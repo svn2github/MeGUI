@@ -50,6 +50,7 @@ namespace MeGUI
 		public event ChapterSetCallback ChapterSet;
 
 		private VideoReader reader;
+        private bool hasAR = false;
 		private int millisecondsPerFrame; // delay in between displaying two frames
 		private int currentPosition, creditsStartFrame = -1, introEndFrame = -1;
 		private int zoneStart = -1, zoneEnd = -1; // zone start and end frames
@@ -87,6 +88,11 @@ namespace MeGUI
 		private System.Windows.Forms.ToolTip defaultToolTip;
 		private System.Windows.Forms.Button chapterButton;
         private Button originalSizeButton;
+        private Label PARLabel;
+        private Label parXLabel;
+        private TextBox parY;
+        private TextBox parX;
+        private CheckBox showPAR;
 		private System.ComponentModel.IContainer components;
 		#endregion
 		#region constructor
@@ -105,9 +111,9 @@ namespace MeGUI
 		/// <param name="path">path of the video file to be loaded</param>
 		/// <param name="type">type of window</param>
 		/// <returns>true if the video could be opened, false if not</returns>
-        public bool loadVideo(string path, PREVIEWTYPE type)
+        public bool loadVideo(string path, PREVIEWTYPE type, bool hasAR)
         {
-            return loadVideo(path, type, false);
+            return loadVideo(path, type, hasAR, false);
         }
 
 		/// <summary>
@@ -118,7 +124,7 @@ namespace MeGUI
 		/// <param name="type">type of window</param>
         /// <param name="inlineAvs">true if path contain not filename but avsynth script to be parsed</param>
 		/// <returns>true if the video could be opened, false if not</returns>
-		public bool loadVideo(string path, PREVIEWTYPE type, bool inlineAvs)
+		public bool loadVideo(string path, PREVIEWTYPE type, bool hasAR, bool inlineAvs)
 		{
             if (reader != null)
                 reader.Close();
@@ -164,6 +170,7 @@ namespace MeGUI
 				this.positionSlider.Value = reader.FrameCount / 2;
                 this.positionSlider.TickFrequency = this.positionSlider.Maximum / 20;
                 this.viewerType = type;
+                this.hasAR = hasAR;
                 this.videoWindowWidth = reader.Width;
                 this.videoWindowHeight = reader.Height;
                 desiredAspectRatio = (float)reader.Width / (float)reader.Height;
@@ -193,12 +200,7 @@ namespace MeGUI
         /// <param name="e"></param>
         void originalSizeButton_Click(object sender, EventArgs e)
         {
-            this.videoWindowWidth = reader.Width;
-            this.videoWindowHeight = reader.Height;
-            sizeLock = true;
-            adjustSize();
-            sizeLock = false;
-            positionSlider_Scroll(null, null);
+            resize(reader.Width, showPAR.Checked);
         }
 		/// <summary>
 		/// adjusts the size of the GUI to match the source video
@@ -235,6 +237,14 @@ namespace MeGUI
 					buttonPanel.Controls.Remove(setZoneButton);
 					break;
 			}
+            if (!hasAR)
+            {
+                buttonPanel.Controls.Remove(PARLabel);
+                buttonPanel.Controls.Remove(parX);
+                buttonPanel.Controls.Remove(parXLabel);
+                buttonPanel.Controls.Remove(parY);
+                buttonPanel.Controls.Remove(showPAR);
+            }
             SuspendLayout();
             sizeLock = true;
             this.Size = new Size(this.videoWindowWidth + formWidthDelta, this.videoWindowHeight + formHeightDelta);
@@ -269,10 +279,7 @@ namespace MeGUI
                         this.videoWindowHeight = (int)(formControl.Height - formHeightDelta);
                     }
                     */  // Unusable without events from .NET 2.0 
-                    this.videoWindowWidth = formControl.Width - formWidthDelta;
-                    this.videoWindowHeight = (int)((formControl.Width - formWidthDelta) / desiredAspectRatio);
-                    adjustSize();
-                    positionSlider_Scroll(null, null);
+                    resize(formControl.Width - formWidthDelta, showPAR.Checked);
                 }
             }
         }
@@ -352,7 +359,12 @@ namespace MeGUI
             this.zoneEndButton = new System.Windows.Forms.Button();
             this.chapterButton = new System.Windows.Forms.Button();
             this.defaultToolTip = new System.Windows.Forms.ToolTip(this.components);
-            //((System.ComponentModel.ISupportInitialize)(this.videoPreview)).BeginInit();
+            this.parX = new System.Windows.Forms.TextBox();
+            this.parY = new System.Windows.Forms.TextBox();
+            this.parXLabel = new System.Windows.Forms.Label();
+            this.PARLabel = new System.Windows.Forms.Label();
+            this.showPAR = new System.Windows.Forms.CheckBox();
+            ((System.ComponentModel.ISupportInitialize)(this.videoPreview)).BeginInit();
             this.previewGroupbox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.positionSlider)).BeginInit();
             this.buttonPanel.SuspendLayout();
@@ -422,7 +434,7 @@ namespace MeGUI
             // 
             this.positionSlider.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.positionSlider.AutoSize = false;
-            this.positionSlider.Location = new System.Drawing.Point(41, 279);
+            this.positionSlider.Location = new System.Drawing.Point(46, 259);
             this.positionSlider.Name = "positionSlider";
             this.positionSlider.Size = new System.Drawing.Size(280, 45);
             this.positionSlider.TabIndex = 1;
@@ -494,6 +506,11 @@ namespace MeGUI
             // buttonPanel
             // 
             this.buttonPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.buttonPanel.Controls.Add(this.showPAR);
+            this.buttonPanel.Controls.Add(this.PARLabel);
+            this.buttonPanel.Controls.Add(this.parXLabel);
+            this.buttonPanel.Controls.Add(this.parY);
+            this.buttonPanel.Controls.Add(this.parX);
             this.buttonPanel.Controls.Add(this.originalSizeButton);
             this.buttonPanel.Controls.Add(this.introEndButton);
             this.buttonPanel.Controls.Add(this.previousFrameButton);
@@ -506,10 +523,9 @@ namespace MeGUI
             this.buttonPanel.Controls.Add(this.setZoneButton);
             this.buttonPanel.Controls.Add(this.zoneEndButton);
             this.buttonPanel.Controls.Add(this.chapterButton);
-            this.buttonPanel.Location = new System.Drawing.Point(14, 330);
-            //this.buttonPanel.Margin = new System.Windows.Forms.Padding(1);
+            this.buttonPanel.Location = new System.Drawing.Point(14, 310);
             this.buttonPanel.Name = "buttonPanel";
-            this.buttonPanel.Size = new System.Drawing.Size(332, 60);
+            this.buttonPanel.Size = new System.Drawing.Size(332, 80);
             this.buttonPanel.TabIndex = 8;
             // 
             // originalSizeButton
@@ -519,7 +535,6 @@ namespace MeGUI
             this.originalSizeButton.Size = new System.Drawing.Size(54, 19);
             this.originalSizeButton.TabIndex = 14;
             this.originalSizeButton.Text = "OrigSize";
-            // this.originalSizeButton.UseVisualStyleBackColor = true;
             this.originalSizeButton.Click += new System.EventHandler(this.originalSizeButton_Click);
             // 
             // introEndButton
@@ -572,10 +587,53 @@ namespace MeGUI
             this.defaultToolTip.SetToolTip(this.chapterButton, "Sets the end frame of a new zone");
             this.chapterButton.Click += new System.EventHandler(this.chapterButton_Click);
             // 
+            // parX
+            // 
+            this.parX.Location = new System.Drawing.Point(64, 54);
+            this.parX.Name = "parX";
+            this.parX.Size = new System.Drawing.Size(52, 21);
+            this.parX.TabIndex = 0;
+            // 
+            // parY
+            // 
+            this.parY.Location = new System.Drawing.Point(146, 54);
+            this.parY.Name = "parY";
+            this.parY.Size = new System.Drawing.Size(52, 21);
+            this.parY.TabIndex = 1;
+            // 
+            // parXLabel
+            // 
+            this.parXLabel.AutoSize = true;
+            this.parXLabel.Location = new System.Drawing.Point(125, 60);
+            this.parXLabel.Name = "parXLabel";
+            this.parXLabel.Size = new System.Drawing.Size(15, 13);
+            this.parXLabel.TabIndex = 16;
+            this.parXLabel.Text = "×";
+            // 
+            // PARLabel
+            // 
+            this.PARLabel.AutoSize = true;
+            this.PARLabel.Location = new System.Drawing.Point(29, 57);
+            this.PARLabel.Name = "PARLabel";
+            this.PARLabel.Size = new System.Drawing.Size(27, 13);
+            this.PARLabel.TabIndex = 17;
+            this.PARLabel.Text = "PAR";
+            // 
+            // showPAR
+            // 
+            this.showPAR.AutoSize = true;
+            this.showPAR.Location = new System.Drawing.Point(200, 56);
+            this.showPAR.Name = "showPAR";
+            this.showPAR.Size = new System.Drawing.Size(75, 17);
+            this.showPAR.TabIndex = 2;
+            this.showPAR.Text = "Show PAR";
+            this.showPAR.UseVisualStyleBackColor = true;
+            this.showPAR.CheckedChanged += new System.EventHandler(this.showPAR_CheckedChanged);
+            // 
             // VideoPlayer
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
-            this.ClientSize = new System.Drawing.Size(360, 390);
+            this.ClientSize = new System.Drawing.Size(360, 392);
             this.Controls.Add(this.buttonPanel);
             this.Controls.Add(this.previewGroupbox);
             this.Controls.Add(this.positionSlider);
@@ -587,10 +645,11 @@ namespace MeGUI
             this.Name = "VideoPlayer";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.Text = "VideoPlayer";
-            //((System.ComponentModel.ISupportInitialize)(this.videoPreview)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.videoPreview)).EndInit();
             this.previewGroupbox.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.positionSlider)).EndInit();
             this.buttonPanel.ResumeLayout(false);
+            this.buttonPanel.PerformLayout();
             this.ResumeLayout(false);
 
 		}
@@ -939,6 +998,40 @@ namespace MeGUI
 		}
 		#endregion
 		#region properties
+        public int PARX
+        {
+            get
+            {
+                int parX = -1, parY = -1;
+                int.TryParse(this.parX.Text, out parX);
+                int.TryParse(this.parY.Text, out parY);
+                if (parX > 0 && parY > 0)
+                    return parX;
+                return -1;
+            }
+            set
+            {
+                if (value > 0)
+                    parX.Text = value.ToString();
+            }
+        }
+        public int PARY
+        {
+            get
+            {
+                int parX = -1, parY = -1;
+                int.TryParse(this.parX.Text, out parX);
+                int.TryParse(this.parY.Text, out parY);
+                if (parX > 0 && parY > 0)
+                    return parY;
+                return -1;
+            }
+            set
+            {
+                if (value > 0)
+                    parY.Text = value.ToString();
+            }
+        }
 		/// <summary>
 		/// returns the underlying video reader
 		/// </summary>
@@ -1018,5 +1111,32 @@ namespace MeGUI
 			}
 		}
 		#endregion
+
+        private void resize(int targetWidth, bool PAR)
+        {
+            int parX = PARX;
+            int parY = PARY;
+            int width = reader.Width;
+            int height = reader.Height;
+            if (PAR && parX > 0 && parY > 0)
+            {
+                width = parX;
+                height = parY;
+            }
+            VideoUtil.reduce(ref width, ref height);
+            height = (int)Math.Round((double) height * ((double)targetWidth / (double)width));
+
+            videoWindowWidth = targetWidth;
+            videoWindowHeight = height;
+            sizeLock = true;
+            adjustSize();
+            sizeLock = false;
+            positionSlider_Scroll(null, null);
+        }
+
+        private void showPAR_CheckedChanged(object sender, EventArgs e)
+        {
+            resize(videoWindowWidth, showPAR.Checked);
+        }
 	}
 }

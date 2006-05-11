@@ -1,3 +1,24 @@
+0.2.3.2136 10 May 2006
+Commit by berrinam:
+  - Fixed Profile Importing/Exporting's CQM handling for XviD
+  - Added tritical's fix for AviSynthWrapper
+  - Fixed OneClick window loading
+  - Fixed LMP4 config loading
+
+0.2.3.2135 8 May 2006
+Commit by berrinam:
+  - Enabled XviD CQMs (there are two fields, but only the first one is active)
+  - Fixed loading of video jobs -- the PAR is now retained.
+  - PAR is now in the video player, not the codec config (it's not a codec-specific thing, conceptually)
+  - Added support for DivXMux.exe (no statuses yet, though... no lines to parse, so filesize-based status required)
+  - Removed registration of AVIMux_GUI (but didn't remove code... hopefully it will get stderr error messages soon, so we can use that again)
+  - Fixed up annoying video profile bug that's been around for ages
+
+0.2.3.2134 8 May 2006
+Commit by Sharx1976
+  - Expanded bitrate fields to 5 chars in x264 config dialog.
+  - Fixed an aesthetic glitch (video config button position) in main form.
+
 0.2.3.2133 6 May 2006
 Commit by berrinam:
   - First commit of mux-path-finding refactor. Work in progress (development build)

@@ -25,23 +25,17 @@ using System.Globalization;
 
 namespace MeGUI
 {
-	/// <summary>
+	// generates a commandline for the given muxSettings instance
+    public delegate string MuxCommandlineGenerator(MuxSettings muxSettings);
+    
+    /// <summary>
 	/// Class that can generate the commanline from a codec settings object
 	/// </summary>
 	public class CommandLineGenerator
 	{
 		#region initialization
-		StringBuilder sb;
-		CultureInfo ci;
-		/// <summary>
-		/// default constructor
-		/// does absolutely nothing
-		/// </summary>
-		public CommandLineGenerator()
-		{
-			sb = new StringBuilder();
-			ci = new CultureInfo("en-us");
-		}
+		private static StringBuilder sb = new StringBuilder();
+		private static CultureInfo ci = new CultureInfo("en-us");
 		#endregion
 		#region helper methods
 		/// <summary>
@@ -50,7 +44,7 @@ namespace MeGUI
 		/// </summary>
 		/// <param name="path">the video output filename</param>
 		/// <returns>0 if the output is avi, 1 if the output is raw, 2 if the output is mp4 and -1 otherwise</returns>
-		private int getVideoOutputType(string path)
+		private static int getVideoOutputType(string path)
 		{
             if (path != null)
             {
@@ -64,7 +58,7 @@ namespace MeGUI
             }
             return -1;
 		}
-        private void x264TriStateAdjustment(x264Settings xs)
+        private static void x264TriStateAdjustment(x264Settings xs)
         {
             switch (xs.Profile)
             {
@@ -134,39 +128,39 @@ namespace MeGUI
                 xs.BitrateQuantizer = 0;
             }
         }
-		public string generateVideoCommandline(VideoCodecSettings vSettings, 
-			string input, string output)
+		public static string generateVideoCommandline(VideoCodecSettings vSettings, 
+			string input, string output, int parX, int parY)
 		{
             if (vSettings is hfyuSettings)
-                return generateHfyuCommandLine((hfyuSettings)vSettings, input, output);
+                return generateHfyuCommandLine((hfyuSettings)vSettings, input, output, parX, parY);
             if (vSettings is lavcSettings)
-				return generateLavcCommandLine((lavcSettings)vSettings, input, output);
+				return generateLavcCommandLine((lavcSettings)vSettings, input, output, parX, parY);
 			if (vSettings is x264Settings)
 			{
 				x264Settings xs = (x264Settings)vSettings;
                 x264TriStateAdjustment(xs);
-				return generateX264CLICommandline(xs, input, output);
+				return generateX264CLICommandline(xs, input, output, parX, parY);
 		}
 			if (vSettings is snowSettings)
-				return generateSnowCommandLine((snowSettings)vSettings, input, output);
+				return generateSnowCommandLine((snowSettings)vSettings, input, output, parX, parY);
             if (vSettings is xvidSettings)
             {
-                return generateXviDEncrawCommandline((xvidSettings)vSettings, input, output);
+                return generateXviDEncrawCommandline((xvidSettings)vSettings, input, output, parX, parY);
             }
 			return "";
         }
-		public string generateAudioCommandline(MeGUISettings settings, AudioCodecSettings aSettings, 
+		public static string generateAudioCommandline(MeGUISettings settings, AudioCodecSettings aSettings, 
 			string input, string output)
 		{
 			if (aSettings.DelayEnabled && aSettings.Delay == 0)
 				aSettings.DelayEnabled = false;
 			if (aSettings is NeroAACSettings)
-				return this.generateNeroAACCommandLine((NeroAACSettings)aSettings, 
+				return generateNeroAACCommandLine((NeroAACSettings)aSettings, 
 					input, output);
 			else if (aSettings is MP3Settings)
-				return this.generateLameCommandLine((MP3Settings)aSettings, input, output);
+				return generateLameCommandLine((MP3Settings)aSettings, input, output);
 			else if (aSettings is FaacSettings)
-				return this.generaceFAACCommandLine((FaacSettings)aSettings, input, output);
+				return generaceFAACCommandLine((FaacSettings)aSettings, input, output);
 			return "";
 		}
 		#endregion
@@ -176,7 +170,7 @@ namespace MeGUI
         /// </summary>
         /// <param name="ls">lavcSettings object containing all the parameters for an lavc encoding session</param>
         /// <returns>commandline matching the input parameters</returns>
-        private string generateLavcCommandLine(lavcSettings ls, string input, string output)
+        private static string generateLavcCommandLine(lavcSettings ls, string input, string output, int parX, int parY)
         {
             sb = new StringBuilder();
             sb.Append("\"" + input + "\" -ovc lavc ");
@@ -300,8 +294,8 @@ namespace MeGUI
                 sb.Append("intra_matrix=" + ls.IntraMatrix + ":");
             if (!ls.InterMatrix.Equals(""))
                 sb.Append("inter_matrix=" + ls.InterMatrix + ":");
-            if (ls.PARX > 0 && ls.PARY > 0)
-                sb.Append("aspect=" + ls.PARX + "/" + ls.PARY + ":");
+            if (parX > 0 && parY > 0)
+                sb.Append("aspect=" + parX + "/" + parY + ":");
             if (ls.NbMotionPredictors != (decimal)0)
                 sb.Append("last_pred=" + ls.NbMotionPredictors.ToString(ci) + ":");
 
@@ -311,7 +305,7 @@ namespace MeGUI
             if (ls.EncodingMode != 2 && ls.EncodingMode != 5) // not 2 pass vbr first pass and 3 pass first pass, add output filename and output type
             {
                 sb.Append(" -o \"" + output + "\" -of "); // rest of mencoder options
-                int outputType = this.getVideoOutputType(output);
+                int outputType = getVideoOutputType(output);
                 if (outputType == 0) // AVI
                     sb.Append("avi -ffourcc " + ls.FourCCs[ls.FourCC] + " ");
                 if (outputType >= 1) // RAW
@@ -326,7 +320,7 @@ namespace MeGUI
         /// <param name="input">input avs script</param>
         /// <param name="output">output lossless file</param>
         /// <returns>commandline matching the input parameters</returns>
-        private string generateHfyuCommandLine(hfyuSettings ls, string input, string output)
+        private static string generateHfyuCommandLine(hfyuSettings ls, string input, string output, int parX, int parY)
         {
             sb = new StringBuilder();
             sb.Append("\"" + input + "\" -o \"" + output + "\" ");
@@ -341,7 +335,7 @@ namespace MeGUI
 		/// </summary>
 		/// <param name="ss">snowSettings object containing all the parameters for an snow encoding session</param>
 		/// <returns>commandline matching the input parameters</returns>
-		private string generateSnowCommandLine(snowSettings ss, string input, string output)
+		private static string generateSnowCommandLine(snowSettings ss, string input, string output, int parX, int parY)
 		{
 			sb = new StringBuilder();
 			sb.Append("\"" + input + "\" -ovc lavc ");
@@ -446,7 +440,7 @@ namespace MeGUI
 			if (ss.EncodingMode != 2)
 			{
 				sb.Append(" -o \"" + output + "\" -of "); // rest of mencoder options
-				int outputType = this.getVideoOutputType(output);
+				int outputType = getVideoOutputType(output);
 				if (outputType == 0) // AVI
 					sb.Append("avi -ffourcc " + ss.FourCCs[ss.FourCC] + " ");
 				if (outputType >= 1) // RAW
@@ -456,7 +450,7 @@ namespace MeGUI
 		}
 		#endregion
 		#region xvid
-        private string generateXviDEncrawCommandline(xvidSettings xs, string input, string output)
+        private static string generateXviDEncrawCommandline(xvidSettings xs, string input, string output, int parX, int parY)
         {
             sb = new StringBuilder();
             sb.Append("-i \"" + input + "\" ");
@@ -469,7 +463,7 @@ namespace MeGUI
                     sb.Append("-single -cq " + xs.BitrateQuantizer + " "); // add quantizer
                     break;
                 case 2: // 2 pass first pass
-                    sb.Append("-o NUL: -pass1 " + "\"" + xs.Logfile + "\" -bitrate " + xs.BitrateQuantizer + " "); // add logfile
+                    sb.Append("-pass1 " + "\"" + xs.Logfile + "\" -bitrate " + xs.BitrateQuantizer + " "); // add logfile
                     break;
                 case 3: // 2 pass second pass
                 case 4: // automated twopass
@@ -527,7 +521,7 @@ namespace MeGUI
                 sb.Append("-gmc ");
             if (xs.QuantType == 1)
                 sb.Append("-qtype 1 ");
-            if (xs.CustomQuantizerMatrix.Length > 0)
+            else if (xs.QuantType == 2 && xs.CustomQuantizerMatrix.Length > 0)
                 sb.Append("-qmatrix \"" + xs.CustomQuantizerMatrix + "\" ");
             if (xs.ClosedGOP)
                 sb.Append("-closed_gop ");
@@ -573,13 +567,9 @@ namespace MeGUI
                 if (xs.MaxBQuant != 2)
                     sb.Append("-bmax " + xs.MaxBQuant + " ");
             }
-            if (xs.PARX > 0 && xs.PARY > 0) // custom PAR mode
+            if (parX > 0 && parY > 0) // custom PAR mode
             {
-                sb.Append("-par " + xs.PARX + ":" + xs.PARY + " ");
-            }
-            else if (xs.PAR > -1)
-            {
-                sb.Append("-par " + xs.PAR + " ");
+                sb.Append("-par " + parX + ":" + parY + " ");
             }
             sb.Append("-threads " + xs.NbThreads + " ");
             if (xs.Zones != null && xs.Zones.Length > 0 && xs.CreditsQuantizer >= new decimal(1)
@@ -600,9 +590,9 @@ namespace MeGUI
             if (xs.EncodingMode != 2) // not 2 pass vbr first pass, add output filename and output type
             {
                 string extension = Path.GetExtension(output).ToLower();
-                if (extension.Equals("mkv"))
+                if (extension.Equals(".mkv"))
                     sb.Append(" -mkv \"" + output + "\"");
-                else if (extension.Equals("avi"))
+                else if (extension.Equals(".avi"))
                     sb.Append(" -avi \"" + output + "\"");
                 else
                     sb.Append(" -o \"" + output + "\"");
@@ -612,7 +602,7 @@ namespace MeGUI
 
 		#endregion
 		#region x264
-		private string generateX264CLICommandline(x264Settings xs, string input, string output)
+		private static string generateX264CLICommandline(x264Settings xs, string input, string output, int parX, int parY)
 		{
 			sb = new StringBuilder();
 			if (xs.EncodingMode == 4 || xs.EncodingMode == 7)
@@ -821,8 +811,8 @@ namespace MeGUI
 				sb.Remove(sb.Length - 1, 1);
 				sb.Append(" ");
 			}
-			if (xs.PARX > 0 && xs.PARY > 0)
-				sb.Append("--sar " + xs.PARX + ":" + xs.PARY + " ");
+			if (parX > 0 && parY > 0)
+				sb.Append("--sar " + parX + ":" + parY + " ");
 			if (xs.QuantizerMatrixType > 0) // custom matrices enabled
 			{
 				if (xs.QuantizerMatrixType == 1)
@@ -856,7 +846,7 @@ namespace MeGUI
 		/// <param name="input">input file to be encoded</param>
 		/// <param name="output">output file to be encoded</param>
 		/// <returns>the entire commandline as a string</returns>
-		private string generateLameCommandLine(MP3Settings ms, string input, string output)
+		private static string generateLameCommandLine(MP3Settings ms, string input, string output)
 		{
 			sb = new StringBuilder();
 			string besweetLogFile = Path.ChangeExtension(output, ".besweet.log");
@@ -905,7 +895,7 @@ namespace MeGUI
 				sb.Append(")");
 			return sb.ToString();
 		}
-		private string generaceFAACCommandLine(FaacSettings fas, string input, string output)
+		private static string generaceFAACCommandLine(FaacSettings fas, string input, string output)
 		{
 			sb = new StringBuilder();
 			string besweetLogFile = Path.ChangeExtension(output, ".besweet.log");
@@ -957,7 +947,7 @@ namespace MeGUI
 		/// </summary>
 		/// <param name="nas">NeroAACSettings containg all the BeSweet and Nero AAC settings</param>
 		/// <returns>string containing the complete BeSweet commandline for AAC encoding</returns>
-		private string generateNeroAACCommandLine(NeroAACSettings nas, string input, string output)
+		private static string generateNeroAACCommandLine(NeroAACSettings nas, string input, string output)
 		{
 			sb = new StringBuilder();
 			string besweetLogFile = Path.ChangeExtension(output, ".besweet.log");
@@ -1043,7 +1033,7 @@ namespace MeGUI
 		/// <param name="input">the video stream for this mux job</param>
 		/// <param name="output">the name of the output file</param>
 		/// <returns>mp4box commandline</returns>
-        public string generateMP4BoxCommandline(MuxSettings settings)
+        public static string generateMP4BoxCommandline(MuxSettings settings)
         {
             StringBuilder sb = new StringBuilder();
             if (settings.VideoInput.Length > 0)
@@ -1089,6 +1079,20 @@ namespace MeGUI
         }
 		#endregion
 		#region avi muxing
+        public static string generateDivXMuxCommandline(MuxSettings settings)
+        {
+            sb = new StringBuilder();
+            if (settings.MuxedInput.Length > 0)
+                sb.AppendFormat("--remux \"{0}\" ", settings.MuxedInput);
+            if (settings.VideoInput.Length > 0)
+                sb.AppendFormat("-v \"{0}\" ", settings.VideoInput);
+            foreach (SubStream audioStream in settings.AudioStreams)
+                sb.AppendFormat("-a \"{0}\" ", audioStream.path);
+            foreach (SubStream subStream in settings.SubtitleStreams)
+                sb.AppendFormat("-s \"{0}\" ", subStream.path);
+            sb.AppendFormat("-o \"{0}\" ", settings.MuxedOutput);
+            return sb.ToString();
+        }
 		/// <summary>
 		/// generates an avi muxing commandline for mencoder
 		/// </summary>
@@ -1097,7 +1101,7 @@ namespace MeGUI
 		/// <param name="input">avi video input</param>
 		/// <param name="output">muxed output</param>
 		/// <returns>mencoder commandline</returns>
-		public string generateAVIMuxCommandline(MuxSettings settings)
+		public static string generateAVIMuxCommandline(MuxSettings settings)
 		{
             sb = new StringBuilder();
             sb.Append("-ovc copy -oac copy ");
@@ -1124,7 +1128,7 @@ namespace MeGUI
         /// <param name="input">the raw avc file to be muxed</param>
         /// <param name="output">the name of the output</param>
         /// <returns>the commandline</returns>
-        public string GenerateAVC2AVICommandline(MuxSettings settings)
+        public static string GenerateAVC2AVICommandline(MuxSettings settings)
         {
             sb = new StringBuilder();
             sb.Append("-f " + settings.Framerate.ToString(ci) + " -i \"" + settings.VideoInput + "\" -o \"" + settings.MuxedOutput + "\"");
@@ -1140,7 +1144,7 @@ namespace MeGUI
 		/// <param name="input">the video stream for this mux job</param>
 		/// <param name="output">the name of the output file</param>
 		/// <returns>mkvmerge commandline</returns>
-		public string generateMkvmergeCommandline(MuxSettings settings)
+		public static string generateMkvmergeCommandline(MuxSettings settings)
 		{
 			StringBuilder sb = new StringBuilder();
          	sb.Append("-o \"" + settings.MuxedOutput + "\"");
@@ -1186,7 +1190,7 @@ namespace MeGUI
 		}
 		#endregion
 		#region dgindex
-		public string generateDGIndexCommandline(string DGIndexPath, int demuxType, int trackID1, int trackID2, 
+		public static string generateDGIndexCommandline(string DGIndexPath, int demuxType, int trackID1, int trackID2, 
 			string input, string output)
 		{
 			StringBuilder sb = new StringBuilder();
@@ -1214,19 +1218,11 @@ namespace MeGUI
 		}
 		#endregion
 
-        public string generateMuxCommandline(MuxSettings muxSettings, MuxerType muxerType)
+        public static string generateMuxCommandline(MuxSettings muxSettings, MuxerType muxerType)
         {
-            switch (muxerType)
-            {
-                case MuxerType.AVC2AVI:
-                    return GenerateAVC2AVICommandline(muxSettings);
-                case MuxerType.AVIMUXGUI:
-                    return generateAVIMuxCommandline(muxSettings);
-                case MuxerType.MP4BOX:
-                    return generateMP4BoxCommandline(muxSettings);
-                case MuxerType.MKVMERGE:
-                    return generateMkvmergeCommandline(muxSettings);
-            }
+            MuxCommandlineGenerator generator = new MuxProvider().GetMuxer(muxerType).CommandlineGenerator;
+            if (generator != null)
+                return generator(muxSettings);
             return null;
         }
     }

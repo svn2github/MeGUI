@@ -994,7 +994,7 @@ namespace MeGUI
             if (player == null || player.IsDisposed) 
                 player = new VideoPlayer();
 
-            bool videoLoaded = player.loadVideo(avisynthScript.Text, PREVIEWTYPE.REGULAR, true);
+            bool videoLoaded = player.loadVideo(avisynthScript.Text, PREVIEWTYPE.REGULAR, false, true);
 			if (videoLoaded)
 			{
 				player.disableIntroAndCredits();
@@ -1275,7 +1275,7 @@ namespace MeGUI
 			this.crop.Checked = false;
             this.videoInput.Text = "";
 			player = new VideoPlayer();
-			bool videoLoaded = player.loadVideo(videoInput, PREVIEWTYPE.REGULAR, inlineAvs);
+			bool videoLoaded = player.loadVideo(videoInput, PREVIEWTYPE.REGULAR, false, inlineAvs);
             enableControls(videoLoaded);
 			if (videoLoaded)
 			{

@@ -38,7 +38,7 @@ namespace MeGUI
     public class baseMuxWindow : System.Windows.Forms.Form
     {
         #region variables
-
+        protected int parX, parY;
         protected string audioFilter, videoInputFilter, subtitleFilter, chaptersFilter, outputFilter;
         protected SubStream[] audioStreams;
         protected SubStream[] subtitleStreams;
@@ -163,8 +163,10 @@ namespace MeGUI
         /// <param name="subtitleStreams">the subtitle streams</param>
         /// <param name="output">name of the output</param>
         /// <param name="splitSize">split size of the output</param>
-        public void setConfig(string videoInput, double framerate, SubStream[] audioStreams, SubStream[] subtitleStreams, string chapterFile, string output, int splitSize)
+        public void setConfig(string videoInput, double framerate, SubStream[] audioStreams, SubStream[] subtitleStreams, string chapterFile, string output, int splitSize, int parX, int parY)
         {
+            this.parX = parX;
+            this.parY = parY;
             this.videoInput.Text = videoInput;
             int fpsIndex = muxFPS.Items.IndexOf(framerate);
             if (fpsIndex != -1)

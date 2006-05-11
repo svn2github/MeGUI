@@ -46,14 +46,16 @@ namespace MeGUI
 
         private void VideoConfigurationDialog_Load(object sender, EventArgs e)
         {
+            int index = -1;
             foreach (VideoProfile prof in this.profileManager.VideoProfiles.Values)
             {
                 if (isValidSettings(prof.Settings)) // those are the profiles we're interested in
                 {
                     this.videoProfile.Items.Add(prof);
+                    if (prof.Name == initialProfile)
+                        index = videoProfile.Items.IndexOf(prof);
                 }
             }
-            int index = this.videoProfile.Items.IndexOf(this.initialProfile);
             if (index != -1)
                 this.videoProfile.SelectedIndex = index;
             zonesControl.IntroEndFrame = introEndFrame;
@@ -113,7 +115,7 @@ namespace MeGUI
             doCodecSpecificAdjustments();
 
             if (generateCommandline) // There's no point in generating the commandline if it isn't visible
-                this.commandline.Text = encoderPath + " " + gen.generateVideoCommandline((VideoCodecSettings)this.Settings, this.input, this.output);
+                this.commandline.Text = encoderPath + " " + CommandLineGenerator.generateVideoCommandline((VideoCodecSettings)this.Settings, this.input, this.output, -1, -1);
             updating = false;
         }
         #endregion

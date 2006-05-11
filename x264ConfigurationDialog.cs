@@ -492,10 +492,6 @@ namespace MeGUI
                     xs.MinGOPSize = Int32.Parse(x264MinGOPSize.Text);
                 xs.Logfile = this.logfile.Text;
                 xs.AdaptiveDCT = adaptiveDCT.Checked;
-                if (!sarX.Text.Equals(""))
-                    xs.PARX = Int32.Parse(sarX.Text);
-                if (!sarY.Text.Equals(""))
-                    xs.PARY = Int32.Parse(sarY.Text);
                 xs.CustomEncoderOptions = customCommandlineOptions.Text;
                 xs.Zones = this.Zones;
                 xs.QuantizerMatrixType = x264CustomQuantizer.SelectedIndex;
@@ -570,10 +566,6 @@ namespace MeGUI
                 x26MERange.Value = xs.MERange;
                 x264NbThreads.Value = xs.NbThreads;
                 x264MinGOPSize.Text = xs.MinGOPSize.ToString();
-                if (xs.PARX > 0)
-                    sarX.Text = xs.PARX.ToString();
-                if (xs.PARY > 0)
-                    sarY.Text = xs.PARY.ToString();
                 customCommandlineOptions.Text = xs.CustomEncoderOptions;
                 this.logfile.Text = xs.Logfile;
                 this.Zones = xs.Zones;
@@ -687,8 +679,6 @@ namespace MeGUI
             tooltipHelp.SetToolTip(x26MERange, SelectHelpText("merange"));
             tooltipHelp.SetToolTip(x264NbThreads, SelectHelpText("threads"));
             tooltipHelp.SetToolTip(x264MinGOPSize, SelectHelpText("min-keyint"));
-            tooltipHelp.SetToolTip(sarX, SelectHelpText("sar"));
-            tooltipHelp.SetToolTip(sarY, SelectHelpText("sar"));
             tooltipHelp.SetToolTip(trellis, SelectHelpText("trellis"));
             tooltipHelp.SetToolTip(psnr, SelectHelpText("no-psnr"));
             tooltipHelp.SetToolTip(fourCC, SelectHelpText("fourcc"));

@@ -57,17 +57,11 @@ namespace MeGUI
 
         public virtual bool setup(Job job, out string error)
         {
-            switch (((MuxJob)job).MuxType)
+            muxer = new MuxProvider().GetMuxer(((MuxJob)job).MuxType, settings);
+            if (muxer == null)
             {
-                case MuxerType.AVC2AVI:
-                    muxer = new Avc2AviMuxer(settings.Avc2aviPath);
-                    break;
-                case MuxerType.MKVMERGE:
-                    muxer = new MkvMergeMuxer(settings.MkvmergePath);
-                    break;
-                case MuxerType.MP4BOX:
-                    muxer = new MP4BoxMuxer(settings.Mp4boxPath);
-                    break;
+                error = "No suitable muxer found";
+                return false;
             }
             error = null;
             return muxer.setup(job, out error);

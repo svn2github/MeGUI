@@ -702,6 +702,11 @@ namespace MeGUI
                     if ((vProfile.Settings as x264Settings).QuantizerMatrixType == 2) // Custom profile
                         return new string[] { (vProfile.Settings as x264Settings).QuantizerMatrix };
                 }
+                if (vProfile.Settings is xvidSettings)
+                {
+                    if ((vProfile.Settings as xvidSettings).QuantType == 2) // CQM
+                        return new string[] { (vProfile.Settings as xvidSettings).CustomQuantizerMatrix };
+                }
             }
             return new string[] { };
         }
@@ -763,6 +768,15 @@ namespace MeGUI
                     {
                         if (substitutionTable.ContainsKey(xSettings.QuantizerMatrix))
                             xSettings.QuantizerMatrix = substitutionTable[xSettings.QuantizerMatrix];
+                    }
+                }
+                if (vProf.Settings is xvidSettings)
+                {
+                    xvidSettings xSettings = vProf.Settings as xvidSettings;
+                    if (xSettings.QuantType == 2) // CQM
+                    {
+                        if (substitutionTable.ContainsKey(xSettings.CustomQuantizerMatrix))
+                            xSettings.CustomQuantizerMatrix = substitutionTable[xSettings.CustomQuantizerMatrix];
                     }
                 }
             }

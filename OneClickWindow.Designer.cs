@@ -801,10 +801,6 @@ namespace MeGUI
             // containerFormat
             // 
             this.containerFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.containerFormat.Items.AddRange(new object[] {
-            "AVI",
-            "MKV",
-            "MP4"});
             this.containerFormat.Location = new System.Drawing.Point(125, 199);
             this.containerFormat.Name = "containerFormat";
             this.containerFormat.Size = new System.Drawing.Size(116, 21);

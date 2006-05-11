@@ -27,12 +27,23 @@ namespace MeGUI
 	public class VideoJob : Job
 	{
 		private VideoCodecSettings settings;
-		private int outputType, numberOfFrames;
+		private int outputType, numberOfFrames, parX, parY;
 		private long desiredSize;
 		private double framerate;
 		public VideoJob():base()
 		{
+            parX = parY = 0;
 		}
+        public int PARX
+        {
+            get { return parX; }
+            set { parX = value; }
+        }
+        public int PARY
+        {
+            get { return parY; }
+            set { parY = value; }
+        }
 		/// <summary>
 		/// the codec settings for this job
 		/// </summary>

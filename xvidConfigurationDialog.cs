@@ -42,20 +42,6 @@ namespace MeGUI
                 xvidBframeThreshold.Enabled = false;
                 xvidFrameDropRatio.Enabled = false;
             }
-
-            if (xvidPAR.SelectedIndex == 5) // custom
-            {
-                this.sarX.Enabled = true;
-                this.sarY.Enabled = true;
-            }
-            else
-            {
-                this.sarX.Enabled = false;
-                this.sarX.Text = "";
-                this.sarY.Enabled = false;
-                this.sarY.Text = "";
-            }
-
         }
 
         private void doDropDownAdjustments()
@@ -124,6 +110,14 @@ namespace MeGUI
         {
             doDropDownAdjustments();
             doCheckBoxAdjustments();
+            if (xvidQuantType.SelectedIndex == 2) // CQM
+            {
+                xvidLoadIntraMatrixButton.Enabled = true;
+            }
+            else
+            {
+                xvidLoadIntraMatrixButton.Enabled = false;
+            }
         }
 
         /// <summary>
@@ -141,8 +135,6 @@ namespace MeGUI
                 this.xvidVHQ.SelectedIndex = 1;
             if (xvidQuantType.SelectedIndex == -1)
                 this.xvidQuantType.SelectedIndex = 0;
-            if (xvidPAR.SelectedIndex == -1)
-                this.xvidPAR.SelectedIndex = 0;
         }
 
         /// <summary>
@@ -192,11 +184,6 @@ namespace MeGUI
                 xs.ClosedGOP = xvidClosedGop.Checked;
                 xs.Greyscale = xvidGreyScale.Checked;
                 xs.Interlaced = xvidInterlaced.Checked;
-                xs.PAR = xvidPAR.SelectedIndex;
-                if (!sarX.Text.Equals(""))
-                    xs.PARX = Int32.Parse(sarX.Text);
-                if (!sarY.Text.Equals(""))
-                    xs.PARY = Int32.Parse(sarY.Text);
                 xs.MinQuantizer = (int)xvidMinIQuant.Value;
                 xs.MaxQuantizer = (int)xvidMaxIQuant.Value;
                 xs.MinPQuant = (int)xvidMinPQuant.Value;
@@ -229,6 +216,7 @@ namespace MeGUI
                 xs.FrameDropRatio = (int)xvidFrameDropRatio.Value;
 //                xs.IntraMatrix = this.xvidIntraMatrix.Text;
 //                xs.InterMatrix = this.xvidInterMatrix.Text;
+                xs.CustomQuantizerMatrix = xvidIntraMatrix.Text;
                 xs.Logfile = this.logfile.Text;
                 xs.Zones = Zones;
                 return xs;
@@ -256,15 +244,6 @@ namespace MeGUI
                 xvidClosedGop.Checked = xs.ClosedGOP;
                 xvidGreyScale.Checked = xs.Greyscale;
                 xvidInterlaced.Checked = xs.Interlaced;
-                xvidPAR.SelectedIndex = xs.PAR;
-                if (xs.PARX > 0)
-                    this.sarX.Text = xs.PARX.ToString();
-                else
-                    sarX.Text = "";
-                if (xs.PARY > 0)
-                    this.sarY.Text = xs.PARY.ToString();
-                else
-                    sarY.Text = "";
                 xvidMinIQuant.Value = xs.MinQuantizer;
                 xvidMaxIQuant.Value = xs.MaxQuantizer;
                 xvidMinPQuant.Value = xs.MinPQuant;
@@ -294,6 +273,7 @@ namespace MeGUI
 //                this.xvidChromaOptimizer.Checked = xs.ChromaOptimizer;
 //                this.xvidHQAC.Checked = xs.HQAC;
                 xvidFrameDropRatio.Value = (decimal)xs.FrameDropRatio;
+                xvidIntraMatrix.Text = xs.CustomQuantizerMatrix;
 //                this.xvidIntraMatrix.Text = xs.IntraMatrix;
 //                this.xvidInterMatrix.Text = xs.InterMatrix;
                 this.logfile.Text = xs.Logfile;

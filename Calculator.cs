@@ -25,6 +25,7 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using System.IO;
 
+#warning Calculator should be aware of mux providing, etc.
 namespace MeGUI
 {
 	/// <summary>
@@ -1116,7 +1117,7 @@ namespace MeGUI
 				FileInfo fi = new FileInfo(openFileDialog.FileName);
 				int sizeKB = (int)(fi.Length / 1024);
 				int sizeMB = sizeKB/1024;
-				aud1Type = this.getAudioType(openFileDialog.FileName);
+				aud1Type = VideoUtil.guessAudioType(openFileDialog.FileName);
 				audio1SizeKB.Text = sizeKB.ToString();
 				audio1SizeMB.Text = sizeMB.ToString();
 				if (mkv.Checked)
@@ -1358,7 +1359,7 @@ namespace MeGUI
 				FileInfo fi = new FileInfo(openFileDialog.FileName);
 				int sizeKB = (int)(fi.Length / 1024);
 				int sizeMB = sizeKB/1024;
-				aud2Type = this.getAudioType(openFileDialog.FileName);
+				aud2Type = VideoUtil.guessAudioType(openFileDialog.FileName);
 				audio2SizeKB.Text = sizeKB.ToString();
 				audio2SizeMB.Text = sizeMB.ToString();
                 if (mkv.Checked)
@@ -1562,28 +1563,6 @@ namespace MeGUI
                     this.isUpdating = false;
                 }
             }
-		}
-		#endregion
-		#region helper methods
-		/// <summary>
-		/// gets the audio type from a filename based on the extension
-		/// </summary>
-		/// <param name="fileName">the file name to be checked</param>
-		/// <returns>the audio type or none if it cannot be identified</returns>
-		private AudioType getAudioType(string fileName)
-		{
-#warning look here
-			string extension = Path.GetExtension(fileName).ToLower();
-            if (extension.Equals(".mp3"))
-                return AudioType.VBRMP3;
-            else if (extension.Equals(".aac") || extension.Equals(".mp4"))
-                return AudioType.MP4AAC;
-            else if (extension.Equals(".ac3"))
-                return AudioType.AC3;
-            else if (extension.Equals(".ogg"))
-                return AudioType.VORBIS;
-            else
-                return null;
 		}
 		#endregion
 		#region updown controls

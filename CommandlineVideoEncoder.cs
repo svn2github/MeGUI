@@ -19,6 +19,7 @@ namespace MeGUI
         protected System.Threading.ManualResetEvent stderrDone = new System.Threading.ManualResetEvent(false);
         public event EncoderOutputCallback EncoderOutputReceived;
         private int hres = 0, vres = 0, darX, darY;
+        protected bool usesSAR = false;
         #endregion
         public CommandlineVideoEncoder()
         {
@@ -190,28 +191,17 @@ namespace MeGUI
                 return false;
             
             // Automatically set AR signalling based on source AR, unless some other AR is already present in codec settings:
-            if ((job.Settings.PARX < 1) || (job.Settings.PARY < 1))
+            if ((job.PARX < 1) || (job.PARY < 1))
             {
-                job.Settings.PARX = darX;
-                job.Settings.PARY = darY;
+                job.PARX = darX;
+                job.PARY = darY;
             }
-            if (job.Settings is x264Settings)
+            if (usesSAR)
             {
                 int sarX, sarY;
-                VideoUtil.findSAR(job.Settings.PARX, job.Settings.PARY, hres, vres, out sarX, out sarY);
-                VideoCodecSettings nSettings = job.Settings.clone();
-                nSettings.PARX = sarX;
-                nSettings.PARY = sarY;
-                job.Commandline = new CommandLineGenerator().generateVideoCommandline(nSettings, job.Input, job.Output);
+                VideoUtil.findSAR(job.PARX, job.PARY, hres, vres, out sarX, out sarY);
+                job.Commandline = CommandLineGenerator.generateVideoCommandline(job.Settings, job.Input, job.Output, sarX, sarY);
             }
-#warning Must look into XviD PAR code.
-/*            if (job.Settings is xvidSettings && settings.XviDEncoder == 0)
-            {
-                int PAR = VideoUtil.roundXviDPAR(job.Settings.PARX, job.Settings.PARY, hres, vres);
-                xvidSettings nSettings = (xvidSettings)job.Settings.clone();
-                nSettings.PAR = PAR;
-                job.Commandline = new CommandLineGenerator().generateVideoCommandline(nSettings, job.Input, job.Output);
-            }*/
             this.job = job;
             su = new StatusUpdate();
             su.FPS = 0;

@@ -12,6 +12,7 @@ namespace MeGUI
 
         public x264Encoder(string executablePath)
         {
+            usesSAR = true;
             this.executable = executablePath;
             ignoreFurtherLines = false;
         }

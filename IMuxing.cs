@@ -43,6 +43,7 @@ namespace MeGUI
             out List<OutputType> unhandledInputTypes);
         MuxerType MuxerType { get; }
         Muxer GetMuxer(MeGUISettings settings);
+        MuxCommandlineGenerator CommandlineGenerator { get;}
         string GetOutputTypeFilter(ContainerType containerType);
         string GetVideoInputFilter();
         string GetAudioInputFilter();

@@ -31,15 +31,10 @@ namespace MeGUI
             this.xvidOtherGroupBox = new System.Windows.Forms.GroupBox();
             this.xvidInterlaced = new System.Windows.Forms.CheckBox();
             this.xvidGreyScale = new System.Windows.Forms.CheckBox();
-            this.xvidPARLabel = new System.Windows.Forms.Label();
-            this.xvidPAR = new System.Windows.Forms.ComboBox();
             this.xvidTrellisQuant = new System.Windows.Forms.CheckBox();
             this.xvidAdaptiveQuant = new System.Windows.Forms.CheckBox();
             this.fourCCLabel = new System.Windows.Forms.Label();
             this.fourCC = new System.Windows.Forms.ComboBox();
-            this.xLabel = new System.Windows.Forms.Label();
-            this.sarY = new System.Windows.Forms.TextBox();
-            this.sarX = new System.Windows.Forms.TextBox();
             this.xvidCodecToolsGroupBox = new System.Windows.Forms.GroupBox();
             this.xvidUseVHQForBframes = new System.Windows.Forms.CheckBox();
             this.xvidUseVHQForBframesLabel = new System.Windows.Forms.Label();
@@ -191,25 +186,20 @@ namespace MeGUI
             // 
             this.xvidOtherGroupBox.Controls.Add(this.xvidInterlaced);
             this.xvidOtherGroupBox.Controls.Add(this.xvidGreyScale);
-            this.xvidOtherGroupBox.Controls.Add(this.xvidPARLabel);
-            this.xvidOtherGroupBox.Controls.Add(this.xvidPAR);
             this.xvidOtherGroupBox.Controls.Add(this.xvidTrellisQuant);
             this.xvidOtherGroupBox.Controls.Add(this.xvidAdaptiveQuant);
             this.xvidOtherGroupBox.Controls.Add(this.fourCCLabel);
             this.xvidOtherGroupBox.Controls.Add(this.fourCC);
-            this.xvidOtherGroupBox.Controls.Add(this.xLabel);
-            this.xvidOtherGroupBox.Controls.Add(this.sarY);
-            this.xvidOtherGroupBox.Controls.Add(this.sarX);
             this.xvidOtherGroupBox.Location = new System.Drawing.Point(334, 6);
             this.xvidOtherGroupBox.Name = "xvidOtherGroupBox";
-            this.xvidOtherGroupBox.Size = new System.Drawing.Size(148, 212);
+            this.xvidOtherGroupBox.Size = new System.Drawing.Size(148, 156);
             this.xvidOtherGroupBox.TabIndex = 24;
             this.xvidOtherGroupBox.TabStop = false;
             this.xvidOtherGroupBox.Text = "Other Settings";
             // 
             // xvidInterlaced
             // 
-            this.xvidInterlaced.Location = new System.Drawing.Point(8, 160);
+            this.xvidInterlaced.Location = new System.Drawing.Point(6, 96);
             this.xvidInterlaced.Name = "xvidInterlaced";
             this.xvidInterlaced.Size = new System.Drawing.Size(104, 24);
             this.xvidInterlaced.TabIndex = 32;
@@ -218,40 +208,16 @@ namespace MeGUI
             // 
             // xvidGreyScale
             // 
-            this.xvidGreyScale.Location = new System.Drawing.Point(8, 136);
+            this.xvidGreyScale.Location = new System.Drawing.Point(6, 72);
             this.xvidGreyScale.Name = "xvidGreyScale";
             this.xvidGreyScale.Size = new System.Drawing.Size(104, 24);
             this.xvidGreyScale.TabIndex = 31;
             this.xvidGreyScale.Text = "Greyscale";
             this.xvidGreyScale.CheckedChanged += new System.EventHandler(this.updateEvent);
             // 
-            // xvidPARLabel
-            // 
-            this.xvidPARLabel.Location = new System.Drawing.Point(8, 24);
-            this.xvidPARLabel.Name = "xvidPARLabel";
-            this.xvidPARLabel.Size = new System.Drawing.Size(32, 23);
-            this.xvidPARLabel.TabIndex = 30;
-            this.xvidPARLabel.Text = "DAR";
-            // 
-            // xvidPAR
-            // 
-            this.xvidPAR.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.xvidPAR.Items.AddRange(new object[] {
-            "VGA (1:1)",
-            "PAL 4:3",
-            "PAL 16:9",
-            "NTSC 4:3",
-            "NTSC 16:9",
-            "Custom"});
-            this.xvidPAR.Location = new System.Drawing.Point(56, 24);
-            this.xvidPAR.Name = "xvidPAR";
-            this.xvidPAR.Size = new System.Drawing.Size(80, 21);
-            this.xvidPAR.TabIndex = 0;
-            this.xvidPAR.SelectedIndexChanged += new System.EventHandler(this.updateEvent);
-            // 
             // xvidTrellisQuant
             // 
-            this.xvidTrellisQuant.Location = new System.Drawing.Point(8, 88);
+            this.xvidTrellisQuant.Location = new System.Drawing.Point(6, 24);
             this.xvidTrellisQuant.Name = "xvidTrellisQuant";
             this.xvidTrellisQuant.Size = new System.Drawing.Size(104, 24);
             this.xvidTrellisQuant.TabIndex = 25;
@@ -260,7 +226,7 @@ namespace MeGUI
             // 
             // xvidAdaptiveQuant
             // 
-            this.xvidAdaptiveQuant.Location = new System.Drawing.Point(8, 112);
+            this.xvidAdaptiveQuant.Location = new System.Drawing.Point(6, 48);
             this.xvidAdaptiveQuant.Name = "xvidAdaptiveQuant";
             this.xvidAdaptiveQuant.Size = new System.Drawing.Size(136, 24);
             this.xvidAdaptiveQuant.TabIndex = 24;
@@ -269,7 +235,7 @@ namespace MeGUI
             // 
             // fourCCLabel
             // 
-            this.fourCCLabel.Location = new System.Drawing.Point(8, 188);
+            this.fourCCLabel.Location = new System.Drawing.Point(6, 124);
             this.fourCCLabel.Name = "fourCCLabel";
             this.fourCCLabel.Size = new System.Drawing.Size(40, 16);
             this.fourCCLabel.TabIndex = 28;
@@ -283,41 +249,11 @@ namespace MeGUI
             "DIVX",
             "DX50",
             "MP4V"});
-            this.fourCC.Location = new System.Drawing.Point(64, 184);
+            this.fourCC.Location = new System.Drawing.Point(62, 120);
             this.fourCC.Name = "fourCC";
             this.fourCC.Size = new System.Drawing.Size(72, 21);
             this.fourCC.TabIndex = 29;
             this.fourCC.SelectedIndexChanged += new System.EventHandler(this.updateEvent);
-            // 
-            // xLabel
-            // 
-            this.xLabel.Location = new System.Drawing.Point(83, 58);
-            this.xLabel.Name = "xLabel";
-            this.xLabel.Size = new System.Drawing.Size(8, 16);
-            this.xLabel.TabIndex = 34;
-            this.xLabel.Text = "x";
-            // 
-            // sarY
-            // 
-            this.sarY.Enabled = false;
-            this.sarY.Location = new System.Drawing.Point(96, 56);
-            this.sarY.MaxLength = 3;
-            this.sarY.Name = "sarY";
-            this.sarY.Size = new System.Drawing.Size(40, 20);
-            this.sarY.TabIndex = 33;
-            this.sarY.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textField_KeyPress);
-            this.sarY.TextChanged += new System.EventHandler(this.updateEvent);
-            // 
-            // sarX
-            // 
-            this.sarX.Enabled = false;
-            this.sarX.Location = new System.Drawing.Point(40, 56);
-            this.sarX.MaxLength = 3;
-            this.sarX.Name = "sarX";
-            this.sarX.Size = new System.Drawing.Size(40, 20);
-            this.sarX.TabIndex = 32;
-            this.sarX.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textField_KeyPress);
-            this.sarX.TextChanged += new System.EventHandler(this.updateEvent);
             // 
             // xvidCodecToolsGroupBox
             // 
@@ -391,10 +327,11 @@ namespace MeGUI
             this.xvidQuantType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.xvidQuantType.Items.AddRange(new object[] {
             "H.263",
-            "MPEG"});
-            this.xvidQuantType.Location = new System.Drawing.Point(248, 157);
+            "MPEG",
+            "Custom"});
+            this.xvidQuantType.Location = new System.Drawing.Point(192, 157);
             this.xvidQuantType.Name = "xvidQuantType";
-            this.xvidQuantType.Size = new System.Drawing.Size(64, 21);
+            this.xvidQuantType.Size = new System.Drawing.Size(120, 21);
             this.xvidQuantType.TabIndex = 10;
             this.xvidQuantType.SelectedIndexChanged += new System.EventHandler(this.updateEvent);
             // 
@@ -536,9 +473,9 @@ namespace MeGUI
             "4 - High",
             "5 - Very High",
             "6 - Ultra High"});
-            this.xvidMotionSearchPrecision.Location = new System.Drawing.Point(200, 144);
+            this.xvidMotionSearchPrecision.Location = new System.Drawing.Point(192, 144);
             this.xvidMotionSearchPrecision.Name = "xvidMotionSearchPrecision";
-            this.xvidMotionSearchPrecision.Size = new System.Drawing.Size(112, 21);
+            this.xvidMotionSearchPrecision.Size = new System.Drawing.Size(120, 21);
             this.xvidMotionSearchPrecision.TabIndex = 11;
             this.xvidMotionSearchPrecision.SelectedIndexChanged += new System.EventHandler(this.updateEvent);
             // 
@@ -1392,7 +1329,6 @@ namespace MeGUI
             this.mainTabPage.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
             this.xvidOtherGroupBox.ResumeLayout(false);
-            this.xvidOtherGroupBox.PerformLayout();
             this.xvidCodecToolsGroupBox.ResumeLayout(false);
             this.xvidGeneralOptionsGroupBox.ResumeLayout(false);
             this.xvidGeneralOptionsGroupBox.PerformLayout();
@@ -1435,15 +1371,10 @@ namespace MeGUI
         private System.Windows.Forms.GroupBox xvidOtherGroupBox;
         private System.Windows.Forms.CheckBox xvidInterlaced;
         private System.Windows.Forms.CheckBox xvidGreyScale;
-        private System.Windows.Forms.Label xvidPARLabel;
-        private System.Windows.Forms.ComboBox xvidPAR;
         private System.Windows.Forms.CheckBox xvidTrellisQuant;
         private System.Windows.Forms.CheckBox xvidAdaptiveQuant;
         private System.Windows.Forms.Label fourCCLabel;
         private System.Windows.Forms.ComboBox fourCC;
-        private System.Windows.Forms.Label xLabel;
-        private System.Windows.Forms.TextBox sarY;
-        private System.Windows.Forms.TextBox sarX;
         private System.Windows.Forms.GroupBox xvidCodecToolsGroupBox;
         private System.Windows.Forms.CheckBox xvidUseVHQForBframes;
         private System.Windows.Forms.Label xvidUseVHQForBframesLabel;

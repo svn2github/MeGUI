@@ -105,7 +105,7 @@ namespace MeGUI
                 profiles.AddAll(profileList, mainForm.DialogManager);
                 this.Close();
             }
-            else
+            else // export mode
             {
                 SaveFileDialog outputFilesChooser = new SaveFileDialog();
                 outputFilesChooser.Title = "Choose your output file";

@@ -29,7 +29,6 @@ namespace MeGUI
         }
         protected virtual MuxJob generateMuxJob()
         {
-#warning muxjobs generated here have no knowledge of PAR
             MuxJob job = new MuxJob();
             convertLanguagesToISO();
             foreach (SubStream stream in audioStreams)
@@ -45,6 +44,8 @@ namespace MeGUI
             job.Settings.VideoInput = this.videoInput.Text;
             job.Settings.MuxedOutput = muxedOutput.Text;
             job.Settings.MuxedInput = this.muxedInput.Text;
+            job.Settings.PARX = base.parX;
+            job.Settings.PARY = base.parY;
 
             if (string.IsNullOrEmpty(job.Settings.VideoInput))
                 job.Input = job.Settings.MuxedInput;
@@ -62,7 +63,7 @@ namespace MeGUI
                 {
                     if (this.enableSplit.Checked && !splitSize.Text.Equals(""))
                         job.Settings.SplitSize = Int32.Parse(this.splitSize.Text) * 1024;
-                    job.Commandline = gen.generateMuxCommandline(job.Settings, job.MuxType);
+                    job.Commandline = CommandLineGenerator.generateMuxCommandline(job.Settings, job.MuxType);
                 }
             }
             return job;
@@ -74,9 +75,9 @@ namespace MeGUI
         }
 
         public void setConfig(string videoInput, string muxedInput, double framerate, SubStream[] audioStreams,
-            SubStream[] subtitleStreams, string chapterFile, string output, int splitSize)
+            SubStream[] subtitleStreams, string chapterFile, string output, int splitSize, int parX, int parY)
         {
-            base.setConfig(videoInput, framerate, audioStreams, subtitleStreams, chapterFile, output, splitSize);
+            base.setConfig(videoInput, framerate, audioStreams, subtitleStreams, chapterFile, output, splitSize, parX, parY);
             this.muxedInput.Text = muxedInput;
         }
 

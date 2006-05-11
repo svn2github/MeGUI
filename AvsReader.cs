@@ -137,7 +137,7 @@ namespace MeGUI
                     // Get the address of the first line.
                     IntPtr ptr = bmpData.Scan0;
                     // Read data
-                    clip.ReadFrame(ptr, position);
+                    clip.ReadFrame(ptr, bmpData.Stride, position);
                 }
                 finally
                 {

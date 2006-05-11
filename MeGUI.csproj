@@ -214,6 +214,7 @@
     <Compile Include="DialogManager.cs" />
     <Compile Include="DialogSettings.cs" />
     <Compile Include="DirectShow.cs" />
+    <Compile Include="DivXMuxer.cs" />
     <Compile Include="Encoder.cs">
       <SubType>Code</SubType>
     </Compile>

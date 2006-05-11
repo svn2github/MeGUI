@@ -134,7 +134,7 @@ namespace MeGUI
                     IntPtr zero = new IntPtr(0);
                     for (i = 0; i < frameCount && continueWorking; i++)
                     {
-                        af.Clip.ReadFrame(zero, i);
+                        af.Clip.ReadFrame(zero, 0, i);
                     }
                     running = false;
                 }

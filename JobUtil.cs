@@ -39,12 +39,10 @@ namespace MeGUI
         #region start/stop
         bool finished = false;
         DeinterlaceFilter[] filters;
-        CommandLineGenerator gen;
 		MeGUI mainForm;
         AVCLevels al;
 		public JobUtil(MeGUI mainForm)
 		{
-			gen = new CommandLineGenerator();
 			this.mainForm = mainForm;
             al = new AVCLevels();
         }
@@ -122,7 +120,7 @@ namespace MeGUI
 			job.AutoForceFilm = mainForm.Settings.AutoForceFilm;
 			job.ForceFilmThreshold = (double)mainForm.Settings.ForceFilmThreshold;
 			job.PostprocessingProperties = properties;
-			job.Commandline = gen.generateDGIndexCommandline(mainForm.Settings.DgIndexPath, demuxType, trackID1,
+            job.Commandline = CommandLineGenerator.generateDGIndexCommandline(mainForm.Settings.DgIndexPath, demuxType, trackID1,
 				trackID2, input, output);
 			return job;
 		}
@@ -142,9 +140,9 @@ namespace MeGUI
             return job;
         }
         
-        public VideoJob generateVideoJob(string input, string output, VideoCodecSettings settings)
+        public VideoJob generateVideoJob(string input, string output, VideoCodecSettings settings, int parX, int parY)
         {
-            return generateVideoJob(input, output, settings, false);
+            return generateVideoJob(input, output, settings, false, parX, parY);
         }
         
         /// <summary>
@@ -156,11 +154,13 @@ namespace MeGUI
 		/// <param name="output">the video output</param>
 		/// <param name="settings">the codec settings for this job</param>
 		/// <returns>the generated job or null if there was an error with the video source</returns>
-		public VideoJob generateVideoJob(string input, string output, VideoCodecSettings settings, bool skipVideoCheck)
+		public VideoJob generateVideoJob(string input, string output, VideoCodecSettings settings, bool skipVideoCheck, int parX, int parY)
 		{
 			VideoJob job = new VideoJob();
 			job.Input = input;
 			job.Output = output;
+            job.PARX = parX;
+            job.PARY = parY;
 			if (mainForm.Settings.AutoSetNbThreads)
 				adjustNbThreads(settings);
 			if (MeGUI.GetDirectoryName(settings.Logfile).Equals("")) // no path set
@@ -191,7 +191,7 @@ namespace MeGUI
 			job.NumberOfFrames = nbOfFrames;
 			job.Framerate = framerate;
 			job.Priority = mainForm.Settings.DefaultPriority;
-			job.Commandline = gen.generateVideoCommandline(job.Settings, input, output);
+            job.Commandline = CommandLineGenerator.generateVideoCommandline(job.Settings, input, output, parX, parY);
 			return job;
 		}
         /// <summary>
@@ -220,7 +220,7 @@ namespace MeGUI
 			job.Output = stream.output;
 			job.Settings = stream.settings;
 			job.Priority = mainForm.Settings.DefaultPriority;
-			job.Commandline = gen.generateAudioCommandline(mainForm.Settings, job.Settings, job.Input, job.Output); 
+            job.Commandline = CommandLineGenerator.generateAudioCommandline(mainForm.Settings, job.Settings, job.Input, job.Output); 
 			return job;
 		}
 
@@ -259,8 +259,8 @@ namespace MeGUI
                     if (o is VideoType)
                     {
                         mjob.Settings.VideoInput = video.Output;
-                        mjob.Settings.PARX = video.Settings.PARX;
-                        mjob.Settings.PARY = video.Settings.PARY;
+                        mjob.Settings.PARX = video.ParX;
+                        mjob.Settings.PARY = video.ParX;
                     }
                     else if (o is AudioType)
                     {
@@ -297,6 +297,8 @@ namespace MeGUI
                 {
                     mjob.Settings.MuxedOutput = output;
                     mjob.Settings.SplitSize = splitSize;
+                    mjob.Settings.PARX = video.ParX;
+                    mjob.Settings.PARY = video.ParY;
                 }
                 else
                 {
@@ -312,7 +314,7 @@ namespace MeGUI
                     mjob.Input = mjob.Settings.VideoInput;
                 mjob.Output = mjob.Settings.MuxedOutput;
                 mjob.MuxType = mpl.muxerInterface.MuxerType;
-                mjob.Commandline = gen.generateMuxCommandline(mjob.Settings, mjob.MuxType);
+                mjob.Commandline = CommandLineGenerator.generateMuxCommandline(mjob.Settings, mjob.MuxType);
             }
             return jobs.ToArray();
         }
@@ -373,12 +375,12 @@ namespace MeGUI
             return false;
         }
         public bool AddVideoJobs(string movieInput, string movieOutput, VideoCodecSettings settings,
-            int introEndFrame, int creditsStartFrame, bool prerender, bool checkVideo)
+            int introEndFrame, int creditsStartFrame, int parX, int parY, bool prerender, bool checkVideo)
         {
             bool cont = getFinalZoneConfiguration(settings, introEndFrame, creditsStartFrame);
             if (!cont) // abort
                 return false;
-            VideoJob[] jobs = prepareVideoJob(movieInput, movieOutput, settings, prerender, checkVideo);
+            VideoJob[] jobs = prepareVideoJob(movieInput, movieOutput, settings, parX, parY, prerender, checkVideo);
             if (jobs == null)
                 return false;
             int freeJobNumber = this.mainForm.getFreeJobNumber();
@@ -415,9 +417,9 @@ namespace MeGUI
             }
             return false;
         }
-        public VideoJob[] prepareVideoJob(string movieInput, string movieOutput, VideoCodecSettings settings)
+        public VideoJob[] prepareVideoJob(string movieInput, string movieOutput, VideoCodecSettings settings, int parX, int parY)
         {
-            return prepareVideoJob(movieInput, movieOutput, settings, false, false);
+            return prepareVideoJob(movieInput, movieOutput, settings, parX, parY, false, false);
         }
 		/// <summary>
 		/// at first, the job from the currently configured settings is generated. In addition, we find out if this job is 
@@ -426,7 +428,7 @@ namespace MeGUI
 		/// then, all the generated jobs are returned
 		/// </summary>
 		/// <returns>an Array of VideoJobs in the order they are to be encoded</returns>
-		public VideoJob[] prepareVideoJob(string movieInput, string movieOutput, VideoCodecSettings settings, bool prerender, bool checkVideo)
+		public VideoJob[] prepareVideoJob(string movieInput, string movieOutput, VideoCodecSettings settings, int parX, int parY, bool prerender, bool checkVideo)
 		{
 			bool twoPasses = false, turbo = settings.Turbo, threePasses = false;
 			if (settings.EncodingMode == 4) // automated twopass
@@ -466,7 +468,7 @@ namespace MeGUI
                 {
                     return null;
                 }
-                prerenderJob = this.generateVideoJob(movieInput, hfyuFile, new hfyuSettings());
+                prerenderJob = this.generateVideoJob(movieInput, hfyuFile, new hfyuSettings(), parX, parY);
                 if (prerenderJob == null)
                     return null;
             }
@@ -484,7 +486,7 @@ namespace MeGUI
                     }
                 }
             }
-            VideoJob job = this.generateVideoJob(inputAVS, movieOutput, settings, prerender);
+            VideoJob job = this.generateVideoJob(inputAVS, movieOutput, settings, prerender, parX, parY);
             if (prerender)
             {
                 job.Framerate = prerenderJob.Framerate;
@@ -501,8 +503,8 @@ namespace MeGUI
 					firstpass.Output = ""; // the first pass has no output
 					firstpass.Settings.EncodingMode = 2;
 					firstpass.Settings.Turbo = turbo;
-					firstpass.Commandline = gen.generateVideoCommandline(firstpass.Settings, 
-						firstpass.Input, firstpass.Output);
+                    firstpass.Commandline = CommandLineGenerator.generateVideoCommandline(firstpass.Settings, 
+						firstpass.Input, firstpass.Output, parX, parY);
 					if (threePasses)
 					{
 						firstpass.Settings.EncodingMode = 5; // change to 3 pass 3rd pass just for show
@@ -515,8 +517,8 @@ namespace MeGUI
                                 + "-2ndpass" + Path.GetExtension(job.Output);
                             job.FilesToDelete.Add(middlepass.Output);
                         }
-						middlepass.Commandline = gen.generateVideoCommandline(middlepass.Settings, 
-							middlepass.Input, middlepass.Output);
+                        middlepass.Commandline = CommandLineGenerator.generateVideoCommandline(middlepass.Settings, 
+							middlepass.Input, middlepass.Output, parX, parY);
 					}
 				}
                 if (prerender)
@@ -943,7 +945,7 @@ namespace MeGUI
 		public void updateVideoBitrate(VideoJob job, int bitrate)
 		{
 			job.Settings.BitrateQuantizer = bitrate;
-			job.Commandline = gen.generateVideoCommandline(job.Settings, job.Input, job.Output);
+            job.Commandline = CommandLineGenerator.generateVideoCommandline(job.Settings, job.Input, job.Output, job.PARX, job.PARY);
 		}
 		#endregion
 		#region input properties

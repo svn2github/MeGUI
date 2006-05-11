@@ -9,7 +9,7 @@ namespace MeGUI
 	{
         private string faacPath, lamePath, nerorawPath, mencoderPath, besweetPath, mp4boxPath, mkvmergePath,
             x264Path, dgIndexPath, xvidEncrawPath, avc2aviPath, aviMuxGUIPath,
-            audioProfileName, videoProfileName, defaultLanguage1, defaultLanguage2;
+            audioProfileName, videoProfileName, defaultLanguage1, defaultLanguage2, divxMuxerPath;
         private bool recalculateMainMovieBitrate, autoForceFilm, autoStartQueue, enableMP3inMP4, shutdown, autoOpenScript,
             overwriteStats, keep2of3passOutput, deleteCompletedJobs, autoSetNbThreads, deleteIntermediateFiles,
             deleteAbortedOutput, openProgressWindow, useadvancedtooltips;
@@ -28,6 +28,11 @@ namespace MeGUI
             set { usingNero6 = value; }
         }
 
+        public string DivXMuxPath
+        {
+            get { return divxMuxerPath; }
+            set { divxMuxerPath = value; }
+        }
 
         public DialogSettings DialogSettings
         {
@@ -56,6 +61,7 @@ namespace MeGUI
 			mp4boxPath = "mp4box.exe";
 			mkvmergePath = "mkvmerge.exe";
 			x264Path = "x264.exe";
+            divxMuxerPath = "divxmux.exe";
 			dgIndexPath = "dgindex.exe";
             xvidEncrawPath = "xvid_encraw.exe";
             lamePath = "lame.exe";

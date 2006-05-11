@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MeGUI
 {
-    public enum MuxerType { MP4BOX, MKVMERGE, AVC2AVI, AVIMUXGUI };
+    public enum MuxerType { MP4BOX, MKVMERGE, AVC2AVI, AVIMUXGUI, DIVXMUX, FFMPEG, ATOMCHANGER };
     
     public class MuxProvider
     {
@@ -16,10 +16,11 @@ namespace MeGUI
         public MuxProvider()
         {
             registeredMuxers = new List<IMuxing>();
-            registeredMuxers.Add(new MP4BoxMuxerProvider() as IMuxing);
-            registeredMuxers.Add(new MKVMergeMuxerProvider() as IMuxing);
-            registeredMuxers.Add(new AVC2AVIMuxerProvider() as IMuxing);
-            registeredMuxers.Add(new AVIMuxGUIMuxerProvider() as IMuxing);
+            registeredMuxers.Add(new MP4BoxMuxerProvider());
+            registeredMuxers.Add(new MKVMergeMuxerProvider());
+            registeredMuxers.Add(new AVC2AVIMuxerProvider());
+            registeredMuxers.Add(new DivXMuxProvider());
+//            registeredMuxers.Add(new AVIMuxGUIMuxerProvider() as IMuxing);
             comparer = new MuxPathComparer();
         }
 
@@ -34,6 +35,14 @@ namespace MeGUI
                 if (muxing.MuxerType == type)
                     return muxing;
             return null;
+        }
+
+        public Muxer GetMuxer(MuxerType type, MeGUISettings settings)
+        {
+            IMuxing muxer = GetMuxer(type);
+            if (muxer == null)
+                return null;
+            return muxer.GetMuxer(settings);
         }
 
         public MuxPath GetMuxPath(VideoCodec videoCodec, AudioCodec[] audioCodecs, OutputType[] dictatedTypes,
@@ -375,6 +384,8 @@ namespace MeGUI
             supportedContainers.Add(ContainerFileType.MP4);
             supportedContainerInputTypes.Add(ContainerType.MP4);
             base.type = MuxerType.MP4BOX;
+            maxFilesOfType = new int[] { 1, -1, -1 };
+            generator = CommandLineGenerator.generateMP4BoxCommandline;
             name = "MP4 Muxer";
 //            base.audioInputFilter = "All supported types (*.aac, *.mp3, *.mp4)|*.aac;*.mp3;*.mp4|RAW AAC Files (*.aac)|*.aac|MP3 Files (*.mp3)|*.mp3|MP4 Audio Files (*.mp4)|*.mp4";
 //            base.videoInputFilter = "All supported types (*.m4v, *.264, *.mp4)|*.m4v;*.264;*.mp4|RAW MPEG-4 ASP Files (*.m4v)|*.m4v|RAW MPEG-4 AVC Files (*.264)|*.264|MP4 Files (*.mp4)|*.mp4";
@@ -385,7 +396,6 @@ namespace MeGUI
         {
             return new MP4BoxMuxer(settings.Mp4boxPath);
         }
-
     }
     public class MKVMergeMuxerProvider : MuxerProvider
     {
@@ -407,7 +417,9 @@ namespace MeGUI
             supportedContainerInputTypes.Add(ContainerType.MP4);
             supportedContainerInputTypes.Add(ContainerType.AVI);
             supportedContainerInputTypes.Add(ContainerType.MKV);
+            maxFilesOfType = new int[] { -1, -1, -1 };
             base.type = MuxerType.MKVMERGE;
+            generator = CommandLineGenerator.generateMkvmergeCommandline;
             name = "Mkv muxer";
 //            base.audioInputFilter = "All supported types (*.aac, *.ac3, *.dts, *.mp2, *.mp3, *.mp4, *.ogg)|*.aac;*.ac3;*.dts;*.mp2;*.mp3;*.mp4;*.ogg|RAW AAC Files (*.aac)|*.aac|AC3 Files (*.ac3)|*.ac3|DTS Files (*.dts)|*.dts" +
 //                "MP2 Files (*.mp2)|*.mp2|MP3 Files (*.mp3)|*.mp3|MP4 Audio Files (*.mp4)|*.mp4|Ogg Vorbis Files (*.ogg)|*.ogg";
@@ -433,14 +445,39 @@ namespace MeGUI
             supportedSubtitleTypes.Add(SubtitleType.SUBRIP);
             supportedContainers.Add(ContainerFileType.AVI);
             supportedContainerInputTypes.Add(ContainerType.AVI);
+            maxFilesOfType = new int[] { 1, -1, -1 };
             base.type = MuxerType.AVIMUXGUI;
             name = "AVI Muxer";
+            generator = CommandLineGenerator.generateAVIMuxCommandline;
         }
 
         public override Muxer GetMuxer(MeGUISettings settings)
         {
             throw new Exception("AVI-Mux GUI muxer not supported yet");
             //return new AVIMuxGUIMuxer(settings.AviMuxGUIPath);
+        }
+    }
+    public class DivXMuxProvider : MuxerProvider
+    {
+        public DivXMuxProvider()
+            : base()
+        {
+            supportedVideoTypes.Add(VideoType.AVI);
+            supportedAudioTypes.Add(AudioType.AC3);
+            supportedAudioTypes.Add(AudioType.MP3);
+            supportedSubtitleTypes.Add(SubtitleType.SUBRIP);
+            supportedSubtitleTypes.Add(SubtitleType.VOBSUB);
+            supportedContainerInputTypes.Add(ContainerType.AVI);
+            supportedContainers.Add(ContainerFileType.AVI);
+            maxFilesOfType = new int[] { 1, -1, -1 };
+            base.type = MuxerType.DIVXMUX;
+            generator = CommandLineGenerator.generateDivXMuxCommandline;
+            name = "DivX AVI Muxer";
+        }
+
+        public override Muxer GetMuxer(MeGUISettings meguiSettings)
+        {
+            return new DivXMuxer(meguiSettings.DivXMuxPath);
         }
     }
     public class AVC2AVIMuxerProvider : MuxerProvider
@@ -451,6 +488,8 @@ namespace MeGUI
             supportedContainers.Add(ContainerFileType.AVI);
             base.type = MuxerType.AVC2AVI;
             name = "AVC2AVI";
+            maxFilesOfType = new int[] { 1, 0, 0 };
+            generator = CommandLineGenerator.GenerateAVC2AVICommandline;
 //            base.videoInputFilter = "RAW MPEG-4 AVC Files (*.264)|*.264";
         }
 
@@ -469,7 +508,9 @@ namespace MeGUI
         protected List<ChapterType> supportedChapterTypes;
         protected List<ContainerFileType> supportedContainers;
         protected List<ContainerType> supportedContainerInputTypes;
+        protected MuxCommandlineGenerator generator;
         protected string videoInputFilter, audioInputFilter, subtitleInputFilter;
+        protected int[] maxFilesOfType;
         protected string name;
         protected MuxerType type;
         public MuxerProvider()
@@ -483,6 +524,10 @@ namespace MeGUI
             videoInputFilter = audioInputFilter = subtitleInputFilter = "";
         }
         #region IMuxing Members
+        public MuxCommandlineGenerator CommandlineGenerator
+        {
+            get { return generator; }
+        }
 
         public string Name
         {
@@ -566,15 +611,20 @@ namespace MeGUI
 
         public abstract Muxer GetMuxer(MeGUISettings meguiSettings);
 
-        private bool canProcess(OutputType type)
+        /// <summary>
+        /// Returns the number of the type if it is supported, otherwise -1
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        private int getSupportedType(OutputType type)
         {
             if (type is VideoType && supportedVideoTypes.Contains((VideoType)type))
-                return true;
+                return 0;
             if (type is AudioType && supportedAudioTypes.Contains((AudioType)type))
-                return true;
+                return 1;
             if (type is SubtitleType && supportedSubtitleTypes.Contains((SubtitleType)type))
-                return true;
-            return false;
+                return 2;
+            return -1;
         }
 
         public ProcessingLevel CanBeProcessed(OutputType[] inputTypes, out List<OutputType> handledInputTypes,
@@ -582,10 +632,21 @@ namespace MeGUI
         {
             handledInputTypes = new List<OutputType>();
             unhandledInputTypes = new List<OutputType>();
+            int[] filesOfType = new int[3];
             foreach (OutputType inputType in inputTypes)
             {
-                if (canProcess(inputType))
-                    handledInputTypes.Add(inputType);
+                int type = getSupportedType(inputType);
+                if (type >= 0)
+                {
+                    if (maxFilesOfType[type] < 0 // We ignore it in this case
+                        || filesOfType[type] < maxFilesOfType[type])
+                    {
+                        handledInputTypes.Add(inputType);
+                        filesOfType[type]++;
+                    }
+                    else
+                        unhandledInputTypes.Add(inputType);
+                }
                 else
                     unhandledInputTypes.Add(inputType);
             }
@@ -596,6 +657,7 @@ namespace MeGUI
                 retval = ProcessingLevel.ALL;
             return retval;
         }
+
 
         public ProcessingLevel CanBeProcessed(ContainerType[] inputContainers, OutputType[] inputTypes, out List<OutputType> handledInputTypes,
             out List<OutputType> unhandledInputTypes)

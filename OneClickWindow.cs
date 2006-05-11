@@ -76,6 +76,7 @@ namespace MeGUI
             logBuilder = new StringBuilder();
             this.vUtil = new VideoUtil(this.mainForm);
             audioLanguages = new List<string>();
+            containerFormat.Items.AddRange(muxProvider.GetSupportedContainers().ToArray());
             this.containerFormat.SelectedIndex = 0;
             this.playbackMethod.Items.Clear();
             foreach (string name in mainForm.Profiles.OneClickProfiles.Keys)

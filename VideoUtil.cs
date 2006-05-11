@@ -828,7 +828,7 @@ namespace MeGUI
             logBuilder.Append(eliminatedDuplicateFilenames(ref videoOutput, ref muxedOutput, audioStreams));
             video.Output = videoOutput;
             int freeJobNumber = this.mainForm.getFreeJobNumber();
-            VideoJob[] vjobs = jobUtil.prepareVideoJob(video.Input, video.Output, video.Settings, prerender, true);
+            VideoJob[] vjobs = jobUtil.prepareVideoJob(video.Input, video.Output, video.Settings, video.ParX, video.ParY, prerender, true);
             List<Job> jobs = new List<Job>();
 
             List<SubStream> allAudioToMux = new List<SubStream>();
@@ -998,59 +998,30 @@ namespace MeGUI
 
         public static SubtitleType guessSubtitleType(string p)
         {
-            switch (Path.GetExtension(p.ToLower()))
+            foreach (SubtitleType type in ContainerManager.GetContainerManager().SubtitleTypes)
             {
-                case ".srt":
-                    return SubtitleType.SUBRIP;
-                case ".idx":
-                    return SubtitleType.VOBSUB;
+                if (Path.GetExtension(p.ToLower()) == "." + type.Extension)
+                    return type;
             }
             return null;
         }
 
         public static VideoType guessVideoType(string p)
         {
-            switch (Path.GetExtension(p.ToLower()))
+            foreach (VideoType type in ContainerManager.GetContainerManager().VideoTypes)
             {
-                case ".avi":
-                    return VideoType.AVI;
-                case ".mkv":
-                    return VideoType.MKV;
-                case ".mp4":
-                    return VideoType.MP4;
-                case ".m4v":
-                    return VideoType.RAWASP;
-                case ".264":
-                    return VideoType.RAWAVC;
+                if (Path.GetExtension(p.ToLower()) == "." + type.Extension)
+                    return type;
             }
             return null;
         }
  
         public static AudioType guessAudioType(string p)
         {
-            switch (Path.GetExtension(p.ToLower()))
+            foreach (AudioType type in ContainerManager.GetContainerManager().AudioTypes)
             {
-                case ".mp3":
-                    return AudioType.MP3;
-
-                case ".mp2":
-                    return AudioType.MP2;
-
-                case ".ac3":
-                    return AudioType.AC3;
-
-                case ".dts":
-                    return AudioType.DTS;
-
-                case ".mp4":
-                    return AudioType.MP4AAC;
-
-                case ".aac":
-                case ".m4a":
-                    return AudioType.RAWAAC;
-
-                case ".ogg":
-                    return AudioType.VORBIS;
+                if (Path.GetExtension(p.ToLower()) == "." + type.Extension)
+                    return type;
             }
             return null;
         }

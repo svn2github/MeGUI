@@ -169,10 +169,6 @@ namespace MeGUI
             this.label24 = new System.Windows.Forms.Label();
             this.label25 = new System.Windows.Forms.Label();
             this.numericUpDown18 = new System.Windows.Forms.NumericUpDown();
-            this.label26 = new System.Windows.Forms.Label();
-            this.label27 = new System.Windows.Forms.Label();
-            this.textBox7 = new System.Windows.Forms.TextBox();
-            this.textBox8 = new System.Windows.Forms.TextBox();
             this.label28 = new System.Windows.Forms.Label();
             this.label29 = new System.Windows.Forms.Label();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
@@ -2029,10 +2025,6 @@ namespace MeGUI
             this.groupBox5.Controls.Add(this.label24);
             this.groupBox5.Controls.Add(this.label25);
             this.groupBox5.Controls.Add(this.numericUpDown18);
-            this.groupBox5.Controls.Add(this.label26);
-            this.groupBox5.Controls.Add(this.label27);
-            this.groupBox5.Controls.Add(this.textBox7);
-            this.groupBox5.Controls.Add(this.textBox8);
             this.groupBox5.Controls.Add(this.label28);
             this.groupBox5.Controls.Add(this.label29);
             this.groupBox5.Controls.Add(this.comboBox2);
@@ -2052,7 +2044,7 @@ namespace MeGUI
             0,
             0,
             65536});
-            this.numericUpDown16.Location = new System.Drawing.Point(84, 160);
+            this.numericUpDown16.Location = new System.Drawing.Point(84, 127);
             this.numericUpDown16.Maximum = new decimal(new int[] {
             1,
             0,
@@ -2071,7 +2063,7 @@ namespace MeGUI
             0,
             0,
             65536});
-            this.numericUpDown17.Location = new System.Drawing.Point(84, 136);
+            this.numericUpDown17.Location = new System.Drawing.Point(84, 103);
             this.numericUpDown17.Maximum = new decimal(new int[] {
             1,
             0,
@@ -2084,7 +2076,7 @@ namespace MeGUI
             // 
             // label23
             // 
-            this.label23.Location = new System.Drawing.Point(6, 162);
+            this.label23.Location = new System.Drawing.Point(6, 129);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(80, 23);
             this.label23.TabIndex = 49;
@@ -2092,7 +2084,7 @@ namespace MeGUI
             // 
             // label24
             // 
-            this.label24.Location = new System.Drawing.Point(6, 138);
+            this.label24.Location = new System.Drawing.Point(6, 105);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(72, 23);
             this.label24.TabIndex = 48;
@@ -2100,7 +2092,7 @@ namespace MeGUI
             // 
             // label25
             // 
-            this.label25.Location = new System.Drawing.Point(6, 114);
+            this.label25.Location = new System.Drawing.Point(6, 81);
             this.label25.Name = "label25";
             this.label25.Size = new System.Drawing.Size(72, 16);
             this.label25.TabIndex = 46;
@@ -2114,7 +2106,7 @@ namespace MeGUI
             0,
             0,
             65536});
-            this.numericUpDown18.Location = new System.Drawing.Point(84, 112);
+            this.numericUpDown18.Location = new System.Drawing.Point(84, 79);
             this.numericUpDown18.Maximum = new decimal(new int[] {
             1,
             0,
@@ -2124,41 +2116,6 @@ namespace MeGUI
             this.numericUpDown18.Size = new System.Drawing.Size(48, 20);
             this.numericUpDown18.TabIndex = 47;
             this.numericUpDown18.ValueChanged += new System.EventHandler(this.updateEvent);
-            // 
-            // label26
-            // 
-            this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(2, 91);
-            this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(30, 13);
-            this.label26.TabIndex = 45;
-            this.label26.Text = "DAR";
-            // 
-            // label27
-            // 
-            this.label27.Location = new System.Drawing.Point(79, 88);
-            this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(8, 16);
-            this.label27.TabIndex = 44;
-            this.label27.Text = "x";
-            // 
-            // textBox7
-            // 
-            this.textBox7.Location = new System.Drawing.Point(91, 88);
-            this.textBox7.Name = "textBox7";
-            this.textBox7.Size = new System.Drawing.Size(40, 20);
-            this.textBox7.TabIndex = 43;
-            this.textBox7.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textField_KeyPress);
-            this.textBox7.TextChanged += new System.EventHandler(this.updateEvent);
-            // 
-            // textBox8
-            // 
-            this.textBox8.Location = new System.Drawing.Point(37, 88);
-            this.textBox8.Name = "textBox8";
-            this.textBox8.Size = new System.Drawing.Size(40, 20);
-            this.textBox8.TabIndex = 42;
-            this.textBox8.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textField_KeyPress);
-            this.textBox8.TextChanged += new System.EventHandler(this.updateEvent);
             // 
             // label28
             // 
@@ -2800,7 +2757,6 @@ namespace MeGUI
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown14)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown15)).EndInit();
             this.groupBox5.ResumeLayout(false);
-            this.groupBox5.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown16)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown17)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown18)).EndInit();
@@ -2971,10 +2927,6 @@ namespace MeGUI
         private System.Windows.Forms.Label label24;
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.NumericUpDown numericUpDown18;
-        private System.Windows.Forms.Label label26;
-        private System.Windows.Forms.Label label27;
-        private System.Windows.Forms.TextBox textBox7;
-        private System.Windows.Forms.TextBox textBox8;
         private System.Windows.Forms.Label label28;
         private System.Windows.Forms.Label label29;
         private System.Windows.Forms.ComboBox comboBox2;

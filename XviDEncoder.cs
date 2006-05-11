@@ -15,6 +15,7 @@ namespace MeGUI
 
         public XviDEncoder(string executablePath)
         {
+            usesSAR = true;
             this.executable = executablePath;
             ignoreFurtherLines = false;
         }

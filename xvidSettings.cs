@@ -28,7 +28,7 @@ namespace MeGUI
     {
         private int motionSearchPrecision, vhqMode, quantType, minPQuant, maxPQuant, minBQuant, maxBQuant, bQuantRatio, bQuantOffset,
             keyFrameBoost, keyframeThreshold, keyframeReduction, overflowControlStrength,
-            maxOverflowImprovement, maxOverflowDegradation, highBitrateDegradation, lowBitrateImprovement, reactionDelayFactor, averagingPeriod, par,
+            maxOverflowImprovement, maxOverflowDegradation, highBitrateDegradation, lowBitrateImprovement, reactionDelayFactor, averagingPeriod,
             rateControlBuffer, frameDropRatio, vbvBuffer, vbvMaxRate, vbvPeakRate;
         private bool packedBitstream, gmc, chromaMotion, closedGOP, vhqForBframes, adaptiveQuant,
             greyscale, interlaced, bottomFieldFirst, lumiMasking;
@@ -48,7 +48,6 @@ namespace MeGUI
             motionSearchPrecision = 6;
             vhqMode = 1;
             quantType = 0; //H.263
-            par = 0; // 1:1
             MinQuantizer = 2;
             MaxQuantizer = 31;
             minPQuant = 2;
@@ -114,11 +113,6 @@ namespace MeGUI
         {
             get { return quantType; }
             set { quantType = value; }
-        }
-        public int PAR
-        {
-            get { return par; }
-            set { par = value; }
         }
         public int MinPQuant
         {

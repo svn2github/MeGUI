@@ -98,6 +98,9 @@ namespace MeGUI
         private TextBox aviMuxGUIPath;
         private Label label5;
         private Label label4;
+        private Button divxMuxSelectExeButton;
+        private TextBox divxMuxPath;
+        private Label label6;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -211,12 +214,15 @@ namespace MeGUI
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
-            this.label4 = new System.Windows.Forms.Label();
-            this.aviMuxGUIPath = new System.Windows.Forms.TextBox();
-            this.selectAviMuxGUIExecutableButton = new System.Windows.Forms.Button();
-            this.label5 = new System.Windows.Forms.Label();
-            this.avc2aviPath = new System.Windows.Forms.TextBox();
             this.selectAvc2AviExecutableButton = new System.Windows.Forms.Button();
+            this.selectAviMuxGUIExecutableButton = new System.Windows.Forms.Button();
+            this.avc2aviPath = new System.Windows.Forms.TextBox();
+            this.aviMuxGUIPath = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.divxMuxPath = new System.Windows.Forms.TextBox();
+            this.divxMuxSelectExeButton = new System.Windows.Forms.Button();
             this.otherGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.acceptableAspectError)).BeginInit();
             this.vobGroupBox.SuspendLayout();
@@ -251,7 +257,7 @@ namespace MeGUI
             // 
             // xvidEncrawLabel
             // 
-            this.xvidEncrawLabel.Location = new System.Drawing.Point(8, 177);
+            this.xvidEncrawLabel.Location = new System.Drawing.Point(8, 200);
             this.xvidEncrawLabel.Name = "xvidEncrawLabel";
             this.xvidEncrawLabel.Size = new System.Drawing.Size(84, 16);
             this.xvidEncrawLabel.TabIndex = 19;
@@ -259,7 +265,7 @@ namespace MeGUI
             // 
             // selectXvidEncrawButton
             // 
-            this.selectXvidEncrawButton.Location = new System.Drawing.Point(424, 171);
+            this.selectXvidEncrawButton.Location = new System.Drawing.Point(424, 194);
             this.selectXvidEncrawButton.Name = "selectXvidEncrawButton";
             this.selectXvidEncrawButton.Size = new System.Drawing.Size(24, 23);
             this.selectXvidEncrawButton.TabIndex = 18;
@@ -268,7 +274,7 @@ namespace MeGUI
             // 
             // xvidEncrawPath
             // 
-            this.xvidEncrawPath.Location = new System.Drawing.Point(120, 172);
+            this.xvidEncrawPath.Location = new System.Drawing.Point(120, 195);
             this.xvidEncrawPath.Name = "xvidEncrawPath";
             this.xvidEncrawPath.ReadOnly = true;
             this.xvidEncrawPath.Size = new System.Drawing.Size(296, 21);
@@ -277,7 +283,7 @@ namespace MeGUI
             // 
             // selectAvisynthPluginsDir
             // 
-            this.selectAvisynthPluginsDir.Location = new System.Drawing.Point(424, 313);
+            this.selectAvisynthPluginsDir.Location = new System.Drawing.Point(424, 336);
             this.selectAvisynthPluginsDir.Name = "selectAvisynthPluginsDir";
             this.selectAvisynthPluginsDir.Size = new System.Drawing.Size(24, 23);
             this.selectAvisynthPluginsDir.TabIndex = 16;
@@ -286,7 +292,7 @@ namespace MeGUI
             // 
             // avisynthPluginsDir
             // 
-            this.avisynthPluginsDir.Location = new System.Drawing.Point(120, 313);
+            this.avisynthPluginsDir.Location = new System.Drawing.Point(120, 336);
             this.avisynthPluginsDir.Name = "avisynthPluginsDir";
             this.avisynthPluginsDir.ReadOnly = true;
             this.avisynthPluginsDir.Size = new System.Drawing.Size(296, 21);
@@ -296,7 +302,7 @@ namespace MeGUI
             // avisynthPluginsLabel
             // 
             this.avisynthPluginsLabel.AutoSize = true;
-            this.avisynthPluginsLabel.Location = new System.Drawing.Point(11, 321);
+            this.avisynthPluginsLabel.Location = new System.Drawing.Point(11, 344);
             this.avisynthPluginsLabel.Name = "avisynthPluginsLabel";
             this.avisynthPluginsLabel.Size = new System.Drawing.Size(84, 13);
             this.avisynthPluginsLabel.TabIndex = 14;
@@ -304,7 +310,7 @@ namespace MeGUI
             // 
             // dgIndexPath
             // 
-            this.dgIndexPath.Location = new System.Drawing.Point(120, 196);
+            this.dgIndexPath.Location = new System.Drawing.Point(120, 219);
             this.dgIndexPath.Name = "dgIndexPath";
             this.dgIndexPath.ReadOnly = true;
             this.dgIndexPath.Size = new System.Drawing.Size(296, 21);
@@ -313,7 +319,7 @@ namespace MeGUI
             // 
             // dgIndexLabel
             // 
-            this.dgIndexLabel.Location = new System.Drawing.Point(8, 201);
+            this.dgIndexLabel.Location = new System.Drawing.Point(8, 224);
             this.dgIndexLabel.Name = "dgIndexLabel";
             this.dgIndexLabel.Size = new System.Drawing.Size(100, 23);
             this.dgIndexLabel.TabIndex = 10;
@@ -425,7 +431,7 @@ namespace MeGUI
             // 
             // x264ExePathLabel
             // 
-            this.x264ExePathLabel.Location = new System.Drawing.Point(8, 151);
+            this.x264ExePathLabel.Location = new System.Drawing.Point(8, 174);
             this.x264ExePathLabel.Name = "x264ExePathLabel";
             this.x264ExePathLabel.Size = new System.Drawing.Size(64, 16);
             this.x264ExePathLabel.TabIndex = 9;
@@ -433,7 +439,7 @@ namespace MeGUI
             // 
             // x264ExePath
             // 
-            this.x264ExePath.Location = new System.Drawing.Point(120, 148);
+            this.x264ExePath.Location = new System.Drawing.Point(120, 171);
             this.x264ExePath.Name = "x264ExePath";
             this.x264ExePath.ReadOnly = true;
             this.x264ExePath.Size = new System.Drawing.Size(296, 21);
@@ -442,7 +448,7 @@ namespace MeGUI
             // 
             // selectX264ExecutableButton
             // 
-            this.selectX264ExecutableButton.Location = new System.Drawing.Point(424, 148);
+            this.selectX264ExecutableButton.Location = new System.Drawing.Point(424, 171);
             this.selectX264ExecutableButton.Name = "selectX264ExecutableButton";
             this.selectX264ExecutableButton.Size = new System.Drawing.Size(24, 23);
             this.selectX264ExecutableButton.TabIndex = 9;
@@ -451,7 +457,7 @@ namespace MeGUI
             // 
             // selectDGIndexExecutable
             // 
-            this.selectDGIndexExecutable.Location = new System.Drawing.Point(424, 196);
+            this.selectDGIndexExecutable.Location = new System.Drawing.Point(424, 219);
             this.selectDGIndexExecutable.Name = "selectDGIndexExecutable";
             this.selectDGIndexExecutable.Size = new System.Drawing.Size(24, 23);
             this.selectDGIndexExecutable.TabIndex = 3;
@@ -869,18 +875,21 @@ namespace MeGUI
             this.tabPage2.Controls.Add(this.dgIndexLabel);
             this.tabPage2.Controls.Add(this.selectMP4boxExecutableButton);
             this.tabPage2.Controls.Add(this.selectAvc2AviExecutableButton);
+            this.tabPage2.Controls.Add(this.divxMuxSelectExeButton);
             this.tabPage2.Controls.Add(this.selectAviMuxGUIExecutableButton);
             this.tabPage2.Controls.Add(this.selectMkvmergeExecutableButton);
             this.tabPage2.Controls.Add(this.selectBesweetExecutableLabelButton);
             this.tabPage2.Controls.Add(this.selectMencoderExecutableButton);
             this.tabPage2.Controls.Add(this.mp4boxPath);
             this.tabPage2.Controls.Add(this.avc2aviPath);
+            this.tabPage2.Controls.Add(this.divxMuxPath);
             this.tabPage2.Controls.Add(this.aviMuxGUIPath);
             this.tabPage2.Controls.Add(this.mkvmergePath);
             this.tabPage2.Controls.Add(this.besweetPath);
             this.tabPage2.Controls.Add(this.mencoderPath);
             this.tabPage2.Controls.Add(this.mp4boxPathLabel);
             this.tabPage2.Controls.Add(this.label5);
+            this.tabPage2.Controls.Add(this.label6);
             this.tabPage2.Controls.Add(this.label4);
             this.tabPage2.Controls.Add(this.mkvmergePathLabel);
             this.tabPage2.Controls.Add(this.besweetPathLabel);
@@ -900,7 +909,7 @@ namespace MeGUI
             // usingNero6
             // 
             this.usingNero6.AutoSize = true;
-            this.usingNero6.Location = new System.Drawing.Point(120, 266);
+            this.usingNero6.Location = new System.Drawing.Point(120, 289);
             this.usingNero6.Name = "usingNero6";
             this.usingNero6.Size = new System.Drawing.Size(196, 17);
             this.usingNero6.TabIndex = 29;
@@ -909,7 +918,7 @@ namespace MeGUI
             // 
             // textBox3
             // 
-            this.textBox3.Location = new System.Drawing.Point(120, 289);
+            this.textBox3.Location = new System.Drawing.Point(120, 312);
             this.textBox3.Name = "textBox3";
             this.textBox3.ReadOnly = true;
             this.textBox3.Size = new System.Drawing.Size(296, 21);
@@ -918,7 +927,7 @@ namespace MeGUI
             // 
             // label3
             // 
-            this.label3.Location = new System.Drawing.Point(8, 294);
+            this.label3.Location = new System.Drawing.Point(8, 317);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(100, 23);
             this.label3.TabIndex = 27;
@@ -926,7 +935,7 @@ namespace MeGUI
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(424, 289);
+            this.button3.Location = new System.Drawing.Point(424, 312);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(24, 23);
             this.button3.TabIndex = 26;
@@ -935,7 +944,7 @@ namespace MeGUI
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(120, 244);
+            this.textBox2.Location = new System.Drawing.Point(120, 267);
             this.textBox2.Name = "textBox2";
             this.textBox2.ReadOnly = true;
             this.textBox2.Size = new System.Drawing.Size(296, 21);
@@ -944,7 +953,7 @@ namespace MeGUI
             // 
             // label2
             // 
-            this.label2.Location = new System.Drawing.Point(8, 249);
+            this.label2.Location = new System.Drawing.Point(8, 272);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(100, 23);
             this.label2.TabIndex = 24;
@@ -952,7 +961,7 @@ namespace MeGUI
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(424, 244);
+            this.button2.Location = new System.Drawing.Point(424, 267);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(24, 23);
             this.button2.TabIndex = 23;
@@ -961,7 +970,7 @@ namespace MeGUI
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(120, 220);
+            this.textBox1.Location = new System.Drawing.Point(120, 243);
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
             this.textBox1.Size = new System.Drawing.Size(296, 21);
@@ -970,7 +979,7 @@ namespace MeGUI
             // 
             // label1
             // 
-            this.label1.Location = new System.Drawing.Point(8, 225);
+            this.label1.Location = new System.Drawing.Point(8, 248);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(100, 23);
             this.label1.TabIndex = 21;
@@ -978,29 +987,21 @@ namespace MeGUI
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(424, 220);
+            this.button1.Location = new System.Drawing.Point(424, 243);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(24, 23);
             this.button1.TabIndex = 20;
             this.button1.Text = "...";
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // label4
+            // selectAvc2AviExecutableButton
             // 
-            this.label4.Location = new System.Drawing.Point(8, 105);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(100, 23);
-            this.label4.TabIndex = 2;
-            this.label4.Text = "avimux_gui";
-            // 
-            // aviMuxGUIPath
-            // 
-            this.aviMuxGUIPath.Location = new System.Drawing.Point(120, 100);
-            this.aviMuxGUIPath.Name = "aviMuxGUIPath";
-            this.aviMuxGUIPath.ReadOnly = true;
-            this.aviMuxGUIPath.Size = new System.Drawing.Size(296, 21);
-            this.aviMuxGUIPath.TabIndex = 5;
-            this.aviMuxGUIPath.Text = "avimux_gui.exe";
+            this.selectAvc2AviExecutableButton.Location = new System.Drawing.Point(424, 146);
+            this.selectAvc2AviExecutableButton.Name = "selectAvc2AviExecutableButton";
+            this.selectAvc2AviExecutableButton.Size = new System.Drawing.Size(24, 23);
+            this.selectAvc2AviExecutableButton.TabIndex = 8;
+            this.selectAvc2AviExecutableButton.Text = "...";
+            this.selectAvc2AviExecutableButton.Click += new System.EventHandler(this.selectAvc2AviExecutableButton_Click);
             // 
             // selectAviMuxGUIExecutableButton
             // 
@@ -1011,31 +1012,65 @@ namespace MeGUI
             this.selectAviMuxGUIExecutableButton.Text = "...";
             this.selectAviMuxGUIExecutableButton.Click += new System.EventHandler(this.selectAviMuxGUIExecutableButton_Click);
             // 
-            // label5
-            // 
-            this.label5.Location = new System.Drawing.Point(8, 128);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(100, 23);
-            this.label5.TabIndex = 2;
-            this.label5.Text = "avc2avi";
-            // 
             // avc2aviPath
             // 
-            this.avc2aviPath.Location = new System.Drawing.Point(120, 123);
+            this.avc2aviPath.Location = new System.Drawing.Point(120, 146);
             this.avc2aviPath.Name = "avc2aviPath";
             this.avc2aviPath.ReadOnly = true;
             this.avc2aviPath.Size = new System.Drawing.Size(296, 21);
             this.avc2aviPath.TabIndex = 5;
             this.avc2aviPath.Text = "avc2avi.exe";
             // 
-            // selectAvc2AviExecutableButton
+            // aviMuxGUIPath
             // 
-            this.selectAvc2AviExecutableButton.Location = new System.Drawing.Point(424, 123);
-            this.selectAvc2AviExecutableButton.Name = "selectAvc2AviExecutableButton";
-            this.selectAvc2AviExecutableButton.Size = new System.Drawing.Size(24, 23);
-            this.selectAvc2AviExecutableButton.TabIndex = 8;
-            this.selectAvc2AviExecutableButton.Text = "...";
-            this.selectAvc2AviExecutableButton.Click += new System.EventHandler(this.selectAvc2AviExecutableButton_Click);
+            this.aviMuxGUIPath.Location = new System.Drawing.Point(120, 100);
+            this.aviMuxGUIPath.Name = "aviMuxGUIPath";
+            this.aviMuxGUIPath.ReadOnly = true;
+            this.aviMuxGUIPath.Size = new System.Drawing.Size(296, 21);
+            this.aviMuxGUIPath.TabIndex = 5;
+            this.aviMuxGUIPath.Text = "avimux_gui.exe";
+            // 
+            // label5
+            // 
+            this.label5.Location = new System.Drawing.Point(8, 151);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(100, 23);
+            this.label5.TabIndex = 2;
+            this.label5.Text = "avc2avi";
+            // 
+            // label4
+            // 
+            this.label4.Location = new System.Drawing.Point(8, 105);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(100, 23);
+            this.label4.TabIndex = 2;
+            this.label4.Text = "avimux_gui";
+            // 
+            // label6
+            // 
+            this.label6.Location = new System.Drawing.Point(8, 128);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(100, 23);
+            this.label6.TabIndex = 2;
+            this.label6.Text = "avimux_gui";
+            // 
+            // divxMuxPath
+            // 
+            this.divxMuxPath.Location = new System.Drawing.Point(120, 123);
+            this.divxMuxPath.Name = "divxMuxPath";
+            this.divxMuxPath.ReadOnly = true;
+            this.divxMuxPath.Size = new System.Drawing.Size(296, 21);
+            this.divxMuxPath.TabIndex = 5;
+            this.divxMuxPath.Text = "divxmux.exe";
+            // 
+            // divxMuxSelectExeButton
+            // 
+            this.divxMuxSelectExeButton.Location = new System.Drawing.Point(424, 123);
+            this.divxMuxSelectExeButton.Name = "divxMuxSelectExeButton";
+            this.divxMuxSelectExeButton.Size = new System.Drawing.Size(24, 23);
+            this.divxMuxSelectExeButton.TabIndex = 8;
+            this.divxMuxSelectExeButton.Text = "...";
+            this.divxMuxSelectExeButton.Click += new System.EventHandler(this.divxMuxSelectExeButton_Click);
             // 
             // SettingsForm
             // 
@@ -1249,6 +1284,7 @@ namespace MeGUI
 				settings.AutoSetNbThreads = autosetNbThreads.Checked;
 				settings.Keep2of3passOutput = keep2ndPassOutput.Checked;
 				settings.OverwriteStats = keep2ndPassLogfile.Checked;
+                settings.DivXMuxPath = divxMuxPath.Text;
 				settings.NbPasses = (int)nbPasses.Value;
 				return settings;
 			}
@@ -1294,6 +1330,7 @@ namespace MeGUI
 				autosetNbThreads.Checked = settings.AutoSetNbThreads;
 				keep2ndPassOutput.Checked = settings.Keep2of3passOutput;
 				keep2ndPassLogfile.Checked = settings.OverwriteStats;
+                divxMuxPath.Text = settings.DivXMuxPath;
 				nbPasses.Value = (decimal)settings.NbPasses;
 			}
 		}
@@ -1303,6 +1340,14 @@ namespace MeGUI
         {
             dialogSettings = new DialogSettings();
             MessageBox.Show(this, "Successfully reset all dialogs", "Success", MessageBoxButtons.OK, MessageBoxIcon.None);
+        }
+
+        private void divxMuxSelectExeButton_Click(object sender, EventArgs e)
+        {
+            if (selectExe("divxmux"))
+            {
+                divxMuxPath.Text = openExecutableDialog.FileName;
+            }
         }
 
 	}

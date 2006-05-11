@@ -32,12 +32,8 @@ namespace MeGUI
             this.fourCC = new System.Windows.Forms.ComboBox();
             this.fourCCLabel = new System.Windows.Forms.Label();
             this.psnr = new System.Windows.Forms.CheckBox();
-            this.xLabel = new System.Windows.Forms.Label();
             this.x264NbThreadsLabel = new System.Windows.Forms.Label();
             this.x264NbThreads = new System.Windows.Forms.NumericUpDown();
-            this.sarLabel = new System.Windows.Forms.Label();
-            this.sarX = new System.Windows.Forms.TextBox();
-            this.sarY = new System.Windows.Forms.TextBox();
             this.avcLevelGroupbox = new System.Windows.Forms.GroupBox();
             this.avcLevel = new System.Windows.Forms.ComboBox();
             this.avcProfileGroupbox = new System.Windows.Forms.GroupBox();
@@ -190,7 +186,6 @@ namespace MeGUI
             // 
             this.zoneTabPage.Controls.Add(this.customCommandlineOptions);
             this.zoneTabPage.Controls.Add(this.customCommandlineOptionsLabel);
-            this.zoneTabPage.Size = new System.Drawing.Size(502, 426);
             this.zoneTabPage.Controls.SetChildIndex(this.customCommandlineOptionsLabel, 0);
             this.zoneTabPage.Controls.SetChildIndex(this.customCommandlineOptions, 0);
             // 
@@ -218,12 +213,8 @@ namespace MeGUI
             this.x264GeneralMiscGroupbox.Controls.Add(this.fourCC);
             this.x264GeneralMiscGroupbox.Controls.Add(this.fourCCLabel);
             this.x264GeneralMiscGroupbox.Controls.Add(this.psnr);
-            this.x264GeneralMiscGroupbox.Controls.Add(this.xLabel);
             this.x264GeneralMiscGroupbox.Controls.Add(this.x264NbThreadsLabel);
             this.x264GeneralMiscGroupbox.Controls.Add(this.x264NbThreads);
-            this.x264GeneralMiscGroupbox.Controls.Add(this.sarLabel);
-            this.x264GeneralMiscGroupbox.Controls.Add(this.sarX);
-            this.x264GeneralMiscGroupbox.Controls.Add(this.sarY);
             this.x264GeneralMiscGroupbox.Location = new System.Drawing.Point(321, 3);
             this.x264GeneralMiscGroupbox.Name = "x264GeneralMiscGroupbox";
             this.x264GeneralMiscGroupbox.Size = new System.Drawing.Size(175, 159);
@@ -267,15 +258,6 @@ namespace MeGUI
             this.psnr.Text = "PSNR calculation";
             this.psnr.CheckedChanged += new System.EventHandler(this.updateEvent);
             // 
-            // xLabel
-            // 
-            this.xLabel.Location = new System.Drawing.Point(76, 125);
-            this.xLabel.Name = "xLabel";
-            this.xLabel.Padding = new System.Windows.Forms.Padding(3);
-            this.xLabel.Size = new System.Drawing.Size(23, 18);
-            this.xLabel.TabIndex = 18;
-            this.xLabel.Text = "x";
-            // 
             // x264NbThreadsLabel
             // 
             this.x264NbThreadsLabel.AutoSize = true;
@@ -310,35 +292,6 @@ namespace MeGUI
             0,
             0});
             this.x264NbThreads.ValueChanged += new System.EventHandler(this.updateEvent);
-            // 
-            // sarLabel
-            // 
-            this.sarLabel.Location = new System.Drawing.Point(30, 101);
-            this.sarLabel.Name = "sarLabel";
-            this.sarLabel.Padding = new System.Windows.Forms.Padding(3);
-            this.sarLabel.Size = new System.Drawing.Size(117, 23);
-            this.sarLabel.TabIndex = 17;
-            this.sarLabel.Text = "Display Aspect Ratio";
-            // 
-            // sarX
-            // 
-            this.sarX.Location = new System.Drawing.Point(29, 124);
-            this.sarX.MaxLength = 3;
-            this.sarX.Name = "sarX";
-            this.sarX.Size = new System.Drawing.Size(40, 20);
-            this.sarX.TabIndex = 15;
-            this.sarX.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textField_KeyPress);
-            this.sarX.TextChanged += new System.EventHandler(this.updateEvent);
-            // 
-            // sarY
-            // 
-            this.sarY.Location = new System.Drawing.Point(103, 124);
-            this.sarY.MaxLength = 3;
-            this.sarY.Name = "sarY";
-            this.sarY.Size = new System.Drawing.Size(40, 20);
-            this.sarY.TabIndex = 16;
-            this.sarY.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textField_KeyPress);
-            this.sarY.TextChanged += new System.EventHandler(this.updateEvent);
             // 
             // avcLevelGroupbox
             // 
@@ -543,7 +496,7 @@ namespace MeGUI
             this.x264Turbo.Location = new System.Drawing.Point(126, 15);
             this.x264Turbo.Name = "x264Turbo";
             this.x264Turbo.Padding = new System.Windows.Forms.Padding(3);
-            this.x264Turbo.Size = new System.Drawing.Size(61, 23);
+            this.x264Turbo.Size = new System.Drawing.Size(60, 23);
             this.x264Turbo.TabIndex = 10;
             this.x264Turbo.Text = "Turbo";
             this.x264Turbo.CheckedChanged += new System.EventHandler(this.updateEvent);
@@ -576,7 +529,7 @@ namespace MeGUI
             this.x264LosslessMode.Location = new System.Drawing.Point(126, 43);
             this.x264LosslessMode.Name = "x264LosslessMode";
             this.x264LosslessMode.Padding = new System.Windows.Forms.Padding(3);
-            this.x264LosslessMode.Size = new System.Drawing.Size(73, 23);
+            this.x264LosslessMode.Size = new System.Drawing.Size(72, 23);
             this.x264LosslessMode.TabIndex = 13;
             this.x264LosslessMode.Text = "Lossless";
             this.x264LosslessMode.CheckedChanged += new System.EventHandler(this.updateEvent);
@@ -584,7 +537,7 @@ namespace MeGUI
             // x264BitrateQuantizer
             // 
             this.x264BitrateQuantizer.Location = new System.Drawing.Point(268, 45);
-            this.x264BitrateQuantizer.MaxLength = 4;
+            this.x264BitrateQuantizer.MaxLength = 5;
             this.x264BitrateQuantizer.Name = "x264BitrateQuantizer";
             this.x264BitrateQuantizer.Size = new System.Drawing.Size(40, 20);
             this.x264BitrateQuantizer.TabIndex = 6;
@@ -599,7 +552,7 @@ namespace MeGUI
             this.rateControlTabPage.Controls.Add(this.x264RCGroupbox);
             this.rateControlTabPage.Location = new System.Drawing.Point(4, 22);
             this.rateControlTabPage.Name = "rateControlTabPage";
-            this.rateControlTabPage.Size = new System.Drawing.Size(502, 426);
+            this.rateControlTabPage.Size = new System.Drawing.Size(488, 426);
             this.rateControlTabPage.TabIndex = 3;
             this.rateControlTabPage.Text = "RC and ME";
             this.rateControlTabPage.UseVisualStyleBackColor = true;
@@ -901,7 +854,7 @@ namespace MeGUI
             // x264VBVMaxRate
             // 
             this.x264VBVMaxRate.Location = new System.Drawing.Point(229, 42);
-            this.x264VBVMaxRate.MaxLength = 4;
+            this.x264VBVMaxRate.MaxLength = 5;
             this.x264VBVMaxRate.Name = "x264VBVMaxRate";
             this.x264VBVMaxRate.Size = new System.Drawing.Size(48, 20);
             this.x264VBVMaxRate.TabIndex = 12;
@@ -977,7 +930,7 @@ namespace MeGUI
             // x264VBVBufferSize
             // 
             this.x264VBVBufferSize.Location = new System.Drawing.Point(229, 17);
-            this.x264VBVBufferSize.MaxLength = 4;
+            this.x264VBVBufferSize.MaxLength = 58;
             this.x264VBVBufferSize.Name = "x264VBVBufferSize";
             this.x264VBVBufferSize.Size = new System.Drawing.Size(48, 20);
             this.x264VBVBufferSize.TabIndex = 6;
@@ -1067,7 +1020,7 @@ namespace MeGUI
             this.quantizationTabPage.Controls.Add(this.x264QuantizerGroupBox);
             this.quantizationTabPage.Location = new System.Drawing.Point(4, 22);
             this.quantizationTabPage.Name = "quantizationTabPage";
-            this.quantizationTabPage.Size = new System.Drawing.Size(502, 426);
+            this.quantizationTabPage.Size = new System.Drawing.Size(488, 426);
             this.quantizationTabPage.TabIndex = 4;
             this.quantizationTabPage.Text = "Advanced";
             this.quantizationTabPage.UseVisualStyleBackColor = true;
@@ -1855,12 +1808,8 @@ namespace MeGUI
         private System.Windows.Forms.ComboBox fourCC;
         private System.Windows.Forms.Label fourCCLabel;
         private System.Windows.Forms.CheckBox psnr;
-        private System.Windows.Forms.Label xLabel;
         private System.Windows.Forms.Label x264NbThreadsLabel;
         private System.Windows.Forms.NumericUpDown x264NbThreads;
-        private System.Windows.Forms.Label sarLabel;
-        private System.Windows.Forms.TextBox sarX;
-        private System.Windows.Forms.TextBox sarY;
         private System.Windows.Forms.GroupBox avcLevelGroupbox;
         private System.Windows.Forms.ComboBox avcLevel;
         private System.Windows.Forms.GroupBox avcProfileGroupbox;

@@ -135,7 +135,7 @@ namespace MeGUI
         [DllImport("AvisynthWrapper", ExactSpelling = true, SetLastError = false, CharSet = CharSet.Ansi)]
         private static extern int dimzon_avs_getaframe(IntPtr avs, IntPtr buf, long sampleNo, long sampleCount);
         [DllImport("AvisynthWrapper", ExactSpelling = true, SetLastError = false, CharSet = CharSet.Ansi)]
-        private static extern int dimzon_avs_getvframe(IntPtr avs, IntPtr buf, int frm);
+        private static extern int dimzon_avs_getvframe(IntPtr avs, IntPtr buf, int stride, int frm);
         [DllImport("AvisynthWrapper", ExactSpelling = true, SetLastError = false, CharSet = CharSet.Ansi)]
         private static extern int dimzon_avs_getintvariable(IntPtr avs, string name, ref int val);
 
@@ -400,9 +400,9 @@ namespace MeGUI
 			}
 		}
 
-        public void ReadFrame(IntPtr addr, int frame)
+        public void ReadFrame(IntPtr addr, int stride, int frame)
         {
-            if (0 != dimzon_avs_getvframe(_avs, addr, frame))
+            if (0 != dimzon_avs_getvframe(_avs, addr, stride, frame))
                 throw new AviSynthException(getLastError());
         }
 

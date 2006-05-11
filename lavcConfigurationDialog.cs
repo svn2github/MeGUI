@@ -215,10 +215,6 @@ namespace MeGUI
                 ls.QuantizerCompression = quantizerCompression.Value;
                 ls.IntraMatrix = this.intraMatrix.Text;
                 ls.InterMatrix = this.interMatrix.Text;
-                if (!sarX.Text.Equals(""))
-                    ls.PARX = Int32.Parse(sarX.Text);
-                if (!sarY.Text.Equals(""))
-                    ls.PARY = Int32.Parse(sarY.Text);
                 ls.MERange = this.meRange.Value;
                 ls.InitialBufferOccupancy = this.initialBufferOccupancy.Value;
                 ls.BorderMask = this.borderMask.Value;
@@ -266,14 +262,6 @@ namespace MeGUI
                 quantizerCompression.Value = ls.QuantizerCompression;
                 intraMatrix.Text = ls.IntraMatrix;
                 interMatrix.Text = ls.InterMatrix;
-                if (ls.PARX > 0)
-                    sarX.Text = ls.PARX.ToString();
-                else
-                    sarX.Text = "";
-                if (ls.PARY > 0)
-                    sarY.Text = ls.PARY.ToString();
-                else
-                    sarY.Text = "";
                 this.meRange.Value = ls.MERange;
                 this.initialBufferOccupancy.Value = ls.InitialBufferOccupancy;
                 this.borderMask.Value = ls.BorderMask;

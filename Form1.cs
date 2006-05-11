@@ -279,6 +279,7 @@ namespace MeGUI
             this.mnuToolsD2VCreator = new System.Windows.Forms.MenuItem();
             this.mnuQuantEditor = new System.Windows.Forms.MenuItem();
             this.menuItem1 = new System.Windows.Forms.MenuItem();
+            this.mnuToolsAdaptiveMuxer = new System.Windows.Forms.MenuItem();
             this.mainMenu1 = new System.Windows.Forms.MainMenu(this.components);
             this.mnuFile = new System.Windows.Forms.MenuItem();
             this.mnuFileOpen = new System.Windows.Forms.MenuItem();
@@ -305,7 +306,6 @@ namespace MeGUI
             this.abortToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.exitMeGUIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuToolsAdaptiveMuxer = new System.Windows.Forms.MenuItem();
             this.tabControl1.SuspendLayout();
             this.inputTab.SuspendLayout();
             this.audioIOGroupBox.SuspendLayout();
@@ -568,7 +568,7 @@ namespace MeGUI
             this.addPrerenderJob.AutoSize = true;
             this.addPrerenderJob.Location = new System.Drawing.Point(254, 134);
             this.addPrerenderJob.Name = "addPrerenderJob";
-            this.addPrerenderJob.Size = new System.Drawing.Size(132, 17);
+            this.addPrerenderJob.Size = new System.Drawing.Size(133, 17);
             this.addPrerenderJob.TabIndex = 16;
             this.addPrerenderJob.Text = "Add pre-rendering job";
             this.addPrerenderJob.UseVisualStyleBackColor = true;
@@ -688,7 +688,7 @@ namespace MeGUI
             // 
             // videoConfigButton
             // 
-            this.videoConfigButton.Location = new System.Drawing.Point(228, 72);
+            this.videoConfigButton.Location = new System.Drawing.Point(228, 75);
             this.videoConfigButton.Name = "videoConfigButton";
             this.videoConfigButton.Size = new System.Drawing.Size(56, 23);
             this.videoConfigButton.TabIndex = 14;
@@ -730,7 +730,7 @@ namespace MeGUI
             this.shutdownCheckBox.AutoSize = true;
             this.shutdownCheckBox.Location = new System.Drawing.Point(6, 317);
             this.shutdownCheckBox.Name = "shutdownCheckBox";
-            this.shutdownCheckBox.Size = new System.Drawing.Size(167, 17);
+            this.shutdownCheckBox.Size = new System.Drawing.Size(168, 17);
             this.shutdownCheckBox.TabIndex = 14;
             this.shutdownCheckBox.Text = "Shutdown at end of encoding";
             this.shutdownCheckBox.UseVisualStyleBackColor = true;
@@ -910,14 +910,14 @@ namespace MeGUI
             this.AbortMenuItem,
             this.LoadMenuItem});
             this.queueContextMenu.Name = "queueContextMenu";
-            this.queueContextMenu.Size = new System.Drawing.Size(156, 92);
+            this.queueContextMenu.Size = new System.Drawing.Size(165, 92);
             this.queueContextMenu.Opened += new System.EventHandler(this.queueContextMenu_Opened);
             // 
             // DeleteMenuItem
             // 
             this.DeleteMenuItem.Name = "DeleteMenuItem";
             this.DeleteMenuItem.ShortcutKeyDisplayString = "";
-            this.DeleteMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.DeleteMenuItem.Size = new System.Drawing.Size(164, 22);
             this.DeleteMenuItem.Text = "&Delete";
             this.DeleteMenuItem.ToolTipText = "Delete this job";
             this.DeleteMenuItem.Click += new System.EventHandler(this.deleteMenuItem_Click);
@@ -928,20 +928,20 @@ namespace MeGUI
             this.PostponedMenuItem,
             this.WaitingMenuItem});
             this.StatusMenuItem.Name = "StatusMenuItem";
-            this.StatusMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.StatusMenuItem.Size = new System.Drawing.Size(164, 22);
             this.StatusMenuItem.Text = "&Change status";
             // 
             // PostponedMenuItem
             // 
             this.PostponedMenuItem.Name = "PostponedMenuItem";
-            this.PostponedMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.PostponedMenuItem.Size = new System.Drawing.Size(144, 22);
             this.PostponedMenuItem.Text = "&Postponed";
             this.PostponedMenuItem.Click += new System.EventHandler(this.postponeMenuItem_Click);
             // 
             // WaitingMenuItem
             // 
             this.WaitingMenuItem.Name = "WaitingMenuItem";
-            this.WaitingMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.WaitingMenuItem.Size = new System.Drawing.Size(144, 22);
             this.WaitingMenuItem.Text = "&Waiting";
             this.WaitingMenuItem.Click += new System.EventHandler(this.waitingMenuItem_Click);
             // 
@@ -949,7 +949,7 @@ namespace MeGUI
             // 
             this.AbortMenuItem.Name = "AbortMenuItem";
             this.AbortMenuItem.ShortcutKeyDisplayString = "";
-            this.AbortMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.AbortMenuItem.Size = new System.Drawing.Size(164, 22);
             this.AbortMenuItem.Text = "&Abort";
             this.AbortMenuItem.ToolTipText = "Abort this job";
             this.AbortMenuItem.Click += new System.EventHandler(this.abortMenuItem_Click);
@@ -958,7 +958,7 @@ namespace MeGUI
             // 
             this.LoadMenuItem.Name = "LoadMenuItem";
             this.LoadMenuItem.ShortcutKeyDisplayString = "";
-            this.LoadMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.LoadMenuItem.Size = new System.Drawing.Size(164, 22);
             this.LoadMenuItem.Text = "&Load";
             this.LoadMenuItem.ToolTipText = "Load into MeGUI";
             this.LoadMenuItem.Click += new System.EventHandler(this.loadMenuItem_Click);
@@ -1055,6 +1055,12 @@ namespace MeGUI
             this.menuItem1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.mnuToolsAdaptiveMuxer});
             this.menuItem1.Text = "Muxer";
+            // 
+            // mnuToolsAdaptiveMuxer
+            // 
+            this.mnuToolsAdaptiveMuxer.Index = 0;
+            this.mnuToolsAdaptiveMuxer.Text = "Adaptive Muxer";
+            this.mnuToolsAdaptiveMuxer.Click += new System.EventHandler(this.mnuToolsAdaptiveMuxer_Click);
             // 
             // mainMenu1
             // 
@@ -1192,58 +1198,52 @@ namespace MeGUI
             this.toolStripSeparator2,
             this.exitMeGUIToolStripMenuItem});
             this.trayMenu.Name = "trayMenu";
-            this.trayMenu.Size = new System.Drawing.Size(147, 126);
+            this.trayMenu.Size = new System.Drawing.Size(156, 126);
             // 
             // openMeGUIToolStripMenuItem
             // 
             this.openMeGUIToolStripMenuItem.Name = "openMeGUIToolStripMenuItem";
-            this.openMeGUIToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.openMeGUIToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
             this.openMeGUIToolStripMenuItem.Text = "Open MeGUI";
             this.openMeGUIToolStripMenuItem.Click += new System.EventHandler(this.openMeGUIToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(143, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(152, 6);
             // 
             // startToolStripMenuItem
             // 
             this.startToolStripMenuItem.Name = "startToolStripMenuItem";
-            this.startToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.startToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
             this.startToolStripMenuItem.Text = "Start";
             this.startToolStripMenuItem.Click += new System.EventHandler(this.startStopButton_Click);
             // 
             // pauseToolStripMenuItem
             // 
             this.pauseToolStripMenuItem.Name = "pauseToolStripMenuItem";
-            this.pauseToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.pauseToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
             this.pauseToolStripMenuItem.Text = "Pause";
             this.pauseToolStripMenuItem.Click += new System.EventHandler(this.pauseButton_Click);
             // 
             // abortToolStripMenuItem
             // 
             this.abortToolStripMenuItem.Name = "abortToolStripMenuItem";
-            this.abortToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.abortToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
             this.abortToolStripMenuItem.Text = "Abort";
             this.abortToolStripMenuItem.Click += new System.EventHandler(this.abortButton_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(143, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(152, 6);
             // 
             // exitMeGUIToolStripMenuItem
             // 
             this.exitMeGUIToolStripMenuItem.Name = "exitMeGUIToolStripMenuItem";
-            this.exitMeGUIToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.exitMeGUIToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
             this.exitMeGUIToolStripMenuItem.Text = "Exit MeGUI";
             this.exitMeGUIToolStripMenuItem.Click += new System.EventHandler(this.exitMeGUIToolStripMenuItem_Click);
-            // 
-            // mnuToolsAdaptiveMuxer
-            // 
-            this.mnuToolsAdaptiveMuxer.Index = 0;
-            this.mnuToolsAdaptiveMuxer.Text = "Adaptive Muxer";
-            this.mnuToolsAdaptiveMuxer.Click += new System.EventHandler(this.mnuToolsAdaptiveMuxer_Click);
             // 
             // MeGUI
             // 
@@ -1454,11 +1454,16 @@ namespace MeGUI
             if (this.player != null) // make sure only one preview window is open at all times
                 player.Close();
             player = new VideoPlayer();
-            bool videoLoaded = player.loadVideo(fileName, PREVIEWTYPE.CREDITS);
+            bool videoLoaded = player.loadVideo(fileName, PREVIEWTYPE.CREDITS, true);
             if (videoLoaded)
             {
-                parX = player.Reader.DARX;
-                parY = player.Reader.DARY;
+                if (parX < 1 || parY < 1)
+                {
+                    parX = player.Reader.DARX;
+                    parY = player.Reader.DARY;
+                }
+                player.PARX = parX;
+                player.PARY = parY;
                 player.IntroCreditsFrameSet += new IntroCreditsFrameSetCallback(player_IntroCreditsFrameSet);
                 player.Closed += new EventHandler(player_Closed);
                 player.Show();
@@ -1502,8 +1507,6 @@ namespace MeGUI
             if (player != null)
                 player.Hide();
             VideoCodecSettings settings = CurrentVideoCodecSettingsProvider.GetCurrentSettings();
-            settings.PARX = parX;
-            settings.PARY = parY;
             string selectedProfile;
             if (CurrentVideoCodecSettingsProvider.EditSettings(this.profileManager, this.settings, this.videoProfile.Text,
                 this.VideoIO, new int[] { this.introEndFrame, this.creditsStartFrame }, out selectedProfile))
@@ -1715,7 +1718,7 @@ namespace MeGUI
             VideoCodecSettings vSettings = this.CurrentVideoCodecSettings.clone();
             bool start = settings.AutoStartQueue;
             start &= jobUtil.AddVideoJobs(this.VideoIO[0], this.VideoIO[1], this.CurrentVideoCodecSettings.clone(),
-                this.introEndFrame, this.creditsStartFrame, addPrerenderJob.Checked, true);
+                this.introEndFrame, this.creditsStartFrame, parX, parY, addPrerenderJob.Checked, true);
             if (start)
                 this.startNextJobInQueue();
         }
@@ -1869,8 +1872,10 @@ namespace MeGUI
                 if (job is VideoJob)
                 {
                     VideoJob vjob = (VideoJob)job;
-                    CurrentVideoCodecSettings = vjob.Settings;
                     this.videoInput.Text = vjob.Input;
+                    parX = vjob.PARX;
+                    parY = vjob.PARY;
+                    CurrentVideoCodecSettings = vjob.Settings;
                     this.videoOutput.Text = vjob.Output;
                     this.tabControl1.SelectedIndex = 0;
                     this.videoProfile.SelectedIndex = -1;
@@ -1899,7 +1904,7 @@ namespace MeGUI
                     SubStream[] subtitleStreams = mjob.Settings.SubtitleStreams.ToArray();
                     mw.setConfig(mjob.Settings.VideoInput, mjob.Settings.MuxedInput, mjob.Settings.Framerate,
                         mjob.Settings.AudioStreams.ToArray(), mjob.Settings.SubtitleStreams.ToArray(), mjob.Settings.ChapterFile,
-                        mjob.Settings.MuxedOutput, mjob.Settings.SplitSize);
+                        mjob.Settings.MuxedOutput, mjob.Settings.SplitSize, mjob.Settings.PARX, mjob.Settings.PARY);
                     if (mw.ShowDialog() == DialogResult.OK)
                     {
                         MuxJob newJob = mw.Job;
@@ -3382,7 +3387,6 @@ namespace MeGUI
                     firstpass.NumberOfFrames, firstpass.Settings.NbBframes, firstpass.Framerate,
                     isXviD, type1, type2, out videoSize);
             }
-#warning avi code over here
             else if (mux.MuxType == MuxerType.AVIMUXGUI)
             {
                 AudioType type = AudioType.VBRMP3;
@@ -3793,6 +3797,8 @@ namespace MeGUI
         /// <param name="e"></param>
         private void player_Closed(object sender, EventArgs e)
         {
+            parX = player.PARX;
+            parY = player.PARY;
             this.player = null;
         }
         /// <summary>
@@ -4323,6 +4329,7 @@ namespace MeGUI
             this.creditsStartFrame = -1;
             this.introEndFrame = -1;
             this.videoInput.Text = fileName;
+            parX = parY = -1;
             //reset the zones for all codecs, zones are supposed to be source bound
             foreach (IVideoSettingsProvider p in (videoCodec.Items))
             {

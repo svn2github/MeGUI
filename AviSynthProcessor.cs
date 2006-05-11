@@ -64,7 +64,7 @@ namespace MeGUI
             IntPtr zero = new IntPtr(0);
             for (position = 0; position < stup.NbFramesTotal && !aborted; position++)
             {
-                reader.Clip.ReadFrame(zero, position);
+                reader.Clip.ReadFrame(zero, 0, position);
                 mre.WaitOne();
             }
             reader.Close();

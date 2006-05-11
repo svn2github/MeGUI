@@ -225,7 +225,7 @@ namespace MeGUI
                 if (player == null)
                 {
                     player = new VideoPlayer();
-                    bool videoLoaded = player.loadVideo(input, PREVIEWTYPE.ZONES);
+                    bool videoLoaded = player.loadVideo(input, PREVIEWTYPE.ZONES, false);
                     if (videoLoaded)
                     {
                         player.ZoneSet += new ZoneSetCallback(player_ZoneSet);

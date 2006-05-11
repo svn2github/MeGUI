@@ -329,8 +329,6 @@ namespace MeGUI
                 xcd.Input = videoIO[0];
                 xcd.Output = videoIO[1];
                 xcd.EncoderPath = settings.XviDEncrawPath;
-                if (this.settings.PARX != -1)
-                    this.settings.PAR = 5; // custom par
                 xcd.Settings = this.settings;
                 xcd.IntroEndFrame = creditsAndIntroFrames[0];
                 xcd.CreditsStartFrame = creditsAndIntroFrames[1];

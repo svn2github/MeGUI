@@ -562,7 +562,7 @@ namespace MeGUI
 				if (player == null)
 				{
 					player = new VideoPlayer();
-					bool videoLoaded = player.loadVideo(videoInput, PREVIEWTYPE.CHAPTERS);
+					bool videoLoaded = player.loadVideo(videoInput, PREVIEWTYPE.CHAPTERS, false);
 					if (videoLoaded)
 					{
 						player.Closed += new EventHandler(player_Closed);

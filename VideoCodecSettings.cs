@@ -31,7 +31,7 @@ namespace MeGUI
 	{
 		public enum Mode:int {CBR = 0, CQ, twopass1, twopass2, twopassAutomated, threepass1, threepass2, threepass3, threepassAutomated, quality};
         int encodingMode, bitrateQuantizer, keyframeInterval, nbBframes, minQuantizer, maxQuantizer, fourCC,
-            parX, parY, maxNumberOfPasses, nbThreads;
+            maxNumberOfPasses, nbThreads;
 		bool turbo, v4mv, qpel, trellis;
 		decimal creditsQuantizer;
 		private string logfile, customEncoderOptions;
@@ -42,10 +42,9 @@ namespace MeGUI
 		public VideoCodecSettings()
 		{
 			logfile = ".stats";
-			parX = 0;
-			parY = 0;
 			customEncoderOptions = "";
 			fourCC = 0;
+            nbThreads = 1;
 			zones = new Zone[0];
 		}
         public VideoCodec Codec
@@ -81,16 +80,6 @@ namespace MeGUI
 		{
 			get {return maxQuantizer;}
 			set {maxQuantizer = value;}
-		}
-		public int PARX
-		{
-			get {return parX;}
-			set {parX = value;}
-		}
-		public int PARY
-		{
-			get {return parY;}
-			set {parY = value;}
 		}
 		public bool Turbo
 		{
