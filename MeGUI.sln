@@ -1,0 +1,30 @@
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeGUI", "MeGUI.csproj", "{12D5215B-0254-4616-A53C-C8B7B6A2C8E9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "neroraw", "neroraw\neroraw.csproj", "{EC7CC373-FD9C-479C-9F13-9B33C4C5CB6C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+		test|Any CPU = test|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{12D5215B-0254-4616-A53C-C8B7B6A2C8E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12D5215B-0254-4616-A53C-C8B7B6A2C8E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12D5215B-0254-4616-A53C-C8B7B6A2C8E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12D5215B-0254-4616-A53C-C8B7B6A2C8E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12D5215B-0254-4616-A53C-C8B7B6A2C8E9}.test|Any CPU.ActiveCfg = Debug|Any CPU
+		{12D5215B-0254-4616-A53C-C8B7B6A2C8E9}.test|Any CPU.Build.0 = Debug|Any CPU
+		{EC7CC373-FD9C-479C-9F13-9B33C4C5CB6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC7CC373-FD9C-479C-9F13-9B33C4C5CB6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC7CC373-FD9C-479C-9F13-9B33C4C5CB6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC7CC373-FD9C-479C-9F13-9B33C4C5CB6C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC7CC373-FD9C-479C-9F13-9B33C4C5CB6C}.test|Any CPU.ActiveCfg = Release|Any CPU
+		{EC7CC373-FD9C-479C-9F13-9B33C4C5CB6C}.test|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

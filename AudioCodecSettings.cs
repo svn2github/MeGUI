@@ -1,0 +1,181 @@
+// ****************************************************************************
+// 
+// Copyright (C) 2005  Doom9
+// 
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 2 of the License, or
+// (at your option) any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+// 
+// ****************************************************************************
+
+using System;
+using System.Xml.Serialization;
+
+namespace MeGUI
+{
+	/// <summary>
+	/// Summary description for AudioCodecSettings.
+	/// </summary>
+	/// 
+	public enum BitrateManagementMode {CBR, VBR, ABR};
+	public enum ChannelMode
+	{
+	    [EnumTitle("Keep Original Channels")]
+	    KeepOriginal, 
+	    [EnumTitle("Convert to Mono")]
+	    ConvertToMono,  
+	    [EnumTitle("Downmix multichannel to Stereo")]
+	    StereoDownmix,
+	    [EnumTitle("Downmix multichannel to Dolby Pro Logic")]
+	    DPLDownmix,
+        [EnumTitle("Downmix multichannel to Dolby Pro Logic II")]
+        DPLIIDownmix,
+        [EnumTitle("Upmix 2 to 5.1 via SuperEQ (slow)")]
+	    Upmix,
+        [EnumTitle("Upmix 2 to 5.1 via Sox equalizer adjustments")]
+        UpmixUsingSoxEq,
+        [EnumTitle("Upmix 2 to 5.1 with center channel dialog")]
+        UpmixWithCenterChannelDialog
+	};
+	[XmlInclude(typeof(NeroAACSettings)), XmlInclude(typeof(MP3Settings)), XmlInclude(typeof(FaacSettings))]
+	public class AudioCodecSettings
+	{
+	    
+		private ChannelMode downmixMode;
+		private BitrateManagementMode bitrateMode;
+		private int bitrate, delay;
+		private bool delayEnabled, autoGain;
+        private bool forceDirectShow;
+        private bool encodeViaBeSweet;
+        private bool sourceIsMultichannel;
+        private bool improveAccuracy;
+        private AudioCodec audioCodec;
+
+        public AudioCodec Codec
+        {
+            get { return audioCodec; }
+            set { audioCodec = value; }
+        }
+
+		public AudioCodecSettings()
+		{
+			downmixMode = ChannelMode.KeepOriginal;
+			bitrateMode = BitrateManagementMode.CBR;
+			bitrate = 128;
+			delay = 0;
+			delayEnabled = false;
+			autoGain = true;
+            forceDirectShow = false;
+            encodeViaBeSweet = false;
+            sourceIsMultichannel = false;
+            improveAccuracy = true;
+		}
+
+        public bool ImproveAccuracy
+        {
+            get { return improveAccuracy; }
+            set { improveAccuracy = value; }
+        }
+	
+        public bool SourceIsMultichannel
+        {
+            get { return sourceIsMultichannel; }
+            set { sourceIsMultichannel = value; }
+        }
+	
+        public bool EncodeViaBeSweet
+        {
+            get { return encodeViaBeSweet; }
+            set { encodeViaBeSweet = value; }
+        }
+
+
+	    public bool ForceDecodingViaDirectShow
+	    {
+            get { return forceDirectShow; }
+            set { forceDirectShow = value; }
+	    }
+	    
+		public ChannelMode DownmixMode
+		{
+			get {return downmixMode;}
+			set {downmixMode = value;}
+		}
+		public BitrateManagementMode BitrateMode
+		{
+			get {return bitrateMode;}
+			set {bitrateMode = value;}
+		}
+		public int Bitrate
+		{
+			get {return bitrate;}
+			set {bitrate = value;}
+		}
+		public int Delay
+		{
+			get {return delay;}
+			set {delay = value;}
+		}
+		public bool DelayEnabled
+		{
+			get {return delayEnabled;}
+			set {delayEnabled = value;}
+		}
+		public bool AutoGain
+		{
+			get {return autoGain;}
+			set {autoGain = value;}
+		}
+
+
+        ///// <summary>
+        ///// Must return command line arguments string for command-line audio encoder
+        ///// {0} means output file name
+        ///// {1} means samplerate in Hz
+        ///// {2} means bits per sample
+        ///// {3} means channel count
+        ///// {4} means samplecount
+        ///// {5} means size in bytes
+        ///// </summary>
+        ///// <returns>command line arguments</returns>
+        //public abstract string GetCommandLineArguments();
+
+        ///// <summary>
+        ///// Must return logical flag
+        ///// </summary>
+        //public abstract bool IsRawPcmSupportedByEncoder
+        //{
+        //    get;
+        //}
+
+        ///// <summary>
+        ///// Must read executable path from settings
+        ///// </summary>
+        ///// <param name="from">settings to read path from</param>
+        ///// <returns>path to encoder executable</returns>
+        //public abstract string GetExecutablePath(MeGUISettings from);
+
+
+        ///// <summary>
+        ///// Return some additional code to be applied to the end of DSP
+        ///// Example - 6==Audiochannels(last)?GetChannel(last,2,3,1,6,4,5):last{0}
+        ///// </summary>
+        //public abstract string AdjasmentAvisynthScript
+        //{
+        //    get;
+        //}
+
+
+
+	}
+}
