@@ -507,7 +507,7 @@ namespace MeGUI
                 sb.Append("-packed ");
             if (xs.MotionSearchPrecision != 6)
                 sb.Append("-quality " + xs.MotionSearchPrecision + " ");
-            if (xs.VHQMode != 0)
+            if (xs.VHQMode != 1)
                 sb.Append("-vhqmode " + xs.VHQMode + " ");
             if (xs.QPel)
                 sb.Append("-qpel ");
@@ -536,10 +536,10 @@ namespace MeGUI
             if (!xs.Trellis)
                 sb.Append("-notrellis ");
             if (!xs.ChromaMotion)
-                sb.Append(" -nochromame ");
+                sb.Append("-nochromame ");
             if (xs.MinQuantizer != 2)
                 sb.Append("-imin " + xs.MinQuantizer + " ");
-            if (xs.MaxQuantizer != 2)
+            if (xs.MaxQuantizer != 31)
                 sb.Append("-imax " + xs.MaxQuantizer + " ");
             if (xs.MinPQuant != 2)
                 sb.Append("-pmin " + xs.MinPQuant + " ");
@@ -547,6 +547,8 @@ namespace MeGUI
                 sb.Append("-pmax " + xs.MaxPQuant + " ");
             if (!xs.ClosedGOP)
                 sb.Append("-noclosed_gop ");
+            if (xs.FrameDropRatio != 0)
+                sb.Append("-drop " + xs.FrameDropRatio + " ");
             if (xs.NbBframes > 0)
             {
                 sb.Append("-max_bframes " + xs.NbBframes + " ");
@@ -558,7 +560,7 @@ namespace MeGUI
                     sb.Append("-bquant_offset " + xs.BQuantOffset + " ");
                 if (xs.MinBQuant != 2)
                     sb.Append("-bmin " + xs.MinBQuant + " ");
-                if (xs.MaxBQuant != 2)
+                if (xs.MaxBQuant != 31)
                     sb.Append("-bmax " + xs.MaxBQuant + " ");
             }
             if (parX > 0 && parY > 0) // custom PAR mode

@@ -1,3 +1,7 @@
+0.2.3.2178
+Commit by berrinam:
+  - Add foxyshadis's XviD fixes
+
 0.2.3.2177
 Commit by berrinam:
   - Fix profiles not being saved when closing bug
