@@ -549,9 +549,10 @@ namespace MeGUI
                 sb.Append("-noclosed_gop ");
             if (xs.FrameDropRatio != 0)
                 sb.Append("-drop " + xs.FrameDropRatio + " ");
+            if (xs.NbBframes != 2)
+                sb.Append("-max_bframes " + xs.NbBframes + " ");
             if (xs.NbBframes > 0)
             {
-                sb.Append("-max_bframes " + xs.NbBframes + " ");
                 if (xs.VHQForBframes)
                     sb.Append("-bvhq ");
                 if (xs.BQuantRatio != 150)

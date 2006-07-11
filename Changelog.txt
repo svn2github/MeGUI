@@ -1,3 +1,7 @@
+0.2.3.2179
+Commit by Sharx1976:
+  - Foxyshadis quote: "Don't code while asleep"
+
 0.2.3.2178
 Commit by berrinam:
   - Add foxyshadis's XviD fixes
