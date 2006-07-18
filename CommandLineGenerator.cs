@@ -708,7 +708,7 @@ namespace MeGUI
 			if (xs.X264Trellis > 0)
 				sb.Append("--trellis " + xs.X264Trellis + " ");
 			// now it's time for the macroblock types
-			if (xs.P8x8mv || xs.B8x8mv || xs.I4x4mv || xs.I8x8mv || xs.P4x4mv || xs.AdaptiveDCT)
+			if (xs.P8x8mv || xs.B8x8mv || xs.I4x4mv || xs.I8x8mv || xs.P4x4mv)
 			{
 				sb.Append("--analyse ");
 				if (xs.I4x4mv && xs.P4x4mv && xs.I8x8mv && xs.P8x8mv && xs.B8x8mv)
@@ -728,8 +728,6 @@ namespace MeGUI
 					if (sb.ToString().EndsWith(","))
 						sb.Remove(sb.Length - 1, 1);
 				}
-				if (xs.AdaptiveDCT) // default is unchecked
-					sb.Append(" --8x8dct ");
 				if (!sb.ToString().EndsWith(" "))
 					sb.Append(" ");
 			}
@@ -737,7 +735,9 @@ namespace MeGUI
 			{
 				sb.Append("--analyse none ");
 			}
-			if (xs.EncodingMode != 1) // doesn't apply to CQ mode
+            if (xs.AdaptiveDCT) // default is unchecked
+                sb.Append(" --8x8dct ");
+            if (xs.EncodingMode != 1) // doesn't apply to CQ mode
 			{
 				if (xs.MinQuantizer != 10) // default min quantizer is 10
 					sb.Append("--qpmin " + xs.MinQuantizer + " ");
