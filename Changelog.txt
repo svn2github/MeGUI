@@ -1,3 +1,7 @@
+0.2.3.2181
+Commit by Sharx1976:
+  - Made x264 thread-input enabled by default
+
 0.2.3.2180
 Commit by Sharx1976:
   - Fixed x264 command line generation ("--analise " --> "--analyse none" when all macroblock disabled and adaptive dct enabled)
