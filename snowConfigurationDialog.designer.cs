@@ -91,7 +91,7 @@ namespace MeGUI
             // 
             // zoneTabPage
             // 
-            this.zoneTabPage.Size = new System.Drawing.Size(488, 311);
+            this.zoneTabPage.Size = new System.Drawing.Size(438, 311);
             // 
             // mainTabPage
             // 
@@ -127,7 +127,7 @@ namespace MeGUI
             // 
             // logfileLabel
             // 
-            this.logfileLabel.Location = new System.Drawing.Point(19, 281);
+            this.logfileLabel.Location = new System.Drawing.Point(19, 284);
             this.logfileLabel.Name = "logfileLabel";
             this.logfileLabel.Size = new System.Drawing.Size(56, 14);
             this.logfileLabel.TabIndex = 55;
@@ -357,7 +357,7 @@ namespace MeGUI
             "9/7 Wavelet",
             "5/3 Wavelet",
             "13/7 Wavelet"});
-            this.snowPredictionMode.Location = new System.Drawing.Point(128, 136);
+            this.snowPredictionMode.Location = new System.Drawing.Point(128, 133);
             this.snowPredictionMode.Name = "snowPredictionMode";
             this.snowPredictionMode.Size = new System.Drawing.Size(88, 21);
             this.snowPredictionMode.TabIndex = 5;
@@ -367,14 +367,14 @@ namespace MeGUI
             // 
             this.snowPredictionModeLabel.Location = new System.Drawing.Point(8, 136);
             this.snowPredictionModeLabel.Name = "snowPredictionModeLabel";
-            this.snowPredictionModeLabel.Size = new System.Drawing.Size(100, 23);
+            this.snowPredictionModeLabel.Size = new System.Drawing.Size(90, 16);
             this.snowPredictionModeLabel.TabIndex = 4;
             this.snowPredictionModeLabel.Text = "Prediction Mode";
             // 
             // snowQuantizer
             // 
             this.snowQuantizer.DecimalPlaces = 2;
-            this.snowQuantizer.Location = new System.Drawing.Point(160, 48);
+            this.snowQuantizer.Location = new System.Drawing.Point(160, 45);
             this.snowQuantizer.Maximum = new decimal(new int[] {
             255,
             0,
@@ -408,7 +408,7 @@ namespace MeGUI
             "3pass - 2nd pass",
             "3pass - 3rd pass",
             "Automated 3pass"});
-            this.snowEncodingMode.Location = new System.Drawing.Point(104, 24);
+            this.snowEncodingMode.Location = new System.Drawing.Point(104, 21);
             this.snowEncodingMode.Name = "snowEncodingMode";
             this.snowEncodingMode.Size = new System.Drawing.Size(112, 21);
             this.snowEncodingMode.TabIndex = 2;
@@ -418,21 +418,21 @@ namespace MeGUI
             // 
             this.snowEncodingModeLabel.Location = new System.Drawing.Point(8, 24);
             this.snowEncodingModeLabel.Name = "snowEncodingModeLabel";
-            this.snowEncodingModeLabel.Size = new System.Drawing.Size(100, 23);
+            this.snowEncodingModeLabel.Size = new System.Drawing.Size(90, 16);
             this.snowEncodingModeLabel.TabIndex = 1;
             this.snowEncodingModeLabel.Text = "Encoding Mode";
             // 
             // snowQuantizerLabel
             // 
-            this.snowQuantizerLabel.Location = new System.Drawing.Point(8, 48);
+            this.snowQuantizerLabel.Location = new System.Drawing.Point(8, 47);
             this.snowQuantizerLabel.Name = "snowQuantizerLabel";
-            this.snowQuantizerLabel.Size = new System.Drawing.Size(64, 23);
+            this.snowQuantizerLabel.Size = new System.Drawing.Size(64, 16);
             this.snowQuantizerLabel.TabIndex = 0;
             this.snowQuantizerLabel.Text = "Quantizer";
             // 
             // snowBitrate
             // 
-            this.snowBitrate.Location = new System.Drawing.Point(176, 72);
+            this.snowBitrate.Location = new System.Drawing.Point(176, 69);
             this.snowBitrate.Name = "snowBitrate";
             this.snowBitrate.Size = new System.Drawing.Size(40, 20);
             this.snowBitrate.TabIndex = 5;
@@ -442,9 +442,9 @@ namespace MeGUI
             // 
             // snowBitrateLabel
             // 
-            this.snowBitrateLabel.Location = new System.Drawing.Point(8, 72);
+            this.snowBitrateLabel.Location = new System.Drawing.Point(8, 71);
             this.snowBitrateLabel.Name = "snowBitrateLabel";
-            this.snowBitrateLabel.Size = new System.Drawing.Size(100, 23);
+            this.snowBitrateLabel.Size = new System.Drawing.Size(100, 16);
             this.snowBitrateLabel.TabIndex = 4;
             this.snowBitrateLabel.Text = "Bitrate";
             // 

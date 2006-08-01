@@ -1,3 +1,7 @@
+0.2.3.2185
+Commit by Sharx1976:
+  - Several cosmetic fixes
+
 0.2.3.2184
 Commit by Sharx1976:
   - Fixed xvid custom commandline options in CommandlineGenerator.cs

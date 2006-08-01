@@ -39,7 +39,7 @@ namespace MeGUI
             this.cancelButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
             this.zoneTabPage = new System.Windows.Forms.TabPage();
-            this.zonesControl = new ZonesControl();
+            this.zonesControl = new MeGUI.ZonesControl();
             this.mainTabPage = new System.Windows.Forms.TabPage();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tooltipHelp = new System.Windows.Forms.ToolTip(this.components);
@@ -81,7 +81,7 @@ namespace MeGUI
             // 
             // loadDefaultsButton
             // 
-            this.loadDefaultsButton.Location = new System.Drawing.Point(310, 19);
+            this.loadDefaultsButton.Location = new System.Drawing.Point(310, 18);
             this.loadDefaultsButton.Name = "loadDefaultsButton";
             this.loadDefaultsButton.Size = new System.Drawing.Size(103, 23);
             this.loadDefaultsButton.TabIndex = 14;
@@ -151,11 +151,11 @@ namespace MeGUI
             this.zonesControl.CreditsStartFrame = 0;
             this.zonesControl.Input = "";
             this.zonesControl.IntroEndFrame = 0;
-            this.zonesControl.Location = new System.Drawing.Point(-4, 3);
+            this.zonesControl.Location = new System.Drawing.Point(6, 6);
             this.zonesControl.Name = "zonesControl";
             this.zonesControl.Size = new System.Drawing.Size(310, 305);
             this.zonesControl.TabIndex = 0;
-            this.zonesControl.Zones = new Zone[0];
+            this.zonesControl.Zones = new MeGUI.Zone[0];
             // 
             // mainTabPage
             // 

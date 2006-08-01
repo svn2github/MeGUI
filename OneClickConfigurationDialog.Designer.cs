@@ -64,10 +64,10 @@ namespace MeGUI
             this.profilesGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
-            // filesize
+            // filesizeKB
             // 
             this.filesizeKB.Location = new System.Drawing.Point(296, 13);
-            this.filesizeKB.Name = "filesize";
+            this.filesizeKB.Name = "filesizeKB";
             this.filesizeKB.ReadOnly = true;
             this.filesizeKB.Size = new System.Drawing.Size(112, 20);
             this.filesizeKB.TabIndex = 24;
@@ -100,7 +100,7 @@ namespace MeGUI
             // autoDeint
             // 
             this.autoDeint.AutoSize = true;
-            this.autoDeint.Location = new System.Drawing.Point(270, 68);
+            this.autoDeint.Location = new System.Drawing.Point(275, 67);
             this.autoDeint.Name = "autoDeint";
             this.autoDeint.Size = new System.Drawing.Size(138, 17);
             this.autoDeint.TabIndex = 35;
@@ -112,7 +112,7 @@ namespace MeGUI
             this.avsProfile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.avsProfile.Location = new System.Drawing.Point(120, 65);
             this.avsProfile.Name = "avsProfile";
-            this.avsProfile.Size = new System.Drawing.Size(144, 21);
+            this.avsProfile.Size = new System.Drawing.Size(149, 21);
             this.avsProfile.Sorted = true;
             this.avsProfile.TabIndex = 34;
             // 
@@ -200,13 +200,13 @@ namespace MeGUI
             this.audioProfile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.audioProfile.Location = new System.Drawing.Point(120, 69);
             this.audioProfile.Name = "audioProfile";
-            this.audioProfile.Size = new System.Drawing.Size(120, 21);
+            this.audioProfile.Size = new System.Drawing.Size(149, 21);
             this.audioProfile.Sorted = true;
             this.audioProfile.TabIndex = 26;
             // 
             // dontEncodeAudio
             // 
-            this.dontEncodeAudio.Location = new System.Drawing.Point(246, 69);
+            this.dontEncodeAudio.Location = new System.Drawing.Point(275, 69);
             this.dontEncodeAudio.Name = "dontEncodeAudio";
             this.dontEncodeAudio.Size = new System.Drawing.Size(130, 21);
             this.dontEncodeAudio.TabIndex = 25;
@@ -235,7 +235,7 @@ namespace MeGUI
             // 
             this.MBLabel.Location = new System.Drawing.Point(380, 48);
             this.MBLabel.Name = "MBLabel";
-            this.MBLabel.Size = new System.Drawing.Size(32, 16);
+            this.MBLabel.Size = new System.Drawing.Size(25, 16);
             this.MBLabel.TabIndex = 23;
             this.MBLabel.Text = "MB";
             // 
@@ -244,7 +244,7 @@ namespace MeGUI
             this.videoProfile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.videoProfile.Location = new System.Drawing.Point(206, 16);
             this.videoProfile.Name = "videoProfile";
-            this.videoProfile.Size = new System.Drawing.Size(168, 21);
+            this.videoProfile.Size = new System.Drawing.Size(202, 21);
             this.videoProfile.Sorted = true;
             this.videoProfile.TabIndex = 1;
             this.videoProfile.SelectedIndexChanged += new System.EventHandler(this.videoProfile_SelectedIndexChanged);

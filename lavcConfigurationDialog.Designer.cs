@@ -307,6 +307,7 @@ namespace MeGUI
             // zoneTabPage
             // 
             this.zoneTabPage.Controls.Add(this.quantizerMatrixGroupbox);
+            this.zoneTabPage.Size = new System.Drawing.Size(488, 418);
             this.zoneTabPage.Controls.SetChildIndex(this.quantizerMatrixGroupbox, 0);
             // 
             // mainTabPage
@@ -314,10 +315,12 @@ namespace MeGUI
             this.mainTabPage.Controls.Add(this.groupBox1);
             this.mainTabPage.Controls.Add(this.lavcCodecToolsGroupbox);
             this.mainTabPage.Controls.Add(this.lavcGeneralOptionsGroupbox);
+            this.mainTabPage.Size = new System.Drawing.Size(488, 418);
             // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.advancedTabPage);
+            this.tabControl1.Size = new System.Drawing.Size(496, 444);
             this.tabControl1.Controls.SetChildIndex(this.zoneTabPage, 0);
             this.tabControl1.Controls.SetChildIndex(this.advancedTabPage, 0);
             this.tabControl1.Controls.SetChildIndex(this.mainTabPage, 0);
@@ -2691,7 +2694,7 @@ namespace MeGUI
             this.advancedTabPage.Controls.Add(this.groupBox7);
             this.advancedTabPage.Location = new System.Drawing.Point(4, 22);
             this.advancedTabPage.Name = "advancedTabPage";
-            this.advancedTabPage.Size = new System.Drawing.Size(488, 426);
+            this.advancedTabPage.Size = new System.Drawing.Size(488, 418);
             this.advancedTabPage.TabIndex = 4;
             this.advancedTabPage.Text = "Advanced";
             this.advancedTabPage.UseVisualStyleBackColor = true;

@@ -419,7 +419,7 @@ namespace MeGUI
             this.audioProfile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.audioProfile.Location = new System.Drawing.Point(152, 101);
             this.audioProfile.Name = "audioProfile";
-            this.audioProfile.Size = new System.Drawing.Size(159, 21);
+            this.audioProfile.Size = new System.Drawing.Size(200, 21);
             this.audioProfile.Sorted = true;
             this.audioProfile.TabIndex = 15;
             this.audioProfile.SelectedIndexChanged += new System.EventHandler(this.audioProfile_SelectedIndexChanged);
@@ -910,14 +910,14 @@ namespace MeGUI
             this.AbortMenuItem,
             this.LoadMenuItem});
             this.queueContextMenu.Name = "queueContextMenu";
-            this.queueContextMenu.Size = new System.Drawing.Size(159, 92);
+            this.queueContextMenu.Size = new System.Drawing.Size(156, 92);
             this.queueContextMenu.Opened += new System.EventHandler(this.queueContextMenu_Opened);
             // 
             // DeleteMenuItem
             // 
             this.DeleteMenuItem.Name = "DeleteMenuItem";
             this.DeleteMenuItem.ShortcutKeyDisplayString = "";
-            this.DeleteMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.DeleteMenuItem.Size = new System.Drawing.Size(155, 22);
             this.DeleteMenuItem.Text = "&Delete";
             this.DeleteMenuItem.ToolTipText = "Delete this job";
             this.DeleteMenuItem.Click += new System.EventHandler(this.deleteMenuItem_Click);
@@ -928,20 +928,20 @@ namespace MeGUI
             this.PostponedMenuItem,
             this.WaitingMenuItem});
             this.StatusMenuItem.Name = "StatusMenuItem";
-            this.StatusMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.StatusMenuItem.Size = new System.Drawing.Size(155, 22);
             this.StatusMenuItem.Text = "&Change status";
             // 
             // PostponedMenuItem
             // 
             this.PostponedMenuItem.Name = "PostponedMenuItem";
-            this.PostponedMenuItem.Size = new System.Drawing.Size(141, 22);
+            this.PostponedMenuItem.Size = new System.Drawing.Size(136, 22);
             this.PostponedMenuItem.Text = "&Postponed";
             this.PostponedMenuItem.Click += new System.EventHandler(this.postponeMenuItem_Click);
             // 
             // WaitingMenuItem
             // 
             this.WaitingMenuItem.Name = "WaitingMenuItem";
-            this.WaitingMenuItem.Size = new System.Drawing.Size(141, 22);
+            this.WaitingMenuItem.Size = new System.Drawing.Size(136, 22);
             this.WaitingMenuItem.Text = "&Waiting";
             this.WaitingMenuItem.Click += new System.EventHandler(this.waitingMenuItem_Click);
             // 
@@ -949,7 +949,7 @@ namespace MeGUI
             // 
             this.AbortMenuItem.Name = "AbortMenuItem";
             this.AbortMenuItem.ShortcutKeyDisplayString = "";
-            this.AbortMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.AbortMenuItem.Size = new System.Drawing.Size(155, 22);
             this.AbortMenuItem.Text = "&Abort";
             this.AbortMenuItem.ToolTipText = "Abort this job";
             this.AbortMenuItem.Click += new System.EventHandler(this.abortMenuItem_Click);
@@ -958,7 +958,7 @@ namespace MeGUI
             // 
             this.LoadMenuItem.Name = "LoadMenuItem";
             this.LoadMenuItem.ShortcutKeyDisplayString = "";
-            this.LoadMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.LoadMenuItem.Size = new System.Drawing.Size(155, 22);
             this.LoadMenuItem.Text = "&Load";
             this.LoadMenuItem.ToolTipText = "Load into MeGUI";
             this.LoadMenuItem.Click += new System.EventHandler(this.loadMenuItem_Click);
@@ -1002,7 +1002,7 @@ namespace MeGUI
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage1.Size = new System.Drawing.Size(472, 380);
             this.tabPage1.TabIndex = 11;
-            this.tabPage1.Text = "Changelog.txt";
+            this.tabPage1.Text = "Changelog";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // txtChangelog
@@ -1205,50 +1205,50 @@ namespace MeGUI
             this.toolStripSeparator2,
             this.exitMeGUIToolStripMenuItem});
             this.trayMenu.Name = "trayMenu";
-            this.trayMenu.Size = new System.Drawing.Size(153, 126);
+            this.trayMenu.Size = new System.Drawing.Size(147, 126);
             // 
             // openMeGUIToolStripMenuItem
             // 
             this.openMeGUIToolStripMenuItem.Name = "openMeGUIToolStripMenuItem";
-            this.openMeGUIToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.openMeGUIToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.openMeGUIToolStripMenuItem.Text = "Open MeGUI";
             this.openMeGUIToolStripMenuItem.Click += new System.EventHandler(this.openMeGUIToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(143, 6);
             // 
             // startToolStripMenuItem
             // 
             this.startToolStripMenuItem.Name = "startToolStripMenuItem";
-            this.startToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.startToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.startToolStripMenuItem.Text = "Start";
             this.startToolStripMenuItem.Click += new System.EventHandler(this.startStopButton_Click);
             // 
             // pauseToolStripMenuItem
             // 
             this.pauseToolStripMenuItem.Name = "pauseToolStripMenuItem";
-            this.pauseToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.pauseToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.pauseToolStripMenuItem.Text = "Pause";
             this.pauseToolStripMenuItem.Click += new System.EventHandler(this.pauseButton_Click);
             // 
             // abortToolStripMenuItem
             // 
             this.abortToolStripMenuItem.Name = "abortToolStripMenuItem";
-            this.abortToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.abortToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.abortToolStripMenuItem.Text = "Abort";
             this.abortToolStripMenuItem.Click += new System.EventHandler(this.abortButton_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(143, 6);
             // 
             // exitMeGUIToolStripMenuItem
             // 
             this.exitMeGUIToolStripMenuItem.Name = "exitMeGUIToolStripMenuItem";
-            this.exitMeGUIToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitMeGUIToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.exitMeGUIToolStripMenuItem.Text = "Exit MeGUI";
             this.exitMeGUIToolStripMenuItem.Click += new System.EventHandler(this.exitMeGUIToolStripMenuItem_Click);
             // 

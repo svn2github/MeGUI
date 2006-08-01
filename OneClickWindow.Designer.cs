@@ -616,7 +616,7 @@ namespace MeGUI
             this.audioProfile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.audioProfile.Location = new System.Drawing.Point(119, 71);
             this.audioProfile.Name = "audioProfile";
-            this.audioProfile.Size = new System.Drawing.Size(159, 21);
+            this.audioProfile.Size = new System.Drawing.Size(256, 21);
             this.audioProfile.Sorted = true;
             this.audioProfile.TabIndex = 15;
             this.audioProfile.SelectedIndexChanged += new System.EventHandler(this.audioProfile_SelectedIndexChanged_1);
