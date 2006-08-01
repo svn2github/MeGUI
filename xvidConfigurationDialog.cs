@@ -112,11 +112,11 @@ namespace MeGUI
             doCheckBoxAdjustments();
             if (xvidQuantType.SelectedIndex == 2) // CQM
             {
-                xvidLoadIntraMatrixButton.Enabled = true;
+                xvidLoadQuantizerMatrixButton.Enabled = true;
             }
             else
             {
-                xvidLoadIntraMatrixButton.Enabled = false;
+                xvidLoadQuantizerMatrixButton.Enabled = false;
             }
         }
 
@@ -215,9 +215,8 @@ namespace MeGUI
 //                xs.ChromaOptimizer = this.xvidChromaOptimizer.Checked;
 //                xs.HQAC = this.xvidHQAC.Checked;
                 xs.FrameDropRatio = (int)xvidFrameDropRatio.Value;
-//                xs.IntraMatrix = this.xvidIntraMatrix.Text;
-//                xs.InterMatrix = this.xvidInterMatrix.Text;
-                xs.CustomQuantizerMatrix = xvidIntraMatrix.Text;
+                xs.CustomQuantizerMatrix = xvidQuantizerMatrixFile.Text;
+                xs.CustomEncoderOptions = xvidCustomCommandlineOptions.Text;
                 xs.Logfile = this.logfile.Text;
                 xs.Zones = Zones;
                 return xs;
@@ -276,29 +275,19 @@ namespace MeGUI
 //                this.xvidChromaOptimizer.Checked = xs.ChromaOptimizer;
 //                this.xvidHQAC.Checked = xs.HQAC;
                 xvidFrameDropRatio.Value = (decimal)xs.FrameDropRatio;
-                xvidIntraMatrix.Text = xs.CustomQuantizerMatrix;
-//                this.xvidIntraMatrix.Text = xs.IntraMatrix;
-//                this.xvidInterMatrix.Text = xs.InterMatrix;
+                xvidQuantizerMatrixFile.Text = xs.CustomQuantizerMatrix;
+                xvidCustomCommandlineOptions.Text = xs.CustomEncoderOptions;
                 this.logfile.Text = xs.Logfile;
                 this.Zones = xs.Zones;
             }
         }
         #endregion
         #region quantizer matrices
-        private void xvidLoadInterMatrixButton_Click(object sender, System.EventArgs e)
+        private void xvidLoadQuantizerMatrixButton_Click(object sender, System.EventArgs e)
         {
             if (this.openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                this.xvidInterMatrix.Text = openFileDialog.FileName;
-                this.showCommandLine();
-            }
-        }
-
-        private void xvidLoadIntraMatrixButton_Click(object sender, System.EventArgs e)
-        {
-            if (this.openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                this.xvidIntraMatrix.Text = openFileDialog.FileName;
+                this.xvidQuantizerMatrixFile.Text = openFileDialog.FileName;
                 this.showCommandLine();
             }
         }

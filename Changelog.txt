@@ -1,3 +1,9 @@
+0.2.3.2182
+Commit by Sharx1976:
+  - Cosmetics on the xvid panel, plus enabling custom commandline.
+  - Packed bistream fix.
+  (both patches by foxyshadis)
+
 0.2.3.2181
 Commit by Sharx1976:
   - Made x264 thread-input enabled by default

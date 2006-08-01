@@ -503,8 +503,8 @@ namespace MeGUI
                 sb.Append("-turbo ");
             if (xs.KeyframeInterval != 300)
                 sb.Append("-max_key_interval " + xs.KeyframeInterval + " ");
-            if (xs.PackedBitstream) // default is off (inverse of VfW gui)
-                sb.Append("-packed ");
+            if (!xs.PackedBitstream) // default is on in encraw
+                sb.Append("-nopacked ");
             if (xs.MotionSearchPrecision != 6)
                 sb.Append("-quality " + xs.MotionSearchPrecision + " ");
             if (xs.VHQMode != 1)
@@ -594,6 +594,8 @@ namespace MeGUI
                 else
                     sb.Append(" -o \"" + output + "\"");
             }
+            if (!xs.CustomEncoderOptions.Equals("")) // add custom encoder options
+                sb.Append(xs.CustomEncoderOptions);
             return sb.ToString(); 
         }
 
