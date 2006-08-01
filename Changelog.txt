@@ -1,7 +1,11 @@
+0.2.3.2183
+Commit by Sharx1976:
+  - Fix: Unchecking lossless in x264 configuration now re-enables the bitrate/quantizer textbox
+
 0.2.3.2182
 Commit by Sharx1976:
-  - Cosmetics on the xvid panel, plus enabling custom commandline.
-  - Packed bistream fix.
+  - Cosmetics on the xvid panel, plus enabling custom commandline
+  - Packed bistream fix
   (both patches by foxyshadis)
 
 0.2.3.2181

@@ -742,6 +742,7 @@ namespace MeGUI
                     else
                     {
                         x264EncodingMode.Enabled = true;
+                        x264BitrateQuantizer.Enabled = true;
                     }
                     quantizerMatrixGroupbox.Enabled = true;
                     break;
