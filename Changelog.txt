@@ -1,3 +1,7 @@
+0.2.3.2184
+Commit by Sharx1976:
+  - Fixed xvid custom commandline options in CommandlineGenerator.cs
+
 0.2.3.2183
 Commit by Sharx1976:
   - Fix: Unchecking lossless in x264 configuration now re-enables the bitrate/quantizer textbox
