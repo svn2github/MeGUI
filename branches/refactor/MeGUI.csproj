@@ -126,17 +126,29 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="AudioEncodingComponent.resx">
+    <EmbeddedResource Include="core\details\audio\baseAudioConfigurationDialog.resx">
+      <DependentUpon>baseAudioConfigurationDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
-      <DependentUpon>AudioEncodingComponent.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="core\details\JobControl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>JobControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FileBar.resx">
+    <EmbeddedResource Include="core\details\mux\baseMuxWindow.resx">
+      <DependentUpon>baseMuxWindow.cs</DependentUpon>
       <SubType>Designer</SubType>
-      <DependentUpon>FileBar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="core\details\mux\MuxWindow.resx">
+      <DependentUpon>MuxWindow.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="core\details\video\VideoConfigurationDialog.resx">
+      <DependentUpon>VideoConfigurationDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="core\details\video\VideoEncodingComponent.resx">
+      <DependentUpon>VideoEncodingComponent.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="App.ico" />
     <EmbeddedResource Include="Changelog.txt" />
@@ -145,25 +157,151 @@
     </Content>
     <Content Include="MediaInfoWrapper.dll" />
     <Content Include="MessageBoxExLib.dll" />
-    <Compile Include="AudioEncodingComponent.cs">
-      <SubType>UserControl</SubType>
+    <Compile Include="core\details\audio\AudioCodecSettings.cs" />
+    <Compile Include="core\details\audio\AudioJob.cs" />
+    <Compile Include="core\details\audio\AudioProfile.cs" />
+    <Compile Include="core\details\audio\baseAudioConfigurationDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AudioEncodingComponent.Designer.cs">
-      <DependentUpon>AudioEncodingComponent.cs</DependentUpon>
-    </Compile>
+    <Compile Include="core\details\CodecManager.cs" />
+    <Compile Include="core\details\CommandlineParser.cs" />
+    <Compile Include="core\details\DialogManager.cs" />
+    <Compile Include="core\details\DialogSettings.cs" />
     <Compile Include="core\details\JobControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="core\details\JobControl.Designer.cs">
       <DependentUpon>JobControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="core\details\MediaFileFactory.cs" />
     <Compile Include="core\details\MeGUIInfo.cs" />
+    <Compile Include="core\details\MeGUISettings.cs" />
+    <Compile Include="core\details\mux\baseMuxWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="core\details\mux\Muxer.cs" />
+    <Compile Include="core\details\mux\MuxJob.cs" />
+    <Compile Include="core\details\mux\MuxPath.cs" />
+    <Compile Include="core\details\mux\MuxPathComparer.cs" />
+    <Compile Include="core\details\mux\MuxProvider.cs" />
+    <Compile Include="core\details\mux\MuxSettings.cs" />
+    <Compile Include="core\details\mux\MuxWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="core\details\mux\MuxWindow.Designer.cs">
+      <DependentUpon>MuxWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="core\details\PackageSystem.cs" />
-    <Compile Include="JobProcessorManager.cs" />
+    <Compile Include="core\details\ProfileManager.cs" />
+    <Compile Include="core\details\StatusUpdate.cs" />
+    <Compile Include="core\details\video\VideoCodecSettings.cs" />
+    <Compile Include="core\details\video\VideoConfigurationDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="core\details\video\VideoConfigurationDialog.designer.cs">
+      <DependentUpon>VideoConfigurationDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="core\details\video\VideoEncoder.cs" />
+    <Compile Include="core\details\video\VideoEncodingComponent.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="core\details\video\VideoEncodingComponent.Designer.cs">
+      <DependentUpon>VideoEncodingComponent.cs</DependentUpon>
+    </Compile>
+    <Compile Include="core\details\video\VideoJob.cs" />
+    <Compile Include="core\details\video\VideoProfile.cs" />
+    <Compile Include="core\gui\AdaptiveMuxWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="core\gui\AdaptiveMuxWindow.Designer.cs">
+      <DependentUpon>AdaptiveMuxWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="core\gui\AudioEncodingComponent.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="core\gui\AudioEncodingComponent.Designer.cs">
+      <DependentUpon>AudioEncodingComponent.cs</DependentUpon>
+    </Compile>
+    <Compile Include="core\gui\FileBar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="core\gui\FileBar.Designer.cs">
+      <DependentUpon>FileBar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="core\gui\Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="core\gui\ProfilePorter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="core\gui\ProfilePorter.Designer.cs">
+      <DependentUpon>ProfilePorter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="core\gui\ProgressWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="core\gui\ProgressWindowInfo.cs" />
+    <Compile Include="core\gui\SettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="core\gui\VideoPlayer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="core\gui\ZonesControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="core\gui\ZonesControl.Designer.cs">
+      <DependentUpon>ZonesControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="core\plugins\implemented\audio\CommandlineAudioEncoder.cs" />
+    <Compile Include="core\plugins\implemented\CommandlineJobProcessor.cs" />
+    <Compile Include="core\plugins\implemented\CommandlineMuxer.cs" />
+    <Compile Include="core\plugins\implemented\video\CommandlineVideoEncoder.cs" />
+    <Compile Include="core\plugins\interfaces\IJobProcessor.cs" />
+    <Compile Include="core\plugins\interfaces\IMediaFile.cs" />
+    <Compile Include="core\plugins\interfaces\IMuxing.cs" />
+    <Compile Include="core\plugins\interfaces\IPackage.cs" />
+    <Compile Include="core\plugins\interfaces\IProfileType.cs" />
+    <Compile Include="core\plugins\interfaces\ISettingsProvider.cs" />
+    <Compile Include="core\plugins\interfaces\Job.cs" />
+    <Compile Include="core\plugins\interfaces\JobHandler.cs" />
+    <Compile Include="core\plugins\interfaces\JobProcessorManager.cs" />
+    <Compile Include="core\plugins\interfaces\Profile.cs" />
+    <Compile Include="core\util\CommandLineGenerator.cs" />
+    <Compile Include="core\util\EnumProxy.cs" />
+    <Compile Include="core\util\GenericRegisterer.cs" />
+    <Compile Include="core\util\JobUtil.cs" />
+    <Compile Include="core\util\LanguageSelectionContainer.cs" />
+    <Compile Include="core\util\ScriptServer.cs" />
+    <Compile Include="core\util\Shutdown.cs" />
+    <Compile Include="core\util\VideoUtil.cs" />
     <Compile Include="packages\AC3ConfigurationDialog.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="packages\AC3Settings.cs" />
+    <Compile Include="packages\audio\faac\faacConfigurationDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="packages\audio\faac\FaacSettings.cs" />
+    <Compile Include="packages\audio\ffmp2\MP2ConfigurationDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="packages\audio\ffmp2\MP2Settings.cs" />
+    <Compile Include="packages\audio\lame\lameConfigurationDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="packages\audio\naac\NeroAACSettings.cs" />
+    <Compile Include="packages\audio\naac\neroConfigurationDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="packages\audio\vorbis\OggVorbisConfigurationDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="packages\audio\vorbis\OggVorbisSettings.cs" />
+    <Compile Include="packages\audio\waac\WinAmpAACConfigurationDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="packages\audio\waac\WinAmpAACSettings.cs" />
     <Compile Include="packages\AudXConfigurationDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -181,242 +319,100 @@
     <Compile Include="packages\avsConfigurationDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ProgressWindowInfo.cs" />
-    <Compile Include="IPackage.cs" />
-    <Compile Include="IProfileType.cs" />
-    <Compile Include="FileBar.cs">
-      <SubType>UserControl</SubType>
+    <Compile Include="packages\mux\avi\DivXMuxer.cs" />
+    <Compile Include="packages\mux\mkv\MkvMergeMuxer.cs" />
+    <Compile Include="packages\mux\mp4\MP4BoxMuxer.cs" />
+    <Compile Include="packages\reader\d2v\d2vReader.cs" />
+    <Compile Include="packages\reader\mediainfo\MediaInfoFile.cs" />
+    <Compile Include="packages\tools\autoencode\AutoEncodeWindow.cs">
+      <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FileBar.Designer.cs">
-      <DependentUpon>FileBar.cs</DependentUpon>
+    <Compile Include="packages\tools\calculator\Calculator.cs">
+      <SubType>Form</SubType>
     </Compile>
+    <Compile Include="packages\tools\chaptercreator\ChapterCreator.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="packages\tools\cqmeditor\QuantizerMatrixDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="packages\tools\d2vcreator\DGIndexer.cs" />
+    <Compile Include="packages\tools\d2vcreator\IndexJob.cs" />
+    <Compile Include="packages\tools\d2vcreator\VobinputWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="packages\tools\oneclick\DGIndexPostprocessingProperties.cs" />
+    <Compile Include="packages\tools\oneclick\OneClickConfigurationDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="packages\tools\oneclick\OneClickConfigurationDialog.Designer.cs">
+      <DependentUpon>OneClickConfigurationDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="packages\tools\oneclick\OneClickProfile.cs" />
+    <Compile Include="packages\tools\oneclick\OneClickSettings.cs" />
+    <Compile Include="packages\tools\oneclick\OneClickWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="packages\tools\oneclick\OneClickWindow.Designer.cs">
+      <DependentUpon>OneClickWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="packages\video\lmp4\lavcConfigurationDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="packages\video\lmp4\lavcConfigurationDialog.Designer.cs">
+      <DependentUpon>lavcConfigurationDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="packages\video\lmp4\lavcSettings.cs" />
+    <Compile Include="packages\video\snow\snowConfigurationDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="packages\video\snow\snowConfigurationDialog.designer.cs">
+      <DependentUpon>snowConfigurationDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="packages\video\snow\snowSettings.cs" />
+    <Compile Include="packages\video\x264\x264ConfigurationDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="packages\video\x264\x264ConfigurationDialog.designer.cs">
+      <DependentUpon>x264ConfigurationDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="packages\video\x264\x264Encoder.cs" />
+    <Compile Include="packages\video\x264\x264Settings.cs" />
+    <Compile Include="packages\video\xvid\xvidConfigurationDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="packages\video\xvid\xvidConfigurationDialog.designer.cs">
+      <DependentUpon>xvidConfigurationDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="packages\video\xvid\XviDEncoder.cs" />
+    <Compile Include="packages\video\xvid\xvidSettings.cs" />
     <Compile Include="AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AudioCodecSettings.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AudioEncoder.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="AudioJob.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AudioProfile.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AutoEncodeWindow.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="AviSynthAudioEncoder.cs" />
     <Compile Include="AvsReader.cs" />
-    <Compile Include="baseAudioConfigurationDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="CodecManager.cs" />
-    <Compile Include="CommandlineAudioEncoder.cs" />
-    <Compile Include="CommandlineJobProcessor.cs" />
-    <Compile Include="CommandlineMuxer.cs" />
-    <Compile Include="CommandlineParser.cs" />
-    <Compile Include="CommandlineVideoEncoder.cs" />
     <Compile Include="BitrateCalculator.cs">
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Calculator.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ChapterCreator.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="CommandLineGenerator.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="baseMuxWindow.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="CropDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="d2vReader.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AdaptiveMuxWindow.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="AdaptiveMuxWindow.Designer.cs">
-      <DependentUpon>AdaptiveMuxWindow.cs</DependentUpon>
-    </Compile>
     <Compile Include="DeinterlaceFilter.cs" />
-    <Compile Include="DGIndexer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DGIndexPostprocessingProperties.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DialogManager.cs" />
-    <Compile Include="DialogSettings.cs" />
     <Compile Include="DirectShow.cs" />
-    <Compile Include="DivXMuxer.cs" />
-    <Compile Include="EnumProxy.cs" />
-    <Compile Include="faacConfigurationDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FaacSettings.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GenericRegisterer.cs" />
     <Compile Include="hfyuSettings.cs" />
-    <Compile Include="IMediaFile.cs" />
-    <Compile Include="IMuxing.cs" />
-    <Compile Include="ISettingsProvider.cs" />
-    <Compile Include="IJobProcessor.cs" />
-    <Compile Include="IndexJob.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Job.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="JobHandler.cs" />
-    <Compile Include="JobUtil.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="lameConfigurationDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="LanguageSelectionContainer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="lavcSettings.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MediaFileFactory.cs" />
-    <Compile Include="MediaInfoFile.cs" />
-    <Compile Include="MeGUISettings.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="mencoderEncoder.cs" />
     <Compile Include="MencoderMuxer.cs" />
-    <Compile Include="MkvMergeMuxer.cs" />
-    <Compile Include="MP2ConfigurationDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MP2Settings.cs" />
     <Compile Include="MP3Settings.cs">
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MP4BoxMuxer.cs" />
-    <Compile Include="Muxer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MuxJob.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MuxPath.cs" />
-    <Compile Include="MuxPathComparer.cs" />
-    <Compile Include="MuxProvider.cs" />
-    <Compile Include="MuxSettings.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MuxWindow.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MuxWindow.Designer.cs">
-      <DependentUpon>MuxWindow.cs</DependentUpon>
-    </Compile>
-    <Compile Include="NeroAACSettings.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="neroConfigurationDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="lavcConfigurationDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="lavcConfigurationDialog.Designer.cs">
-      <DependentUpon>lavcConfigurationDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="OggVorbisConfigurationDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="OggVorbisSettings.cs" />
-    <Compile Include="ProfilePorter.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ProfilePorter.Designer.cs">
-      <DependentUpon>ProfilePorter.cs</DependentUpon>
-    </Compile>
-    <Compile Include="snowConfigurationDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="snowConfigurationDialog.designer.cs">
-      <DependentUpon>snowConfigurationDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="UpdateWindow.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UpdateWindow.Designer.cs">
       <DependentUpon>UpdateWindow.cs</DependentUpon>
-    </Compile>
-    <Compile Include="VideoEncodingComponent.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="VideoEncodingComponent.Designer.cs">
-      <DependentUpon>VideoEncodingComponent.cs</DependentUpon>
-    </Compile>
-    <Compile Include="WinAmpAACConfigurationDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="WinAmpAACSettings.cs" />
-    <Compile Include="x264ConfigurationDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="x264ConfigurationDialog.designer.cs">
-      <DependentUpon>x264ConfigurationDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="xvidConfigurationDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="xvidConfigurationDialog.designer.cs">
-      <DependentUpon>xvidConfigurationDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="OneClickConfigurationDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="OneClickConfigurationDialog.Designer.cs">
-      <DependentUpon>OneClickConfigurationDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="OneClickProfile.cs" />
-    <Compile Include="OneClickSettings.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="OneClickWindow.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="OneClickWindow.Designer.cs">
-      <DependentUpon>OneClickWindow.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Profile.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ProfileManager.cs" />
-    <Compile Include="ProgressWindow.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="QuantizerMatrixDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ScriptServer.cs" />
-    <Compile Include="SettingsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Shutdown.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="snowSettings.cs">
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="SourceDetector.cs" />
     <Compile Include="SourceDetectorConfigWindow.cs">
@@ -426,107 +422,68 @@
       <DependentUpon>SourceDetectorConfigWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="SourceDetectorSettings.cs" />
-    <Compile Include="StatusUpdate.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="VideoCodecSettings.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="VideoConfigurationDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="VideoConfigurationDialog.designer.cs">
-      <DependentUpon>VideoConfigurationDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="VideoEncoder.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="VideoJob.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="VideoPlayer.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="VideoProfile.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="VideoUtil.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="VobinputWindow.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="x264Encoder.cs" />
-    <Compile Include="x264Settings.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="XviDEncoder.cs" />
-    <Compile Include="xvidSettings.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ZonesControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ZonesControl.designer.cs">
+    <EmbeddedResource Include="core\gui\AdaptiveMuxWindow.resx">
+      <DependentUpon>AdaptiveMuxWindow.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="core\gui\AudioEncodingComponent.resx">
+      <DependentUpon>AudioEncodingComponent.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="core\gui\FileBar.resx">
+      <DependentUpon>FileBar.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="core\gui\Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="core\gui\ProfilePorter.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ProfilePorter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="core\gui\ProgressWindow.resx">
+      <DependentUpon>ProgressWindow.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="core\gui\SettingsForm.resx">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="core\gui\VideoPlayer.resx">
+      <DependentUpon>VideoPlayer.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="core\gui\ZonesControl.resx">
       <DependentUpon>ZonesControl.cs</DependentUpon>
-    </Compile>
-    <EmbeddedResource Include="AutoEncodeWindow.resx">
-      <DependentUpon>AutoEncodeWindow.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="baseAudioConfigurationDialog.resx">
-      <DependentUpon>baseAudioConfigurationDialog.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Calculator.resx">
-      <DependentUpon>Calculator.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ChapterCreator.resx">
-      <DependentUpon>ChapterCreator.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="baseMuxWindow.resx">
-      <DependentUpon>baseMuxWindow.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="CropDialog.resx">
       <SubType>Designer</SubType>
       <DependentUpon>CropDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="AdaptiveMuxWindow.resx">
+    <EmbeddedResource Include="packages\AC3ConfigurationDialog.resx">
+      <DependentUpon>AC3ConfigurationDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
-      <DependentUpon>AdaptiveMuxWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="faacConfigurationDialog.resx">
+    <EmbeddedResource Include="packages\audio\faac\faacConfigurationDialog.resx">
       <DependentUpon>faacConfigurationDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="lameConfigurationDialog.resx">
+    <EmbeddedResource Include="packages\audio\lame\lameConfigurationDialog.resx">
       <DependentUpon>lameConfigurationDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="MuxWindow.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>MuxWindow.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="neroConfigurationDialog.resx">
+    <EmbeddedResource Include="packages\audio\naac\neroConfigurationDialog.resx">
       <DependentUpon>neroConfigurationDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="lavcConfigurationDialog.resx">
-      <DependentUpon>lavcConfigurationDialog.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="OggVorbisConfigurationDialog.resx">
-      <SubType>Designer</SubType>
+    <EmbeddedResource Include="packages\audio\vorbis\OggVorbisConfigurationDialog.resx">
       <DependentUpon>OggVorbisConfigurationDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="packages\AC3ConfigurationDialog.resx">
-      <DependentUpon>AC3ConfigurationDialog.cs</DependentUpon>
+    <EmbeddedResource Include="packages\audio\waac\WinAmpAACConfigurationDialog.resx">
+      <DependentUpon>WinAmpAACConfigurationDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="packages\AudXConfigurationDialog.resx">
@@ -541,87 +498,68 @@
       <DependentUpon>avsConfigurationDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="ProfilePorter.resx">
+    <EmbeddedResource Include="packages\tools\autoencode\AutoEncodeWindow.resx">
+      <DependentUpon>AutoEncodeWindow.cs</DependentUpon>
       <SubType>Designer</SubType>
-      <DependentUpon>ProfilePorter.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="snowConfigurationDialog.resx">
+    <EmbeddedResource Include="packages\tools\calculator\Calculator.resx">
+      <DependentUpon>Calculator.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="packages\tools\chaptercreator\ChapterCreator.resx">
+      <DependentUpon>ChapterCreator.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="packages\tools\cqmeditor\QuantizerMatrixDialog.resx">
+      <DependentUpon>QuantizerMatrixDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="packages\tools\d2vcreator\VobinputWindow.resx">
+      <DependentUpon>VobinputWindow.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="packages\tools\oneclick\OneClickConfigurationDialog.resx">
+      <DependentUpon>OneClickConfigurationDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="packages\tools\oneclick\OneClickWindow.resx">
+      <DependentUpon>OneClickWindow.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="packages\video\lmp4\lavcConfigurationDialog.resx">
+      <DependentUpon>lavcConfigurationDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="packages\video\snow\snowConfigurationDialog.resx">
       <DependentUpon>snowConfigurationDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="packages\video\x264\x264ConfigurationDialog.resx">
+      <DependentUpon>x264ConfigurationDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="packages\video\xvid\xvidConfigurationDialog.resx">
+      <DependentUpon>xvidConfigurationDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="UpdateWindow.resx">
       <DependentUpon>UpdateWindow.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="VideoEncodingComponent.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>VideoEncodingComponent.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WinAmpAACConfigurationDialog.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>WinAmpAACConfigurationDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="x264ConfigurationDialog.resx">
-      <DependentUpon>x264ConfigurationDialog.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="xvidConfigurationDialog.resx">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="OneClickConfigurationDialog.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>OneClickConfigurationDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="OneClickWindow.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>OneClickWindow.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="pause.ico" />
     <EmbeddedResource Include="play.ico" />
-    <EmbeddedResource Include="ProgressWindow.resx">
-      <DependentUpon>ProgressWindow.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="QuantizerMatrixDialog.resx">
-      <DependentUpon>QuantizerMatrixDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SettingsForm.resx">
-      <DependentUpon>SettingsForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="SourceDetectorConfigWindow.resx">
       <DependentUpon>SourceDetectorConfigWindow.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="VideoConfigurationDialog.resx">
-      <DependentUpon>VideoConfigurationDialog.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="VideoPlayer.resx">
-      <DependentUpon>VideoPlayer.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="VobinputWindow.resx">
-      <DependentUpon>VobinputWindow.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ZonesControl.resx">
-      <DependentUpon>ZonesControl.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="core\gui\" />
-    <Folder Include="core\plugins\implemented\audio\" />
-    <Folder Include="core\plugins\implemented\video\" />
-    <Folder Include="core\plugins\interfaces\" />
-    <Folder Include="core\util\" />
-    <Folder Include="packages\audio\" />
+    <Folder Include="packages\audio\audx\" />
+    <Folder Include="packages\audio\ffac3\" />
     <Folder Include="packages\misc\" />
-    <Folder Include="packages\mux\" />
-    <Folder Include="packages\reader\" />
-    <Folder Include="packages\tools\" />
-    <Folder Include="packages\video\" />
+    <Folder Include="packages\reader\avs\" />
+    <Folder Include="packages\tools\avscreator\" />
+    <Folder Include="packages\tools\levelvalidator\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
