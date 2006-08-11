@@ -1,3 +1,12 @@
+0.2.3.2186
+Commit by Doom9
+	- mp4box / mkvmerge got new split commandlines, adapted megui accordingly
+	- dgindex reports video % instead of film % when video % > 50 starting with v1.4.8, adapted megui to not apply forcefilm in such a case
+	- reshuffled menu shortcuts, megui no longer uses standard shortcuts like CTRL-A/C/V/X
+	- Changelog now has its own dialog
+	- Introduced a help menu with links to the megui wiki and the support forum
+	- Renamed Vorbis container to Ogg since that's the container's name
+
 0.2.3.2185
 Commit by Sharx1976:
   - Several cosmetic fixes

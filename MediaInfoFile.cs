@@ -20,7 +20,7 @@ namespace MeGUI
         private static Dictionary<string, ContainerFileType> knownContainerTypes;
         private static Dictionary<string, ContainerFileType> knownContainerDescriptions;
         
-        private int width, height, darX, darY, frameCount;
+        private int width, height, darX = 0, darY = 0, frameCount;
         private bool hasVideo;
         private double fps;
         private VideoCodec vCodec;
@@ -135,7 +135,7 @@ namespace MeGUI
             {
                 return (int.Parse(value));
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return -1;
             }
@@ -147,7 +147,7 @@ namespace MeGUI
             {
                 return double.Parse(value);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return -1;
             }

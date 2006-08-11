@@ -220,8 +220,7 @@ namespace MeGUI
 			job.Output = stream.output;
 			job.Settings = stream.settings;
 			job.Priority = mainForm.Settings.DefaultPriority;
-#warning No more commandline here!
-            job.Commandline = CommandLineGenerator.generateAudioCommandline(mainForm.Settings, job.Settings, job.Input, job.Output); 
+            //job.Commandline = CommandLineGenerator.generateAudioCommandline(mainForm.Settings, job.Settings, job.Input, job.Output);  // no longer necessary for the avisynth encoder
 			return job;
 		}
 

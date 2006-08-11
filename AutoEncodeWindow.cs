@@ -705,7 +705,7 @@ namespace MeGUI
 					splitSize = Int32.Parse(this.splitSize.Text);
 				}
                 if (desiredSizeBytes > 0)
-                    logBuilder.Append("Desired size of this automated encoding series: " + desiredSizeBytes + " bytes, split size: " + splitSize + "\r\n");
+                    logBuilder.Append("Desired size of this automated encoding series: " + desiredSizeBytes + " bytes, split size: " + splitSize + "MB\r\n");
                 else
                     logBuilder.Append("No desired size of this encode. The profile settings will be used");
 				SubStream[] audio;

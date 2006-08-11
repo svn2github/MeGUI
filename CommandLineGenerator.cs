@@ -882,7 +882,7 @@ namespace MeGUI
                 sb.Append(" -chap \"" + settings.ChapterFile + "\"");
 
             if (settings.SplitSize > 0)
-                sb.Append(" -splits " + settings.SplitSize);
+                sb.Append(" -split-size " + settings.SplitSize * 1024); // mp4box wants KB
 
             if (settings.Framerate > 0)
             {
@@ -997,7 +997,7 @@ namespace MeGUI
 				sb.Append(" --chapters \"" + settings.ChapterFile + "\"");
 			
          	if (settings.SplitSize > 0)
-				sb.Append(" -split " + settings.SplitSize + "MB");
+				sb.Append(" --split size " + settings.SplitSize + "m");
 			
          	sb.Append(" --no-clusters-in-meta-seek"); // ensures lower overhead
 
