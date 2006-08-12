@@ -997,7 +997,7 @@ namespace MeGUI
 				sb.Append(" --chapters \"" + settings.ChapterFile + "\"");
 			
          	if (settings.SplitSize > 0)
-				sb.Append(" --split size " + settings.SplitSize + "m");
+				sb.Append(" --split size:" + settings.SplitSize + "m");
 			
          	sb.Append(" --no-clusters-in-meta-seek"); // ensures lower overhead
 
