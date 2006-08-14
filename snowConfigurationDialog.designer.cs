@@ -141,9 +141,9 @@ namespace MeGUI
             this.snowMotionEstimationGroupbox.Controls.Add(this.snowMbCompareLabel);
             this.snowMotionEstimationGroupbox.Controls.Add(this.snowMeCmpHpelLabel);
             this.snowMotionEstimationGroupbox.Controls.Add(this.snowMeCmpFullpelLabel);
-            this.snowMotionEstimationGroupbox.Location = new System.Drawing.Point(3, 174);
+            this.snowMotionEstimationGroupbox.Location = new System.Drawing.Point(0, 171);
             this.snowMotionEstimationGroupbox.Name = "snowMotionEstimationGroupbox";
-            this.snowMotionEstimationGroupbox.Size = new System.Drawing.Size(424, 104);
+            this.snowMotionEstimationGroupbox.Size = new System.Drawing.Size(437, 104);
             this.snowMotionEstimationGroupbox.TabIndex = 54;
             this.snowMotionEstimationGroupbox.TabStop = false;
             this.snowMotionEstimationGroupbox.Text = "Motion Estimation";
@@ -156,7 +156,7 @@ namespace MeGUI
             "SSD",
             "5/3 Wavelet",
             "9/7 Wavelet"});
-            this.snowMbCompare.Location = new System.Drawing.Point(296, 72);
+            this.snowMbCompare.Location = new System.Drawing.Point(298, 69);
             this.snowMbCompare.Name = "snowMbCompare";
             this.snowMbCompare.Size = new System.Drawing.Size(121, 21);
             this.snowMbCompare.TabIndex = 17;
@@ -170,7 +170,7 @@ namespace MeGUI
             "SSD",
             "5/3 Wavelet",
             "9/7 Wavelet"});
-            this.snowMeCmpHpel.Location = new System.Drawing.Point(296, 48);
+            this.snowMeCmpHpel.Location = new System.Drawing.Point(298, 45);
             this.snowMeCmpHpel.Name = "snowMeCmpHpel";
             this.snowMeCmpHpel.Size = new System.Drawing.Size(121, 21);
             this.snowMeCmpHpel.TabIndex = 16;
@@ -184,7 +184,7 @@ namespace MeGUI
             "SSD",
             "5/3 Wavelet",
             "9/7 Wavelet"});
-            this.snowMeCmpFullpel.Location = new System.Drawing.Point(296, 24);
+            this.snowMeCmpFullpel.Location = new System.Drawing.Point(298, 21);
             this.snowMeCmpFullpel.Name = "snowMeCmpFullpel";
             this.snowMeCmpFullpel.Size = new System.Drawing.Size(121, 21);
             this.snowMeCmpFullpel.TabIndex = 15;
@@ -226,9 +226,9 @@ namespace MeGUI
             this.snowToolsGroupbox.Controls.Add(this.snowCreditsQuantizer);
             this.snowToolsGroupbox.Controls.Add(this.snowLosslessModeLabel);
             this.snowToolsGroupbox.Controls.Add(this.snowLosslessMode);
-            this.snowToolsGroupbox.Location = new System.Drawing.Point(235, 6);
+            this.snowToolsGroupbox.Location = new System.Drawing.Point(235, 3);
             this.snowToolsGroupbox.Name = "snowToolsGroupbox";
-            this.snowToolsGroupbox.Size = new System.Drawing.Size(192, 168);
+            this.snowToolsGroupbox.Size = new System.Drawing.Size(203, 168);
             this.snowToolsGroupbox.TabIndex = 53;
             this.snowToolsGroupbox.TabStop = false;
             this.snowToolsGroupbox.Text = "Tools";
@@ -343,7 +343,7 @@ namespace MeGUI
             this.snowCodecGeneralGroupbox.Controls.Add(this.snowQuantizerLabel);
             this.snowCodecGeneralGroupbox.Controls.Add(this.snowBitrate);
             this.snowCodecGeneralGroupbox.Controls.Add(this.snowBitrateLabel);
-            this.snowCodecGeneralGroupbox.Location = new System.Drawing.Point(3, 6);
+            this.snowCodecGeneralGroupbox.Location = new System.Drawing.Point(0, 3);
             this.snowCodecGeneralGroupbox.Name = "snowCodecGeneralGroupbox";
             this.snowCodecGeneralGroupbox.Size = new System.Drawing.Size(224, 168);
             this.snowCodecGeneralGroupbox.TabIndex = 52;

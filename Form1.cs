@@ -400,7 +400,7 @@ namespace MeGUI
             // 
             // audioCodecLabel
             // 
-            this.audioCodecLabel.Location = new System.Drawing.Point(8, 76);
+            this.audioCodecLabel.Location = new System.Drawing.Point(16, 74);
             this.audioCodecLabel.Name = "audioCodecLabel";
             this.audioCodecLabel.Size = new System.Drawing.Size(100, 23);
             this.audioCodecLabel.TabIndex = 31;
@@ -409,7 +409,7 @@ namespace MeGUI
             // 
             // queueAudioButton
             // 
-            this.queueAudioButton.Location = new System.Drawing.Point(374, 100);
+            this.queueAudioButton.Location = new System.Drawing.Point(376, 101);
             this.queueAudioButton.Name = "queueAudioButton";
             this.queueAudioButton.Size = new System.Drawing.Size(66, 23);
             this.queueAudioButton.TabIndex = 30;
@@ -421,14 +421,14 @@ namespace MeGUI
             this.audioProfile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.audioProfile.Location = new System.Drawing.Point(152, 101);
             this.audioProfile.Name = "audioProfile";
-            this.audioProfile.Size = new System.Drawing.Size(200, 21);
+            this.audioProfile.Size = new System.Drawing.Size(219, 21);
             this.audioProfile.Sorted = true;
             this.audioProfile.TabIndex = 15;
             this.audioProfile.SelectedIndexChanged += new System.EventHandler(this.audioProfile_SelectedIndexChanged);
             // 
             // audioProfileLabel
             // 
-            this.audioProfileLabel.Location = new System.Drawing.Point(8, 102);
+            this.audioProfileLabel.Location = new System.Drawing.Point(16, 104);
             this.audioProfileLabel.Name = "audioProfileLabel";
             this.audioProfileLabel.Size = new System.Drawing.Size(100, 23);
             this.audioProfileLabel.TabIndex = 14;
@@ -439,12 +439,12 @@ namespace MeGUI
             this.audioInput.Location = new System.Drawing.Point(152, 22);
             this.audioInput.Name = "audioInput";
             this.audioInput.ReadOnly = true;
-            this.audioInput.Size = new System.Drawing.Size(256, 21);
+            this.audioInput.Size = new System.Drawing.Size(257, 21);
             this.audioInput.TabIndex = 6;
             // 
             // audioInputOpenButton
             // 
-            this.audioInputOpenButton.Location = new System.Drawing.Point(416, 22);
+            this.audioInputOpenButton.Location = new System.Drawing.Point(419, 22);
             this.audioInputOpenButton.Name = "audioInputOpenButton";
             this.audioInputOpenButton.Size = new System.Drawing.Size(24, 23);
             this.audioInputOpenButton.TabIndex = 7;
@@ -453,7 +453,7 @@ namespace MeGUI
             // 
             // audioInputLabel
             // 
-            this.audioInputLabel.Location = new System.Drawing.Point(8, 24);
+            this.audioInputLabel.Location = new System.Drawing.Point(16, 26);
             this.audioInputLabel.Name = "audioInputLabel";
             this.audioInputLabel.Size = new System.Drawing.Size(100, 23);
             this.audioInputLabel.TabIndex = 5;
@@ -463,12 +463,12 @@ namespace MeGUI
             // 
             this.audioOutput.Location = new System.Drawing.Point(152, 48);
             this.audioOutput.Name = "audioOutput";
-            this.audioOutput.Size = new System.Drawing.Size(256, 21);
+            this.audioOutput.Size = new System.Drawing.Size(257, 21);
             this.audioOutput.TabIndex = 8;
             // 
             // audioOutputLabel
             // 
-            this.audioOutputLabel.Location = new System.Drawing.Point(8, 50);
+            this.audioOutputLabel.Location = new System.Drawing.Point(16, 52);
             this.audioOutputLabel.Name = "audioOutputLabel";
             this.audioOutputLabel.Size = new System.Drawing.Size(100, 23);
             this.audioOutputLabel.TabIndex = 9;
@@ -476,7 +476,7 @@ namespace MeGUI
             // 
             // audioOutputOpenButton
             // 
-            this.audioOutputOpenButton.Location = new System.Drawing.Point(416, 48);
+            this.audioOutputOpenButton.Location = new System.Drawing.Point(419, 48);
             this.audioOutputOpenButton.Name = "audioOutputOpenButton";
             this.audioOutputOpenButton.Size = new System.Drawing.Size(24, 23);
             this.audioOutputOpenButton.TabIndex = 13;
@@ -505,7 +505,7 @@ namespace MeGUI
             // 
             // deleteAudioButton
             // 
-            this.deleteAudioButton.Location = new System.Drawing.Point(416, 74);
+            this.deleteAudioButton.Location = new System.Drawing.Point(419, 74);
             this.deleteAudioButton.Name = "deleteAudioButton";
             this.deleteAudioButton.Size = new System.Drawing.Size(24, 23);
             this.deleteAudioButton.TabIndex = 6;
@@ -589,13 +589,13 @@ namespace MeGUI
             this.videoInput.Location = new System.Drawing.Point(152, 22);
             this.videoInput.Name = "videoInput";
             this.videoInput.ReadOnly = true;
-            this.videoInput.Size = new System.Drawing.Size(256, 21);
+            this.videoInput.Size = new System.Drawing.Size(257, 21);
             this.videoInput.TabIndex = 3;
             this.videoInput.DoubleClick += new System.EventHandler(this.videoInput_DoubleClick);
             // 
             // inputOpenButton
             // 
-            this.inputOpenButton.Location = new System.Drawing.Point(418, 22);
+            this.inputOpenButton.Location = new System.Drawing.Point(419, 22);
             this.inputOpenButton.Name = "inputOpenButton";
             this.inputOpenButton.Size = new System.Drawing.Size(24, 23);
             this.inputOpenButton.TabIndex = 4;
@@ -668,7 +668,7 @@ namespace MeGUI
             // 
             this.videoOutput.Location = new System.Drawing.Point(152, 48);
             this.videoOutput.Name = "videoOutput";
-            this.videoOutput.Size = new System.Drawing.Size(256, 21);
+            this.videoOutput.Size = new System.Drawing.Size(257, 21);
             this.videoOutput.TabIndex = 13;
             // 
             // videoOutputLabel
@@ -681,7 +681,7 @@ namespace MeGUI
             // 
             // videoOutputOpenButton
             // 
-            this.videoOutputOpenButton.Location = new System.Drawing.Point(418, 48);
+            this.videoOutputOpenButton.Location = new System.Drawing.Point(419, 48);
             this.videoOutputOpenButton.Name = "videoOutputOpenButton";
             this.videoOutputOpenButton.Size = new System.Drawing.Size(24, 23);
             this.videoOutputOpenButton.TabIndex = 13;

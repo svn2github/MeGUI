@@ -151,7 +151,7 @@ namespace MeGUI
             this.zonesControl.CreditsStartFrame = 0;
             this.zonesControl.Input = "";
             this.zonesControl.IntroEndFrame = 0;
-            this.zonesControl.Location = new System.Drawing.Point(6, 6);
+            this.zonesControl.Location = new System.Drawing.Point(0, 3);
             this.zonesControl.Name = "zonesControl";
             this.zonesControl.Size = new System.Drawing.Size(310, 305);
             this.zonesControl.TabIndex = 0;
