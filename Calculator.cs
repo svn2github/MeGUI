@@ -506,7 +506,7 @@ namespace MeGUI
             // audio1Type
             // 
             this.audio1Type.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.audio1Type.Location = new System.Drawing.Point(64, 152);
+            this.audio1Type.Location = new System.Drawing.Point(48, 152);
             this.audio1Type.Name = "audio1Type";
             this.audio1Type.Size = new System.Drawing.Size(84, 21);
             this.audio1Type.TabIndex = 6;
@@ -623,7 +623,7 @@ namespace MeGUI
             // audio2Type
             // 
             this.audio2Type.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.audio2Type.Location = new System.Drawing.Point(64, 152);
+            this.audio2Type.Location = new System.Drawing.Point(47, 152);
             this.audio2Type.Name = "audio2Type";
             this.audio2Type.Size = new System.Drawing.Size(84, 21);
             this.audio2Type.TabIndex = 13;

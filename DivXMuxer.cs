@@ -35,8 +35,12 @@ namespace MeGUI
         {
             if (line.Contains("Muxing"))
                 return;
+            if (line.ToLower().Contains("error"))
+            {
+                su.Error = line;
+                su.HasError = true;
+            }
             log.AppendLine(line);
         }
-
     }
 }

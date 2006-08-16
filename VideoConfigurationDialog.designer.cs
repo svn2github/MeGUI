@@ -43,6 +43,7 @@ namespace MeGUI
             this.mainTabPage = new System.Windows.Forms.TabPage();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tooltipHelp = new System.Windows.Forms.ToolTip(this.components);
+            this.updateButton = new System.Windows.Forms.Button();
             this.profilesGroupbox.SuspendLayout();
             this.zoneTabPage.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -68,20 +69,21 @@ namespace MeGUI
             // 
             // profilesGroupbox
             // 
+            this.profilesGroupbox.Controls.Add(this.updateButton);
             this.profilesGroupbox.Controls.Add(this.loadDefaultsButton);
             this.profilesGroupbox.Controls.Add(this.videoProfile);
             this.profilesGroupbox.Controls.Add(this.newVideoProfileButton);
             this.profilesGroupbox.Controls.Add(this.deleteVideoProfileButton);
             this.profilesGroupbox.Location = new System.Drawing.Point(12, 472);
             this.profilesGroupbox.Name = "profilesGroupbox";
-            this.profilesGroupbox.Size = new System.Drawing.Size(428, 48);
+            this.profilesGroupbox.Size = new System.Drawing.Size(472, 48);
             this.profilesGroupbox.TabIndex = 43;
             this.profilesGroupbox.TabStop = false;
             this.profilesGroupbox.Text = "Profiles";
             // 
             // loadDefaultsButton
             // 
-            this.loadDefaultsButton.Location = new System.Drawing.Point(310, 18);
+            this.loadDefaultsButton.Location = new System.Drawing.Point(363, 18);
             this.loadDefaultsButton.Name = "loadDefaultsButton";
             this.loadDefaultsButton.Size = new System.Drawing.Size(103, 23);
             this.loadDefaultsButton.TabIndex = 14;
@@ -120,7 +122,7 @@ namespace MeGUI
             // cancelButton
             // 
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(393, 523);
+            this.cancelButton.Location = new System.Drawing.Point(444, 523);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(48, 23);
             this.cancelButton.TabIndex = 42;
@@ -129,7 +131,7 @@ namespace MeGUI
             // okButton
             // 
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.okButton.Location = new System.Drawing.Point(457, 523);
+            this.okButton.Location = new System.Drawing.Point(385, 523);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(40, 23);
             this.okButton.TabIndex = 41;
@@ -186,6 +188,16 @@ namespace MeGUI
             this.tooltipHelp.ReshowDelay = 100;
             this.tooltipHelp.ShowAlways = true;
             // 
+            // updateButton
+            // 
+            this.updateButton.Location = new System.Drawing.Point(286, 18);
+            this.updateButton.Name = "updateButton";
+            this.updateButton.Size = new System.Drawing.Size(50, 23);
+            this.updateButton.TabIndex = 15;
+            this.updateButton.Text = "Update";
+            this.updateButton.UseVisualStyleBackColor = true;
+            this.updateButton.Click += new System.EventHandler(this.updateButton_Click);
+            // 
             // VideoConfigurationDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -228,5 +240,6 @@ namespace MeGUI
         protected System.Windows.Forms.TabPage mainTabPage;
         protected System.Windows.Forms.TabControl tabControl1;
         protected System.Windows.Forms.ToolTip tooltipHelp;
+        private System.Windows.Forms.Button updateButton;
     }
 }

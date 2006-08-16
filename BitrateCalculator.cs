@@ -203,6 +203,10 @@ namespace MeGUI
                 samplesPerBlock = VorbisBlockSize;
                 headerSize = mkvVorbisTrackHeaderSize;
             }
+            else // unknown types.. we presume the same overhead as for DTS
+            {
+                samplesPerBlock = AC3BlockSize;
+            }
             double blockOverhead = (double)nbSamples / (double)samplesPerBlock * 22.0 / 8.0;
             int overhead = (int)(headerSize + 5 * length + blockOverhead);
             return overhead;
@@ -227,9 +231,11 @@ namespace MeGUI
             foreach (AudioStream stream in audioStreams)
             {
                 audioSize += stream.SizeBytes;
-                double audioOverhead = getAviAudioOverhead(stream.Type, stream.BitrateMode);
                 if (stream.SizeBytes > 0)
-                    totalOverhead += audioOverhead;
+                {
+                    double audioOverhead = getAviAudioOverhead(stream.Type, stream.BitrateMode);
+                    totalOverhead += audioOverhead * nbOfFrames;
+                }
             }
             long videoTargetSize = desiredOutputSize - audioSize - (long)totalOverhead;
             videoSize = (int)(videoTargetSize / (long)1024);
@@ -247,7 +253,7 @@ namespace MeGUI
             {
                 audioSize += stream.SizeBytes;
                 if (stream.SizeBytes > 0)
-                    audioOverhead += getAviAudioOverhead(stream.Type, stream.BitrateMode);
+                    audioOverhead += getAviAudioOverhead(stream.Type, stream.BitrateMode) * nbOfFrames;
             }
             double totalOverhead = videoOverhead + audioOverhead;
             double bytesPerSecond = desiredBitrate * 1000 / 8;

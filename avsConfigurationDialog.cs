@@ -38,7 +38,6 @@ namespace MeGUI
 		#region variable declaration
         private string initialProfile;
 		private int oldAviSynthProfileIndex;
-		private bool newProfile;
 		private string path;
 		private string pluginsDirectory;
         private ProfileManager profileManager;
@@ -71,6 +70,8 @@ namespace MeGUI
         private CheckBox resize;
         private ComboBox mod16Box;
         private CheckBox signalAR;
+        private Button loadDefaultsButton;
+        private Button updateButton;
 		private System.Windows.Forms.CheckBox mpeg2Deblocking;
 		/// <summary>
 		/// Required designer variable.
@@ -127,6 +128,8 @@ namespace MeGUI
             this.resizeFilterType = new System.Windows.Forms.ComboBox();
             this.cancelButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
+            this.loadDefaultsButton = new System.Windows.Forms.Button();
+            this.updateButton = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.templatePage.SuspendLayout();
             this.profilesGroupbox.SuspendLayout();
@@ -148,7 +151,7 @@ namespace MeGUI
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(424, 480);
+            this.tabControl1.Size = new System.Drawing.Size(424, 501);
             this.tabControl1.TabIndex = 0;
             // 
             // templatePage
@@ -165,7 +168,7 @@ namespace MeGUI
             this.templatePage.Controls.Add(this.insertResize);
             this.templatePage.Location = new System.Drawing.Point(4, 22);
             this.templatePage.Name = "templatePage";
-            this.templatePage.Size = new System.Drawing.Size(416, 454);
+            this.templatePage.Size = new System.Drawing.Size(416, 475);
             this.templatePage.TabIndex = 0;
             this.templatePage.Text = "Template";
             // 
@@ -214,18 +217,21 @@ namespace MeGUI
             // 
             // profilesGroupbox
             // 
+            this.profilesGroupbox.Controls.Add(this.updateButton);
+            this.profilesGroupbox.Controls.Add(this.loadDefaultsButton);
             this.profilesGroupbox.Controls.Add(this.avsProfile);
             this.profilesGroupbox.Controls.Add(this.newAvsProfileButton);
             this.profilesGroupbox.Controls.Add(this.deleteAvsProfileButton);
             this.profilesGroupbox.Location = new System.Drawing.Point(4, 400);
             this.profilesGroupbox.Name = "profilesGroupbox";
-            this.profilesGroupbox.Size = new System.Drawing.Size(400, 48);
+            this.profilesGroupbox.Size = new System.Drawing.Size(400, 72);
             this.profilesGroupbox.TabIndex = 40;
             this.profilesGroupbox.TabStop = false;
             this.profilesGroupbox.Text = "Profiles";
             // 
             // avsProfile
             // 
+            this.avsProfile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.avsProfile.Location = new System.Drawing.Point(8, 18);
             this.avsProfile.Name = "avsProfile";
             this.avsProfile.Size = new System.Drawing.Size(280, 21);
@@ -295,7 +301,7 @@ namespace MeGUI
             this.extraSetupPage.Controls.Add(this.filtersGroupbox);
             this.extraSetupPage.Location = new System.Drawing.Point(4, 22);
             this.extraSetupPage.Name = "extraSetupPage";
-            this.extraSetupPage.Size = new System.Drawing.Size(416, 454);
+            this.extraSetupPage.Size = new System.Drawing.Size(416, 475);
             this.extraSetupPage.TabIndex = 1;
             this.extraSetupPage.Text = "Extra Setup";
             // 
@@ -405,7 +411,7 @@ namespace MeGUI
             // cancelButton
             // 
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(320, 488);
+            this.cancelButton.Location = new System.Drawing.Point(372, 507);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(48, 23);
             this.cancelButton.TabIndex = 39;
@@ -414,17 +420,37 @@ namespace MeGUI
             // okButton
             // 
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.okButton.Location = new System.Drawing.Point(376, 488);
+            this.okButton.Location = new System.Drawing.Point(304, 507);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(48, 23);
             this.okButton.TabIndex = 38;
             this.okButton.Text = "OK";
             this.okButton.Click += new System.EventHandler(this.okButton_Click);
             // 
+            // loadDefaultsButton
+            // 
+            this.loadDefaultsButton.Location = new System.Drawing.Point(306, 47);
+            this.loadDefaultsButton.Name = "loadDefaultsButton";
+            this.loadDefaultsButton.Size = new System.Drawing.Size(86, 23);
+            this.loadDefaultsButton.TabIndex = 14;
+            this.loadDefaultsButton.Text = "Load Defaults";
+            this.loadDefaultsButton.UseVisualStyleBackColor = true;
+            this.loadDefaultsButton.Click += new System.EventHandler(this.loadDefaultsButton_Click);
+            // 
+            // updateButton
+            // 
+            this.updateButton.Location = new System.Drawing.Point(213, 47);
+            this.updateButton.Name = "updateButton";
+            this.updateButton.Size = new System.Drawing.Size(75, 23);
+            this.updateButton.TabIndex = 15;
+            this.updateButton.Text = "Update";
+            this.updateButton.UseVisualStyleBackColor = true;
+            this.updateButton.Click += new System.EventHandler(this.updateButton_Click);
+            // 
             // avsConfigurationDialog
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
-            this.ClientSize = new System.Drawing.Size(426, 512);
+            this.ClientSize = new System.Drawing.Size(426, 542);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.okButton);
@@ -461,12 +487,13 @@ namespace MeGUI
 			if (this.avsProfile.SelectedIndex != -1) // if it's -1 it's bogus
 			{
                 AviSynthProfile prof = this.profileManager.AvsProfiles[this.avsProfile.SelectedItem.ToString()];
-                if (this.oldAviSynthProfileIndex != -1 && !this.newProfile) // -1 means it's never been touched
+                this.Settings = prof.Settings;
+                /*if (this.oldAviSynthProfileIndex != -1 && !this.newProfile) // -1 means it's never been touched
                     this.profileManager.AvsProfiles[this.avsProfile.Items[this.oldAviSynthProfileIndex].ToString()].Settings = this.Settings;
                 newProfile = false;
                 this.Settings = prof.Settings;
                 this.oldAviSynthProfileIndex = this.avsProfile.SelectedIndex;
-                this.avsProfile.SelectAll();
+                this.avsProfile.SelectAll();*/
 			}
 		}
 		/// <summary>
@@ -478,16 +505,16 @@ namespace MeGUI
 		/// <param name="e"></param>
 		private void newAviSynthProfileButton_Click(object sender, System.EventArgs e)
 		{
-            if (this.avsProfile.Text.Equals(""))
-            {
-                MessageBox.Show("Please give the profile a name", "Empty name for profile", MessageBoxButtons.OK);
+            string profileName = Microsoft.VisualBasic.Interaction.InputBox("Please give the profile a name", "Please give the profile a name", "", -1, -1);
+            if (profileName == null)
                 return;
-            }
-            AviSynthProfile prof = new AviSynthProfile(this.avsProfile.Text, this.Settings);
+            profileName = profileName.Trim();
+            if (profileName.Length == 0)
+                return;
+            AviSynthProfile prof = new AviSynthProfile(profileName, this.Settings);
             if (this.profileManager.AddAviSynthProfile(prof))
             {
                 this.avsProfile.Items.Add(prof.Name);
-				this.newProfile = true;
 				this.avsProfile.SelectedIndex = this.avsProfile.Items.IndexOf(prof.Name);
                 this.oldAviSynthProfileIndex = this.avsProfile.SelectedIndex;
             }
@@ -516,6 +543,33 @@ namespace MeGUI
                 }
 			}
 		}
+        /// <summary>
+        /// loads the default settings
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void loadDefaultsButton_Click(object sender, EventArgs e)
+        {
+            this.Settings = new AviSynthSettings();
+        }
+        /// <summary>
+        /// updates the currently selected settings with what's currently being shown in the GUI
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void updateButton_Click(object sender, EventArgs e)
+        {
+            if (this.avsProfile.SelectedIndex != -1) // if it's -1 it's bogus
+            {
+                AviSynthProfile prof = this.profileManager.AvsProfiles[this.avsProfile.SelectedItem.ToString()];
+                prof.Settings = this.Settings;
+            }
+            else
+            {
+                MessageBox.Show("You must select a profile to update!", "No profile selected", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+        }
 		#endregion
 		#region start/stop events
 		/// <summary>
@@ -535,10 +589,10 @@ namespace MeGUI
 
         private void okButton_Click(object sender, System.EventArgs e)
         {
-            if (this.avsProfile.SelectedIndex != -1)
+            /*if (this.avsProfile.SelectedIndex != -1)
             {
                 this.profileManager.AvsProfiles[this.avsProfile.SelectedItem.ToString()].Settings = this.Settings;
-            }
+            }*/
         }
 		#endregion
 		#region helper methods

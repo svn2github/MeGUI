@@ -100,10 +100,11 @@ namespace MeGUI
 
         }
         #endregion
-
-
         #region properties
-
+        protected override AudioCodecSettings defaultSettings()
+        {
+            return new AudXSettings();
+        }
         protected override bool IsMultichanelRequed
         {
             get
@@ -134,8 +135,5 @@ namespace MeGUI
             }
         }
         #endregion
-
-
-
     }
 }

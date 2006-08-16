@@ -1,3 +1,12 @@
+0.2.3.2189
+Commit by Doom9
+	- Audio overhead for AVI files is properly calculated
+	- DTS/MP2 audio no longer throws the bitrate calculator out of whack
+	- Creating a new profile no longer overwrites the currently active one
+	- New way of doing profiles... updating a profile now requires selecting the profile, make changes, press update
+		As a result, config windows no longer serve as profile selectors, you always have to select the desired profile where profiles are being used
+	- Swapped the position of OK and Cancel button to correspond to the Windows standard
+
 0.2.3.2188
   - Cosmetic fixes (part 3...)
   - Swapped Crop and Resize controls position in Avisynth Script Creator window to better represent the correct workflow

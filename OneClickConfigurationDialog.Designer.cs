@@ -58,6 +58,7 @@ namespace MeGUI
             this.newProfileButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
+            this.updateButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.horizontalResolution)).BeginInit();
             this.extraGroupbox.SuspendLayout();
             this.otherGroupBox.SuspendLayout();
@@ -321,6 +322,7 @@ namespace MeGUI
             // 
             // playbackMethod
             // 
+            this.playbackMethod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.playbackMethod.Location = new System.Drawing.Point(120, 13);
             this.playbackMethod.Name = "playbackMethod";
             this.playbackMethod.Size = new System.Drawing.Size(288, 21);
@@ -330,6 +332,7 @@ namespace MeGUI
             // 
             // profilesGroupBox
             // 
+            this.profilesGroupBox.Controls.Add(this.updateButton);
             this.profilesGroupBox.Controls.Add(this.deleteProfileButton);
             this.profilesGroupBox.Controls.Add(this.newProfileButton);
             this.profilesGroupBox.Controls.Add(this.playbackMethodLabel);
@@ -364,7 +367,7 @@ namespace MeGUI
             // cancelButton
             // 
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(285, 298);
+            this.cancelButton.Location = new System.Drawing.Point(366, 298);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 40;
@@ -374,13 +377,23 @@ namespace MeGUI
             // okButton
             // 
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.okButton.Location = new System.Drawing.Point(366, 298);
+            this.okButton.Location = new System.Drawing.Point(264, 298);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(75, 23);
             this.okButton.TabIndex = 41;
             this.okButton.Text = "OK";
             this.okButton.UseVisualStyleBackColor = true;
             this.okButton.Click += new System.EventHandler(this.okButton_Click);
+            // 
+            // updateButton
+            // 
+            this.updateButton.Location = new System.Drawing.Point(133, 40);
+            this.updateButton.Name = "updateButton";
+            this.updateButton.Size = new System.Drawing.Size(75, 23);
+            this.updateButton.TabIndex = 41;
+            this.updateButton.Text = "Update";
+            this.updateButton.UseVisualStyleBackColor = true;
+            this.updateButton.Click += new System.EventHandler(this.updateButton_Click);
             // 
             // OneClickConfigurationDialog
             // 
@@ -394,7 +407,7 @@ namespace MeGUI
             this.Controls.Add(this.extraGroupbox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "OneClickConfigurationDialog";
-            this.Text = "OneClickConfigurationDialog";
+            this.Text = "One Click Configuration Dialog";
             ((System.ComponentModel.ISupportInitialize)(this.horizontalResolution)).EndInit();
             this.extraGroupbox.ResumeLayout(false);
             this.extraGroupbox.PerformLayout();
@@ -437,5 +450,6 @@ namespace MeGUI
         private System.Windows.Forms.Button newProfileButton;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Button okButton;
+        private System.Windows.Forms.Button updateButton;
     }
 }

@@ -49,20 +49,6 @@ namespace MeGUI
 
 
 		#endregion
-
-        protected override bool IsMultichanelSupported
-        {
-            get
-            {
-                return false;
-            }
-        }
-	    
-        protected override Type supportedType
-        {
-            get { return typeof(MP3Settings); }
-        }
-
 	    #region Windows Form Designer generated code
 		/// <summary>
 		/// Required method for Designer support - do not modify
@@ -188,6 +174,22 @@ namespace MeGUI
 		}
 		#endregion
 		#region properties
+        protected override AudioCodecSettings defaultSettings()
+        {
+            return new MP3Settings();
+        }
+        protected override bool IsMultichanelSupported
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        protected override Type supportedType
+        {
+            get { return typeof(MP3Settings); }
+        }
 	    /// <summary>
 	    /// gets / sets the settings that are being shown in this configuration dialog
 	    /// </summary>
@@ -250,6 +252,5 @@ namespace MeGUI
 		}
 
 		#endregion
-
 	}
 }

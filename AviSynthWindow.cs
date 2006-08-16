@@ -998,7 +998,8 @@ namespace MeGUI
 			if (videoLoaded)
 			{
 				player.disableIntroAndCredits();
-				    player.Show();
+                reader = player.Reader;
+				player.Show();
 			}
 		}
 		private void saveButton_Click(object sender, System.EventArgs e)
@@ -1527,15 +1528,16 @@ namespace MeGUI
 				this.avsProfile.Items.Clear();
                 foreach (string name in mainForm.Profiles.AvsProfiles.Keys)
                     avsProfile.Items.Add(name);
-				int index = this.avsProfile.Items.IndexOf(acd.CurrentProfile);
+                this.avsProfile.SelectedIndex = -1;
+                this.Settings = acd.Settings;
+				/*int index = this.avsProfile.Items.IndexOf(acd.CurrentProfile);
 				if (index != -1)
-					this.avsProfile.SelectedIndex = index;
+					this.avsProfile.SelectedIndex = index;*/
 			}
 		}
 
 		private void avsProfile_SelectedIndexChanged(object sender, System.EventArgs e)
 		{
-#warning This is just quickfix, please check it!
             if (avsProfile.SelectedItem.ToString().Length > 0)
             {
                 AviSynthProfile prof = this.mainForm.Profiles.AvsProfiles[avsProfile.SelectedItem.ToString()];

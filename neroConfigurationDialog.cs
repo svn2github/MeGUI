@@ -190,9 +190,11 @@ namespace MeGUI
 
 		}
 		#endregion
-
-
 		#region properties
+        protected override AudioCodecSettings defaultSettings()
+        {
+            return new NeroAACSettings();
+        }
         protected override Type supportedType
         {
             get { return typeof(NeroAACSettings); }

@@ -1597,9 +1597,10 @@ namespace MeGUI
                 {
                     this.videoProfile.Items.Add(name);
                 }
-                int index = this.videoProfile.Items.IndexOf(selectedProfile);
+                this.videoProfile.SelectedIndex = -1;
+                /*int index = this.videoProfile.Items.IndexOf(selectedProfile);
                 if (index != -1)
-                    this.videoProfile.SelectedIndex = index;
+                    this.videoProfile.SelectedIndex = index;*/
             }
             if (player != null)
                 player.Show();
@@ -1618,9 +1619,10 @@ namespace MeGUI
                 {
                     this.audioProfile.Items.Add(name);
                 }
-                int index = audioProfile.Items.IndexOf(selectedProfile);
+                this.audioProfile.SelectedItem = -1;
+                /*int index = audioProfile.Items.IndexOf(selectedProfile);
                 if (index != -1)
-                    audioProfile.SelectedIndex = index;
+                    audioProfile.SelectedIndex = index;*/
                 AudioStream stream = this.CurrentAudioStream;
                 stream.settings = CurrentAudioSettingsProvider.GetCurrentSettings();
                 this.CurrentAudioStream = stream;
