@@ -6,6 +6,7 @@ Commit by Doom9
 	- New way of doing profiles... updating a profile now requires selecting the profile, make changes, press update
 		As a result, config windows no longer serve as profile selectors, you always have to select the desired profile where profiles are being used
 	- Swapped the position of OK and Cancel button to correspond to the Windows standard
+	- Autocrop no longer crashes when the preview is being closed and reopened before cropping
 
 0.2.3.2188
   - Cosmetic fixes (part 3...)
