@@ -124,6 +124,7 @@ namespace MeGUI
         private VideoType[] knownVideoTypes;
         private AudioType[] knownAudioTypes;
         private SubtitleType[] knownSubtitleTypes;
+        private ChapterType[] knownChapterTypes;
 
         private static ContainerManager manager;
         /// <summary>
@@ -145,6 +146,7 @@ namespace MeGUI
                 AudioType.VBRMP3,
                 AudioType.VORBIS};
             this.knownSubtitleTypes = new SubtitleType[] { SubtitleType.SUBRIP, SubtitleType.VOBSUB };
+            this.knownChapterTypes = new ChapterType[] { ChapterType.OGG_TXT };
         }
         public static ContainerManager GetContainerManager()
         {
@@ -167,6 +169,10 @@ namespace MeGUI
         public SubtitleType[] SubtitleTypes
         {
             get { return knownSubtitleTypes; }
+        }
+        public ChapterType[] ChapterTypes
+        {
+            get { return knownChapterTypes; }
         }
     }
 

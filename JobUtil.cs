@@ -226,13 +226,15 @@ namespace MeGUI
 
         public MuxJob[] GenerateMuxJobs(VideoStream video, SubStream[] audioStreamsArray, MuxableType[] audioTypes,
             SubStream[] subtitleStreamsArray, MuxableType[] subTypes,
-            string chapterFile, ContainerType container, string output, int splitSize)
+            string chapterFile, MuxableType chapterInputType, ContainerType container, string output, int splitSize)
         {
             MuxProvider prov = new MuxProvider();
             List<MuxableType> allTypes = new List<MuxableType>();
             allTypes.Add(video.VideoType);
             allTypes.AddRange(audioTypes);
             allTypes.AddRange(subTypes);
+            if (chapterInputType != null)
+                allTypes.Add(chapterInputType);
             MuxPath muxPath = prov.GetMuxPath(container, allTypes.ToArray());
             List<MuxJob> jobs = new List<MuxJob>();
             List<SubStream> subtitleStreams = new List<SubStream>(subtitleStreamsArray);
@@ -288,6 +290,11 @@ namespace MeGUI
                                 //audioStreams.Remove(subStream); // So that we don't mux this too many times
                             }
                         }
+                    }
+                    else if (o.outputType is ChapterType)
+                    {
+                        if ((VideoUtil.guessChapterType(chapterFile) == o.outputType))
+                            mjob.Settings.ChapterFile = chapterFile;
                     }
                 }
                 foreach (SubStream s in mjob.Settings.AudioStreams)

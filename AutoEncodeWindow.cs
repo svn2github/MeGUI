@@ -129,6 +129,36 @@ namespace MeGUI
                 string muxedName = MainForm.GetDirectoryName(mainForm.VideoIO[1]) + @"\" + Path.GetFileNameWithoutExtension(mainForm.VideoIO[1]) + "-muxed.";
                 this.muxedOutput.Text = Path.ChangeExtension(muxedName, (this.container.SelectedItem as ContainerFileType).Extension);
                 this.sizeSelection.SelectedIndex = 2;
+
+                if (mainForm.Settings.AedSettings.SplitOutput)
+                {
+                    splitOutput.Checked = true;
+                    splitSize.Text = mainForm.Settings.AedSettings.SplitSize.ToString();
+                }
+                if (mainForm.Settings.AedSettings.FileSizeMode)
+                {
+                    FileSizeRadio.Checked = true;
+                    muxedSizeMBs.Text = mainForm.Settings.AedSettings.FileSize.ToString();
+                }
+                else if (mainForm.Settings.AedSettings.BitrateMode)
+                {
+                    averageBitrateRadio.Checked = true;
+                    projectedBitrateKBits.Text = mainForm.Settings.AedSettings.Bitrate.ToString();
+                }
+                else
+                    noTargetRadio.Checked = true;
+                if (mainForm.Settings.AedSettings.AddAdditionalContent)
+                    addSubsNChapters.Checked = true;
+                foreach (object o in container.Items) // I know this is ugly, but using the ContainerType doesn't work unless we're switching to manual serialization
+                {
+                    if (o.ToString().Equals(mainForm.Settings.AedSettings.Container))
+                    {
+                        container.SelectedItem = o;
+                        break;
+                    }
+                }
+
+
                 return true;
             }
             else
@@ -215,7 +245,7 @@ namespace MeGUI
             // 
             this.noTargetRadio.Location = new System.Drawing.Point(16, 72);
             this.noTargetRadio.Name = "noTargetRadio";
-            this.noTargetRadio.Size = new System.Drawing.Size(197, 18);
+            this.noTargetRadio.Size = new System.Drawing.Size(218, 18);
             this.noTargetRadio.TabIndex = 22;
             this.noTargetRadio.TabStop = true;
             this.noTargetRadio.Text = "No Target Size (use profile settings)";
@@ -300,7 +330,7 @@ namespace MeGUI
             // 
             this.AverageBitrateLabel.Location = new System.Drawing.Point(187, 47);
             this.AverageBitrateLabel.Name = "AverageBitrateLabel";
-            this.AverageBitrateLabel.Size = new System.Drawing.Size(32, 23);
+            this.AverageBitrateLabel.Size = new System.Drawing.Size(47, 23);
             this.AverageBitrateLabel.TabIndex = 10;
             this.AverageBitrateLabel.Text = "kbit/s";
             // 
@@ -456,7 +486,6 @@ namespace MeGUI
             this.Name = "AutoEncodeWindow";
             this.ShowInTaskbar = false;
             this.Text = "Automatic Encoding";
-            this.TopMost = true;
             this.AutomaticEncodingGroup.ResumeLayout(false);
             this.AutomaticEncodingGroup.PerformLayout();
             this.OutputGroupBox.ResumeLayout(false);
@@ -563,7 +592,7 @@ namespace MeGUI
                     videoStream.NumberOfFrames,
                     videoStream.Framerate,
                     out videoSize);
-#warning check whether codecs use k=1000 or k=1024 for kbits
+#warning check whether codecs use k=1000 or k=1024 for kbits // kick those that still use 1024...
                 this.videoSizeKB.Text = videoSize.ToString();
                 this.projectedBitrateKBits.Text = bitrateKbits.ToString();
             }
@@ -721,8 +750,8 @@ namespace MeGUI
                 if (addSubsNChapters.Checked)
 				{
                     AdaptiveMuxWindow amw = new AdaptiveMuxWindow(mainForm);
-                    amw.setMinimizedMode(videoOutput, videoStream.VideoType, jobUtil.getFramerate(videoInput), audio, 
-                        muxTypes, muxedOutput, this.getSplitSize(), cot);
+                    amw.setMinimizedMode(videoOutput, videoStream.VideoType, jobUtil.getFramerate(videoInput), audio,
+                        muxTypes, muxedOutput, splitSize, cot);
                     if (amw.ShowDialog() == DialogResult.OK)
                         amw.getAdditionalStreams(out audio, out subtitles, out chapters, out muxedOutput, out cot);
                 }

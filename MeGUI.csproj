@@ -138,6 +138,10 @@
       <SubType>Designer</SubType>
       <DependentUpon>AudXConfigurationDialog.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="AutoEncodeDefaults.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>AutoEncodeDefaults.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Changelog.resx">
       <SubType>Designer</SubType>
       <DependentUpon>Changelog.cs</DependentUpon>
@@ -171,6 +175,13 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="AudXSettings.cs" />
+    <Compile Include="AutoEncodeDefaults.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AutoEncodeDefaults.Designer.cs">
+      <DependentUpon>AutoEncodeDefaults.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AutoEncodeDefaultsSettings.cs" />
     <Compile Include="AutoEncodeWindow.cs">
       <SubType>Form</SubType>
     </Compile>

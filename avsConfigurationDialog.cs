@@ -108,6 +108,8 @@ namespace MeGUI
             this.avisynthScript = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.profilesGroupbox = new System.Windows.Forms.GroupBox();
+            this.updateButton = new System.Windows.Forms.Button();
+            this.loadDefaultsButton = new System.Windows.Forms.Button();
             this.avsProfile = new System.Windows.Forms.ComboBox();
             this.newAvsProfileButton = new System.Windows.Forms.Button();
             this.deleteAvsProfileButton = new System.Windows.Forms.Button();
@@ -128,8 +130,6 @@ namespace MeGUI
             this.resizeFilterType = new System.Windows.Forms.ComboBox();
             this.cancelButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
-            this.loadDefaultsButton = new System.Windows.Forms.Button();
-            this.updateButton = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.templatePage.SuspendLayout();
             this.profilesGroupbox.SuspendLayout();
@@ -229,6 +229,26 @@ namespace MeGUI
             this.profilesGroupbox.TabStop = false;
             this.profilesGroupbox.Text = "Profiles";
             // 
+            // updateButton
+            // 
+            this.updateButton.Location = new System.Drawing.Point(213, 47);
+            this.updateButton.Name = "updateButton";
+            this.updateButton.Size = new System.Drawing.Size(75, 23);
+            this.updateButton.TabIndex = 15;
+            this.updateButton.Text = "Update";
+            this.updateButton.UseVisualStyleBackColor = true;
+            this.updateButton.Click += new System.EventHandler(this.updateButton_Click);
+            // 
+            // loadDefaultsButton
+            // 
+            this.loadDefaultsButton.Location = new System.Drawing.Point(306, 47);
+            this.loadDefaultsButton.Name = "loadDefaultsButton";
+            this.loadDefaultsButton.Size = new System.Drawing.Size(86, 23);
+            this.loadDefaultsButton.TabIndex = 14;
+            this.loadDefaultsButton.Text = "Load Defaults";
+            this.loadDefaultsButton.UseVisualStyleBackColor = true;
+            this.loadDefaultsButton.Click += new System.EventHandler(this.loadDefaultsButton_Click);
+            // 
             // avsProfile
             // 
             this.avsProfile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -313,7 +333,8 @@ namespace MeGUI
             this.mod16Box.Items.AddRange(new object[] {
             "Resize to mod16",
             "Overcrop to achieve mod16",
-            "Encode non-mod16"});
+            "Encode non-mod16",
+            "Crop mod4 horizontally"});
             this.mod16Box.Location = new System.Drawing.Point(210, 181);
             this.mod16Box.Name = "mod16Box";
             this.mod16Box.Size = new System.Drawing.Size(157, 21);
@@ -426,26 +447,6 @@ namespace MeGUI
             this.okButton.TabIndex = 38;
             this.okButton.Text = "OK";
             this.okButton.Click += new System.EventHandler(this.okButton_Click);
-            // 
-            // loadDefaultsButton
-            // 
-            this.loadDefaultsButton.Location = new System.Drawing.Point(306, 47);
-            this.loadDefaultsButton.Name = "loadDefaultsButton";
-            this.loadDefaultsButton.Size = new System.Drawing.Size(86, 23);
-            this.loadDefaultsButton.TabIndex = 14;
-            this.loadDefaultsButton.Text = "Load Defaults";
-            this.loadDefaultsButton.UseVisualStyleBackColor = true;
-            this.loadDefaultsButton.Click += new System.EventHandler(this.loadDefaultsButton_Click);
-            // 
-            // updateButton
-            // 
-            this.updateButton.Location = new System.Drawing.Point(213, 47);
-            this.updateButton.Name = "updateButton";
-            this.updateButton.Size = new System.Drawing.Size(75, 23);
-            this.updateButton.TabIndex = 15;
-            this.updateButton.Text = "Update";
-            this.updateButton.UseVisualStyleBackColor = true;
-            this.updateButton.Click += new System.EventHandler(this.updateButton_Click);
             // 
             // avsConfigurationDialog
             // 

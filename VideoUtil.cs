@@ -864,8 +864,15 @@ namespace MeGUI
                     if (VideoUtil.guessSubtitleType(muxStream.path) != null) 
                         allInputSubtitleTypes.Add(new MuxableType(VideoUtil.guessSubtitleType(muxStream.path), null));
 
+                MuxableType chapterInputType = null;
+                if (!String.IsNullOrEmpty(chapters))
+                {
+                    ChapterType type = VideoUtil.guessChapterType(chapters);
+                    if (type != null)
+                        chapterInputType = new MuxableType(type, null);
+                }
                 MuxJob[] muxJobs = this.jobUtil.GenerateMuxJobs(video, allAudioToMux.ToArray(), allInputAudioTypes.ToArray(),
-                    subtitles, allInputSubtitleTypes.ToArray(), chapters, container, muxedOutput, splitSize);
+                    subtitles, allInputSubtitleTypes.ToArray(), chapters, chapterInputType, container, muxedOutput, splitSize);
 
                 Job lastJob = null;
                 if (muxJobs.Length > 0)
@@ -1035,6 +1042,16 @@ namespace MeGUI
         public static AudioType guessAudioType(string p)
         {
             foreach (AudioType type in ContainerManager.GetContainerManager().AudioTypes)
+            {
+                if (Path.GetExtension(p.ToLower()) == "." + type.Extension)
+                    return type;
+            }
+            return null;
+        }
+
+        public static ChapterType guessChapterType(string p)
+        {
+            foreach (ChapterType type in ContainerManager.GetContainerManager().ChapterTypes)
             {
                 if (Path.GetExtension(p.ToLower()) == "." + type.Extension)
                     return type;

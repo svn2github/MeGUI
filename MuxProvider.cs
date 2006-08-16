@@ -380,13 +380,14 @@ namespace MeGUI
             supportedAudioCodecs.Add(AudioCodec.AAC);
             supportedAudioCodecs.Add(AudioCodec.MP3);
             supportedSubtitleTypes.Add(SubtitleType.SUBRIP);
+            supportedSubtitleTypes.Add(SubtitleType.VOBSUB);
             supportedChapterTypes.Add(ChapterType.OGG_TXT);
             supportedContainers.Add(ContainerFileType.MP4);
             supportedContainerInputTypes.Add(ContainerType.MP4);
             supportsAnyInputtableAudioCodec = true;
             supportsAnyInputtableVideoCodec = true;
             base.type = MuxerType.MP4BOX;
-            maxFilesOfType = new int[] { 1, -1, -1 };
+            maxFilesOfType = new int[] { 1, -1, -1, 1 };
             generator = CommandLineGenerator.generateMP4BoxCommandline;
             name = "MP4 Muxer";
 //            base.audioInputFilter = "All supported types (*.aac, *.mp3, *.mp4)|*.aac;*.mp3;*.mp4|RAW AAC Files (*.aac)|*.aac|MP3 Files (*.mp3)|*.mp3|MP4 Audio Files (*.mp4)|*.mp4";
@@ -418,12 +419,13 @@ namespace MeGUI
             supportsAnyInputtableAudioCodec = true;
             supportsAnyInputtableVideoCodec = true;
             supportedSubtitleTypes.Add(SubtitleType.SUBRIP);
+            supportedSubtitleTypes.Add(SubtitleType.VOBSUB);
             supportedChapterTypes.Add(ChapterType.OGG_TXT);
             supportedContainers.Add(ContainerFileType.MKV);
             supportedContainerInputTypes.Add(ContainerType.MP4);
             supportedContainerInputTypes.Add(ContainerType.AVI);
             supportedContainerInputTypes.Add(ContainerType.MKV);
-            maxFilesOfType = new int[] { -1, -1, -1 };
+            maxFilesOfType = new int[] { -1, -1, -1, 1 };
             base.type = MuxerType.MKVMERGE;
             generator = CommandLineGenerator.generateMkvmergeCommandline;
             name = "Mkv muxer";
@@ -455,7 +457,7 @@ namespace MeGUI
             supportedSubtitleTypes.Add(SubtitleType.SUBRIP);
             supportedContainers.Add(ContainerFileType.AVI);
             supportedContainerInputTypes.Add(ContainerType.AVI);
-            maxFilesOfType = new int[] { 1, -1, -1 };
+            maxFilesOfType = new int[] { 1, -1, -1, 1 };
             base.type = MuxerType.AVIMUXGUI;
             name = "AVI Muxer";
             generator = CommandLineGenerator.generateAVIMuxCommandline;
@@ -484,7 +486,7 @@ namespace MeGUI
             supportedAudioCodecs.Add(AudioCodec.MP3);
             supportedContainerInputTypes.Add(ContainerType.AVI);
             supportedContainers.Add(ContainerFileType.AVI);
-            maxFilesOfType = new int[] { 1, -1, -1 };
+            maxFilesOfType = new int[] { 1, -1, -1, 1 };
             base.type = MuxerType.DIVXMUX;
             generator = CommandLineGenerator.generateDivXMuxCommandline;
             name = "DivX AVI Muxer";
@@ -504,7 +506,7 @@ namespace MeGUI
             supportedVideoCodecs.Add(VideoCodec.AVC);
             base.type = MuxerType.AVC2AVI;
             name = "AVC2AVI";
-            maxFilesOfType = new int[] { 1, 0, 0 };
+            maxFilesOfType = new int[] { 1, 0, 0, 0 };
             generator = CommandLineGenerator.GenerateAVC2AVICommandline;
 //            base.videoInputFilter = "RAW MPEG-4 AVC Files (*.264)|*.264";
         }
@@ -672,6 +674,8 @@ namespace MeGUI
                 return 1;
             if (type.outputType is SubtitleType && supportedSubtitleTypes.Contains((SubtitleType)type.outputType))
                 return 2;
+            if (type.outputType is ChapterType && supportedChapterTypes.Contains((ChapterType)type.outputType))
+                return 3;
             return -1;
         }
 
@@ -680,7 +684,7 @@ namespace MeGUI
         {
             handledInputTypes = new List<MuxableType>();
             unhandledInputTypes = new List<MuxableType>();
-            int[] filesOfType = new int[3];
+            int[] filesOfType = new int[4];
             foreach (MuxableType inputType in inputTypes)
             {
                 int type = getSupportedType(inputType);

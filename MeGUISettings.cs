@@ -6,7 +6,8 @@ namespace MeGUI
 	/// Summary description for MeGUISettings.
 	/// </summary>
 	public class MeGUISettings
-	{
+    {
+        #region variables
         private string faacPath, lamePath, neroAacEncPath, mencoderPath,  mp4boxPath, mkvmergePath, encAacPlusPath,
             ffmpegPath,
             x264Path, dgIndexPath, xvidEncrawPath, avc2aviPath, aviMuxGUIPath, oggEnc2Path, encAudXPath,
@@ -19,38 +20,16 @@ namespace MeGUI
         private string videoExtension, audioExtension, avsProfile, oneClickProfile;
         private bool safeProfileAlteration;
         private SourceDetectorSettings sdSettings;
+        private AutoEncodeDefaultsSettings aedSettings;
         private DialogSettings dialogSettings;
         private ProcessPriority defaultPriority;
         private bool autoUpdate;
-
-        public bool AutoUpdate
-        {
-            get { return autoUpdate; }
-            set { autoUpdate = value; }
-        }
-
-        public string DivXMuxPath
-        {
-            get { return divxMuxerPath; }
-            set { divxMuxerPath = value; }
-        }
-
-        public DialogSettings DialogSettings
-        {
-            get { return dialogSettings; }
-            set { dialogSettings = value; }
-        }
-
-        public SourceDetectorSettings SourceDetectorSettings
-        {
-            get { return sdSettings; }
-            set { sdSettings = value; }
-        }
-
+        #endregion
         public MeGUISettings()
 		{
             dialogSettings = new DialogSettings();
             sdSettings = new SourceDetectorSettings();
+            AedSettings = new AutoEncodeDefaultsSettings();
             autoUpdate = true;
             useadvancedtooltips = true;
             avc2aviPath = "avc2avi.exe";
@@ -464,6 +443,37 @@ namespace MeGUI
         {
             get { return audioExtension; }
             set { audioExtension = value; }
+        }
+        public bool AutoUpdate
+        {
+            get { return autoUpdate; }
+            set { autoUpdate = value; }
+        }
+
+        public string DivXMuxPath
+        {
+            get { return divxMuxerPath; }
+            set { divxMuxerPath = value; }
+        }
+
+        public DialogSettings DialogSettings
+        {
+            get { return dialogSettings; }
+            set { dialogSettings = value; }
+        }
+
+        public SourceDetectorSettings SourceDetectorSettings
+        {
+            get { return sdSettings; }
+            set { sdSettings = value; }
+        }
+        /// <summary>
+        /// gets / sets the default settings for the autoencode window
+        /// </summary>
+        public AutoEncodeDefaultsSettings AedSettings
+        {
+            get { return aedSettings; }
+            set { aedSettings = value; }
         }
         #endregion
     }

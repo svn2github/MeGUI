@@ -1,3 +1,12 @@
+0.2.3.2190
+Commit by Doom9
+	- Added a mod4 horizontal crop mode to the anamorphic cropping modes (to be used instead of non mod16 as this can cause non mod4 horizontal resolutions which cannot be encoded)
+	- Added VobSub subtitles as supported subtitle type to the mkv muxer - this will prevent weird mux paths containing an avi job to include the subs
+	- Added chapter handling to the automatic mux path finding so that chapters will be taken into account in autoencode and the adaptive muxer
+	- Added support for audio track names in the mkv muxer
+	- Enabled vobsub muxing in the mp4 muxer
+	- Added autoencode defaults in the settings (keep in mind that the container selection will work only if you select compatible input types, avc video, mp4 audio and avi output just don't go together ;)
+
 0.2.3.2189
 Commit by Doom9
 	- Audio overhead for AVI files is properly calculated

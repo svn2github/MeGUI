@@ -830,7 +830,7 @@ namespace MeGUI
                 subtitleInput.Text = openFileDialog.FileName;
                 int index = this.getSelectedSubTitle();
                 subtitleStreams[index].path = openFileDialog.FileName;
-                subtitleStreams[index].language = openFileDialog.FileName;
+                subtitleStreams[index].language = subtitleLanguage.Text;
                 fileUpdated();
             }
         }

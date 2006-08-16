@@ -1659,7 +1659,7 @@ namespace MeGUI
                 MessageBox.Show(error, "Unsupported video configuration", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return;
             }
-            if ((error = verifyAudioSettings()) != null)
+            if ((error = verifyAudioSettings()) != null && !error.Equals("No audio input defined."))
             {
                 MessageBox.Show(error, "Unsupported audio configuration", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return;
@@ -2577,10 +2577,14 @@ namespace MeGUI
         public string verifyAudioSettings()
         {
             // test for valid input filename
+            int nbEmptyStreams = 0;
             foreach (AudioStream stream in audioStreams)
             {
                 if (string.IsNullOrEmpty(stream.path) && string.IsNullOrEmpty(stream.output))
+                {
+                    nbEmptyStreams++;
                     continue;
+                }
                 string fileErr = verifyInputFile(this.audioInput.Text);
                 if (fileErr != null)
                 {
@@ -2600,6 +2604,8 @@ namespace MeGUI
                         + aot.Extension;
                 }
             }
+            if (nbEmptyStreams == audioStreams.Length)
+                return "No audio input defined.";
             return null;
         }
 

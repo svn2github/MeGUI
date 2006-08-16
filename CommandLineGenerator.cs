@@ -981,7 +981,8 @@ namespace MeGUI
 					trackID = 1;
             	if (!stream.language.Equals(""))
 					sb.Append(" --language " + trackID + ":" + stream.language);
-				
+                if (stream.name != null && !stream.name.Equals(""))
+                    sb.Append(" --track-name " + trackID + ":" + stream.name);
             	sb.Append(" -a " + trackID + " -D -S \"" + stream.path + "\"");
 			}
 			

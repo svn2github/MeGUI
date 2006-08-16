@@ -112,6 +112,8 @@ namespace MeGUI
         private Button button7;
         private GroupBox autoUpdateGroupBox;
         private CheckBox useAutoUpdateCheckbox;
+        private Button autoEncodeDefaultsButton;
+        private AutoEncodeDefaultsSettings autoEncodeDefaults;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -245,6 +247,7 @@ namespace MeGUI
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.autoEncodeDefaultsButton = new System.Windows.Forms.Button();
             this.otherGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.acceptableAspectError)).BeginInit();
             this.vobGroupBox.SuspendLayout();
@@ -719,6 +722,7 @@ namespace MeGUI
             // 
             // autoModeGroupbox
             // 
+            this.autoModeGroupbox.Controls.Add(this.autoEncodeDefaultsButton);
             this.autoModeGroupbox.Controls.Add(this.keep2ndPassLogfile);
             this.autoModeGroupbox.Controls.Add(this.nbPassesLabel);
             this.autoModeGroupbox.Controls.Add(this.nbPasses);
@@ -866,7 +870,7 @@ namespace MeGUI
             this.useAutoUpdateCheckbox.AutoSize = true;
             this.useAutoUpdateCheckbox.Location = new System.Drawing.Point(9, 23);
             this.useAutoUpdateCheckbox.Name = "useAutoUpdateCheckbox";
-            this.useAutoUpdateCheckbox.Size = new System.Drawing.Size(106, 17);
+            this.useAutoUpdateCheckbox.Size = new System.Drawing.Size(105, 17);
             this.useAutoUpdateCheckbox.TabIndex = 2;
             this.useAutoUpdateCheckbox.Text = "Use AutoUpdate";
             this.useAutoUpdateCheckbox.UseVisualStyleBackColor = true;
@@ -964,7 +968,7 @@ namespace MeGUI
             this.checkBox1.AutoSize = true;
             this.checkBox1.Location = new System.Drawing.Point(120, 243);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(178, 17);
+            this.checkBox1.Size = new System.Drawing.Size(177, 17);
             this.checkBox1.TabIndex = 38;
             this.checkBox1.Text = "I\'m using OggEnc2 v2.8 or later";
             this.checkBox1.UseVisualStyleBackColor = true;
@@ -1203,6 +1207,16 @@ namespace MeGUI
             this.label4.TabIndex = 2;
             this.label4.Text = "avimux_gui";
             // 
+            // autoEncodeDefaultsButton
+            // 
+            this.autoEncodeDefaultsButton.Location = new System.Drawing.Point(11, 51);
+            this.autoEncodeDefaultsButton.Name = "autoEncodeDefaultsButton";
+            this.autoEncodeDefaultsButton.Size = new System.Drawing.Size(114, 23);
+            this.autoEncodeDefaultsButton.TabIndex = 4;
+            this.autoEncodeDefaultsButton.Text = "Configure Defaults";
+            this.autoEncodeDefaultsButton.UseVisualStyleBackColor = true;
+            this.autoEncodeDefaultsButton.Click += new System.EventHandler(this.autoEncodeDefaultsButton_Click);
+            // 
             // SettingsForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
@@ -1350,6 +1364,69 @@ namespace MeGUI
                 avc2aviPath.Text = openExecutableDialog.FileName;
             }
         }
+        private void resetDialogs_Click(object sender, EventArgs e)
+        {
+            dialogSettings = new DialogSettings();
+            MessageBox.Show(this, "Successfully reset all dialogs", "Success", MessageBoxButtons.OK, MessageBoxIcon.None);
+        }
+
+        private void divxMuxSelectExeButton_Click(object sender, EventArgs e)
+        {
+            if (selectExe("divxmux"))
+            {
+                divxMuxPath.Text = openExecutableDialog.FileName;
+            }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            if (selectExe("oggenc2"))
+            {
+                textBox4.Text = openExecutableDialog.FileName;
+            }
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            if (selectExe("enc_AudX_CLI"))
+            {
+                textBox5.Text = openExecutableDialog.FileName;
+            }
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            if (selectExe("enc_aacPlus"))
+            {
+                textBox6.Text = openExecutableDialog.FileName;
+            }
+
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            if (selectExe("ffmpeg"))
+            {
+                textBox7.Text = openExecutableDialog.FileName;
+            }
+        }
+        /// <summary>
+        /// launches the autoencode default settings window
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void autoEncodeDefaultsButton_Click(object sender, EventArgs e)
+        {
+            using (AutoEncodeDefaults aed = new AutoEncodeDefaults())
+            {
+                aed.Settings = this.autoEncodeDefaults;
+                DialogResult dr = aed.ShowDialog();
+                if (dr == DialogResult.OK)
+                {
+                    this.autoEncodeDefaults = aed.Settings;
+                }
+            }
+        }
 		#endregion
 		#region properties
 		public MeGUISettings Settings
@@ -1398,6 +1475,7 @@ namespace MeGUI
                 settings.EncAacPlusPath = textBox6.Text;
                 settings.FreshOggEnc2 = checkBox1.Checked;
                 settings.FFMpegPath = textBox7.Text;
+                settings.AedSettings = this.autoEncodeDefaults;
 				return settings;
 			}
 			set
@@ -1448,55 +1526,9 @@ namespace MeGUI
                 textBox6.Text = settings.EncAacPlusPath;
                 checkBox1.Checked = settings.FreshOggEnc2;
                 textBox7.Text = settings.FFMpegPath;
+                this.autoEncodeDefaults = settings.AedSettings;
 			}
 		}
 		#endregion
-
-        private void resetDialogs_Click(object sender, EventArgs e)
-        {
-            dialogSettings = new DialogSettings();
-            MessageBox.Show(this, "Successfully reset all dialogs", "Success", MessageBoxButtons.OK, MessageBoxIcon.None);
-        }
-
-        private void divxMuxSelectExeButton_Click(object sender, EventArgs e)
-        {
-            if (selectExe("divxmux"))
-            {
-                divxMuxPath.Text = openExecutableDialog.FileName;
-            }
-        }
-
-        private void button4_Click(object sender, EventArgs e)
-        {
-            if (selectExe("oggenc2"))
-            {
-                textBox4.Text = openExecutableDialog.FileName;
-            }
-        }
-
-        private void button5_Click(object sender, EventArgs e)
-        {
-            if (selectExe("enc_AudX_CLI"))
-            {
-                textBox5.Text = openExecutableDialog.FileName;
-            }
-        }
-
-        private void button6_Click(object sender, EventArgs e)
-        {
-            if (selectExe("enc_aacPlus"))
-            {
-                textBox6.Text = openExecutableDialog.FileName;
-            }
-
-        }
-
-        private void button7_Click(object sender, EventArgs e)
-        {
-            if (selectExe("ffmpeg"))
-            {
-                textBox7.Text = openExecutableDialog.FileName;
-            }
-        }
 	}
 }

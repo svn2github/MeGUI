@@ -182,9 +182,16 @@ namespace MeGUI
                     if (!int.TryParse(this.splitSize.Text, out splitSize))
                         splitSize = -1;
                 }
+                MuxableType chapterInputType = null;
+                if (!String.IsNullOrEmpty(chaptersInput.Text))
+                {
+                    ChapterType type = VideoUtil.guessChapterType(chaptersInput.Text);
+                    if (type != null)
+                        chapterInputType = new MuxableType(type, null);
+                }
 
                 return jobUtil.GenerateMuxJobs(myVideo, audioStreams, audioTypes, subtitleStreams,
-                    subtitleTypes, chaptersInput.Text, (containerFormat.SelectedItem as ContainerFileType).ContainerType, muxedOutput.Text, splitSize);
+                    subtitleTypes, chaptersInput.Text, chapterInputType, (containerFormat.SelectedItem as ContainerFileType).ContainerType, muxedOutput.Text, splitSize);
             }
         }
         /// <summary>

@@ -14,7 +14,7 @@ namespace MeGUI
 {
 	public delegate void OpenScriptCallback(string avisynthScript);
     public enum PossibleSources { d2v, mpeg2, vdr, directShow };
-    public enum mod16Method : int { none = -1, resize = 0, overcrop, nonMod16 };
+    public enum mod16Method : int { none = -1, resize = 0, overcrop, nonMod16, mod4Horizontal };
     /// <summary>
 	/// Summary description for AviSynthWindow.
 	/// </summary>
@@ -550,7 +550,8 @@ namespace MeGUI
             this.mod16Box.Items.AddRange(new object[] {
             "Resize to mod16",
             "Overcrop to achieve mod16",
-            "Encode non-mod16"});
+            "Encode non-mod16",
+            "Crop mod4 horizontally"});
             this.mod16Box.Location = new System.Drawing.Point(224, 81);
             this.mod16Box.Name = "mod16Box";
             this.mod16Box.Size = new System.Drawing.Size(157, 21);
@@ -1580,6 +1581,8 @@ namespace MeGUI
                     returnValue.right = (int)cropRight.Value;
                     if (Mod16Method == mod16Method.overcrop)
                         ScriptServer.overcrop(ref returnValue);
+                    else if (Mod16Method == mod16Method.mod4Horizontal)
+                        ScriptServer.cropMod4Horizontal(ref returnValue);
                 }
                 return returnValue;
             }
@@ -1694,7 +1697,7 @@ namespace MeGUI
                 crop.Text = "Crop";
             crop_CheckedChanged(null, null);
 
-            if (Mod16Method == mod16Method.overcrop || Mod16Method  == mod16Method.nonMod16)
+            if (Mod16Method == mod16Method.overcrop || Mod16Method == mod16Method.nonMod16 || Mod16Method == mod16Method.mod4Horizontal)
             {
                 resize.Checked = false;
                 resize.Enabled = false;
