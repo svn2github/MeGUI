@@ -1,3 +1,7 @@
+0.2.3.2188
+  - Cosmetic fixes (part 3...)
+  - Swapped Crop and Resize controls position in Avisynth Script Creator window to better represent the correct workflow
+
 0.2.3.2187
 Commit by Sharx1976:
   - Cosmetic fixes (part 2...)
