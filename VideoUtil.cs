@@ -1066,9 +1066,9 @@ namespace MeGUI
             if (useMediaInfo)
             {
                 MediaInfoFile info = new MediaInfoFile(p);
-                if (!info.HasVideo)
-                    return null;
-                return new MuxableType(info.VideoType, info.VCodec);
+                if (info.HasVideo)
+                    return new MuxableType(info.VideoType, info.VCodec);
+                // otherwise we may as well try the other route too
             }
             VideoType vType = guessVideoType(p);
             if (vType != null)

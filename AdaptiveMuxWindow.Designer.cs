@@ -39,7 +39,7 @@ namespace MeGUI
             // 
             // muxButton
             // 
-            this.muxButton.Location = new System.Drawing.Point(376, 435);
+            this.muxButton.Location = new System.Drawing.Point(294, 461);
             // 
             // outputButton
             // 
@@ -67,7 +67,7 @@ namespace MeGUI
             // 
             // cancelButton
             // 
-            this.cancelButton.Location = new System.Drawing.Point(296, 435);
+            this.cancelButton.Location = new System.Drawing.Point(376, 461);
             // 
             // outputGroupbox
             // 
@@ -106,7 +106,8 @@ namespace MeGUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(444, 469);
+            this.CancelButton = this.cancelButton;
+            this.ClientSize = new System.Drawing.Size(444, 490);
             this.Name = "AdaptiveMuxWindow";
             this.Text = "Adaptive Mux Window";
             this.videoGroupbox.ResumeLayout(false);

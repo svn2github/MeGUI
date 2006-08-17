@@ -426,6 +426,7 @@ namespace MeGUI
             // baseAudioConfigurationDialog
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
+            this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(376, 395);
             this.Controls.Add(this.encoderGroupBox);
             this.Controls.Add(this.profileGroupbox);

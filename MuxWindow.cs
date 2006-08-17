@@ -15,7 +15,7 @@ namespace MeGUI
         private ContainerType cot;
         private CommandLineGenerator gen = new CommandLineGenerator();
 
-        public MuxWindow(IMuxing muxer)
+        public MuxWindow(IMuxing muxer) : base()
         {
             InitializeComponent();
             this.muxer = muxer;
@@ -27,6 +27,8 @@ namespace MeGUI
                 subtitleGroupbox.Enabled = false;
             if (muxer.GetSupportedContainerInputTypes().Count == 0)
                 muxedInputOpenButton.Enabled = false;
+            if (muxer.GetSupportedChapterTypes().Count == 0)
+                chaptersGroupbox.Enabled = false;
         }
         protected virtual MuxJob generateMuxJob()
         {
@@ -77,9 +79,9 @@ namespace MeGUI
             set
             {
                 setConfig(value.Settings.VideoInput, value.Settings.MuxedInput, value.Settings.Framerate,
-              value.Settings.AudioStreams.ToArray(), value.Settings.SubtitleStreams.ToArray(),
-              value.Settings.ChapterFile, value.Settings.MuxedOutput, value.Settings.SplitSize,
-              value.Settings.PARX, value.Settings.PARY, value.ContainerType);
+                    value.Settings.AudioStreams.ToArray(), value.Settings.SubtitleStreams.ToArray(),
+                    value.Settings.ChapterFile, value.Settings.MuxedOutput, value.Settings.SplitSize,
+                    value.Settings.PARX, value.Settings.PARY, value.ContainerType);
             }
         }
 
@@ -89,6 +91,7 @@ namespace MeGUI
             base.setConfig(videoInput, framerate, audioStreams, subtitleStreams, chapterFile, output, splitSize, parX, parY);
             this.muxedInput.Text = muxedInput;
             this.cot = cot;
+            this.checkIO();
         }
 
         #region overriden filters
@@ -177,6 +180,28 @@ namespace MeGUI
                 return false;
             else
                 return true;
+        }
+
+        protected override void muxButton_Click(object sender, System.EventArgs e)
+        {
+            if (muxButton.DialogResult != DialogResult.OK)
+            {
+                if (videoInput.Text.Equals("") && muxedInput.Text.Equals(""))
+                {
+                    MessageBox.Show("You must configure a video input file", "Missing input", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    return;
+                }
+                else if (muxedOutput.Text.Equals(""))
+                {
+                    MessageBox.Show("You must configure an output file", "Missing input", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    return;
+                }
+                else if (muxFPS.SelectedIndex == -1 && isFPSRequired())
+                {
+                    MessageBox.Show("You must select a framerate", "Missing input", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    return;
+                }
+            }
         }
     }
 }

@@ -136,5 +136,23 @@ namespace MeGUI
             else
                 return "";
 		}
+        /// <summary>
+        /// takes an ISO639.2 3 letter language code and returns
+        /// a 2 letter ISO639.1 language code
+        /// </summary>
+        /// <param name="iso639dot2"></param>
+        /// <returns></returns>
+        public static string getISO639dot1(string iso639dot2)
+        {
+            foreach (System.Globalization.CultureInfo ci in System.Globalization.CultureInfo.GetCultures(System.Globalization.CultureTypes.AllCultures))
+            {
+                if (ci.ThreeLetterISOLanguageName == iso639dot2) // we found our language
+                {
+                    if (ci.TwoLetterISOLanguageName.Length == 2) // sometimes we get 3 letter codes here, divxmux can't handle those
+                        return ci.TwoLetterISOLanguageName;
+                }
+            }
+            return null;
+        }
 	}
 }

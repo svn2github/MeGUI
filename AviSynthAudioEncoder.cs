@@ -483,7 +483,11 @@ namespace MeGUI
                 switch (Path.GetExtension(audioJob.InputFileName).ToLower())
                 {
                     case ".ac3":
-                        script.AppendFormat("NicAc3Source(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
+                        script.AppendFormat("NicAc3Source(\"{0}\"", audioJob.Input);
+                        if (audioJob.Settings.AutoGain)
+                            script.AppendFormat(", DRC=1){0}", Environment.NewLine);
+                        else
+                            script.Append(")");
                         break;
                     case ".avs":
                         script.AppendFormat("Import(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
@@ -492,7 +496,11 @@ namespace MeGUI
                         script.AppendFormat("WavSource(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
                         break;
                     case ".dts":
-                        script.AppendFormat("NicDtsSource(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
+                        script.AppendFormat("NicDtsSource(\"{0}\")", audioJob.Input);
+                        if (audioJob.Settings.AutoGain)
+                            script.AppendFormat(", DRC=1){0}", Environment.NewLine);
+                        else
+                            script.Append(")");
                         break;
                     case ".mpa":
                     case ".mpg":

@@ -476,7 +476,7 @@ namespace MeGUI
             // 
             // audioOutputOpenButton
             // 
-            this.audioOutputOpenButton.Location = new System.Drawing.Point(419, 48);
+            this.audioOutputOpenButton.Location = new System.Drawing.Point(419, 47);
             this.audioOutputOpenButton.Name = "audioOutputOpenButton";
             this.audioOutputOpenButton.Size = new System.Drawing.Size(24, 23);
             this.audioOutputOpenButton.TabIndex = 13;
@@ -505,7 +505,7 @@ namespace MeGUI
             // 
             // deleteAudioButton
             // 
-            this.deleteAudioButton.Location = new System.Drawing.Point(419, 74);
+            this.deleteAudioButton.Location = new System.Drawing.Point(419, 73);
             this.deleteAudioButton.Name = "deleteAudioButton";
             this.deleteAudioButton.Size = new System.Drawing.Size(24, 23);
             this.deleteAudioButton.TabIndex = 6;
@@ -1687,6 +1687,16 @@ namespace MeGUI
                 myVideo.ParY = this.parY;
                 myVideo.VideoType = CurrentMuxableVideoType;
                 myVideo.Settings = vSettings;
+                foreach (AudioStream aStream in this.audioStreams)
+                {
+                    if (aStream.Delay != 0)
+                    {
+                        aStream.settings.DelayEnabled = true;
+                        aStream.settings.Delay = aStream.Delay;
+                    }
+                }
+                this.audioStreams[0].Delay = 0;// zero it so it won't be used again for muxing
+                this.audioStreams[1].Delay = 0;
                 AutoEncodeWindow aew = new AutoEncodeWindow(myVideo, this.audioStreams, this, this.addPrerenderJob.Checked);
                 if (aew.init())
                     aew.ShowDialog();
@@ -1702,8 +1712,9 @@ namespace MeGUI
             AudioStream stream = new AudioStream();
             stream.path = this.audioInput.Text;
             stream.output = this.audioOutput.Text;
-            stream.settings = this.CurrentAudioSettingsProvider.GetCurrentSettings();
+            stream.settings = this.CurrentAudioSettingsProvider.GetCurrentSettings().clone();
             stream.Type = (this.audioContainer.SelectedItem as AudioType);
+            stream.Delay = getDelay(stream.path);
             this.CurrentAudioStream = stream;
         }
 
@@ -1786,6 +1797,7 @@ namespace MeGUI
                 this.audioStreams[trackNumber].Type = null;
                 this.audioStreams[trackNumber].path = "";
                 this.audioStreams[trackNumber].output = "";
+                this.audioStreams[trackNumber].Delay = 0;
             }
         }
         #endregion
@@ -1813,13 +1825,19 @@ namespace MeGUI
         /// <param name="e"></param>
         private void queueAudioButton_Click(object sender, System.EventArgs e)
         {
+            this.updateAudioStreams();
             string settingsError = verifyAudioSettings();
             if (settingsError != null)
             {
                 MessageBox.Show(settingsError, "Unsupported configuration", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return;
             }
-            AudioCodecSettings aSettings = this.CurrentAudioSettingsProvider.GetCurrentSettings();
+            AudioCodecSettings aSettings = this.CurrentAudioStream.settings;
+            if (this.CurrentAudioStream.Delay != 0)
+            {
+                aSettings.DelayEnabled = true;
+                aSettings.Delay = this.CurrentAudioStream.Delay;
+            }
             bool start = this.settings.AutoStartQueue;
             start &= jobUtil.AddAudioJob(this.audioInput.Text, this.audioOutput.Text, aSettings);
             if (start)
@@ -1984,7 +2002,6 @@ namespace MeGUI
                 {
                     MuxJob mjob = (MuxJob)job;
                     MuxWindow mw = new MuxWindow(muxProvider.GetMuxer(mjob.MuxType));
-                    SubStream[] subtitleStreams = mjob.Settings.SubtitleStreams.ToArray();
                     mw.Job = mjob;
                     if (mw.ShowDialog() == DialogResult.OK)
                     {
@@ -2295,7 +2312,9 @@ namespace MeGUI
             }
             AudioCodecSettings settings = CurrentAudioSettingsProvider.GetCurrentSettings();
             if (verifyOutputFile(this.audioOutput.Text) == null)
+            {
                 this.audioOutput.Text = Path.ChangeExtension(this.audioOutput.Text, currentType.Extension);
+            }
         }
         #endregion
         #region profiles
@@ -3507,13 +3526,15 @@ namespace MeGUI
                 this.audioStreams[lastSelectedAudioTrackNumber].output = "";
                 this.audioStreams[lastSelectedAudioTrackNumber].Type = null;
                 this.audioStreams[lastSelectedAudioTrackNumber].settings = null;
+                this.audioStreams[lastSelectedAudioTrackNumber].Delay = 0;
             }
             else
             {
                 this.audioStreams[lastSelectedAudioTrackNumber].path = this.audioInput.Text;
                 this.audioStreams[lastSelectedAudioTrackNumber].output = this.audioOutput.Text;
                 this.audioStreams[lastSelectedAudioTrackNumber].Type = CurrentAudioOutputType;
-                this.audioStreams[lastSelectedAudioTrackNumber].settings = (audioCodec.SelectedItem as IAudioSettingsProvider).GetCurrentSettings();
+                this.audioStreams[lastSelectedAudioTrackNumber].settings = (audioCodec.SelectedItem as IAudioSettingsProvider).GetCurrentSettings().clone();
+                //this.audioStreams[lastSelectedAudioTrackNumber].Delay = this.audioStreams[lastSelectedAudioTrackNumber].settings.Delay;
             }
             this.audioInput.Text = this.audioStreams[current].path;
             this.audioOutput.Text = this.audioStreams[current].output;
@@ -4299,7 +4320,7 @@ namespace MeGUI
             this.audioInput.Text = fileName;
             int del = getDelay(fileName);
             AudioCodecSettings settings = (audioCodec.SelectedItem as IAudioSettingsProvider).GetCurrentSettings();
-            if (del != 0) // we have a delay we are interested in
+            /*if (del != 0) // we have a delay we are interested in
             {
                 settings.DelayEnabled = true;
                 settings.Delay = del;
@@ -4307,8 +4328,9 @@ namespace MeGUI
             else
             {
                 settings.DelayEnabled = false;
-            }
+            }*/
             this.audioOutput.Text = Path.ChangeExtension(fileName, this.CurrentAudioOutputType.Extension);
+            this.updateAudioStreams();
         }
         public void openOtherVideoFile(string fileName)
         {

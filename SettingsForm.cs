@@ -202,6 +202,7 @@ namespace MeGUI
             this.openExecutableDialog = new System.Windows.Forms.OpenFileDialog();
             this.openFolderDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.autoModeGroupbox = new System.Windows.Forms.GroupBox();
+            this.autoEncodeDefaultsButton = new System.Windows.Forms.Button();
             this.keep2ndPassLogfile = new System.Windows.Forms.CheckBox();
             this.nbPassesLabel = new System.Windows.Forms.Label();
             this.nbPasses = new System.Windows.Forms.NumericUpDown();
@@ -247,7 +248,6 @@ namespace MeGUI
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.autoEncodeDefaultsButton = new System.Windows.Forms.Button();
             this.otherGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.acceptableAspectError)).BeginInit();
             this.vobGroupBox.SuspendLayout();
@@ -265,7 +265,7 @@ namespace MeGUI
             // 
             this.saveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.saveButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.saveButton.Location = new System.Drawing.Point(410, 501);
+            this.saveButton.Location = new System.Drawing.Point(355, 501);
             this.saveButton.Name = "saveButton";
             this.saveButton.Size = new System.Drawing.Size(48, 23);
             this.saveButton.TabIndex = 0;
@@ -275,7 +275,7 @@ namespace MeGUI
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(356, 501);
+            this.cancelButton.Location = new System.Drawing.Point(414, 501);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(48, 23);
             this.cancelButton.TabIndex = 1;
@@ -733,6 +733,16 @@ namespace MeGUI
             this.autoModeGroupbox.TabIndex = 5;
             this.autoModeGroupbox.TabStop = false;
             this.autoModeGroupbox.Text = "Automated Encoding";
+            // 
+            // autoEncodeDefaultsButton
+            // 
+            this.autoEncodeDefaultsButton.Location = new System.Drawing.Point(11, 51);
+            this.autoEncodeDefaultsButton.Name = "autoEncodeDefaultsButton";
+            this.autoEncodeDefaultsButton.Size = new System.Drawing.Size(114, 23);
+            this.autoEncodeDefaultsButton.TabIndex = 4;
+            this.autoEncodeDefaultsButton.Text = "Configure Defaults";
+            this.autoEncodeDefaultsButton.UseVisualStyleBackColor = true;
+            this.autoEncodeDefaultsButton.Click += new System.EventHandler(this.autoEncodeDefaultsButton_Click);
             // 
             // keep2ndPassLogfile
             // 
@@ -1207,19 +1217,10 @@ namespace MeGUI
             this.label4.TabIndex = 2;
             this.label4.Text = "avimux_gui";
             // 
-            // autoEncodeDefaultsButton
-            // 
-            this.autoEncodeDefaultsButton.Location = new System.Drawing.Point(11, 51);
-            this.autoEncodeDefaultsButton.Name = "autoEncodeDefaultsButton";
-            this.autoEncodeDefaultsButton.Size = new System.Drawing.Size(114, 23);
-            this.autoEncodeDefaultsButton.TabIndex = 4;
-            this.autoEncodeDefaultsButton.Text = "Configure Defaults";
-            this.autoEncodeDefaultsButton.UseVisualStyleBackColor = true;
-            this.autoEncodeDefaultsButton.Click += new System.EventHandler(this.autoEncodeDefaultsButton_Click);
-            // 
             // SettingsForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
+            this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(468, 536);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.cancelButton);

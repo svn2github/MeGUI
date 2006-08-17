@@ -60,6 +60,7 @@ namespace MeGUI
             // 
             // btnAbort
             // 
+            this.btnAbort.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnAbort.Enabled = false;
             this.btnAbort.Location = new System.Drawing.Point(266, 309);
             this.btnAbort.Name = "btnAbort";
@@ -175,6 +176,7 @@ namespace MeGUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.btnAbort;
             this.ClientSize = new System.Drawing.Size(685, 343);
             this.Controls.Add(this.treeView);
             this.Controls.Add(this.listViewDetails);

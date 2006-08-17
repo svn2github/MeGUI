@@ -869,6 +869,8 @@ namespace MeGUI
                     sb.Append(":lang=" + stream.language);
                 if (stream.name != null && !stream.name.Equals(""))
                     sb.Append(":name=\"" + stream.name + "\"");
+                if (stream.delay != 0)
+                    sb.Append(":delay=" + stream.delay);
             }
             foreach (object o in settings.SubtitleStreams)
             {
@@ -902,9 +904,27 @@ namespace MeGUI
             if (settings.VideoInput.Length > 0)
                 sb.AppendFormat("-v \"{0}\" ", settings.VideoInput);
             foreach (SubStream audioStream in settings.AudioStreams)
+            {
                 sb.AppendFormat("-a \"{0}\" ", audioStream.path);
+                if (audioStream.delay != 0)
+                    sb.AppendFormat(" o{0} ", audioStream.delay);
+                if (audioStream.language != null && !audioStream.language.Equals(""))
+                {
+                    string lang = LanguageSelectionContainer.getISO639dot1(audioStream.language);
+                    if (lang != null)
+                        sb.AppendFormat(" Audio - {0} ", lang);
+                }
+            }
             foreach (SubStream subStream in settings.SubtitleStreams)
+            {
                 sb.AppendFormat("-s \"{0}\" ", subStream.path);
+                if (subStream.language != null && !subStream.language.Equals(""))
+                {
+                    string lang = LanguageSelectionContainer.getISO639dot1(subStream.language);
+                    if (lang != null)
+                        sb.AppendFormat(" Subtitle - {0} ", lang);
+                }
+            }
             sb.AppendFormat("-o \"{0}\" ", settings.MuxedOutput);
             return sb.ToString();
         }
@@ -983,6 +1003,8 @@ namespace MeGUI
 					sb.Append(" --language " + trackID + ":" + stream.language);
                 if (stream.name != null && !stream.name.Equals(""))
                     sb.Append(" --track-name " + trackID + ":" + stream.name);
+                if (stream.delay != 0)
+                    sb.Append(" --delay " + trackID + ":" + stream.delay + "ms");
             	sb.Append(" -a " + trackID + " -D -S \"" + stream.path + "\"");
 			}
 			

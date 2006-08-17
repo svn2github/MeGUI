@@ -451,6 +451,7 @@ namespace MeGUI
             // avsConfigurationDialog
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
+            this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(426, 542);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.cancelButton);

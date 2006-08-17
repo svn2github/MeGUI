@@ -381,7 +381,7 @@ namespace MeGUI
             // queueButton
             // 
             this.queueButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.queueButton.Location = new System.Drawing.Point(360, 196);
+            this.queueButton.Location = new System.Drawing.Point(280, 196);
             this.queueButton.Name = "queueButton";
             this.queueButton.Size = new System.Drawing.Size(74, 23);
             this.queueButton.TabIndex = 8;
@@ -453,7 +453,7 @@ namespace MeGUI
             // cancelButton
             // 
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(280, 196);
+            this.cancelButton.Location = new System.Drawing.Point(364, 196);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(72, 23);
             this.cancelButton.TabIndex = 19;
@@ -473,6 +473,7 @@ namespace MeGUI
             // AutoEncodeWindow
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
+            this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(444, 223);
             this.Controls.Add(this.addSubsNChapters);
             this.Controls.Add(this.cancelButton);
@@ -754,6 +755,8 @@ namespace MeGUI
                         muxTypes, muxedOutput, splitSize, cot);
                     if (amw.ShowDialog() == DialogResult.OK)
                         amw.getAdditionalStreams(out audio, out subtitles, out chapters, out muxedOutput, out cot);
+                    else // user aborted, abort the whole process
+                        return;
                 }
                 removeStreamsToBeEncoded(ref audio, aStreams);
                 this.vUtil.GenerateJobSeries(this.videoStream, muxedOutput, aStreams, subtitles, chapters,

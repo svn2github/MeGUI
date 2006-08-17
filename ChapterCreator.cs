@@ -71,189 +71,194 @@ namespace MeGUI
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.chaptersGroupbox = new System.Windows.Forms.GroupBox();
-			this.saveButton = new System.Windows.Forms.Button();
-			this.loadButton = new System.Windows.Forms.Button();
-			this.chapterName = new System.Windows.Forms.TextBox();
-			this.chapterNameLabel = new System.Windows.Forms.Label();
-			this.chapterListView = new System.Windows.Forms.ListView();
-			this.timecodeColumn = new System.Windows.Forms.ColumnHeader();
-			this.nameColumn = new System.Windows.Forms.ColumnHeader();
-			this.startTime = new System.Windows.Forms.TextBox();
-			this.startTimeLabel = new System.Windows.Forms.Label();
-			this.addZoneButton = new System.Windows.Forms.Button();
-			this.clearZonesButton = new System.Windows.Forms.Button();
-			this.updateZoneButton = new System.Windows.Forms.Button();
-			this.showVideoButton = new System.Windows.Forms.Button();
-			this.removeZoneButton = new System.Windows.Forms.Button();
-			this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
-			this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
-			this.chaptersGroupbox.SuspendLayout();
-			this.SuspendLayout();
-			// 
-			// chaptersGroupbox
-			// 
-			this.chaptersGroupbox.Controls.Add(this.saveButton);
-			this.chaptersGroupbox.Controls.Add(this.loadButton);
-			this.chaptersGroupbox.Controls.Add(this.chapterName);
-			this.chaptersGroupbox.Controls.Add(this.chapterNameLabel);
-			this.chaptersGroupbox.Controls.Add(this.chapterListView);
-			this.chaptersGroupbox.Controls.Add(this.startTime);
-			this.chaptersGroupbox.Controls.Add(this.startTimeLabel);
-			this.chaptersGroupbox.Controls.Add(this.addZoneButton);
-			this.chaptersGroupbox.Controls.Add(this.clearZonesButton);
-			this.chaptersGroupbox.Controls.Add(this.updateZoneButton);
-			this.chaptersGroupbox.Controls.Add(this.showVideoButton);
-			this.chaptersGroupbox.Controls.Add(this.removeZoneButton);
-			this.chaptersGroupbox.Location = new System.Drawing.Point(8, 8);
-			this.chaptersGroupbox.Name = "chaptersGroupbox";
-			this.chaptersGroupbox.Size = new System.Drawing.Size(448, 376);
-			this.chaptersGroupbox.TabIndex = 23;
-			this.chaptersGroupbox.TabStop = false;
-			this.chaptersGroupbox.Text = "Chapters";
-			// 
-			// saveButton
-			// 
-			this.saveButton.Location = new System.Drawing.Point(384, 304);
-			this.saveButton.Name = "saveButton";
-			this.saveButton.Size = new System.Drawing.Size(52, 23);
-			this.saveButton.TabIndex = 40;
-			this.saveButton.Text = "Save";
-			this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
-			// 
-			// loadButton
-			// 
-			this.loadButton.Location = new System.Drawing.Point(384, 272);
-			this.loadButton.Name = "loadButton";
-			this.loadButton.Size = new System.Drawing.Size(52, 23);
-			this.loadButton.TabIndex = 39;
-			this.loadButton.Text = "Load";
-			this.loadButton.Click += new System.EventHandler(this.loadButton_Click);
-			// 
-			// chapterName
-			// 
-			this.chapterName.Location = new System.Drawing.Point(96, 304);
-			this.chapterName.Name = "chapterName";
-			this.chapterName.Size = new System.Drawing.Size(224, 21);
-			this.chapterName.TabIndex = 38;
-			this.chapterName.Text = "Chapter1";
-			// 
-			// chapterNameLabel
-			// 
-			this.chapterNameLabel.Location = new System.Drawing.Point(16, 304);
-			this.chapterNameLabel.Name = "chapterNameLabel";
-			this.chapterNameLabel.Size = new System.Drawing.Size(56, 23);
-			this.chapterNameLabel.TabIndex = 37;
-			this.chapterNameLabel.Text = "Name";
-			// 
-			// chapterListView
-			// 
-			this.chapterListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-																							  this.timecodeColumn,
-																							  this.nameColumn});
-			this.chapterListView.FullRowSelect = true;
-			this.chapterListView.HideSelection = false;
-			this.chapterListView.Location = new System.Drawing.Point(16, 24);
-			this.chapterListView.Name = "chapterListView";
-			this.chapterListView.Size = new System.Drawing.Size(424, 240);
-			this.chapterListView.TabIndex = 36;
-			this.chapterListView.View = System.Windows.Forms.View.Details;
-			this.chapterListView.SelectedIndexChanged += new System.EventHandler(this.chapterListView_SelectedIndexChanged);
-			// 
-			// timecodeColumn
-			// 
-			this.timecodeColumn.Text = "Timecode";
-			this.timecodeColumn.Width = 100;
-			// 
-			// nameColumn
-			// 
-			this.nameColumn.Text = "Name";
-			this.nameColumn.Width = 320;
-			// 
-			// startTime
-			// 
-			this.startTime.Location = new System.Drawing.Point(96, 274);
-			this.startTime.Name = "startTime";
-			this.startTime.Size = new System.Drawing.Size(96, 21);
-			this.startTime.TabIndex = 23;
-			this.startTime.Text = "00:00:00.000";
-			// 
-			// startTimeLabel
-			// 
-			this.startTimeLabel.Location = new System.Drawing.Point(16, 280);
-			this.startTimeLabel.Name = "startTimeLabel";
-			this.startTimeLabel.Size = new System.Drawing.Size(64, 16);
-			this.startTimeLabel.TabIndex = 24;
-			this.startTimeLabel.Text = "Start Time";
-			// 
-			// addZoneButton
-			// 
-			this.addZoneButton.Location = new System.Drawing.Point(272, 336);
-			this.addZoneButton.Name = "addZoneButton";
-			this.addZoneButton.Size = new System.Drawing.Size(52, 23);
-			this.addZoneButton.TabIndex = 33;
-			this.addZoneButton.Text = "Add";
-			this.addZoneButton.Click += new System.EventHandler(this.addZoneButton_Click);
-			// 
-			// clearZonesButton
-			// 
-			this.clearZonesButton.Location = new System.Drawing.Point(88, 336);
-			this.clearZonesButton.Name = "clearZonesButton";
-			this.clearZonesButton.Size = new System.Drawing.Size(52, 23);
-			this.clearZonesButton.TabIndex = 29;
-			this.clearZonesButton.Text = "Clear";
-			this.clearZonesButton.Click += new System.EventHandler(this.clearZonesButton_Click);
-			// 
-			// updateZoneButton
-			// 
-			this.updateZoneButton.Location = new System.Drawing.Point(144, 336);
-			this.updateZoneButton.Name = "updateZoneButton";
-			this.updateZoneButton.Size = new System.Drawing.Size(52, 23);
-			this.updateZoneButton.TabIndex = 35;
-			this.updateZoneButton.Text = "Update";
-			this.updateZoneButton.Click += new System.EventHandler(this.updateZoneButton_Click);
-			// 
-			// showVideoButton
-			// 
-			this.showVideoButton.Enabled = false;
-			this.showVideoButton.Location = new System.Drawing.Point(16, 336);
-			this.showVideoButton.Name = "showVideoButton";
-			this.showVideoButton.Size = new System.Drawing.Size(52, 23);
-			this.showVideoButton.TabIndex = 34;
-			this.showVideoButton.Text = "Preview";
-			this.showVideoButton.Click += new System.EventHandler(this.showVideoButton_Click);
-			// 
-			// removeZoneButton
-			// 
-			this.removeZoneButton.Location = new System.Drawing.Point(216, 336);
-			this.removeZoneButton.Name = "removeZoneButton";
-			this.removeZoneButton.Size = new System.Drawing.Size(52, 23);
-			this.removeZoneButton.TabIndex = 32;
-			this.removeZoneButton.Text = "Remove";
-			this.removeZoneButton.Click += new System.EventHandler(this.removeZoneButton_Click);
-			// 
-			// openFileDialog
-			// 
-			this.openFileDialog.DefaultExt = "txt";
-			this.openFileDialog.Filter = "Chapter Files (*.txt)|*.txt";
-			// 
-			// saveFileDialog
-			// 
-			this.saveFileDialog.DefaultExt = "txt";
-			this.saveFileDialog.Filter = "Chapter Files (*.txt)|*.txt";
-			// 
-			// ChapterCreator
-			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
-			this.ClientSize = new System.Drawing.Size(474, 392);
-			this.Controls.Add(this.chaptersGroupbox);
-			this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-			this.MaximizeBox = false;
-			this.Name = "ChapterCreator";
-			this.Text = "MeGUI Chapter Creator";
-			this.chaptersGroupbox.ResumeLayout(false);
-			this.ResumeLayout(false);
+            this.chaptersGroupbox = new System.Windows.Forms.GroupBox();
+            this.saveButton = new System.Windows.Forms.Button();
+            this.loadButton = new System.Windows.Forms.Button();
+            this.chapterName = new System.Windows.Forms.TextBox();
+            this.chapterNameLabel = new System.Windows.Forms.Label();
+            this.chapterListView = new System.Windows.Forms.ListView();
+            this.timecodeColumn = new System.Windows.Forms.ColumnHeader();
+            this.nameColumn = new System.Windows.Forms.ColumnHeader();
+            this.startTime = new System.Windows.Forms.TextBox();
+            this.startTimeLabel = new System.Windows.Forms.Label();
+            this.addZoneButton = new System.Windows.Forms.Button();
+            this.clearZonesButton = new System.Windows.Forms.Button();
+            this.updateZoneButton = new System.Windows.Forms.Button();
+            this.showVideoButton = new System.Windows.Forms.Button();
+            this.removeZoneButton = new System.Windows.Forms.Button();
+            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
+            this.chaptersGroupbox.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // chaptersGroupbox
+            // 
+            this.chaptersGroupbox.Controls.Add(this.saveButton);
+            this.chaptersGroupbox.Controls.Add(this.loadButton);
+            this.chaptersGroupbox.Controls.Add(this.chapterName);
+            this.chaptersGroupbox.Controls.Add(this.chapterNameLabel);
+            this.chaptersGroupbox.Controls.Add(this.chapterListView);
+            this.chaptersGroupbox.Controls.Add(this.startTime);
+            this.chaptersGroupbox.Controls.Add(this.startTimeLabel);
+            this.chaptersGroupbox.Controls.Add(this.addZoneButton);
+            this.chaptersGroupbox.Controls.Add(this.clearZonesButton);
+            this.chaptersGroupbox.Controls.Add(this.updateZoneButton);
+            this.chaptersGroupbox.Controls.Add(this.showVideoButton);
+            this.chaptersGroupbox.Controls.Add(this.removeZoneButton);
+            this.chaptersGroupbox.Location = new System.Drawing.Point(8, 8);
+            this.chaptersGroupbox.Name = "chaptersGroupbox";
+            this.chaptersGroupbox.Size = new System.Drawing.Size(448, 376);
+            this.chaptersGroupbox.TabIndex = 23;
+            this.chaptersGroupbox.TabStop = false;
+            this.chaptersGroupbox.Text = "Chapters";
+            // 
+            // saveButton
+            // 
+            this.saveButton.Location = new System.Drawing.Point(384, 304);
+            this.saveButton.Name = "saveButton";
+            this.saveButton.Size = new System.Drawing.Size(52, 23);
+            this.saveButton.TabIndex = 40;
+            this.saveButton.Text = "Save";
+            this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
+            // 
+            // loadButton
+            // 
+            this.loadButton.Location = new System.Drawing.Point(384, 272);
+            this.loadButton.Name = "loadButton";
+            this.loadButton.Size = new System.Drawing.Size(52, 23);
+            this.loadButton.TabIndex = 39;
+            this.loadButton.Text = "Load";
+            this.loadButton.Click += new System.EventHandler(this.loadButton_Click);
+            // 
+            // chapterName
+            // 
+            this.chapterName.Location = new System.Drawing.Point(96, 304);
+            this.chapterName.Name = "chapterName";
+            this.chapterName.Size = new System.Drawing.Size(224, 21);
+            this.chapterName.TabIndex = 38;
+            this.chapterName.Text = "Chapter1";
+            // 
+            // chapterNameLabel
+            // 
+            this.chapterNameLabel.Location = new System.Drawing.Point(16, 304);
+            this.chapterNameLabel.Name = "chapterNameLabel";
+            this.chapterNameLabel.Size = new System.Drawing.Size(56, 23);
+            this.chapterNameLabel.TabIndex = 37;
+            this.chapterNameLabel.Text = "Name";
+            // 
+            // chapterListView
+            // 
+            this.chapterListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.timecodeColumn,
+            this.nameColumn});
+            this.chapterListView.FullRowSelect = true;
+            this.chapterListView.HideSelection = false;
+            this.chapterListView.Location = new System.Drawing.Point(16, 24);
+            this.chapterListView.Name = "chapterListView";
+            this.chapterListView.Size = new System.Drawing.Size(424, 240);
+            this.chapterListView.TabIndex = 36;
+            this.chapterListView.UseCompatibleStateImageBehavior = false;
+            this.chapterListView.View = System.Windows.Forms.View.Details;
+            this.chapterListView.SelectedIndexChanged += new System.EventHandler(this.chapterListView_SelectedIndexChanged);
+            // 
+            // timecodeColumn
+            // 
+            this.timecodeColumn.Text = "Timecode";
+            this.timecodeColumn.Width = 100;
+            // 
+            // nameColumn
+            // 
+            this.nameColumn.Text = "Name";
+            this.nameColumn.Width = 320;
+            // 
+            // startTime
+            // 
+            this.startTime.Location = new System.Drawing.Point(96, 274);
+            this.startTime.Name = "startTime";
+            this.startTime.Size = new System.Drawing.Size(96, 21);
+            this.startTime.TabIndex = 23;
+            this.startTime.Text = "00:00:00.000";
+            // 
+            // startTimeLabel
+            // 
+            this.startTimeLabel.Location = new System.Drawing.Point(16, 280);
+            this.startTimeLabel.Name = "startTimeLabel";
+            this.startTimeLabel.Size = new System.Drawing.Size(64, 16);
+            this.startTimeLabel.TabIndex = 24;
+            this.startTimeLabel.Text = "Start Time";
+            // 
+            // addZoneButton
+            // 
+            this.addZoneButton.Location = new System.Drawing.Point(272, 336);
+            this.addZoneButton.Name = "addZoneButton";
+            this.addZoneButton.Size = new System.Drawing.Size(52, 23);
+            this.addZoneButton.TabIndex = 33;
+            this.addZoneButton.Text = "Add";
+            this.addZoneButton.Click += new System.EventHandler(this.addZoneButton_Click);
+            // 
+            // clearZonesButton
+            // 
+            this.clearZonesButton.Location = new System.Drawing.Point(88, 336);
+            this.clearZonesButton.Name = "clearZonesButton";
+            this.clearZonesButton.Size = new System.Drawing.Size(52, 23);
+            this.clearZonesButton.TabIndex = 29;
+            this.clearZonesButton.Text = "Clear";
+            this.clearZonesButton.Click += new System.EventHandler(this.clearZonesButton_Click);
+            // 
+            // updateZoneButton
+            // 
+            this.updateZoneButton.Location = new System.Drawing.Point(144, 336);
+            this.updateZoneButton.Name = "updateZoneButton";
+            this.updateZoneButton.Size = new System.Drawing.Size(52, 23);
+            this.updateZoneButton.TabIndex = 35;
+            this.updateZoneButton.Text = "Update";
+            this.updateZoneButton.Click += new System.EventHandler(this.updateZoneButton_Click);
+            // 
+            // showVideoButton
+            // 
+            this.showVideoButton.Enabled = false;
+            this.showVideoButton.Location = new System.Drawing.Point(16, 336);
+            this.showVideoButton.Name = "showVideoButton";
+            this.showVideoButton.Size = new System.Drawing.Size(52, 23);
+            this.showVideoButton.TabIndex = 34;
+            this.showVideoButton.Text = "Preview";
+            this.showVideoButton.Click += new System.EventHandler(this.showVideoButton_Click);
+            // 
+            // removeZoneButton
+            // 
+            this.removeZoneButton.Location = new System.Drawing.Point(216, 336);
+            this.removeZoneButton.Name = "removeZoneButton";
+            this.removeZoneButton.Size = new System.Drawing.Size(52, 23);
+            this.removeZoneButton.TabIndex = 32;
+            this.removeZoneButton.Text = "Remove";
+            this.removeZoneButton.Click += new System.EventHandler(this.removeZoneButton_Click);
+            // 
+            // openFileDialog
+            // 
+            this.openFileDialog.DefaultExt = "txt";
+            this.openFileDialog.Filter = "Chapter Files (*.txt)|*.txt";
+            // 
+            // saveFileDialog
+            // 
+            this.saveFileDialog.DefaultExt = "txt";
+            this.saveFileDialog.Filter = "Chapter Files (*.txt)|*.txt";
+            // 
+            // ChapterCreator
+            // 
+            this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
+            this.ClientSize = new System.Drawing.Size(474, 392);
+            this.Controls.Add(this.chaptersGroupbox);
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "ChapterCreator";
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
+            this.Text = "MeGUI Chapter Creator";
+            this.chaptersGroupbox.ResumeLayout(false);
+            this.chaptersGroupbox.PerformLayout();
+            this.ResumeLayout(false);
 
 		}
 		#endregion

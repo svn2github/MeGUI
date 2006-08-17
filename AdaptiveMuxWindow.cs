@@ -220,6 +220,7 @@ namespace MeGUI
                 this.audioStreams[0] = audioStreams[0];
                 audioInputOpenButton.Enabled = false;
                 removeAudioTrackButton.Enabled = false;
+                this.audioDelay.Enabled = false;
                 audioInput.Text = audioStreams[0].path;
             }
             else if (audioStreams.Length == 2) // both streams are defined, disable audio opening facilities
@@ -230,6 +231,7 @@ namespace MeGUI
                 audioInput.Text = audioStreams[0].path;
                 audioInputOpenButton.Enabled = false;
                 removeAudioTrackButton.Enabled = false;
+                this.audioDelay.Enabled = false;
             }
             else // no audio tracks predefined
             {

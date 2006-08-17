@@ -622,6 +622,7 @@ namespace MeGUI
                     
                     bool error = false;
                     string input = null, output = null, language = null;
+                    int delay = 0;
                     AudioCodecSettings settings = null;
                     // Input
                     if (string.IsNullOrEmpty(propertiesStream.input))
@@ -633,10 +634,12 @@ namespace MeGUI
                         input = audioFiles[propertiesStream.trackNumber];
                     else
                         error = true;
-
+                    delay = MainForm.getDelay(input);
                     // Settings
                     if (propertiesStream.dontEncode)
+                    {
                         settings = null;
+                    }
                     else if (propertiesStream.settings != null)
                         settings = propertiesStream.settings;
                     else
@@ -672,6 +675,7 @@ namespace MeGUI
                             newStream.path = input;
                             newStream.name = "";
                             newStream.language = language;
+                            newStream.delay = delay;
                             muxOnlyAudioStreams.Add(newStream);
                         }
                         else
@@ -680,6 +684,11 @@ namespace MeGUI
                             encodeStream.path = input;
                             encodeStream.output = output;
                             encodeStream.settings = settings;
+                            if (delay != 0)
+                            {
+                                settings.DelayEnabled = true;
+                                settings.Delay = delay;
+                            }
                             encodableAudioStreams.Add(encodeStream);
                         }
                     }

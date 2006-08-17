@@ -54,11 +54,11 @@ namespace MeGUI
             this.playbackMethodLabel = new System.Windows.Forms.Label();
             this.playbackMethod = new System.Windows.Forms.ComboBox();
             this.profilesGroupBox = new System.Windows.Forms.GroupBox();
+            this.updateButton = new System.Windows.Forms.Button();
             this.deleteProfileButton = new System.Windows.Forms.Button();
             this.newProfileButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
-            this.updateButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.horizontalResolution)).BeginInit();
             this.extraGroupbox.SuspendLayout();
             this.otherGroupBox.SuspendLayout();
@@ -344,6 +344,16 @@ namespace MeGUI
             this.profilesGroupBox.TabStop = false;
             this.profilesGroupBox.Text = "Profiles";
             // 
+            // updateButton
+            // 
+            this.updateButton.Location = new System.Drawing.Point(133, 40);
+            this.updateButton.Name = "updateButton";
+            this.updateButton.Size = new System.Drawing.Size(75, 23);
+            this.updateButton.TabIndex = 41;
+            this.updateButton.Text = "Update";
+            this.updateButton.UseVisualStyleBackColor = true;
+            this.updateButton.Click += new System.EventHandler(this.updateButton_Click);
+            // 
             // deleteProfileButton
             // 
             this.deleteProfileButton.Location = new System.Drawing.Point(333, 40);
@@ -385,20 +395,11 @@ namespace MeGUI
             this.okButton.UseVisualStyleBackColor = true;
             this.okButton.Click += new System.EventHandler(this.okButton_Click);
             // 
-            // updateButton
-            // 
-            this.updateButton.Location = new System.Drawing.Point(133, 40);
-            this.updateButton.Name = "updateButton";
-            this.updateButton.Size = new System.Drawing.Size(75, 23);
-            this.updateButton.TabIndex = 41;
-            this.updateButton.Text = "Update";
-            this.updateButton.UseVisualStyleBackColor = true;
-            this.updateButton.Click += new System.EventHandler(this.updateButton_Click);
-            // 
             // OneClickConfigurationDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(453, 328);
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.cancelButton);
@@ -406,7 +407,11 @@ namespace MeGUI
             this.Controls.Add(this.otherGroupBox);
             this.Controls.Add(this.extraGroupbox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "OneClickConfigurationDialog";
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
             this.Text = "One Click Configuration Dialog";
             ((System.ComponentModel.ISupportInitialize)(this.horizontalResolution)).EndInit();
             this.extraGroupbox.ResumeLayout(false);

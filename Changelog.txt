@@ -1,3 +1,14 @@
+0.2.3.2191
+Commit by Doom9
+	- Fixed adaptive muxer when loading a raw video stream (MediaInfo can't handle those, leading to mux scenarios that cause a crash)
+	- Fixed delay and settings being overwritten when audio streams were being changed
+	- Added audio delays for mux-only sources
+	- Added audio delays to one click mode (taken from the filename), applied to both mux-only and encodable audio sources
+	- Added language codes for divxmux (not all languages may be supported, divxmux is even more limited than mp4box)
+	- Added cancel button (ESC) to all dialogs that have a cancel / abort button
+	- Swapped out a few remaining Cancel and OK/Queue buttons
+	- Existing mux job with a muxed video input can now be updated
+
 0.2.3.2190
 Commit by Doom9
 	- Added a mod4 horizontal crop mode to the anamorphic cropping modes (to be used instead of non mod16 as this can cause non mod4 horizontal resolutions which cannot be encoded)

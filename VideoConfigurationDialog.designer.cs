@@ -32,6 +32,7 @@ namespace MeGUI
             this.commandline = new System.Windows.Forms.TextBox();
             this.commandlineVisible = new System.Windows.Forms.CheckBox();
             this.profilesGroupbox = new System.Windows.Forms.GroupBox();
+            this.updateButton = new System.Windows.Forms.Button();
             this.loadDefaultsButton = new System.Windows.Forms.Button();
             this.videoProfile = new System.Windows.Forms.ComboBox();
             this.newVideoProfileButton = new System.Windows.Forms.Button();
@@ -43,7 +44,6 @@ namespace MeGUI
             this.mainTabPage = new System.Windows.Forms.TabPage();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tooltipHelp = new System.Windows.Forms.ToolTip(this.components);
-            this.updateButton = new System.Windows.Forms.Button();
             this.profilesGroupbox.SuspendLayout();
             this.zoneTabPage.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -80,6 +80,16 @@ namespace MeGUI
             this.profilesGroupbox.TabIndex = 43;
             this.profilesGroupbox.TabStop = false;
             this.profilesGroupbox.Text = "Profiles";
+            // 
+            // updateButton
+            // 
+            this.updateButton.Location = new System.Drawing.Point(286, 18);
+            this.updateButton.Name = "updateButton";
+            this.updateButton.Size = new System.Drawing.Size(50, 23);
+            this.updateButton.TabIndex = 15;
+            this.updateButton.Text = "Update";
+            this.updateButton.UseVisualStyleBackColor = true;
+            this.updateButton.Click += new System.EventHandler(this.updateButton_Click);
             // 
             // loadDefaultsButton
             // 
@@ -188,20 +198,11 @@ namespace MeGUI
             this.tooltipHelp.ReshowDelay = 100;
             this.tooltipHelp.ShowAlways = true;
             // 
-            // updateButton
-            // 
-            this.updateButton.Location = new System.Drawing.Point(286, 18);
-            this.updateButton.Name = "updateButton";
-            this.updateButton.Size = new System.Drawing.Size(50, 23);
-            this.updateButton.TabIndex = 15;
-            this.updateButton.Text = "Update";
-            this.updateButton.UseVisualStyleBackColor = true;
-            this.updateButton.Click += new System.EventHandler(this.updateButton_Click);
-            // 
             // VideoConfigurationDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(496, 550);
             this.Controls.Add(this.profilesGroupbox);
             this.Controls.Add(this.cancelButton);
