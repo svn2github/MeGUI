@@ -124,6 +124,55 @@ namespace MeGUI
 				trackID2, input, output);
 			return job;
 		}
+        /// <summary>
+        /// generates a vobsub indexing job
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="output"></param>
+        /// <param name="demuxAllTracks"></param>
+        /// <param name="trackIDs"></param>
+        /// <returns></returns>
+        public SubtitleIndexJob generateSubtitleIndexJob(string input, string output, bool demuxAllTracks, List<int> trackIDs, int pgc)
+        {
+            SubtitleIndexJob job = new SubtitleIndexJob();
+            job.Input = input;
+            job.Output = output;
+            string scriptOutput = Path.GetDirectoryName(output) + @"\" + Path.GetFileNameWithoutExtension(output);
+            job.IndexAllTracks = demuxAllTracks;
+            job.TrackIDs = trackIDs;
+            bool fileError = false;
+            string configFile = Path.ChangeExtension(input, ".vobsub");
+            job.ScriptFile = configFile;
+            using (StreamWriter sw = new StreamWriter(configFile, false, Encoding.Default))
+            {
+                try
+                {
+                    sw.WriteLine(input);
+                    sw.WriteLine(scriptOutput);
+                    sw.WriteLine(pgc);
+                    sw.WriteLine("0"); // we presume angle processing has been done before
+                    if (demuxAllTracks)
+                        sw.WriteLine("ALL");
+                    else
+                    {
+                        foreach (int id in trackIDs)
+                        {
+                            sw.Write(id + " ");
+                        }
+                        sw.Write(sw.NewLine);
+                    }
+                    sw.WriteLine("CLOSE");
+                }
+                catch (Exception)
+                {
+                    fileError = true;
+                }
+            }
+            job.Commandline = CommandLineGenerator.generateVobSubCommandline(configFile);
+            if (fileError)
+                return null;
+            return job;
+        }
         public AviSynthJob generateAvisynthJob(string input)
         {
             AviSynthJob job = new AviSynthJob();

@@ -394,8 +394,9 @@ namespace MeGUI
 		/// </summary>
 		/// <param name="fileName">name of the first vob to be loaded</param>
 		/// <returns>full name of the info file or an empty string if no file was found</returns>
-		public static string getInfoFileName(string fileName)
+		public static string getInfoFileName(string fileName, out int pgc)
 		{
+            pgc = 1;
 			string path = MainForm.GetDirectoryName(fileName);
 			string name = Path.GetFileName(fileName);
 			string vts = name.Substring(0, 6);
@@ -405,12 +406,29 @@ namespace MeGUI
 			{
 				if (file.IndexOf("Stream Information") != -1) // we found our file
 				{
+                    int index = file.IndexOf("_PGC_");
+                    if (index != -1) // PGC number is in the filename
+                    {
+                        string pgcString = file.Substring(index + 5, 2);
+                        try
+                        {
+                            pgc = Int32.Parse(pgcString);
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    }
 					infoFile = file;
 					break;
 				}
 			}
 			return infoFile;
 		}
+        public static string getInfoFileName(string fileName)
+        {
+            int pgc;
+            return VideoUtil.getInfoFileName(fileName, out pgc);
+        }
 		/// <summary>
 		/// gets the dvd decrypter generated chapter file
 		/// </summary>
@@ -439,11 +457,12 @@ namespace MeGUI
 		/// <param name="infoFile">the info file to be analyzed</param>
 		/// <param name="audioTracks">the audio tracks found</param>
 		/// <param name="aspectRatio">the aspect ratio of the video</param>
-		public void getSourceInfo(string infoFile, out AudioTrackInfo[] audioTracks,
+        public void getSourceInfo(string infoFile, out List<AudioTrackInfo> audioTracks, out List<SubtitleInfo> subtitles,
 			out AspectRatio aspectRatio, out int maxHorizontalResolution)
 		{
 			StreamReader sr = null;
-			ArrayList aTracks = new ArrayList();
+            audioTracks = new List<AudioTrackInfo>();
+            subtitles = new List<SubtitleInfo>();
 			aspectRatio = AspectRatio.CUSTOM;
             maxHorizontalResolution = 5000;
 			try
@@ -469,26 +488,36 @@ namespace MeGUI
 						else
 							aspectRatio = AspectRatio.CUSTOM;
 					}
-					if (line.IndexOf("Audio") != -1)
+					else if (line.IndexOf("Audio") != -1)
 					{
 						char[] separator = {'/'};
 						string[] split = line.Split(separator, 1000); 
 						AudioTrackInfo ati = new AudioTrackInfo();
-						ati.type = split[0].Substring(split[0].LastIndexOf("-") + 1).Trim();
-						if (ati.type.Equals("DTS"))
+						ati.Type = split[0].Substring(split[0].LastIndexOf("-") + 1).Trim();
+                        if (ati.Type.Equals("DTS"))
 							continue; // skip DTS tracks as BeSweet can't handle them
 						string trackID = split[0].Substring(3, 1);
-						ati.trackID = Int32.Parse(trackID) + 1;
-						ati.nbChannels = split[1].Trim();
-						ati.language = split[4].Trim();
-						aTracks.Add(ati);
+						ati.TrackID = Int32.Parse(trackID) + 1;
+						ati.NbChannels = split[1].Trim();
+						ati.Language = split[4].Trim();
+                        audioTracks.Add(ati);
 					}
+                    else if (line.IndexOf("Subtitle") != -1)
+                    {
+                        char[] separator = { '-' };
+                        string[] split = line.Split(separator, 1000);
+                        string trackID = split[0].Substring(3, 1);
+                        int intTrackID = Int32.Parse(trackID) + 1;
+                        string language = split[2].Trim();
+                        SubtitleInfo si = new SubtitleInfo(language, intTrackID);
+                        subtitles.Add(si);
+                    }
 				}
 			}
 			catch (Exception i)
 			{
 				MessageBox.Show("The following error ocurred when parsing the info file " + infoFile + "\r\n" + i.Message, "Error parsing info file", MessageBoxButtons.OK);
-				aTracks.Clear();
+                audioTracks.Clear();
 			}
 			finally
 			{
@@ -504,13 +533,6 @@ namespace MeGUI
 					}
 				}
 			}
-			audioTracks = new AudioTrackInfo[aTracks.Count];
-			int index = 0;
-			foreach (object o in aTracks)
-			{
-				audioTracks[index] = (AudioTrackInfo)o;
-				index++;
-			}
 		}
 		/// <summary>
 		/// gets all the audio languages from a defined source info file
@@ -520,13 +542,14 @@ namespace MeGUI
 		public List<string> getAudioLanguages(string infoFile)
 		{
 			List<string> retval = new List<string>();
-			AudioTrackInfo[] audioTracks;
+			List<AudioTrackInfo> audioTracks;
+            List<SubtitleInfo> subtitles;
 			AspectRatio ar;
             int maxHorizontalResolution;
-			getSourceInfo(infoFile, out audioTracks, out ar, out maxHorizontalResolution);
+			getSourceInfo(infoFile, out audioTracks, out subtitles, out ar, out maxHorizontalResolution);
 			foreach (AudioTrackInfo ati in audioTracks)
 			{
-				retval.Add(ati.language);
+				retval.Add(ati.Language);
 			}
 			return retval;
 
@@ -542,33 +565,20 @@ namespace MeGUI
 		/// <param name="ar">aspect ratio of the video</param>
 		/// <param name="trackIDs">an arraylist that will contain the track IDs of the source if found</param>
 		/// <returns>true if a source info file has been found, false if not</returns>
-		public bool openVideoSource(string fileName, ComboBox track1, ComboBox track2, out List<string> audioTypes, out AspectRatio ar, out int maxHorizontalResolution)
+        public bool openVideoSource(string fileName, out List<AudioTrackInfo> audioTracks, out List<SubtitleInfo> subtitles, 
+            out AspectRatio ar, out int maxHorizontalResolution, out int pgc)
 		{
-			audioTypes = new List<string>();
-            string infoFile = VideoUtil.getInfoFileName(fileName);
+            audioTracks = new List<AudioTrackInfo>();
+            subtitles = new List<SubtitleInfo>();
+            string infoFile = VideoUtil.getInfoFileName(fileName, out pgc);
 			bool putDummyTracks = true; // indicates whether audio tracks have been found or not
 			ar = AspectRatio.CUSTOM;
             maxHorizontalResolution = 5000;
 			if (!infoFile.Equals(""))
 			{
-				AudioTrackInfo[] atis;
-				getSourceInfo(infoFile, out atis, out ar, out maxHorizontalResolution);
-				if (atis.Length > 0)
-				{
+                getSourceInfo(infoFile, out audioTracks, out subtitles, out ar, out maxHorizontalResolution);
+                if (audioTracks.Count > 0)
 					putDummyTracks = false;
-				}
-				int index = 0;
-				foreach (AudioTrackInfo ati in atis)
-				{
-                    audioTypes.Add(ati.type);
-                    track1.Items.Add(ati.language + " " + ati.type + " " + ati.nbChannels);
-					track2.Items.Add(ati.language + " " + ati.type + " " + ati.nbChannels);
-					if (ati.language.Equals(mainForm.Settings.DefaultLanguage1) && track1.SelectedIndex == -1)
-						track1.SelectedIndex = index;
-					if (ati.language.Equals(mainForm.Settings.DefaultLanguage2) && track2.SelectedIndex == -1)
-						track2.SelectedIndex = index;
-					index++;
-				}	
 			}
 			else
 			{
@@ -577,8 +587,15 @@ namespace MeGUI
 			}
 			if (putDummyTracks)
 			{
-				track1.Items.AddRange(new string[] {"Track 1", "Track 2", "Track 3", "Track 4", "Track 5", "Track 6", "Track 7", "Track 8"});
-				track2.Items.AddRange(new string[] {"Track 1", "Track 2", "Track 3", "Track 4", "Track 5", "Track 6", "Track 7", "Track 8"});
+                for (int i = 1; i <= 8; i++)
+                {
+                    audioTracks.Add(new AudioTrackInfo("Track " + i, "", "", i));
+                }
+                subtitles.Clear();
+                for (int i = 1; i <= 32; i++)
+                {
+                    subtitles.Add(new SubtitleInfo("Track " + i, i));
+                }
 			}
 			return putDummyTracks;
 		}
@@ -1218,10 +1235,71 @@ namespace MeGUI
             return (CropValues)this.MemberwiseClone();
         }
 	}
-	public struct AudioTrackInfo
-	{
-		public string language, nbChannels, type;
-		public int trackID;
-	}
+    public class AudioTrackInfo
+    {
+        private string language, nbChannels, type;
+        private int trackID;
+        public AudioTrackInfo()
+        {
+        }
+        public AudioTrackInfo(string language, string nbChannels, string type, int trackID)
+        {
+            this.language = language;
+            this.nbChannels = nbChannels;
+            this.type = type;
+            this.trackID = trackID;
+        }
+        public int TrackID
+        {
+            get { return trackID; }
+            set { trackID = value; }
+        }
+        public string Type
+        {
+            get { return type; }
+            set { type = value; }
+        }
+
+        public string NbChannels
+        {
+            get { return nbChannels; }
+            set { nbChannels = value; }
+        }
+
+        public string Language
+        {
+            get { return language; }
+            set { language = value; }
+        }
+        public override string ToString()
+        {
+            string fullString = this.language + " " + this.type + " " + this.nbChannels;
+            return fullString.Trim();
+        }
+    }
+    public class SubtitleInfo
+    {
+        private string name;
+        private int index;
+        public SubtitleInfo(string name, int index)
+        {
+            this.name = name;
+            this.index = index;
+        }
+        public string Name
+        {
+            get { return name; }
+            set { name = value; }
+        }
+        public int Index
+        {
+            get { return index; }
+            set { index = value; }
+        }
+        public override string ToString()
+        {
+            return this.name;
+        }
+    }
 	#endregion
 }

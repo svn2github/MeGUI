@@ -1054,7 +1054,10 @@ namespace MeGUI
 			return sb.ToString();
 		}
 		#endregion
-
+        public static string generateVobSubCommandline(string parameterFile)
+        {
+            return "vobsub.dll,Configure " + parameterFile;
+        }
         public static string generateMuxCommandline(MuxSettings muxSettings, MuxerType muxerType)
         {
             MuxCommandlineGenerator generator = new MuxProvider().GetMuxer(muxerType).CommandlineGenerator;

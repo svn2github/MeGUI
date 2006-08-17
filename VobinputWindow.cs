@@ -453,8 +453,25 @@ namespace MeGUI
 			track2.Items.Clear();
 			AspectRatio ar;
             int maxHorizontalResolution;
-            List<string> p1;
-            demuxAllTracks.Checked = vUtil.openVideoSource(fileName, track1, track2, out p1, out ar, out maxHorizontalResolution);
+            List<AudioTrackInfo> audioTracks;
+            List<SubtitleInfo> subtitles;
+            int pgc;
+            demuxSelectedTracks.Checked = vUtil.openVideoSource(fileName, out audioTracks, out subtitles, out ar, out maxHorizontalResolution, out pgc);
+            track1.Items.AddRange(audioTracks.ToArray());
+            track2.Items.AddRange(audioTracks.ToArray());
+            foreach (AudioTrackInfo ati in audioTracks)
+            {
+                if (ati.Language.ToLower().Equals(mainForm.Settings.DefaultLanguage1.ToLower()))
+                {
+                    track1.SelectedItem = ati;
+                    continue;
+                }
+                if (ati.Language.ToLower().Equals(mainForm.Settings.DefaultLanguage2.ToLower()))
+                {
+                    track2.SelectedItem = ati;
+                    continue;
+                }
+            }
 			demuxSelectedTracks.Checked = !demuxAllTracks.Checked;
 		}
 		/// <summary>

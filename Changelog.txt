@@ -1,3 +1,7 @@
+0.2.3.2192
+Commit by Doom9
+	- Subtitle processing via VobSub
+
 0.2.3.2191
 Commit by Doom9
 	- Fixed adaptive muxer when loading a raw video stream (MediaInfo can't handle those, leading to mux scenarios that cause a crash)

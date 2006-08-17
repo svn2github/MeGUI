@@ -217,7 +217,7 @@ namespace MeGUI
 
 
         #endregion
-
+        #region reading process output
         protected virtual void readStream(StreamReader sr, ManualResetEvent rEvent)
         {
             string line;
@@ -269,6 +269,8 @@ namespace MeGUI
             readStream(sr, stderrDone);
         }
         public abstract void ProcessLine(string line, int stream);
+        #endregion
+        #region status updates
         public event JobProcessingStatusUpdateCallback StatusUpdate
         {
             add { statusUpdate += value; }
@@ -299,6 +301,7 @@ namespace MeGUI
         }
 
         protected virtual void doStatusCycleOverrides()
-        {}
+        { }
+        #endregion
     }
 }

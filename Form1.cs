@@ -187,6 +187,7 @@ namespace MeGUI
         private MenuItem mnuGuide;
         private MenuItem mnuChangelog;
         private MenuItem mnuHelpLink;
+        private MenuItem mnuVobSub;
 
         /// <summary>
         /// Required designer variable.
@@ -310,6 +311,7 @@ namespace MeGUI
             this.abortToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.exitMeGUIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuVobSub = new System.Windows.Forms.MenuItem();
             this.tabControl1.SuspendLayout();
             this.inputTab.SuspendLayout();
             this.audioIOGroupBox.SuspendLayout();
@@ -1127,7 +1129,8 @@ namespace MeGUI
             this.mnuMuxers,
             this.mnuToolsSettings,
             this.mnuUpdate,
-            this.mnuAVCLevelValidation});
+            this.mnuAVCLevelValidation,
+            this.mnuVobSub});
             this.mnuTools.Text = "&Tools";
             // 
             // mnuToolsBitrateCalculator
@@ -1257,6 +1260,13 @@ namespace MeGUI
             this.exitMeGUIToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.exitMeGUIToolStripMenuItem.Text = "Exit MeGUI";
             this.exitMeGUIToolStripMenuItem.Click += new System.EventHandler(this.exitMeGUIToolStripMenuItem_Click);
+            // 
+            // mnuVobSub
+            // 
+            this.mnuVobSub.Index = 11;
+            this.mnuVobSub.Shortcut = System.Windows.Forms.Shortcut.CtrlN;
+            this.mnuVobSub.Text = "VobSub I&ndexer";
+            this.mnuVobSub.Click += new System.EventHandler(this.mnuVobSub_Click);
             // 
             // MainForm
             // 
@@ -2016,19 +2026,36 @@ namespace MeGUI
                     IndexJob ijob = (IndexJob)job;
                     if (ijob.PostprocessingProperties == null)
                     {
-                        VobinputWindow viw = new VobinputWindow(this);
-                        viw.setConfig(ijob.Input, ijob.Output, ijob.DemuxMode, ijob.AudioTrackID1, ijob.AudioTrackID2,
-                            false, true, ijob.LoadSources, true);
-                        if (viw.ShowDialog() == DialogResult.OK)
+                        using (VobinputWindow viw = new VobinputWindow(this))
                         {
-                            IndexJob newJob = viw.Job;
-                            transferJobSettings(ijob, newJob);
-                            jobs.Remove(job.Name);
-                            jobs.Add(job.Name, newJob);
+                            viw.setConfig(ijob.Input, ijob.Output, ijob.DemuxMode, ijob.AudioTrackID1, ijob.AudioTrackID2,
+                                false, true, ijob.LoadSources, true);
+                            if (viw.ShowDialog() == DialogResult.OK)
+                            {
+                                IndexJob newJob = viw.Job;
+                                transferJobSettings(ijob, newJob);
+                                jobs.Remove(job.Name);
+                                jobs.Add(job.Name, newJob);
+                            }
                         }
                     }
                     else
                         MessageBox.Show("Loading of OneClick index jobs not supported", "Load not possible", MessageBoxButtons.OK);
+                }
+                else if (job is SubtitleIndexJob)
+                {
+                    SubtitleIndexJob sij = (SubtitleIndexJob)job;
+                    using (VobSubIndexWindow vsiw = new VobSubIndexWindow(this))
+                    {
+                        vsiw.setConfig(sij.Input, sij.Output, sij.IndexAllTracks, sij.TrackIDs, sij.PGC);
+                        if (vsiw.ShowDialog() == DialogResult.OK)
+                        {
+                            SubtitleIndexJob newJob = vsiw.Job;
+                            transferJobSettings(sij, newJob);
+                            jobs.Remove(job.Name);
+                            jobs.Add(job.Name, newJob);
+                        }
+                    }
                 }
             }
             else
@@ -2825,6 +2852,8 @@ namespace MeGUI
                 currentProcessor = new AviSynthProcessor();
             else if (job is IndexJob)
                 currentProcessor = new DGIndexer(Settings.DgIndexPath);
+            else if (job is SubtitleIndexJob)
+                currentProcessor = new VobSubIndexer();
             else
             {
                 addToLog("Unknown job type found. No job started.\r\n");
@@ -2993,6 +3022,10 @@ namespace MeGUI
                 {
                     encodingMode = "avs";
                 }
+                else if (next is SubtitleIndexJob)
+                {
+                    encodingMode = "sub";
+                }
                 switch (next.Status)
                 {
                     case JobStatus.ABORTED:
@@ -3074,6 +3107,12 @@ namespace MeGUI
                 jobs.Add(job.Name, job);
                 item = new ListViewItem(new string[] {job.Name, job.InputFileName, job.OutputFileName, 
 														 "", "avs", "waiting", "", "", ""});
+                this.queueListView.Items.Add(item);
+            }
+            if (job is SubtitleIndexJob)
+            {
+                jobs.Add(job.Name, job);
+                item = new ListViewItem(new string[] { job.Name, job.InputFileName, job.OutputFileName, "", "sub", "waiting", "", "", "" });
                 this.queueListView.Items.Add(item);
             }
         }
@@ -4146,6 +4185,18 @@ namespace MeGUI
             using (Changelog cl = new Changelog())
             {
                 cl.ShowDialog();
+            }
+        }
+        /// <summary>
+        /// launches the vobsub indexer
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void mnuVobSub_Click(object sender, EventArgs e)
+        {
+            using (VobSubIndexWindow vsi = new VobSubIndexWindow(this))
+            {
+                vsi.ShowDialog();
             }
         }
         #endregion
