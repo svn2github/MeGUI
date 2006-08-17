@@ -8,6 +8,7 @@ Commit by Doom9
 	- Added cancel button (ESC) to all dialogs that have a cancel / abort button
 	- Swapped out a few remaining Cancel and OK/Queue buttons
 	- Existing mux job with a muxed video input can now be updated
+	- Added DRC for AC3/DTS sources when "increase volume" is checked
 
 0.2.3.2190
 Commit by Doom9
