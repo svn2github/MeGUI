@@ -563,7 +563,7 @@ namespace MeGUI.core.details
                 int position = this.queueListView.SelectedItems[0].Index;
                 Job job = jobs[this.queueListView.Items[position].Text];
 #warning implement polymorphic job loading here
-/*                if (job is VideoJob)
+                /*                if (job is VideoJob)
                 {
                     VideoJob vjob = (VideoJob)job;
                     this.videoInput.Text = vjob.Input;
@@ -595,7 +595,6 @@ namespace MeGUI.core.details
                 {
                     MuxJob mjob = (MuxJob)job;
                     MuxWindow mw = new MuxWindow(muxProvider.GetMuxer(mjob.MuxType));
-                    SubStream[] subtitleStreams = mjob.Settings.SubtitleStreams.ToArray();
                     mw.Job = mjob;
                     if (mw.ShowDialog() == DialogResult.OK)
                     {
@@ -610,7 +609,8 @@ namespace MeGUI.core.details
                     IndexJob ijob = (IndexJob)job;
                     if (ijob.PostprocessingProperties == null)
                     {
-                        VobinputWindow viw = new VobinputWindow(this);
+                        using (VobinputWindow viw = new VobinputWindow(this))
+                        {
                         viw.setConfig(ijob.Input, ijob.Output, ijob.DemuxMode, ijob.AudioTrackID1, ijob.AudioTrackID2,
                             false, true, ijob.LoadSources, true);
                         if (viw.ShowDialog() == DialogResult.OK)
@@ -620,10 +620,26 @@ namespace MeGUI.core.details
                             jobs.Remove(job.Name);
                             jobs.Add(job.Name, newJob);
                         }
+                        }
                     }
                     else
                         MessageBox.Show("Loading of OneClick index jobs not supported", "Load not possible", MessageBoxButtons.OK);
                 }
+                else if (job is SubtitleIndexJob)
+                {
+                    SubtitleIndexJob sij = (SubtitleIndexJob)job;
+                    using (VobSubIndexWindow vsiw = new VobSubIndexWindow(this))
+                    {
+                        vsiw.setConfig(sij.Input, sij.Output, sij.IndexAllTracks, sij.TrackIDs, sij.PGC);
+                        if (vsiw.ShowDialog() == DialogResult.OK)
+                        {
+                            SubtitleIndexJob newJob = vsiw.Job;
+                            transferJobSettings(sij, newJob);
+                            jobs.Remove(job.Name);
+                            jobs.Add(job.Name, newJob);
+                        }
+                    }
+                }        
 */
             }
             else
@@ -977,6 +993,8 @@ namespace MeGUI.core.details
                 currentProcessor = new AviSynthProcessor();
             else if (job is IndexJob)
                 currentProcessor = new DGIndexer(mainForm.Settings.DgIndexPath);
+            else if (job is SubtitleIndexJob)
+                currentProcessor = new VobSubIndexer();
             else
             {
                 mainForm.addToLog("Unknown job type found. No job started.\r\n");

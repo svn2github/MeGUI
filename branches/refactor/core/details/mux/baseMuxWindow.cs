@@ -31,6 +31,7 @@ namespace MeGUI
     public struct SubStream
     {
         public string path, language, name;
+        public int delay;
     }
     /// <summary>
     /// Summary description for Mux.
@@ -93,6 +94,8 @@ namespace MeGUI
         protected TextBox videoName;
         protected Label videoNameLabel;
         protected Label audioNameLabel;
+        protected NumericUpDown audioDelay;
+        protected Label delayLabel;
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -184,6 +187,7 @@ namespace MeGUI
             {
                 audioInput.Text = this.audioStreams[0].path;
                 audioLanguage.SelectedIndex = audioLanguage.Items.IndexOf(this.audioStreams[0].language);
+                audioDelay.Value = this.audioStreams[0].delay;
             }
             index = 0;
             foreach (SubStream stream in subtitleStreams)
@@ -247,6 +251,8 @@ namespace MeGUI
             this.subtitleTrack2 = new System.Windows.Forms.RadioButton();
             this.subtitleTrack1 = new System.Windows.Forms.RadioButton();
             this.audioGroupbox = new System.Windows.Forms.GroupBox();
+            this.delayLabel = new System.Windows.Forms.Label();
+            this.audioDelay = new System.Windows.Forms.NumericUpDown();
             this.audioName = new System.Windows.Forms.TextBox();
             this.audioNameLabel = new System.Windows.Forms.Label();
             this.removeAudioTrackButton = new System.Windows.Forms.Button();
@@ -281,6 +287,7 @@ namespace MeGUI
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.subtitleGroupbox.SuspendLayout();
             this.audioGroupbox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.audioDelay)).BeginInit();
             this.videoGroupbox.SuspendLayout();
             this.chaptersGroupbox.SuspendLayout();
             this.outputGroupbox.SuspendLayout();
@@ -288,7 +295,7 @@ namespace MeGUI
             // 
             // muxButton
             // 
-            this.muxButton.Location = new System.Drawing.Point(376, 404);
+            this.muxButton.Location = new System.Drawing.Point(291, 430);
             this.muxButton.Name = "muxButton";
             this.muxButton.Size = new System.Drawing.Size(56, 23);
             this.muxButton.TabIndex = 26;
@@ -308,7 +315,7 @@ namespace MeGUI
             this.subtitleGroupbox.Controls.Add(this.subtitleTrack3);
             this.subtitleGroupbox.Controls.Add(this.subtitleTrack2);
             this.subtitleGroupbox.Controls.Add(this.subtitleTrack1);
-            this.subtitleGroupbox.Location = new System.Drawing.Point(8, 177);
+            this.subtitleGroupbox.Location = new System.Drawing.Point(8, 204);
             this.subtitleGroupbox.Name = "subtitleGroupbox";
             this.subtitleGroupbox.Size = new System.Drawing.Size(424, 80);
             this.subtitleGroupbox.TabIndex = 24;
@@ -415,6 +422,8 @@ namespace MeGUI
             // 
             // audioGroupbox
             // 
+            this.audioGroupbox.Controls.Add(this.delayLabel);
+            this.audioGroupbox.Controls.Add(this.audioDelay);
             this.audioGroupbox.Controls.Add(this.audioName);
             this.audioGroupbox.Controls.Add(this.audioNameLabel);
             this.audioGroupbox.Controls.Add(this.removeAudioTrackButton);
@@ -427,10 +436,36 @@ namespace MeGUI
             this.audioGroupbox.Controls.Add(this.audioInputLabel);
             this.audioGroupbox.Location = new System.Drawing.Point(8, 92);
             this.audioGroupbox.Name = "audioGroupbox";
-            this.audioGroupbox.Size = new System.Drawing.Size(424, 80);
+            this.audioGroupbox.Size = new System.Drawing.Size(424, 106);
             this.audioGroupbox.TabIndex = 23;
             this.audioGroupbox.TabStop = false;
             this.audioGroupbox.Text = "Audio";
+            // 
+            // delayLabel
+            // 
+            this.delayLabel.AutoSize = true;
+            this.delayLabel.Location = new System.Drawing.Point(19, 76);
+            this.delayLabel.Name = "delayLabel";
+            this.delayLabel.Size = new System.Drawing.Size(34, 13);
+            this.delayLabel.TabIndex = 32;
+            this.delayLabel.Text = "Delay";
+            // 
+            // audioDelay
+            // 
+            this.audioDelay.Location = new System.Drawing.Point(120, 76);
+            this.audioDelay.Maximum = new decimal(new int[] {
+            5000,
+            0,
+            0,
+            0});
+            this.audioDelay.Minimum = new decimal(new int[] {
+            5000,
+            0,
+            0,
+            -2147483648});
+            this.audioDelay.Name = "audioDelay";
+            this.audioDelay.Size = new System.Drawing.Size(78, 21);
+            this.audioDelay.TabIndex = 31;
             // 
             // audioName
             // 
@@ -602,7 +637,7 @@ namespace MeGUI
             this.chaptersGroupbox.Controls.Add(this.chaptersInputLabel);
             this.chaptersGroupbox.Controls.Add(this.chaptersInput);
             this.chaptersGroupbox.Controls.Add(this.openChaptersButton);
-            this.chaptersGroupbox.Location = new System.Drawing.Point(8, 262);
+            this.chaptersGroupbox.Location = new System.Drawing.Point(8, 290);
             this.chaptersGroupbox.Name = "chaptersGroupbox";
             this.chaptersGroupbox.Size = new System.Drawing.Size(424, 48);
             this.chaptersGroupbox.TabIndex = 25;
@@ -642,7 +677,7 @@ namespace MeGUI
             this.outputGroupbox.Controls.Add(this.muxedOutputLabel);
             this.outputGroupbox.Controls.Add(this.muxedOutput);
             this.outputGroupbox.Controls.Add(this.outputButton);
-            this.outputGroupbox.Location = new System.Drawing.Point(8, 315);
+            this.outputGroupbox.Location = new System.Drawing.Point(8, 344);
             this.outputGroupbox.Name = "outputGroupbox";
             this.outputGroupbox.Size = new System.Drawing.Size(424, 80);
             this.outputGroupbox.TabIndex = 28;
@@ -704,7 +739,7 @@ namespace MeGUI
             // cancelButton
             // 
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(296, 404);
+            this.cancelButton.Location = new System.Drawing.Point(376, 430);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(56, 23);
             this.cancelButton.TabIndex = 29;
@@ -713,7 +748,8 @@ namespace MeGUI
             // baseMuxWindow
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
-            this.ClientSize = new System.Drawing.Size(444, 435);
+            this.CancelButton = this.cancelButton;
+            this.ClientSize = new System.Drawing.Size(444, 460);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.outputGroupbox);
             this.Controls.Add(this.muxButton);
@@ -733,6 +769,7 @@ namespace MeGUI
             this.subtitleGroupbox.PerformLayout();
             this.audioGroupbox.ResumeLayout(false);
             this.audioGroupbox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.audioDelay)).EndInit();
             this.videoGroupbox.ResumeLayout(false);
             this.videoGroupbox.PerformLayout();
             this.chaptersGroupbox.ResumeLayout(false);
@@ -817,6 +854,8 @@ namespace MeGUI
                 audioInput.Text = openFileDialog.FileName;
                 audioStreams[index].path = openFileDialog.FileName;
                 audioStreams[index].language = audioLanguage.Text;
+                audioStreams[index].delay = AudioEncodingComponent.getDelay(openFileDialog.FileName);
+                audioDelay.Value = audioStreams[index].delay;
                 fileUpdated();
             }
         }
@@ -830,7 +869,7 @@ namespace MeGUI
                 subtitleInput.Text = openFileDialog.FileName;
                 int index = this.getSelectedSubTitle();
                 subtitleStreams[index].path = openFileDialog.FileName;
-                subtitleStreams[index].language = openFileDialog.FileName;
+                subtitleStreams[index].language = subtitleLanguage.Text;
                 fileUpdated();
             }
         }
@@ -858,7 +897,7 @@ namespace MeGUI
             }
         }
 
-        private void muxButton_Click(object sender, System.EventArgs e)
+        protected virtual void muxButton_Click(object sender, System.EventArgs e)
         {
             if (muxButton.DialogResult != DialogResult.OK)
             {
@@ -935,17 +974,22 @@ namespace MeGUI
             this.audioStreams[lastAudioTrack].path = audioInput.Text;
             this.audioStreams[lastAudioTrack].language = audioLanguage.Text;
             this.audioStreams[lastAudioTrack].name = audioName.Text;
+            this.audioStreams[lastAudioTrack].delay = (int)audioDelay.Value;
             audioInput.Text = audioStreams[currentAudioTrack].path;
             audioName.Text = audioStreams[currentAudioTrack].name;
             if (preconfigured[currentAudioTrack])
             {
                 audioInputOpenButton.Enabled = false;
                 removeAudioTrackButton.Enabled = false;
+                audioDelay.Enabled = false;
+                audioDelay.Value = 0;
             }
             else
             {
                 audioInputOpenButton.Enabled = true;
                 removeAudioTrackButton.Enabled = true;
+                audioDelay.Enabled = true;
+                audioDelay.Value = audioStreams[currentAudioTrack].delay;
             }
             if (!audioStreams[currentAudioTrack].language.Equals(""))
             {

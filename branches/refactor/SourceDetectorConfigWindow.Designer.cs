@@ -232,7 +232,7 @@ namespace MeGUI
             // 
             this.saveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.saveButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.saveButton.Location = new System.Drawing.Point(264, 229);
+            this.saveButton.Location = new System.Drawing.Point(175, 229);
             this.saveButton.Name = "saveButton";
             this.saveButton.Size = new System.Drawing.Size(69, 24);
             this.saveButton.TabIndex = 3;
@@ -243,7 +243,7 @@ namespace MeGUI
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(189, 229);
+            this.cancelButton.Location = new System.Drawing.Point(264, 229);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(69, 24);
             this.cancelButton.TabIndex = 3;
@@ -277,6 +277,7 @@ namespace MeGUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(345, 265);
             this.Controls.Add(this.priority);
             this.Controls.Add(this.priorityLabel);
@@ -296,7 +297,11 @@ namespace MeGUI
             this.Controls.Add(this.analysisPercent);
             this.Controls.Add(this.analysisPercentLabel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "SourceDetectorConfigWindow";
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
             this.Text = "Source Detector Configuration";
             ((System.ComponentModel.ISupportInitialize)(this.analysisPercent)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.minAnalyseSections)).EndInit();

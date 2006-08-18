@@ -423,7 +423,6 @@ namespace MeGUI
         private AudioEncoderProvider audioEncoderProvider;
         private JobUtil jobUtil;
         private BitrateCalculator calc;
-        private List<string> audioTypes;
         private List<string> audioLanguages;
         private VideoUtil vUtil;
         private PartialAudioStream[] audioStreams;
@@ -505,8 +504,26 @@ namespace MeGUI
             track1.Items.Clear();
             track2.Items.Clear();
             AspectRatio ar;
-            int maxHorizontalResolution = -1;
-            vUtil.openVideoSource(fileName, track1, track2, out audioTypes, out ar, out maxHorizontalResolution);
+            int maxHorizontalResolution;
+            List<AudioTrackInfo> audioTracks;
+            List<SubtitleInfo> subtitles;
+            int pgc;
+            vUtil.openVideoSource(fileName, out audioTracks, out subtitles, out ar, out maxHorizontalResolution, out pgc);
+            track1.Items.AddRange(audioTracks.ToArray());
+            track2.Items.AddRange(audioTracks.ToArray());
+            foreach (AudioTrackInfo ati in audioTracks)
+            {
+                if (ati.Language.ToLower().Equals(mainForm.Settings.DefaultLanguage1.ToLower()))
+                {
+                    track1.SelectedItem = ati;
+                    continue;
+                }
+                if (ati.Language.ToLower().Equals(mainForm.Settings.DefaultLanguage2.ToLower()))
+                {
+                    track2.SelectedItem = ati;
+                    continue;
+                }
+            }
             horizontalResolution.Maximum = maxHorizontalResolution;
             string chapterFile = VideoUtil.getChapterFile(fileName);
             if (File.Exists(chapterFile))
@@ -630,9 +647,15 @@ namespace MeGUI
                     if (!audioStreams[i].useExternalInput)
                     {
                         if (i == 0 && track1.SelectedIndex >= 0)
-                            typeString = "file." + audioTypes[track1.SelectedIndex];
+                        {
+                            AudioTrackInfo ati = track1.SelectedItem as AudioTrackInfo;
+                            typeString = "file." + ati.Type;
+                        }
                         else if (i == 1 && track2.SelectedIndex >= 0)
-                            typeString = "file." + audioTypes[track2.SelectedIndex];
+                        {
+                            AudioTrackInfo ati = track2.SelectedItem as AudioTrackInfo;
+                            typeString = "file." + ati.Type;
+                        }
                         else
                             continue;
                     }

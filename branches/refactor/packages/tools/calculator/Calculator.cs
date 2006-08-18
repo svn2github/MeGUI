@@ -309,7 +309,7 @@ namespace MeGUI
             // 
             // nbFrames
             // 
-            this.nbFrames.Location = new System.Drawing.Point(188, 110);
+            this.nbFrames.Location = new System.Drawing.Point(192, 110);
             this.nbFrames.Maximum = new decimal(new int[] {
             5400000,
             0,
@@ -322,7 +322,7 @@ namespace MeGUI
             // 
             // totalSeconds
             // 
-            this.totalSeconds.Location = new System.Drawing.Point(188, 56);
+            this.totalSeconds.Location = new System.Drawing.Point(192, 56);
             this.totalSeconds.Maximum = new decimal(new int[] {
             90000,
             0,
@@ -339,7 +339,7 @@ namespace MeGUI
             this.bframes.CheckState = System.Windows.Forms.CheckState.Checked;
             this.bframes.Location = new System.Drawing.Point(8, 136);
             this.bframes.Name = "bframes";
-            this.bframes.Size = new System.Drawing.Size(120, 16);
+            this.bframes.Size = new System.Drawing.Size(128, 16);
             this.bframes.TabIndex = 45;
             this.bframes.Text = "B-frames";
             this.bframes.CheckedChanged += new System.EventHandler(this.bframes_CheckedChanged);
@@ -348,7 +348,7 @@ namespace MeGUI
             // 
             this.nbFramesLabel.Location = new System.Drawing.Point(8, 112);
             this.nbFramesLabel.Name = "nbFramesLabel";
-            this.nbFramesLabel.Size = new System.Drawing.Size(100, 16);
+            this.nbFramesLabel.Size = new System.Drawing.Size(128, 16);
             this.nbFramesLabel.TabIndex = 43;
             this.nbFramesLabel.Text = "Number of Frames";
             // 
@@ -364,7 +364,7 @@ namespace MeGUI
             // 
             this.framerateLabel.Location = new System.Drawing.Point(8, 86);
             this.framerateLabel.Name = "framerateLabel";
-            this.framerateLabel.Size = new System.Drawing.Size(75, 16);
+            this.framerateLabel.Size = new System.Drawing.Size(128, 16);
             this.framerateLabel.TabIndex = 39;
             this.framerateLabel.Text = "Framerate";
             // 
@@ -434,9 +434,9 @@ namespace MeGUI
             // framerate
             // 
             this.framerate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.framerate.Location = new System.Drawing.Point(230, 80);
+            this.framerate.Location = new System.Drawing.Point(243, 83);
             this.framerate.Name = "framerate";
-            this.framerate.Size = new System.Drawing.Size(80, 21);
+            this.framerate.Size = new System.Drawing.Size(69, 21);
             this.framerate.TabIndex = 32;
             this.framerate.SelectedIndexChanged += new System.EventHandler(this.framerate_SelectedIndexChanged);
             // 
@@ -472,7 +472,7 @@ namespace MeGUI
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(17, 72);
+            this.label2.Location = new System.Drawing.Point(13, 72);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(26, 13);
             this.label2.TabIndex = 38;
@@ -481,7 +481,7 @@ namespace MeGUI
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(17, 22);
+            this.label1.Location = new System.Drawing.Point(13, 22);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(39, 13);
             this.label1.TabIndex = 38;
@@ -489,7 +489,7 @@ namespace MeGUI
             // 
             // audio1SizeMB
             // 
-            this.audio1SizeMB.Location = new System.Drawing.Point(19, 121);
+            this.audio1SizeMB.Location = new System.Drawing.Point(16, 121);
             this.audio1SizeMB.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -502,7 +502,7 @@ namespace MeGUI
             // 
             // audio1SizeKB
             // 
-            this.audio1SizeKB.Location = new System.Drawing.Point(19, 94);
+            this.audio1SizeKB.Location = new System.Drawing.Point(16, 94);
             this.audio1SizeKB.Maximum = new decimal(new int[] {
             10000000,
             0,
@@ -520,7 +520,7 @@ namespace MeGUI
             0,
             0,
             0});
-            this.audio1Bitrate.Location = new System.Drawing.Point(19, 43);
+            this.audio1Bitrate.Location = new System.Drawing.Point(16, 43);
             this.audio1Bitrate.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -559,15 +559,15 @@ namespace MeGUI
             // audio1Type
             // 
             this.audio1Type.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.audio1Type.Location = new System.Drawing.Point(64, 152);
+            this.audio1Type.Location = new System.Drawing.Point(48, 152);
             this.audio1Type.Name = "audio1Type";
-            this.audio1Type.Size = new System.Drawing.Size(56, 21);
+            this.audio1Type.Size = new System.Drawing.Size(84, 21);
             this.audio1Type.TabIndex = 6;
             this.audio1Type.SelectedIndexChanged += new System.EventHandler(this.audio_SelectedIndexChanged);
             // 
             // audio1TypeLabel
             // 
-            this.audio1TypeLabel.Location = new System.Drawing.Point(16, 152);
+            this.audio1TypeLabel.Location = new System.Drawing.Point(13, 155);
             this.audio1TypeLabel.Name = "audio1TypeLabel";
             this.audio1TypeLabel.Size = new System.Drawing.Size(40, 16);
             this.audio1TypeLabel.TabIndex = 6;
@@ -605,7 +605,7 @@ namespace MeGUI
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(17, 72);
+            this.label4.Location = new System.Drawing.Point(13, 72);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(26, 13);
             this.label4.TabIndex = 38;
@@ -627,7 +627,7 @@ namespace MeGUI
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(17, 22);
+            this.label3.Location = new System.Drawing.Point(13, 22);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(39, 13);
             this.label3.TabIndex = 38;
@@ -666,7 +666,7 @@ namespace MeGUI
             // 
             // clearAudio2Button
             // 
-            this.clearAudio2Button.Location = new System.Drawing.Point(128, 184);
+            this.clearAudio2Button.Location = new System.Drawing.Point(124, 184);
             this.clearAudio2Button.Name = "clearAudio2Button";
             this.clearAudio2Button.Size = new System.Drawing.Size(24, 23);
             this.clearAudio2Button.TabIndex = 35;
@@ -676,15 +676,15 @@ namespace MeGUI
             // audio2Type
             // 
             this.audio2Type.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.audio2Type.Location = new System.Drawing.Point(64, 152);
+            this.audio2Type.Location = new System.Drawing.Point(47, 152);
             this.audio2Type.Name = "audio2Type";
-            this.audio2Type.Size = new System.Drawing.Size(56, 21);
+            this.audio2Type.Size = new System.Drawing.Size(84, 21);
             this.audio2Type.TabIndex = 13;
             this.audio2Type.SelectedIndexChanged += new System.EventHandler(this.audio_SelectedIndexChanged);
             // 
             // audio2TypeLabel
             // 
-            this.audio2TypeLabel.Location = new System.Drawing.Point(16, 152);
+            this.audio2TypeLabel.Location = new System.Drawing.Point(13, 155);
             this.audio2TypeLabel.Name = "audio2TypeLabel";
             this.audio2TypeLabel.Size = new System.Drawing.Size(40, 16);
             this.audio2TypeLabel.TabIndex = 12;
@@ -773,7 +773,7 @@ namespace MeGUI
             // 
             // muxedSizeKB
             // 
-            this.muxedSizeKB.Location = new System.Drawing.Point(120, 26);
+            this.muxedSizeKB.Location = new System.Drawing.Point(112, 25);
             this.muxedSizeKB.Maximum = new decimal(new int[] {
             20000000,
             0,
@@ -786,7 +786,7 @@ namespace MeGUI
             // 
             // muxedSizeMB
             // 
-            this.muxedSizeMB.Location = new System.Drawing.Point(120, 51);
+            this.muxedSizeMB.Location = new System.Drawing.Point(112, 51);
             this.muxedSizeMB.Maximum = new decimal(new int[] {
             20000,
             0,
@@ -809,7 +809,7 @@ namespace MeGUI
             // sizeSelection
             // 
             this.sizeSelection.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.sizeSelection.Location = new System.Drawing.Point(120, 88);
+            this.sizeSelection.Location = new System.Drawing.Point(112, 88);
             this.sizeSelection.Name = "sizeSelection";
             this.sizeSelection.Size = new System.Drawing.Size(88, 21);
             this.sizeSelection.TabIndex = 18;
@@ -1682,5 +1682,6 @@ namespace MeGUI
             return true;
 		}
 		#endregion
+
 	}
 }

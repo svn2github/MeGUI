@@ -335,9 +335,9 @@ namespace MeGUI
             this.groupBox1.Controls.Add(this.greyScale);
             this.groupBox1.Controls.Add(this.lavcNBPredictors);
             this.groupBox1.Controls.Add(this.snowNBPredictorsLabel);
-            this.groupBox1.Location = new System.Drawing.Point(327, 6);
+            this.groupBox1.Location = new System.Drawing.Point(327, 3);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(160, 152);
+            this.groupBox1.Size = new System.Drawing.Size(161, 152);
             this.groupBox1.TabIndex = 34;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Other";
@@ -442,7 +442,7 @@ namespace MeGUI
             this.lavcCodecToolsGroupbox.Controls.Add(this.lavcScdLabel);
             this.lavcCodecToolsGroupbox.Controls.Add(this.lavcMbDecisionAlgo);
             this.lavcCodecToolsGroupbox.Controls.Add(this.lavcMbDecisionAlgoLabel);
-            this.lavcCodecToolsGroupbox.Location = new System.Drawing.Point(3, 158);
+            this.lavcCodecToolsGroupbox.Location = new System.Drawing.Point(0, 158);
             this.lavcCodecToolsGroupbox.Name = "lavcCodecToolsGroupbox";
             this.lavcCodecToolsGroupbox.Size = new System.Drawing.Size(320, 216);
             this.lavcCodecToolsGroupbox.TabIndex = 33;
@@ -643,7 +643,7 @@ namespace MeGUI
             this.lavcGeneralOptionsGroupbox.Controls.Add(this.lavcKeyframeIntervalLabel);
             this.lavcGeneralOptionsGroupbox.Controls.Add(this.lavcBitrateQuantLabel);
             this.lavcGeneralOptionsGroupbox.Controls.Add(this.lavcModeLabel);
-            this.lavcGeneralOptionsGroupbox.Location = new System.Drawing.Point(3, 6);
+            this.lavcGeneralOptionsGroupbox.Location = new System.Drawing.Point(0, 3);
             this.lavcGeneralOptionsGroupbox.Name = "lavcGeneralOptionsGroupbox";
             this.lavcGeneralOptionsGroupbox.Size = new System.Drawing.Size(320, 152);
             this.lavcGeneralOptionsGroupbox.TabIndex = 32;
@@ -2032,9 +2032,9 @@ namespace MeGUI
             this.groupBox5.Controls.Add(this.label29);
             this.groupBox5.Controls.Add(this.comboBox2);
             this.groupBox5.Controls.Add(this.numericUpDown19);
-            this.groupBox5.Location = new System.Drawing.Point(340, 5);
+            this.groupBox5.Location = new System.Drawing.Point(340, 3);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(138, 188);
+            this.groupBox5.Size = new System.Drawing.Size(148, 188);
             this.groupBox5.TabIndex = 44;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Other Options";
@@ -2047,7 +2047,7 @@ namespace MeGUI
             0,
             0,
             65536});
-            this.numericUpDown16.Location = new System.Drawing.Point(84, 127);
+            this.numericUpDown16.Location = new System.Drawing.Point(89, 112);
             this.numericUpDown16.Maximum = new decimal(new int[] {
             1,
             0,
@@ -2066,7 +2066,7 @@ namespace MeGUI
             0,
             0,
             65536});
-            this.numericUpDown17.Location = new System.Drawing.Point(84, 103);
+            this.numericUpDown17.Location = new System.Drawing.Point(89, 88);
             this.numericUpDown17.Maximum = new decimal(new int[] {
             1,
             0,
@@ -2080,7 +2080,7 @@ namespace MeGUI
             // label23
             // 
             this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(6, 129);
+            this.label23.Location = new System.Drawing.Point(11, 114);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(80, 13);
             this.label23.TabIndex = 49;
@@ -2088,7 +2088,7 @@ namespace MeGUI
             // 
             // label24
             // 
-            this.label24.Location = new System.Drawing.Point(6, 105);
+            this.label24.Location = new System.Drawing.Point(11, 90);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(72, 23);
             this.label24.TabIndex = 48;
@@ -2096,7 +2096,7 @@ namespace MeGUI
             // 
             // label25
             // 
-            this.label25.Location = new System.Drawing.Point(6, 81);
+            this.label25.Location = new System.Drawing.Point(11, 66);
             this.label25.Name = "label25";
             this.label25.Size = new System.Drawing.Size(72, 16);
             this.label25.TabIndex = 46;
@@ -2110,7 +2110,7 @@ namespace MeGUI
             0,
             0,
             65536});
-            this.numericUpDown18.Location = new System.Drawing.Point(84, 79);
+            this.numericUpDown18.Location = new System.Drawing.Point(89, 64);
             this.numericUpDown18.Maximum = new decimal(new int[] {
             1,
             0,
@@ -2123,7 +2123,7 @@ namespace MeGUI
             // 
             // label28
             // 
-            this.label28.Location = new System.Drawing.Point(6, 58);
+            this.label28.Location = new System.Drawing.Point(11, 42);
             this.label28.Name = "label28";
             this.label28.Size = new System.Drawing.Size(84, 23);
             this.label28.TabIndex = 41;
@@ -2131,7 +2131,7 @@ namespace MeGUI
             // 
             // label29
             // 
-            this.label29.Location = new System.Drawing.Point(6, 27);
+            this.label29.Location = new System.Drawing.Point(11, 19);
             this.label29.Name = "label29";
             this.label29.Size = new System.Drawing.Size(44, 23);
             this.label29.TabIndex = 32;
@@ -2144,15 +2144,15 @@ namespace MeGUI
             "MP4V",
             "DX50",
             "XVID"});
-            this.comboBox2.Location = new System.Drawing.Point(56, 24);
+            this.comboBox2.Location = new System.Drawing.Point(61, 16);
             this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(72, 21);
+            this.comboBox2.Size = new System.Drawing.Size(76, 21);
             this.comboBox2.TabIndex = 33;
             this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.updateEvent);
             // 
             // numericUpDown19
             // 
-            this.numericUpDown19.Location = new System.Drawing.Point(96, 56);
+            this.numericUpDown19.Location = new System.Drawing.Point(105, 40);
             this.numericUpDown19.Maximum = new decimal(new int[] {
             8,
             0,
@@ -2376,7 +2376,7 @@ namespace MeGUI
             this.groupBox7.Controls.Add(this.numericUpDown30);
             this.groupBox7.Controls.Add(this.label42);
             this.groupBox7.Controls.Add(this.label43);
-            this.groupBox7.Location = new System.Drawing.Point(0, 5);
+            this.groupBox7.Location = new System.Drawing.Point(0, 3);
             this.groupBox7.Name = "groupBox7";
             this.groupBox7.Size = new System.Drawing.Size(336, 188);
             this.groupBox7.TabIndex = 42;

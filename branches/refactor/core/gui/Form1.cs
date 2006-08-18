@@ -70,7 +70,7 @@ namespace MeGUI
         private MenuItem mnuViewMinimizeToTray;
         private NotifyIcon trayIcon;
         private System.Windows.Forms.Button autoEncodeButton;
-        private System.Windows.Forms.MenuItem menuItem1;
+        private System.Windows.Forms.MenuItem mnuMuxers;
         private MenuItem mnuFileOpen;
         private ContextMenuStrip trayMenu;
         private ToolStripMenuItem openMeGUIToolStripMenuItem;
@@ -80,8 +80,6 @@ namespace MeGUI
         private ToolStripMenuItem abortToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator2;
         private ToolStripMenuItem exitMeGUIToolStripMenuItem;
-        private TabPage tabPage1;
-        private TextBox txtChangelog;
         private MenuItem mnuFileImport;
         private MenuItem mnuFileExport;
         private Button clearLogButton;
@@ -92,7 +90,10 @@ namespace MeGUI
         private BitrateCalculator bitrateCalculator = new BitrateCalculator();
         private TabPage tabPage2;
         private JobControl jobControl1;
-
+        private MenuItem mnuHelp;
+        private MenuItem mnuGuide;
+        private MenuItem mnuChangelog;
+        private MenuItem mnuHelpLink;
 
 
 
@@ -119,9 +120,7 @@ namespace MeGUI
             this.logTab = new System.Windows.Forms.TabPage();
             this.clearLogButton = new System.Windows.Forms.Button();
             this.log = new System.Windows.Forms.TextBox();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.txtChangelog = new System.Windows.Forms.TextBox();
-            this.menuItem1 = new System.Windows.Forms.MenuItem();
+            this.mnuMuxers = new System.Windows.Forms.MenuItem();
             this.mnuToolsAdaptiveMuxer = new System.Windows.Forms.MenuItem();
             this.mainMenu1 = new System.Windows.Forms.MainMenu(this.components);
             this.mnuFile = new System.Windows.Forms.MenuItem();
@@ -138,6 +137,10 @@ namespace MeGUI
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.trayIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.trayMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.mnuHelp = new System.Windows.Forms.MenuItem();
+            this.mnuChangelog = new System.Windows.Forms.MenuItem();
+            this.mnuGuide = new System.Windows.Forms.MenuItem();
+            this.mnuHelpLink = new System.Windows.Forms.MenuItem();
             this.openMeGUIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.startToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -149,7 +152,6 @@ namespace MeGUI
             this.inputTab.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.logTab.SuspendLayout();
-            this.tabPage1.SuspendLayout();
             this.trayMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -158,7 +160,6 @@ namespace MeGUI
             this.tabControl1.Controls.Add(this.inputTab);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.logTab);
-            this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
@@ -273,35 +274,12 @@ namespace MeGUI
             this.log.Size = new System.Drawing.Size(472, 348);
             this.log.TabIndex = 0;
             // 
-            // tabPage1
+            // mnuMuxers
             // 
-            this.tabPage1.Controls.Add(this.txtChangelog);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(472, 380);
-            this.tabPage1.TabIndex = 11;
-            this.tabPage1.Text = "Changelog";
-            this.tabPage1.UseVisualStyleBackColor = true;
-            // 
-            // txtChangelog
-            // 
-            this.txtChangelog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtChangelog.Location = new System.Drawing.Point(3, 3);
-            this.txtChangelog.Multiline = true;
-            this.txtChangelog.Name = "txtChangelog";
-            this.txtChangelog.ReadOnly = true;
-            this.txtChangelog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtChangelog.Size = new System.Drawing.Size(466, 374);
-            this.txtChangelog.TabIndex = 0;
-            this.txtChangelog.WordWrap = false;
-            // 
-            // menuItem1
-            // 
-            this.menuItem1.Index = 0;
-            this.menuItem1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.mnuMuxers.Index = 0;
+            this.mnuMuxers.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.mnuToolsAdaptiveMuxer});
-            this.menuItem1.Text = "Muxer";
+            this.mnuMuxers.Text = "Muxer";
             // 
             // mnuToolsAdaptiveMuxer
             // 
@@ -314,7 +292,8 @@ namespace MeGUI
             this.mainMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.mnuFile,
             this.mnuView,
-            this.mnuTools});
+            this.mnuTools,
+            this.mnuHelp});
             // 
             // mnuFile
             // 
@@ -324,32 +303,33 @@ namespace MeGUI
             this.mnuFileImport,
             this.mnuFileExport,
             this.mnuFileExit});
-            this.mnuFile.Shortcut = System.Windows.Forms.Shortcut.CtrlF;
             this.mnuFile.Text = "&File";
             // 
             // mnuFileOpen
             // 
             this.mnuFileOpen.Index = 0;
-            this.mnuFileOpen.Text = "Open";
+            this.mnuFileOpen.Shortcut = System.Windows.Forms.Shortcut.CtrlO;
+            this.mnuFileOpen.Text = "&Open";
             this.mnuFileOpen.Click += new System.EventHandler(this.mnuFileOpen_Click);
             // 
             // mnuFileImport
             // 
             this.mnuFileImport.Index = 1;
-            this.mnuFileImport.Text = "Import Profiles";
+            this.mnuFileImport.Shortcut = System.Windows.Forms.Shortcut.CtrlI;
+            this.mnuFileImport.Text = "&Import Profiles";
             this.mnuFileImport.Click += new System.EventHandler(this.mnuFileImport_Click);
             // 
             // mnuFileExport
             // 
             this.mnuFileExport.Index = 2;
-            this.mnuFileExport.Text = "Export Profiles";
+            this.mnuFileExport.Shortcut = System.Windows.Forms.Shortcut.CtrlE;
+            this.mnuFileExport.Text = "&Export Profiles";
             this.mnuFileExport.Click += new System.EventHandler(this.mnuFileExport_Click);
             // 
             // mnuFileExit
             // 
             this.mnuFileExit.Index = 3;
             this.mnuFileExit.Shortcut = System.Windows.Forms.Shortcut.CtrlX;
-            this.mnuFileExit.ShowShortcut = false;
             this.mnuFileExit.Text = "E&xit";
             this.mnuFileExit.Click += new System.EventHandler(this.mnuFileExit_Click);
             // 
@@ -371,14 +351,15 @@ namespace MeGUI
             // mnuViewMinimizeToTray
             // 
             this.mnuViewMinimizeToTray.Index = 1;
-            this.mnuViewMinimizeToTray.Text = "Minimize to Tray";
+            this.mnuViewMinimizeToTray.Shortcut = System.Windows.Forms.Shortcut.CtrlM;
+            this.mnuViewMinimizeToTray.Text = "&Minimize to Tray";
             this.mnuViewMinimizeToTray.Click += new System.EventHandler(this.mnuViewMinimizeToTray_Click);
             // 
             // mnuTools
             // 
             this.mnuTools.Index = 2;
             this.mnuTools.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.menuItem1,
+            this.mnuMuxers,
             this.mnuToolsSettings});
             this.mnuTools.Shortcut = System.Windows.Forms.Shortcut.CtrlT;
             this.mnuTools.Text = "&Tools";
@@ -390,6 +371,35 @@ namespace MeGUI
             this.mnuToolsSettings.ShowShortcut = false;
             this.mnuToolsSettings.Text = "&Settings";
             this.mnuToolsSettings.Click += new System.EventHandler(this.mnuToolsSettings_Click);
+            // 
+            // mnuHelp
+            // 
+            this.mnuHelp.Index = 3;
+            this.mnuHelp.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.mnuChangelog,
+            this.mnuGuide,
+            this.mnuHelpLink});
+            this.mnuHelp.Text = "&Help";
+            // 
+            // mnuChangelog
+            // 
+            this.mnuChangelog.Index = 0;
+            this.mnuChangelog.Text = "Changelog";
+            this.mnuChangelog.Click += new System.EventHandler(this.mnuChangelog_Click);
+            // 
+            // mnuGuide
+            // 
+            this.mnuGuide.Index = 1;
+            this.mnuGuide.Shortcut = System.Windows.Forms.Shortcut.CtrlG;
+            this.mnuGuide.Text = "&Guide";
+            this.mnuGuide.Click += new System.EventHandler(this.mnuGuide_Click);
+            // 
+            // mnuHelpLink
+            // 
+            this.mnuHelpLink.Index = 2;
+            this.mnuHelpLink.Shortcut = System.Windows.Forms.Shortcut.CtrlH;
+            this.mnuHelpLink.Text = "Help";
+            this.mnuHelpLink.Click += new System.EventHandler(this.menuItem2_Click);
             // 
             // trayIcon
             // 
@@ -471,13 +481,42 @@ namespace MeGUI
             this.tabPage2.ResumeLayout(false);
             this.logTab.ResumeLayout(false);
             this.logTab.PerformLayout();
-            this.tabPage1.ResumeLayout(false);
-            this.tabPage1.PerformLayout();
             this.trayMenu.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
         #endregion
+        /// <summary>
+        /// launches the megui wiki in the default browser
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void mnuGuide_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://www.project357.com/MeGUIwiki/index.php?title=Main_Page");
+        }
+        /// <summary>
+        /// launches the encoder gui forum in the default browser
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void menuItem2_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://forum.doom9.org/forumdisplay.php?f=78");
+        }
+        /// <summary>
+        /// shows the changelog dialog window
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void mnuChangelog_Click(object sender, EventArgs e)
+        {
+            using (Changelog cl = new Changelog())
+            {
+                cl.ShowDialog();
+            }
+        }
+
         public MainForm()
         {
             InitializeComponent();
@@ -672,6 +711,12 @@ namespace MeGUI
             return null;
         }
         #endregion
+        private void clearLogButton_Click(object sender, EventArgs e)
+        {
+            saveLog();
+            logBuilder = new StringBuilder();
+            log.Text = "";
+        }
         #endregion
         #region settings
         /// <summary>
@@ -1148,12 +1193,6 @@ namespace MeGUI
             exporter.ShowDialog();
         }
         #endregion
-        private void clearLogButton_Click(object sender, EventArgs e)
-        {
-            saveLog();
-            logBuilder = new StringBuilder();
-            log.Text = "";
-        }
 
         private void mnuToolsAdaptiveMuxer_Click(object sender, EventArgs e)
         {
@@ -1317,7 +1356,7 @@ namespace MeGUI
             this.dialogManager = new DialogManager(this);
             muxProvider = new MuxProvider(this);
 #warning refactor menus
-            int index = menuItem1.MenuItems.Count;
+            int index = mnuMuxers.MenuItems.Count;
             foreach (IMuxing muxer in PackageSystem.MuxerProviders.Values)
             {
                 MenuItem newMenuItem = new MenuItem();
@@ -1325,7 +1364,7 @@ namespace MeGUI
                 newMenuItem.Tag = muxer;
                 newMenuItem.Index = index;
                 index++;
-                menuItem1.MenuItems.Add(newMenuItem);
+                mnuMuxers.MenuItems.Add(newMenuItem);
                 newMenuItem.Click += new System.EventHandler(this.mnuMuxer_Click);
             }
             index = mnuTools.MenuItems.Count;
@@ -1340,10 +1379,6 @@ namespace MeGUI
                 newMenuItem.Click += new System.EventHandler(this.mnuTool_Click);
             }
             //MessageBox.Show(String.Join("|", this.GetType().Assembly.GetManifestResourceNames()));
-            using (TextReader r = new StreamReader(this.GetType().Assembly.GetManifestResourceStream("MeGUI.Changelog.txt")))
-            {
-                 txtChangelog.Text = r.ReadToEnd();
-            }
         }
 
         private void addPackages()
@@ -1356,6 +1391,7 @@ namespace MeGUI
             PackageSystem.Tools.Register(new OneClickTool());
             PackageSystem.Tools.Register(new D2VCreatorTool());
             PackageSystem.Tools.Register(new AVCLevelTool());
+            PackageSystem.Tools.Register(new VobSubTool());
             PackageSystem.VideoSettingsProviders.Register(new X264SettingsProvider());
             PackageSystem.VideoSettingsProviders.Register(new XviDSettingsProvider());
             PackageSystem.VideoSettingsProviders.Register(new SnowSettingsProvider());

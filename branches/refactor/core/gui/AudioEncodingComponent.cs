@@ -94,10 +94,14 @@ namespace MeGUI
         public string verifyAudioSettings()
         {
             // test for valid input filename
+            int nbEmptyStreams = 0;
             foreach (AudioStream stream in audioStreams)
             {
                 if (string.IsNullOrEmpty(stream.path) && string.IsNullOrEmpty(stream.output))
+                {
+                    nbEmptyStreams++;
                     continue;
+                }
                 string fileErr = MainForm.verifyInputFile(this.AudioInput);
                 if (fileErr != null)
                 {
@@ -117,6 +121,8 @@ namespace MeGUI
                         + aot.Extension;
                 }
             }
+            if (nbEmptyStreams == audioStreams.Length)
+                return "No audio input defined.";
             return null;
         }
 
@@ -200,6 +206,7 @@ namespace MeGUI
                 this.audioStreams[trackNumber].Type = null;
                 this.audioStreams[trackNumber].path = "";
                 this.audioStreams[trackNumber].output = "";
+                this.audioStreams[trackNumber].Delay = 0;
             }
         }
         /// <summary>
@@ -225,13 +232,15 @@ namespace MeGUI
                 this.audioStreams[lastSelectedAudioTrackNumber].output = "";
                 this.audioStreams[lastSelectedAudioTrackNumber].Type = null;
                 this.audioStreams[lastSelectedAudioTrackNumber].settings = null;
+                this.audioStreams[lastSelectedAudioTrackNumber].Delay = 0;
             }
             else
             {
                 this.audioStreams[lastSelectedAudioTrackNumber].path = this.AudioInput;
                 this.audioStreams[lastSelectedAudioTrackNumber].output = this.AudioOutput;
                 this.audioStreams[lastSelectedAudioTrackNumber].Type = CurrentAudioOutputType;
-                this.audioStreams[lastSelectedAudioTrackNumber].settings = (AudioCodec.SelectedItem as IAudioSettingsProvider).GetCurrentSettings();
+                this.audioStreams[lastSelectedAudioTrackNumber].settings = (audioCodec.SelectedItem as IAudioSettingsProvider).GetCurrentSettings().clone();
+                //this.audioStreams[lastSelectedAudioTrackNumber].Delay = this.audioStreams[lastSelectedAudioTrackNumber].settings.Delay;
             }
             this.AudioInput = this.audioStreams[current].path;
             this.AudioOutput = this.audioStreams[current].output;
@@ -257,13 +266,19 @@ namespace MeGUI
         /// <param name="e"></param>
         private void queueAudioButton_Click(object sender, System.EventArgs e)
         {
+            this.updateAudioStreams();
             string settingsError = verifyAudioSettings();
             if (settingsError != null)
             {
                 MessageBox.Show(settingsError, "Unsupported configuration", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return;
             }
-            AudioCodecSettings aSettings = this.CurrentAudioSettingsProvider.GetCurrentSettings();
+            AudioCodecSettings aSettings = this.CurrentAudioStream.settings;
+            if (this.CurrentAudioStream.Delay != 0)
+            {
+                aSettings.DelayEnabled = true;
+                aSettings.Delay = this.CurrentAudioStream.Delay;
+            }
             bool start = mainForm.Settings.AutoStartQueue;
             start &= mainForm.JobUtil.AddAudioJob(this.AudioInput, this.AudioOutput, aSettings);
             if (start)
@@ -280,7 +295,7 @@ namespace MeGUI
             this.AudioInput = fileName;
             int del = getDelay(fileName);
             AudioCodecSettings settings = (AudioCodec.SelectedItem as IAudioSettingsProvider).GetCurrentSettings();
-            if (del != 0) // we have a delay we are interested in
+            /*if (del != 0) // we have a delay we are interested in
             {
                 settings.DelayEnabled = true;
                 settings.Delay = del;
@@ -288,8 +303,9 @@ namespace MeGUI
             else
             {
                 settings.DelayEnabled = false;
-            }
+            }*/
             this.AudioOutput = Path.ChangeExtension(fileName, this.CurrentAudioOutputType.Extension);
+            this.updateAudioStreams();
         }
         /// <summary>
         /// Selects the current audio stream from audioStreams and gets/sets it.
@@ -316,8 +332,9 @@ namespace MeGUI
             AudioStream stream = new AudioStream();
             stream.path = this.AudioInput;
             stream.output = this.AudioOutput;
-            stream.settings = this.CurrentAudioSettingsProvider.GetCurrentSettings();
+            stream.settings = this.CurrentAudioSettingsProvider.GetCurrentSettings().clone();
             stream.Type = (this.audioContainer.SelectedItem as AudioType);
+            stream.Delay = getDelay(stream.path); 
             this.CurrentAudioStream = stream;
         }
         private IAudioSettingsProvider CurrentAudioSettingsProvider

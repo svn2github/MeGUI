@@ -49,7 +49,6 @@ namespace MeGUI
     {
         private MainForm mainForm;
         private BitrateCalculator calc;
-        private bool newProfile = false;
         private int oldOneClickProfileIndex = -1;
         private string path;
 
@@ -193,12 +192,14 @@ namespace MeGUI
             if (playbackMethod.SelectedIndex != -1) // if it's -1 it's bogus
             {
                 OneClickProfile prof = this.mainForm.Profiles.OneClickProfiles[this.playbackMethod.SelectedItem.ToString()];
+                this.Settings = prof.Settings;
+                /*
                 if (this.oldOneClickProfileIndex != -1 && !newProfile) // -1 means it's never been touched
                     this.mainForm.Profiles.OneClickProfiles[this.playbackMethod.Items[this.oldOneClickProfileIndex].ToString()].Settings = this.Settings;
                 newProfile = false;
                 this.Settings = prof.Settings;
                 this.oldOneClickProfileIndex = this.playbackMethod.SelectedIndex;
-                this.playbackMethod.SelectAll();
+                this.playbackMethod.SelectAll();*/
             }
         }
 
@@ -247,16 +248,16 @@ namespace MeGUI
 
         private void newProfileButton_Click(object sender, EventArgs e)
         {
-            if (this.playbackMethod.Text.Equals(""))
-            {
-                MessageBox.Show("Please give the profile a name", "Empty name for profile", MessageBoxButtons.OK);
+            string profileName = Microsoft.VisualBasic.Interaction.InputBox("Please give the profile a name", "Please give the profile a name", "", -1, -1);
+            if (profileName == null)
                 return;
-            }
-            OneClickProfile prof = new OneClickProfile(this.playbackMethod.Text, this.Settings);
+            profileName = profileName.Trim();
+            if (profileName.Length == 0)
+                return;
+            OneClickProfile prof = new OneClickProfile(profileName, this.Settings);
             if (this.mainForm.Profiles.AddOneClickProfile(prof))
             {
                 this.playbackMethod.Items.Add(prof.Name);
-                this.newProfile = true;
                 this.playbackMethod.SelectedIndex = this.playbackMethod.Items.IndexOf(prof.Name);
                 this.oldOneClickProfileIndex = this.playbackMethod.SelectedIndex;
             }
@@ -281,13 +282,34 @@ namespace MeGUI
 
         private void okButton_Click(object sender, EventArgs e)
         {
-            if (this.playbackMethod.SelectedIndex != -1)
+            /*if (this.playbackMethod.SelectedIndex != -1)
             {
                 if (this.mainForm.Profiles.OneClickProfiles[this.playbackMethod.SelectedItem.ToString()] != null)
                 {
                     this.mainForm.Profiles.OneClickProfiles[this.playbackMethod.SelectedItem.ToString()].Settings = this.Settings;
                     mainForm.Settings.OneClickProfileName = playbackMethod.Text;
                 }
+            }*/
+        }
+
+        private void updateButton_Click(object sender, EventArgs e)
+        {
+            if (playbackMethod.SelectedIndex != -1) // if it's -1 it's bogus
+            {
+                OneClickProfile prof = this.mainForm.Profiles.OneClickProfiles[this.playbackMethod.SelectedItem.ToString()];
+                prof.Settings = this.Settings;
+                /*
+                if (this.oldOneClickProfileIndex != -1 && !newProfile) // -1 means it's never been touched
+                    this.mainForm.Profiles.OneClickProfiles[this.playbackMethod.Items[this.oldOneClickProfileIndex].ToString()].Settings = this.Settings;
+                newProfile = false;
+                this.Settings = prof.Settings;
+                this.oldOneClickProfileIndex = this.playbackMethod.SelectedIndex;
+                this.playbackMethod.SelectAll();*/
+            }
+            else
+            {
+                MessageBox.Show("You must select a profile to update!", "No profile selected", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
         }
     }

@@ -1,3 +1,55 @@
+0.2.3.2192
+Commit by Doom9
+	- Subtitle processing via VobSub
+
+0.2.3.2191
+Commit by Doom9
+	- Fixed adaptive muxer when loading a raw video stream (MediaInfo can't handle those, leading to mux scenarios that cause a crash)
+	- Fixed delay and settings being overwritten when audio streams were being changed
+	- Added audio delays for mux-only sources
+	- Added audio delays to one click mode (taken from the filename), applied to both mux-only and encodable audio sources
+	- Added language codes for divxmux (not all languages may be supported, divxmux is even more limited than mp4box)
+	- Added cancel button (ESC) to all dialogs that have a cancel / abort button
+	- Swapped out a few remaining Cancel and OK/Queue buttons
+	- Existing mux job with a muxed video input can now be updated
+	- Added DRC for AC3/DTS sources when "increase volume" is checked
+
+0.2.3.2190
+Commit by Doom9
+	- Added a mod4 horizontal crop mode to the anamorphic cropping modes (to be used instead of non mod16 as this can cause non mod4 horizontal resolutions which cannot be encoded)
+	- Added VobSub subtitles as supported subtitle type to the mkv muxer - this will prevent weird mux paths containing an avi job to include the subs
+	- Added chapter handling to the automatic mux path finding so that chapters will be taken into account in autoencode and the adaptive muxer
+	- Added support for audio track names in the mkv muxer
+	- Enabled vobsub muxing in the mp4 muxer
+	- Added autoencode defaults in the settings (keep in mind that the container selection will work only if you select compatible input types, avc video, mp4 audio and avi output just don't go together ;)
+
+0.2.3.2189
+Commit by Doom9
+	- Audio overhead for AVI files is properly calculated
+	- DTS/MP2 audio no longer throws the bitrate calculator out of whack
+	- Creating a new profile no longer overwrites the currently active one
+	- New way of doing profiles... updating a profile now requires selecting the profile, make changes, press update
+		As a result, config windows no longer serve as profile selectors, you always have to select the desired profile where profiles are being used
+	- Swapped the position of OK and Cancel button to correspond to the Windows standard
+	- Autocrop no longer crashes when the preview is being closed and reopened before cropping
+
+0.2.3.2188
+  - Cosmetic fixes (part 3...)
+  - Swapped Crop and Resize controls position in Avisynth Script Creator window to better represent the correct workflow
+
+0.2.3.2187
+Commit by Sharx1976:
+  - Cosmetic fixes (part 2...)
+
+0.2.3.2186
+Commit by Doom9
+  - mp4box / mkvmerge got new split commandlines, adapted megui accordingly
+  - dgindex reports video % instead of film % when video % > 50 starting with v1.4.8, adapted megui to not apply forcefilm in such a case
+  - reshuffled menu shortcuts, megui no longer uses standard shortcuts like CTRL-A/C/V/X
+  - Changelog now has its own dialog
+  - Introduced a help menu with links to the megui wiki and the support forum
+  - Renamed Vorbis container to Ogg since that's the container's name
+
 0.2.3.2185
 Commit by Sharx1976:
   - Several cosmetic fixes

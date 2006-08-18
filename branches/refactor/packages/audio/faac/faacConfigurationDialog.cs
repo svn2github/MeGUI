@@ -143,14 +143,15 @@ namespace MeGUI
 
 		}
 		#endregion
-
-	    protected override Type supportedType
-	    {
-	        get { return typeof(FaacSettings); }
-	    }
-
 	    #region properties
-	    
+        protected override AudioCodecSettings defaultSettings()
+        {
+            return new FaacSettings();
+        }
+        protected override Type supportedType
+        {
+            get { return typeof(FaacSettings); }
+        }
 		/// <summary>
 		/// gets / sets the settings that are being shown in this configuration dialog
 		/// </summary>

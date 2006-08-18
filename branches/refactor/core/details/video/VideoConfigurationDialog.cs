@@ -237,13 +237,16 @@ namespace MeGUI
             VideoProfile prof = this.videoProfile.SelectedItem as VideoProfile;
             if (prof == null)
                 return;
-            if (!object.ReferenceEquals(prof, oldVideoProfile))
+            this.Settings = prof.Settings;
+            /*
+            // update the still selected profile with the current settings
+            if (!object.ReferenceEquals(prof, oldVideoProfile)) 
             {
                 if (oldVideoProfile != null)
                     oldVideoProfile.Settings = this.Settings;
                 this.oldVideoProfile = prof;
                 this.Settings = prof.Settings;
-            }
+            }*/
 
             /*if (this.videoProfile.SelectedIndex != -1) // if it's -1 it's bogus
             {
@@ -299,15 +302,23 @@ namespace MeGUI
             this.videoProfile.Items.Remove(prof);
             this.oldVideoProfile = null;
         }
-
+        /// <summary>
+        /// loads the default settings for the current codec
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void loadDefaultsButton_Click(object sender, EventArgs e)
         {
             Settings = defaultSettings();
         }
-
+        /// <summary>
+        /// accepts the changes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void okButton_Click(object sender, EventArgs e)
         {
-            if (this.videoProfile.SelectedIndex != -1)
+            /*if (this.videoProfile.SelectedIndex != -1)
             {
                 VideoProfile pold = (VideoProfile)videoProfile.SelectedItem;
                 const string tweakSuffix = "Tweaked";
@@ -322,7 +333,6 @@ namespace MeGUI
                         profileManager.AddVideoProfile(new VideoProfile(newName, Settings));
                         videoProfile.Items.Add(profileManager.VideoProfiles[newName]);
                     }
-
                     this.oldVideoProfile = null;
                     this.videoProfile.SelectedItem = profileManager.VideoProfiles[newName];
                 }
@@ -330,7 +340,22 @@ namespace MeGUI
                 {
                     pold.Settings = this.Settings;
                 }
+            }*/
+        }
+        /// <summary>
+        /// updates the currently selected profile with the current settings
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void updateButton_Click(object sender, EventArgs e)
+        {
+            VideoProfile prof = this.videoProfile.SelectedItem as VideoProfile;
+            if (prof == null)
+            {
+                MessageBox.Show("You must select a profile to update!", "No profile selected", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
+            prof.Settings = this.Settings;
         }
         #endregion
     }

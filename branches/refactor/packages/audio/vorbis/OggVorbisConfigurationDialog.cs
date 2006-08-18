@@ -107,9 +107,11 @@ namespace MeGUI
 
         }
         #endregion
-
-
         #region properties
+        protected override AudioCodecSettings defaultSettings()
+        {
+            return new OggVorbisSettings();
+        }
         protected override Type supportedType
         {
             get { return typeof(OggVorbisSettings); }
@@ -132,8 +134,6 @@ namespace MeGUI
             }
         }
         #endregion
-
-
         private void vQuality_ValueChanged(object sender, EventArgs e)
         {
             Decimal q = ((Decimal)vQuality.Value) *10.0M/ vQuality.Maximum;

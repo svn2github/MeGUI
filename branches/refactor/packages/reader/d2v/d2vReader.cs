@@ -136,7 +136,7 @@ namespace MeGUI
 						string fieldOp = line.Substring(16, 1);
 						this.fieldOperation = Int32.Parse(fieldOp);
 					}
-					if (line.IndexOf("FINISHED") != -1)
+					if (line.IndexOf("FINISHED") != -1 && line.IndexOf("FILM") != -1) // dgindex now reports VIDEO % if it's > 50%
 					{
 						int end = line.IndexOf("%");
 						string percentage = line.Substring(10, end - 10);

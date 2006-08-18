@@ -54,10 +54,12 @@ namespace MeGUI
         private System.Windows.Forms.ComboBox audioProfile;
         private System.Windows.Forms.CheckBox autoGain;
 		private System.Windows.Forms.CheckBox negativeDelay;
-        private CheckBox checkBox1;
+        private CheckBox forceDShowDecoding;
         protected GroupBox encoderGroupBox;
         private EnumProxy[] _avisynthChannelSet;
-        private CheckBox checkBox3;
+        private CheckBox improvedAccuracy;
+        private Button updateButton;
+        private Button defaultSettingsButton;
 	    
 		/// <summary>
 		/// Required designer variable.
@@ -190,8 +192,8 @@ namespace MeGUI
 		private void InitializeComponent()
 		{
             this.besweetOptionsGroupbox = new System.Windows.Forms.GroupBox();
-            this.checkBox3 = new System.Windows.Forms.CheckBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.improvedAccuracy = new System.Windows.Forms.CheckBox();
+            this.forceDShowDecoding = new System.Windows.Forms.CheckBox();
             this.negativeDelay = new System.Windows.Forms.CheckBox();
             this.autoGain = new System.Windows.Forms.CheckBox();
             this.besweetDelay = new System.Windows.Forms.TextBox();
@@ -202,6 +204,8 @@ namespace MeGUI
             this.cancelButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
             this.profileGroupbox = new System.Windows.Forms.GroupBox();
+            this.updateButton = new System.Windows.Forms.Button();
+            this.defaultSettingsButton = new System.Windows.Forms.Button();
             this.deleteAudioProfileButton = new System.Windows.Forms.Button();
             this.newAudioProfileButton = new System.Windows.Forms.Button();
             this.audioProfile = new System.Windows.Forms.ComboBox();
@@ -214,8 +218,8 @@ namespace MeGUI
             // 
             this.besweetOptionsGroupbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.besweetOptionsGroupbox.Controls.Add(this.checkBox3);
-            this.besweetOptionsGroupbox.Controls.Add(this.checkBox1);
+            this.besweetOptionsGroupbox.Controls.Add(this.improvedAccuracy);
+            this.besweetOptionsGroupbox.Controls.Add(this.forceDShowDecoding);
             this.besweetOptionsGroupbox.Controls.Add(this.negativeDelay);
             this.besweetOptionsGroupbox.Controls.Add(this.autoGain);
             this.besweetOptionsGroupbox.Controls.Add(this.besweetDelay);
@@ -230,26 +234,26 @@ namespace MeGUI
             this.besweetOptionsGroupbox.TabStop = false;
             this.besweetOptionsGroupbox.Text = "Audio Options";
             // 
-            // checkBox3
+            // improvedAccuracy
             // 
-            this.checkBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.checkBox3.AutoSize = true;
-            this.checkBox3.Location = new System.Drawing.Point(16, 93);
-            this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(272, 17);
-            this.checkBox3.TabIndex = 12;
-            this.checkBox3.Text = "Improve Accuracy using 32bit && Float computations";
-            this.checkBox3.UseVisualStyleBackColor = true;
+            this.improvedAccuracy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.improvedAccuracy.AutoSize = true;
+            this.improvedAccuracy.Location = new System.Drawing.Point(16, 93);
+            this.improvedAccuracy.Name = "improvedAccuracy";
+            this.improvedAccuracy.Size = new System.Drawing.Size(272, 17);
+            this.improvedAccuracy.TabIndex = 12;
+            this.improvedAccuracy.Text = "Improve Accuracy using 32bit && Float computations";
+            this.improvedAccuracy.UseVisualStyleBackColor = true;
             // 
-            // checkBox1
+            // forceDShowDecoding
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(16, 16);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(174, 17);
-            this.checkBox1.TabIndex = 8;
-            this.checkBox1.Text = "Force Decoding via DirectShow";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.forceDShowDecoding.AutoSize = true;
+            this.forceDShowDecoding.Location = new System.Drawing.Point(16, 16);
+            this.forceDShowDecoding.Name = "forceDShowDecoding";
+            this.forceDShowDecoding.Size = new System.Drawing.Size(174, 17);
+            this.forceDShowDecoding.TabIndex = 8;
+            this.forceDShowDecoding.Text = "Force Decoding via DirectShow";
+            this.forceDShowDecoding.UseVisualStyleBackColor = true;
             // 
             // negativeDelay
             // 
@@ -323,7 +327,7 @@ namespace MeGUI
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(252, 338);
+            this.cancelButton.Location = new System.Drawing.Point(315, 365);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(48, 23);
             this.cancelButton.TabIndex = 4;
@@ -333,7 +337,7 @@ namespace MeGUI
             // 
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.okButton.Location = new System.Drawing.Point(316, 338);
+            this.okButton.Location = new System.Drawing.Point(259, 365);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(48, 23);
             this.okButton.TabIndex = 5;
@@ -344,15 +348,37 @@ namespace MeGUI
             // 
             this.profileGroupbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.profileGroupbox.Controls.Add(this.updateButton);
+            this.profileGroupbox.Controls.Add(this.defaultSettingsButton);
             this.profileGroupbox.Controls.Add(this.deleteAudioProfileButton);
             this.profileGroupbox.Controls.Add(this.newAudioProfileButton);
             this.profileGroupbox.Controls.Add(this.audioProfile);
             this.profileGroupbox.Location = new System.Drawing.Point(8, 284);
             this.profileGroupbox.Name = "profileGroupbox";
-            this.profileGroupbox.Size = new System.Drawing.Size(356, 48);
+            this.profileGroupbox.Size = new System.Drawing.Size(356, 75);
             this.profileGroupbox.TabIndex = 6;
             this.profileGroupbox.TabStop = false;
             this.profileGroupbox.Text = "Profiles";
+            // 
+            // updateButton
+            // 
+            this.updateButton.Location = new System.Drawing.Point(148, 46);
+            this.updateButton.Name = "updateButton";
+            this.updateButton.Size = new System.Drawing.Size(75, 23);
+            this.updateButton.TabIndex = 22;
+            this.updateButton.Text = "Update";
+            this.updateButton.UseVisualStyleBackColor = true;
+            this.updateButton.Click += new System.EventHandler(this.updateButton_Click);
+            // 
+            // defaultSettingsButton
+            // 
+            this.defaultSettingsButton.Location = new System.Drawing.Point(251, 46);
+            this.defaultSettingsButton.Name = "defaultSettingsButton";
+            this.defaultSettingsButton.Size = new System.Drawing.Size(96, 23);
+            this.defaultSettingsButton.TabIndex = 21;
+            this.defaultSettingsButton.Text = "Load Defaults";
+            this.defaultSettingsButton.UseVisualStyleBackColor = true;
+            this.defaultSettingsButton.Click += new System.EventHandler(this.defaultSettingsButton_Click);
             // 
             // deleteAudioProfileButton
             // 
@@ -400,7 +426,8 @@ namespace MeGUI
             // baseAudioConfigurationDialog
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
-            this.ClientSize = new System.Drawing.Size(376, 368);
+            this.CancelButton = this.cancelButton;
+            this.ClientSize = new System.Drawing.Size(376, 395);
             this.Controls.Add(this.encoderGroupBox);
             this.Controls.Add(this.profileGroupbox);
             this.Controls.Add(this.okButton);
@@ -489,8 +516,8 @@ namespace MeGUI
 			get
 			{
                 AudioCodecSettings fas = CodecSettings;
-                fas.ImproveAccuracy = checkBox3.Checked;
-                fas.ForceDecodingViaDirectShow = checkBox1.Checked;
+                fas.ImproveAccuracy = improvedAccuracy.Checked;
+                fas.ForceDecodingViaDirectShow = forceDShowDecoding.Checked;
                 EnumProxy o = besweetDownmixMode.SelectedItem as EnumProxy;
 			    if(o!=null)
 				    fas.DownmixMode = (ChannelMode) o.RealValue ;
@@ -511,8 +538,8 @@ namespace MeGUI
 			{
 				AudioCodecSettings fas = value;
                 besweetDownmixMode.SelectedItem = EnumProxy.Create(fas.DownmixMode);
-                checkBox3.Checked = fas.ImproveAccuracy;
-                checkBox1.Checked = fas.ForceDecodingViaDirectShow;
+                improvedAccuracy.Checked = fas.ImproveAccuracy;
+                forceDShowDecoding.Checked = fas.ForceDecodingViaDirectShow;
 				if (fas.DelayEnabled)
 				{
 					besweetDelayCorrection.Checked = true;
@@ -599,22 +626,23 @@ namespace MeGUI
             AudioProfile prof = this.audioProfile.SelectedItem as AudioProfile;
             if (prof == null)
                 return;
-            if (!object.ReferenceEquals(prof, oldAudioProfile))
+            this.Settings = prof.Settings;
+            /*if (!object.ReferenceEquals(prof, oldAudioProfile))
             {
                 if (oldAudioProfile != null)
                     oldAudioProfile.Settings = Settings;
                 this.oldAudioProfile = prof;
                 this.Settings = prof.Settings;
-            }
+            }*/
 		}
 		#endregion
 		#region buttons
 		private void okButton_Click(object sender, System.EventArgs e)
 		{
-            if (this.oldAudioProfile != null)
+            /*if (this.oldAudioProfile != null)
 			{
                 this.oldAudioProfile.Settings = this.Settings;
-			}
+			}*/
 		}
 		/// <summary>
 		/// handles entires into textfiels, blocks entry of non digit characters
@@ -626,12 +654,39 @@ namespace MeGUI
 			if (! char.IsDigit(e.KeyChar) && (int)Keys.Back != (int)e.KeyChar)
 				e.Handled = true;
 		}
+        /// <summary>
+        /// updates the currently selected profile with the currently active settings
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void updateButton_Click(object sender, EventArgs e)
+        {
+            AudioProfile prof = this.audioProfile.SelectedItem as AudioProfile;
+            if (prof == null)
+            {
+                MessageBox.Show("You must select a profile to update!", "No profile selected", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            prof.Settings = this.Settings;
+        }
+        private void defaultSettingsButton_Click(object sender, EventArgs e)
+        {
+            this.Settings = defaultSettings();
+        }
 		#endregion
 		#region commandline
 		private void besweetDelay_TextChanged(object sender, System.EventArgs e)
 		{
 		}
 		#endregion
-
+        /// <summary>
+        /// Returns a new instance of the codec settings. This must be specific to the type of the config dialog, so
+        /// that it can be set with the Settings.set property.
+        /// </summary>
+        /// <returns>A new instance of xxxSettings</returns>
+        protected virtual AudioCodecSettings defaultSettings()
+        {
+            throw new Exception("A bug in the program -- ProfilableConfigurationDialog.defaultSettings() is not overridden");
+        }
     }
 }

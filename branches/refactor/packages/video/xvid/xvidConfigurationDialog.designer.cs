@@ -198,9 +198,9 @@ namespace MeGUI
             this.xvidOtherGroupBox.Controls.Add(this.xvidAdaptiveQuant);
             this.xvidOtherGroupBox.Controls.Add(this.fourCCLabel);
             this.xvidOtherGroupBox.Controls.Add(this.fourCC);
-            this.xvidOtherGroupBox.Location = new System.Drawing.Point(334, 6);
+            this.xvidOtherGroupBox.Location = new System.Drawing.Point(326, 3);
             this.xvidOtherGroupBox.Name = "xvidOtherGroupBox";
-            this.xvidOtherGroupBox.Size = new System.Drawing.Size(148, 176);
+            this.xvidOtherGroupBox.Size = new System.Drawing.Size(162, 176);
             this.xvidOtherGroupBox.TabIndex = 24;
             this.xvidOtherGroupBox.TabStop = false;
             this.xvidOtherGroupBox.Text = "Other Settings";
@@ -208,7 +208,7 @@ namespace MeGUI
             // xvidThreadsLabel
             // 
             this.xvidThreadsLabel.AutoSize = true;
-            this.xvidThreadsLabel.Location = new System.Drawing.Point(8, 125);
+            this.xvidThreadsLabel.Location = new System.Drawing.Point(13, 117);
             this.xvidThreadsLabel.Name = "xvidThreadsLabel";
             this.xvidThreadsLabel.Size = new System.Drawing.Size(46, 13);
             this.xvidThreadsLabel.TabIndex = 4;
@@ -216,7 +216,7 @@ namespace MeGUI
             // 
             // nbThreads
             // 
-            this.nbThreads.Location = new System.Drawing.Point(70, 123);
+            this.nbThreads.Location = new System.Drawing.Point(75, 115);
             this.nbThreads.Minimum = new decimal(new int[] {
             1,
             0,
@@ -234,7 +234,7 @@ namespace MeGUI
             // 
             // xvidInterlaced
             // 
-            this.xvidInterlaced.Location = new System.Drawing.Point(6, 96);
+            this.xvidInterlaced.Location = new System.Drawing.Point(11, 88);
             this.xvidInterlaced.Name = "xvidInterlaced";
             this.xvidInterlaced.Size = new System.Drawing.Size(104, 24);
             this.xvidInterlaced.TabIndex = 3;
@@ -243,7 +243,7 @@ namespace MeGUI
             // 
             // xvidGreyScale
             // 
-            this.xvidGreyScale.Location = new System.Drawing.Point(6, 72);
+            this.xvidGreyScale.Location = new System.Drawing.Point(11, 64);
             this.xvidGreyScale.Name = "xvidGreyScale";
             this.xvidGreyScale.Size = new System.Drawing.Size(104, 24);
             this.xvidGreyScale.TabIndex = 2;
@@ -252,7 +252,7 @@ namespace MeGUI
             // 
             // xvidTrellisQuant
             // 
-            this.xvidTrellisQuant.Location = new System.Drawing.Point(6, 24);
+            this.xvidTrellisQuant.Location = new System.Drawing.Point(11, 16);
             this.xvidTrellisQuant.Name = "xvidTrellisQuant";
             this.xvidTrellisQuant.Size = new System.Drawing.Size(104, 24);
             this.xvidTrellisQuant.TabIndex = 0;
@@ -261,7 +261,7 @@ namespace MeGUI
             // 
             // xvidAdaptiveQuant
             // 
-            this.xvidAdaptiveQuant.Location = new System.Drawing.Point(6, 48);
+            this.xvidAdaptiveQuant.Location = new System.Drawing.Point(11, 40);
             this.xvidAdaptiveQuant.Name = "xvidAdaptiveQuant";
             this.xvidAdaptiveQuant.Size = new System.Drawing.Size(136, 24);
             this.xvidAdaptiveQuant.TabIndex = 1;
@@ -270,7 +270,7 @@ namespace MeGUI
             // 
             // fourCCLabel
             // 
-            this.fourCCLabel.Location = new System.Drawing.Point(8, 147);
+            this.fourCCLabel.Location = new System.Drawing.Point(13, 139);
             this.fourCCLabel.Name = "fourCCLabel";
             this.fourCCLabel.Size = new System.Drawing.Size(40, 16);
             this.fourCCLabel.TabIndex = 6;
@@ -284,7 +284,7 @@ namespace MeGUI
             "DIVX",
             "DX50",
             "MP4V"});
-            this.fourCC.Location = new System.Drawing.Point(70, 144);
+            this.fourCC.Location = new System.Drawing.Point(75, 136);
             this.fourCC.Name = "fourCC";
             this.fourCC.Size = new System.Drawing.Size(72, 21);
             this.fourCC.TabIndex = 7;
@@ -308,7 +308,7 @@ namespace MeGUI
             this.xvidCodecToolsGroupBox.Controls.Add(this.xvidQPelLabel);
             this.xvidCodecToolsGroupBox.Controls.Add(this.xvidVHQ);
             this.xvidCodecToolsGroupBox.Controls.Add(this.xvidVHQLabel);
-            this.xvidCodecToolsGroupBox.Location = new System.Drawing.Point(6, 182);
+            this.xvidCodecToolsGroupBox.Location = new System.Drawing.Point(0, 182);
             this.xvidCodecToolsGroupBox.Name = "xvidCodecToolsGroupBox";
             this.xvidCodecToolsGroupBox.Size = new System.Drawing.Size(320, 208);
             this.xvidCodecToolsGroupBox.TabIndex = 23;
@@ -476,7 +476,7 @@ namespace MeGUI
             this.xvidGeneralOptionsGroupBox.Controls.Add(this.xvidTurbo);
             this.xvidGeneralOptionsGroupBox.Controls.Add(this.xvidEncodingMode);
             this.xvidGeneralOptionsGroupBox.Controls.Add(this.xvidModeLabel);
-            this.xvidGeneralOptionsGroupBox.Location = new System.Drawing.Point(6, 6);
+            this.xvidGeneralOptionsGroupBox.Location = new System.Drawing.Point(0, 3);
             this.xvidGeneralOptionsGroupBox.Name = "xvidGeneralOptionsGroupBox";
             this.xvidGeneralOptionsGroupBox.Size = new System.Drawing.Size(320, 176);
             this.xvidGeneralOptionsGroupBox.TabIndex = 22;
@@ -650,7 +650,7 @@ namespace MeGUI
             this.xvidOtherOptionsGroupbox.Controls.Add(this.xvidBframeThreshold);
             this.xvidOtherOptionsGroupbox.Location = new System.Drawing.Point(289, 246);
             this.xvidOtherOptionsGroupbox.Name = "xvidOtherOptionsGroupbox";
-            this.xvidOtherOptionsGroupbox.Size = new System.Drawing.Size(193, 136);
+            this.xvidOtherOptionsGroupbox.Size = new System.Drawing.Size(199, 136);
             this.xvidOtherOptionsGroupbox.TabIndex = 3;
             this.xvidOtherOptionsGroupbox.TabStop = false;
             this.xvidOtherOptionsGroupbox.Text = "Other options";
@@ -658,7 +658,7 @@ namespace MeGUI
             // 
             // xvidFrameDropRatio
             // 
-            this.xvidFrameDropRatio.Location = new System.Drawing.Point(128, 94);
+            this.xvidFrameDropRatio.Location = new System.Drawing.Point(139, 99);
             this.xvidFrameDropRatio.Name = "xvidFrameDropRatio";
             this.xvidFrameDropRatio.Size = new System.Drawing.Size(48, 20);
             this.xvidFrameDropRatio.TabIndex = 7;
@@ -666,7 +666,7 @@ namespace MeGUI
             // 
             // xvidFrameDropRatioLabel
             // 
-            this.xvidFrameDropRatioLabel.Location = new System.Drawing.Point(8, 96);
+            this.xvidFrameDropRatioLabel.Location = new System.Drawing.Point(12, 101);
             this.xvidFrameDropRatioLabel.Name = "xvidFrameDropRatioLabel";
             this.xvidFrameDropRatioLabel.Size = new System.Drawing.Size(100, 23);
             this.xvidFrameDropRatioLabel.TabIndex = 6;
@@ -674,7 +674,7 @@ namespace MeGUI
             // 
             // xvidHQAC
             // 
-            this.xvidHQAC.Location = new System.Drawing.Point(160, 69);
+            this.xvidHQAC.Location = new System.Drawing.Point(171, 74);
             this.xvidHQAC.Name = "xvidHQAC";
             this.xvidHQAC.Size = new System.Drawing.Size(16, 24);
             this.xvidHQAC.TabIndex = 5;
@@ -682,7 +682,7 @@ namespace MeGUI
             // 
             // xvidHQACLabel
             // 
-            this.xvidHQACLabel.Location = new System.Drawing.Point(8, 72);
+            this.xvidHQACLabel.Location = new System.Drawing.Point(12, 77);
             this.xvidHQACLabel.Name = "xvidHQACLabel";
             this.xvidHQACLabel.Size = new System.Drawing.Size(100, 23);
             this.xvidHQACLabel.TabIndex = 4;
@@ -690,7 +690,7 @@ namespace MeGUI
             // 
             // xvidChromaOptimizerLabel
             // 
-            this.xvidChromaOptimizerLabel.Location = new System.Drawing.Point(8, 48);
+            this.xvidChromaOptimizerLabel.Location = new System.Drawing.Point(12, 53);
             this.xvidChromaOptimizerLabel.Name = "xvidChromaOptimizerLabel";
             this.xvidChromaOptimizerLabel.Size = new System.Drawing.Size(100, 23);
             this.xvidChromaOptimizerLabel.TabIndex = 2;
@@ -698,7 +698,7 @@ namespace MeGUI
             // 
             // xvidChromaOptimizer
             // 
-            this.xvidChromaOptimizer.Location = new System.Drawing.Point(160, 46);
+            this.xvidChromaOptimizer.Location = new System.Drawing.Point(171, 51);
             this.xvidChromaOptimizer.Name = "xvidChromaOptimizer";
             this.xvidChromaOptimizer.Size = new System.Drawing.Size(16, 24);
             this.xvidChromaOptimizer.TabIndex = 3;
@@ -706,7 +706,7 @@ namespace MeGUI
             // 
             // xvidBframeThresholdLabel
             // 
-            this.xvidBframeThresholdLabel.Location = new System.Drawing.Point(8, 24);
+            this.xvidBframeThresholdLabel.Location = new System.Drawing.Point(12, 29);
             this.xvidBframeThresholdLabel.Name = "xvidBframeThresholdLabel";
             this.xvidBframeThresholdLabel.Size = new System.Drawing.Size(100, 23);
             this.xvidBframeThresholdLabel.TabIndex = 0;
@@ -714,7 +714,7 @@ namespace MeGUI
             // 
             // xvidBframeThreshold
             // 
-            this.xvidBframeThreshold.Location = new System.Drawing.Point(128, 24);
+            this.xvidBframeThreshold.Location = new System.Drawing.Point(139, 29);
             this.xvidBframeThreshold.Maximum = new decimal(new int[] {
             255,
             0,
@@ -748,9 +748,9 @@ namespace MeGUI
             this.xvidRCGroupbox.Controls.Add(this.xvidKeyframeReductionLabel);
             this.xvidRCGroupbox.Controls.Add(this.xvidKeyframeTresholdLabel);
             this.xvidRCGroupbox.Controls.Add(this.xvidIframeBoostLabel);
-            this.xvidRCGroupbox.Location = new System.Drawing.Point(8, 150);
+            this.xvidRCGroupbox.Location = new System.Drawing.Point(0, 150);
             this.xvidRCGroupbox.Name = "xvidRCGroupbox";
-            this.xvidRCGroupbox.Size = new System.Drawing.Size(272, 232);
+            this.xvidRCGroupbox.Size = new System.Drawing.Size(280, 232);
             this.xvidRCGroupbox.TabIndex = 1;
             this.xvidRCGroupbox.TabStop = false;
             this.xvidRCGroupbox.Text = "Rate Control";
@@ -935,9 +935,9 @@ namespace MeGUI
             this.xvidQuantizerGroupbox.Controls.Add(this.xvidMinIQuant);
             this.xvidQuantizerGroupbox.Controls.Add(this.xvidMaxIQuantLabel);
             this.xvidQuantizerGroupbox.Controls.Add(this.xvidMinIQuantLabel);
-            this.xvidQuantizerGroupbox.Location = new System.Drawing.Point(6, 6);
+            this.xvidQuantizerGroupbox.Location = new System.Drawing.Point(0, 3);
             this.xvidQuantizerGroupbox.Name = "xvidQuantizerGroupbox";
-            this.xvidQuantizerGroupbox.Size = new System.Drawing.Size(476, 144);
+            this.xvidQuantizerGroupbox.Size = new System.Drawing.Size(488, 144);
             this.xvidQuantizerGroupbox.TabIndex = 0;
             this.xvidQuantizerGroupbox.TabStop = false;
             this.xvidQuantizerGroupbox.Text = "Quantizers";
@@ -980,7 +980,7 @@ namespace MeGUI
             0,
             0,
             0});
-            this.xvidBframeQuantOffset.Location = new System.Drawing.Point(411, 112);
+            this.xvidBframeQuantOffset.Location = new System.Drawing.Point(428, 112);
             this.xvidBframeQuantOffset.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -1026,7 +1026,7 @@ namespace MeGUI
             // 
             // xvidBframeQuantOffsetLabel
             // 
-            this.xvidBframeQuantOffsetLabel.Location = new System.Drawing.Point(284, 112);
+            this.xvidBframeQuantOffsetLabel.Location = new System.Drawing.Point(301, 112);
             this.xvidBframeQuantOffsetLabel.Name = "xvidBframeQuantOffsetLabel";
             this.xvidBframeQuantOffsetLabel.Size = new System.Drawing.Size(120, 23);
             this.xvidBframeQuantOffsetLabel.TabIndex = 16;
@@ -1042,7 +1042,7 @@ namespace MeGUI
             // 
             // xvidMaxBQuant
             // 
-            this.xvidMaxBQuant.Location = new System.Drawing.Point(419, 64);
+            this.xvidMaxBQuant.Location = new System.Drawing.Point(436, 64);
             this.xvidMaxBQuant.Maximum = new decimal(new int[] {
             31,
             0,
@@ -1096,7 +1096,7 @@ namespace MeGUI
             // 
             // xvidMaxPQuant
             // 
-            this.xvidMaxPQuant.Location = new System.Drawing.Point(419, 40);
+            this.xvidMaxPQuant.Location = new System.Drawing.Point(436, 40);
             this.xvidMaxPQuant.Maximum = new decimal(new int[] {
             31,
             0,
@@ -1114,7 +1114,7 @@ namespace MeGUI
             // 
             // xvidMaxBQuantLabel
             // 
-            this.xvidMaxBQuantLabel.Location = new System.Drawing.Point(284, 66);
+            this.xvidMaxBQuantLabel.Location = new System.Drawing.Point(301, 66);
             this.xvidMaxBQuantLabel.Name = "xvidMaxBQuantLabel";
             this.xvidMaxBQuantLabel.Size = new System.Drawing.Size(136, 16);
             this.xvidMaxBQuantLabel.TabIndex = 14;
@@ -1130,7 +1130,7 @@ namespace MeGUI
             // 
             // xvidMaxPQuantLabel
             // 
-            this.xvidMaxPQuantLabel.Location = new System.Drawing.Point(284, 42);
+            this.xvidMaxPQuantLabel.Location = new System.Drawing.Point(301, 42);
             this.xvidMaxPQuantLabel.Name = "xvidMaxPQuantLabel";
             this.xvidMaxPQuantLabel.Size = new System.Drawing.Size(128, 23);
             this.xvidMaxPQuantLabel.TabIndex = 12;
@@ -1146,7 +1146,7 @@ namespace MeGUI
             // 
             // xvidMaxIQuant
             // 
-            this.xvidMaxIQuant.Location = new System.Drawing.Point(419, 16);
+            this.xvidMaxIQuant.Location = new System.Drawing.Point(436, 16);
             this.xvidMaxIQuant.Maximum = new decimal(new int[] {
             31,
             0,
@@ -1182,7 +1182,7 @@ namespace MeGUI
             // 
             // xvidMaxIQuantLabel
             // 
-            this.xvidMaxIQuantLabel.Location = new System.Drawing.Point(284, 18);
+            this.xvidMaxIQuantLabel.Location = new System.Drawing.Point(301, 18);
             this.xvidMaxIQuantLabel.Name = "xvidMaxIQuantLabel";
             this.xvidMaxIQuantLabel.Size = new System.Drawing.Size(120, 23);
             this.xvidMaxIQuantLabel.TabIndex = 10;
@@ -1206,14 +1206,14 @@ namespace MeGUI
             this.xvidCBRRcGroupBox.Controls.Add(this.xvidRCDelayFactor);
             this.xvidCBRRcGroupBox.Location = new System.Drawing.Point(289, 150);
             this.xvidCBRRcGroupBox.Name = "xvidCBRRcGroupBox";
-            this.xvidCBRRcGroupBox.Size = new System.Drawing.Size(193, 90);
+            this.xvidCBRRcGroupBox.Size = new System.Drawing.Size(199, 90);
             this.xvidCBRRcGroupBox.TabIndex = 2;
             this.xvidCBRRcGroupBox.TabStop = false;
             this.xvidCBRRcGroupBox.Text = "CBR RC";
             // 
             // xvidRCBufferSize
             // 
-            this.xvidRCBufferSize.Location = new System.Drawing.Point(128, 64);
+            this.xvidRCBufferSize.Location = new System.Drawing.Point(139, 64);
             this.xvidRCBufferSize.MaxLength = 9;
             this.xvidRCBufferSize.Name = "xvidRCBufferSize";
             this.xvidRCBufferSize.Size = new System.Drawing.Size(48, 20);
@@ -1223,7 +1223,7 @@ namespace MeGUI
             // 
             // xvidRCBufferSizeLabel
             // 
-            this.xvidRCBufferSizeLabel.Location = new System.Drawing.Point(8, 64);
+            this.xvidRCBufferSizeLabel.Location = new System.Drawing.Point(12, 64);
             this.xvidRCBufferSizeLabel.Name = "xvidRCBufferSizeLabel";
             this.xvidRCBufferSizeLabel.Size = new System.Drawing.Size(100, 23);
             this.xvidRCBufferSizeLabel.TabIndex = 4;
@@ -1231,7 +1231,7 @@ namespace MeGUI
             // 
             // xvidRCAveragingPeriodLabel
             // 
-            this.xvidRCAveragingPeriodLabel.Location = new System.Drawing.Point(8, 40);
+            this.xvidRCAveragingPeriodLabel.Location = new System.Drawing.Point(12, 40);
             this.xvidRCAveragingPeriodLabel.Name = "xvidRCAveragingPeriodLabel";
             this.xvidRCAveragingPeriodLabel.Size = new System.Drawing.Size(100, 23);
             this.xvidRCAveragingPeriodLabel.TabIndex = 2;
@@ -1239,7 +1239,7 @@ namespace MeGUI
             // 
             // xvidRCAveragingPeriod
             // 
-            this.xvidRCAveragingPeriod.Location = new System.Drawing.Point(128, 40);
+            this.xvidRCAveragingPeriod.Location = new System.Drawing.Point(139, 40);
             this.xvidRCAveragingPeriod.Name = "xvidRCAveragingPeriod";
             this.xvidRCAveragingPeriod.Size = new System.Drawing.Size(48, 20);
             this.xvidRCAveragingPeriod.TabIndex = 3;
@@ -1249,7 +1249,7 @@ namespace MeGUI
             // 
             // xvidRCDelayFactorLabel
             // 
-            this.xvidRCDelayFactorLabel.Location = new System.Drawing.Point(8, 16);
+            this.xvidRCDelayFactorLabel.Location = new System.Drawing.Point(12, 16);
             this.xvidRCDelayFactorLabel.Name = "xvidRCDelayFactorLabel";
             this.xvidRCDelayFactorLabel.Size = new System.Drawing.Size(120, 23);
             this.xvidRCDelayFactorLabel.TabIndex = 0;
@@ -1257,7 +1257,7 @@ namespace MeGUI
             // 
             // xvidRCDelayFactor
             // 
-            this.xvidRCDelayFactor.Location = new System.Drawing.Point(128, 16);
+            this.xvidRCDelayFactor.Location = new System.Drawing.Point(139, 16);
             this.xvidRCDelayFactor.Name = "xvidRCDelayFactor";
             this.xvidRCDelayFactor.Size = new System.Drawing.Size(48, 20);
             this.xvidRCDelayFactor.TabIndex = 1;

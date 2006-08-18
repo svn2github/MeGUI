@@ -246,6 +246,55 @@ namespace MeGUI
 				trackID2, input, output);
 			return job;
 		}
+        /// <summary>
+        /// generates a vobsub indexing job
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="output"></param>
+        /// <param name="demuxAllTracks"></param>
+        /// <param name="trackIDs"></param>
+        /// <returns></returns>
+        public SubtitleIndexJob generateSubtitleIndexJob(string input, string output, bool demuxAllTracks, List<int> trackIDs, int pgc)
+        {
+            SubtitleIndexJob job = new SubtitleIndexJob();
+            job.Input = input;
+            job.Output = output;
+            string scriptOutput = Path.GetDirectoryName(output) + @"\" + Path.GetFileNameWithoutExtension(output);
+            job.IndexAllTracks = demuxAllTracks;
+            job.TrackIDs = trackIDs;
+            bool fileError = false;
+            string configFile = Path.ChangeExtension(input, ".vobsub");
+            job.ScriptFile = configFile;
+            using (StreamWriter sw = new StreamWriter(configFile, false, Encoding.Default))
+            {
+                try
+                {
+                    sw.WriteLine(input);
+                    sw.WriteLine(scriptOutput);
+                    sw.WriteLine(pgc);
+                    sw.WriteLine("0"); // we presume angle processing has been done before
+                    if (demuxAllTracks)
+                        sw.WriteLine("ALL");
+                    else
+                    {
+                        foreach (int id in trackIDs)
+                        {
+                            sw.Write(id + " ");
+                        }
+                        sw.Write(sw.NewLine);
+                    }
+                    sw.WriteLine("CLOSE");
+                }
+                catch (Exception)
+                {
+                    fileError = true;
+                }
+            }
+            job.Commandline = CommandLineGenerator.generateVobSubCommandline(configFile);
+            if (fileError)
+                return null;
+            return job;
+        }
         public AviSynthJob generateAvisynthJob(string input)
         {
             AviSynthJob job = new AviSynthJob();
@@ -342,20 +391,21 @@ namespace MeGUI
 			job.Output = stream.output;
 			job.Settings = stream.settings;
 			job.Priority = mainForm.Settings.DefaultPriority;
-#warning No more commandline here!
-            job.Commandline = CommandLineGenerator.generateAudioCommandline(mainForm.Settings, job.Settings, job.Input, job.Output); 
+			// job.Commandline = CommandLineGenerator.generateAudioCommandline(mainForm.Settings, job.Settings, job.Input, job.Output); // no longer necessary
 			return job;
 		}
 
         public MuxJob[] GenerateMuxJobs(VideoStream video, SubStream[] audioStreamsArray, MuxableType[] audioTypes,
             SubStream[] subtitleStreamsArray, MuxableType[] subTypes,
-            string chapterFile, ContainerType container, string output, int splitSize)
+            string chapterFile, MuxableType chapterInputType, ContainerType container, string output, int splitSize)
         {
             MuxProvider prov = mainForm.MuxProvider;
             List<MuxableType> allTypes = new List<MuxableType>();
             allTypes.Add(video.VideoType);
             allTypes.AddRange(audioTypes);
             allTypes.AddRange(subTypes);
+            if (chapterInputType != null)
+                allTypes.Add(chapterInputType);
             MuxPath muxPath = prov.GetMuxPath(container, allTypes.ToArray());
             List<MuxJob> jobs = new List<MuxJob>();
             List<SubStream> subtitleStreams = new List<SubStream>(subtitleStreamsArray);
@@ -411,6 +461,11 @@ namespace MeGUI
                                 //audioStreams.Remove(subStream); // So that we don't mux this too many times
                             }
                         }
+                    }
+                    else if (o.outputType is ChapterType)
+                    {
+                        if ((VideoUtil.guessChapterType(chapterFile) == o.outputType))
+                            mjob.Settings.ChapterFile = chapterFile;
                     }
                 }
                 foreach (SubStream s in mjob.Settings.AudioStreams)

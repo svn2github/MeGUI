@@ -14,7 +14,7 @@ namespace MeGUI
 {
 	public delegate void OpenScriptCallback(string avisynthScript);
     public enum PossibleSources { d2v, mpeg2, vdr, directShow };
-    public enum mod16Method : int { none = -1, resize = 0, overcrop, nonMod16 };
+    public enum mod16Method : int { none = -1, resize = 0, overcrop, nonMod16, mod4Horizontal };
 
     public class AviSynthWindowTool : MeGUI.core.plugins.interfaces.ITool
     {
@@ -340,7 +340,7 @@ namespace MeGUI
             this.resNCropGroupbox.Enabled = false;
             this.resNCropGroupbox.Location = new System.Drawing.Point(3, 160);
             this.resNCropGroupbox.Name = "resNCropGroupbox";
-            this.resNCropGroupbox.Size = new System.Drawing.Size(412, 111);
+            this.resNCropGroupbox.Size = new System.Drawing.Size(412, 112);
             this.resNCropGroupbox.TabIndex = 0;
             this.resNCropGroupbox.TabStop = false;
             this.resNCropGroupbox.Text = "Resolution Crop";
@@ -350,7 +350,7 @@ namespace MeGUI
             this.resize.AutoSize = true;
             this.resize.Checked = true;
             this.resize.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.resize.Location = new System.Drawing.Point(8, 20);
+            this.resize.Location = new System.Drawing.Point(8, 87);
             this.resize.Name = "resize";
             this.resize.Size = new System.Drawing.Size(57, 17);
             this.resize.TabIndex = 9;
@@ -360,7 +360,7 @@ namespace MeGUI
             // 
             // suggestResolution
             // 
-            this.suggestResolution.Location = new System.Drawing.Point(272, 16);
+            this.suggestResolution.Location = new System.Drawing.Point(272, 83);
             this.suggestResolution.Name = "suggestResolution";
             this.suggestResolution.Size = new System.Drawing.Size(120, 24);
             this.suggestResolution.TabIndex = 8;
@@ -375,7 +375,7 @@ namespace MeGUI
             0,
             0,
             0});
-            this.cropLeft.Location = new System.Drawing.Point(112, 64);
+            this.cropLeft.Location = new System.Drawing.Point(112, 35);
             this.cropLeft.Maximum = new decimal(new int[] {
             200,
             0,
@@ -394,7 +394,7 @@ namespace MeGUI
             0,
             0,
             0});
-            this.cropRight.Location = new System.Drawing.Point(224, 64);
+            this.cropRight.Location = new System.Drawing.Point(224, 35);
             this.cropRight.Maximum = new decimal(new int[] {
             200,
             0,
@@ -413,7 +413,7 @@ namespace MeGUI
             0,
             0,
             0});
-            this.cropBottom.Location = new System.Drawing.Point(168, 80);
+            this.cropBottom.Location = new System.Drawing.Point(168, 51);
             this.cropBottom.Maximum = new decimal(new int[] {
             200,
             0,
@@ -432,7 +432,7 @@ namespace MeGUI
             0,
             0,
             0});
-            this.cropTop.Location = new System.Drawing.Point(168, 48);
+            this.cropTop.Location = new System.Drawing.Point(168, 19);
             this.cropTop.Maximum = new decimal(new int[] {
             200,
             0,
@@ -445,7 +445,7 @@ namespace MeGUI
             // 
             // autoCropButton
             // 
-            this.autoCropButton.Location = new System.Drawing.Point(304, 64);
+            this.autoCropButton.Location = new System.Drawing.Point(304, 35);
             this.autoCropButton.Name = "autoCropButton";
             this.autoCropButton.Size = new System.Drawing.Size(75, 23);
             this.autoCropButton.TabIndex = 3;
@@ -454,7 +454,7 @@ namespace MeGUI
             // 
             // crop
             // 
-            this.crop.Location = new System.Drawing.Point(8, 49);
+            this.crop.Location = new System.Drawing.Point(8, 20);
             this.crop.Name = "crop";
             this.crop.Size = new System.Drawing.Size(98, 48);
             this.crop.TabIndex = 2;
@@ -468,7 +468,7 @@ namespace MeGUI
             0,
             0,
             0});
-            this.verticalResolution.Location = new System.Drawing.Point(200, 16);
+            this.verticalResolution.Location = new System.Drawing.Point(200, 83);
             this.verticalResolution.Maximum = new decimal(new int[] {
             1200,
             0,
@@ -491,7 +491,7 @@ namespace MeGUI
             0,
             0,
             0});
-            this.horizontalResolution.Location = new System.Drawing.Point(128, 16);
+            this.horizontalResolution.Location = new System.Drawing.Point(128, 83);
             this.horizontalResolution.Maximum = new decimal(new int[] {
             1920,
             0,
@@ -514,7 +514,7 @@ namespace MeGUI
             this.onSaveLoadScript.CheckState = System.Windows.Forms.CheckState.Checked;
             this.onSaveLoadScript.Location = new System.Drawing.Point(8, 385);
             this.onSaveLoadScript.Name = "onSaveLoadScript";
-            this.onSaveLoadScript.Size = new System.Drawing.Size(224, 24);
+            this.onSaveLoadScript.Size = new System.Drawing.Size(230, 24);
             this.onSaveLoadScript.TabIndex = 2;
             this.onSaveLoadScript.Text = "On Save close and load to be encoded";
             // 
@@ -589,8 +589,9 @@ namespace MeGUI
             this.mod16Box.Items.AddRange(new object[] {
             "Resize to mod16",
             "Overcrop to achieve mod16",
-            "Encode non-mod16"});
-            this.mod16Box.Location = new System.Drawing.Point(222, 81);
+            "Encode non-mod16",
+            "Crop mod4 horizontally"});
+            this.mod16Box.Location = new System.Drawing.Point(224, 81);
             this.mod16Box.Name = "mod16Box";
             this.mod16Box.Size = new System.Drawing.Size(157, 21);
             this.mod16Box.TabIndex = 19;
@@ -598,7 +599,7 @@ namespace MeGUI
             // 
             // avsConfigButton
             // 
-            this.avsConfigButton.Location = new System.Drawing.Point(331, 106);
+            this.avsConfigButton.Location = new System.Drawing.Point(333, 108);
             this.avsConfigButton.Name = "avsConfigButton";
             this.avsConfigButton.Size = new System.Drawing.Size(48, 23);
             this.avsConfigButton.TabIndex = 18;
@@ -636,14 +637,14 @@ namespace MeGUI
             // 
             // tvTypeLabel
             // 
-            this.tvTypeLabel.Location = new System.Drawing.Point(276, 54);
+            this.tvTypeLabel.Location = new System.Drawing.Point(276, 52);
             this.tvTypeLabel.Name = "tvTypeLabel";
             this.tvTypeLabel.Size = new System.Drawing.Size(48, 23);
             this.tvTypeLabel.TabIndex = 10;
             // 
             // customDAR
             // 
-            this.customDAR.Location = new System.Drawing.Point(224, 56);
+            this.customDAR.Location = new System.Drawing.Point(224, 54);
             this.customDAR.Name = "customDAR";
             this.customDAR.ReadOnly = true;
             this.customDAR.Size = new System.Drawing.Size(40, 21);
@@ -658,7 +659,7 @@ namespace MeGUI
             "ITU 4:3",
             "1:1",
             "Custom"});
-            this.inputDAR.Location = new System.Drawing.Point(96, 56);
+            this.inputDAR.Location = new System.Drawing.Point(96, 54);
             this.inputDAR.Name = "inputDAR";
             this.inputDAR.Size = new System.Drawing.Size(121, 21);
             this.inputDAR.TabIndex = 8;
@@ -690,7 +691,7 @@ namespace MeGUI
             // 
             // openVideoButton
             // 
-            this.openVideoButton.Location = new System.Drawing.Point(355, 24);
+            this.openVideoButton.Location = new System.Drawing.Point(357, 24);
             this.openVideoButton.Name = "openVideoButton";
             this.openVideoButton.Size = new System.Drawing.Size(24, 23);
             this.openVideoButton.TabIndex = 6;
@@ -781,9 +782,9 @@ namespace MeGUI
             "Field Deinterlace",
             "Field Deinterlace (no blend)",
             "Telecide for PAL"});
-            this.deinterlaceType.Location = new System.Drawing.Point(151, 142);
+            this.deinterlaceType.Location = new System.Drawing.Point(153, 142);
             this.deinterlaceType.Name = "deinterlaceType";
-            this.deinterlaceType.Size = new System.Drawing.Size(254, 21);
+            this.deinterlaceType.Size = new System.Drawing.Size(252, 21);
             this.deinterlaceType.TabIndex = 4;
             // 
             // aviOptGroupBox
@@ -801,7 +802,7 @@ namespace MeGUI
             // 
             // fpsLabel
             // 
-            this.fpsLabel.Location = new System.Drawing.Point(3, 48);
+            this.fpsLabel.Location = new System.Drawing.Point(7, 48);
             this.fpsLabel.Name = "fpsLabel";
             this.fpsLabel.Size = new System.Drawing.Size(25, 13);
             this.fpsLabel.TabIndex = 2;
@@ -809,7 +810,7 @@ namespace MeGUI
             // 
             // fpsBox
             // 
-            this.fpsBox.Location = new System.Drawing.Point(34, 45);
+            this.fpsBox.Location = new System.Drawing.Point(38, 45);
             this.fpsBox.Name = "fpsBox";
             this.fpsBox.Size = new System.Drawing.Size(53, 21);
             this.fpsBox.TabIndex = 1;
@@ -918,7 +919,7 @@ namespace MeGUI
             // 
             // openDLLButton
             // 
-            this.openDLLButton.Location = new System.Drawing.Point(381, 324);
+            this.openDLLButton.Location = new System.Drawing.Point(384, 324);
             this.openDLLButton.Name = "openDLLButton";
             this.openDLLButton.Size = new System.Drawing.Size(24, 23);
             this.openDLLButton.TabIndex = 3;
@@ -930,7 +931,7 @@ namespace MeGUI
             this.dllPath.Location = new System.Drawing.Point(77, 324);
             this.dllPath.Name = "dllPath";
             this.dllPath.ReadOnly = true;
-            this.dllPath.Size = new System.Drawing.Size(288, 21);
+            this.dllPath.Size = new System.Drawing.Size(301, 21);
             this.dllPath.TabIndex = 2;
             // 
             // label1
@@ -1037,7 +1038,8 @@ namespace MeGUI
 			if (videoLoaded)
 			{
 				player.disableIntroAndCredits();
-				    player.Show();
+                reader = player.Reader;
+				player.Show();
 			}
 		}
 		private void saveButton_Click(object sender, System.EventArgs e)
@@ -1567,15 +1569,16 @@ namespace MeGUI
 				this.avsProfile.Items.Clear();
                 foreach (string name in mainForm.Profiles.AvsProfiles.Keys)
                     avsProfile.Items.Add(name);
-				int index = this.avsProfile.Items.IndexOf(acd.CurrentProfile);
+                this.avsProfile.SelectedIndex = -1;
+                this.Settings = acd.Settings;
+				/*int index = this.avsProfile.Items.IndexOf(acd.CurrentProfile);
 				if (index != -1)
-					this.avsProfile.SelectedIndex = index;
+					this.avsProfile.SelectedIndex = index;*/
 			}
 		}
 
 		private void avsProfile_SelectedIndexChanged(object sender, System.EventArgs e)
 		{
-#warning This is just quickfix, please check it!
             if (avsProfile.SelectedItem.ToString().Length > 0)
             {
                 AviSynthProfile prof = this.mainForm.Profiles.AvsProfiles[avsProfile.SelectedItem.ToString()];
@@ -1618,6 +1621,8 @@ namespace MeGUI
                     returnValue.right = (int)cropRight.Value;
                     if (Mod16Method == mod16Method.overcrop)
                         ScriptServer.overcrop(ref returnValue);
+                    else if (Mod16Method == mod16Method.mod4Horizontal)
+                        ScriptServer.cropMod4Horizontal(ref returnValue);
                 }
                 return returnValue;
             }
@@ -1732,7 +1737,7 @@ namespace MeGUI
                 crop.Text = "Crop";
             crop_CheckedChanged(null, null);
 
-            if (Mod16Method == mod16Method.overcrop || Mod16Method  == mod16Method.nonMod16)
+            if (Mod16Method == mod16Method.overcrop || Mod16Method == mod16Method.nonMod16 || Mod16Method == mod16Method.mod4Horizontal)
             {
                 resize.Checked = false;
                 resize.Enabled = false;

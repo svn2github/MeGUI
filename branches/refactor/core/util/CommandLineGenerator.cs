@@ -1038,5 +1038,10 @@ namespace MeGUI
                 return generator(muxSettings);
             return null;
         }
+
+        public static string generateVobSubCommandline(string configFile)
+        {
+            return "vobsub.dll,Configure " + configFile;
+        }
     }
 }

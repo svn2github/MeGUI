@@ -73,6 +73,7 @@ namespace MeGUI
         public AudioCodecSettings settings;
         private AudioType type;
         private long size;
+        private int delay;
         private BitrateManagementMode bitrateMode;
         /// <summary>
         /// gets / sets the size of this stream
@@ -115,6 +116,14 @@ namespace MeGUI
             {
                 bitrateMode = value;
             }
+        }
+        /// <summary>
+        /// gets / sets the delay of the audio stream (delay compared to the start of the video stream)
+        /// </summary>
+        public int Delay
+        {
+            get { return delay; }
+            set { delay = value; }
         }
     }
 

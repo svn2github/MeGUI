@@ -130,6 +130,36 @@ namespace MeGUI
                 string muxedName = Path.Combine(Path.GetDirectoryName(mainForm.VideoIO[1]), Path.GetFileNameWithoutExtension(mainForm.VideoIO[1]) + "-muxed.");
                 this.muxedOutput.Text = Path.ChangeExtension(muxedName, (this.container.SelectedItem as ContainerType).Extension);
                 this.sizeSelection.SelectedIndex = 2;
+
+                if (mainForm.Settings.AedSettings.SplitOutput)
+                {
+                    splitOutput.Checked = true;
+                    splitSize.Text = mainForm.Settings.AedSettings.SplitSize.ToString();
+                }
+                if (mainForm.Settings.AedSettings.FileSizeMode)
+                {
+                    FileSizeRadio.Checked = true;
+                    muxedSizeMBs.Text = mainForm.Settings.AedSettings.FileSize.ToString();
+                }
+                else if (mainForm.Settings.AedSettings.BitrateMode)
+                {
+                    averageBitrateRadio.Checked = true;
+                    projectedBitrateKBits.Text = mainForm.Settings.AedSettings.Bitrate.ToString();
+                }
+                else
+                    noTargetRadio.Checked = true;
+                if (mainForm.Settings.AedSettings.AddAdditionalContent)
+                    addSubsNChapters.Checked = true;
+                foreach (object o in container.Items) // I know this is ugly, but using the ContainerType doesn't work unless we're switching to manual serialization
+                {
+                    if (o.ToString().Equals(mainForm.Settings.AedSettings.Container))
+                    {
+                        container.SelectedItem = o;
+                        break;
+                    }
+                }
+
+
                 return true;
             }
             else
@@ -216,7 +246,7 @@ namespace MeGUI
             // 
             this.noTargetRadio.Location = new System.Drawing.Point(16, 72);
             this.noTargetRadio.Name = "noTargetRadio";
-            this.noTargetRadio.Size = new System.Drawing.Size(197, 18);
+            this.noTargetRadio.Size = new System.Drawing.Size(218, 18);
             this.noTargetRadio.TabIndex = 22;
             this.noTargetRadio.TabStop = true;
             this.noTargetRadio.Text = "No Target Size (use profile settings)";
@@ -301,7 +331,7 @@ namespace MeGUI
             // 
             this.AverageBitrateLabel.Location = new System.Drawing.Point(187, 47);
             this.AverageBitrateLabel.Name = "AverageBitrateLabel";
-            this.AverageBitrateLabel.Size = new System.Drawing.Size(32, 23);
+            this.AverageBitrateLabel.Size = new System.Drawing.Size(47, 23);
             this.AverageBitrateLabel.TabIndex = 10;
             this.AverageBitrateLabel.Text = "kbit/s";
             // 
@@ -352,7 +382,7 @@ namespace MeGUI
             // queueButton
             // 
             this.queueButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.queueButton.Location = new System.Drawing.Point(360, 196);
+            this.queueButton.Location = new System.Drawing.Point(280, 196);
             this.queueButton.Name = "queueButton";
             this.queueButton.Size = new System.Drawing.Size(74, 23);
             this.queueButton.TabIndex = 8;
@@ -424,7 +454,7 @@ namespace MeGUI
             // cancelButton
             // 
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(280, 196);
+            this.cancelButton.Location = new System.Drawing.Point(364, 196);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(72, 23);
             this.cancelButton.TabIndex = 19;
@@ -444,6 +474,7 @@ namespace MeGUI
             // AutoEncodeWindow
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
+            this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(444, 223);
             this.Controls.Add(this.addSubsNChapters);
             this.Controls.Add(this.cancelButton);
@@ -457,7 +488,6 @@ namespace MeGUI
             this.Name = "AutoEncodeWindow";
             this.ShowInTaskbar = false;
             this.Text = "Automatic Encoding";
-            this.TopMost = true;
             this.AutomaticEncodingGroup.ResumeLayout(false);
             this.AutomaticEncodingGroup.PerformLayout();
             this.OutputGroupBox.ResumeLayout(false);
@@ -564,7 +594,7 @@ namespace MeGUI
                     videoStream.NumberOfFrames,
                     videoStream.Framerate,
                     out videoSize);
-#warning check whether codecs use k=1000 or k=1024 for kbits
+#warning check whether codecs use k=1000 or k=1024 for kbits // kick those that still use 1024...
                 this.videoSizeKB.Text = videoSize.ToString();
                 this.projectedBitrateKBits.Text = bitrateKbits.ToString();
             }
@@ -706,7 +736,7 @@ namespace MeGUI
 					splitSize = Int32.Parse(this.splitSize.Text);
 				}
                 if (desiredSizeBytes > 0)
-                    logBuilder.Append("Desired size of this automated encoding series: " + desiredSizeBytes + " bytes, split size: " + splitSize + "\r\n");
+                    logBuilder.Append("Desired size of this automated encoding series: " + desiredSizeBytes + " bytes, split size: " + splitSize + "MB\r\n");
                 else
                     logBuilder.Append("No desired size of this encode. The profile settings will be used");
 				SubStream[] audio;
@@ -722,10 +752,12 @@ namespace MeGUI
                 if (addSubsNChapters.Checked)
 				{
                     AdaptiveMuxWindow amw = new AdaptiveMuxWindow(mainForm);
-                    amw.setMinimizedMode(videoOutput, videoStream.VideoType, jobUtil.getFramerate(videoInput), audio, 
-                        muxTypes, muxedOutput, this.getSplitSize(), cot);
+                    amw.setMinimizedMode(videoOutput, videoStream.VideoType, jobUtil.getFramerate(videoInput), audio,
+                        muxTypes, muxedOutput, splitSize, cot);
                     if (amw.ShowDialog() == DialogResult.OK)
                         amw.getAdditionalStreams(out audio, out subtitles, out chapters, out muxedOutput, out cot);
+                    else // user aborted, abort the whole process
+                        return;
                 }
                 removeStreamsToBeEncoded(ref audio, aStreams);
                 this.vUtil.GenerateJobSeries(this.videoStream, muxedOutput, aStreams, subtitles, chapters,
@@ -834,8 +866,7 @@ namespace MeGUI
                 MessageBox.Show(error, "Unsupported video configuration", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return;
             }
-            if ((error = info.Audio.verifyAudioSettings()) != null)
-            {
+            if ((error = info.Audio.verifyAudioSettings()) != null && !error.Equals("No audio input defined."))            {
                 MessageBox.Show(error, "Unsupported audio configuration", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return;
             }
@@ -863,6 +894,17 @@ namespace MeGUI
                 myVideo.ParY = info.Video.PARY;
                 myVideo.VideoType = info.Video.CurrentMuxableVideoType;
                 myVideo.Settings = vSettings;
+#warning check delays here. Doom9 did them, but I'm not sure how they work
+                foreach (AudioStream aStream in info.Audio.AudioStreams)
+                {
+                    if (aStream.Delay != 0)
+                    {
+                        aStream.settings.DelayEnabled = true;
+                        aStream.settings.Delay = aStream.Delay;
+                    }
+                }
+                info.Audio.AudioStreams[0].Delay = 0;
+                info.Audio.AudioStreams[1].Delay = 0;
                 AutoEncodeWindow aew = new AutoEncodeWindow(myVideo, info.Audio.AudioStreams, info, info.Video.PrerenderJob);
                 if (aew.init())
                     aew.ShowDialog();

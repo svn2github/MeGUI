@@ -25,7 +25,7 @@ using MeGUI.core.plugins.interfaces;
 namespace MeGUI
 {
 	public enum ProcessPriority: int {IDLE=0, NORMAL, HIGH};
-	public enum JobTypes: int {VIDEO=0, AUDIO, MUX, MERGE, INDEX, AVS};
+	public enum JobTypes: int {VIDEO=0, AUDIO, MUX, MERGE, INDEX, AVS, VOBSUB};
     public enum JobStatus: int {WAITING = 0, PROCESSING, POSTPONED, ERROR, ABORTED, DONE };
     // status of job, 0: waiting, 1: processing, 2: postponed, 3: error, 4: aborted, 5: done
 	/// <summary>
@@ -33,7 +33,7 @@ namespace MeGUI
 	/// A job is a collection of all the settings required to start an encoding session
 	/// </summary>
 	[XmlInclude(typeof(VideoJob)), XmlInclude(typeof(AudioJob)), XmlInclude(typeof(MuxJob)), 
-	XmlInclude (typeof(SubStream)), XmlInclude(typeof(IndexJob)), XmlInclude(typeof(AviSynthJob))]
+	XmlInclude (typeof(SubStream)), XmlInclude(typeof(IndexJob)), XmlInclude(typeof(AviSynthJob)), XmlInclude(typeof(SubtitleIndexJob))]
 	public abstract class Job
 	{
         private int position;

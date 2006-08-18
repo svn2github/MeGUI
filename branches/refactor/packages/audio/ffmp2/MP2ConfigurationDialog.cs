@@ -112,10 +112,12 @@ namespace MeGUI
 
         }
         #endregion
-
-
         #region properties
 
+        protected override AudioCodecSettings defaultSettings()
+        {
+            return new MP2Settings();
+        }
         protected override bool IsMultichanelSupported
         {
             get
@@ -146,8 +148,5 @@ namespace MeGUI
             }
         }
         #endregion
-
-
-
     }
 }

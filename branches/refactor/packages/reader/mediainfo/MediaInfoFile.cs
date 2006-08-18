@@ -52,7 +52,7 @@ namespace MeGUI
         private static Dictionary<string, ContainerType> knownContainerDescriptions;
         private IMediaFile videoSourceFile = null;
         private IVideoReader videoReader = null;
-        private int width, height, darX, darY, frameCount;
+        private int width, height, darX = 0, darY = 0, frameCount;
         private bool hasVideo;
         private double fps;
         private VideoCodec vCodec;

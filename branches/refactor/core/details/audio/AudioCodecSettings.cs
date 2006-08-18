@@ -138,6 +138,15 @@ namespace MeGUI
 			get {return autoGain;}
 			set {autoGain = value;}
 		}
+        /// <summary>
+        /// generates a copy of this object
+        /// </summary>
+        /// <returns>the codec specific settings of this object</returns>
+        public virtual AudioCodecSettings clone()
+        {
+            // This method is sutable for all known descendants!
+            return this.MemberwiseClone() as AudioCodecSettings;
+        }
 
 
         ///// <summary>

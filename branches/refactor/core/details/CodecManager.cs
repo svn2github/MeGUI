@@ -225,7 +225,7 @@ namespace MeGUI
         public static readonly AudioType MP4AAC = new AudioType("MP4-AAC", "MP4 AAC Files", "mp4", ContainerType.MP4, AudioCodec.AAC);
         public static readonly AudioType RAWAAC = new AudioType("Raw-AAC", "RAW AAC Files", "aac", null, AudioCodec.AAC);
         public static readonly AudioType MP3 = new AudioType("MP3", "MP3 Files", "mp3", null, AudioCodec.MP3);
-        public static readonly AudioType VORBIS = new AudioType("Ogg Vorbis", "Ogg Vorbis Files", "ogg", null, AudioCodec.VORBIS);
+        public static readonly AudioType VORBIS = new AudioType("Ogg", "Ogg Vorbis Files", "ogg", null, AudioCodec.VORBIS);
         public static readonly AudioType AC3 = new AudioType("AC3", "AC3 Files", "ac3", null, AudioCodec.AC3);
         public static readonly AudioType MP2 = new AudioType("MP2", "MP2 Files", "mp2", null, AudioCodec.MP2);
         public static readonly AudioType DTS = new AudioType("DTS", "DTS Files", "dts", null, AudioCodec.DTS);
@@ -260,6 +260,7 @@ namespace MeGUI
         public static GenericRegisterer<AudioType> AudioTypes = new GenericRegisterer<AudioType>();
         public static GenericRegisterer<SubtitleType> SubtitleTypes = new GenericRegisterer<SubtitleType>();
         public static GenericRegisterer<ContainerType> ContainerTypes = new GenericRegisterer<ContainerType>();
+	public static GenericRegisterer<ChapterType> ChapterTypes = new GenericRegisterer<ChapterType>();
 
         static ContainerManager()
         {
@@ -288,6 +289,9 @@ namespace MeGUI
                 ContainerTypes.Register(ContainerType.MKV) &&
                 ContainerTypes.Register(ContainerType.MP4)))
                 throw new Exception("Failed to register a container type");
+            if (!(
+	            ChapterTypes.Register(ChapterType.OGG_TXT)))
+		        throw new Exception("Failed to register a chapter type");
         }
     }
 

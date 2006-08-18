@@ -43,7 +43,7 @@ namespace MeGUI
             this.settings = settings;
 		}
 
-#region IVideoEncoder Members
+        #region IVideoEncoder Members
 
         public virtual bool setup(Job job, out string error)
         {

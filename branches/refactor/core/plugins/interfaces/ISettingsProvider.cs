@@ -319,7 +319,7 @@ namespace MeGUI
     public class OggVorbisSettingsProvider : AudioSettingsProviderImpl<OggVorbisSettings, OggVorbisConfigurationDialog>
     {
 
-        public OggVorbisSettingsProvider():base("OggVorbis", AudioEncoderType.VORBIS)
+        public OggVorbisSettingsProvider():base("Vorbis", AudioEncoderType.VORBIS)
         {
         }
     }

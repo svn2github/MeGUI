@@ -381,5 +381,37 @@ SelectRangeEvery({3},{4},0)
                 doTopNext = !doTopNext;
             }
         }
+
+        public static void cropMod4Horizontal(ref CropValues crop)
+        {
+            if (crop.left % 2 != 0 && crop.top % 2 != 0 && crop.bottom % 2 != 0 && crop.right % 2 != 0)
+                throw new Exception("Cropping by odd numbers not supported in mod4 horizontal cropping");
+            while ((crop.left + crop.right) % 4 > 0)
+            {
+                if (crop.left > crop.right)
+                {
+                    if (crop.left > 1)
+                    {
+                        crop.left -= 2;
+                    }
+                    else
+                    {
+                        crop.left = 0;
+                    }
+                }
+                else
+                {
+                    if (crop.right > 1)
+                    {
+                        crop.right -= 2;
+                    }
+                    else
+                    {
+                        crop.right = 0;
+                    }
+                }
+            }
+        }
+
     }
 }
