@@ -85,7 +85,6 @@ namespace MeGUI
 			logBuilder = new StringBuilder();
 			gen = new CommandLineGenerator();
 			sizeSelection.Items.AddRange(calc.getPredefinedOutputSizes());
-            this.container.Items.AddRange(muxProvider.GetSupportedContainers().ToArray());
         }
         public AutoEncodeWindow(VideoStream videoStream, AudioStream[] audioStreams, MainForm mainForm, bool prerender)
             : this()
@@ -103,6 +102,7 @@ namespace MeGUI
 			jobUtil = new JobUtil(mainForm);
 			vUtil = new VideoUtil(mainForm);
             muxProvider = mainForm.MuxProvider;
+            container.Items.AddRange(muxProvider.GetSupportedContainers().ToArray());
         }
         /// <summary>
         /// does the final initialization of the dialog

@@ -1384,6 +1384,7 @@ namespace MeGUI
         private void addPackages()
         {
             PackageSystem.Tools.Register(new AviSynthWindowTool());
+            PackageSystem.Tools.Register(new AutoEncodeTool());
             PackageSystem.Tools.Register(new CQMEditorTool());
             PackageSystem.Tools.Register(new CalculatorTool());
             PackageSystem.Tools.Register(new ChapterCreatorTool());

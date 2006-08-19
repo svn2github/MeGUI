@@ -151,19 +151,11 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="App.ico" />
-    <EmbeddedResource Include="AutoEncodeDefaults.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>AutoEncodeDefaults.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Changelog.resx">
       <SubType>Designer</SubType>
       <DependentUpon>Changelog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Changelog.txt" />
-    <EmbeddedResource Include="VobSubIndexWindow.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>VobSubIndexWindow.cs</DependentUpon>
-    </EmbeddedResource>
     <Content Include="Data\ContextHelp.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -175,14 +167,6 @@
     <Compile Include="core\details\audio\baseAudioConfigurationDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="VobSubIndexer.cs" />
-    <Compile Include="VobSubIndexWindow.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="VobSubIndexWindow.Designer.cs">
-      <DependentUpon>VobSubIndexWindow.cs</DependentUpon>
-    </Compile>
-    <Compile Include="SubtitleIndexJob.cs" />
     <Compile Include="Changelog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -350,13 +334,13 @@
     <Compile Include="packages\mux\mp4\MP4BoxMuxer.cs" />
     <Compile Include="packages\reader\d2v\d2vReader.cs" />
     <Compile Include="packages\reader\mediainfo\MediaInfoFile.cs" />
-    <Compile Include="AutoEncodeDefaults.cs">
+    <Compile Include="packages\tools\autoencode\AutoEncodeDefaults.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AutoEncodeDefaults.Designer.cs">
+    <Compile Include="packages\tools\autoencode\AutoEncodeDefaults.Designer.cs">
       <DependentUpon>AutoEncodeDefaults.cs</DependentUpon>
     </Compile>
-    <Compile Include="AutoEncodeDefaultsSettings.cs" />
+    <Compile Include="packages\tools\autoencode\AutoEncodeDefaultsSettings.cs" />
     <Compile Include="packages\tools\autoencode\AutoEncodeWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -388,6 +372,14 @@
     </Compile>
     <Compile Include="packages\tools\oneclick\OneClickWindow.Designer.cs">
       <DependentUpon>OneClickWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="packages\tools\vobsub\SubtitleIndexJob.cs" />
+    <Compile Include="packages\tools\vobsub\VobSubIndexer.cs" />
+    <Compile Include="packages\tools\vobsub\VobSubIndexWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="packages\tools\vobsub\VobSubIndexWindow.Designer.cs">
+      <DependentUpon>VobSubIndexWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="packages\video\lmp4\lavcConfigurationDialog.cs">
       <SubType>Form</SubType>
@@ -531,6 +523,10 @@
       <DependentUpon>avsConfigurationDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="packages\tools\autoencode\AutoEncodeDefaults.resx">
+      <DependentUpon>AutoEncodeDefaults.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="packages\tools\autoencode\AutoEncodeWindow.resx">
       <DependentUpon>AutoEncodeWindow.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -557,6 +553,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="packages\tools\oneclick\OneClickWindow.resx">
       <DependentUpon>OneClickWindow.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="packages\tools\vobsub\VobSubIndexWindow.resx">
+      <DependentUpon>VobSubIndexWindow.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="packages\video\lmp4\lavcConfigurationDialog.resx">
