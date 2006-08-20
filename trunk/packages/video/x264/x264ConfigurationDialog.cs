@@ -17,8 +17,8 @@ namespace MeGUI
         private XmlDocument ContextHelp = new XmlDocument();
         #endregion
         #region start / stop
-        public x264ConfigurationDialog(MainForm mainForm, ProfileManager profileManager, string initialProfile, bool safeProfileAlteration)
-            : base(mainForm, profileManager, initialProfile, safeProfileAlteration)
+        public x264ConfigurationDialog(MainForm mainForm, string initialProfile, bool safeProfileAlteration)
+            : base(mainForm, initialProfile, safeProfileAlteration)
         {
             InitializeComponent();
             AVCLevels al = new AVCLevels();

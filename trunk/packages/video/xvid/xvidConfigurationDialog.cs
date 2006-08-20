@@ -12,8 +12,8 @@ namespace MeGUI
     public partial class xvidConfigurationDialog : VideoConfigurationDialog
     {
         #region start / stop
-        public xvidConfigurationDialog(MainForm mainForm, ProfileManager profileManager, string initialProfile, bool safeProfileAlteration)
-            : base(mainForm, profileManager, initialProfile, safeProfileAlteration)
+        public xvidConfigurationDialog(MainForm mainForm, string initialProfile, bool safeProfileAlteration)
+            : base(mainForm, initialProfile, safeProfileAlteration)
         {
             InitializeComponent();
         }

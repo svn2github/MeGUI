@@ -145,7 +145,7 @@ namespace MeGUI
                 player.Hide();
             VideoCodecSettings settings = CurrentVideoCodecSettingsProvider.GetCurrentSettings();
             string selectedProfile;
-            if (CurrentVideoCodecSettingsProvider.EditSettings(mainForm.Profiles, mainForm.Settings, this.VideoProfile.Text,
+            if (CurrentVideoCodecSettingsProvider.EditSettings(mainForm, this.VideoProfile.Text,
                 this.VideoIO, new int[] { this.introEndFrame, this.creditsStartFrame }, out selectedProfile))
             {
                 this.VideoProfile.Items.Clear();

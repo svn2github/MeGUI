@@ -12,8 +12,8 @@ namespace MeGUI
     public partial class snowConfigurationDialog : VideoConfigurationDialog
     {
         #region start / stop
-        public snowConfigurationDialog(MainForm mainForm, ProfileManager profileManager, string initialProfile, bool safeProfileAlteration)
-            : base(mainForm, profileManager, initialProfile, safeProfileAlteration)
+        public snowConfigurationDialog(MainForm mainForm, string initialProfile, bool safeProfileAlteration)
+            : base(mainForm, initialProfile, safeProfileAlteration)
         {
             InitializeComponent();
         }

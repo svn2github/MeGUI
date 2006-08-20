@@ -29,17 +29,18 @@ namespace MeGUI
         #endregion
         #region start / stop
         public VideoConfigurationDialog()
-            : this(null, new ProfileManager(""), "", false)
+            : this(null, "", false)
         { }
 
-        public VideoConfigurationDialog(MainForm mainForm, ProfileManager manager, string initialProfile, bool safeProfileAlteration)
+        public VideoConfigurationDialog(MainForm mainForm, string initialProfile, bool safeProfileAlteration)
         {
             loaded = false;
             generateCommandline = false;
             InitializeComponent();
             zonesControl.UpdateGUIEvent += new ZonesControl.UpdateConfigGUI(genericUpdate);
             zonesControl.MainForm = mainForm;
-            this.profileManager = manager;
+            if (mainForm != null) this.profileManager = mainForm.Profiles;
+            else this.profileManager = new ProfileManager("");
             this.initialProfile = initialProfile;
             this.safeProfileAlteration = safeProfileAlteration;
             gen = new CommandLineGenerator();

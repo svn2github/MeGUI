@@ -904,7 +904,7 @@ namespace MeGUI
         {
             VideoCodecSettings settings = CurrentVideoCodecSettingsProvider.GetCurrentSettings();
             string selectedProfile;
-            if (CurrentVideoCodecSettingsProvider.EditSettings(mainForm.Profiles, mainForm.Settings,
+            if (CurrentVideoCodecSettingsProvider.EditSettings(mainForm, 
                 this.videoProfile.Text, new string[] {"input", "output" }, 
                 new int[] { -1, -1 }, out selectedProfile))
             {

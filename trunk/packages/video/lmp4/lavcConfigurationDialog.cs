@@ -12,8 +12,8 @@ namespace MeGUI
     public partial class lavcConfigurationDialog : VideoConfigurationDialog
     {
         #region start / stop
-        public lavcConfigurationDialog(MainForm mainForm, ProfileManager profileManager, string initialProfile, bool safeProfileAlteration)
-            : base(mainForm, profileManager, initialProfile, safeProfileAlteration)
+        public lavcConfigurationDialog(MainForm mainForm, string initialProfile, bool safeProfileAlteration)
+            : base(mainForm, initialProfile, safeProfileAlteration)
         {
             InitializeComponent();
         }

@@ -79,7 +79,7 @@ namespace MeGUI
         /// </summary>
         /// <param name="settings"></param>
         void LoadSettings(VideoCodecSettings settings);
-        bool EditSettings(ProfileManager profileManager, MeGUISettings settings, string initialProfile, string[] videoIO, int[] creditsAndIntroFrames, out string selectedProfile);
+        bool EditSettings(MainForm mF, string initialProfile, string[] videoIO, int[] creditsAndIntroFrames, out string selectedProfile);
     }
 
     /// <summary>
@@ -149,14 +149,14 @@ namespace MeGUI
             return settings.MencoderPath;
         }
 
-        bool IVideoSettingsProvider.EditSettings(ProfileManager profileManager, MeGUISettings settings, string initialProfile, string[] videoIO, int[] creditsAndIntroFrames, out string selectedProfile)
+        bool IVideoSettingsProvider.EditSettings(MainForm mainForm, string initialProfile, string[] videoIO, int[] creditsAndIntroFrames, out string selectedProfile)
         {
             selectedProfile = null;
-            using (TConfigurationDialog scd = (TConfigurationDialog)System.Activator.CreateInstance(typeof(TConfigurationDialog),profileManager, initialProfile, settings.SafeProfileAlteration))
+            using (TConfigurationDialog scd = (TConfigurationDialog)System.Activator.CreateInstance( typeof(TConfigurationDialog),mainForm, initialProfile, mainForm.Settings.SafeProfileAlteration))
             {
                 scd.Input = videoIO[0];
                 scd.Output = videoIO[1];
-                scd.EncoderPath = EncoderPath(settings);
+                scd.EncoderPath = EncoderPath(mainForm.Settings);
                 scd.Settings = this.settings;
                 scd.IntroEndFrame = creditsAndIntroFrames[0];
                 scd.CreditsStartFrame = creditsAndIntroFrames[1];
