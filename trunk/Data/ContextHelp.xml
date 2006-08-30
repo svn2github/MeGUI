@@ -271,16 +271,16 @@ more informed choices on the finial pass.</Advanced>
 		<qcomp name="Quantizer Curve Compression">
 			<Advanced>
 Regulates how much the quality can fluctuate within the target Average Bit Rate that
-has been set. Lower settings constrict quality changes, producing a file that will have
+has been set. Higher settings constrict quality changes, producing a file that will have
 a more constant quality throughout, while reducing the codec's ability to adapt to complex
-scenes where loss of detail may not be as important. Higher settings increase variability
+scenes where loss of detail may not be as important. Lower settings increase variability
 of quality, which may improve visual quality throughout the video by reducing quality
 where fine detail can't be seen and increasing it where fine detail is more noticeable.
-Setting this to 0 would result in constant quality. Setting this to 1 would create highly
+Setting this to 1 would result in constant quality. Setting this to 0 would create highly
 erratic quality changes.</Advanced>
 			<Basic>
-Allowed variance of average quantizer (or quality). Lower values indicate less variance,
-while higher values indicate more variance. Note: 0 indicates constant quality while 1
+Allowed variance of average quantizer (or quality). Higher values indicate less variance,
+while lower values indicate more variance. Note: 1 indicates constant quality while 0
 indicates maximum fluctuation.</Basic>
 			<Recommended>0.60</Recommended>
 			<Default>0.60</Default>
