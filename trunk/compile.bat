@@ -26,9 +26,10 @@ copy MediaInfo.dll .\Dist\libs
 copy MediaInfoWrapper.dll .\Dist\libs
 md Dist\avswrapper
 copy AviSynthWrapper.dll .\Dist\avswrapper
-md Dist\updatecopier
-copy updatecopier.exe .\Dist\updatecopier
 md Dist\Data
 copy .\Data\*.xml .\Dist\Data
-
-PAUSE
+md Dist\updatecopier
+cd ..\UpdateCopier
+start /wait compile-updatecopier.bat
+cd ..\trunk
+copy ..\UpdateCopier\updatecopier.exe .\Dist\updatecopier
