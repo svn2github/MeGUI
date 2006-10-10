@@ -20,7 +20,7 @@
 
 using System;
 using System.Xml.Serialization;
-
+using MeGUI.core.plugins.interfaces;
 namespace MeGUI
 {
 	/// <summary>
@@ -58,9 +58,12 @@ namespace MeGUI
         XmlInclude(typeof(FaacSettings)), 
         XmlInclude(typeof(OggVorbisSettings))
     ]
-	public class AudioCodecSettings
+	public class AudioCodecSettings : MeGUI.core.plugins.interfaces.GenericSettings
 	{
-	    
+        public string getSettingsType()
+        {
+            return "Audio";
+        }
 		private ChannelMode downmixMode;
 		private BitrateManagementMode bitrateMode;
 		private int bitrate, delay;
@@ -142,7 +145,12 @@ namespace MeGUI
         /// generates a copy of this object
         /// </summary>
         /// <returns>the codec specific settings of this object</returns>
-        public virtual AudioCodecSettings clone()
+        public GenericSettings baseClone()
+        {
+            return clone();
+        }
+        
+        public AudioCodecSettings clone()
         {
             // This method is sutable for all known descendants!
             return this.MemberwiseClone() as AudioCodecSettings;

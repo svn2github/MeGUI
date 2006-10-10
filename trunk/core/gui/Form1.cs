@@ -1042,7 +1042,7 @@ namespace MeGUI
         {
 #warning fix bitrate calculator
 /*            OneClickWindow ocmt = new OneClickWindow(this, VideoProfile.SelectedIndex,
-                AudioProfile.SelectedIndex, jobUtil, 
+                GenericProfile<AudioCodecSettings>.SelectedIndex, jobUtil, 
                 videoEncodingComponent1.VideoEncoderProvider, 
                 audioEncodingComponent1.AudioEncoderProvider);
             ocmt.Input = fileName;
@@ -1345,14 +1345,14 @@ namespace MeGUI
             this.profileManager = new ProfileManager(this.path);
             this.profileManager.LoadProfiles(Video.VideoProfile, Audio.AudioProfile);
             this.mediaFileFactory = new MediaFileFactory(this);
-            this.loadSettings();
             addPackages();
-            jobControl1.MainForm = this;
-            jobControl1.loadJobs();
             videoEncodingComponent1.MainForm = this;
             videoEncodingComponent1.InitializeDropdowns();
             audioEncodingComponent1.MainForm = this;
             audioEncodingComponent1.InitializeDropdowns();
+            this.loadSettings();
+            jobControl1.MainForm = this;
+            jobControl1.loadJobs();
             this.dialogManager = new DialogManager(this);
             muxProvider = new MuxProvider(this);
 #warning refactor menus

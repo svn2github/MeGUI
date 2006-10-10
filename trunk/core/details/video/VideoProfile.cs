@@ -19,21 +19,21 @@
 // ****************************************************************************
 
 using System;
-
+#warning empty file
 namespace MeGUI
 {
-	/// <summary>
+/*	/// <summary>
 	/// Contains all the info from a video profile
 	/// </summary>
-	public class VideoProfile : Profile
+    public class GenericProfile<VideoCodecSettings>
 	{
 		private VideoCodecSettings settings;
 
-		public VideoProfile()
+		public GenericProfile<VideoCodecSettings>()
 		{
 			this.Name = "Default";
 		}
-		public VideoProfile(string name, VideoCodecSettings settings)
+		public GenericProfile<VideoCodecSettings>(string name, VideoCodecSettings settings)
 		{
 			this.Name = name;
 			this.settings = settings;
@@ -47,9 +47,9 @@ namespace MeGUI
         {
             return Name;
         }
-        public VideoProfile clone()
+        public GenericProfile<VideoCodecSettings> clone()
         {
-            return new VideoProfile(this.Name, Settings.clone());
+            return new GenericProfile<VideoCodecSettings>(this.Name, Settings.clone());
         }
-	}
+	}*/
 }

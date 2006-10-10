@@ -2,27 +2,184 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using System.Reflection;
 using System.Xml.Serialization;
 using System.Windows.Forms;
+using MeGUI.core.plugins.interfaces;
 
 namespace MeGUI
 {
     public class ProfileManager
     {
         string path;
-        Dictionary<string, AudioProfile> audioProfiles;
-        Dictionary<string, AviSynthProfile> avsProfiles;
-        Dictionary<string, OneClickProfile> oneClickProfiles;
-        Dictionary<string, VideoProfile> videoProfiles;
+/*        Dictionary<string, GenericProfile<AudioCodecSettings>> audioProfiles;
+        Dictionary<string, GenericProfile<AviSynthSettings>> avsProfiles;
+        Dictionary<string, GenericProfile<OneClickSettings>> oneClickProfiles;
+        Dictionary<string, GenericProfile<VideoCodecSettings>> videoProfiles;*/
+        Dictionary<string, GenericSettings> settingsTypes = new Dictionary<string,GenericSettings>();
+        Dictionary<string, Type> profileTypes = new Dictionary<string,Type>();
+        Dictionary<string, Dictionary<string, Profile>> profiles = new Dictionary<string,Dictionary<string,Profile>>();
+
+        public bool Register(GenericSettings settingsType, Type type)
+        {
+            string name = settingsType.getSettingsType();
+            if (settingsTypes.ContainsKey(name)) return false;
+            System.Diagnostics.Debug.Assert((!profileTypes.ContainsKey(name)) && (!profiles.ContainsKey(name)));
+            settingsTypes[name] = settingsType;
+            profileTypes[name] = type;
+            profiles[name] = new Dictionary<string, Profile>();
+            return true;
+        }
 
         public ProfileManager(string path)
         {
             this.path = path;
-            audioProfiles = new Dictionary<string, AudioProfile>();
-            avsProfiles = new Dictionary<string, AviSynthProfile>();
-            oneClickProfiles = new Dictionary<string, OneClickProfile>();
-            videoProfiles = new Dictionary<string, VideoProfile>();
-        } 
+            Register(new x264Settings(), typeof(GenericProfile<VideoCodecSettings>));
+            Register(new AudioCodecSettings(), typeof(GenericProfile<AudioCodecSettings>));
+            Register(new OneClickSettings(), typeof(GenericProfile<OneClickSettings>));
+            Register(new AviSynthSettings(), typeof(GenericProfile<OneClickSettings>));
+        }
+        #region loading and saving
+        public void LoadProfiles(ComboBox video, ComboBox audio)
+        {
+            loadProfiles();
+            foreach (GenericProfile<VideoCodecSettings> vProf in VideoProfiles.Values)
+            {
+                video.Items.Add(vProf.Name);
+            }
+            foreach (GenericProfile<AudioCodecSettings> aProf in AudioProfiles.Values)
+            {
+                audio.Items.Add(aProf.Name);
+            }
+        }
+        /// <summary>
+        /// saves all the profiles
+        /// this is called when the program exists and ensures that all
+        /// currently defined profiles are saved, overwriting currently existing ones
+        /// </summary>
+        public void SaveProfiles()
+        {
+            foreach (Dictionary<string, Profile> profileSet in profiles.Values)
+            {
+                foreach (Profile prof in profileSet.Values)
+                {
+                    saveProfile(prof);
+                }
+            }
+        }
+        private void loadProfiles()
+        {
+            foreach (GenericSettings type in settingsTypes.Values)
+            {
+                string profilePath = path + @"\profiles\" + type.getSettingsType();
+                if (!Directory.Exists(profilePath))
+                    Directory.CreateDirectory(profilePath);
+                DirectoryInfo di = new DirectoryInfo(profilePath);
+                FileInfo[] files = di.GetFiles("*.xml");
+                foreach (FileInfo fi in files)
+                {
+                    string fileName = fi.FullName;
+                    if (Path.GetFileNameWithoutExtension(fileName) != "") // additional check to ensure that rogue profiles are not loaded
+                    {
+                        Profile prof = loadProfile(fileName, type.getSettingsType());
+                        if (prof != null)
+                        {
+                            if (profiles[type.getSettingsType()].ContainsKey(prof.Name))
+                                MessageBox.Show(type.getSettingsType() + " profile " + prof.Name + " is has already been loaded\nDiscarding duplicate profile " + fi.FullName, "Duplicate profile name",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            else
+                            {
+                                profiles[type.getSettingsType()].Add(prof.Name, prof);
+                            }
+                        }
+                    }
+                }                
+            }
+		}
+        /// <summary>
+        /// saves a profile to program directory\profiles\profilename.xml
+        /// the serializer mechanism used is xml which yields a humanly readable profile
+        /// </summary>
+        /// <param name="prof">the Profile to be saved</param>
+		private void saveProfile(Profile prof)
+		{
+            if (prof.Name == "")
+                return; // redundant check to eliminate rogue profiles
+			XmlSerializer ser = null;
+			string fileName = ProfilePath(prof);
+			using (Stream s = File.Open(fileName, System.IO.FileMode.Create, System.IO.FileAccess.Write))
+			{
+				try
+				{
+					ser = new XmlSerializer(prof.GetType());
+					ser.Serialize(s, prof);
+				}
+				catch (Exception e)
+				{
+					MessageBox.Show("Profile " + prof.Name + " could not be saved. Error message: " + e.Message, "Error saving profile", MessageBoxButtons.OK);
+				}
+			}
+		}
+        /// <summary>
+        /// loads a profile with a given name from program-directory\profiles\profilename.xml
+        /// </summary>
+        /// <param name="name">name of the profile</param>
+        /// <returns>the loaded Profile or null if the profile could not be loaded</returns>
+		private Profile loadProfile(string name, string type)
+		{
+			XmlSerializer ser = null;
+			using (Stream s = File.OpenRead(name))
+			{
+				try
+				{
+					ser = new XmlSerializer(profileTypes[type]);
+					return (Profile)ser.Deserialize(s);
+				}
+				catch (Exception)
+				{
+					MessageBox.Show("Profile " + name + " could not be loaded. Is it a valid profile created by MeGUI?", "Error loading profile", MessageBoxButtons.OK);
+					return null;
+				}
+			}
+        }
+        #endregion
+        #region individual setting and getting
+        /// <summary>
+        /// delets the audio profile with the given name
+        /// </summary>
+        /// <param name="name">the name of the profile to be deleted</param>
+        public bool DeleteProfile(string name, string type)
+        {
+            if (profiles[name].Remove(name))
+            {
+                string fileName = path + @"\profiles\" + type + "\\" + name + ".xml";
+                if (File.Exists(fileName))
+                    File.Delete(fileName);
+                return true;
+            }
+            else
+            {
+                MessageBox.Show("Profile " + name + " could not be found and can thus not be deleted.", "Error loading profile", MessageBoxButtons.OK);
+                return false;
+            }
+        }
+        /// <summary>
+        /// adds a new audio profile
+        /// </summary>
+        /// <param name="prof">the new profile to be added</param>
+        /// <returns>true if the insertion succeeded, false if not</returns>
+        public bool AddProfile(Profile prof, string type)
+        {
+            if (profiles[type].ContainsKey(prof.Name))
+                return false;
+            else
+            {
+                profiles[type].Add(prof.Name, prof);
+                saveProfile(prof);
+                return true;
+            }
+        }
+        #endregion
         #region helper methods
         /// <summary>
         /// eliminates non allowed characters and replaced them with an underscore
@@ -45,71 +202,54 @@ namespace MeGUI
 
         public string ProfilePath(Profile prof)
         {
-            return ProfilePath(prof.Name, prof.GetType());
+            return ProfilePath(prof, this.path);
         }
 
-        public string ProfilePath(string profName, Type type)
+        public static string ProfilePath(Profile prof, string path)
         {
-            return ProfilePath(profName, type, this.path);
+            return Path.Combine(path, @"profiles\" + prof.BaseSettings.getSettingsType() + "\\" + fixName(prof.Name) + ".xml");
         }
 
-        public static string ProfilePath(string profName, Type type, string path)
-        {
-            if (!path.EndsWith("\\") && !path.EndsWith("/"))
+        /*if (!path.EndsWith("\\") && !path.EndsWith("/"))
             {
                 if (path.Length >= 0)
                     path = path + "\\";
             }
-            if (type == typeof(VideoProfile))
+            if (type == typeof(GenericProfile<VideoCodecSettings>))
                 return path + @"profiles\video\" + fixName(profName) + ".xml";
-            if (type == typeof(AudioProfile))
+            if (type == typeof(GenericProfile<AudioCodecSettings>))
                 return path + @"profiles\audio\" + fixName(profName) + ".xml";
-            if (type == typeof(AviSynthProfile))
+            if (type == typeof(GenericProfile<AviSynthSettings>))
                 return path + @"profiles\avs\" + fixName(profName) + ".xml";
-            if (type == typeof(OneClickProfile))
+            if (type == typeof(GenericProfile<OneClickSettings>))
                 return path + @"profiles\oneclick\" + fixName(profName) + ".xml";
             throw new ArgumentException("Unknown type");
-        }
+        }*/
     
         #endregion
+        #region old
         #region generic loading and saving
-        /// <summary>
-        /// saves all the profiles
-        /// this is called when the program exists and ensures that all
-        /// currently defined profiles are saved, overwriting currently existing ones
-        /// </summary>
-        public void SaveProfiles()
-        {
-            foreach (VideoProfile vProf in videoProfiles.Values)
+
+        /*
+            foreach (GenericProfile<VideoCodecSettings> vProf in videoProfiles.Values)
             {
                 saveVideoProfile(vProf);
             }
-            foreach (AudioProfile aProf in audioProfiles.Values)
+            foreach (GenericProfile<AudioCodecSettings> aProf in audioProfiles.Values)
             {
                 saveAudioProfile(aProf);
             }
-            foreach (AviSynthProfile asProf in avsProfiles.Values)
+            foreach (GenericProfile<AviSynthSettings> asProf in avsProfiles.Values)
             {
                 saveAviSynthProfile(asProf);
             }
-            foreach (OneClickProfile oProf in oneClickProfiles.Values)
+            foreach (GenericProfile<OneClickSettings> oProf in oneClickProfiles.Values)
             {
                 saveOneClickProfile(oProf);
             }
-        }
-        public void LoadProfiles(ComboBox video, ComboBox audio)
-        {
-            LoadProfiles();
-            foreach (VideoProfile vProf in VideoProfiles.Values)
-            {
-                video.Items.Add(vProf.Name);
-            }
-            foreach (AudioProfile aProf in AudioProfiles.Values)
-            {
-                audio.Items.Add(aProf.Name);
-            }
-        }
-        /// <summary>
+        }*/
+
+/*        /// <summary>
         /// loads all the profiles from the harddisk.
         /// Every *.xml file in the profile directory is considered to be a profile
         /// the profile dropdown list is then filled with all the loaded elements
@@ -123,8 +263,9 @@ namespace MeGUI
             this.loadAudioProfiles();
             this.loadAviSynthProfiles();
             this.loadOneClickProfiles();
-        }
+        }*/
         #endregion
+        /*
         #region video
         /// <summary>
         /// loads all the profiles from the harddisk.
@@ -143,7 +284,7 @@ namespace MeGUI
                 string fileName = fi.FullName;
                 if (Path.GetFileNameWithoutExtension(fileName) != "") // additional check to ensure that rogue profiles are not loaded
                 {
-                    VideoProfile prof = this.loadVideoProfile(fileName);
+                    GenericProfile<VideoCodecSettings> prof = this.loadVideoProfile(fileName);
                     if (prof != null)
                     {
                         if (videoProfiles.ContainsKey(prof.Name))
@@ -165,7 +306,7 @@ namespace MeGUI
         /// profile is generic
         /// </summary>
         /// <param name="prof">the Profile to be saved</param>
-        private void saveVideoProfile(VideoProfile prof)
+        private void saveVideoProfile(GenericProfile<VideoCodecSettings> prof)
         {
             if (prof.Name == "")
                 return; // redundant check to eliminate rogue profiles
@@ -176,7 +317,7 @@ namespace MeGUI
                 try
                 {
                     prof.Settings.Zones = new Zone[0];
-                    ser = new XmlSerializer(typeof(VideoProfile));
+                    ser = new XmlSerializer(typeof(GenericProfile<VideoCodecSettings>));
                     ser.Serialize(s, prof);
                 }
                 catch (Exception e)
@@ -190,15 +331,15 @@ namespace MeGUI
         /// </summary>
         /// <param name="name">name of the profile</param>
         /// <returns>the loaded Profile or null if the profile could not be loaded</returns>
-        private VideoProfile loadVideoProfile(string name)
+        private GenericProfile<VideoCodecSettings> loadVideoProfile(string name)
         {
             XmlSerializer ser = null;
             using (Stream s = File.OpenRead(name))
             {
                 try
                 {
-                    ser = new XmlSerializer(typeof(VideoProfile));
-                    return (VideoProfile)ser.Deserialize(s);
+                    ser = new XmlSerializer(typeof(GenericProfile<VideoCodecSettings>));
+                    return (GenericProfile<VideoCodecSettings>)ser.Deserialize(s);
                 }
                 catch (Exception)
                 {
@@ -215,7 +356,7 @@ namespace MeGUI
         {
             if (this.videoProfiles.Remove(name))
             {
-                string fileName = ProfilePath(name, typeof(VideoProfile));
+                string fileName = ProfilePath(name, typeof(GenericProfile<VideoCodecSettings>));
                 if (File.Exists(fileName))
                     File.Delete(fileName);
                 return true;
@@ -231,7 +372,7 @@ namespace MeGUI
         /// </summary>
         /// <param name="prof">the new profile to be added</param>
         /// <returns>true if the insertion succeeded, false if not</returns>
-        public bool AddVideoProfile(VideoProfile prof)
+        public bool AddVideoProfile(GenericProfile<VideoCodecSettings> prof)
         {
             if (this.videoProfiles.ContainsKey(prof.Name))
                 return false;
@@ -259,7 +400,7 @@ namespace MeGUI
 				string fileName = fi.FullName;
                 if (Path.GetFileNameWithoutExtension(fileName) != "") // additional check to ensure that rogue profiles are not loaded
                 {
-				    AudioProfile prof = loadAudioProfile(fileName);
+				    GenericProfile<AudioCodecSettings> prof = loadAudioProfile(fileName);
                     if (prof != null)
                     {
                         if (audioProfiles.ContainsKey(prof.Name))
@@ -278,7 +419,7 @@ namespace MeGUI
         /// the serializer mechanism used is xml which yields a humanly readable profile
         /// </summary>
         /// <param name="prof">the Profile to be saved</param>
-		private void saveAudioProfile(AudioProfile prof)
+		private void saveAudioProfile(GenericProfile<AudioCodecSettings> prof)
 		{
             if (prof.Name == "")
                 return; // redundant check to eliminate rogue profiles
@@ -288,7 +429,7 @@ namespace MeGUI
 			{
 				try
 				{
-					ser = new XmlSerializer(typeof(AudioProfile));
+					ser = new XmlSerializer(typeof(GenericProfile<AudioCodecSettings>));
 					ser.Serialize(s, prof);
 				}
 				catch (Exception e)
@@ -302,15 +443,15 @@ namespace MeGUI
         /// </summary>
         /// <param name="name">name of the profile</param>
         /// <returns>the loaded Profile or null if the profile could not be loaded</returns>
-		private AudioProfile loadAudioProfile(string name)
+		private GenericProfile<AudioCodecSettings> loadAudioProfile(string name)
 		{
 			XmlSerializer ser = null;
 			using (Stream s = File.OpenRead(name))
 			{
 				try
 				{
-					ser = new XmlSerializer(typeof(AudioProfile));
-					return (AudioProfile)ser.Deserialize(s);
+					ser = new XmlSerializer(typeof(GenericProfile<AudioCodecSettings>));
+					return (GenericProfile<AudioCodecSettings>)ser.Deserialize(s);
 				}
 				catch (Exception)
 				{
@@ -343,7 +484,7 @@ namespace MeGUI
         /// </summary>
         /// <param name="prof">the new profile to be added</param>
         /// <returns>true if the insertion succeeded, false if not</returns>
-        public bool AddAudioProfile(AudioProfile prof)
+        public bool AddAudioProfile(GenericProfile<AudioCodecSettings> prof)
         {
             if (this.audioProfiles.ContainsKey(prof.Name))
                 return false;
@@ -361,7 +502,7 @@ namespace MeGUI
         /// </summary>
         /// <param name="prof"></param>
         /// <returns></returns>
-        public bool AddAviSynthProfile(AviSynthProfile prof)
+        public bool AddAviSynthProfile(GenericProfile<AviSynthSettings> prof)
         {
             if (this.avsProfiles.ContainsKey(prof.Name))
                 return false;
@@ -380,7 +521,7 @@ namespace MeGUI
         {
             if (this.avsProfiles.Remove(name))
             {
-                string fileName = ProfilePath(name, typeof(AviSynthProfile));
+                string fileName = ProfilePath(name, typeof(GenericProfile<AviSynthSettings>));
                 if (File.Exists(fileName))
                     File.Delete(fileName);
                 return true;
@@ -404,7 +545,7 @@ namespace MeGUI
             foreach (FileInfo fi in files)
             {
                 string fileName = fi.FullName;
-                AviSynthProfile prof = loadAviSynthProfile(fileName);
+                GenericProfile<AviSynthSettings> prof = loadAviSynthProfile(fileName);
                 if (prof != null)
                 {
                     if (avsProfiles.ContainsKey(prof.Name))
@@ -416,14 +557,14 @@ namespace MeGUI
                     }
                 }
             }
-            if (!this.avsProfiles.ContainsKey(new AviSynthProfile().Name))
-                this.avsProfiles.Add(new AviSynthProfile().Name, new AviSynthProfile());
+            if (!this.avsProfiles.ContainsKey(new GenericProfile<AviSynthSettings>().Name))
+                this.avsProfiles.Add(new GenericProfile<AviSynthSettings>().Name, new GenericProfile<AviSynthSettings>());
         }
         /// <summary>
         /// saves a given AviSynth profile to the profile path
         /// </summary>
         /// <param name="prof">the profile to be saved</param>
-        private void saveAviSynthProfile(AviSynthProfile prof)
+        private void saveAviSynthProfile(GenericProfile<AviSynthSettings> prof)
         {
             if (prof.Name == "")
                 return; // redundant check to eliminate rogue profiles
@@ -433,7 +574,7 @@ namespace MeGUI
             {
                 try
                 {
-                    ser = new XmlSerializer(typeof(AviSynthProfile));
+                    ser = new XmlSerializer(typeof(GenericProfile<AviSynthSettings>));
                     ser.Serialize(s, prof);
                 }
                 catch (Exception e)
@@ -447,15 +588,15 @@ namespace MeGUI
         /// </summary>
         /// <param name="name">the filename of the path</param>
         /// <returns>the profile loaded or null if no profile has been loaded</returns>
-        private AviSynthProfile loadAviSynthProfile(string name)
+        private GenericProfile<AviSynthSettings> loadAviSynthProfile(string name)
         {
             XmlSerializer ser = null;
             using (Stream s = File.OpenRead(name))
             {
                 try
                 {
-                    ser = new XmlSerializer(typeof(AviSynthProfile));
-                    return (AviSynthProfile)ser.Deserialize(s);
+                    ser = new XmlSerializer(typeof(GenericProfile<AviSynthSettings>));
+                    return (GenericProfile<AviSynthSettings>)ser.Deserialize(s);
                 }
                 catch (Exception)
                 {
@@ -471,7 +612,7 @@ namespace MeGUI
         /// </summary>
         /// <param name="prof"></param>
         /// <returns></returns>
-        public bool AddOneClickProfile(OneClickProfile prof)
+        public bool AddOneClickProfile(GenericProfile<OneClickSettings> prof)
         {
             if (this.oneClickProfiles.ContainsKey(prof.Name))
                 return false;
@@ -490,7 +631,7 @@ namespace MeGUI
         {
             if (this.oneClickProfiles.Remove(name))
             {
-                string fileName = ProfilePath(name, typeof(OneClickProfile));
+                string fileName = ProfilePath(name, typeof(GenericProfile<OneClickSettings>));
                 if (File.Exists(fileName))
                     File.Delete(fileName);
                 return true;
@@ -514,7 +655,7 @@ namespace MeGUI
             foreach (FileInfo fi in files)
             {
                 string fileName = fi.FullName;
-                OneClickProfile prof = loadOneClickProfile(fileName);
+                GenericProfile<OneClickSettings> prof = loadOneClickProfile(fileName);
                 if (prof != null)
                 {
                     if (oneClickProfiles.ContainsKey(prof.Name))
@@ -532,15 +673,15 @@ namespace MeGUI
         /// </summary>
         /// <param name="name">the filename of the profile</param>
         /// <returns>the profile or null if there was an error loading</returns>
-        private OneClickProfile loadOneClickProfile(string name)
+        private GenericProfile<OneClickSettings> loadOneClickProfile(string name)
         {
             XmlSerializer ser = null;
             using (Stream s = File.OpenRead(name))
             {
                 try
                 {
-                    ser = new XmlSerializer(typeof(OneClickProfile));
-                    return (OneClickProfile)ser.Deserialize(s);
+                    ser = new XmlSerializer(typeof(GenericProfile<OneClickSettings>));
+                    return (GenericProfile<OneClickSettings>)ser.Deserialize(s);
                 }
                 catch (Exception)
                 {
@@ -553,7 +694,7 @@ namespace MeGUI
         /// saves a one click profile
         /// </summary>
         /// <param name="prof">the profile to be saved</param>
-        private void saveOneClickProfile(OneClickProfile prof)
+        private void saveOneClickProfile(GenericProfile<OneClickSettings> prof)
         {
             if (prof.Name == "")
                 return; // redundant check to eliminate rogue profiles
@@ -563,7 +704,7 @@ namespace MeGUI
             {
                 try
                 {
-                    ser = new XmlSerializer(typeof(OneClickProfile));
+                    ser = new XmlSerializer(typeof(GenericProfile<OneClickSettings>));
                     ser.Serialize(s, prof);
                 }
                 catch (Exception e)
@@ -573,26 +714,51 @@ namespace MeGUI
             }
         }
         #endregion
+         * */
+        #endregion
+        #region my hasher
+        class MyHashTable<TSettings>
+            where TSettings : GenericSettings
+        {
+            private Dictionary<string, Profile> impl;
+            public GenericProfile<TSettings> this[string key]
+            {
+                get
+                {
+                    return (GenericProfile<TSettings>)impl[key];
+                }
+                set
+                {
+                    impl[key] = value;
+                }
+            }
+            MyHashTable(Dictionary<string, Profile> impl)
+            {
+                this.impl = impl;
+            }
+        }
+        #endregion
         #region properties
-        public Dictionary<string, AudioProfile> AudioProfiles
+#warning look at properties here. Work out how to do the types
+        public Dictionary<string, Profile> AudioProfiles
         {
-            get { return audioProfiles; }
-            set { audioProfiles = value; }
+            get { return profiles[new AudioCodecSettings().getSettingsType()]; }
+            set { profiles[new AudioCodecSettings().getSettingsType()] = value; }
         }
-        public Dictionary<string, AviSynthProfile> AvsProfiles
+        public Dictionary<string, Profile> AvsProfiles
         {
-            get { return avsProfiles; }
-            set { avsProfiles = value; }
+            get { return profiles[new AviSynthSettings().getSettingsType()]; }
+            set { profiles[new AviSynthSettings().getSettingsType()] = value; }
         }
-        public Dictionary<string, OneClickProfile> OneClickProfiles
+        public Dictionary<string, Profile> OneClickProfiles
         {
-            get { return oneClickProfiles; }
-            set { oneClickProfiles = value; }
+            get { return profiles[new OneClickSettings().getSettingsType()]; }
+            set { profiles[new OneClickSettings().getSettingsType()] = value; }
         }
-        public Dictionary<string, VideoProfile> VideoProfiles
+        public Dictionary<string, Profile> VideoProfiles
         {
-            get { return videoProfiles; }
-            set { videoProfiles = value; }
+            get { return profiles[new x264Settings().getSettingsType()]; }
+            set { profiles[new x264Settings().getSettingsType()] = value; }
         }
         #endregion
         #region Profile Listing
@@ -600,32 +766,16 @@ namespace MeGUI
         {
             get
             {
-                string[] profileList = new string[AudioProfiles.Count
-                    + VideoProfiles.Count + OneClickProfiles.Count
-                    + AvsProfiles.Count];
-
-                int i = 0;
-                foreach (string key in VideoProfiles.Keys)
+                List<string> profileList = new List<string>();
+                foreach (string key in profiles.Keys)
                 {
-                    profileList[i] = "Video: " + key;
-                    i++;
+                    Dictionary<string, Profile> profileSet = profiles[key];
+                    foreach (string name in profileSet.Keys)
+                    {
+                        profileList.Add(key + ": " + name);
+                    }
                 }
-                foreach (string key in AudioProfiles.Keys)
-                {
-                    profileList[i] = "Audio: " + key;
-                    i++;
-                }
-                foreach (string key in AvsProfiles.Keys)
-                {
-                    profileList[i] = "AviSynth: " + key;
-                    i++;
-                }
-                foreach (string key in OneClickProfiles.Keys)
-                {
-                    profileList[i] = "OneClick: " + key;
-                    i++;
-                }
-                return profileList;
+                return profileList.ToArray();
             }
         }
         public Profile[] AllDependantProfiles(string formattedName)
@@ -634,7 +784,7 @@ namespace MeGUI
             {
                 if (formattedName.StartsWith("Video: "))
                 {
-                    return new Profile[] { VideoProfiles[formattedName.Substring(7)].clone() };
+                    return new Profile[] { VideoProfiles[formattedName.Substring(7)].baseClone() };
                 }
                 else if (formattedName.StartsWith("Audio: "))
                 {
@@ -646,12 +796,12 @@ namespace MeGUI
                 }
                 else if (formattedName.StartsWith("OneClick: "))
                 {
-                    OneClickProfile profile = OneClickProfiles[formattedName.Substring(10)];
+                    GenericProfile<OneClickSettings> profile = (GenericProfile<OneClickSettings>)OneClickProfiles[formattedName.Substring(10)];
                     if (profile.Settings.DontEncodeAudio)
-                        return new Profile[] { profile, VideoProfiles[profile.Settings.VideoProfileName].clone() };
+                        return new Profile[] { profile, VideoProfiles[profile.Settings.VideoProfileName].baseClone() };
                     else
                         return new Profile[] { profile,
-                        VideoProfiles[profile.Settings.VideoProfileName].clone(),
+                        VideoProfiles[profile.Settings.VideoProfileName].baseClone(),
                         AudioProfiles[profile.Settings.AudioProfileName] };
                 }
                 else return null;
@@ -694,9 +844,9 @@ namespace MeGUI
         }
         public string[] RequiredFiles(Profile profile)
         {
-            if (profile is VideoProfile)
+            if (profile is GenericProfile<VideoCodecSettings>)
             {
-                VideoProfile vProfile = profile as VideoProfile;
+                GenericProfile<VideoCodecSettings> vProfile = profile as GenericProfile<VideoCodecSettings>;
                 if (vProfile.Settings is x264Settings)
                 {
                     if ((vProfile.Settings as x264Settings).QuantizerMatrixType == 2) // Custom profile
@@ -758,9 +908,9 @@ namespace MeGUI
 
         public static void FixFileNames(Profile profile, Dictionary<string, string> substitutionTable)
         {
-            if (profile is VideoProfile)
+            if (profile is GenericProfile<VideoCodecSettings>)
             {
-                VideoProfile vProf = profile as VideoProfile;
+                GenericProfile<VideoCodecSettings> vProf = profile as GenericProfile<VideoCodecSettings>;
                 if (vProf.Settings is x264Settings)
                 {
                     x264Settings xSettings = vProf.Settings as x264Settings;
@@ -790,38 +940,32 @@ namespace MeGUI
         }
         public void Add(Profile prof, DialogManager asker)
         {
-            bool succeeded = false;
-            if (prof is VideoProfile)
-                succeeded = AddVideoProfile(prof as VideoProfile);
-            else if (prof is AudioProfile)
-                succeeded = AddAudioProfile(prof as AudioProfile);
-            else if (prof is AviSynthProfile)
-                succeeded = AddAviSynthProfile(prof as AviSynthProfile);
-            else if (prof is OneClickProfile)
-                succeeded = AddOneClickProfile(prof as OneClickProfile);
-            if (!succeeded)
+            if (!AddProfile(prof, prof.BaseSettings.getSettingsType()))
             {
                 if (!asker.overwriteProfile(prof.Name))
                     return;
                 else
                 {
-                    RemoveProfileWithName(prof);
+                    DeleteProfile(prof);
                     Add(prof, asker);
                 }
             }
         }
-        private void RemoveProfileWithName(Profile prof)
+        public bool DeleteProfile(Profile prof)
         {
-            if (prof is VideoProfile)
-                DeleteVideoProfile(prof.Name);
-            else if (prof is AudioProfile)
-                DeleteAudioProfile(prof.Name);
-            else if (prof is AviSynthProfile)
-                DeleteAviSynthProfile(prof.Name);
-            else if (prof is OneClickProfile)
-                DeleteOneClickProfile(prof.Name);
+            return DeleteProfile(prof.Name, prof.BaseSettings.getSettingsType());
         }
         #endregion
+
+        public bool AddProfile(Profile prof)
+        {
+            return AddProfile(prof, prof.BaseSettings.getSettingsType());
+        }
+
+        public bool AddVideoProfile(GenericProfile<VideoCodecSettings> prof)
+        {
+            return AddProfile(prof, prof.BaseSettings.getSettingsType());
+        }
 
     }
 }

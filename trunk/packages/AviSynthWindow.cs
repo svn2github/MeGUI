@@ -1581,7 +1581,7 @@ namespace MeGUI
 		{
             if (avsProfile.SelectedItem.ToString().Length > 0)
             {
-                AviSynthProfile prof = this.mainForm.Profiles.AvsProfiles[avsProfile.SelectedItem.ToString()];
+                GenericProfile<AviSynthSettings> prof = (GenericProfile<AviSynthSettings>)this.mainForm.Profiles.AvsProfiles[avsProfile.SelectedItem.ToString()];
                 this.Settings = prof.Settings;
             }
             else

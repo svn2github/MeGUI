@@ -111,7 +111,7 @@ namespace MeGUI
             {
                 if (!dontEncodeAudio.Checked)
                     containerFormat.Enabled = true;
-                VideoProfile prof = this.mainForm.Profiles.VideoProfiles[this.videoProfile.SelectedItem.ToString()];
+                GenericProfile<VideoCodecSettings> prof = (GenericProfile<VideoCodecSettings>)this.mainForm.Profiles.VideoProfiles[this.videoProfile.SelectedItem.ToString()];
 #warning fix selected index selection
 /*                if (prof.Settings is lavcSettings)
                 {
@@ -141,7 +141,7 @@ namespace MeGUI
         private void containerFormat_SelectedIndexChanged(object sender, EventArgs e)
         {
             this.audioProfile.Items.Clear();
-            foreach (AudioProfile prof in this.mainForm.Profiles.AudioProfiles.Values)
+            foreach (GenericProfile<AudioCodecSettings> prof in this.mainForm.Profiles.AudioProfiles.Values)
             {
                 if (containerFormat.SelectedIndex == 0)
                 {
@@ -191,7 +191,7 @@ namespace MeGUI
         {
             if (playbackMethod.SelectedIndex != -1) // if it's -1 it's bogus
             {
-                OneClickProfile prof = this.mainForm.Profiles.OneClickProfiles[this.playbackMethod.SelectedItem.ToString()];
+                GenericProfile<OneClickSettings> prof = (GenericProfile<OneClickSettings>)this.mainForm.Profiles.OneClickProfiles[this.playbackMethod.SelectedItem.ToString()];
                 this.Settings = prof.Settings;
                 /*
                 if (this.oldOneClickProfileIndex != -1 && !newProfile) // -1 means it's never been touched
@@ -254,8 +254,8 @@ namespace MeGUI
             profileName = profileName.Trim();
             if (profileName.Length == 0)
                 return;
-            OneClickProfile prof = new OneClickProfile(profileName, this.Settings);
-            if (this.mainForm.Profiles.AddOneClickProfile(prof))
+            GenericProfile<OneClickSettings> prof = new GenericProfile<OneClickSettings>(profileName, this.Settings);
+            if (this.mainForm.Profiles.AddProfile(prof))
             {
                 this.playbackMethod.Items.Add(prof.Name);
                 this.playbackMethod.SelectedIndex = this.playbackMethod.Items.IndexOf(prof.Name);
@@ -269,11 +269,11 @@ namespace MeGUI
         {
             if (this.playbackMethod.SelectedIndex != -1) // if it's -1 it's bogus
             {
-                string name = this.playbackMethod.SelectedItem.ToString();
-                if (this.mainForm.Profiles.DeleteOneClickProfile(name))
+                Profile prof = (Profile)this.playbackMethod.SelectedItem;
+                if (this.mainForm.Profiles.DeleteProfile(prof))
                 {
                     this.playbackMethod.BeginUpdate(); // now make GUI changes
-                    this.playbackMethod.Items.Remove(name);
+                    this.playbackMethod.Items.Remove(prof);
                     this.playbackMethod.EndUpdate();
                     this.oldOneClickProfileIndex = -1;
                 }
@@ -296,7 +296,7 @@ namespace MeGUI
         {
             if (playbackMethod.SelectedIndex != -1) // if it's -1 it's bogus
             {
-                OneClickProfile prof = this.mainForm.Profiles.OneClickProfiles[this.playbackMethod.SelectedItem.ToString()];
+                GenericProfile<OneClickSettings> prof = (GenericProfile<OneClickSettings>)this.mainForm.Profiles.OneClickProfiles[this.playbackMethod.SelectedItem.ToString()];
                 prof.Settings = this.Settings;
                 /*
                 if (this.oldOneClickProfileIndex != -1 && !newProfile) // -1 means it's never been touched

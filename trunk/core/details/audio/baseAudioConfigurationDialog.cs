@@ -35,7 +35,7 @@ namespace MeGUI
 	{
 		#region variables
         private ProfileManager profileManager;
-		private AudioProfile oldAudioProfile = null;
+		private GenericProfile<AudioCodecSettings> oldAudioProfile = null;
 		private string path, initialProfile;
 		private string input, output;
 		private MeGUISettings settings;
@@ -173,7 +173,7 @@ namespace MeGUI
 		/// <param name="e"></param>
 		private void OnFormLoad(object sender, System.EventArgs e)
 		{
-            foreach (AudioProfile prof in this.profileManager.AudioProfiles.Values)
+            foreach (GenericProfile<AudioCodecSettings> prof in this.profileManager.AudioProfiles.Values)
             {
                 if (prof.Settings.GetType() == this.supportedType) // those are the profiles we're interested in
                 {
@@ -595,8 +595,8 @@ namespace MeGUI
             profileName = profileName.Trim();
             if (profileName.Length == 0)
                 return;
-            AudioProfile prof = new AudioProfile(profileName, this.Settings);
-            if (this.profileManager.AddAudioProfile(prof))
+            GenericProfile<AudioCodecSettings> prof = new GenericProfile<AudioCodecSettings>(profileName, this.Settings);
+            if (this.profileManager.AddProfile(prof))
             {
                 this.audioProfile.Items.Add(prof);
                 this.audioProfile.SelectedItem = prof;
@@ -613,17 +613,17 @@ namespace MeGUI
 		/// <param name="e"></param>
 		private void deleteAudioProfileButton_Click(object sender, System.EventArgs e)
 		{
-            AudioProfile prof = this.audioProfile.SelectedItem as AudioProfile;
+            GenericProfile<AudioCodecSettings> prof = this.audioProfile.SelectedItem as GenericProfile<AudioCodecSettings>;
             if(prof==null)
                 return;
-            if (!this.profileManager.DeleteAudioProfile(prof.Name))
+            if (!this.profileManager.DeleteProfile(prof))
                 return;
             this.audioProfile.Items.Remove(prof);
             this.oldAudioProfile = null;
 		}
 		private void audioProfile_SelectedIndexChanged(object sender, System.EventArgs e)
 		{
-            AudioProfile prof = this.audioProfile.SelectedItem as AudioProfile;
+            GenericProfile<AudioCodecSettings> prof = this.audioProfile.SelectedItem as GenericProfile<AudioCodecSettings>;
             if (prof == null)
                 return;
             this.Settings = prof.Settings;
@@ -661,7 +661,7 @@ namespace MeGUI
         /// <param name="e"></param>
         private void updateButton_Click(object sender, EventArgs e)
         {
-            AudioProfile prof = this.audioProfile.SelectedItem as AudioProfile;
+            GenericProfile<AudioCodecSettings> prof = this.audioProfile.SelectedItem as GenericProfile<AudioCodecSettings>;
             if (prof == null)
             {
                 MessageBox.Show("You must select a profile to update!", "No profile selected", MessageBoxButtons.OK, MessageBoxIcon.Error);

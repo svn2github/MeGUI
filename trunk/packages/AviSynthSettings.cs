@@ -1,19 +1,33 @@
 using System;
 using System.Text;
-
+using MeGUI.core.plugins.interfaces;
 namespace MeGUI
 {
 	/// <summary>
 	/// Summary description for AviSynthSettings.
 	/// </summary>
-	public class AviSynthSettings
+    public sealed class AviSynthSettings : GenericSettings
 	{
-		private string template;
+        public string getSettingsType()
+        {
+            return "AviSynth";
+        }
+        private string template;
         private ResizeFilterType resizeMethod;
         private DenoiseFilterType denoiseMethod;
         private mod16Method mod16Method;
 		private bool deinterlace, denoise, ivtc, mpeg2deblock, colourCorrect;
         private bool resize;
+
+        public GenericSettings baseClone()
+        {
+            return clone();
+        }
+        
+        public AviSynthSettings clone()
+        {
+            return this.MemberwiseClone() as AviSynthSettings;
+        }
 
         public mod16Method Mod16Method
         {

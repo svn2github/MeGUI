@@ -19,6 +19,8 @@
 // ****************************************************************************
 
 using System;
+using System.Xml.Serialization;
+using MeGUI.core.plugins.interfaces;
 
 namespace MeGUI
 {
@@ -26,7 +28,7 @@ namespace MeGUI
 	/// Superclass of an actual video or audio profile
 	/// defines some basic properties
 	/// </summary>
-	public class Profile
+	public abstract class Profile
 	{
 		private string name; // name of the profile
 		/// <summary>
@@ -53,5 +55,49 @@ namespace MeGUI
         {
             return Name;
         }
+
+        [XmlIgnore]
+        public abstract GenericSettings BaseSettings
+        {
+            get;
+            set;
+        }
+
+        public abstract Profile baseClone();
 	}
+
+    public class GenericProfile<TSettings> : Profile
+        where TSettings : GenericSettings
+    {
+		private TSettings settings;
+
+		public GenericProfile():base()
+		{
+		}
+		public GenericProfile(string name, TSettings settings):base(name)
+		{
+			this.settings = settings;
+		}
+		
+        [XmlIgnore]
+        public override GenericSettings BaseSettings
+		{
+			get {return settings;}
+            set { System.Diagnostics.Debug.Assert(value is TSettings); settings = (TSettings)value; }
+		}
+
+        public TSettings Settings
+        {
+            get { return settings; }
+            set { settings = value; }
+        }
+        public GenericProfile<TSettings> clone()
+        {
+            return new GenericProfile<TSettings>(Name, (TSettings)settings.baseClone());
+        }
+        public override Profile baseClone()
+        {
+            return clone();
+        }
+    }
 }

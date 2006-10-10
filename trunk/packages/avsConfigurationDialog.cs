@@ -488,7 +488,7 @@ namespace MeGUI
 		{
 			if (this.avsProfile.SelectedIndex != -1) // if it's -1 it's bogus
 			{
-                AviSynthProfile prof = this.profileManager.AvsProfiles[this.avsProfile.SelectedItem.ToString()];
+                GenericProfile<AviSynthSettings> prof = (GenericProfile<AviSynthSettings>)this.profileManager.AvsProfiles[this.avsProfile.SelectedItem.ToString()];
                 this.Settings = prof.Settings;
                 /*if (this.oldAviSynthProfileIndex != -1 && !this.newProfile) // -1 means it's never been touched
                     this.profileManager.AvsProfiles[this.avsProfile.Items[this.oldAviSynthProfileIndex].ToString()].Settings = this.Settings;
@@ -513,8 +513,8 @@ namespace MeGUI
             profileName = profileName.Trim();
             if (profileName.Length == 0)
                 return;
-            AviSynthProfile prof = new AviSynthProfile(profileName, this.Settings);
-            if (this.profileManager.AddAviSynthProfile(prof))
+            GenericProfile<AviSynthSettings> prof = new GenericProfile<AviSynthSettings>(profileName, this.Settings);
+            if (this.profileManager.AddProfile(prof))
             {
                 this.avsProfile.Items.Add(prof.Name);
 				this.avsProfile.SelectedIndex = this.avsProfile.Items.IndexOf(prof.Name);
@@ -535,11 +535,11 @@ namespace MeGUI
 		{
 			if (this.avsProfile.SelectedIndex != -1) // if it's -1 it's bogus
 			{
-                string name = this.avsProfile.SelectedItem.ToString();
-                if (profileManager.DeleteAviSynthProfile(name))
+                Profile prof = (Profile)this.avsProfile.SelectedItem;
+                if (profileManager.DeleteProfile(prof))
                 {
                     this.avsProfile.BeginUpdate(); // now make GUI changes
-                    this.avsProfile.Items.Remove(name);
+                    this.avsProfile.Items.Remove(prof);
                     this.avsProfile.EndUpdate();
                     this.oldAviSynthProfileIndex = -1;
                 }
@@ -563,7 +563,7 @@ namespace MeGUI
         {
             if (this.avsProfile.SelectedIndex != -1) // if it's -1 it's bogus
             {
-                AviSynthProfile prof = this.profileManager.AvsProfiles[this.avsProfile.SelectedItem.ToString()];
+                GenericProfile<AviSynthSettings> prof = (GenericProfile<AviSynthSettings>)this.profileManager.AvsProfiles[this.avsProfile.SelectedItem.ToString()];
                 prof.Settings = this.Settings;
             }
             else

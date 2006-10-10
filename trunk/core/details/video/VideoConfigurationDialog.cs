@@ -18,7 +18,7 @@ namespace MeGUI
         private double bytesPerFrame;
         private bool advancedToolTips;
         protected int lastEncodingMode = 0;
-        private VideoProfile oldVideoProfile = null;
+        private GenericProfile<VideoCodecSettings> oldVideoProfile = null;
         private string initialProfile;
         private bool safeProfileAlteration;
 
@@ -49,7 +49,7 @@ namespace MeGUI
         private void VideoConfigurationDialog_Load(object sender, EventArgs e)
         {
             int index = -1;
-            foreach (VideoProfile prof in this.profileManager.VideoProfiles.Values)
+            foreach (GenericProfile<VideoCodecSettings> prof in this.profileManager.VideoProfiles.Values)
             {
                 if (isValidSettings(prof.Settings)) // those are the profiles we're interested in
                 {
@@ -235,7 +235,7 @@ namespace MeGUI
         /// <param name="e"></param>
         private void profile_SelectedIndexChanged(object sender, System.EventArgs e)
         {
-            VideoProfile prof = this.videoProfile.SelectedItem as VideoProfile;
+            GenericProfile<VideoCodecSettings> prof = this.videoProfile.SelectedItem as GenericProfile<VideoCodecSettings>;
             if (prof == null)
                 return;
             this.Settings = prof.Settings;
@@ -275,8 +275,8 @@ namespace MeGUI
             profileName = profileName.Trim();
             if (profileName.Length == 0)
                 return;
-            VideoProfile prof = new VideoProfile(profileName, this.Settings);
-            if (this.profileManager.AddVideoProfile(prof))
+            GenericProfile<VideoCodecSettings> prof = new GenericProfile<VideoCodecSettings>(profileName, this.Settings);
+            if (this.profileManager.AddProfile(prof))
             {
                 this.videoProfile.Items.Add(prof);
                 this.videoProfile.SelectedItem = prof;
@@ -295,10 +295,10 @@ namespace MeGUI
         /// <param name="e"></param>
         private void deleteProfileButton_Click(object sender, System.EventArgs e)
         {
-            VideoProfile prof = this.videoProfile.SelectedItem as VideoProfile;
+            GenericProfile<VideoCodecSettings> prof = this.videoProfile.SelectedItem as GenericProfile<VideoCodecSettings>;
             if (prof == null)
                 return;
-            if (!this.profileManager.DeleteVideoProfile(prof.Name))
+            if (!this.profileManager.DeleteProfile(prof))
                 return;
             this.videoProfile.Items.Remove(prof);
             this.oldVideoProfile = null;
@@ -350,7 +350,7 @@ namespace MeGUI
         /// <param name="e"></param>
         private void updateButton_Click(object sender, EventArgs e)
         {
-            VideoProfile prof = this.videoProfile.SelectedItem as VideoProfile;
+            GenericProfile<VideoCodecSettings> prof = this.videoProfile.SelectedItem as GenericProfile<VideoCodecSettings>;
             if (prof == null)
             {
                 MessageBox.Show("You must select a profile to update!", "No profile selected", MessageBoxButtons.OK, MessageBoxIcon.Error);

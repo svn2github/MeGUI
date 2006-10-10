@@ -193,7 +193,7 @@ namespace MeGUI
         {
             if (this.VideoProfile.SelectedIndex != -1) // if it's -1 it's bogus
             {
-                VideoProfile prof = mainForm.Profiles.VideoProfiles[this.VideoProfile.SelectedItem.ToString()];
+                GenericProfile<VideoCodecSettings> prof = (GenericProfile<VideoCodecSettings>)mainForm.Profiles.VideoProfiles[this.VideoProfile.SelectedItem.ToString()];
                 foreach (IVideoSettingsProvider p in this.VideoCodec.Items)
                 {
                     if (p.IsSameType(prof.Settings))

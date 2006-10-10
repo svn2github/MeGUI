@@ -701,7 +701,7 @@ namespace MeGUI
         {
             if (playbackMethod.SelectedItem != null)
             {
-                OneClickSettings settings = this.mainForm.Profiles.OneClickProfiles[playbackMethod.SelectedItem.ToString()].Settings;
+                OneClickSettings settings = (OneClickSettings)this.mainForm.Profiles.OneClickProfiles[playbackMethod.SelectedItem.ToString()].BaseSettings;
 
                 // Do extra defaults config (same code as in OneClickDefaultWindow)
                 // strings
@@ -797,7 +797,7 @@ namespace MeGUI
                 dpp.AudioStreams = audioStreams;
                 dpp.AutoDeinterlace = autoDeint.Checked;
                 dpp.AviSynthScript = "";
-                dpp.AvsSettings = this.mainForm.Profiles.AvsProfiles[avsProfile.SelectedItem.ToString()].Settings;
+                dpp.AvsSettings = (AviSynthSettings)this.mainForm.Profiles.AvsProfiles[avsProfile.SelectedItem.ToString()].BaseSettings;
                 dpp.ChapterFile = chapterFile.Text;
                 dpp.Container = (ContainerType)containerFormat.SelectedItem;
                 dpp.FinalOutput = output.Text;
@@ -924,7 +924,7 @@ namespace MeGUI
         {
             if (this.videoProfile.SelectedIndex != -1) // if it's -1 it's bogus
             {
-                VideoProfile prof = mainForm.Profiles.VideoProfiles[this.videoProfile.SelectedItem.ToString()];
+                GenericProfile<VideoCodecSettings> prof = (GenericProfile<VideoCodecSettings>)mainForm.Profiles.VideoProfiles[this.videoProfile.SelectedItem.ToString()];
                 foreach (IVideoSettingsProvider p in this.videoCodec.Items)
                 {
                     if (p.IsSameType(prof.Settings))
@@ -1024,7 +1024,7 @@ namespace MeGUI
         {
             if (this.audioProfile.SelectedIndex != -1) // if it's -1 it's bogus
             {
-                AudioProfile prof = mainForm.Profiles.AudioProfiles[this.audioProfile.SelectedItem.ToString()];
+                GenericProfile<AudioCodecSettings> prof = (GenericProfile<AudioCodecSettings>)mainForm.Profiles.AudioProfiles[this.audioProfile.SelectedItem.ToString()];
                 foreach (IAudioSettingsProvider p in this.audioCodec.Items)
                 {
                     if (p.IsSameType(prof.Settings))

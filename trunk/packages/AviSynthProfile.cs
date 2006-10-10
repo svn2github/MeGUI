@@ -1,11 +1,12 @@
 using System;
-
+#warning empty file
 namespace MeGUI
 {
-	/// <summary>
+/*	/// <summary>
 	/// Summary description for AviSynthProfile.
 	/// </summary>
-	public class AviSynthProfile : Profile
+	public class GenericProfile<AviSynthSettings> : GenericProfile<AviSynthSettings> {}
+    
 	{
 		private AviSynthSettings avsSettings;
 		public AviSynthSettings Settings
@@ -25,6 +26,5 @@ namespace MeGUI
 			this.Settings = settings;
 			this.Name = name;
 		}
-
-	}
+	}*/
 }

@@ -148,7 +148,7 @@ namespace MeGUI
 
                 foreach (Profile prof in profileList)
                 {
-                    ZipEntry newEntry = new ZipEntry(ProfileManager.ProfilePath(prof.Name, prof.GetType(), "").TrimStart(new char[] { '\\' }));
+                    ZipEntry newEntry = new ZipEntry(ProfileManager.ProfilePath(prof,"").TrimStart(new char[] { '\\' }));
                     outputFile.PutNextEntry(newEntry);
                     XmlSerializer outputter = new XmlSerializer(prof.GetType());
                     outputter.Serialize(outputFile, prof);
@@ -210,10 +210,10 @@ namespace MeGUI
             
             importedProfiles = new ProfileManager("");
             XmlSerializer videoSerializer, audioSerializer, avsSerializer, oneclickSerializer;
-            videoSerializer = new XmlSerializer(typeof(VideoProfile));
-            audioSerializer = new XmlSerializer(typeof(AudioProfile));
-            avsSerializer = new XmlSerializer(typeof(AviSynthProfile));
-            oneclickSerializer = new XmlSerializer(typeof(OneClickProfile));
+            videoSerializer = new XmlSerializer(typeof(GenericProfile<VideoCodecSettings>));
+            audioSerializer = new XmlSerializer(typeof(GenericProfile<AudioCodecSettings>));
+            avsSerializer = new XmlSerializer(typeof(GenericProfile<AviSynthSettings>));
+            oneclickSerializer = new XmlSerializer(typeof(GenericProfile<OneClickSettings>));
 
 #warning We are generating a list of failed attempts, but we aren't doing anything with it (below).
             List<string> failedEntries = new List<string>(); 
@@ -230,7 +230,7 @@ namespace MeGUI
                         try
                         {
                             importedProfiles.AddVideoProfile(
-                               (VideoProfile)videoSerializer.Deserialize(inputFile.GetInputStream(entry)));
+                               (GenericProfile<VideoCodecSettings>)videoSerializer.Deserialize(inputFile.GetInputStream(entry)));
                         }
                         catch (Exception)
                         {
@@ -243,8 +243,8 @@ namespace MeGUI
                     {
                         try
                         {
-                            importedProfiles.AddAudioProfile(
-                               (AudioProfile)audioSerializer.Deserialize(inputFile.GetInputStream(entry)));
+                            importedProfiles.AddProfile(
+                               (GenericProfile<AudioCodecSettings>)audioSerializer.Deserialize(inputFile.GetInputStream(entry)));
                         }
                         catch (Exception)
                         {
@@ -257,8 +257,8 @@ namespace MeGUI
                     {
                         try
                         {
-                            importedProfiles.AddAviSynthProfile(
-                               (AviSynthProfile)avsSerializer.Deserialize(inputFile.GetInputStream(entry)));
+                            importedProfiles.AddProfile(
+                               (GenericProfile<AviSynthSettings>)avsSerializer.Deserialize(inputFile.GetInputStream(entry)));
                         }
                         catch (Exception)
                         {
@@ -271,8 +271,8 @@ namespace MeGUI
                     {
                         try
                         {
-                            importedProfiles.AddOneClickProfile(
-                               (OneClickProfile)oneclickSerializer.Deserialize(inputFile.GetInputStream(entry)));
+                            importedProfiles.AddProfile(
+                               (GenericProfile<OneClickSettings>)oneclickSerializer.Deserialize(inputFile.GetInputStream(entry)));
                         }
                         catch (Exception)
                         {

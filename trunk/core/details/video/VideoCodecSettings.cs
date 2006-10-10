@@ -20,16 +20,20 @@
 
 using System;
 using System.Xml.Serialization;
-
+using MeGUI.core.plugins.interfaces;
 namespace MeGUI
 {
 	/// <summary>
 	/// Contains basic codec settings, basically all the settings that are often used by codecs like bitrate, encoding mode, etc.
 	/// </summary>
 	[XmlInclude(typeof(lavcSettings)), XmlInclude(typeof(x264Settings)), XmlInclude(typeof(snowSettings)), XmlInclude(typeof(xvidSettings)), XmlInclude(typeof(hfyuSettings))]
-	public abstract class VideoCodecSettings
+    public abstract class VideoCodecSettings : MeGUI.core.plugins.interfaces.GenericSettings
 	{
-		public enum Mode:int {CBR = 0, CQ, twopass1, twopass2, twopassAutomated, threepass1, threepass2, threepass3, threepassAutomated, quality};
+        public string getSettingsType()
+        {
+            return "Video";
+        }
+        public enum Mode : int { CBR = 0, CQ, twopass1, twopass2, twopassAutomated, threepass1, threepass2, threepass3, threepassAutomated, quality };
         int encodingMode, bitrateQuantizer, keyframeInterval, nbBframes, minQuantizer, maxQuantizer, fourCC,
             maxNumberOfPasses, nbThreads;
 		bool turbo, v4mv, qpel, trellis;
@@ -174,11 +178,18 @@ namespace MeGUI
 		/// generates a copy of this object
 		/// </summary>
 		/// <returns>the codec specific settings of this object</returns>
-		public virtual VideoCodecSettings clone()
-		{
+        public GenericSettings baseClone()
+        {
+            return clone();
+        }
+        
+        public VideoCodecSettings clone()
+        {
             // This method is sutable for all known descendants!
             return this.MemberwiseClone() as VideoCodecSettings;
 		}
+
+
 
         public virtual bool IsAltered(VideoCodecSettings otherSettings)
         {

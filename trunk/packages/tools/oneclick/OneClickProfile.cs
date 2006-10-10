@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-
+#warning empty file
 namespace MeGUI
-{
-    public class OneClickProfile : Profile
+{/*
+    public class GenericProfile<OneClickSettings> : GenericProfile<OneClickSettings>
     {
 		private OneClickSettings oneClickSettings;
 		public OneClickSettings Settings
@@ -13,16 +13,16 @@ namespace MeGUI
 			set {oneClickSettings = value;}
 		}
 
-		public OneClickProfile()
+		public GenericProfile<OneClickSettings>()
 		{
 			this.Name = "Default Profile";
 			this.Settings = new OneClickSettings();
 		}
 
-		public OneClickProfile(string name, OneClickSettings settings)
+		public GenericProfile<OneClickSettings>(string name, OneClickSettings settings)
 		{
 			this.Settings = settings;
 			this.Name = name;
 		}
-    }
+    }*/
 }

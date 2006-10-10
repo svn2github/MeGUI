@@ -1,15 +1,29 @@
 using System;
-
+using MeGUI.core.plugins.interfaces;
 namespace MeGUI
 {
 	/// <summary>
 	/// Summary description for OneClickDefaults.
 	/// </summary>
-	public class OneClickSettings
+    public class OneClickSettings : GenericSettings
 	{
-		public string VideoProfileName, AudioProfileName, StorageMediumName, ContainerFormatName, AvsProfileName;
+        public string getSettingsType()
+        {
+            return "OneClick";
+        }
+        public string VideoProfileName, AudioProfileName, StorageMediumName, ContainerFormatName, AvsProfileName;
 		public bool DontEncodeAudio, SignalAR, Split, AutomaticDeinterlacing;
 		public long OutputResolution, Filesize, SplitSize;
+
+        public GenericSettings baseClone()
+        {
+            return clone();
+        }
+        
+        public OneClickSettings clone()
+        {
+            return this.MemberwiseClone() as OneClickSettings;
+        }
 
 		public OneClickSettings()
 		{

@@ -19,27 +19,27 @@
 // ****************************************************************************
 
 using System;
-
+#warning empty class
 namespace MeGUI
 {
 	/// <summary>
 	/// contains all the info for an audio profile
 	/// </summary>
-	public class AudioProfile : Profile
-	{
+	//public class GenericProfile<AudioCodecSettings> : GenericProfile<AudioCodecSettings> {}
+/*	{
 		private AudioCodecSettings settings;
 
-		public AudioProfile():base()
+		public GenericProfile<AudioCodecSettings>():base()
 		{
 		}
-		public AudioProfile(string name, AudioCodecSettings settings):base(name)
+		public GenericProfile<AudioCodecSettings>(string name, AudioCodecSettings settings):base(name)
 		{
 			this.settings = settings;
 		}
-		public AudioCodecSettings Settings
+		public override AudioCodecSettings Settings
 		{
 			get {return settings;}
 			set {settings = value;}
 		}
-	}
+	}*/
 }

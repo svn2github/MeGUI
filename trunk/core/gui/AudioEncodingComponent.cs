@@ -395,7 +395,7 @@ namespace MeGUI
         {
             if (audioProfile.SelectedIndex != -1) // if it's -1 it's bogus
             {
-                AudioProfile prof = mainForm.Profiles.AudioProfiles[audioProfile.SelectedItem.ToString()];
+                GenericProfile<AudioCodecSettings> prof = (GenericProfile<AudioCodecSettings>)mainForm.Profiles.AudioProfiles[audioProfile.SelectedItem.ToString()];
                 foreach (IAudioSettingsProvider p in audioCodec.Items)
                 {
                     if (p.IsSameType(prof.Settings))
