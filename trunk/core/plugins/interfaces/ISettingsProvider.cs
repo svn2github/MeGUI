@@ -2,6 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
+using MeGUI.core.plugins.interfaces;
+using MeGUI.core.details.video;
+using MeGUI.packages.video.x264;
+
 namespace MeGUI
 {
     public interface IAudioSettingsProvider : IIDable
@@ -80,6 +84,95 @@ namespace MeGUI
         /// <param name="settings"></param>
         void LoadSettings(VideoCodecSettings settings);
         bool EditSettings(MainForm mF, string initialProfile, string[] videoIO, int[] creditsAndIntroFrames, out string selectedProfile);
+    }
+
+    public class VideoSettingsProviderImpl2<TSettings, TPanelType> : IVideoSettingsProvider
+        where TSettings : VideoCodecSettings, new()
+        where TPanelType : VideoConfigurationPanel, Gettable<VideoCodecSettings>
+    {
+        private string title;
+        private TSettings settings;
+        private VideoEncoderType encoderType;
+
+        public VideoSettingsProviderImpl2(string title, VideoEncoderType encoderType)
+        {
+            this.title = title;
+            this.encoderType = encoderType;
+            (this as IVideoSettingsProvider).LoadDefaults();
+        }
+        public string ID
+        {
+            get
+            {
+                return title;
+            }
+        }
+        public override string ToString()
+        {
+            return this.title;
+        }
+
+        public VideoEncoderType EncoderType
+        {
+            get { return encoderType; }
+        }
+
+        #region IVideoSettingsProvider Members
+
+        VideoCodec IVideoSettingsProvider.CodecType
+        {
+            get { return this.settings.Codec; }
+        }
+
+        void IVideoSettingsProvider.LoadDefaults()
+        {
+            this.settings = new TSettings();
+        }
+
+        bool IVideoSettingsProvider.IsSameType(VideoCodecSettings settings)
+        {
+            return settings is TSettings;
+        }
+
+        VideoCodecSettings IVideoSettingsProvider.GetCurrentSettings()
+        {
+            return this.settings;
+        }
+
+        void IVideoSettingsProvider.LoadSettings(VideoCodecSettings settings)
+        {
+            this.settings = (TSettings)settings;
+        }
+
+        public virtual string EncoderPath(MeGUISettings settings)
+        {
+            return settings.MencoderPath;
+        }
+
+        bool IVideoSettingsProvider.EditSettings(MainForm mainForm, string initialProfile, string[] videoIO, int[] creditsAndIntroFrames, out string selectedProfile)
+        {
+            selectedProfile = null;
+            TPanelType t = (TPanelType)System.Activator.CreateInstance(typeof(TPanelType), mainForm);
+            using (ConfigurationWindow<TSettings, VideoCodecSettings> scd = new ConfigurationWindow<TSettings, VideoCodecSettings>(mainForm.Profiles, t, t, initialProfile))
+            {
+                t.Input = videoIO[0];
+                t.Output = videoIO[1];
+                t.EncoderPath = EncoderPath(mainForm.Settings);
+                t.IntroEndFrame = creditsAndIntroFrames[0];
+                t.CreditsStartFrame = creditsAndIntroFrames[1];
+                scd.Settings = this.settings;
+                if (scd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    this.settings = (TSettings)scd.Settings;
+                    selectedProfile = scd.CurrentProfile;
+                    return true;
+                }
+                else
+                    return false;
+            }
+        }
+
+        #endregion
     }
 
     /// <summary>
@@ -186,7 +279,7 @@ namespace MeGUI
         {
         }
     }
-    public class X264SettingsProvider : VideoSettingsProviderImpl<x264Settings,x264ConfigurationDialog>
+    public class X264SettingsProvider : VideoSettingsProviderImpl2<x264Settings, x264ConfigurationPanel>
     {
         public X264SettingsProvider():base("x264", VideoEncoderType.X264)
         {

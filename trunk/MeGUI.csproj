@@ -146,6 +146,10 @@
       <DependentUpon>VideoConfigurationDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="core\details\video\VideoConfigurationPanel.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>VideoConfigurationPanel.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="core\details\video\VideoEncodingComponent.resx">
       <DependentUpon>VideoEncodingComponent.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -210,6 +214,9 @@
     </Compile>
     <Compile Include="core\details\video\VideoConfigurationDialog.designer.cs">
       <DependentUpon>VideoConfigurationDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="core\details\video\VideoConfigurationPanel.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="core\details\video\VideoEncoder.cs" />
     <Compile Include="core\details\video\VideoEncodingComponent.cs">
@@ -404,6 +411,12 @@
     <Compile Include="packages\video\x264\x264ConfigurationDialog.designer.cs">
       <DependentUpon>x264ConfigurationDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="packages\video\x264\x264ConfigurationPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="packages\video\x264\x264ConfigurationPanel.Designer.cs">
+      <DependentUpon>x264ConfigurationPanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="packages\video\x264\x264Encoder.cs" />
     <Compile Include="packages\video\x264\x264Settings.cs" />
     <Compile Include="packages\video\xvid\xvidConfigurationDialog.cs">
@@ -577,6 +590,10 @@
     <EmbeddedResource Include="packages\video\x264\x264ConfigurationDialog.resx">
       <DependentUpon>x264ConfigurationDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="packages\video\x264\x264ConfigurationPanel.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>x264ConfigurationPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="packages\video\xvid\xvidConfigurationDialog.resx">
       <DependentUpon>xvidConfigurationDialog.cs</DependentUpon>

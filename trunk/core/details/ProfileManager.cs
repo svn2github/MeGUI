@@ -760,6 +760,7 @@ namespace MeGUI
             get { return profiles[new x264Settings().getSettingsType()]; }
             set { profiles[new x264Settings().getSettingsType()] = value; }
         }
+        public Dictionary<string, Profile> Profiles(string type) { return profiles[type]; }
         #endregion
         #region Profile Listing
         public string[] AllProfileNames

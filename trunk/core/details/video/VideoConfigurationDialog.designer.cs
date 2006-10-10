@@ -40,10 +40,10 @@ namespace MeGUI
             this.cancelButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
             this.zoneTabPage = new System.Windows.Forms.TabPage();
-            this.zonesControl = new MeGUI.ZonesControl();
             this.mainTabPage = new System.Windows.Forms.TabPage();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tooltipHelp = new System.Windows.Forms.ToolTip(this.components);
+            this.zonesControl = new MeGUI.ZonesControl();
             this.profilesGroupbox.SuspendLayout();
             this.zoneTabPage.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -158,17 +158,6 @@ namespace MeGUI
             this.zoneTabPage.Text = "Zones";
             this.zoneTabPage.UseVisualStyleBackColor = true;
             // 
-            // zonesControl
-            // 
-            this.zonesControl.CreditsStartFrame = 0;
-            this.zonesControl.Input = "";
-            this.zonesControl.IntroEndFrame = 0;
-            this.zonesControl.Location = new System.Drawing.Point(0, 3);
-            this.zonesControl.Name = "zonesControl";
-            this.zonesControl.Size = new System.Drawing.Size(310, 305);
-            this.zonesControl.TabIndex = 0;
-            this.zonesControl.Zones = new MeGUI.Zone[0];
-            // 
             // mainTabPage
             // 
             this.mainTabPage.Location = new System.Drawing.Point(4, 22);
@@ -198,12 +187,23 @@ namespace MeGUI
             this.tooltipHelp.ReshowDelay = 100;
             this.tooltipHelp.ShowAlways = true;
             // 
+            // zonesControl
+            // 
+            this.zonesControl.CreditsStartFrame = 0;
+            this.zonesControl.Input = "";
+            this.zonesControl.IntroEndFrame = 0;
+            this.zonesControl.Location = new System.Drawing.Point(0, 3);
+            this.zonesControl.MainForm = null;
+            this.zonesControl.Name = "zonesControl";
+            this.zonesControl.Size = new System.Drawing.Size(310, 305);
+            this.zonesControl.TabIndex = 0;
+            this.zonesControl.Zones = new MeGUI.Zone[0];
+            // 
             // VideoConfigurationDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(496, 550);
+            this.ClientSize = new System.Drawing.Size(496, 651);
             this.Controls.Add(this.profilesGroupbox);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.okButton);
