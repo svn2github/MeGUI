@@ -22,12 +22,13 @@ namespace MeGUI
 
         public void Run(MainForm info)
         {
-            using (OneClickWindow ocmt = new OneClickWindow(info, info.Video.VideoProfile.SelectedIndex,
+#warning fix this up
+/*            using (OneClickWindow ocmt = new OneClickWindow(info, info.Video.VideoProfile.SelectedIndex,
                 info.Audio.AudioProfile.SelectedIndex, info.JobUtil, info.Video.VideoEncoderProvider, 
                 info.Audio.AudioEncoderProvider))
             {
                 ocmt.ShowDialog();
-            }
+            }*/
         }
 
         public string[] Shortcuts
@@ -902,11 +903,13 @@ namespace MeGUI
 
         private void videoConfigButton_Click(object sender, EventArgs e)
         {
+#warning fix video config button here
+            /*
             VideoCodecSettings settings = CurrentVideoCodecSettingsProvider.GetCurrentSettings();
-            string selectedProfile;
+            string selectedProfile = videoProfile.Text;
             if (CurrentVideoCodecSettingsProvider.EditSettings(mainForm, 
-                this.videoProfile.Text, new string[] {"input", "output" }, 
-                new int[] { -1, -1 }, out selectedProfile))
+                this.videoProfile.Text, new VideoInfo(new string[] {"input", "output" }, 
+                new int[] { -1, -1 }), out selectedProfile))
             {
                 this.videoProfile.Items.Clear();
                 foreach (string name in mainForm.Profiles.VideoProfiles.Keys)
@@ -917,7 +920,7 @@ namespace MeGUI
                 if (index != -1)
                     this.videoProfile.SelectedIndex = index;
             }
-            updatePossibleContainers();
+            updatePossibleContainers();*/
         }
 
         private void videoProfile_SelectedIndexChanged_1(object sender, EventArgs e)
@@ -925,7 +928,7 @@ namespace MeGUI
             if (this.videoProfile.SelectedIndex != -1) // if it's -1 it's bogus
             {
                 GenericProfile<VideoCodecSettings> prof = (GenericProfile<VideoCodecSettings>)mainForm.Profiles.VideoProfiles[this.videoProfile.SelectedItem.ToString()];
-                foreach (IVideoSettingsProvider p in this.videoCodec.Items)
+                foreach (ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> p in this.videoCodec.Items)
                 {
                     if (p.IsSameType(prof.Settings))
                     {
@@ -954,7 +957,7 @@ namespace MeGUI
             }
             this.audioStreams[lastSelectedAudioTrackNumber].input = this.audioInput.Text;
             this.audioStreams[lastSelectedAudioTrackNumber].useExternalInput = externalInput.Checked;
-            this.audioStreams[lastSelectedAudioTrackNumber].settings = (audioCodec.SelectedItem as IAudioSettingsProvider).GetCurrentSettings();
+            this.audioStreams[lastSelectedAudioTrackNumber].settings = (audioCodec.SelectedItem as ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType>).GetCurrentSettings();
             this.audioStreams[lastSelectedAudioTrackNumber].dontEncode = dontEncodeAudio.Checked;
             if (this.audioProfile.SelectedIndex >= 0)
                 this.audioStreams[lastSelectedAudioTrackNumber].profileItem = audioProfile.SelectedItem;
@@ -967,7 +970,7 @@ namespace MeGUI
                 audioProfile.SelectedItem = audioStreams[current].profileItem;
             if (audioStreams[current].settings != null)
             {
-                foreach (IAudioSettingsProvider p in this.audioCodec.Items)
+                foreach (ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType> p in this.audioCodec.Items)
                 {
                     if (p.IsSameType(audioStreams[current].settings))
                     {
@@ -1000,6 +1003,8 @@ namespace MeGUI
 
         private void configAudioButton_Click(object sender, EventArgs e)
         {
+#warning fix config button here
+/*
             string selectedProfile;
             if (CurrentAudioSettingsProvider.EditSettings(mainForm.Profiles, mainForm.MeGUIPath,
                 mainForm.Settings, this.audioProfile.Text,
@@ -1017,15 +1022,16 @@ namespace MeGUI
                 stream.settings = CurrentAudioSettingsProvider.GetCurrentSettings();
                 this.CurrentAudioStream = stream;
             }
-            updatePossibleContainers();
+            updatePossibleContainers();*/
         }
 
         private void audioProfile_SelectedIndexChanged_1(object sender, EventArgs e)
         {
-            if (this.audioProfile.SelectedIndex != -1) // if it's -1 it's bogus
+#warning fix audio profile thingy here
+            /*if (this.audioProfile.SelectedIndex != -1) // if it's -1 it's bogus
             {
                 GenericProfile<AudioCodecSettings> prof = (GenericProfile<AudioCodecSettings>)mainForm.Profiles.AudioProfiles[this.audioProfile.SelectedItem.ToString()];
-                foreach (IAudioSettingsProvider p in this.audioCodec.Items)
+                foreach (ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> p in this.audioCodec.Items)
                 {
                     if (p.IsSameType(prof.Settings))
                     {
@@ -1035,7 +1041,7 @@ namespace MeGUI
                     }
                 }
             }
-            updatePossibleContainers();
+            updatePossibleContainers();*/
         }
 
         private void externalInput_CheckedChanged(object sender, EventArgs e)
@@ -1061,18 +1067,18 @@ namespace MeGUI
         }
         #endregion
         #region properties
-        private IVideoSettingsProvider CurrentVideoCodecSettingsProvider
+        private ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> CurrentVideoCodecSettingsProvider
         {
             get
             {
-                return this.videoCodec.SelectedItem as IVideoSettingsProvider;
+                return this.videoCodec.SelectedItem as ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>;
             }
         }
-        private IAudioSettingsProvider CurrentAudioSettingsProvider
+        private ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType> CurrentAudioSettingsProvider
         {
             get
             {
-                return this.audioCodec.SelectedItem as IAudioSettingsProvider;
+                return this.audioCodec.SelectedItem as ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType>;
             }
         }
         private PartialAudioStream CurrentAudioStream
@@ -1181,7 +1187,7 @@ namespace MeGUI
         {
             this.audioInput.Text = p;
             int del = AudioEncodingComponent.getDelay(p);
-            AudioCodecSettings settings = (audioCodec.SelectedItem as IAudioSettingsProvider).GetCurrentSettings();
+            AudioCodecSettings settings = (audioCodec.SelectedItem as ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType>).GetCurrentSettings();
             if (del != 0) // we have a delay we are interested in
             {
                 settings.DelayEnabled = true;

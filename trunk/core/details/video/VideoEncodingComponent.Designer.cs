@@ -28,10 +28,7 @@ namespace MeGUI
         /// </summary>
         private void InitializeComponent()
         {
-            this.videoConfigButton = new System.Windows.Forms.Button();
             this.videoOutputLabel = new System.Windows.Forms.Label();
-            this.videoProfile = new System.Windows.Forms.ComboBox();
-            this.videoProfileLabel = new System.Windows.Forms.Label();
             this.videoCodec = new System.Windows.Forms.ComboBox();
             this.fileType = new System.Windows.Forms.ComboBox();
             this.videoCodecLabel = new System.Windows.Forms.Label();
@@ -42,18 +39,9 @@ namespace MeGUI
             this.videoInput = new MeGUI.FileBar();
             this.videoOutput = new MeGUI.FileBar();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.profileControl1 = new MeGUI.core.details.video.ProfileControl();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // videoConfigButton
-            // 
-            this.videoConfigButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.videoConfigButton.Location = new System.Drawing.Point(206, 65);
-            this.videoConfigButton.Name = "videoConfigButton";
-            this.videoConfigButton.Size = new System.Drawing.Size(56, 23);
-            this.videoConfigButton.TabIndex = 25;
-            this.videoConfigButton.Text = "Config";
-            this.videoConfigButton.Click += new System.EventHandler(this.videoConfigButton_Click);
             // 
             // videoOutputLabel
             // 
@@ -64,33 +52,12 @@ namespace MeGUI
             this.videoOutputLabel.TabIndex = 24;
             this.videoOutputLabel.Text = "Video Output";
             // 
-            // videoProfile
-            // 
-            this.videoProfile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.videoProfile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.videoProfile.Location = new System.Drawing.Point(143, 93);
-            this.videoProfile.Name = "videoProfile";
-            this.videoProfile.Size = new System.Drawing.Size(278, 21);
-            this.videoProfile.Sorted = true;
-            this.videoProfile.TabIndex = 23;
-            this.videoProfile.SelectedIndexChanged += new System.EventHandler(this.VideoProfile_SelectedIndexChanged);
-            // 
-            // videoProfileLabel
-            // 
-            this.videoProfileLabel.AutoSize = true;
-            this.videoProfileLabel.Location = new System.Drawing.Point(6, 96);
-            this.videoProfileLabel.Name = "videoProfileLabel";
-            this.videoProfileLabel.Size = new System.Drawing.Size(66, 13);
-            this.videoProfileLabel.TabIndex = 20;
-            this.videoProfileLabel.Text = "Video Profile";
-            // 
             // videoCodec
             // 
             this.videoCodec.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.videoCodec.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.videoCodec.Location = new System.Drawing.Point(142, 66);
+            this.videoCodec.Location = new System.Drawing.Point(71, 67);
             this.videoCodec.Name = "videoCodec";
             this.videoCodec.Size = new System.Drawing.Size(58, 21);
             this.videoCodec.TabIndex = 22;
@@ -189,15 +156,13 @@ namespace MeGUI
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.profileControl1);
             this.groupBox1.Controls.Add(this.videoInputLabel);
             this.groupBox1.Controls.Add(this.videoOutput);
-            this.groupBox1.Controls.Add(this.videoConfigButton);
             this.groupBox1.Controls.Add(this.videoInput);
             this.groupBox1.Controls.Add(this.videoOutputLabel);
             this.groupBox1.Controls.Add(this.addAnalysisPass);
-            this.groupBox1.Controls.Add(this.videoProfile);
             this.groupBox1.Controls.Add(this.addPrerenderJob);
-            this.groupBox1.Controls.Add(this.videoProfileLabel);
             this.groupBox1.Controls.Add(this.queueVideoButton);
             this.groupBox1.Controls.Add(this.videoCodec);
             this.groupBox1.Controls.Add(this.fileType);
@@ -205,10 +170,17 @@ namespace MeGUI
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(426, 153);
+            this.groupBox1.Size = new System.Drawing.Size(426, 195);
             this.groupBox1.TabIndex = 30;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Video encoding";
+            // 
+            // profileControl1
+            // 
+            this.profileControl1.Location = new System.Drawing.Point(0, 89);
+            this.profileControl1.Name = "profileControl1";
+            this.profileControl1.Size = new System.Drawing.Size(426, 29);
+            this.profileControl1.TabIndex = 30;
             // 
             // VideoEncodingComponent
             // 
@@ -216,7 +188,7 @@ namespace MeGUI
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.groupBox1);
             this.Name = "VideoEncodingComponent";
-            this.Size = new System.Drawing.Size(426, 153);
+            this.Size = new System.Drawing.Size(426, 195);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
@@ -225,10 +197,7 @@ namespace MeGUI
 
         #endregion
 
-        private System.Windows.Forms.Button videoConfigButton;
         private System.Windows.Forms.Label videoOutputLabel;
-        private System.Windows.Forms.ComboBox videoProfile;
-        private System.Windows.Forms.Label videoProfileLabel;
         private System.Windows.Forms.ComboBox videoCodec;
         private System.Windows.Forms.ComboBox fileType;
         private System.Windows.Forms.Label videoCodecLabel;
@@ -239,6 +208,7 @@ namespace MeGUI
         private FileBar videoInput;
         private FileBar videoOutput;
         private System.Windows.Forms.GroupBox groupBox1;
+        private MeGUI.core.details.video.ProfileControl profileControl1;
 
     }
 }

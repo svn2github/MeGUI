@@ -18,6 +18,10 @@ namespace MeGUI.packages.video.x264
         {
             InitializeComponent();
         }
+        protected override string getCommandline()
+        {
+            return CommandLineGenerator.generateVideoCommandline(this.Settings, this.input, this.output, -1, -1);
+        }
         #region variables
         public static bool levelEnforced; // flag to prevent recursion in EnforceLevels. There's probably a better way to do this.
         private XmlDocument ContextHelp = new XmlDocument();
@@ -25,8 +29,8 @@ namespace MeGUI.packages.video.x264
 
 
         #region start / stop
-        public x264ConfigurationPanel(MainForm mainForm)
-            : base(mainForm)
+        public x264ConfigurationPanel(MainForm mainForm, VideoInfo info)
+            : base(mainForm, info)
         {
             InitializeComponent();
             AVCLevels al = new AVCLevels();

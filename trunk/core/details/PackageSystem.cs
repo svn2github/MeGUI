@@ -34,11 +34,11 @@ namespace MeGUI.core.details
                 {
                     mediaFileTypes.Register(factory);
                 }
-                foreach (IVideoSettingsProvider provider in registerable.VideoSettingsProviders)
+                foreach (ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> provider in registerable.VideoSettingsProviders)
                 {
                     videoSettingsProviders.Register(provider);
                 }
-                foreach (IAudioSettingsProvider provider in registerable.AudioSettingsProviders)
+                foreach (ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> provider in registerable.AudioSettingsProviders)
                 {
                     audioSettingsProviders.Register(provider);
                 }
@@ -63,8 +63,8 @@ namespace MeGUI.core.details
         }
         GenericRegisterer<ITool> tools = new GenericRegisterer<ITool>();
         GenericRegisterer<IMediaFileFactory> mediaFileTypes = new GenericRegisterer<IMediaFileFactory>();
-        GenericRegisterer<IVideoSettingsProvider> videoSettingsProviders = new GenericRegisterer<IVideoSettingsProvider>();
-        GenericRegisterer<IAudioSettingsProvider> audioSettingsProviders = new GenericRegisterer<IAudioSettingsProvider>();
+        GenericRegisterer<ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>> videoSettingsProviders = new GenericRegisterer<ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>>();
+        GenericRegisterer<ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>> audioSettingsProviders = new GenericRegisterer<ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>>();
         GenericRegisterer<IMuxing> muxers = new GenericRegisterer<IMuxing>();
         GenericRegisterer<JobPreProcessor> jobPreProcessors = new GenericRegisterer<JobPreProcessor>();
         GenericRegisterer<JobPostProcessor> jobPostProcessors = new GenericRegisterer<JobPostProcessor>();
@@ -79,11 +79,11 @@ namespace MeGUI.core.details
         {
             get { return mediaFileTypes; }
         }
-        public GenericRegisterer<IVideoSettingsProvider> VideoSettingsProviders
+        public GenericRegisterer<ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>> VideoSettingsProviders
         {
             get { return videoSettingsProviders; }
         }
-        public GenericRegisterer<IAudioSettingsProvider> AudioSettingsProviders
+        public GenericRegisterer<ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>> AudioSettingsProviders
         {
             get { return audioSettingsProviders; }
         }

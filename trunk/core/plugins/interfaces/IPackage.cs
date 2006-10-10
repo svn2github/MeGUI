@@ -13,8 +13,8 @@ namespace MeGUI.core.plugins.interfaces
         JobPreProcessor[] JobPreProcessors { get;}
         JobPostProcessor[] JobPostProcessors { get;}
         JobProcessorFactory[] JobProcessors { get;}
-        IVideoSettingsProvider[] VideoSettingsProviders { get;}
-        IAudioSettingsProvider[] AudioSettingsProviders { get;}
+        ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>[] VideoSettingsProviders { get;}
+        ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>[] AudioSettingsProviders { get;}
         IMuxing[] MuxerProviders { get;}
         string Name { get;}
         string[] RequiredPackageIDs { get;}

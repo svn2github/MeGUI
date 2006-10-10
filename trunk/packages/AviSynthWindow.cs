@@ -10,49 +10,12 @@ using System.Text.RegularExpressions;
 using System.IO;
 using System.Collections.Generic;
 
+using MeGUI.core.details.video;
+using MeGUI.core.plugins.interfaces;
+
 namespace MeGUI
 {
-	public delegate void OpenScriptCallback(string avisynthScript);
-    public enum PossibleSources { d2v, mpeg2, vdr, directShow };
-    public enum mod16Method : int { none = -1, resize = 0, overcrop, nonMod16, mod4Horizontal };
 
-    public class AviSynthWindowTool : MeGUI.core.plugins.interfaces.ITool
-    {
-
-        #region ITool Members
-
-        public string Name
-        {
-            get { return "AviSynth Script Creator"; }
-        }
-
-        public void Run(MainForm info)
-        {
-            info.ClosePlayer();
-            using (AviSynthWindow asw = new AviSynthWindow(info))
-            {
-                asw.OpenScript += new OpenScriptCallback(info.Video.openVideoFile);
-                asw.ShowDialog(info);
-            }
-        }
-
-        public string[] Shortcuts
-        {
-            get { throw new Exception("The method or operation is not implemented."); }
-        }
-
-        #endregion
-
-        #region IIDable Members
-
-        public string ID
-        {
-            get { return "AvsCreator"; }
-        }
-
-        #endregion
-    }
-    
     /// <summary>
 	/// Summary description for AviSynthWindow.
 	/// </summary>
@@ -1559,6 +1522,7 @@ namespace MeGUI
         }
         #endregion
         #region profiles
+
         private void avsConfigButton_Click(object sender, System.EventArgs e)
 		{
 			avsConfigurationDialog acd = new avsConfigurationDialog(this.mainForm.Profiles, avsProfile.Text, this.path, 
@@ -1760,5 +1724,45 @@ namespace MeGUI
             }
             showScript();
         }
+    }
+    public delegate void OpenScriptCallback(string avisynthScript);
+    public enum PossibleSources { d2v, mpeg2, vdr, directShow };
+    public enum mod16Method : int { none = -1, resize = 0, overcrop, nonMod16, mod4Horizontal };
+
+    public class AviSynthWindowTool : MeGUI.core.plugins.interfaces.ITool
+    {
+
+        #region ITool Members
+
+        public string Name
+        {
+            get { return "AviSynth Script Creator"; }
+        }
+
+        public void Run(MainForm info)
+        {
+            info.ClosePlayer();
+            using (AviSynthWindow asw = new AviSynthWindow(info))
+            {
+                asw.OpenScript += new OpenScriptCallback(info.Video.openVideoFile);
+                asw.ShowDialog(info);
+            }
+        }
+
+        public string[] Shortcuts
+        {
+            get { throw new Exception("The method or operation is not implemented."); }
+        }
+
+        #endregion
+
+        #region IIDable Members
+
+        public string ID
+        {
+            get { return "AvsCreator"; }
+        }
+
+        #endregion
     }
 }

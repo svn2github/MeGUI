@@ -45,13 +45,13 @@ namespace MeGUI
                 double framerate = 0.0;
                 if (!info.Video.VideoInput.Equals(""))
                     info.JobUtil.getInputProperties(out nbFrames, out framerate, info.Video.VideoInput);
-                calc.setDefaults(nbFrames, framerate, (IVideoSettingsProvider)info.Video.VideoCodec.SelectedItem, info.Audio.AudioStreams[0], info.Audio.AudioStreams[1]);
+                calc.setDefaults(nbFrames, framerate, info.Video.CurrentSettingsProvider, info.Audio.AudioStreams[0], info.Audio.AudioStreams[1]);
 
                 DialogResult dr = calc.ShowDialog();
                 if (dr == DialogResult.OK)
                 {
-                    info.Video.VideoCodec.SelectedItem = calc.getSelectedCodec();
-                    VideoCodecSettings settings = info.Video.CurrentVideoCodecSettingsProvider.GetCurrentSettings();
+                    info.Video.CurrentSettingsProvider = calc.getSelectedCodec();
+                    VideoCodecSettings settings = info.Video.CodecHandler.Getter();
                     if (settings.EncodingMode == 1 || settings.EncodingMode == 9)
                     {
                         settings.EncodingMode = 0;
@@ -1013,7 +1013,7 @@ namespace MeGUI
 		/// <param name="container">container</param>
 		/// <param name="audio1Bitrate">bitrate of the first audio track</param>
 		/// <param name="audio2Bitrate">bitrate of the second audio track</param>
-		public void setDefaults(int nbFrames, double framerate, IVideoSettingsProvider codec, AudioStream audioStream1, AudioStream audioStream2)
+		public void setDefaults(int nbFrames, double framerate, ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> codec, AudioStream audioStream1, AudioStream audioStream2)
 		{
             double closestValue = (double)this.framerate.Items[0];
             foreach (object value in this.framerate.Items)
@@ -1053,9 +1053,9 @@ namespace MeGUI
 		/// gets the selected codec
 		/// </summary>
 		/// <returns></returns>
-		public IVideoSettingsProvider getSelectedCodec()
+		public ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> getSelectedCodec()
 		{
-            return (IVideoSettingsProvider)videoCodec.SelectedItem;
+            return (ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>)videoCodec.SelectedItem;
 		}
 		/// <summary>
 		/// gets the calculated bitrate
@@ -1489,7 +1489,7 @@ namespace MeGUI
             if (updatingContainers)
                 return;
             updatingContainers = true;
-            VideoEncoderType vCodec = (videoCodec.SelectedItem as IVideoSettingsProvider).EncoderType;
+            VideoEncoderType vCodec = (videoCodec.SelectedItem as ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>).EncoderType;
             List<MuxableType> muxableTypes = new List<MuxableType>();
             AudioType type;
             if (audio1Type.SelectedIndex > -1)
@@ -1578,7 +1578,7 @@ namespace MeGUI
             audioStreamsArray = audioStreams.ToArray();
             try
             {
-                codec = (videoCodec.SelectedItem as IVideoSettingsProvider).CodecType;
+                codec = (videoCodec.SelectedItem as ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>).CodecType;
                 containerType = (containerFormat.SelectedItem as ContainerType);
             }
             catch (Exception)

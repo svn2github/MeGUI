@@ -88,7 +88,7 @@ namespace MeGUI
         {
             get
             {
-                return (this.AudioCodec.SelectedItem as IAudioSettingsProvider).GetCurrentSettings();
+                return (this.AudioCodec.SelectedItem as ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType>).GetCurrentSettings();
             }
         }
         public string verifyAudioSettings()
@@ -129,7 +129,8 @@ namespace MeGUI
         #region local event handlers
         private void configAudioButton_Click(object sender, System.EventArgs e)
         {
-            mainForm.hidePlayer();
+#warning update this
+            /*mainForm.hidePlayer();
             string selectedProfile;
             if (CurrentAudioSettingsProvider.EditSettings(mainForm.Profiles, mainForm.MeGUIPath, mainForm.Settings, 
                 this.AudioProfile.Text, new string[] { AudioInput, AudioOutput }, out selectedProfile))
@@ -146,11 +147,12 @@ namespace MeGUI
                 stream.settings = CurrentAudioSettingsProvider.GetCurrentSettings();
                 this.CurrentAudioStream = stream;
             }
-            mainForm.showPlayer();
+            mainForm.showPlayer();*/
         }
         private void audioCodec_SelectedIndexChanged(object sender, EventArgs e)
         {
-            AudioType[] outputTypes = this.audioEncoderProvider.GetSupportedOutput(this.CurrentAudioSettingsProvider.EncoderType);
+#warning and this
+            /*AudioType[] outputTypes = this.audioEncoderProvider.GetSupportedOutput(this.CurrentAudioSettingsProvider.EncoderType);
             AudioType currentType = null;
             if (this.audioContainer.SelectedItem != null)
                 currentType = this.audioContainer.SelectedItem as AudioType;
@@ -178,7 +180,7 @@ namespace MeGUI
             AudioCodecSettings settings = CurrentAudioSettingsProvider.GetCurrentSettings();
             if (MainForm.verifyOutputFile(this.AudioOutput) == null)
                 this.AudioOutput = Path.ChangeExtension(this.AudioOutput, currentType.Extension);
-            audioInput.Filter = audioEncoderProvider.GetSupportedInput(this.CurrentAudioSettingsProvider.CodecType);
+            audioInput.Filter = audioEncoderProvider.GetSupportedInput(this.CurrentAudioSettingsProvider.CodecType);*/
         }
         private void audioContainer_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -239,14 +241,14 @@ namespace MeGUI
                 this.audioStreams[lastSelectedAudioTrackNumber].path = this.AudioInput;
                 this.audioStreams[lastSelectedAudioTrackNumber].output = this.AudioOutput;
                 this.audioStreams[lastSelectedAudioTrackNumber].Type = CurrentAudioOutputType;
-                this.audioStreams[lastSelectedAudioTrackNumber].settings = (audioCodec.SelectedItem as IAudioSettingsProvider).GetCurrentSettings().clone();
+                this.audioStreams[lastSelectedAudioTrackNumber].settings = (audioCodec.SelectedItem as ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType>).GetCurrentSettings().clone();
                 //this.audioStreams[lastSelectedAudioTrackNumber].Delay = this.audioStreams[lastSelectedAudioTrackNumber].settings.Delay;
             }
             this.AudioInput = this.audioStreams[current].path;
             this.AudioOutput = this.audioStreams[current].output;
             if (audioStreams[current].settings != null)
             {
-                foreach (IAudioSettingsProvider p in this.AudioCodec.Items)
+                foreach (ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType> p in this.AudioCodec.Items)
                 {
                     if (p.IsSameType(audioStreams[current].settings))
                     {
@@ -294,7 +296,7 @@ namespace MeGUI
         {
             this.AudioInput = fileName;
             int del = getDelay(fileName);
-            AudioCodecSettings settings = (AudioCodec.SelectedItem as IAudioSettingsProvider).GetCurrentSettings();
+            AudioCodecSettings settings = (AudioCodec.SelectedItem as ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType>).GetCurrentSettings();
             /*if (del != 0) // we have a delay we are interested in
             {
                 settings.DelayEnabled = true;
@@ -337,11 +339,11 @@ namespace MeGUI
             stream.Delay = getDelay(stream.path); 
             this.CurrentAudioStream = stream;
         }
-        private IAudioSettingsProvider CurrentAudioSettingsProvider
+        private ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType> CurrentAudioSettingsProvider
         {
             get
             {
-                return this.AudioCodec.SelectedItem as IAudioSettingsProvider;
+                return this.AudioCodec.SelectedItem as ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType>;
             }
         }
         public AudioType CurrentAudioOutputType
@@ -396,7 +398,7 @@ namespace MeGUI
             if (audioProfile.SelectedIndex != -1) // if it's -1 it's bogus
             {
                 GenericProfile<AudioCodecSettings> prof = (GenericProfile<AudioCodecSettings>)mainForm.Profiles.AudioProfiles[audioProfile.SelectedItem.ToString()];
-                foreach (IAudioSettingsProvider p in audioCodec.Items)
+                foreach (ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType> p in audioCodec.Items)
                 {
                     if (p.IsSameType(prof.Settings))
                     {
@@ -406,6 +408,11 @@ namespace MeGUI
                     }
                 }
             }
+        }
+
+        internal void RefreshProfiles()
+        {
+            //throw new Exception("The method or operation is not implemented.");
         }
     }
 }

@@ -8,98 +8,83 @@ using MeGUI.packages.video.x264;
 
 namespace MeGUI
 {
-    public interface IAudioSettingsProvider : IIDable
+    public interface ISettingsProvider<TSettings, TInfo, TCodec, TEncoder> : IIDable
+        where TSettings : GenericSettings
     {
-        AudioCodec CodecType
-        {
-            get;
-        }
-
-        AudioEncoderType EncoderType
-        {
-            get;
-        }
         /// <summary>
-        /// loads the default settings
+        /// Returns the codec (format, eg AVC, MP3, etc) type
+        /// </summary>
+        TCodec CodecType { get; }
+        
+        /// <summary>
+        /// Returns the encoder (eg x264, LAME, etc) type
+        /// </summary>
+        TEncoder EncoderType { get; }
+        
+        /// <summary>
+        /// Sets the settings back to default
         /// </summary>
         void LoadDefaults();
+
         /// <summary>
-        /// checks if the type of the object given as an argument is the same as the one of the provider
-        /// this check is used to see if a settings object can be loaded into the current provider
-        /// </summary>
-        /// <param name="settings">the settings object to be checked</param>
-        /// <returns>true if the settings is of the same type, false if not</returns>
-        bool IsSameType(AudioCodecSettings settings);
-        /// <summary>
-        /// returns the underlying settings object
-        /// </summary>
-        /// <returns></returns>
-        AudioCodecSettings GetCurrentSettings();
-        /// <summary>
-        /// loads the settings into the provider
+        /// Returns true if settings is the type that this settings provider supports
         /// </summary>
         /// <param name="settings"></param>
-        void LoadSettings(AudioCodecSettings settings);
-        /// <summary>
-        /// allows to edit the settings object via GUI
-        /// </summary>
-        /// <param name="profileManager">the profile manager containing all profiles</param>
-        /// <param name="path">the start path of the application</param>
-        /// <param name="settings">the settings of the application</param>
-        /// <param name="initialProfile">the profile that's currently selected</param>
-        /// <param name="selectedProfile">the profile selected after the configuration dialog has been closed</param>
         /// <returns></returns>
-        bool EditSettings(ProfileManager profileManager, string path, MeGUISettings settings, string initialProfile, string[] audioIO, out string selectedProfile);
+        bool IsSameType(TSettings settings);
+
+        /// <summary>
+        /// Returns the current settings
+        /// </summary>
+        /// <returns></returns>
+        TSettings GetCurrentSettings();
+
+        /// <summary>
+        /// Sets the Current Settings
+        /// </summary>
+        /// <param name="settings"></param>
+        void LoadSettings(TSettings settings);
+
+        /// <summary>
+        /// Opens the configuration dialog for the current settings/profiles
+        /// </summary>
+        SettingsEditor<TSettings, TInfo> EditSettings { get; }
     }
-    public interface IVideoSettingsProvider : IIDable
+    
+/*    public interface IAudioSettingsProvider : ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType> {}
+    public interface IVideoSettingsProvider : ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> { }*/
+
+    public class VideoInfo
     {
-        VideoCodec CodecType
+        public string[] videoIO;
+        public int[] creditsAndIntroFrames;
+        public VideoInfo(string[] v, int[] c)
         {
-            get;
+            this.videoIO = v;
+            this.creditsAndIntroFrames =c;
         }
-
-        VideoEncoderType EncoderType
-        {
-            get;
-        }
-        /// <summary>
-        /// loads the default settings
-        /// </summary>
-        void LoadDefaults();
-        /// <summary>
-        /// checks if the type of the object given as an argument is the same as the one of the provider
-        /// this check is used to see if a settings object can be loaded into the current provider
-        /// </summary>
-        /// <param name="settings">the settings object to be checked</param>
-        /// <returns>true if the settings is of the same type, false if not</returns>
-        bool IsSameType(VideoCodecSettings settings);
-        /// <summary>
-        /// returns the underlying settings object
-        /// </summary>
-        /// <returns></returns>
-        VideoCodecSettings GetCurrentSettings();
-        /// <summary>
-        /// loads the settings into the provider
-        /// </summary>
-        /// <param name="settings"></param>
-        void LoadSettings(VideoCodecSettings settings);
-        bool EditSettings(MainForm mF, string initialProfile, string[] videoIO, int[] creditsAndIntroFrames, out string selectedProfile);
     }
 
-    public class VideoSettingsProviderImpl2<TSettings, TPanelType> : IVideoSettingsProvider
-        where TSettings : VideoCodecSettings, new()
-        where TPanelType : VideoConfigurationPanel, Gettable<VideoCodecSettings>
+
+    public class SettingsProviderImpl2<TPanel, TInfo, TSettings, TProfileSettings, TCodec, TEncoder>
+        : ISettingsProvider<TProfileSettings, TInfo, TCodec, TEncoder>
+        where TProfileSettings : GenericSettings
+        where TSettings : TProfileSettings, new()
+        where TPanel : System.Windows.Forms.Control, Gettable<TProfileSettings>
     {
         private string title;
         private TSettings settings;
-        private VideoEncoderType encoderType;
+        private TCodec codec;
+        private TEncoder encoderType;
 
-        public VideoSettingsProviderImpl2(string title, VideoEncoderType encoderType)
+        public SettingsProviderImpl2(string title, TEncoder encoderType, TCodec codec)
         {
             this.title = title;
             this.encoderType = encoderType;
-            (this as IVideoSettingsProvider).LoadDefaults();
+            this.codec = codec;
+            LoadDefaults();
         }
+
         public string ID
         {
             get
@@ -112,34 +97,34 @@ namespace MeGUI
             return this.title;
         }
 
-        public VideoEncoderType EncoderType
+        public TEncoder EncoderType
         {
             get { return encoderType; }
         }
 
         #region IVideoSettingsProvider Members
 
-        VideoCodec IVideoSettingsProvider.CodecType
+        public TCodec CodecType
         {
-            get { return this.settings.Codec; }
+            get { return this.codec; }
         }
 
-        void IVideoSettingsProvider.LoadDefaults()
+        public void LoadDefaults()
         {
             this.settings = new TSettings();
         }
 
-        bool IVideoSettingsProvider.IsSameType(VideoCodecSettings settings)
+        public bool IsSameType(TProfileSettings settings)
         {
             return settings is TSettings;
         }
 
-        VideoCodecSettings IVideoSettingsProvider.GetCurrentSettings()
+        public TProfileSettings GetCurrentSettings()
         {
             return this.settings;
         }
 
-        void IVideoSettingsProvider.LoadSettings(VideoCodecSettings settings)
+        public void LoadSettings(TProfileSettings settings)
         {
             this.settings = (TSettings)settings;
         }
@@ -149,38 +134,49 @@ namespace MeGUI
             return settings.MencoderPath;
         }
 
-        bool IVideoSettingsProvider.EditSettings(MainForm mainForm, string initialProfile, string[] videoIO, int[] creditsAndIntroFrames, out string selectedProfile)
+        public SettingsEditor<TProfileSettings, TInfo> EditSettings
         {
-            selectedProfile = null;
-            TPanelType t = (TPanelType)System.Activator.CreateInstance(typeof(TPanelType), mainForm);
-            using (ConfigurationWindow<TSettings, VideoCodecSettings> scd = new ConfigurationWindow<TSettings, VideoCodecSettings>(mainForm.Profiles, t, t, initialProfile))
-            {
-                t.Input = videoIO[0];
-                t.Output = videoIO[1];
-                t.EncoderPath = EncoderPath(mainForm.Settings);
-                t.IntroEndFrame = creditsAndIntroFrames[0];
-                t.CreditsStartFrame = creditsAndIntroFrames[1];
-                scd.Settings = this.settings;
-                if (scd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                {
-                    this.settings = (TSettings)scd.Settings;
-                    selectedProfile = scd.CurrentProfile;
-                    return true;
-                }
-                else
-                    return false;
-            }
+            get { return EditorProvider<TPanel, TInfo, TSettings, TProfileSettings>.Create(); }
         }
-
         #endregion
     }
 
+    public class EditorProvider<TPanel, TInfo, TSettings, TProfileSettings>
+        where TProfileSettings : GenericSettings
+        where TSettings : TProfileSettings, new()
+        where TPanel : System.Windows.Forms.Control, Gettable<TProfileSettings>
+    {
+        public static SettingsEditor<TProfileSettings, TInfo> Create()
+        {
+            return new SettingsEditor<TProfileSettings, TInfo>(
+                delegate(MainForm mainForm, ref TProfileSettings settings,
+                            ref string profile, TInfo info)
+                {
+                    TPanel t = (TPanel)System.Activator.CreateInstance(typeof(TPanel), mainForm, info);
+                    using (ConfigurationWindow<TSettings, TProfileSettings> scd = new ConfigurationWindow<TSettings, TProfileSettings>(mainForm.Profiles, t, t, profile))
+                    {
+                        scd.Settings = (TSettings) settings; // Set the settings in case there is no profile configured
+                        if (scd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                        {
+                            settings = scd.Settings; // Again, in case no profile is configured
+                            profile = scd.CurrentProfile;
+                            return true;
+                        }
+                        else
+                            return false;
+                    }
+                });
+        }
+    }
+    
+#region old
+    /*
     /// <summary>
     /// Generic IVideoSettingsProvider implementation
     /// </summary>
     /// <typeparam name="TSettings">Video Codec settings</typeparam>
     /// <typeparam name="TConfigurationDialog">Dialog to configure Video Codec settings</typeparam>
-    public class VideoSettingsProviderImpl<TSettings, TConfigurationDialog> : IVideoSettingsProvider
+    public class VideoSettingsProviderImpl<TSettings, TConfigurationDialog> : ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>
         where TSettings : VideoCodecSettings, new()
         where TConfigurationDialog : VideoConfigurationDialog
     {
@@ -191,7 +187,7 @@ namespace MeGUI
         {
             this.title = title;
             this.encoderType = encoderType;
-            (this as IVideoSettingsProvider).LoadDefaults();
+            (this as ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>).LoadDefaults();
         }
         public string ID
         {
@@ -212,27 +208,27 @@ namespace MeGUI
 
         #region IVideoSettingsProvider Members
 
-        VideoCodec IVideoSettingsProvider.CodecType
+        VideoCodec ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>.CodecType
         {
             get { return this.settings.Codec; }
         }
 
-        void IVideoSettingsProvider.LoadDefaults()
+        void ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>.LoadDefaults()
         {
             this.settings = new TSettings();
         }
 
-        bool IVideoSettingsProvider.IsSameType(VideoCodecSettings settings)
+        bool ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>.IsSameType(VideoCodecSettings settings)
         {
             return settings is TSettings;
         }
 
-        VideoCodecSettings IVideoSettingsProvider.GetCurrentSettings()
+        VideoCodecSettings ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>.GetCurrentSettings()
         {
             return this.settings;
         }
 
-        void IVideoSettingsProvider.LoadSettings(VideoCodecSettings settings)
+        void ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>.LoadSettings(VideoCodecSettings settings)
         {
             this.settings = (TSettings)settings;
         }
@@ -242,7 +238,7 @@ namespace MeGUI
             return settings.MencoderPath;
         }
 
-        bool IVideoSettingsProvider.EditSettings(MainForm mainForm, string initialProfile, string[] videoIO, int[] creditsAndIntroFrames, out string selectedProfile)
+        bool ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>.EditSettings(MainForm mainForm, string initialProfile, string[] videoIO, int[] creditsAndIntroFrames, out string selectedProfile)
         {
             selectedProfile = null;
             using (TConfigurationDialog scd = (TConfigurationDialog)System.Activator.CreateInstance( typeof(TConfigurationDialog),mainForm, initialProfile, mainForm.Settings.SafeProfileAlteration))
@@ -267,7 +263,9 @@ namespace MeGUI
         #endregion
     }
 
-    public class SnowSettingsProvider : VideoSettingsProviderImpl<snowSettings, snowConfigurationDialog>
+*/
+#endregion
+/*    public class SnowSettingsProvider : SettingsProviderImpl<snowSettings, snowConfigurationDialog>
     {
         public SnowSettingsProvider():base("Snow", VideoEncoderType.SNOW)
         {
@@ -278,10 +276,11 @@ namespace MeGUI
         public LavcSettingsProvider(): base("LMP4", VideoEncoderType.LMP4)
         {
         }
-    }
-    public class X264SettingsProvider : VideoSettingsProviderImpl2<x264Settings, x264ConfigurationPanel>
+    }*/
+    public class X264SettingsProvider : SettingsProviderImpl2<x264ConfigurationPanel,
+        VideoInfo, x264Settings, VideoCodecSettings, VideoCodec, VideoEncoderType>
     {
-        public X264SettingsProvider():base("x264", VideoEncoderType.X264)
+        public X264SettingsProvider():base("x264", VideoEncoderType.X264, VideoCodec.AVC)
         {
         }
         public override string EncoderPath(MeGUISettings settings)
@@ -289,6 +288,8 @@ namespace MeGUI
             return settings.X264Path;
         }
     }
+#region old
+/*
     public class XviDSettingsProvider : VideoSettingsProviderImpl<xvidSettings, xvidConfigurationDialog>
     {
         public XviDSettingsProvider():base("XviD", VideoEncoderType.XVID)
@@ -305,7 +306,7 @@ namespace MeGUI
     /// </summary>
     /// <typeparam name="TSettings">Audio Codec settings</typeparam>
     /// <typeparam name="TConfigurationDialog">Dialog to configure Audio Codec settings</typeparam>
-    public class AudioSettingsProviderImpl<TSettings, TConfigurationDialog>:IAudioSettingsProvider
+    public class AudioSettingsProviderImpl<TSettings, TConfigurationDialog>:ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>
         where TSettings: AudioCodecSettings, new()
         where TConfigurationDialog: baseAudioConfigurationDialog
     {
@@ -316,7 +317,7 @@ namespace MeGUI
 
         public AudioSettingsProviderImpl(string title, AudioEncoderType encoderType)
         {
-            ((IAudioSettingsProvider)this).LoadDefaults();
+            ((ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>)this).LoadDefaults();
             this.title = title;
             this.encoderType = encoderType;
         }
@@ -435,4 +436,6 @@ namespace MeGUI
         {
         }
     }
+*/
+#endregion
 }

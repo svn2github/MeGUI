@@ -186,7 +186,7 @@ namespace MeGUI.packages.video.x264
             // 
             this.tabControl1.Controls.Add(this.rateControlTabPage);
             this.tabControl1.Controls.Add(this.quantizationTabPage);
-            this.tabControl1.Size = new System.Drawing.Size(510, 482);
+            this.tabControl1.Size = new System.Drawing.Size(510, 445);
             this.tabControl1.Controls.SetChildIndex(this.zoneTabPage, 0);
             this.tabControl1.Controls.SetChildIndex(this.quantizationTabPage, 0);
             this.tabControl1.Controls.SetChildIndex(this.rateControlTabPage, 0);
@@ -196,13 +196,13 @@ namespace MeGUI.packages.video.x264
             // 
             this.zoneTabPage.Controls.Add(this.customCommandlineOptions);
             this.zoneTabPage.Controls.Add(this.customCommandlineOptionsLabel);
-            this.zoneTabPage.Size = new System.Drawing.Size(502, 426);
+            this.zoneTabPage.Size = new System.Drawing.Size(502, 456);
             this.zoneTabPage.Controls.SetChildIndex(this.customCommandlineOptionsLabel, 0);
             this.zoneTabPage.Controls.SetChildIndex(this.customCommandlineOptions, 0);
             // 
             // commandline
             // 
-            this.commandline.Location = new System.Drawing.Point(0, 488);
+            this.commandline.Location = new System.Drawing.Point(0, 451);
             this.commandline.Size = new System.Drawing.Size(507, 59);
             // 
             // mainTabPage
@@ -558,7 +558,7 @@ namespace MeGUI.packages.video.x264
             this.rateControlTabPage.Controls.Add(this.x264RCGroupbox);
             this.rateControlTabPage.Location = new System.Drawing.Point(4, 22);
             this.rateControlTabPage.Name = "rateControlTabPage";
-            this.rateControlTabPage.Size = new System.Drawing.Size(502, 426);
+            this.rateControlTabPage.Size = new System.Drawing.Size(502, 456);
             this.rateControlTabPage.TabIndex = 3;
             this.rateControlTabPage.Text = "RC and ME";
             this.rateControlTabPage.UseVisualStyleBackColor = true;
@@ -1026,7 +1026,7 @@ namespace MeGUI.packages.video.x264
             this.quantizationTabPage.Controls.Add(this.x264QuantizerGroupBox);
             this.quantizationTabPage.Location = new System.Drawing.Point(4, 22);
             this.quantizationTabPage.Name = "quantizationTabPage";
-            this.quantizationTabPage.Size = new System.Drawing.Size(502, 426);
+            this.quantizationTabPage.Size = new System.Drawing.Size(502, 419);
             this.quantizationTabPage.TabIndex = 4;
             this.quantizationTabPage.Text = "Advanced";
             this.quantizationTabPage.UseVisualStyleBackColor = true;
@@ -1752,7 +1752,7 @@ namespace MeGUI.packages.video.x264
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Name = "x264ConfigurationPanel";
-            this.Size = new System.Drawing.Size(510, 550);
+            this.Size = new System.Drawing.Size(510, 513);
             this.tabControl1.ResumeLayout(false);
             this.zoneTabPage.ResumeLayout(false);
             this.zoneTabPage.PerformLayout();

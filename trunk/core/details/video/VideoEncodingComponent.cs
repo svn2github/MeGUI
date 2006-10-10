@@ -7,6 +7,10 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 
+using MeGUI.core.plugins.interfaces;
+using MeGUI.core.details.video;
+using MeGUI.packages.video;
+
 namespace MeGUI
 {
     public partial class VideoEncodingComponent : UserControl
@@ -15,11 +19,57 @@ namespace MeGUI
         private MainForm mainForm;
         private int creditsStartFrame = -1, introEndFrame = -1;
         private int parX = -1, parY = -1;
+
+        private ProfilesControlHandler<VideoCodecSettings, VideoInfo> profileHandler;
+        public ProfilesControlHandler<VideoCodecSettings, VideoInfo> ProfileHandler
+        {
+            get { return profileHandler; }
+        }
+
+        public VideoCodecSettings CurrentSettings
+        {
+            get { return codecHandler.Getter(); }
+        }
+	
         private VideoEncoderProvider videoEncoderProvider = new VideoEncoderProvider();
         public VideoEncodingComponent()
         {
             InitializeComponent();
+
         }
+
+        public string SelectedProfile
+        {
+            get { return ProfileHandler.SelectedProfile; }
+            set { ProfileHandler.SelectedProfile = value; }
+        }
+
+        public ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> CurrentSettingsProvider
+        {
+            get { return codecHandler.CurrentSettingsProvider; }
+            set { codecHandler.CurrentSettingsProvider = value; }
+        }
+
+        private MultipleConfigurersHandler<VideoCodecSettings, VideoInfo, MeGUI.VideoCodec, VideoEncoderType> codecHandler;
+        public MultipleConfigurersHandler<VideoCodecSettings, VideoInfo, MeGUI.VideoCodec, VideoEncoderType> CodecHandler
+        {
+            get { return codecHandler; }
+        }
+
+        public  VideoInfo getInfo()
+        {
+            return new VideoInfo(VideoIO, new int[] { creditsStartFrame, introEndFrame });
+        }
+        
+        private VideoInfo info;
+
+        public VideoInfo Info
+        {
+            get { return info; }
+            set { info = value; }
+        }
+
+
         public void InitializeDropdowns()
         {
             videoCodec.Items.Clear();
@@ -30,15 +80,23 @@ namespace MeGUI
                 try { videoCodec.SelectedIndex = 0; }
                 catch (Exception) { MessageBox.Show("No valid video codecs are set up", "No valid video codecs", MessageBoxButtons.OK, MessageBoxIcon.Error); }
             }
+
+            codecHandler =
+                new MultipleConfigurersHandler<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>(videoCodec);
+            
+            profileHandler = new ProfilesControlHandler<VideoCodecSettings, VideoInfo>("Video", mainForm, profileControl1,
+                codecHandler.EditSettings, new InfoGetter<VideoInfo>(getInfo),
+                codecHandler.Getter, codecHandler.Setter);
+            profileHandler.RefreshProfiles();
         }
         public MainForm MainForm
         {
             set { mainForm = value; }
         }
-        public ComboBox VideoCodec
+/*        public ComboBox VideoCodec
         {
             get { return videoCodec; }
-        }
+        }*/
         public string VideoInput
         {
             get { return videoInput.Filename; }
@@ -49,10 +107,10 @@ namespace MeGUI
             get { return videoOutput.Filename; }
             set { videoOutput.Filename = value; }
         }
-        public ComboBox VideoProfile
+/*        public ComboBox VideoProfile
         {
-            get { return videoProfile; }
-        }
+            get { return null; /* throw new Exception("NOt implemented"); *//*}
+        }*/
         public VideoType CurrentVideoOutputType
         {
             get { return this.fileType.SelectedItem as VideoType; }
@@ -82,14 +140,14 @@ namespace MeGUI
             get { return creditsStartFrame; }
             set { creditsStartFrame = value; }
         }
-        public IVideoSettingsProvider CurrentVideoCodecSettingsProvider
+/*        public ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> CurrentVideoCodecSettingsProvider
         {
             get
             {
-                return videoCodec.SelectedItem as IVideoSettingsProvider;
+                return videoCodec.SelectedItem as ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>;
             }
         }
-
+        */
         #region event handlers
         private void videoInput_FileSelected(FileBar sender, FileBarEventArgs args)
         {
@@ -139,9 +197,10 @@ namespace MeGUI
                     this.player.IntroEnd = introEndFrame;
             }
         }
-        private void videoConfigButton_Click(object sender, System.EventArgs e)
+/*        private void videoConfigButton_Click(object sender, System.EventArgs e)
         {
-            if (player != null)
+#warning fix this
+            /*if (player != null)
                 player.Hide();
             VideoCodecSettings settings = CurrentVideoCodecSettingsProvider.GetCurrentSettings();
             string selectedProfile;
@@ -159,8 +218,8 @@ namespace MeGUI
             }
             if (player != null)
                 player.Show();
-            updateIOConfig();
-        }
+            updateIOConfig();*/
+        //}
         private void queueVideoButton_Click(object sender, System.EventArgs e)
         {
             string settingsError = verifyVideoSettings();  // basic input, logfile and output file settings are okay
@@ -189,12 +248,12 @@ namespace MeGUI
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void VideoProfile_SelectedIndexChanged(object sender, System.EventArgs e)
+/*        private void VideoProfile_SelectedIndexChanged(object sender, System.EventArgs e)
         {
-            if (this.VideoProfile.SelectedIndex != -1) // if it's -1 it's bogus
+            if (this..SelectedIndex != -1) // if it's -1 it's bogus
             {
                 GenericProfile<VideoCodecSettings> prof = (GenericProfile<VideoCodecSettings>)mainForm.Profiles.VideoProfiles[this.VideoProfile.SelectedItem.ToString()];
-                foreach (IVideoSettingsProvider p in this.VideoCodec.Items)
+                foreach (ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> p in this.VideoCodec.Items)
                 {
                     if (p.IsSameType(prof.Settings))
                     {
@@ -205,7 +264,7 @@ namespace MeGUI
                 }
             }
             updateIOConfig();
-        }
+        }*/
         /// <summary>
         /// handles changes in the codec selection
         /// enables / disabled the proper GUI fields
@@ -216,7 +275,7 @@ namespace MeGUI
         /// <param name="e"></param>
         private void codec_SelectedIndexChanged(object sender, System.EventArgs e)
         {
-            VideoType[] outputTypes = this.videoEncoderProvider.GetSupportedOutput(this.CurrentVideoCodecSettingsProvider.EncoderType);
+            VideoType[] outputTypes = this.videoEncoderProvider.GetSupportedOutput(codecHandler.CurrentSettingsProvider.EncoderType);
             VideoType currentType = null;
             if (CurrentVideoOutputType != null)
                 currentType = CurrentVideoOutputType;
@@ -241,7 +300,7 @@ namespace MeGUI
                 currentType = outputTypes[0];
                 this.fileType.SelectedItem = outputTypes[0];
             }
-            VideoCodecSettings settings = CurrentVideoCodecSettingsProvider.GetCurrentSettings();
+            VideoCodecSettings settings = CurrentSettings;
             this.updateIOConfig();
             if (MainForm.verifyOutputFile(this.VideoOutput) == null)
                 this.VideoOutput = Path.ChangeExtension(this.VideoOutput, currentType.Extension);
@@ -251,7 +310,7 @@ namespace MeGUI
         /// </summary>
         private void updateIOConfig()
         {
-            int encodingMode = CurrentVideoCodecSettingsProvider.GetCurrentSettings().EncodingMode;
+            int encodingMode = CurrentSettings.EncodingMode;
             if (encodingMode == 2 || encodingMode == 5) // first pass
             {
                 videoOutput.Enabled = false;
@@ -301,14 +360,15 @@ namespace MeGUI
         /// </summary>
         public VideoCodecSettings CurrentVideoCodecSettings
         {
+#warning remove
             get
             {
-                return CurrentVideoCodecSettingsProvider.GetCurrentSettings();
+                return CurrentSettings;
             }
-
+/*
             set
             {
-                foreach (IVideoSettingsProvider p in VideoCodec.Items)
+                foreach (ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> p in VideoCodec.Items)
                 {
                     if (p.IsSameType(value))
                     {
@@ -317,7 +377,7 @@ namespace MeGUI
                         break;
                     }
                 }
-            }
+            }*/
         }
         public MuxableType CurrentMuxableVideoType
         {
@@ -330,7 +390,7 @@ namespace MeGUI
             this.VideoInput = fileName;
             parX = parY = -1;
             //reset the zones for all codecs, zones are supposed to be source bound
-            foreach (IVideoSettingsProvider p in (VideoCodec.Items))
+            foreach (ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> p in (videoCodec.Items))
             {
                 VideoCodecSettings s = p.GetCurrentSettings();
                 s.Zones = new Zone[0];
@@ -473,6 +533,11 @@ namespace MeGUI
             this.VideoInput = "";
             this.VideoOutput = "";
             this.creditsStartFrame = 0;
+        }
+
+        public void RefreshProfiles()
+        {
+            ProfileHandler.RefreshProfiles();
         }
     }
 }

@@ -101,6 +101,7 @@ namespace MeGUI.core.plugins.interfaces
             this.videoProfile.Size = new System.Drawing.Size(196, 21);
             this.videoProfile.Sorted = true;
             this.videoProfile.TabIndex = 11;
+            this.videoProfile.SelectedIndexChanged += new System.EventHandler(this.videoProfile_SelectedIndexChanged);
             // 
             // newVideoProfileButton
             // 
@@ -166,11 +167,19 @@ namespace MeGUI.core.plugins.interfaces
         }
 
         public ConfigurationWindow(ProfileManager p, Control sPanel, Gettable<TProfileSettings> s, string initialProfile)
+            : this(p, sPanel, s, initialProfile, new TSettings().getSettingsType()) { }
+        
+        public ConfigurationWindow(ProfileManager p, Control sPanel, Gettable<TProfileSettings> s, string initialProfile, string title)
         {
             this.initialProfile = initialProfile;
             InitializeComponent();
+            this.Text = title + " configuration dialog";
             this.profileManager = p;
             this.s = s;
+            System.Drawing.Size size = Size;
+            size.Height += sPanel.Height - panel1.Height;
+            size.Width += sPanel.Width - panel1.Width;
+            Size = size;
             sPanel.Dock = DockStyle.Fill;
             panel1.Controls.Add(sPanel);
         }
@@ -223,6 +232,14 @@ namespace MeGUI.core.plugins.interfaces
             }
             else
                 MessageBox.Show("Sorry, profiles must have unique names", "Duplicate name detected", MessageBoxButtons.OK);
+        }
+
+        private void videoProfile_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            GenericProfile<TProfileSettings> prof = this.videoProfile.SelectedItem as GenericProfile<TProfileSettings>;
+            if (prof == null)
+                return;
+            this.Settings = prof.Settings;
         }
     }
 

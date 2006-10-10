@@ -125,27 +125,27 @@ namespace MeGUI
         public static GenericRegisterer<AudioEncoderType> AudioEncoderTypes = new GenericRegisterer<AudioEncoderType>();
         
         // Audio Codecs
-        public static readonly IAudioSettingsProvider NAAC = new NeroAACSettingsProvider();
-        public static readonly IAudioSettingsProvider WAAC = new WinAmpAACSettingsProvider();
-        public static readonly IAudioSettingsProvider Lame = new LameMP3SettingsProvider();
-        public static readonly IAudioSettingsProvider FAAC = new FaacSettingsProvider();
-        public static readonly IAudioSettingsProvider Vorbis = new OggVorbisSettingsProvider();
-        public static readonly IAudioSettingsProvider AudX = new AudXSettingsProvider();
-        public static readonly IAudioSettingsProvider AC3 = new AC3SettingsProvider();
-        public static readonly IAudioSettingsProvider MP2 = new MP2SettingsProvider();
+/*        public static readonly ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType> NAAC = new NeroAACSettingsProvider();
+        public static readonly ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType> WAAC = new WinAmpAACSettingsProvider();
+        public static readonly ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType> Lame = new LameMP3SettingsProvider();
+        public static readonly ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType> FAAC = new FaacSettingsProvider();
+        public static readonly ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType> Vorbis = new OggVorbisSettingsProvider();
+        public static readonly ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType> AudX = new AudXSettingsProvider();
+        public static readonly ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType> AC3 = new AC3SettingsProvider();
+        public static readonly ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType> MP2 = new MP2SettingsProvider();*/
 
         // Video Codecs
-        public static readonly IVideoSettingsProvider X264 = new X264SettingsProvider();
-        public static readonly IVideoSettingsProvider Snow = new SnowSettingsProvider();
-        public static readonly IVideoSettingsProvider Lavc = new LavcSettingsProvider();
-        public static readonly IVideoSettingsProvider XviD = new XviDSettingsProvider();
+        public static readonly ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> X264 = new X264SettingsProvider();
+/*        public static readonly ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> Snow = new SnowSettingsProvider();
+        public static readonly ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> Lavc = new LavcSettingsProvider();
+        public static readonly ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> XviD = new XviDSettingsProvider();*/
 
         // All Audio Codecs
 #warning this must be renamed
-        public static readonly IAudioSettingsProvider[] ListOfAudioCodecs = new IAudioSettingsProvider[] { NAAC, WAAC, Lame, AudX, Vorbis, AC3, MP2, FAAC};
+        public static readonly ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>[] ListOfAudioCodecs = new ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>[] { /*NAAC, WAAC, Lame, AudX, Vorbis, AC3, MP2, FAAC*/};
         // All Audio Codecs
 #warning this must be renamed
-        public static readonly IVideoSettingsProvider[] ListOfVideoCodecs = new IVideoSettingsProvider[] { Lavc, X264, Snow, XviD };
+        public static readonly ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>[] ListOfVideoCodecs = new ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>[] { /*Lavc,*/ X264/*, Snow, XviD*/ };
         
         static CodecManager()
         {

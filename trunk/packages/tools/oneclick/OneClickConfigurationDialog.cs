@@ -22,11 +22,12 @@ namespace MeGUI
 
         public void Run(MainForm info)
         {
-            using (OneClickConfigurationDialog dialog = new OneClickConfigurationDialog(
+#warning fix oneclick tool
+/*            using (OneClickConfigurationDialog dialog = new OneClickConfigurationDialog(
                 info.Video.VideoProfile.SelectedIndex, info.Audio.AudioProfile.SelectedIndex, info))
             {
                 dialog.ShowDialog();
-            }
+            }*/
         }
 
         public string[] Shortcuts

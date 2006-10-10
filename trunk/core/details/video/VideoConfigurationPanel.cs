@@ -20,35 +20,39 @@ namespace MeGUI.core.details.video
 
         private bool loaded;
         private int introEndFrame = 0, creditsStartFrame = 0;
-        private string input = "", output = "", encoderPath = "";
+        protected string input = "", output = "", encoderPath = "";
         #endregion
         protected ToolTip tooltipHelp;
         private IContainer components;
         #region start / stop
         public VideoConfigurationPanel()
-            : this(null)
+            : this(null, new VideoInfo(null, null))
         { }
 
-        public VideoConfigurationPanel(MainForm mainForm)
+
+        public VideoConfigurationPanel(MainForm mainForm, VideoInfo info)
         {
             loaded = false;
             InitializeComponent();
             zonesControl.UpdateGUIEvent += new ZonesControl.UpdateConfigGUI(genericUpdate);
             zonesControl.MainForm = mainForm;
+
+            input = info.videoIO[0];
+            output = info.videoIO[1];
+            zonesControl.IntroEndFrame = info.creditsAndIntroFrames[0];
+            zonesControl.CreditsStartFrame = info.creditsAndIntroFrames[1];
         }
 
         private void VideoConfigurationPanel_Load(object sender, EventArgs e)
         {
-            zonesControl.IntroEndFrame = introEndFrame;
-            zonesControl.CreditsStartFrame = creditsStartFrame;
             loaded = true;
             doCodecSpecificLoadAdjustments();
             genericUpdate();
         }
 
-        private void VideoConfigurationPanel_Unload(object sender, EventArgs e)
+        private void VideoConfigurationPanel_VisibleChanged(object sender, EventArgs e)
         {
-            zonesControl.closePlayer();
+            if (!Visible) zonesControl.closePlayer();
         }
 
         #endregion
@@ -268,6 +272,8 @@ namespace MeGUI.core.details.video
             this.Controls.Add(this.tabControl1);
             this.Name = "VideoConfigurationPanel";
             this.Size = new System.Drawing.Size(331, 409);
+            this.VisibleChanged += new System.EventHandler(this.VideoConfigurationPanel_VisibleChanged);
+            this.Load += new System.EventHandler(this.VideoConfigurationPanel_Load);
             this.tabControl1.ResumeLayout(false);
             this.zoneTabPage.ResumeLayout(false);
             this.ResumeLayout(false);

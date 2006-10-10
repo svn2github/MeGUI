@@ -726,7 +726,7 @@ namespace MeGUI
         {
             XmlSerializer ser = null;
             settings.AudioProfileName = Audio.AudioProfile.Text;
-            settings.VideoProfileName = Video.VideoProfile.Text;
+            settings.VideoProfileName = Video.SelectedProfile;
             string fileName = this.path + @"\settings.xml";
             using (Stream s = File.Open(fileName, System.IO.FileMode.Create, System.IO.FileAccess.Write))
             {
@@ -772,8 +772,11 @@ namespace MeGUI
                         {
                             if (this.profileManager.VideoProfiles.ContainsKey(settings.VideoProfileName))
                             {
-                                int pos = Video.VideoProfile.Items.IndexOf(settings.VideoProfileName);
-                                Video.VideoProfile.SelectedIndex = pos;
+                                try
+                                { Video.SelectedProfile = settings.VideoProfileName; }
+                                catch (Exception) { }
+/*                                int pos = Video.VideoProfile.Items.IndexOf(settings.VideoProfileName);
+                                Video.VideoProfile.SelectedIndex = pos;*/
                             }
                         }
                     }
@@ -1115,11 +1118,7 @@ namespace MeGUI
         {
             ProfilePorter importer = new ProfilePorter(profileManager, file, this);
             importer.ShowDialog();
-            Video.VideoProfile.Items.Clear();
-            foreach (string name in this.profileManager.VideoProfiles.Keys)
-            {
-                Video.VideoProfile.Items.Add(name);
-            }
+            Video.RefreshProfiles();
             Audio.AudioProfile.Items.Clear();
             foreach (string name in this.profileManager.AudioProfiles.Keys)
             {
@@ -1159,11 +1158,7 @@ namespace MeGUI
             }
             ProfilePorter importer = new ProfilePorter(profileManager, this, data);
             importer.ShowDialog();
-            Video.VideoProfile.Items.Clear();
-            foreach (string name in this.profileManager.VideoProfiles.Keys)
-            {
-                Video.VideoProfile.Items.Add(name);
-            }
+            Video.RefreshProfiles();
             Audio.AudioProfile.Items.Clear();
             foreach (string name in this.profileManager.AudioProfiles.Keys)
             {
@@ -1175,11 +1170,7 @@ namespace MeGUI
         {
             ProfilePorter importer = new ProfilePorter(profileManager, true, this);
             importer.ShowDialog();
-            Video.VideoProfile.Items.Clear();
-            foreach (string name in this.profileManager.VideoProfiles.Keys)
-            {
-                Video.VideoProfile.Items.Add(name);
-            }
+            Video.RefreshProfiles();
             Audio.AudioProfile.Items.Clear();
             foreach (string name in this.profileManager.AudioProfiles.Keys)
             {
@@ -1342,13 +1333,14 @@ namespace MeGUI
             this.jobUtil = new JobUtil(this);
             this.settings = new MeGUISettings();
             this.calc = new BitrateCalculator();
-            this.profileManager = new ProfileManager(this.path);
-            this.profileManager.LoadProfiles(Video.VideoProfile, Audio.AudioProfile);
-            this.mediaFileFactory = new MediaFileFactory(this);
             addPackages();
             videoEncodingComponent1.MainForm = this;
-            videoEncodingComponent1.InitializeDropdowns();
             audioEncodingComponent1.MainForm = this;
+            this.profileManager = new ProfileManager(this.path);
+            this.profileManager.LoadProfiles();
+            Audio.RefreshProfiles();
+            this.mediaFileFactory = new MediaFileFactory(this);
+            videoEncodingComponent1.InitializeDropdowns();
             audioEncodingComponent1.InitializeDropdowns();
             this.loadSettings();
             jobControl1.MainForm = this;
@@ -1394,10 +1386,11 @@ namespace MeGUI
             PackageSystem.Tools.Register(new AVCLevelTool());
             PackageSystem.Tools.Register(new VobSubTool());
             PackageSystem.VideoSettingsProviders.Register(new X264SettingsProvider());
-            PackageSystem.VideoSettingsProviders.Register(new XviDSettingsProvider());
+#warning add others
+/*            PackageSystem.VideoSettingsProviders.Register(new XviDSettingsProvider());
             PackageSystem.VideoSettingsProviders.Register(new SnowSettingsProvider());
             PackageSystem.VideoSettingsProviders.Register(new LavcSettingsProvider());
-            PackageSystem.AudioSettingsProviders.Register(new NeroAACSettingsProvider());
+            PackageSystem.AudioSettingsProviders.Register(new NeroAACSettingsProvider());*/
             PackageSystem.MediaFileTypes.Register(new AvsFileFactory());
             PackageSystem.MediaFileTypes.Register(new d2vFileFactory());
             PackageSystem.MediaFileTypes.Register(new MediaInfoFileFactory());

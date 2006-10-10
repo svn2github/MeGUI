@@ -40,17 +40,9 @@ namespace MeGUI
             Register(new AviSynthSettings(), typeof(GenericProfile<OneClickSettings>));
         }
         #region loading and saving
-        public void LoadProfiles(ComboBox video, ComboBox audio)
+        public void LoadProfiles()
         {
             loadProfiles();
-            foreach (GenericProfile<VideoCodecSettings> vProf in VideoProfiles.Values)
-            {
-                video.Items.Add(vProf.Name);
-            }
-            foreach (GenericProfile<AudioCodecSettings> aProf in AudioProfiles.Values)
-            {
-                audio.Items.Add(aProf.Name);
-            }
         }
         /// <summary>
         /// saves all the profiles
