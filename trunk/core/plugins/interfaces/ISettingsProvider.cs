@@ -5,6 +5,9 @@ using System.Text;
 using MeGUI.core.plugins.interfaces;
 using MeGUI.core.details.video;
 using MeGUI.packages.video.x264;
+using MeGUI.packages.video.lmp4;
+using MeGUI.packages.video.snow;
+using MeGUI.packages.video.xvid;
 
 namespace MeGUI
 {
@@ -63,6 +66,9 @@ namespace MeGUI
             this.videoIO = v;
             this.creditsAndIntroFrames =c;
         }
+
+        public VideoInfo()
+            : this(new string[2], new int[2]) { }
     }
 
 
@@ -280,12 +286,41 @@ namespace MeGUI
     public class X264SettingsProvider : SettingsProviderImpl2<x264ConfigurationPanel,
         VideoInfo, x264Settings, VideoCodecSettings, VideoCodec, VideoEncoderType>
     {
-        public X264SettingsProvider():base("x264", VideoEncoderType.X264, VideoCodec.AVC)
+        public X264SettingsProvider()
+            : base("x264", VideoEncoderType.X264, VideoCodec.AVC)
         {
         }
         public override string EncoderPath(MeGUISettings settings)
         {
             return settings.X264Path;
+        }
+    }
+    public class XviDSettingsProvider : SettingsProviderImpl2<xvidConfigurationPanel,
+   VideoInfo, xvidSettings, VideoCodecSettings, VideoCodec, VideoEncoderType>
+    {
+        public XviDSettingsProvider()
+            : base("XviD", VideoEncoderType.XVID, VideoCodec.ASP)
+        {
+        }
+        public override string EncoderPath(MeGUISettings settings)
+        {
+            return settings.XviDEncrawPath;
+        }
+    }
+    public class LavcSettingsProvider : SettingsProviderImpl2<lavcConfigurationPanel,
+   VideoInfo, lavcSettings, VideoCodecSettings, VideoCodec, VideoEncoderType>
+    {
+        public LavcSettingsProvider()
+            : base("LMP4", VideoEncoderType.LMP4, VideoCodec.ASP)
+        {
+        }
+    }
+    public class SnowSettingsProvider : SettingsProviderImpl2<snowConfigurationPanel,
+   VideoInfo, snowSettings, VideoCodecSettings, VideoCodec, VideoEncoderType>
+    {
+        public SnowSettingsProvider()
+            : base("Snow", VideoEncoderType.SNOW, VideoCodec.SNOW)
+        {
         }
     }
 #region old

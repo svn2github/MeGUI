@@ -1,6 +1,6 @@
-namespace MeGUI
+namespace MeGUI.packages.video.snow
 {
-    partial class snowConfigurationDialog
+    partial class snowConfigurationPanel
     {
         /// <summary>
         /// Required designer variable.
@@ -59,8 +59,8 @@ namespace MeGUI
             this.snowBitrate = new System.Windows.Forms.TextBox();
             this.snowBitrateLabel = new System.Windows.Forms.Label();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
-            this.mainTabPage.SuspendLayout();
             this.tabControl1.SuspendLayout();
+            this.mainTabPage.SuspendLayout();
             this.snowMotionEstimationGroupbox.SuspendLayout();
             this.snowToolsGroupbox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.snowNBPredictors)).BeginInit();
@@ -69,29 +69,19 @@ namespace MeGUI
             ((System.ComponentModel.ISupportInitialize)(this.snowQuantizer)).BeginInit();
             this.SuspendLayout();
             // 
-            // commandline
+            // tabControl1
             // 
-            this.commandline.Location = new System.Drawing.Point(0, 426);
-            // 
-            // commandlineVisible
-            // 
-            this.commandlineVisible.Location = new System.Drawing.Point(12, 397);
-            // 
-            // profilesGroupbox
-            // 
-            this.profilesGroupbox.Location = new System.Drawing.Point(13, 343);
-            // 
-            // cancelButton
-            // 
-            this.cancelButton.Location = new System.Drawing.Point(327, 397);
-            // 
-            // okButton
-            // 
-            this.okButton.Location = new System.Drawing.Point(391, 397);
+            this.tabControl1.Size = new System.Drawing.Size(446, 337);
             // 
             // zoneTabPage
             // 
             this.zoneTabPage.Size = new System.Drawing.Size(438, 311);
+            // 
+            // commandline
+            // 
+            this.commandline.Location = new System.Drawing.Point(3, 339);
+            this.commandline.Size = new System.Drawing.Size(438, 82);
+            this.commandline.Text = " ";
             // 
             // mainTabPage
             // 
@@ -102,10 +92,6 @@ namespace MeGUI
             this.mainTabPage.Controls.Add(this.snowToolsGroupbox);
             this.mainTabPage.Controls.Add(this.snowCodecGeneralGroupbox);
             this.mainTabPage.Size = new System.Drawing.Size(438, 311);
-            // 
-            // tabControl1
-            // 
-            this.tabControl1.Size = new System.Drawing.Size(446, 337);
             // 
             // logfile
             // 
@@ -448,16 +434,15 @@ namespace MeGUI
             this.snowBitrateLabel.TabIndex = 4;
             this.snowBitrateLabel.Text = "Bitrate";
             // 
-            // snowConfigurationDialog
+            // snowConfigurationPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(446, 424);
-            this.Name = "snowConfigurationDialog";
-            this.Text = "Snow Encoder Configuration";
+            this.Name = "snowConfigurationPanel";
+            this.Size = new System.Drawing.Size(446, 424);
+            this.tabControl1.ResumeLayout(false);
             this.mainTabPage.ResumeLayout(false);
             this.mainTabPage.PerformLayout();
-            this.tabControl1.ResumeLayout(false);
             this.snowMotionEstimationGroupbox.ResumeLayout(false);
             this.snowToolsGroupbox.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.snowNBPredictors)).EndInit();

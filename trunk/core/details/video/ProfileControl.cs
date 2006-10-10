@@ -207,7 +207,14 @@ namespace MeGUI.core.details.video
 
         public SettingsEditor<TProfileSettings, TInfo> EditSettings
         {
-            get { return CurrentSettingsProvider.EditSettings; }
+            get
+            {
+                return new SettingsEditor<TProfileSettings, TInfo>(
+              delegate(MainForm a, ref TProfileSettings b, ref string c, TInfo d)
+              {
+                  return CurrentSettingsProvider.EditSettings(a, ref b, ref c, d);
+              });
+            }
         }
     }
 

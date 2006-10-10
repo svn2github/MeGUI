@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -7,13 +6,15 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
-namespace MeGUI
+using MeGUI.core.plugins.interfaces;
+
+namespace MeGUI.packages.video.snow
 {
-    public partial class snowConfigurationDialog : VideoConfigurationDialog
+    public partial class snowConfigurationPanel : MeGUI.core.details.video.VideoConfigurationPanel, Gettable<VideoCodecSettings>
     {
         #region start / stop
-        public snowConfigurationDialog(MainForm mainForm, string initialProfile, bool safeProfileAlteration)
-            : base(mainForm, initialProfile, safeProfileAlteration)
+        public snowConfigurationPanel(MainForm mainForm, VideoInfo info)
+            : base(mainForm, info)
         {
             InitializeComponent();
         }
@@ -124,7 +125,7 @@ namespace MeGUI
         /// <summary>
         /// gets / sets the settings currently displayed on the GUI
         /// </summary>
-        public override VideoCodecSettings Settings
+        public VideoCodecSettings Settings
         {
             get
             {
@@ -189,3 +190,4 @@ namespace MeGUI
         #endregion
     }
 }
+

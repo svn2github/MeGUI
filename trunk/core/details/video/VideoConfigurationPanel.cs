@@ -26,7 +26,7 @@ namespace MeGUI.core.details.video
         private IContainer components;
         #region start / stop
         public VideoConfigurationPanel()
-            : this(null, new VideoInfo(null, null))
+            : this(null, new VideoInfo())
         { }
 
 

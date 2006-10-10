@@ -725,8 +725,10 @@ namespace MeGUI
         public void saveSettings()
         {
             XmlSerializer ser = null;
-            settings.AudioProfileName = Audio.AudioProfile.Text;
-            settings.VideoProfileName = Video.SelectedProfile;
+            try { settings.AudioProfileName = Audio.AudioProfile.Text; }
+            catch (Exception) { settings.AudioProfileName = ""; }
+            try { settings.VideoProfileName = Video.SelectedProfile; }
+            catch (Exception) { settings.VideoProfileName = ""; }
             string fileName = this.path + @"\settings.xml";
             using (Stream s = File.Open(fileName, System.IO.FileMode.Create, System.IO.FileAccess.Write))
             {
@@ -1386,11 +1388,10 @@ namespace MeGUI
             PackageSystem.Tools.Register(new AVCLevelTool());
             PackageSystem.Tools.Register(new VobSubTool());
             PackageSystem.VideoSettingsProviders.Register(new X264SettingsProvider());
-#warning add others
-/*            PackageSystem.VideoSettingsProviders.Register(new XviDSettingsProvider());
+            PackageSystem.VideoSettingsProviders.Register(new XviDSettingsProvider());
             PackageSystem.VideoSettingsProviders.Register(new SnowSettingsProvider());
             PackageSystem.VideoSettingsProviders.Register(new LavcSettingsProvider());
-            PackageSystem.AudioSettingsProviders.Register(new NeroAACSettingsProvider());*/
+//            PackageSystem.AudioSettingsProviders.Register(new NeroAACSettingsProvider());
             PackageSystem.MediaFileTypes.Register(new AvsFileFactory());
             PackageSystem.MediaFileTypes.Register(new d2vFileFactory());
             PackageSystem.MediaFileTypes.Register(new MediaInfoFileFactory());

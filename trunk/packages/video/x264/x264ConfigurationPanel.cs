@@ -177,9 +177,9 @@ namespace MeGUI.packages.video.x264
                     this.x264VBVBufferSize.Enabled = false;
                 if (enforcement.Altered)
                 {
-                    x264ConfigurationDialog.levelEnforced = true;
+                    levelEnforced = true;
                     this.Settings = verifiedSettings;
-                    x264ConfigurationDialog.levelEnforced = false;
+                    levelEnforced = false;
 
                     // Set the config boxes to the correct values
                     // if (!enforcement.EnableP4x4mv)
