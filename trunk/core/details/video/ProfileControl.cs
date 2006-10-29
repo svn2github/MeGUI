@@ -12,18 +12,10 @@ namespace MeGUI.core.details.video
 {
     public partial class ProfileControl : UserControl
     {
-        public override string Text
+        public string LabelText
         {
             get { return avsProfileLabel.Text; }
-            set
-            {
-                // Adjust the appearance so that the profile combobox fills just the right amount of space
-                int width = avsProfileLabel.Width;
-                avsProfileLabel.Text = value;
-                Point loc = avsProfile.Location;
-                loc.X += avsProfileLabel.Width - width;
-                avsProfile.Location = loc;
-            }
+            set { avsProfileLabel.Text = value; }
         }
 
         public ProfileControl()
@@ -119,6 +111,7 @@ namespace MeGUI.core.details.video
 
         private void avsConfigButton_Click(object sender, System.EventArgs e)
         {
+            
             TInfo info = GetInfo();
             TSettings settings = GetCurrentSettings();
             string profile = impl.avsProfile.Text;
@@ -169,7 +162,29 @@ namespace MeGUI.core.details.video
     public class MultipleConfigurersHandler<TProfileSettings, TInfo, TCodec, TEncoder>
         where TProfileSettings : GenericSettings
     {
-        public MultipleConfigurersHandler(ComboBox impl) { this.impl = impl; }
+        public MultipleConfigurersHandler(ComboBox impl)
+        {
+            this.impl = impl;
+        }
+
+        public void Register(ProfilesControlHandler<TProfileSettings, TInfo> pHandler)
+        {
+            pHandler.ProfileChanged += new SelectedProfileChangedEvent(ProfileChanged);
+        }
+
+        private void ProfileChanged(object sender, Profile prof)
+        {
+            if (prof == null) return;
+            foreach (ISettingsProvider<TProfileSettings, TInfo, TCodec, TEncoder> p in impl.Items)
+            {
+                if (p.IsSameType((TProfileSettings)prof.BaseSettings))
+                {
+                    p.LoadSettings((TProfileSettings)prof.BaseSettings);
+                    impl.SelectedItem = p;
+                    break;
+                }
+            }
+        }
 
         public ISettingsProvider<TProfileSettings, TInfo, TCodec, TEncoder> CurrentSettingsProvider
         {
@@ -218,5 +233,71 @@ namespace MeGUI.core.details.video
         }
     }
 
+
+    public class FileTypeHandler<TType>
+    {
+
+        private ComboBox fileType;
+        public FileTypeHandler(ComboBox fileType, ComboBox codecBox, SupportedOutputGetter getter)
+        {
+            this.GetOutput = getter;
+            this.fileType = fileType;
+            codecBox.SelectedIndexChanged += new EventHandler(codec_SelectedIndexChanged);
+        }
+
+        public delegate TType[] SupportedOutputGetter();
+
+        private SupportedOutputGetter GetOutput;
+
+        public TType CurrentType
+        {
+            get { return (TType)fileType.SelectedItem; }
+        }
+
+        public delegate void FileTypeEvent(object Sender, TType newType);
+        public event FileTypeEvent FileTypeChanged;
+
+        private void codec_SelectedIndexChanged(object sender, System.EventArgs e)
+        {
+            TType[] outputTypes = GetOutput();
+            TType currentType = CurrentType;
+
+            if (currentType == null ||
+                Array.IndexOf<TType>(outputTypes, currentType) < 0)
+                currentType = outputTypes[0];
+
+            this.fileType.Items.Clear();
+            foreach (TType t in outputTypes) fileType.Items.Add(t);
+
+            fileType.SelectedItem = currentType;
+            if (FileTypeChanged != null) FileTypeChanged(this, currentType);
+/*            // now select the previously selected type again if possible
+            bool selected = false;
+            foreach (TType t in outputTypes)
+            {
+                if (currentType == t)
+                {
+                    fileType.SelectedItem = t;
+                    currentType = t;
+                    selected = true;
+                    break;
+                }
+            }
+            if (!selected)
+            {
+                currentType = outputTypes[0];
+                this.fileType.SelectedItem = outputTypes[0];
+            }*/
+/*            VideoCodecSettings settings = CurrentSettings;
+            this.updateIOConfig();
+            if (MainForm.verifyOutputFile(this.VideoOutput) == null)
+                this.VideoOutput = Path.ChangeExtension(this.VideoOutput, currentType.Extension);*/
+        }
+
+        public void RefreshFiletypes()
+        {
+            codec_SelectedIndexChanged(null, null);
+        }
+    }
 
 }

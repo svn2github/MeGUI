@@ -7,6 +7,9 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 
+using MeGUI.core.details.video;
+using MeGUI.core.plugins.interfaces;
+
 namespace MeGUI
 {
     public partial class AudioEncodingComponent : UserControl
@@ -15,6 +18,29 @@ namespace MeGUI
         private AudioStream[] audioStreams = new AudioStream[2];
         private AudioEncoderProvider audioEncoderProvider= new AudioEncoderProvider();
         private int lastSelectedAudioTrackNumber = 0;
+
+        #region handlers
+        private FileTypeHandler<AudioType> fileTypeHandler;
+        public FileTypeHandler<AudioType> FileTypeHandler
+        {
+            get { return fileTypeHandler; }
+        }
+
+        private ProfilesControlHandler<AudioCodecSettings, string[]> profileHandler;
+        public ProfilesControlHandler<AudioCodecSettings, string[]> ProfileHandler
+        {
+            get { return profileHandler; }
+        }
+
+        private MultipleConfigurersHandler<AudioCodecSettings, string[], AudioCodec, AudioEncoderType> codecHandler;
+        public MultipleConfigurersHandler<AudioCodecSettings, string[], AudioCodec, AudioEncoderType> CodecHandler
+        {
+            get { return codecHandler; }
+        }
+        #endregion
+        #region init
+
+
         public AudioEncodingComponent()
         {
             InitializeComponent();
@@ -29,8 +55,33 @@ namespace MeGUI
                 try { audioCodec.SelectedIndex = 0; }
                 catch (Exception) { MessageBox.Show("No valid audio codecs are set up", "No valid audio codecs", MessageBoxButtons.OK, MessageBoxIcon.Error); }
             }
+
+            fileTypeHandler = new FileTypeHandler<AudioType>(audioContainer, audioCodec, new FileTypeHandler<AudioType>.SupportedOutputGetter(delegate
+            {
+                return audioEncoderProvider.GetSupportedOutput(codecHandler.CurrentSettingsProvider.EncoderType);
+            }));
+            
+            codecHandler = new MultipleConfigurersHandler<AudioCodecSettings, string[], AudioCodec, AudioEncoderType>(audioCodec);
+
+            profileHandler = new ProfilesControlHandler<AudioCodecSettings, string[]>("Audio", mainForm, profileControl1, codecHandler.EditSettings,
+                new InfoGetter<string[]>(delegate { return new string[] { AudioInput, AudioOutput }; }), codecHandler.Getter, codecHandler.Setter);
+
+            profileHandler.ConfigureCompleted += new EventHandler(profileHandler_ConfigureCompleted);
+
         }
 
+        void profileHandler_ConfigureCompleted(object sender, EventArgs e)
+        {
+            AudioStream stream = CurrentAudioStream;
+            stream.settings = AudCodecSettings;
+            CurrentAudioStream = stream;
+        }
+        #endregion
+        public string SelectedProfile
+        {
+            get { return ProfileHandler.SelectedProfile; }
+            set { ProfileHandler.SelectedProfile = value; }
+        }
         public MainForm MainForm
         {
             set { mainForm = value; }
@@ -52,10 +103,6 @@ namespace MeGUI
         public ComboBox AudioCodec
         {
             get { return audioCodec; }
-        }
-        public ComboBox AudioProfile
-        {
-            get { return audioProfile; }
         }
 
         /// <summary>
@@ -88,7 +135,7 @@ namespace MeGUI
         {
             get
             {
-                return (this.AudioCodec.SelectedItem as ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType>).GetCurrentSettings();
+                return codecHandler.CurrentSettingsProvider.GetCurrentSettings();
             }
         }
         public string verifyAudioSettings()
@@ -127,61 +174,6 @@ namespace MeGUI
         }
 
         #region local event handlers
-        private void configAudioButton_Click(object sender, System.EventArgs e)
-        {
-#warning update this
-            /*mainForm.hidePlayer();
-            string selectedProfile;
-            if (CurrentAudioSettingsProvider.EditSettings(mainForm.Profiles, mainForm.MeGUIPath, mainForm.Settings, 
-                this.AudioProfile.Text, new string[] { AudioInput, AudioOutput }, out selectedProfile))
-            {
-                this.AudioProfile.Items.Clear();
-                foreach (string name in mainForm.Profiles.AudioProfiles.Keys)
-                {
-                    this.AudioProfile.Items.Add(name);
-                }
-                int index = AudioProfile.Items.IndexOf(selectedProfile);
-                if (index != -1)
-                    AudioProfile.SelectedIndex = index;
-                AudioStream stream = this.CurrentAudioStream;
-                stream.settings = CurrentAudioSettingsProvider.GetCurrentSettings();
-                this.CurrentAudioStream = stream;
-            }
-            mainForm.showPlayer();*/
-        }
-        private void audioCodec_SelectedIndexChanged(object sender, EventArgs e)
-        {
-#warning and this
-            /*AudioType[] outputTypes = this.audioEncoderProvider.GetSupportedOutput(this.CurrentAudioSettingsProvider.EncoderType);
-            AudioType currentType = null;
-            if (this.audioContainer.SelectedItem != null)
-                currentType = this.audioContainer.SelectedItem as AudioType;
-            else
-                currentType = outputTypes[0];
-            this.audioContainer.Items.Clear();
-            this.audioContainer.Items.AddRange(outputTypes);
-            // now select the previously selected type again if possible
-            bool selected = false;
-            foreach (AudioType t in outputTypes)
-            {
-                if (currentType == t)
-                {
-                    this.audioContainer.SelectedItem = t;
-                    currentType = t;
-                    selected = true;
-                    break;
-                }
-            }
-            if (!selected)
-            {
-                currentType = outputTypes[0];
-                this.audioContainer.SelectedItem = outputTypes[0];
-            }
-            AudioCodecSettings settings = CurrentAudioSettingsProvider.GetCurrentSettings();
-            if (MainForm.verifyOutputFile(this.AudioOutput) == null)
-                this.AudioOutput = Path.ChangeExtension(this.AudioOutput, currentType.Extension);
-            audioInput.Filter = audioEncoderProvider.GetSupportedInput(this.CurrentAudioSettingsProvider.CodecType);*/
-        }
         private void audioContainer_SelectedIndexChanged(object sender, EventArgs e)
         {
             AudioType currentType = CurrentAudioOutputType;
@@ -334,17 +326,10 @@ namespace MeGUI
             AudioStream stream = new AudioStream();
             stream.path = this.AudioInput;
             stream.output = this.AudioOutput;
-            stream.settings = this.CurrentAudioSettingsProvider.GetCurrentSettings().clone();
+            stream.settings = this.AudCodecSettings.clone();
             stream.Type = (this.audioContainer.SelectedItem as AudioType);
             stream.Delay = getDelay(stream.path); 
             this.CurrentAudioStream = stream;
-        }
-        private ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType> CurrentAudioSettingsProvider
-        {
-            get
-            {
-                return this.AudioCodec.SelectedItem as ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType>;
-            }
         }
         public AudioType CurrentAudioOutputType
         {
@@ -393,7 +378,7 @@ namespace MeGUI
             this.audioStreams[1].settings = null;
         }
 
-        private void audioProfile_SelectedIndexChanged(object sender, EventArgs e)
+/*        private void audioProfile_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (audioProfile.SelectedIndex != -1) // if it's -1 it's bogus
             {
@@ -408,11 +393,11 @@ namespace MeGUI
                     }
                 }
             }
-        }
+        }*/
 
         internal void RefreshProfiles()
         {
-            //throw new Exception("The method or operation is not implemented.");
+            profileHandler.RefreshProfiles();
         }
     }
 }

@@ -193,17 +193,11 @@ namespace MeGUI
             // 
             this.videoEncodingComponent1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.videoEncodingComponent1.CreditsStartFrame = -1;
-            this.videoEncodingComponent1.IntroEndFrame = -1;
             this.videoEncodingComponent1.Location = new System.Drawing.Point(8, 3);
             this.videoEncodingComponent1.Name = "videoEncodingComponent1";
-            this.videoEncodingComponent1.PARX = -1;
-            this.videoEncodingComponent1.PARY = -1;
             this.videoEncodingComponent1.PrerenderJob = false;
             this.videoEncodingComponent1.Size = new System.Drawing.Size(456, 153);
             this.videoEncodingComponent1.TabIndex = 7;
-            this.videoEncodingComponent1.VideoInput = "";
-            this.videoEncodingComponent1.VideoOutput = "";
             // 
             // autoEncodeButton
             // 
@@ -725,7 +719,7 @@ namespace MeGUI
         public void saveSettings()
         {
             XmlSerializer ser = null;
-            try { settings.AudioProfileName = Audio.AudioProfile.Text; }
+            try { settings.AudioProfileName = Audio.SelectedProfile; }
             catch (Exception) { settings.AudioProfileName = ""; }
             try { settings.VideoProfileName = Video.SelectedProfile; }
             catch (Exception) { settings.VideoProfileName = ""; }
@@ -758,18 +752,19 @@ namespace MeGUI
                     try
                     {
                         this.settings = (MeGUISettings)ser.Deserialize(s);
-                        if (!settings.AudioProfileName.Equals(""))
-                        {
-                            if (this.profileManager.AudioProfiles.ContainsKey(settings.AudioProfileName))
-                            {
-                                int pos = Audio.AudioProfile.Items.IndexOf(settings.AudioProfileName);
-                                Audio.AudioProfile.SelectedIndex = pos;
-                            }
-                        }
+
                         // modify PATH so that n00bs don't complain because they forgot to put dgdecode.dll in the MeGUI dir
                         string pathEnv = Environment.GetEnvironmentVariable("PATH");
                         pathEnv = Path.GetDirectoryName(settings.DgIndexPath) + ";" + pathEnv;
                         Environment.SetEnvironmentVariable("PATH", pathEnv);
+                        if (!settings.AudioProfileName.Equals(""))
+                        {
+                            if (this.profileManager.AudioProfiles.ContainsKey(settings.AudioProfileName))
+                            {
+                                try { Audio.SelectedProfile = settings.AudioProfileName; }
+                                catch (Exception) { }
+                            }
+                        } 
                         if (!settings.VideoProfileName.Equals(""))
                         {
                             if (this.profileManager.VideoProfiles.ContainsKey(settings.VideoProfileName))
@@ -1121,11 +1116,7 @@ namespace MeGUI
             ProfilePorter importer = new ProfilePorter(profileManager, file, this);
             importer.ShowDialog();
             Video.RefreshProfiles();
-            Audio.AudioProfile.Items.Clear();
-            foreach (string name in this.profileManager.AudioProfiles.Keys)
-            {
-                Audio.AudioProfile.Items.Add(name);
-            }
+            Audio.RefreshProfiles();
         }
         #endregion
         #region Drag 'n' Drop
@@ -1161,11 +1152,7 @@ namespace MeGUI
             ProfilePorter importer = new ProfilePorter(profileManager, this, data);
             importer.ShowDialog();
             Video.RefreshProfiles();
-            Audio.AudioProfile.Items.Clear();
-            foreach (string name in this.profileManager.AudioProfiles.Keys)
-            {
-                Audio.AudioProfile.Items.Add(name);
-            }
+            Audio.RefreshProfiles();
         }
 
         private void mnuFileImport_Click(object sender, EventArgs e)
@@ -1173,11 +1160,7 @@ namespace MeGUI
             ProfilePorter importer = new ProfilePorter(profileManager, true, this);
             importer.ShowDialog();
             Video.RefreshProfiles();
-            Audio.AudioProfile.Items.Clear();
-            foreach (string name in this.profileManager.AudioProfiles.Keys)
-            {
-                Audio.AudioProfile.Items.Add(name);
-            }
+            Audio.RefreshProfiles();
         }
 
         private void mnuFileExport_Click(object sender, EventArgs e)
@@ -1340,7 +1323,6 @@ namespace MeGUI
             audioEncodingComponent1.MainForm = this;
             this.profileManager = new ProfileManager(this.path);
             this.profileManager.LoadProfiles();
-            Audio.RefreshProfiles();
             this.mediaFileFactory = new MediaFileFactory(this);
             videoEncodingComponent1.InitializeDropdowns();
             audioEncodingComponent1.InitializeDropdowns();
@@ -1391,7 +1373,14 @@ namespace MeGUI
             PackageSystem.VideoSettingsProviders.Register(new XviDSettingsProvider());
             PackageSystem.VideoSettingsProviders.Register(new SnowSettingsProvider());
             PackageSystem.VideoSettingsProviders.Register(new LavcSettingsProvider());
-//            PackageSystem.AudioSettingsProviders.Register(new NeroAACSettingsProvider());
+            PackageSystem.AudioSettingsProviders.Register(new NeroAACSettingsProvider());
+            PackageSystem.AudioSettingsProviders.Register(new AudXSettingsProvider());
+            PackageSystem.AudioSettingsProviders.Register(new faacSettingsProvider());
+            PackageSystem.AudioSettingsProviders.Register(new ffac3SettingsProvider());
+            PackageSystem.AudioSettingsProviders.Register(new ffmp2SettingsProvider());
+            PackageSystem.AudioSettingsProviders.Register(new lameSettingsProvider());
+            PackageSystem.AudioSettingsProviders.Register(new vorbisSettingsProvider());
+            PackageSystem.AudioSettingsProviders.Register(new waacSettingsProvider());
             PackageSystem.MediaFileTypes.Register(new AvsFileFactory());
             PackageSystem.MediaFileTypes.Register(new d2vFileFactory());
             PackageSystem.MediaFileTypes.Register(new MediaInfoFileFactory());
@@ -1515,10 +1504,6 @@ namespace MeGUI
         internal void showPlayer()
         {
             videoEncodingComponent1.showPlayer();
-        }
-        public string[] VideoIO
-        {
-            get { return videoEncodingComponent1.VideoIO; }
         }
     }
     public class CommandlineUpgradeData

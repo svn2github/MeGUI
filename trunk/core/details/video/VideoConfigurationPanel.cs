@@ -37,10 +37,10 @@ namespace MeGUI.core.details.video
             zonesControl.UpdateGUIEvent += new ZonesControl.UpdateConfigGUI(genericUpdate);
             zonesControl.MainForm = mainForm;
 
-            input = info.videoIO[0];
-            output = info.videoIO[1];
-            zonesControl.IntroEndFrame = info.creditsAndIntroFrames[0];
-            zonesControl.CreditsStartFrame = info.creditsAndIntroFrames[1];
+            input = info.VideoInput;
+            output = info.VideoOutput;
+            zonesControl.IntroEndFrame = info.IntroEndFrame;
+            zonesControl.CreditsStartFrame = info.CreditsStartFrame;
         }
 
         private void VideoConfigurationPanel_Load(object sender, EventArgs e)

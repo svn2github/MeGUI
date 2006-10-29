@@ -8,6 +8,14 @@ using MeGUI.packages.video.x264;
 using MeGUI.packages.video.lmp4;
 using MeGUI.packages.video.snow;
 using MeGUI.packages.video.xvid;
+using MeGUI.packages.audio.naac;
+using MeGUI.packages.audio.audx;
+using MeGUI.packages.audio.faac;
+using MeGUI.packages.audio.ffac3;
+using MeGUI.packages.audio.ffmp2;
+using MeGUI.packages.audio.lame;
+using MeGUI.packages.audio.vorbis;
+using MeGUI.packages.audio.waac;
 
 namespace MeGUI
 {
@@ -18,12 +26,12 @@ namespace MeGUI
         /// Returns the codec (format, eg AVC, MP3, etc) type
         /// </summary>
         TCodec CodecType { get; }
-        
+
         /// <summary>
         /// Returns the encoder (eg x264, LAME, etc) type
         /// </summary>
         TEncoder EncoderType { get; }
-        
+
         /// <summary>
         /// Sets the settings back to default
         /// </summary>
@@ -53,22 +61,70 @@ namespace MeGUI
         /// </summary>
         SettingsEditor<TSettings, TInfo> EditSettings { get; }
     }
-    
-/*    public interface IAudioSettingsProvider : ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType> {}
-    public interface IVideoSettingsProvider : ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> { }*/
 
+    /*    public interface IAudioSettingsProvider : ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType> {}
+        public interface IVideoSettingsProvider : ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> { }*/
+
+    public delegate void StringChanged(object sender, string val);
+    public delegate void IntChanged(object sender, int val);
     public class VideoInfo
     {
-        public string[] videoIO;
-        public int[] creditsAndIntroFrames;
-        public VideoInfo(string[] v, int[] c)
+        private string videoInput;
+        public event StringChanged VideoInputChanged;
+        public string VideoInput
         {
-            this.videoIO = v;
-            this.creditsAndIntroFrames =c;
+            get { return videoInput; }
+            set { videoInput = value; VideoInputChanged(this, value); }
+        }
+
+        private string videoOutput;
+        public event StringChanged VideoOutputChanged;
+        public string VideoOutput
+        {
+            get { return videoOutput; }
+            set { videoOutput = value; VideoOutputChanged(this, value); }
+        }
+        private int darX;
+
+        public int DARX
+        {
+            get { return darX; }
+            set { darX = value; }
+        }
+        private int darY;
+
+        public int DARY
+        {
+            get { return darY; }
+            set { darY = value; }
+        }
+        private int introEndFrame;
+
+        public int IntroEndFrame
+        {
+            get { return introEndFrame; }
+            set { introEndFrame = value; }
+        }
+        private int creditsStartFrame;
+
+        public int CreditsStartFrame
+        {
+            get { return creditsStartFrame; }
+            set { creditsStartFrame = value; }
+        }
+
+        public VideoInfo(string videoInput, string videoOutput, int darX, int darY, int creditsStartFrame, int introEndFrame)
+        {
+            this.videoInput = videoInput;
+            this.videoOutput = videoOutput;
+            this.darX = darX;
+            this.darY = darY;
+            this.creditsStartFrame = creditsStartFrame;
+            this.introEndFrame = introEndFrame;
         }
 
         public VideoInfo()
-            : this(new string[2], new int[2]) { }
+            : this("", "", -1, -1, -1, -1) { }
     }
 
 
@@ -161,7 +217,7 @@ namespace MeGUI
                     TPanel t = (TPanel)System.Activator.CreateInstance(typeof(TPanel), mainForm, info);
                     using (ConfigurationWindow<TSettings, TProfileSettings> scd = new ConfigurationWindow<TSettings, TProfileSettings>(mainForm.Profiles, t, t, profile))
                     {
-                        scd.Settings = (TSettings) settings; // Set the settings in case there is no profile configured
+                        scd.Settings = (TSettings)settings; // Set the settings in case there is no profile configured
                         if (scd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                         {
                             settings = scd.Settings; // Again, in case no profile is configured
@@ -174,8 +230,8 @@ namespace MeGUI
                 });
         }
     }
-    
-#region old
+
+    #region old
     /*
     /// <summary>
     /// Generic IVideoSettingsProvider implementation
@@ -270,8 +326,8 @@ namespace MeGUI
     }
 
 */
-#endregion
-/*    public class SnowSettingsProvider : SettingsProviderImpl<snowSettings, snowConfigurationDialog>
+    #endregion
+    /*    public class SnowSettingsProvider : SettingsProviderImpl<snowSettings, snowConfigurationDialog>
     {
         public SnowSettingsProvider():base("Snow", VideoEncoderType.SNOW)
         {
@@ -283,6 +339,7 @@ namespace MeGUI
         {
         }
     }*/
+    #region video providers
     public class X264SettingsProvider : SettingsProviderImpl2<x264ConfigurationPanel,
         VideoInfo, x264Settings, VideoCodecSettings, VideoCodec, VideoEncoderType>
     {
@@ -323,8 +380,67 @@ namespace MeGUI
         {
         }
     }
-#region old
-/*
+    public class NeroAACSettingsProvider : SettingsProviderImpl2<neroConfigurationPanel, string[],
+    NeroAACSettings, AudioCodecSettings, AudioCodec, AudioEncoderType>
+    {
+        public NeroAACSettingsProvider()
+            : base("ND AAC", AudioEncoderType.NAAC, AudioCodec.AAC)
+        {
+        }
+    }
+    public class AudXSettingsProvider : SettingsProviderImpl2<AudXConfigurationPanel, string[],
+        AudXSettings, AudioCodecSettings, AudioCodec, AudioEncoderType>
+    {
+        public AudXSettingsProvider()
+            : base("Aud-X MP3", AudioEncoderType.AUDX, AudioCodec.MP3)
+        { }
+    }
+    public class faacSettingsProvider : SettingsProviderImpl2<faacConfigurationPanel, string[],
+        FaacSettings, AudioCodecSettings, AudioCodec, AudioEncoderType>
+    {
+        public faacSettingsProvider()
+            : base("FAAC", AudioEncoderType.FAAC, AudioCodec.AAC)
+        { }
+    }
+    public class ffac3SettingsProvider : SettingsProviderImpl2<AC3ConfigurationPanel, string[],
+   AC3Settings, AudioCodecSettings, AudioCodec, AudioEncoderType>
+    {
+        public ffac3SettingsProvider()
+            : base("FFMPEG AC-3", AudioEncoderType.FFAC3, AudioCodec.AAC)
+        { }
+    }
+    public class ffmp2SettingsProvider : SettingsProviderImpl2<MP2ConfigurationPanel, string[],
+   MP2Settings, AudioCodecSettings, AudioCodec, AudioEncoderType>
+    {
+        public ffmp2SettingsProvider()
+            : base("FFMPEG MP2", AudioEncoderType.FFMP2, AudioCodec.MP2)
+        { }
+    }
+    public class lameSettingsProvider : SettingsProviderImpl2<lameConfigurationPanel, string[],
+   MP3Settings, AudioCodecSettings, AudioCodec, AudioEncoderType>
+    {
+        public lameSettingsProvider()
+            : base("LAME MP3", AudioEncoderType.LAME, AudioCodec.MP3)
+        { }
+    }
+    public class vorbisSettingsProvider : SettingsProviderImpl2<OggVorbisConfigurationPanel, string[],
+   OggVorbisSettings, AudioCodecSettings, AudioCodec, AudioEncoderType>
+    {
+        public vorbisSettingsProvider()
+            : base("Ogg Vorbis", AudioEncoderType.VORBIS, AudioCodec.VORBIS)
+        { }
+    }
+    public class waacSettingsProvider : SettingsProviderImpl2<WinAmpAACConfigurationPanel, string[],
+   WinAmpAACSettings, AudioCodecSettings, AudioCodec, AudioEncoderType>
+    {
+        public waacSettingsProvider()
+            : base("WinAmp AAC", AudioEncoderType.WAAC, AudioCodec.AAC)
+        { }
+    }
+
+    #endregion
+    #region old
+    /*
     public class XviDSettingsProvider : VideoSettingsProviderImpl<xvidSettings, xvidConfigurationDialog>
     {
         public XviDSettingsProvider():base("XviD", VideoEncoderType.XVID)
@@ -417,8 +533,10 @@ namespace MeGUI
 
         #endregion
     }
+    */
+    #endregion
 
-    public class MP2SettingsProvider : AudioSettingsProviderImpl<MP2Settings, MP2ConfigurationDialog>
+    /*    public class MP2SettingsProvider : AudioSettingsProviderImpl<MP2Settings, MP2ConfigurationDialog>
     {
         public MP2SettingsProvider():base("MP2", AudioEncoderType.FFMP2)
         {
@@ -452,25 +570,18 @@ namespace MeGUI
         {
         }
     }
-
-    public class FaacSettingsProvider : AudioSettingsProviderImpl<FaacSettings, FaacConfigurationDialog>
-    {
-        public FaacSettingsProvider():base("FAAC", AudioEncoderType.FAAC)
-        {
-        }
-    }
-    public class NeroAACSettingsProvider : AudioSettingsProviderImpl<NeroAACSettings, NeroAACConfigurationDialog>
-    {
-        public NeroAACSettingsProvider():base("ND AAC", AudioEncoderType.NAAC)
-        {
-        }
-    }
-    public class LameMP3SettingsProvider : AudioSettingsProviderImpl<MP3Settings,lameConfigurationDialog>
+        public class LameMP3SettingsProvider : AudioSettingsProviderImpl<MP3Settings,lameConfigurationDialog>
     {
         public LameMP3SettingsProvider():base("MP3", AudioEncoderType.LAME)
         {
         }
     }
-*/
-#endregion
+    public class FaacSettingsProvider : AudioSettingsProviderImpl<FaacSettings, FaacConfigurationDialog>
+    {
+        public FaacSettingsProvider():base("FAAC", AudioEncoderType.FAAC)
+        {
+        }
+    }*/
+
+
 }

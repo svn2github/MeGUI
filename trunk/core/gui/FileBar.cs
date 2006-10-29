@@ -8,17 +8,6 @@ using System.Windows.Forms;
 
 namespace MeGUI
 {
-    public class FileBarEventArgs : EventArgs
-    {
-        public readonly string OldFileName;
-        public readonly string NewFileName;
-        public FileBarEventArgs(string oldName, string newName)
-            : base()
-        {
-            OldFileName = oldName;
-            NewFileName = newName;
-        }
-    }
 
     public delegate void FileBarEventHandler(FileBar sender, FileBarEventArgs args);
     
@@ -109,4 +98,16 @@ namespace MeGUI
             }
         }
     }
+    public class FileBarEventArgs : EventArgs
+    {
+        public readonly string OldFileName;
+        public readonly string NewFileName;
+        public FileBarEventArgs(string oldName, string newName)
+            : base()
+        {
+            OldFileName = oldName;
+            NewFileName = newName;
+        }
+    }
+
 }

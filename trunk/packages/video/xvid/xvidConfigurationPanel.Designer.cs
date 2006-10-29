@@ -132,9 +132,9 @@ namespace MeGUI.packages.video.xvid
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.advancedTabPage = new System.Windows.Forms.TabPage();
+            this.tabControl1.SuspendLayout();
             this.zoneTabPage.SuspendLayout();
             this.mainTabPage.SuspendLayout();
-            this.tabControl1.SuspendLayout();
             this.xvidOtherGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nbThreads)).BeginInit();
             this.xvidCodecToolsGroupBox.SuspendLayout();
@@ -166,23 +166,32 @@ namespace MeGUI.packages.video.xvid
             this.advancedTabPage.SuspendLayout();
             this.SuspendLayout();
             // 
+            // tabControl1
+            // 
+            this.tabControl1.Controls.Add(this.advancedTabPage);
+            this.tabControl1.Size = new System.Drawing.Size(500, 458);
+            this.tabControl1.Controls.SetChildIndex(this.zoneTabPage, 0);
+            this.tabControl1.Controls.SetChildIndex(this.advancedTabPage, 0);
+            this.tabControl1.Controls.SetChildIndex(this.mainTabPage, 0);
+            // 
             // zoneTabPage
             // 
             this.zoneTabPage.Controls.Add(this.quantizerMatrixGroupbox);
+            this.zoneTabPage.Size = new System.Drawing.Size(492, 432);
             this.zoneTabPage.Controls.SetChildIndex(this.quantizerMatrixGroupbox, 0);
+            // 
+            // commandline
+            // 
+            this.commandline.Location = new System.Drawing.Point(4, 464);
+            this.commandline.Size = new System.Drawing.Size(496, 59);
+            this.commandline.Text = " ";
             // 
             // mainTabPage
             // 
             this.mainTabPage.Controls.Add(this.xvidOtherGroupBox);
             this.mainTabPage.Controls.Add(this.xvidCodecToolsGroupBox);
             this.mainTabPage.Controls.Add(this.xvidGeneralOptionsGroupBox);
-            // 
-            // tabControl1
-            // 
-            this.tabControl1.Controls.Add(this.advancedTabPage);
-            this.tabControl1.Controls.SetChildIndex(this.zoneTabPage, 0);
-            this.tabControl1.Controls.SetChildIndex(this.advancedTabPage, 0);
-            this.tabControl1.Controls.SetChildIndex(this.mainTabPage, 0);
+            this.mainTabPage.Size = new System.Drawing.Size(492, 432);
             // 
             // xvidOtherGroupBox
             // 
@@ -1332,21 +1341,20 @@ namespace MeGUI.packages.video.xvid
             this.advancedTabPage.Controls.Add(this.xvidCBRRcGroupBox);
             this.advancedTabPage.Location = new System.Drawing.Point(4, 22);
             this.advancedTabPage.Name = "advancedTabPage";
-            this.advancedTabPage.Size = new System.Drawing.Size(488, 426);
+            this.advancedTabPage.Size = new System.Drawing.Size(492, 432);
             this.advancedTabPage.TabIndex = 3;
             this.advancedTabPage.Text = "Advanced";
             this.advancedTabPage.UseVisualStyleBackColor = true;
             // 
-            // xvidConfigurationDialog
+            // xvidConfigurationPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(496, 550);
-            this.Name = "xvidConfigurationDialog";
-            this.Text = "XviD Encoder Configuration";
+            this.Name = "xvidConfigurationPanel";
+            this.Size = new System.Drawing.Size(503, 526);
+            this.tabControl1.ResumeLayout(false);
             this.zoneTabPage.ResumeLayout(false);
             this.mainTabPage.ResumeLayout(false);
-            this.tabControl1.ResumeLayout(false);
             this.xvidOtherGroupBox.ResumeLayout(false);
             this.xvidOtherGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nbThreads)).EndInit();

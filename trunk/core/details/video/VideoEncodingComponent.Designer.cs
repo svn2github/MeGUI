@@ -36,10 +36,11 @@ namespace MeGUI
             this.queueVideoButton = new System.Windows.Forms.Button();
             this.addPrerenderJob = new System.Windows.Forms.CheckBox();
             this.addAnalysisPass = new System.Windows.Forms.Button();
-            this.videoInput = new MeGUI.FileBar();
-            this.videoOutput = new MeGUI.FileBar();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.profileControl1 = new MeGUI.core.details.video.ProfileControl();
+            this.videoOutput = new MeGUI.FileBar();
+            this.videoInput = new MeGUI.FileBar();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -57,9 +58,9 @@ namespace MeGUI
             this.videoCodec.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.videoCodec.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.videoCodec.Location = new System.Drawing.Point(71, 67);
+            this.videoCodec.Location = new System.Drawing.Point(113, 67);
             this.videoCodec.Name = "videoCodec";
-            this.videoCodec.Size = new System.Drawing.Size(58, 21);
+            this.videoCodec.Size = new System.Drawing.Size(79, 21);
             this.videoCodec.TabIndex = 22;
             this.videoCodec.SelectedIndexChanged += new System.EventHandler(this.codec_SelectedIndexChanged);
             // 
@@ -67,16 +68,16 @@ namespace MeGUI
             // 
             this.fileType.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.fileType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.fileType.Location = new System.Drawing.Point(365, 66);
+            this.fileType.Location = new System.Drawing.Point(266, 67);
             this.fileType.Name = "fileType";
-            this.fileType.Size = new System.Drawing.Size(56, 21);
+            this.fileType.Size = new System.Drawing.Size(88, 21);
             this.fileType.TabIndex = 19;
             this.fileType.SelectedIndexChanged += new System.EventHandler(this.fileType_SelectedIndexChanged);
             // 
             // videoCodecLabel
             // 
             this.videoCodecLabel.AutoSize = true;
-            this.videoCodecLabel.Location = new System.Drawing.Point(6, 67);
+            this.videoCodecLabel.Location = new System.Drawing.Point(6, 70);
             this.videoCodecLabel.Name = "videoCodecLabel";
             this.videoCodecLabel.Size = new System.Drawing.Size(38, 13);
             this.videoCodecLabel.TabIndex = 21;
@@ -95,7 +96,7 @@ namespace MeGUI
             // queueVideoButton
             // 
             this.queueVideoButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.queueVideoButton.Location = new System.Drawing.Point(358, 120);
+            this.queueVideoButton.Location = new System.Drawing.Point(347, 120);
             this.queueVideoButton.Name = "queueVideoButton";
             this.queueVideoButton.Size = new System.Drawing.Size(62, 23);
             this.queueVideoButton.TabIndex = 26;
@@ -106,7 +107,7 @@ namespace MeGUI
             // 
             this.addPrerenderJob.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.addPrerenderJob.AutoSize = true;
-            this.addPrerenderJob.Location = new System.Drawing.Point(217, 124);
+            this.addPrerenderJob.Location = new System.Drawing.Point(206, 124);
             this.addPrerenderJob.Name = "addPrerenderJob";
             this.addPrerenderJob.Size = new System.Drawing.Size(127, 17);
             this.addPrerenderJob.TabIndex = 27;
@@ -122,40 +123,9 @@ namespace MeGUI
             this.addAnalysisPass.Text = "Queue analysis pass";
             this.addAnalysisPass.UseVisualStyleBackColor = true;
             // 
-            // videoInput
-            // 
-            this.videoInput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.videoInput.Filename = "";
-            this.videoInput.Filter = "AviSynth files (*.avs)|*.avs|All files (*.*)|*.*";
-            this.videoInput.FolderMode = false;
-            this.videoInput.Location = new System.Drawing.Point(139, 8);
-            this.videoInput.Name = "videoInput";
-            this.videoInput.ReadOnly = true;
-            this.videoInput.SaveMode = false;
-            this.videoInput.Size = new System.Drawing.Size(282, 26);
-            this.videoInput.TabIndex = 29;
-            this.videoInput.Title = "Open AviSynth script";
-            this.videoInput.FileSelected += new MeGUI.FileBarEventHandler(this.videoInput_FileSelected);
-            // 
-            // videoOutput
-            // 
-            this.videoOutput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.videoOutput.Filename = "";
-            this.videoOutput.Filter = null;
-            this.videoOutput.FolderMode = false;
-            this.videoOutput.Location = new System.Drawing.Point(139, 34);
-            this.videoOutput.Name = "videoOutput";
-            this.videoOutput.ReadOnly = false;
-            this.videoOutput.SaveMode = false;
-            this.videoOutput.Size = new System.Drawing.Size(281, 26);
-            this.videoOutput.TabIndex = 29;
-            this.videoOutput.Title = "Enter name of output";
-            this.videoOutput.FileSelected += new MeGUI.FileBarEventHandler(this.videoOutput_FileSelected);
-            // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.profileControl1);
             this.groupBox1.Controls.Add(this.videoInputLabel);
             this.groupBox1.Controls.Add(this.videoOutput);
@@ -170,17 +140,62 @@ namespace MeGUI
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(426, 195);
+            this.groupBox1.Size = new System.Drawing.Size(415, 153);
             this.groupBox1.TabIndex = 30;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Video encoding";
             // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(203, 70);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(55, 13);
+            this.label1.TabIndex = 31;
+            this.label1.Text = "File format";
+            // 
             // profileControl1
             // 
-            this.profileControl1.Location = new System.Drawing.Point(0, 89);
+            this.profileControl1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.profileControl1.LabelText = "Video profile";
+            this.profileControl1.Location = new System.Drawing.Point(9, 89);
             this.profileControl1.Name = "profileControl1";
-            this.profileControl1.Size = new System.Drawing.Size(426, 29);
+            this.profileControl1.Size = new System.Drawing.Size(400, 29);
             this.profileControl1.TabIndex = 30;
+            // 
+            // videoOutput
+            // 
+            this.videoOutput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.videoOutput.Filename = "";
+            this.videoOutput.Filter = null;
+            this.videoOutput.FolderMode = false;
+            this.videoOutput.Location = new System.Drawing.Point(113, 34);
+            this.videoOutput.Name = "videoOutput";
+            this.videoOutput.ReadOnly = false;
+            this.videoOutput.SaveMode = false;
+            this.videoOutput.Size = new System.Drawing.Size(296, 26);
+            this.videoOutput.TabIndex = 29;
+            this.videoOutput.Title = "Enter name of output";
+            this.videoOutput.FileSelected += new MeGUI.FileBarEventHandler(this.videoOutput_FileSelected);
+            // 
+            // videoInput
+            // 
+            this.videoInput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.videoInput.Filename = "";
+            this.videoInput.Filter = "AviSynth files (*.avs)|*.avs|All files (*.*)|*.*";
+            this.videoInput.FolderMode = false;
+            this.videoInput.Location = new System.Drawing.Point(113, 8);
+            this.videoInput.Name = "videoInput";
+            this.videoInput.ReadOnly = true;
+            this.videoInput.SaveMode = false;
+            this.videoInput.Size = new System.Drawing.Size(296, 26);
+            this.videoInput.TabIndex = 29;
+            this.videoInput.Title = "Open AviSynth script";
+            this.videoInput.FileSelected += new MeGUI.FileBarEventHandler(this.videoInput_FileSelected);
             // 
             // VideoEncodingComponent
             // 
@@ -188,7 +203,7 @@ namespace MeGUI
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.groupBox1);
             this.Name = "VideoEncodingComponent";
-            this.Size = new System.Drawing.Size(426, 195);
+            this.Size = new System.Drawing.Size(415, 153);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
@@ -209,6 +224,7 @@ namespace MeGUI
         private FileBar videoOutput;
         private System.Windows.Forms.GroupBox groupBox1;
         private MeGUI.core.details.video.ProfileControl profileControl1;
+        private System.Windows.Forms.Label label1;
 
     }
 }

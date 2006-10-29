@@ -38,7 +38,7 @@ namespace MeGUI.core.details
                 {
                     videoSettingsProviders.Register(provider);
                 }
-                foreach (ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> provider in registerable.AudioSettingsProviders)
+                foreach (ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType> provider in registerable.AudioSettingsProviders)
                 {
                     audioSettingsProviders.Register(provider);
                 }
@@ -64,7 +64,7 @@ namespace MeGUI.core.details
         GenericRegisterer<ITool> tools = new GenericRegisterer<ITool>();
         GenericRegisterer<IMediaFileFactory> mediaFileTypes = new GenericRegisterer<IMediaFileFactory>();
         GenericRegisterer<ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>> videoSettingsProviders = new GenericRegisterer<ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>>();
-        GenericRegisterer<ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>> audioSettingsProviders = new GenericRegisterer<ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>>();
+        GenericRegisterer<ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType>> audioSettingsProviders = new GenericRegisterer<ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType>>();
         GenericRegisterer<IMuxing> muxers = new GenericRegisterer<IMuxing>();
         GenericRegisterer<JobPreProcessor> jobPreProcessors = new GenericRegisterer<JobPreProcessor>();
         GenericRegisterer<JobPostProcessor> jobPostProcessors = new GenericRegisterer<JobPostProcessor>();
@@ -83,7 +83,7 @@ namespace MeGUI.core.details
         {
             get { return videoSettingsProviders; }
         }
-        public GenericRegisterer<ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>> AudioSettingsProviders
+        public GenericRegisterer<ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType>> AudioSettingsProviders
         {
             get { return audioSettingsProviders; }
         }

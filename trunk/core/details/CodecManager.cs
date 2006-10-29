@@ -125,8 +125,8 @@ namespace MeGUI
         public static GenericRegisterer<AudioEncoderType> AudioEncoderTypes = new GenericRegisterer<AudioEncoderType>();
         
         // Audio Codecs
-/*        public static readonly ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType> NAAC = new NeroAACSettingsProvider();
-        public static readonly ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType> WAAC = new WinAmpAACSettingsProvider();
+        public static readonly ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType> NAAC = new NeroAACSettingsProvider();
+/*        public static readonly ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType> WAAC = new WinAmpAACSettingsProvider();
         public static readonly ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType> Lame = new LameMP3SettingsProvider();
         public static readonly ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType> FAAC = new FaacSettingsProvider();
         public static readonly ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType> Vorbis = new OggVorbisSettingsProvider();
@@ -142,7 +142,7 @@ namespace MeGUI
 
         // All Audio Codecs
 #warning this must be renamed
-        public static readonly ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>[] ListOfAudioCodecs = new ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>[] { /*NAAC, WAAC, Lame, AudX, Vorbis, AC3, MP2, FAAC*/};
+        public static readonly ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType>[] ListOfAudioCodecs = new ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType>[] { NAAC/*, WAAC, Lame, AudX, Vorbis, AC3, MP2, FAAC*/};
         // All Audio Codecs
 #warning this must be renamed
         public static readonly ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>[] ListOfVideoCodecs = new ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>[] { Lavc, X264, Snow, XviD };
@@ -201,8 +201,8 @@ namespace MeGUI
                 this.supportedCodecs = supportedCodecs;
         }
         public static readonly VideoType MP4 = new VideoType("MP4", "MP4 Files", "mp4", ContainerType.MP4, new VideoCodec[] { VideoCodec.ASP, VideoCodec.AVC });
-        public static readonly VideoType RAWASP = new VideoType("RAWAVC", "RAW MPEG-4 ASP Files", "m4v", null, VideoCodec.ASP);
-        public static readonly VideoType RAWAVC = new VideoType("RAWASP", "RAW MPEG-4 AVC Files", "264", null, VideoCodec.AVC);
+        public static readonly VideoType RAWASP = new VideoType("RAWASP", "RAW MPEG-4 ASP Files", "m4v", null, VideoCodec.ASP);
+        public static readonly VideoType RAWAVC = new VideoType("RAWAVC", "RAW MPEG-4 AVC Files", "264", null, VideoCodec.AVC);
         public static readonly VideoType MKV = new VideoType("MKV", "Matroska Files", "mkv", ContainerType.MKV, new VideoCodec[] { VideoCodec.ASP, VideoCodec.AVC, VideoCodec.SNOW, VideoCodec.HFYU});
         public static readonly VideoType AVI = new VideoType("AVI", "AVI Files", "avi", ContainerType.AVI, new VideoCodec[] { VideoCodec.ASP, VideoCodec.AVC, VideoCodec.HFYU, VideoCodec.SNOW });
     }

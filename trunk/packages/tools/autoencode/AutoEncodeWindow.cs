@@ -127,7 +127,7 @@ namespace MeGUI
                 this.container.Items.Clear();
                 this.container.Items.AddRange(supportedOutputTypes.ToArray());
                 this.container.SelectedIndex = 0;
-                string muxedName = Path.Combine(Path.GetDirectoryName(mainForm.VideoIO[1]), Path.GetFileNameWithoutExtension(mainForm.VideoIO[1]) + "-muxed.");
+                string muxedName = Path.Combine(Path.GetDirectoryName(mainForm.Video.Info.VideoOutput), Path.GetFileNameWithoutExtension(mainForm.Video.Info.VideoOutput) + "-muxed.");
                 this.muxedOutput.Text = Path.ChangeExtension(muxedName, (this.container.SelectedItem as ContainerType).Extension);
                 this.sizeSelection.SelectedIndex = 2;
 
@@ -745,8 +745,8 @@ namespace MeGUI
 				separateEncodableAndMuxableAudioStreams(out aStreams, out audio, out muxTypes);
 				SubStream[] subtitles = new SubStream[0];
 				string chapters = "";
-				string videoInput = mainForm.VideoIO[0];
-				string videoOutput = mainForm.VideoIO[1];
+				string videoInput = mainForm.Video.Info.VideoInput;
+                string videoOutput = mainForm.Video.Info.VideoOutput;
                 string muxedOutput = this.muxedOutput.Text;
                 ContainerType cot = this.container.SelectedItem as ContainerType;
                 if (addSubsNChapters.Checked)
@@ -879,19 +879,19 @@ namespace MeGUI
             }
 
             VideoCodecSettings vSettings = info.Video.CurrentVideoCodecSettings.clone();
-            bool cont = info.JobUtil.getFinalZoneConfiguration(vSettings, info.Video.IntroEndFrame, info.Video.CreditsStartFrame);
+            bool cont = info.JobUtil.getFinalZoneConfiguration(vSettings, info.Video.Info.IntroEndFrame, info.Video.Info.CreditsStartFrame);
             if (cont)
             {
                 int length = 0;
                 double framerate = 0.0;
                 VideoStream myVideo = new VideoStream();
                 info.JobUtil.getInputProperties(out length, out framerate, info.Video.VideoInput);
-                myVideo.Input = info.Video.VideoIO[0];
-                myVideo.Output = info.Video.VideoIO[1];
+                myVideo.Input = info.Video.Info.VideoInput;
+                myVideo.Output = info.Video.Info.VideoOutput;
                 myVideo.NumberOfFrames = length;
                 myVideo.Framerate = framerate;
-                myVideo.ParX = info.Video.PARX;
-                myVideo.ParY = info.Video.PARY;
+                myVideo.ParX = info.Video.Info.DARX;
+                myVideo.ParY = info.Video.Info.DARY;
                 myVideo.VideoType = info.Video.CurrentMuxableVideoType;
                 myVideo.Settings = vSettings;
 #warning check delays here. Doom9 did them, but I'm not sure how they work

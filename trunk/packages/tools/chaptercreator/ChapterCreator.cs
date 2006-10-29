@@ -21,9 +21,9 @@ namespace MeGUI
         {
             using (ChapterCreator cc = new ChapterCreator(info))
             {
-                cc.VideoInput = info.Video.VideoInput;
-                cc.CreditsStartFrame = info.Video.CreditsStartFrame;
-                cc.IntroEndFrame = info.Video.IntroEndFrame;
+                cc.VideoInput = info.Video.Info.VideoInput;
+                cc.CreditsStartFrame = info.Video.Info.CreditsStartFrame;
+                cc.IntroEndFrame = info.Video.Info.IntroEndFrame;
                 cc.ShowDialog();
             }
         }

@@ -17,8 +17,36 @@ namespace MeGUI
     {
         private VideoPlayer player; // window that shows a preview of the video
         private MainForm mainForm;
-        private int creditsStartFrame = -1, introEndFrame = -1;
-        private int parX = -1, parY = -1;
+
+        #region video info
+        private VideoInfo info;
+        private void initVideoInfo()
+        {
+            info = new VideoInfo();
+            info.VideoInputChanged += new StringChanged(delegate(object _, string val)
+            {
+                videoInput.Filename = val;
+            });
+            info.VideoOutputChanged += new StringChanged(delegate(object _, string val)
+            {
+                videoOutput.Filename = val;
+            });
+        }
+        public VideoInfo Info
+        {
+            get
+            {
+                return info;
+            }
+        }
+        #endregion
+        #region generic handlers: filetype, profiles and codec. Also, encoder provider
+        private FileTypeHandler<VideoType> fileTypeHandler;
+        public FileTypeHandler<VideoType> FileTypeHandler
+        {
+            get { return fileTypeHandler; }
+        }
+
 
         private ProfilesControlHandler<VideoCodecSettings, VideoInfo> profileHandler;
         public ProfilesControlHandler<VideoCodecSettings, VideoInfo> ProfileHandler
@@ -34,10 +62,12 @@ namespace MeGUI
         private VideoEncoderProvider videoEncoderProvider = new VideoEncoderProvider();
         public VideoEncodingComponent()
         {
+            initVideoInfo();
             InitializeComponent();
 
         }
-
+        #endregion
+        #region wrappers for the above handlers
         public string SelectedProfile
         {
             get { return ProfileHandler.SelectedProfile; }
@@ -55,21 +85,13 @@ namespace MeGUI
         {
             get { return codecHandler; }
         }
-
+        #endregion
+        #region initialization of those handlers
         public  VideoInfo getInfo()
         {
-            return new VideoInfo(VideoIO, new int[] { creditsStartFrame, introEndFrame });
+            return Info;
         }
         
-        private VideoInfo info;
-
-        public VideoInfo Info
-        {
-            get { return info; }
-            set { info = value; }
-        }
-
-
         public void InitializeDropdowns()
         {
             videoCodec.Items.Clear();
@@ -81,31 +103,46 @@ namespace MeGUI
                 catch (Exception) { MessageBox.Show("No valid video codecs are set up", "No valid video codecs", MessageBoxButtons.OK, MessageBoxIcon.Error); }
             }
 
+
+            fileTypeHandler = new FileTypeHandler<VideoType>(fileType, videoCodec,
+                new FileTypeHandler<VideoType>.SupportedOutputGetter(delegate
+            {
+                return videoEncoderProvider.GetSupportedOutput(codecHandler.CurrentSettingsProvider.EncoderType);
+            }));
+
+            fileTypeHandler.FileTypeChanged += new FileTypeHandler<VideoType>.FileTypeEvent(delegate
+            (object sender, VideoType currentType) {
+                VideoCodecSettings settings = CurrentSettings;
+                this.updateIOConfig();
+                if (MainForm.verifyOutputFile(this.VideoOutput) == null)
+                    this.VideoOutput = Path.ChangeExtension(this.VideoOutput, currentType.Extension);
+            });
+
             codecHandler =
                 new MultipleConfigurersHandler<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>(videoCodec);
             
             profileHandler = new ProfilesControlHandler<VideoCodecSettings, VideoInfo>("Video", mainForm, profileControl1,
                 codecHandler.EditSettings, new InfoGetter<VideoInfo>(getInfo),
                 codecHandler.Getter, codecHandler.Setter);
+            codecHandler.Register(profileHandler);
             profileHandler.RefreshProfiles();
+            fileTypeHandler.RefreshFiletypes();
         }
+        #endregion
+        #region extra properties
         public MainForm MainForm
         {
             set { mainForm = value; }
         }
-/*        public ComboBox VideoCodec
-        {
-            get { return videoCodec; }
-        }*/
         public string VideoInput
         {
-            get { return videoInput.Filename; }
-            set { videoInput.Filename = value; }
+            get { return info.VideoInput; }
+            set { info.VideoInput = value; }
         }
         public string VideoOutput
         {
-            get { return videoOutput.Filename; }
-            set { videoOutput.Filename = value; }
+            get { return info.VideoOutput; }
+            set { info.VideoOutput = value; }
         }
 /*        public ComboBox VideoProfile
         {
@@ -115,30 +152,10 @@ namespace MeGUI
         {
             get { return this.fileType.SelectedItem as VideoType; }
         }
-        public int PARX
-        {
-            get { return parX; }
-            set { parX = value; }
-        }
-        public int PARY
-        {
-            get { return parY; }
-            set { parY = value; }
-        }
         public bool PrerenderJob
         {
             get { return addPrerenderJob.Checked; }
             set { addPrerenderJob.Checked = value; }
-        }
-        public int IntroEndFrame
-        {
-            get { return introEndFrame; }
-            set { introEndFrame = value; }
-        }
-        public int CreditsStartFrame
-        {
-            get { return creditsStartFrame; }
-            set { creditsStartFrame = value; }
         }
 /*        public ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> CurrentVideoCodecSettingsProvider
         {
@@ -148,6 +165,7 @@ namespace MeGUI
             }
         }
         */
+        #endregion
         #region event handlers
         private void videoInput_FileSelected(FileBar sender, FileBarEventArgs args)
         {
@@ -156,7 +174,7 @@ namespace MeGUI
 
         private void videoOutput_FileSelected(FileBar sender, FileBarEventArgs args)
         {
-
+            info.VideoOutput = videoOutput.Filename;
         }
         /// <summary>
         /// opens the AviSynth preview for a given AviSynth script
@@ -172,13 +190,13 @@ namespace MeGUI
             bool videoLoaded = player.loadVideo(mainForm, fileName, PREVIEWTYPE.CREDITS, true);
             if (videoLoaded)
             {
-                if (parX < 1 || parY < 1)
+                if (info.DARX < 1 || info.DARY < 1)
                 {
-                    parX = player.File.DARX;
-                    parY = player.File.DARY;
+                    info.DARX = player.File.DARX;
+                    info.DARY = player.File.DARY;
                 }
-                player.PARX = parX;
-                player.PARY = parY;
+                player.PARX = info.DARX;
+                player.PARY = info.DARY;
                 player.IntroCreditsFrameSet += new IntroCreditsFrameSetCallback(player_IntroCreditsFrameSet);
                 player.Closed += new EventHandler(player_Closed);
                 player.Show();
@@ -191,10 +209,10 @@ namespace MeGUI
             if (!VideoInput.Equals(""))
             {
                 this.openAvisynthScript(VideoInput);
-                if (this.creditsStartFrame > -1)
-                    this.player.CreditsStart = creditsStartFrame;
-                if (this.introEndFrame > -1)
-                    this.player.IntroEnd = introEndFrame;
+                if (info.CreditsStartFrame > -1)
+                    this.player.CreditsStart = info.CreditsStartFrame;
+                if (info.IntroEndFrame > -1)
+                    this.player.IntroEnd = info.IntroEndFrame;
             }
         }
 /*        private void videoConfigButton_Click(object sender, System.EventArgs e)
@@ -230,8 +248,8 @@ namespace MeGUI
             }
             VideoCodecSettings vSettings = this.CurrentVideoCodecSettings.clone();
             bool start = mainForm.Settings.AutoStartQueue;
-            start &= mainForm.JobUtil.AddVideoJobs(this.VideoIO[0], this.VideoIO[1], this.CurrentVideoCodecSettings.clone(),
-                this.introEndFrame, this.creditsStartFrame, parX, parY, addPrerenderJob.Checked, true);
+            start &= mainForm.JobUtil.AddVideoJobs(info.VideoInput, info.VideoOutput, this.CurrentVideoCodecSettings.clone(),
+                info.IntroEndFrame, info.CreditsStartFrame, info.DARX, info.DARY, addPrerenderJob.Checked, true);
             if (start)
                 mainForm.Jobs.startNextJobInQueue();
         }
@@ -275,7 +293,7 @@ namespace MeGUI
         /// <param name="e"></param>
         private void codec_SelectedIndexChanged(object sender, System.EventArgs e)
         {
-            VideoType[] outputTypes = this.videoEncoderProvider.GetSupportedOutput(codecHandler.CurrentSettingsProvider.EncoderType);
+/*            VideoType[] outputTypes = this.videoEncoderProvider.GetSupportedOutput(codecHandler.CurrentSettingsProvider.EncoderType);
             VideoType currentType = null;
             if (CurrentVideoOutputType != null)
                 currentType = CurrentVideoOutputType;
@@ -303,7 +321,7 @@ namespace MeGUI
             VideoCodecSettings settings = CurrentSettings;
             this.updateIOConfig();
             if (MainForm.verifyOutputFile(this.VideoOutput) == null)
-                this.VideoOutput = Path.ChangeExtension(this.VideoOutput, currentType.Extension);
+                this.VideoOutput = Path.ChangeExtension(this.VideoOutput, currentType.Extension);*/
         }
         /// <summary>
         /// enables / disables output fields depending on the codec configuration
@@ -321,7 +339,7 @@ namespace MeGUI
             }
         }
         #endregion
-
+        #region verification
         /// <summary>
         /// verifies the input, output and logfile configuration
         /// based on the codec and encoding mode certain fields must be filled out
@@ -355,6 +373,8 @@ namespace MeGUI
             }
             return null;
         }
+        #endregion
+        #region helpers
         /// <summary>
         ///  returns the video codec settings for the currently active video codec
         /// </summary>
@@ -385,10 +405,10 @@ namespace MeGUI
         }
         public void openVideoFile(string fileName)
         {
-            this.creditsStartFrame = -1;
-            this.introEndFrame = -1;
-            this.VideoInput = fileName;
-            parX = parY = -1;
+            info.CreditsStartFrame = -1;
+            info.IntroEndFrame = -1;
+            info.VideoInput = fileName;
+            info.DARX = info.DARY = -1;
             //reset the zones for all codecs, zones are supposed to be source bound
             foreach (ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> p in (videoCodec.Items))
             {
@@ -412,7 +432,8 @@ namespace MeGUI
             else
                 return false;
         }
-
+        #endregion
+        #region player info
 
         internal void ClosePlayer()
         {
@@ -441,8 +462,8 @@ namespace MeGUI
         /// <param name="e"></param>
         private void player_Closed(object sender, EventArgs e)
         {
-            parX = player.PARX;
-            parY = player.PARY;
+            info.DARX = player.PARX;
+            info.DARY = player.PARY;
             this.player = null;
         }
         /// <summary>
@@ -457,7 +478,7 @@ namespace MeGUI
                 if (validateCredits(frameNumber))
                 {
                     player.CreditsStart = frameNumber;
-                    this.creditsStartFrame = frameNumber;
+                    info.CreditsStartFrame = frameNumber;
                 }
                 else
                     player.CreditsStart = -1;
@@ -466,7 +487,7 @@ namespace MeGUI
             {
                 if (validateIntro(frameNumber))
                 {
-                    this.introEndFrame = frameNumber;
+                    info.IntroEndFrame = frameNumber;
                     player.IntroEnd = frameNumber;
                 }
                 else
@@ -513,16 +534,8 @@ namespace MeGUI
             }
             return true;
         }
-        /// <summary>
-        /// returns video input and output configuration
-        /// </summary>
-        public string[] VideoIO
-        {
-            get
-            {
-                return new string[] { VideoInput, VideoOutput };
-            }
-        }
+        #endregion
+        #region misc
         public VideoEncoderProvider VideoEncoderProvider
         {
             get { return videoEncoderProvider; }
@@ -532,12 +545,13 @@ namespace MeGUI
         {
             this.VideoInput = "";
             this.VideoOutput = "";
-            this.creditsStartFrame = 0;
+            info.CreditsStartFrame = 0;
         }
 
         public void RefreshProfiles()
         {
             ProfileHandler.RefreshProfiles();
         }
+        #endregion
     }
 }

@@ -37,16 +37,16 @@ namespace MeGUI
             this.filename.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.filename.Location = new System.Drawing.Point(3, 3);
+            this.filename.Location = new System.Drawing.Point(0, 3);
             this.filename.Name = "filename";
             this.filename.ReadOnly = true;
-            this.filename.Size = new System.Drawing.Size(236, 20);
+            this.filename.Size = new System.Drawing.Size(239, 20);
             this.filename.TabIndex = 5;
             // 
             // openButton
             // 
             this.openButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.openButton.Location = new System.Drawing.Point(242, 1);
+            this.openButton.Location = new System.Drawing.Point(245, 1);
             this.openButton.Name = "openButton";
             this.openButton.Size = new System.Drawing.Size(24, 23);
             this.openButton.TabIndex = 6;

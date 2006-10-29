@@ -14,7 +14,7 @@ namespace MeGUI.core.plugins.interfaces
         JobPostProcessor[] JobPostProcessors { get;}
         JobProcessorFactory[] JobProcessors { get;}
         ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>[] VideoSettingsProviders { get;}
-        ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>[] AudioSettingsProviders { get;}
+        ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType>[] AudioSettingsProviders { get;}
         IMuxing[] MuxerProviders { get;}
         string Name { get;}
         string[] RequiredPackageIDs { get;}

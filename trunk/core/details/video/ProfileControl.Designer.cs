@@ -36,7 +36,7 @@ namespace MeGUI.core.details.video
             // avsConfigButton
             // 
             this.avsConfigButton.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.avsConfigButton.Location = new System.Drawing.Point(331, 3);
+            this.avsConfigButton.Location = new System.Drawing.Point(340, 3);
             this.avsConfigButton.Name = "avsConfigButton";
             this.avsConfigButton.Size = new System.Drawing.Size(48, 23);
             this.avsConfigButton.TabIndex = 21;
@@ -47,9 +47,9 @@ namespace MeGUI.core.details.video
             // 
             this.avsProfile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.avsProfile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.avsProfile.Location = new System.Drawing.Point(71, 3);
+            this.avsProfile.Location = new System.Drawing.Point(104, 3);
             this.avsProfile.Name = "avsProfile";
-            this.avsProfile.Size = new System.Drawing.Size(254, 21);
+            this.avsProfile.Size = new System.Drawing.Size(230, 21);
             this.avsProfile.Sorted = true;
             this.avsProfile.TabIndex = 20;
             this.avsProfile.SelectedIndexChanged += new System.EventHandler(this.avsProfile_SelectedIndexChanged);
@@ -58,7 +58,7 @@ namespace MeGUI.core.details.video
             // 
             this.avsProfileLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.avsProfileLabel.AutoSize = true;
-            this.avsProfileLabel.Location = new System.Drawing.Point(6, 6);
+            this.avsProfileLabel.Location = new System.Drawing.Point(-3, 8);
             this.avsProfileLabel.Name = "avsProfileLabel";
             this.avsProfileLabel.Size = new System.Drawing.Size(59, 13);
             this.avsProfileLabel.TabIndex = 19;

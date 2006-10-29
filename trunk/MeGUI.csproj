@@ -126,6 +126,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="core\details\audio\AudioConfigurationPanel.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>AudioConfigurationPanel.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="core\details\audio\baseAudioConfigurationDialog.resx">
       <DependentUpon>baseAudioConfigurationDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -170,6 +174,12 @@
     <Content Include="MediaInfoWrapper.dll" />
     <Content Include="MessageBoxExLib.dll" />
     <Compile Include="core\details\audio\AudioCodecSettings.cs" />
+    <Compile Include="core\details\audio\AudioConfigurationPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="core\details\audio\AudioConfigurationPanel.Designer.cs">
+      <DependentUpon>AudioConfigurationPanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="core\details\audio\AudioJob.cs" />
     <Compile Include="core\details\audio\AudioProfile.cs" />
     <Compile Include="core\details\audio\baseAudioConfigurationDialog.cs">
@@ -305,10 +315,28 @@
     <Compile Include="core\util\ScriptServer.cs" />
     <Compile Include="core\util\Shutdown.cs" />
     <Compile Include="core\util\VideoUtil.cs" />
-    <Compile Include="packages\AC3ConfigurationDialog.cs">
+    <Compile Include="packages\audio\audx\AudXConfigurationPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="packages\audio\audx\AudXConfigurationPanel.Designer.cs">
+      <DependentUpon>AudXConfigurationPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="packages\audio\faac\faacConfigurationPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="packages\audio\faac\faacConfigurationPanel.Designer.cs">
+      <DependentUpon>faacConfigurationPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="packages\audio\ffac3\AC3ConfigurationDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="packages\AC3Settings.cs" />
+    <Compile Include="packages\audio\ffac3\AC3ConfigurationPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="packages\audio\ffac3\AC3ConfigurationPanel.Designer.cs">
+      <DependentUpon>AC3ConfigurationPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="packages\audio\ffac3\AC3Settings.cs" />
     <Compile Include="packages\audio\faac\faacConfigurationDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -316,26 +344,56 @@
     <Compile Include="packages\audio\ffmp2\MP2ConfigurationDialog.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="packages\audio\ffmp2\MP2ConfigurationPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="packages\audio\ffmp2\MP2ConfigurationPanel.Designer.cs">
+      <DependentUpon>MP2ConfigurationPanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="packages\audio\ffmp2\MP2Settings.cs" />
     <Compile Include="packages\audio\lame\lameConfigurationDialog.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="packages\audio\lame\lameConfigurationPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="packages\audio\lame\lameConfigurationPanel.Designer.cs">
+      <DependentUpon>lameConfigurationPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="packages\audio\naac\NeroAACSettings.cs" />
     <Compile Include="packages\audio\naac\neroConfigurationDialog.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="packages\audio\naac\neroConfigurationPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="packages\audio\naac\neroConfigurationPanel.Designer.cs">
+      <DependentUpon>neroConfigurationPanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="packages\audio\vorbis\OggVorbisConfigurationDialog.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="packages\audio\vorbis\OggVorbisConfigurationPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="packages\audio\vorbis\OggVorbisConfigurationPanel.Designer.cs">
+      <DependentUpon>OggVorbisConfigurationPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="packages\audio\vorbis\OggVorbisSettings.cs" />
     <Compile Include="packages\audio\waac\WinAmpAACConfigurationDialog.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="packages\audio\waac\WinAmpAACConfigurationPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="packages\audio\waac\WinAmpAACConfigurationPanel.Designer.cs">
+      <DependentUpon>WinAmpAACConfigurationPanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="packages\audio\waac\WinAmpAACSettings.cs" />
-    <Compile Include="packages\AudXConfigurationDialog.cs">
+    <Compile Include="packages\audio\audx\AudXConfigurationDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="packages\AudXSettings.cs" />
+    <Compile Include="packages\audio\audx\AudXSettings.cs" />
     <Compile Include="packages\Avc2AviMuxer.cs" />
     <Compile Include="packages\AVCLevels.cs" />
     <Compile Include="packages\AviSynthJob.cs" />
@@ -401,12 +459,6 @@
     <Compile Include="packages\tools\vobsub\VobSubIndexWindow.Designer.cs">
       <DependentUpon>VobSubIndexWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="packages\video\lmp4\lavcConfigurationDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="packages\video\lmp4\lavcConfigurationDialog.Designer.cs">
-      <DependentUpon>lavcConfigurationDialog.cs</DependentUpon>
-    </Compile>
     <Compile Include="packages\video\lmp4\lavcConfigurationPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -429,12 +481,6 @@
     </Compile>
     <Compile Include="packages\video\x264\x264Encoder.cs" />
     <Compile Include="packages\video\x264\x264Settings.cs" />
-    <Compile Include="packages\video\xvid\xvidConfigurationDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="packages\video\xvid\xvidConfigurationDialog.designer.cs">
-      <DependentUpon>xvidConfigurationDialog.cs</DependentUpon>
-    </Compile>
     <Compile Include="packages\video\xvid\xvidConfigurationPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -523,7 +569,15 @@
       <SubType>Designer</SubType>
       <DependentUpon>CropDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="packages\AC3ConfigurationDialog.resx">
+    <EmbeddedResource Include="packages\audio\audx\AudXConfigurationPanel.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>AudXConfigurationPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="packages\audio\faac\faacConfigurationPanel.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>faacConfigurationPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="packages\audio\ffac3\AC3ConfigurationDialog.resx">
       <DependentUpon>AC3ConfigurationDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -531,25 +585,49 @@
       <DependentUpon>faacConfigurationDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="packages\audio\ffac3\AC3ConfigurationPanel.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>AC3ConfigurationPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="packages\audio\ffmp2\MP2ConfigurationPanel.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>MP2ConfigurationPanel.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="packages\audio\lame\lameConfigurationDialog.resx">
       <DependentUpon>lameConfigurationDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="packages\audio\lame\lameConfigurationPanel.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>lameConfigurationPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="packages\audio\naac\neroConfigurationDialog.resx">
       <DependentUpon>neroConfigurationDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="packages\audio\naac\neroConfigurationPanel.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>neroConfigurationPanel.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="packages\audio\vorbis\OggVorbisConfigurationDialog.resx">
       <DependentUpon>OggVorbisConfigurationDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="packages\audio\vorbis\OggVorbisConfigurationPanel.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>OggVorbisConfigurationPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="packages\audio\waac\WinAmpAACConfigurationDialog.resx">
       <DependentUpon>WinAmpAACConfigurationDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="packages\AudXConfigurationDialog.resx">
+    <EmbeddedResource Include="packages\audio\audx\AudXConfigurationDialog.resx">
       <DependentUpon>AudXConfigurationDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="packages\audio\waac\WinAmpAACConfigurationPanel.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WinAmpAACConfigurationPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="packages\AviSynthWindow.resx">
       <DependentUpon>AviSynthWindow.cs</DependentUpon>
@@ -595,10 +673,6 @@
       <DependentUpon>VobSubIndexWindow.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="packages\video\lmp4\lavcConfigurationDialog.resx">
-      <DependentUpon>lavcConfigurationDialog.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="packages\video\snow\snowConfigurationPanel.resx">
       <SubType>Designer</SubType>
       <DependentUpon>snowConfigurationPanel.cs</DependentUpon>
@@ -607,9 +681,9 @@
       <SubType>Designer</SubType>
       <DependentUpon>x264ConfigurationPanel.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="packages\video\xvid\xvidConfigurationDialog.resx">
-      <DependentUpon>xvidConfigurationDialog.cs</DependentUpon>
+    <EmbeddedResource Include="packages\video\xvid\xvidConfigurationPanel.resx">
       <SubType>Designer</SubType>
+      <DependentUpon>xvidConfigurationPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UpdateWindow.resx">
       <DependentUpon>UpdateWindow.cs</DependentUpon>
@@ -623,8 +697,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="packages\audio\audx\" />
-    <Folder Include="packages\audio\ffac3\" />
     <Folder Include="packages\misc\" />
     <Folder Include="packages\reader\avs\" />
     <Folder Include="packages\tools\avscreator\" />
