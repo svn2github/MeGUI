@@ -14,6 +14,7 @@ namespace MeGUI.packages.audio.audx
             : base(mainForm, info)
         {
             InitializeComponent();
+            comboBox1.Items.AddRange(EnumProxy.CreateArray(typeof(AudXSettings.QualityMode)));
         }
         #region properties
         protected override bool IsMultichanelRequed

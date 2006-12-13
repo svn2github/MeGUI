@@ -14,6 +14,9 @@ namespace MeGUI.packages.audio.lame
             : base(mainForm, info)
         {
             InitializeComponent();
+            this.encodingMode.Items.Add(BitrateManagementMode.CBR);
+            this.encodingMode.Items.Add(BitrateManagementMode.VBR);
+            this.encodingMode.Items.Add(BitrateManagementMode.ABR);
         }
 		#region properties
         protected override bool IsMultichanelSupported

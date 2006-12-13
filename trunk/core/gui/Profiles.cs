@@ -12,13 +12,13 @@ namespace MeGUI.core.plugins.interfaces
         ProfileManager profileManager;
         private Gettable<TProfileSettings> s;
         protected GroupBox profilesGroupbox;
+        private Panel panel1;
+        protected Button cancelButton;
+        protected Button okButton;
         private Button updateButton;
         private Button loadDefaultsButton;
         private ComboBox videoProfile;
         private Button newVideoProfileButton;
-        private Panel panel1;
-        protected Button cancelButton;
-        protected Button okButton;
         private Button deleteVideoProfileButton;
         private string initialProfile;
 
@@ -42,14 +42,14 @@ namespace MeGUI.core.plugins.interfaces
         private void InitializeComponent()
         {
             this.profilesGroupbox = new System.Windows.Forms.GroupBox();
-            this.updateButton = new System.Windows.Forms.Button();
-            this.loadDefaultsButton = new System.Windows.Forms.Button();
-            this.videoProfile = new System.Windows.Forms.ComboBox();
-            this.newVideoProfileButton = new System.Windows.Forms.Button();
-            this.deleteVideoProfileButton = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.cancelButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
+            this.deleteVideoProfileButton = new System.Windows.Forms.Button();
+            this.newVideoProfileButton = new System.Windows.Forms.Button();
+            this.videoProfile = new System.Windows.Forms.ComboBox();
+            this.loadDefaultsButton = new System.Windows.Forms.Button();
+            this.updateButton = new System.Windows.Forms.Button();
             this.profilesGroupbox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -64,63 +64,10 @@ namespace MeGUI.core.plugins.interfaces
             this.profilesGroupbox.Controls.Add(this.deleteVideoProfileButton);
             this.profilesGroupbox.Location = new System.Drawing.Point(12, 405);
             this.profilesGroupbox.Name = "profilesGroupbox";
-            this.profilesGroupbox.Size = new System.Drawing.Size(500, 48);
+            this.profilesGroupbox.Size = new System.Drawing.Size(396, 48);
             this.profilesGroupbox.TabIndex = 44;
             this.profilesGroupbox.TabStop = false;
             this.profilesGroupbox.Text = "Profiles";
-            // 
-            // updateButton
-            // 
-            this.updateButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.updateButton.Location = new System.Drawing.Point(314, 18);
-            this.updateButton.Name = "updateButton";
-            this.updateButton.Size = new System.Drawing.Size(50, 23);
-            this.updateButton.TabIndex = 15;
-            this.updateButton.Text = "Update";
-            this.updateButton.UseVisualStyleBackColor = true;
-            this.updateButton.Click += new System.EventHandler(this.updateButton_Click);
-            // 
-            // loadDefaultsButton
-            // 
-            this.loadDefaultsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.loadDefaultsButton.Location = new System.Drawing.Point(391, 18);
-            this.loadDefaultsButton.Name = "loadDefaultsButton";
-            this.loadDefaultsButton.Size = new System.Drawing.Size(103, 23);
-            this.loadDefaultsButton.TabIndex = 14;
-            this.loadDefaultsButton.Text = "Load Defaults";
-            this.loadDefaultsButton.UseVisualStyleBackColor = true;
-            this.loadDefaultsButton.Click += new System.EventHandler(this.loadDefaultsButton_Click);
-            // 
-            // videoProfile
-            // 
-            this.videoProfile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.videoProfile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.videoProfile.Location = new System.Drawing.Point(8, 18);
-            this.videoProfile.Name = "videoProfile";
-            this.videoProfile.Size = new System.Drawing.Size(196, 21);
-            this.videoProfile.Sorted = true;
-            this.videoProfile.TabIndex = 11;
-            this.videoProfile.SelectedIndexChanged += new System.EventHandler(this.videoProfile_SelectedIndexChanged);
-            // 
-            // newVideoProfileButton
-            // 
-            this.newVideoProfileButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.newVideoProfileButton.Location = new System.Drawing.Point(268, 18);
-            this.newVideoProfileButton.Name = "newVideoProfileButton";
-            this.newVideoProfileButton.Size = new System.Drawing.Size(40, 23);
-            this.newVideoProfileButton.TabIndex = 12;
-            this.newVideoProfileButton.Text = "New";
-            this.newVideoProfileButton.Click += new System.EventHandler(this.newVideoProfileButton_Click);
-            // 
-            // deleteVideoProfileButton
-            // 
-            this.deleteVideoProfileButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.deleteVideoProfileButton.Location = new System.Drawing.Point(210, 18);
-            this.deleteVideoProfileButton.Name = "deleteVideoProfileButton";
-            this.deleteVideoProfileButton.Size = new System.Drawing.Size(48, 23);
-            this.deleteVideoProfileButton.TabIndex = 13;
-            this.deleteVideoProfileButton.Text = "Delete";
             // 
             // panel1
             // 
@@ -129,14 +76,14 @@ namespace MeGUI.core.plugins.interfaces
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.Location = new System.Drawing.Point(2, 2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(515, 399);
+            this.panel1.Size = new System.Drawing.Size(411, 399);
             this.panel1.TabIndex = 45;
             // 
             // cancelButton
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(462, 459);
+            this.cancelButton.Location = new System.Drawing.Point(358, 459);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(48, 23);
             this.cancelButton.TabIndex = 47;
@@ -146,15 +93,68 @@ namespace MeGUI.core.plugins.interfaces
             // 
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.okButton.Location = new System.Drawing.Point(403, 459);
+            this.okButton.Location = new System.Drawing.Point(299, 459);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(40, 23);
             this.okButton.TabIndex = 46;
             this.okButton.Text = "OK";
             // 
+            // deleteVideoProfileButton
+            // 
+            this.deleteVideoProfileButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.deleteVideoProfileButton.Location = new System.Drawing.Point(131, 18);
+            this.deleteVideoProfileButton.Name = "deleteVideoProfileButton";
+            this.deleteVideoProfileButton.Size = new System.Drawing.Size(48, 23);
+            this.deleteVideoProfileButton.TabIndex = 13;
+            this.deleteVideoProfileButton.Text = "Delete";
+            // 
+            // newVideoProfileButton
+            // 
+            this.newVideoProfileButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.newVideoProfileButton.Location = new System.Drawing.Point(185, 18);
+            this.newVideoProfileButton.Name = "newVideoProfileButton";
+            this.newVideoProfileButton.Size = new System.Drawing.Size(40, 23);
+            this.newVideoProfileButton.TabIndex = 12;
+            this.newVideoProfileButton.Text = "New";
+            this.newVideoProfileButton.Click += new System.EventHandler(this.newVideoProfileButton_Click);
+            // 
+            // videoProfile
+            // 
+            this.videoProfile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.videoProfile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.videoProfile.Location = new System.Drawing.Point(8, 18);
+            this.videoProfile.Name = "videoProfile";
+            this.videoProfile.Size = new System.Drawing.Size(117, 21);
+            this.videoProfile.Sorted = true;
+            this.videoProfile.TabIndex = 11;
+            this.videoProfile.SelectedIndexChanged += new System.EventHandler(this.videoProfile_SelectedIndexChanged);
+            // 
+            // loadDefaultsButton
+            // 
+            this.loadDefaultsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.loadDefaultsButton.Location = new System.Drawing.Point(287, 18);
+            this.loadDefaultsButton.Name = "loadDefaultsButton";
+            this.loadDefaultsButton.Size = new System.Drawing.Size(103, 23);
+            this.loadDefaultsButton.TabIndex = 14;
+            this.loadDefaultsButton.Text = "Load Defaults";
+            this.loadDefaultsButton.UseVisualStyleBackColor = true;
+            this.loadDefaultsButton.Click += new System.EventHandler(this.loadDefaultsButton_Click);
+            // 
+            // updateButton
+            // 
+            this.updateButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.updateButton.Location = new System.Drawing.Point(231, 18);
+            this.updateButton.Name = "updateButton";
+            this.updateButton.Size = new System.Drawing.Size(50, 23);
+            this.updateButton.TabIndex = 15;
+            this.updateButton.Text = "Update";
+            this.updateButton.UseVisualStyleBackColor = true;
+            this.updateButton.Click += new System.EventHandler(this.updateButton_Click);
+            // 
             // ConfigurationWindow
             // 
-            this.ClientSize = new System.Drawing.Size(518, 490);
+            this.ClientSize = new System.Drawing.Size(414, 490);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.panel1);
@@ -178,7 +178,7 @@ namespace MeGUI.core.plugins.interfaces
             this.s = s;
             System.Drawing.Size size = Size;
             size.Height += sPanel.Height - panel1.Height;
-            size.Width += sPanel.Width - panel1.Width;
+            size.Width += Math.Max(sPanel.Width - panel1.Width, 0);
             Size = size;
             sPanel.Dock = DockStyle.Fill;
             panel1.Controls.Add(sPanel);
