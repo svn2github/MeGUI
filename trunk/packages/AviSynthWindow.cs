@@ -22,9 +22,10 @@ namespace MeGUI
 	public class AviSynthWindow : System.Windows.Forms.Form
 	{
 		#region variable declaration
+        ISettingsProvider<AviSynthSettings, Empty, int, int> settingsProvider = new SettingsProviderImpl2<
+            MeGUI.core.gui.AviSynthProfileConfigPanel, Empty, AviSynthSettings, AviSynthSettings, int, int>("AviSynth", 0, 0); 
         private CultureInfo ci = new CultureInfo("en-us");
         private bool eventsOn = true;
-		private string template;
 		private string path;
 		private VideoPlayer player;
         private IMediaFile file;
@@ -56,22 +57,16 @@ namespace MeGUI
 		private System.Windows.Forms.Label tvTypeLabel;
 		private System.Windows.Forms.OpenFileDialog openVideoDialog;
 		private System.Windows.Forms.SaveFileDialog saveAvisynthScriptDialog;
-		private System.Windows.Forms.TextBox avisynthScript;
-		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.Button openDLLButton;
+        private System.Windows.Forms.TextBox avisynthScript;
 		private System.Windows.Forms.NumericUpDown horizontalResolution;
 		private System.Windows.Forms.NumericUpDown verticalResolution;
 		private System.Windows.Forms.NumericUpDown cropLeft;
 		private System.Windows.Forms.NumericUpDown cropRight;
 		private System.Windows.Forms.NumericUpDown cropBottom;
 		private System.Windows.Forms.NumericUpDown cropTop;
-		private System.Windows.Forms.OpenFileDialog openFilterDialog;
-		private System.Windows.Forms.TextBox dllPath;
+        private System.Windows.Forms.OpenFileDialog openFilterDialog;
 		private System.Windows.Forms.CheckBox suggestResolution;
         private CheckBox signalAR;
-		private System.Windows.Forms.Button avsConfigButton;
-		private System.Windows.Forms.ComboBox avsProfile;
-        private System.Windows.Forms.Label avsProfileLabel;
 
 
         private List<Control> controlsToDisable;
@@ -97,6 +92,10 @@ namespace MeGUI
         private Label resizeFilterLabel;
         private CheckBox resize;
         private ComboBox mod16Box;
+        private ProfileControl profileControl1;
+        private Label label1;
+        private Button openDLLButton;
+        private TextBox dllPath;
 
 		/// <summary>
 		/// Required designer variable.
@@ -137,11 +136,6 @@ namespace MeGUI
                 "|All supported files|*.d2v;*.vob;*.mpg;*.mpeg;*.m2v;*.mpv;*.tp;*.ts;*.trp;*.pva;*.vro;*.avi;*.vdr;*.mp4;*.mkv;*.rmvb" +
                 "|All files|*.*";
 			this.path = mainForm.MeGUIPath;
-			template = "";
-            foreach (string name in this.mainForm.Profiles.AvsProfiles.Keys)
-            {
-                this.avsProfile.Items.Add(name);
-            }
 
             this.resizeFilterType.Items.Clear();
             this.resizeFilterType.DataSource = ScriptServer.ListOfResizeFilterType;
@@ -153,8 +147,6 @@ namespace MeGUI
             this.noiseFilterType.SelectedIndexChanged += new System.EventHandler(this.noiseFilterType_SelectedIndexChanged);
             this.resizeFilterType.SelectedIndexChanged += new System.EventHandler(this.resizeFilterType_SelectedIndexChanged);
 
-            if (avsProfile.Items.Contains(mainForm.Settings.AvsProfileName))
-                avsProfile.SelectedItem = mainForm.Settings.AvsProfileName;
             sarX = sarY = -1;
 
 
@@ -170,7 +162,22 @@ namespace MeGUI
             this.jobUtil = new JobUtil(mainForm);
 			this.showScript();
 
+
+
+
+
+            ProfilesControlHandler<AviSynthSettings, Empty> profileHandler = new ProfilesControlHandler<AviSynthSettings,Empty>(
+                "AviSynth", mainForm, profileControl1, settingsProvider.EditSettings, Empty.Getter,
+                new SettingsGetter<AviSynthSettings>(settingsProvider.GetCurrentSettings), new SettingsSetter<AviSynthSettings>(settingsProvider.LoadSettings));
+
+            SingleConfigurerHandler<AviSynthSettings, Empty, int, int> configurerHandler = new SingleConfigurerHandler<AviSynthSettings, Empty, int, int>(profileHandler, settingsProvider);
+            configurerHandler.ProfileChanged += new SelectedProfileChangedEvent(ProfileChanged);
 		}
+
+        void ProfileChanged(object sender, Profile prof)
+        {
+            this.Settings = settingsProvider.GetCurrentSettings();
+        }
 		/// <summary>
 		/// constructor that first initializes everything using the default constructor
 		/// then opens a preview window with the video given as parameter
@@ -183,7 +190,6 @@ namespace MeGUI
 
 		protected override void OnClosing(CancelEventArgs e)
 		{
-            mainForm.Settings.AvsProfileName = avsProfile.Text;
             if (player != null)
 				player.Close();
             if (detector != null)
@@ -230,10 +236,8 @@ namespace MeGUI
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.optionsTab = new System.Windows.Forms.TabPage();
             this.videoGroupBox = new System.Windows.Forms.GroupBox();
+            this.profileControl1 = new MeGUI.core.details.video.ProfileControl();
             this.mod16Box = new System.Windows.Forms.ComboBox();
-            this.avsConfigButton = new System.Windows.Forms.Button();
-            this.avsProfile = new System.Windows.Forms.ComboBox();
-            this.avsProfileLabel = new System.Windows.Forms.Label();
             this.signalAR = new System.Windows.Forms.CheckBox();
             this.tvTypeLabel = new System.Windows.Forms.Label();
             this.customDAR = new System.Windows.Forms.TextBox();
@@ -263,13 +267,13 @@ namespace MeGUI
             this.resizeFilterType = new System.Windows.Forms.ComboBox();
             this.resizeFilterLabel = new System.Windows.Forms.Label();
             this.editTab = new System.Windows.Forms.TabPage();
-            this.openDLLButton = new System.Windows.Forms.Button();
-            this.dllPath = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.avisynthScript = new System.Windows.Forms.TextBox();
             this.openVideoDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveAvisynthScriptDialog = new System.Windows.Forms.SaveFileDialog();
             this.openFilterDialog = new System.Windows.Forms.OpenFileDialog();
+            this.label1 = new System.Windows.Forms.Label();
+            this.dllPath = new System.Windows.Forms.TextBox();
+            this.openDLLButton = new System.Windows.Forms.Button();
             this.resNCropGroupbox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.cropLeft)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cropRight)).BeginInit();
@@ -525,10 +529,8 @@ namespace MeGUI
             // 
             // videoGroupBox
             // 
+            this.videoGroupBox.Controls.Add(this.profileControl1);
             this.videoGroupBox.Controls.Add(this.mod16Box);
-            this.videoGroupBox.Controls.Add(this.avsConfigButton);
-            this.videoGroupBox.Controls.Add(this.avsProfile);
-            this.videoGroupBox.Controls.Add(this.avsProfileLabel);
             this.videoGroupBox.Controls.Add(this.signalAR);
             this.videoGroupBox.Controls.Add(this.tvTypeLabel);
             this.videoGroupBox.Controls.Add(this.customDAR);
@@ -543,6 +545,14 @@ namespace MeGUI
             this.videoGroupBox.TabIndex = 5;
             this.videoGroupBox.TabStop = false;
             this.videoGroupBox.Text = "Video";
+            // 
+            // profileControl1
+            // 
+            this.profileControl1.LabelText = "AVS profile";
+            this.profileControl1.Location = new System.Drawing.Point(11, 106);
+            this.profileControl1.Name = "profileControl1";
+            this.profileControl1.Size = new System.Drawing.Size(388, 29);
+            this.profileControl1.TabIndex = 6;
             // 
             // mod16Box
             // 
@@ -559,34 +569,6 @@ namespace MeGUI
             this.mod16Box.Size = new System.Drawing.Size(157, 21);
             this.mod16Box.TabIndex = 19;
             this.mod16Box.SelectedIndexChanged += new System.EventHandler(this.mod16Box_SelectedIndexChanged);
-            // 
-            // avsConfigButton
-            // 
-            this.avsConfigButton.Location = new System.Drawing.Point(333, 108);
-            this.avsConfigButton.Name = "avsConfigButton";
-            this.avsConfigButton.Size = new System.Drawing.Size(48, 23);
-            this.avsConfigButton.TabIndex = 18;
-            this.avsConfigButton.Text = "Config";
-            this.avsConfigButton.Click += new System.EventHandler(this.avsConfigButton_Click);
-            // 
-            // avsProfile
-            // 
-            this.avsProfile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.avsProfile.Location = new System.Drawing.Point(96, 108);
-            this.avsProfile.Name = "avsProfile";
-            this.avsProfile.Size = new System.Drawing.Size(224, 21);
-            this.avsProfile.Sorted = true;
-            this.avsProfile.TabIndex = 17;
-            this.avsProfile.SelectedIndexChanged += new System.EventHandler(this.avsProfile_SelectedIndexChanged);
-            // 
-            // avsProfileLabel
-            // 
-            this.avsProfileLabel.AutoSize = true;
-            this.avsProfileLabel.Location = new System.Drawing.Point(8, 111);
-            this.avsProfileLabel.Name = "avsProfileLabel";
-            this.avsProfileLabel.Size = new System.Drawing.Size(59, 13);
-            this.avsProfileLabel.TabIndex = 16;
-            this.avsProfileLabel.Text = "AVS profile";
             // 
             // signalAR
             // 
@@ -880,31 +862,6 @@ namespace MeGUI
             this.editTab.Text = "Edit";
             this.editTab.UseVisualStyleBackColor = true;
             // 
-            // openDLLButton
-            // 
-            this.openDLLButton.Location = new System.Drawing.Point(384, 324);
-            this.openDLLButton.Name = "openDLLButton";
-            this.openDLLButton.Size = new System.Drawing.Size(24, 23);
-            this.openDLLButton.TabIndex = 3;
-            this.openDLLButton.Text = "...";
-            this.openDLLButton.Click += new System.EventHandler(this.openDLLButton_Click);
-            // 
-            // dllPath
-            // 
-            this.dllPath.Location = new System.Drawing.Point(77, 324);
-            this.dllPath.Name = "dllPath";
-            this.dllPath.ReadOnly = true;
-            this.dllPath.Size = new System.Drawing.Size(301, 21);
-            this.dllPath.TabIndex = 2;
-            // 
-            // label1
-            // 
-            this.label1.Location = new System.Drawing.Point(5, 324);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(100, 23);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Load DLL";
-            // 
             // avisynthScript
             // 
             this.avisynthScript.Location = new System.Drawing.Point(8, 8);
@@ -929,6 +886,31 @@ namespace MeGUI
             // 
             this.openFilterDialog.Filter = "AviSynth Filters|*.dll";
             this.openFilterDialog.Title = "Select an AviSynth Filter";
+            // 
+            // label1
+            // 
+            this.label1.Location = new System.Drawing.Point(5, 324);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(100, 23);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Load DLL";
+            // 
+            // dllPath
+            // 
+            this.dllPath.Location = new System.Drawing.Point(77, 324);
+            this.dllPath.Name = "dllPath";
+            this.dllPath.ReadOnly = true;
+            this.dllPath.Size = new System.Drawing.Size(301, 21);
+            this.dllPath.TabIndex = 2;
+            // 
+            // openDLLButton
+            // 
+            this.openDLLButton.Location = new System.Drawing.Point(384, 324);
+            this.openDLLButton.Name = "openDLLButton";
+            this.openDLLButton.Size = new System.Drawing.Size(24, 23);
+            this.openDLLButton.TabIndex = 3;
+            this.openDLLButton.Text = "...";
+            this.openDLLButton.Click += new System.EventHandler(this.openDLLButton_Click);
             // 
             // AviSynthWindow
             // 
@@ -1044,7 +1026,7 @@ namespace MeGUI
             resizeLine = ScriptServer.GetResizeLine(resize.Checked, (int)horizontalResolution.Value, (int)verticalResolution.Value, (ResizeFilterType)(resizeFilterType.SelectedItem as EnumProxy).RealValue);
             denoiseLines = ScriptServer.GetDenoiseLines(noiseFilter.Checked, (DenoiseFilterType)(noiseFilterType.SelectedItem as EnumProxy).RealValue);
 
-            string newScript = ScriptServer.CreateScriptFromTemplate(template, inputLine, cropLine, resizeLine, denoiseLines, deinterlaceLines);
+            string newScript = ScriptServer.CreateScriptFromTemplate(settingsProvider.GetCurrentSettings().Template, inputLine, cropLine, resizeLine, denoiseLines, deinterlaceLines);
 			
 			if (this.signalAR.Checked)
                 newScript = string.Format("# Set DAR in encoder to {0} : {1}. The following line is for automatic signalling\r\nglobal MeGUI_darx = {0}\r\nglobal MeGUI_dary = {1}\r\n", sarX, sarY)
@@ -1192,7 +1174,7 @@ namespace MeGUI
                     try
                     {
                         MediaInfoFile info = new MediaInfoFile(fileName);
-                        if (info.HasVideo && info.FPS > 0)
+                       if (info.HasVideo && info.FPS > 0)
                             frameRateString = info.FPS.ToString(System.Globalization.CultureInfo.InvariantCulture);
                     }
                     catch (Exception)
@@ -1205,7 +1187,7 @@ namespace MeGUI
                             );
                     if (file != null)
                         file.Dispose();
-                    openVideo(tempAvs, fileName, true);
+                   openVideo(tempAvs, fileName, true);
                 }
             }
         }
@@ -1521,39 +1503,6 @@ namespace MeGUI
             this.showScript();
         }
         #endregion
-        #region profiles
-
-        private void avsConfigButton_Click(object sender, System.EventArgs e)
-		{
-			avsConfigurationDialog acd = new avsConfigurationDialog(this.mainForm.Profiles, avsProfile.Text, this.path, 
-				MeGUISettings.AvisynthPluginsPath);
-			acd.Settings = new AviSynthSettings();
-			if (acd.ShowDialog() == DialogResult.OK)
-			{
-				this.avsProfile.Items.Clear();
-                foreach (string name in mainForm.Profiles.AvsProfiles.Keys)
-                    avsProfile.Items.Add(name);
-                this.avsProfile.SelectedIndex = -1;
-                this.Settings = acd.Settings;
-				/*int index = this.avsProfile.Items.IndexOf(acd.CurrentProfile);
-				if (index != -1)
-					this.avsProfile.SelectedIndex = index;*/
-			}
-		}
-
-		private void avsProfile_SelectedIndexChanged(object sender, System.EventArgs e)
-		{
-            if (avsProfile.SelectedItem.ToString().Length > 0)
-            {
-                GenericProfile<AviSynthSettings> prof = (GenericProfile<AviSynthSettings>)this.mainForm.Profiles.AvsProfiles[avsProfile.SelectedItem.ToString()];
-                this.Settings = prof.Settings;
-            }
-            else
-            {
-                this.Settings = new AviSynthSettings();
-            }
-		}
-#endregion
         #region properties
         private AviSynthSettings Settings
 		{
@@ -1566,7 +1515,6 @@ namespace MeGUI
 				this.deinterlace.Checked = value.Deinterlace;
 				this.noiseFilter.Checked = value.Denoise;
                 this.resize.Checked = value.Resize;
-				this.template = value.Template;
                 this.mod16Box.SelectedIndex = (int)value.Mod16Method;
                 this.signalAR.Checked = (value.Mod16Method != mod16Method.none);
 				this.showScript();
@@ -1749,9 +1697,9 @@ namespace MeGUI
             }
         }
 
-        public string[] Shortcuts
+        public Shortcut[] Shortcuts
         {
-            get { throw new Exception("The method or operation is not implemented."); }
+            get { return new Shortcut[] { Shortcut.CtrlR }; }
         }
 
         #endregion

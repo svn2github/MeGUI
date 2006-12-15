@@ -16,28 +16,29 @@ namespace MeGUI
         Dictionary<string, GenericProfile<AviSynthSettings>> avsProfiles;
         Dictionary<string, GenericProfile<OneClickSettings>> oneClickProfiles;
         Dictionary<string, GenericProfile<VideoCodecSettings>> videoProfiles;*/
-        Dictionary<string, GenericSettings> settingsTypes = new Dictionary<string,GenericSettings>();
+        Dictionary<string, string> selectedProfiles = new Dictionary<string, string>();
+        List<string> settingsTypes = new List<string>();
         Dictionary<string, Type> profileTypes = new Dictionary<string,Type>();
         Dictionary<string, Dictionary<string, Profile>> profiles = new Dictionary<string,Dictionary<string,Profile>>();
 
-        public bool Register(GenericSettings settingsType, Type type)
+        public bool Register(string name, Type type)
         {
-            string name = settingsType.getSettingsType();
-            if (settingsTypes.ContainsKey(name)) return false;
+            if (settingsTypes.Contains(name)) return false;
             System.Diagnostics.Debug.Assert((!profileTypes.ContainsKey(name)) && (!profiles.ContainsKey(name)));
-            settingsTypes[name] = settingsType;
+            settingsTypes.Add(name);
             profileTypes[name] = type;
             profiles[name] = new Dictionary<string, Profile>();
+            selectedProfiles[name] = "";
             return true;
         }
 
         public ProfileManager(string path)
         {
             this.path = path;
-            Register(new x264Settings(), typeof(GenericProfile<VideoCodecSettings>));
-            Register(new AudioCodecSettings(), typeof(GenericProfile<AudioCodecSettings>));
-            Register(new OneClickSettings(), typeof(GenericProfile<OneClickSettings>));
-            Register(new AviSynthSettings(), typeof(GenericProfile<OneClickSettings>));
+            Register(new x264Settings().getSettingsType(), typeof(GenericProfile<VideoCodecSettings>));
+            Register(new AudioCodecSettings().getSettingsType(), typeof(GenericProfile<AudioCodecSettings>));
+            Register(new OneClickSettings().getSettingsType(), typeof(GenericProfile<OneClickSettings>));
+            Register(new AviSynthSettings().getSettingsType(), typeof(GenericProfile<AviSynthSettings>));
         }
         #region loading and saving
         public void LoadProfiles()
@@ -58,12 +59,65 @@ namespace MeGUI
                     saveProfile(prof);
                 }
             }
+            saveSelectedProfiles();
         }
+
+        private void saveSelectedProfiles()
+        {
+            string filename = path + @"\profiles\SelectedProfiles.xml";
+            XmlSerializer ser = null;
+            using (Stream s = File.Open(filename, System.IO.FileMode.Create, System.IO.FileAccess.Write))
+            {
+                try
+                {
+                    // Hacky workaround because serialization of dictionaries isn't possible
+                    string[] keys = new string[selectedProfiles.Count];
+                    string[] values = new string[selectedProfiles.Count];
+                    selectedProfiles.Keys.CopyTo(keys, 0);
+                    for (int i = 0; i < keys.Length; i++)
+                    {
+                        values[i] = selectedProfiles[keys[i]];
+                    }
+                    string[][] data = new string[][] { keys, values };
+                    ser = new XmlSerializer(data.GetType());
+                    ser.Serialize(s, data);
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show("List of selected profiles could not be saved. Error message: " + e.Message, "Error saving profile", MessageBoxButtons.OK);
+                }
+            }
+        }
+
+        private void loadSelectedProfiles()
+        {
+            using (Stream s = File.OpenRead(path + @"\profiles\SelectedProfiles.xml"))
+            {
+                try
+                {
+                    // Hacky workaround because serialization of dictionaries isn't possible
+                    XmlSerializer ser = new XmlSerializer(typeof(string[][]));
+                    string[][] data = (string[][])ser.Deserialize(s);
+                    string[] keys = data[0];
+                    string[] values = data[1];
+                    System.Diagnostics.Debug.Assert(keys.Length == values.Length);
+                    for (int i = 0; i < keys.Length; i++)
+                    {
+                        selectedProfiles[keys[i]] = values[i];
+                    }
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("List of selected profiles could not be loaded.", "Error loading profile", MessageBoxButtons.OK);
+                }
+            }
+        }
+
         private void loadProfiles()
         {
-            foreach (GenericSettings type in settingsTypes.Values)
+            foreach (string type in settingsTypes)
             {
-                string profilePath = path + @"\profiles\" + type.getSettingsType();
+                string profilePath = path + @"\profiles\" + type;
                 if (!Directory.Exists(profilePath))
                     Directory.CreateDirectory(profilePath);
                 DirectoryInfo di = new DirectoryInfo(profilePath);
@@ -73,20 +127,21 @@ namespace MeGUI
                     string fileName = fi.FullName;
                     if (Path.GetFileNameWithoutExtension(fileName) != "") // additional check to ensure that rogue profiles are not loaded
                     {
-                        Profile prof = loadProfile(fileName, type.getSettingsType());
+                        Profile prof = loadProfile(fileName, type);
                         if (prof != null)
                         {
-                            if (profiles[type.getSettingsType()].ContainsKey(prof.Name))
-                                MessageBox.Show(type.getSettingsType() + " profile " + prof.Name + " is has already been loaded\nDiscarding duplicate profile " + fi.FullName, "Duplicate profile name",
+                            if (profiles[type].ContainsKey(prof.Name))
+                                MessageBox.Show(type + " profile " + prof.Name + " is has already been loaded\nDiscarding duplicate profile " + fi.FullName, "Duplicate profile name",
                                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                             else
                             {
-                                profiles[type.getSettingsType()].Add(prof.Name, prof);
+                                profiles[type].Add(prof.Name, prof);
                             }
                         }
                     }
                 }                
             }
+            loadSelectedProfiles();
 		}
         /// <summary>
         /// saves a profile to program directory\profiles\profilename.xml
@@ -142,8 +197,9 @@ namespace MeGUI
         /// <param name="name">the name of the profile to be deleted</param>
         public bool DeleteProfile(string name, string type)
         {
-            if (profiles[name].Remove(name))
+            if (profiles[type].Remove(name))
             {
+                if (selectedProfiles[type] == name) selectedProfiles[type] = "";
                 string fileName = path + @"\profiles\" + type + "\\" + name + ".xml";
                 if (File.Exists(fileName))
                     File.Delete(fileName);
@@ -170,6 +226,28 @@ namespace MeGUI
                 saveProfile(prof);
                 return true;
             }
+        }
+
+        public string GetSelectedProfileName(string profileType)
+        {
+            return selectedProfiles[profileType];
+        }
+
+        public Profile GetSelectedProfile(string profileType)
+        {
+            string name = GetSelectedProfileName(profileType);
+            if (string.IsNullOrEmpty(name)) return null;
+            return profiles[profileType][name];
+        }
+
+        public void SetSelectedProfile(Profile prof)
+        {
+            SetSelectedProfile(prof.BaseSettings.getSettingsType(), prof.Name);
+        }
+
+        public void SetSelectedProfile(string profileType, string name)
+        {
+            selectedProfiles[profileType] = name;
         }
         #endregion
         #region helper methods

@@ -68,11 +68,6 @@ namespace MeGUI
         }
         #endregion
         #region wrappers for the above handlers
-        public string SelectedProfile
-        {
-            get { return ProfileHandler.SelectedProfile; }
-            set { ProfileHandler.SelectedProfile = value; }
-        }
 
         public ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> CurrentSettingsProvider
         {
@@ -125,7 +120,6 @@ namespace MeGUI
                 codecHandler.EditSettings, new InfoGetter<VideoInfo>(getInfo),
                 codecHandler.Getter, codecHandler.Setter);
             codecHandler.Register(profileHandler);
-            profileHandler.RefreshProfiles();
             fileTypeHandler.RefreshFiletypes();
         }
         #endregion

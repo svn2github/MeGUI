@@ -33,7 +33,7 @@ namespace MeGUI
             update.ShowDialog();
         }
 
-        public string[] Shortcuts
+        public Shortcut[] Shortcuts
         {
             get { throw new Exception("The method or operation is not implemented."); }
         }

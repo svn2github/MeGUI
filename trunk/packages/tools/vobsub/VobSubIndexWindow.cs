@@ -179,9 +179,9 @@ namespace MeGUI
             }
         }
 
-        public string[] Shortcuts
+        public Shortcut[] Shortcuts
         {
-            get { throw new Exception("The method or operation is not implemented."); }
+            get { return new Shortcut[] { Shortcut.CtrlN }; }
         }
 
         #endregion

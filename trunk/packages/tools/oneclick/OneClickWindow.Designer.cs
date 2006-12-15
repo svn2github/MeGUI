@@ -30,18 +30,15 @@ namespace MeGUI
         {
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.locationGroupBox = new System.Windows.Forms.GroupBox();
-            this.chapterFileOpen = new System.Windows.Forms.Button();
-            this.chapterFile = new System.Windows.Forms.TextBox();
+            this.chapterFile = new MeGUI.FileBar();
+            this.workingDirectory = new MeGUI.FileBar();
             this.chapterLabel = new System.Windows.Forms.Label();
             this.workingDirectoryLabel = new System.Windows.Forms.Label();
-            this.workingDirectory = new System.Windows.Forms.TextBox();
-            this.workingDirectoryButton = new System.Windows.Forms.Button();
             this.workingName = new System.Windows.Forms.TextBox();
             this.projectNameLabel = new System.Windows.Forms.Label();
             this.avsBox = new System.Windows.Forms.GroupBox();
+            this.profileControl1 = new MeGUI.core.details.video.ProfileControl();
             this.autoDeint = new System.Windows.Forms.CheckBox();
-            this.avsProfile = new System.Windows.Forms.ComboBox();
-            this.avsProfileLabel = new System.Windows.Forms.Label();
             this.signalAR = new System.Windows.Forms.CheckBox();
             this.AR = new System.Windows.Forms.TextBox();
             this.outputResolutionLabel = new System.Windows.Forms.Label();
@@ -50,12 +47,10 @@ namespace MeGUI
             this.ARLabel = new System.Windows.Forms.Label();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.IOGroupbox = new System.Windows.Forms.GroupBox();
-            this.selectOutput = new System.Windows.Forms.Button();
-            this.output = new System.Windows.Forms.TextBox();
+            this.output = new MeGUI.FileBar();
+            this.input = new MeGUI.FileBar();
             this.outputLabel = new System.Windows.Forms.Label();
-            this.input = new System.Windows.Forms.TextBox();
             this.inputLabel = new System.Windows.Forms.Label();
-            this.openButton = new System.Windows.Forms.Button();
             this.targetGroupBox = new System.Windows.Forms.GroupBox();
             this.filesizeKB = new System.Windows.Forms.TextBox();
             this.inKBLabel = new System.Windows.Forms.Label();
@@ -73,31 +68,26 @@ namespace MeGUI
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.encoderConfigTab = new System.Windows.Forms.TabPage();
             this.audioIOGroupBox = new System.Windows.Forms.GroupBox();
+            this.audioProfileControl = new MeGUI.core.details.video.ProfileControl();
             this.externalInput = new System.Windows.Forms.CheckBox();
             this.audioCodecLabel = new System.Windows.Forms.Label();
-            this.audioProfile = new System.Windows.Forms.ComboBox();
             this.dontEncodeAudio = new System.Windows.Forms.CheckBox();
-            this.audioProfileLabel = new System.Windows.Forms.Label();
             this.audioInput = new System.Windows.Forms.TextBox();
             this.audioInputOpenButton = new System.Windows.Forms.Button();
             this.audioTrack2 = new System.Windows.Forms.RadioButton();
             this.audioTrack1 = new System.Windows.Forms.RadioButton();
             this.deleteAudioButton = new System.Windows.Forms.Button();
-            this.configAudioButton = new System.Windows.Forms.Button();
             this.audioCodec = new System.Windows.Forms.ComboBox();
             this.videoGroupBox = new System.Windows.Forms.GroupBox();
+            this.videoProfileControl = new MeGUI.core.details.video.ProfileControl();
             this.addPrerenderJob = new System.Windows.Forms.CheckBox();
             this.videoCodecLabel = new System.Windows.Forms.Label();
             this.videoCodec = new System.Windows.Forms.ComboBox();
-            this.videoProfileLabel = new System.Windows.Forms.Label();
-            this.videoProfile = new System.Windows.Forms.ComboBox();
-            this.videoConfigButton = new System.Windows.Forms.Button();
             this.splitOutput = new System.Windows.Forms.CheckBox();
             this.splitSize = new System.Windows.Forms.TextBox();
             this.containerFormatLabel = new System.Windows.Forms.Label();
             this.containerFormat = new System.Windows.Forms.ComboBox();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.outputDialog = new System.Windows.Forms.SaveFileDialog();
             this.showAdvancedOptions = new System.Windows.Forms.CheckBox();
             this.shutdownCheckBox = new System.Windows.Forms.CheckBox();
             this.goButton = new System.Windows.Forms.Button();
@@ -129,12 +119,10 @@ namespace MeGUI
             // 
             // locationGroupBox
             // 
-            this.locationGroupBox.Controls.Add(this.chapterFileOpen);
             this.locationGroupBox.Controls.Add(this.chapterFile);
+            this.locationGroupBox.Controls.Add(this.workingDirectory);
             this.locationGroupBox.Controls.Add(this.chapterLabel);
             this.locationGroupBox.Controls.Add(this.workingDirectoryLabel);
-            this.locationGroupBox.Controls.Add(this.workingDirectory);
-            this.locationGroupBox.Controls.Add(this.workingDirectoryButton);
             this.locationGroupBox.Controls.Add(this.workingName);
             this.locationGroupBox.Controls.Add(this.projectNameLabel);
             this.locationGroupBox.Location = new System.Drawing.Point(8, 6);
@@ -144,22 +132,32 @@ namespace MeGUI
             this.locationGroupBox.TabStop = false;
             this.locationGroupBox.Text = "Extra IO";
             // 
-            // chapterFileOpen
-            // 
-            this.chapterFileOpen.Location = new System.Drawing.Point(384, 36);
-            this.chapterFileOpen.Name = "chapterFileOpen";
-            this.chapterFileOpen.Size = new System.Drawing.Size(24, 23);
-            this.chapterFileOpen.TabIndex = 35;
-            this.chapterFileOpen.Text = "...";
-            this.chapterFileOpen.Click += new System.EventHandler(this.chapterFileOpen_Click);
-            // 
             // chapterFile
             // 
+            this.chapterFile.Filename = "";
+            this.chapterFile.Filter = "Chapter files (*.txt)|*.txt";
+            this.chapterFile.FolderMode = false;
             this.chapterFile.Location = new System.Drawing.Point(120, 38);
             this.chapterFile.Name = "chapterFile";
             this.chapterFile.ReadOnly = true;
-            this.chapterFile.Size = new System.Drawing.Size(256, 20);
-            this.chapterFile.TabIndex = 37;
+            this.chapterFile.SaveMode = false;
+            this.chapterFile.Size = new System.Drawing.Size(288, 26);
+            this.chapterFile.TabIndex = 39;
+            this.chapterFile.Title = null;
+            // 
+            // workingDirectory
+            // 
+            this.workingDirectory.Filename = "";
+            this.workingDirectory.Filter = null;
+            this.workingDirectory.FolderMode = true;
+            this.workingDirectory.Location = new System.Drawing.Point(120, 8);
+            this.workingDirectory.Name = "workingDirectory";
+            this.workingDirectory.ReadOnly = true;
+            this.workingDirectory.SaveMode = false;
+            this.workingDirectory.Size = new System.Drawing.Size(288, 26);
+            this.workingDirectory.TabIndex = 38;
+            this.workingDirectory.Title = null;
+            this.workingDirectory.FileSelected += new MeGUI.FileBarEventHandler(this.workingDirectory_FileSelected);
             // 
             // chapterLabel
             // 
@@ -176,23 +174,6 @@ namespace MeGUI
             this.workingDirectoryLabel.Size = new System.Drawing.Size(100, 13);
             this.workingDirectoryLabel.TabIndex = 32;
             this.workingDirectoryLabel.Text = "Working Directory";
-            // 
-            // workingDirectory
-            // 
-            this.workingDirectory.Location = new System.Drawing.Point(120, 12);
-            this.workingDirectory.Name = "workingDirectory";
-            this.workingDirectory.ReadOnly = true;
-            this.workingDirectory.Size = new System.Drawing.Size(256, 20);
-            this.workingDirectory.TabIndex = 34;
-            // 
-            // workingDirectoryButton
-            // 
-            this.workingDirectoryButton.Location = new System.Drawing.Point(384, 12);
-            this.workingDirectoryButton.Name = "workingDirectoryButton";
-            this.workingDirectoryButton.Size = new System.Drawing.Size(24, 23);
-            this.workingDirectoryButton.TabIndex = 33;
-            this.workingDirectoryButton.Text = "...";
-            this.workingDirectoryButton.Click += new System.EventHandler(this.workingDirectoryButton_Click);
             // 
             // workingName
             // 
@@ -212,9 +193,8 @@ namespace MeGUI
             // 
             // avsBox
             // 
+            this.avsBox.Controls.Add(this.profileControl1);
             this.avsBox.Controls.Add(this.autoDeint);
-            this.avsBox.Controls.Add(this.avsProfile);
-            this.avsBox.Controls.Add(this.avsProfileLabel);
             this.avsBox.Controls.Add(this.signalAR);
             this.avsBox.Controls.Add(this.AR);
             this.avsBox.Controls.Add(this.outputResolutionLabel);
@@ -223,37 +203,28 @@ namespace MeGUI
             this.avsBox.Controls.Add(this.ARLabel);
             this.avsBox.Location = new System.Drawing.Point(8, 107);
             this.avsBox.Name = "avsBox";
-            this.avsBox.Size = new System.Drawing.Size(424, 99);
+            this.avsBox.Size = new System.Drawing.Size(424, 124);
             this.avsBox.TabIndex = 23;
             this.avsBox.TabStop = false;
             this.avsBox.Text = "AviSynth setup";
             // 
+            // profileControl1
+            // 
+            this.profileControl1.LabelText = "AVS profile";
+            this.profileControl1.Location = new System.Drawing.Point(19, 69);
+            this.profileControl1.Name = "profileControl1";
+            this.profileControl1.Size = new System.Drawing.Size(389, 29);
+            this.profileControl1.TabIndex = 21;
+            // 
             // autoDeint
             // 
             this.autoDeint.AutoSize = true;
-            this.autoDeint.Location = new System.Drawing.Point(270, 75);
+            this.autoDeint.Location = new System.Drawing.Point(123, 101);
             this.autoDeint.Name = "autoDeint";
             this.autoDeint.Size = new System.Drawing.Size(138, 17);
             this.autoDeint.TabIndex = 20;
             this.autoDeint.Text = "Automatic Deinterlacing";
             this.autoDeint.UseVisualStyleBackColor = true;
-            // 
-            // avsProfile
-            // 
-            this.avsProfile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.avsProfile.Location = new System.Drawing.Point(120, 72);
-            this.avsProfile.Name = "avsProfile";
-            this.avsProfile.Size = new System.Drawing.Size(144, 21);
-            this.avsProfile.Sorted = true;
-            this.avsProfile.TabIndex = 19;
-            // 
-            // avsProfileLabel
-            // 
-            this.avsProfileLabel.Location = new System.Drawing.Point(16, 75);
-            this.avsProfileLabel.Name = "avsProfileLabel";
-            this.avsProfileLabel.Size = new System.Drawing.Size(72, 18);
-            this.avsProfileLabel.TabIndex = 18;
-            this.avsProfileLabel.Text = "AVS profile";
             // 
             // signalAR
             // 
@@ -345,12 +316,10 @@ namespace MeGUI
             // 
             // IOGroupbox
             // 
-            this.IOGroupbox.Controls.Add(this.selectOutput);
             this.IOGroupbox.Controls.Add(this.output);
-            this.IOGroupbox.Controls.Add(this.outputLabel);
             this.IOGroupbox.Controls.Add(this.input);
+            this.IOGroupbox.Controls.Add(this.outputLabel);
             this.IOGroupbox.Controls.Add(this.inputLabel);
-            this.IOGroupbox.Controls.Add(this.openButton);
             this.IOGroupbox.Location = new System.Drawing.Point(8, 6);
             this.IOGroupbox.Name = "IOGroupbox";
             this.IOGroupbox.Size = new System.Drawing.Size(424, 76);
@@ -358,22 +327,35 @@ namespace MeGUI
             this.IOGroupbox.TabStop = false;
             this.IOGroupbox.Text = "Input/Output";
             // 
-            // selectOutput
-            // 
-            this.selectOutput.Location = new System.Drawing.Point(384, 44);
-            this.selectOutput.Name = "selectOutput";
-            this.selectOutput.Size = new System.Drawing.Size(24, 23);
-            this.selectOutput.TabIndex = 0;
-            this.selectOutput.Text = "...";
-            this.selectOutput.Click += new System.EventHandler(this.selectOutput_Click);
-            // 
             // output
             // 
-            this.output.Location = new System.Drawing.Point(120, 45);
+            this.output.Filename = "";
+            this.output.Filter = "MP4 Files|*.mp4";
+            this.output.FolderMode = false;
+            this.output.Location = new System.Drawing.Point(120, 42);
             this.output.Name = "output";
             this.output.ReadOnly = true;
-            this.output.Size = new System.Drawing.Size(256, 20);
-            this.output.TabIndex = 1;
+            this.output.SaveMode = true;
+            this.output.Size = new System.Drawing.Size(288, 26);
+            this.output.TabIndex = 4;
+            this.output.Title = null;
+            this.output.FileSelected += new MeGUI.FileBarEventHandler(this.output_FileSelected);
+            // 
+            // input
+            // 
+            this.input.Filename = "";
+            this.input.Filter = "VOB Files (*.vob)|*.vob|MPEG-1/2 Program Streams (*.mpg)|*.mpg|Transport Streams " +
+                "(*.ts)|*.ts|All DGIndex supported files|*.vob;*.mpg;*.mpeg;*.m2v;*.mpv;*.tp;*.ts" +
+                ";*.trp;*.pva;*.vro";
+            this.input.FolderMode = false;
+            this.input.Location = new System.Drawing.Point(120, 13);
+            this.input.Name = "input";
+            this.input.ReadOnly = true;
+            this.input.SaveMode = false;
+            this.input.Size = new System.Drawing.Size(288, 26);
+            this.input.TabIndex = 3;
+            this.input.Title = null;
+            this.input.FileSelected += new MeGUI.FileBarEventHandler(this.input_FileSelected);
             // 
             // outputLabel
             // 
@@ -383,14 +365,6 @@ namespace MeGUI
             this.outputLabel.TabIndex = 0;
             this.outputLabel.Text = "Output file";
             // 
-            // input
-            // 
-            this.input.Location = new System.Drawing.Point(120, 19);
-            this.input.Name = "input";
-            this.input.ReadOnly = true;
-            this.input.Size = new System.Drawing.Size(256, 20);
-            this.input.TabIndex = 4;
-            // 
             // inputLabel
             // 
             this.inputLabel.Location = new System.Drawing.Point(16, 22);
@@ -398,15 +372,6 @@ namespace MeGUI
             this.inputLabel.Size = new System.Drawing.Size(100, 13);
             this.inputLabel.TabIndex = 2;
             this.inputLabel.Text = "Input file";
-            // 
-            // openButton
-            // 
-            this.openButton.Location = new System.Drawing.Point(384, 19);
-            this.openButton.Name = "openButton";
-            this.openButton.Size = new System.Drawing.Size(24, 23);
-            this.openButton.TabIndex = 3;
-            this.openButton.Text = "...";
-            this.openButton.Click += new System.EventHandler(this.openButton_Click);
             // 
             // targetGroupBox
             // 
@@ -571,17 +536,15 @@ namespace MeGUI
             // 
             // audioIOGroupBox
             // 
+            this.audioIOGroupBox.Controls.Add(this.audioProfileControl);
             this.audioIOGroupBox.Controls.Add(this.externalInput);
             this.audioIOGroupBox.Controls.Add(this.audioCodecLabel);
-            this.audioIOGroupBox.Controls.Add(this.audioProfile);
             this.audioIOGroupBox.Controls.Add(this.dontEncodeAudio);
-            this.audioIOGroupBox.Controls.Add(this.audioProfileLabel);
             this.audioIOGroupBox.Controls.Add(this.audioInput);
             this.audioIOGroupBox.Controls.Add(this.audioInputOpenButton);
             this.audioIOGroupBox.Controls.Add(this.audioTrack2);
             this.audioIOGroupBox.Controls.Add(this.audioTrack1);
             this.audioIOGroupBox.Controls.Add(this.deleteAudioButton);
-            this.audioIOGroupBox.Controls.Add(this.configAudioButton);
             this.audioIOGroupBox.Controls.Add(this.audioCodec);
             this.audioIOGroupBox.Location = new System.Drawing.Point(6, 89);
             this.audioIOGroupBox.Name = "audioIOGroupBox";
@@ -590,10 +553,18 @@ namespace MeGUI
             this.audioIOGroupBox.TabStop = false;
             this.audioIOGroupBox.Text = "Audio";
             // 
+            // audioProfileControl
+            // 
+            this.audioProfileControl.LabelText = "Audio Profile";
+            this.audioProfileControl.Location = new System.Drawing.Point(9, 69);
+            this.audioProfileControl.Name = "audioProfileControl";
+            this.audioProfileControl.Size = new System.Drawing.Size(407, 29);
+            this.audioProfileControl.TabIndex = 33;
+            // 
             // externalInput
             // 
             this.externalInput.AutoSize = true;
-            this.externalInput.Location = new System.Drawing.Point(9, 21);
+            this.externalInput.Location = new System.Drawing.Point(9, 23);
             this.externalInput.Name = "externalInput";
             this.externalInput.Size = new System.Drawing.Size(90, 17);
             this.externalInput.TabIndex = 32;
@@ -611,16 +582,6 @@ namespace MeGUI
             this.audioCodecLabel.Text = "Codec";
             this.audioCodecLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // audioProfile
-            // 
-            this.audioProfile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.audioProfile.Location = new System.Drawing.Point(119, 71);
-            this.audioProfile.Name = "audioProfile";
-            this.audioProfile.Size = new System.Drawing.Size(256, 21);
-            this.audioProfile.Sorted = true;
-            this.audioProfile.TabIndex = 15;
-            this.audioProfile.SelectedIndexChanged += new System.EventHandler(this.audioProfile_SelectedIndexChanged_1);
-            // 
             // dontEncodeAudio
             // 
             this.dontEncodeAudio.Location = new System.Drawing.Point(256, 47);
@@ -630,18 +591,9 @@ namespace MeGUI
             this.dontEncodeAudio.Text = "Keep original track";
             this.dontEncodeAudio.CheckedChanged += new System.EventHandler(this.dontEncodeAudio_CheckedChanged);
             // 
-            // audioProfileLabel
-            // 
-            this.audioProfileLabel.AutoSize = true;
-            this.audioProfileLabel.Location = new System.Drawing.Point(6, 74);
-            this.audioProfileLabel.Name = "audioProfileLabel";
-            this.audioProfileLabel.Size = new System.Drawing.Size(66, 13);
-            this.audioProfileLabel.TabIndex = 14;
-            this.audioProfileLabel.Text = "Audio Profile";
-            // 
             // audioInput
             // 
-            this.audioInput.Location = new System.Drawing.Point(119, 19);
+            this.audioInput.Location = new System.Drawing.Point(113, 19);
             this.audioInput.Name = "audioInput";
             this.audioInput.ReadOnly = true;
             this.audioInput.Size = new System.Drawing.Size(256, 20);
@@ -679,38 +631,27 @@ namespace MeGUI
             // 
             // deleteAudioButton
             // 
-            this.deleteAudioButton.Location = new System.Drawing.Point(383, 71);
+            this.deleteAudioButton.Location = new System.Drawing.Point(383, 45);
             this.deleteAudioButton.Name = "deleteAudioButton";
             this.deleteAudioButton.Size = new System.Drawing.Size(24, 23);
             this.deleteAudioButton.TabIndex = 6;
             this.deleteAudioButton.Text = "X";
             this.deleteAudioButton.Click += new System.EventHandler(this.deleteAudioButton_Click);
             // 
-            // configAudioButton
-            // 
-            this.configAudioButton.Location = new System.Drawing.Point(194, 45);
-            this.configAudioButton.Name = "configAudioButton";
-            this.configAudioButton.Size = new System.Drawing.Size(56, 23);
-            this.configAudioButton.TabIndex = 26;
-            this.configAudioButton.Text = "Config";
-            this.configAudioButton.Click += new System.EventHandler(this.configAudioButton_Click);
-            // 
             // audioCodec
             // 
             this.audioCodec.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.audioCodec.Location = new System.Drawing.Point(119, 45);
+            this.audioCodec.Location = new System.Drawing.Point(113, 44);
             this.audioCodec.Name = "audioCodec";
-            this.audioCodec.Size = new System.Drawing.Size(70, 21);
+            this.audioCodec.Size = new System.Drawing.Size(122, 21);
             this.audioCodec.TabIndex = 7;
             // 
             // videoGroupBox
             // 
+            this.videoGroupBox.Controls.Add(this.videoProfileControl);
             this.videoGroupBox.Controls.Add(this.addPrerenderJob);
             this.videoGroupBox.Controls.Add(this.videoCodecLabel);
             this.videoGroupBox.Controls.Add(this.videoCodec);
-            this.videoGroupBox.Controls.Add(this.videoProfileLabel);
-            this.videoGroupBox.Controls.Add(this.videoProfile);
-            this.videoGroupBox.Controls.Add(this.videoConfigButton);
             this.videoGroupBox.Location = new System.Drawing.Point(3, 6);
             this.videoGroupBox.Name = "videoGroupBox";
             this.videoGroupBox.Size = new System.Drawing.Size(429, 77);
@@ -718,10 +659,18 @@ namespace MeGUI
             this.videoGroupBox.TabStop = false;
             this.videoGroupBox.Text = "Video";
             // 
+            // videoProfileControl
+            // 
+            this.videoProfileControl.LabelText = "Video Profile";
+            this.videoProfileControl.Location = new System.Drawing.Point(12, 42);
+            this.videoProfileControl.Name = "videoProfileControl";
+            this.videoProfileControl.Size = new System.Drawing.Size(407, 29);
+            this.videoProfileControl.TabIndex = 17;
+            // 
             // addPrerenderJob
             // 
             this.addPrerenderJob.AutoSize = true;
-            this.addPrerenderJob.Location = new System.Drawing.Point(259, 21);
+            this.addPrerenderJob.Location = new System.Drawing.Point(259, 22);
             this.addPrerenderJob.Name = "addPrerenderJob";
             this.addPrerenderJob.Size = new System.Drawing.Size(127, 17);
             this.addPrerenderJob.TabIndex = 16;
@@ -740,42 +689,15 @@ namespace MeGUI
             // videoCodec
             // 
             this.videoCodec.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.videoCodec.Location = new System.Drawing.Point(122, 17);
+            this.videoCodec.Location = new System.Drawing.Point(116, 20);
             this.videoCodec.Name = "videoCodec";
-            this.videoCodec.Size = new System.Drawing.Size(70, 21);
+            this.videoCodec.Size = new System.Drawing.Size(122, 21);
             this.videoCodec.TabIndex = 8;
-            // 
-            // videoProfileLabel
-            // 
-            this.videoProfileLabel.Location = new System.Drawing.Point(9, 47);
-            this.videoProfileLabel.Name = "videoProfileLabel";
-            this.videoProfileLabel.Size = new System.Drawing.Size(92, 23);
-            this.videoProfileLabel.TabIndex = 7;
-            this.videoProfileLabel.Text = "Video Profile";
-            // 
-            // videoProfile
-            // 
-            this.videoProfile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.videoProfile.Location = new System.Drawing.Point(122, 46);
-            this.videoProfile.Name = "videoProfile";
-            this.videoProfile.Size = new System.Drawing.Size(290, 21);
-            this.videoProfile.Sorted = true;
-            this.videoProfile.TabIndex = 8;
-            this.videoProfile.SelectedIndexChanged += new System.EventHandler(this.videoProfile_SelectedIndexChanged_1);
-            // 
-            // videoConfigButton
-            // 
-            this.videoConfigButton.Location = new System.Drawing.Point(197, 17);
-            this.videoConfigButton.Name = "videoConfigButton";
-            this.videoConfigButton.Size = new System.Drawing.Size(56, 23);
-            this.videoConfigButton.TabIndex = 14;
-            this.videoConfigButton.Text = "Config";
-            this.videoConfigButton.Click += new System.EventHandler(this.videoConfigButton_Click);
             // 
             // splitOutput
             // 
             this.splitOutput.AutoSize = true;
-            this.splitOutput.Location = new System.Drawing.Point(247, 199);
+            this.splitOutput.Location = new System.Drawing.Point(262, 199);
             this.splitOutput.Name = "splitOutput";
             this.splitOutput.Size = new System.Drawing.Size(69, 17);
             this.splitOutput.TabIndex = 29;
@@ -801,9 +723,9 @@ namespace MeGUI
             // containerFormat
             // 
             this.containerFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.containerFormat.Location = new System.Drawing.Point(125, 199);
+            this.containerFormat.Location = new System.Drawing.Point(119, 197);
             this.containerFormat.Name = "containerFormat";
-            this.containerFormat.Size = new System.Drawing.Size(116, 21);
+            this.containerFormat.Size = new System.Drawing.Size(122, 21);
             this.containerFormat.TabIndex = 26;
             this.containerFormat.SelectedIndexChanged += new System.EventHandler(this.containerFormat_SelectedIndexChanged_1);
             // 
@@ -811,10 +733,6 @@ namespace MeGUI
             // 
             this.openFileDialog.Filter = "IFO Files|*.ifo|VOB Files (*.vob)|*.vob|MPEG-1/2 Program Streams (*.mpg)|*.mpg|Tr" +
                 "ansport Streams (*.ts)|*.ts";
-            // 
-            // outputDialog
-            // 
-            this.outputDialog.Filter = "MP4 Files|*.mp4";
             // 
             // showAdvancedOptions
             // 
@@ -868,7 +786,6 @@ namespace MeGUI
             ((System.ComponentModel.ISupportInitialize)(this.horizontalResolution)).EndInit();
             this.tabPage1.ResumeLayout(false);
             this.IOGroupbox.ResumeLayout(false);
-            this.IOGroupbox.PerformLayout();
             this.targetGroupBox.ResumeLayout(false);
             this.targetGroupBox.PerformLayout();
             this.audioGroupbox.ResumeLayout(false);
@@ -888,8 +805,6 @@ namespace MeGUI
 
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.Button openButton;
-        private System.Windows.Forms.TextBox input;
         private System.Windows.Forms.Label inputLabel;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.GroupBox audioGroupbox;
@@ -900,8 +815,6 @@ namespace MeGUI
         private System.Windows.Forms.ComboBox track2;
         private System.Windows.Forms.ComboBox track1;
         private System.Windows.Forms.GroupBox IOGroupbox;
-        private System.Windows.Forms.Button selectOutput;
-        private System.Windows.Forms.TextBox output;
         private System.Windows.Forms.Label outputLabel;
         private System.Windows.Forms.GroupBox avsBox;
         private System.Windows.Forms.CheckBox signalAR;
@@ -912,8 +825,6 @@ namespace MeGUI
         private System.Windows.Forms.Label ARLabel;
         private System.Windows.Forms.GroupBox locationGroupBox;
         private System.Windows.Forms.Label workingDirectoryLabel;
-        private System.Windows.Forms.TextBox workingDirectory;
-        private System.Windows.Forms.Button workingDirectoryButton;
         private System.Windows.Forms.TextBox workingName;
         private System.Windows.Forms.Label projectNameLabel;
         private System.Windows.Forms.GroupBox targetGroupBox;
@@ -923,14 +834,9 @@ namespace MeGUI
         private System.Windows.Forms.Label inKBLabel;
         private System.Windows.Forms.ComboBox filesizeComboBox;
         private System.Windows.Forms.Label filesizeLabel;
-        private System.Windows.Forms.Button chapterFileOpen;
-        private System.Windows.Forms.TextBox chapterFile;
         private System.Windows.Forms.Label chapterLabel;
         private System.Windows.Forms.CheckBox autoDeint;
-        private System.Windows.Forms.ComboBox avsProfile;
-        private System.Windows.Forms.Label avsProfileLabel;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
-        private System.Windows.Forms.SaveFileDialog outputDialog;
         private System.Windows.Forms.TabPage encoderConfigTab;
         private System.Windows.Forms.CheckBox dontEncodeAudio;
         private System.Windows.Forms.CheckBox splitOutput;
@@ -941,24 +847,25 @@ namespace MeGUI
         private System.Windows.Forms.CheckBox addPrerenderJob;
         private System.Windows.Forms.Label videoCodecLabel;
         private System.Windows.Forms.ComboBox videoCodec;
-        private System.Windows.Forms.Label videoProfileLabel;
-        private System.Windows.Forms.ComboBox videoProfile;
-        private System.Windows.Forms.Button videoConfigButton;
         private System.Windows.Forms.GroupBox audioIOGroupBox;
         private System.Windows.Forms.Label audioCodecLabel;
-        private System.Windows.Forms.ComboBox audioProfile;
-        private System.Windows.Forms.Label audioProfileLabel;
         private System.Windows.Forms.TextBox audioInput;
         private System.Windows.Forms.Button audioInputOpenButton;
         private System.Windows.Forms.RadioButton audioTrack2;
         private System.Windows.Forms.RadioButton audioTrack1;
         private System.Windows.Forms.Button deleteAudioButton;
-        private System.Windows.Forms.Button configAudioButton;
         private System.Windows.Forms.ComboBox audioCodec;
         private System.Windows.Forms.CheckBox externalInput;
         private System.Windows.Forms.CheckBox showAdvancedOptions;
         private System.Windows.Forms.CheckBox shutdownCheckBox;
         private System.Windows.Forms.Button goButton;
+        private MeGUI.core.details.video.ProfileControl profileControl1;
+        private MeGUI.core.details.video.ProfileControl audioProfileControl;
+        private MeGUI.core.details.video.ProfileControl videoProfileControl;
+        private FileBar input;
+        private FileBar output;
+        private FileBar workingDirectory;
+        private FileBar chapterFile;
 
 
     }

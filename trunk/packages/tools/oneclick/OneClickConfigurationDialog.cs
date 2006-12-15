@@ -30,9 +30,9 @@ namespace MeGUI
             }*/
         }
 
-        public string[] Shortcuts
+        public Shortcut[] Shortcuts
         {
-            get { throw new Exception("The method or operation is not implemented."); }
+            get { return new Shortcut[] {}; }
         }
 
         #endregion
@@ -69,8 +69,8 @@ namespace MeGUI
             {
                 this.avsProfile.Items.Add(name);
             }
-            if (avsProfile.Items.Contains(mainForm.Settings.AvsProfileName))
-                avsProfile.SelectedItem = mainForm.Settings.AvsProfileName;
+/*            if (avsProfile.Items.Contains(mainForm.Settings.AvsProfileName))
+                avsProfile.SelectedItem = mainForm.Settings.AvsProfileName;*/
             foreach (string name in mainForm.Profiles.VideoProfiles.Keys)
             {
                 this.videoProfile.Items.Add(name);
@@ -90,8 +90,8 @@ namespace MeGUI
             {
                 this.playbackMethod.Items.Add(name);
             }
-            if (playbackMethod.Items.Contains(mainForm.Settings.OneClickProfileName))
-                playbackMethod.SelectedItem = mainForm.Settings.OneClickProfileName;
+/*            if (playbackMethod.Items.Contains(mainForm.Settings.OneClickProfileName))
+                playbackMethod.SelectedItem = mainForm.Settings.OneClickProfileName;*/
             playbackMethod_SelectedIndexChanged(null, null);
         }
 

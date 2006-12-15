@@ -107,6 +107,8 @@ namespace MeGUI.core.details.video
             {
                 impl.avsProfile.Items.Add(name);
             }
+            try { SelectedProfile = mainForm.Profiles.GetSelectedProfile(profileType).Name; }
+            catch (NullReferenceException) { }
         }
 
         private void avsConfigButton_Click(object sender, System.EventArgs e)
@@ -129,6 +131,7 @@ namespace MeGUI.core.details.video
 
         private void avsProfile_SelectedIndexChanged(object sender, System.EventArgs e)
         {
+            mainForm.Profiles.SetSelectedProfile(profileType, SelectedProfile);
             if (ProfileChanged != null)
             {
                 if (impl.avsProfile.SelectedIndex >= 0)
@@ -156,7 +159,31 @@ namespace MeGUI.core.details.video
             p.ProfileIndexChanged += new EventHandler(avsProfile_SelectedIndexChanged);
             p.ConfigClick += new EventHandler(avsConfigButton_Click);
             impl = p;
+            RefreshProfiles();
         }
+    }
+
+    public class SingleConfigurerHandler<TProfileSettings, TInfo, TCodec, TEncoder>
+        where TProfileSettings : GenericSettings
+    {
+        ISettingsProvider<TProfileSettings, TInfo, TCodec, TEncoder> settingsProvider;
+        public SingleConfigurerHandler(ProfilesControlHandler<TProfileSettings, TInfo> pHandler,
+            ISettingsProvider<TProfileSettings, TInfo, TCodec, TEncoder> sP)
+        {
+            settingsProvider = sP;
+            pHandler.ProfileChanged += new SelectedProfileChangedEvent(profileChanged);
+            pHandler.RefreshProfiles();
+        }
+
+        private void profileChanged(object sender, Profile prof)
+        {
+            if (prof == null) return;
+            settingsProvider.LoadSettings((TProfileSettings)prof.BaseSettings);
+            if (ProfileChanged != null) ProfileChanged(this, prof);
+        }
+        public event SelectedProfileChangedEvent ProfileChanged;
+
+
     }
     
     public class MultipleConfigurersHandler<TProfileSettings, TInfo, TCodec, TEncoder>
@@ -170,6 +197,7 @@ namespace MeGUI.core.details.video
         public void Register(ProfilesControlHandler<TProfileSettings, TInfo> pHandler)
         {
             pHandler.ProfileChanged += new SelectedProfileChangedEvent(ProfileChanged);
+            pHandler.RefreshProfiles();
         }
 
         private void ProfileChanged(object sender, Profile prof)

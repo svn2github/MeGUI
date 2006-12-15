@@ -42,14 +42,14 @@ namespace MeGUI.core.plugins.interfaces
         private void InitializeComponent()
         {
             this.profilesGroupbox = new System.Windows.Forms.GroupBox();
+            this.updateButton = new System.Windows.Forms.Button();
+            this.loadDefaultsButton = new System.Windows.Forms.Button();
+            this.videoProfile = new System.Windows.Forms.ComboBox();
+            this.newVideoProfileButton = new System.Windows.Forms.Button();
+            this.deleteVideoProfileButton = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.cancelButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
-            this.deleteVideoProfileButton = new System.Windows.Forms.Button();
-            this.newVideoProfileButton = new System.Windows.Forms.Button();
-            this.videoProfile = new System.Windows.Forms.ComboBox();
-            this.loadDefaultsButton = new System.Windows.Forms.Button();
-            this.updateButton = new System.Windows.Forms.Button();
             this.profilesGroupbox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -68,6 +68,60 @@ namespace MeGUI.core.plugins.interfaces
             this.profilesGroupbox.TabIndex = 44;
             this.profilesGroupbox.TabStop = false;
             this.profilesGroupbox.Text = "Profiles";
+            // 
+            // updateButton
+            // 
+            this.updateButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.updateButton.Location = new System.Drawing.Point(231, 18);
+            this.updateButton.Name = "updateButton";
+            this.updateButton.Size = new System.Drawing.Size(50, 23);
+            this.updateButton.TabIndex = 15;
+            this.updateButton.Text = "Update";
+            this.updateButton.UseVisualStyleBackColor = true;
+            this.updateButton.Click += new System.EventHandler(this.updateButton_Click);
+            // 
+            // loadDefaultsButton
+            // 
+            this.loadDefaultsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.loadDefaultsButton.Location = new System.Drawing.Point(287, 18);
+            this.loadDefaultsButton.Name = "loadDefaultsButton";
+            this.loadDefaultsButton.Size = new System.Drawing.Size(103, 23);
+            this.loadDefaultsButton.TabIndex = 14;
+            this.loadDefaultsButton.Text = "Load Defaults";
+            this.loadDefaultsButton.UseVisualStyleBackColor = true;
+            this.loadDefaultsButton.Click += new System.EventHandler(this.loadDefaultsButton_Click);
+            // 
+            // videoProfile
+            // 
+            this.videoProfile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.videoProfile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.videoProfile.Location = new System.Drawing.Point(8, 18);
+            this.videoProfile.Name = "videoProfile";
+            this.videoProfile.Size = new System.Drawing.Size(117, 21);
+            this.videoProfile.Sorted = true;
+            this.videoProfile.TabIndex = 11;
+            this.videoProfile.SelectedIndexChanged += new System.EventHandler(this.videoProfile_SelectedIndexChanged);
+            // 
+            // newVideoProfileButton
+            // 
+            this.newVideoProfileButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.newVideoProfileButton.Location = new System.Drawing.Point(185, 18);
+            this.newVideoProfileButton.Name = "newVideoProfileButton";
+            this.newVideoProfileButton.Size = new System.Drawing.Size(40, 23);
+            this.newVideoProfileButton.TabIndex = 12;
+            this.newVideoProfileButton.Text = "New";
+            this.newVideoProfileButton.Click += new System.EventHandler(this.newVideoProfileButton_Click);
+            // 
+            // deleteVideoProfileButton
+            // 
+            this.deleteVideoProfileButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.deleteVideoProfileButton.Location = new System.Drawing.Point(131, 18);
+            this.deleteVideoProfileButton.Name = "deleteVideoProfileButton";
+            this.deleteVideoProfileButton.Size = new System.Drawing.Size(48, 23);
+            this.deleteVideoProfileButton.TabIndex = 13;
+            this.deleteVideoProfileButton.Text = "Delete";
+            this.deleteVideoProfileButton.Click += new System.EventHandler(this.deleteVideoProfileButton_Click);
             // 
             // panel1
             // 
@@ -98,59 +152,6 @@ namespace MeGUI.core.plugins.interfaces
             this.okButton.Size = new System.Drawing.Size(40, 23);
             this.okButton.TabIndex = 46;
             this.okButton.Text = "OK";
-            // 
-            // deleteVideoProfileButton
-            // 
-            this.deleteVideoProfileButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.deleteVideoProfileButton.Location = new System.Drawing.Point(131, 18);
-            this.deleteVideoProfileButton.Name = "deleteVideoProfileButton";
-            this.deleteVideoProfileButton.Size = new System.Drawing.Size(48, 23);
-            this.deleteVideoProfileButton.TabIndex = 13;
-            this.deleteVideoProfileButton.Text = "Delete";
-            // 
-            // newVideoProfileButton
-            // 
-            this.newVideoProfileButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.newVideoProfileButton.Location = new System.Drawing.Point(185, 18);
-            this.newVideoProfileButton.Name = "newVideoProfileButton";
-            this.newVideoProfileButton.Size = new System.Drawing.Size(40, 23);
-            this.newVideoProfileButton.TabIndex = 12;
-            this.newVideoProfileButton.Text = "New";
-            this.newVideoProfileButton.Click += new System.EventHandler(this.newVideoProfileButton_Click);
-            // 
-            // videoProfile
-            // 
-            this.videoProfile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.videoProfile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.videoProfile.Location = new System.Drawing.Point(8, 18);
-            this.videoProfile.Name = "videoProfile";
-            this.videoProfile.Size = new System.Drawing.Size(117, 21);
-            this.videoProfile.Sorted = true;
-            this.videoProfile.TabIndex = 11;
-            this.videoProfile.SelectedIndexChanged += new System.EventHandler(this.videoProfile_SelectedIndexChanged);
-            // 
-            // loadDefaultsButton
-            // 
-            this.loadDefaultsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.loadDefaultsButton.Location = new System.Drawing.Point(287, 18);
-            this.loadDefaultsButton.Name = "loadDefaultsButton";
-            this.loadDefaultsButton.Size = new System.Drawing.Size(103, 23);
-            this.loadDefaultsButton.TabIndex = 14;
-            this.loadDefaultsButton.Text = "Load Defaults";
-            this.loadDefaultsButton.UseVisualStyleBackColor = true;
-            this.loadDefaultsButton.Click += new System.EventHandler(this.loadDefaultsButton_Click);
-            // 
-            // updateButton
-            // 
-            this.updateButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.updateButton.Location = new System.Drawing.Point(231, 18);
-            this.updateButton.Name = "updateButton";
-            this.updateButton.Size = new System.Drawing.Size(50, 23);
-            this.updateButton.TabIndex = 15;
-            this.updateButton.Text = "Update";
-            this.updateButton.UseVisualStyleBackColor = true;
-            this.updateButton.Click += new System.EventHandler(this.updateButton_Click);
             // 
             // ConfigurationWindow
             // 
@@ -202,6 +203,7 @@ namespace MeGUI.core.plugins.interfaces
         private void loadDefaultsButton_Click(object sender, EventArgs e)
         {
             s.Settings = new TSettings();
+            videoProfile.SelectedIndex = -1;
         }
 
         private void updateButton_Click(object sender, EventArgs e)
@@ -241,9 +243,21 @@ namespace MeGUI.core.plugins.interfaces
                 return;
             this.Settings = prof.Settings;
         }
+
+        private void deleteVideoProfileButton_Click(object sender, EventArgs e)
+        {
+            GenericProfile<TProfileSettings> prof = (GenericProfile<TProfileSettings>)this.videoProfile.SelectedItem;
+            if (prof == null)
+            {
+                MessageBox.Show("You must select a profile to delete!", "No profile selected", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            profileManager.DeleteProfile(prof);
+            videoProfile.Items.Remove(prof);
+            loadDefaultsButton_Click(null, null);
+        }
     }
 
-    public sealed class ProfileMetaType { }
 
     /** This is the base type for any kind of settings which can be stored in a profile.
      * Nothing need be defined, but this interface must be inherited for type checking reasons.*/

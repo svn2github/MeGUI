@@ -144,8 +144,8 @@ namespace MeGUI
                     file = mainForm.MediaFileFactory.Open(path);
                     if (file == null && !(file.HasVideo && file.CanReadVideo))
                         throw new ArgumentException("The video stream cannot be opened");
-                    reader = file.GetVideoReader();
                 }
+                reader = file.GetVideoReader();
             }
             catch (AviSynthException e)
             {

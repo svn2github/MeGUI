@@ -25,6 +25,6 @@ namespace MeGUI.core.plugins.interfaces
     {
         string Name { get;}
         void Run(MainForm info);
-        string[] Shortcuts { get;}
+        System.Windows.Forms.Shortcut[] Shortcuts { get;}
     }
 }

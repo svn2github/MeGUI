@@ -49,7 +49,7 @@ namespace MeGUI
         {
             audioCodec.Items.Clear();
             audioCodec.Items.AddRange(mainForm.PackageSystem.AudioSettingsProviders.ValuesArray);
-            try { audioCodec.SelectedItem = mainForm.PackageSystem.AudioSettingsProviders["x264"]; }
+            try { audioCodec.SelectedItem = mainForm.PackageSystem.AudioSettingsProviders["NAAC"]; }
             catch (Exception)
             {
                 try { audioCodec.SelectedIndex = 0; }
@@ -67,7 +67,8 @@ namespace MeGUI
                 new InfoGetter<string[]>(delegate { return new string[] { AudioInput, AudioOutput }; }), codecHandler.Getter, codecHandler.Setter);
 
             profileHandler.ConfigureCompleted += new EventHandler(profileHandler_ConfigureCompleted);
-
+            codecHandler.Register(profileHandler);
+            fileTypeHandler.RefreshFiletypes();
         }
 
         void profileHandler_ConfigureCompleted(object sender, EventArgs e)
@@ -77,11 +78,6 @@ namespace MeGUI
             CurrentAudioStream = stream;
         }
         #endregion
-        public string SelectedProfile
-        {
-            get { return ProfileHandler.SelectedProfile; }
-            set { ProfileHandler.SelectedProfile = value; }
-        }
         public MainForm MainForm
         {
             set { mainForm = value; }

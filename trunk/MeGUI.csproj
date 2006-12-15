@@ -230,6 +230,12 @@
     <Compile Include="core\gui\AudioEncodingComponent.Designer.cs">
       <DependentUpon>AudioEncodingComponent.cs</DependentUpon>
     </Compile>
+    <Compile Include="core\gui\AviSynthProfileConfigPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="core\gui\AviSynthProfileConfigPanel.Designer.cs">
+      <DependentUpon>AviSynthProfileConfigPanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="core\gui\FileBar.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -251,6 +257,9 @@
     <Compile Include="core\gui\ProfilePorter.Designer.cs">
       <DependentUpon>ProfilePorter.cs</DependentUpon>
     </Compile>
+    <Compile Include="core\gui\Profiles.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="core\gui\ProgressWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -271,17 +280,12 @@
     <Compile Include="core\plugins\implemented\CommandlineJobProcessor.cs" />
     <Compile Include="core\plugins\implemented\CommandlineMuxer.cs" />
     <Compile Include="core\plugins\implemented\video\CommandlineVideoEncoder.cs" />
-    <Compile Include="core\plugins\interfaces\Profiles.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="core\plugins\interfaces\IJobProcessor.cs" />
     <Compile Include="core\plugins\interfaces\IMediaFile.cs" />
     <Compile Include="core\plugins\interfaces\IMuxing.cs" />
     <Compile Include="core\plugins\interfaces\IPackage.cs" />
-    <Compile Include="core\plugins\interfaces\IProfileType.cs" />
     <Compile Include="core\plugins\interfaces\ISettingsProvider.cs" />
     <Compile Include="core\plugins\interfaces\Job.cs" />
-    <Compile Include="core\plugins\interfaces\JobHandler.cs" />
     <Compile Include="core\plugins\interfaces\JobProcessorManager.cs" />
     <Compile Include="core\plugins\interfaces\Profile.cs" />
     <Compile Include="core\util\CommandLineGenerator.cs" />
@@ -351,7 +355,6 @@
     <Compile Include="packages\AVCLevels.cs" />
     <Compile Include="packages\AviSynthJob.cs" />
     <Compile Include="packages\AviSynthProcessor.cs" />
-    <Compile Include="packages\AviSynthProfile.cs" />
     <Compile Include="packages\AviSynthSettings.cs" />
     <Compile Include="packages\AviSynthWindow.cs">
       <SubType>Form</SubType>
@@ -486,6 +489,10 @@
       <DependentUpon>AudioEncodingComponent.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="core\gui\AviSynthProfileConfigPanel.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>AviSynthProfileConfigPanel.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="core\gui\FileBar.resx">
       <DependentUpon>FileBar.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -502,6 +509,10 @@
       <SubType>Designer</SubType>
       <DependentUpon>ProfilePorter.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="core\gui\Profiles.resx">
+      <DependentUpon>Profiles.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="core\gui\ProgressWindow.resx">
       <DependentUpon>ProgressWindow.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -517,10 +528,6 @@
     <EmbeddedResource Include="core\gui\ZonesControl.resx">
       <DependentUpon>ZonesControl.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="core\plugins\interfaces\Profiles.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>Profiles.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CropDialog.resx">
       <SubType>Designer</SubType>

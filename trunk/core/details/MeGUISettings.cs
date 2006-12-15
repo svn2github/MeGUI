@@ -11,13 +11,13 @@ namespace MeGUI
         private string faacPath, lamePath, neroAacEncPath, mencoderPath,  mp4boxPath, mkvmergePath, encAacPlusPath,
             ffmpegPath,
             x264Path, dgIndexPath, xvidEncrawPath, avc2aviPath, aviMuxGUIPath, oggEnc2Path, encAudXPath,
-            audioProfileName, videoProfileName, defaultLanguage1, defaultLanguage2, divxMuxerPath;
+            defaultLanguage1, defaultLanguage2, divxMuxerPath;
         private bool recalculateMainMovieBitrate, autoForceFilm, autoStartQueue, enableMP3inMP4, shutdown, autoOpenScript,
             overwriteStats, keep2of3passOutput, deleteCompletedJobs, autoSetNbThreads, deleteIntermediateFiles,
             deleteAbortedOutput, openProgressWindow, useadvancedtooltips, freshOggEnc2;
 		private decimal forceFilmThreshold;
 		private int nbPasses, acceptableAspectError;
-        private string videoExtension, audioExtension, avsProfile, oneClickProfile;
+        private string videoExtension, audioExtension;
         private bool safeProfileAlteration;
         private SourceDetectorSettings sdSettings;
         private AutoEncodeDefaultsSettings aedSettings;
@@ -34,8 +34,6 @@ namespace MeGUI
             useadvancedtooltips = true;
             avc2aviPath = "avc2avi.exe";
             aviMuxGUIPath = "avimux_gui.exe";
-            avsProfile = "Default Profile";
-            oneClickProfile = "default";
             faacPath = "faac.exe";
             mencoderPath = "mencoder.exe";
 			mp4boxPath = "mp4box.exe";
@@ -50,8 +48,6 @@ namespace MeGUI
             encAudXPath = "enc_AudX_CLI.exe";
             encAacPlusPath = "enc_aacPlus.exe";
             ffmpegPath = "ffmpeg.exe";
-			audioProfileName = "";
-			videoProfileName = "";
             recalculateMainMovieBitrate = false;
 			autoForceFilm = true;
 			autoStartQueue = false;
@@ -93,16 +89,6 @@ namespace MeGUI
         {
             get { return useadvancedtooltips; }
             set { useadvancedtooltips = value; }
-        }
-        public string AvsProfileName
-        {
-            get { return avsProfile; }
-            set { avsProfile = value; }
-        }
-        public string OneClickProfileName
-        {
-            get { return oneClickProfile; }
-            set { oneClickProfile = value; }
         }
 
         /// <summary>
@@ -253,22 +239,6 @@ namespace MeGUI
                 key.SetValue("plugindir2_5", value);
             }
         }
-		/// <summary>
-		/// name of the currently selected audio profile
-		/// </summary>
-		public string AudioProfileName
-		{
-			get {return audioProfileName;}
-			set {audioProfileName = value;}
-		}
-		/// <summary>
-		/// name of the currently selected video profile
-		/// </summary>
-		public string VideoProfileName
-		{
-			get {return videoProfileName;}
-			set {videoProfileName = value;}
-		}
 		/// <summary>
 		/// should the video bitrate be recalculated after credits encoding in video only mode?
 		/// </summary>
