@@ -93,7 +93,7 @@ namespace MeGUI
                 {
                     string oldFilename = filename.Text;
                     filename.Text = dialog.FileName;
-                    FileSelected(this, new FileBarEventArgs(oldFilename, filename.Text));
+                    if (FileSelected != null) FileSelected(this, new FileBarEventArgs(oldFilename, filename.Text));
                 }
             }
         }

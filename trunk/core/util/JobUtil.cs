@@ -211,8 +211,13 @@ namespace MeGUI
 				}
 				catch (Exception e)
 				{
-					MessageBox.Show("Profile " + name + " could not be loaded. Is it a valid Job created by MeGUI?", "Error loading Job", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-					Console.Write(e.Message);
+					DialogResult r = MessageBox.Show("Job " + name + " could not be loaded. Delete?", "Error loading Job", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
+                    if (r == DialogResult.Yes)
+                    {
+                        try { s.Close(); File.Delete(name); }
+                        catch (Exception) { }
+                    }
+                    Console.Write(e.Message);
 					return null;
 				}
 			}

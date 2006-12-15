@@ -165,11 +165,27 @@ namespace MeGUI
 			get {return fps;}
 			set {fps = value;}
 		}
+        private string nextJobName;
+
+        public string NextJobName
+        {
+            get { return nextJobName; }
+            set { nextJobName = value; }
+        }
+        private string previousJobName;
+
+        public string PreviousJobName
+        {
+            get { return previousJobName; }
+            set { previousJobName = value; }
+        }
+
 		/// <summary>
 		/// previous job in the queue, used for job chaining (automated 2 pass encoding, mp4 muxing)
 		/// jobs chained via Next/Previous are treated as an entity and are encoded one after another
 		/// regardless of their relative position in the queue
 		/// </summary>
+        [XmlIgnore()]
 		public Job Next
 		{
 			get {return next;}
@@ -180,7 +196,8 @@ namespace MeGUI
 		/// jobs chained via Next/Previous are treated as an entity and are encoded one after another
 		/// regardless of their relative position in the queue
 		/// </summary>
-		public Job Previous
+        [XmlIgnore()]
+        public Job Previous
 		{
 			get {return previous;}
 			set {previous = value;}

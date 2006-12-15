@@ -24,6 +24,28 @@ namespace MeGUI
         {
             updatePossibleContainers();
         }
+        #region OneClick profiles
+        ISettingsProvider<OneClickSettings, Empty, int, int> oneClickSettingsProvider = new SettingsProviderImpl2<
+    MeGUI.packages.tools.oneclick.OneClickConfigPanel, Empty, OneClickSettings, OneClickSettings, int, int>("OneClick", 0, 0);
+        private void initOneClickHandler()
+        {
+            // Init oneclick handlers
+            ProfilesControlHandler<OneClickSettings, Empty> profileHandler = new ProfilesControlHandler<OneClickSettings, Empty>(
+    "OneClick", mainForm, profileControl2, oneClickSettingsProvider.EditSettings, Empty.Getter,
+    new SettingsGetter<OneClickSettings>(oneClickSettingsProvider.GetCurrentSettings), new SettingsSetter<OneClickSettings>(oneClickSettingsProvider.LoadSettings));
+            SingleConfigurerHandler<OneClickSettings, Empty, int, int> configurerHandler = new SingleConfigurerHandler<OneClickSettings, Empty, int, int>(profileHandler, oneClickSettingsProvider);
+            profileHandler.ProfileChanged += new SelectedProfileChangedEvent(OneClickProfileChanged);
+            profileHandler.RefreshProfiles();
+        }
+
+        void OneClickProfileChanged(object sender, Profile prof)
+        {
+            if (prof != null)
+            {
+                this.Settings = ((OneClickSettings)prof.BaseSettings);
+            }
+        } 
+        #endregion
         #region AVS profiles
         ISettingsProvider<AviSynthSettings, MeGUI.core.details.video.Empty, int, int> avsSettingsProvider = new SettingsProviderImpl2<
     MeGUI.core.gui.AviSynthProfileConfigPanel, MeGUI.core.details.video.Empty, AviSynthSettings, AviSynthSettings, int, int>("AviSynth", 0, 0);
@@ -86,6 +108,8 @@ namespace MeGUI
         #endregion
         #endregion
         #region Variable Declaration
+        private bool ignoreRestrictions = false;
+        private ContainerType[] acceptableContainerTypes;
         private AudioEncoderProvider audioEncoderProvider = new AudioEncoderProvider();
         private VideoEncoderProvider videoEncoderProvider = new VideoEncoderProvider();
         private VideoUtil vUtil;
@@ -107,6 +131,7 @@ namespace MeGUI
             audioStreams = new PartialAudioStream[2];
             audioLanguages = new List<string>();
             this.muxProvider = mainForm.MuxProvider;
+            acceptableContainerTypes = muxProvider.GetSupportedContainers().ToArray();
 
             InitializeComponent();
 
@@ -121,15 +146,11 @@ namespace MeGUI
             initVideoHandler();
             initAudioHandler();
             initAvsHandler();
-
+            initOneClickHandler();
+            
             containerFormat.Items.AddRange(muxProvider.GetSupportedContainers().ToArray());
             this.containerFormat.SelectedIndex = 0;
-            this.playbackMethod.Items.Clear();
-            foreach (string name in mainForm.Profiles.OneClickProfiles.Keys)
-            {
-                this.playbackMethod.Items.Add(name);
-            }
-            playbackMethod_SelectedIndexChanged(null, null);
+            
             showAdvancedOptions_CheckedChanged(null, null);
         }
         #endregion
@@ -182,9 +203,44 @@ namespace MeGUI
             }
             audioLanguages.Clear();
             workingDirectory.Filename = Path.GetDirectoryName(fileName);
-            workingName.Text = Path.GetFileNameWithoutExtension(fileName);
+            workingName.Text = extractWorkingName(fileName);
             this.updateFilename();
             this.setAspectRatio(ar);
+        }
+
+        private string extractWorkingName(string fileName)
+        {
+            string A = Path.GetFileNameWithoutExtension(fileName); // In case they all fail
+            int count = 0;
+            while (Path.GetDirectoryName(fileName).Length > 0 && count < 3)
+            {
+                string temp = Path.GetFileNameWithoutExtension(fileName).ToLower();
+                if (!temp.Contains("vts") && !temp.Contains("video") && !temp.Contains("audio"))
+                {
+                    A = temp;
+                    break;
+                }
+                fileName = Path.GetDirectoryName(fileName);
+                count++;
+            }
+
+            // Format it nicely:
+            char[] chars = A.ToCharArray();
+            bool beginningOfWord = true;
+            for (int i = 0; i < chars.Length; i++)
+            {
+                // Capitalize the beginning of words
+                if (char.IsLetter(chars[i]) && beginningOfWord) chars[i] = char.ToUpper(chars[i]);
+                // Turn '_' into ' '
+                if (chars[i] == '_') chars[i] = ' ';
+
+                beginningOfWord = !char.IsLetter(chars[i]);
+            }
+
+            A = new string(chars);
+            return A;
+/*            string B = Path.GetFileName(Path.GetDirectoryName(fileName));
+            return "al";*/
         }
         private void clearAudio1Button_Click(object sender, EventArgs e)
         {
@@ -280,14 +336,40 @@ namespace MeGUI
                         dictatedOutputTypes.Add(VideoUtil.guessAudioMuxableType(typeString, false));
                 }
             }
-            List<ContainerType> supportedOutputTypes = this.muxProvider.GetSupportedContainers(
+            List<ContainerType> tempSupportedOutputTypes = this.muxProvider.GetSupportedContainers(
                 VideoSettingsProvider.EncoderType, audioCodecs.ToArray(), dictatedOutputTypes.ToArray());
+
+            List<ContainerType> supportedOutputTypes = new List<ContainerType>();
+            foreach (ContainerType c in acceptableContainerTypes)
+            {
+                if (tempSupportedOutputTypes.Contains(c))
+                    supportedOutputTypes.Add(c);
+            }
+            
+            if (supportedOutputTypes.Count == 0)
+            {
+                if (tempSupportedOutputTypes.Count > 0 && !ignoreRestrictions)
+                {
+                    string message = string.Format(
+                    "No container type could be found that matches the list of acceptable types" +
+                    "in your chosen one click profile. {0}" +
+                    "Your restrictions are now being ignored.", Environment.NewLine);
+                    MessageBox.Show(message, "Filetype restrictions too restrictive", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    ignoreRestrictions = true;
+                }
+                if (ignoreRestrictions) supportedOutputTypes = tempSupportedOutputTypes;
+                if (tempSupportedOutputTypes.Count == 0)
+                    MessageBox.Show("No container type could be found for your current settings. Please modify the codecs you use", "No container found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
             if (supportedOutputTypes.Count > 0)
             {
                 this.containerFormat.Items.Clear();
                 this.containerFormat.Items.AddRange(supportedOutputTypes.ToArray());
                 this.containerFormat.SelectedIndex = 0;
                 this.output.Filename = Path.ChangeExtension(output.Filename, (this.containerFormat.SelectedItem as ContainerType).Extension);
+            }
+            else
+            {
             }
             beingCalled = false;
         }
@@ -302,20 +384,40 @@ namespace MeGUI
                 splitSize.Text = "0";
             }
         }
-        private void playbackMethod_SelectedIndexChanged(object sender, EventArgs e)
+        private OneClickSettings Settings
         {
-            if (playbackMethod.SelectedItem != null)
+            set
             {
-                OneClickSettings settings = (OneClickSettings)this.mainForm.Profiles.OneClickProfiles[playbackMethod.SelectedItem.ToString()].BaseSettings;
+                bool misconfigured = false;
+                OneClickSettings settings = value;
 
                 // Do extra defaults config (same code as in OneClickDefaultWindow)
                 // strings
-                try { audioProfileHandler.SelectedProfile = settings.AudioProfileName; } catch (Exception) { }
-                try { videoProfileHandler.SelectedProfile = settings.VideoProfileName; } catch (Exception) { }
-                if (containerFormat.Items.Contains(settings.ContainerFormatName))
-                    containerFormat.SelectedItem = settings.ContainerFormatName;
-                if (filesizeComboBox.Items.Contains(settings.StorageMediumName))
-                    filesizeComboBox.SelectedItem = settings.StorageMediumName;
+                try { audioProfileHandler.SelectedProfile = settings.AudioProfileName; }
+                catch (Exception) { misconfigured = true; }
+                try { videoProfileHandler.SelectedProfile = settings.VideoProfileName; }
+                catch (Exception) { misconfigured = true; }
+
+                List<ContainerType> temp = new List<ContainerType>();
+                List<ContainerType> allContainerTypes = muxProvider.GetSupportedContainers();
+                foreach (string s in settings.ContainerCandidates)
+                {
+                    ContainerType ct = allContainerTypes.Find(
+                        new Predicate<ContainerType>(delegate(ContainerType t)
+                        { return t.ToString() == s; }));
+                    if (ct != null)
+                        temp.Add(ct);
+                }
+                acceptableContainerTypes = temp.ToArray();
+                
+                ignoreRestrictions = false;
+                try { filesizeComboBox.SelectedItem = settings.StorageMediumName; }
+                catch (Exception) { misconfigured = true; }
+
+                audioStreams[0].dontEncode = settings.DontEncodeAudio;
+                audioStreams[1].dontEncode = settings.DontEncodeAudio;
+                audioStreams[0].profileItem = audioProfileHandler.SelectedProfile;
+                audioStreams[1].profileItem = audioProfileHandler.SelectedProfile;
 
                 // bools
                 dontEncodeAudio.Checked = settings.DontEncodeAudio;
@@ -324,19 +426,22 @@ namespace MeGUI
                 autoDeint.Checked = settings.AutomaticDeinterlacing;
 
                 // ints
-                if (settings.SplitSize > 0)
-                    splitSize.Text = settings.SplitSize.ToString();
-                if (settings.Filesize > 0)
-                    filesizeKB.Text = settings.Filesize.ToString();
+                splitSize.Text = settings.SplitSize.ToString();
+                filesizeKB.Text = settings.Filesize.ToString();
                 horizontalResolution.Value = settings.OutputResolution;
 
+                if (misconfigured)
+                    MessageBox.Show("Some settings could not be configured as the profile specified, since the required profiles are no longer available. Please check your configuration", "Some options misconfigured", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
                 // Clean up after those settings were set
+                updatePossibleContainers();
                 filesizeComboBox_SelectedIndexChanged(null, null);
                 containerFormat_SelectedIndexChanged_1(null, null);
                 dontEncodeAudio_CheckedChanged(null, null);
                 splitOutput_CheckedChanged(null, null);
             }
         }
+
 
 
         private void goButton_Click(object sender, EventArgs e)
@@ -598,7 +703,7 @@ namespace MeGUI
             public bool useExternalInput;
             public bool dontEncode;
             public int trackNumber;
-            public object profileItem;
+            public string profileItem;
             public AudioCodecSettings settings;
         }
 

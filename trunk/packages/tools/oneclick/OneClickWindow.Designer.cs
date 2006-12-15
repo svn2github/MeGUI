@@ -56,8 +56,6 @@ namespace MeGUI
             this.inKBLabel = new System.Windows.Forms.Label();
             this.filesizeComboBox = new System.Windows.Forms.ComboBox();
             this.filesizeLabel = new System.Windows.Forms.Label();
-            this.playbackMethodLabel = new System.Windows.Forms.Label();
-            this.playbackMethod = new System.Windows.Forms.ComboBox();
             this.audioGroupbox = new System.Windows.Forms.GroupBox();
             this.clearAudio2Button = new System.Windows.Forms.Button();
             this.clearAudio1Button = new System.Windows.Forms.Button();
@@ -91,6 +89,7 @@ namespace MeGUI
             this.showAdvancedOptions = new System.Windows.Forms.CheckBox();
             this.shutdownCheckBox = new System.Windows.Forms.CheckBox();
             this.goButton = new System.Windows.Forms.Button();
+            this.profileControl2 = new MeGUI.core.details.video.ProfileControl();
             this.tabPage2.SuspendLayout();
             this.locationGroupBox.SuspendLayout();
             this.avsBox.SuspendLayout();
@@ -332,11 +331,11 @@ namespace MeGUI
             this.output.Filename = "";
             this.output.Filter = "MP4 Files|*.mp4";
             this.output.FolderMode = false;
-            this.output.Location = new System.Drawing.Point(120, 42);
+            this.output.Location = new System.Drawing.Point(123, 42);
             this.output.Name = "output";
             this.output.ReadOnly = true;
             this.output.SaveMode = true;
-            this.output.Size = new System.Drawing.Size(288, 26);
+            this.output.Size = new System.Drawing.Size(285, 26);
             this.output.TabIndex = 4;
             this.output.Title = null;
             this.output.FileSelected += new MeGUI.FileBarEventHandler(this.output_FileSelected);
@@ -348,11 +347,11 @@ namespace MeGUI
                 "(*.ts)|*.ts|All DGIndex supported files|*.vob;*.mpg;*.mpeg;*.m2v;*.mpv;*.tp;*.ts" +
                 ";*.trp;*.pva;*.vro";
             this.input.FolderMode = false;
-            this.input.Location = new System.Drawing.Point(120, 13);
+            this.input.Location = new System.Drawing.Point(123, 13);
             this.input.Name = "input";
             this.input.ReadOnly = true;
             this.input.SaveMode = false;
-            this.input.Size = new System.Drawing.Size(288, 26);
+            this.input.Size = new System.Drawing.Size(285, 26);
             this.input.TabIndex = 3;
             this.input.Title = null;
             this.input.FileSelected += new MeGUI.FileBarEventHandler(this.input_FileSelected);
@@ -375,12 +374,11 @@ namespace MeGUI
             // 
             // targetGroupBox
             // 
+            this.targetGroupBox.Controls.Add(this.profileControl2);
             this.targetGroupBox.Controls.Add(this.filesizeKB);
             this.targetGroupBox.Controls.Add(this.inKBLabel);
             this.targetGroupBox.Controls.Add(this.filesizeComboBox);
             this.targetGroupBox.Controls.Add(this.filesizeLabel);
-            this.targetGroupBox.Controls.Add(this.playbackMethodLabel);
-            this.targetGroupBox.Controls.Add(this.playbackMethod);
             this.targetGroupBox.Location = new System.Drawing.Point(6, 176);
             this.targetGroupBox.Name = "targetGroupBox";
             this.targetGroupBox.Size = new System.Drawing.Size(424, 71);
@@ -407,9 +405,9 @@ namespace MeGUI
             // filesizeComboBox
             // 
             this.filesizeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.filesizeComboBox.Location = new System.Drawing.Point(122, 41);
+            this.filesizeComboBox.Location = new System.Drawing.Point(125, 41);
             this.filesizeComboBox.Name = "filesizeComboBox";
-            this.filesizeComboBox.Size = new System.Drawing.Size(114, 21);
+            this.filesizeComboBox.Size = new System.Drawing.Size(111, 21);
             this.filesizeComboBox.TabIndex = 19;
             this.filesizeComboBox.SelectedIndexChanged += new System.EventHandler(this.filesizeComboBox_SelectedIndexChanged);
             // 
@@ -420,24 +418,6 @@ namespace MeGUI
             this.filesizeLabel.Size = new System.Drawing.Size(90, 13);
             this.filesizeLabel.TabIndex = 21;
             this.filesizeLabel.Text = "Filesize";
-            // 
-            // playbackMethodLabel
-            // 
-            this.playbackMethodLabel.Location = new System.Drawing.Point(18, 20);
-            this.playbackMethodLabel.Name = "playbackMethodLabel";
-            this.playbackMethodLabel.Size = new System.Drawing.Size(100, 13);
-            this.playbackMethodLabel.TabIndex = 3;
-            this.playbackMethodLabel.Text = "Playback method";
-            // 
-            // playbackMethod
-            // 
-            this.playbackMethod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.playbackMethod.Location = new System.Drawing.Point(122, 17);
-            this.playbackMethod.Name = "playbackMethod";
-            this.playbackMethod.Size = new System.Drawing.Size(288, 21);
-            this.playbackMethod.Sorted = true;
-            this.playbackMethod.TabIndex = 13;
-            this.playbackMethod.SelectedIndexChanged += new System.EventHandler(this.playbackMethod_SelectedIndexChanged);
             // 
             // audioGroupbox
             // 
@@ -491,18 +471,18 @@ namespace MeGUI
             // track2
             // 
             this.track2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.track2.Location = new System.Drawing.Point(122, 48);
+            this.track2.Location = new System.Drawing.Point(125, 50);
             this.track2.Name = "track2";
-            this.track2.Size = new System.Drawing.Size(256, 21);
+            this.track2.Size = new System.Drawing.Size(253, 21);
             this.track2.TabIndex = 14;
             this.track2.SelectedIndexChanged += new System.EventHandler(this.track1_SelectedIndexChanged);
             // 
             // track1
             // 
             this.track1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.track1.Location = new System.Drawing.Point(122, 24);
+            this.track1.Location = new System.Drawing.Point(125, 24);
             this.track1.Name = "track1";
-            this.track1.Size = new System.Drawing.Size(256, 21);
+            this.track1.Size = new System.Drawing.Size(253, 21);
             this.track1.TabIndex = 13;
             this.track1.SelectedIndexChanged += new System.EventHandler(this.track1_SelectedIndexChanged);
             // 
@@ -766,6 +746,14 @@ namespace MeGUI
             this.goButton.UseVisualStyleBackColor = true;
             this.goButton.Click += new System.EventHandler(this.goButton_Click);
             // 
+            // profileControl2
+            // 
+            this.profileControl2.LabelText = "One Click profile";
+            this.profileControl2.Location = new System.Drawing.Point(21, 12);
+            this.profileControl2.Name = "profileControl2";
+            this.profileControl2.Size = new System.Drawing.Size(389, 29);
+            this.profileControl2.TabIndex = 23;
+            // 
             // OneClickWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -828,8 +816,6 @@ namespace MeGUI
         private System.Windows.Forms.TextBox workingName;
         private System.Windows.Forms.Label projectNameLabel;
         private System.Windows.Forms.GroupBox targetGroupBox;
-        private System.Windows.Forms.Label playbackMethodLabel;
-        private System.Windows.Forms.ComboBox playbackMethod;
         private System.Windows.Forms.TextBox filesizeKB;
         private System.Windows.Forms.Label inKBLabel;
         private System.Windows.Forms.ComboBox filesizeComboBox;
@@ -866,6 +852,7 @@ namespace MeGUI
         private FileBar output;
         private FileBar workingDirectory;
         private FileBar chapterFile;
+        private MeGUI.core.details.video.ProfileControl profileControl2;
 
 
     }

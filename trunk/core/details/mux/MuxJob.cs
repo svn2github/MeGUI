@@ -34,10 +34,24 @@ namespace MeGUI
 		private MuxerType type;
         private ContainerType containerType;
 
+        [System.Xml.Serialization.XmlIgnore()]
         public ContainerType ContainerType
         {
             get { return containerType; }
             set { containerType = value; }
+        }
+
+        public string ContainerTypeString
+        {
+            get { return ContainerType.ID; }
+            set
+            {
+                foreach (ContainerType t in MainForm.Instance.MuxProvider.GetSupportedContainers())
+                {
+                    if (t.ID == value) { ContainerType = t; return; }
+                }
+                ContainerType = null;
+            }
         }
 
         public override string CodecString

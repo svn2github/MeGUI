@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 using System.Text;
 
 namespace MeGUI
@@ -347,6 +348,7 @@ namespace MeGUI
         {
             this.containerType = containerType;
         }
+
         private ContainerType containerType;
         public ContainerType ContainerType
         {

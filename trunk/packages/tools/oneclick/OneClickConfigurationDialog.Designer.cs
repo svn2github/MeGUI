@@ -1,3 +1,4 @@
+#if NONE
 namespace MeGUI
 {
     partial class OneClickConfigurationDialog
@@ -458,3 +459,4 @@ namespace MeGUI
         private System.Windows.Forms.Button updateButton;
     }
 }
+#endif

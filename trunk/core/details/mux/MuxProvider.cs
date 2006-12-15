@@ -308,15 +308,13 @@ namespace MeGUI
         public List<ContainerType> GetSupportedContainers()
         {
             List<ContainerType> supportedContainers = new List<ContainerType>();
-            List<ContainerType> containerTypes = new List<ContainerType>();
             foreach (IMuxing muxerInterface in mainForm.PackageSystem.MuxerProviders.Values)
             {
                 List<ContainerType> outputTypes = muxerInterface.GetSupportedContainers();
                 foreach (ContainerType type in outputTypes)
                 {
-                    if (!containerTypes.Contains(type))
+                    if (!supportedContainers.Contains(type))
                         supportedContainers.Add(type);
-                    containerTypes.Add(type);
                 }
             }
             return supportedContainers;
@@ -975,7 +973,8 @@ namespace MeGUI
         public VideoEncoderProvider()
             : base()
         {
-            this.RegisterEncoder(new MencoderEncoderProvider());
+            this.RegisterEncoder(new SnowMencoderEncoderProvider());
+            this.RegisterEncoder(new LMP4MencoderEncoderProvider());
             this.RegisterEncoder(new X264EncoderProvider());
             this.RegisterEncoder(new XviDEncoderProvider());
         }
@@ -1031,16 +1030,28 @@ namespace MeGUI
         }
     }
 
-    public class MencoderEncoderProvider : EncodingProvider<VideoCodec, VideoType, VideoEncoderType>
+    public class SnowMencoderEncoderProvider : EncodingProvider<VideoCodec, VideoType, VideoEncoderType>
     {
-        public MencoderEncoderProvider()
+        public SnowMencoderEncoderProvider()
         {
             supportedCodecs.Add(VideoCodec.SNOW);
+            supportedTypes.Add(VideoType.AVI);
+            supportedEncoderTypes.Add(VideoEncoderType.SNOW);
+        }
+
+        public override IJobProcessor CreateEncoder(MeGUISettings settings)
+        {
+            return new mencoderEncoder(settings.MencoderPath);
+        }
+    }
+    public class LMP4MencoderEncoderProvider : EncodingProvider<VideoCodec, VideoType, VideoEncoderType>
+    {
+        public LMP4MencoderEncoderProvider()
+        {
             supportedCodecs.Add(VideoCodec.ASP);
             supportedTypes.Add(VideoType.AVI);
             supportedTypes.Add(VideoType.RAWASP);
             supportedEncoderTypes.Add(VideoEncoderType.LMP4);
-            supportedEncoderTypes.Add(VideoEncoderType.SNOW);
         }
 
         public override IJobProcessor CreateEncoder(MeGUISettings settings)

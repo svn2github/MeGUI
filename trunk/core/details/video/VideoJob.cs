@@ -143,7 +143,7 @@ namespace MeGUI
 
         public override string FPSString
         {
-            get { throw new Exception("The method or operation is not implemented."); }
+            get { return ""; }
         }
     }
 }

@@ -51,6 +51,9 @@ namespace MeGUI
     /// </summary>
     public class MainForm : System.Windows.Forms.Form
     {
+        // This instance is to be used by the serializers that can't be passed a MainForm as a parameter
+        public static MainForm Instance;
+
         #region variable declaration
         //        private MeGUIInfo info;
         private System.Windows.Forms.TabPage inputTab;
@@ -515,6 +518,7 @@ namespace MeGUI
 
         public MainForm()
         {
+            Instance = this;
             InitializeComponent();
 
             System.Reflection.Assembly myAssembly = this.GetType().Assembly;
@@ -1291,6 +1295,7 @@ namespace MeGUI
         /// </summary>
         public void constructMeGUIInfo()
         {
+            muxProvider = new MuxProvider(this);
             this.codecs = new CodecManager();
             this.gen = new CommandLineGenerator();
             this.path = System.Windows.Forms.Application.StartupPath;
@@ -1311,7 +1316,6 @@ namespace MeGUI
             jobControl1.MainForm = this;
             jobControl1.loadJobs();
             this.dialogManager = new DialogManager(this);
-            muxProvider = new MuxProvider(this);
 
             //MessageBox.Show(String.Join("|", this.GetType().Assembly.GetManifestResourceNames()));
         }
@@ -1384,7 +1388,7 @@ namespace MeGUI
             PackageSystem.Tools.Register(new CQMEditorTool());
             PackageSystem.Tools.Register(new CalculatorTool());
             PackageSystem.Tools.Register(new ChapterCreatorTool());
-            PackageSystem.Tools.Register(new OneClickConfigTool());
+//            PackageSystem.Tools.Register(new OneClickConfigTool());
             PackageSystem.Tools.Register(new OneClickTool());
             PackageSystem.Tools.Register(new D2VCreatorTool());
             PackageSystem.Tools.Register(new AVCLevelTool());

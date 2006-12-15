@@ -1,5 +1,6 @@
 using System;
 using MeGUI.core.plugins.interfaces;
+using System.Collections.Generic;
 namespace MeGUI
 {
 	/// <summary>
@@ -11,9 +12,10 @@ namespace MeGUI
         {
             return "OneClick";
         }
-        public string VideoProfileName, AudioProfileName, StorageMediumName, ContainerFormatName, AvsProfileName;
-		public bool DontEncodeAudio, SignalAR, Split, AutomaticDeinterlacing;
+        public string VideoProfileName, StorageMediumName, AudioProfileName, AvsProfileName;
+		public bool PrerenderVideo, DontEncodeAudio, SignalAR, Split, AutomaticDeinterlacing;
 		public long OutputResolution, Filesize, SplitSize;
+        public string[] ContainerCandidates;
 
         public GenericSettings baseClone()
         {
@@ -27,18 +29,19 @@ namespace MeGUI
 
 		public OneClickSettings()
 		{
-			VideoProfileName = "default";
-			AudioProfileName = "default";
-			StorageMediumName = "default";
-			ContainerFormatName = "default";
-            AvsProfileName = "default";
+			VideoProfileName = "";
+			AudioProfileName = "";
+			StorageMediumName = "";
+            AvsProfileName = "";
             AutomaticDeinterlacing = true;
+            PrerenderVideo = false;
 			DontEncodeAudio = false;
 			SignalAR = false;
 			Split = false;
 			OutputResolution = 640;
 			Filesize = -1;
 			SplitSize = -1;
+            ContainerCandidates = new string[0];
 		}
 	}
 }

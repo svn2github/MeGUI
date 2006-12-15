@@ -96,8 +96,22 @@ namespace MeGUI.core.details.video
 
         public string SelectedProfile
         {
-            get { return impl.avsProfile.SelectedItem.ToString(); }
-            set { impl.avsProfile.SelectedItem = value; }
+            get { try { return impl.avsProfile.SelectedItem.ToString(); } catch (Exception) { return null; } }
+            set
+            {
+                if (string.IsNullOrEmpty(value)) impl.avsProfile.SelectedIndex = -1;
+                impl.avsProfile.SelectedItem = value;
+            }
+        }
+
+        public Profile[] Profiles
+        {
+            get
+            {
+                Profile[] val = new Profile[mainForm.Profiles.Profiles(profileType).Values.Count];
+                mainForm.Profiles.Profiles(profileType).Values.CopyTo(val, 0);
+                return val;
+            }
         }
 
         public void RefreshProfiles()
@@ -189,13 +203,29 @@ namespace MeGUI.core.details.video
     public class MultipleConfigurersHandler<TProfileSettings, TInfo, TCodec, TEncoder>
         where TProfileSettings : GenericSettings
     {
+        ProfilesControlHandler<TProfileSettings, TInfo> pHandler;
         public MultipleConfigurersHandler(ComboBox impl)
         {
             this.impl = impl;
+            impl.SelectedIndexChanged += new EventHandler(impl_SelectedIndexChanged);
+        }
+
+        void impl_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            foreach (Profile p in pHandler.Profiles)
+            {
+                if (CurrentSettingsProvider.IsSameType((TProfileSettings)p.BaseSettings))
+                {
+                    pHandler.SelectedProfile = p.Name;
+                    return;
+                }
+            }
+            pHandler.SelectedProfile = null;
         }
 
         public void Register(ProfilesControlHandler<TProfileSettings, TInfo> pHandler)
         {
+            this.pHandler = pHandler;
             pHandler.ProfileChanged += new SelectedProfileChangedEvent(ProfileChanged);
             pHandler.RefreshProfiles();
         }

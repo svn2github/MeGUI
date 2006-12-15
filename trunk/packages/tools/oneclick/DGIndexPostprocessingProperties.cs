@@ -70,30 +70,25 @@ namespace MeGUI
 		/// <summary>
 		/// gets / sets the container of the output
 		/// </summary>
-		[XmlIgnore]
+        [XmlIgnore()]
         public ContainerType Container
 		{
 			get {return container;}
 			set {container = value;}
 		}
 
-        public string ContainerType
+        public string ContainerTypeString
         {
             get { return Container.ID; }
             set
             {
-                try
+                foreach (ContainerType t in MainForm.Instance.MuxProvider.GetSupportedContainers())
                 {
-                    Container = ContainerManager.ContainerTypes[value];
+                    if (t.ID == value) { Container = t; return; }
                 }
-                catch (Exception e)
-                {
-                    throw new Exception("Container '" + value + "' not registered.", e);
-                }
+                Container = null;
             }
         }
-
-        
         /// <summary>
 		/// gets / sets the output size
 		/// </summary>

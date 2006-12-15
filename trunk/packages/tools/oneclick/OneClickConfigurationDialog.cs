@@ -1,3 +1,4 @@
+#if NONE
 using System;
 using System.IO;
 using System.Collections.Generic;
@@ -10,42 +11,7 @@ using System.Windows.Forms;
 
 namespace MeGUI
 {
-    public class OneClickConfigTool : MeGUI.core.plugins.interfaces.ITool
-    {
 
-        #region ITool Members
-
-        public string Name
-        {
-            get { return "One Click configuration"; }
-        }
-
-        public void Run(MainForm info)
-        {
-#warning fix oneclick tool
-/*            using (OneClickConfigurationDialog dialog = new OneClickConfigurationDialog(
-                info.Video.VideoProfile.SelectedIndex, info.Audio.AudioProfile.SelectedIndex, info))
-            {
-                dialog.ShowDialog();
-            }*/
-        }
-
-        public Shortcut[] Shortcuts
-        {
-            get { return new Shortcut[] {}; }
-        }
-
-        #endregion
-
-        #region IIDable Members
-
-        public string ID
-        {
-            get { return "one_click_config"; }
-        }
-
-        #endregion
-    }
     public partial class OneClickConfigurationDialog : Form
     {
         private MainForm mainForm;
@@ -314,4 +280,41 @@ namespace MeGUI
             }
         }
     }
+    public class OneClickConfigTool : MeGUI.core.plugins.interfaces.ITool
+    {
+
+        #region ITool Members
+
+        public string Name
+        {
+            get { return "One Click configuration"; }
+        }
+
+        public void Run(MainForm info)
+        {
+#warning fix oneclick tool
+            /*            using (OneClickConfigurationDialog dialog = new OneClickConfigurationDialog(
+                info.Video.VideoProfile.SelectedIndex, info.Audio.AudioProfile.SelectedIndex, info))
+            {
+                dialog.ShowDialog();
+            }*/
+        }
+
+        public Shortcut[] Shortcuts
+        {
+            get { return new Shortcut[] { }; }
+        }
+
+        #endregion
+
+        #region IIDable Members
+
+        public string ID
+        {
+            get { return "one_click_config"; }
+        }
+
+        #endregion
+    }
 }
+#endif

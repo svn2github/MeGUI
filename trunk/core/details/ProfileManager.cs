@@ -91,6 +91,8 @@ namespace MeGUI
 
         private void loadSelectedProfiles()
         {
+            string file = path + @"\profiles\SelectedProfiles.xml";
+            if (!File.Exists(file)) return;
             using (Stream s = File.OpenRead(path + @"\profiles\SelectedProfiles.xml"))
             {
                 try

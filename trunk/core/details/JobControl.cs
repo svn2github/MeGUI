@@ -1092,6 +1092,10 @@ namespace MeGUI.core.details
             {
                 Job job = (Job)jobs[item.Text];
                 job.Position = position;
+                if (job.Next != null) job.NextJobName = job.Next.Name;
+                else job.NextJobName = "";
+                if (job.Previous != null) job.PreviousJobName = job.Previous.Name;
+                else job.PreviousJobName = "";
                 this.mainForm.JobUtil.saveJob(job, mainForm.MeGUIPath);
                 position++;
             }
@@ -1141,30 +1145,7 @@ namespace MeGUI.core.details
                 codec = next.CodecString;
                 encodingMode = next.EncodingMode;
                 fps = next.FPSString;
-/*                if (next is VideoJob)
-                {
-                    codec = ((VideoJob)next).CodecString;
-                    encodingMode = ((VideoJob)next).EncodingMode;
-                    if (next.Status == JobStatus.DONE)
-                        fps = next.FPS.ToString();
-                }
-                else if (next is AudioJob)
-                {
-                    codec = ((AudioJob)next).CodecString;
-                    encodingMode = ((AudioJob)next).EncodingMode;
-                }
-                else if (next is MuxJob)
-                {
-                    encodingMode = "mux";
-                }
-                else if (next is IndexJob)
-                {
-                    encodingMode = "idx";
-                }
-                else if (next is AviSynthJob)
-                {
-                    encodingMode = "avs";
-                }*/
+
                 switch (next.Status)
                 {
                     case JobStatus.ABORTED:
@@ -1180,6 +1161,13 @@ namespace MeGUI.core.details
                 item.SubItems.AddRange(new string[] { codec, encodingMode, next.StatusString, start, end, fps });
                 this.queueListView.Items.Add(item);
                 next = null;
+            }
+            foreach (Job job in jobs.Values)
+            {
+                try { job.Next = jobs[job.NextJobName]; }
+                catch (Exception) { job.Next = null; job.NextJobName = null; }
+                try { job.Previous = jobs[job.PreviousJobName]; }
+                catch (Exception) { job.Previous = null; job.PreviousJobName = null; }
             }
         }
         #endregion
