@@ -163,14 +163,12 @@
     <Content Include="MessageBoxExLib.dll" />
     <Compile Include="core\details\audio\AudioCodecSettings.cs" />
     <Compile Include="core\details\audio\AudioConfigurationPanel.cs">
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="core\details\audio\AudioConfigurationPanel.Designer.cs">
       <DependentUpon>AudioConfigurationPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="core\details\audio\AudioJob.cs" />
     <Compile Include="Changelog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Changelog.Designer.cs">
       <DependentUpon>Changelog.cs</DependentUpon>
@@ -189,7 +187,6 @@
     <Compile Include="core\details\MeGUIInfo.cs" />
     <Compile Include="core\details\MeGUISettings.cs" />
     <Compile Include="core\details\mux\baseMuxWindow.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="core\details\mux\Muxer.cs" />
     <Compile Include="core\details\mux\MuxJob.cs" />
@@ -198,7 +195,6 @@
     <Compile Include="core\details\mux\MuxProvider.cs" />
     <Compile Include="core\details\mux\MuxSettings.cs" />
     <Compile Include="core\details\mux\MuxWindow.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="core\details\mux\MuxWindow.Designer.cs">
       <DependentUpon>MuxWindow.cs</DependentUpon>
@@ -208,7 +204,6 @@
     <Compile Include="core\details\StatusUpdate.cs" />
     <Compile Include="core\details\video\VideoCodecSettings.cs" />
     <Compile Include="core\details\video\VideoConfigurationPanel.cs">
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="core\details\video\VideoEncoder.cs" />
     <Compile Include="core\details\video\VideoEncodingComponent.cs">
@@ -219,7 +214,6 @@
     </Compile>
     <Compile Include="core\details\video\VideoJob.cs" />
     <Compile Include="core\gui\AdaptiveMuxWindow.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="core\gui\AdaptiveMuxWindow.Designer.cs">
       <DependentUpon>AdaptiveMuxWindow.cs</DependentUpon>
@@ -231,13 +225,11 @@
       <DependentUpon>AudioEncodingComponent.cs</DependentUpon>
     </Compile>
     <Compile Include="core\gui\AviSynthProfileConfigPanel.cs">
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="core\gui\AviSynthProfileConfigPanel.Designer.cs">
       <DependentUpon>AviSynthProfileConfigPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="core\gui\FileBar.cs">
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="core\gui\FileBar.Designer.cs">
       <DependentUpon>FileBar.cs</DependentUpon>
@@ -245,14 +237,15 @@
     <Compile Include="core\gui\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="core\gui\PackageManagerForm.cs">
+    <Compile Include="..\old\megui_profiles\core\gui\PackageManagerForm.cs">
       <SubType>Form</SubType>
+      <Link>core\gui\PackageManagerForm.cs</Link>
     </Compile>
-    <Compile Include="core\gui\PackageManagerForm.Designer.cs">
+    <Compile Include="..\old\megui_profiles\core\gui\PackageManagerForm.Designer.cs">
       <DependentUpon>PackageManagerForm.cs</DependentUpon>
+      <Link>core\gui\PackageManagerForm.Designer.cs</Link>
     </Compile>
     <Compile Include="core\gui\ProfileControl.cs">
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="core\gui\ProfileControl.Designer.cs">
       <DependentUpon>ProfileControl.cs</DependentUpon>
@@ -264,17 +257,13 @@
       <DependentUpon>ProfilePorter.cs</DependentUpon>
     </Compile>
     <Compile Include="core\gui\Profiles.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="core\gui\ProgressWindow.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="core\gui\ProgressWindowInfo.cs" />
     <Compile Include="core\gui\SettingsForm.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="core\gui\VideoPlayer.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="core\gui\ZonesControl.cs">
       <SubType>UserControl</SubType>
@@ -303,19 +292,16 @@
     <Compile Include="core\util\Shutdown.cs" />
     <Compile Include="core\util\VideoUtil.cs" />
     <Compile Include="packages\audio\audx\AudXConfigurationPanel.cs">
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="packages\audio\audx\AudXConfigurationPanel.Designer.cs">
       <DependentUpon>AudXConfigurationPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="packages\audio\faac\faacConfigurationPanel.cs">
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="packages\audio\faac\faacConfigurationPanel.Designer.cs">
       <DependentUpon>faacConfigurationPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="packages\audio\ffac3\AC3ConfigurationPanel.cs">
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="packages\audio\ffac3\AC3ConfigurationPanel.Designer.cs">
       <DependentUpon>AC3ConfigurationPanel.cs</DependentUpon>
@@ -323,34 +309,29 @@
     <Compile Include="packages\audio\ffac3\AC3Settings.cs" />
     <Compile Include="packages\audio\faac\FaacSettings.cs" />
     <Compile Include="packages\audio\ffmp2\MP2ConfigurationPanel.cs">
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="packages\audio\ffmp2\MP2ConfigurationPanel.Designer.cs">
       <DependentUpon>MP2ConfigurationPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="packages\audio\ffmp2\MP2Settings.cs" />
     <Compile Include="packages\audio\lame\lameConfigurationPanel.cs">
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="packages\audio\lame\lameConfigurationPanel.Designer.cs">
       <DependentUpon>lameConfigurationPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="packages\audio\naac\NeroAACSettings.cs" />
     <Compile Include="packages\audio\naac\neroConfigurationPanel.cs">
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="packages\audio\naac\neroConfigurationPanel.Designer.cs">
       <DependentUpon>neroConfigurationPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="packages\audio\vorbis\OggVorbisConfigurationPanel.cs">
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="packages\audio\vorbis\OggVorbisConfigurationPanel.Designer.cs">
       <DependentUpon>OggVorbisConfigurationPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="packages\audio\vorbis\OggVorbisSettings.cs" />
     <Compile Include="packages\audio\waac\WinAmpAACConfigurationPanel.cs">
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="packages\audio\waac\WinAmpAACConfigurationPanel.Designer.cs">
       <DependentUpon>WinAmpAACConfigurationPanel.cs</DependentUpon>
@@ -363,11 +344,9 @@
     <Compile Include="packages\AviSynthProcessor.cs" />
     <Compile Include="packages\AviSynthSettings.cs" />
     <Compile Include="packages\AviSynthWindow.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="packages\AvisynthWrapper.cs" />
     <Compile Include="packages\avsConfigurationDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="packages\mux\avi\DivXMuxer.cs" />
     <Compile Include="packages\mux\mkv\MkvMergeMuxer.cs" />
@@ -375,38 +354,30 @@
     <Compile Include="packages\reader\d2v\d2vReader.cs" />
     <Compile Include="packages\reader\mediainfo\MediaInfoFile.cs" />
     <Compile Include="packages\tools\autoencode\AutoEncodeDefaults.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="packages\tools\autoencode\AutoEncodeDefaults.Designer.cs">
       <DependentUpon>AutoEncodeDefaults.cs</DependentUpon>
     </Compile>
     <Compile Include="packages\tools\autoencode\AutoEncodeDefaultsSettings.cs" />
     <Compile Include="packages\tools\autoencode\AutoEncodeWindow.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="packages\tools\calculator\Calculator.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="packages\tools\chaptercreator\ChapterCreator.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="packages\tools\cqmeditor\QuantizerMatrixDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="packages\tools\d2vcreator\DGIndexer.cs" />
     <Compile Include="packages\tools\d2vcreator\IndexJob.cs" />
     <Compile Include="packages\tools\d2vcreator\VobinputWindow.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="packages\tools\oneclick\DGIndexPostprocessingProperties.cs" />
     <Compile Include="packages\tools\oneclick\OneClickConfigPanel.cs">
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="packages\tools\oneclick\OneClickConfigPanel.Designer.cs">
       <DependentUpon>OneClickConfigPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="packages\tools\oneclick\OneClickConfigurationDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="packages\tools\oneclick\OneClickConfigurationDialog.Designer.cs">
       <DependentUpon>OneClickConfigurationDialog.cs</DependentUpon>
@@ -414,7 +385,6 @@
     <Compile Include="packages\tools\oneclick\OneClickProfile.cs" />
     <Compile Include="packages\tools\oneclick\OneClickSettings.cs" />
     <Compile Include="packages\tools\oneclick\OneClickWindow.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="packages\tools\oneclick\OneClickWindow.Designer.cs">
       <DependentUpon>OneClickWindow.cs</DependentUpon>
@@ -422,27 +392,23 @@
     <Compile Include="packages\tools\vobsub\SubtitleIndexJob.cs" />
     <Compile Include="packages\tools\vobsub\VobSubIndexer.cs" />
     <Compile Include="packages\tools\vobsub\VobSubIndexWindow.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="packages\tools\vobsub\VobSubIndexWindow.Designer.cs">
       <DependentUpon>VobSubIndexWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="packages\video\lmp4\lavcConfigurationPanel.cs">
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="packages\video\lmp4\lavcConfigurationPanel.Designer.cs">
       <DependentUpon>lavcConfigurationPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="packages\video\lmp4\lavcSettings.cs" />
     <Compile Include="packages\video\snow\snowConfigurationPanel.cs">
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="packages\video\snow\snowConfigurationPanel.Designer.cs">
       <DependentUpon>snowConfigurationPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="packages\video\snow\snowSettings.cs" />
     <Compile Include="packages\video\x264\x264ConfigurationPanel.cs">
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="packages\video\x264\x264ConfigurationPanel.Designer.cs">
       <DependentUpon>x264ConfigurationPanel.cs</DependentUpon>
@@ -450,7 +416,6 @@
     <Compile Include="packages\video\x264\x264Encoder.cs" />
     <Compile Include="packages\video\x264\x264Settings.cs" />
     <Compile Include="packages\video\xvid\xvidConfigurationPanel.cs">
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="packages\video\xvid\xvidConfigurationPanel.Designer.cs">
       <DependentUpon>xvidConfigurationPanel.cs</DependentUpon>
@@ -469,7 +434,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CropDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="DeinterlaceFilter.cs" />
     <Compile Include="DirectShow.cs" />
@@ -487,7 +451,6 @@
     </Compile>
     <Compile Include="SourceDetector.cs" />
     <Compile Include="SourceDetectorConfigWindow.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SourceDetectorConfigWindow.Designer.cs">
       <DependentUpon>SourceDetectorConfigWindow.cs</DependentUpon>
@@ -513,9 +476,10 @@
       <DependentUpon>Form1.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="core\gui\PackageManagerForm.resx">
+    <EmbeddedResource Include="..\old\megui_profiles\core\gui\PackageManagerForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>PackageManagerForm.cs</DependentUpon>
+      <Link>core\gui\PackageManagerForm.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="core\gui\ProfileControl.resx">
       <DependentUpon>ProfileControl.cs</DependentUpon>
