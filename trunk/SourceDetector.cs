@@ -16,8 +16,17 @@ namespace MeGUI
 	/// Summary description for Form1.
 	/// </summary>
 	public delegate void UpdateSourceDetectionStatus(int numDone, int total); // catches the UpdateGUI events fired from the encoder
-    public delegate void FinishedAnalysis(string text, DeinterlaceFilter[] filters, bool error, string errorMessage);
-    
+    public delegate void FinishedAnalysis(SourceInfo info, bool error, string errorMessage);
+
+    public class SourceInfo
+    {
+        public FieldOrder fieldOrder;
+        public SourceType sourceType;
+        public int decimateM;
+        public bool majorityFilm;
+        public bool isAnime;
+    }
+
     public enum SourceType
     {
         UNKNOWN, NOT_ENOUGH_SECTIONS,
@@ -27,7 +36,7 @@ namespace MeGUI
 
     public enum FieldOrder
     {
-        UNKNOWN, VARIABLE, TFF, BFF
+        UNKNOWN, TFF, BFF, VARIABLE, 
     };
 
     public class SourceDetector
@@ -679,7 +688,7 @@ namespace MeGUI
         {
             if (error)
             {
-                finishedAnalysis(null, null, true, errorMessage);
+                finishedAnalysis(null, true, errorMessage);
                 return;
             }
 
@@ -692,74 +701,13 @@ namespace MeGUI
                 d2vFileName.Length == 0) // We are stuck for field order information, lets just go for what we have most of
                 fieldOrder = (bffCount > tffCount) ? FieldOrder.BFF : FieldOrder.TFF;
 
-            #region script generation
-            if (type == SourceType.NOT_ENOUGH_SECTIONS)
-            {
-                filters.Add(new DeinterlaceFilter(
-                    "Do nothing (Source Detection is stuck)",
-                    "#Not doing anything because I have no idea what is going on"));
-            }
-            else if (type == SourceType.PROGRESSIVE)
-            {
-                filters.Add(new DeinterlaceFilter(
-                    "Do nothing",
-                    "#Not doing anything because the source is progressive"));
-            }
-            else if (type == SourceType.DECIMATING)
-            {
-                ScriptServer.AddTDecimate(decimateM, filters);
-            }
-            else if (type == SourceType.INTERLACED)
-            {
-                ScriptServer.AddTDeint(fieldOrder, filters, true, true);
-                ScriptServer.AddTDeint(fieldOrder, filters, true, false);
-                if (fieldOrder != FieldOrder.VARIABLE)
-                    ScriptServer.AddLeakDeint(fieldOrder, filters);
-                ScriptServer.AddTMC(fieldOrder, filters);
-                ScriptServer.AddFieldDeint(fieldOrder, filters, true, true);
-                ScriptServer.AddFieldDeint(fieldOrder, filters, true, false);
-            }
-            else if (type == SourceType.FILM)
-            {
-                ScriptServer.AddTIVTC(d2vFileName, isAnime, false, true, false, fieldOrder, filters);
-                ScriptServer.AddIVTC(fieldOrder, false, true, filters);
-            }
-            else if (type == SourceType.HYBRID_FILM_INTERLACED ||
-                type == SourceType.HYBRID_PROGRESSIVE_FILM)
-            {
-                ScriptServer.AddTIVTC(d2vFileName, isAnime, true, majorityFilm, true,
-                    fieldOrder, filters);
-                ScriptServer.AddTIVTC(d2vFileName, isAnime, true, majorityFilm, false,
-                    fieldOrder, filters);
-                ScriptServer.AddIVTC(fieldOrder, true, majorityFilm, filters);
-            }
-            else if (type == SourceType.HYBRID_PROGRESSIVE_INTERLACED)
-            {
-                if (usingPortions)
-                {
-                    ScriptServer.AddTDeint(fieldOrder, filters, true, true);
-                    ScriptServer.AddTDeint(fieldOrder, filters, true, false);
-                    if (fieldOrder != FieldOrder.VARIABLE)
-                        ScriptServer.AddLeakDeint(fieldOrder, filters);
-                    ScriptServer.AddTMC(fieldOrder, filters);
-                    ScriptServer.AddFieldDeint(fieldOrder, filters, true, true);
-                    ScriptServer.AddFieldDeint(fieldOrder, filters, true, false);
-                    ScriptServer.Portionize(filters, trimmedFilteredLine);
-                }
-                else
-                {
-                    ScriptServer.AddTDeint(fieldOrder, filters, false, true);
-                    ScriptServer.AddTDeint(fieldOrder, filters, false, false);
-                    ScriptServer.AddFieldDeint(fieldOrder, filters, false, true);
-                    ScriptServer.AddFieldDeint(fieldOrder, filters, false, false);
-                    if (fieldOrder != FieldOrder.VARIABLE)
-                        ScriptServer.AddLeakDeint(fieldOrder, filters);
-                    ScriptServer.AddTMC(fieldOrder, filters);
-                }
-            }
-            #endregion
+            SourceInfo info = new SourceInfo();
+            info.decimateM = decimateM;
+            info.fieldOrder = fieldOrder;
+            info.majorityFilm = majorityFilm;
+           
 
-            finishedAnalysis(analysis, filters.ToArray(), false, null);
+            finishedAnalysis(info, false, null);
 
         }
         #endregion

@@ -1,3 +1,9 @@
+0.2.4.0001
+Commit by berrinam:
+    - Fixed Guide link so it points to http://mewiki.project357.com/wiki/Main_Page
+    - Fixed bug when loading d2v files into avs creator
+    - New deinterlacing options in avs creator
+
 0.2.4.0000
 Commit by Sharx1976:
     - New version number

@@ -39,11 +39,45 @@ namespace MeGUI
         HeavyNoise
     }
 
+    public enum UserSourceType
+    {
+        [EnumTitle("Progressive", SourceType.PROGRESSIVE)]
+        Progressive,
+        [EnumTitle("Interlaced", SourceType.INTERLACED)]
+        Interlaced,
+        [EnumTitle("Film", SourceType.FILM)]
+        Film,
+        [EnumTitle("M-in-5 decimation required", SourceType.DECIMATING)]
+        Decimating,
+        [EnumTitle("Hybrid film/interlaced. Mostly film", SourceType.HYBRID_FILM_INTERLACED)]
+        HybridFilmInterlaced,
+        [EnumTitle("Hybrid film/interlaced. Mostly interlaced", SourceType.HYBRID_FILM_INTERLACED)]
+        HybridInterlacedFilm,
+        [EnumTitle("Partially interlaced", SourceType.HYBRID_PROGRESSIVE_INTERLACED)]
+        HybridProgressiveInterlaced,
+        [EnumTitle("Partially film", SourceType.HYBRID_PROGRESSIVE_FILM)]
+        HybridProgressiveFilm
+    }
+
+    public enum UserFieldOrder
+    {
+        [EnumTitle("Top Field First", FieldOrder.TFF)]
+        TFF,
+        [EnumTitle("Bottom Field First", FieldOrder.BFF)]
+        BFF,
+        [EnumTitle("Varying field order", FieldOrder.VARIABLE)]
+        Varying
+    }
+
     public class ScriptServer
     {
         public static readonly IList ListOfResizeFilterType = EnumProxy.CreateArray(typeof(ResizeFilterType));
 
         public static readonly IList ListOfDenoiseFilterType = EnumProxy.CreateArray(typeof(DenoiseFilterType));
+
+        public static readonly IList ListOfSourceTypes = EnumProxy.CreateArray(typeof(UserSourceType));
+
+        public static readonly IList ListOfFieldOrders = EnumProxy.CreateArray(typeof(UserFieldOrder));
 
         public static string CreateScriptFromTemplate(string template, string inputLine, string cropLine, string resizeLine, string denoiseLines, string deinterlaceLines)
         {
@@ -122,6 +156,56 @@ namespace MeGUI
                     denoiseLines = "#denoise - " + p;
             }
             return denoiseLines;
+        }
+
+        public static List<DeinterlaceFilter> GetDeinterlacers(SourceInfo info)
+        {
+            List<DeinterlaceFilter> filters = new List<DeinterlaceFilter>();
+            if (info.sourceType == SourceType.PROGRESSIVE)
+            {
+                filters.Add(new DeinterlaceFilter(
+                    "Do nothing",
+                    "#Not doing anything because the source is progressive"));
+            }
+            else if (info.sourceType == SourceType.DECIMATING)
+            {
+                ScriptServer.AddTDecimate(info.decimateM, filters);
+            }
+            else if (info.sourceType == SourceType.INTERLACED)
+            {
+                ScriptServer.AddTDeint(info.fieldOrder, filters, true, true);
+                ScriptServer.AddTDeint(info.fieldOrder, filters, true, false);
+                if (info.fieldOrder != FieldOrder.VARIABLE)
+                    ScriptServer.AddLeakDeint(info.fieldOrder, filters);
+                ScriptServer.AddTMC(info.fieldOrder, filters);
+                ScriptServer.AddFieldDeint(info.fieldOrder, filters, true, true);
+                ScriptServer.AddFieldDeint(info.fieldOrder, filters, true, false);
+            }
+            else if (info.sourceType == SourceType.FILM)
+            {
+                ScriptServer.AddTIVTC("", info.isAnime, false, true, false, info.fieldOrder, filters);
+                ScriptServer.AddIVTC(info.fieldOrder, false, true, filters);
+            }
+            else if (info.sourceType == SourceType.HYBRID_FILM_INTERLACED ||
+                info.sourceType == SourceType.HYBRID_PROGRESSIVE_FILM)
+            {
+                ScriptServer.AddTIVTC("", info.isAnime, true, info.majorityFilm, true,
+                    info.fieldOrder, filters);
+                ScriptServer.AddTIVTC("", info.isAnime, true, info.majorityFilm, false,
+                    info.fieldOrder, filters);
+                ScriptServer.AddIVTC(info.fieldOrder, true, info.majorityFilm, filters);
+            }
+            else if (info.sourceType == SourceType.HYBRID_PROGRESSIVE_INTERLACED)
+            {
+                ScriptServer.AddTDeint(info.fieldOrder, filters, false, true);
+                ScriptServer.AddTDeint(info.fieldOrder, filters, false, false);
+                ScriptServer.AddFieldDeint(info.fieldOrder, filters, false, true);
+                ScriptServer.AddFieldDeint(info.fieldOrder, filters, false, false);
+                if (info.fieldOrder != FieldOrder.VARIABLE)
+                    ScriptServer.AddLeakDeint(info.fieldOrder, filters);
+                ScriptServer.AddTMC(info.fieldOrder, filters);
+            }
+            return filters;
         }
 
         #region deinterlacing snippets

@@ -1196,7 +1196,7 @@ namespace MeGUI
         }
 
 
-        public void finishedAnalysis(string text, DeinterlaceFilter[] filters, bool error, string errorMessage)
+        public void finishedAnalysis(SourceInfo info, bool error, string errorMessage)
         {
             if (error)
             {
