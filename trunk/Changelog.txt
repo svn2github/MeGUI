@@ -1,3 +1,7 @@
+0.2.4.0000
+Commit by Sharx1976:
+    - New version number
+
 0.2.3.2193: *Development version*
 Commit by berrinam
 	- Merged the refactor with 2192. Still a few bugs around the place. Consult readme.txt for details of the refactor.
