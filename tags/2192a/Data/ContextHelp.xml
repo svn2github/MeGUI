@@ -1,0 +1,582 @@
+<?xml version="1.0"?>
+<ContextHelp version="0.3" Author="LiFers" LastUpdated="15-1-06">
+	<Codec name="x264">
+		<!--To Do List: 
+1 Use info from x264 help  -  DONE
+2: Use info from MeGUI  - No Info Here
+3: Begin Doom9 perusal (x264 GUIDE) - DONE
+4: Begin Doom9 perusal (forum) - commencing
+4: Clear up remaining with Devs
+-->
+		<!--Frame type options:-->
+		<keyint name="Maximum Key Frame Interval">
+			<Advanced>
+Defines the maximum size of a Group of Pictures. A frame in a GOP cannot reference
+frames in other GOPs, and in doing so enables seeking and random access. GOP sizes
+are dynamically calculated during encoding to maximise compression, however specifying
+a maximum GOP prevents any reduction of seekability.</Advanced>
+			<Basic>Maximum GOP size</Basic>
+			<Recommended>250</Recommended>
+			<Default>250</Default>
+		</keyint>
+		<min-keyint name="Minimum Key Frame Interval">
+			<Advanced>
+Defines the minimum size of a Group of Pictures. A frame in a GOP cannot reference
+frames in other GOPs, and in doing so enables seeking and random access.
+GOP sizes are dynamically calculated during encoding to maximise compression,
+however specifying a minimum GOP will help improve compression in high motion scenes.</Advanced>
+			<Basic>Minimum GOP size</Basic>
+			<Recommended>25</Recommended>
+			<Default>25</Default>
+		</min-keyint>
+		<scenecut name="Scene Change Sensitivity">
+			<Advanced>
+Modifies the sensitivity to scene changes. Scene change detection is useful as it forces
+the use of an I-frame at a scene change, leading to better looking cuts and overall
+improvement in quality.</Advanced>
+			<Basic>How aggressively scene changes are detected</Basic>
+			<Recommended>40</Recommended>
+			<Default>40</Default>
+		</scenecut>
+		<bframes name="Maximum B-frames">
+			<Advanced>
+Bi-directional Predictive Frames are highly compressed as they only store the data that
+has changed from the previous frame or that is different from the next frame. B-frames
+generally have less quality than I- or P- frames but can increase the overall quality of the
+video by storing data very efficiently. A setting of 2 to 3 will usually provide the best
+overall quality while allowing significant compression advantages.</Advanced>
+			<Basic>Maximum number of B-frames between I and P frames</Basic>
+			<Recommended>2 to 3</Recommended>
+			<Default>0</Default>
+		</bframes>
+		<!-- WARNING DOUBLE NEGATIVE -->
+		<no-b-adapt name="Adaptive B-frames">
+			<Advanced>
+Enables x264 to make adaptive decisions on where B-frames should be used, decreasing
+the number of consecutive B-frames where it makes sense.</Advanced>
+			<Basic>Enables adaptive B-frame decisions</Basic>
+			<Recommended>Enabled</Recommended>
+			<Default>Enabled</Default>
+		</no-b-adapt>
+		<b-bias name="B-frame Bias">
+			<Advanced>
+Positive values increase the likelihood that a B-frame will be used, negative values decrease
+the likelihood, without violating the "Maximum B-frames" setting.</Advanced>
+			<Basic>Influences how often B-frames are used</Basic>
+			<Recommended>0</Recommended>
+			<Default>0</Default>
+		</b-bias>
+		<b-pyramid name="B-frame Pyramid">
+			<Advanced>
+Allows B-frames to be used as references for other B-frames, increasing compression efficiency
+when 2 or more B-frames are used.</Advanced>
+			<Basic>Keep some B-frames as references</Basic>
+			<Recommended>Enabled</Recommended>
+			<Default>Disabled</Default>
+		</b-pyramid>
+		<!--WARNING DOUBLE NEGATIVE-->
+		<no-cabac name="Encode CABAC">
+			<Advanced>
+CABAC is a clever technique of losslessly compressing the syntax elements of the video
+stream, knowing the probabilities of the elements in a given context. CABAC uses more
+CPU for encoding and decoding. When disabled, video is encoded using CAVLC (Context
+Adaptive Variable Length Encoding) which is less CPU intensive but provides less compression.
+Note: Some advanced features will not be available when encoding with CAVLC.</Advanced>
+			<Basic>Encode with Context Adaptive Binary Arithmetic Coding to increase compression</Basic>
+			<Recommended>Enabled</Recommended>
+			<Default>Enabled</Default>
+		</no-cabac>
+		<ref name="Reference Frames">
+			<Advanced>
+Determines how many previous frames can be referenced by a P- or B-frame. Encoding slows
+as more frames are used. The maximum value is 16, however quality increases become marginal
+with more than 5 reference frames.</Advanced>
+			<Basic>Number of reference frames</Basic>
+			<Recommended>1 to 5</Recommended>
+			<Default>1</Default>
+		</ref>
+		<nf name="Deblocking (in loop) Filter">
+			<Advanced>
+MPEG-4 AVC defines video with a grid of squares representing moving data, the in loop deblocking
+filter detects the edges of these squares in order to smooth them. In loop deblocking is part of the
+normal operation of MPEG-4 AVC and should not be disabled.</Advanced>
+			<Basic>Disable deblocking (in loop) filter</Basic>
+			<Recommended>Enabled</Recommended>
+			<Default>Enabled</Default>
+		</nf>
+		<filter name="Deblocking (in loop) Filter Strength">
+			<Advanced>
+Deblocking strength is computed for each macroblock according to the quantizer of the macroblock
+and that of its neighbours. Alpha is used to determine whether the frontier of an encoded macroblock
+is blocky or if it's actually a detail. It works like a threshold. Beta also works like a threshold, but is
+used to insure that the picture is homogenous on both sides of the frontier in order to separate detail
+from blockiness. When blocks are detected, alpha is used to decide the strength (maximum allowed
+modification of the pixel). Beta applies slight modification to this strength if the macroblock is homogenous. </Advanced>
+			<Basic>
+Deblocking Strength : Deblocking Threshold (strength : threshold). The Deblocking Threshold
+determines how easily the filter detects blocks. The Deblocking Strength determines how strong
+detected blocks should be deblocked. The default provides an accurate mix of deblocking while
+preserving detail. Adjustments should range from -3 to 3 (lower values indicate less deblocking.
+Negative values do not indicate the deblocking effect is reversed). Note: Setting values too high
+will result in loss of detail and texture or smearing. Setting the value to low may leave sharp edges
+or mosquito noise. There should be a positive correlation between each setting, ie. if you apply
+heavier deblocking, you should increase the threshold so that more data is deblocked.</Basic>
+			<Recommended>0:0</Recommended>
+			<Default>0:0</Default>
+		</filter>
+		<!--Reate control options:-->
+		<qp name="Constant Quantizer">
+			<Advanced>
+In Constant Quantizer mode, each frame is encoded with the same mathematical quality
+(or quantizer) as every other frame, regardless of the bit rate required to do so, applying
+a constant mathematical quality to the entire video sequence. Lower values indicate lower
+compression (higher quality). There is no way to predict file size in this mode. Note: Values
+under 15 are only useful for archival/reproduction quality and values over 40 show considerable
+loss in quality.</Advanced>
+			<Basic>Encode in Constant Quality mode (0 = lossless) regardless of bit rate. Note: This mode only requires 1 pass.</Basic>
+			<Recommended>24 to 28</Recommended>
+			<Default>26</Default>
+		</qp>
+		<bitrate name="Average Bit Rate">
+			<Advanced>
+In Average (Variable) Bit Rate mode (VBR), each frame is encoded at the lowest possible
+quantizer (best quality) while maintaining the average bit rate specified over time. File size
+can be predicted in this mode. Note: Other VBV settings determine the level of change in
+local bit rate used to compensate for changing scene complexity.</Advanced>
+			<Basic>Sets the average bit rate that the file is to be encoded in. Note: this mode performs best in 2 passes.</Basic>
+			<Recommended>N/A</Recommended>
+			<Default>N/A</Default>
+		</bitrate>
+		<crf name="Quality Based VBR">
+			<Advanced>
+In Constant Quality Based VBR mode, each frame is encoded with almost the same mathematical
+quality (or quantizer) as every other frame, taking motion (rate control) into account. This mode
+improves visual quality by encoding high motion scenes with slightly higher compression (lower
+quality) and  low motion scenes with slightly lower compression (higher quality). While the quantizer
+(mathematical quality) may fluctuate over time, less bits are spent on scenes where high speed fine
+detail would be invisible, and more bits are spent in scenes where more static fine detail is more visible.
+This applies a constant visual quality to the entire video sequence. Lower values indicate lower
+compression (higher quality). There is no way to predict file size in this mode. Note: Values under
+15 are only useful for archival/reproduction quality and values over 40 show considerable loss in
+quality. This mode is only tuned for qcomp=0.6.</Advanced>
+			<Basic>Encode in Quality Based Variable Bit Rate mode, regardless of bit rate. Note: This mode can perform best in 2 passes.</Basic>
+			<Recommended>24 to 28</Recommended>
+			<Default>26</Default>
+		</crf>
+		<qpmin name="Minimum Quantizer">
+			<Advanced>
+Enforces a minimum Quantizer. Prevents the codec from outputting frames with too much compression,
+causing reduced quality. Note: This is disregarded in Constant Quality or Quality Based VBR modes.</Advanced>
+			<Basic>Set minimum Quantizer factor.</Basic>
+			<Recommended>10</Recommended>
+			<Default>10</Default>
+		</qpmin>
+		<qpmax name="Maximum Quantizer">
+			<Advanced>
+Enforces a maximum Quantizer. Prevents the codec from outputting frames with too little
+compression, wasting bits. Note: This is disregarded in Constant Quality or Quality Based VBR modes.</Advanced>
+			<Basic>Set maximum Quantizer factor.</Basic>
+			<Recommended>51</Recommended>
+			<Default>51</Default>
+		</qpmax>
+		<qpstep name="Maximum Quantizer Steps">
+			<Advanced>
+Sets how much the quantizer can change between consecutive frames, maintaining a more stable
+level of quality.</Advanced>
+			<Basic>Set maximum quantizer step.</Basic>
+			<Recommended>4</Recommended>
+			<Default>4</Default>
+		</qpstep>
+		<ratetol name="Average Bit rate Variance (%)">
+			<Advanced>Regulates how much the bit rate can fluctuate from the target Average Bit Rate that has
+been set. Lower settings constrict bit rate changes, producing a file that will stream better
+and more closely match a predicted file size based on the set bit rate, while reducing the
+codec's ability to adapt to complex scenes. Higher settings increase bit rate variability which
+decreases the reliability of streaming and the ability to predict the file size, while improving
+the codec's ability to adapt to complex scenes. Setting this to 0% would result in a constant
+bit rate. Setting this to 100% would provide a highly erratic bit rate dependant on scene
+complexity. (A setting of 100% would result in Constant Quantizer compression.</Advanced>
+			<Basic>Allowed variance of average bit rate. Lower values indicate less variance, while higher values indicate more variance.</Basic>
+			<Recommended>1.0 to 4.0</Recommended>
+			<Default>1.0</Default>
+		</ratetol>
+		<vbv-maxrate name="VBV Maximum Bit rate">
+			<Advanced>Specifies the maximum bit rate allowed in the Video Buffer.</Advanced>
+			<Basic>Max local bit rate of Video Buffer Verifier.</Basic>
+			<Recommended>0 (Automatic)</Recommended>
+			<Default>0</Default>
+		</vbv-maxrate>
+		<vbv-bufsize name="VBV Buffer Size">
+			<Advanced>
+Specifies the maximum size of the Video Buffer, which can affect playback start up times
+if too large and cause stuttering if too small.</Advanced>
+			<Basic>Size of Video Buffer Verifier.</Basic>
+			<Recommended>0 (Automatic)</Recommended>
+			<Default>0</Default>
+		</vbv-bufsize>
+		<vbv-init name="VBV Initial Size">
+			<Advanced>
+Specifies the level of the Video Buffer to fill before playback can begin. Low levels may
+cause reduced initial quality while high levels may cause artificially high initial quality.</Advanced>
+			<Basic>Initial Video Buffer Verifier occupancy.</Basic>
+			<Recommended>0.9</Recommended>
+			<Default>0.9</Default>
+		</vbv-init>
+		<ipratio name="I-P Quantizer Factor">
+			<Advanced>
+Specifies the level of quality reduction between high quality I-frames and the more
+compressed P-frames that follow.</Advanced>
+			<Basic>Quantization factor used between I- and P-frames.</Basic>
+			<Recommended>1.4</Recommended>
+			<Default>1.4</Default>
+		</ipratio>
+		<pbratio name="P-B Quantizer Factor">
+			<Advanced>Specifies the level of quality reduction between P-frames and the more compressed B-frames that follow.</Advanced>
+			<Basic>Quantization factor between P- and B-frames.</Basic>
+			<Recommended>1.3</Recommended>
+			<Default>1.3</Default>
+		</pbratio>
+		<chroma-qp-offset name="Chroma and Luma Qunatizer Offset">
+			<Advanced>
+Specifies the level of quality reduction between colour and brightness information.
+The human eye is more sensitive to changes in brightness than colour, so compression
+can be increased by removing some colour detail.</Advanced>
+			<Basic>Quantization difference between chroma (colour) and luma (brightness) values.</Basic>
+			<Recommended>0</Recommended>
+			<Default>0</Default>
+		</chroma-qp-offset>
+		<pass name="Multipass Mode">
+			<Advanced>
+Multiple passes allow the codec to make more informed choices when deciding how
+to compress each frame in  regards to the quality and complexity of the entire clip.
+Note: 2 pass encoding will take up to twice as long.</Advanced>
+			<Basic>Enable multipass rate control for Average Bit Rate or Quality based VBR modes.</Basic>
+			<Recommended>Enabled</Recommended>
+			<Default>Disabled</Default>
+		</pass>
+		<stats name="Statistics File Name">
+			<Advanced>
+This file holds information generated about each frame, which is then used to make
+more informed choices on the finial pass.</Advanced>
+			<Basic>Filename for multipass statistics</Basic>
+			<Recommended>x264_2pass.log</Recommended>
+			<Default>x264_2pass.log</Default>
+		</stats>
+		<rceq name="Rate Control Equation">
+			<Advanced>This is the mathematical model used to determine rate control during encoding.</Advanced>
+			<Basic>Rate Control Equation.</Basic>
+			<Recommended>blurCplx^(1-qComp)</Recommended>
+			<Default>blurCplx^(1-qComp)</Default>
+		</rceq>
+		<qcomp name="Quantizer Curve Compression">
+			<Advanced>
+Regulates how much the quality can fluctuate within the target Average Bit Rate that
+has been set. Lower settings constrict quality changes, producing a file that will have
+a more constant quality throughout, while reducing the codec's ability to adapt to complex
+scenes where loss of detail may not be as important. Higher settings increase variability
+of quality, which may improve visual quality throughout the video by reducing quality
+where fine detail can't be seen and increasing it where fine detail is more noticeable.
+Setting this to 0 would result in constant quality. Setting this to 1 would create highly
+erratic quality changes.</Advanced>
+			<Basic>
+Allowed variance of average quantizer (or quality). Lower values indicate less variance,
+while higher values indicate more variance. Note: 0 indicates constant quality while 1
+indicates maximum fluctuation.</Basic>
+			<Recommended>0.60</Recommended>
+			<Default>0.60</Default>
+		</qcomp>
+		<cplxblur name="Quantizer Fluctuation Reduction (Before)">
+			<Advanced></Advanced>
+			<Basic>Reduce fluctuations in Quantizer (before curve compression).</Basic>
+			<Recommended>20.0</Recommended>
+			<Default>20.0</Default>
+		</cplxblur>
+		<qblur name="Quantizer Fluctuation Reduction (After)">
+			<Advanced></Advanced>
+			<Basic>Reduce fluctuations in QP (after curve compression).</Basic>
+			<Recommended>0.5</Recommended>
+			<Default>0.5</Default>
+		</qblur>
+		<zones name="Define Zones">
+			<Advanced>
+Zones allow you to define areas of video for which you can specify additional encoding
+options. eg you may specify the credits at the end of the film to use a lower bit rate or
+higher compression than the main feature.</Advanced>
+			<Basic>Define regions of video for which additional encoding options can be specified.</Basic>
+			<Recommended>Disabled</Recommended>
+			<Default>Disabled</Default>
+		</zones>
+		<!--Analysis options:-->
+		<analyse name="Macroblock Analysis Sizes">
+			<Advanced>
+Enabling additional macroblock search sizes increases encoding efficiency and quality
+but decreases speed. Note: i8x8 can only be used in High Profile and when Adaptive
+8x8 DCT is used.</Advanced>
+			<Basic>Specify which Macroblock Partition Sizes to analyse</Basic>
+			<Recommended>All (High Profile)</Recommended>
+			<Default>p8x8,b8x8,i8x8,i4x4</Default>
+		</analyse>
+		<direct name="B-frame Mode">
+			<Advanced>
+Determines how motion vectors for B-frames are derived. Spatial uses neighbouring
+blocks in the same frame which may result in higher PSNR. Temporal makes use of
+neighbouring frames which may be perceived as higher quality. Auto selects direct
+mode per frame. Works best in 2pass (enable in both passes).</Advanced>
+			<Basic>Direct motion vector prediction mode</Basic>
+			<Recommended>Spatial</Recommended>
+			<Default>Spatial</Default>
+		</direct>
+		<weightb name="B-frame Weighted Prediction">
+			<Advanced>Enables 'brightness' weighting of B-frames which improves fades and colour gradients ie sky.</Advanced>
+			<Basic>Weighted prediction for B-frames</Basic>
+			<Recommended>Enabled</Recommended>
+			<Default>Disabled</Default>
+		</weightb>
+		<me name="Motion Estimation Mode">
+			<Advanced>
+Controls the method used to search for motion vectors. Diamond search radius 1 (fastest),
+ hexagonal search radius 2 (fast), uneven multi-hexagon search (slow), exhaustive search
+(slowest). Exhaustive search is not recommended for normal use as it is exceptionally slow
+and does not provide significant quality increases.</Advanced>
+			<Basic>Motion estimation method: 1=fast, 4=best</Basic>
+			<Recommended>hexagonal</Recommended>
+			<Default>hexagonal</Default>
+		</me>
+		<merange name="Maximum Motion Vector Range">
+			<Advanced>
+Specifies the maximum range a macroblock can travel in order to be encoded as a vector.
+Larger values may increase efficiency but will increase encoding time.</Advanced>
+			<Basic>Maximum motion vector search range.</Basic>
+			<Recommended>16 to 32</Recommended>
+			<Default>16</Default>
+		</merange>
+		<subme name="Sub Pixel Refinement">
+			<Advanced>
+Controls the decision quality of motion estimation. Lower values will make faster and less
+accurate decisions. Higher values will improve quality but will slow encoding speed. Note:
+mode 6 (RDO) must be used to enable RDO for B-frames.</Advanced>
+			<Basic>Sub Pixel motion estimation and partition decision quality: 1=fast, 6=best.</Basic>
+			<Recommended>5 to 6</Recommended>
+			<Default>5</Default>
+		</subme>
+		<b-rdo name="RDO for B-frames">
+			<Advanced>Improved motion estimation for B-frames at the cost of encoding speed. Note: requires Sub Pixel Refinement.</Advanced>
+			<Basic>Rate Distortion Optimisation mode decision for B-frames.</Basic>
+			<Recommended>Enabled</Recommended>
+			<Default>Disabled</Default>
+		</b-rdo>
+		<mixed-refs name="Mixed References">
+			<Advanced>
+Allows each 8x8 or 16x8 partition in a macroblock to independently select a reference frame,
+as opposed to only one reference frame per macroblock.</Advanced>
+			<Basic>Decide references on a per partition basis</Basic>
+			<Recommended>Enabled</Recommended>
+			<Default>Disabled</Default>
+		</mixed-refs>
+		<!--WARNING DOUBLE NEGATIVE-->
+		<no-chroma-me name="Chroma Motion Estimation">
+			<Advanced>Enables Motion Estimation to take colour components of the video into account when calculating movement, improving quality.</Advanced>
+			<Basic>Use chroma in motion estimation</Basic>
+			<Recommended>Enabled</Recommended>
+			<Default>Enabled</Default>
+		</no-chroma-me>
+		<bime name="Bi-Directional Motion Estimation">
+			<Advanced>Enables an additional search for forwards and backwards vectors when encoding
+a bi-directional B-frames, improving quality. Note: Does not effect B-frames encoded
+as direct/skip (no motion vector), forward (1 MV pointing to a past reference), backwards
+(1 MV pointing to a future reference).</Advanced>
+			<Basic>Jointly optimize both Motion Vectors in B-frames</Basic>
+			<Recommended>Enabled</Recommended>
+			<Default>Disabled</Default>
+		</bime>
+		<!--Note: name changed from 8x8dct due to invalid XML character warning-->
+		<i8x8dct name="Adaptive 8x8 DCT">
+			<Advanced>Enables the intelligent adaptive use of 8x8 transforms in I-frames.</Advanced>
+			<Basic>Adaptive spatial transform size</Basic>
+			<Recommended>Enabled</Recommended>
+			<Default>Disabled</Default>
+		</i8x8dct>
+		<trellis name="Trellis Quantization">
+			<Advanced>
+Performs Trellis quantisation to increase efficiency. On Macroblock provides a
+good compromise between speed and efficiency. On all decisions reduces
+speed further.</Advanced>
+			<Basic>Trellis Rate Distortion quantization. (Requires CABAC)</Basic>
+			<Recommended>On Macro Block</Recommended>
+			<Default>Disabled</Default>
+		</trellis>
+		<!--WARNING DOUBLE NEGATIVE-->
+		<no-fast-pskip name="Fast P-frame Skip Detection">
+			<Advanced>
+Fast Skip detection increases speed but may cause slight blockiness in areas
+of solid colour or slight gradients such as dark scenes or sky.
+Enabling this option will DISABLE the Fast Skip detection.</Advanced>
+			<Basic>Disables early Skip detection on P-frames.</Basic>
+			<Recommended>Enabled</Recommended>
+			<Default>Disabled</Default>
+		</no-fast-pskip>
+		<nr name="Noise Reduction">
+			<Advanced>
+Estimates film noise based on this value and attempts to remove it by
+dropping small details before quantization. This may not match the quality
+of a good external noise reduction filter, but it performs very fast.</Advanced>
+			<Basic>Performs fast noise reduction.</Basic>
+			<Recommended>0 (100-1000 for denoising)</Recommended>
+			<Default>0</Default>
+		</nr>
+		<cqm name="Preset Quantization Matrices">
+			<Advanced></Advanced>
+			<Basic>Preset quantization matrices. (jvt, flat)</Basic>
+			<Recommended>Flat</Recommended>
+			<Default>Flat</Default>
+		</cqm>
+		<cqmfile name="Quantization Matrice File">
+			<Advanced></Advanced>
+			<Basic>Read quantization matrices from a JM compatible file. (Overrides any other --cqm* options).</Basic>
+			<Recommended>Disabled</Recommended>
+			<Default>Disabled</Default>
+		</cqmfile>
+		<cqm4 name="4x4 Quantization Matrices">
+			<Advanced>Takes a comma separated list of 16 integers.</Advanced>
+			<Basic>Set all 4x4 quantization matrices.</Basic>
+			<Recommended>Disabled</Recommended>
+			<Default>Disabled</Default>
+		</cqm4>
+		<cqm8 name="8x8 Quantization Matrices">
+			<Advanced>Takes a comma separated list of 64 integers.</Advanced>
+			<Basic>Set all 8x8 quantization matrices.</Basic>
+			<Recommended>Disabled</Recommended>
+			<Default>Disabled</Default>
+		</cqm8>
+		<!-- Not Documented: 
+	cqm4i, cqm4p, cqm8i, cqm8p: Set both luma and chroma quant matrices
+	cqm4iy, cqm4ic, cqm4py, cqm4pc: Set individual quant matrices-->
+		<!--Video Usability options:
+Note: these settings are not used by the encoder but are suggestions to the playback equipment-->
+		<sar name="Sample Aspect Ration">
+			<Advanced>Stores the size of non-square pixels in the video stream for use during playback. This enables anamorphic video.</Advanced>
+			<Basic>Specify Sample Aspect Ratio</Basic>
+			<Recommended>1:1</Recommended>
+			<Default>1:1</Default>
+		</sar>
+		<!-- Not Documented:
+      overscan <string>     Specify crop overscan setting ["undef"]
+                                  - undef, show, crop
+      videoformat <string>  Specify video format ["undef"]
+                                  - component, pal, ntsc, secam, mac, undef
+      fullrange <string>    Specify full range samples setting ["off"]
+                                  - off, on
+      colorprim <string>    Specify color primaries ["undef"]
+                                  - undef, bt709, bt470m, bt470bg
+                                    smpte170m, smpte240m, film
+      transfer <string>     Specify transfer characteristics ["undef"]
+                                  - undef, bt709, bt470m, bt470bg, linear,
+                                    log100, log316, smpte170m, smpte240m
+      colormatrix <string>  Specify color matrix setting ["undef"]
+                                  - undef, bt709, fcc, bt470bg
+                                    smpte170m, smpte240m, GBR, YCgCo
+      chromaloc <integer>   Specify chroma sample location (0 to 5) [0]
+-->
+		<!--Video Usability options:-->
+		<level name="AVC Complexity Level">
+			<Advanced></Advanced>
+			<Basic>Specify level (as defined by Annex A)</Basic>
+			<Recommended>Unrestricted</Recommended>
+			<Default>Unrestricted</Default>
+		</level>
+		<fps name="Frame Rate">
+			<Advanced>
+This can be used to change the frame rate of the video during encoding
+(or specify the frame rate for a source  that does not detect correctly).</Advanced>
+			<Basic>Specify frame rate</Basic>
+			<Recommended>Automatic</Recommended>
+			<Default>Automatic</Default>
+		</fps>
+		<seek name="Seek to Start Frame">
+			<Advanced>Enables encoding to begin at any point in the source.</Advanced>
+			<Basic>First frame to encode</Basic>
+			<Recommended>Disabled</Recommended>
+			<Default>Disabled</Default>
+		</seek>
+		<frames name="Frames to Encode">
+			<Advanced>Enables encoding to finish at a point before the end of the source.</Advanced>
+			<Basic>Maximum number of frames to encode</Basic>
+			<Recommended>Disabled</Recommended>
+			<Default>Disabled</Default>
+		</frames>
+		<output name="Output File Name">
+			<Advanced></Advanced>
+			<Basic>Specify output file</Basic>
+			<Recommended></Recommended>
+			<Default></Default>
+		</output>
+		<threads name="Number of Threads">
+			<Advanced>
+For optimum speed, this should be equivalent to the number of Virtual
+and Physical CPU cores, ie, set to 2 for a single core hyperthreading
+processor, or a dual core processor. Note: This will decrease speed
+if more threads than CPUs are used. (HT may reduce encoding speed
+in some instances). While increasing speed, this will slightly reduce
+codec efficiency (slices cannot use other slices for references,
+slices reset CABAC contexts).</Advanced>
+			<Basic>Enable parallel encoding by using more than 1 thread to increase speed (uses slices)</Basic>
+			<Recommended>1</Recommended>
+			<Default>1</Default>
+		</threads>
+		<!--WARNING DOUBLE NEGATIVE-->
+		<no-asm name="Disable CPU Optimizations">
+			<Advanced>
+Codecs use advanced CPU SIMD (Single Instruction, Multiple Data) instruction
+sets allowing massive speed increases. This should only be enabled for
+troubleshooting purposes.</Advanced>
+			<Basic>Disable all CPU optimizations</Basic>
+			<Recommended>Disabled</Recommended>
+			<Default>Disabled</Default>
+		</no-asm>
+		<!--WARNING DOUBLE NEGATIVE-->
+		<no-psnr name="Disable PSNR Computation">
+			<Advanced>Prevents PSNR calculations that are reported on completion. Provides a small increase in speed.</Advanced>
+			<Basic>Disable PSNR computation.</Basic>
+			<Recommended>Disabled</Recommended>
+			<Default>Disabled</Default>
+		</no-psnr>
+		<quiet name="Quiet Mode">
+			<Advanced></Advanced>
+			<Basic>Enable Quiet Mode (do not display output information).</Basic>
+			<Recommended>Disabled</Recommended>
+			<Default>Disabled</Default>
+		</quiet>
+		<verbose name="Verbose Mode">
+			<Advanced></Advanced>
+			<Basic>Show frame statistics.</Basic>
+			<Recommended>Disabled</Recommended>
+			<Default>Disabled</Default>
+		</verbose>
+		<progress name="Progress Meter">
+			<Advanced></Advanced>
+			<Basic>Show a progress indicator while encoding.</Basic>
+			<Recommended>Disabled</Recommended>
+			<Default>Disabled</Default>
+		</progress>
+		<visualize name="Visualize Analysis">
+			<Advanced>Debugging option used to understand what is happening on a frame by frame basis.</Advanced>
+			<Basic>Show Macroblock types overlayed on the encoded video.</Basic>
+			<Recommended>Disabled</Recommended>
+			<Default>Disabled</Default>
+		</visualize>
+		<aud name="Access Unit Delimiters">
+			<Advanced>Used for compatibility when using AVC in some transport streams (inc MPEG-2 TS).</Advanced>
+			<Basic>Use access unit delimiters</Basic>
+			<Recommended>Disabled</Recommended>
+			<Default>Disabled</Default>
+		</aud>
+	</Codec>
+	<Codec name="Xvid">
+		<setting1 name="setting1">
+			<Advanced>Advanced Text</Advanced>
+			<Basic>basic text</Basic>
+			<Recommended>Enabled</Recommended>
+			<Default>Disabled</Default>
+		</setting1>
+	</Codec>
+</ContextHelp>
