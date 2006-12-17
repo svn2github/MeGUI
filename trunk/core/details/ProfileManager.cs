@@ -5,6 +5,7 @@ using System.IO;
 using System.Reflection;
 using System.Xml.Serialization;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
 using MeGUI.core.plugins.interfaces;
 
 namespace MeGUI
@@ -177,22 +178,49 @@ namespace MeGUI
         /// </summary>
         /// <param name="name">name of the profile</param>
         /// <returns>the loaded Profile or null if the profile could not be loaded</returns>
-		private Profile loadProfile(string name, string type)
-		{
-			XmlSerializer ser = null;
-			using (Stream s = File.OpenRead(name))
-			{
-				try
-				{
-					ser = new XmlSerializer(profileTypes[type]);
-					return (Profile)ser.Deserialize(s);
-				}
-				catch (Exception)
-				{
-					DialogResult r = MessageBox.Show("Profile " + name + " could not be loaded. Delete?", "Error loading profile", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
-					return null;
-				}
-			}
+        private Profile loadProfile(string name, string type)
+        {
+            XmlSerializer ser = null;
+            using (Stream s = File.OpenRead(name))
+            {
+                try
+                {
+                    try
+                    {
+                        ser = new XmlSerializer(profileTypes[type]);
+                        return (Profile)ser.Deserialize(s);
+                    }
+                    catch (InvalidOperationException)
+                    {
+                        s.Close();
+                        return updateProfile(name, type); // If this fails, it will throw to the catch below
+                    }
+                }
+                catch (Exception)
+                {
+                    DialogResult r = MessageBox.Show("Profile " + name + " could not be loaded. Delete?", "Error loading profile", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
+                    return null;
+                }
+            }
+        }
+
+        private Profile updateProfile(string name, string type)
+        {
+            string[] data = File.ReadAllLines(name);
+            if (new Regex("GenericProfileOf[a-zA-Z]+").IsMatch(data[1])) // It's already a new profile
+                return null;
+            Regex matchLine2 = new Regex(@"(?<=\<)[a-zA-Z]+");
+            string replaceName = "GenericProfileOf" + profileTypes[type].GetGenericArguments()[0].Name;
+            data[1] = matchLine2.Replace(data[1], replaceName);
+            Regex matchLastLine = new Regex(@"(?<=\</)[a-zA-Z]+");
+            data[data.Length - 1] = matchLastLine.Replace(data[data.Length - 1], replaceName);
+            File.WriteAllLines(name, data);
+
+            using (Stream s = File.OpenRead(name))
+            {
+                XmlSerializer ser = new XmlSerializer(profileTypes[type]);
+                return (Profile)ser.Deserialize(s);
+            }
         }
         #endregion
         #region individual setting and getting

@@ -1,3 +1,7 @@
+0.2.4.1004
+Commit by berrinam:
+    - Workaround so that old profiles (from before 0.2.4) can work with 0.2.4.1004+ builds -- such old profiles will be recognised and updated to the new format.
+
 0.2.4.1003
 Commit by berrinam:
     - Allow deletion of unreadable profiles
