@@ -702,6 +702,7 @@ namespace MeGUI
                 fieldOrder = (bffCount > tffCount) ? FieldOrder.BFF : FieldOrder.TFF;
 
             SourceInfo info = new SourceInfo();
+            info.sourceType = type;
             info.decimateM = decimateM;
             info.fieldOrder = fieldOrder;
             info.majorityFilm = majorityFilm;
