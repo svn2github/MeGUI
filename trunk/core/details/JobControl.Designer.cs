@@ -29,7 +29,6 @@ namespace MeGUI.core.details
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.shutdownCheckBox = new System.Windows.Forms.CheckBox();
             this.pauseButton = new System.Windows.Forms.Button();
             this.updateJobButton = new System.Windows.Forms.Button();
             this.deleteAllJobsButton = new System.Windows.Forms.Button();
@@ -58,21 +57,9 @@ namespace MeGUI.core.details
             this.WaitingMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.AbortMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.LoadMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.afterEncoding = new System.Windows.Forms.Label();
             this.queueContextMenu.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // shutdownCheckBox
-            // 
-            this.shutdownCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.shutdownCheckBox.AutoSize = true;
-            this.shutdownCheckBox.Location = new System.Drawing.Point(9, 305);
-            this.shutdownCheckBox.Name = "shutdownCheckBox";
-            this.shutdownCheckBox.Size = new System.Drawing.Size(166, 17);
-            this.shutdownCheckBox.TabIndex = 27;
-            this.shutdownCheckBox.Text = "Shutdown at end of encoding";
-            this.shutdownCheckBox.UseVisualStyleBackColor = true;
-            this.shutdownCheckBox.Click += new System.EventHandler(this.shutdownCheckBox_CheckedChanged);
-            this.shutdownCheckBox.CheckedChanged += new System.EventHandler(this.shutdownCheckBox_CheckedChanged);
             // 
             // pauseButton
             // 
@@ -315,11 +302,20 @@ namespace MeGUI.core.details
             this.LoadMenuItem.ToolTipText = "Load into MeGUI";
             this.LoadMenuItem.Click += new System.EventHandler(this.loadMenuItem_Click);
             // 
+            // afterEncoding
+            // 
+            this.afterEncoding.AutoSize = true;
+            this.afterEncoding.Location = new System.Drawing.Point(6, 304);
+            this.afterEncoding.Name = "afterEncoding";
+            this.afterEncoding.Size = new System.Drawing.Size(132, 13);
+            this.afterEncoding.TabIndex = 27;
+            this.afterEncoding.Text = "After encoding: do nothing";
+            // 
             // JobControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.shutdownCheckBox);
+            this.Controls.Add(this.afterEncoding);
             this.Controls.Add(this.pauseButton);
             this.Controls.Add(this.updateJobButton);
             this.Controls.Add(this.deleteAllJobsButton);
@@ -342,7 +338,6 @@ namespace MeGUI.core.details
 
         #endregion
 
-        private System.Windows.Forms.CheckBox shutdownCheckBox;
         private System.Windows.Forms.Button pauseButton;
         private System.Windows.Forms.Button updateJobButton;
         private System.Windows.Forms.Button deleteAllJobsButton;
@@ -371,5 +366,6 @@ namespace MeGUI.core.details
         private System.Windows.Forms.ToolStripMenuItem WaitingMenuItem;
         private System.Windows.Forms.ToolStripMenuItem AbortMenuItem;
         private System.Windows.Forms.ToolStripMenuItem LoadMenuItem;
+        private System.Windows.Forms.Label afterEncoding;
     }
 }

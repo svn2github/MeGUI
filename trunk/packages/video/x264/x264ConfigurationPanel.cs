@@ -448,7 +448,9 @@ namespace MeGUI.packages.video.x264
             get
             {
                 x264Settings xs = new x264Settings();
+                xs.EncodeInterlaced = interlaced.Checked;
                 xs.NoDCTDecimate = this.noDCTDecimateOption.Checked;
+                xs.SSIMCalculation = this.ssim.Checked;
                 xs.PSNRCalculation = this.psnr.Checked;
                 xs.noFastPSkip = this.NoFastPSkip.Checked;
                 xs.FourCC = fourCC.SelectedIndex;
@@ -518,7 +520,9 @@ namespace MeGUI.packages.video.x264
             set
             {  // Warning! The ordering of components matters because of the dependency code!
                 x264Settings xs = (x264Settings)value;
+                interlaced.Checked = xs.EncodeInterlaced;
                 noDCTDecimateOption.Checked = xs.NoDCTDecimate;
+                ssim.Checked = xs.SSIMCalculation;
                 avcProfile.SelectedIndex = xs.Profile;
                 avcLevel.SelectedIndex = xs.Level;
                 x264EncodingMode.SelectedIndex = xs.EncodingMode;

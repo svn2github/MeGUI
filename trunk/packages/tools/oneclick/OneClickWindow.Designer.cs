@@ -52,6 +52,7 @@ namespace MeGUI
             this.outputLabel = new System.Windows.Forms.Label();
             this.inputLabel = new System.Windows.Forms.Label();
             this.targetGroupBox = new System.Windows.Forms.GroupBox();
+            this.profileControl2 = new MeGUI.core.details.video.ProfileControl();
             this.filesizeKB = new System.Windows.Forms.TextBox();
             this.inKBLabel = new System.Windows.Forms.Label();
             this.filesizeComboBox = new System.Windows.Forms.ComboBox();
@@ -87,9 +88,7 @@ namespace MeGUI
             this.containerFormat = new System.Windows.Forms.ComboBox();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.showAdvancedOptions = new System.Windows.Forms.CheckBox();
-            this.shutdownCheckBox = new System.Windows.Forms.CheckBox();
             this.goButton = new System.Windows.Forms.Button();
-            this.profileControl2 = new MeGUI.core.details.video.ProfileControl();
             this.tabPage2.SuspendLayout();
             this.locationGroupBox.SuspendLayout();
             this.avsBox.SuspendLayout();
@@ -385,6 +384,14 @@ namespace MeGUI
             this.targetGroupBox.TabIndex = 18;
             this.targetGroupBox.TabStop = false;
             this.targetGroupBox.Text = "Target";
+            // 
+            // profileControl2
+            // 
+            this.profileControl2.LabelText = "One Click profile";
+            this.profileControl2.Location = new System.Drawing.Point(21, 12);
+            this.profileControl2.Name = "profileControl2";
+            this.profileControl2.Size = new System.Drawing.Size(389, 29);
+            this.profileControl2.TabIndex = 23;
             // 
             // filesizeKB
             // 
@@ -717,24 +724,13 @@ namespace MeGUI
             // showAdvancedOptions
             // 
             this.showAdvancedOptions.AutoSize = true;
-            this.showAdvancedOptions.Location = new System.Drawing.Point(4, 306);
+            this.showAdvancedOptions.Location = new System.Drawing.Point(4, 287);
             this.showAdvancedOptions.Name = "showAdvancedOptions";
             this.showAdvancedOptions.Size = new System.Drawing.Size(144, 17);
             this.showAdvancedOptions.TabIndex = 31;
             this.showAdvancedOptions.Text = "Show Advanced Options";
             this.showAdvancedOptions.UseVisualStyleBackColor = true;
             this.showAdvancedOptions.CheckedChanged += new System.EventHandler(this.showAdvancedOptions_CheckedChanged);
-            // 
-            // shutdownCheckBox
-            // 
-            this.shutdownCheckBox.AutoSize = true;
-            this.shutdownCheckBox.Location = new System.Drawing.Point(4, 283);
-            this.shutdownCheckBox.Name = "shutdownCheckBox";
-            this.shutdownCheckBox.Size = new System.Drawing.Size(145, 17);
-            this.shutdownCheckBox.TabIndex = 30;
-            this.shutdownCheckBox.Text = "Shutdown after encoding";
-            this.shutdownCheckBox.UseVisualStyleBackColor = true;
-            this.shutdownCheckBox.CheckedChanged += new System.EventHandler(this.shutdownCheckBox_CheckedChanged);
             // 
             // goButton
             // 
@@ -746,21 +742,12 @@ namespace MeGUI
             this.goButton.UseVisualStyleBackColor = true;
             this.goButton.Click += new System.EventHandler(this.goButton_Click);
             // 
-            // profileControl2
-            // 
-            this.profileControl2.LabelText = "One Click profile";
-            this.profileControl2.Location = new System.Drawing.Point(21, 12);
-            this.profileControl2.Name = "profileControl2";
-            this.profileControl2.Size = new System.Drawing.Size(389, 29);
-            this.profileControl2.TabIndex = 23;
-            // 
             // OneClickWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(448, 335);
+            this.ClientSize = new System.Drawing.Size(448, 315);
             this.Controls.Add(this.showAdvancedOptions);
-            this.Controls.Add(this.shutdownCheckBox);
             this.Controls.Add(this.goButton);
             this.Controls.Add(this.tabControl1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -843,7 +830,6 @@ namespace MeGUI
         private System.Windows.Forms.ComboBox audioCodec;
         private System.Windows.Forms.CheckBox externalInput;
         private System.Windows.Forms.CheckBox showAdvancedOptions;
-        private System.Windows.Forms.CheckBox shutdownCheckBox;
         private System.Windows.Forms.Button goButton;
         private MeGUI.core.details.video.ProfileControl profileControl1;
         private MeGUI.core.details.video.ProfileControl audioProfileControl;

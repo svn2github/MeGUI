@@ -457,7 +457,6 @@ namespace MeGUI
             this.jobControl1.Location = new System.Drawing.Point(0, 0);
             this.jobControl1.Name = "jobControl1";
             this.jobControl1.QueueEncoding = false;
-            this.jobControl1.Shutdown = false;
             this.jobControl1.Size = new System.Drawing.Size(472, 380);
             this.jobControl1.TabIndex = 0;
             // 
@@ -530,8 +529,7 @@ namespace MeGUI
             this.trayIcon.Icon = new Icon(myAssembly.GetManifestResourceStream(name + "App.ico"));
             constructMeGUIInfo();
             this.TitleText = Application.ProductName + " " + Application.ProductVersion;
-            this.jobControl1.Shutdown = this.settings.Shutdown;
-            
+            Jobs.showAfterEncodingStatus(Settings);
         }
 
         #region GUI properties
@@ -798,19 +796,42 @@ namespace MeGUI
         /// also saves all profiles, jobs and the log as MeGUI is killed
         /// via the shutdown so the appropriate methods in the OnClosing are not called
         /// </summary>
-        public void shutdown()
+        public void runAfterEncodingCommands()
         {
-            if (this.settings.Shutdown)
+            if (settings.AfterEncoding == AfterEncoding.DoNothing) return;
+            this.profileManager.SaveProfiles();
+            this.saveSettings();
+            jobControl1.saveJobs();
+            this.saveLog();
+
+            if (settings.AfterEncoding == AfterEncoding.Shutdown)
             {
-                this.profileManager.SaveProfiles();
-                this.saveSettings();
-                jobControl1.saveJobs();
-                this.saveLog();
                 bool succ = Shutdown.shutdown();
                 if (!succ)
                     addToLog("Tried shutting down system at " + DateTime.Now.ToShortTimeString() + " but the call failed");
                 else
                     addToLog("Shutdown initiated at " + DateTime.Now.ToShortTimeString());
+            }
+            else
+            {
+                string filename = MeGUIPath + @"\after_encoding.bat";
+                try
+                {
+                    using (StreamWriter s = new StreamWriter(File.OpenWrite(filename)))
+                    {
+                        s.WriteLine(settings.AfterEncodingCommand);
+                    }
+                    ProcessStartInfo psi = new ProcessStartInfo(filename);
+                    psi.CreateNoWindow = true;
+                    psi.UseShellExecute = false;
+                    Process p = new Process();
+                    p.StartInfo = psi;
+                    p.Start();
+                }
+                catch (IOException e) { MessageBox.Show("Error when attempting to run command: " + e.Message, "Run command failed", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+/*                try { File.Delete(filename); }
+                catch (IOException) { }*/
+
             }
         }
         /// <summary>
@@ -910,8 +931,8 @@ namespace MeGUI
                 if (sform.ShowDialog() == DialogResult.OK)
                 {
                     this.settings = sform.Settings;
-                    jobControl1.Shutdown = this.settings.Shutdown;
                     this.saveSettings();
+                    Jobs.showAfterEncodingStatus(settings);
                 }
             }
         }

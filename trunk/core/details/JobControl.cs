@@ -263,7 +263,7 @@ namespace MeGUI.core.details
                     this.queueEncoding = false;
                     this.startStopButton.Text = "Start";
                     this.abortButton.Enabled = false;
-                    mainForm.shutdown();
+                    if (!su.WasAborted) mainForm.runAfterEncodingCommands();
                 }
             }
             else // job is not complete yet
@@ -283,7 +283,7 @@ namespace MeGUI.core.details
                 if (percentage.IndexOf(".") != -1 && percentage.Substring(percentage.IndexOf(".")).Length == 1)
                     percentage += "0";
                 mainForm.TitleText = "MeGUI " + su.JobName + " " + percentage + "% ";
-                if (mainForm.Settings.Shutdown)
+                if (mainForm.Settings.AfterEncoding == AfterEncoding.Shutdown)
                     mainForm.TitleText += "- SHUTDOWN after encode";
                 this.jobProgress.Value = su.PercentageDone;
             }
@@ -708,10 +708,6 @@ namespace MeGUI.core.details
                     MessageBox.Show("You cannot update an indexing job", "Not supported", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }*/
             }
-        }
-        private void shutdownCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            mainForm.Settings.Shutdown = this.shutdownCheckBox.Checked;
         }
         #endregion
         #region GUI action
@@ -1325,15 +1321,19 @@ namespace MeGUI.core.details
                     mainForm.addToLog("Error when trying to resume processing: " + error + "\r\n");
                 }
             }
-            this.shutdownCheckBox.Checked = false;
-            mainForm.Settings.Shutdown = false;
             updateProcessingStatus();
         }
 
-        public bool Shutdown
+        internal void showAfterEncodingStatus(MeGUISettings Settings)
         {
-            get { return shutdownCheckBox.Checked; }
-            set { shutdownCheckBox.Checked = value; }
+            if (Settings.AfterEncoding == AfterEncoding.DoNothing)
+                afterEncoding.Text = "After encoding: do nothing";
+            else if (Settings.AfterEncoding == AfterEncoding.Shutdown)
+                afterEncoding.Text = "After encoding: shutdown";
+            else
+            {
+                afterEncoding.Text = "After encoding: run '" + Settings.AfterEncodingCommand + "'";
+            }
         }
     }
 }

@@ -32,8 +32,8 @@ namespace MeGUI
 			quantizerMatrixType, profile, x264Trellis, level, noiseReduction;
 		decimal ipFactor, pbFactor, chromaQPOffset, vbvInitialBuffer, bitrateVariance, quantCompression, 
 			tempComplexityBlur, tempQuanBlurCC, scdSensitivity, bframeBias;
-		bool deblock, cabac, p4x4mv, p8x8mv, b8x8mv, i4x4mv, i8x8mv, weightedBPrediction, adaptiveBFrames, 
-			bFramePyramid, chromaME, adaptiveDCT, lossless, mixedRefs, bRDO, NoFastPSkip, BiME, psnrCalc, noDctDecimate;
+		bool deblock, cabac, p4x4mv, p8x8mv, b8x8mv, i4x4mv, i8x8mv, weightedBPrediction, adaptiveBFrames, encodeInterlaced,
+			bFramePyramid, chromaME, adaptiveDCT, lossless, mixedRefs, bRDO, NoFastPSkip, BiME, psnrCalc, noDctDecimate, ssimCalc;
 		string quantizerMatrix;
 		#region constructor
         public override VideoCodec Codec
@@ -49,7 +49,9 @@ namespace MeGUI
 		/// </summary>
 		public x264Settings():base()
 		{
+            encodeInterlaced = false;
 			noFastPSkip = false;
+            ssimCalc = false;
             psnrCalc = false;
 			EncodingMode = 0;
 			BitrateQuantizer = 700;
@@ -106,6 +108,11 @@ namespace MeGUI
 		}
 		#endregion
 		#region properties
+        public bool EncodeInterlaced
+        {
+            get { return encodeInterlaced; }
+            set { encodeInterlaced = value; }
+        }
         public bool NoDCTDecimate
         {
             get { return noDctDecimate; }
@@ -327,6 +334,11 @@ namespace MeGUI
 			get {return adaptiveDCT;}
 			set {adaptiveDCT = value;}
 		}
+        public bool SSIMCalculation
+        {
+            get { return ssimCalc; }
+            set { ssimCalc = value; }
+        }
 		public bool Lossless
 		{
 			get {return lossless;}

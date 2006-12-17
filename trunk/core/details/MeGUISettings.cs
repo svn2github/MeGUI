@@ -11,11 +11,12 @@ namespace MeGUI
         private string faacPath, lamePath, neroAacEncPath, mencoderPath,  mp4boxPath, mkvmergePath, encAacPlusPath,
             ffmpegPath,
             x264Path, dgIndexPath, xvidEncrawPath, avc2aviPath, aviMuxGUIPath, oggEnc2Path, encAudXPath,
-            defaultLanguage1, defaultLanguage2, divxMuxerPath;
-        private bool recalculateMainMovieBitrate, autoForceFilm, autoStartQueue, enableMP3inMP4, shutdown, autoOpenScript,
+            defaultLanguage1, defaultLanguage2, divxMuxerPath, afterEncodingCommand;
+        private bool recalculateMainMovieBitrate, autoForceFilm, autoStartQueue, enableMP3inMP4, autoOpenScript,
             overwriteStats, keep2of3passOutput, deleteCompletedJobs, autoSetNbThreads, deleteIntermediateFiles,
             deleteAbortedOutput, openProgressWindow, useadvancedtooltips, freshOggEnc2;
-		private decimal forceFilmThreshold;
+        private AfterEncoding afterEncoding;
+        private decimal forceFilmThreshold;
 		private int nbPasses, acceptableAspectError;
         private string videoExtension, audioExtension;
         private bool safeProfileAlteration;
@@ -56,7 +57,7 @@ namespace MeGUI
 			defaultLanguage2 = "";
             defaultPriority = ProcessPriority.IDLE;
             acceptableAspectError = 5;
-			shutdown = false;
+            afterEncoding = AfterEncoding.DoNothing;
 			autoOpenScript = true;
 			enableMP3inMP4 = false;
 			overwriteStats = true;
@@ -73,7 +74,22 @@ namespace MeGUI
             safeProfileAlteration = false;
         }
         #region properties
-
+        /// <summary>
+        /// What to do after all encodes are finished
+        /// </summary>
+        public AfterEncoding AfterEncoding
+        {
+            get { return afterEncoding; }
+            set { afterEncoding = value; }
+        }
+        /// <summary>
+        /// Command to run after encoding is finished (only if AfterEncoding is RunCommand)
+        /// </summary>
+        public string AfterEncodingCommand
+        {
+            get { return afterEncodingCommand; }
+            set { afterEncodingCommand = value; }
+        }
         /// <summary>
         /// Maximum aspect error (%) to allow in resizing.
         /// </summary>
@@ -274,14 +290,6 @@ namespace MeGUI
 			set {autoStartQueue = value;}
 		}
 		/// <summary>
-		/// gets / sets whether megui shuts down the pc after encoding has completed
-		/// </summary>
-		public bool Shutdown
-		{
-			get {return shutdown;}
-			set {shutdown = value;}
-		}
-		/// <summary>
 		/// gets / sets whether megui automatically opens the preview window upon loading an avisynth script
 		/// </summary>
 		public bool AutoOpenScript
@@ -447,4 +455,5 @@ namespace MeGUI
         }
         #endregion
     }
+    public enum AfterEncoding { DoNothing, Shutdown, RunCommand }
 }

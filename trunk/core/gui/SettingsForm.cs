@@ -38,18 +38,8 @@ namespace MeGUI
 		private System.Windows.Forms.Label defaultAudioTrack1Label;
 		private System.Windows.Forms.ComboBox defaultLanguage1;
 		private System.Windows.Forms.Label defaultAudioTrack2Label;
-		private System.Windows.Forms.ComboBox defaultLanguage2;
-		private System.Windows.Forms.GroupBox autoModeGroupbox;
-		private System.Windows.Forms.NumericUpDown nbPasses;
-		private System.Windows.Forms.Label nbPassesLabel;
-		private System.Windows.Forms.CheckBox keep2ndPassLogfile;
-		private System.Windows.Forms.CheckBox keep2ndPassOutput;
+        private System.Windows.Forms.ComboBox defaultLanguage2;
         private System.Windows.Forms.FolderBrowserDialog openFolderDialog;
-        private System.Windows.Forms.GroupBox outputExtensions;
-        private System.Windows.Forms.TextBox videoExtension;
-        private System.Windows.Forms.Label audioExtLabel;
-        private System.Windows.Forms.Label videoExtLabel;
-        private System.Windows.Forms.TextBox audioExtension;
         private System.Windows.Forms.Label avisynthPluginsLabel;
         private System.Windows.Forms.Button selectAvisynthPluginsDir;
         private System.Windows.Forms.TextBox avisynthPluginsDir;
@@ -68,8 +58,7 @@ namespace MeGUI
         private System.Windows.Forms.CheckBox safeProfileAlteration;
 		private System.Windows.Forms.ComboBox priority;
 		private System.Windows.Forms.OpenFileDialog openExecutableDialog;
-		private System.Windows.Forms.CheckBox autostartQueue;
-		private System.Windows.Forms.CheckBox shutdown;
+        private System.Windows.Forms.CheckBox autostartQueue;
 		private System.Windows.Forms.CheckBox openScript;
 		private System.Windows.Forms.Label priorityLabel;
 		private System.Windows.Forms.CheckBox deleteCompletedJobs;
@@ -110,10 +99,35 @@ namespace MeGUI
         private TextBox textBox7;
         private Label label10;
         private Button button7;
-        private GroupBox autoUpdateGroupBox;
-        private CheckBox useAutoUpdateCheckbox;
-        private Button autoEncodeDefaultsButton;
         private AutoEncodeDefaultsSettings autoEncodeDefaults;
+        private TabPage tabPage3;
+        private GroupBox autoUpdateGroupBox;
+        private CheckBox checkBox2;
+        private GroupBox outputExtensions;
+        private TextBox textBox8;
+        private Label label11;
+        private Label label12;
+        private TextBox textBox9;
+        private GroupBox autoModeGroupbox;
+        private Button button8;
+        private CheckBox checkBox3;
+        private Label label13;
+        private NumericUpDown numericUpDown1;
+        private CheckBox checkBox4;
+        private CheckBox useAutoUpdateCheckbox;
+        private TextBox videoExtension;
+        private Label audioExtLabel;
+        private Label videoExtLabel;
+        private TextBox audioExtension;
+        private Button autoEncodeDefaultsButton;
+        private CheckBox keep2ndPassLogfile;
+        private Label nbPassesLabel;
+        private NumericUpDown nbPasses;
+        private CheckBox keep2ndPassOutput;
+        private TextBox command;
+        private RadioButton runCommand;
+        private RadioButton shutdown;
+        private RadioButton donothing;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -151,6 +165,7 @@ namespace MeGUI
 		/// </summary>
 		private void InitializeComponent()
 		{
+            System.Windows.Forms.GroupBox groupBox1;
             this.saveButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.xvidEncrawLabel = new System.Windows.Forms.Label();
@@ -187,7 +202,6 @@ namespace MeGUI
             this.deleteAbortedOutput = new System.Windows.Forms.CheckBox();
             this.deleteCompletedJobs = new System.Windows.Forms.CheckBox();
             this.openScript = new System.Windows.Forms.CheckBox();
-            this.shutdown = new System.Windows.Forms.CheckBox();
             this.autostartQueue = new System.Windows.Forms.CheckBox();
             this.priority = new System.Windows.Forms.ComboBox();
             this.priorityLabel = new System.Windows.Forms.Label();
@@ -201,21 +215,8 @@ namespace MeGUI
             this.autoForceFilm = new System.Windows.Forms.CheckBox();
             this.openExecutableDialog = new System.Windows.Forms.OpenFileDialog();
             this.openFolderDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.autoModeGroupbox = new System.Windows.Forms.GroupBox();
-            this.autoEncodeDefaultsButton = new System.Windows.Forms.Button();
-            this.keep2ndPassLogfile = new System.Windows.Forms.CheckBox();
-            this.nbPassesLabel = new System.Windows.Forms.Label();
-            this.nbPasses = new System.Windows.Forms.NumericUpDown();
-            this.keep2ndPassOutput = new System.Windows.Forms.CheckBox();
-            this.outputExtensions = new System.Windows.Forms.GroupBox();
-            this.videoExtension = new System.Windows.Forms.TextBox();
-            this.audioExtLabel = new System.Windows.Forms.Label();
-            this.videoExtLabel = new System.Windows.Forms.Label();
-            this.audioExtension = new System.Windows.Forms.TextBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.autoUpdateGroupBox = new System.Windows.Forms.GroupBox();
-            this.useAutoUpdateCheckbox = new System.Windows.Forms.CheckBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.textBox7 = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
@@ -248,17 +249,49 @@ namespace MeGUI
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.useAutoUpdateCheckbox = new System.Windows.Forms.CheckBox();
+            this.videoExtension = new System.Windows.Forms.TextBox();
+            this.audioExtLabel = new System.Windows.Forms.Label();
+            this.videoExtLabel = new System.Windows.Forms.Label();
+            this.audioExtension = new System.Windows.Forms.TextBox();
+            this.autoEncodeDefaultsButton = new System.Windows.Forms.Button();
+            this.keep2ndPassLogfile = new System.Windows.Forms.CheckBox();
+            this.nbPassesLabel = new System.Windows.Forms.Label();
+            this.nbPasses = new System.Windows.Forms.NumericUpDown();
+            this.keep2ndPassOutput = new System.Windows.Forms.CheckBox();
+            this.autoUpdateGroupBox = new System.Windows.Forms.GroupBox();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.outputExtensions = new System.Windows.Forms.GroupBox();
+            this.textBox8 = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.textBox9 = new System.Windows.Forms.TextBox();
+            this.autoModeGroupbox = new System.Windows.Forms.GroupBox();
+            this.button8 = new System.Windows.Forms.Button();
+            this.checkBox3 = new System.Windows.Forms.CheckBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox4 = new System.Windows.Forms.CheckBox();
+            this.command = new System.Windows.Forms.TextBox();
+            this.runCommand = new System.Windows.Forms.RadioButton();
+            this.shutdown = new System.Windows.Forms.RadioButton();
+            this.donothing = new System.Windows.Forms.RadioButton();
+            groupBox1 = new System.Windows.Forms.GroupBox();
             this.otherGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.acceptableAspectError)).BeginInit();
             this.vobGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.forceFilmPercentage)).BeginInit();
-            this.autoModeGroupbox.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nbPasses)).BeginInit();
-            this.outputExtensions.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
-            this.autoUpdateGroupBox.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            this.tabPage3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nbPasses)).BeginInit();
+            this.autoUpdateGroupBox.SuspendLayout();
+            this.outputExtensions.SuspendLayout();
+            this.autoModeGroupbox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // saveButton
@@ -478,7 +511,6 @@ namespace MeGUI
             this.otherGroupBox.Controls.Add(this.deleteAbortedOutput);
             this.otherGroupBox.Controls.Add(this.deleteCompletedJobs);
             this.otherGroupBox.Controls.Add(this.openScript);
-            this.otherGroupBox.Controls.Add(this.shutdown);
             this.otherGroupBox.Controls.Add(this.autostartQueue);
             this.otherGroupBox.Controls.Add(this.priority);
             this.otherGroupBox.Controls.Add(this.priorityLabel);
@@ -601,14 +633,6 @@ namespace MeGUI
             this.openScript.TabIndex = 16;
             this.openScript.Text = "Open Preview after AviSynth script selection";
             // 
-            // shutdown
-            // 
-            this.shutdown.Location = new System.Drawing.Point(289, 16);
-            this.shutdown.Name = "shutdown";
-            this.shutdown.Size = new System.Drawing.Size(152, 24);
-            this.shutdown.TabIndex = 15;
-            this.shutdown.Text = "Shutdown after encoding";
-            // 
             // autostartQueue
             // 
             this.autostartQueue.Location = new System.Drawing.Point(289, 40);
@@ -720,128 +744,10 @@ namespace MeGUI
             this.autoForceFilm.TabIndex = 0;
             this.autoForceFilm.Text = "Auto Force Film at";
             // 
-            // autoModeGroupbox
-            // 
-            this.autoModeGroupbox.Controls.Add(this.autoEncodeDefaultsButton);
-            this.autoModeGroupbox.Controls.Add(this.keep2ndPassLogfile);
-            this.autoModeGroupbox.Controls.Add(this.nbPassesLabel);
-            this.autoModeGroupbox.Controls.Add(this.nbPasses);
-            this.autoModeGroupbox.Controls.Add(this.keep2ndPassOutput);
-            this.autoModeGroupbox.Location = new System.Drawing.Point(4, 291);
-            this.autoModeGroupbox.Name = "autoModeGroupbox";
-            this.autoModeGroupbox.Size = new System.Drawing.Size(454, 78);
-            this.autoModeGroupbox.TabIndex = 5;
-            this.autoModeGroupbox.TabStop = false;
-            this.autoModeGroupbox.Text = "Automated Encoding";
-            // 
-            // autoEncodeDefaultsButton
-            // 
-            this.autoEncodeDefaultsButton.Location = new System.Drawing.Point(11, 51);
-            this.autoEncodeDefaultsButton.Name = "autoEncodeDefaultsButton";
-            this.autoEncodeDefaultsButton.Size = new System.Drawing.Size(114, 23);
-            this.autoEncodeDefaultsButton.TabIndex = 4;
-            this.autoEncodeDefaultsButton.Text = "Configure Defaults";
-            this.autoEncodeDefaultsButton.UseVisualStyleBackColor = true;
-            this.autoEncodeDefaultsButton.Click += new System.EventHandler(this.autoEncodeDefaultsButton_Click);
-            // 
-            // keep2ndPassLogfile
-            // 
-            this.keep2ndPassLogfile.Checked = true;
-            this.keep2ndPassLogfile.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.keep2ndPassLogfile.Location = new System.Drawing.Point(232, 16);
-            this.keep2ndPassLogfile.Name = "keep2ndPassLogfile";
-            this.keep2ndPassLogfile.Size = new System.Drawing.Size(208, 24);
-            this.keep2ndPassLogfile.TabIndex = 3;
-            this.keep2ndPassLogfile.Text = "Overwrite Stats File in 3rd pass";
-            // 
-            // nbPassesLabel
-            // 
-            this.nbPassesLabel.Location = new System.Drawing.Point(8, 24);
-            this.nbPassesLabel.Name = "nbPassesLabel";
-            this.nbPassesLabel.Size = new System.Drawing.Size(100, 23);
-            this.nbPassesLabel.TabIndex = 2;
-            this.nbPassesLabel.Text = "Number of passes";
-            // 
-            // nbPasses
-            // 
-            this.nbPasses.Location = new System.Drawing.Point(120, 22);
-            this.nbPasses.Maximum = new decimal(new int[] {
-            3,
-            0,
-            0,
-            0});
-            this.nbPasses.Minimum = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
-            this.nbPasses.Name = "nbPasses";
-            this.nbPasses.Size = new System.Drawing.Size(40, 21);
-            this.nbPasses.TabIndex = 1;
-            this.nbPasses.Value = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
-            // 
-            // keep2ndPassOutput
-            // 
-            this.keep2ndPassOutput.Checked = true;
-            this.keep2ndPassOutput.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.keep2ndPassOutput.Location = new System.Drawing.Point(232, 48);
-            this.keep2ndPassOutput.Name = "keep2ndPassOutput";
-            this.keep2ndPassOutput.Size = new System.Drawing.Size(216, 24);
-            this.keep2ndPassOutput.TabIndex = 0;
-            this.keep2ndPassOutput.Text = "Keep 2nd pass Output in 3 pass mode";
-            // 
-            // outputExtensions
-            // 
-            this.outputExtensions.Controls.Add(this.videoExtension);
-            this.outputExtensions.Controls.Add(this.audioExtLabel);
-            this.outputExtensions.Controls.Add(this.videoExtLabel);
-            this.outputExtensions.Controls.Add(this.audioExtension);
-            this.outputExtensions.Location = new System.Drawing.Point(3, 375);
-            this.outputExtensions.Name = "outputExtensions";
-            this.outputExtensions.Size = new System.Drawing.Size(218, 78);
-            this.outputExtensions.TabIndex = 4;
-            this.outputExtensions.TabStop = false;
-            this.outputExtensions.Text = "Optional output extensions";
-            // 
-            // videoExtension
-            // 
-            this.videoExtension.Location = new System.Drawing.Point(6, 20);
-            this.videoExtension.Name = "videoExtension";
-            this.videoExtension.Size = new System.Drawing.Size(120, 21);
-            this.videoExtension.TabIndex = 21;
-            // 
-            // audioExtLabel
-            // 
-            this.audioExtLabel.AutoSize = true;
-            this.audioExtLabel.Location = new System.Drawing.Point(137, 51);
-            this.audioExtLabel.Name = "audioExtLabel";
-            this.audioExtLabel.Size = new System.Drawing.Size(34, 13);
-            this.audioExtLabel.TabIndex = 24;
-            this.audioExtLabel.Text = "Audio";
-            // 
-            // videoExtLabel
-            // 
-            this.videoExtLabel.AutoSize = true;
-            this.videoExtLabel.Location = new System.Drawing.Point(137, 24);
-            this.videoExtLabel.Name = "videoExtLabel";
-            this.videoExtLabel.Size = new System.Drawing.Size(33, 13);
-            this.videoExtLabel.TabIndex = 23;
-            this.videoExtLabel.Text = "Video";
-            // 
-            // audioExtension
-            // 
-            this.audioExtension.Location = new System.Drawing.Point(6, 48);
-            this.audioExtension.Name = "audioExtension";
-            this.audioExtension.Size = new System.Drawing.Size(120, 21);
-            this.audioExtension.TabIndex = 22;
-            // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Top;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
@@ -852,9 +758,6 @@ namespace MeGUI
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.autoUpdateGroupBox);
-            this.tabPage1.Controls.Add(this.outputExtensions);
-            this.tabPage1.Controls.Add(this.autoModeGroupbox);
             this.tabPage1.Controls.Add(this.vobGroupBox);
             this.tabPage1.Controls.Add(this.otherGroupBox);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
@@ -864,26 +767,6 @@ namespace MeGUI
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Main";
             this.tabPage1.UseVisualStyleBackColor = true;
-            // 
-            // autoUpdateGroupBox
-            // 
-            this.autoUpdateGroupBox.Controls.Add(this.useAutoUpdateCheckbox);
-            this.autoUpdateGroupBox.Location = new System.Drawing.Point(227, 375);
-            this.autoUpdateGroupBox.Name = "autoUpdateGroupBox";
-            this.autoUpdateGroupBox.Size = new System.Drawing.Size(231, 78);
-            this.autoUpdateGroupBox.TabIndex = 6;
-            this.autoUpdateGroupBox.TabStop = false;
-            this.autoUpdateGroupBox.Text = "Auto Update";
-            // 
-            // useAutoUpdateCheckbox
-            // 
-            this.useAutoUpdateCheckbox.AutoSize = true;
-            this.useAutoUpdateCheckbox.Location = new System.Drawing.Point(9, 23);
-            this.useAutoUpdateCheckbox.Name = "useAutoUpdateCheckbox";
-            this.useAutoUpdateCheckbox.Size = new System.Drawing.Size(105, 17);
-            this.useAutoUpdateCheckbox.TabIndex = 2;
-            this.useAutoUpdateCheckbox.Text = "Use AutoUpdate";
-            this.useAutoUpdateCheckbox.UseVisualStyleBackColor = true;
             // 
             // tabPage2
             // 
@@ -1217,6 +1100,312 @@ namespace MeGUI
             this.label4.TabIndex = 2;
             this.label4.Text = "avimux_gui";
             // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(groupBox1);
+            this.tabPage3.Controls.Add(this.autoUpdateGroupBox);
+            this.tabPage3.Controls.Add(this.outputExtensions);
+            this.tabPage3.Controls.Add(this.autoModeGroupbox);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Size = new System.Drawing.Size(460, 461);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "Extra config";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // useAutoUpdateCheckbox
+            // 
+            this.useAutoUpdateCheckbox.AutoSize = true;
+            this.useAutoUpdateCheckbox.Location = new System.Drawing.Point(9, 23);
+            this.useAutoUpdateCheckbox.Name = "useAutoUpdateCheckbox";
+            this.useAutoUpdateCheckbox.Size = new System.Drawing.Size(105, 17);
+            this.useAutoUpdateCheckbox.TabIndex = 2;
+            this.useAutoUpdateCheckbox.Text = "Use AutoUpdate";
+            this.useAutoUpdateCheckbox.UseVisualStyleBackColor = true;
+            // 
+            // videoExtension
+            // 
+            this.videoExtension.Location = new System.Drawing.Point(6, 20);
+            this.videoExtension.Name = "videoExtension";
+            this.videoExtension.Size = new System.Drawing.Size(120, 20);
+            this.videoExtension.TabIndex = 21;
+            // 
+            // audioExtLabel
+            // 
+            this.audioExtLabel.AutoSize = true;
+            this.audioExtLabel.Location = new System.Drawing.Point(137, 51);
+            this.audioExtLabel.Name = "audioExtLabel";
+            this.audioExtLabel.Size = new System.Drawing.Size(34, 13);
+            this.audioExtLabel.TabIndex = 24;
+            this.audioExtLabel.Text = "Audio";
+            // 
+            // videoExtLabel
+            // 
+            this.videoExtLabel.AutoSize = true;
+            this.videoExtLabel.Location = new System.Drawing.Point(137, 24);
+            this.videoExtLabel.Name = "videoExtLabel";
+            this.videoExtLabel.Size = new System.Drawing.Size(34, 13);
+            this.videoExtLabel.TabIndex = 23;
+            this.videoExtLabel.Text = "Video";
+            // 
+            // audioExtension
+            // 
+            this.audioExtension.Location = new System.Drawing.Point(6, 48);
+            this.audioExtension.Name = "audioExtension";
+            this.audioExtension.Size = new System.Drawing.Size(120, 20);
+            this.audioExtension.TabIndex = 22;
+            // 
+            // autoEncodeDefaultsButton
+            // 
+            this.autoEncodeDefaultsButton.Location = new System.Drawing.Point(11, 51);
+            this.autoEncodeDefaultsButton.Name = "autoEncodeDefaultsButton";
+            this.autoEncodeDefaultsButton.Size = new System.Drawing.Size(114, 23);
+            this.autoEncodeDefaultsButton.TabIndex = 4;
+            this.autoEncodeDefaultsButton.Text = "Configure Defaults";
+            this.autoEncodeDefaultsButton.UseVisualStyleBackColor = true;
+            // 
+            // keep2ndPassLogfile
+            // 
+            this.keep2ndPassLogfile.Checked = true;
+            this.keep2ndPassLogfile.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.keep2ndPassLogfile.Location = new System.Drawing.Point(232, 16);
+            this.keep2ndPassLogfile.Name = "keep2ndPassLogfile";
+            this.keep2ndPassLogfile.Size = new System.Drawing.Size(208, 24);
+            this.keep2ndPassLogfile.TabIndex = 3;
+            this.keep2ndPassLogfile.Text = "Overwrite Stats File in 3rd pass";
+            // 
+            // nbPassesLabel
+            // 
+            this.nbPassesLabel.Location = new System.Drawing.Point(8, 24);
+            this.nbPassesLabel.Name = "nbPassesLabel";
+            this.nbPassesLabel.Size = new System.Drawing.Size(100, 23);
+            this.nbPassesLabel.TabIndex = 2;
+            this.nbPassesLabel.Text = "Number of passes";
+            // 
+            // nbPasses
+            // 
+            this.nbPasses.Location = new System.Drawing.Point(120, 22);
+            this.nbPasses.Maximum = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+            this.nbPasses.Minimum = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.nbPasses.Name = "nbPasses";
+            this.nbPasses.Size = new System.Drawing.Size(40, 20);
+            this.nbPasses.TabIndex = 1;
+            this.nbPasses.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            // 
+            // keep2ndPassOutput
+            // 
+            this.keep2ndPassOutput.Checked = true;
+            this.keep2ndPassOutput.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.keep2ndPassOutput.Location = new System.Drawing.Point(232, 48);
+            this.keep2ndPassOutput.Name = "keep2ndPassOutput";
+            this.keep2ndPassOutput.Size = new System.Drawing.Size(216, 24);
+            this.keep2ndPassOutput.TabIndex = 0;
+            this.keep2ndPassOutput.Text = "Keep 2nd pass Output in 3 pass mode";
+            // 
+            // autoUpdateGroupBox
+            // 
+            this.autoUpdateGroupBox.Controls.Add(this.checkBox2);
+            this.autoUpdateGroupBox.Location = new System.Drawing.Point(227, 87);
+            this.autoUpdateGroupBox.Name = "autoUpdateGroupBox";
+            this.autoUpdateGroupBox.Size = new System.Drawing.Size(231, 78);
+            this.autoUpdateGroupBox.TabIndex = 9;
+            this.autoUpdateGroupBox.TabStop = false;
+            this.autoUpdateGroupBox.Text = "Auto Update";
+            // 
+            // checkBox2
+            // 
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.Location = new System.Drawing.Point(9, 23);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(105, 17);
+            this.checkBox2.TabIndex = 2;
+            this.checkBox2.Text = "Use AutoUpdate";
+            this.checkBox2.UseVisualStyleBackColor = true;
+            // 
+            // outputExtensions
+            // 
+            this.outputExtensions.Controls.Add(this.textBox8);
+            this.outputExtensions.Controls.Add(this.label11);
+            this.outputExtensions.Controls.Add(this.label12);
+            this.outputExtensions.Controls.Add(this.textBox9);
+            this.outputExtensions.Location = new System.Drawing.Point(3, 87);
+            this.outputExtensions.Name = "outputExtensions";
+            this.outputExtensions.Size = new System.Drawing.Size(218, 78);
+            this.outputExtensions.TabIndex = 7;
+            this.outputExtensions.TabStop = false;
+            this.outputExtensions.Text = "Optional output extensions";
+            // 
+            // textBox8
+            // 
+            this.textBox8.Location = new System.Drawing.Point(6, 20);
+            this.textBox8.Name = "textBox8";
+            this.textBox8.Size = new System.Drawing.Size(120, 21);
+            this.textBox8.TabIndex = 21;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(137, 51);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(34, 13);
+            this.label11.TabIndex = 24;
+            this.label11.Text = "Audio";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(137, 24);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(33, 13);
+            this.label12.TabIndex = 23;
+            this.label12.Text = "Video";
+            // 
+            // textBox9
+            // 
+            this.textBox9.Location = new System.Drawing.Point(6, 48);
+            this.textBox9.Name = "textBox9";
+            this.textBox9.Size = new System.Drawing.Size(120, 21);
+            this.textBox9.TabIndex = 22;
+            // 
+            // autoModeGroupbox
+            // 
+            this.autoModeGroupbox.Controls.Add(this.button8);
+            this.autoModeGroupbox.Controls.Add(this.checkBox3);
+            this.autoModeGroupbox.Controls.Add(this.label13);
+            this.autoModeGroupbox.Controls.Add(this.numericUpDown1);
+            this.autoModeGroupbox.Controls.Add(this.checkBox4);
+            this.autoModeGroupbox.Location = new System.Drawing.Point(4, 3);
+            this.autoModeGroupbox.Name = "autoModeGroupbox";
+            this.autoModeGroupbox.Size = new System.Drawing.Size(454, 78);
+            this.autoModeGroupbox.TabIndex = 8;
+            this.autoModeGroupbox.TabStop = false;
+            this.autoModeGroupbox.Text = "Automated Encoding";
+            // 
+            // button8
+            // 
+            this.button8.Location = new System.Drawing.Point(11, 51);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(114, 23);
+            this.button8.TabIndex = 4;
+            this.button8.Text = "Configure Defaults";
+            this.button8.UseVisualStyleBackColor = true;
+            // 
+            // checkBox3
+            // 
+            this.checkBox3.Checked = true;
+            this.checkBox3.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox3.Location = new System.Drawing.Point(232, 16);
+            this.checkBox3.Name = "checkBox3";
+            this.checkBox3.Size = new System.Drawing.Size(208, 24);
+            this.checkBox3.TabIndex = 3;
+            this.checkBox3.Text = "Overwrite Stats File in 3rd pass";
+            // 
+            // label13
+            // 
+            this.label13.Location = new System.Drawing.Point(8, 24);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(100, 23);
+            this.label13.TabIndex = 2;
+            this.label13.Text = "Number of passes";
+            // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.Location = new System.Drawing.Point(120, 22);
+            this.numericUpDown1.Maximum = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+            this.numericUpDown1.Minimum = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(40, 21);
+            this.numericUpDown1.TabIndex = 1;
+            this.numericUpDown1.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            // 
+            // checkBox4
+            // 
+            this.checkBox4.Checked = true;
+            this.checkBox4.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox4.Location = new System.Drawing.Point(232, 48);
+            this.checkBox4.Name = "checkBox4";
+            this.checkBox4.Size = new System.Drawing.Size(216, 24);
+            this.checkBox4.TabIndex = 0;
+            this.checkBox4.Text = "Keep 2nd pass Output in 3 pass mode";
+            // 
+            // groupBox1
+            // 
+            groupBox1.Controls.Add(this.command);
+            groupBox1.Controls.Add(this.runCommand);
+            groupBox1.Controls.Add(this.shutdown);
+            groupBox1.Controls.Add(this.donothing);
+            groupBox1.Location = new System.Drawing.Point(4, 171);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Size = new System.Drawing.Size(217, 119);
+            groupBox1.TabIndex = 10;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "After encoding";
+            // 
+            // command
+            // 
+            this.command.Enabled = false;
+            this.command.Location = new System.Drawing.Point(42, 89);
+            this.command.Name = "command";
+            this.command.Size = new System.Drawing.Size(160, 21);
+            this.command.TabIndex = 3;
+            // 
+            // runCommand
+            // 
+            this.runCommand.AutoSize = true;
+            this.runCommand.Location = new System.Drawing.Point(11, 66);
+            this.runCommand.Name = "runCommand";
+            this.runCommand.Size = new System.Drawing.Size(96, 17);
+            this.runCommand.TabIndex = 2;
+            this.runCommand.Text = "Run command:";
+            this.runCommand.UseVisualStyleBackColor = true;
+            this.runCommand.CheckedChanged += new System.EventHandler(this.runCommand_CheckedChanged);
+            // 
+            // shutdown
+            // 
+            this.shutdown.AutoSize = true;
+            this.shutdown.Location = new System.Drawing.Point(11, 43);
+            this.shutdown.Name = "shutdown";
+            this.shutdown.Size = new System.Drawing.Size(73, 17);
+            this.shutdown.TabIndex = 1;
+            this.shutdown.Text = "Shutdown";
+            this.shutdown.UseVisualStyleBackColor = true;
+            // 
+            // donothing
+            // 
+            this.donothing.AutoSize = true;
+            this.donothing.Checked = true;
+            this.donothing.Location = new System.Drawing.Point(11, 20);
+            this.donothing.Name = "donothing";
+            this.donothing.Size = new System.Drawing.Size(77, 17);
+            this.donothing.TabIndex = 0;
+            this.donothing.TabStop = true;
+            this.donothing.Text = "Do nothing";
+            this.donothing.UseVisualStyleBackColor = true;
+            // 
             // SettingsForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
@@ -1237,16 +1426,20 @@ namespace MeGUI
             ((System.ComponentModel.ISupportInitialize)(this.acceptableAspectError)).EndInit();
             this.vobGroupBox.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.forceFilmPercentage)).EndInit();
-            this.autoModeGroupbox.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.nbPasses)).EndInit();
-            this.outputExtensions.ResumeLayout(false);
-            this.outputExtensions.PerformLayout();
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
-            this.autoUpdateGroupBox.ResumeLayout(false);
-            this.autoUpdateGroupBox.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
+            this.tabPage3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.nbPasses)).EndInit();
+            this.autoUpdateGroupBox.ResumeLayout(false);
+            this.autoUpdateGroupBox.PerformLayout();
+            this.outputExtensions.ResumeLayout(false);
+            this.outputExtensions.PerformLayout();
+            this.autoModeGroupbox.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            groupBox1.ResumeLayout(false);
+            groupBox1.PerformLayout();
             this.ResumeLayout(false);
 
 		}
@@ -1411,6 +1604,10 @@ namespace MeGUI
                 textBox7.Text = openExecutableDialog.FileName;
             }
         }
+        private void runCommand_CheckedChanged(object sender, EventArgs e)
+        {
+            command.Enabled = runCommand.Checked;
+        }
         /// <summary>
         /// launches the autoencode default settings window
         /// </summary>
@@ -1459,7 +1656,13 @@ namespace MeGUI
 				settings.ForceFilmThreshold = forceFilmPercentage.Value;
 				settings.DefaultPriority = (ProcessPriority)priority.SelectedIndex;
 				settings.AutoStartQueue = this.autostartQueue.Checked;
-				settings.Shutdown = this.shutdown.Checked;
+                if (donothing.Checked) settings.AfterEncoding = AfterEncoding.DoNothing;
+                else if (shutdown.Checked) settings.AfterEncoding = AfterEncoding.Shutdown;
+                else
+                {
+                    settings.AfterEncoding = AfterEncoding.RunCommand;
+                    settings.AfterEncodingCommand = command.Text;
+                }
 				settings.AutoOpenScript = this.openScript.Checked;
 				settings.DeleteCompletedJobs = deleteCompletedJobs.Checked;
 				settings.DeleteIntermediateFiles = deleteIntermediateFiles.Checked;
@@ -1510,7 +1713,10 @@ namespace MeGUI
 				forceFilmPercentage.Value = settings.ForceFilmThreshold;
 				priority.SelectedIndex = (int)settings.DefaultPriority;
 				autostartQueue.Checked = settings.AutoStartQueue;
-				shutdown.Checked = settings.Shutdown;
+                donothing.Checked = settings.AfterEncoding == AfterEncoding.DoNothing;
+                shutdown.Checked = settings.AfterEncoding == AfterEncoding.Shutdown;
+                runCommand.Checked = settings.AfterEncoding == AfterEncoding.RunCommand;
+                command.Text = settings.AfterEncodingCommand;
 				deleteCompletedJobs.Checked = settings.DeleteCompletedJobs;
 				openScript.Checked = settings.AutoOpenScript;
 				deleteIntermediateFiles.Checked = settings.DeleteIntermediateFiles;

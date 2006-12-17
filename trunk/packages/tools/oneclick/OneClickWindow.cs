@@ -141,7 +141,6 @@ namespace MeGUI
             this.filesizeComboBox.Items.Add("Don't care");
             this.filesizeComboBox.SelectedIndex = 2;
             this.arComboBox.SelectedIndex = 0;
-            this.shutdownCheckBox.Checked = mainForm.Settings.Shutdown;
 
             initVideoHandler();
             initAudioHandler();
@@ -521,11 +520,6 @@ namespace MeGUI
             else
                 MessageBox.Show("You must select audio and video profile, output name and working directory to continue",
                     "Incomplete configuration", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-        }
-
-        private void shutdownCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            mainForm.Settings.Shutdown = this.shutdownCheckBox.Checked;
         }
 
         #endregion

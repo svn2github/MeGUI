@@ -824,6 +824,10 @@ namespace MeGUI
                 sb.Append("--no-dct-decimate ");
             if (!xs.PSNRCalculation)
                 sb.Append("--no-psnr ");
+            if (!xs.SSIMCalculation)
+                sb.Append("--no-ssim ");
+            if (xs.EncodeInterlaced)
+                sb.Append("--interlaced ");
             if (xs.NoiseReduction > 0)
                 sb.Append("--nr " + xs.NoiseReduction + " ");
             //add the rest of the mencoder commandline regarding the output

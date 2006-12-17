@@ -142,6 +142,8 @@ namespace MeGUI.packages.video.x264
             this.customCommandlineOptionsLabel = new System.Windows.Forms.Label();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.ssim = new System.Windows.Forms.CheckBox();
+            this.interlaced = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.zoneTabPage.SuspendLayout();
             this.mainTabPage.SuspendLayout();
@@ -196,7 +198,7 @@ namespace MeGUI.packages.video.x264
             // 
             this.zoneTabPage.Controls.Add(this.customCommandlineOptions);
             this.zoneTabPage.Controls.Add(this.customCommandlineOptionsLabel);
-            this.zoneTabPage.Size = new System.Drawing.Size(502, 456);
+            this.zoneTabPage.Size = new System.Drawing.Size(502, 419);
             this.zoneTabPage.Controls.SetChildIndex(this.customCommandlineOptionsLabel, 0);
             this.zoneTabPage.Controls.SetChildIndex(this.customCommandlineOptions, 0);
             // 
@@ -204,6 +206,7 @@ namespace MeGUI.packages.video.x264
             // 
             this.commandline.Location = new System.Drawing.Point(0, 451);
             this.commandline.Size = new System.Drawing.Size(507, 59);
+            this.commandline.Text = " ";
             // 
             // mainTabPage
             // 
@@ -212,12 +215,13 @@ namespace MeGUI.packages.video.x264
             this.mainTabPage.Controls.Add(this.avcProfileGroupbox);
             this.mainTabPage.Controls.Add(this.x264CodecToolsGroupbox);
             this.mainTabPage.Controls.Add(this.x264CodecGeneralGroupbox);
-            this.mainTabPage.Size = new System.Drawing.Size(502, 456);
+            this.mainTabPage.Size = new System.Drawing.Size(502, 419);
             // 
             // x264GeneralMiscGroupbox
             // 
             this.x264GeneralMiscGroupbox.Controls.Add(this.fourCC);
             this.x264GeneralMiscGroupbox.Controls.Add(this.fourCCLabel);
+            this.x264GeneralMiscGroupbox.Controls.Add(this.ssim);
             this.x264GeneralMiscGroupbox.Controls.Add(this.psnr);
             this.x264GeneralMiscGroupbox.Controls.Add(this.x264NbThreadsLabel);
             this.x264GeneralMiscGroupbox.Controls.Add(this.x264NbThreads);
@@ -235,7 +239,7 @@ namespace MeGUI.packages.video.x264
             "VSSH",
             "x264",
             "avc1"});
-            this.fourCC.Location = new System.Drawing.Point(88, 64);
+            this.fourCC.Location = new System.Drawing.Point(87, 101);
             this.fourCC.Name = "fourCC";
             this.fourCC.Size = new System.Drawing.Size(82, 21);
             this.fourCC.TabIndex = 20;
@@ -244,7 +248,7 @@ namespace MeGUI.packages.video.x264
             // fourCCLabel
             // 
             this.fourCCLabel.AutoSize = true;
-            this.fourCCLabel.Location = new System.Drawing.Point(8, 63);
+            this.fourCCLabel.Location = new System.Drawing.Point(7, 100);
             this.fourCCLabel.Margin = new System.Windows.Forms.Padding(3);
             this.fourCCLabel.Name = "fourCCLabel";
             this.fourCCLabel.Padding = new System.Windows.Forms.Padding(3);
@@ -267,7 +271,7 @@ namespace MeGUI.packages.video.x264
             // x264NbThreadsLabel
             // 
             this.x264NbThreadsLabel.AutoSize = true;
-            this.x264NbThreadsLabel.Location = new System.Drawing.Point(8, 39);
+            this.x264NbThreadsLabel.Location = new System.Drawing.Point(7, 76);
             this.x264NbThreadsLabel.Margin = new System.Windows.Forms.Padding(3);
             this.x264NbThreadsLabel.Name = "x264NbThreadsLabel";
             this.x264NbThreadsLabel.Padding = new System.Windows.Forms.Padding(3);
@@ -278,7 +282,7 @@ namespace MeGUI.packages.video.x264
             // 
             // x264NbThreads
             // 
-            this.x264NbThreads.Location = new System.Drawing.Point(130, 40);
+            this.x264NbThreads.Location = new System.Drawing.Point(129, 77);
             this.x264NbThreads.Maximum = new decimal(new int[] {
             4,
             0,
@@ -558,13 +562,14 @@ namespace MeGUI.packages.video.x264
             this.rateControlTabPage.Controls.Add(this.x264RCGroupbox);
             this.rateControlTabPage.Location = new System.Drawing.Point(4, 22);
             this.rateControlTabPage.Name = "rateControlTabPage";
-            this.rateControlTabPage.Size = new System.Drawing.Size(502, 456);
+            this.rateControlTabPage.Size = new System.Drawing.Size(502, 419);
             this.rateControlTabPage.TabIndex = 3;
             this.rateControlTabPage.Text = "RC and ME";
             this.rateControlTabPage.UseVisualStyleBackColor = true;
             // 
             // x264RateControlMiscGroupbox
             // 
+            this.x264RateControlMiscGroupbox.Controls.Add(this.interlaced);
             this.x264RateControlMiscGroupbox.Controls.Add(this.NoiseReduction);
             this.x264RateControlMiscGroupbox.Controls.Add(this.NoiseReductionLabel);
             this.x264RateControlMiscGroupbox.Controls.Add(this.x264KeyframeIntervalLabel);
@@ -1747,6 +1752,28 @@ namespace MeGUI.packages.video.x264
             // 
             this.openFileDialog.FileName = "openFileDialog1";
             // 
+            // ssim
+            // 
+            this.ssim.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.ssim.Location = new System.Drawing.Point(8, 43);
+            this.ssim.Name = "ssim";
+            this.ssim.Padding = new System.Windows.Forms.Padding(3);
+            this.ssim.Size = new System.Drawing.Size(160, 23);
+            this.ssim.TabIndex = 18;
+            this.ssim.Text = "Enable SSIM calculation";
+            this.ssim.CheckedChanged += new System.EventHandler(this.updateEvent);
+            // 
+            // interlaced
+            // 
+            this.interlaced.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.interlaced.Location = new System.Drawing.Point(12, 91);
+            this.interlaced.Name = "interlaced";
+            this.interlaced.Size = new System.Drawing.Size(186, 24);
+            this.interlaced.TabIndex = 12;
+            this.interlaced.Text = "Encode interlaced";
+            this.interlaced.UseVisualStyleBackColor = true;
+            this.interlaced.CheckedChanged += new System.EventHandler(this.updateEvent);
+            // 
             // x264ConfigurationPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1923,5 +1950,7 @@ namespace MeGUI.packages.video.x264
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.CheckBox noDCTDecimateOption;
+        private System.Windows.Forms.CheckBox ssim;
+        private System.Windows.Forms.CheckBox interlaced;
     }
 }

@@ -1,4 +1,9 @@
-0.2.4.0001
+0.2.4.1002
+Commit by berrinam:
+    - Add 'run command after encoding'
+    - x264: add support for --no-ssim and --interlaced
+
+0.2.4.1001
 Commit by berrinam:
     - Fixed Guide link so it points to http://mewiki.project357.com/wiki/Main_Page
     - Fixed bug when loading d2v files into avs creator
