@@ -1,3 +1,8 @@
+0.2.4.1003
+Commit by berrinam:
+    - Allow deletion of unreadable profiles
+    - Add the update window to the tools menu again
+
 0.2.4.1002
 Commit by berrinam:
     - Add 'run command after encoding'

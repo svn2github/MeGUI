@@ -166,6 +166,9 @@ namespace MeGUI
 				catch (Exception e)
 				{
 					MessageBox.Show("Profile " + prof.Name + " could not be saved. Error message: " + e.Message, "Error saving profile", MessageBoxButtons.OK);
+                    s.Close();
+                    try { File.Delete(fileName); }
+                    catch (IOException) { }
 				}
 			}
 		}
@@ -186,7 +189,7 @@ namespace MeGUI
 				}
 				catch (Exception)
 				{
-					MessageBox.Show("Profile " + name + " could not be loaded. Is it a valid profile created by MeGUI?", "Error loading profile", MessageBoxButtons.OK);
+					DialogResult r = MessageBox.Show("Profile " + name + " could not be loaded. Delete?", "Error loading profile", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
 					return null;
 				}
 			}

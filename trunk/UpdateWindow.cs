@@ -17,38 +17,7 @@ using System.Text;
 
 namespace MeGUI
 {
-    public class UpdateTool : MeGUI.core.plugins.interfaces.ITool
-    {
 
-        #region ITool Members
-
-        public string Name
-        {
-            get { return "Update"; }
-        }
-
-        public void Run(MainForm info)
-        {
-            UpdateWindow update = new UpdateWindow(info, info.Settings);
-            update.ShowDialog();
-        }
-
-        public Shortcut[] Shortcuts
-        {
-            get { throw new Exception("The method or operation is not implemented."); }
-        }
-
-        #endregion
-
-        #region IIDable Members
-
-        public string ID
-        {
-            get { return "update_window"; }
-        }
-
-        #endregion
-    }
     public partial class UpdateWindow : Form
     {
         private MainForm mainForm = null;
@@ -1398,5 +1367,37 @@ namespace MeGUI
             btnUpdate.Enabled = true;
             btnAbort.Enabled = false;
         }
+    }
+    public class UpdateTool : MeGUI.core.plugins.interfaces.ITool
+    {
+
+        #region ITool Members
+
+        public string Name
+        {
+            get { return "Update"; }
+        }
+
+        public void Run(MainForm info)
+        {
+            UpdateWindow update = new UpdateWindow(info, info.Settings);
+            update.ShowDialog();
+        }
+
+        public Shortcut[] Shortcuts
+        {
+            get { return new Shortcut[] { Shortcut.CtrlU }; }
+        }
+
+        #endregion
+
+        #region IIDable Members
+
+        public string ID
+        {
+            get { return "update_window"; }
+        }
+
+        #endregion
     }
 }

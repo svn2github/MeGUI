@@ -1409,6 +1409,7 @@ namespace MeGUI
             PackageSystem.Tools.Register(new CQMEditorTool());
             PackageSystem.Tools.Register(new CalculatorTool());
             PackageSystem.Tools.Register(new ChapterCreatorTool());
+            PackageSystem.Tools.Register(new UpdateTool());
 //            PackageSystem.Tools.Register(new OneClickConfigTool());
             PackageSystem.Tools.Register(new OneClickTool());
             PackageSystem.Tools.Register(new D2VCreatorTool());
