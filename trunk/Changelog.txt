@@ -1,3 +1,7 @@
+0.2.4.1007
+Commit by berrinam:
+    - Fixed force film detection for video sources
+
 0.2.4.1006
 Commit by berrinam:
     - Fixed interlace detection

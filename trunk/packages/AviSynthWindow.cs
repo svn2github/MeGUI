@@ -325,9 +325,9 @@ namespace MeGUI
             label2.AutoSize = true;
             label2.Location = new System.Drawing.Point(6, 22);
             label2.Name = "label2";
-            label2.Size = new System.Drawing.Size(208, 13);
+            label2.Size = new System.Drawing.Size(289, 13);
             label2.TabIndex = 11;
-            label2.Text = "Source info (click analyse to auto-detect):";
+            label2.Text = "Source info:       (enter info or click analyse to auto-detect)";
             // 
             // label3
             // 

@@ -66,6 +66,9 @@ namespace MeGUI
 	/// </summary>
 	public class d2vFile : IMediaFile
 	{
+        private static readonly System.Text.RegularExpressions.Regex r =
+            new System.Text.RegularExpressions.Regex("(?<=FINISHED +)[0-9.]+(?=% FILM)");
+
         public static double GetFilmPercent(string file)
         {
             double filmPercentage = -1.0;
@@ -73,14 +76,9 @@ namespace MeGUI
             {
                 string line = sr.ReadLine();
                 while ((line = sr.ReadLine()) != null)
-                {
-                    if (line.IndexOf("FINISHED") != -1)
-                    {
-                        int end = line.IndexOf("%");
-                        string percentage = line.Substring(10, end - 10);
-                        filmPercentage = Double.Parse(percentage, System.Globalization.CultureInfo.InvariantCulture);
-                    }
-                }
+                    if (r.IsMatch(line))
+                        filmPercentage = double.Parse(r.Match(line).Value, 
+                            System.Globalization.CultureInfo.InvariantCulture);
             }
             return filmPercentage;
         }
