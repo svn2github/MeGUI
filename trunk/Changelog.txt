@@ -1,3 +1,7 @@
+0.2.4.1008
+Commit by Sharx1976:
+    - Added "--threads auto" support in x264 config and commandline generator
+    
 0.2.4.1007
 Commit by berrinam:
     - Fixed force film detection for video sources

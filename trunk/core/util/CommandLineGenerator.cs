@@ -786,8 +786,10 @@ namespace MeGUI
 			}
 			if (xs.MERange != 16)
 				sb.Append("--merange " + xs.MERange + " ");
-			if (xs.NbThreads != 1)
+			if (xs.NbThreads > 1)
 				sb.Append("--threads " + xs.NbThreads + " ");
+            if (xs.NbThreads == 0)
+                sb.Append("--threads auto ");
             sb.Append("--thread-input ");
 			if (xs.Zones != null && xs.Zones.Length > 0 && xs.CreditsQuantizer >= new decimal(1))
 			{

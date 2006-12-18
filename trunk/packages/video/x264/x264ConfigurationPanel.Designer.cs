@@ -31,6 +31,7 @@ namespace MeGUI.packages.video.x264
             this.x264GeneralMiscGroupbox = new System.Windows.Forms.GroupBox();
             this.fourCC = new System.Windows.Forms.ComboBox();
             this.fourCCLabel = new System.Windows.Forms.Label();
+            this.ssim = new System.Windows.Forms.CheckBox();
             this.psnr = new System.Windows.Forms.CheckBox();
             this.x264NbThreadsLabel = new System.Windows.Forms.Label();
             this.x264NbThreads = new System.Windows.Forms.NumericUpDown();
@@ -56,6 +57,7 @@ namespace MeGUI.packages.video.x264
             this.x264BitrateQuantizer = new System.Windows.Forms.TextBox();
             this.rateControlTabPage = new System.Windows.Forms.TabPage();
             this.x264RateControlMiscGroupbox = new System.Windows.Forms.GroupBox();
+            this.interlaced = new System.Windows.Forms.CheckBox();
             this.NoiseReduction = new System.Windows.Forms.TextBox();
             this.NoiseReductionLabel = new System.Windows.Forms.Label();
             this.x264KeyframeIntervalLabel = new System.Windows.Forms.Label();
@@ -142,8 +144,6 @@ namespace MeGUI.packages.video.x264
             this.customCommandlineOptionsLabel = new System.Windows.Forms.Label();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.ssim = new System.Windows.Forms.CheckBox();
-            this.interlaced = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.zoneTabPage.SuspendLayout();
             this.mainTabPage.SuspendLayout();
@@ -257,6 +257,17 @@ namespace MeGUI.packages.video.x264
             this.fourCCLabel.Text = "fourCC";
             this.fourCCLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // ssim
+            // 
+            this.ssim.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.ssim.Location = new System.Drawing.Point(8, 43);
+            this.ssim.Name = "ssim";
+            this.ssim.Padding = new System.Windows.Forms.Padding(3);
+            this.ssim.Size = new System.Drawing.Size(160, 23);
+            this.ssim.TabIndex = 18;
+            this.ssim.Text = "Enable SSIM calculation";
+            this.ssim.CheckedChanged += new System.EventHandler(this.updateEvent);
+            // 
             // psnr
             // 
             this.psnr.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -275,9 +286,9 @@ namespace MeGUI.packages.video.x264
             this.x264NbThreadsLabel.Margin = new System.Windows.Forms.Padding(3);
             this.x264NbThreadsLabel.Name = "x264NbThreadsLabel";
             this.x264NbThreadsLabel.Padding = new System.Windows.Forms.Padding(3);
-            this.x264NbThreadsLabel.Size = new System.Drawing.Size(104, 19);
+            this.x264NbThreadsLabel.Size = new System.Drawing.Size(101, 19);
             this.x264NbThreadsLabel.TabIndex = 5;
-            this.x264NbThreadsLabel.Text = "Number of Threads";
+            this.x264NbThreadsLabel.Text = "Threads (0 = Auto)";
             this.x264NbThreadsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // x264NbThreads
@@ -288,19 +299,9 @@ namespace MeGUI.packages.video.x264
             0,
             0,
             0});
-            this.x264NbThreads.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
             this.x264NbThreads.Name = "x264NbThreads";
             this.x264NbThreads.Size = new System.Drawing.Size(40, 20);
             this.x264NbThreads.TabIndex = 4;
-            this.x264NbThreads.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
             this.x264NbThreads.ValueChanged += new System.EventHandler(this.updateEvent);
             // 
             // avcLevelGroupbox
@@ -582,6 +583,17 @@ namespace MeGUI.packages.video.x264
             this.x264RateControlMiscGroupbox.TabIndex = 40;
             this.x264RateControlMiscGroupbox.TabStop = false;
             this.x264RateControlMiscGroupbox.Text = "Misc";
+            // 
+            // interlaced
+            // 
+            this.interlaced.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.interlaced.Location = new System.Drawing.Point(12, 91);
+            this.interlaced.Name = "interlaced";
+            this.interlaced.Size = new System.Drawing.Size(186, 24);
+            this.interlaced.TabIndex = 12;
+            this.interlaced.Text = "Encode interlaced";
+            this.interlaced.UseVisualStyleBackColor = true;
+            this.interlaced.CheckedChanged += new System.EventHandler(this.updateEvent);
             // 
             // NoiseReduction
             // 
@@ -1751,28 +1763,6 @@ namespace MeGUI.packages.video.x264
             // openFileDialog
             // 
             this.openFileDialog.FileName = "openFileDialog1";
-            // 
-            // ssim
-            // 
-            this.ssim.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.ssim.Location = new System.Drawing.Point(8, 43);
-            this.ssim.Name = "ssim";
-            this.ssim.Padding = new System.Windows.Forms.Padding(3);
-            this.ssim.Size = new System.Drawing.Size(160, 23);
-            this.ssim.TabIndex = 18;
-            this.ssim.Text = "Enable SSIM calculation";
-            this.ssim.CheckedChanged += new System.EventHandler(this.updateEvent);
-            // 
-            // interlaced
-            // 
-            this.interlaced.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.interlaced.Location = new System.Drawing.Point(12, 91);
-            this.interlaced.Name = "interlaced";
-            this.interlaced.Size = new System.Drawing.Size(186, 24);
-            this.interlaced.TabIndex = 12;
-            this.interlaced.Text = "Encode interlaced";
-            this.interlaced.UseVisualStyleBackColor = true;
-            this.interlaced.CheckedChanged += new System.EventHandler(this.updateEvent);
             // 
             // x264ConfigurationPanel
             // 

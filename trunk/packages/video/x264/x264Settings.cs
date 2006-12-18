@@ -95,7 +95,7 @@ namespace MeGUI
 			bframeBias = new decimal(0);
 			meType = 1;
 			meRange = 16;
-			NbThreads = 1;
+			NbThreads = 0;
 			minGOPSize = 25;
 			adaptiveDCT = false;
 			quantizerMatrix = "";
