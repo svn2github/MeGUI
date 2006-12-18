@@ -68,7 +68,8 @@ namespace MeGUI
         }
         #endregion
         #region wrappers for the above handlers
-
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> CurrentSettingsProvider
         {
             get { return codecHandler.CurrentSettingsProvider; }

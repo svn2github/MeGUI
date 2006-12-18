@@ -27,56 +27,7 @@ using System.IO;
 
 namespace MeGUI
 {
-    public class CalculatorTool : MeGUI.core.plugins.interfaces.ITool
-    {
-
-        #region ITool Members
-
-        public string Name
-        {
-            get { return "Bitrate Calculator"; }
-        }
-
-        public void Run(MainForm info)
-        {
-            using (Calculator calc = new Calculator(info))
-            {
-                int nbFrames = 0;
-                double framerate = 0.0;
-                if (!info.Video.VideoInput.Equals(""))
-                    info.JobUtil.getInputProperties(out nbFrames, out framerate, info.Video.VideoInput);
-                calc.setDefaults(nbFrames, framerate, info.Video.CurrentSettingsProvider, info.Audio.AudioStreams[0], info.Audio.AudioStreams[1]);
-
-                DialogResult dr = calc.ShowDialog();
-                if (dr == DialogResult.OK)
-                {
-                    info.Video.CurrentSettingsProvider = calc.getSelectedCodec();
-                    VideoCodecSettings settings = info.Video.CodecHandler.Getter();
-                    if (settings.EncodingMode == 1 || settings.EncodingMode == 9)
-                    {
-                        settings.EncodingMode = 0;
-                    }
-                    settings.BitrateQuantizer = calc.getBitrate();
-                }
-            }
-        }
-
-        public Shortcut[] Shortcuts
-        {
-            get { return new Shortcut[] { Shortcut.CtrlB }; }
-        }
-
-        #endregion
-
-        #region IIDable Members
-
-        public string ID
-        {
-            get { return "bitrate_calculator_window"; }
-        }
-
-        #endregion
-    }
+ 
 	/// <summary>
 	/// Summary description for Calculator.
 	/// </summary>
@@ -1684,4 +1635,54 @@ namespace MeGUI
 		#endregion
 
 	}
+    public class CalculatorTool : MeGUI.core.plugins.interfaces.ITool
+    {
+
+        #region ITool Members
+
+        public string Name
+        {
+            get { return "Bitrate Calculator"; }
+        }
+
+        public void Run(MainForm info)
+        {
+            using (Calculator calc = new Calculator(info))
+            {
+                int nbFrames = 0;
+                double framerate = 0.0;
+                if (!info.Video.VideoInput.Equals(""))
+                    info.JobUtil.getInputProperties(out nbFrames, out framerate, info.Video.VideoInput);
+                calc.setDefaults(nbFrames, framerate, info.Video.CurrentSettingsProvider, info.Audio.AudioStreams[0], info.Audio.AudioStreams[1]);
+
+                DialogResult dr = calc.ShowDialog();
+                if (dr == DialogResult.OK)
+                {
+                    info.Video.CurrentSettingsProvider = calc.getSelectedCodec();
+                    VideoCodecSettings settings = info.Video.CodecHandler.Getter();
+                    if (settings.EncodingMode == 1 || settings.EncodingMode == 9)
+                    {
+                        settings.EncodingMode = 0;
+                    }
+                    settings.BitrateQuantizer = calc.getBitrate();
+                }
+            }
+        }
+
+        public Shortcut[] Shortcuts
+        {
+            get { return new Shortcut[] { Shortcut.CtrlB }; }
+        }
+
+        #endregion
+
+        #region IIDable Members
+
+        public string ID
+        {
+            get { return "bitrate_calculator_window"; }
+        }
+
+        #endregion
+    }
 }

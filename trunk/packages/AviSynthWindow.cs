@@ -1284,7 +1284,6 @@ namespace MeGUI
                     if (value.majorityFilm) deintSourceType.SelectedItem = ScriptServer.ListOfSourceTypes[(int)UserSourceType.HybridFilmInterlaced];
                     else deintSourceType.SelectedItem = ScriptServer.ListOfSourceTypes[(int)UserSourceType.HybridInterlacedFilm];
                 }
-                this.deinterlaceType.Items.Clear();
                 this.deinterlaceType.DataSource = ScriptServer.GetDeinterlacers(value);
                 this.deinterlaceType.BindingContext = new BindingContext();
             }

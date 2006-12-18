@@ -1,3 +1,9 @@
+0.2.4.1006
+Commit by berrinam:
+    - Fixed interlace detection
+    - Fixed Adaptive muxer crash
+    - Re-added the avc2avi and divxmux muxers (for avi).
+
 0.2.4.1005
 Commit by berrinam:
     - Made the 'enqueue' button for audio visible. Sorry

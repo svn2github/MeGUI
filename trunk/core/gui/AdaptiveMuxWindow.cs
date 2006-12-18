@@ -30,7 +30,7 @@ namespace MeGUI
 
         private void containerFormat_SelectedIndexChanged(object sender, EventArgs e)
         {
-            this.muxedOutput.Text = Path.ChangeExtension(this.muxedOutput.Text, (this.containerFormat.SelectedItem as OutputType).Extension);
+            this.muxedOutput.Text = Path.ChangeExtension(this.muxedOutput.Text, (this.containerFormat.SelectedItem as ContainerType).Extension);
         }
 
         private void getTypes(out AudioEncoderType[] aCodec, out MuxableType[] audioTypes, out MuxableType[] subtitleTypes)

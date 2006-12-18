@@ -175,7 +175,7 @@ namespace MeGUI
             this.videoOutput.Location = new System.Drawing.Point(113, 34);
             this.videoOutput.Name = "videoOutput";
             this.videoOutput.ReadOnly = false;
-            this.videoOutput.SaveMode = false;
+            this.videoOutput.SaveMode = true;
             this.videoOutput.Size = new System.Drawing.Size(296, 26);
             this.videoOutput.TabIndex = 29;
             this.videoOutput.Title = "Enter name of output";

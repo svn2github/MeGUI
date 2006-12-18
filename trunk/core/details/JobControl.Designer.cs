@@ -304,6 +304,7 @@ namespace MeGUI.core.details
             // 
             // afterEncoding
             // 
+            this.afterEncoding.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.afterEncoding.AutoSize = true;
             this.afterEncoding.Location = new System.Drawing.Point(6, 304);
             this.afterEncoding.Name = "afterEncoding";
