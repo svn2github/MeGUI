@@ -1,3 +1,7 @@
+0.2.4.1009
+Commit by berrinam:
+    - Fixed the 'modify filename doesn't work' bug
+
 0.2.4.1008
 Commit by Sharx1976:
     - Added "--threads auto" support in x264 config and commandline generator

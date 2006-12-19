@@ -13,6 +13,7 @@ namespace MeGUI
     
     public partial class FileBar : UserControl
     {
+        private string oldName;
         public FileBar()
         {
             InitializeComponent();
@@ -43,7 +44,7 @@ namespace MeGUI
         public string Filename
         {
             get { return filename.Text; }
-            set { filename.Text = value; }
+            set { filename.Text = value; oldName = value; }
         }
 
         private bool folderMode;
@@ -71,9 +72,10 @@ namespace MeGUI
                 FolderBrowserDialog dialog = new FolderBrowserDialog();
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
-                    string oldFilename = filename.Text;
+                    oldName = filename.Text;
                     filename.Text = dialog.SelectedPath;
-                    FileSelected(this, new FileBarEventArgs(oldFilename, filename.Text));
+                    FileSelected(this, new FileBarEventArgs(oldName, filename.Text));
+                    oldName = filename.Text;
                 }
             }
             else
@@ -91,11 +93,17 @@ namespace MeGUI
                 dialog.Title = title;
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
-                    string oldFilename = filename.Text;
+                    oldName = filename.Text;
                     filename.Text = dialog.FileName;
-                    if (FileSelected != null) FileSelected(this, new FileBarEventArgs(oldFilename, filename.Text));
+                    if (FileSelected != null) FileSelected(this, new FileBarEventArgs(oldName, filename.Text));
+                    oldName = filename.Text;
                 }
             }
+        }
+
+        private void filename_TextChanged(object sender, EventArgs e)
+        {
+            if (FileSelected != null) FileSelected(this, new FileBarEventArgs(oldName, filename.Text));
         }
     }
     public class FileBarEventArgs : EventArgs

@@ -42,6 +42,7 @@ namespace MeGUI
             this.filename.ReadOnly = true;
             this.filename.Size = new System.Drawing.Size(239, 20);
             this.filename.TabIndex = 5;
+            this.filename.TextChanged += new System.EventHandler(this.filename_TextChanged);
             // 
             // openButton
             // 
