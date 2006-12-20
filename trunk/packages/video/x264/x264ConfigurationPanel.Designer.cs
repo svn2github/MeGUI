@@ -295,7 +295,7 @@ namespace MeGUI.packages.video.x264
             // 
             this.x264NbThreads.Location = new System.Drawing.Point(129, 77);
             this.x264NbThreads.Maximum = new decimal(new int[] {
-            4,
+            16,
             0,
             0,
             0});

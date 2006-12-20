@@ -1,3 +1,7 @@
+0.2.4.1010
+Commit by Sharx1976:
+    - Max number of threads for x264 is now '16'
+
 0.2.4.1009
 Commit by berrinam:
     - Fixed the 'modify filename doesn't work' bug
