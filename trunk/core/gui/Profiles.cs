@@ -152,6 +152,7 @@ namespace MeGUI.core.plugins.interfaces
             this.okButton.Size = new System.Drawing.Size(40, 23);
             this.okButton.TabIndex = 46;
             this.okButton.Text = "OK";
+            this.okButton.Click += new System.EventHandler(this.okButton_Click);
             // 
             // ConfigurationWindow
             // 
@@ -255,6 +256,20 @@ namespace MeGUI.core.plugins.interfaces
             profileManager.DeleteProfile(prof);
             videoProfile.Items.Remove(prof);
             loadDefaultsButton_Click(null, null);
+        }
+
+        private void okButton_Click(object sender, EventArgs e)
+        {
+            GenericProfile<TProfileSettings> prof = (GenericProfile<TProfileSettings>)this.videoProfile.SelectedItem;
+            if (prof != null)
+            {
+                DialogResult update;
+                update = MessageBox.Show("Update the selected profile?", "Profile update", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (update == DialogResult.Yes)
+                {
+                    prof.Settings = s.Settings;
+                }
+            }
         }
     }
 

@@ -1,3 +1,7 @@
+0.2.4.1011
+Commit by Sharx1976:
+    - Better codecs profiles management: the OK button in the codec config window now pops up a messagebox asking if you want to update the profile
+
 0.2.4.1010
 Commit by Sharx1976:
     - Max number of threads for x264 is now '16'
