@@ -132,6 +132,7 @@ namespace MeGUI.core.details.audio
             this.besweetDelayCorrection.Size = new System.Drawing.Size(112, 16);
             this.besweetDelayCorrection.TabIndex = 4;
             this.besweetDelayCorrection.Text = "Delay Correction";
+            this.besweetDelayCorrection.CheckedChanged += new System.EventHandler(this.besweetDelayCorrection_CheckedChanged);
             // 
             // besweetDownmixMode
             // 

@@ -81,22 +81,22 @@ namespace MeGUI.core.details.audio
 		#endregion
 		#region checkboxes
 
-		private void besweetDelayCorrection_CheckedChanged(object sender, System.EventArgs e)
-		{
-			if (besweetDelayCorrection.Checked)
-			{
-				besweetDelay.Enabled = true;
-				this.negativeDelay.Enabled = true;
-			}
-			else
-			{
-				besweetDelay.Enabled = false;
-				this.negativeDelay.Enabled = false;
-			}
-			showCommandLine();
-		}
-
-	    protected void showCommandLine()
+        private void besweetDelayCorrection_CheckedChanged(object sender, EventArgs e)
+        {
+            if (besweetDelayCorrection.Checked)
+            {
+                besweetDelay.Enabled = true;
+                this.negativeDelay.Enabled = true;
+            }
+            else
+            {
+                besweetDelay.Enabled = false;
+                this.negativeDelay.Enabled = false;
+            }
+            showCommandLine();
+        }
+        
+        protected void showCommandLine()
 	    {
 	        
 	    }
@@ -207,6 +207,5 @@ namespace MeGUI.core.details.audio
 		{
 		}
 		#endregion
-
     }
 }

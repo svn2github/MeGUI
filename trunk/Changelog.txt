@@ -1,3 +1,7 @@
+0.2.4.1012
+Commit by Sharx1976:
+    - Fixed the delay option in audio configuration window
+
 0.2.4.1011
 Commit by Sharx1976:
     - Better codecs profiles management: the OK button in the codec config window now pops up a messagebox asking if you want to update the profile
