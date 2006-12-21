@@ -185,6 +185,7 @@ namespace MeGUI.core.details
             this.startColumn,
             this.endColumn,
             this.fpsColumn});
+            this.queueListView.ContextMenuStrip = this.queueContextMenu;
             this.queueListView.FullRowSelect = true;
             this.queueListView.HideSelection = false;
             this.queueListView.Location = new System.Drawing.Point(3, 0);

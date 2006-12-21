@@ -1,3 +1,7 @@
+0.2.4.1013
+Commit by berrinam:
+    - Re-enabled the right-click menu in the job queue
+
 0.2.4.1012
 Commit by Sharx1976:
     - Fixed the delay option in audio configuration window
