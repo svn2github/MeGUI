@@ -556,9 +556,7 @@ namespace MeGUI
 					int jobNumber = mainForm.Jobs.getFreeJobNumber();
 					job.Name = "job" + jobNumber;
                     lastJob = job;
-					mainForm.Jobs.addJobToQueue(job);
-                    if (mainForm.Settings.AutoStartQueue)
-                        mainForm.Jobs.startEncoding(job);
+					mainForm.Jobs.addJobsToQueue(job);
 					if (this.closeOnQueue.Checked)
 						this.Close();
 				}

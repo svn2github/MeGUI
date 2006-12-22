@@ -242,11 +242,8 @@ namespace MeGUI
                 return;
             }
             VideoCodecSettings vSettings = this.CurrentVideoCodecSettings.clone();
-            bool start = mainForm.Settings.AutoStartQueue;
-            start &= mainForm.JobUtil.AddVideoJobs(info.VideoInput, info.VideoOutput, this.CurrentVideoCodecSettings.clone(),
+            mainForm.JobUtil.AddVideoJobs(info.VideoInput, info.VideoOutput, this.CurrentVideoCodecSettings.clone(),
                 info.IntroEndFrame, info.CreditsStartFrame, info.DARX, info.DARY, addPrerenderJob.Checked, true);
-            if (start)
-                mainForm.Jobs.startNextJobInQueue();
         }
         private void fileType_SelectedIndexChanged(object sender, EventArgs e)
         {

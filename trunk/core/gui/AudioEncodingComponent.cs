@@ -269,10 +269,7 @@ namespace MeGUI
                 aSettings.DelayEnabled = true;
                 aSettings.Delay = this.CurrentAudioStream.Delay;
             }
-            bool start = mainForm.Settings.AutoStartQueue;
-            start &= mainForm.JobUtil.AddAudioJob(this.AudioInput, this.AudioOutput, aSettings);
-            if (start)
-                mainForm.Jobs.startNextJobInQueue();
+            mainForm.JobUtil.AddAudioJob(this.AudioInput, this.AudioOutput, aSettings);
         }
         private void audioInput_FileSelected(FileBar sender, FileBarEventArgs args)
         {

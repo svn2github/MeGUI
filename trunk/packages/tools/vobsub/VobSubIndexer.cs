@@ -7,6 +7,15 @@ namespace MeGUI
 {
     public class VobSubIndexer : IJobProcessor
     {
+        public static readonly JobProcessorFactory Factory =
+       new JobProcessorFactory(new ProcessorFactory(init), "VobSubIndexer");
+
+        private static IJobProcessor init(MainForm mf, Job j)
+        {
+            if (j is SubtitleIndexJob) return new VobSubIndexer();
+            return null;
+        }
+
         private StatusUpdate stup;
         private SubtitleIndexJob job;
         private Process proc;

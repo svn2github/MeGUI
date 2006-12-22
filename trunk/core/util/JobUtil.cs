@@ -561,7 +561,7 @@ namespace MeGUI
             {
                 int freeJobNumber = this.mainForm.Jobs.getFreeJobNumber();
                 job.Name = "job" + freeJobNumber;
-                this.mainForm.Jobs.addJobToQueue(job);
+                this.mainForm.Jobs.addJobsToQueue(job);
                 return true;
             }
             return false;
@@ -593,15 +593,12 @@ namespace MeGUI
                         number++;
                         prevJob = job;
                     }
-                    foreach (VideoJob job in jobs)
-                    {
-                        this.mainForm.Jobs.addJobToQueue(job);
-                    }
+                    mainForm.Jobs.addJobsToQueue(jobs);
                 }
                 else // simple naming
                 {
                     jobs[0].Name = "job" + freeJobNumber;
-                    this.mainForm.Jobs.addJobToQueue(jobs[0]);
+                    this.mainForm.Jobs.addJobsToQueue(jobs[0]);
                 }
                 return true;
             }

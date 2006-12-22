@@ -42,7 +42,7 @@ namespace MeGUI
 
         public override string FPSString
         {
-            get { return ""; }
+            get { return FPS.ToString("##.##"); }
         }
     }
 }

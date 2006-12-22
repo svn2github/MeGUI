@@ -456,7 +456,6 @@ namespace MeGUI
             this.jobControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.jobControl1.Location = new System.Drawing.Point(0, 0);
             this.jobControl1.Name = "jobControl1";
-            this.jobControl1.QueueEncoding = false;
             this.jobControl1.Size = new System.Drawing.Size(472, 365);
             this.jobControl1.TabIndex = 0;
             this.jobControl1.Load += new System.EventHandler(this.jobControl1_Load);
@@ -962,9 +961,7 @@ namespace MeGUI
                     MuxJob job = mw.Job;
                     int freeJobNumber = Jobs.getFreeJobNumber();
                     job.Name = "job" + freeJobNumber;
-                    Jobs.addJobToQueue(job);
-                    if (Settings.AutoStartQueue)
-                        Jobs.startEncoding(job);
+                    Jobs.addJobsToQueue(job);
                 }
             }
         }
@@ -1199,10 +1196,7 @@ namespace MeGUI
                     else
                         return;
                 }
-                foreach (MuxJob job in jobs)
-                    Jobs.addJobToQueue(job);
-                if (Settings.AutoStartQueue)
-                    Jobs.startEncoding(jobs[0]);
+                Jobs.addJobsToQueue(jobs);
             }
 
         }
@@ -1403,6 +1397,12 @@ namespace MeGUI
 
         private void addPackages()
         {
+            PackageSystem.JobProcessors.Register(VideoEncoder.Factory);
+            PackageSystem.JobProcessors.Register(AudioEncoder.Factory);
+            PackageSystem.JobProcessors.Register(Muxer.Factory);
+            PackageSystem.JobProcessors.Register(AviSynthProcessor.Factory);
+            PackageSystem.JobProcessors.Register(DGIndexer.Factory);
+            PackageSystem.JobProcessors.Register(VobSubIndexer.Factory);
             PackageSystem.MuxerProviders.Register(new MKVMergeMuxerProvider());
             PackageSystem.MuxerProviders.Register(new MP4BoxMuxerProvider());
             PackageSystem.MuxerProviders.Register(new AVC2AVIMuxerProvider());
@@ -1435,6 +1435,7 @@ namespace MeGUI
             PackageSystem.MediaFileTypes.Register(new MediaInfoFileFactory());
             PackageSystem.JobPostProcessors.Register(OneClickPostProcessor.PostProcessor);
             PackageSystem.JobPostProcessors.Register(IndexJobPostProcessor.PostProcessor);
+            PackageSystem.JobPostProcessors.Register(JobControl.DeleteIntermediateFilesPostProcessor);
         }
 
         private static Mutex mySingleInstanceMutex = new Mutex(true, "MeGUI_D9D0C224154B489784998BF97B9C9414");

@@ -14,14 +14,18 @@ namespace MeGUI.core.details
     {
         private Bitmap pauseImage;
         private Bitmap playImage;
-        private bool isEncoding = false, queueEncoding = false, paused = false; // encoding status and whether or not we're in queue encoding mode
+
+        private bool isEncoding = false, paused = false; // encoding status and whether or not we're in queue encoding mode
+        private bool stopTheQueue = false;
         private Dictionary<string, Job> jobs = new Dictionary<string,Job>(); //storage for all the jobs and profiles known to the system
-        private List<Job> skipJobs = new List<Job>(); // contains jobs to be skipped (chained with a previously errored out job)
-        private int jobNr = 1; // number of jobs in the queue
         private IJobProcessor currentProcessor;
         private MainForm mainForm;
         private ProgressWindow pw; // window that shows the encoding progress
+        private Job currentJob; // The job being processed at the moment
 
+        private List<Job> jobsToEncode = null; // List of jobs to be encoded if only a certain number are to be encoded (different from normal queue behaviour)
+
+        #region process window opening and closing
         public void HideProcessWindow()
         {
             if (pw != null)
@@ -38,43 +42,6 @@ namespace MeGUI.core.details
         {
             get { return (pw != null); }
         }
-
-        public JobControl()
-        {
-            InitializeComponent();
-
-            System.Reflection.Assembly myAssembly = this.GetType().Assembly;
-            string name = /*this.GetType().Namespace + "."*/ "MeGUI.";
-#if CSC
-			name = "";
-#endif
-            string[] resources = myAssembly.GetManifestResourceNames();
-            try
-            {
-                this.pauseImage = new Bitmap(myAssembly.GetManifestResourceStream(name + "pause.ico"));
-                this.playImage = new Bitmap(myAssembly.GetManifestResourceStream(name + "play.ico"));
-                this.pauseButton.Image = (Image)pauseImage;
-                this.pauseButton.ImageAlign = System.Drawing.ContentAlignment.BottomRight;
-            }
-            catch (Exception) { }
-        }
-
-        public MainForm MainForm
-        {
-            set { mainForm = value; }
-        }
-
-        public bool IsEncoding
-        {
-            get { return isEncoding; }
-        }
-
-        public bool QueueEncoding
-        {
-            get { return queueEncoding; }
-            set { queueEncoding = value; }
-        }
-
         /// <summary>
         /// callback for the Progress Window
         /// This is called when the progress window has been closed and ensures that
@@ -107,58 +74,80 @@ namespace MeGUI.core.details
                 mainForm.addToLog("Error when attempting to change priority: " + error);
             }
         }
-        private void abortMenuItem_Click(object sender, EventArgs e)
+        #endregion
+
+        public JobControl()
         {
-            abortButton_Click(sender, e);
+            InitializeComponent();
+
+            System.Reflection.Assembly myAssembly = this.GetType().Assembly;
+            string name = "MeGUI.";
+#if CSC
+			name = "";
+#endif
+            string[] resources = myAssembly.GetManifestResourceNames();
+            try
+            {
+                this.pauseImage = new Bitmap(myAssembly.GetManifestResourceStream(name + "pause.ico"));
+                this.playImage = new Bitmap(myAssembly.GetManifestResourceStream(name + "play.ico"));
+                this.pauseButton.Image = (Image)pauseImage;
+                this.pauseButton.ImageAlign = System.Drawing.ContentAlignment.BottomRight;
+            }
+            catch (Exception) { }
         }
 
-        void deleteMenuItem_Click(object sender, EventArgs e)
+        #region properties
+        public MainForm MainForm
         {
-            deleteJobButton_Click(sender, e);
+            set { mainForm = value; }
         }
 
-        private void loadMenuItem_Click(object sender, EventArgs e)
+        public bool IsEncoding
         {
-            loadJobButton_Click(sender, e);
+            get { return isEncoding; }
         }
+        #endregion
 
+        /// <summary>
+        /// Sets the job status of the selected jobs to postponed.
+        /// No selected jobs should currently be running.
+        /// </summary>
+        /// <param name="sender">This parameter is ignored</param>
+        /// <param name="e">This parameter is ignored</param>
         private void postponeMenuItem_Click(object sender, EventArgs e)
         {
             foreach (ListViewItem item in this.queueListView.SelectedItems)
             {
                 int position = item.Index;
                 Job job = jobs[item.Text];
-                if (job.Status != JobStatus.PROCESSING)
-                {
-                    job.Status = JobStatus.POSTPONED;
-                    this.queueListView.Items[position].SubItems[5].Text = job.StatusString;
-                }
-                else
-                {
-                    Debug.Assert(false, "shouldn't be able to postpone an active job");
-                    return;
-                }
+                
+                Debug.Assert(job.Status != JobStatus.PROCESSING, "shouldn't be able to postpone an active job");
+
+                job.Status = JobStatus.POSTPONED;
+                this.queueListView.Items[position].SubItems[5].Text = job.StatusString;
             }
         }
 
+        /// <summary>
+        /// Sets the jobs status of the selected jobs to waiting.
+        /// No selected jobs should currently be running.
+        /// </summary>
+        /// <param name="sender">This parameter is ignored</param>
+        /// <param name="e">This parameter is ignored</param>
         private void waitingMenuItem_Click(object sender, EventArgs e)
         {
             foreach (ListViewItem item in this.queueListView.SelectedItems)
             {
                 int position = item.Index;
                 Job job = jobs[item.Text];
-                if (job.Status != JobStatus.PROCESSING)
-                {
-                    job.Status = JobStatus.WAITING;
-                    this.queueListView.Items[position].SubItems[5].Text = job.StatusString;
-                }
-                else
-                {
-                    Debug.Assert(false, "shouldn't be able to set an active job back to waiting");
-                    return;
-                }
+
+                Debug.Assert(job.Status != JobStatus.PROCESSING, "shouldn't be able to set an active job back to waiting");
+
+                job.Status = JobStatus.WAITING;
+                queueListView.Items[position].SubItems[5].Text = job.StatusString;
             }
         }        
+        
         /// <summary>
         /// event callback for the encoder
         /// Each time the encoder has a statusupdate, it fires an event that is catched here
@@ -172,17 +161,24 @@ namespace MeGUI.core.details
             this.Invoke(new UpdateGUIStatusCallback(this.UpdateGUIStatus), new object[] { su });
         }
 
+#if UNUSED
+        /// <summary>
+        /// Returns a the job by the given name or, if it doesn't exist, null.
+        /// </summary>
+        /// <param name="name">The name of the job to look for.</param>
+        /// <returns>The job by that name, or else null.</returns>
         public Job GetJobByNameSafe(string name)
         {
             try
             {
                 return jobs[name];
             }
-            catch (Exception)
+            catch (KeyNotFoundException)
             {
                 return null;
             }
         }
+#endif
 
         /// <summary>
         /// updates the actual GUI with the status information received as parameter
@@ -198,73 +194,49 @@ namespace MeGUI.core.details
         {
             if (su.IsComplete)
             {
+                Job job = currentJob;
+                copyInfoIntoJob(job, su);
+                updateListViewInfo(job);
+
+                // Update the GUI to show that the job is completed
                 mainForm.TitleText = Application.ProductName + " " + Application.ProductVersion;
-                Job job = markJobDone(su);
                 currentProcessor = null;
                 this.jobProgress.Value = 0;
-                if (pw != null)
-                {
-                    pw.IsUserAbort = false; // ensures that the window will be closed
-                    pw.Close();
-                    pw = null;
-                }
+                ensureProgressWindowClosed();
+                
+                // Logging
                 mainForm.addToLog("Processing ended at " + DateTime.Now.ToLongTimeString() + "\r\n");
                 mainForm.addToLog("----------------------------------------------------------------------------------------------------------" +
                     "\r\n\r\nLog for job " + su.JobName + "\r\n\r\n" + su.Log +
                     "\r\n----------------------------------------------------------------------------------------------------------\r\n");
-                bool jobCompletedSuccessfully = true; // true = no errors; false = some reason to stop
                 if (su.WasAborted)
-                {
                     mainForm.addToLog("The current job was aborted. Stopping queue mode\r\n");
-                    jobCompletedSuccessfully = false;
-                }
                 if (su.HasError)
                 {
                     mainForm.addToLog("The current job contains errors. Skipping chained jobs\r\n");
-                    Job j = null;
-                    jobCompletedSuccessfully = false;
-                    if (job.Next != null)
-                    {
-                        j = job;
-                        while (j.Next != null) // find all chained jobs
-                        {
-                            j = j.Next;
-                            this.skipJobs.Add(j);
-                        }
-                    }
+                    skipChainedJobs(currentJob);
                 }
-#warning eventually turn deleteIntermediateFiles into a job postprocessor
-                if (jobCompletedSuccessfully)
-                    deleteIntermediateFiles(job);
+
+                // Postprocessing
+                bool jobCompletedSuccessfully = (job.Status == JobStatus.DONE);
                 if (jobCompletedSuccessfully)
                 {
                     postprocessJob(job);
                 }
+
+                if (job.Next == null && jobCompletedSuccessfully && mainForm.Settings.DeleteCompletedJobs)
+                    removeCompletedJob(job);
+                
+                // Clear the encoding info
                 this.isEncoding = false;
-                if (job.Next != null && jobCompletedSuccessfully) // try finding a chained job
-                {
-#warning this will fail if the user deletes the next job
-                    Job next = job.Next;
-                    mainForm.addToLog("job " + job.Name + " has been processed. This job is linked to the next job: " + next.Name + "\r\n");
-                }
-#warning use enums instead of int's here
-                int nextJobStart = 0;
-                if (this.queueEncoding)
-                {
-                    nextJobStart = startNextJobInQueue(); //new with the return value to check if there was another job
-                }
-                else
-                {
-                    nextJobStart = 2;
-                }
-                if (nextJobStart == 2)
-                {	//new test if this was the last job or a job was stoped
-                    this.isEncoding = false;	//moved out the else before
-                    this.queueEncoding = false;
-                    this.startStopButton.Text = "Start";
-                    this.abortButton.Enabled = false;
-                    if (!su.WasAborted) mainForm.runAfterEncodingCommands();
-                }
+                this.currentJob = null;
+                this.currentProcessor = null;
+
+                if (job.Status != JobStatus.ABORTED)
+                    startNextJobInQueue();
+
+                if (!isEncoding && job.Status != JobStatus.ABORTED) mainForm.runAfterEncodingCommands();
+                updateProcessingStatus();
             }
             else // job is not complete yet
             {
@@ -289,50 +261,135 @@ namespace MeGUI.core.details
             }
         }
 
+        /// <summary>
+        /// Adds all chained jobs to the skip jobs list, but doesn't add the passed job.
+        /// </summary>
+        /// <param name="job"></param>
+        private void skipChainedJobs(Job job)
+        {
+            while (job.Next != null)
+            {
+                job = job.Next;
+                job.Status = JobStatus.SKIP;
+                updateListViewInfo(job);
+            }
+        }
+
+        /// <summary>
+        /// Updates all columns of the ListViewItem that shows this job.
+        /// </summary>
+        /// <param name="job"></param>
+        private void updateListViewInfo(Job job)
+        {
+            if (queueListView.InvokeRequired)
+            {
+                queueListView.Invoke(new MethodInvoker(delegate { updateListViewInfo(job); }));
+                return;
+            }
+            ListViewItem item = queueListView.Items[job.Position];
+            Debug.Assert(item.Text == job.Name);
+
+            item.SubItems[1].Text = job.InputFileName;
+            item.SubItems[2].Text = job.OutputFileName;
+            item.SubItems[3].Text = job.CodecString;
+            item.SubItems[4].Text = job.EncodingMode;
+            item.SubItems[5].Text = job.StatusString;
+            if (job.Status == JobStatus.DONE)
+            {
+                item.SubItems[7].Text = job.End.ToLongTimeString();
+                item.SubItems[8].Text = job.FPSString;
+            }
+            else
+            {
+                item.SubItems[7].Text = "";
+                item.SubItems[8].Text = "";
+            }
+            if (job.Status == JobStatus.DONE || job.Status == JobStatus.PROCESSING)
+                item.SubItems[6].Text = job.Start.ToLongTimeString();
+            else
+                item.SubItems[6].Text = "";
+        }
+
+        /// <summary>
+        /// Copies completion info into the job: end time, FPS, status.
+        /// </summary>
+        /// <param name="job">Job to fill with info</param>
+        /// <param name="su">StatusUpdate with info</param>
+        private void copyInfoIntoJob(Job job, StatusUpdate su)
+        {
+            Debug.Assert(su.IsComplete);
+
+            job.End = DateTime.Now;
+            job.FPS = su.FPS;
+            
+            JobStatus s;
+            if (su.WasAborted)
+                s = JobStatus.ABORTED;
+            else if (su.HasError)
+                s = JobStatus.ERROR;
+            else
+                s = JobStatus.DONE;
+            job.Status = s;
+        }
+
+        /// <summary>
+        /// Makes sure that the progress window is closed
+        /// </summary>
+        private void ensureProgressWindowClosed()
+        {
+            if (pw != null)
+            {
+                pw.IsUserAbort = false; // ensures that the window will be closed
+                pw.Close();
+                pw = null;
+            }
+        }
+
+        /// <summary>
+        /// Postprocesses the given job according to the JobPostProcessors in the mainForm's PackageSystem
+        /// </summary>
+        /// <param name="job"></param>
         private void postprocessJob(Job job)
         {
-            mainForm.addToLog("Starting postprocessing of job...\n");
+            mainForm.addToLog("Starting postprocessing of job...\r\n");
             foreach (JobPostProcessor pp in mainForm.PackageSystem.JobPostProcessors.Values)
             {
                 pp.PostProcessor(mainForm, job);
             }
-            mainForm.addToLog("Postprocessing finished!\n");
+            mainForm.addToLog("Postprocessing finished!\r\n");
         }
 
+        /// <summary>
+        /// Preprocesses the given job according to the JobPreProcessors in the mainForm's PackageSystem
+        /// </summary>
+        /// <param name="job"></param>
         private void preprocessJob(Job job)
         {
-            mainForm.addToLog("Starting preprocessing of job...\n");
+            mainForm.addToLog("Starting preprocessing of job...\r\n");
             foreach (JobPreProcessor pp in mainForm.PackageSystem.JobPreProcessors.Values)
             {
                 pp.PreProcessor(mainForm, job);
             }
-            mainForm.addToLog("Preprocessing finished!\n");
+            mainForm.addToLog("Preprocessing finished!\r\n");
         }
-        /// <summary>
-        /// Attempts to delete all files listed in job.FilesToDelete if settings.DeleteIntermediateFiles is checked
-        /// </summary>
-        /// <param name="job">the job which should just have been completed</param>
-        private void deleteIntermediateFiles(Job job)
+
+        private IJobProcessor getProcessor(Job job)
         {
-            if (mainForm.Settings.DeleteIntermediateFiles)
+            mainForm.addToLog("Looking for job processor for job...\r\n");
+            foreach (JobProcessorFactory f in mainForm.PackageSystem.JobProcessors.Values)
             {
-                mainForm.addToLog("Job completed successfully and deletion of intermediate files is activated\r\n");
-                foreach (string file in job.FilesToDelete)
+                IJobProcessor p = f.Factory(mainForm, job);
+                if (p != null)
                 {
-                    try
-                    {
-                        mainForm.addToLog("Found intermediate output file '" + ((string)file)
-                            + "', deleting...\r\n");
-                        File.Delete(file);
-                        mainForm.addToLog("Deletion succeeded.");
-                    }
-                    catch (Exception)
-                    {
-                        mainForm.addToLog("Deletion failed.");
-                    }
+                    mainForm.addToLog("Processor found!\r\n");
+                    return p;
                 }
             }
+            mainForm.addToLog("No processor found!\r\n");
+            return null;
         }
+
+        
 
         #region queue buttons
         /// <summary>
@@ -347,25 +404,9 @@ namespace MeGUI.core.details
         public void startStopButton_Click(object sender, System.EventArgs e)
         {
             if (this.isEncoding) // we're already encoding
-            {
-                this.queueEncoding = !this.queueEncoding;
-            }
+                this.stopTheQueue = !this.stopTheQueue;
             else // we're not encoding yet
-            {
-                if (this.queueListView.Items.Count > 0) // we can't start encoding if there are no jobs
-                {
-                    mainForm.ClosePlayer();
-                    this.skipJobs.Clear();
-                    this.queueEncoding = true;
-                    int retval = startNextJobInQueue();
-                    if (retval == 1)
-                        MessageBox.Show("Couldn't start processing. Please consult the log for more details", "Processing failed", MessageBoxButtons.OK);
-                    else if (retval == 2)
-                        MessageBox.Show("No jobs are waiting. Nothing to do", "No jobs waiting", MessageBoxButtons.OK);
-                }
-                else
-                    MessageBox.Show("Please give me something to do", "No jobs found", MessageBoxButtons.OK);
-            }
+                StartEncoding(true);
             updateProcessingStatus();
         }
 
@@ -381,6 +422,7 @@ namespace MeGUI.core.details
             if (dr == DialogResult.Yes)
                 Abort();
         }
+        
         /// <summary>
         /// deletes all the jobs from the jobs queue
         /// </summary>
@@ -397,8 +439,10 @@ namespace MeGUI.core.details
                         this.removeJobFromQueue(job);
                     else
                         MessageBox.Show("You cannot delete a job while it is being encoded.", "Deleting job failed", MessageBoxButtons.OK);
+                    updateJobPositions();
                 }
         }
+
         /// <summary>
         /// handles the pause button
         /// enables / disables the main encoding thread
@@ -428,7 +472,6 @@ namespace MeGUI.core.details
                     if (currentProcessor.resume(out error))
                     {
                         paused = false;
-                        this.pauseButton.Image = (Image)this.pauseImage;
                     }
                     else
                         mainForm.addToLog("Error when trying to resume encoding: " + error);
@@ -451,6 +494,7 @@ namespace MeGUI.core.details
                 updateJobPositions();
             }
         }
+
         /// <summary>
         /// moves a job one position down in the queue
         /// </summary>
@@ -464,6 +508,7 @@ namespace MeGUI.core.details
                 updateJobPositions();
             }
         }
+        
         /// <summary>
         /// deletes a job from the job queue
         /// if a line in the job queue is selected, and its status is not processing (status processing means we're currently
@@ -475,67 +520,59 @@ namespace MeGUI.core.details
         /// <param name="e"></param>
         private void deleteJobButton_Click(object sender, System.EventArgs e)
         {
-            if (this.queueListView.SelectedItems.Count > 0)
+            if (queueListView.Items.Count <= 0) return;
+
+            foreach (ListViewItem item in this.queueListView.SelectedItems)
             {
-                foreach (ListViewItem item in this.queueListView.SelectedItems)
+                if (!jobs.ContainsKey(item.Text)) // Check if it has already been deleted
+                    continue;
+                Job job = jobs[item.Text];
+                if (job == null) continue;
+
+                if (job.Status == JobStatus.PROCESSING)
                 {
-                    if (!jobs.ContainsKey(item.Text)) // Check if it has already been deleted
-                        continue;
-                    Job job = jobs[item.Text];
-                    if (job != null)
-                    {
-                        if (job.Status != JobStatus.PROCESSING)
-                        {
-                            if (job.Next != null || job.Previous != null)
-                            {
-                                DialogResult dr = MessageBox.Show("This job is part of a series of jobs. Deleting it alone will cause corruption of the dependant jobs\r\n"
-                                    + "Press Yes to delete all dependant jobs, No to delete just this job or Cancel to abort.", "Job dependency detected", MessageBoxButtons.YesNoCancel);
-                                switch (dr)
-                                {
-                                    case DialogResult.Yes:
-                                        this.removeJobFromQueue(job);
-                                        Job prev = null;
-                                        if (job.Previous != null)
-                                            prev = job.Previous;
-                                        while (prev != null)
-                                        {
-                                            removeJobFromQueue(prev);
-                                            if (prev.Previous != null)
-                                                prev = prev.Previous;
-                                            else
-                                                prev = null;
-                                        }
-                                        Job next = null;
-                                        if (job.Next != null)
-                                            next = job.Next;
-                                        while (next != null)
-                                        {
-                                            removeJobFromQueue(next);
-                                            if (next.Next != null)
-                                                next = next.Next;
-                                            else
-                                                next = null;
-                                        }
-                                        break;
-                                    case DialogResult.No:
-                                        removeJobFromQueue(job);
-                                        break;
-                                    case DialogResult.Cancel: // do nothing
-                                        break;
-                                }
-                            }
-                            else // no dependent jobs
-                            {
-                                removeJobFromQueue(job);
-                            }
-                        }
-                        else
-                            MessageBox.Show("You cannot delete a job while it is being processed.", "Deleting job failed", MessageBoxButtons.OK);
-                    }
+                    MessageBox.Show("You cannot delete a job while it is being processed.", "Deleting job failed", MessageBoxButtons.OK);
+                    continue;
                 }
-                updateJobPositions();
+
+                if (job.Next == null && job.Previous == null)
+                {
+                    removeJobFromQueue(job);
+                    continue;
+                }
+
+                DialogResult dr = MessageBox.Show("This job is part of a series of jobs. Deleting it alone will cause corruption of the dependant jobs\r\n"
+                    + "Press Yes to delete all dependant jobs, No to delete just this job or Cancel to abort.", "Job dependency detected", MessageBoxButtons.YesNoCancel);
+                switch (dr)
+                {
+                    case DialogResult.Yes: // Delete all dependent jobs
+                        this.removeJobFromQueue(job);
+                        Job j = job.Previous;
+                        while (j != null)
+                        {
+                            removeJobFromQueue(j);
+                            j = j.Previous;
+                        }
+                        j = job.Next;
+                        while (j != null)
+                        {
+                            removeJobFromQueue(j);
+                            j = j.Next;
+                        }
+                        break;
+
+                    case DialogResult.No: // Just delete the single job
+                        removeJobFromQueue(job);
+                        break;
+
+                    case DialogResult.Cancel: // do nothing
+                        break;
+                }
+
             }
+            updateJobPositions();
         }
+
         /// <summary>
         /// goes through all jobs in the listview and updates their position
         /// this is called when moving or deleting jobs
@@ -548,6 +585,8 @@ namespace MeGUI.core.details
                 job.Position = item.Index;
             }
         }
+#endregion
+        #region load and update jobs
         /// <summary>
         /// loads a job listed in the job queue
         /// if a line is selected in the queue, its associated job is extracted from the jobs hashtable, then its settings
@@ -645,6 +684,7 @@ namespace MeGUI.core.details
             else
                 MessageBox.Show("You need to select a job first.", "No job selected", MessageBoxButtons.OK);
         }
+
         /// <summary>
         /// updates a selected job in the queue with what's currently configured in the GUI
         /// </summary>
@@ -710,6 +750,7 @@ namespace MeGUI.core.details
             }
         }
         #endregion
+
         #region GUI action
         /// <summary>
         /// moves the currently selected listviewitem up/down
@@ -760,6 +801,7 @@ namespace MeGUI.core.details
                 lv.Refresh();
             }
         }
+        
         /// <summary>
         /// handles the doubleclick event for the listview
         /// changes the job status from waiting -> postponed to waiting
@@ -774,11 +816,9 @@ namespace MeGUI.core.details
             {
                 int position = this.queueListView.SelectedItems[0].Index;
                 Job job = jobs[this.queueListView.SelectedItems[0].Text];
-                if (job.Status == JobStatus.POSTPONED || job.Status == JobStatus.ERROR || job.Status == JobStatus.ABORTED || job.Status == JobStatus.DONE) // postponed/error/aborted/done -> waiting
-                    job.Status = JobStatus.WAITING;
-                else if (job.Status == JobStatus.WAITING) // waiting -> postponed
+                if (job.Status == JobStatus.WAITING) // waiting -> postponed
                     job.Status = JobStatus.POSTPONED;
-                else if (job.Status == JobStatus.PROCESSING && !this.isEncoding) // b0rked processing job
+                else
                     job.Status = JobStatus.WAITING;
                 this.queueListView.Items[position].SubItems[5].Text = job.StatusString;
             }
@@ -841,17 +881,6 @@ namespace MeGUI.core.details
             return false;
         }
 
-        private int getJobPosition(string name)
-        {
-            foreach (ListViewItem item in this.queueListView.Items)
-            {
-                if (item.SubItems[0].Text.Equals(name))
-                {
-                    return item.Index;
-                }
-            }
-            return -1;
-        }
         #endregion
         #region update queue
         /// <summary>
@@ -885,7 +914,8 @@ namespace MeGUI.core.details
                 }
             }
         }
-        /// <summary>
+
+/*        /// <summary>
         /// marks the first job found in "processing" state in the job queue as done and returns its name
         /// </summary>
         /// <returns>name of the job marked as done</returns>
@@ -927,10 +957,10 @@ namespace MeGUI.core.details
                     break;
                 }
             }
-            if (job != null && job.Status == JobStatus.DONE && job.Next == null && mainForm.Settings.DeleteCompletedJobs)
-                removeCompletedJob(job);
+
             return job;
-        }
+        }*/
+
         /// <summary>
         /// removes this job, and any previous jobs that belong to a series of jobs from the
         /// queue, then update the queue positions
@@ -938,28 +968,11 @@ namespace MeGUI.core.details
         /// <param name="job">the job to be removed</param>
         private void removeCompletedJob(Job job)
         {
-            List<Job> jobs = new List<Job>();
-            jobs.Add(job);
-            Job j = job;
-            while (j.Previous != null) // find all previous jobs
-            {
-                jobs.Add(j.Previous);
-                j = j.Previous;
-            }
-            ListViewItem item2Flush = null;
-            foreach (Job j2 in jobs)
-            {
-                this.jobs.Remove(j2.Name);
-                foreach (ListViewItem item in this.queueListView.Items)
-                {
-                    if (item.Text.Equals(j2.Name))
-                    {
-                        item2Flush = item;
-                        break;
-                    }
-                }
-                this.queueListView.Items.Remove(item2Flush);
-            }
+            // List all jobs to delete
+            do {
+                removeJobFromQueue(job);
+                job = job.Previous;
+            } while (job != null);
             updateJobPositions();
         }
         #endregion
@@ -969,15 +982,60 @@ namespace MeGUI.core.details
         /// </summary>
         /// <param name="job">the Job object containing all the parameters</param>
         /// <returns>success / failure indicator</returns>
-        public bool startEncoding(Job job)
+        private bool startEncoding(Job job)
         {
-            mainForm.ClosePlayer();
-            bool retval = false;
-            if (this.isEncoding) // we're already encoding and can't start another job
-                return false;
+            Debug.Assert(!this.isEncoding);
             string error;
-            preprocessJob(job);
+            mainForm.ClosePlayer();
+            
+            // Get IJobProcessor
+            currentProcessor = getProcessor(job);
+            if (currentProcessor == null)
+            {
+                mainForm.addToLog("Skipping job\r\n");
+                return false;
+            }
+            
             mainForm.addToLog("Starting job " + job.Name + " at " + DateTime.Now.ToLongTimeString() + "\r\n");
+            
+            // Preprocess
+            preprocessJob(job);
+            
+            // Setup
+            if (!currentProcessor.setup(job, out error))
+            {
+                mainForm.addToLog("Calling setup of processor failed with error " + error + "\r\n");
+                currentProcessor = null;
+                return false;
+            }
+
+            // Do JobControl setup
+            mainForm.addToLog(" encoder commandline:\r\n" + job.Commandline + "\r\n");
+            job.Status = JobStatus.PROCESSING;
+            currentProcessor.StatusUpdate += new JobProcessingStatusUpdateCallback(enc_StatusUpdate);
+            
+            // Progress window
+            pw = new ProgressWindow(job.JobType);
+            pw.WindowClosed += new WindowClosedCallback(pw_WindowClosed);
+            pw.Abort += new AbortCallback(pw_Abort);
+            pw.setPriority(job.Priority);
+            pw.PriorityChanged += new PriorityChangedCallback(pw_PriorityChanged);
+            if (mainForm.Settings.OpenProgressWindow && mainForm.Visible)
+            {
+                mainForm.ProcessStatusChecked = true;
+                pw.Show();
+            }
+
+            // Start
+            if (!currentProcessor.start(out error))
+            {
+                mainForm.addToLog("starting encoder failed with error " + error + "\r\n");
+                return false;
+            }
+            
+            mainForm.addToLog("successfully started encoding\r\n");
+            return true;
+#if UNUSED
 #warning make IJobProcessor init polymorphic
             if (job is VideoJob)
                 currentProcessor = new VideoEncoder(mainForm.Settings);
@@ -998,36 +1056,7 @@ namespace MeGUI.core.details
             }
             if (currentProcessor.setup(job, out error))
             {
-                mainForm.addToLog(" encoder commandline:\r\n" + job.Commandline + "\r\n");
-                ListViewItem item = this.queueListView.Items[getJobPosition(job.Name)];
-                item.SubItems[5].Text = "processing";
-                item.SubItems[6].Text = DateTime.Now.ToLongTimeString();
-                item.SubItems[7].Text = "";
-                item.SubItems[8].Text = "";
-                job.Status = JobStatus.PROCESSING;
-                currentProcessor.StatusUpdate += new JobProcessingStatusUpdateCallback(enc_StatusUpdate);
-                pw = new ProgressWindow(job.JobType);
-                pw.WindowClosed += new WindowClosedCallback(pw_WindowClosed);
-                pw.Abort += new AbortCallback(pw_Abort);
-                pw.setPriority(job.Priority);
-                pw.PriorityChanged += new PriorityChangedCallback(pw_PriorityChanged);
-                if (mainForm.Settings.OpenProgressWindow && this.Visible)
-                {
-                    mainForm.ProcessStatusChecked = true;
-                    pw.Show();
-                }
-                if (currentProcessor.start(out error))
-                {
-                    this.isEncoding = true;
-                    retval = true;
-                    mainForm.addToLog("successfully started encoding\r\n");
-                }
-                else
-                {
-                    mainForm.addToLog("starting encoder failed with error " + error + "\r\n");
-                    this.isEncoding = false;
-                    retval = false;
-                }
+
             }
             else // setup failed, probably a program is missing
             {
@@ -1036,9 +1065,9 @@ namespace MeGUI.core.details
                 currentProcessor = null;
                 retval = false;
             }
-
             updateProcessingStatus();
             return retval;
+#endif
         }
         /// <summary>
         /// starts the next job in status "waiting" from the queue list
@@ -1049,32 +1078,34 @@ namespace MeGUI.core.details
         /// is set back to false, as well as the queue encoding indicator
         /// </summary>
         /// <returns>0 = successfully started nex tjob, 1 = starting the next job failed, 2 = no jobs with status pending</returns>
-        public int startNextJobInQueue()
+        private JobStartInfo startNextJobInQueue()
         {
-            ListViewItem i = null;
-            Job job = null;
+            bool triedToStart = false;
             foreach (ListViewItem item in this.queueListView.Items)
             {
-                if (item.SubItems[5].Text.Equals("waiting")) // this is an item to be encoded
+                Job job = jobs[item.Text];
+                if (job.Status != JobStatus.WAITING)
+                    continue;
+                if (!startEncoding(job))
                 {
-                    i = item;
-                    job = jobs[item.SubItems[0].Text];
-                    if (this.skipJobs.Contains(job)) // this job is to be skipped
-                        continue;
-                    if (startEncoding(job))
-                    {
-                        i.SubItems[5].Text = "processing";
-                        job.Start = DateTime.Now;
-                        i.SubItems[6].Text = job.Start.ToLongTimeString();
-                        job.Status = JobStatus.PROCESSING;
-                        return 0;
-                    }
-                    else
-                        return 1;
+                    triedToStart = true;
+                    job.Status = JobStatus.ERROR;
+                    skipChainedJobs(job);
+                    updateListViewInfo(job);
+                    continue;
                 }
+                currentJob = job;
+                job.Status = JobStatus.PROCESSING;
+                job.Start = DateTime.Now;
+                this.isEncoding = true;
+                updateListViewInfo(job);
+                updateProcessingStatus();
+                return JobStartInfo.JOB_STARTED;
             }
+            this.isEncoding = false;
             updateProcessingStatus();
-            return 2;
+            if (triedToStart) return JobStartInfo.COULDNT_START;
+            return JobStartInfo.NO_JOBS_WAITING;
         }
         #endregion
         #region saving jobs
@@ -1123,40 +1154,15 @@ namespace MeGUI.core.details
                         jobs.Add(job.Name, job);
                 }
             }
-            Dictionary<string, Job> remaining = new Dictionary<string, Job>(jobs);
-            Job next = null;
-            while (remaining.Count > 0)
+            Job[] orderedJobs = new Job[jobs.Count];
+            jobs.Values.CopyTo(orderedJobs, 0);
+            Array.Sort<Job>(orderedJobs, new Comparison<Job>(delegate(Job a, Job b) { return a.Position - b.Position; }));
+            Debug.Assert(orderedJobs.Length < 2 || orderedJobs[0].Position < orderedJobs[1].Position);
+            foreach (Job job in orderedJobs)
             {
-                foreach (Job job in remaining.Values)
-                {
-                    if (next == null ||
-                        job.Position < next.Position)
-                    {
-                        next = job;
-                    }
-                }
-                remaining.Remove(next.Name);
-                string codec = "", encodingMode = "", start = "", end = "", fps = "";
-                ListViewItem item = new ListViewItem(new string[] { next.Name, next.InputFileName, next.OutputFileName });
-                codec = next.CodecString;
-                encodingMode = next.EncodingMode;
-                fps = next.FPSString;
-
-                switch (next.Status)
-                {
-                    case JobStatus.ABORTED:
-                    case JobStatus.ERROR:
-                    case JobStatus.DONE:
-                        start = next.Start.ToLongTimeString();
-                        end = next.End.ToLongTimeString();
-                        break;
-                    case JobStatus.PROCESSING:
-                        start = next.Start.ToLongTimeString();
-                        break;
-                }
-                item.SubItems.AddRange(new string[] { codec, encodingMode, next.StatusString, start, end, fps });
-                this.queueListView.Items.Add(item);
-                next = null;
+                ListViewItem item = new ListViewItem(new string[] { job.Name, "", "", "", "", "", "", "", "" });
+                queueListView.Items.Add(item);
+                updateListViewInfo(job);
             }
             foreach (Job job in jobs.Values)
             {
@@ -1174,18 +1180,20 @@ namespace MeGUI.core.details
         /// <returns>the job number that can be attributed to the next job to be added to the queue</returns>
         public int getFreeJobNumber()
         {
-            jobNr = 1;
-            string name = "job" + this.jobNr;
-            while (jobs.ContainsKey(name) || jobs.ContainsKey(name + "-1") || jobs.ContainsKey(name + "-2") || jobs.ContainsKey(name + "-3") || jobs.ContainsKey(name + "-4")
-                || jobs.ContainsKey(name + "-5"))
+            int jobNr = 1;
+            while (true)
             {
-                name = "job" + this.jobNr;
+                string name = "job" + jobNr;
+                bool found = false;
+                foreach (string jobName in jobs.Keys)
+                    if (jobName.StartsWith(name))
+                    {
+                        found = true;
+                        break;
+                    }
+                if (!found) return jobNr;
                 jobNr++;
             }
-            if (jobNr > 1)
-                return jobNr - 1;
-            else
-                return jobNr;
         }
         #endregion
         #region adding jobs to queue
@@ -1193,45 +1201,22 @@ namespace MeGUI.core.details
         /// adds a job to the Queue (Hashtable) and the listview for graphical display
         /// </summary>
         /// <param name="job">the Job to be added to the next free spot in the queue</param>
-        public void addJobToQueue(Job job)
+        public void addJobsToQueue(params Job[] jobs)
+        {
+            foreach (Job j in jobs)
+                addJob(j);
+            if (!isEncoding && mainForm.Settings.AutoStartQueue)
+                StartEncoding(false);
+        }
+
+        private void addJob(Job job)
         {
             job.Position = this.jobs.Count;
-            ListViewItem item;
-            if (job is VideoJob)
-            {
-                jobs.Add(job.Name, job); // adds job to the queue
-                item = new ListViewItem(new string[] {job.Name, job.InputFileName, job.OutputFileName, 
-							((VideoJob)job).CodecString, ((VideoJob)job).EncodingMode, "waiting", "", "", ""});
-                this.queueListView.Items.Add(item);
-            }
-            if (job is AudioJob)
-            {
-                jobs.Add(job.Name, job); // adds job to the queue
-                item = new ListViewItem(new string[] {job.Name, job.InputFileName, job.OutputFileName, 
-														 ((AudioJob)job).CodecString, ((AudioJob)job).EncodingMode, "waiting", "", "", ""});
-                this.queueListView.Items.Add(item);
-            }
-            if (job is MuxJob)
-            {
-                jobs.Add(job.Name, job);
-                item = new ListViewItem(new string[] {job.Name, job.InputFileName, job.OutputFileName, 
-						"", "mux", "waiting", "", "", ""});
-                this.queueListView.Items.Add(item);
-            }
-            if (job is IndexJob)
-            {
-                jobs.Add(job.Name, job);
-                item = new ListViewItem(new string[] {job.Name, job.InputFileName, job.OutputFileName, 
-														 "", "idx", "waiting", "", "", ""});
-                this.queueListView.Items.Add(item);
-            }
-            if (job is AviSynthJob)
-            {
-                jobs.Add(job.Name, job);
-                item = new ListViewItem(new string[] {job.Name, job.InputFileName, job.OutputFileName, 
-														 "", "avs", "waiting", "", "", ""});
-                this.queueListView.Items.Add(item);
-            }
+            jobs.Add(job.Name, job);
+            ListViewItem item = new ListViewItem(
+                new string[] { job.Name, "", "", "", "", "", "", "", "" });
+            queueListView.Items.Add(item);
+            updateListViewInfo(job);
         }
         #endregion
         #region deleting jobs
@@ -1243,8 +1228,7 @@ namespace MeGUI.core.details
         {
             this.queueListView.BeginUpdate();
             jobs.Remove(job.Name);
-            int position = getJobPosition(job.Name);
-            this.queueListView.Items[position].Remove();
+            this.queueListView.Items[job.Position].Remove();
             this.queueListView.Refresh();
             this.queueListView.EndUpdate();
             string fileName = mainForm.MeGUIPath + "\\jobs\\" + job.Name + ".xml";
@@ -1271,15 +1255,15 @@ namespace MeGUI.core.details
                     mainForm.PauseMenuItemTS.Text = "Pause";
                     mainForm.PauseMenuItemTS.Enabled = true;
                 }
-                if (this.queueEncoding)
-                {
-                    startStopButton.Text = "Stop";
-                    mainForm.StartStopMenuItemTS.Text = "Stop";
-                }
-                else
+                if (this.stopTheQueue)
                 {
                     startStopButton.Text = "Start";
                     mainForm.StartStopMenuItemTS.Text = "Start";
+                }
+                else
+                {
+                    startStopButton.Text = "Stop";
+                    mainForm.StartStopMenuItemTS.Text = "Stop";
                 }
                 mainForm.AbortMenuItemTS.Enabled = true;
                 abortButton.Enabled = true;
@@ -1302,17 +1286,14 @@ namespace MeGUI.core.details
         /// </summary>
         public void Abort()
         {
+            Debug.Assert(isEncoding);
             string error;
-            if (this.isEncoding)
+            if (!currentProcessor.stop(out error))
             {
-                if (!currentProcessor.stop(out error))
-                {
-                    mainForm.addToLog("Error when trying to stop processing: " + error + "\r\n");
-                }
+                mainForm.addToLog("Error when trying to stop processing: " + error + "\r\n");
             }
             this.markJobAborted();
             this.isEncoding = false;
-            this.queueEncoding = false;
             if (this.paused) // aborting directly causes problems so prevent it
             {
                 this.paused = false;
@@ -1331,9 +1312,58 @@ namespace MeGUI.core.details
             else if (Settings.AfterEncoding == AfterEncoding.Shutdown)
                 afterEncoding.Text = "After encoding: shutdown";
             else
-            {
                 afterEncoding.Text = "After encoding: run '" + Settings.AfterEncodingCommand + "'";
+        }
+        
+        private void StartEncoding(bool showMessageBoxes)
+        {
+            if (this.queueListView.Items.Count <= 0) // we can't start encoding if there are no jobs
+            {
+                MessageBox.Show("Please give me something to do", "No jobs found", MessageBoxButtons.OK);
+                return;
+            }
+
+            mainForm.ClosePlayer();
+            this.stopTheQueue = false;
+            JobStartInfo retval = startNextJobInQueue();
+            if (showMessageBoxes)
+            {
+                if (retval == JobStartInfo.COULDNT_START)
+                    MessageBox.Show("Couldn't start processing. Please consult the log for more details", "Processing failed", MessageBoxButtons.OK);
+                else if (retval == JobStartInfo.NO_JOBS_WAITING)
+                    MessageBox.Show("No jobs are waiting. Nothing to do", "No jobs waiting", MessageBoxButtons.OK);
             }
         }
+
+        public static readonly JobPostProcessor DeleteIntermediateFilesPostProcessor = new JobPostProcessor(
+            new Processor(deleteIntermediateFiles), "DeleteIntermediateFiles");
+
+        /// <summary>
+        /// Attempts to delete all files listed in job.FilesToDelete if settings.DeleteIntermediateFiles is checked
+        /// </summary>
+        /// <param name="job">the job which should just have been completed</param>
+        private static void deleteIntermediateFiles(MainForm mainForm, Job job)
+        {
+            if (mainForm.Settings.DeleteIntermediateFiles)
+            {
+                mainForm.addToLog("Job completed successfully and deletion of intermediate files is activated\r\n");
+                foreach (string file in job.FilesToDelete)
+                {
+                    mainForm.addToLog("Found intermediate output file '" + ((string)file)
+                        + "', deleting...\r\n");
+                    try
+                    {
+                        File.Delete(file);
+                        mainForm.addToLog("Deletion succeeded.");
+                    }
+                    catch (IOException)
+                    {
+                        mainForm.addToLog("Deletion failed.");
+                    }
+                }
+            }
+        }
+    
     }
+    enum JobStartInfo { JOB_STARTED, NO_JOBS_WAITING, COULDNT_START }
 }

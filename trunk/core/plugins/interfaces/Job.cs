@@ -26,7 +26,7 @@ namespace MeGUI
 {
 	public enum ProcessPriority: int {IDLE=0, NORMAL, HIGH};
 	public enum JobTypes: int {VIDEO=0, AUDIO, MUX, MERGE, INDEX, AVS, VOBSUB};
-    public enum JobStatus: int {WAITING = 0, PROCESSING, POSTPONED, ERROR, ABORTED, DONE };
+    public enum JobStatus: int {WAITING = 0, PROCESSING, POSTPONED, ERROR, ABORTED, DONE, SKIP };
     // status of job, 0: waiting, 1: processing, 2: postponed, 3: error, 4: aborted, 5: done
 	/// <summary>
 	/// This class contains all the information required for a job
@@ -231,6 +231,8 @@ namespace MeGUI
                         return "aborted";
                     case JobStatus.DONE:
                         return "done"; 
+                    case JobStatus.SKIP:
+                        return "skip";
                     default:
                         return "";
                 }

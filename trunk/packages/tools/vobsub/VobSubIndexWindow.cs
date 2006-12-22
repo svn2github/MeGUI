@@ -73,9 +73,7 @@ namespace MeGUI
                     SubtitleIndexJob job = generateJob();
                     int jobNumber = mainForm.Jobs.getFreeJobNumber();
                     job.Name = "job" + jobNumber;
-                    mainForm.Jobs.addJobToQueue(job);
-                    if (mainForm.Settings.AutoStartQueue)
-                        mainForm.Jobs.startEncoding(job);
+                    mainForm.Jobs.addJobsToQueue(job);
                     if (this.closeOnQueue.Checked)
                         this.Close();
                 }

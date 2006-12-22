@@ -28,6 +28,15 @@ namespace MeGUI
 {
 	public class Muxer : IJobProcessor
 	{
+        public static readonly JobProcessorFactory Factory =
+    new JobProcessorFactory(new ProcessorFactory(init), "Muxer");
+
+        private static IJobProcessor init(MainForm mf, Job j)
+        {
+            if (j is MuxJob) return new Muxer(mf);
+            return null;
+        }
+
         private MainForm mainForm;
         protected MuxJob job;
         protected StatusUpdate su;

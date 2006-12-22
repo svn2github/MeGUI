@@ -1375,6 +1375,10 @@ namespace MeGUI
         /// <param name="fileName"></param>
         private void gotoD2vCreator(string fileName)
         {
+            MessageBox.Show("You can't open MPEG files with the AviSynth Script Creator. You'll have to index it first with the D2V indexer, and open the created project file (*.d2v) here.",
+                "Can't open MPEG files", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+        /*
             VobinputWindow mpegInput = new VobinputWindow(this.mainForm, fileName, true);
             mpegInput.setConfig(fileName, Path.ChangeExtension(fileName,".d2v"), 2, 0, -1,
                 false, true, true, false);
@@ -1383,7 +1387,8 @@ namespace MeGUI
             {
                 if (mainForm.Jobs.startEncoding(mpegInput.LastJob))
                 {
-                    mainForm.Jobs.QueueEncoding = false;
+#warning allow a way to specify that the d2v is the only job run
+//                    mainForm.Jobs.QueueEncoding = false;
                 }
                 else
                 {
@@ -1391,7 +1396,7 @@ namespace MeGUI
                 }
                 this.Close();
             }
-        }
+        }*/
 
         private void enableControls(bool enable)
         {

@@ -6,6 +6,13 @@ namespace MeGUI
 {
     public delegate void JobProcessingStatusUpdateCallback(StatusUpdate su);
     public delegate void Processor(MainForm info, Job job);
+    
+    /// <summary>
+    /// Returns an IJobProcessor if this job can be processed, returns null otherwise.
+    /// </summary>
+    /// <param name="info"></param>
+    /// <param name="job"></param>
+    /// <returns></returns>
     public delegate IJobProcessor ProcessorFactory(MainForm info, Job job);
     public sealed class JobPreProcessor : IIDable
     {

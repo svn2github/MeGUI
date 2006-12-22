@@ -31,6 +31,15 @@ namespace MeGUI
 	/// </summary>
     public class VideoEncoder : IJobProcessor
 	{
+        public static readonly JobProcessorFactory Factory =
+            new JobProcessorFactory(new ProcessorFactory(init), "VideoEncoder");
+
+        private static IJobProcessor init(MainForm mf, Job j)
+        {
+            if (j is VideoJob) return new VideoEncoder(mf.Settings);
+            return null;
+        }
+        
         protected MeGUISettings settings;
         protected VideoJob job;
         protected StatusUpdate su;

@@ -514,7 +514,7 @@ namespace MeGUI
                     track1.SelectedIndex, track2.SelectedIndex, dpp);
                 int jobNumber = mainForm.Jobs.getFreeJobNumber();
                 job.Name = "job" + jobNumber;
-                mainForm.Jobs.addJobToQueue((Job)job);
+                mainForm.Jobs.addJobsToQueue((Job)job);
                 this.Close();
             }
             else

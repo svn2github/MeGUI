@@ -10,6 +10,15 @@ namespace MeGUI
 
     public class AviSynthProcessor : IJobProcessor
     {
+        public static readonly JobProcessorFactory Factory =
+       new JobProcessorFactory(new ProcessorFactory(init), "AviSynthProcessor");
+
+        private static IJobProcessor init(MainForm mf, Job j)
+        {
+            if (j is AviSynthJob) return new AviSynthProcessor();
+            return null;
+        }
+
         #region variables
         protected System.Threading.ManualResetEvent mre = new System.Threading.ManualResetEvent(true); // lock used to pause encoding
 #warning AvsFile should be refactored to IMediaFile once fast frame reading is supported

@@ -28,6 +28,15 @@ namespace MeGUI
 {
     public class DGIndexer : CommandlineJobProcessor<IndexJob>
     {
+        public static readonly JobProcessorFactory Factory =
+            new JobProcessorFactory(new ProcessorFactory(init), "DGIndexer");
+
+        private static IJobProcessor init(MainForm mf, Job j)
+        {
+            if (j is IndexJob) return new DGIndexer(mf.Settings.DgIndexPath);
+            return null;
+        }
+
         public DGIndexer(string executableName)
             : base()
         {

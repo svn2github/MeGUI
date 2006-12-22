@@ -984,13 +984,8 @@ namespace MeGUI
                         vJob.DesiredSizeBytes = -1;
                     }
                 }
-                foreach (Job job in jobs)
-                {
-                    this.mainForm.Jobs.addJobToQueue(job);
-                }
+                mainForm.Jobs.addJobsToQueue(jobs.ToArray());
                 mainForm.addToLog(logBuilder.ToString());
-                if (mainForm.Settings.AutoStartQueue)
-                    mainForm.Jobs.startEncoding(jobs[0]);
             }
 
         }

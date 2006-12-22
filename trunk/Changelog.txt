@@ -1,3 +1,13 @@
+0.2.4.1014
+Commit by berrinam:
+    - Big code changes to JobControl (the queue) resulting in:
+         - 'skip' is now a status which has the same effect as 'postponed'
+         - chained jobs are set to 'skip' if a job in the chain is aborted/errored
+         - Progress Window should always open
+         - Jobs should always start if 'Auto start queue' is set
+         - Missing an executable file results in an error now
+         - No running of single jobs, like the AVS window is supposed to do
+
 0.2.4.1013
 Commit by berrinam:
     - Re-enabled the right-click menu in the job queue

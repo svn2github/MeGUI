@@ -35,6 +35,15 @@ namespace MeGUI
 
     public class AudioEncoder : IJobProcessor
     {
+        public static readonly JobProcessorFactory Factory =
+    new JobProcessorFactory(new ProcessorFactory(init), "AudioEncoder");
+
+        private static IJobProcessor init(MainForm mf, Job j)
+        {
+            if (j is AudioJob) return new AudioEncoder(mf.Settings);
+            return null;
+        }
+
         private MeGUISettings settings;
         protected Job job;
         protected StatusUpdate su;
