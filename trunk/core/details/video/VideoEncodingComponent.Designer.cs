@@ -58,7 +58,7 @@ namespace MeGUI
             this.videoCodec.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.videoCodec.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.videoCodec.Location = new System.Drawing.Point(113, 67);
+            this.videoCodec.Location = new System.Drawing.Point(115, 67);
             this.videoCodec.Name = "videoCodec";
             this.videoCodec.Size = new System.Drawing.Size(79, 21);
             this.videoCodec.TabIndex = 22;
@@ -176,7 +176,7 @@ namespace MeGUI
             this.videoOutput.Name = "videoOutput";
             this.videoOutput.ReadOnly = false;
             this.videoOutput.SaveMode = true;
-            this.videoOutput.Size = new System.Drawing.Size(296, 26);
+            this.videoOutput.Size = new System.Drawing.Size(296, 29);
             this.videoOutput.TabIndex = 29;
             this.videoOutput.Title = "Enter name of output";
             this.videoOutput.FileSelected += new MeGUI.FileBarEventHandler(this.videoOutput_FileSelected);
@@ -192,7 +192,7 @@ namespace MeGUI
             this.videoInput.Name = "videoInput";
             this.videoInput.ReadOnly = true;
             this.videoInput.SaveMode = false;
-            this.videoInput.Size = new System.Drawing.Size(296, 26);
+            this.videoInput.Size = new System.Drawing.Size(296, 29);
             this.videoInput.TabIndex = 29;
             this.videoInput.Title = "Open AviSynth script";
             this.videoInput.FileSelected += new MeGUI.FileBarEventHandler(this.videoInput_FileSelected);

@@ -46,7 +46,7 @@ namespace MeGUI
             // 
             // openButton
             // 
-            this.openButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.openButton.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.openButton.Location = new System.Drawing.Point(245, 1);
             this.openButton.Name = "openButton";
             this.openButton.Size = new System.Drawing.Size(24, 23);
