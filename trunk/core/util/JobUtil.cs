@@ -72,7 +72,7 @@ namespace MeGUI
             if (!job.CalculateBitrate) return; // No desired filesize
 
             StringBuilder logBuilder = new StringBuilder();
-            logBuilder.AppendFormat("Job '{0}' requires bitrate calculation. Calculating now...\n", job.Name);
+            logBuilder.AppendFormat("Job '{0}' requires bitrate calculation. Calculating now...\r\n", job.Name);
             //            mainForm.addToLog("We have an audio job followed by a video job\r\n");
             //            logBuilder.AppendFormat("The audio job is named {0}. The first video job is named {1}.", firstAudio.Name, firstpass.Name);
             List<VideoJob> allVideoJobs = new List<VideoJob>();
@@ -157,6 +157,7 @@ namespace MeGUI
                 mainForm.JobUtil.updateVideoBitrate(vjob, bitrateKBits);
                 vjob.CalculateBitrate = false;
             }
+            mainForm.addToLog(logBuilder.ToString());
         }
         #endregion
 

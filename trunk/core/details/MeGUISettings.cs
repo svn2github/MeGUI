@@ -314,14 +314,6 @@ namespace MeGUI
 			get {return openProgressWindow;}
 			set {openProgressWindow = value;}
 		}
-        /// <summary>
-		/// gets / sets whether the configuration dialog should create a new profile on alteration of a stock one
-		/// </summary>
-        public bool SafeProfileAlteration
-        {
-            get {return safeProfileAlteration;}
-            set {safeProfileAlteration = value;}
-        }
 		/// <summary>
 		/// the threshold to apply force film. If the film percentage is higher than this threshold,
 		/// force film will be applied

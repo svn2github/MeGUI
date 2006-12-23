@@ -1,3 +1,8 @@
+0.2.4.1017
+Commit by berrinam:
+    - AutoEncode now calculates bitrate properly again
+    - Removed 'Safe Profile Alteration' from the settings window, since it didn't do anything anyway
+
 0.2.4.1016
 Commit by berrinam:
     - Fix up zones+previews in codec configs

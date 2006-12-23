@@ -955,12 +955,12 @@ namespace MeGUI
                             logBuilder.Append("Encoded audio file is present: " + stream.path +
                                 " It has a size of " + fi.Length + " bytes. \r\n");
                         }
-                        
+
                         long videoSizeKB;
                         bool useBframes = false;
                         if (video.Settings.NbBframes > 0)
                             useBframes = true;
-                        
+
                         bitrateKBits = calc.CalculateBitrateKBits(video.Settings.Codec, useBframes, container, calculationAudioStreams.ToArray(),
                             desiredSizeBytes, video.NumberOfFrames, video.Framerate, out videoSizeKB);
                         desiredSizeBytes = (long)videoSizeKB * 1024L; // convert kb back to bytes
@@ -969,6 +969,10 @@ namespace MeGUI
                         {
                             jobUtil.updateVideoBitrate(vJob, bitrateKBits);
                         }
+                    }
+                    else
+                    {
+                        vjobs[0].CalculateBitrate = true;
                     }
                     logBuilder.Append("Setting desired size of video to " + desiredSizeBytes + " bytes\r\n");
                     foreach (VideoJob vJob in vjobs)

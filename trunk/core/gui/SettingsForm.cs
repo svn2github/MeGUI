@@ -55,7 +55,6 @@ namespace MeGUI
 		private System.Windows.Forms.Label x264ExePathLabel;
 		private System.Windows.Forms.Button selectX264ExecutableButton;
         private System.Windows.Forms.GroupBox otherGroupBox;
-        private System.Windows.Forms.CheckBox safeProfileAlteration;
 		private System.Windows.Forms.ComboBox priority;
 		private System.Windows.Forms.OpenFileDialog openExecutableDialog;
         private System.Windows.Forms.CheckBox autostartQueue;
@@ -166,6 +165,10 @@ namespace MeGUI
 		private void InitializeComponent()
 		{
             System.Windows.Forms.GroupBox groupBox1;
+            this.command = new System.Windows.Forms.TextBox();
+            this.runCommand = new System.Windows.Forms.RadioButton();
+            this.shutdown = new System.Windows.Forms.RadioButton();
+            this.donothing = new System.Windows.Forms.RadioButton();
             this.saveButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.xvidEncrawLabel = new System.Windows.Forms.Label();
@@ -195,7 +198,6 @@ namespace MeGUI
             this.resetDialogs = new System.Windows.Forms.Button();
             this.configSourceDetector = new System.Windows.Forms.Button();
             this.chkboxUseAdvancedTooltips = new System.Windows.Forms.CheckBox();
-            this.safeProfileAlteration = new System.Windows.Forms.CheckBox();
             this.openProgressWindow = new System.Windows.Forms.CheckBox();
             this.autosetNbThreads = new System.Windows.Forms.CheckBox();
             this.deleteIntermediateFiles = new System.Windows.Forms.CheckBox();
@@ -217,6 +219,20 @@ namespace MeGUI
             this.openFolderDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.autoUpdateGroupBox = new System.Windows.Forms.GroupBox();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.outputExtensions = new System.Windows.Forms.GroupBox();
+            this.textBox8 = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.textBox9 = new System.Windows.Forms.TextBox();
+            this.autoModeGroupbox = new System.Windows.Forms.GroupBox();
+            this.button8 = new System.Windows.Forms.Button();
+            this.checkBox3 = new System.Windows.Forms.CheckBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.checkBox4 = new System.Windows.Forms.CheckBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.textBox7 = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
@@ -249,7 +265,6 @@ namespace MeGUI
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
             this.useAutoUpdateCheckbox = new System.Windows.Forms.CheckBox();
             this.videoExtension = new System.Windows.Forms.TextBox();
             this.audioExtLabel = new System.Windows.Forms.Label();
@@ -260,39 +275,76 @@ namespace MeGUI
             this.nbPassesLabel = new System.Windows.Forms.Label();
             this.nbPasses = new System.Windows.Forms.NumericUpDown();
             this.keep2ndPassOutput = new System.Windows.Forms.CheckBox();
-            this.autoUpdateGroupBox = new System.Windows.Forms.GroupBox();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
-            this.outputExtensions = new System.Windows.Forms.GroupBox();
-            this.textBox8 = new System.Windows.Forms.TextBox();
-            this.label11 = new System.Windows.Forms.Label();
-            this.label12 = new System.Windows.Forms.Label();
-            this.textBox9 = new System.Windows.Forms.TextBox();
-            this.autoModeGroupbox = new System.Windows.Forms.GroupBox();
-            this.button8 = new System.Windows.Forms.Button();
-            this.checkBox3 = new System.Windows.Forms.CheckBox();
-            this.label13 = new System.Windows.Forms.Label();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox4 = new System.Windows.Forms.CheckBox();
-            this.command = new System.Windows.Forms.TextBox();
-            this.runCommand = new System.Windows.Forms.RadioButton();
-            this.shutdown = new System.Windows.Forms.RadioButton();
-            this.donothing = new System.Windows.Forms.RadioButton();
             groupBox1 = new System.Windows.Forms.GroupBox();
+            groupBox1.SuspendLayout();
             this.otherGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.acceptableAspectError)).BeginInit();
             this.vobGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.forceFilmPercentage)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
-            this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nbPasses)).BeginInit();
             this.autoUpdateGroupBox.SuspendLayout();
             this.outputExtensions.SuspendLayout();
             this.autoModeGroupbox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
-            groupBox1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nbPasses)).BeginInit();
             this.SuspendLayout();
+            // 
+            // groupBox1
+            // 
+            groupBox1.Controls.Add(this.command);
+            groupBox1.Controls.Add(this.runCommand);
+            groupBox1.Controls.Add(this.shutdown);
+            groupBox1.Controls.Add(this.donothing);
+            groupBox1.Location = new System.Drawing.Point(4, 171);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Size = new System.Drawing.Size(217, 119);
+            groupBox1.TabIndex = 10;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "After encoding";
+            // 
+            // command
+            // 
+            this.command.Enabled = false;
+            this.command.Location = new System.Drawing.Point(42, 89);
+            this.command.Name = "command";
+            this.command.Size = new System.Drawing.Size(160, 21);
+            this.command.TabIndex = 3;
+            // 
+            // runCommand
+            // 
+            this.runCommand.AutoSize = true;
+            this.runCommand.Location = new System.Drawing.Point(11, 66);
+            this.runCommand.Name = "runCommand";
+            this.runCommand.Size = new System.Drawing.Size(96, 17);
+            this.runCommand.TabIndex = 2;
+            this.runCommand.Text = "Run command:";
+            this.runCommand.UseVisualStyleBackColor = true;
+            this.runCommand.CheckedChanged += new System.EventHandler(this.runCommand_CheckedChanged);
+            // 
+            // shutdown
+            // 
+            this.shutdown.AutoSize = true;
+            this.shutdown.Location = new System.Drawing.Point(11, 43);
+            this.shutdown.Name = "shutdown";
+            this.shutdown.Size = new System.Drawing.Size(73, 17);
+            this.shutdown.TabIndex = 1;
+            this.shutdown.Text = "Shutdown";
+            this.shutdown.UseVisualStyleBackColor = true;
+            // 
+            // donothing
+            // 
+            this.donothing.AutoSize = true;
+            this.donothing.Checked = true;
+            this.donothing.Location = new System.Drawing.Point(11, 20);
+            this.donothing.Name = "donothing";
+            this.donothing.Size = new System.Drawing.Size(77, 17);
+            this.donothing.TabIndex = 0;
+            this.donothing.TabStop = true;
+            this.donothing.Text = "Do nothing";
+            this.donothing.UseVisualStyleBackColor = true;
             // 
             // saveButton
             // 
@@ -504,7 +556,6 @@ namespace MeGUI
             this.otherGroupBox.Controls.Add(this.resetDialogs);
             this.otherGroupBox.Controls.Add(this.configSourceDetector);
             this.otherGroupBox.Controls.Add(this.chkboxUseAdvancedTooltips);
-            this.otherGroupBox.Controls.Add(this.safeProfileAlteration);
             this.otherGroupBox.Controls.Add(this.openProgressWindow);
             this.otherGroupBox.Controls.Add(this.autosetNbThreads);
             this.otherGroupBox.Controls.Add(this.deleteIntermediateFiles);
@@ -575,19 +626,11 @@ namespace MeGUI
             this.chkboxUseAdvancedTooltips.TabIndex = 23;
             this.chkboxUseAdvancedTooltips.Text = "Use Advanced ToolTips";
             // 
-            // safeProfileAlteration
-            // 
-            this.safeProfileAlteration.Location = new System.Drawing.Point(289, 136);
-            this.safeProfileAlteration.Name = "safeProfileAlteration";
-            this.safeProfileAlteration.Size = new System.Drawing.Size(152, 24);
-            this.safeProfileAlteration.TabIndex = 22;
-            this.safeProfileAlteration.Text = "Safe Profile Alteration";
-            // 
             // openProgressWindow
             // 
             this.openProgressWindow.Checked = true;
             this.openProgressWindow.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.openProgressWindow.Location = new System.Drawing.Point(289, 112);
+            this.openProgressWindow.Location = new System.Drawing.Point(287, 136);
             this.openProgressWindow.Name = "openProgressWindow";
             this.openProgressWindow.Size = new System.Drawing.Size(144, 24);
             this.openProgressWindow.TabIndex = 21;
@@ -603,7 +646,7 @@ namespace MeGUI
             // 
             // deleteIntermediateFiles
             // 
-            this.deleteIntermediateFiles.Location = new System.Drawing.Point(289, 88);
+            this.deleteIntermediateFiles.Location = new System.Drawing.Point(287, 112);
             this.deleteIntermediateFiles.Name = "deleteIntermediateFiles";
             this.deleteIntermediateFiles.Size = new System.Drawing.Size(152, 24);
             this.deleteIntermediateFiles.TabIndex = 19;
@@ -619,7 +662,7 @@ namespace MeGUI
             // 
             // deleteCompletedJobs
             // 
-            this.deleteCompletedJobs.Location = new System.Drawing.Point(289, 64);
+            this.deleteCompletedJobs.Location = new System.Drawing.Point(287, 88);
             this.deleteCompletedJobs.Name = "deleteCompletedJobs";
             this.deleteCompletedJobs.Size = new System.Drawing.Size(144, 24);
             this.deleteCompletedJobs.TabIndex = 17;
@@ -635,7 +678,7 @@ namespace MeGUI
             // 
             // autostartQueue
             // 
-            this.autostartQueue.Location = new System.Drawing.Point(289, 40);
+            this.autostartQueue.Location = new System.Drawing.Point(287, 64);
             this.autostartQueue.Name = "autostartQueue";
             this.autostartQueue.Size = new System.Drawing.Size(112, 24);
             this.autostartQueue.TabIndex = 14;
@@ -767,6 +810,157 @@ namespace MeGUI
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Main";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(groupBox1);
+            this.tabPage3.Controls.Add(this.autoUpdateGroupBox);
+            this.tabPage3.Controls.Add(this.outputExtensions);
+            this.tabPage3.Controls.Add(this.autoModeGroupbox);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Size = new System.Drawing.Size(460, 461);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "Extra config";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // autoUpdateGroupBox
+            // 
+            this.autoUpdateGroupBox.Controls.Add(this.checkBox2);
+            this.autoUpdateGroupBox.Location = new System.Drawing.Point(227, 87);
+            this.autoUpdateGroupBox.Name = "autoUpdateGroupBox";
+            this.autoUpdateGroupBox.Size = new System.Drawing.Size(231, 78);
+            this.autoUpdateGroupBox.TabIndex = 9;
+            this.autoUpdateGroupBox.TabStop = false;
+            this.autoUpdateGroupBox.Text = "Auto Update";
+            // 
+            // checkBox2
+            // 
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.Location = new System.Drawing.Point(9, 23);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(105, 17);
+            this.checkBox2.TabIndex = 2;
+            this.checkBox2.Text = "Use AutoUpdate";
+            this.checkBox2.UseVisualStyleBackColor = true;
+            // 
+            // outputExtensions
+            // 
+            this.outputExtensions.Controls.Add(this.textBox8);
+            this.outputExtensions.Controls.Add(this.label11);
+            this.outputExtensions.Controls.Add(this.label12);
+            this.outputExtensions.Controls.Add(this.textBox9);
+            this.outputExtensions.Location = new System.Drawing.Point(3, 87);
+            this.outputExtensions.Name = "outputExtensions";
+            this.outputExtensions.Size = new System.Drawing.Size(218, 78);
+            this.outputExtensions.TabIndex = 7;
+            this.outputExtensions.TabStop = false;
+            this.outputExtensions.Text = "Optional output extensions";
+            // 
+            // textBox8
+            // 
+            this.textBox8.Location = new System.Drawing.Point(6, 20);
+            this.textBox8.Name = "textBox8";
+            this.textBox8.Size = new System.Drawing.Size(120, 21);
+            this.textBox8.TabIndex = 21;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(137, 51);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(34, 13);
+            this.label11.TabIndex = 24;
+            this.label11.Text = "Audio";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(137, 24);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(33, 13);
+            this.label12.TabIndex = 23;
+            this.label12.Text = "Video";
+            // 
+            // textBox9
+            // 
+            this.textBox9.Location = new System.Drawing.Point(6, 48);
+            this.textBox9.Name = "textBox9";
+            this.textBox9.Size = new System.Drawing.Size(120, 21);
+            this.textBox9.TabIndex = 22;
+            // 
+            // autoModeGroupbox
+            // 
+            this.autoModeGroupbox.Controls.Add(this.button8);
+            this.autoModeGroupbox.Controls.Add(this.checkBox3);
+            this.autoModeGroupbox.Controls.Add(this.label13);
+            this.autoModeGroupbox.Controls.Add(this.numericUpDown1);
+            this.autoModeGroupbox.Controls.Add(this.checkBox4);
+            this.autoModeGroupbox.Location = new System.Drawing.Point(4, 3);
+            this.autoModeGroupbox.Name = "autoModeGroupbox";
+            this.autoModeGroupbox.Size = new System.Drawing.Size(454, 78);
+            this.autoModeGroupbox.TabIndex = 8;
+            this.autoModeGroupbox.TabStop = false;
+            this.autoModeGroupbox.Text = "Automated Encoding";
+            // 
+            // button8
+            // 
+            this.button8.Location = new System.Drawing.Point(11, 51);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(114, 23);
+            this.button8.TabIndex = 4;
+            this.button8.Text = "Configure Defaults";
+            this.button8.UseVisualStyleBackColor = true;
+            // 
+            // checkBox3
+            // 
+            this.checkBox3.Checked = true;
+            this.checkBox3.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox3.Location = new System.Drawing.Point(232, 16);
+            this.checkBox3.Name = "checkBox3";
+            this.checkBox3.Size = new System.Drawing.Size(208, 24);
+            this.checkBox3.TabIndex = 3;
+            this.checkBox3.Text = "Overwrite Stats File in 3rd pass";
+            // 
+            // label13
+            // 
+            this.label13.Location = new System.Drawing.Point(8, 24);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(100, 23);
+            this.label13.TabIndex = 2;
+            this.label13.Text = "Number of passes";
+            // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.Location = new System.Drawing.Point(120, 22);
+            this.numericUpDown1.Maximum = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+            this.numericUpDown1.Minimum = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(40, 21);
+            this.numericUpDown1.TabIndex = 1;
+            this.numericUpDown1.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            // 
+            // checkBox4
+            // 
+            this.checkBox4.Checked = true;
+            this.checkBox4.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox4.Location = new System.Drawing.Point(232, 48);
+            this.checkBox4.Name = "checkBox4";
+            this.checkBox4.Size = new System.Drawing.Size(216, 24);
+            this.checkBox4.TabIndex = 0;
+            this.checkBox4.Text = "Keep 2nd pass Output in 3 pass mode";
             // 
             // tabPage2
             // 
@@ -1100,19 +1294,6 @@ namespace MeGUI
             this.label4.TabIndex = 2;
             this.label4.Text = "avimux_gui";
             // 
-            // tabPage3
-            // 
-            this.tabPage3.Controls.Add(groupBox1);
-            this.tabPage3.Controls.Add(this.autoUpdateGroupBox);
-            this.tabPage3.Controls.Add(this.outputExtensions);
-            this.tabPage3.Controls.Add(this.autoModeGroupbox);
-            this.tabPage3.Location = new System.Drawing.Point(4, 22);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(460, 461);
-            this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "Extra config";
-            this.tabPage3.UseVisualStyleBackColor = true;
-            // 
             // useAutoUpdateCheckbox
             // 
             this.useAutoUpdateCheckbox.AutoSize = true;
@@ -1214,198 +1395,6 @@ namespace MeGUI
             this.keep2ndPassOutput.TabIndex = 0;
             this.keep2ndPassOutput.Text = "Keep 2nd pass Output in 3 pass mode";
             // 
-            // autoUpdateGroupBox
-            // 
-            this.autoUpdateGroupBox.Controls.Add(this.checkBox2);
-            this.autoUpdateGroupBox.Location = new System.Drawing.Point(227, 87);
-            this.autoUpdateGroupBox.Name = "autoUpdateGroupBox";
-            this.autoUpdateGroupBox.Size = new System.Drawing.Size(231, 78);
-            this.autoUpdateGroupBox.TabIndex = 9;
-            this.autoUpdateGroupBox.TabStop = false;
-            this.autoUpdateGroupBox.Text = "Auto Update";
-            // 
-            // checkBox2
-            // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(9, 23);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(105, 17);
-            this.checkBox2.TabIndex = 2;
-            this.checkBox2.Text = "Use AutoUpdate";
-            this.checkBox2.UseVisualStyleBackColor = true;
-            // 
-            // outputExtensions
-            // 
-            this.outputExtensions.Controls.Add(this.textBox8);
-            this.outputExtensions.Controls.Add(this.label11);
-            this.outputExtensions.Controls.Add(this.label12);
-            this.outputExtensions.Controls.Add(this.textBox9);
-            this.outputExtensions.Location = new System.Drawing.Point(3, 87);
-            this.outputExtensions.Name = "outputExtensions";
-            this.outputExtensions.Size = new System.Drawing.Size(218, 78);
-            this.outputExtensions.TabIndex = 7;
-            this.outputExtensions.TabStop = false;
-            this.outputExtensions.Text = "Optional output extensions";
-            // 
-            // textBox8
-            // 
-            this.textBox8.Location = new System.Drawing.Point(6, 20);
-            this.textBox8.Name = "textBox8";
-            this.textBox8.Size = new System.Drawing.Size(120, 21);
-            this.textBox8.TabIndex = 21;
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(137, 51);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(34, 13);
-            this.label11.TabIndex = 24;
-            this.label11.Text = "Audio";
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(137, 24);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(33, 13);
-            this.label12.TabIndex = 23;
-            this.label12.Text = "Video";
-            // 
-            // textBox9
-            // 
-            this.textBox9.Location = new System.Drawing.Point(6, 48);
-            this.textBox9.Name = "textBox9";
-            this.textBox9.Size = new System.Drawing.Size(120, 21);
-            this.textBox9.TabIndex = 22;
-            // 
-            // autoModeGroupbox
-            // 
-            this.autoModeGroupbox.Controls.Add(this.button8);
-            this.autoModeGroupbox.Controls.Add(this.checkBox3);
-            this.autoModeGroupbox.Controls.Add(this.label13);
-            this.autoModeGroupbox.Controls.Add(this.numericUpDown1);
-            this.autoModeGroupbox.Controls.Add(this.checkBox4);
-            this.autoModeGroupbox.Location = new System.Drawing.Point(4, 3);
-            this.autoModeGroupbox.Name = "autoModeGroupbox";
-            this.autoModeGroupbox.Size = new System.Drawing.Size(454, 78);
-            this.autoModeGroupbox.TabIndex = 8;
-            this.autoModeGroupbox.TabStop = false;
-            this.autoModeGroupbox.Text = "Automated Encoding";
-            // 
-            // button8
-            // 
-            this.button8.Location = new System.Drawing.Point(11, 51);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(114, 23);
-            this.button8.TabIndex = 4;
-            this.button8.Text = "Configure Defaults";
-            this.button8.UseVisualStyleBackColor = true;
-            // 
-            // checkBox3
-            // 
-            this.checkBox3.Checked = true;
-            this.checkBox3.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox3.Location = new System.Drawing.Point(232, 16);
-            this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(208, 24);
-            this.checkBox3.TabIndex = 3;
-            this.checkBox3.Text = "Overwrite Stats File in 3rd pass";
-            // 
-            // label13
-            // 
-            this.label13.Location = new System.Drawing.Point(8, 24);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(100, 23);
-            this.label13.TabIndex = 2;
-            this.label13.Text = "Number of passes";
-            // 
-            // numericUpDown1
-            // 
-            this.numericUpDown1.Location = new System.Drawing.Point(120, 22);
-            this.numericUpDown1.Maximum = new decimal(new int[] {
-            3,
-            0,
-            0,
-            0});
-            this.numericUpDown1.Minimum = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(40, 21);
-            this.numericUpDown1.TabIndex = 1;
-            this.numericUpDown1.Value = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
-            // 
-            // checkBox4
-            // 
-            this.checkBox4.Checked = true;
-            this.checkBox4.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox4.Location = new System.Drawing.Point(232, 48);
-            this.checkBox4.Name = "checkBox4";
-            this.checkBox4.Size = new System.Drawing.Size(216, 24);
-            this.checkBox4.TabIndex = 0;
-            this.checkBox4.Text = "Keep 2nd pass Output in 3 pass mode";
-            // 
-            // groupBox1
-            // 
-            groupBox1.Controls.Add(this.command);
-            groupBox1.Controls.Add(this.runCommand);
-            groupBox1.Controls.Add(this.shutdown);
-            groupBox1.Controls.Add(this.donothing);
-            groupBox1.Location = new System.Drawing.Point(4, 171);
-            groupBox1.Name = "groupBox1";
-            groupBox1.Size = new System.Drawing.Size(217, 119);
-            groupBox1.TabIndex = 10;
-            groupBox1.TabStop = false;
-            groupBox1.Text = "After encoding";
-            // 
-            // command
-            // 
-            this.command.Enabled = false;
-            this.command.Location = new System.Drawing.Point(42, 89);
-            this.command.Name = "command";
-            this.command.Size = new System.Drawing.Size(160, 21);
-            this.command.TabIndex = 3;
-            // 
-            // runCommand
-            // 
-            this.runCommand.AutoSize = true;
-            this.runCommand.Location = new System.Drawing.Point(11, 66);
-            this.runCommand.Name = "runCommand";
-            this.runCommand.Size = new System.Drawing.Size(96, 17);
-            this.runCommand.TabIndex = 2;
-            this.runCommand.Text = "Run command:";
-            this.runCommand.UseVisualStyleBackColor = true;
-            this.runCommand.CheckedChanged += new System.EventHandler(this.runCommand_CheckedChanged);
-            // 
-            // shutdown
-            // 
-            this.shutdown.AutoSize = true;
-            this.shutdown.Location = new System.Drawing.Point(11, 43);
-            this.shutdown.Name = "shutdown";
-            this.shutdown.Size = new System.Drawing.Size(73, 17);
-            this.shutdown.TabIndex = 1;
-            this.shutdown.Text = "Shutdown";
-            this.shutdown.UseVisualStyleBackColor = true;
-            // 
-            // donothing
-            // 
-            this.donothing.AutoSize = true;
-            this.donothing.Checked = true;
-            this.donothing.Location = new System.Drawing.Point(11, 20);
-            this.donothing.Name = "donothing";
-            this.donothing.Size = new System.Drawing.Size(77, 17);
-            this.donothing.TabIndex = 0;
-            this.donothing.TabStop = true;
-            this.donothing.Text = "Do nothing";
-            this.donothing.UseVisualStyleBackColor = true;
-            // 
             // SettingsForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
@@ -1421,6 +1410,8 @@ namespace MeGUI
             this.Name = "SettingsForm";
             this.ShowInTaskbar = false;
             this.Text = "Settings";
+            groupBox1.ResumeLayout(false);
+            groupBox1.PerformLayout();
             this.otherGroupBox.ResumeLayout(false);
             this.otherGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.acceptableAspectError)).EndInit();
@@ -1428,18 +1419,16 @@ namespace MeGUI
             ((System.ComponentModel.ISupportInitialize)(this.forceFilmPercentage)).EndInit();
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
-            this.tabPage2.ResumeLayout(false);
-            this.tabPage2.PerformLayout();
             this.tabPage3.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.nbPasses)).EndInit();
             this.autoUpdateGroupBox.ResumeLayout(false);
             this.autoUpdateGroupBox.PerformLayout();
             this.outputExtensions.ResumeLayout(false);
             this.outputExtensions.PerformLayout();
             this.autoModeGroupbox.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
-            groupBox1.ResumeLayout(false);
-            groupBox1.PerformLayout();
+            this.tabPage2.ResumeLayout(false);
+            this.tabPage2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nbPasses)).EndInit();
             this.ResumeLayout(false);
 
 		}
@@ -1668,7 +1657,6 @@ namespace MeGUI
 				settings.DeleteIntermediateFiles = deleteIntermediateFiles.Checked;
 				settings.DeleteAbortedOutput = deleteAbortedOutput.Checked;
 				settings.OpenProgressWindow = openProgressWindow.Checked;
-                settings.SafeProfileAlteration = safeProfileAlteration.Checked;
 				settings.AutoSetNbThreads = autosetNbThreads.Checked;
 				settings.Keep2of3passOutput = keep2ndPassOutput.Checked;
 				settings.OverwriteStats = keep2ndPassLogfile.Checked;
@@ -1722,7 +1710,6 @@ namespace MeGUI
 				deleteIntermediateFiles.Checked = settings.DeleteIntermediateFiles;
 				deleteAbortedOutput.Checked = settings.DeleteAbortedOutput;
 				openProgressWindow.Checked = settings.OpenProgressWindow;
-                safeProfileAlteration.Checked = settings.SafeProfileAlteration;
 				autosetNbThreads.Checked = settings.AutoSetNbThreads;
 				keep2ndPassOutput.Checked = settings.Keep2of3passOutput;
 				keep2ndPassLogfile.Checked = settings.OverwriteStats;
