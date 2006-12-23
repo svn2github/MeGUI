@@ -164,7 +164,7 @@ namespace MeGUI
         #region event handlers
         private void videoInput_FileSelected(FileBar sender, FileBarEventArgs args)
         {
-            openVideoFile(videoInput.Filename);
+            if (!string.IsNullOrEmpty(videoInput.Filename)) openVideoFile(videoInput.Filename);
         }
 
         private void videoOutput_FileSelected(FileBar sender, FileBarEventArgs args)

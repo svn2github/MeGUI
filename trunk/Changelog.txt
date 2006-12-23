@@ -1,3 +1,7 @@
+0.2.4.1018
+Commit by berrinam:
+    - Fixed crash on 'Reset'
+
 0.2.4.1017
 Commit by berrinam:
     - AutoEncode now calculates bitrate properly again

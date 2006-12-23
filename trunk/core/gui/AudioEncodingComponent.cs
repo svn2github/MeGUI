@@ -273,7 +273,7 @@ namespace MeGUI
         }
         private void audioInput_FileSelected(FileBar sender, FileBarEventArgs args)
         {
-            openAudioFile(audioInput.Filename);
+            if (!string.IsNullOrEmpty(audioInput.Filename)) openAudioFile(audioInput.Filename);
         }
         #endregion
         #region helper methods
