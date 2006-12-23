@@ -1,3 +1,9 @@
+0.2.4.1016
+Commit by berrinam:
+    - Fix up zones+previews in codec configs
+    - Fix up the long-time bug in AVS creator with previewing. The distinction between preview windows is now explicit
+    - Changed AutoScaleMode to DPI, so it may look marginally better with large fonts.
+
 0.2.4.1015
 Commit by berrinam:
     - Change AutoEncode shortcut from CtrlA to Ctrl3, so that text can be selected in log window

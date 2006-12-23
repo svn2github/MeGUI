@@ -301,7 +301,7 @@ namespace MeGUI
         /// </summary>
         public string Input
         {
-            set { input = value; showVideoButton.Enabled = (value != null); }
+            set { input = value; showVideoButton.Enabled = !string.IsNullOrEmpty(value); }
             get { return input; }
         }
         /// <summary>

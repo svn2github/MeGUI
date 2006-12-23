@@ -38,6 +38,7 @@ namespace MeGUI.core.details.video
             zonesControl.MainForm = mainForm;
 
             input = info.VideoInput;
+            zonesControl.Input = input;
             output = info.VideoOutput;
             zonesControl.IntroEndFrame = info.IntroEndFrame;
             zonesControl.CreditsStartFrame = info.CreditsStartFrame;

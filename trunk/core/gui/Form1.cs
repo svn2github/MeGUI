@@ -114,9 +114,12 @@ namespace MeGUI
             this.components = new System.ComponentModel.Container();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.inputTab = new System.Windows.Forms.TabPage();
+            this.audioEncodingComponent1 = new MeGUI.AudioEncodingComponent();
+            this.videoEncodingComponent1 = new MeGUI.VideoEncodingComponent();
             this.autoEncodeButton = new System.Windows.Forms.Button();
             this.resetButton = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.jobControl1 = new MeGUI.core.details.JobControl();
             this.logTab = new System.Windows.Forms.TabPage();
             this.clearLogButton = new System.Windows.Forms.Button();
             this.log = new System.Windows.Forms.TextBox();
@@ -148,9 +151,6 @@ namespace MeGUI
             this.abortToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.exitMeGUIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.audioEncodingComponent1 = new MeGUI.AudioEncodingComponent();
-            this.videoEncodingComponent1 = new MeGUI.VideoEncodingComponent();
-            this.jobControl1 = new MeGUI.core.details.JobControl();
             this.tabControl1.SuspendLayout();
             this.inputTab.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -183,6 +183,31 @@ namespace MeGUI
             this.inputTab.Text = "Input";
             this.inputTab.UseVisualStyleBackColor = true;
             // 
+            // audioEncodingComponent1
+            // 
+            this.audioEncodingComponent1.AudioInput = "";
+            this.audioEncodingComponent1.AudioOutput = "";
+            this.audioEncodingComponent1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.audioEncodingComponent1.Location = new System.Drawing.Point(0, 153);
+            this.audioEncodingComponent1.MaximumSize = new System.Drawing.Size(0, 162);
+            this.audioEncodingComponent1.MinimumSize = new System.Drawing.Size(400, 162);
+            this.audioEncodingComponent1.Name = "audioEncodingComponent1";
+            this.audioEncodingComponent1.Size = new System.Drawing.Size(470, 162);
+            this.audioEncodingComponent1.TabIndex = 8;
+            // 
+            // videoEncodingComponent1
+            // 
+            this.videoEncodingComponent1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.videoEncodingComponent1.Location = new System.Drawing.Point(0, 0);
+            this.videoEncodingComponent1.MaximumSize = new System.Drawing.Size(0, 153);
+            this.videoEncodingComponent1.MinimumSize = new System.Drawing.Size(415, 153);
+            this.videoEncodingComponent1.Name = "videoEncodingComponent1";
+            this.videoEncodingComponent1.PrerenderJob = false;
+            this.videoEncodingComponent1.Size = new System.Drawing.Size(470, 153);
+            this.videoEncodingComponent1.TabIndex = 7;
+            this.videoEncodingComponent1.VideoInput = "";
+            this.videoEncodingComponent1.VideoOutput = "";
+            // 
             // autoEncodeButton
             // 
             this.autoEncodeButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
@@ -208,10 +233,19 @@ namespace MeGUI
             this.tabPage2.Controls.Add(this.jobControl1);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Size = new System.Drawing.Size(470, 365);
+            this.tabPage2.Size = new System.Drawing.Size(470, 367);
             this.tabPage2.TabIndex = 12;
             this.tabPage2.Text = "Queue";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // jobControl1
+            // 
+            this.jobControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.jobControl1.Location = new System.Drawing.Point(0, 0);
+            this.jobControl1.Name = "jobControl1";
+            this.jobControl1.Size = new System.Drawing.Size(470, 367);
+            this.jobControl1.TabIndex = 0;
+            this.jobControl1.Load += new System.EventHandler(this.jobControl1_Load);
             // 
             // logTab
             // 
@@ -219,7 +253,7 @@ namespace MeGUI
             this.logTab.Controls.Add(this.log);
             this.logTab.Location = new System.Drawing.Point(4, 22);
             this.logTab.Name = "logTab";
-            this.logTab.Size = new System.Drawing.Size(470, 365);
+            this.logTab.Size = new System.Drawing.Size(470, 367);
             this.logTab.TabIndex = 10;
             this.logTab.Text = "Log";
             this.logTab.UseVisualStyleBackColor = true;
@@ -238,7 +272,7 @@ namespace MeGUI
             // log
             // 
             this.log.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.log.Location = new System.Drawing.Point(0, 33);
+            this.log.Location = new System.Drawing.Point(0, 35);
             this.log.Multiline = true;
             this.log.Name = "log";
             this.log.ReadOnly = true;
@@ -432,40 +466,6 @@ namespace MeGUI
             this.exitMeGUIToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.exitMeGUIToolStripMenuItem.Text = "Exit MeGUI";
             this.exitMeGUIToolStripMenuItem.Click += new System.EventHandler(this.exitMeGUIToolStripMenuItem_Click);
-            // 
-            // audioEncodingComponent1
-            // 
-            this.audioEncodingComponent1.AudioInput = "";
-            this.audioEncodingComponent1.AudioOutput = "";
-            this.audioEncodingComponent1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.audioEncodingComponent1.Location = new System.Drawing.Point(0, 153);
-            this.audioEncodingComponent1.MaximumSize = new System.Drawing.Size(0, 162);
-            this.audioEncodingComponent1.MinimumSize = new System.Drawing.Size(400, 162);
-            this.audioEncodingComponent1.Name = "audioEncodingComponent1";
-            this.audioEncodingComponent1.Size = new System.Drawing.Size(470, 162);
-            this.audioEncodingComponent1.TabIndex = 8;
-            // 
-            // videoEncodingComponent1
-            // 
-            this.videoEncodingComponent1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.videoEncodingComponent1.Location = new System.Drawing.Point(0, 0);
-            this.videoEncodingComponent1.MaximumSize = new System.Drawing.Size(0, 153);
-            this.videoEncodingComponent1.MinimumSize = new System.Drawing.Size(415, 153);
-            this.videoEncodingComponent1.Name = "videoEncodingComponent1";
-            this.videoEncodingComponent1.PrerenderJob = false;
-            this.videoEncodingComponent1.Size = new System.Drawing.Size(470, 153);
-            this.videoEncodingComponent1.TabIndex = 7;
-            this.videoEncodingComponent1.VideoInput = "";
-            this.videoEncodingComponent1.VideoOutput = "";
-            // 
-            // jobControl1
-            // 
-            this.jobControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.jobControl1.Location = new System.Drawing.Point(0, 0);
-            this.jobControl1.Name = "jobControl1";
-            this.jobControl1.Size = new System.Drawing.Size(470, 365);
-            this.jobControl1.TabIndex = 0;
-            this.jobControl1.Load += new System.EventHandler(this.jobControl1_Load);
             // 
             // MainForm
             // 

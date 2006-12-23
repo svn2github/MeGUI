@@ -22,6 +22,11 @@ namespace MeGUI
 	public class AviSynthWindow : System.Windows.Forms.Form
 	{
 		#region variable declaration
+        string originalScript;
+        bool originalInlineAvs;
+
+
+        bool isPreviewMode = false;
         ISettingsProvider<AviSynthSettings, Empty, int, int> settingsProvider = new SettingsProviderImpl2<
             MeGUI.core.gui.AviSynthProfileConfigPanel, Empty, AviSynthSettings, AviSynthSettings, int, int>("AviSynth", 0, 0); 
         private CultureInfo ci = new CultureInfo("en-us");
@@ -40,7 +45,7 @@ namespace MeGUI
 
         private System.Windows.Forms.GroupBox resNCropGroupbox;
 		private System.Windows.Forms.CheckBox onSaveLoadScript;
-		private System.Windows.Forms.Button previewButton;
+		private System.Windows.Forms.Button previewAvsButton;
         private System.Windows.Forms.Button saveButton;
 		private System.Windows.Forms.CheckBox crop;
         private System.Windows.Forms.Button autoCropButton;
@@ -100,6 +105,7 @@ namespace MeGUI
         private StatusStrip statusStrip1;
         private ToolStripProgressBar deintProgressBar;
         private ToolStripStatusLabel deintStatusLabel;
+        private Button reopenOriginal;
 
 		/// <summary>
 		/// Required designer variable.
@@ -118,7 +124,7 @@ namespace MeGUI
             this.controlsToDisable.Add(mpegOptGroupBox);
             this.controlsToDisable.Add(aviOptGroupBox);
             this.controlsToDisable.Add(resNCropGroupbox);
-            this.controlsToDisable.Add(previewButton);
+            this.controlsToDisable.Add(previewAvsButton);
             this.controlsToDisable.Add(saveButton);
             this.controlsToDisable.Add(inputDAR);
             this.controlsToDisable.Add(inputDARLabel);
@@ -249,11 +255,12 @@ namespace MeGUI
             this.verticalResolution = new System.Windows.Forms.NumericUpDown();
             this.horizontalResolution = new System.Windows.Forms.NumericUpDown();
             this.onSaveLoadScript = new System.Windows.Forms.CheckBox();
-            this.previewButton = new System.Windows.Forms.Button();
+            this.previewAvsButton = new System.Windows.Forms.Button();
             this.saveButton = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.optionsTab = new System.Windows.Forms.TabPage();
             this.videoGroupBox = new System.Windows.Forms.GroupBox();
+            this.reopenOriginal = new System.Windows.Forms.Button();
             this.profileControl1 = new MeGUI.core.details.video.ProfileControl();
             this.mod16Box = new System.Windows.Forms.ComboBox();
             this.signalAR = new System.Windows.Forms.CheckBox();
@@ -369,7 +376,7 @@ namespace MeGUI
             this.resNCropGroupbox.Controls.Add(this.verticalResolution);
             this.resNCropGroupbox.Controls.Add(this.horizontalResolution);
             this.resNCropGroupbox.Enabled = false;
-            this.resNCropGroupbox.Location = new System.Drawing.Point(3, 160);
+            this.resNCropGroupbox.Location = new System.Drawing.Point(3, 185);
             this.resNCropGroupbox.Name = "resNCropGroupbox";
             this.resNCropGroupbox.Size = new System.Drawing.Size(412, 112);
             this.resNCropGroupbox.TabIndex = 0;
@@ -549,22 +556,26 @@ namespace MeGUI
             this.onSaveLoadScript.TabIndex = 2;
             this.onSaveLoadScript.Text = "On Save close and load to be encoded";
             // 
-            // previewButton
+            // previewAvsButton
             // 
-            this.previewButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.previewButton.Location = new System.Drawing.Point(257, 419);
-            this.previewButton.Name = "previewButton";
-            this.previewButton.Size = new System.Drawing.Size(75, 23);
-            this.previewButton.TabIndex = 3;
-            this.previewButton.Text = "Preview";
-            this.previewButton.Click += new System.EventHandler(this.previewButton_Click);
+            this.previewAvsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.previewAvsButton.AutoSize = true;
+            this.previewAvsButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.previewAvsButton.Location = new System.Drawing.Point(265, 419);
+            this.previewAvsButton.Name = "previewAvsButton";
+            this.previewAvsButton.Size = new System.Drawing.Size(107, 23);
+            this.previewAvsButton.TabIndex = 3;
+            this.previewAvsButton.Text = "Preview AVS Script";
+            this.previewAvsButton.Click += new System.EventHandler(this.previewButton_Click);
             // 
             // saveButton
             // 
             this.saveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.saveButton.Location = new System.Drawing.Point(338, 419);
+            this.saveButton.AutoSize = true;
+            this.saveButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.saveButton.Location = new System.Drawing.Point(378, 419);
             this.saveButton.Name = "saveButton";
-            this.saveButton.Size = new System.Drawing.Size(75, 23);
+            this.saveButton.Size = new System.Drawing.Size(41, 23);
             this.saveButton.TabIndex = 4;
             this.saveButton.Text = "Save";
             this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
@@ -593,6 +604,7 @@ namespace MeGUI
             // 
             // videoGroupBox
             // 
+            this.videoGroupBox.Controls.Add(this.reopenOriginal);
             this.videoGroupBox.Controls.Add(this.profileControl1);
             this.videoGroupBox.Controls.Add(this.mod16Box);
             this.videoGroupBox.Controls.Add(this.signalAR);
@@ -605,15 +617,27 @@ namespace MeGUI
             this.videoGroupBox.Controls.Add(this.openVideoButton);
             this.videoGroupBox.Location = new System.Drawing.Point(3, 8);
             this.videoGroupBox.Name = "videoGroupBox";
-            this.videoGroupBox.Size = new System.Drawing.Size(412, 144);
+            this.videoGroupBox.Size = new System.Drawing.Size(412, 171);
             this.videoGroupBox.TabIndex = 5;
             this.videoGroupBox.TabStop = false;
             this.videoGroupBox.Text = "Video";
             // 
+            // reopenOriginal
+            // 
+            this.reopenOriginal.AutoSize = true;
+            this.reopenOriginal.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.reopenOriginal.Location = new System.Drawing.Point(96, 51);
+            this.reopenOriginal.Name = "reopenOriginal";
+            this.reopenOriginal.Size = new System.Drawing.Size(157, 23);
+            this.reopenOriginal.TabIndex = 20;
+            this.reopenOriginal.Text = "Re-open original video player";
+            this.reopenOriginal.UseVisualStyleBackColor = true;
+            this.reopenOriginal.Click += new System.EventHandler(this.reopenOriginal_Click);
+            // 
             // profileControl1
             // 
             this.profileControl1.LabelText = "AVS profile";
-            this.profileControl1.Location = new System.Drawing.Point(11, 106);
+            this.profileControl1.Location = new System.Drawing.Point(11, 131);
             this.profileControl1.Name = "profileControl1";
             this.profileControl1.Size = new System.Drawing.Size(388, 29);
             this.profileControl1.TabIndex = 6;
@@ -628,7 +652,7 @@ namespace MeGUI
             "Overcrop to achieve mod16",
             "Encode non-mod16",
             "Crop mod4 horizontally"});
-            this.mod16Box.Location = new System.Drawing.Point(224, 81);
+            this.mod16Box.Location = new System.Drawing.Point(224, 106);
             this.mod16Box.Name = "mod16Box";
             this.mod16Box.Size = new System.Drawing.Size(157, 21);
             this.mod16Box.TabIndex = 19;
@@ -637,7 +661,7 @@ namespace MeGUI
             // signalAR
             // 
             this.signalAR.AutoSize = true;
-            this.signalAR.Location = new System.Drawing.Point(26, 83);
+            this.signalAR.Location = new System.Drawing.Point(26, 108);
             this.signalAR.Name = "signalAR";
             this.signalAR.Size = new System.Drawing.Size(190, 17);
             this.signalAR.TabIndex = 11;
@@ -646,14 +670,14 @@ namespace MeGUI
             // 
             // tvTypeLabel
             // 
-            this.tvTypeLabel.Location = new System.Drawing.Point(276, 52);
+            this.tvTypeLabel.Location = new System.Drawing.Point(276, 82);
             this.tvTypeLabel.Name = "tvTypeLabel";
             this.tvTypeLabel.Size = new System.Drawing.Size(48, 23);
             this.tvTypeLabel.TabIndex = 10;
             // 
             // customDAR
             // 
-            this.customDAR.Location = new System.Drawing.Point(224, 54);
+            this.customDAR.Location = new System.Drawing.Point(224, 79);
             this.customDAR.Name = "customDAR";
             this.customDAR.ReadOnly = true;
             this.customDAR.Size = new System.Drawing.Size(40, 21);
@@ -668,7 +692,7 @@ namespace MeGUI
             "ITU 4:3",
             "1:1",
             "Custom"});
-            this.inputDAR.Location = new System.Drawing.Point(96, 54);
+            this.inputDAR.Location = new System.Drawing.Point(96, 79);
             this.inputDAR.Name = "inputDAR";
             this.inputDAR.Size = new System.Drawing.Size(121, 21);
             this.inputDAR.TabIndex = 8;
@@ -676,7 +700,7 @@ namespace MeGUI
             // 
             // inputDARLabel
             // 
-            this.inputDARLabel.Location = new System.Drawing.Point(8, 56);
+            this.inputDARLabel.Location = new System.Drawing.Point(8, 81);
             this.inputDARLabel.Name = "inputDARLabel";
             this.inputDARLabel.Size = new System.Drawing.Size(72, 23);
             this.inputDARLabel.TabIndex = 7;
@@ -1031,7 +1055,7 @@ namespace MeGUI
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.onSaveLoadScript);
             this.Controls.Add(this.saveButton);
-            this.Controls.Add(this.previewButton);
+            this.Controls.Add(this.previewAvsButton);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
@@ -1100,6 +1124,8 @@ namespace MeGUI
 			{
 				player.disableIntroAndCredits();
                 reader = player.Reader;
+                isPreviewMode = true;
+                sendCropValues();
 				player.Show();
 			}
 		}
@@ -1290,8 +1316,8 @@ namespace MeGUI
         }
 
         private void resetSourceDetection()
-        {
-/*            if (detector != null)
+        {/*
+            if (detector != null)
             {
                 detector.stop();
                 detector = null;
@@ -1409,21 +1435,40 @@ namespace MeGUI
             openVideo(videoInput, videoInput, false);
         }
 
+        private bool showOriginal()
+        {
+            if (player != null)
+            {
+                player.Close();
+                player = null;
+            }
+            this.isPreviewMode = false;
+            player = new VideoPlayer();
+            if (player.loadVideo(mainForm, originalScript, PREVIEWTYPE.REGULAR, false, originalInlineAvs))
+            {
+                player.Show();
+                sendCropValues();
+                return true;
+            }
+            else
+            {
+                player.Close();
+                player = null;
+                return false;
+            }
+        }
+
 		/// <summary>
 		/// opens a given DGIndex script
 		/// </summary>
 		/// <param name="videoInput">the DGIndex script to be opened</param>
 		private void openVideo(string videoInput, string textBoxName, bool inlineAvs)
 		{
-			if (player != null)
-			{
-				player.Close();
-				player = null;
-			}
 			this.crop.Checked = false;
             this.videoInput.Text = "";
-			player = new VideoPlayer();
-			bool videoLoaded = player.loadVideo(mainForm, videoInput, PREVIEWTYPE.REGULAR, false, inlineAvs);
+            this.originalScript = videoInput;
+            this.originalInlineAvs = inlineAvs;
+            bool videoLoaded = showOriginal();
             enableControls(videoLoaded);
 			if (videoLoaded)
 			{
@@ -1447,7 +1492,6 @@ namespace MeGUI
                     inputDAR.SelectedIndex = 3; // Custom
                     customDAR.Text = Math.Round(((double)((double)file.Width / (double)file.Height)), 4).ToString();
                 }
-				player.Show();
 				this.showScript();
 			}
 		}
@@ -1468,8 +1512,13 @@ namespace MeGUI
 		}
 		private void sendCropValues()
 		{
-			if (player != null && player.Visible)
-				player.crop(Cropping);
+            if (player != null && player.Visible)
+            {
+                if (isPreviewMode)
+                    player.crop(0, 0, 0, 0);
+                else
+                    player.crop(Cropping);
+            }
 		}
 		#endregion
 		#region checkboxes
@@ -1583,9 +1632,9 @@ namespace MeGUI
 		/// <param name="e"></param>
 		private void autoCropButton_Click(object sender, System.EventArgs e)
 		{
-            if (player == null || !player.Visible)
+            if (isPreviewMode || player == null || !player.Visible)
             {
-                MessageBox.Show(this, "No AutoCropping without the preview window open",
+                MessageBox.Show(this, "No AutoCropping without the original video window open",
                     "AutoCropping not possible",MessageBoxButtons.OK,MessageBoxIcon.Error);
                 return;
             }
@@ -1847,6 +1896,11 @@ namespace MeGUI
             deinterlaceType.DataSource = ScriptServer.GetDeinterlacers(DeintInfo);
             deinterlaceType.BindingContext = new BindingContext();
             showScript();
+        }
+
+        private void reopenOriginal_Click(object sender, EventArgs e)
+        {
+            showOriginal();
         }
     }
     public delegate void OpenScriptCallback(string avisynthScript);
