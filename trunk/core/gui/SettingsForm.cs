@@ -16,6 +16,7 @@ namespace MeGUI
 		#region variables
         private System.Windows.Forms.Button saveButton;
 		private System.Windows.Forms.Button cancelButton;
+        private string[] autoUpdateServers;
         private DialogSettings dialogSettings;
         private Button resetDialogs;
         private TabControl tabControl1;
@@ -127,6 +128,9 @@ namespace MeGUI
         private RadioButton runCommand;
         private RadioButton shutdown;
         private RadioButton donothing;
+        private Button configureServersButton;
+        private Label label14;
+        private NumericUpDown maxServersToTry;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -221,6 +225,7 @@ namespace MeGUI
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.autoUpdateGroupBox = new System.Windows.Forms.GroupBox();
+            this.configureServersButton = new System.Windows.Forms.Button();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.outputExtensions = new System.Windows.Forms.GroupBox();
             this.textBox8 = new System.Windows.Forms.TextBox();
@@ -275,6 +280,8 @@ namespace MeGUI
             this.nbPassesLabel = new System.Windows.Forms.Label();
             this.nbPasses = new System.Windows.Forms.NumericUpDown();
             this.keep2ndPassOutput = new System.Windows.Forms.CheckBox();
+            this.maxServersToTry = new System.Windows.Forms.NumericUpDown();
+            this.label14 = new System.Windows.Forms.Label();
             groupBox1 = new System.Windows.Forms.GroupBox();
             groupBox1.SuspendLayout();
             this.otherGroupBox.SuspendLayout();
@@ -290,6 +297,7 @@ namespace MeGUI
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nbPasses)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.maxServersToTry)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -826,13 +834,28 @@ namespace MeGUI
             // 
             // autoUpdateGroupBox
             // 
+            this.autoUpdateGroupBox.Controls.Add(this.label14);
+            this.autoUpdateGroupBox.Controls.Add(this.maxServersToTry);
+            this.autoUpdateGroupBox.Controls.Add(this.configureServersButton);
             this.autoUpdateGroupBox.Controls.Add(this.checkBox2);
             this.autoUpdateGroupBox.Location = new System.Drawing.Point(227, 87);
             this.autoUpdateGroupBox.Name = "autoUpdateGroupBox";
-            this.autoUpdateGroupBox.Size = new System.Drawing.Size(231, 78);
+            this.autoUpdateGroupBox.Size = new System.Drawing.Size(231, 203);
             this.autoUpdateGroupBox.TabIndex = 9;
             this.autoUpdateGroupBox.TabStop = false;
             this.autoUpdateGroupBox.Text = "Auto Update";
+            // 
+            // configureServersButton
+            // 
+            this.configureServersButton.AutoSize = true;
+            this.configureServersButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.configureServersButton.Location = new System.Drawing.Point(9, 46);
+            this.configureServersButton.Name = "configureServersButton";
+            this.configureServersButton.Size = new System.Drawing.Size(115, 23);
+            this.configureServersButton.TabIndex = 3;
+            this.configureServersButton.Text = "Configure servers...";
+            this.configureServersButton.UseVisualStyleBackColor = true;
+            this.configureServersButton.Click += new System.EventHandler(this.configureServersButton_Click);
             // 
             // checkBox2
             // 
@@ -1395,6 +1418,32 @@ namespace MeGUI
             this.keep2ndPassOutput.TabIndex = 0;
             this.keep2ndPassOutput.Text = "Keep 2nd pass Output in 3 pass mode";
             // 
+            // maxServersToTry
+            // 
+            this.maxServersToTry.Location = new System.Drawing.Point(24, 104);
+            this.maxServersToTry.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.maxServersToTry.Name = "maxServersToTry";
+            this.maxServersToTry.Size = new System.Drawing.Size(120, 21);
+            this.maxServersToTry.TabIndex = 4;
+            this.maxServersToTry.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(6, 84);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(176, 13);
+            this.label14.TabIndex = 5;
+            this.label14.Text = "Maximum number of servers to try:";
+            // 
             // SettingsForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
@@ -1429,6 +1478,7 @@ namespace MeGUI
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nbPasses)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.maxServersToTry)).EndInit();
             this.ResumeLayout(false);
 
 		}
@@ -1614,6 +1664,22 @@ namespace MeGUI
                 }
             }
         }
+
+        /// <summary>
+        /// Launches configuration of auto-update servers
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void configureServersButton_Click(object sender, EventArgs e)
+        {
+            using (MeGUI.core.gui.AutoUpdateServerConfigWindow w = new MeGUI.core.gui.AutoUpdateServerConfigWindow())
+            {
+                w.ServerList = autoUpdateServers;
+                if (w.ShowDialog() == DialogResult.OK)
+                    autoUpdateServers = w.ServerList;
+            }
+        }
+
 		#endregion
 		#region properties
 		public MeGUISettings Settings
@@ -1621,6 +1687,8 @@ namespace MeGUI
 			get 
 			{
 				MeGUISettings settings = new MeGUISettings();
+                settings.MaxServersToTry = (int)maxServersToTry.Value;
+                settings.AutoUpdateServers = autoUpdateServers;
                 settings.AutoUpdate = useAutoUpdateCheckbox.Checked;
                 settings.DialogSettings = dialogSettings;
                 settings.AcceptableAspectErrorPercent = (int)acceptableAspectError.Value;
@@ -1673,6 +1741,8 @@ namespace MeGUI
 			set
 			{
 				MeGUISettings settings = value;
+                maxServersToTry.Value = settings.MaxServersToTry;
+                autoUpdateServers = settings.AutoUpdateServers;
                 useAutoUpdateCheckbox.Checked = settings.AutoUpdate;
                 acceptableAspectError.Value = (decimal)settings.AcceptableAspectErrorPercent;
                 dialogSettings = settings.DialogSettings;
@@ -1724,5 +1794,6 @@ namespace MeGUI
 			}
 		}
 		#endregion
+
 	}
 }

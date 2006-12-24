@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace MeGUI
 {
@@ -8,6 +9,7 @@ namespace MeGUI
 	public class MeGUISettings
     {
         #region variables
+        private string[] autoUpdateServers;
         private string faacPath, lamePath, neroAacEncPath, mencoderPath,  mp4boxPath, mkvmergePath, encAacPlusPath,
             ffmpegPath,
             x264Path, dgIndexPath, xvidEncrawPath, avc2aviPath, aviMuxGUIPath, oggEnc2Path, encAudXPath,
@@ -17,7 +19,7 @@ namespace MeGUI
             deleteAbortedOutput, openProgressWindow, useadvancedtooltips, freshOggEnc2;
         private AfterEncoding afterEncoding;
         private decimal forceFilmThreshold;
-		private int nbPasses, acceptableAspectError;
+		private int nbPasses, acceptableAspectError, maxServersToTry;
         private string videoExtension, audioExtension;
         private bool safeProfileAlteration;
         private SourceDetectorSettings sdSettings;
@@ -28,6 +30,8 @@ namespace MeGUI
         #endregion
         public MeGUISettings()
 		{
+            autoUpdateServers = new string[] { "http://megui.org/auto/", "http://mewiki.project357.com/auto/" };
+            maxServersToTry = 5;
             dialogSettings = new DialogSettings();
             sdSettings = new SourceDetectorSettings();
             AedSettings = new AutoEncodeDefaultsSettings();
@@ -75,9 +79,25 @@ namespace MeGUI
         }
         #region properties
         /// <summary>
-        /// What to do after all encodes are finished
+        /// Maximum servers that auto update should try before aborting.
         /// </summary>
-        public AfterEncoding AfterEncoding
+        public int MaxServersToTry
+        {
+            get { return maxServersToTry; }
+            set { maxServersToTry = value; }
+        }
+        /// <summary>
+        /// List of servers to use for autoupdate
+        /// </summary>
+        public string[] AutoUpdateServers
+        {
+            get { return autoUpdateServers; }
+            set { autoUpdateServers = value; }
+        }
+            /// <summary>
+            /// What to do after all encodes are finished
+            /// </summary>
+            public AfterEncoding AfterEncoding
         {
             get { return afterEncoding; }
             set { afterEncoding = value; }

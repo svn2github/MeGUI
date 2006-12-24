@@ -1505,8 +1505,15 @@ namespace MeGUI
             pstart.CreateNoWindow = true;
             pstart.UseShellExecute = false;
             proc.StartInfo = pstart;
-            if (!proc.Start())
+            try
+            {
+                if (!proc.Start())
+                    MessageBox.Show("Couldn't run updater.", "Couldn't run updater.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch
+            {
                 MessageBox.Show("Couldn't run updater.", "Couldn't run updater.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         #endregion
         #region properties

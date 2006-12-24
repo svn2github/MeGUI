@@ -1,3 +1,7 @@
+0.2.4.1019
+Commit by berrinam:
+    - Support multiple servers in auto-update
+
 0.2.4.1018
 Commit by berrinam:
     - Fixed crash on 'Reset'

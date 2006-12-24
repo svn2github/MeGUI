@@ -20,6 +20,9 @@ namespace MeGUI
 
     public partial class UpdateWindow : Form
     {
+        private string[] serverList;
+        private int currentServerIndex;
+        
         private MainForm mainForm = null;
         public static MeGUISettings meGUISettings = null;
         private bool continueUpdate = true;
@@ -30,7 +33,7 @@ namespace MeGUI
         private XmlDocument upgradeXml = null;
         private bool needsRestart = false;
         private bool isOrHasDownloadedUpgradeData = false;
-        private static readonly string ServerAddress = "http://megui.org/auto/";
+        private string ServerAddress;
 
         #region Classes
         /// <summary>
@@ -666,8 +669,28 @@ namespace MeGUI
             this.upgradeData = new iUpgradeableCollection(32); // To avoid unnecessary resizing, start at 32.
             meGUISettings = savedSettings; // Load up the MeGUI settings so i can access filepaths
 
+            this.serverList = shuffled(mainForm.Settings.AutoUpdateServers);
+            if (serverList.Length == 0)
+            {
+                MessageBox.Show("Couldn't run auto-update since there are no servers registered.", "No servers registered", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             LoadSettings();
         }
+
+        private string[] shuffled(string[] serverList)
+        {
+            Random r = new Random();
+            SortedList<int, string> shuffled = new SortedList<int, string>();
+            foreach (string file in serverList)
+                shuffled.Add(r.Next(),file);
+
+            string[] array = new string[shuffled.Count];
+            shuffled.Values.CopyTo(array, 0);
+            return array;
+        }
+
         private void UpdateWindow_Load(object sender, EventArgs e)
         {
             GetUpdateData(false);
@@ -759,7 +782,8 @@ namespace MeGUI
             }
             catch
             {
-                AddTextToLog("Error: Couldn't connect to server. Try again later.");
+                AddTextToLog("Error: Couldn't connect to server.");
+                upgradeXml = null;
                 return ErrorState.ServerNotAvailable;
             }
 
@@ -772,6 +796,7 @@ namespace MeGUI
             catch
             {
                 AddTextToLog("Error: Invalid XML file on server. Aborting.");
+                upgradeXml = null;
                 return ErrorState.InvalidXML;
             }
             
@@ -784,7 +809,20 @@ namespace MeGUI
         private void ProcessUpdateXML()
         {
             isOrHasDownloadedUpgradeData = true;
-            ErrorState value = GetUpdateXML();
+            ErrorState value = ErrorState.ServerNotAvailable;
+            int count = 0;
+            foreach (string serverName in serverList)
+            {
+                count++;
+                if (count > mainForm.Settings.MaxServersToTry)
+                    break;
+                ServerAddress = serverName;
+                AddTextToLog("Trying server: " + serverName);
+                value = GetUpdateXML();
+                if (value == ErrorState.Successful)
+                    break;
+            }
+            
             if (value != ErrorState.Successful)
             {
                 AddTextToLog("Error: Could not download XML file");
@@ -1272,7 +1310,10 @@ namespace MeGUI
 
             try
             {
-                data = Download(response.GetResponseStream(), response.ContentLength);
+                using (Stream s = response.GetResponseStream())
+                {
+                    data = Download(s, response.ContentLength);
+                }
             }
             catch
             {
