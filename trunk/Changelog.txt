@@ -1,4 +1,4 @@
-0.2.4.2020
+0.2.4.1020
 Commit by Sharx1976:
     - Fixed the behaviour of the UseAutoUpdate checkbox in Settings (now it works and the value is saved correctly into the settings)
 
