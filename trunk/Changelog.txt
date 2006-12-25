@@ -1,6 +1,6 @@
 0.2.4.2020
 Commit by Sharx1976:
-    - Fixed the behaviour of the UseAutoUpdate button in Settings (now it works and the value is saved correctly into the settings)
+    - Fixed the behaviour of the UseAutoUpdate checkbox in Settings (now it works and the value is saved correctly into the settings)
 
 0.2.4.1019
 Commit by berrinam:
