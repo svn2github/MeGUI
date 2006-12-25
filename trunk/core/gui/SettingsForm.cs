@@ -102,7 +102,7 @@ namespace MeGUI
         private AutoEncodeDefaultsSettings autoEncodeDefaults;
         private TabPage tabPage3;
         private GroupBox autoUpdateGroupBox;
-        private CheckBox checkBox2;
+        private CheckBox useAutoUpdateCheckbox;
         private GroupBox outputExtensions;
         private TextBox textBox8;
         private Label label11;
@@ -114,7 +114,6 @@ namespace MeGUI
         private Label label13;
         private NumericUpDown numericUpDown1;
         private CheckBox checkBox4;
-        private CheckBox useAutoUpdateCheckbox;
         private TextBox videoExtension;
         private Label audioExtLabel;
         private Label videoExtLabel;
@@ -225,8 +224,10 @@ namespace MeGUI
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.autoUpdateGroupBox = new System.Windows.Forms.GroupBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.maxServersToTry = new System.Windows.Forms.NumericUpDown();
             this.configureServersButton = new System.Windows.Forms.Button();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.useAutoUpdateCheckbox = new System.Windows.Forms.CheckBox();
             this.outputExtensions = new System.Windows.Forms.GroupBox();
             this.textBox8 = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
@@ -270,7 +271,6 @@ namespace MeGUI
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.useAutoUpdateCheckbox = new System.Windows.Forms.CheckBox();
             this.videoExtension = new System.Windows.Forms.TextBox();
             this.audioExtLabel = new System.Windows.Forms.Label();
             this.videoExtLabel = new System.Windows.Forms.Label();
@@ -280,8 +280,6 @@ namespace MeGUI
             this.nbPassesLabel = new System.Windows.Forms.Label();
             this.nbPasses = new System.Windows.Forms.NumericUpDown();
             this.keep2ndPassOutput = new System.Windows.Forms.CheckBox();
-            this.maxServersToTry = new System.Windows.Forms.NumericUpDown();
-            this.label14 = new System.Windows.Forms.Label();
             groupBox1 = new System.Windows.Forms.GroupBox();
             groupBox1.SuspendLayout();
             this.otherGroupBox.SuspendLayout();
@@ -292,12 +290,12 @@ namespace MeGUI
             this.tabPage1.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.autoUpdateGroupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.maxServersToTry)).BeginInit();
             this.outputExtensions.SuspendLayout();
             this.autoModeGroupbox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nbPasses)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.maxServersToTry)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -837,13 +835,39 @@ namespace MeGUI
             this.autoUpdateGroupBox.Controls.Add(this.label14);
             this.autoUpdateGroupBox.Controls.Add(this.maxServersToTry);
             this.autoUpdateGroupBox.Controls.Add(this.configureServersButton);
-            this.autoUpdateGroupBox.Controls.Add(this.checkBox2);
+            this.autoUpdateGroupBox.Controls.Add(this.useAutoUpdateCheckbox);
             this.autoUpdateGroupBox.Location = new System.Drawing.Point(227, 87);
             this.autoUpdateGroupBox.Name = "autoUpdateGroupBox";
             this.autoUpdateGroupBox.Size = new System.Drawing.Size(231, 203);
             this.autoUpdateGroupBox.TabIndex = 9;
             this.autoUpdateGroupBox.TabStop = false;
             this.autoUpdateGroupBox.Text = "Auto Update";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(6, 84);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(176, 13);
+            this.label14.TabIndex = 5;
+            this.label14.Text = "Maximum number of servers to try:";
+            // 
+            // maxServersToTry
+            // 
+            this.maxServersToTry.Location = new System.Drawing.Point(24, 104);
+            this.maxServersToTry.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.maxServersToTry.Name = "maxServersToTry";
+            this.maxServersToTry.Size = new System.Drawing.Size(120, 21);
+            this.maxServersToTry.TabIndex = 4;
+            this.maxServersToTry.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
             // 
             // configureServersButton
             // 
@@ -857,15 +881,15 @@ namespace MeGUI
             this.configureServersButton.UseVisualStyleBackColor = true;
             this.configureServersButton.Click += new System.EventHandler(this.configureServersButton_Click);
             // 
-            // checkBox2
+            // useAutoUpdateCheckbox
             // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(9, 23);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(105, 17);
-            this.checkBox2.TabIndex = 2;
-            this.checkBox2.Text = "Use AutoUpdate";
-            this.checkBox2.UseVisualStyleBackColor = true;
+            this.useAutoUpdateCheckbox.AutoSize = true;
+            this.useAutoUpdateCheckbox.Location = new System.Drawing.Point(9, 23);
+            this.useAutoUpdateCheckbox.Name = "useAutoUpdateCheckbox";
+            this.useAutoUpdateCheckbox.Size = new System.Drawing.Size(105, 17);
+            this.useAutoUpdateCheckbox.TabIndex = 2;
+            this.useAutoUpdateCheckbox.Text = "Use AutoUpdate";
+            this.useAutoUpdateCheckbox.UseVisualStyleBackColor = true;
             // 
             // outputExtensions
             // 
@@ -1317,16 +1341,6 @@ namespace MeGUI
             this.label4.TabIndex = 2;
             this.label4.Text = "avimux_gui";
             // 
-            // useAutoUpdateCheckbox
-            // 
-            this.useAutoUpdateCheckbox.AutoSize = true;
-            this.useAutoUpdateCheckbox.Location = new System.Drawing.Point(9, 23);
-            this.useAutoUpdateCheckbox.Name = "useAutoUpdateCheckbox";
-            this.useAutoUpdateCheckbox.Size = new System.Drawing.Size(105, 17);
-            this.useAutoUpdateCheckbox.TabIndex = 2;
-            this.useAutoUpdateCheckbox.Text = "Use AutoUpdate";
-            this.useAutoUpdateCheckbox.UseVisualStyleBackColor = true;
-            // 
             // videoExtension
             // 
             this.videoExtension.Location = new System.Drawing.Point(6, 20);
@@ -1418,32 +1432,6 @@ namespace MeGUI
             this.keep2ndPassOutput.TabIndex = 0;
             this.keep2ndPassOutput.Text = "Keep 2nd pass Output in 3 pass mode";
             // 
-            // maxServersToTry
-            // 
-            this.maxServersToTry.Location = new System.Drawing.Point(24, 104);
-            this.maxServersToTry.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.maxServersToTry.Name = "maxServersToTry";
-            this.maxServersToTry.Size = new System.Drawing.Size(120, 21);
-            this.maxServersToTry.TabIndex = 4;
-            this.maxServersToTry.Value = new decimal(new int[] {
-            5,
-            0,
-            0,
-            0});
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(6, 84);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(176, 13);
-            this.label14.TabIndex = 5;
-            this.label14.Text = "Maximum number of servers to try:";
-            // 
             // SettingsForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
@@ -1471,6 +1459,7 @@ namespace MeGUI
             this.tabPage3.ResumeLayout(false);
             this.autoUpdateGroupBox.ResumeLayout(false);
             this.autoUpdateGroupBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.maxServersToTry)).EndInit();
             this.outputExtensions.ResumeLayout(false);
             this.outputExtensions.PerformLayout();
             this.autoModeGroupbox.ResumeLayout(false);
@@ -1478,7 +1467,6 @@ namespace MeGUI
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nbPasses)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.maxServersToTry)).EndInit();
             this.ResumeLayout(false);
 
 		}
