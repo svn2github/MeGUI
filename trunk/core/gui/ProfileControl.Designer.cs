@@ -58,7 +58,7 @@ namespace MeGUI.core.details.video
             // 
             this.avsProfileLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.avsProfileLabel.AutoSize = true;
-            this.avsProfileLabel.Location = new System.Drawing.Point(-3, 8);
+            this.avsProfileLabel.Location = new System.Drawing.Point(-2, 8);
             this.avsProfileLabel.Name = "avsProfileLabel";
             this.avsProfileLabel.Size = new System.Drawing.Size(59, 13);
             this.avsProfileLabel.TabIndex = 19;

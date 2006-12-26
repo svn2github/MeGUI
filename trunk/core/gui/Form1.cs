@@ -167,21 +167,21 @@ namespace MeGUI
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(478, 390);
+            this.tabControl1.Size = new System.Drawing.Size(478, 369);
             this.tabControl1.TabIndex = 0;
             // 
             // inputTab
             // 
+            this.inputTab.BackColor = System.Drawing.SystemColors.Control;
             this.inputTab.Controls.Add(this.audioEncodingComponent1);
             this.inputTab.Controls.Add(this.videoEncodingComponent1);
             this.inputTab.Controls.Add(this.autoEncodeButton);
             this.inputTab.Controls.Add(this.resetButton);
             this.inputTab.Location = new System.Drawing.Point(4, 22);
             this.inputTab.Name = "inputTab";
-            this.inputTab.Size = new System.Drawing.Size(470, 364);
+            this.inputTab.Size = new System.Drawing.Size(470, 343);
             this.inputTab.TabIndex = 0;
             this.inputTab.Text = "Input";
-            this.inputTab.UseVisualStyleBackColor = true;
             // 
             // autoEncodeButton
             // 
@@ -208,7 +208,7 @@ namespace MeGUI
             this.tabPage2.Controls.Add(this.jobControl1);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Size = new System.Drawing.Size(470, 367);
+            this.tabPage2.Size = new System.Drawing.Size(470, 364);
             this.tabPage2.TabIndex = 12;
             this.tabPage2.Text = "Queue";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -219,7 +219,7 @@ namespace MeGUI
             this.logTab.Controls.Add(this.log);
             this.logTab.Location = new System.Drawing.Point(4, 22);
             this.logTab.Name = "logTab";
-            this.logTab.Size = new System.Drawing.Size(470, 367);
+            this.logTab.Size = new System.Drawing.Size(470, 364);
             this.logTab.TabIndex = 10;
             this.logTab.Text = "Log";
             this.logTab.UseVisualStyleBackColor = true;
@@ -238,7 +238,7 @@ namespace MeGUI
             // log
             // 
             this.log.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.log.Location = new System.Drawing.Point(0, 35);
+            this.log.Location = new System.Drawing.Point(0, 32);
             this.log.Multiline = true;
             this.log.Name = "log";
             this.log.ReadOnly = true;
@@ -389,47 +389,47 @@ namespace MeGUI
             this.toolStripSeparator2,
             this.exitMeGUIToolStripMenuItem});
             this.trayMenu.Name = "trayMenu";
-            this.trayMenu.Size = new System.Drawing.Size(147, 126);
+            this.trayMenu.Size = new System.Drawing.Size(153, 126);
             // 
             // openMeGUIToolStripMenuItem
             // 
             this.openMeGUIToolStripMenuItem.Name = "openMeGUIToolStripMenuItem";
-            this.openMeGUIToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.openMeGUIToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.openMeGUIToolStripMenuItem.Text = "Open MeGUI";
             this.openMeGUIToolStripMenuItem.Click += new System.EventHandler(this.openMeGUIToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(143, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
             // 
             // startToolStripMenuItem
             // 
             this.startToolStripMenuItem.Name = "startToolStripMenuItem";
-            this.startToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.startToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.startToolStripMenuItem.Text = "Start";
             // 
             // pauseToolStripMenuItem
             // 
             this.pauseToolStripMenuItem.Name = "pauseToolStripMenuItem";
-            this.pauseToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.pauseToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.pauseToolStripMenuItem.Text = "Pause";
             // 
             // abortToolStripMenuItem
             // 
             this.abortToolStripMenuItem.Name = "abortToolStripMenuItem";
-            this.abortToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.abortToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.abortToolStripMenuItem.Text = "Abort";
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(143, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
             // 
             // exitMeGUIToolStripMenuItem
             // 
             this.exitMeGUIToolStripMenuItem.Name = "exitMeGUIToolStripMenuItem";
-            this.exitMeGUIToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.exitMeGUIToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.exitMeGUIToolStripMenuItem.Text = "Exit MeGUI";
             this.exitMeGUIToolStripMenuItem.Click += new System.EventHandler(this.exitMeGUIToolStripMenuItem_Click);
             // 
@@ -463,7 +463,7 @@ namespace MeGUI
             this.jobControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.jobControl1.Location = new System.Drawing.Point(0, 0);
             this.jobControl1.Name = "jobControl1";
-            this.jobControl1.Size = new System.Drawing.Size(470, 367);
+            this.jobControl1.Size = new System.Drawing.Size(470, 364);
             this.jobControl1.TabIndex = 0;
             this.jobControl1.Load += new System.EventHandler(this.jobControl1_Load);
             // 
@@ -472,7 +472,7 @@ namespace MeGUI
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(478, 390);
+            this.ClientSize = new System.Drawing.Size(478, 369);
             this.Controls.Add(this.tabControl1);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;

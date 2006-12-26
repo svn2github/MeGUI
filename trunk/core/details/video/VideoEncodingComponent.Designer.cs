@@ -58,9 +58,9 @@ namespace MeGUI
             this.videoCodec.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.videoCodec.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.videoCodec.Location = new System.Drawing.Point(115, 67);
+            this.videoCodec.Location = new System.Drawing.Point(113, 65);
             this.videoCodec.Name = "videoCodec";
-            this.videoCodec.Size = new System.Drawing.Size(79, 21);
+            this.videoCodec.Size = new System.Drawing.Size(81, 21);
             this.videoCodec.TabIndex = 22;
             this.videoCodec.SelectedIndexChanged += new System.EventHandler(this.codec_SelectedIndexChanged);
             // 
@@ -68,16 +68,16 @@ namespace MeGUI
             // 
             this.fileType.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.fileType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.fileType.Location = new System.Drawing.Point(266, 67);
+            this.fileType.Location = new System.Drawing.Point(266, 65);
             this.fileType.Name = "fileType";
-            this.fileType.Size = new System.Drawing.Size(88, 21);
+            this.fileType.Size = new System.Drawing.Size(89, 21);
             this.fileType.TabIndex = 19;
             this.fileType.SelectedIndexChanged += new System.EventHandler(this.fileType_SelectedIndexChanged);
             // 
             // videoCodecLabel
             // 
             this.videoCodecLabel.AutoSize = true;
-            this.videoCodecLabel.Location = new System.Drawing.Point(6, 70);
+            this.videoCodecLabel.Location = new System.Drawing.Point(6, 68);
             this.videoCodecLabel.Name = "videoCodecLabel";
             this.videoCodecLabel.Size = new System.Drawing.Size(38, 13);
             this.videoCodecLabel.TabIndex = 21;
@@ -149,7 +149,7 @@ namespace MeGUI
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(203, 70);
+            this.label1.Location = new System.Drawing.Point(203, 68);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(55, 13);
             this.label1.TabIndex = 31;
