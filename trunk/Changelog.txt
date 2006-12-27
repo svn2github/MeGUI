@@ -1,3 +1,7 @@
+0.2.4.1023
+Commit by berrinam:
+    - Fix the OneClick+Config+compile.bat crash -- the text was too long, and delegated to a resource that wasn't compiled in
+
 0.2.4.1022
 Commit by Sharx1976:
     - More cosmetic fixes

@@ -77,6 +77,10 @@ namespace MeGUI.packages.tools.oneclick
         {
             this.mainForm = mainForm;
             InitializeComponent();
+
+            // We do this because the designer will attempt to put such a long string in the resources otherwise
+            containerFormatLabel.Text = "Since the possible output filetypes are not known until the input is configured, the output type cannot be configured in a profile. Instead, here is a list of known file-types. You choose which you are happy with, and MeGUI will attempt to encode to one of those on the list.";
+
             foreach (ContainerType t in mainForm.MuxProvider.GetSupportedContainers())
                 containerTypeList.Items.Add(t.ToString());
             this.filesizeComboBox.Items.AddRange(calc.getPredefinedOutputSizes());
