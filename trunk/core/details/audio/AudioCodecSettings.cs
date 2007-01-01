@@ -20,6 +20,7 @@
 
 using System;
 using System.Xml.Serialization;
+using System.Collections.Generic;
 using MeGUI.core.plugins.interfaces;
 namespace MeGUI
 {
@@ -60,6 +61,7 @@ namespace MeGUI
     ]
 	public class AudioCodecSettings : MeGUI.core.plugins.interfaces.GenericSettings
 	{
+        public virtual void FixFileNames(Dictionary<string, string> _) {}
         public string getSettingsType()
         {
             return "Audio";
@@ -201,5 +203,20 @@ namespace MeGUI
 
 
 
-	}
+
+        #region GenericSettings Members
+
+
+        public string[] RequiredFiles
+        {
+            get { return new string[0]; }
+        }
+
+        public string[] RequiredProfiles
+        {
+            get { return new string[0]; }
+        }
+
+        #endregion
+    }
 }

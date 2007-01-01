@@ -7,16 +7,13 @@ using System.Xml.Serialization;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using MeGUI.core.plugins.interfaces;
+using MeGUI.core.util;
 
 namespace MeGUI
 {
     public class ProfileManager
     {
         string path;
-/*        Dictionary<string, GenericProfile<AudioCodecSettings>> audioProfiles;
-        Dictionary<string, GenericProfile<AviSynthSettings>> avsProfiles;
-        Dictionary<string, GenericProfile<OneClickSettings>> oneClickProfiles;
-        Dictionary<string, GenericProfile<VideoCodecSettings>> videoProfiles;*/
         Dictionary<string, string> selectedProfiles = new Dictionary<string, string>();
         List<string> settingsTypes = new List<string>();
         Dictionary<string, Type> profileTypes = new Dictionary<string,Type>();
@@ -157,6 +154,7 @@ namespace MeGUI
                 return; // redundant check to eliminate rogue profiles
 			XmlSerializer ser = null;
 			string fileName = ProfilePath(prof);
+            FileUtil.ensureDirectoryExists(Path.GetDirectoryName(fileName));
 			using (Stream s = File.Open(fileName, System.IO.FileMode.Create, System.IO.FileAccess.Write))
 			{
 				try
@@ -173,6 +171,7 @@ namespace MeGUI
 				}
 			}
 		}
+
         /// <summary>
         /// loads a profile with a given name from program-directory\profiles\profilename.xml
         /// </summary>
@@ -868,6 +867,14 @@ namespace MeGUI
         public Dictionary<string, Profile> Profiles(string type) { return profiles[type]; }
         #endregion
         #region Profile Listing
+        public Profile ByFormattedName(string formattedName)
+        {
+            string type = formattedName.Substring(0, formattedName.IndexOf(':'));
+            System.Diagnostics.Debug.Assert(formattedName.StartsWith(type + ": "));
+            string profileName = formattedName.Substring(type.Length + 2);
+            return Profiles(type)[profileName];
+        }
+
         public string[] AllProfileNames
         {
             get
@@ -884,8 +891,21 @@ namespace MeGUI
                 return profileList.ToArray();
             }
         }
-        public Profile[] AllDependantProfiles(string formattedName)
+
+        public void AddDependantProfiles(string formattedName, Dictionary<string, Profile> includedProfiles)
         {
+            if (includedProfiles.ContainsKey(formattedName)) return; // This profile has already been added
+            
+            Profile prof = ByFormattedName(formattedName);
+            includedProfiles[formattedName] = prof;
+            
+            string[] formattedNames = prof.BaseSettings.RequiredProfiles;
+            foreach (string profileName in formattedNames)
+            {
+                AddDependantProfiles(profileName, includedProfiles);
+            }
+/*            List<Profile> profiles = new List<Profile>();
+            Profile prof = 
             try
             {
                 if (formattedName.StartsWith("Video: "))
@@ -915,65 +935,45 @@ namespace MeGUI
             catch (KeyNotFoundException) // In this case the profile name is not valid for some reason.
             {
                 return null;
-            }
+            }*/
         }
-        public Profile[] AllProfiles(string[] formattedProfileNames, out List<string> failedProfiles)
+        public Profile[] AllProfiles(string[] formattedProfileNames)
         {
-            failedProfiles = new List<string>();
-
-            // List all the profiles
-            List<Profile> profiles = new List<Profile>();
+            Dictionary<string, Profile> profileList = new Dictionary<string, Profile>();
             foreach (string formattedProfileName in formattedProfileNames)
             {
-                Profile[] relatedProfiles = AllDependantProfiles(formattedProfileName);
-                if (relatedProfiles == null)
-                    failedProfiles.Add(formattedProfileName);
-                else
-                    profiles.AddRange(relatedProfiles);
+                AddDependantProfiles(formattedProfileName, profileList);
             }
-
-            // Cull the repeated ones.
-            for (int i = 0; i < profiles.Count; i++)
-            {
-                for (int j = i + 1; j < profiles.Count; j++)
-                {
-                    if (profiles[i] == profiles[j])
-                    {
-                        profiles.RemoveAt(j);
-                        j--;
-                    }
-                }
-            }
-    
-
-            return profiles.ToArray();
+            Profile[] array = new Profile[profileList.Count];
+            profileList.Values.CopyTo(array, 0);
+            return array;
         }
-        public string[] RequiredFiles(Profile profile)
+
+        public List<string> AllRequiredFiles(Profile[] profiles  /*, out Dictionary<string, string> substitutionTable*/)
         {
-            if (profile is GenericProfile<VideoCodecSettings>)
-            {
-                GenericProfile<VideoCodecSettings> vProfile = profile as GenericProfile<VideoCodecSettings>;
-                if (vProfile.Settings is x264Settings)
-                {
-                    if ((vProfile.Settings as x264Settings).QuantizerMatrixType == 2) // Custom profile
-                        return new string[] { (vProfile.Settings as x264Settings).QuantizerMatrix };
-                }
-                if (vProfile.Settings is xvidSettings)
-                {
-                    if ((vProfile.Settings as xvidSettings).QuantType == 2) // CQM
-                        return new string[] { (vProfile.Settings as xvidSettings).CustomQuantizerMatrix };
-                }
-            }
-            return new string[] { };
-        }
-        public Dictionary<string, string> AllRequiredFiles(Profile[] profiles, out Dictionary<string, string> substitutionTable)
-        {
-            Dictionary<string, string> fileList = new Dictionary<string,string>();
-            substitutionTable = new Dictionary<string, string>();
+            /*Dictionary<string, string> fileList = new Dictionary<string,string>();
+            substitutionTable = new Dictionary<string, string>();*/
             List<string> files = new List<string>();
+            
+            // Generate the list of files
             foreach (Profile prof in profiles)
-                files.AddRange(RequiredFiles(prof));
+                files.AddRange(prof.BaseSettings.RequiredFiles);
 
+            // Make it unique
+            for (int i = 0; i < files.Count; i++)
+            {
+                string file = files[i];
+                int index;
+                while ((index = files.LastIndexOf(file)) > i)
+                {
+                    files.RemoveAt(index);
+                }
+            }
+
+            return files;
+        }
+        /*
+            // Generate a substitution table
             foreach (string file in files)
             {
                 string filename = "extra\\" + Path.GetFileName(file);
@@ -1003,40 +1003,15 @@ namespace MeGUI
                 }
             }
             return fileList;
-        }
+        }*/
         public static void FixFileNames(Profile[] profileList, Dictionary<string, string> substitutionTable)
         {
             foreach (Profile prof in profileList)
             {
-                FixFileNames(prof, substitutionTable);
+                prof.BaseSettings.FixFileNames(substitutionTable);
             }
         }
 
-        public static void FixFileNames(Profile profile, Dictionary<string, string> substitutionTable)
-        {
-            if (profile is GenericProfile<VideoCodecSettings>)
-            {
-                GenericProfile<VideoCodecSettings> vProf = profile as GenericProfile<VideoCodecSettings>;
-                if (vProf.Settings is x264Settings)
-                {
-                    x264Settings xSettings = vProf.Settings as x264Settings;
-                    if (xSettings.QuantizerMatrixType == 2) // CQM
-                    {
-                        if (substitutionTable.ContainsKey(xSettings.QuantizerMatrix))
-                            xSettings.QuantizerMatrix = substitutionTable[xSettings.QuantizerMatrix];
-                    }
-                }
-                if (vProf.Settings is xvidSettings)
-                {
-                    xvidSettings xSettings = vProf.Settings as xvidSettings;
-                    if (xSettings.QuantType == 2) // CQM
-                    {
-                        if (substitutionTable.ContainsKey(xSettings.CustomQuantizerMatrix))
-                            xSettings.CustomQuantizerMatrix = substitutionTable[xSettings.CustomQuantizerMatrix];
-                    }
-                }
-            }
-        }
         public void AddAll(Profile[] profiles, DialogManager asker)
         {
             foreach (Profile prof in profiles)

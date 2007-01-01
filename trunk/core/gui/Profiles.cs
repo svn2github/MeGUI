@@ -311,6 +311,24 @@ namespace MeGUI.core.plugins.interfaces
         /// </summary>
         /// <returns></returns>
         string getSettingsType();
+
+        /// <summary>
+        /// Substitutes any filenames stored in this profile (eg quantizer matrices) according to
+        /// the substitution table
+        /// </summary>
+        /// <param name="substitutionTable"></param>
+        void FixFileNames(Dictionary<string, string> substitutionTable);
+
+        /// <summary>
+        /// Lists all the files that these codec settings depend upon
+        /// </summary>
+        string[] RequiredFiles { get; }
+
+        /// <summary>
+        /// Lists all the profiles that these codec settings depend upon
+        /// </summary>
+        string[] RequiredProfiles { get; }
+
     }
 
     public interface Gettable<TSettings>
@@ -331,12 +349,20 @@ namespace MeGUI.core.plugins.interfaces
 
     public class PropertyEqualityTester
     {
+        /// <summary>
+        /// Returns whether all of the properties (excluding those with the PropertyEqualityIgnoreAttribute)
+        /// of the two objects are equal
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static bool Equals(object a, object b)
         {
             if (a.GetType() != b.GetType()) return false;
             Type t = a.GetType();
             foreach (PropertyInfo info in t.GetProperties())
             {
+                object[] attributes = info.GetCustomAttributes(true);
                 if (info.GetCustomAttributes(typeof(PropertyEqualityIgnoreAttribute), true).Length > 0)
                     continue;
                 object aVal = null, bVal = null;
@@ -344,26 +370,38 @@ namespace MeGUI.core.plugins.interfaces
                 catch { }
                 try { bVal = info.GetValue(b, null); }
                 catch { }
-                if (aVal == bVal) continue;
-                if (aVal == null || bVal == null)
+                if (!ArrayEqual(aVal, bVal)) 
                     return false;
-                if (!aVal.Equals(bVal) && aVal != bVal)
-                    return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Returns whether these two objects are equal. Returns object.Equals except for arrays,
+        /// where it recursively does an elementwise comparison
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        private static bool ArrayEqual(object a, object b)
+        {
+            if (a == b) return true;
+            if (a == null || b == null) return false;
+
+            if (a.GetType() != b.GetType()) return false;
+            if (!a.GetType().IsArray)
+                return a.Equals(b);
+
+            object[] arrayA = (object[])a;
+            object[] arrayB = (object[])b;
+
+            if (arrayA.Length != arrayB.Length) return false;
+            for (int i = 0; i < arrayA.Length; i++)
+            {
+                if (!ArrayEqual(arrayA[i], arrayB[i])) return false;
             }
             return true;
         }
     }
 
-    /** This is the base type for a settings configuration panel. This must be extended
-     *  to be used by the ConfigurationWindow, which wraps this with the profile management code. */
-/*    public class SettingsPanel<TSettings> : System.Windows.Forms.Control
-        where TSettings : GenericSettings
-    {
-        /** Gets and sets the settings that this panel displays. Must be overridden. This is called by ConfigurationWindow when the user updates/changes profiles */
-       /* public TSettings Settings
-        {
-            get { throw new Exception("Settings.get must be overridden"); }
-            set { throw new Exception("Settings.set must be overridden"); }
-        }
-    }*/
 }

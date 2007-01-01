@@ -18,6 +18,7 @@
 // 
 // ****************************************************************************
 using System;
+using System.Collections.Generic;
 
 namespace MeGUI
 {
@@ -26,6 +27,26 @@ namespace MeGUI
     /// </summary>
     public class xvidSettings : VideoCodecSettings
     {
+        public override void FixFileNames(System.Collections.Generic.Dictionary<string, string> substitutionTable)
+        {
+            base.FixFileNames(substitutionTable);
+            if (QuantType == 2) // CQM
+            {
+                if (substitutionTable.ContainsKey(CustomQuantizerMatrix))
+                    CustomQuantizerMatrix = substitutionTable[CustomQuantizerMatrix];
+            }
+        }
+        public override string[] RequiredFiles
+        {
+            get
+            {
+                List<string> list = new List<string>(base.RequiredFiles);
+                if (QuantType == 2) // Custom profile
+                    list.Add(CustomQuantizerMatrix);
+                return list.ToArray();
+            }
+        }
+
         private int motionSearchPrecision, vhqMode, quantType, minPQuant, maxPQuant, minBQuant, maxBQuant, bQuantRatio, bQuantOffset,
             keyFrameBoost, keyframeThreshold, keyframeReduction, overflowControlStrength,
             maxOverflowImprovement, maxOverflowDegradation, highBitrateDegradation, lowBitrateImprovement, reactionDelayFactor, averagingPeriod,

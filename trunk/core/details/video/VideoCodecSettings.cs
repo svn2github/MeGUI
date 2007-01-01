@@ -194,6 +194,21 @@ namespace MeGUI
             // This method is sutable for all known descendants!
             return this.MemberwiseClone() as VideoCodecSettings;
 		}
+
+        #region GenericSettings Members
+        public virtual void FixFileNames(System.Collections.Generic.Dictionary<string, string> _) { }
+
+        public virtual string[] RequiredFiles
+        {
+            get { return new string[0]; }
+        }
+
+        public virtual string[] RequiredProfiles
+        {
+            get { return new string[0]; }
+        }
+
+        #endregion
     }
 	public enum ZONEMODE: int {QUANTIZER = 0, WEIGHT};
 	public struct Zone

@@ -18,6 +18,7 @@
 // 
 // ****************************************************************************
 using System;
+using System.Collections.Generic;
 
 namespace MeGUI
 {
@@ -27,6 +28,25 @@ namespace MeGUI
 	[Serializable]
 	public class x264Settings: VideoCodecSettings
 	{
+        public override void FixFileNames(System.Collections.Generic.Dictionary<string, string> substitutionTable)
+        {
+            base.FixFileNames(substitutionTable);
+            if (QuantizerMatrixType == 2) // CQM
+            {
+                if (substitutionTable.ContainsKey(QuantizerMatrix))
+                    QuantizerMatrix = substitutionTable[QuantizerMatrix];
+            }
+        }
+        public override string[] RequiredFiles
+        {
+            get
+            {
+                List<string> list = new List<string>(base.RequiredFiles);
+                if (QuantizerMatrixType == 2) // Custom profile
+                    list.Add(QuantizerMatrix);
+                return list.ToArray();
+            }
+        }
 		int nbRefFrames, alphaDeblock, betaDeblock, subPelRefinement, maxQuantDelta, tempQuantBlur, 
 			bframePredictionMode, vbvBufferSize, vbvMaxBitrate, meType, meRange, minGOPSize, 
 			quantizerMatrixType, profile, x264Trellis, level, noiseReduction;

@@ -1,3 +1,7 @@
+0.2.4.1025
+Commit by berrinam:
+    - Fix profile import/export behavior, especially with CQMs, etc
+
 0.2.4.1024
 Commit by berrinam:
     - Nicer profile behavior, and detection whether you've actually changed the profile or not

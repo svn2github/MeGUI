@@ -8,6 +8,8 @@ namespace MeGUI
 	/// </summary>
     public sealed class AviSynthSettings : GenericSettings
 	{
+        public void FixFileNames(System.Collections.Generic.Dictionary<string, string> _) { }
+
         public override bool Equals(object obj)
         {
             return PropertyEqualityTester.Equals(this, obj);
@@ -127,5 +129,20 @@ namespace MeGUI
 			this.ColourCorrect = colourCorrect;
             this.Mod16Method = method;
 		}
-	}
+
+        #region GenericSettings Members
+
+
+        public string[] RequiredFiles
+        {
+            get { return new string[0]; }
+        }
+
+        public string[] RequiredProfiles
+        {
+            get { return new string[0]; }
+        }
+
+        #endregion
+    }
 }

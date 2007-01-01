@@ -8,6 +8,7 @@ namespace MeGUI
 	/// </summary>
     public class OneClickSettings : GenericSettings
 	{
+        public virtual void FixFileNames(Dictionary<string, string> _) { }
         public override bool Equals(object obj)
         {
             return PropertyEqualityTester.Equals(this, obj);
@@ -48,5 +49,20 @@ namespace MeGUI
 			SplitSize = -1;
             ContainerCandidates = new string[0];
 		}
-	}
+
+        #region GenericSettings Members
+
+
+        public string[] RequiredFiles
+        {
+            get { return new string[0]; }
+        }
+
+        public string[] RequiredProfiles
+        {
+            get { return new string[]{VideoProfileName, AudioProfileName};}
+        }
+
+        #endregion
+    }
 }
