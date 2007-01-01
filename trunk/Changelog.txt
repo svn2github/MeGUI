@@ -1,3 +1,7 @@
+0.2.4.1026
+Commit by berrinam:
+    - Profile Porter window is now TopMost
+
 0.2.4.1025
 Commit by berrinam:
     - Fix profile import/export behavior, especially with CQMs, etc
