@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
+using System.Reflection;
 
 namespace MeGUI.core.plugins.interfaces
 {
@@ -31,11 +32,32 @@ namespace MeGUI.core.plugins.interfaces
         /// <summary>
         /// gets the name of the currently selected profile
         /// </summary>
-        public string CurrentProfile
+        public string CurrentProfileName
         {
             get
             {
                 return videoProfile.Text;
+            }
+        }
+
+        private bool createTempSettings = false;
+        /// <summary>
+        /// Returns true if the selected settings should be copied into a temporary location and no profile selected when returned.
+        /// Returns false if the selected profile here should be selected when this returns.
+        /// </summary>
+        public bool CreateTempSettings
+        {
+            get
+            {
+                return createTempSettings;
+            }
+        }
+
+        public GenericProfile<TProfileSettings> CurrentProfile
+        {
+            get
+            {
+                return (GenericProfile<TProfileSettings>)videoProfile.SelectedItem;
             }
         }
 
@@ -260,24 +282,23 @@ namespace MeGUI.core.plugins.interfaces
 
         private void okButton_Click(object sender, EventArgs e)
         {
-            GenericProfile<TProfileSettings> prof = (GenericProfile<TProfileSettings>)this.videoProfile.SelectedItem;
-            if (prof != null)
-            {
-                DialogResult update;
-                update = MessageBox.Show("Update the selected profile?", "Profile update", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (update == DialogResult.Yes)
-                {
-                    prof.Settings = s.Settings;
-                }
-            }
+
+            // Empty, has been moved to EditorProvider.Create
         }
     }
 
 
-    /** This is the base type for any kind of settings which can be stored in a profile.
-     * Nothing need be defined, but this interface must be inherited for type checking reasons.*/
+    
+    /** This is the base type for any kind of settings which can be stored in a profile.*/
     public interface GenericSettings 
     {
+        /************************************************************************************
+         *                   Classes implementing GenericSettings must                      *
+         *                    ensure that object.Equals(object other)                       *
+         *                     is overridden and is correct for the                         *
+         *                                 given class.                                     *
+         ************************************************************************************/
+
         /// <summary>
         /// Deep-clones the settings
         /// </summary>
@@ -298,6 +319,38 @@ namespace MeGUI.core.plugins.interfaces
         {
             get;
             set;
+        }
+    }
+
+    [AttributeUsage(AttributeTargets.Property)]
+    public class PropertyEqualityIgnoreAttribute : Attribute
+    {
+        public PropertyEqualityIgnoreAttribute() {}
+    }
+
+
+    public class PropertyEqualityTester
+    {
+        public static bool Equals(object a, object b)
+        {
+            if (a.GetType() != b.GetType()) return false;
+            Type t = a.GetType();
+            foreach (PropertyInfo info in t.GetProperties())
+            {
+                if (info.GetCustomAttributes(typeof(PropertyEqualityIgnoreAttribute), true).Length > 0)
+                    continue;
+                object aVal = null, bVal = null;
+                try { aVal = info.GetValue(a, null); }
+                catch { }
+                try { bVal = info.GetValue(b, null); }
+                catch { }
+                if (aVal == bVal) continue;
+                if (aVal == null || bVal == null)
+                    return false;
+                if (!aVal.Equals(bVal) && aVal != bVal)
+                    return false;
+            }
+            return true;
         }
     }
 

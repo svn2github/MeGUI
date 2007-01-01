@@ -8,6 +8,11 @@ namespace MeGUI
 	/// </summary>
     public class OneClickSettings : GenericSettings
 	{
+        public override bool Equals(object obj)
+        {
+            return PropertyEqualityTester.Equals(this, obj);
+        }
+
         public string getSettingsType()
         {
             return "OneClick";

@@ -135,9 +135,8 @@ namespace MeGUI.core.details.video
             {
                 RefreshProfiles();
                 int index = impl.avsProfile.Items.IndexOf(profile);
-                if (index != -1)
-                    impl.avsProfile.SelectedIndex = index;
-                else
+                impl.avsProfile.SelectedIndex = index;
+                if (index == -1)
                     SetCurrentSettings(settings);
             }
             if (ConfigureCompleted != null) ConfigureCompleted(this, null);

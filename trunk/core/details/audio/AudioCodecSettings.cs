@@ -156,6 +156,11 @@ namespace MeGUI
             return this.MemberwiseClone() as AudioCodecSettings;
         }
 
+        public override bool Equals(object obj)
+        {
+            // This works for all known descendants
+            return PropertyEqualityTester.Equals(this, obj);
+        }
 
         ///// <summary>
         ///// Must return command line arguments string for command-line audio encoder

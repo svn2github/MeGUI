@@ -327,7 +327,7 @@ namespace MeGUI
         /// </summary>
         /// <param name="otherSettings"></param>
         /// <returns>true if the settings differ</returns>
-        public override bool IsAltered(VideoCodecSettings settings)
+        public bool IsAltered(VideoCodecSettings settings)
         {
             if (!(settings is xvidSettings))
                 return true;

@@ -25,10 +25,6 @@ namespace MeGUI
             FourCCs = m_fourCCs;
         }
 
-        public override bool IsAltered(VideoCodecSettings settings)
-        {
-            return true;
-        }
         public override bool UsesSAR
         {
             get { return false; }

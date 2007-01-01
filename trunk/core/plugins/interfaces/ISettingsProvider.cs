@@ -16,6 +16,7 @@ using MeGUI.packages.audio.ffmp2;
 using MeGUI.packages.audio.lame;
 using MeGUI.packages.audio.vorbis;
 using MeGUI.packages.audio.waac;
+using System.Windows.Forms;
 
 namespace MeGUI
 {
@@ -212,16 +213,37 @@ namespace MeGUI
         {
             return new SettingsEditor<TProfileSettings, TInfo>(
                 delegate(MainForm mainForm, ref TProfileSettings settings,
-                            ref string profile, TInfo info)
+                            ref string profileName, TInfo info)
                 {
                     TPanel t = (TPanel)System.Activator.CreateInstance(typeof(TPanel), mainForm, info);
-                    using (ConfigurationWindow<TSettings, TProfileSettings> scd = new ConfigurationWindow<TSettings, TProfileSettings>(mainForm.Profiles, t, t, profile))
+                    using (ConfigurationWindow<TSettings, TProfileSettings> scd = 
+                        new ConfigurationWindow<TSettings, TProfileSettings>(mainForm.Profiles, t, t, profileName))
                     {
                         scd.Settings = (TSettings)settings; // Set the settings in case there is no profile configured
                         if (scd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                         {
-                            settings = scd.Settings; // Again, in case no profile is configured
-                            profile = scd.CurrentProfile;
+                            /* Get the selected profile and see if its settings match the current 
+                             * configuration of the window. If they do, continue as normal. If not,
+                             * ask the user whether he/she wants to overwrite the profile's settings
+                             * with the currently configured ones. If the user answers no, then the
+                             * settings are returned as an unnamed profile; this is a special case,
+                             * and generates a temporary group of settings. */
+                            Profile prof = scd.CurrentProfile;
+                            if (prof != null && !scd.Settings.Equals(prof.BaseSettings))
+                            {
+                                if (MessageBox.Show("Profile has been changed. Update the selected profile?",
+                                    "Profile update", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                                    == DialogResult.Yes)
+                                    prof.BaseSettings = scd.Settings;
+                                else
+                                    prof = null;
+                            }
+                            if (prof == null)
+                                profileName = "";
+                            else
+                                profileName = prof.Name;
+
+                            settings = scd.Settings;
                             return true;
                         }
                         else

@@ -103,47 +103,6 @@ namespace MeGUI
         {
             get { return false; }
         }
-        /// <summary>
-        ///  Handles assessment of whether the encoding options vary between two snowSettings instances
-        /// The following are excluded from the comparison:
-        /// BitrateQuantizer
-        /// CreditsQuantizer
-        /// Logfile
-        /// Quantizer
-        /// SARX
-        /// SARY
-        /// Zones
-        /// </summary>
-        /// <param name="otherSettings"></param>
-        /// <returns>true if the settings differ</returns>
-        public override bool IsAltered(VideoCodecSettings settings)
-        {
-            if (!(settings is snowSettings))
-                return true;
-            snowSettings otherSettings = (snowSettings)settings;
-            if (
-                this.CustomEncoderOptions != otherSettings.CustomEncoderOptions ||
-                this.EncodingMode != otherSettings.EncodingMode ||
-                this.FourCC != otherSettings.FourCC ||
-                // this.FourCCs != otherSettings.FourCCs ||
-                this.KeyframeInterval != otherSettings.KeyframeInterval ||
-                this.LosslessMode != otherSettings.LosslessMode ||
-                this.MaxQuantizer != otherSettings.MaxQuantizer ||
-                this.MBComp != otherSettings.MBComp ||
-                this.MECompFullpel != otherSettings.MECompFullpel ||
-                this.MECompHpel != otherSettings.MECompHpel ||
-                this.MinQuantizer != otherSettings.MinQuantizer ||
-                this.NbBframes != otherSettings.NbBframes ||
-                this.NbMotionPredictors != otherSettings.NbMotionPredictors ||
-                this.PredictionMode != otherSettings.PredictionMode ||
-                this.QPel != otherSettings.QPel ||
-                this.Trellis != otherSettings.Trellis ||
-                this.Turbo != otherSettings.Turbo ||
-                this.V4MV != otherSettings.V4MV
-                )
-                return true;
-            else
-                return false;
-        }
+
     }
 }

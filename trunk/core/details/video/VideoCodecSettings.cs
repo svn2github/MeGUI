@@ -29,6 +29,11 @@ namespace MeGUI
 	[XmlInclude(typeof(lavcSettings)), XmlInclude(typeof(x264Settings)), XmlInclude(typeof(snowSettings)), XmlInclude(typeof(xvidSettings)), XmlInclude(typeof(hfyuSettings))]
     public abstract class VideoCodecSettings : MeGUI.core.plugins.interfaces.GenericSettings
 	{
+        public override bool Equals(object obj)
+        {
+            return PropertyEqualityTester.Equals(this, obj);
+        }
+
         public string getSettingsType()
         {
             return "Video";
@@ -121,6 +126,7 @@ namespace MeGUI
 		/// <summary>
 		/// returns the available FourCCs for the codec
 		/// </summary>
+        [PropertyEqualityIgnore]
         public string[] FourCCs
         {
             get { return fourCCs; }
@@ -188,13 +194,6 @@ namespace MeGUI
             // This method is sutable for all known descendants!
             return this.MemberwiseClone() as VideoCodecSettings;
 		}
-
-
-
-        public virtual bool IsAltered(VideoCodecSettings otherSettings)
-        {
-            return true;
-        }
     }
 	public enum ZONEMODE: int {QUANTIZER = 0, WEIGHT};
 	public struct Zone

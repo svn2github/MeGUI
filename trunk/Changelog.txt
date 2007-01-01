@@ -1,3 +1,8 @@
+0.2.4.1024
+Commit by berrinam:
+    - Nicer profile behavior, and detection whether you've actually changed the profile or not
+    - SelectedProfiles bug fixed
+
 0.2.4.1023
 Commit by berrinam:
     - Fix the OneClick+Config+compile.bat crash -- the text was too long, and delegated to a resource that wasn't compiled in

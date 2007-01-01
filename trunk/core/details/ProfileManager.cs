@@ -270,7 +270,9 @@ namespace MeGUI
         {
             string name = GetSelectedProfileName(profileType);
             if (string.IsNullOrEmpty(name)) return null;
-            return profiles[profileType][name];
+            try { return profiles[profileType][name]; }
+            catch { }
+            return null;
         }
 
         public void SetSelectedProfile(Profile prof)
