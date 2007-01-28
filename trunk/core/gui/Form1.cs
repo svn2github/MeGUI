@@ -55,6 +55,7 @@ namespace MeGUI
         public static MainForm Instance;
 
         #region variable declaration
+        private List<string> filesToDeleteOnClosing = new List<string>();
         //        private MeGUIInfo info;
         private System.Windows.Forms.TabPage inputTab;
         private System.Windows.Forms.TabControl tabControl1;
@@ -99,6 +100,10 @@ namespace MeGUI
         private MenuItem mnuHelpLink;
 
 
+        public void DeleteOnClosing(string file)
+        {
+            filesToDeleteOnClosing.Add(file);
+        }
 
         /// <summary>
         /// Required designer variable.
@@ -1260,7 +1265,21 @@ namespace MeGUI
             this.saveSettings();
             jobControl1.saveJobs();
             this.saveLog();
+            deleteFiles();
             this.runRestarter();
+        }
+
+        private void deleteFiles()
+        {
+            foreach (string file in filesToDeleteOnClosing)
+            {
+                try
+                {
+                    if (Directory.Exists(file)) Directory.Delete(file, true);
+                    if (File.Exists(file)) File.Delete(file);
+                }
+                catch { }
+            }
         }
 
         public void OpenVideoFile(string p)

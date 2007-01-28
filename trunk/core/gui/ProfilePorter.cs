@@ -65,6 +65,7 @@ namespace MeGUI
                 // This will fail unless the folder is inexistant or empty
                 if (Directory.Exists(path)) Directory.Delete(path);
                 Directory.CreateDirectory(path);
+                mainForm.DeleteOnClosing(path);
             }
             catch (IOException ioe) {
                 throw new Exception("Could not start porter because of inability to access " + path, ioe);

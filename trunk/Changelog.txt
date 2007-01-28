@@ -1,3 +1,7 @@
+0.2.4.1027
+Commit by berrinam:
+    - Ensure Profile Porter deletes necessary files on closing
+
 0.2.4.1026
 Commit by berrinam:
     - Profile Porter window is now TopMost
