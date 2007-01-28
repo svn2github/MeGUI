@@ -1,3 +1,11 @@
+0.2.4.1028
+Commit by berrinam:
+    - Made the audio output a save dialog
+    - Made the FPS changeable in AVS window
+    - Changing deinterlace filter now updates the script
+    - Made 'Zone' a class, not a struct, which fixes zones setting bug. (Unfortunately, other bugs may have been created)
+    - Fix the bug where MeGUI crashes on deleting multiple jobs.
+
 0.2.4.1027
 Commit by berrinam:
     - Ensure Profile Porter deletes necessary files on closing

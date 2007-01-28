@@ -211,7 +211,7 @@ namespace MeGUI
         #endregion
     }
 	public enum ZONEMODE: int {QUANTIZER = 0, WEIGHT};
-	public struct Zone
+	public class Zone
 	{
 		public int startFrame;
 		public int endFrame;

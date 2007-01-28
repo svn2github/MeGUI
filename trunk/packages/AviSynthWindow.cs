@@ -83,7 +83,6 @@ namespace MeGUI
         private ComboBox deinterlaceType;
         private GroupBox aviOptGroupBox;
         private Label fpsLabel;
-        private TextBox fpsBox;
         private CheckBox flipVertical;
         private GroupBox mpegOptGroupBox;
         private CheckBox colourCorrect;
@@ -106,6 +105,7 @@ namespace MeGUI
         private ToolStripProgressBar deintProgressBar;
         private ToolStripStatusLabel deintStatusLabel;
         private Button reopenOriginal;
+        private NumericUpDown fpsBox;
 
 		/// <summary>
 		/// Required designer variable.
@@ -281,8 +281,8 @@ namespace MeGUI
             this.deinterlace = new System.Windows.Forms.CheckBox();
             this.deinterlaceType = new System.Windows.Forms.ComboBox();
             this.aviOptGroupBox = new System.Windows.Forms.GroupBox();
+            this.fpsBox = new System.Windows.Forms.NumericUpDown();
             this.fpsLabel = new System.Windows.Forms.Label();
-            this.fpsBox = new System.Windows.Forms.TextBox();
             this.flipVertical = new System.Windows.Forms.CheckBox();
             this.mpegOptGroupBox = new System.Windows.Forms.GroupBox();
             this.colourCorrect = new System.Windows.Forms.CheckBox();
@@ -321,6 +321,7 @@ namespace MeGUI
             this.deinterlacingGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.deintM)).BeginInit();
             this.aviOptGroupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.fpsBox)).BeginInit();
             this.mpegOptGroupBox.SuspendLayout();
             this.filtersGroupbox.SuspendLayout();
             this.editTab.SuspendLayout();
@@ -838,11 +839,12 @@ namespace MeGUI
             this.deinterlaceType.Name = "deinterlaceType";
             this.deinterlaceType.Size = new System.Drawing.Size(229, 21);
             this.deinterlaceType.TabIndex = 4;
+            this.deinterlaceType.SelectedIndexChanged += new System.EventHandler(this.deinterlaceType_SelectedIndexChanged);
             // 
             // aviOptGroupBox
             // 
-            this.aviOptGroupBox.Controls.Add(this.fpsLabel);
             this.aviOptGroupBox.Controls.Add(this.fpsBox);
+            this.aviOptGroupBox.Controls.Add(this.fpsLabel);
             this.aviOptGroupBox.Controls.Add(this.flipVertical);
             this.aviOptGroupBox.Enabled = false;
             this.aviOptGroupBox.Location = new System.Drawing.Point(215, 304);
@@ -852,6 +854,30 @@ namespace MeGUI
             this.aviOptGroupBox.TabStop = false;
             this.aviOptGroupBox.Text = "Avi Options";
             // 
+            // fpsBox
+            // 
+            this.fpsBox.DecimalPlaces = 3;
+            this.fpsBox.Location = new System.Drawing.Point(46, 44);
+            this.fpsBox.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.fpsBox.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            196608});
+            this.fpsBox.Name = "fpsBox";
+            this.fpsBox.Size = new System.Drawing.Size(120, 21);
+            this.fpsBox.TabIndex = 3;
+            this.fpsBox.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            196608});
+            this.fpsBox.ValueChanged += new System.EventHandler(this.fpsBox_ValueChanged);
+            // 
             // fpsLabel
             // 
             this.fpsLabel.Location = new System.Drawing.Point(7, 48);
@@ -859,14 +885,6 @@ namespace MeGUI
             this.fpsLabel.Size = new System.Drawing.Size(25, 13);
             this.fpsLabel.TabIndex = 2;
             this.fpsLabel.Text = "FPS";
-            // 
-            // fpsBox
-            // 
-            this.fpsBox.Location = new System.Drawing.Point(38, 45);
-            this.fpsBox.Name = "fpsBox";
-            this.fpsBox.Size = new System.Drawing.Size(53, 21);
-            this.fpsBox.TabIndex = 1;
-            this.fpsBox.TextChanged += new System.EventHandler(this.fpsBox_TextChanged);
             // 
             // flipVertical
             // 
@@ -1078,7 +1096,7 @@ namespace MeGUI
             this.deinterlacingGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.deintM)).EndInit();
             this.aviOptGroupBox.ResumeLayout(false);
-            this.aviOptGroupBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.fpsBox)).EndInit();
             this.mpegOptGroupBox.ResumeLayout(false);
             this.filtersGroupbox.ResumeLayout(false);
             this.editTab.ResumeLayout(false);
@@ -1475,7 +1493,7 @@ namespace MeGUI
                 this.videoInput.Text = textBoxName;
                 file = player.File;
                 reader = player.Reader;
-                this.fpsBox.Text = file.FPS.ToString(ci);
+                this.fpsBox.Value = (decimal)file.FPS;
 				if (file.FPS.Equals(25.0)) // disable ivtc for pal sources
 					this.tvTypeLabel.Text = "PAL";
 				else
@@ -1711,11 +1729,8 @@ namespace MeGUI
 		}
 		#endregion
         #region fps
-        void fpsBox_TextChanged(object sender, EventArgs e)
+        void fpsBox_ValueChanged(object sender, EventArgs e)
         {
-            float result;
-            if (Single.TryParse(fpsBox.Text, out result))
-                fpsBox.Text = file.FPS.ToString();
             this.showScript();
         }
         #endregion

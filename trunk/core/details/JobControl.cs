@@ -1228,7 +1228,10 @@ namespace MeGUI.core.details
         {
             this.queueListView.BeginUpdate();
             jobs.Remove(job.Name);
-            this.queueListView.Items[job.Position].Remove();
+            int position = -1;
+            foreach (ListViewItem item in queueListView.Items)
+                if (item.Text == job.Name) position = item.Index;
+            if (position != -1) queueListView.Items[position].Remove();
             this.queueListView.Refresh();
             this.queueListView.EndUpdate();
             string fileName = mainForm.MeGUIPath + "\\jobs\\" + job.Name + ".xml";

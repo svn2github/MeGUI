@@ -109,7 +109,6 @@ namespace MeGUI
         private Label label12;
         private TextBox textBox9;
         private GroupBox autoModeGroupbox;
-        private Button button8;
         private CheckBox checkBox3;
         private Label label13;
         private NumericUpDown numericUpDown1;
@@ -234,7 +233,6 @@ namespace MeGUI
             this.label12 = new System.Windows.Forms.Label();
             this.textBox9 = new System.Windows.Forms.TextBox();
             this.autoModeGroupbox = new System.Windows.Forms.GroupBox();
-            this.button8 = new System.Windows.Forms.Button();
             this.checkBox3 = new System.Windows.Forms.CheckBox();
             this.label13 = new System.Windows.Forms.Label();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
@@ -938,7 +936,6 @@ namespace MeGUI
             // 
             // autoModeGroupbox
             // 
-            this.autoModeGroupbox.Controls.Add(this.button8);
             this.autoModeGroupbox.Controls.Add(this.checkBox3);
             this.autoModeGroupbox.Controls.Add(this.label13);
             this.autoModeGroupbox.Controls.Add(this.numericUpDown1);
@@ -949,15 +946,6 @@ namespace MeGUI
             this.autoModeGroupbox.TabIndex = 8;
             this.autoModeGroupbox.TabStop = false;
             this.autoModeGroupbox.Text = "Automated Encoding";
-            // 
-            // button8
-            // 
-            this.button8.Location = new System.Drawing.Point(11, 51);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(114, 23);
-            this.button8.TabIndex = 4;
-            this.button8.Text = "Configure Defaults";
-            this.button8.UseVisualStyleBackColor = true;
             // 
             // checkBox3
             // 

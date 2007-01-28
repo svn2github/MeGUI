@@ -88,7 +88,7 @@ namespace MeGUI
             this.audioOutput.Location = new System.Drawing.Point(115, 41);
             this.audioOutput.Name = "audioOutput";
             this.audioOutput.ReadOnly = false;
-            this.audioOutput.SaveMode = false;
+            this.audioOutput.SaveMode = true;
             this.audioOutput.Size = new System.Drawing.Size(348, 29);
             this.audioOutput.TabIndex = 34;
             this.audioOutput.Title = "Enter name of output";
