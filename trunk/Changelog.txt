@@ -1,3 +1,8 @@
+0.2.4.1029
+Commit by berrinam:
+    - Fixed 1621767: Made OneClick suggest an output filename again
+    - Fixed 1646330: Made OneClick show the correct output filename filter
+
 0.2.4.1028
 Commit by berrinam:
     - Made the audio output a save dialog

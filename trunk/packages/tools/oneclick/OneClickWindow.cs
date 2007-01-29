@@ -721,11 +721,13 @@ namespace MeGUI
             {
                 output.Filename = Path.Combine(workingDirectory.Filename, workingName.Text + "." + 
                     ((ContainerType)containerFormat.SelectedItem).Extension);
+                outputChosen = false;
             }
             else
             {
                 output.Filename = Path.ChangeExtension(output.Filename, ((ContainerType)containerFormat.SelectedItem).Extension);
             }
+            output.Filter = ((ContainerType)containerFormat.SelectedItem).OutputFilterString;
         }
 
         private void updateAudioFilenames()
