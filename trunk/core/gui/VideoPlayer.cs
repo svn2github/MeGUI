@@ -105,6 +105,19 @@ namespace MeGUI
 			right = top = left = bottom = 0;
 		}
 
+        public bool AllowClose
+        {
+            set
+            {
+                this.ControlBox = value;
+            }
+            get
+            {
+                return this.ControlBox;
+            }
+        }
+
+
 		/// <summary>
 		/// loads the video, sets up the proper window size and enables / disables the GUI buttons depending on the
 		/// preview type set
@@ -179,7 +192,8 @@ namespace MeGUI
                 this.videoWindowWidth = file.Width;
                 this.videoWindowHeight = file.Height;
                 desiredAspectRatio = (float)file.Width / (float)file.Height;
-				this.adjustSize();
+                doInitialAdjustment();
+                adjustSize();
 				positionSlider_Scroll(null, null); // makes the image visible
 				this.Text = "Current position: " + this.positionSlider.Value + "/" + this.positionSlider.Maximum;
 				isRunning = false;
@@ -207,41 +221,45 @@ namespace MeGUI
         {
             resize(file.Width, showPAR.Checked);
         }
+
+        private void doInitialAdjustment()
+        {
+            switch (this.viewerType)
+            {
+                case PREVIEWTYPE.REGULAR:
+                    buttonPanel.Controls.Remove(creditsStartButton);
+                    buttonPanel.Controls.Remove(introEndButton);
+                    buttonPanel.Controls.Remove(chapterButton);
+                    buttonPanel.Controls.Remove(zoneStartButton);
+                    buttonPanel.Controls.Remove(zoneEndButton);
+                    buttonPanel.Controls.Remove(setZoneButton);
+                    break;
+                case PREVIEWTYPE.ZONES:
+                    buttonPanel.Controls.Remove(creditsStartButton);
+                    buttonPanel.Controls.Remove(introEndButton);
+                    buttonPanel.Controls.Remove(chapterButton);
+                    formHeightDelta += formHeightZonesDelta;
+                    break;
+                case PREVIEWTYPE.CREDITS:
+                    buttonPanel.Controls.Remove(zoneStartButton);
+                    buttonPanel.Controls.Remove(zoneEndButton);
+                    buttonPanel.Controls.Remove(setZoneButton);
+                    buttonPanel.Controls.Remove(chapterButton);
+                    break;
+                case PREVIEWTYPE.CHAPTERS:
+                    buttonPanel.Controls.Remove(creditsStartButton);
+                    buttonPanel.Controls.Remove(introEndButton);
+                    buttonPanel.Controls.Remove(zoneStartButton);
+                    buttonPanel.Controls.Remove(zoneEndButton);
+                    buttonPanel.Controls.Remove(setZoneButton);
+                    break;
+            }
+        }
 		/// <summary>
 		/// adjusts the size of the GUI to match the source video
 		/// </summary>
 		private void adjustSize()
 		{
-			switch (this.viewerType)
-			{
-				case PREVIEWTYPE.REGULAR:
-					buttonPanel.Controls.Remove(creditsStartButton);
-					buttonPanel.Controls.Remove(introEndButton);
-					buttonPanel.Controls.Remove(chapterButton);
-					buttonPanel.Controls.Remove(zoneStartButton);
-					buttonPanel.Controls.Remove(zoneEndButton);
-					buttonPanel.Controls.Remove(setZoneButton);
-					break;
-				case PREVIEWTYPE.ZONES:
-					buttonPanel.Controls.Remove(creditsStartButton);
-					buttonPanel.Controls.Remove(introEndButton);
-					buttonPanel.Controls.Remove(chapterButton);
-					formHeightDelta += formHeightZonesDelta;
-					break;
-				case PREVIEWTYPE.CREDITS:
-					buttonPanel.Controls.Remove(zoneStartButton);
-					buttonPanel.Controls.Remove(zoneEndButton);
-					buttonPanel.Controls.Remove(setZoneButton);
-					buttonPanel.Controls.Remove(chapterButton);
-					break;
-				case PREVIEWTYPE.CHAPTERS:
-					buttonPanel.Controls.Remove(creditsStartButton);
-					buttonPanel.Controls.Remove(introEndButton);
-					buttonPanel.Controls.Remove(zoneStartButton);
-					buttonPanel.Controls.Remove(zoneEndButton);
-					buttonPanel.Controls.Remove(setZoneButton);
-					break;
-			}
             if (!hasAR)
             {
                 buttonPanel.Controls.Remove(PARLabel);
@@ -329,6 +347,12 @@ namespace MeGUI
 		/// <param name="e"></param>
 		protected override void OnClosing(CancelEventArgs e)
 		{
+            if (!this.AllowClose)
+            {
+                e.Cancel = true;
+                return;
+            }
+
             if (file != null)
                 file.Dispose();
 			base.OnClosing (e);
@@ -499,6 +523,7 @@ namespace MeGUI
             // 
             // creditsStartButton
             // 
+            this.creditsStartButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.creditsStartButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.creditsStartButton.Location = new System.Drawing.Point(242, 8);
             this.creditsStartButton.Name = "creditsStartButton";
@@ -627,6 +652,7 @@ namespace MeGUI
             // 
             // chapterButton
             // 
+            this.chapterButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.chapterButton.Location = new System.Drawing.Point(200, 8);
             this.chapterButton.Name = "chapterButton";
             this.chapterButton.Size = new System.Drawing.Size(72, 18);

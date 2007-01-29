@@ -32,6 +32,7 @@ using System.Text;
 using MeGUI.core.details;
 using MeGUI.core.plugins.interfaces;
 using System.Reflection;
+using MeGUI.packages.tools.cutter;
 
 namespace MeGUI
 {
@@ -1435,6 +1436,7 @@ namespace MeGUI
             PackageSystem.MuxerProviders.Register(new MP4BoxMuxerProvider());
             PackageSystem.MuxerProviders.Register(new AVC2AVIMuxerProvider());
             PackageSystem.MuxerProviders.Register(new DivXMuxProvider());
+            PackageSystem.Tools.Register(new CutterTool());
             PackageSystem.Tools.Register(new AviSynthWindowTool());
             PackageSystem.Tools.Register(new AutoEncodeTool());
             PackageSystem.Tools.Register(new CQMEditorTool());
