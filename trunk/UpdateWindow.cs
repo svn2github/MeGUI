@@ -105,6 +105,10 @@ namespace MeGUI
         }
         public abstract class iUpgradeable
         {
+            /// <summary>
+            /// May be overridden in a special init is to be done after the xmlserializer
+            /// </summary>
+            public virtual void init() { }
             
             internal iUpgradeable()
             {
@@ -375,6 +379,7 @@ namespace MeGUI
             private MeGUIFile()
             {
             }
+
             public MeGUIFile(string treeViewID, string name)
             {
                 this.Name = name;
@@ -410,20 +415,25 @@ namespace MeGUI
             private ProgramFile()
             {
             }
+
+            public override void init()
+            {
+                SavePath = Path.Combine(Application.StartupPath, MeGUIFilePath);
+                // If the file doesn't exist, assume it isn't set up, so put it in the standard install location
+                if (!File.Exists(SavePath))
+                {
+                    SavePath = Path.Combine(Path.Combine(System.Windows.Forms.Application.StartupPath, "tools\\" + Name),
+                        Name + ".exe");
+                    MeGUIFilePath = SavePath;
+                }
+            }
+            
             public ProgramFile(string treeViewID, string name) // Constructor
             {
                 this.Name = name;
                 this.AllowUpdate = true;
                 this.treeViewID = treeViewID;
-                this.SavePath = Path.Combine(Application.StartupPath, MeGUIFilePath);
-                // If the file doesn't exist, assume it isn't set up, so put it in the standard install location
-                if (!File.Exists(SavePath))
-                {
-                    this.SavePath = Path.Combine(Path.Combine(System.Windows.Forms.Application.StartupPath, "tools\\" + Name),
-                        Name + ".exe");
-                    MeGUIFilePath = SavePath;
-                }
-
+                init();
             }
 
             private string MeGUIFilePath
@@ -707,6 +717,12 @@ namespace MeGUI
                     StreamReader settingsReader = new StreamReader(Application.StartupPath + "\\AutoUpdate.xml");
                     this.upgradeData = (iUpgradeableCollection)serializer.Deserialize(settingsReader);
                     settingsReader.Dispose();
+
+                    foreach (iUpgradeable file in upgradeData)
+                    {
+                        file.init();
+                    }
+
                     return; //settings loaded correctly
                 }
                 catch(Exception)

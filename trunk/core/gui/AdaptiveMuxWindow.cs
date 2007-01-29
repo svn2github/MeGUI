@@ -15,7 +15,7 @@ namespace MeGUI
         private JobUtil jobUtil;
         private bool minimizedMode = false;
         private MuxableType knownVideoType;
-        private MuxableType[] knownAudioTypes;
+        private KnownAudioType[] knownAudioTypes;
         public AdaptiveMuxWindow(MainForm mainForm)
         {
             InitializeComponent();
@@ -44,7 +44,7 @@ namespace MeGUI
             {
                 if (minimizedMode && knownAudioTypes.Length > counter)
                 {
-                    audioCodecList.Add((AudioEncoderType)knownAudioTypes[counter].codec);
+                    audioCodecList.Add(knownAudioTypes[counter].encoderType);
                 }
                 else
                 {
@@ -204,7 +204,7 @@ namespace MeGUI
         /// <param name="audioStreams">the audio streams whose languages have to be assigned</param>
         /// <param name="output">the output file</param>
         /// <param name="splitSize">the output split size</param>
-        public void setMinimizedMode(string videoInput, MuxableType videoType, double framerate, SubStream[] audioStreams, MuxableType[] audioTypes, string output,
+        public void setMinimizedMode(string videoInput, MuxableType videoType, double framerate, SubStream[] audioStreams, KnownAudioType[] audioTypes, string output,
             int splitSize, ContainerType cft)
         {
             minimizedMode = true;

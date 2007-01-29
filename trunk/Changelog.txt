@@ -1,3 +1,8 @@
+0.2.4.1030
+Commit by berrinam:
+    - Fixed 1599119 (updater does not respect user-selected paths)
+    - Fixed 1646706 (crash with autoencode and audio)
+
 0.2.4.1029
 Commit by berrinam:
     - Fixed 1621767: Made OneClick suggest an output filename again

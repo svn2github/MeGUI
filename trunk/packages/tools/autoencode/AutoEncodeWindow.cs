@@ -560,18 +560,18 @@ namespace MeGUI
 		/// </summary>
 		/// <param name="encodable">encodeable audio streams</param>
 		/// <param name="muxable">muxable Audio Streams with the path filled out and a blank language</param>
-		private void separateEncodableAndMuxableAudioStreams(out AudioStream[] encodable, out SubStream[] muxable, out MuxableType[] muxTypes)
+		private void separateEncodableAndMuxableAudioStreams(out AudioStream[] encodable, out SubStream[] muxable, out KnownAudioType[] muxTypes)
 		{
 			encodable = this.getConfiguredAudioJobs(); // discards improperly configured ones
 			// the rest of the job is all encodeable
 			muxable = new SubStream[encodable.Length];
-            muxTypes = new MuxableType[encodable.Length];
+            muxTypes = new KnownAudioType[encodable.Length];
 			int j = 0;
 			foreach (AudioStream stream in encodable)
 			{
 				muxable[j].path = stream.output;
 				muxable[j].language = "";
-                muxTypes[j] = new MuxableType(stream.Type, stream.settings.Codec);
+                muxTypes[j] = new KnownAudioType(new MuxableType(stream.Type, stream.settings.Codec), stream.settings.EncoderType);
 				j++;
 			}
 		}
@@ -741,7 +741,7 @@ namespace MeGUI
                     logBuilder.Append("No desired size of this encode. The profile settings will be used");
 				SubStream[] audio;
 				AudioStream[] aStreams;
-                MuxableType[] muxTypes;
+                KnownAudioType[] muxTypes;
 				separateEncodableAndMuxableAudioStreams(out aStreams, out audio, out muxTypes);
 				SubStream[] subtitles = new SubStream[0];
 				string chapters = "";
@@ -928,5 +928,16 @@ namespace MeGUI
         }
 
         #endregion
+    }
+
+    public class KnownAudioType
+    {
+        public MuxableType muxable;
+        public AudioEncoderType encoderType;
+        public KnownAudioType(MuxableType m, AudioEncoderType e)
+        {
+            muxable = m;
+            encoderType = e;
+        }
     }
 }
