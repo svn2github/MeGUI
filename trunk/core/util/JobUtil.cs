@@ -395,6 +395,7 @@ namespace MeGUI
 			AudioJob job = new AudioJob();
 			job.Input = stream.path;
 			job.Output = stream.output;
+            job.CutFile = stream.cutlist;
 			job.Settings = stream.settings;
 			job.Priority = mainForm.Settings.DefaultPriority;
 			// job.Commandline = CommandLineGenerator.generateAudioCommandline(mainForm.Settings, job.Settings, job.Input, job.Output); // no longer necessary
@@ -551,12 +552,13 @@ namespace MeGUI
 		}*/
 		#endregion
 		#region job preparation (aka multiple job generation)
-        public bool AddAudioJob(string audioInput, string audioOutput, AudioCodecSettings settings)
+        public bool AddAudioJob(string audioInput, string audioOutput, string cutFile, AudioCodecSettings settings)
         {
             AudioStream stream = new AudioStream();
             stream.path = audioInput;
             stream.output = audioOutput;
             stream.settings = settings;
+            stream.cutlist = cutFile;
             AudioJob job = this.generateAudioJob(stream);
             if (job != null)
             {

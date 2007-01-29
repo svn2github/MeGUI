@@ -69,6 +69,7 @@ namespace MeGUI
     /// </summary>
     public struct AudioStream
     {
+        public string cutlist;
         public string path, output;
         public AudioCodecSettings settings;
         private AudioType type;

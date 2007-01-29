@@ -29,6 +29,15 @@ namespace MeGUI
 	/// </summary>
 	public class AudioJob : Job
 	{
+        private string cutFile;
+
+        public string CutFile
+        {
+            get { return cutFile; }
+            set { cutFile = value; }
+        }
+
+
 		private AudioCodecSettings settings;
 		public AudioJob():base()
 		{

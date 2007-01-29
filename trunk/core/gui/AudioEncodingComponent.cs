@@ -185,6 +185,7 @@ namespace MeGUI
         {
             this.AudioInput = "";
             this.AudioOutput = "";
+            this.cuts.Filename = "";
             int trackNumber = -1;
             if (this.audioTrack1.Checked)
                 trackNumber = 0;
@@ -193,6 +194,7 @@ namespace MeGUI
             if (trackNumber != -1)
             {
                 this.audioStreams[trackNumber].settings = null;
+                this.audioStreams[trackNumber].cutlist = "";
                 this.audioStreams[trackNumber].Type = null;
                 this.audioStreams[trackNumber].path = "";
                 this.audioStreams[trackNumber].output = "";
@@ -222,6 +224,7 @@ namespace MeGUI
                 this.audioStreams[lastSelectedAudioTrackNumber].output = "";
                 this.audioStreams[lastSelectedAudioTrackNumber].Type = null;
                 this.audioStreams[lastSelectedAudioTrackNumber].settings = null;
+                this.audioStreams[lastSelectedAudioTrackNumber].cutlist = "";
                 this.audioStreams[lastSelectedAudioTrackNumber].Delay = 0;
             }
             else
@@ -230,10 +233,12 @@ namespace MeGUI
                 this.audioStreams[lastSelectedAudioTrackNumber].output = this.AudioOutput;
                 this.audioStreams[lastSelectedAudioTrackNumber].Type = CurrentAudioOutputType;
                 this.audioStreams[lastSelectedAudioTrackNumber].settings = (audioCodec.SelectedItem as ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType>).GetCurrentSettings().clone();
+                this.audioStreams[lastSelectedAudioTrackNumber].cutlist = this.cuts.Filename;
                 //this.audioStreams[lastSelectedAudioTrackNumber].Delay = this.audioStreams[lastSelectedAudioTrackNumber].settings.Delay;
             }
             this.AudioInput = this.audioStreams[current].path;
             this.AudioOutput = this.audioStreams[current].output;
+            this.cuts.Filename = this.audioStreams[current].cutlist;
             if (audioStreams[current].settings != null)
             {
                 foreach (ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType> p in this.AudioCodec.Items)
@@ -269,7 +274,7 @@ namespace MeGUI
                 aSettings.DelayEnabled = true;
                 aSettings.Delay = this.CurrentAudioStream.Delay;
             }
-            mainForm.JobUtil.AddAudioJob(this.AudioInput, this.AudioOutput, aSettings);
+            mainForm.JobUtil.AddAudioJob(this.AudioInput, this.AudioOutput, this.cuts.Filename, aSettings);
         }
         private void audioInput_FileSelected(FileBar sender, FileBarEventArgs args)
         {
@@ -321,7 +326,8 @@ namespace MeGUI
             stream.output = this.AudioOutput;
             stream.settings = this.AudCodecSettings.clone();
             stream.Type = (this.audioContainer.SelectedItem as AudioType);
-            stream.Delay = getDelay(stream.path); 
+            stream.Delay = getDelay(stream.path);
+            stream.cutlist = this.cuts.Filename;
             this.CurrentAudioStream = stream;
         }
         public AudioType CurrentAudioOutputType

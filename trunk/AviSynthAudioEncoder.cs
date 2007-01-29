@@ -27,6 +27,7 @@ using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using MeGUI.core.util;
 
 namespace MeGUI
 {
@@ -522,7 +523,7 @@ namespace MeGUI
 
 
             if (audioJob.Settings.DelayEnabled && audioJob.Settings.Delay != 0)
-                script.AppendFormat("DelayAudio({0}.0/1000.0)", audioJob.Settings.Delay, Environment.NewLine);
+                script.AppendFormat("DelayAudio({0}.0/1000.0){1}", audioJob.Settings.Delay, Environment.NewLine);
 
             if (audioJob.Settings.ImproveAccuracy || audioJob.Settings.AutoGain /* to fix the bug */)
                 script.AppendFormat("ConvertAudioToFloat(){0}", Environment.NewLine);
@@ -722,7 +723,22 @@ namespace MeGUI
 
             script.AppendFormat("ConvertAudioTo16bit(){0}", Environment.NewLine);
 
-            script.Append(
+
+            if (!string.IsNullOrEmpty(audioJob.CutFile))
+            {
+                try
+                {
+                    Cuts cuts = FilmCutter.ReadCutsFromFile(audioJob.CutFile);
+                    script.AppendLine(FilmCutter.GetCutsScript(cuts, true));
+                }
+                catch (Exception)
+                {
+                    deleteTempFiles();
+                    error = "Broken cuts file, " + audioJob.CutFile + ", can't continue.";
+                    return false;
+                }
+            }
+            script.AppendLine(
 @"
 
 return last

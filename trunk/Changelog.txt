@@ -1,3 +1,7 @@
+0.2.4.1031
+Commit by berrinam:
+    - Add an AviSynth cutter (allows audio and video cutting)
+
 0.2.4.1030
 Commit by berrinam:
     - Fixed 1599119 (updater does not respect user-selected paths)

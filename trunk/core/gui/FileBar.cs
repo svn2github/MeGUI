@@ -40,11 +40,18 @@ namespace MeGUI
             set { title = value; }
         }
 
+        bool raiseEvent = true;
 
         public string Filename
         {
             get { return filename.Text; }
-            set { filename.Text = value; oldName = value; }
+            set
+            {
+                raiseEvent = false;
+                filename.Text = value;
+                oldName = value;
+                raiseEvent = false;
+            }
         }
 
         private bool folderMode;
@@ -103,7 +110,7 @@ namespace MeGUI
 
         private void filename_TextChanged(object sender, EventArgs e)
         {
-            if (FileSelected != null) FileSelected(this, new FileBarEventArgs(oldName, filename.Text));
+            if (raiseEvent && FileSelected != null) FileSelected(this, new FileBarEventArgs(oldName, filename.Text));
         }
     }
     public class FileBarEventArgs : EventArgs

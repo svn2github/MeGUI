@@ -167,7 +167,12 @@ namespace MeGUI.packages.tools.cutter
                 MessageBox.Show("Cuts already added; can't cut again", "Cuts already added", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            FilmCutter.WriteCutsToScript(scriptName, cuts);
+            if (cuts.AllCuts.Count == 0)
+            {
+                MessageBox.Show("At least one section must be created", "No sections created", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            FilmCutter.WriteCutsToScript(scriptName, cuts, false);
             MessageBox.Show("Cuts written!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             cutsAdded = true;
             avsScript.Text += "*";
@@ -175,6 +180,12 @@ namespace MeGUI.packages.tools.cutter
 
         private void saveCuts_Click(object sender, EventArgs e)
         {
+            if (cuts.AllCuts.Count == 0)
+            {
+                MessageBox.Show("At least one section must be created", "No sections created", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            } 
+            
             SaveFileDialog d = new SaveFileDialog();
             d.Filter = "MeGUI cut list (*.clt)|*.clt";
             d.Title = "Select a place to save the cut list";
