@@ -296,7 +296,10 @@ namespace MeGUI
             {
                 settings.DelayEnabled = false;
             }*/
-            this.AudioOutput = Path.ChangeExtension(fileName, this.CurrentAudioOutputType.Extension);
+            string filePath = Path.GetDirectoryName(fileName);
+            string fileNameNoExtension = Path.GetFileNameWithoutExtension(fileName);
+            this.AudioOutput = Path.Combine(filePath, fileNameNoExtension) + mainForm.Settings.AudioExtension + ".extension";
+            this.AudioOutput = Path.ChangeExtension(this.AudioOutput, this.CurrentAudioOutputType.Extension);
             this.updateAudioStreams();
         }
         /// <summary>

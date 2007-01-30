@@ -104,19 +104,17 @@ namespace MeGUI
         private GroupBox autoUpdateGroupBox;
         private CheckBox useAutoUpdateCheckbox;
         private GroupBox outputExtensions;
-        private TextBox textBox8;
+        private TextBox videoExtension;
         private Label label11;
         private Label label12;
-        private TextBox textBox9;
+        private TextBox audioExtension;
         private GroupBox autoModeGroupbox;
         private CheckBox checkBox3;
         private Label label13;
         private NumericUpDown numericUpDown1;
         private CheckBox checkBox4;
-        private TextBox videoExtension;
         private Label audioExtLabel;
         private Label videoExtLabel;
-        private TextBox audioExtension;
         private Button autoEncodeDefaultsButton;
         private CheckBox keep2ndPassLogfile;
         private Label nbPassesLabel;
@@ -228,10 +226,10 @@ namespace MeGUI
             this.configureServersButton = new System.Windows.Forms.Button();
             this.useAutoUpdateCheckbox = new System.Windows.Forms.CheckBox();
             this.outputExtensions = new System.Windows.Forms.GroupBox();
-            this.textBox8 = new System.Windows.Forms.TextBox();
+            this.videoExtension = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
-            this.textBox9 = new System.Windows.Forms.TextBox();
+            this.audioExtension = new System.Windows.Forms.TextBox();
             this.autoModeGroupbox = new System.Windows.Forms.GroupBox();
             this.checkBox3 = new System.Windows.Forms.CheckBox();
             this.label13 = new System.Windows.Forms.Label();
@@ -269,10 +267,8 @@ namespace MeGUI
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.videoExtension = new System.Windows.Forms.TextBox();
             this.audioExtLabel = new System.Windows.Forms.Label();
             this.videoExtLabel = new System.Windows.Forms.Label();
-            this.audioExtension = new System.Windows.Forms.TextBox();
             this.autoEncodeDefaultsButton = new System.Windows.Forms.Button();
             this.keep2ndPassLogfile = new System.Windows.Forms.CheckBox();
             this.nbPassesLabel = new System.Windows.Forms.Label();
@@ -891,10 +887,10 @@ namespace MeGUI
             // 
             // outputExtensions
             // 
-            this.outputExtensions.Controls.Add(this.textBox8);
+            this.outputExtensions.Controls.Add(this.videoExtension);
             this.outputExtensions.Controls.Add(this.label11);
             this.outputExtensions.Controls.Add(this.label12);
-            this.outputExtensions.Controls.Add(this.textBox9);
+            this.outputExtensions.Controls.Add(this.audioExtension);
             this.outputExtensions.Location = new System.Drawing.Point(3, 87);
             this.outputExtensions.Name = "outputExtensions";
             this.outputExtensions.Size = new System.Drawing.Size(218, 78);
@@ -902,12 +898,12 @@ namespace MeGUI
             this.outputExtensions.TabStop = false;
             this.outputExtensions.Text = "Optional output extensions";
             // 
-            // textBox8
+            // videoExtension
             // 
-            this.textBox8.Location = new System.Drawing.Point(6, 20);
-            this.textBox8.Name = "textBox8";
-            this.textBox8.Size = new System.Drawing.Size(120, 21);
-            this.textBox8.TabIndex = 21;
+            this.videoExtension.Location = new System.Drawing.Point(6, 20);
+            this.videoExtension.Name = "videoExtension";
+            this.videoExtension.Size = new System.Drawing.Size(120, 21);
+            this.videoExtension.TabIndex = 21;
             // 
             // label11
             // 
@@ -927,12 +923,12 @@ namespace MeGUI
             this.label12.TabIndex = 23;
             this.label12.Text = "Video";
             // 
-            // textBox9
+            // audioExtension
             // 
-            this.textBox9.Location = new System.Drawing.Point(6, 48);
-            this.textBox9.Name = "textBox9";
-            this.textBox9.Size = new System.Drawing.Size(120, 21);
-            this.textBox9.TabIndex = 22;
+            this.audioExtension.Location = new System.Drawing.Point(6, 48);
+            this.audioExtension.Name = "audioExtension";
+            this.audioExtension.Size = new System.Drawing.Size(120, 21);
+            this.audioExtension.TabIndex = 22;
             // 
             // autoModeGroupbox
             // 
@@ -1329,13 +1325,6 @@ namespace MeGUI
             this.label4.TabIndex = 2;
             this.label4.Text = "avimux_gui";
             // 
-            // videoExtension
-            // 
-            this.videoExtension.Location = new System.Drawing.Point(6, 20);
-            this.videoExtension.Name = "videoExtension";
-            this.videoExtension.Size = new System.Drawing.Size(120, 20);
-            this.videoExtension.TabIndex = 21;
-            // 
             // audioExtLabel
             // 
             this.audioExtLabel.AutoSize = true;
@@ -1353,13 +1342,6 @@ namespace MeGUI
             this.videoExtLabel.Size = new System.Drawing.Size(34, 13);
             this.videoExtLabel.TabIndex = 23;
             this.videoExtLabel.Text = "Video";
-            // 
-            // audioExtension
-            // 
-            this.audioExtension.Location = new System.Drawing.Point(6, 48);
-            this.audioExtension.Name = "audioExtension";
-            this.audioExtension.Size = new System.Drawing.Size(120, 20);
-            this.audioExtension.TabIndex = 22;
             // 
             // autoEncodeDefaultsButton
             // 

@@ -33,6 +33,7 @@ namespace MeGUI.packages.video.x264
             : base(mainForm, info)
         {
             InitializeComponent();
+            this.AdvancedToolTips = mainForm.Settings.UseAdvancedTooltips;
             AVCLevels al = new AVCLevels();
             this.avcLevel.Items.AddRange(al.getLevels());
         }

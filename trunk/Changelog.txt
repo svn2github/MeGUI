@@ -1,3 +1,8 @@
+0.2.4.1033
+Commit by berrinam:
+    - Fixed 1647524 ("optional output extensions" are not saving at next sessions)
+    - Fixed 1647520 ("advanced tooltip" not working)
+
 0.2.4.1032
 Commit by berrinam:
     - Fixed 1647454 (crash with German FPS in AVS window)
