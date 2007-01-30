@@ -1176,8 +1176,7 @@ namespace MeGUI
 			string cropLine = "#crop";
 			string resizeLine = "#resize";
 
-            double fps;
-            double.TryParse(fpsBox.Text, out fps);
+            double fps = (double)fpsBox.Value;
             inputLine = ScriptServer.GetInputLine(this.videoInput.Text, sourceType, colourCorrect.Checked, mpeg2Deblocking.Checked, flipVertical.Checked, fps);
             
             if (deinterlace.Checked && deinterlaceType.SelectedItem is DeinterlaceFilter)
@@ -1380,7 +1379,7 @@ namespace MeGUI
                     try
                     {
                         MediaInfoFile info = new MediaInfoFile(fileName);
-                       if (info.HasVideo && info.FPS > 0)
+                        if (info.HasVideo && info.FPS > 0)
                             frameRateString = info.FPS.ToString(System.Globalization.CultureInfo.InvariantCulture);
                     }
                     catch (Exception)

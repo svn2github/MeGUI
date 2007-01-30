@@ -1,3 +1,7 @@
+0.2.4.1032
+Commit by berrinam:
+    - Fixed 1647454 (crash with German FPS in AVS window)
+
 0.2.4.1031
 Commit by berrinam:
     - Add an AviSynth cutter (allows audio and video cutting)

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using MediaInfoWrapper;
+using System.Globalization;
 
 namespace MeGUI
 {
@@ -45,6 +46,7 @@ namespace MeGUI
 
     public class MediaInfoFile : IMediaFile
     {
+        private static readonly CultureInfo culture = new CultureInfo("en-us");
         #region variables
         private static Dictionary<string, VideoCodec> knownVideoDescriptions;
         private static Dictionary<string, AudioCodec> knownAudioDescriptions;
@@ -170,7 +172,7 @@ namespace MeGUI
         {
             try
             {
-                return (int.Parse(value));
+                return (int.Parse(value, culture));
             }
             catch (Exception)
             {
@@ -182,7 +184,7 @@ namespace MeGUI
         {
             try
             {
-                return double.Parse(value);
+                return double.Parse(value, culture);
             }
             catch (Exception)
             {
