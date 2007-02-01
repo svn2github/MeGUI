@@ -130,6 +130,16 @@ namespace MeGUI.packages.video.x264
         {
             x264QuantizerFileLoadButton.Enabled = (x264CustomQuantizer.SelectedIndex == 2); // If it is set to 'custom'
         }
+        private void doTrellisAdjustments()
+        {
+            deadzoneInter.Enabled = (trellis.SelectedIndex == 0);
+            deadzoneIntra.Enabled = (trellis.SelectedIndex == 0);
+            if (trellis.SelectedIndex != 0)
+            {
+                deadzoneIntra.Value = 11;
+                deadzoneInter.Value = 21;
+            }
+        }
 
         #endregion
         #region levels
@@ -381,6 +391,7 @@ namespace MeGUI.packages.video.x264
             doEncodingModeAdjustments();
             doCheckBoxAdjustments();
             doCQMAdjustments();
+            doTrellisAdjustments();
             doTextFieldAdjustments();
             doAVCLevelAdjustments();
 
@@ -449,6 +460,8 @@ namespace MeGUI.packages.video.x264
             get
             {
                 x264Settings xs = new x264Settings();
+                xs.DeadZoneInter = (int)deadzoneInter.Value;
+                xs.DeadZoneIntra = (int)deadzoneIntra.Value;
                 xs.EncodeInterlaced = interlaced.Checked;
                 xs.NoDCTDecimate = this.noDCTDecimateOption.Checked;
                 xs.SSIMCalculation = this.ssim.Checked;
@@ -521,6 +534,8 @@ namespace MeGUI.packages.video.x264
             set
             {  // Warning! The ordering of components matters because of the dependency code!
                 x264Settings xs = (x264Settings)value;
+                deadzoneInter.Value = xs.DeadZoneInter;
+                deadzoneIntra.Value = xs.DeadZoneIntra;
                 interlaced.Checked = xs.EncodeInterlaced;
                 noDCTDecimateOption.Checked = xs.NoDCTDecimate;
                 ssim.Checked = xs.SSIMCalculation;

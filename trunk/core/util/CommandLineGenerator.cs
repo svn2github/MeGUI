@@ -660,6 +660,10 @@ namespace MeGUI
                 xs.WeightedBPrediction = false;
                 xs.biME = false;
 			}
+            if (xs.DeadZoneInter != 21)
+                sb.Append("--deadzone-inter " + xs.DeadZoneInter + " ");
+            if (xs.DeadZoneIntra != 11)
+                sb.Append("--deadzone-intra " + xs.DeadZoneIntra + " ");
 			if (xs.NbRefFrames != 1) // 1 ref frame is default
 				sb.Append("--ref " + xs.NbRefFrames + " ");
 			if (xs.MixedRefs)

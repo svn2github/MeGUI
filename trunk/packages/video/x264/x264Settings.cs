@@ -49,7 +49,7 @@ namespace MeGUI
         }
 		int nbRefFrames, alphaDeblock, betaDeblock, subPelRefinement, maxQuantDelta, tempQuantBlur, 
 			bframePredictionMode, vbvBufferSize, vbvMaxBitrate, meType, meRange, minGOPSize, 
-			quantizerMatrixType, profile, x264Trellis, level, noiseReduction;
+			quantizerMatrixType, profile, x264Trellis, level, noiseReduction, deadZoneInter, deadZoneIntra;
 		decimal ipFactor, pbFactor, chromaQPOffset, vbvInitialBuffer, bitrateVariance, quantCompression, 
 			tempComplexityBlur, tempQuanBlurCC, scdSensitivity, bframeBias;
 		bool deblock, cabac, p4x4mv, p8x8mv, b8x8mv, i4x4mv, i8x8mv, weightedBPrediction, adaptiveBFrames, encodeInterlaced,
@@ -69,6 +69,8 @@ namespace MeGUI
 		/// </summary>
 		public x264Settings():base()
 		{
+            deadZoneInter = 21;
+            deadZoneIntra = 11;
             encodeInterlaced = false;
 			noFastPSkip = false;
             ssimCalc = false;
@@ -375,6 +377,18 @@ namespace MeGUI
 			set {quantizerMatrixType = value;}
 		}
 		#endregion
+        public int DeadZoneInter
+        {
+            get { return deadZoneInter; }
+            set { deadZoneInter = value; }
+        }
+
+        public int DeadZoneIntra
+        {
+            get { return deadZoneIntra; }
+            set { deadZoneIntra = value; }
+        }
+
         public override bool UsesSAR
         {
             get { return true; }
