@@ -51,7 +51,7 @@ namespace MeGUI
 			bframePredictionMode, vbvBufferSize, vbvMaxBitrate, meType, meRange, minGOPSize, 
 			quantizerMatrixType, profile, x264Trellis, level, noiseReduction, deadZoneInter, deadZoneIntra;
 		decimal ipFactor, pbFactor, chromaQPOffset, vbvInitialBuffer, bitrateVariance, quantCompression, 
-			tempComplexityBlur, tempQuanBlurCC, scdSensitivity, bframeBias;
+			tempComplexityBlur, tempQuanBlurCC, scdSensitivity, bframeBias, quantizerCrf;
 		bool deblock, cabac, p4x4mv, p8x8mv, b8x8mv, i4x4mv, i8x8mv, weightedBPrediction, adaptiveBFrames, encodeInterlaced,
 			bFramePyramid, chromaME, adaptiveDCT, lossless, mixedRefs, bRDO, NoFastPSkip, BiME, psnrCalc, noDctDecimate, ssimCalc;
 		string quantizerMatrix;
@@ -130,6 +130,11 @@ namespace MeGUI
 		}
 		#endregion
 		#region properties
+        public decimal QuantizerCRF
+        {
+            get { return quantizerCrf; }
+            set { quantizerCrf = value; }
+        }
         public bool EncodeInterlaced
         {
             get { return encodeInterlaced; }

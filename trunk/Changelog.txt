@@ -1,3 +1,7 @@
+0.2.4.1035
+Commit by berrinam:
+    - Added support for non-integer crf in x264
+
 0.2.4.1034
 Commit by berrinam:
     - Added support for --deadzone in x264

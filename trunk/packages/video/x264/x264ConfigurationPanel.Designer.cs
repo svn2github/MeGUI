@@ -54,7 +54,6 @@ namespace MeGUI.packages.video.x264
             this.x264EncodingModeLabel = new System.Windows.Forms.Label();
             this.x264BitrateQuantizerLabel = new System.Windows.Forms.Label();
             this.x264LosslessMode = new System.Windows.Forms.CheckBox();
-            this.x264BitrateQuantizer = new System.Windows.Forms.TextBox();
             this.rateControlTabPage = new System.Windows.Forms.TabPage();
             this.x264QuantOptionsGroupbox = new System.Windows.Forms.GroupBox();
             this.x264MixedReferences = new System.Windows.Forms.CheckBox();
@@ -148,6 +147,7 @@ namespace MeGUI.packages.video.x264
             this.customCommandlineOptionsLabel = new System.Windows.Forms.Label();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.x264BitrateQuantizer = new System.Windows.Forms.NumericUpDown();
             this.tabControl1.SuspendLayout();
             this.zoneTabPage.SuspendLayout();
             this.mainTabPage.SuspendLayout();
@@ -188,6 +188,7 @@ namespace MeGUI.packages.video.x264
             ((System.ComponentModel.ISupportInitialize)(this.x264MaximumQuantizer)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.x264MinimimQuantizer)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.x264PBFrameFactor)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.x264BitrateQuantizer)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -441,6 +442,7 @@ namespace MeGUI.packages.video.x264
             // 
             // x264CodecGeneralGroupbox
             // 
+            this.x264CodecGeneralGroupbox.Controls.Add(this.x264BitrateQuantizer);
             this.x264CodecGeneralGroupbox.Controls.Add(this.logfile);
             this.x264CodecGeneralGroupbox.Controls.Add(this.x264EncodingMode);
             this.x264CodecGeneralGroupbox.Controls.Add(this.logfileLabel);
@@ -449,7 +451,6 @@ namespace MeGUI.packages.video.x264
             this.x264CodecGeneralGroupbox.Controls.Add(this.x264EncodingModeLabel);
             this.x264CodecGeneralGroupbox.Controls.Add(this.x264BitrateQuantizerLabel);
             this.x264CodecGeneralGroupbox.Controls.Add(this.x264LosslessMode);
-            this.x264CodecGeneralGroupbox.Controls.Add(this.x264BitrateQuantizer);
             this.x264CodecGeneralGroupbox.Location = new System.Drawing.Point(0, 3);
             this.x264CodecGeneralGroupbox.Name = "x264CodecGeneralGroupbox";
             this.x264CodecGeneralGroupbox.Size = new System.Drawing.Size(314, 159);
@@ -550,17 +551,6 @@ namespace MeGUI.packages.video.x264
             this.x264LosslessMode.TabIndex = 13;
             this.x264LosslessMode.Text = "Lossless";
             this.x264LosslessMode.CheckedChanged += new System.EventHandler(this.updateEvent);
-            // 
-            // x264BitrateQuantizer
-            // 
-            this.x264BitrateQuantizer.Location = new System.Drawing.Point(268, 45);
-            this.x264BitrateQuantizer.MaxLength = 5;
-            this.x264BitrateQuantizer.Name = "x264BitrateQuantizer";
-            this.x264BitrateQuantizer.Size = new System.Drawing.Size(40, 20);
-            this.x264BitrateQuantizer.TabIndex = 6;
-            this.x264BitrateQuantizer.Text = "700";
-            this.x264BitrateQuantizer.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textField_KeyPress);
-            this.x264BitrateQuantizer.TextChanged += new System.EventHandler(this.updateEvent);
             // 
             // rateControlTabPage
             // 
@@ -1813,6 +1803,19 @@ namespace MeGUI.packages.video.x264
             // 
             this.openFileDialog.FileName = "openFileDialog1";
             // 
+            // x264BitrateQuantizer
+            // 
+            this.x264BitrateQuantizer.Location = new System.Drawing.Point(242, 47);
+            this.x264BitrateQuantizer.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.x264BitrateQuantizer.Name = "x264BitrateQuantizer";
+            this.x264BitrateQuantizer.Size = new System.Drawing.Size(66, 20);
+            this.x264BitrateQuantizer.TabIndex = 41;
+            this.x264BitrateQuantizer.ValueChanged += new System.EventHandler(this.updateEvent);
+            // 
             // x264ConfigurationPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1870,6 +1873,7 @@ namespace MeGUI.packages.video.x264
             ((System.ComponentModel.ISupportInitialize)(this.x264MaximumQuantizer)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.x264MinimimQuantizer)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.x264PBFrameFactor)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.x264BitrateQuantizer)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1902,7 +1906,6 @@ namespace MeGUI.packages.video.x264
         private System.Windows.Forms.Label x264EncodingModeLabel;
         private System.Windows.Forms.Label x264BitrateQuantizerLabel;
         private System.Windows.Forms.CheckBox x264LosslessMode;
-        private System.Windows.Forms.TextBox x264BitrateQuantizer;
         private System.Windows.Forms.TabPage rateControlTabPage;
         private System.Windows.Forms.TabPage quantizationTabPage;
         private System.Windows.Forms.GroupBox x264RateControlMiscGroupbox;
@@ -1997,5 +2000,6 @@ namespace MeGUI.packages.video.x264
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.NumericUpDown deadzoneIntra;
         private System.Windows.Forms.NumericUpDown deadzoneInter;
+        private System.Windows.Forms.NumericUpDown x264BitrateQuantizer;
     }
 }

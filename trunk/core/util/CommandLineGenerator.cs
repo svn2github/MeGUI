@@ -611,7 +611,7 @@ namespace MeGUI
 					sb.Append("--bitrate " + xs.BitrateQuantizer + " ");
 					break;
 				case 1: // CQ
-					sb.Append("--qp " + xs.BitrateQuantizer + " ");
+					sb.Append("--qp " + xs.QuantizerCRF + " ");
 					break;
 				case 2: // 2 pass first pass
 					sb.Append("--pass 1 --bitrate " + xs.BitrateQuantizer + " --stats " + "\"" + xs.Logfile + "\" ");
@@ -631,7 +631,7 @@ namespace MeGUI
 					sb.Append("--pass 3 --bitrate " + xs.BitrateQuantizer + " --stats " + "\"" + xs.Logfile + "\" ");
 					break;
 				case 9: // constant quality
-					sb.Append("--crf " + xs.BitrateQuantizer + " ");
+					sb.Append("--crf " + xs.QuantizerCRF + " ");
 					break;
 			} // now add the rest of the x264 encoder options
             

@@ -401,7 +401,7 @@ as direct/skip (no motion vector), forward (1 MV pointing to a past reference), 
 Performs Trellis quantisation to increase efficiency. On Macroblock provides a
 good compromise between speed and efficiency. On all decisions reduces
 speed further.</Advanced>
-			<Basic>Trellis Rate Distortion quantization. (Requires CABAC)</Basic>
+			<Basic>Trellis Rate Distortion quantization. (Requires CABAC, disables deadzone)</Basic>
 			<Recommended>On Macro Block</Recommended>
 			<Default>Disabled</Default>
 		</trellis>

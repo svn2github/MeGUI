@@ -238,18 +238,6 @@ namespace MeGUI.packages.video.x264
         }
         private void doEncodingModeAdjustments()
         {
-            // We check whether the bitrate/quality text needs to be changed
-            if (isBitrateMode(lastEncodingMode) != isBitrateMode(x264EncodingMode.SelectedIndex))
-            {
-                if (isBitrateMode(x264EncodingMode.SelectedIndex))
-                {
-                    this.x264BitrateQuantizer.Text = "700";
-                }
-                else
-                {
-                    this.x264BitrateQuantizer.Text = "26";
-                }
-            }
 
             if (isBitrateMode(x264EncodingMode.SelectedIndex))
             {
@@ -258,6 +246,11 @@ namespace MeGUI.packages.video.x264
                 x264TempFrameComplexityBlurLabel.Enabled = true;
                 x264TempQuantBlur.Enabled = true;
                 x264TempQuantBlurLabel.Enabled = true;
+
+                x264BitrateQuantizer.Maximum = 100000;
+                x264BitrateQuantizer.Minimum = 10;
+                x264BitrateQuantizer.DecimalPlaces = 0;
+                x264BitrateQuantizer.Increment = 10;
             }
             else
             {
@@ -273,6 +266,30 @@ namespace MeGUI.packages.video.x264
                 {
                     this.x264BitrateQuantizerLabel.Text = "Quality";
                 }
+
+                // If x264 gets float for a quantizer, then this is correct
+                /*x264BitrateQuantizer.Maximum = 64;
+                x264BitrateQuantizer.Minimum = 0.1M;
+                x264BitrateQuantizer.DecimalPlaces = 1;
+                x264BitrateQuantizer.Increment = 0.1M;*/
+
+                
+                x264BitrateQuantizer.Maximum = 64;
+                if (x264EncodingMode.SelectedIndex == 9) // crf
+                {
+                    x264BitrateQuantizer.Minimum = 0.1M;
+                    x264BitrateQuantizer.DecimalPlaces = 1;
+                    x264BitrateQuantizer.Increment = 0.1M;
+                }
+                else // qp
+                {
+                    // This first line makes sure it is an integer, in case we just swapped from crf
+                    x264BitrateQuantizer.Value = (int)x264BitrateQuantizer.Value; 
+                    x264BitrateQuantizer.Minimum = 1;
+                    x264BitrateQuantizer.DecimalPlaces = 0;
+                    x264BitrateQuantizer.Increment = 1;
+                }
+
             }
             if (x264EncodingMode.SelectedIndex != (int)VideoCodecSettings.Mode.CQ)
                 setNonQPOptionsEnabled(true);
@@ -328,23 +345,37 @@ namespace MeGUI.packages.video.x264
                     x264RateTolLabel.Enabled = false;
                     break;
             }
+
+            // We check whether the bitrate/quality text needs to be changed
+            if (isBitrateMode(lastEncodingMode) != isBitrateMode(x264EncodingMode.SelectedIndex))
+            {
+                if (isBitrateMode(x264EncodingMode.SelectedIndex))
+                {
+                    this.x264BitrateQuantizer.Value = 700;
+                }
+                else
+                {
+                    this.x264BitrateQuantizer.Value = 26;
+                }
+            }
+
             lastEncodingMode = x264EncodingMode.SelectedIndex;
         }
         #endregion
         #region textboxes
         private void doTextFieldAdjustments()
         {
-            if (!x264BitrateQuantizer.Text.Equals(""))
+/*            if (!x264BitrateQuantizer.Text.Equals(""))
             {
-                int val = Int32.Parse(x264BitrateQuantizer.Text);
+                int val = Int32.Parse(x264Bitratequantizer.text);
                 if (val == 0 && !x264LosslessMode.Checked) // stop quantizer 0
                 {
                     if (isBitrateMode(x264EncodingMode.SelectedIndex))
-                        x264BitrateQuantizer.Text = "700";
+                        x264BitrateQuantizer.Value = 700;
                     else
-                        x264BitrateQuantizer.Text = "26";
+                        x264BitrateQuantizer.Value = 26;
                 }
-            }
+            }*/
         }
         #endregion
         #region level -> mb
@@ -471,8 +502,8 @@ namespace MeGUI.packages.video.x264
                 xs.Turbo = this.x264Turbo.Checked;
                 xs.MixedRefs = this.x264MixedReferences.Checked;
                 xs.EncodingMode = x264EncodingMode.SelectedIndex;
-                if (!x264BitrateQuantizer.Text.Equals(""))
-                    xs.BitrateQuantizer = Int32.Parse(x264BitrateQuantizer.Text);
+                xs.BitrateQuantizer = (int)x264BitrateQuantizer.Value;
+                xs.QuantizerCRF = x264BitrateQuantizer.Value;
                 if (!x264KeyframeInterval.Text.Equals(""))
                     xs.KeyframeInterval = Int32.Parse(x264KeyframeInterval.Text);
                 xs.NbRefFrames = (int)x264NumberOfRefFrames.Value;
@@ -550,8 +581,8 @@ namespace MeGUI.packages.video.x264
                 x264SubpelRefinement.SelectedIndex = xs.SubPelRefinement;
                 fourCC.SelectedIndex = xs.FourCC;
                 x264Turbo.Checked = xs.Turbo;
-                x264BitrateQuantizer.Text = xs.BitrateQuantizer.ToString(); ;
-                x264KeyframeInterval.Text = xs.KeyframeInterval.ToString(); ;
+                x264BitrateQuantizer.Value = isBitrateMode(xs.EncodingMode) ? xs.BitrateQuantizer : xs.QuantizerCRF;
+                x264KeyframeInterval.Text = xs.KeyframeInterval.ToString() ;
                 x264AdaptiveBframes.Checked = xs.AdaptiveBFrames;
                 x264DeblockActive.Checked = xs.Deblock;
                 x264PyramidBframes.Checked = xs.BFramePyramid;
