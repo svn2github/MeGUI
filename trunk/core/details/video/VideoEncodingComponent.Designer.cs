@@ -122,6 +122,7 @@ namespace MeGUI
             this.addAnalysisPass.TabIndex = 28;
             this.addAnalysisPass.Text = "Queue analysis pass";
             this.addAnalysisPass.UseVisualStyleBackColor = true;
+            this.addAnalysisPass.Click += new System.EventHandler(this.addAnalysisPass_Click);
             // 
             // groupBox1
             // 

@@ -528,6 +528,21 @@ namespace MeGUI
             if (audioJob.Settings.ImproveAccuracy || audioJob.Settings.AutoGain /* to fix the bug */)
                 script.AppendFormat("ConvertAudioToFloat(){0}", Environment.NewLine);
 
+            if (!string.IsNullOrEmpty(audioJob.CutFile))
+            {
+                try
+                {
+                    Cuts cuts = FilmCutter.ReadCutsFromFile(audioJob.CutFile);
+                    script.AppendLine(FilmCutter.GetCutsScript(cuts, true));
+                }
+                catch (Exception)
+                {
+                    deleteTempFiles();
+                    error = "Broken cuts file, " + audioJob.CutFile + ", can't continue.";
+                    return false;
+                }
+            }
+
             if (audioJob.Settings.AutoGain)
                 script.AppendFormat("Normalize(){0}", Environment.NewLine);
 
@@ -724,20 +739,6 @@ namespace MeGUI
             script.AppendFormat("ConvertAudioTo16bit(){0}", Environment.NewLine);
 
 
-            if (!string.IsNullOrEmpty(audioJob.CutFile))
-            {
-                try
-                {
-                    Cuts cuts = FilmCutter.ReadCutsFromFile(audioJob.CutFile);
-                    script.AppendLine(FilmCutter.GetCutsScript(cuts, true));
-                }
-                catch (Exception)
-                {
-                    deleteTempFiles();
-                    error = "Broken cuts file, " + audioJob.CutFile + ", can't continue.";
-                    return false;
-                }
-            }
             script.AppendLine(
 @"
 

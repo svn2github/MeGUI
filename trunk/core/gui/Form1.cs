@@ -173,7 +173,7 @@ namespace MeGUI
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(478, 399);
+            this.tabControl1.Size = new System.Drawing.Size(478, 393);
             this.tabControl1.TabIndex = 0;
             // 
             // inputTab
@@ -185,7 +185,7 @@ namespace MeGUI
             this.inputTab.Controls.Add(this.resetButton);
             this.inputTab.Location = new System.Drawing.Point(4, 22);
             this.inputTab.Name = "inputTab";
-            this.inputTab.Size = new System.Drawing.Size(470, 373);
+            this.inputTab.Size = new System.Drawing.Size(470, 367);
             this.inputTab.TabIndex = 0;
             this.inputTab.Text = "Input";
             // 
@@ -214,7 +214,7 @@ namespace MeGUI
             this.tabPage2.Controls.Add(this.jobControl1);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Size = new System.Drawing.Size(470, 372);
+            this.tabPage2.Size = new System.Drawing.Size(470, 310);
             this.tabPage2.TabIndex = 12;
             this.tabPage2.Text = "Queue";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -225,7 +225,7 @@ namespace MeGUI
             this.logTab.Controls.Add(this.log);
             this.logTab.Location = new System.Drawing.Point(4, 22);
             this.logTab.Name = "logTab";
-            this.logTab.Size = new System.Drawing.Size(470, 372);
+            this.logTab.Size = new System.Drawing.Size(470, 310);
             this.logTab.TabIndex = 10;
             this.logTab.Text = "Log";
             this.logTab.UseVisualStyleBackColor = true;
@@ -244,7 +244,7 @@ namespace MeGUI
             // log
             // 
             this.log.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.log.Location = new System.Drawing.Point(0, 40);
+            this.log.Location = new System.Drawing.Point(0, -22);
             this.log.Multiline = true;
             this.log.Name = "log";
             this.log.ReadOnly = true;
@@ -469,7 +469,7 @@ namespace MeGUI
             this.jobControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.jobControl1.Location = new System.Drawing.Point(0, 0);
             this.jobControl1.Name = "jobControl1";
-            this.jobControl1.Size = new System.Drawing.Size(470, 372);
+            this.jobControl1.Size = new System.Drawing.Size(470, 310);
             this.jobControl1.TabIndex = 0;
             this.jobControl1.Load += new System.EventHandler(this.jobControl1_Load);
             // 
@@ -478,7 +478,7 @@ namespace MeGUI
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(478, 399);
+            this.ClientSize = new System.Drawing.Size(478, 393);
             this.Controls.Add(this.tabControl1);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;

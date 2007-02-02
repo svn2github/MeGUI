@@ -545,5 +545,18 @@ namespace MeGUI
             ProfileHandler.RefreshProfiles();
         }
         #endregion
+
+        private void addAnalysisPass_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(VideoInput))
+            {
+                MessageBox.Show("Error: Could not add job to queue. Make sure that all the details are entered correctly", "Couldn't create job", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            AviSynthJob job = mainForm.JobUtil.generateAvisynthJob(VideoInput);
+            job.Name = "job" + mainForm.Jobs.getFreeJobNumber(); ;
+            mainForm.Jobs.addJobsToQueue(job);
+        }
     }
 }
