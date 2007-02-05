@@ -631,7 +631,7 @@ namespace MeGUI
 					sb.Append("--pass 3 --bitrate " + xs.BitrateQuantizer + " --stats " + "\"" + xs.Logfile + "\" ");
 					break;
 				case 9: // constant quality
-					sb.Append("--crf " + xs.QuantizerCRF + " ");
+					sb.Append("--crf " + xs.QuantizerCRF.ToString(new CultureInfo("en-us")) + " ");
 					break;
 			} // now add the rest of the x264 encoder options
             

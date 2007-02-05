@@ -1,3 +1,11 @@
+0.2.4.1037
+Commit by berrinam:
+    - Made PgDn/PgUp do a jump of 1000 frames; made >> jump 25 frames
+    - Add extra resizers for AviSynth
+    - Save jobs on creation
+    - Fixed 1650887 (x264 doesn't understand --crf 18,0)
+    - Fixed 1651387 (reset button does not remove audio cut file reference)
+
 0.2.4.1036
 Commit by berrinam:
     - Fixed 1650271 (Queue analysis pass does nothing)

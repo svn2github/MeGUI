@@ -255,6 +255,15 @@ namespace MeGUI
                 set { needsRestartedCopying = value; }
             }
 
+            private uint installPriority = 0;
+
+            public uint InstallPriority
+            {
+                get { return installPriority; }
+                set { installPriority = value; }
+            }
+
+
             public virtual bool NeedsInstalling
             {
                 get { return false; }
@@ -941,6 +950,12 @@ namespace MeGUI
                     file.NeedsRestartedCopying = false;
             }
             catch (Exception) { }
+            
+            try
+            {
+                file.InstallPriority = uint.Parse(node.Attributes["installpriority"].Value);
+            }
+            catch (Exception) { }
 
             foreach (XmlNode filenode in node.ChildNodes) // each filenode contains the upgrade url and version
             {
@@ -1063,21 +1078,54 @@ namespace MeGUI
         {
             continueUpdate = true;
             int currentFile = 1; //the first file we update is file 1.
-            int updateableFileCount = upgradeData.CountCheckedFiles();
             byte[] fileData;
             ErrorState result;
             List<iUpgradeable> succeededFiles = new List<iUpgradeable>();
             List<iUpgradeable> failedFiles = new List<iUpgradeable>();
 
+            // Sort the files to download according to their install priority
+            SortedDictionary<uint, List<iUpgradeable>> groups = new SortedDictionary<uint, List<iUpgradeable>>();
             foreach (iUpgradeable file in upgradeData)
             {
-                if (!continueUpdate)
-                {
-                    AddTextToLog("Update aborted by user.");
-                    return;
-                }
                 if (file.DownloadChecked)
                 {
+                    if (!groups.ContainsKey(file.InstallPriority))
+                        groups[file.InstallPriority] = new List<iUpgradeable>();
+                    groups[file.InstallPriority].Add(file);
+                }
+            }
+
+            // Count the number of files we can update before we restart
+            int updateableFileCount = 0;
+            uint indexOfRestart = 0;
+            bool needsRestart = false;
+            foreach (List<iUpgradeable> group in groups)
+            {
+                foreach (iUpgradeable file in group)
+                {
+                    if (file.NeedsRestartedCopying)
+                        needsRestart = true;
+                }
+                updateableFileCount += group.Count;
+                if (needsRestart)
+                {
+                    indexOfRestart = group[0].InstallPriority;
+                    break;
+                }
+            }
+
+
+            // Now update the files we can
+            foreach (List<iUpgradeable> group in groups)
+            {
+                foreach (iUpgradeable file in group)
+                {
+                    if (!continueUpdate)
+                    {
+                        AddTextToLog("Update aborted by user.");
+                        return;
+                    }
+
                     AddTextToLog(string.Format("Updating {0}. File {1}/{2}.",
                         file.Name, currentFile, updateableFileCount));
 
@@ -1101,7 +1149,24 @@ namespace MeGUI
                     }
                     currentFile++;
                 }
+
+                if (currentFile >= updateableFileCount) break;
             }
+
+            // Tell MeGUI to update the remaining files after restarting
+            foreach (List<iUpgradeable> group in groups)
+            {
+                foreach (iUpgradeable file in group)
+                {
+                    if (file.InstallPriority > indexOfRestart)
+                    {
+                        AddTextToLog(string.Format("Updating {0} after MeGUI is restarted.{1}", file.Name, Environment.NewLine));
+                        mainForm.AddFileToInstall(file.Name);
+                    }
+                }
+            }
+
+
             SetProgressBar(0, 1, 1); //make sure progress bar is at 100%.
 
             if (failedFiles.Count > 0)

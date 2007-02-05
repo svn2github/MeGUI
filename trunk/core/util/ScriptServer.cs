@@ -20,10 +20,19 @@ namespace MeGUI
         BicubicSoft,
         [EnumTitle("Lanczos (Sharp)", "LanczosResize({0},{1})")]
         Lanczos,
-        [EnumTitle("Lanczo4 (Sharp)", "Lanczos4Resize({0},{1})")]
+        [EnumTitle("Lanczos4 (Sharp)", "Lanczos4Resize({0},{1})")]
         Lanczos4,
         [EnumTitle("Simple (Soft)", "SimpleResize({0},{1})")]
-        Simple
+        Simple,
+        [EnumTitle("Gauss (Neutral)", "GaussResize({0},{1})")]
+        Gauss,
+        [EnumTitle("Point (Sharp)", "PointResize({0},{1})")]
+        Point,
+        [EnumTitle("Spline16 (Neutral)", "Spline16Resize({0},{1})")]
+        Spline16,
+        [EnumTitle("Spline36 (Neutral)", "Spline36Resize({0},{1})")]
+        Spline32
+
     }
 
     public enum DenoiseFilterType

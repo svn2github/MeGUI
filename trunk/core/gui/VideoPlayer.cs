@@ -463,6 +463,7 @@ namespace MeGUI
             // 
             this.positionSlider.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.positionSlider.AutoSize = false;
+            this.positionSlider.LargeChange = 1000;
             this.positionSlider.Location = new System.Drawing.Point(46, 259);
             this.positionSlider.Name = "positionSlider";
             this.positionSlider.Size = new System.Drawing.Size(280, 45);
@@ -865,41 +866,40 @@ namespace MeGUI
 			}
 		}
 
+        private void safeChangePosition(int frameChange)
+        {
+            int newFrameNumber = this.currentPosition + frameChange;
+            if (newFrameNumber >= 0 && newFrameNumber < reader.FrameCount)
+            {
+                currentPosition = newFrameNumber;
+            }
+            else
+            {
+                if (frameChange > 0) currentPosition = reader.FrameCount - 1;
+                else currentPosition = 0;
+            }
+            updateGUI();
+        }
+
 		private void previousFrameButton_Click(object sender, System.EventArgs e)
 		{
-			if (this.currentPosition > 0)
-			{
-				currentPosition--;
-				this.updateGUI();
-			}
+            safeChangePosition(-1);
 		}
 
 		private void nextFrameButton_Click(object sender, System.EventArgs e)
 		{
-			if (this.currentPosition + 1 < reader.FrameCount)
-			{
-				currentPosition++;
-				this.updateGUI();
-			}
+            safeChangePosition(1);
 		}
 
 		private void fwdButton_Click(object sender, System.EventArgs e)
 		{
-			if (this.currentPosition - 10 >= 0)
-			{
-				currentPosition -= 10;
-				this.updateGUI();
-			}
+            safeChangePosition(-25);
 		}
 
 		private void ffButton_Click(object sender, System.EventArgs e)
 		{
-			if (this.currentPosition + 10 < reader.FrameCount)
-			{
-				currentPosition += 10;
-				this.updateGUI();
-			}
-		}
+            safeChangePosition(25);
+        }
 		#endregion
 		#region credits / intro
 		/// <summary>

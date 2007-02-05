@@ -1205,6 +1205,7 @@ namespace MeGUI.core.details
         {
             foreach (Job j in jobs)
                 addJob(j);
+            saveJobs();
             if (!isEncoding && mainForm.Settings.AutoStartQueue)
                 StartEncoding(false);
         }

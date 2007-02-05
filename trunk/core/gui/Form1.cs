@@ -1259,6 +1259,12 @@ namespace MeGUI
             filesToReplace.Add(iUpgradeableName, data);
         }
 
+        internal void AddFileToInstall(string file)
+        {
+            if (!otherFilesToInstall.Contains(file))
+                otherFilesToInstall.Add(file);
+        }
+
         internal void CloseSilent()
         {
             this.profileManager.SaveProfiles();
@@ -1298,6 +1304,7 @@ namespace MeGUI
         #region variable declaration
         private bool restart = false;
         private Dictionary<string, CommandlineUpgradeData> filesToReplace = new Dictionary<string, CommandlineUpgradeData>();
+        private List<string> otherFilesToInstall = new List<string>();
         private DialogManager dialogManager;
         private string path; // path the program was started from
         private CommandLineGenerator gen; // class that generates commandlines
@@ -1516,6 +1523,10 @@ namespace MeGUI
                        filesToReplace[file].filename[i],
                        filesToReplace[file].tempFilename[i]);
                 }
+            }
+            foreach (string file in otherFilesToInstall)
+            {
+                pstart.Arguments += string.Format("--then-install \"{0}\" ", file);
             }
             if (restart)
                 pstart.Arguments += "--restart ";

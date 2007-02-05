@@ -371,11 +371,14 @@ namespace MeGUI
         internal void Reset()
         {
             this.AudioInput = "";
+            this.cuts.Filename = "";
             this.AudioOutput = "";
             this.audioStreams[0].path = "";
+            this.audioStreams[0].cutlist = "";
             this.audioStreams[0].output = "";
             this.audioStreams[0].settings = null;
             this.audioStreams[1].path = "";
+            this.audioStreams[1].cutlist = "";
             this.audioStreams[1].output = "";
             this.audioStreams[1].settings = null;
         }
