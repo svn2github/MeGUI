@@ -1,3 +1,8 @@
+0.2.4.1038
+Commit by berrinam:
+    - Support update server branching
+    - Fixed 1651704 (CQ- profiles create error "not valid value")
+
 0.2.4.1037
 Commit by berrinam:
     - Made PgDn/PgUp do a jump of 1000 frames; made >> jump 25 frames

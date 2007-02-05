@@ -9,7 +9,7 @@ namespace MeGUI
 	public class MeGUISettings
     {
         #region variables
-        private string[] autoUpdateServers;
+        private string[][] autoUpdateServerLists;
         private string faacPath, lamePath, neroAacEncPath, mencoderPath,  mp4boxPath, mkvmergePath, encAacPlusPath,
             ffmpegPath,
             x264Path, dgIndexPath, xvidEncrawPath, avc2aviPath, aviMuxGUIPath, oggEnc2Path, encAudXPath,
@@ -19,7 +19,7 @@ namespace MeGUI
             deleteAbortedOutput, openProgressWindow, useadvancedtooltips, freshOggEnc2;
         private AfterEncoding afterEncoding;
         private decimal forceFilmThreshold;
-		private int nbPasses, acceptableAspectError, maxServersToTry;
+		private int nbPasses, acceptableAspectError, maxServersToTry, autoUpdateServerSubList;
         private string videoExtension, audioExtension;
         private bool safeProfileAlteration;
         private SourceDetectorSettings sdSettings;
@@ -30,7 +30,9 @@ namespace MeGUI
         #endregion
         public MeGUISettings()
 		{
-            autoUpdateServers = new string[] { "http://megui.org/auto/", "http://mewiki.project357.com/auto/" };
+            autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/stable/", "http://mewiki.project357.com/auto/stable/" },
+                new string[] { "Development", "http://megui.org/auto/", "http://mewiki.project357.com/auto/" } };
+            autoUpdateServerSubList = 0;
             maxServersToTry = 5;
             dialogSettings = new DialogSettings();
             sdSettings = new SourceDetectorSettings();
@@ -87,12 +89,20 @@ namespace MeGUI
             set { maxServersToTry = value; }
         }
         /// <summary>
+        /// Which sublist to look in for the update servers
+        /// </summary>
+        public int AutoUpdateServerSubList
+        {
+            get { return autoUpdateServerSubList; }
+            set { autoUpdateServerSubList = value; }
+        }
+        /// <summary>
         /// List of servers to use for autoupdate
         /// </summary>
-        public string[] AutoUpdateServers
+        public string[][] AutoUpdateServerLists
         {
-            get { return autoUpdateServers; }
-            set { autoUpdateServers = value; }
+            get { return autoUpdateServerLists; }
+            set { autoUpdateServerLists = value; }
         }
             /// <summary>
             /// What to do after all encodes are finished

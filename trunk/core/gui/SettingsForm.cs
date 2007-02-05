@@ -16,7 +16,8 @@ namespace MeGUI
 		#region variables
         private System.Windows.Forms.Button saveButton;
 		private System.Windows.Forms.Button cancelButton;
-        private string[] autoUpdateServers;
+        private string[][] autoUpdateServers;
+        private int autoUpdateIndex;
         private DialogSettings dialogSettings;
         private Button resetDialogs;
         private TabControl tabControl1;
@@ -1633,8 +1634,12 @@ namespace MeGUI
             using (MeGUI.core.gui.AutoUpdateServerConfigWindow w = new MeGUI.core.gui.AutoUpdateServerConfigWindow())
             {
                 w.ServerList = autoUpdateServers;
+                w.ServerListIndex = autoUpdateIndex;
                 if (w.ShowDialog() == DialogResult.OK)
+                {
                     autoUpdateServers = w.ServerList;
+                    autoUpdateIndex = w.ServerListIndex;
+                }
             }
         }
 
@@ -1646,7 +1651,8 @@ namespace MeGUI
 			{
 				MeGUISettings settings = new MeGUISettings();
                 settings.MaxServersToTry = (int)maxServersToTry.Value;
-                settings.AutoUpdateServers = autoUpdateServers;
+                settings.AutoUpdateServerSubList = autoUpdateIndex;
+                settings.AutoUpdateServerLists = autoUpdateServers;
                 settings.AutoUpdate = useAutoUpdateCheckbox.Checked;
                 settings.DialogSettings = dialogSettings;
                 settings.AcceptableAspectErrorPercent = (int)acceptableAspectError.Value;
@@ -1700,7 +1706,8 @@ namespace MeGUI
 			{
 				MeGUISettings settings = value;
                 maxServersToTry.Value = settings.MaxServersToTry;
-                autoUpdateServers = settings.AutoUpdateServers;
+                autoUpdateServers = settings.AutoUpdateServerLists;
+                autoUpdateIndex = settings.AutoUpdateServerSubList;
                 useAutoUpdateCheckbox.Checked = settings.AutoUpdate;
                 acceptableAspectError.Value = (decimal)settings.AcceptableAspectErrorPercent;
                 dialogSettings = settings.DialogSettings;

@@ -581,7 +581,7 @@ namespace MeGUI.packages.video.x264
                 x264SubpelRefinement.SelectedIndex = xs.SubPelRefinement;
                 fourCC.SelectedIndex = xs.FourCC;
                 x264Turbo.Checked = xs.Turbo;
-                x264BitrateQuantizer.Value = isBitrateMode(xs.EncodingMode) ? xs.BitrateQuantizer : xs.QuantizerCRF;
+                x264BitrateQuantizer.Value = (isBitrateMode(xs.EncodingMode) || xs.QuantizerCRF == 0) ? xs.BitrateQuantizer : xs.QuantizerCRF;
                 x264KeyframeInterval.Text = xs.KeyframeInterval.ToString() ;
                 x264AdaptiveBframes.Checked = xs.AdaptiveBFrames;
                 x264DeblockActive.Checked = xs.Deblock;

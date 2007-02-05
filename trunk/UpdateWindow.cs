@@ -688,7 +688,7 @@ namespace MeGUI
             this.upgradeData = new iUpgradeableCollection(32); // To avoid unnecessary resizing, start at 32.
             meGUISettings = savedSettings; // Load up the MeGUI settings so i can access filepaths
 
-            this.serverList = shuffled(mainForm.Settings.AutoUpdateServers);
+            this.serverList = shuffled(mainForm.Settings.AutoUpdateServerLists[mainForm.Settings.AutoUpdateServerSubList]);
             if (serverList.Length == 0)
             {
                 MessageBox.Show("Couldn't run auto-update since there are no servers registered.", "No servers registered", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -702,8 +702,9 @@ namespace MeGUI
         {
             Random r = new Random();
             SortedList<int, string> shuffled = new SortedList<int, string>();
-            foreach (string file in serverList)
-                shuffled.Add(r.Next(),file);
+            // The first element is the name
+            for (int i = 1; i < serverList.Length; i++)
+                shuffled.Add(r.Next(),serverList[i]);
 
             string[] array = new string[shuffled.Count];
             shuffled.Values.CopyTo(array, 0);

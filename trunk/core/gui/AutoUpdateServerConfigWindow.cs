@@ -10,6 +10,10 @@ namespace MeGUI.core.gui
 {
     public partial class AutoUpdateServerConfigWindow : Form
     {
+        private string[][] serverLists;
+        private string oldTitle = null;
+        private int oldIndex = -1;
+
         public AutoUpdateServerConfigWindow()
         {
             InitializeComponent();
@@ -46,20 +50,64 @@ namespace MeGUI.core.gui
             }
         }
 
-        public string[] ServerList
+        public int ServerListIndex
+        {
+            get
+            {
+                return subList.SelectedIndex;
+            }
+            set
+            {
+                subList.SelectedIndex = value;
+            }
+        }
+
+        public string[][] ServerList
+        {
+            get
+            {
+                subList_SelectedIndexChanged(null, null);
+                return serverLists;
+            }
+            set
+            {
+                serverLists = value;
+                oldIndex = -1;
+                subList.Items.Clear();
+                
+                foreach (string[] sub in value)
+                    subList.Items.Add(sub[0]);
+
+                subList_SelectedIndexChanged(null, null);
+            }
+        }
+
+        private string[] littleServerList
         {
             get
             {
                 List<string> list = new List<string>();
+                list.Add(oldTitle);
                 foreach (string o in serverList.Items)
                     list.Add(o);
                 return list.ToArray();
             }
             set
             {
+                oldTitle = value[0];
                 serverList.Items.Clear();
                 serverList.Items.AddRange(value);
+                serverList.Items.RemoveAt(0);
             }
+        }
+
+        private void subList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (oldIndex > -1)
+                serverLists[oldIndex] = littleServerList;
+            oldIndex = subList.SelectedIndex;
+            if (oldIndex > -1) 
+                littleServerList = serverLists[subList.SelectedIndex];
         }
     }
 }
