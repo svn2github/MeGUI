@@ -1259,11 +1259,11 @@ namespace MeGUI
             filesToReplace.Add(iUpgradeableName, data);
         }
 
-        internal void AddFileToInstall(string file)
+/*        internal void AddFileToInstall(string file)
         {
             if (!otherFilesToInstall.Contains(file))
                 otherFilesToInstall.Add(file);
-        }
+        }*/
 
         internal void CloseSilent()
         {
@@ -1304,7 +1304,7 @@ namespace MeGUI
         #region variable declaration
         private bool restart = false;
         private Dictionary<string, CommandlineUpgradeData> filesToReplace = new Dictionary<string, CommandlineUpgradeData>();
-        private List<string> otherFilesToInstall = new List<string>();
+/*        private List<string> otherFilesToInstall = new List<string>();*/
         private DialogManager dialogManager;
         private string path; // path the program was started from
         private CommandLineGenerator gen; // class that generates commandlines
@@ -1329,12 +1329,16 @@ namespace MeGUI
         {
             foreach (string file in parser.failedUpgrades)
                 System.Windows.Forms.MessageBox.Show("Failed to upgrade '" + file + "'.", "Upgrade failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
-#warning turn the UpdateWindow here into an ITool
+
             if (parser.upgradeData.Count > 0)
             {
                 UpdateWindow update = new UpdateWindow(this, Settings);
                 foreach (string file in parser.upgradeData.Keys)
                     update.UpdateVersionNumber(file, parser.upgradeData[file]);
+                
+/*                if (update.InstallFiles(parser.filesToInstall)) // returns true if we need to restart afterwards
+                    parser.start = false;*/
+
                 update.SaveSettings();
             }
         }
@@ -1509,7 +1513,7 @@ namespace MeGUI
         }
         private void runRestarter()
         {
-            if (filesToReplace.Keys.Count == 0)
+            if (filesToReplace.Keys.Count == 0 /*&& otherFilesToInstall.Count == 0*/)
                 return;
             Process proc = new Process();
             ProcessStartInfo pstart = new ProcessStartInfo();
@@ -1524,10 +1528,10 @@ namespace MeGUI
                        filesToReplace[file].tempFilename[i]);
                 }
             }
-            foreach (string file in otherFilesToInstall)
+            /*foreach (string file in otherFilesToInstall)
             {
                 pstart.Arguments += string.Format("--then-install \"{0}\" ", file);
-            }
+            }*/
             if (restart)
                 pstart.Arguments += "--restart ";
             else

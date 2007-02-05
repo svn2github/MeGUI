@@ -31,7 +31,7 @@ namespace UpdateCopier
             StringBuilder commandline = new StringBuilder();
 
             Dictionary<string, CommandlineUpgradeData> filesToCopy = new Dictionary<string,CommandlineUpgradeData>();
-            
+            List<string> filesToInstall = new List<string>();
             bool restart = false;
             string appName = null;
             string lastComponentName = null;
@@ -74,6 +74,19 @@ namespace UpdateCopier
                         filesToCopy.Add(args[i+1], data);
                         lastComponentName = args[i+1];
                         i += 2;
+                    }
+                    else
+                    {
+                        showCommandlineErrorMessage(args);
+                        return;
+                    }
+                }
+                else if (args[i] == "--then-install")
+                {
+                    if (args.Length > i + 1)
+                    {
+                        filesToInstall.Add(args[i + 1]);
+                        i++;
                     }
                     else
                     {
@@ -126,6 +139,10 @@ namespace UpdateCopier
             }
             if (!restart)
                 commandline.Append("--dont-start");
+
+            foreach (string file in filesToInstall)
+                commandline.AppendFormat(@"--install ""{0}"" ", file);
+
             Process proc = new Process();
             ProcessStartInfo pstart = new ProcessStartInfo();
             pstart.FileName = appName;

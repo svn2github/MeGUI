@@ -7,6 +7,7 @@ namespace MeGUI
     public class CommandlineParser
     {
         public Dictionary<string, string> upgradeData = new Dictionary<string, string>();
+        public List<string> filesToInstall = new List<string>();
         public List<string> failedUpgrades = new List<string>();
         public bool start = true;
 
@@ -23,6 +24,15 @@ namespace MeGUI
                     }
                     else
                         return false;
+                }
+                else if (commandline[i] == "--install")
+                {
+                    if (commandline.Length > i + 1)
+                    {
+                        filesToInstall.Add(commandline[i + 1]);
+                        i++;
+                    }
+                    else return false;
                 }
                 else if (commandline[i] == "--upgrade-failed")
                 {
