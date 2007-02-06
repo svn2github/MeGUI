@@ -1,3 +1,6 @@
+Libs 0.2.4.1038:
+A new version of MediaInfo(Wrapper) (0.7.4.4) which works on Vista. Thanks to moadib2k and the MediaInfo team for getting this to work.
+
 0.2.4.1038
 Commit by berrinam:
     - Support update server branching
