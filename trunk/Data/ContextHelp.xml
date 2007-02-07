@@ -511,17 +511,12 @@ This can be used to change the frame rate of the video during encoding
 			<Default></Default>
 		</output>
 		<threads name="Number of Threads">
-			<Advanced>
-For optimum speed, this should be equivalent to the number of Virtual
-and Physical CPU cores, ie, set to 2 for a single core hyperthreading
-processor, or a dual core processor. Note: This will decrease speed
-if more threads than CPUs are used. (HT may reduce encoding speed
-in some instances). While increasing speed, this will slightly reduce
-codec efficiency (slices cannot use other slices for references,
-slices reset CABAC contexts).</Advanced>
-			<Basic>Enable parallel encoding by using more than 1 thread to increase speed (uses slices)</Basic>
-			<Recommended>1</Recommended>
-			<Default>1</Default>
+			<Advanced>For optimum speed, this should be left at 0, ie automatic detection.
+The automatic setting is 1.5 x logical CPUs. Threads increase encoding
+speed and negligibly negatively affect quality.</Advanced>
+			<Basic>Enable parallel encoding by using more than 1 thread to increase speed</Basic>
+			<Recommended>0 (auto)</Recommended>
+			<Default>0 (auto)</Default>
 		</threads>
 		<!--WARNING DOUBLE NEGATIVE-->
 		<no-asm name="Disable CPU Optimizations">
