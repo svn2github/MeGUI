@@ -611,8 +611,9 @@ namespace MeGUI
 					sb.Append("--bitrate " + xs.BitrateQuantizer + " ");
 					break;
 				case 1: // CQ
-					sb.Append("--qp " + xs.QuantizerCRF + " ");
-					break;
+                    if (xs.Lossless) sb.Append("--qp 0 ");
+                    else sb.Append("--qp " + xs.QuantizerCRF + " ");
+                    break;
 				case 2: // 2 pass first pass
 					sb.Append("--pass 1 --bitrate " + xs.BitrateQuantizer + " --stats " + "\"" + xs.Logfile + "\" ");
 					break;
