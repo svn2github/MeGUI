@@ -12,6 +12,10 @@ namespace MeGUI.packages.video.lmp4
 {
     public partial class lavcConfigurationPanel : MeGUI.core.details.video.VideoConfigurationPanel, Gettable<VideoCodecSettings>
     {
+        protected override string getCommandline()
+        {
+            return CommandLineGenerator.generateVideoCommandline(this.Settings, this.input, this.output, -1, -1);
+        }
         #region start / stop
         public lavcConfigurationPanel(MainForm mainForm, VideoInfo info)
             : base(mainForm, info)
@@ -98,19 +102,17 @@ namespace MeGUI.packages.video.lmp4
                     this.quantizerBlur.Maximum = (decimal)99.0;
                     break;
                 case 4: // automated twopass
-                    lavcTurbo.Checked = false;
                     lavcTurbo.Enabled = true;
                     logfileOpenButton.Enabled = true;
                     break;
                 case 5:  // 3 pass first pass
-                    lavcTurbo.Enabled = false;
+                    lavcTurbo.Enabled = true;
                     logfileOpenButton.Enabled = true;
                     lavcAvoidHighmotionBframes.Enabled = false;
                     this.quantizerBlur.Maximum = (decimal)99.0;
                     break;
                 case 6: // 3 pass 2nd pass
-                    lavcTurbo.Checked = false;
-                    lavcTurbo.Enabled = false;
+                    lavcTurbo.Enabled = true;
                     logfileOpenButton.Enabled = true;
                     break;
                 case 7: // 3 pass 3rd pass

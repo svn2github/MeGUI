@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
+using MeGUI.core.util;
 
 namespace MeGUI
 {
@@ -44,25 +45,21 @@ namespace MeGUI
                         counter++;
                         if (counter == 10)
                         {
-                            double percentage = 0;
+                            decimal percentage = 0;
                             su.NbFramesDone = getFrameNumber(line);
                             if (job.NbOfFrames == 0)
                             {
-                                if (System.IO.File.Exists(job.Output))
-                                {
-                                    System.IO.FileInfo fi = new System.IO.FileInfo(job.Output);
-                                    int currentSize = (int)(fi.Length / 1024);
-                                    percentage = (double)100 / (double)su.ProjectedFileSize * (double)currentSize;
-                                }
+                                FileSize currentSize = FileSize.Of2(job.Output) ?? FileSize.Empty;
+                                percentage = (currentSize / su.ProjectedFileSize) * 100M ?? 0M;
                             }
                             else
-                                percentage = (double)100 / (double)job.NbOfFrames * (double)su.NbFramesDone;
+                                percentage = 100M / (decimal)job.NbOfFrames * (decimal)su.NbFramesDone;
                             if (percentage > 100)
                                 percentage = 100; // to compensate for errors
                             su.PercentageDoneExact = percentage;
                             su.TimeElapsed = DateTime.Now.Ticks - job.Start.Ticks;
-                            su.FileSize = (long)(videoSize * percentage / 100) / 1024;
-                            su.AudioFileSize = (long)(audioSize1 * percentage / 100) / 1024;
+                            su.FileSize = videoSize * percentage / 100M;
+                            su.AudioFileSize = audioSize1 * percentage / 100M;
                             base.sendStatusUpdateToGUI(su);
                             counter = 0;
                         }

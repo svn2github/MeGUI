@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Diagnostics;
+using MeGUI.core.util;
 
 namespace MeGUI
 {
@@ -13,7 +14,7 @@ namespace MeGUI
         #region variables
         protected Process proc; // the encoder process
         protected string executable; // path and filename of the muxer executable to be used
-        protected long muxedInputSize = 0, videoSize = 0, audioSize1 = 0, audioSize2, subtitleSize;
+        protected FileSize? videoSize = null, muxedInputSize = null, audioSize1, audioSize2, subtitleSize;
         protected System.Threading.ManualResetEvent mre = new System.Threading.ManualResetEvent(true); // lock used to pause encoding
         protected System.Threading.ManualResetEvent stdoutDone = new System.Threading.ManualResetEvent(false);
         protected System.Threading.ManualResetEvent stderrDone = new System.Threading.ManualResetEvent(false);
@@ -119,30 +120,15 @@ namespace MeGUI
         void setProjectedFileSize()
         {
             MuxJob mjob = (MuxJob)job;
-            try
-            {
-                FileInfo fi = new FileInfo(job.Settings.VideoInput);
-                videoSize = fi.Length; 
-            }
-            catch (Exception) { videoSize = 0; }
-            try
-            {
-                FileInfo fi2 = new FileInfo(job.Settings.MuxedInput);
-                muxedInputSize = fi2.Length;
-            }
-            catch (Exception) { }
-            su.ProjectedFileSize = (int) ((videoSize + muxedInputSize)/ 1024L);
+            videoSize = FileSize.Of2(job.Settings.VideoInput);
+            muxedInputSize = FileSize.Of2(job.Settings.MuxedInput);
+            su.ProjectedFileSize = videoSize + muxedInputSize;
             int count = 0;
             foreach (object o in mjob.Settings.AudioStreams)
             {
                 SubStream audioStream = (SubStream)o;
-                int fileLength = 0;
-                try
-                {
-                    FileInfo fi = new FileInfo(audioStream.path);
-                    fileLength = (int)(fi.Length / 1024);
-                }
-                catch (Exception) { }
+                FileSize fileLength = FileSize.Of2(audioStream.path) ?? FileSize.Empty;
+
                 su.ProjectedFileSize += fileLength;
                 if (count == 0)
                     audioSize1 = fileLength;
@@ -153,13 +139,7 @@ namespace MeGUI
             foreach (object o in mjob.Settings.SubtitleStreams)
             {
                 SubStream subtitleStream = (SubStream)o;
-                try
-                {
-                    FileInfo fi = new FileInfo(subtitleStream.path);
-                    su.ProjectedFileSize += (int)(fi.Length / 1024);
-                    subtitleSize += fi.Length;
-                }
-                catch (Exception) { }
+                subtitleSize += FileSize.Of2(subtitleStream.path) ?? FileSize.Empty;
             }
         }
         #endregion
@@ -179,7 +159,7 @@ namespace MeGUI
             su = new StatusUpdate();
             su.JobName = job.Name;
             su.JobType = JobTypes.MUX;
-            su.FileSize = 0;
+            su.FileSize = FileSize.Empty;
             log = new StringBuilder();
             setProjectedFileSize();
             return true;

@@ -39,8 +39,8 @@ namespace MeGUI
                 int percentage = getPercentage(line);
                 su.PercentageDoneExact = percentage;
                 su.TimeElapsed = DateTime.Now.Ticks - job.Start.Ticks;
-                su.FileSize = (long)(videoSize * percentage / 100) / 1024;
-                su.AudioFileSize = (long)(audioSize1 * percentage / 100) / 1024;
+                su.FileSize = videoSize * percentage / 100M;
+                su.AudioFileSize = audioSize1 * percentage / 100M;
                 base.sendStatusUpdateToGUI(su);
             }
             else if (line.IndexOf("Error") != -1)

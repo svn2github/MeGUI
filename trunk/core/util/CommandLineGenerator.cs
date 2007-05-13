@@ -549,9 +549,10 @@ namespace MeGUI
                 sb.Append("-noclosed_gop ");
             if (xs.FrameDropRatio != 0)
                 sb.Append("-drop " + xs.FrameDropRatio + " ");
+
+            if (xs.NbBframes != 2) sb.Append("-max_bframes " + xs.NbBframes + " ");
             if (xs.NbBframes > 0)
             {
-                sb.Append("-max_bframes " + xs.NbBframes + " ");
                 if (xs.VHQForBframes)
                     sb.Append("-bvhq ");
                 if (xs.BQuantRatio != 150)
@@ -1007,7 +1008,7 @@ namespace MeGUI
 				sb.Append(" --chapters \"" + settings.ChapterFile + "\"");
 			
          	if (settings.SplitSize > 0)
-				sb.Append(" -split " + settings.SplitSize + "MB");
+				sb.Append(" --split " + (settings.SplitSize / 1024) + "M");
 			
          	sb.Append(" --no-clusters-in-meta-seek"); // ensures lower overhead
 

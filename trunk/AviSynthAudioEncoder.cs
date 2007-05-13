@@ -192,7 +192,7 @@ namespace MeGUI
         private void setProgress(double n, int currentSample)
         {
             StatusUpdate e = new StatusUpdate();
-            e.PercentageDoneExact = n;
+            e.PercentageDoneExact = (decimal)n;
             if (currentSample != -1)
             {
                 Int64 msec = currentSample;

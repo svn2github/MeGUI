@@ -24,6 +24,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.IO;
+using System.Diagnostics;
 
 namespace MeGUI
 {
@@ -955,6 +956,27 @@ namespace MeGUI
 		}
 		#endregion
 		#region data setters and getters
+        private void setFPSToBest(double fps)
+        {
+            double closestValue = (double)this.framerate.Items[0];
+            foreach (double f_value in this.framerate.Items)
+            {
+                if (Math.Abs(fps - f_value) < Math.Abs(closestValue - fps))
+                    closestValue = f_value;
+            }
+
+            if (Math.Abs(fps - closestValue) < (double)mainForm.Settings.AcceptableFPSError)
+            {
+                int index = this.framerate.Items.IndexOf(closestValue);
+                Debug.Assert(index != -1); // given that we just found it
+                this.framerate.SelectedIndex = index;
+            }
+            else
+            {
+                this.framerate.Items.Insert(0, fps);
+                this.framerate.SelectedIndex = 0;
+            }
+        }
 		/// <summary>
 		/// sets video, audio and codec defaults
 		/// </summary>
@@ -966,21 +988,13 @@ namespace MeGUI
 		/// <param name="audio2Bitrate">bitrate of the second audio track</param>
 		public void setDefaults(int nbFrames, double framerate, ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> codec, AudioStream audioStream1, AudioStream audioStream2)
 		{
-            double closestValue = (double)this.framerate.Items[0];
-            foreach (object value in this.framerate.Items)
-            {
-                double f_value = (double)value;
-                if (Math.Abs(framerate - f_value) < Math.Abs(closestValue - f_value))
-                    closestValue = f_value;
-            }
+            setFPSToBest(framerate);
             try
             {
                 bframes.Checked = codec.GetCurrentSettings().NbBframes > 0;
             }
             catch (Exception) { }
-            int index = this.framerate.Items.IndexOf(closestValue);
-			if (index != -1)
-				this.framerate.SelectedIndex = index;
+
 			if (nbFrames > 0)
 				this.nbFrames.Value = nbFrames;
 

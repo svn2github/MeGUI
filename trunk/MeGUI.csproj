@@ -250,6 +250,12 @@
     <Compile Include="core\gui\FileBar.Designer.cs">
       <DependentUpon>FileBar.cs</DependentUpon>
     </Compile>
+    <Compile Include="core\gui\FileSizeBar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="core\gui\FileSizeBar.Designer.cs">
+      <DependentUpon>FileSizeBar.cs</DependentUpon>
+    </Compile>
     <Compile Include="core\gui\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -298,11 +304,13 @@
     <Compile Include="core\plugins\interfaces\Profile.cs" />
     <Compile Include="core\util\CommandLineGenerator.cs" />
     <Compile Include="core\util\EnumProxy.cs" />
+    <Compile Include="core\util\FileSize.cs" />
     <Compile Include="core\util\FileUtil.cs" />
     <Compile Include="core\util\FilmCutter.cs" />
     <Compile Include="core\util\GenericRegisterer.cs" />
     <Compile Include="core\util\JobUtil.cs" />
     <Compile Include="core\util\LanguageSelectionContainer.cs" />
+    <Compile Include="core\util\NotifyCounter.cs" />
     <Compile Include="core\util\ScriptServer.cs" />
     <Compile Include="core\util\Shutdown.cs" />
     <Compile Include="core\util\VideoUtil.cs" />
@@ -370,9 +378,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="packages\AvisynthWrapper.cs" />
-    <Compile Include="packages\avsConfigurationDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="packages\mux\avi\DivXMuxer.cs" />
     <Compile Include="packages\mux\mkv\MkvMergeMuxer.cs" />
     <Compile Include="packages\mux\mp4\MP4BoxMuxer.cs" />
@@ -522,6 +527,10 @@
       <DependentUpon>FileBar.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="core\gui\FileSizeBar.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>FileSizeBar.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="core\gui\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -594,10 +603,6 @@
       <DependentUpon>AviSynthWindow.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="packages\avsConfigurationDialog.resx">
-      <DependentUpon>avsConfigurationDialog.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="packages\tools\autoencode\AutoEncodeDefaults.resx">
       <DependentUpon>AutoEncodeDefaults.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -641,6 +646,10 @@
     <EmbeddedResource Include="packages\tools\vobsub\VobSubIndexWindow.resx">
       <DependentUpon>VobSubIndexWindow.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="packages\video\lmp4\lavcConfigurationPanel.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>lavcConfigurationPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="packages\video\snow\snowConfigurationPanel.resx">
       <SubType>Designer</SubType>

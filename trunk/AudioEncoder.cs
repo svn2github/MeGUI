@@ -27,6 +27,7 @@ using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using MeGUI.core.util;
 
 
 namespace MeGUI
@@ -61,11 +62,7 @@ namespace MeGUI
         protected void sendStatusUpdateToGUI(StatusUpdate su)
         {
             su.TimeElapsed = DateTime.Now.Ticks - job.Start.Ticks;
-            if (File.Exists(job.Output))
-            {
-                FileInfo fi = new FileInfo(job.Output);
-                su.FileSize = fi.Length / 1024;
-            }
+            su.FileSize = FileSize.Of2(job.Output);
             if (statusUpdate != null)
                 statusUpdate(su);
         }

@@ -118,7 +118,7 @@ namespace MeGUI
 			set {bitrate = value;}
 		}
 		/// <summary>
-		/// projected mp4 muxing overhead for this job
+		/// projected mp4 muxing overhead for this job in bytes / frame
 		/// </summary>
 		public double Overhead
 		{

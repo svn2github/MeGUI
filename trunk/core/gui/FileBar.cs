@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
+using MeGUI.core.util;
 
 namespace MeGUI
 {
@@ -40,17 +41,18 @@ namespace MeGUI
             set { title = value; }
         }
 
-        bool raiseEvent = true;
+        NotifyCounter raiseEvent = new NotifyCounter();
 
         public string Filename
         {
             get { return filename.Text; }
             set
             {
-                raiseEvent = false;
-                filename.Text = value;
-                oldName = value;
-                raiseEvent = false;
+                using (IDisposable wrapper = raiseEvent.Wrap())
+                {
+                    filename.Text = value;
+                    oldName = value;
+                }
             }
         }
 
@@ -78,39 +80,40 @@ namespace MeGUI
             {
                 FolderBrowserDialog dialog = new FolderBrowserDialog();
                 if (dialog.ShowDialog() == DialogResult.OK)
-                {
-                    oldName = filename.Text;
-                    filename.Text = dialog.SelectedPath;
-                    FileSelected(this, new FileBarEventArgs(oldName, filename.Text));
-                    oldName = filename.Text;
-                }
+                    setFilename(dialog.SelectedPath);
             }
             else
             {
-                FileDialog dialog;
-                if (saveMode)
-                {
-                    dialog = new SaveFileDialog();
-                }
-                else
-                {
-                    dialog = new OpenFileDialog();
-                }
+                FileDialog dialog = saveMode ?
+                    (FileDialog)new SaveFileDialog() :
+                    (FileDialog)new OpenFileDialog();
+
                 dialog.Filter = filter;
                 dialog.Title = title;
                 if (dialog.ShowDialog() == DialogResult.OK)
-                {
-                    oldName = filename.Text;
-                    filename.Text = dialog.FileName;
-                    if (FileSelected != null) FileSelected(this, new FileBarEventArgs(oldName, filename.Text));
-                    oldName = filename.Text;
-                }
+                    setFilename(dialog.FileName);
             }
+        }
+
+        private void setFilename(string filename)
+        {
+            oldName = this.filename.Text;
+            using (IDisposable a = raiseEvent.Wrap())
+            {
+                this.filename.Text = filename;
+            }
+            triggerEvent();
+        }
+
+        private void triggerEvent()
+        {
+            if (raiseEvent.Ready && FileSelected != null) FileSelected(this, new FileBarEventArgs(oldName, filename.Text));
+            oldName = filename.Text;
         }
 
         private void filename_TextChanged(object sender, EventArgs e)
         {
-            if (raiseEvent && FileSelected != null) FileSelected(this, new FileBarEventArgs(oldName, filename.Text));
+            triggerEvent();
         }
     }
     public class FileBarEventArgs : EventArgs

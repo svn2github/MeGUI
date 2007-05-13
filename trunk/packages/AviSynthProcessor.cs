@@ -53,7 +53,7 @@ namespace MeGUI
             while (!aborted && position < stup.NbFramesTotal)
             {
                 stup.NbFramesDone = position;
-                stup.PercentageDoneExact = ((double)stup.NbFramesDone / (double)stup.NbFramesTotal) * 100.0;
+                stup.PercentageDoneExact = ((decimal)stup.NbFramesDone / (decimal)stup.NbFramesTotal) * 100M;
                 stup.TimeElapsed = DateTime.Now.Ticks - job.Start.Ticks;
                 long now = DateTime.Now.Ticks;
                 if (stup.NbFramesDone >= lastFPSUpdateFrame + 100) // after 100 frames, recalculate the FPS

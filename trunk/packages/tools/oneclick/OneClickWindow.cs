@@ -1201,7 +1201,7 @@ namespace MeGUI
                     new DeinterlaceFilter("Error", "#An error occurred in source detection. Doing no processing")};
             }
             else
-                this.filters = filters;
+                this.filters = ScriptServer.GetDeinterlacers(info).ToArray();
             finished = true;
         }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
+using MeGUI.core.util;
 
 namespace MeGUI
 {
@@ -30,7 +31,8 @@ namespace MeGUI
                 if (!Path.GetExtension(job.Input).ToLower().Equals(".mp4"))
                 {
                     double overhead = mjob.Overhead * (double)mjob.NbOfFrames;
-                    su.ProjectedFileSize += (int)(overhead / 1024);
+                    if (su.ProjectedFileSize.HasValue)
+                        su.ProjectedFileSize += new FileSize((ulong)overhead);
                 }
                 return true;
             }
@@ -87,20 +89,20 @@ namespace MeGUI
                     }
                     else
                         su.AudioPosition = "importing";
-                    su.PercentageDoneExact = (double)percentage;
+                    su.PercentageDoneExact = percentage;
                     su.TimeElapsed = DateTime.Now.Ticks - job.Start.Ticks;
                     base.sendStatusUpdateToGUI(su);
                     break;
                 case LineType.splitting:
                     percentage = getPercentage(line);
-                    su.PercentageDoneExact = (double)percentage;
+                    su.PercentageDoneExact = percentage;
                     su.TimeElapsed = DateTime.Now.Ticks - job.Start.Ticks;
                     su.AudioPosition = "splitting";
                     base.sendStatusUpdateToGUI(su);
                     break;
                 case LineType.writing:
                     percentage = getPercentage(line);
-                    su.PercentageDoneExact = (double)percentage;
+                    su.PercentageDoneExact = percentage;
                     su.TimeElapsed = DateTime.Now.Ticks - job.Start.Ticks;
                     su.AudioPosition = "writing";
                     base.sendStatusUpdateToGUI(su);
@@ -186,27 +188,40 @@ namespace MeGUI
         {
             try
             {
-                FileInfo fi = new FileInfo(job.Output);
-                long finalMP4Size = fi.Length;
-                long videoInMP4Size = fi.Length - this.audioSize1 - this.audioSize2 - this.subtitleSize;
-                fi = new FileInfo(job.Input);
+                FileSize len = FileSize.Of(job.Output);
+                FileSize Empty = FileSize.Empty;
+                FileSize videoInMP4Size = len - 
+                    (audioSize1 ?? Empty) - 
+                    (audioSize2 ?? Empty) - 
+                    (subtitleSize ?? Empty);
                 if (!Path.GetExtension(job.Input).ToLower().Equals(".mp4"))
                 {
-                    long rawSize = fi.Length;
-                    long overhead = videoInMP4Size - rawSize;
-                    double overheadPerFrame = (double)overhead / job.NbOfFrames;
+                    FileSize rawSize = FileSize.Of(job.Input);
+                    FileSize overhead = videoInMP4Size - rawSize;
+                    decimal overheadPerFrame = (decimal)overhead.Bytes / (decimal)job.NbOfFrames;
                     log.Append("MP4 muxing info:\r\n");
-                    log.Append("Size of audio track 1: " + this.audioSize1 + " bytes\r\n");
-                    log.Append("Size of audio track 2: " + this.audioSize2 + " bytes\r\n");
-                    log.Append("Size of raw video stream: " + rawSize + " bytes\r\n");
-                    log.Append("Size of final MP4 file: " + finalMP4Size + " bytes\r\n");
-                    log.Append("Size of video in MP4 file: " + videoInMP4Size + " bytes\r\n");
-                    log.Append("Total overhead: " + overhead + " bytes\r\n");
-                    log.Append("Overhead per frame: " + overheadPerFrame + " bytes\r\n\r\n");
-                    log.Append("source information\r\n");
-                    log.Append("codec: " + job.Codec + "\r\n");
-                    log.Append("number of b-frames: " + job.NbOfBFrames + "\r\n");
-                    log.Append("number of source frames: " + job.NbOfFrames);
+                    log.AppendFormat("Size of audio track 1: {1}{0}" +
+                        "Size of audio track 2: {2}{0}" +
+                        "Size of raw video stream: {3}{0}" +
+                        "Size of final MP4 file: {4}{0}" +
+                        "Size of video in MP4 file: {5}{0}" +
+                        "Total overhead: {6}{0}" +
+                        "Overhead per frame: {7}{0}" +
+                        "source information{0}" +
+                        "codec: {8}{0}" +
+                        "number of b-frames: {9}{0}" +
+                        "number of source frames: {10}{0}",
+                        Environment.NewLine,
+                        audioSize1 ?? Empty,
+                        audioSize1 ?? Empty,
+                        rawSize,
+                        len,
+                        videoInMP4Size,
+                        overhead,
+                        overheadPerFrame,
+                        job.Codec,
+                        job.NbOfBFrames,
+                        job.NbOfFrames);
                 }
             }
             catch (Exception e)

@@ -1,3 +1,21 @@
+0.2.4.1040
+Commit by berrinam:
+    - Small new feature: AutoEncode has better filesize choosers.
+        (addresses 1654588)
+    - If the bitrate calculator doesn't contain an appropriate framerate, one is added
+        (fixes 1676934, includes code from there)
+    - Removed the unused avsConfigurationDialog.cs
+    - Fixed 1652664 (no commandline previews)
+    - Fixed 1653755 (Muxer reports audio in wrong notation)
+    - Fixed 1679572 (Turbo Mode in LMP4 multipass sometimes not selectable)
+    - Fixed 1696067 (Video encoding doesn't use the specified filename)
+        (a duplicate of 1653186: Video Output not passed to commandline)
+    - Fixed 1688789 (One Click Encoder Crashes with Automatic Deinterlace checked)
+    - Fixed 1675408 (mkvmerge split option incorrect)
+    - Fixed 1666878 (Vobsubber changing output doesn't work)
+    - Fixed 1659596 (Load DLL in Avisynth configuration dialog)
+    - Fixed 1652312 (xvid b-frames default wrong)
+    
 0.2.4.1039
 Commint by Sharx1976:
     - Fixed 1672842 (x264 lossless broken)

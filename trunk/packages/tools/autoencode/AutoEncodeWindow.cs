@@ -27,6 +27,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Text;
 using MeGUI.core.plugins.interfaces;
+using MeGUI.core.util;
 
 namespace MeGUI
 {
@@ -49,23 +50,17 @@ namespace MeGUI
 		private System.Windows.Forms.GroupBox AutomaticEncodingGroup;
 		private System.Windows.Forms.Label VideoFileSizeLabel;
 		private System.Windows.Forms.Label StorageMediumLabel;
-		private System.Windows.Forms.RadioButton FileSizeRadio;
-        private System.Windows.Forms.Label SplitSizeLabel;
-		private System.Windows.Forms.Label AverageBitrateLabel;
-		private System.Windows.Forms.Label FileSizeLabel;
+        private System.Windows.Forms.RadioButton FileSizeRadio;
+        private System.Windows.Forms.Label AverageBitrateLabel;
         private System.Windows.Forms.GroupBox OutputGroupBox;
         private System.Windows.Forms.TextBox muxedOutput;
 		private System.Windows.Forms.SaveFileDialog saveDialog;
 		private System.Windows.Forms.Button muxedOutputButton;
-		private System.Windows.Forms.CheckBox splitOutput;
-		private System.Windows.Forms.TextBox splitSize;
+        private System.Windows.Forms.CheckBox splitOutput;
 		private System.Windows.Forms.Button queueButton;
-		private System.Windows.Forms.Button cancelButton;
-		private System.Windows.Forms.TextBox muxedSizeMBs;
+        private System.Windows.Forms.Button cancelButton;
 		private System.Windows.Forms.ComboBox sizeSelection;
         private System.Windows.Forms.TextBox projectedBitrateKBits;
-		private System.Windows.Forms.TextBox videoSizeKB;
-		private System.Windows.Forms.Label videoSizeLabel;
 		private System.Windows.Forms.CheckBox addSubsNChapters;
 		private System.Windows.Forms.RadioButton averageBitrateRadio;
         private RadioButton noTargetRadio;
@@ -76,6 +71,11 @@ namespace MeGUI
         private MuxProvider muxProvider;
         private VideoStream videoStream;
 		#endregion
+        private MeGUI.core.gui.FileSizeBar muxedSize;
+        private MeGUI.core.gui.FileSizeBar videoSize;
+        private MeGUI.core.gui.FileSizeBar splitSize;
+
+
         private IContainer components;
 		#region start / stop
 		public AutoEncodeWindow()
@@ -134,12 +134,14 @@ namespace MeGUI
                 if (mainForm.Settings.AedSettings.SplitOutput)
                 {
                     splitOutput.Checked = true;
-                    splitSize.Text = mainForm.Settings.AedSettings.SplitSize.ToString();
+                    splitSize.Value = new FileSize(Unit.MB,
+                        mainForm.Settings.AedSettings.SplitSize);
                 }
-                if (mainForm.Settings.AedSettings.FileSizeMode)
+                if (mainForm.Settings.AedSettings.FileSizeMode && FileSizeRadio.Enabled)
                 {
                     FileSizeRadio.Checked = true;
-                    muxedSizeMBs.Text = mainForm.Settings.AedSettings.FileSize.ToString();
+                    muxedSize.Value = new FileSize(Unit.MB,
+                        mainForm.Settings.AedSettings.FileSize);
                 }
                 else if (mainForm.Settings.AedSettings.BitrateMode)
                 {
@@ -192,8 +194,6 @@ namespace MeGUI
             this.components = new System.ComponentModel.Container();
             this.AutomaticEncodingGroup = new System.Windows.Forms.GroupBox();
             this.noTargetRadio = new System.Windows.Forms.RadioButton();
-            this.videoSizeLabel = new System.Windows.Forms.Label();
-            this.videoSizeKB = new System.Windows.Forms.TextBox();
             this.VideoFileSizeLabel = new System.Windows.Forms.Label();
             this.sizeSelection = new System.Windows.Forms.ComboBox();
             this.StorageMediumLabel = new System.Windows.Forms.Label();
@@ -201,11 +201,7 @@ namespace MeGUI
             this.FileSizeRadio = new System.Windows.Forms.RadioButton();
             this.projectedBitrateKBits = new System.Windows.Forms.TextBox();
             this.AverageBitrateLabel = new System.Windows.Forms.Label();
-            this.muxedSizeMBs = new System.Windows.Forms.TextBox();
-            this.FileSizeLabel = new System.Windows.Forms.Label();
             this.splitOutput = new System.Windows.Forms.CheckBox();
-            this.splitSize = new System.Windows.Forms.TextBox();
-            this.SplitSizeLabel = new System.Windows.Forms.Label();
             this.queueButton = new System.Windows.Forms.Button();
             this.OutputGroupBox = new System.Windows.Forms.GroupBox();
             this.container = new System.Windows.Forms.ComboBox();
@@ -217,15 +213,18 @@ namespace MeGUI
             this.saveDialog = new System.Windows.Forms.SaveFileDialog();
             this.addSubsNChapters = new System.Windows.Forms.CheckBox();
             this.defaultToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.splitSize = new MeGUI.core.gui.FileSizeBar();
+            this.videoSize = new MeGUI.core.gui.FileSizeBar();
+            this.muxedSize = new MeGUI.core.gui.FileSizeBar();
             this.AutomaticEncodingGroup.SuspendLayout();
             this.OutputGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // AutomaticEncodingGroup
             // 
+            this.AutomaticEncodingGroup.Controls.Add(this.videoSize);
+            this.AutomaticEncodingGroup.Controls.Add(this.muxedSize);
             this.AutomaticEncodingGroup.Controls.Add(this.noTargetRadio);
-            this.AutomaticEncodingGroup.Controls.Add(this.videoSizeLabel);
-            this.AutomaticEncodingGroup.Controls.Add(this.videoSizeKB);
             this.AutomaticEncodingGroup.Controls.Add(this.VideoFileSizeLabel);
             this.AutomaticEncodingGroup.Controls.Add(this.sizeSelection);
             this.AutomaticEncodingGroup.Controls.Add(this.StorageMediumLabel);
@@ -233,11 +232,9 @@ namespace MeGUI
             this.AutomaticEncodingGroup.Controls.Add(this.FileSizeRadio);
             this.AutomaticEncodingGroup.Controls.Add(this.projectedBitrateKBits);
             this.AutomaticEncodingGroup.Controls.Add(this.AverageBitrateLabel);
-            this.AutomaticEncodingGroup.Controls.Add(this.muxedSizeMBs);
-            this.AutomaticEncodingGroup.Controls.Add(this.FileSizeLabel);
             this.AutomaticEncodingGroup.Location = new System.Drawing.Point(12, 86);
             this.AutomaticEncodingGroup.Name = "AutomaticEncodingGroup";
-            this.AutomaticEncodingGroup.Size = new System.Drawing.Size(424, 104);
+            this.AutomaticEncodingGroup.Size = new System.Drawing.Size(456, 104);
             this.AutomaticEncodingGroup.TabIndex = 17;
             this.AutomaticEncodingGroup.TabStop = false;
             this.AutomaticEncodingGroup.Text = "Size and Bitrate";
@@ -255,26 +252,9 @@ namespace MeGUI
             this.noTargetRadio.UseVisualStyleBackColor = true;
             this.noTargetRadio.CheckedChanged += new System.EventHandler(this.calculationMode_CheckedChanged);
             // 
-            // videoSizeLabel
-            // 
-            this.videoSizeLabel.Location = new System.Drawing.Point(376, 47);
-            this.videoSizeLabel.Name = "videoSizeLabel";
-            this.videoSizeLabel.Size = new System.Drawing.Size(24, 13);
-            this.videoSizeLabel.TabIndex = 20;
-            this.videoSizeLabel.Text = "KB";
-            // 
-            // videoSizeKB
-            // 
-            this.videoSizeKB.Enabled = false;
-            this.videoSizeKB.Location = new System.Drawing.Point(308, 44);
-            this.videoSizeKB.Name = "videoSizeKB";
-            this.videoSizeKB.Size = new System.Drawing.Size(64, 21);
-            this.videoSizeKB.TabIndex = 19;
-            this.videoSizeKB.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textField_KeyPress);
-            // 
             // VideoFileSizeLabel
             // 
-            this.VideoFileSizeLabel.Location = new System.Drawing.Point(222, 47);
+            this.VideoFileSizeLabel.Location = new System.Drawing.Point(250, 47);
             this.VideoFileSizeLabel.Name = "VideoFileSizeLabel";
             this.VideoFileSizeLabel.Size = new System.Drawing.Size(82, 18);
             this.VideoFileSizeLabel.TabIndex = 18;
@@ -283,7 +263,8 @@ namespace MeGUI
             // sizeSelection
             // 
             this.sizeSelection.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.sizeSelection.Location = new System.Drawing.Point(308, 16);
+            this.sizeSelection.Enabled = false;
+            this.sizeSelection.Location = new System.Drawing.Point(341, 17);
             this.sizeSelection.Name = "sizeSelection";
             this.sizeSelection.Size = new System.Drawing.Size(64, 21);
             this.sizeSelection.TabIndex = 0;
@@ -291,7 +272,7 @@ namespace MeGUI
             // 
             // StorageMediumLabel
             // 
-            this.StorageMediumLabel.Location = new System.Drawing.Point(222, 20);
+            this.StorageMediumLabel.Location = new System.Drawing.Point(246, 17);
             this.StorageMediumLabel.Name = "StorageMediumLabel";
             this.StorageMediumLabel.Size = new System.Drawing.Size(90, 18);
             this.StorageMediumLabel.TabIndex = 17;
@@ -299,9 +280,10 @@ namespace MeGUI
             // 
             // averageBitrateRadio
             // 
-            this.averageBitrateRadio.Location = new System.Drawing.Point(16, 47);
+            this.averageBitrateRadio.AutoSize = true;
+            this.averageBitrateRadio.Location = new System.Drawing.Point(16, 45);
             this.averageBitrateRadio.Name = "averageBitrateRadio";
-            this.averageBitrateRadio.Size = new System.Drawing.Size(100, 18);
+            this.averageBitrateRadio.Size = new System.Drawing.Size(101, 17);
             this.averageBitrateRadio.TabIndex = 16;
             this.averageBitrateRadio.Text = "Average Bitrate";
             this.averageBitrateRadio.CheckedChanged += new System.EventHandler(this.calculationMode_CheckedChanged);
@@ -320,69 +302,36 @@ namespace MeGUI
             // projectedBitrateKBits
             // 
             this.projectedBitrateKBits.Enabled = false;
-            this.projectedBitrateKBits.Location = new System.Drawing.Point(118, 44);
+            this.projectedBitrateKBits.Location = new System.Drawing.Point(119, 41);
             this.projectedBitrateKBits.Name = "projectedBitrateKBits";
-            this.projectedBitrateKBits.Size = new System.Drawing.Size(64, 21);
+            this.projectedBitrateKBits.Size = new System.Drawing.Size(85, 21);
             this.projectedBitrateKBits.TabIndex = 9;
             this.projectedBitrateKBits.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textField_KeyPress);
             this.projectedBitrateKBits.TextChanged += new System.EventHandler(this.projectedBitrate_TextChanged);
             // 
             // AverageBitrateLabel
             // 
-            this.AverageBitrateLabel.Location = new System.Drawing.Point(187, 47);
+            this.AverageBitrateLabel.AutoSize = true;
+            this.AverageBitrateLabel.Location = new System.Drawing.Point(207, 47);
             this.AverageBitrateLabel.Name = "AverageBitrateLabel";
-            this.AverageBitrateLabel.Size = new System.Drawing.Size(47, 23);
+            this.AverageBitrateLabel.Size = new System.Drawing.Size(33, 13);
             this.AverageBitrateLabel.TabIndex = 10;
             this.AverageBitrateLabel.Text = "kbit/s";
             // 
-            // muxedSizeMBs
-            // 
-            this.muxedSizeMBs.Location = new System.Drawing.Point(118, 16);
-            this.muxedSizeMBs.Name = "muxedSizeMBs";
-            this.muxedSizeMBs.Size = new System.Drawing.Size(64, 21);
-            this.muxedSizeMBs.TabIndex = 1;
-            this.muxedSizeMBs.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textField_KeyPress);
-            this.muxedSizeMBs.TextChanged += new System.EventHandler(this.muxedSize_TextChanged);
-            // 
-            // FileSizeLabel
-            // 
-            this.FileSizeLabel.Location = new System.Drawing.Point(187, 20);
-            this.FileSizeLabel.Name = "FileSizeLabel";
-            this.FileSizeLabel.Size = new System.Drawing.Size(24, 13);
-            this.FileSizeLabel.TabIndex = 4;
-            this.FileSizeLabel.Text = "MB";
-            // 
             // splitOutput
             // 
-            this.splitOutput.Location = new System.Drawing.Point(192, 21);
+            this.splitOutput.AutoSize = true;
+            this.splitOutput.Location = new System.Drawing.Point(212, 22);
             this.splitOutput.Name = "splitOutput";
-            this.splitOutput.Size = new System.Drawing.Size(97, 18);
+            this.splitOutput.Size = new System.Drawing.Size(83, 17);
             this.splitOutput.TabIndex = 21;
             this.splitOutput.Text = "Split Output";
             this.splitOutput.CheckedChanged += new System.EventHandler(this.splitOutput_CheckedChanged);
             // 
-            // splitSize
-            // 
-            this.splitSize.Enabled = false;
-            this.splitSize.Location = new System.Drawing.Point(308, 20);
-            this.splitSize.Name = "splitSize";
-            this.splitSize.Size = new System.Drawing.Size(64, 21);
-            this.splitSize.TabIndex = 13;
-            this.splitSize.Text = "0";
-            this.splitSize.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textField_KeyPress);
-            // 
-            // SplitSizeLabel
-            // 
-            this.SplitSizeLabel.Location = new System.Drawing.Point(381, 23);
-            this.SplitSizeLabel.Name = "SplitSizeLabel";
-            this.SplitSizeLabel.Size = new System.Drawing.Size(32, 16);
-            this.SplitSizeLabel.TabIndex = 14;
-            this.SplitSizeLabel.Text = "MB";
-            // 
             // queueButton
             // 
             this.queueButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.queueButton.Location = new System.Drawing.Point(280, 196);
+            this.queueButton.Location = new System.Drawing.Point(308, 196);
             this.queueButton.Name = "queueButton";
             this.queueButton.Size = new System.Drawing.Size(74, 23);
             this.queueButton.TabIndex = 8;
@@ -391,17 +340,16 @@ namespace MeGUI
             // 
             // OutputGroupBox
             // 
+            this.OutputGroupBox.Controls.Add(this.splitSize);
             this.OutputGroupBox.Controls.Add(this.container);
             this.OutputGroupBox.Controls.Add(this.splitOutput);
             this.OutputGroupBox.Controls.Add(this.containerLabel);
             this.OutputGroupBox.Controls.Add(this.muxedOutputLabel);
             this.OutputGroupBox.Controls.Add(this.muxedOutput);
             this.OutputGroupBox.Controls.Add(this.muxedOutputButton);
-            this.OutputGroupBox.Controls.Add(this.SplitSizeLabel);
-            this.OutputGroupBox.Controls.Add(this.splitSize);
             this.OutputGroupBox.Location = new System.Drawing.Point(10, 4);
             this.OutputGroupBox.Name = "OutputGroupBox";
-            this.OutputGroupBox.Size = new System.Drawing.Size(424, 76);
+            this.OutputGroupBox.Size = new System.Drawing.Size(458, 76);
             this.OutputGroupBox.TabIndex = 18;
             this.OutputGroupBox.TabStop = false;
             this.OutputGroupBox.Text = "Output Options";
@@ -410,9 +358,9 @@ namespace MeGUI
             // 
             this.container.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.container.FormattingEnabled = true;
-            this.container.Location = new System.Drawing.Point(118, 20);
+            this.container.Location = new System.Drawing.Point(97, 20);
             this.container.Name = "container";
-            this.container.Size = new System.Drawing.Size(64, 21);
+            this.container.Size = new System.Drawing.Size(85, 21);
             this.container.TabIndex = 25;
             this.container.SelectedIndexChanged += new System.EventHandler(this.container_SelectedIndexChanged);
             // 
@@ -436,15 +384,15 @@ namespace MeGUI
             // 
             // muxedOutput
             // 
-            this.muxedOutput.Location = new System.Drawing.Point(118, 48);
+            this.muxedOutput.Location = new System.Drawing.Point(97, 48);
             this.muxedOutput.Name = "muxedOutput";
             this.muxedOutput.ReadOnly = true;
-            this.muxedOutput.Size = new System.Drawing.Size(256, 21);
+            this.muxedOutput.Size = new System.Drawing.Size(322, 21);
             this.muxedOutput.TabIndex = 0;
             // 
             // muxedOutputButton
             // 
-            this.muxedOutputButton.Location = new System.Drawing.Point(381, 46);
+            this.muxedOutputButton.Location = new System.Drawing.Point(425, 46);
             this.muxedOutputButton.Name = "muxedOutputButton";
             this.muxedOutputButton.Size = new System.Drawing.Size(24, 23);
             this.muxedOutputButton.TabIndex = 19;
@@ -454,7 +402,7 @@ namespace MeGUI
             // cancelButton
             // 
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(364, 196);
+            this.cancelButton.Location = new System.Drawing.Point(391, 195);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(72, 23);
             this.cancelButton.TabIndex = 19;
@@ -471,11 +419,36 @@ namespace MeGUI
                     "o be added to your output, as well as assign audio/subtitle languages and assign" +
                     " a chapter file");
             // 
+            // splitSize
+            // 
+            this.splitSize.CurrentUnit = MeGUI.core.util.Unit.MB;
+            this.splitSize.Enabled = false;
+            this.splitSize.Location = new System.Drawing.Point(304, 20);
+            this.splitSize.Name = "splitSize";
+            this.splitSize.Size = new System.Drawing.Size(148, 24);
+            this.splitSize.TabIndex = 0;
+            // 
+            // videoSize
+            // 
+            this.videoSize.CurrentUnit = MeGUI.core.util.Unit.KB;
+            this.videoSize.Location = new System.Drawing.Point(341, 45);
+            this.videoSize.Name = "videoSize";
+            this.videoSize.Size = new System.Drawing.Size(106, 24);
+            this.videoSize.TabIndex = 24;
+            // 
+            // muxedSize
+            // 
+            this.muxedSize.CurrentUnit = MeGUI.core.util.Unit.MB;
+            this.muxedSize.Location = new System.Drawing.Point(119, 14);
+            this.muxedSize.Name = "muxedSize";
+            this.muxedSize.Size = new System.Drawing.Size(115, 24);
+            this.muxedSize.TabIndex = 23;
+            this.muxedSize.Load += new System.EventHandler(this.fileSizeBar1_Load);
+            // 
             // AutoEncodeWindow
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
-            this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(444, 223);
+            this.ClientSize = new System.Drawing.Size(471, 226);
             this.Controls.Add(this.addSubsNChapters);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.OutputGroupBox);
@@ -505,7 +478,7 @@ namespace MeGUI
         private void sizeSelection_SelectedIndexChanged(object sender, System.EventArgs e)
 		{
 			int sizeMBs = calc.getOutputSizeKBs(sizeSelection.SelectedIndex) / 1024;
-			this.muxedSizeMBs.Text = sizeMBs.ToString();
+			muxedSize.Value = new FileSize(Unit.MB, sizeMBs);
 		}
         /// <summary>
         /// adjusts the output extension when the container is being changed
@@ -580,11 +553,12 @@ namespace MeGUI
 		/// <summary>
 		/// sets the projected video bitrate field in the GUI
 		/// </summary>
-		private void setVideoBitrate()
-		{
+        private void setVideoBitrate()
+        {
             try
             {
-                long desiredSizeBytes = Int64.Parse(muxedSizeMBs.Text) * 1024L * 1024L;
+                long desiredSizeBytes;
+                checked { desiredSizeBytes = (long)muxedSize.Value.Bytes; }
                 long videoSize;
                 int bitrateKbits = calc.CalculateBitrateKBits(videoStream.Settings.Codec,
                     (videoStream.Settings.NbBframes > 0),
@@ -595,13 +569,13 @@ namespace MeGUI
                     videoStream.Framerate,
                     out videoSize);
 #warning check whether codecs use k=1000 or k=1024 for kbits // kick those that still use 1024...
-                this.videoSizeKB.Text = videoSize.ToString();
+                this.videoSize.Value = new FileSize(Unit.KB, videoSize);
                 this.projectedBitrateKBits.Text = bitrateKbits.ToString();
             }
             catch (Exception)
             {
                 this.projectedBitrateKBits.Text = "";
-                this.videoSizeKB.Text = "";
+                videoSize.Value = FileSize.Empty;
             }
         }
 
@@ -623,13 +597,13 @@ namespace MeGUI
                     videoStream.NumberOfFrames,
                     videoStream.Framerate,
                     out rawVideoSize) / 1024L ;
-                this.videoSizeKB.Text = rawVideoSize.ToString();
-                this.muxedSizeMBs.Text = outputSize.ToString();
+                this.videoSize.Value = new FileSize(Unit.KB, rawVideoSize);
+                this.muxedSize.Value = new FileSize(Unit.MB, outputSize);
             }
             catch (Exception)
             {
-				this.videoSizeKB.Text = "";
-				this.muxedSizeMBs.Text = "";
+                videoSize.Value = FileSize.Empty;
+                muxedSize.Value = FileSize.Empty;
 			}
 		}
 		#region audio
@@ -663,18 +637,7 @@ namespace MeGUI
 		/// <returns></returns>
 		public int getSplitSize()
 		{
-			int splitSize = 0;
-			try
-			{
-				splitSize = Int32.Parse(this.splitSize.Text) * 1024;
-			}
-			catch (Exception e)
-			{
-				MessageBox.Show("I'm not sure how you want me to split the output at an undefinied position.\r\nWhere I'm from that number doesn't exist.\r\n" +
-					"I'm going to assume you meant to not split the output", "Split size undefined", MessageBoxButtons.OK);
-				Console.Write(e.Message);
-			}
-			return splitSize;
+            return (int)this.splitSize.Value.KB;
 		}
 
 		/// <summary>
@@ -716,7 +679,7 @@ namespace MeGUI
                 {
                     try
                     {
-                        desiredSizeBytes = Int64.Parse(this.muxedSizeMBs.Text) * 1048576L;
+                        checked { desiredSizeBytes = (long)muxedSize.Value.Bytes; }
                     }
                     catch (Exception f)
                     {
@@ -733,7 +696,7 @@ namespace MeGUI
 				int splitSize = 0;
 				if (splitOutput.Checked)
 				{
-					splitSize = Int32.Parse(this.splitSize.Text);
+					splitSize = (int)this.splitSize.Value.MB;
 				}
                 if (desiredSizeBytes > 0)
                     logBuilder.Append("Desired size of this automated encoding series: " + desiredSizeBytes + " bytes, split size: " + splitSize + "MB\r\n");
@@ -822,27 +785,35 @@ namespace MeGUI
 		{
 			if (averageBitrateRadio.Checked)
 			{
-				muxedSizeMBs.Enabled = false;
+				muxedSize.Enabled = false;
+                videoSize.Enabled = true;
 				this.projectedBitrateKBits.Enabled = true;
 				this.isBitrateMode = false;
 				this.sizeSelection.Enabled = false;
 			}
             else if (noTargetRadio.Checked)
             {
-                muxedSizeMBs.Enabled = false;
+                muxedSize.Enabled = false;
+                videoSize.Enabled = false;
                 this.projectedBitrateKBits.Enabled = false;
                 this.isBitrateMode = false;
                 this.sizeSelection.Enabled = false;
             } 
             else
 			{
-				muxedSizeMBs.Enabled = true;
+				muxedSize.Enabled = true;
+                videoSize.Enabled = false;
 				this.projectedBitrateKBits.Enabled = false;
 				this.isBitrateMode = true;
 				this.sizeSelection.Enabled = true;
 			}
 		}
 		#endregion
+
+        private void fileSizeBar1_Load(object sender, EventArgs e)
+        {
+
+        }
 
 
     }

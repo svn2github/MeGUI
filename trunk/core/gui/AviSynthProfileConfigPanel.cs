@@ -70,5 +70,10 @@ namespace MeGUI.core.gui
 			string avsScriptB = avsScript.Substring(avisynthScript.SelectionStart + avisynthScript.SelectionLength);
 			avisynthScript.Text = avsScriptA + text + avsScriptB;
         }
+
+        private void dllBar_FileSelected(FileBar sender, FileBarEventArgs args)
+        {
+            avisynthScript.Text = "LoadPlugin(\"" + args.NewFileName + "\")\r\n" + avisynthScript.Text;
+        }
     }
 }

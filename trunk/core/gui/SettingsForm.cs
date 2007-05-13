@@ -128,6 +128,8 @@ namespace MeGUI
         private Button configureServersButton;
         private Label label14;
         private NumericUpDown maxServersToTry;
+        private NumericUpDown acceptableFPSError;
+        private Label label15;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -275,6 +277,8 @@ namespace MeGUI
             this.nbPassesLabel = new System.Windows.Forms.Label();
             this.nbPasses = new System.Windows.Forms.NumericUpDown();
             this.keep2ndPassOutput = new System.Windows.Forms.CheckBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.acceptableFPSError = new System.Windows.Forms.NumericUpDown();
             groupBox1 = new System.Windows.Forms.GroupBox();
             groupBox1.SuspendLayout();
             this.otherGroupBox.SuspendLayout();
@@ -291,6 +295,7 @@ namespace MeGUI
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nbPasses)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.acceptableFPSError)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -552,6 +557,8 @@ namespace MeGUI
             // 
             // otherGroupBox
             // 
+            this.otherGroupBox.Controls.Add(this.acceptableFPSError);
+            this.otherGroupBox.Controls.Add(this.label15);
             this.otherGroupBox.Controls.Add(this.acceptableAspectError);
             this.otherGroupBox.Controls.Add(this.acceptableAspectErrorLabel);
             this.otherGroupBox.Controls.Add(this.resetDialogs);
@@ -568,7 +575,7 @@ namespace MeGUI
             this.otherGroupBox.Controls.Add(this.priorityLabel);
             this.otherGroupBox.Location = new System.Drawing.Point(2, 90);
             this.otherGroupBox.Name = "otherGroupBox";
-            this.otherGroupBox.Size = new System.Drawing.Size(456, 197);
+            this.otherGroupBox.Size = new System.Drawing.Size(456, 253);
             this.otherGroupBox.TabIndex = 3;
             this.otherGroupBox.TabStop = false;
             this.otherGroupBox.Text = "Other";
@@ -601,7 +608,7 @@ namespace MeGUI
             // 
             // resetDialogs
             // 
-            this.resetDialogs.Location = new System.Drawing.Point(12, 162);
+            this.resetDialogs.Location = new System.Drawing.Point(17, 224);
             this.resetDialogs.Name = "resetDialogs";
             this.resetDialogs.Size = new System.Drawing.Size(149, 23);
             this.resetDialogs.TabIndex = 26;
@@ -611,7 +618,7 @@ namespace MeGUI
             // 
             // configSourceDetector
             // 
-            this.configSourceDetector.Location = new System.Drawing.Point(287, 162);
+            this.configSourceDetector.Location = new System.Drawing.Point(293, 224);
             this.configSourceDetector.Name = "configSourceDetector";
             this.configSourceDetector.Size = new System.Drawing.Size(154, 23);
             this.configSourceDetector.TabIndex = 6;
@@ -621,7 +628,7 @@ namespace MeGUI
             // 
             // chkboxUseAdvancedTooltips
             // 
-            this.chkboxUseAdvancedTooltips.Location = new System.Drawing.Point(7, 64);
+            this.chkboxUseAdvancedTooltips.Location = new System.Drawing.Point(13, 122);
             this.chkboxUseAdvancedTooltips.Name = "chkboxUseAdvancedTooltips";
             this.chkboxUseAdvancedTooltips.Size = new System.Drawing.Size(152, 24);
             this.chkboxUseAdvancedTooltips.TabIndex = 23;
@@ -631,7 +638,7 @@ namespace MeGUI
             // 
             this.openProgressWindow.Checked = true;
             this.openProgressWindow.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.openProgressWindow.Location = new System.Drawing.Point(287, 136);
+            this.openProgressWindow.Location = new System.Drawing.Point(293, 194);
             this.openProgressWindow.Name = "openProgressWindow";
             this.openProgressWindow.Size = new System.Drawing.Size(144, 24);
             this.openProgressWindow.TabIndex = 21;
@@ -639,7 +646,7 @@ namespace MeGUI
             // 
             // autosetNbThreads
             // 
-            this.autosetNbThreads.Location = new System.Drawing.Point(7, 136);
+            this.autosetNbThreads.Location = new System.Drawing.Point(13, 194);
             this.autosetNbThreads.Name = "autosetNbThreads";
             this.autosetNbThreads.Size = new System.Drawing.Size(208, 24);
             this.autosetNbThreads.TabIndex = 20;
@@ -647,7 +654,7 @@ namespace MeGUI
             // 
             // deleteIntermediateFiles
             // 
-            this.deleteIntermediateFiles.Location = new System.Drawing.Point(287, 112);
+            this.deleteIntermediateFiles.Location = new System.Drawing.Point(293, 170);
             this.deleteIntermediateFiles.Name = "deleteIntermediateFiles";
             this.deleteIntermediateFiles.Size = new System.Drawing.Size(152, 24);
             this.deleteIntermediateFiles.TabIndex = 19;
@@ -655,7 +662,7 @@ namespace MeGUI
             // 
             // deleteAbortedOutput
             // 
-            this.deleteAbortedOutput.Location = new System.Drawing.Point(7, 112);
+            this.deleteAbortedOutput.Location = new System.Drawing.Point(13, 170);
             this.deleteAbortedOutput.Name = "deleteAbortedOutput";
             this.deleteAbortedOutput.Size = new System.Drawing.Size(184, 24);
             this.deleteAbortedOutput.TabIndex = 18;
@@ -663,7 +670,7 @@ namespace MeGUI
             // 
             // deleteCompletedJobs
             // 
-            this.deleteCompletedJobs.Location = new System.Drawing.Point(287, 88);
+            this.deleteCompletedJobs.Location = new System.Drawing.Point(293, 146);
             this.deleteCompletedJobs.Name = "deleteCompletedJobs";
             this.deleteCompletedJobs.Size = new System.Drawing.Size(144, 24);
             this.deleteCompletedJobs.TabIndex = 17;
@@ -671,7 +678,7 @@ namespace MeGUI
             // 
             // openScript
             // 
-            this.openScript.Location = new System.Drawing.Point(7, 88);
+            this.openScript.Location = new System.Drawing.Point(13, 146);
             this.openScript.Name = "openScript";
             this.openScript.Size = new System.Drawing.Size(248, 24);
             this.openScript.TabIndex = 16;
@@ -679,7 +686,7 @@ namespace MeGUI
             // 
             // autostartQueue
             // 
-            this.autostartQueue.Location = new System.Drawing.Point(287, 64);
+            this.autostartQueue.Location = new System.Drawing.Point(293, 122);
             this.autostartQueue.Name = "autostartQueue";
             this.autostartQueue.Size = new System.Drawing.Size(112, 24);
             this.autostartQueue.TabIndex = 14;
@@ -1403,6 +1410,32 @@ namespace MeGUI
             this.keep2ndPassOutput.TabIndex = 0;
             this.keep2ndPassOutput.Text = "Keep 2nd pass Output in 3 pass mode";
             // 
+            // label15
+            // 
+            this.label15.Location = new System.Drawing.Point(9, 72);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(130, 32);
+            this.label15.TabIndex = 29;
+            this.label15.Text = "Acceptable FPS rounding error (bitrate calculator)";
+            // 
+            // acceptableFPSError
+            // 
+            this.acceptableFPSError.DecimalPlaces = 3;
+            this.acceptableFPSError.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            196608});
+            this.acceptableFPSError.Location = new System.Drawing.Point(145, 72);
+            this.acceptableFPSError.Maximum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.acceptableFPSError.Name = "acceptableFPSError";
+            this.acceptableFPSError.Size = new System.Drawing.Size(79, 21);
+            this.acceptableFPSError.TabIndex = 30;
+            // 
             // SettingsForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
@@ -1438,6 +1471,7 @@ namespace MeGUI
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nbPasses)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.acceptableFPSError)).EndInit();
             this.ResumeLayout(false);
 
 		}
@@ -1650,6 +1684,7 @@ namespace MeGUI
 			get 
 			{
 				MeGUISettings settings = new MeGUISettings();
+                settings.AcceptableFPSError = acceptableFPSError.Value; 
                 settings.MaxServersToTry = (int)maxServersToTry.Value;
                 settings.AutoUpdateServerSubList = autoUpdateIndex;
                 settings.AutoUpdateServerLists = autoUpdateServers;
@@ -1705,6 +1740,7 @@ namespace MeGUI
 			set
 			{
 				MeGUISettings settings = value;
+                acceptableFPSError.Value = settings.AcceptableFPSError;
                 maxServersToTry.Value = settings.MaxServersToTry;
                 autoUpdateServers = settings.AutoUpdateServerLists;
                 autoUpdateIndex = settings.AutoUpdateServerSubList;

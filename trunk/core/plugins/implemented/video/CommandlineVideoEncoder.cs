@@ -118,7 +118,7 @@ namespace MeGUI
         protected override void doStatusCycleOverrides()
         {
             su.NbFramesDone = currentFrameNumber;
-            su.PercentageDoneExact = 100.0 * (double)currentFrameNumber / (double)numberOfFrames;
+            su.PercentageDoneExact = 100.0M * (decimal)currentFrameNumber / (decimal)numberOfFrames;
             su.FPS = (double)currentFrameNumber / (double)TimeSpan.FromTicks(su.TimeElapsed).TotalSeconds;
         }
     }

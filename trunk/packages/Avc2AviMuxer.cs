@@ -4,6 +4,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using System.Threading;
+using MeGUI.core.util;
 
 namespace MeGUI
 {
@@ -30,7 +31,8 @@ namespace MeGUI
             if (base.setup(job, out error))
             {
                 double overhead = mjob.Overhead * (double)mjob.NbOfFrames;
-                su.ProjectedFileSize += (int)(overhead / 1024);
+                if (su.ProjectedFileSize.HasValue)
+                    su.ProjectedFileSize += new FileSize((ulong)overhead);
                 return true;
             }
             else
@@ -76,11 +78,11 @@ namespace MeGUI
         /// </summary>
         private void setPercentage()
         {
-            if (File.Exists(this.job.Output) && su.ProjectedFileSize > 0 && this.job.NbOfFrames > 0)
+            if (File.Exists(this.job.Output) && (su.ProjectedFileSize ?? FileSize.Empty) > FileSize.Empty
+                && this.job.NbOfFrames > 0)
             { // we need those properties so that we can calculate a proper estimate
-                FileInfo fi = new FileInfo(this.job.Output);
-                su.PercentageDoneExact = 100D / (double)su.ProjectedFileSize * 1024D * (double)fi.Length;
-                su.FileSize = fi.Length / 1024;
+                su.PercentageDoneExact = (100M * FileSize.Of(job.Output) / su.ProjectedFileSize) ?? 0M;
+                su.FileSize = FileSize.Of(job.Output);
             }
         }
         /// <summary>

@@ -18,7 +18,7 @@ namespace MeGUI
             overwriteStats, keep2of3passOutput, deleteCompletedJobs, autoSetNbThreads, deleteIntermediateFiles,
             deleteAbortedOutput, openProgressWindow, useadvancedtooltips, freshOggEnc2;
         private AfterEncoding afterEncoding;
-        private decimal forceFilmThreshold;
+        private decimal forceFilmThreshold, acceptableFPSError;
 		private int nbPasses, acceptableAspectError, maxServersToTry, autoUpdateServerSubList;
         private string videoExtension, audioExtension;
         private bool safeProfileAlteration;
@@ -32,6 +32,7 @@ namespace MeGUI
 		{
             autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/stable/", "http://mewiki.project357.com/auto/stable/" },
                 new string[] { "Development", "http://megui.org/auto/", "http://mewiki.project357.com/auto/" } };
+            acceptableFPSError = 0.01M;
             autoUpdateServerSubList = 0;
             maxServersToTry = 5;
             dialogSettings = new DialogSettings();
@@ -80,6 +81,15 @@ namespace MeGUI
             safeProfileAlteration = false;
         }
         #region properties
+        /// <summary>
+        /// Maximum error that the bitrate calculator should accept when rounding the framerate
+        /// </summary>
+        public decimal AcceptableFPSError
+        {
+            get { return acceptableFPSError; }
+            set { acceptableFPSError = value; }
+        }
+
         /// <summary>
         /// Maximum servers that auto update should try before aborting.
         /// </summary>

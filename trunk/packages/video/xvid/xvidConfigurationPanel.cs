@@ -12,6 +12,11 @@ namespace MeGUI.packages.video.xvid
 {
     public partial class xvidConfigurationPanel : MeGUI.core.details.video.VideoConfigurationPanel, Gettable<VideoCodecSettings>
     {
+        protected override string getCommandline()
+        {
+            return CommandLineGenerator.generateVideoCommandline(this.Settings, this.input, this.output, -1, -1);
+        }
+
         #region start / stop
         public xvidConfigurationPanel(MainForm mainForm, VideoInfo info)
             : base(mainForm, info)

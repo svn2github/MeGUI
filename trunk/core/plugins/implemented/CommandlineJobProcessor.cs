@@ -4,6 +4,7 @@ using System.Text;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
+using MeGUI.core.util;
 
 namespace MeGUI
 {
@@ -282,16 +283,8 @@ namespace MeGUI
             while (proc != null && !proc.HasExited)
             {
                 su.TimeElapsed = DateTime.Now.Ticks - job.Start.Ticks;
-                if (!string.IsNullOrEmpty(job.Output) && File.Exists(job.Output))
-                {
-                    try
-                    {
-                        FileInfo fi = new FileInfo(job.Output);
-                        su.FileSize = fi.Length / 1024;
-                    }
-                    catch (Exception)
-                    { }
-                }
+                su.FileSize = FileSize.Of2(job.Output);
+
                 doStatusCycleOverrides();
                 if (statusUpdate != null && proc != null && !proc.HasExited)
                     statusUpdate(su);

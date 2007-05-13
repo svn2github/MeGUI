@@ -39,13 +39,13 @@ namespace MeGUI
             this.projectName = new System.Windows.Forms.TextBox();
             this.nameLabel = new System.Windows.Forms.Label();
             this.subtitleGroupbox = new System.Windows.Forms.GroupBox();
+            this.subtitleTracks = new System.Windows.Forms.CheckedListBox();
             this.demuxSelectedTracks = new System.Windows.Forms.RadioButton();
             this.keepAllTracks = new System.Windows.Forms.RadioButton();
             this.closeOnQueue = new System.Windows.Forms.CheckBox();
             this.queueButton = new System.Windows.Forms.Button();
-            this.subtitleTracks = new System.Windows.Forms.CheckedListBox();
-            this.openOutputDialog = new System.Windows.Forms.OpenFileDialog();
             this.openIFODialog = new System.Windows.Forms.OpenFileDialog();
+            this.openOutputDialog = new System.Windows.Forms.SaveFileDialog();
             this.inputGroupbox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pgc)).BeginInit();
             this.outputGroupbox.SuspendLayout();
@@ -171,6 +171,14 @@ namespace MeGUI
             this.subtitleGroupbox.TabStop = false;
             this.subtitleGroupbox.Text = "Subtitles";
             // 
+            // subtitleTracks
+            // 
+            this.subtitleTracks.FormattingEnabled = true;
+            this.subtitleTracks.Location = new System.Drawing.Point(50, 72);
+            this.subtitleTracks.Name = "subtitleTracks";
+            this.subtitleTracks.Size = new System.Drawing.Size(356, 148);
+            this.subtitleTracks.TabIndex = 9;
+            // 
             // demuxSelectedTracks
             // 
             this.demuxSelectedTracks.Checked = true;
@@ -206,25 +214,18 @@ namespace MeGUI
             this.queueButton.Text = "Queue";
             this.queueButton.Click += new System.EventHandler(this.queueButton_Click);
             // 
-            // subtitleTracks
-            // 
-            this.subtitleTracks.FormattingEnabled = true;
-            this.subtitleTracks.Location = new System.Drawing.Point(50, 72);
-            this.subtitleTracks.Name = "subtitleTracks";
-            this.subtitleTracks.Size = new System.Drawing.Size(356, 148);
-            this.subtitleTracks.TabIndex = 9;
-            // 
-            // openOutputDialog
-            // 
-            this.openOutputDialog.DefaultExt = "idx";
-            this.openOutputDialog.Filter = "VobSub Files|*.idx";
-            // 
             // openIFODialog
             // 
             this.openIFODialog.DefaultExt = "ifo";
             this.openIFODialog.Filter = "IFO Files|*.ifo";
             // 
-            // VobSubIndexer
+            // openOutputDialog
+            // 
+            this.openOutputDialog.DefaultExt = "idx";
+            this.openOutputDialog.Filter = "VobSub Files|*.idx";
+            this.openOutputDialog.Title = "Choose an output file";
+            // 
+            // VobSubIndexWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -238,7 +239,7 @@ namespace MeGUI
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "VobSubIndexer";
+            this.Name = "VobSubIndexWindow";
             this.ShowInTaskbar = false;
             this.Text = "VobSub Indexer";
             this.inputGroupbox.ResumeLayout(false);
@@ -269,8 +270,8 @@ namespace MeGUI
         private System.Windows.Forms.Label pgcLabel;
         private System.Windows.Forms.NumericUpDown pgc;
         private System.Windows.Forms.CheckedListBox subtitleTracks;
-        private System.Windows.Forms.OpenFileDialog openOutputDialog;
         private System.Windows.Forms.OpenFileDialog openIFODialog;
+        private System.Windows.Forms.SaveFileDialog openOutputDialog;
 
     }
 }

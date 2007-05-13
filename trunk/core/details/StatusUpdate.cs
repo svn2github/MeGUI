@@ -19,6 +19,7 @@
 // ****************************************************************************
 
 using System;
+using MeGUI.core.util;
 
 namespace MeGUI
 {
@@ -30,10 +31,12 @@ namespace MeGUI
 	{
 		private bool hasError, isComplete, wasAborted;
 		private string error, log, jobName, audioPosition;
-		private int nbFramesDone, nbFramesTotal, projectedFileSize;
+        private int nbFramesDone, nbFramesTotal;
         private JobTypes jobType;
-		private long filesize, timeElapsed, audioFileSize;
-		private double fps, percentage;
+		private long timeElapsed;
+        private FileSize? filesize, audioFileSize, projectedFileSize;
+		private decimal percentage;
+        private double fps;
 		public StatusUpdate()
 		{
 			hasError = false;
@@ -43,13 +46,13 @@ namespace MeGUI
 			log = null;
 			jobName = null;
 			audioPosition = null;
-			audioFileSize = 0;
+			audioFileSize = null;
 			nbFramesDone = 0;
 			nbFramesTotal = 0;
 			fps = 0;
-			projectedFileSize = 0;
+			projectedFileSize = null;
 			timeElapsed = 0;
-			filesize = 0;
+			filesize = null;
 		}
 		/// <summary>
 		/// does the job have any errors?
@@ -134,7 +137,7 @@ namespace MeGUI
 		/// <summary>
 		/// projected output size
 		/// </summary>
-		public int ProjectedFileSize
+		public FileSize? ProjectedFileSize
 		{
 			get {return projectedFileSize;}
 			set {projectedFileSize = value;}
@@ -149,7 +152,7 @@ namespace MeGUI
 		/// <summary>
 		/// gets / sets the exact percentage of the encoding progress
 		/// </summary>
-		public double PercentageDoneExact
+		public decimal PercentageDoneExact
 		{
 			get
 			{
@@ -163,16 +166,17 @@ namespace MeGUI
 		/// <summary>
 		/// size of the encoded file at this point
 		/// </summary>
-		public long FileSize
+		public FileSize? FileSize
 		{
 			get {return filesize;}
 			set {filesize = value;}
 		}
+
 		/// <summary>
 		/// current size of the audio
 		/// this field is filled when muxing and contains the current size of the audio data
 		/// </summary>
-		public long AudioFileSize
+		public FileSize? AudioFileSize
 		{
 			get {return audioFileSize;}
 			set {audioFileSize = value;}

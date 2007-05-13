@@ -95,6 +95,7 @@ namespace MeGUI.core.gui
             this.dllBar.Size = new System.Drawing.Size(328, 26);
             this.dllBar.TabIndex = 46;
             this.dllBar.Title = "Select AviSynth Plugin DLL to open";
+            this.dllBar.FileSelected += new MeGUI.FileBarEventHandler(this.dllBar_FileSelected);
             // 
             // flowLayoutPanel1
             // 

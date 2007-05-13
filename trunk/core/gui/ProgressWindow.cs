@@ -24,6 +24,7 @@ using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
+using MeGUI.core.util;
 
 namespace MeGUI
 {
@@ -349,12 +350,14 @@ namespace MeGUI
 			if (su.JobType == JobTypes.VIDEO) // video status update
 			{
 				this.currentVideoFrame.Text = su.NbFramesDone + "/" + su.NbFramesTotal;
-				this.videoData.Text = su.FileSize.ToString() + " KB";
-				long projectedSize = (long)((double)su.FileSize/su.PercentageDoneExact * (double)100);
-				if (projectedSize < 0)
-					this.filesize.Text = "unknown";
-				else
-					this.filesize.Text = projectedSize.ToString() + " KB";
+				this.videoData.Text = su.FileSize.ToString();
+                if (su.FileSize.HasValue)
+                {
+                    FileSize projectedSize = su.FileSize.Value * (100M / su.PercentageDoneExact);
+                    this.filesize.Text = projectedSize.ToString();
+                }
+                else
+                    this.filesize.Text = "unknown";
                 this.fps.Text = su.FPS.ToString("##.##") + " FPS";
 				this.timeElapsed.Text = su.TimeElapsedString;
 				this.totalTime.Text = getTimeString(su.TimeElapsed, su.PercentageDoneExact);
@@ -364,8 +367,8 @@ namespace MeGUI
 			if (su.JobType == JobTypes.AUDIO) // audio status update
 			{
 				this.currentVideoFrame.Text = su.AudioPosition;
-				this.videoData.Text = su.FileSize.ToString() + " KB";
-                if (su.FileSize == 0) // first pass
+				this.videoData.Text = su.FileSize.ToString();
+                if (!su.FileSize.HasValue) // first pass
                 {
                     this.filesize.Text = "N/A (first pass)";
                     this.totalTime.Text = "N/A (first pass)";
@@ -373,8 +376,8 @@ namespace MeGUI
                 }
                 else
 				{
-					long projectedSize = (long)((double)su.FileSize/su.PercentageDoneExact * (double)100);
-					this.filesize.Text = projectedSize.ToString() + " KB";
+                    FileSize projectedSize = su.FileSize.Value * (100M / su.PercentageDoneExact);
+                    this.filesize.Text = projectedSize.ToString();
 					this.totalTime.Text = getTimeString(su.TimeElapsed, su.PercentageDoneExact);
 					this.progress.Value = su.PercentageDone;
                     this.Text = "Status: " + su.PercentageDoneExact.ToString("##.##") + " %";
@@ -383,9 +386,9 @@ namespace MeGUI
 			}
 			if (su.JobType == JobTypes.MUX) // mux status update
 			{
-				this.currentVideoFrame.Text = su.AudioFileSize.ToString() + " KB"; // audio data
-				this.videoData.Text = su.FileSize.ToString() + " KB";
-				this.filesize.Text = su.ProjectedFileSize.ToString() + " KB";
+				this.currentVideoFrame.Text = su.AudioFileSize.ToString(); // audio data
+				this.videoData.Text = su.FileSize.ToString();
+				this.filesize.Text = su.ProjectedFileSize.ToString();
 				this.fps.Text = su.AudioPosition;
                 this.Text = "Status: " + su.PercentageDoneExact.ToString("##.##") + " %";
 				this.progress.Value = su.PercentageDone;
@@ -421,13 +424,13 @@ namespace MeGUI
 		/// <param name="span">timespan elapsed since the start of the job</param>
 		/// <param name="percentageDone">percentage the job is currently done</param>
 		/// <returns>presentable string in hh:mm:ss format</returns>
-		private string getTimeString(long span, double percentageDone)
+		private string getTimeString(long span, decimal percentageDone)
 		{
 			if (percentageDone == 0)
 				return "n/a";
 			else
 			{
-				long ratio = (long)((double)span / percentageDone * (double)100);
+				long ratio = (long)((decimal)span / percentageDone * 100M);
 				TimeSpan t = new TimeSpan(ratio - span);
                 string retval = t.Days + ":";
                 if (t.Hours < 10)

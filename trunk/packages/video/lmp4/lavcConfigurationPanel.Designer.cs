@@ -213,9 +213,9 @@ namespace MeGUI.packages.video.lmp4
             this.label44 = new System.Windows.Forms.Label();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.advancedTabPage = new System.Windows.Forms.TabPage();
+            this.tabControl1.SuspendLayout();
             this.zoneTabPage.SuspendLayout();
             this.mainTabPage.SuspendLayout();
-            this.tabControl1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.meRange)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.lavcNBPredictors)).BeginInit();
@@ -284,23 +284,6 @@ namespace MeGUI.packages.video.lmp4
             this.advancedTabPage.SuspendLayout();
             this.SuspendLayout();
             // 
-            // commandline
-            // 
-            this.commandline.Location = new System.Drawing.Point(0, 534);
-            // 
-            // zoneTabPage
-            // 
-            this.zoneTabPage.Controls.Add(this.quantizerMatrixGroupbox);
-            this.zoneTabPage.Size = new System.Drawing.Size(488, 418);
-            this.zoneTabPage.Controls.SetChildIndex(this.quantizerMatrixGroupbox, 0);
-            // 
-            // mainTabPage
-            // 
-            this.mainTabPage.Controls.Add(this.groupBox1);
-            this.mainTabPage.Controls.Add(this.lavcCodecToolsGroupbox);
-            this.mainTabPage.Controls.Add(this.lavcGeneralOptionsGroupbox);
-            this.mainTabPage.Size = new System.Drawing.Size(488, 418);
-            // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.advancedTabPage);
@@ -308,6 +291,27 @@ namespace MeGUI.packages.video.lmp4
             this.tabControl1.Controls.SetChildIndex(this.zoneTabPage, 0);
             this.tabControl1.Controls.SetChildIndex(this.advancedTabPage, 0);
             this.tabControl1.Controls.SetChildIndex(this.mainTabPage, 0);
+            // 
+            // zoneTabPage
+            // 
+            this.zoneTabPage.Controls.Add(this.quantizerMatrixGroupbox);
+            this.zoneTabPage.Size = new System.Drawing.Size(488, 418);
+            this.zoneTabPage.Controls.SetChildIndex(this.quantizerMatrixGroupbox, 0);
+            // 
+            // commandline
+            // 
+            this.commandline.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)));
+            this.commandline.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.commandline.Location = new System.Drawing.Point(0, 450);
+            this.commandline.Size = new System.Drawing.Size(496, 78);
+            this.commandline.Text = " ";
+            // 
+            // mainTabPage
+            // 
+            this.mainTabPage.Controls.Add(this.groupBox1);
+            this.mainTabPage.Controls.Add(this.lavcCodecToolsGroupbox);
+            this.mainTabPage.Controls.Add(this.lavcGeneralOptionsGroupbox);
+            this.mainTabPage.Size = new System.Drawing.Size(488, 418);
             // 
             // groupBox1
             // 
@@ -2683,16 +2687,15 @@ namespace MeGUI.packages.video.lmp4
             this.advancedTabPage.Text = "Advanced";
             this.advancedTabPage.UseVisualStyleBackColor = true;
             // 
-            // lavcConfigurationDialog
+            // lavcConfigurationPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(496, 528);
-            this.Name = "lavcConfigurationDialog";
-            this.Text = "lavc Encoder Configuration";
+            this.Name = "lavcConfigurationPanel";
+            this.Size = new System.Drawing.Size(496, 528);
+            this.tabControl1.ResumeLayout(false);
             this.zoneTabPage.ResumeLayout(false);
             this.mainTabPage.ResumeLayout(false);
-            this.tabControl1.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.meRange)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.lavcNBPredictors)).EndInit();
