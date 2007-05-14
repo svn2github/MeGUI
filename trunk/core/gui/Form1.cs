@@ -121,7 +121,6 @@ namespace MeGUI
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.inputTab = new System.Windows.Forms.TabPage();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
@@ -532,7 +531,6 @@ namespace MeGUI
             this.ClientSize = new System.Drawing.Size(466, 392);
             this.Controls.Add(this.tabControl1);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Menu = this.mainMenu1;
             this.Name = "MainForm";
@@ -597,6 +595,7 @@ namespace MeGUI
 #endif
             string[] resources = myAssembly.GetManifestResourceNames();
             this.trayIcon.Icon = new Icon(myAssembly.GetManifestResourceStream(name + "App.ico"));
+            this.Icon = trayIcon.Icon;
             constructMeGUIInfo();
             this.TitleText = Application.ProductName + " " + Application.ProductVersion;
             Jobs.showAfterEncodingStatus(Settings);
