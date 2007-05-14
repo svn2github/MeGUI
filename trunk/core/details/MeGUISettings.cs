@@ -16,7 +16,7 @@ namespace MeGUI
             defaultLanguage1, defaultLanguage2, divxMuxerPath, afterEncodingCommand;
         private bool recalculateMainMovieBitrate, autoForceFilm, autoStartQueue, enableMP3inMP4, autoOpenScript,
             overwriteStats, keep2of3passOutput, deleteCompletedJobs, autoSetNbThreads, deleteIntermediateFiles,
-            deleteAbortedOutput, openProgressWindow, useadvancedtooltips, freshOggEnc2;
+            deleteAbortedOutput, openProgressWindow, useadvancedtooltips, freshOggEnc2, autoscroll;
         private AfterEncoding afterEncoding;
         private decimal forceFilmThreshold, acceptableFPSError;
 		private int nbPasses, acceptableAspectError, maxServersToTry, autoUpdateServerSubList;
@@ -30,6 +30,7 @@ namespace MeGUI
         #endregion
         public MeGUISettings()
 		{
+            autoscroll = true;
             autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/stable/", "http://mewiki.project357.com/auto/stable/" },
                 new string[] { "Development", "http://megui.org/auto/", "http://mewiki.project357.com/auto/" } };
             acceptableFPSError = 0.01M;
@@ -81,6 +82,15 @@ namespace MeGUI
             safeProfileAlteration = false;
         }
         #region properties
+        /// <summary>
+        /// Gets / sets whether the log should be autoscrolled
+        /// </summary>
+        public bool AutoScrollLog
+        {
+            get { return autoscroll; }
+            set { autoscroll = value; }
+        }
+
         /// <summary>
         /// Maximum error that the bitrate calculator should accept when rounding the framerate
         /// </summary>

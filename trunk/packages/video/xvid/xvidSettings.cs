@@ -53,7 +53,7 @@ namespace MeGUI
             rateControlBuffer, frameDropRatio, vbvBuffer, vbvMaxRate, vbvPeakRate;
         private bool packedBitstream, gmc, chromaMotion, closedGOP, vhqForBframes, adaptiveQuant,
             greyscale, interlaced, bottomFieldFirst, lumiMasking;
-        private decimal bframeThreshold;
+        private decimal bframeThreshold, quantizer;
         private string customQuantizerMatrix;
         public override VideoCodec Codec
         {
@@ -76,6 +76,7 @@ namespace MeGUI
             : base()
         {
             EncodingMode = 0;
+            quantizer = 0;
             BitrateQuantizer = 700;
             KeyframeInterval = 300;
             NbBframes = 2;
@@ -130,6 +131,12 @@ namespace MeGUI
         public static string[] FourCCsForMPEG4ASP
         {
             get { return m_fourCCs; }
+        }
+
+        public decimal Quantizer
+        {
+            get { return quantizer; }
+            set { quantizer = value; }
         }
 
         public int MotionSearchPrecision

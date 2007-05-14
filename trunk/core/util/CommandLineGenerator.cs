@@ -454,7 +454,7 @@ namespace MeGUI
                     sb.Append("-single -bitrate " + xs.BitrateQuantizer + " "); // add bitrate
                     break;
                 case 1: // CQ
-                    sb.Append("-single -cq " + xs.BitrateQuantizer + " "); // add quantizer
+                    sb.Append("-single -cq " + xs.Quantizer + " "); // add quantizer
                     break;
                 case 2: // 2 pass first pass
                     sb.Append("-pass1 " + "\"" + xs.Logfile + "\" -bitrate " + xs.BitrateQuantizer + " "); // add logfile

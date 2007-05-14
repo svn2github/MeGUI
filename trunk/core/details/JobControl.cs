@@ -482,31 +482,23 @@ namespace MeGUI.core.details
         #endregion
         #region misc action
         /// <summary>
-        /// moves the job one position up in the queue
+        /// moves the selected jobs one position up in the queue
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void upButton_Click(object sender, System.EventArgs e)
         {
-            if (queueListView.SelectedItems.Count > 0)
-            {
-                MoveListViewItem(ref this.queueListView, true);
-                updateJobPositions();
-            }
+            MoveListViewItem(Direction.Up);
         }
 
         /// <summary>
-        /// moves a job one position down in the queue
+        /// moves the selected jobs one position down in the queue
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void downButton_Click(object sender, System.EventArgs e)
         {
-            if (queueListView.SelectedItems.Count > 0)
-            {
-                MoveListViewItem(ref this.queueListView, false);
-                updateJobPositions();
-            }
+            MoveListViewItem(Direction.Down);
         }
         
         /// <summary>
@@ -752,54 +744,121 @@ namespace MeGUI.core.details
         #endregion
 
         #region GUI action
+        enum Direction { Up, Down }
+        /// <summary>
+        /// Updates the up/down buttons according to whether the selection CAN be moved up/down
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void queueListView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        {
+            upButton.Enabled = isSelectionMovable(Direction.Up);
+            downButton.Enabled = isSelectionMovable(Direction.Down);
+        }
+            
         /// <summary>
         /// moves the currently selected listviewitem up/down
-        /// code by Less Smith @ KnotDot.Net
+        /// adapted from code by Less Smith @ KnotDot.Net
         /// </summary>
         /// <param name="lv">reference to ListView</param>
         /// <param name="moveUp">whether the currently selected item should be moved up or down</param>
-        private void MoveListViewItem(ref ListView lv, bool moveUp)
+        private void MoveListViewItem(Direction d)
         {
-            string cache;
-            int selIdx;
+            // We can trust that the button will be disabled unless this condition is met
+            Debug.Assert(isSelectionMovable(d));
 
-            selIdx = lv.SelectedItems[0].Index;
-            lv.Items[selIdx].Selected = false;
-            if (moveUp)
-            {
-                // ignore moveup of row(0)
-                if (selIdx == 0)
-                    return;
+            ListView lv = queueListView;
+            ListView.ListViewItemCollection items = lv.Items;
 
-                // move the subitems for the previous row
-                // to cache to make room for the selected row
-                for (int i = 0; i < lv.Items[selIdx].SubItems.Count; i++)
-                {
-                    cache = lv.Items[selIdx - 1].SubItems[i].Text;
-                    lv.Items[selIdx - 1].SubItems[i].Text =
-                        lv.Items[selIdx].SubItems[i].Text;
-                    lv.Items[selIdx].SubItems[i].Text = cache;
-                }
-                lv.Items[selIdx - 1].Selected = true;
-                lv.Refresh();
-            }
-            else
+            int[] indices = new int[lv.SelectedIndices.Count];
+            lv.SelectedIndices.CopyTo(indices, 0);
+            Array.Sort(indices);
+            int min = indices[0];
+            int max = indices[indices.Length-1];
+
+            lv.BeginUpdate();
+            if (d == Direction.Up)
             {
-                // ignore movedown of last item
-                if (selIdx == lv.Items.Count - 1)
-                    return;
-                // move the subitems for the next row
-                // to cache so we can move the selected row down
-                for (int i = 0; i < lv.Items[selIdx].SubItems.Count; i++)
-                {
-                    cache = lv.Items[selIdx + 1].SubItems[i].Text;
-                    lv.Items[selIdx + 1].SubItems[i].Text =
-                        lv.Items[selIdx].SubItems[i].Text;
-                    lv.Items[selIdx].SubItems[i].Text = cache;
-                }
-                lv.Items[selIdx + 1].Selected = true;
-                lv.Refresh();
+                items[max].Selected = false;
+                items[min - 1].Selected = true;
+
+                for (int i = min; i <= max; i++)
+                    swapContents(items[i], items[i - 1]);
             }
+            else if (d == Direction.Down)
+            {
+                items[min].Selected = false;
+                items[max + 1].Selected = true;
+
+                for (int i = max; i >= min; i--)
+                    swapContents(items[i], items[i + 1]);
+            }
+            lv.EndUpdate();
+            lv.Refresh();
+
+            updateJobPositions();
+        }
+
+        /// <summary>
+        /// swaps the contents of the two items
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        private void swapContents(ListViewItem a, ListViewItem b)
+        {
+            for (int i = 0; i < a.SubItems.Count; i++)
+            {
+                string cache = b.SubItems[i].Text;
+                b.SubItems[i].Text = a.SubItems[i].Text;
+                a.SubItems[i].Text = cache;
+            }
+        }
+
+        /// <summary>
+        /// Tells if the current selection can be moved in direction d.
+        /// Checks:
+        ///     whether it's at the top / bottom
+        ///     if anything is actually selected
+        ///     whether the selection is contiguous
+        /// </summary>
+        /// <param name="d"></param>
+        /// <returns></returns>
+        private bool isSelectionMovable(Direction d)
+        {
+            ListView lv = queueListView;
+            int[] indices = new int[lv.SelectedIndices.Count];
+            lv.SelectedIndices.CopyTo(indices, 0);
+            Array.Sort(indices);
+
+            if (indices.Length == 0) return false;
+            if (d == Direction.Up && indices[0] == 0) return false;
+            if (d == Direction.Down && 
+                indices[indices.Length - 1] == queueListView.Items.Count - 1) 
+                return false;
+            if (!consecutiveIndices(indices)) return false;
+
+            return true;
+        }
+
+        /// <summary>
+        /// Tells if the given list of indices is consecutive; if so, sets min and 
+        /// max to the min and max indices
+        /// </summary>
+        /// <param name="indices"></param>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        private bool consecutiveIndices(int[] indices)
+        {
+            Debug.Assert(indices.Length > 0);
+
+            int last = indices[0] - 1;
+            foreach (int i in indices)
+            {
+                if (i != last + 1) return false;
+                last = i;
+            }
+
+            return true;
         }
         
         /// <summary>
@@ -1367,7 +1426,6 @@ namespace MeGUI.core.details
                 }
             }
         }
-    
     }
     enum JobStartInfo { JOB_STARTED, NO_JOBS_WAITING, COULDNT_START }
 }

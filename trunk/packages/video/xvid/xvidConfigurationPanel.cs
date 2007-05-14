@@ -56,12 +56,20 @@ namespace MeGUI.packages.video.xvid
             if (this.lastEncodingMode == 1 && xvidEncodingMode.SelectedIndex != 1)
             {
                 xvidBitrateQuantLabel.Text = "Bitrate";
-                xvidBitrateQuantizer.Text = "700";
+                xvidBitrateQuantizer.Maximum = 10000;
+                xvidBitrateQuantizer.Minimum = 1;
+                xvidBitrateQuantizer.Increment = 1;
+                xvidBitrateQuantizer.DecimalPlaces = 0;
+                xvidBitrateQuantizer.Value = 700;
             }
             else if (lastEncodingMode != 1 && xvidEncodingMode.SelectedIndex == 1)
             {
                 xvidBitrateQuantLabel.Text = "Quantizer";
-                xvidBitrateQuantizer.Text = "8";
+                xvidBitrateQuantizer.Maximum = 31;
+                xvidBitrateQuantizer.Minimum = 1;
+                xvidBitrateQuantizer.Increment = 0.1M;
+                xvidBitrateQuantizer.DecimalPlaces = 1;
+                xvidBitrateQuantizer.Value = 8;
             }
             switch (this.xvidEncodingMode.SelectedIndex)
             {
@@ -173,8 +181,9 @@ namespace MeGUI.packages.video.xvid
                 xs.FourCC = fourCC.SelectedIndex;
                 xs.Turbo = this.xvidTurbo.Checked;
                 xs.EncodingMode = this.xvidEncodingMode.SelectedIndex;
-                if (!xvidBitrateQuantizer.Text.Equals(""))
-                    xs.BitrateQuantizer = Int32.Parse(this.xvidBitrateQuantizer.Text);
+                xs.Quantizer = xvidBitrateQuantizer.Value;
+                xs.BitrateQuantizer = (int)xvidBitrateQuantizer.Value;
+
                 if (!xvidKeyframeInterval.Text.Equals(""))
                     xs.KeyframeInterval = Int32.Parse(this.xvidKeyframeInterval.Text);
                 xs.NbBframes = (int)xvidNbBFrames.Value;
@@ -236,8 +245,11 @@ namespace MeGUI.packages.video.xvid
                 this.xvidTurbo.Checked = xs.Turbo;
                 this.xvidEncodingMode.SelectedIndex = xs.EncodingMode;
                 lastEncodingMode = xvidEncodingMode.SelectedIndex;
+                if (xs.EncodingMode == 1) // CQ
+                    xvidBitrateQuantizer.Value = xs.Quantizer;
+                else
+                    xvidBitrateQuantizer.Value = xs.BitrateQuantizer;
                 this.nbThreads.Value = xs.NbThreads;
-                this.xvidBitrateQuantizer.Text = xs.BitrateQuantizer.ToString();
                 this.xvidKeyframeInterval.Text = xs.KeyframeInterval.ToString(); ;
                 xvidNbBFrames.Value = xs.NbBframes;
                 xvidPackedBitstream.Checked = xs.PackedBitstream;

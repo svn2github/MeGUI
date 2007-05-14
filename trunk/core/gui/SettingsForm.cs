@@ -16,9 +16,10 @@ namespace MeGUI
 		#region variables
         private System.Windows.Forms.Button saveButton;
 		private System.Windows.Forms.Button cancelButton;
-        private string[][] autoUpdateServers;
+        private MeGUISettings internalSettings = new MeGUISettings();
+/*        private string[][] autoUpdateServers;
         private int autoUpdateIndex;
-        private DialogSettings dialogSettings;
+        private DialogSettings dialogSettings;*/
         private Button resetDialogs;
         private TabControl tabControl1;
         private TabPage tabPage1;
@@ -1592,7 +1593,7 @@ namespace MeGUI
         }
         private void resetDialogs_Click(object sender, EventArgs e)
         {
-            dialogSettings = new DialogSettings();
+            internalSettings.DialogSettings = new DialogSettings();
             MessageBox.Show(this, "Successfully reset all dialogs", "Success", MessageBoxButtons.OK, MessageBoxIcon.None);
         }
 
@@ -1667,12 +1668,12 @@ namespace MeGUI
         {
             using (MeGUI.core.gui.AutoUpdateServerConfigWindow w = new MeGUI.core.gui.AutoUpdateServerConfigWindow())
             {
-                w.ServerList = autoUpdateServers;
-                w.ServerListIndex = autoUpdateIndex;
+                w.ServerList = internalSettings.AutoUpdateServerLists;
+                w.ServerListIndex = internalSettings.AutoUpdateServerSubList;
                 if (w.ShowDialog() == DialogResult.OK)
                 {
-                    autoUpdateServers = w.ServerList;
-                    autoUpdateIndex = w.ServerListIndex;
+                    internalSettings.AutoUpdateServerLists = w.ServerList;
+                    internalSettings.AutoUpdateServerSubList = w.ServerListIndex;
                 }
             }
         }
@@ -1683,13 +1684,10 @@ namespace MeGUI
 		{
 			get 
 			{
-				MeGUISettings settings = new MeGUISettings();
+                MeGUISettings settings = internalSettings;
                 settings.AcceptableFPSError = acceptableFPSError.Value; 
                 settings.MaxServersToTry = (int)maxServersToTry.Value;
-                settings.AutoUpdateServerSubList = autoUpdateIndex;
-                settings.AutoUpdateServerLists = autoUpdateServers;
                 settings.AutoUpdate = useAutoUpdateCheckbox.Checked;
-                settings.DialogSettings = dialogSettings;
                 settings.AcceptableAspectErrorPercent = (int)acceptableAspectError.Value;
 				settings.MencoderPath = mencoderPath.Text;
                 settings.SourceDetectorSettings = sdSettings;
@@ -1739,14 +1737,12 @@ namespace MeGUI
 			}
 			set
 			{
-				MeGUISettings settings = value;
+                internalSettings = value;
+                MeGUISettings settings = value;
                 acceptableFPSError.Value = settings.AcceptableFPSError;
                 maxServersToTry.Value = settings.MaxServersToTry;
-                autoUpdateServers = settings.AutoUpdateServerLists;
-                autoUpdateIndex = settings.AutoUpdateServerSubList;
                 useAutoUpdateCheckbox.Checked = settings.AutoUpdate;
                 acceptableAspectError.Value = (decimal)settings.AcceptableAspectErrorPercent;
-                dialogSettings = settings.DialogSettings;
 				mencoderPath.Text = settings.MencoderPath;      
                 textBox1.Text = settings.FaacPath;
                 textBox2.Text = settings.NeroAacEncPath;

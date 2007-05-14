@@ -55,6 +55,7 @@ namespace MeGUI.packages.video.xvid
             this.xvidVHQ = new System.Windows.Forms.ComboBox();
             this.xvidVHQLabel = new System.Windows.Forms.Label();
             this.xvidGeneralOptionsGroupBox = new System.Windows.Forms.GroupBox();
+            this.xvidBitrateQuantizer = new System.Windows.Forms.NumericUpDown();
             this.xvidKeyframeInterval = new System.Windows.Forms.TextBox();
             this.xvidKeyframeIntervalLabel = new System.Windows.Forms.Label();
             this.xvidPackedBitstream = new System.Windows.Forms.CheckBox();
@@ -63,7 +64,6 @@ namespace MeGUI.packages.video.xvid
             this.xvidMotionSearchPrecisionLabel = new System.Windows.Forms.Label();
             this.xvidNbBFrames = new System.Windows.Forms.NumericUpDown();
             this.xvidNbBframesLabel = new System.Windows.Forms.Label();
-            this.xvidBitrateQuantizer = new System.Windows.Forms.TextBox();
             this.xvidBitrateQuantLabel = new System.Windows.Forms.Label();
             this.xvidTurbo = new System.Windows.Forms.CheckBox();
             this.xvidEncodingMode = new System.Windows.Forms.ComboBox();
@@ -139,6 +139,7 @@ namespace MeGUI.packages.video.xvid
             ((System.ComponentModel.ISupportInitialize)(this.nbThreads)).BeginInit();
             this.xvidCodecToolsGroupBox.SuspendLayout();
             this.xvidGeneralOptionsGroupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.xvidBitrateQuantizer)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.xvidNbBFrames)).BeginInit();
             this.xvidOtherOptionsGroupbox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.xvidFrameDropRatio)).BeginInit();
@@ -468,6 +469,7 @@ namespace MeGUI.packages.video.xvid
             // 
             // xvidGeneralOptionsGroupBox
             // 
+            this.xvidGeneralOptionsGroupBox.Controls.Add(this.xvidBitrateQuantizer);
             this.xvidGeneralOptionsGroupBox.Controls.Add(this.xvidKeyframeInterval);
             this.xvidGeneralOptionsGroupBox.Controls.Add(this.xvidKeyframeIntervalLabel);
             this.xvidGeneralOptionsGroupBox.Controls.Add(this.xvidPackedBitstream);
@@ -476,7 +478,6 @@ namespace MeGUI.packages.video.xvid
             this.xvidGeneralOptionsGroupBox.Controls.Add(this.xvidMotionSearchPrecisionLabel);
             this.xvidGeneralOptionsGroupBox.Controls.Add(this.xvidNbBFrames);
             this.xvidGeneralOptionsGroupBox.Controls.Add(this.xvidNbBframesLabel);
-            this.xvidGeneralOptionsGroupBox.Controls.Add(this.xvidBitrateQuantizer);
             this.xvidGeneralOptionsGroupBox.Controls.Add(this.xvidBitrateQuantLabel);
             this.xvidGeneralOptionsGroupBox.Controls.Add(this.xvidTurbo);
             this.xvidGeneralOptionsGroupBox.Controls.Add(this.xvidEncodingMode);
@@ -487,6 +488,19 @@ namespace MeGUI.packages.video.xvid
             this.xvidGeneralOptionsGroupBox.TabIndex = 22;
             this.xvidGeneralOptionsGroupBox.TabStop = false;
             this.xvidGeneralOptionsGroupBox.Text = "General";
+            // 
+            // xvidBitrateQuantizer
+            // 
+            this.xvidBitrateQuantizer.Location = new System.Drawing.Point(192, 43);
+            this.xvidBitrateQuantizer.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.xvidBitrateQuantizer.Name = "xvidBitrateQuantizer";
+            this.xvidBitrateQuantizer.Size = new System.Drawing.Size(120, 20);
+            this.xvidBitrateQuantizer.TabIndex = 13;
+            this.xvidBitrateQuantizer.ValueChanged += new System.EventHandler(this.updateEvent);
             // 
             // xvidKeyframeInterval
             // 
@@ -565,16 +579,6 @@ namespace MeGUI.packages.video.xvid
             this.xvidNbBframesLabel.Size = new System.Drawing.Size(120, 23);
             this.xvidNbBframesLabel.TabIndex = 7;
             this.xvidNbBframesLabel.Text = "Number of B-frames";
-            // 
-            // xvidBitrateQuantizer
-            // 
-            this.xvidBitrateQuantizer.Location = new System.Drawing.Point(272, 48);
-            this.xvidBitrateQuantizer.Name = "xvidBitrateQuantizer";
-            this.xvidBitrateQuantizer.Size = new System.Drawing.Size(40, 20);
-            this.xvidBitrateQuantizer.TabIndex = 4;
-            this.xvidBitrateQuantizer.Text = "800";
-            this.xvidBitrateQuantizer.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textField_KeyPress);
-            this.xvidBitrateQuantizer.TextChanged += new System.EventHandler(this.updateEvent);
             // 
             // xvidBitrateQuantLabel
             // 
@@ -1361,6 +1365,7 @@ namespace MeGUI.packages.video.xvid
             this.xvidCodecToolsGroupBox.ResumeLayout(false);
             this.xvidGeneralOptionsGroupBox.ResumeLayout(false);
             this.xvidGeneralOptionsGroupBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.xvidBitrateQuantizer)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.xvidNbBFrames)).EndInit();
             this.xvidOtherOptionsGroupbox.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.xvidFrameDropRatio)).EndInit();
@@ -1428,7 +1433,6 @@ namespace MeGUI.packages.video.xvid
         private System.Windows.Forms.Label xvidMotionSearchPrecisionLabel;
         private System.Windows.Forms.NumericUpDown xvidNbBFrames;
         private System.Windows.Forms.Label xvidNbBframesLabel;
-        private System.Windows.Forms.TextBox xvidBitrateQuantizer;
         private System.Windows.Forms.Label xvidBitrateQuantLabel;
         private System.Windows.Forms.CheckBox xvidTurbo;
         private System.Windows.Forms.ComboBox xvidEncodingMode;
@@ -1501,5 +1505,6 @@ namespace MeGUI.packages.video.xvid
         private System.Windows.Forms.NumericUpDown nbThreads;
         private System.Windows.Forms.TextBox xvidKeyframeInterval;
         private System.Windows.Forms.Label xvidKeyframeIntervalLabel;
+        private System.Windows.Forms.NumericUpDown xvidBitrateQuantizer;
     }
 }

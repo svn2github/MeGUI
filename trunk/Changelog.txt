@@ -1,3 +1,10 @@
+0.2.4.1041
+Commit by berrinam:
+    - Allow non-integer XviD quantizers (1650574)
+    - Make the main window expandable (1704963)
+    - Groups of jobs can be moved up and down in the queue (1685623)
+    - Allow autoscrolling the log (1661785)
+
 0.2.4.1040
 Commit by berrinam:
     - Small new feature: AutoEncode has better filesize choosers.

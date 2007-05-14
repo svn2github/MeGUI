@@ -69,12 +69,10 @@ namespace MeGUI
         private System.Windows.Forms.MenuItem mnuToolsSettings;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
-        private System.Windows.Forms.Button resetButton;
         private System.Windows.Forms.MenuItem mnuView;
         private System.Windows.Forms.MenuItem mnuViewProcessStatus;
         private MenuItem mnuViewMinimizeToTray;
         private NotifyIcon trayIcon;
-        private System.Windows.Forms.Button autoEncodeButton;
         private System.Windows.Forms.MenuItem mnuMuxers;
         private MenuItem mnuFileOpen;
         private ContextMenuStrip trayMenu;
@@ -87,7 +85,6 @@ namespace MeGUI
         private ToolStripMenuItem exitMeGUIToolStripMenuItem;
         private MenuItem mnuFileImport;
         private MenuItem mnuFileExport;
-        private Button clearLogButton;
         private MenuItem mnuToolsAdaptiveMuxer;
         #endregion
         private AudioEncodingComponent audioEncodingComponent1;
@@ -98,6 +95,12 @@ namespace MeGUI
         private MenuItem mnuHelp;
         private MenuItem mnuGuide;
         private MenuItem mnuChangelog;
+        private FlowLayoutPanel flowLayoutPanel1;
+        private Button clearLogButton;
+        private FlowLayoutPanel flowLayoutPanel2;
+        private Button autoEncodeButton;
+        private Button resetButton;
+        private CheckBox autoscroll;
         private MenuItem mnuHelpLink;
 
 
@@ -118,17 +121,21 @@ namespace MeGUI
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.inputTab = new System.Windows.Forms.TabPage();
-            this.audioEncodingComponent1 = new MeGUI.AudioEncodingComponent();
-            this.videoEncodingComponent1 = new MeGUI.VideoEncodingComponent();
+            this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
             this.autoEncodeButton = new System.Windows.Forms.Button();
             this.resetButton = new System.Windows.Forms.Button();
+            this.audioEncodingComponent1 = new MeGUI.AudioEncodingComponent();
+            this.videoEncodingComponent1 = new MeGUI.VideoEncodingComponent();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.jobControl1 = new MeGUI.core.details.JobControl();
             this.logTab = new System.Windows.Forms.TabPage();
-            this.clearLogButton = new System.Windows.Forms.Button();
             this.log = new System.Windows.Forms.TextBox();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.clearLogButton = new System.Windows.Forms.Button();
+            this.autoscroll = new System.Windows.Forms.CheckBox();
             this.mnuMuxers = new System.Windows.Forms.MenuItem();
             this.mnuToolsAdaptiveMuxer = new System.Windows.Forms.MenuItem();
             this.mainMenu1 = new System.Windows.Forms.MainMenu(this.components);
@@ -159,8 +166,10 @@ namespace MeGUI
             this.exitMeGUIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1.SuspendLayout();
             this.inputTab.SuspendLayout();
+            this.flowLayoutPanel2.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.logTab.SuspendLayout();
+            this.flowLayoutPanel1.SuspendLayout();
             this.trayMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -173,21 +182,57 @@ namespace MeGUI
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(478, 397);
+            this.tabControl1.Size = new System.Drawing.Size(466, 392);
             this.tabControl1.TabIndex = 0;
             // 
             // inputTab
             // 
             this.inputTab.BackColor = System.Drawing.SystemColors.Control;
+            this.inputTab.Controls.Add(this.flowLayoutPanel2);
             this.inputTab.Controls.Add(this.audioEncodingComponent1);
             this.inputTab.Controls.Add(this.videoEncodingComponent1);
-            this.inputTab.Controls.Add(this.autoEncodeButton);
-            this.inputTab.Controls.Add(this.resetButton);
             this.inputTab.Location = new System.Drawing.Point(4, 22);
             this.inputTab.Name = "inputTab";
-            this.inputTab.Size = new System.Drawing.Size(470, 371);
+            this.inputTab.Size = new System.Drawing.Size(458, 366);
             this.inputTab.TabIndex = 0;
             this.inputTab.Text = "Input";
+            // 
+            // flowLayoutPanel2
+            // 
+            this.flowLayoutPanel2.AutoSize = true;
+            this.flowLayoutPanel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.flowLayoutPanel2.Controls.Add(this.autoEncodeButton);
+            this.flowLayoutPanel2.Controls.Add(this.resetButton);
+            this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.flowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
+            this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 337);
+            this.flowLayoutPanel2.Name = "flowLayoutPanel2";
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(458, 29);
+            this.flowLayoutPanel2.TabIndex = 9;
+            // 
+            // autoEncodeButton
+            // 
+            this.autoEncodeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.autoEncodeButton.AutoSize = true;
+            this.autoEncodeButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.autoEncodeButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.autoEncodeButton.Location = new System.Drawing.Point(380, 3);
+            this.autoEncodeButton.Name = "autoEncodeButton";
+            this.autoEncodeButton.Size = new System.Drawing.Size(75, 23);
+            this.autoEncodeButton.TabIndex = 8;
+            this.autoEncodeButton.Text = "AutoEncode";
+            // 
+            // resetButton
+            // 
+            this.resetButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.resetButton.AutoSize = true;
+            this.resetButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.resetButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.resetButton.Location = new System.Drawing.Point(329, 3);
+            this.resetButton.Name = "resetButton";
+            this.resetButton.Size = new System.Drawing.Size(45, 23);
+            this.resetButton.TabIndex = 7;
+            this.resetButton.Text = "Reset";
             // 
             // audioEncodingComponent1
             // 
@@ -197,7 +242,7 @@ namespace MeGUI
             this.audioEncodingComponent1.Location = new System.Drawing.Point(0, 153);
             this.audioEncodingComponent1.MinimumSize = new System.Drawing.Size(400, 162);
             this.audioEncodingComponent1.Name = "audioEncodingComponent1";
-            this.audioEncodingComponent1.Size = new System.Drawing.Size(470, 179);
+            this.audioEncodingComponent1.Size = new System.Drawing.Size(458, 179);
             this.audioEncodingComponent1.TabIndex = 8;
             // 
             // videoEncodingComponent1
@@ -208,37 +253,17 @@ namespace MeGUI
             this.videoEncodingComponent1.MinimumSize = new System.Drawing.Size(415, 153);
             this.videoEncodingComponent1.Name = "videoEncodingComponent1";
             this.videoEncodingComponent1.PrerenderJob = false;
-            this.videoEncodingComponent1.Size = new System.Drawing.Size(470, 153);
+            this.videoEncodingComponent1.Size = new System.Drawing.Size(458, 153);
             this.videoEncodingComponent1.TabIndex = 7;
             this.videoEncodingComponent1.VideoInput = "";
             this.videoEncodingComponent1.VideoOutput = "";
-            // 
-            // autoEncodeButton
-            // 
-            this.autoEncodeButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.autoEncodeButton.Location = new System.Drawing.Point(382, 338);
-            this.autoEncodeButton.Name = "autoEncodeButton";
-            this.autoEncodeButton.Size = new System.Drawing.Size(80, 23);
-            this.autoEncodeButton.TabIndex = 6;
-            this.autoEncodeButton.Text = "AutoEncode";
-            this.autoEncodeButton.Click += new System.EventHandler(this.autoEncodeButton_Click);
-            // 
-            // resetButton
-            // 
-            this.resetButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.resetButton.Location = new System.Drawing.Point(328, 338);
-            this.resetButton.Name = "resetButton";
-            this.resetButton.Size = new System.Drawing.Size(48, 23);
-            this.resetButton.TabIndex = 5;
-            this.resetButton.Text = "Reset";
-            this.resetButton.Click += new System.EventHandler(this.resetButton_Click);
             // 
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.jobControl1);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Size = new System.Drawing.Size(470, 371);
+            this.tabPage2.Size = new System.Drawing.Size(458, 366);
             this.tabPage2.TabIndex = 12;
             this.tabPage2.Text = "Queue";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -249,42 +274,68 @@ namespace MeGUI
             this.jobControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.jobControl1.Location = new System.Drawing.Point(0, 0);
             this.jobControl1.Name = "jobControl1";
-            this.jobControl1.Size = new System.Drawing.Size(470, 371);
+            this.jobControl1.Size = new System.Drawing.Size(458, 366);
             this.jobControl1.TabIndex = 0;
             this.jobControl1.Load += new System.EventHandler(this.jobControl1_Load);
             // 
             // logTab
             // 
-            this.logTab.Controls.Add(this.clearLogButton);
             this.logTab.Controls.Add(this.log);
+            this.logTab.Controls.Add(this.flowLayoutPanel1);
             this.logTab.Location = new System.Drawing.Point(4, 22);
             this.logTab.Name = "logTab";
-            this.logTab.Size = new System.Drawing.Size(470, 371);
+            this.logTab.Size = new System.Drawing.Size(458, 366);
             this.logTab.TabIndex = 10;
             this.logTab.Text = "Log";
             this.logTab.UseVisualStyleBackColor = true;
             // 
-            // clearLogButton
-            // 
-            this.clearLogButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.clearLogButton.Location = new System.Drawing.Point(8, 3);
-            this.clearLogButton.Name = "clearLogButton";
-            this.clearLogButton.Size = new System.Drawing.Size(75, 23);
-            this.clearLogButton.TabIndex = 1;
-            this.clearLogButton.Text = "Clear Log";
-            this.clearLogButton.UseVisualStyleBackColor = true;
-            this.clearLogButton.Click += new System.EventHandler(this.clearLogButton_Click);
-            // 
             // log
             // 
-            this.log.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.log.Location = new System.Drawing.Point(0, 39);
+            this.log.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.log.Location = new System.Drawing.Point(0, 29);
             this.log.Multiline = true;
             this.log.Name = "log";
             this.log.ReadOnly = true;
             this.log.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.log.Size = new System.Drawing.Size(470, 332);
+            this.log.Size = new System.Drawing.Size(458, 337);
             this.log.TabIndex = 0;
+            // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.AutoSize = true;
+            this.flowLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.flowLayoutPanel1.Controls.Add(this.clearLogButton);
+            this.flowLayoutPanel1.Controls.Add(this.autoscroll);
+            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(458, 29);
+            this.flowLayoutPanel1.TabIndex = 1;
+            // 
+            // clearLogButton
+            // 
+            this.clearLogButton.AutoSize = true;
+            this.clearLogButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.clearLogButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.clearLogButton.Location = new System.Drawing.Point(3, 3);
+            this.clearLogButton.Name = "clearLogButton";
+            this.clearLogButton.Size = new System.Drawing.Size(62, 23);
+            this.clearLogButton.TabIndex = 2;
+            this.clearLogButton.Text = "Clear Log";
+            this.clearLogButton.UseVisualStyleBackColor = true;
+            this.clearLogButton.Click += new System.EventHandler(this.clearLogButton_Click);
+            // 
+            // autoscroll
+            // 
+            this.autoscroll.AutoSize = true;
+            this.flowLayoutPanel1.SetFlowBreak(this.autoscroll, true);
+            this.autoscroll.Location = new System.Drawing.Point(71, 3);
+            this.autoscroll.Name = "autoscroll";
+            this.autoscroll.Size = new System.Drawing.Size(74, 17);
+            this.autoscroll.TabIndex = 3;
+            this.autoscroll.Text = "AutoScroll";
+            this.autoscroll.UseVisualStyleBackColor = true;
+            this.autoscroll.CheckedChanged += new System.EventHandler(this.autoscroll_CheckedChanged);
             // 
             // mnuMuxers
             // 
@@ -478,10 +529,10 @@ namespace MeGUI
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(478, 397);
+            this.ClientSize = new System.Drawing.Size(466, 392);
             this.Controls.Add(this.tabControl1);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Menu = this.mainMenu1;
             this.Name = "MainForm";
@@ -490,9 +541,14 @@ namespace MeGUI
             this.Load += new System.EventHandler(this.MeGUI_Load);
             this.tabControl1.ResumeLayout(false);
             this.inputTab.ResumeLayout(false);
+            this.inputTab.PerformLayout();
+            this.flowLayoutPanel2.ResumeLayout(false);
+            this.flowLayoutPanel2.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.logTab.ResumeLayout(false);
             this.logTab.PerformLayout();
+            this.flowLayoutPanel1.ResumeLayout(false);
+            this.flowLayoutPanel1.PerformLayout();
             this.trayMenu.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -856,6 +912,11 @@ namespace MeGUI
         {
             logBuilder.Append(logEntry);
             this.log.Text = logBuilder.ToString();
+            if (Settings.AutoScrollLog)
+            {
+                log.Select(log.Text.Length - 1, 0);
+                log.ScrollToCaret();
+            }
         }
         /// <summary>
         /// saves the whole content of the log into a logfile
@@ -1611,6 +1672,11 @@ namespace MeGUI
         private void jobControl1_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void autoscroll_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.AutoScrollLog = autoscroll.Checked;
         }
     }
     public class CommandlineUpgradeData
