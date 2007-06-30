@@ -181,7 +181,7 @@ namespace MeGUI
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(466, 392);
+            this.tabControl1.Size = new System.Drawing.Size(466, 394);
             this.tabControl1.TabIndex = 0;
             // 
             // inputTab
@@ -192,7 +192,7 @@ namespace MeGUI
             this.inputTab.Controls.Add(this.videoEncodingComponent1);
             this.inputTab.Location = new System.Drawing.Point(4, 22);
             this.inputTab.Name = "inputTab";
-            this.inputTab.Size = new System.Drawing.Size(458, 366);
+            this.inputTab.Size = new System.Drawing.Size(458, 368);
             this.inputTab.TabIndex = 0;
             this.inputTab.Text = "Input";
             // 
@@ -204,7 +204,7 @@ namespace MeGUI
             this.flowLayoutPanel2.Controls.Add(this.resetButton);
             this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.flowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 337);
+            this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 339);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
             this.flowLayoutPanel2.Size = new System.Drawing.Size(458, 29);
             this.flowLayoutPanel2.TabIndex = 9;
@@ -220,6 +220,7 @@ namespace MeGUI
             this.autoEncodeButton.Size = new System.Drawing.Size(75, 23);
             this.autoEncodeButton.TabIndex = 8;
             this.autoEncodeButton.Text = "AutoEncode";
+            this.autoEncodeButton.Click += new System.EventHandler(this.autoEncodeButton_Click);
             // 
             // resetButton
             // 
@@ -232,6 +233,7 @@ namespace MeGUI
             this.resetButton.Size = new System.Drawing.Size(45, 23);
             this.resetButton.TabIndex = 7;
             this.resetButton.Text = "Reset";
+            this.resetButton.Click += new System.EventHandler(this.resetButton_Click);
             // 
             // audioEncodingComponent1
             // 
@@ -262,7 +264,7 @@ namespace MeGUI
             this.tabPage2.Controls.Add(this.jobControl1);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Size = new System.Drawing.Size(458, 366);
+            this.tabPage2.Size = new System.Drawing.Size(458, 368);
             this.tabPage2.TabIndex = 12;
             this.tabPage2.Text = "Queue";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -273,7 +275,7 @@ namespace MeGUI
             this.jobControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.jobControl1.Location = new System.Drawing.Point(0, 0);
             this.jobControl1.Name = "jobControl1";
-            this.jobControl1.Size = new System.Drawing.Size(458, 366);
+            this.jobControl1.Size = new System.Drawing.Size(458, 368);
             this.jobControl1.TabIndex = 0;
             this.jobControl1.Load += new System.EventHandler(this.jobControl1_Load);
             // 
@@ -283,7 +285,7 @@ namespace MeGUI
             this.logTab.Controls.Add(this.flowLayoutPanel1);
             this.logTab.Location = new System.Drawing.Point(4, 22);
             this.logTab.Name = "logTab";
-            this.logTab.Size = new System.Drawing.Size(458, 366);
+            this.logTab.Size = new System.Drawing.Size(458, 368);
             this.logTab.TabIndex = 10;
             this.logTab.Text = "Log";
             this.logTab.UseVisualStyleBackColor = true;
@@ -296,7 +298,7 @@ namespace MeGUI
             this.log.Name = "log";
             this.log.ReadOnly = true;
             this.log.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.log.Size = new System.Drawing.Size(458, 337);
+            this.log.Size = new System.Drawing.Size(458, 339);
             this.log.TabIndex = 0;
             // 
             // flowLayoutPanel1
@@ -528,10 +530,9 @@ namespace MeGUI
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(466, 392);
+            this.ClientSize = new System.Drawing.Size(466, 394);
             this.Controls.Add(this.tabControl1);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.MaximizeBox = false;
             this.Menu = this.mainMenu1;
             this.Name = "MainForm";
             this.DragDrop += new System.Windows.Forms.DragEventHandler(this.MeGUI_DragDrop);

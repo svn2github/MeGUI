@@ -156,8 +156,14 @@ namespace MeGUI.core.details
         /// access problems
         /// </summary>
         /// <param name="su">StatusUpdate object that contains the current encoding statuts</param>
+        private DateTime lastUpdated = DateTime.MinValue;
         private void enc_StatusUpdate(StatusUpdate su)
         {
+            if (!su.HasError && !su.IsComplete && !su.WasAborted && 
+                ((DateTime.Now - lastUpdated) < new TimeSpan(0, 0, 1) && su.PercentageDone != 100))
+                return;
+
+            lastUpdated = DateTime.Now;
             this.Invoke(new UpdateGUIStatusCallback(this.UpdateGUIStatus), new object[] { su });
         }
 

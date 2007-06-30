@@ -12,6 +12,7 @@ using System.Collections.Generic;
 
 using MeGUI.core.details.video;
 using MeGUI.core.plugins.interfaces;
+using System.Diagnostics;
 
 namespace MeGUI
 {
@@ -192,6 +193,8 @@ namespace MeGUI
 
             SingleConfigurerHandler<AviSynthSettings, Empty, int, int> configurerHandler = new SingleConfigurerHandler<AviSynthSettings, Empty, int, int>(profileHandler, settingsProvider);
             configurerHandler.ProfileChanged += new SelectedProfileChangedEvent(ProfileChanged);
+
+            ProfileChanged(null, null);
 		}
 
         void ProfileChanged(object sender, Profile prof)
@@ -1509,6 +1512,10 @@ namespace MeGUI
                     inputDAR.SelectedIndex = 3; // Custom
                     customDAR.Text = Math.Round(((double)((double)file.Width / (double)file.Height)), 4).ToString();
                 }
+                Debug.Assert(file.Width > 1);
+                Debug.Assert(file.Height > 1);
+                cropLeft.Maximum = cropRight.Maximum = file.Width / 2;
+                cropTop.Maximum = cropBottom.Maximum = file.Height / 2;
 				this.showScript();
 			}
 		}

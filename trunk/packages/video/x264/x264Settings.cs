@@ -28,6 +28,11 @@ namespace MeGUI
 	[Serializable]
 	public class x264Settings: VideoCodecSettings
 	{
+        public override void setAdjustedNbThreads(int nbThreads)
+        {
+            base.setAdjustedNbThreads(0);
+        }
+
         public override void FixFileNames(System.Collections.Generic.Dictionary<string, string> substitutionTable)
         {
             base.FixFileNames(substitutionTable);

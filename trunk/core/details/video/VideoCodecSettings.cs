@@ -29,6 +29,11 @@ namespace MeGUI
 	[XmlInclude(typeof(lavcSettings)), XmlInclude(typeof(x264Settings)), XmlInclude(typeof(snowSettings)), XmlInclude(typeof(xvidSettings)), XmlInclude(typeof(hfyuSettings))]
     public abstract class VideoCodecSettings : MeGUI.core.plugins.interfaces.GenericSettings
 	{
+        public virtual void setAdjustedNbThreads(int nbThreads)
+        {
+            NbThreads = nbThreads;
+        }
+
         public override bool Equals(object obj)
         {
             return PropertyEqualityTester.Equals(this, obj);

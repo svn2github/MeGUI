@@ -466,6 +466,7 @@ namespace MeGUI
             this.audioDelay.Name = "audioDelay";
             this.audioDelay.Size = new System.Drawing.Size(78, 21);
             this.audioDelay.TabIndex = 31;
+            this.audioDelay.ValueChanged += new System.EventHandler(this.audioDelay_ValueChanged);
             // 
             // audioName
             // 
@@ -1127,5 +1128,10 @@ namespace MeGUI
         }
         #endregion
         protected virtual void fileUpdated() { }
+
+        private void audioDelay_ValueChanged(object sender, EventArgs e)
+        {
+            audioStreams[getSelectedAudioTrack()].delay = (int)audioDelay.Value;
+        }
     }
 }

@@ -1,3 +1,15 @@
+0.2.4.1042
+Commit by berrinam:
+    - Make main window maximizable (1734262)
+    - Fixed 1648638 with Mutant_Fruit's patch
+    - Fixed 1737423 adapting foxyshadis's patch
+    - Fixed 1734260 (must select profile in AVS creator for settings to be applied)
+    - Fixed 1728899 (AutoEncode button does not work)
+    - Fixed 1728890 (mp4box problem). mp4box muxes now use the output file's folder as the temp dir
+    - Fixed 1727973 (crop limit 200 pixels). The crop limit is now half the video's size
+    - Fixed inability to serialise jobs created with non-adaptive muxers
+    - Fixed 1659923 (Audio Delay ignored in muxer)
+
 0.2.4.1041
 Commit by berrinam:
     - Allow non-integer XviD quantizers (1650574)
@@ -24,7 +36,7 @@ Commit by berrinam:
     - Fixed 1652312 (xvid b-frames default wrong)
     
 0.2.4.1039
-Commint by Sharx1976:
+Commit by Sharx1976:
     - Fixed 1672842 (x264 lossless broken)
     - Fixed MediaInfoWrapper reference in the megui project
 

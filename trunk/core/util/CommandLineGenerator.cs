@@ -880,6 +880,8 @@ namespace MeGUI
                     sb.Append(":lang=" + stream.language);
                 if (stream.name != null && !stream.name.Equals(""))
                     sb.Append(":name=\"" + stream.name + "\"");
+                if (stream.delay != 0)
+                    sb.AppendFormat(":delay={0}", stream.delay);
             }
             foreach (object o in settings.SubtitleStreams)
             {
@@ -901,6 +903,7 @@ namespace MeGUI
                 sb.Append(" -fps " + fpsString);
             }
             sb.Append(" -new \"" + settings.MuxedOutput + "\"");
+            sb.AppendFormat(" -tmp \"{0}\"", Path.GetDirectoryName(settings.MuxedOutput));
             return sb.ToString();
         }
 		#endregion
@@ -992,7 +995,8 @@ namespace MeGUI
 					trackID = 1;
             	if (!stream.language.Equals(""))
 					sb.Append(" --language " + trackID + ":" + stream.language);
-				
+                if (stream.delay != 0)
+                    sb.AppendFormat(" --delay {0}:{1}ms", trackID, stream.delay);
             	sb.Append(" -a " + trackID + " -D -S \"" + stream.path + "\"");
 			}
 			

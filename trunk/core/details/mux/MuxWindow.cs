@@ -6,6 +6,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace MeGUI
 {
@@ -13,7 +14,6 @@ namespace MeGUI
     {
         private IMuxing muxer;
         private MainForm mainForm;
-        private ContainerType cot;
         private CommandLineGenerator gen = new CommandLineGenerator();
 
         public MuxWindow(IMuxing muxer, MainForm mainForm) : base()
@@ -59,7 +59,7 @@ namespace MeGUI
 
             job.Output = job.Settings.MuxedOutput;
             job.MuxType = muxer.MuxerType;
-            job.ContainerType = cot;
+            job.ContainerType = getContainerType(job.Settings.MuxedOutput);
             if ((!job.Settings.MuxedInput.Equals("") || !job.Settings.VideoInput.Equals(""))
                 && !job.Settings.MuxedOutput.Equals(""))
             {
@@ -83,16 +83,15 @@ namespace MeGUI
                 setConfig(value.Settings.VideoInput, value.Settings.MuxedInput, value.Settings.Framerate,
                     value.Settings.AudioStreams.ToArray(), value.Settings.SubtitleStreams.ToArray(),
                     value.Settings.ChapterFile, value.Settings.MuxedOutput, value.Settings.SplitSize,
-                    value.Settings.PARX, value.Settings.PARY, value.ContainerType);
+                    value.Settings.PARX, value.Settings.PARY);
             }
         }
 
         private void setConfig(string videoInput, string muxedInput, double framerate, SubStream[] audioStreams,
-            SubStream[] subtitleStreams, string chapterFile, string output, int splitSize, int parX, int parY, ContainerType cot)
+            SubStream[] subtitleStreams, string chapterFile, string output, int splitSize, int parX, int parY)
         {
             base.setConfig(videoInput, framerate, audioStreams, subtitleStreams, chapterFile, output, splitSize, parX, parY);
             this.muxedInput.Text = muxedInput;
-            this.cot = cot;
             this.checkIO();
         }
 
@@ -140,6 +139,18 @@ namespace MeGUI
             }
         }
         #endregion
+
+        private ContainerType getContainerType(string outputFilename)
+        {
+            Debug.Assert(outputFilename != null);
+            foreach (ContainerType t in muxer.GetSupportedContainers())
+            {
+                if (outputFilename.ToLower().EndsWith(t.Extension.ToLower()))
+                    return t;
+            }
+            Debug.Assert(false);
+            return null;
+        }
 
         private void muxedInputOpenButton_Click(object sender, EventArgs e)
         {
