@@ -1,3 +1,7 @@
+0.2.4.1043
+Commit by berrinam:
+    - Add support for AVI-Mux GUI muxing
+
 0.2.4.1042
 Commit by berrinam:
     - Make main window maximizable (1734262)

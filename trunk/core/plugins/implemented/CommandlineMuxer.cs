@@ -44,7 +44,8 @@ namespace MeGUI
                     while ((line = sr.ReadLine()) != null)
                     {
                         mre.WaitOne();
-                        MuxerOutputReceived(line, 0);
+                        if (MuxerOutputReceived != null)
+                            MuxerOutputReceived(line, 0);
                     }
                 }
                 catch (Exception e)
@@ -74,7 +75,8 @@ namespace MeGUI
                     while ((line = sr.ReadLine()) != null)
                     {
                         mre.WaitOne();
-                        MuxerOutputReceived(line, 1);
+                        if (MuxerOutputReceived != null)
+                            MuxerOutputReceived(line, 1);
                     }
                 }
                 catch (Exception e)
@@ -108,7 +110,7 @@ namespace MeGUI
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void proc_Exited(object sender, EventArgs e)
+        void    proc_Exited(object sender, EventArgs e)
         {
             stdoutDone.WaitOne(); // wait for stdout to finish processing
             stderrDone.WaitOne(); // wait for stderr to finish processing
@@ -156,6 +158,15 @@ namespace MeGUI
             }
             executable = "\"" + executable + "\"";
             this.job = (MuxJob)job;
+            try
+            {
+                ensureInputFilesExist(this.job.Settings);
+            }
+            catch (SetupException se)
+            {
+                error = se.error;
+                return false;
+            }
             su = new StatusUpdate();
             su.JobName = job.Name;
             su.JobType = JobTypes.MUX;
@@ -163,6 +174,23 @@ namespace MeGUI
             log = new StringBuilder();
             setProjectedFileSize();
             return true;
+        }
+
+        private void ensureInputFilesExist(MuxSettings settings)
+        {
+            ensureExists(settings.MuxedInput);
+            ensureExists(settings.VideoInput);
+            ensureExists(settings.ChapterFile);
+            foreach (SubStream s in settings.AudioStreams)
+                ensureExists(s.path);
+            foreach (SubStream s in settings.SubtitleStreams)
+                ensureExists(s.path);
+        }
+
+        private void ensureExists(string file)
+        {
+            if (!string.IsNullOrEmpty(file) && !File.Exists(file))
+                throw new SetupException("Input file, '" + file + "' doesn't exist.");
         }
 
         public override bool start(out string error)

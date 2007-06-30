@@ -446,19 +446,25 @@ namespace MeGUI
         public AVIMuxGUIMuxerProvider(): base("AVIMuxGUI")
         {
             supportedVideoTypes.Add(VideoType.AVI);
+            supportsAnyInputtableVideoCodec = true;
+
             supportedAudioTypes.Add(AudioType.AC3);
             supportedAudioTypes.Add(AudioType.DTS);
             supportedAudioTypes.Add(AudioType.MP3);
             supportedAudioTypes.Add(AudioType.VBRMP3);
             supportedAudioTypes.Add(AudioType.CBRMP3);
-            supportsAnyInputtableAudioCodec = true;
-            supportsAnyInputtableVideoCodec = true;
-            supportedAudioTypes.Add(AudioType.VORBIS);
+            supportedAudioTypes.Add(AudioType.MP2);
             supportedAudioTypes.Add(AudioType.RAWAAC);
+            supportsAnyInputtableAudioCodec = true;
+            
+            
             supportedSubtitleTypes.Add(SubtitleType.SUBRIP);
+            
             supportedContainers.Add(ContainerType.AVI);
+
             supportedContainerInputTypes.Add(ContainerType.AVI);
-            maxFilesOfType = new int[] { 1, -1, -1, 1 };
+            
+            maxFilesOfType = new int[] { 1, -1, -1, 0 };
             base.type = MuxerType.AVIMUXGUI;
             name = "AVI Muxer";
             generator = CommandLineGenerator.generateAVIMuxCommandline;
@@ -466,8 +472,7 @@ namespace MeGUI
 
         public override Muxer GetMuxer(MeGUISettings settings)
         {
-            throw new Exception("AVI-Mux GUI muxer not supported yet");
-            //return new AVIMuxGUIMuxer(settings.AviMuxGUIPath);
+            return new AMGMuxer(settings.AviMuxGUIPath);
         }
     }
     public class DivXMuxProvider : MuxerProvider

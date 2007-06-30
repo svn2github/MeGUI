@@ -465,6 +465,8 @@ namespace MeGUI
                             return meGUISettings.Mp4boxPath;
                         case ("neroaacenc"):
                             return meGUISettings.NeroAacEncPath;
+                        case ("avimux_gui"):
+                            return meGUISettings.AviMuxGUIPath;
                         case ("x264"):
                             return meGUISettings.X264Path;
                         case ("xvid_encraw"):
@@ -515,6 +517,9 @@ namespace MeGUI
                             break;
                         case ("neroaacenc"):
                             meGUISettings.NeroAacEncPath = value;
+                            break;
+                        case ("avimux_gui"):
+                            meGUISettings.AviMuxGUIPath = value;
                             break;
                         case ("x264"):
                             meGUISettings.X264Path = value;

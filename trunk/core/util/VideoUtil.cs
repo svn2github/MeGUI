@@ -1351,3 +1351,13 @@ namespace MeGUI
     }
 	#endregion
 }
+
+public class SetupException : Exception
+{
+    public string error;
+
+    public SetupException(string message)
+    {
+        error = message;
+    }
+}
