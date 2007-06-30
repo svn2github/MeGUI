@@ -1,3 +1,7 @@
+0.2.4.1044
+Commit by berrinam:
+    - Allow future programs to be added to AutoUpdate without crashing
+
 0.2.4.1043
 Commit by berrinam:
     - Add support for AVI-Mux GUI muxing

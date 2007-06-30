@@ -13,6 +13,7 @@ using ICSharpCode.SharpZipLib.GZip;
 using ICSharpCode.SharpZipLib.BZip2;
 
 using System.Text;
+using MeGUI.core.util;
 
 
 namespace MeGUI
@@ -427,6 +428,8 @@ namespace MeGUI
 
             public override void init()
             {
+                if (MeGUIFilePath == null)
+                    throw new FileNotRegisteredYetException(Name);
                 SavePath = Path.Combine(Application.StartupPath, MeGUIFilePath);
                 // If the file doesn't exist, assume it isn't set up, so put it in the standard install location
                 if (!File.Exists(SavePath))
@@ -928,16 +931,23 @@ namespace MeGUI
             
             if ((file = upgradeData.FindByName(node.Name)) == null) // If this file isn't already in
             {                                                       // the upgradeData list.
-                if (groupNode.Name.Equals("MeGUI"))
-                    file = new MeGUIFile(treePath, node.Name);
-                else if (groupNode.Name.Equals("ProgramFile"))
-                    file = new ProgramFile(treePath, node.Name);
-                else if (groupNode.Name.Equals("AviSynthFile"))
-                    file = new AviSynthFile(treePath, node.Name);
-                else if (groupNode.Name.Equals("ProfilesFile"))
-                    file = new ProfilesFile(treePath, node.Name, mainForm);
-                else
+                try
+                {
+                    if (groupNode.Name.Equals("MeGUI"))
+                        file = new MeGUIFile(treePath, node.Name);
+                    else if (groupNode.Name.Equals("ProgramFile"))
+                        file = new ProgramFile(treePath, node.Name);
+                    else if (groupNode.Name.Equals("AviSynthFile"))
+                        file = new AviSynthFile(treePath, node.Name);
+                    else if (groupNode.Name.Equals("ProfilesFile"))
+                        file = new ProfilesFile(treePath, node.Name, mainForm);
+                    else
+                        return;
+                }
+                catch (FileNotRegisteredYetException)
+                {
                     return;
+                }
             }
             else
             {
@@ -1560,5 +1570,21 @@ namespace MeGUI
         }
 
         #endregion
+    }
+
+    public class FileNotRegisteredYetException : MeGUIException
+    {
+        private string name;
+
+        public string Name { get { return name; } }
+        public FileNotRegisteredYetException(string name)
+        {
+            this.name = name;
+        }
+
+        public override string ToString()
+        {
+            return "AutoUpdate file '" + name + "' not registered with MeGUI.";
+        }
     }
 }

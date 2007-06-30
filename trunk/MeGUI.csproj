@@ -312,7 +312,9 @@
     <Compile Include="core\util\LanguageSelectionContainer.cs" />
     <Compile Include="core\util\NotifyCounter.cs" />
     <Compile Include="core\util\ScriptServer.cs" />
+    <Compile Include="core\util\SerializableDictionary.cs" />
     <Compile Include="core\util\Shutdown.cs" />
+    <Compile Include="core\util\Util.cs" />
     <Compile Include="core\util\VideoUtil.cs" />
     <Compile Include="packages\audio\audx\AudXConfigurationPanel.cs">
       <SubType>UserControl</SubType>
