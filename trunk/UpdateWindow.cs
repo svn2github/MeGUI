@@ -474,8 +474,6 @@ namespace MeGUI
                             return meGUISettings.X264Path;
                         case ("xvid_encraw"):
                             return meGUISettings.XviDEncrawPath;
-                        case ("divxmux"):
-                            return meGUISettings.DivXMuxPath;
                         case ("ffmpeg"):
                             return meGUISettings.FFMpegPath;
                         case ("encaudxcli"):
@@ -530,9 +528,6 @@ namespace MeGUI
                         case ("xvid_encraw"):
                             meGUISettings.XviDEncrawPath = value;
                             break;
-                        case ("divxmux"):
-                            meGUISettings.DivXMuxPath = value;
-                            return;
                         case ("ffmpeg"):
                             meGUISettings.FFMpegPath = value;
                             return;
@@ -738,7 +733,11 @@ namespace MeGUI
 
                     foreach (iUpgradeable file in upgradeData)
                     {
-                        file.init();
+                        try
+                        {
+                            file.init();
+                        }
+                        catch (FileNotRegisteredYetException) { }
                     }
 
                     return; //settings loaded correctly

@@ -1,3 +1,9 @@
+0.2.5.1002
+Commit by berrinam:
+    - Removed the DivX avi muxer
+    - Fixed up mux-path-finding with AutoEncode+AddSubsNChapters to support changing output format with same codec.
+        Result: you can now encode to AVI through AutoEncode+AddSubsNChapters
+
 0.2.5.1001 Libs update
     - Same as 0.2.4.1038, but corrected because autoupdate had an old version
 

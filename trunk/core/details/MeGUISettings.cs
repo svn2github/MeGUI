@@ -480,12 +480,6 @@ namespace MeGUI
             set { autoUpdate = value; }
         }
 
-        public string DivXMuxPath
-        {
-            get { return divxMuxerPath; }
-            set { divxMuxerPath = value; }
-        }
-
         public DialogSettings DialogSettings
         {
             get { return dialogSettings; }

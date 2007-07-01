@@ -14,7 +14,7 @@ namespace MeGUI
         private MuxProvider muxProvider;
         private JobUtil jobUtil;
         private bool minimizedMode = false;
-        private MuxableType knownVideoType;
+        private VideoEncoderType knownVideoType;
         private KnownAudioType[] knownAudioTypes;
         public AdaptiveMuxWindow(MainForm mainForm)
         {
@@ -98,11 +98,11 @@ namespace MeGUI
         {
             MuxableType videoType;
             if (minimizedMode)
-                videoType = knownVideoType;
+                videoType = null;
             else
                 videoType = VideoUtil.guessVideoMuxableType(videoInput.Text, true);
 
-            if (videoType == null)
+            if (!minimizedMode && videoType == null)
             {
                 this.containerFormat.Items.Clear();
                 this.containerFormat.Items.AddRange(muxProvider.GetSupportedContainers().ToArray());
@@ -116,7 +116,8 @@ namespace MeGUI
             getTypes(out audioCodecs, out audioTypes, out subTypes);
 
             List<MuxableType> allTypes = new List<MuxableType>();
-            allTypes.Add(videoType);
+            if (videoType != null)
+                allTypes.Add(videoType);
             allTypes.AddRange(audioTypes);
             allTypes.AddRange(subTypes);
 
@@ -124,7 +125,7 @@ namespace MeGUI
 
             if (minimizedMode)
             {
-                supportedOutputTypes = this.muxProvider.GetSupportedContainers(null, audioCodecs,
+                supportedOutputTypes = this.muxProvider.GetSupportedContainers(knownVideoType, audioCodecs,
                     allTypes.ToArray());
             }
             else
@@ -204,7 +205,7 @@ namespace MeGUI
         /// <param name="audioStreams">the audio streams whose languages have to be assigned</param>
         /// <param name="output">the output file</param>
         /// <param name="splitSize">the output split size</param>
-        public void setMinimizedMode(string videoInput, MuxableType videoType, double framerate, SubStream[] audioStreams, KnownAudioType[] audioTypes, string output,
+        public void setMinimizedMode(string videoInput, VideoEncoderType videoType, double framerate, SubStream[] audioStreams, KnownAudioType[] audioTypes, string output,
             int splitSize, ContainerType cft)
         {
             minimizedMode = true;

@@ -381,7 +381,6 @@
     </Compile>
     <Compile Include="packages\AvisynthWrapper.cs" />
     <Compile Include="packages\mux\avimuxgui\AMGMuxer.cs" />
-    <Compile Include="packages\mux\avi\DivXMuxer.cs" />
     <Compile Include="packages\mux\mkv\MkvMergeMuxer.cs" />
     <Compile Include="packages\mux\mp4\MP4BoxMuxer.cs" />
     <Compile Include="packages\reader\d2v\d2vReader.cs" />

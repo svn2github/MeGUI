@@ -475,6 +475,7 @@ namespace MeGUI
             return new AMGMuxer(settings.AviMuxGUIPath);
         }
     }
+    /*
     public class DivXMuxProvider : MuxerProvider
     {
         public DivXMuxProvider()
@@ -502,7 +503,7 @@ namespace MeGUI
         {
             return new DivXMuxer(meguiSettings.DivXMuxPath);
         }
-    }
+    }*/
     public class AVC2AVIMuxerProvider : MuxerProvider
     {
         public AVC2AVIMuxerProvider() : base("avc2avi")

@@ -1509,7 +1509,7 @@ namespace MeGUI
             PackageSystem.MuxerProviders.Register(new MKVMergeMuxerProvider());
             PackageSystem.MuxerProviders.Register(new MP4BoxMuxerProvider());
             PackageSystem.MuxerProviders.Register(new AVC2AVIMuxerProvider());
-            PackageSystem.MuxerProviders.Register(new DivXMuxProvider());
+//            PackageSystem.MuxerProviders.Register(new DivXMuxProvider());
             PackageSystem.MuxerProviders.Register(new AVIMuxGUIMuxerProvider());
             PackageSystem.Tools.Register(new CutterTool());
             PackageSystem.Tools.Register(new AviSynthWindowTool());
