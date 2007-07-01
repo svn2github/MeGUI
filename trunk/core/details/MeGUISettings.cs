@@ -11,7 +11,7 @@ namespace MeGUI
         #region variables
         private string[][] autoUpdateServerLists;
         private string faacPath, lamePath, neroAacEncPath, mencoderPath,  mp4boxPath, mkvmergePath, encAacPlusPath,
-            ffmpegPath,
+            ffmpegPath, besplitPath,
             x264Path, dgIndexPath, xvidEncrawPath, avc2aviPath, aviMuxGUIPath, oggEnc2Path, encAudXPath,
             defaultLanguage1, defaultLanguage2, divxMuxerPath, afterEncodingCommand;
         private bool recalculateMainMovieBitrate, autoForceFilm, autoStartQueue, enableMP3inMP4, autoOpenScript,
@@ -43,6 +43,7 @@ namespace MeGUI
             useadvancedtooltips = true;
             avc2aviPath = "avc2avi.exe";
             aviMuxGUIPath = "avimux_gui.exe";
+            besplitPath = "besplit.exe";
             faacPath = "faac.exe";
             mencoderPath = "mencoder.exe";
 			mp4boxPath = "mp4box.exe";
@@ -155,6 +156,15 @@ namespace MeGUI
         {
             get { return useadvancedtooltips; }
             set { useadvancedtooltips = value; }
+        }
+
+        /// <summary>
+        /// path of besplit.exe
+        /// </summary>
+        public string BeSplitPath
+        {
+            get { return besplitPath; }
+            set { besplitPath = value; }
         }
 
         /// <summary>

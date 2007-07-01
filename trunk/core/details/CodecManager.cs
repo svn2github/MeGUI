@@ -44,6 +44,8 @@ namespace MeGUI
         public static readonly AudioCodec DTS = new AudioCodec("DTS");
         public static readonly AudioCodec AC3 = new AudioCodec("AC3");
         public static readonly AudioCodec MP2 = new AudioCodec("MP2");
+        public static readonly AudioCodec WAV = new AudioCodec("WAV");
+        public static readonly AudioCodec PCM = new AudioCodec("PCM");
     }
     #endregion
     #region video and audio encoder types
@@ -230,6 +232,8 @@ namespace MeGUI
         public static readonly AudioType AC3 = new AudioType("AC3", "AC3 Files", "ac3", null, AudioCodec.AC3);
         public static readonly AudioType MP2 = new AudioType("MP2", "MP2 Files", "mp2", null, AudioCodec.MP2);
         public static readonly AudioType DTS = new AudioType("DTS", "DTS Files", "dts", null, AudioCodec.DTS);
+        public static readonly AudioType WAV = new AudioType("WAV", "WAV Files", "wav", null, AudioCodec.WAV);
+        public static readonly AudioType PCM = new AudioType("DTS", "DTS Files", "dts", null, AudioCodec.PCM);
         public static readonly AudioType CBRMP3 = new AudioType("CBR MP3", "CBR MP3 Files", "mp3", null, AudioCodec.MP3);
         public static readonly AudioType VBRMP3 = new AudioType("VBR MP3", "VBR MP3 Files", "mp3", null, AudioCodec.MP3);
     }

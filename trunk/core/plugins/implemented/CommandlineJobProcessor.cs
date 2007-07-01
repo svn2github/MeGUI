@@ -55,6 +55,10 @@ namespace MeGUI
         protected virtual void doExitConfig()
         { }
 
+        // returns true if the exit code yields a meaningful answer
+        protected abstract bool checkExitCode();
+
+
         /// <summary>
         /// handles the encoder process existing
         /// </summary>
@@ -65,7 +69,7 @@ namespace MeGUI
             mre.Set();  // Make sure nothing is waiting for pause to stop
             stdoutDone.WaitOne(); // wait for stdout to finish processing
             stderrDone.WaitOne(); // wait for stderr to finish processing
-            if (proc.ExitCode != 0) // check the exitcode because x264.exe sometimes exits with error but without
+            if (checkExitCode() && proc.ExitCode != 0) // check the exitcode because x264.exe sometimes exits with error but without
                 su.HasError = true; // any commandline indication as to why
             job.End = DateTime.Now;
             su.IsComplete = true;

@@ -131,6 +131,9 @@ namespace MeGUI
         private NumericUpDown maxServersToTry;
         private NumericUpDown acceptableFPSError;
         private Label label15;
+        private TextBox textBox8;
+        private Label besplit;
+        private Button button8;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -197,6 +200,8 @@ namespace MeGUI
             this.selectX264ExecutableButton = new System.Windows.Forms.Button();
             this.selectDGIndexExecutable = new System.Windows.Forms.Button();
             this.otherGroupBox = new System.Windows.Forms.GroupBox();
+            this.acceptableFPSError = new System.Windows.Forms.NumericUpDown();
+            this.label15 = new System.Windows.Forms.Label();
             this.acceptableAspectError = new System.Windows.Forms.NumericUpDown();
             this.acceptableAspectErrorLabel = new System.Windows.Forms.Label();
             this.resetDialogs = new System.Windows.Forms.Button();
@@ -278,11 +283,13 @@ namespace MeGUI
             this.nbPassesLabel = new System.Windows.Forms.Label();
             this.nbPasses = new System.Windows.Forms.NumericUpDown();
             this.keep2ndPassOutput = new System.Windows.Forms.CheckBox();
-            this.label15 = new System.Windows.Forms.Label();
-            this.acceptableFPSError = new System.Windows.Forms.NumericUpDown();
+            this.button8 = new System.Windows.Forms.Button();
+            this.besplit = new System.Windows.Forms.Label();
+            this.textBox8 = new System.Windows.Forms.TextBox();
             groupBox1 = new System.Windows.Forms.GroupBox();
             groupBox1.SuspendLayout();
             this.otherGroupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.acceptableFPSError)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.acceptableAspectError)).BeginInit();
             this.vobGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.forceFilmPercentage)).BeginInit();
@@ -296,7 +303,6 @@ namespace MeGUI
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nbPasses)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.acceptableFPSError)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -357,7 +363,7 @@ namespace MeGUI
             // 
             this.saveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.saveButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.saveButton.Location = new System.Drawing.Point(355, 501);
+            this.saveButton.Location = new System.Drawing.Point(355, 520);
             this.saveButton.Name = "saveButton";
             this.saveButton.Size = new System.Drawing.Size(48, 23);
             this.saveButton.TabIndex = 0;
@@ -367,7 +373,7 @@ namespace MeGUI
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(414, 501);
+            this.cancelButton.Location = new System.Drawing.Point(414, 520);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(48, 23);
             this.cancelButton.TabIndex = 1;
@@ -401,7 +407,7 @@ namespace MeGUI
             // 
             // selectAvisynthPluginsDir
             // 
-            this.selectAvisynthPluginsDir.Location = new System.Drawing.Point(424, 430);
+            this.selectAvisynthPluginsDir.Location = new System.Drawing.Point(424, 460);
             this.selectAvisynthPluginsDir.Name = "selectAvisynthPluginsDir";
             this.selectAvisynthPluginsDir.Size = new System.Drawing.Size(24, 23);
             this.selectAvisynthPluginsDir.TabIndex = 16;
@@ -410,7 +416,7 @@ namespace MeGUI
             // 
             // avisynthPluginsDir
             // 
-            this.avisynthPluginsDir.Location = new System.Drawing.Point(120, 431);
+            this.avisynthPluginsDir.Location = new System.Drawing.Point(120, 461);
             this.avisynthPluginsDir.Name = "avisynthPluginsDir";
             this.avisynthPluginsDir.ReadOnly = true;
             this.avisynthPluginsDir.Size = new System.Drawing.Size(296, 21);
@@ -420,7 +426,7 @@ namespace MeGUI
             // avisynthPluginsLabel
             // 
             this.avisynthPluginsLabel.AutoSize = true;
-            this.avisynthPluginsLabel.Location = new System.Drawing.Point(11, 438);
+            this.avisynthPluginsLabel.Location = new System.Drawing.Point(11, 468);
             this.avisynthPluginsLabel.Name = "avisynthPluginsLabel";
             this.avisynthPluginsLabel.Size = new System.Drawing.Size(84, 13);
             this.avisynthPluginsLabel.TabIndex = 14;
@@ -580,6 +586,32 @@ namespace MeGUI
             this.otherGroupBox.TabIndex = 3;
             this.otherGroupBox.TabStop = false;
             this.otherGroupBox.Text = "Other";
+            // 
+            // acceptableFPSError
+            // 
+            this.acceptableFPSError.DecimalPlaces = 3;
+            this.acceptableFPSError.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            196608});
+            this.acceptableFPSError.Location = new System.Drawing.Point(145, 72);
+            this.acceptableFPSError.Maximum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.acceptableFPSError.Name = "acceptableFPSError";
+            this.acceptableFPSError.Size = new System.Drawing.Size(79, 21);
+            this.acceptableFPSError.TabIndex = 30;
+            // 
+            // label15
+            // 
+            this.label15.Location = new System.Drawing.Point(9, 72);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(130, 32);
+            this.label15.TabIndex = 29;
+            this.label15.Text = "Acceptable FPS rounding error (bitrate calculator)";
             // 
             // acceptableAspectError
             // 
@@ -805,7 +837,7 @@ namespace MeGUI
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(468, 487);
+            this.tabControl1.Size = new System.Drawing.Size(468, 514);
             this.tabControl1.TabIndex = 28;
             // 
             // tabPage1
@@ -1004,7 +1036,10 @@ namespace MeGUI
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.textBox8);
+            this.tabPage2.Controls.Add(this.besplit);
             this.tabPage2.Controls.Add(this.textBox7);
+            this.tabPage2.Controls.Add(this.button8);
             this.tabPage2.Controls.Add(this.label10);
             this.tabPage2.Controls.Add(this.button7);
             this.tabPage2.Controls.Add(this.checkBox1);
@@ -1059,7 +1094,7 @@ namespace MeGUI
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(460, 461);
+            this.tabPage2.Size = new System.Drawing.Size(460, 488);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Program Paths";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -1411,37 +1446,37 @@ namespace MeGUI
             this.keep2ndPassOutput.TabIndex = 0;
             this.keep2ndPassOutput.Text = "Keep 2nd pass Output in 3 pass mode";
             // 
-            // label15
+            // button8
             // 
-            this.label15.Location = new System.Drawing.Point(9, 72);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(130, 32);
-            this.label15.TabIndex = 29;
-            this.label15.Text = "Acceptable FPS rounding error (bitrate calculator)";
+            this.button8.Location = new System.Drawing.Point(424, 417);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(24, 23);
+            this.button8.TabIndex = 39;
+            this.button8.Text = "...";
+            this.button8.Click += new System.EventHandler(this.button8_Click);
             // 
-            // acceptableFPSError
+            // besplit
             // 
-            this.acceptableFPSError.DecimalPlaces = 3;
-            this.acceptableFPSError.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            196608});
-            this.acceptableFPSError.Location = new System.Drawing.Point(145, 72);
-            this.acceptableFPSError.Maximum = new decimal(new int[] {
-            5,
-            0,
-            0,
-            0});
-            this.acceptableFPSError.Name = "acceptableFPSError";
-            this.acceptableFPSError.Size = new System.Drawing.Size(79, 21);
-            this.acceptableFPSError.TabIndex = 30;
+            this.besplit.Location = new System.Drawing.Point(8, 422);
+            this.besplit.Name = "besplit";
+            this.besplit.Size = new System.Drawing.Size(100, 23);
+            this.besplit.TabIndex = 40;
+            this.besplit.Text = "ffmpeg";
+            // 
+            // textBox8
+            // 
+            this.textBox8.Location = new System.Drawing.Point(120, 417);
+            this.textBox8.Name = "textBox8";
+            this.textBox8.ReadOnly = true;
+            this.textBox8.Size = new System.Drawing.Size(296, 21);
+            this.textBox8.TabIndex = 41;
+            this.textBox8.Text = "dgindex.exe";
             // 
             // SettingsForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(468, 536);
+            this.ClientSize = new System.Drawing.Size(468, 555);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.saveButton);
@@ -1456,6 +1491,7 @@ namespace MeGUI
             groupBox1.PerformLayout();
             this.otherGroupBox.ResumeLayout(false);
             this.otherGroupBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.acceptableFPSError)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.acceptableAspectError)).EndInit();
             this.vobGroupBox.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.forceFilmPercentage)).EndInit();
@@ -1472,7 +1508,6 @@ namespace MeGUI
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nbPasses)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.acceptableFPSError)).EndInit();
             this.ResumeLayout(false);
 
 		}
@@ -1637,6 +1672,16 @@ namespace MeGUI
                 textBox7.Text = openExecutableDialog.FileName;
             }
         }
+
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            if (selectExe("besplit"))
+            {
+                textBox8.Text = openExecutableDialog.FileName;
+            }
+        }
+
         private void runCommand_CheckedChanged(object sender, EventArgs e)
         {
             command.Enabled = runCommand.Checked;
@@ -1702,6 +1747,7 @@ namespace MeGUI
                 settings.VideoExtension = videoExtension.Text;
                 settings.AudioExtension = audioExtension.Text;
                 settings.UseAdvancedTooltips = chkboxUseAdvancedTooltips.Checked;
+                settings.BeSplitPath = textBox8.Text;
 				settings.X264Path = x264ExePath.Text;
 				settings.DgIndexPath = dgIndexPath.Text;
 				settings.DefaultLanguage1 = defaultLanguage1.Text;
@@ -1747,6 +1793,7 @@ namespace MeGUI
                 textBox1.Text = settings.FaacPath;
                 textBox2.Text = settings.NeroAacEncPath;
                 textBox3.Text = settings.LamePath;
+                textBox8.Text = settings.BeSplitPath;
                 sdSettings = settings.SourceDetectorSettings;
                 chkboxUseAdvancedTooltips.Checked = settings.UseAdvancedTooltips;
 				mp4boxPath.Text = settings.Mp4boxPath;

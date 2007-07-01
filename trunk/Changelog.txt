@@ -1,3 +1,10 @@
+0.2.5.1001 Libs update
+    - Same as 0.2.4.1038, but corrected because autoupdate had an old version
+
+0.2.5.1001
+Commit by berrinam:
+    - Add support for BeSplit audio cutting/joining, based on cutlists
+
 0.2.4.1044
 Commit by berrinam:
     - Allow future programs to be added to AutoUpdate without crashing

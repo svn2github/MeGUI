@@ -396,6 +396,16 @@
     <Compile Include="packages\tools\autoencode\AutoEncodeWindow.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="packages\tools\besplitter\AudioJoinJob.cs" />
+    <Compile Include="packages\tools\besplitter\AudioSplitJob.cs" />
+    <Compile Include="packages\tools\besplitter\Joiner.cs" />
+    <Compile Include="packages\tools\besplitter\Splitter.cs" />
+    <Compile Include="packages\tools\besplitter\Besplitter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="packages\tools\besplitter\Besplitter.Designer.cs">
+      <DependentUpon>Besplitter.cs</DependentUpon>
+    </Compile>
     <Compile Include="packages\tools\calculator\Calculator.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -613,6 +623,10 @@
     <EmbeddedResource Include="packages\tools\autoencode\AutoEncodeWindow.resx">
       <DependentUpon>AutoEncodeWindow.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="packages\tools\besplitter\Besplitter.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>Besplitter.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="packages\tools\calculator\Calculator.resx">
       <DependentUpon>Calculator.cs</DependentUpon>

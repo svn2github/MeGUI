@@ -36,7 +36,10 @@ namespace MeGUI
             if (j is IndexJob) return new DGIndexer(mf.Settings.DgIndexPath);
             return null;
         }
-
+        protected override bool checkExitCode()
+        {
+            return true;
+        }
         public DGIndexer(string executableName)
             : base()
         {

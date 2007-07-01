@@ -13,6 +13,11 @@ namespace MeGUI
             executable = encoderPath;
         }
 
+        protected override bool checkExitCode()
+        {
+            return true;
+        }
+
         public override string GetFrameString(string line, int stream)
         {
             if (line.StartsWith("Pos:")) // status update

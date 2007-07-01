@@ -36,5 +36,10 @@ namespace MeGUI
             }
             return null;
         }
+
+        protected override bool checkExitCode()
+        {
+            return true;
+        }
     }
 }

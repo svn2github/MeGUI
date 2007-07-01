@@ -381,7 +381,7 @@ namespace MeGUI
             if (!String.IsNullOrEmpty(nbProc))
             {
                 int nbCPUs = Int32.Parse(System.Environment.GetEnvironmentVariable("NUMBER_OF_PROCESSORS"));
-                settings.NbThreads = nbCPUs;
+                settings.setAdjustedNbThreads(nbCPUs);
             }
         }
         /// <summary>

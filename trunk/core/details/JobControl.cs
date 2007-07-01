@@ -213,9 +213,9 @@ namespace MeGUI.core.details
 
                 // Logging
                 mainForm.addToLog("Processing ended at " + DateTime.Now.ToLongTimeString() + "\r\n");
-                mainForm.addToLog("----------------------------------------------------------------------------------------------------------" +
+                mainForm.addToLog("----------------------" +
                     "\r\n\r\nLog for job " + su.JobName + "\r\n\r\n" + su.Log +
-                    "\r\n----------------------------------------------------------------------------------------------------------\r\n");
+                    "\r\n----------------------\r\n");
                 if (su.WasAborted)
                     mainForm.addToLog("The current job was aborted. Stopping queue mode\r\n");
                 if (su.HasError)
@@ -238,6 +238,8 @@ namespace MeGUI.core.details
                 this.isEncoding = false;
                 this.currentJob = null;
                 this.currentProcessor = null;
+                mainForm.addToLog("End of log for " + job.Name + "\r\n" +
+                    "-------------------------------------------------------\r\n\r\n");
 
                 if (job.Status != JobStatus.ABORTED)
                     startNextJobInQueue();
@@ -1055,14 +1057,16 @@ namespace MeGUI.core.details
             string error;
             mainForm.ClosePlayer();
 
+
             // Get IJobProcessor
             currentProcessor = getProcessor(job);
             if (currentProcessor == null)
             {
-                mainForm.addToLog("Skipping job\r\n");
+                mainForm.addToLog("Skipping job " + job.Name + ".\r\n");
                 return false;
             }
 
+            mainForm.addToLog("\r\n\r\n------------------------------------------------------\r\n\r\n");
             mainForm.addToLog("Starting job " + job.Name + " at " + DateTime.Now.ToLongTimeString() + "\r\n");
 
             // Preprocess
@@ -1421,15 +1425,15 @@ namespace MeGUI.core.details
                 foreach (string file in job.FilesToDelete)
                 {
                     mainForm.addToLog("Found intermediate output file '" + ((string)file)
-                        + "', deleting...\r\n");
+                        + "', deleting...");
                     try
                     {
                         File.Delete(file);
-                        mainForm.addToLog("Deletion succeeded.");
+                        mainForm.addToLog("Deletion succeeded.\r\n");
                     }
                     catch (IOException)
                     {
-                        mainForm.addToLog("Deletion failed.");
+                        mainForm.addToLog("Deletion failed.\r\n");
                     }
                 }
             }

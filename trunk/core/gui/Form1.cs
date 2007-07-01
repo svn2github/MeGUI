@@ -33,6 +33,7 @@ using MeGUI.core.details;
 using MeGUI.core.plugins.interfaces;
 using System.Reflection;
 using MeGUI.packages.tools.cutter;
+using MeGUI.packages.tools.besplitter;
 
 namespace MeGUI
 {
@@ -1503,6 +1504,8 @@ namespace MeGUI
             PackageSystem.JobProcessors.Register(AviSynthProcessor.Factory);
             PackageSystem.JobProcessors.Register(DGIndexer.Factory);
             PackageSystem.JobProcessors.Register(VobSubIndexer.Factory);
+            PackageSystem.JobProcessors.Register(Joiner.Factory);
+            PackageSystem.JobProcessors.Register(MeGUI.packages.tools.besplitter.Splitter.Factory);
             PackageSystem.MuxerProviders.Register(new MKVMergeMuxerProvider());
             PackageSystem.MuxerProviders.Register(new MP4BoxMuxerProvider());
             PackageSystem.MuxerProviders.Register(new AVC2AVIMuxerProvider());
@@ -1515,6 +1518,7 @@ namespace MeGUI
             PackageSystem.Tools.Register(new CalculatorTool());
             PackageSystem.Tools.Register(new ChapterCreatorTool());
             PackageSystem.Tools.Register(new UpdateTool());
+            PackageSystem.Tools.Register(new BesplitterTool());
 //            PackageSystem.Tools.Register(new OneClickConfigTool());
             PackageSystem.Tools.Register(new OneClickTool());
             PackageSystem.Tools.Register(new D2VCreatorTool());
