@@ -8,6 +8,15 @@ namespace MeGUI.packages.tools.besplitter
 {
     public class AudioJoinJob : Job
     {
+        private TimeSpan cliplength;
+
+        public TimeSpan ClipLength
+        {
+            get { return cliplength; }
+            set { cliplength = value; }
+        }
+
+
         private string[] inputFiles;
 
         public string[] InputFiles

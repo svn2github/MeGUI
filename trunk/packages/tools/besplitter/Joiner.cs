@@ -24,9 +24,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "BeSplit_Joiner");
             executable = exe;
         }
 
-        protected override bool checkExitCode()
+        protected override bool checkExitCode
         {
-            return false;
+            get { return false; }
         }
 
         protected override void doExitConfig()
@@ -44,7 +44,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "BeSplit_Joiner");
         protected override void checkJobIO()
         {
             base.checkJobIO();
-
+            FileSize totalSize = FileSize.Empty;
             try
             {
                 // now create the temporary file
@@ -52,7 +52,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "BeSplit_Joiner");
                 using (StreamWriter w = new StreamWriter(File.OpenWrite(tmpfile)))
                 {
                     foreach (string file in job.InputFiles)
+                    {
+                        Util.ensureExists(file);
+                        totalSize += FileSize.Of(file);
                         w.WriteLine(file);
+                    }
                 }
                 job.Commandline = job.generateJoinCommandline(tmpfile);
             }
@@ -60,10 +64,15 @@ new JobProcessorFactory(new ProcessorFactory(init), "BeSplit_Joiner");
             {
                 throw new JobRunException("Error generating temporary *.lst file: " + e.Message, e);
             }
+            su.ProjectedFileSize = totalSize;
+            su.ClipLength = job.ClipLength;
         }
 
         public override void ProcessLine(string line, StreamType stream)
         {
+            if (line.IndexOf("writing to file") != -1)
+                return;
+            
             if (line.IndexOf("Usage") != -1)
                 su.HasError = true;
             log.AppendLine(line);

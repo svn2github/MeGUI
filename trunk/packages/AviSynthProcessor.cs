@@ -41,12 +41,12 @@ namespace MeGUI
         }
         #endregion
         #region processing
-        public bool canBeProcessed(Job job)
+/*        public bool canBeProcessed(Job job)
         {
             if (job is AviSynthJob)
                 return true;
             return false;
-        }
+        }*/
         private void update()
         {
             while (!aborted && position < stup.NbFramesTotal)
@@ -120,9 +120,8 @@ namespace MeGUI
         /// </summary>
         /// <param name="error">output for any errors that might ocurr during this method</param>
         /// <returns>true if encoding has been successfully started, false if not</returns>
-        public bool start(out string error)
+        public void start()
         {
-            error = null;
             try
             {
                 statusThread.Start();
@@ -130,59 +129,37 @@ namespace MeGUI
             }
             catch (Exception e)
             {
-                error = e.Message;
-                return false;
+                throw new JobRunException(e);
             }
-            return true;
         }
         /// <summary>
         /// stops the encoding process
         /// </summary>
         /// <param name="error">output for any errors that might ocurr during this method</param>
         /// <returns>true if encoding has been successfully stopped, false if not</returns>
-        public bool stop(out string error)
+        public void stop()
         {
-            error = "";
             aborted = true;
-            return true;
         }
         /// <summary>
         /// pauses the encoding process
         /// </summary>
         /// <param name="error">output for any errors that might ocurr during this method</param>
         /// <returns>true if encoding has been successfully paused, false if not</returns>
-        public bool pause(out string error)
+        public void pause()
         {
-            error = "";
-            try
-            {
-                mre.Reset();
-            }
-            catch (Exception e)
-            {
-                error = e.Message;
-                return false;
-            }
-            return true;
+            if (!mre.Reset())
+                throw new JobRunException("Could not reset mutex");
         }
         /// <summary>
         /// resumes the encoding process
         /// </summary>
         /// <param name="error">output for any errors that might ocurr during this method</param>
         /// <returns>true if encoding has been successfully started, false if not</returns>
-        public bool resume(out string error)
+        public void resume()
         {
-            error = "";
-            try
-            {
-                mre.Set();
-            }
-            catch (Exception e)
-            {
-                error = e.Message;
-                return false;
-            }
-            return true;
+            if (!mre.Set())
+                throw new JobRunException("Could not set mutex");
         }
         /// <summary>
         /// changes the priority of the encoding process/thread
@@ -190,9 +167,8 @@ namespace MeGUI
         /// <param name="priority">the priority to change to</param>
         /// <param name="error">output for any errors that might ocurr during this method</param>
         /// <returns>true if the priority has been changed, false if not</returns>
-        public bool changePriority(ProcessPriority priority, out string error)
+        public void changePriority(ProcessPriority priority)
         {
-            error = null;
             if (processorThread != null && processorThread.IsAlive)
             {
                 try
@@ -203,21 +179,19 @@ namespace MeGUI
                         processorThread.Priority = ThreadPriority.Normal;
                     else if (priority == ProcessPriority.HIGH)
                         processorThread.Priority = ThreadPriority.Highest;
-                    return true;
+                    return;
                 }
                 catch (Exception e) // process could not be running anymore
                 {
-                    error = "exception in changePriority: " + e.Message;
-                    return false;
+                    throw new JobRunException(e);
                 }
             }
             else
             {
                 if (processorThread == null)
-                    error = "Process has not been started yet";
+                    throw new JobRunException("Process has not been started yet");
                 else
-                    error = "Process has exited";
-                return false;
+                    throw new JobRunException("Process has exited");
             }
         }
         public event JobProcessingStatusUpdateCallback StatusUpdate;

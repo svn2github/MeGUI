@@ -7,15 +7,21 @@ namespace MeGUI
 {
     class mencoderEncoder : CommandlineVideoEncoder
     {
+        public static readonly JobProcessorFactory Factory =
+new JobProcessorFactory(new ProcessorFactory(init), "MencoderEncoder");
+
+        private static IJobProcessor init(MainForm mf, Job j)
+        {
+            if (j is VideoJob && 
+                ((j as VideoJob).Settings is snowSettings || (j as VideoJob).Settings is lavcSettings))
+                return new mencoderEncoder(mf.Settings.MencoderPath);
+            return null;
+        }
+
         public mencoderEncoder(string encoderPath)
             : base()
         {
             executable = encoderPath;
-        }
-
-        protected override bool checkExitCode()
-        {
-            return true;
         }
 
         public override string GetFrameString(string line, StreamType stream)

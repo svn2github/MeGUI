@@ -1,4 +1,4 @@
-using System;
+/*using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
@@ -121,9 +121,8 @@ namespace MeGUI
             log = new StringBuilder();
         }
 
-        public override bool start(out string error)
+        public override void start()
         {
-            error = null;
             proc = new Process();
             ProcessStartInfo pstart = new ProcessStartInfo();
             pstart.FileName = executable;
@@ -135,49 +134,43 @@ namespace MeGUI
             proc.StartInfo = pstart;
             proc.EnableRaisingEvents = true;
             proc.Exited += new EventHandler(proc_Exited);
-            return true;
         }
 
-        public override bool stop(out string error)
+        public override void stop()
         {
-            error = null;
             if (proc != null && !proc.HasExited)
             {
                 try
                 {
                     su.WasAborted = true;
                     proc.Kill();
-                    return true;
+                    return;
                 }
                 catch (Exception e)
                 {
-                    error = "Error killing process: " + e.Message;
-                    return false;
+                    throw new JobRunException(e);
                 }
             }
             else
             {
                 if (proc == null)
-                    error = "Encoder process does not exist";
+                    throw new JobRunException("Encoder process does not exist");
                 else
-                    error = "Encoder process has already existed";
-                return false;
+                    throw new JobRunException("Encoder process has already exited");
             }
         }
 
-        public override bool pause(out string error)
+        public override void pause()
         {
-            error = null;
             if (mre.Reset())
-                return true;
+                return;
             else
             {
-                error = "Could not reset mutex. pause failed";
-                return false;
+                throw new JobRunException("Could not reset mutex. pause failed")
             }
         }
 
-        public override bool resume(out string error)
+        public override void resume()
         {
             error = null;
             if (mre.Set())
@@ -222,4 +215,4 @@ namespace MeGUI
 
         #endregion
     }
-}
+}*/

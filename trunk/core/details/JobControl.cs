@@ -69,10 +69,13 @@ namespace MeGUI.core.details
         /// <param name="priority"></param>
         private void pw_PriorityChanged(ProcessPriority priority)
         {
-            string error;
-            if (!currentProcessor.changePriority(priority, out error))
+            try
             {
-                mainForm.addToLog("Error when attempting to change priority: " + error);
+                currentProcessor.changePriority(priority);
+            }
+            catch (JobRunException e)
+            {
+                mainForm.addToLog("Error when attempting to change priority: " + e.Message);
             }
         }
         #endregion
@@ -222,7 +225,7 @@ namespace MeGUI.core.details
                 if (su.HasError)
                 {
                     mainForm.addToLog("The current job contains errors. Skipping chained jobs\r\n");
-                    skipChainedJobs(currentJob);
+                    skipChainedJobs(job);
                 }
 
                 // Postprocessing
@@ -461,32 +464,25 @@ namespace MeGUI.core.details
         /// <param name="e"></param>
         public void pauseButton_Click(object sender, System.EventArgs e)
         {
-            if (!this.paused) // we're encoding
+            if (currentProcessor != null)
             {
-                string error;
-                if (currentProcessor != null)
+                string change = "pause";
+                try
                 {
-                    if (currentProcessor.pause(out error))
+                    if (!this.paused)
                     {
-                        paused = true;
+                        change = "resume";
+                        currentProcessor.resume();
                     }
                     else
-                        mainForm.addToLog("Error when trying to pause encoding: " + error);
+                        currentProcessor.pause();
                 }
-            }
-            else
-            {
-                string error;
-                if (currentProcessor != null)
+                catch (JobRunException ex)
                 {
-                    if (currentProcessor.resume(out error))
-                    {
-                        paused = false;
-                    }
-                    else
-                        mainForm.addToLog("Error when trying to resume encoding: " + error);
+                    mainForm.addToLog("Error when trying to " + change + " encoding: " + ex.Message + Environment.NewLine);
                 }
             }
+
             updateProcessingStatus();
         }
         #endregion
@@ -1103,9 +1099,14 @@ namespace MeGUI.core.details
             }
 
             // Start
-            if (!currentProcessor.start(out error))
+            try
             {
-                mainForm.addToLog("starting encoder failed with error " + error + "\r\n");
+                currentProcessor.start();
+            }
+            catch (JobRunException e)
+            {
+                mainForm.addToLog("starting encoder failed with error " + e.Message + "\r\n");
+                currentProcessor = null;
                 return false;
             }
 
@@ -1367,19 +1368,27 @@ namespace MeGUI.core.details
         public void Abort()
         {
             Debug.Assert(isEncoding);
-            string error;
-            if (!currentProcessor.stop(out error))
+            if (currentProcessor == null) return;
+            try
             {
-                mainForm.addToLog("Error when trying to stop processing: " + error + "\r\n");
+                currentProcessor.stop();
+            }
+            catch (JobRunException er)
+            {
+                mainForm.addToLog("Error when trying to stop processing: " + er.Message + "\r\n");
             }
             this.markJobAborted();
             this.isEncoding = false;
             if (this.paused) // aborting directly causes problems so prevent it
             {
                 this.paused = false;
-                if (currentProcessor.resume(out error))
+                try
                 {
-                    mainForm.addToLog("Error when trying to resume processing: " + error + "\r\n");
+                    currentProcessor.resume();
+                }
+                catch (JobRunException er)
+                {
+                    mainForm.addToLog("Error when trying to resume processing: " + er.Message + "\r\n");
                 }
             }
             updateProcessingStatus();

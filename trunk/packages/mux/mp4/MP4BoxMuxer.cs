@@ -9,6 +9,16 @@ namespace MeGUI
 {
     class MP4BoxMuxer : CommandlineMuxer
     {
+        public static readonly JobProcessorFactory Factory =
+new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
+
+        private static IJobProcessor init(MainForm mf, Job j)
+        {
+            if (j is MuxJob && (j as MuxJob).MuxType == MuxerType.MP4BOX)
+                return new MP4BoxMuxer(mf.Settings.Mp4boxPath);
+            return null;
+        }
+        
         private int numberOfAudioTracks, numberOfSubtitleTracks, trackNumber;
         private enum LineType : int {other = 0, importing, writing, splitting, empty, error };
         private string lastLine;
@@ -126,11 +136,6 @@ namespace MeGUI
             }
         }
         #endregion
-
-        protected override bool checkExitCode()
-        {
-            return true;
-        }
 
         public override void ProcessLine(string line, StreamType stream)
         {

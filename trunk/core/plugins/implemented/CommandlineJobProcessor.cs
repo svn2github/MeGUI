@@ -35,7 +35,10 @@ namespace MeGUI
         { }
 
         // returns true if the exit code yields a meaningful answer
-        protected abstract bool checkExitCode();
+        protected virtual bool checkExitCode
+        {
+            get { return true; }
+        }
 
 
         /// <summary>
@@ -48,7 +51,7 @@ namespace MeGUI
             mre.Set();  // Make sure nothing is waiting for pause to stop
             stdoutDone.WaitOne(); // wait for stdout to finish processing
             stderrDone.WaitOne(); // wait for stderr to finish processing
-            if (checkExitCode() && proc.ExitCode != 0) // check the exitcode because x264.exe sometimes exits with error but without
+            if (checkExitCode && proc.ExitCode != 0) // check the exitcode because x264.exe sometimes exits with error but without
                 su.HasError = true; // any commandline indication as to why
             job.End = DateTime.Now;
             su.IsComplete = true;
@@ -77,9 +80,8 @@ namespace MeGUI
             su.JobType = job.JobType;
         }
 
-        public bool start(out string error)
+        public void start()
         {
-            error = null;
             proc = new Process();
             ProcessStartInfo pstart = new ProcessStartInfo();
             pstart.FileName = executable;
@@ -100,65 +102,52 @@ namespace MeGUI
                 new Thread(new ThreadStart(readStdErr)).Start();
                 new Thread(new ThreadStart(readStdOut)).Start();
                 new System.Windows.Forms.MethodInvoker(this.RunStatusCycle).BeginInvoke(null, null);
-                this.changePriority(job.Priority, out error);
-                return true;
+                this.changePriority(job.Priority);
             }
             catch (Exception e)
             {
-                error = "Exception starting the encoder: " + e.Message;
-                return false;
+                throw new JobRunException(e);
             }
         }
 
-        public bool stop(out string error)
+        public void stop()
         {
-            error = null;
             if (proc != null && !proc.HasExited)
             {
                 try
                 {
                     su.WasAborted = true;
                     proc.Kill();
-                    return true;
+                    return;
                 }
                 catch (Exception e)
                 {
-                    error = "Error killing process: " + e.Message;
-                    return false;
+                    throw new JobRunException(e);
                 }
             }
             else
             {
                 if (proc == null)
-                    error = "Encoder process does not exist";
+                    throw new JobRunException("Encoder process does not exist");
                 else
-                    error = "Encoder process has already existed";
-                return false;
+                    throw new JobRunException("Encoder process has already existed");
             }
         }
 
-        public bool pause(out string error)
+        public void pause()
         {
-            error = null;
-            if (mre.Reset())
-                return true;
-            else
-            {
-                error = "Could not reset mutex. pause failed";
-                return false;
-            }
+            if (!canPause)
+                throw new JobRunException("Can't pause this kind of job.");
+            if (!mre.Reset())
+                throw new JobRunException("Could not reset mutex. pause failed");
         }
 
-        public bool resume(out string error)
+        public void resume()
         {
-            error = null;
-            if (mre.Set())
-                return true;
-            else
-            {
-                error = "Could not set mutex. pause failed";
-                return false;
-            }
+            if (!canPause)
+                throw new JobRunException("Can't resume this kind of job.");
+            if (!mre.Set())
+                throw new JobRunException("Could not set mutex. pause failed");
         }
 
         public bool isRunning()
@@ -166,9 +155,8 @@ namespace MeGUI
             return (proc != null && !proc.HasExited);
         }
 
-        public bool changePriority(ProcessPriority priority, out string error)
+        public void changePriority(ProcessPriority priority)
         {
-            error = null;
             if (isRunning())
             {
                 try
@@ -179,27 +167,33 @@ namespace MeGUI
                         proc.PriorityClass = ProcessPriorityClass.Normal;
                     else if (priority == ProcessPriority.HIGH)
                         proc.PriorityClass = ProcessPriorityClass.High;
-                    return true;
+                    return;
                 }
                 catch (Exception e) // process could not be running anymore
                 {
-                    error = "exception in changeProcessPriority: " + e.Message;
-                    return false;
+                    throw new JobRunException(e);
                 }
             }
             else 
             {
                 if (proc == null)
-                    error = "Process has not been started yet";
+                    throw new JobRunException("Process has not been started yet");
                 else
-                    error = "Process has exited";
-                return false;
+                {
+                    Debug.Assert(proc.HasExited);
+                    throw new JobRunException("Process has exited");
+                }
             }
         }
 
-        public virtual bool canBeProcessed(Job job)
+/*        public virtual bool canBeProcessed(Job job)
         {
             return (job is TJob);
+        }
+        */
+        public virtual bool canPause
+        {
+            get { return true; }
         }
 
 
@@ -255,7 +249,11 @@ namespace MeGUI
             }
             readStream(sr, stderrDone, StreamType.Stderr);
         }
-        public abstract void ProcessLine(string line, StreamType stream);
+
+        public virtual void ProcessLine(string line, StreamType stream)
+        {
+            log.AppendLine(line);
+        }
 
         #endregion
         #region status updates

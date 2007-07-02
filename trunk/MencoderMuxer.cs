@@ -34,11 +34,6 @@ namespace MeGUI
             }
         }
 
-        protected override bool checkExitCode()
-        {
-            return true;
-        }
-
         public override void ProcessLine(string line, StreamType stream)
         {
             if (line.StartsWith("Pos:")) // status update

@@ -17,7 +17,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 // 
 // ****************************************************************************
-
+/*
 using System;
 using System.Diagnostics;
 using System.Threading;
@@ -82,35 +82,30 @@ namespace MeGUI
             encoder.setup(job);
         }
 
-        public virtual bool start(out string error)
+        public virtual void start()
         {
-            error = null;
             encoder.job.Start = DateTime.Now;
-            return encoder.start(out error);
+            encoder.start();
         }
 
-        public virtual bool stop(out string error)
+        public virtual void stop()
         {
-            error = null;
-            return encoder.stop(out error);
+            encoder.stop();
         }
 
-        public virtual bool pause(out string error)
+        public virtual void pause()
         {
-            error = null;
-            return encoder.pause(out error);
+            encoder.pause();
         }
 
-        public virtual bool resume(out string error)
+        public virtual void resume()
         {
-            error = null;
-            return encoder.resume(out error);
+            encoder.resume();
         }
 
-        public virtual bool changePriority(ProcessPriority priority, out string error)
+        public virtual void changePriority(ProcessPriority priority)
         {
-            error = null;
-            return encoder.changePriority(priority, out error);
+            encoder.changePriority(priority);
         }
 
         private event JobProcessingStatusUpdateCallback statusUpdate;
@@ -130,3 +125,4 @@ namespace MeGUI
         #endregion
     }
 }
+*/

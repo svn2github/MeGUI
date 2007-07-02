@@ -36,10 +36,7 @@ namespace MeGUI
             if (j is IndexJob) return new DGIndexer(mf.Settings.DgIndexPath);
             return null;
         }
-        protected override bool checkExitCode()
-        {
-            return true;
-        }
+
         public DGIndexer(string executableName)
         {
             executable = executableName;
@@ -125,10 +122,5 @@ namespace MeGUI
             }
         }
 
-        public override void ProcessLine(string line, StreamType stream)
-        {
-            // We don't expect any lines, but lets put them on the log just in case
-            log.AppendLine(line);
-        }
     }
 }

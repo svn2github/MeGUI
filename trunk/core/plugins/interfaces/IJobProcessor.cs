@@ -83,38 +83,38 @@ namespace MeGUI
         /// </summary>
         /// <param name="error">output for any errors that might ocurr during this method</param>
         /// <returns>true if encoding has been successfully started, false if not</returns>
-        bool start(out string error);
+        void start();
         /// <summary>
         /// stops the encoding process
         /// </summary>
         /// <param name="error">output for any errors that might ocurr during this method</param>
         /// <returns>true if encoding has been successfully stopped, false if not</returns>
-        bool stop(out string error);
+        void stop();
         /// <summary>
         /// pauses the encoding process
         /// </summary>
         /// <param name="error">output for any errors that might ocurr during this method</param>
         /// <returns>true if encoding has been successfully paused, false if not</returns>
-        bool pause(out string error);
+        void pause();
         /// <summary>
         /// resumes the encoding process
         /// </summary>
         /// <param name="error">output for any errors that might ocurr during this method</param>
         /// <returns>true if encoding has been successfully started, false if not</returns>
-        bool resume(out string error);
+        void resume();
         /// <summary>
         /// changes the priority of the encoding process/thread
         /// </summary>
         /// <param name="priority">the priority to change to</param>
         /// <param name="error">output for any errors that might ocurr during this method</param>
         /// <returns>true if the priority has been changed, false if not</returns>
-        bool changePriority(ProcessPriority priority, out string error);
-        /// <summary>
+        void changePriority(ProcessPriority priority);
+/*        /// <summary>
         /// returns whether this jobprocessor can process the job given as parameter
         /// </summary>
         /// <param name="job">the job to be processed</param>
         /// <returns>true of the job can be processed, false if not</returns>
-        bool canBeProcessed(Job job);
+        bool canBeProcessed(Job job);*/
         event JobProcessingStatusUpdateCallback StatusUpdate;
     }
 }

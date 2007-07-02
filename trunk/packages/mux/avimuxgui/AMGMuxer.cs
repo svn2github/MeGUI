@@ -9,6 +9,16 @@ namespace MeGUI
 {
     class AMGMuxer : CommandlineMuxer
     {
+        public static readonly JobProcessorFactory Factory =
+new JobProcessorFactory(new ProcessorFactory(init), "AMGMuxer");
+
+        private static IJobProcessor init(MainForm mf, Job j)
+        {
+            if (j is MuxJob && (j as MuxJob).MuxType == MuxerType.AVIMUXGUI)
+                return new AMGMuxer(mf.Settings.AviMuxGUIPath);
+            return null;
+        }
+
         string script_filename;
 
         public AMGMuxer(string executablePath)
@@ -128,14 +138,9 @@ SET OPTION STDIDX AUTO");
 
         #endregion
 
-        protected override bool checkExitCode()
+        protected override bool checkExitCode
         {
-            return false;
-        }
-
-        public override void ProcessLine(string line, StreamType stream)
-        {
-            log.AppendLine(line);
+            get { return false; }
         }
     }
 }

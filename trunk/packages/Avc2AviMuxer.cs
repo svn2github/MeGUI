@@ -13,19 +13,19 @@ namespace MeGUI
     /// </summary>
     class Avc2AviMuxer : CommandlineMuxer
     {
+        public static readonly JobProcessorFactory Factory =
+new JobProcessorFactory(new ProcessorFactory(init), "Avc2AviMuxer");
+
+        private static IJobProcessor init(MainForm mf, Job j)
+        {
+            if (j is MuxJob && (j as MuxJob).MuxType == MuxerType.AVC2AVI)
+                return new AMGMuxer(mf.Settings.Avc2aviPath);
+            return null;
+        }
+
         public Avc2AviMuxer(string executablePath)
         {
             this.executable = executablePath;
-        }
-
-        public override void ProcessLine(string line, StreamType stream)
-        {
-            log.AppendLine(line);
-        }
-
-        protected override bool checkExitCode()
-        {
-            return true;
         }
     }
 }

@@ -7,6 +7,16 @@ namespace MeGUI
 {
     class MkvMergeMuxer : CommandlineMuxer
     {
+        public static readonly JobProcessorFactory Factory =
+new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
+
+        private static IJobProcessor init(MainForm mf, Job j)
+        {
+            if (j is MuxJob && (j as MuxJob).MuxType == MuxerType.MKVMERGE)
+                return new MkvMergeMuxer(mf.Settings.MkvmergePath);
+            return null;
+        }
+        
         public MkvMergeMuxer(string executablePath)
         {
             this.executable = executablePath;
@@ -36,9 +46,9 @@ namespace MeGUI
         }
         #endregion
 
-        protected override bool checkExitCode()
+        protected override bool checkExitCode
         {
-            return false;
+            get { return false; }
         }
 
         public override void ProcessLine(string line, StreamType stream)

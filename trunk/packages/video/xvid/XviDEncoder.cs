@@ -9,6 +9,17 @@ namespace MeGUI
 {
     class XviDEncoder : CommandlineVideoEncoder
     {
+        public static readonly JobProcessorFactory Factory =
+new JobProcessorFactory(new ProcessorFactory(init), "XviDEncoder");
+
+        private static IJobProcessor init(MainForm mf, Job j)
+        {
+            if (j is VideoJob &&
+                (j as VideoJob).Settings is xvidSettings)
+                return new XviDEncoder(mf.Settings.XviDEncrawPath);
+            return null;
+        }
+
         public XviDEncoder(string exePath)
             : base()
         {
@@ -30,11 +41,6 @@ namespace MeGUI
             if (line.IndexOf("Usage") != -1) // we get the usage message if there's an unrecognized parameter
                 return line;
             return null;
-        }
-
-        protected override bool checkExitCode()
-        {
-            return true;
         }
     }
 }

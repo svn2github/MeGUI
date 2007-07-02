@@ -7,6 +7,17 @@ namespace MeGUI
 {
     class x264Encoder : CommandlineVideoEncoder
     {
+        public static readonly JobProcessorFactory Factory =
+new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
+
+        private static IJobProcessor init(MainForm mf, Job j)
+        {
+            if (j is VideoJob &&
+                (j as VideoJob).Settings is x264Settings) 
+                return new x264Encoder(mf.Settings.X264Path);
+            return null;
+        }
+
         public x264Encoder(string encoderPath)
             : base()
         {
@@ -35,11 +46,6 @@ namespace MeGUI
                     return line;
             }
             return null;
-        }
-
-        protected override bool checkExitCode()
-        {
-            return true;
         }
     }
 }

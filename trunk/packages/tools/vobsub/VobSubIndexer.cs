@@ -6,7 +6,7 @@ using MeGUI.core.util;
 
 namespace MeGUI
 {
-    public class VobSubIndexer : IJobProcessor
+    public class VobSubIndexer : CommandlineJobProcessor<SubtitleIndexJob>
     {
         public static readonly JobProcessorFactory Factory =
        new JobProcessorFactory(new ProcessorFactory(init), "VobSubIndexer");
@@ -17,148 +17,28 @@ namespace MeGUI
             return null;
         }
 
-        private StatusUpdate stup;
-        private SubtitleIndexJob job;
-        private Process proc;
-        private bool isProcessing;
         public VobSubIndexer()
         {
-            stup = new StatusUpdate();
-            stup.JobType = JobTypes.VOBSUB;
-            isProcessing = false;
+            executable = Environment.GetFolderPath(Environment.SpecialFolder.System) + @"\rundll32.exe";
+//            executable = Environment.GetFolderPath(Environment.SpecialFolder.System) + @"\vobsub.dll";
         }
         #region IJobProcessor Members
-
-        public void setup(Job job)
+        protected override void checkJobIO()
         {
-            Debug.Assert(job is SubtitleIndexJob, "Job is the wrong type");
-                this.job = (SubtitleIndexJob)job;
-                        
-            if (!System.IO.File.Exists(this.job.ScriptFile))
-                throw new MissingFileException(this.job.ScriptFile);
-
-            string vobsubPath = Environment.GetFolderPath(Environment.SpecialFolder.System) + @"\vobsub.dll";
-            if (!System.IO.File.Exists(vobsubPath))
-                throw new EncoderMissingException(vobsubPath);
-
-            stup.JobName = this.job.Name;
+            base.checkJobIO();
+            Util.ensureExists(job.ScriptFile);
         }
 
-        public bool start(out string error)
+        public override bool canPause
         {
-            error = null;
-            proc = new Process();
-            ProcessStartInfo pstart = new ProcessStartInfo();
-            pstart.FileName = Environment.GetFolderPath(Environment.SpecialFolder.System) + @"\rundll32.exe";
-            //pstart.FileName = "rundll32";
-            pstart.Arguments = job.Commandline;
-            pstart.WindowStyle = ProcessWindowStyle.Minimized;
-            pstart.UseShellExecute = true;
-            pstart.CreateNoWindow = true;
-            proc.StartInfo = pstart;
-            proc.EnableRaisingEvents = true;
-            proc.Exited += new EventHandler(proc_Exited);
-            try
-            {
-                job.Start = DateTime.Now;
-                bool started = proc.Start();
-                isProcessing = true;
-                this.changePriority(job.Priority, out error);
-                return true;
-            }
-            catch (Exception e)
-            {
-                error = "Exception starting the encoder: " + e.Message;
-                return false;
-            }
+            get { return false; }
         }
-
-        void proc_Exited(object sender, EventArgs e)
-        {
-            job.End = DateTime.Now;
-            stup.IsComplete = true;
-            StatusUpdate(stup);
-        }
-
-        public bool stop(out string error)
-        {
-            error = null;
-            if (proc != null && !proc.HasExited)
-            {
-                try
-                {
-                    stup.WasAborted = true;
-                    proc.Kill();
-                    return true;
-                }
-                catch (Exception e)
-                {
-                    error = "Error killing process: " + e.Message;
-                    return false;
-                }
-            }
-            else
-            {
-                if (proc == null)
-                    error = "Encoder process does not exist";
-                else
-                    error = "Encoder process has already existed";
-                return false;
-            }
-        }
-
-        public bool pause(out string error)
-        {
-            error = "Cannot pause a vobsub job";
-            return false;
-        }
-
-        public bool resume(out string error)
-        {
-            error = "Cannot resume a vobsub job";
-            return false;
-        }
-
-        public bool changePriority(ProcessPriority priority, out string error)
-        {
-            error = null;
-            if (proc != null && !proc.HasExited)
-            {
-                try
-                {
-                    if (priority == ProcessPriority.IDLE)
-                        proc.PriorityClass = ProcessPriorityClass.Idle;
-                    else if (priority == ProcessPriority.NORMAL)
-                        proc.PriorityClass = ProcessPriorityClass.Normal;
-                    else if (priority == ProcessPriority.HIGH)
-                        proc.PriorityClass = ProcessPriorityClass.High;
-                    return true;
-                }
-                catch (Exception e) // process could not be running anymore
-                {
-                    error = "exception in changeProcessPriority: " + e.Message;
-                    return false;
-                }
-            }
-            else
-            {
-                if (proc == null)
-                    error = "Process has not been started yet";
-                else
-                    error = "Process has exited";
-                return false;
-            }
-        }
-
-        public bool canBeProcessed(Job job)
-        {
-            if (job is SubtitleIndexJob)
-                return true;
-            return false;
-        }
-
-        public event JobProcessingStatusUpdateCallback StatusUpdate;
 
         #endregion
+
+        protected override bool checkExitCode
+        {
+            get { return false; }
+        }
     }
 }

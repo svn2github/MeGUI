@@ -1,3 +1,8 @@
+0.2.5.1003
+Commit by berrinam:
+    - Nicer progress window displaying consistent information for all jobs
+       (and much nicer internal code)
+
 0.2.5.1002
 Commit by berrinam:
     - Removed the DivX avi muxer

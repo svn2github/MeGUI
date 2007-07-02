@@ -6,8 +6,6 @@ namespace MeGUI.packages.tools.besplitter
 {
     class Splitter : CommandlineJobProcessor<AudioSplitJob>
     {
-        protected decimal totalTime; // in ms
-
         public static readonly JobProcessorFactory Factory =
   new JobProcessorFactory(new ProcessorFactory(init), "BeSplit_Splitter");
 
@@ -17,9 +15,9 @@ namespace MeGUI.packages.tools.besplitter
             return null;
         }
 
-        protected override bool checkExitCode()
+        protected override bool checkExitCode
         {
-            return false;
+            get { return false; }
         }
 
         public Splitter(string exe)
@@ -30,13 +28,13 @@ namespace MeGUI.packages.tools.besplitter
         protected override void checkJobIO()
         {
             int endFrame = job.TheCuts.AllCuts[job.TheCuts.AllCuts.Count - 1].endFrame;
-            totalTime = ((decimal)endFrame) / ((decimal)job.TheCuts.Framerate) * 1000M;
+            su.ClipLength = TimeSpan.FromSeconds((double)endFrame / job.TheCuts.Framerate);
             base.checkJobIO();
         }
 
         public override void ProcessLine(string line, StreamType stream)
         {
-            if (line.IndexOf("Writing") != -1)
+            if (line.IndexOf("Writing") != -1 || line.IndexOf("Seeking") != -1)
             {
                 // this is a progress line
                 try
@@ -45,10 +43,7 @@ namespace MeGUI.packages.tools.besplitter
                     int mins = int.Parse(line.Substring(4, 2));
                     int secs = int.Parse(line.Substring(7, 2));
                     int millis = int.Parse(line.Substring(10, 3));
-                    TimeSpan position = new TimeSpan(0, hours, mins, secs, millis);
-                    decimal percentDone = ((decimal)position.Milliseconds) / totalTime;
-                    su.PercentageDoneExact = percentDone;
-
+                    su.ClipPosition = new TimeSpan(0, hours, mins, secs, millis);
                 }
                 catch (FormatException)
                 {
@@ -58,12 +53,13 @@ namespace MeGUI.packages.tools.besplitter
                 {
                     log.AppendLine(line);
                 }
+                return;
             }
-            else if (line.IndexOf("Usage") != -1)
-            {
+            
+            if (line.IndexOf("Usage") != -1)
                 su.HasError = true;
-                log.AppendLine(line);
-            }
+
+            log.AppendLine(line);
         }
     }
 }

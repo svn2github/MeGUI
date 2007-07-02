@@ -1498,9 +1498,20 @@ namespace MeGUI
 
         private void addPackages()
         {
-            PackageSystem.JobProcessors.Register(VideoEncoder.Factory);
-            PackageSystem.JobProcessors.Register(AudioEncoder.Factory);
-            PackageSystem.JobProcessors.Register(Muxer.Factory);
+//            PackageSystem.JobProcessors.Register(VideoEncoder.Factory);
+//            PackageSystem.JobProcessors.Register(AudioEncoder.Factory);
+//            PackageSystem.JobProcessors.Register(Muxer.Factory);
+            PackageSystem.JobProcessors.Register(AviSynthAudioEncoder.Factory);
+
+            PackageSystem.JobProcessors.Register(mencoderEncoder.Factory);
+            PackageSystem.JobProcessors.Register(x264Encoder.Factory);
+            PackageSystem.JobProcessors.Register(XviDEncoder.Factory);
+
+            PackageSystem.JobProcessors.Register(Avc2AviMuxer.Factory);
+            PackageSystem.JobProcessors.Register(MkvMergeMuxer.Factory);
+            PackageSystem.JobProcessors.Register(MP4BoxMuxer.Factory);
+            PackageSystem.JobProcessors.Register(AMGMuxer.Factory);
+
             PackageSystem.JobProcessors.Register(AviSynthProcessor.Factory);
             PackageSystem.JobProcessors.Register(DGIndexer.Factory);
             PackageSystem.JobProcessors.Register(VobSubIndexer.Factory);

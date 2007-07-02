@@ -31,8 +31,25 @@ using MeGUI.core.util;
 
 namespace MeGUI
 {
-    public sealed class AviSynthAudioEncoder : AudioEncoder
+    public sealed class AviSynthAudioEncoder : IJobProcessor // : AudioEncoder
     {
+        public static readonly JobProcessorFactory Factory =
+new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
+
+        private static IJobProcessor init(MainForm mf, Job j)
+        {
+            if (j is AudioJob &&
+                (((j as AudioJob).Settings is MP3Settings) ||
+                ((j as AudioJob).Settings is MP2Settings) ||
+                ((j as AudioJob).Settings is AC3Settings) ||
+                ((j as AudioJob).Settings is WinAmpAACSettings) ||
+                ((j as AudioJob).Settings is AudXSettings) ||
+                ((j as AudioJob).Settings is OggVorbisSettings) ||
+                ((j as AudioJob).Settings is FaacSettings) ||
+                ((j as AudioJob).Settings is NeroAACSettings)))
+                return new AviSynthAudioEncoder(mf.Settings);
+            return null;
+        }
 
         #region fields
         private Process _encoderProcess;
@@ -55,13 +72,9 @@ namespace MeGUI
 
         private MeGUISettings _settings = null;
         private int SAMPLES_PER_UPDATE;
-        private AudioJob audioJob
-        {
-            get
-            {
-                return this.job as AudioJob;
-            }
-        }
+        private AudioJob audioJob;
+        private StatusUpdate su;
+
         private List<string> _tempFiles = new List<string>();
         private readonly string _uniqueId = Guid.NewGuid().ToString("N");
         #endregion
@@ -185,7 +198,8 @@ namespace MeGUI
         {
             if (su.IsComplete = (su.IsComplete || su.WasAborted || su.HasError))
                 su.Log = createLog();
-            this.sendStatusUpdateToGUI(su);
+            if (StatusUpdate != null)
+                StatusUpdate(su);
         }
 
         private void setProgress(decimal n)
@@ -464,9 +478,9 @@ namespace MeGUI
         #region IJobProcessor Members
 
 
-        public override void setup(Job job)
+        public void setup(Job job)
         {
-            this.job = (AudioJob)job;
+            this.audioJob = (AudioJob)job;
             su.JobName = audioJob.Name;
 
 
@@ -842,63 +856,44 @@ function x_upmixC" + id + @"(clip stereo)
 
         }
 
-        public override bool start(out string error)
+        public void start()
         {
             try
             {
                 this.Start();
-                error = null;
-                return true;
             }
             catch (Exception e)
             {
-                error = e.ToString();
-                return false;
+                throw new JobRunException(e);
             }
         }
 
-        public override bool stop(out string error)
+        public void stop()
         {
             try
             {
                 this.Abort();
-                error = null;
-                return true;
             }
             catch (Exception e)
             {
-                error = e.ToString();
-                return false;
+                throw new JobRunException(e);
             }
         }
 
-        public override bool pause(out string error)
+        public void pause()
         {
-            error = null;
-            if (_mre.Reset())
-                return true;
-            else
-            {
-                error = "Could not reset mutex. pause failed";
-                return false;
-            }
+            if (!_mre.Reset())
+                throw new JobRunException("Could not reset mutex. pause failed");
         }
 
-        public override bool resume(out string error)
+        public void resume()
         {
-            error = null;
-            if (_mre.Set())
-                return true;
-            else
-            {
-                error = "Could not set mutex. pause failed";
-                return false;
-            }
+            if (!_mre.Set())
+                throw new JobRunException("Could not set mutex. pause failed");
         }
 
-        public override bool changePriority(ProcessPriority priority, out string error)
+        public void changePriority(ProcessPriority priority)
         {
-            error = null;
             if (this._encoderThread != null && _encoderThread.IsAlive)
             {
                 try
@@ -909,25 +904,23 @@ function x_upmixC" + id + @"(clip stereo)
                         _encoderThread.Priority = ThreadPriority.Normal;
                     else if (priority == ProcessPriority.HIGH)
                         _encoderThread.Priority = ThreadPriority.AboveNormal;
-                    return true;
+                    return;
                 }
                 catch (Exception e) // process could not be running anymore
                 {
-                    error = "exception in change Priority: " + e.Message;
-                    return false;
+                    throw new JobRunException(e);
                 }
             }
             else
             {
                 if (_encoderThread == null)
-                    error = "Thread has not been started yet";
+                    throw new JobRunException("Thread has not been started yet");
                 else
-                    error = "Thread has exited";
-                return false;
+                    throw new JobRunException("Thread has exited");
             }
         }
 
-
+        public event JobProcessingStatusUpdateCallback StatusUpdate;
         #endregion
     }
 }

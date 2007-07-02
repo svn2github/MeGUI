@@ -112,6 +112,17 @@ namespace MeGUI.core.util
             cuts.Clear();
         }
 
+        public ulong TotalFrames
+        {
+            get
+            {
+                ulong ans = 0;
+                foreach (CutSection c in AllCuts)
+                    ans += (ulong)(c.endFrame - c.startFrame);
+                return ans;
+            }
+        }
+
         public Cuts clone()
         {
             Cuts copy = new Cuts(Style);

@@ -17,7 +17,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 // 
 // ****************************************************************************
-using System;
+/*using System;
 using System.Diagnostics;
 using System.Threading;
 using System.Windows.Forms;
@@ -69,7 +69,7 @@ namespace MeGUI
             encoder.setup(job);
         }
 
-        public virtual bool start(out string error)
+        public virtual void start()
         {
             error = null;
             return encoder.start(out error);
@@ -117,4 +117,4 @@ namespace MeGUI
         }
         #endregion
     }
-}
+}*/
