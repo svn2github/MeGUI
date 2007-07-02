@@ -6,6 +6,23 @@ namespace MeGUI
 {
     public class DialogSettings
     {
+        private bool ovewriteJobOutputResponse = true;
+
+        public bool OverwriteJobOutputResponse
+        {
+            get { return ovewriteJobOutputResponse; }
+            set { ovewriteJobOutputResponse = value; }
+        }
+
+        private bool askAboutOverwriteJobOutput = true;
+
+        public bool AskAboutOverwriteJobOutput
+        {
+            get { return askAboutOverwriteJobOutput; }
+            set { askAboutOverwriteJobOutput = value; }
+        }
+
+
         private bool askAboutDuplicates;
         private bool dupResponse;
 

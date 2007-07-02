@@ -1,3 +1,7 @@
+0.2.5.1006
+Commit by berrinam:
+    - Applied chiklit8963's patch for 1696276 (Ask whether to overwrite file if already exists)
+
 0.2.5.1005
 Commit by berrinam:
     - Fixed audio encoding

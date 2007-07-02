@@ -85,6 +85,21 @@ namespace MeGUI
             return (sResult.Equals("true"));
         }
 
+        public bool overwriteJobOutput(string outputname)
+        {
+            if (mainForm.Settings.DialogSettings.AskAboutOverwriteJobOutput)
+            {
+                bool askAgain;
+                bool bResult = askAbout("The output file, '" + outputname + "' already exists. Would you like to overwrite?",
+                    "File Already Exists", MessageBoxIcon.Warning, out askAgain);
+
+                mainForm.Settings.DialogSettings.AskAboutOverwriteJobOutput = askAgain;
+                mainForm.Settings.DialogSettings.OverwriteJobOutputResponse = bResult;
+                return bResult;
+            }
+            return mainForm.Settings.DialogSettings.OverwriteJobOutputResponse;
+        }
+
         public bool overwriteProfile(string profname)
         {
             if (mainForm.Settings.DialogSettings.AskAboutDuplicates)

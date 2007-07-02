@@ -1055,6 +1055,17 @@ namespace MeGUI.core.details
             mainForm.ClosePlayer();
 
 
+
+            //Check to see if output file already exists before encoding.
+            if (File.Exists(job.Output))
+            {
+                if (!mainForm.DialogManager.overwriteJobOutput(job.Output))
+                {
+                    mainForm.addToLog("Skipping job\r\n");
+                    return false;
+                }
+            }
+            
             // Get IJobProcessor
             currentProcessor = getProcessor(job);
             if (currentProcessor == null)
