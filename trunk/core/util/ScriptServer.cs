@@ -99,7 +99,7 @@ namespace MeGUI
             return newScript;
         }
 
-        public static string GetInputLine(string input, PossibleSources sourceType,
+        public static string GetInputLine(string input, bool interlaced, PossibleSources sourceType,
             bool colormatrix, bool mpeg2deblock, bool flipVertical, double fps)
         {
             string inputLine = "#input";
@@ -113,7 +113,7 @@ namespace MeGUI
                         inputLine += ",info=3";
                     inputLine += ")";
                     if (colormatrix)
-                        inputLine += "\r\nColorMatrix(hints=true)";
+                        inputLine += string.Format("\r\nColorMatrix(hints=true{0})", interlaced ? ",interlaced=true" : "");
                     break;
                 case PossibleSources.vdr:
                     inputLine = "AviSource(\"" + input + "\")";

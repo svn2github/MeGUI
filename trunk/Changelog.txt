@@ -1,3 +1,8 @@
+0.2.5.1005
+Commit by berrinam:
+    - Fixed audio encoding
+    - Fixed ColorCorrect's missing 'interlaced=true' on interlaced sources
+
 0.2.5.1004
 Commit by berrinam:
     - Fixed avc2avi muxing (d'oh!)

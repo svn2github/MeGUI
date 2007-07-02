@@ -1180,7 +1180,7 @@ namespace MeGUI
 			string resizeLine = "#resize";
 
             double fps = (double)fpsBox.Value;
-            inputLine = ScriptServer.GetInputLine(this.videoInput.Text, sourceType, colourCorrect.Checked, mpeg2Deblocking.Checked, flipVertical.Checked, fps);
+            inputLine = ScriptServer.GetInputLine(this.videoInput.Text, deinterlace.Checked, sourceType, colourCorrect.Checked, mpeg2Deblocking.Checked, flipVertical.Checked, fps);
             
             if (deinterlace.Checked && deinterlaceType.SelectedItem is DeinterlaceFilter)
                 deinterlaceLines = ((DeinterlaceFilter)deinterlaceType.SelectedItem).Script;
@@ -1799,7 +1799,7 @@ namespace MeGUI
                     if (videoInput.Text.ToLower().EndsWith(".d2v"))
                         d2v = videoInput.Text;
                     detector = new SourceDetector(
-                        ScriptServer.GetInputLine(videoInput.Text,
+                        ScriptServer.GetInputLine(videoInput.Text, false,
                         sourceType, false, false, false, 25),
                         d2v, deintIsAnime.Checked,
                         mainForm.Settings.SourceDetectorSettings,

@@ -120,6 +120,7 @@ namespace MeGUI
 			DenoiseFilterType denoiseMethod, bool denoise, bool mpeg2deblock, bool colourCorrect, mod16Method method)
 		{
 			this.Template = template;
+            this.Resize = resize;
 			this.ResizeMethod = resizeMethod;
 			this.DenoiseMethod = denoiseMethod;
 			this.Deinterlace = deinterlace;

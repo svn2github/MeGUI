@@ -23,6 +23,12 @@ namespace MeGUI.core.util
 
     public class Util
     {
+        private static readonly System.Text.RegularExpressions.Regex _cleanUpStringRegex = new System.Text.RegularExpressions.Regex(@"\n[^\n]+\r", System.Text.RegularExpressions.RegexOptions.Compiled | System.Text.RegularExpressions.RegexOptions.CultureInvariant);
+        public static string cleanUpString(string s)
+        {
+            return _cleanUpStringRegex.Replace(s.Replace(Environment.NewLine, "\n"), Environment.NewLine);
+        }
+
         public static void ensureExists(string file)
         {
             if (!System.IO.File.Exists(file))

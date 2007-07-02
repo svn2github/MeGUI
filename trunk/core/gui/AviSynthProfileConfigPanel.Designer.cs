@@ -290,6 +290,7 @@ namespace MeGUI.core.gui
             this.resize.Size = new System.Drawing.Size(104, 24);
             this.resize.TabIndex = 3;
             this.resize.Text = "Resize Filter";
+            this.resize.CheckedChanged += new System.EventHandler(this.resize_CheckedChanged);
             // 
             // noiseFilter
             // 
@@ -299,6 +300,7 @@ namespace MeGUI.core.gui
             this.noiseFilter.Size = new System.Drawing.Size(104, 24);
             this.noiseFilter.TabIndex = 3;
             this.noiseFilter.Text = "Noise Filter";
+            this.noiseFilter.CheckedChanged += new System.EventHandler(this.noiseFilter_CheckedChanged);
             // 
             // resizeFilterType
             // 

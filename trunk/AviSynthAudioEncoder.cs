@@ -73,7 +73,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
         private MeGUISettings _settings = null;
         private int SAMPLES_PER_UPDATE;
         private AudioJob audioJob;
-        private StatusUpdate su;
+        private StatusUpdate su = new StatusUpdate();
+        private DateTime _start;
 
         private List<string> _tempFiles = new List<string>();
         private readonly string _uniqueId = Guid.NewGuid().ToString("N");
@@ -205,6 +206,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
         private void setProgress(decimal n)
         {
             su.PercentageDoneExact = n * 100M;
+            su.CurrentFileSize = FileSize.Of2(audioJob.Output);
+            su.TimeElapsed = DateTime.Now - _start;
             su.FillValues();
             raiseEvent();
         }
@@ -275,6 +278,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                             throw new ApplicationException("Can't find audio stream");
 
                         _logBuilder.AppendFormat("Channels={0}, BitsPerSample={1}, SampleRate={2}Hz{3}", a.ChannelsCount, a.BitsPerSample, a.AudioSampleRate, Environment.NewLine);
+                        _start = DateTime.Now;
 
                         const int MAX_SAMPLES_PER_ONCE = 4096;
                         int frameSample = 0;
@@ -318,14 +322,14 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                                         }
 
 
+                                        target.Write(frameBuffer, 0, nHowMany * a.ChannelsCount * a.BytesPerSample);
+                                        target.Flush();
+                                        frameSample += nHowMany;
                                         if (frameSample - lastUpdateSample > SAMPLES_PER_UPDATE)
                                         {
                                             setProgress((decimal)frameSample / (decimal)a.SamplesCount);
                                             lastUpdateSample = frameSample;
                                         }
-                                        target.Write(frameBuffer, 0, nHowMany * a.ChannelsCount * a.BytesPerSample);
-                                        target.Flush();
-                                        frameSample += nHowMany;
                                         Thread.Sleep(0);
                                     }
                                 }

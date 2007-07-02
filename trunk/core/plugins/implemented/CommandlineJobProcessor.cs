@@ -24,6 +24,42 @@ namespace MeGUI
         protected ManualResetEvent stderrDone = new ManualResetEvent(false);
         protected StatusUpdate su = new StatusUpdate();
         protected StringBuilder log = new StringBuilder();
+        protected Thread readFromStdErrThread;
+        protected Thread readFromStdOutThread;
+        protected List<string> tempFiles = new List<string>();
+
+        #endregion
+
+        #region temp file utils
+        protected void writeTempTextFile(string filePath, string text)
+        {
+            using (Stream temp = new FileStream(filePath, System.IO.FileMode.Create))
+            {
+                using (TextWriter avswr = new StreamWriter(temp, System.Text.Encoding.Default))
+                {
+                    avswr.WriteLine(text);
+                }
+            }
+            tempFiles.Add(filePath);
+        }
+        private void deleteTempFiles()
+        {
+            foreach (string filePath in tempFiles)
+                safeDelete(filePath);
+
+        }
+
+        private static void safeDelete(string filePath)
+        {
+            try
+            {
+                File.Delete(filePath);
+            }
+            catch
+            {
+                // Do Nothing
+            }
+        }
         #endregion
 
         protected virtual void checkJobIO()
@@ -99,8 +135,10 @@ namespace MeGUI
             {
                 bool started = proc.Start();
                 isProcessing = true;
-                new Thread(new ThreadStart(readStdErr)).Start();
-                new Thread(new ThreadStart(readStdOut)).Start();
+                readFromStdErrThread = new Thread(new ThreadStart(readStdErr));
+                readFromStdOutThread = new Thread(new ThreadStart(readStdOut));
+                readFromStdOutThread.Start();
+                readFromStdErrThread.Start();
                 new System.Windows.Forms.MethodInvoker(this.RunStatusCycle).BeginInvoke(null, null);
                 this.changePriority(job.Priority);
             }

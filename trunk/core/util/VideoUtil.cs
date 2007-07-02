@@ -1137,7 +1137,7 @@ namespace MeGUI
             {
                 StreamWriter output = new StreamWriter(outputFile);
                 output.WriteLine(
-                    ScriptServer.GetInputLine(filename, sourceType, false, false, false, -1));
+                    ScriptServer.GetInputLine(filename, false, sourceType, false, false, false, -1));
                 output.Close();
             }
             catch (IOException)

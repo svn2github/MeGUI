@@ -75,5 +75,15 @@ namespace MeGUI.core.gui
         {
             avisynthScript.Text = "LoadPlugin(\"" + args.NewFileName + "\")\r\n" + avisynthScript.Text;
         }
+
+        private void noiseFilter_CheckedChanged(object sender, EventArgs e)
+        {
+            noiseFilterType.Enabled = noiseFilter.Checked;
+        }
+
+        private void resize_CheckedChanged(object sender, EventArgs e)
+        {
+            resizeFilterType.Enabled = resize.Checked;
+        }
     }
 }

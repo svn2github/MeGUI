@@ -876,6 +876,7 @@ namespace MeGUI
         private IndexJob job;
         private AVCLevels al = new AVCLevels();
         private bool finished = false;
+        private bool interlaced = false;
         private DeinterlaceFilter[] filters;
 
         public OneClickPostProcessor(MainForm mainForm, IndexJob ijob)
@@ -1150,8 +1151,8 @@ namespace MeGUI
             string cropLine = "#crop";
             string resizeLine = "#resize";
 
-            inputLine = ScriptServer.GetInputLine(path, PossibleSources.d2v,
-                avsSettings.ColourCorrect, avsSettings.MPEG2Deblock, false, 0);
+            inputLine = ScriptServer.GetInputLine(path, false, PossibleSources.d2v,
+                false, false, false, 0);
 
             if (autoDeint)
             {
@@ -1167,6 +1168,9 @@ namespace MeGUI
                 deinterlaceLines = filters[0].Script;
                 logBuilder.AppendLine("Deinterlacing used: " + deinterlaceLines);
             }
+
+            inputLine = ScriptServer.GetInputLine(path, interlaced, PossibleSources.d2v,
+                avsSettings.ColourCorrect, avsSettings.MPEG2Deblock, false, 0);
 
             cropLine = ScriptServer.GetCropLine(true, final);
             denoiseLines = ScriptServer.GetDenoiseLines(avsSettings.Denoise, (DenoiseFilterType)avsSettings.DenoiseMethod);
@@ -1202,6 +1206,7 @@ namespace MeGUI
             }
             else
                 this.filters = ScriptServer.GetDeinterlacers(info).ToArray();
+            interlaced = (info.sourceType != SourceType.PROGRESSIVE);
             finished = true;
         }
 
