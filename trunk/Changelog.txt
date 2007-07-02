@@ -1,3 +1,8 @@
+0.2.5.1004
+Commit by berrinam:
+    - Fixed avc2avi muxing (d'oh!)
+    - Fixed error on corrupt input in Adaptive Muxer
+
 0.2.5.1003
 Commit by berrinam:
     - Nicer progress window displaying consistent information for all jobs

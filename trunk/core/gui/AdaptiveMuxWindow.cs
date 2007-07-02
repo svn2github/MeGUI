@@ -100,7 +100,14 @@ namespace MeGUI
             if (minimizedMode)
                 videoType = null;
             else
+            {
                 videoType = VideoUtil.guessVideoMuxableType(videoInput.Text, true);
+                if (videoType != null && (videoType.codec == null || videoType.outputType == null))
+                {
+                    MessageBox.Show("Unable to determine type of input video. Mux-path finding cannot continue. Your video could well be corrupt.", "Determining type failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+            }
 
             if (!minimizedMode && videoType == null)
             {

@@ -19,7 +19,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "Avc2AviMuxer");
         private static IJobProcessor init(MainForm mf, Job j)
         {
             if (j is MuxJob && (j as MuxJob).MuxType == MuxerType.AVC2AVI)
-                return new AMGMuxer(mf.Settings.Avc2aviPath);
+                return new Avc2AviMuxer(mf.Settings.Avc2aviPath);
             return null;
         }
 
