@@ -41,7 +41,7 @@ namespace MeGUI
         ProcessingLevel CanBeProcessed(ContainerType[] inputContainer, MuxableType[] inputTypes, out List<MuxableType> handledInputTypes,
             out List<MuxableType> unhandledInputTypes);
         MuxerType MuxerType { get; }
-        Muxer GetMuxer(MeGUISettings settings);
+        IJobProcessor GetMuxer(MeGUISettings settings);
         MuxCommandlineGenerator CommandlineGenerator { get;}
         string GetOutputTypeFilter(ContainerType containerType);
         string GetVideoInputFilter();
@@ -131,7 +131,8 @@ namespace MeGUI
     public class VideoStream
     {
         string input, output;
-        int numberOfFrames, parx, pary;
+        ulong numberOfFrames;
+        int parx, pary;
         double framerate;
         MuxableType videoType;
         VideoCodecSettings settings;
@@ -162,7 +163,7 @@ namespace MeGUI
           get { return parx; }
           set { parx = value; }
         }
-        public int NumberOfFrames
+        public ulong NumberOfFrames
         {
           get { return numberOfFrames; }
           set { numberOfFrames = value; }

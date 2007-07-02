@@ -13,7 +13,7 @@ namespace MeGUI
             executable = encoderPath;
         }
 
-        public override string GetFrameString(string line, int stream)
+        public override string GetFrameString(string line, StreamType stream)
         {
             if (line.StartsWith("encoded frames:")) // status update
             {
@@ -24,7 +24,7 @@ namespace MeGUI
             return null;
         }
 
-        public override string GetErrorString(string line, int stream)
+        public override string GetErrorString(string line, StreamType stream)
         {
             if (line.IndexOf("Syntax") != -1 ||
                 (line.IndexOf("error") != -1)

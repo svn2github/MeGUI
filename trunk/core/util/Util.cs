@@ -23,6 +23,17 @@ namespace MeGUI.core.util
 
     public class Util
     {
+        public static void ensureExists(string file)
+        {
+            if (!System.IO.File.Exists(file))
+                throw new MissingFileException(file);
+        }
+
+        public static void ensureExistsIfNeeded(string file)
+        {
+            if (!string.IsNullOrEmpty(file)) ensureExists(file);
+        }
+
         public static string ToString(TimeSpan? t1)
         {
             if (!t1.HasValue) return null;

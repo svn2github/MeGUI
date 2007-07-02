@@ -54,6 +54,7 @@ namespace MeGUI
         private static readonly System.Text.RegularExpressions.Regex _cleanUpStringRegex = new System.Text.RegularExpressions.Regex(@"\n[^\n]+\r", System.Text.RegularExpressions.RegexOptions.Compiled | System.Text.RegularExpressions.RegexOptions.CultureInvariant);
 
         private MeGUISettings _settings = null;
+        private int SAMPLES_PER_UPDATE;
         private AudioJob audioJob
         {
             get
@@ -180,42 +181,31 @@ namespace MeGUI
 ");
         }
 
-        private void raiseEvent(StatusUpdate e)
+        private void raiseEvent()
         {
-            e.JobName = audioJob.Name;
-            e.JobType = JobTypes.AUDIO;
-            if (e.IsComplete = (e.IsComplete || e.WasAborted || e.HasError))
-                e.Log = createLog();
-            this.sendStatusUpdateToGUI(e);
+            if (su.IsComplete = (su.IsComplete || su.WasAborted || su.HasError))
+                su.Log = createLog();
+            this.sendStatusUpdateToGUI(su);
         }
 
-        private void setProgress(double n, int currentSample)
+        private void setProgress(decimal n)
         {
-            StatusUpdate e = new StatusUpdate();
-            e.PercentageDoneExact = (decimal)n;
-            if (currentSample != -1)
-            {
-                Int64 msec = currentSample;
-                msec *= 1000;
-                msec /= _sampleRate;
-                msec *= 10000;
-                DateTime dt = new DateTime(msec);
-                e.AudioPosition = dt.ToString("HHHH:mm:ss.fff");
-            }
-            raiseEvent(e);
+            su.PercentageDoneExact = n * 100M;
+            su.FillValues();
+            raiseEvent();
         }
 
         private void raiseEvent(string s)
         {
-            StatusUpdate e = new StatusUpdate();
-            e.AudioPosition = s;
-            raiseEvent(e);
-
+            su.Status = s;
+            raiseEvent();
         }
 
 
         internal AviSynthAudioEncoder(MeGUISettings settings)
         {
+            su.JobType = JobTypes.AUDIO;
+            SAMPLES_PER_UPDATE = (int)settings.AudioSamplesPerUpdate;
             _settings = settings;
         }
 
@@ -274,6 +264,7 @@ namespace MeGUI
 
                         const int MAX_SAMPLES_PER_ONCE = 4096;
                         int frameSample = 0;
+                        int lastUpdateSample = 0;
                         int frameBufferTotalSize = MAX_SAMPLES_PER_ONCE * a.ChannelsCount * a.BytesPerSample;
                         byte[] frameBuffer = new byte[frameBufferTotalSize];
                         createEncoderProcess(a);
@@ -288,11 +279,13 @@ namespace MeGUI
                                 _sampleRate = a.AudioSampleRate;
 
                                 raiseEvent("Preprocessing...");
+                                bool hasStartedEncoding = false;
 
                                 GCHandle h = GCHandle.Alloc(frameBuffer, GCHandleType.Pinned);
                                 IntPtr address = h.AddrOfPinnedObject();
                                 try
                                 {
+                                    su.ClipLength = TimeSpan.FromSeconds((double)a.SamplesCount / (double)_sampleRate);
                                     while (frameSample < a.SamplesCount)
                                     {
                                         _mre.WaitOne();
@@ -304,8 +297,18 @@ namespace MeGUI
                                         a.ReadAudio(address, frameSample, nHowMany);
                                         
                                         _mre.WaitOne();
+                                        if (!hasStartedEncoding)
+                                        {
+                                            raiseEvent("Encoding audio...");
+                                            hasStartedEncoding = true;
+                                        }
 
-                                        setProgress(((100 * (double)frameSample) / a.SamplesCount), frameSample);
+
+                                        if (frameSample - lastUpdateSample > SAMPLES_PER_UPDATE)
+                                        {
+                                            setProgress((decimal)frameSample / (decimal)a.SamplesCount);
+                                            lastUpdateSample = frameSample;
+                                        }
                                         target.Write(frameBuffer, 0, nHowMany * a.ChannelsCount * a.BytesPerSample);
                                         target.Flush();
                                         frameSample += nHowMany;
@@ -316,7 +319,7 @@ namespace MeGUI
                                 {
                                     h.Free();
                                 }
-                                setProgress(100, frameSample);
+                                setProgress(1M);
 
                                 if (_mustSendWavHeaderToEncoderStdIn && a.BytesPerSample % 2 == 1)
                                     target.WriteByte(0);
@@ -350,17 +353,14 @@ namespace MeGUI
                 if (e is ThreadAbortException)
                 {
                     _logBuilder.Append("ABORTING!\n");
-                    StatusUpdate u = new StatusUpdate();
-                    u.WasAborted = true;
-                    raiseEvent(u);
+                    su.WasAborted = true;
+                    raiseEvent();
                 }
                 else
                 {
                     _logBuilder.Append("Error:\n" + e.ToString());
-                    StatusUpdate u = new StatusUpdate();
-                    u.HasError = true;
-                    u.Error = e.ToString();
-                    raiseEvent(u);
+                    su.HasError = true;
+                    raiseEvent();
                 }
                 return;
             }
@@ -368,9 +368,8 @@ namespace MeGUI
             {
                 deleteTempFiles();
             }
-            StatusUpdate u2 = new StatusUpdate();
-            u2.IsComplete = true;
-            raiseEvent(u2);
+            su.IsComplete = true;
+            raiseEvent();
         }
 
         private string createLog()
@@ -465,10 +464,11 @@ namespace MeGUI
         #region IJobProcessor Members
 
 
-        public override bool setup(Job job, out string error)
+        public override void setup(Job job)
         {
-            error = null;
             this.job = (AudioJob)job;
+            su.JobName = audioJob.Name;
+
 
             //let's create avisynth script
             StringBuilder script = new StringBuilder();
@@ -535,11 +535,15 @@ namespace MeGUI
                     Cuts cuts = FilmCutter.ReadCutsFromFile(audioJob.CutFile);
                     script.AppendLine(FilmCutter.GetCutsScript(cuts, true));
                 }
+                catch (FileNotFoundException)
+                {
+                    deleteTempFiles();
+                    throw new MissingFileException(audioJob.CutFile);
+                }
                 catch (Exception)
                 {
                     deleteTempFiles();
-                    error = "Broken cuts file, " + audioJob.CutFile + ", can't continue.";
-                    return false;
+                    throw new JobRunException("Broken cuts file, " + audioJob.CutFile + ", can't continue.");
                 }
             }
 
@@ -732,8 +736,7 @@ namespace MeGUI
             if (!File.Exists(_encoderExecutablePath))
             {
                 deleteTempFiles();
-                error = "Can't find encoder " + _encoderExecutablePath + ", please check settings!";
-                return false;
+                throw new EncoderMissingException(_encoderExecutablePath);
             }
 
             script.AppendFormat("ConvertAudioTo16bit(){0}", Environment.NewLine);
@@ -837,7 +840,6 @@ function x_upmixC" + id + @"(clip stereo)
         );
             _avisynthAudioScript = script.ToString();
 
-            return true;
         }
 
         public override bool start(out string error)

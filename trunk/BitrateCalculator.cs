@@ -40,9 +40,9 @@ namespace MeGUI
 		private int VorbisBlockSize = 1024;
 		private int mkvAudioTrackHeaderSize = 140;
 		private int mkvVorbisTrackHeaderSize = 4096;
-		private int mkvIframeOverhead = 26;
-		private int mkvPframeOverhead = 13;
-		private int mkvBframeOverhead = 16;
+		private readonly uint mkvIframeOverhead = 26;
+		private readonly uint mkvPframeOverhead = 13;
+		private readonly uint mkvBframeOverhead = 16;
 		#endregion
 		public BitrateCalculator()
 		{}
@@ -57,7 +57,7 @@ namespace MeGUI
         /// <param name="framerate">framerate of the video</param>
         /// <param name="videoSize">size of the raw video stream</param>
         /// <returns>the calculated bitrate</returns>
-        private int calculateMP4VideoBitrate(AudioStream[] audioStreams, long desiredOutputSizeBytes, int nbOfFrames,
+        private int calculateMP4VideoBitrate(AudioStream[] audioStreams, long desiredOutputSizeBytes, ulong nbOfFrames,
             bool useBframes, double framerate, out long videoSizeKB)
         {
             double mp4Overhead = this.getMP4Overhead(useBframes);
@@ -84,7 +84,7 @@ namespace MeGUI
         /// <param name="framerate">the framerate of the source</param>
         /// <param name="rawVideoSize">the raw video size the stream will have in the container</param>
         /// <returns>the size of the mp4 file in KB</returns>
-        private long calculateMP4Size(AudioStream[] audioStreams, int desiredBitrate, int nbOfFrames, bool useBframes, double framerate, out int rawVideoSize)
+        private long calculateMP4Size(AudioStream[] audioStreams, int desiredBitrate, ulong nbOfFrames, bool useBframes, double framerate, out int rawVideoSize)
         {
             double mp4Overhead = this.getMP4Overhead(useBframes);
             double totalOverhead = (double)nbOfFrames * mp4Overhead;
@@ -113,14 +113,14 @@ namespace MeGUI
         /// <param name="useBframes">whether the video uses b-frames</param>
         /// <param name="videoSize">size of the raw video stream in KB</param>
         /// <returns>the video bitrate in kbit/s</returns>
-        private int calculateMKVVideoBitrate(AudioStream[] audioStreams, long desiredOutputSize, int nbOfFrames, double framerate, bool useBframes, out long videoSize)
+        private int calculateMKVVideoBitrate(AudioStream[] audioStreams, long desiredOutputSize, ulong nbOfFrames, double framerate, bool useBframes, out long videoSize)
         {
             double totalOverhead = 0.0;
-            int nbIframes = nbOfFrames / 10;
-            int nbBframes = 0;
+            ulong nbIframes = nbOfFrames / 10;
+            ulong nbBframes = 0;
             if (useBframes)
                 nbBframes = (nbOfFrames - nbIframes) / 2;
-            int nbPframes = nbOfFrames - nbIframes - nbBframes;
+            ulong nbPframes = nbOfFrames - nbIframes - nbBframes;
             totalOverhead = (double)(4300 + 1400 + nbIframes * mkvIframeOverhead + nbPframes * mkvPframeOverhead +
                 nbBframes * mkvBframeOverhead);
             double nbOfSeconds = (double)nbOfFrames / framerate;
@@ -149,14 +149,14 @@ namespace MeGUI
         /// <param name="useBframes">whether we use b-frames for the video</param>
         /// <param name="rawVideoSize">the raw size of the video stream in KB</param>
         /// <returns>the size of the final file in KB</returns>
-        private long calculateMKVSize(AudioStream[] audioStreams, int desiredBitrate, int nbOfFrames, double framerate, bool useBframes, out int rawVideoSize)
+        private long calculateMKVSize(AudioStream[] audioStreams, int desiredBitrate, ulong nbOfFrames, double framerate, bool useBframes, out int rawVideoSize)
         {
             double totalOverhead = 0.0;
-            int nbIframes = nbOfFrames / 10;
-            int nbBframes = 0;
+            ulong nbIframes = nbOfFrames / 10;
+            ulong nbBframes = 0;
             if (useBframes)
                 nbBframes = (nbOfFrames - nbIframes) / 2;
-            int nbPframes = nbOfFrames - nbIframes - nbBframes;
+            ulong nbPframes = nbOfFrames - nbIframes - nbBframes;
             totalOverhead = (double)(4300 + 1400 + nbIframes * mkvIframeOverhead + nbPframes * mkvPframeOverhead +
                 nbBframes * mkvBframeOverhead);
             double nbOfSeconds = (double)nbOfFrames / framerate;
@@ -222,7 +222,7 @@ namespace MeGUI
         /// <param name="framerate">the framerate of the source</param>
         /// <param name="videoSize">the size of the raw video stream</param>
         /// <returns>the bitrate in kbit/s</returns>
-        private int calculateAVIBitrate(AudioStream[] audioStreams, long desiredOutputSize, int nbOfFrames, double framerate, out long videoSize)
+        private int calculateAVIBitrate(AudioStream[] audioStreams, long desiredOutputSize, ulong nbOfFrames, double framerate, out long videoSize)
         {
             double videoOverhead = (double)nbOfFrames * aviVideoOverhead;
             double nbOfSeconds = (double)nbOfFrames / framerate;
@@ -243,7 +243,7 @@ namespace MeGUI
             int bitrate = (int)(sizeInBits / (nbOfSeconds * 1000));
             return bitrate;
         }
-        private long calculateAVISize(AudioStream[] audioStreams, int desiredBitrate, int nbOfFrames, double framerate, out int rawVideoSize)
+        private long calculateAVISize(AudioStream[] audioStreams, int desiredBitrate, ulong nbOfFrames, double framerate, out int rawVideoSize)
         {
             double videoOverhead = this.aviVideoOverhead;
             double nbOfSeconds = (double)nbOfFrames / framerate;
@@ -316,7 +316,7 @@ namespace MeGUI
         }
 		#endregion
         #region generic calculations
-        public int CalculateBitrateKBits(VideoCodec codec, bool useBframes, ContainerType container, AudioStream[] audioStreams, long desiredOutputSizeBytes, int nbOfFrames, double framerate, out long videoSizeKB)
+        public int CalculateBitrateKBits(VideoCodec codec, bool useBframes, ContainerType container, AudioStream[] audioStreams, long desiredOutputSizeBytes, ulong nbOfFrames, double framerate, out long videoSizeKB)
         {
             if (container == ContainerType.MP4)
                 return calculateMP4VideoBitrate(audioStreams, desiredOutputSizeBytes, nbOfFrames, useBframes, framerate, out videoSizeKB);
@@ -327,7 +327,7 @@ namespace MeGUI
             videoSizeKB = 0;
             return 0;
         }
-        public long CalculateFileSizeKB(VideoCodec codec, bool useBframes, ContainerType container, AudioStream[] audioStreams, int desiredBitrate, int nbOfFrames, double framerate, out int rawVideoSize)
+        public long CalculateFileSizeKB(VideoCodec codec, bool useBframes, ContainerType container, AudioStream[] audioStreams, int desiredBitrate, ulong nbOfFrames, double framerate, out int rawVideoSize)
         {
             if (container == ContainerType.MP4)
                 return calculateMP4Size(audioStreams, desiredBitrate, nbOfFrames, useBframes, framerate, out rawVideoSize);

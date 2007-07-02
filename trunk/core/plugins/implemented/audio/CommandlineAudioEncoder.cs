@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
 using System.IO;
+using MeGUI.core.util;
 
 namespace MeGUI
 {
@@ -83,23 +84,6 @@ namespace MeGUI
         #endregion
         #region helper methods
         /// <summary>
-        /// checks if the encoder path given to the encoder actually exists
-        /// </summary>
-        /// <param name="executableName">path and name of the encoder executable</param>
-        /// <param name="error">return string for errors</param>
-        /// <returns>true if the encoder is there, false if not</returns>
-        protected bool checkEncoderExistence(string executableName, out string error)
-        {
-            error = null;
-            if (!File.Exists(executable))
-            {
-                error = "Could not find " + executableName + " in the path specified: " + executable
-                    + " Please specify the proper path in the settings";
-                return false;
-            }
-            return true;
-        }
-        /// <summary>
         /// sends a status update up the chain where it will be thrown as an event
         /// </summary>
         /// <param name="su">the status update object to be send back to the GUI</param>
@@ -124,13 +108,10 @@ namespace MeGUI
         #endregion
         #region IJobProcessor overridden members
 
-        public override bool setup(Job job, out string error)
+        public override void setup(Job job)
         {
-            error = null;
-            if (!checkEncoderExistence(executable, out error))
-            {
-                return false;
-            }
+            Util.ensureExists(executable);
+            
             executable = "\"" + executable + "\"";
             this.job = job;
             su = new StatusUpdate();
@@ -138,7 +119,6 @@ namespace MeGUI
             su.JobName = job.Name;
             su.JobType = JobTypes.AUDIO;
             log = new StringBuilder();
-            return true;
         }
 
         public override bool start(out string error)

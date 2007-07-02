@@ -16,22 +16,13 @@ namespace MeGUI
             this.executable = executablePath;
         }
         #region setup/start overrides
-        public override bool setup(Job job, out string error)
+        protected override void checkJobIO()
         {
-            error = null;
-            MuxJob mjob = (MuxJob)job;
-            script_filename = writeScript(mjob);
-            mjob.Commandline = "\"" + script_filename + "\"";
-
-            // Since AviMuxGUI is so sensitive to errors, let's be extra careful, and check that the files
-            // all exist, so we can give the user a nicer error, and continue with the queue
-            if (base.setup(job, out error))
-                return true;
-            else
-                return false;
+            script_filename = writeScript(job);
+            job.Commandline = "\"" + script_filename + "\"";
+            
+            base.checkJobIO();
         }
-
-
 
         private string writeScript(MuxJob job)
         {
@@ -125,34 +116,26 @@ SET OPTION STDIDX AUTO");
             return filename;
         }
 
-        public override bool start(out string error)
-        {
-            error = null;
-            base.start(out error); // always return true so we don't check the return value
-            try
-            {
-                proc.Exited += new EventHandler(proc_Exited);
-                bool started = proc.Start();
-                new MethodInvoker(this.readStdOut).BeginInvoke(null, null);
-                new MethodInvoker(this.readStdErr).BeginInvoke(null, null);
-                this.changePriority(job.Priority, out error);
-                return true;
-            }
-            catch (Exception e)
-            {
-                error = "Exception starting the process: " + e.Message;
-                return false;
-            }
-        }
-
-        void proc_Exited(object sender, EventArgs e)
+        protected override void doExitConfig()
         {
             try
             {
                 File.Delete(script_filename);
             }
             catch (IOException) { }
+            base.doExitConfig();
         }
+
         #endregion
+
+        protected override bool checkExitCode()
+        {
+            return false;
+        }
+
+        public override void ProcessLine(string line, StreamType stream)
+        {
+            log.AppendLine(line);
+        }
     }
 }

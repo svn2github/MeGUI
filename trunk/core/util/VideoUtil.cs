@@ -38,55 +38,6 @@ namespace MeGUI
 	/// </summary>
 	public class VideoUtil
     {
-        #region range clamping
-        public static void clampedSet(NumericUpDown box, decimal value)
-        {
-            box.Value = clamp(value, box.Minimum, box.Maximum);
-        }
-
-        public static decimal clamp(decimal val, decimal min, decimal max)
-        {
-            Debug.Assert(max >= min);
-            if (val < min) return min;
-            if (val > max) return max;
-            return val;
-        }
-
-        public static int clamp(int val, int min, int max)
-        {
-            return (int)clamp((decimal)val, min, max);
-        }
-
-        public static uint clamp(uint val, uint min, uint max)
-        {
-            return (uint)clamp((decimal)val, min, max);
-        }
-        
-        public static ulong clamp(ulong val, ulong min, ulong max)
-        {
-            return (ulong)clamp((decimal)val, min, max);
-        }
-
-        public static long clamp(long val, long min, long max)
-        {
-            return (long)clamp((decimal)val, min, max);
-        }
-        
-        public static ulong clamp(long val, ulong min, ulong max)
-        {
-            return (ulong)clamp((decimal)val, min, max);
-        }
-
-        public static ulong clampPositive(long val)
-        {
-            if (val < 0) return 0u;
-            return (ulong)val;
-        }
-        public static uint clampPositive(int val)
-        {
-            return (uint)clampPositive((long)val);
-        }
-        #endregion
 
         private MainForm mainForm;
 		private JobUtil jobUtil;
@@ -1352,12 +1303,3 @@ namespace MeGUI
 	#endregion
 }
 
-public class SetupException : Exception
-{
-    public string error;
-
-    public SetupException(string message)
-    {
-        error = message;
-    }
-}

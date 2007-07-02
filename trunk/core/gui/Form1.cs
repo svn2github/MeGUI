@@ -1560,6 +1560,7 @@ namespace MeGUI
                     return;
             }
             Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
+//            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(Application_ThreadException);
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
             CommandlineParser parser = new CommandlineParser();
             parser.Parse(args);

@@ -5,9 +5,12 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using MeGUI.core.util;
+using MeGUI.core.plugins.implemented;
 
 namespace MeGUI
 {
+    public enum StreamType : ushort { None = 0, Stderr = 1, Stdout = 2 }
+
     public abstract class CommandlineJobProcessor<TJob> : IJobProcessor
         where TJob : Job
     {
@@ -19,37 +22,13 @@ namespace MeGUI
         protected ManualResetEvent mre = new ManualResetEvent(true); // lock used to pause encoding
         protected ManualResetEvent stdoutDone = new ManualResetEvent(false);
         protected ManualResetEvent stderrDone = new ManualResetEvent(false);
-        protected event JobProcessingStatusUpdateCallback statusUpdate;
         protected StatusUpdate su = new StatusUpdate();
         protected StringBuilder log = new StringBuilder();
         #endregion
-        /// <summary>
-        /// checks if the encoder path given to the encoder actually exists
-        /// </summary>
-        /// <param name="executableName">path and name of the encoder executable</param>
-        /// <param name="error">return string for errors</param>
-        /// <returns>true if the encoder is there, false if not</returns>
-        protected bool checkEncoderExistence(string executableName, out string error)
-        {
-            error = null;
-            if (!File.Exists(executableName))
-            {
-                error = "Could not find " + executableName + " in the path specified: " + executable
-                    + " Please specify the proper path in the settings";
-                return false;
-            }
-            return true;
-        }
 
-        protected virtual bool checkJobIO(TJob job, out string error)
+        protected virtual void checkJobIO()
         {
-            error = null;
-            if (!File.Exists(job.Input))
-            {
-                error = string.Format("Input file {0} does not exist.", job.Input);
-                return false;
-            }
-            return true;
+            Util.ensureExists(job.Input);
         }
 
         protected virtual void doExitConfig()
@@ -75,29 +54,27 @@ namespace MeGUI
             su.IsComplete = true;
             doExitConfig();
             su.Log = log.ToString();
-            statusUpdate(su);
+            StatusUpdate(su);
         }
 
         #region IVideoEncoder overridden Members
 
-        public bool setup(Job job2, out string error)
+        public void setup(Job job2)
         {
-            if (!(job2 is TJob))
-                throw new Exception("Job is the wrong type");
+            Debug.Assert(job2 is TJob, "Job is the wrong type");
+
             TJob job = (TJob)job2;
-            error = null;
+            this.job = job;
+
             // This enables relative paths, etc
             executable = Path.Combine(System.Windows.Forms.Application.StartupPath, executable);
-            if (!checkEncoderExistence(executable, out error))
-                return false;
 
-            if (!checkJobIO(job, out error))
-                return false;
+            Util.ensureExists(executable);
+
+            checkJobIO();
             
-            this.job = job;
             su.JobName = job.Name;
             su.JobType = job.JobType;
-            return true;
         }
 
         public bool start(out string error)
@@ -184,10 +161,15 @@ namespace MeGUI
             }
         }
 
+        public bool isRunning()
+        {
+            return (proc != null && !proc.HasExited);
+        }
+
         public bool changePriority(ProcessPriority priority, out string error)
         {
             error = null;
-            if (proc != null && !proc.HasExited)
+            if (isRunning())
             {
                 try
                 {
@@ -223,7 +205,7 @@ namespace MeGUI
 
         #endregion
         #region reading process output
-        protected virtual void readStream(StreamReader sr, ManualResetEvent rEvent)
+        protected virtual void readStream(StreamReader sr, ManualResetEvent rEvent, StreamType str)
         {
             string line;
             if (proc != null)
@@ -233,12 +215,12 @@ namespace MeGUI
                     while ((line = sr.ReadLine()) != null)
                     {
                         mre.WaitOne();
-                        ProcessLine(line, 1);
+                        ProcessLine(line, str);
                     }
                 }
                 catch (Exception e)
                 {
-                    ProcessLine("Exception in readStdErr: " + e.Message, 2);
+                    ProcessLine("Exception in readStdErr: " + e.Message, str);
                 }
                 rEvent.Set();
             }
@@ -256,7 +238,7 @@ namespace MeGUI
                 stdoutDone.Set();
                 return;
             }
-            readStream(sr, stdoutDone);
+            readStream(sr, stdoutDone, StreamType.Stdout);
         }
         protected void readStdErr()
         {
@@ -271,27 +253,29 @@ namespace MeGUI
                 stderrDone.Set();
                 return;
             }
-            readStream(sr, stderrDone);
+            readStream(sr, stderrDone, StreamType.Stderr);
         }
-        public abstract void ProcessLine(string line, int stream);
+        public abstract void ProcessLine(string line, StreamType stream);
+
         #endregion
         #region status updates
-        public event JobProcessingStatusUpdateCallback StatusUpdate
-        {
+        public event JobProcessingStatusUpdateCallback StatusUpdate;
+/*        {
             add { statusUpdate += value; }
             remove { statusUpdate -= value; }
-        }
+        }*/
 
         protected void RunStatusCycle()
         {
-            while (proc != null && !proc.HasExited)
+            while (isRunning())
             {
-                su.TimeElapsed = DateTime.Now.Ticks - job.Start.Ticks;
-                su.FileSize = FileSize.Of2(job.Output);
+                su.TimeElapsed = DateTime.Now - job.Start;
+                su.CurrentFileSize = FileSize.Of2(job.Output);
 
                 doStatusCycleOverrides();
-                if (statusUpdate != null && proc != null && !proc.HasExited)
-                    statusUpdate(su);
+                su.FillValues();
+                if (StatusUpdate != null && proc != null && !proc.HasExited)
+                    StatusUpdate(su);
                 Thread.Sleep(1000);
 
             }

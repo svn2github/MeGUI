@@ -49,7 +49,7 @@ namespace MeGUI
             return null;
         }
 
-        public Muxer GetMuxer(MuxerType type, MeGUISettings settings)
+        public IJobProcessor GetMuxer(MuxerType type, MeGUISettings settings)
         {
             IMuxing muxer = GetMuxer(type);
             if (muxer == null)
@@ -396,7 +396,7 @@ namespace MeGUI
 //            base.subtitleInputFilter = "All supported types (*.srt)|*.srt";
         }
 
-        public override Muxer GetMuxer(MeGUISettings settings)
+        public override IJobProcessor GetMuxer(MeGUISettings settings)
         {
             return new MP4BoxMuxer(settings.Mp4boxPath);
         }
@@ -436,7 +436,7 @@ namespace MeGUI
 //            base.subtitleInputFilter = "All supported types (*.srt, *.idx)|*.srt;*.idx|Subrip Files (*.srt)|*.srt|VobSub Files (*.idx)|*.idx";
         }
 
-        public override Muxer GetMuxer(MeGUISettings settings)
+        public override IJobProcessor GetMuxer(MeGUISettings settings)
         {
             return new MkvMergeMuxer(settings.MkvmergePath);
         }
@@ -470,7 +470,7 @@ namespace MeGUI
             generator = CommandLineGenerator.generateAVIMuxCommandline;
         }
 
-        public override Muxer GetMuxer(MeGUISettings settings)
+        public override IJobProcessor GetMuxer(MeGUISettings settings)
         {
             return new AMGMuxer(settings.AviMuxGUIPath);
         }
@@ -518,7 +518,7 @@ namespace MeGUI
 //            base.videoInputFilter = "RAW MPEG-4 AVC Files (*.264)|*.264";
         }
 
-        public override Muxer GetMuxer(MeGUISettings settings)
+        public override IJobProcessor GetMuxer(MeGUISettings settings)
         {
             return new Avc2AviMuxer(settings.Avc2aviPath);
         }
@@ -660,7 +660,7 @@ namespace MeGUI
             return commonContainers;
         }
 
-        public abstract Muxer GetMuxer(MeGUISettings meguiSettings);
+        public abstract IJobProcessor GetMuxer(MeGUISettings meguiSettings);
 
         /// <summary>
         /// Returns the number of the type if it is supported, otherwise -1

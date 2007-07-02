@@ -23,6 +23,7 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Text;
 using System.IO;
+using MeGUI.core.util;
 
 namespace MeGUI
 {
@@ -41,7 +42,7 @@ namespace MeGUI
         protected MuxJob job;
         protected StatusUpdate su;
         protected StringBuilder log; // holds logging information
-        private Muxer muxer;
+        private IJobProcessor muxer;
 
         public Muxer(MainForm mainForm)
 		{
@@ -64,22 +65,19 @@ namespace MeGUI
             return false;
         }
 
-        public virtual bool setup(Job job, out string error)
+        public virtual void setup(Job job)
         {
             muxer = mainForm.MuxProvider.GetMuxer(((MuxJob)job).MuxType, mainForm.Settings);
             if (muxer == null)
             {
-                error = "No suitable muxer found";
-                return false;
+                throw new JobRunException("No suitable muxer found");
             }
-            error = null;
-            return muxer.setup(job, out error);
+            muxer.setup(job);
         }
 
         public virtual bool start(out string error)
         {
             error = null;
-            muxer.job.Start = DateTime.Now;
             return muxer.start(out error);
         }
 
@@ -113,11 +111,11 @@ namespace MeGUI
         {
             add
             {
-                muxer.statusUpdate += value;
+                muxer.StatusUpdate += value;
             }
             remove
             {
-                muxer.statusUpdate -= value;
+                muxer.StatusUpdate -= value;
             }
         }
         #endregion

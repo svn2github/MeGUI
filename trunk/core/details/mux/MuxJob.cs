@@ -28,7 +28,8 @@ namespace MeGUI
 	public class MuxJob: Job
 	{
 		private string codec;
-		private int nbOfBframes, bitrate, nbOfFrames;
+        private int nbOfBframes, bitrate;
+        private ulong nbOfFrames;
 		private double overhead;
 		private MuxSettings settings;
 		private MuxerType type;
@@ -104,7 +105,7 @@ namespace MeGUI
 		/// <summary>
 		/// the number of frames the video has
 		/// </summary>
-		public int NbOfFrames
+		public ulong NbOfFrames
 		{
 			get {return nbOfFrames;}
 			set {nbOfFrames = value;}

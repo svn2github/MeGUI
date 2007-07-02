@@ -18,7 +18,7 @@ namespace MeGUI
             return true;
         }
 
-        public override string GetFrameString(string line, int stream)
+        public override string GetFrameString(string line, StreamType stream)
         {
             if (line.StartsWith("Pos:")) // status update
             {
@@ -28,7 +28,7 @@ namespace MeGUI
             }
             return null;
         }
-        public override string GetErrorString(string line, int stream)
+        public override string GetErrorString(string line, StreamType stream)
         {
             if (line.IndexOf("error") != -1 || line.IndexOf("not an MEncoder option") != -1)
                 return line;

@@ -986,7 +986,7 @@ namespace MeGUI
 		/// <param name="container">container</param>
 		/// <param name="audio1Bitrate">bitrate of the first audio track</param>
 		/// <param name="audio2Bitrate">bitrate of the second audio track</param>
-		public void setDefaults(int nbFrames, double framerate, ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> codec, AudioStream audioStream1, AudioStream audioStream2)
+		public void setDefaults(ulong nbFrames, double framerate, ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> codec, AudioStream audioStream1, AudioStream audioStream2)
 		{
             setFPSToBest(framerate);
             try
@@ -1519,9 +1519,9 @@ namespace MeGUI
 		#endregion
 		#region bitrate calculations
         private bool getInfo(out VideoCodec codec, out AudioStream[] audioStreamsArray, out ContainerType containerType,
-            out int numberOfFrames, out double framerate)
+            out ulong numberOfFrames, out double framerate)
         {
-            numberOfFrames = (int)nbFrames.Value;
+            numberOfFrames = (ulong)nbFrames.Value;
             framerate = (double)this.framerate.Items[this.framerate.SelectedIndex];
             long[] audioSizes = { ((long)audio1SizeKB.Value)* 1024L, ((long)audio2SizeKB.Value) * 1024L };
             List<AudioStream> audioStreams = new List<AudioStream>();
@@ -1562,7 +1562,7 @@ namespace MeGUI
             AudioStream[] audioStreams;
             VideoCodec vCodec;
             ContainerType containerType;
-            int nbOfFrames;
+            ulong nbOfFrames;
             double framerate;
             if (!getInfo(out vCodec, out audioStreams, out containerType,
                 out nbOfFrames, out framerate))
@@ -1621,7 +1621,7 @@ namespace MeGUI
             long muxedSizeBytes = ((long)muxedSizeKB.Value) * 1024L;
             if (muxedSizeBytes <= 0)
                 return false;
-            int numberOfFrames;
+            ulong numberOfFrames;
             double framerate;
             AudioStream[] audioStreams;
             VideoCodec vCodec;
@@ -1663,7 +1663,7 @@ namespace MeGUI
         {
             using (Calculator calc = new Calculator(info))
             {
-                int nbFrames = 0;
+                ulong nbFrames = 0;
                 double framerate = 0.0;
                 if (!info.Video.VideoInput.Equals(""))
                     info.JobUtil.getInputProperties(out nbFrames, out framerate, info.Video.VideoInput);

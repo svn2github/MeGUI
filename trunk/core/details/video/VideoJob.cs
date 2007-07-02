@@ -27,7 +27,8 @@ namespace MeGUI
 	public class VideoJob : Job
 	{
 		private VideoCodecSettings settings;
-		private int outputType, numberOfFrames, parX, parY;
+		private int outputType, parX, parY;
+        private ulong numberOfFrames;
 		private long desiredSize;
 		private double framerate;
         private bool calculateBitrate;
@@ -83,7 +84,7 @@ namespace MeGUI
 		/// <summary>
 		/// the number of frames the source of this job has
 		/// </summary>
-		public int NumberOfFrames
+		public ulong NumberOfFrames
 		{
 			get {return numberOfFrames;}
 			set {numberOfFrames = value;}

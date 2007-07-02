@@ -12,53 +12,14 @@ namespace MeGUI
             this.executable = executablePath;
         }
 
-        public override bool start(out string error)
-        {
-            error = null;
-            base.start(out error); // always return true so we don't check the return value
-            this.MuxerOutputReceived += new MuxerOutputCallback(MkvMergeMuxer_MuxerOutputReceived);
-            try
-            {
-                bool started = proc.Start();
-                new MethodInvoker(this.readStdOut).BeginInvoke(null, null);
-                new MethodInvoker(this.readStdErr).BeginInvoke(null, null);
-                this.changePriority(job.Priority, out error);
-                return true;
-            }
-            catch (Exception e)
-            {
-                error = "Exception starting the process: " + e.Message;
-                return false;
-            }
-        }
-        #region line processing
-        void MkvMergeMuxer_MuxerOutputReceived(string line, int type)
-        {
-            if (line.StartsWith("progress: ")) //status update
-            {
-                int percentage = getPercentage(line);
-                su.PercentageDoneExact = percentage;
-                su.TimeElapsed = DateTime.Now.Ticks - job.Start.Ticks;
-                su.FileSize = videoSize * percentage / 100M;
-                su.AudioFileSize = audioSize1 * percentage / 100M;
-                base.sendStatusUpdateToGUI(su);
-            }
-            else if (line.IndexOf("Error") != -1)
-            {
-                log.Append(line + "\r\n");
-                su.HasError = true;
-                su.Error = line;
-            }
-            else
-                log.Append(line + "\r\n");
-        }
 
+        #region line processing
         /// <summary>
         /// gets the framenumber from an mkvmerge status update line
         /// </summary>
         /// <param name="line">mkvmerge commandline output</param>
         /// <returns>the framenumber included in the line</returns>
-        public int getPercentage(string line)
+        public decimal? getPercentage(string line)
         {
             try
             {
@@ -69,10 +30,29 @@ namespace MeGUI
             }
             catch (Exception e)
             {
-                log.Append("Exception in getPercentage(" + line + ") " + e.Message);
-                return 0;
+                log.AppendLine("Exception in getPercentage(" + line + ") " + e.Message);
+                return null;
             }
         }
         #endregion
+
+        protected override bool checkExitCode()
+        {
+            return false;
+        }
+
+        public override void ProcessLine(string line, StreamType stream)
+        {
+            if (line.StartsWith("progress: ")) //status update
+                su.PercentageDoneExact = getPercentage(line);
+            else if (line.IndexOf("Error") != -1)
+            {
+                log.Append(line);
+                su.HasError = true;
+                su.Error = line;
+            }
+            else
+                log.AppendLine(line);
+        }
     }
 }

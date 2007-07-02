@@ -8,84 +8,9 @@ namespace MeGUI
 {
     class MencoderMuxer : CommandlineMuxer
     {
-        int counter;
         public MencoderMuxer(string executablePath)
         {
             this.executable = executablePath;
-            counter = 0;
-        }
-
-        public override bool start(out string error)
-        {
-            error = null;
-            base.start(out error); // always return true so we don't check the return value
-            this.MuxerOutputReceived += new MuxerOutputCallback(MencoderMuxer_MuxerOutputReceived);
-            try
-            {
-                bool started = proc.Start();
-                new MethodInvoker(this.readStdOut).BeginInvoke(null, null);
-                new MethodInvoker(this.readStdErr).BeginInvoke(null, null);
-                this.changePriority(job.Priority, out error);
-                return true;
-            }
-            catch (Exception e)
-            {
-                error = "Exception starting the process: " + e.Message;
-                return false;
-            }
-        }
-
-        void MencoderMuxer_MuxerOutputReceived(string line, int type)
-        {
-            switch (type)
-            {
-                case 0:
-                    if (line.StartsWith("Pos:")) // status update
-                    {
-                        counter++;
-                        if (counter == 10)
-                        {
-                            decimal percentage = 0;
-                            su.NbFramesDone = getFrameNumber(line);
-                            if (job.NbOfFrames == 0)
-                            {
-                                FileSize currentSize = FileSize.Of2(job.Output) ?? FileSize.Empty;
-                                percentage = (currentSize / su.ProjectedFileSize) * 100M ?? 0M;
-                            }
-                            else
-                                percentage = 100M / (decimal)job.NbOfFrames * (decimal)su.NbFramesDone;
-                            if (percentage > 100)
-                                percentage = 100; // to compensate for errors
-                            su.PercentageDoneExact = percentage;
-                            su.TimeElapsed = DateTime.Now.Ticks - job.Start.Ticks;
-                            su.FileSize = videoSize * percentage / 100M;
-                            su.AudioFileSize = audioSize1 * percentage / 100M;
-                            base.sendStatusUpdateToGUI(su);
-                            counter = 0;
-                        }
-                    }
-                    else if (line.IndexOf("error") != -1)
-                    {
-                        log.Append(line + "\r\n");
-                        su.HasError = true;
-                    }
-                    else
-                        log.Append(line + "\r\n");
-                    break;
-                case 1:
-                    if (line.IndexOf("not an MEncoder option") != -1)
-                    {
-                        log.Append("Error: Unrecognized commandline parameter detected. \r\n");
-                        su.Error = line;
-                        su.HasError = true;
-                    }
-                    else
-                        log.Append(line + "\r\n");
-                    break;
-                case 2:
-                    log.Append(line + "\r\n");
-                    break;
-            }
         }
 
         /// <summary>
@@ -93,20 +18,44 @@ namespace MeGUI
         /// </summary>
         /// <param name="line">mencoder stdout line</param>
         /// <returns>the framenumber included in the line</returns>
-        public int getFrameNumber(string line)
+        public ulong? getFrameNumber(string line)
         {
             try
             {
                 int frameNumberStart = line.IndexOf("s", 4) + 1;
                 int frameNumberEnd = line.IndexOf("f");
                 string frameNumber = line.Substring(frameNumberStart, frameNumberEnd - frameNumberStart).Trim();
-                return Int32.Parse(frameNumber);
+                return ulong.Parse(frameNumber);
             }
             catch (Exception e)
             {
                 log.Append("Exception in getFrameNumber(" + line + ") " + e.Message);
-                return 0;
+                return null;
             }
+        }
+
+        protected override bool checkExitCode()
+        {
+            return true;
+        }
+
+        public override void ProcessLine(string line, StreamType stream)
+        {
+            if (line.StartsWith("Pos:")) // status update
+                su.NbFramesDone = getFrameNumber(line);
+            else if (line.IndexOf("error") != -1)
+            {
+                log.AppendLine(line);
+                su.HasError = true;
+            }
+            else if (line.IndexOf("not an MEncoder option") != -1)
+            {
+                log.AppendLine("Error: Unrecognized commandline parameter detected.");
+                su.Error = line;
+                su.HasError = true;
+            }
+            else
+                log.AppendLine(line);
         }
     }
 }

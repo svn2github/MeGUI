@@ -47,9 +47,7 @@ namespace MeGUI
 		private System.Windows.Forms.GroupBox groupBox1;
 		private System.Windows.Forms.Button abortButton;
 		private System.Windows.Forms.Label videoDataLabel;
-		private System.Windows.Forms.TextBox videoData;
-		private System.Windows.Forms.Label filesizeLabel;
-		private System.Windows.Forms.TextBox filesize;
+        private System.Windows.Forms.TextBox videoData;
 		private System.Windows.Forms.Label fpsLabel;
 		private System.Windows.Forms.TextBox fps;
 		private System.Windows.Forms.Label timeElapsedLabel;
@@ -61,6 +59,10 @@ namespace MeGUI
 		private System.Windows.Forms.Label priorityLabel;
 		private System.Windows.Forms.ComboBox priority;
 		private bool isUserClosing;
+        private TextBox positionInClip;
+        private Label currentPositionLabel;
+        private StatusStrip statusStrip1;
+        private ToolStripStatusLabel statusLabel;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -77,7 +79,7 @@ namespace MeGUI
 			//
 			InitializeComponent();
 			isUserClosing = true;
-			if (type == JobTypes.AUDIO)
+/*			if (type == JobTypes.AUDIO)
 			{
 				currentVideoFrameLabel.Text = "Current audio position:";
 				videoDataLabel.Text = "Audio data:";
@@ -87,7 +89,7 @@ namespace MeGUI
             {
                 currentVideoFrameLabel.Text = "Audio data:";
                 fpsLabel.Text = "Current operation:";
-            }
+            }*/
 		}
 		/// <summary>
 		/// handles the onclosing event
@@ -140,30 +142,35 @@ namespace MeGUI
             this.timeElapsedLabel = new System.Windows.Forms.Label();
             this.fps = new System.Windows.Forms.TextBox();
             this.fpsLabel = new System.Windows.Forms.Label();
-            this.filesize = new System.Windows.Forms.TextBox();
-            this.filesizeLabel = new System.Windows.Forms.Label();
             this.videoData = new System.Windows.Forms.TextBox();
             this.videoDataLabel = new System.Windows.Forms.Label();
+            this.positionInClip = new System.Windows.Forms.TextBox();
+            this.currentPositionLabel = new System.Windows.Forms.Label();
             this.abortButton = new System.Windows.Forms.Button();
             this.progressLabel = new System.Windows.Forms.Label();
             this.progress = new System.Windows.Forms.ProgressBar();
             this.priorityLabel = new System.Windows.Forms.Label();
             this.priority = new System.Windows.Forms.ComboBox();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.groupBox1.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // currentVideoFrameLabel
             // 
-            this.currentVideoFrameLabel.Location = new System.Drawing.Point(16, 24);
+            this.currentVideoFrameLabel.AutoSize = true;
+            this.currentVideoFrameLabel.Location = new System.Drawing.Point(16, 50);
             this.currentVideoFrameLabel.Name = "currentVideoFrameLabel";
-            this.currentVideoFrameLabel.Size = new System.Drawing.Size(120, 23);
+            this.currentVideoFrameLabel.Size = new System.Drawing.Size(118, 13);
             this.currentVideoFrameLabel.TabIndex = 0;
-            this.currentVideoFrameLabel.Text = "Current Video Frame:";
+            this.currentVideoFrameLabel.Text = "Current / Total frames:";
             // 
             // currentVideoFrame
             // 
+            this.currentVideoFrame.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.currentVideoFrame.Enabled = false;
-            this.currentVideoFrame.Location = new System.Drawing.Point(136, 24);
+            this.currentVideoFrame.Location = new System.Drawing.Point(173, 47);
             this.currentVideoFrame.Name = "currentVideoFrame";
             this.currentVideoFrame.Size = new System.Drawing.Size(128, 21);
             this.currentVideoFrame.TabIndex = 1;
@@ -171,28 +178,31 @@ namespace MeGUI
             // 
             // groupBox1
             // 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.totalTime);
             this.groupBox1.Controls.Add(this.totalTimeLabel);
             this.groupBox1.Controls.Add(this.timeElapsed);
             this.groupBox1.Controls.Add(this.timeElapsedLabel);
             this.groupBox1.Controls.Add(this.fps);
             this.groupBox1.Controls.Add(this.fpsLabel);
-            this.groupBox1.Controls.Add(this.filesize);
-            this.groupBox1.Controls.Add(this.filesizeLabel);
             this.groupBox1.Controls.Add(this.videoData);
             this.groupBox1.Controls.Add(this.videoDataLabel);
+            this.groupBox1.Controls.Add(this.positionInClip);
+            this.groupBox1.Controls.Add(this.currentPositionLabel);
             this.groupBox1.Controls.Add(this.currentVideoFrame);
             this.groupBox1.Controls.Add(this.currentVideoFrameLabel);
             this.groupBox1.Location = new System.Drawing.Point(8, 8);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(272, 176);
+            this.groupBox1.Size = new System.Drawing.Size(307, 186);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             // 
             // totalTime
             // 
+            this.totalTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.totalTime.Enabled = false;
-            this.totalTime.Location = new System.Drawing.Point(136, 144);
+            this.totalTime.Location = new System.Drawing.Point(173, 155);
             this.totalTime.Name = "totalTime";
             this.totalTime.Size = new System.Drawing.Size(128, 21);
             this.totalTime.TabIndex = 11;
@@ -200,16 +210,18 @@ namespace MeGUI
             // 
             // totalTimeLabel
             // 
-            this.totalTimeLabel.Location = new System.Drawing.Point(16, 144);
+            this.totalTimeLabel.AutoSize = true;
+            this.totalTimeLabel.Location = new System.Drawing.Point(16, 158);
             this.totalTimeLabel.Name = "totalTimeLabel";
-            this.totalTimeLabel.Size = new System.Drawing.Size(120, 23);
+            this.totalTimeLabel.Size = new System.Drawing.Size(85, 13);
             this.totalTimeLabel.TabIndex = 10;
-            this.totalTimeLabel.Text = "Remaining Time";
+            this.totalTimeLabel.Text = "Remaining Time:";
             // 
             // timeElapsed
             // 
+            this.timeElapsed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.timeElapsed.Enabled = false;
-            this.timeElapsed.Location = new System.Drawing.Point(136, 120);
+            this.timeElapsed.Location = new System.Drawing.Point(173, 128);
             this.timeElapsed.Name = "timeElapsed";
             this.timeElapsed.Size = new System.Drawing.Size(128, 21);
             this.timeElapsed.TabIndex = 9;
@@ -217,16 +229,18 @@ namespace MeGUI
             // 
             // timeElapsedLabel
             // 
-            this.timeElapsedLabel.Location = new System.Drawing.Point(16, 120);
+            this.timeElapsedLabel.AutoSize = true;
+            this.timeElapsedLabel.Location = new System.Drawing.Point(16, 131);
             this.timeElapsedLabel.Name = "timeElapsedLabel";
-            this.timeElapsedLabel.Size = new System.Drawing.Size(100, 23);
+            this.timeElapsedLabel.Size = new System.Drawing.Size(73, 13);
             this.timeElapsedLabel.TabIndex = 8;
-            this.timeElapsedLabel.Text = "Time elapsed";
+            this.timeElapsedLabel.Text = "Time elapsed:";
             // 
             // fps
             // 
+            this.fps.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.fps.Enabled = false;
-            this.fps.Location = new System.Drawing.Point(136, 96);
+            this.fps.Location = new System.Drawing.Point(173, 101);
             this.fps.Name = "fps";
             this.fps.Size = new System.Drawing.Size(128, 21);
             this.fps.TabIndex = 7;
@@ -234,33 +248,18 @@ namespace MeGUI
             // 
             // fpsLabel
             // 
-            this.fpsLabel.Location = new System.Drawing.Point(16, 96);
+            this.fpsLabel.AutoSize = true;
+            this.fpsLabel.Location = new System.Drawing.Point(16, 104);
             this.fpsLabel.Name = "fpsLabel";
-            this.fpsLabel.Size = new System.Drawing.Size(112, 23);
+            this.fpsLabel.Size = new System.Drawing.Size(85, 13);
             this.fpsLabel.TabIndex = 6;
-            this.fpsLabel.Text = "Video rendering rate";
-            // 
-            // filesize
-            // 
-            this.filesize.Enabled = false;
-            this.filesize.Location = new System.Drawing.Point(136, 72);
-            this.filesize.Name = "filesize";
-            this.filesize.Size = new System.Drawing.Size(128, 21);
-            this.filesize.TabIndex = 5;
-            this.filesize.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            // 
-            // filesizeLabel
-            // 
-            this.filesizeLabel.Location = new System.Drawing.Point(16, 72);
-            this.filesizeLabel.Name = "filesizeLabel";
-            this.filesizeLabel.Size = new System.Drawing.Size(100, 23);
-            this.filesizeLabel.TabIndex = 4;
-            this.filesizeLabel.Text = "Projected Filesize";
+            this.fpsLabel.Text = "Processing rate:";
             // 
             // videoData
             // 
+            this.videoData.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.videoData.Enabled = false;
-            this.videoData.Location = new System.Drawing.Point(136, 48);
+            this.videoData.Location = new System.Drawing.Point(173, 74);
             this.videoData.Name = "videoData";
             this.videoData.Size = new System.Drawing.Size(128, 21);
             this.videoData.TabIndex = 3;
@@ -268,15 +267,36 @@ namespace MeGUI
             // 
             // videoDataLabel
             // 
-            this.videoDataLabel.Location = new System.Drawing.Point(16, 48);
+            this.videoDataLabel.AutoSize = true;
+            this.videoDataLabel.Location = new System.Drawing.Point(16, 77);
             this.videoDataLabel.Name = "videoDataLabel";
-            this.videoDataLabel.Size = new System.Drawing.Size(100, 23);
+            this.videoDataLabel.Size = new System.Drawing.Size(139, 13);
             this.videoDataLabel.TabIndex = 2;
-            this.videoDataLabel.Text = "Video data:";
+            this.videoDataLabel.Text = "Current / Projected filesize:";
+            // 
+            // positionInClip
+            // 
+            this.positionInClip.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.positionInClip.Enabled = false;
+            this.positionInClip.Location = new System.Drawing.Point(173, 20);
+            this.positionInClip.Name = "positionInClip";
+            this.positionInClip.Size = new System.Drawing.Size(128, 21);
+            this.positionInClip.TabIndex = 1;
+            this.positionInClip.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // currentPositionLabel
+            // 
+            this.currentPositionLabel.AutoSize = true;
+            this.currentPositionLabel.Location = new System.Drawing.Point(16, 23);
+            this.currentPositionLabel.Name = "currentPositionLabel";
+            this.currentPositionLabel.Size = new System.Drawing.Size(144, 13);
+            this.currentPositionLabel.TabIndex = 0;
+            this.currentPositionLabel.Text = "Position in clip / Total length:";
             // 
             // abortButton
             // 
-            this.abortButton.Location = new System.Drawing.Point(197, 251);
+            this.abortButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.abortButton.Location = new System.Drawing.Point(240, 232);
             this.abortButton.Name = "abortButton";
             this.abortButton.Size = new System.Drawing.Size(75, 23);
             this.abortButton.TabIndex = 3;
@@ -285,7 +305,8 @@ namespace MeGUI
             // 
             // progressLabel
             // 
-            this.progressLabel.Location = new System.Drawing.Point(16, 196);
+            this.progressLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.progressLabel.Location = new System.Drawing.Point(16, 211);
             this.progressLabel.Name = "progressLabel";
             this.progressLabel.Size = new System.Drawing.Size(100, 15);
             this.progressLabel.TabIndex = 4;
@@ -293,14 +314,16 @@ namespace MeGUI
             // 
             // progress
             // 
-            this.progress.Location = new System.Drawing.Point(144, 192);
+            this.progress.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.progress.Location = new System.Drawing.Point(122, 205);
             this.progress.Name = "progress";
-            this.progress.Size = new System.Drawing.Size(128, 23);
+            this.progress.Size = new System.Drawing.Size(193, 23);
             this.progress.TabIndex = 5;
             // 
             // priorityLabel
             // 
-            this.priorityLabel.Location = new System.Drawing.Point(16, 227);
+            this.priorityLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.priorityLabel.Location = new System.Drawing.Point(16, 240);
             this.priorityLabel.Name = "priorityLabel";
             this.priorityLabel.Size = new System.Drawing.Size(100, 15);
             this.priorityLabel.TabIndex = 6;
@@ -308,21 +331,39 @@ namespace MeGUI
             // 
             // priority
             // 
+            this.priority.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.priority.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.priority.Items.AddRange(new object[] {
             "LOW",
             "NORMAL",
             "HIGH"});
-            this.priority.Location = new System.Drawing.Point(192, 224);
+            this.priority.Location = new System.Drawing.Point(122, 234);
             this.priority.Name = "priority";
             this.priority.Size = new System.Drawing.Size(80, 21);
             this.priority.TabIndex = 7;
             this.priority.SelectedIndexChanged += new System.EventHandler(this.priority_SelectedIndexChanged);
             // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.statusLabel});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 265);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(327, 22);
+            this.statusStrip1.TabIndex = 8;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // statusLabel
+            // 
+            this.statusLabel.Name = "statusLabel";
+            this.statusLabel.Size = new System.Drawing.Size(45, 17);
+            this.statusLabel.Text = "Status: ";
+            // 
             // ProgressWindow
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
-            this.ClientSize = new System.Drawing.Size(292, 286);
+            this.ClientSize = new System.Drawing.Size(327, 287);
+            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.priority);
             this.Controls.Add(this.priorityLabel);
             this.Controls.Add(this.progress);
@@ -336,7 +377,10 @@ namespace MeGUI
             this.Text = "Status";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
 		}
 		#endregion
@@ -347,7 +391,34 @@ namespace MeGUI
 		/// <param name="su"></param>
 		public void UpdateStatus(StatusUpdate su)
 		{
-			if (su.JobType == JobTypes.VIDEO) // video status update
+            // Current position
+            positionInClip.Text = (Util.ToString(su.ClipPosition) ?? "---") + 
+                " / " + (Util.ToString(su.ClipLength) ?? "---");
+
+            // Current frame
+            currentVideoFrame.Text = (Util.ToString(su.NbFramesDone) ?? "---") +
+                " / " + (Util.ToString(su.NbFramesTotal) ?? "---");
+
+            // Data
+            videoData.Text = (su.CurrentFileSize.HasValue ? su.CurrentFileSize.Value.ToString() : "---") +
+                " / " + (su.ProjectedFileSize.HasValue ? su.ProjectedFileSize.Value.ToString() : "---");
+
+            // Processing speed
+            fps.Text = su.ProcessingSpeed ?? "---";
+
+            // Time elapsed
+            timeElapsed.Text = Util.ToString(su.TimeElapsed);
+
+            // Estimated time
+            totalTime.Text = Util.ToString(su.EstimatedTime) ?? "---";
+
+            this.Text = "Status: " + (su.PercentageDoneExact ?? 0M).ToString("##.##") + " %";
+            statusLabel.Text = su.Status ?? "";
+
+            progress.Value = su.PercentageDone;
+
+            #region old code
+            /*            if (su.JobType == JobTypes.VIDEO) // video status update
 			{
 				this.currentVideoFrame.Text = su.NbFramesDone + "/" + su.NbFramesTotal;
 				this.videoData.Text = su.FileSize.ToString();
@@ -366,7 +437,7 @@ namespace MeGUI
 			}
 			if (su.JobType == JobTypes.AUDIO) // audio status update
 			{
-				this.currentVideoFrame.Text = su.AudioPosition;
+				this.currentVideoFrame.Text = Util.ToString(su.ClipPosition);
 				this.videoData.Text = su.FileSize.ToString();
                 if (!su.FileSize.HasValue) // first pass
                 {
@@ -389,7 +460,7 @@ namespace MeGUI
 				this.currentVideoFrame.Text = su.AudioFileSize.ToString(); // audio data
 				this.videoData.Text = su.FileSize.ToString();
 				this.filesize.Text = su.ProjectedFileSize.ToString();
-				this.fps.Text = su.AudioPosition;
+                this.fps.Text = Util.ToString(su.ClipPosition);
                 this.Text = "Status: " + su.PercentageDoneExact.ToString("##.##") + " %";
 				this.progress.Value = su.PercentageDone;
 				this.timeElapsed.Text = su.TimeElapsedString;
@@ -414,24 +485,26 @@ namespace MeGUI
                 this.totalTime.Text = "N/A";
                 this.progress.Value = 0;
                 this.timeElapsed.Text = su.TimeElapsedString;
-            }
+            }*/
+            #endregion
         }
         #endregion
         #region helper methods
+        /*
         /// <summary>
 		/// calculates the remaining encoding time from the elapsed timespan and the percentage the job is done
 		/// </summary>
 		/// <param name="span">timespan elapsed since the start of the job</param>
 		/// <param name="percentageDone">percentage the job is currently done</param>
 		/// <returns>presentable string in hh:mm:ss format</returns>
-		private string getTimeString(long span, decimal percentageDone)
+		private string getTimeString(TimeSpan span, decimal percentageDone)
 		{
 			if (percentageDone == 0)
 				return "n/a";
 			else
 			{
-				long ratio = (long)((decimal)span / percentageDone * 100M);
-				TimeSpan t = new TimeSpan(ratio - span);
+                long ratio = (long)((decimal)span.Ticks / percentageDone * 100M);
+				TimeSpan t = new TimeSpan(ratio - span.Ticks);
                 string retval = t.Days + ":";
                 if (t.Hours < 10)
                     retval += "0";
@@ -445,6 +518,7 @@ namespace MeGUI
 				return retval;
 			}
 		}
+         * */
         /// <summary>
         /// sets the priority
         /// </summary>

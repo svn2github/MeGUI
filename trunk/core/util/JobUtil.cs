@@ -26,6 +26,7 @@ using System.Xml.Serialization;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using MeGUI.core.util;
 
 namespace MeGUI
 {
@@ -305,7 +306,7 @@ namespace MeGUI
         {
             AviSynthJob job = new AviSynthJob();
             job.Input = input;
-            int nbFrames = 0;
+            ulong nbFrames = 0;
             double framerate = 0.0;
             bool videoOK = getInputProperties(out nbFrames, out framerate, job.Input);
             if (!videoOK)
@@ -356,7 +357,7 @@ namespace MeGUI
 					job.Settings.EncodingMode = 3; // 2 pass 2nd pass.. doesn't overwrite the stats file
 				job.Settings.Turbo = false;
 			}
-			int nbOfFrames = 0;
+			ulong nbOfFrames = 0;
 			double framerate = 0.0;
             bool videoOK = true;
             if (!skipVideoCheck)
@@ -768,34 +769,34 @@ namespace MeGUI
 		/// <param name="framerate">framerate of the source</param>
 		/// <param name="video">path of the source</param>
 		/// <returns>true if the input file could be opened, false if not</returns>
-		public bool getInputProperties(out int nbOfFrames, out double framerate, string video)
+		public bool getInputProperties(out ulong nbOfFrames, out double framerate, string video)
 		{
             int d1, d2, d3, d4;
             return getAllInputProperties(out nbOfFrames, out framerate, out d1, out d2, out d3, out d4, video);
 		}
 
-        public static string GetAllInputProperties(out int nbOfFrames, out double framerate, out int hRes, 
+        public static void GetAllInputProperties(out ulong nbOfFrames, out double framerate, out int hRes, 
 			out int vRes, out int darX, out int darY, string video)
 		{
-            nbOfFrames = hRes = vRes = darX = darY = 0;
+            nbOfFrames = 0;
+            hRes = vRes = darX = darY = 0;
             framerate = 0.0;
             try
 			{
                 using (AvsFile avi = AvsFile.OpenScriptFile(video))
                 {
-                    nbOfFrames = avi.FrameCount;
+                    checked{ nbOfFrames = (ulong) avi.FrameCount;}
                     framerate = avi.FPS;
                     hRes = avi.Width;
                     vRes = avi.Height;
                     darX = avi.DARX;
                     darY = avi.DARY;
                 }
-				return null;
 			}
 			catch (Exception e)
 			{
-                return "The file " + video + " cannot be opened.\r\n"
-                    + "Error message for your reference: " + e.Message;
+                throw new JobRunException("The file " + video + " cannot be opened.\r\n"
+                     + "Error message for your reference: " + e.Message, e);
             }
 			
 		}
@@ -810,16 +811,23 @@ namespace MeGUI
 		/// <param name="vRes">the vertical resolution</param>
 		/// <param name="video">the video whose properties are to be read</param>
 		/// <returns>whether the source could be opened or not</returns>
-		public bool getAllInputProperties(out int nbOfFrames, out double framerate, out int hRes, 
+		public bool getAllInputProperties(out ulong nbOfFrames, out double framerate, out int hRes, 
 			out int vRes, out int darX, out int darY, string video)
 		{
-            string err  = GetAllInputProperties(out nbOfFrames, out framerate, out hRes, out vRes, out darX, out darY, video);
-            if (err == null)
+            try
+            {
+                GetAllInputProperties(out nbOfFrames, out framerate, out hRes, out vRes, out darX, out darY, video);
                 return true;
-            MessageBox.Show( err,
-                    "Cannot open video input", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-            return false;
-
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message,
+                        "Cannot open video input", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                nbOfFrames = 0;
+                hRes = vRes = darX = darY = 0;
+                framerate = 0;
+                return false;
+            }
 		}
 
         /// <summary>
@@ -835,7 +843,8 @@ namespace MeGUI
 		/// the source could not be read</returns>
 		public bool validateAVCLevel(string source, x264Settings settings, out int compliantLevel)
 		{
-			int nbFrames, hRes, vRes, d1, d2;
+			int hRes, vRes, d1, d2;
+            ulong nbFrames;
 			double framerate;
 			compliantLevel = -1;
 			if (this.getAllInputProperties(out nbFrames, out framerate, out hRes, out vRes, out d1, out d2, source))
@@ -850,9 +859,9 @@ namespace MeGUI
 		/// </summary>
 		/// <param name="path"></param>
 		/// <returns></returns>
-		public int getNumberOfFrames(string path)
+		public ulong getNumberOfFrames(string path)
 		{
-			int retval = 0;
+			ulong retval = 0;
 			double framerate = 0.0;
 			bool succ = getInputProperties(out retval, out framerate, path);
 			return retval;
@@ -864,7 +873,7 @@ namespace MeGUI
 		/// <returns></returns>
 		public double getFramerate(string path)
 		{
-			int retval = 0;
+			ulong retval = 0;
 			double framerate = 0.0;
 			bool succ = getInputProperties(out retval, out framerate, path);
 			return framerate;
@@ -982,7 +991,7 @@ namespace MeGUI
 		{
 			Zone introZone = new Zone();
 			Zone creditsZone = new Zone();
-			int nbOfFrames = getNumberOfFrames(mainForm.Video.Info.VideoInput);
+			ulong nbOfFrames = getNumberOfFrames(mainForm.Video.Info.VideoInput);
 			bool doIntroZone = false, doCreditsZone = false;
 			int flushZonesStart = 0, flushZonesEnd = 0;
 			if (introEndFrame > 0) // add the intro zone
@@ -1024,7 +1033,7 @@ namespace MeGUI
 			if (creditsStartFrame > 0) // add the credits zone
 			{
 				creditsZone.startFrame = creditsStartFrame;
-				creditsZone.endFrame = nbOfFrames-1;
+				creditsZone.endFrame = (int)nbOfFrames-1;
 				creditsZone.mode = ZONEMODE.QUANTIZER;
 				creditsZone.modifier = vSettings.CreditsQuantizer;
 				if (vSettings.Zones.Length > 0)
@@ -1081,7 +1090,7 @@ namespace MeGUI
 			}
 			if (vSettings is xvidSettings && newZones.Length > 0)
 			{
-				Zone[] xvidZones = createHelperZones(newZones, nbOfFrames);
+				Zone[] xvidZones = createHelperZones(newZones, (int)nbOfFrames);
 				if (xvidZones == null)
 					return false;
 				else

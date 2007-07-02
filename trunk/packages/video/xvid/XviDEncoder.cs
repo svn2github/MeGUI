@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms; // used for the MethodInvoker
 using System.Text;
 using System.IO;
+using MeGUI.core.plugins.implemented;
 
 namespace MeGUI
 {
@@ -14,7 +15,7 @@ namespace MeGUI
             executable = exePath;
         }
 
-        public override string GetFrameString(string line, int stream)
+        public override string GetFrameString(string line, StreamType stream)
         {
             if (line.IndexOf(": key") != -1) // we found a position line, parse it
             {
@@ -24,7 +25,7 @@ namespace MeGUI
             return null;
         }
 
-        public override string GetErrorString(string line, int stream)
+        public override string GetErrorString(string line, StreamType stream)
         {
             if (line.IndexOf("Usage") != -1) // we get the usage message if there's an unrecognized parameter
                 return line;

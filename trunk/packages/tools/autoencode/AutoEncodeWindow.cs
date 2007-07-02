@@ -853,7 +853,7 @@ namespace MeGUI
             bool cont = info.JobUtil.getFinalZoneConfiguration(vSettings, info.Video.Info.IntroEndFrame, info.Video.Info.CreditsStartFrame);
             if (cont)
             {
-                int length = 0;
+                ulong length = 0;
                 double framerate = 0.0;
                 VideoStream myVideo = new VideoStream();
                 info.JobUtil.getInputProperties(out length, out framerate, info.Video.VideoInput);

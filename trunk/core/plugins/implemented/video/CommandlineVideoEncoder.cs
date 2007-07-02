@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Diagnostics;
+using MeGUI.core.plugins.implemented;
 
 namespace MeGUI
 {
@@ -12,8 +13,8 @@ namespace MeGUI
     {
         #region variables
         protected int lastStatusUpdateFramePosition = 0;
-        int numberOfFrames;
-        int currentFrameNumber;
+        ulong numberOfFrames;
+        ulong? currentFrameNumber;
         private int hres = 0, vres = 0, darX, darY;
         protected bool usesSAR = false;
         #endregion
@@ -21,11 +22,12 @@ namespace MeGUI
         {
         }
         #region helper methods
-        protected override bool checkJobIO(VideoJob job, out string error)
+        protected override void checkJobIO()
         {
-            if (!base.checkJobIO(job, out error))
-                return false;
-            return (getInputProperties(job, out error));
+            base.checkJobIO();
+
+            su.Status = "Encoding video...";
+            getInputProperties(job);
         }
         /// <summary>
         /// tries to open the video source and gets the number of frames from it, or 
@@ -34,11 +36,11 @@ namespace MeGUI
         /// <param name="videoSource">the AviSynth script</param>
         /// <param name="error">return parameter for all errors</param>
         /// <returns>true if the file could be opened, false if not</returns>
-        protected bool getInputProperties(VideoJob job, out string error)
+        protected void getInputProperties(VideoJob job)
         {
-            double f;
+            double fps;
             int a, b;
-            error = JobUtil.GetAllInputProperties( out numberOfFrames, out f, out hres, out vres, out a, out b, job.Input);
+            JobUtil.GetAllInputProperties( out numberOfFrames, out fps, out hres, out vres, out a, out b, job.Input);
             darX = job.DARX;
             darY = job.DARY;
             if (job.Settings.UsesSAR)
@@ -48,17 +50,11 @@ namespace MeGUI
                 job.Commandline = CommandLineGenerator.generateVideoCommandline(job.Settings, job.Input, job.Output, sarX, sarY);
             }
             su.NbFramesTotal = numberOfFrames;
-            return error == null;
+            su.ClipLength = TimeSpan.FromSeconds((double)numberOfFrames / fps);
         }
 
         protected override void doExitConfig()
         {
-            TimeSpan ts = TimeSpan.FromTicks(job.End.Ticks - job.Start.Ticks);
-            double seconds = ts.TotalSeconds;
-            if (seconds > 0)
-                su.FPS = (double)su.NbFramesDone / seconds;
-            else
-                su.FPS = 0;
             if (!su.HasError && !su.WasAborted)
                 compileFinalStats();
         }
@@ -88,7 +84,7 @@ namespace MeGUI
         }
         #endregion
 
-        public override void ProcessLine(string line, int stream)
+        public override void ProcessLine(string line, StreamType stream)
         {
             string frameString = GetFrameString(line, stream);
             string errorString = GetErrorString(line, stream);
@@ -96,7 +92,7 @@ namespace MeGUI
             {
                 int currentFrameNumber;
                 if (int.TryParse(frameString, out currentFrameNumber))
-                    this.currentFrameNumber = currentFrameNumber;
+                    this.currentFrameNumber = (ulong)currentFrameNumber;
             }
             if (!string.IsNullOrEmpty(errorString))
             {
@@ -112,14 +108,12 @@ namespace MeGUI
             }
         }
 
-        public abstract string GetFrameString(string line, int stream);
-        public abstract string GetErrorString(string line, int stream);
+        public abstract string GetFrameString(string line, StreamType stream);
+        public abstract string GetErrorString(string line, StreamType stream);
 
         protected override void doStatusCycleOverrides()
         {
             su.NbFramesDone = currentFrameNumber;
-            su.PercentageDoneExact = 100.0M * (decimal)currentFrameNumber / (decimal)numberOfFrames;
-            su.FPS = (double)currentFrameNumber / (double)TimeSpan.FromTicks(su.TimeElapsed).TotalSeconds;
         }
     }
 }

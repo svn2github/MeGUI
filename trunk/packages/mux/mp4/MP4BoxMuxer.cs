@@ -20,105 +20,16 @@ namespace MeGUI
             lastLine = "";
         }
         #region setup/start overrides
-        public override bool setup(Job job, out string error)
+        protected override void checkJobIO()
         {
-            error = null;
-            MuxJob mjob = (MuxJob)job;
-            this.numberOfAudioTracks = mjob.Settings.AudioStreams.Count;
-            this.numberOfSubtitleTracks = mjob.Settings.SubtitleStreams.Count;
-            if (base.setup(job, out error))
-            {
-                if (!Path.GetExtension(job.Input).ToLower().Equals(".mp4"))
-                {
-                    double overhead = mjob.Overhead * (double)mjob.NbOfFrames;
-                    if (su.ProjectedFileSize.HasValue)
-                        su.ProjectedFileSize += new FileSize((ulong)overhead);
-                }
-                return true;
-            }
-            else
-                return false;
+            this.numberOfAudioTracks = job.Settings.AudioStreams.Count;
+            this.numberOfSubtitleTracks = job.Settings.SubtitleStreams.Count;
+            
+            base.checkJobIO();
         }
-        public override bool start(out string error)
-        {
-            error = null;
-            base.start(out error); // always return true so we don't check the return value
-            this.MuxerOutputReceived += new MuxerOutputCallback(MP4BoxMuxer_MuxerOutputReceived);
-            try
-            {
-                bool started = proc.Start();
-                new MethodInvoker(this.readStdOut).BeginInvoke(null, null);
-                new MethodInvoker(this.readStdErr).BeginInvoke(null, null);
-                this.changePriority(job.Priority, out error);
-                return true;
-            }
-            catch (Exception e)
-            {
-                error = "Exception starting the process: " + e.Message;
-                return false;
-            }
-        }
+
         #endregion
-        #region line dispatching
-        void MP4BoxMuxer_MuxerOutputReceived(string line, int type)
-        {
-            LineType lineType = getLineType(line);
-            int percentage = 0;
-            switch (lineType)
-            {
-                case LineType.empty:
-                    if (getLineType(lastLine) == LineType.importing) // moving from one track to another
-                        trackNumber++;
-                    break;
-                case LineType.importing:
-                    percentage = getPercentage(line);
-                    if (trackNumber == 1) // video
-                    {
-                        su.FileSize = (videoSize * percentage / 100) / 1024;
-                        su.AudioPosition = "importing video";
-                    }
-                    else if (trackNumber == 2 && numberOfAudioTracks > 0) // first audio track
-                    {
-                        su.AudioFileSize = (audioSize1 * percentage / 100) / 1024;
-                        su.AudioPosition = "importing audio 1";
-                    }
-                    else if (trackNumber == 3 && numberOfAudioTracks > 1) // second audio track
-                    {
-                        su.AudioFileSize = (audioSize1 + audioSize2 * percentage / 100) / 1024;
-                        su.AudioPosition = "importing audio 2";
-                    }
-                    else
-                        su.AudioPosition = "importing";
-                    su.PercentageDoneExact = percentage;
-                    su.TimeElapsed = DateTime.Now.Ticks - job.Start.Ticks;
-                    base.sendStatusUpdateToGUI(su);
-                    break;
-                case LineType.splitting:
-                    percentage = getPercentage(line);
-                    su.PercentageDoneExact = percentage;
-                    su.TimeElapsed = DateTime.Now.Ticks - job.Start.Ticks;
-                    su.AudioPosition = "splitting";
-                    base.sendStatusUpdateToGUI(su);
-                    break;
-                case LineType.writing:
-                    percentage = getPercentage(line);
-                    su.PercentageDoneExact = percentage;
-                    su.TimeElapsed = DateTime.Now.Ticks - job.Start.Ticks;
-                    su.AudioPosition = "writing";
-                    base.sendStatusUpdateToGUI(su);
-                    break;
-                case LineType.other:
-                    log.Append(line + "\r\n");
-                    break;
-                case LineType.error:
-                    su.Error = line;
-                    su.HasError = true;
-                    log.Append(line + "\r\n");
-                    break;
-            }
-            lastLine = line;
-        }
-        #endregion
+
         #region line processing
         /// <summary>
         /// looks at a line and returns its type
@@ -129,7 +40,7 @@ namespace MeGUI
         {
             if (line.StartsWith("Importing"))
                 return LineType.importing;
-            if (line.StartsWith("Writing"))
+            if (line.StartsWith("ISO File Writing"))
                 return LineType.writing;
             if (line.StartsWith("Splitting"))
                 return LineType.splitting;
@@ -144,7 +55,7 @@ namespace MeGUI
         /// </summary>
         /// <param name="line"></param>
         /// <returns></returns>
-        private int getPercentage(string line)
+        private decimal? getPercentage(string line)
         {
             try
             {
@@ -157,7 +68,7 @@ namespace MeGUI
             catch (Exception e)
             {
                 log.Append("Exception in getPercentage(" + line + ") " + e.Message);
-                return 0;
+                return null;
             }
         }
         /// <summary>
@@ -190,35 +101,20 @@ namespace MeGUI
             {
                 FileSize len = FileSize.Of(job.Output);
                 FileSize Empty = FileSize.Empty;
-                FileSize videoInMP4Size = len - 
-                    (audioSize1 ?? Empty) - 
-                    (audioSize2 ?? Empty) - 
-                    (subtitleSize ?? Empty);
                 if (!Path.GetExtension(job.Input).ToLower().Equals(".mp4"))
                 {
                     FileSize rawSize = FileSize.Of(job.Input);
-                    FileSize overhead = videoInMP4Size - rawSize;
-                    decimal overheadPerFrame = (decimal)overhead.Bytes / (decimal)job.NbOfFrames;
                     log.Append("MP4 muxing info:\r\n");
-                    log.AppendFormat("Size of audio track 1: {1}{0}" +
-                        "Size of audio track 2: {2}{0}" +
-                        "Size of raw video stream: {3}{0}" +
-                        "Size of final MP4 file: {4}{0}" +
-                        "Size of video in MP4 file: {5}{0}" +
-                        "Total overhead: {6}{0}" +
-                        "Overhead per frame: {7}{0}" +
+                    log.AppendFormat(
+                        "Size of raw video stream: {1}{0}" +
+                        "Size of final MP4 file: {2}{0}" +
                         "source information{0}" +
-                        "codec: {8}{0}" +
-                        "number of b-frames: {9}{0}" +
-                        "number of source frames: {10}{0}",
+                        "codec: {3}{0}" +
+                        "number of b-frames: {4}{0}" +
+                        "number of source frames: {5}{0}",
                         Environment.NewLine,
-                        audioSize1 ?? Empty,
-                        audioSize1 ?? Empty,
                         rawSize,
                         len,
-                        videoInMP4Size,
-                        overhead,
-                        overheadPerFrame,
                         job.Codec,
                         job.NbOfBFrames,
                         job.NbOfFrames);
@@ -230,5 +126,52 @@ namespace MeGUI
             }
         }
         #endregion
+
+        protected override bool checkExitCode()
+        {
+            return true;
+        }
+
+        public override void ProcessLine(string line, StreamType stream)
+        {
+            switch (getLineType(line))
+            {
+                case LineType.empty:
+                    if (getLineType(lastLine) == LineType.importing) // moving from one track to another
+                        trackNumber++;
+                    break;
+                case LineType.importing:
+                    su.PercentageDoneExact = getPercentage(line);
+                    if (trackNumber == 1) // video
+                        su.Status = "importing video";
+                    else if (trackNumber == 2 && numberOfAudioTracks > 0) // first audio track
+                        su.Status = "importing audio 1";
+                    else if (trackNumber == 3 && numberOfAudioTracks > 1) // second audio track
+                        su.Status = "importing audio 2";
+                    else
+                        su.Status = "importing";
+                    break;
+
+                case LineType.splitting:
+                    su.PercentageDoneExact = getPercentage(line);
+                    break;
+
+                case LineType.writing:
+                    su.PercentageDoneExact = getPercentage(line);
+                    su.Status = "writing";
+                    break;
+
+                case LineType.other:
+                    log.AppendLine(line);
+                    break;
+
+                case LineType.error:
+                    su.Error = line;
+                    su.HasError = true;
+                    log.AppendLine(line);
+                    break;
+            }
+            lastLine = line;
+        }
     }
 }

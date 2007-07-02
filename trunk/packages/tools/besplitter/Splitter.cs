@@ -27,14 +27,14 @@ namespace MeGUI.packages.tools.besplitter
             executable = exe;
         }
 
-        protected override bool checkJobIO(AudioSplitJob job, out string error)
+        protected override void checkJobIO()
         {
             int endFrame = job.TheCuts.AllCuts[job.TheCuts.AllCuts.Count - 1].endFrame;
             totalTime = ((decimal)endFrame) / ((decimal)job.TheCuts.Framerate) * 1000M;
-            return base.checkJobIO(job, out error);
+            base.checkJobIO();
         }
 
-        public override void ProcessLine(string line, int stream)
+        public override void ProcessLine(string line, StreamType stream)
         {
             if (line.IndexOf("Writing") != -1)
             {

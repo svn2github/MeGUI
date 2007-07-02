@@ -17,6 +17,7 @@ namespace MeGUI
         private bool recalculateMainMovieBitrate, autoForceFilm, autoStartQueue, enableMP3inMP4, autoOpenScript,
             overwriteStats, keep2of3passOutput, deleteCompletedJobs, autoSetNbThreads, deleteIntermediateFiles,
             deleteAbortedOutput, openProgressWindow, useadvancedtooltips, freshOggEnc2, autoscroll;
+        private ulong audioSamplesPerUpdate;
         private AfterEncoding afterEncoding;
         private decimal forceFilmThreshold, acceptableFPSError;
 		private int nbPasses, acceptableAspectError, maxServersToTry, autoUpdateServerSubList;
@@ -41,6 +42,7 @@ namespace MeGUI
             AedSettings = new AutoEncodeDefaultsSettings();
             autoUpdate = true;
             useadvancedtooltips = true;
+            audioSamplesPerUpdate = 100000;
             avc2aviPath = "avc2avi.exe";
             aviMuxGUIPath = "avimux_gui.exe";
             besplitPath = "besplit.exe";
@@ -83,6 +85,12 @@ namespace MeGUI
             safeProfileAlteration = false;
         }
         #region properties
+        public ulong AudioSamplesPerUpdate
+        {
+            get { return audioSamplesPerUpdate; }
+            set { audioSamplesPerUpdate = value; }
+        }
+
         /// <summary>
         /// Gets / sets whether the log should be autoscrolled
         /// </summary>

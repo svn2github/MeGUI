@@ -131,6 +131,8 @@ namespace MeGUI
         private TextBox textBox8;
         private Label besplit;
         private Button button8;
+        private NumericUpDown audiosamplesperupdate;
+        private Label label6;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -280,6 +282,8 @@ namespace MeGUI
             this.nbPassesLabel = new System.Windows.Forms.Label();
             this.nbPasses = new System.Windows.Forms.NumericUpDown();
             this.keep2ndPassOutput = new System.Windows.Forms.CheckBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.audiosamplesperupdate = new System.Windows.Forms.NumericUpDown();
             groupBox1 = new System.Windows.Forms.GroupBox();
             groupBox1.SuspendLayout();
             this.otherGroupBox.SuspendLayout();
@@ -297,6 +301,7 @@ namespace MeGUI
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nbPasses)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.audiosamplesperupdate)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -558,6 +563,8 @@ namespace MeGUI
             // 
             // otherGroupBox
             // 
+            this.otherGroupBox.Controls.Add(this.audiosamplesperupdate);
+            this.otherGroupBox.Controls.Add(this.label6);
             this.otherGroupBox.Controls.Add(this.acceptableFPSError);
             this.otherGroupBox.Controls.Add(this.label15);
             this.otherGroupBox.Controls.Add(this.acceptableAspectError);
@@ -1437,6 +1444,36 @@ namespace MeGUI
             this.keep2ndPassOutput.TabIndex = 0;
             this.keep2ndPassOutput.Text = "Keep 2nd pass Output in 3 pass mode";
             // 
+            // label6
+            // 
+            this.label6.Location = new System.Drawing.Point(241, 16);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(102, 42);
+            this.label6.TabIndex = 31;
+            this.label6.Text = "Samples between audio progress updates";
+            // 
+            // audiosamplesperupdate
+            // 
+            this.audiosamplesperupdate.Location = new System.Drawing.Point(342, 20);
+            this.audiosamplesperupdate.Maximum = new decimal(new int[] {
+            100000000,
+            0,
+            0,
+            0});
+            this.audiosamplesperupdate.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.audiosamplesperupdate.Name = "audiosamplesperupdate";
+            this.audiosamplesperupdate.Size = new System.Drawing.Size(95, 21);
+            this.audiosamplesperupdate.TabIndex = 32;
+            this.audiosamplesperupdate.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
             // SettingsForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
@@ -1473,6 +1510,7 @@ namespace MeGUI
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nbPasses)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.audiosamplesperupdate)).EndInit();
             this.ResumeLayout(false);
 
 		}
@@ -1687,6 +1725,7 @@ namespace MeGUI
 			get 
 			{
                 MeGUISettings settings = internalSettings;
+                settings.AudioSamplesPerUpdate = (ulong)audiosamplesperupdate.Value;
                 settings.AcceptableFPSError = acceptableFPSError.Value; 
                 settings.MaxServersToTry = (int)maxServersToTry.Value;
                 settings.AutoUpdate = useAutoUpdateCheckbox.Checked;
@@ -1741,6 +1780,7 @@ namespace MeGUI
 			{
                 internalSettings = value;
                 MeGUISettings settings = value;
+                audiosamplesperupdate.Value = settings.AudioSamplesPerUpdate;
                 acceptableFPSError.Value = settings.AcceptableFPSError;
                 maxServersToTry.Value = settings.MaxServersToTry;
                 useAutoUpdateCheckbox.Checked = settings.AutoUpdate;

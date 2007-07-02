@@ -1026,7 +1026,7 @@ namespace MeGUI
                 job.PostprocessingProperties.AvsSettings, job.PostprocessingProperties.AutoDeinterlace, videoSettings, out parX, out parY);
 
             VideoStream myVideo = new VideoStream();
-            int length;
+            ulong length;
             double framerate;
             jobUtil.getInputProperties(out length, out framerate, videoInput);
             myVideo.Input = videoInput;

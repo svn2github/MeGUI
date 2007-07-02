@@ -54,7 +54,7 @@ namespace MeGUI
 
         #region IVideoEncoder Members
 
-        public virtual bool setup(Job job, out string error)
+        public virtual void setup(Job job)
         {
             if (!(job is VideoJob))
                 throw new Exception("Setup was called on a non-video job");
@@ -65,8 +65,8 @@ namespace MeGUI
                 encoder = new XviDEncoder(settings.XviDEncrawPath);
             else
                 encoder = new mencoderEncoder(settings.MencoderPath);
-            error = null;
-            return encoder.setup(job, out error);
+
+            encoder.setup(job);
         }
 
         public virtual bool start(out string error)

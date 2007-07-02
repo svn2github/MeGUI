@@ -293,6 +293,7 @@
     <Compile Include="core\plugins\implemented\audio\CommandlineAudioEncoder.cs" />
     <Compile Include="core\plugins\implemented\CommandlineJobProcessor.cs" />
     <Compile Include="core\plugins\implemented\CommandlineMuxer.cs" />
+    <Compile Include="core\plugins\implemented\ICommandlineOutputParser.cs" />
     <Compile Include="core\plugins\implemented\video\CommandlineVideoEncoder.cs" />
     <Compile Include="core\plugins\interfaces\IJobProcessor.cs" />
     <Compile Include="core\plugins\interfaces\IMediaFile.cs" />
@@ -304,6 +305,7 @@
     <Compile Include="core\plugins\interfaces\Profile.cs" />
     <Compile Include="core\util\CommandLineGenerator.cs" />
     <Compile Include="core\util\EnumProxy.cs" />
+    <Compile Include="core\util\Exceptions.cs" />
     <Compile Include="core\util\FileSize.cs" />
     <Compile Include="core\util\FileUtil.cs" />
     <Compile Include="core\util\FilmCutter.cs" />

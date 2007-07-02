@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
+using MeGUI.core.util;
 
 namespace MeGUI
 {
@@ -28,31 +29,19 @@ namespace MeGUI
         }
         #region IJobProcessor Members
 
-        public bool setup(Job job, out string error)
+        public void setup(Job job)
         {
-            error = "";
-            if (job is SubtitleIndexJob)
-            {
+            Debug.Assert(job is SubtitleIndexJob, "Job is the wrong type");
                 this.job = (SubtitleIndexJob)job;
-            }
-            else
-            {
-                error = "Job '" + job.Name + "' has been given to the VobSubIndexer, even though it is not a SubtitleIndexJob.";
-                return false;
-            }
+                        
             if (!System.IO.File.Exists(this.job.ScriptFile))
-            {
-                error = "Unable to find the script file " + this.job.ScriptFile;
-                return false;
-            }
+                throw new MissingFileException(this.job.ScriptFile);
+
             string vobsubPath = Environment.GetFolderPath(Environment.SpecialFolder.System) + @"\vobsub.dll";
             if (!System.IO.File.Exists(vobsubPath))
-            {
-                error = "Unable to find vobsub.dll in your system32 directory";
-                return false;
-            }
+                throw new EncoderMissingException(vobsubPath);
+
             stup.JobName = this.job.Name;
-            return true;
         }
 
         public bool start(out string error)

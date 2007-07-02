@@ -41,7 +41,6 @@ namespace MeGUI
             return true;
         }
         public DGIndexer(string executableName)
-            : base()
         {
             executable = executableName;
         }
@@ -50,6 +49,7 @@ namespace MeGUI
         {
             if (job.AutoForceFilm && !su.HasError && !su.WasAborted )
             {
+                StringBuilder log = new StringBuilder();
                 double filmPercent;
                 try
                 {
@@ -125,7 +125,7 @@ namespace MeGUI
             }
         }
 
-        public override void ProcessLine(string line, int stream)
+        public override void ProcessLine(string line, StreamType stream)
         {
             // We don't expect any lines, but lets put them on the log just in case
             log.AppendLine(line);

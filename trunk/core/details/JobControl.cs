@@ -7,6 +7,7 @@ using System.IO;
 using System.Text;
 using System.Diagnostics;
 using System.Windows.Forms;
+using MeGUI.core.util;
 
 namespace MeGUI.core.details
 {
@@ -159,11 +160,11 @@ namespace MeGUI.core.details
         private DateTime lastUpdated = DateTime.MinValue;
         private void enc_StatusUpdate(StatusUpdate su)
         {
-            if (!su.HasError && !su.IsComplete && !su.WasAborted &&
+/*            if (!su.HasError && !su.IsComplete && !su.WasAborted &&
                 ((DateTime.Now - lastUpdated) < new TimeSpan(0, 0, 1) && su.PercentageDone != 100))
                 return;
 
-            lastUpdated = DateTime.Now;
+            lastUpdated = DateTime.Now;*/
             this.Invoke(new UpdateGUIStatusCallback(this.UpdateGUIStatus), new object[] { su });
         }
 
@@ -260,7 +261,7 @@ namespace MeGUI.core.details
                 {
                     mainForm.addToLog("Exception when trying to update status while a job is running. Text: " + e.Message + " stacktrace: " + e.StackTrace);
                 }
-                string percentage = su.PercentageDoneExact.ToString("##.##");
+                string percentage = (su.PercentageDoneExact ?? 0M).ToString("##.##");
                 if (percentage.IndexOf(".") != -1 && percentage.Substring(percentage.IndexOf(".")).Length == 1)
                     percentage += "0";
                 mainForm.TitleText = "MeGUI " + su.JobName + " " + percentage + "% ";
@@ -329,7 +330,7 @@ namespace MeGUI.core.details
             Debug.Assert(su.IsComplete);
 
             job.End = DateTime.Now;
-            job.FPS = su.FPS;
+//            job.FPS = su.FPS;
 
             JobStatus s;
             if (su.WasAborted)
@@ -1073,9 +1074,13 @@ namespace MeGUI.core.details
             preprocessJob(job);
 
             // Setup
-            if (!currentProcessor.setup(job, out error))
+            try
             {
-                mainForm.addToLog("Calling setup of processor failed with error " + error + "\r\n");
+                currentProcessor.setup(job);
+            }
+            catch (JobRunException e)
+            {
+                mainForm.addToLog("Calling setup of processor failed with error " + e.Message + "\r\n");
                 currentProcessor = null;
                 return false;
             }

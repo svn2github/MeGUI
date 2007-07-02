@@ -6,7 +6,7 @@ namespace MeGUI
 {
     public class AviSynthJob : Job
     {
-        private int nbFrames;
+        private ulong nbFrames;
         private double framerate;
 
         public double Framerate
@@ -15,7 +15,7 @@ namespace MeGUI
             set { framerate = value; }
         }
 
-        public int NumberOfFrames
+        public ulong NumberOfFrames
         {
             get { return nbFrames; }
             set { nbFrames = value; }

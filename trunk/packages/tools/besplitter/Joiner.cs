@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using MeGUI.core.util;
 
 namespace MeGUI.packages.tools.besplitter
 {
@@ -40,12 +41,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "BeSplit_Joiner");
 
         }
 
-        protected override bool checkJobIO(AudioJoinJob job, out string error)
+        protected override void checkJobIO()
         {
-            error = null;
-
-            if (!base.checkJobIO(job, out error))
-                return false;
+            base.checkJobIO();
 
             try
             {
@@ -60,13 +58,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "BeSplit_Joiner");
             }
             catch (Exception e)
             {
-                error = "Error generating temporary *.lst file: " + e.Message;
-                return false;
+                throw new JobRunException("Error generating temporary *.lst file: " + e.Message, e);
             }
-            return true;
         }
 
-        public override void ProcessLine(string line, int stream)
+        public override void ProcessLine(string line, StreamType stream)
         {
             if (line.IndexOf("Usage") != -1)
                 su.HasError = true;

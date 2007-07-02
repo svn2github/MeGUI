@@ -47,7 +47,7 @@ namespace MeGUI
 
         private MeGUISettings settings;
         protected Job job;
-        protected StatusUpdate su;
+        protected StatusUpdate su = new StatusUpdate();
         protected StringBuilder log; // holds logging information
         private AudioEncoder encoder;
 
@@ -61,8 +61,8 @@ namespace MeGUI
 
         protected void sendStatusUpdateToGUI(StatusUpdate su)
         {
-            su.TimeElapsed = DateTime.Now.Ticks - job.Start.Ticks;
-            su.FileSize = FileSize.Of2(job.Output);
+            su.TimeElapsed = DateTime.Now - job.Start;
+            su.CurrentFileSize = FileSize.Of2(job.Output);
             if (statusUpdate != null)
                 statusUpdate(su);
         }
@@ -75,13 +75,11 @@ namespace MeGUI
         }
         #region IJobProcessor Members
 
-        public virtual bool setup(Job job, out string error)
+        public virtual void setup(Job job)
         {
-            error = null;
-            
             encoder = new AviSynthAudioEncoder(settings);
 
-            return encoder.setup(job, out error);
+            encoder.setup(job);
         }
 
         public virtual bool start(out string error)

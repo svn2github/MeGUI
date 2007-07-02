@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using System.Text;
+using MeGUI.core.util;
 
 namespace MeGUI
 {
@@ -25,10 +26,10 @@ namespace MeGUI
         private AvsFile file;
         private IVideoReader reader;
         private bool aborted;
-        private int position;
+        private ulong position;
         private Thread processorThread, statusThread;
-        private int lastFPSUpdateFrame;
-        private long lastFPSUpdateTime;
+//       private ulong lastFPSUpdateFrame;
+//        private long lastFPSUpdateTime;
         private StatusUpdate stup;
         private AviSynthJob job;
         #endregion
@@ -48,23 +49,13 @@ namespace MeGUI
         }
         private void update()
         {
-            lastFPSUpdateFrame = 0;
-            lastFPSUpdateTime = DateTime.Now.Ticks;
             while (!aborted && position < stup.NbFramesTotal)
             {
                 stup.NbFramesDone = position;
-                stup.PercentageDoneExact = ((decimal)stup.NbFramesDone / (decimal)stup.NbFramesTotal) * 100M;
-                stup.TimeElapsed = DateTime.Now.Ticks - job.Start.Ticks;
-                long now = DateTime.Now.Ticks;
-                if (stup.NbFramesDone >= lastFPSUpdateFrame + 100) // after 100 frames, recalculate the FPS
-                {
-                    TimeSpan ts = TimeSpan.FromTicks(now - lastFPSUpdateTime); // time elapsed since the last 100 frames
-                    stup.FPS = (double)(stup.NbFramesDone - lastFPSUpdateFrame) / ts.TotalSeconds;
-                    lastFPSUpdateFrame = stup.NbFramesDone;
-                    lastFPSUpdateTime = now;
-                }
+                stup.TimeElapsed = DateTime.Now - job.Start;
+                stup.FillValues();
                 StatusUpdate(stup);
-                Thread.Sleep(500);
+                Thread.Sleep(1000);
             }
             stup.IsComplete = true;
             StatusUpdate(stup);
@@ -75,7 +66,7 @@ namespace MeGUI
             IntPtr zero = new IntPtr(0);
             for (position = 0; position < stup.NbFramesTotal && !aborted; position++)
             {
-                file.Clip.ReadFrame(zero, 0, position);
+                file.Clip.ReadFrame(zero, 0, (int)position);
                 mre.WaitOne();
             }
             file.Dispose();
@@ -86,18 +77,12 @@ namespace MeGUI
         /// <param name="job">the job to be processed</param>
         /// <param name="error">output for any errors that might ocurr during this method</param>
         /// <returns>true if the setup has succeeded, false if it has not</returns>
-        public bool setup(Job job, out string error)
+        public void setup(Job job)
         {
-            error = "";
-            if (job is AviSynthJob)
-            {
-                this.job = (AviSynthJob)job;
-            }
-            else
-            {
-                 error = "Job '" + job.Name + "' has been given to the AviSynthProcessor, even though it is not an AviSynthJob.";
-                return false;
-            }
+            Debug.Assert(job is AviSynthJob, "Job isn't an AviSynthJob");
+
+            this.job = (AviSynthJob)job;
+
             stup.JobName = job.Name;
 
             try 
@@ -107,10 +92,11 @@ namespace MeGUI
             }
             catch (Exception ex)
             {
-                error = ex.Message;
-                return false;
+                throw new JobRunException(ex);
             }
-            stup.NbFramesTotal = reader.FrameCount;
+            stup.NbFramesTotal = (ulong)reader.FrameCount;
+            stup.ClipLength = TimeSpan.FromSeconds((double)stup.NbFramesTotal / file.FPS);
+            stup.Status = "Playing through file...";
             position = 0;
             try
             {
@@ -118,8 +104,7 @@ namespace MeGUI
             }
             catch (Exception e)
             {
-                error = e.Message;
-                return false;
+                throw new JobRunException(e);
             }
             try
             {
@@ -127,10 +112,8 @@ namespace MeGUI
             }
             catch (Exception e)
             {
-                error = e.Message;
-                return false;
+                throw new JobRunException(e);
             }
-            return true;
         }
         /// <summary>
         /// starts the encoding process
@@ -139,7 +122,7 @@ namespace MeGUI
         /// <returns>true if encoding has been successfully started, false if not</returns>
         public bool start(out string error)
         {
-            error = "";
+            error = null;
             try
             {
                 statusThread.Start();
