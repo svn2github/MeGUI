@@ -103,6 +103,7 @@ namespace MeGUI
         private Label label1;
         private Label label4;
         private Label label3;
+        private MeGUI.core.gui.HelpButton helpButton1;
 
 		/// <summary>
 		/// Required designer variable.
@@ -212,6 +213,7 @@ namespace MeGUI
             this.videoSizeMBLabel = new System.Windows.Forms.Label();
             this.cancelButton = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.videoGroupbox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nbFrames)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.totalSeconds)).BeginInit();
@@ -906,10 +908,21 @@ namespace MeGUI
             this.cancelButton.TabIndex = 33;
             this.cancelButton.Text = "Cancel";
             // 
+            // helpButton1
+            // 
+            this.helpButton1.ArticleName = "Bitrate calculator";
+            this.helpButton1.AutoSize = true;
+            this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.helpButton1.Location = new System.Drawing.Point(355, 351);
+            this.helpButton1.Name = "helpButton1";
+            this.helpButton1.Size = new System.Drawing.Size(38, 23);
+            this.helpButton1.TabIndex = 34;
+            // 
             // Calculator
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
             this.ClientSize = new System.Drawing.Size(576, 386);
+            this.Controls.Add(this.helpButton1);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.resultGroupbox);
             this.Controls.Add(this.sizeGroupbox);
@@ -952,6 +965,7 @@ namespace MeGUI
             ((System.ComponentModel.ISupportInitialize)(this.videoSizeKB)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.projectedBitrate)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
 		}
 		#endregion

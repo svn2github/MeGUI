@@ -32,6 +32,8 @@ namespace MeGUI
             this.okButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
+            this.helpButton1 = new MeGUI.core.gui.HelpButton();
+            this.helpProvider1 = new System.Windows.Forms.HelpProvider();
             this.SuspendLayout();
             // 
             // profileListBox
@@ -74,12 +76,22 @@ namespace MeGUI
             this.label1.TabIndex = 3;
             this.label1.Text = "Select the profiles you want to export (Ctrl or Shift might help):";
             // 
+            // helpButton1
+            // 
+            this.helpButton1.ArticleName = "Profile exporter";
+            this.helpButton1.AutoSize = true;
+            this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.helpButton1.Location = new System.Drawing.Point(12, 291);
+            this.helpButton1.Name = "helpButton1";
+            this.helpButton1.Size = new System.Drawing.Size(39, 23);
+            this.helpButton1.TabIndex = 4;
+            // 
             // ProfilePorter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(321, 321);
+            this.Controls.Add(this.helpButton1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.okButton);
@@ -104,5 +116,7 @@ namespace MeGUI
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Label label1;
+        private MeGUI.core.gui.HelpButton helpButton1;
+        private System.Windows.Forms.HelpProvider helpProvider1;
     }
 }

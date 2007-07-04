@@ -74,6 +74,7 @@ namespace MeGUI
         private MeGUI.core.gui.FileSizeBar muxedSize;
         private MeGUI.core.gui.FileSizeBar videoSize;
         private MeGUI.core.gui.FileSizeBar splitSize;
+        private MeGUI.core.gui.HelpButton helpButton1;
 
 
         private IContainer components;
@@ -193,6 +194,8 @@ namespace MeGUI
 		{
             this.components = new System.ComponentModel.Container();
             this.AutomaticEncodingGroup = new System.Windows.Forms.GroupBox();
+            this.videoSize = new MeGUI.core.gui.FileSizeBar();
+            this.muxedSize = new MeGUI.core.gui.FileSizeBar();
             this.noTargetRadio = new System.Windows.Forms.RadioButton();
             this.VideoFileSizeLabel = new System.Windows.Forms.Label();
             this.sizeSelection = new System.Windows.Forms.ComboBox();
@@ -204,6 +207,7 @@ namespace MeGUI
             this.splitOutput = new System.Windows.Forms.CheckBox();
             this.queueButton = new System.Windows.Forms.Button();
             this.OutputGroupBox = new System.Windows.Forms.GroupBox();
+            this.splitSize = new MeGUI.core.gui.FileSizeBar();
             this.container = new System.Windows.Forms.ComboBox();
             this.containerLabel = new System.Windows.Forms.Label();
             this.muxedOutputLabel = new System.Windows.Forms.Label();
@@ -213,9 +217,7 @@ namespace MeGUI
             this.saveDialog = new System.Windows.Forms.SaveFileDialog();
             this.addSubsNChapters = new System.Windows.Forms.CheckBox();
             this.defaultToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.splitSize = new MeGUI.core.gui.FileSizeBar();
-            this.videoSize = new MeGUI.core.gui.FileSizeBar();
-            this.muxedSize = new MeGUI.core.gui.FileSizeBar();
+            this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.AutomaticEncodingGroup.SuspendLayout();
             this.OutputGroupBox.SuspendLayout();
             this.SuspendLayout();
@@ -238,6 +240,23 @@ namespace MeGUI
             this.AutomaticEncodingGroup.TabIndex = 17;
             this.AutomaticEncodingGroup.TabStop = false;
             this.AutomaticEncodingGroup.Text = "Size and Bitrate";
+            // 
+            // videoSize
+            // 
+            this.videoSize.CurrentUnit = MeGUI.core.util.Unit.KB;
+            this.videoSize.Location = new System.Drawing.Point(341, 45);
+            this.videoSize.Name = "videoSize";
+            this.videoSize.Size = new System.Drawing.Size(106, 24);
+            this.videoSize.TabIndex = 24;
+            // 
+            // muxedSize
+            // 
+            this.muxedSize.CurrentUnit = MeGUI.core.util.Unit.MB;
+            this.muxedSize.Location = new System.Drawing.Point(119, 14);
+            this.muxedSize.Name = "muxedSize";
+            this.muxedSize.Size = new System.Drawing.Size(115, 24);
+            this.muxedSize.TabIndex = 23;
+            this.muxedSize.Load += new System.EventHandler(this.fileSizeBar1_Load);
             // 
             // noTargetRadio
             // 
@@ -330,10 +349,12 @@ namespace MeGUI
             // 
             // queueButton
             // 
+            this.queueButton.AutoSize = true;
+            this.queueButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.queueButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.queueButton.Location = new System.Drawing.Point(308, 196);
+            this.queueButton.Location = new System.Drawing.Point(358, 196);
             this.queueButton.Name = "queueButton";
-            this.queueButton.Size = new System.Drawing.Size(74, 23);
+            this.queueButton.Size = new System.Drawing.Size(49, 23);
             this.queueButton.TabIndex = 8;
             this.queueButton.Text = "Queue";
             this.queueButton.Click += new System.EventHandler(this.queueButton_Click);
@@ -353,6 +374,15 @@ namespace MeGUI
             this.OutputGroupBox.TabIndex = 18;
             this.OutputGroupBox.TabStop = false;
             this.OutputGroupBox.Text = "Output Options";
+            // 
+            // splitSize
+            // 
+            this.splitSize.CurrentUnit = MeGUI.core.util.Unit.MB;
+            this.splitSize.Enabled = false;
+            this.splitSize.Location = new System.Drawing.Point(304, 20);
+            this.splitSize.Name = "splitSize";
+            this.splitSize.Size = new System.Drawing.Size(148, 24);
+            this.splitSize.TabIndex = 0;
             // 
             // container
             // 
@@ -401,16 +431,18 @@ namespace MeGUI
             // 
             // cancelButton
             // 
+            this.cancelButton.AutoSize = true;
+            this.cancelButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(391, 195);
+            this.cancelButton.Location = new System.Drawing.Point(413, 196);
             this.cancelButton.Name = "cancelButton";
-            this.cancelButton.Size = new System.Drawing.Size(72, 23);
+            this.cancelButton.Size = new System.Drawing.Size(49, 23);
             this.cancelButton.TabIndex = 19;
             this.cancelButton.Text = "Cancel";
             // 
             // addSubsNChapters
             // 
-            this.addSubsNChapters.Location = new System.Drawing.Point(18, 195);
+            this.addSubsNChapters.Location = new System.Drawing.Point(88, 196);
             this.addSubsNChapters.Name = "addSubsNChapters";
             this.addSubsNChapters.Size = new System.Drawing.Size(256, 24);
             this.addSubsNChapters.TabIndex = 20;
@@ -419,36 +451,21 @@ namespace MeGUI
                     "o be added to your output, as well as assign audio/subtitle languages and assign" +
                     " a chapter file");
             // 
-            // splitSize
+            // helpButton1
             // 
-            this.splitSize.CurrentUnit = MeGUI.core.util.Unit.MB;
-            this.splitSize.Enabled = false;
-            this.splitSize.Location = new System.Drawing.Point(304, 20);
-            this.splitSize.Name = "splitSize";
-            this.splitSize.Size = new System.Drawing.Size(148, 24);
-            this.splitSize.TabIndex = 0;
-            // 
-            // videoSize
-            // 
-            this.videoSize.CurrentUnit = MeGUI.core.util.Unit.KB;
-            this.videoSize.Location = new System.Drawing.Point(341, 45);
-            this.videoSize.Name = "videoSize";
-            this.videoSize.Size = new System.Drawing.Size(106, 24);
-            this.videoSize.TabIndex = 24;
-            // 
-            // muxedSize
-            // 
-            this.muxedSize.CurrentUnit = MeGUI.core.util.Unit.MB;
-            this.muxedSize.Location = new System.Drawing.Point(119, 14);
-            this.muxedSize.Name = "muxedSize";
-            this.muxedSize.Size = new System.Drawing.Size(115, 24);
-            this.muxedSize.TabIndex = 23;
-            this.muxedSize.Load += new System.EventHandler(this.fileSizeBar1_Load);
+            this.helpButton1.ArticleName = "AutoEncode window";
+            this.helpButton1.AutoSize = true;
+            this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.helpButton1.Location = new System.Drawing.Point(10, 196);
+            this.helpButton1.Name = "helpButton1";
+            this.helpButton1.Size = new System.Drawing.Size(38, 23);
+            this.helpButton1.TabIndex = 21;
             // 
             // AutoEncodeWindow
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
             this.ClientSize = new System.Drawing.Size(471, 226);
+            this.Controls.Add(this.helpButton1);
             this.Controls.Add(this.addSubsNChapters);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.OutputGroupBox);
@@ -466,6 +483,7 @@ namespace MeGUI
             this.OutputGroupBox.ResumeLayout(false);
             this.OutputGroupBox.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
 		}
 		#endregion

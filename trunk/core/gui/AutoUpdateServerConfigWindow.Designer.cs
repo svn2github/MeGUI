@@ -38,6 +38,7 @@ namespace MeGUI.core.gui
             this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
             this.subList = new System.Windows.Forms.ComboBox();
+            this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.flowLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
             this.flowLayoutPanel3.SuspendLayout();
@@ -94,6 +95,7 @@ namespace MeGUI.core.gui
             this.flowLayoutPanel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.flowLayoutPanel2.Controls.Add(this.cancelButton);
             this.flowLayoutPanel2.Controls.Add(this.okButton);
+            this.flowLayoutPanel2.Controls.Add(this.helpButton1);
             this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.flowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
             this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 321);
@@ -158,6 +160,16 @@ namespace MeGUI.core.gui
             this.subList.TabIndex = 3;
             this.subList.SelectedIndexChanged += new System.EventHandler(this.subList_SelectedIndexChanged);
             // 
+            // helpButton1
+            // 
+            this.helpButton1.ArticleName = "AutoUpdate server configuration window";
+            this.helpButton1.AutoSize = true;
+            this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.helpButton1.Location = new System.Drawing.Point(215, 3);
+            this.helpButton1.Name = "helpButton1";
+            this.helpButton1.Size = new System.Drawing.Size(39, 23);
+            this.helpButton1.TabIndex = 2;
+            // 
             // AutoUpdateServerConfigWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -192,5 +204,6 @@ namespace MeGUI.core.gui
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel3;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox subList;
+        private HelpButton helpButton1;
     }
 }

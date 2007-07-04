@@ -6,9 +6,6 @@ using System.Diagnostics;
 
 namespace MeGUI.core.util
 {
-    // The base class for MeGUI-triggered exceptions
-    public class MeGUIException : Exception
-    {}
 
     public class Pair<T1, T2>
     {

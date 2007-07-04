@@ -116,9 +116,9 @@ namespace MeGUI.packages.tools.oneclick
             }
             set
             {
-                try { audioProfileHandler.SelectedProfile = value.AudioProfileName; } catch (Exception) { }
+                try { audioProfileHandler.SelectedProfile = value.AudioProfileName; } catch (ProfileCouldntBeSelectedException) { }
                 autoDeint.Checked = value.AutomaticDeinterlacing;
-                try { avsProfileHandler.SelectedProfile = value.AvsProfileName; } catch (Exception) { }
+                try { avsProfileHandler.SelectedProfile = value.AvsProfileName; } catch (ProfileCouldntBeSelectedException) { }
                 ContainerCandidates = value.ContainerCandidates;
                 dontEncodeAudio.Checked = value.DontEncodeAudio;
                 filesizeKB.Text = value.Filesize.ToString();
@@ -128,7 +128,7 @@ namespace MeGUI.packages.tools.oneclick
                 splitOutput.Checked = value.Split;
                 splitSize.Text = value.SplitSize.ToString();
                 try { filesizeComboBox.SelectedItem = value.StorageMediumName; } catch (Exception) { }
-                try { videoProfileHandler.SelectedProfile = value.VideoProfileName; } catch (Exception) { }
+                try { videoProfileHandler.SelectedProfile = value.VideoProfileName; } catch (ProfileCouldntBeSelectedException) { }
             }
         }
 

@@ -1,3 +1,8 @@
+0.2.5.1007
+Commit by berrinam:
+    - Fixed some profile behaviour bugs in OneClick window
+    - Added a help button to all the windows, which links to the relevant page on http://mewiki.project357.com/wiki/Main_Page
+
 0.2.5.1006
 Commit by berrinam:
     - Applied chiklit8963's patch for 1696276 (Ask whether to overwrite file if already exists)

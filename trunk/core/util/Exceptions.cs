@@ -4,7 +4,18 @@ using System.Text;
 
 namespace MeGUI.core.util
 {
-    public class JobRunException : Exception
+    // The base class for MeGUI-triggered exceptions
+    public class MeGUIException : Exception
+    { 
+        public MeGUIException(string message) : base(message) { }
+
+        public MeGUIException(Exception inner) : base(inner.Message, inner) { }
+
+        public MeGUIException(string message, Exception inner) : base(message, inner) { }
+
+    }
+
+    public class JobRunException : MeGUIException
     {
         public JobRunException(string message) : base(message) { }
 

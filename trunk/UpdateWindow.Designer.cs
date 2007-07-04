@@ -48,6 +48,7 @@ namespace MeGUI
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.statusToolStrip.SuspendLayout();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -154,27 +155,27 @@ namespace MeGUI
             this.checkToolStripMenuItem,
             this.uncheckToolStripMenuItem});
             this.statusToolStrip.Name = "statusToolStrip";
-            this.statusToolStrip.Size = new System.Drawing.Size(214, 70);
+            this.statusToolStrip.Size = new System.Drawing.Size(203, 70);
             // 
             // setIgnoreValue
             // 
             this.setIgnoreValue.CheckOnClick = true;
             this.setIgnoreValue.Name = "setIgnoreValue";
-            this.setIgnoreValue.Size = new System.Drawing.Size(213, 22);
+            this.setIgnoreValue.Size = new System.Drawing.Size(202, 22);
             this.setIgnoreValue.Text = "Ignore updates for this file";
             this.setIgnoreValue.Click += new System.EventHandler(this.setIgnoreValue_Click);
             // 
             // checkToolStripMenuItem
             // 
             this.checkToolStripMenuItem.Name = "checkToolStripMenuItem";
-            this.checkToolStripMenuItem.Size = new System.Drawing.Size(213, 22);
+            this.checkToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.checkToolStripMenuItem.Text = "Check";
             this.checkToolStripMenuItem.Click += new System.EventHandler(this.checkToolStripMenuItem_Click);
             // 
             // uncheckToolStripMenuItem
             // 
             this.uncheckToolStripMenuItem.Name = "uncheckToolStripMenuItem";
-            this.uncheckToolStripMenuItem.Size = new System.Drawing.Size(213, 22);
+            this.uncheckToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.uncheckToolStripMenuItem.Text = "Uncheck";
             this.uncheckToolStripMenuItem.Click += new System.EventHandler(this.uncheckToolStripMenuItem_Click);
             // 
@@ -225,6 +226,7 @@ namespace MeGUI
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.helpButton1);
             this.panel1.Controls.Add(this.progressBar);
             this.panel1.Controls.Add(this.btnUpdate);
             this.panel1.Controls.Add(this.btnAbort);
@@ -233,6 +235,16 @@ namespace MeGUI
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(639, 65);
             this.panel1.TabIndex = 12;
+            // 
+            // helpButton1
+            // 
+            this.helpButton1.ArticleName = "Update window";
+            this.helpButton1.AutoSize = true;
+            this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.helpButton1.Location = new System.Drawing.Point(12, 30);
+            this.helpButton1.Name = "helpButton1";
+            this.helpButton1.Size = new System.Drawing.Size(39, 23);
+            this.helpButton1.TabIndex = 8;
             // 
             // UpdateWindow
             // 
@@ -254,6 +266,7 @@ namespace MeGUI
             this.splitContainer2.Panel2.PerformLayout();
             this.splitContainer2.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -278,5 +291,6 @@ namespace MeGUI
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.Panel panel1;
+        private MeGUI.core.gui.HelpButton helpButton1;
     }
 }

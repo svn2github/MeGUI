@@ -28,39 +28,6 @@ using System.Text;
 
 namespace MeGUI
 {
-    public class CQMEditorTool : MeGUI.core.plugins.interfaces.ITool
-    {
-        #region ITool Members
-
-        public string Name
-        {
-            get { return "AVC Quant Matrix Editor"; }
-        }
-
-        public void Run(MainForm info)
-        {
-            using (QuantizerMatrixDialog qmd = new QuantizerMatrixDialog())
-            {
-                qmd.ShowDialog();
-            }
-        }
-
-        public Shortcut[] Shortcuts
-        {
-            get { return new Shortcut[] { Shortcut.CtrlQ }; }
-        }
-
-        #endregion
-
-        #region IIDable Members
-
-        public string ID
-        {
-            get { return "cqmEditor"; }
-        }
-
-        #endregion
-    }
     /// <summary>
 	/// Summary description for QuantizerMatrixDialog.
 	/// </summary>
@@ -152,6 +119,7 @@ namespace MeGUI
 		private System.Windows.Forms.GroupBox operationsGroupbox;
 		private System.Windows.Forms.TextBox mat1x2;
 		#endregion
+        private MeGUI.core.gui.HelpButton helpButton1;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -288,6 +256,7 @@ namespace MeGUI
             this.saveMatrixButton = new System.Windows.Forms.Button();
             this.operationsGroupbox = new System.Windows.Forms.GroupBox();
             this.okButton = new System.Windows.Forms.Button();
+            this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.matrixGroupbox.SuspendLayout();
             this.operationsGroupbox.SuspendLayout();
             this.SuspendLayout();
@@ -1055,11 +1024,22 @@ namespace MeGUI
             this.okButton.TabIndex = 75;
             this.okButton.Text = "OK";
             // 
+            // helpButton1
+            // 
+            this.helpButton1.ArticleName = "x264 Quantizer matrix editor";
+            this.helpButton1.AutoSize = true;
+            this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.helpButton1.Location = new System.Drawing.Point(8, 256);
+            this.helpButton1.Name = "helpButton1";
+            this.helpButton1.Size = new System.Drawing.Size(38, 23);
+            this.helpButton1.TabIndex = 76;
+            // 
             // QuantizerMatrixDialog
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
             this.CancelButton = this.okButton;
             this.ClientSize = new System.Drawing.Size(434, 288);
+            this.Controls.Add(this.helpButton1);
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.operationsGroupbox);
             this.Controls.Add(this.matrixGroupbox);
@@ -1077,6 +1057,7 @@ namespace MeGUI
             this.matrixGroupbox.PerformLayout();
             this.operationsGroupbox.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
 		}
 		#endregion
@@ -2034,4 +2015,38 @@ namespace MeGUI
 		public bool onePerSize;
 	}
 	#endregion
+
+    public class CQMEditorTool : MeGUI.core.plugins.interfaces.ITool
+    {
+        #region ITool Members
+
+        public string Name
+        {
+            get { return "AVC Quant Matrix Editor"; }
+        }
+
+        public void Run(MainForm info)
+        {
+            using (QuantizerMatrixDialog qmd = new QuantizerMatrixDialog())
+            {
+                qmd.ShowDialog();
+            }
+        }
+
+        public Shortcut[] Shortcuts
+        {
+            get { return new Shortcut[] { Shortcut.CtrlQ }; }
+        }
+
+        #endregion
+
+        #region IIDable Members
+
+        public string ID
+        {
+            get { return "cqmEditor"; }
+        }
+
+        #endregion
+    }
 }

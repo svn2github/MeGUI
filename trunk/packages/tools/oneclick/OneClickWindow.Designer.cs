@@ -89,6 +89,7 @@ namespace MeGUI
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.showAdvancedOptions = new System.Windows.Forms.CheckBox();
             this.goButton = new System.Windows.Forms.Button();
+            this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.tabPage2.SuspendLayout();
             this.locationGroupBox.SuspendLayout();
             this.avsBox.SuspendLayout();
@@ -724,7 +725,7 @@ namespace MeGUI
             // showAdvancedOptions
             // 
             this.showAdvancedOptions.AutoSize = true;
-            this.showAdvancedOptions.Location = new System.Drawing.Point(4, 287);
+            this.showAdvancedOptions.Location = new System.Drawing.Point(82, 287);
             this.showAdvancedOptions.Name = "showAdvancedOptions";
             this.showAdvancedOptions.Size = new System.Drawing.Size(144, 17);
             this.showAdvancedOptions.TabIndex = 31;
@@ -742,11 +743,22 @@ namespace MeGUI
             this.goButton.UseVisualStyleBackColor = true;
             this.goButton.Click += new System.EventHandler(this.goButton_Click);
             // 
+            // helpButton1
+            // 
+            this.helpButton1.ArticleName = "One click encoder";
+            this.helpButton1.AutoSize = true;
+            this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.helpButton1.Location = new System.Drawing.Point(12, 283);
+            this.helpButton1.Name = "helpButton1";
+            this.helpButton1.Size = new System.Drawing.Size(39, 23);
+            this.helpButton1.TabIndex = 32;
+            // 
             // OneClickWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(448, 315);
+            this.Controls.Add(this.helpButton1);
             this.Controls.Add(this.showAdvancedOptions);
             this.Controls.Add(this.goButton);
             this.Controls.Add(this.tabControl1);
@@ -839,6 +851,7 @@ namespace MeGUI
         private FileBar workingDirectory;
         private FileBar chapterFile;
         private MeGUI.core.details.video.ProfileControl profileControl2;
+        private MeGUI.core.gui.HelpButton helpButton1;
 
 
     }

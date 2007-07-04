@@ -296,6 +296,7 @@ namespace MeGUI.packages.video.lmp4
             // 
             this.zoneTabPage.Controls.Add(this.quantizerMatrixGroupbox);
             this.zoneTabPage.Size = new System.Drawing.Size(488, 418);
+            this.zoneTabPage.Controls.SetChildIndex(this.zonesControl, 0);
             this.zoneTabPage.Controls.SetChildIndex(this.quantizerMatrixGroupbox, 0);
             // 
             // commandline

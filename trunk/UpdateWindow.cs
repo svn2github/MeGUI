@@ -1576,14 +1576,9 @@ namespace MeGUI
         private string name;
 
         public string Name { get { return name; } }
-        public FileNotRegisteredYetException(string name)
+        public FileNotRegisteredYetException(string name) : base("AutoUpdate file '" + name + "' not registered with MeGUI.")
         {
             this.name = name;
-        }
-
-        public override string ToString()
-        {
-            return "AutoUpdate file '" + name + "' not registered with MeGUI.";
         }
     }
 }

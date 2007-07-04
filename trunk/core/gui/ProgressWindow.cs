@@ -63,6 +63,7 @@ namespace MeGUI
         private Label currentPositionLabel;
         private StatusStrip statusStrip1;
         private ToolStripStatusLabel statusLabel;
+        private MeGUI.core.gui.HelpButton helpButton1;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -153,6 +154,7 @@ namespace MeGUI
             this.priority = new System.Windows.Forms.ComboBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.groupBox1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -296,7 +298,7 @@ namespace MeGUI
             // abortButton
             // 
             this.abortButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.abortButton.Location = new System.Drawing.Point(240, 232);
+            this.abortButton.Location = new System.Drawing.Point(240, 259);
             this.abortButton.Name = "abortButton";
             this.abortButton.Size = new System.Drawing.Size(75, 23);
             this.abortButton.TabIndex = 3;
@@ -306,7 +308,7 @@ namespace MeGUI
             // progressLabel
             // 
             this.progressLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.progressLabel.Location = new System.Drawing.Point(16, 211);
+            this.progressLabel.Location = new System.Drawing.Point(16, 206);
             this.progressLabel.Name = "progressLabel";
             this.progressLabel.Size = new System.Drawing.Size(100, 15);
             this.progressLabel.TabIndex = 4;
@@ -315,7 +317,7 @@ namespace MeGUI
             // progress
             // 
             this.progress.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.progress.Location = new System.Drawing.Point(122, 205);
+            this.progress.Location = new System.Drawing.Point(122, 200);
             this.progress.Name = "progress";
             this.progress.Size = new System.Drawing.Size(193, 23);
             this.progress.TabIndex = 5;
@@ -323,7 +325,7 @@ namespace MeGUI
             // priorityLabel
             // 
             this.priorityLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.priorityLabel.Location = new System.Drawing.Point(16, 240);
+            this.priorityLabel.Location = new System.Drawing.Point(16, 235);
             this.priorityLabel.Name = "priorityLabel";
             this.priorityLabel.Size = new System.Drawing.Size(100, 15);
             this.priorityLabel.TabIndex = 6;
@@ -337,7 +339,7 @@ namespace MeGUI
             "LOW",
             "NORMAL",
             "HIGH"});
-            this.priority.Location = new System.Drawing.Point(122, 234);
+            this.priority.Location = new System.Drawing.Point(122, 229);
             this.priority.Name = "priority";
             this.priority.Size = new System.Drawing.Size(80, 21);
             this.priority.TabIndex = 7;
@@ -347,7 +349,7 @@ namespace MeGUI
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.statusLabel});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 265);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 285);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(327, 22);
             this.statusStrip1.TabIndex = 8;
@@ -359,10 +361,21 @@ namespace MeGUI
             this.statusLabel.Size = new System.Drawing.Size(45, 17);
             this.statusLabel.Text = "Status: ";
             // 
+            // helpButton1
+            // 
+            this.helpButton1.ArticleName = "Status window";
+            this.helpButton1.AutoSize = true;
+            this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.helpButton1.Location = new System.Drawing.Point(8, 259);
+            this.helpButton1.Name = "helpButton1";
+            this.helpButton1.Size = new System.Drawing.Size(38, 23);
+            this.helpButton1.TabIndex = 9;
+            // 
             // ProgressWindow
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
-            this.ClientSize = new System.Drawing.Size(327, 287);
+            this.ClientSize = new System.Drawing.Size(327, 307);
+            this.Controls.Add(this.helpButton1);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.priority);
             this.Controls.Add(this.priorityLabel);

@@ -7,9 +7,25 @@ using System.Text;
 using System.Windows.Forms;
 
 using MeGUI.core.plugins.interfaces;
+using MeGUI.core.util;
 
 namespace MeGUI.core.details.video
 {
+    public class ProfileCouldntBeSelectedException : MeGUIException
+    {
+        private string name;
+        public string ProfileName
+        {
+            get { return name; }
+        }
+
+        public ProfileCouldntBeSelectedException(string name)
+            : base("The profile '" + name + "' couldn't be selected.")
+        {
+            this.name = name;
+        }
+    }
+
     public partial class ProfileControl : UserControl
     {
         public string LabelText
@@ -101,6 +117,8 @@ namespace MeGUI.core.details.video
             {
                 if (string.IsNullOrEmpty(value)) impl.avsProfile.SelectedIndex = -1;
                 impl.avsProfile.SelectedItem = value;
+                if (impl.avsProfile.SelectedIndex < 0 || impl.avsProfile.SelectedItem.ToString() != value)
+                    throw new ProfileCouldntBeSelectedException(value);
             }
         }
 
@@ -123,6 +141,7 @@ namespace MeGUI.core.details.video
             }
             try { SelectedProfile = mainForm.Profiles.GetSelectedProfile(profileType).Name; }
             catch (NullReferenceException) { }
+            catch (ProfileCouldntBeSelectedException) { }
         }
 
         private void avsConfigButton_Click(object sender, System.EventArgs e)

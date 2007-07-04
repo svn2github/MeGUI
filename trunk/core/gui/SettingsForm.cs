@@ -133,6 +133,7 @@ namespace MeGUI
         private Button button8;
         private NumericUpDown audiosamplesperupdate;
         private Label label6;
+        private MeGUI.core.gui.HelpButton helpButton1;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -199,6 +200,8 @@ namespace MeGUI
             this.selectX264ExecutableButton = new System.Windows.Forms.Button();
             this.selectDGIndexExecutable = new System.Windows.Forms.Button();
             this.otherGroupBox = new System.Windows.Forms.GroupBox();
+            this.audiosamplesperupdate = new System.Windows.Forms.NumericUpDown();
+            this.label6 = new System.Windows.Forms.Label();
             this.acceptableFPSError = new System.Windows.Forms.NumericUpDown();
             this.label15 = new System.Windows.Forms.Label();
             this.acceptableAspectError = new System.Windows.Forms.NumericUpDown();
@@ -282,11 +285,11 @@ namespace MeGUI
             this.nbPassesLabel = new System.Windows.Forms.Label();
             this.nbPasses = new System.Windows.Forms.NumericUpDown();
             this.keep2ndPassOutput = new System.Windows.Forms.CheckBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.audiosamplesperupdate = new System.Windows.Forms.NumericUpDown();
+            this.helpButton1 = new MeGUI.core.gui.HelpButton();
             groupBox1 = new System.Windows.Forms.GroupBox();
             groupBox1.SuspendLayout();
             this.otherGroupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.audiosamplesperupdate)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.acceptableFPSError)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.acceptableAspectError)).BeginInit();
             this.vobGroupBox.SuspendLayout();
@@ -301,7 +304,6 @@ namespace MeGUI
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nbPasses)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.audiosamplesperupdate)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -587,6 +589,36 @@ namespace MeGUI
             this.otherGroupBox.TabIndex = 3;
             this.otherGroupBox.TabStop = false;
             this.otherGroupBox.Text = "Other";
+            // 
+            // audiosamplesperupdate
+            // 
+            this.audiosamplesperupdate.Location = new System.Drawing.Point(342, 20);
+            this.audiosamplesperupdate.Maximum = new decimal(new int[] {
+            100000000,
+            0,
+            0,
+            0});
+            this.audiosamplesperupdate.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.audiosamplesperupdate.Name = "audiosamplesperupdate";
+            this.audiosamplesperupdate.Size = new System.Drawing.Size(95, 21);
+            this.audiosamplesperupdate.TabIndex = 32;
+            this.audiosamplesperupdate.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // label6
+            // 
+            this.label6.Location = new System.Drawing.Point(241, 16);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(102, 42);
+            this.label6.TabIndex = 31;
+            this.label6.Text = "Samples between audio progress updates";
             // 
             // acceptableFPSError
             // 
@@ -1444,41 +1476,22 @@ namespace MeGUI
             this.keep2ndPassOutput.TabIndex = 0;
             this.keep2ndPassOutput.Text = "Keep 2nd pass Output in 3 pass mode";
             // 
-            // label6
+            // helpButton1
             // 
-            this.label6.Location = new System.Drawing.Point(241, 16);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(102, 42);
-            this.label6.TabIndex = 31;
-            this.label6.Text = "Samples between audio progress updates";
-            // 
-            // audiosamplesperupdate
-            // 
-            this.audiosamplesperupdate.Location = new System.Drawing.Point(342, 20);
-            this.audiosamplesperupdate.Maximum = new decimal(new int[] {
-            100000000,
-            0,
-            0,
-            0});
-            this.audiosamplesperupdate.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.audiosamplesperupdate.Name = "audiosamplesperupdate";
-            this.audiosamplesperupdate.Size = new System.Drawing.Size(95, 21);
-            this.audiosamplesperupdate.TabIndex = 32;
-            this.audiosamplesperupdate.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
+            this.helpButton1.ArticleName = "Settings window";
+            this.helpButton1.AutoSize = true;
+            this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.helpButton1.Location = new System.Drawing.Point(6, 520);
+            this.helpButton1.Name = "helpButton1";
+            this.helpButton1.Size = new System.Drawing.Size(38, 23);
+            this.helpButton1.TabIndex = 29;
             // 
             // SettingsForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
             this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(468, 555);
+            this.Controls.Add(this.helpButton1);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.saveButton);
@@ -1493,6 +1506,7 @@ namespace MeGUI
             groupBox1.PerformLayout();
             this.otherGroupBox.ResumeLayout(false);
             this.otherGroupBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.audiosamplesperupdate)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.acceptableFPSError)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.acceptableAspectError)).EndInit();
             this.vobGroupBox.ResumeLayout(false);
@@ -1510,8 +1524,8 @@ namespace MeGUI
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nbPasses)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.audiosamplesperupdate)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
 		}
         #endregion

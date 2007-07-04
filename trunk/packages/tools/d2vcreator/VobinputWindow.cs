@@ -30,73 +30,7 @@ using System.Threading;
 
 namespace MeGUI
 {
-    public class D2VCreatorTool : MeGUI.core.plugins.interfaces.ITool
-    {
 
-        #region ITool Members
-
-        public string Name
-        {
-            get { return "D2V Creator"; }
-        }
-
-        public void Run(MainForm info)
-        {
-            VobinputWindow vobInput = new VobinputWindow(info);
-            vobInput.ShowDialog();
-
-        }
-
-        public Shortcut[] Shortcuts
-        {
-            get { return new Shortcut[] { Shortcut.Ctrl2 }; }
-        }
-
-        #endregion
-
-        #region IIDable Members
-
-        public string ID
-        {
-            get { return "d2v_creator"; }
-        }
-
-        #endregion
-    }
-
-    public class IndexJobPostProcessor
-    {
-        public static JobPostProcessor PostProcessor = new JobPostProcessor(postprocess, "D2V_postprocessor");
-        private static void postprocess(MainForm mainForm, Job ajob)
-        {
-            if (!(ajob is IndexJob)) return;
-            IndexJob job = (IndexJob)ajob;
-            if (job.PostprocessingProperties != null) return;
-
-            StringBuilder logBuilder = new StringBuilder();
-            VideoUtil vUtil = new VideoUtil(mainForm);
-            Dictionary<int, string> audioFiles = vUtil.getAllDemuxedAudio(job.Output, 8);
-            if (job.LoadSources)
-            {
-                if (job.DemuxMode != 0)
-                {
-                    int counter = 0;
-                    foreach (int i in audioFiles.Keys)
-                    {
-                        mainForm.setAudioTrack(counter, audioFiles[i]);
-                        if (counter >= 2)
-                            break;
-                        counter++;
-                    }
-                }
-                AviSynthWindow asw = new AviSynthWindow(mainForm, job.Output);
-                asw.OpenScript += new OpenScriptCallback(mainForm.Video.openVideoFile);
-                asw.Show();
-            }
-        }
-    }
-
-    public delegate void ProjectCreationComplete(); // this event is fired when the dgindex thread finishes
 	/// <summary>
 	/// Summary description for Vobinput.
 	/// </summary>
@@ -135,6 +69,7 @@ namespace MeGUI
 		private System.Windows.Forms.Button queueButton;
 		private System.Windows.Forms.CheckBox loadOnComplete;
 		private System.Windows.Forms.CheckBox closeOnQueue;
+        private MeGUI.core.gui.HelpButton helpButton1;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -251,6 +186,7 @@ namespace MeGUI
             this.saveProjectDialog = new System.Windows.Forms.SaveFileDialog();
             this.openIFODialog = new System.Windows.Forms.OpenFileDialog();
             this.closeOnQueue = new System.Windows.Forms.CheckBox();
+            this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.inputGroupbox.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -304,7 +240,7 @@ namespace MeGUI
             // 
             // loadOnComplete
             // 
-            this.loadOnComplete.Location = new System.Drawing.Point(8, 264);
+            this.loadOnComplete.Location = new System.Drawing.Point(52, 263);
             this.loadOnComplete.Name = "loadOnComplete";
             this.loadOnComplete.Size = new System.Drawing.Size(144, 24);
             this.loadOnComplete.TabIndex = 11;
@@ -464,10 +400,21 @@ namespace MeGUI
             this.closeOnQueue.TabIndex = 13;
             this.closeOnQueue.Text = "and close";
             // 
+            // helpButton1
+            // 
+            this.helpButton1.ArticleName = "D2v creator window";
+            this.helpButton1.AutoSize = true;
+            this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.helpButton1.Location = new System.Drawing.Point(8, 263);
+            this.helpButton1.Name = "helpButton1";
+            this.helpButton1.Size = new System.Drawing.Size(38, 23);
+            this.helpButton1.TabIndex = 14;
+            // 
             // VobinputWindow
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
             this.ClientSize = new System.Drawing.Size(444, 292);
+            this.Controls.Add(this.helpButton1);
             this.Controls.Add(this.closeOnQueue);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.loadOnComplete);
@@ -485,6 +432,7 @@ namespace MeGUI
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
 		}
 		#endregion
@@ -633,4 +581,72 @@ namespace MeGUI
         }
         #endregion
     }
+
+    public class D2VCreatorTool : MeGUI.core.plugins.interfaces.ITool
+    {
+
+        #region ITool Members
+
+        public string Name
+        {
+            get { return "D2V Creator"; }
+        }
+
+        public void Run(MainForm info)
+        {
+            VobinputWindow vobInput = new VobinputWindow(info);
+            vobInput.ShowDialog();
+
+        }
+
+        public Shortcut[] Shortcuts
+        {
+            get { return new Shortcut[] { Shortcut.Ctrl2 }; }
+        }
+
+        #endregion
+
+        #region IIDable Members
+
+        public string ID
+        {
+            get { return "d2v_creator"; }
+        }
+
+        #endregion
+    }
+
+    public class IndexJobPostProcessor
+    {
+        public static JobPostProcessor PostProcessor = new JobPostProcessor(postprocess, "D2V_postprocessor");
+        private static void postprocess(MainForm mainForm, Job ajob)
+        {
+            if (!(ajob is IndexJob)) return;
+            IndexJob job = (IndexJob)ajob;
+            if (job.PostprocessingProperties != null) return;
+
+            StringBuilder logBuilder = new StringBuilder();
+            VideoUtil vUtil = new VideoUtil(mainForm);
+            Dictionary<int, string> audioFiles = vUtil.getAllDemuxedAudio(job.Output, 8);
+            if (job.LoadSources)
+            {
+                if (job.DemuxMode != 0)
+                {
+                    int counter = 0;
+                    foreach (int i in audioFiles.Keys)
+                    {
+                        mainForm.setAudioTrack(counter, audioFiles[i]);
+                        if (counter >= 2)
+                            break;
+                        counter++;
+                    }
+                }
+                AviSynthWindow asw = new AviSynthWindow(mainForm, job.Output);
+                asw.OpenScript += new OpenScriptCallback(mainForm.Video.openVideoFile);
+                asw.Show();
+            }
+        }
+    }
+
+    public delegate void ProjectCreationComplete(); // this event is fired when the dgindex thread finishes
 }

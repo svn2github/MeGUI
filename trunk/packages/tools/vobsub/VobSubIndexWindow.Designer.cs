@@ -46,6 +46,7 @@ namespace MeGUI
             this.queueButton = new System.Windows.Forms.Button();
             this.openIFODialog = new System.Windows.Forms.OpenFileDialog();
             this.openOutputDialog = new System.Windows.Forms.SaveFileDialog();
+            this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.inputGroupbox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pgc)).BeginInit();
             this.outputGroupbox.SuspendLayout();
@@ -225,11 +226,22 @@ namespace MeGUI
             this.openOutputDialog.Filter = "VobSub Files|*.idx";
             this.openOutputDialog.Title = "Choose an output file";
             // 
+            // helpButton1
+            // 
+            this.helpButton1.ArticleName = "Vobsub indexer window";
+            this.helpButton1.AutoSize = true;
+            this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.helpButton1.Location = new System.Drawing.Point(7, 364);
+            this.helpButton1.Name = "helpButton1";
+            this.helpButton1.Size = new System.Drawing.Size(38, 23);
+            this.helpButton1.TabIndex = 17;
+            // 
             // VobSubIndexWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(434, 393);
+            this.Controls.Add(this.helpButton1);
             this.Controls.Add(this.closeOnQueue);
             this.Controls.Add(this.queueButton);
             this.Controls.Add(this.subtitleGroupbox);
@@ -249,6 +261,7 @@ namespace MeGUI
             this.outputGroupbox.PerformLayout();
             this.subtitleGroupbox.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -272,6 +285,7 @@ namespace MeGUI
         private System.Windows.Forms.CheckedListBox subtitleTracks;
         private System.Windows.Forms.OpenFileDialog openIFODialog;
         private System.Windows.Forms.SaveFileDialog openOutputDialog;
+        private MeGUI.core.gui.HelpButton helpButton1;
 
     }
 }

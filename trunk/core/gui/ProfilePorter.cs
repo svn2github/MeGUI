@@ -55,6 +55,7 @@ namespace MeGUI
             {
                 okButton.Text = "Import";
                 this.Text = "Profile Importer";
+                helpButton1.ArticleName = "Profile importer";
                 label1.Text = "Select the profiles you want to import (Ctrl or Shift might help):";
             }
             this.profiles = profiles;

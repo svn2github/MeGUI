@@ -49,6 +49,7 @@ namespace MeGUI.packages.tools.cutter
             this.sections = new System.Windows.Forms.ListView();
             this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
+            this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.flowLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.startFrame)).BeginInit();
@@ -202,6 +203,7 @@ namespace MeGUI.packages.tools.cutter
             this.flowLayoutPanel2.Controls.Add(this.closeButton);
             this.flowLayoutPanel2.Controls.Add(this.saveCuts);
             this.flowLayoutPanel2.Controls.Add(this.addCutsToScript);
+            this.flowLayoutPanel2.Controls.Add(this.helpButton1);
             this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.flowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
             this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 393);
@@ -292,6 +294,16 @@ namespace MeGUI.packages.tools.cutter
             this.columnHeader2.Text = "End frame";
             this.columnHeader2.Width = 262;
             // 
+            // helpButton1
+            // 
+            this.helpButton1.ArticleName = "Avs cutter";
+            this.helpButton1.AutoSize = true;
+            this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.helpButton1.Location = new System.Drawing.Point(183, 8);
+            this.helpButton1.Name = "helpButton1";
+            this.helpButton1.Size = new System.Drawing.Size(39, 23);
+            this.helpButton1.TabIndex = 3;
+            // 
             // Cutter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -341,5 +353,6 @@ namespace MeGUI.packages.tools.cutter
         private System.Windows.Forms.ListView sections;
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
+        private MeGUI.core.gui.HelpButton helpButton1;
     }
 }

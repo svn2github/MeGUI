@@ -7,43 +7,7 @@ using System.IO;
 
 namespace MeGUI
 {
-    public class ChapterCreatorTool : MeGUI.core.plugins.interfaces.ITool
-    {
 
-        #region ITool Members
-
-        public string Name
-        {
-            get { return "Chapter Creator"; }
-        }
-
-        public void Run(MainForm info)
-        {
-            using (ChapterCreator cc = new ChapterCreator(info))
-            {
-                cc.VideoInput = info.Video.Info.VideoInput;
-                cc.CreditsStartFrame = info.Video.Info.CreditsStartFrame;
-                cc.IntroEndFrame = info.Video.Info.IntroEndFrame;
-                cc.ShowDialog();
-            }
-        }
-
-        public Shortcut[] Shortcuts
-        {
-            get { return new Shortcut[] { Shortcut.CtrlH }; }
-        }
-
-        #endregion
-
-        #region IIDable Members
-
-        public string ID
-        {
-            get { return "chapter_creator"; }
-        }
-
-        #endregion
-    }
 	/// <summary>
 	/// Summary description for ChapterCreator.
 	/// </summary>
@@ -73,6 +37,7 @@ namespace MeGUI
 		private System.Windows.Forms.ListView chapterListView;
 		private System.Windows.Forms.OpenFileDialog openFileDialog;
 		private System.Windows.Forms.SaveFileDialog saveFileDialog;
+        private MeGUI.core.gui.HelpButton helpButton1;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -127,11 +92,13 @@ namespace MeGUI
             this.removeZoneButton = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
+            this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.chaptersGroupbox.SuspendLayout();
             this.SuspendLayout();
             // 
             // chaptersGroupbox
             // 
+            this.chaptersGroupbox.Controls.Add(this.helpButton1);
             this.chaptersGroupbox.Controls.Add(this.saveButton);
             this.chaptersGroupbox.Controls.Add(this.loadButton);
             this.chaptersGroupbox.Controls.Add(this.chapterName);
@@ -228,25 +195,31 @@ namespace MeGUI
             // 
             // addZoneButton
             // 
-            this.addZoneButton.Location = new System.Drawing.Point(272, 336);
+            this.addZoneButton.AutoSize = true;
+            this.addZoneButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.addZoneButton.Location = new System.Drawing.Point(326, 332);
             this.addZoneButton.Name = "addZoneButton";
-            this.addZoneButton.Size = new System.Drawing.Size(52, 23);
+            this.addZoneButton.Size = new System.Drawing.Size(36, 23);
             this.addZoneButton.TabIndex = 33;
             this.addZoneButton.Text = "Add";
             this.addZoneButton.Click += new System.EventHandler(this.addZoneButton_Click);
             // 
             // clearZonesButton
             // 
-            this.clearZonesButton.Location = new System.Drawing.Point(88, 336);
+            this.clearZonesButton.AutoSize = true;
+            this.clearZonesButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.clearZonesButton.Location = new System.Drawing.Point(142, 332);
             this.clearZonesButton.Name = "clearZonesButton";
-            this.clearZonesButton.Size = new System.Drawing.Size(52, 23);
+            this.clearZonesButton.Size = new System.Drawing.Size(42, 23);
             this.clearZonesButton.TabIndex = 29;
             this.clearZonesButton.Text = "Clear";
             this.clearZonesButton.Click += new System.EventHandler(this.clearZonesButton_Click);
             // 
             // updateZoneButton
             // 
-            this.updateZoneButton.Location = new System.Drawing.Point(144, 336);
+            this.updateZoneButton.AutoSize = true;
+            this.updateZoneButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.updateZoneButton.Location = new System.Drawing.Point(200, 332);
             this.updateZoneButton.Name = "updateZoneButton";
             this.updateZoneButton.Size = new System.Drawing.Size(52, 23);
             this.updateZoneButton.TabIndex = 35;
@@ -255,19 +228,23 @@ namespace MeGUI
             // 
             // showVideoButton
             // 
+            this.showVideoButton.AutoSize = true;
+            this.showVideoButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.showVideoButton.Enabled = false;
-            this.showVideoButton.Location = new System.Drawing.Point(16, 336);
+            this.showVideoButton.Location = new System.Drawing.Point(70, 332);
             this.showVideoButton.Name = "showVideoButton";
-            this.showVideoButton.Size = new System.Drawing.Size(52, 23);
+            this.showVideoButton.Size = new System.Drawing.Size(55, 23);
             this.showVideoButton.TabIndex = 34;
             this.showVideoButton.Text = "Preview";
             this.showVideoButton.Click += new System.EventHandler(this.showVideoButton_Click);
             // 
             // removeZoneButton
             // 
-            this.removeZoneButton.Location = new System.Drawing.Point(216, 336);
+            this.removeZoneButton.AutoSize = true;
+            this.removeZoneButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.removeZoneButton.Location = new System.Drawing.Point(270, 332);
             this.removeZoneButton.Name = "removeZoneButton";
-            this.removeZoneButton.Size = new System.Drawing.Size(52, 23);
+            this.removeZoneButton.Size = new System.Drawing.Size(56, 23);
             this.removeZoneButton.TabIndex = 32;
             this.removeZoneButton.Text = "Remove";
             this.removeZoneButton.Click += new System.EventHandler(this.removeZoneButton_Click);
@@ -281,6 +258,16 @@ namespace MeGUI
             // 
             this.saveFileDialog.DefaultExt = "txt";
             this.saveFileDialog.Filter = "Chapter Files (*.txt)|*.txt";
+            // 
+            // helpButton1
+            // 
+            this.helpButton1.ArticleName = "Chapter creator";
+            this.helpButton1.AutoSize = true;
+            this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.helpButton1.Location = new System.Drawing.Point(6, 347);
+            this.helpButton1.Name = "helpButton1";
+            this.helpButton1.Size = new System.Drawing.Size(38, 23);
+            this.helpButton1.TabIndex = 41;
             // 
             // ChapterCreator
             // 
@@ -738,4 +725,42 @@ namespace MeGUI
 		public string timecode;
 		public string name;
 	}
+
+    public class ChapterCreatorTool : MeGUI.core.plugins.interfaces.ITool
+    {
+
+        #region ITool Members
+
+        public string Name
+        {
+            get { return "Chapter Creator"; }
+        }
+
+        public void Run(MainForm info)
+        {
+            using (ChapterCreator cc = new ChapterCreator(info))
+            {
+                cc.VideoInput = info.Video.Info.VideoInput;
+                cc.CreditsStartFrame = info.Video.Info.CreditsStartFrame;
+                cc.IntroEndFrame = info.Video.Info.IntroEndFrame;
+                cc.ShowDialog();
+            }
+        }
+
+        public Shortcut[] Shortcuts
+        {
+            get { return new Shortcut[] { Shortcut.CtrlH }; }
+        }
+
+        #endregion
+
+        #region IIDable Members
+
+        public string ID
+        {
+            get { return "chapter_creator"; }
+        }
+
+        #endregion
+    }
 }

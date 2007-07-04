@@ -187,7 +187,7 @@ namespace MeGUI.core.details.video
         protected TabPage zoneTabPage;
         protected TextBox commandline;
         protected TabPage mainTabPage;
-        private ZonesControl zonesControl;
+        protected ZonesControl zonesControl;
     
 
         private void InitializeComponent()

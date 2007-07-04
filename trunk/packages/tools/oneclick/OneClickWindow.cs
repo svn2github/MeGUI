@@ -35,7 +35,20 @@ namespace MeGUI
     new SettingsGetter<OneClickSettings>(oneClickSettingsProvider.GetCurrentSettings), new SettingsSetter<OneClickSettings>(oneClickSettingsProvider.LoadSettings));
             SingleConfigurerHandler<OneClickSettings, Empty, int, int> configurerHandler = new SingleConfigurerHandler<OneClickSettings, Empty, int, int>(profileHandler, oneClickSettingsProvider);
             profileHandler.ProfileChanged += new SelectedProfileChangedEvent(OneClickProfileChanged);
+            profileHandler.ConfigureCompleted += new EventHandler(profileHandler_ConfigureCompleted);
             profileHandler.RefreshProfiles();
+        }
+
+        private void refreshAssistingProfiles()
+        {
+            videoProfileHandler.RefreshProfiles();
+            audioProfileHandler.RefreshProfiles();
+            avsProfileHandler.RefreshProfiles();
+        }
+
+        void profileHandler_ConfigureCompleted(object sender, EventArgs e)
+        {
+            refreshAssistingProfiles();
         }
 
         void OneClickProfileChanged(object sender, Profile prof)
@@ -49,13 +62,14 @@ namespace MeGUI
         #region AVS profiles
         ISettingsProvider<AviSynthSettings, MeGUI.core.details.video.Empty, int, int> avsSettingsProvider = new SettingsProviderImpl2<
     MeGUI.core.gui.AviSynthProfileConfigPanel, MeGUI.core.details.video.Empty, AviSynthSettings, AviSynthSettings, int, int>("AviSynth", 0, 0);
+        ProfilesControlHandler<AviSynthSettings, Empty> avsProfileHandler; 
         private void initAvsHandler()
         {
             // Init AVS handlers
-            ProfilesControlHandler<AviSynthSettings, Empty> profileHandler = new ProfilesControlHandler<AviSynthSettings, Empty>(
+            avsProfileHandler = new ProfilesControlHandler<AviSynthSettings, Empty>(
     "AviSynth", mainForm, profileControl1, avsSettingsProvider.EditSettings, Empty.Getter,
     new SettingsGetter<AviSynthSettings>(avsSettingsProvider.GetCurrentSettings), new SettingsSetter<AviSynthSettings>(avsSettingsProvider.LoadSettings));
-            SingleConfigurerHandler<AviSynthSettings, Empty, int, int> configurerHandler = new SingleConfigurerHandler<AviSynthSettings, Empty, int, int>(profileHandler, avsSettingsProvider);
+            SingleConfigurerHandler<AviSynthSettings, Empty, int, int> configurerHandler = new SingleConfigurerHandler<AviSynthSettings, Empty, int, int>(avsProfileHandler, avsSettingsProvider);
         }
         #endregion
         #region Video profiles
@@ -387,15 +401,28 @@ namespace MeGUI
         {
             set
             {
-                bool misconfigured = false;
                 OneClickSettings settings = value;
+
+                refreshAssistingProfiles();
 
                 // Do extra defaults config (same code as in OneClickDefaultWindow)
                 // strings
                 try { audioProfileHandler.SelectedProfile = settings.AudioProfileName; }
-                catch (Exception) { misconfigured = true; }
+                catch (ProfileCouldntBeSelectedException e)
+                {
+                    MessageBox.Show("The audio profile '" + e.ProfileName + "' could not be properly configured. Presumably the profile no longer exists.", "Some options misconfigured", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+                
                 try { videoProfileHandler.SelectedProfile = settings.VideoProfileName; }
-                catch (Exception) { misconfigured = true; }
+                catch (ProfileCouldntBeSelectedException e)
+                {
+                    MessageBox.Show("The video profile '" + e.ProfileName + "' could not be properly configured. Presumably the profile no longer exists.", "Some options misconfigured", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+                try { avsProfileHandler.SelectedProfile = settings.AvsProfileName; }
+                catch (ProfileCouldntBeSelectedException e)
+                {
+                    MessageBox.Show("The Avisynth profile '" + e.ProfileName + "' could not be properly configured. Presumably the profile no longer exists.", "Some options misconfigured", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
 
                 List<ContainerType> temp = new List<ContainerType>();
                 List<ContainerType> allContainerTypes = muxProvider.GetSupportedContainers();
@@ -408,10 +435,13 @@ namespace MeGUI
                         temp.Add(ct);
                 }
                 acceptableContainerTypes = temp.ToArray();
-                
+
                 ignoreRestrictions = false;
                 try { filesizeComboBox.SelectedItem = settings.StorageMediumName; }
-                catch (Exception) { misconfigured = true; }
+                catch (Exception)
+                {
+                    MessageBox.Show("The filesize '" + settings.StorageMediumName + "' could not be properly set. Presumably that preset no longer exists.", "Some options misconfigured", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
 
                 audioStreams[0].dontEncode = settings.DontEncodeAudio;
                 audioStreams[1].dontEncode = settings.DontEncodeAudio;
@@ -429,8 +459,6 @@ namespace MeGUI
                 filesizeKB.Text = settings.Filesize.ToString();
                 horizontalResolution.Value = settings.OutputResolution;
 
-                if (misconfigured)
-                    MessageBox.Show("Some settings could not be configured as the profile specified, since the required profiles are no longer available. Please check your configuration", "Some options misconfigured", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 // Clean up after those settings were set
                 updatePossibleContainers();
@@ -638,7 +666,7 @@ namespace MeGUI
             this.externalInput.Checked = this.audioStreams[current].useExternalInput;
             this.dontEncodeAudio.Checked = this.audioStreams[current].dontEncode;
             try { audioProfileHandler.SelectedProfile = (string)audioStreams[current].profileItem; }
-            catch (Exception) { }
+            catch (ProfileCouldntBeSelectedException) { }
             if (audioStreams[current].settings != null)
             {
                 foreach (ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType> p in this.audioCodec.Items)

@@ -46,6 +46,7 @@ namespace MeGUI.packages.video.x264
             this.x264BetaDeblockLabel = new System.Windows.Forms.Label();
             this.x264AlphaDeblockLabel = new System.Windows.Forms.Label();
             this.x264CodecGeneralGroupbox = new System.Windows.Forms.GroupBox();
+            this.x264BitrateQuantizer = new System.Windows.Forms.NumericUpDown();
             this.logfile = new System.Windows.Forms.TextBox();
             this.x264EncodingMode = new System.Windows.Forms.ComboBox();
             this.logfileLabel = new System.Windows.Forms.Label();
@@ -147,7 +148,7 @@ namespace MeGUI.packages.video.x264
             this.customCommandlineOptionsLabel = new System.Windows.Forms.Label();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.x264BitrateQuantizer = new System.Windows.Forms.NumericUpDown();
+            this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.tabControl1.SuspendLayout();
             this.zoneTabPage.SuspendLayout();
             this.mainTabPage.SuspendLayout();
@@ -159,6 +160,7 @@ namespace MeGUI.packages.video.x264
             ((System.ComponentModel.ISupportInitialize)(this.x264BetaDeblock)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.x264AlphaDeblock)).BeginInit();
             this.x264CodecGeneralGroupbox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.x264BitrateQuantizer)).BeginInit();
             this.rateControlTabPage.SuspendLayout();
             this.x264QuantOptionsGroupbox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.x264NumberOfRefFrames)).BeginInit();
@@ -188,7 +190,6 @@ namespace MeGUI.packages.video.x264
             ((System.ComponentModel.ISupportInitialize)(this.x264MaximumQuantizer)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.x264MinimimQuantizer)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.x264PBFrameFactor)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.x264BitrateQuantizer)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -206,13 +207,14 @@ namespace MeGUI.packages.video.x264
             this.zoneTabPage.Controls.Add(this.customCommandlineOptions);
             this.zoneTabPage.Controls.Add(this.customCommandlineOptionsLabel);
             this.zoneTabPage.Size = new System.Drawing.Size(502, 419);
+            this.zoneTabPage.Controls.SetChildIndex(this.zonesControl, 0);
             this.zoneTabPage.Controls.SetChildIndex(this.customCommandlineOptionsLabel, 0);
             this.zoneTabPage.Controls.SetChildIndex(this.customCommandlineOptions, 0);
             // 
             // commandline
             // 
             this.commandline.Location = new System.Drawing.Point(0, 451);
-            this.commandline.Size = new System.Drawing.Size(507, 59);
+            this.commandline.Size = new System.Drawing.Size(507, 39);
             this.commandline.Text = " ";
             // 
             // mainTabPage
@@ -457,6 +459,19 @@ namespace MeGUI.packages.video.x264
             this.x264CodecGeneralGroupbox.TabIndex = 36;
             this.x264CodecGeneralGroupbox.TabStop = false;
             this.x264CodecGeneralGroupbox.Text = "General";
+            // 
+            // x264BitrateQuantizer
+            // 
+            this.x264BitrateQuantizer.Location = new System.Drawing.Point(242, 47);
+            this.x264BitrateQuantizer.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.x264BitrateQuantizer.Name = "x264BitrateQuantizer";
+            this.x264BitrateQuantizer.Size = new System.Drawing.Size(66, 20);
+            this.x264BitrateQuantizer.TabIndex = 41;
+            this.x264BitrateQuantizer.ValueChanged += new System.EventHandler(this.updateEvent);
             // 
             // logfile
             // 
@@ -1803,25 +1818,26 @@ namespace MeGUI.packages.video.x264
             // 
             this.openFileDialog.FileName = "openFileDialog1";
             // 
-            // x264BitrateQuantizer
+            // helpButton1
             // 
-            this.x264BitrateQuantizer.Location = new System.Drawing.Point(242, 47);
-            this.x264BitrateQuantizer.Maximum = new decimal(new int[] {
-            100000,
-            0,
-            0,
-            0});
-            this.x264BitrateQuantizer.Name = "x264BitrateQuantizer";
-            this.x264BitrateQuantizer.Size = new System.Drawing.Size(66, 20);
-            this.x264BitrateQuantizer.TabIndex = 41;
-            this.x264BitrateQuantizer.ValueChanged += new System.EventHandler(this.updateEvent);
+            this.helpButton1.ArticleName = "Video configuration dialog/X264 Configuration";
+            this.helpButton1.AutoSize = true;
+            this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.helpButton1.Location = new System.Drawing.Point(13, 496);
+            this.helpButton1.Name = "helpButton1";
+            this.helpButton1.Size = new System.Drawing.Size(39, 23);
+            this.helpButton1.TabIndex = 42;
             // 
             // x264ConfigurationPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.helpButton1);
             this.Name = "x264ConfigurationPanel";
-            this.Size = new System.Drawing.Size(510, 513);
+            this.Size = new System.Drawing.Size(510, 523);
+            this.Controls.SetChildIndex(this.helpButton1, 0);
+            this.Controls.SetChildIndex(this.tabControl1, 0);
+            this.Controls.SetChildIndex(this.commandline, 0);
             this.tabControl1.ResumeLayout(false);
             this.zoneTabPage.ResumeLayout(false);
             this.zoneTabPage.PerformLayout();
@@ -1837,6 +1853,7 @@ namespace MeGUI.packages.video.x264
             ((System.ComponentModel.ISupportInitialize)(this.x264AlphaDeblock)).EndInit();
             this.x264CodecGeneralGroupbox.ResumeLayout(false);
             this.x264CodecGeneralGroupbox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.x264BitrateQuantizer)).EndInit();
             this.rateControlTabPage.ResumeLayout(false);
             this.x264QuantOptionsGroupbox.ResumeLayout(false);
             this.x264QuantOptionsGroupbox.PerformLayout();
@@ -1873,7 +1890,6 @@ namespace MeGUI.packages.video.x264
             ((System.ComponentModel.ISupportInitialize)(this.x264MaximumQuantizer)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.x264MinimimQuantizer)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.x264PBFrameFactor)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.x264BitrateQuantizer)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2001,5 +2017,6 @@ namespace MeGUI.packages.video.x264
         private System.Windows.Forms.NumericUpDown deadzoneIntra;
         private System.Windows.Forms.NumericUpDown deadzoneInter;
         private System.Windows.Forms.NumericUpDown x264BitrateQuantizer;
+        private MeGUI.core.gui.HelpButton helpButton1;
     }
 }

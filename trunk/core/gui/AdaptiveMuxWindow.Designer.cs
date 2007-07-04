@@ -30,11 +30,13 @@ namespace MeGUI
         {
             this.containerFormat = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.videoGroupbox.SuspendLayout();
             this.outputGroupbox.SuspendLayout();
             this.audioGroupbox.SuspendLayout();
             this.subtitleGroupbox.SuspendLayout();
             this.chaptersGroupbox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.audioDelay)).BeginInit();
             this.SuspendLayout();
             // 
             // muxButton
@@ -102,14 +104,32 @@ namespace MeGUI
             this.label1.TabIndex = 25;
             this.label1.Text = "Container Format";
             // 
+            // helpButton1
+            // 
+            this.helpButton1.ArticleName = "Adaptive mux window";
+            this.helpButton1.AutoSize = true;
+            this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.helpButton1.Location = new System.Drawing.Point(8, 461);
+            this.helpButton1.Name = "helpButton1";
+            this.helpButton1.Size = new System.Drawing.Size(38, 23);
+            this.helpButton1.TabIndex = 30;
+            // 
             // AdaptiveMuxWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(444, 490);
+            this.Controls.Add(this.helpButton1);
             this.Name = "AdaptiveMuxWindow";
             this.Text = "Adaptive Mux Window";
+            this.Controls.SetChildIndex(this.helpButton1, 0);
+            this.Controls.SetChildIndex(this.chaptersGroupbox, 0);
+            this.Controls.SetChildIndex(this.videoGroupbox, 0);
+            this.Controls.SetChildIndex(this.audioGroupbox, 0);
+            this.Controls.SetChildIndex(this.subtitleGroupbox, 0);
+            this.Controls.SetChildIndex(this.muxButton, 0);
+            this.Controls.SetChildIndex(this.outputGroupbox, 0);
+            this.Controls.SetChildIndex(this.cancelButton, 0);
             this.videoGroupbox.ResumeLayout(false);
             this.videoGroupbox.PerformLayout();
             this.outputGroupbox.ResumeLayout(false);
@@ -120,7 +140,9 @@ namespace MeGUI
             this.subtitleGroupbox.PerformLayout();
             this.chaptersGroupbox.ResumeLayout(false);
             this.chaptersGroupbox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.audioDelay)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -128,5 +150,6 @@ namespace MeGUI
 
         private System.Windows.Forms.ComboBox containerFormat;
         private System.Windows.Forms.Label label1;
+        private MeGUI.core.gui.HelpButton helpButton1;
     }
 }

@@ -58,6 +58,7 @@ namespace MeGUI.core.details
             this.AbortMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.LoadMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.afterEncoding = new System.Windows.Forms.Label();
+            this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.queueContextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -314,10 +315,22 @@ namespace MeGUI.core.details
             this.afterEncoding.TabIndex = 27;
             this.afterEncoding.Text = "After encoding: do nothing";
             // 
+            // helpButton1
+            // 
+            this.helpButton1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.helpButton1.ArticleName = "Main window#Queue";
+            this.helpButton1.AutoSize = true;
+            this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.helpButton1.Location = new System.Drawing.Point(428, 299);
+            this.helpButton1.Name = "helpButton1";
+            this.helpButton1.Size = new System.Drawing.Size(39, 23);
+            this.helpButton1.TabIndex = 28;
+            // 
             // JobControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.helpButton1);
             this.Controls.Add(this.afterEncoding);
             this.Controls.Add(this.pauseButton);
             this.Controls.Add(this.updateJobButton);
@@ -370,5 +383,6 @@ namespace MeGUI.core.details
         private System.Windows.Forms.ToolStripMenuItem AbortMenuItem;
         private System.Windows.Forms.ToolStripMenuItem LoadMenuItem;
         private System.Windows.Forms.Label afterEncoding;
+        private MeGUI.core.gui.HelpButton helpButton1;
     }
 }

@@ -45,6 +45,7 @@ namespace MeGUI
             this.cancelButton = new System.Windows.Forms.Button();
             this.priority = new System.Windows.Forms.ComboBox();
             this.priorityLabel = new System.Windows.Forms.Label();
+            this.helpButton1 = new MeGUI.core.gui.HelpButton();
             ((System.ComponentModel.ISupportInitialize)(this.analysisPercent)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.minAnalyseSections)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.hybridThreshold)).BeginInit();
@@ -273,12 +274,23 @@ namespace MeGUI
             this.priorityLabel.Text = "Process Priority";
             this.priorityLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // helpButton1
+            // 
+            this.helpButton1.ArticleName = "Source detector configuration window";
+            this.helpButton1.AutoSize = true;
+            this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.helpButton1.Location = new System.Drawing.Point(15, 229);
+            this.helpButton1.Name = "helpButton1";
+            this.helpButton1.Size = new System.Drawing.Size(39, 23);
+            this.helpButton1.TabIndex = 16;
+            // 
             // SourceDetectorConfigWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(345, 265);
+            this.Controls.Add(this.helpButton1);
             this.Controls.Add(this.priority);
             this.Controls.Add(this.priorityLabel);
             this.Controls.Add(this.cancelButton);
@@ -333,5 +345,6 @@ namespace MeGUI
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.ComboBox priority;
         private System.Windows.Forms.Label priorityLabel;
+        private MeGUI.core.gui.HelpButton helpButton1;
     }
 }

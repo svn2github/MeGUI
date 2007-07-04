@@ -107,6 +107,7 @@ namespace MeGUI
         private ToolStripStatusLabel deintStatusLabel;
         private Button reopenOriginal;
         private NumericUpDown fpsBox;
+        private MeGUI.core.gui.HelpButton helpButton1;
 
 		/// <summary>
 		/// Required designer variable.
@@ -306,6 +307,7 @@ namespace MeGUI
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.deintProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.deintStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.helpButton1 = new MeGUI.core.gui.HelpButton();
             label2 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
             label4 = new System.Windows.Forms.Label();
@@ -552,11 +554,12 @@ namespace MeGUI
             // onSaveLoadScript
             // 
             this.onSaveLoadScript.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.onSaveLoadScript.AutoSize = true;
             this.onSaveLoadScript.Checked = true;
             this.onSaveLoadScript.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.onSaveLoadScript.Location = new System.Drawing.Point(7, 419);
+            this.onSaveLoadScript.Location = new System.Drawing.Point(53, 420);
             this.onSaveLoadScript.Name = "onSaveLoadScript";
-            this.onSaveLoadScript.Size = new System.Drawing.Size(230, 24);
+            this.onSaveLoadScript.Size = new System.Drawing.Size(210, 17);
             this.onSaveLoadScript.TabIndex = 2;
             this.onSaveLoadScript.Text = "On Save close and load to be encoded";
             // 
@@ -565,7 +568,7 @@ namespace MeGUI
             this.previewAvsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.previewAvsButton.AutoSize = true;
             this.previewAvsButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.previewAvsButton.Location = new System.Drawing.Point(265, 419);
+            this.previewAvsButton.Location = new System.Drawing.Point(268, 416);
             this.previewAvsButton.Name = "previewAvsButton";
             this.previewAvsButton.Size = new System.Drawing.Size(107, 23);
             this.previewAvsButton.TabIndex = 3;
@@ -577,7 +580,7 @@ namespace MeGUI
             this.saveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.saveButton.AutoSize = true;
             this.saveButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.saveButton.Location = new System.Drawing.Point(378, 419);
+            this.saveButton.Location = new System.Drawing.Point(381, 417);
             this.saveButton.Name = "saveButton";
             this.saveButton.Size = new System.Drawing.Size(41, 23);
             this.saveButton.TabIndex = 4;
@@ -1068,10 +1071,21 @@ namespace MeGUI
             this.deintStatusLabel.Name = "deintStatusLabel";
             this.deintStatusLabel.Size = new System.Drawing.Size(0, 17);
             // 
+            // helpButton1
+            // 
+            this.helpButton1.ArticleName = "Avisynth script creator";
+            this.helpButton1.AutoSize = true;
+            this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.helpButton1.Location = new System.Drawing.Point(4, 417);
+            this.helpButton1.Name = "helpButton1";
+            this.helpButton1.Size = new System.Drawing.Size(38, 23);
+            this.helpButton1.TabIndex = 7;
+            // 
             // AviSynthWindow
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
             this.ClientSize = new System.Drawing.Size(425, 467);
+            this.Controls.Add(this.helpButton1);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.onSaveLoadScript);

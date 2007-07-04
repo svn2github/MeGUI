@@ -35,6 +35,7 @@ namespace MeGUI.packages.tools.besplitter
             this.cuts = new MeGUI.FileBar();
             this.output = new MeGUI.FileBar();
             this.goButton = new System.Windows.Forms.Button();
+            this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.SuspendLayout();
             // 
             // label1
@@ -123,11 +124,22 @@ namespace MeGUI.packages.tools.besplitter
             this.goButton.UseVisualStyleBackColor = true;
             this.goButton.Click += new System.EventHandler(this.goButton_Click);
             // 
+            // helpButton1
+            // 
+            this.helpButton1.ArticleName = "Audio cutter";
+            this.helpButton1.AutoSize = true;
+            this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.helpButton1.Location = new System.Drawing.Point(12, 156);
+            this.helpButton1.Name = "helpButton1";
+            this.helpButton1.Size = new System.Drawing.Size(39, 23);
+            this.helpButton1.TabIndex = 7;
+            // 
             // Besplitter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(309, 191);
+            this.Controls.Add(this.helpButton1);
             this.Controls.Add(this.goButton);
             this.Controls.Add(this.output);
             this.Controls.Add(this.cuts);
@@ -151,5 +163,6 @@ namespace MeGUI.packages.tools.besplitter
         private FileBar cuts;
         private FileBar output;
         private System.Windows.Forms.Button goButton;
+        private MeGUI.core.gui.HelpButton helpButton1;
     }
 }
