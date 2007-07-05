@@ -28,8 +28,4 @@ md Dist\avswrapper
 copy AviSynthWrapper.dll .\Dist\avswrapper
 md Dist\Data
 copy .\Data\*.xml .\Dist\Data
-md Dist\updatecopier
-cd ..\UpdateCopier
-start /wait compile-updatecopier.bat
-cd ..\trunk
-copy ..\UpdateCopier\updatecopier.exe .\Dist\updatecopier
+EXIT
