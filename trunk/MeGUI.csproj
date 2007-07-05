@@ -304,7 +304,6 @@
     <Compile Include="core\plugins\implemented\audio\CommandlineAudioEncoder.cs" />
     <Compile Include="core\plugins\implemented\CommandlineJobProcessor.cs" />
     <Compile Include="core\plugins\implemented\CommandlineMuxer.cs" />
-    <Compile Include="core\plugins\implemented\ICommandlineOutputParser.cs" />
     <Compile Include="core\plugins\implemented\video\CommandlineVideoEncoder.cs" />
     <Compile Include="core\plugins\interfaces\IJobProcessor.cs" />
     <Compile Include="core\plugins\interfaces\IMediaFile.cs" />
@@ -325,7 +324,6 @@
     <Compile Include="core\util\LanguageSelectionContainer.cs" />
     <Compile Include="core\util\NotifyCounter.cs" />
     <Compile Include="core\util\ScriptServer.cs" />
-    <Compile Include="core\util\SerializableDictionary.cs" />
     <Compile Include="core\util\Shutdown.cs" />
     <Compile Include="core\util\Util.cs" />
     <Compile Include="core\util\VideoUtil.cs" />
