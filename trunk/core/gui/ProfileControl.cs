@@ -115,7 +115,11 @@ namespace MeGUI.core.details.video
             get { try { return impl.avsProfile.SelectedItem.ToString(); } catch (Exception) { return null; } }
             set
             {
-                if (string.IsNullOrEmpty(value)) impl.avsProfile.SelectedIndex = -1;
+                if (string.IsNullOrEmpty(value))
+                {
+                    impl.avsProfile.SelectedIndex = -1;
+                    return;
+                }
                 impl.avsProfile.SelectedItem = value;
                 if (impl.avsProfile.SelectedIndex < 0 || impl.avsProfile.SelectedItem.ToString() != value)
                     throw new ProfileCouldntBeSelectedException(value);

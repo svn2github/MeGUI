@@ -555,7 +555,6 @@ namespace MeGUI
             }
 
             AviSynthJob job = mainForm.JobUtil.generateAvisynthJob(VideoInput);
-            job.Name = "job" + mainForm.Jobs.getFreeJobNumber(); ;
             mainForm.Jobs.addJobsToQueue(job);
         }
     }

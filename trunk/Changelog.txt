@@ -1,3 +1,7 @@
+0.2.6.1001
+Commit by berrinam:
+    - Parallel job execution. See http://mewiki.project357.com/wiki/MeGUI:Parallel_job_execution for details.
+
 0.2.5.1007
 Commit by berrinam:
     - Fixed some profile behaviour bugs in OneClick window

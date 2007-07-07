@@ -53,10 +53,5 @@ namespace MeGUI
         {
             get { return "sub"; }
         }
-
-        public override string FPSString
-        {
-            get { return ""; }
-        }
     }
 }

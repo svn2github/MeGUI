@@ -211,6 +211,7 @@
       <DependentUpon>MuxWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="core\details\PackageSystem.cs" />
+    <Compile Include="core\details\JobWorker.cs" />
     <Compile Include="core\details\ProfileManager.cs" />
     <Compile Include="core\details\StatusUpdate.cs" />
     <Compile Include="core\details\video\VideoCodecSettings.cs" />
@@ -270,6 +271,24 @@
     <Compile Include="core\gui\HelpButton.Designer.cs">
       <DependentUpon>HelpButton.cs</DependentUpon>
     </Compile>
+    <Compile Include="core\gui\IndividualWorkerSummary.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="core\gui\IndividualWorkerSummary.Designer.cs">
+      <DependentUpon>IndividualWorkerSummary.cs</DependentUpon>
+    </Compile>
+    <Compile Include="core\gui\JobQueue.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="core\gui\JobQueue.Designer.cs">
+      <DependentUpon>JobQueue.cs</DependentUpon>
+    </Compile>
+    <Compile Include="core\gui\JobWorkerWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="core\gui\JobWorkerWindow.Designer.cs">
+      <DependentUpon>JobWorkerWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="core\gui\ProfileControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -294,6 +313,12 @@
     </Compile>
     <Compile Include="core\gui\VideoPlayer.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="core\gui\WorkerSummary.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="core\gui\WorkerSummary.Designer.cs">
+      <DependentUpon>WorkerSummary.cs</DependentUpon>
     </Compile>
     <Compile Include="core\gui\ZonesControl.cs">
       <SubType>UserControl</SubType>
@@ -516,6 +541,12 @@
     <Compile Include="MP3Settings.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Settings.cs" />
     <Compile Include="UpdateWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -562,6 +593,18 @@
       <SubType>Designer</SubType>
       <DependentUpon>HelpButton.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="core\gui\IndividualWorkerSummary.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>IndividualWorkerSummary.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="core\gui\JobQueue.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>JobQueue.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="core\gui\JobWorkerWindow.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>JobWorkerWindow.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="core\gui\ProfileControl.resx">
       <DependentUpon>ProfileControl.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -585,6 +628,10 @@
     <EmbeddedResource Include="core\gui\VideoPlayer.resx">
       <DependentUpon>VideoPlayer.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="core\gui\WorkerSummary.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WorkerSummary.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="core\gui\ZonesControl.resx">
       <DependentUpon>ZonesControl.cs</DependentUpon>
@@ -706,11 +753,17 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
     <Folder Include="packages\misc\" />
     <Folder Include="packages\reader\avs\" />
     <Folder Include="packages\tools\avscreator\" />
     <Folder Include="packages\tools\levelvalidator\" />
-    <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

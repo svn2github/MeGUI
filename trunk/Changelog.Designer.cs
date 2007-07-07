@@ -48,12 +48,15 @@ namespace MeGUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(572, 492);
+            this.ClientSize = global::MeGUI.Properties.Settings.Default.ChangelogSize;
             this.Controls.Add(this.txtChangelog);
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
+            this.DataBindings.Add(new System.Windows.Forms.Binding("Location", global::MeGUI.Properties.Settings.Default, "ChangelogLocation", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.DataBindings.Add(new System.Windows.Forms.Binding("ClientSize", global::MeGUI.Properties.Settings.Default, "ChangelogSize", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.DataBindings.Add(new System.Windows.Forms.Binding("WindowState", global::MeGUI.Properties.Settings.Default, "ChangelogWindowState", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.Location = global::MeGUI.Properties.Settings.Default.ChangelogLocation;
             this.Name = "Changelog";
             this.Text = "Changelog";
+            this.WindowState = global::MeGUI.Properties.Settings.Default.ChangelogWindowState;
             this.Resize += new System.EventHandler(this.Changelog_Resize);
             this.Load += new System.EventHandler(this.Changelog_Load);
             this.ResumeLayout(false);

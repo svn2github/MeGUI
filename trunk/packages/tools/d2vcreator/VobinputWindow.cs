@@ -501,8 +501,6 @@ namespace MeGUI
 				if (!dialogMode)
 				{
 					IndexJob job = generateIndexJob();
-					int jobNumber = mainForm.Jobs.getFreeJobNumber();
-					job.Name = "job" + jobNumber;
                     lastJob = job;
 					mainForm.Jobs.addJobsToQueue(job);
 					if (this.closeOnQueue.Checked)

@@ -39,10 +39,5 @@ namespace MeGUI
         {
             get { return "avs"; }
         }
-
-        public override string FPSString
-        {
-            get { return FPS.ToString("##.##"); }
-        }
     }
 }

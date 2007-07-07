@@ -39,7 +39,7 @@ namespace MeGUI
 	public class ProgressWindow : System.Windows.Forms.Form
     {
         #region variables
-        public event WindowClosedCallback WindowClosed; // event fired if the window closes
+//        public event WindowClosedCallback WindowClosed; // event fired if the window closes
 		public event AbortCallback Abort; // event fired if the abort button has been pressed
 		public event PriorityChangedCallback PriorityChanged; // event fired if the priority dropdown has changed
 		private System.Windows.Forms.Label currentVideoFrameLabel;
@@ -104,11 +104,11 @@ namespace MeGUI
             {
                 e.Cancel = true;
                 this.Hide();
-                WindowClosed(true);
+//                WindowClosed(true);
             }
             else
             {
-                WindowClosed(false);
+//                WindowClosed(false);
                 base.OnClosing(e);
             }
         }
@@ -532,13 +532,19 @@ namespace MeGUI
 			}
 		}
          * */
+
+        private bool isSettingPriority = false;
         /// <summary>
         /// sets the priority
         /// </summary>
         /// <param name="priority"></param>
         public void setPriority(ProcessPriority priority)
         {
-            this.priority.SelectedIndex = (int)priority;
+            Util.ThreadSafeRun(this.priority, delegate {
+                isSettingPriority = true;
+                this.priority.SelectedIndex = (int)priority;
+                isSettingPriority = false;
+            });
         }
         #endregion
         #region events
@@ -550,9 +556,7 @@ namespace MeGUI
 		/// <param name="e"></param>
 		private void abortButton_Click(object sender, System.EventArgs e)
 		{
-			DialogResult dr = MessageBox.Show("Are you sure you want to abort encoding?", "Are you sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-			if (dr == DialogResult.Yes)
-				Abort();
+		    Abort();
 		}
 		/// <summary>
 		/// handles changes in the priority dropdwon
@@ -561,7 +565,7 @@ namespace MeGUI
 		/// <param name="e"></param>
         private void priority_SelectedIndexChanged(object sender, System.EventArgs e)
         {
-            if (PriorityChanged != null)
+            if (PriorityChanged != null && !isSettingPriority)
             {
                 PriorityChanged((ProcessPriority)priority.SelectedIndex);
             }

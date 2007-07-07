@@ -99,10 +99,5 @@ namespace MeGUI
         {
             get { return "idx"; }
         }
-
-        public override string FPSString
-        {
-            get { return ""; }
-        }
     }
 }

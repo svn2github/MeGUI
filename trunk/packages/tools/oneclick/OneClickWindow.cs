@@ -540,9 +540,7 @@ namespace MeGUI
                 dpp.VideoSettings = VideoSettings.clone();
                 IndexJob job = mainForm.JobUtil.generateIndexJob(this.input.Filename, d2vName, 1,
                     track1.SelectedIndex, track2.SelectedIndex, dpp);
-                int jobNumber = mainForm.Jobs.getFreeJobNumber();
-                job.Name = "job" + jobNumber;
-                mainForm.Jobs.addJobsToQueue((Job)job);
+                mainForm.Jobs.addJobsToQueue(job);
                 this.Close();
             }
             else

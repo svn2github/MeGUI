@@ -51,11 +51,6 @@ namespace MeGUI.packages.tools.besplitter
             get { return "join"; }
         }
 
-        public override string FPSString
-        {
-            get { return ""; }
-        }
-
         public override JobTypes JobType
         {
             get { return JobTypes.CUT; }

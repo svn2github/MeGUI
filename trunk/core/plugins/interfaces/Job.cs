@@ -22,9 +22,55 @@ using System.Xml.Serialization;
 using System.Collections.Generic;
 using MeGUI.core.plugins.interfaces;
 using MeGUI.packages.tools.besplitter;
+using MeGUI.core.util;
+using System.Diagnostics;
 
 namespace MeGUI
 {
+    public class JobID
+    {
+        private static readonly Random gen = new Random();
+
+        private string name;
+        public string Name
+        {
+            get { return name; }
+        }
+        private int uniqueID;
+        public int UniqueID
+        {
+            get { return uniqueID; }
+        }
+
+        public JobID(string name)
+        {
+            for (int i = 0; i < name.Length; i++)
+                if (!(Char.IsLetterOrDigit(name[i]) || name[i] == '_'))
+                    throw new MeGUIException("The name must be alphanumeric, including underscores.");
+            
+            this.name = name;
+            this.uniqueID = gen.Next();
+        }
+
+        public override string ToString()
+        {
+            return name + " " + uniqueID.ToString();
+        }
+
+        public override bool Equals(object obj)
+        {
+            JobID other = obj as JobID;
+            if (other == null) return false;
+
+            return (name == other.name && uniqueID == other.uniqueID);
+        }
+
+        public override int GetHashCode()
+        {
+            return ToString().GetHashCode();
+        }
+    }
+
 	public enum ProcessPriority: int {IDLE=0, NORMAL, HIGH};
 	public enum JobTypes: int {VIDEO=0, AUDIO, MUX, MERGE, INDEX, AVS, VOBSUB, CUT};
     public enum JobStatus: int {WAITING = 0, PROCESSING, POSTPONED, ERROR, ABORTED, DONE, SKIP };
@@ -38,15 +84,59 @@ namespace MeGUI
     XmlInclude(typeof(SubtitleIndexJob)), XmlInclude(typeof(AudioSplitJob)), XmlInclude(typeof(AudioJoinJob))]
 	public abstract class Job
 	{
-        private int position;
         private ProcessPriority priority;
         private JobStatus status;
 		private DateTime start, end; // time the job was started / ended
 		private string input, output, name; //name of the input and output for this job
         private Job next, previous;
         private string commandline;
-		private double fps;
         private List<string> filesToDelete = new List<string>();
+        
+        private string owningWorker;
+
+        public string OwningWorker
+        {
+            get { return owningWorker; }
+            set { owningWorker = value; }
+        }
+
+
+        private List<string> requiredJobNames;
+
+
+        public void AddDependency(Job other)
+        {
+            // we can't have each job depending on the other
+            Debug.Assert(!other.RequiredJobs.Contains(this));
+            RequiredJobs.Add(other);
+            other.EnabledJobs.Add(this);
+        }
+
+        /// <summary>
+        /// List of jobs which need to be completed before this can be processed
+        /// </summary>
+        public List<string> RequiredJobNames
+        {
+            get { return requiredJobNames; }
+            set { requiredJobNames = value; }
+        }
+
+        private List<string> enabledJobNames;
+        /// <summary>
+        /// List of jobs which completing this job enables
+        /// </summary>
+        public List<string> EnabledJobNames
+        {
+            get { return enabledJobNames; }
+            set { enabledJobNames = value; }
+        }
+
+        [XmlIgnore]
+        public List<Job> EnabledJobs = new List<Job>();
+
+        [XmlIgnore]
+        public List<Job> RequiredJobs = new List<Job>();
+
 
         /// <summary>
         /// List of files to delete when this job is successfullly completed.
@@ -65,7 +155,6 @@ namespace MeGUI
 		public Job()
 		{
             status = JobStatus.WAITING;
-			position = 1000000;
 			input = "";
 			output = "";
 			next = null;
@@ -83,16 +172,13 @@ namespace MeGUI
             get;
         }
 
-        public abstract string FPSString
-        {
-            get;
-        }
-
         public abstract JobTypes JobType
         {
             get;
         }
 
+        public string EncodingSpeed = "";
+	
         /// <summary>
         /// the source file for this job
         /// </summary>
@@ -118,29 +204,12 @@ namespace MeGUI
 			set {name = value;}
 		}
 		/// <summary>
-		/// priority of the job, 0 = low, 1 = normal
-		/// </summary>
-        public ProcessPriority Priority
-		{
-			get {return priority;}
-			set {priority = value;}
-		}
-		/// <summary>
 		/// status of the job
 		/// </summary>
 		public JobStatus Status
 		{
 			get {return status;}
 			set {status = value;}
-		}
-		/// <summary>
-		/// position of this job in the job queue in the GUI
-		/// used to put the job at the proper position once the GUI is restarted
-		/// </summary>
-		public int Position
-		{
-			get {return position;}
-			set {position = value;}
 		}
 		/// <summary>
 		/// time the job was started
@@ -157,15 +226,6 @@ namespace MeGUI
 		{
 			get {return end;}
 			set {end = value;}
-		}
-		/// <summary>
-		/// average fps of the job
-		/// only available if the job has been completed or aborted
-		/// </summary>
-		public double FPS
-		{
-			get {return fps;}
-			set {fps = value;}
 		}
         private string nextJobName;
 

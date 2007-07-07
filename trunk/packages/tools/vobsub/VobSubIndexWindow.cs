@@ -71,8 +71,6 @@ namespace MeGUI
                 if (!dialogMode)
                 {
                     SubtitleIndexJob job = generateJob();
-                    int jobNumber = mainForm.Jobs.getFreeJobNumber();
-                    job.Name = "job" + jobNumber;
                     mainForm.Jobs.addJobsToQueue(job);
                     if (this.closeOnQueue.Checked)
                         this.Close();

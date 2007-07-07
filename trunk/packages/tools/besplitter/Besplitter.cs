@@ -77,10 +77,8 @@ namespace MeGUI.packages.tools.besplitter
             join.FilesToDelete.AddRange(evens);
             // generate the join commandline later
 
-            int number = info.Jobs.getFreeJobNumber();
-            split.Name = "job" + number + "-1";
-            join.Name = "job" + number + "-2";
             join.ClipLength = TimeSpan.FromSeconds((double)c.TotalFrames / c.Framerate);
+            join.AddDependency(split);
             info.Jobs.addJobsToQueue(split, join);
             this.Dispose();
         }

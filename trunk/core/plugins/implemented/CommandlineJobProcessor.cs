@@ -140,7 +140,7 @@ namespace MeGUI
                 readFromStdOutThread.Start();
                 readFromStdErrThread.Start();
                 new System.Windows.Forms.MethodInvoker(this.RunStatusCycle).BeginInvoke(null, null);
-                this.changePriority(job.Priority);
+                this.changePriority(MainForm.Instance.Settings.DefaultPriority);
             }
             catch (Exception e)
             {
@@ -154,6 +154,7 @@ namespace MeGUI
             {
                 try
                 {
+                    mre.Set(); // if it's paused, then unpause
                     su.WasAborted = true;
                     proc.Kill();
                     return;

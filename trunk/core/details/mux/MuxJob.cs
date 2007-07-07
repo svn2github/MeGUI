@@ -65,11 +65,6 @@ namespace MeGUI
             get { return "mux"; }
         }
 
-        public override string FPSString
-        {
-            get { return ""; }
-        }
-
         public override JobTypes JobType
         {
             get { return JobTypes.MUX; }

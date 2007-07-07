@@ -845,7 +845,7 @@ namespace MeGUI
             string videoOutput = video.Output;
             logBuilder.Append(eliminatedDuplicateFilenames(ref videoOutput, ref muxedOutput, audioStreams));
             video.Output = videoOutput;
-            int freeJobNumber = this.mainForm.Jobs.getFreeJobNumber();
+
             VideoJob[] vjobs = jobUtil.prepareVideoJob(video.Input, video.Output, video.Settings, video.ParX, video.ParY, prerender, true);
             List<Job> jobs = new List<Job>();
 
@@ -904,16 +904,25 @@ namespace MeGUI
                     lastJob.FilesToDelete.Add(vjobs[vjobs.Length - 1].Output);
 
                 int index = 0;
+                List<Job> aJobs = new List<Job>();
                 foreach (AudioStream astream in audioStreams) // generate audio encoding jobs
                 {
                     AudioJob jo = jobUtil.generateAudioJob(astream);
-                    jobs.Add(jo);
+                    aJobs.Add(jo);
                     lastJob.FilesToDelete.Add(jo.Output);
                     index++;
                 }
                 index = 0;
+                
                 jobs.AddRange(vjobs);
+                jobs.AddRange(aJobs);
+                
+                foreach (Job mJob in muxJobs)
+                    foreach (Job job in jobs)
+                        mJob.AddDependency(job);
+
                 jobs.AddRange(muxJobs);
+
                 /*
                 foreach (VideoJob job in vjobs)
                 {
@@ -924,19 +933,6 @@ namespace MeGUI
                     jobs.Add(job);
                 }
                  */
-                Job prevJob = null;
-                int number = 1;
-                foreach (Job job in jobs)
-                {
-                    job.Name = "job" + freeJobNumber + "-" + number;
-                    if (prevJob != null)
-                    {
-                        job.Previous = prevJob;
-                        prevJob.Next = job;
-                    }
-                    number++;
-                    prevJob = job;
-                }
 
                 int bitrateKBits = 0;
                 if (desiredSizeBytes > 0) // We have a target filesize

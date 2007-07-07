@@ -368,7 +368,6 @@ namespace MeGUI
 			}
 			job.NumberOfFrames = nbOfFrames;
 			job.Framerate = framerate;
-			job.Priority = mainForm.Settings.DefaultPriority;
             job.Commandline = CommandLineGenerator.generateVideoCommandline(job.Settings, input, output, parX, parY);
 			return job;
 		}
@@ -398,7 +397,6 @@ namespace MeGUI
 			job.Output = stream.output;
             job.CutFile = stream.cutlist;
 			job.Settings = stream.settings;
-			job.Priority = mainForm.Settings.DefaultPriority;
 			// job.Commandline = CommandLineGenerator.generateAudioCommandline(mainForm.Settings, job.Settings, job.Input, job.Output); // no longer necessary
 			return job;
 		}
@@ -435,7 +433,6 @@ namespace MeGUI
                 mjob.NbOfBFrames = video.Settings.NbBframes;
                 mjob.Codec = video.Settings.Codec.ToString();
                 mjob.Settings.Framerate = video.Framerate;
-                mjob.Priority = this.mainForm.Settings.DefaultPriority;
 
                 string tempOutputName = Path.Combine(Path.GetDirectoryName(output),
                     Path.GetFileNameWithoutExtension(output) + tempNumber + ".");
@@ -511,6 +508,10 @@ namespace MeGUI
                 mjob.MuxType = mpl.muxerInterface.MuxerType;
                 mjob.Commandline = CommandLineGenerator.generateMuxCommandline(mjob.Settings, mjob.MuxType, mainForm);
             }
+
+            for (int i = 1; i < jobs.Count; i++)
+                jobs[i].AddDependency(jobs[i - 1]);
+
             return jobs.ToArray();
         }
 /*		/// <summary>
@@ -563,8 +564,6 @@ namespace MeGUI
             AudioJob job = this.generateAudioJob(stream);
             if (job != null)
             {
-                int freeJobNumber = this.mainForm.Jobs.getFreeJobNumber();
-                job.Name = "job" + freeJobNumber;
                 this.mainForm.Jobs.addJobsToQueue(job);
                 return true;
             }
@@ -579,10 +578,10 @@ namespace MeGUI
             VideoJob[] jobs = prepareVideoJob(movieInput, movieOutput, settings, parX, parY, prerender, checkVideo);
             if (jobs == null)
                 return false;
-            int freeJobNumber = this.mainForm.Jobs.getFreeJobNumber();
             if (jobs.Length > 0)
             {
-                if (jobs.Length > 1) // complex naming
+                mainForm.Jobs.addJobsToQueue(jobs);
+/*                if (jobs.Length > 1) // complex naming
                 {
                     Job prevJob = null;
                     int number = 1;
@@ -603,7 +602,7 @@ namespace MeGUI
                 {
                     jobs[0].Name = "job" + freeJobNumber;
                     this.mainForm.Jobs.addJobsToQueue(jobs[0]);
-                }
+                }*/
                 return true;
             }
             return false;
@@ -725,6 +724,11 @@ namespace MeGUI
                 if (middlepass != null) // we have a middle pass
                     jobList.Add(middlepass);
                 jobList.Add(job);
+
+                for (int i = 1; i < jobList.Count; i++)
+                {
+                    jobList[i].AddDependency(jobList[i - 1]);
+                }
                 return jobList.ToArray();
 			}
 			return null;
@@ -742,7 +746,6 @@ namespace MeGUI
 			job.Framerate = oldJob.Framerate;
 			job.OutputType = oldJob.OutputType;
 			job.Output = oldJob.Output;
-			job.Priority = oldJob.Priority;
 			job.Settings = oldJob.Settings.clone();
 			return job;
 		}

@@ -32,8 +32,10 @@ using System.Text;
 using MeGUI.core.details;
 using MeGUI.core.plugins.interfaces;
 using System.Reflection;
+using MeGUI.core.util;
 using MeGUI.packages.tools.cutter;
 using MeGUI.packages.tools.besplitter;
+using MeGUI.core.gui;
 
 namespace MeGUI
 {
@@ -71,7 +73,7 @@ namespace MeGUI
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
         private System.Windows.Forms.MenuItem mnuView;
-        private System.Windows.Forms.MenuItem mnuViewProcessStatus;
+        private System.Windows.Forms.MenuItem progressMenu;
         private MenuItem mnuViewMinimizeToTray;
         private NotifyIcon trayIcon;
         private System.Windows.Forms.MenuItem mnuMuxers;
@@ -79,10 +81,6 @@ namespace MeGUI
         private ContextMenuStrip trayMenu;
         private ToolStripMenuItem openMeGUIToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator1;
-        private ToolStripMenuItem startToolStripMenuItem;
-        private ToolStripMenuItem pauseToolStripMenuItem;
-        private ToolStripMenuItem abortToolStripMenuItem;
-        private ToolStripSeparator toolStripSeparator2;
         private ToolStripMenuItem exitMeGUIToolStripMenuItem;
         private MenuItem mnuFileImport;
         private MenuItem mnuFileExport;
@@ -103,8 +101,46 @@ namespace MeGUI
         private Button resetButton;
         private CheckBox autoscroll;
         private MeGUI.core.gui.HelpButton helpButton1;
+        private MenuItem menuItem1;
+        private MenuItem createNewWorker;
+        private MenuItem menuItem6;
+        private MenuItem workersMenu;
+        private MenuItem showAllWorkers;
+        private MenuItem hideAllWorkers;
+        private MenuItem separator;
+        private MenuItem menuItem2;
+        private MenuItem viewSummary;
+        private MenuItem showAllProgressWindows;
+        private MenuItem hideAllProgressWindows;
+        private MenuItem separator2;
+        private MenuItem menuItem7;
         private MenuItem mnuHelpLink;
 
+        private List<Form> allForms = new List<Form>();
+        private MenuItem menuItem3;
+        private List<Form> formsToReopen = new List<Form>();
+
+        public bool IsHiddenMode { get { return trayIcon.Visible; } }
+
+        public void RegisterForm(Form f)
+        {
+/*            allForms.Add(f);
+            f.VisibleChanged += new EventHandler(delegate(object sender, EventArgs e) {
+                Form f2 = (Form)sender;
+
+                if (f2.IsDisposed)
+                {
+                    if (allForms.Contains(f2))
+                        allForms.Remove(f2);
+                    if (formsToReopen.Contains(f2))
+                        formsToReopen.Remove(f2);
+                } 
+                
+                if (f2.Visible && IsHiddenMode)
+                    f2.Visible = false;
+
+            });*/
+        }
 
         public void DeleteOnClosing(string file)
         {
@@ -143,8 +179,21 @@ namespace MeGUI
             this.mnuFileExport = new System.Windows.Forms.MenuItem();
             this.mnuFileExit = new System.Windows.Forms.MenuItem();
             this.mnuView = new System.Windows.Forms.MenuItem();
-            this.mnuViewProcessStatus = new System.Windows.Forms.MenuItem();
+            this.progressMenu = new System.Windows.Forms.MenuItem();
+            this.showAllProgressWindows = new System.Windows.Forms.MenuItem();
+            this.hideAllProgressWindows = new System.Windows.Forms.MenuItem();
+            this.separator2 = new System.Windows.Forms.MenuItem();
+            this.menuItem7 = new System.Windows.Forms.MenuItem();
             this.mnuViewMinimizeToTray = new System.Windows.Forms.MenuItem();
+            this.menuItem1 = new System.Windows.Forms.MenuItem();
+            this.createNewWorker = new System.Windows.Forms.MenuItem();
+            this.menuItem6 = new System.Windows.Forms.MenuItem();
+            this.workersMenu = new System.Windows.Forms.MenuItem();
+            this.showAllWorkers = new System.Windows.Forms.MenuItem();
+            this.hideAllWorkers = new System.Windows.Forms.MenuItem();
+            this.separator = new System.Windows.Forms.MenuItem();
+            this.menuItem2 = new System.Windows.Forms.MenuItem();
+            this.viewSummary = new System.Windows.Forms.MenuItem();
             this.mnuTools = new System.Windows.Forms.MenuItem();
             this.mnuToolsSettings = new System.Windows.Forms.MenuItem();
             this.mnuHelp = new System.Windows.Forms.MenuItem();
@@ -157,15 +206,12 @@ namespace MeGUI
             this.trayMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.openMeGUIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.startToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.pauseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.abortToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.exitMeGUIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.audioEncodingComponent1 = new MeGUI.AudioEncodingComponent();
             this.videoEncodingComponent1 = new MeGUI.VideoEncodingComponent();
             this.jobControl1 = new MeGUI.core.details.JobControl();
+            this.menuItem3 = new System.Windows.Forms.MenuItem();
             this.tabControl1.SuspendLayout();
             this.inputTab.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
@@ -184,8 +230,8 @@ namespace MeGUI
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(466, 390);
-            this.tabControl1.TabIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(508, 385);
+            this.tabControl1.TabIndex = 55;
             // 
             // inputTab
             // 
@@ -195,7 +241,7 @@ namespace MeGUI
             this.inputTab.Controls.Add(this.videoEncodingComponent1);
             this.inputTab.Location = new System.Drawing.Point(4, 22);
             this.inputTab.Name = "inputTab";
-            this.inputTab.Size = new System.Drawing.Size(458, 364);
+            this.inputTab.Size = new System.Drawing.Size(500, 359);
             this.inputTab.TabIndex = 0;
             this.inputTab.Text = "Input";
             // 
@@ -208,9 +254,9 @@ namespace MeGUI
             this.flowLayoutPanel2.Controls.Add(this.helpButton1);
             this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.flowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 335);
+            this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 330);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-            this.flowLayoutPanel2.Size = new System.Drawing.Size(458, 29);
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(500, 29);
             this.flowLayoutPanel2.TabIndex = 9;
             // 
             // autoEncodeButton
@@ -219,7 +265,7 @@ namespace MeGUI
             this.autoEncodeButton.AutoSize = true;
             this.autoEncodeButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.autoEncodeButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.autoEncodeButton.Location = new System.Drawing.Point(380, 3);
+            this.autoEncodeButton.Location = new System.Drawing.Point(422, 3);
             this.autoEncodeButton.Name = "autoEncodeButton";
             this.autoEncodeButton.Size = new System.Drawing.Size(75, 23);
             this.autoEncodeButton.TabIndex = 8;
@@ -232,7 +278,7 @@ namespace MeGUI
             this.resetButton.AutoSize = true;
             this.resetButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.resetButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.resetButton.Location = new System.Drawing.Point(329, 3);
+            this.resetButton.Location = new System.Drawing.Point(371, 3);
             this.resetButton.Name = "resetButton";
             this.resetButton.Size = new System.Drawing.Size(45, 23);
             this.resetButton.TabIndex = 7;
@@ -244,7 +290,7 @@ namespace MeGUI
             this.tabPage2.Controls.Add(this.jobControl1);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Size = new System.Drawing.Size(458, 367);
+            this.tabPage2.Size = new System.Drawing.Size(500, 359);
             this.tabPage2.TabIndex = 12;
             this.tabPage2.Text = "Queue";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -255,7 +301,7 @@ namespace MeGUI
             this.logTab.Controls.Add(this.flowLayoutPanel1);
             this.logTab.Location = new System.Drawing.Point(4, 22);
             this.logTab.Name = "logTab";
-            this.logTab.Size = new System.Drawing.Size(458, 367);
+            this.logTab.Size = new System.Drawing.Size(500, 359);
             this.logTab.TabIndex = 10;
             this.logTab.Text = "Log";
             this.logTab.UseVisualStyleBackColor = true;
@@ -268,7 +314,7 @@ namespace MeGUI
             this.log.Name = "log";
             this.log.ReadOnly = true;
             this.log.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.log.Size = new System.Drawing.Size(458, 338);
+            this.log.Size = new System.Drawing.Size(500, 330);
             this.log.TabIndex = 0;
             // 
             // flowLayoutPanel1
@@ -280,7 +326,7 @@ namespace MeGUI
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(458, 29);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(500, 29);
             this.flowLayoutPanel1.TabIndex = 1;
             // 
             // clearLogButton
@@ -306,7 +352,6 @@ namespace MeGUI
             this.autoscroll.TabIndex = 3;
             this.autoscroll.Text = "AutoScroll";
             this.autoscroll.UseVisualStyleBackColor = true;
-            this.autoscroll.CheckedChanged += new System.EventHandler(this.autoscroll_CheckedChanged);
             // 
             // mnuMuxers
             // 
@@ -326,6 +371,7 @@ namespace MeGUI
             this.mainMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.mnuFile,
             this.mnuView,
+            this.menuItem1,
             this.mnuTools,
             this.mnuHelp});
             // 
@@ -371,16 +417,42 @@ namespace MeGUI
             // 
             this.mnuView.Index = 1;
             this.mnuView.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.mnuViewProcessStatus,
+            this.progressMenu,
             this.mnuViewMinimizeToTray});
             this.mnuView.Text = "&View";
             this.mnuView.Popup += new System.EventHandler(this.mnuView_Popup);
             // 
-            // mnuViewProcessStatus
+            // progressMenu
             // 
-            this.mnuViewProcessStatus.Index = 0;
-            this.mnuViewProcessStatus.Text = "&Process Status";
-            this.mnuViewProcessStatus.Click += new System.EventHandler(this.mnuViewProcessStatus_Click);
+            this.progressMenu.Index = 0;
+            this.progressMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.showAllProgressWindows,
+            this.hideAllProgressWindows,
+            this.separator2,
+            this.menuItem7});
+            this.progressMenu.Text = "&Process Status";
+            // 
+            // showAllProgressWindows
+            // 
+            this.showAllProgressWindows.Index = 0;
+            this.showAllProgressWindows.Text = "Show all";
+            this.showAllProgressWindows.Click += new System.EventHandler(this.showAllProgressWindows_Click);
+            // 
+            // hideAllProgressWindows
+            // 
+            this.hideAllProgressWindows.Index = 1;
+            this.hideAllProgressWindows.Text = "Hide all";
+            this.hideAllProgressWindows.Click += new System.EventHandler(this.hideAllProgressWindows_Click);
+            // 
+            // separator2
+            // 
+            this.separator2.Index = 2;
+            this.separator2.Text = "-";
+            // 
+            // menuItem7
+            // 
+            this.menuItem7.Index = 3;
+            this.menuItem7.Text = "(List of progress windows goes here)";
             // 
             // mnuViewMinimizeToTray
             // 
@@ -389,9 +461,70 @@ namespace MeGUI
             this.mnuViewMinimizeToTray.Text = "&Minimize to Tray";
             this.mnuViewMinimizeToTray.Click += new System.EventHandler(this.mnuViewMinimizeToTray_Click);
             // 
+            // menuItem1
+            // 
+            this.menuItem1.Index = 2;
+            this.menuItem1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.createNewWorker,
+            this.menuItem6,
+            this.workersMenu,
+            this.viewSummary});
+            this.menuItem1.Text = "Workers";
+            this.menuItem1.Popup += new System.EventHandler(this.showAllWorkers_Popup);
+            // 
+            // createNewWorker
+            // 
+            this.createNewWorker.Index = 0;
+            this.createNewWorker.Text = "Create new worker";
+            this.createNewWorker.Click += new System.EventHandler(this.createNewWorker_Click);
+            // 
+            // menuItem6
+            // 
+            this.menuItem6.Index = 1;
+            this.menuItem6.Text = "-";
+            // 
+            // workersMenu
+            // 
+            this.workersMenu.Index = 2;
+            this.workersMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.showAllWorkers,
+            this.hideAllWorkers,
+            this.separator,
+            this.menuItem2,
+            this.menuItem3});
+            this.workersMenu.Text = "Workers";
+            // 
+            // showAllWorkers
+            // 
+            this.showAllWorkers.Index = 0;
+            this.showAllWorkers.Text = "Show all";
+            this.showAllWorkers.Click += new System.EventHandler(this.showAllWorkers_Click);
+            // 
+            // hideAllWorkers
+            // 
+            this.hideAllWorkers.Index = 1;
+            this.hideAllWorkers.Text = "Hide all";
+            this.hideAllWorkers.Click += new System.EventHandler(this.hideAllWorkers_Click);
+            // 
+            // separator
+            // 
+            this.separator.Index = 2;
+            this.separator.Text = "-";
+            // 
+            // menuItem2
+            // 
+            this.menuItem2.Index = 3;
+            this.menuItem2.Text = "(List of workers goes here)";
+            // 
+            // viewSummary
+            // 
+            this.viewSummary.Index = 3;
+            this.viewSummary.Text = "Worker summary";
+            this.viewSummary.Click += new System.EventHandler(this.viewSummary_Click);
+            // 
             // mnuTools
             // 
-            this.mnuTools.Index = 2;
+            this.mnuTools.Index = 3;
             this.mnuTools.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.mnuMuxers,
             this.mnuToolsSettings});
@@ -407,7 +540,7 @@ namespace MeGUI
             // 
             // mnuHelp
             // 
-            this.mnuHelp.Index = 3;
+            this.mnuHelp.Index = 4;
             this.mnuHelp.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.mnuChangelog,
             this.mnuGuide,
@@ -445,13 +578,9 @@ namespace MeGUI
             this.trayMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openMeGUIToolStripMenuItem,
             this.toolStripSeparator1,
-            this.startToolStripMenuItem,
-            this.pauseToolStripMenuItem,
-            this.abortToolStripMenuItem,
-            this.toolStripSeparator2,
             this.exitMeGUIToolStripMenuItem});
             this.trayMenu.Name = "trayMenu";
-            this.trayMenu.Size = new System.Drawing.Size(136, 126);
+            this.trayMenu.Size = new System.Drawing.Size(136, 54);
             // 
             // openMeGUIToolStripMenuItem
             // 
@@ -465,29 +594,6 @@ namespace MeGUI
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(132, 6);
             // 
-            // startToolStripMenuItem
-            // 
-            this.startToolStripMenuItem.Name = "startToolStripMenuItem";
-            this.startToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
-            this.startToolStripMenuItem.Text = "Start";
-            // 
-            // pauseToolStripMenuItem
-            // 
-            this.pauseToolStripMenuItem.Name = "pauseToolStripMenuItem";
-            this.pauseToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
-            this.pauseToolStripMenuItem.Text = "Pause";
-            // 
-            // abortToolStripMenuItem
-            // 
-            this.abortToolStripMenuItem.Name = "abortToolStripMenuItem";
-            this.abortToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
-            this.abortToolStripMenuItem.Text = "Abort";
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(132, 6);
-            // 
             // exitMeGUIToolStripMenuItem
             // 
             this.exitMeGUIToolStripMenuItem.Name = "exitMeGUIToolStripMenuItem";
@@ -500,7 +606,7 @@ namespace MeGUI
             this.helpButton1.ArticleName = "Main window#Input";
             this.helpButton1.AutoSize = true;
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.helpButton1.Location = new System.Drawing.Point(285, 3);
+            this.helpButton1.Location = new System.Drawing.Point(327, 3);
             this.helpButton1.Name = "helpButton1";
             this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 9;
@@ -513,7 +619,7 @@ namespace MeGUI
             this.audioEncodingComponent1.Location = new System.Drawing.Point(0, 153);
             this.audioEncodingComponent1.MinimumSize = new System.Drawing.Size(400, 162);
             this.audioEncodingComponent1.Name = "audioEncodingComponent1";
-            this.audioEncodingComponent1.Size = new System.Drawing.Size(458, 179);
+            this.audioEncodingComponent1.Size = new System.Drawing.Size(500, 179);
             this.audioEncodingComponent1.TabIndex = 8;
             // 
             // videoEncodingComponent1
@@ -524,7 +630,7 @@ namespace MeGUI
             this.videoEncodingComponent1.MinimumSize = new System.Drawing.Size(415, 153);
             this.videoEncodingComponent1.Name = "videoEncodingComponent1";
             this.videoEncodingComponent1.PrerenderJob = false;
-            this.videoEncodingComponent1.Size = new System.Drawing.Size(458, 153);
+            this.videoEncodingComponent1.Size = new System.Drawing.Size(500, 153);
             this.videoEncodingComponent1.TabIndex = 7;
             this.videoEncodingComponent1.VideoInput = "";
             this.videoEncodingComponent1.VideoOutput = "";
@@ -535,22 +641,27 @@ namespace MeGUI
             this.jobControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.jobControl1.Location = new System.Drawing.Point(0, 0);
             this.jobControl1.Name = "jobControl1";
-            this.jobControl1.Size = new System.Drawing.Size(458, 367);
+            this.jobControl1.Size = new System.Drawing.Size(500, 359);
             this.jobControl1.TabIndex = 0;
-            this.jobControl1.Load += new System.EventHandler(this.jobControl1_Load);
+            // 
+            // menuItem3
+            // 
+            this.menuItem3.Index = 4;
+            this.menuItem3.Text = "ao";
             // 
             // MainForm
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(466, 390);
+            this.ClientSize = new System.Drawing.Size(508, 385);
             this.Controls.Add(this.tabControl1);
+            this.DataBindings.Add(new System.Windows.Forms.Binding("Location", global::MeGUI.Properties.Settings.Default, "MainFormLocation", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Location = global::MeGUI.Properties.Settings.Default.MainFormLocation;
             this.Menu = this.mainMenu1;
             this.Name = "MainForm";
-            this.DragDrop += new System.Windows.Forms.DragEventHandler(this.MeGUI_DragDrop);
-            this.DragEnter += new System.Windows.Forms.DragEventHandler(this.MeGUI_DragEnter);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
             this.Load += new System.EventHandler(this.MeGUI_Load);
             this.tabControl1.ResumeLayout(false);
             this.inputTab.ResumeLayout(false);
@@ -602,7 +713,7 @@ namespace MeGUI
         {
             Instance = this;
             InitializeComponent();
-
+            Util.SetSize(this, MeGUI.Properties.Settings.Default.MainFormSize, MeGUI.Properties.Settings.Default.MainFormWindowState);
             System.Reflection.Assembly myAssembly = this.GetType().Assembly;
             string name = this.GetType().Namespace + ".";
 #if CSC
@@ -627,20 +738,8 @@ namespace MeGUI
         }
         public bool ProcessStatusChecked
         {
-            get { return mnuViewProcessStatus.Checked; }
-            set { mnuViewProcessStatus.Checked = value; }
-        }
-        public ToolStripMenuItem PauseMenuItemTS
-        {
-            get { return pauseToolStripMenuItem; }
-        }
-        public ToolStripMenuItem StartStopMenuItemTS
-        {
-            get { return startToolStripMenuItem; }
-        }
-        public ToolStripMenuItem AbortMenuItemTS
-        {
-            get { return abortToolStripMenuItem; }
+            get { return progressMenu.Checked; }
+            set { progressMenu.Checked = value; }
         }
         public VideoEncodingComponent Video
         {
@@ -679,13 +778,13 @@ namespace MeGUI
         /// <param name="e"></param>
         protected override void OnClosing(CancelEventArgs e)
         {
-            if (jobControl1.IsEncoding)
+            if (jobControl1.IsAnyWorkerEncoding)
             {
                 DialogResult dr = MessageBox.Show("Are you sure you want to quit?", "Job in progress", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                 if (dr == DialogResult.No)
                     e.Cancel = true; // abort closing
                 else
-                    jobControl1.Abort();
+                    jobControl1.AbortAll();
             }
             if (!e.Cancel)
             {
@@ -925,12 +1024,15 @@ namespace MeGUI
         public void addToLog(string logEntry)
         {
             logBuilder.Append(logEntry);
-            this.log.Text = logBuilder.ToString();
-            if (Settings.AutoScrollLog)
+            Util.ThreadSafeRun(log, delegate
             {
-                log.Select(log.Text.Length - 1, 0);
-                log.ScrollToCaret();
-            }
+                this.log.Text = logBuilder.ToString();
+                if (Settings.AutoScrollLog)
+                {
+                    log.Select(log.Text.Length - 1, 0);
+                    log.ScrollToCaret();
+                }
+            });
         }
         /// <summary>
         /// saves the whole content of the log into a logfile
@@ -1002,8 +1104,15 @@ namespace MeGUI
         }
         private void mnuViewMinimizeToTray_Click(object sender, EventArgs e)
         {
-            Jobs.HideProcessWindow();
-            this.Hide();
+            formsToReopen.Clear();
+            foreach (Form f in allForms)
+            {
+                if (f.Visible)
+                {
+                    formsToReopen.Add(f);
+                    f.Hide();
+                }
+            }
             trayIcon.Visible = true;
         }
 
@@ -1048,8 +1157,6 @@ namespace MeGUI
                 if (mw.ShowDialog() == DialogResult.OK)
                 {
                     MuxJob job = mw.Job;
-                    int freeJobNumber = Jobs.getFreeJobNumber();
-                    job.Name = "job" + freeJobNumber;
                     Jobs.addJobsToQueue(job);
                 }
             }
@@ -1057,17 +1164,47 @@ namespace MeGUI
 
         private void mnuView_Popup(object sender, System.EventArgs e)
         {
-            if (Jobs.ProcessWindowAccessible)
+            List<Pair<string, bool>> workers = Jobs.ListProgressWindows();
+            progressMenu.MenuItems.Clear();
+            progressMenu.MenuItems.Add(showAllProgressWindows);
+            progressMenu.MenuItems.Add(hideAllProgressWindows);
+            progressMenu.MenuItems.Add(separator2);
+
+            foreach (Pair<string, bool> p in workers)
+            {
+                MenuItem i = new MenuItem(p.fst);
+                i.Checked = p.snd;
+                i.Click += new EventHandler(mnuProgress_Click);
+                progressMenu.MenuItems.Add(i);
+            }
+
+            if (workers.Count == 0)
+            {
+                MenuItem i = new MenuItem("(No progress windows to show)");
+                i.Enabled = false;
+                progressMenu.MenuItems.Add(i);
+            }
+        }
+
+        void mnuProgress_Click(object sender, EventArgs e)
+        {
+            MenuItem i = (MenuItem)sender;
+            if (i.Checked)
+                Jobs.HideProgressWindow(i.Text);
+            else
+                Jobs.ShowProgressWindow(i.Text);
+        }
+/*            if (Jobs.ProcessWindowAccessible)
             {
                 mnuViewProcessStatus.Enabled = true;
             }
             else
             {
                 mnuViewProcessStatus.Enabled = false;
-            }
-        }
+            }*/
         private void mnuViewProcessStatus_Click(object sender, System.EventArgs e)
         {
+            /*
             if (Jobs.ProcessWindowAccessible)
             {
                 if (mnuViewProcessStatus.Checked)
@@ -1085,6 +1222,7 @@ namespace MeGUI
             {
                 Debug.Assert(false, "ProgressWindow should not be null if we can get here");
             }
+             * */
         }
 
         #endregion
@@ -1103,16 +1241,16 @@ namespace MeGUI
         private void trayIcon_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             this.Show();
-            if (mnuViewProcessStatus.Checked)
-                Jobs.ShowProcessWindow();
+            if (progressMenu.Checked)
+                Jobs.ShowAllProcessWindows();
             trayIcon.Visible = false;
         }
         private void openMeGUIToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.Show();
-            if (mnuViewProcessStatus.Checked)
-                Jobs.ShowProcessWindow();
             trayIcon.Visible = false;
+            foreach (Form f in formsToReopen)
+                if (!f.IsDisposed)
+                    f.Visible = true;
         }
 
         #endregion
@@ -1266,32 +1404,13 @@ namespace MeGUI
         {
             AdaptiveMuxWindow amw = new AdaptiveMuxWindow(this);
             if (amw.ShowDialog() == DialogResult.OK)
-            {
-                MuxJob[] jobs = amw.Jobs;
-                int freeJobNumber = Jobs.getFreeJobNumber();
-                int subNumber = 1;
-                if (jobs.Length > 1)
-                {
-                    foreach (MuxJob job in jobs)
-                    {
-                        job.Name = "job" + freeJobNumber + "-" + subNumber;
-                        subNumber++;
-                    }
-                }
-                else
-                {
-                    if (jobs.Length == 1)
-                        jobs[0].Name = "job" + freeJobNumber;
-                    else
-                        return;
-                }
-                Jobs.addJobsToQueue(jobs);
-            }
+                Jobs.addJobsToQueue(amw.Jobs);
 
         }
 
         private void MeGUI_Load(object sender, EventArgs e)
         {
+            RegisterForm(this);
             if (settings.AutoUpdate)
             {
                 // Need a seperate thread to run the updater to stop internet lookups from freezing the app.
@@ -1344,10 +1463,22 @@ namespace MeGUI
         {
             this.profileManager.SaveProfiles();
             this.saveSettings();
+            this.saveApplicationSettings();
             jobControl1.saveJobs();
             this.saveLog();
             deleteFiles();
             this.runRestarter();
+            Application.ApplicationExit += new EventHandler(Application_ApplicationExit);
+//            Application.Exit();
+        }
+
+        void Application_ApplicationExit(object sender, EventArgs e)
+        {
+            MeGUI.Properties.Settings.Default.Save();
+        }
+
+        private void saveApplicationSettings()
+        {
         }
 
         private void deleteFiles()
@@ -1566,7 +1697,7 @@ namespace MeGUI
             PackageSystem.JobPreProcessors.Register(JobUtil.CalculationProcessor);
             PackageSystem.JobPostProcessors.Register(OneClickPostProcessor.PostProcessor);
             PackageSystem.JobPostProcessors.Register(IndexJobPostProcessor.PostProcessor);
-            PackageSystem.JobPostProcessors.Register(JobControl.DeleteIntermediateFilesPostProcessor);
+            PackageSystem.JobPostProcessors.Register(JobWorker.DeleteIntermediateFilesPostProcessor);
         }
 
         private static Mutex mySingleInstanceMutex = new Mutex(true, "MeGUI_D9D0C224154B489784998BF97B9C9414");
@@ -1584,8 +1715,7 @@ namespace MeGUI
                     return;
             }
             Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
-//            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(Application_ThreadException);
-            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
             CommandlineParser parser = new CommandlineParser();
             parser.Parse(args);
 //            MeGUIInfo info = new MeGUIInfo();
@@ -1596,12 +1726,23 @@ namespace MeGUI
                 Application.Run(mainForm);
         }
 
-        static void Application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
+        static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            MessageBox.Show("MeGUI encountered a fatal error and may not be able to proceed. Reason: " + e.Exception.Message
-                + " Source of exception: " + e.Exception.Source + " stacktrace: " + e.Exception.StackTrace, "Fatal error",
+            HandleUnhandledException((Exception)e.ExceptionObject);
+        }
+
+        static void HandleUnhandledException(Exception e)
+        {
+            MessageBox.Show("MeGUI encountered a fatal error and may not be able to proceed. Reason: " + e.Message
+                + " Source of exception: " + e.Source + " stacktrace: " + e.StackTrace, "Fatal error",
                 MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
+
+        static void Application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
+        {
+            HandleUnhandledException(e.Exception);
+        }
+
         private void runRestarter()
         {
             if (filesToReplace.Keys.Count == 0 /*&& otherFilesToInstall.Count == 0*/)
@@ -1699,14 +1840,91 @@ namespace MeGUI
             videoEncodingComponent1.showPlayer();
         }
 
-        private void jobControl1_Load(object sender, EventArgs e)
-        {
-
-        }
-
         private void autoscroll_CheckedChanged(object sender, EventArgs e)
         {
             Settings.AutoScrollLog = autoscroll.Checked;
+        }
+
+
+        private void showAllWorkers_Click(object sender, EventArgs e)
+        {
+            Jobs.ShowAllWorkers();
+        }
+
+        private void hideAllWorkers_Click(object sender, EventArgs e)
+        {
+            Jobs.HideAllWorkers();
+        }
+
+        private void showAllWorkers_Popup(object sender, EventArgs e)
+        {
+            viewSummary.Checked = Jobs.SummaryVisible;
+            
+            List<Pair<string, bool>> workers = Jobs.ListWorkers();
+            workersMenu.MenuItems.Clear();
+            workersMenu.MenuItems.Add(showAllWorkers);
+            workersMenu.MenuItems.Add(hideAllWorkers);
+            workersMenu.MenuItems.Add(separator);
+
+            foreach (Pair<string, bool> p in workers)
+            {
+                MenuItem i = new MenuItem(p.fst);
+                i.Checked = p.snd;
+                i.Click += new EventHandler(mnuWorker_Click);
+                workersMenu.MenuItems.Add(i);
+            }
+
+            if (workers.Count == 0)
+            {
+                MenuItem i = new MenuItem("(No workers to show)");
+                i.Enabled = false;
+                workersMenu.MenuItems.Add(i);
+            }
+        }
+
+
+
+        void mnuWorker_Click(object sender1, EventArgs e)
+        {
+            MenuItem sender = (MenuItem) sender1;
+            Jobs.SetWorkerVisible(sender.Text, !sender.Checked);
+        }
+
+        private void viewSummary_Click(object sender, EventArgs e)
+        {
+            if (viewSummary.Checked)
+            {
+                viewSummary.Checked = false;
+                Jobs.HideSummary();
+            }
+            else
+            {
+                viewSummary.Checked = true;
+                Jobs.ShowSummary();
+            }
+        }
+
+        private void createNewWorker_Click(object sender, EventArgs e)
+        {
+            Jobs.RequestNewWorker();
+        }
+
+        private void showAllProgressWindows_Click(object sender, EventArgs e)
+        {
+            Jobs.ShowAllProcessWindows();
+        }
+
+        private void hideAllProgressWindows_Click(object sender, EventArgs e)
+        {
+            Jobs.HideAllProcessWindows();
+        }
+
+        private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Util.SaveSize(this,
+                delegate(System.Drawing.Size s) { MeGUI.Properties.Settings.Default.MainFormSize = s; },
+                delegate(FormWindowState s) { MeGUI.Properties.Settings.Default.MainFormWindowState = s; });
+
         }
     }
     public class CommandlineUpgradeData

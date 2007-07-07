@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 using System.Diagnostics;
+using System.IO;
+using System.Xml.Serialization;
+using System.Drawing;
 
 namespace MeGUI.core.util
 {
@@ -16,10 +19,82 @@ namespace MeGUI.core.util
             fst = f;
             snd = s;
         }
+
+        public Pair() { }
     }
+
+    public delegate T Getter<T>();
+    public delegate void Setter<T>(T thing);
 
     public class Util
     {
+        public static void SetSize(Form f, Size s, FormWindowState state)
+        {
+            f.WindowState = state;
+            if (f.WindowState == FormWindowState.Normal)
+                f.ClientSize = s;
+        }
+
+        public static void SaveSize(Form f, Setter<Size> size, Setter<FormWindowState> state)
+        {
+            size(f.ClientSize);
+            state(f.WindowState);
+        }
+
+
+        public static void ThreadSafeRun(Control c, MethodInvoker m)
+        {
+            if (c.InvokeRequired)
+                c.Invoke(m);
+            else
+                m();
+        }
+
+        public static void XmlSerialize<T>(T t, string path)
+        {
+            XmlSerializer ser = new XmlSerializer(typeof(T));
+            using (Stream s = File.Open(path, System.IO.FileMode.Create, System.IO.FileAccess.Write))
+            {
+                try
+                {
+                    ser.Serialize(s, t);
+                }
+                catch (Exception e)
+                {
+                    Console.Write(e.Message);
+                }
+            }
+        }
+
+        public static T XmlDeserialize<T>(string path)
+            where T : class, new()
+        {
+            XmlSerializer ser = new XmlSerializer(typeof(T));
+            if (File.Exists(path))
+            {
+                using (Stream s = File.OpenRead(path))
+                {
+                    try
+                    {
+                        return (T)ser.Deserialize(s);
+                    }
+                    catch (Exception e)
+                    {
+                        DialogResult r = MessageBox.Show("File '" + path + "' could not be loaded. Delete?", "Error loading Job", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
+                        if (r == DialogResult.Yes)
+                        {
+                            try { s.Close(); File.Delete(path); }
+                            catch (Exception) { }
+                        }
+                        Console.Write(e.Message);
+                        return null;
+                    }
+                }
+            }
+            else return new T();
+        }
+
+
         private static readonly System.Text.RegularExpressions.Regex _cleanUpStringRegex = new System.Text.RegularExpressions.Regex(@"\n[^\n]+\r", System.Text.RegularExpressions.RegexOptions.Compiled | System.Text.RegularExpressions.RegexOptions.CultureInvariant);
         public static string cleanUpString(string s)
         {
