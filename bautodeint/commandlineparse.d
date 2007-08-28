@@ -242,7 +242,7 @@ class CommandlineParser
 		}
 		body
 		{
-			return (argument in boolArgs) != null;
+			return (argument in boolArgs) !is null;
 		}
 
 		bool hasIntArgument(string argument)
@@ -252,7 +252,7 @@ class CommandlineParser
 		}
 		body
 		{
-			return (argument in intArgs) != null;
+			return (argument in intArgs) !is null;
 		}
 		
 		int getIntArgument(string argument)
@@ -272,7 +272,7 @@ class CommandlineParser
 		}
 		body
 		{
-			return (argument in floatArgs) != null;
+			return (argument in floatArgs) !is null;
 		}
 
 		double getFloatArgument(string argument)
@@ -292,7 +292,7 @@ class CommandlineParser
 		}
 		body
 		{
-			return ((argument in stringArgs) != null);
+			return ((argument in stringArgs) !is null);
 		}
 
 		string getStringArgument(string argument)
@@ -315,7 +315,7 @@ class CommandlineParser
 					usedArgument = false;
 					continue;
 				}
-				if ((arg in supportedArguments) == null)
+				if ((arg in supportedArguments) is null)
 				{
 					throw new CommandlineException("Unsupported argument: '" ~ arg ~ "'");
 				}

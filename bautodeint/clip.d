@@ -313,7 +313,7 @@ class Clip
 					TSectionDataType type = getResult(dataA[iData..iData+sectionLength],
 														dataB[iData..iData+sectionLength]);
 					results[iSection] = type;
-					if ((type in sectionCounts) == null)
+					if (!(type in sectionCounts))
 						sectionCounts[type] = 0;
 					sectionCounts[type]++;
 				}
@@ -331,9 +331,9 @@ class Clip
 			uint count(SectionType type)
 			{
 				if (type in sectionCounts)
-					return 0;
-				else
 					return sectionCounts[type];
+				else
+					return 0;
 			}
 			uint sectioncount = m_clip_info.all_sections.length;
 			uint num_known_sections = sectioncount - count(SectionType.UNKNOWN);
@@ -384,9 +384,9 @@ class Clip
 		{
 			uint count(FieldOrder type)
 			{
-				if ((type in orderCounts) == null)
-					return 0;
-				else return orderCounts[type];
+				if (type in orderCounts)
+					return orderCounts[type];
+				else return 0;
 			}
 			uint sectioncount = m_clip_info.all_field_orders.length;
 			messagef(MessageImportance.DEBUG, "Number of field-order sections: %d", sectioncount);
@@ -409,7 +409,7 @@ class Clip
 		private static SectionType get_modal_type(uint[SectionType] types, out int frequency)
 		out (type)
 		{
-			assert(((type in types) == null) || (types[type] == frequency));
+			assert( (!(type in types)) || (types[type] == frequency));
 			assert (types.keys.length == 0 || frequency >= 0);
 		}
 		body
@@ -465,7 +465,7 @@ class Clip
 			for (int iData = 0; iData < comb_data.length; iData+= 5)
 			{
 				SectionType type = get_short_section_type(comb_data[iData..iData+5],motion_data[iData..iData+5]);
-				if ((type in sectionTypes) == null)
+				if (!(type in sectionTypes))
 					sectionTypes[type] = 0;
 				sectionTypes[type]++;
 			}
