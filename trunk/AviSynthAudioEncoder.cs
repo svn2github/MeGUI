@@ -603,7 +603,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 _mustSendWavHeaderToEncoderStdIn = true;
                 AC3Settings n = audioJob.Settings as AC3Settings;
                 _encoderExecutablePath = this._settings.FFMpegPath;
-                _encoderCommandLine = "-i - -y -acodec ac3 -ab " + n.Bitrate + " \"{0}\"";
+                _encoderCommandLine = "-i - -y -acodec ac3 -ab " + n.Bitrate + "k \"{0}\"";
             }
             if (audioJob.Settings is MP2Settings)
             {
