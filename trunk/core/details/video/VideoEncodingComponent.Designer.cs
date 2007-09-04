@@ -184,6 +184,7 @@ namespace MeGUI
             // 
             // videoInput
             // 
+            this.videoInput.AllowDrop = true;
             this.videoInput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.videoInput.Filename = "";
@@ -197,6 +198,8 @@ namespace MeGUI
             this.videoInput.TabIndex = 29;
             this.videoInput.Title = "Open AviSynth script";
             this.videoInput.FileSelected += new MeGUI.FileBarEventHandler(this.videoInput_FileSelected);
+            this.videoInput.DragOver += new System.Windows.Forms.DragEventHandler(this.videoInput_DragOver);
+            this.videoInput.DragDrop += new System.Windows.Forms.DragEventHandler(this.videoInput_DragDrop);
             // 
             // VideoEncodingComponent
             // 

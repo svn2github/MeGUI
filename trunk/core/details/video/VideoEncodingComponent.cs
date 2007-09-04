@@ -557,5 +557,33 @@ namespace MeGUI
             AviSynthJob job = mainForm.JobUtil.generateAvisynthJob(VideoInput);
             mainForm.Jobs.addJobsToQueue(job);
         }
+
+		// added simple drag&drop support
+		#region drag&drop
+        private void videoInput_DragOver(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.Move;
+        }
+
+        private void videoInput_DragDrop(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.Move;
+
+            Array data = e.Data.GetData("FileDrop") as Array;
+            if (data != null)
+            {
+                if (data.GetValue(0) is String)
+                {
+                    string filename = ((string[])data)[0];
+
+                    if (Path.GetExtension(filename) == ".avs")
+                    {
+                        videoInput.Filename = filename;
+                        openVideoFile(videoInput.Filename);
+                    }
+                }
+            }
+        }
+		#endregion
     }
 }

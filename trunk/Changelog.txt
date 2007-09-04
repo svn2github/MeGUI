@@ -1,3 +1,8 @@
+0.2.6.1003
+Commit by Sharx1976:
+    - Fix One Click Encoder crash (patch by bbel)
+    - Drag&Drop support for avs input in main window (patch by dako-kun)
+
 0.2.6.1002
 Commit by Kurtnoise:
     - "Do all and Close" button for the AVS Cutter. Patch by mitsubishi (http://forum.doom9.org/showthread.php?p=1033012#post1033012)
