@@ -763,6 +763,7 @@ namespace MeGUI
             {
                 try
                 {
+                    audioStreams[0].trackNumber = track1.SelectedIndex;
                     audioStreams[0].input = track1.SelectedItem.ToString();
                 }
                 catch (NullReferenceException)
@@ -774,6 +775,7 @@ namespace MeGUI
             {
                 try
                 {
+                    audioStreams[1].trackNumber = track2.SelectedIndex;
                     audioStreams[1].input = track2.SelectedItem.ToString();
                 }
                 catch (NullReferenceException)
@@ -950,7 +952,7 @@ namespace MeGUI
                 // Output
                 if (propertiesStream.dontEncode)
                     output = input;
-                else
+                else if (!error)
                     output = Path.Combine(
                         Path.GetDirectoryName(input),
                         Path.GetFileNameWithoutExtension(input) + "_" +
