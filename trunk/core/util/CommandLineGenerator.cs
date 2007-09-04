@@ -864,9 +864,10 @@ namespace MeGUI
             StringBuilder sb = new StringBuilder();
             if (settings.VideoInput.Length > 0)
             {
-                sb.Append("-add \"" + settings.VideoInput + "\"");
+                sb.Append("-add \"" + settings.VideoInput);
                 if (!settings.VideoName.Equals(""))
-                    sb.Append(":name=\"" + settings.VideoName + "\"");
+                    sb.Append(":name=" + settings.VideoName);
+                sb.Append("\"");
             }
             if (settings.MuxedInput.Length > 0)
             {
@@ -875,20 +876,22 @@ namespace MeGUI
             foreach (object o in settings.AudioStreams)
             {
                 SubStream stream = (SubStream)o;
-                sb.Append(" -add \"" + stream.path + "\"");
+                sb.Append(" -add \"" + stream.path);
                 if (stream.language != null && !stream.language.Equals(""))
                     sb.Append(":lang=" + stream.language);
                 if (stream.name != null && !stream.name.Equals(""))
-                    sb.Append(":name=\"" + stream.name + "\"");
+                    sb.Append(":name=" + stream.name);
                 if (stream.delay != 0)
                     sb.AppendFormat(":delay={0}", stream.delay);
+                sb.Append("\"");
             }
             foreach (object o in settings.SubtitleStreams)
             {
                 SubStream stream = (SubStream)o;
-                sb.Append(" -add \"" + stream.path + "\"");
+                sb.Append(" -add \"" + stream.path);
                 if (!stream.language.Equals(""))
                     sb.Append(":lang=" + stream.language);
+                sb.Append("\"");
             }
 
             if (!settings.ChapterFile.Equals("")) // a chapter file is defined
@@ -902,8 +905,8 @@ namespace MeGUI
                 string fpsString = settings.Framerate.ToString(ci);
                 sb.Append(" -fps " + fpsString);
             }
+            sb.AppendFormat(" -tmp {0}", Path.GetDirectoryName(settings.MuxedOutput));
             sb.Append(" -new \"" + settings.MuxedOutput + "\"");
-            sb.AppendFormat(" -tmp \"{0}\"", Path.GetDirectoryName(settings.MuxedOutput));
             return sb.ToString();
         }
 		#endregion
