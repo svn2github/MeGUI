@@ -12,8 +12,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "MencoderEncoder");
 
         private static IJobProcessor init(MainForm mf, Job j)
         {
-            if (j is VideoJob && 
-                ((j as VideoJob).Settings is snowSettings || (j as VideoJob).Settings is lavcSettings))
+            if (j is VideoJob &&
+                ((j as VideoJob).Settings is snowSettings || (j as VideoJob).Settings is lavcSettings || (j as VideoJob).Settings is hfyuSettings))
                 return new mencoderEncoder(mf.Settings.MencoderPath);
             return null;
         }
