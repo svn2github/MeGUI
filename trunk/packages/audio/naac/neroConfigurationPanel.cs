@@ -103,7 +103,7 @@ namespace MeGUI.packages.audio.naac
             // 
             this.vBitrate.Dock = System.Windows.Forms.DockStyle.Top;
             this.vBitrate.Location = new System.Drawing.Point(3, 64);
-            this.vBitrate.Maximum = 320;
+            this.vBitrate.Maximum = 640;
             this.vBitrate.Minimum = 16;
             this.vBitrate.Name = "vBitrate";
             this.vBitrate.Size = new System.Drawing.Size(369, 45);
