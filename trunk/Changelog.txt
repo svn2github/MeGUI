@@ -1,3 +1,9 @@
+0.2.6.1004
+Commit by Sharx1976:
+    - Always check to see if an event handler delegate is non-null before calling it (Patch by Sean McGovern)
+    - Increased the neroaac encoder max bitrate to 640kbps
+    - (Kurtnoise) add "Français" in the Language Selection (supported by the ISO 639 code and also needed for the parsing of the DVDDecrypter Info Text File)
+
 0.2.6.1003
 Commit by Sharx1976:
     - Fix One Click Encoder crash (patch by bbel)
