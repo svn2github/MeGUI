@@ -642,11 +642,17 @@ namespace MeGUI.core.gui
                     break;
 
                 case PauseResumeMode.Pause:
-                    PauseClicked(this, e);
+				    if (PauseClicked != null)
+				    {
+				        PauseClicked(this, e);
+				    }
                     break;
 
                 case PauseResumeMode.Resume:
-                    ResumeClicked(this, e);
+					if (ResumeClicked != null)
+					{
+						ResumeClicked(this, e);
+					}
                     break;
             }
         }
