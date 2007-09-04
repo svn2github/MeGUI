@@ -1,3 +1,13 @@
+0.2.6.1002
+Commit by Kurtnoise:
+    - "Do all and Close" button for the AVS Cutter. Patch by mitsubishi (http://forum.doom9.org/showthread.php?p=1033012#post1033012)
+    - PreRender fix. Patch by mitsubishi.
+    - fix a typo for the FFmpeg AC-3 Encoder Type.
+    - fix some typos for the MP4Box command line generator.
+    - ANSI Encoding type instead of UTF-8 for the chapters file saved + some revamping.
+    - add MP4 Container support for the XviD compressor.
+    - fix ac3 bitrate command line for the new FFmpeg builds. 
+
 0.2.6.1001
 Commit by berrinam:
     - Parallel job execution. See http://mewiki.project357.com/wiki/MeGUI:Parallel_job_execution for details.
