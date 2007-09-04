@@ -84,6 +84,7 @@ namespace MeGUI
             addLanguage("Faroese", "fao");
             addLanguage("Finnish", "fin");
             addLanguage("French", "fre");
+            addLanguage("Français", "fra");
             addLanguage("Georgian", "geo");
             addLanguage("German", "ger");
             addLanguage("Greek", "gre");
