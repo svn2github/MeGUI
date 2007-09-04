@@ -428,7 +428,7 @@ namespace MeGUI
    AC3Settings, AudioCodecSettings, AudioCodec, AudioEncoderType>
     {
         public ffac3SettingsProvider()
-            : base("FFMPEG AC-3", AudioEncoderType.FFAC3, AudioCodec.AAC)
+            : base("FFMPEG AC-3", AudioEncoderType.FFAC3, AudioCodec.AC3)
         { }
     }
     public class ffmp2SettingsProvider : SettingsProviderImpl2<MP2ConfigurationPanel, string[],
