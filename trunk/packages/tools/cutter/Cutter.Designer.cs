@@ -41,6 +41,7 @@ namespace MeGUI.packages.tools.cutter
             this.startFrame = new System.Windows.Forms.NumericUpDown();
             this.endFrame = new System.Windows.Forms.NumericUpDown();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
+            this.doAllClose = new System.Windows.Forms.Button();
             this.closeButton = new System.Windows.Forms.Button();
             this.saveCuts = new System.Windows.Forms.Button();
             this.addCutsToScript = new System.Windows.Forms.Button();
@@ -200,6 +201,7 @@ namespace MeGUI.packages.tools.cutter
             // flowLayoutPanel2
             // 
             this.flowLayoutPanel2.AutoSize = true;
+            this.flowLayoutPanel2.Controls.Add(this.doAllClose);
             this.flowLayoutPanel2.Controls.Add(this.closeButton);
             this.flowLayoutPanel2.Controls.Add(this.saveCuts);
             this.flowLayoutPanel2.Controls.Add(this.addCutsToScript);
@@ -212,12 +214,22 @@ namespace MeGUI.packages.tools.cutter
             this.flowLayoutPanel2.Size = new System.Drawing.Size(476, 39);
             this.flowLayoutPanel2.TabIndex = 15;
             // 
+            // doAllClose
+            // 
+            this.doAllClose.Location = new System.Drawing.Point(366, 8);
+            this.doAllClose.Name = "doAllClose";
+            this.doAllClose.Size = new System.Drawing.Size(97, 23);
+            this.doAllClose.TabIndex = 4;
+            this.doAllClose.Text = "Do all and close";
+            this.doAllClose.UseVisualStyleBackColor = true;
+            this.doAllClose.Click += new System.EventHandler(this.doAllClose_Click);
+            // 
             // closeButton
             // 
             this.closeButton.AutoSize = true;
             this.closeButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.closeButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.closeButton.Location = new System.Drawing.Point(420, 8);
+            this.closeButton.Location = new System.Drawing.Point(317, 8);
             this.closeButton.Name = "closeButton";
             this.closeButton.Size = new System.Drawing.Size(43, 23);
             this.closeButton.TabIndex = 0;
@@ -229,7 +241,7 @@ namespace MeGUI.packages.tools.cutter
             // 
             this.saveCuts.AutoSize = true;
             this.saveCuts.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.saveCuts.Location = new System.Drawing.Point(333, 8);
+            this.saveCuts.Location = new System.Drawing.Point(230, 8);
             this.saveCuts.Name = "saveCuts";
             this.saveCuts.Size = new System.Drawing.Size(81, 23);
             this.saveCuts.TabIndex = 1;
@@ -241,7 +253,7 @@ namespace MeGUI.packages.tools.cutter
             // 
             this.addCutsToScript.AutoSize = true;
             this.addCutsToScript.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.addCutsToScript.Location = new System.Drawing.Point(228, 8);
+            this.addCutsToScript.Location = new System.Drawing.Point(125, 8);
             this.addCutsToScript.Name = "addCutsToScript";
             this.addCutsToScript.Size = new System.Drawing.Size(99, 23);
             this.addCutsToScript.TabIndex = 2;
@@ -299,7 +311,7 @@ namespace MeGUI.packages.tools.cutter
             this.helpButton1.ArticleName = "Avs cutter";
             this.helpButton1.AutoSize = true;
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.helpButton1.Location = new System.Drawing.Point(183, 8);
+            this.helpButton1.Location = new System.Drawing.Point(80, 8);
             this.helpButton1.Name = "helpButton1";
             this.helpButton1.Size = new System.Drawing.Size(39, 23);
             this.helpButton1.TabIndex = 3;
@@ -353,6 +365,7 @@ namespace MeGUI.packages.tools.cutter
         private System.Windows.Forms.ListView sections;
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
-        private MeGUI.core.gui.HelpButton helpButton1;
+        private System.Windows.Forms.Button doAllClose;
+        private MeGUI.core.gui.HelpButton helpButton1;        
     }
 }

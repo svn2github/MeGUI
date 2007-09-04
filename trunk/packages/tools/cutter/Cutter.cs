@@ -195,6 +195,46 @@ namespace MeGUI.packages.tools.cutter
             MessageBox.Show("Cuts written!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
+        private void doAllClose_Click(object sender, EventArgs e)
+        {
+            if (cuts.AllCuts.Count == 0)
+            {
+                MessageBox.Show("At least one section must be created", "No sections created", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (cutsAdded)
+            {
+                if (MessageBox.Show("Cuts already added to script, if you have altered cuts the cutfile will not match\n\r Continue?", "Cuts already added", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+                {
+                    return;
+                }
+            }
+            string savecutsto = scriptName + ".clt";
+            if (System.IO.File.Exists(savecutsto))
+            {
+                DialogResult result = MessageBox.Show("Cutfile already exists, overwrite?", "Overwrite cutfile", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                if (result == DialogResult.Cancel) return;
+
+                if (result == DialogResult.No)
+                {
+                    SaveFileDialog d = new SaveFileDialog();
+                    d.Filter = "MeGUI cut list (*.clt)|*.clt";
+                    d.Title = "Select a place to save the cut list";
+                    if (d.ShowDialog() != DialogResult.OK) return;
+                    savecutsto = d.FileName;
+                }
+            }
+
+            if (!cutsAdded)
+            {
+                FilmCutter.WriteCutsToScript(scriptName, cuts, false);
+            }
+            FilmCutter.WriteCutsToFile(savecutsto, cuts);
+            Close();
+
+            
+        }
+
 
     }
 
