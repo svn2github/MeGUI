@@ -999,7 +999,7 @@ namespace MeGUI
 			{
 				SubStream stream = (SubStream)o;
 				int trackID = 0;
-				if (Path.GetExtension(stream.path.ToLower()).Equals(".mp4"))
+                if (Path.GetExtension(stream.path.ToLower()).Equals(".mp4") || Path.GetExtension(stream.path.ToLower()).Equals(".m4a"))
 					trackID = 1;
             	if (!stream.language.Equals(""))
 					sb.Append(" --language " + trackID + ":" + stream.language);
