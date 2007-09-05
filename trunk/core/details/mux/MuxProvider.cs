@@ -374,6 +374,7 @@ namespace MeGUI
             supportedVideoTypes.Add(VideoType.MP4);
             supportedAudioTypes.Add(AudioType.RAWAAC);
             supportedAudioTypes.Add(AudioType.MP4AAC);
+            supportedAudioTypes.Add(AudioType.M4A);
             supportedAudioTypes.Add(AudioType.MP3);
             supportedAudioTypes.Add(AudioType.VBRMP3);
             supportedAudioTypes.Add(AudioType.CBRMP3);
@@ -412,6 +413,7 @@ namespace MeGUI
             supportedVideoTypes.Add(VideoType.MP4);
             supportedAudioTypes.Add(AudioType.RAWAAC);
             supportedAudioTypes.Add(AudioType.MP4AAC);
+            supportedAudioTypes.Add(AudioType.M4A);
             supportedAudioTypes.Add(AudioType.MP3);
             supportedAudioTypes.Add(AudioType.VBRMP3);
             supportedAudioTypes.Add(AudioType.CBRMP3);
@@ -1088,6 +1090,7 @@ namespace MeGUI
         {
             supportedCodecs.Add(AudioCodec.AAC);
             supportedTypes.Add(AudioType.MP4AAC);
+            supportedTypes.Add(AudioType.M4A);
             supportedEncoderTypes.Add(AudioEncoderType.NAAC);
         }
     }
@@ -1121,6 +1124,7 @@ namespace MeGUI
         {
             supportedCodecs.Add(AudioCodec.AAC);
             supportedTypes.Add(AudioType.MP4AAC);
+            supportedTypes.Add(AudioType.M4A);
             supportedTypes.Add(AudioType.RAWAAC);
             supportedEncoderTypes.Add(AudioEncoderType.FAAC);
         }

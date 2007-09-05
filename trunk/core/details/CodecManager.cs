@@ -117,6 +117,7 @@ namespace MeGUI
         public static readonly AudioEncoderType VORBIS = new AudioEncoderType("VORBIS", AudioCodec.VORBIS);
         public static readonly AudioEncoderType FFAC3 = new AudioEncoderType("FFAC3", AudioCodec.AC3);
         public static readonly AudioEncoderType FFMP2 = new AudioEncoderType("FFMP2", AudioCodec.MP2);
+        public static readonly AudioEncoderType AFTEN = new AudioEncoderType("AFTEN", AudioCodec.AC3);
     }
     #endregion
     
@@ -181,7 +182,8 @@ namespace MeGUI
                 AudioEncoderTypes.Register(AudioEncoderType.LAME) &&
                 AudioEncoderTypes.Register(AudioEncoderType.NAAC) &&
                 AudioEncoderTypes.Register(AudioEncoderType.VORBIS) &&
-                AudioEncoderTypes.Register(AudioEncoderType.WAAC)))
+                AudioEncoderTypes.Register(AudioEncoderType.WAAC) &&
+                AudioEncoderTypes.Register(AudioEncoderType.AFTEN)))
                 throw new Exception("Failed to register a standard audio encoder type");
                 
         }
@@ -226,6 +228,7 @@ namespace MeGUI
                 this.supportedCodecs = supportedCodecs;
         }
         public static readonly AudioType MP4AAC = new AudioType("MP4-AAC", "MP4 AAC Files", "mp4", ContainerType.MP4, AudioCodec.AAC);
+        public static readonly AudioType M4A = new AudioType("M4A", "MP4 Audio Files", "m4a", ContainerType.MP4, AudioCodec.AAC);
         public static readonly AudioType RAWAAC = new AudioType("Raw-AAC", "RAW AAC Files", "aac", null, AudioCodec.AAC);
         public static readonly AudioType MP3 = new AudioType("MP3", "MP3 Files", "mp3", null, AudioCodec.MP3);
         public static readonly AudioType VORBIS = new AudioType("Ogg", "Ogg Vorbis Files", "ogg", null, AudioCodec.VORBIS);
@@ -282,6 +285,7 @@ namespace MeGUI
                 AudioTypes.Register(AudioType.DTS) &&
                 AudioTypes.Register(AudioType.MP2) &&
                 AudioTypes.Register(AudioType.MP4AAC) &&
+                AudioTypes.Register(AudioType.M4A) &&
                 AudioTypes.Register(AudioType.RAWAAC) &&
                 AudioTypes.Register(AudioType.VORBIS)))
                 throw new Exception("Failed to register an audio type");
