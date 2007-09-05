@@ -206,6 +206,7 @@ namespace MeGUI
             // 
             // openButton
             // 
+            this.openButton.AllowDrop = true;
             this.openButton.Location = new System.Drawing.Point(382, 16);
             this.openButton.Name = "openButton";
             this.openButton.Size = new System.Drawing.Size(24, 23);
@@ -215,11 +216,14 @@ namespace MeGUI
             // 
             // input
             // 
+            this.input.AllowDrop = true;
             this.input.Location = new System.Drawing.Point(118, 17);
             this.input.Name = "input";
             this.input.ReadOnly = true;
             this.input.Size = new System.Drawing.Size(256, 21);
             this.input.TabIndex = 1;
+            this.input.DragOver += new System.Windows.Forms.DragEventHandler(this.input_DragOver);
+            this.input.DragDrop += new System.Windows.Forms.DragEventHandler(this.input_DragDrop);
             // 
             // inputLabel
             // 
@@ -578,6 +582,31 @@ namespace MeGUI
             get { return lastJob != null; }
         }
         #endregion
+
+        private void input_DragDrop(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.Move;
+
+            Array data = e.Data.GetData("FileDrop") as Array;
+            if (data != null)
+            {
+                if (data.GetValue(0) is String)
+                {
+                    string filename = ((string[])data)[0];
+
+                    if (Path.GetExtension(filename).ToLower().Equals(".vob") || Path.GetExtension(filename).ToLower().Equals(".mpg") || Path.GetExtension(filename).ToLower().Equals(".ts"))
+                    {
+                        openIFODialog.FileName = filename;
+                        openVideo(openIFODialog.FileName);
+                    }
+                }
+            }
+        }
+
+        private void input_DragOver(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.Move;
+        }
     }
 
     public class D2VCreatorTool : MeGUI.core.plugins.interfaces.ITool
