@@ -64,6 +64,10 @@ namespace MeGUI
             // 
             this.muxFPS.Location = new System.Drawing.Point(118, 77);
             // 
+            // muxedOutput
+            // 
+            this.muxedOutput.ReadOnly = false;
+            // 
             // cancelButton
             // 
             this.cancelButton.Location = new System.Drawing.Point(376, 448);
@@ -74,7 +78,7 @@ namespace MeGUI
             this.videoGroupbox.Controls.Add(this.label1);
             this.videoGroupbox.Controls.Add(this.muxedInputOpenButton);
             this.videoGroupbox.Location = new System.Drawing.Point(8, 3);
-            this.videoGroupbox.Size = new System.Drawing.Size(424, 102);
+            this.videoGroupbox.Size = new System.Drawing.Size(428, 102);
             this.videoGroupbox.Controls.SetChildIndex(this.videoNameLabel, 0);
             this.videoGroupbox.Controls.SetChildIndex(this.MuxFPSLabel, 0);
             this.videoGroupbox.Controls.SetChildIndex(this.videoName, 0);
@@ -89,18 +93,22 @@ namespace MeGUI
             // outputGroupbox
             // 
             this.outputGroupbox.Location = new System.Drawing.Point(8, 362);
+            this.outputGroupbox.Size = new System.Drawing.Size(428, 80);
             // 
             // audioGroupbox
             // 
             this.audioGroupbox.Location = new System.Drawing.Point(8, 109);
+            this.audioGroupbox.Size = new System.Drawing.Size(428, 106);
             // 
             // subtitleGroupbox
             // 
             this.subtitleGroupbox.Location = new System.Drawing.Point(8, 222);
+            this.subtitleGroupbox.Size = new System.Drawing.Size(428, 80);
             // 
             // chaptersGroupbox
             // 
             this.chaptersGroupbox.Location = new System.Drawing.Point(8, 308);
+            this.chaptersGroupbox.Size = new System.Drawing.Size(428, 48);
             // 
             // videoName
             // 

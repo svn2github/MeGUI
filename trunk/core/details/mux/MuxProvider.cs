@@ -368,6 +368,7 @@ namespace MeGUI
         
         public MP4BoxMuxerProvider() : base("MP4Box")
         {
+            supportedVideoTypes.Add(VideoType.AVI);
             supportedVideoTypes.Add(VideoType.RAWASP);
             supportedVideoTypes.Add(VideoType.RAWAVC);
             supportedVideoTypes.Add(VideoType.MP4);
@@ -384,6 +385,7 @@ namespace MeGUI
             supportedSubtitleTypes.Add(SubtitleType.VOBSUB);
             supportedChapterTypes.Add(ChapterType.OGG_TXT);
             supportedContainers.Add(ContainerType.MP4);
+            supportedContainerInputTypes.Add(ContainerType.AVI);
             supportedContainerInputTypes.Add(ContainerType.MP4);
             supportsAnyInputtableAudioCodec = true;
             supportsAnyInputtableVideoCodec = true;
@@ -998,6 +1000,7 @@ namespace MeGUI
             RegisterEncoder(new VorbisEncodingProvider());
             RegisterEncoder(new AC3EncodingProvider());
             RegisterEncoder(new MP2EncodingProvider());
+            RegisterEncoder(new AftenEncodingProvider());
         }
     }
     #endregion
@@ -1143,6 +1146,17 @@ namespace MeGUI
             supportedCodecs.Add(AudioCodec.AC3);
             supportedTypes.Add(AudioType.AC3);
             supportedEncoderTypes.Add(AudioEncoderType.FFAC3);
+        }
+    }
+
+    public class AftenEncodingProvider : AudioEncodingProvider
+    {
+        public AftenEncodingProvider()
+            : base()
+        {
+            supportedCodecs.Add(AudioCodec.AC3);
+            supportedTypes.Add(AudioType.AC3);
+            supportedEncoderTypes.Add(AudioEncoderType.AFTEN);
         }
     }
 

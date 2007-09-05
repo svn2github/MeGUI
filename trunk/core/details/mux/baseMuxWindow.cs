@@ -96,6 +96,8 @@ namespace MeGUI
         protected Label audioNameLabel;
         protected NumericUpDown audioDelay;
         protected Label delayLabel;
+        protected TextBox subName;
+        protected Label SubNamelabel;
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -285,6 +287,8 @@ namespace MeGUI
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.cancelButton = new System.Windows.Forms.Button();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
+            this.subName = new System.Windows.Forms.TextBox();
+            this.SubNamelabel = new System.Windows.Forms.Label();
             this.subtitleGroupbox.SuspendLayout();
             this.audioGroupbox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.audioDelay)).BeginInit();
@@ -304,6 +308,8 @@ namespace MeGUI
             // 
             // subtitleGroupbox
             // 
+            this.subtitleGroupbox.Controls.Add(this.subName);
+            this.subtitleGroupbox.Controls.Add(this.SubNamelabel);
             this.subtitleGroupbox.Controls.Add(this.removeSubtitleTrack);
             this.subtitleGroupbox.Controls.Add(this.subtitleLanguage);
             this.subtitleGroupbox.Controls.Add(this.subtitleLanguageLabel);
@@ -724,7 +730,6 @@ namespace MeGUI
             // 
             this.muxedOutput.Location = new System.Drawing.Point(120, 20);
             this.muxedOutput.Name = "muxedOutput";
-            this.muxedOutput.ReadOnly = true;
             this.muxedOutput.Size = new System.Drawing.Size(256, 21);
             this.muxedOutput.TabIndex = 18;
             // 
@@ -745,6 +750,24 @@ namespace MeGUI
             this.cancelButton.Size = new System.Drawing.Size(56, 23);
             this.cancelButton.TabIndex = 29;
             this.cancelButton.Text = "Cancel";
+            // 
+            // subName
+            // 
+            this.subName.Location = new System.Drawing.Point(286, 50);
+            this.subName.MaxLength = 100;
+            this.subName.Name = "subName";
+            this.subName.Size = new System.Drawing.Size(90, 21);
+            this.subName.TabIndex = 32;
+            this.subName.Leave += new System.EventHandler(this.subName_Leave);
+            // 
+            // SubNamelabel
+            // 
+            this.SubNamelabel.AutoSize = true;
+            this.SubNamelabel.Location = new System.Drawing.Point(245, 54);
+            this.SubNamelabel.Name = "SubNamelabel";
+            this.SubNamelabel.Size = new System.Drawing.Size(34, 13);
+            this.SubNamelabel.TabIndex = 31;
+            this.SubNamelabel.Text = "Name";
             // 
             // baseMuxWindow
             // 
@@ -1132,6 +1155,12 @@ namespace MeGUI
         private void audioDelay_ValueChanged(object sender, EventArgs e)
         {
             audioStreams[getSelectedAudioTrack()].delay = (int)audioDelay.Value;
+        }
+
+        private void subName_Leave(object sender, EventArgs e)
+        {
+            int index = this.getSelectedSubTitle();
+            subtitleStreams[index].name = subName.Text;
         }
     }
 }
