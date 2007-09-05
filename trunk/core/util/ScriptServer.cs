@@ -119,9 +119,14 @@ namespace MeGUI
                     inputLine = "AviSource(\"" + input + "\")";
                     break;
                 case PossibleSources.directShow:
-                    inputLine = "DirectShowSource(\"" + input + "\"" + ((fps > 0) ? ",fps=" + fps.ToString(new CultureInfo("en-us")) : string.Empty) + ",audio=false)";
-                    if (flipVertical)
-                        inputLine = inputLine + "\r\nFlipVertical()";
+                    if (input.ToLower().EndsWith(".avi"))
+                        inputLine = "AviSource(\"" + input + "\")";
+                    else
+                    {
+                        inputLine = "DirectShowSource(\"" + input + "\"" + ((fps > 0) ? ",fps=" + fps.ToString(new CultureInfo("en-us")) : string.Empty) + ",audio=false)";
+                        if (flipVertical)
+                            inputLine = inputLine + "\r\nFlipVertical()";
+                    }
                     break;
             }
             return inputLine;
