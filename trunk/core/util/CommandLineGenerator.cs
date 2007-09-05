@@ -891,6 +891,8 @@ namespace MeGUI
                 sb.Append(" -add \"" + stream.path);
                 if (!stream.language.Equals(""))
                     sb.Append(":lang=" + stream.language);
+                if (stream.name != null && !stream.name.Equals(""))
+                    sb.Append(":name=" + stream.name);
                 sb.Append("\"");
             }
 
@@ -969,7 +971,7 @@ namespace MeGUI
         #endregion
 		#region mkv muxing
 		/// <summary>
-		/// generates the commandline for mp4box
+		/// generates the commandline for mkvmerge
 		/// </summary>
 		/// <param name="mkvmergePath">path of the mkvmerge executable</param>
 		/// <param name="settings">the settings object containing additional streams and the framerate</param>
@@ -984,12 +986,15 @@ namespace MeGUI
          	if (settings.PARX > 0 && settings.PARY > 0)
 				sb.Append(" --aspect-ratio 0:" + settings.PARX + "/" + settings.PARY);
 
+            if (settings.VideoName.Length > 0)
+                sb.Append(" --track-name \"0:" + settings.VideoName + "\"");
+
             if (settings.MuxedInput.Length > 0)
                 sb.Append(" \"" + settings.MuxedInput + "\"");
             
             if (settings.VideoInput.Length > 0)
                 sb.Append(" -A -S \"" + settings.VideoInput + "\"");
-			
+                        			
          	foreach (object o in settings.AudioStreams)
 			{
 				SubStream stream = (SubStream)o;
@@ -998,17 +1003,23 @@ namespace MeGUI
 					trackID = 1;
             	if (!stream.language.Equals(""))
 					sb.Append(" --language " + trackID + ":" + stream.language);
+                if (stream.name != null && !stream.name.Equals(""))
+                    sb.Append(" --track-name \"" + trackID + ":" + stream.name + "\"");
                 if (stream.delay != 0)
                     sb.AppendFormat(" --delay {0}:{1}ms", trackID, stream.delay);
-            	sb.Append(" -a " + trackID + " -D -S \"" + stream.path + "\"");
+            	
+             sb.Append(" -a " + trackID + " -D -S \"" + stream.path + "\"");
 			}
 			
          	foreach (object o in settings.SubtitleStreams)
 			{
 				SubStream stream = (SubStream)o;
+                int trackID = 0;
 				if (!stream.language.Equals(""))
 					sb.Append(" --language 0:" + stream.language);
-				
+                if (stream.name != null && !stream.name.Equals(""))
+                    sb.Append(" --track-name \"" + trackID + ":" + stream.name + "\"");
+
             sb.Append(" -s 0 -D -A \"" + stream.path + "\"");
 			}
 			if (!settings.ChapterFile.Equals("")) // a chapter file is defined
