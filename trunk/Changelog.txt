@@ -1,3 +1,18 @@
+0.2.6.1005
+Commit by Sharx1976:
+    - Using Avisource() to open .avi files.
+    - Added a warning if avisynth is not installed and automatically disables the update button.
+    - (Kurtnoise) m4a extension missing for MKV mux.
+    - (Kurtnoise) allow m4a extension for AudioType.
+    - (Kurtnoise) Drag & Drop support for Audio Encoding.
+    - (Kurtnoise) Drap & Drop support for D2V Creator Tool (bug #1718007)
+    - (Kurtnoise) Drag & Drop support for the OneClick Tool. (bug #1718007)
+    - (Kurtnoise) remove Aften code...
+    - (Kurtnoise) -add Subtitles Streams Name for MKV and MP4 Muxer.
+-enable some missing features for the Muxers. Adaptive Muxer issues not fixed yet...
+    - (Kurtnoise) -add Subtitles Streams Name for MKV and MP4 Muxer.
+-enable some missing features for the Muxers. Adaptive Muxer issues not fixed yet...
+
 0.2.6.1004
 Commit by Sharx1976:
     - Always check to see if an event handler delegate is non-null before calling it (Patch by Sean McGovern)
