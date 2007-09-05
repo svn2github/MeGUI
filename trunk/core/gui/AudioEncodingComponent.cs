@@ -16,7 +16,7 @@ namespace MeGUI
     {
         private MainForm mainForm;
         private AudioStream[] audioStreams = new AudioStream[2];
-        private AudioEncoderProvider audioEncoderProvider= new AudioEncoderProvider();
+        private AudioEncoderProvider audioEncoderProvider = new AudioEncoderProvider();
         private int lastSelectedAudioTrackNumber = 0;
 
         #region handlers
@@ -60,7 +60,7 @@ namespace MeGUI
             {
                 return audioEncoderProvider.GetSupportedOutput(codecHandler.CurrentSettingsProvider.EncoderType);
             }));
-            
+
             codecHandler = new MultipleConfigurersHandler<AudioCodecSettings, string[], AudioCodec, AudioEncoderType>(audioCodec);
 
             profileHandler = new ProfilesControlHandler<AudioCodecSettings, string[]>("Audio", mainForm, profileControl1, codecHandler.EditSettings,
@@ -383,26 +383,52 @@ namespace MeGUI
             this.audioStreams[1].settings = null;
         }
 
-/*        private void audioProfile_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (audioProfile.SelectedIndex != -1) // if it's -1 it's bogus
-            {
-                GenericProfile<AudioCodecSettings> prof = (GenericProfile<AudioCodecSettings>)mainForm.Profiles.AudioProfiles[audioProfile.SelectedItem.ToString()];
-                foreach (ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType> p in audioCodec.Items)
+        /*        private void audioProfile_SelectedIndexChanged(object sender, EventArgs e)
                 {
-                    if (p.IsSameType(prof.Settings))
+                    if (audioProfile.SelectedIndex != -1) // if it's -1 it's bogus
                     {
-                        p.LoadSettings(prof.Settings);
-                        audioCodec.SelectedItem = p;
-                        break;
+                        GenericProfile<AudioCodecSettings> prof = (GenericProfile<AudioCodecSettings>)mainForm.Profiles.AudioProfiles[audioProfile.SelectedItem.ToString()];
+                        foreach (ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType> p in audioCodec.Items)
+                        {
+                            if (p.IsSameType(prof.Settings))
+                            {
+                                p.LoadSettings(prof.Settings);
+                                audioCodec.SelectedItem = p;
+                                break;
+                            }
+                        }
                     }
-                }
-            }
-        }*/
+                }*/
 
         internal void RefreshProfiles()
         {
             profileHandler.RefreshProfiles();
         }
+
+        private void audioInput_DragOver(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.Move;
+        }
+
+        private void audioInput_DragDrop(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.Move;
+
+            Array data = e.Data.GetData("FileDrop") as Array;
+            if (data != null)
+            {
+                if (data.GetValue(0) is String)
+                {
+                    string filename = ((string[])data)[0];
+
+                    if (Path.GetExtension(filename) != null)
+                    {
+                        audioInput.Filename = filename;
+                        openAudioFile(audioInput.Filename);
+                    }
+                }
+            }
+        }
+
     }
 }
