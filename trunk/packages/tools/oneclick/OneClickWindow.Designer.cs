@@ -342,6 +342,7 @@ namespace MeGUI
             // 
             // input
             // 
+            this.input.AllowDrop = true;
             this.input.Filename = "";
             this.input.Filter = "VOB Files (*.vob)|*.vob|MPEG-1/2 Program Streams (*.mpg)|*.mpg|Transport Streams " +
                 "(*.ts)|*.ts|All DGIndex supported files|*.vob;*.mpg;*.mpeg;*.m2v;*.mpv;*.tp;*.ts" +
@@ -355,6 +356,8 @@ namespace MeGUI
             this.input.TabIndex = 3;
             this.input.Title = null;
             this.input.FileSelected += new MeGUI.FileBarEventHandler(this.input_FileSelected);
+            this.input.DragOver += new System.Windows.Forms.DragEventHandler(this.input_DragOver);
+            this.input.DragDrop += new System.Windows.Forms.DragEventHandler(this.input_DragDrop);
             // 
             // outputLabel
             // 

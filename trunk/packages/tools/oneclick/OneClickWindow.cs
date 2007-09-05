@@ -845,6 +845,36 @@ namespace MeGUI
                     tabControl1.TabPages.Remove(encoderConfigTab);
             }
         }
+
+        private void input_DragDrop(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.Move;
+
+            Array data = e.Data.GetData("FileDrop") as Array;
+            if (data != null)
+            {
+                if (data.GetValue(0) is String)
+                {
+                    string filename = ((string[])data)[0];
+
+                    if (Path.GetExtension(filename).ToLower().Equals(".vob") || Path.GetExtension(filename).ToLower().Equals(".vro") ||
+                        Path.GetExtension(filename).ToLower().Equals(".mpg") || Path.GetExtension(filename).ToLower().Equals(".mpeg") ||
+                        Path.GetExtension(filename).ToLower().Equals(".m2v") || Path.GetExtension(filename).ToLower().Equals(".mpv") ||
+                        Path.GetExtension(filename).ToLower().Equals(".ts")  || Path.GetExtension(filename).ToLower().Equals(".tp") ||
+                        Path.GetExtension(filename).ToLower().Equals(".trp") || Path.GetExtension(filename).ToLower().Equals(".pva")                        
+                       )
+                    {
+                        input.Filename = filename;
+                        openInput(input.Filename);
+                    }
+                }
+            }
+        }
+
+        private void input_DragOver(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.Move;
+        }
     }
     public class OneClickTool : MeGUI.core.plugins.interfaces.ITool
     {
