@@ -506,9 +506,17 @@ namespace MeGUI
                     else if (line.IndexOf("Subtitle") != -1)
                     {
                         char[] separator = { '-' };
+                        int intTrackID = 0;
                         string[] split = line.Split(separator, 1000);
                         string trackID = split[0].Substring(3, 1);
-                        int intTrackID = Int32.Parse(trackID) + 1;
+                        if ((trackID == "A") || (trackID == "B") || (trackID == "C") || (trackID == "D") || (trackID == "E") || (trackID == "F"))
+                        {
+                            intTrackID = line.IndexOf("Subtitle") + 1; // use line number when SubIDs are strings instead of numbers.
+                        }
+                        else
+                        {
+                            intTrackID = Int32.Parse(trackID) + 1;
+                        }
                         string language = split[2].Trim();
                         SubtitleInfo si = new SubtitleInfo(language, intTrackID);
                         subtitles.Add(si);
