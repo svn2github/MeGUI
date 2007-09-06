@@ -145,7 +145,7 @@ namespace MeGUI
             this.audioContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.audioContainer.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.audioContainer.FormattingEnabled = true;
-            this.audioContainer.Location = new System.Drawing.Point(301, 119);
+            this.audioContainer.Location = new System.Drawing.Point(301, 118);
             this.audioContainer.Name = "audioContainer";
             this.audioContainer.Size = new System.Drawing.Size(108, 21);
             this.audioContainer.TabIndex = 7;
@@ -155,7 +155,7 @@ namespace MeGUI
             // 
             this.audioContainerLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.audioContainerLabel.AutoSize = true;
-            this.audioContainerLabel.Location = new System.Drawing.Point(243, 122);
+            this.audioContainerLabel.Location = new System.Drawing.Point(243, 121);
             this.audioContainerLabel.Name = "audioContainerLabel";
             this.audioContainerLabel.Size = new System.Drawing.Size(59, 13);
             this.audioContainerLabel.TabIndex = 32;
@@ -164,7 +164,7 @@ namespace MeGUI
             // audioCodecLabel
             // 
             this.audioCodecLabel.AutoSize = true;
-            this.audioCodecLabel.Location = new System.Drawing.Point(31, 122);
+            this.audioCodecLabel.Location = new System.Drawing.Point(31, 121);
             this.audioCodecLabel.Name = "audioCodecLabel";
             this.audioCodecLabel.Size = new System.Drawing.Size(44, 13);
             this.audioCodecLabel.TabIndex = 31;
@@ -177,7 +177,7 @@ namespace MeGUI
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.queueAudioButton.AutoSize = true;
             this.queueAudioButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.queueAudioButton.Location = new System.Drawing.Point(403, 146);
+            this.queueAudioButton.Location = new System.Drawing.Point(403, 144);
             this.queueAudioButton.Name = "queueAudioButton";
             this.queueAudioButton.Size = new System.Drawing.Size(60, 23);
             this.queueAudioButton.TabIndex = 30;
@@ -227,7 +227,7 @@ namespace MeGUI
             // deleteAudioButton
             // 
             this.deleteAudioButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.deleteAudioButton.Location = new System.Drawing.Point(415, 119);
+            this.deleteAudioButton.Location = new System.Drawing.Point(415, 118);
             this.deleteAudioButton.Name = "deleteAudioButton";
             this.deleteAudioButton.Size = new System.Drawing.Size(48, 23);
             this.deleteAudioButton.TabIndex = 6;
@@ -239,7 +239,7 @@ namespace MeGUI
             this.audioCodec.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.audioCodec.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.audioCodec.Location = new System.Drawing.Point(115, 119);
+            this.audioCodec.Location = new System.Drawing.Point(115, 118);
             this.audioCodec.Name = "audioCodec";
             this.audioCodec.Size = new System.Drawing.Size(122, 21);
             this.audioCodec.TabIndex = 7;

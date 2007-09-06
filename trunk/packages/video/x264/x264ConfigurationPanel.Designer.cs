@@ -371,7 +371,7 @@ namespace MeGUI.packages.video.x264
             // 
             // x264BetaDeblock
             // 
-            this.x264BetaDeblock.Location = new System.Drawing.Point(272, 64);
+            this.x264BetaDeblock.Location = new System.Drawing.Point(268, 64);
             this.x264BetaDeblock.Maximum = new decimal(new int[] {
             6,
             0,
@@ -389,7 +389,7 @@ namespace MeGUI.packages.video.x264
             // 
             // x264AlphaDeblock
             // 
-            this.x264AlphaDeblock.Location = new System.Drawing.Point(272, 40);
+            this.x264AlphaDeblock.Location = new System.Drawing.Point(268, 40);
             this.x264AlphaDeblock.Maximum = new decimal(new int[] {
             6,
             0,
@@ -1104,9 +1104,9 @@ namespace MeGUI.packages.video.x264
             this.x264TempQuantBlurLabel.Location = new System.Drawing.Point(8, 166);
             this.x264TempQuantBlurLabel.Name = "x264TempQuantBlurLabel";
             this.x264TempQuantBlurLabel.Padding = new System.Windows.Forms.Padding(3);
-            this.x264TempQuantBlurLabel.Size = new System.Drawing.Size(148, 19);
+            this.x264TempQuantBlurLabel.Size = new System.Drawing.Size(149, 19);
             this.x264TempQuantBlurLabel.TabIndex = 5;
-            this.x264TempQuantBlurLabel.Text = "Temp. blur of Quant after CC";
+            this.x264TempQuantBlurLabel.Text = "Temp. Blur of Quant after CC";
             this.x264TempQuantBlurLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // x264TempFrameComplexityBlurLabel
@@ -1235,7 +1235,7 @@ namespace MeGUI.packages.video.x264
             "Spatial",
             "Temporal",
             "Auto"});
-            this.x264BframePredictionMode.Location = new System.Drawing.Point(91, 199);
+            this.x264BframePredictionMode.Location = new System.Drawing.Point(88, 197);
             this.x264BframePredictionMode.Name = "x264BframePredictionMode";
             this.x264BframePredictionMode.Size = new System.Drawing.Size(82, 21);
             this.x264BframePredictionMode.TabIndex = 39;

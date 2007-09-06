@@ -1701,6 +1701,7 @@ namespace MeGUI
 		{
             if (suggestResolution.Checked)
             {
+                this.resize.Checked = true;
                 this.verticalResolution.Enabled = false;
                 bool signalAR = this.signalAR.Checked;
                 double dar = 1.0;
@@ -1884,10 +1885,12 @@ namespace MeGUI
             {
                 this.horizontalResolution.Enabled = true;
                 this.verticalResolution.Enabled = !suggestResolution.Checked;
+                this.suggestResolution.Enabled = true;
             }
             else
             {
                 this.horizontalResolution.Enabled = this.verticalResolution.Enabled = false;
+                this.suggestResolution.Enabled = this.suggestResolution.Checked = false;
             }
             this.showScript();
         }

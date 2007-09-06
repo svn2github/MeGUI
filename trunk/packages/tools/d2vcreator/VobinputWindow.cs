@@ -309,7 +309,7 @@ namespace MeGUI
             this.track1Label.Name = "track1Label";
             this.track1Label.Size = new System.Drawing.Size(72, 23);
             this.track1Label.TabIndex = 11;
-            this.track1Label.Text = "Track1";
+            this.track1Label.Text = "Track 1";
             // 
             // track2
             // 
