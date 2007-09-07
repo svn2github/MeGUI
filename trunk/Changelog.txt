@@ -1,14 +1,20 @@
+0.2.6.1007
+    - (Sharx1976) New changelog format
+    - (Sharx1976) Fixed 1735676 (Video Output filename can't be changed directly)
+    - (Kurtnoise) fix wiki link
+    - (Kurtnoise) fix label typos
+    - (Kurtnoise) remove hint track option for NDAAC encoder + several tunings
+    - (Kurtnoise) few tunings for audio encoders
+
 0.2.6.1006
-Commit by Sharx1976:
-    - Fixed some visual interface glitches
-	- AVS Creator: Checking "Resize" enables "Suggest Resolution"
-	- AVS Creator: Checking "Suggest Resolution" automatically checks "Resize"
-	- (Kurtnoise) fix subtitles streams parsing when we have strings instead of numbers.
+    - (Sharx1976) Fixed some visual interface glitches
+    - (Sharx1976) AVS Creator: Checking "Resize" enables "Suggest Resolution"
+    - (Sharx1976) AVS Creator: Checking "Suggest Resolution" automatically checks "Resize"
+    - (Kurtnoise) fix subtitles streams parsing when we have strings instead of numbers
 
 0.2.6.1005
-Commit by Sharx1976:
-    - Using Avisource() to open .avi files.
-    - Added a warning if avisynth is not installed and automatically disables the update button.
+    - (Sharx1976) Using Avisource() to open .avi files.
+    - (Sharx1976) Added a warning if avisynth is not installed and automatically disables the update button.
     - (Kurtnoise) m4a extension missing for MKV mux.
     - (Kurtnoise) allow m4a extension for AudioType.
     - (Kurtnoise) Drag & Drop support for Audio Encoding.
@@ -19,9 +25,8 @@ Commit by Sharx1976:
     - (Kurtnoise) enable some missing features for the Muxers. Adaptive Muxer issues not fixed yet...
 
 0.2.6.1004
-Commit by Sharx1976:
-    - Always check to see if an event handler delegate is non-null before calling it (Patch by Sean McGovern)
-    - Increased the neroaac encoder max bitrate to 640kbps
+    - (Sharx1976) Always check to see if an event handler delegate is non-null before calling it (Patch by Sean McGovern)
+    - (Sharx1976) Increased the neroaac encoder max bitrate to 640kbps
     - (Kurtnoise) add "Français" in the Language Selection (supported by the ISO 639 code and also needed for the parsing of the DVDDecrypter Info Text File)
 
 0.2.6.1003
