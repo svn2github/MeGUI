@@ -1,3 +1,10 @@
+0.2.6.1006
+Commit by Sharx1976:
+    - Fixed some visual interface glitches
+	- AVS Creator: Checking "Resize" enables "Suggest Resolution"
+	- AVS Creator: Checking "Suggest Resolution" automatically checks "Resize"
+	- (Kurtnoise) fix subtitles streams parsing when we have strings instead of numbers.
+
 0.2.6.1005
 Commit by Sharx1976:
     - Using Avisource() to open .avi files.
@@ -8,10 +15,8 @@ Commit by Sharx1976:
     - (Kurtnoise) Drap & Drop support for D2V Creator Tool (bug #1718007)
     - (Kurtnoise) Drag & Drop support for the OneClick Tool. (bug #1718007)
     - (Kurtnoise) remove Aften code...
-    - (Kurtnoise) -add Subtitles Streams Name for MKV and MP4 Muxer.
--enable some missing features for the Muxers. Adaptive Muxer issues not fixed yet...
-    - (Kurtnoise) -add Subtitles Streams Name for MKV and MP4 Muxer.
--enable some missing features for the Muxers. Adaptive Muxer issues not fixed yet...
+    - (Kurtnoise) add Subtitles Streams Name for MKV and MP4 Muxer.
+    - (Kurtnoise) enable some missing features for the Muxers. Adaptive Muxer issues not fixed yet...
 
 0.2.6.1004
 Commit by Sharx1976:
