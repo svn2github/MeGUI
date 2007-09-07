@@ -433,7 +433,7 @@ namespace MeGUI
             maxFilesOfType = new int[] { -1, -1, -1, 1 };
             base.type = MuxerType.MKVMERGE;
             generator = CommandLineGenerator.generateMkvmergeCommandline;
-            name = "Mkv muxer";
+            name = "MKV muxer";
 //            base.audioInputFilter = "All supported types (*.aac, *.ac3, *.dts, *.mp2, *.mp3, *.mp4, *.ogg)|*.aac;*.ac3;*.dts;*.mp2;*.mp3;*.mp4;*.ogg|RAW AAC Files (*.aac)|*.aac|AC3 Files (*.ac3)|*.ac3|DTS Files (*.dts)|*.dts" +
 //                "MP2 Files (*.mp2)|*.mp2|MP3 Files (*.mp3)|*.mp3|MP4 Audio Files (*.mp4)|*.mp4|Ogg Vorbis Files (*.ogg)|*.ogg";
 //            base.videoInputFilter = "All supported types (*.avi, *.mkv, *.mp4)|*.avi;*.mkv;*.mp4|AVI Files (*.avi)|*.avi|Matroska Files (*.mkv)|*.mkv|MP4 Files (*.mp4)|*.mp4";

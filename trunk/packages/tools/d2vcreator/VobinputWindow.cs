@@ -382,7 +382,7 @@ namespace MeGUI
             this.projectNameLabel.Name = "projectNameLabel";
             this.projectNameLabel.Size = new System.Drawing.Size(100, 13);
             this.projectNameLabel.TabIndex = 3;
-            this.projectNameLabel.Text = "d2v Project Ouput";
+            this.projectNameLabel.Text = "d2v Project Output";
             // 
             // saveProjectDialog
             // 
