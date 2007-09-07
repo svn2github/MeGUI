@@ -47,8 +47,13 @@ namespace MeGUI.packages.audio.lame
             this.encoderGroupBox.Controls.Add(this.encodingModeLabel);
             this.encoderGroupBox.Controls.Add(this.encodingMode);
             this.encoderGroupBox.Controls.Add(this.bitrate);
-            this.encoderGroupBox.Location = new System.Drawing.Point(1, 158);
-            this.encoderGroupBox.Size = new System.Drawing.Size(390, 92);
+            this.encoderGroupBox.Location = new System.Drawing.Point(5, 158);
+            this.encoderGroupBox.Size = new System.Drawing.Size(382, 92);
+            // 
+            // besweetOptionsGroupbox
+            // 
+            this.besweetOptionsGroupbox.Location = new System.Drawing.Point(5, 3);
+            this.besweetOptionsGroupbox.Size = new System.Drawing.Size(382, 149);
             // 
             // qualityLabel
             // 
@@ -66,7 +71,7 @@ namespace MeGUI.packages.audio.lame
             0,
             0,
             0});
-            this.quality.Location = new System.Drawing.Point(330, 61);
+            this.quality.Location = new System.Drawing.Point(322, 61);
             this.quality.Minimum = new decimal(new int[] {
             10,
             0,
@@ -102,7 +107,7 @@ namespace MeGUI.packages.audio.lame
             // 
             this.encodingMode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.encodingMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.encodingMode.Location = new System.Drawing.Point(258, 13);
+            this.encodingMode.Location = new System.Drawing.Point(250, 13);
             this.encodingMode.Name = "encodingMode";
             this.encodingMode.Size = new System.Drawing.Size(121, 21);
             this.encodingMode.TabIndex = 7;
@@ -116,7 +121,7 @@ namespace MeGUI.packages.audio.lame
             0,
             0,
             0});
-            this.bitrate.Location = new System.Drawing.Point(330, 37);
+            this.bitrate.Location = new System.Drawing.Point(322, 37);
             this.bitrate.Maximum = new decimal(new int[] {
             320,
             0,

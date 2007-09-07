@@ -38,9 +38,14 @@ namespace MeGUI.packages.audio.vorbis
             // 
             this.encoderGroupBox.Controls.Add(this.vQuality);
             this.encoderGroupBox.Controls.Add(this.label1);
-            this.encoderGroupBox.Location = new System.Drawing.Point(1, 158);
-            this.encoderGroupBox.Size = new System.Drawing.Size(390, 85);
+            this.encoderGroupBox.Location = new System.Drawing.Point(5, 158);
+            this.encoderGroupBox.Size = new System.Drawing.Size(382, 85);
             this.encoderGroupBox.Text = "Ogg Vorbis options";
+            // 
+            // besweetOptionsGroupbox
+            // 
+            this.besweetOptionsGroupbox.Location = new System.Drawing.Point(5, 3);
+            this.besweetOptionsGroupbox.Size = new System.Drawing.Size(382, 149);
             // 
             // vQuality
             // 
@@ -49,7 +54,7 @@ namespace MeGUI.packages.audio.vorbis
             this.vQuality.Maximum = 1000;
             this.vQuality.Minimum = -200;
             this.vQuality.Name = "vQuality";
-            this.vQuality.Size = new System.Drawing.Size(384, 45);
+            this.vQuality.Size = new System.Drawing.Size(376, 45);
             this.vQuality.TabIndex = 24;
             this.vQuality.TickFrequency = 25;
             this.vQuality.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
@@ -57,9 +62,10 @@ namespace MeGUI.packages.audio.vorbis
             // 
             // label1
             // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label1.Location = new System.Drawing.Point(3, 16);
+            this.label1.Location = new System.Drawing.Point(10, 16);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(35, 13);
             this.label1.TabIndex = 25;

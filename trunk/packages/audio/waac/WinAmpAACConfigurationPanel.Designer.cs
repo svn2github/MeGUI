@@ -48,9 +48,14 @@ namespace MeGUI.packages.audio.waac
             this.encoderGroupBox.Controls.Add(this.comboBox2);
             this.encoderGroupBox.Controls.Add(this.label1);
             this.encoderGroupBox.Controls.Add(this.comboBox1);
-            this.encoderGroupBox.Location = new System.Drawing.Point(1, 158);
-            this.encoderGroupBox.Size = new System.Drawing.Size(390, 165);
+            this.encoderGroupBox.Location = new System.Drawing.Point(5, 158);
+            this.encoderGroupBox.Size = new System.Drawing.Size(382, 165);
             this.encoderGroupBox.Text = "CT AAC Options";
+            // 
+            // besweetOptionsGroupbox
+            // 
+            this.besweetOptionsGroupbox.Location = new System.Drawing.Point(5, 3);
+            this.besweetOptionsGroupbox.Size = new System.Drawing.Size(382, 149);
             // 
             // label3
             // 
@@ -68,7 +73,7 @@ namespace MeGUI.packages.audio.waac
             this.vBitrate.Maximum = 320;
             this.vBitrate.Minimum = 16;
             this.vBitrate.Name = "vBitrate";
-            this.vBitrate.Size = new System.Drawing.Size(384, 45);
+            this.vBitrate.Size = new System.Drawing.Size(376, 45);
             this.vBitrate.TabIndex = 36;
             this.vBitrate.TickFrequency = 8;
             this.vBitrate.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
@@ -82,7 +87,7 @@ namespace MeGUI.packages.audio.waac
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(243, 17);
             this.checkBox2.TabIndex = 35;
-            this.checkBox2.Text = "Produce MPEG2 AAC isntead of MPEG4 AAC";
+            this.checkBox2.Text = "Produce MPEG2 AAC instead of MPEG4 AAC";
             this.checkBox2.UseVisualStyleBackColor = true;
             // 
             // label2
@@ -90,15 +95,15 @@ namespace MeGUI.packages.audio.waac
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(12, 40);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(76, 13);
+            this.label2.Size = new System.Drawing.Size(82, 13);
             this.label2.TabIndex = 34;
-            this.label2.Text = "Channel Mode";
+            this.label2.Text = "Channel Mode :";
             // 
             // comboBox2
             // 
             this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(93, 37);
+            this.comboBox2.Location = new System.Drawing.Point(107, 37);
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(253, 21);
             this.comboBox2.TabIndex = 33;
@@ -108,15 +113,15 @@ namespace MeGUI.packages.audio.waac
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(12, 13);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(36, 13);
+            this.label1.Size = new System.Drawing.Size(42, 13);
             this.label1.TabIndex = 32;
-            this.label1.Text = "Profile";
+            this.label1.Text = "Profile :";
             // 
             // comboBox1
             // 
             this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(93, 10);
+            this.comboBox1.Location = new System.Drawing.Point(107, 10);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(253, 21);
             this.comboBox1.TabIndex = 31;

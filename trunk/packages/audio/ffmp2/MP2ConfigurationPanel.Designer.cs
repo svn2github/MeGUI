@@ -39,23 +39,28 @@ namespace MeGUI.packages.audio.ffmp2
             this.encoderGroupBox.Controls.Add(this.label2);
             this.encoderGroupBox.Controls.Add(this.label1);
             this.encoderGroupBox.Controls.Add(this.comboBox1);
-            this.encoderGroupBox.Location = new System.Drawing.Point(1, 158);
-            this.encoderGroupBox.Size = new System.Drawing.Size(390, 43);
+            this.encoderGroupBox.Location = new System.Drawing.Point(5, 158);
+            this.encoderGroupBox.Size = new System.Drawing.Size(382, 43);
+            // 
+            // besweetOptionsGroupbox
+            // 
+            this.besweetOptionsGroupbox.Location = new System.Drawing.Point(5, 3);
+            this.besweetOptionsGroupbox.Size = new System.Drawing.Size(382, 149);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 16);
+            this.label2.Location = new System.Drawing.Point(12, 18);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(37, 13);
+            this.label2.Size = new System.Drawing.Size(43, 13);
             this.label2.TabIndex = 5;
-            this.label2.Text = "Bitrate";
+            this.label2.Text = "Bitrate :";
             // 
             // label1
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(354, 16);
+            this.label1.Location = new System.Drawing.Point(346, 18);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(30, 13);
             this.label1.TabIndex = 4;
@@ -67,9 +72,9 @@ namespace MeGUI.packages.audio.ffmp2
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(55, 13);
+            this.comboBox1.Location = new System.Drawing.Point(55, 15);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(291, 21);
+            this.comboBox1.Size = new System.Drawing.Size(283, 21);
             this.comboBox1.TabIndex = 3;
             // 
             // MP2ConfigurationPanel

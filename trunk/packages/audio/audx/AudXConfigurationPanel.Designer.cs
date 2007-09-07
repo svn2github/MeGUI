@@ -37,26 +37,31 @@ namespace MeGUI.packages.audio.audx
             // 
             this.encoderGroupBox.Controls.Add(this.label1);
             this.encoderGroupBox.Controls.Add(this.comboBox1);
-            this.encoderGroupBox.Location = new System.Drawing.Point(1, 158);
-            this.encoderGroupBox.Size = new System.Drawing.Size(390, 64);
+            this.encoderGroupBox.Location = new System.Drawing.Point(6, 158);
+            this.encoderGroupBox.Size = new System.Drawing.Size(380, 64);
             this.encoderGroupBox.Text = "AudX Configuration Options";
+            // 
+            // besweetOptionsGroupbox
+            // 
+            this.besweetOptionsGroupbox.Location = new System.Drawing.Point(6, 3);
+            this.besweetOptionsGroupbox.Size = new System.Drawing.Size(380, 149);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(28, 27);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(39, 13);
+            this.label1.Size = new System.Drawing.Size(45, 13);
             this.label1.TabIndex = 27;
-            this.label1.Text = "Quality";
+            this.label1.Text = "Quality :";
             // 
             // comboBox1
             // 
             this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(106, 24);
+            this.comboBox1.Location = new System.Drawing.Point(82, 24);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(278, 21);
+            this.comboBox1.Size = new System.Drawing.Size(289, 21);
             this.comboBox1.TabIndex = 26;
             // 
             // AudXConfigurationPanel
