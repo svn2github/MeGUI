@@ -113,6 +113,7 @@ namespace MeGUI
 
         private void filename_TextChanged(object sender, EventArgs e)
         {
+            setFilename(filename.Text);
             triggerEvent();
         }
     }
