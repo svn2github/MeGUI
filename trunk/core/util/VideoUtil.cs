@@ -469,7 +469,7 @@ namespace MeGUI
 			try
 			{
 				sr = new StreamReader(infoFile, System.Text.Encoding.Default);
-				string line = "";
+                string line = ""; int LineCount = 0;
 				while ((line = sr.ReadLine()) != null)
 				{
 					if (line.IndexOf("Video") != -1)
@@ -506,19 +506,10 @@ namespace MeGUI
                     else if (line.IndexOf("Subtitle") != -1)
                     {
                         char[] separator = { '-' };
-                        int intTrackID = 0;
+                        LineCount++;
                         string[] split = line.Split(separator, 1000);
-                        string trackID = split[0].Substring(3, 1);
-                        if ((trackID == "A") || (trackID == "B") || (trackID == "C") || (trackID == "D") || (trackID == "E") || (trackID == "F"))
-                        {
-                            intTrackID = line.IndexOf("Subtitle") + 1; // use line number when SubIDs are strings instead of numbers.
-                        }
-                        else
-                        {
-                            intTrackID = Int32.Parse(trackID) + 1;
-                        }
                         string language = split[2].Trim();
-                        SubtitleInfo si = new SubtitleInfo(language, intTrackID);
+                        SubtitleInfo si = new SubtitleInfo(language, LineCount);
                         subtitles.Add(si);
                     }
 				}
