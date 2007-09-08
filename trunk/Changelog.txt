@@ -1,3 +1,11 @@
+0.2.6.1008
+    - (Kurtnoise) Introduce a line counter for Subtitle Part in the getSourceInfo function (to avoid issues).
+    - (Kurtnoise) [MP4 Muxer] : disabled -tmp command.
+    - (Kurtnoise) [MP4 Muxer] : added 'video name' feature for muxedInput.
+    - (Kurtnoise) [D2V Creator] : added automatic output filename.
+    - (Kurtnoise) [VOBSubber] : added Drag & Drop.
+    - (Kurtnoise) [Main Form] : added bugs tracker and features requests SF links (#1789800) 
+
 0.2.6.1007
     - (Sharx1976) New changelog format
     - (Sharx1976) Fixed 1735676 (Video Output filename can't be changed directly)
