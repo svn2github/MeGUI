@@ -598,6 +598,8 @@ namespace MeGUI
                     {
                         openIFODialog.FileName = filename;
                         openVideo(openIFODialog.FileName);
+                        projectName.Text = Path.ChangeExtension(openIFODialog.FileName, ".d2v");
+                        checkIndexIO();
                     }
                 }
             }
