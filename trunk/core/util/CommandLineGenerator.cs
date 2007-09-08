@@ -871,7 +871,10 @@ namespace MeGUI
             }
             if (settings.MuxedInput.Length > 0)
             {
-                sb.Append(" -add \"" + settings.MuxedInput + "\"");
+                sb.Append(" -add \"" + settings.MuxedInput);
+                if (!settings.VideoName.Equals(""))
+                    sb.Append(":name=" + settings.VideoName);
+                sb.Append("\"");
             }
             foreach (object o in settings.AudioStreams)
             {
@@ -907,7 +910,7 @@ namespace MeGUI
                 string fpsString = settings.Framerate.ToString(ci);
                 sb.Append(" -fps " + fpsString);
             }
-            sb.AppendFormat(" -tmp {0}", Path.GetDirectoryName(settings.MuxedOutput));
+         /*   sb.AppendFormat(" -tmp {0}", Path.GetDirectoryName(settings.MuxedOutput)); */
             sb.Append(" -new \"" + settings.MuxedOutput + "\"");
             return sb.ToString();
         }
