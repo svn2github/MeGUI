@@ -118,6 +118,9 @@ namespace MeGUI
 
         private List<Form> allForms = new List<Form>();
         private MenuItem menuItem3;
+        private MenuItem mnuSF;
+        private MenuItem mnuBugsTrackerLink;
+        private MenuItem mnuFeaturesReqLink;
         private List<Form> formsToReopen = new List<Form>();
 
         public bool IsHiddenMode { get { return trayIcon.Visible; } }
@@ -205,6 +208,9 @@ namespace MeGUI
             this.mnuChangelog = new System.Windows.Forms.MenuItem();
             this.mnuGuide = new System.Windows.Forms.MenuItem();
             this.mnuHelpLink = new System.Windows.Forms.MenuItem();
+            this.mnuSF = new System.Windows.Forms.MenuItem();
+            this.mnuBugsTrackerLink = new System.Windows.Forms.MenuItem();
+            this.mnuFeaturesReqLink = new System.Windows.Forms.MenuItem();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.trayIcon = new System.Windows.Forms.NotifyIcon(this.components);
@@ -592,7 +598,8 @@ namespace MeGUI
             this.mnuHelp.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.mnuChangelog,
             this.mnuGuide,
-            this.mnuHelpLink});
+            this.mnuHelpLink,
+            this.mnuSF});
             this.mnuHelp.Text = "&Help";
             // 
             // mnuChangelog
@@ -614,6 +621,26 @@ namespace MeGUI
             this.mnuHelpLink.Shortcut = System.Windows.Forms.Shortcut.CtrlH;
             this.mnuHelpLink.Text = "Help";
             this.mnuHelpLink.Click += new System.EventHandler(this.menuItem2_Click);
+            // 
+            // mnuSF
+            // 
+            this.mnuSF.Index = 3;
+            this.mnuSF.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.mnuBugsTrackerLink,
+            this.mnuFeaturesReqLink});
+            this.mnuSF.Text = "SourceForge.net";
+            // 
+            // mnuBugsTrackerLink
+            // 
+            this.mnuBugsTrackerLink.Index = 0;
+            this.mnuBugsTrackerLink.Text = "Bugs Tracker";
+            this.mnuBugsTrackerLink.Click += new System.EventHandler(this.mnuBugsTrackerLink_Click);
+            // 
+            // mnuFeaturesReqLink
+            // 
+            this.mnuFeaturesReqLink.Index = 1;
+            this.mnuFeaturesReqLink.Text = "Features Requests";
+            this.mnuFeaturesReqLink.Click += new System.EventHandler(this.mnuFeaturesReqLink_Click);
             // 
             // trayIcon
             // 
@@ -1925,6 +1952,15 @@ namespace MeGUI
                 delegate(System.Drawing.Size s) { MeGUI.Properties.Settings.Default.MainFormSize = s; },
                 delegate(FormWindowState s) { MeGUI.Properties.Settings.Default.MainFormWindowState = s; });
 
+        }
+        private void mnuBugsTrackerLink_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://sourceforge.net/tracker/?group_id=156112&atid=798476");
+        }
+
+        private void mnuFeaturesReqLink_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://sourceforge.net/tracker/?group_id=156112&atid=798479");
         }
     }
     public class CommandlineUpgradeData
