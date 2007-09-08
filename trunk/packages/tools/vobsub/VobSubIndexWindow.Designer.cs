@@ -109,11 +109,14 @@ namespace MeGUI
             // 
             // input
             // 
+            this.input.AllowDrop = true;
             this.input.Location = new System.Drawing.Point(118, 17);
             this.input.Name = "input";
             this.input.ReadOnly = true;
             this.input.Size = new System.Drawing.Size(256, 21);
             this.input.TabIndex = 1;
+            this.input.DragOver += new System.Windows.Forms.DragEventHandler(this.input_DragOver);
+            this.input.DragDrop += new System.Windows.Forms.DragEventHandler(this.input_DragDrop);
             // 
             // inputLabel
             // 

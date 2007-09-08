@@ -150,6 +150,33 @@ namespace MeGUI
         {
             get { return generateJob(); }
         }
+
+        private void input_DragDrop(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.Move;
+
+            Array data = e.Data.GetData("FileDrop") as Array;
+            if (data != null)
+            {
+                if (data.GetValue(0) is String)
+                {
+                    string filename = ((string[])data)[0];
+
+                    if (Path.GetExtension(filename).ToLower().Equals(".ifo"))
+                    {
+                        openIFODialog.FileName = filename;
+                        openVideo(openIFODialog.FileName);
+                        projectName.Text = Path.ChangeExtension(openIFODialog.FileName, ".idx");
+                        checkIndexIO();
+                    }
+                }
+            }
+        }
+
+        private void input_DragOver(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.Move;
+        }
     }
 
     public class VobSubTool : ITool
