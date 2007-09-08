@@ -48,10 +48,10 @@ namespace MeGUI
                 }
                 else
                 {
-                    MuxableType audioType = VideoUtil.guessAudioMuxableType(stream.path, true);
+                    AudioType audioType = VideoUtil.guessAudioType(stream.path);
                     if (audioType != null)
                     {
-                        audioTypesList.Add(audioType);
+                        subTypesList.Add(new MuxableType(audioType, null));
                     }
                 }
                 counter++;
