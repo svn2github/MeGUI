@@ -11,7 +11,7 @@ namespace MeGUI
         #region variables
         private string[][] autoUpdateServerLists;
         private string faacPath, lamePath, neroAacEncPath, mencoderPath,  mp4boxPath, mkvmergePath, encAacPlusPath,
-            ffmpegPath, besplitPath,
+            ffmpegPath, besplitPath, yadifPath,
             x264Path, dgIndexPath, xvidEncrawPath, avc2aviPath, aviMuxGUIPath, oggEnc2Path, encAudXPath,
             defaultLanguage1, defaultLanguage2, divxMuxerPath, afterEncodingCommand;
         private bool recalculateMainMovieBitrate, autoForceFilm, autoStartQueue, enableMP3inMP4, autoOpenScript,
@@ -60,6 +60,7 @@ namespace MeGUI
             encAudXPath = "enc_AudX_CLI.exe";
             encAacPlusPath = "enc_aacPlus.exe";
             ffmpegPath = "ffmpeg.exe";
+            yadifPath = "yadif.dll";
             recalculateMainMovieBitrate = false;
 			autoForceFilm = true;
 			autoStartQueue = false;
@@ -85,6 +86,12 @@ namespace MeGUI
             safeProfileAlteration = false;
         }
         #region properties
+        public string YadifPath
+        {
+            get { return yadifPath; }
+            set { yadifPath = value; }
+        }
+
         public ulong AudioSamplesPerUpdate
         {
             get { return audioSamplesPerUpdate; }

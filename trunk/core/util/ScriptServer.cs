@@ -187,8 +187,9 @@ namespace MeGUI
             }
             else if (info.sourceType == SourceType.INTERLACED)
             {
-                ScriptServer.AddTDeint(info.fieldOrder, filters, true, true);
+                ScriptServer.AddYadif(info.fieldOrder, filters);
                 ScriptServer.AddTDeint(info.fieldOrder, filters, true, false);
+                ScriptServer.AddTDeint(info.fieldOrder, filters, true, true);
                 if (info.fieldOrder != FieldOrder.VARIABLE)
                     ScriptServer.AddLeakDeint(info.fieldOrder, filters);
                 ScriptServer.AddTMC(info.fieldOrder, filters);
@@ -203,16 +204,17 @@ namespace MeGUI
             else if (info.sourceType == SourceType.HYBRID_FILM_INTERLACED ||
                 info.sourceType == SourceType.HYBRID_PROGRESSIVE_FILM)
             {
-                ScriptServer.AddTIVTC("", info.isAnime, true, info.majorityFilm, true,
-                    info.fieldOrder, filters);
                 ScriptServer.AddTIVTC("", info.isAnime, true, info.majorityFilm, false,
+                    info.fieldOrder, filters);
+                ScriptServer.AddTIVTC("", info.isAnime, true, info.majorityFilm, true,
                     info.fieldOrder, filters);
                 ScriptServer.AddIVTC(info.fieldOrder, true, info.majorityFilm, filters);
             }
             else if (info.sourceType == SourceType.HYBRID_PROGRESSIVE_INTERLACED)
             {
-                ScriptServer.AddTDeint(info.fieldOrder, filters, false, true);
+                ScriptServer.AddYadif(info.fieldOrder, filters);
                 ScriptServer.AddTDeint(info.fieldOrder, filters, false, false);
+                ScriptServer.AddTDeint(info.fieldOrder, filters, false, true);
                 ScriptServer.AddFieldDeint(info.fieldOrder, filters, false, true);
                 ScriptServer.AddFieldDeint(info.fieldOrder, filters, false, false);
                 if (info.fieldOrder != FieldOrder.VARIABLE)
@@ -232,6 +234,16 @@ namespace MeGUI
                 i_order = 1;
             return i_order;
         }
+
+        public static void AddYadif(FieldOrder order, List<DeinterlaceFilter> filters)
+        {
+            filters.Add(new DeinterlaceFilter(
+                "Yadif",
+                string.Format("Load_Stdcall_Plugin(\"{0}\"){1}Yadif(order={2})", 
+                    MainForm.Instance.Settings.YadifPath, Environment.NewLine,
+                    Order(order))));
+        }
+
         public static void AddLeakDeint(FieldOrder order, List<DeinterlaceFilter> filters)
         {
             filters.Add(new DeinterlaceFilter(

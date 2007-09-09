@@ -134,6 +134,9 @@ namespace MeGUI
         private NumericUpDown audiosamplesperupdate;
         private Label label6;
         private MeGUI.core.gui.HelpButton helpButton1;
+        private Button button9;
+        private TextBox textBox9;
+        private Label label16;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -286,6 +289,9 @@ namespace MeGUI
             this.nbPasses = new System.Windows.Forms.NumericUpDown();
             this.keep2ndPassOutput = new System.Windows.Forms.CheckBox();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
+            this.label16 = new System.Windows.Forms.Label();
+            this.textBox9 = new System.Windows.Forms.TextBox();
+            this.button9 = new System.Windows.Forms.Button();
             groupBox1 = new System.Windows.Forms.GroupBox();
             groupBox1.SuspendLayout();
             this.otherGroupBox.SuspendLayout();
@@ -408,7 +414,7 @@ namespace MeGUI
             // 
             // selectAvisynthPluginsDir
             // 
-            this.selectAvisynthPluginsDir.Location = new System.Drawing.Point(424, 441);
+            this.selectAvisynthPluginsDir.Location = new System.Drawing.Point(424, 460);
             this.selectAvisynthPluginsDir.Name = "selectAvisynthPluginsDir";
             this.selectAvisynthPluginsDir.Size = new System.Drawing.Size(24, 23);
             this.selectAvisynthPluginsDir.TabIndex = 16;
@@ -417,7 +423,7 @@ namespace MeGUI
             // 
             // avisynthPluginsDir
             // 
-            this.avisynthPluginsDir.Location = new System.Drawing.Point(120, 442);
+            this.avisynthPluginsDir.Location = new System.Drawing.Point(120, 461);
             this.avisynthPluginsDir.Name = "avisynthPluginsDir";
             this.avisynthPluginsDir.ReadOnly = true;
             this.avisynthPluginsDir.Size = new System.Drawing.Size(296, 21);
@@ -427,7 +433,7 @@ namespace MeGUI
             // avisynthPluginsLabel
             // 
             this.avisynthPluginsLabel.AutoSize = true;
-            this.avisynthPluginsLabel.Location = new System.Drawing.Point(11, 449);
+            this.avisynthPluginsLabel.Location = new System.Drawing.Point(11, 468);
             this.avisynthPluginsLabel.Name = "avisynthPluginsLabel";
             this.avisynthPluginsLabel.Size = new System.Drawing.Size(84, 13);
             this.avisynthPluginsLabel.TabIndex = 14;
@@ -1097,7 +1103,10 @@ namespace MeGUI
             this.tabPage2.Controls.Add(this.xvidEncrawLabel);
             this.tabPage2.Controls.Add(this.selectXvidEncrawButton);
             this.tabPage2.Controls.Add(this.xvidEncrawPath);
+            this.tabPage2.Controls.Add(this.button9);
             this.tabPage2.Controls.Add(this.selectAvisynthPluginsDir);
+            this.tabPage2.Controls.Add(this.textBox9);
+            this.tabPage2.Controls.Add(this.label16);
             this.tabPage2.Controls.Add(this.avisynthPluginsDir);
             this.tabPage2.Controls.Add(this.avisynthPluginsLabel);
             this.tabPage2.Controls.Add(this.dgIndexPath);
@@ -1486,6 +1495,33 @@ namespace MeGUI
             this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 29;
             // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(11, 437);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(45, 13);
+            this.label16.TabIndex = 14;
+            this.label16.Text = "yadif.dll";
+            // 
+            // textBox9
+            // 
+            this.textBox9.Location = new System.Drawing.Point(120, 434);
+            this.textBox9.Name = "textBox9";
+            this.textBox9.ReadOnly = true;
+            this.textBox9.Size = new System.Drawing.Size(296, 21);
+            this.textBox9.TabIndex = 15;
+            this.textBox9.Text = "avisynth plugins Directory";
+            // 
+            // button9
+            // 
+            this.button9.Location = new System.Drawing.Point(424, 433);
+            this.button9.Name = "button9";
+            this.button9.Size = new System.Drawing.Size(24, 23);
+            this.button9.TabIndex = 16;
+            this.button9.Text = "...";
+            this.button9.Click += new System.EventHandler(this.button9_Click);
+            // 
             // SettingsForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
@@ -1693,6 +1729,18 @@ namespace MeGUI
             }
         }
 
+        private void button9_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog d = new OpenFileDialog();
+            d.Filter = "yadif library|yadif.dll|Any library|*.dll";
+            d.DefaultExt = "dll";
+            d.FileName = "yadif.dll";
+            d.Title = "Select yadif library";
+            if (d.ShowDialog() == DialogResult.OK)
+                textBox9.Text = d.FileName;
+        }
+
+
         private void runCommand_CheckedChanged(object sender, EventArgs e)
         {
             command.Enabled = runCommand.Checked;
@@ -1741,6 +1789,7 @@ namespace MeGUI
 			get 
 			{
                 MeGUISettings settings = internalSettings;
+                settings.YadifPath = textBox9.Text;
                 settings.AudioSamplesPerUpdate = (ulong)audiosamplesperupdate.Value;
                 settings.AcceptableFPSError = acceptableFPSError.Value; 
                 settings.MaxServersToTry = (int)maxServersToTry.Value;
@@ -1796,6 +1845,7 @@ namespace MeGUI
 			{
                 internalSettings = value;
                 MeGUISettings settings = value;
+                textBox9.Text = settings.YadifPath;
                 audiosamplesperupdate.Value = settings.AudioSamplesPerUpdate;
                 acceptableFPSError.Value = settings.AcceptableFPSError;
                 maxServersToTry.Value = settings.MaxServersToTry;
@@ -1849,6 +1899,5 @@ namespace MeGUI
 			}
 		}
 		#endregion
-
 	}
 }

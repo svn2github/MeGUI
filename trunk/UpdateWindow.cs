@@ -434,8 +434,9 @@ namespace MeGUI
                 // If the file doesn't exist, assume it isn't set up, so put it in the standard install location
                 if (!File.Exists(SavePath))
                 {
+                    string extension = Path.GetExtension(SavePath);
                     SavePath = Path.Combine(Path.Combine(System.Windows.Forms.Application.StartupPath, "tools\\" + Name),
-                        Name + ".exe");
+                        Name + extension);
                     MeGUIFilePath = SavePath;
                 }
             }
@@ -484,6 +485,8 @@ namespace MeGUI
                             return meGUISettings.OggEnc2Path;
                         case ("avc2avi"):
                             return meGUISettings.Avc2aviPath;
+                        case ("yadif"):
+                            return meGUISettings.YadifPath;
                         default:
                             return null;
                     }
@@ -536,6 +539,9 @@ namespace MeGUI
                             return;
                         case ("encaacplus"):
                             meGUISettings.EncAacPlusPath = value;
+                            return;
+                        case ("yadif"):
+                            meGUISettings.YadifPath = value;
                             return;
                     }
                 }
