@@ -23,17 +23,7 @@ namespace MeGUI
         private Button resetDialogs;
         private TabControl tabControl1;
         private TabPage tabPage1;
-        private TabPage tabPage2;
         private SourceDetectorSettings sdSettings;
-		private System.Windows.Forms.TextBox mp4boxPath;
-		private System.Windows.Forms.Label mp4boxPathLabel;
-		private System.Windows.Forms.Button selectMP4boxExecutableButton;
-		private System.Windows.Forms.TextBox mkvmergePath;
-		private System.Windows.Forms.Label mkvmergePathLabel;
-        private System.Windows.Forms.Button selectMkvmergeExecutableButton;
-		private System.Windows.Forms.Label dgIndexLabel;
-		private System.Windows.Forms.TextBox dgIndexPath;
-		private System.Windows.Forms.Button selectDGIndexExecutable;
 		private System.Windows.Forms.CheckBox autoForceFilm;
 		private System.Windows.Forms.NumericUpDown forceFilmPercentage;
         private System.Windows.Forms.Label percentLabel;
@@ -43,20 +33,8 @@ namespace MeGUI
 		private System.Windows.Forms.Label defaultAudioTrack2Label;
         private System.Windows.Forms.ComboBox defaultLanguage2;
         private System.Windows.Forms.FolderBrowserDialog openFolderDialog;
-        private System.Windows.Forms.Label avisynthPluginsLabel;
-        private System.Windows.Forms.Button selectAvisynthPluginsDir;
-        private System.Windows.Forms.TextBox avisynthPluginsDir;
         private CheckBox chkboxUseAdvancedTooltips;
         private Button configSourceDetector;
-        private Label xvidEncrawLabel;
-        private Button selectXvidEncrawButton;
-        private TextBox xvidEncrawPath;
-		private System.Windows.Forms.TextBox mencoderPath;
-		private System.Windows.Forms.Label mencoderPathLabel;
-		private System.Windows.Forms.Button selectMencoderExecutableButton;
-		private System.Windows.Forms.TextBox x264ExePath;
-		private System.Windows.Forms.Label x264ExePathLabel;
-		private System.Windows.Forms.Button selectX264ExecutableButton;
         private System.Windows.Forms.GroupBox otherGroupBox;
 		private System.Windows.Forms.ComboBox priority;
 		private System.Windows.Forms.OpenFileDialog openExecutableDialog;
@@ -67,37 +45,9 @@ namespace MeGUI
 		private System.Windows.Forms.CheckBox deleteAbortedOutput;
 		private System.Windows.Forms.CheckBox deleteIntermediateFiles;
 		private System.Windows.Forms.CheckBox openProgressWindow;
-		private System.Windows.Forms.CheckBox autosetNbThreads;
-        private TextBox textBox3;
-        private Label label3;
-        private Button button3;
-        private TextBox textBox2;
-        private Label label2;
-        private Button button2;
-        private TextBox textBox1;
-        private Label label1;
-        private Button button1;
+        private System.Windows.Forms.CheckBox autosetNbThreads;
         private NumericUpDown acceptableAspectError;
         private Label acceptableAspectErrorLabel;
-        private Button selectAvc2AviExecutableButton;
-        private Button selectAviMuxGUIExecutableButton;
-        private TextBox avc2aviPath;
-        private TextBox aviMuxGUIPath;
-        private Label label5;
-        private Label label4;
-        private TextBox textBox4;
-        private Label label7;
-        private Button button4;
-        private TextBox textBox5;
-        private Label label8;
-        private Button button5;
-        private TextBox textBox6;
-        private Label label9;
-        private Button button6;
-        private CheckBox checkBox1;
-        private TextBox textBox7;
-        private Label label10;
-        private Button button7;
         private AutoEncodeDefaultsSettings autoEncodeDefaults;
         private TabPage tabPage3;
         private GroupBox autoUpdateGroupBox;
@@ -128,15 +78,70 @@ namespace MeGUI
         private NumericUpDown maxServersToTry;
         private NumericUpDown acceptableFPSError;
         private Label label15;
-        private TextBox textBox8;
-        private Label besplit;
-        private Button button8;
         private NumericUpDown audiosamplesperupdate;
         private Label label6;
         private MeGUI.core.gui.HelpButton helpButton1;
+        private TabPage tabPage2;
+        private TabControl tabControl2;
+        private TabPage tabPage4;
+        private Label xvidEncrawLabel;
+        private Button selectXvidEncrawButton;
+        private TextBox xvidEncrawPath;
+        private Button selectAvc2AviExecutableButton;
+        private Button selectMencoderExecutableButton;
+        private TextBox avc2aviPath;
+        private TextBox mencoderPath;
+        private Label label5;
+        private Label mencoderPathLabel;
+        private Label x264ExePathLabel;
+        private TextBox x264ExePath;
+        private Button selectX264ExecutableButton;
+        private TabPage tabPage5;
+        private TabPage tabPage7;
         private Button button9;
+        private Button selectAvisynthPluginsDir;
         private TextBox textBox9;
         private Label label16;
+        private TextBox avisynthPluginsDir;
+        private TextBox dgIndexPath;
+        private Label dgIndexLabel;
+        private Button selectDGIndexExecutable;
+        private Label avisynthPluginsLabel;
+        private TabPage tabPage6;
+        private TextBox aviMuxGUIPath;
+        private TextBox mp4boxPath;
+        private Button selectMkvmergeExecutableButton;
+        private Button selectAviMuxGUIExecutableButton;
+        private TextBox mkvmergePath;
+        private Button selectMP4boxExecutableButton;
+        private Label mp4boxPathLabel;
+        private Label mkvmergePathLabel;
+        private Label label4;
+        private TextBox textBox8;
+        private Label besplit;
+        private TextBox textBox7;
+        private Button button8;
+        private Label label10;
+        private Button button7;
+        private CheckBox checkBox1;
+        private TextBox textBox6;
+        private Label label9;
+        private Button button6;
+        private TextBox textBox5;
+        private Label label8;
+        private Button button5;
+        private TextBox textBox4;
+        private Label label7;
+        private Button button4;
+        private TextBox textBox3;
+        private Label label3;
+        private Button button3;
+        private TextBox textBox2;
+        private Label label2;
+        private Button button2;
+        private TextBox textBox1;
+        private Label label1;
+        private Button button1;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -181,27 +186,6 @@ namespace MeGUI
             this.donothing = new System.Windows.Forms.RadioButton();
             this.saveButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
-            this.xvidEncrawLabel = new System.Windows.Forms.Label();
-            this.selectXvidEncrawButton = new System.Windows.Forms.Button();
-            this.xvidEncrawPath = new System.Windows.Forms.TextBox();
-            this.selectAvisynthPluginsDir = new System.Windows.Forms.Button();
-            this.avisynthPluginsDir = new System.Windows.Forms.TextBox();
-            this.avisynthPluginsLabel = new System.Windows.Forms.Label();
-            this.dgIndexPath = new System.Windows.Forms.TextBox();
-            this.dgIndexLabel = new System.Windows.Forms.Label();
-            this.selectMP4boxExecutableButton = new System.Windows.Forms.Button();
-            this.selectMkvmergeExecutableButton = new System.Windows.Forms.Button();
-            this.selectMencoderExecutableButton = new System.Windows.Forms.Button();
-            this.mp4boxPath = new System.Windows.Forms.TextBox();
-            this.mkvmergePath = new System.Windows.Forms.TextBox();
-            this.mencoderPath = new System.Windows.Forms.TextBox();
-            this.mp4boxPathLabel = new System.Windows.Forms.Label();
-            this.mkvmergePathLabel = new System.Windows.Forms.Label();
-            this.mencoderPathLabel = new System.Windows.Forms.Label();
-            this.x264ExePathLabel = new System.Windows.Forms.Label();
-            this.x264ExePath = new System.Windows.Forms.TextBox();
-            this.selectX264ExecutableButton = new System.Windows.Forms.Button();
-            this.selectDGIndexExecutable = new System.Windows.Forms.Button();
             this.otherGroupBox = new System.Windows.Forms.GroupBox();
             this.audiosamplesperupdate = new System.Windows.Forms.NumericUpDown();
             this.label6 = new System.Windows.Forms.Label();
@@ -250,37 +234,30 @@ namespace MeGUI
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.checkBox4 = new System.Windows.Forms.CheckBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.textBox8 = new System.Windows.Forms.TextBox();
-            this.besplit = new System.Windows.Forms.Label();
-            this.textBox7 = new System.Windows.Forms.TextBox();
-            this.button8 = new System.Windows.Forms.Button();
-            this.label10 = new System.Windows.Forms.Label();
-            this.button7 = new System.Windows.Forms.Button();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.textBox6 = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
-            this.button6 = new System.Windows.Forms.Button();
-            this.textBox5 = new System.Windows.Forms.TextBox();
-            this.label8 = new System.Windows.Forms.Label();
-            this.button5 = new System.Windows.Forms.Button();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.button4 = new System.Windows.Forms.Button();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.button3 = new System.Windows.Forms.Button();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.button2 = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.tabControl2 = new System.Windows.Forms.TabControl();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.xvidEncrawLabel = new System.Windows.Forms.Label();
+            this.selectXvidEncrawButton = new System.Windows.Forms.Button();
+            this.xvidEncrawPath = new System.Windows.Forms.TextBox();
             this.selectAvc2AviExecutableButton = new System.Windows.Forms.Button();
-            this.selectAviMuxGUIExecutableButton = new System.Windows.Forms.Button();
+            this.selectMencoderExecutableButton = new System.Windows.Forms.Button();
             this.avc2aviPath = new System.Windows.Forms.TextBox();
-            this.aviMuxGUIPath = new System.Windows.Forms.TextBox();
+            this.mencoderPath = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
+            this.mencoderPathLabel = new System.Windows.Forms.Label();
+            this.x264ExePathLabel = new System.Windows.Forms.Label();
+            this.x264ExePath = new System.Windows.Forms.TextBox();
+            this.selectX264ExecutableButton = new System.Windows.Forms.Button();
+            this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.tabPage7 = new System.Windows.Forms.TabPage();
+            this.button9 = new System.Windows.Forms.Button();
+            this.selectAvisynthPluginsDir = new System.Windows.Forms.Button();
+            this.textBox9 = new System.Windows.Forms.TextBox();
+            this.label16 = new System.Windows.Forms.Label();
+            this.avisynthPluginsDir = new System.Windows.Forms.TextBox();
+            this.dgIndexPath = new System.Windows.Forms.TextBox();
+            this.dgIndexLabel = new System.Windows.Forms.Label();
+            this.selectDGIndexExecutable = new System.Windows.Forms.Button();
             this.audioExtLabel = new System.Windows.Forms.Label();
             this.videoExtLabel = new System.Windows.Forms.Label();
             this.autoEncodeDefaultsButton = new System.Windows.Forms.Button();
@@ -288,10 +265,43 @@ namespace MeGUI
             this.nbPassesLabel = new System.Windows.Forms.Label();
             this.nbPasses = new System.Windows.Forms.NumericUpDown();
             this.keep2ndPassOutput = new System.Windows.Forms.CheckBox();
+            this.avisynthPluginsLabel = new System.Windows.Forms.Label();
+            this.mkvmergePathLabel = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.mp4boxPathLabel = new System.Windows.Forms.Label();
+            this.mkvmergePath = new System.Windows.Forms.TextBox();
+            this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.aviMuxGUIPath = new System.Windows.Forms.TextBox();
+            this.mp4boxPath = new System.Windows.Forms.TextBox();
+            this.selectMkvmergeExecutableButton = new System.Windows.Forms.Button();
+            this.selectAviMuxGUIExecutableButton = new System.Windows.Forms.Button();
+            this.selectMP4boxExecutableButton = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.button2 = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.button3 = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.button4 = new System.Windows.Forms.Button();
+            this.label7 = new System.Windows.Forms.Label();
+            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.button5 = new System.Windows.Forms.Button();
+            this.label8 = new System.Windows.Forms.Label();
+            this.textBox5 = new System.Windows.Forms.TextBox();
+            this.button6 = new System.Windows.Forms.Button();
+            this.label9 = new System.Windows.Forms.Label();
+            this.textBox6 = new System.Windows.Forms.TextBox();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.button7 = new System.Windows.Forms.Button();
+            this.label10 = new System.Windows.Forms.Label();
+            this.button8 = new System.Windows.Forms.Button();
+            this.textBox7 = new System.Windows.Forms.TextBox();
+            this.besplit = new System.Windows.Forms.Label();
+            this.textBox8 = new System.Windows.Forms.TextBox();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
-            this.label16 = new System.Windows.Forms.Label();
-            this.textBox9 = new System.Windows.Forms.TextBox();
-            this.button9 = new System.Windows.Forms.Button();
             groupBox1 = new System.Windows.Forms.GroupBox();
             groupBox1.SuspendLayout();
             this.otherGroupBox.SuspendLayout();
@@ -309,7 +319,12 @@ namespace MeGUI
             this.autoModeGroupbox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.tabPage2.SuspendLayout();
+            this.tabControl2.SuspendLayout();
+            this.tabPage4.SuspendLayout();
+            this.tabPage5.SuspendLayout();
+            this.tabPage7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nbPasses)).BeginInit();
+            this.tabPage6.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -370,7 +385,7 @@ namespace MeGUI
             // 
             this.saveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.saveButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.saveButton.Location = new System.Drawing.Point(355, 520);
+            this.saveButton.Location = new System.Drawing.Point(355, 402);
             this.saveButton.Name = "saveButton";
             this.saveButton.Size = new System.Drawing.Size(48, 23);
             this.saveButton.TabIndex = 0;
@@ -380,194 +395,11 @@ namespace MeGUI
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(414, 520);
+            this.cancelButton.Location = new System.Drawing.Point(414, 402);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(48, 23);
             this.cancelButton.TabIndex = 1;
             this.cancelButton.Text = "Cancel";
-            // 
-            // xvidEncrawLabel
-            // 
-            this.xvidEncrawLabel.Location = new System.Drawing.Point(8, 157);
-            this.xvidEncrawLabel.Name = "xvidEncrawLabel";
-            this.xvidEncrawLabel.Size = new System.Drawing.Size(84, 16);
-            this.xvidEncrawLabel.TabIndex = 19;
-            this.xvidEncrawLabel.Text = "xvid_encraw";
-            // 
-            // selectXvidEncrawButton
-            // 
-            this.selectXvidEncrawButton.Location = new System.Drawing.Point(424, 151);
-            this.selectXvidEncrawButton.Name = "selectXvidEncrawButton";
-            this.selectXvidEncrawButton.Size = new System.Drawing.Size(24, 23);
-            this.selectXvidEncrawButton.TabIndex = 18;
-            this.selectXvidEncrawButton.Text = "...";
-            this.selectXvidEncrawButton.Click += new System.EventHandler(this.selectXvidEncrawButton_Click);
-            // 
-            // xvidEncrawPath
-            // 
-            this.xvidEncrawPath.Location = new System.Drawing.Point(120, 152);
-            this.xvidEncrawPath.Name = "xvidEncrawPath";
-            this.xvidEncrawPath.ReadOnly = true;
-            this.xvidEncrawPath.Size = new System.Drawing.Size(296, 21);
-            this.xvidEncrawPath.TabIndex = 17;
-            this.xvidEncrawPath.Text = "xvid_encraw.exe";
-            // 
-            // selectAvisynthPluginsDir
-            // 
-            this.selectAvisynthPluginsDir.Location = new System.Drawing.Point(424, 460);
-            this.selectAvisynthPluginsDir.Name = "selectAvisynthPluginsDir";
-            this.selectAvisynthPluginsDir.Size = new System.Drawing.Size(24, 23);
-            this.selectAvisynthPluginsDir.TabIndex = 16;
-            this.selectAvisynthPluginsDir.Text = "...";
-            this.selectAvisynthPluginsDir.Click += new System.EventHandler(this.selectAvisynthDir_Click);
-            // 
-            // avisynthPluginsDir
-            // 
-            this.avisynthPluginsDir.Location = new System.Drawing.Point(120, 461);
-            this.avisynthPluginsDir.Name = "avisynthPluginsDir";
-            this.avisynthPluginsDir.ReadOnly = true;
-            this.avisynthPluginsDir.Size = new System.Drawing.Size(296, 21);
-            this.avisynthPluginsDir.TabIndex = 15;
-            this.avisynthPluginsDir.Text = "avisynth plugins Directory";
-            // 
-            // avisynthPluginsLabel
-            // 
-            this.avisynthPluginsLabel.AutoSize = true;
-            this.avisynthPluginsLabel.Location = new System.Drawing.Point(11, 468);
-            this.avisynthPluginsLabel.Name = "avisynthPluginsLabel";
-            this.avisynthPluginsLabel.Size = new System.Drawing.Size(84, 13);
-            this.avisynthPluginsLabel.TabIndex = 14;
-            this.avisynthPluginsLabel.Text = "avisynth plugins";
-            // 
-            // dgIndexPath
-            // 
-            this.dgIndexPath.Location = new System.Drawing.Point(120, 176);
-            this.dgIndexPath.Name = "dgIndexPath";
-            this.dgIndexPath.ReadOnly = true;
-            this.dgIndexPath.Size = new System.Drawing.Size(296, 21);
-            this.dgIndexPath.TabIndex = 11;
-            this.dgIndexPath.Text = "dgindex.exe";
-            // 
-            // dgIndexLabel
-            // 
-            this.dgIndexLabel.Location = new System.Drawing.Point(8, 181);
-            this.dgIndexLabel.Name = "dgIndexLabel";
-            this.dgIndexLabel.Size = new System.Drawing.Size(100, 23);
-            this.dgIndexLabel.TabIndex = 10;
-            this.dgIndexLabel.Text = "DGIndex";
-            // 
-            // selectMP4boxExecutableButton
-            // 
-            this.selectMP4boxExecutableButton.Location = new System.Drawing.Point(424, 29);
-            this.selectMP4boxExecutableButton.Name = "selectMP4boxExecutableButton";
-            this.selectMP4boxExecutableButton.Size = new System.Drawing.Size(24, 23);
-            this.selectMP4boxExecutableButton.TabIndex = 8;
-            this.selectMP4boxExecutableButton.Text = "...";
-            this.selectMP4boxExecutableButton.Click += new System.EventHandler(this.selectMP4boxExecutableButton_Click);
-            // 
-            // selectMkvmergeExecutableButton
-            // 
-            this.selectMkvmergeExecutableButton.Location = new System.Drawing.Point(424, 53);
-            this.selectMkvmergeExecutableButton.Name = "selectMkvmergeExecutableButton";
-            this.selectMkvmergeExecutableButton.Size = new System.Drawing.Size(24, 23);
-            this.selectMkvmergeExecutableButton.TabIndex = 8;
-            this.selectMkvmergeExecutableButton.Text = "...";
-            this.selectMkvmergeExecutableButton.Click += new System.EventHandler(this.selectMkvmergeExecutableButton_Click);
-            // 
-            // selectMencoderExecutableButton
-            // 
-            this.selectMencoderExecutableButton.Location = new System.Drawing.Point(424, 5);
-            this.selectMencoderExecutableButton.Name = "selectMencoderExecutableButton";
-            this.selectMencoderExecutableButton.Size = new System.Drawing.Size(24, 23);
-            this.selectMencoderExecutableButton.TabIndex = 6;
-            this.selectMencoderExecutableButton.Text = "...";
-            this.selectMencoderExecutableButton.Click += new System.EventHandler(this.selectMencoderExecutableButton_Click);
-            // 
-            // mp4boxPath
-            // 
-            this.mp4boxPath.Location = new System.Drawing.Point(120, 29);
-            this.mp4boxPath.Name = "mp4boxPath";
-            this.mp4boxPath.ReadOnly = true;
-            this.mp4boxPath.Size = new System.Drawing.Size(296, 21);
-            this.mp4boxPath.TabIndex = 5;
-            this.mp4boxPath.Text = "mp4box.exe";
-            // 
-            // mkvmergePath
-            // 
-            this.mkvmergePath.Location = new System.Drawing.Point(120, 53);
-            this.mkvmergePath.Name = "mkvmergePath";
-            this.mkvmergePath.ReadOnly = true;
-            this.mkvmergePath.Size = new System.Drawing.Size(296, 21);
-            this.mkvmergePath.TabIndex = 5;
-            this.mkvmergePath.Text = "mkvmerge.exe";
-            // 
-            // mencoderPath
-            // 
-            this.mencoderPath.Location = new System.Drawing.Point(120, 5);
-            this.mencoderPath.Name = "mencoderPath";
-            this.mencoderPath.ReadOnly = true;
-            this.mencoderPath.Size = new System.Drawing.Size(296, 21);
-            this.mencoderPath.TabIndex = 3;
-            this.mencoderPath.Text = "mencoder.exe";
-            // 
-            // mp4boxPathLabel
-            // 
-            this.mp4boxPathLabel.Location = new System.Drawing.Point(8, 34);
-            this.mp4boxPathLabel.Name = "mp4boxPathLabel";
-            this.mp4boxPathLabel.Size = new System.Drawing.Size(100, 23);
-            this.mp4boxPathLabel.TabIndex = 2;
-            this.mp4boxPathLabel.Text = "mp4Box";
-            // 
-            // mkvmergePathLabel
-            // 
-            this.mkvmergePathLabel.Location = new System.Drawing.Point(8, 58);
-            this.mkvmergePathLabel.Name = "mkvmergePathLabel";
-            this.mkvmergePathLabel.Size = new System.Drawing.Size(100, 23);
-            this.mkvmergePathLabel.TabIndex = 2;
-            this.mkvmergePathLabel.Text = "mkvmerge";
-            // 
-            // mencoderPathLabel
-            // 
-            this.mencoderPathLabel.Location = new System.Drawing.Point(8, 10);
-            this.mencoderPathLabel.Name = "mencoderPathLabel";
-            this.mencoderPathLabel.Size = new System.Drawing.Size(100, 23);
-            this.mencoderPathLabel.TabIndex = 0;
-            this.mencoderPathLabel.Text = "mencoder";
-            // 
-            // x264ExePathLabel
-            // 
-            this.x264ExePathLabel.Location = new System.Drawing.Point(8, 131);
-            this.x264ExePathLabel.Name = "x264ExePathLabel";
-            this.x264ExePathLabel.Size = new System.Drawing.Size(64, 16);
-            this.x264ExePathLabel.TabIndex = 9;
-            this.x264ExePathLabel.Text = "x264";
-            // 
-            // x264ExePath
-            // 
-            this.x264ExePath.Location = new System.Drawing.Point(120, 128);
-            this.x264ExePath.Name = "x264ExePath";
-            this.x264ExePath.ReadOnly = true;
-            this.x264ExePath.Size = new System.Drawing.Size(296, 21);
-            this.x264ExePath.TabIndex = 9;
-            this.x264ExePath.Text = "x264.exe";
-            // 
-            // selectX264ExecutableButton
-            // 
-            this.selectX264ExecutableButton.Location = new System.Drawing.Point(424, 128);
-            this.selectX264ExecutableButton.Name = "selectX264ExecutableButton";
-            this.selectX264ExecutableButton.Size = new System.Drawing.Size(24, 23);
-            this.selectX264ExecutableButton.TabIndex = 9;
-            this.selectX264ExecutableButton.Text = "...";
-            this.selectX264ExecutableButton.Click += new System.EventHandler(this.selectX264ExecutableButton_Click);
-            // 
-            // selectDGIndexExecutable
-            // 
-            this.selectDGIndexExecutable.Location = new System.Drawing.Point(424, 176);
-            this.selectDGIndexExecutable.Name = "selectDGIndexExecutable";
-            this.selectDGIndexExecutable.Size = new System.Drawing.Size(24, 23);
-            this.selectDGIndexExecutable.TabIndex = 3;
-            this.selectDGIndexExecutable.Text = "...";
-            this.selectDGIndexExecutable.Click += new System.EventHandler(this.selectDGIndexExecutable_Click);
             // 
             // otherGroupBox
             // 
@@ -876,7 +708,7 @@ namespace MeGUI
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(468, 514);
+            this.tabControl1.Size = new System.Drawing.Size(468, 394);
             this.tabControl1.TabIndex = 28;
             // 
             // tabPage1
@@ -886,7 +718,7 @@ namespace MeGUI
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(460, 488);
+            this.tabPage1.Size = new System.Drawing.Size(460, 368);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Main";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -899,7 +731,7 @@ namespace MeGUI
             this.tabPage3.Controls.Add(this.autoModeGroupbox);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(460, 488);
+            this.tabPage3.Size = new System.Drawing.Size(460, 368);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Extra config";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -1075,338 +907,270 @@ namespace MeGUI
             // 
             // tabPage2
             // 
-            this.tabPage2.Controls.Add(this.textBox8);
-            this.tabPage2.Controls.Add(this.besplit);
-            this.tabPage2.Controls.Add(this.textBox7);
-            this.tabPage2.Controls.Add(this.button8);
-            this.tabPage2.Controls.Add(this.label10);
-            this.tabPage2.Controls.Add(this.button7);
-            this.tabPage2.Controls.Add(this.checkBox1);
-            this.tabPage2.Controls.Add(this.textBox6);
-            this.tabPage2.Controls.Add(this.label9);
-            this.tabPage2.Controls.Add(this.button6);
-            this.tabPage2.Controls.Add(this.textBox5);
-            this.tabPage2.Controls.Add(this.label8);
-            this.tabPage2.Controls.Add(this.button5);
-            this.tabPage2.Controls.Add(this.textBox4);
-            this.tabPage2.Controls.Add(this.label7);
-            this.tabPage2.Controls.Add(this.button4);
-            this.tabPage2.Controls.Add(this.textBox3);
-            this.tabPage2.Controls.Add(this.label3);
-            this.tabPage2.Controls.Add(this.button3);
-            this.tabPage2.Controls.Add(this.textBox2);
-            this.tabPage2.Controls.Add(this.label2);
-            this.tabPage2.Controls.Add(this.button2);
-            this.tabPage2.Controls.Add(this.textBox1);
-            this.tabPage2.Controls.Add(this.label1);
-            this.tabPage2.Controls.Add(this.button1);
-            this.tabPage2.Controls.Add(this.xvidEncrawLabel);
-            this.tabPage2.Controls.Add(this.selectXvidEncrawButton);
-            this.tabPage2.Controls.Add(this.xvidEncrawPath);
-            this.tabPage2.Controls.Add(this.button9);
-            this.tabPage2.Controls.Add(this.selectAvisynthPluginsDir);
-            this.tabPage2.Controls.Add(this.textBox9);
-            this.tabPage2.Controls.Add(this.label16);
-            this.tabPage2.Controls.Add(this.avisynthPluginsDir);
-            this.tabPage2.Controls.Add(this.avisynthPluginsLabel);
-            this.tabPage2.Controls.Add(this.dgIndexPath);
-            this.tabPage2.Controls.Add(this.dgIndexLabel);
-            this.tabPage2.Controls.Add(this.selectMP4boxExecutableButton);
-            this.tabPage2.Controls.Add(this.selectAvc2AviExecutableButton);
-            this.tabPage2.Controls.Add(this.selectAviMuxGUIExecutableButton);
-            this.tabPage2.Controls.Add(this.selectMkvmergeExecutableButton);
-            this.tabPage2.Controls.Add(this.selectMencoderExecutableButton);
-            this.tabPage2.Controls.Add(this.mp4boxPath);
-            this.tabPage2.Controls.Add(this.avc2aviPath);
-            this.tabPage2.Controls.Add(this.aviMuxGUIPath);
-            this.tabPage2.Controls.Add(this.mkvmergePath);
-            this.tabPage2.Controls.Add(this.mencoderPath);
-            this.tabPage2.Controls.Add(this.mp4boxPathLabel);
-            this.tabPage2.Controls.Add(this.label5);
-            this.tabPage2.Controls.Add(this.label4);
-            this.tabPage2.Controls.Add(this.mkvmergePathLabel);
-            this.tabPage2.Controls.Add(this.mencoderPathLabel);
-            this.tabPage2.Controls.Add(this.x264ExePathLabel);
-            this.tabPage2.Controls.Add(this.x264ExePath);
-            this.tabPage2.Controls.Add(this.selectX264ExecutableButton);
-            this.tabPage2.Controls.Add(this.selectDGIndexExecutable);
+            this.tabPage2.Controls.Add(this.tabControl2);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(460, 488);
+            this.tabPage2.Size = new System.Drawing.Size(460, 368);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Program Paths";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // textBox8
+            // tabControl2
             // 
-            this.textBox8.Location = new System.Drawing.Point(120, 398);
-            this.textBox8.Name = "textBox8";
-            this.textBox8.ReadOnly = true;
-            this.textBox8.Size = new System.Drawing.Size(296, 21);
-            this.textBox8.TabIndex = 41;
-            this.textBox8.Text = "dgindex.exe";
+            this.tabControl2.Controls.Add(this.tabPage4);
+            this.tabControl2.Controls.Add(this.tabPage5);
+            this.tabControl2.Controls.Add(this.tabPage6);
+            this.tabControl2.Controls.Add(this.tabPage7);
+            this.tabControl2.Location = new System.Drawing.Point(8, 6);
+            this.tabControl2.Name = "tabControl2";
+            this.tabControl2.SelectedIndex = 0;
+            this.tabControl2.Size = new System.Drawing.Size(446, 296);
+            this.tabControl2.TabIndex = 0;
             // 
-            // besplit
+            // tabPage4
             // 
-            this.besplit.Location = new System.Drawing.Point(8, 403);
-            this.besplit.Name = "besplit";
-            this.besplit.Size = new System.Drawing.Size(100, 23);
-            this.besplit.TabIndex = 40;
-            this.besplit.Text = "besplit";
+            this.tabPage4.Controls.Add(this.xvidEncrawLabel);
+            this.tabPage4.Controls.Add(this.selectXvidEncrawButton);
+            this.tabPage4.Controls.Add(this.xvidEncrawPath);
+            this.tabPage4.Controls.Add(this.selectAvc2AviExecutableButton);
+            this.tabPage4.Controls.Add(this.selectMencoderExecutableButton);
+            this.tabPage4.Controls.Add(this.avc2aviPath);
+            this.tabPage4.Controls.Add(this.mencoderPath);
+            this.tabPage4.Controls.Add(this.label5);
+            this.tabPage4.Controls.Add(this.mencoderPathLabel);
+            this.tabPage4.Controls.Add(this.x264ExePathLabel);
+            this.tabPage4.Controls.Add(this.x264ExePath);
+            this.tabPage4.Controls.Add(this.selectX264ExecutableButton);
+            this.tabPage4.Location = new System.Drawing.Point(4, 22);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage4.Size = new System.Drawing.Size(438, 270);
+            this.tabPage4.TabIndex = 0;
+            this.tabPage4.Text = "Video";
+            this.tabPage4.UseVisualStyleBackColor = true;
             // 
-            // textBox7
+            // xvidEncrawLabel
             // 
-            this.textBox7.Location = new System.Drawing.Point(120, 371);
-            this.textBox7.Name = "textBox7";
-            this.textBox7.ReadOnly = true;
-            this.textBox7.Size = new System.Drawing.Size(296, 21);
-            this.textBox7.TabIndex = 41;
-            this.textBox7.Text = "dgindex.exe";
+            this.xvidEncrawLabel.Location = new System.Drawing.Point(2, 99);
+            this.xvidEncrawLabel.Name = "xvidEncrawLabel";
+            this.xvidEncrawLabel.Size = new System.Drawing.Size(84, 16);
+            this.xvidEncrawLabel.TabIndex = 71;
+            this.xvidEncrawLabel.Text = "xvid_encraw";
             // 
-            // button8
+            // selectXvidEncrawButton
             // 
-            this.button8.Location = new System.Drawing.Point(424, 398);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(24, 23);
-            this.button8.TabIndex = 39;
-            this.button8.Text = "...";
-            this.button8.Click += new System.EventHandler(this.button8_Click);
+            this.selectXvidEncrawButton.Location = new System.Drawing.Point(408, 96);
+            this.selectXvidEncrawButton.Name = "selectXvidEncrawButton";
+            this.selectXvidEncrawButton.Size = new System.Drawing.Size(24, 23);
+            this.selectXvidEncrawButton.TabIndex = 70;
+            this.selectXvidEncrawButton.Text = "...";
             // 
-            // label10
+            // xvidEncrawPath
             // 
-            this.label10.Location = new System.Drawing.Point(8, 376);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(100, 23);
-            this.label10.TabIndex = 40;
-            this.label10.Text = "ffmpeg";
-            // 
-            // button7
-            // 
-            this.button7.Location = new System.Drawing.Point(424, 371);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(24, 23);
-            this.button7.TabIndex = 39;
-            this.button7.Text = "...";
-            this.button7.Click += new System.EventHandler(this.button7_Click);
-            // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(120, 224);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(177, 17);
-            this.checkBox1.TabIndex = 38;
-            this.checkBox1.Text = "I\'m using OggEnc2 v2.8 or later";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            // 
-            // textBox6
-            // 
-            this.textBox6.Location = new System.Drawing.Point(120, 346);
-            this.textBox6.Name = "textBox6";
-            this.textBox6.ReadOnly = true;
-            this.textBox6.Size = new System.Drawing.Size(296, 21);
-            this.textBox6.TabIndex = 37;
-            this.textBox6.Text = "dgindex.exe";
-            // 
-            // label9
-            // 
-            this.label9.Location = new System.Drawing.Point(8, 351);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(100, 23);
-            this.label9.TabIndex = 36;
-            this.label9.Text = "enc_aacPlus";
-            // 
-            // button6
-            // 
-            this.button6.Location = new System.Drawing.Point(424, 346);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(24, 23);
-            this.button6.TabIndex = 35;
-            this.button6.Text = "...";
-            this.button6.Click += new System.EventHandler(this.button6_Click);
-            // 
-            // textBox5
-            // 
-            this.textBox5.Location = new System.Drawing.Point(120, 321);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.ReadOnly = true;
-            this.textBox5.Size = new System.Drawing.Size(296, 21);
-            this.textBox5.TabIndex = 34;
-            this.textBox5.Text = "dgindex.exe";
-            // 
-            // label8
-            // 
-            this.label8.Location = new System.Drawing.Point(8, 326);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(100, 23);
-            this.label8.TabIndex = 33;
-            this.label8.Text = "enc_AudX_CLI";
-            // 
-            // button5
-            // 
-            this.button5.Location = new System.Drawing.Point(424, 321);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(24, 23);
-            this.button5.TabIndex = 32;
-            this.button5.Text = "...";
-            this.button5.Click += new System.EventHandler(this.button5_Click);
-            // 
-            // textBox4
-            // 
-            this.textBox4.Location = new System.Drawing.Point(120, 200);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.ReadOnly = true;
-            this.textBox4.Size = new System.Drawing.Size(296, 21);
-            this.textBox4.TabIndex = 31;
-            this.textBox4.Text = "dgindex.exe";
-            // 
-            // label7
-            // 
-            this.label7.Location = new System.Drawing.Point(8, 205);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(100, 23);
-            this.label7.TabIndex = 30;
-            this.label7.Text = "oggenc2";
-            // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(424, 200);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(24, 23);
-            this.button4.TabIndex = 29;
-            this.button4.Text = "...";
-            this.button4.Click += new System.EventHandler(this.button4_Click);
-            // 
-            // textBox3
-            // 
-            this.textBox3.Location = new System.Drawing.Point(120, 296);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.ReadOnly = true;
-            this.textBox3.Size = new System.Drawing.Size(296, 21);
-            this.textBox3.TabIndex = 28;
-            this.textBox3.Text = "dgindex.exe";
-            // 
-            // label3
-            // 
-            this.label3.Location = new System.Drawing.Point(8, 301);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(100, 23);
-            this.label3.TabIndex = 27;
-            this.label3.Text = "lame";
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(424, 296);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(24, 23);
-            this.button3.TabIndex = 26;
-            this.button3.Text = "...";
-            this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
-            // textBox2
-            // 
-            this.textBox2.Location = new System.Drawing.Point(120, 271);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.ReadOnly = true;
-            this.textBox2.Size = new System.Drawing.Size(296, 21);
-            this.textBox2.TabIndex = 25;
-            this.textBox2.Text = "dgindex.exe";
-            // 
-            // label2
-            // 
-            this.label2.Location = new System.Drawing.Point(8, 276);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(100, 23);
-            this.label2.TabIndex = 24;
-            this.label2.Text = "neroAacEnc";
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(424, 271);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(24, 23);
-            this.button2.TabIndex = 23;
-            this.button2.Text = "...";
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(120, 247);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(296, 21);
-            this.textBox1.TabIndex = 22;
-            this.textBox1.Text = "dgindex.exe";
-            // 
-            // label1
-            // 
-            this.label1.Location = new System.Drawing.Point(8, 252);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(100, 23);
-            this.label1.TabIndex = 21;
-            this.label1.Text = "faac";
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(424, 247);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(24, 23);
-            this.button1.TabIndex = 20;
-            this.button1.Text = "...";
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.xvidEncrawPath.Location = new System.Drawing.Point(89, 96);
+            this.xvidEncrawPath.Name = "xvidEncrawPath";
+            this.xvidEncrawPath.ReadOnly = true;
+            this.xvidEncrawPath.Size = new System.Drawing.Size(308, 21);
+            this.xvidEncrawPath.TabIndex = 69;
+            this.xvidEncrawPath.Text = "xvid_encraw.exe";
             // 
             // selectAvc2AviExecutableButton
             // 
-            this.selectAvc2AviExecutableButton.Location = new System.Drawing.Point(424, 103);
+            this.selectAvc2AviExecutableButton.Location = new System.Drawing.Point(408, 42);
             this.selectAvc2AviExecutableButton.Name = "selectAvc2AviExecutableButton";
             this.selectAvc2AviExecutableButton.Size = new System.Drawing.Size(24, 23);
-            this.selectAvc2AviExecutableButton.TabIndex = 8;
+            this.selectAvc2AviExecutableButton.TabIndex = 57;
             this.selectAvc2AviExecutableButton.Text = "...";
-            this.selectAvc2AviExecutableButton.Click += new System.EventHandler(this.selectAvc2AviExecutableButton_Click);
             // 
-            // selectAviMuxGUIExecutableButton
+            // selectMencoderExecutableButton
             // 
-            this.selectAviMuxGUIExecutableButton.Location = new System.Drawing.Point(424, 76);
-            this.selectAviMuxGUIExecutableButton.Name = "selectAviMuxGUIExecutableButton";
-            this.selectAviMuxGUIExecutableButton.Size = new System.Drawing.Size(24, 23);
-            this.selectAviMuxGUIExecutableButton.TabIndex = 8;
-            this.selectAviMuxGUIExecutableButton.Text = "...";
-            this.selectAviMuxGUIExecutableButton.Click += new System.EventHandler(this.selectAviMuxGUIExecutableButton_Click);
+            this.selectMencoderExecutableButton.Location = new System.Drawing.Point(408, 16);
+            this.selectMencoderExecutableButton.Name = "selectMencoderExecutableButton";
+            this.selectMencoderExecutableButton.Size = new System.Drawing.Size(24, 23);
+            this.selectMencoderExecutableButton.TabIndex = 53;
+            this.selectMencoderExecutableButton.Text = "...";
             // 
             // avc2aviPath
             // 
-            this.avc2aviPath.Location = new System.Drawing.Point(120, 103);
+            this.avc2aviPath.Location = new System.Drawing.Point(89, 42);
             this.avc2aviPath.Name = "avc2aviPath";
             this.avc2aviPath.ReadOnly = true;
-            this.avc2aviPath.Size = new System.Drawing.Size(296, 21);
-            this.avc2aviPath.TabIndex = 5;
+            this.avc2aviPath.Size = new System.Drawing.Size(308, 21);
+            this.avc2aviPath.TabIndex = 51;
             this.avc2aviPath.Text = "avc2avi.exe";
             // 
-            // aviMuxGUIPath
+            // mencoderPath
             // 
-            this.aviMuxGUIPath.Location = new System.Drawing.Point(120, 76);
-            this.aviMuxGUIPath.Name = "aviMuxGUIPath";
-            this.aviMuxGUIPath.ReadOnly = true;
-            this.aviMuxGUIPath.Size = new System.Drawing.Size(296, 21);
-            this.aviMuxGUIPath.TabIndex = 5;
-            this.aviMuxGUIPath.Text = "avimux_gui.exe";
+            this.mencoderPath.Location = new System.Drawing.Point(89, 16);
+            this.mencoderPath.Name = "mencoderPath";
+            this.mencoderPath.ReadOnly = true;
+            this.mencoderPath.Size = new System.Drawing.Size(308, 21);
+            this.mencoderPath.TabIndex = 47;
+            this.mencoderPath.Text = "mencoder.exe";
             // 
             // label5
             // 
-            this.label5.Location = new System.Drawing.Point(8, 108);
+            this.label5.Location = new System.Drawing.Point(26, 45);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(100, 23);
-            this.label5.TabIndex = 2;
+            this.label5.Size = new System.Drawing.Size(47, 18);
+            this.label5.TabIndex = 46;
             this.label5.Text = "avc2avi";
             // 
-            // label4
+            // mencoderPathLabel
             // 
-            this.label4.Location = new System.Drawing.Point(8, 81);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(100, 23);
-            this.label4.TabIndex = 2;
-            this.label4.Text = "avimux_gui";
+            this.mencoderPathLabel.Location = new System.Drawing.Point(16, 19);
+            this.mencoderPathLabel.Name = "mencoderPathLabel";
+            this.mencoderPathLabel.Size = new System.Drawing.Size(57, 18);
+            this.mencoderPathLabel.TabIndex = 42;
+            this.mencoderPathLabel.Text = "mencoder";
+            // 
+            // x264ExePathLabel
+            // 
+            this.x264ExePathLabel.Location = new System.Drawing.Point(35, 72);
+            this.x264ExePathLabel.Name = "x264ExePathLabel";
+            this.x264ExePathLabel.Size = new System.Drawing.Size(38, 16);
+            this.x264ExePathLabel.TabIndex = 58;
+            this.x264ExePathLabel.Text = "x264";
+            // 
+            // x264ExePath
+            // 
+            this.x264ExePath.Location = new System.Drawing.Point(89, 69);
+            this.x264ExePath.Name = "x264ExePath";
+            this.x264ExePath.ReadOnly = true;
+            this.x264ExePath.Size = new System.Drawing.Size(308, 21);
+            this.x264ExePath.TabIndex = 59;
+            this.x264ExePath.Text = "x264.exe";
+            // 
+            // selectX264ExecutableButton
+            // 
+            this.selectX264ExecutableButton.Location = new System.Drawing.Point(408, 69);
+            this.selectX264ExecutableButton.Name = "selectX264ExecutableButton";
+            this.selectX264ExecutableButton.Size = new System.Drawing.Size(24, 23);
+            this.selectX264ExecutableButton.TabIndex = 60;
+            this.selectX264ExecutableButton.Text = "...";
+            // 
+            // tabPage5
+            // 
+            this.tabPage5.Controls.Add(this.textBox8);
+            this.tabPage5.Controls.Add(this.besplit);
+            this.tabPage5.Controls.Add(this.textBox7);
+            this.tabPage5.Controls.Add(this.button8);
+            this.tabPage5.Controls.Add(this.label10);
+            this.tabPage5.Controls.Add(this.button7);
+            this.tabPage5.Controls.Add(this.checkBox1);
+            this.tabPage5.Controls.Add(this.textBox6);
+            this.tabPage5.Controls.Add(this.label9);
+            this.tabPage5.Controls.Add(this.button6);
+            this.tabPage5.Controls.Add(this.textBox5);
+            this.tabPage5.Controls.Add(this.label8);
+            this.tabPage5.Controls.Add(this.button5);
+            this.tabPage5.Controls.Add(this.textBox4);
+            this.tabPage5.Controls.Add(this.label7);
+            this.tabPage5.Controls.Add(this.button4);
+            this.tabPage5.Controls.Add(this.textBox3);
+            this.tabPage5.Controls.Add(this.label3);
+            this.tabPage5.Controls.Add(this.button3);
+            this.tabPage5.Controls.Add(this.textBox2);
+            this.tabPage5.Controls.Add(this.label2);
+            this.tabPage5.Controls.Add(this.button2);
+            this.tabPage5.Controls.Add(this.textBox1);
+            this.tabPage5.Controls.Add(this.label1);
+            this.tabPage5.Controls.Add(this.button1);
+            this.tabPage5.Location = new System.Drawing.Point(4, 22);
+            this.tabPage5.Name = "tabPage5";
+            this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage5.Size = new System.Drawing.Size(438, 270);
+            this.tabPage5.TabIndex = 1;
+            this.tabPage5.Text = "Audio";
+            this.tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // tabPage7
+            // 
+            this.tabPage7.Controls.Add(this.avisynthPluginsLabel);
+            this.tabPage7.Controls.Add(this.button9);
+            this.tabPage7.Controls.Add(this.selectAvisynthPluginsDir);
+            this.tabPage7.Controls.Add(this.textBox9);
+            this.tabPage7.Controls.Add(this.label16);
+            this.tabPage7.Controls.Add(this.avisynthPluginsDir);
+            this.tabPage7.Controls.Add(this.dgIndexPath);
+            this.tabPage7.Controls.Add(this.dgIndexLabel);
+            this.tabPage7.Controls.Add(this.selectDGIndexExecutable);
+            this.tabPage7.Location = new System.Drawing.Point(4, 22);
+            this.tabPage7.Name = "tabPage7";
+            this.tabPage7.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage7.Size = new System.Drawing.Size(438, 270);
+            this.tabPage7.TabIndex = 3;
+            this.tabPage7.Text = "Others";
+            this.tabPage7.UseVisualStyleBackColor = true;
+            // 
+            // button9
+            // 
+            this.button9.Location = new System.Drawing.Point(408, 43);
+            this.button9.Name = "button9";
+            this.button9.Size = new System.Drawing.Size(24, 23);
+            this.button9.TabIndex = 75;
+            this.button9.Text = "...";
+            // 
+            // selectAvisynthPluginsDir
+            // 
+            this.selectAvisynthPluginsDir.Location = new System.Drawing.Point(408, 70);
+            this.selectAvisynthPluginsDir.Name = "selectAvisynthPluginsDir";
+            this.selectAvisynthPluginsDir.Size = new System.Drawing.Size(24, 23);
+            this.selectAvisynthPluginsDir.TabIndex = 76;
+            this.selectAvisynthPluginsDir.Text = "...";
+            // 
+            // textBox9
+            // 
+            this.textBox9.Location = new System.Drawing.Point(99, 43);
+            this.textBox9.Name = "textBox9";
+            this.textBox9.ReadOnly = true;
+            this.textBox9.Size = new System.Drawing.Size(298, 21);
+            this.textBox9.TabIndex = 73;
+            this.textBox9.Text = "avisynth plugins Directory";
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(45, 47);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(45, 13);
+            this.label16.TabIndex = 72;
+            this.label16.Text = "yadif.dll";
+            // 
+            // avisynthPluginsDir
+            // 
+            this.avisynthPluginsDir.Location = new System.Drawing.Point(99, 70);
+            this.avisynthPluginsDir.Name = "avisynthPluginsDir";
+            this.avisynthPluginsDir.ReadOnly = true;
+            this.avisynthPluginsDir.Size = new System.Drawing.Size(298, 21);
+            this.avisynthPluginsDir.TabIndex = 74;
+            this.avisynthPluginsDir.Text = "avisynth plugins Directory";
+            // 
+            // dgIndexPath
+            // 
+            this.dgIndexPath.Location = new System.Drawing.Point(99, 16);
+            this.dgIndexPath.Name = "dgIndexPath";
+            this.dgIndexPath.ReadOnly = true;
+            this.dgIndexPath.Size = new System.Drawing.Size(298, 21);
+            this.dgIndexPath.TabIndex = 71;
+            this.dgIndexPath.Text = "dgindex.exe";
+            // 
+            // dgIndexLabel
+            // 
+            this.dgIndexLabel.Location = new System.Drawing.Point(35, 19);
+            this.dgIndexLabel.Name = "dgIndexLabel";
+            this.dgIndexLabel.Size = new System.Drawing.Size(58, 21);
+            this.dgIndexLabel.TabIndex = 70;
+            this.dgIndexLabel.Text = "DGIndex";
+            // 
+            // selectDGIndexExecutable
+            // 
+            this.selectDGIndexExecutable.Location = new System.Drawing.Point(408, 16);
+            this.selectDGIndexExecutable.Name = "selectDGIndexExecutable";
+            this.selectDGIndexExecutable.Size = new System.Drawing.Size(24, 23);
+            this.selectDGIndexExecutable.TabIndex = 69;
+            this.selectDGIndexExecutable.Text = "...";
             // 
             // audioExtLabel
             // 
@@ -1485,48 +1249,334 @@ namespace MeGUI
             this.keep2ndPassOutput.TabIndex = 0;
             this.keep2ndPassOutput.Text = "Keep 2nd pass Output in 3 pass mode";
             // 
+            // avisynthPluginsLabel
+            // 
+            this.avisynthPluginsLabel.AutoSize = true;
+            this.avisynthPluginsLabel.Location = new System.Drawing.Point(6, 75);
+            this.avisynthPluginsLabel.Name = "avisynthPluginsLabel";
+            this.avisynthPluginsLabel.Size = new System.Drawing.Size(84, 13);
+            this.avisynthPluginsLabel.TabIndex = 77;
+            this.avisynthPluginsLabel.Text = "avisynth plugins";
+            // 
+            // mkvmergePathLabel
+            // 
+            this.mkvmergePathLabel.Location = new System.Drawing.Point(25, 45);
+            this.mkvmergePathLabel.Name = "mkvmergePathLabel";
+            this.mkvmergePathLabel.Size = new System.Drawing.Size(58, 21);
+            this.mkvmergePathLabel.TabIndex = 58;
+            this.mkvmergePathLabel.Text = "mkvmerge";
+            // 
+            // label4
+            // 
+            this.label4.Location = new System.Drawing.Point(18, 74);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(73, 21);
+            this.label4.TabIndex = 57;
+            this.label4.Text = "avimux_gui";
+            // 
+            // mp4boxPathLabel
+            // 
+            this.mp4boxPathLabel.Location = new System.Drawing.Point(37, 19);
+            this.mp4boxPathLabel.Name = "mp4boxPathLabel";
+            this.mp4boxPathLabel.Size = new System.Drawing.Size(46, 20);
+            this.mp4boxPathLabel.TabIndex = 59;
+            this.mp4boxPathLabel.Text = "mp4Box";
+            // 
+            // mkvmergePath
+            // 
+            this.mkvmergePath.Location = new System.Drawing.Point(89, 43);
+            this.mkvmergePath.Name = "mkvmergePath";
+            this.mkvmergePath.ReadOnly = true;
+            this.mkvmergePath.Size = new System.Drawing.Size(308, 21);
+            this.mkvmergePath.TabIndex = 62;
+            this.mkvmergePath.Text = "mkvmerge.exe";
+            // 
+            // tabPage6
+            // 
+            this.tabPage6.Controls.Add(this.aviMuxGUIPath);
+            this.tabPage6.Controls.Add(this.mp4boxPath);
+            this.tabPage6.Controls.Add(this.label4);
+            this.tabPage6.Controls.Add(this.selectMkvmergeExecutableButton);
+            this.tabPage6.Controls.Add(this.mkvmergePathLabel);
+            this.tabPage6.Controls.Add(this.selectAviMuxGUIExecutableButton);
+            this.tabPage6.Controls.Add(this.mp4boxPathLabel);
+            this.tabPage6.Controls.Add(this.mkvmergePath);
+            this.tabPage6.Controls.Add(this.selectMP4boxExecutableButton);
+            this.tabPage6.Location = new System.Drawing.Point(4, 22);
+            this.tabPage6.Name = "tabPage6";
+            this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage6.Size = new System.Drawing.Size(438, 270);
+            this.tabPage6.TabIndex = 2;
+            this.tabPage6.Text = "Muxer";
+            this.tabPage6.UseVisualStyleBackColor = true;
+            // 
+            // aviMuxGUIPath
+            // 
+            this.aviMuxGUIPath.Location = new System.Drawing.Point(89, 70);
+            this.aviMuxGUIPath.Name = "aviMuxGUIPath";
+            this.aviMuxGUIPath.ReadOnly = true;
+            this.aviMuxGUIPath.Size = new System.Drawing.Size(308, 21);
+            this.aviMuxGUIPath.TabIndex = 60;
+            this.aviMuxGUIPath.Text = "avimux_gui.exe";
+            // 
+            // mp4boxPath
+            // 
+            this.mp4boxPath.Location = new System.Drawing.Point(89, 16);
+            this.mp4boxPath.Name = "mp4boxPath";
+            this.mp4boxPath.ReadOnly = true;
+            this.mp4boxPath.Size = new System.Drawing.Size(308, 21);
+            this.mp4boxPath.TabIndex = 61;
+            this.mp4boxPath.Text = "mp4box.exe";
+            // 
+            // selectMkvmergeExecutableButton
+            // 
+            this.selectMkvmergeExecutableButton.Location = new System.Drawing.Point(408, 43);
+            this.selectMkvmergeExecutableButton.Name = "selectMkvmergeExecutableButton";
+            this.selectMkvmergeExecutableButton.Size = new System.Drawing.Size(24, 23);
+            this.selectMkvmergeExecutableButton.TabIndex = 63;
+            this.selectMkvmergeExecutableButton.Text = "...";
+            // 
+            // selectAviMuxGUIExecutableButton
+            // 
+            this.selectAviMuxGUIExecutableButton.Location = new System.Drawing.Point(408, 70);
+            this.selectAviMuxGUIExecutableButton.Name = "selectAviMuxGUIExecutableButton";
+            this.selectAviMuxGUIExecutableButton.Size = new System.Drawing.Size(24, 23);
+            this.selectAviMuxGUIExecutableButton.TabIndex = 64;
+            this.selectAviMuxGUIExecutableButton.Text = "...";
+            // 
+            // selectMP4boxExecutableButton
+            // 
+            this.selectMP4boxExecutableButton.Location = new System.Drawing.Point(408, 16);
+            this.selectMP4boxExecutableButton.Name = "selectMP4boxExecutableButton";
+            this.selectMP4boxExecutableButton.Size = new System.Drawing.Size(24, 23);
+            this.selectMP4boxExecutableButton.TabIndex = 65;
+            this.selectMP4boxExecutableButton.Text = "...";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(408, 16);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(24, 23);
+            this.button1.TabIndex = 91;
+            this.button1.Text = "...";
+            // 
+            // label1
+            // 
+            this.label1.Location = new System.Drawing.Point(50, 16);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(29, 18);
+            this.label1.TabIndex = 92;
+            this.label1.Text = "faac";
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(89, 16);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.ReadOnly = true;
+            this.textBox1.Size = new System.Drawing.Size(308, 21);
+            this.textBox1.TabIndex = 93;
+            this.textBox1.Text = "faac.exe";
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(408, 43);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(24, 23);
+            this.button2.TabIndex = 94;
+            this.button2.Text = "...";
+            // 
+            // label2
+            // 
+            this.label2.Location = new System.Drawing.Point(14, 43);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(65, 21);
+            this.label2.TabIndex = 95;
+            this.label2.Text = "neroAacEnc";
+            // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(89, 43);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.ReadOnly = true;
+            this.textBox2.Size = new System.Drawing.Size(308, 21);
+            this.textBox2.TabIndex = 96;
+            this.textBox2.Text = "neroAacEnc.exe";
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(408, 70);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(24, 23);
+            this.button3.TabIndex = 97;
+            this.button3.Text = "...";
+            // 
+            // label3
+            // 
+            this.label3.Location = new System.Drawing.Point(47, 70);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(36, 21);
+            this.label3.TabIndex = 98;
+            this.label3.Text = "lame";
+            // 
+            // textBox3
+            // 
+            this.textBox3.Location = new System.Drawing.Point(89, 70);
+            this.textBox3.Name = "textBox3";
+            this.textBox3.ReadOnly = true;
+            this.textBox3.Size = new System.Drawing.Size(308, 21);
+            this.textBox3.TabIndex = 99;
+            this.textBox3.Text = "lame.exe";
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(408, 205);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(24, 23);
+            this.button4.TabIndex = 100;
+            this.button4.Text = "...";
+            // 
+            // label7
+            // 
+            this.label7.Location = new System.Drawing.Point(29, 208);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(54, 21);
+            this.label7.TabIndex = 101;
+            this.label7.Text = "oggenc2";
+            // 
+            // textBox4
+            // 
+            this.textBox4.Location = new System.Drawing.Point(89, 205);
+            this.textBox4.Name = "textBox4";
+            this.textBox4.ReadOnly = true;
+            this.textBox4.Size = new System.Drawing.Size(308, 21);
+            this.textBox4.TabIndex = 102;
+            this.textBox4.Text = "oggenc2.exe";
+            // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(408, 97);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(24, 23);
+            this.button5.TabIndex = 103;
+            this.button5.Text = "...";
+            // 
+            // label8
+            // 
+            this.label8.Location = new System.Drawing.Point(3, 97);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(84, 21);
+            this.label8.TabIndex = 104;
+            this.label8.Text = "enc_AudX_CLI";
+            // 
+            // textBox5
+            // 
+            this.textBox5.Location = new System.Drawing.Point(89, 97);
+            this.textBox5.Name = "textBox5";
+            this.textBox5.ReadOnly = true;
+            this.textBox5.Size = new System.Drawing.Size(308, 21);
+            this.textBox5.TabIndex = 105;
+            this.textBox5.Text = "enc_AudX_CLI.exe";
+            // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(408, 124);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(24, 23);
+            this.button6.TabIndex = 106;
+            this.button6.Text = "...";
+            // 
+            // label9
+            // 
+            this.label9.Location = new System.Drawing.Point(14, 124);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(73, 21);
+            this.label9.TabIndex = 107;
+            this.label9.Text = "enc_aacPlus";
+            // 
+            // textBox6
+            // 
+            this.textBox6.Location = new System.Drawing.Point(89, 124);
+            this.textBox6.Name = "textBox6";
+            this.textBox6.ReadOnly = true;
+            this.textBox6.Size = new System.Drawing.Size(308, 21);
+            this.textBox6.TabIndex = 108;
+            this.textBox6.Text = "enc_aacplus.exe";
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(110, 232);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(177, 17);
+            this.checkBox1.TabIndex = 109;
+            this.checkBox1.Text = "I\'m using OggEnc2 v2.8 or later";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // button7
+            // 
+            this.button7.Location = new System.Drawing.Point(408, 149);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(24, 23);
+            this.button7.TabIndex = 111;
+            this.button7.Text = "...";
+            // 
+            // label10
+            // 
+            this.label10.Location = new System.Drawing.Point(34, 154);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(49, 23);
+            this.label10.TabIndex = 113;
+            this.label10.Text = "ffmpeg";
+            // 
+            // button8
+            // 
+            this.button8.Location = new System.Drawing.Point(408, 178);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(24, 23);
+            this.button8.TabIndex = 110;
+            this.button8.Text = "...";
+            // 
+            // textBox7
+            // 
+            this.textBox7.Location = new System.Drawing.Point(89, 151);
+            this.textBox7.Name = "textBox7";
+            this.textBox7.ReadOnly = true;
+            this.textBox7.Size = new System.Drawing.Size(308, 21);
+            this.textBox7.TabIndex = 115;
+            this.textBox7.Text = "dgindex.exe";
+            // 
+            // besplit
+            // 
+            this.besplit.Location = new System.Drawing.Point(34, 183);
+            this.besplit.Name = "besplit";
+            this.besplit.Size = new System.Drawing.Size(49, 16);
+            this.besplit.TabIndex = 112;
+            this.besplit.Text = "besplit";
+            // 
+            // textBox8
+            // 
+            this.textBox8.Location = new System.Drawing.Point(89, 178);
+            this.textBox8.Name = "textBox8";
+            this.textBox8.ReadOnly = true;
+            this.textBox8.Size = new System.Drawing.Size(308, 21);
+            this.textBox8.TabIndex = 114;
+            this.textBox8.Text = "dgindex.exe";
+            // 
             // helpButton1
             // 
+            this.helpButton1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.helpButton1.ArticleName = "Settings window";
             this.helpButton1.AutoSize = true;
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.helpButton1.Location = new System.Drawing.Point(6, 520);
+            this.helpButton1.Location = new System.Drawing.Point(12, 402);
             this.helpButton1.Name = "helpButton1";
             this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 29;
             // 
-            // label16
-            // 
-            this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(11, 437);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(45, 13);
-            this.label16.TabIndex = 14;
-            this.label16.Text = "yadif.dll";
-            // 
-            // textBox9
-            // 
-            this.textBox9.Location = new System.Drawing.Point(120, 434);
-            this.textBox9.Name = "textBox9";
-            this.textBox9.ReadOnly = true;
-            this.textBox9.Size = new System.Drawing.Size(296, 21);
-            this.textBox9.TabIndex = 15;
-            this.textBox9.Text = "avisynth plugins Directory";
-            // 
-            // button9
-            // 
-            this.button9.Location = new System.Drawing.Point(424, 433);
-            this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(24, 23);
-            this.button9.TabIndex = 16;
-            this.button9.Text = "...";
-            this.button9.Click += new System.EventHandler(this.button9_Click);
-            // 
             // SettingsForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
-            this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(468, 555);
+            this.ClientSize = new System.Drawing.Size(468, 437);
             this.Controls.Add(this.helpButton1);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.cancelButton);
@@ -1560,8 +1610,16 @@ namespace MeGUI
             this.autoModeGroupbox.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.tabPage2.ResumeLayout(false);
-            this.tabPage2.PerformLayout();
+            this.tabControl2.ResumeLayout(false);
+            this.tabPage4.ResumeLayout(false);
+            this.tabPage4.PerformLayout();
+            this.tabPage5.ResumeLayout(false);
+            this.tabPage5.PerformLayout();
+            this.tabPage7.ResumeLayout(false);
+            this.tabPage7.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nbPasses)).EndInit();
+            this.tabPage6.ResumeLayout(false);
+            this.tabPage6.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
