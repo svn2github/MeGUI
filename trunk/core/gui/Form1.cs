@@ -92,7 +92,6 @@ namespace MeGUI
         private TabPage tabPage2;
         private JobControl jobControl1;
         private MenuItem mnuHelp;
-        private MenuItem mnuGuide;
         private MenuItem mnuChangelog;
         private FlowLayoutPanel flowLayoutPanel1;
         private Button clearLogButton;
@@ -114,13 +113,15 @@ namespace MeGUI
         private MenuItem hideAllProgressWindows;
         private MenuItem separator2;
         private MenuItem menuItem7;
-        private MenuItem mnuHelpLink;
 
         private List<Form> allForms = new List<Form>();
         private MenuItem menuItem3;
-        private MenuItem mnuSF;
-        private MenuItem mnuBugsTrackerLink;
-        private MenuItem mnuFeaturesReqLink;
+        private MenuItem mnuDoc;
+        private MenuItem mnuWebsite;
+        private MenuItem mnuHome;
+        private MenuItem mnuForum;
+        private MenuItem mnuBugTracker;
+        private MenuItem mnuFeaturesReq;
         private List<Form> formsToReopen = new List<Form>();
 
         public bool IsHiddenMode { get { return trayIcon.Visible; } }
@@ -206,11 +207,12 @@ namespace MeGUI
             this.mnuToolsSettings = new System.Windows.Forms.MenuItem();
             this.mnuHelp = new System.Windows.Forms.MenuItem();
             this.mnuChangelog = new System.Windows.Forms.MenuItem();
-            this.mnuGuide = new System.Windows.Forms.MenuItem();
-            this.mnuHelpLink = new System.Windows.Forms.MenuItem();
-            this.mnuSF = new System.Windows.Forms.MenuItem();
-            this.mnuBugsTrackerLink = new System.Windows.Forms.MenuItem();
-            this.mnuFeaturesReqLink = new System.Windows.Forms.MenuItem();
+            this.mnuDoc = new System.Windows.Forms.MenuItem();
+            this.mnuWebsite = new System.Windows.Forms.MenuItem();
+            this.mnuHome = new System.Windows.Forms.MenuItem();
+            this.mnuForum = new System.Windows.Forms.MenuItem();
+            this.mnuBugTracker = new System.Windows.Forms.MenuItem();
+            this.mnuFeaturesReq = new System.Windows.Forms.MenuItem();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.trayIcon = new System.Windows.Forms.NotifyIcon(this.components);
@@ -597,9 +599,8 @@ namespace MeGUI
             this.mnuHelp.Index = 4;
             this.mnuHelp.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.mnuChangelog,
-            this.mnuGuide,
-            this.mnuHelpLink,
-            this.mnuSF});
+            this.mnuDoc,
+            this.mnuWebsite});
             this.mnuHelp.Text = "&Help";
             // 
             // mnuChangelog
@@ -608,39 +609,45 @@ namespace MeGUI
             this.mnuChangelog.Text = "Changelog";
             this.mnuChangelog.Click += new System.EventHandler(this.mnuChangelog_Click);
             // 
-            // mnuGuide
+            // mnuDoc
             // 
-            this.mnuGuide.Index = 1;
-            this.mnuGuide.Shortcut = System.Windows.Forms.Shortcut.CtrlG;
-            this.mnuGuide.Text = "&Guide";
-            this.mnuGuide.Click += new System.EventHandler(this.mnuGuide_Click);
+            this.mnuDoc.Index = 1;
+            this.mnuDoc.Text = "Wiki - User Guides";
+            this.mnuDoc.Click += new System.EventHandler(this.mnuDoc_Click);
             // 
-            // mnuHelpLink
+            // mnuWebsite
             // 
-            this.mnuHelpLink.Index = 2;
-            this.mnuHelpLink.Shortcut = System.Windows.Forms.Shortcut.CtrlH;
-            this.mnuHelpLink.Text = "Help";
-            this.mnuHelpLink.Click += new System.EventHandler(this.menuItem2_Click);
+            this.mnuWebsite.Index = 2;
+            this.mnuWebsite.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.mnuHome,
+            this.mnuForum,
+            this.mnuBugTracker,
+            this.mnuFeaturesReq});
+            this.mnuWebsite.Text = "Website";
             // 
-            // mnuSF
+            // mnuHome
             // 
-            this.mnuSF.Index = 3;
-            this.mnuSF.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.mnuBugsTrackerLink,
-            this.mnuFeaturesReqLink});
-            this.mnuSF.Text = "SourceForge.net";
+            this.mnuHome.Index = 0;
+            this.mnuHome.Text = "Homepage";
+            this.mnuHome.Click += new System.EventHandler(this.mnuHome_Click);
             // 
-            // mnuBugsTrackerLink
+            // mnuForum
             // 
-            this.mnuBugsTrackerLink.Index = 0;
-            this.mnuBugsTrackerLink.Text = "Bugs Tracker";
-            this.mnuBugsTrackerLink.Click += new System.EventHandler(this.mnuBugsTrackerLink_Click);
+            this.mnuForum.Index = 1;
+            this.mnuForum.Text = "Forum";
+            this.mnuForum.Click += new System.EventHandler(this.mnuForum_Click);
             // 
-            // mnuFeaturesReqLink
+            // mnuBugTracker
             // 
-            this.mnuFeaturesReqLink.Index = 1;
-            this.mnuFeaturesReqLink.Text = "Features Requests";
-            this.mnuFeaturesReqLink.Click += new System.EventHandler(this.mnuFeaturesReqLink_Click);
+            this.mnuBugTracker.Index = 2;
+            this.mnuBugTracker.Text = "Bugs Tracker";
+            this.mnuBugTracker.Click += new System.EventHandler(this.mnuBugTracker_Click);
+            // 
+            // mnuFeaturesReq
+            // 
+            this.mnuFeaturesReq.Index = 3;
+            this.mnuFeaturesReq.Text = "Feature Requests";
+            this.mnuFeaturesReq.Click += new System.EventHandler(this.mnuFeaturesReq_Click);
             // 
             // trayIcon
             // 
@@ -655,6 +662,7 @@ namespace MeGUI
             this.toolStripSeparator1,
             this.exitMeGUIToolStripMenuItem});
             this.trayMenu.Name = "trayMenu";
+            this.trayMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
             this.trayMenu.Size = new System.Drawing.Size(147, 54);
             // 
             // openMeGUIToolStripMenuItem
@@ -721,7 +729,7 @@ namespace MeGUI
         /// <param name="e"></param>
         private void menuItem2_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("http://forum.doom9.org/forumdisplay.php?f=78");
+            
         }
         /// <summary>
         /// shows the changelog dialog window
@@ -1953,14 +1961,29 @@ namespace MeGUI
                 delegate(FormWindowState s) { MeGUI.Properties.Settings.Default.MainFormWindowState = s; });
 
         }
-        private void mnuBugsTrackerLink_Click(object sender, EventArgs e)
+        private void mnuForum_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://forum.doom9.org/forumdisplay.php?f=78");
+        }
+
+        private void mnuHome_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://sourceforge.net/projects/megui");
+        }
+
+        private void mnuBugTracker_Click(object sender, EventArgs e)
         {
             System.Diagnostics.Process.Start("http://sourceforge.net/tracker/?group_id=156112&atid=798476");
         }
 
-        private void mnuFeaturesReqLink_Click(object sender, EventArgs e)
+        private void mnuFeaturesReq_Click(object sender, EventArgs e)
         {
             System.Diagnostics.Process.Start("http://sourceforge.net/tracker/?group_id=156112&atid=798479");
+        }
+
+        private void mnuDoc_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://mewiki.project357.com/index.php/Main_Page");
         }
     }
     public class CommandlineUpgradeData
