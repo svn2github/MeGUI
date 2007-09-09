@@ -69,7 +69,6 @@ namespace MeGUI
         private System.Windows.Forms.MenuItem mnuFile;
         private System.Windows.Forms.MenuItem mnuFileExit;
         private System.Windows.Forms.MenuItem mnuTools;
-        private System.Windows.Forms.MenuItem mnuToolsSettings;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
         private System.Windows.Forms.MenuItem mnuView;
@@ -122,6 +121,8 @@ namespace MeGUI
         private MenuItem mnuForum;
         private MenuItem mnuBugTracker;
         private MenuItem mnuFeaturesReq;
+        private MenuItem mnuOptions;
+        private MenuItem mnuOptionsSettings;
         private List<Form> formsToReopen = new List<Form>();
 
         public bool IsHiddenMode { get { return trayIcon.Visible; } }
@@ -168,11 +169,7 @@ namespace MeGUI
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
             this.autoEncodeButton = new System.Windows.Forms.Button();
             this.resetButton = new System.Windows.Forms.Button();
-            this.helpButton1 = new MeGUI.core.gui.HelpButton();
-            this.audioEncodingComponent1 = new MeGUI.AudioEncodingComponent();
-            this.videoEncodingComponent1 = new MeGUI.VideoEncodingComponent();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.jobControl1 = new MeGUI.core.details.JobControl();
             this.logTab = new System.Windows.Forms.TabPage();
             this.log = new System.Windows.Forms.TextBox();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
@@ -204,7 +201,8 @@ namespace MeGUI
             this.menuItem3 = new System.Windows.Forms.MenuItem();
             this.viewSummary = new System.Windows.Forms.MenuItem();
             this.mnuTools = new System.Windows.Forms.MenuItem();
-            this.mnuToolsSettings = new System.Windows.Forms.MenuItem();
+            this.mnuOptions = new System.Windows.Forms.MenuItem();
+            this.mnuOptionsSettings = new System.Windows.Forms.MenuItem();
             this.mnuHelp = new System.Windows.Forms.MenuItem();
             this.mnuChangelog = new System.Windows.Forms.MenuItem();
             this.mnuDoc = new System.Windows.Forms.MenuItem();
@@ -220,6 +218,10 @@ namespace MeGUI
             this.openMeGUIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.exitMeGUIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.helpButton1 = new MeGUI.core.gui.HelpButton();
+            this.audioEncodingComponent1 = new MeGUI.AudioEncodingComponent();
+            this.videoEncodingComponent1 = new MeGUI.VideoEncodingComponent();
+            this.jobControl1 = new MeGUI.core.details.JobControl();
             this.tabControl1.SuspendLayout();
             this.inputTab.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
@@ -238,7 +240,7 @@ namespace MeGUI
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(508, 385);
+            this.tabControl1.Size = new System.Drawing.Size(508, 322);
             this.tabControl1.TabIndex = 55;
             // 
             // inputTab
@@ -249,7 +251,7 @@ namespace MeGUI
             this.inputTab.Controls.Add(this.videoEncodingComponent1);
             this.inputTab.Location = new System.Drawing.Point(4, 22);
             this.inputTab.Name = "inputTab";
-            this.inputTab.Size = new System.Drawing.Size(500, 359);
+            this.inputTab.Size = new System.Drawing.Size(500, 296);
             this.inputTab.TabIndex = 0;
             this.inputTab.Text = "Input";
             // 
@@ -262,7 +264,7 @@ namespace MeGUI
             this.flowLayoutPanel2.Controls.Add(this.helpButton1);
             this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.flowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 330);
+            this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 267);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
             this.flowLayoutPanel2.Size = new System.Drawing.Size(500, 29);
             this.flowLayoutPanel2.TabIndex = 9;
@@ -293,58 +295,15 @@ namespace MeGUI
             this.resetButton.Text = "Reset";
             this.resetButton.Click += new System.EventHandler(this.resetButton_Click);
             // 
-            // helpButton1
-            // 
-            this.helpButton1.ArticleName = "Main window#Input";
-            this.helpButton1.AutoSize = true;
-            this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.helpButton1.Location = new System.Drawing.Point(327, 3);
-            this.helpButton1.Name = "helpButton1";
-            this.helpButton1.Size = new System.Drawing.Size(38, 23);
-            this.helpButton1.TabIndex = 9;
-            // 
-            // audioEncodingComponent1
-            // 
-            this.audioEncodingComponent1.AudioInput = "";
-            this.audioEncodingComponent1.AudioOutput = "";
-            this.audioEncodingComponent1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.audioEncodingComponent1.Location = new System.Drawing.Point(0, 153);
-            this.audioEncodingComponent1.MinimumSize = new System.Drawing.Size(400, 162);
-            this.audioEncodingComponent1.Name = "audioEncodingComponent1";
-            this.audioEncodingComponent1.Size = new System.Drawing.Size(500, 179);
-            this.audioEncodingComponent1.TabIndex = 8;
-            // 
-            // videoEncodingComponent1
-            // 
-            this.videoEncodingComponent1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.videoEncodingComponent1.Location = new System.Drawing.Point(0, 0);
-            this.videoEncodingComponent1.MaximumSize = new System.Drawing.Size(0, 153);
-            this.videoEncodingComponent1.MinimumSize = new System.Drawing.Size(415, 153);
-            this.videoEncodingComponent1.Name = "videoEncodingComponent1";
-            this.videoEncodingComponent1.PrerenderJob = false;
-            this.videoEncodingComponent1.Size = new System.Drawing.Size(500, 153);
-            this.videoEncodingComponent1.TabIndex = 7;
-            this.videoEncodingComponent1.VideoInput = "";
-            this.videoEncodingComponent1.VideoOutput = "";
-            // 
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.jobControl1);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Size = new System.Drawing.Size(500, 359);
+            this.tabPage2.Size = new System.Drawing.Size(500, 317);
             this.tabPage2.TabIndex = 12;
             this.tabPage2.Text = "Queue";
             this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // jobControl1
-            // 
-            this.jobControl1.BackColor = System.Drawing.SystemColors.Control;
-            this.jobControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.jobControl1.Location = new System.Drawing.Point(0, 0);
-            this.jobControl1.Name = "jobControl1";
-            this.jobControl1.Size = new System.Drawing.Size(500, 359);
-            this.jobControl1.TabIndex = 0;
             // 
             // logTab
             // 
@@ -352,7 +311,7 @@ namespace MeGUI
             this.logTab.Controls.Add(this.flowLayoutPanel1);
             this.logTab.Location = new System.Drawing.Point(4, 22);
             this.logTab.Name = "logTab";
-            this.logTab.Size = new System.Drawing.Size(500, 359);
+            this.logTab.Size = new System.Drawing.Size(500, 317);
             this.logTab.TabIndex = 10;
             this.logTab.Text = "Log";
             this.logTab.UseVisualStyleBackColor = true;
@@ -365,7 +324,7 @@ namespace MeGUI
             this.log.Name = "log";
             this.log.ReadOnly = true;
             this.log.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.log.Size = new System.Drawing.Size(500, 330);
+            this.log.Size = new System.Drawing.Size(500, 288);
             this.log.TabIndex = 0;
             // 
             // flowLayoutPanel1
@@ -424,6 +383,7 @@ namespace MeGUI
             this.mnuView,
             this.menuItem1,
             this.mnuTools,
+            this.mnuOptions,
             this.mnuHelp});
             // 
             // mnuFile
@@ -582,21 +542,27 @@ namespace MeGUI
             // 
             this.mnuTools.Index = 3;
             this.mnuTools.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.mnuMuxers,
-            this.mnuToolsSettings});
+            this.mnuMuxers});
             this.mnuTools.Shortcut = System.Windows.Forms.Shortcut.CtrlT;
             this.mnuTools.Text = "&Tools";
             // 
-            // mnuToolsSettings
+            // mnuOptions
             // 
-            this.mnuToolsSettings.Index = 1;
-            this.mnuToolsSettings.Shortcut = System.Windows.Forms.Shortcut.CtrlS;
-            this.mnuToolsSettings.Text = "Settings";
-            this.mnuToolsSettings.Click += new System.EventHandler(this.mnuToolsSettings_Click);
+            this.mnuOptions.Index = 4;
+            this.mnuOptions.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.mnuOptionsSettings});
+            this.mnuOptions.Text = "&Options";
+            // 
+            // mnuOptionsSettings
+            // 
+            this.mnuOptionsSettings.Index = 0;
+            this.mnuOptionsSettings.Shortcut = System.Windows.Forms.Shortcut.CtrlS;
+            this.mnuOptionsSettings.Text = "Settings";
+            this.mnuOptionsSettings.Click += new System.EventHandler(this.mnuOptionsSettings_Click);
             // 
             // mnuHelp
             // 
-            this.mnuHelp.Index = 4;
+            this.mnuHelp.Index = 5;
             this.mnuHelp.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.mnuChangelog,
             this.mnuDoc,
@@ -684,12 +650,55 @@ namespace MeGUI
             this.exitMeGUIToolStripMenuItem.Text = "Exit MeGUI";
             this.exitMeGUIToolStripMenuItem.Click += new System.EventHandler(this.exitMeGUIToolStripMenuItem_Click);
             // 
+            // helpButton1
+            // 
+            this.helpButton1.ArticleName = "Main window#Input";
+            this.helpButton1.AutoSize = true;
+            this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.helpButton1.Location = new System.Drawing.Point(327, 3);
+            this.helpButton1.Name = "helpButton1";
+            this.helpButton1.Size = new System.Drawing.Size(38, 23);
+            this.helpButton1.TabIndex = 9;
+            // 
+            // audioEncodingComponent1
+            // 
+            this.audioEncodingComponent1.AudioInput = "";
+            this.audioEncodingComponent1.AudioOutput = "";
+            this.audioEncodingComponent1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.audioEncodingComponent1.Location = new System.Drawing.Point(0, 153);
+            this.audioEncodingComponent1.MinimumSize = new System.Drawing.Size(400, 162);
+            this.audioEncodingComponent1.Name = "audioEncodingComponent1";
+            this.audioEncodingComponent1.Size = new System.Drawing.Size(500, 179);
+            this.audioEncodingComponent1.TabIndex = 8;
+            // 
+            // videoEncodingComponent1
+            // 
+            this.videoEncodingComponent1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.videoEncodingComponent1.Location = new System.Drawing.Point(0, 0);
+            this.videoEncodingComponent1.MaximumSize = new System.Drawing.Size(0, 153);
+            this.videoEncodingComponent1.MinimumSize = new System.Drawing.Size(415, 153);
+            this.videoEncodingComponent1.Name = "videoEncodingComponent1";
+            this.videoEncodingComponent1.PrerenderJob = false;
+            this.videoEncodingComponent1.Size = new System.Drawing.Size(500, 153);
+            this.videoEncodingComponent1.TabIndex = 7;
+            this.videoEncodingComponent1.VideoInput = "";
+            this.videoEncodingComponent1.VideoOutput = "";
+            // 
+            // jobControl1
+            // 
+            this.jobControl1.BackColor = System.Drawing.SystemColors.Control;
+            this.jobControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.jobControl1.Location = new System.Drawing.Point(0, 0);
+            this.jobControl1.Name = "jobControl1";
+            this.jobControl1.Size = new System.Drawing.Size(500, 317);
+            this.jobControl1.TabIndex = 0;
+            // 
             // MainForm
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(508, 385);
+            this.ClientSize = new System.Drawing.Size(508, 322);
             this.Controls.Add(this.tabControl1);
             this.DataBindings.Add(new System.Windows.Forms.Binding("Location", global::MeGUI.Properties.Settings.Default, "MainFormLocation", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -1183,6 +1192,13 @@ namespace MeGUI
             ((ITool)(sender as MenuItem).Tag).Run(this);
         }
 
+        private void mnuOptions_Click(object sender, System.EventArgs e)
+        {
+            if ((!(sender is System.Windows.Forms.MenuItem)) || (!((sender as MenuItem).Tag is IOption)))
+                return;
+            ((IOption)(sender as MenuItem).Tag).Run(this);
+        }
+
         private void mnuMuxer_Click(object sender, System.EventArgs e)
         {
             if ((!(sender is System.Windows.Forms.MenuItem)) || (!((sender as MenuItem).Tag is IMuxing)))
@@ -1638,9 +1654,7 @@ namespace MeGUI
             List<MenuItem> toolsItems = new List<MenuItem>();
             List<Shortcut> usedShortcuts = new List<Shortcut>();
             toolsItems.Add(mnuMuxers);
-            toolsItems.Add(mnuToolsSettings);
             usedShortcuts.Add(mnuMuxers.Shortcut);
-            usedShortcuts.Add(mnuToolsSettings.Shortcut);
             
             foreach (ITool tool in PackageSystem.Tools.Values)
             {
@@ -1672,6 +1686,44 @@ namespace MeGUI
                 m.Index = index;
                 index++;
                 mnuTools.MenuItems.Add(m);
+            }
+
+            // Fill the Options Menu
+            mnuOptions.MenuItems.Clear();
+            List<MenuItem> optionsItems = new List<MenuItem>();
+            List<Shortcut> usedShortcuts2 = new List<Shortcut>();
+            optionsItems.Add(mnuOptionsSettings);
+            usedShortcuts2.Add(mnuOptionsSettings.Shortcut);
+            foreach (IOption option in PackageSystem.Options.Values)
+            {
+                MenuItem newMenuItem = new MenuItem();
+                newMenuItem.Text = option.Name;
+                newMenuItem.Tag = option;
+                newMenuItem.Click += new System.EventHandler(this.mnuOptions_Click);
+                bool shortcutAttempted = false;
+                foreach (Shortcut s in option.Shortcuts)
+                {
+                    shortcutAttempted = true;
+                    Debug.Assert(s != Shortcut.None);
+                    if (!usedShortcuts.Contains(s))
+                    {
+                        usedShortcuts2.Add(s);
+                        newMenuItem.Shortcut = s;
+                        break;
+                    }
+                }
+                if (shortcutAttempted && newMenuItem.Shortcut == Shortcut.None)
+                    addToLog("Shortcut for '" + option.Name + "' is already used. No shortcut selected.\r\n");
+                optionsItems.Add(newMenuItem);
+            }
+
+            optionsItems.Sort(new Comparison<MenuItem>(delegate(MenuItem a, MenuItem b) { return (a.Text.CompareTo(b.Text)); }));
+            index = 0;
+            foreach (MenuItem m in optionsItems)
+            {
+                m.Index = index;
+                index++;
+                mnuOptions.MenuItems.Add(m);
             }
         }
 
@@ -1707,7 +1759,7 @@ namespace MeGUI
             PackageSystem.Tools.Register(new CQMEditorTool());
             PackageSystem.Tools.Register(new CalculatorTool());
             PackageSystem.Tools.Register(new ChapterCreatorTool());
-            PackageSystem.Tools.Register(new UpdateTool());
+            PackageSystem.Options.Register(new UpdateOptions());
             PackageSystem.Tools.Register(new BesplitterTool());
 //            PackageSystem.Tools.Register(new OneClickConfigTool());
             PackageSystem.Tools.Register(new OneClickTool());
@@ -1984,6 +2036,20 @@ namespace MeGUI
         private void mnuDoc_Click(object sender, EventArgs e)
         {
             System.Diagnostics.Process.Start("http://mewiki.project357.com/index.php/Main_Page");
+        }
+
+        private void mnuOptionsSettings_Click(object sender, EventArgs e)
+        {
+            using (SettingsForm sform = new SettingsForm())
+            {
+                sform.Settings = this.settings;
+                if (sform.ShowDialog() == DialogResult.OK)
+                {
+                    this.settings = sform.Settings;
+                    this.saveSettings();
+                    Jobs.showAfterEncodingStatus(settings);
+                }
+            }
         }
     }
     public class CommandlineUpgradeData

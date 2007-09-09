@@ -28,7 +28,11 @@ namespace MeGUI.core.details
 
                 foreach (ITool tool in registerable.Tools)
                 {
-                    tools.Register(tool);
+                    tools.Register(tool); 
+                }
+                foreach (IOption Options in registerable.Options)
+                {
+                    options.Register(Options);
                 }
                 foreach (IMediaFileFactory factory in registerable.MediaFileTypes)
                 {
@@ -62,6 +66,7 @@ namespace MeGUI.core.details
             }
         }
         GenericRegisterer<ITool> tools = new GenericRegisterer<ITool>();
+        GenericRegisterer<IOption> options = new GenericRegisterer<IOption>();
         GenericRegisterer<IMediaFileFactory> mediaFileTypes = new GenericRegisterer<IMediaFileFactory>();
         GenericRegisterer<ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>> videoSettingsProviders = new GenericRegisterer<ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>>();
         GenericRegisterer<ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType>> audioSettingsProviders = new GenericRegisterer<ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType>>();
@@ -74,6 +79,10 @@ namespace MeGUI.core.details
         public GenericRegisterer<ITool> Tools
         {
             get { return tools; }
+        }
+        public GenericRegisterer<IOption> Options
+        {
+            get { return options; }
         }
         public GenericRegisterer<IMediaFileFactory> MediaFileTypes
         {

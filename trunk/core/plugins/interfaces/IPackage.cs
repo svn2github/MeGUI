@@ -9,6 +9,7 @@ namespace MeGUI.core.plugins.interfaces
     public interface IPackage : IIDable
     {
         ITool[] Tools { get;}
+        IOption[] Options { get;}
         IMediaFileFactory[] MediaFileTypes { get;}
         JobPreProcessor[] JobPreProcessors { get;}
         JobPostProcessor[] JobPostProcessors { get;}
@@ -22,6 +23,13 @@ namespace MeGUI.core.plugins.interfaces
     }
     
     public interface ITool : IIDable
+    {
+        string Name { get;}
+        void Run(MainForm info);
+        System.Windows.Forms.Shortcut[] Shortcuts { get;}
+    }
+
+    public interface IOption : IIDable
     {
         string Name { get;}
         void Run(MainForm info);

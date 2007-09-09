@@ -1552,10 +1552,10 @@ namespace MeGUI
             return InstallFiles(files, true);
         }*/
     }
-    public class UpdateTool : MeGUI.core.plugins.interfaces.ITool
+    public class UpdateOptions : MeGUI.core.plugins.interfaces.IOption
     {
 
-        #region ITool Members
+        #region IOption Members
 
         public string Name
         {
