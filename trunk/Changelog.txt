@@ -1,3 +1,7 @@
+0.2.6.1011
+    - (Sharktooth) [OneClick] Audio Track 2 is disabled by default unless "Show Advanced Options" is checked.
+    - (Sharktooth) [Autoupdate] Check if yadif.dll path was set before trying to update it...
+
 0.2.6.1010
     - (kurtnoise) Fixed a 0.2.6.1009 regression (#1791532 - "Program path" browse button doesn't work)
     - (berrinam) Line up controls and fix tab order (patch by demi_alucard)
