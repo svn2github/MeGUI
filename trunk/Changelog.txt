@@ -1,4 +1,5 @@
 0.2.6.1010
+    - (kurtnoise) Fixed a 0.2.6.1009 regression (#1791532 - "Program path" browse button doesn't work)
     - (berrinam) Line up controls and fix tab order (patch by demi_alucard)
 
 0.2.6.1009
