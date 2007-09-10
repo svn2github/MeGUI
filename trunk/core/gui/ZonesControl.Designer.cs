@@ -70,14 +70,14 @@ namespace MeGUI
             this.zonesGroupbox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.zonesGroupbox.Location = new System.Drawing.Point(0, 0);
             this.zonesGroupbox.Name = "zonesGroupbox";
-            this.zonesGroupbox.Size = new System.Drawing.Size(310, 305);
+            this.zonesGroupbox.Size = new System.Drawing.Size(317, 288);
             this.zonesGroupbox.TabIndex = 2;
             this.zonesGroupbox.TabStop = false;
             this.zonesGroupbox.Text = "Zones";
             // 
             // zoneModifier
             // 
-            this.zoneModifier.Location = new System.Drawing.Point(248, 200);
+            this.zoneModifier.Location = new System.Drawing.Point(263, 200);
             this.zoneModifier.Maximum = new decimal(new int[] {
             51,
             0,
@@ -102,9 +102,9 @@ namespace MeGUI
             // 
             // zoneLabel
             // 
-            this.zoneLabel.Location = new System.Drawing.Point(160, 224);
+            this.zoneLabel.Location = new System.Drawing.Point(160, 230);
             this.zoneLabel.Name = "zoneLabel";
-            this.zoneLabel.Size = new System.Drawing.Size(32, 23);
+            this.zoneLabel.Size = new System.Drawing.Size(32, 13);
             this.zoneLabel.TabIndex = 5;
             this.zoneLabel.Text = "Mode";
             // 
@@ -114,7 +114,7 @@ namespace MeGUI
             this.zoneMode.Items.AddRange(new object[] {
             "Quantizer",
             "Weight"});
-            this.zoneMode.Location = new System.Drawing.Point(216, 224);
+            this.zoneMode.Location = new System.Drawing.Point(231, 226);
             this.zoneMode.Name = "zoneMode";
             this.zoneMode.Size = new System.Drawing.Size(80, 21);
             this.zoneMode.TabIndex = 4;
@@ -122,7 +122,7 @@ namespace MeGUI
             // 
             // endFrame
             // 
-            this.endFrame.Location = new System.Drawing.Point(88, 224);
+            this.endFrame.Location = new System.Drawing.Point(88, 226);
             this.endFrame.Name = "endFrame";
             this.endFrame.Size = new System.Drawing.Size(48, 20);
             this.endFrame.TabIndex = 2;
@@ -145,7 +145,7 @@ namespace MeGUI
             this.zoneListView.HideSelection = false;
             this.zoneListView.Location = new System.Drawing.Point(8, 24);
             this.zoneListView.Name = "zoneListView";
-            this.zoneListView.Size = new System.Drawing.Size(288, 168);
+            this.zoneListView.Size = new System.Drawing.Size(303, 168);
             this.zoneListView.TabIndex = 0;
             this.zoneListView.UseCompatibleStateImageBehavior = false;
             this.zoneListView.View = System.Windows.Forms.View.Details;
@@ -169,7 +169,7 @@ namespace MeGUI
             // 
             // startFrameLabel
             // 
-            this.startFrameLabel.Location = new System.Drawing.Point(8, 200);
+            this.startFrameLabel.Location = new System.Drawing.Point(8, 202);
             this.startFrameLabel.Name = "startFrameLabel";
             this.startFrameLabel.Size = new System.Drawing.Size(64, 16);
             this.startFrameLabel.TabIndex = 1;
@@ -177,7 +177,7 @@ namespace MeGUI
             // 
             // endFrameLabel
             // 
-            this.endFrameLabel.Location = new System.Drawing.Point(8, 224);
+            this.endFrameLabel.Location = new System.Drawing.Point(8, 228);
             this.endFrameLabel.Name = "endFrameLabel";
             this.endFrameLabel.Size = new System.Drawing.Size(64, 16);
             this.endFrameLabel.TabIndex = 2;
@@ -185,7 +185,7 @@ namespace MeGUI
             // 
             // addZoneButton
             // 
-            this.addZoneButton.Location = new System.Drawing.Point(252, 264);
+            this.addZoneButton.Location = new System.Drawing.Point(260, 256);
             this.addZoneButton.Name = "addZoneButton";
             this.addZoneButton.Size = new System.Drawing.Size(52, 23);
             this.addZoneButton.TabIndex = 7;
@@ -194,7 +194,7 @@ namespace MeGUI
             // 
             // clearZonesButton
             // 
-            this.clearZonesButton.Location = new System.Drawing.Point(68, 264);
+            this.clearZonesButton.Location = new System.Drawing.Point(76, 256);
             this.clearZonesButton.Name = "clearZonesButton";
             this.clearZonesButton.Size = new System.Drawing.Size(52, 23);
             this.clearZonesButton.TabIndex = 5;
@@ -203,7 +203,7 @@ namespace MeGUI
             // 
             // updateZoneButton
             // 
-            this.updateZoneButton.Location = new System.Drawing.Point(126, 264);
+            this.updateZoneButton.Location = new System.Drawing.Point(134, 256);
             this.updateZoneButton.Name = "updateZoneButton";
             this.updateZoneButton.Size = new System.Drawing.Size(52, 23);
             this.updateZoneButton.TabIndex = 9;
@@ -213,7 +213,7 @@ namespace MeGUI
             // showVideoButton
             // 
             this.showVideoButton.Enabled = false;
-            this.showVideoButton.Location = new System.Drawing.Point(3, 264);
+            this.showVideoButton.Location = new System.Drawing.Point(9, 256);
             this.showVideoButton.Name = "showVideoButton";
             this.showVideoButton.Size = new System.Drawing.Size(61, 23);
             this.showVideoButton.TabIndex = 9;
@@ -222,7 +222,7 @@ namespace MeGUI
             // 
             // removeZoneButton
             // 
-            this.removeZoneButton.Location = new System.Drawing.Point(184, 264);
+            this.removeZoneButton.Location = new System.Drawing.Point(192, 256);
             this.removeZoneButton.Name = "removeZoneButton";
             this.removeZoneButton.Size = new System.Drawing.Size(62, 23);
             this.removeZoneButton.TabIndex = 6;
@@ -235,7 +235,7 @@ namespace MeGUI
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.zonesGroupbox);
             this.Name = "ZonesControl";
-            this.Size = new System.Drawing.Size(310, 305);
+            this.Size = new System.Drawing.Size(317, 288);
             this.Load += new System.EventHandler(this.ZonesControl_Load);
             this.zonesGroupbox.ResumeLayout(false);
             this.zonesGroupbox.PerformLayout();

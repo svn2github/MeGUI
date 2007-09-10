@@ -169,7 +169,11 @@ namespace MeGUI
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
             this.autoEncodeButton = new System.Windows.Forms.Button();
             this.resetButton = new System.Windows.Forms.Button();
+            this.helpButton1 = new MeGUI.core.gui.HelpButton();
+            this.audioEncodingComponent1 = new MeGUI.AudioEncodingComponent();
+            this.videoEncodingComponent1 = new MeGUI.VideoEncodingComponent();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.jobControl1 = new MeGUI.core.details.JobControl();
             this.logTab = new System.Windows.Forms.TabPage();
             this.log = new System.Windows.Forms.TextBox();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
@@ -218,10 +222,6 @@ namespace MeGUI
             this.openMeGUIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.exitMeGUIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.helpButton1 = new MeGUI.core.gui.HelpButton();
-            this.audioEncodingComponent1 = new MeGUI.AudioEncodingComponent();
-            this.videoEncodingComponent1 = new MeGUI.VideoEncodingComponent();
-            this.jobControl1 = new MeGUI.core.details.JobControl();
             this.tabControl1.SuspendLayout();
             this.inputTab.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
@@ -240,8 +240,8 @@ namespace MeGUI
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(508, 322);
-            this.tabControl1.TabIndex = 55;
+            this.tabControl1.Size = new System.Drawing.Size(508, 442);
+            this.tabControl1.TabIndex = 0;
             // 
             // inputTab
             // 
@@ -251,7 +251,7 @@ namespace MeGUI
             this.inputTab.Controls.Add(this.videoEncodingComponent1);
             this.inputTab.Location = new System.Drawing.Point(4, 22);
             this.inputTab.Name = "inputTab";
-            this.inputTab.Size = new System.Drawing.Size(500, 296);
+            this.inputTab.Size = new System.Drawing.Size(500, 416);
             this.inputTab.TabIndex = 0;
             this.inputTab.Text = "Input";
             // 
@@ -264,10 +264,10 @@ namespace MeGUI
             this.flowLayoutPanel2.Controls.Add(this.helpButton1);
             this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.flowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 267);
+            this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 387);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
             this.flowLayoutPanel2.Size = new System.Drawing.Size(500, 29);
-            this.flowLayoutPanel2.TabIndex = 9;
+            this.flowLayoutPanel2.TabIndex = 2;
             // 
             // autoEncodeButton
             // 
@@ -278,7 +278,7 @@ namespace MeGUI
             this.autoEncodeButton.Location = new System.Drawing.Point(422, 3);
             this.autoEncodeButton.Name = "autoEncodeButton";
             this.autoEncodeButton.Size = new System.Drawing.Size(75, 23);
-            this.autoEncodeButton.TabIndex = 8;
+            this.autoEncodeButton.TabIndex = 2;
             this.autoEncodeButton.Text = "AutoEncode";
             this.autoEncodeButton.Click += new System.EventHandler(this.autoEncodeButton_Click);
             // 
@@ -291,19 +291,62 @@ namespace MeGUI
             this.resetButton.Location = new System.Drawing.Point(371, 3);
             this.resetButton.Name = "resetButton";
             this.resetButton.Size = new System.Drawing.Size(45, 23);
-            this.resetButton.TabIndex = 7;
+            this.resetButton.TabIndex = 1;
             this.resetButton.Text = "Reset";
             this.resetButton.Click += new System.EventHandler(this.resetButton_Click);
+            // 
+            // helpButton1
+            // 
+            this.helpButton1.ArticleName = "Main window#Input";
+            this.helpButton1.AutoSize = true;
+            this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.helpButton1.Location = new System.Drawing.Point(327, 3);
+            this.helpButton1.Name = "helpButton1";
+            this.helpButton1.Size = new System.Drawing.Size(38, 23);
+            this.helpButton1.TabIndex = 0;
+            // 
+            // audioEncodingComponent1
+            // 
+            this.audioEncodingComponent1.AudioInput = "";
+            this.audioEncodingComponent1.AudioOutput = "";
+            this.audioEncodingComponent1.AutoScroll = true;
+            this.audioEncodingComponent1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.audioEncodingComponent1.Location = new System.Drawing.Point(0, 168);
+            this.audioEncodingComponent1.MinimumSize = new System.Drawing.Size(400, 192);
+            this.audioEncodingComponent1.Name = "audioEncodingComponent1";
+            this.audioEncodingComponent1.Size = new System.Drawing.Size(500, 192);
+            this.audioEncodingComponent1.TabIndex = 1;
+            // 
+            // videoEncodingComponent1
+            // 
+            this.videoEncodingComponent1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.videoEncodingComponent1.Location = new System.Drawing.Point(0, 0);
+            this.videoEncodingComponent1.MinimumSize = new System.Drawing.Size(500, 168);
+            this.videoEncodingComponent1.Name = "videoEncodingComponent1";
+            this.videoEncodingComponent1.PrerenderJob = false;
+            this.videoEncodingComponent1.Size = new System.Drawing.Size(500, 168);
+            this.videoEncodingComponent1.TabIndex = 0;
+            this.videoEncodingComponent1.VideoInput = "";
+            this.videoEncodingComponent1.VideoOutput = "";
             // 
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.jobControl1);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Size = new System.Drawing.Size(500, 317);
+            this.tabPage2.Size = new System.Drawing.Size(500, 416);
             this.tabPage2.TabIndex = 12;
             this.tabPage2.Text = "Queue";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // jobControl1
+            // 
+            this.jobControl1.BackColor = System.Drawing.SystemColors.Control;
+            this.jobControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.jobControl1.Location = new System.Drawing.Point(0, 0);
+            this.jobControl1.Name = "jobControl1";
+            this.jobControl1.Size = new System.Drawing.Size(500, 416);
+            this.jobControl1.TabIndex = 0;
             // 
             // logTab
             // 
@@ -311,7 +354,7 @@ namespace MeGUI
             this.logTab.Controls.Add(this.flowLayoutPanel1);
             this.logTab.Location = new System.Drawing.Point(4, 22);
             this.logTab.Name = "logTab";
-            this.logTab.Size = new System.Drawing.Size(500, 317);
+            this.logTab.Size = new System.Drawing.Size(500, 416);
             this.logTab.TabIndex = 10;
             this.logTab.Text = "Log";
             this.logTab.UseVisualStyleBackColor = true;
@@ -324,8 +367,8 @@ namespace MeGUI
             this.log.Name = "log";
             this.log.ReadOnly = true;
             this.log.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.log.Size = new System.Drawing.Size(500, 288);
-            this.log.TabIndex = 0;
+            this.log.Size = new System.Drawing.Size(500, 387);
+            this.log.TabIndex = 1;
             // 
             // flowLayoutPanel1
             // 
@@ -337,7 +380,8 @@ namespace MeGUI
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(500, 29);
-            this.flowLayoutPanel1.TabIndex = 1;
+            this.flowLayoutPanel1.TabIndex = 0;
+            this.flowLayoutPanel1.WrapContents = false;
             // 
             // clearLogButton
             // 
@@ -347,19 +391,19 @@ namespace MeGUI
             this.clearLogButton.Location = new System.Drawing.Point(3, 3);
             this.clearLogButton.Name = "clearLogButton";
             this.clearLogButton.Size = new System.Drawing.Size(62, 23);
-            this.clearLogButton.TabIndex = 2;
+            this.clearLogButton.TabIndex = 0;
             this.clearLogButton.Text = "Clear Log";
             this.clearLogButton.UseVisualStyleBackColor = true;
             this.clearLogButton.Click += new System.EventHandler(this.clearLogButton_Click);
             // 
             // autoscroll
             // 
-            this.autoscroll.AutoSize = true;
             this.flowLayoutPanel1.SetFlowBreak(this.autoscroll, true);
+            this.autoscroll.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.autoscroll.Location = new System.Drawing.Point(71, 3);
             this.autoscroll.Name = "autoscroll";
-            this.autoscroll.Size = new System.Drawing.Size(74, 17);
-            this.autoscroll.TabIndex = 3;
+            this.autoscroll.Size = new System.Drawing.Size(74, 23);
+            this.autoscroll.TabIndex = 1;
             this.autoscroll.Text = "AutoScroll";
             this.autoscroll.UseVisualStyleBackColor = true;
             // 
@@ -629,81 +673,39 @@ namespace MeGUI
             this.exitMeGUIToolStripMenuItem});
             this.trayMenu.Name = "trayMenu";
             this.trayMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.trayMenu.Size = new System.Drawing.Size(147, 54);
+            this.trayMenu.Size = new System.Drawing.Size(136, 54);
             // 
             // openMeGUIToolStripMenuItem
             // 
             this.openMeGUIToolStripMenuItem.Name = "openMeGUIToolStripMenuItem";
-            this.openMeGUIToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.openMeGUIToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
             this.openMeGUIToolStripMenuItem.Text = "Open MeGUI";
             this.openMeGUIToolStripMenuItem.Click += new System.EventHandler(this.openMeGUIToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(143, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(132, 6);
             // 
             // exitMeGUIToolStripMenuItem
             // 
             this.exitMeGUIToolStripMenuItem.Name = "exitMeGUIToolStripMenuItem";
-            this.exitMeGUIToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.exitMeGUIToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
             this.exitMeGUIToolStripMenuItem.Text = "Exit MeGUI";
             this.exitMeGUIToolStripMenuItem.Click += new System.EventHandler(this.exitMeGUIToolStripMenuItem_Click);
-            // 
-            // helpButton1
-            // 
-            this.helpButton1.ArticleName = "Main window#Input";
-            this.helpButton1.AutoSize = true;
-            this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.helpButton1.Location = new System.Drawing.Point(327, 3);
-            this.helpButton1.Name = "helpButton1";
-            this.helpButton1.Size = new System.Drawing.Size(38, 23);
-            this.helpButton1.TabIndex = 9;
-            // 
-            // audioEncodingComponent1
-            // 
-            this.audioEncodingComponent1.AudioInput = "";
-            this.audioEncodingComponent1.AudioOutput = "";
-            this.audioEncodingComponent1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.audioEncodingComponent1.Location = new System.Drawing.Point(0, 153);
-            this.audioEncodingComponent1.MinimumSize = new System.Drawing.Size(400, 162);
-            this.audioEncodingComponent1.Name = "audioEncodingComponent1";
-            this.audioEncodingComponent1.Size = new System.Drawing.Size(500, 179);
-            this.audioEncodingComponent1.TabIndex = 8;
-            // 
-            // videoEncodingComponent1
-            // 
-            this.videoEncodingComponent1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.videoEncodingComponent1.Location = new System.Drawing.Point(0, 0);
-            this.videoEncodingComponent1.MaximumSize = new System.Drawing.Size(0, 153);
-            this.videoEncodingComponent1.MinimumSize = new System.Drawing.Size(415, 153);
-            this.videoEncodingComponent1.Name = "videoEncodingComponent1";
-            this.videoEncodingComponent1.PrerenderJob = false;
-            this.videoEncodingComponent1.Size = new System.Drawing.Size(500, 153);
-            this.videoEncodingComponent1.TabIndex = 7;
-            this.videoEncodingComponent1.VideoInput = "";
-            this.videoEncodingComponent1.VideoOutput = "";
-            // 
-            // jobControl1
-            // 
-            this.jobControl1.BackColor = System.Drawing.SystemColors.Control;
-            this.jobControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.jobControl1.Location = new System.Drawing.Point(0, 0);
-            this.jobControl1.Name = "jobControl1";
-            this.jobControl1.Size = new System.Drawing.Size(500, 317);
-            this.jobControl1.TabIndex = 0;
             // 
             // MainForm
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(508, 322);
+            this.ClientSize = new System.Drawing.Size(508, 442);
             this.Controls.Add(this.tabControl1);
             this.DataBindings.Add(new System.Windows.Forms.Binding("Location", global::MeGUI.Properties.Settings.Default, "MainFormLocation", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Location = global::MeGUI.Properties.Settings.Default.MainFormLocation;
             this.Menu = this.mainMenu1;
+            this.MinimumSize = new System.Drawing.Size(516, 476);
             this.Name = "MainForm";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
             this.Load += new System.EventHandler(this.MeGUI_Load);

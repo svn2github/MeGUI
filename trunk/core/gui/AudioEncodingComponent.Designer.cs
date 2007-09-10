@@ -29,11 +29,7 @@ namespace MeGUI
         private void InitializeComponent()
         {
             this.audioIOGroupBox = new System.Windows.Forms.GroupBox();
-            this.cuts = new MeGUI.FileBar();
             this.label1 = new System.Windows.Forms.Label();
-            this.profileControl1 = new MeGUI.core.details.video.ProfileControl();
-            this.audioOutput = new MeGUI.FileBar();
-            this.audioInput = new MeGUI.FileBar();
             this.audioContainer = new System.Windows.Forms.ComboBox();
             this.audioContainerLabel = new System.Windows.Forms.Label();
             this.audioCodecLabel = new System.Windows.Forms.Label();
@@ -44,6 +40,10 @@ namespace MeGUI
             this.audioTrack1 = new System.Windows.Forms.RadioButton();
             this.deleteAudioButton = new System.Windows.Forms.Button();
             this.audioCodec = new System.Windows.Forms.ComboBox();
+            this.cuts = new MeGUI.FileBar();
+            this.profileControl1 = new MeGUI.core.details.video.ProfileControl();
+            this.audioOutput = new MeGUI.FileBar();
+            this.audioInput = new MeGUI.FileBar();
             this.audioIOGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -67,139 +67,78 @@ namespace MeGUI
             this.audioIOGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.audioIOGroupBox.Location = new System.Drawing.Point(0, 0);
             this.audioIOGroupBox.Name = "audioIOGroupBox";
-            this.audioIOGroupBox.Size = new System.Drawing.Size(466, 179);
-            this.audioIOGroupBox.TabIndex = 5;
+            this.audioIOGroupBox.Size = new System.Drawing.Size(480, 190);
+            this.audioIOGroupBox.TabIndex = 0;
             this.audioIOGroupBox.TabStop = false;
             this.audioIOGroupBox.Text = "Audio";
-            // 
-            // cuts
-            // 
-            this.cuts.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.cuts.Filename = "";
-            this.cuts.Filter = "MeGUI cutlist files (*.clt)|*.clt";
-            this.cuts.FolderMode = false;
-            this.cuts.Location = new System.Drawing.Point(115, 40);
-            this.cuts.Name = "cuts";
-            this.cuts.ReadOnly = true;
-            this.cuts.SaveMode = false;
-            this.cuts.Size = new System.Drawing.Size(348, 26);
-            this.cuts.TabIndex = 38;
-            this.cuts.Title = "Select a file with cuts";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(9, 45);
+            this.label1.Location = new System.Drawing.Point(8, 53);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(28, 13);
-            this.label1.TabIndex = 37;
+            this.label1.TabIndex = 4;
             this.label1.Text = "Cuts";
-            // 
-            // profileControl1
-            // 
-            this.profileControl1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.profileControl1.LabelText = "Audio profile";
-            this.profileControl1.Location = new System.Drawing.Point(11, 88);
-            this.profileControl1.Name = "profileControl1";
-            this.profileControl1.Size = new System.Drawing.Size(452, 29);
-            this.profileControl1.TabIndex = 36;
-            // 
-            // audioOutput
-            // 
-            this.audioOutput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.audioOutput.Filename = "";
-            this.audioOutput.Filter = null;
-            this.audioOutput.FolderMode = false;
-            this.audioOutput.Location = new System.Drawing.Point(115, 63);
-            this.audioOutput.Name = "audioOutput";
-            this.audioOutput.ReadOnly = false;
-            this.audioOutput.SaveMode = true;
-            this.audioOutput.Size = new System.Drawing.Size(348, 29);
-            this.audioOutput.TabIndex = 34;
-            this.audioOutput.Title = "Enter name of output";
-            // 
-            // audioInput
-            // 
-            this.audioInput.AllowDrop = true;
-            this.audioInput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.audioInput.Filename = "";
-            this.audioInput.Filter = null;
-            this.audioInput.FolderMode = false;
-            this.audioInput.Location = new System.Drawing.Point(115, 16);
-            this.audioInput.Name = "audioInput";
-            this.audioInput.ReadOnly = true;
-            this.audioInput.SaveMode = false;
-            this.audioInput.Size = new System.Drawing.Size(348, 29);
-            this.audioInput.TabIndex = 33;
-            this.audioInput.Title = "Select your audio input";
-            this.audioInput.FileSelected += new MeGUI.FileBarEventHandler(this.audioInput_FileSelected);
-            this.audioInput.DragOver += new System.Windows.Forms.DragEventHandler(this.audioInput_DragOver);
-            this.audioInput.DragDrop += new System.Windows.Forms.DragEventHandler(this.audioInput_DragDrop);
             // 
             // audioContainer
             // 
-            this.audioContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.audioContainer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.audioContainer.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.audioContainer.FormattingEnabled = true;
-            this.audioContainer.Location = new System.Drawing.Point(301, 118);
+            this.audioContainer.Location = new System.Drawing.Point(319, 134);
             this.audioContainer.Name = "audioContainer";
-            this.audioContainer.Size = new System.Drawing.Size(108, 21);
-            this.audioContainer.TabIndex = 7;
+            this.audioContainer.Size = new System.Drawing.Size(101, 21);
+            this.audioContainer.TabIndex = 12;
             this.audioContainer.SelectedIndexChanged += new System.EventHandler(this.audioContainer_SelectedIndexChanged);
             // 
             // audioContainerLabel
             // 
-            this.audioContainerLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.audioContainerLabel.AutoSize = true;
-            this.audioContainerLabel.Location = new System.Drawing.Point(243, 121);
+            this.audioContainerLabel.Location = new System.Drawing.Point(257, 137);
             this.audioContainerLabel.Name = "audioContainerLabel";
-            this.audioContainerLabel.Size = new System.Drawing.Size(59, 13);
-            this.audioContainerLabel.TabIndex = 32;
-            this.audioContainerLabel.Text = "Extension :";
+            this.audioContainerLabel.Size = new System.Drawing.Size(56, 13);
+            this.audioContainerLabel.TabIndex = 11;
+            this.audioContainerLabel.Text = "Extension ";
             // 
             // audioCodecLabel
             // 
             this.audioCodecLabel.AutoSize = true;
-            this.audioCodecLabel.Location = new System.Drawing.Point(31, 121);
+            this.audioCodecLabel.Location = new System.Drawing.Point(8, 137);
             this.audioCodecLabel.Name = "audioCodecLabel";
-            this.audioCodecLabel.Size = new System.Drawing.Size(44, 13);
-            this.audioCodecLabel.TabIndex = 31;
-            this.audioCodecLabel.Text = "Codec :";
+            this.audioCodecLabel.Size = new System.Drawing.Size(38, 13);
+            this.audioCodecLabel.TabIndex = 9;
+            this.audioCodecLabel.Text = "Codec";
             this.audioCodecLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // queueAudioButton
             // 
-            this.queueAudioButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.queueAudioButton.AutoSize = true;
+            this.queueAudioButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.queueAudioButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.queueAudioButton.Location = new System.Drawing.Point(403, 144);
+            this.queueAudioButton.Location = new System.Drawing.Point(414, 160);
             this.queueAudioButton.Name = "queueAudioButton";
             this.queueAudioButton.Size = new System.Drawing.Size(60, 23);
-            this.queueAudioButton.TabIndex = 30;
+            this.queueAudioButton.TabIndex = 14;
             this.queueAudioButton.Text = "Enqueue";
             this.queueAudioButton.Click += new System.EventHandler(this.queueAudioButton_Click);
             // 
             // audioInputLabel
             // 
             this.audioInputLabel.AutoSize = true;
-            this.audioInputLabel.Location = new System.Drawing.Point(8, 19);
+            this.audioInputLabel.Location = new System.Drawing.Point(8, 25);
             this.audioInputLabel.Name = "audioInputLabel";
             this.audioInputLabel.Size = new System.Drawing.Size(61, 13);
-            this.audioInputLabel.TabIndex = 5;
+            this.audioInputLabel.TabIndex = 2;
             this.audioInputLabel.Text = "Audio Input";
             // 
             // audioOutputLabel
             // 
             this.audioOutputLabel.AutoSize = true;
-            this.audioOutputLabel.Location = new System.Drawing.Point(9, 72);
+            this.audioOutputLabel.Location = new System.Drawing.Point(8, 80);
             this.audioOutputLabel.Name = "audioOutputLabel";
             this.audioOutputLabel.Size = new System.Drawing.Size(69, 13);
-            this.audioOutputLabel.TabIndex = 9;
+            this.audioOutputLabel.TabIndex = 6;
             this.audioOutputLabel.Text = "Audio Output";
             // 
             // audioTrack2
@@ -208,7 +147,7 @@ namespace MeGUI
             this.audioTrack2.Location = new System.Drawing.Point(75, 0);
             this.audioTrack2.Name = "audioTrack2";
             this.audioTrack2.Size = new System.Drawing.Size(31, 17);
-            this.audioTrack2.TabIndex = 20;
+            this.audioTrack2.TabIndex = 1;
             this.audioTrack2.Text = "2";
             this.audioTrack2.CheckedChanged += new System.EventHandler(this.audioTrack_CheckedChanged);
             // 
@@ -219,38 +158,96 @@ namespace MeGUI
             this.audioTrack1.Location = new System.Drawing.Point(48, 0);
             this.audioTrack1.Name = "audioTrack1";
             this.audioTrack1.Size = new System.Drawing.Size(31, 17);
-            this.audioTrack1.TabIndex = 19;
+            this.audioTrack1.TabIndex = 0;
             this.audioTrack1.TabStop = true;
             this.audioTrack1.Text = "1";
             this.audioTrack1.CheckedChanged += new System.EventHandler(this.audioTrack_CheckedChanged);
             // 
             // deleteAudioButton
             // 
-            this.deleteAudioButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.deleteAudioButton.Location = new System.Drawing.Point(415, 118);
+            this.deleteAudioButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.deleteAudioButton.Location = new System.Drawing.Point(426, 132);
             this.deleteAudioButton.Name = "deleteAudioButton";
             this.deleteAudioButton.Size = new System.Drawing.Size(48, 23);
-            this.deleteAudioButton.TabIndex = 6;
+            this.deleteAudioButton.TabIndex = 13;
             this.deleteAudioButton.Text = "X";
             this.deleteAudioButton.Click += new System.EventHandler(this.deleteAudioButton_Click);
             // 
             // audioCodec
             // 
-            this.audioCodec.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
             this.audioCodec.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.audioCodec.Location = new System.Drawing.Point(115, 118);
+            this.audioCodec.Location = new System.Drawing.Point(115, 134);
             this.audioCodec.Name = "audioCodec";
-            this.audioCodec.Size = new System.Drawing.Size(122, 21);
-            this.audioCodec.TabIndex = 7;
+            this.audioCodec.Size = new System.Drawing.Size(136, 21);
+            this.audioCodec.TabIndex = 10;
+            // 
+            // cuts
+            // 
+            this.cuts.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.cuts.Filename = "";
+            this.cuts.Filter = "MeGUI cutlist files (*.clt)|*.clt";
+            this.cuts.FolderMode = false;
+            this.cuts.Location = new System.Drawing.Point(115, 47);
+            this.cuts.Name = "cuts";
+            this.cuts.ReadOnly = true;
+            this.cuts.SaveMode = false;
+            this.cuts.Size = new System.Drawing.Size(359, 26);
+            this.cuts.TabIndex = 5;
+            this.cuts.Title = "Select a file with cuts";
+            // 
+            // profileControl1
+            // 
+            this.profileControl1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.profileControl1.LabelText = "Audio Profile";
+            this.profileControl1.Location = new System.Drawing.Point(11, 101);
+            this.profileControl1.Name = "profileControl1";
+            this.profileControl1.Size = new System.Drawing.Size(463, 29);
+            this.profileControl1.TabIndex = 8;
+            // 
+            // audioOutput
+            // 
+            this.audioOutput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.audioOutput.Filename = "";
+            this.audioOutput.Filter = null;
+            this.audioOutput.FolderMode = false;
+            this.audioOutput.Location = new System.Drawing.Point(115, 74);
+            this.audioOutput.Name = "audioOutput";
+            this.audioOutput.ReadOnly = false;
+            this.audioOutput.SaveMode = true;
+            this.audioOutput.Size = new System.Drawing.Size(359, 29);
+            this.audioOutput.TabIndex = 7;
+            this.audioOutput.Title = "Enter name of output";
+            // 
+            // audioInput
+            // 
+            this.audioInput.AllowDrop = true;
+            this.audioInput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.audioInput.Filename = "";
+            this.audioInput.Filter = null;
+            this.audioInput.FolderMode = false;
+            this.audioInput.Location = new System.Drawing.Point(115, 19);
+            this.audioInput.Name = "audioInput";
+            this.audioInput.ReadOnly = true;
+            this.audioInput.SaveMode = false;
+            this.audioInput.Size = new System.Drawing.Size(359, 29);
+            this.audioInput.TabIndex = 3;
+            this.audioInput.Title = "Select your audio input";
+            this.audioInput.FileSelected += new MeGUI.FileBarEventHandler(this.audioInput_FileSelected);
+            this.audioInput.DragOver += new System.Windows.Forms.DragEventHandler(this.audioInput_DragOver);
+            this.audioInput.DragDrop += new System.Windows.Forms.DragEventHandler(this.audioInput_DragDrop);
             // 
             // AudioEncodingComponent
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
             this.Controls.Add(this.audioIOGroupBox);
             this.Name = "AudioEncodingComponent";
-            this.Size = new System.Drawing.Size(466, 179);
+            this.Size = new System.Drawing.Size(480, 190);
             this.audioIOGroupBox.ResumeLayout(false);
             this.audioIOGroupBox.PerformLayout();
             this.ResumeLayout(false);

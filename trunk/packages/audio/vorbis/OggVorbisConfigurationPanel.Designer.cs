@@ -40,12 +40,14 @@ namespace MeGUI.packages.audio.vorbis
             this.encoderGroupBox.Controls.Add(this.label1);
             this.encoderGroupBox.Location = new System.Drawing.Point(5, 158);
             this.encoderGroupBox.Size = new System.Drawing.Size(382, 85);
+            this.encoderGroupBox.TabIndex = 1;
             this.encoderGroupBox.Text = "Ogg Vorbis options";
             // 
             // besweetOptionsGroupbox
             // 
             this.besweetOptionsGroupbox.Location = new System.Drawing.Point(5, 3);
             this.besweetOptionsGroupbox.Size = new System.Drawing.Size(382, 149);
+            this.besweetOptionsGroupbox.TabIndex = 0;
             // 
             // vQuality
             // 
@@ -55,7 +57,7 @@ namespace MeGUI.packages.audio.vorbis
             this.vQuality.Minimum = -200;
             this.vQuality.Name = "vQuality";
             this.vQuality.Size = new System.Drawing.Size(376, 45);
-            this.vQuality.TabIndex = 24;
+            this.vQuality.TabIndex = 1;
             this.vQuality.TickFrequency = 25;
             this.vQuality.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
             this.vQuality.ValueChanged += new System.EventHandler(this.vQuality_ValueChanged);
@@ -68,7 +70,7 @@ namespace MeGUI.packages.audio.vorbis
             this.label1.Location = new System.Drawing.Point(10, 16);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(35, 13);
-            this.label1.TabIndex = 25;
+            this.label1.TabIndex = 0;
             this.label1.Text = "label1";
             // 
             // OggVorbisConfigurationPanel

@@ -91,13 +91,12 @@ namespace MeGUI.core.gui
             // 
             // progressLabel
             // 
-            this.progressLabel.AutoSize = true;
             this.progressLabel.Dock = System.Windows.Forms.DockStyle.Left;
             this.progressLabel.Location = new System.Drawing.Point(0, 0);
             this.progressLabel.Margin = new System.Windows.Forms.Padding(3);
             this.progressLabel.Name = "progressLabel";
             this.progressLabel.Padding = new System.Windows.Forms.Padding(0, 5, 0, 5);
-            this.progressLabel.Size = new System.Drawing.Size(48, 23);
+            this.progressLabel.Size = new System.Drawing.Size(48, 26);
             this.progressLabel.TabIndex = 29;
             this.progressLabel.Text = "Progress";
             this.progressLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -218,7 +217,6 @@ namespace MeGUI.core.gui
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
             this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             this.flowLayoutPanel2.ResumeLayout(false);
             this.flowLayoutPanel2.PerformLayout();
             this.menuStrip1.ResumeLayout(false);

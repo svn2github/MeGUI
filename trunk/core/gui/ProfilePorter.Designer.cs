@@ -38,17 +38,20 @@ namespace MeGUI
             // 
             // profileListBox
             // 
+            this.profileListBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.profileListBox.FormattingEnabled = true;
-            this.profileListBox.Location = new System.Drawing.Point(0, 34);
+            this.profileListBox.Location = new System.Drawing.Point(12, 25);
             this.profileListBox.Name = "profileListBox";
             this.profileListBox.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.profileListBox.Size = new System.Drawing.Size(319, 251);
+            this.profileListBox.Size = new System.Drawing.Size(358, 251);
             this.profileListBox.TabIndex = 0;
             // 
             // okButton
             // 
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.okButton.Location = new System.Drawing.Point(152, 291);
+            this.okButton.Location = new System.Drawing.Point(214, 282);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(75, 23);
             this.okButton.TabIndex = 1;
@@ -60,7 +63,7 @@ namespace MeGUI
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(244, 291);
+            this.cancelButton.Location = new System.Drawing.Point(295, 282);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 2;
@@ -78,10 +81,11 @@ namespace MeGUI
             // 
             // helpButton1
             // 
+            this.helpButton1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.helpButton1.ArticleName = "Profile exporter";
             this.helpButton1.AutoSize = true;
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.helpButton1.Location = new System.Drawing.Point(12, 291);
+            this.helpButton1.Location = new System.Drawing.Point(12, 282);
             this.helpButton1.Name = "helpButton1";
             this.helpButton1.Size = new System.Drawing.Size(39, 23);
             this.helpButton1.TabIndex = 4;
@@ -90,7 +94,7 @@ namespace MeGUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(321, 321);
+            this.ClientSize = new System.Drawing.Size(382, 313);
             this.Controls.Add(this.helpButton1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cancelButton);

@@ -68,12 +68,14 @@ namespace MeGUI.packages.audio.naac
             this.encoderGroupBox.Controls.Add(this.rbtnABR);
             this.encoderGroupBox.Location = new System.Drawing.Point(5, 158);
             this.encoderGroupBox.Size = new System.Drawing.Size(366, 225);
+            this.encoderGroupBox.TabIndex = 1;
             this.encoderGroupBox.Text = "NeroDigital AAC Options";
             // 
             // besweetOptionsGroupbox
             // 
             this.besweetOptionsGroupbox.Location = new System.Drawing.Point(5, 3);
             this.besweetOptionsGroupbox.Size = new System.Drawing.Size(366, 149);
+            this.besweetOptionsGroupbox.TabIndex = 0;
             // 
             // vQuality
             // 
@@ -83,7 +85,7 @@ namespace MeGUI.packages.audio.naac
             this.vQuality.Maximum = 100;
             this.vQuality.Name = "vQuality";
             this.vQuality.Size = new System.Drawing.Size(360, 45);
-            this.vQuality.TabIndex = 22;
+            this.vQuality.TabIndex = 4;
             this.vQuality.TickFrequency = 5;
             this.vQuality.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
             this.vQuality.ValueChanged += new System.EventHandler(this.vBitrate_ValueChanged);
@@ -95,7 +97,7 @@ namespace MeGUI.packages.audio.naac
             this.rbtnVBR.Location = new System.Drawing.Point(13, 115);
             this.rbtnVBR.Name = "rbtnVBR";
             this.rbtnVBR.Size = new System.Drawing.Size(239, 24);
-            this.rbtnVBR.TabIndex = 19;
+            this.rbtnVBR.TabIndex = 3;
             this.rbtnVBR.Text = "Variable Bitrate";
             this.rbtnVBR.CheckedChanged += new System.EventHandler(this.rbtnABR_CheckedChanged);
             // 
@@ -108,7 +110,7 @@ namespace MeGUI.packages.audio.naac
             this.vBitrate.Minimum = 16;
             this.vBitrate.Name = "vBitrate";
             this.vBitrate.Size = new System.Drawing.Size(360, 45);
-            this.vBitrate.TabIndex = 20;
+            this.vBitrate.TabIndex = 2;
             this.vBitrate.TickFrequency = 8;
             this.vBitrate.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
             this.vBitrate.Value = 16;
@@ -119,7 +121,7 @@ namespace MeGUI.packages.audio.naac
             this.rbtnCBR.Location = new System.Drawing.Point(13, 42);
             this.rbtnCBR.Name = "rbtnCBR";
             this.rbtnCBR.Size = new System.Drawing.Size(320, 24);
-            this.rbtnCBR.TabIndex = 18;
+            this.rbtnCBR.TabIndex = 1;
             this.rbtnCBR.Text = "Constant Bitrate";
             this.rbtnCBR.CheckedChanged += new System.EventHandler(this.rbtnABR_CheckedChanged);
             // 
@@ -128,7 +130,7 @@ namespace MeGUI.packages.audio.naac
             this.rbtnABR.Location = new System.Drawing.Point(13, 24);
             this.rbtnABR.Name = "rbtnABR";
             this.rbtnABR.Size = new System.Drawing.Size(302, 17);
-            this.rbtnABR.TabIndex = 21;
+            this.rbtnABR.TabIndex = 0;
             this.rbtnABR.Text = "Adaptive Bitrate";
             this.rbtnABR.CheckedChanged += new System.EventHandler(this.rbtnABR_CheckedChanged);
             // 
@@ -139,7 +141,7 @@ namespace MeGUI.packages.audio.naac
             this.comboBox1.Location = new System.Drawing.Point(106, 179);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(199, 21);
-            this.comboBox1.TabIndex = 24;
+            this.comboBox1.TabIndex = 6;
             // 
             // label1
             // 
@@ -147,7 +149,7 @@ namespace MeGUI.packages.audio.naac
             this.label1.Location = new System.Drawing.Point(30, 182);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(66, 13);
-            this.label1.TabIndex = 25;
+            this.label1.TabIndex = 5;
             this.label1.Text = "AAC Profile :";
             // 
             // neroConfigurationPanel
@@ -213,4 +215,5 @@ namespace MeGUI.packages.audio.naac
         }
     }
 }
+
 

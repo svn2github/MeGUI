@@ -38,19 +38,19 @@ namespace MeGUI.core.details
             // 
             this.afterEncoding.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.afterEncoding.AutoSize = true;
-            this.afterEncoding.Location = new System.Drawing.Point(6, 532);
+            this.afterEncoding.Location = new System.Drawing.Point(6, 527);
             this.afterEncoding.Name = "afterEncoding";
             this.afterEncoding.Size = new System.Drawing.Size(132, 13);
-            this.afterEncoding.TabIndex = 27;
+            this.afterEncoding.TabIndex = 1;
             this.afterEncoding.Text = "After encoding: do nothing";
             // 
             // newWorkerButton
             // 
             this.newWorkerButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.newWorkerButton.Location = new System.Drawing.Point(323, 524);
+            this.newWorkerButton.Location = new System.Drawing.Point(430, 522);
             this.newWorkerButton.Name = "newWorkerButton";
             this.newWorkerButton.Size = new System.Drawing.Size(75, 23);
-            this.newWorkerButton.TabIndex = 30;
+            this.newWorkerButton.TabIndex = 2;
             this.newWorkerButton.Text = "New worker";
             this.newWorkerButton.UseVisualStyleBackColor = true;
             this.newWorkerButton.Click += new System.EventHandler(this.newWorkerButton_Click);
@@ -66,7 +66,7 @@ namespace MeGUI.core.details
             this.jobQueue.PauseResumeMode = MeGUI.core.gui.PauseResumeMode.Disabled;
             this.jobQueue.Size = new System.Drawing.Size(554, 521);
             this.jobQueue.StartStopMode = MeGUI.core.gui.StartStopMode.Start;
-            this.jobQueue.TabIndex = 29;
+            this.jobQueue.TabIndex = 0;
             this.jobQueue.StopClicked += new System.EventHandler(this.jobQueue_StopClicked);
             this.jobQueue.AbortClicked += new System.EventHandler(this.jobQueue_AbortClicked);
             this.jobQueue.StartClicked += new System.EventHandler(this.jobQueue_StartClicked);
@@ -77,10 +77,10 @@ namespace MeGUI.core.details
             this.helpButton1.ArticleName = "Main window#Queue";
             this.helpButton1.AutoSize = true;
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.helpButton1.Location = new System.Drawing.Point(511, 527);
+            this.helpButton1.Location = new System.Drawing.Point(511, 522);
             this.helpButton1.Name = "helpButton1";
             this.helpButton1.Size = new System.Drawing.Size(39, 23);
-            this.helpButton1.TabIndex = 28;
+            this.helpButton1.TabIndex = 3;
             // 
             // JobControl
             // 

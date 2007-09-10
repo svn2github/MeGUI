@@ -254,7 +254,7 @@ namespace MeGUI
             this.videoGroupbox.Controls.Add(this.minutes);
             this.videoGroupbox.Controls.Add(this.hours);
             this.videoGroupbox.Controls.Add(this.framerate);
-            this.videoGroupbox.Location = new System.Drawing.Point(8, 8);
+            this.videoGroupbox.Location = new System.Drawing.Point(8, 2);
             this.videoGroupbox.Name = "videoGroupbox";
             this.videoGroupbox.Size = new System.Drawing.Size(320, 160);
             this.videoGroupbox.TabIndex = 0;
@@ -263,7 +263,7 @@ namespace MeGUI
             // 
             // nbFrames
             // 
-            this.nbFrames.Location = new System.Drawing.Point(192, 110);
+            this.nbFrames.Location = new System.Drawing.Point(189, 105);
             this.nbFrames.Maximum = new decimal(new int[] {
             5400000,
             0,
@@ -271,12 +271,12 @@ namespace MeGUI
             0});
             this.nbFrames.Name = "nbFrames";
             this.nbFrames.Size = new System.Drawing.Size(120, 21);
-            this.nbFrames.TabIndex = 47;
+            this.nbFrames.TabIndex = 11;
             this.nbFrames.ValueChanged += new System.EventHandler(this.textField_TextChanged);
             // 
             // totalSeconds
             // 
-            this.totalSeconds.Location = new System.Drawing.Point(192, 56);
+            this.totalSeconds.Location = new System.Drawing.Point(189, 51);
             this.totalSeconds.Maximum = new decimal(new int[] {
             90000,
             0,
@@ -284,7 +284,7 @@ namespace MeGUI
             0});
             this.totalSeconds.Name = "totalSeconds";
             this.totalSeconds.Size = new System.Drawing.Size(120, 21);
-            this.totalSeconds.TabIndex = 46;
+            this.totalSeconds.TabIndex = 7;
             this.totalSeconds.ValueChanged += new System.EventHandler(this.textField_TextChanged);
             // 
             // bframes
@@ -294,61 +294,61 @@ namespace MeGUI
             this.bframes.Location = new System.Drawing.Point(8, 136);
             this.bframes.Name = "bframes";
             this.bframes.Size = new System.Drawing.Size(128, 16);
-            this.bframes.TabIndex = 45;
+            this.bframes.TabIndex = 12;
             this.bframes.Text = "B-frames";
             this.bframes.CheckedChanged += new System.EventHandler(this.bframes_CheckedChanged);
             // 
             // nbFramesLabel
             // 
-            this.nbFramesLabel.Location = new System.Drawing.Point(8, 112);
+            this.nbFramesLabel.Location = new System.Drawing.Point(6, 112);
             this.nbFramesLabel.Name = "nbFramesLabel";
             this.nbFramesLabel.Size = new System.Drawing.Size(128, 16);
-            this.nbFramesLabel.TabIndex = 43;
+            this.nbFramesLabel.TabIndex = 10;
             this.nbFramesLabel.Text = "Number of Frames";
             // 
             // totalSecondsLabel
             // 
-            this.totalSecondsLabel.Location = new System.Drawing.Point(8, 58);
+            this.totalSecondsLabel.Location = new System.Drawing.Point(6, 58);
             this.totalSecondsLabel.Name = "totalSecondsLabel";
             this.totalSecondsLabel.Size = new System.Drawing.Size(128, 16);
-            this.totalSecondsLabel.TabIndex = 42;
+            this.totalSecondsLabel.TabIndex = 6;
             this.totalSecondsLabel.Text = "Total Length in Seconds";
             // 
             // framerateLabel
             // 
-            this.framerateLabel.Location = new System.Drawing.Point(8, 86);
+            this.framerateLabel.Location = new System.Drawing.Point(6, 86);
             this.framerateLabel.Name = "framerateLabel";
             this.framerateLabel.Size = new System.Drawing.Size(128, 16);
-            this.framerateLabel.TabIndex = 39;
+            this.framerateLabel.TabIndex = 8;
             this.framerateLabel.Text = "Framerate";
             // 
             // secondsLabel
             // 
-            this.secondsLabel.Location = new System.Drawing.Point(211, 26);
+            this.secondsLabel.Location = new System.Drawing.Point(207, 26);
             this.secondsLabel.Name = "secondsLabel";
             this.secondsLabel.Size = new System.Drawing.Size(48, 16);
-            this.secondsLabel.TabIndex = 38;
+            this.secondsLabel.TabIndex = 4;
             this.secondsLabel.Text = "Seconds";
             // 
             // minutesLabel
             // 
-            this.minutesLabel.Location = new System.Drawing.Point(103, 26);
+            this.minutesLabel.Location = new System.Drawing.Point(99, 26);
             this.minutesLabel.Name = "minutesLabel";
             this.minutesLabel.Size = new System.Drawing.Size(48, 16);
-            this.minutesLabel.TabIndex = 37;
+            this.minutesLabel.TabIndex = 2;
             this.minutesLabel.Text = "Minutes";
             // 
             // hoursLabel
             // 
-            this.hoursLabel.Location = new System.Drawing.Point(8, 26);
+            this.hoursLabel.Location = new System.Drawing.Point(7, 26);
             this.hoursLabel.Name = "hoursLabel";
             this.hoursLabel.Size = new System.Drawing.Size(40, 16);
-            this.hoursLabel.TabIndex = 36;
+            this.hoursLabel.TabIndex = 0;
             this.hoursLabel.Text = "Hours";
             // 
             // seconds
             // 
-            this.seconds.Location = new System.Drawing.Point(262, 24);
+            this.seconds.Location = new System.Drawing.Point(261, 24);
             this.seconds.Maximum = new decimal(new int[] {
             60,
             0,
@@ -356,12 +356,12 @@ namespace MeGUI
             0});
             this.seconds.Name = "seconds";
             this.seconds.Size = new System.Drawing.Size(48, 21);
-            this.seconds.TabIndex = 35;
+            this.seconds.TabIndex = 5;
             this.seconds.ValueChanged += new System.EventHandler(this.time_ValueChanged);
             // 
             // minutes
             // 
-            this.minutes.Location = new System.Drawing.Point(151, 24);
+            this.minutes.Location = new System.Drawing.Point(153, 24);
             this.minutes.Maximum = new decimal(new int[] {
             60,
             0,
@@ -369,12 +369,12 @@ namespace MeGUI
             0});
             this.minutes.Name = "minutes";
             this.minutes.Size = new System.Drawing.Size(48, 21);
-            this.minutes.TabIndex = 34;
+            this.minutes.TabIndex = 3;
             this.minutes.ValueChanged += new System.EventHandler(this.time_ValueChanged);
             // 
             // hours
             // 
-            this.hours.Location = new System.Drawing.Point(48, 24);
+            this.hours.Location = new System.Drawing.Point(53, 24);
             this.hours.Maximum = new decimal(new int[] {
             24,
             0,
@@ -382,25 +382,25 @@ namespace MeGUI
             0});
             this.hours.Name = "hours";
             this.hours.Size = new System.Drawing.Size(40, 21);
-            this.hours.TabIndex = 33;
+            this.hours.TabIndex = 1;
             this.hours.ValueChanged += new System.EventHandler(this.time_ValueChanged);
             // 
             // framerate
             // 
             this.framerate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.framerate.Location = new System.Drawing.Point(243, 83);
+            this.framerate.Location = new System.Drawing.Point(240, 78);
             this.framerate.Name = "framerate";
             this.framerate.Size = new System.Drawing.Size(69, 21);
-            this.framerate.TabIndex = 32;
+            this.framerate.TabIndex = 9;
             this.framerate.SelectedIndexChanged += new System.EventHandler(this.framerate_SelectedIndexChanged);
             // 
             // applyButton
             // 
             this.applyButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.applyButton.Location = new System.Drawing.Point(512, 352);
+            this.applyButton.Location = new System.Drawing.Point(517, 336);
             this.applyButton.Name = "applyButton";
             this.applyButton.Size = new System.Drawing.Size(48, 23);
-            this.applyButton.TabIndex = 1;
+            this.applyButton.TabIndex = 0;
             this.applyButton.Text = "Apply";
             // 
             // audio1Groupbox
@@ -418,32 +418,32 @@ namespace MeGUI
             this.audio1Groupbox.Controls.Add(this.clearAudio1Button);
             this.audio1Groupbox.Location = new System.Drawing.Point(8, 168);
             this.audio1Groupbox.Name = "audio1Groupbox";
-            this.audio1Groupbox.Size = new System.Drawing.Size(156, 216);
-            this.audio1Groupbox.TabIndex = 2;
+            this.audio1Groupbox.Size = new System.Drawing.Size(156, 200);
+            this.audio1Groupbox.TabIndex = 5;
             this.audio1Groupbox.TabStop = false;
             this.audio1Groupbox.Text = "AudioTrack 1";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(13, 72);
+            this.label2.Location = new System.Drawing.Point(8, 67);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(26, 13);
-            this.label2.TabIndex = 38;
+            this.label2.TabIndex = 2;
             this.label2.Text = "Size";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(13, 22);
+            this.label1.Location = new System.Drawing.Point(8, 22);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(39, 13);
-            this.label1.TabIndex = 38;
+            this.label1.TabIndex = 0;
             this.label1.Text = "Bitrate";
             // 
             // audio1SizeMB
             // 
-            this.audio1SizeMB.Location = new System.Drawing.Point(16, 121);
+            this.audio1SizeMB.Location = new System.Drawing.Point(8, 110);
             this.audio1SizeMB.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -451,12 +451,12 @@ namespace MeGUI
             0});
             this.audio1SizeMB.Name = "audio1SizeMB";
             this.audio1SizeMB.Size = new System.Drawing.Size(97, 21);
-            this.audio1SizeMB.TabIndex = 37;
+            this.audio1SizeMB.TabIndex = 5;
             this.audio1SizeMB.ValueChanged += new System.EventHandler(this.textField_TextChanged);
             // 
             // audio1SizeKB
             // 
-            this.audio1SizeKB.Location = new System.Drawing.Point(16, 94);
+            this.audio1SizeKB.Location = new System.Drawing.Point(8, 83);
             this.audio1SizeKB.Maximum = new decimal(new int[] {
             10000000,
             0,
@@ -464,7 +464,7 @@ namespace MeGUI
             0});
             this.audio1SizeKB.Name = "audio1SizeKB";
             this.audio1SizeKB.Size = new System.Drawing.Size(97, 21);
-            this.audio1SizeKB.TabIndex = 36;
+            this.audio1SizeKB.TabIndex = 3;
             this.audio1SizeKB.ValueChanged += new System.EventHandler(this.textField_TextChanged);
             // 
             // audio1Bitrate
@@ -474,7 +474,7 @@ namespace MeGUI
             0,
             0,
             0});
-            this.audio1Bitrate.Location = new System.Drawing.Point(16, 43);
+            this.audio1Bitrate.Location = new System.Drawing.Point(8, 43);
             this.audio1Bitrate.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -482,12 +482,12 @@ namespace MeGUI
             0});
             this.audio1Bitrate.Name = "audio1Bitrate";
             this.audio1Bitrate.Size = new System.Drawing.Size(97, 21);
-            this.audio1Bitrate.TabIndex = 35;
+            this.audio1Bitrate.TabIndex = 1;
             this.audio1Bitrate.ValueChanged += new System.EventHandler(this.textField_TextChanged);
             // 
             // audio1MBLabel
             // 
-            this.audio1MBLabel.Location = new System.Drawing.Point(128, 120);
+            this.audio1MBLabel.Location = new System.Drawing.Point(108, 112);
             this.audio1MBLabel.Name = "audio1MBLabel";
             this.audio1MBLabel.Size = new System.Drawing.Size(24, 16);
             this.audio1MBLabel.TabIndex = 19;
@@ -495,33 +495,33 @@ namespace MeGUI
             // 
             // audio1KBLabel
             // 
-            this.audio1KBLabel.Location = new System.Drawing.Point(128, 96);
+            this.audio1KBLabel.Location = new System.Drawing.Point(108, 85);
             this.audio1KBLabel.Name = "audio1KBLabel";
             this.audio1KBLabel.Size = new System.Drawing.Size(24, 16);
-            this.audio1KBLabel.TabIndex = 18;
+            this.audio1KBLabel.TabIndex = 4;
             this.audio1KBLabel.Text = "KB";
             // 
             // selectAudio1Button
             // 
-            this.selectAudio1Button.Location = new System.Drawing.Point(16, 184);
+            this.selectAudio1Button.Location = new System.Drawing.Point(8, 164);
             this.selectAudio1Button.Name = "selectAudio1Button";
             this.selectAudio1Button.Size = new System.Drawing.Size(75, 23);
-            this.selectAudio1Button.TabIndex = 17;
+            this.selectAudio1Button.TabIndex = 8;
             this.selectAudio1Button.Text = "Select";
             this.selectAudio1Button.Click += new System.EventHandler(this.selectAudio1Button_Click);
             // 
             // audio1Type
             // 
             this.audio1Type.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.audio1Type.Location = new System.Drawing.Point(48, 152);
+            this.audio1Type.Location = new System.Drawing.Point(54, 137);
             this.audio1Type.Name = "audio1Type";
             this.audio1Type.Size = new System.Drawing.Size(84, 21);
-            this.audio1Type.TabIndex = 6;
+            this.audio1Type.TabIndex = 7;
             this.audio1Type.SelectedIndexChanged += new System.EventHandler(this.audio_SelectedIndexChanged);
             // 
             // audio1TypeLabel
             // 
-            this.audio1TypeLabel.Location = new System.Drawing.Point(13, 155);
+            this.audio1TypeLabel.Location = new System.Drawing.Point(8, 140);
             this.audio1TypeLabel.Name = "audio1TypeLabel";
             this.audio1TypeLabel.Size = new System.Drawing.Size(40, 16);
             this.audio1TypeLabel.TabIndex = 6;
@@ -529,10 +529,10 @@ namespace MeGUI
             // 
             // clearAudio1Button
             // 
-            this.clearAudio1Button.Location = new System.Drawing.Point(124, 184);
+            this.clearAudio1Button.Location = new System.Drawing.Point(89, 164);
             this.clearAudio1Button.Name = "clearAudio1Button";
             this.clearAudio1Button.Size = new System.Drawing.Size(24, 23);
-            this.clearAudio1Button.TabIndex = 34;
+            this.clearAudio1Button.TabIndex = 9;
             this.clearAudio1Button.Text = "X";
             this.clearAudio1Button.Click += new System.EventHandler(this.clearAudioButton_Click);
             // 
@@ -551,23 +551,23 @@ namespace MeGUI
             this.audio2Groupbox.Controls.Add(this.selectAudio2Button);
             this.audio2Groupbox.Location = new System.Drawing.Point(168, 168);
             this.audio2Groupbox.Name = "audio2Groupbox";
-            this.audio2Groupbox.Size = new System.Drawing.Size(160, 216);
-            this.audio2Groupbox.TabIndex = 3;
+            this.audio2Groupbox.Size = new System.Drawing.Size(160, 200);
+            this.audio2Groupbox.TabIndex = 6;
             this.audio2Groupbox.TabStop = false;
             this.audio2Groupbox.Text = "AudioTrack 2";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(13, 72);
+            this.label4.Location = new System.Drawing.Point(13, 67);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(26, 13);
-            this.label4.TabIndex = 38;
+            this.label4.TabIndex = 2;
             this.label4.Text = "Size";
             // 
             // audio2SizeMB
             // 
-            this.audio2SizeMB.Location = new System.Drawing.Point(16, 118);
+            this.audio2SizeMB.Location = new System.Drawing.Point(16, 110);
             this.audio2SizeMB.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -575,7 +575,7 @@ namespace MeGUI
             0});
             this.audio2SizeMB.Name = "audio2SizeMB";
             this.audio2SizeMB.Size = new System.Drawing.Size(100, 21);
-            this.audio2SizeMB.TabIndex = 37;
+            this.audio2SizeMB.TabIndex = 5;
             this.audio2SizeMB.ValueChanged += new System.EventHandler(this.textField_TextChanged);
             // 
             // label3
@@ -584,12 +584,12 @@ namespace MeGUI
             this.label3.Location = new System.Drawing.Point(13, 22);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(39, 13);
-            this.label3.TabIndex = 38;
+            this.label3.TabIndex = 0;
             this.label3.Text = "Bitrate";
             // 
             // audio2SizeKB
             // 
-            this.audio2SizeKB.Location = new System.Drawing.Point(16, 94);
+            this.audio2SizeKB.Location = new System.Drawing.Point(16, 83);
             this.audio2SizeKB.Maximum = new decimal(new int[] {
             10000000,
             0,
@@ -597,7 +597,7 @@ namespace MeGUI
             0});
             this.audio2SizeKB.Name = "audio2SizeKB";
             this.audio2SizeKB.Size = new System.Drawing.Size(100, 21);
-            this.audio2SizeKB.TabIndex = 37;
+            this.audio2SizeKB.TabIndex = 3;
             this.audio2SizeKB.ValueChanged += new System.EventHandler(this.textField_TextChanged);
             // 
             // audio2Bitrate
@@ -615,54 +615,54 @@ namespace MeGUI
             0});
             this.audio2Bitrate.Name = "audio2Bitrate";
             this.audio2Bitrate.Size = new System.Drawing.Size(100, 21);
-            this.audio2Bitrate.TabIndex = 36;
+            this.audio2Bitrate.TabIndex = 1;
             this.audio2Bitrate.ValueChanged += new System.EventHandler(this.textField_TextChanged);
             // 
             // clearAudio2Button
             // 
-            this.clearAudio2Button.Location = new System.Drawing.Point(124, 184);
+            this.clearAudio2Button.Location = new System.Drawing.Point(97, 164);
             this.clearAudio2Button.Name = "clearAudio2Button";
             this.clearAudio2Button.Size = new System.Drawing.Size(24, 23);
-            this.clearAudio2Button.TabIndex = 35;
+            this.clearAudio2Button.TabIndex = 10;
             this.clearAudio2Button.Text = "X";
             this.clearAudio2Button.Click += new System.EventHandler(this.clearAudioButton_Click);
             // 
             // audio2Type
             // 
             this.audio2Type.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.audio2Type.Location = new System.Drawing.Point(47, 152);
+            this.audio2Type.Location = new System.Drawing.Point(59, 137);
             this.audio2Type.Name = "audio2Type";
             this.audio2Type.Size = new System.Drawing.Size(84, 21);
-            this.audio2Type.TabIndex = 13;
+            this.audio2Type.TabIndex = 8;
             this.audio2Type.SelectedIndexChanged += new System.EventHandler(this.audio_SelectedIndexChanged);
             // 
             // audio2TypeLabel
             // 
-            this.audio2TypeLabel.Location = new System.Drawing.Point(13, 155);
+            this.audio2TypeLabel.Location = new System.Drawing.Point(13, 140);
             this.audio2TypeLabel.Name = "audio2TypeLabel";
             this.audio2TypeLabel.Size = new System.Drawing.Size(40, 16);
-            this.audio2TypeLabel.TabIndex = 12;
+            this.audio2TypeLabel.TabIndex = 7;
             this.audio2TypeLabel.Text = "Type";
             // 
             // audio2MBLabel
             // 
-            this.audio2MBLabel.Location = new System.Drawing.Point(128, 120);
+            this.audio2MBLabel.Location = new System.Drawing.Point(122, 112);
             this.audio2MBLabel.Name = "audio2MBLabel";
             this.audio2MBLabel.Size = new System.Drawing.Size(24, 16);
-            this.audio2MBLabel.TabIndex = 11;
+            this.audio2MBLabel.TabIndex = 6;
             this.audio2MBLabel.Text = "MB";
             // 
             // audio2KBLabel
             // 
-            this.audio2KBLabel.Location = new System.Drawing.Point(128, 96);
+            this.audio2KBLabel.Location = new System.Drawing.Point(122, 85);
             this.audio2KBLabel.Name = "audio2KBLabel";
             this.audio2KBLabel.Size = new System.Drawing.Size(24, 16);
-            this.audio2KBLabel.TabIndex = 10;
+            this.audio2KBLabel.TabIndex = 4;
             this.audio2KBLabel.Text = "KB";
             // 
             // selectAudio2Button
             // 
-            this.selectAudio2Button.Location = new System.Drawing.Point(16, 184);
+            this.selectAudio2Button.Location = new System.Drawing.Point(16, 164);
             this.selectAudio2Button.Name = "selectAudio2Button";
             this.selectAudio2Button.Size = new System.Drawing.Size(75, 23);
             this.selectAudio2Button.TabIndex = 9;
@@ -672,10 +672,10 @@ namespace MeGUI
             // codecGroupbox
             // 
             this.codecGroupbox.Controls.Add(this.videoCodec);
-            this.codecGroupbox.Location = new System.Drawing.Point(336, 8);
+            this.codecGroupbox.Location = new System.Drawing.Point(336, 4);
             this.codecGroupbox.Name = "codecGroupbox";
-            this.codecGroupbox.Size = new System.Drawing.Size(232, 48);
-            this.codecGroupbox.TabIndex = 4;
+            this.codecGroupbox.Size = new System.Drawing.Size(232, 55);
+            this.codecGroupbox.TabIndex = 1;
             this.codecGroupbox.TabStop = false;
             this.codecGroupbox.Text = "Codec";
             // 
@@ -683,7 +683,7 @@ namespace MeGUI
             // 
             this.videoCodec.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.videoCodec.FormattingEnabled = true;
-            this.videoCodec.Location = new System.Drawing.Point(6, 20);
+            this.videoCodec.Location = new System.Drawing.Point(6, 24);
             this.videoCodec.Name = "videoCodec";
             this.videoCodec.Size = new System.Drawing.Size(121, 21);
             this.videoCodec.TabIndex = 0;
@@ -692,10 +692,10 @@ namespace MeGUI
             // containerGroupbox
             // 
             this.containerGroupbox.Controls.Add(this.containerFormat);
-            this.containerGroupbox.Location = new System.Drawing.Point(336, 58);
+            this.containerGroupbox.Location = new System.Drawing.Point(336, 65);
             this.containerGroupbox.Name = "containerGroupbox";
-            this.containerGroupbox.Size = new System.Drawing.Size(232, 48);
-            this.containerGroupbox.TabIndex = 5;
+            this.containerGroupbox.Size = new System.Drawing.Size(232, 50);
+            this.containerGroupbox.TabIndex = 2;
             this.containerGroupbox.TabStop = false;
             this.containerGroupbox.Text = "Container";
             // 
@@ -718,16 +718,16 @@ namespace MeGUI
             this.sizeGroupbox.Controls.Add(this.storageMediumLabel);
             this.sizeGroupbox.Controls.Add(this.fileSizeRadio);
             this.sizeGroupbox.Controls.Add(this.muxedSizeKBLabel);
-            this.sizeGroupbox.Location = new System.Drawing.Point(336, 112);
+            this.sizeGroupbox.Location = new System.Drawing.Point(336, 119);
             this.sizeGroupbox.Name = "sizeGroupbox";
-            this.sizeGroupbox.Size = new System.Drawing.Size(232, 120);
-            this.sizeGroupbox.TabIndex = 6;
+            this.sizeGroupbox.Size = new System.Drawing.Size(232, 105);
+            this.sizeGroupbox.TabIndex = 3;
             this.sizeGroupbox.TabStop = false;
             this.sizeGroupbox.Text = "Total Size";
             // 
             // muxedSizeKB
             // 
-            this.muxedSizeKB.Location = new System.Drawing.Point(112, 25);
+            this.muxedSizeKB.Location = new System.Drawing.Point(112, 20);
             this.muxedSizeKB.Maximum = new decimal(new int[] {
             20000000,
             0,
@@ -735,12 +735,12 @@ namespace MeGUI
             0});
             this.muxedSizeKB.Name = "muxedSizeKB";
             this.muxedSizeKB.Size = new System.Drawing.Size(88, 21);
-            this.muxedSizeKB.TabIndex = 37;
+            this.muxedSizeKB.TabIndex = 1;
             this.muxedSizeKB.ValueChanged += new System.EventHandler(this.textField_TextChanged);
             // 
             // muxedSizeMB
             // 
-            this.muxedSizeMB.Location = new System.Drawing.Point(112, 51);
+            this.muxedSizeMB.Location = new System.Drawing.Point(112, 47);
             this.muxedSizeMB.Maximum = new decimal(new int[] {
             20000,
             0,
@@ -748,42 +748,42 @@ namespace MeGUI
             0});
             this.muxedSizeMB.Name = "muxedSizeMB";
             this.muxedSizeMB.Size = new System.Drawing.Size(88, 21);
-            this.muxedSizeMB.TabIndex = 36;
+            this.muxedSizeMB.TabIndex = 3;
             this.muxedSizeMB.ValueChanged += new System.EventHandler(this.textField_TextChanged);
             // 
             // muxedSizeMBLabel
             // 
             this.muxedSizeMBLabel.AutoSize = true;
-            this.muxedSizeMBLabel.Location = new System.Drawing.Point(208, 53);
+            this.muxedSizeMBLabel.Location = new System.Drawing.Point(206, 51);
             this.muxedSizeMBLabel.Name = "muxedSizeMBLabel";
             this.muxedSizeMBLabel.Size = new System.Drawing.Size(21, 13);
-            this.muxedSizeMBLabel.TabIndex = 35;
+            this.muxedSizeMBLabel.TabIndex = 4;
             this.muxedSizeMBLabel.Text = "MB";
             // 
             // sizeSelection
             // 
             this.sizeSelection.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.sizeSelection.Location = new System.Drawing.Point(112, 88);
+            this.sizeSelection.Location = new System.Drawing.Point(112, 74);
             this.sizeSelection.Name = "sizeSelection";
             this.sizeSelection.Size = new System.Drawing.Size(88, 21);
-            this.sizeSelection.TabIndex = 18;
+            this.sizeSelection.TabIndex = 6;
             this.sizeSelection.SelectedIndexChanged += new System.EventHandler(this.sizeSelection_SelectedIndexChanged);
             // 
             // storageMediumLabel
             // 
-            this.storageMediumLabel.Location = new System.Drawing.Point(16, 91);
+            this.storageMediumLabel.Location = new System.Drawing.Point(8, 78);
             this.storageMediumLabel.Name = "storageMediumLabel";
             this.storageMediumLabel.Size = new System.Drawing.Size(90, 13);
-            this.storageMediumLabel.TabIndex = 19;
+            this.storageMediumLabel.TabIndex = 5;
             this.storageMediumLabel.Text = "Storage Medium";
             // 
             // fileSizeRadio
             // 
             this.fileSizeRadio.Checked = true;
-            this.fileSizeRadio.Location = new System.Drawing.Point(8, 24);
+            this.fileSizeRadio.Location = new System.Drawing.Point(8, 20);
             this.fileSizeRadio.Name = "fileSizeRadio";
             this.fileSizeRadio.Size = new System.Drawing.Size(100, 20);
-            this.fileSizeRadio.TabIndex = 26;
+            this.fileSizeRadio.TabIndex = 0;
             this.fileSizeRadio.TabStop = true;
             this.fileSizeRadio.Text = "File Size";
             this.fileSizeRadio.CheckedChanged += new System.EventHandler(this.calculationMode_CheckedChanged);
@@ -791,18 +791,18 @@ namespace MeGUI
             // muxedSizeKBLabel
             // 
             this.muxedSizeKBLabel.AutoSize = true;
-            this.muxedSizeKBLabel.Location = new System.Drawing.Point(208, 27);
+            this.muxedSizeKBLabel.Location = new System.Drawing.Point(205, 24);
             this.muxedSizeKBLabel.Name = "muxedSizeKBLabel";
             this.muxedSizeKBLabel.Size = new System.Drawing.Size(19, 13);
-            this.muxedSizeKBLabel.TabIndex = 23;
+            this.muxedSizeKBLabel.TabIndex = 2;
             this.muxedSizeKBLabel.Text = "KB";
             // 
             // videoSizeKBLabel
             // 
-            this.videoSizeKBLabel.Location = new System.Drawing.Point(191, 51);
+            this.videoSizeKBLabel.Location = new System.Drawing.Point(190, 51);
             this.videoSizeKBLabel.Name = "videoSizeKBLabel";
             this.videoSizeKBLabel.Size = new System.Drawing.Size(24, 13);
-            this.videoSizeKBLabel.TabIndex = 31;
+            this.videoSizeKBLabel.TabIndex = 5;
             this.videoSizeKBLabel.Text = "KB";
             // 
             // VideoFileSizeLabel
@@ -810,7 +810,7 @@ namespace MeGUI
             this.VideoFileSizeLabel.Location = new System.Drawing.Point(8, 51);
             this.VideoFileSizeLabel.Name = "VideoFileSizeLabel";
             this.VideoFileSizeLabel.Size = new System.Drawing.Size(82, 13);
-            this.VideoFileSizeLabel.TabIndex = 29;
+            this.VideoFileSizeLabel.TabIndex = 3;
             this.VideoFileSizeLabel.Text = "Video File Size";
             // 
             // averageBitrateRadio
@@ -819,17 +819,17 @@ namespace MeGUI
             this.averageBitrateRadio.Location = new System.Drawing.Point(8, 25);
             this.averageBitrateRadio.Name = "averageBitrateRadio";
             this.averageBitrateRadio.Size = new System.Drawing.Size(101, 17);
-            this.averageBitrateRadio.TabIndex = 27;
+            this.averageBitrateRadio.TabIndex = 0;
             this.averageBitrateRadio.Text = "Average Bitrate";
             this.averageBitrateRadio.CheckedChanged += new System.EventHandler(this.calculationMode_CheckedChanged);
             // 
             // AverageBitrateLabel
             // 
             this.AverageBitrateLabel.AutoSize = true;
-            this.AverageBitrateLabel.Location = new System.Drawing.Point(191, 26);
+            this.AverageBitrateLabel.Location = new System.Drawing.Point(190, 26);
             this.AverageBitrateLabel.Name = "AverageBitrateLabel";
             this.AverageBitrateLabel.Size = new System.Drawing.Size(33, 13);
-            this.AverageBitrateLabel.TabIndex = 25;
+            this.AverageBitrateLabel.TabIndex = 2;
             this.AverageBitrateLabel.Text = "kbit/s";
             // 
             // resultGroupbox
@@ -842,10 +842,10 @@ namespace MeGUI
             this.resultGroupbox.Controls.Add(this.VideoFileSizeLabel);
             this.resultGroupbox.Controls.Add(this.videoSizeKBLabel);
             this.resultGroupbox.Controls.Add(this.averageBitrateRadio);
-            this.resultGroupbox.Location = new System.Drawing.Point(336, 240);
+            this.resultGroupbox.Location = new System.Drawing.Point(336, 230);
             this.resultGroupbox.Name = "resultGroupbox";
             this.resultGroupbox.Size = new System.Drawing.Size(232, 100);
-            this.resultGroupbox.TabIndex = 32;
+            this.resultGroupbox.TabIndex = 7;
             this.resultGroupbox.TabStop = false;
             this.resultGroupbox.Text = "Results";
             // 
@@ -860,7 +860,7 @@ namespace MeGUI
             this.videoSizeMB.Name = "videoSizeMB";
             this.videoSizeMB.ReadOnly = true;
             this.videoSizeMB.Size = new System.Drawing.Size(72, 21);
-            this.videoSizeMB.TabIndex = 34;
+            this.videoSizeMB.TabIndex = 6;
             this.videoSizeMB.ValueChanged += new System.EventHandler(this.textField_TextChanged);
             // 
             // videoSizeKB
@@ -874,7 +874,7 @@ namespace MeGUI
             this.videoSizeKB.Name = "videoSizeKB";
             this.videoSizeKB.ReadOnly = true;
             this.videoSizeKB.Size = new System.Drawing.Size(72, 21);
-            this.videoSizeKB.TabIndex = 34;
+            this.videoSizeKB.TabIndex = 4;
             this.videoSizeKB.ValueChanged += new System.EventHandler(this.textField_TextChanged);
             // 
             // projectedBitrate
@@ -888,24 +888,24 @@ namespace MeGUI
             this.projectedBitrate.Name = "projectedBitrate";
             this.projectedBitrate.ReadOnly = true;
             this.projectedBitrate.Size = new System.Drawing.Size(72, 21);
-            this.projectedBitrate.TabIndex = 34;
+            this.projectedBitrate.TabIndex = 1;
             this.projectedBitrate.ValueChanged += new System.EventHandler(this.textField_TextChanged);
             // 
             // videoSizeMBLabel
             // 
-            this.videoSizeMBLabel.Location = new System.Drawing.Point(191, 75);
+            this.videoSizeMBLabel.Location = new System.Drawing.Point(190, 75);
             this.videoSizeMBLabel.Name = "videoSizeMBLabel";
             this.videoSizeMBLabel.Size = new System.Drawing.Size(24, 16);
-            this.videoSizeMBLabel.TabIndex = 33;
+            this.videoSizeMBLabel.TabIndex = 7;
             this.videoSizeMBLabel.Text = "MB";
             // 
             // cancelButton
             // 
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(448, 352);
+            this.cancelButton.Location = new System.Drawing.Point(462, 336);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(48, 23);
-            this.cancelButton.TabIndex = 33;
+            this.cancelButton.TabIndex = 9;
             this.cancelButton.Text = "Cancel";
             // 
             // helpButton1
@@ -913,15 +913,15 @@ namespace MeGUI
             this.helpButton1.ArticleName = "Bitrate calculator";
             this.helpButton1.AutoSize = true;
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.helpButton1.Location = new System.Drawing.Point(355, 351);
+            this.helpButton1.Location = new System.Drawing.Point(344, 336);
             this.helpButton1.Name = "helpButton1";
             this.helpButton1.Size = new System.Drawing.Size(38, 23);
-            this.helpButton1.TabIndex = 34;
+            this.helpButton1.TabIndex = 8;
             // 
             // Calculator
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
-            this.ClientSize = new System.Drawing.Size(576, 386);
+            this.ClientSize = new System.Drawing.Size(576, 377);
             this.Controls.Add(this.helpButton1);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.resultGroupbox);

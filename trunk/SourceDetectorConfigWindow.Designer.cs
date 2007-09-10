@@ -57,7 +57,7 @@ namespace MeGUI
             // analysisPercentLabel
             // 
             this.analysisPercentLabel.AutoSize = true;
-            this.analysisPercentLabel.Location = new System.Drawing.Point(12, 9);
+            this.analysisPercentLabel.Location = new System.Drawing.Point(12, 11);
             this.analysisPercentLabel.Name = "analysisPercentLabel";
             this.analysisPercentLabel.Size = new System.Drawing.Size(88, 13);
             this.analysisPercentLabel.TabIndex = 0;
@@ -83,7 +83,7 @@ namespace MeGUI
             // minAnalyseSectionsLabel
             // 
             this.minAnalyseSectionsLabel.AutoSize = true;
-            this.minAnalyseSectionsLabel.Location = new System.Drawing.Point(12, 35);
+            this.minAnalyseSectionsLabel.Location = new System.Drawing.Point(12, 37);
             this.minAnalyseSectionsLabel.Name = "minAnalyseSectionsLabel";
             this.minAnalyseSectionsLabel.Size = new System.Drawing.Size(133, 13);
             this.minAnalyseSectionsLabel.TabIndex = 0;
@@ -114,7 +114,7 @@ namespace MeGUI
             // hybridThresholdLabel
             // 
             this.hybridThresholdLabel.AutoSize = true;
-            this.hybridThresholdLabel.Location = new System.Drawing.Point(12, 61);
+            this.hybridThresholdLabel.Location = new System.Drawing.Point(12, 63);
             this.hybridThresholdLabel.Name = "hybridThresholdLabel";
             this.hybridThresholdLabel.Size = new System.Drawing.Size(107, 13);
             this.hybridThresholdLabel.TabIndex = 0;
@@ -140,7 +140,7 @@ namespace MeGUI
             // hybridFOThresholdLabel
             // 
             this.hybridFOThresholdLabel.AutoSize = true;
-            this.hybridFOThresholdLabel.Location = new System.Drawing.Point(12, 87);
+            this.hybridFOThresholdLabel.Location = new System.Drawing.Point(12, 89);
             this.hybridFOThresholdLabel.Name = "hybridFOThresholdLabel";
             this.hybridFOThresholdLabel.Size = new System.Drawing.Size(161, 13);
             this.hybridFOThresholdLabel.TabIndex = 0;
@@ -166,7 +166,7 @@ namespace MeGUI
             // portionThresholdLabel
             // 
             this.portionThresholdLabel.AutoSize = true;
-            this.portionThresholdLabel.Location = new System.Drawing.Point(12, 170);
+            this.portionThresholdLabel.Location = new System.Drawing.Point(12, 161);
             this.portionThresholdLabel.Name = "portionThresholdLabel";
             this.portionThresholdLabel.Size = new System.Drawing.Size(93, 13);
             this.portionThresholdLabel.TabIndex = 0;
@@ -176,7 +176,7 @@ namespace MeGUI
             // 
             this.portionThreshold.DecimalPlaces = 1;
             this.portionThreshold.Enabled = false;
-            this.portionThreshold.Location = new System.Drawing.Point(213, 168);
+            this.portionThreshold.Location = new System.Drawing.Point(213, 159);
             this.portionThreshold.Minimum = new decimal(new int[] {
             1,
             0,
@@ -194,7 +194,7 @@ namespace MeGUI
             // maximumPortionsLabel
             // 
             this.maximumPortionsLabel.AutoSize = true;
-            this.maximumPortionsLabel.Location = new System.Drawing.Point(12, 196);
+            this.maximumPortionsLabel.Location = new System.Drawing.Point(12, 187);
             this.maximumPortionsLabel.Name = "maximumPortionsLabel";
             this.maximumPortionsLabel.Size = new System.Drawing.Size(147, 13);
             this.maximumPortionsLabel.TabIndex = 0;
@@ -203,7 +203,7 @@ namespace MeGUI
             // maximumPortions
             // 
             this.maximumPortions.Enabled = false;
-            this.maximumPortions.Location = new System.Drawing.Point(213, 194);
+            this.maximumPortions.Location = new System.Drawing.Point(213, 185);
             this.maximumPortions.Minimum = new decimal(new int[] {
             1,
             0,
@@ -221,7 +221,7 @@ namespace MeGUI
             // portionsAllowed
             // 
             this.portionsAllowed.AutoSize = true;
-            this.portionsAllowed.Location = new System.Drawing.Point(15, 150);
+            this.portionsAllowed.Location = new System.Drawing.Point(15, 136);
             this.portionsAllowed.Name = "portionsAllowed";
             this.portionsAllowed.Size = new System.Drawing.Size(104, 17);
             this.portionsAllowed.TabIndex = 2;
@@ -233,7 +233,7 @@ namespace MeGUI
             // 
             this.saveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.saveButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.saveButton.Location = new System.Drawing.Point(175, 229);
+            this.saveButton.Location = new System.Drawing.Point(189, 211);
             this.saveButton.Name = "saveButton";
             this.saveButton.Size = new System.Drawing.Size(69, 24);
             this.saveButton.TabIndex = 3;
@@ -244,7 +244,7 @@ namespace MeGUI
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(264, 229);
+            this.cancelButton.Location = new System.Drawing.Point(264, 211);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(69, 24);
             this.cancelButton.TabIndex = 3;
@@ -267,7 +267,7 @@ namespace MeGUI
             // 
             // priorityLabel
             // 
-            this.priorityLabel.Location = new System.Drawing.Point(12, 111);
+            this.priorityLabel.Location = new System.Drawing.Point(12, 110);
             this.priorityLabel.Name = "priorityLabel";
             this.priorityLabel.Size = new System.Drawing.Size(88, 23);
             this.priorityLabel.TabIndex = 14;
@@ -276,10 +276,12 @@ namespace MeGUI
             // 
             // helpButton1
             // 
+            this.helpButton1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)));
             this.helpButton1.ArticleName = "Source detector configuration window";
             this.helpButton1.AutoSize = true;
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.helpButton1.Location = new System.Drawing.Point(15, 229);
+            this.helpButton1.Location = new System.Drawing.Point(15, 212);
             this.helpButton1.Name = "helpButton1";
             this.helpButton1.Size = new System.Drawing.Size(39, 23);
             this.helpButton1.TabIndex = 16;
@@ -288,8 +290,7 @@ namespace MeGUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(345, 265);
+            this.ClientSize = new System.Drawing.Size(345, 242);
             this.Controls.Add(this.helpButton1);
             this.Controls.Add(this.priority);
             this.Controls.Add(this.priorityLabel);

@@ -35,10 +35,10 @@ namespace MeGUI.core.gui
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
             this.cancelButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
+            this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
             this.subList = new System.Windows.Forms.ComboBox();
-            this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.flowLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
             this.flowLayoutPanel3.SuspendLayout();
@@ -48,9 +48,9 @@ namespace MeGUI.core.gui
             // 
             this.serverList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.serverList.FormattingEnabled = true;
-            this.serverList.Location = new System.Drawing.Point(0, 28);
+            this.serverList.Location = new System.Drawing.Point(0, 0);
             this.serverList.Name = "serverList";
-            this.serverList.Size = new System.Drawing.Size(351, 264);
+            this.serverList.Size = new System.Drawing.Size(379, 342);
             this.serverList.TabIndex = 0;
             // 
             // flowLayoutPanel1
@@ -62,7 +62,7 @@ namespace MeGUI.core.gui
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 292);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(351, 29);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(379, 29);
             this.flowLayoutPanel1.TabIndex = 2;
             // 
             // addServerButton
@@ -100,7 +100,7 @@ namespace MeGUI.core.gui
             this.flowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
             this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 321);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-            this.flowLayoutPanel2.Size = new System.Drawing.Size(351, 29);
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(379, 29);
             this.flowLayoutPanel2.TabIndex = 3;
             // 
             // cancelButton
@@ -108,7 +108,7 @@ namespace MeGUI.core.gui
             this.cancelButton.AutoSize = true;
             this.cancelButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(298, 3);
+            this.cancelButton.Location = new System.Drawing.Point(326, 3);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(50, 23);
             this.cancelButton.TabIndex = 1;
@@ -120,12 +120,22 @@ namespace MeGUI.core.gui
             this.okButton.AutoSize = true;
             this.okButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.okButton.Location = new System.Drawing.Point(260, 3);
+            this.okButton.Location = new System.Drawing.Point(288, 3);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(32, 23);
             this.okButton.TabIndex = 0;
             this.okButton.Text = "OK";
             this.okButton.UseVisualStyleBackColor = true;
+            // 
+            // helpButton1
+            // 
+            this.helpButton1.ArticleName = "AutoUpdate server configuration window";
+            this.helpButton1.AutoSize = true;
+            this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.helpButton1.Location = new System.Drawing.Point(243, 3);
+            this.helpButton1.Name = "helpButton1";
+            this.helpButton1.Size = new System.Drawing.Size(39, 23);
+            this.helpButton1.TabIndex = 2;
             // 
             // flowLayoutPanel3
             // 
@@ -134,19 +144,18 @@ namespace MeGUI.core.gui
             this.flowLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Top;
             this.flowLayoutPanel3.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanel3.Name = "flowLayoutPanel3";
-            this.flowLayoutPanel3.Size = new System.Drawing.Size(351, 28);
+            this.flowLayoutPanel3.Size = new System.Drawing.Size(379, 28);
             this.flowLayoutPanel3.TabIndex = 4;
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(3, 0);
             this.label1.Name = "label1";
             this.label1.Padding = new System.Windows.Forms.Padding(3);
-            this.label1.Size = new System.Drawing.Size(108, 19);
+            this.label1.Size = new System.Drawing.Size(114, 23);
             this.label1.TabIndex = 2;
             this.label1.Text = "Auto-update servers";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // subList
             // 
@@ -154,31 +163,21 @@ namespace MeGUI.core.gui
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.subList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.subList.FormattingEnabled = true;
-            this.subList.Location = new System.Drawing.Point(117, 3);
+            this.subList.Location = new System.Drawing.Point(123, 3);
             this.subList.Name = "subList";
             this.subList.Size = new System.Drawing.Size(222, 21);
             this.subList.TabIndex = 3;
             this.subList.SelectedIndexChanged += new System.EventHandler(this.subList_SelectedIndexChanged);
             // 
-            // helpButton1
-            // 
-            this.helpButton1.ArticleName = "AutoUpdate server configuration window";
-            this.helpButton1.AutoSize = true;
-            this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.helpButton1.Location = new System.Drawing.Point(215, 3);
-            this.helpButton1.Name = "helpButton1";
-            this.helpButton1.Size = new System.Drawing.Size(39, 23);
-            this.helpButton1.TabIndex = 2;
-            // 
             // AutoUpdateServerConfigWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(351, 350);
-            this.Controls.Add(this.serverList);
+            this.ClientSize = new System.Drawing.Size(379, 350);
             this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.flowLayoutPanel2);
             this.Controls.Add(this.flowLayoutPanel3);
+            this.Controls.Add(this.serverList);
             this.Name = "AutoUpdateServerConfigWindow";
             this.Text = "AutoUpdateServerConfigWindow";
             this.flowLayoutPanel1.ResumeLayout(false);
@@ -186,7 +185,6 @@ namespace MeGUI.core.gui
             this.flowLayoutPanel2.ResumeLayout(false);
             this.flowLayoutPanel2.PerformLayout();
             this.flowLayoutPanel3.ResumeLayout(false);
-            this.flowLayoutPanel3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 

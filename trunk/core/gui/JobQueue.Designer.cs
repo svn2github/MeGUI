@@ -82,7 +82,7 @@ namespace MeGUI.core.gui
             abortButton.Margin = new System.Windows.Forms.Padding(3, 3, 7, 3);
             abortButton.Name = "abortButton";
             abortButton.Size = new System.Drawing.Size(42, 23);
-            abortButton.TabIndex = 0;
+            abortButton.TabIndex = 3;
             abortButton.Text = "Abort";
             abortButton.UseVisualStyleBackColor = true;
             abortButton.Click += new System.EventHandler(this.abortButton_Click);
@@ -96,7 +96,7 @@ namespace MeGUI.core.gui
             loadJobButton.Margin = new System.Windows.Forms.Padding(7, 3, 3, 3);
             loadJobButton.Name = "loadJobButton";
             loadJobButton.Size = new System.Drawing.Size(41, 23);
-            loadJobButton.TabIndex = 0;
+            loadJobButton.TabIndex = 4;
             loadJobButton.Text = "Load";
             loadJobButton.UseVisualStyleBackColor = true;
             // 
@@ -109,7 +109,7 @@ namespace MeGUI.core.gui
             updateJobButton.Margin = new System.Windows.Forms.Padding(3, 3, 7, 3);
             updateJobButton.Name = "updateJobButton";
             updateJobButton.Size = new System.Drawing.Size(52, 23);
-            updateJobButton.TabIndex = 0;
+            updateJobButton.TabIndex = 5;
             updateJobButton.Text = "Update";
             updateJobButton.UseVisualStyleBackColor = true;
             // 
@@ -120,7 +120,7 @@ namespace MeGUI.core.gui
             button9.Location = new System.Drawing.Point(384, 3);
             button9.Name = "button9";
             button9.Size = new System.Drawing.Size(48, 23);
-            button9.TabIndex = 0;
+            button9.TabIndex = 8;
             button9.Text = "Delete";
             button9.UseVisualStyleBackColor = true;
             button9.Click += new System.EventHandler(this.deleteJobButton_Click);
@@ -179,7 +179,7 @@ namespace MeGUI.core.gui
             this.upButton.Margin = new System.Windows.Forms.Padding(7, 3, 3, 3);
             this.upButton.Name = "upButton";
             this.upButton.Size = new System.Drawing.Size(31, 23);
-            this.upButton.TabIndex = 0;
+            this.upButton.TabIndex = 6;
             this.upButton.Text = "Up";
             this.upButton.UseVisualStyleBackColor = true;
             this.upButton.Click += new System.EventHandler(this.upButton_Click);
@@ -192,7 +192,7 @@ namespace MeGUI.core.gui
             this.downButton.Margin = new System.Windows.Forms.Padding(3, 3, 7, 3);
             this.downButton.Name = "downButton";
             this.downButton.Size = new System.Drawing.Size(45, 23);
-            this.downButton.TabIndex = 0;
+            this.downButton.TabIndex = 7;
             this.downButton.Text = "Down";
             this.downButton.UseVisualStyleBackColor = true;
             this.downButton.Click += new System.EventHandler(this.downButton_Click);
@@ -216,8 +216,8 @@ namespace MeGUI.core.gui
             this.queueListView.HideSelection = false;
             this.queueListView.Location = new System.Drawing.Point(0, 0);
             this.queueListView.Name = "queueListView";
-            this.queueListView.Size = new System.Drawing.Size(692, 513);
-            this.queueListView.TabIndex = 27;
+            this.queueListView.Size = new System.Drawing.Size(692, 542);
+            this.queueListView.TabIndex = 0;
             this.queueListView.UseCompatibleStateImageBehavior = false;
             this.queueListView.View = System.Windows.Forms.View.Details;
             this.queueListView.DoubleClick += new System.EventHandler(this.queueListView_DoubleClick);
@@ -306,7 +306,7 @@ namespace MeGUI.core.gui
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 513);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(692, 29);
-            this.flowLayoutPanel1.TabIndex = 37;
+            this.flowLayoutPanel1.TabIndex = 1;
             // 
             // startStopButton
             // 
@@ -337,7 +337,7 @@ namespace MeGUI.core.gui
             this.pauseButton.Location = new System.Drawing.Point(93, 3);
             this.pauseButton.Name = "pauseButton";
             this.pauseButton.Size = new System.Drawing.Size(24, 23);
-            this.pauseButton.TabIndex = 0;
+            this.pauseButton.TabIndex = 2;
             this.pauseButton.UseVisualStyleBackColor = true;
             this.pauseButton.Click += new System.EventHandler(this.pauseButton_Click);
             // 
@@ -345,8 +345,8 @@ namespace MeGUI.core.gui
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.queueListView);
             this.Controls.Add(this.flowLayoutPanel1);
+            this.Controls.Add(this.queueListView);
             this.Name = "JobQueue";
             this.Size = new System.Drawing.Size(692, 542);
             this.queueContextMenu.ResumeLayout(false);
