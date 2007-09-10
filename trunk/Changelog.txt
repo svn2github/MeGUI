@@ -1,3 +1,12 @@
+0.2.6.1009
+    - (Kurtnoise) fixed 1660566 (Audio Streams were discarded from command line in the Adaptive Muxer).
+    - (Kurtnoise) [AVS Creator] Add yadif.dll deinterlacer (also added to AutoUpdate)
+    - (Kurtnoise) [AVS Creator] Re-order deinterlacers, to prefer TDeint over TDeint+EEDI2, and yadif over TDeint
+    - (Kurtnoise) [MainForm] : some refactoring in the Help Menu.
+    - (Kurtnoise) added a TabControl for Program Paths.
+    - (Kurtnoise) updated MediaInfo.dll & MediaInfoWrapper.dll (0.7.4.4 to 0.7.5.3)
+    - (Kurtnoise) move Settings & Update items to Options Menu.
+
 0.2.6.1008
     - (Kurtnoise) Introduce a line counter for Subtitle Part in the getSourceInfo function (to avoid issues).
     - (Kurtnoise) [MP4 Muxer] : disabled -tmp command.
