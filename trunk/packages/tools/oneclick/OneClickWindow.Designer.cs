@@ -447,6 +447,7 @@ namespace MeGUI
             // 
             // clearAudio2Button
             // 
+            this.clearAudio2Button.Enabled = false;
             this.clearAudio2Button.Location = new System.Drawing.Point(386, 48);
             this.clearAudio2Button.Name = "clearAudio2Button";
             this.clearAudio2Button.Size = new System.Drawing.Size(24, 23);
@@ -482,6 +483,7 @@ namespace MeGUI
             // track2
             // 
             this.track2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.track2.Enabled = false;
             this.track2.Location = new System.Drawing.Point(125, 50);
             this.track2.Name = "track2";
             this.track2.Size = new System.Drawing.Size(253, 21);

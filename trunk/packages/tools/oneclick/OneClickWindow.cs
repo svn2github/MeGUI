@@ -832,6 +832,8 @@ namespace MeGUI
         {
             if (showAdvancedOptions.Checked)
             {
+                clearAudio2Button.Enabled = true;
+                track2.Enabled = true;
                 if (!tabControl1.TabPages.Contains(tabPage2))
                     tabControl1.TabPages.Add(tabPage2);
                 if (!tabControl1.TabPages.Contains(encoderConfigTab))
@@ -839,6 +841,8 @@ namespace MeGUI
             }
             else
             {
+                clearAudio2Button.Enabled = false;
+                track2.Enabled = false;
                 if (tabControl1.TabPages.Contains(tabPage2))
                     tabControl1.TabPages.Remove(tabPage2);
                 if (tabControl1.TabPages.Contains(encoderConfigTab))
