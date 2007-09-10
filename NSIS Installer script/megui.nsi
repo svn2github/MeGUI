@@ -15,7 +15,7 @@
 !define MUI_ICON x264.ico
 !define MUI_UNICON x264.ico
 !define MUI_HEADERIMAGE
-!define MUI_HEADERIMAGE_BITMAP x264.bmp
+!define MUI_HEADERIMAGE_BITMAP megui.bmp
 !define MUI_COMPONENTSPAGE_SMALLDESC
 !include "MUI.nsh"
 !include "Sections.nsh"
