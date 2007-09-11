@@ -69,7 +69,7 @@ Section "";
 	CreateDirectory $SMPROGRAMS\megui
 	CreateShortcut "$SMPROGRAMS\megui\changelog.lnk" $INSTDIR\${FILE2}
 	CreateShortcut "$SMPROGRAMS\megui\gpl.lnk" $INSTDIR\${FILE3}
-	CreateShortcut "$SMPROGRAMS\megui\meGUI modern media encoder.lnk" $INSTDIR\${FILE5} "" $INSTDIR\x264.ico
+	CreateShortcut "$SMPROGRAMS\megui\meGUI modern media encoder.lnk" $INSTDIR\${FILE5} "" $INSTDIR\megui.ico
 	CreateShortcut "$SMPROGRAMS\megui\uninstall megui.lnk" $INSTDIR\megui-uninstall.exe
 
 	; write out uninstaller
