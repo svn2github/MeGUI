@@ -1088,11 +1088,6 @@ namespace MeGUI
                 MessageBox.Show("Error: Avisynth plugins path is not set (check if you have Avisynth installed and ensure to set the path to plugins in the settings).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 btnUpdate.Enabled = false;
             }
-            else if ((meGUISettings.YadifPath == "") || (meGUISettings.YadifPath == "yadif.dll"))
-            {
-                MessageBox.Show("Error: Yadif.dll path was not configured in the MeGUI settings. Please specify a path for Yadif to continue the update.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                btnUpdate.Enabled = false;
-            }
             else
             {
                 btnUpdate.Enabled = false;
