@@ -1,3 +1,7 @@
+0.2.6.1012
+    - (Sharktooth) [Autoupdate] Removed yadif.dll path check since it was impossible to set the path without already having yadif.
+    - (Sharktooth) Various Installer fixes.
+
 0.2.6.1011
     - (Sharktooth) [OneClick] Audio Track 2 is disabled by default unless "Show Advanced Options" is checked.
     - (Sharktooth) [Autoupdate] Check if yadif.dll path was set before trying to update it...
