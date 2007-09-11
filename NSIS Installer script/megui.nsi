@@ -7,13 +7,13 @@
 !define FILE4 "ICSharpCode.SharpZipLib.dll"
 !define FILE5 "megui.exe"
 !define FILE6 "MessageBoxExLib.dll"
-!define FILE7 "x264.ico"
+!define FILE7 "megui.ico"
 !define FILE8 "MediaInfo.dll"
 !define FILE9 "MediaInfoWrapper.dll"
 !define HELP "Data\*.xml"
 !define UNINST_NAME "megui-uninstall.exe"
-!define MUI_ICON x264.ico
-!define MUI_UNICON x264.ico
+!define MUI_ICON megui.ico
+!define MUI_UNICON megui.ico
 !define MUI_HEADERIMAGE
 !define MUI_HEADERIMAGE_BITMAP megui.bmp
 !define MUI_COMPONENTSPAGE_SMALLDESC
