@@ -1,16 +1,16 @@
-!define NAME "meGUI modern media encoder"
+!define NAME "MeGUI modern media encoder"
 !define OUTFILE "megui-install.exe"
-!define INPUT_PATH ""
-!define FILE1 "..\trunk\dist\bigdist\AvisynthWrapper.dll"
-!define FILE2 "..\trunk\dist\bigdist\Changelog.txt"
-!define FILE3 "..\trunk\dist\bigdist\gpl.txt"
-!define FILE4 "..\trunk\dist\bigdist\ICSharpCode.SharpZipLib.dll"
-!define FILE5 "..\trunk\dist\bigdist\megui.exe"
-!define FILE6 "..\trunk\dist\bigdist\MessageBoxExLib.dll"
+!define INPUT_PATH "..\trunk\dist\bigdist\"
+!define FILE1 "AvisynthWrapper.dll"
+!define FILE2 "Changelog.txt"
+!define FILE3 "gpl.txt"
+!define FILE4 "ICSharpCode.SharpZipLib.dll"
+!define FILE5 "megui.exe"
+!define FILE6 "MessageBoxExLib.dll"
 !define FILE7 "x264.ico"
-!define FILE8 "..\trunk\dist\bigdist\MediaInfo.dll"
-!define FILE9 "..\trunk\dist\bigdist\MediaInfoWrapper.dll"
-!define HELP "..\trunk\dist\Data\*.xml"
+!define FILE8 "MediaInfo.dll"
+!define FILE9 "MediaInfoWrapper.dll"
+!define HELP "Data\*.xml"
 !define UNINST_NAME "megui-uninstall.exe"
 !define MUI_ICON x264.ico
 !define MUI_UNICON x264.ico
@@ -59,12 +59,12 @@ Section "";
 	File "${INPUT_PATH}${FILE4}"
 	File "${INPUT_PATH}${FILE5}"
 	File "${INPUT_PATH}${FILE6}"
-	File "${INPUT_PATH}${FILE7}"
+	File "${FILE7}"
 	File "${INPUT_PATH}${FILE8}"
 	File "${INPUT_PATH}${FILE9}"
 
         SetOutPath "$INSTDIR\Data\"
-        File "${INPUT_PATH}${HELP}"
+        File "${INPUT_PATH}..\${HELP}"
 
 	CreateDirectory $SMPROGRAMS\megui
 	CreateShortcut "$SMPROGRAMS\megui\changelog.lnk" $INSTDIR\${FILE2}
