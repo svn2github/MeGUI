@@ -13,7 +13,7 @@
 !define HELP "Data\*.xml"
 !define UNINST_NAME "megui-uninstall.exe"
 !define MUI_ICON megui.ico
-!define MUI_UNICON megui.ico
+!define MUI_UNICON uninstall.ico
 !define MUI_HEADERIMAGE
 !define MUI_HEADERIMAGE_BITMAP megui.bmp
 !define MUI_COMPONENTSPAGE_SMALLDESC
