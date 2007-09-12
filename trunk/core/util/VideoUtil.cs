@@ -506,10 +506,10 @@ namespace MeGUI
                     else if (line.IndexOf("Subtitle") != -1)
                     {
                         char[] separator = { '-' };
-                        LineCount++;
                         string[] split = line.Split(separator, 1000);
                         string language = split[2].Trim();
                         SubtitleInfo si = new SubtitleInfo(language, LineCount);
+                        LineCount++; // must be there coz vobsub index begins to zero...                        
                         subtitles.Add(si);
                     }
 				}
