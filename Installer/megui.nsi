@@ -66,11 +66,11 @@ Section "";
         SetOutPath "$INSTDIR\Data\"
         File "${INPUT_PATH}..\${HELP}"
 
-	CreateDirectory $SMPROGRAMS\megui
-	CreateShortcut "$SMPROGRAMS\megui\Changelog.lnk" $INSTDIR\${FILE2}
-	CreateShortcut "$SMPROGRAMS\megui\GPL.lnk" $INSTDIR\${FILE3}
-	CreateShortcut "$SMPROGRAMS\megui\MeGUI Modern Media Encoder.lnk" $INSTDIR\${FILE5} "" $INSTDIR\megui.ico
-	CreateShortcut "$SMPROGRAMS\megui\Uninstall MeGUI.lnk" $INSTDIR\megui-uninstall.exe
+	CreateDirectory $SMPROGRAMS\MeGUI
+	CreateShortcut "$SMPROGRAMS\MeGUI\Changelog.lnk" $INSTDIR\${FILE2}
+	CreateShortcut "$SMPROGRAMS\MeGUI\GPL.lnk" $INSTDIR\${FILE3}
+	CreateShortcut "$SMPROGRAMS\MeGUI\MeGUI Modern Media Encoder.lnk" $INSTDIR\${FILE5} "" $INSTDIR\megui.ico
+	CreateShortcut "$SMPROGRAMS\MeGUI\Uninstall MeGUI.lnk" $INSTDIR\megui-uninstall.exe
 
 	; write out uninstaller
 	WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "DisplayName" "${NAME} (remove only)"
@@ -103,7 +103,7 @@ Section Uninstall
         RMDir /r "$INSTDIR"
    
 	DeleteRegKey HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}"
-	RMDir /r "$SMPROGRAMS\megui"
+	RMDir /r "$SMPROGRAMS\MeGUI"
 
 
 SectionEnd ; end of uninstall section
