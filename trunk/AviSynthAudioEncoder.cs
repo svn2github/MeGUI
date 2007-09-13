@@ -610,7 +610,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 _mustSendWavHeaderToEncoderStdIn = true;
                 MP2Settings n = audioJob.Settings as MP2Settings;
                 _encoderExecutablePath = this._settings.FFMpegPath;
-                _encoderCommandLine = "-i - -y -acodec mp2 -ab " + n.Bitrate + " \"{0}\"";
+                _encoderCommandLine = "-i - -y -acodec mp2 -ab " + n.Bitrate + "k \"{0}\"";
             } 
             if (audioJob.Settings is WinAmpAACSettings)
             {
