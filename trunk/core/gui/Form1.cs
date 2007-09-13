@@ -708,7 +708,6 @@ namespace MeGUI
             this.MinimumSize = new System.Drawing.Size(516, 476);
             this.Name = "MainForm";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
-            this.Resize += new System.EventHandler(this.MainForm_Resize);
             this.Load += new System.EventHandler(this.MeGUI_Load);
             this.tabControl1.ResumeLayout(false);
             this.inputTab.ResumeLayout(false);
@@ -2052,20 +2051,6 @@ namespace MeGUI
                     this.saveSettings();
                     Jobs.showAfterEncodingStatus(settings);
                 }
-            }
-        }
-
-        private void MainForm_Resize(object sender, EventArgs e)
-        {
-            if (FormWindowState.Minimized == this.WindowState)
-            {
-                trayIcon.Visible = true;
-                trayIcon.ShowBalloonTip(500);
-                this.Hide();
-            }
-            else if (FormWindowState.Normal == this.WindowState)
-            {
-                trayIcon.Visible = false;
             }
         }
     }
