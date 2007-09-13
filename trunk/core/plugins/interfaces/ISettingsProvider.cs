@@ -378,7 +378,7 @@ namespace MeGUI
    VideoInfo, xvidSettings, VideoCodecSettings, VideoCodec, VideoEncoderType>
     {
         public XviDSettingsProvider()
-            : base("XviD", VideoEncoderType.XVID, VideoCodec.ASP)
+            : base("Xvid", VideoEncoderType.XVID, VideoCodec.ASP)
         {
         }
         public override string EncoderPath(MeGUISettings settings)
@@ -414,7 +414,7 @@ namespace MeGUI
         AudXSettings, AudioCodecSettings, AudioCodec, AudioEncoderType>
     {
         public AudXSettingsProvider()
-            : base("Aud-X MP3", AudioEncoderType.AUDX, AudioCodec.MP3)
+            : base("MP3 Surround", AudioEncoderType.AUDX, AudioCodec.MP3)
         { }
     }
     public class faacSettingsProvider : SettingsProviderImpl2<faacConfigurationPanel, string[],
@@ -456,7 +456,7 @@ namespace MeGUI
    WinAmpAACSettings, AudioCodecSettings, AudioCodec, AudioEncoderType>
     {
         public waacSettingsProvider()
-            : base("WinAmp AAC", AudioEncoderType.WAAC, AudioCodec.AAC)
+            : base("Winamp AAC", AudioEncoderType.WAAC, AudioCodec.AAC)
         { }
     }
 
