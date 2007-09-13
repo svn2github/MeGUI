@@ -1,3 +1,6 @@
+0.2.6.1014
+    - (Kurtnoise) [MainForm] fixed minimize to tray (#1749803)
+
 0.2.6.1013
     - (Sharktooth) New MeGUI icons and installer fixes
     - (Kurtnoise) [JobQueue] : scrollbar fix (#1793456)
