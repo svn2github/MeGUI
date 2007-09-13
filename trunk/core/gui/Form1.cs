@@ -661,6 +661,8 @@ namespace MeGUI
             // 
             // trayIcon
             // 
+            this.trayIcon.BalloonTipText = "meGUI is still working...";
+            this.trayIcon.BalloonTipTitle = "meGUI";
             this.trayIcon.ContextMenuStrip = this.trayMenu;
             this.trayIcon.Text = "MeGUI";
             this.trayIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.trayIcon_MouseDoubleClick);
@@ -708,6 +710,7 @@ namespace MeGUI
             this.MinimumSize = new System.Drawing.Size(516, 476);
             this.Name = "MainForm";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
+            this.Resize += new System.EventHandler(this.MainForm_Resize);
             this.Load += new System.EventHandler(this.MeGUI_Load);
             this.tabControl1.ResumeLayout(false);
             this.inputTab.ResumeLayout(false);
@@ -1151,14 +1154,7 @@ namespace MeGUI
         private void mnuViewMinimizeToTray_Click(object sender, EventArgs e)
         {
             formsToReopen.Clear();
-            foreach (Form f in allForms)
-            {
-                if (f.Visible)
-                {
-                    formsToReopen.Add(f);
-                    f.Hide();
-                }
-            }
+            this.Visible = false;
             trayIcon.Visible = true;
         }
 
@@ -1301,9 +1297,7 @@ namespace MeGUI
         private void openMeGUIToolStripMenuItem_Click(object sender, EventArgs e)
         {
             trayIcon.Visible = false;
-            foreach (Form f in formsToReopen)
-                if (!f.IsDisposed)
-                    f.Visible = true;
+            this.Visible = true;
         }
 
         #endregion
@@ -2051,6 +2045,16 @@ namespace MeGUI
                     this.saveSettings();
                     Jobs.showAfterEncodingStatus(settings);
                 }
+            }
+        }
+
+        private void MainForm_Resize(object sender, EventArgs e)
+        {
+            if (FormWindowState.Minimized == this.WindowState)
+            {
+                trayIcon.Visible = true;
+                trayIcon.ShowBalloonTip(500);
+                this.Hide();
             }
         }
     }
