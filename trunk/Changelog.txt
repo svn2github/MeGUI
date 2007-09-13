@@ -1,3 +1,11 @@
+0.2.6.1013
+    - (Sharktooth) New MeGUI icons and installer fixes
+    - (Kurtnoise) [JobQueue] : scrollbar fix (#1793456)
+    - (Kurtnoise) [AudioEncoder] : fix mp2 bitrate command line for the new FFmpeg builds.
+    - (Kurtnoise) Better label names for some encoders.
+    - (Kurtnoise) Cosmetic : added m2ts extension.
+    - (Kurtnoise) Removed resize event.
+
 0.2.6.1012
     - (Sharktooth) [Autoupdate] Removed yadif.dll path check since it was impossible to set the path without already having yadif.
     - (Sharktooth) Various Installer fixes.
@@ -7,13 +15,13 @@
     - (Sharktooth) [Autoupdate] Check if yadif.dll path was set before trying to update it...
 
 0.2.6.1010
-    - (kurtnoise) Fixed a 0.2.6.1009 regression (#1791532 - "Program path" browse button doesn't work)
+    - (Kurtnoise) Fixed a 0.2.6.1009 regression (#1791532 - "Program path" browse button doesn't work)
     - (berrinam) Line up controls and fix tab order (patch by demi_alucard)
 
 0.2.6.1009
     - (Kurtnoise) fixed 1660566 (Audio Streams were discarded from command line in the Adaptive Muxer).
-    - (berrinam) [AVS Creator] Add yadif.dll deinterlacer (also added to AutoUpdate)
-    - (berrinam) [AVS Creator] Re-order deinterlacers, to prefer TDeint over TDeint+EEDI2, and yadif over TDeint
+    - (Berrinam) [AVS Creator] Add yadif.dll deinterlacer (also added to AutoUpdate)
+    - (Berrinam) [AVS Creator] Re-order deinterlacers, to prefer TDeint over TDeint+EEDI2, and yadif over TDeint
     - (Kurtnoise) [MainForm] : some refactoring in the Help Menu.
     - (Kurtnoise) added a TabControl for Program Paths.
     - (Kurtnoise) updated MediaInfo.dll & MediaInfoWrapper.dll (0.7.4.4 to 0.7.5.3)
