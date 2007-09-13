@@ -142,10 +142,10 @@ namespace MeGUI
             script = new StringBuilder();
 
             this.openVideoDialog.Filter = "DGIndex Project Files|*.d2v" +
-                "|MPEG2 files|*.vob;*.mpg;*.mpeg;*.m2v;*.mpv;*.tp;*.ts;*.trp;*.pva;*.vro" +
+                "|MPEG2 files|*.vob;*.mpg;*.mpeg;*.m2ts;*.m2v;*.mpv;*.tp;*.ts;*.trp;*.pva;*.vro" +
                 "|DirectShow-loadable files (*.avi, *.mp4, *.mkv, *.rmvb)|*.avi;*.mp4;*.mkv;*.rmvb" +
                 "|VirtualDub frameserver files|*.vdr" +
-                "|All supported files|*.d2v;*.vob;*.mpg;*.mpeg;*.m2v;*.mpv;*.tp;*.ts;*.trp;*.pva;*.vro;*.avi;*.vdr;*.mp4;*.mkv;*.rmvb" +
+                "|All supported files|*.d2v;*.vob;*.mpg;*.mpeg;*.m2ts;*.m2v;*.mpv;*.tp;*.ts;*.trp;*.pva;*.vro;*.avi;*.vdr;*.mp4;*.mkv;*.rmvb" +
                 "|All files|*.*";
 			this.path = mainForm.MeGUIPath;
 

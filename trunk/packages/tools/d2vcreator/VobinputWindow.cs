@@ -392,7 +392,7 @@ namespace MeGUI
             // openIFODialog
             // 
             this.openIFODialog.Filter = "VOB Files (*.vob)|*.vob|MPEG-1/2 Program Streams (*.mpg)|*.mpg|Transport Streams " +
-                "(*.ts)|*.ts|All DGIndex supported files|*.vob;*.mpg;*.mpeg;*.m2v;*.mpv;*.tp;*.ts" +
+                "(*.m2ts;*.ts)|*.m2ts;*.ts|All DGIndex supported files|*.vob;*.mpg;*.mpeg;*.m2ts;*.m2v;*.mpv;*.tp;*.ts" +
                 ";*.trp;*.pva;*.vro";
             this.openIFODialog.FilterIndex = 4;
             // 
@@ -594,7 +594,8 @@ namespace MeGUI
                 {
                     string filename = ((string[])data)[0];
 
-                    if (Path.GetExtension(filename).ToLower().Equals(".vob") || Path.GetExtension(filename).ToLower().Equals(".mpg") || Path.GetExtension(filename).ToLower().Equals(".ts"))
+                    if (Path.GetExtension(filename).ToLower().Equals(".vob") || Path.GetExtension(filename).ToLower().Equals(".mpg") ||
+                        Path.GetExtension(filename).ToLower().Equals(".ts")  || Path.GetExtension(filename).ToLower().Equals(".m2ts"))
                     {
                         openIFODialog.FileName = filename;
                         openVideo(openIFODialog.FileName);

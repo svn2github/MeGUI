@@ -345,7 +345,7 @@ namespace MeGUI
             this.input.AllowDrop = true;
             this.input.Filename = "";
             this.input.Filter = "VOB Files (*.vob)|*.vob|MPEG-1/2 Program Streams (*.mpg)|*.mpg|Transport Streams " +
-                "(*.ts)|*.ts|All DGIndex supported files|*.vob;*.mpg;*.mpeg;*.m2v;*.mpv;*.tp;*.ts" +
+                "(*.m2ts,*.ts)|*.m2ts;*.ts|All DGIndex supported files|*.vob;*.mpg;*.mpeg;*.m2ts;*.m2v;*.mpv;*.tp;*.ts" +
                 ";*.trp;*.pva;*.vro";
             this.input.FolderMode = false;
             this.input.Location = new System.Drawing.Point(123, 13);

@@ -673,24 +673,24 @@ namespace MeGUI
             this.exitMeGUIToolStripMenuItem});
             this.trayMenu.Name = "trayMenu";
             this.trayMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.trayMenu.Size = new System.Drawing.Size(136, 54);
+            this.trayMenu.Size = new System.Drawing.Size(147, 54);
             // 
             // openMeGUIToolStripMenuItem
             // 
             this.openMeGUIToolStripMenuItem.Name = "openMeGUIToolStripMenuItem";
-            this.openMeGUIToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
+            this.openMeGUIToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.openMeGUIToolStripMenuItem.Text = "Open MeGUI";
             this.openMeGUIToolStripMenuItem.Click += new System.EventHandler(this.openMeGUIToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(132, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(143, 6);
             // 
             // exitMeGUIToolStripMenuItem
             // 
             this.exitMeGUIToolStripMenuItem.Name = "exitMeGUIToolStripMenuItem";
-            this.exitMeGUIToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
+            this.exitMeGUIToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.exitMeGUIToolStripMenuItem.Text = "Exit MeGUI";
             this.exitMeGUIToolStripMenuItem.Click += new System.EventHandler(this.exitMeGUIToolStripMenuItem_Click);
             // 
@@ -708,6 +708,7 @@ namespace MeGUI
             this.MinimumSize = new System.Drawing.Size(516, 476);
             this.Name = "MainForm";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
+            this.Resize += new System.EventHandler(this.MainForm_Resize);
             this.Load += new System.EventHandler(this.MeGUI_Load);
             this.tabControl1.ResumeLayout(false);
             this.inputTab.ResumeLayout(false);
@@ -1138,11 +1139,11 @@ namespace MeGUI
         {
             openFileDialog.Filter = "AviSynth Scripts (*.avs)|*.avs|" +
                 "Audio Files (*.ac3, *.mp2, *.mpa, *.wav)|*.ac3;*.mp2;*.mpa;*.wav|" +
-                "MPEG-2 Files (*.vob, *.mpg, *.mpeg, *.m2v, *.mpv, *.tp, *.ts, *.trp, *.pva, *.vro)|" +
-                "*.vob;*.mpg;*.mpeg;*.m2v;*.mpv;*.tp;*.ts;*.trp;*.pva;*.vro|" +
+                "MPEG-2 Files (*.vob, *.mpg, *.mpeg, *.m2ts, *.m2v, *.mpv, *.tp, *.ts, *.trp, *.pva, *.vro)|" +
+                "*.vob;*.mpg;*.mpeg;*.m2ts;*.m2v;*.mpv;*.tp;*.ts;*.trp;*.pva;*.vro|" +
                 "Other Video Files (*.d2v, *.avi, *.mp4, *.mkv, *.rmvb)|*.d2v;*.avi;*.mp4;*.mkv;*.rmvb|" +
                 "All supported encodable files|" +
-                "*.avs;*.ac3;*.mp2;*.mpa;*.wav;*.vob;*.mpg;*.mpeg;*.m2v;*.mpv;*.tp;*.ts;*.trp;*.pva;*.vro;*.d2v;*.avi;*.mp4;*.mkv;*.rmvb|" +
+                "*.avs;*.ac3;*.mp2;*.mpa;*.wav;*.vob;*.mpg;*.mpeg;*.m2ts;*.m2v;*.mpv;*.tp;*.ts;*.trp;*.pva;*.vro;*.d2v;*.avi;*.mp4;*.mkv;*.rmvb|" +
                 "All files|*.*";
             openFileDialog.Title = "Select your input file";
             if (openFileDialog.ShowDialog() == DialogResult.OK)
@@ -2051,6 +2052,20 @@ namespace MeGUI
                     this.saveSettings();
                     Jobs.showAfterEncodingStatus(settings);
                 }
+            }
+        }
+
+        private void MainForm_Resize(object sender, EventArgs e)
+        {
+            if (FormWindowState.Minimized == this.WindowState)
+            {
+                trayIcon.Visible = true;
+                trayIcon.ShowBalloonTip(500);
+                this.Hide();
+            }
+            else if (FormWindowState.Normal == this.WindowState)
+            {
+                trayIcon.Visible = false;
             }
         }
     }
