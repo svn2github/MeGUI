@@ -728,6 +728,18 @@ namespace MeGUI.core.gui
             else if (!AbortMenuItem.Checked)
                 AbortClicked(this, e);
         }
+
+        private void queueListView_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete)
+                deleteJobButton_Click(sender, e);
+            if (e.KeyCode == Keys.Up)
+                upButton_Click(sender, e);
+            if (e.KeyCode == Keys.Down)
+                downButton_Click(sender, e);
+            if ((e.KeyCode == Keys.Enter) || (e.KeyCode == Keys.Escape))
+                startStopButton_Click(sender, e);
+        }
     }
 
     class JobQueueEventArgs : EventArgs
