@@ -277,7 +277,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                         if (0 == a.ChannelsCount)
                             throw new ApplicationException("Can't find audio stream");
 
-                        _logBuilder.AppendFormat("Channels={0}, BitsPerSample={1}, SampleRate={2}Hz{3}", a.ChannelsCount, a.BitsPerSample, a.AudioSampleRate, Environment.NewLine);
+                        _logBuilder.AppendFormat("Input: Channels={0}, BitsPerSample={1}, SampleRate={2}Hz{3}", a.ChannelsCount, a.BitsPerSample, a.AudioSampleRate, Environment.NewLine);
                         _start = DateTime.Now;
 
                         const int MAX_SAMPLES_PER_ONCE = 4096;
@@ -376,7 +376,20 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 }
                 else
                 {
-                    _logBuilder.Append("Error:\n" + e.ToString());
+                    // Better Errors Exception for Audio Encoders
+                    int encoder_path = _encoderExecutablePath.LastIndexOf(@"\");
+                    string audio_encoder = _encoderExecutablePath.Substring(encoder_path + 1).ToLower();
+
+                    _logBuilder.Append("\n");
+                    _logBuilder.Append("\nError:\n");
+
+                    if (audioJob.Settings is WinAmpAACSettings)
+                    {
+                        if (File.Exists(encoder_path + "aac_encplus.dll") == false)
+                            _logBuilder.Append("aac_encplus.dll not found in the path...\n");
+                        if (File.Exists(Environment.SystemDirectory + @"\nscrt.dll") == false)
+                            _logBuilder.Append("nscrt.dll must be in your Windows System directory...\n");
+                    }
                     su.HasError = true;
                     raiseEvent();
                 }
@@ -422,7 +435,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 info.Arguments = string.Format(_encoderCommandLine,
                     audioJob.Output, a.AudioSampleRate, a.BitsPerSample, a.ChannelsCount, a.SamplesCount, a.AudioSizeInBytes);
                 info.FileName = _encoderExecutablePath;
-                _logBuilder.AppendFormat("{0} {1}", _encoderExecutablePath, info.Arguments, Environment.NewLine);
+                _logBuilder.AppendFormat("Command line used: {0} {1}", _encoderExecutablePath, info.Arguments, Environment.NewLine);
                 info.UseShellExecute = false;
                 info.RedirectStandardInput = true;
                 info.RedirectStandardOutput = true;
