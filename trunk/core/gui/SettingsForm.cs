@@ -58,17 +58,13 @@ namespace MeGUI
         private Label label12;
         private TextBox audioExtension;
         private GroupBox autoModeGroupbox;
-        private CheckBox checkBox3;
         private Label label13;
         private NumericUpDown numericUpDown1;
-        private CheckBox checkBox4;
         private Label audioExtLabel;
         private Label videoExtLabel;
         private Button autoEncodeDefaultsButton;
-        private CheckBox keep2ndPassLogfile;
         private Label nbPassesLabel;
         private NumericUpDown nbPasses;
-        private CheckBox keep2ndPassOutput;
         private TextBox command;
         private RadioButton runCommand;
         private RadioButton shutdown;
@@ -142,6 +138,8 @@ namespace MeGUI
         private Button selectAvc2AviExecutableButton;
         private TextBox avc2aviPath;
         private Label label5;
+        private CheckBox keep2ndPassOutput;
+        private CheckBox keep2ndPassLogFile;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -229,10 +227,9 @@ namespace MeGUI
             this.label12 = new System.Windows.Forms.Label();
             this.audioExtension = new System.Windows.Forms.TextBox();
             this.autoModeGroupbox = new System.Windows.Forms.GroupBox();
-            this.checkBox3 = new System.Windows.Forms.CheckBox();
+            this.keep2ndPassOutput = new System.Windows.Forms.CheckBox();
             this.label13 = new System.Windows.Forms.Label();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
-            this.checkBox4 = new System.Windows.Forms.CheckBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage4 = new System.Windows.Forms.TabPage();
@@ -272,6 +269,9 @@ namespace MeGUI
             this.label1 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.selectAvc2AviExecutableButton = new System.Windows.Forms.Button();
+            this.avc2aviPath = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.aviMuxGUIPath = new System.Windows.Forms.TextBox();
             this.mp4boxPath = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -294,14 +294,10 @@ namespace MeGUI
             this.audioExtLabel = new System.Windows.Forms.Label();
             this.videoExtLabel = new System.Windows.Forms.Label();
             this.autoEncodeDefaultsButton = new System.Windows.Forms.Button();
-            this.keep2ndPassLogfile = new System.Windows.Forms.CheckBox();
             this.nbPassesLabel = new System.Windows.Forms.Label();
             this.nbPasses = new System.Windows.Forms.NumericUpDown();
-            this.keep2ndPassOutput = new System.Windows.Forms.CheckBox();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
-            this.selectAvc2AviExecutableButton = new System.Windows.Forms.Button();
-            this.avc2aviPath = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
+            this.keep2ndPassLogFile = new System.Windows.Forms.CheckBox();
             groupBox1 = new System.Windows.Forms.GroupBox();
             groupBox1.SuspendLayout();
             this.otherGroupBox.SuspendLayout();
@@ -844,10 +840,10 @@ namespace MeGUI
             // 
             // autoModeGroupbox
             // 
-            this.autoModeGroupbox.Controls.Add(this.checkBox3);
+            this.autoModeGroupbox.Controls.Add(this.keep2ndPassLogFile);
+            this.autoModeGroupbox.Controls.Add(this.keep2ndPassOutput);
             this.autoModeGroupbox.Controls.Add(this.label13);
             this.autoModeGroupbox.Controls.Add(this.numericUpDown1);
-            this.autoModeGroupbox.Controls.Add(this.checkBox4);
             this.autoModeGroupbox.Location = new System.Drawing.Point(4, 3);
             this.autoModeGroupbox.Name = "autoModeGroupbox";
             this.autoModeGroupbox.Size = new System.Drawing.Size(463, 73);
@@ -855,15 +851,17 @@ namespace MeGUI
             this.autoModeGroupbox.TabStop = false;
             this.autoModeGroupbox.Text = "Automated Encoding";
             // 
-            // checkBox3
+            // keep2ndPassOutput
             // 
-            this.checkBox3.Checked = true;
-            this.checkBox3.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox3.Location = new System.Drawing.Point(232, 21);
-            this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(208, 17);
-            this.checkBox3.TabIndex = 2;
-            this.checkBox3.Text = "Overwrite Stats File in 3rd pass";
+            this.keep2ndPassOutput.AutoSize = true;
+            this.keep2ndPassOutput.Checked = true;
+            this.keep2ndPassOutput.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.keep2ndPassOutput.Location = new System.Drawing.Point(232, 47);
+            this.keep2ndPassOutput.Name = "keep2ndPassOutput";
+            this.keep2ndPassOutput.Size = new System.Drawing.Size(207, 17);
+            this.keep2ndPassOutput.TabIndex = 3;
+            this.keep2ndPassOutput.Text = "Keep 2nd pass Output in 3 pass mode";
+            this.keep2ndPassOutput.UseVisualStyleBackColor = true;
             // 
             // label13
             // 
@@ -894,16 +892,6 @@ namespace MeGUI
             0,
             0,
             0});
-            // 
-            // checkBox4
-            // 
-            this.checkBox4.Checked = true;
-            this.checkBox4.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox4.Location = new System.Drawing.Point(232, 44);
-            this.checkBox4.Name = "checkBox4";
-            this.checkBox4.Size = new System.Drawing.Size(208, 17);
-            this.checkBox4.TabIndex = 3;
-            this.checkBox4.Text = "Keep 2nd pass Output in 3 pass mode";
             // 
             // tabPage2
             // 
@@ -1300,6 +1288,31 @@ namespace MeGUI
             this.tabPage6.Text = "Muxer";
             this.tabPage6.UseVisualStyleBackColor = true;
             // 
+            // selectAvc2AviExecutableButton
+            // 
+            this.selectAvc2AviExecutableButton.Location = new System.Drawing.Point(417, 98);
+            this.selectAvc2AviExecutableButton.Name = "selectAvc2AviExecutableButton";
+            this.selectAvc2AviExecutableButton.Size = new System.Drawing.Size(24, 23);
+            this.selectAvc2AviExecutableButton.TabIndex = 11;
+            this.selectAvc2AviExecutableButton.Text = "...";
+            // 
+            // avc2aviPath
+            // 
+            this.avc2aviPath.Location = new System.Drawing.Point(89, 98);
+            this.avc2aviPath.Name = "avc2aviPath";
+            this.avc2aviPath.ReadOnly = true;
+            this.avc2aviPath.Size = new System.Drawing.Size(322, 21);
+            this.avc2aviPath.TabIndex = 10;
+            this.avc2aviPath.Text = "avc2avi.exe";
+            // 
+            // label5
+            // 
+            this.label5.Location = new System.Drawing.Point(6, 101);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(47, 18);
+            this.label5.TabIndex = 9;
+            this.label5.Text = "avc2avi";
+            // 
             // aviMuxGUIPath
             // 
             this.aviMuxGUIPath.Location = new System.Drawing.Point(89, 70);
@@ -1504,16 +1517,6 @@ namespace MeGUI
             this.autoEncodeDefaultsButton.Text = "Configure Defaults";
             this.autoEncodeDefaultsButton.UseVisualStyleBackColor = true;
             // 
-            // keep2ndPassLogfile
-            // 
-            this.keep2ndPassLogfile.Checked = true;
-            this.keep2ndPassLogfile.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.keep2ndPassLogfile.Location = new System.Drawing.Point(232, 16);
-            this.keep2ndPassLogfile.Name = "keep2ndPassLogfile";
-            this.keep2ndPassLogfile.Size = new System.Drawing.Size(208, 24);
-            this.keep2ndPassLogfile.TabIndex = 3;
-            this.keep2ndPassLogfile.Text = "Overwrite Stats File in 3rd pass";
-            // 
             // nbPassesLabel
             // 
             this.nbPassesLabel.Location = new System.Drawing.Point(8, 24);
@@ -1544,16 +1547,6 @@ namespace MeGUI
             0,
             0});
             // 
-            // keep2ndPassOutput
-            // 
-            this.keep2ndPassOutput.Checked = true;
-            this.keep2ndPassOutput.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.keep2ndPassOutput.Location = new System.Drawing.Point(232, 48);
-            this.keep2ndPassOutput.Name = "keep2ndPassOutput";
-            this.keep2ndPassOutput.Size = new System.Drawing.Size(216, 24);
-            this.keep2ndPassOutput.TabIndex = 0;
-            this.keep2ndPassOutput.Text = "Keep 2nd pass Output in 3 pass mode";
-            // 
             // helpButton1
             // 
             this.helpButton1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -1565,30 +1558,17 @@ namespace MeGUI
             this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 1;
             // 
-            // selectAvc2AviExecutableButton
+            // keep2ndPassLogFile
             // 
-            this.selectAvc2AviExecutableButton.Location = new System.Drawing.Point(417, 98);
-            this.selectAvc2AviExecutableButton.Name = "selectAvc2AviExecutableButton";
-            this.selectAvc2AviExecutableButton.Size = new System.Drawing.Size(24, 23);
-            this.selectAvc2AviExecutableButton.TabIndex = 11;
-            this.selectAvc2AviExecutableButton.Text = "...";
-            // 
-            // avc2aviPath
-            // 
-            this.avc2aviPath.Location = new System.Drawing.Point(89, 98);
-            this.avc2aviPath.Name = "avc2aviPath";
-            this.avc2aviPath.ReadOnly = true;
-            this.avc2aviPath.Size = new System.Drawing.Size(322, 21);
-            this.avc2aviPath.TabIndex = 10;
-            this.avc2aviPath.Text = "avc2avi.exe";
-            // 
-            // label5
-            // 
-            this.label5.Location = new System.Drawing.Point(6, 101);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(47, 18);
-            this.label5.TabIndex = 9;
-            this.label5.Text = "avc2avi";
+            this.keep2ndPassLogFile.AutoSize = true;
+            this.keep2ndPassLogFile.Checked = true;
+            this.keep2ndPassLogFile.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.keep2ndPassLogFile.Location = new System.Drawing.Point(232, 22);
+            this.keep2ndPassLogFile.Name = "keep2ndPassLogFile";
+            this.keep2ndPassLogFile.Size = new System.Drawing.Size(176, 17);
+            this.keep2ndPassLogFile.TabIndex = 4;
+            this.keep2ndPassLogFile.Text = "Overwrite Stats File in 3rd Pass";
+            this.keep2ndPassLogFile.UseVisualStyleBackColor = true;
             // 
             // SettingsForm
             // 
@@ -1625,6 +1605,7 @@ namespace MeGUI
             this.outputExtensions.ResumeLayout(false);
             this.outputExtensions.PerformLayout();
             this.autoModeGroupbox.ResumeLayout(false);
+            this.autoModeGroupbox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.tabPage2.ResumeLayout(false);
             this.tabControl2.ResumeLayout(false);
@@ -1906,7 +1887,7 @@ namespace MeGUI
 				settings.OpenProgressWindow = openProgressWindow.Checked;
 				settings.AutoSetNbThreads = autosetNbThreads.Checked;
 				settings.Keep2of3passOutput = keep2ndPassOutput.Checked;
-				settings.OverwriteStats = keep2ndPassLogfile.Checked;
+				settings.OverwriteStats = keep2ndPassLogFile.Checked;
 				settings.NbPasses = (int)nbPasses.Value;
                 settings.OggEnc2Path = textBox4.Text;
                 settings.EncAudXPath = textBox5.Text;
@@ -1963,7 +1944,7 @@ namespace MeGUI
 				openProgressWindow.Checked = settings.OpenProgressWindow;
 				autosetNbThreads.Checked = settings.AutoSetNbThreads;
 				keep2ndPassOutput.Checked = settings.Keep2of3passOutput;
-				keep2ndPassLogfile.Checked = settings.OverwriteStats;
+				keep2ndPassLogFile.Checked = settings.OverwriteStats;
 				nbPasses.Value = (decimal)settings.NbPasses;
                 textBox4.Text = settings.OggEnc2Path;
                 textBox5.Text = settings.EncAudXPath;
@@ -1974,6 +1955,5 @@ namespace MeGUI
 			}
 		}
 		#endregion
-
 	}
 }
