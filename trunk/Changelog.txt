@@ -1,5 +1,8 @@
 0.2.6.1015
     - (berrinam) Nicer CQM selection for XviD and x264 (#1651251 and #1717536)
+    - (Kurtnoise) better errors exception for Audio Encoders
+    - (Kurtnoise) [Job Queue] : added keydown event (for start, stop, up, down, delete)
+    - (Kurtnoise) [SettingsForm] : Overwrite Stats File & Keep 2nd Pass Output checkboxes were not saved in the Settings 
 
 0.2.6.1014
     - (Kurtnoise) [MainForm] fixed minimize to tray (#1749803)
