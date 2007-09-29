@@ -250,6 +250,12 @@
     <Compile Include="core\gui\AviSynthProfileConfigPanel.Designer.cs">
       <DependentUpon>AviSynthProfileConfigPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="core\gui\CQMComboBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="core\gui\CQMComboBox.Designer.cs">
+      <DependentUpon>CQMComboBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="core\gui\FileBar.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -288,6 +294,12 @@
     </Compile>
     <Compile Include="core\gui\JobWorkerWindow.Designer.cs">
       <DependentUpon>JobWorkerWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="core\gui\NiceComboBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="core\gui\NiceComboBox.Designer.cs">
+      <DependentUpon>NiceComboBox.cs</DependentUpon>
     </Compile>
     <Compile Include="core\gui\ProfileControl.cs">
       <SubType>UserControl</SubType>
@@ -577,6 +589,10 @@
       <SubType>Designer</SubType>
       <DependentUpon>AviSynthProfileConfigPanel.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="core\gui\CQMComboBox.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>CQMComboBox.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="core\gui\FileBar.resx">
       <DependentUpon>FileBar.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -604,6 +620,10 @@
     <EmbeddedResource Include="core\gui\JobWorkerWindow.resx">
       <SubType>Designer</SubType>
       <DependentUpon>JobWorkerWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="core\gui\NiceComboBox.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>NiceComboBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="core\gui\ProfileControl.resx">
       <DependentUpon>ProfileControl.cs</DependentUpon>

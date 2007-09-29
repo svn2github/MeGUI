@@ -1,3 +1,6 @@
+0.2.6.1015
+    - (berrinam) Nicer CQM selection for XviD and x264 (#1651251 and #1717536)
+
 0.2.6.1014
     - (Kurtnoise) [MainForm] fixed minimize to tray (#1749803)
 

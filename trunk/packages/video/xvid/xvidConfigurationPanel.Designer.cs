@@ -38,12 +38,12 @@ namespace MeGUI.packages.video.xvid
             this.fourCCLabel = new System.Windows.Forms.Label();
             this.fourCC = new System.Windows.Forms.ComboBox();
             this.xvidCodecToolsGroupBox = new System.Windows.Forms.GroupBox();
+            this.cqmComboBox1 = new MeGUI.core.gui.CQMComboBox();
             this.xvidUseVHQForBframes = new System.Windows.Forms.CheckBox();
             this.xvidUseVHQForBframesLabel = new System.Windows.Forms.Label();
             this.xvidClosedGop = new System.Windows.Forms.CheckBox();
             this.xvidClosedGopLabel = new System.Windows.Forms.Label();
             this.xvidQuantTypeLabel = new System.Windows.Forms.Label();
-            this.xvidQuantType = new System.Windows.Forms.ComboBox();
             this.xvidChromaMotion = new System.Windows.Forms.CheckBox();
             this.xvidChromaMotionLabel = new System.Windows.Forms.Label();
             this.xvidCartoonMode = new System.Windows.Forms.CheckBox();
@@ -123,15 +123,12 @@ namespace MeGUI.packages.video.xvid
             this.xvidRCAveragingPeriod = new System.Windows.Forms.TextBox();
             this.xvidRCDelayFactorLabel = new System.Windows.Forms.Label();
             this.xvidRCDelayFactor = new System.Windows.Forms.TextBox();
-            this.quantizerMatrixGroupbox = new System.Windows.Forms.GroupBox();
-            this.xvidLoadQuantizerMatrixButton = new System.Windows.Forms.Button();
-            this.xvidQuantizerMatrixFile = new System.Windows.Forms.TextBox();
-            this.xvidQuantizerMatrixFileLabel = new System.Windows.Forms.Label();
-            this.xvidCustomCommandlineOptions = new System.Windows.Forms.TextBox();
-            this.xvidCustomCommandlineOptionsLabel = new System.Windows.Forms.Label();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.advancedTabPage = new System.Windows.Forms.TabPage();
+            this.xvidCustomCommandlineOptionsLabel = new System.Windows.Forms.Label();
+            this.xvidCustomCommandlineOptions = new System.Windows.Forms.TextBox();
+            this.quantizerMatrixGroupbox = new System.Windows.Forms.GroupBox();
             this.tabControl1.SuspendLayout();
             this.zoneTabPage.SuspendLayout();
             this.mainTabPage.SuspendLayout();
@@ -163,8 +160,8 @@ namespace MeGUI.packages.video.xvid
             ((System.ComponentModel.ISupportInitialize)(this.xvidMaxIQuant)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.xvidMinIQuant)).BeginInit();
             this.xvidCBRRcGroupBox.SuspendLayout();
-            this.quantizerMatrixGroupbox.SuspendLayout();
             this.advancedTabPage.SuspendLayout();
+            this.quantizerMatrixGroupbox.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -180,6 +177,7 @@ namespace MeGUI.packages.video.xvid
             this.zoneTabPage.Controls.Add(this.quantizerMatrixGroupbox);
             this.zoneTabPage.Size = new System.Drawing.Size(492, 432);
             this.zoneTabPage.Controls.SetChildIndex(this.quantizerMatrixGroupbox, 0);
+            this.zoneTabPage.Controls.SetChildIndex(this.zonesControl, 0);
             // 
             // commandline
             // 
@@ -298,12 +296,12 @@ namespace MeGUI.packages.video.xvid
             // 
             // xvidCodecToolsGroupBox
             // 
+            this.xvidCodecToolsGroupBox.Controls.Add(this.cqmComboBox1);
             this.xvidCodecToolsGroupBox.Controls.Add(this.xvidUseVHQForBframes);
             this.xvidCodecToolsGroupBox.Controls.Add(this.xvidUseVHQForBframesLabel);
             this.xvidCodecToolsGroupBox.Controls.Add(this.xvidClosedGop);
             this.xvidCodecToolsGroupBox.Controls.Add(this.xvidClosedGopLabel);
             this.xvidCodecToolsGroupBox.Controls.Add(this.xvidQuantTypeLabel);
-            this.xvidCodecToolsGroupBox.Controls.Add(this.xvidQuantType);
             this.xvidCodecToolsGroupBox.Controls.Add(this.xvidChromaMotion);
             this.xvidCodecToolsGroupBox.Controls.Add(this.xvidChromaMotionLabel);
             this.xvidCodecToolsGroupBox.Controls.Add(this.xvidCartoonMode);
@@ -316,10 +314,26 @@ namespace MeGUI.packages.video.xvid
             this.xvidCodecToolsGroupBox.Controls.Add(this.xvidVHQLabel);
             this.xvidCodecToolsGroupBox.Location = new System.Drawing.Point(0, 182);
             this.xvidCodecToolsGroupBox.Name = "xvidCodecToolsGroupBox";
-            this.xvidCodecToolsGroupBox.Size = new System.Drawing.Size(320, 208);
+            this.xvidCodecToolsGroupBox.Size = new System.Drawing.Size(320, 244);
             this.xvidCodecToolsGroupBox.TabIndex = 23;
             this.xvidCodecToolsGroupBox.TabStop = false;
             this.xvidCodecToolsGroupBox.Text = "Tools";
+            // 
+            // cqmComboBox1
+            // 
+            this.cqmComboBox1.CustomCQMs = new string[0];
+            this.cqmComboBox1.Filter = "";
+            this.cqmComboBox1.Location = new System.Drawing.Point(10, 209);
+            this.cqmComboBox1.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.cqmComboBox1.MinimumSize = new System.Drawing.Size(64, 29);
+            this.cqmComboBox1.Name = "cqmComboBox1";
+            this.cqmComboBox1.SelectedIndex = -1;
+            this.cqmComboBox1.SelectedItem = null;
+            this.cqmComboBox1.SelectedText = "";
+            this.cqmComboBox1.Size = new System.Drawing.Size(302, 29);
+            this.cqmComboBox1.StandardCQMs = new string[0];
+            this.cqmComboBox1.TabIndex = 16;
+            this.cqmComboBox1.SelectionChanged += new MeGUI.StringChanged(this.cqmComboBox1_SelectionChanged);
             // 
             // xvidUseVHQForBframes
             // 
@@ -341,7 +355,7 @@ namespace MeGUI.packages.video.xvid
             // 
             this.xvidClosedGop.Checked = true;
             this.xvidClosedGop.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.xvidClosedGop.Location = new System.Drawing.Point(296, 178);
+            this.xvidClosedGop.Location = new System.Drawing.Point(296, 154);
             this.xvidClosedGop.Name = "xvidClosedGop";
             this.xvidClosedGop.Size = new System.Drawing.Size(16, 24);
             this.xvidClosedGop.TabIndex = 15;
@@ -349,7 +363,7 @@ namespace MeGUI.packages.video.xvid
             // 
             // xvidClosedGopLabel
             // 
-            this.xvidClosedGopLabel.Location = new System.Drawing.Point(8, 178);
+            this.xvidClosedGopLabel.Location = new System.Drawing.Point(8, 159);
             this.xvidClosedGopLabel.Name = "xvidClosedGopLabel";
             this.xvidClosedGopLabel.Size = new System.Drawing.Size(100, 16);
             this.xvidClosedGopLabel.TabIndex = 14;
@@ -357,24 +371,11 @@ namespace MeGUI.packages.video.xvid
             // 
             // xvidQuantTypeLabel
             // 
-            this.xvidQuantTypeLabel.Location = new System.Drawing.Point(8, 156);
+            this.xvidQuantTypeLabel.Location = new System.Drawing.Point(8, 190);
             this.xvidQuantTypeLabel.Name = "xvidQuantTypeLabel";
             this.xvidQuantTypeLabel.Size = new System.Drawing.Size(100, 16);
             this.xvidQuantTypeLabel.TabIndex = 12;
             this.xvidQuantTypeLabel.Text = "Quantization Type";
-            // 
-            // xvidQuantType
-            // 
-            this.xvidQuantType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.xvidQuantType.Items.AddRange(new object[] {
-            "H.263",
-            "MPEG",
-            "Custom"});
-            this.xvidQuantType.Location = new System.Drawing.Point(192, 157);
-            this.xvidQuantType.Name = "xvidQuantType";
-            this.xvidQuantType.Size = new System.Drawing.Size(120, 21);
-            this.xvidQuantType.TabIndex = 13;
-            this.xvidQuantType.SelectedIndexChanged += new System.EventHandler(this.updateEvent);
             // 
             // xvidChromaMotion
             // 
@@ -1274,62 +1275,6 @@ namespace MeGUI.packages.video.xvid
             this.xvidRCDelayFactor.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textField_KeyPress);
             this.xvidRCDelayFactor.TextChanged += new System.EventHandler(this.updateEvent);
             // 
-            // quantizerMatrixGroupbox
-            // 
-            this.quantizerMatrixGroupbox.Controls.Add(this.xvidLoadQuantizerMatrixButton);
-            this.quantizerMatrixGroupbox.Controls.Add(this.xvidQuantizerMatrixFile);
-            this.quantizerMatrixGroupbox.Controls.Add(this.xvidQuantizerMatrixFileLabel);
-            this.quantizerMatrixGroupbox.Controls.Add(this.xvidCustomCommandlineOptions);
-            this.quantizerMatrixGroupbox.Controls.Add(this.xvidCustomCommandlineOptionsLabel);
-            this.quantizerMatrixGroupbox.Location = new System.Drawing.Point(0, 314);
-            this.quantizerMatrixGroupbox.Name = "quantizerMatrixGroupbox";
-            this.quantizerMatrixGroupbox.Size = new System.Drawing.Size(480, 78);
-            this.quantizerMatrixGroupbox.TabIndex = 17;
-            this.quantizerMatrixGroupbox.TabStop = false;
-            this.quantizerMatrixGroupbox.Text = "Other Options";
-            // 
-            // xvidLoadQuantizerMatrixButton
-            // 
-            this.xvidLoadQuantizerMatrixButton.Location = new System.Drawing.Point(448, 24);
-            this.xvidLoadQuantizerMatrixButton.Name = "xvidLoadQuantizerMatrixButton";
-            this.xvidLoadQuantizerMatrixButton.Size = new System.Drawing.Size(24, 24);
-            this.xvidLoadQuantizerMatrixButton.TabIndex = 2;
-            this.xvidLoadQuantizerMatrixButton.Text = "...";
-            this.xvidLoadQuantizerMatrixButton.Click += new System.EventHandler(this.xvidLoadQuantizerMatrixButton_Click);
-            // 
-            // xvidQuantizerMatrixFile
-            // 
-            this.xvidQuantizerMatrixFile.Location = new System.Drawing.Point(176, 24);
-            this.xvidQuantizerMatrixFile.Name = "xvidQuantizerMatrixFile";
-            this.xvidQuantizerMatrixFile.ReadOnly = true;
-            this.xvidQuantizerMatrixFile.Size = new System.Drawing.Size(264, 20);
-            this.xvidQuantizerMatrixFile.TabIndex = 1;
-            this.xvidQuantizerMatrixFile.TextChanged += new System.EventHandler(this.updateEvent);
-            // 
-            // xvidQuantizerMatrixFileLabel
-            // 
-            this.xvidQuantizerMatrixFileLabel.Location = new System.Drawing.Point(8, 24);
-            this.xvidQuantizerMatrixFileLabel.Name = "xvidQuantizerMatrixFileLabel";
-            this.xvidQuantizerMatrixFileLabel.Size = new System.Drawing.Size(112, 23);
-            this.xvidQuantizerMatrixFileLabel.TabIndex = 0;
-            this.xvidQuantizerMatrixFileLabel.Text = "Quantizer Matrix";
-            // 
-            // xvidCustomCommandlineOptions
-            // 
-            this.xvidCustomCommandlineOptions.Location = new System.Drawing.Point(176, 48);
-            this.xvidCustomCommandlineOptions.Name = "xvidCustomCommandlineOptions";
-            this.xvidCustomCommandlineOptions.Size = new System.Drawing.Size(264, 20);
-            this.xvidCustomCommandlineOptions.TabIndex = 4;
-            this.xvidCustomCommandlineOptions.TextChanged += new System.EventHandler(this.updateEvent);
-            // 
-            // xvidCustomCommandlineOptionsLabel
-            // 
-            this.xvidCustomCommandlineOptionsLabel.Location = new System.Drawing.Point(8, 48);
-            this.xvidCustomCommandlineOptionsLabel.Name = "xvidCustomCommandlineOptionsLabel";
-            this.xvidCustomCommandlineOptionsLabel.Size = new System.Drawing.Size(162, 23);
-            this.xvidCustomCommandlineOptionsLabel.TabIndex = 3;
-            this.xvidCustomCommandlineOptionsLabel.Text = "Custom Commandline Options";
-            // 
             // openFileDialog
             // 
             this.openFileDialog.FileName = "openFileDialog1";
@@ -1350,6 +1295,33 @@ namespace MeGUI.packages.video.xvid
             this.advancedTabPage.Text = "Advanced";
             this.advancedTabPage.UseVisualStyleBackColor = true;
             // 
+            // xvidCustomCommandlineOptionsLabel
+            // 
+            this.xvidCustomCommandlineOptionsLabel.Location = new System.Drawing.Point(10, 19);
+            this.xvidCustomCommandlineOptionsLabel.Name = "xvidCustomCommandlineOptionsLabel";
+            this.xvidCustomCommandlineOptionsLabel.Size = new System.Drawing.Size(162, 23);
+            this.xvidCustomCommandlineOptionsLabel.TabIndex = 3;
+            this.xvidCustomCommandlineOptionsLabel.Text = "Custom Commandline Options";
+            // 
+            // xvidCustomCommandlineOptions
+            // 
+            this.xvidCustomCommandlineOptions.Location = new System.Drawing.Point(178, 19);
+            this.xvidCustomCommandlineOptions.Name = "xvidCustomCommandlineOptions";
+            this.xvidCustomCommandlineOptions.Size = new System.Drawing.Size(264, 20);
+            this.xvidCustomCommandlineOptions.TabIndex = 4;
+            this.xvidCustomCommandlineOptions.TextChanged += new System.EventHandler(this.updateEvent);
+            // 
+            // quantizerMatrixGroupbox
+            // 
+            this.quantizerMatrixGroupbox.Controls.Add(this.xvidCustomCommandlineOptions);
+            this.quantizerMatrixGroupbox.Controls.Add(this.xvidCustomCommandlineOptionsLabel);
+            this.quantizerMatrixGroupbox.Location = new System.Drawing.Point(9, 295);
+            this.quantizerMatrixGroupbox.Name = "quantizerMatrixGroupbox";
+            this.quantizerMatrixGroupbox.Size = new System.Drawing.Size(480, 54);
+            this.quantizerMatrixGroupbox.TabIndex = 17;
+            this.quantizerMatrixGroupbox.TabStop = false;
+            this.quantizerMatrixGroupbox.Text = "Other Options";
+            // 
             // xvidConfigurationPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1358,6 +1330,7 @@ namespace MeGUI.packages.video.xvid
             this.Size = new System.Drawing.Size(503, 526);
             this.tabControl1.ResumeLayout(false);
             this.zoneTabPage.ResumeLayout(false);
+            this.zoneTabPage.PerformLayout();
             this.mainTabPage.ResumeLayout(false);
             this.xvidOtherGroupBox.ResumeLayout(false);
             this.xvidOtherGroupBox.PerformLayout();
@@ -1391,10 +1364,10 @@ namespace MeGUI.packages.video.xvid
             ((System.ComponentModel.ISupportInitialize)(this.xvidMinIQuant)).EndInit();
             this.xvidCBRRcGroupBox.ResumeLayout(false);
             this.xvidCBRRcGroupBox.PerformLayout();
-            this.quantizerMatrixGroupbox.ResumeLayout(false);
-            this.quantizerMatrixGroupbox.PerformLayout();
             this.advancedTabPage.ResumeLayout(false);
             this.advancedTabPage.PerformLayout();
+            this.quantizerMatrixGroupbox.ResumeLayout(false);
+            this.quantizerMatrixGroupbox.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1415,7 +1388,6 @@ namespace MeGUI.packages.video.xvid
         private System.Windows.Forms.CheckBox xvidClosedGop;
         private System.Windows.Forms.Label xvidClosedGopLabel;
         private System.Windows.Forms.Label xvidQuantTypeLabel;
-        private System.Windows.Forms.ComboBox xvidQuantType;
         private System.Windows.Forms.CheckBox xvidChromaMotion;
         private System.Windows.Forms.Label xvidChromaMotionLabel;
         private System.Windows.Forms.CheckBox xvidCartoonMode;
@@ -1492,12 +1464,6 @@ namespace MeGUI.packages.video.xvid
         private System.Windows.Forms.TextBox xvidRCAveragingPeriod;
         private System.Windows.Forms.Label xvidRCDelayFactorLabel;
         private System.Windows.Forms.TextBox xvidRCDelayFactor;
-        private System.Windows.Forms.GroupBox quantizerMatrixGroupbox;
-        private System.Windows.Forms.Button xvidLoadQuantizerMatrixButton;
-        private System.Windows.Forms.TextBox xvidQuantizerMatrixFile;
-        private System.Windows.Forms.Label xvidQuantizerMatrixFileLabel;
-        private System.Windows.Forms.TextBox xvidCustomCommandlineOptions;
-        private System.Windows.Forms.Label xvidCustomCommandlineOptionsLabel;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
         private System.Windows.Forms.TabPage advancedTabPage;
@@ -1506,5 +1472,9 @@ namespace MeGUI.packages.video.xvid
         private System.Windows.Forms.TextBox xvidKeyframeInterval;
         private System.Windows.Forms.Label xvidKeyframeIntervalLabel;
         private System.Windows.Forms.NumericUpDown xvidBitrateQuantizer;
+        private MeGUI.core.gui.CQMComboBox cqmComboBox1;
+        private System.Windows.Forms.GroupBox quantizerMatrixGroupbox;
+        private System.Windows.Forms.TextBox xvidCustomCommandlineOptions;
+        private System.Windows.Forms.Label xvidCustomCommandlineOptionsLabel;
     }
 }

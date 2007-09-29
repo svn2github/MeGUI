@@ -213,7 +213,7 @@ namespace MeGUI.core.details.video
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(327, 344);
+            this.tabControl1.Size = new System.Drawing.Size(368, 344);
             this.tabControl1.TabIndex = 39;
             // 
             // mainTabPage
@@ -231,20 +231,21 @@ namespace MeGUI.core.details.video
             this.zoneTabPage.Controls.Add(this.zonesControl);
             this.zoneTabPage.Location = new System.Drawing.Point(4, 22);
             this.zoneTabPage.Name = "zoneTabPage";
-            this.zoneTabPage.Size = new System.Drawing.Size(319, 318);
+            this.zoneTabPage.Size = new System.Drawing.Size(360, 318);
             this.zoneTabPage.TabIndex = 2;
             this.zoneTabPage.Text = "Zones";
             this.zoneTabPage.UseVisualStyleBackColor = true;
             // 
             // zonesControl
             // 
+            this.zonesControl.AutoSize = true;
             this.zonesControl.CreditsStartFrame = 0;
             this.zonesControl.Input = "";
             this.zonesControl.IntroEndFrame = 0;
             this.zonesControl.Location = new System.Drawing.Point(0, 3);
             this.zonesControl.MainForm = null;
             this.zonesControl.Name = "zonesControl";
-            this.zonesControl.Size = new System.Drawing.Size(310, 305);
+            this.zonesControl.Size = new System.Drawing.Size(319, 286);
             this.zonesControl.TabIndex = 0;
             this.zonesControl.Zones = new MeGUI.Zone[0];
             // 
@@ -256,7 +257,7 @@ namespace MeGUI.core.details.video
             this.commandline.Multiline = true;
             this.commandline.Name = "commandline";
             this.commandline.ReadOnly = true;
-            this.commandline.Size = new System.Drawing.Size(324, 59);
+            this.commandline.Size = new System.Drawing.Size(365, 59);
             this.commandline.TabIndex = 41;
             // 
             // tooltipHelp
@@ -272,11 +273,12 @@ namespace MeGUI.core.details.video
             this.Controls.Add(this.commandline);
             this.Controls.Add(this.tabControl1);
             this.Name = "VideoConfigurationPanel";
-            this.Size = new System.Drawing.Size(331, 409);
+            this.Size = new System.Drawing.Size(372, 409);
             this.VisibleChanged += new System.EventHandler(this.VideoConfigurationPanel_VisibleChanged);
             this.Load += new System.EventHandler(this.VideoConfigurationPanel_Load);
             this.tabControl1.ResumeLayout(false);
             this.zoneTabPage.ResumeLayout(false);
+            this.zoneTabPage.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 

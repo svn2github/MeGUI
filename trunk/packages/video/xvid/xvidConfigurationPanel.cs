@@ -22,6 +22,7 @@ namespace MeGUI.packages.video.xvid
             : base(mainForm, info)
         {
             InitializeComponent();
+            cqmComboBox1.StandardCQMs = new string[] { xvidSettings.H263Matrix, xvidSettings.MPEGMatrix };
         }
         #endregion
         #region adjustments
@@ -124,14 +125,6 @@ namespace MeGUI.packages.video.xvid
         {
             doDropDownAdjustments();
             doCheckBoxAdjustments();
-            if (xvidQuantType.SelectedIndex == 2) // CQM
-            {
-                xvidLoadQuantizerMatrixButton.Enabled = true;
-            }
-            else
-            {
-                xvidLoadQuantizerMatrixButton.Enabled = false;
-            }
         }
 
         /// <summary>
@@ -147,8 +140,8 @@ namespace MeGUI.packages.video.xvid
                 this.xvidMotionSearchPrecision.SelectedIndex = 6;
             if (xvidVHQ.SelectedIndex == -1)
                 this.xvidVHQ.SelectedIndex = 1;
-            if (xvidQuantType.SelectedIndex == -1)
-                this.xvidQuantType.SelectedIndex = 0;
+            if (cqmComboBox1.SelectedIndex == -1)
+                cqmComboBox1.SelectedIndex = 0;
         }
 
         /// <summary>
@@ -196,7 +189,6 @@ namespace MeGUI.packages.video.xvid
                 xs.NbThreads = (int)nbThreads.Value;
 //                xs.CartoonMode = xvidCartoonMode.Checked;
                 xs.ChromaMotion = xvidChromaMotion.Checked;
-                xs.QuantType = xvidQuantType.SelectedIndex;
                 xs.ClosedGOP = xvidClosedGop.Checked;
                 xs.Greyscale = xvidGreyScale.Checked;
                 xs.Interlaced = xvidInterlaced.Checked;
@@ -230,7 +222,7 @@ namespace MeGUI.packages.video.xvid
 //                xs.ChromaOptimizer = this.xvidChromaOptimizer.Checked;
 //                xs.HQAC = this.xvidHQAC.Checked;
                 xs.FrameDropRatio = (int)xvidFrameDropRatio.Value;
-                xs.CustomQuantizerMatrix = xvidQuantizerMatrixFile.Text;
+                xs.QuantizerMatrix = cqmComboBox1.SelectedText;
                 xs.CustomEncoderOptions = xvidCustomCommandlineOptions.Text;
                 xs.Logfile = this.logfile.Text;
                 xs.Zones = Zones;
@@ -260,7 +252,6 @@ namespace MeGUI.packages.video.xvid
                 xvidGMC.Checked = xs.GMC;
 //                xvidCartoonMode.Checked = xs.CartoonMode;
                 xvidChromaMotion.Checked = xs.ChromaMotion;
-                xvidQuantType.SelectedIndex = xs.QuantType;
                 xvidClosedGop.Checked = xs.ClosedGOP;
                 xvidGreyScale.Checked = xs.Greyscale;
                 xvidInterlaced.Checked = xs.Interlaced;
@@ -293,20 +284,10 @@ namespace MeGUI.packages.video.xvid
 //                this.xvidChromaOptimizer.Checked = xs.ChromaOptimizer;
 //                this.xvidHQAC.Checked = xs.HQAC;
                 xvidFrameDropRatio.Value = (decimal)xs.FrameDropRatio;
-                xvidQuantizerMatrixFile.Text = xs.CustomQuantizerMatrix;
+                cqmComboBox1.SelectCQM(xs.QuantizerMatrix);
                 xvidCustomCommandlineOptions.Text = xs.CustomEncoderOptions;
                 this.logfile.Text = xs.Logfile;
                 this.Zones = xs.Zones;
-            }
-        }
-        #endregion
-        #region quantizer matrices
-        private void xvidLoadQuantizerMatrixButton_Click(object sender, System.EventArgs e)
-        {
-            if (this.openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                this.xvidQuantizerMatrixFile.Text = openFileDialog.FileName;
-                this.showCommandLine();
             }
         }
         #endregion
@@ -329,6 +310,11 @@ namespace MeGUI.packages.video.xvid
             }
         }
         #endregion
+
+        private void cqmComboBox1_SelectionChanged(object sender, string val)
+        {
+            genericUpdate();
+        }
     }
 }
 

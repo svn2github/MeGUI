@@ -27,18 +27,29 @@ namespace MeGUI
     /// </summary>
     public class xvidSettings : VideoCodecSettings
     {
+        public static readonly string H263Matrix = "H.263";
+        public static readonly string MPEGMatrix = "MPEG";
+
         public override void setAdjustedNbThreads(int nbThreads)
         {
             base.setAdjustedNbThreads(0);
         }
 
+        public bool IsCustomMatrix
+        {
+            get
+            {
+                return QuantizerMatrix != H263Matrix && QuantizerMatrix != MPEGMatrix;
+            }
+        }
+
         public override void FixFileNames(System.Collections.Generic.Dictionary<string, string> substitutionTable)
         {
             base.FixFileNames(substitutionTable);
-            if (QuantType == 2) // CQM
+            if (IsCustomMatrix)
             {
-                if (substitutionTable.ContainsKey(CustomQuantizerMatrix))
-                    CustomQuantizerMatrix = substitutionTable[CustomQuantizerMatrix];
+                if (substitutionTable.ContainsKey(QuantizerMatrix))
+                    QuantizerMatrix = substitutionTable[QuantizerMatrix];
             }
         }
         public override string[] RequiredFiles
@@ -46,13 +57,13 @@ namespace MeGUI
             get
             {
                 List<string> list = new List<string>(base.RequiredFiles);
-                if (QuantType == 2) // Custom profile
-                    list.Add(CustomQuantizerMatrix);
+                if (IsCustomMatrix)
+                    list.Add(QuantizerMatrix);
                 return list.ToArray();
             }
         }
 
-        private int motionSearchPrecision, vhqMode, quantType, minPQuant, maxPQuant, minBQuant, maxBQuant, bQuantRatio, bQuantOffset,
+        private int motionSearchPrecision, vhqMode, minPQuant, maxPQuant, minBQuant, maxBQuant, bQuantRatio, bQuantOffset,
             keyFrameBoost, keyframeThreshold, keyframeReduction, overflowControlStrength,
             maxOverflowImprovement, maxOverflowDegradation, highBitrateDegradation, lowBitrateImprovement, reactionDelayFactor, averagingPeriod,
             rateControlBuffer, frameDropRatio, vbvBuffer, vbvMaxRate, vbvPeakRate;
@@ -87,7 +98,6 @@ namespace MeGUI
             NbBframes = 2;
             motionSearchPrecision = 6;
             vhqMode = 1;
-            quantType = 0; //H.263
             MinQuantizer = 2;
             MaxQuantizer = 31;
             minPQuant = 2;
@@ -153,11 +163,6 @@ namespace MeGUI
         {
             get { return vhqMode; }
             set { vhqMode = value; }
-        }
-        public int QuantType
-        {
-            get { return quantType; }
-            set { quantType = value; }
         }
         public int MinPQuant
         {
@@ -339,7 +344,7 @@ namespace MeGUI
         /// <summary>
         /// gets / sets the custom quantizer matrix to be used for encoding
         /// </summary>
-        public string CustomQuantizerMatrix
+        public string QuantizerMatrix
         {
             get { return customQuantizerMatrix; }
             set { customQuantizerMatrix = value; }
@@ -398,7 +403,6 @@ namespace MeGUI
                this.OverflowControlStrength != otherSettings.OverflowControlStrength ||
                this.PackedBitstream != otherSettings.PackedBitstream ||
                this.QPel != otherSettings.QPel ||
-               this.QuantType != otherSettings.QuantType ||
                this.RateControlBuffer != otherSettings.RateControlBuffer ||
                this.ReactionDelayFactor != otherSettings.ReactionDelayFactor ||
                this.Trellis != otherSettings.Trellis ||

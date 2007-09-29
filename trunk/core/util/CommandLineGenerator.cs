@@ -513,10 +513,10 @@ namespace MeGUI
                 sb.Append("-qpel ");
             if (xs.GMC)
                 sb.Append("-gmc ");
-            if (xs.QuantType == 1)
+            if (xs.QuantizerMatrix == xvidSettings.MPEGMatrix)
                 sb.Append("-qtype 1 ");
-            else if (xs.QuantType == 2 && xs.CustomQuantizerMatrix.Length > 0)
-                sb.Append("-qmatrix \"" + xs.CustomQuantizerMatrix + "\" ");
+            else if (xs.QuantizerMatrix != xvidSettings.H263Matrix && !string.IsNullOrEmpty(xs.QuantizerMatrix))
+                sb.Append("-qmatrix \"" + xs.QuantizerMatrix + "\" ");
             if (xs.ClosedGOP)
                 sb.Append("-closed_gop ");
             if (xs.AdaptiveQuant)

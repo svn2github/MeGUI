@@ -18,6 +18,7 @@ namespace MeGUI.packages.video.x264
         {
             InitializeComponent();
         }
+
         protected override string getCommandline()
         {
             return CommandLineGenerator.generateVideoCommandline(this.Settings, this.input, this.output, -1, -1);
@@ -33,6 +34,7 @@ namespace MeGUI.packages.video.x264
             : base(mainForm, info)
         {
             InitializeComponent();
+            cqmComboBox1.StandardCQMs = new string[] { "Flat (none)", "JVT" };
             this.AdvancedToolTips = mainForm.Settings.UseAdvancedTooltips;
             AVCLevels al = new AVCLevels();
             this.avcLevel.Items.AddRange(al.getLevels());
@@ -125,10 +127,6 @@ namespace MeGUI.packages.video.x264
                     this.x264P4x4mv.Enabled = true;
                 }
             }
-        }
-        private void doCQMAdjustments()
-        {
-            x264QuantizerFileLoadButton.Enabled = (x264CustomQuantizer.SelectedIndex == 2); // If it is set to 'custom'
         }
         private void doTrellisAdjustments()
         {
@@ -421,7 +419,6 @@ namespace MeGUI.packages.video.x264
         {
             doEncodingModeAdjustments();
             doCheckBoxAdjustments();
-            doCQMAdjustments();
             doTrellisAdjustments();
             doTextFieldAdjustments();
             doAVCLevelAdjustments();
@@ -447,8 +444,8 @@ namespace MeGUI.packages.video.x264
                 this.x264METype.SelectedIndex = 0;
             if (macroblockOptions.SelectedIndex == -1)
                 macroblockOptions.SelectedIndex = 2;
-            if (this.x264CustomQuantizer.SelectedIndex == -1)
-                this.x264CustomQuantizer.SelectedIndex = 0; // no matrix by default
+            if (cqmComboBox1.SelectedIndex == -1)
+                cqmComboBox1.SelectedIndex = 0; // flat matrix
             if (this.avcProfile.SelectedIndex == -1)
                 avcProfile.SelectedIndex = 1; // 
 
@@ -553,8 +550,11 @@ namespace MeGUI.packages.video.x264
                 xs.AdaptiveDCT = adaptiveDCT.Checked;
                 xs.CustomEncoderOptions = customCommandlineOptions.Text;
                 xs.Zones = this.Zones;
-                xs.QuantizerMatrixType = x264CustomQuantizer.SelectedIndex;
-                xs.QuantizerMatrix = x264QuantizerMatrixFile.Text;
+                if (cqmComboBox1.SelectedIndex > 1)
+                    xs.QuantizerMatrixType = 2;
+                else
+                    xs.QuantizerMatrixType = cqmComboBox1.SelectedIndex;
+                xs.QuantizerMatrix = cqmComboBox1.SelectedText;
                 xs.Profile = avcProfile.SelectedIndex;
                 xs.Level = avcLevel.SelectedIndex;
                 xs.Lossless = x264LosslessMode.Checked;
@@ -630,8 +630,7 @@ namespace MeGUI.packages.video.x264
                 customCommandlineOptions.Text = xs.CustomEncoderOptions;
                 this.logfile.Text = xs.Logfile;
                 this.Zones = xs.Zones;
-                x264CustomQuantizer.SelectedIndex = xs.QuantizerMatrixType;
-                x264QuantizerMatrixFile.Text = xs.QuantizerMatrix;
+                cqmComboBox1.SelectCQM(xs.QuantizerMatrix);
                 x264LosslessMode.Checked = xs.Lossless;
                 psnr.Checked = xs.PSNRCalculation;
                 NoiseReduction.Text = xs.NoiseReduction.ToString(); ;
@@ -745,16 +744,6 @@ namespace MeGUI.packages.video.x264
             tooltipHelp.SetToolTip(fourCC, SelectHelpText("fourcc"));
         }
         #endregion
-        #region quantizer matrices
-        private void x264QuantizerFileLoadButton_Click(object sender, System.EventArgs e)
-        {
-            this.openFileDialog.Filter = "Quantizer matrix files (*.cfg)|*.cfg|All Files (*.*)|*.*";
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                x264QuantizerMatrixFile.Text = openFileDialog.FileName;
-            }
-        }
-        #endregion
         #region GUI State adjustment
         private void x264DialogTriStateAdjustment()
         {
@@ -772,7 +761,7 @@ namespace MeGUI.packages.video.x264
                     x264NumberOfBFrames.Value = 0;
                     x264NumberOfBFrames.Enabled = false;
                     x264NumberOfRefFramesLabel.Enabled = false;
-                    x264CustomQuantizer.SelectedIndex = 0;
+                    cqmComboBox1.SelectedIndex = 0;
                     quantizerMatrixGroupbox.Text = "";
                     quantizerMatrixGroupbox.Enabled = false;
                     x264LosslessMode.Checked = false;
@@ -782,7 +771,7 @@ namespace MeGUI.packages.video.x264
                     x264CabacEnabled.Enabled = true;
                     x264NumberOfBFrames.Enabled = true;
                     x264NumberOfRefFramesLabel.Enabled = true;
-                    x264CustomQuantizer.SelectedIndex = 0;
+                    cqmComboBox1.SelectedIndex = 0;
                     quantizerMatrixGroupbox.Text = "";
                     quantizerMatrixGroupbox.Enabled = false;
                     x264LosslessMode.Checked = false;
@@ -917,6 +906,11 @@ namespace MeGUI.packages.video.x264
             #endregion
         }
         #endregion
+
+        private void cqmComboBox1_SelectionChanged(object sender, string val)
+        {
+            genericUpdate();
+        }
     }
 }
 

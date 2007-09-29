@@ -112,11 +112,8 @@ namespace MeGUI.packages.video.x264
             this.x264AdaptiveBframes = new System.Windows.Forms.CheckBox();
             this.x264PyramidBframes = new System.Windows.Forms.CheckBox();
             this.quantizerMatrixGroupbox = new System.Windows.Forms.GroupBox();
+            this.cqmComboBox1 = new MeGUI.core.gui.CQMComboBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.x264QuantizerMatrixFile = new System.Windows.Forms.TextBox();
-            this.x264QuantizerMatrixFileLabel = new System.Windows.Forms.Label();
-            this.x264CustomQuantizer = new System.Windows.Forms.ComboBox();
-            this.x264QuantizerFileLoadButton = new System.Windows.Forms.Button();
             this.x264MBGroupbox = new System.Windows.Forms.GroupBox();
             this.macroblockOptions = new System.Windows.Forms.ComboBox();
             this.adaptiveDCT = new System.Windows.Forms.CheckBox();
@@ -1347,17 +1344,29 @@ namespace MeGUI.packages.video.x264
             // 
             // quantizerMatrixGroupbox
             // 
+            this.quantizerMatrixGroupbox.Controls.Add(this.cqmComboBox1);
             this.quantizerMatrixGroupbox.Controls.Add(this.label1);
-            this.quantizerMatrixGroupbox.Controls.Add(this.x264QuantizerMatrixFile);
-            this.quantizerMatrixGroupbox.Controls.Add(this.x264QuantizerMatrixFileLabel);
-            this.quantizerMatrixGroupbox.Controls.Add(this.x264CustomQuantizer);
-            this.quantizerMatrixGroupbox.Controls.Add(this.x264QuantizerFileLoadButton);
             this.quantizerMatrixGroupbox.Location = new System.Drawing.Point(0, 262);
             this.quantizerMatrixGroupbox.Name = "quantizerMatrixGroupbox";
-            this.quantizerMatrixGroupbox.Size = new System.Drawing.Size(314, 72);
+            this.quantizerMatrixGroupbox.Size = new System.Drawing.Size(314, 104);
             this.quantizerMatrixGroupbox.TabIndex = 2;
             this.quantizerMatrixGroupbox.TabStop = false;
             this.quantizerMatrixGroupbox.Text = "Quantizer Matrices";
+            // 
+            // cqmComboBox1
+            // 
+            this.cqmComboBox1.CustomCQMs = new string[0];
+            this.cqmComboBox1.Filter = "Quantizer matrix files (*.cfg)|*.cfg|All Files (*.*)|*.*";
+            this.cqmComboBox1.Location = new System.Drawing.Point(15, 34);
+            this.cqmComboBox1.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.cqmComboBox1.MinimumSize = new System.Drawing.Size(64, 29);
+            this.cqmComboBox1.Name = "cqmComboBox1";
+            this.cqmComboBox1.SelectedItem = null;
+            this.cqmComboBox1.SelectedText = "";
+            this.cqmComboBox1.Size = new System.Drawing.Size(289, 29);
+            this.cqmComboBox1.StandardCQMs = new string[0];
+            this.cqmComboBox1.TabIndex = 5;
+            this.cqmComboBox1.SelectionChanged += new MeGUI.StringChanged(this.cqmComboBox1_SelectionChanged);
             // 
             // label1
             // 
@@ -1368,48 +1377,6 @@ namespace MeGUI.packages.video.x264
             this.label1.TabIndex = 0;
             this.label1.Text = "Quantization matrix";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // x264QuantizerMatrixFile
-            // 
-            this.x264QuantizerMatrixFile.Location = new System.Drawing.Point(122, 41);
-            this.x264QuantizerMatrixFile.Name = "x264QuantizerMatrixFile";
-            this.x264QuantizerMatrixFile.ReadOnly = true;
-            this.x264QuantizerMatrixFile.Size = new System.Drawing.Size(152, 20);
-            this.x264QuantizerMatrixFile.TabIndex = 3;
-            this.x264QuantizerMatrixFile.TextChanged += new System.EventHandler(this.updateEvent);
-            // 
-            // x264QuantizerMatrixFileLabel
-            // 
-            this.x264QuantizerMatrixFileLabel.AutoSize = true;
-            this.x264QuantizerMatrixFileLabel.Location = new System.Drawing.Point(12, 44);
-            this.x264QuantizerMatrixFileLabel.Name = "x264QuantizerMatrixFileLabel";
-            this.x264QuantizerMatrixFileLabel.Size = new System.Drawing.Size(102, 13);
-            this.x264QuantizerMatrixFileLabel.TabIndex = 2;
-            this.x264QuantizerMatrixFileLabel.Text = "Quantizer Matrix File";
-            this.x264QuantizerMatrixFileLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // x264CustomQuantizer
-            // 
-            this.x264CustomQuantizer.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.x264CustomQuantizer.Items.AddRange(new object[] {
-            "None",
-            "JVT",
-            "Custom"});
-            this.x264CustomQuantizer.Location = new System.Drawing.Point(122, 17);
-            this.x264CustomQuantizer.Name = "x264CustomQuantizer";
-            this.x264CustomQuantizer.Size = new System.Drawing.Size(121, 21);
-            this.x264CustomQuantizer.TabIndex = 1;
-            this.x264CustomQuantizer.SelectedIndexChanged += new System.EventHandler(this.updateEvent);
-            // 
-            // x264QuantizerFileLoadButton
-            // 
-            this.x264QuantizerFileLoadButton.Enabled = false;
-            this.x264QuantizerFileLoadButton.Location = new System.Drawing.Point(280, 39);
-            this.x264QuantizerFileLoadButton.Name = "x264QuantizerFileLoadButton";
-            this.x264QuantizerFileLoadButton.Size = new System.Drawing.Size(24, 24);
-            this.x264QuantizerFileLoadButton.TabIndex = 4;
-            this.x264QuantizerFileLoadButton.Text = "...";
-            this.x264QuantizerFileLoadButton.Click += new System.EventHandler(this.x264QuantizerFileLoadButton_Click);
             // 
             // x264MBGroupbox
             // 
@@ -1971,10 +1938,6 @@ namespace MeGUI.packages.video.x264
         private System.Windows.Forms.CheckBox x264PyramidBframes;
         private System.Windows.Forms.GroupBox quantizerMatrixGroupbox;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox x264QuantizerMatrixFile;
-        private System.Windows.Forms.Label x264QuantizerMatrixFileLabel;
-        private System.Windows.Forms.ComboBox x264CustomQuantizer;
-        private System.Windows.Forms.Button x264QuantizerFileLoadButton;
         private System.Windows.Forms.GroupBox x264MBGroupbox;
         private System.Windows.Forms.ComboBox macroblockOptions;
         private System.Windows.Forms.CheckBox adaptiveDCT;
@@ -2019,5 +1982,6 @@ namespace MeGUI.packages.video.x264
         private System.Windows.Forms.NumericUpDown x264BitrateQuantizer;
         private MeGUI.core.gui.HelpButton helpButton1;
         private System.Windows.Forms.TextBox customCommandlineOptions;
+        private MeGUI.core.gui.CQMComboBox cqmComboBox1;
     }
 }
