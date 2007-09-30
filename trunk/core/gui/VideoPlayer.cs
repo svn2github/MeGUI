@@ -27,6 +27,7 @@ using System.Threading;
 using System.IO;
 using System.Drawing.Imaging;
 using MeGUI.core.gui;
+using MeGUI.core.util;
 
 namespace MeGUI
 {
@@ -67,7 +68,6 @@ namespace MeGUI
 		private const int defaultSpacing = 8; // default spacing from GUI elements
 		private const int formHeightZonesDelta = 28; // additional form height needed to display the zones buttons
         private int videoWindowWidth, videoWindowHeight;
-        private float desiredAspectRatio;
         private PREVIEWTYPE viewerType;
         private static bool sizeLock; // recursion lock for resize event handler
 
@@ -90,11 +90,8 @@ namespace MeGUI
 		private System.Windows.Forms.ToolTip defaultToolTip;
 		private System.Windows.Forms.Button chapterButton;
         private Button originalSizeButton;
-        private Label PARLabel;
-        private Label parXLabel;
-        private TextBox parY;
-        private TextBox parX;
         private CheckBox showPAR;
+        private ARChooser arChooser;
 		private System.ComponentModel.IContainer components;
 		#endregion
 		#region constructor
@@ -156,7 +153,7 @@ namespace MeGUI
                 else
                 {
                     file = mainForm.MediaFileFactory.Open(path);
-                    if (file == null && !(file.HasVideo && file.CanReadVideo))
+                    if (file == null && !(file.Info.HasVideo && file.CanReadVideo))
                         throw new ArgumentException("The video stream cannot be opened");
                 }
                 reader = file.GetVideoReader();
@@ -190,15 +187,14 @@ namespace MeGUI
                 this.positionSlider.TickFrequency = this.positionSlider.Maximum / 20;
                 this.viewerType = type;
                 this.hasAR = hasAR;
-                this.videoWindowWidth = file.Width;
-                this.videoWindowHeight = file.Height;
-                desiredAspectRatio = (float)file.Width / (float)file.Height;
+                this.videoWindowWidth = (int)file.Info.Width;
+                this.videoWindowHeight = (int)file.Info.Height;
                 doInitialAdjustment();
                 adjustSize();
 				positionSlider_Scroll(null, null); // makes the image visible
 				this.Text = "Current position: " + this.positionSlider.Value + "/" + this.positionSlider.Maximum;
 				isRunning = false;
-				millisecondsPerFrame = (int)(1000 / file.FPS);
+                millisecondsPerFrame = (int)(1000 / file.Info.FPS);
 				return true;
 			}
 			return false;
@@ -220,7 +216,7 @@ namespace MeGUI
         /// <param name="e"></param>
         void originalSizeButton_Click(object sender, EventArgs e)
         {
-            resize(file.Width, showPAR.Checked);
+            resize((int)file.Info.Width, showPAR.Checked);
         }
 
         private void doInitialAdjustment()
@@ -263,10 +259,7 @@ namespace MeGUI
 		{
             if (!hasAR)
             {
-                buttonPanel.Controls.Remove(PARLabel);
-                buttonPanel.Controls.Remove(parX);
-                buttonPanel.Controls.Remove(parXLabel);
-                buttonPanel.Controls.Remove(parY);
+                buttonPanel.Controls.Remove(arChooser);
                 buttonPanel.Controls.Remove(showPAR);
             }
             SuspendLayout();
@@ -384,10 +377,6 @@ namespace MeGUI
             this.creditsStartButton = new System.Windows.Forms.Button();
             this.buttonPanel = new System.Windows.Forms.Panel();
             this.showPAR = new System.Windows.Forms.CheckBox();
-            this.PARLabel = new System.Windows.Forms.Label();
-            this.parXLabel = new System.Windows.Forms.Label();
-            this.parY = new System.Windows.Forms.TextBox();
-            this.parX = new System.Windows.Forms.TextBox();
             this.originalSizeButton = new System.Windows.Forms.Button();
             this.introEndButton = new System.Windows.Forms.Button();
             this.zoneStartButton = new System.Windows.Forms.Button();
@@ -395,12 +384,22 @@ namespace MeGUI
             this.zoneEndButton = new System.Windows.Forms.Button();
             this.chapterButton = new System.Windows.Forms.Button();
             this.defaultToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.arChooser = new MeGUI.core.gui.ARChooser();
             goToFrameButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.videoPreview)).BeginInit();
             this.previewGroupbox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.positionSlider)).BeginInit();
             this.buttonPanel.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // goToFrameButton
+            // 
+            goToFrameButton.Location = new System.Drawing.Point(200, 8);
+            goToFrameButton.Name = "goToFrameButton";
+            goToFrameButton.Size = new System.Drawing.Size(82, 18);
+            goToFrameButton.TabIndex = 9;
+            goToFrameButton.Text = "Go to frame";
+            goToFrameButton.Click += new System.EventHandler(this.goToFrameButton_Click);
             // 
             // videoPreview
             // 
@@ -540,11 +539,8 @@ namespace MeGUI
             // buttonPanel
             // 
             this.buttonPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.buttonPanel.Controls.Add(this.arChooser);
             this.buttonPanel.Controls.Add(this.showPAR);
-            this.buttonPanel.Controls.Add(this.PARLabel);
-            this.buttonPanel.Controls.Add(this.parXLabel);
-            this.buttonPanel.Controls.Add(this.parY);
-            this.buttonPanel.Controls.Add(this.parX);
             this.buttonPanel.Controls.Add(this.originalSizeButton);
             this.buttonPanel.Controls.Add(this.introEndButton);
             this.buttonPanel.Controls.Add(this.previousFrameButton);
@@ -566,45 +562,13 @@ namespace MeGUI
             // showPAR
             // 
             this.showPAR.AutoSize = true;
-            this.showPAR.Location = new System.Drawing.Point(200, 56);
+            this.showPAR.Location = new System.Drawing.Point(236, 54);
             this.showPAR.Name = "showPAR";
             this.showPAR.Size = new System.Drawing.Size(76, 17);
             this.showPAR.TabIndex = 2;
             this.showPAR.Text = "Show DAR";
             this.showPAR.UseVisualStyleBackColor = true;
             this.showPAR.CheckedChanged += new System.EventHandler(this.showPAR_CheckedChanged);
-            // 
-            // PARLabel
-            // 
-            this.PARLabel.AutoSize = true;
-            this.PARLabel.Location = new System.Drawing.Point(29, 57);
-            this.PARLabel.Name = "PARLabel";
-            this.PARLabel.Size = new System.Drawing.Size(28, 13);
-            this.PARLabel.TabIndex = 17;
-            this.PARLabel.Text = "DAR";
-            // 
-            // parXLabel
-            // 
-            this.parXLabel.AutoSize = true;
-            this.parXLabel.Location = new System.Drawing.Point(125, 60);
-            this.parXLabel.Name = "parXLabel";
-            this.parXLabel.Size = new System.Drawing.Size(15, 13);
-            this.parXLabel.TabIndex = 16;
-            this.parXLabel.Text = "×";
-            // 
-            // parY
-            // 
-            this.parY.Location = new System.Drawing.Point(146, 54);
-            this.parY.Name = "parY";
-            this.parY.Size = new System.Drawing.Size(52, 21);
-            this.parY.TabIndex = 1;
-            // 
-            // parX
-            // 
-            this.parX.Location = new System.Drawing.Point(64, 54);
-            this.parX.Name = "parX";
-            this.parX.Size = new System.Drawing.Size(52, 21);
-            this.parX.TabIndex = 0;
             // 
             // originalSizeButton
             // 
@@ -666,14 +630,17 @@ namespace MeGUI
             this.defaultToolTip.SetToolTip(this.chapterButton, "Sets the end frame of a new zone");
             this.chapterButton.Click += new System.EventHandler(this.chapterButton_Click);
             // 
-            // goToFrameButton
+            // arChooser
             // 
-            goToFrameButton.Location = new System.Drawing.Point(200, 8);
-            goToFrameButton.Name = "goToFrameButton";
-            goToFrameButton.Size = new System.Drawing.Size(82, 18);
-            goToFrameButton.TabIndex = 9;
-            goToFrameButton.Text = "Go to frame";
-            goToFrameButton.Click += new System.EventHandler(this.goToFrameButton_Click);
+            this.arChooser.CustomItems = new object[0];
+            this.arChooser.HasLater = false;
+            this.arChooser.Location = new System.Drawing.Point(8, 48);
+            this.arChooser.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.arChooser.MinimumSize = new System.Drawing.Size(64, 29);
+            this.arChooser.Name = "arChooser";
+            this.arChooser.Size = new System.Drawing.Size(208, 29);
+            this.arChooser.TabIndex = 15;
+            this.arChooser.SelectionChanged += new MeGUI.StringChanged(this.arChooser_SelectionChanged);
             // 
             // VideoPlayer
             // 
@@ -1042,40 +1009,12 @@ namespace MeGUI
 		}
 		#endregion
 		#region properties
-        public int PARX
+        public Dar? DAR
         {
-            get
-            {
-                int parX = -1, parY = -1;
-                int.TryParse(this.parX.Text, out parX);
-                int.TryParse(this.parY.Text, out parY);
-                if (parX > 0 && parY > 0)
-                    return parX;
-                return -1;
-            }
-            set
-            {
-                if (value > 0)
-                    parX.Text = value.ToString();
-            }
+            get { return arChooser.Value; }
+            set { arChooser.Value = value; }
         }
-        public int PARY
-        {
-            get
-            {
-                int parX = -1, parY = -1;
-                int.TryParse(this.parX.Text, out parX);
-                int.TryParse(this.parY.Text, out parY);
-                if (parX > 0 && parY > 0)
-                    return parY;
-                return -1;
-            }
-            set
-            {
-                if (value > 0)
-                    parY.Text = value.ToString();
-            }
-        }
+
 		/// <summary>
 		/// returns the underlying video reader
 		/// </summary>
@@ -1145,7 +1084,7 @@ namespace MeGUI
 		/// </summary>
 		public double Framerate
 		{
-            get { return file.FPS;}
+            get { return file.Info.FPS; }
 		}
 		/// <summary>
 		/// gets / sets the frame currently visible
@@ -1166,20 +1105,13 @@ namespace MeGUI
 
         private void resize(int targetWidth, bool PAR)
         {
-            int parX = PARX;
-            int parY = PARY;
-            int width = file.Width;
-            int height = file.Height;
-            if (PAR && parX > 0 && parY > 0)
-            {
-                width = parX;
-                height = parY;
-            }
-            VideoUtil.reduce(ref width, ref height);
-            height = (int)Math.Round((double) height * ((double)targetWidth / (double)width));
+            Dar d = new Dar(file.Info.Width, file.Info.Height);
+            if (PAR) d = arChooser.Value ?? d;
+
+            int height = (int)Math.Round((decimal)targetWidth / d.ar);
 
             videoWindowWidth = targetWidth;
-            videoWindowHeight = height;
+            videoWindowHeight = (int)height;
             sizeLock = true;
             adjustSize();
             sizeLock = false;
@@ -1201,6 +1133,11 @@ namespace MeGUI
                 positionSlider.Value = (int)val;
                 positionSlider_Scroll(null, null);
             }
+        }
+
+        private void arChooser_SelectionChanged(object sender, string val)
+        {
+            resize(videoWindowWidth, showPAR.Checked);
         }
 	}
 }

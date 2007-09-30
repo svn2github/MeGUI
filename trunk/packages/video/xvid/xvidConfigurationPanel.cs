@@ -14,7 +14,7 @@ namespace MeGUI.packages.video.xvid
     {
         protected override string getCommandline()
         {
-            return CommandLineGenerator.generateVideoCommandline(this.Settings, this.input, this.output, -1, -1);
+            return CommandLineGenerator.generateVideoCommandline(this.Settings, this.input, this.output, null);
         }
 
         #region start / stop
@@ -22,7 +22,7 @@ namespace MeGUI.packages.video.xvid
             : base(mainForm, info)
         {
             InitializeComponent();
-            cqmComboBox1.StandardCQMs = new string[] { xvidSettings.H263Matrix, xvidSettings.MPEGMatrix };
+            cqmComboBox1.StandardItems = new string[] { xvidSettings.H263Matrix, xvidSettings.MPEGMatrix };
         }
         #endregion
         #region adjustments
@@ -284,7 +284,7 @@ namespace MeGUI.packages.video.xvid
 //                this.xvidChromaOptimizer.Checked = xs.ChromaOptimizer;
 //                this.xvidHQAC.Checked = xs.HQAC;
                 xvidFrameDropRatio.Value = (decimal)xs.FrameDropRatio;
-                cqmComboBox1.SelectCQM(xs.QuantizerMatrix);
+                cqmComboBox1.SelectedObject = xs.QuantizerMatrix;
                 xvidCustomCommandlineOptions.Text = xs.CustomEncoderOptions;
                 this.logfile.Text = xs.Logfile;
                 this.Zones = xs.Zones;

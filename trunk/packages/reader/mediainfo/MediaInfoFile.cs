@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using MediaInfoWrapper;
 using System.Globalization;
+using MeGUI.core.util;
 
 namespace MeGUI
 {
@@ -54,9 +55,6 @@ namespace MeGUI
         private static Dictionary<string, ContainerType> knownContainerDescriptions;
         private IMediaFile videoSourceFile = null;
         private IVideoReader videoReader = null;
-        private int width, height, darX = 0, darY = 0, frameCount;
-        private bool hasVideo;
-        private double fps;
         private VideoCodec vCodec;
         private AudioCodec[] aCodecs;
         private AudioType aType;
@@ -64,8 +62,13 @@ namespace MeGUI
         private ContainerType cType;
         private BitrateManagementMode[] aBitrateModes;
         private string file;
+        private MediaFileInfo info;
         #endregion
         #region properties
+        public MediaFileInfo Info
+        {
+            get { return info; }
+        }
         public AudioType AudioType
         {
             get { return aType; }
@@ -77,34 +80,6 @@ namespace MeGUI
         public ContainerType ContainerFileType
         {
             get { return cType; }
-        }
-        public bool HasVideo
-        {
-            get { return hasVideo; }
-        }
-        public int Width
-        {
-            get { return width; }
-        }
-        public int Height
-        {
-            get { return height; }
-        }
-        public int DARX
-        {
-            get { return darX; }
-        }
-        public int DARY
-        {
-            get { return darY; }
-        }
-        public int FrameCount
-        {
-            get { return frameCount; }
-        }
-        public double FPS
-        {
-            get { return fps; }
         }
         public VideoCodec VCodec
         {
@@ -125,19 +100,24 @@ namespace MeGUI
         {
             this.file = file;
             MediaInfo info = new MediaInfo(file);
-            hasVideo = (info.Video.Count > 0);
+            bool hasVideo = (info.Video.Count > 0);
             if (hasVideo)
             {
                 VideoTrack track = info.Video[0];
-                width = easyParseInt(track.Width);
-                height = easyParseInt(track.Height);
-                frameCount = easyParseInt(track.FrameCount);
-                fps = easyParseDouble(track.FrameRate);
-                vCodec = getVideoCodec(track.Codec);
+                checked
+                {
+                    ulong width = (ulong)easyParseInt(track.Width);
+                    ulong height = (ulong)easyParseInt(track.Height);
+                    ulong frameCount = (ulong)easyParseInt(track.FrameCount);
+                    double fps = easyParseDouble(track.FrameRate);
+                    vCodec = getVideoCodec(track.Codec);
 #warning should parse DAR properly, as commented below
-                darX = width;
-                darY = height; 
-//                darX = easyParseInt(track.AspectRatio.Substring()
+                    int darX = -1;
+                    int darY = -1;
+                    //                darX = easyParseInt(track.AspectRatio.Substring()
+                    Dar dar = new Dar(darX, darY, width, height);
+                    this.info = new MediaFileInfo(hasVideo, width, height, dar, frameCount, fps, aCodecs.Length > 0);
+                }
             }
             aCodecs = new AudioCodec[info.Audio.Count];
             aBitrateModes = new BitrateManagementMode[info.Audio.Count];
@@ -302,7 +282,7 @@ namespace MeGUI
 
         public IVideoReader GetVideoReader()
         {
-            if (!HasVideo || !CanReadVideo)
+            if (!Info.HasVideo || !CanReadVideo)
                 throw new Exception("Can't read the video stream");
             if (videoSourceFile == null || videoReader == null)
                 lock (this)
@@ -310,7 +290,7 @@ namespace MeGUI
                     if (videoSourceFile == null)
                     {
                         videoSourceFile = AvsFile.ParseScript(ScriptServer.GetInputLine(file, false,
-                        PossibleSources.directShow, false, false, false, FPS));
+                        PossibleSources.directShow, false, false, false, Info.FPS));
                         videoReader = null;
                     }
                     if (videoReader == null)

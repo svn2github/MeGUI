@@ -95,7 +95,7 @@ namespace MeGUI
                 throw new JobRunException(ex);
             }
             stup.NbFramesTotal = (ulong)reader.FrameCount;
-            stup.ClipLength = TimeSpan.FromSeconds((double)stup.NbFramesTotal / file.FPS);
+            stup.ClipLength = TimeSpan.FromSeconds((double)stup.NbFramesTotal / file.Info.FPS);
             stup.Status = "Playing through file...";
             position = 0;
             try

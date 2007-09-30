@@ -14,7 +14,7 @@ namespace MeGUI.packages.video.snow
     {
         protected override string getCommandline()
         {
-            return CommandLineGenerator.generateVideoCommandline(this.Settings, this.input, this.output, -1, -1);
+            return CommandLineGenerator.generateVideoCommandline(this.Settings, this.input, this.output, null);
         }
 
         #region start / stop

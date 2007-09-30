@@ -21,7 +21,7 @@ namespace MeGUI.packages.video.x264
 
         protected override string getCommandline()
         {
-            return CommandLineGenerator.generateVideoCommandline(this.Settings, this.input, this.output, -1, -1);
+            return CommandLineGenerator.generateVideoCommandline(this.Settings, this.input, this.output, null);
         }
         #region variables
         public static bool levelEnforced; // flag to prevent recursion in EnforceLevels. There's probably a better way to do this.
@@ -34,7 +34,7 @@ namespace MeGUI.packages.video.x264
             : base(mainForm, info)
         {
             InitializeComponent();
-            cqmComboBox1.StandardCQMs = new string[] { "Flat (none)", "JVT" };
+            cqmComboBox1.StandardItems = new string[] { "Flat (none)", "JVT" };
             this.AdvancedToolTips = mainForm.Settings.UseAdvancedTooltips;
             AVCLevels al = new AVCLevels();
             this.avcLevel.Items.AddRange(al.getLevels());
@@ -630,7 +630,7 @@ namespace MeGUI.packages.video.x264
                 customCommandlineOptions.Text = xs.CustomEncoderOptions;
                 this.logfile.Text = xs.Logfile;
                 this.Zones = xs.Zones;
-                cqmComboBox1.SelectCQM(xs.QuantizerMatrix);
+                cqmComboBox1.SelectedObject = xs.QuantizerMatrix;
                 x264LosslessMode.Checked = xs.Lossless;
                 psnr.Checked = xs.PSNRCalculation;
                 NoiseReduction.Text = xs.NoiseReduction.ToString(); ;

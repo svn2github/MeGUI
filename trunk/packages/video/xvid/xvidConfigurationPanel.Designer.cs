@@ -38,7 +38,7 @@ namespace MeGUI.packages.video.xvid
             this.fourCCLabel = new System.Windows.Forms.Label();
             this.fourCC = new System.Windows.Forms.ComboBox();
             this.xvidCodecToolsGroupBox = new System.Windows.Forms.GroupBox();
-            this.cqmComboBox1 = new MeGUI.core.gui.CQMComboBox();
+            this.cqmComboBox1 = new MeGUI.core.gui.FileSCBox();
             this.xvidUseVHQForBframes = new System.Windows.Forms.CheckBox();
             this.xvidUseVHQForBframesLabel = new System.Windows.Forms.Label();
             this.xvidClosedGop = new System.Windows.Forms.CheckBox();
@@ -321,17 +321,14 @@ namespace MeGUI.packages.video.xvid
             // 
             // cqmComboBox1
             // 
-            this.cqmComboBox1.CustomCQMs = new string[0];
+            this.cqmComboBox1.CustomItems = new string[0];
             this.cqmComboBox1.Filter = "";
             this.cqmComboBox1.Location = new System.Drawing.Point(10, 209);
             this.cqmComboBox1.MaximumSize = new System.Drawing.Size(1000, 29);
             this.cqmComboBox1.MinimumSize = new System.Drawing.Size(64, 29);
             this.cqmComboBox1.Name = "cqmComboBox1";
-            this.cqmComboBox1.SelectedIndex = -1;
-            this.cqmComboBox1.SelectedItem = null;
-            this.cqmComboBox1.SelectedText = "";
             this.cqmComboBox1.Size = new System.Drawing.Size(302, 29);
-            this.cqmComboBox1.StandardCQMs = new string[0];
+            this.cqmComboBox1.StandardItems = new string[0];
             this.cqmComboBox1.TabIndex = 16;
             this.cqmComboBox1.SelectionChanged += new MeGUI.StringChanged(this.cqmComboBox1_SelectionChanged);
             // 
@@ -1472,7 +1469,7 @@ namespace MeGUI.packages.video.xvid
         private System.Windows.Forms.TextBox xvidKeyframeInterval;
         private System.Windows.Forms.Label xvidKeyframeIntervalLabel;
         private System.Windows.Forms.NumericUpDown xvidBitrateQuantizer;
-        private MeGUI.core.gui.CQMComboBox cqmComboBox1;
+        private MeGUI.core.gui.FileSCBox cqmComboBox1;
         private System.Windows.Forms.GroupBox quantizerMatrixGroupbox;
         private System.Windows.Forms.TextBox xvidCustomCommandlineOptions;
         private System.Windows.Forms.Label xvidCustomCommandlineOptionsLabel;

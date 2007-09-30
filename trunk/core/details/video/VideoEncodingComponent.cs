@@ -185,13 +185,9 @@ namespace MeGUI
             bool videoLoaded = player.loadVideo(mainForm, fileName, PREVIEWTYPE.CREDITS, true);
             if (videoLoaded)
             {
-                if (info.DARX < 1 || info.DARY < 1)
-                {
-                    info.DARX = player.File.DARX;
-                    info.DARY = player.File.DARY;
-                }
-                player.PARX = info.DARX;
-                player.PARY = info.DARY;
+                info.DAR = info.DAR ?? player.File.Info.DAR;
+                player.DAR = info.DAR;
+
                 player.IntroCreditsFrameSet += new IntroCreditsFrameSetCallback(player_IntroCreditsFrameSet);
                 player.Closed += new EventHandler(player_Closed);
                 player.Show();
@@ -243,7 +239,7 @@ namespace MeGUI
             }
             VideoCodecSettings vSettings = this.CurrentVideoCodecSettings.clone();
             mainForm.JobUtil.AddVideoJobs(info.VideoInput, info.VideoOutput, this.CurrentVideoCodecSettings.clone(),
-                info.IntroEndFrame, info.CreditsStartFrame, info.DARX, info.DARY, addPrerenderJob.Checked, true);
+                info.IntroEndFrame, info.CreditsStartFrame, info.DAR, addPrerenderJob.Checked, true);
         }
         private void fileType_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -400,7 +396,7 @@ namespace MeGUI
             info.CreditsStartFrame = -1;
             info.IntroEndFrame = -1;
             info.VideoInput = fileName;
-            info.DARX = info.DARY = -1;
+            info.DAR = null;
             //reset the zones for all codecs, zones are supposed to be source bound
             foreach (ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> p in (videoCodec.Items))
             {
@@ -454,8 +450,7 @@ namespace MeGUI
         /// <param name="e"></param>
         private void player_Closed(object sender, EventArgs e)
         {
-            info.DARX = player.PARX;
-            info.DARY = player.PARY;
+            info.DAR = player.DAR;
             this.player = null;
         }
         /// <summary>

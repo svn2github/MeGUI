@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using MeGUI.core.util;
 
 namespace MeGUI
 {
@@ -86,22 +87,16 @@ namespace MeGUI
 			get {return splitSize;}
 			set {splitSize = value;}
 		}
-		/// <summary>
-		/// The SARX value to be used for muxing (-1 means it isn't used)
-		/// </summary>
-		public int PARX
-		{
-			get {return parX;}
-			set {parX = value;}
-		}
-		/// <summary>
-		/// The SARY value to be used for muxing (-1 means it isn't used)
-		/// </summary>
-		public int PARY
-		{
-			get {return parY;}
-			set {parY = value;}
-		}
+
+        private Dar? dar;
+
+        public Dar? DAR
+        {
+            get { return dar; }
+            set { dar = value; }
+        }
+
+		
         /// <summary>
         /// gets / sets the name of the video track
         /// </summary>

@@ -14,7 +14,7 @@ namespace MeGUI.packages.video.lmp4
     {
         protected override string getCommandline()
         {
-            return CommandLineGenerator.generateVideoCommandline(this.Settings, this.input, this.output, -1, -1);
+            return CommandLineGenerator.generateVideoCommandline(this.Settings, this.input, this.output, null);
         }
         #region start / stop
         public lavcConfigurationPanel(MainForm mainForm, VideoInfo info)

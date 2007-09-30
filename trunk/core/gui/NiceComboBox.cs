@@ -9,15 +9,29 @@ using System.Diagnostics;
 
 namespace MeGUI.core.gui
 {
-    
+    /// <summary>
+    /// A base class for a nicer ComboBox imitator. It works by displaying a context menu next
+    /// to a text-field. This class isn't expected to be useful on its own. Derived classes such
+    /// as StandardAndCustomComboBox provide more specific, and useful, functionality.
+    /// </summary>
     public partial class NiceComboBox : UserControl
     {
+        /// <summary>
+        /// A list of all the items.
+        /// </summary>
         public readonly List<NiceComboBoxItem> Items = new List<NiceComboBoxItem>();
 
-        private NiceComboBoxItem selectedItem;
-
+        /// <summary>
+        /// Raised when the selected item is changed, either by the user, or by a call to 
+        /// SelectedIndex.set or SelectedItem.set
+        /// </summary>
         public event StringChanged SelectionChanged;
 
+        /// <summary>
+        /// Index of the selected item, or -1 if the selected item isn't on the list
+        /// or if it is in a submenu.
+        /// </summary>
+        [Browsable(false)]
         public int SelectedIndex
         {
             get
@@ -35,6 +49,12 @@ namespace MeGUI.core.gui
             }
         }
 
+        /// <summary>
+        /// Gets / sets the selected item. The text is guaranteed to 
+        /// be displayed, but the item will not be added to the drop-down menu
+        /// if it isn't already there.
+        /// </summary>
+        [Browsable(false)]
         public NiceComboBoxItem SelectedItem
         {
             get
@@ -60,6 +80,10 @@ namespace MeGUI.core.gui
             }
         }
 
+        /// <summary>
+        /// Returns the currently displayed text
+        /// </summary>
+        [Browsable(false)]
         public string SelectedText
         {
             get { return textBox1.Text; }
@@ -78,6 +102,8 @@ namespace MeGUI.core.gui
             InitializeComponent();
         }
 
+        private NiceComboBoxItem selectedItem;
+
         private void dropDownButton_Click(object sender, EventArgs e)
         {
             ContextMenuStrip s = new ContextMenuStrip();
@@ -85,6 +111,11 @@ namespace MeGUI.core.gui
             s.Show(dropDownButton, 0, dropDownButton.Height);
         }
 
+        /// <summary>
+        /// Generates a list of menu items from their descriptors
+        /// </summary>
+        /// <param name="items"></param>
+        /// <returns></returns>
         private ToolStripItem[] createMenu(List<NiceComboBoxItem> items)
         {
             ToolStripItem[] result = new ToolStripItem[items.Count];
@@ -132,7 +163,11 @@ namespace MeGUI.core.gui
     {
         public string Name;
         public object Tag;
-        public bool Ticked = false;
+        private bool ticked;
+        public bool Ticked {
+            get { return ticked; }
+            set { ticked = value; }
+        }
 
         public NiceComboBoxItem(string name, object tag)
         {
@@ -141,6 +176,11 @@ namespace MeGUI.core.gui
         }
     }
 
+    /// <summary>
+    /// This represents a clickable item, which can either be selected or
+    /// can have an event handler for when it is clicked. It is not a separator,
+    /// and it may not have a submenu
+    /// </summary>
     public class NiceComboBoxNormalItem : NiceComboBoxItem
     {
         public bool Selectable = true;
@@ -170,6 +210,9 @@ namespace MeGUI.core.gui
             : this(stringableObject.ToString(), stringableObject, handler) { }
     }
 
+    /// <summary>
+    /// An item which may hold a submenu. Can't be clicked.
+    /// </summary>
     public class NiceComboBoxSubMenuItem : NiceComboBoxItem
     {
         public List<NiceComboBoxItem> SubItems;
@@ -184,6 +227,9 @@ namespace MeGUI.core.gui
             : this(stringableObject.ToString(), stringableObject, subItems) { }
     }
 
+    /// <summary>
+    /// A separator. Can't be clicked.
+    /// </summary>
     public class NiceComboBoxSeparator : NiceComboBoxItem
     {
         public NiceComboBoxSeparator() : base(null, null) { }

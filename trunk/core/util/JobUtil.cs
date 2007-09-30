@@ -194,9 +194,9 @@ namespace MeGUI
             return job;
         }
         
-        public VideoJob generateVideoJob(string input, string output, VideoCodecSettings settings, int parX, int parY)
+        public VideoJob generateVideoJob(string input, string output, VideoCodecSettings settings, Dar? dar)
         {
-            return generateVideoJob(input, output, settings, false, parX, parY);
+            return generateVideoJob(input, output, settings, false, dar);
         }
         
         /// <summary>
@@ -208,13 +208,12 @@ namespace MeGUI
 		/// <param name="output">the video output</param>
 		/// <param name="settings">the codec settings for this job</param>
 		/// <returns>the generated job or null if there was an error with the video source</returns>
-		public VideoJob generateVideoJob(string input, string output, VideoCodecSettings settings, bool skipVideoCheck, int parX, int parY)
+		public VideoJob generateVideoJob(string input, string output, VideoCodecSettings settings, bool skipVideoCheck, Dar? dar)
 		{
 			VideoJob job = new VideoJob();
 			job.Input = input;
 			job.Output = output;
-            job.DARX = parX;
-            job.DARY = parY;
+            job.DAR = dar;
 			if (mainForm.Settings.AutoSetNbThreads)
 				adjustNbThreads(settings);
 			if (Path.GetDirectoryName(settings.Logfile).Equals("")) // no path set
@@ -244,7 +243,7 @@ namespace MeGUI
 			}
 			job.NumberOfFrames = nbOfFrames;
 			job.Framerate = framerate;
-            job.Commandline = CommandLineGenerator.generateVideoCommandline(job.Settings, input, output, parX, parY);
+            job.Commandline = CommandLineGenerator.generateVideoCommandline(job.Settings, input, output, dar);
 			return job;
 		}
         /// <summary>
@@ -318,8 +317,7 @@ namespace MeGUI
                     if (o.outputType is VideoType)
                     {
                         mjob.Settings.VideoInput = video.Output;
-                        mjob.Settings.PARX = video.ParX;
-                        mjob.Settings.PARY = video.ParX;
+                        mjob.Settings.DAR = video.DAR;
                     }
                     else if (o.outputType is AudioType)
                     {
@@ -361,8 +359,7 @@ namespace MeGUI
                 {
                     mjob.Settings.MuxedOutput = output;
                     mjob.Settings.SplitSize = splitSize;
-                    mjob.Settings.PARX = video.ParX;
-                    mjob.Settings.PARY = video.ParY;
+                    mjob.Settings.DAR = video.DAR;
                     mjob.ContainerType = container;
                     mjob.FilesToDelete.AddRange(muxedFilesToDelete);
                 }
@@ -446,12 +443,12 @@ namespace MeGUI
             return false;
         }
         public bool AddVideoJobs(string movieInput, string movieOutput, VideoCodecSettings settings,
-            int introEndFrame, int creditsStartFrame, int parX, int parY, bool prerender, bool checkVideo)
+            int introEndFrame, int creditsStartFrame, Dar? dar, bool prerender, bool checkVideo)
         {
             bool cont = getFinalZoneConfiguration(settings, introEndFrame, creditsStartFrame);
             if (!cont) // abort
                 return false;
-            VideoJob[] jobs = prepareVideoJob(movieInput, movieOutput, settings, parX, parY, prerender, checkVideo);
+            VideoJob[] jobs = prepareVideoJob(movieInput, movieOutput, settings, dar, prerender, checkVideo);
             if (jobs == null)
                 return false;
             if (jobs.Length > 0)
@@ -483,9 +480,9 @@ namespace MeGUI
             }
             return false;
         }
-        public VideoJob[] prepareVideoJob(string movieInput, string movieOutput, VideoCodecSettings settings, int parX, int parY)
+        public VideoJob[] prepareVideoJob(string movieInput, string movieOutput, VideoCodecSettings settings, Dar? dar)
         {
-            return prepareVideoJob(movieInput, movieOutput, settings, parX, parY, false, false);
+            return prepareVideoJob(movieInput, movieOutput, settings, dar, false, false);
         }
 		/// <summary>
 		/// at first, the job from the currently configured settings is generated. In addition, we find out if this job is 
@@ -494,7 +491,7 @@ namespace MeGUI
 		/// then, all the generated jobs are returned
 		/// </summary>
 		/// <returns>an Array of VideoJobs in the order they are to be encoded</returns>
-		public VideoJob[] prepareVideoJob(string movieInput, string movieOutput, VideoCodecSettings settings, int parX, int parY, bool prerender, bool checkVideo)
+		public VideoJob[] prepareVideoJob(string movieInput, string movieOutput, VideoCodecSettings settings, Dar? dar, bool prerender, bool checkVideo)
 		{
 			bool twoPasses = false, turbo = settings.Turbo, threePasses = false;
 			if (settings.EncodingMode == 4) // automated twopass
@@ -534,7 +531,7 @@ namespace MeGUI
                 {
                     return null;
                 }
-                prerenderJob = this.generateVideoJob(movieInput, hfyuFile, new hfyuSettings(), parX, parY);
+                prerenderJob = this.generateVideoJob(movieInput, hfyuFile, new hfyuSettings(), dar);
                 if (prerenderJob == null)
                     return null;
             }
@@ -552,7 +549,7 @@ namespace MeGUI
                     }
                 }
             }
-            VideoJob job = this.generateVideoJob(inputAVS, movieOutput, settings, prerender, parX, parY);
+            VideoJob job = this.generateVideoJob(inputAVS, movieOutput, settings, prerender, dar);
             if (prerender)
             {
                 job.Framerate = prerenderJob.Framerate;
@@ -570,7 +567,7 @@ namespace MeGUI
 					firstpass.Settings.EncodingMode = 2;
 					firstpass.Settings.Turbo = turbo;
                     firstpass.Commandline = CommandLineGenerator.generateVideoCommandline(firstpass.Settings, 
-						firstpass.Input, firstpass.Output, parX, parY);
+						firstpass.Input, firstpass.Output, dar);
 					if (threePasses)
 					{
 						firstpass.Settings.EncodingMode = 5; // change to 3 pass 3rd pass just for show
@@ -584,7 +581,7 @@ namespace MeGUI
                             job.FilesToDelete.Add(middlepass.Output);
                         }
                         middlepass.Commandline = CommandLineGenerator.generateVideoCommandline(middlepass.Settings, 
-							middlepass.Input, middlepass.Output, parX, parY);
+							middlepass.Input, middlepass.Output, dar);
 					}
 				}
                 if (prerender)
@@ -637,7 +634,7 @@ namespace MeGUI
 		public void updateVideoBitrate(VideoJob job, int bitrate)
 		{
 			job.Settings.BitrateQuantizer = bitrate;
-            job.Commandline = CommandLineGenerator.generateVideoCommandline(job.Settings, job.Input, job.Output, job.DARX, job.DARY);
+            job.Commandline = CommandLineGenerator.generateVideoCommandline(job.Settings, job.Input, job.Output, job.DAR);
 		}
 		#endregion
 		#region input properties
@@ -650,26 +647,26 @@ namespace MeGUI
 		/// <returns>true if the input file could be opened, false if not</returns>
 		public bool getInputProperties(out ulong nbOfFrames, out double framerate, string video)
 		{
-            int d1, d2, d3, d4;
-            return getAllInputProperties(out nbOfFrames, out framerate, out d1, out d2, out d3, out d4, video);
+            int d1, d2;
+            Dar d;
+            return getAllInputProperties(out nbOfFrames, out framerate, out d1, out d2, out d, video);
 		}
 
         public static void GetAllInputProperties(out ulong nbOfFrames, out double framerate, out int hRes, 
-			out int vRes, out int darX, out int darY, string video)
+			out int vRes, out Dar dar, string video)
 		{
             nbOfFrames = 0;
-            hRes = vRes = darX = darY = 0;
+            hRes = vRes = 0;
             framerate = 0.0;
             try
 			{
                 using (AvsFile avi = AvsFile.OpenScriptFile(video))
                 {
-                    checked{ nbOfFrames = (ulong) avi.FrameCount;}
-                    framerate = avi.FPS;
-                    hRes = avi.Width;
-                    vRes = avi.Height;
-                    darX = avi.DARX;
-                    darY = avi.DARY;
+                    checked { nbOfFrames = (ulong)avi.Info.FrameCount; }
+                    framerate = avi.Info.FPS;
+                    hRes = (int)avi.Info.Width;
+                    vRes = (int)avi.Info.Height;
+                    dar = avi.Info.DAR;
                 }
 			}
 			catch (Exception e)
@@ -691,11 +688,11 @@ namespace MeGUI
 		/// <param name="video">the video whose properties are to be read</param>
 		/// <returns>whether the source could be opened or not</returns>
 		public bool getAllInputProperties(out ulong nbOfFrames, out double framerate, out int hRes, 
-			out int vRes, out int darX, out int darY, string video)
+			out int vRes, out Dar dar, string video)
 		{
             try
             {
-                GetAllInputProperties(out nbOfFrames, out framerate, out hRes, out vRes, out darX, out darY, video);
+                GetAllInputProperties(out nbOfFrames, out framerate, out hRes, out vRes, out dar, video);
                 return true;
             }
             catch (Exception e)
@@ -703,8 +700,9 @@ namespace MeGUI
                 MessageBox.Show(e.Message,
                         "Cannot open video input", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 nbOfFrames = 0;
-                hRes = vRes = darX = darY = 0;
+                hRes = vRes = 0;
                 framerate = 0;
+                dar = Dar.ITU16x9;
                 return false;
             }
 		}
@@ -722,11 +720,12 @@ namespace MeGUI
 		/// the source could not be read</returns>
 		public bool validateAVCLevel(string source, x264Settings settings, out int compliantLevel)
 		{
-			int hRes, vRes, d1, d2;
+			int hRes, vRes;
+            Dar d;
             ulong nbFrames;
 			double framerate;
 			compliantLevel = -1;
-			if (this.getAllInputProperties(out nbFrames, out framerate, out hRes, out vRes, out d1, out d2, source))
+			if (this.getAllInputProperties(out nbFrames, out framerate, out hRes, out vRes, out d, source))
 			{
 				return this.al.validateAVCLevel(hRes, vRes, framerate, settings, out compliantLevel);
 			}

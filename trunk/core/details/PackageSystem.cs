@@ -5,66 +5,9 @@ using MeGUI.core.plugins.interfaces;
 
 namespace MeGUI.core.details
 {
-    public class PackageSystem : GenericRegisterer<IPackage>
+    public class PackageSystem 
     {
-        public override bool Register(IPackage registerable)
-        {
-            lock (this)
-            {
-                try
-                {
-                    foreach (string id in registerable.RequiredPackageIDs)
-                    {
-                        IPackage temp = this[id];
-                    }
-                }
-                catch (KeyNotFoundException)
-                {
-                    return false;
-#warning should pass the reason why it failed on
-                }
-                if (!base.Register(registerable))
-                    return false;
 
-                foreach (ITool tool in registerable.Tools)
-                {
-                    tools.Register(tool); 
-                }
-                foreach (IOption Options in registerable.Options)
-                {
-                    options.Register(Options);
-                }
-                foreach (IMediaFileFactory factory in registerable.MediaFileTypes)
-                {
-                    mediaFileTypes.Register(factory);
-                }
-                foreach (ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> provider in registerable.VideoSettingsProviders)
-                {
-                    videoSettingsProviders.Register(provider);
-                }
-                foreach (ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType> provider in registerable.AudioSettingsProviders)
-                {
-                    audioSettingsProviders.Register(provider);
-                }
-                foreach (IMuxing muxing in registerable.MuxerProviders)
-                {
-                    muxers.Register(muxing);
-                }
-                foreach (JobPreProcessor pp in registerable.JobPreProcessors)
-                {
-                    jobPreProcessors.Register(pp);
-                }
-                foreach (JobPostProcessor pp in registerable.JobPostProcessors)
-                {
-                    jobPostProcessors.Register(pp);
-                }
-                foreach (JobProcessorFactory pp in registerable.JobProcessors)
-                {
-                    jobProcessors.Register(pp);
-                }
-                return true;
-            }
-        }
         GenericRegisterer<ITool> tools = new GenericRegisterer<ITool>();
         GenericRegisterer<IOption> options = new GenericRegisterer<IOption>();
         GenericRegisterer<IMediaFileFactory> mediaFileTypes = new GenericRegisterer<IMediaFileFactory>();

@@ -22,10 +22,10 @@ using System.IO;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Xml.Serialization;
+using MeGUI.core.util;
 
 namespace MeGUI
 {
-	public enum AspectRatio: int {ITU16x9 = 0, ITU4x3, A1x1, CUSTOM};
 	public enum FieldOperation: int {NONE = 0, FF, RAW};
 
     public class d2vFileFactory : IMediaFileFactory
@@ -86,8 +86,7 @@ namespace MeGUI
         private AvsFile reader;
 		private string fileName;
 		private int fieldOperation;
-		private AspectRatio aspectRatio;
-        private int darX = -1, darY = -1;
+        private MediaFileInfo info;
 		private double filmPercentage;
 		/// <summary>
 		/// initializes the d2v reader
@@ -108,7 +107,8 @@ namespace MeGUI
 		/// </summary>
 		private void readFileProperties()
 		{
-            using(StreamReader sr = new StreamReader(fileName))
+            Dar dar = Dar.ITU16x9;
+            using (StreamReader sr = new StreamReader(fileName))
             {
 				string line = sr.ReadLine();
 				while ((line = sr.ReadLine()) != null)
@@ -116,18 +116,13 @@ namespace MeGUI
 					if (line.IndexOf("Aspect_Ratio") != -1) // this is the aspect ratio line
 					{
 						string ar = line.Substring(13);
+                        
                         if (ar.Equals("16:9"))
-                            this.aspectRatio = AspectRatio.ITU16x9;
+                            dar = Dar.ITU16x9;
                         else if (ar.Equals("4:3"))
-                            this.aspectRatio = AspectRatio.ITU4x3;
+                            dar = Dar.ITU4x3;
                         else if (ar.Equals("1:1"))
-                            this.aspectRatio = AspectRatio.A1x1;
-                        else
-                            this.aspectRatio = AspectRatio.CUSTOM;
-
-                        double AR = VideoUtil.getAspectRatio(aspectRatio);
-                        if (AR > 0)
-                            VideoUtil.approximate(AR, out darX, out darY);
+                            dar = Dar.A1x1;
                     }
 					if (line.IndexOf("Field_Operation") != -1)
 					{
@@ -142,58 +137,20 @@ namespace MeGUI
 					}
 				}
 			}
+            info = reader.Info.Clone();
+            info.DAR = dar;
 		}
 		#region properties
-        public int DARX
+        public MediaFileInfo Info
         {
-            get { return darX; }
+            get { return info; }
         }
-
-        public int DARY
-        {
-            get { return darY; }
-        }
-        /// <summary>
-		/// gets the vertical resolution of the video
-		/// </summary>
-		public int Width
-		{
-			get {return reader.Width;}
-		}
-		/// <summary>
-		///  gets the horizontal resolution of the video
-		/// </summary>
-		public int Height
-		{
-            get { return reader.Height; }
-		}
-		/// <summary>
-		/// gets the number of frames of the video
-		/// </summary>
-		public int FrameCount
-		{
-            get { return reader.FrameCount; }
-		}
-		/// <summary>
-		/// gets the framerate of the video
-		/// </summary>
-		public double FPS
-		{
-            get { return reader.FPS; }
-		}
 		/// <summary>
 		/// returns the percentage of film of this source
 		/// </summary>
 		public double FilmPercentage
 		{
 			get {return this.filmPercentage;}
-		}
-		/// <summary>
-		/// returns the aspect ratio of this source
-		/// </summary>
-		public int AR
-		{
-			get {return (int)this.aspectRatio;}
 		}
 		/// <summary>
 		/// returns the field operation performed on this source
@@ -205,16 +162,6 @@ namespace MeGUI
 		#endregion
 
         #region IMediaFile Members
-
-        public bool HasVideo
-        {
-            get { return reader.HasVideo; }
-        }
-
-        public bool HasAudio
-        {
-            get { return false; }
-        }
 
         public bool CanReadVideo
         {

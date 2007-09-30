@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using MeGUI.core.plugins.interfaces;
+using MeGUI.core.util;
 
 namespace MeGUI
 {
@@ -84,12 +85,11 @@ namespace MeGUI
         private void openVideo(string fileName)
         {
             input.Text = fileName;
-            AspectRatio ar;
+            Dar? ar;
             int maxHorizontalResolution;
             List<AudioTrackInfo> audioTracks;
             List<SubtitleInfo> subtitles;
-            int pgc;
-            keepAllTracks.Checked = vUtil.openVideoSource(fileName, out audioTracks, out subtitles, out ar, out maxHorizontalResolution, out pgc);
+            keepAllTracks.Checked = vUtil.openVideoSource(fileName, out audioTracks, out subtitles, out ar, out maxHorizontalResolution);
             subtitleTracks.Items.Clear();
             subtitleTracks.Items.AddRange(subtitles.ToArray());
             demuxSelectedTracks.Checked = !keepAllTracks.Checked;

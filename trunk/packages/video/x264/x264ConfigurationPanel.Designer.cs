@@ -112,7 +112,7 @@ namespace MeGUI.packages.video.x264
             this.x264AdaptiveBframes = new System.Windows.Forms.CheckBox();
             this.x264PyramidBframes = new System.Windows.Forms.CheckBox();
             this.quantizerMatrixGroupbox = new System.Windows.Forms.GroupBox();
-            this.cqmComboBox1 = new MeGUI.core.gui.CQMComboBox();
+            this.cqmComboBox1 = new MeGUI.core.gui.FileSCBox();
             this.label1 = new System.Windows.Forms.Label();
             this.x264MBGroupbox = new System.Windows.Forms.GroupBox();
             this.macroblockOptions = new System.Windows.Forms.ComboBox();
@@ -1355,16 +1355,14 @@ namespace MeGUI.packages.video.x264
             // 
             // cqmComboBox1
             // 
-            this.cqmComboBox1.CustomCQMs = new string[0];
+            this.cqmComboBox1.CustomItems = new string[0];
             this.cqmComboBox1.Filter = "Quantizer matrix files (*.cfg)|*.cfg|All Files (*.*)|*.*";
             this.cqmComboBox1.Location = new System.Drawing.Point(15, 34);
             this.cqmComboBox1.MaximumSize = new System.Drawing.Size(1000, 29);
             this.cqmComboBox1.MinimumSize = new System.Drawing.Size(64, 29);
             this.cqmComboBox1.Name = "cqmComboBox1";
-            this.cqmComboBox1.SelectedItem = null;
-            this.cqmComboBox1.SelectedText = "";
             this.cqmComboBox1.Size = new System.Drawing.Size(289, 29);
-            this.cqmComboBox1.StandardCQMs = new string[0];
+            this.cqmComboBox1.StandardItems = new string[0];
             this.cqmComboBox1.TabIndex = 5;
             this.cqmComboBox1.SelectionChanged += new MeGUI.StringChanged(this.cqmComboBox1_SelectionChanged);
             // 
@@ -1982,6 +1980,6 @@ namespace MeGUI.packages.video.x264
         private System.Windows.Forms.NumericUpDown x264BitrateQuantizer;
         private MeGUI.core.gui.HelpButton helpButton1;
         private System.Windows.Forms.TextBox customCommandlineOptions;
-        private MeGUI.core.gui.CQMComboBox cqmComboBox1;
+        private MeGUI.core.gui.FileSCBox cqmComboBox1;
     }
 }

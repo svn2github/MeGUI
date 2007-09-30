@@ -14,6 +14,7 @@ using MeGUI.core.details.video;
 using MeGUI.core.plugins.interfaces;
 using MeGUI.core.gui;
 using MeGUI.packages.tools.oneclick;
+using MeGUI.core.util;
 
 namespace MeGUI
 {
@@ -21,7 +22,7 @@ namespace MeGUI
 //    public class OneClickPostProcessor 
     public partial class OneClickWindow : Form
     {
-        CQMComboBox[] audioTrack;
+        FileSCBox[] audioTrack;
         AudioConfigControl[] audio;
 
         #region profiles
@@ -42,7 +43,7 @@ namespace MeGUI
             profileHandler.ProfileChanged += new SelectedProfileChangedEvent(OneClickProfileChanged);
             profileHandler.ConfigureCompleted += new EventHandler(profileHandler_ConfigureCompleted);
             profileHandler.RefreshProfiles();
-            audioTrack = new CQMComboBox[] { audioTrack1, audioTrack2 };
+            audioTrack = new FileSCBox[] { audioTrack1, audioTrack2 };
             audio = new AudioConfigControl[] { audio1, audio2 };
         }
 
@@ -136,12 +137,12 @@ namespace MeGUI
 
             InitializeComponent();
 
-            // Fill the filesize combo box
+/*            // Fill the filesize combo box
             this.filesizeComboBox.Items.AddRange(calc.getPredefinedOutputSizes());
             this.filesizeComboBox.Items.Add("Custom");
             this.filesizeComboBox.Items.Add("Don't care");
-            this.filesizeComboBox.SelectedIndex = 2;
-            this.arComboBox.SelectedIndex = 0;
+            this.filesizeComboBox.SelectedIndex = 2;*/
+//            this.arComboBox.SelectedIndex = 0;
 
             initVideoHandler();
             initAudioHandler();
@@ -172,36 +173,33 @@ namespace MeGUI
         private void openInput(string fileName)
         {
             input.Filename = fileName;
-            AspectRatio ar;
+            Dar? ar;
             int maxHorizontalResolution;
             List<AudioTrackInfo> audioTracks;
             List<SubtitleInfo> subtitles;
-            int pgc;
-            vUtil.openVideoSource(fileName, out audioTracks, out subtitles, out ar, out maxHorizontalResolution, out pgc);
+            vUtil.openVideoSource(fileName, out audioTracks, out subtitles, out ar, out maxHorizontalResolution);
             
             List<object> trackNames = new List<object>();
             foreach (object o in audioTracks)
                 trackNames.Add(o);
             trackNames.Insert(0, "None");
 
-            audioTrack1.StandardCQMs = trackNames.ToArray();
-            audioTrack2.StandardCQMs = trackNames.ToArray();
+            audioTrack1.StandardItems = trackNames.ToArray();
+            audioTrack2.StandardItems = trackNames.ToArray();
 
-            audioTrack1.SelectedIndex = audioTrack2.SelectedIndex = 0;
-            
             foreach (AudioTrackInfo ati in audioTracks)
             {
                 if (ati.Language.ToLower().Equals(mainForm.Settings.DefaultLanguage1.ToLower()) &&
                     audioTrack1.SelectedIndex == 0)
                 {
-                    audioTrack1.SelectCQM(ati.ToString());
+                    audioTrack1.SelectedObject = ati;
                     continue;
                 }
 
                 if (ati.Language.ToLower().Equals(mainForm.Settings.DefaultLanguage2.ToLower()) &&
                     audioTrack2.SelectedIndex == 0)
                 {
-                    audioTrack2.SelectCQM(ati.ToString());
+                    audioTrack2.SelectedObject = ati;
                     continue;
                 }
             }
@@ -216,7 +214,7 @@ namespace MeGUI
             workingDirectory.Filename = Path.GetDirectoryName(fileName);
             workingName.Text = extractWorkingName(fileName);
             this.updateFilename();
-            this.setAspectRatio(ar);
+            this.ar.Value = ar;
         }
 
         private string extractWorkingName(string fileName)
@@ -254,7 +252,7 @@ namespace MeGUI
             return "al";*/
         }
 
-        private void filesizeComboBox_SelectedIndexChanged(object sender, EventArgs e)
+/*        private void filesizeComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             this.filesizeKB.ReadOnly = true;
             filesizeKB.Text = calc.getOutputSizeKBs(filesizeComboBox.SelectedIndex).ToString();
@@ -262,14 +260,14 @@ namespace MeGUI
                 this.filesizeKB.ReadOnly = false;
             if (filesizeComboBox.SelectedIndex == 11) // Don't care
                 this.filesizeKB.Text = "-1";
-        }
+        }*/
 
         private void workingName_TextChanged(object sender, EventArgs e)
         {
             updateFilename();
         }
 
-        private void arComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        /*private void arComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             double dar = 0;
             switch (arComboBox.SelectedIndex)
@@ -289,7 +287,7 @@ namespace MeGUI
                 AR.ReadOnly = false;
             else
                 AR.ReadOnly = true;
-        }
+        }*/
 
         private void updatePossibleContainers()
         {
@@ -313,9 +311,9 @@ namespace MeGUI
                 {
                     string typeString;
 
-                    if (audioTrack[i].CQMName.IsStandard)
+                    if (audioTrack[i].SelectedSCItem.IsStandard)
                     {
-                        AudioTrackInfo ati = (AudioTrackInfo)audioTrack[i].CQMName.Tag;
+                        AudioTrackInfo ati = (AudioTrackInfo)audioTrack[i].SelectedObject;
                         typeString = "file." + ati.Type;
                     }
                     else
@@ -420,11 +418,12 @@ namespace MeGUI
                 acceptableContainerTypes = temp.ToArray();
 
                 ignoreRestrictions = false;
+/*                optionalTargetSizeBox1.Fil
                 try { filesizeComboBox.SelectedItem = settings.StorageMediumName; }
                 catch (Exception)
                 {
                     MessageBox.Show("The filesize '" + settings.StorageMediumName + "' could not be properly set. Presumably that preset no longer exists.", "Some options misconfigured", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
+                }*/
 
                 audio1.DontEncode = settings.DontEncodeAudio;
                 audio2.DontEncode = settings.DontEncodeAudio;
@@ -436,13 +435,17 @@ namespace MeGUI
 
                 // ints
                 splitSize.Text = settings.SplitSize.ToString();
-                filesizeKB.Text = settings.Filesize.ToString();
+                if (settings.Filesize < 0)
+                    optionalTargetSizeBox1.Value = null;
+                else
+                    optionalTargetSizeBox1.Value = new FileSize(Unit.KB, settings.Filesize);
+//                filesizeKB.Text = settings.Filesize.ToString();
                 horizontalResolution.Value = settings.OutputResolution;
 
 
                 // Clean up after those settings were set
                 updatePossibleContainers();
-                filesizeComboBox_SelectedIndexChanged(null, null);
+//                filesizeComboBox_SelectedIndexChanged(null, null);
                 containerFormat_SelectedIndexChanged_1(null, null);
                 splitOutput_CheckedChanged(null, null);
             }
@@ -461,7 +464,10 @@ namespace MeGUI
                 long desiredSize;
                 try
                 {
-                    desiredSize = Int64.Parse(filesizeKB.Text) * 1024;
+                    //desiredSize = Int64.Parse(.Text) * 1024;
+                    desiredSize = (long)(optionalTargetSizeBox1.Value ?? FileSize.Empty).Bytes;
+                    if (desiredSize == 0)
+                        desiredSize = -1;
                 }
                 catch (Exception f)
                 {
@@ -484,7 +490,7 @@ namespace MeGUI
                         continue;
 
                     PartialAudioStream s = new PartialAudioStream();
-                    s.useExternalInput = !audioTrack[i].CQMName.IsStandard;
+                    s.useExternalInput = !audioTrack[i].SelectedSCItem.IsStandard;
                     if (!s.useExternalInput)
                     {
                         s.trackNumber = audioTrack[i].SelectedIndex - 1; // since "None" is first
@@ -498,25 +504,8 @@ namespace MeGUI
 
                 string d2vName = workingDirectory.Filename + @"\" + workingName.Text + ".d2v";
                 DGIndexPostprocessingProperties dpp = new DGIndexPostprocessingProperties();
-                switch (arComboBox.SelectedIndex)
-                {
-                    case 0:
-                        dpp.AR = AspectRatio.ITU16x9;
-                        break;
-                    case 1:
-                        dpp.AR = AspectRatio.ITU4x3;
-                        break;
-                    case 2:
-                        dpp.AR = AspectRatio.A1x1;
-                        break;
-                    case 3:
-                        dpp.AR = AspectRatio.CUSTOM;
-                        dpp.CustomAR = Double.Parse(AR.Text);
-                        break;
-                    case 4:
-                        dpp.AutoDeriveAR = true;
-                        break;
-                }
+                dpp.DAR = ar.Value;
+
                 dpp.AudioStreams = audioStreams.ToArray();
                 dpp.AutoDeinterlace = autoDeint.Checked;
                 dpp.AviSynthScript = "";
@@ -562,30 +551,6 @@ namespace MeGUI
         }
 
 
-
-        private void setAspectRatio(AspectRatio ratio)
-        {
-            switch (ratio)
-            {
-                case AspectRatio.ITU16x9:
-                    arComboBox.SelectedIndex = 0;
-                    arComboBox_SelectedIndexChanged(null, null);
-                    break;
-                case AspectRatio.ITU4x3:
-                    arComboBox.SelectedIndex = 1;
-                    arComboBox_SelectedIndexChanged(null, null);
-                    break;
-                case AspectRatio.A1x1:
-                    arComboBox.SelectedIndex = 2;
-                    arComboBox_SelectedIndexChanged(null, null);
-                    break;
-                default:
-                    arComboBox.SelectedIndex = 4;
-                    arComboBox_SelectedIndexChanged(null, null);
-                    break;
-
-            }
-        }
         #endregion
         #region Properties
         private VideoCodecSettings VideoSettings
@@ -610,7 +575,7 @@ namespace MeGUI
         {
             for (int i = 0; i < audioTrack.Length; ++i)
             {
-                if (audioTrack[i].CQMName.IsStandard)
+                if (audioTrack[i].SelectedSCItem.IsStandard)
                     continue;
 
                 string r = MainForm.verifyInputFile(audioTrack[i].SelectedText);
@@ -705,19 +670,24 @@ namespace MeGUI
 
         private void audioTrack1_SelectionChanged(object sender, string val)
         {
-            if (!audioTrack1.CQMName.IsStandard)
-                audio1.openAudioFile(audioTrack1.CQMName.Name);
+            if (!audioTrack1.SelectedSCItem.IsStandard)
+                audio1.openAudioFile((string)audioTrack1.SelectedObject);
         }
         
         private void audioTrack2_SelectionChanged(object sender, string val)
         {
-            if (!audioTrack2.CQMName.IsStandard)
-                audio2.openAudioFile(audioTrack2.CQMName.Name);
+            if (!audioTrack2.SelectedSCItem.IsStandard)
+                audio2.openAudioFile((string)audioTrack2.SelectedObject);
         }
 
         private void audio1_SomethingChanged(object sender, EventArgs e)
         {
             updatePossibleContainers();
+        }
+
+        private void targetGroupBox_Enter(object sender, EventArgs e)
+        {
+
         }
     }
     public class OneClickTool : MeGUI.core.plugins.interfaces.ITool
@@ -923,10 +893,10 @@ namespace MeGUI
                 audioStreams = new AudioStream[0];*/
 
             //Open the video
-            int parX, parY;
-            string videoInput = openVideo(job.Output, (int)job.PostprocessingProperties.AR, job.PostprocessingProperties.CustomAR,
+            Dar? dar;
+            string videoInput = openVideo(job.Output, job.PostprocessingProperties.DAR, 
                 job.PostprocessingProperties.HorizontalOutputResolution, job.PostprocessingProperties.SignalAR, logBuilder,
-                job.PostprocessingProperties.AvsSettings, job.PostprocessingProperties.AutoDeinterlace, videoSettings, out parX, out parY);
+                job.PostprocessingProperties.AvsSettings, job.PostprocessingProperties.AutoDeinterlace, videoSettings, out dar);
 
             VideoStream myVideo = new VideoStream();
             ulong length;
@@ -936,8 +906,7 @@ namespace MeGUI
             myVideo.Output = videoOutput;
             myVideo.NumberOfFrames = length;
             myVideo.Framerate = framerate;
-            myVideo.ParX = parX;
-            myVideo.ParY = parY;
+            myVideo.DAR = dar;
             myVideo.VideoType = new MuxableType((new VideoEncoderProvider().GetSupportedOutput(videoSettings.EncoderType))[0], videoSettings.Codec);
             myVideo.Settings = videoSettings;
             List<string> intermediateFiles = new List<string>();
@@ -978,11 +947,11 @@ namespace MeGUI
         /// <param name="signalAR">whether or not ar signalling is to be used for the output 
         /// (depending on this parameter, resizing changes to match the source AR)</param>
         /// <returns>the name of the AviSynth script created, empty of there was an error</returns>
-        private string openVideo(string path, int aspectRatio, double customDAR, int horizontalResolution,
+        private string openVideo(string path, Dar? AR, int horizontalResolution,
             bool signalAR, StringBuilder logBuilder, AviSynthSettings avsSettings, bool autoDeint,
-            VideoCodecSettings settings, out int sarX, out int sarY)
+            VideoCodecSettings settings, out Dar? dar)
         {
-            sarX = sarY = -1;
+            dar = null;
             IMediaFile d2v = new d2vFile(path);
             IVideoReader reader = d2v.GetVideoReader();
             if (reader.FrameCount < 1)
@@ -992,7 +961,7 @@ namespace MeGUI
             }
 
             //Autocrop
-            CropValues final = VideoUtil.autocrop(reader);
+            CropValues final = Autocrop.autocrop(reader);
             bool error = (final.left == -1);
             if (!error)
             {
@@ -1006,40 +975,41 @@ namespace MeGUI
                 return "";
             }
 
-            customDAR = VideoUtil.getAspectRatio((AspectRatio)aspectRatio);
+            decimal customDAR;
 
             //Check if AR needs to be autodetected now
-            if (aspectRatio == 4) // it does
+            if (AR == null) // it does
             {
                 logBuilder.Append("Aspect Ratio set to auto-detect later, detecting now. ");
-                customDAR = (double)d2v.DARX / (double)d2v.DARY;
+                customDAR = d2v.Info.DAR.ar;
                 if (customDAR > 0)
                     logBuilder.AppendFormat("Found aspect ratio of {0}.{1}", customDAR, Environment.NewLine);
                 else
                 {
-                    customDAR = VideoUtil.getAspectRatio(AspectRatio.ITU16x9);
+                    customDAR = Dar.ITU16x9.ar;
                     logBuilder.AppendFormat("No aspect ratio found, defaulting to {0}.{1}", customDAR, Environment.NewLine);
                 }
             }
+            else customDAR = AR.Value.ar;
 
             //Suggest a resolution (taken from AvisynthWindow.suggestResolution_CheckedChanged)
-            int scriptVerticalResolution = VideoUtil.suggestResolution(d2v.Height, d2v.Width, customDAR,
-                final, horizontalResolution, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out sarX, out sarY);
+            int scriptVerticalResolution = Resolution.suggestResolution(d2v.Info.Height, d2v.Info.Width, (double)customDAR,
+                final, horizontalResolution, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out dar);
             if (settings != null && settings is x264Settings) // verify that the video corresponds to the chosen avc level, if not, change the resolution until it does fit
             {
                 x264Settings xs = (x264Settings)settings;
                 if (xs.Level != 15)
                 {
                     int compliantLevel = 15;
-                    while (!this.al.validateAVCLevel(horizontalResolution, scriptVerticalResolution, d2v.FPS, xs, out compliantLevel))
+                    while (!this.al.validateAVCLevel(horizontalResolution, scriptVerticalResolution, d2v.Info.FPS, xs, out compliantLevel))
                     { // resolution not profile compliant, reduce horizontal resolution by 16, get the new vertical resolution and try again
                         AVCLevels al = new AVCLevels();
                         string levelName = al.getLevels()[xs.Level];
                         logBuilder.Append("Your chosen AVC level " + levelName + " is too strict to allow your chosen resolution of " +
                             horizontalResolution + "*" + scriptVerticalResolution + ". Reducing horizontal resolution by 16.\r\n");
                         horizontalResolution -= 16;
-                        scriptVerticalResolution = VideoUtil.suggestResolution(d2v.Height, d2v.Width, customDAR,
-                            final, horizontalResolution, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out sarX, out sarY);
+                        scriptVerticalResolution = Resolution.suggestResolution(d2v.Info.Height, d2v.Info.Width, (double)customDAR,
+                            final, horizontalResolution, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out dar);
                     }
                     logBuilder.Append("Final resolution that is compatible with the chosen AVC Level: " + horizontalResolution + "*"
                         + scriptVerticalResolution + "\r\n");
@@ -1079,8 +1049,8 @@ namespace MeGUI
             resizeLine = ScriptServer.GetResizeLine(true, horizontalResolution, scriptVerticalResolution, (ResizeFilterType)avsSettings.ResizeMethod);
 
             string newScript = ScriptServer.CreateScriptFromTemplate(avsSettings.Template, inputLine, cropLine, resizeLine, denoiseLines, deinterlaceLines);
-            if (sarX != -1 && sarY != -1)
-                newScript = string.Format("global MeGUI_darx = {0}\r\nglobal MeGUI_dary = {1}\r\n{2}", sarX, sarY, newScript);
+            if (dar.HasValue)
+                newScript = string.Format("global MeGUI_darx = {0}\r\nglobal MeGUI_dary = {1}\r\n{2}", dar.Value.X, dar.Value.Y, newScript);
             logBuilder.Append("Avisynth script created:\r\n");
             logBuilder.Append(newScript);
             try

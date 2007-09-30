@@ -232,6 +232,9 @@
     <Compile Include="core\gui\AdaptiveMuxWindow.Designer.cs">
       <DependentUpon>AdaptiveMuxWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="core\gui\ARChooser.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="core\gui\AudioEncodingComponent.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -250,23 +253,26 @@
     <Compile Include="core\gui\AviSynthProfileConfigPanel.Designer.cs">
       <DependentUpon>AviSynthProfileConfigPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="core\gui\CQMComboBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="core\gui\CQMComboBox.Designer.cs">
-      <DependentUpon>CQMComboBox.cs</DependentUpon>
-    </Compile>
     <Compile Include="core\gui\FileBar.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="core\gui\FileBar.Designer.cs">
       <DependentUpon>FileBar.cs</DependentUpon>
     </Compile>
+    <Compile Include="core\gui\FileSCBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="core\gui\FileSizeBar.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="core\gui\FileSizeBar.Designer.cs">
       <DependentUpon>FileSizeBar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="core\gui\FileSizeDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="core\gui\FileSizeDialog.Designer.cs">
+      <DependentUpon>FileSizeDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="core\gui\Form1.cs">
       <SubType>Form</SubType>
@@ -301,6 +307,9 @@
     <Compile Include="core\gui\NiceComboBox.Designer.cs">
       <DependentUpon>NiceComboBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="core\gui\NonOptionalTargetSizeBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="core\gui\NumberChooser.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -329,6 +338,15 @@
     <Compile Include="core\gui\SettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="core\gui\StandardAndCustomComboBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="core\gui\StandardAndCustomComboBox.Designer.cs">
+      <DependentUpon>StandardAndCustomComboBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="core\gui\TargetSizeSCBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="core\gui\VideoPlayer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -356,8 +374,10 @@
     <Compile Include="core\plugins\interfaces\Job.cs" />
     <Compile Include="core\plugins\interfaces\JobProcessorManager.cs" />
     <Compile Include="core\plugins\interfaces\Profile.cs" />
+    <Compile Include="core\util\Autocrop.cs" />
     <Compile Include="core\util\BitrateCalculatorPreProcessor.cs" />
     <Compile Include="core\util\CommandLineGenerator.cs" />
+    <Compile Include="core\util\DAR.cs" />
     <Compile Include="core\util\EnumProxy.cs" />
     <Compile Include="core\util\Exceptions.cs" />
     <Compile Include="core\util\FileSize.cs" />
@@ -367,8 +387,10 @@
     <Compile Include="core\util\JobUtil.cs" />
     <Compile Include="core\util\LanguageSelectionContainer.cs" />
     <Compile Include="core\util\NotifyCounter.cs" />
+    <Compile Include="core\util\Resolution.cs" />
     <Compile Include="core\util\ScriptServer.cs" />
     <Compile Include="core\util\Shutdown.cs" />
+    <Compile Include="core\util\Tuples.cs" />
     <Compile Include="core\util\Util.cs" />
     <Compile Include="core\util\VideoUtil.cs" />
     <Compile Include="core\util\WindowUtil.cs" />
@@ -440,6 +462,7 @@
     <Compile Include="packages\mux\mkv\MkvMergeMuxer.cs" />
     <Compile Include="packages\mux\mp4\MP4BoxMuxer.cs" />
     <Compile Include="packages\reader\d2v\d2vReader.cs" />
+    <Compile Include="packages\reader\dvddecrypter\DVDD_File.cs" />
     <Compile Include="packages\reader\mediainfo\MediaInfoFile.cs" />
     <Compile Include="packages\tools\autoencode\AutoEncodeDefaults.cs">
       <SubType>Form</SubType>
@@ -604,10 +627,6 @@
       <SubType>Designer</SubType>
       <DependentUpon>AviSynthProfileConfigPanel.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="core\gui\CQMComboBox.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>CQMComboBox.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="core\gui\FileBar.resx">
       <DependentUpon>FileBar.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -615,6 +634,10 @@
     <EmbeddedResource Include="core\gui\FileSizeBar.resx">
       <SubType>Designer</SubType>
       <DependentUpon>FileSizeBar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="core\gui\FileSizeDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>FileSizeDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="core\gui\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>

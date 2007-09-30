@@ -30,6 +30,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Text;
 using MeGUI.core.util;
+using MeGUI.core.gui;
 
 namespace MeGUI
 {
@@ -47,358 +48,16 @@ namespace MeGUI
 			this.mainForm = mainForm;
 			jobUtil = new JobUtil(mainForm);
         }
-        #region Autocrop
-        public static CropValues autocrop(IVideoReader reader) 
-		{
-			int pos = reader.FrameCount / 4;
-			int tenPercent = reader.FrameCount / 20;
-			CropValues[] cropValues = new CropValues[10];
-			for (int i = 0; i < 10; i++)
-			{
-				Bitmap b = reader.ReadFrameBitmap(pos);
-				cropValues[i] = getAutoCropValues(b);
-				pos += tenPercent;
-			}
-			bool error = false;
-			CropValues final = getFinalAutocropValues(cropValues);
-			if (!error)
-			{
-				return final;
-			}
-			else
-			{
-				final.left = -1;
-				final.right = -1;
-				final.top = -1;
-				final.bottom = -1;
-				return final;
-			}
-		}
 
-		/// <summary>
-		/// iterates through a set of CropValues and tries to find a majority of matching crop values. If a match is found, the crop values are returned
-		/// if not, the minimum found value is returned for the value in question
-		/// </summary>
-		/// <param name="values">the CropValues array to be analyzed</param>
-		/// <returns>the final CropValues</returns>
-		public static CropValues getFinalAutocropValues(CropValues[] values)
-		{
-			int matchingLeftValues = 0, matchingTopValues = 0, matchingRightValues = 0, matchingBottomValues = 0;
-			int minLeft = values[0].left, minTop = values[0].top, minRight = values[0].right, minBottom = values[0].bottom;
-			CropValues retval = values[0].Clone();
-			for (int i = 1; i < values.Length; i++)
-			{
-				if (values[i].left == values[i-1].left)
-				{
-					retval.left = values[i].left;
-					matchingLeftValues++;
-				}
-				if (values[i].top == values[i-1].top)
-				{
-					retval.top = values[i].top;
-					matchingTopValues++;
-				}
-				if (values[i].right == values[i-1].right)
-				{
-					retval.right = values[i].right;
-					matchingRightValues++;
-				}
-				if (values[i].bottom == values[i-1].bottom)
-				{
-					retval.bottom = values[i].bottom;
-					matchingBottomValues++;
-				}
-				if (values[i].left < minLeft)
-					minLeft = values[i].left;
-				if (values[i].top < minTop)
-					minTop = values[i].top;
-				if (values[i].right < minRight)
-					minRight = values[i].right;
-				if (values[i].bottom < minBottom)
-					minBottom = values[i].bottom;
-			}
-			if (matchingLeftValues < values.Length / 2) // we have less than 50% matching values, use minimum found
-				retval.left = minLeft;
-			if (matchingTopValues < values.Length / 2)
-				retval.top = minTop;
-			if (matchingRightValues < values.Length / 2)
-				retval.right = minRight;
-			if (matchingBottomValues < values.Length / 2)
-				retval.bottom = minBottom;
-			return retval;
-		}
-		
-		private static bool isBadPixel(int pixel)
-		{
-			int comp = 12632256;
-			int res = pixel & comp;
-			return (res != 0);
-		}
-		/// <summary>
-		/// iterates through the lines and columns of the bitmap and compares the pixel values with the value of the upper left corner pixel
-		/// if a pixel that doesn't have the same color value is found, it is assumed that this is the first line that does not need to be cropped away
-		/// </summary>
-		/// <param name="b">the bitmap to be analyzed</param>
-		/// <returns>struct containing the number of lines to be cropped away from the left, top, right and bottom</returns>
-		public static unsafe CropValues getAutoCropValues(Bitmap b)
-		{
-			// When locking the pixels into memory, they are currently being converted from 24bpp to 32bpp. This incurs a small (5%) speed penalty,
-			// but means that pixel management is easier, because each pixel is a 4-byte int.
-			BitmapData image = b.LockBits(new Rectangle(0, 0, b.Width, b.Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
-			int* pointer = (int*) image.Scan0.ToPointer();
-			int* lineBegin, pixel;
-			int stride = image.Stride / 4;
-			CropValues retval = new CropValues();
-			bool lineFound = false;
-			int badPixelThreshold = 50;
-			int widthBadPixelThreshold = b.Width / badPixelThreshold;
-			int heightBadPixelThreshold = b.Height / badPixelThreshold;
-			int nbBadPixels = 0;
-	
-			lineBegin = pointer;
-			for (int i = 0; i < b.Width; i++)
-			{
-				pixel = lineBegin;
-				for (int j = 0; j < b.Height; j++)
-				{
-					//if (b.GetPixel(i, j) != prevColor)
-					//if (isBadPixel(b.GetPixel(i, j)))
-					if (isBadPixel(*pixel))
-						nbBadPixels++;
-					if (nbBadPixels  > heightBadPixelThreshold)
-					{
-						retval.left = i;
-						if (retval.left < 0)
-							retval.left = 0;
-						if (retval.left % 2 != 0)
-							retval.left++;
-						lineFound = true;
-						break;
-					}
-					pixel += stride;
-				}
-				nbBadPixels = 0;
-				if (lineFound)
-					break;
-				lineBegin += 1; // 4-byte Argb
-			}
-			nbBadPixels = 0;
-			lineFound = false;
-			lineBegin = pointer;
-			for (int i = 0; i < b.Height; i++)
-			{
-				pixel = lineBegin;
-				for (int j = 0; j < b.Width; j++)
-				{
-					//if (b.GetPixel(j, i) != prevColor)
-					//if (isBadPixel(b.GetPixel(j, i)))
-					if (isBadPixel(*pixel))
-						nbBadPixels++;
-					if (nbBadPixels > widthBadPixelThreshold)
-					{
-						retval.top = i;
-						if (retval.top < 0)
-							retval.top = 0;
-						if (retval.top % 2 != 0)
-							retval.top++;
-						lineFound = true;
-						break;
-					}
-					pixel += 1; // 4-byte Argb
-				}
-				nbBadPixels = 0;
-				if (lineFound)
-					break;
-				lineBegin += stride;
-			}
-			nbBadPixels = 0;
-			lineFound = false;
-			lineBegin = pointer + b.Width - 1;
-			for (int i = b.Width - 1; i >= 0 ; i--)
-			{
-				pixel = lineBegin;
-				for (int j = 0; j < b.Height; j++)
-				{
-					//if (b.GetPixel(i, j) != prevColor)
-					//if (isBadPixel(b.GetPixel(i, j)))
-					if (isBadPixel(*pixel))
-						nbBadPixels++;
-					if (nbBadPixels > heightBadPixelThreshold)
-					{
-						retval.right = b.Width - i;
-						if (retval.right < 0)
-							retval.right = 0;
-						if (retval.right % 2 != 0)
-							retval.right++;
-						lineFound = true;
-						break;
-					}
-					pixel += stride;
-				}
-				nbBadPixels = 0;
-				if (lineFound)
-					break;
-				lineBegin -= 1; // Backwards across 4-byte Argb
-			}
-			nbBadPixels = 0;
-			lineFound = false;
-			lineBegin = pointer + stride * (b.Height-1);
-			for (int i = b.Height - 1; i >= 0 ; i--)
-			{
-				pixel = lineBegin;
-				for (int j = 0; j < b.Width; j++)
-				{
-					//if (b.GetPixel(j, i) != prevColor)
-					//if (isBadPixel(b.GetPixel(j, i)))
-					if (isBadPixel(*pixel))
-						nbBadPixels++;
-					if (nbBadPixels > widthBadPixelThreshold)
-					{
-						retval.bottom = b.Height - i;
-						if (retval.bottom < 0)
-							retval.bottom = 0;
-						if (retval.bottom % 2 != 0)
-							retval.bottom++;
-						lineFound = true;
-						break;
-					}
-					pixel += 1;// 4-byte Argb
-				}
-				nbBadPixels = 0;
-				if (lineFound)
-					break;
-				lineBegin -= stride;
-			}
-			return retval;
-		}
-		#endregion
-		#region SuggestResolution
-		/// <summary>
-		/// if enabled, each change of the horizontal resolution triggers this method
-		/// it calculates the ideal mod 16 vertical resolution that matches the desired horizontal resolution
-		/// </summary>
-		/// <param name="readerHeight">height of the source</param>
-		/// <param name="readerWidth">width of the source</param>
-		/// <param name="customDAR">custom display aspect ratio to be taken into account for resizing</param>
-		/// <param name="cropping">the crop values for the source</param>
-		/// <param name="horizontalResolution">the desired horizontal resolution of the output</param>
-		/// <param name="signalAR">whether or not we're going to signal the aspect ratio (influences the resizing)</param>
-		/// <param name="sarX">horizontal pixel aspect ratio (used when signalAR = true)</param>
-		/// <param name="sarY">vertical pixel aspect ratio (used when signalAR = true)</param>
-		/// <returns>the suggested horizontal resolution</returns>
-		public static int suggestResolution(double readerHeight, double readerWidth, double customDAR, CropValues cropping, int horizontalResolution,
-			bool signalAR, int acceptableAspectError, out int sarX, out int sarY)
-		{
-            double fractionOfWidth = (readerWidth - (double)cropping.left - (double)cropping.right) / readerWidth;
-            double inputWidthOnHeight = (readerWidth - (double)cropping.left - (double)cropping.right) /
-                                          (readerHeight - (double)cropping.top - (double)cropping.bottom);
-            double sourceHorizontalResolution = readerHeight * customDAR * fractionOfWidth;
-            double sourceVerticalResolution = readerHeight - (double)cropping.top - (double)cropping.bottom;
-            double realAspectRatio = sourceHorizontalResolution / sourceVerticalResolution; // the real aspect ratio of the video
-            realAspectRatio = getAspectRatio(realAspectRatio, acceptableAspectError); // Constrains DAR to a set of limited possibilities
-			double resizedVerticalResolution = (double)horizontalResolution / realAspectRatio;
-
-            int scriptVerticalResolution = ((int)Math.Round(resizedVerticalResolution / 16.0)) * 16;
-
-            if (signalAR)
-			{
-                resizedVerticalResolution = (double)horizontalResolution / inputWidthOnHeight; // Scale vertical resolution appropriately
-                scriptVerticalResolution = ((int)Math.Round(resizedVerticalResolution / 16.0) * 16);
-
-                int parX = 0;
-                int parY = 0;
-                double distance = 999999;
-                for (int i = 1; i < 101; i++)
-                {
-                    // We create a fraction with integers, and then convert back to a double, and see how big the rounding error is
-                    double fractionApproximation = (double)Math.Round(realAspectRatio * ((double)i)) / (double)i;
-                    double approximationDifference = Math.Abs(realAspectRatio - fractionApproximation);
-                    if (approximationDifference < distance)
-                    {
-                        distance = approximationDifference;
-                        parY = i;
-                        parX = (int)Math.Round(realAspectRatio * ((double)parY));
-                    }
-                }
-				//sarX = (int)Math.Round(realAspectRatio * resizedVerticalResolution);
-                //sarY = (int)Math.Round(horizontalResolution);
-                sarX = parX;
-                sarY = parY;
-				
-				return scriptVerticalResolution;
-			}
-			else
-			{
-				sarX = 0;
-				sarY = 0;
-				return scriptVerticalResolution;
-			}
-		}
-		
-		/// <summary>
-		/// finds the aspect ratio closest to the one giving as parameter (which is an approximation using the selected DAR for the source and the cropping values)
-		/// </summary>
-		/// <param name="calculatedAR">the aspect ratio to be approximated</param>
-		/// <returns>the aspect ratio that most closely matches the input</returns>
-		private static double getAspectRatio(double calculatedAR, int acceptableAspectErrorPercent)
-		{
-			double[] availableAspectRatios = {1.0, 1.33333, 1.66666, 1.77778, 1.85, 2.35};
-			double[] distances = new double[availableAspectRatios.Length];
-			double minDist = 1000.0;
-			double realAspectRatio = 1.0;
-			foreach (double d in availableAspectRatios)
-			{
-                double dist = Math.Abs(d - calculatedAR);
-				if (dist < minDist)
-				{
-					minDist = dist;
-					realAspectRatio = d;
-				}
-			}
-            double aspectError = realAspectRatio / calculatedAR;
-            if (Math.Abs(aspectError - 1.0) * 100.0 < acceptableAspectErrorPercent)
-                return realAspectRatio;
-            else
-                return calculatedAR;
-		}
-
-        /// <summary>
-        /// rounds the output PAR to the closest matching predefined xvid profile
-        /// </summary>
-        /// <param name="sarX">horizontal component of the pixel aspect ratio</param>
-        /// <param name="sarY">vertical component of the pixel aspect ratio</param>
-        /// <param name="height">height of the desired output</param>
-        /// <param name="width">width of the desired output</param>
-        /// <returns>the closest profile match</returns>
-        public static int roundXviDPAR(int parX, int parY, int height, int width)
-        {
-            double par = (double) parX / (double) parY;
-            double[] pars = { 1, 1.090909, 1.454545, 0.090909, 1.212121 };
-            double minDist = 1000;
-            int closestIndex = 0;
-            for (int i = 0; i < pars.Length; i++)
-            {
-                double first = Math.Max(par, pars[i]);
-                double second = Math.Min(par, pars[i]);
-                double dist = first - second;
-                if (dist < minDist)
-                {
-                    minDist = dist;
-                    closestIndex = i;
-                }
-            }
-            return closestIndex;
-        }
-        #endregion
 		#region finding source information
 		/// <summary>
 		/// gets the dvd decrypter generated stream information file
 		/// </summary>
 		/// <param name="fileName">name of the first vob to be loaded</param>
 		/// <returns>full name of the info file or an empty string if no file was found</returns>
-		public static string getInfoFileName(string fileName, out int pgc)
+		public static string getInfoFileName(string fileName)
 		{
-			pgc = 1;
+			int pgc = 1;
 			string path = Path.GetDirectoryName(fileName);
 			string name = Path.GetFileName(fileName);
 			string vts = name.Substring(0, 6);
@@ -424,13 +83,10 @@ namespace MeGUI
 					break;
 				}
 			}
-			return infoFile;
+            // pgc is parsed, but unused. Might be useful later
+            return infoFile;
 		}
-        public static string getInfoFileName(string fileName)
-        {
-            int pgc;
-            return VideoUtil.getInfoFileName(fileName, out pgc);
-        }
+
 		/// <summary>
 		/// gets the dvd decrypter generated chapter file
 		/// </summary>
@@ -460,12 +116,12 @@ namespace MeGUI
 		/// <param name="audioTracks">the audio tracks found</param>
 		/// <param name="aspectRatio">the aspect ratio of the video</param>
         public void getSourceInfo(string infoFile, out List<AudioTrackInfo> audioTracks, out List<SubtitleInfo> subtitles,
-			out AspectRatio aspectRatio, out int maxHorizontalResolution)
+			out Dar? aspectRatio, out int maxHorizontalResolution)
 		{
 			StreamReader sr = null;
             audioTracks = new List<AudioTrackInfo>();
             subtitles = new List<SubtitleInfo>();
-			aspectRatio = AspectRatio.CUSTOM;
+            aspectRatio = null;
             maxHorizontalResolution = 5000;
 			try
 			{
@@ -481,14 +137,12 @@ namespace MeGUI
                         resolution = resolution.Substring(1, resolution.IndexOf('x')-1);
                         maxHorizontalResolution = Int32.Parse(resolution);
 						string ar = split[2].Substring(1, split[2].Length - 2);
-						if (ar.Equals("16:9"))
-							aspectRatio = AspectRatio.ITU16x9;
-						else if (ar.Equals("4:3"))
-							aspectRatio = AspectRatio.ITU4x3;
-						else if (ar.Equals("1:1"))
-							aspectRatio = AspectRatio.A1x1;
-						else
-							aspectRatio = AspectRatio.CUSTOM;
+                        if (ar.Equals("16:9"))
+                            aspectRatio = Dar.ITU16x9;
+                        else if (ar.Equals("4:3"))
+                            aspectRatio = Dar.ITU4x3;
+                        else if (ar.Equals("1:1"))
+                            aspectRatio = Dar.A1x1;
 					}
 					else if (line.IndexOf("Audio") != -1)
 					{
@@ -545,7 +199,7 @@ namespace MeGUI
 			List<string> retval = new List<string>();
 			List<AudioTrackInfo> audioTracks;
             List<SubtitleInfo> subtitles;
-			AspectRatio ar;
+			Dar? ar;
             int maxHorizontalResolution;
 			getSourceInfo(infoFile, out audioTracks, out subtitles, out ar, out maxHorizontalResolution);
 			foreach (AudioTrackInfo ati in audioTracks)
@@ -567,13 +221,13 @@ namespace MeGUI
 		/// <param name="trackIDs">an arraylist that will contain the track IDs of the source if found</param>
 		/// <returns>true if a source info file has been found, false if not</returns>
         public bool openVideoSource(string fileName, out List<AudioTrackInfo> audioTracks, out List<SubtitleInfo> subtitles, 
-            out AspectRatio ar, out int maxHorizontalResolution, out int pgc)
+            out Dar? ar, out int maxHorizontalResolution)
 		{
             audioTracks = new List<AudioTrackInfo>();
             subtitles = new List<SubtitleInfo>();
-            string infoFile = VideoUtil.getInfoFileName(fileName, out pgc);
+            string infoFile = VideoUtil.getInfoFileName(fileName);
 			bool putDummyTracks = true; // indicates whether audio tracks have been found or not
-			ar = AspectRatio.CUSTOM;
+			ar = null;
             maxHorizontalResolution = 5000;
 			if (!infoFile.Equals(""))
 			{
@@ -704,50 +358,7 @@ namespace MeGUI
 		}
         #endregion
         #region SAR calculation
-        public static void findSAR(int parX, int parY, int hres, int vres, out int sarX, out int sarY)
-        {
-            // sarX
-            // ----   must be the amount the video needs to be stretched horizontally.
-            // sarY
-            //
-            //    horizontalResolution
-            // --------------------------  is the ratio of the pixels. This must be stretched to equal realAspectRatio
-            //  scriptVerticalResolution
-            //
-            // To work out the stretching amount, we then divide realAspectRatio by the ratio of the pixels:
-            // sarX      parX        horizontalResolution        realAspectRatio * scriptVerticalResolution
-            // ---- =    ---- /   -------------------------- =  --------------------------------------------   
-            // sarY      parY     scriptVerticalResolution               horizontalResolution
-            sarX = parX * vres;
-            sarY = parY * hres;
-            reduce(ref sarX, ref sarY);
 
-            if (parX < 1 || parY < 1)
-            {
-                sarX = sarY = -1;
-            }
-        }
-
-        /// <summary>
-        /// Puts x and y in simplest form, by dividing by all their factors.
-        /// </summary>
-        /// <param name="x">First number to reduce</param>
-        /// <param name="y">Second number to reduce</param>
-        public static void reduce(ref int x, ref int y)
-        {
-            int i = 2;
-            while (i < x && i < y)
-            {
-                if (x % i == 0 &&
-                    y % i == 0)
-                {
-                    x /= i;
-                    y /= i;
-                }
-                else
-                    i++;
-            }
-        }
         #endregion
         #region source checking
         public string checkVideo(string avsFile)
@@ -846,7 +457,7 @@ namespace MeGUI
             logBuilder.Append(eliminatedDuplicateFilenames(ref videoOutput, ref muxedOutput, audioStreams));
             video.Output = videoOutput;
 
-            VideoJob[] vjobs = jobUtil.prepareVideoJob(video.Input, video.Output, video.Settings, video.ParX, video.ParY, prerender, true);
+            VideoJob[] vjobs = jobUtil.prepareVideoJob(video.Input, video.Output, video.Settings, video.DAR, prerender, true);
             List<Job> jobs = new List<Job>();
 
             if (vjobs.Length > 0) // else the user aborted and we cannot proceed
@@ -1076,7 +687,7 @@ namespace MeGUI
             if (useMediaInfo)
             {
                 MediaInfoFile info = new MediaInfoFile(p);
-                if (info.HasVideo)
+                if (info.Info.HasVideo)
                     return new MuxableType(info.VideoType, info.VCodec);
                 // otherwise we may as well try the other route too
             }
@@ -1190,28 +801,6 @@ namespace MeGUI
                 return initialFilterTrimmed + "|" + allSmallFilters.ToString().TrimEnd('|');
             else
                 return allSmallFilters.ToString().TrimEnd('|');
-        }
-
-        public static double getAspectRatio(AspectRatio ar)
-        {
-            switch (ar)
-            {
-                case AspectRatio.ITU16x9:
-                    return 1.823;
-                case AspectRatio.A1x1:
-                    return 1;
-                case AspectRatio.ITU4x3:
-                    return 1.3672;
-                default:
-                    return -1;
-            }
-        }
-
-        public static void approximate(double ar, out int x, out int y)
-        {
-            y = 10000;
-            x = (int)((double)y * ar);
-            reduce(ref x, ref y);
         }
     }
 	#region helper structs

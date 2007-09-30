@@ -879,8 +879,7 @@ namespace MeGUI
                 myVideo.Output = info.Video.Info.VideoOutput;
                 myVideo.NumberOfFrames = length;
                 myVideo.Framerate = framerate;
-                myVideo.ParX = info.Video.Info.DARX;
-                myVideo.ParY = info.Video.Info.DARY;
+                myVideo.DAR = info.Video.Info.DAR;
                 myVideo.VideoType = info.Video.CurrentMuxableVideoType;
                 myVideo.Settings = vSettings;
 #warning check delays here. Doom9 did them, but I'm not sure how they work

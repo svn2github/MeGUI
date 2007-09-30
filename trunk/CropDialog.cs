@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using MeGUI.core.util;
 
 namespace MeGUI
 {
@@ -183,12 +184,12 @@ namespace MeGUI
         {
             x1offset.Minimum = x2offset.Minimum = y1offset.Minimum = y2offset.Minimum = 0;
             x1offset.Value = x2offset.Value = y1offset.Value = y2offset.Value = 0;
-            x1offset.Maximum = x2offset.Maximum = file.Width;
-            y1offset.Maximum = y2offset.Maximum = file.Height;
+            x1offset.Maximum = x2offset.Maximum = file.Info.Width;
+            y1offset.Maximum = y2offset.Maximum = file.Info.Height;
             trackBar1.Minimum = 0;
             trackBar1.Maximum = reader.FrameCount - 1;
             trackBar1.Value = reader.FrameCount / 2;
-            panel1.ClientSize = new Size(file.Width + 2, file.Height + 2);
+            panel1.ClientSize = new Size((int)file.Info.Width + 2, (int)file.Info.Height + 2);
            
             int w = panel1.Right + panel1.Left;
             if (w < 600)
@@ -306,8 +307,8 @@ namespace MeGUI
 
         private void showInfo()
         {
-            int h = file.Height - cropTop - cropBottom;
-            int w = file.Width - cropLeft - cropRight;
+            int h = (int)file.Info.Height - cropTop - cropBottom;
+            int w = (int)file.Info.Width - cropLeft - cropRight;
 
             this.Text = string.Format("Size: {0}x{1}, Mod: {2}x{3} ", w, h, getmod(w), getmod(h));
         }
@@ -404,7 +405,7 @@ namespace MeGUI
 
         private void button3_Click(object sender, EventArgs e)
         {
-            CropValues final = VideoUtil.autocrop(reader);
+            CropValues final = Autocrop.autocrop(reader);
             bool error = (final.left == -1);
             if (!error)
             {

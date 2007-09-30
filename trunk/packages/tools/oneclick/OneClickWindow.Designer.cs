@@ -44,10 +44,8 @@ namespace MeGUI
             this.profileControl1 = new MeGUI.core.details.video.ProfileControl();
             this.autoDeint = new System.Windows.Forms.CheckBox();
             this.signalAR = new System.Windows.Forms.CheckBox();
-            this.AR = new System.Windows.Forms.TextBox();
             this.outputResolutionLabel = new System.Windows.Forms.Label();
             this.horizontalResolution = new System.Windows.Forms.NumericUpDown();
-            this.arComboBox = new System.Windows.Forms.ComboBox();
             this.ARLabel = new System.Windows.Forms.Label();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.IOGroupbox = new System.Windows.Forms.GroupBox();
@@ -56,14 +54,12 @@ namespace MeGUI
             this.outputLabel = new System.Windows.Forms.Label();
             this.inputLabel = new System.Windows.Forms.Label();
             this.targetGroupBox = new System.Windows.Forms.GroupBox();
+            this.optionalTargetSizeBox1 = new MeGUI.core.gui.TargetSizeSCBox();
             this.profileControl2 = new MeGUI.core.details.video.ProfileControl();
-            this.filesizeKB = new System.Windows.Forms.TextBox();
-            this.inKBLabel = new System.Windows.Forms.Label();
-            this.filesizeComboBox = new System.Windows.Forms.ComboBox();
             this.filesizeLabel = new System.Windows.Forms.Label();
             this.audioGroupbox = new System.Windows.Forms.GroupBox();
-            this.audioTrack2 = new MeGUI.core.gui.CQMComboBox();
-            this.audioTrack1 = new MeGUI.core.gui.CQMComboBox();
+            this.audioTrack2 = new MeGUI.core.gui.FileSCBox();
+            this.audioTrack1 = new MeGUI.core.gui.FileSCBox();
             this.track2Label = new System.Windows.Forms.Label();
             this.track1Label = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
@@ -82,6 +78,7 @@ namespace MeGUI
             this.showAdvancedOptions = new System.Windows.Forms.CheckBox();
             this.goButton = new System.Windows.Forms.Button();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
+            this.ar = new MeGUI.core.gui.ARChooser();
             tabPage3 = new System.Windows.Forms.TabPage();
             tabPage4 = new System.Windows.Forms.TabPage();
             tabPage3.SuspendLayout();
@@ -149,7 +146,7 @@ namespace MeGUI
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(440, 252);
+            this.tabPage2.Size = new System.Drawing.Size(440, 263);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Advanced Config";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -230,13 +227,12 @@ namespace MeGUI
             // 
             // avsBox
             // 
+            this.avsBox.Controls.Add(this.ar);
             this.avsBox.Controls.Add(this.profileControl1);
             this.avsBox.Controls.Add(this.autoDeint);
             this.avsBox.Controls.Add(this.signalAR);
-            this.avsBox.Controls.Add(this.AR);
             this.avsBox.Controls.Add(this.outputResolutionLabel);
             this.avsBox.Controls.Add(this.horizontalResolution);
-            this.avsBox.Controls.Add(this.arComboBox);
             this.avsBox.Controls.Add(this.ARLabel);
             this.avsBox.Location = new System.Drawing.Point(8, 107);
             this.avsBox.Name = "avsBox";
@@ -265,20 +261,11 @@ namespace MeGUI
             // 
             // signalAR
             // 
-            this.signalAR.Location = new System.Drawing.Point(270, 43);
+            this.signalAR.Location = new System.Drawing.Point(326, 43);
             this.signalAR.Name = "signalAR";
             this.signalAR.Size = new System.Drawing.Size(82, 24);
             this.signalAR.TabIndex = 5;
             this.signalAR.Text = "Signal AR";
-            // 
-            // AR
-            // 
-            this.AR.Location = new System.Drawing.Point(224, 43);
-            this.AR.Name = "AR";
-            this.AR.ReadOnly = true;
-            this.AR.Size = new System.Drawing.Size(40, 20);
-            this.AR.TabIndex = 2;
-            this.AR.Text = "1.778";
             // 
             // outputResolutionLabel
             // 
@@ -315,24 +302,9 @@ namespace MeGUI
             0,
             0});
             // 
-            // arComboBox
-            // 
-            this.arComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.arComboBox.Items.AddRange(new object[] {
-            "ITU 16:9",
-            "ITU 4:3",
-            "1:1",
-            "Custom",
-            "Auto-detect later"});
-            this.arComboBox.Location = new System.Drawing.Point(224, 16);
-            this.arComboBox.Name = "arComboBox";
-            this.arComboBox.Size = new System.Drawing.Size(161, 21);
-            this.arComboBox.TabIndex = 1;
-            this.arComboBox.SelectedIndexChanged += new System.EventHandler(this.arComboBox_SelectedIndexChanged);
-            // 
             // ARLabel
             // 
-            this.ARLabel.Location = new System.Drawing.Point(192, 20);
+            this.ARLabel.Location = new System.Drawing.Point(16, 48);
             this.ARLabel.Name = "ARLabel";
             this.ARLabel.Size = new System.Drawing.Size(24, 13);
             this.ARLabel.TabIndex = 4;
@@ -346,7 +318,7 @@ namespace MeGUI
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(440, 252);
+            this.tabPage1.Size = new System.Drawing.Size(440, 263);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Basic IO";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -415,17 +387,27 @@ namespace MeGUI
             // 
             // targetGroupBox
             // 
+            this.targetGroupBox.Controls.Add(this.optionalTargetSizeBox1);
             this.targetGroupBox.Controls.Add(this.profileControl2);
-            this.targetGroupBox.Controls.Add(this.filesizeKB);
-            this.targetGroupBox.Controls.Add(this.inKBLabel);
-            this.targetGroupBox.Controls.Add(this.filesizeComboBox);
             this.targetGroupBox.Controls.Add(this.filesizeLabel);
-            this.targetGroupBox.Location = new System.Drawing.Point(6, 176);
+            this.targetGroupBox.Location = new System.Drawing.Point(8, 175);
             this.targetGroupBox.Name = "targetGroupBox";
-            this.targetGroupBox.Size = new System.Drawing.Size(424, 71);
+            this.targetGroupBox.Size = new System.Drawing.Size(424, 82);
             this.targetGroupBox.TabIndex = 18;
             this.targetGroupBox.TabStop = false;
             this.targetGroupBox.Text = "Target";
+            this.targetGroupBox.Enter += new System.EventHandler(this.targetGroupBox_Enter);
+            // 
+            // optionalTargetSizeBox1
+            // 
+            this.optionalTargetSizeBox1.CustomItems = new object[0];
+            this.optionalTargetSizeBox1.Location = new System.Drawing.Point(125, 43);
+            this.optionalTargetSizeBox1.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.optionalTargetSizeBox1.MinimumSize = new System.Drawing.Size(64, 29);
+            this.optionalTargetSizeBox1.Name = "optionalTargetSizeBox1";
+            this.optionalTargetSizeBox1.Size = new System.Drawing.Size(285, 29);
+            this.optionalTargetSizeBox1.TabIndex = 24;
+            this.optionalTargetSizeBox1.Value = null;
             // 
             // profileControl2
             // 
@@ -435,34 +417,9 @@ namespace MeGUI
             this.profileControl2.Size = new System.Drawing.Size(389, 29);
             this.profileControl2.TabIndex = 23;
             // 
-            // filesizeKB
-            // 
-            this.filesizeKB.Location = new System.Drawing.Point(298, 41);
-            this.filesizeKB.Name = "filesizeKB";
-            this.filesizeKB.ReadOnly = true;
-            this.filesizeKB.Size = new System.Drawing.Size(112, 20);
-            this.filesizeKB.TabIndex = 20;
-            // 
-            // inKBLabel
-            // 
-            this.inKBLabel.Location = new System.Drawing.Point(242, 45);
-            this.inKBLabel.Name = "inKBLabel";
-            this.inKBLabel.Size = new System.Drawing.Size(50, 13);
-            this.inKBLabel.TabIndex = 22;
-            this.inKBLabel.Text = "In KB:";
-            // 
-            // filesizeComboBox
-            // 
-            this.filesizeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.filesizeComboBox.Location = new System.Drawing.Point(125, 41);
-            this.filesizeComboBox.Name = "filesizeComboBox";
-            this.filesizeComboBox.Size = new System.Drawing.Size(111, 21);
-            this.filesizeComboBox.TabIndex = 19;
-            this.filesizeComboBox.SelectedIndexChanged += new System.EventHandler(this.filesizeComboBox_SelectedIndexChanged);
-            // 
             // filesizeLabel
             // 
-            this.filesizeLabel.Location = new System.Drawing.Point(18, 44);
+            this.filesizeLabel.Location = new System.Drawing.Point(18, 51);
             this.filesizeLabel.Name = "filesizeLabel";
             this.filesizeLabel.Size = new System.Drawing.Size(90, 13);
             this.filesizeLabel.TabIndex = 21;
@@ -474,7 +431,7 @@ namespace MeGUI
             this.audioGroupbox.Controls.Add(this.audioTrack1);
             this.audioGroupbox.Controls.Add(this.track2Label);
             this.audioGroupbox.Controls.Add(this.track1Label);
-            this.audioGroupbox.Location = new System.Drawing.Point(6, 88);
+            this.audioGroupbox.Location = new System.Drawing.Point(8, 88);
             this.audioGroupbox.Name = "audioGroupbox";
             this.audioGroupbox.Size = new System.Drawing.Size(424, 82);
             this.audioGroupbox.TabIndex = 5;
@@ -483,33 +440,27 @@ namespace MeGUI
             // 
             // audioTrack2
             // 
-            this.audioTrack2.CustomCQMs = new string[0];
+            this.audioTrack2.CustomItems = new object[0];
             this.audioTrack2.Filter = "";
             this.audioTrack2.Location = new System.Drawing.Point(125, 45);
             this.audioTrack2.MaximumSize = new System.Drawing.Size(1000, 29);
             this.audioTrack2.MinimumSize = new System.Drawing.Size(64, 29);
             this.audioTrack2.Name = "audioTrack2";
-            this.audioTrack2.SelectedIndex = -1;
-            this.audioTrack2.SelectedItem = null;
-            this.audioTrack2.SelectedText = "";
             this.audioTrack2.Size = new System.Drawing.Size(285, 29);
-            this.audioTrack2.StandardCQMs = new object[0];
+            this.audioTrack2.StandardItems = new object[0];
             this.audioTrack2.TabIndex = 20;
             this.audioTrack2.SelectionChanged += new MeGUI.StringChanged(this.audioTrack2_SelectionChanged);
             // 
             // audioTrack1
             // 
-            this.audioTrack1.CustomCQMs = new string[0];
+            this.audioTrack1.CustomItems = new object[0];
             this.audioTrack1.Filter = "";
             this.audioTrack1.Location = new System.Drawing.Point(125, 15);
             this.audioTrack1.MaximumSize = new System.Drawing.Size(1000, 29);
             this.audioTrack1.MinimumSize = new System.Drawing.Size(64, 29);
             this.audioTrack1.Name = "audioTrack1";
-            this.audioTrack1.SelectedIndex = -1;
-            this.audioTrack1.SelectedItem = null;
-            this.audioTrack1.SelectedText = "";
             this.audioTrack1.Size = new System.Drawing.Size(285, 29);
-            this.audioTrack1.StandardCQMs = new object[0];
+            this.audioTrack1.StandardItems = new object[0];
             this.audioTrack1.TabIndex = 19;
             this.audioTrack1.SelectionChanged += new MeGUI.StringChanged(this.audioTrack1_SelectionChanged);
             // 
@@ -538,7 +489,7 @@ namespace MeGUI
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(448, 278);
+            this.tabControl1.Size = new System.Drawing.Size(448, 289);
             this.tabControl1.TabIndex = 0;
             // 
             // encoderConfigTab
@@ -552,7 +503,7 @@ namespace MeGUI
             this.encoderConfigTab.Location = new System.Drawing.Point(4, 22);
             this.encoderConfigTab.Name = "encoderConfigTab";
             this.encoderConfigTab.Padding = new System.Windows.Forms.Padding(3);
-            this.encoderConfigTab.Size = new System.Drawing.Size(440, 252);
+            this.encoderConfigTab.Size = new System.Drawing.Size(440, 263);
             this.encoderConfigTab.TabIndex = 2;
             this.encoderConfigTab.Text = "Encoder Config";
             this.encoderConfigTab.UseVisualStyleBackColor = true;
@@ -658,7 +609,7 @@ namespace MeGUI
             // showAdvancedOptions
             // 
             this.showAdvancedOptions.AutoSize = true;
-            this.showAdvancedOptions.Location = new System.Drawing.Point(82, 287);
+            this.showAdvancedOptions.Location = new System.Drawing.Point(76, 295);
             this.showAdvancedOptions.Name = "showAdvancedOptions";
             this.showAdvancedOptions.Size = new System.Drawing.Size(144, 17);
             this.showAdvancedOptions.TabIndex = 31;
@@ -668,7 +619,7 @@ namespace MeGUI
             // 
             // goButton
             // 
-            this.goButton.Location = new System.Drawing.Point(351, 283);
+            this.goButton.Location = new System.Drawing.Point(345, 291);
             this.goButton.Name = "goButton";
             this.goButton.Size = new System.Drawing.Size(75, 23);
             this.goButton.TabIndex = 29;
@@ -681,16 +632,26 @@ namespace MeGUI
             this.helpButton1.ArticleName = "One click encoder";
             this.helpButton1.AutoSize = true;
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.helpButton1.Location = new System.Drawing.Point(12, 283);
+            this.helpButton1.Location = new System.Drawing.Point(12, 291);
             this.helpButton1.Name = "helpButton1";
             this.helpButton1.Size = new System.Drawing.Size(39, 23);
             this.helpButton1.TabIndex = 32;
+            // 
+            // ar
+            // 
+            this.ar.CustomItems = new object[0];
+            this.ar.Location = new System.Drawing.Point(120, 42);
+            this.ar.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.ar.MinimumSize = new System.Drawing.Size(64, 29);
+            this.ar.Name = "ar";
+            this.ar.Size = new System.Drawing.Size(200, 29);
+            this.ar.TabIndex = 22;
             // 
             // OneClickWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(448, 315);
+            this.ClientSize = new System.Drawing.Size(448, 326);
             this.Controls.Add(this.helpButton1);
             this.Controls.Add(this.showAdvancedOptions);
             this.Controls.Add(this.goButton);
@@ -709,7 +670,6 @@ namespace MeGUI
             this.tabPage1.ResumeLayout(false);
             this.IOGroupbox.ResumeLayout(false);
             this.targetGroupBox.ResumeLayout(false);
-            this.targetGroupBox.PerformLayout();
             this.audioGroupbox.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
             this.encoderConfigTab.ResumeLayout(false);
@@ -735,19 +695,14 @@ namespace MeGUI
         private System.Windows.Forms.Label outputLabel;
         private System.Windows.Forms.GroupBox avsBox;
         private System.Windows.Forms.CheckBox signalAR;
-        private System.Windows.Forms.TextBox AR;
         private System.Windows.Forms.Label outputResolutionLabel;
         private System.Windows.Forms.NumericUpDown horizontalResolution;
-        private System.Windows.Forms.ComboBox arComboBox;
         private System.Windows.Forms.Label ARLabel;
         private System.Windows.Forms.GroupBox locationGroupBox;
         private System.Windows.Forms.Label workingDirectoryLabel;
         private System.Windows.Forms.TextBox workingName;
         private System.Windows.Forms.Label projectNameLabel;
         private System.Windows.Forms.GroupBox targetGroupBox;
-        private System.Windows.Forms.TextBox filesizeKB;
-        private System.Windows.Forms.Label inKBLabel;
-        private System.Windows.Forms.ComboBox filesizeComboBox;
         private System.Windows.Forms.Label filesizeLabel;
         private System.Windows.Forms.Label chapterLabel;
         private System.Windows.Forms.CheckBox autoDeint;
@@ -774,8 +729,10 @@ namespace MeGUI
         private System.Windows.Forms.TabControl tabControl2;
         private MeGUI.packages.tools.oneclick.AudioConfigControl audio1;
         private MeGUI.packages.tools.oneclick.AudioConfigControl audio2;
-        private MeGUI.core.gui.CQMComboBox audioTrack2;
-        private MeGUI.core.gui.CQMComboBox audioTrack1;
+        private MeGUI.core.gui.FileSCBox audioTrack2;
+        private MeGUI.core.gui.FileSCBox audioTrack1;
+        private MeGUI.core.gui.TargetSizeSCBox optionalTargetSizeBox1;
+        private MeGUI.core.gui.ARChooser ar;
 
 
     }

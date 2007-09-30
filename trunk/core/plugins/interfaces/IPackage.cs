@@ -6,7 +6,7 @@ using MeGUI;
 
 namespace MeGUI.core.plugins.interfaces
 {
-    public interface IPackage : IIDable
+/*    public interface IPackage : IIDable
     {
         ITool[] Tools { get;}
         IOption[] Options { get;}
@@ -20,7 +20,7 @@ namespace MeGUI.core.plugins.interfaces
         string Name { get;}
         string[] RequiredPackageIDs { get;}
         bool IsSetUp(MainForm mainForm, out string error);
-    }
+    }*/
     
     public interface ITool : IIDable
     {

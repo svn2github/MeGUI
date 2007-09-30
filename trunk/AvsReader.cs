@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
+using MeGUI.core.util;
 
 namespace MeGUI
 {
@@ -64,9 +65,7 @@ namespace MeGUI
         private AviSynthScriptEnvironment enviroment = null;
         private IAudioReader audioReader;
         private IVideoReader videoReader;
-        private int width, height, darX = -1, darY = -1, frameCount;
-        private double frameRate;
-        private bool hasVideo, hasAudio;
+        private MediaFileInfo info;
         #region construction
         public AviSynthClip Clip
         {
@@ -92,14 +91,20 @@ namespace MeGUI
             {
                 this.enviroment = new AviSynthScriptEnvironment();
                 this.clip = parse ? enviroment.ParseScript(script, AviSynthColorspace.RGB24) : enviroment.OpenScriptFile(script, AviSynthColorspace.RGB24);
-                this.hasVideo = clip.HasVideo;
-                this.height = this.clip.VideoHeight;
-                this.width = this.clip.VideoWidth;
-                this.frameRate = ((double)clip.raten) / ((double)clip.rated);
-                this.darX = this.clip.GetIntVariable("MeGUI_darx", -1);
-                this.darY = this.clip.GetIntVariable("MeGUI_dary", -1);
-                this.frameCount = clip.num_frames;
-                this.hasAudio = (clip.SamplesCount != 0);
+
+                checked
+                {
+                    ulong width = (ulong)clip.VideoWidth;
+                    ulong height = (ulong)clip.VideoHeight;
+                    info = new MediaFileInfo(
+                        clip.HasVideo, width, height,
+                        new Dar(clip.GetIntVariable("MeGUI_darx", -1),
+                              clip.GetIntVariable("MeGUI_dary", -1),
+                              width, height),
+                              (ulong)clip.num_frames,
+                              ((double)clip.raten) / ((double)clip.rated),
+                              (clip.SamplesCount != 0));
+                }
             }
             catch (Exception)
             {
@@ -124,37 +129,9 @@ namespace MeGUI
         }
         #endregion
         #region properties
-        public int DARX
+        public MediaFileInfo Info
         {
-            get { return darX; }
-        }
-        public int DARY
-        {
-            get { return darY; }
-        }
-        public int Width
-        {
-            get { return this.width; }
-        }
-        public int Height
-        {
-            get { return this.height; }
-        }
-        public double FPS
-        {
-            get { return this.frameRate; }
-        }
-        public int FrameCount
-        {
-            get { return frameCount; }
-        }
-        public bool HasVideo
-        {
-            get { return hasVideo; }
-        }
-        public bool HasAudio
-        {
-            get { return this.hasAudio; }
+            get { return info; }
         }
         public bool CanReadVideo
         {
@@ -167,7 +144,7 @@ namespace MeGUI
         #endregion
         public IAudioReader GetAudioReader(int track)
         {
-            if (track != 0 || !hasAudio)
+            if (track != 0 || !info.HasAudio)
                 throw new Exception(string.Format("Can't read audio track {0}, because it can't be found", track));
             if (audioReader == null)
                 lock (this)
@@ -179,13 +156,13 @@ namespace MeGUI
         }
         public IVideoReader GetVideoReader()
         {
-            if (!this.HasVideo)
+            if (!this.Info.HasVideo)
                 throw new Exception("Can't get Video Reader, since there is no video stream!");
             if (videoReader == null)
                 lock (this)
                 {
                     if (videoReader == null)
-                        videoReader = new AvsVideoReader(clip, Width, Height);
+                        videoReader = new AvsVideoReader(clip, (int)Info.Width, (int)Info.Height);
                 }
             return videoReader;
         }

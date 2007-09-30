@@ -44,16 +44,14 @@ namespace MeGUI
 		{
             parX = parY = 0;
 		}
-        public int DARX
+        private Dar? dar;
+
+        public Dar? DAR
         {
-            get { return parX; }
-            set { parX = value; }
+            get { return dar; }
+            set { dar = value; }
         }
-        public int DARY
-        {
-            get { return parY; }
-            set { parY = value; }
-        }
+
 		/// <summary>
 		/// the codec settings for this job
 		/// </summary>

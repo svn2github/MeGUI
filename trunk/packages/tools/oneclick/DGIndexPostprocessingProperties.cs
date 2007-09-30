@@ -1,5 +1,6 @@
 using System.Xml.Serialization;
 using System;
+using MeGUI.core.util;
 
 namespace MeGUI
 {
@@ -12,7 +13,7 @@ namespace MeGUI
 		private int horizontalOutputResolution, splitSize;
         private ContainerType container;
 		private long outputSize;
-		private AspectRatio ar;
+		private Dar? ar;
 		private VideoCodecSettings videoSettings;
         private AviSynthSettings avsSettings;
         private OneClickWindow.PartialAudioStream[] audioStreams;
@@ -23,7 +24,7 @@ namespace MeGUI
 		{
 			autoDeriveAR = false;
 			signalAR = false;
-			ar = AspectRatio.A1x1;
+            ar = null;
             audioStreams = new OneClickWindow.PartialAudioStream[2];
             avsSettings = new AviSynthSettings();
 			horizontalOutputResolution = 640;
@@ -108,7 +109,7 @@ namespace MeGUI
 		/// <summary>
 		/// gets / sets the aspect ratio of the video input (if known)
 		/// </summary>
-		public AspectRatio AR
+		public Dar? DAR
 		{
 			get {return ar;}
 			set {ar = value;}

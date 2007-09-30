@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using MeGUI.core.util;
 
 namespace MeGUI
 {
@@ -132,7 +133,7 @@ namespace MeGUI
     {
         string input, output;
         ulong numberOfFrames;
-        int parx, pary;
+        Dar? dar = null;
         double framerate;
         MuxableType videoType;
         VideoCodecSettings settings;
@@ -140,8 +141,6 @@ namespace MeGUI
         {
             input = "";
             numberOfFrames = 0;
-            parx = 0;
-            pary = 0;
         }
         public string Output
         {
@@ -153,15 +152,10 @@ namespace MeGUI
           get { return input; }
           set { input = value; }
         }
-        public int ParY
+        public Dar? DAR
         {
-          get { return pary; }
-          set { pary = value; }
-        }
-        public int ParX
-        {
-          get { return parx; }
-          set { parx = value; }
+            get { return dar; }
+            set { dar = value; }
         }
         public ulong NumberOfFrames
         {

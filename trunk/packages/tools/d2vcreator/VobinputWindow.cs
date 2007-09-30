@@ -27,6 +27,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Threading;
+using MeGUI.core.util;
 
 namespace MeGUI
 {
@@ -470,12 +471,11 @@ namespace MeGUI
 			input.Text = fileName;
 			track1.Items.Clear();
 			track2.Items.Clear();
-			AspectRatio ar;
+			Dar? ar;
             int maxHorizontalResolution;
             List<AudioTrackInfo> audioTracks;
             List<SubtitleInfo> subtitles;
-            int pgc;
-            demuxSelectedTracks.Checked = vUtil.openVideoSource(fileName, out audioTracks, out subtitles, out ar, out maxHorizontalResolution, out pgc);
+            demuxSelectedTracks.Checked = vUtil.openVideoSource(fileName, out audioTracks, out subtitles, out ar, out maxHorizontalResolution);
             track1.Items.AddRange(audioTracks.ToArray());
             track2.Items.AddRange(audioTracks.ToArray());
             foreach (AudioTrackInfo ati in audioTracks)

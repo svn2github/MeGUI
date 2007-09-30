@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using MeGUI.core.details.video;
 using MeGUI.core.plugins.interfaces;
 using System.Diagnostics;
+using MeGUI.core.util;
 
 namespace MeGUI
 {
@@ -38,6 +39,7 @@ namespace MeGUI
         private IVideoReader reader;
 		private StringBuilder script;
 		public event OpenScriptCallback OpenScript;
+        private Dar? suggestedDar;
         private int sarX, sarY;
         private MainForm mainForm;
         private JobUtil jobUtil;
@@ -57,9 +59,7 @@ namespace MeGUI
         private System.Windows.Forms.Label videoInputLabel;
 		private System.Windows.Forms.TextBox videoInput;
 		private System.Windows.Forms.Button openVideoButton;
-		private System.Windows.Forms.Label inputDARLabel;
-		private System.Windows.Forms.ComboBox inputDAR;
-		private System.Windows.Forms.TextBox customDAR;
+        private System.Windows.Forms.Label inputDARLabel;
 		private System.Windows.Forms.Label tvTypeLabel;
 		private System.Windows.Forms.OpenFileDialog openVideoDialog;
 		private System.Windows.Forms.SaveFileDialog saveAvisynthScriptDialog;
@@ -108,6 +108,7 @@ namespace MeGUI
         private Button reopenOriginal;
         private NumericUpDown fpsBox;
         private MeGUI.core.gui.HelpButton helpButton1;
+        private MeGUI.core.gui.ARChooser arChooser;
 
 		/// <summary>
 		/// Required designer variable.
@@ -128,7 +129,7 @@ namespace MeGUI
             this.controlsToDisable.Add(resNCropGroupbox);
             this.controlsToDisable.Add(previewAvsButton);
             this.controlsToDisable.Add(saveButton);
-            this.controlsToDisable.Add(inputDAR);
+            this.controlsToDisable.Add(arChooser);
             this.controlsToDisable.Add(inputDARLabel);
             this.controlsToDisable.Add(signalAR);
             this.controlsToDisable.Add(avisynthScript);
@@ -269,8 +270,6 @@ namespace MeGUI
             this.mod16Box = new System.Windows.Forms.ComboBox();
             this.signalAR = new System.Windows.Forms.CheckBox();
             this.tvTypeLabel = new System.Windows.Forms.Label();
-            this.customDAR = new System.Windows.Forms.TextBox();
-            this.inputDAR = new System.Windows.Forms.ComboBox();
             this.inputDARLabel = new System.Windows.Forms.Label();
             this.videoInput = new System.Windows.Forms.TextBox();
             this.videoInputLabel = new System.Windows.Forms.Label();
@@ -308,6 +307,7 @@ namespace MeGUI
             this.deintProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.deintStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
+            this.arChooser = new MeGUI.core.gui.ARChooser();
             label2 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
             label4 = new System.Windows.Forms.Label();
@@ -382,7 +382,7 @@ namespace MeGUI
             this.resNCropGroupbox.Controls.Add(this.verticalResolution);
             this.resNCropGroupbox.Controls.Add(this.horizontalResolution);
             this.resNCropGroupbox.Enabled = false;
-            this.resNCropGroupbox.Location = new System.Drawing.Point(3, 175);
+            this.resNCropGroupbox.Location = new System.Drawing.Point(3, 227);
             this.resNCropGroupbox.Name = "resNCropGroupbox";
             this.resNCropGroupbox.Size = new System.Drawing.Size(412, 112);
             this.resNCropGroupbox.TabIndex = 0;
@@ -611,20 +611,19 @@ namespace MeGUI
             // 
             // videoGroupBox
             // 
+            this.videoGroupBox.Controls.Add(this.arChooser);
             this.videoGroupBox.Controls.Add(this.reopenOriginal);
             this.videoGroupBox.Controls.Add(this.profileControl1);
             this.videoGroupBox.Controls.Add(this.mod16Box);
             this.videoGroupBox.Controls.Add(this.signalAR);
             this.videoGroupBox.Controls.Add(this.tvTypeLabel);
-            this.videoGroupBox.Controls.Add(this.customDAR);
-            this.videoGroupBox.Controls.Add(this.inputDAR);
             this.videoGroupBox.Controls.Add(this.inputDARLabel);
             this.videoGroupBox.Controls.Add(this.videoInput);
             this.videoGroupBox.Controls.Add(this.videoInputLabel);
             this.videoGroupBox.Controls.Add(this.openVideoButton);
             this.videoGroupBox.Location = new System.Drawing.Point(3, 8);
             this.videoGroupBox.Name = "videoGroupBox";
-            this.videoGroupBox.Size = new System.Drawing.Size(412, 161);
+            this.videoGroupBox.Size = new System.Drawing.Size(412, 213);
             this.videoGroupBox.TabIndex = 5;
             this.videoGroupBox.TabStop = false;
             this.videoGroupBox.Text = "Video";
@@ -644,7 +643,7 @@ namespace MeGUI
             // profileControl1
             // 
             this.profileControl1.LabelText = "AVS profile";
-            this.profileControl1.Location = new System.Drawing.Point(11, 128);
+            this.profileControl1.Location = new System.Drawing.Point(11, 178);
             this.profileControl1.Name = "profileControl1";
             this.profileControl1.Size = new System.Drawing.Size(395, 29);
             this.profileControl1.TabIndex = 6;
@@ -659,7 +658,7 @@ namespace MeGUI
             "Overcrop to achieve mod16",
             "Encode non-mod16",
             "Crop mod4 horizontally"});
-            this.mod16Box.Location = new System.Drawing.Point(249, 103);
+            this.mod16Box.Location = new System.Drawing.Point(249, 135);
             this.mod16Box.Name = "mod16Box";
             this.mod16Box.Size = new System.Drawing.Size(157, 21);
             this.mod16Box.TabIndex = 19;
@@ -668,7 +667,7 @@ namespace MeGUI
             // signalAR
             // 
             this.signalAR.AutoSize = true;
-            this.signalAR.Location = new System.Drawing.Point(11, 105);
+            this.signalAR.Location = new System.Drawing.Point(11, 137);
             this.signalAR.Name = "signalAR";
             this.signalAR.Size = new System.Drawing.Size(190, 17);
             this.signalAR.TabIndex = 11;
@@ -677,37 +676,14 @@ namespace MeGUI
             // 
             // tvTypeLabel
             // 
-            this.tvTypeLabel.Location = new System.Drawing.Point(276, 82);
+            this.tvTypeLabel.Location = new System.Drawing.Point(276, 97);
             this.tvTypeLabel.Name = "tvTypeLabel";
             this.tvTypeLabel.Size = new System.Drawing.Size(48, 23);
             this.tvTypeLabel.TabIndex = 10;
             // 
-            // customDAR
-            // 
-            this.customDAR.Location = new System.Drawing.Point(224, 76);
-            this.customDAR.Name = "customDAR";
-            this.customDAR.ReadOnly = true;
-            this.customDAR.Size = new System.Drawing.Size(40, 21);
-            this.customDAR.TabIndex = 9;
-            this.customDAR.TextChanged += new System.EventHandler(this.customDAR_TextChanged);
-            // 
-            // inputDAR
-            // 
-            this.inputDAR.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.inputDAR.Items.AddRange(new object[] {
-            "ITU 16:9",
-            "ITU 4:3",
-            "1:1",
-            "Custom"});
-            this.inputDAR.Location = new System.Drawing.Point(96, 76);
-            this.inputDAR.Name = "inputDAR";
-            this.inputDAR.Size = new System.Drawing.Size(121, 21);
-            this.inputDAR.TabIndex = 8;
-            this.inputDAR.SelectedIndexChanged += new System.EventHandler(this.inputDAR_SelectedIndexChanged);
-            // 
             // inputDARLabel
             // 
-            this.inputDARLabel.Location = new System.Drawing.Point(8, 80);
+            this.inputDARLabel.Location = new System.Drawing.Point(8, 95);
             this.inputDARLabel.Name = "inputDARLabel";
             this.inputDARLabel.Size = new System.Drawing.Size(72, 13);
             this.inputDARLabel.TabIndex = 7;
@@ -1081,6 +1057,17 @@ namespace MeGUI
             this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 7;
             // 
+            // arChooser
+            // 
+            this.arChooser.CustomItems = new object[0];
+            this.arChooser.HasLater = false;
+            this.arChooser.Location = new System.Drawing.Point(96, 88);
+            this.arChooser.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.arChooser.MinimumSize = new System.Drawing.Size(64, 29);
+            this.arChooser.Name = "arChooser";
+            this.arChooser.Size = new System.Drawing.Size(214, 29);
+            this.arChooser.TabIndex = 21;
+            // 
             // AviSynthWindow
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
@@ -1396,8 +1383,8 @@ namespace MeGUI
                     try
                     {
                         MediaInfoFile info = new MediaInfoFile(fileName);
-                        if (info.HasVideo && info.FPS > 0)
-                            frameRateString = info.FPS.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                        if (info.Info.HasVideo && info.Info.FPS > 0)
+                            frameRateString = info.Info.FPS.ToString(System.Globalization.CultureInfo.InvariantCulture);
                     }
                     catch (Exception)
                     { }
@@ -1509,27 +1496,17 @@ namespace MeGUI
                 this.videoInput.Text = textBoxName;
                 file = player.File;
                 reader = player.Reader;
-                this.fpsBox.Value = (decimal)file.FPS;
-				if (file.FPS.Equals(25.0)) // disable ivtc for pal sources
+                this.fpsBox.Value = (decimal)file.Info.FPS;
+                if (file.Info.FPS.Equals(25.0)) // disable ivtc for pal sources
 					this.tvTypeLabel.Text = "PAL";
 				else
 					this.tvTypeLabel.Text = "NTSC";
-				horizontalResolution.Maximum = file.Width;
-				verticalResolution.Maximum = file.Height;
-                if (file is d2vFile)
-                {
-                    d2vFile temp = (d2vFile)file;
-                    inputDAR.SelectedIndex = temp.AR;
-                }
-                else
-                {
-                    inputDAR.SelectedIndex = 3; // Custom
-                    customDAR.Text = Math.Round(((double)((double)file.Width / (double)file.Height)), 4).ToString();
-                }
-                Debug.Assert(file.Width > 1);
-                Debug.Assert(file.Height > 1);
-                cropLeft.Maximum = cropRight.Maximum = file.Width / 2;
-                cropTop.Maximum = cropBottom.Maximum = file.Height / 2;
+                horizontalResolution.Maximum = file.Info.Width;
+                verticalResolution.Maximum = file.Info.Height;
+                arChooser.Value = file.Info.DAR;
+
+                cropLeft.Maximum = cropRight.Maximum = file.Info.Width / 2;
+                cropTop.Maximum = cropBottom.Maximum = file.Info.Height / 2;
 				this.showScript();
 			}
 		}
@@ -1646,7 +1623,7 @@ namespace MeGUI
 		{
 			this.showScript();
 		}
-		private void inputDAR_SelectedIndexChanged(object sender, System.EventArgs e)
+/*		private void inputDAR_SelectedIndexChanged(object sender, System.EventArgs e)
 		{
             double dar = VideoUtil.getAspectRatio((AspectRatio)inputDAR.SelectedIndex);
             if (dar <= 0)
@@ -1658,7 +1635,7 @@ namespace MeGUI
 			else
 				customDAR.ReadOnly = true;
 			suggestResolution_CheckedChanged(null, null);
-		}
+		}*/
 		#endregion
 		#region autocrop
 		/// <summary>
@@ -1676,7 +1653,7 @@ namespace MeGUI
                     "AutoCropping not possible",MessageBoxButtons.OK,MessageBoxIcon.Error);
                 return;
             }
-            CropValues final = VideoUtil.autocrop(reader);
+            CropValues final = Autocrop.autocrop(reader);
 			bool error = (final.left == -1);
 			if (!error)
 			{
@@ -1707,21 +1684,17 @@ namespace MeGUI
                 double dar = 1.0;
                 try
                 {
-                    if (inputDAR.SelectedIndex == -1)
-                        dar = 1; // assume square pixels if user specifies nothing
-                    else
-                        if (!Double.TryParse(customDAR.Text, out dar))
-                            dar = 1.0;
-                    int sarx, sary;
-                    int scriptVerticalResolution = VideoUtil.suggestResolution(file.Height, file.Width, dar,
-                        Cropping, (int)horizontalResolution.Value, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out sarx, out sary);
+                    dar = (double)arChooser.RealValue.ar;
+                    Dar? suggestedDar;
+                    int scriptVerticalResolution = Resolution.suggestResolution((int)file.Info.Height, (int)file.Info.Width, dar,
+                        Cropping, (int)horizontalResolution.Value, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out suggestedDar);
                     if (scriptVerticalResolution > verticalResolution.Maximum)
                     { // Reduce horizontal resolution until a fit is found that doesn't require upsizing. This is really only needed for oddball DAR scenarios
                         int hres = (int)horizontalResolution.Value;
                         do
                         {
                             hres -= 16;
-                            scriptVerticalResolution = VideoUtil.suggestResolution(file.Height, file.Width, dar, Cropping, hres, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out sarx, out sary);
+                            scriptVerticalResolution = Resolution.suggestResolution((int)file.Info.Height, (int)file.Info.Width, dar, Cropping, hres, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out suggestedDar);
                         }
                         while (scriptVerticalResolution > verticalResolution.Maximum && hres > 0);
                         eventsOn = false;
@@ -1730,10 +1703,7 @@ namespace MeGUI
                     }
                     verticalResolution.Value = (decimal)scriptVerticalResolution;
                     if (signalAR)
-                    {
-                        this.sarX = sarx;
-                        this.sarY = sary;
-                    }
+                        this.suggestedDar = suggestedDar;
                 }
                 catch (Exception exc)
                 {

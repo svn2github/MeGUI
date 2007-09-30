@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using System.Collections.Generic;
 using System.Text;
+using MeGUI.core.util;
 
 namespace MeGUI
 {
@@ -21,40 +22,43 @@ namespace MeGUI
         /// <returns>Higher number for better handling, negative for impossible.</returns>
         int HandleLevel(string file);
     }
+
+    public class MediaFileInfo
+    {
+        public bool HasVideo;
+        public ulong Width;
+        public ulong Height;
+        public Dar DAR;
+        public ulong FrameCount;
+        public double FPS;
+        public bool HasAudio;
+
+        public MediaFileInfo(bool hasVideo, 
+            ulong width, ulong height,
+            Dar dar, ulong frameCount,
+            double fps, bool hasAudio)
+        {
+            HasVideo = hasVideo;
+            Width = width;
+            Height = height;
+            DAR = dar;
+            FrameCount = frameCount;
+            FPS = fps;
+            HasAudio = hasAudio;
+        }
+
+        public MediaFileInfo Clone()
+        {
+            return (MediaFileInfo)this.MemberwiseClone();
+        }
+    }
     public interface IMediaFile : IDisposable
     {
-        bool HasVideo
+        MediaFileInfo Info
         {
             get;
         }
-        int Width
-        {
-            get;
-        }
-        int Height
-        {
-            get;
-        }
-        int DARX
-        {
-            get;
-        }
-        int DARY
-        {
-            get;
-        }
-        int FrameCount
-        {
-            get;
-        }
-        double FPS
-        {
-            get;
-        }
-        bool HasAudio
-        {
-            get;
-        }
+
         bool CanReadVideo
         {
             get;

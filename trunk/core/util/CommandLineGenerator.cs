@@ -22,6 +22,7 @@ using System;
 using System.IO;
 using System.Text;
 using System.Globalization;
+using MeGUI.core.util;
 
 namespace MeGUI
 {
@@ -129,23 +130,23 @@ namespace MeGUI
             }
         }
 		public static string generateVideoCommandline(VideoCodecSettings vSettings, 
-			string input, string output, int parX, int parY)
+			string input, string output, Dar? dar)
 		{
             if (vSettings is hfyuSettings)
-                return generateHfyuCommandLine((hfyuSettings)vSettings, input, output, parX, parY);
+                return generateHfyuCommandLine((hfyuSettings)vSettings, input, output, dar);
             if (vSettings is lavcSettings)
-				return generateLavcCommandLine((lavcSettings)vSettings, input, output, parX, parY);
+				return generateLavcCommandLine((lavcSettings)vSettings, input, output, dar);
 			if (vSettings is x264Settings)
 			{
 				x264Settings xs = (x264Settings)vSettings;
                 x264TriStateAdjustment(xs);
-				return generateX264CLICommandline(xs, input, output, parX, parY);
+				return generateX264CLICommandline(xs, input, output, dar);
 		}
 			if (vSettings is snowSettings)
-				return generateSnowCommandLine((snowSettings)vSettings, input, output, parX, parY);
+				return generateSnowCommandLine((snowSettings)vSettings, input, output, dar);
             if (vSettings is xvidSettings)
             {
-                return generateXviDEncrawCommandline((xvidSettings)vSettings, input, output, parX, parY);
+                return generateXviDEncrawCommandline((xvidSettings)vSettings, input, output, dar);
             }
 			return "";
         }
@@ -164,7 +165,7 @@ namespace MeGUI
         /// </summary>
         /// <param name="ls">lavcSettings object containing all the parameters for an lavc encoding session</param>
         /// <returns>commandline matching the input parameters</returns>
-        private static string generateLavcCommandLine(lavcSettings ls, string input, string output, int parX, int parY)
+        private static string generateLavcCommandLine(lavcSettings ls, string input, string output, Dar? dar)
         {
             sb = new StringBuilder();
             sb.Append("\"" + input + "\" -ovc lavc ");
@@ -288,8 +289,8 @@ namespace MeGUI
                 sb.Append("intra_matrix=" + ls.IntraMatrix + ":");
             if (!ls.InterMatrix.Equals(""))
                 sb.Append("inter_matrix=" + ls.InterMatrix + ":");
-            if (parX > 0 && parY > 0)
-                sb.Append("aspect=" + parX + "/" + parY + ":");
+            if (dar.HasValue)
+                sb.Append("aspect=" + dar.Value.X + "/" + dar.Value.Y + ":");
             if (ls.NbMotionPredictors != (decimal)0)
                 sb.Append("last_pred=" + ls.NbMotionPredictors.ToString(ci) + ":");
 
@@ -314,7 +315,7 @@ namespace MeGUI
         /// <param name="input">input avs script</param>
         /// <param name="output">output lossless file</param>
         /// <returns>commandline matching the input parameters</returns>
-        private static string generateHfyuCommandLine(hfyuSettings ls, string input, string output, int parX, int parY)
+        private static string generateHfyuCommandLine(hfyuSettings ls, string input, string output, Dar? dar)
         {
             sb = new StringBuilder();
             sb.Append("\"" + input + "\" -o \"" + output + "\" ");
@@ -329,7 +330,7 @@ namespace MeGUI
 		/// </summary>
 		/// <param name="ss">snowSettings object containing all the parameters for an snow encoding session</param>
 		/// <returns>commandline matching the input parameters</returns>
-		private static string generateSnowCommandLine(snowSettings ss, string input, string output, int parX, int parY)
+		private static string generateSnowCommandLine(snowSettings ss, string input, string output, Dar? dar)
 		{
 			sb = new StringBuilder();
 			sb.Append("\"" + input + "\" -ovc lavc ");
@@ -444,7 +445,7 @@ namespace MeGUI
 		}
 		#endregion
 		#region xvid
-        private static string generateXviDEncrawCommandline(xvidSettings xs, string input, string output, int parX, int parY)
+        private static string generateXviDEncrawCommandline(xvidSettings xs, string input, string output, Dar? dar)
         {
             sb = new StringBuilder();
             sb.Append("-i \"" + input + "\" ");
@@ -564,9 +565,9 @@ namespace MeGUI
                 if (xs.MaxBQuant != 31)
                     sb.Append("-bmax " + xs.MaxBQuant + " ");
             }
-            if (parX > 0 && parY > 0) // custom PAR mode
+            if (dar.HasValue) // custom PAR mode
             {
-                sb.Append("-par " + parX + ":" + parY + " ");
+                sb.Append("-par " + dar.Value.X + ":" + dar.Value.Y + " ");
             }
             sb.Append("-threads " + xs.NbThreads + " ");
             if (xs.Zones != null && xs.Zones.Length > 0 && xs.CreditsQuantizer >= new decimal(1)
@@ -601,7 +602,7 @@ namespace MeGUI
 
 		#endregion
 		#region x264
-		private static string generateX264CLICommandline(x264Settings xs, string input, string output, int parX, int parY)
+		private static string generateX264CLICommandline(x264Settings xs, string input, string output, Dar? dar)
 		{
 			sb = new StringBuilder();
 			if (xs.EncodingMode == 4 || xs.EncodingMode == 7)
@@ -818,8 +819,8 @@ namespace MeGUI
 				sb.Remove(sb.Length - 1, 1);
 				sb.Append(" ");
 			}
-			if (parX > 0 && parY > 0)
-				sb.Append("--sar " + parX + ":" + parY + " ");
+			if (dar.HasValue)
+				sb.Append("--sar " + dar.Value.X + ":" + dar.Value.Y + " ");
 			if (xs.QuantizerMatrixType > 0) // custom matrices enabled
 			{
 				if (xs.QuantizerMatrixType == 1)
@@ -986,8 +987,8 @@ namespace MeGUI
 			StringBuilder sb = new StringBuilder();
          	sb.Append("-o \"" + settings.MuxedOutput + "\"");
 			
-         	if (settings.PARX > 0 && settings.PARY > 0)
-				sb.Append(" --aspect-ratio 0:" + settings.PARX + "/" + settings.PARY);
+         	if (settings.DAR.HasValue)
+				sb.Append(" --aspect-ratio 0:" + settings.DAR.Value.X + "/" + settings.DAR.Value.Y);
 
             if (settings.VideoName.Length > 0)
                 sb.Append(" --track-name \"0:" + settings.VideoName + "\"");

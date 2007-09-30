@@ -1,6 +1,6 @@
 namespace MeGUI.core.gui
 {
-    partial class CQMComboBox
+    partial class StandardAndCustomComboBox
     {
         /// <summary>
         /// Required designer variable.
@@ -28,26 +28,9 @@ namespace MeGUI.core.gui
         /// </summary>
         private void InitializeComponent()
         {
-            this.ofd = new System.Windows.Forms.OpenFileDialog();
-            this.SuspendLayout();
-            // 
-            // ofd
-            // 
-            this.ofd.FileName = "openFileDialog1";
-            this.ofd.Title = "Select your file...";
-            // 
-            // CQMComboBox
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.Name = "CQMComboBox";
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            this.components = new System.ComponentModel.Container();
         }
 
         #endregion
-
-        private System.Windows.Forms.OpenFileDialog ofd;
-
     }
 }

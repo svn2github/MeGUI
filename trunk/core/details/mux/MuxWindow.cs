@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.Diagnostics;
+using MeGUI.core.util;
 
 namespace MeGUI
 {
@@ -49,9 +50,8 @@ namespace MeGUI
             job.Settings.VideoInput = this.videoInput.Text;
             job.Settings.MuxedOutput = muxedOutput.Text;
             job.Settings.MuxedInput = this.muxedInput.Text;
-            job.Settings.PARX = base.parX;
-            job.Settings.PARY = base.parY;
-
+            job.Settings.DAR = base.dar;
+            
             if (string.IsNullOrEmpty(job.Settings.VideoInput))
                 job.Input = job.Settings.MuxedInput;
             else
@@ -83,14 +83,14 @@ namespace MeGUI
                 setConfig(value.Settings.VideoInput, value.Settings.MuxedInput, value.Settings.Framerate,
                     value.Settings.AudioStreams.ToArray(), value.Settings.SubtitleStreams.ToArray(),
                     value.Settings.ChapterFile, value.Settings.MuxedOutput, value.Settings.SplitSize,
-                    value.Settings.PARX, value.Settings.PARY);
+                    value.Settings.DAR);
             }
         }
 
         private void setConfig(string videoInput, string muxedInput, double framerate, SubStream[] audioStreams,
-            SubStream[] subtitleStreams, string chapterFile, string output, int splitSize, int parX, int parY)
+            SubStream[] subtitleStreams, string chapterFile, string output, int splitSize, Dar? dar)
         {
-            base.setConfig(videoInput, framerate, audioStreams, subtitleStreams, chapterFile, output, splitSize, parX, parY);
+            base.setConfig(videoInput, framerate, audioStreams, subtitleStreams, chapterFile, output, splitSize, dar);
             this.muxedInput.Text = muxedInput;
             this.checkIO();
         }

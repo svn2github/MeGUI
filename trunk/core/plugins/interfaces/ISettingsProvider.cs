@@ -17,6 +17,7 @@ using MeGUI.packages.audio.lame;
 using MeGUI.packages.audio.vorbis;
 using MeGUI.packages.audio.waac;
 using System.Windows.Forms;
+using MeGUI.core.util;
 
 namespace MeGUI
 {
@@ -85,20 +86,15 @@ namespace MeGUI
             get { return videoOutput; }
             set { videoOutput = value; VideoOutputChanged(this, value); }
         }
-        private int darX;
 
-        public int DARX
-        {
-            get { return darX; }
-            set { darX = value; }
-        }
-        private int darY;
+        private Dar? dar = null;
 
-        public int DARY
+        public Dar? DAR
         {
-            get { return darY; }
-            set { darY = value; }
+            get { return dar; }
+            set { dar = value; }
         }
+        
         private int introEndFrame;
 
         public int IntroEndFrame
@@ -118,8 +114,6 @@ namespace MeGUI
         {
             this.videoInput = videoInput;
             this.videoOutput = videoOutput;
-            this.darX = darX;
-            this.darY = darY;
             this.creditsStartFrame = creditsStartFrame;
             this.introEndFrame = introEndFrame;
         }

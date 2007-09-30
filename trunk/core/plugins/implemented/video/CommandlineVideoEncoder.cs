@@ -4,6 +4,7 @@ using System.Text;
 using System.IO;
 using System.Diagnostics;
 using MeGUI.core.plugins.implemented;
+using MeGUI.core.util;
 
 namespace MeGUI
 {
@@ -15,7 +16,8 @@ namespace MeGUI
         protected int lastStatusUpdateFramePosition = 0;
         ulong numberOfFrames;
         ulong? currentFrameNumber;
-        private int hres = 0, vres = 0, darX, darY;
+        private int hres = 0, vres = 0;
+        Dar? dar;
         protected bool usesSAR = false;
         #endregion
         public CommandlineVideoEncoder() : base()
@@ -39,15 +41,14 @@ namespace MeGUI
         protected void getInputProperties(VideoJob job)
         {
             double fps;
-            int a, b;
-            JobUtil.GetAllInputProperties( out numberOfFrames, out fps, out hres, out vres, out a, out b, job.Input);
-            darX = job.DARX;
-            darY = job.DARY;
-            if (job.Settings.UsesSAR)
+            Dar d;
+            JobUtil.GetAllInputProperties( out numberOfFrames, out fps, out hres, out vres,out d, job.Input);
+            dar = job.DAR;
+            if (job.Settings.UsesSAR && job.DAR.HasValue)
             {
-                int sarX, sarY;
-                VideoUtil.findSAR(job.DARX, job.DARY, hres, vres, out sarX, out sarY);
-                job.Commandline = CommandLineGenerator.generateVideoCommandline(job.Settings, job.Input, job.Output, sarX, sarY);
+                Sar s = job.DAR.Value.ToSar(hres, vres);
+                Dar d2 = new Dar(s.ar);
+                job.Commandline = CommandLineGenerator.generateVideoCommandline(job.Settings, job.Input, job.Output, d2);
             }
             su.NbFramesTotal = numberOfFrames;
             su.ClipLength = TimeSpan.FromSeconds((double)numberOfFrames / fps);

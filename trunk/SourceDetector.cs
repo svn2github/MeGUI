@@ -125,7 +125,7 @@ namespace MeGUI
                 using (AvsFile af = AvsFile.ParseScript(scriptBlock))
                 {
                     int i = 0;
-                    int frameCount = af.FrameCount;
+                    int frameCount = (int)af.Info.FrameCount;
                     bool running = true;
                     new Thread(new ThreadStart(delegate
                     {
@@ -165,7 +165,7 @@ namespace MeGUI
             {
                 using (AvsFile af = AvsFile.ParseScript(script))
                 {
-                    numFrames = af.FrameCount;
+                    numFrames = (int)af.Info.FrameCount;
                 }
             }
             catch (Exception e)
