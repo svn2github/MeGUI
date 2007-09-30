@@ -1419,7 +1419,7 @@ namespace MeGUI
         }
         #endregion
         #region importing
-        public void importProfiles(byte[] data)
+        public void importProfiles(Stream data)
         {
             if (this.InvokeRequired)
             {
@@ -1777,7 +1777,7 @@ namespace MeGUI
             PackageSystem.MediaFileTypes.Register(new AvsFileFactory());
             PackageSystem.MediaFileTypes.Register(new d2vFileFactory());
             PackageSystem.MediaFileTypes.Register(new MediaInfoFileFactory());
-            PackageSystem.JobPreProcessors.Register(JobUtil.CalculationProcessor);
+            PackageSystem.JobPreProcessors.Register(BitrateCalculatorPreProcessor.CalculationProcessor);
             PackageSystem.JobPostProcessors.Register(OneClickPostProcessor.PostProcessor);
             PackageSystem.JobPostProcessors.Register(IndexJobPostProcessor.PostProcessor);
             PackageSystem.JobPostProcessors.Register(JobWorker.DeleteIntermediateFilesPostProcessor);

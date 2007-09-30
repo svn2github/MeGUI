@@ -41,10 +41,10 @@ namespace MeGUI
         private ZipOutputStream outputFile;
         private Dictionary<string, ZipEntry> extraFiles;
 
-        public ProfilePorter(ProfileManager profiles, MainForm mainForm, byte[] data)
+        public ProfilePorter(ProfileManager profiles, MainForm mainForm, Stream data)
             : this (profiles, true, mainForm)
         {
-            inputFile = new ZipFile(new MemoryStream(data));
+            inputFile = new ZipFile(data);
         }
 
         public ProfilePorter(ProfileManager profiles, bool importMode, MainForm mainForm)

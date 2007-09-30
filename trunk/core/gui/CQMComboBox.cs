@@ -42,13 +42,13 @@ namespace MeGUI.core.gui
 
         int numStandardCQMs, numCustomCQMs;
 
-        public void AddStandardCQM(string name)
+        public void AddStandardCQM(object o)
         {
             if (numStandardCQMs == 0)
                 Items.Insert(0, new NiceComboBoxSeparator());
 
             Items.Insert(numStandardCQMs, 
-                new NiceComboBoxNormalItem(new CQMName(name, true)));
+                new NiceComboBoxNormalItem(new CQMName(o.ToString(), o, true)));
             numStandardCQMs++;
         }
 
@@ -61,7 +61,7 @@ namespace MeGUI.core.gui
             }
 
             Items.Insert(Items.Count - 3, 
-                new NiceComboBoxNormalItem(new CQMName(name, false)));
+                new NiceComboBoxNormalItem(new CQMName(name, null, false)));
             numCustomCQMs++;
         }
 
@@ -135,35 +135,41 @@ namespace MeGUI.core.gui
             SelectCQM(CQM);
         }
 
-        public string[] StandardCQMs
+        public object[] StandardCQMs
         {
             get
             {
-                string[] res = new string[numStandardCQMs];
+                object[] res = new object[numStandardCQMs];
 
                 for (int i = 0; i < numStandardCQMs; ++i)
                 {
-                    res[i] = Items[i].Name;
+                    res[i] = (Items[i].Tag as CQMName).Tag;
                 }
                 return res;
             }
             set {
                 clearStandardCQMs();
-                foreach (string s in value)
-                    AddStandardCQM(s);
+                foreach (object o in value)
+                    AddStandardCQM(o);
             }
         }
 
+        public CQMName CQMName
+        {
+            get { return (CQMName)SelectedItem.Tag; }
+        }
     }
 
     public class CQMName
     {
-        string Name;
-        bool IsStandard;
+        public object Tag;
+        public string Name;
+        public bool IsStandard;
 
-        public CQMName(string name, bool isStandard)
+        public CQMName(string name, object tag, bool isStandard)
         {
             Name = name;
+            Tag = tag;
             IsStandard = isStandard;
         }
 

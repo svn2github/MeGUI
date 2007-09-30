@@ -29,6 +29,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Diagnostics;
 using System.Text;
+using MeGUI.core.util;
 
 namespace MeGUI
 {
@@ -888,6 +889,13 @@ namespace MeGUI
                     if (type != null)
                         chapterInputType = new MuxableType(type, null);
                 }
+                mainForm.addToLog("\r\n\r\nAUDIO TO MUX: ");
+                foreach (SubStream s in allAudioToMux)
+                    mainForm.addToLog(s.path + "\r\n");
+                mainForm.addToLog("\r\nAUDIO TYPES: ");
+                foreach (MuxableType m in allInputAudioTypes)
+                    mainForm.addToLog(m.codec.ToString());
+
                 MuxJob[] muxJobs = this.jobUtil.GenerateMuxJobs(video, allAudioToMux.ToArray(), allInputAudioTypes.ToArray(),
                     subtitles, allInputSubtitleTypes.ToArray(), chapters, chapterInputType, container, muxedOutput, splitSize);
 
@@ -912,9 +920,9 @@ namespace MeGUI
                     index++;
                 }
                 index = 0;
-                
-                jobs.AddRange(vjobs);
+
                 jobs.AddRange(aJobs);
+                jobs.AddRange(vjobs);
                 
                 foreach (Job mJob in muxJobs)
                     foreach (Job job in jobs)
@@ -936,7 +944,8 @@ namespace MeGUI
                 int bitrateKBits = 0;
                 if (desiredSizeBytes > 0) // We have a target filesize
                 {
-                    if (encodedAudioPresent) // no audio encoding, we can calculate the video bitrate directly
+                    vjobs[0].MuxOnlyAudioJobs = muxOnlyAudio;
+/*                    if (encodedAudioPresent) // no audio encoding, we can calculate the video bitrate directly
                     {
                         logBuilder.Append("No audio encoding. Calculating desired video bitrate directly.\r\n");
                         List<AudioStream> calculationAudioStreams = new List<AudioStream>();
@@ -965,24 +974,14 @@ namespace MeGUI
                         {
                             jobUtil.updateVideoBitrate(vJob, bitrateKBits);
                         }
-                    }
-                    else
-                    {
-                        vjobs[0].CalculateBitrate = true;
-                    }
-                    logBuilder.Append("Setting desired size of video to " + desiredSizeBytes + " bytes\r\n");
-                    foreach (VideoJob vJob in vjobs)
-                    {
-                        vJob.DesiredSizeBytes = desiredSizeBytes;
-                    }
-                }
-                else
-                {
-                    logBuilder.Append("User doesn't care what the filesize is. Leaving bitrate/qp/crf at the profile's value");
-                    foreach (VideoJob vJob in vjobs)
-                    {
-                        vJob.DesiredSizeBytes = -1;
-                    }
+                    }*/
+                    BitrateCalculationInfo b = new BitrateCalculationInfo();
+                    b.AudioJobs = aJobs;
+                    b.MuxJob = muxJobs[muxJobs.Length - 1];
+                    b.VideoJobs = new List<Job>(vjobs);
+                    b.MuxOnlyStreams = new List<SubStream>(muxOnlyAudio);
+                    b.DesiredSizeBytes = desiredSizeBytes;
+                    vjobs[0].BitrateCalculationInfo = b;
                 }
                 mainForm.Jobs.addJobsToQueue(jobs.ToArray());
                 mainForm.addToLog(logBuilder.ToString());
@@ -1099,9 +1098,8 @@ namespace MeGUI
             if (useMediaInfo)
             {
                 MediaInfoFile info = new MediaInfoFile(p);
-                if (info.AudioType == null)
-                    return null;
-                return new MuxableType(info.AudioType, info.ACodecs[0]);
+                if (info.AudioType != null)
+                    return new MuxableType(info.AudioType, info.ACodecs[0]);
             }
             AudioType aType = guessAudioType(p);
             if (aType != null)

@@ -283,7 +283,7 @@ namespace MeGUI.core.details
         }
 
         #region saving / loading jobs
-        private List<string> toStringList(IEnumerable<Job> jobList)
+        public List<string> toStringList(IEnumerable<Job> jobList)
         {
             List<string> strings = new List<string>();
             foreach (Job j in jobList)
@@ -377,11 +377,17 @@ namespace MeGUI.core.details
             loadJobLists();
         }
 
-        private List<Job> toJobList(IEnumerable<string> list)
+        public List<Job> toJobList(IEnumerable<string> list)
         {
             List<Job> jobList = new List<Job>();
             foreach (string name in list)
-                jobList.Add(allJobs[name]);
+            {
+                try
+                {
+                    jobList.Add(allJobs[name]);
+                }
+                catch (KeyNotFoundException) { }
+            }
             return jobList;
         } 
         #endregion

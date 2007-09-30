@@ -37,6 +37,7 @@ namespace MeGUI
             this.setIgnoreValue = new System.Windows.Forms.ToolStripMenuItem();
             this.checkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uncheckToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.reinstallToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
@@ -96,9 +97,10 @@ namespace MeGUI
             this.statusToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.setIgnoreValue,
             this.checkToolStripMenuItem,
-            this.uncheckToolStripMenuItem});
+            this.uncheckToolStripMenuItem,
+            this.reinstallToolStripMenuItem});
             this.statusToolStrip.Name = "statusToolStrip";
-            this.statusToolStrip.Size = new System.Drawing.Size(203, 70);
+            this.statusToolStrip.Size = new System.Drawing.Size(203, 114);
             // 
             // setIgnoreValue
             // 
@@ -121,6 +123,13 @@ namespace MeGUI
             this.uncheckToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.uncheckToolStripMenuItem.Text = "Uncheck";
             this.uncheckToolStripMenuItem.Click += new System.EventHandler(this.uncheckToolStripMenuItem_Click);
+            // 
+            // reinstallToolStripMenuItem
+            // 
+            this.reinstallToolStripMenuItem.Name = "reinstallToolStripMenuItem";
+            this.reinstallToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.reinstallToolStripMenuItem.Text = "Force (re)install";
+            this.reinstallToolStripMenuItem.Click += new System.EventHandler(this.reinstallToolStripMenuItem_Click);
             // 
             // panel1
             // 
@@ -299,5 +308,6 @@ namespace MeGUI
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.Panel panel1;
         private MeGUI.core.gui.HelpButton helpButton1;
+        private System.Windows.Forms.ToolStripMenuItem reinstallToolStripMenuItem;
     }
 }

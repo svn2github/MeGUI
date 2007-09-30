@@ -330,7 +330,30 @@ namespace MeGUI
                 key.SetValue("plugindir2_5", value);
             }
         }
-		/// <summary>
+
+        /// <summary>
+        /// folder containing local copies of update files
+        /// </summary>
+        public static string MeGUIUpdateCache
+        {
+            get
+            {
+                Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\MeGUI");
+                if (key == null)
+                    return null;
+                else
+                    return (string)key.GetValue("update_cache");
+            }
+            set
+            {
+                if (!System.IO.Path.IsPathRooted(value))
+                    throw new ArgumentException("Path must be absolute");
+                Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine.CreateSubKey(@"SOFTWARE\MeGUI");
+                key.SetValue("update_cache", value);
+            }
+        }
+
+        /// <summary>
 		/// should the video bitrate be recalculated after credits encoding in video only mode?
 		/// </summary>
 		public bool RecalculateMainMovieBitrate

@@ -26,6 +26,7 @@ using System.Windows.Forms;
 using System.Threading;
 using System.IO;
 using System.Drawing.Imaging;
+using MeGUI.core.gui;
 
 namespace MeGUI
 {
@@ -366,6 +367,7 @@ namespace MeGUI
 		private void InitializeComponent()
 		{
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.Button goToFrameButton;
             this.videoPreview = new System.Windows.Forms.PictureBox();
             this.contextMenu1 = new System.Windows.Forms.ContextMenu();
             this.mnuIntroEnd = new System.Windows.Forms.MenuItem();
@@ -393,6 +395,7 @@ namespace MeGUI
             this.zoneEndButton = new System.Windows.Forms.Button();
             this.chapterButton = new System.Windows.Forms.Button();
             this.defaultToolTip = new System.Windows.Forms.ToolTip(this.components);
+            goToFrameButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.videoPreview)).BeginInit();
             this.previewGroupbox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.positionSlider)).BeginInit();
@@ -526,7 +529,7 @@ namespace MeGUI
             // 
             this.creditsStartButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.creditsStartButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.creditsStartButton.Location = new System.Drawing.Point(242, 8);
+            this.creditsStartButton.Location = new System.Drawing.Point(278, 30);
             this.creditsStartButton.Name = "creditsStartButton";
             this.creditsStartButton.Size = new System.Drawing.Size(44, 18);
             this.creditsStartButton.TabIndex = 7;
@@ -551,12 +554,13 @@ namespace MeGUI
             this.buttonPanel.Controls.Add(this.nextFrameButton);
             this.buttonPanel.Controls.Add(this.zoneStartButton);
             this.buttonPanel.Controls.Add(this.creditsStartButton);
+            this.buttonPanel.Controls.Add(goToFrameButton);
             this.buttonPanel.Controls.Add(this.setZoneButton);
             this.buttonPanel.Controls.Add(this.zoneEndButton);
             this.buttonPanel.Controls.Add(this.chapterButton);
             this.buttonPanel.Location = new System.Drawing.Point(14, 310);
             this.buttonPanel.Name = "buttonPanel";
-            this.buttonPanel.Size = new System.Drawing.Size(332, 80);
+            this.buttonPanel.Size = new System.Drawing.Size(333, 80);
             this.buttonPanel.TabIndex = 8;
             // 
             // showPAR
@@ -613,7 +617,7 @@ namespace MeGUI
             // 
             // introEndButton
             // 
-            this.introEndButton.Location = new System.Drawing.Point(200, 8);
+            this.introEndButton.Location = new System.Drawing.Point(236, 30);
             this.introEndButton.Name = "introEndButton";
             this.introEndButton.Size = new System.Drawing.Size(38, 18);
             this.introEndButton.TabIndex = 12;
@@ -633,7 +637,7 @@ namespace MeGUI
             // 
             // setZoneButton
             // 
-            this.setZoneButton.Location = new System.Drawing.Point(256, 34);
+            this.setZoneButton.Location = new System.Drawing.Point(204, 30);
             this.setZoneButton.Name = "setZoneButton";
             this.setZoneButton.Size = new System.Drawing.Size(30, 18);
             this.setZoneButton.TabIndex = 9;
@@ -654,13 +658,22 @@ namespace MeGUI
             // chapterButton
             // 
             this.chapterButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.chapterButton.Location = new System.Drawing.Point(200, 8);
+            this.chapterButton.Location = new System.Drawing.Point(236, 30);
             this.chapterButton.Name = "chapterButton";
             this.chapterButton.Size = new System.Drawing.Size(72, 18);
             this.chapterButton.TabIndex = 13;
             this.chapterButton.Text = "Set Chapter";
             this.defaultToolTip.SetToolTip(this.chapterButton, "Sets the end frame of a new zone");
             this.chapterButton.Click += new System.EventHandler(this.chapterButton_Click);
+            // 
+            // goToFrameButton
+            // 
+            goToFrameButton.Location = new System.Drawing.Point(200, 8);
+            goToFrameButton.Name = "goToFrameButton";
+            goToFrameButton.Size = new System.Drawing.Size(82, 18);
+            goToFrameButton.TabIndex = 9;
+            goToFrameButton.Text = "Go to frame";
+            goToFrameButton.Click += new System.EventHandler(this.goToFrameButton_Click);
             // 
             // VideoPlayer
             // 
@@ -1176,6 +1189,18 @@ namespace MeGUI
         private void showPAR_CheckedChanged(object sender, EventArgs e)
         {
             resize(videoWindowWidth, showPAR.Checked);
+        }
+
+        private void goToFrameButton_Click(object sender, EventArgs e)
+        {
+            decimal val;
+            if (NumberChooser.ShowDialog("Enter a frame number:", "Go to frame",
+                0, positionSlider.Minimum, positionSlider.Maximum, positionSlider.Value, out val)
+                == DialogResult.OK)
+            {
+                positionSlider.Value = (int)val;
+                positionSlider_Scroll(null, null);
+            }
         }
 	}
 }

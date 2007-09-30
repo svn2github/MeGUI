@@ -18,6 +18,7 @@
 // 
 // ****************************************************************************
 using System;
+using MeGUI.core.util;
 
 namespace MeGUI
 {
@@ -29,15 +30,11 @@ namespace MeGUI
 		private VideoCodecSettings settings;
 		private int outputType, parX, parY;
         private ulong numberOfFrames;
-		private long desiredSize;
 		private double framerate;
-        private bool calculateBitrate;
 
-        public bool CalculateBitrate
-        {
-            get { return calculateBitrate; }
-            set { calculateBitrate = value; }
-        }
+        public SubStream[] MuxOnlyAudioJobs = new SubStream[0];
+
+        public BitrateCalculationInfo BitrateCalculationInfo;
 
         public override JobTypes JobType
         {
@@ -72,14 +69,6 @@ namespace MeGUI
 		{
 			get {return outputType;}
 			set {outputType = value;}
-		}
-		/// <summary>
-		/// the desired output size this job shall have, in bytes
-		/// </summary>
-		public long DesiredSizeBytes
-		{
-			get {return desiredSize;}
-			set {desiredSize = value;}
 		}
 		/// <summary>
 		/// the number of frames the source of this job has

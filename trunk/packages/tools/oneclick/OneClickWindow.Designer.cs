@@ -28,6 +28,10 @@ namespace MeGUI
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.TabPage tabPage3;
+            System.Windows.Forms.TabPage tabPage4;
+            this.audio1 = new MeGUI.packages.tools.oneclick.AudioConfigControl();
+            this.audio2 = new MeGUI.packages.tools.oneclick.AudioConfigControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.locationGroupBox = new System.Windows.Forms.GroupBox();
             this.chapterFile = new MeGUI.FileBar();
@@ -58,25 +62,13 @@ namespace MeGUI
             this.filesizeComboBox = new System.Windows.Forms.ComboBox();
             this.filesizeLabel = new System.Windows.Forms.Label();
             this.audioGroupbox = new System.Windows.Forms.GroupBox();
-            this.clearAudio2Button = new System.Windows.Forms.Button();
-            this.clearAudio1Button = new System.Windows.Forms.Button();
+            this.audioTrack2 = new MeGUI.core.gui.CQMComboBox();
+            this.audioTrack1 = new MeGUI.core.gui.CQMComboBox();
             this.track2Label = new System.Windows.Forms.Label();
             this.track1Label = new System.Windows.Forms.Label();
-            this.track2 = new System.Windows.Forms.ComboBox();
-            this.track1 = new System.Windows.Forms.ComboBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.encoderConfigTab = new System.Windows.Forms.TabPage();
-            this.audioIOGroupBox = new System.Windows.Forms.GroupBox();
-            this.audioProfileControl = new MeGUI.core.details.video.ProfileControl();
-            this.externalInput = new System.Windows.Forms.CheckBox();
-            this.audioCodecLabel = new System.Windows.Forms.Label();
-            this.dontEncodeAudio = new System.Windows.Forms.CheckBox();
-            this.audioInput = new System.Windows.Forms.TextBox();
-            this.audioInputOpenButton = new System.Windows.Forms.Button();
-            this.audioTrack2 = new System.Windows.Forms.RadioButton();
-            this.audioTrack1 = new System.Windows.Forms.RadioButton();
-            this.deleteAudioButton = new System.Windows.Forms.Button();
-            this.audioCodec = new System.Windows.Forms.ComboBox();
+            this.tabControl2 = new System.Windows.Forms.TabControl();
             this.videoGroupBox = new System.Windows.Forms.GroupBox();
             this.videoProfileControl = new MeGUI.core.details.video.ProfileControl();
             this.addPrerenderJob = new System.Windows.Forms.CheckBox();
@@ -90,6 +82,10 @@ namespace MeGUI
             this.showAdvancedOptions = new System.Windows.Forms.CheckBox();
             this.goButton = new System.Windows.Forms.Button();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
+            tabPage3 = new System.Windows.Forms.TabPage();
+            tabPage4 = new System.Windows.Forms.TabPage();
+            tabPage3.SuspendLayout();
+            tabPage4.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.locationGroupBox.SuspendLayout();
             this.avsBox.SuspendLayout();
@@ -100,9 +96,51 @@ namespace MeGUI
             this.audioGroupbox.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.encoderConfigTab.SuspendLayout();
-            this.audioIOGroupBox.SuspendLayout();
+            this.tabControl2.SuspendLayout();
             this.videoGroupBox.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // tabPage3
+            // 
+            tabPage3.Controls.Add(this.audio1);
+            tabPage3.Location = new System.Drawing.Point(4, 22);
+            tabPage3.Name = "tabPage3";
+            tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            tabPage3.Size = new System.Drawing.Size(423, 67);
+            tabPage3.TabIndex = 0;
+            tabPage3.Text = "Audio track 1";
+            tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // audio1
+            // 
+            this.audio1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.audio1.DontEncode = false;
+            this.audio1.Location = new System.Drawing.Point(3, 3);
+            this.audio1.Name = "audio1";
+            this.audio1.Size = new System.Drawing.Size(417, 61);
+            this.audio1.TabIndex = 0;
+            this.audio1.SomethingChanged += new System.EventHandler(this.audio1_SomethingChanged);
+            // 
+            // tabPage4
+            // 
+            tabPage4.Controls.Add(this.audio2);
+            tabPage4.Location = new System.Drawing.Point(4, 22);
+            tabPage4.Name = "tabPage4";
+            tabPage4.Padding = new System.Windows.Forms.Padding(3);
+            tabPage4.Size = new System.Drawing.Size(423, 67);
+            tabPage4.TabIndex = 1;
+            tabPage4.Text = "Audio track 2";
+            tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // audio2
+            // 
+            this.audio2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.audio2.DontEncode = false;
+            this.audio2.Location = new System.Drawing.Point(3, 3);
+            this.audio2.Name = "audio2";
+            this.audio2.Size = new System.Drawing.Size(417, 61);
+            this.audio2.TabIndex = 0;
+            this.audio2.SomethingChanged += new System.EventHandler(this.audio1_SomethingChanged);
             // 
             // tabPage2
             // 
@@ -345,8 +383,8 @@ namespace MeGUI
             this.input.AllowDrop = true;
             this.input.Filename = "";
             this.input.Filter = "VOB Files (*.vob)|*.vob|MPEG-1/2 Program Streams (*.mpg)|*.mpg|Transport Streams " +
-                "(*.m2ts,*.ts)|*.m2ts;*.ts|All DGIndex supported files|*.vob;*.mpg;*.mpeg;*.m2ts;*.m2v;*.mpv;*.tp;*.ts" +
-                ";*.trp;*.pva;*.vro";
+                "(*.m2ts,*.ts)|*.m2ts;*.ts|All DGIndex supported files|*.vob;*.mpg;*.mpeg;*.m2ts;" +
+                "*.m2v;*.mpv;*.tp;*.ts;*.trp;*.pva;*.vro";
             this.input.FolderMode = false;
             this.input.Location = new System.Drawing.Point(123, 13);
             this.input.Name = "input";
@@ -432,12 +470,10 @@ namespace MeGUI
             // 
             // audioGroupbox
             // 
-            this.audioGroupbox.Controls.Add(this.clearAudio2Button);
-            this.audioGroupbox.Controls.Add(this.clearAudio1Button);
+            this.audioGroupbox.Controls.Add(this.audioTrack2);
+            this.audioGroupbox.Controls.Add(this.audioTrack1);
             this.audioGroupbox.Controls.Add(this.track2Label);
             this.audioGroupbox.Controls.Add(this.track1Label);
-            this.audioGroupbox.Controls.Add(this.track2);
-            this.audioGroupbox.Controls.Add(this.track1);
             this.audioGroupbox.Location = new System.Drawing.Point(6, 88);
             this.audioGroupbox.Name = "audioGroupbox";
             this.audioGroupbox.Size = new System.Drawing.Size(424, 82);
@@ -445,24 +481,37 @@ namespace MeGUI
             this.audioGroupbox.TabStop = false;
             this.audioGroupbox.Text = "Audio";
             // 
-            // clearAudio2Button
+            // audioTrack2
             // 
-            this.clearAudio2Button.Enabled = false;
-            this.clearAudio2Button.Location = new System.Drawing.Point(386, 48);
-            this.clearAudio2Button.Name = "clearAudio2Button";
-            this.clearAudio2Button.Size = new System.Drawing.Size(24, 23);
-            this.clearAudio2Button.TabIndex = 18;
-            this.clearAudio2Button.Text = "X";
-            this.clearAudio2Button.Click += new System.EventHandler(this.clearAudio2Button_Click);
+            this.audioTrack2.CustomCQMs = new string[0];
+            this.audioTrack2.Filter = "";
+            this.audioTrack2.Location = new System.Drawing.Point(125, 45);
+            this.audioTrack2.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.audioTrack2.MinimumSize = new System.Drawing.Size(64, 29);
+            this.audioTrack2.Name = "audioTrack2";
+            this.audioTrack2.SelectedIndex = -1;
+            this.audioTrack2.SelectedItem = null;
+            this.audioTrack2.SelectedText = "";
+            this.audioTrack2.Size = new System.Drawing.Size(285, 29);
+            this.audioTrack2.StandardCQMs = new object[0];
+            this.audioTrack2.TabIndex = 20;
+            this.audioTrack2.SelectionChanged += new MeGUI.StringChanged(this.audioTrack2_SelectionChanged);
             // 
-            // clearAudio1Button
+            // audioTrack1
             // 
-            this.clearAudio1Button.Location = new System.Drawing.Point(386, 24);
-            this.clearAudio1Button.Name = "clearAudio1Button";
-            this.clearAudio1Button.Size = new System.Drawing.Size(24, 23);
-            this.clearAudio1Button.TabIndex = 17;
-            this.clearAudio1Button.Text = "X";
-            this.clearAudio1Button.Click += new System.EventHandler(this.clearAudio1Button_Click);
+            this.audioTrack1.CustomCQMs = new string[0];
+            this.audioTrack1.Filter = "";
+            this.audioTrack1.Location = new System.Drawing.Point(125, 15);
+            this.audioTrack1.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.audioTrack1.MinimumSize = new System.Drawing.Size(64, 29);
+            this.audioTrack1.Name = "audioTrack1";
+            this.audioTrack1.SelectedIndex = -1;
+            this.audioTrack1.SelectedItem = null;
+            this.audioTrack1.SelectedText = "";
+            this.audioTrack1.Size = new System.Drawing.Size(285, 29);
+            this.audioTrack1.StandardCQMs = new object[0];
+            this.audioTrack1.TabIndex = 19;
+            this.audioTrack1.SelectionChanged += new MeGUI.StringChanged(this.audioTrack1_SelectionChanged);
             // 
             // track2Label
             // 
@@ -480,25 +529,6 @@ namespace MeGUI
             this.track1Label.TabIndex = 15;
             this.track1Label.Text = "Track 1";
             // 
-            // track2
-            // 
-            this.track2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.track2.Enabled = false;
-            this.track2.Location = new System.Drawing.Point(125, 50);
-            this.track2.Name = "track2";
-            this.track2.Size = new System.Drawing.Size(253, 21);
-            this.track2.TabIndex = 14;
-            this.track2.SelectedIndexChanged += new System.EventHandler(this.track1_SelectedIndexChanged);
-            // 
-            // track1
-            // 
-            this.track1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.track1.Location = new System.Drawing.Point(125, 24);
-            this.track1.Name = "track1";
-            this.track1.Size = new System.Drawing.Size(253, 21);
-            this.track1.TabIndex = 13;
-            this.track1.SelectedIndexChanged += new System.EventHandler(this.track1_SelectedIndexChanged);
-            // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
@@ -513,7 +543,7 @@ namespace MeGUI
             // 
             // encoderConfigTab
             // 
-            this.encoderConfigTab.Controls.Add(this.audioIOGroupBox);
+            this.encoderConfigTab.Controls.Add(this.tabControl2);
             this.encoderConfigTab.Controls.Add(this.videoGroupBox);
             this.encoderConfigTab.Controls.Add(this.splitOutput);
             this.encoderConfigTab.Controls.Add(this.splitSize);
@@ -527,117 +557,15 @@ namespace MeGUI
             this.encoderConfigTab.Text = "Encoder Config";
             this.encoderConfigTab.UseVisualStyleBackColor = true;
             // 
-            // audioIOGroupBox
+            // tabControl2
             // 
-            this.audioIOGroupBox.Controls.Add(this.audioProfileControl);
-            this.audioIOGroupBox.Controls.Add(this.externalInput);
-            this.audioIOGroupBox.Controls.Add(this.audioCodecLabel);
-            this.audioIOGroupBox.Controls.Add(this.dontEncodeAudio);
-            this.audioIOGroupBox.Controls.Add(this.audioInput);
-            this.audioIOGroupBox.Controls.Add(this.audioInputOpenButton);
-            this.audioIOGroupBox.Controls.Add(this.audioTrack2);
-            this.audioIOGroupBox.Controls.Add(this.audioTrack1);
-            this.audioIOGroupBox.Controls.Add(this.deleteAudioButton);
-            this.audioIOGroupBox.Controls.Add(this.audioCodec);
-            this.audioIOGroupBox.Location = new System.Drawing.Point(6, 89);
-            this.audioIOGroupBox.Name = "audioIOGroupBox";
-            this.audioIOGroupBox.Size = new System.Drawing.Size(426, 104);
-            this.audioIOGroupBox.TabIndex = 32;
-            this.audioIOGroupBox.TabStop = false;
-            this.audioIOGroupBox.Text = "Audio";
-            // 
-            // audioProfileControl
-            // 
-            this.audioProfileControl.LabelText = "Audio Profile";
-            this.audioProfileControl.Location = new System.Drawing.Point(9, 69);
-            this.audioProfileControl.Name = "audioProfileControl";
-            this.audioProfileControl.Size = new System.Drawing.Size(407, 29);
-            this.audioProfileControl.TabIndex = 33;
-            // 
-            // externalInput
-            // 
-            this.externalInput.AutoSize = true;
-            this.externalInput.Location = new System.Drawing.Point(9, 23);
-            this.externalInput.Name = "externalInput";
-            this.externalInput.Size = new System.Drawing.Size(90, 17);
-            this.externalInput.TabIndex = 32;
-            this.externalInput.Text = "External input";
-            this.externalInput.UseVisualStyleBackColor = true;
-            this.externalInput.CheckedChanged += new System.EventHandler(this.externalInput_CheckedChanged);
-            // 
-            // audioCodecLabel
-            // 
-            this.audioCodecLabel.AutoSize = true;
-            this.audioCodecLabel.Location = new System.Drawing.Point(6, 50);
-            this.audioCodecLabel.Name = "audioCodecLabel";
-            this.audioCodecLabel.Size = new System.Drawing.Size(38, 13);
-            this.audioCodecLabel.TabIndex = 31;
-            this.audioCodecLabel.Text = "Codec";
-            this.audioCodecLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // dontEncodeAudio
-            // 
-            this.dontEncodeAudio.Location = new System.Drawing.Point(256, 47);
-            this.dontEncodeAudio.Name = "dontEncodeAudio";
-            this.dontEncodeAudio.Size = new System.Drawing.Size(122, 21);
-            this.dontEncodeAudio.TabIndex = 30;
-            this.dontEncodeAudio.Text = "Keep original track";
-            this.dontEncodeAudio.CheckedChanged += new System.EventHandler(this.dontEncodeAudio_CheckedChanged);
-            // 
-            // audioInput
-            // 
-            this.audioInput.Location = new System.Drawing.Point(113, 19);
-            this.audioInput.Name = "audioInput";
-            this.audioInput.ReadOnly = true;
-            this.audioInput.Size = new System.Drawing.Size(256, 20);
-            this.audioInput.TabIndex = 6;
-            // 
-            // audioInputOpenButton
-            // 
-            this.audioInputOpenButton.Location = new System.Drawing.Point(383, 19);
-            this.audioInputOpenButton.Name = "audioInputOpenButton";
-            this.audioInputOpenButton.Size = new System.Drawing.Size(24, 23);
-            this.audioInputOpenButton.TabIndex = 7;
-            this.audioInputOpenButton.Text = "...";
-            this.audioInputOpenButton.Visible = false;
-            this.audioInputOpenButton.Click += new System.EventHandler(this.audioInputOpenButton_Click);
-            // 
-            // audioTrack2
-            // 
-            this.audioTrack2.Location = new System.Drawing.Point(75, 0);
-            this.audioTrack2.Name = "audioTrack2";
-            this.audioTrack2.Size = new System.Drawing.Size(24, 16);
-            this.audioTrack2.TabIndex = 20;
-            this.audioTrack2.Text = "2";
-            this.audioTrack2.CheckedChanged += new System.EventHandler(this.audioTrack1_CheckedChanged);
-            // 
-            // audioTrack1
-            // 
-            this.audioTrack1.Checked = true;
-            this.audioTrack1.Location = new System.Drawing.Point(48, 0);
-            this.audioTrack1.Name = "audioTrack1";
-            this.audioTrack1.Size = new System.Drawing.Size(24, 16);
-            this.audioTrack1.TabIndex = 19;
-            this.audioTrack1.TabStop = true;
-            this.audioTrack1.Text = "1";
-            this.audioTrack1.CheckedChanged += new System.EventHandler(this.audioTrack1_CheckedChanged);
-            // 
-            // deleteAudioButton
-            // 
-            this.deleteAudioButton.Location = new System.Drawing.Point(383, 45);
-            this.deleteAudioButton.Name = "deleteAudioButton";
-            this.deleteAudioButton.Size = new System.Drawing.Size(24, 23);
-            this.deleteAudioButton.TabIndex = 6;
-            this.deleteAudioButton.Text = "X";
-            this.deleteAudioButton.Click += new System.EventHandler(this.deleteAudioButton_Click);
-            // 
-            // audioCodec
-            // 
-            this.audioCodec.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.audioCodec.Location = new System.Drawing.Point(113, 44);
-            this.audioCodec.Name = "audioCodec";
-            this.audioCodec.Size = new System.Drawing.Size(122, 21);
-            this.audioCodec.TabIndex = 7;
+            this.tabControl2.Controls.Add(tabPage3);
+            this.tabControl2.Controls.Add(tabPage4);
+            this.tabControl2.Location = new System.Drawing.Point(3, 89);
+            this.tabControl2.Name = "tabControl2";
+            this.tabControl2.SelectedIndex = 0;
+            this.tabControl2.Size = new System.Drawing.Size(431, 93);
+            this.tabControl2.TabIndex = 32;
             // 
             // videoGroupBox
             // 
@@ -690,7 +618,7 @@ namespace MeGUI
             // splitOutput
             // 
             this.splitOutput.AutoSize = true;
-            this.splitOutput.Location = new System.Drawing.Point(262, 199);
+            this.splitOutput.Location = new System.Drawing.Point(262, 202);
             this.splitOutput.Name = "splitOutput";
             this.splitOutput.Size = new System.Drawing.Size(69, 17);
             this.splitOutput.TabIndex = 29;
@@ -699,7 +627,7 @@ namespace MeGUI
             // splitSize
             // 
             this.splitSize.Enabled = false;
-            this.splitSize.Location = new System.Drawing.Point(351, 197);
+            this.splitSize.Location = new System.Drawing.Point(351, 200);
             this.splitSize.Name = "splitSize";
             this.splitSize.Size = new System.Drawing.Size(64, 20);
             this.splitSize.TabIndex = 28;
@@ -707,7 +635,7 @@ namespace MeGUI
             // 
             // containerFormatLabel
             // 
-            this.containerFormatLabel.Location = new System.Drawing.Point(21, 204);
+            this.containerFormatLabel.Location = new System.Drawing.Point(21, 207);
             this.containerFormatLabel.Name = "containerFormatLabel";
             this.containerFormatLabel.Size = new System.Drawing.Size(92, 13);
             this.containerFormatLabel.TabIndex = 27;
@@ -716,7 +644,7 @@ namespace MeGUI
             // containerFormat
             // 
             this.containerFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.containerFormat.Location = new System.Drawing.Point(119, 197);
+            this.containerFormat.Location = new System.Drawing.Point(119, 200);
             this.containerFormat.Name = "containerFormat";
             this.containerFormat.Size = new System.Drawing.Size(122, 21);
             this.containerFormat.TabIndex = 26;
@@ -770,6 +698,8 @@ namespace MeGUI
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "OneClickWindow";
             this.Text = "One Click Encoder";
+            tabPage3.ResumeLayout(false);
+            tabPage4.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.locationGroupBox.ResumeLayout(false);
             this.locationGroupBox.PerformLayout();
@@ -784,8 +714,7 @@ namespace MeGUI
             this.tabControl1.ResumeLayout(false);
             this.encoderConfigTab.ResumeLayout(false);
             this.encoderConfigTab.PerformLayout();
-            this.audioIOGroupBox.ResumeLayout(false);
-            this.audioIOGroupBox.PerformLayout();
+            this.tabControl2.ResumeLayout(false);
             this.videoGroupBox.ResumeLayout(false);
             this.videoGroupBox.PerformLayout();
             this.ResumeLayout(false);
@@ -800,12 +729,8 @@ namespace MeGUI
         private System.Windows.Forms.Label inputLabel;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.GroupBox audioGroupbox;
-        private System.Windows.Forms.Button clearAudio2Button;
-        private System.Windows.Forms.Button clearAudio1Button;
         private System.Windows.Forms.Label track2Label;
         private System.Windows.Forms.Label track1Label;
-        private System.Windows.Forms.ComboBox track2;
-        private System.Windows.Forms.ComboBox track1;
         private System.Windows.Forms.GroupBox IOGroupbox;
         private System.Windows.Forms.Label outputLabel;
         private System.Windows.Forms.GroupBox avsBox;
@@ -828,7 +753,6 @@ namespace MeGUI
         private System.Windows.Forms.CheckBox autoDeint;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.TabPage encoderConfigTab;
-        private System.Windows.Forms.CheckBox dontEncodeAudio;
         private System.Windows.Forms.CheckBox splitOutput;
         private System.Windows.Forms.TextBox splitSize;
         private System.Windows.Forms.Label containerFormatLabel;
@@ -837,19 +761,9 @@ namespace MeGUI
         private System.Windows.Forms.CheckBox addPrerenderJob;
         private System.Windows.Forms.Label videoCodecLabel;
         private System.Windows.Forms.ComboBox videoCodec;
-        private System.Windows.Forms.GroupBox audioIOGroupBox;
-        private System.Windows.Forms.Label audioCodecLabel;
-        private System.Windows.Forms.TextBox audioInput;
-        private System.Windows.Forms.Button audioInputOpenButton;
-        private System.Windows.Forms.RadioButton audioTrack2;
-        private System.Windows.Forms.RadioButton audioTrack1;
-        private System.Windows.Forms.Button deleteAudioButton;
-        private System.Windows.Forms.ComboBox audioCodec;
-        private System.Windows.Forms.CheckBox externalInput;
         private System.Windows.Forms.CheckBox showAdvancedOptions;
         private System.Windows.Forms.Button goButton;
         private MeGUI.core.details.video.ProfileControl profileControl1;
-        private MeGUI.core.details.video.ProfileControl audioProfileControl;
         private MeGUI.core.details.video.ProfileControl videoProfileControl;
         private FileBar input;
         private FileBar output;
@@ -857,6 +771,11 @@ namespace MeGUI
         private FileBar chapterFile;
         private MeGUI.core.details.video.ProfileControl profileControl2;
         private MeGUI.core.gui.HelpButton helpButton1;
+        private System.Windows.Forms.TabControl tabControl2;
+        private MeGUI.packages.tools.oneclick.AudioConfigControl audio1;
+        private MeGUI.packages.tools.oneclick.AudioConfigControl audio2;
+        private MeGUI.core.gui.CQMComboBox audioTrack2;
+        private MeGUI.core.gui.CQMComboBox audioTrack1;
 
 
     }

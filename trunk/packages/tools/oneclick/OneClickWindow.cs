@@ -12,6 +12,8 @@ using System.Windows.Forms;
 
 using MeGUI.core.details.video;
 using MeGUI.core.plugins.interfaces;
+using MeGUI.core.gui;
+using MeGUI.packages.tools.oneclick;
 
 namespace MeGUI
 {
@@ -19,6 +21,9 @@ namespace MeGUI
 //    public class OneClickPostProcessor 
     public partial class OneClickWindow : Form
     {
+        CQMComboBox[] audioTrack;
+        AudioConfigControl[] audio;
+
         #region profiles
         void ProfileChanged(object sender, Profile prof)
         {
@@ -37,12 +42,15 @@ namespace MeGUI
             profileHandler.ProfileChanged += new SelectedProfileChangedEvent(OneClickProfileChanged);
             profileHandler.ConfigureCompleted += new EventHandler(profileHandler_ConfigureCompleted);
             profileHandler.RefreshProfiles();
+            audioTrack = new CQMComboBox[] { audioTrack1, audioTrack2 };
+            audio = new AudioConfigControl[] { audio1, audio2 };
         }
 
         private void refreshAssistingProfiles()
         {
             videoProfileHandler.RefreshProfiles();
-            audioProfileHandler.RefreshProfiles();
+            audio1.RefreshProfiles();
+            audio2.RefreshProfiles();
             avsProfileHandler.RefreshProfiles();
         }
 
@@ -95,29 +103,10 @@ namespace MeGUI
         }
         #endregion
         #region Audio profiles
-        MultipleConfigurersHandler<AudioCodecSettings, string[], AudioCodec, AudioEncoderType> audioCodecHandler;
-        ProfilesControlHandler<AudioCodecSettings, string[]> audioProfileHandler;
         private void initAudioHandler()
         {
-            this.audioCodec.Items.AddRange(mainForm.PackageSystem.AudioSettingsProviders.ValuesArray);
-            try
-            {
-                this.audioCodec.SelectedItem = mainForm.PackageSystem.AudioSettingsProviders["ND AAC"];
-            }
-            catch (Exception) { }
-
-            // Init audio handlers
-            audioCodecHandler = new MultipleConfigurersHandler<AudioCodecSettings, string[], AudioCodec, AudioEncoderType>(audioCodec);
-            audioProfileHandler = new ProfilesControlHandler<AudioCodecSettings, string[]>("Audio", mainForm, audioProfileControl, audioCodecHandler.EditSettings,
-                new InfoGetter<string[]>(delegate { return new string[] { "input", "output" }; }), audioCodecHandler.Getter, audioCodecHandler.Setter);
-            audioProfileHandler.ConfigureCompleted += new EventHandler(delegate(object _0, EventArgs _1)
-            {
-                PartialAudioStream stream = CurrentAudioStream;
-                stream.settings = audioCodecHandler.Getter();
-                CurrentAudioStream = stream;
-            });
-            audioCodecHandler.Register(audioProfileHandler);
-            audioProfileHandler.ProfileChanged += new SelectedProfileChangedEvent(ProfileChanged);
+            audio1.initHandler();
+            audio2.initHandler();
         }
         #endregion
         #endregion
@@ -132,7 +121,6 @@ namespace MeGUI
         private MainForm mainForm;
         private BitrateCalculator calc;
         private List<string> audioLanguages;
-        private PartialAudioStream[] audioStreams;
         private MuxProvider muxProvider;
         private int lastSelectedAudioTrackNumber = 0;
         #endregion
@@ -142,7 +130,6 @@ namespace MeGUI
             this.mainForm = mainForm;
             calc = mainForm.BitrateCalculator;
             vUtil = new VideoUtil(mainForm);
-            audioStreams = new PartialAudioStream[2];
             audioLanguages = new List<string>();
             this.muxProvider = mainForm.MuxProvider;
             acceptableContainerTypes = muxProvider.GetSupportedContainers().ToArray();
@@ -185,29 +172,40 @@ namespace MeGUI
         private void openInput(string fileName)
         {
             input.Filename = fileName;
-            track1.Items.Clear();
-            track2.Items.Clear();
             AspectRatio ar;
             int maxHorizontalResolution;
             List<AudioTrackInfo> audioTracks;
             List<SubtitleInfo> subtitles;
             int pgc;
             vUtil.openVideoSource(fileName, out audioTracks, out subtitles, out ar, out maxHorizontalResolution, out pgc);
-            track1.Items.AddRange(audioTracks.ToArray());
-            track2.Items.AddRange(audioTracks.ToArray());
+            
+            List<object> trackNames = new List<object>();
+            foreach (object o in audioTracks)
+                trackNames.Add(o);
+            trackNames.Insert(0, "None");
+
+            audioTrack1.StandardCQMs = trackNames.ToArray();
+            audioTrack2.StandardCQMs = trackNames.ToArray();
+
+            audioTrack1.SelectedIndex = audioTrack2.SelectedIndex = 0;
+            
             foreach (AudioTrackInfo ati in audioTracks)
             {
-                if (ati.Language.ToLower().Equals(mainForm.Settings.DefaultLanguage1.ToLower()))
+                if (ati.Language.ToLower().Equals(mainForm.Settings.DefaultLanguage1.ToLower()) &&
+                    audioTrack1.SelectedIndex == 0)
                 {
-                    track1.SelectedItem = ati;
+                    audioTrack1.SelectCQM(ati.ToString());
                     continue;
                 }
-                if (ati.Language.ToLower().Equals(mainForm.Settings.DefaultLanguage2.ToLower()))
+
+                if (ati.Language.ToLower().Equals(mainForm.Settings.DefaultLanguage2.ToLower()) &&
+                    audioTrack2.SelectedIndex == 0)
                 {
-                    track2.SelectedItem = ati;
+                    audioTrack2.SelectCQM(ati.ToString());
                     continue;
                 }
             }
+
             horizontalResolution.Maximum = maxHorizontalResolution;
             string chapterFile = VideoUtil.getChapterFile(fileName);
             if (File.Exists(chapterFile))
@@ -255,16 +253,6 @@ namespace MeGUI
 /*            string B = Path.GetFileName(Path.GetDirectoryName(fileName));
             return "al";*/
         }
-        private void clearAudio1Button_Click(object sender, EventArgs e)
-        {
-            track1.SelectedIndex = -1;
-            updateAudioFilenames();
-        }
-        private void clearAudio2Button_Click(object sender, EventArgs e)
-        {
-            track2.SelectedIndex = -1;
-            updateAudioFilenames();
-        }
 
         private void filesizeComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -309,46 +297,37 @@ namespace MeGUI
             if (beingCalled)
                 return;
             beingCalled = true;
-            updateAudioStreamsAndGUI();
+
             List<AudioEncoderType> audioCodecs = new List<AudioEncoderType>();
             List<MuxableType> dictatedOutputTypes = new List<MuxableType>();
-            for (int i = 0; i < audioStreams.Length; i++)
+
+            for (int i = 0; i < audio.Length; ++i)
             {
-                if (audioStreams[i].settings != null && !audioStreams[i].dontEncode && 
-                    !string.IsNullOrEmpty(audioStreams[i].input))
-                {
-                    audioCodecs.Add(audioStreams[i].settings.EncoderType);
-                }
-                else if (audioStreams[i].dontEncode)
+                if (audioTrack[i].SelectedIndex == 0) // "None"
+                    continue;
+
+                if (audio[i].Settings != null && !audio[i].DontEncode)
+                    audioCodecs.Add(audio[i].Settings.EncoderType);
+
+                else if (audio[i].DontEncode)
                 {
                     string typeString;
 
-                    if (!audioStreams[i].useExternalInput)
+                    if (audioTrack[i].CQMName.IsStandard)
                     {
-                        if (i == 0 && track1.SelectedIndex >= 0)
-                        {
-                            AudioTrackInfo ati = track1.SelectedItem as AudioTrackInfo;
-                            typeString = "file." + ati.Type;
-                        }
-                        else if (i == 1 && track2.SelectedIndex >= 0)
-                        {
-                            AudioTrackInfo ati = track2.SelectedItem as AudioTrackInfo;
-                            typeString = "file." + ati.Type;
-                        }
-                        else
-                            continue;
+                        AudioTrackInfo ati = (AudioTrackInfo)audioTrack[i].CQMName.Tag;
+                        typeString = "file." + ati.Type;
                     }
-                    else if (MainForm.verifyInputFile(audioStreams[i].input) == null)
+                    else
                     {
-                        typeString = audioStreams[i].input;
+                        typeString = audioTrack[i].SelectedText;
                     }
-                    else 
-                        continue;
-                        
+
                     if (VideoUtil.guessAudioType(typeString) != null)
                         dictatedOutputTypes.Add(VideoUtil.guessAudioMuxableType(typeString, false));
                 }
             }
+
             List<ContainerType> tempSupportedOutputTypes = this.muxProvider.GetSupportedContainers(
                 VideoSettingsProvider.EncoderType, audioCodecs.ToArray(), dictatedOutputTypes.ToArray());
 
@@ -407,7 +386,11 @@ namespace MeGUI
 
                 // Do extra defaults config (same code as in OneClickDefaultWindow)
                 // strings
-                try { audioProfileHandler.SelectedProfile = settings.AudioProfileName; }
+                try
+                {
+                    audio1.SelectedProfile = settings.AudioProfileName;
+                    audio2.SelectedProfile = settings.AudioProfileName;
+                }
                 catch (ProfileCouldntBeSelectedException e)
                 {
                     MessageBox.Show("The audio profile '" + e.ProfileName + "' could not be properly configured. Presumably the profile no longer exists.", "Some options misconfigured", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -443,13 +426,10 @@ namespace MeGUI
                     MessageBox.Show("The filesize '" + settings.StorageMediumName + "' could not be properly set. Presumably that preset no longer exists.", "Some options misconfigured", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
 
-                audioStreams[0].dontEncode = settings.DontEncodeAudio;
-                audioStreams[1].dontEncode = settings.DontEncodeAudio;
-                audioStreams[0].profileItem = audioProfileHandler.SelectedProfile;
-                audioStreams[1].profileItem = audioProfileHandler.SelectedProfile;
+                audio1.DontEncode = settings.DontEncodeAudio;
+                audio2.DontEncode = settings.DontEncodeAudio;
 
                 // bools
-                dontEncodeAudio.Checked = settings.DontEncodeAudio;
                 signalAR.Checked = settings.SignalAR;
                 splitOutput.Checked = settings.Split;
                 autoDeint.Checked = settings.AutomaticDeinterlacing;
@@ -464,7 +444,6 @@ namespace MeGUI
                 updatePossibleContainers();
                 filesizeComboBox_SelectedIndexChanged(null, null);
                 containerFormat_SelectedIndexChanged_1(null, null);
-                dontEncodeAudio_CheckedChanged(null, null);
                 splitOutput_CheckedChanged(null, null);
             }
         }
@@ -497,14 +476,26 @@ namespace MeGUI
                     this.audioLanguages = vUtil.getAudioLanguages(infoFile);
                 if (audioLanguages.Count == 0) // add 8 dummy tracks
                     audioLanguages.AddRange(new string[] { "", "", "", "", "", "", "", "" });
-                if (!audioStreams[0].dontEncode && track1.SelectedIndex >= 0)
+
+                List<PartialAudioStream> audioStreams = new List<PartialAudioStream>();
+                for (int i = 0; i < audio.Length; ++i)
                 {
-                    audioStreams[0].language = audioLanguages[track1.SelectedIndex];
+                    if (audioTrack[i].SelectedIndex == 0) // "None"
+                        continue;
+
+                    PartialAudioStream s = new PartialAudioStream();
+                    s.useExternalInput = !audioTrack[i].CQMName.IsStandard;
+                    if (!s.useExternalInput)
+                    {
+                        s.trackNumber = audioTrack[i].SelectedIndex - 1; // since "None" is first
+                        s.language = audioLanguages[s.trackNumber];
+                    }
+                    s.input = audioTrack[i].SelectedText;
+                    s.dontEncode = audio[i].DontEncode;
+                    s.settings = audio[i].Settings;
+                    audioStreams.Add(s);
                 }
-                if (!audioStreams[1].dontEncode && track2.SelectedIndex >= 0)
-                {
-                    audioStreams[1].language = audioLanguages[track2.SelectedIndex];
-                }
+
                 string d2vName = workingDirectory.Filename + @"\" + workingName.Text + ".d2v";
                 DGIndexPostprocessingProperties dpp = new DGIndexPostprocessingProperties();
                 switch (arComboBox.SelectedIndex)
@@ -526,7 +517,7 @@ namespace MeGUI
                         dpp.AutoDeriveAR = true;
                         break;
                 }
-                dpp.AudioStreams = audioStreams;
+                dpp.AudioStreams = audioStreams.ToArray();
                 dpp.AutoDeinterlace = autoDeint.Checked;
                 dpp.AviSynthScript = "";
                 dpp.AvsSettings = avsSettingsProvider.GetCurrentSettings();
@@ -539,7 +530,7 @@ namespace MeGUI
                 dpp.SplitSize = this.getSplitSize();
                 dpp.VideoSettings = VideoSettings.clone();
                 IndexJob job = mainForm.JobUtil.generateIndexJob(this.input.Filename, d2vName, 1,
-                    track1.SelectedIndex, track2.SelectedIndex, dpp);
+                    audioTrack1.SelectedIndex - 1, audioTrack2.SelectedIndex - 1, dpp);
                 mainForm.Jobs.addJobsToQueue(job);
                 this.Close();
             }
@@ -601,34 +592,9 @@ namespace MeGUI
         {
             get { return VideoSettingsProvider.GetCurrentSettings(); }
         }
-        private AudioCodecSettings AudioSettings
-        {
-            get { return AudioSettingsProvider.GetCurrentSettings(); }
-        }
         private ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> VideoSettingsProvider
         {
             get { return videoCodecHandler.CurrentSettingsProvider; }
-        }
-        private ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType> AudioSettingsProvider
-        {
-            get { return audioCodecHandler.CurrentSettingsProvider; }
-        }
-        private PartialAudioStream CurrentAudioStream
-        {
-            get
-            {
-                if (this.audioTrack1.Checked)
-                    return this.audioStreams[0];
-                else
-                    return this.audioStreams[1];
-            }
-            set
-            {
-                if (this.audioTrack1.Checked)
-                    this.audioStreams[0] = value;
-                else
-                    this.audioStreams[1] = value;
-            }
         }
         public string Input
         {
@@ -639,80 +605,18 @@ namespace MeGUI
         }
         #endregion
         #region profile management
-        private void updateAudioStreamsAndGUI()
-        {
-            if (updateAudioBeingCalled)
-                return;
-            updateAudioBeingCalled = true;
-            int current = 0;
-            if (audioTrack1.Checked) // user switched from track 1 to track 2
-            {
-                current = 0;
-            }
-            else if (audioTrack2.Checked) // user switched from track 2 to track 1
-            {
-                current = 1;
-            }
-            this.audioStreams[lastSelectedAudioTrackNumber].input = this.audioInput.Text;
-            this.audioStreams[lastSelectedAudioTrackNumber].useExternalInput = externalInput.Checked;
-            this.audioStreams[lastSelectedAudioTrackNumber].settings = AudioSettings;
-            this.audioStreams[lastSelectedAudioTrackNumber].dontEncode = dontEncodeAudio.Checked;
-            try { this.audioStreams[lastSelectedAudioTrackNumber].profileItem = audioProfileHandler.SelectedProfile; }
-            catch (Exception) { }
-
-            this.audioInput.Text = this.audioStreams[current].input;
-            this.externalInput.Checked = this.audioStreams[current].useExternalInput;
-            this.dontEncodeAudio.Checked = this.audioStreams[current].dontEncode;
-            try { audioProfileHandler.SelectedProfile = (string)audioStreams[current].profileItem; }
-            catch (ProfileCouldntBeSelectedException) { }
-            if (audioStreams[current].settings != null)
-            {
-                foreach (ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType> p in this.audioCodec.Items)
-                {
-                    if (p.IsSameType(audioStreams[current].settings))
-                    {
-                        p.LoadSettings(audioStreams[current].settings);
-                        audioCodec.SelectedItem = p;
-                        break;
-                    }
-                }
-            }
-            lastSelectedAudioTrackNumber = current;
-            updateAudioBeingCalled = false;
-        }
-
-        private void audioTrack1_CheckedChanged(object sender, EventArgs e)
-        {
-            updateAudioStreamsAndGUI();
-        }
 
         private string verifyAudioSettings()
         {
-            if (!externalInput.Checked)
-                return null;
-            return (MainForm.verifyInputFile(audioInput.Text));
-        }
+            for (int i = 0; i < audioTrack.Length; ++i)
+            {
+                if (audioTrack[i].CQMName.IsStandard)
+                    continue;
 
-        private void externalInput_CheckedChanged(object sender, EventArgs e)
-        {
-            if (externalInput.Checked)
-            {
-                audioInputOpenButton.Visible = true;
-                if (MainForm.verifyInputFile(audioInput.Text)!=null)
-                    audioInput.Text = "";
+                string r = MainForm.verifyInputFile(audioTrack[i].SelectedText);
+                if (r != null) return r;
             }
-            else
-            {
-                audioInputOpenButton.Visible = false;
-                try
-                {
-                    if (audioTrack1.Checked)
-                        audioInput.Text = track1.SelectedItem.ToString();
-                    else
-                        audioInput.Text = track2.SelectedItem.ToString();
-                }
-                catch (NullReferenceException) { } // This will throw if nothing is selected
-            }
+            return null;
         }
         #endregion
 
@@ -723,18 +627,10 @@ namespace MeGUI
             public bool useExternalInput;
             public bool dontEncode;
             public int trackNumber;
-            public string profileItem;
             public AudioCodecSettings settings;
         }
 
         #region updates
-        private void dontEncodeAudio_CheckedChanged(object sender, EventArgs e)
-        {
-            bool aChecked = dontEncodeAudio.Checked;
-            audioCodec.Enabled = !aChecked;
-            audioProfileControl.Enabled = !aChecked;
-            updatePossibleContainers();
-        }
 
         private void containerFormat_SelectedIndexChanged_1(object sender, EventArgs e)
         {
@@ -756,84 +652,13 @@ namespace MeGUI
             output.Filter = ((ContainerType)containerFormat.SelectedItem).OutputFilterString;
         }
 
-        private void updateAudioFilenames()
-        {
-            updateAudioStreamsAndGUI();
-            if (!audioStreams[0].useExternalInput)
-            {
-                try
-                {
-                    audioStreams[0].trackNumber = track1.SelectedIndex;
-                    audioStreams[0].input = track1.SelectedItem.ToString();
-                }
-                catch (NullReferenceException)
-                {
-                    audioStreams[0].input = "";
-                }
-            }
-            if (!audioStreams[1].useExternalInput)
-            {
-                try
-                {
-                    audioStreams[1].trackNumber = track2.SelectedIndex;
-                    audioStreams[1].input = track2.SelectedItem.ToString();
-                }
-                catch (NullReferenceException)
-                {
-                    audioStreams[1].input = "";
-                }
-            }
-            audioInput.Text = CurrentAudioStream.input;
-            updateAudioStreamsAndGUI();
-            updatePossibleContainers();
-        }
 
-        private void track1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            updateAudioFilenames();
-        }
-
-        private void audioInputOpenButton_Click(object sender, EventArgs e)
-        {
-            this.openFileDialog.Filter = audioEncoderProvider.GetSupportedInput(AudioSettingsProvider.CodecType);
-            this.openFileDialog.Title = "Select your audio input";
-            if (this.openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                openAudioFile(openFileDialog.FileName);
-            }
-        }
-
-        private void openAudioFile(string p)
-        {
-            this.audioInput.Text = p;
-            int del = AudioEncodingComponent.getDelay(p);
-            AudioCodecSettings settings = (audioCodec.SelectedItem as ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType>).GetCurrentSettings();
-            if (del != 0) // we have a delay we are interested in
-            {
-                settings.DelayEnabled = true;
-                settings.Delay = del;
-            }
-            else
-            {
-                settings.DelayEnabled = false;
-            }
-        }
         #endregion
-
-        private void deleteAudioButton_Click(object sender, EventArgs e)
-        {
-            if (audioTrack1.Checked)
-                clearAudio1Button_Click(sender, e);
-            else
-                clearAudio2Button_Click(sender, e);
-        }
 
         private void showAdvancedOptions_CheckedChanged(object sender, EventArgs e)
         {
             if (showAdvancedOptions.Checked)
             {
-                clearAudio2Button.Enabled = true;
-                track2.Enabled = true;
                 if (!tabControl1.TabPages.Contains(tabPage2))
                     tabControl1.TabPages.Add(tabPage2);
                 if (!tabControl1.TabPages.Contains(encoderConfigTab))
@@ -841,8 +666,6 @@ namespace MeGUI
             }
             else
             {
-                clearAudio2Button.Enabled = false;
-                track2.Enabled = false;
                 if (tabControl1.TabPages.Contains(tabPage2))
                     tabControl1.TabPages.Remove(tabPage2);
                 if (tabControl1.TabPages.Contains(encoderConfigTab))
@@ -878,6 +701,23 @@ namespace MeGUI
         private void input_DragOver(object sender, DragEventArgs e)
         {
             e.Effect = DragDropEffects.Move;
+        }
+
+        private void audioTrack1_SelectionChanged(object sender, string val)
+        {
+            if (!audioTrack1.CQMName.IsStandard)
+                audio1.openAudioFile(audioTrack1.CQMName.Name);
+        }
+        
+        private void audioTrack2_SelectionChanged(object sender, string val)
+        {
+            if (!audioTrack2.CQMName.IsStandard)
+                audio2.openAudioFile(audioTrack2.CQMName.Name);
+        }
+
+        private void audio1_SomethingChanged(object sender, EventArgs e)
+        {
+            updatePossibleContainers();
         }
     }
     public class OneClickTool : MeGUI.core.plugins.interfaces.ITool

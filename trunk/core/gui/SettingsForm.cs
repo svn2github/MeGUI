@@ -140,6 +140,9 @@ namespace MeGUI
         private Label label5;
         private CheckBox keep2ndPassOutput;
         private CheckBox keep2ndPassLogFile;
+        private Label label17;
+        private Button button10;
+        private TextBox meguiUpdateCache;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -154,6 +157,7 @@ namespace MeGUI
             defaultLanguage2.BindingContext = new BindingContext();
             defaultLanguage1.BindingContext = new BindingContext();
             this.avisynthPluginsDir.Text = "" + MeGUISettings.AvisynthPluginsPath;
+            this.meguiUpdateCache.Text = "" + MeGUISettings.MeGUIUpdateCache;
 		}
 		/// <summary>
 		/// Clean up any resources being used.
@@ -227,6 +231,7 @@ namespace MeGUI
             this.label12 = new System.Windows.Forms.Label();
             this.audioExtension = new System.Windows.Forms.TextBox();
             this.autoModeGroupbox = new System.Windows.Forms.GroupBox();
+            this.keep2ndPassLogFile = new System.Windows.Forms.CheckBox();
             this.keep2ndPassOutput = new System.Windows.Forms.CheckBox();
             this.label13 = new System.Windows.Forms.Label();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
@@ -297,7 +302,9 @@ namespace MeGUI
             this.nbPassesLabel = new System.Windows.Forms.Label();
             this.nbPasses = new System.Windows.Forms.NumericUpDown();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
-            this.keep2ndPassLogFile = new System.Windows.Forms.CheckBox();
+            this.meguiUpdateCache = new System.Windows.Forms.TextBox();
+            this.button10 = new System.Windows.Forms.Button();
+            this.label17 = new System.Windows.Forms.Label();
             groupBox1 = new System.Windows.Forms.GroupBox();
             groupBox1.SuspendLayout();
             this.otherGroupBox.SuspendLayout();
@@ -851,6 +858,18 @@ namespace MeGUI
             this.autoModeGroupbox.TabStop = false;
             this.autoModeGroupbox.Text = "Automated Encoding";
             // 
+            // keep2ndPassLogFile
+            // 
+            this.keep2ndPassLogFile.AutoSize = true;
+            this.keep2ndPassLogFile.Checked = true;
+            this.keep2ndPassLogFile.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.keep2ndPassLogFile.Location = new System.Drawing.Point(232, 22);
+            this.keep2ndPassLogFile.Name = "keep2ndPassLogFile";
+            this.keep2ndPassLogFile.Size = new System.Drawing.Size(176, 17);
+            this.keep2ndPassLogFile.TabIndex = 4;
+            this.keep2ndPassLogFile.Text = "Overwrite Stats File in 3rd Pass";
+            this.keep2ndPassLogFile.UseVisualStyleBackColor = true;
+            // 
             // keep2ndPassOutput
             // 
             this.keep2ndPassOutput.AutoSize = true;
@@ -1393,11 +1412,14 @@ namespace MeGUI
             // 
             // tabPage7
             // 
+            this.tabPage7.Controls.Add(this.label17);
             this.tabPage7.Controls.Add(this.avisynthPluginsLabel);
             this.tabPage7.Controls.Add(this.button9);
+            this.tabPage7.Controls.Add(this.button10);
             this.tabPage7.Controls.Add(this.selectAvisynthPluginsDir);
             this.tabPage7.Controls.Add(this.textBox9);
             this.tabPage7.Controls.Add(this.label16);
+            this.tabPage7.Controls.Add(this.meguiUpdateCache);
             this.tabPage7.Controls.Add(this.avisynthPluginsDir);
             this.tabPage7.Controls.Add(this.dgIndexPath);
             this.tabPage7.Controls.Add(this.dgIndexLabel);
@@ -1558,17 +1580,32 @@ namespace MeGUI
             this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 1;
             // 
-            // keep2ndPassLogFile
+            // meguiUpdateCache
             // 
-            this.keep2ndPassLogFile.AutoSize = true;
-            this.keep2ndPassLogFile.Checked = true;
-            this.keep2ndPassLogFile.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.keep2ndPassLogFile.Location = new System.Drawing.Point(232, 22);
-            this.keep2ndPassLogFile.Name = "keep2ndPassLogFile";
-            this.keep2ndPassLogFile.Size = new System.Drawing.Size(176, 17);
-            this.keep2ndPassLogFile.TabIndex = 4;
-            this.keep2ndPassLogFile.Text = "Overwrite Stats File in 3rd Pass";
-            this.keep2ndPassLogFile.UseVisualStyleBackColor = true;
+            this.meguiUpdateCache.Location = new System.Drawing.Point(96, 97);
+            this.meguiUpdateCache.Name = "meguiUpdateCache";
+            this.meguiUpdateCache.ReadOnly = true;
+            this.meguiUpdateCache.Size = new System.Drawing.Size(315, 21);
+            this.meguiUpdateCache.TabIndex = 7;
+            this.meguiUpdateCache.Text = "MeGUI update cache";
+            // 
+            // button10
+            // 
+            this.button10.Location = new System.Drawing.Point(417, 96);
+            this.button10.Name = "button10";
+            this.button10.Size = new System.Drawing.Size(24, 23);
+            this.button10.TabIndex = 8;
+            this.button10.Text = "...";
+            this.button10.Click += new System.EventHandler(this.button10_Click);
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(6, 101);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(73, 13);
+            this.label17.TabIndex = 6;
+            this.label17.Text = "Update cache";
             // 
             // SettingsForm
             // 
@@ -1782,6 +1819,17 @@ namespace MeGUI
             if (selectExe("besplit"))
             {
                 textBox8.Text = openExecutableDialog.FileName;
+            }
+        }
+
+
+        private void button10_Click(object sender, EventArgs e)
+        {
+            openFolderDialog.RootFolder = Environment.SpecialFolder.Desktop;
+            if (openFolderDialog.ShowDialog() == DialogResult.OK)
+            {
+                meguiUpdateCache.Text = openFolderDialog.SelectedPath;
+                MeGUISettings.MeGUIUpdateCache = meguiUpdateCache.Text;
             }
         }
 

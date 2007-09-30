@@ -23,11 +23,21 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Text;
 using System.IO;
+using System.Text.RegularExpressions;
+using MeGUI.core.util;
 
 namespace MeGUI
 {
     public class DGIndexer : CommandlineJobProcessor<IndexJob>
     {
+        private static readonly Regex DGPercent =
+            new Regex(@"\[(?<num>[0-9]*)%\]",
+            RegexOptions.Compiled);
+
+        private static readonly TimeSpan TwoSeconds = new TimeSpan(0, 0, 2);
+
+        IntPtr ptr = IntPtr.Zero;
+
         public static readonly JobProcessorFactory Factory =
             new JobProcessorFactory(new ProcessorFactory(init), "DGIndexer");
 
@@ -120,6 +130,28 @@ namespace MeGUI
                 log.Append("Exception in applyForceFilm: " + e.Message);
                 return false;
             }
+        }
+
+        protected override void doStatusCycleOverrides()
+        {
+            try
+            {
+                if (su.TimeElapsed < TwoSeconds) // give it some time to start up, otherwise MainWindowHandle remains null
+                    return; 
+
+
+                if (ptr == IntPtr.Zero)
+                    ptr = proc.MainWindowHandle;
+
+                string text = WindowUtil.GetText(ptr);
+
+                Match m = DGPercent.Match(text);
+                if (m.Success)
+                {
+                    su.PercentageDoneExact = int.Parse(m.Groups["num"].Value);
+                }
+            }
+            catch (Exception) { }
         }
 
     }

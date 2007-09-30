@@ -388,8 +388,8 @@ namespace MeGUI
             supportedContainers.Add(ContainerType.MP4);
             supportedContainerInputTypes.Add(ContainerType.AVI);
             supportedContainerInputTypes.Add(ContainerType.MP4);
-            supportsAnyInputtableAudioCodec = true;
-            supportsAnyInputtableVideoCodec = true;
+            supportsAnyInputtableAudioCodec = false;
+            supportsAnyInputtableVideoCodec = false;
             base.type = MuxerType.MP4BOX;
             maxFilesOfType = new int[] { 1, -1, -1, 1};
             generator = CommandLineGenerator.generateMP4BoxCommandline;

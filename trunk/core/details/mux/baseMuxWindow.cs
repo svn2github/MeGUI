@@ -865,7 +865,16 @@ namespace MeGUI
                 }
                 checkIO();
                 fileUpdated();
+                if (string.IsNullOrEmpty(muxedOutput.Text))
+                    chooseOutputFilename();
             }
+        }
+
+        private void chooseOutputFilename()
+        {
+            string file = videoInput.Text;
+            muxedOutput.Text = Path.Combine(Path.GetDirectoryName(file),
+                Path.GetFileNameWithoutExtension(file) + "-muxed" + Path.GetExtension(file));
         }
 
         private void audioInputOpenButton_Click(object sender, System.EventArgs e)

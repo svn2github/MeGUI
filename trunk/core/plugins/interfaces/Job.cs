@@ -137,7 +137,6 @@ namespace MeGUI
         [XmlIgnore]
         public List<Job> RequiredJobs = new List<Job>();
 
-
         /// <summary>
         /// List of files to delete when this job is successfullly completed.
         /// </summary>
@@ -242,28 +241,6 @@ namespace MeGUI
             set { previousJobName = value; }
         }
 
-		/// <summary>
-		/// previous job in the queue, used for job chaining (automated 2 pass encoding, mp4 muxing)
-		/// jobs chained via Next/Previous are treated as an entity and are encoded one after another
-		/// regardless of their relative position in the queue
-		/// </summary>
-        [XmlIgnore()]
-		public Job Next
-		{
-			get {return next;}
-			set {next = value;}
-		}
-		/// <summary>
-		/// next job in the queue, used for job chaining (automated 2 pass encoding, mp4 muxing)
-		/// jobs chained via Next/Previous are treated as an entity and are encoded one after another
-		/// regardless of their relative position in the queue
-		/// </summary>
-        [XmlIgnore()]
-        public Job Previous
-		{
-			get {return previous;}
-			set {previous = value;}
-		}
 		/// <summary>
 		/// commandline for this job
 		/// </summary>

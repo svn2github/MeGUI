@@ -128,6 +128,19 @@ namespace MeGUI
 
                 return latest;
             }
+
+            public bool HasAvailableVersions
+            {
+                get
+                {
+                    Version latest = GetLatestVersion();
+                    return !(latest == null || latest.FileVersion == null ||
+                   (latest != null && this.CurrentVersion != null &&
+                   CompareVersionNumber(latest.FileVersion, currentVersion.FileVersion) >= 0));
+                }
+            }
+
+
             public ListViewItem CreateListViewItem()
             {
                 ListViewItem myitem = new ListViewItem();
@@ -149,15 +162,8 @@ namespace MeGUI
                     existingVersion.Text = this.CurrentVersion.FileVersion;
                 else
                     existingVersion.Text = "N/A";
-                Version latest = this.GetLatestVersion();
-                if (latest != null)
-                    latestVersion.Text = latest.FileVersion;
-                else
-                    latestVersion.Text = "N/A";
 
-                if (latest == null || latest.FileVersion == null ||
-                    (latest != null && this.CurrentVersion != null && 
-                    CompareVersionNumber(latest.FileVersion, currentVersion.FileVersion) >= 0))
+                if (!HasAvailableVersions)
                 {
                     status.Text = "No Updates Available";
                 }
@@ -235,6 +241,8 @@ namespace MeGUI
                 }
             }
 
+            public bool Reinstall;
+
             private string name;
             public string Name
             {
@@ -270,7 +278,7 @@ namespace MeGUI
                 get { return false; }
             }
 
-            public virtual ErrorState Install(byte[] fileData)
+            public virtual ErrorState Install(Stream fileData)
             {
                 throw new Exception("This kind of file cannot be installed.");
             }
@@ -347,7 +355,7 @@ namespace MeGUI
                 }
             }
 
-            public override ErrorState Install(byte[] fileData)
+            public override ErrorState Install(Stream fileData)
             {
                 try 
                 {
@@ -612,8 +620,12 @@ namespace MeGUI
         {
             if (this.progressBar.InvokeRequired)
             {
-                UpdateProgressBar d = new UpdateProgressBar(SetProgressBar);
-                this.Invoke(d, minValue, maxValue, currentValue);
+                try
+                {
+                    UpdateProgressBar d = new UpdateProgressBar(SetProgressBar);
+                    progressBar.Invoke(d, minValue, maxValue, currentValue);
+                }
+                catch (Exception) { }
             }
             else
             {
@@ -703,7 +715,6 @@ namespace MeGUI
                 MessageBox.Show("Couldn't run auto-update since there are no servers registered.", "No servers registered", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-
             LoadSettings();
         }
 
@@ -1019,11 +1030,15 @@ namespace MeGUI
                 || itm.SubItems["Status"].Text.Equals("Updates Ignored"))
                 e.NewValue = CheckState.Unchecked;
 
+
             iUpgradeable file = upgradeData.FindByName(itm.Name);
             if (e.NewValue == CheckState.Checked)
                 file.DownloadChecked = true;
             else
                 file.DownloadChecked = false;
+
+            if (e.NewValue == CheckState.Unchecked && itm.SubItems["Status"].Text == "Reinstalling")
+                itm.SubItems["Status"].Text = file.AllowUpdate ? (file.HasAvailableVersions ? "Updates Available" : "No Updates Available") : "Updates Ignored";
         }
 
         private void listViewDetails_MouseClick(object sender, MouseEventArgs e)
@@ -1143,23 +1158,31 @@ namespace MeGUI
                     AddTextToLog(string.Format("Updating {0}. File {1}/{2}.",
                         file.Name, currentFile, updateableFileCount));
 
-                    if ((result = DownloadFile(file, out fileData)) != ErrorState.Successful)
+                    Stream str;
+
+                    if ((result = UpdateCacher.DownloadFile(file.GetLatestVersion().Url, new Uri(ServerAddress),
+                        out str, wc_DownloadProgressChanged)) 
+                        != ErrorState.Successful)
                         failedFiles.Add(file);
                     else
                     {
-                        ErrorState state;
-                        if (file.NeedsInstalling)
-                            state = Install(file, fileData);
-                        else
-                            state = SaveNewFile(file, fileData);
-
-                        if (state != ErrorState.Successful)
-                            failedFiles.Add(file);
-                        else
+                        try
                         {
-                            succeededFiles.Add(file);
-                            file.DownloadChecked = false;
+                            ErrorState state;
+                            if (file.NeedsInstalling)
+                                state = Install(file, str);
+                            else
+                                state = SaveNewFile(file, str);
+
+                            if (state != ErrorState.Successful)
+                                failedFiles.Add(file);
+                            else
+                            {
+                                succeededFiles.Add(file);
+                                file.DownloadChecked = false;
+                            }
                         }
+                        finally { str.Close(); }
                     }
                     currentFile++;
                 }
@@ -1193,6 +1216,13 @@ namespace MeGUI
                     succeededFiles.Count, failedFiles.Count, Environment.NewLine));
             else
                 AddTextToLog(string.Format("Update completed successfully. {0} files updated", succeededFiles.Count));
+
+            List<string> files = new List<string>();
+            foreach (iUpgradeable u in upgradeData)
+            {
+                files.Add(u.GetLatestVersion().Url);
+            }
+            UpdateCacher.flushOldCachedFilesAsync(files);
 
             if (needsRestart)
             {
@@ -1237,7 +1267,7 @@ namespace MeGUI
             InstallFiles(groups /*, false*/ );
         }
 
-        private ErrorState Install(iUpgradeable file, byte[] fileData)
+        private ErrorState Install(iUpgradeable file, Stream fileData)
         {
             ErrorState state = file.Install(fileData);
             if (state == ErrorState.Successful)
@@ -1258,7 +1288,7 @@ namespace MeGUI
         /// <param name="file"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        private ErrorState SaveNewFile(iUpgradeable file, byte[] data)
+        private ErrorState SaveNewFile(iUpgradeable file, Stream data)
         {
             string filepath = null, filename = null;
             if (file.SaveFolder != null)
@@ -1290,11 +1320,8 @@ namespace MeGUI
             {
                 try
                 {
-                    ZipInputStream zip = new ZipInputStream(new MemoryStream(data));
-                    FileStream outputWriter;
+                    ZipInputStream zip = new ZipInputStream(data);
                     ZipEntry zipentry;
-                    int bytesRead = 0;
-                    byte[] buffer = new byte[2048];
 
                     while ((zipentry = zip.GetNextEntry()) != null)
                     {
@@ -1318,12 +1345,9 @@ namespace MeGUI
                             if (result != ErrorState.Successful)
                                 return result;
                         }
-                        using (outputWriter = new FileStream(filename, FileMode.Create))
+                        using (Stream outputWriter = new FileStream(filename, FileMode.Create))
                         {
-                            // Keep reading data into the buffer and writing the buffer to the disc
-                            // until bytesRead is 0. That means we've read all of the current file.
-                            while ((bytesRead = zip.Read(buffer, 0, buffer.Length)) > 0)
-                                outputWriter.Write(buffer, 0, bytesRead);
+                            FileUtil.copyData(zip, outputWriter);
                         }
                         if (file.NeedsRestartedCopying)
                         {
@@ -1357,15 +1381,19 @@ namespace MeGUI
                 }
                 try
                 {
-                    File.WriteAllBytes(filename, data);
-                    if (file.NeedsRestartedCopying)
+                    using (Stream output = File.OpenWrite(filename))
                     {
-                        mainForm.AddFileToReplace(file.Name, filename, oldFileName, file.GetLatestVersion().FileVersion);
-                        needsRestart = true;
+                        
+                        //filename, data);
+                        if (file.NeedsRestartedCopying)
+                        {
+                            mainForm.AddFileToReplace(file.Name, filename, oldFileName, file.GetLatestVersion().FileVersion);
+                            needsRestart = true;
+                        }
+                        else
+                            file.CurrentVersion = file.GetLatestVersion(); // current installed version
+                        // is now the latest available version
                     }
-                    else
-                        file.CurrentVersion = file.GetLatestVersion(); // current installed version
-                                                                   // is now the latest available version
                 }
                 catch
                 {
@@ -1400,92 +1428,12 @@ namespace MeGUI
             }
             return ErrorState.Successful;
         }
-        /// <summary>
-        /// This function downloads an iUpgradeable from the server and saves it to the supplied byte array.
-        /// where it can be processed later.
-        /// </summary>
-        /// <param name="file">The file to download from the server</param>
-        /// <param name="data">The byte array to save the data too</param>
-        /// <returns></returns>
-        private ErrorState DownloadFile(iUpgradeable file, out byte[] data)
+
+        void wc_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
-            WebRequest request = null;
-            WebResponse response = null;
-            data = null;
-
-            try
-            {
-                request = HttpWebRequest.Create(ServerAddress + file.GetLatestVersion().Url);
-                response = request.GetResponse();
-            }
-            catch (WebException ex)
-            {
-                if (ex.Message.Equals("The remote server returned an error: (404) Not Found."))
-                {
-                    AddTextToLog("Error: " + file.Name + " could not be found on the server");
-                    return ErrorState.FileNotOnServer;
-                }
-                else
-                {
-                    AddTextToLog("Error: server could not be contacted, please try again later");
-                    return ErrorState.ServerNotAvailable;
-                }
-            }
-
-            try
-            {
-                using (Stream s = response.GetResponseStream())
-                {
-                    data = Download(s, response.ContentLength);
-                }
-            }
-            catch
-            {
-                AddTextToLog("Error: " + file.Name + " could not be downloaded");
-                return ErrorState.CouldNotDownloadFile;
-            }
-            return ErrorState.Successful;
+            if (e.TotalBytesToReceive > 0)
+                SetProgressBar(0, (int)e.TotalBytesToReceive, (int)e.BytesReceived);
         }
-        /// <summary>
-        /// This method should be called from DownloadFile(). This method does the actual downloading
-        /// off the file from the server and updates the progressbar as the file downloads.
-        /// </summary>
-        /// <param name="stream"></param>
-        /// <param name="remainingBytes"></param>
-        /// <returns></returns>
-        private byte[] Download(Stream stream, long remainingBytes)
-        {
-            BinaryReader reader;
-            int bufferSize = 2048;
-            int bytesDownloaded = 0;
-            byte[] buffer = new byte[bufferSize];
-            byte[] fileData = new byte[remainingBytes];
-
-            try
-            {
-                reader = new BinaryReader(stream);
-
-                while (remainingBytes / bufferSize > 0)
-                {
-                    SetProgressBar(0, fileData.Length, bytesDownloaded);
-                    buffer = reader.ReadBytes(bufferSize);
-                    Array.Copy(buffer, 0, fileData, bytesDownloaded, bufferSize);
-                    bytesDownloaded += bufferSize;
-                    remainingBytes -= bufferSize;
-                }
-                buffer = reader.ReadBytes((int)remainingBytes);
-                Array.Copy(buffer, 0, fileData, bytesDownloaded, remainingBytes);
-                bytesDownloaded += (int)remainingBytes;
-                remainingBytes -= remainingBytes;
-                SetProgressBar(0, fileData.Length, bytesDownloaded);
-            }
-            catch
-            {
-                return null; // download was aborted/interrupted for whatever reason.
-            }
-            return fileData;
-        }
-        #endregion
 
         public bool HasUpdatableFiles()
         {
@@ -1524,6 +1472,15 @@ namespace MeGUI
             ToolStripMenuItem ts = (ToolStripMenuItem)sender;
             foreach (ListViewItem item in listViewDetails.SelectedItems)
                 item.Checked = false;
+        }
+
+        private void reinstallToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (ListViewItem item in listViewDetails.SelectedItems)
+            {
+                item.SubItems["Status"].Text = "Reinstalling";
+                item.Checked = true;
+            }
         }
 
         private void btnAbort_Click(object sender, EventArgs e)
@@ -1595,4 +1552,11 @@ namespace MeGUI
             this.name = name;
         }
     }
+
+    public class DataHolder
+    {
+        byte[] data;
+        ManualResetEvent mre = new ManualResetEvent(false);
+    }
+        #endregion
 }

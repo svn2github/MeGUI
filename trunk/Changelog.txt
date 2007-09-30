@@ -1,3 +1,12 @@
+0.2.6.1016
+    - (berrinam) [AutoUpdate] : add support for a local cache of update files (located via registry) (#1804656)
+    - (berrinam) [AutoUpdate] : Re-install function in autoupdater (#1790523)
+    - (berrinam) [Video Preview] : 'Go to frame' for video preview (#1746899)
+    - (berrinam) [OneClick Window] : Easier code for audio, better audio input selection
+    - (berrinam) [OneClick Window] : Fix order of jobs in OneClick (bitrate calculation there should work again)
+    - (berrinam) [Muxer Windows] : Automatically choose output filename in muxer (#1784648)
+    - (berrinam) [DGIndexer] : Read progress reports from DGIndex title
+
 0.2.6.1015
     - (berrinam) Nicer CQM selection for XviD and x264 (#1651251 and #1717536)
     - (Kurtnoise) better errors exception for Audio Encoders
