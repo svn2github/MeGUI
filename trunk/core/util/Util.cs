@@ -103,7 +103,7 @@ namespace MeGUI.core.util
 
         public static void ensureExists(string file)
         {
-            if (!System.IO.File.Exists(file))
+            if (file == null || !System.IO.File.Exists(file))
                 throw new MissingFileException(file);
         }
 
@@ -137,6 +137,7 @@ namespace MeGUI.core.util
             return u.Value.ToString();
         }
 
+        
         #region range clamping
         public static void clampedSet(NumericUpDown box, decimal value)
         {

@@ -16,7 +16,6 @@ namespace MeGUI.packages.tools.oneclick
 {
     public partial class OneClickConfigPanel : UserControl, MeGUI.core.plugins.interfaces.Gettable<OneClickSettings>
     {
-        BitrateCalculator calc = new BitrateCalculator();
         private MainForm mainForm;
         #region profiles
         #region AVS profiles
@@ -84,10 +83,6 @@ namespace MeGUI.packages.tools.oneclick
 
             foreach (ContainerType t in mainForm.MuxProvider.GetSupportedContainers())
                 containerTypeList.Items.Add(t.ToString());
-            this.filesizeComboBox.Items.AddRange(calc.getPredefinedOutputSizes());
-            this.filesizeComboBox.Items.Add("Custom");
-            this.filesizeComboBox.Items.Add("Don't care");
-            this.filesizeComboBox.SelectedIndex = 2;
             initAudioHandler();
             initAvsHandler();
             initVideoHandler();
@@ -105,13 +100,11 @@ namespace MeGUI.packages.tools.oneclick
                 val.AvsProfileName = avsProfileHandler.SelectedProfile;
                 val.ContainerCandidates = ContainerCandidates;
                 val.DontEncodeAudio = dontEncodeAudio.Checked;
-                val.Filesize = long.Parse(filesizeKB.Text);
+                val.Filesize = fileSize.Value;
                 val.OutputResolution = (long)horizontalResolution.Value;
                 val.PrerenderVideo = preprocessVideo.Checked;
                 val.SignalAR = signalAR.Checked;
-                val.Split = splitOutput.Checked;
-                if (val.Split) val.SplitSize = new FileSize(Unit.KB, long.Parse(splitSize.Text));
-                val.StorageMediumName = filesizeComboBox.SelectedItem.ToString();
+                val.SplitSize = splitSize.Value;
                 val.VideoProfileName = videoProfileHandler.SelectedProfile;
                 return val;
             }
@@ -122,13 +115,11 @@ namespace MeGUI.packages.tools.oneclick
                 try { avsProfileHandler.SelectedProfile = value.AvsProfileName; } catch (ProfileCouldntBeSelectedException) { }
                 ContainerCandidates = value.ContainerCandidates;
                 dontEncodeAudio.Checked = value.DontEncodeAudio;
-                filesizeKB.Text = value.Filesize.ToString();
+                fileSize.Value = value.Filesize;
                 horizontalResolution.Value = value.OutputResolution;
                 preprocessVideo.Checked = value.PrerenderVideo;
                 signalAR.Checked = value.SignalAR;
-                splitOutput.Checked = value.Split;
-                splitSize.Text = value.SplitSize.ToString();
-                try { filesizeComboBox.SelectedItem = value.StorageMediumName; } catch (Exception) { }
+                splitSize.Value = value.SplitSize;
                 try { videoProfileHandler.SelectedProfile = value.VideoProfileName; } catch (ProfileCouldntBeSelectedException) { }
             }
         }
@@ -139,11 +130,6 @@ namespace MeGUI.packages.tools.oneclick
         {
             audioProfileControl.Enabled = !dontEncodeAudio.Checked;
             audioCodec.Enabled = !dontEncodeAudio.Checked;
-        }
-
-        private void splitOutput_CheckedChanged(object sender, EventArgs e)
-        {
-            splitSize.Enabled = splitOutput.Checked;
         }
 
         private string[] ContainerCandidates
@@ -166,16 +152,6 @@ namespace MeGUI.packages.tools.oneclick
                         containerTypeList.SetItemChecked(index, true);
                 }
             }
-        }
-
-        private void filesizeComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            this.filesizeKB.ReadOnly = true;
-            filesizeKB.Text = calc.getOutputSizeKBs(filesizeComboBox.SelectedIndex).ToString();
-            if (filesizeComboBox.SelectedIndex == 10) // Custom
-                this.filesizeKB.ReadOnly = false;
-            if (filesizeComboBox.SelectedIndex == 11) // Don't care
-                this.filesizeKB.Text = "-1";
         }
     }
 }

@@ -392,7 +392,6 @@ namespace MeGUI
             supportsAnyInputtableVideoCodec = false;
             base.type = MuxerType.MP4BOX;
             maxFilesOfType = new int[] { 1, -1, -1, 1};
-            generator = CommandLineGenerator.generateMP4BoxCommandline;
             name = "MP4 Muxer";
 //            base.audioInputFilter = "All supported types (*.aac, *.mp3, *.mp4)|*.aac;*.mp3;*.mp4|RAW AAC Files (*.aac)|*.aac|MP3 Files (*.mp3)|*.mp3|MP4 Audio Files (*.mp4)|*.mp4";
 //            base.videoInputFilter = "All supported types (*.m4v, *.264, *.mp4)|*.m4v;*.264;*.mp4|RAW MPEG-4 ASP Files (*.m4v)|*.m4v|RAW MPEG-4 AVC Files (*.264)|*.264|MP4 Files (*.mp4)|*.mp4";
@@ -432,7 +431,6 @@ namespace MeGUI
             supportedContainerInputTypes.Add(ContainerType.MKV);
             maxFilesOfType = new int[] { -1, -1, -1, 1 };
             base.type = MuxerType.MKVMERGE;
-            generator = CommandLineGenerator.generateMkvmergeCommandline;
             name = "MKV muxer";
 //            base.audioInputFilter = "All supported types (*.aac, *.ac3, *.dts, *.mp2, *.mp3, *.mp4, *.ogg)|*.aac;*.ac3;*.dts;*.mp2;*.mp3;*.mp4;*.ogg|RAW AAC Files (*.aac)|*.aac|AC3 Files (*.ac3)|*.ac3|DTS Files (*.dts)|*.dts" +
 //                "MP2 Files (*.mp2)|*.mp2|MP3 Files (*.mp3)|*.mp3|MP4 Audio Files (*.mp4)|*.mp4|Ogg Vorbis Files (*.ogg)|*.ogg";
@@ -471,7 +469,6 @@ namespace MeGUI
             maxFilesOfType = new int[] { 1, -1, -1, 0 };
             base.type = MuxerType.AVIMUXGUI;
             name = "AVI Muxer";
-            generator = CommandLineGenerator.generateAVIMuxCommandline;
         }
 
         public override IJobProcessor GetMuxer(MeGUISettings settings)
@@ -518,7 +515,6 @@ namespace MeGUI
             base.type = MuxerType.AVC2AVI;
             name = "AVC2AVI";
             maxFilesOfType = new int[] { 1, 0, 0, 0 };
-            generator = CommandLineGenerator.GenerateAVC2AVICommandline;
 //            base.videoInputFilter = "RAW MPEG-4 AVC Files (*.264)|*.264";
         }
 
@@ -539,7 +535,6 @@ namespace MeGUI
         protected List<ChapterType> supportedChapterTypes;
         protected List<ContainerType> supportedContainers;
         protected List<ContainerType> supportedContainerInputTypes;
-        protected MuxCommandlineGenerator generator;
         protected bool supportsAnyInputtableAudioCodec = false;
         protected bool supportsAnyInputtableVideoCodec = false;
         protected string videoInputFilter, audioInputFilter, subtitleInputFilter;
@@ -590,11 +585,6 @@ namespace MeGUI
         public List<AudioCodec> GetSupportedAudioCodecs()
         {
             return supportedAudioCodecs;
-        }
-
-        public MuxCommandlineGenerator CommandlineGenerator
-        {
-            get { return generator; }
         }
 
         public string Name

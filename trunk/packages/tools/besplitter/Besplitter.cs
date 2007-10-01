@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using MeGUI.core.plugins.interfaces;
 using MeGUI.core.util;
 using System.IO;
+using MeGUI.core.details;
 
 namespace MeGUI.packages.tools.besplitter
 {
@@ -62,7 +63,6 @@ namespace MeGUI.packages.tools.besplitter
             string[] tempfiles = generateNumberedFilenames(prefix, Path.GetExtension(output.Filename), c.AllCuts.Count * 2);
             
             AudioSplitJob split = new AudioSplitJob(input.Filename, prefix, c);
-            split.Commandline = split.generateSplitCommandline();
             for (int i = 1; i < tempfiles.Length; i += 2)
                 split.FilesToDelete.Add(tempfiles[i]);
 
@@ -78,8 +78,8 @@ namespace MeGUI.packages.tools.besplitter
             // generate the join commandline later
 
             join.ClipLength = TimeSpan.FromSeconds((double)c.TotalFrames / c.Framerate);
-            join.AddDependency(split);
-            info.Jobs.addJobsToQueue(split, join);
+
+            info.Jobs.addJobsWithDependencies(new SequentialChain(split, join));
             this.Dispose();
         }
 

@@ -36,6 +36,15 @@ namespace MeGUI
 		public VideoJob():base()
 		{
 		}
+
+        public VideoJob(string input, string output,
+            VideoCodecSettings settings, Dar? dar)
+            : base(input, output)
+        {
+            Settings = settings;
+            DAR = dar;
+        }
+
         private Dar? dar;
 
         public Dar? DAR
@@ -51,22 +60,6 @@ namespace MeGUI
 		{
 			get {return settings;}
 			set {settings = value;}
-		}
-		/// <summary>
-		/// the number of frames the source of this job has
-		/// </summary>
-		public ulong NumberOfFrames
-		{
-			get {return numberOfFrames;}
-			set {numberOfFrames = value;}
-		}
-		/// <summary>
-		/// the framerate of the source of this job
-		/// </summary>
-		public double Framerate
-		{
-			get {return framerate;}
-			set {framerate = value;}
 		}
 		/// <summary>
 		/// codec used as presentable string

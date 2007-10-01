@@ -48,7 +48,8 @@ namespace MeGUI
             {
                 Sar s = job.DAR.Value.ToSar(hres, vres);
                 Dar d2 = new Dar(s.ar);
-                job.Commandline = CommandLineGenerator.generateVideoCommandline(job.Settings, job.Input, job.Output, d2);
+                throw new Exception();
+//                job.Commandline = CommandLineGenerator.generateVideoCommandline(job.Settings, job.Input, job.Output, d2);
             }
             su.NbFramesTotal = numberOfFrames;
             su.ClipLength = TimeSpan.FromSeconds((double)numberOfFrames / fps);
@@ -70,8 +71,13 @@ namespace MeGUI
                 {
                     FileInfo fi = new FileInfo(job.Output);
                     long size = fi.Length; // size in bytes
-                    double numberOfSeconds = job.NumberOfFrames / job.Framerate;
-                    long bitrate = (long) ((double)(size * 8.0) / (numberOfSeconds * 1000.0));
+
+                    ulong framecount;
+                    double framerate;
+                    JobUtil.getInputProperties(out framecount, out framerate, job.Input);
+
+                    double numberOfSeconds = (double)framecount / framerate;
+                    long bitrate = (long)((double)(size * 8.0) / (numberOfSeconds * 1000.0));
                     if (job.Settings.EncodingMode != 1)
                         log.Append("desired video bitrate of this job: " + job.Settings.BitrateQuantizer + " kbit/s - obtained video bitrate (approximate): " + bitrate + " kbit/s");
                     else

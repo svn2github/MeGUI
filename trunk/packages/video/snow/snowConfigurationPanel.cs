@@ -12,11 +12,6 @@ namespace MeGUI.packages.video.snow
 {
     public partial class snowConfigurationPanel : MeGUI.core.details.video.VideoConfigurationPanel, Gettable<VideoCodecSettings>
     {
-        protected override string getCommandline()
-        {
-            return CommandLineGenerator.generateVideoCommandline(this.Settings, this.input, this.output, null);
-        }
-
         #region start / stop
         public snowConfigurationPanel(MainForm mainForm, VideoInfo info)
             : base(mainForm, info)

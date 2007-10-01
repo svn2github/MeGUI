@@ -66,7 +66,7 @@ namespace MeGUI.core.gui
             // jobQueue1
             // 
             this.jobQueue1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.jobQueue1.JobList = new MeGUI.Job[0];
+            this.jobQueue1.JobList = new MeGUI.core.details.TaggedJob[0];
             this.jobQueue1.Location = new System.Drawing.Point(3, 16);
             this.jobQueue1.Name = "jobQueue1";
             this.jobQueue1.Padding = new System.Windows.Forms.Padding(2);

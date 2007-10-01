@@ -40,5 +40,32 @@ namespace MeGUI.core.util
             A = new string(chars);
             return A;
         }
+
+        /// <summary>
+        /// gets the delay from an audio filename
+        /// </summary>
+        /// <param name="fileName">file name to be analyzed</param>
+        /// <returns>the delay in milliseconds</returns>
+        public static int getDelay(string fileName)
+        {
+            int start = fileName.LastIndexOf("DELAY ");
+            if (start != -1) // delay is in filename
+            {
+                try
+                {
+                    string delay = fileName.Substring(start + 6, fileName.LastIndexOf("ms.") - start - 6);
+                    int del = 0;
+                    del = Int32.Parse(delay);
+                    return del;
+                }
+                catch (Exception e) // problem parsing, assume 0s delay
+                {
+                    Console.WriteLine(e.Message);
+                    return 0;
+                }
+            }
+            return 0;
+        }
+
     }
 }

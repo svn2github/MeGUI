@@ -549,8 +549,9 @@ namespace MeGUI
                 return;
             }
 
-            AviSynthJob job = mainForm.JobUtil.generateAvisynthJob(VideoInput);
-            mainForm.Jobs.addJobsToQueue(job);
+            AviSynthJob job = new AviSynthJob(VideoInput);
+            // mainForm.JobUtil.generateAvisynthJob(VideoInput);
+            mainForm.Jobs.addJobsToQueue(new AviSynthJob(VideoInput));
         }
 
 		// added simple drag&drop support

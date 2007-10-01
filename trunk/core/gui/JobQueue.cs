@@ -8,14 +8,15 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using MeGUI.core.util;
 using System.Collections;
+using MeGUI.core.details;
 
 namespace MeGUI.core.gui
 {
-    public delegate Pair<string, MultiJobHandler>[] MultiJobMenuGenerator();
+    internal delegate Pair<string, MultiJobHandler>[] MultiJobMenuGenerator();
     public delegate void JobChangeEvent(object sender, JobQueueEventArgs info);
-    public delegate void RequestJobDeleted(Job jobs);
-    public delegate void SingleJobHandler(Job job);
-    public delegate void MultiJobHandler(List<Job> jobs);
+    internal delegate void RequestJobDeleted(TaggedJob jobs);
+    internal delegate void SingleJobHandler(TaggedJob job);
+    internal delegate void MultiJobHandler(List<TaggedJob> jobs);
     public enum StartStopMode { Start, Stop };
     public enum PauseResumeMode { Pause, Resume, Disabled };
     public enum Dependencies { DeleteAll, RemoveDependencies }
@@ -33,7 +34,7 @@ namespace MeGUI.core.gui
         private static readonly Bitmap playImage = new Bitmap(myAssembly.GetManifestResourceStream(__Name + "play.ico"));
         #endregion
 
-        private Dictionary<string, Job> jobs = new Dictionary<string, Job>();
+        private Dictionary<string, TaggedJob> jobs = new Dictionary<string, TaggedJob>();
         private List<ToolStripItem> singleJobHandlers = new List<ToolStripItem>();
         private List<ToolStripItem> multiJobHandlers = new List<ToolStripItem>();
         private List<Pair<ToolStripMenuItem, MultiJobMenuGenerator>> menuGenerators = new List<Pair<ToolStripMenuItem, MultiJobMenuGenerator>>();
@@ -101,17 +102,17 @@ namespace MeGUI.core.gui
 
         #region public interface: jobs
         [Browsable(false)]
-        public IEnumerable<Job> JobList
+        internal IEnumerable<TaggedJob> JobList
         {
             get
             {
                 if (InvokeRequired)
                 {
-                    return (IEnumerable<Job>)Invoke(new Getter<IEnumerable<Job>>(delegate { return JobList; }));
+                    return (IEnumerable<TaggedJob>)Invoke(new Getter<IEnumerable<TaggedJob>>(delegate { return JobList; }));
                 }
 
-                Job[] jobList = new Job[jobs.Count];
-                foreach (Job j in jobs.Values)
+                TaggedJob[] jobList = new TaggedJob[jobs.Count];
+                foreach (TaggedJob j in jobs.Values)
                 {
                     jobList[indexOf(j)] = j;
                 }
@@ -128,7 +129,7 @@ namespace MeGUI.core.gui
 
                 queueListView.BeginUpdate();
                 queueListView.Items.Clear();
-                foreach (Job job in value)
+                foreach (TaggedJob job in value)
                 {
                     queueListView.Items.Add(new ListViewItem(new string[] { job.Name, "", "", "", "", "", "", "", "", "" }));
                     jobs[job.Name] = job;
@@ -138,7 +139,7 @@ namespace MeGUI.core.gui
             }
         }
 
-        public void enqueueJob(Job j)
+        internal void enqueueJob(TaggedJob j)
         {
             if (InvokeRequired)
             {
@@ -151,7 +152,7 @@ namespace MeGUI.core.gui
             refreshQueue();
         }
 
-        public void removeJobFromQueue(Job job)
+        internal void removeJobFromQueue(TaggedJob job)
         {
             if (InvokeRequired)
             {
@@ -187,7 +188,7 @@ namespace MeGUI.core.gui
                     }
         }
 
-        public void AddDynamicSubMenu(string name, string parent, MultiJobMenuGenerator gen)
+        internal void AddDynamicSubMenu(string name, string parent, MultiJobMenuGenerator gen)
         {
             ToolStripMenuItem item = new ToolStripMenuItem(name);
             menuGenerators.Add(new Pair<ToolStripMenuItem, MultiJobMenuGenerator>(item, gen));
@@ -199,26 +200,26 @@ namespace MeGUI.core.gui
             addItem(new ToolStripMenuItem(name), parent);
         }
 
-        public void AddMenuItem(string name, string parent, SingleJobHandler handler)
+        internal void AddMenuItem(string name, string parent, SingleJobHandler handler)
         {
             ToolStripMenuItem item = new ToolStripMenuItem(name);
             item.Click += delegate(object sender, EventArgs e)
             {
                 Debug.Assert(queueListView.SelectedItems.Count == 1);
-                Job j = jobs[queueListView.SelectedItems[0].Text];
+                TaggedJob j = jobs[queueListView.SelectedItems[0].Text];
                 handler(j);
             };
             singleJobHandlers.Add(item);
             addItem(item, parent);
         }
 
-        public void AddMenuItem(string name, string parent, MultiJobHandler handler)
+        internal void AddMenuItem(string name, string parent, MultiJobHandler handler)
         {
             ToolStripMenuItem item = new ToolStripMenuItem(name);
             item.Click += delegate(object sender, EventArgs e)
             {
                 Debug.Assert(queueListView.SelectedItems.Count > 0);
-                List<Job> list = new List<Job>();
+                List<TaggedJob> list = new List<TaggedJob>();
                 foreach (ListViewItem i in queueListView.SelectedItems)
                     list.Add(jobs[i.Text]);
                 handler(list);
@@ -258,7 +259,7 @@ namespace MeGUI.core.gui
         #endregion
 
         #region indexOf
-        private int indexOf(Job j)
+        private int indexOf(TaggedJob j)
         {
             Debug.Assert(jobs.ContainsKey(j.Name), "Looking for a job which isn't in the jobs dictionary");
             foreach (ListViewItem i in queueListView.Items)
@@ -283,18 +284,18 @@ namespace MeGUI.core.gui
         }
 
         #region job deletion
-        public RequestJobDeleted RequestJobDeleted;
+        internal RequestJobDeleted RequestJobDeleted;
         public event EventHandler AbortClicked;
         public event EventHandler StartClicked;
         public event EventHandler StopClicked;
         public event EventHandler PauseClicked;
         public event EventHandler ResumeClicked;
 
-        private List<Job> removeAllDependantJobsFromQueue(Job job)
+        private List<TaggedJob> removeAllDependantJobsFromQueue(TaggedJob job)
         {
             removeJobFromQueue(job);
-            List<Job> list = new List<Job>();
-            foreach (Job j in job.EnabledJobs)
+            List<TaggedJob> list = new List<TaggedJob>();
+            foreach (TaggedJob j in job.EnabledJobs)
             {
                 if (jobs.ContainsKey(j.Name))
                     list.AddRange(removeAllDependantJobsFromQueue(j));
@@ -318,7 +319,7 @@ namespace MeGUI.core.gui
         {
             if (!jobs.ContainsKey(name)) // Check if it has already been deleted
                 return;
-            Job job = jobs[name];
+            TaggedJob job = jobs[name];
             if (job == null) return;
             RequestJobDeleted(job);
         }
@@ -478,7 +479,7 @@ namespace MeGUI.core.gui
             }
             foreach (ListViewItem item in this.queueListView.SelectedItems)
             {
-                Job job = jobs[item.Text];
+                TaggedJob job = jobs[item.Text];
                 if (job.Status != status)
                     return false;
             }
@@ -494,7 +495,7 @@ namespace MeGUI.core.gui
         {
             foreach (ListViewItem item in this.queueListView.SelectedItems)
             {
-                Job job = jobs[item.Text];
+                TaggedJob job = jobs[item.Text];
                 if (job.Status == status)
                     return true;
             }
@@ -514,7 +515,7 @@ namespace MeGUI.core.gui
             if (this.queueListView.SelectedItems.Count > 0) // otherwise 
             {
                 int position = this.queueListView.SelectedItems[0].Index;
-                Job job = jobs[this.queueListView.SelectedItems[0].Text];
+                TaggedJob job = jobs[this.queueListView.SelectedItems[0].Text];
                 if (job.Status == JobStatus.WAITING) // waiting -> postponed
                     job.Status = JobStatus.POSTPONED;
                 else
@@ -533,7 +534,7 @@ namespace MeGUI.core.gui
             foreach (ListViewItem item in this.queueListView.SelectedItems)
             {
                 int position = item.Index;
-                Job job = jobs[item.Text];
+                TaggedJob job = jobs[item.Text];
 
                 Debug.Assert(job.Status != JobStatus.PROCESSING, "shouldn't be able to postpone an active job");
 
@@ -553,7 +554,7 @@ namespace MeGUI.core.gui
             foreach (ListViewItem item in this.queueListView.SelectedItems)
             {
                 int position = item.Index;
-                Job job = jobs[item.Text];
+                TaggedJob job = jobs[item.Text];
 
                 Debug.Assert(job.Status != JobStatus.PROCESSING, "shouldn't be able to set an active job back to waiting");
 
@@ -584,7 +585,7 @@ namespace MeGUI.core.gui
                         i.Click += delegate(object sender1, EventArgs e2)
                         {
                             Debug.Assert(queueListView.SelectedItems.Count > 0);
-                            List<Job> list = new List<Job>();
+                            List<TaggedJob> list = new List<TaggedJob>();
                             foreach (ListViewItem i2 in queueListView.SelectedItems)
                                 list.Add(jobs[i2.Text]);
                             ((MultiJobHandler)((ToolStripItem)sender1).Tag)(list);
@@ -672,11 +673,11 @@ namespace MeGUI.core.gui
             queueListView.BeginUpdate();
             foreach (ListViewItem item in queueListView.Items)
             {
-                Job job = jobs[item.Text];
+                TaggedJob job = jobs[item.Text];
                 item.SubItems[1].Text = job.InputFileName;
                 item.SubItems[2].Text = job.OutputFileName;
-                item.SubItems[3].Text = job.CodecString;
-                item.SubItems[4].Text = job.EncodingMode;
+                item.SubItems[3].Text = job.Job.CodecString;
+                item.SubItems[4].Text = job.Job.EncodingMode;
                 item.SubItems[5].Text = job.StatusString;
                 item.SubItems[6].Text = job.OwningWorker ?? "";
                 
@@ -705,7 +706,7 @@ namespace MeGUI.core.gui
             StopClicked(this, e);
         }
 
-        internal bool HasJob(Job job)
+        internal bool HasJob(TaggedJob job)
         {
             return jobs.ContainsKey(job.Name);
         }

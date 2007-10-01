@@ -9,7 +9,7 @@ namespace MeGUI
 	/// </summary>
 	public class MuxSettings
 	{
-		private List<SubStream> audioStreams, subtitleStreams;
+		private List<MuxStream> audioStreams, subtitleStreams;
 		private double framerate;
 		private string chapterFile, videoName;
         private string muxedInput, videoInput, muxedOutput;
@@ -18,8 +18,8 @@ namespace MeGUI
 
 		public MuxSettings()
 		{
-			audioStreams = new List<SubStream>();
-			subtitleStreams = new List<SubStream>();
+			audioStreams = new List<MuxStream>();
+			subtitleStreams = new List<MuxStream>();
 			framerate = 0.0;
             muxedInput = "";
 			chapterFile = "";
@@ -48,7 +48,7 @@ namespace MeGUI
 		/// <summary>
 		/// Array of all the audio streams to be muxed
 		/// </summary>
-		public List<SubStream> AudioStreams
+		public List<MuxStream> AudioStreams
 		{
 			get {return audioStreams;}
 			set {audioStreams = value;}
@@ -56,7 +56,7 @@ namespace MeGUI
 		/// <summary>
 		/// Array of subtitle tracks to be muxed
 		/// </summary>
-		public List<SubStream> SubtitleStreams
+		public List<MuxStream> SubtitleStreams
 		{
 			get {return subtitleStreams;}
 			set {subtitleStreams = value;}

@@ -60,7 +60,7 @@ namespace MeGUI.core.details
             this.jobQueue.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.jobQueue.JobList = new MeGUI.Job[0];
+            this.jobQueue.JobList = new TaggedJob[0];
             this.jobQueue.Location = new System.Drawing.Point(3, 0);
             this.jobQueue.Name = "jobQueue";
             this.jobQueue.PauseResumeMode = MeGUI.core.gui.PauseResumeMode.Disabled;

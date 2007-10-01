@@ -15,7 +15,7 @@ namespace MeGUI.core.details
 {
     public partial class JobControl : UserControl
     {
-        private Dictionary<string, Job> allJobs = new Dictionary<string, Job>(); //storage for all the jobs and profiles known to the system
+        private Dictionary<string, TaggedJob> allJobs = new Dictionary<string, TaggedJob>(); //storage for all the jobs and profiles known to the system
         private Dictionary<string, JobWorker> workers = new Dictionary<string, JobWorker>();
         private MainForm mainForm;
         private WorkerSummary summary;
@@ -77,7 +77,7 @@ namespace MeGUI.core.details
         private void addSendToTemporaryWorkerMenuItem()
         {
             jobQueue.AddMenuItem("Run in new temporary worker", null, new MultiJobHandler(
-                delegate(List<Job> jobs)
+                delegate(List<TaggedJob> jobs)
                 {
                     // find a good name
                     int number = 0;
@@ -89,7 +89,7 @@ namespace MeGUI.core.details
                     } while (workers.ContainsKey(name));
                     JobWorker w = NewWorker(name, false);
 
-                    foreach (Job j in jobs)
+                    foreach (TaggedJob j in jobs)
                     {
                         ReleaseJob(j);
                         w.AddJob(j);
@@ -100,7 +100,7 @@ namespace MeGUI.core.details
                 }));
         }
 
-        public void ReleaseJob(Job j)
+        internal void ReleaseJob(TaggedJob j)
         {
             if (j.OwningWorker == null)
                 return;
@@ -116,9 +116,9 @@ namespace MeGUI.core.details
         {
             JobControl c;
             JobWorker w;
-            public void handleEvent(List<Job> jobs)
+            public void handleEvent(List<TaggedJob> jobs)
             {
-                foreach (Job j in jobs)
+                foreach (TaggedJob j in jobs)
                 {
                     if (j.Status == JobStatus.PROCESSING)
                     {
@@ -193,15 +193,15 @@ namespace MeGUI.core.details
             DialogResult dr = MessageBox.Show("Are you sure you want to clear the queue? This will delete all jobs in all workers.", "Are you sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (dr == DialogResult.Yes)
             {
-                Job[] jobList = new Job[allJobs.Count];
+                TaggedJob[] jobList = new TaggedJob[allJobs.Count];
                 allJobs.Values.CopyTo(jobList, 0);
-                foreach (Job j in jobList)
+                foreach (TaggedJob j in jobList)
                     reallyDeleteJob(j);
             }
         }
         #endregion
         #region deleting jobs
-        public void DeleteJob(Job job)
+        internal void DeleteJob(TaggedJob job)
         {
             if (job.Status == JobStatus.PROCESSING)
             {
@@ -242,12 +242,12 @@ namespace MeGUI.core.details
         /// queue, then update the queue positions
         /// </summary>
         /// <param name="job">the job to be removed</param>
-        public void RemoveCompletedJob(Job job)
+        internal void RemoveCompletedJob(TaggedJob job)
         {
             reallyDeleteJob(job);
         }
 
-        private void reallyDeleteJob(Job job)
+        private void reallyDeleteJob(TaggedJob job)
         {
             if (job.Status == JobStatus.PROCESSING) return;
 
@@ -257,7 +257,7 @@ namespace MeGUI.core.details
             if (jobQueue.HasJob(job))
                 jobQueue.removeJobFromQueue(job);
 
-            foreach (Job j in job.EnabledJobs)
+            foreach (TaggedJob j in job.EnabledJobs)
                 j.RequiredJobs.Remove(job);
 
             string fileName = mainForm.MeGUIPath + "\\jobs\\" + job.Name + ".xml";
@@ -267,11 +267,11 @@ namespace MeGUI.core.details
             allJobs.Remove(job.Name);
         }
 
-        private void deleteAllDependantJobs(Job job)
+        private void deleteAllDependantJobs(TaggedJob job)
         {
             reallyDeleteJob(job);
 
-            foreach (Job j in job.EnabledJobs)
+            foreach (TaggedJob j in job.EnabledJobs)
                 deleteAllDependantJobs(j);
         }
         #endregion
@@ -283,10 +283,10 @@ namespace MeGUI.core.details
         }
 
         #region saving / loading jobs
-        public List<string> toStringList(IEnumerable<Job> jobList)
+        internal List<string> toStringList(IEnumerable<TaggedJob> jobList)
         {
             List<string> strings = new List<string>();
-            foreach (Job j in jobList)
+            foreach (TaggedJob j in jobList)
                 strings.Add(j.Name);
             return strings;
         }
@@ -295,11 +295,11 @@ namespace MeGUI.core.details
         /// </summary>
         public void saveJobs()
         {
-            foreach (Job job in allJobs.Values)
+            foreach (TaggedJob job in allJobs.Values)
             {
                 job.EnabledJobNames = toStringList(job.EnabledJobs);
                 job.RequiredJobNames = toStringList(job.RequiredJobs);
-                this.mainForm.JobUtil.saveJob(job, mainForm.MeGUIPath);
+                saveJob(job, mainForm.MeGUIPath);
             }
 
             saveJobLists();
@@ -336,9 +336,9 @@ namespace MeGUI.core.details
             foreach (Pair<string, List<string>> p in s.workersAndTheirJobLists)
             {
                 JobWorker w = NewWorker(p.fst, false);
-                IEnumerable<Job> list = toJobList(p.snd);
+                IEnumerable<TaggedJob> list = toJobList(p.snd);
                 w.Jobs = list;
-                foreach (Job j in list)
+                foreach (TaggedJob j in list)
                     j.OwningWorker = w.Name;
             }
         }
@@ -358,7 +358,7 @@ namespace MeGUI.core.details
             foreach (FileInfo fi in files)
             {
                 string fileName = fi.FullName;
-                Job job = this.mainForm.JobUtil.loadJob(fileName);
+                TaggedJob job = loadJob(fileName);
                 if (job != null)
                 {
                     if (allJobs.ContainsKey(job.Name))
@@ -369,7 +369,7 @@ namespace MeGUI.core.details
                 }
             }
 
-            foreach (Job job in allJobs.Values)
+            foreach (TaggedJob job in allJobs.Values)
             {
                 job.RequiredJobs = toJobList(job.RequiredJobNames);
                 job.EnabledJobs = toJobList(job.EnabledJobNames);
@@ -377,9 +377,9 @@ namespace MeGUI.core.details
             loadJobLists();
         }
 
-        public List<Job> toJobList(IEnumerable<string> list)
+        internal List<TaggedJob> toJobList(IEnumerable<string> list)
         {
-            List<Job> jobList = new List<Job>();
+            List<TaggedJob> jobList = new List<TaggedJob>();
             foreach (string name in list)
             {
                 try
@@ -389,7 +389,51 @@ namespace MeGUI.core.details
                 catch (KeyNotFoundException) { }
             }
             return jobList;
-        } 
+        }
+
+        #region individual job saving and loading
+        #region loading and saving jobs
+        /// <summary>
+        /// saves a job to programdirectory\jobs\jobname.xml
+        /// using the XML Serializer we get a humanly readable file
+        /// </summary>
+        /// <param name="job">the Job object to be saved</param>
+        /// <param name="path">The path where the program was launched from</param>
+        internal void saveJob(TaggedJob job, string path)
+        {
+            string fileName = path + "\\jobs\\" + job.Name + ".xml";
+            Util.XmlSerialize(job, fileName);
+        }
+        /// <summary>
+        /// loads a job with a given name from programdirectory\jobs\jobname.xml
+        /// </summary>
+        /// <param name="name">name of the job to be loaded (corresponds to the filename)</param>
+        /// <returns>the Job object that was read from the harddisk</returns>
+        internal TaggedJob loadJob(string name)
+        {
+            XmlSerializer ser = null;
+            using (Stream s = File.OpenRead(name))
+            {
+                try
+                {
+                    ser = new XmlSerializer(typeof(TaggedJob));
+                    return (TaggedJob)ser.Deserialize(s);
+                }
+                catch (Exception e)
+                {
+                    DialogResult r = MessageBox.Show("Job " + name + " could not be loaded. Delete?", "Error loading Job", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
+                    if (r == DialogResult.Yes)
+                    {
+                        try { s.Close(); File.Delete(name); }
+                        catch (Exception) { }
+                    }
+                    Console.Write(e.Message);
+                    return null;
+                }
+            }
+        }
+                #endregion
+        #endregion
         #endregion
         #region free job name
         /// <summary>
@@ -416,6 +460,11 @@ namespace MeGUI.core.details
         #endregion
         
         #region adding jobs to queue
+        public void addJobsWithDependencies(JobChain c)
+        {
+            throw new Exception();
+        }
+
         /// <summary>
         /// adds a job to the Queue (Hashtable) and the listview for graphical display
         /// </summary>
@@ -423,14 +472,14 @@ namespace MeGUI.core.details
         public void addJobsToQueue(params Job[] jobs)
         {
             foreach (Job j in jobs)
-                addJob(j);
+                addJob(new TaggedJob(j));
             saveJobs();
             if (mainForm.Settings.AutoStartQueue)
                 StartAll(false);
             refresh();
         }
 
-        private void addJob(Job job)
+        private void addJob(TaggedJob job)
         {
             job.Name = getFreeJobName();
             allJobs[job.Name] = job;
@@ -487,7 +536,7 @@ namespace MeGUI.core.details
         /// </summary>
         /// <param name="p"></param>
         /// <returns></returns>
-        internal Job ByName(string p)
+        internal TaggedJob ByName(string p)
         {
             return allJobs[p];
         }
@@ -497,9 +546,9 @@ namespace MeGUI.core.details
         /// </summary>
         /// <param name="j"></param>
         /// <returns></returns>
-        internal bool areDependenciesMet(Job j)
+        internal bool areDependenciesMet(TaggedJob j)
         {
-            foreach (Job job in j.RequiredJobs)
+            foreach (TaggedJob job in j.RequiredJobs)
                 if (job.Status != JobStatus.DONE)
                     return false;
 
@@ -511,9 +560,9 @@ namespace MeGUI.core.details
         /// is set to 'waiting', and which isn't owned by any JobWorkers
         /// </summary>
         /// <returns></returns>
-        internal Job getJobToProcess()
+        internal TaggedJob getJobToProcess()
         {
-            foreach (Job job in jobQueue.JobList)
+            foreach (TaggedJob job in jobQueue.JobList)
             {
                 if (job.Status == JobStatus.WAITING &&
                     job.OwningWorker == null &&
@@ -534,7 +583,7 @@ namespace MeGUI.core.details
             workers[value] = w;
             summary.Rename(name, value);
 
-            foreach (Job job in allJobs.Values)
+            foreach (TaggedJob job in allJobs.Values)
             {
                 if (name == job.OwningWorker)
                     job.OwningWorker = value;

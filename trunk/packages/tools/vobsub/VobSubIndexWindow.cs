@@ -111,8 +111,7 @@ namespace MeGUI
                 SubtitleInfo si = (SubtitleInfo)itemChecked;
                 trackIDs.Add(si.Index);
             }
-            SubtitleIndexJob job = this.jobUtil.generateSubtitleIndexJob(input.Text, projectName.Text, keepAllTracks.Checked, trackIDs, (int)pgc.Value);
-            return job;
+            return new SubtitleIndexJob(input.Text, projectName.Text, keepAllTracks.Checked, trackIDs, (int)pgc.Value);
         }
         public void setConfig(string input, string output, bool indexAllTracks, List<int> trackIDs, int pgc)
         {

@@ -12,10 +12,6 @@ namespace MeGUI.packages.video.lmp4
 {
     public partial class lavcConfigurationPanel : MeGUI.core.details.video.VideoConfigurationPanel, Gettable<VideoCodecSettings>
     {
-        protected override string getCommandline()
-        {
-            return CommandLineGenerator.generateVideoCommandline(this.Settings, this.input, this.output, null);
-        }
         #region start / stop
         public lavcConfigurationPanel(MainForm mainForm, VideoInfo info)
             : base(mainForm, info)

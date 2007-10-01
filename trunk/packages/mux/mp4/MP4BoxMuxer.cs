@@ -4,6 +4,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using MeGUI.core.util;
+using System.Globalization;
 
 namespace MeGUI
 {
@@ -177,6 +178,67 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                     break;
             }
             lastLine = line;
+        }
+
+        protected override string Commandline
+        {
+            get
+            {
+                MuxSettings settings = job.Settings;
+                CultureInfo ci = new CultureInfo("en-us");
+                StringBuilder sb = new StringBuilder();
+                if (settings.VideoInput.Length > 0)
+                {
+                    sb.Append("-add \"" + settings.VideoInput);
+                    if (!settings.VideoName.Equals(""))
+                        sb.Append(":name=" + settings.VideoName);
+                    sb.Append("\"");
+                }
+                if (settings.MuxedInput.Length > 0)
+                {
+                    sb.Append(" -add \"" + settings.MuxedInput);
+                    if (!settings.VideoName.Equals(""))
+                        sb.Append(":name=" + settings.VideoName);
+                    sb.Append("\"");
+                }
+                foreach (object o in settings.AudioStreams)
+                {
+                    MuxStream stream = (MuxStream)o;
+                    sb.Append(" -add \"" + stream.path);
+                    if (stream.language != null && !stream.language.Equals(""))
+                        sb.Append(":lang=" + stream.language);
+                    if (stream.name != null && !stream.name.Equals(""))
+                        sb.Append(":name=" + stream.name);
+                    if (stream.delay != 0)
+                        sb.AppendFormat(":delay={0}", stream.delay);
+                    sb.Append("\"");
+                }
+                foreach (object o in settings.SubtitleStreams)
+                {
+                    MuxStream stream = (MuxStream)o;
+                    sb.Append(" -add \"" + stream.path);
+                    if (!stream.language.Equals(""))
+                        sb.Append(":lang=" + stream.language);
+                    if (stream.name != null && !stream.name.Equals(""))
+                        sb.Append(":name=" + stream.name);
+                    sb.Append("\"");
+                }
+
+                if (!settings.ChapterFile.Equals("")) // a chapter file is defined
+                    sb.Append(" -chap \"" + settings.ChapterFile + "\"");
+
+                if (settings.SplitSize.HasValue)
+                    sb.Append(" -splits " + settings.SplitSize.Value.KB);
+
+                if (settings.Framerate > 0)
+                {
+                    string fpsString = settings.Framerate.ToString(ci);
+                    sb.Append(" -fps " + fpsString);
+                }
+                /*   sb.AppendFormat(" -tmp {0}", Path.GetDirectoryName(settings.MuxedOutput)); */
+                sb.Append(" -new \"" + settings.MuxedOutput + "\"");
+                return sb.ToString();
+            }
         }
     }
 }

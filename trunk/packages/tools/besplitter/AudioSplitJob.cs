@@ -35,7 +35,6 @@ namespace MeGUI.packages.tools.besplitter
             this.c = c;
             this.Input = input;
             this.Output = output;
-            this.Commandline = generateSplitCommandline();
         }
 
         public Cuts TheCuts

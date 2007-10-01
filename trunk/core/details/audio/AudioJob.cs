@@ -20,6 +20,7 @@
 
 using System;
 using MeGUI.core.plugins.interfaces;
+using System.Xml.Serialization;
 
 namespace MeGUI
 {
@@ -29,64 +30,63 @@ namespace MeGUI
 	/// </summary>
 	public class AudioJob : Job
 	{
-        private string cutFile;
+        public string CutFile;
+		public AudioCodecSettings Settings;
+        public int Delay;
 
-        public string CutFile
+        public AudioJob() : this(null, null, null, null, 0) { }
+
+        public AudioJob(string input, string output, string cutfile, AudioCodecSettings settings, int delay)
+            :base(input, output)
         {
-            get { return cutFile; }
-            set { cutFile = value; }
+            CutFile = cutfile;
+            Settings = settings;
+            Delay = delay;
         }
 
+        public long SizeBytes;
 
-		private AudioCodecSettings settings;
-		public AudioJob():base()
-		{
-			settings = null;
-		}
 
-		/// <summary>
-		/// the settings for this audio job
-		/// </summary>
-		public AudioCodecSettings Settings
-		{
-			get {return settings;}
-			set {settings = value;}
-		}
-		/// <summary>
-		/// codec used as presentable string
-		/// </summary>
+        public MuxableType ToMuxableType()
+        {
+            return new MuxableType(Type, Settings.Codec);
+        }
+
+        public MuxStream ToMuxStream()
+        {
+                MuxStream s = new MuxStream();
+                s.delay = 0; // no delay correction is required since the audio job will fix the delay
+                s.language = null;
+                s.name = null;
+                s.path = Output;
+                return s;
+        }
+
 		public override string CodecString
 		{
 			get
 			{
-				if (settings is NeroAACSettings)
-					return "AAC Nero";
-				else if (settings is MP3Settings)
-					return "MP3";
-				else if (settings is FaacSettings)
-					return "AAC FAAC";
-				return "";
+                return Settings.getSettingsType();
 			}
 		}
-		/// <summary>
-		/// returns the encoding mode as a human readable string
-		/// (this string is placed in the appropriate column in the queue)
-		/// </summary>
-		public override string EncodingMode
+
+        public override string EncodingMode
 		{
 			get
 			{
-				switch (((AudioCodecSettings)settings).BitrateMode)
-				{
-					case BitrateManagementMode.CBR:
-						return "CBR";
-					case BitrateManagementMode.ABR:
-						return "ABR";
-					case BitrateManagementMode.VBR:
-						return "VBR";
-				}
-				return "";
-			}
+                return null;
+            }
 		}
+
+        [XmlIgnore]
+        public AudioType Type;
+        /*{
+            get
+            {
+                return VideoUtil.guessAudioType(Output);
+            }
+        }*/
+
+        public BitrateManagementMode BitrateMode;
     }
 }

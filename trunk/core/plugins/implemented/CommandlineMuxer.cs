@@ -17,10 +17,10 @@ namespace MeGUI
             su.ProjectedFileSize += (FileSize.Of2(job.Settings.VideoInput) ?? FileSize.Empty);
             su.ProjectedFileSize += (FileSize.Of2(job.Settings.MuxedInput) ?? FileSize.Empty);
 
-            foreach (SubStream s in job.Settings.AudioStreams)
+            foreach (MuxStream s in job.Settings.AudioStreams)
                 su.ProjectedFileSize += FileSize.Of2(s.path) ?? FileSize.Empty;
 
-            foreach (SubStream s in job.Settings.SubtitleStreams)
+            foreach (MuxStream s in job.Settings.SubtitleStreams)
                 su.ProjectedFileSize += FileSize.Of2(s.path) ?? FileSize.Empty;
         }
 
@@ -35,9 +35,9 @@ namespace MeGUI
             Util.ensureExistsIfNeeded(settings.MuxedInput);
             Util.ensureExistsIfNeeded(settings.VideoInput);
             Util.ensureExistsIfNeeded(settings.ChapterFile);
-            foreach (SubStream s in settings.AudioStreams)
+            foreach (MuxStream s in settings.AudioStreams)
                 Util.ensureExistsIfNeeded(s.path);
-            foreach (SubStream s in settings.SubtitleStreams)
+            foreach (MuxStream s in settings.SubtitleStreams)
                 Util.ensureExistsIfNeeded(s.path);
         }
     }

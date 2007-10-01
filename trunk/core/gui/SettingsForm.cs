@@ -143,6 +143,7 @@ namespace MeGUI
         private Label label17;
         private Button button10;
         private TextBox meguiUpdateCache;
+        private Button configAutoEncodeDefaults;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -304,6 +305,7 @@ namespace MeGUI
             this.autoEncodeDefaultsButton = new System.Windows.Forms.Button();
             this.nbPassesLabel = new System.Windows.Forms.Label();
             this.nbPasses = new System.Windows.Forms.NumericUpDown();
+            this.configAutoEncodeDefaults = new System.Windows.Forms.Button();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
             groupBox1 = new System.Windows.Forms.GroupBox();
             groupBox1.SuspendLayout();
@@ -847,6 +849,7 @@ namespace MeGUI
             // 
             // autoModeGroupbox
             // 
+            this.autoModeGroupbox.Controls.Add(this.configAutoEncodeDefaults);
             this.autoModeGroupbox.Controls.Add(this.keep2ndPassLogFile);
             this.autoModeGroupbox.Controls.Add(this.keep2ndPassOutput);
             this.autoModeGroupbox.Controls.Add(this.label13);
@@ -1595,6 +1598,19 @@ namespace MeGUI
             0,
             0,
             0});
+            // 
+            // configAutoEncodeDefaults
+            // 
+            this.configAutoEncodeDefaults.AutoSize = true;
+            this.configAutoEncodeDefaults.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.configAutoEncodeDefaults.Location = new System.Drawing.Point(11, 43);
+            this.configAutoEncodeDefaults.Name = "configAutoEncodeDefaults";
+            this.configAutoEncodeDefaults.Size = new System.Drawing.Size(179, 23);
+            this.configAutoEncodeDefaults.TabIndex = 5;
+            this.configAutoEncodeDefaults.Text = "Configure AutoEncode defaults...";
+            this.configAutoEncodeDefaults.UseVisualStyleBackColor = true;
+            this.configAutoEncodeDefaults.Visible = false;
+            this.configAutoEncodeDefaults.Click += new System.EventHandler(this.autoEncodeDefaultsButton_Click);
             // 
             // helpButton1
             // 

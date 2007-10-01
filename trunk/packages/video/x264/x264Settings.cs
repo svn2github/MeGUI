@@ -480,5 +480,76 @@ namespace MeGUI
             else
                 return false;
         }
+
+        public void doTriStateAdjustment()
+        {
+            switch (Profile)
+            {
+                case 0:
+                    Cabac = false;
+                    NbBframes = 0;
+                    AdaptiveBFrames = false;
+                    BFramePyramid = false;
+                    I8x8mv = false;
+                    AdaptiveDCT = false;
+                    BframeBias = 0;
+                    BframePredictionMode = 1; // default
+                    QuantizerMatrixType = 0; // no matrix
+                    QuantizerMatrix = "";
+                    Lossless = false;
+                    break;
+                case 1:
+                    I8x8mv = false;
+                    AdaptiveDCT = false;
+                    QuantizerMatrixType = 0; // no matrix
+                    QuantizerMatrix = "";
+                    break;
+                case 2:
+                    break;
+            }
+            if (EncodingMode != 2 && EncodingMode != 5)
+                Turbo = false;
+            if (Turbo)
+            {
+                NbRefFrames = 1;
+                SubPelRefinement = 0;
+                METype = 0; // diamond search
+                I4x4mv = false;
+                P4x4mv = false;
+                I8x8mv = false;
+                P8x8mv = false;
+                B8x8mv = false;
+                AdaptiveDCT = false;
+                MixedRefs = false;
+                BRDO = false;
+                Trellis = false;
+                noFastPSkip = false;
+                WeightedBPrediction = false;
+                biME = false;
+            }
+            if (Profile != 2) // lossless requires High Profile
+                Lossless = false;
+            if (NbRefFrames <= 1) // mixed references require at least two reference frames
+                MixedRefs = false;
+            if (NbBframes < 2) // pyramid requires at least two b-frames
+                BFramePyramid = false;
+            if (NbBframes == 0)
+            {
+                AdaptiveBFrames = false;
+                biME = false;
+                WeightedBPrediction = false;
+            }
+            if (!Cabac) // trellis requires CABAC
+                X264Trellis = 0;
+            if (NbBframes == 0 || SubPelRefinement < 5) // BRDO requires RDO and b-frames
+                BRDO = false;
+            if (!P8x8mv) // p8x8 requires p4x4
+                P4x4mv = false;
+            if (Lossless) // This needs CQ 0
+            {
+                EncodingMode = 1;
+                BitrateQuantizer = 0;
+            }
+        }
 	}
 }

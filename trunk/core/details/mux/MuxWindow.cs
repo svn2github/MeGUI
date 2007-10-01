@@ -15,7 +15,6 @@ namespace MeGUI
     {
         private IMuxing muxer;
         private MainForm mainForm;
-        private CommandLineGenerator gen = new CommandLineGenerator();
 
         public MuxWindow(IMuxing muxer, MainForm mainForm) : base()
         {
@@ -37,11 +36,11 @@ namespace MeGUI
         {
             MuxJob job = new MuxJob();
             convertLanguagesToISO();
-            foreach (SubStream stream in audioStreams)
+            foreach (MuxStream stream in audioStreams)
             {
                 job.Settings.AudioStreams.Add(stream);
             }
-            foreach (SubStream stream in subtitleStreams)
+            foreach (MuxStream stream in subtitleStreams)
             {
                 job.Settings.SubtitleStreams.Add(stream);
             }
@@ -69,7 +68,8 @@ namespace MeGUI
                 {
                     if (this.enableSplit.Checked && !splitSize.Text.Equals(""))
                         job.Settings.SplitSize = new FileSize(Unit.MB, Int32.Parse(this.splitSize.Text));
-                    job.Commandline = CommandLineGenerator.generateMuxCommandline(job.Settings, job.MuxType, mainForm);
+                    throw new Exception();
+//                    job.Commandline = CommandLineGenerator.generateMuxCommandline(job.Settings, job.MuxType, mainForm);
                 }
             }
             return job;
@@ -87,8 +87,8 @@ namespace MeGUI
             }
         }
 
-        private void setConfig(string videoInput, string muxedInput, double framerate, SubStream[] audioStreams,
-            SubStream[] subtitleStreams, string chapterFile, string output, FileSize? splitSize, Dar? dar)
+        private void setConfig(string videoInput, string muxedInput, double framerate, MuxStream[] audioStreams,
+            MuxStream[] subtitleStreams, string chapterFile, string output, FileSize? splitSize, Dar? dar)
         {
             base.setConfig(videoInput, framerate, audioStreams, subtitleStreams, chapterFile, output, splitSize, dar);
             this.muxedInput.Text = muxedInput;

@@ -73,7 +73,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
         private MeGUISettings _settings = null;
         private int SAMPLES_PER_UPDATE;
         private AudioJob audioJob;
-        private StatusUpdate su = new StatusUpdate();
+        private StatusUpdate su;
         private DateTime _start;
 
         private List<string> _tempFiles = new List<string>();
@@ -494,10 +494,12 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
         #region IJobProcessor Members
 
 
-        public void setup(Job job)
+        public void setup(Job job, StatusUpdate su)
         {
             this.audioJob = (AudioJob)job;
-            su.JobName = audioJob.Name;
+            
+            throw new Exception();
+            //su.JobName = audioJob.Name;
 
 
             //let's create avisynth script
@@ -511,7 +513,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             bool directShow = audioJob.Settings.ForceDecodingViaDirectShow;
             if (!directShow)
             {
-                switch (Path.GetExtension(audioJob.InputFileName).ToLower())
+                switch (Path.GetExtension(audioJob.Input).ToLower())
                 {
                     case ".ac3":
                         script.AppendFormat("NicAc3Source(\"{0}\"", audioJob.Input);

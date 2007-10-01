@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using MeGUI.core.util;
+using MeGUI.core.details;
 
 namespace MeGUI
 {
@@ -16,7 +17,7 @@ namespace MeGUI
         private JobUtil jobUtil;
         private bool minimizedMode = false;
         private VideoEncoderType knownVideoType;
-        private KnownAudioType[] knownAudioTypes;
+        private AudioEncoderType[] knownAudioTypes;
         public AdaptiveMuxWindow(MainForm mainForm)
         {
             InitializeComponent();
@@ -41,11 +42,11 @@ namespace MeGUI
             List<AudioEncoderType> audioCodecList = new List<AudioEncoderType>();
 
             int counter = 0;
-            foreach (SubStream stream in audioStreams)
+            foreach (MuxStream stream in audioStreams)
             {
                 if (minimizedMode && knownAudioTypes.Length > counter)
                 {
-                    audioCodecList.Add(knownAudioTypes[counter].encoderType);
+                    audioCodecList.Add(knownAudioTypes[counter]);
                 }
                 else
                 {
@@ -57,7 +58,7 @@ namespace MeGUI
                 }
                 counter++;
             }
-            foreach (SubStream stream in subtitleStreams)
+            foreach (MuxStream stream in subtitleStreams)
             {
                 SubtitleType subtitleType = VideoUtil.guessSubtitleType(stream.path);
                 if (subtitleType != null)
@@ -70,16 +71,16 @@ namespace MeGUI
             aCodec = audioCodecList.ToArray();
         }
 
-        private void getStreams(out SubStream[] audioStreams, out SubStream[] subtitleStreams)
+        private void getStreams(out MuxStream[] audioStreams, out MuxStream[] subtitleStreams)
         {
-            List<SubStream> audioStreamsList = new List<SubStream>();
-            List<SubStream> subtitleStreamList = new List<SubStream>();
-            foreach (SubStream stream in this.audioStreams)
+            List<MuxStream> audioStreamsList = new List<MuxStream>();
+            List<MuxStream> subtitleStreamList = new List<MuxStream>();
+            foreach (MuxStream stream in this.audioStreams)
             {
                 if (!string.IsNullOrEmpty(stream.path))
                     audioStreamsList.Add(stream);
             }
-            foreach (SubStream stream in this.subtitleStreams)
+            foreach (MuxStream stream in this.subtitleStreams)
             {
                 if (!string.IsNullOrEmpty(stream.path))
                     subtitleStreamList.Add(stream);
@@ -160,7 +161,7 @@ namespace MeGUI
             }
         }
 
-        public MuxJob[] Jobs
+        public JobChain Jobs
         {
             get
             {
@@ -182,7 +183,7 @@ namespace MeGUI
                 MuxableType[] audioTypes;
                 MuxableType[] subtitleTypes;
                 AudioEncoderType[] audioCodecs;
-                SubStream[] audioStreams, subtitleStreams;
+                MuxStream[] audioStreams, subtitleStreams;
                 getTypes(out audioCodecs, out audioTypes, out subtitleTypes);
                 getStreams(out audioStreams, out subtitleStreams);
 
@@ -202,7 +203,7 @@ namespace MeGUI
                 }
 
                 return jobUtil.GenerateMuxJobs(myVideo, audioStreams, audioTypes, subtitleStreams,
-                    subtitleTypes, chaptersInput.Text, chapterInputType, (containerFormat.SelectedItem as ContainerType), muxedOutput.Text, splitSize);
+                    subtitleTypes, chaptersInput.Text, chapterInputType, (containerFormat.SelectedItem as ContainerType), muxedOutput.Text, splitSize, false);
             }
         }
         /// <summary>
@@ -214,7 +215,7 @@ namespace MeGUI
         /// <param name="audioStreams">the audio streams whose languages have to be assigned</param>
         /// <param name="output">the output file</param>
         /// <param name="splitSize">the output split size</param>
-        public void setMinimizedMode(string videoInput, VideoEncoderType videoType, double framerate, SubStream[] audioStreams, KnownAudioType[] audioTypes, string output,
+        public void setMinimizedMode(string videoInput, VideoEncoderType videoType, double framerate, MuxStream[] audioStreams, AudioEncoderType[] audioTypes, string output,
             FileSize? splitSize, ContainerType cft)
         {
             minimizedMode = true;
@@ -301,7 +302,7 @@ namespace MeGUI
         }
         #endregion
 
-        public void getAdditionalStreams(out SubStream[] audio, out SubStream[] subtitles, out string chapters, out string output, out ContainerType cot)
+        public void getAdditionalStreams(out MuxStream[] audio, out MuxStream[] subtitles, out string chapters, out string output, out ContainerType cot)
         {
             cot = (containerFormat.SelectedItem as ContainerType);
             output = muxedOutput.Text;

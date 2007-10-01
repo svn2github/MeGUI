@@ -43,7 +43,6 @@ namespace MeGUI
             out List<MuxableType> unhandledInputTypes);
         MuxerType MuxerType { get; }
         IJobProcessor GetMuxer(MeGUISettings settings);
-        MuxCommandlineGenerator CommandlineGenerator { get;}
         string GetOutputTypeFilter(ContainerType containerType);
         string GetVideoInputFilter();
         string GetAudioInputFilter();
@@ -65,10 +64,10 @@ namespace MeGUI
         string GetInputTypeFilter();
     }
 
-    /// <summary>
+/*    /// <summary>
     /// AudioStream is a simple container for audio streams and their related properties and settings
     /// </summary>
-    public struct AudioStream
+    public class AudioStream
     {
         public string cutlist;
         public string path, output;
@@ -127,7 +126,7 @@ namespace MeGUI
             get { return delay; }
             set { delay = value; }
         }
-    }
+    }*/
 
     public class VideoStream
     {

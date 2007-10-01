@@ -15,6 +15,7 @@ using MeGUI.core.plugins.interfaces;
 using MeGUI.core.gui;
 using MeGUI.packages.tools.oneclick;
 using MeGUI.core.util;
+using MeGUI.core.details;
 
 namespace MeGUI
 {
@@ -403,12 +404,8 @@ namespace MeGUI
                 signalAR.Checked = settings.SignalAR;
                 autoDeint.Checked = settings.AutomaticDeinterlacing;
 
-                // ints
                 splitting.Value = settings.SplitSize;
-                if (settings.Filesize < 0)
-                    optionalTargetSizeBox1.Value = null;
-                else
-                    optionalTargetSizeBox1.Value = new FileSize(Unit.KB, settings.Filesize);
+                optionalTargetSizeBox1.Value = settings.Filesize;
                 horizontalResolution.Value = settings.OutputResolution;
 
 
@@ -464,8 +461,8 @@ namespace MeGUI
                 dpp.SignalAR = signalAR.Checked;
                 dpp.Splitting = splitting.Value;
                 dpp.VideoSettings = VideoSettings.clone();
-                IndexJob job = mainForm.JobUtil.generateIndexJob(this.input.Filename, d2vName, 1,
-                    audioTrack1.SelectedIndex - 1, audioTrack2.SelectedIndex - 1, dpp);
+                IndexJob job = new IndexJob(input.Filename, d2vName, 1,
+                    audioTrack1.SelectedIndex - 1, audioTrack2.SelectedIndex - 1, dpp, false);
                 mainForm.Jobs.addJobsToQueue(job);
                 this.Close();
             }
@@ -574,7 +571,7 @@ namespace MeGUI
         public void Run(MainForm info)
         {
             using (OneClickWindow ocmt = new OneClickWindow(info, info.JobUtil, info.Video.VideoEncoderProvider,
-                info.Audio.AudioEncoderProvider))
+                new AudioEncoderProvider()))
             {
                 ocmt.ShowDialog();
             }
@@ -635,8 +632,8 @@ namespace MeGUI
         {
             Dictionary<int, string> audioFiles = vUtil.getAllDemuxedAudio(job.Output, 8);
 
-            List<AudioStream> encodableAudioStreams = new List<AudioStream>();
-            List<SubStream> muxOnlyAudioStreams = new List<SubStream>();
+            List<AudioJob> encodableAudioStreams = new List<AudioJob>();
+            List<MuxStream> muxOnlyAudioStreams = new List<MuxStream>();
             int counter = 0; // The counter is only used to find the track number in case of an error
 
             getAudioStreams(audioFiles, job.PostprocessingProperties.AudioStreams, out encodableAudioStreams, out muxOnlyAudioStreams);
@@ -659,7 +656,7 @@ namespace MeGUI
             VideoStream myVideo = new VideoStream();
             ulong length;
             double framerate;
-            jobUtil.getInputProperties(out length, out framerate, videoInput);
+            JobUtil.getInputProperties(out length, out framerate, videoInput);
             myVideo.Input = videoInput;
             myVideo.Output = videoOutput;
             myVideo.NumberOfFrames = length;
@@ -671,26 +668,27 @@ namespace MeGUI
             intermediateFiles.Add(videoInput);
             intermediateFiles.Add(job.Output);
             intermediateFiles.AddRange(audioFiles.Values);
-            if (!videoInput.Equals(""))
+            if (!string.IsNullOrEmpty(videoInput))
             {
                 //Create empty subtitles for muxing (subtitles not supported in one click mode)
-                SubStream[] subtitles = new SubStream[0];
-                vUtil.GenerateJobSeries(myVideo, muxedOutput, encodableAudioStreams.ToArray(), subtitles,
+                MuxStream[] subtitles = new MuxStream[0];
+                JobChain c = vUtil.GenerateJobSeries(myVideo, muxedOutput, encodableAudioStreams.ToArray(), subtitles,
                     job.PostprocessingProperties.ChapterFile, job.PostprocessingProperties.OutputSize,
                     job.PostprocessingProperties.Splitting, job.PostprocessingProperties.Container,
-                    false, muxOnlyAudioStreams.ToArray(), intermediateFiles);
+                    false, muxOnlyAudioStreams.ToArray());
                 /*                    vUtil.generateJobSeries(videoInput, videoOutput, muxedOutput, videoSettings,
                                         audioStreams, audio, subtitles, job.PostprocessingProperties.ChapterFile,
                                         job.PostprocessingProperties.OutputSize, job.PostprocessingProperties.SplitSize,
                                         containerOverhead, type, new string[] { job.Output, videoInput });*/
+                c = CleanupJob.AddAfter(c, intermediateFiles);
             }
             mainForm.addToLog(logBuilder.ToString());
         }
 
-        private void getAudioStreams(Dictionary<int, string> audioFiles, OneClickWindow.PartialAudioStream[] partialAudioStream, out List<AudioStream> encodableAudioStreams, out List<SubStream> muxOnlyAudioStreams)
+        private void getAudioStreams(Dictionary<int, string> audioFiles, OneClickWindow.PartialAudioStream[] partialAudioStream, out List<AudioJob> encodableAudioStreams, out List<MuxStream> muxOnlyAudioStreams)
         {
-            muxOnlyAudioStreams = new List<SubStream>();
-            encodableAudioStreams = new List<AudioStream>();
+            muxOnlyAudioStreams = new List<MuxStream>();
+            encodableAudioStreams = new List<AudioJob>();
             int counter = 0;
             foreach (OneClickWindow.PartialAudioStream propertiesStream in job.PostprocessingProperties.AudioStreams)
             {
@@ -744,7 +742,7 @@ namespace MeGUI
                 {
                     if (propertiesStream.dontEncode)
                     {
-                        SubStream newStream = new SubStream();
+                        MuxStream newStream = new MuxStream();
                         newStream.path = input;
                         newStream.name = "";
                         newStream.language = language;
@@ -752,10 +750,10 @@ namespace MeGUI
                     }
                     else
                     {
-                        AudioStream encodeStream = new AudioStream();
-                        encodeStream.path = input;
-                        encodeStream.output = output;
-                        encodeStream.settings = settings;
+                        AudioJob encodeStream = new AudioJob();
+                        encodeStream.Input = input;
+                        encodeStream.Output = output;
+                        encodeStream.Settings = settings;
                         encodableAudioStreams.Add(encodeStream);
                     }
                 }

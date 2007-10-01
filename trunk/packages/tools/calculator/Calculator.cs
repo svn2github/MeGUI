@@ -26,6 +26,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Diagnostics;
 using MeGUI.core.util;
+using MeGUI.core.details;
 
 namespace MeGUI
 {
@@ -115,7 +116,6 @@ namespace MeGUI
             videoCodec.SelectedItem = CodecManager.X264;
             this.containerFormat.Items.AddRange(muxProvider.GetSupportedContainers().ToArray());
             containerFormat.SelectedItem = ContainerType.MKV;
-			calc = new BitrateCalculator();
 		}
 
 		/// <summary>
@@ -865,7 +865,7 @@ namespace MeGUI
 		/// <param name="container">container</param>
 		/// <param name="audio1Bitrate">bitrate of the first audio track</param>
 		/// <param name="audio2Bitrate">bitrate of the second audio track</param>
-		public void setDefaults(ulong nbFrames, double framerate, ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> codec, AudioStream audioStream1, AudioStream audioStream2)
+        public void setDefaults(ulong nbFrames, double framerate, ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> codec, AudioJob audioStream1, AudioJob audioStream2)
 		{
             setFPSToBest(framerate);
             try
@@ -880,15 +880,15 @@ namespace MeGUI
             if (videoCodec.Items.Contains(codec))
                 videoCodec.SelectedItem = codec;
 
-            if (audioStream1.settings != null)
+            if (audioStream1 != null && audioStream1.Settings != null)
             {
-                audio1Bitrate.Value = audioStream1.settings.Bitrate;
+                audio1Bitrate.Value = audioStream1.Settings.Bitrate;
                 if (audioStream1.Type != null && audio1Type.Items.Contains(audioStream1.Type))
                     audio1Type.SelectedItem = audioStream1.Type;
             }
-            if (audioStream2.settings != null)
+            if (audioStream2 != null && audioStream2.Settings != null)
             {
-                audio2Bitrate.Value = audioStream2.settings.Bitrate;
+                audio2Bitrate.Value = audioStream2.Settings.Bitrate;
                 if (audioStream2.Type != null && audio2Type.Items.Contains(audioStream2.Type))
                     audio2Type.SelectedItem = audioStream2.Type;
             }
@@ -1330,25 +1330,25 @@ namespace MeGUI
 		}
 		#endregion
 		#region bitrate calculations
-        private bool getInfo(out VideoCodec codec, out AudioStream[] audioStreamsArray, out ContainerType containerType,
+        private bool getInfo(out VideoCodec codec, out AudioBitrateCalculationStream[] audioStreamsArray, out ContainerType containerType,
             out ulong numberOfFrames, out double framerate)
         {
             numberOfFrames = (ulong)nbFrames.Value;
             framerate = (double)fpsChooser.Value;
             long[] audioSizes = { ((long)audio1SizeKB.Value)* 1024L, ((long)audio2SizeKB.Value) * 1024L };
-            List<AudioStream> audioStreams = new List<AudioStream>();
-            AudioStream stream;
+            List<AudioBitrateCalculationStream> audioStreams = new List<AudioBitrateCalculationStream>();
+            AudioBitrateCalculationStream stream;
             if (audio1Type.SelectedIndex > -1)
             {
-                stream = new AudioStream();
-                stream.SizeBytes = audioSizes[0];
+                stream = new AudioBitrateCalculationStream();
+                stream.Size = new FileSize(Unit.B, audioSizes[0]);
                 stream.Type = audio1Type.SelectedItem as AudioType;
                 audioStreams.Add(stream);
             }
             if (audio2Type.SelectedIndex > -1)
             {
-                stream = new AudioStream();
-                stream.SizeBytes = audioSizes[1];
+                stream = new AudioBitrateCalculationStream();
+                stream.Size = new FileSize(Unit.B, audioSizes[1]);
                 stream.Type = audio2Type.SelectedItem as AudioType;
                 audioStreams.Add(stream);
             }
@@ -1371,7 +1371,7 @@ namespace MeGUI
 
 		private bool updateSize()
 		{
-            AudioStream[] audioStreams;
+            AudioBitrateCalculationStream[] audioStreams;
             VideoCodec vCodec;
             ContainerType containerType;
             ulong nbOfFrames;
@@ -1383,7 +1383,7 @@ namespace MeGUI
             int bitrate = (int)projectedBitrate.Value;
             if (bitrate <= 0)
                 return false;
-            long totalSize = calc.CalculateFileSizeKB(vCodec, bframes.Checked, containerType,
+            long totalSize = BitrateCalculator.CalculateFileSizeKB(vCodec, bframes.Checked, containerType,
                 audioStreams, bitrate, nbOfFrames, framerate, out vidSize);
 			long totalSizeMB = totalSize / 1024L;
 			int sizeMB = vidSize / 1024;
@@ -1426,20 +1426,18 @@ namespace MeGUI
 		{
             if (!targetSize.Value.HasValue) return false;
 
-            long muxedSizeBytes;
-            checked { muxedSizeBytes = (long)targetSize.Value.Value.Bytes; }
-            if (muxedSizeBytes <= 0)
-                return false;
+            ulong muxedSizeBytes;
+            checked { muxedSizeBytes = targetSize.Value.Value.Bytes; }
             ulong numberOfFrames;
             double framerate;
-            AudioStream[] audioStreams;
+            AudioBitrateCalculationStream[] audioStreams;
             VideoCodec vCodec;
             ContainerType containerType;
             if (!getInfo(out vCodec, out audioStreams, out containerType, out numberOfFrames, out framerate))
                 return false;
 			int bitrateKBits = 0;
-			long videoSizeKBs = 0;
-            bitrateKBits = calc.CalculateBitrateKBits(vCodec, bframes.Checked, containerType, audioStreams, muxedSizeBytes,
+			ulong videoSizeKBs = 0;
+            bitrateKBits = BitrateCalculator.CalculateBitrateKBits(vCodec, bframes.Checked, containerType, audioStreams, muxedSizeBytes,
                 numberOfFrames, framerate, out videoSizeKBs);
 			int videoSizeMBs = (int) (videoSizeKBs / 1024);
             try
@@ -1488,8 +1486,8 @@ namespace MeGUI
             {
                 ulong nbFrames = 0;
                 double framerate = 0.0;
-                if (!info.Video.VideoInput.Equals(""))
-                    info.JobUtil.getInputProperties(out nbFrames, out framerate, info.Video.VideoInput);
+                if (!string.IsNullOrEmpty(info.Video.VideoInput))
+                    JobUtil.getInputProperties(out nbFrames, out framerate, info.Video.VideoInput);
                 calc.setDefaults(nbFrames, framerate, info.Video.CurrentSettingsProvider, info.Audio.AudioStreams[0], info.Audio.AudioStreams[1]);
 
                 DialogResult dr = calc.ShowDialog();

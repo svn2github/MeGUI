@@ -52,5 +52,31 @@ namespace MeGUI
             else
                 log.AppendLine(line);
         }
+
+        protected override string Commandline
+        {
+            get
+            {
+                StringBuilder sb = new StringBuilder();
+                MuxSettings settings = job.Settings;
+
+                sb.Append("-ovc copy -oac copy ");
+                if (settings.MuxedInput.Length > 0)
+                {
+                    sb.Append("\"" + settings.MuxedInput + "\" ");
+                }
+                if (settings.VideoInput.Length > 0)
+                {
+                    sb.Append("\"" + settings.VideoInput + "\" ");
+                }
+                if (settings.AudioStreams.Count > 0)
+                {
+                    MuxStream stream = (MuxStream)settings.AudioStreams[0];
+                    sb.Append("-audiofile \"" + stream.path + "\" ");
+                }
+                sb.Append(" -mc 0 -noskip -o \"" + settings.VideoInput + "\"");
+                return sb.ToString();
+            }
+        }
     }
 }

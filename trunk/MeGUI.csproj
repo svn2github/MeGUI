@@ -182,8 +182,10 @@
     <Compile Include="Changelog.Designer.cs">
       <DependentUpon>Changelog.cs</DependentUpon>
     </Compile>
+    <Compile Include="core\details\CleanupJob.cs" />
     <Compile Include="core\details\CodecManager.cs" />
     <Compile Include="core\details\CommandlineParser.cs" />
+    <Compile Include="core\details\DependencyChain.cs" />
     <Compile Include="core\details\DialogManager.cs" />
     <Compile Include="core\details\DialogSettings.cs" />
     <Compile Include="core\details\JobControl.cs">
@@ -214,6 +216,8 @@
     <Compile Include="core\details\JobWorker.cs" />
     <Compile Include="core\details\ProfileManager.cs" />
     <Compile Include="core\details\StatusUpdate.cs" />
+    <Compile Include="core\details\Streams.cs" />
+    <Compile Include="core\details\TaggedJob.cs" />
     <Compile Include="core\details\video\VideoCodecSettings.cs" />
     <Compile Include="core\details\video\VideoConfigurationPanel.cs">
       <SubType>UserControl</SubType>
@@ -240,6 +244,12 @@
     </Compile>
     <Compile Include="core\gui\AudioEncodingComponent.Designer.cs">
       <DependentUpon>AudioEncodingComponent.cs</DependentUpon>
+    </Compile>
+    <Compile Include="core\gui\AudioEncodingTab.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="core\gui\AudioEncodingTab.Designer.cs">
+      <DependentUpon>AudioEncodingTab.cs</DependentUpon>
     </Compile>
     <Compile Include="core\gui\AutoUpdateServerConfigWindow.cs">
       <SubType>Form</SubType>
@@ -376,7 +386,6 @@
     <Compile Include="core\plugins\interfaces\Profile.cs" />
     <Compile Include="core\util\Autocrop.cs" />
     <Compile Include="core\util\BitrateCalculatorPreProcessor.cs" />
-    <Compile Include="core\util\CommandLineGenerator.cs" />
     <Compile Include="core\util\DAR.cs" />
     <Compile Include="core\util\EnumProxy.cs" />
     <Compile Include="core\util\Exceptions.cs" />
@@ -619,6 +628,10 @@
     <EmbeddedResource Include="core\gui\AudioEncodingComponent.resx">
       <DependentUpon>AudioEncodingComponent.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="core\gui\AudioEncodingTab.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>AudioEncodingTab.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="core\gui\AutoUpdateServerConfigWindow.resx">
       <SubType>Designer</SubType>

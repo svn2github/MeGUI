@@ -90,11 +90,6 @@ namespace MeGUI.core.details.video
         }
         #endregion
         #region showCommandline
-        protected virtual string getCommandline()
-        {
-            return null;
-            // CommandLineGenerator.generateVideoCommandline((VideoCodecSettings)this.Settings, this.input, this.output, -1, -1);
-        }
         protected void showCommandLine()
         {
             if (!loaded)
@@ -105,7 +100,7 @@ namespace MeGUI.core.details.video
 
             doCodecSpecificAdjustments();
 
-            this.commandline.Text = encoderPath + " " + getCommandline();
+            this.commandline.Text = ""; // encoderPath + " " + getCommandline();
             updating = false;
         }
         #endregion

@@ -19,9 +19,10 @@ namespace MeGUI
         {
             return "OneClick";
         }
-        public string VideoProfileName, StorageMediumName, AudioProfileName, AvsProfileName;
-		public bool PrerenderVideo, DontEncodeAudio, SignalAR, Split, AutomaticDeinterlacing;
-		public long OutputResolution, Filesize;
+        public string VideoProfileName, AudioProfileName, AvsProfileName;
+		public bool PrerenderVideo, DontEncodeAudio, SignalAR, AutomaticDeinterlacing;
+		public long OutputResolution;
+        public FileSize? Filesize;
         public FileSize? SplitSize;
         public string[] ContainerCandidates;
 
@@ -39,15 +40,12 @@ namespace MeGUI
 		{
 			VideoProfileName = "";
 			AudioProfileName = "";
-			StorageMediumName = "";
             AvsProfileName = "";
             AutomaticDeinterlacing = true;
             PrerenderVideo = false;
 			DontEncodeAudio = false;
 			SignalAR = false;
-			Split = false;
 			OutputResolution = 640;
-			Filesize = -1;
             SplitSize = null;
             ContainerCandidates = new string[0];
 		}

@@ -6,23 +6,9 @@ namespace MeGUI
 {
     public class AviSynthJob : Job
     {
-        private ulong nbFrames;
-        private double framerate;
+        public AviSynthJob() : base() { }
 
-        public double Framerate
-        {
-            get { return framerate; }
-            set { framerate = value; }
-        }
-
-        public ulong NumberOfFrames
-        {
-            get { return nbFrames; }
-            set { nbFrames = value; }
-        }
-
-
-        public AviSynthJob() : base()
+        public AviSynthJob(string input) : base(input, null)
         {
         }
 

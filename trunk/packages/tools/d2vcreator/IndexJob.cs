@@ -7,29 +7,30 @@ namespace MeGUI
 	/// </summary>
 	public class IndexJob : Job
 	{
-		private bool autoForceFilm, loadSources;
+		private bool loadSources;
 		private int audioTrackID1, audioTrackID2, demuxMode;
-		private double forceFilmThreshold;
 		private DGIndexPostprocessingProperties postprocessingProperties;
 		
 		public IndexJob():base()
 		{
-			autoForceFilm = true;
 			loadSources = false;
 			demuxMode = 0;
-			forceFilmThreshold = 95.0;
 			audioTrackID1 = audioTrackID2 = -1;
 		}
 
+        public IndexJob(string input, string output, int demuxType, int trackID1, int trackID2,
+            DGIndexPostprocessingProperties properties, bool loadSources)
+        {
+            Input = input;
+            Output = output;
+            DemuxMode = demuxType;
+            AudioTrackID1 = trackID1;
+            AudioTrackID2 = trackID2;
+            PostprocessingProperties = properties;
+            LoadSources = loadSources;
+        }
 
-		/// <summary>
-		/// gets / sets whether force film should be applied after indexing
-		/// </summary>
-		public bool AutoForceFilm
-		{
-			get {return autoForceFilm;}
-			set {autoForceFilm = value;}
-		}
+
 		/// <summary>
 		/// gets / sets whether the audio and video files should be loaded after indexing
 		/// </summary>
@@ -64,14 +65,6 @@ namespace MeGUI
 		{
 			get {return demuxMode;}
 			set {demuxMode = value;}
-		}
-		/// <summary>
-		/// gets / sets the percentage above which force film should be automatically applied
-		/// </summary>
-		public double ForceFilmThreshold
-		{
-			get {return forceFilmThreshold;}
-			set {forceFilmThreshold = value;}
 		}
 		/// <summary>
 		/// gets / sets the postprocessing properties

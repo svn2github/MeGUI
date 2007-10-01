@@ -6,6 +6,7 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 using MeGUI.core.details.video;
+using MeGUI.core.util;
 
 namespace MeGUI.packages.tools.oneclick
 {
@@ -72,7 +73,7 @@ namespace MeGUI.packages.tools.oneclick
         
         public void openAudioFile(string p)
         {
-            int del = AudioEncodingComponent.getDelay(p);
+            int del = PrettyFormatting.getDelay(p);
             AudioCodecSettings settings = (audioCodec.SelectedItem as ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType>).GetCurrentSettings();
             if (del != 0) // we have a delay we are interested in
             {

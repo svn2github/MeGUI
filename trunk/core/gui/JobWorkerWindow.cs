@@ -61,7 +61,7 @@ namespace MeGUI.core.gui
     public partial class JobWorker : Form
     {
         private IJobProcessor currentProcessor;
-        private Job currentJob; // The job being processed at the moment
+        private TaggedJob currentJob; // The job being processed at the moment
         private ProgressWindow pw;
         private MainForm mainForm;
         private decimal progress;
@@ -190,7 +190,7 @@ namespace MeGUI.core.gui
         }
         #endregion
 
-        private Dictionary<string, Job> localJobs = new Dictionary<string, Job>();
+        private Dictionary<string, TaggedJob> localJobs = new Dictionary<string, TaggedJob>();
 
         public JobWorker(MainForm mf)
         {
@@ -199,9 +199,9 @@ namespace MeGUI.core.gui
             Util.SetSize(this, MeGUI.Properties.Settings.Default.JobWorkerSize, MeGUI.Properties.Settings.Default.JobWorkerWindowState);
             jobQueue1.SetStartStopButtonsTogether();
             jobQueue1.RequestJobDeleted = new RequestJobDeleted(GUIDeleteJob);
-            jobQueue1.AddMenuItem("Return to main job queue", null, delegate(List<Job> jobs)
+            jobQueue1.AddMenuItem("Return to main job queue", null, delegate(List<TaggedJob> jobs)
             {
-                foreach (Job j in jobs)
+                foreach (TaggedJob j in jobs)
                     mainForm.Jobs.ReleaseJob(j);
             });
 
@@ -313,13 +313,13 @@ namespace MeGUI.core.gui
 
         private void returnJobsToMainQueue()
         {
-            List<Job> list = new List<Job>(localJobs.Values);
+            List<TaggedJob> list = new List<TaggedJob>(localJobs.Values);
 //            IEnumerable<Job> list = localJobs.Values;
-            foreach (Job j in list)
+            foreach (TaggedJob j in list)
                 mainForm.Jobs.ReleaseJob(j);
         }
 
-        internal void GUIDeleteJob(Job j)
+        internal void GUIDeleteJob(TaggedJob j)
         {
             mainForm.Jobs.DeleteJob(j);
             //            mainForm.Jobs
@@ -400,7 +400,7 @@ namespace MeGUI.core.gui
         /// </summary>
         /// <param name="job">Job to fill with info</param>
         /// <param name="su">StatusUpdate with info</param>
-        private void copyInfoIntoJob(Job job, StatusUpdate su)
+        private void copyInfoIntoJob(TaggedJob job, StatusUpdate su)
         {
             Debug.Assert(su.IsComplete);
 
@@ -434,7 +434,7 @@ namespace MeGUI.core.gui
                 // so we don't lock up the GUI, we start a new thread
                 Thread t = new Thread(new ThreadStart(delegate
                 {
-                    Job job = mainForm.Jobs.ByName(su.JobName);
+                    TaggedJob job = mainForm.Jobs.ByName(su.JobName);
 
                     copyInfoIntoJob(job, su);
                     progress = 0;
@@ -454,7 +454,7 @@ namespace MeGUI.core.gui
                     // Postprocessing
                     bool jobCompletedSuccessfully = (job.Status == JobStatus.DONE);
                     if (jobCompletedSuccessfully)
-                        postprocessJob(job);
+                        postprocessJob(job.Job);
 
                     if (jobCompletedSuccessfully && mainForm.Settings.DeleteCompletedJobs)
                         mainForm.Jobs.RemoveCompletedJob(job);
@@ -516,7 +516,7 @@ namespace MeGUI.core.gui
         private bool shutdownWorkerIfJobsCompleted()
         {
             if (mode != JobWorkerMode.CloseOnLocalListCompleted) return false;
-            foreach (Job j in localJobs.Values)
+            foreach (TaggedJob j in localJobs.Values)
                 if (j.Status != JobStatus.DONE)
                     return false;
             ShutDown();
@@ -534,18 +534,18 @@ namespace MeGUI.core.gui
         /// </summary>
         /// <param name="job">the Job object containing all the parameters</param>
         /// <returns>success / failure indicator</returns>
-        private bool startEncoding(Job job)
+        private bool startEncoding(TaggedJob job)
         {
             Debug.Assert(status == JobWorkerStatus.Idle);
 
             try
             {
                 //Check to see if output file already exists before encoding.
-                if (File.Exists(job.Output) && !mainForm.DialogManager.overwriteJobOutput(job.Output))
+                if (File.Exists(job.Job.Output) && !mainForm.DialogManager.overwriteJobOutput(job.Job.Output))
                     throw new JobStartException("File exists and the user doesn't want to overwrite", ExceptionType.UserSkip);
 
                 // Get IJobProcessor
-                currentProcessor = getProcessor(job);
+                currentProcessor = getProcessor(job.Job);
                 if (currentProcessor == null)
                     throw new JobStartException("No processor could be found", ExceptionType.Error);
 
@@ -553,12 +553,12 @@ namespace MeGUI.core.gui
                 addToLog("Starting job " + job.Name + " at " + DateTime.Now.ToLongTimeString() + "\r\n");
 
                 // Preprocess
-                preprocessJob(job);
+                preprocessJob(job.Job);
 
                 // Setup
                 try
                 {
-                    currentProcessor.setup(job);
+                    currentProcessor.setup(job.Job, new StatusUpdate(job.Name));
                 }
                 catch (JobRunException e)
                 {
@@ -566,7 +566,7 @@ namespace MeGUI.core.gui
                 }
 
                 // Do JobControl setup
-                addToLog("encoder commandline:\r\n" + job.Commandline + "\r\n");
+                //addToLog("encoder commandline:\r\n" + job.Commandline + "\r\n");
                 currentProcessor.StatusUpdate += new JobProcessingStatusUpdateCallback(UpdateGUIStatus);
 
                 // Progress window
@@ -617,9 +617,9 @@ namespace MeGUI.core.gui
             mainForm.addToLog(p);
         }
 
-        private Job getNextJob()
+        private TaggedJob getNextJob()
         {
-            foreach (Job j in jobQueue1.JobList)
+            foreach (TaggedJob j in jobQueue1.JobList)
                 if (j.Status == JobStatus.WAITING && mainForm.Jobs.areDependenciesMet(j))
                     return j;
             if (mode == JobWorkerMode.RequestNewJobs)
@@ -630,7 +630,7 @@ namespace MeGUI.core.gui
 
         private JobStartInfo startNextJobInQueue()
         {
-            Job job = getNextJob();
+            TaggedJob job = getNextJob();
 
             if (job == null) return JobStartInfo.NO_JOBS_WAITING;
 
@@ -650,7 +650,7 @@ namespace MeGUI.core.gui
         /// </summary>
         private void markJobAborted()
         {
-            Job job = currentJob;
+            TaggedJob job = currentJob;
             job.Status = JobStatus.ABORTED;
             job.End = DateTime.Now;
             if (mainForm.Settings.DeleteAbortedOutput)
@@ -658,7 +658,7 @@ namespace MeGUI.core.gui
                 mainForm.addToLog("Job aborted, deleting output file...");
                 try
                 {
-                    File.Delete(job.Output);
+                    File.Delete(job.Job.Output);
                     mainForm.addToLog("Deletion successful.\r\n");
                 }
                 catch (Exception)
@@ -726,7 +726,7 @@ namespace MeGUI.core.gui
         }*/
 
 
-        internal void RemoveJobFromQueue(Job job)
+        internal void RemoveJobFromQueue(TaggedJob job)
         {
             localJobs.Remove(job.Name);
             jobQueue1.removeJobFromQueue(job);
@@ -740,7 +740,7 @@ namespace MeGUI.core.gui
         }
 
 
-        public IEnumerable<Job> Jobs
+        internal IEnumerable<TaggedJob> Jobs
         {
             get { return jobQueue1.JobList; }
             set { jobQueue1.JobList = value; }
@@ -822,7 +822,7 @@ namespace MeGUI.core.gui
         }
 
 
-        internal void AddJob(Job j)
+        internal void AddJob(TaggedJob j)
         {
             j.OwningWorker = this.Name;
             jobQueue1.enqueueJob(j);

@@ -25,6 +25,14 @@ namespace MeGUI.packages.tools.besplitter
             executable = exe;
         }
 
+        protected override string Commandline
+        {
+            get
+            {
+                return job.generateSplitCommandline();
+            }
+        }
+
         protected override void checkJobIO()
         {
             int endFrame = job.TheCuts.AllCuts[job.TheCuts.AllCuts.Count - 1].endFrame;

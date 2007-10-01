@@ -39,15 +39,16 @@ namespace MeGUI
         private string processingspeed;
 		private decimal percentage;
         private double fps;
-		public StatusUpdate()
+		internal StatusUpdate(string name)
 		{
+            jobName = name;
+
             estimatedTime = null;
 			hasError = false;
 			isComplete = false;
 			wasAborted = false;
 			error = null;
 			log = null;
-			jobName = null;
 			audioPosition = null;
             cliplength = null;
 			audioFileSize = null;

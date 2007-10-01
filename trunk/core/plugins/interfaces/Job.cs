@@ -75,114 +75,37 @@ namespace MeGUI
 	public enum JobTypes: int {VIDEO=0, AUDIO, MUX, MERGE, INDEX, AVS, VOBSUB, CUT};
     public enum JobStatus: int {WAITING = 0, PROCESSING, POSTPONED, ERROR, ABORTED, DONE, SKIP };
     // status of job, 0: waiting, 1: processing, 2: postponed, 3: error, 4: aborted, 5: done
-	/// <summary>
-	/// This class contains all the information required for a job
-	/// A job is a collection of all the settings required to start an encoding session
+	
+    
+    /// <summary>
+	/// This represents an un-identifiable job. It only has information about how to complete
+    /// it and no way to say *which specific job* it is in the queue. Furthermore, it doesn't
+    /// have any extraneous information about its storage in the queue. That information is held
+    /// in the TaggedJob class.
 	/// </summary>
 	[XmlInclude(typeof(VideoJob)), XmlInclude(typeof(AudioJob)), XmlInclude(typeof(MuxJob)), 
-	XmlInclude (typeof(SubStream)), XmlInclude(typeof(IndexJob)), XmlInclude(typeof(AviSynthJob)), 
+	XmlInclude (typeof(MuxStream)), XmlInclude(typeof(IndexJob)), XmlInclude(typeof(AviSynthJob)), 
     XmlInclude(typeof(SubtitleIndexJob)), XmlInclude(typeof(AudioSplitJob)), XmlInclude(typeof(AudioJoinJob))]
 	public abstract class Job
 	{
-        private ProcessPriority priority;
-        private JobStatus status;
-		private DateTime start, end; // time the job was started / ended
-		private string input, output, name; //name of the input and output for this job
-        private Job next, previous;
-        private string commandline;
-        private List<string> filesToDelete = new List<string>();
-
-
-        #region job queue information
-        private string owningWorker;
-
-        public string OwningWorker
-        {
-            get { return owningWorker; }
-            set { owningWorker = value; }
-        }
-
-
-        private List<string> requiredJobNames;
-
-
-        public void AddDependency(Job other)
-        {
-            // we can't have each job depending on the other
-            Debug.Assert(!other.RequiredJobs.Contains(this));
-            RequiredJobs.Add(other);
-            other.EnabledJobs.Add(this);
-        }
-
-        /// <summary>
-        /// List of jobs which need to be completed before this can be processed
-        /// </summary>
-        public List<string> RequiredJobNames
-        {
-            get { return requiredJobNames; }
-            set { requiredJobNames = value; }
-        }
-
-        private List<string> enabledJobNames;
-        /// <summary>
-        /// List of jobs which completing this job enables
-        /// </summary>
-        public List<string> EnabledJobNames
-        {
-            get { return enabledJobNames; }
-            set { enabledJobNames = value; }
-        }
-
-        [XmlIgnore]
-        public List<Job> EnabledJobs = new List<Job>();
-
-        [XmlIgnore]
-        public List<Job> RequiredJobs = new List<Job>();
-        #endregion
-
         #region important details
-        /// <summary>
-        /// the source file for this job
-        /// </summary>
-        public string Input
-        {
-            get { return input; }
-            set { input = value; }
-        }
-        /// <summary>
-        /// the output of this job
-        /// </summary>
-        public string Output
-        {
-            get { return output; }
-            set { output = value; }
-        }
-        /// <summary>
-        /// commandline for this job
-        /// </summary>
-        public string Commandline
-        {
-            get { return commandline; }
-            set { commandline = value; }
+        public string Input;
+        public string Output;
+        public List<string> FilesToDelete;
+        #endregion
+
+        #region init
+        public Job():this(null, null)
+		{
         }
 
-        /// <summary>
-        /// List of files to delete when this job is successfullly completed.
-        /// </summary>
-        public List<string> FilesToDelete
+        public Job(string input, string output)
         {
-            get { return filesToDelete; }
-            set { filesToDelete = value; }
+            Input = input;
+            Output = output;
+            FilesToDelete = new List<string>();
         }
         #endregion
-        
-		public Job()
-		{
-            status = JobStatus.WAITING;
-			input = "";
-			output = "";
-			commandline = "";
-        }
 
         #region queue display details
         public abstract string CodecString
@@ -195,90 +118,6 @@ namespace MeGUI
             get;
         }
 
-        public string EncodingSpeed = "";
-
-       
-        /// <summary>
-        /// the name of this job
-        /// </summary>
-		public string Name
-		{
-			get {return name;}
-			set {name = value;}
-		}
-		/// <summary>
-		/// status of the job
-		/// </summary>
-		public JobStatus Status
-		{
-			get {return status;}
-			set {status = value;}
-		}
-		/// <summary>
-		/// time the job was started
-		/// </summary>
-		public DateTime Start
-		{
-			get {return start;}
-			set {start = value;}
-		}
-		/// <summary>
-		///  time the job was completed
-		/// </summary>
-		public DateTime End
-		{
-			get {return end;}
-			set {end = value;}
-		}
-
-		/// <summary>
-		/// gets a humanly readable status tring
-		/// </summary>
-		public string StatusString
-		{
-			get
-			{
-                switch (status)
-                {
-                    case JobStatus.WAITING:
-                        return "waiting";
-                    case JobStatus.PROCESSING:
-                        return "processing";
-                    case JobStatus.POSTPONED:
-                        return "postponed";
-                    case JobStatus.ERROR:
-                        return "error";
-                    case JobStatus.ABORTED:
-                        return "aborted";
-                    case JobStatus.DONE:
-                        return "done"; 
-                    case JobStatus.SKIP:
-                        return "skip";
-                    default:
-                        return "";
-                }
-			}
-		}
-		/// <summary>
-		/// filename without path of the source for this job
-		/// </summary>
-		public string InputFileName
-		{
-			get
-			{
-                return System.IO.Path.GetFileName(this.input);
-			}
-		}
-		/// <summary>
-		///  filename without path of the destination of this job
-		/// </summary>
-		public string OutputFileName
-		{
-			get 
-			{
-                return System.IO.Path.GetFileName(this.output);
-			}
-        }
         #endregion
     }
 }

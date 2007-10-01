@@ -87,7 +87,6 @@ namespace MeGUI
         #endregion
         private AudioEncodingComponent audioEncodingComponent1;
         private VideoEncodingComponent videoEncodingComponent1;
-        private BitrateCalculator bitrateCalculator = new BitrateCalculator();
         private TabPage tabPage2;
         private JobControl jobControl1;
         private MenuItem mnuHelp;
@@ -240,7 +239,7 @@ namespace MeGUI
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(508, 442);
+            this.tabControl1.Size = new System.Drawing.Size(508, 457);
             this.tabControl1.TabIndex = 0;
             // 
             // inputTab
@@ -251,7 +250,7 @@ namespace MeGUI
             this.inputTab.Controls.Add(this.videoEncodingComponent1);
             this.inputTab.Location = new System.Drawing.Point(4, 22);
             this.inputTab.Name = "inputTab";
-            this.inputTab.Size = new System.Drawing.Size(500, 416);
+            this.inputTab.Size = new System.Drawing.Size(500, 431);
             this.inputTab.TabIndex = 0;
             this.inputTab.Text = "Input";
             // 
@@ -264,7 +263,7 @@ namespace MeGUI
             this.flowLayoutPanel2.Controls.Add(this.helpButton1);
             this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.flowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 387);
+            this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 402);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
             this.flowLayoutPanel2.Size = new System.Drawing.Size(500, 29);
             this.flowLayoutPanel2.TabIndex = 2;
@@ -307,14 +306,14 @@ namespace MeGUI
             // 
             // audioEncodingComponent1
             // 
-            this.audioEncodingComponent1.AudioInput = "";
-            this.audioEncodingComponent1.AudioOutput = "";
+            this.audioEncodingComponent1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.audioEncodingComponent1.AutoScroll = true;
-            this.audioEncodingComponent1.Dock = System.Windows.Forms.DockStyle.Top;
             this.audioEncodingComponent1.Location = new System.Drawing.Point(0, 168);
             this.audioEncodingComponent1.MinimumSize = new System.Drawing.Size(400, 192);
             this.audioEncodingComponent1.Name = "audioEncodingComponent1";
-            this.audioEncodingComponent1.Size = new System.Drawing.Size(500, 192);
+            this.audioEncodingComponent1.Size = new System.Drawing.Size(500, 228);
             this.audioEncodingComponent1.TabIndex = 1;
             // 
             // videoEncodingComponent1
@@ -675,24 +674,24 @@ namespace MeGUI
             this.exitMeGUIToolStripMenuItem});
             this.trayMenu.Name = "trayMenu";
             this.trayMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.trayMenu.Size = new System.Drawing.Size(147, 54);
+            this.trayMenu.Size = new System.Drawing.Size(136, 54);
             // 
             // openMeGUIToolStripMenuItem
             // 
             this.openMeGUIToolStripMenuItem.Name = "openMeGUIToolStripMenuItem";
-            this.openMeGUIToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.openMeGUIToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
             this.openMeGUIToolStripMenuItem.Text = "Open MeGUI";
             this.openMeGUIToolStripMenuItem.Click += new System.EventHandler(this.openMeGUIToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(143, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(132, 6);
             // 
             // exitMeGUIToolStripMenuItem
             // 
             this.exitMeGUIToolStripMenuItem.Name = "exitMeGUIToolStripMenuItem";
-            this.exitMeGUIToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.exitMeGUIToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
             this.exitMeGUIToolStripMenuItem.Text = "Exit MeGUI";
             this.exitMeGUIToolStripMenuItem.Click += new System.EventHandler(this.exitMeGUIToolStripMenuItem_Click);
             // 
@@ -701,7 +700,7 @@ namespace MeGUI
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(508, 442);
+            this.ClientSize = new System.Drawing.Size(508, 457);
             this.Controls.Add(this.tabControl1);
             this.DataBindings.Add(new System.Windows.Forms.Binding("Location", global::MeGUI.Properties.Settings.Default, "MainFormLocation", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -777,10 +776,6 @@ namespace MeGUI
         }
 
         #region GUI properties
-        public BitrateCalculator BitrateCalculator
-        {
-            get { return bitrateCalculator; }
-        }
         public JobControl Jobs
         {
             get { return jobControl1; }
@@ -1070,9 +1065,10 @@ namespace MeGUI
         /// adds a string to the log
         /// </summary>
         /// <param name="logEntry"></param>
-        public void addToLog(string logEntry)
+        public void addToLog(string logEntry, params object[] args)
         {
-            logBuilder.Append(logEntry);
+            logBuilder.AppendFormat(logEntry, args);
+            logBuilder.AppendLine();
             Util.ThreadSafeRun(log, delegate
             {
                 this.log.Text = logBuilder.ToString();
@@ -1451,7 +1447,7 @@ namespace MeGUI
         {
             AdaptiveMuxWindow amw = new AdaptiveMuxWindow(this);
             if (amw.ShowDialog() == DialogResult.OK)
-                Jobs.addJobsToQueue(amw.Jobs);
+                Jobs.addJobsWithDependencies(amw.Jobs);
 
         }
 
@@ -1560,7 +1556,6 @@ namespace MeGUI
 /*        private List<string> otherFilesToInstall = new List<string>();*/
         private DialogManager dialogManager;
         private string path; // path the program was started from
-        private CommandLineGenerator gen; // class that generates commandlines
         private StringBuilder logBuilder; // made public so that system jobs can write to it
         private MediaFileFactory mediaFileFactory;
         private PackageSystem packageSystem = new PackageSystem();
@@ -1605,16 +1600,13 @@ namespace MeGUI
         {
             muxProvider = new MuxProvider(this);
             this.codecs = new CodecManager();
-            this.gen = new CommandLineGenerator();
             this.path = System.Windows.Forms.Application.StartupPath;
             this.logBuilder = new StringBuilder();
             this.jobUtil = new JobUtil(this);
             this.settings = new MeGUISettings();
-            this.calc = new BitrateCalculator();
             addPackages();
             fillMenus();
             videoEncodingComponent1.MainForm = this;
-            audioEncodingComponent1.MainForm = this;
             this.profileManager = new ProfileManager(this.path);
             this.profileManager.LoadProfiles();
             this.mediaFileFactory = new MediaFileFactory(this);
@@ -1906,11 +1898,6 @@ namespace MeGUI
         internal void ClosePlayer()
         {
             videoEncodingComponent1.ClosePlayer();
-        }
-
-        internal void setAudioTrack(int counter, string p)
-        {
-            audioEncodingComponent1.setAudioTrack(counter, p);
         }
 
         internal void hidePlayer()

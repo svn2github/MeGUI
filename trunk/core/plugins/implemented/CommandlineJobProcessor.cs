@@ -16,13 +16,14 @@ namespace MeGUI
     {
         #region variables
         protected TJob job;
+        DateTime startTime;
         protected bool isProcessing = false;
         protected Process proc = new Process(); // the encoder process
         protected string executable; // path and filename of the commandline encoder to be used
         protected ManualResetEvent mre = new ManualResetEvent(true); // lock used to pause encoding
         protected ManualResetEvent stdoutDone = new ManualResetEvent(false);
         protected ManualResetEvent stderrDone = new ManualResetEvent(false);
-        protected StatusUpdate su = new StatusUpdate();
+        protected StatusUpdate su;
         protected StringBuilder log = new StringBuilder();
         protected Thread readFromStdErrThread;
         protected Thread readFromStdOutThread;
@@ -76,6 +77,11 @@ namespace MeGUI
             get { return true; }
         }
 
+        protected abstract string Commandline
+        {
+            get;
+        }
+
 
         /// <summary>
         /// handles the encoder process existing
@@ -89,7 +95,7 @@ namespace MeGUI
             stderrDone.WaitOne(); // wait for stderr to finish processing
             if (checkExitCode && proc.ExitCode != 0) // check the exitcode because x264.exe sometimes exits with error but without
                 su.HasError = true; // any commandline indication as to why
-            job.End = DateTime.Now;
+
             su.IsComplete = true;
             doExitConfig();
             su.Log = log.ToString();
@@ -98,7 +104,7 @@ namespace MeGUI
 
         #region IVideoEncoder overridden Members
 
-        public void setup(Job job2)
+        public void setup(Job job2, StatusUpdate su)
         {
             Debug.Assert(job2 is TJob, "Job is the wrong type");
 
@@ -111,8 +117,8 @@ namespace MeGUI
             Util.ensureExists(executable);
 
             checkJobIO();
-            
-            su.JobName = job.Name;
+
+            this.su = su;
         }
 
         public void start()
@@ -120,7 +126,7 @@ namespace MeGUI
             proc = new Process();
             ProcessStartInfo pstart = new ProcessStartInfo();
             pstart.FileName = executable;
-            pstart.Arguments = job.Commandline;
+            pstart.Arguments = Commandline;
             pstart.RedirectStandardOutput = true;
             pstart.RedirectStandardError = true;
             pstart.WindowStyle = ProcessWindowStyle.Minimized;
@@ -133,6 +139,7 @@ namespace MeGUI
             try
             {
                 bool started = proc.Start();
+                startTime = DateTime.Now;
                 isProcessing = true;
                 readFromStdErrThread = new Thread(new ThreadStart(readStdErr));
                 readFromStdOutThread = new Thread(new ThreadStart(readStdOut));
@@ -305,7 +312,7 @@ namespace MeGUI
         {
             while (isRunning())
             {
-                su.TimeElapsed = DateTime.Now - job.Start;
+                su.TimeElapsed = DateTime.Now - startTime;
                 su.CurrentFileSize = FileSize.Of2(job.Output);
 
                 doStatusCycleOverrides();

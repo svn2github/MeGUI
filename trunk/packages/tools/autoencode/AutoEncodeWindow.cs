@@ -28,6 +28,7 @@ using System.IO;
 using System.Text;
 using MeGUI.core.plugins.interfaces;
 using MeGUI.core.util;
+using MeGUI.core.details;
 
 namespace MeGUI
 {
@@ -38,13 +39,12 @@ namespace MeGUI
 	{
 		#region variables
 		private BitrateCalculator calc;
-		private AudioStream[] audioStreams;
+        private List<AudioJob> audioStreams;
         private bool prerender;
         private MainForm mainForm;
 		private JobUtil jobUtil;
 		private VideoUtil vUtil;
 		private StringBuilder logBuilder;
-		private CommandLineGenerator gen;
 		private bool isBitrateMode = true;
 
         private System.Windows.Forms.GroupBox AutomaticEncodingGroup;
@@ -80,11 +80,9 @@ namespace MeGUI
 		public AutoEncodeWindow()
 		{
 			InitializeComponent();
-			calc = new BitrateCalculator();
 			logBuilder = new StringBuilder();
-			gen = new CommandLineGenerator();
         }
-        public AutoEncodeWindow(VideoStream videoStream, AudioStream[] audioStreams, MainForm mainForm, bool prerender)
+        public AutoEncodeWindow(VideoStream videoStream, List<AudioJob> audioStreams, MainForm mainForm, bool prerender)
             : this()
         {
             if (videoStream.Settings.EncodingMode == 1 || videoStream.Settings.EncodingMode == 9) // CQ and CRF -- no bitrate possible
@@ -112,52 +110,52 @@ namespace MeGUI
         {
             List<AudioEncoderType> aTypes = new List<AudioEncoderType>();
             AudioEncoderType[] audioTypes;
-            foreach (AudioStream stream in this.audioStreams)
+            foreach (AudioJob stream in this.audioStreams)
             {
-                if (stream.settings != null && !String.IsNullOrEmpty(stream.path) && !String.IsNullOrEmpty(stream.output))
-                    aTypes.Add(stream.settings.EncoderType);
+                if (stream.Settings != null && !String.IsNullOrEmpty(stream.Input) && !String.IsNullOrEmpty(stream.Output))
+                    aTypes.Add(stream.Settings.EncoderType);
             }
             audioTypes = aTypes.ToArray();
             List<ContainerType> supportedOutputTypes = this.muxProvider.GetSupportedContainers(
                 this.videoStream.Settings.EncoderType, audioTypes);
-            if (supportedOutputTypes.Count > 0)
-            {
-                this.container.Items.Clear();
-                this.container.Items.AddRange(supportedOutputTypes.ToArray());
-                this.container.SelectedIndex = 0;
-                string muxedName = Path.Combine(Path.GetDirectoryName(mainForm.Video.Info.VideoOutput), Path.GetFileNameWithoutExtension(mainForm.Video.Info.VideoOutput) + "-muxed.");
-                this.muxedOutput.Text = Path.ChangeExtension(muxedName, (this.container.SelectedItem as ContainerType).Extension);
+            
+            if (supportedOutputTypes.Count <= 0)
+                return false;
+
+            this.container.Items.Clear();
+            this.container.Items.AddRange(supportedOutputTypes.ToArray());
+            this.container.SelectedIndex = 0;
+            string muxedName = FileUtil.AddToFileName(mainForm.Video.Info.VideoOutput, "-muxed");
+
+            this.muxedOutput.Text = Path.ChangeExtension(muxedName, (this.container.SelectedItem as ContainerType).Extension);
 //                this.sizeSelection.SelectedIndex = 2;
 
-                splitting.Value = mainForm.Settings.AedSettings.SplitSize;
-                if (mainForm.Settings.AedSettings.FileSizeMode && FileSizeRadio.Enabled)
-                {
-                    FileSizeRadio.Checked = true;
-                    targetSize.Value = mainForm.Settings.AedSettings.FileSize;
-                }
-                else if (mainForm.Settings.AedSettings.BitrateMode)
-                {
-                    averageBitrateRadio.Checked = true;
-                    projectedBitrateKBits.Text = mainForm.Settings.AedSettings.Bitrate.ToString();
-                }
-                else
-                    noTargetRadio.Checked = true;
-                if (mainForm.Settings.AedSettings.AddAdditionalContent)
-                    addSubsNChapters.Checked = true;
-                foreach (object o in container.Items) // I know this is ugly, but using the ContainerType doesn't work unless we're switching to manual serialization
-                {
-                    if (o.ToString().Equals(mainForm.Settings.AedSettings.Container))
-                    {
-                        container.SelectedItem = o;
-                        break;
-                    }
-                }
-
-
-                return true;
+            splitting.Value = mainForm.Settings.AedSettings.SplitSize;
+            if (mainForm.Settings.AedSettings.FileSizeMode && FileSizeRadio.Enabled)
+            {
+                FileSizeRadio.Checked = true;
+                targetSize.Value = mainForm.Settings.AedSettings.FileSize;
+            }
+            else if (mainForm.Settings.AedSettings.BitrateMode)
+            {
+                averageBitrateRadio.Checked = true;
+                projectedBitrateKBits.Text = mainForm.Settings.AedSettings.Bitrate.ToString();
             }
             else
-                return false;
+                noTargetRadio.Checked = true;
+            if (mainForm.Settings.AedSettings.AddAdditionalContent)
+                addSubsNChapters.Checked = true;
+            foreach (object o in container.Items) // I know this is ugly, but using the ContainerType doesn't work unless we're switching to manual serialization
+            {
+                if (o.ToString().Equals(mainForm.Settings.AedSettings.Container))
+                {
+                    container.SelectedItem = o;
+                    break;
+                }
+            }
+
+
+            return true;
         }
 
 
@@ -513,18 +511,17 @@ namespace MeGUI
 		/// </summary>
 		/// <param name="encodable">encodeable audio streams</param>
 		/// <param name="muxable">muxable Audio Streams with the path filled out and a blank language</param>
-		private void separateEncodableAndMuxableAudioStreams(out AudioStream[] encodable, out SubStream[] muxable, out KnownAudioType[] muxTypes)
+        private void separateEncodableAndMuxableAudioStreams(out AudioJob[] encodable, out MuxStream[] muxable, out AudioEncoderType[] muxTypes)
 		{
 			encodable = this.getConfiguredAudioJobs(); // discards improperly configured ones
 			// the rest of the job is all encodeable
-			muxable = new SubStream[encodable.Length];
-            muxTypes = new KnownAudioType[encodable.Length];
+			muxable = new MuxStream[encodable.Length];
+            muxTypes = new AudioEncoderType[encodable.Length];
 			int j = 0;
-			foreach (AudioStream stream in encodable)
+            foreach (AudioJob stream in encodable)
 			{
-				muxable[j].path = stream.output;
-				muxable[j].language = "";
-                muxTypes[j] = new KnownAudioType(new MuxableType(stream.Type, stream.settings.Codec), stream.settings.EncoderType);
+                muxable[j] = stream.ToMuxStream();
+                muxTypes[j] = stream.Settings.EncoderType;
 				j++;
 			}
 		}
@@ -537,13 +534,14 @@ namespace MeGUI
         {
             try
             {
-                long desiredSizeBytes;
-                checked { desiredSizeBytes = (long)targetSize.Value.Value.Bytes; }
-                long videoSize;
-                int bitrateKbits = calc.CalculateBitrateKBits(videoStream.Settings.Codec,
+                ulong desiredSizeBytes;
+                checked { desiredSizeBytes = targetSize.Value.Value.Bytes; }
+                ulong videoSize;
+
+                int bitrateKbits = BitrateCalculator.CalculateBitrateKBits(videoStream.Settings.Codec,
                     (videoStream.Settings.NbBframes > 0),
                     ((ContainerType)container.SelectedItem),
-                    audioStreams,
+                    getAudioStreamsForBitrate(),
                     desiredSizeBytes,
                     videoStream.NumberOfFrames,
                     videoStream.Framerate,
@@ -559,6 +557,14 @@ namespace MeGUI
             }
         }
 
+        private AudioBitrateCalculationStream[] getAudioStreamsForBitrate()
+        {
+            List<AudioBitrateCalculationStream> streams = new List<AudioBitrateCalculationStream>();
+            foreach (AudioJob s in audioStreams)
+                streams.Add(new AudioBitrateCalculationStream(s.Output));
+            return streams.ToArray();
+        }
+
 		/// <summary>
 		/// sets the size of the output given the desired bitrate
 		/// </summary>
@@ -569,10 +575,10 @@ namespace MeGUI
                 int desiredBitrate = Int32.Parse(this.projectedBitrateKBits.Text);
                 long outputSize = 0;
                 int rawVideoSize = 0;
-                outputSize = calc.CalculateFileSizeKB(videoStream.Settings.Codec,
+                outputSize = BitrateCalculator.CalculateFileSizeKB(videoStream.Settings.Codec,
                     (videoStream.Settings.NbBframes > 0),
                     ((ContainerType)container.SelectedItem),
-                    audioStreams,
+                    getAudioStreamsForBitrate(),
                     desiredBitrate,
                     videoStream.NumberOfFrames,
                     videoStream.Framerate,
@@ -592,16 +598,16 @@ namespace MeGUI
         /// </summary>
         private void setAudioSize()
         {
-            long[] sizes = new long[this.audioStreams.Length];
+            long[] sizes = new long[this.audioStreams.Count];
             int index = 0;
-            foreach (AudioStream stream in this.audioStreams)
+            foreach (AudioJob stream in this.audioStreams)
             {
-                if (!stream.output.Equals("")) // if we don't have the video length or the audio is not fully configured we can give up now
+                if (!string.IsNullOrEmpty(stream.Output)) // if we don't have the video length or the audio is not fully configured we can give up now
                 {
                     long bytesPerSecond = 0;
                     if (stream.BitrateMode == BitrateManagementMode.CBR)
                     {
-                        bytesPerSecond = stream.settings.Bitrate * 1000 / 8;
+                        bytesPerSecond = stream.Settings.Bitrate * 1000 / 8;
                     }
                     double lengthInSeconds = (double)this.videoStream.NumberOfFrames / (double)this.videoStream.Framerate;
                     long sizeInBytes = (long)(lengthInSeconds * bytesPerSecond);
@@ -616,12 +622,12 @@ namespace MeGUI
 		/// returns all audio streams that can be encoded or muxed
 		/// </summary>
 		/// <returns></returns>
-		private AudioStream[] getConfiguredAudioJobs()
+        private AudioJob[] getConfiguredAudioJobs()
 		{
-            List<AudioStream> list = new List<AudioStream>();
-			foreach (AudioStream stream in audioStreams)
+            List<AudioJob> list = new List<AudioJob>();
+            foreach (AudioJob stream in audioStreams)
 			{
-                if (String.IsNullOrEmpty(stream.path))
+                if (String.IsNullOrEmpty(stream.Input))
                 {
                     // no audio is ok, just skip
                     break;
@@ -644,7 +650,7 @@ namespace MeGUI
 		/// <param name="e"></param>
 		private void queueButton_Click(object sender, System.EventArgs e)
 		{
-			if (!this.muxedOutput.Text.Equals(""))
+			if (!string.IsNullOrEmpty(this.muxedOutput.Text))
 			{
 				long desiredSizeBytes;
                 if (!noTargetRadio.Checked)
@@ -671,11 +677,11 @@ namespace MeGUI
                     logBuilder.Append("Desired size of this automated encoding series: " + desiredSizeBytes + " bytes, split size: " + splitSize + "MB\r\n");
                 else
                     logBuilder.Append("No desired size of this encode. The profile settings will be used");
-				SubStream[] audio;
-				AudioStream[] aStreams;
-                KnownAudioType[] muxTypes;
+				MuxStream[] audio;
+                AudioJob[] aStreams;
+                AudioEncoderType[] muxTypes;
 				separateEncodableAndMuxableAudioStreams(out aStreams, out audio, out muxTypes);
-				SubStream[] subtitles = new SubStream[0];
+				MuxStream[] subtitles = new MuxStream[0];
 				string chapters = "";
 				string videoInput = mainForm.Video.Info.VideoInput;
                 string videoOutput = mainForm.Video.Info.VideoOutput;
@@ -693,7 +699,7 @@ namespace MeGUI
                 }
                 removeStreamsToBeEncoded(ref audio, aStreams);
                 this.vUtil.GenerateJobSeries(this.videoStream, muxedOutput, aStreams, subtitles, chapters,
-                    new FileSize(desiredSizeBytes), splitSize, cot, this.prerender, audio, new List<string>());
+                    new FileSize(desiredSizeBytes), splitSize, cot, this.prerender, audio);
                 this.Close();
 			}
 		}
@@ -703,15 +709,15 @@ namespace MeGUI
         /// </summary>
         /// <param name="audio">All files to be muxed (including the ones which will be encoded first)</param>
         /// <param name="aStreams">All files being encoded (these will be removed from the audio array)</param>
-        private void removeStreamsToBeEncoded(ref SubStream[] audio, AudioStream[] aStreams)
+        private void removeStreamsToBeEncoded(ref MuxStream[] audio, AudioJob[] aStreams)
         {
-            List<SubStream> newAudio = new List<SubStream>();
-            foreach (SubStream stream in audio)
+            List<MuxStream> newAudio = new List<MuxStream>();
+            foreach (MuxStream stream in audio)
             {
                 bool matchFound = false;
-                foreach (AudioStream a in aStreams)
+                foreach (AudioJob a in aStreams)
                 {
-                    if (stream.path == a.output)
+                    if (stream.path == a.Output)
                     {
                         matchFound = true; // In this case we have found a file which needs to be encoded
                         break;
@@ -814,7 +820,7 @@ namespace MeGUI
                 ulong length = 0;
                 double framerate = 0.0;
                 VideoStream myVideo = new VideoStream();
-                info.JobUtil.getInputProperties(out length, out framerate, info.Video.VideoInput);
+                JobUtil.getInputProperties(out length, out framerate, info.Video.VideoInput);
                 myVideo.Input = info.Video.Info.VideoInput;
                 myVideo.Output = info.Video.Info.VideoOutput;
                 myVideo.NumberOfFrames = length;
@@ -823,12 +829,12 @@ namespace MeGUI
                 myVideo.VideoType = info.Video.CurrentMuxableVideoType;
                 myVideo.Settings = vSettings;
 #warning check delays here. Doom9 did them, but I'm not sure how they work
-                foreach (AudioStream aStream in info.Audio.AudioStreams)
+                foreach (AudioJob aStream in info.Audio.AudioStreams)
                 {
                     if (aStream.Delay != 0)
                     {
-                        aStream.settings.DelayEnabled = true;
-                        aStream.settings.Delay = aStream.Delay;
+                        aStream.Settings.DelayEnabled = true;
+                        aStream.Settings.Delay = aStream.Delay;
                     }
                 }
                 info.Audio.AudioStreams[0].Delay = 0;
@@ -856,16 +862,5 @@ namespace MeGUI
         }
 
         #endregion
-    }
-
-    public class KnownAudioType
-    {
-        public MuxableType muxable;
-        public AudioEncoderType encoderType;
-        public KnownAudioType(MuxableType m, AudioEncoderType e)
-        {
-            muxable = m;
-            encoderType = e;
-        }
     }
 }

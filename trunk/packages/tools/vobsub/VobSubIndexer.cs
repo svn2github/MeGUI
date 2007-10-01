@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
 using MeGUI.core.util;
+using System.IO;
 
 namespace MeGUI
 {
@@ -11,10 +12,20 @@ namespace MeGUI
         public static readonly JobProcessorFactory Factory =
        new JobProcessorFactory(new ProcessorFactory(init), "VobSubIndexer");
 
+        private string configFile = null;
+
         private static IJobProcessor init(MainForm mf, Job j)
         {
             if (j is SubtitleIndexJob) return new VobSubIndexer();
             return null;
+        }
+
+        protected override string Commandline
+        {
+            get
+            {
+                return "vobsub.dll,Configure " + configFile;
+            }
         }
 
         public VobSubIndexer()
@@ -26,7 +37,34 @@ namespace MeGUI
         protected override void checkJobIO()
         {
             base.checkJobIO();
-            Util.ensureExists(job.ScriptFile);
+            generateScript();
+            Util.ensureExists(configFile);
+        }
+
+        private void generateScript()
+        {
+            configFile = Path.ChangeExtension(job.Input, ".vobsub");
+
+            using (StreamWriter sw = new StreamWriter(configFile, false, Encoding.Default))
+            {
+                sw.WriteLine(job.Input);
+                sw.WriteLine(FileUtil.GetPathWithoutExtension(job.Output));
+                sw.WriteLine(job.PGC);
+                sw.WriteLine("0"); // we presume angle processing has been done before
+                if (job.IndexAllTracks)
+                    sw.WriteLine("ALL");
+                else
+                {
+                    foreach (int id in job.TrackIDs)
+                    {
+                        sw.Write(id + " ");
+                    }
+                    sw.Write(sw.NewLine);
+                }
+                sw.WriteLine("CLOSE");
+            }
+
+            job.FilesToDelete.Add(configFile);
         }
 
         public override bool canPause

@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Threading;
 using MeGUI.core.util;
+using System.Globalization;
 
 namespace MeGUI
 {
@@ -26,6 +27,16 @@ new JobProcessorFactory(new ProcessorFactory(init), "Avc2AviMuxer");
         public Avc2AviMuxer(string executablePath)
         {
             this.executable = executablePath;
+        }
+
+        protected override string Commandline
+        {
+            get
+            {
+                return "-f " + job.Settings.Framerate.ToString(new CultureInfo("en-us")) + 
+                    " -i \"" + job.Settings.VideoInput + 
+                    "\" -o \"" + job.Settings.MuxedOutput + "\"";
+            }
         }
     }
 }

@@ -29,9 +29,16 @@ new JobProcessorFactory(new ProcessorFactory(init), "AMGMuxer");
         protected override void checkJobIO()
         {
             script_filename = writeScript(job);
-            job.Commandline = "\"" + script_filename + "\"";
             
             base.checkJobIO();
+        }
+
+        protected override string Commandline
+        {
+            get
+            {
+                return "\"" + script_filename + "\"";
+            }
         }
 
         private string writeScript(MuxJob job)
@@ -47,7 +54,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AMGMuxer");
             
             int audioNum = 1; // the audio track number
             // add the audio streams
-            foreach (SubStream s in settings.AudioStreams)
+            foreach (MuxStream s in settings.AudioStreams)
             {
                 script.AppendFormat("LOAD {1}{0}", Environment.NewLine, s.path);
                 script.AppendLine("SET OUTPUT OPTIONS");
@@ -64,7 +71,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AMGMuxer");
 
             int subtitleNum = 1; // the subtitle track number
             // add the subtitle streams
-            foreach (SubStream s in settings.SubtitleStreams)
+            foreach (MuxStream s in settings.SubtitleStreams)
             {
                 script.AppendFormat("LOAD {1}{0}", Environment.NewLine, s.path);
                 script.AppendLine("SET OUTPUT OPTIONS");

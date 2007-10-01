@@ -30,38 +30,31 @@ namespace MeGUI
         {
             this.AutomaticEncodingGroup = new System.Windows.Forms.GroupBox();
             this.noTargetRadio = new System.Windows.Forms.RadioButton();
-            this.sizeSelection = new System.Windows.Forms.ComboBox();
-            this.StorageMediumLabel = new System.Windows.Forms.Label();
             this.averageBitrateRadio = new System.Windows.Forms.RadioButton();
             this.FileSizeRadio = new System.Windows.Forms.RadioButton();
             this.projectedBitrateKBits = new System.Windows.Forms.TextBox();
             this.AverageBitrateLabel = new System.Windows.Forms.Label();
-            this.muxedSizeMBs = new System.Windows.Forms.TextBox();
-            this.FileSizeLabel = new System.Windows.Forms.Label();
             this.cancelButton = new System.Windows.Forms.Button();
             this.saveButton = new System.Windows.Forms.Button();
             this.OutputGroupBox = new System.Windows.Forms.GroupBox();
             this.container = new System.Windows.Forms.ComboBox();
-            this.splitOutput = new System.Windows.Forms.CheckBox();
             this.containerLabel = new System.Windows.Forms.Label();
-            this.SplitSizeLabel = new System.Windows.Forms.Label();
-            this.splitSize = new System.Windows.Forms.TextBox();
             this.addSubsNChapters = new System.Windows.Forms.CheckBox();
+            this.splitSize = new MeGUI.core.gui.TargetSizeSCBox();
+            this.fileSize = new MeGUI.core.gui.TargetSizeSCBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.AutomaticEncodingGroup.SuspendLayout();
             this.OutputGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // AutomaticEncodingGroup
             // 
+            this.AutomaticEncodingGroup.Controls.Add(this.fileSize);
             this.AutomaticEncodingGroup.Controls.Add(this.noTargetRadio);
-            this.AutomaticEncodingGroup.Controls.Add(this.sizeSelection);
-            this.AutomaticEncodingGroup.Controls.Add(this.StorageMediumLabel);
             this.AutomaticEncodingGroup.Controls.Add(this.averageBitrateRadio);
             this.AutomaticEncodingGroup.Controls.Add(this.FileSizeRadio);
             this.AutomaticEncodingGroup.Controls.Add(this.projectedBitrateKBits);
             this.AutomaticEncodingGroup.Controls.Add(this.AverageBitrateLabel);
-            this.AutomaticEncodingGroup.Controls.Add(this.muxedSizeMBs);
-            this.AutomaticEncodingGroup.Controls.Add(this.FileSizeLabel);
             this.AutomaticEncodingGroup.Location = new System.Drawing.Point(3, 80);
             this.AutomaticEncodingGroup.Name = "AutomaticEncodingGroup";
             this.AutomaticEncodingGroup.Size = new System.Drawing.Size(424, 104);
@@ -79,23 +72,6 @@ namespace MeGUI
             this.noTargetRadio.Text = "No Target Size (use profile settings)";
             this.noTargetRadio.UseVisualStyleBackColor = true;
             this.noTargetRadio.CheckedChanged += new System.EventHandler(this.FileSizeRadio_CheckedChanged);
-            // 
-            // sizeSelection
-            // 
-            this.sizeSelection.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.sizeSelection.Location = new System.Drawing.Point(308, 16);
-            this.sizeSelection.Name = "sizeSelection";
-            this.sizeSelection.Size = new System.Drawing.Size(64, 21);
-            this.sizeSelection.TabIndex = 0;
-            this.sizeSelection.SelectedIndexChanged += new System.EventHandler(this.sizeSelection_SelectedIndexChanged);
-            // 
-            // StorageMediumLabel
-            // 
-            this.StorageMediumLabel.Location = new System.Drawing.Point(222, 20);
-            this.StorageMediumLabel.Name = "StorageMediumLabel";
-            this.StorageMediumLabel.Size = new System.Drawing.Size(90, 18);
-            this.StorageMediumLabel.TabIndex = 17;
-            this.StorageMediumLabel.Text = "Storage Medium";
             // 
             // averageBitrateRadio
             // 
@@ -134,22 +110,6 @@ namespace MeGUI
             this.AverageBitrateLabel.TabIndex = 10;
             this.AverageBitrateLabel.Text = "kbit/s";
             // 
-            // muxedSizeMBs
-            // 
-            this.muxedSizeMBs.Location = new System.Drawing.Point(118, 16);
-            this.muxedSizeMBs.Name = "muxedSizeMBs";
-            this.muxedSizeMBs.Size = new System.Drawing.Size(64, 21);
-            this.muxedSizeMBs.TabIndex = 1;
-            this.muxedSizeMBs.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textField_KeyPress);
-            // 
-            // FileSizeLabel
-            // 
-            this.FileSizeLabel.Location = new System.Drawing.Point(187, 20);
-            this.FileSizeLabel.Name = "FileSizeLabel";
-            this.FileSizeLabel.Size = new System.Drawing.Size(24, 13);
-            this.FileSizeLabel.TabIndex = 4;
-            this.FileSizeLabel.Text = "MB";
-            // 
             // cancelButton
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -172,11 +132,10 @@ namespace MeGUI
             // 
             // OutputGroupBox
             // 
-            this.OutputGroupBox.Controls.Add(this.container);
-            this.OutputGroupBox.Controls.Add(this.splitOutput);
-            this.OutputGroupBox.Controls.Add(this.containerLabel);
-            this.OutputGroupBox.Controls.Add(this.SplitSizeLabel);
+            this.OutputGroupBox.Controls.Add(this.label1);
             this.OutputGroupBox.Controls.Add(this.splitSize);
+            this.OutputGroupBox.Controls.Add(this.container);
+            this.OutputGroupBox.Controls.Add(this.containerLabel);
             this.OutputGroupBox.Location = new System.Drawing.Point(3, 12);
             this.OutputGroupBox.Name = "OutputGroupBox";
             this.OutputGroupBox.Size = new System.Drawing.Size(424, 62);
@@ -188,46 +147,19 @@ namespace MeGUI
             // 
             this.container.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.container.FormattingEnabled = true;
-            this.container.Location = new System.Drawing.Point(118, 20);
+            this.container.Location = new System.Drawing.Point(128, 24);
             this.container.Name = "container";
             this.container.Size = new System.Drawing.Size(64, 21);
             this.container.TabIndex = 25;
             // 
-            // splitOutput
-            // 
-            this.splitOutput.Location = new System.Drawing.Point(192, 21);
-            this.splitOutput.Name = "splitOutput";
-            this.splitOutput.Size = new System.Drawing.Size(97, 18);
-            this.splitOutput.TabIndex = 21;
-            this.splitOutput.Text = "Split Output";
-            this.splitOutput.CheckedChanged += new System.EventHandler(this.splitOutput_CheckedChanged);
-            // 
             // containerLabel
             // 
             this.containerLabel.AutoSize = true;
-            this.containerLabel.Location = new System.Drawing.Point(6, 23);
+            this.containerLabel.Location = new System.Drawing.Point(16, 28);
             this.containerLabel.Name = "containerLabel";
             this.containerLabel.Size = new System.Drawing.Size(54, 13);
             this.containerLabel.TabIndex = 24;
             this.containerLabel.Text = "Container";
-            // 
-            // SplitSizeLabel
-            // 
-            this.SplitSizeLabel.Location = new System.Drawing.Point(381, 23);
-            this.SplitSizeLabel.Name = "SplitSizeLabel";
-            this.SplitSizeLabel.Size = new System.Drawing.Size(32, 16);
-            this.SplitSizeLabel.TabIndex = 14;
-            this.SplitSizeLabel.Text = "MB";
-            // 
-            // splitSize
-            // 
-            this.splitSize.Enabled = false;
-            this.splitSize.Location = new System.Drawing.Point(308, 20);
-            this.splitSize.Name = "splitSize";
-            this.splitSize.Size = new System.Drawing.Size(64, 21);
-            this.splitSize.TabIndex = 13;
-            this.splitSize.Text = "0";
-            this.splitSize.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textField_KeyPress);
             // 
             // addSubsNChapters
             // 
@@ -236,6 +168,39 @@ namespace MeGUI
             this.addSubsNChapters.Size = new System.Drawing.Size(256, 24);
             this.addSubsNChapters.TabIndex = 22;
             this.addSubsNChapters.Text = "Add additional content (audio, subs, chapters)";
+            // 
+            // splitSize
+            // 
+            this.splitSize.Location = new System.Drawing.Point(270, 20);
+            this.splitSize.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.splitSize.MinimumSize = new System.Drawing.Size(64, 29);
+            this.splitSize.Name = "splitSize";
+            this.splitSize.NullString = null;
+            this.splitSize.SelectedIndex = -1;
+            this.splitSize.SelectedItem = null;
+            this.splitSize.Size = new System.Drawing.Size(136, 29);
+            this.splitSize.TabIndex = 26;
+            // 
+            // fileSize
+            // 
+            this.fileSize.Location = new System.Drawing.Point(118, 12);
+            this.fileSize.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.fileSize.MinimumSize = new System.Drawing.Size(64, 29);
+            this.fileSize.Name = "fileSize";
+            this.fileSize.NullString = null;
+            this.fileSize.SelectedIndex = -1;
+            this.fileSize.SelectedItem = null;
+            this.fileSize.Size = new System.Drawing.Size(208, 29);
+            this.fileSize.TabIndex = 23;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(215, 28);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(49, 13);
+            this.label1.TabIndex = 27;
+            this.label1.Text = "Splitting:";
             // 
             // AutoEncodeDefaults
             // 
@@ -268,22 +233,18 @@ namespace MeGUI
 
         private System.Windows.Forms.GroupBox AutomaticEncodingGroup;
         private System.Windows.Forms.RadioButton noTargetRadio;
-        private System.Windows.Forms.ComboBox sizeSelection;
-        private System.Windows.Forms.Label StorageMediumLabel;
         private System.Windows.Forms.RadioButton averageBitrateRadio;
         private System.Windows.Forms.RadioButton FileSizeRadio;
         private System.Windows.Forms.TextBox projectedBitrateKBits;
         private System.Windows.Forms.Label AverageBitrateLabel;
-        private System.Windows.Forms.TextBox muxedSizeMBs;
-        private System.Windows.Forms.Label FileSizeLabel;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Button saveButton;
         private System.Windows.Forms.GroupBox OutputGroupBox;
         private System.Windows.Forms.ComboBox container;
-        private System.Windows.Forms.CheckBox splitOutput;
         private System.Windows.Forms.Label containerLabel;
-        private System.Windows.Forms.Label SplitSizeLabel;
-        private System.Windows.Forms.TextBox splitSize;
         private System.Windows.Forms.CheckBox addSubsNChapters;
+        private MeGUI.core.gui.TargetSizeSCBox fileSize;
+        private MeGUI.core.gui.TargetSizeSCBox splitSize;
+        private System.Windows.Forms.Label label1;
     }
 }

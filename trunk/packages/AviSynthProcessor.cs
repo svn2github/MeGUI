@@ -11,6 +11,7 @@ namespace MeGUI
 
     public class AviSynthProcessor : IJobProcessor
     {
+        DateTime startTime;
         public static readonly JobProcessorFactory Factory =
        new JobProcessorFactory(new ProcessorFactory(init), "AviSynthProcessor");
 
@@ -36,7 +37,6 @@ namespace MeGUI
         #region start / stop
         public AviSynthProcessor()
         {
-            stup = new StatusUpdate();
         }
         #endregion
         #region processing
@@ -51,7 +51,7 @@ namespace MeGUI
             while (!aborted && position < stup.NbFramesTotal)
             {
                 stup.NbFramesDone = position;
-                stup.TimeElapsed = DateTime.Now - job.Start;
+                stup.TimeElapsed = DateTime.Now - startTime;
                 stup.FillValues();
                 StatusUpdate(stup);
                 Thread.Sleep(1000);
@@ -76,13 +76,11 @@ namespace MeGUI
         /// <param name="job">the job to be processed</param>
         /// <param name="error">output for any errors that might ocurr during this method</param>
         /// <returns>true if the setup has succeeded, false if it has not</returns>
-        public void setup(Job job)
+        public void setup(Job job, StatusUpdate su)
         {
             Debug.Assert(job is AviSynthJob, "Job isn't an AviSynthJob");
 
             this.job = (AviSynthJob)job;
-
-            stup.JobName = job.Name;
 
             try 
             {
@@ -125,6 +123,7 @@ namespace MeGUI
             {
                 statusThread.Start();
                 processorThread.Start();
+                startTime = DateTime.Now;
             }
             catch (Exception e)
             {

@@ -18,6 +18,16 @@ namespace MeGUI
             pgc = 1;
 		}
 
+        public SubtitleIndexJob(string input, string output,
+            bool indexAllTracks, List<int> trackIDs, int pgc)
+        {
+            Input = input;
+            Output = output;
+            IndexAllTracks = indexAllTracks;
+            TrackIDs = trackIDs;
+            PGC = pgc;
+        }
+
         
         public bool IndexAllTracks
         {
@@ -33,11 +43,6 @@ namespace MeGUI
         {
             get { return pgc; }
             set { pgc = value; }
-        }
-        public string ScriptFile
-        {
-            get { return scriptFile; }
-            set { scriptFile = value; }
         }
 
         public override string CodecString

@@ -556,11 +556,8 @@ namespace MeGUI
 				demuxType = 2;
 			else if (demuxSelectedTracks.Checked)
 				demuxType = 1;
-			IndexJob job = jobUtil.generateIndexJob(this.input.Text, this.projectName.Text, demuxType, 
-				track1.SelectedIndex, track2.SelectedIndex, null);
-			if (this.loadOnComplete.Checked)
-				job.LoadSources = true;
-			return job;
+			return new IndexJob(this.input.Text, this.projectName.Text, demuxType, 
+				track1.SelectedIndex, track2.SelectedIndex, null, loadOnComplete.Checked);
 		}
 		#endregion
 		#region properties
@@ -663,13 +660,13 @@ namespace MeGUI
                 if (job.DemuxMode != 0)
                 {
                     int counter = 0;
-                    foreach (int i in audioFiles.Keys)
-                    {
-                        mainForm.setAudioTrack(counter, audioFiles[i]);
-                        if (counter >= 2)
-                            break;
-                        counter++;
-                    }
+                    string[] files = new string[audioFiles.Values.Count];
+                    audioFiles.Values.CopyTo(files, 0);
+                    Util.ThreadSafeRun(mainForm, new MethodInvoker(
+                        delegate
+                        {
+                            mainForm.Audio.openAudioFile(files);
+                        }));
                 }
                 AviSynthWindow asw = new AviSynthWindow(mainForm, job.Output);
                 asw.OpenScript += new OpenScriptCallback(mainForm.Video.openVideoFile);

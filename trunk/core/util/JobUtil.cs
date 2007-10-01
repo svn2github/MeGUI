@@ -27,6 +27,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using MeGUI.core.util;
+using MeGUI.core.details;
 
 namespace MeGUI
 {
@@ -47,152 +48,8 @@ namespace MeGUI
             al = new AVCLevels();
         }
         #endregion
-        #region loading and saving jobs
-        /// <summary>
-		/// saves a job to programdirectory\jobs\jobname.xml
-		/// using the XML Serializer we get a humanly readable file
-		/// </summary>
-		/// <param name="job">the Job object to be saved</param>
-		/// <param name="path">The path where the program was launched from</param>
-		public void saveJob(Job job, string path)
-		{
-			XmlSerializer ser = null;
-			string fileName = path + "\\jobs\\" + job.Name + ".xml";
-			using (Stream s = File.Open(fileName, System.IO.FileMode.Create, System.IO.FileAccess.Write))
-			{
-				try
-				{
-                    Type p = job.GetType();
-                    ser = new XmlSerializer(typeof(Job));
-					ser.Serialize(s, job);
-				}
-				catch (Exception e)
-				{
-					Console.Write(e.Message);
-				}
-			}
-		}
-		/// <summary>
-		/// loads a job with a given name from programdirectory\jobs\jobname.xml
-		/// </summary>
-		/// <param name="name">name of the job to be loaded (corresponds to the filename)</param>
-		/// <returns>the Job object that was read from the harddisk</returns>
-		public Job loadJob(string name)
-		{
-			XmlSerializer ser = null;
-			using (Stream s = File.OpenRead(name))
-			{
-				try
-				{
-					ser = new XmlSerializer(typeof(Job));
-					return (Job)ser.Deserialize(s);
-				}
-				catch (Exception e)
-				{
-					DialogResult r = MessageBox.Show("Job " + name + " could not be loaded. Delete?", "Error loading Job", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
-                    if (r == DialogResult.Yes)
-                    {
-                        try { s.Close(); File.Delete(name); }
-                        catch (Exception) { }
-                    }
-                    Console.Write(e.Message);
-					return null;
-				}
-			}
-		}
-		#endregion
 		#region job generation
 		#region single job generation
-		/// <summary>
-		/// generates a dgindex job
-		/// </summary>
-		/// <param name="input">video input</param>
-		/// <param name="output">dgindex project name</param>
-		/// <param name="demuxType">type of audio demux</param>
-		/// <param name="trackID1">ID of first audio track</param>
-		/// <param name="trackID2">ID of second audio track</param>
-		/// <param name="properties">postprocessing properties</param>
-		/// <returns>the indexing job</returns>
-		public IndexJob generateIndexJob(string input, string output, int demuxType, int trackID1, int trackID2, 
-			DGIndexPostprocessingProperties properties)
-		{
-			IndexJob job = new IndexJob();
-			job.Input = input;
-			job.Output = output;
-			job.DemuxMode = demuxType;
-			job.AudioTrackID1 = trackID1;
-			job.AudioTrackID2 = trackID2;
-			job.AutoForceFilm = mainForm.Settings.AutoForceFilm;
-			job.ForceFilmThreshold = (double)mainForm.Settings.ForceFilmThreshold;
-			job.PostprocessingProperties = properties;
-            job.Commandline = CommandLineGenerator.generateDGIndexCommandline(demuxType, trackID1,
-				trackID2, input, output);
-			return job;
-		}
-        /// <summary>
-        /// generates a vobsub indexing job
-        /// </summary>
-        /// <param name="input"></param>
-        /// <param name="output"></param>
-        /// <param name="demuxAllTracks"></param>
-        /// <param name="trackIDs"></param>
-        /// <returns></returns>
-        public SubtitleIndexJob generateSubtitleIndexJob(string input, string output, bool demuxAllTracks, List<int> trackIDs, int pgc)
-        {
-            SubtitleIndexJob job = new SubtitleIndexJob();
-            job.Input = input;
-            job.Output = output;
-            string scriptOutput = Path.GetDirectoryName(output) + @"\" + Path.GetFileNameWithoutExtension(output);
-            job.IndexAllTracks = demuxAllTracks;
-            job.TrackIDs = trackIDs;
-            bool fileError = false;
-            string configFile = Path.ChangeExtension(input, ".vobsub");
-            job.ScriptFile = configFile;
-            using (StreamWriter sw = new StreamWriter(configFile, false, Encoding.Default))
-            {
-                try
-                {
-                    sw.WriteLine(input);
-                    sw.WriteLine(scriptOutput);
-                    sw.WriteLine(pgc);
-                    sw.WriteLine("0"); // we presume angle processing has been done before
-                    if (demuxAllTracks)
-                        sw.WriteLine("ALL");
-                    else
-                    {
-                        foreach (int id in trackIDs)
-                        {
-                            sw.Write(id + " ");
-                        }
-                        sw.Write(sw.NewLine);
-                    }
-                    sw.WriteLine("CLOSE");
-                }
-                catch (Exception)
-                {
-                    fileError = true;
-                }
-            }
-            job.Commandline = CommandLineGenerator.generateVobSubCommandline(configFile);
-            if (fileError)
-                return null;
-            return job;
-        }
-        public AviSynthJob generateAvisynthJob(string input)
-        {
-            AviSynthJob job = new AviSynthJob();
-            job.Input = input;
-            ulong nbFrames = 0;
-            double framerate = 0.0;
-            bool videoOK = getInputProperties(out nbFrames, out framerate, job.Input);
-            if (!videoOK)
-            {
-                return null;
-            }
-            job.NumberOfFrames = nbFrames;
-            job.Framerate = framerate;
-            return job;
-        }
         
         public VideoJob generateVideoJob(string input, string output, VideoCodecSettings settings, Dar? dar)
         {
@@ -210,15 +67,12 @@ namespace MeGUI
 		/// <returns>the generated job or null if there was an error with the video source</returns>
 		public VideoJob generateVideoJob(string input, string output, VideoCodecSettings settings, bool skipVideoCheck, Dar? dar)
 		{
-			VideoJob job = new VideoJob();
-			job.Input = input;
-			job.Output = output;
-            job.DAR = dar;
-			if (mainForm.Settings.AutoSetNbThreads)
+			VideoJob job = new VideoJob(input, output, settings, dar);
+			
+            if (mainForm.Settings.AutoSetNbThreads)
 				adjustNbThreads(settings);
 			if (Path.GetDirectoryName(settings.Logfile).Equals("")) // no path set
 				settings.Logfile = Path.ChangeExtension(input, ".stats");
-			job.Settings = settings;
 			if (job.Settings.EncodingMode == 4) // automated 2 pass, change type to 2 pass 2nd pass
 			{
 				job.Settings.EncodingMode = 3;
@@ -232,20 +86,19 @@ namespace MeGUI
 					job.Settings.EncodingMode = 3; // 2 pass 2nd pass.. doesn't overwrite the stats file
 				job.Settings.Turbo = false;
 			}
-			ulong nbOfFrames = 0;
-			double framerate = 0.0;
-            bool videoOK = true;
+
             if (!skipVideoCheck)
-                videoOK = getInputProperties(out nbOfFrames, out framerate, job.Input);
-			if (!videoOK && !skipVideoCheck) // abort if the video is not okay
-			{
-                return null;
-			}
-			job.NumberOfFrames = nbOfFrames;
-			job.Framerate = framerate;
-            job.Commandline = CommandLineGenerator.generateVideoCommandline(job.Settings, input, output, dar);
-			return job;
+                checkVideo(job.Input);
+
+            return job;
 		}
+
+        private void checkVideo(string p)
+        {
+            ulong a;
+            double b;
+            getInputProperties(out a, out b, p);
+        }
         /// <summary>
         /// sets the number of encoder threads in function of the number of processors found on the system
         /// </summary>
@@ -255,30 +108,18 @@ namespace MeGUI
             string nbProc = System.Environment.GetEnvironmentVariable("NUMBER_OF_PROCESSORS");
             if (!String.IsNullOrEmpty(nbProc))
             {
-                int nbCPUs = Int32.Parse(System.Environment.GetEnvironmentVariable("NUMBER_OF_PROCESSORS"));
-                settings.setAdjustedNbThreads(nbCPUs);
+                try
+                {
+                    int nbCPUs = int.Parse(nbProc);
+                    settings.setAdjustedNbThreads(nbCPUs);
+                }
+                catch (Exception) { }
             }
         }
-        /// <summary>
-		/// generates an audio encoding job from the currently configured audio settings in the GUI
-		/// returns that job and the commandline generated from the settings (as opposed to the commandline in the commandline GUI field
-		/// </summary>
-		/// <param name="stream">the audio stream to be used as input for this job</param>
-		/// <returns>a fully configured AudioJob</returns>
-		public AudioJob generateAudioJob(AudioStream stream)
-		{
-			AudioJob job = new AudioJob();
-			job.Input = stream.path;
-			job.Output = stream.output;
-            job.CutFile = stream.cutlist;
-			job.Settings = stream.settings;
-			// job.Commandline = CommandLineGenerator.generateAudioCommandline(mainForm.Settings, job.Settings, job.Input, job.Output); // no longer necessary
-			return job;
-		}
 
-        public MuxJob[] GenerateMuxJobs(VideoStream video, SubStream[] audioStreamsArray, MuxableType[] audioTypes,
-            SubStream[] subtitleStreamsArray, MuxableType[] subTypes,
-            string chapterFile, MuxableType chapterInputType, ContainerType container, string output, FileSize? splitSize)
+        public JobChain GenerateMuxJobs(VideoStream video, MuxStream[] audioStreamsArray, MuxableType[] audioTypes,
+            MuxStream[] subtitleStreamsArray, MuxableType[] subTypes,
+            string chapterFile, MuxableType chapterInputType, ContainerType container, string output, FileSize? splitSize, bool deleteInputs)
         {
             MuxProvider prov = mainForm.MuxProvider;
             List<MuxableType> allTypes = new List<MuxableType>();
@@ -289,19 +130,22 @@ namespace MeGUI
                 allTypes.Add(chapterInputType);
             MuxPath muxPath = prov.GetMuxPath(container, allTypes.ToArray());
             List<MuxJob> jobs = new List<MuxJob>();
-            List<SubStream> subtitleStreams = new List<SubStream>(subtitleStreamsArray);
-            List<SubStream> audioStreams = new List<SubStream>(audioStreamsArray);
+            List<MuxStream> subtitleStreams = new List<MuxStream>(subtitleStreamsArray);
+            List<MuxStream> audioStreams = new List<MuxStream>(audioStreamsArray);
             int index = 0;
             int tempNumber = 1;
             string previousOutput = null;
-            List<string> muxedFilesToDelete = new List<string>();
             foreach (MuxPathLeg mpl in muxPath)
             {
+                List<string> filesToDeleteThisJob = new List<string>();
+
                 MuxJob mjob = new MuxJob();
+
 
                 if (previousOutput != null)
                 {
                     mjob.Settings.MuxedInput = previousOutput;
+                    filesToDeleteThisJob.Add(previousOutput);
                 }
 
                 mjob.NbOfFrames = video.NumberOfFrames;
@@ -317,26 +161,32 @@ namespace MeGUI
                     if (o.outputType is VideoType)
                     {
                         mjob.Settings.VideoInput = video.Output;
+                        if (deleteInputs)
+                            filesToDeleteThisJob.Add(video.Output);
                         mjob.Settings.DAR = video.DAR;
                     }
                     else if (o.outputType is AudioType)
                     {
-                        foreach (SubStream audioStream in audioStreams)
+                        foreach (MuxStream audioStream in audioStreams)
                         {
                             if (VideoUtil.guessAudioType(audioStream.path) == o.outputType)
                             {
                                 mjob.Settings.AudioStreams.Add(audioStream);
                                 //audioStreams.Remove(audioStream); // So that we don't mux this too many times
+                                if (deleteInputs)
+                                    filesToDeleteThisJob.Add(audioStream.path);
                             }
                         }
                     }
                     else if (o.outputType is SubtitleType)
                     {
-                        foreach (SubStream subStream in subtitleStreams)
+                        foreach (MuxStream subStream in subtitleStreams)
                         {
                             if ((VideoUtil.guessSubtitleType(subStream.path) == o.outputType))
                             {
                                 mjob.Settings.SubtitleStreams.Add(subStream);
+                                if (deleteInputs)
+                                    filesToDeleteThisJob.Add(subStream.path);
                                 //audioStreams.Remove(subStream); // So that we don't mux this too many times
                             }
                         }
@@ -345,30 +195,31 @@ namespace MeGUI
                     {
                         if ((VideoUtil.guessChapterType(chapterFile) == o.outputType))
                             mjob.Settings.ChapterFile = chapterFile;
+                        if (deleteInputs)
+                            filesToDeleteThisJob.Add(chapterFile);
                     }
                 }
-                foreach (SubStream s in mjob.Settings.AudioStreams)
+                foreach (MuxStream s in mjob.Settings.AudioStreams)
                 {
                     audioStreams.Remove(s);
                 }
-                foreach (SubStream s in mjob.Settings.SubtitleStreams)
+                foreach (MuxStream s in mjob.Settings.SubtitleStreams)
                 {
                     subtitleStreams.Remove(s);
                 }
+                mjob.FilesToDelete.AddRange(filesToDeleteThisJob);
                 if (index == muxPath.Length - 1)
                 {
                     mjob.Settings.MuxedOutput = output;
                     mjob.Settings.SplitSize = splitSize;
                     mjob.Settings.DAR = video.DAR;
                     mjob.ContainerType = container;
-                    mjob.FilesToDelete.AddRange(muxedFilesToDelete);
                 }
                 else
                 {
                     ContainerType cot = mpl.muxerInterface.GetContainersInCommon(muxPath[index + 1].muxerInterface)[0];
                     mjob.Settings.MuxedOutput = tempOutputName + cot.Extension;
                     mjob.ContainerType = cot;
-                    muxedFilesToDelete.Add(mjob.Settings.MuxedOutput);
                 }
                 previousOutput = mjob.Settings.MuxedOutput;
                 index++;
@@ -379,13 +230,9 @@ namespace MeGUI
                     mjob.Input = mjob.Settings.VideoInput;
                 mjob.Output = mjob.Settings.MuxedOutput;
                 mjob.MuxType = mpl.muxerInterface.MuxerType;
-                mjob.Commandline = CommandLineGenerator.generateMuxCommandline(mjob.Settings, mjob.MuxType, mainForm);
             }
 
-            for (int i = 1; i < jobs.Count; i++)
-                jobs[i].AddDependency(jobs[i - 1]);
-
-            return jobs.ToArray();
+            return new SequentialChain(jobs.ToArray());
         }
 /*		/// <summary>
 		/// generates a muxing job based on a video and audio job that precede the muxing
@@ -427,60 +274,21 @@ namespace MeGUI
 		}*/
 		#endregion
 		#region job preparation (aka multiple job generation)
-        public bool AddAudioJob(string audioInput, string audioOutput, string cutFile, AudioCodecSettings settings)
-        {
-            AudioStream stream = new AudioStream();
-            stream.path = audioInput;
-            stream.output = audioOutput;
-            stream.settings = settings;
-            stream.cutlist = cutFile;
-            AudioJob job = this.generateAudioJob(stream);
-            if (job != null)
-            {
-                this.mainForm.Jobs.addJobsToQueue(job);
-                return true;
-            }
-            return false;
-        }
+
         public bool AddVideoJobs(string movieInput, string movieOutput, VideoCodecSettings settings,
             int introEndFrame, int creditsStartFrame, Dar? dar, bool prerender, bool checkVideo)
         {
             bool cont = getFinalZoneConfiguration(settings, introEndFrame, creditsStartFrame);
             if (!cont) // abort
                 return false;
-            VideoJob[] jobs = prepareVideoJob(movieInput, movieOutput, settings, dar, prerender, checkVideo);
+            JobChain jobs = prepareVideoJob(movieInput, movieOutput, settings, dar, prerender, checkVideo);
             if (jobs == null)
                 return false;
-            if (jobs.Length > 0)
-            {
-                mainForm.Jobs.addJobsToQueue(jobs);
-/*                if (jobs.Length > 1) // complex naming
-                {
-                    Job prevJob = null;
-                    int number = 1;
-                    foreach (VideoJob job in jobs)
-                    {
-                        job.Name = "job" + freeJobNumber + "-" + number;
-                        if (prevJob != null)
-                        {
-                            job.Previous = prevJob;
-                            prevJob.Next = job;
-                        }
-                        number++;
-                        prevJob = job;
-                    }
-                    mainForm.Jobs.addJobsToQueue(jobs);
-                }
-                else // simple naming
-                {
-                    jobs[0].Name = "job" + freeJobNumber;
-                    this.mainForm.Jobs.addJobsToQueue(jobs[0]);
-                }*/
-                return true;
-            }
+            mainForm.Jobs.addJobsWithDependencies(jobs);
+
             return false;
         }
-        public VideoJob[] prepareVideoJob(string movieInput, string movieOutput, VideoCodecSettings settings, Dar? dar)
+        public JobChain prepareVideoJob(string movieInput, string movieOutput, VideoCodecSettings settings, Dar? dar)
         {
             return prepareVideoJob(movieInput, movieOutput, settings, dar, false, false);
         }
@@ -491,7 +299,7 @@ namespace MeGUI
 		/// then, all the generated jobs are returned
 		/// </summary>
 		/// <returns>an Array of VideoJobs in the order they are to be encoded</returns>
-		public VideoJob[] prepareVideoJob(string movieInput, string movieOutput, VideoCodecSettings settings, Dar? dar, bool prerender, bool checkVideo)
+		public JobChain prepareVideoJob(string movieInput, string movieOutput, VideoCodecSettings settings, Dar? dar, bool prerender, bool checkVideo)
 		{
 			bool twoPasses = false, turbo = settings.Turbo, threePasses = false;
 			if (settings.EncodingMode == 4) // automated twopass
@@ -550,11 +358,6 @@ namespace MeGUI
                 }
             }
             VideoJob job = this.generateVideoJob(inputAVS, movieOutput, settings, prerender, dar);
-            if (prerender)
-            {
-                job.Framerate = prerenderJob.Framerate;
-                job.NumberOfFrames = prerenderJob.NumberOfFrames;
-            }
 			VideoJob firstpass = null;
 			VideoJob middlepass = null;
 			if (job != null)
@@ -566,8 +369,7 @@ namespace MeGUI
 					firstpass.Output = ""; // the first pass has no output
 					firstpass.Settings.EncodingMode = 2;
 					firstpass.Settings.Turbo = turbo;
-                    firstpass.Commandline = CommandLineGenerator.generateVideoCommandline(firstpass.Settings, 
-						firstpass.Input, firstpass.Output, dar);
+                    firstpass.DAR = dar;
 					if (threePasses)
 					{
 						firstpass.Settings.EncodingMode = 5; // change to 3 pass 3rd pass just for show
@@ -580,8 +382,7 @@ namespace MeGUI
                                 + "-2ndpass" + Path.GetExtension(job.Output));
                             job.FilesToDelete.Add(middlepass.Output);
                         }
-                        middlepass.Commandline = CommandLineGenerator.generateVideoCommandline(middlepass.Settings, 
-							middlepass.Input, middlepass.Output, dar);
+                        middlepass.DAR = dar;
 					}
 				}
                 if (prerender)
@@ -598,11 +399,7 @@ namespace MeGUI
                     jobList.Add(middlepass);
                 jobList.Add(job);
 
-                for (int i = 1; i < jobList.Count; i++)
-                {
-                    jobList[i].AddDependency(jobList[i - 1]);
-                }
-                return jobList.ToArray();
+                return new SequentialChain(jobList.ToArray());
 			}
 			return null;
 		}
@@ -615,8 +412,6 @@ namespace MeGUI
 		{
 			VideoJob job = new VideoJob();
 			job.Input = oldJob.Input;
-			job.NumberOfFrames = oldJob.NumberOfFrames;
-			job.Framerate = oldJob.Framerate;
 			job.Output = oldJob.Output;
 			job.Settings = oldJob.Settings.clone();
 			return job;
@@ -633,7 +428,6 @@ namespace MeGUI
 		public void updateVideoBitrate(VideoJob job, int bitrate)
 		{
 			job.Settings.BitrateQuantizer = bitrate;
-            job.Commandline = CommandLineGenerator.generateVideoCommandline(job.Settings, job.Input, job.Output, job.DAR);
 		}
 		#endregion
 		#region input properties
@@ -644,7 +438,7 @@ namespace MeGUI
 		/// <param name="framerate">framerate of the source</param>
 		/// <param name="video">path of the source</param>
 		/// <returns>true if the input file could be opened, false if not</returns>
-		public bool getInputProperties(out ulong nbOfFrames, out double framerate, string video)
+		public static bool getInputProperties(out ulong nbOfFrames, out double framerate, string video)
 		{
             int d1, d2;
             Dar d;
@@ -686,7 +480,7 @@ namespace MeGUI
 		/// <param name="vRes">the vertical resolution</param>
 		/// <param name="video">the video whose properties are to be read</param>
 		/// <returns>whether the source could be opened or not</returns>
-		public bool getAllInputProperties(out ulong nbOfFrames, out double framerate, out int hRes, 
+		public static bool getAllInputProperties(out ulong nbOfFrames, out double framerate, out int hRes, 
 			out int vRes, out Dar dar, string video)
 		{
             try
@@ -724,7 +518,7 @@ namespace MeGUI
             ulong nbFrames;
 			double framerate;
 			compliantLevel = -1;
-			if (this.getAllInputProperties(out nbFrames, out framerate, out hRes, out vRes, out d, source))
+			if (getAllInputProperties(out nbFrames, out framerate, out hRes, out vRes, out d, source))
 			{
 				return this.al.validateAVCLevel(hRes, vRes, framerate, settings, out compliantLevel);
 			}

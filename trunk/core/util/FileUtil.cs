@@ -73,5 +73,28 @@ namespace MeGUI.core.util
                 output.Write(data, 0, count);
             }
         }
+
+        /// <summary>
+        /// Returns the full path and filename, but without the extension
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static string GetPathWithoutExtension(string path)
+        {
+            return Path.Combine(Path.GetDirectoryName(path), Path.GetFileNameWithoutExtension(path));
+        }
+
+        /// <summary>
+        /// Adds extra to the filename, modifying the filename but keeping the extension and folder the same.
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <param name="extra"></param>
+        /// <returns></returns>
+        public static string AddToFileName(string filename, string extra)
+        {
+            return Path.Combine(
+                Path.GetDirectoryName(filename),
+                Path.GetFileNameWithoutExtension(filename) + extra + Path.GetExtension(filename));
+        }
     }
 }

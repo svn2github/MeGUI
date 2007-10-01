@@ -15,8 +15,6 @@ namespace MeGUI
         public AutoEncodeDefaults()
         {
             InitializeComponent();
-            calc = new BitrateCalculator();
-            sizeSelection.Items.AddRange(calc.getPredefinedOutputSizes());
 #warning muxprovider needs to be added here
 //            MuxProvider muxProvider = new MuxProvider();
 //            this.container.Items.AddRange(muxProvider.GetSupportedContainers().ToArray());
@@ -28,32 +26,9 @@ namespace MeGUI
             {
                 AutoEncodeDefaultsSettings defaults = new AutoEncodeDefaultsSettings();
                 defaults.AddAdditionalContent = addSubsNChapters.Checked;
-                defaults.SplitSize = null;
-                if (splitOutput.Checked)
-                {
-                    try
-                    {
-                        int size = Int32.Parse(splitSize.Text);
-                        defaults.SplitSize = new FileSize(Unit.MB, size);
-                    }
-                    catch (Exception)
-                    {
-
-                    }
-                }
+                defaults.SplitSize = splitSize.Value;
                 defaults.FileSizeMode = FileSizeRadio.Checked;
-                if (defaults.FileSizeMode)
-                {
-                    try
-                    {
-                        int size = Int32.Parse(muxedSizeMBs.Text);
-                        defaults.FileSize = new FileSize(Unit.MB, size);
-                    }
-                    catch (Exception)
-                    {
-
-                    }
-                }
+                defaults.FileSize = fileSize.Value;
                 defaults.BitrateMode = averageBitrateRadio.Checked;
                 if (defaults.BitrateMode)
                 {
@@ -75,10 +50,9 @@ namespace MeGUI
             {
                 AutoEncodeDefaultsSettings defaults = value;
                 addSubsNChapters.Checked = defaults.AddAdditionalContent;
-                splitOutput.Checked = defaults.SplitSize.HasValue;
-                muxedSizeMBs.Text = defaults.SplitSize.ToString();
+                splitSize.Value = defaults.SplitSize;
                 FileSizeRadio.Checked = defaults.FileSizeMode;
-                muxedSizeMBs.Text = defaults.FileSize.ToString();
+                fileSize.Value = defaults.FileSize;
                 averageBitrateRadio.Checked = defaults.BitrateMode;
                 projectedBitrateKBits.Text = defaults.Bitrate.ToString();
                 noTargetRadio.Checked = defaults.NoTargetSizeMode;
@@ -93,39 +67,22 @@ namespace MeGUI
             }
         }
 
-        private void splitOutput_CheckedChanged(object sender, EventArgs e)
-        {
-            if (this.splitOutput.Checked)
-                splitSize.Enabled = true;
-            else
-                splitSize.Enabled = false;
-        }
-
-        private void sizeSelection_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            int sizeMBs = calc.getOutputSizeKBs(sizeSelection.SelectedIndex) / 1024;
-            this.muxedSizeMBs.Text = sizeMBs.ToString();
-        }
-
         private void FileSizeRadio_CheckedChanged(object sender, EventArgs e)
         {
             if (averageBitrateRadio.Checked)
             {
-                muxedSizeMBs.Enabled = false;
+                fileSize.Enabled = false;
                 this.projectedBitrateKBits.Enabled = true;
-                this.sizeSelection.Enabled = false;
             }
             else if (noTargetRadio.Checked)
             {
-                muxedSizeMBs.Enabled = false;
+                fileSize.Enabled = false;
                 this.projectedBitrateKBits.Enabled = false;
-                this.sizeSelection.Enabled = false;
             }
             else
             {
-                muxedSizeMBs.Enabled = true;
+                fileSize.Enabled = true;
                 this.projectedBitrateKBits.Enabled = false;
-                this.sizeSelection.Enabled = true;
             }
         }
         private void textField_KeyPress(object sender, KeyPressEventArgs e)

@@ -41,6 +41,14 @@ new JobProcessorFactory(new ProcessorFactory(init), "BeSplit_Joiner");
 
         }
 
+        protected override string Commandline
+        {
+            get
+            {
+                return job.generateJoinCommandline(tmpfile);
+            }
+        }
+
         protected override void checkJobIO()
         {
             base.checkJobIO();
@@ -58,7 +66,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "BeSplit_Joiner");
                         w.WriteLine(file);
                     }
                 }
-                job.Commandline = job.generateJoinCommandline(tmpfile);
             }
             catch (Exception e)
             {

@@ -31,6 +31,7 @@ using System.Diagnostics;
 using System.Text;
 using MeGUI.core.util;
 using MeGUI.core.gui;
+using MeGUI.core.details;
 
 namespace MeGUI
 {
@@ -229,7 +230,7 @@ namespace MeGUI
 			bool putDummyTracks = true; // indicates whether audio tracks have been found or not
 			ar = null;
             maxHorizontalResolution = 5000;
-			if (!infoFile.Equals(""))
+			if (!string.IsNullOrEmpty(infoFile))
 			{
                 getSourceInfo(infoFile, out audioTracks, out subtitles, out ar, out maxHorizontalResolution);
                 if (audioTracks.Count > 0)
@@ -300,7 +301,7 @@ namespace MeGUI
 		/// <param name="aStreams">all encodable audio streams</param>
 		/// <param name="audio">all muxable audio streams</param>
 		/// <returns>the info to be added to the log</returns>
-		public string eliminatedDuplicateFilenames(ref string videoOutput, ref string muxedOutput, AudioStream[] aStreams)
+		public string eliminatedDuplicateFilenames(ref string videoOutput, ref string muxedOutput, AudioJob[] aStreams)
 		{
             StringBuilder logBuilder = new StringBuilder();
             videoOutput = Path.GetFullPath(videoOutput);
@@ -344,13 +345,13 @@ namespace MeGUI
 
 			for (int i = 0; i < aStreams.Length; i++)
 			{
-				string name = Path.GetFullPath(aStreams[i].output);
+				string name = Path.GetFullPath(aStreams[i].Output);
 				if (name.Equals(videoOutput) || name.Equals(muxedOutput)) // audio will be overwritten -> no good
 				{
 					name = Path.Combine(Path.GetDirectoryName(name), Path.GetFileNameWithoutExtension(name) + i.ToString() + Path.GetExtension(name));
 					logBuilder.Append("Encodable audio stream number " + i + " has the same name as a video file\r\n" 
 						+ "Renaming stream to " + name);
-					aStreams[i].output = name;
+					aStreams[i].Output = name;
 				}
 			}
 			return logBuilder.ToString();
@@ -431,11 +432,10 @@ namespace MeGUI
         #endregion
 
         #region new stuff
-        public void GenerateJobSeries(VideoStream video, string muxedOutput, AudioStream[] audioStreams,
-            SubStream[] subtitles, string chapters, FileSize? desiredSize, FileSize? splitSize, ContainerType container, bool prerender, SubStream[] muxOnlyAudio, IEnumerable<string> tempFiles)
+        public JobChain GenerateJobSeries(VideoStream video, string muxedOutput, AudioJob[] audioStreams,
+            MuxStream[] subtitles, string chapters, FileSize? desiredSize, FileSize? splitSize, ContainerType container, bool prerender, MuxStream[] muxOnlyAudio)
         {
             StringBuilder logBuilder = new StringBuilder();
-            BitrateCalculator calc = new BitrateCalculator();
             if (desiredSize.HasValue)
             {
                 logBuilder.Append("Generating jobs. Desired size: " + desiredSize.Value.ToString() + "\r\n");
@@ -449,162 +449,142 @@ namespace MeGUI
             }
             else
                 logBuilder.Append("Generating jobs. No desired size.\r\n");
-            bool encodedAudioPresent = true;
-            if (audioStreams.Length > 0)
-                encodedAudioPresent = false;
+
             fixFileNameExtensions(video, audioStreams, container);
             string videoOutput = video.Output;
             logBuilder.Append(eliminatedDuplicateFilenames(ref videoOutput, ref muxedOutput, audioStreams));
             video.Output = videoOutput;
 
-            VideoJob[] vjobs = jobUtil.prepareVideoJob(video.Input, video.Output, video.Settings, video.DAR, prerender, true);
-            List<Job> jobs = new List<Job>();
+            JobChain vjobs = jobUtil.prepareVideoJob(video.Input, video.Output, video.Settings, video.DAR, prerender, true);
 
-            if (vjobs.Length > 0) // else the user aborted and we cannot proceed
+            if (vjobs == null) return null;
+            /* Here, we guess the types of the files based on extension.
+             * This is guaranteed to work with MeGUI-encoded files, because
+             * the extension will always be recognised. For non-MeGUI files,
+             * we can only ever hope.*/
+            List<MuxStream> allAudioToMux = new List<MuxStream>();
+            List<MuxableType> allInputAudioTypes = new List<MuxableType>();
+            foreach (MuxStream muxStream in muxOnlyAudio)
             {
-                /* Here, we guess the types of the files based on extension.
-                 * This is guaranteed to work with MeGUI-encoded files, because
-                 * the extension will always be recognised. For non-MeGUI files,
-                 * we can only ever hope.*/
-                List<SubStream> allAudioToMux = new List<SubStream>();
-                List<MuxableType> allInputAudioTypes = new List<MuxableType>();
-                foreach (SubStream muxStream in muxOnlyAudio)
+                if (VideoUtil.guessAudioMuxableType(muxStream.path, true) != null)
                 {
-                    if (VideoUtil.guessAudioMuxableType(muxStream.path, true) != null)
-                    {
-                        allInputAudioTypes.Add(VideoUtil.guessAudioMuxableType(muxStream.path, true));
-                        allAudioToMux.Add(muxStream);
-                    }
+                    allInputAudioTypes.Add(VideoUtil.guessAudioMuxableType(muxStream.path, true));
+                    allAudioToMux.Add(muxStream);
                 }
-
-                foreach (AudioStream stream in audioStreams)
-                {
-                    SubStream newStream = new SubStream();
-                    newStream.language = "";
-                    newStream.name = "";
-                    newStream.path = stream.output;
-                    allAudioToMux.Add(newStream);
-                    allInputAudioTypes.Add(new MuxableType(stream.Type, stream.settings.Codec));
-                }
-
-
-                List<MuxableType> allInputSubtitleTypes = new List<MuxableType>();
-                foreach (SubStream muxStream in subtitles)
-                    if (VideoUtil.guessSubtitleType(muxStream.path) != null) 
-                        allInputSubtitleTypes.Add(new MuxableType(VideoUtil.guessSubtitleType(muxStream.path), null));
-
-                MuxableType chapterInputType = null;
-                if (!String.IsNullOrEmpty(chapters))
-                {
-                    ChapterType type = VideoUtil.guessChapterType(chapters);
-                    if (type != null)
-                        chapterInputType = new MuxableType(type, null);
-                }
-                mainForm.addToLog("\r\n\r\nAUDIO TO MUX: ");
-                foreach (SubStream s in allAudioToMux)
-                    mainForm.addToLog(s.path + "\r\n");
-                mainForm.addToLog("\r\nAUDIO TYPES: ");
-                foreach (MuxableType m in allInputAudioTypes)
-                    mainForm.addToLog(m.codec.ToString());
-
-                MuxJob[] muxJobs = this.jobUtil.GenerateMuxJobs(video, allAudioToMux.ToArray(), allInputAudioTypes.ToArray(),
-                    subtitles, allInputSubtitleTypes.ToArray(), chapters, chapterInputType, container, muxedOutput, splitSize);
-
-                Job lastJob = null;
-                if (muxJobs.Length > 0)
-                    lastJob = muxJobs[muxJobs.Length - 1];
-                else
-                    lastJob = vjobs[vjobs.Length - 1];
-                
-                lastJob.FilesToDelete.AddRange(tempFiles);
-
-                if (muxJobs.Length > 0)
-                    lastJob.FilesToDelete.Add(vjobs[vjobs.Length - 1].Output);
-
-                int index = 0;
-                List<Job> aJobs = new List<Job>();
-                foreach (AudioStream astream in audioStreams) // generate audio encoding jobs
-                {
-                    AudioJob jo = jobUtil.generateAudioJob(astream);
-                    aJobs.Add(jo);
-                    lastJob.FilesToDelete.Add(jo.Output);
-                    index++;
-                }
-                index = 0;
-
-                jobs.AddRange(aJobs);
-                jobs.AddRange(vjobs);
-                
-                foreach (Job mJob in muxJobs)
-                    foreach (Job job in jobs)
-                        mJob.AddDependency(job);
-
-                jobs.AddRange(muxJobs);
-
-                /*
-                foreach (VideoJob job in vjobs)
-                {
-                    jobs.Add(job);
-                }
-                foreach (MuxJob job in muxJobs)
-                {
-                    jobs.Add(job);
-                }
-                 */
-
-                int bitrateKBits = 0;
-                if (desiredSize.HasValue)
-                {
-/*                    if (encodedAudioPresent) // no audio encoding, we can calculate the video bitrate directly
-                    {
-                        logBuilder.Append("No audio encoding. Calculating desired video bitrate directly.\r\n");
-                        List<AudioStream> calculationAudioStreams = new List<AudioStream>();
-                        foreach (SubStream stream in muxOnlyAudio)
-                        {
-                            FileInfo fi = new FileInfo(stream.path);
-                            AudioStream newStream = new AudioStream();
-                            newStream.SizeBytes = fi.Length;
-                            newStream.Type = guessAudioType(stream.path);
-                            newStream.BitrateMode = BitrateManagementMode.VBR;
-                            calculationAudioStreams.Add(newStream);
-                            logBuilder.Append("Encoded audio file is present: " + stream.path +
-                                " It has a size of " + fi.Length + " bytes. \r\n");
-                        }
-
-                        long videoSizeKB;
-                        bool useBframes = false;
-                        if (video.Settings.NbBframes > 0)
-                            useBframes = true;
-
-                        bitrateKBits = calc.CalculateBitrateKBits(video.Settings.Codec, useBframes, container, calculationAudioStreams.ToArray(),
-                            desiredSizeBytes, video.NumberOfFrames, video.Framerate, out videoSizeKB);
-                        desiredSizeBytes = (long)videoSizeKB * 1024L; // convert kb back to bytes
-                        logBuilder.Append("Setting video bitrate for the video jobs to " + bitrateKBits + " kbit/s\r\n");
-                        foreach (VideoJob vJob in vjobs)
-                        {
-                            jobUtil.updateVideoBitrate(vJob, bitrateKBits);
-                        }
-                    }*/
-                    BitrateCalculationInfo b = new BitrateCalculationInfo();
-                    b.AudioJobs = aJobs;
-                    b.MuxJob = muxJobs[muxJobs.Length - 1];
-                    b.VideoJobs = new List<Job>(vjobs);
-                    b.MuxOnlyStreams = new List<SubStream>(muxOnlyAudio);
-                    b.DesiredSize = desiredSize.Value;
-                    vjobs[0].BitrateCalculationInfo = b;
-                }
-                mainForm.Jobs.addJobsToQueue(jobs.ToArray());
-                mainForm.addToLog(logBuilder.ToString());
             }
+
+            foreach (AudioJob stream in audioStreams)
+            {
+                allAudioToMux.Add(stream.ToMuxStream());
+                allInputAudioTypes.Add(stream.ToMuxableType());
+            }
+
+
+            List<MuxableType> allInputSubtitleTypes = new List<MuxableType>();
+            foreach (MuxStream muxStream in subtitles)
+                if (VideoUtil.guessSubtitleType(muxStream.path) != null)
+                    allInputSubtitleTypes.Add(new MuxableType(VideoUtil.guessSubtitleType(muxStream.path), null));
+
+            MuxableType chapterInputType = null;
+            if (!String.IsNullOrEmpty(chapters))
+            {
+                ChapterType type = VideoUtil.guessChapterType(chapters);
+                if (type != null)
+                    chapterInputType = new MuxableType(type, null);
+            }
+            mainForm.addToLog("\r\n\r\nAUDIO TO MUX: ");
+            foreach (MuxStream s in allAudioToMux)
+                mainForm.addToLog(s.path + "\r\n");
+            mainForm.addToLog("\r\nAUDIO TYPES: ");
+            foreach (MuxableType m in allInputAudioTypes)
+                mainForm.addToLog(m.codec.ToString());
+
+            JobChain muxJobs = this.jobUtil.GenerateMuxJobs(video, allAudioToMux.ToArray(), allInputAudioTypes.ToArray(),
+                subtitles, allInputSubtitleTypes.ToArray(), chapters, chapterInputType, container, muxedOutput, splitSize, true);
+
+
+            int index = 0;
+
+
+
+            /*                foreach (Job mJob in muxJobs)
+                                foreach (Job job in jobs)
+                                    mJob.AddDependency(job);*/
+
+
+            /*
+            foreach (VideoJob job in vjobs)
+            {
+                jobs.Add(job);
+            }
+            foreach (MuxJob job in muxJobs)
+            {
+                jobs.Add(job);
+            }
+             */
+
+            int bitrateKBits = 0;
+            if (desiredSize.HasValue)
+            {
+                /*                    if (encodedAudioPresent) // no audio encoding, we can calculate the video bitrate directly
+                                    {
+                                        logBuilder.Append("No audio encoding. Calculating desired video bitrate directly.\r\n");
+                                        List<AudioStream> calculationAudioStreams = new List<AudioStream>();
+                                        foreach (SubStream stream in muxOnlyAudio)
+                                        {
+                                            FileInfo fi = new FileInfo(stream.path);
+                                            AudioStream newStream = new AudioStream();
+                                            newStream.SizeBytes = fi.Length;
+                                            newStream.Type = guessAudioType(stream.path);
+                                            newStream.BitrateMode = BitrateManagementMode.VBR;
+                                            calculationAudioStreams.Add(newStream);
+                                            logBuilder.Append("Encoded audio file is present: " + stream.path +
+                                                " It has a size of " + fi.Length + " bytes. \r\n");
+                                        }
+
+                                        long videoSizeKB;
+                                        bool useBframes = false;
+                                        if (video.Settings.NbBframes > 0)
+                                            useBframes = true;
+
+                                        bitrateKBits = calc.CalculateBitrateKBits(video.Settings.Codec, useBframes, container, calculationAudioStreams.ToArray(),
+                                            desiredSizeBytes, video.NumberOfFrames, video.Framerate, out videoSizeKB);
+                                        desiredSizeBytes = (long)videoSizeKB * 1024L; // convert kb back to bytes
+                                        logBuilder.Append("Setting video bitrate for the video jobs to " + bitrateKBits + " kbit/s\r\n");
+                                        foreach (VideoJob vJob in vjobs)
+                                        {
+                                            jobUtil.updateVideoBitrate(vJob, bitrateKBits);
+                                        }
+                                    }*/
+                BitrateCalculationInfo b = new BitrateCalculationInfo();
+                
+                List<string> audiofiles = new List<string>();
+                foreach (MuxStream s in allAudioToMux)
+                    audiofiles.Add(s.path);
+                b.AudioFiles = audiofiles;
+
+                b.Container = container;
+                b.VideoJobs = new List<TaggedJob>(vjobs.Jobs);
+                b.DesiredSize = desiredSize.Value;
+                ((VideoJob)vjobs.Jobs[0].Job).BitrateCalculationInfo = b;
+            }
+            mainForm.addToLog(logBuilder.ToString());
+
+
+            return 
+                new SequentialChain(
+                    new ParallelChain((Job[])audioStreams),
+                    new SequentialChain(vjobs),
+                    new SequentialChain(muxJobs));
 
         }
 
-        private void fixFileNameExtensions(VideoStream video, AudioStream[] audioStreams, ContainerType container)
+        private void fixFileNameExtensions(VideoStream video, AudioJob[] audioStreams, ContainerType container)
         {
             AudioEncoderType[] audioCodecs = new AudioEncoderType[audioStreams.Length];
             for (int i = 0; i < audioStreams.Length; i++)
             {
-                audioCodecs[i] = audioStreams[i].settings.EncoderType;
+                audioCodecs[i] = audioStreams[i].Settings.EncoderType;
             }
             MuxPath path = mainForm.MuxProvider.GetMuxPath(video.Settings.EncoderType, audioCodecs, container);
             if (path == null)
@@ -625,14 +605,13 @@ namespace MeGUI
             AudioEncoderProvider aProvider = new AudioEncoderProvider();
             for (int i = 0; i < audioStreams.Length; i++)
             {
-                AudioType[] types = aProvider.GetSupportedOutput(audioStreams[i].settings.EncoderType);
+                AudioType[] types = aProvider.GetSupportedOutput(audioStreams[i].Settings.EncoderType);
                 foreach (AudioType type in types)
                 {
                     if (audioTypes.Contains(type))
                     {
-                        audioStreams[i].output = Path.ChangeExtension(audioStreams[i].output,
+                        audioStreams[i].Output = Path.ChangeExtension(audioStreams[i].Output,
                             type.Extension);
-                        audioStreams[i].Type = type;
                         break;
                     }
                 }

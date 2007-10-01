@@ -19,6 +19,8 @@
 // ****************************************************************************
 
 using System;
+using MeGUI.core.details;
+using MeGUI.core.util;
 
 namespace MeGUI
 {
@@ -28,155 +30,103 @@ namespace MeGUI
 	public class BitrateCalculator
 	{
 		#region constants
-		private decimal mp4OverheadWithBframes = new decimal(10.4);
-		private decimal mp4OverheadWithoutBframes = new decimal(4.3);
-		private double aviVideoOverhead = 24;
-		private double cbrMP3Overhead = 23.75;
-		private double vbrMP3Overhead = 40;
-		private double ac3Overhead = 23.75;
-		private int AACBlockSize = 1024;
-		private int AC3BlockSize = 1536;
-		private int MP3BlockSize = 1152;
-		private int VorbisBlockSize = 1024;
-		private int mkvAudioTrackHeaderSize = 140;
-		private int mkvVorbisTrackHeaderSize = 4096;
-		private readonly uint mkvIframeOverhead = 26;
-		private readonly uint mkvPframeOverhead = 13;
-		private readonly uint mkvBframeOverhead = 16;
+		private static readonly decimal mp4OverheadWithBframes = 10.4M;
+        private static readonly decimal mp4OverheadWithoutBframes = 4.3M;
+        private static readonly decimal aviVideoOverhead = 24M;
+        private static readonly decimal cbrMP3Overhead = 23.75M;
+        private static readonly decimal vbrMP3Overhead = 40M;
+        private static readonly decimal ac3Overhead = 23.75M;
+        private static readonly int AACBlockSize = 1024;
+        private static readonly int AC3BlockSize = 1536;
+        private static readonly int MP3BlockSize = 1152;
+        private static readonly int VorbisBlockSize = 1024;
+        private static readonly int mkvAudioTrackHeaderSize = 140;
+        private static readonly int mkvVorbisTrackHeaderSize = 4096;
+		private static readonly uint mkvIframeOverhead = 26;
+		private static readonly uint mkvPframeOverhead = 13;
+		private static readonly uint mkvBframeOverhead = 16;
 		#endregion
-		public BitrateCalculator()
-		{}
-		#region mp4
-        /// <summary>
-        /// calculates the video bitrate for a video to be put into the MP4 container
-        /// </summary>
-        /// <param name="audioStreams">the audio streams to be muxed</param>
-        /// <param name="desiredOutputSize">the desired size of the muxed output</param>
-        /// <param name="nbOfFrames">number of frames of the source</param>
-        /// <param name="useBframes">whether we have b-frames in the video</param>
-        /// <param name="framerate">framerate of the video</param>
-        /// <param name="videoSize">size of the raw video stream</param>
-        /// <returns>the calculated bitrate</returns>
-        private int calculateMP4VideoBitrate(AudioStream[] audioStreams, long desiredOutputSizeBytes, ulong nbOfFrames,
-            bool useBframes, double framerate, out long videoSizeKB)
-        {
-            double mp4Overhead = this.getMP4Overhead(useBframes);
-            double totalOverhead = (double)nbOfFrames * mp4Overhead;
-            double nbOfSeconds = (double)nbOfFrames / framerate;
-            long audioSize = 0;
-            foreach (AudioStream stream in audioStreams)
-            {
-                audioSize += stream.SizeBytes;
-            }
-            long videoTargetSize = desiredOutputSizeBytes - audioSize - (long)totalOverhead;
-            videoSizeKB = videoTargetSize / 1024L;
-            long sizeInBits = videoTargetSize * 8;
-            int bitrate = (int)(sizeInBits / (nbOfSeconds * 1000));
-            return bitrate;
-        }
-        /// <summary>
-        /// calculates the size of a muxed mp4 file given the desired video bitrate and the audio streams to be muxed
-        /// </summary>
-        /// <param name="audioStreams">the audio streams to be muxed with the video</param>
-        /// <param name="desiredBitrate">the desired video bitrate</param>
-        /// <param name="nbOfFrames">the number of frames of the video source</param>
-        /// <param name="useBframes">whether the sources uses b-frames</param>
-        /// <param name="framerate">the framerate of the source</param>
-        /// <param name="rawVideoSize">the raw video size the stream will have in the container</param>
-        /// <returns>the size of the mp4 file in KB</returns>
-        private long calculateMP4Size(AudioStream[] audioStreams, int desiredBitrate, ulong nbOfFrames, bool useBframes, double framerate, out int rawVideoSize)
-        {
-            double mp4Overhead = this.getMP4Overhead(useBframes);
-            double totalOverhead = (double)nbOfFrames * mp4Overhead;
-            double nbOfSeconds = (double)nbOfFrames / framerate;
-            double bytesPerSecond = desiredBitrate * 1000 / 8;
-            long videoSize = (long)(nbOfSeconds * bytesPerSecond);
-            rawVideoSize = (int)(videoSize / (long)1024);
-            long audioSize = 0;
-            foreach (AudioStream stream in audioStreams)
-            {
-                audioSize += stream.SizeBytes;
-            }
-            long size = videoSize + audioSize + (long)totalOverhead;
-            return size / 1024L;
-        }
-		#endregion
-		#region matroska
-        /// <summary>
-        /// calculates the bitrate a video with the given properties needs to have in order to be placed into a matroska file along with the
-        /// given audio tracks and end up having the desired size
-        /// </summary>
-        /// <param name="audioStreams">te audio streams to be muxed with this video</param>
-        /// <param name="desiredOutputSize">the final size of this file</param>
-        /// <param name="nbOfFrames">number of frames of the video</param>
-        /// <param name="framerate">framerate of the video</param>
-        /// <param name="useBframes">whether the video uses b-frames</param>
-        /// <param name="videoSize">size of the raw video stream in KB</param>
-        /// <returns>the video bitrate in kbit/s</returns>
-        private int calculateMKVVideoBitrate(AudioStream[] audioStreams, long desiredOutputSize, ulong nbOfFrames, double framerate, bool useBframes, out long videoSize)
-        {
-            double totalOverhead = 0.0;
-            ulong nbIframes = nbOfFrames / 10;
-            ulong nbBframes = 0;
-            if (useBframes)
-                nbBframes = (nbOfFrames - nbIframes) / 2;
-            ulong nbPframes = nbOfFrames - nbIframes - nbBframes;
-            totalOverhead = (double)(4300 + 1400 + nbIframes * mkvIframeOverhead + nbPframes * mkvPframeOverhead +
-                nbBframes * mkvBframeOverhead);
-            double nbOfSeconds = (double)nbOfFrames / framerate;
-            totalOverhead += nbOfSeconds / 2.0 * 12; // 12 bytes per cluster
-            long audioSize = 0L;
-            double audioOverhead = 0;
-            foreach (AudioStream stream in audioStreams)
-            {
-                audioSize += stream.SizeBytes;
-                audioOverhead += getMKVAudioOverhead(stream.Type, 48000, nbOfSeconds);
-            }
-            long videoTargetSize = desiredOutputSize - audioSize - (long)audioOverhead -
-                (long)totalOverhead;
-            videoSize = (int)(videoTargetSize / (long)1024);
-            long sizeInBits = videoTargetSize * 8;
-            int bitrate = (int)(sizeInBits / (nbOfSeconds * 1000));
-            return bitrate;
-        }
-        /// <summary>
-        /// calculates what size a given video and audio stream(s) will have at a given video bitrate
-        /// </summary>
-        /// <param name="audioStreams">the audio streams to be considered</param>
-        /// <param name="desiredBitrate">the desired video bitrate</param>
-        /// <param name="nbOfFrames">number of frames of the video source</param>
-        /// <param name="framerate">framerate of the video source</param>
-        /// <param name="useBframes">whether we use b-frames for the video</param>
-        /// <param name="rawVideoSize">the raw size of the video stream in KB</param>
-        /// <returns>the size of the final file in KB</returns>
-        private long calculateMKVSize(AudioStream[] audioStreams, int desiredBitrate, ulong nbOfFrames, double framerate, bool useBframes, out int rawVideoSize)
-        {
-            double totalOverhead = 0.0;
-            ulong nbIframes = nbOfFrames / 10;
-            ulong nbBframes = 0;
-            if (useBframes)
-                nbBframes = (nbOfFrames - nbIframes) / 2;
-            ulong nbPframes = nbOfFrames - nbIframes - nbBframes;
-            totalOverhead = (double)(4300 + 1400 + nbIframes * mkvIframeOverhead + nbPframes * mkvPframeOverhead +
-                nbBframes * mkvBframeOverhead);
-            double nbOfSeconds = (double)nbOfFrames / framerate;
-            totalOverhead += nbOfSeconds / 2.0 * 12; // 12 bytes per cluster
 
-            long audioSize = 0L;
-            double audioOverhead = 0;
-            foreach (AudioStream stream in audioStreams)
-            {
-                audioSize += stream.SizeBytes;
-                audioOverhead += getMKVAudioOverhead(stream.Type, 48000, nbOfSeconds);
-            }
+        // FileSize desiredSize, 
+        // out FileSize targetVideoSize
+        public BitrateCalculator(VideoCodec codec, bool useBframes, ContainerType container, 
+            AudioBitrateCalculationStream[] audioStreams, ulong nbOfFrames, double framerate)
+		{
+            nbOfSeconds = (decimal)nbOfFrames / (decimal)framerate;
 
-            totalOverhead += audioOverhead;
-            double bytesPerSecond = desiredBitrate * 1000 / 8;
-            long videoSize = (long)(nbOfSeconds * bytesPerSecond);
-            rawVideoSize = (int)(videoSize / (long)1024);
-            long size = videoSize + audioSize + (long)totalOverhead;
-            return size / 1024L;
+            VideoOverhead = getVideoOverhead(container, useBframes, nbOfFrames, nbOfSeconds);
+
+            AudioOverhead = FileSize.Empty;
+            AudioSize = FileSize.Empty;
+            foreach (AudioBitrateCalculationStream s in audioStreams)
+            {
+                AudioSize += s.Size ?? FileSize.Empty;
+                AudioOverhead += getAudioOverhead(container, s.AType, nbOfSeconds, nbOfFrames);
+            }
         }
+
+        public FileSize VideoOverhead;
+        public FileSize AudioOverhead;
+        public FileSize AudioSize;
+
+        private decimal nbOfSeconds;
+
+        public Tuple<ulong, FileSize> getBitrateAndVideoSize(FileSize desiredSize)
+        {
+            FileSize videoSize = desiredSize - VideoOverhead - AudioOverhead - AudioSize;
+            ulong sizeInBits = videoSize.Bytes * 8;
+            return new Tuple<ulong, FileSize>((ulong)(sizeInBits / (nbOfSeconds * 1000)), videoSize);
+        }
+
+        public Tuple<FileSize, FileSize> getFileAndVideoSize(ulong bitrateKBits)
+        {
+            decimal bytesPerSecond = bitrateKBits * 1000 / 8;
+
+            FileSize videoSize = new FileSize(Unit.B, (nbOfSeconds * bytesPerSecond));
+
+            return new Tuple<FileSize, FileSize>(videoSize + VideoOverhead + AudioOverhead + AudioSize, videoSize);
+        }
+
+
+        #region overheads
+        private static FileSize getAudioOverhead(ContainerType container, AudioType type, decimal nbSeconds, ulong nbOfFrames)
+        {
+            if (container == ContainerType.MP4)
+                return FileSize.Empty;
+            else if (container == ContainerType.MKV)
+                return new FileSize(Unit.B, getMKVAudioOverhead(type, 48000, (double)nbSeconds));
+            else if (container == ContainerType.AVI)
+                return new FileSize(Unit.B, getAviAudioOverhead(type) * nbOfFrames);
+
+            throw new Exception();
+        }
+
+        private FileSize getVideoOverhead(ContainerType container, bool useBframes, ulong nbOfFrames, decimal nbofSeconds)
+        {
+            if (container == ContainerType.MP4)
+            {
+                return new FileSize(Unit.B,
+                    (useBframes ? mp4OverheadWithBframes : mp4OverheadWithoutBframes) * nbOfFrames);
+            }
+            else if (container == ContainerType.MKV)
+            {
+                ulong nbIframes = nbOfFrames / 10;
+                ulong nbBframes = useBframes ? (nbOfFrames - nbIframes) / 2 : 0;
+                ulong nbPframes = nbOfFrames - nbIframes - nbBframes;
+                return new FileSize(Unit.B,
+                    (4300M + 1400M + nbIframes * mkvIframeOverhead + nbPframes * mkvPframeOverhead +
+                    nbBframes * mkvBframeOverhead + 
+                    nbofSeconds * 12 / 2 // this line for 12 bytes per cluster overhoad
+                    ));
+            }
+            else if (container == ContainerType.AVI)
+            {
+                return new FileSize(Unit.B, nbOfFrames * aviVideoOverhead);
+            }
+            throw new Exception();
+        }
+
+
 		/// <summary>
 		/// gets the overhead a given audio type will incurr in the matroska container
 		/// given its length and sampling rate
@@ -185,7 +135,7 @@ namespace MeGUI
 		/// <param name="samplingRate">sampling rate of the audio track</param>
 		/// <param name="length">length of the audio track</param>
 		/// <returns>overhead this audio track will incurr</returns>
-        public int getMKVAudioOverhead(AudioType audioType, int samplingRate, double length)
+        public static int getMKVAudioOverhead(AudioType audioType, int samplingRate, double length)
         {
             if (audioType == null)
                 return 0;
@@ -211,57 +161,7 @@ namespace MeGUI
             int overhead = (int)(headerSize + 5 * length + blockOverhead);
             return overhead;
         }
-		#endregion
-		#region avi
-        /// <summary>
-        /// calculates the AVI bitrate given the desired audio streams and video stream properties
-        /// </summary>
-        /// <param name="audioStreams">the audio streams to be muxed to the video</param>
-        /// <param name="desiredOutputSize">the desired final filesize</param>
-        /// <param name="nbOfFrames">the number of frames of the source</param>
-        /// <param name="framerate">the framerate of the source</param>
-        /// <param name="videoSize">the size of the raw video stream</param>
-        /// <returns>the bitrate in kbit/s</returns>
-        private int calculateAVIBitrate(AudioStream[] audioStreams, long desiredOutputSize, ulong nbOfFrames, double framerate, out long videoSize)
-        {
-            double videoOverhead = (double)nbOfFrames * aviVideoOverhead;
-            double nbOfSeconds = (double)nbOfFrames / framerate;
-            double totalOverhead = videoOverhead;
-            long audioSize = 0;
-            foreach (AudioStream stream in audioStreams)
-            {
-                audioSize += stream.SizeBytes;
-                if (stream.SizeBytes > 0)
-                {
-                    double audioOverhead = getAviAudioOverhead(stream.Type, stream.BitrateMode);
-                    totalOverhead += audioOverhead * nbOfFrames;
-                }
-            }
-            long videoTargetSize = desiredOutputSize - audioSize - (long)totalOverhead;
-            videoSize = (int)(videoTargetSize / (long)1024);
-            long sizeInBits = videoTargetSize * 8;
-            int bitrate = (int)(sizeInBits / (nbOfSeconds * 1000));
-            return bitrate;
-        }
-        private long calculateAVISize(AudioStream[] audioStreams, int desiredBitrate, ulong nbOfFrames, double framerate, out int rawVideoSize)
-        {
-            double videoOverhead = this.aviVideoOverhead;
-            double nbOfSeconds = (double)nbOfFrames / framerate;
-            long audioSize = 0L;
-            double audioOverhead = 0;
-            foreach (AudioStream stream in audioStreams)
-            {
-                audioSize += stream.SizeBytes;
-                if (stream.SizeBytes > 0)
-                    audioOverhead += getAviAudioOverhead(stream.Type, stream.BitrateMode) * nbOfFrames;
-            }
-            double totalOverhead = videoOverhead + audioOverhead;
-            double bytesPerSecond = desiredBitrate * 1000 / 8;
-            long videoSize = (long)(nbOfSeconds * bytesPerSecond);
-            rawVideoSize = (int)(videoSize / (long)1024);
-            long size = videoSize + (long)audioSize + (long)totalOverhead;
-            return size / 1024L;
-        }
+
         /// <summary>
         /// gets the avi container overhead for the given audio type and bitrate mode
         /// bitrate mode only needs to be taken into account for MP3 but it's there for all cases nontheless
@@ -269,97 +169,34 @@ namespace MeGUI
         /// <param name="AudioType">the type of audio</param>
         /// <param name="bitrateMode">the bitrate mode of the given audio type</param>
         /// <returns>the overhead in bytes per frame</returns>
-        public double getAviAudioOverhead(AudioType audioType, BitrateManagementMode bitrateMode)
+        public static decimal getAviAudioOverhead(AudioType audioType)
         {
 #warning overheads here are inconsistant with the ones on www.alexander-noe.com
-            double audioOverhead = 0;
             if (audioType == AudioType.AC3)
-                audioOverhead = ac3Overhead;
+                return ac3Overhead;
             else if (audioType == AudioType.MP3)
-            {
-                if (bitrateMode == BitrateManagementMode.CBR)
-                    audioOverhead = cbrMP3Overhead;
-                else
-                    audioOverhead = vbrMP3Overhead;
-            }
+                return vbrMP3Overhead;
             else if (audioType == AudioType.VBRMP3)
-                audioOverhead = vbrMP3Overhead;
+                return vbrMP3Overhead;
             else if (audioType == AudioType.CBRMP3)
-                audioOverhead = cbrMP3Overhead;
+                return cbrMP3Overhead;
             else if (audioType == AudioType.RAWAAC)
-                audioOverhead = vbrMP3Overhead;
+                return vbrMP3Overhead;
             else if (audioType == AudioType.DTS)
-                audioOverhead = ac3Overhead;
+                return ac3Overhead;
             else
-                audioOverhead = 0;
-            return audioOverhead;
-        }
-        /// <summary>
-		/// gets the avi container overhead given the type of audio file to be muxed
-		/// </summary>
-		/// <param name="AudioType">the type of audio in question</param>
-		/// <returns>the overhead per video frame for the given audio type</returns>
-        public double getAviAudioOverhead(AudioType audioType)
-        {
-            double audioOverhead = 0;
-            if (audioType == AudioType.AC3)
-                audioOverhead = ac3Overhead;
-            else if (audioType == AudioType.CBRMP3)
-                audioOverhead = cbrMP3Overhead;
-            else if (audioType == AudioType.VBRMP3)
-                audioOverhead = vbrMP3Overhead;
-            else if (audioType == AudioType.MP4AAC)
-                audioOverhead = 0;
-            else
-                audioOverhead = 0;
-            return audioOverhead;
-        }
-		#endregion
-        #region generic calculations
-        public int CalculateBitrateKBits(VideoCodec codec, bool useBframes, ContainerType container, AudioStream[] audioStreams, long desiredOutputSizeBytes, ulong nbOfFrames, double framerate, out long videoSizeKB)
-        {
-            if (container == ContainerType.MP4)
-                return calculateMP4VideoBitrate(audioStreams, desiredOutputSizeBytes, nbOfFrames, useBframes, framerate, out videoSizeKB);
-            if (container == ContainerType.AVI)
-                return calculateAVIBitrate(audioStreams, desiredOutputSizeBytes, nbOfFrames, framerate, out videoSizeKB);
-            if (container == ContainerType.MKV)
-                return calculateMKVVideoBitrate(audioStreams, desiredOutputSizeBytes, nbOfFrames, framerate, useBframes, out videoSizeKB);
-            videoSizeKB = 0;
-            return 0;
-        }
-        public long CalculateFileSizeKB(VideoCodec codec, bool useBframes, ContainerType container, AudioStream[] audioStreams, int desiredBitrate, ulong nbOfFrames, double framerate, out int rawVideoSize)
-        {
-            if (container == ContainerType.MP4)
-                return calculateMP4Size(audioStreams, desiredBitrate, nbOfFrames, useBframes, framerate, out rawVideoSize);
-            if (container == ContainerType.AVI)
-                return calculateAVISize(audioStreams, desiredBitrate, nbOfFrames, framerate, out rawVideoSize);
-            if (container == ContainerType.MKV)
-                return calculateMKVSize(audioStreams, desiredBitrate, nbOfFrames, framerate, useBframes, out rawVideoSize);
-
-            rawVideoSize = 0;
-            return 0;
+                return 0;
         }
         #endregion
-        /// <summary>
-        /// gets the video container overhead per frame given the b-frame choice
-        /// </summary>
-        /// <param name="useBframes">whether we have b-frames in the source or not (causes a great increase in overhead)</param>
-        /// <returns>the overhead per video frame</returns>
-        private double getMP4Overhead(bool useBframes)
-        {
-            if (useBframes)
-                return (double)mp4OverheadWithBframes;
-            else
-                return (double)mp4OverheadWithoutBframes;
-        }
+
 
 		#region predefined output sizes
-		/// <summary>
+/*		/// <summary>
 		/// gets the predefined output size given the index of the dropdown
 		/// </summary>
 		/// <param name="index">the index which is currently selected in the size selection dropdown</param>
 		/// <returns>the size in kilobytes</returns>
-		public int getOutputSizeKBs(int index)
+		public static int getOutputSizeKBs(int index)
 		{
 			if (index == 0) // 1/4 CD
 				return 179200;
@@ -387,11 +224,30 @@ namespace MeGUI
 		/// gets all the predefined output sizes
 		/// </summary>
 		/// <returns>an array of strings</returns>
-		public string[] getPredefinedOutputSizes()
+		public static string[] getPredefinedOutputSizes()
 		{
 			string[] values = {"1/4 CD", "1/2 CD", "1 CD", "2 CD", "3 CD", "1/3 DVD-R", "1/4 DVD-R", "1/5 DVD-R", "DVD-5", "DVD-9"};
 			return values;
-		}
+		}*/
 		#endregion
-	}
+
+        public static long CalculateFileSizeKB(VideoCodec vCodec, bool p, ContainerType containerType, AudioBitrateCalculationStream[] audioStreams, int bitrate, ulong nbOfFrames, double framerate, out int vidSize)
+        {
+            BitrateCalculator c = new BitrateCalculator(vCodec, p, containerType, audioStreams, nbOfFrames, framerate);
+            FileSize a, b;
+            c.getFileAndVideoSize((ulong)bitrate).get(out a, out b);
+            vidSize = (int)b.KB;
+            return (long)a.KB;
+        }
+
+        public static int CalculateBitrateKBits(VideoCodec vCodec, bool p, ContainerType containerType, AudioBitrateCalculationStream[] audioStreams, ulong muxedSizeBytes, ulong numberOfFrames, double framerate, out ulong videoSizeKBs)
+        {
+            BitrateCalculator c = new BitrateCalculator(vCodec, p, containerType, audioStreams, numberOfFrames, framerate);
+            FileSize b;
+            ulong a;
+            c.getBitrateAndVideoSize(new FileSize(Unit.B, muxedSizeBytes)).get(out a, out b);
+            videoSizeKBs = b.KB;
+            return (int)a;
+        }
+    }
 }

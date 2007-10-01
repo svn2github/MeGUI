@@ -32,13 +32,7 @@ namespace MeGUI.packages.tools.oneclick
             this.preprocessVideo = new System.Windows.Forms.CheckBox();
             this.avsProfileControl = new MeGUI.core.details.video.ProfileControl();
             this.filesizeLabel = new System.Windows.Forms.Label();
-            this.filesizeComboBox = new System.Windows.Forms.ComboBox();
             this.autoDeint = new System.Windows.Forms.CheckBox();
-            this.splitOutput = new System.Windows.Forms.CheckBox();
-            this.inKBLabel = new System.Windows.Forms.Label();
-            this.splitSize = new System.Windows.Forms.TextBox();
-            this.MBLabel = new System.Windows.Forms.Label();
-            this.filesizeKB = new System.Windows.Forms.TextBox();
             this.signalAR = new System.Windows.Forms.CheckBox();
             this.horizontalResolution = new System.Windows.Forms.NumericUpDown();
             this.outputResolutionLabel = new System.Windows.Forms.Label();
@@ -56,6 +50,9 @@ namespace MeGUI.packages.tools.oneclick
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.fileSize = new MeGUI.core.gui.TargetSizeSCBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.splitSize = new MeGUI.core.gui.TargetSizeSCBox();
             this.otherGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.horizontalResolution)).BeginInit();
             this.extraGroupbox.SuspendLayout();
@@ -66,24 +63,20 @@ namespace MeGUI.packages.tools.oneclick
             // 
             // otherGroupBox
             // 
-            this.otherGroupBox.AutoSize = true;
+            this.otherGroupBox.Controls.Add(this.splitSize);
+            this.otherGroupBox.Controls.Add(this.fileSize);
             this.otherGroupBox.Controls.Add(this.preprocessVideo);
+            this.otherGroupBox.Controls.Add(this.label2);
             this.otherGroupBox.Controls.Add(this.avsProfileControl);
             this.otherGroupBox.Controls.Add(this.filesizeLabel);
-            this.otherGroupBox.Controls.Add(this.filesizeComboBox);
             this.otherGroupBox.Controls.Add(this.autoDeint);
-            this.otherGroupBox.Controls.Add(this.splitOutput);
-            this.otherGroupBox.Controls.Add(this.inKBLabel);
-            this.otherGroupBox.Controls.Add(this.splitSize);
-            this.otherGroupBox.Controls.Add(this.MBLabel);
-            this.otherGroupBox.Controls.Add(this.filesizeKB);
             this.otherGroupBox.Controls.Add(this.signalAR);
             this.otherGroupBox.Controls.Add(this.horizontalResolution);
             this.otherGroupBox.Controls.Add(this.outputResolutionLabel);
             this.otherGroupBox.Dock = System.Windows.Forms.DockStyle.Top;
             this.otherGroupBox.Location = new System.Drawing.Point(3, 3);
             this.otherGroupBox.Name = "otherGroupBox";
-            this.otherGroupBox.Size = new System.Drawing.Size(419, 162);
+            this.otherGroupBox.Size = new System.Drawing.Size(419, 165);
             this.otherGroupBox.TabIndex = 38;
             this.otherGroupBox.TabStop = false;
             this.otherGroupBox.Text = "Filesize and Avisynth setup";
@@ -91,7 +84,7 @@ namespace MeGUI.packages.tools.oneclick
             // preprocessVideo
             // 
             this.preprocessVideo.AutoSize = true;
-            this.preprocessVideo.Location = new System.Drawing.Point(61, 126);
+            this.preprocessVideo.Location = new System.Drawing.Point(61, 135);
             this.preprocessVideo.Name = "preprocessVideo";
             this.preprocessVideo.Size = new System.Drawing.Size(179, 17);
             this.preprocessVideo.TabIndex = 37;
@@ -103,93 +96,33 @@ namespace MeGUI.packages.tools.oneclick
             this.avsProfileControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.avsProfileControl.LabelText = "AVS profile";
-            this.avsProfileControl.Location = new System.Drawing.Point(6, 91);
+            this.avsProfileControl.Location = new System.Drawing.Point(6, 100);
             this.avsProfileControl.Name = "avsProfileControl";
             this.avsProfileControl.Size = new System.Drawing.Size(406, 29);
             this.avsProfileControl.TabIndex = 36;
             // 
             // filesizeLabel
             // 
-            this.filesizeLabel.Location = new System.Drawing.Point(6, 16);
+            this.filesizeLabel.Location = new System.Drawing.Point(6, 27);
             this.filesizeLabel.Name = "filesizeLabel";
             this.filesizeLabel.Size = new System.Drawing.Size(90, 13);
             this.filesizeLabel.TabIndex = 25;
             this.filesizeLabel.Text = "Filesize";
             // 
-            // filesizeComboBox
-            // 
-            this.filesizeComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.filesizeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.filesizeComboBox.Location = new System.Drawing.Point(110, 13);
-            this.filesizeComboBox.Name = "filesizeComboBox";
-            this.filesizeComboBox.Size = new System.Drawing.Size(132, 21);
-            this.filesizeComboBox.TabIndex = 23;
-            this.filesizeComboBox.SelectedIndexChanged += new System.EventHandler(this.filesizeComboBox_SelectedIndexChanged);
-            // 
             // autoDeint
             // 
             this.autoDeint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.autoDeint.AutoSize = true;
-            this.autoDeint.Location = new System.Drawing.Point(274, 126);
+            this.autoDeint.Location = new System.Drawing.Point(274, 135);
             this.autoDeint.Name = "autoDeint";
             this.autoDeint.Size = new System.Drawing.Size(138, 17);
             this.autoDeint.TabIndex = 35;
             this.autoDeint.Text = "Automatic Deinterlacing";
             this.autoDeint.UseVisualStyleBackColor = true;
             // 
-            // splitOutput
-            // 
-            this.splitOutput.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.splitOutput.AutoSize = true;
-            this.splitOutput.Location = new System.Drawing.Point(251, 38);
-            this.splitOutput.Name = "splitOutput";
-            this.splitOutput.Size = new System.Drawing.Size(46, 17);
-            this.splitOutput.TabIndex = 24;
-            this.splitOutput.Text = "Split";
-            this.splitOutput.CheckedChanged += new System.EventHandler(this.splitOutput_CheckedChanged);
-            // 
-            // inKBLabel
-            // 
-            this.inKBLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.inKBLabel.Location = new System.Drawing.Point(248, 17);
-            this.inKBLabel.Name = "inKBLabel";
-            this.inKBLabel.Size = new System.Drawing.Size(50, 13);
-            this.inKBLabel.TabIndex = 26;
-            this.inKBLabel.Text = "In KB:";
-            // 
-            // splitSize
-            // 
-            this.splitSize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.splitSize.Enabled = false;
-            this.splitSize.Location = new System.Drawing.Point(304, 36);
-            this.splitSize.Name = "splitSize";
-            this.splitSize.Size = new System.Drawing.Size(77, 20);
-            this.splitSize.TabIndex = 22;
-            this.splitSize.Text = "0";
-            // 
-            // MBLabel
-            // 
-            this.MBLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.MBLabel.AutoSize = true;
-            this.MBLabel.Location = new System.Drawing.Point(389, 39);
-            this.MBLabel.Name = "MBLabel";
-            this.MBLabel.Size = new System.Drawing.Size(23, 13);
-            this.MBLabel.TabIndex = 23;
-            this.MBLabel.Text = "MB";
-            // 
-            // filesizeKB
-            // 
-            this.filesizeKB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.filesizeKB.Location = new System.Drawing.Point(304, 13);
-            this.filesizeKB.Name = "filesizeKB";
-            this.filesizeKB.ReadOnly = true;
-            this.filesizeKB.Size = new System.Drawing.Size(112, 20);
-            this.filesizeKB.TabIndex = 24;
-            // 
             // signalAR
             // 
-            this.signalAR.Location = new System.Drawing.Point(178, 71);
+            this.signalAR.Location = new System.Drawing.Point(178, 80);
             this.signalAR.Name = "signalAR";
             this.signalAR.Size = new System.Drawing.Size(76, 24);
             this.signalAR.TabIndex = 32;
@@ -202,7 +135,7 @@ namespace MeGUI.packages.tools.oneclick
             0,
             0,
             0});
-            this.horizontalResolution.Location = new System.Drawing.Point(110, 71);
+            this.horizontalResolution.Location = new System.Drawing.Point(110, 80);
             this.horizontalResolution.Maximum = new decimal(new int[] {
             5000,
             0,
@@ -224,7 +157,7 @@ namespace MeGUI.packages.tools.oneclick
             // 
             // outputResolutionLabel
             // 
-            this.outputResolutionLabel.Location = new System.Drawing.Point(6, 75);
+            this.outputResolutionLabel.Location = new System.Drawing.Point(6, 84);
             this.outputResolutionLabel.Name = "outputResolutionLabel";
             this.outputResolutionLabel.Size = new System.Drawing.Size(100, 13);
             this.outputResolutionLabel.TabIndex = 30;
@@ -241,9 +174,9 @@ namespace MeGUI.packages.tools.oneclick
             this.extraGroupbox.Controls.Add(this.audioCodec);
             this.extraGroupbox.Controls.Add(this.videoCodec);
             this.extraGroupbox.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.extraGroupbox.Location = new System.Drawing.Point(3, 169);
+            this.extraGroupbox.Location = new System.Drawing.Point(3, 175);
             this.extraGroupbox.Name = "extraGroupbox";
-            this.extraGroupbox.Size = new System.Drawing.Size(419, 174);
+            this.extraGroupbox.Size = new System.Drawing.Size(419, 176);
             this.extraGroupbox.TabIndex = 39;
             this.extraGroupbox.TabStop = false;
             this.extraGroupbox.Text = "Encoding Setup";
@@ -352,7 +285,7 @@ namespace MeGUI.packages.tools.oneclick
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(433, 372);
+            this.tabControl1.Size = new System.Drawing.Size(433, 380);
             this.tabControl1.TabIndex = 39;
             // 
             // tabPage1
@@ -362,7 +295,7 @@ namespace MeGUI.packages.tools.oneclick
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(425, 346);
+            this.tabPage1.Size = new System.Drawing.Size(425, 354);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Encoding Setup";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -379,20 +312,49 @@ namespace MeGUI.packages.tools.oneclick
             this.tabPage2.Text = "Container type";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // fileSize
+            // 
+            this.fileSize.Location = new System.Drawing.Point(110, 19);
+            this.fileSize.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.fileSize.MinimumSize = new System.Drawing.Size(64, 29);
+            this.fileSize.Name = "fileSize";
+            this.fileSize.NullString = "Don\'t care";
+            this.fileSize.SelectedIndex = 0;
+            this.fileSize.Size = new System.Drawing.Size(208, 29);
+            this.fileSize.TabIndex = 38;
+            // 
+            // label2
+            // 
+            this.label2.Location = new System.Drawing.Point(6, 53);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(90, 13);
+            this.label2.TabIndex = 25;
+            this.label2.Text = "Splitting:";
+            // 
+            // splitSize
+            // 
+            this.splitSize.Location = new System.Drawing.Point(110, 45);
+            this.splitSize.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.splitSize.MinimumSize = new System.Drawing.Size(64, 29);
+            this.splitSize.Name = "splitSize";
+            this.splitSize.NullString = "Dont split";
+            this.splitSize.SelectedIndex = 0;
+            this.splitSize.Size = new System.Drawing.Size(208, 29);
+            this.splitSize.TabIndex = 38;
+            // 
             // OneClickConfigPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tabControl1);
             this.Name = "OneClickConfigPanel";
-            this.Size = new System.Drawing.Size(433, 372);
+            this.Size = new System.Drawing.Size(433, 380);
             this.otherGroupBox.ResumeLayout(false);
             this.otherGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.horizontalResolution)).EndInit();
             this.extraGroupbox.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
-            this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -403,19 +365,13 @@ namespace MeGUI.packages.tools.oneclick
         private System.Windows.Forms.GroupBox otherGroupBox;
         private MeGUI.core.details.video.ProfileControl avsProfileControl;
         private System.Windows.Forms.Label filesizeLabel;
-        private System.Windows.Forms.ComboBox filesizeComboBox;
         private System.Windows.Forms.CheckBox autoDeint;
-        private System.Windows.Forms.Label inKBLabel;
-        private System.Windows.Forms.TextBox filesizeKB;
         private System.Windows.Forms.CheckBox signalAR;
         private System.Windows.Forms.NumericUpDown horizontalResolution;
         private System.Windows.Forms.Label outputResolutionLabel;
         private System.Windows.Forms.GroupBox extraGroupbox;
         private System.Windows.Forms.Label audioProfileLabel;
         private System.Windows.Forms.CheckBox dontEncodeAudio;
-        private System.Windows.Forms.CheckBox splitOutput;
-        private System.Windows.Forms.TextBox splitSize;
-        private System.Windows.Forms.Label MBLabel;
         private System.Windows.Forms.Label videoCodecLabel;
         private System.Windows.Forms.ComboBox videoCodec;
         private System.Windows.Forms.Label containerFormatLabel;
@@ -428,5 +384,8 @@ namespace MeGUI.packages.tools.oneclick
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
+        private MeGUI.core.gui.TargetSizeSCBox splitSize;
+        private MeGUI.core.gui.TargetSizeSCBox fileSize;
+        private System.Windows.Forms.Label label2;
     }
 }

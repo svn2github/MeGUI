@@ -29,7 +29,7 @@ using MeGUI.core.util;
 
 namespace MeGUI
 {
-    public struct SubStream
+    public struct MuxStream
     {
         public string path, language, name;
         public int delay;
@@ -43,8 +43,8 @@ namespace MeGUI
         //protected int parX, parY;
         protected Dar? dar;
         protected string audioFilter, videoInputFilter, subtitleFilter, chaptersFilter, outputFilter;
-        protected SubStream[] audioStreams;
-        protected SubStream[] subtitleStreams;
+        protected MuxStream[] audioStreams;
+        protected MuxStream[] subtitleStreams;
         private MainForm mainForm;
         private MeGUISettings settings;
         private int lastSubtitle = 0, lastAudioTrack = 0;
@@ -112,14 +112,14 @@ namespace MeGUI
             // Required for Windows Form Designer support
             //
             InitializeComponent();
-            audioStreams = new SubStream[2];
+            audioStreams = new MuxStream[2];
             audioStreams[0].path = "";
             audioStreams[0].language = "";
             audioStreams[0].name = "";
             audioStreams[1].path = "";
             audioStreams[1].language = "";
             audioStreams[1].name = "";
-            subtitleStreams = new SubStream[5];
+            subtitleStreams = new MuxStream[5];
             subtitleStreams[0].path = "";
             subtitleStreams[0].language = "";
             subtitleStreams[1].path = "";
@@ -170,7 +170,7 @@ namespace MeGUI
         /// <param name="subtitleStreams">the subtitle streams</param>
         /// <param name="output">name of the output</param>
         /// <param name="splitSize">split size of the output</param>
-        public void setConfig(string videoInput, double framerate, SubStream[] audioStreams, SubStream[] subtitleStreams, string chapterFile, string output, FileSize? splitSize, Dar? dar)
+        public void setConfig(string videoInput, double framerate, MuxStream[] audioStreams, MuxStream[] subtitleStreams, string chapterFile, string output, FileSize? splitSize, Dar? dar)
         {
             this.dar = dar;
             this.videoInput.Text = videoInput;
@@ -178,7 +178,7 @@ namespace MeGUI
             if (fpsIndex != -1)
                 muxFPS.SelectedIndex = fpsIndex;
             int index = 0;
-            foreach (SubStream stream in audioStreams)
+            foreach (MuxStream stream in audioStreams)
             {
                 string lang = LanguageSelectionContainer.lookupISOCode(stream.language);
                 this.audioStreams[index] = stream;
@@ -193,7 +193,7 @@ namespace MeGUI
                 audioDelay.Value = this.audioStreams[0].delay;
             }
             index = 0;
-            foreach (SubStream stream in subtitleStreams)
+            foreach (MuxStream stream in subtitleStreams)
             {
                 string lang = LanguageSelectionContainer.lookupISOCode(stream.language);
                 this.subtitleStreams[index] = stream;
@@ -224,7 +224,7 @@ namespace MeGUI
         /// <param name="aStreams">the configured audio streams(language assignments)</param>
         /// <param name="sStreams">the newly added subtitle streams</param>
         /// <param name="chapterFile">the assigned chapter file</param>
-        public void getAdditionalStreams(out SubStream[] aStreams, out SubStream[] sStreams, out string chapterFile)
+        public void getAdditionalStreams(out MuxStream[] aStreams, out MuxStream[] sStreams, out string chapterFile)
         {
             convertLanguagesToISO();
             aStreams = this.audioStreams;
@@ -807,12 +807,12 @@ namespace MeGUI
         #region helper method
         protected virtual void checkIO()
         {
-            if (videoInput.Text.Equals(""))
+            if (string.IsNullOrEmpty(videoInput.Text))
             {
                 muxButton.DialogResult = DialogResult.None;
                 return;
             }
-            else if (muxedOutput.Text.Equals(""))
+            else if (string.IsNullOrEmpty(muxedOutput.Text))
             {
                 muxButton.DialogResult = DialogResult.None;
                 return;
@@ -887,7 +887,7 @@ namespace MeGUI
                 audioInput.Text = openFileDialog.FileName;
                 audioStreams[index].path = openFileDialog.FileName;
                 audioStreams[index].language = audioLanguage.Text;
-                audioStreams[index].delay = AudioEncodingComponent.getDelay(openFileDialog.FileName);
+                audioStreams[index].delay = PrettyFormatting.getDelay(openFileDialog.FileName);
                 audioDelay.Value = audioStreams[index].delay;
                 fileUpdated();
             }
@@ -934,12 +934,12 @@ namespace MeGUI
         {
             if (muxButton.DialogResult != DialogResult.OK)
             {
-                if (videoInput.Text.Equals(""))
+                if (string.IsNullOrEmpty(videoInput.Text))
                 {
                     MessageBox.Show("You must configure a video input file", "Missing input", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     return;
                 }
-                else if (muxedOutput.Text.Equals(""))
+                else if (string.IsNullOrEmpty(muxedOutput.Text))
                 {
                     MessageBox.Show("You must configure an output file", "Missing input", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     return;
@@ -960,16 +960,16 @@ namespace MeGUI
         protected void convertLanguagesToISO()
         {
             ArrayList tracks = new ArrayList();
-            foreach (SubStream stream in this.audioStreams)
+            foreach (MuxStream stream in this.audioStreams)
             {
-                if (!stream.path.Equals("")) // get all configured audio tracks
+                if (!string.IsNullOrEmpty(stream.path)) // get all configured audio tracks
                     tracks.Add(stream);
             }
-            this.audioStreams = new SubStream[tracks.Count];
+            this.audioStreams = new MuxStream[tracks.Count];
             int index = 0;
             foreach (object o in tracks)
             {
-                audioStreams[index] = (SubStream)o;
+                audioStreams[index] = (MuxStream)o;
                 object lang = languages[audioStreams[index].language];
                 if (lang != null)
                     audioStreams[index].language = (string)lang;
@@ -977,15 +977,15 @@ namespace MeGUI
             }
             index = 0;
             tracks = new ArrayList();
-            foreach (SubStream stream in this.subtitleStreams)
+            foreach (MuxStream stream in this.subtitleStreams)
             {
-                if (!stream.path.Equals("")) // get all configured audio tracks
+                if (!string.IsNullOrEmpty(stream.path)) // get all configured audio tracks
                     tracks.Add(stream);
             }
-            this.subtitleStreams = new SubStream[tracks.Count];
+            this.subtitleStreams = new MuxStream[tracks.Count];
             foreach (object o in tracks)
             {
-                subtitleStreams[index] = (SubStream)o;
+                subtitleStreams[index] = (MuxStream)o;
                 object lang = languages[subtitleStreams[index].language];
                 if (lang != null)
                     subtitleStreams[index].language = (string)lang;
@@ -1024,7 +1024,7 @@ namespace MeGUI
                 audioDelay.Enabled = true;
                 audioDelay.Value = audioStreams[currentAudioTrack].delay;
             }
-            if (!audioStreams[currentAudioTrack].language.Equals(""))
+            if (!string.IsNullOrEmpty(audioStreams[currentAudioTrack].language))
             {
                 int ind = audioLanguage.Items.IndexOf(audioStreams[currentAudioTrack].language);
                 audioLanguage.SelectedIndex = ind;
@@ -1067,7 +1067,7 @@ namespace MeGUI
             subtitleStreams[lastSubtitle].language = subtitleLanguage.Text;
             int index = this.getSelectedSubTitle();
             subtitleInput.Text = subtitleStreams[index].path;
-            if (!subtitleStreams[index].language.Equals(""))
+            if (!string.IsNullOrEmpty(subtitleStreams[index].language))
             {
                 int ind = audioLanguage.Items.IndexOf(subtitleStreams[index].language);
                 subtitleLanguage.SelectedIndex = ind;

@@ -19,10 +19,6 @@ namespace MeGUI.packages.video.x264
             InitializeComponent();
         }
 
-        protected override string getCommandline()
-        {
-            return CommandLineGenerator.generateVideoCommandline(this.Settings, this.input, this.output, null);
-        }
         #region variables
         public static bool levelEnforced; // flag to prevent recursion in EnforceLevels. There's probably a better way to do this.
         private XmlDocument ContextHelp = new XmlDocument();

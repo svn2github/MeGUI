@@ -64,5 +64,64 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
             else
                 log.AppendLine(line);
         }
+
+        protected override string Commandline
+        {
+            get
+            {
+                StringBuilder sb = new StringBuilder();
+                MuxSettings settings = job.Settings;
+                sb.Append("-o \"" + settings.MuxedOutput + "\"");
+
+                if (settings.DAR.HasValue)
+                    sb.Append(" --aspect-ratio 0:" + settings.DAR.Value.X + "/" + settings.DAR.Value.Y);
+
+                if (settings.VideoName.Length > 0)
+                    sb.Append(" --track-name \"0:" + settings.VideoName + "\"");
+
+                if (settings.MuxedInput.Length > 0)
+                    sb.Append(" \"" + settings.MuxedInput + "\"");
+
+                if (settings.VideoInput.Length > 0)
+                    sb.Append(" -A -S \"" + settings.VideoInput + "\"");
+
+                foreach (object o in settings.AudioStreams)
+                {
+                    MuxStream stream = (MuxStream)o;
+                    int trackID = 0;
+                    if (stream.path.ToLower().EndsWith(".mp4") || stream.path.ToLower().EndsWith(".m4a"))
+                        trackID = 1;
+                    if (!stream.language.Equals(""))
+                        sb.Append(" --language " + trackID + ":" + stream.language);
+                    if (stream.name != null && !stream.name.Equals(""))
+                        sb.Append(" --track-name \"" + trackID + ":" + stream.name + "\"");
+                    if (stream.delay != 0)
+                        sb.AppendFormat(" --delay {0}:{1}ms", trackID, stream.delay);
+
+                    sb.Append(" -a " + trackID + " -D -S \"" + stream.path + "\"");
+                }
+
+                foreach (object o in settings.SubtitleStreams)
+                {
+                    MuxStream stream = (MuxStream)o;
+                    int trackID = 0;
+                    if (!stream.language.Equals(""))
+                        sb.Append(" --language 0:" + stream.language);
+                    if (stream.name != null && !stream.name.Equals(""))
+                        sb.Append(" --track-name \"" + trackID + ":" + stream.name + "\"");
+
+                    sb.Append(" -s 0 -D -A \"" + stream.path + "\"");
+                }
+                if (!settings.ChapterFile.Equals("")) // a chapter file is defined
+                    sb.Append(" --chapters \"" + settings.ChapterFile + "\"");
+
+                if (settings.SplitSize.HasValue)
+                    sb.Append(" --split " + (settings.SplitSize.Value.MB) + "M");
+
+                sb.Append(" --no-clusters-in-meta-seek"); // ensures lower overhead
+
+                return sb.ToString();
+            }
+        }
     }
 }

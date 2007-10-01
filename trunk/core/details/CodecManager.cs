@@ -260,6 +260,15 @@ namespace MeGUI
         public static readonly ContainerType MP4 = new ContainerType("MP4", "MP4 Files", "mp4");
         public static readonly ContainerType MKV = new ContainerType("MKV", "Matroska Files", "mkv");
         public static readonly ContainerType AVI = new ContainerType("AVI", "AVI Files", "avi");
+        public static readonly ContainerType[] Containers = new ContainerType[] { MP4, MKV, AVI };
+
+        public static ContainerType ByName(string id)
+        {
+            foreach (ContainerType t in Containers)
+                if (t.ID == id)
+                    return t;
+            return null;
+        }
     }
     #endregion
     public class ContainerManager
