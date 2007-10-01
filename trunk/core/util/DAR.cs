@@ -37,8 +37,26 @@ namespace MeGUI.core.util
                 init(width, height);
         }
 
-        public ulong X { get { throw new Exception(); } }
-        public ulong Y { get { throw new Exception(); } }
+        public ulong X
+        {
+            get
+            {
+                ulong x, y;
+                RatioUtils.approximate(ar, out x, out y);
+                return x;
+            }
+        }
+
+        public ulong Y
+        {
+            get
+            {
+                ulong x, y; RatioUtils.approximate(ar, out x, out y);
+                return y;
+            }
+        }
+
+
 
         public override string ToString()
         {

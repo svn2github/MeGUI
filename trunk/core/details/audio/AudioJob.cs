@@ -44,10 +44,6 @@ namespace MeGUI
 			settings = null;
 		}
 
-        public override JobTypes JobType
-        {
-            get { return JobTypes.AUDIO; }
-        }
 		/// <summary>
 		/// the settings for this audio job
 		/// </summary>

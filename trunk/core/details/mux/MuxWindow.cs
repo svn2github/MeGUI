@@ -68,7 +68,7 @@ namespace MeGUI
                 if (this.muxFPS.SelectedIndex != -1 || !isFPSRequired())
                 {
                     if (this.enableSplit.Checked && !splitSize.Text.Equals(""))
-                        job.Settings.SplitSize = Int32.Parse(this.splitSize.Text) * 1024;
+                        job.Settings.SplitSize = new FileSize(Unit.MB, Int32.Parse(this.splitSize.Text));
                     job.Commandline = CommandLineGenerator.generateMuxCommandline(job.Settings, job.MuxType, mainForm);
                 }
             }
@@ -88,7 +88,7 @@ namespace MeGUI
         }
 
         private void setConfig(string videoInput, string muxedInput, double framerate, SubStream[] audioStreams,
-            SubStream[] subtitleStreams, string chapterFile, string output, int splitSize, Dar? dar)
+            SubStream[] subtitleStreams, string chapterFile, string output, FileSize? splitSize, Dar? dar)
         {
             base.setConfig(videoInput, framerate, audioStreams, subtitleStreams, chapterFile, output, splitSize, dar);
             this.muxedInput.Text = muxedInput;

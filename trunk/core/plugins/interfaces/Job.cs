@@ -91,7 +91,9 @@ namespace MeGUI
         private Job next, previous;
         private string commandline;
         private List<string> filesToDelete = new List<string>();
-        
+
+
+        #region job queue information
         private string owningWorker;
 
         public string OwningWorker
@@ -136,6 +138,33 @@ namespace MeGUI
 
         [XmlIgnore]
         public List<Job> RequiredJobs = new List<Job>();
+        #endregion
+
+        #region important details
+        /// <summary>
+        /// the source file for this job
+        /// </summary>
+        public string Input
+        {
+            get { return input; }
+            set { input = value; }
+        }
+        /// <summary>
+        /// the output of this job
+        /// </summary>
+        public string Output
+        {
+            get { return output; }
+            set { output = value; }
+        }
+        /// <summary>
+        /// commandline for this job
+        /// </summary>
+        public string Commandline
+        {
+            get { return commandline; }
+            set { commandline = value; }
+        }
 
         /// <summary>
         /// List of files to delete when this job is successfullly completed.
@@ -145,22 +174,17 @@ namespace MeGUI
             get { return filesToDelete; }
             set { filesToDelete = value; }
         }
-
-		/// <summary>
-		/// standard constructor, initializes the status to waiting and its position in the GUI to 1 million
-		/// Note that if you have more than 1 million jobs, the order in which jobs are displayed in the GUI after a program
-		/// start will not match the status they had prior to exiting the program
-		/// </summary>
+        #endregion
+        
 		public Job()
 		{
             status = JobStatus.WAITING;
 			input = "";
 			output = "";
-			next = null;
-			previous = null;
 			commandline = "";
-		}
+        }
 
+        #region queue display details
         public abstract string CodecString
         {
             get;
@@ -171,29 +195,9 @@ namespace MeGUI
             get;
         }
 
-        public abstract JobTypes JobType
-        {
-            get;
-        }
-
         public string EncodingSpeed = "";
-	
-        /// <summary>
-        /// the source file for this job
-        /// </summary>
-		public string Input
-		{
-			get {return input;}
-			set {input = value;}
-		}
-        /// <summary>
-        /// the output of this job
-        /// </summary>
-		public string Output
-		{
-			get {return output;}
-			set {output = value;}
-		}
+
+       
         /// <summary>
         /// the name of this job
         /// </summary>
@@ -226,29 +230,7 @@ namespace MeGUI
 			get {return end;}
 			set {end = value;}
 		}
-        private string nextJobName;
 
-        public string NextJobName
-        {
-            get { return nextJobName; }
-            set { nextJobName = value; }
-        }
-        private string previousJobName;
-
-        public string PreviousJobName
-        {
-            get { return previousJobName; }
-            set { previousJobName = value; }
-        }
-
-		/// <summary>
-		/// commandline for this job
-		/// </summary>
-		public string Commandline
-		{
-			get {return commandline;}
-			set {commandline = value;}
-		}
 		/// <summary>
 		/// gets a humanly readable status tring
 		/// </summary>
@@ -296,6 +278,7 @@ namespace MeGUI
 			{
                 return System.IO.Path.GetFileName(this.output);
 			}
-		}
-	}
+        }
+        #endregion
+    }
 }

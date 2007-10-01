@@ -432,13 +432,13 @@ namespace MeGUI
 
         #region new stuff
         public void GenerateJobSeries(VideoStream video, string muxedOutput, AudioStream[] audioStreams,
-            SubStream[] subtitles, string chapters, long desiredSizeBytes, int splitSize, ContainerType container, bool prerender, SubStream[] muxOnlyAudio, IEnumerable<string> tempFiles)
+            SubStream[] subtitles, string chapters, FileSize? desiredSize, FileSize? splitSize, ContainerType container, bool prerender, SubStream[] muxOnlyAudio, IEnumerable<string> tempFiles)
         {
             StringBuilder logBuilder = new StringBuilder();
             BitrateCalculator calc = new BitrateCalculator();
-            if (desiredSizeBytes > 0)
+            if (desiredSize.HasValue)
             {
-                logBuilder.Append("Generating jobs. Desired size: " + desiredSizeBytes + " bytes\r\n");
+                logBuilder.Append("Generating jobs. Desired size: " + desiredSize.Value.ToString() + "\r\n");
                 if (video.Settings.EncodingMode != 4 && video.Settings.EncodingMode != 8) // no automated 2/3 pass
                 {
                     if (this.mainForm.Settings.NbPasses == 2)
@@ -553,9 +553,8 @@ namespace MeGUI
                  */
 
                 int bitrateKBits = 0;
-                if (desiredSizeBytes > 0) // We have a target filesize
+                if (desiredSize.HasValue)
                 {
-                    vjobs[0].MuxOnlyAudioJobs = muxOnlyAudio;
 /*                    if (encodedAudioPresent) // no audio encoding, we can calculate the video bitrate directly
                     {
                         logBuilder.Append("No audio encoding. Calculating desired video bitrate directly.\r\n");
@@ -591,7 +590,7 @@ namespace MeGUI
                     b.MuxJob = muxJobs[muxJobs.Length - 1];
                     b.VideoJobs = new List<Job>(vjobs);
                     b.MuxOnlyStreams = new List<SubStream>(muxOnlyAudio);
-                    b.DesiredSizeBytes = desiredSizeBytes;
+                    b.DesiredSize = desiredSize.Value;
                     vjobs[0].BitrateCalculationInfo = b;
                 }
                 mainForm.Jobs.addJobsToQueue(jobs.ToArray());

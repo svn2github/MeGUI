@@ -21,10 +21,6 @@ namespace MeGUI
             set { nbFrames = value; }
         }
 
-        public override JobTypes JobType
-        {
-            get { return JobTypes.AVS; }
-        }
 
         public AviSynthJob() : base()
         {

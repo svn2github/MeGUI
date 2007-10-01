@@ -1,25 +1,24 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using MeGUI.core.util;
 
 namespace MeGUI
 {
     public class AutoEncodeDefaultsSettings
     {
-        private bool splitOutput, fileSizeMode, bitrateMode, noTargetSizeMode, addAdditionalContent;
+        private bool fileSizeMode, bitrateMode, noTargetSizeMode, addAdditionalContent;
         private string container;
-        private int splitSize, fileSize, bitrate;
+        private FileSize? splitSize = null, fileSize = null;
+        private int bitrate;
 
         public AutoEncodeDefaultsSettings()
         {
-            splitOutput = false;
             fileSizeMode = true;
             bitrateMode = false;
             noTargetSizeMode = false;
             addAdditionalContent = false;
             container = "MP4";
-            splitSize = 0;
-            fileSize = 700;
             bitrate = 700;
         }
         #region properties
@@ -56,14 +55,6 @@ namespace MeGUI
             set { fileSizeMode = value; }
         }
         /// <summary>
-        /// gets / sets if the output should be split or not
-        /// </summary>
-        public bool SplitOutput
-        {
-            get { return splitOutput; }
-            set { splitOutput = value; }
-        }
-        /// <summary>
         ///  gets / sets the default container
         /// </summary>
         public string Container
@@ -82,7 +73,7 @@ namespace MeGUI
         /// <summary>
         /// gets / sets the output filesize
         /// </summary>
-        public int FileSize
+        public FileSize? FileSize
         {
             get { return fileSize; }
             set { fileSize = value; }
@@ -90,7 +81,7 @@ namespace MeGUI
         /// <summary>
         /// gets / sets the default split size
         /// </summary>
-        public int SplitSize
+        public FileSize? SplitSize
         {
             get { return splitSize; }
             set { splitSize = value; }

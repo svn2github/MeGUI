@@ -278,7 +278,7 @@ namespace MeGUI
 
         public MuxJob[] GenerateMuxJobs(VideoStream video, SubStream[] audioStreamsArray, MuxableType[] audioTypes,
             SubStream[] subtitleStreamsArray, MuxableType[] subTypes,
-            string chapterFile, MuxableType chapterInputType, ContainerType container, string output, int splitSize)
+            string chapterFile, MuxableType chapterInputType, ContainerType container, string output, FileSize? splitSize)
         {
             MuxProvider prov = mainForm.MuxProvider;
             List<MuxableType> allTypes = new List<MuxableType>();
@@ -617,7 +617,6 @@ namespace MeGUI
 			job.Input = oldJob.Input;
 			job.NumberOfFrames = oldJob.NumberOfFrames;
 			job.Framerate = oldJob.Framerate;
-			job.OutputType = oldJob.OutputType;
 			job.Output = oldJob.Output;
 			job.Settings = oldJob.Settings.clone();
 			return job;

@@ -1,3 +1,8 @@
+0.2.6.1017
+    - (berrinam) [OneClick, AviSynth Creator, Video Preview, AutoEncode, and Bitrate Calculator] : nicer comboboxes, for AR, FPS, and target sizes
+    - (berrinam) Internal change from use of DARX/DARY pairs to a Dar struct
+    - (berrinam) Turn the IMediaFile info details from virtual calls into populating a MediaFileInfo class
+
 0.2.6.1016
     - (berrinam) [AutoUpdate] : add support for a local cache of update files (located via registry) (#1804656)
     - (berrinam) [AutoUpdate] : Re-install function in autoupdater (#1790523)

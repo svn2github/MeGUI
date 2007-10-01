@@ -56,6 +56,7 @@ namespace MeGUI.core.gui
         }
 
         [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Dar? Value
         {
             get
@@ -74,6 +75,7 @@ namespace MeGUI.core.gui
         }
 
         [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Dar RealValue
         {
             get

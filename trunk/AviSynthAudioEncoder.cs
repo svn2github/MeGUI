@@ -221,7 +221,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
 
         internal AviSynthAudioEncoder(MeGUISettings settings)
         {
-            su.JobType = JobTypes.AUDIO;
             SAMPLES_PER_UPDATE = (int)settings.AudioSamplesPerUpdate;
             _settings = settings;
         }

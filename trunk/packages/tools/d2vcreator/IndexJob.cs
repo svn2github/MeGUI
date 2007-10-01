@@ -21,10 +21,6 @@ namespace MeGUI
 			audioTrackID1 = audioTrackID2 = -1;
 		}
 
-        public override JobTypes JobType
-        {
-            get { return JobTypes.INDEX; }
-        }
 
 		/// <summary>
 		/// gets / sets whether force film should be applied after indexing

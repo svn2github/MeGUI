@@ -277,6 +277,9 @@
     <Compile Include="core\gui\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="core\gui\FPSChooser.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="core\gui\HelpButton.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -306,9 +309,6 @@
     </Compile>
     <Compile Include="core\gui\NiceComboBox.Designer.cs">
       <DependentUpon>NiceComboBox.cs</DependentUpon>
-    </Compile>
-    <Compile Include="core\gui\NonOptionalTargetSizeBox.cs">
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="core\gui\NumberChooser.cs">
       <SubType>Form</SubType>
@@ -387,6 +387,7 @@
     <Compile Include="core\util\JobUtil.cs" />
     <Compile Include="core\util\LanguageSelectionContainer.cs" />
     <Compile Include="core\util\NotifyCounter.cs" />
+    <Compile Include="core\util\PrettyFormatting.cs" />
     <Compile Include="core\util\Resolution.cs" />
     <Compile Include="core\util\ScriptServer.cs" />
     <Compile Include="core\util\Shutdown.cs" />

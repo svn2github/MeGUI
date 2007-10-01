@@ -30,6 +30,7 @@ namespace MeGUI
         {
             System.Windows.Forms.TabPage tabPage3;
             System.Windows.Forms.TabPage tabPage4;
+            System.Windows.Forms.Label label1;
             this.audio1 = new MeGUI.packages.tools.oneclick.AudioConfigControl();
             this.audio2 = new MeGUI.packages.tools.oneclick.AudioConfigControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
@@ -41,6 +42,7 @@ namespace MeGUI
             this.workingName = new System.Windows.Forms.TextBox();
             this.projectNameLabel = new System.Windows.Forms.Label();
             this.avsBox = new System.Windows.Forms.GroupBox();
+            this.ar = new MeGUI.core.gui.ARChooser();
             this.profileControl1 = new MeGUI.core.details.video.ProfileControl();
             this.autoDeint = new System.Windows.Forms.CheckBox();
             this.signalAR = new System.Windows.Forms.CheckBox();
@@ -64,23 +66,22 @@ namespace MeGUI
             this.track1Label = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.encoderConfigTab = new System.Windows.Forms.TabPage();
+            this.splitting = new MeGUI.core.gui.TargetSizeSCBox();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.videoGroupBox = new System.Windows.Forms.GroupBox();
             this.videoProfileControl = new MeGUI.core.details.video.ProfileControl();
             this.addPrerenderJob = new System.Windows.Forms.CheckBox();
             this.videoCodecLabel = new System.Windows.Forms.Label();
             this.videoCodec = new System.Windows.Forms.ComboBox();
-            this.splitOutput = new System.Windows.Forms.CheckBox();
-            this.splitSize = new System.Windows.Forms.TextBox();
             this.containerFormatLabel = new System.Windows.Forms.Label();
             this.containerFormat = new System.Windows.Forms.ComboBox();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.showAdvancedOptions = new System.Windows.Forms.CheckBox();
             this.goButton = new System.Windows.Forms.Button();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
-            this.ar = new MeGUI.core.gui.ARChooser();
             tabPage3 = new System.Windows.Forms.TabPage();
             tabPage4 = new System.Windows.Forms.TabPage();
+            label1 = new System.Windows.Forms.Label();
             tabPage3.SuspendLayout();
             tabPage4.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -138,6 +139,15 @@ namespace MeGUI
             this.audio2.Size = new System.Drawing.Size(417, 61);
             this.audio2.TabIndex = 0;
             this.audio2.SomethingChanged += new System.EventHandler(this.audio1_SomethingChanged);
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new System.Drawing.Point(12, 233);
+            label1.Name = "label1";
+            label1.Size = new System.Drawing.Size(47, 13);
+            label1.TabIndex = 33;
+            label1.Text = "Splitting:";
             // 
             // tabPage2
             // 
@@ -240,6 +250,18 @@ namespace MeGUI
             this.avsBox.TabIndex = 23;
             this.avsBox.TabStop = false;
             this.avsBox.Text = "AviSynth setup";
+            // 
+            // ar
+            // 
+            this.ar.HasLater = true;
+            this.ar.Location = new System.Drawing.Point(120, 42);
+            this.ar.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.ar.MinimumSize = new System.Drawing.Size(64, 29);
+            this.ar.Name = "ar";
+            this.ar.SelectedIndex = -1;
+            this.ar.SelectedItem = null;
+            this.ar.Size = new System.Drawing.Size(200, 29);
+            this.ar.TabIndex = 22;
             // 
             // profileControl1
             // 
@@ -400,14 +422,15 @@ namespace MeGUI
             // 
             // optionalTargetSizeBox1
             // 
-            this.optionalTargetSizeBox1.CustomItems = new object[0];
             this.optionalTargetSizeBox1.Location = new System.Drawing.Point(125, 43);
             this.optionalTargetSizeBox1.MaximumSize = new System.Drawing.Size(1000, 29);
             this.optionalTargetSizeBox1.MinimumSize = new System.Drawing.Size(64, 29);
             this.optionalTargetSizeBox1.Name = "optionalTargetSizeBox1";
+            this.optionalTargetSizeBox1.NullString = "Don\'t Care";
+            this.optionalTargetSizeBox1.SelectedIndex = -1;
+            this.optionalTargetSizeBox1.SelectedItem = null;
             this.optionalTargetSizeBox1.Size = new System.Drawing.Size(285, 29);
             this.optionalTargetSizeBox1.TabIndex = 24;
-            this.optionalTargetSizeBox1.Value = null;
             // 
             // profileControl2
             // 
@@ -440,27 +463,27 @@ namespace MeGUI
             // 
             // audioTrack2
             // 
-            this.audioTrack2.CustomItems = new object[0];
-            this.audioTrack2.Filter = "";
+            this.audioTrack2.Filter = "All files (*.*)|*.*";
             this.audioTrack2.Location = new System.Drawing.Point(125, 45);
             this.audioTrack2.MaximumSize = new System.Drawing.Size(1000, 29);
             this.audioTrack2.MinimumSize = new System.Drawing.Size(64, 29);
             this.audioTrack2.Name = "audioTrack2";
+            this.audioTrack2.SelectedIndex = -1;
+            this.audioTrack2.SelectedItem = null;
             this.audioTrack2.Size = new System.Drawing.Size(285, 29);
-            this.audioTrack2.StandardItems = new object[0];
             this.audioTrack2.TabIndex = 20;
             this.audioTrack2.SelectionChanged += new MeGUI.StringChanged(this.audioTrack2_SelectionChanged);
             // 
             // audioTrack1
             // 
-            this.audioTrack1.CustomItems = new object[0];
-            this.audioTrack1.Filter = "";
+            this.audioTrack1.Filter = "All files (*.*)|*.*";
             this.audioTrack1.Location = new System.Drawing.Point(125, 15);
             this.audioTrack1.MaximumSize = new System.Drawing.Size(1000, 29);
             this.audioTrack1.MinimumSize = new System.Drawing.Size(64, 29);
             this.audioTrack1.Name = "audioTrack1";
+            this.audioTrack1.SelectedIndex = -1;
+            this.audioTrack1.SelectedItem = null;
             this.audioTrack1.Size = new System.Drawing.Size(285, 29);
-            this.audioTrack1.StandardItems = new object[0];
             this.audioTrack1.TabIndex = 19;
             this.audioTrack1.SelectionChanged += new MeGUI.StringChanged(this.audioTrack1_SelectionChanged);
             // 
@@ -494,10 +517,10 @@ namespace MeGUI
             // 
             // encoderConfigTab
             // 
+            this.encoderConfigTab.Controls.Add(this.splitting);
+            this.encoderConfigTab.Controls.Add(label1);
             this.encoderConfigTab.Controls.Add(this.tabControl2);
             this.encoderConfigTab.Controls.Add(this.videoGroupBox);
-            this.encoderConfigTab.Controls.Add(this.splitOutput);
-            this.encoderConfigTab.Controls.Add(this.splitSize);
             this.encoderConfigTab.Controls.Add(this.containerFormatLabel);
             this.encoderConfigTab.Controls.Add(this.containerFormat);
             this.encoderConfigTab.Location = new System.Drawing.Point(4, 22);
@@ -507,6 +530,18 @@ namespace MeGUI
             this.encoderConfigTab.TabIndex = 2;
             this.encoderConfigTab.Text = "Encoder Config";
             this.encoderConfigTab.UseVisualStyleBackColor = true;
+            // 
+            // splitting
+            // 
+            this.splitting.Location = new System.Drawing.Point(119, 224);
+            this.splitting.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.splitting.MinimumSize = new System.Drawing.Size(64, 29);
+            this.splitting.Name = "splitting";
+            this.splitting.NullString = "No splitting";
+            this.splitting.SelectedIndex = -1;
+            this.splitting.SelectedItem = null;
+            this.splitting.Size = new System.Drawing.Size(208, 29);
+            this.splitting.TabIndex = 34;
             // 
             // tabControl2
             // 
@@ -566,27 +601,9 @@ namespace MeGUI
             this.videoCodec.Size = new System.Drawing.Size(122, 21);
             this.videoCodec.TabIndex = 8;
             // 
-            // splitOutput
-            // 
-            this.splitOutput.AutoSize = true;
-            this.splitOutput.Location = new System.Drawing.Point(262, 202);
-            this.splitOutput.Name = "splitOutput";
-            this.splitOutput.Size = new System.Drawing.Size(69, 17);
-            this.splitOutput.TabIndex = 29;
-            this.splitOutput.Text = "Split Size";
-            // 
-            // splitSize
-            // 
-            this.splitSize.Enabled = false;
-            this.splitSize.Location = new System.Drawing.Point(351, 200);
-            this.splitSize.Name = "splitSize";
-            this.splitSize.Size = new System.Drawing.Size(64, 20);
-            this.splitSize.TabIndex = 28;
-            this.splitSize.Text = "0";
-            // 
             // containerFormatLabel
             // 
-            this.containerFormatLabel.Location = new System.Drawing.Point(21, 207);
+            this.containerFormatLabel.Location = new System.Drawing.Point(12, 200);
             this.containerFormatLabel.Name = "containerFormatLabel";
             this.containerFormatLabel.Size = new System.Drawing.Size(92, 13);
             this.containerFormatLabel.TabIndex = 27;
@@ -595,7 +612,7 @@ namespace MeGUI
             // containerFormat
             // 
             this.containerFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.containerFormat.Location = new System.Drawing.Point(119, 200);
+            this.containerFormat.Location = new System.Drawing.Point(119, 197);
             this.containerFormat.Name = "containerFormat";
             this.containerFormat.Size = new System.Drawing.Size(122, 21);
             this.containerFormat.TabIndex = 26;
@@ -636,16 +653,6 @@ namespace MeGUI
             this.helpButton1.Name = "helpButton1";
             this.helpButton1.Size = new System.Drawing.Size(39, 23);
             this.helpButton1.TabIndex = 32;
-            // 
-            // ar
-            // 
-            this.ar.CustomItems = new object[0];
-            this.ar.Location = new System.Drawing.Point(120, 42);
-            this.ar.MaximumSize = new System.Drawing.Size(1000, 29);
-            this.ar.MinimumSize = new System.Drawing.Size(64, 29);
-            this.ar.Name = "ar";
-            this.ar.Size = new System.Drawing.Size(200, 29);
-            this.ar.TabIndex = 22;
             // 
             // OneClickWindow
             // 
@@ -708,8 +715,6 @@ namespace MeGUI
         private System.Windows.Forms.CheckBox autoDeint;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.TabPage encoderConfigTab;
-        private System.Windows.Forms.CheckBox splitOutput;
-        private System.Windows.Forms.TextBox splitSize;
         private System.Windows.Forms.Label containerFormatLabel;
         private System.Windows.Forms.ComboBox containerFormat;
         private System.Windows.Forms.GroupBox videoGroupBox;
@@ -733,6 +738,7 @@ namespace MeGUI
         private MeGUI.core.gui.FileSCBox audioTrack1;
         private MeGUI.core.gui.TargetSizeSCBox optionalTargetSizeBox1;
         private MeGUI.core.gui.ARChooser ar;
+        private MeGUI.core.gui.TargetSizeSCBox splitting;
 
 
     }

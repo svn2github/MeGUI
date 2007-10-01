@@ -170,7 +170,7 @@ namespace MeGUI
         /// <param name="subtitleStreams">the subtitle streams</param>
         /// <param name="output">name of the output</param>
         /// <param name="splitSize">split size of the output</param>
-        public void setConfig(string videoInput, double framerate, SubStream[] audioStreams, SubStream[] subtitleStreams, string chapterFile, string output, int splitSize, Dar? dar)
+        public void setConfig(string videoInput, double framerate, SubStream[] audioStreams, SubStream[] subtitleStreams, string chapterFile, string output, FileSize? splitSize, Dar? dar)
         {
             this.dar = dar;
             this.videoInput.Text = videoInput;
@@ -208,11 +208,10 @@ namespace MeGUI
             }
             chaptersInput.Text = chapterFile;
             muxedOutput.Text = output;
-            if (splitSize > 0)
+            if (splitSize.HasValue)
             {
                 enableSplit.Checked = true;
-                int size = splitSize / 1024;
-                this.splitSize.Text = size.ToString();
+                this.splitSize.Text = splitSize.Value.InUnits(Unit.MB).ToString();
             }
             this.muxButton.Text = "Update";
             checkIO();

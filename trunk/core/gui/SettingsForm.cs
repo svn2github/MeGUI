@@ -287,11 +287,14 @@ namespace MeGUI
             this.mkvmergePath = new System.Windows.Forms.TextBox();
             this.selectMP4boxExecutableButton = new System.Windows.Forms.Button();
             this.tabPage7 = new System.Windows.Forms.TabPage();
+            this.label17 = new System.Windows.Forms.Label();
             this.avisynthPluginsLabel = new System.Windows.Forms.Label();
             this.button9 = new System.Windows.Forms.Button();
+            this.button10 = new System.Windows.Forms.Button();
             this.selectAvisynthPluginsDir = new System.Windows.Forms.Button();
             this.textBox9 = new System.Windows.Forms.TextBox();
             this.label16 = new System.Windows.Forms.Label();
+            this.meguiUpdateCache = new System.Windows.Forms.TextBox();
             this.avisynthPluginsDir = new System.Windows.Forms.TextBox();
             this.dgIndexPath = new System.Windows.Forms.TextBox();
             this.dgIndexLabel = new System.Windows.Forms.Label();
@@ -302,9 +305,6 @@ namespace MeGUI
             this.nbPassesLabel = new System.Windows.Forms.Label();
             this.nbPasses = new System.Windows.Forms.NumericUpDown();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
-            this.meguiUpdateCache = new System.Windows.Forms.TextBox();
-            this.button10 = new System.Windows.Forms.Button();
-            this.label17 = new System.Windows.Forms.Label();
             groupBox1 = new System.Windows.Forms.GroupBox();
             groupBox1.SuspendLayout();
             this.otherGroupBox.SuspendLayout();
@@ -1432,6 +1432,15 @@ namespace MeGUI
             this.tabPage7.Text = "Others";
             this.tabPage7.UseVisualStyleBackColor = true;
             // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(6, 101);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(73, 13);
+            this.label17.TabIndex = 6;
+            this.label17.Text = "Update cache";
+            // 
             // avisynthPluginsLabel
             // 
             this.avisynthPluginsLabel.AutoSize = true;
@@ -1449,6 +1458,15 @@ namespace MeGUI
             this.button9.TabIndex = 5;
             this.button9.Text = "...";
             this.button9.Click += new System.EventHandler(this.button9_Click);
+            // 
+            // button10
+            // 
+            this.button10.Location = new System.Drawing.Point(417, 96);
+            this.button10.Name = "button10";
+            this.button10.Size = new System.Drawing.Size(24, 23);
+            this.button10.TabIndex = 8;
+            this.button10.Text = "...";
+            this.button10.Click += new System.EventHandler(this.button10_Click);
             // 
             // selectAvisynthPluginsDir
             // 
@@ -1476,6 +1494,15 @@ namespace MeGUI
             this.label16.Size = new System.Drawing.Size(45, 13);
             this.label16.TabIndex = 3;
             this.label16.Text = "yadif.dll";
+            // 
+            // meguiUpdateCache
+            // 
+            this.meguiUpdateCache.Location = new System.Drawing.Point(96, 97);
+            this.meguiUpdateCache.Name = "meguiUpdateCache";
+            this.meguiUpdateCache.ReadOnly = true;
+            this.meguiUpdateCache.Size = new System.Drawing.Size(315, 21);
+            this.meguiUpdateCache.TabIndex = 7;
+            this.meguiUpdateCache.Text = "MeGUI update cache";
             // 
             // avisynthPluginsDir
             // 
@@ -1579,33 +1606,6 @@ namespace MeGUI
             this.helpButton1.Name = "helpButton1";
             this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 1;
-            // 
-            // meguiUpdateCache
-            // 
-            this.meguiUpdateCache.Location = new System.Drawing.Point(96, 97);
-            this.meguiUpdateCache.Name = "meguiUpdateCache";
-            this.meguiUpdateCache.ReadOnly = true;
-            this.meguiUpdateCache.Size = new System.Drawing.Size(315, 21);
-            this.meguiUpdateCache.TabIndex = 7;
-            this.meguiUpdateCache.Text = "MeGUI update cache";
-            // 
-            // button10
-            // 
-            this.button10.Location = new System.Drawing.Point(417, 96);
-            this.button10.Name = "button10";
-            this.button10.Size = new System.Drawing.Size(24, 23);
-            this.button10.TabIndex = 8;
-            this.button10.Text = "...";
-            this.button10.Click += new System.EventHandler(this.button10_Click);
-            // 
-            // label17
-            // 
-            this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(6, 101);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(73, 13);
-            this.label17.TabIndex = 6;
-            this.label17.Text = "Update cache";
             // 
             // SettingsForm
             // 

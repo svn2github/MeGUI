@@ -227,14 +227,6 @@ namespace MeGUI
             set { _timeEstimate = value ?? _timeEstimate; estimatedTime = _timeEstimate; }
         }
 
-		/// <summary>
-		/// the type of job this is, video, audio or mux
-		/// </summary>
-        public JobTypes JobType
-        {
-            get { return jobType; }
-            set { jobType = value; }
-        }
 
         #region REAL variables
         TimeSpan? _timeEstimate = null;

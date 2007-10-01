@@ -74,7 +74,7 @@ namespace MeGUI.core.util
             mainForm.addToLog("CCCC");
             //            mainForm.addToLog("The audio job is named " + firstAudio.Name + " the first pass " + firstpass.Name + ".\r\n");
             logBuilder.AppendFormat("The video job has a desired final output size of {0} bytes and video bitrate of {1}kbit/s\r\n",
-                b.DesiredSizeBytes, job.Settings.BitrateQuantizer);
+                b.DesiredSize, job.Settings.BitrateQuantizer);
             logBuilder.AppendFormat("Examining audio jobs found...\r\n");
             foreach (AudioJob aJob in allAudioJobs)
             {
@@ -120,7 +120,7 @@ namespace MeGUI.core.util
             VideoCodec vCodec = job.Settings.Codec;
             long videoSizeKB = 0;
             bitrateKBits = mainForm.BitrateCalculator.CalculateBitrateKBits(vCodec, job.Settings.NbBframes > 0, mux.ContainerType,
-                audioStreams.ToArray(), b.DesiredSizeBytes, job.NumberOfFrames,
+                audioStreams.ToArray(), (long)b.DesiredSize.Bytes, job.NumberOfFrames,
                 job.Framerate, out videoSizeKB);
 
             logBuilder.AppendFormat("Desired video size after substracting audio size is " + videoSizeKB + "KBs. ");
@@ -156,7 +156,7 @@ namespace MeGUI.core.util
             set { MuxJob = MainForm.Instance.Jobs.toJobList(new string[] { value })[0]; }
         }
 
-        public long DesiredSizeBytes;
+        public FileSize DesiredSize;
 
         
         public List<SubStream> MuxOnlyStreams;

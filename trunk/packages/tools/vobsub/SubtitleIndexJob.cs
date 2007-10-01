@@ -18,11 +18,7 @@ namespace MeGUI
             pgc = 1;
 		}
 
-        public override JobTypes JobType
-        {
-            get { return JobTypes.VOBSUB; }
-        }
-
+        
         public bool IndexAllTracks
         {
             get { return indexAllTracks; }

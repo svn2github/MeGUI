@@ -107,6 +107,8 @@ namespace MeGUI.core.gui
             return 0;
         }
 
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public object[] CustomItems
         {
             get
@@ -128,6 +130,8 @@ namespace MeGUI.core.gui
             }
         }
 
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public object[] StandardItems
         {
             get
@@ -151,6 +155,7 @@ namespace MeGUI.core.gui
         }
 
         [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public object SelectedObject
         {
             get
@@ -179,6 +184,7 @@ namespace MeGUI.core.gui
         }
 
         [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public SCItem SelectedSCItem
         {
             get

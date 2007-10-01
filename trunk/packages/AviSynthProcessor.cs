@@ -37,7 +37,6 @@ namespace MeGUI
         public AviSynthProcessor()
         {
             stup = new StatusUpdate();
-            stup.JobType = JobTypes.AVS;
         }
         #endregion
         #region processing

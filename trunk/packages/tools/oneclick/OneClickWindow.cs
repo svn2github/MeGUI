@@ -30,6 +30,7 @@ namespace MeGUI
         {
             updatePossibleContainers();
         }
+
         #region OneClick profiles
         ISettingsProvider<OneClickSettings, Empty, int, int> oneClickSettingsProvider = new SettingsProviderImpl2<
     MeGUI.packages.tools.oneclick.OneClickConfigPanel, Empty, OneClickSettings, OneClickSettings, int, int>("OneClick", 0, 0);
@@ -82,6 +83,14 @@ namespace MeGUI
         }
         #endregion
         #region Video profiles
+        private VideoCodecSettings VideoSettings
+        {
+            get { return VideoSettingsProvider.GetCurrentSettings(); }
+        }
+        private ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> VideoSettingsProvider
+        {
+            get { return videoCodecHandler.CurrentSettingsProvider; }
+        }
         MultipleConfigurersHandler<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> videoCodecHandler;
         ProfilesControlHandler<VideoCodecSettings, VideoInfo> videoProfileHandler;
         private void initVideoHandler()
@@ -111,38 +120,40 @@ namespace MeGUI
         }
         #endregion
         #endregion
+
         #region Variable Declaration
+        /// <summary>
+        /// whether we ignore the restrictions on container output type set by the profile
+        /// </summary>
         private bool ignoreRestrictions = false;
+        
+        /// <summary>
+        /// the restrictions from above: the only containers we may use
+        /// </summary>
         private ContainerType[] acceptableContainerTypes;
-        private AudioEncoderProvider audioEncoderProvider = new AudioEncoderProvider();
-        private VideoEncoderProvider videoEncoderProvider = new VideoEncoderProvider();
+        
         private VideoUtil vUtil;
-        private bool beingCalled = false, updateAudioBeingCalled = false;
-        private bool outputChosen = false;
         private MainForm mainForm;
-        private BitrateCalculator calc;
-        private List<string> audioLanguages;
         private MuxProvider muxProvider;
-        private int lastSelectedAudioTrackNumber = 0;
+        
+        /// <summary>
+        /// whether the user has selected an output filename
+        /// </summary>
+        private bool outputChosen = false;
+
         #endregion
+        
         #region init
         public OneClickWindow(MainForm mainForm, JobUtil jobUtil, VideoEncoderProvider vProv, AudioEncoderProvider aProv)
         {
             this.mainForm = mainForm;
-            calc = mainForm.BitrateCalculator;
             vUtil = new VideoUtil(mainForm);
-            audioLanguages = new List<string>();
             this.muxProvider = mainForm.MuxProvider;
             acceptableContainerTypes = muxProvider.GetSupportedContainers().ToArray();
 
             InitializeComponent();
 
-/*            // Fill the filesize combo box
-            this.filesizeComboBox.Items.AddRange(calc.getPredefinedOutputSizes());
-            this.filesizeComboBox.Items.Add("Custom");
-            this.filesizeComboBox.Items.Add("Don't care");
-            this.filesizeComboBox.SelectedIndex = 2;*/
-//            this.arComboBox.SelectedIndex = 0;
+            audioTrack2.StandardItems = audioTrack1.StandardItems = new object[] { "None" };
 
             initVideoHandler();
             initAudioHandler();
@@ -155,7 +166,45 @@ namespace MeGUI
             showAdvancedOptions_CheckedChanged(null, null);
         }
         #endregion
+
         #region event handlers
+        private void showAdvancedOptions_CheckedChanged(object sender, EventArgs e)
+        {
+            if (showAdvancedOptions.Checked)
+            {
+                if (!tabControl1.TabPages.Contains(tabPage2))
+                    tabControl1.TabPages.Add(tabPage2);
+                if (!tabControl1.TabPages.Contains(encoderConfigTab))
+                    tabControl1.TabPages.Add(encoderConfigTab);
+            }
+            else
+            {
+                if (tabControl1.TabPages.Contains(tabPage2))
+                    tabControl1.TabPages.Remove(tabPage2);
+                if (tabControl1.TabPages.Contains(encoderConfigTab))
+                    tabControl1.TabPages.Remove(encoderConfigTab);
+            }
+        }
+        private void containerFormat_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+            updateFilename();
+        }
+
+        private void updateFilename()
+        {
+            if (!outputChosen)
+            {
+                output.Filename = Path.Combine(workingDirectory.Filename, workingName.Text + "." +
+                    ((ContainerType)containerFormat.SelectedItem).Extension);
+                outputChosen = false;
+            }
+            else
+            {
+                output.Filename = Path.ChangeExtension(output.Filename, ((ContainerType)containerFormat.SelectedItem).Extension);
+            }
+            output.Filter = ((ContainerType)containerFormat.SelectedItem).OutputFilterString;
+        }
+
         private void input_FileSelected(FileBar sender, FileBarEventArgs args)
         {
             openInput(input.Filename);
@@ -170,6 +219,12 @@ namespace MeGUI
         {
             updateFilename();
         }
+
+        private void workingName_TextChanged(object sender, EventArgs e)
+        {
+            updateFilename();
+        }
+        
         private void openInput(string fileName)
         {
             input.Filename = fileName;
@@ -180,9 +235,9 @@ namespace MeGUI
             vUtil.openVideoSource(fileName, out audioTracks, out subtitles, out ar, out maxHorizontalResolution);
             
             List<object> trackNames = new List<object>();
+            trackNames.Add("None");
             foreach (object o in audioTracks)
                 trackNames.Add(o);
-            trackNames.Insert(0, "None");
 
             audioTrack1.StandardItems = trackNames.ToArray();
             audioTrack2.StandardItems = trackNames.ToArray();
@@ -205,90 +260,21 @@ namespace MeGUI
             }
 
             horizontalResolution.Maximum = maxHorizontalResolution;
+            
             string chapterFile = VideoUtil.getChapterFile(fileName);
             if (File.Exists(chapterFile))
-            {
                 this.chapterFile.Filename = chapterFile;
-            }
-            audioLanguages.Clear();
+
             workingDirectory.Filename = Path.GetDirectoryName(fileName);
-            workingName.Text = extractWorkingName(fileName);
+            workingName.Text = PrettyFormatting.ExtractWorkingName(fileName);
             this.updateFilename();
             this.ar.Value = ar;
         }
 
-        private string extractWorkingName(string fileName)
-        {
-            string A = Path.GetFileNameWithoutExtension(fileName); // In case they all fail
-            int count = 0;
-            while (Path.GetDirectoryName(fileName).Length > 0 && count < 3)
-            {
-                string temp = Path.GetFileNameWithoutExtension(fileName).ToLower();
-                if (!temp.Contains("vts") && !temp.Contains("video") && !temp.Contains("audio"))
-                {
-                    A = temp;
-                    break;
-                }
-                fileName = Path.GetDirectoryName(fileName);
-                count++;
-            }
 
-            // Format it nicely:
-            char[] chars = A.ToCharArray();
-            bool beginningOfWord = true;
-            for (int i = 0; i < chars.Length; i++)
-            {
-                // Capitalize the beginning of words
-                if (char.IsLetter(chars[i]) && beginningOfWord) chars[i] = char.ToUpper(chars[i]);
-                // Turn '_' into ' '
-                if (chars[i] == '_') chars[i] = ' ';
 
-                beginningOfWord = !char.IsLetter(chars[i]);
-            }
 
-            A = new string(chars);
-            return A;
-/*            string B = Path.GetFileName(Path.GetDirectoryName(fileName));
-            return "al";*/
-        }
-
-/*        private void filesizeComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            this.filesizeKB.ReadOnly = true;
-            filesizeKB.Text = calc.getOutputSizeKBs(filesizeComboBox.SelectedIndex).ToString();
-            if (filesizeComboBox.SelectedIndex == 10) // Custom
-                this.filesizeKB.ReadOnly = false;
-            if (filesizeComboBox.SelectedIndex == 11) // Don't care
-                this.filesizeKB.Text = "-1";
-        }*/
-
-        private void workingName_TextChanged(object sender, EventArgs e)
-        {
-            updateFilename();
-        }
-
-        /*private void arComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            double dar = 0;
-            switch (arComboBox.SelectedIndex)
-            {
-                case 0:
-                    dar = 1.7778;
-                    break;
-                case 1:
-                    dar = 1.3333;
-                    break;
-                case 2:
-                    dar = 1;
-                    break;
-            }
-            AR.Text = dar.ToString();
-            if (arComboBox.SelectedIndex == 3)
-                AR.ReadOnly = false;
-            else
-                AR.ReadOnly = true;
-        }*/
-
+        private bool beingCalled;
         private void updatePossibleContainers()
         {
             // Since everything calls everything else, this is just a safeguard to make sure we don't infinitely recurse
@@ -330,6 +316,7 @@ namespace MeGUI
                 VideoSettingsProvider.EncoderType, audioCodecs.ToArray(), dictatedOutputTypes.ToArray());
 
             List<ContainerType> supportedOutputTypes = new List<ContainerType>();
+
             foreach (ContainerType c in acceptableContainerTypes)
             {
                 if (tempSupportedOutputTypes.Contains(c))
@@ -364,16 +351,6 @@ namespace MeGUI
             beingCalled = false;
         }
 
-        private void splitOutput_CheckedChanged(object sender, EventArgs e)
-        {
-            if (splitOutput.Checked)
-                splitSize.Enabled = true;
-            else
-            {
-                splitSize.Enabled = false;
-                splitSize.Text = "0";
-            }
-        }
         private OneClickSettings Settings
         {
             set
@@ -418,36 +395,26 @@ namespace MeGUI
                 acceptableContainerTypes = temp.ToArray();
 
                 ignoreRestrictions = false;
-/*                optionalTargetSizeBox1.Fil
-                try { filesizeComboBox.SelectedItem = settings.StorageMediumName; }
-                catch (Exception)
-                {
-                    MessageBox.Show("The filesize '" + settings.StorageMediumName + "' could not be properly set. Presumably that preset no longer exists.", "Some options misconfigured", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }*/
 
                 audio1.DontEncode = settings.DontEncodeAudio;
                 audio2.DontEncode = settings.DontEncodeAudio;
 
                 // bools
                 signalAR.Checked = settings.SignalAR;
-                splitOutput.Checked = settings.Split;
                 autoDeint.Checked = settings.AutomaticDeinterlacing;
 
                 // ints
-                splitSize.Text = settings.SplitSize.ToString();
+                splitting.Value = settings.SplitSize;
                 if (settings.Filesize < 0)
                     optionalTargetSizeBox1.Value = null;
                 else
                     optionalTargetSizeBox1.Value = new FileSize(Unit.KB, settings.Filesize);
-//                filesizeKB.Text = settings.Filesize.ToString();
                 horizontalResolution.Value = settings.OutputResolution;
 
 
                 // Clean up after those settings were set
                 updatePossibleContainers();
-//                filesizeComboBox_SelectedIndexChanged(null, null);
                 containerFormat_SelectedIndexChanged_1(null, null);
-                splitOutput_CheckedChanged(null, null);
             }
         }
 
@@ -461,27 +428,7 @@ namespace MeGUI
                 && !string.IsNullOrEmpty(input.Filename)
                 && !string.IsNullOrEmpty(workingName.Text))
             {
-                long desiredSize;
-                try
-                {
-                    //desiredSize = Int64.Parse(.Text) * 1024;
-                    desiredSize = (long)(optionalTargetSizeBox1.Value ?? FileSize.Empty).Bytes;
-                    if (desiredSize == 0)
-                        desiredSize = -1;
-                }
-                catch (Exception f)
-                {
-                    MessageBox.Show("I'm not sure how you want me to reach a target size of <empty>.\r\nWhere I'm from that number doesn't exist.\r\n",
-                        "Target size undefined", MessageBoxButtons.OK);
-                    Console.Write(f.Message);
-                    return;
-                }
-
-                string infoFile = VideoUtil.getInfoFileName(input.Filename);
-                if (infoFile.Length > 0)
-                    this.audioLanguages = vUtil.getAudioLanguages(infoFile);
-                if (audioLanguages.Count == 0) // add 8 dummy tracks
-                    audioLanguages.AddRange(new string[] { "", "", "", "", "", "", "", "" });
+                FileSize? desiredSize = optionalTargetSizeBox1.Value;
 
                 List<PartialAudioStream> audioStreams = new List<PartialAudioStream>();
                 for (int i = 0; i < audio.Length; ++i)
@@ -494,7 +441,7 @@ namespace MeGUI
                     if (!s.useExternalInput)
                     {
                         s.trackNumber = audioTrack[i].SelectedIndex - 1; // since "None" is first
-                        s.language = audioLanguages[s.trackNumber];
+                        s.language = ((AudioTrackInfo)audioTrack[i].SelectedObject).Language;
                     }
                     s.input = audioTrack[i].SelectedText;
                     s.dontEncode = audio[i].DontEncode;
@@ -502,13 +449,12 @@ namespace MeGUI
                     audioStreams.Add(s);
                 }
 
-                string d2vName = workingDirectory.Filename + @"\" + workingName.Text + ".d2v";
+                string d2vName = Path.Combine(workingDirectory.Filename, workingName.Text + ".d2v");
+                
                 DGIndexPostprocessingProperties dpp = new DGIndexPostprocessingProperties();
                 dpp.DAR = ar.Value;
-
                 dpp.AudioStreams = audioStreams.ToArray();
                 dpp.AutoDeinterlace = autoDeint.Checked;
-                dpp.AviSynthScript = "";
                 dpp.AvsSettings = avsSettingsProvider.GetCurrentSettings();
                 dpp.ChapterFile = chapterFile.Filename;
                 dpp.Container = (ContainerType)containerFormat.SelectedItem;
@@ -516,7 +462,7 @@ namespace MeGUI
                 dpp.HorizontalOutputResolution = (int)horizontalResolution.Value;
                 dpp.OutputSize = desiredSize;
                 dpp.SignalAR = signalAR.Checked;
-                dpp.SplitSize = this.getSplitSize();
+                dpp.Splitting = splitting.Value;
                 dpp.VideoSettings = VideoSettings.clone();
                 IndexJob job = mainForm.JobUtil.generateIndexJob(this.input.Filename, d2vName, 1,
                     audioTrack1.SelectedIndex - 1, audioTrack2.SelectedIndex - 1, dpp);
@@ -529,46 +475,7 @@ namespace MeGUI
         }
 
         #endregion
-        #region helper methods
-        /// <summary>
-        /// gets the split size for the muxed output
-        /// </summary>
-        /// <returns></returns>
-        public int getSplitSize()
-        {
-            int splitSize = 0;
-            try
-            {
-                splitSize = Int32.Parse(this.splitSize.Text) * 1024;
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("I'm not sure how you want me to split the output at an undefinied position.\r\nWhere I'm from that number doesn't exist.\r\n" +
-                    "I'm going to assume you meant to not split the output", "Split size undefined", MessageBoxButtons.OK);
-                Console.Write(e.Message);
-            }
-            return splitSize;
-        }
 
-
-        #endregion
-        #region Properties
-        private VideoCodecSettings VideoSettings
-        {
-            get { return VideoSettingsProvider.GetCurrentSettings(); }
-        }
-        private ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> VideoSettingsProvider
-        {
-            get { return videoCodecHandler.CurrentSettingsProvider; }
-        }
-        public string Input
-        {
-            set
-            {
-                openInput(value);
-            }
-        }
-        #endregion
         #region profile management
 
         private string verifyAudioSettings()
@@ -597,46 +504,10 @@ namespace MeGUI
 
         #region updates
 
-        private void containerFormat_SelectedIndexChanged_1(object sender, EventArgs e)
-        {
-            updateFilename();
-        }
-
-        private void updateFilename()
-        {
-            if (!outputChosen)
-            {
-                output.Filename = Path.Combine(workingDirectory.Filename, workingName.Text + "." + 
-                    ((ContainerType)containerFormat.SelectedItem).Extension);
-                outputChosen = false;
-            }
-            else
-            {
-                output.Filename = Path.ChangeExtension(output.Filename, ((ContainerType)containerFormat.SelectedItem).Extension);
-            }
-            output.Filter = ((ContainerType)containerFormat.SelectedItem).OutputFilterString;
-        }
-
 
         #endregion
 
-        private void showAdvancedOptions_CheckedChanged(object sender, EventArgs e)
-        {
-            if (showAdvancedOptions.Checked)
-            {
-                if (!tabControl1.TabPages.Contains(tabPage2))
-                    tabControl1.TabPages.Add(tabPage2);
-                if (!tabControl1.TabPages.Contains(encoderConfigTab))
-                    tabControl1.TabPages.Add(encoderConfigTab);
-            }
-            else
-            {
-                if (tabControl1.TabPages.Contains(tabPage2))
-                    tabControl1.TabPages.Remove(tabPage2);
-                if (tabControl1.TabPages.Contains(encoderConfigTab))
-                    tabControl1.TabPages.Remove(encoderConfigTab);
-            }
-        }
+
 
         private void input_DragDrop(object sender, DragEventArgs e)
         {
@@ -750,6 +621,7 @@ namespace MeGUI
         private bool finished = false;
         private bool interlaced = false;
         private DeinterlaceFilter[] filters;
+        private StringBuilder logBuilder = new StringBuilder();
 
         public OneClickPostProcessor(MainForm mainForm, IndexJob ijob)
         {
@@ -761,12 +633,65 @@ namespace MeGUI
 
         public void postprocess()
         {
-            StringBuilder logBuilder = new StringBuilder();
-            VideoUtil vUtil = new VideoUtil(mainForm);
             Dictionary<int, string> audioFiles = vUtil.getAllDemuxedAudio(job.Output, 8);
+
             List<AudioStream> encodableAudioStreams = new List<AudioStream>();
             List<SubStream> muxOnlyAudioStreams = new List<SubStream>();
             int counter = 0; // The counter is only used to find the track number in case of an error
+
+            getAudioStreams(audioFiles, job.PostprocessingProperties.AudioStreams, out encodableAudioStreams, out muxOnlyAudioStreams);
+
+
+            logBuilder.Append("Desired size of this automated encoding series: " + job.PostprocessingProperties.OutputSize
+                + " split size: " + job.PostprocessingProperties.Splitting + "\r\n");
+            VideoCodecSettings videoSettings = job.PostprocessingProperties.VideoSettings;
+
+            string videoOutput = Path.Combine(Path.GetDirectoryName(job.Output),
+                Path.GetFileNameWithoutExtension(job.Output) + "_Video");
+            string muxedOutput = job.PostprocessingProperties.FinalOutput;
+
+            //Open the video
+            Dar? dar;
+            string videoInput = openVideo(job.Output, job.PostprocessingProperties.DAR, 
+                job.PostprocessingProperties.HorizontalOutputResolution, job.PostprocessingProperties.SignalAR, logBuilder,
+                job.PostprocessingProperties.AvsSettings, job.PostprocessingProperties.AutoDeinterlace, videoSettings, out dar);
+
+            VideoStream myVideo = new VideoStream();
+            ulong length;
+            double framerate;
+            jobUtil.getInputProperties(out length, out framerate, videoInput);
+            myVideo.Input = videoInput;
+            myVideo.Output = videoOutput;
+            myVideo.NumberOfFrames = length;
+            myVideo.Framerate = framerate;
+            myVideo.DAR = dar;
+            myVideo.VideoType = new MuxableType((new VideoEncoderProvider().GetSupportedOutput(videoSettings.EncoderType))[0], videoSettings.Codec);
+            myVideo.Settings = videoSettings;
+            List<string> intermediateFiles = new List<string>();
+            intermediateFiles.Add(videoInput);
+            intermediateFiles.Add(job.Output);
+            intermediateFiles.AddRange(audioFiles.Values);
+            if (!videoInput.Equals(""))
+            {
+                //Create empty subtitles for muxing (subtitles not supported in one click mode)
+                SubStream[] subtitles = new SubStream[0];
+                vUtil.GenerateJobSeries(myVideo, muxedOutput, encodableAudioStreams.ToArray(), subtitles,
+                    job.PostprocessingProperties.ChapterFile, job.PostprocessingProperties.OutputSize,
+                    job.PostprocessingProperties.Splitting, job.PostprocessingProperties.Container,
+                    false, muxOnlyAudioStreams.ToArray(), intermediateFiles);
+                /*                    vUtil.generateJobSeries(videoInput, videoOutput, muxedOutput, videoSettings,
+                                        audioStreams, audio, subtitles, job.PostprocessingProperties.ChapterFile,
+                                        job.PostprocessingProperties.OutputSize, job.PostprocessingProperties.SplitSize,
+                                        containerOverhead, type, new string[] { job.Output, videoInput });*/
+            }
+            mainForm.addToLog(logBuilder.ToString());
+        }
+
+        private void getAudioStreams(Dictionary<int, string> audioFiles, OneClickWindow.PartialAudioStream[] partialAudioStream, out List<AudioStream> encodableAudioStreams, out List<SubStream> muxOnlyAudioStreams)
+        {
+            muxOnlyAudioStreams = new List<SubStream>();
+            encodableAudioStreams = new List<AudioStream>();
+            int counter = 0;
             foreach (OneClickWindow.PartialAudioStream propertiesStream in job.PostprocessingProperties.AudioStreams)
             {
                 counter++; // The track number starts at 1, so we increment right here. This also ensures it will always be incremented
@@ -835,98 +760,6 @@ namespace MeGUI
                     }
                 }
             }
-
-            logBuilder.Append("Desired size of this automated encoding series: " + job.PostprocessingProperties.OutputSize
-                + " bytes, split size: " + job.PostprocessingProperties.SplitSize + "\r\n");
-            VideoCodecSettings videoSettings = job.PostprocessingProperties.VideoSettings;
-
-            string videoOutput = Path.Combine(Path.GetDirectoryName(job.Output),
-                Path.GetFileNameWithoutExtension(job.Output) + "_Video");
-            string muxedOutput = job.PostprocessingProperties.FinalOutput;
-
-            /*
-            SubStream[] audio = new SubStream[audioStreams.Length];
-            int j = 0;
-            //Configure audio muxing inputs
-            foreach (AudioStream stream in audioStreams)
-            {
-                audio[j].language = "";
-                audio[j].name = "";
-                if (type == MuxerType.MP4BOX || type == MuxerType.MKVMERGE)
-                {
-                    if (Path.GetExtension(stream.output).ToLower().Equals(".mp4"))
-                        audio[j].path = stream.output;
-                    if (stream.settings == null)
-                        audio[j].path = stream.path;
-                    logBuilder.Append("Language of track " + (j+1) + " is " + job.PostprocessingProperties.AudioLanguages[j]);
-                    logBuilder.Append(". The ISO code that this corresponds to is ");
-                    string lang = null;
-                    try
-                    {
-                        lang = (string)LanguageSelectionContainer.Languages[job.PostprocessingProperties.AudioLanguages[j]];
-                    }
-                    catch (KeyNotFoundException)
-                    { }
-						
-                    if (lang != null)
-                    {
-                        audio[j].language = lang;
-                        logBuilder.Append(lang + ".\r\n");
-                    }
-                    else
-                    {
-                        logBuilder.Append("unknown.\r\n");
-                    }
-                }
-                else if (type == MuxerType.AVIMUXGUI)
-                {
-                    if (Path.GetExtension(stream.output).ToLower().Equals(".mp3"))
-                    {
-                        audio[j].path = stream.output;
-                        break; // jump out of loop, only one audio track for AVI
-                    }
-                }
-                j++;
-            }
-            if ((audioStreams.Length == 1 && audioStreams[0].settings == null) ||
-                (audioStreams.Length == 2 && audioStreams[0].settings == null && audioStreams[1].settings == null))
-                audioStreams = new AudioStream[0];*/
-
-            //Open the video
-            Dar? dar;
-            string videoInput = openVideo(job.Output, job.PostprocessingProperties.DAR, 
-                job.PostprocessingProperties.HorizontalOutputResolution, job.PostprocessingProperties.SignalAR, logBuilder,
-                job.PostprocessingProperties.AvsSettings, job.PostprocessingProperties.AutoDeinterlace, videoSettings, out dar);
-
-            VideoStream myVideo = new VideoStream();
-            ulong length;
-            double framerate;
-            jobUtil.getInputProperties(out length, out framerate, videoInput);
-            myVideo.Input = videoInput;
-            myVideo.Output = videoOutput;
-            myVideo.NumberOfFrames = length;
-            myVideo.Framerate = framerate;
-            myVideo.DAR = dar;
-            myVideo.VideoType = new MuxableType((new VideoEncoderProvider().GetSupportedOutput(videoSettings.EncoderType))[0], videoSettings.Codec);
-            myVideo.Settings = videoSettings;
-            List<string> intermediateFiles = new List<string>();
-            intermediateFiles.Add(videoInput);
-            intermediateFiles.Add(job.Output);
-            intermediateFiles.AddRange(audioFiles.Values);
-            if (!videoInput.Equals(""))
-            {
-                //Create empty subtitles for muxing (subtitles not supported in one click mode)
-                SubStream[] subtitles = new SubStream[0];
-                vUtil.GenerateJobSeries(myVideo, muxedOutput, encodableAudioStreams.ToArray(), subtitles,
-                    job.PostprocessingProperties.ChapterFile, job.PostprocessingProperties.OutputSize,
-                    job.PostprocessingProperties.SplitSize, job.PostprocessingProperties.Container,
-                    false, muxOnlyAudioStreams.ToArray(), intermediateFiles);
-                /*                    vUtil.generateJobSeries(videoInput, videoOutput, muxedOutput, videoSettings,
-                                        audioStreams, audio, subtitles, job.PostprocessingProperties.ChapterFile,
-                                        job.PostprocessingProperties.OutputSize, job.PostprocessingProperties.SplitSize,
-                                        containerOverhead, type, new string[] { job.Output, videoInput });*/
-            }
-            mainForm.addToLog(logBuilder.ToString());
         }
 
         /// <summary>

@@ -10,6 +10,7 @@ using System.Windows.Forms;
 
 using MeGUI.core.details.video;
 using MeGUI.core.plugins.interfaces;
+using MeGUI.core.util;
 
 namespace MeGUI.packages.tools.oneclick
 {
@@ -109,7 +110,7 @@ namespace MeGUI.packages.tools.oneclick
                 val.PrerenderVideo = preprocessVideo.Checked;
                 val.SignalAR = signalAR.Checked;
                 val.Split = splitOutput.Checked;
-                val.SplitSize = long.Parse(splitSize.Text);
+                if (val.Split) val.SplitSize = new FileSize(Unit.KB, long.Parse(splitSize.Text));
                 val.StorageMediumName = filesizeComboBox.SelectedItem.ToString();
                 val.VideoProfileName = videoProfileHandler.SelectedProfile;
                 return val;

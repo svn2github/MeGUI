@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using MeGUI.core.util;
 
 namespace MeGUI
 {
@@ -27,13 +28,13 @@ namespace MeGUI
             {
                 AutoEncodeDefaultsSettings defaults = new AutoEncodeDefaultsSettings();
                 defaults.AddAdditionalContent = addSubsNChapters.Checked;
-                defaults.SplitOutput = splitOutput.Checked;
-                if (defaults.SplitOutput)
+                defaults.SplitSize = null;
+                if (splitOutput.Checked)
                 {
                     try
                     {
                         int size = Int32.Parse(splitSize.Text);
-                        defaults.SplitSize = size;
+                        defaults.SplitSize = new FileSize(Unit.MB, size);
                     }
                     catch (Exception)
                     {
@@ -46,7 +47,7 @@ namespace MeGUI
                     try
                     {
                         int size = Int32.Parse(muxedSizeMBs.Text);
-                        defaults.SplitSize = size;
+                        defaults.FileSize = new FileSize(Unit.MB, size);
                     }
                     catch (Exception)
                     {
@@ -74,7 +75,7 @@ namespace MeGUI
             {
                 AutoEncodeDefaultsSettings defaults = value;
                 addSubsNChapters.Checked = defaults.AddAdditionalContent;
-                splitOutput.Checked = defaults.SplitOutput;
+                splitOutput.Checked = defaults.SplitSize.HasValue;
                 muxedSizeMBs.Text = defaults.SplitSize.ToString();
                 FileSizeRadio.Checked = defaults.FileSizeMode;
                 muxedSizeMBs.Text = defaults.FileSize.ToString();

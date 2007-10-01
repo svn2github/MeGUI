@@ -113,7 +113,6 @@ namespace MeGUI
             checkJobIO();
             
             su.JobName = job.Name;
-            su.JobType = job.JobType;
         }
 
         public void start()

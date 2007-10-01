@@ -87,14 +87,14 @@ namespace MeGUI.core.gui
         public string SelectedText
         {
             get { return textBox1.Text; }
-            set
+/*            set
             {
                 textBox1.Text = value;
                 selectedItem = null;
 
                 if (SelectionChanged != null)
                     SelectionChanged(this, textBox1.Text);
-            }
+            }*/
         }
 
         public NiceComboBox()

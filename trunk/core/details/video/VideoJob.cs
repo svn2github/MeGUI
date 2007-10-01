@@ -28,21 +28,13 @@ namespace MeGUI
 	public class VideoJob : Job
 	{
 		private VideoCodecSettings settings;
-		private int outputType, parX, parY;
         private ulong numberOfFrames;
 		private double framerate;
 
-        public SubStream[] MuxOnlyAudioJobs = new SubStream[0];
-
         public BitrateCalculationInfo BitrateCalculationInfo;
 
-        public override JobTypes JobType
-        {
-            get { return JobTypes.VIDEO; }
-        }
 		public VideoJob():base()
 		{
-            parX = parY = 0;
 		}
         private Dar? dar;
 
@@ -59,14 +51,6 @@ namespace MeGUI
 		{
 			get {return settings;}
 			set {settings = value;}
-		}
-		/// <summary>
-		/// output type for this job: avi, raw or mp4
-		/// </summary>
-		public int OutputType
-		{
-			get {return outputType;}
-			set {outputType = value;}
 		}
 		/// <summary>
 		/// the number of frames the source of this job has

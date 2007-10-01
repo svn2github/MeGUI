@@ -1,6 +1,7 @@
 using System;
 using MeGUI.core.plugins.interfaces;
 using System.Collections.Generic;
+using MeGUI.core.util;
 namespace MeGUI
 {
 	/// <summary>
@@ -20,7 +21,8 @@ namespace MeGUI
         }
         public string VideoProfileName, StorageMediumName, AudioProfileName, AvsProfileName;
 		public bool PrerenderVideo, DontEncodeAudio, SignalAR, Split, AutomaticDeinterlacing;
-		public long OutputResolution, Filesize, SplitSize;
+		public long OutputResolution, Filesize;
+        public FileSize? SplitSize;
         public string[] ContainerCandidates;
 
         public GenericSettings baseClone()
@@ -46,7 +48,7 @@ namespace MeGUI
 			Split = false;
 			OutputResolution = 640;
 			Filesize = -1;
-			SplitSize = -1;
+            SplitSize = null;
             ContainerCandidates = new string[0];
 		}
 

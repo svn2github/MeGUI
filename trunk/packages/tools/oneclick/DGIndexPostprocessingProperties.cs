@@ -10,9 +10,10 @@ namespace MeGUI
 	public class DGIndexPostprocessingProperties
 	{
 		private bool autoDeriveAR, signalAR, autoDeint;
-		private int horizontalOutputResolution, splitSize;
+		private int horizontalOutputResolution;
+        private FileSize? splitSize;
         private ContainerType container;
-		private long outputSize;
+		private FileSize? outputSize;
 		private Dar? ar;
 		private VideoCodecSettings videoSettings;
         private AviSynthSettings avsSettings;
@@ -30,8 +31,8 @@ namespace MeGUI
 			horizontalOutputResolution = 640;
 			customAR = 1.0;
 			container = MeGUI.ContainerType.MKV;
-			outputSize = 734003200; // 700 mb
-			splitSize = 0;
+            outputSize = null;
+			splitSize = null;
 		}
         public OneClickWindow.PartialAudioStream[] AudioStreams
         {
@@ -93,7 +94,7 @@ namespace MeGUI
         /// <summary>
 		/// gets / sets the output size
 		/// </summary>
-		public long OutputSize
+		public FileSize? OutputSize
 		{
 			get {return outputSize;}
 			set {outputSize = value;}
@@ -101,7 +102,7 @@ namespace MeGUI
 		/// <summary>
 		/// gets / sets the split size for the output
 		/// </summary>
-		public int SplitSize
+		public FileSize? Splitting
 		{
 			get {return splitSize;}
 			set {splitSize = value;}

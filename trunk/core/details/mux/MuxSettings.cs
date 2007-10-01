@@ -14,7 +14,7 @@ namespace MeGUI
 		private string chapterFile, videoName;
         private string muxedInput, videoInput, muxedOutput;
 
-		private int splitSize, parX, parY;
+        private FileSize? splitSize;
 
 		public MuxSettings()
 		{
@@ -26,9 +26,7 @@ namespace MeGUI
             videoName = "";
             videoInput = "";
             muxedOutput = "";
-			splitSize = 0;
-			parX = -1;
-			parY = -1;
+			splitSize = null;
 		}
 
         public string MuxedInput
@@ -82,7 +80,7 @@ namespace MeGUI
 		/// <summary>
 		/// file size at which the output file is to be split
 		/// </summary>
-		public int SplitSize
+		public FileSize? SplitSize
 		{
 			get {return splitSize;}
 			set {splitSize = value;}

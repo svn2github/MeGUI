@@ -903,8 +903,8 @@ namespace MeGUI
             if (!settings.ChapterFile.Equals("")) // a chapter file is defined
                 sb.Append(" -chap \"" + settings.ChapterFile + "\"");
 
-            if (settings.SplitSize > 0)
-                sb.Append(" -splits " + settings.SplitSize);
+            if (settings.SplitSize.HasValue)
+                sb.Append(" -splits " + settings.SplitSize.Value.KB);
 
             if (settings.Framerate > 0)
             {
@@ -1029,8 +1029,8 @@ namespace MeGUI
 			if (!settings.ChapterFile.Equals("")) // a chapter file is defined
 				sb.Append(" --chapters \"" + settings.ChapterFile + "\"");
 			
-         	if (settings.SplitSize > 0)
-				sb.Append(" --split " + (settings.SplitSize / 1024) + "M");
+         	if (settings.SplitSize.HasValue)
+				sb.Append(" --split " + (settings.SplitSize.Value.MB) + "M");
 			
          	sb.Append(" --no-clusters-in-meta-seek"); // ensures lower overhead
 

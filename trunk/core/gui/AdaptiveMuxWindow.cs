@@ -6,6 +6,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using MeGUI.core.util;
 
 namespace MeGUI
 {
@@ -185,11 +186,12 @@ namespace MeGUI
                 getTypes(out audioCodecs, out audioTypes, out subtitleTypes);
                 getStreams(out audioStreams, out subtitleStreams);
 
-                int splitSize = -1;
+                FileSize? splitSize = null;
                 if (enableSplit.Checked)
                 {
-                    if (!int.TryParse(this.splitSize.Text, out splitSize))
-                        splitSize = -1;
+                    int i;
+                    if (!int.TryParse(this.splitSize.Text, out i))
+                        splitSize = new FileSize(Unit.MB, i);
                 }
                 MuxableType chapterInputType = null;
                 if (!String.IsNullOrEmpty(chaptersInput.Text))
@@ -213,7 +215,7 @@ namespace MeGUI
         /// <param name="output">the output file</param>
         /// <param name="splitSize">the output split size</param>
         public void setMinimizedMode(string videoInput, VideoEncoderType videoType, double framerate, SubStream[] audioStreams, KnownAudioType[] audioTypes, string output,
-            int splitSize, ContainerType cft)
+            FileSize? splitSize, ContainerType cft)
         {
             minimizedMode = true;
             knownVideoType = videoType;
@@ -248,7 +250,7 @@ namespace MeGUI
             }
             muxedOutput.Text = output;
             this.splitSize.Text = splitSize.ToString();
-            if (splitSize > 0)
+            if (splitSize.HasValue)
                 enableSplit.Checked = true;
             this.muxButton.Text = "Go";
             updatePossibleContainers();

@@ -23,6 +23,27 @@ namespace MeGUI
         int HandleLevel(string file);
     }
 
+    public class VideoInfo2
+    {
+        public ulong Width;
+        public ulong Height;
+        public Dar DAR;
+        public ulong FrameCount;
+        public double FPS;
+
+        public VideoInfo2() { }
+
+        public VideoInfo2(ulong width, ulong height,
+            Dar dar, ulong framecount, double fps)
+        {
+            Width = width;
+            Height = height;
+            DAR = dar;
+            FrameCount = framecount;
+            FPS = fps;
+        }
+    }
+
     public class MediaFileInfo
     {
         public bool HasVideo;

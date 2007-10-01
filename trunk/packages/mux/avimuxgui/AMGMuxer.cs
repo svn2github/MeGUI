@@ -95,7 +95,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AMGMuxer");
 
             script.AppendLine("SET OUTPUT OPTIONS");
             // split size
-            if (settings.SplitSize != 0)
+            if (settings.SplitSize.HasValue)
                 script.AppendFormat("SET OPTION MAXFILESIZE {0}{1}", settings.SplitSize, Environment.NewLine);
 
             // Now do the rest of the setup

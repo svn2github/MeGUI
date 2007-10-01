@@ -51,9 +51,5 @@ namespace MeGUI.packages.tools.besplitter
             get { return "join"; }
         }
 
-        public override JobTypes JobType
-        {
-            get { return JobTypes.CUT; }
-        }
     }
 }

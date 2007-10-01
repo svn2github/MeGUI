@@ -25,6 +25,7 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using System.IO;
 using System.Diagnostics;
+using MeGUI.core.util;
 
 namespace MeGUI
 {
@@ -52,7 +53,6 @@ namespace MeGUI
 		private System.Windows.Forms.Label totalSecondsLabel;
 		private System.Windows.Forms.GroupBox audio1Groupbox;
         private System.Windows.Forms.GroupBox audio2Groupbox;
-        private System.Windows.Forms.ComboBox framerate;
 		private System.Windows.Forms.Button selectAudio2Button;
 		private System.Windows.Forms.Label audio2KBLabel;
 		private System.Windows.Forms.Label audio2MBLabel;
@@ -60,23 +60,16 @@ namespace MeGUI
 		private System.Windows.Forms.ComboBox audio1Type;
 		private System.Windows.Forms.Label audio1TypeLabel;
 		private System.Windows.Forms.ComboBox audio2Type;
-		private System.Windows.Forms.Label audio2TypeLabel;
-		private System.Windows.Forms.ComboBox sizeSelection;
+        private System.Windows.Forms.Label audio2TypeLabel;
 		private System.Windows.Forms.Button applyButton;
 		private System.Windows.Forms.Label audio1MBLabel;
 		private System.Windows.Forms.Label audio1KBLabel;
         private System.Windows.Forms.GroupBox codecGroupbox;
-		private System.Windows.Forms.GroupBox sizeGroupbox;
-		private System.Windows.Forms.Label storageMediumLabel;
-        private System.Windows.Forms.Label videoSizeKBLabel;
-		private System.Windows.Forms.Label VideoFileSizeLabel;
+        private System.Windows.Forms.GroupBox sizeGroupbox;
 		private System.Windows.Forms.RadioButton averageBitrateRadio;
         private System.Windows.Forms.RadioButton fileSizeRadio;
         private System.Windows.Forms.Label AverageBitrateLabel;
-		private System.Windows.Forms.Label muxedSizeKBLabel;
         private System.Windows.Forms.GroupBox resultGroupbox;
-		private System.Windows.Forms.Label videoSizeMBLabel;
-        private System.Windows.Forms.Label muxedSizeMBLabel;
         private System.Windows.Forms.Label nbFramesLabel;
 		private System.Windows.Forms.Button cancelButton;
 		private System.Windows.Forms.OpenFileDialog openFileDialog;
@@ -94,16 +87,16 @@ namespace MeGUI
         private NumericUpDown audio1SizeKB;
         private NumericUpDown audio2SizeMB;
         private NumericUpDown audio2SizeKB;
-        private NumericUpDown muxedSizeKB;
-        private NumericUpDown muxedSizeMB;
-        private NumericUpDown videoSizeMB;
-        private NumericUpDown videoSizeKB;
         private NumericUpDown projectedBitrate;
         private Label label2;
         private Label label1;
         private Label label4;
         private Label label3;
         private MeGUI.core.gui.HelpButton helpButton1;
+        private MeGUI.core.gui.TargetSizeSCBox targetSize;
+        private TextBox videoSize;
+        private Label VideoFileSizeLabel;
+        private MeGUI.core.gui.FPSChooser fpsChooser;
 
 		/// <summary>
 		/// Required designer variable.
@@ -123,10 +116,6 @@ namespace MeGUI
             this.containerFormat.Items.AddRange(muxProvider.GetSupportedContainers().ToArray());
             containerFormat.SelectedItem = ContainerType.MKV;
 			calc = new BitrateCalculator();
-			sizeSelection.Items.AddRange(calc.getPredefinedOutputSizes());
-			this.framerate.Items.AddRange(new object[] {23.976, 24.0, 25.0, 29.97, 30.0, 50.0, 59.94, 60.0});
-			framerate.SelectedIndex = 2; // 25 fps is default
-			sizeSelection.SelectedIndex = 2;
 		}
 
 		/// <summary>
@@ -152,6 +141,7 @@ namespace MeGUI
 		private void InitializeComponent()
 		{
             this.videoGroupbox = new System.Windows.Forms.GroupBox();
+            this.fpsChooser = new MeGUI.core.gui.FPSChooser();
             this.nbFrames = new System.Windows.Forms.NumericUpDown();
             this.totalSeconds = new System.Windows.Forms.NumericUpDown();
             this.bframes = new System.Windows.Forms.CheckBox();
@@ -164,7 +154,6 @@ namespace MeGUI
             this.seconds = new System.Windows.Forms.NumericUpDown();
             this.minutes = new System.Windows.Forms.NumericUpDown();
             this.hours = new System.Windows.Forms.NumericUpDown();
-            this.framerate = new System.Windows.Forms.ComboBox();
             this.applyButton = new System.Windows.Forms.Button();
             this.audio1Groupbox = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -195,22 +184,14 @@ namespace MeGUI
             this.containerGroupbox = new System.Windows.Forms.GroupBox();
             this.containerFormat = new System.Windows.Forms.ComboBox();
             this.sizeGroupbox = new System.Windows.Forms.GroupBox();
-            this.muxedSizeKB = new System.Windows.Forms.NumericUpDown();
-            this.muxedSizeMB = new System.Windows.Forms.NumericUpDown();
-            this.muxedSizeMBLabel = new System.Windows.Forms.Label();
-            this.sizeSelection = new System.Windows.Forms.ComboBox();
-            this.storageMediumLabel = new System.Windows.Forms.Label();
+            this.targetSize = new MeGUI.core.gui.TargetSizeSCBox();
             this.fileSizeRadio = new System.Windows.Forms.RadioButton();
-            this.muxedSizeKBLabel = new System.Windows.Forms.Label();
-            this.videoSizeKBLabel = new System.Windows.Forms.Label();
-            this.VideoFileSizeLabel = new System.Windows.Forms.Label();
             this.averageBitrateRadio = new System.Windows.Forms.RadioButton();
             this.AverageBitrateLabel = new System.Windows.Forms.Label();
             this.resultGroupbox = new System.Windows.Forms.GroupBox();
-            this.videoSizeMB = new System.Windows.Forms.NumericUpDown();
-            this.videoSizeKB = new System.Windows.Forms.NumericUpDown();
+            this.videoSize = new System.Windows.Forms.TextBox();
             this.projectedBitrate = new System.Windows.Forms.NumericUpDown();
-            this.videoSizeMBLabel = new System.Windows.Forms.Label();
+            this.VideoFileSizeLabel = new System.Windows.Forms.Label();
             this.cancelButton = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
@@ -231,16 +212,13 @@ namespace MeGUI
             this.codecGroupbox.SuspendLayout();
             this.containerGroupbox.SuspendLayout();
             this.sizeGroupbox.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.muxedSizeKB)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.muxedSizeMB)).BeginInit();
             this.resultGroupbox.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.videoSizeMB)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.videoSizeKB)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.projectedBitrate)).BeginInit();
             this.SuspendLayout();
             // 
             // videoGroupbox
             // 
+            this.videoGroupbox.Controls.Add(this.fpsChooser);
             this.videoGroupbox.Controls.Add(this.nbFrames);
             this.videoGroupbox.Controls.Add(this.totalSeconds);
             this.videoGroupbox.Controls.Add(this.bframes);
@@ -253,13 +231,23 @@ namespace MeGUI
             this.videoGroupbox.Controls.Add(this.seconds);
             this.videoGroupbox.Controls.Add(this.minutes);
             this.videoGroupbox.Controls.Add(this.hours);
-            this.videoGroupbox.Controls.Add(this.framerate);
             this.videoGroupbox.Location = new System.Drawing.Point(8, 2);
             this.videoGroupbox.Name = "videoGroupbox";
             this.videoGroupbox.Size = new System.Drawing.Size(320, 160);
             this.videoGroupbox.TabIndex = 0;
             this.videoGroupbox.TabStop = false;
             this.videoGroupbox.Text = "Video";
+            // 
+            // fpsChooser
+            // 
+            this.fpsChooser.Location = new System.Drawing.Point(185, 73);
+            this.fpsChooser.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.fpsChooser.MinimumSize = new System.Drawing.Size(64, 29);
+            this.fpsChooser.Name = "fpsChooser";
+            this.fpsChooser.SelectedIndex = 0;
+            this.fpsChooser.Size = new System.Drawing.Size(129, 29);
+            this.fpsChooser.TabIndex = 13;
+            this.fpsChooser.SelectionChanged += new MeGUI.StringChanged(this.fpsChooser_SelectionChanged);
             // 
             // nbFrames
             // 
@@ -384,15 +372,6 @@ namespace MeGUI
             this.hours.Size = new System.Drawing.Size(40, 21);
             this.hours.TabIndex = 1;
             this.hours.ValueChanged += new System.EventHandler(this.time_ValueChanged);
-            // 
-            // framerate
-            // 
-            this.framerate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.framerate.Location = new System.Drawing.Point(240, 78);
-            this.framerate.Name = "framerate";
-            this.framerate.Size = new System.Drawing.Size(69, 21);
-            this.framerate.TabIndex = 9;
-            this.framerate.SelectedIndexChanged += new System.EventHandler(this.framerate_SelectedIndexChanged);
             // 
             // applyButton
             // 
@@ -711,71 +690,26 @@ namespace MeGUI
             // 
             // sizeGroupbox
             // 
-            this.sizeGroupbox.Controls.Add(this.muxedSizeKB);
-            this.sizeGroupbox.Controls.Add(this.muxedSizeMB);
-            this.sizeGroupbox.Controls.Add(this.muxedSizeMBLabel);
-            this.sizeGroupbox.Controls.Add(this.sizeSelection);
-            this.sizeGroupbox.Controls.Add(this.storageMediumLabel);
+            this.sizeGroupbox.Controls.Add(this.targetSize);
             this.sizeGroupbox.Controls.Add(this.fileSizeRadio);
-            this.sizeGroupbox.Controls.Add(this.muxedSizeKBLabel);
             this.sizeGroupbox.Location = new System.Drawing.Point(336, 119);
             this.sizeGroupbox.Name = "sizeGroupbox";
-            this.sizeGroupbox.Size = new System.Drawing.Size(232, 105);
+            this.sizeGroupbox.Size = new System.Drawing.Size(232, 84);
             this.sizeGroupbox.TabIndex = 3;
             this.sizeGroupbox.TabStop = false;
             this.sizeGroupbox.Text = "Total Size";
             // 
-            // muxedSizeKB
+            // targetSize
             // 
-            this.muxedSizeKB.Location = new System.Drawing.Point(112, 20);
-            this.muxedSizeKB.Maximum = new decimal(new int[] {
-            20000000,
-            0,
-            0,
-            0});
-            this.muxedSizeKB.Name = "muxedSizeKB";
-            this.muxedSizeKB.Size = new System.Drawing.Size(88, 21);
-            this.muxedSizeKB.TabIndex = 1;
-            this.muxedSizeKB.ValueChanged += new System.EventHandler(this.textField_TextChanged);
-            // 
-            // muxedSizeMB
-            // 
-            this.muxedSizeMB.Location = new System.Drawing.Point(112, 47);
-            this.muxedSizeMB.Maximum = new decimal(new int[] {
-            20000,
-            0,
-            0,
-            0});
-            this.muxedSizeMB.Name = "muxedSizeMB";
-            this.muxedSizeMB.Size = new System.Drawing.Size(88, 21);
-            this.muxedSizeMB.TabIndex = 3;
-            this.muxedSizeMB.ValueChanged += new System.EventHandler(this.textField_TextChanged);
-            // 
-            // muxedSizeMBLabel
-            // 
-            this.muxedSizeMBLabel.AutoSize = true;
-            this.muxedSizeMBLabel.Location = new System.Drawing.Point(206, 51);
-            this.muxedSizeMBLabel.Name = "muxedSizeMBLabel";
-            this.muxedSizeMBLabel.Size = new System.Drawing.Size(21, 13);
-            this.muxedSizeMBLabel.TabIndex = 4;
-            this.muxedSizeMBLabel.Text = "MB";
-            // 
-            // sizeSelection
-            // 
-            this.sizeSelection.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.sizeSelection.Location = new System.Drawing.Point(112, 74);
-            this.sizeSelection.Name = "sizeSelection";
-            this.sizeSelection.Size = new System.Drawing.Size(88, 21);
-            this.sizeSelection.TabIndex = 6;
-            this.sizeSelection.SelectedIndexChanged += new System.EventHandler(this.sizeSelection_SelectedIndexChanged);
-            // 
-            // storageMediumLabel
-            // 
-            this.storageMediumLabel.Location = new System.Drawing.Point(8, 78);
-            this.storageMediumLabel.Name = "storageMediumLabel";
-            this.storageMediumLabel.Size = new System.Drawing.Size(90, 13);
-            this.storageMediumLabel.TabIndex = 5;
-            this.storageMediumLabel.Text = "Storage Medium";
+            this.targetSize.Location = new System.Drawing.Point(18, 46);
+            this.targetSize.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.targetSize.MinimumSize = new System.Drawing.Size(64, 29);
+            this.targetSize.Name = "targetSize";
+            this.targetSize.NullString = "Not calculated";
+            this.targetSize.SelectedIndex = 0;
+            this.targetSize.Size = new System.Drawing.Size(208, 29);
+            this.targetSize.TabIndex = 1;
+            this.targetSize.SelectionChanged += new MeGUI.StringChanged(this.targetSize_SelectionChanged);
             // 
             // fileSizeRadio
             // 
@@ -787,31 +721,6 @@ namespace MeGUI
             this.fileSizeRadio.TabStop = true;
             this.fileSizeRadio.Text = "File Size";
             this.fileSizeRadio.CheckedChanged += new System.EventHandler(this.calculationMode_CheckedChanged);
-            // 
-            // muxedSizeKBLabel
-            // 
-            this.muxedSizeKBLabel.AutoSize = true;
-            this.muxedSizeKBLabel.Location = new System.Drawing.Point(205, 24);
-            this.muxedSizeKBLabel.Name = "muxedSizeKBLabel";
-            this.muxedSizeKBLabel.Size = new System.Drawing.Size(19, 13);
-            this.muxedSizeKBLabel.TabIndex = 2;
-            this.muxedSizeKBLabel.Text = "KB";
-            // 
-            // videoSizeKBLabel
-            // 
-            this.videoSizeKBLabel.Location = new System.Drawing.Point(190, 51);
-            this.videoSizeKBLabel.Name = "videoSizeKBLabel";
-            this.videoSizeKBLabel.Size = new System.Drawing.Size(24, 13);
-            this.videoSizeKBLabel.TabIndex = 5;
-            this.videoSizeKBLabel.Text = "KB";
-            // 
-            // VideoFileSizeLabel
-            // 
-            this.VideoFileSizeLabel.Location = new System.Drawing.Point(8, 51);
-            this.VideoFileSizeLabel.Name = "VideoFileSizeLabel";
-            this.VideoFileSizeLabel.Size = new System.Drawing.Size(82, 13);
-            this.VideoFileSizeLabel.TabIndex = 3;
-            this.VideoFileSizeLabel.Text = "Video File Size";
             // 
             // averageBitrateRadio
             // 
@@ -834,48 +743,25 @@ namespace MeGUI
             // 
             // resultGroupbox
             // 
-            this.resultGroupbox.Controls.Add(this.videoSizeMB);
-            this.resultGroupbox.Controls.Add(this.videoSizeKB);
+            this.resultGroupbox.Controls.Add(this.videoSize);
             this.resultGroupbox.Controls.Add(this.projectedBitrate);
-            this.resultGroupbox.Controls.Add(this.videoSizeMBLabel);
             this.resultGroupbox.Controls.Add(this.AverageBitrateLabel);
             this.resultGroupbox.Controls.Add(this.VideoFileSizeLabel);
-            this.resultGroupbox.Controls.Add(this.videoSizeKBLabel);
             this.resultGroupbox.Controls.Add(this.averageBitrateRadio);
-            this.resultGroupbox.Location = new System.Drawing.Point(336, 230);
+            this.resultGroupbox.Location = new System.Drawing.Point(336, 211);
             this.resultGroupbox.Name = "resultGroupbox";
-            this.resultGroupbox.Size = new System.Drawing.Size(232, 100);
+            this.resultGroupbox.Size = new System.Drawing.Size(232, 119);
             this.resultGroupbox.TabIndex = 7;
             this.resultGroupbox.TabStop = false;
             this.resultGroupbox.Text = "Results";
             // 
-            // videoSizeMB
+            // videoSize
             // 
-            this.videoSizeMB.Location = new System.Drawing.Point(112, 73);
-            this.videoSizeMB.Maximum = new decimal(new int[] {
-            20000,
-            0,
-            0,
-            0});
-            this.videoSizeMB.Name = "videoSizeMB";
-            this.videoSizeMB.ReadOnly = true;
-            this.videoSizeMB.Size = new System.Drawing.Size(72, 21);
-            this.videoSizeMB.TabIndex = 6;
-            this.videoSizeMB.ValueChanged += new System.EventHandler(this.textField_TextChanged);
-            // 
-            // videoSizeKB
-            // 
-            this.videoSizeKB.Location = new System.Drawing.Point(112, 48);
-            this.videoSizeKB.Maximum = new decimal(new int[] {
-            20000000,
-            0,
-            0,
-            0});
-            this.videoSizeKB.Name = "videoSizeKB";
-            this.videoSizeKB.ReadOnly = true;
-            this.videoSizeKB.Size = new System.Drawing.Size(72, 21);
-            this.videoSizeKB.TabIndex = 4;
-            this.videoSizeKB.ValueChanged += new System.EventHandler(this.textField_TextChanged);
+            this.videoSize.Location = new System.Drawing.Point(18, 74);
+            this.videoSize.Name = "videoSize";
+            this.videoSize.ReadOnly = true;
+            this.videoSize.Size = new System.Drawing.Size(188, 21);
+            this.videoSize.TabIndex = 4;
             // 
             // projectedBitrate
             // 
@@ -891,13 +777,13 @@ namespace MeGUI
             this.projectedBitrate.TabIndex = 1;
             this.projectedBitrate.ValueChanged += new System.EventHandler(this.textField_TextChanged);
             // 
-            // videoSizeMBLabel
+            // VideoFileSizeLabel
             // 
-            this.videoSizeMBLabel.Location = new System.Drawing.Point(190, 75);
-            this.videoSizeMBLabel.Name = "videoSizeMBLabel";
-            this.videoSizeMBLabel.Size = new System.Drawing.Size(24, 16);
-            this.videoSizeMBLabel.TabIndex = 7;
-            this.videoSizeMBLabel.Text = "MB";
+            this.VideoFileSizeLabel.Location = new System.Drawing.Point(17, 51);
+            this.VideoFileSizeLabel.Name = "VideoFileSizeLabel";
+            this.VideoFileSizeLabel.Size = new System.Drawing.Size(82, 13);
+            this.VideoFileSizeLabel.TabIndex = 3;
+            this.VideoFileSizeLabel.Text = "Video File Size:";
             // 
             // cancelButton
             // 
@@ -956,13 +842,8 @@ namespace MeGUI
             this.codecGroupbox.ResumeLayout(false);
             this.containerGroupbox.ResumeLayout(false);
             this.sizeGroupbox.ResumeLayout(false);
-            this.sizeGroupbox.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.muxedSizeKB)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.muxedSizeMB)).EndInit();
             this.resultGroupbox.ResumeLayout(false);
             this.resultGroupbox.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.videoSizeMB)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.videoSizeKB)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.projectedBitrate)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -972,24 +853,8 @@ namespace MeGUI
 		#region data setters and getters
         private void setFPSToBest(double fps)
         {
-            double closestValue = (double)this.framerate.Items[0];
-            foreach (double f_value in this.framerate.Items)
-            {
-                if (Math.Abs(fps - f_value) < Math.Abs(closestValue - fps))
-                    closestValue = f_value;
-            }
+            fpsChooser.Value = (decimal)fps;
 
-            if (Math.Abs(fps - closestValue) < (double)mainForm.Settings.AcceptableFPSError)
-            {
-                int index = this.framerate.Items.IndexOf(closestValue);
-                Debug.Assert(index != -1); // given that we just found it
-                this.framerate.SelectedIndex = index;
-            }
-            else
-            {
-                this.framerate.Items.Insert(0, fps);
-                this.framerate.SelectedIndex = 0;
-            }
         }
 		/// <summary>
 		/// sets video, audio and codec defaults
@@ -1229,14 +1094,7 @@ namespace MeGUI
                     this.isUpdating = true;
                     NumericUpDown tb = (NumericUpDown)sender;
                     decimal value = tb.Value;
-                    if(tb == muxedSizeKB)
-                    {
-                        if(!averageBitrateRadio.Checked)
-                        {
-                            muxedSizeMB.Value = value / 1024;
-                        }
-                    }
-                    else if (tb == audio1Bitrate)
+                    if (tb == audio1Bitrate)
                     {
                         calculateAudioSize(true, false);
                     }
@@ -1264,27 +1122,6 @@ namespace MeGUI
                         audio2SizeKB.Value = value * 1024;
                         calculateAudioBitrate(false, true);
                     }
-                    else if (tb == muxedSizeMB)
-                    {
-                        if (!averageBitrateRadio.Checked)
-                        {
-                            muxedSizeKB.Value = value * 1024;
-                        }
-                    }
-                    else if (tb == videoSizeKB)
-                    {
-                        if (!averageBitrateRadio.Checked)
-                        {
-                            videoSizeMB.Value = value / 1024;
-                        }
-                    }
-                    else if (tb == videoSizeMB)
-                    {
-                        if (!averageBitrateRadio.Checked)
-                        {
-                            videoSizeKB.Value = value * 1024;
-                        }
-                    }
                     else if (tb == totalSeconds)
                     {
                         int hours = (int)value / 3600;
@@ -1309,29 +1146,26 @@ namespace MeGUI
                     }
                     else if (tb == nbFrames)
                     {
-                        if (framerate.SelectedIndex >= 0)
+                        int secs = (int)(value / fpsChooser.Value);
+                        totalSeconds.Text = secs.ToString();
+                        int hours = secs / 3600;
+                        secs -= hours * 3600;
+                        int minutes = secs / 60;
+                        secs -= minutes * 60;
+                        if (hours < this.hours.Maximum)
                         {
-                            int secs = (int)((double)value / (double)framerate.Items[framerate.SelectedIndex]);
-                            totalSeconds.Text = secs.ToString();
-                            int hours = secs / 3600;
-                            secs -= hours * 3600;
-                            int minutes = secs / 60;
-                            secs -= minutes * 60;
-                            if (hours < this.hours.Maximum)
-                            {
-                                this.hours.Value = hours;
-                                this.minutes.Value = minutes;
-                                this.seconds.Value = secs;
-                            }
-                            else //Set to max available time and set frames accordingly
-                            {
-                                this.hours.Value = this.hours.Maximum;
-                                this.minutes.Value = this.minutes.Maximum - 1; //59 minutes
-                                this.seconds.Value = this.seconds.Maximum - 1; //59 seconds
-                                UpdateTotalFrames();
-                            }
-                            UpdateTotalSeconds();
+                            this.hours.Value = hours;
+                            this.minutes.Value = minutes;
+                            this.seconds.Value = secs;
                         }
+                        else //Set to max available time and set frames accordingly
+                        {
+                            this.hours.Value = this.hours.Maximum;
+                            this.minutes.Value = this.minutes.Maximum - 1; //59 minutes
+                            this.seconds.Value = this.seconds.Maximum - 1; //59 seconds
+                            UpdateTotalFrames();
+                        }
+                        UpdateTotalSeconds();
                     }
                     else if (tb == projectedBitrate)
                     {
@@ -1339,10 +1173,7 @@ namespace MeGUI
                             updateSize();
                     }
                     tb.Select(tb.Text.Length, 0);
-                    if((averageBitrateRadio.Checked && tb != videoSizeMB
-                        && tb != videoSizeKB
-                        && tb != muxedSizeMB
-                        && tb != muxedSizeKB
+                    if((averageBitrateRadio.Checked
                         && tb != projectedBitrate)
                         || !averageBitrateRadio.Checked)
                         updateBitrateSize();
@@ -1405,11 +1236,8 @@ namespace MeGUI
                 }
                 UpdateTotalSeconds();
                 this.calculateAudioSize(true, true);
-                if (this.framerate.SelectedIndex >= 0)
-                {
-                    UpdateTotalFrames();
-                    updateBitrateSize();
-                }
+                UpdateTotalFrames();
+                updateBitrateSize();
 
                 this.isUpdating = false;
             }
@@ -1418,7 +1246,7 @@ namespace MeGUI
         private void UpdateTotalFrames()
         {
             int secs = (int)totalSeconds.Value;
-            double fps = (double)framerate.Items[framerate.SelectedIndex];
+            double fps = (double)fpsChooser.Value;
             int frameNumber = (int)((double)secs * fps);
             nbFrames.Value = frameNumber;
         }
@@ -1440,14 +1268,12 @@ namespace MeGUI
 			if (rb.Checked)
 			{
                 bool isBitrate = (rb == averageBitrateRadio);
-                muxedSizeKB.ReadOnly = isBitrate;
-                muxedSizeMB.ReadOnly = isBitrate;
+                targetSize.Enabled = !isBitrate;
                 projectedBitrate.ReadOnly = !isBitrate;
                 if (isBitrate)
                     fileSizeRadio.Checked = false;
                 else
                     averageBitrateRadio.Checked = false;
-                sizeSelection.Enabled = !isBitrate;
 			}
 		}
 		/// <summary>
@@ -1497,34 +1323,6 @@ namespace MeGUI
             updatingContainers = false;
         }
         #endregion
-        #region size
-        private void sizeSelection_SelectedIndexChanged(object sender, System.EventArgs e)
-		{
-			int sizeKB = calc.getOutputSizeKBs(sizeSelection.SelectedIndex);
-			muxedSizeKB.Value = sizeKB;
-			int size = sizeKB / 1024;
-            muxedSizeMB.Value = size;
-	
-			updateBitrateSize();
-		}
-		#endregion
-		#region dropdowns
-		/// <summary>
-		/// handles the video framerate selection
-		/// if the length of the video is defined, the number of frames are updated
-		/// in function of the selected framerate
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void framerate_SelectedIndexChanged(object sender, System.EventArgs e)
-		{
-            double framerate = (double)this.framerate.Items[this.framerate.SelectedIndex];
-            int length = (int)totalSeconds.Value;
-            int numberOfFrames = (int)(length * framerate);
-            nbFrames.Value = numberOfFrames;
-            this.updateBitrateSize();
-		}
-		#endregion
 		#region checkboxes
 		private void bframes_CheckedChanged(object sender, System.EventArgs e)
 		{
@@ -1536,7 +1334,7 @@ namespace MeGUI
             out ulong numberOfFrames, out double framerate)
         {
             numberOfFrames = (ulong)nbFrames.Value;
-            framerate = (double)this.framerate.Items[this.framerate.SelectedIndex];
+            framerate = (double)fpsChooser.Value;
             long[] audioSizes = { ((long)audio1SizeKB.Value)* 1024L, ((long)audio2SizeKB.Value) * 1024L };
             List<AudioStream> audioStreams = new List<AudioStream>();
             AudioStream stream;
@@ -1591,10 +1389,8 @@ namespace MeGUI
 			int sizeMB = vidSize / 1024;
             try
             {
-                muxedSizeKB.Value = totalSize;
-                muxedSizeMB.Value = totalSizeMB;
-                videoSizeKB.Value = vidSize;
-                videoSizeMB.Value = sizeMB;
+                targetSize.Value = new FileSize(Unit.KB, totalSize);
+                videoSize.Text = new FileSize(Unit.KB, vidSize).ToString();
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -1603,8 +1399,11 @@ namespace MeGUI
             return true;
 		}
 
+        private bool updating = false;
 		private void updateBitrateSize()
 		{
+            if (updating) return;
+            updating = true;
 			bool succeeded = false;	
             if (fileSizeRadio.Checked)
 				succeeded = updateBitrate();
@@ -1612,27 +1411,23 @@ namespace MeGUI
 				succeeded = updateSize();
             if (!succeeded)
             {
+                videoSize.Text = "";
                 if (fileSizeRadio.Checked)
-				{
                     projectedBitrate.Value = 0;
-					videoSizeKB.Value = 0;
-					videoSizeMB.Value = 0;
-				}
 				else
-				{
-					muxedSizeKB.Value = 0;
-					muxedSizeMB.Value = 0;
-					videoSizeKB.Value = 0;
-					videoSizeMB.Value = 0;
-				}
+                    targetSize.Value = null;
 			}
+            updating = false;
 		}
 		/// <summary>
 		/// calculates the bitrate and shows the results of the calculation in the appropriate gui fields
 		/// </summary>
 		private bool updateBitrate()
 		{
-            long muxedSizeBytes = ((long)muxedSizeKB.Value) * 1024L;
+            if (!targetSize.Value.HasValue) return false;
+
+            long muxedSizeBytes;
+            checked { muxedSizeBytes = (long)targetSize.Value.Value.Bytes; }
             if (muxedSizeBytes <= 0)
                 return false;
             ulong numberOfFrames;
@@ -1649,8 +1444,7 @@ namespace MeGUI
 			int videoSizeMBs = (int) (videoSizeKBs / 1024);
             try
             {
-                videoSizeKB.Value = videoSizeKBs;
-                videoSizeMB.Value = videoSizeMBs;
+                videoSize.Text = new FileSize(Unit.KB, videoSizeKBs).ToString();
                 this.projectedBitrate.Value = bitrateKBits;
             }
             catch (ArgumentOutOfRangeException)
@@ -1661,6 +1455,21 @@ namespace MeGUI
             return true;
 		}
 		#endregion
+
+        private void targetSize_SelectionChanged(object sender, string val)
+        {
+            updateBitrateSize();
+        }
+
+        private void fpsChooser_SelectionChanged(object sender, string val)
+        {
+            double framerate = (double)fpsChooser.Value;
+            int length = (int)totalSeconds.Value;
+            int numberOfFrames = (int)(length * framerate);
+            nbFrames.Value = numberOfFrames;
+            this.updateBitrateSize();
+
+        }
 
 	}
     public class CalculatorTool : MeGUI.core.plugins.interfaces.ITool
