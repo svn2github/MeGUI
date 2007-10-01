@@ -48,9 +48,9 @@ namespace MeGUI.core.gui
             // 
             this.serverList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.serverList.FormattingEnabled = true;
-            this.serverList.Location = new System.Drawing.Point(0, 0);
+            this.serverList.Location = new System.Drawing.Point(0, 28);
             this.serverList.Name = "serverList";
-            this.serverList.Size = new System.Drawing.Size(379, 342);
+            this.serverList.Size = new System.Drawing.Size(379, 264);
             this.serverList.TabIndex = 0;
             // 
             // flowLayoutPanel1
@@ -174,10 +174,10 @@ namespace MeGUI.core.gui
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(379, 350);
+            this.Controls.Add(this.serverList);
             this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.flowLayoutPanel2);
             this.Controls.Add(this.flowLayoutPanel3);
-            this.Controls.Add(this.serverList);
             this.Name = "AutoUpdateServerConfigWindow";
             this.Text = "AutoUpdateServerConfigWindow";
             this.flowLayoutPanel1.ResumeLayout(false);
