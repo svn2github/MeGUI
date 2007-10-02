@@ -21,6 +21,7 @@
 using System;
 using MeGUI.core.plugins.interfaces;
 using System.Xml.Serialization;
+using MeGUI.core.details;
 
 namespace MeGUI
 {
@@ -46,6 +47,8 @@ namespace MeGUI
 
         public long SizeBytes;
 
+        public TrackInfo TrackInfo;
+
 
         public MuxableType ToMuxableType()
         {
@@ -54,12 +57,8 @@ namespace MeGUI
 
         public MuxStream ToMuxStream()
         {
-                MuxStream s = new MuxStream();
-                s.delay = 0; // no delay correction is required since the audio job will fix the delay
-                s.language = null;
-                s.name = null;
-                s.path = Output;
-                return s;
+            return new MuxStream(Output, TrackInfo, 0); 
+            // no delay correction is required since the audio job will fix the delay
         }
 
 		public override string CodecString
@@ -79,13 +78,13 @@ namespace MeGUI
 		}
 
         [XmlIgnore]
-        public AudioType Type;
-        /*{
+        public AudioType Type
+        {
             get
             {
                 return VideoUtil.guessAudioType(Output);
             }
-        }*/
+        }
 
         public BitrateManagementMode BitrateMode;
     }

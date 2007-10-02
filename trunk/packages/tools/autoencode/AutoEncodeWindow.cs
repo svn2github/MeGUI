@@ -828,17 +828,6 @@ namespace MeGUI
                 myVideo.DAR = info.Video.Info.DAR;
                 myVideo.VideoType = info.Video.CurrentMuxableVideoType;
                 myVideo.Settings = vSettings;
-#warning check delays here. Doom9 did them, but I'm not sure how they work
-                foreach (AudioJob aStream in info.Audio.AudioStreams)
-                {
-                    if (aStream.Delay != 0)
-                    {
-                        aStream.Settings.DelayEnabled = true;
-                        aStream.Settings.Delay = aStream.Delay;
-                    }
-                }
-                info.Audio.AudioStreams[0].Delay = 0;
-                info.Audio.AudioStreams[1].Delay = 0;
                 AutoEncodeWindow aew = new AutoEncodeWindow(myVideo, info.Audio.AudioStreams, info, info.Video.PrerenderJob);
                 if (aew.init())
                     aew.ShowDialog();

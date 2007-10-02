@@ -26,14 +26,10 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using System.IO;
 using MeGUI.core.util;
+using MeGUI.core.details;
 
 namespace MeGUI
 {
-    public struct MuxStream
-    {
-        public string path, language, name;
-        public int delay;
-    }
     /// <summary>
     /// Summary description for Mux.
     /// </summary>
@@ -114,22 +110,20 @@ namespace MeGUI
             InitializeComponent();
             audioStreams = new MuxStream[2];
             audioStreams[0].path = "";
-            audioStreams[0].language = "";
-            audioStreams[0].name = "";
+            audioStreams[0].TrackInfo = new TrackInfo();
             audioStreams[1].path = "";
-            audioStreams[1].language = "";
-            audioStreams[1].name = "";
+            audioStreams[1].TrackInfo = new TrackInfo(); 
             subtitleStreams = new MuxStream[5];
             subtitleStreams[0].path = "";
-            subtitleStreams[0].language = "";
+            subtitleStreams[0].TrackInfo = new TrackInfo();
             subtitleStreams[1].path = "";
-            subtitleStreams[1].language = "";
+            subtitleStreams[1].TrackInfo = new TrackInfo();
             subtitleStreams[2].path = "";
-            subtitleStreams[2].language = "";
+            subtitleStreams[2].TrackInfo = new TrackInfo();
             subtitleStreams[3].path = "";
-            subtitleStreams[3].language = "";
+            subtitleStreams[3].TrackInfo = new TrackInfo();
             subtitleStreams[4].path = "";
-            subtitleStreams[4].language = "";
+            subtitleStreams[4].TrackInfo = new TrackInfo();
             this.languages = LanguageSelectionContainer.Languages;
             subtitleLanguage.DataSource = audioLanguage.DataSource = new List<string>(this.languages.Keys);
             audioLanguage.BindingContext = new BindingContext();

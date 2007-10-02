@@ -156,7 +156,7 @@ namespace MeGUI
 						string trackID = split[0].Substring(3, 1);
 						ati.TrackID = Int32.Parse(trackID) + 1;
 						ati.NbChannels = split[1].Trim();
-						ati.Language = split[4].Trim();
+                        ati.TrackInfo = new TrackInfo(split[4].Trim(), null);
                         audioTracks.Add(ati);
 					}
                     else if (line.IndexOf("Subtitle") != -1)
@@ -190,7 +190,7 @@ namespace MeGUI
 				}
 			}
 		}
-		/// <summary>
+/*		/// <summary>
 		/// gets all the audio languages from a defined source info file
 		/// </summary>
 		/// <param name="infoFile">the info file containing the language info</param>
@@ -205,11 +205,11 @@ namespace MeGUI
 			getSourceInfo(infoFile, out audioTracks, out subtitles, out ar, out maxHorizontalResolution);
 			foreach (AudioTrackInfo ati in audioTracks)
 			{
-				retval.Add(ati.Language);
+				retval.Add(ati.TrackInfo.Language);
 			}
 			return retval;
 
-		}
+		}*/
 		#endregion
 		#region dgindex preprocessing
 		/// <summary>
@@ -796,18 +796,35 @@ namespace MeGUI
 	}
     public class AudioTrackInfo
     {
-        private string language, nbChannels, type;
+        private string nbChannels, type;
         private int trackID;
-        public AudioTrackInfo()
+        public AudioTrackInfo() :this(null, null, null, 0)
         {
         }
         public AudioTrackInfo(string language, string nbChannels, string type, int trackID)
         {
-            this.language = language;
+            TrackInfo = new TrackInfo(language, null);
             this.nbChannels = nbChannels;
             this.type = type;
             this.trackID = trackID;
         }
+
+        public string Language
+        {
+            get
+            {
+                if (TrackInfo == null) return null;
+                return TrackInfo.Language;
+            }
+            set
+            {
+                if (TrackInfo == null)
+                    TrackInfo = new TrackInfo();
+                TrackInfo.Language = value;
+            }
+        }
+
+        public TrackInfo TrackInfo;
         public int TrackID
         {
             get { return trackID; }
@@ -825,14 +842,9 @@ namespace MeGUI
             set { nbChannels = value; }
         }
 
-        public string Language
-        {
-            get { return language; }
-            set { language = value; }
-        }
         public override string ToString()
         {
-            string fullString = this.language + " " + this.type + " " + this.nbChannels;
+            string fullString = TrackInfo.Language + " " + this.type + " " + this.nbChannels;
             return fullString.Trim();
         }
     }

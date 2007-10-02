@@ -66,24 +66,24 @@ namespace MeGUI.packages.tools.oneclick
             get { return audioCodecHandler.CurrentSettingsProvider; }
         }
 
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public AudioCodecSettings Settings
         {
             get { return AudioSettingsProvider.GetCurrentSettings(); }
         }
+
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public bool DelayEnabled
+        {
+            set { delay.Enabled = value; }
+            get { return delay.Enabled; }
+        }
         
         public void openAudioFile(string p)
         {
-            int del = PrettyFormatting.getDelay(p);
-            AudioCodecSettings settings = (audioCodec.SelectedItem as ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType>).GetCurrentSettings();
-            if (del != 0) // we have a delay we are interested in
-            {
-                settings.DelayEnabled = true;
-                settings.Delay = del;
-            }
-            else
-            {
-                settings.DelayEnabled = false;
-            }
+            delay.Value = PrettyFormatting.getDelay(p);
         }
 
         public AudioConfigControl()
@@ -101,6 +101,8 @@ namespace MeGUI.packages.tools.oneclick
             audioProfileHandler.RefreshProfiles();
         }
 
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool DontEncode
         {
             get
@@ -113,6 +115,8 @@ namespace MeGUI.packages.tools.oneclick
             }
         }
 
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string SelectedProfile
         {
             get
@@ -122,6 +126,20 @@ namespace MeGUI.packages.tools.oneclick
             set
             {
                 audioProfileHandler.SelectedProfile = value;
+            }
+        }
+
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public int Delay
+        {
+            get
+            {
+                return (int)delay.Value;
+            }
+            set
+            {
+                delay.Value = value;
             }
         }
     }

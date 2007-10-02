@@ -4,6 +4,7 @@ using System.Text;
 using System.IO;
 using System.Diagnostics;
 using MeGUI.core.util;
+using MeGUI.core.details;
 
 namespace MeGUI
 {

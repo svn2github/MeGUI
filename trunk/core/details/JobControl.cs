@@ -386,7 +386,10 @@ namespace MeGUI.core.details
                 {
                     jobList.Add(allJobs[name]);
                 }
-                catch (KeyNotFoundException) { }
+                catch (KeyNotFoundException)
+                {
+
+                }
             }
             return jobList;
         }
@@ -462,7 +465,12 @@ namespace MeGUI.core.details
         #region adding jobs to queue
         public void addJobsWithDependencies(JobChain c)
         {
-            throw new Exception();
+            foreach (TaggedJob j in c.Jobs)
+                addJob(j);
+            saveJobs();
+            if (mainForm.Settings.AutoStartQueue)
+                StartAll(false);
+            refresh();
         }
 
         /// <summary>

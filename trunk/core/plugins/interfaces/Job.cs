@@ -24,6 +24,7 @@ using MeGUI.core.plugins.interfaces;
 using MeGUI.packages.tools.besplitter;
 using MeGUI.core.util;
 using System.Diagnostics;
+using MeGUI.core.details;
 
 namespace MeGUI
 {
@@ -85,7 +86,8 @@ namespace MeGUI
 	/// </summary>
 	[XmlInclude(typeof(VideoJob)), XmlInclude(typeof(AudioJob)), XmlInclude(typeof(MuxJob)), 
 	XmlInclude (typeof(MuxStream)), XmlInclude(typeof(IndexJob)), XmlInclude(typeof(AviSynthJob)), 
-    XmlInclude(typeof(SubtitleIndexJob)), XmlInclude(typeof(AudioSplitJob)), XmlInclude(typeof(AudioJoinJob))]
+    XmlInclude(typeof(SubtitleIndexJob)), XmlInclude(typeof(AudioSplitJob)), XmlInclude(typeof(AudioJoinJob)),
+    XmlInclude(typeof(CleanupJob))]
 	public abstract class Job
 	{
         #region important details

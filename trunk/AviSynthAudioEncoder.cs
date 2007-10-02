@@ -497,9 +497,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
         public void setup(Job job, StatusUpdate su)
         {
             this.audioJob = (AudioJob)job;
-            
-            throw new Exception();
-            //su.JobName = audioJob.Name;
+
+            this.su = su;
 
 
             //let's create avisynth script
@@ -554,8 +553,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             script.AppendFormat("EnsureVBRMP3Sync(){0}", Environment.NewLine);
 
 
-            if (audioJob.Settings.DelayEnabled && audioJob.Settings.Delay != 0)
-                script.AppendFormat("DelayAudio({0}.0/1000.0){1}", audioJob.Settings.Delay, Environment.NewLine);
+            if (audioJob.Delay != 0)
+                script.AppendFormat("DelayAudio({0}.0/1000.0){1}", audioJob.Delay, Environment.NewLine);
 
             if (audioJob.Settings.ImproveAccuracy || audioJob.Settings.AutoGain /* to fix the bug */)
                 script.AppendFormat("ConvertAudioToFloat(){0}", Environment.NewLine);

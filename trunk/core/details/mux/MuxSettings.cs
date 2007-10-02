@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using MeGUI.core.util;
+using MeGUI.core.details;
 
 namespace MeGUI
 {

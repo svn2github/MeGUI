@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using System.IO;
 using MeGUI.core.util;
 using System.Globalization;
+using MeGUI.core.details;
 
 namespace MeGUI
 {

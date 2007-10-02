@@ -81,21 +81,6 @@ namespace MeGUI.core.details.audio
 		#endregion
 		#region checkboxes
 
-        private void besweetDelayCorrection_CheckedChanged(object sender, EventArgs e)
-        {
-            if (besweetDelayCorrection.Checked)
-            {
-                besweetDelay.Enabled = true;
-                this.negativeDelay.Enabled = true;
-            }
-            else
-            {
-                besweetDelay.Enabled = false;
-                this.negativeDelay.Enabled = false;
-            }
-            showCommandLine();
-        }
-        
         protected void showCommandLine()
 	    {
 	        
@@ -153,16 +138,6 @@ namespace MeGUI.core.details.audio
                 EnumProxy o = besweetDownmixMode.SelectedItem as EnumProxy;
 			    if(o!=null)
 				    fas.DownmixMode = (ChannelMode) o.RealValue ;
-				if (besweetDelayCorrection.Checked)
-				{
-					fas.DelayEnabled = true;
-					if (!fas.Delay.Equals(""))
-					{
-						fas.Delay = Int32.Parse(besweetDelay.Text);
-						if (negativeDelay.Checked)
-							fas.Delay -= 2* fas.Delay;
-					}
-				}
 				fas.AutoGain = autoGain.Checked;
 				return fas;
 			}
@@ -172,18 +147,6 @@ namespace MeGUI.core.details.audio
                 besweetDownmixMode.SelectedItem = EnumProxy.Create(fas.DownmixMode);
                 improvedAccuracy.Checked = fas.ImproveAccuracy;
                 forceDShowDecoding.Checked = fas.ForceDecodingViaDirectShow;
-				if (fas.DelayEnabled)
-				{
-					besweetDelayCorrection.Checked = true;
-					if (fas.Delay < 0)
-						this.negativeDelay.Checked = true;
-					besweetDelay.Text = Math.Abs(fas.Delay).ToString();
-				}
-				else
-				{
-					besweetDelayCorrection.Checked = false;
-					besweetDelay.Text = "0";
-				}
 				autoGain.Checked = fas.AutoGain;
                 CodecSettings = fas;
 			}

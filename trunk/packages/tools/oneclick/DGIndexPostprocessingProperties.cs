@@ -1,6 +1,7 @@
 using System.Xml.Serialization;
 using System;
 using MeGUI.core.util;
+using MeGUI.core.details;
 
 namespace MeGUI
 {
@@ -17,7 +18,6 @@ namespace MeGUI
 		private Dar? ar;
 		private VideoCodecSettings videoSettings;
         private AviSynthSettings avsSettings;
-        private OneClickWindow.PartialAudioStream[] audioStreams;
 		private double customAR;
 		private string chapterFile, finalOutput, aviSynthScript;
 
@@ -26,7 +26,6 @@ namespace MeGUI
 			autoDeriveAR = false;
 			signalAR = false;
             ar = null;
-            audioStreams = new OneClickWindow.PartialAudioStream[2];
             avsSettings = new AviSynthSettings();
 			horizontalOutputResolution = 640;
 			customAR = 1.0;
@@ -34,11 +33,10 @@ namespace MeGUI
             outputSize = null;
 			splitSize = null;
 		}
-        public OneClickWindow.PartialAudioStream[] AudioStreams
-        {
-            get { return audioStreams; }
-            set { audioStreams = value; }
-        }
+
+        public AudioJob[] AudioJobs;
+        public MuxStream[] DirectMuxAudio;
+
         public bool AutoDeinterlace
         {
             get { return autoDeint; }

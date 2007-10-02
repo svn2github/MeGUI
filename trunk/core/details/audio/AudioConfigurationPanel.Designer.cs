@@ -32,12 +32,8 @@ namespace MeGUI.core.details.audio
             this.besweetOptionsGroupbox = new System.Windows.Forms.GroupBox();
             this.improvedAccuracy = new System.Windows.Forms.CheckBox();
             this.forceDShowDecoding = new System.Windows.Forms.CheckBox();
-            this.negativeDelay = new System.Windows.Forms.CheckBox();
             this.autoGain = new System.Windows.Forms.CheckBox();
-            this.besweetDelay = new System.Windows.Forms.TextBox();
-            this.besweetDelayCorrection = new System.Windows.Forms.CheckBox();
             this.besweetDownmixMode = new System.Windows.Forms.ComboBox();
-            this.besweetDelayLabel = new System.Windows.Forms.Label();
             this.BesweetChannelsLabel = new System.Windows.Forms.Label();
             this.besweetOptionsGroupbox.SuspendLayout();
             this.SuspendLayout();
@@ -60,12 +56,8 @@ namespace MeGUI.core.details.audio
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.besweetOptionsGroupbox.Controls.Add(this.improvedAccuracy);
             this.besweetOptionsGroupbox.Controls.Add(this.forceDShowDecoding);
-            this.besweetOptionsGroupbox.Controls.Add(this.negativeDelay);
             this.besweetOptionsGroupbox.Controls.Add(this.autoGain);
-            this.besweetOptionsGroupbox.Controls.Add(this.besweetDelay);
-            this.besweetOptionsGroupbox.Controls.Add(this.besweetDelayCorrection);
             this.besweetOptionsGroupbox.Controls.Add(this.besweetDownmixMode);
-            this.besweetOptionsGroupbox.Controls.Add(this.besweetDelayLabel);
             this.besweetOptionsGroupbox.Controls.Add(this.BesweetChannelsLabel);
             this.besweetOptionsGroupbox.Location = new System.Drawing.Point(0, 3);
             this.besweetOptionsGroupbox.Name = "besweetOptionsGroupbox";
@@ -95,16 +87,6 @@ namespace MeGUI.core.details.audio
             this.forceDShowDecoding.Text = "Force Decoding via DirectShow";
             this.forceDShowDecoding.UseVisualStyleBackColor = true;
             // 
-            // negativeDelay
-            // 
-            this.negativeDelay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.negativeDelay.Enabled = false;
-            this.negativeDelay.Location = new System.Drawing.Point(168, 118);
-            this.negativeDelay.Name = "negativeDelay";
-            this.negativeDelay.Size = new System.Drawing.Size(32, 24);
-            this.negativeDelay.TabIndex = 7;
-            this.negativeDelay.Text = "-";
-            // 
             // autoGain
             // 
             this.autoGain.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -113,26 +95,6 @@ namespace MeGUI.core.details.audio
             this.autoGain.Size = new System.Drawing.Size(184, 24);
             this.autoGain.TabIndex = 6;
             this.autoGain.Text = "Increase Volume automatically";
-            // 
-            // besweetDelay
-            // 
-            this.besweetDelay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.besweetDelay.Enabled = false;
-            this.besweetDelay.Location = new System.Drawing.Point(200, 119);
-            this.besweetDelay.Name = "besweetDelay";
-            this.besweetDelay.Size = new System.Drawing.Size(48, 20);
-            this.besweetDelay.TabIndex = 5;
-            this.besweetDelay.Text = "0";
-            // 
-            // besweetDelayCorrection
-            // 
-            this.besweetDelayCorrection.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.besweetDelayCorrection.Location = new System.Drawing.Point(16, 123);
-            this.besweetDelayCorrection.Name = "besweetDelayCorrection";
-            this.besweetDelayCorrection.Size = new System.Drawing.Size(112, 16);
-            this.besweetDelayCorrection.TabIndex = 4;
-            this.besweetDelayCorrection.Text = "Delay Correction";
-            this.besweetDelayCorrection.CheckedChanged += new System.EventHandler(this.besweetDelayCorrection_CheckedChanged);
             // 
             // besweetDownmixMode
             // 
@@ -143,15 +105,6 @@ namespace MeGUI.core.details.audio
             this.besweetDownmixMode.Name = "besweetDownmixMode";
             this.besweetDownmixMode.Size = new System.Drawing.Size(278, 21);
             this.besweetDownmixMode.TabIndex = 3;
-            // 
-            // besweetDelayLabel
-            // 
-            this.besweetDelayLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.besweetDelayLabel.Location = new System.Drawing.Point(256, 121);
-            this.besweetDelayLabel.Name = "besweetDelayLabel";
-            this.besweetDelayLabel.Size = new System.Drawing.Size(24, 23);
-            this.besweetDelayLabel.TabIndex = 2;
-            this.besweetDelayLabel.Text = "ms";
             // 
             // BesweetChannelsLabel
             // 
@@ -180,12 +133,8 @@ namespace MeGUI.core.details.audio
         protected System.Windows.Forms.GroupBox encoderGroupBox;
         private System.Windows.Forms.CheckBox improvedAccuracy;
         private System.Windows.Forms.CheckBox forceDShowDecoding;
-        private System.Windows.Forms.CheckBox negativeDelay;
         private System.Windows.Forms.CheckBox autoGain;
-        private System.Windows.Forms.TextBox besweetDelay;
-        private System.Windows.Forms.CheckBox besweetDelayCorrection;
         private System.Windows.Forms.ComboBox besweetDownmixMode;
-        private System.Windows.Forms.Label besweetDelayLabel;
         private System.Windows.Forms.Label BesweetChannelsLabel;
         protected System.Windows.Forms.GroupBox besweetOptionsGroupbox;
 

@@ -244,7 +244,7 @@ namespace MeGUI
             // 
             // inputTab
             // 
-            this.inputTab.BackColor = System.Drawing.SystemColors.Control;
+            this.inputTab.BackColor = System.Drawing.Color.Transparent;
             this.inputTab.Controls.Add(this.flowLayoutPanel2);
             this.inputTab.Controls.Add(this.audioEncodingComponent1);
             this.inputTab.Controls.Add(this.videoEncodingComponent1);
@@ -333,7 +333,7 @@ namespace MeGUI
             this.tabPage2.Controls.Add(this.jobControl1);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Size = new System.Drawing.Size(500, 416);
+            this.tabPage2.Size = new System.Drawing.Size(500, 431);
             this.tabPage2.TabIndex = 12;
             this.tabPage2.Text = "Queue";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -344,7 +344,7 @@ namespace MeGUI
             this.jobControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.jobControl1.Location = new System.Drawing.Point(0, 0);
             this.jobControl1.Name = "jobControl1";
-            this.jobControl1.Size = new System.Drawing.Size(500, 416);
+            this.jobControl1.Size = new System.Drawing.Size(500, 431);
             this.jobControl1.TabIndex = 0;
             // 
             // logTab
@@ -353,7 +353,7 @@ namespace MeGUI
             this.logTab.Controls.Add(this.flowLayoutPanel1);
             this.logTab.Location = new System.Drawing.Point(4, 22);
             this.logTab.Name = "logTab";
-            this.logTab.Size = new System.Drawing.Size(500, 416);
+            this.logTab.Size = new System.Drawing.Size(500, 431);
             this.logTab.TabIndex = 10;
             this.logTab.Text = "Log";
             this.logTab.UseVisualStyleBackColor = true;
@@ -366,7 +366,7 @@ namespace MeGUI
             this.log.Name = "log";
             this.log.ReadOnly = true;
             this.log.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.log.Size = new System.Drawing.Size(500, 387);
+            this.log.Size = new System.Drawing.Size(500, 402);
             this.log.TabIndex = 1;
             // 
             // flowLayoutPanel1
@@ -1730,6 +1730,7 @@ namespace MeGUI
             PackageSystem.JobProcessors.Register(MkvMergeMuxer.Factory);
             PackageSystem.JobProcessors.Register(MP4BoxMuxer.Factory);
             PackageSystem.JobProcessors.Register(AMGMuxer.Factory);
+            PackageSystem.JobProcessors.Register(CleanupJobRunner.Factory);
 
             PackageSystem.JobProcessors.Register(AviSynthProcessor.Factory);
             PackageSystem.JobProcessors.Register(DGIndexer.Factory);

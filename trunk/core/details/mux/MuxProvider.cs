@@ -57,6 +57,15 @@ namespace MeGUI
             return muxer.GetMuxer(settings);
         }
 
+
+        /// <summary>
+        /// Finds the best mux path and the output types the encoders should produce
+        /// </summary>
+        /// <param name="videoCodec"></param>
+        /// <param name="audioCodecs"></param>
+        /// <param name="containerType"></param>
+        /// <param name="dictatedTypes"></param>
+        /// <returns></returns>
         public MuxPath GetMuxPath(VideoEncoderType videoCodec, AudioEncoderType[] audioCodecs, ContainerType containerType, 
             params MuxableType[] dictatedTypes)
         {
@@ -72,53 +81,12 @@ namespace MeGUI
             return findBestMuxPathAndConfig(inputCodecs, decidedTypeList, containerType);
         }
 
-        private MuxPath findBestMuxPathAndConfig(List<IEncoderType> undecidedInputs, List<MuxableType> decidedInputs, ContainerType containerType)
-        {
-            if (undecidedInputs.Count == 0)
-            {
-                return getShortestMuxPath(new MuxPath(decidedInputs, containerType), decidedInputs, containerType);
-            }
-            else
-            {
-                List<MuxPath> allPaths = new List<MuxPath>();
-                IEncoderType undecidedInput = undecidedInputs[0];
-                undecidedInputs.RemoveAt(0);
-
-                if (undecidedInput is VideoEncoderType)
-                {
-                    VideoType[] allTypes = vProvider.GetSupportedOutput((VideoEncoderType)undecidedInput);
-                    foreach (VideoType v in allTypes)
-                    {
-                        MuxableType input = new MuxableType(v, undecidedInput.Codec);
-                        decidedInputs.Add(input);
-                        MuxPath path = findBestMuxPathAndConfig(undecidedInputs, decidedInputs, containerType);
-                        if (path != null)
-                        {
-                            allPaths.Add(path);
-                        }
-                        decidedInputs.Remove(input);
-                    }
-                }
-                if (undecidedInput is AudioEncoderType)
-                {
-                    AudioType[] allTypes = aProvider.GetSupportedOutput((AudioEncoderType)undecidedInput);
-                    foreach (AudioType a in allTypes)
-                    {
-                        MuxableType input = new MuxableType(a, undecidedInput.Codec);
-                        decidedInputs.Add(input);
-                        MuxPath path = findBestMuxPathAndConfig(undecidedInputs, decidedInputs, containerType);
-                        if (path != null)
-                        {
-                            allPaths.Add(path);
-                        }
-                        decidedInputs.Remove(input);
-                    }
-                }
-                undecidedInputs.Insert(0, undecidedInput);
-                return comparer.GetBestMuxPath(allPaths);
-            }
-        }
-
+        /// <summary>
+        /// Finds the best mux path
+        /// </summary>
+        /// <param name="containerType"></param>
+        /// <param name="allTypes"></param>
+        /// <returns></returns>
         public MuxPath GetMuxPath(ContainerType containerType, params MuxableType[] allTypes)
         {
             List<MuxableType> inputTypes = new List<MuxableType>();
@@ -145,166 +113,7 @@ namespace MeGUI
             else
                 return false;
         }
-
-        private MuxPath getShortestMuxPath(MuxPath currentMuxPath,
-            List<IMuxing> remainingMuxers, ContainerType desiredContainerType)
-        {
-            List<MuxPath> allMuxPaths = new List<MuxPath>();
-
-            if (currentMuxPath.IsCompleted())
-                return currentMuxPath;
-
-            List<IMuxing> newRemainingMuxers = new List<IMuxing>();
-            newRemainingMuxers.AddRange(remainingMuxers);
-
-            foreach (IMuxing muxer in remainingMuxers)
-            {
-                bool supportsInput = currentMuxPath[currentMuxPath.Length - 1].muxerInterface.GetContainersInCommon(muxer).Count > 0;
-                if (supportsInput)
-                {
-                    MuxPath newMuxPath = currentMuxPath.Clone();
-
-                    MuxPathLeg currentMPL = new MuxPathLeg();
-                    currentMPL.muxerInterface = muxer;
-                    currentMPL.handledInputTypes = new List<MuxableType>();
-                    currentMPL.unhandledInputTypes = new List<MuxableType>();
-                    newMuxPath.Add(currentMPL);
-                    
-                    newRemainingMuxers.Remove(muxer);
-                    MuxPath shortestPath = getShortestMuxPath(newMuxPath, newRemainingMuxers, desiredContainerType);
-                    if (shortestPath != null)
-                    {
-                        allMuxPaths.Add(shortestPath);
-                    }
-                    newRemainingMuxers.Add(muxer);
-                }
-            }
-            return comparer.GetBestMuxPath(allMuxPaths);
-        }
-
-        private MuxPath getShortestMuxPath(MuxPath currentMuxPath, IMuxing muxer, List<MuxableType> decidedHandledTypes,
-            List<MuxableType> undecidedPossibleHandledTypes, List<MuxableType> unhandledInputTypes, ContainerType desiredContainerType)
-        {
-            if (undecidedPossibleHandledTypes.Count == 0)
-            {
-                MuxPathLeg mpl = new MuxPathLeg();
-                mpl.muxerInterface = muxer;
-                mpl.handledInputTypes = new List<MuxableType>(decidedHandledTypes);
-                mpl.unhandledInputTypes = new List<MuxableType>(unhandledInputTypes);
-                MuxPath newMuxPath = currentMuxPath.Clone();
-                newMuxPath.Add(mpl);
-                if (decidedHandledTypes.Count == 0)
-                    return null;
-                return getShortestMuxPath(newMuxPath, unhandledInputTypes, desiredContainerType);
-            }
-            else
-            {
-                List<MuxPath> allMuxPaths = new List<MuxPath>();
-                MuxableType type = undecidedPossibleHandledTypes[0];
-                undecidedPossibleHandledTypes.RemoveAt(0);
-
-                decidedHandledTypes.Add(type);
-                MuxPath shortestMuxPath = getShortestMuxPath(currentMuxPath, muxer, decidedHandledTypes, undecidedPossibleHandledTypes, unhandledInputTypes, desiredContainerType);
-                if (shortestMuxPath != null)
-                    allMuxPaths.Add(shortestMuxPath);
-                decidedHandledTypes.Remove(type);
-
-                unhandledInputTypes.Add(type);
-                shortestMuxPath = getShortestMuxPath(currentMuxPath, muxer, decidedHandledTypes, undecidedPossibleHandledTypes, unhandledInputTypes, desiredContainerType);
-                if (shortestMuxPath != null)
-                    allMuxPaths.Add(shortestMuxPath);
-                unhandledInputTypes.Remove(type);
-
-                undecidedPossibleHandledTypes.Add(type);
-
-                return (comparer.GetBestMuxPath(allMuxPaths));
-            }
-        }
-
-        /// <summary>
-        /// Recurses to find the shortest mux path.
-        /// </summary>
-        /// Initial stage: if currentMuxPath is empty, it creates a first leg.
-        /// Recursive step: It tries out adding all possible muxers to the current mux path,
-        ///                 and calls itself with this extended mux path. It returns the shortest path.
-        /// Final step: This will stop recursing if there are no muxers that can help, or if a muxer 
-        ///                 is found in one step that finalizes the path. This is guaranteed to finish:
-        ///                 if no progress is made, then it will not recurse. Otherwise, there is a finite
-        ///                 amount of progress (progress is the number of streams muxed), so it will eventually
-        ///                 stop progressing.
-        /// <param name="currentMuxPath">Current mux path to be worked on</param>
-        /// <param name="unhandledDesiredInputTypes">What remains to be muxed</param>
-        /// <param name="desiredContainerType">Container type we are aiming at</param>
-        /// <returns></returns>
-        private MuxPath getShortestMuxPath(MuxPath currentMuxPath, 
-            List<MuxableType> unhandledDesiredInputTypes, ContainerType desiredContainerType)
-        {
-            List<MuxableType> handledInputTypes = new List<MuxableType>();
-            List<MuxableType> unhandledInputTypes = new List<MuxableType>();
-            List<MuxPath> allMuxPaths = new List<MuxPath>();
-
-            if (currentMuxPath.IsCompleted())
-                return currentMuxPath;
-            
-            foreach (IMuxing muxer in mainForm.PackageSystem.MuxerProviders.Values)
-            {
-                ProcessingLevel level;
-                if (currentMuxPath.Length > 0)
-                {
-                    level = muxer.CanBeProcessed(
-                        currentMuxPath[currentMuxPath.Length - 1].muxerInterface.GetSupportedContainerTypes().ToArray(),
-                        unhandledDesiredInputTypes.ToArray(), out handledInputTypes, out unhandledInputTypes);
-                }
-                else
-                {
-                    level = muxer.CanBeProcessed(unhandledDesiredInputTypes.ToArray(), out handledInputTypes, out unhandledInputTypes);
-                }
-                if (level != ProcessingLevel.NONE)
-                {
-                    MuxPath newMuxPath = currentMuxPath.Clone();
-
-                    MuxPathLeg currentMPL = new MuxPathLeg();
-                    currentMPL.muxerInterface = muxer;
-                    currentMPL.handledInputTypes = handledInputTypes;
-                    currentMPL.unhandledInputTypes = unhandledInputTypes;
-                    newMuxPath.Add(currentMPL);
-
-                    if (unhandledInputTypes.Count == 0)
-                    {
-                        List<IMuxing> allMuxers = new List<IMuxing>();
-                        allMuxers.AddRange(mainForm.PackageSystem.MuxerProviders.Values);
-                        MuxPath shortestPath = getShortestMuxPath(newMuxPath, allMuxers, desiredContainerType);
-                        if (shortestPath != null)
-                            allMuxPaths.Add(shortestPath);
-                    }
-
-                    MuxPath aShortestPath = getShortestMuxPath(currentMuxPath, muxer, new List<MuxableType>(), handledInputTypes, unhandledInputTypes, desiredContainerType);
-                    if (aShortestPath != null)
-                        allMuxPaths.Add(aShortestPath);
-                }
-            }
-            return comparer.GetBestMuxPath(allMuxPaths);
-        }
-        /// <summary>
-        /// gets the video type from the container type
-        /// if it cannot be identified, null is returned
-        /// </summary>
-        /// <param name="containerType">the container type</param>
-        /// <returns>the video type</returns>
-/*        private OutputType videoTypeFromContainerType(ContainerType containerType)
-        {
-            switch (containerType)
-            {
-                case ContainerType.AVI:
-                    return VideoType.AVI;
-                case ContainerType.MKV:
-                    return VideoType.MKV;
-                case ContainerType.MP4:
-                    return VideoType.MP4;
-            }
-            return null;
-        }*/
-
+                
         public List<ContainerType> GetSupportedContainers()
         {
             List<ContainerType> supportedContainers = new List<ContainerType>();
@@ -355,6 +164,260 @@ namespace MeGUI
             }
             return supportedContainers;
         }
+        
+        #region private, implementation
+        /// <summary>
+        /// Finds the best mux path if some of the inputs have not yet been
+        /// produced (they are yet to be encoded). When this is the case,
+        /// there is more flexibility, as some encoders can produce outputs
+        /// in multiple formats. This function suggests the output formats
+        /// they should produce as well as the mux path.
+        /// </summary>
+        /// <param name="undecidedInputs">List of encoder types for the inputs which have not yet been encoded</param>
+        /// <param name="decidedInputs">List of file types for the inputs which are already encoded</param>
+        /// <param name="containerType">Target container type</param>
+        /// <returns></returns>
+        private MuxPath findBestMuxPathAndConfig(List<IEncoderType> undecidedInputs, List<MuxableType> decidedInputs, ContainerType containerType)
+        {
+            if (undecidedInputs.Count == 0)
+            {
+                return getShortestMuxPath(new MuxPath(decidedInputs, containerType), decidedInputs, containerType);
+            }
+            else
+            {
+                List<MuxPath> allPaths = new List<MuxPath>();
+                IEncoderType undecidedInput = undecidedInputs[0];
+                undecidedInputs.RemoveAt(0);
+
+                if (undecidedInput is VideoEncoderType)
+                {
+                    VideoType[] allTypes = vProvider.GetSupportedOutput((VideoEncoderType)undecidedInput);
+                    foreach (VideoType v in allTypes)
+                    {
+                        MuxableType input = new MuxableType(v, undecidedInput.Codec);
+                        decidedInputs.Add(input);
+                        MuxPath path = findBestMuxPathAndConfig(undecidedInputs, decidedInputs, containerType);
+                        if (path != null)
+                        {
+                            allPaths.Add(path);
+                        }
+                        decidedInputs.Remove(input);
+                    }
+                }
+                if (undecidedInput is AudioEncoderType)
+                {
+                    AudioType[] allTypes = aProvider.GetSupportedOutput((AudioEncoderType)undecidedInput);
+                    foreach (AudioType a in allTypes)
+                    {
+                        MuxableType input = new MuxableType(a, undecidedInput.Codec);
+                        decidedInputs.Add(input);
+                        MuxPath path = findBestMuxPathAndConfig(undecidedInputs, decidedInputs, containerType);
+                        if (path != null)
+                        {
+                            allPaths.Add(path);
+                        }
+                        decidedInputs.Remove(input);
+                    }
+                }
+                undecidedInputs.Insert(0, undecidedInput);
+                return comparer.GetBestMuxPath(allPaths);
+            }
+        }
+        
+        /// <summary>
+        /// Given a mux path in which all the inputs have already been handled,
+        /// this finds the shortest mux path to achieve the desired container type.
+        /// </summary>
+        /// <param name="currentMuxPath"></param>
+        /// <param name="remainingMuxers">List of muxers which haven't yet been used
+        /// in this final stage. There's no point having a muxer twice in this final
+        /// stage, as the output of the second time could substitute the output of 
+        /// the first time.</param>
+        /// <param name="desiredContainerType"></param>
+        /// <returns></returns>
+        private MuxPath getShortestMuxPath(MuxPath currentMuxPath,
+            List<IMuxing> remainingMuxers, ContainerType desiredContainerType)
+        {
+            if (currentMuxPath.IsCompleted())
+                return currentMuxPath;
+
+            List<MuxPath> allMuxPaths = new List<MuxPath>();
+
+            List<IMuxing> newRemainingMuxers = new List<IMuxing>();
+            newRemainingMuxers.AddRange(remainingMuxers);
+
+            foreach (IMuxing muxer in remainingMuxers)
+            {
+                bool supportsInput = currentMuxPath[currentMuxPath.Length - 1].muxerInterface.GetContainersInCommon(muxer).Count > 0;
+                if (!supportsInput) continue;
+             
+                MuxPath newMuxPath = currentMuxPath.Clone();
+
+                MuxPathLeg currentMPL = new MuxPathLeg();
+                currentMPL.muxerInterface = muxer;
+                currentMPL.handledInputTypes = new List<MuxableType>();
+                currentMPL.unhandledInputTypes = new List<MuxableType>();
+                newMuxPath.Add(currentMPL);
+
+                newRemainingMuxers.Remove(muxer);
+                MuxPath shortestPath = getShortestMuxPath(newMuxPath, newRemainingMuxers, desiredContainerType);
+                if (shortestPath != null)
+                {
+                    allMuxPaths.Add(shortestPath);
+                }
+                newRemainingMuxers.Add(muxer);
+            }
+            return comparer.GetBestMuxPath(allMuxPaths);
+        }
+
+        /// <summary>
+        /// Step in the recursive stage which chooses, of all the MuxableTypes which
+        /// *could* be handled, whether they should be. That means, it generates a
+        /// mux path which involves muxing in each of the 2^n combinations of inputs
+        /// at this stage. 
+        /// 
+        /// I'm not sure if this step is actually necessary. The only possible
+        /// use I can think of is if you have a specific muxpath rule which says
+        /// that only one file can be muxed in at a time, or only some specific
+        /// combination of files can be muxed in at a time.
+        ///           -- berrinam
+        /// </summary>
+        /// <param name="currentMuxPath"></param>
+        /// <param name="muxer"></param>
+        /// <param name="decidedHandledTypes"></param>
+        /// <param name="undecidedPossibleHandledTypes"></param>
+        /// <param name="unhandledInputTypes"></param>
+        /// <param name="desiredContainerType"></param>
+        /// <returns></returns>
+        private MuxPath getShortestMuxPath(MuxPath currentMuxPath, IMuxing muxer, List<MuxableType> decidedHandledTypes,
+            List<MuxableType> undecidedPossibleHandledTypes, List<MuxableType> unhandledInputTypes, ContainerType desiredContainerType)
+        {
+            if (undecidedPossibleHandledTypes.Count == 0)
+            {
+                MuxPathLeg mpl = new MuxPathLeg();
+                mpl.muxerInterface = muxer;
+                mpl.handledInputTypes = new List<MuxableType>(decidedHandledTypes);
+                mpl.unhandledInputTypes = new List<MuxableType>(unhandledInputTypes);
+                MuxPath newMuxPath = currentMuxPath.Clone();
+                newMuxPath.Add(mpl);
+                if (decidedHandledTypes.Count == 0)
+                    return null;
+                return getShortestMuxPath(newMuxPath, unhandledInputTypes, desiredContainerType);
+            }
+            else
+            {
+                List<MuxPath> allMuxPaths = new List<MuxPath>();
+                MuxableType type = undecidedPossibleHandledTypes[0];
+                undecidedPossibleHandledTypes.RemoveAt(0);
+
+                decidedHandledTypes.Add(type);
+                MuxPath shortestMuxPath = getShortestMuxPath(currentMuxPath, muxer, decidedHandledTypes, undecidedPossibleHandledTypes, unhandledInputTypes, desiredContainerType);
+                if (shortestMuxPath != null)
+                    allMuxPaths.Add(shortestMuxPath);
+                decidedHandledTypes.Remove(type);
+
+                unhandledInputTypes.Add(type);
+                shortestMuxPath = getShortestMuxPath(currentMuxPath, muxer, decidedHandledTypes, undecidedPossibleHandledTypes, unhandledInputTypes, desiredContainerType);
+                if (shortestMuxPath != null)
+                    allMuxPaths.Add(shortestMuxPath);
+                unhandledInputTypes.Remove(type);
+
+                undecidedPossibleHandledTypes.Add(type);
+
+                return (comparer.GetBestMuxPath(allMuxPaths));
+            }
+        }
+
+        /// <summary>
+        /// Finds the shortest mux path for a given set of input MuxableTypes (ie the
+        /// encoder output types have all already been chosen here).
+        /// </summary>
+        /// Initial stage: if currentMuxPath is empty, it creates a first leg.
+        /// Recursive step: It tries out adding all possible muxers to the current mux path,
+        ///                 and calls itself with this extended mux path. It returns the shortest path.
+        /// Final step: This will stop recursing if there are no muxers that can help, or if a muxer 
+        ///                 is found in one step that finalizes the path. This is guaranteed to finish:
+        ///                 if no progress is made, then it will not recurse. Otherwise, there is a finite
+        ///                 amount of progress (progress is the number of streams muxed), so it will eventually
+        ///                 stop progressing.
+        /// <param name="currentMuxPath">Current mux path to be worked on</param>
+        /// <param name="unhandledDesiredInputTypes">What remains to be muxed</param>
+        /// <param name="desiredContainerType">Container type we are aiming at</param>
+        /// <returns></returns>
+        private MuxPath getShortestMuxPath(MuxPath currentMuxPath, 
+            List<MuxableType> unhandledDesiredInputTypes, ContainerType desiredContainerType)
+        {
+            if (currentMuxPath.IsCompleted())
+                return currentMuxPath;
+
+            
+            List<MuxableType> handledInputTypes;
+            List<MuxableType> unhandledInputTypes;
+            List<MuxPath> allMuxPaths = new List<MuxPath>();
+
+            foreach (IMuxing muxer in mainForm.PackageSystem.MuxerProviders.Values)
+            {
+                ProcessingLevel level;
+                if (currentMuxPath.Length > 0)
+                {
+                    level = muxer.CanBeProcessed(
+                        currentMuxPath[currentMuxPath.Length - 1].muxerInterface.GetSupportedContainerTypes().ToArray(),
+                        unhandledDesiredInputTypes.ToArray(), out handledInputTypes, out unhandledInputTypes);
+                }
+                else
+                {
+                    level = muxer.CanBeProcessed(unhandledDesiredInputTypes.ToArray(), out handledInputTypes, out unhandledInputTypes);
+                }
+                if (level != ProcessingLevel.NONE)
+                {
+                    MuxPath newMuxPath = currentMuxPath.Clone();
+
+                    MuxPathLeg currentMPL = new MuxPathLeg();
+                    currentMPL.muxerInterface = muxer;
+                    currentMPL.handledInputTypes = handledInputTypes;
+                    currentMPL.unhandledInputTypes = unhandledInputTypes;
+                    newMuxPath.Add(currentMPL);
+
+                    if (unhandledInputTypes.Count == 0)
+                    {
+                        // All the streams have been muxed into some file. Now let's 
+                        // just make sure that we can convert this file to the format we want
+                        // (or leave it alone if it already is in that format).
+                        List<IMuxing> allMuxers = new List<IMuxing>();
+                        allMuxers.AddRange(mainForm.PackageSystem.MuxerProviders.Values);
+                        MuxPath shortestPath = getShortestMuxPath(newMuxPath, allMuxers, desiredContainerType);
+                        if (shortestPath != null)
+                            allMuxPaths.Add(shortestPath);
+                    }
+
+                    MuxPath aShortestPath = getShortestMuxPath(currentMuxPath, muxer, new List<MuxableType>(), handledInputTypes, unhandledInputTypes, desiredContainerType);
+                    if (aShortestPath != null)
+                        allMuxPaths.Add(aShortestPath);
+                }
+            }
+            return comparer.GetBestMuxPath(allMuxPaths);
+        }
+        /// <summary>
+        /// gets the video type from the container type
+        /// if it cannot be identified, null is returned
+        /// </summary>
+        /// <param name="containerType">the container type</param>
+        /// <returns>the video type</returns>
+/*        private OutputType videoTypeFromContainerType(ContainerType containerType)
+        {
+            switch (containerType)
+            {
+                case ContainerType.AVI:
+                    return VideoType.AVI;
+                case ContainerType.MKV:
+                    return VideoType.MKV;
+                case ContainerType.MP4:
+                    return VideoType.MP4;
+            }
+            return null;
+        }*/
+
+        #endregion
     }
     public struct MuxPathLeg
     {

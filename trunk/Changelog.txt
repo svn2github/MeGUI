@@ -5,6 +5,8 @@
     - (berrinam) [Internal] : Separated Job into Job Queue info (now under TaggedJob) and job running info (under Job, as before). This may cause temporary Serialization bugs
     - (berrinam) [Internal] : Reworked/simplified BitrateCalculator
     - (berrinam) [Main window] : Can have arbitrarily many audio tracks
+    - (berrinam) [Internal] : Documentation for MuxPath finding
+    - (berrinam) [OneClick] : Can have arbitrarily many audio tracks
 
 0.2.6.1017
     - (berrinam) [OneClick, AviSynth Creator, Video Preview, AutoEncode, and Bitrate Calculator] : nicer comboboxes, for AR, FPS, and target sizes

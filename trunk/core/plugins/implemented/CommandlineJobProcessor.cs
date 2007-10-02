@@ -116,9 +116,9 @@ namespace MeGUI
 
             Util.ensureExists(executable);
 
+            this.su = su;
             checkJobIO();
 
-            this.su = su;
         }
 
         public void start()

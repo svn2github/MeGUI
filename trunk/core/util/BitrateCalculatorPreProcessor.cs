@@ -57,18 +57,38 @@ namespace MeGUI.core.util
 
     public class BitrateCalculationInfo
     {
-        public List<string> _VideoJobNames
+        public string[] _VideoJobNames
         {
-            get { return MainForm.Instance.Jobs.toStringList(VideoJobs); }
-            set { VideoJobs = MainForm.Instance.Jobs.toJobList(value); }
+            get
+            {
+                return MainForm.Instance.Jobs.toStringList(VideoJobs).ToArray();
+            }
+            set {
+                _videoJobNames = value;
+            }
+        }
+        private string[] _videoJobNames;
+
+        private List<TaggedJob> videoJobs;
+        [XmlIgnore]
+        public List<TaggedJob> VideoJobs
+        {
+            get
+            {
+                if (videoJobs == null && _videoJobNames != null)
+                    videoJobs = MainForm.Instance.Jobs.toJobList(_videoJobNames);
+                return videoJobs;
+            }
+            set
+            {
+                videoJobs = value;
+            }
         }
 
         public FileSize DesiredSize;
 
         public List<string> AudioFiles;
 
-        [XmlIgnore]
-        internal List<TaggedJob> VideoJobs;
 
         [XmlIgnore]
         public ContainerType Container;

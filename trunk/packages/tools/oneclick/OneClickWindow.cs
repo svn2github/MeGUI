@@ -16,6 +16,7 @@ using MeGUI.core.gui;
 using MeGUI.packages.tools.oneclick;
 using MeGUI.core.util;
 using MeGUI.core.details;
+using System.Diagnostics;
 
 namespace MeGUI
 {
@@ -23,8 +24,9 @@ namespace MeGUI
 //    public class OneClickPostProcessor 
     public partial class OneClickWindow : Form
     {
-        FileSCBox[] audioTrack;
-        AudioConfigControl[] audio;
+        List<FileSCBox> audioTrack;
+        List<Label> trackLabel;
+        List<AudioConfigControl> audioConfigControl;
 
         #region profiles
         void ProfileChanged(object sender, Profile prof)
@@ -45,8 +47,18 @@ namespace MeGUI
             profileHandler.ProfileChanged += new SelectedProfileChangedEvent(OneClickProfileChanged);
             profileHandler.ConfigureCompleted += new EventHandler(profileHandler_ConfigureCompleted);
             profileHandler.RefreshProfiles();
-            audioTrack = new FileSCBox[] { audioTrack1, audioTrack2 };
-            audio = new AudioConfigControl[] { audio1, audio2 };
+            
+            audioTrack = new List<FileSCBox>();
+            audioTrack.Add(audioTrack1);
+            audioTrack.Add(audioTrack2);
+
+            trackLabel = new List<Label>();
+            trackLabel.Add(track1Label);
+            trackLabel.Add(track2Label);
+
+            audioConfigControl = new List<AudioConfigControl>();
+            audioConfigControl.Add(audio1);
+            audioConfigControl.Add(audio2);
         }
 
         private void refreshAssistingProfiles()
@@ -154,13 +166,14 @@ namespace MeGUI
 
             InitializeComponent();
 
-            audioTrack2.StandardItems = audioTrack1.StandardItems = new object[] { "None" };
-
             initVideoHandler();
             initAudioHandler();
             initAvsHandler();
             initOneClickHandler();
-            
+
+            audioTrack1.StandardItems = audioTrack2.StandardItems = new object[] { "None" };
+            audioTrack1.SelectedIndex = audioTrack2.SelectedIndex = 0;
+
             containerFormat.Items.AddRange(muxProvider.GetSupportedContainers().ToArray());
             this.containerFormat.SelectedIndex = 0;
             
@@ -240,8 +253,8 @@ namespace MeGUI
             foreach (object o in audioTracks)
                 trackNames.Add(o);
 
-            audioTrack1.StandardItems = trackNames.ToArray();
-            audioTrack2.StandardItems = trackNames.ToArray();
+            foreach (FileSCBox b in audioTrack)
+                b.StandardItems = trackNames.ToArray();
 
             foreach (AudioTrackInfo ati in audioTracks)
             {
@@ -251,7 +264,6 @@ namespace MeGUI
                     audioTrack1.SelectedObject = ati;
                     continue;
                 }
-
                 if (ati.Language.ToLower().Equals(mainForm.Settings.DefaultLanguage2.ToLower()) &&
                     audioTrack2.SelectedIndex == 0)
                 {
@@ -286,15 +298,15 @@ namespace MeGUI
             List<AudioEncoderType> audioCodecs = new List<AudioEncoderType>();
             List<MuxableType> dictatedOutputTypes = new List<MuxableType>();
 
-            for (int i = 0; i < audio.Length; ++i)
+            for (int i = 0; i < audioConfigControl.Count; ++i)
             {
                 if (audioTrack[i].SelectedIndex == 0) // "None"
                     continue;
 
-                if (audio[i].Settings != null && !audio[i].DontEncode)
-                    audioCodecs.Add(audio[i].Settings.EncoderType);
+                if (audioConfigControl[i].Settings != null && !audioConfigControl[i].DontEncode)
+                    audioCodecs.Add(audioConfigControl[i].Settings.EncoderType);
 
-                else if (audio[i].DontEncode)
+                else if (audioConfigControl[i].DontEncode)
                 {
                     string typeString;
 
@@ -364,8 +376,8 @@ namespace MeGUI
                 // strings
                 try
                 {
-                    audio1.SelectedProfile = settings.AudioProfileName;
-                    audio2.SelectedProfile = settings.AudioProfileName;
+                    foreach (AudioConfigControl a in audioConfigControl)
+                        a.SelectedProfile = settings.AudioProfileName;
                 }
                 catch (ProfileCouldntBeSelectedException e)
                 {
@@ -397,9 +409,9 @@ namespace MeGUI
 
                 ignoreRestrictions = false;
 
-                audio1.DontEncode = settings.DontEncodeAudio;
-                audio2.DontEncode = settings.DontEncodeAudio;
-
+                foreach (AudioConfigControl a in audioConfigControl)
+                    a.DontEncode = settings.DontEncodeAudio;
+                
                 // bools
                 signalAR.Checked = settings.SignalAR;
                 autoDeint.Checked = settings.AutomaticDeinterlacing;
@@ -427,30 +439,36 @@ namespace MeGUI
             {
                 FileSize? desiredSize = optionalTargetSizeBox1.Value;
 
-                List<PartialAudioStream> audioStreams = new List<PartialAudioStream>();
-                for (int i = 0; i < audio.Length; ++i)
+                List<AudioJob> aJobs = new List<AudioJob>();
+                List<MuxStream> muxOnlyAudio = new List<MuxStream>();
+                for (int i = 0; i < audioConfigControl.Count; ++i)
                 {
                     if (audioTrack[i].SelectedIndex == 0) // "None"
                         continue;
 
-                    PartialAudioStream s = new PartialAudioStream();
-                    s.useExternalInput = !audioTrack[i].SelectedSCItem.IsStandard;
-                    if (!s.useExternalInput)
+                    string aInput;
+                    TrackInfo info = null;
+                    int delay = audioConfigControl[i].Delay;
+                    if (audioTrack[i].SelectedSCItem.IsStandard)
                     {
-                        s.trackNumber = audioTrack[i].SelectedIndex - 1; // since "None" is first
-                        s.language = ((AudioTrackInfo)audioTrack[i].SelectedObject).Language;
+                        aInput = "::" + (audioTrack[i].SelectedIndex - 1) + "::"; // -1 since "None" is first
+                        info = new TrackInfo(((AudioTrackInfo)audioTrack[i].SelectedObject).Language, null);
                     }
-                    s.input = audioTrack[i].SelectedText;
-                    s.dontEncode = audio[i].DontEncode;
-                    s.settings = audio[i].Settings;
-                    audioStreams.Add(s);
+                    else
+                        aInput = audioTrack[i].SelectedText;
+
+                    if (audioConfigControl[i].DontEncode)
+                        muxOnlyAudio.Add(new MuxStream(aInput, info, delay));
+                    else
+                        aJobs.Add(new AudioJob(aInput, null, null, audioConfigControl[i].Settings, delay));
                 }
 
                 string d2vName = Path.Combine(workingDirectory.Filename, workingName.Text + ".d2v");
                 
                 DGIndexPostprocessingProperties dpp = new DGIndexPostprocessingProperties();
                 dpp.DAR = ar.Value;
-                dpp.AudioStreams = audioStreams.ToArray();
+                dpp.DirectMuxAudio = muxOnlyAudio.ToArray();
+                dpp.AudioJobs = aJobs.ToArray();
                 dpp.AutoDeinterlace = autoDeint.Checked;
                 dpp.AvsSettings = avsSettingsProvider.GetCurrentSettings();
                 dpp.ChapterFile = chapterFile.Filename;
@@ -477,7 +495,7 @@ namespace MeGUI
 
         private string verifyAudioSettings()
         {
-            for (int i = 0; i < audioTrack.Length; ++i)
+            for (int i = 0; i < audioTrack.Count; ++i)
             {
                 if (audioTrack[i].SelectedSCItem.IsStandard)
                     continue;
@@ -504,7 +522,59 @@ namespace MeGUI
 
         #endregion
 
+        private void AddTrack()
+        {
+            FileSCBox b = new FileSCBox();
+            b.Filter = audioTrack1.Filter;
+            b.Size = audioTrack1.Size;
+            b.StandardItems = audioTrack1.StandardItems;
+            b.SelectedIndex = 0;
+            b.Anchor = audioTrack1.Anchor;
+            b.SelectionChanged += new StringChanged(this.audioTrack1_SelectionChanged);
+            
+            int delta_y = audioTrack2.Location.Y - audioTrack1.Location.Y;
+            b.Location = new Point(audioTrack1.Location.X, audioTrack[audioTrack.Count - 1].Location.Y + delta_y);
 
+            Label l = new Label();
+            l.Text = "Track " + (audioTrack.Count + 1);
+            l.AutoSize = true;
+            l.Location = new Point(track1Label.Location.X, trackLabel[trackLabel.Count - 1].Location.Y + delta_y);
+
+            AudioConfigControl a = new AudioConfigControl();
+            a.Dock = DockStyle.Fill;
+            a.Location = audio1.Location;
+            a.Size = audio1.Size;
+            a.initHandler();
+            a.SomethingChanged += new EventHandler(audio1_SomethingChanged);
+
+            TabPage t = new TabPage("Audio track " + (audioTrack.Count + 1));
+            t.UseVisualStyleBackColor = trackTabPage1.UseVisualStyleBackColor;
+            t.Padding = trackTabPage1.Padding;
+            t.Size = trackTabPage1.Size;
+            t.Controls.Add(a);
+            tabControl2.TabPages.Add(t);
+            
+            panel1.SuspendLayout();
+            panel1.Controls.Add(l);
+            panel1.Controls.Add(b);
+            panel1.ResumeLayout();
+
+            trackLabel.Add(l);
+            audioTrack.Add(b);
+            audioConfigControl.Add(a);
+        }
+
+        private void RemoveTrack()
+        {
+            panel1.SuspendLayout();
+            panel1.Controls.Remove(trackLabel[trackLabel.Count - 1]);
+            panel1.Controls.Remove(audioTrack[audioTrack.Count - 1]);
+            panel1.ResumeLayout();
+            
+            tabControl2.TabPages.RemoveAt(tabControl2.TabPages.Count - 1);
+            trackLabel.RemoveAt(trackLabel.Count - 1);
+            audioTrack.RemoveAt(audioTrack.Count - 1);
+        }
 
         private void input_DragDrop(object sender, DragEventArgs e)
         {
@@ -538,16 +608,15 @@ namespace MeGUI
 
         private void audioTrack1_SelectionChanged(object sender, string val)
         {
-            if (!audioTrack1.SelectedSCItem.IsStandard)
-                audio1.openAudioFile((string)audioTrack1.SelectedObject);
+            int i = audioTrack.IndexOf((FileSCBox)sender);
+            Debug.Assert(i >= 0 && i < audioTrack.Count);
+            
+            FileSCBox track = audioTrack[i];
+            if (!track.SelectedSCItem.IsStandard)
+                audioConfigControl[i].openAudioFile((string)track.SelectedObject);
+            audioConfigControl[i].DelayEnabled = !track.SelectedSCItem.IsStandard;
         }
         
-        private void audioTrack2_SelectionChanged(object sender, string val)
-        {
-            if (!audioTrack2.SelectedSCItem.IsStandard)
-                audio2.openAudioFile((string)audioTrack2.SelectedObject);
-        }
-
         private void audio1_SomethingChanged(object sender, EventArgs e)
         {
             updatePossibleContainers();
@@ -556,6 +625,21 @@ namespace MeGUI
         private void targetGroupBox_Enter(object sender, EventArgs e)
         {
 
+        }
+
+        private void addTrackToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AddTrack();
+        }
+
+        private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
+        {
+            removeTrackToolStripMenuItem.Enabled = (audioTrack.Count > 1);
+        }
+
+        private void removeTrackToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            RemoveTrack();
         }
     }
     public class OneClickTool : MeGUI.core.plugins.interfaces.ITool
@@ -611,6 +695,7 @@ namespace MeGUI
 
         #endregion
         private MainForm mainForm;
+        Dictionary<int, string> audioFiles;
         private JobUtil jobUtil;
         private VideoUtil vUtil;
         private IndexJob job;
@@ -630,13 +715,9 @@ namespace MeGUI
 
         public void postprocess()
         {
-            Dictionary<int, string> audioFiles = vUtil.getAllDemuxedAudio(job.Output, 8);
+            audioFiles = vUtil.getAllDemuxedAudio(job.Output, 8);
 
-            List<AudioJob> encodableAudioStreams = new List<AudioJob>();
-            List<MuxStream> muxOnlyAudioStreams = new List<MuxStream>();
-            int counter = 0; // The counter is only used to find the track number in case of an error
-
-            getAudioStreams(audioFiles, job.PostprocessingProperties.AudioStreams, out encodableAudioStreams, out muxOnlyAudioStreams);
+            fillInAudioInformation();
 
 
             logBuilder.Append("Desired size of this automated encoding series: " + job.PostprocessingProperties.OutputSize
@@ -672,20 +753,63 @@ namespace MeGUI
             {
                 //Create empty subtitles for muxing (subtitles not supported in one click mode)
                 MuxStream[] subtitles = new MuxStream[0];
-                JobChain c = vUtil.GenerateJobSeries(myVideo, muxedOutput, encodableAudioStreams.ToArray(), subtitles,
+                JobChain c = vUtil.GenerateJobSeries(myVideo, muxedOutput, job.PostprocessingProperties.AudioJobs, subtitles,
                     job.PostprocessingProperties.ChapterFile, job.PostprocessingProperties.OutputSize,
                     job.PostprocessingProperties.Splitting, job.PostprocessingProperties.Container,
-                    false, muxOnlyAudioStreams.ToArray());
+                    false, job.PostprocessingProperties.DirectMuxAudio);
                 /*                    vUtil.generateJobSeries(videoInput, videoOutput, muxedOutput, videoSettings,
                                         audioStreams, audio, subtitles, job.PostprocessingProperties.ChapterFile,
                                         job.PostprocessingProperties.OutputSize, job.PostprocessingProperties.SplitSize,
                                         containerOverhead, type, new string[] { job.Output, videoInput });*/
                 c = CleanupJob.AddAfter(c, intermediateFiles);
+                mainForm.Jobs.addJobsWithDependencies(c);
             }
             mainForm.addToLog(logBuilder.ToString());
         }
 
-        private void getAudioStreams(Dictionary<int, string> audioFiles, OneClickWindow.PartialAudioStream[] partialAudioStream, out List<AudioJob> encodableAudioStreams, out List<MuxStream> muxOnlyAudioStreams)
+        private void fillInAudioInformation()
+        {
+            foreach (MuxStream m in job.PostprocessingProperties.DirectMuxAudio)
+                m.path = convertTrackNumberToFile(m.path, ref m.delay);
+
+            foreach (AudioJob a in job.PostprocessingProperties.AudioJobs)
+            {
+                a.Input = convertTrackNumberToFile(a.Input, ref a.Delay);
+                if (string.IsNullOrEmpty(a.Output))
+                    a.Output = FileUtil.AddToFileName(a.Input, "_audio");
+            }
+        }
+
+        /// <summary>
+        /// if input is a track number (of the form, "::&lt;number&gt;::")
+        /// then it returns the file path of that track number. Otherwise,
+        /// it returns the string only
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        private string convertTrackNumberToFile(string input, ref int delay)
+        {
+            if (input.StartsWith("::") && input.EndsWith("::") && input.Length > 4)
+            {
+                string sub = input.Substring(2, input.Length - 4);
+                try
+                {
+                    int t = int.Parse(sub);
+                    string s = audioFiles[t];
+                    delay = PrettyFormatting.getDelay(s);
+                    return s;
+                }
+                catch (Exception)
+                {
+                    mainForm.addToLog("Couldn't find audio file for track {0}. Skipping track.", input);
+                    return null;
+                }
+            }
+
+            return input;
+        }
+
+/*        private void getAudioStreams(Dictionary<int, string> audioFiles, OneClickWindow.PartialAudioStream[] partialAudioStream, out List<AudioJob> encodableAudioStreams, out List<MuxStream> muxOnlyAudioStreams)
         {
             muxOnlyAudioStreams = new List<MuxStream>();
             encodableAudioStreams = new List<AudioJob>();
@@ -758,7 +882,7 @@ namespace MeGUI
                     }
                 }
             }
-        }
+        }*/
 
         /// <summary>
         /// opens a dgindex script

@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Diagnostics;
 using MeGUI.core.util;
+using MeGUI.core.details;
 
 namespace MeGUI
 {

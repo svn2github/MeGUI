@@ -36,9 +36,9 @@ namespace MeGUI
             TabPage p = new TabPage("Track " + tabs.Count);
             tabControl1.TabPages.Add(p);
             p.Controls.Add(a);
-            p.Padding = new System.Windows.Forms.Padding(3);
+            p.Padding = tabControl1.TabPages[0].Padding;
             a.FileTypeComboBoxSize = tabs[0].FileTypeComboBoxSize; // has to go after padding
-            p.UseVisualStyleBackColor = true;
+            p.UseVisualStyleBackColor = tabControl1.TabPages[0].UseVisualStyleBackColor;
 
         }
 

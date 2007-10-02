@@ -128,16 +128,16 @@ namespace MeGUI
 			get {return bitrate;}
 			set {bitrate = value;}
 		}
-		public int Delay
+/*		public int Delay
 		{
 			get {return delay;}
 			set {delay = value;}
-		}
-		public bool DelayEnabled
+		}*/
+/*		public bool DelayEnabled
 		{
 			get {return delayEnabled;}
 			set {delayEnabled = value;}
-		}
+		}*/
 		public bool AutoGain
 		{
 			get {return autoGain;}

@@ -134,10 +134,11 @@ namespace MeGUI.core.details
                 if (last != null)
                     c.MakeStartDepend(new MakeDependant(last.MakeJobDependOnChain));
                 jobs.AddRange(cjobs);
+                last = c;
             }
             this.jobs = jobs.ToArray();
             first = chains[0];
-            last = chains[chains.Length - 1];
+            this.last = chains[chains.Length - 1];
         }
 
         internal override TaggedJob[] Jobs
