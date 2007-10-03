@@ -16,7 +16,6 @@ namespace MeGUI
         #region variables
         private bool dialogMode = false; // $%£%$^>*"%$%%$#{"!!! Affects the public behaviour!
         private bool configured = false;
-        private bool processing = false;
         private MainForm mainForm;
         private VideoUtil vUtil;
         private JobUtil jobUtil;
@@ -32,39 +31,10 @@ namespace MeGUI
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            if (this.processing)
-            {
-                e.Cancel = true;
-            }
-            else
-                base.OnClosing(e);
+            base.OnClosing(e);
         }
         #endregion
         #region button handlers
-        private void openButton_Click(object sender, EventArgs e)
-        {
-            if (!processing)
-            {
-                if (openIFODialog.ShowDialog() == DialogResult.OK)
-                {
-                    openVideo(openIFODialog.FileName);
-                    projectName.Text = Path.ChangeExtension(openIFODialog.FileName, ".idx");
-                    checkIndexIO();
-                }
-            }
-        }
-
-        private void pickOutputButton_Click(object sender, EventArgs e)
-        {
-            if (!processing)
-            {
-                if (openOutputDialog.ShowDialog() == DialogResult.OK)
-                {
-                    projectName.Text = openOutputDialog.FileName;
-                    checkIndexIO();
-                }
-            }
-        }
         private void queueButton_Click(object sender, EventArgs e)
         {
             if (configured)
@@ -84,7 +54,7 @@ namespace MeGUI
         #endregion
         private void openVideo(string fileName)
         {
-            input.Text = fileName;
+            input.Filename = fileName;
             Dar? ar;
             int maxHorizontalResolution;
             List<AudioTrackInfo> audioTracks;
@@ -96,7 +66,7 @@ namespace MeGUI
         }
         private void checkIndexIO()
         {
-            configured = (!input.Text.Equals("") && !projectName.Text.Equals(""));
+            configured = (!input.Filename.Equals("") && !output.Filename.Equals(""));
             if (configured && dialogMode)
                 queueButton.DialogResult = DialogResult.OK;
             else
@@ -111,15 +81,15 @@ namespace MeGUI
                 SubtitleInfo si = (SubtitleInfo)itemChecked;
                 trackIDs.Add(si.Index);
             }
-            return new SubtitleIndexJob(input.Text, projectName.Text, keepAllTracks.Checked, trackIDs, (int)pgc.Value);
+            return new SubtitleIndexJob(input.Filename, output.Filename, keepAllTracks.Checked, trackIDs, (int)pgc.Value);
         }
         public void setConfig(string input, string output, bool indexAllTracks, List<int> trackIDs, int pgc)
         {
             this.dialogMode = true;
             queueButton.Text = "Update";
-            this.input.Text = input;
+            this.input.Filename = input;
             openVideo(input);
-            this.projectName.Text = output;
+            this.output.Filename = output;
             checkIndexIO();
             if (indexAllTracks)
                 keepAllTracks.Checked = true;
@@ -150,31 +120,16 @@ namespace MeGUI
             get { return generateJob(); }
         }
 
-        private void input_DragDrop(object sender, DragEventArgs e)
+        private void input_FileSelected(FileBar sender, FileBarEventArgs args)
         {
-            e.Effect = DragDropEffects.Move;
-
-            Array data = e.Data.GetData("FileDrop") as Array;
-            if (data != null)
-            {
-                if (data.GetValue(0) is String)
-                {
-                    string filename = ((string[])data)[0];
-
-                    if (Path.GetExtension(filename).ToLower().Equals(".ifo"))
-                    {
-                        openIFODialog.FileName = filename;
-                        openVideo(openIFODialog.FileName);
-                        projectName.Text = Path.ChangeExtension(openIFODialog.FileName, ".idx");
-                        checkIndexIO();
-                    }
-                }
-            }
+            openVideo(input.Filename);
+            output.Filename = Path.ChangeExtension(input.Filename, ".idx");
+            checkIndexIO();
         }
 
-        private void input_DragOver(object sender, DragEventArgs e)
+        private void output_FileSelected(FileBar sender, FileBarEventArgs args)
         {
-            e.Effect = DragDropEffects.Move;
+            checkIndexIO();
         }
     }
 

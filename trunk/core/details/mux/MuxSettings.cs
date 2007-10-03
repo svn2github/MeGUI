@@ -11,7 +11,7 @@ namespace MeGUI
 	public class MuxSettings
 	{
 		private List<MuxStream> audioStreams, subtitleStreams;
-		private double framerate;
+		private decimal framerate;
 		private string chapterFile, videoName;
         private string muxedInput, videoInput, muxedOutput;
 
@@ -21,7 +21,7 @@ namespace MeGUI
 		{
 			audioStreams = new List<MuxStream>();
 			subtitleStreams = new List<MuxStream>();
-			framerate = 0.0;
+            framerate = 0.0M;
             muxedInput = "";
 			chapterFile = "";
             videoName = "";
@@ -65,7 +65,7 @@ namespace MeGUI
 		/// <summary>
 		/// framerate of the video
 		/// </summary>
-		public double Framerate
+		public decimal Framerate
 		{
 			get {return framerate;}
 			set {framerate = value;}

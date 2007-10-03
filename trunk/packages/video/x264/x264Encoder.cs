@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms; // used for the MethodInvoker
 using System.Text;
 using System.Globalization;
+using MeGUI.core.util;
 
 namespace MeGUI
 {
@@ -271,7 +272,10 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                     sb.Append(" ");
                 }
                 if (job.DAR.HasValue)
-                    sb.Append("--sar " + job.DAR.Value.X + ":" + job.DAR.Value.Y + " ");
+                {
+                    Sar s = job.DAR.Value.ToSar(hres, vres);
+                    sb.Append("--sar " + s.X + ":" + s.Y + " ");
+                }
                 if (xs.QuantizerMatrixType > 0) // custom matrices enabled
                 {
                     if (xs.QuantizerMatrixType == 1)

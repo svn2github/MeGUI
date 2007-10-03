@@ -31,12 +31,8 @@ namespace MeGUI
             this.inputGroupbox = new System.Windows.Forms.GroupBox();
             this.pgc = new System.Windows.Forms.NumericUpDown();
             this.pgcLabel = new System.Windows.Forms.Label();
-            this.openButton = new System.Windows.Forms.Button();
-            this.input = new System.Windows.Forms.TextBox();
             this.inputLabel = new System.Windows.Forms.Label();
             this.outputGroupbox = new System.Windows.Forms.GroupBox();
-            this.pickOutputButton = new System.Windows.Forms.Button();
-            this.projectName = new System.Windows.Forms.TextBox();
             this.nameLabel = new System.Windows.Forms.Label();
             this.subtitleGroupbox = new System.Windows.Forms.GroupBox();
             this.subtitleTracks = new System.Windows.Forms.CheckedListBox();
@@ -44,9 +40,9 @@ namespace MeGUI
             this.keepAllTracks = new System.Windows.Forms.RadioButton();
             this.closeOnQueue = new System.Windows.Forms.CheckBox();
             this.queueButton = new System.Windows.Forms.Button();
-            this.openIFODialog = new System.Windows.Forms.OpenFileDialog();
-            this.openOutputDialog = new System.Windows.Forms.SaveFileDialog();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
+            this.output = new MeGUI.FileBar();
+            this.input = new MeGUI.FileBar();
             this.inputGroupbox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pgc)).BeginInit();
             this.outputGroupbox.SuspendLayout();
@@ -55,10 +51,9 @@ namespace MeGUI
             // 
             // inputGroupbox
             // 
+            this.inputGroupbox.Controls.Add(this.input);
             this.inputGroupbox.Controls.Add(this.pgc);
             this.inputGroupbox.Controls.Add(this.pgcLabel);
-            this.inputGroupbox.Controls.Add(this.openButton);
-            this.inputGroupbox.Controls.Add(this.input);
             this.inputGroupbox.Controls.Add(this.inputLabel);
             this.inputGroupbox.Location = new System.Drawing.Point(2, 2);
             this.inputGroupbox.Name = "inputGroupbox";
@@ -98,26 +93,6 @@ namespace MeGUI
             this.pgcLabel.TabIndex = 3;
             this.pgcLabel.Text = "PGC";
             // 
-            // openButton
-            // 
-            this.openButton.Location = new System.Drawing.Point(382, 16);
-            this.openButton.Name = "openButton";
-            this.openButton.Size = new System.Drawing.Size(24, 23);
-            this.openButton.TabIndex = 2;
-            this.openButton.Text = "...";
-            this.openButton.Click += new System.EventHandler(this.openButton_Click);
-            // 
-            // input
-            // 
-            this.input.AllowDrop = true;
-            this.input.Location = new System.Drawing.Point(118, 17);
-            this.input.Name = "input";
-            this.input.ReadOnly = true;
-            this.input.Size = new System.Drawing.Size(256, 21);
-            this.input.TabIndex = 1;
-            this.input.DragOver += new System.Windows.Forms.DragEventHandler(this.input_DragOver);
-            this.input.DragDrop += new System.Windows.Forms.DragEventHandler(this.input_DragDrop);
-            // 
             // inputLabel
             // 
             this.inputLabel.Location = new System.Drawing.Point(16, 20);
@@ -128,8 +103,7 @@ namespace MeGUI
             // 
             // outputGroupbox
             // 
-            this.outputGroupbox.Controls.Add(this.pickOutputButton);
-            this.outputGroupbox.Controls.Add(this.projectName);
+            this.outputGroupbox.Controls.Add(this.output);
             this.outputGroupbox.Controls.Add(this.nameLabel);
             this.outputGroupbox.Location = new System.Drawing.Point(2, 309);
             this.outputGroupbox.Name = "outputGroupbox";
@@ -137,23 +111,6 @@ namespace MeGUI
             this.outputGroupbox.TabIndex = 13;
             this.outputGroupbox.TabStop = false;
             this.outputGroupbox.Text = "Output";
-            // 
-            // pickOutputButton
-            // 
-            this.pickOutputButton.Location = new System.Drawing.Point(384, 16);
-            this.pickOutputButton.Name = "pickOutputButton";
-            this.pickOutputButton.Size = new System.Drawing.Size(24, 23);
-            this.pickOutputButton.TabIndex = 5;
-            this.pickOutputButton.Text = "...";
-            this.pickOutputButton.Click += new System.EventHandler(this.pickOutputButton_Click);
-            // 
-            // projectName
-            // 
-            this.projectName.Location = new System.Drawing.Point(120, 17);
-            this.projectName.Name = "projectName";
-            this.projectName.ReadOnly = true;
-            this.projectName.Size = new System.Drawing.Size(256, 21);
-            this.projectName.TabIndex = 4;
             // 
             // nameLabel
             // 
@@ -218,17 +175,6 @@ namespace MeGUI
             this.queueButton.Text = "Queue";
             this.queueButton.Click += new System.EventHandler(this.queueButton_Click);
             // 
-            // openIFODialog
-            // 
-            this.openIFODialog.DefaultExt = "ifo";
-            this.openIFODialog.Filter = "IFO Files|*.ifo";
-            // 
-            // openOutputDialog
-            // 
-            this.openOutputDialog.DefaultExt = "idx";
-            this.openOutputDialog.Filter = "VobSub Files|*.idx";
-            this.openOutputDialog.Title = "Choose an output file";
-            // 
             // helpButton1
             // 
             this.helpButton1.ArticleName = "Vobsub indexer window";
@@ -238,6 +184,34 @@ namespace MeGUI
             this.helpButton1.Name = "helpButton1";
             this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 17;
+            // 
+            // output
+            // 
+            this.output.Filename = "";
+            this.output.Filter = "VobSub Files|*.idx";
+            this.output.FolderMode = false;
+            this.output.Location = new System.Drawing.Point(120, 17);
+            this.output.Name = "output";
+            this.output.ReadOnly = true;
+            this.output.SaveMode = true;
+            this.output.Size = new System.Drawing.Size(286, 26);
+            this.output.TabIndex = 5;
+            this.output.Title = "Choose an output file";
+            this.output.FileSelected += new MeGUI.FileBarEventHandler(this.output_FileSelected);
+            // 
+            // input
+            // 
+            this.input.Filename = "";
+            this.input.Filter = "IFO Files|*.ifo";
+            this.input.FolderMode = false;
+            this.input.Location = new System.Drawing.Point(120, 13);
+            this.input.Name = "input";
+            this.input.ReadOnly = true;
+            this.input.SaveMode = false;
+            this.input.Size = new System.Drawing.Size(286, 26);
+            this.input.TabIndex = 5;
+            this.input.Title = null;
+            this.input.FileSelected += new MeGUI.FileBarEventHandler(this.input_FileSelected);
             // 
             // VobSubIndexWindow
             // 
@@ -261,7 +235,6 @@ namespace MeGUI
             this.inputGroupbox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pgc)).EndInit();
             this.outputGroupbox.ResumeLayout(false);
-            this.outputGroupbox.PerformLayout();
             this.subtitleGroupbox.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -271,12 +244,8 @@ namespace MeGUI
         #endregion
 
         private System.Windows.Forms.GroupBox inputGroupbox;
-        private System.Windows.Forms.Button openButton;
-        private System.Windows.Forms.TextBox input;
         private System.Windows.Forms.Label inputLabel;
         private System.Windows.Forms.GroupBox outputGroupbox;
-        private System.Windows.Forms.Button pickOutputButton;
-        private System.Windows.Forms.TextBox projectName;
         private System.Windows.Forms.Label nameLabel;
         private System.Windows.Forms.GroupBox subtitleGroupbox;
         private System.Windows.Forms.RadioButton demuxSelectedTracks;
@@ -286,9 +255,9 @@ namespace MeGUI
         private System.Windows.Forms.Label pgcLabel;
         private System.Windows.Forms.NumericUpDown pgc;
         private System.Windows.Forms.CheckedListBox subtitleTracks;
-        private System.Windows.Forms.OpenFileDialog openIFODialog;
-        private System.Windows.Forms.SaveFileDialog openOutputDialog;
         private MeGUI.core.gui.HelpButton helpButton1;
+        private FileBar input;
+        private FileBar output;
 
     }
 }

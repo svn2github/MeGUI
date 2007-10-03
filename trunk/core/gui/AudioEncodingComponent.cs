@@ -23,6 +23,11 @@ namespace MeGUI
         {
             InitializeComponent();
             tabs.Add(audioEncodingTab1);
+
+            audioEncodingTab1.QueueJob = delegate(AudioJob a)
+            {
+                MainForm.Instance.Jobs.addJobsToQueue(a);
+            };
         }
         #endregion
 
@@ -32,6 +37,7 @@ namespace MeGUI
             tabs.Add(a);
             a.Dock = System.Windows.Forms.DockStyle.Fill;
             a.InitializeDropdowns();
+            a.QueueJob = tabs[0].QueueJob;
             
             TabPage p = new TabPage("Track " + tabs.Count);
             tabControl1.TabPages.Add(p);

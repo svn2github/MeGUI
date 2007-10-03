@@ -12,7 +12,7 @@ namespace MeGUI
 
         public override bool Equals(object obj)
         {
-            return PropertyEqualityTester.Equals(this, obj);
+            return PropertyEqualityTester.AreEqual(this, obj);
         }
 
         public string getSettingsType()

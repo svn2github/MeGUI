@@ -198,8 +198,6 @@ namespace MeGUI
             this.videoInput.TabIndex = 1;
             this.videoInput.Title = "Open AviSynth script";
             this.videoInput.FileSelected += new MeGUI.FileBarEventHandler(this.videoInput_FileSelected);
-            this.videoInput.DragOver += new System.Windows.Forms.DragEventHandler(this.videoInput_DragOver);
-            this.videoInput.DragDrop += new System.Windows.Forms.DragEventHandler(this.videoInput_DragDrop);
             // 
             // VideoEncodingComponent
             // 

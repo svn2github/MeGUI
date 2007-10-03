@@ -37,13 +37,13 @@ namespace MeGUI.core.gui
             this.audioOutputLabel = new System.Windows.Forms.Label();
             this.deleteAudioButton = new System.Windows.Forms.Button();
             this.audioCodec = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.delay = new System.Windows.Forms.NumericUpDown();
+            this.label3 = new System.Windows.Forms.Label();
             this.cuts = new MeGUI.FileBar();
             this.profileControl1 = new MeGUI.core.details.video.ProfileControl();
             this.audioOutput = new MeGUI.FileBar();
             this.audioInput = new MeGUI.FileBar();
-            this.label2 = new System.Windows.Forms.Label();
-            this.delay = new System.Windows.Forms.NumericUpDown();
-            this.label3 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.delay)).BeginInit();
             this.SuspendLayout();
             // 
@@ -134,6 +134,41 @@ namespace MeGUI.core.gui
             this.audioCodec.Size = new System.Drawing.Size(136, 21);
             this.audioCodec.TabIndex = 23;
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(3, 151);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(34, 13);
+            this.label2.TabIndex = 28;
+            this.label2.Text = "Delay";
+            // 
+            // delay
+            // 
+            this.delay.Location = new System.Drawing.Point(110, 147);
+            this.delay.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.delay.Minimum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            -2147483648});
+            this.delay.Name = "delay";
+            this.delay.Size = new System.Drawing.Size(136, 20);
+            this.delay.TabIndex = 29;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(252, 151);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(20, 13);
+            this.label3.TabIndex = 30;
+            this.label3.Text = "ms";
+            // 
             // cuts
             // 
             this.cuts.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
@@ -180,7 +215,7 @@ namespace MeGUI.core.gui
             this.audioInput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.audioInput.Filename = "";
-            this.audioInput.Filter = null;
+            this.audioInput.Filter = "All files (*.*)|*.*";
             this.audioInput.FolderMode = false;
             this.audioInput.Location = new System.Drawing.Point(110, 4);
             this.audioInput.Name = "audioInput";
@@ -190,43 +225,6 @@ namespace MeGUI.core.gui
             this.audioInput.TabIndex = 16;
             this.audioInput.Title = "Select your audio input";
             this.audioInput.FileSelected += new MeGUI.FileBarEventHandler(this.audioInput_FileSelected);
-            this.audioInput.DragOver += new System.Windows.Forms.DragEventHandler(this.audioInput_DragOver);
-            this.audioInput.DragDrop += new System.Windows.Forms.DragEventHandler(this.audioInput_DragDrop);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 151);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(34, 13);
-            this.label2.TabIndex = 28;
-            this.label2.Text = "Delay";
-            // 
-            // delay
-            // 
-            this.delay.Location = new System.Drawing.Point(110, 147);
-            this.delay.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.delay.Minimum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            -2147483648});
-            this.delay.Name = "delay";
-            this.delay.Size = new System.Drawing.Size(136, 20);
-            this.delay.TabIndex = 29;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(252, 151);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(20, 13);
-            this.label3.TabIndex = 30;
-            this.label3.Text = "ms";
             // 
             // AudioEncodingTab
             // 

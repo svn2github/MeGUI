@@ -503,8 +503,6 @@ namespace MeGUI
                 subtitles, allInputSubtitleTypes.ToArray(), chapters, chapterInputType, container, muxedOutput, splitSize, true);
 
 
-            int index = 0;
-
 
 
             /*                foreach (Job mJob in muxJobs)
@@ -523,7 +521,6 @@ namespace MeGUI
             }
              */
 
-            int bitrateKBits = 0;
             if (desiredSize.HasValue)
             {
                 /*                    if (encodedAudioPresent) // no audio encoding, we can calculate the video bitrate directly

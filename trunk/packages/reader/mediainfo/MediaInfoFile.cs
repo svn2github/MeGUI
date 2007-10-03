@@ -4,6 +4,7 @@ using System.Text;
 using MediaInfoWrapper;
 using System.Globalization;
 using MeGUI.core.util;
+using System.Text.RegularExpressions;
 
 namespace MeGUI
 {
@@ -45,8 +46,132 @@ namespace MeGUI
         #endregion
     }
 
+/*    public class MediaInfoFile2
+    {
+    }*/
+
     public class MediaInfoFile : IMediaFile
     {
+        public static MediaFile Open(string file)
+        {
+            try
+            {
+                MediaInfo m = new MediaInfo(file);
+
+                // tracks
+                List<MediaTrack> tracks = new List<MediaTrack>();
+                foreach (MediaInfoWrapper.VideoTrack t in m.Video)
+                {
+                    VideoTrack v = new VideoTrack();
+                    v.Codec = v.VCodec = getVideoCodec(t.Codec);
+                    v.Info = new MeGUI.core.details.TrackInfo(t.Language, t.Title);
+
+                    ulong width = ulong.Parse(t.Width);
+                    ulong height = ulong.Parse(t.Height);
+                    ulong frameCount = ulong.Parse(t.FrameCount);
+                    double fps = double.Parse(t.FrameRate);
+
+                    decimal? ar = easyParse<decimal>(delegate { return decimal.Parse(t.AspectRatio); });
+                    Dar dar = new Dar(ar, width, height);
+
+                    v.StreamInfo = new VideoInfo2(width, height, dar, frameCount, fps);
+                    v.TrackNumber = uint.Parse(t.ID);
+                    tracks.Add(v);
+                }
+
+                foreach (MediaInfoWrapper.AudioTrack t in m.Audio)
+                {
+                    AudioTrack a = new AudioTrack();
+                    a.Codec = a.ACodec = getAudioCodec(t.Codec);
+                    a.Info = new MeGUI.core.details.TrackInfo(t.Language, t.Title);
+
+                    a.StreamInfo = new AudioInfo();
+
+                    a.TrackNumber = uint.Parse(t.ID);
+
+                    tracks.Add(a);
+                }
+
+                foreach (MediaInfoWrapper.TextTrack t in m.Text)
+                {
+                    SubtitleTrack s = new SubtitleTrack();
+                    s.Codec = s.SCodec = getSubtitleCodec(t.Codec);
+                    s.Info = new MeGUI.core.details.TrackInfo(t.Language, t.Title);
+                    s.StreamInfo = new SubtitleInfo2();
+                    s.TrackNumber = uint.Parse(t.ID);
+
+                    tracks.Add(s);
+                }
+
+                if (m.General.Count != 1)
+                    throw new Exception("Expected one general track");
+
+                GeneralTrack g = m.General[0];
+                ContainerType cType = getContainerType(g.Format, g.FormatString);
+                TimeSpan playTime = TimeSpan.Parse(g.PlayTimeString3);
+
+                Chapters chapters = null;
+                if (m.Chapters.Count == 1)
+                    chapters = parseChapters(m.Chapters[0]);
+
+                return new MediaFile(tracks, chapters, playTime, cType);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        private static Regex chaptersRegex = new Regex(
+            @"^(?<num>\d+)\s*:\s*(?<hours>\d+):(?<mins>\d+):(?<secs>\d+).(?<ms>\d+) (?<name>.*)$", 
+            RegexOptions.Multiline| RegexOptions.Compiled);
+        private static Chapters parseChapters(MediaInfoWrapper.ChaptersTrack t)
+        {
+            // sample:
+
+/*Language             : English
+1                    : 00:00:00.000 Part 1
+2                    : 00:42:20.064 Part 2
+3                    : 01:26:34.240 Part 3*/
+
+            List<Chapter> chapters = new List<Chapter>();
+            foreach (Match m in chaptersRegex.Matches(t.Inform))
+            {
+                Chapter c = new Chapter();
+                c.name = m.Groups["name"].Value;
+                c.StartTime = new TimeSpan(0,
+                    int.Parse(m.Groups["hours"].Value),
+                    int.Parse(m.Groups["mins"].Value),
+                    int.Parse(m.Groups["secs"].Value),
+                    int.Parse(m.Groups["ms"].Value));
+                chapters.Add(c);
+            }
+            Chapters ch = new Chapters();
+            ch.Data = chapters;
+            return ch;
+        }
+
+        private static SubtitleCodec getSubtitleCodec(string p)
+        {
+            return null;
+            throw new Exception("The method or operation is not implemented.");
+        }
+
+
+        public static T? easyParse<T>(Getter<T> parse)
+            where T : struct
+        {
+            try
+            {
+                return parse();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+
         private static readonly CultureInfo culture = new CultureInfo("en-us");
         #region variables
         private static Dictionary<string, VideoCodec> knownVideoDescriptions;
@@ -100,29 +225,13 @@ namespace MeGUI
         {
             this.file = file;
             MediaInfo info = new MediaInfo(file);
+
             bool hasVideo = (info.Video.Count > 0);
-            if (hasVideo)
-            {
-                VideoTrack track = info.Video[0];
-                checked
-                {
-                    ulong width = (ulong)easyParseInt(track.Width);
-                    ulong height = (ulong)easyParseInt(track.Height);
-                    ulong frameCount = (ulong)easyParseInt(track.FrameCount);
-                    double fps = easyParseDouble(track.FrameRate);
-                    vCodec = getVideoCodec(track.Codec);
-#warning should parse DAR properly, as commented below
-                    int darX = -1;
-                    int darY = -1;
-                    //                darX = easyParseInt(track.AspectRatio.Substring()
-                    Dar dar = new Dar(darX, darY, width, height);
-                    this.info = new MediaFileInfo(hasVideo, width, height, dar, frameCount, fps, aCodecs.Length > 0);
-                }
-            }
+
             aCodecs = new AudioCodec[info.Audio.Count];
             aBitrateModes = new BitrateManagementMode[info.Audio.Count];
             int i = 0;
-            foreach (AudioTrack track in info.Audio)
+            foreach (MediaInfoWrapper.AudioTrack track in info.Audio)
             {
                 aCodecs[i] = getAudioCodec(track.Codec);
                 if (track.BitRateMode == "VBR")
@@ -135,20 +244,34 @@ namespace MeGUI
             else
                 cType = getContainerType(info.General[0].Format, info.General[0].FormatString);
             
-            if (hasVideo)
-                vType = getVideoType(vCodec, cType);
-            else
-                vType = null;
-            
             if (aCodecs.Length == 1)
                 aType = getAudioType(aCodecs[0], cType);
             else
                 aType = null;
 
+            if (hasVideo)
+            {
+                MediaInfoWrapper.VideoTrack track = info.Video[0];
+                checked
+                {
+                    ulong width = (ulong)easyParseInt(track.Width);
+                    ulong height = (ulong)easyParseInt(track.Height);
+                    ulong frameCount = (ulong)easyParseInt(track.FrameCount);
+                    double fps = (easyParseDouble(track.FrameRate) ?? 25.0);
+                    vCodec = getVideoCodec(track.Codec);
+                    vType = getVideoType(vCodec, cType);
+                    Dar dar = new Dar((decimal?)easyParseDouble(track.AspectRatio), width, height);
+                    this.info = new MediaFileInfo(hasVideo, width, height, dar, frameCount, fps, aCodecs.Length > 0);
+                }
+            }
+            else
+            {
+                this.info = new MediaFileInfo(false, 0, 0, Dar.A1x1, 0, 0, aCodecs.Length > 0);
+            }
         }
 
         #region methods
-        private int easyParseInt(string value)
+        private static int easyParseInt(string value)
         {
             try
             {
@@ -160,7 +283,7 @@ namespace MeGUI
             }
         }
 
-        private double easyParseDouble(string value)
+        private static double? easyParseDouble(string value)
         {
             try
             {
@@ -168,11 +291,11 @@ namespace MeGUI
             }
             catch (Exception)
             {
-                return -1;
+                return null;
             }
         }
 
-        private ContainerType getContainerType(string codec, string description)
+        private static ContainerType getContainerType(string codec, string description)
         {
             if (knownContainerTypes.ContainsKey(codec))
                 return knownContainerTypes[codec];
@@ -183,7 +306,7 @@ namespace MeGUI
             return null;
         }
 
-        private AudioCodec getAudioCodec(string description)
+        private static AudioCodec getAudioCodec(string description)
         {
             description = description.ToLower();
             foreach (string knownDescription in knownAudioDescriptions.Keys)
@@ -192,7 +315,7 @@ namespace MeGUI
             return null; ;
         }
 
-        private VideoCodec getVideoCodec(string description)
+        private static VideoCodec getVideoCodec(string description)
         {
             description = description.ToLower();
             foreach (string knownDescription in knownVideoDescriptions.Keys)
@@ -201,20 +324,17 @@ namespace MeGUI
             return null;
         }
 
-        private VideoType getVideoType(VideoCodec codec, ContainerType cft)
+        private static VideoType getVideoType(VideoCodec codec, ContainerType cft)
         {
-            ContainerType type = null;
-            if (cft != null)
-                type = cft;
             foreach (VideoType t in ContainerManager.VideoTypes.Values)
             {
-                if (t.ContainerType == type && Array.IndexOf<VideoCodec>(t.SupportedCodecs, codec) >= 0)
+                if (t.ContainerType == cft && Array.IndexOf<VideoCodec>(t.SupportedCodecs, codec) >= 0)
                     return t;
             }
             return null;
         }
 
-        private AudioType getAudioType(AudioCodec codec, ContainerType cft)
+        private static AudioType getAudioType(AudioCodec codec, ContainerType cft)
         {
             ContainerType type = null;
             if (cft != null)
@@ -239,6 +359,7 @@ namespace MeGUI
             knownVideoDescriptions.Add("asp", VideoCodec.ASP);
             knownVideoDescriptions.Add("mpeg-4 adv simple", VideoCodec.ASP);
             knownVideoDescriptions.Add("avc", VideoCodec.AVC);
+            knownVideoDescriptions.Add("h264", VideoCodec.AVC);
             knownVideoDescriptions.Add("h.264", VideoCodec.AVC);
             knownVideoDescriptions.Add("huffman", VideoCodec.HFYU);
             knownVideoDescriptions.Add("ffvh", VideoCodec.HFYU);

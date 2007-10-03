@@ -133,7 +133,7 @@ namespace MeGUI
         string input, output;
         ulong numberOfFrames;
         Dar? dar = null;
-        double framerate;
+        decimal framerate;
         MuxableType videoType;
         VideoCodecSettings settings;
         public VideoStream()
@@ -161,7 +161,7 @@ namespace MeGUI
           get { return numberOfFrames; }
           set { numberOfFrames = value; }
         }
-        public double Framerate
+        public decimal Framerate
         {
           get { return framerate; }
           set { framerate = value; }

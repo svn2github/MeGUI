@@ -1118,7 +1118,6 @@ namespace MeGUI
         {
             continueUpdate = true;
             int currentFile = 1; //the first file we update is file 1.
-            byte[] fileData;
             ErrorState result;
             List<iUpgradeable> succeededFiles = new List<iUpgradeable>();
             List<iUpgradeable> failedFiles = new List<iUpgradeable>();
@@ -1551,12 +1550,6 @@ namespace MeGUI
         {
             this.name = name;
         }
-    }
-
-    public class DataHolder
-    {
-        byte[] data;
-        ManualResetEvent mre = new ManualResetEvent(false);
     }
         #endregion
 }

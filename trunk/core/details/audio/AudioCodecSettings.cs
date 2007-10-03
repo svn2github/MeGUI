@@ -161,7 +161,7 @@ namespace MeGUI
         public override bool Equals(object obj)
         {
             // This works for all known descendants
-            return PropertyEqualityTester.Equals(this, obj);
+            return PropertyEqualityTester.AreEqual(this, obj);
         }
 
         ///// <summary>

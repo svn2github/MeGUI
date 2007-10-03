@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace MeGUI.core.gui
 {
-    class FPSChooser : StandardAndCustomComboBox
+    public class FPSChooser : StandardAndCustomComboBox
     {
         private static readonly object[] Framerates = new object[] { 
             new FPS(23.976M), 
@@ -26,7 +26,7 @@ namespace MeGUI.core.gui
                 decimal result;
                 if (NumberChooser.ShowDialog(
                     "Enter your AR:", "Custom AR", 3,
-                    1M, 1000M, Value, out result) == DialogResult.OK)
+                    1M, 1000M, Value ?? 25M, out result) == DialogResult.OK)
                     return new FPS(result);
                 else
                     return null;
@@ -34,18 +34,60 @@ namespace MeGUI.core.gui
             StandardItems = Framerates;
         }
 
+        private string nullString;
+        /// <summary>
+        /// String to display which represents "null" filesize. If NullString is set to null, then
+        /// there is no option not to select a filesize.
+        /// </summary>
+        public string NullString
+        {
+            get { return nullString; }
+            set { nullString = value; fillStandard(); }
+        }
+        
+        private void fillStandard()
+        {
+            List<object> objects = new List<object>();
+            if (!string.IsNullOrEmpty(NullString))
+                objects.Add(NullString);
+            objects.AddRange(Framerates);
+            base.StandardItems = objects.ToArray();
+
+        }
+
+
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public decimal Value
+        public decimal? Value
         {
             get
             {
+                if (SelectedObject.Equals(NullString))
+                    return null;
                 return ((FPS)SelectedObject).val;
             }
             set
             {
+                if (value == null)
+                {
+                    SelectedObject = NullString;
+                    return;
+                }
                 if (value == 0) return;
-                SelectedObject = new FPS(value);
+                SelectedObject = new FPS(value.Value);
+            }
+        }
+
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public decimal CertainValue
+        {
+            get
+            {
+                return Value.Value;
+            }
+            set
+            {
+                Value = value;
             }
         }
     }

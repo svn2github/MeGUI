@@ -47,6 +47,20 @@ namespace MeGUI
         public static readonly AudioCodec WAV = new AudioCodec("WAV");
         public static readonly AudioCodec PCM = new AudioCodec("PCM");
     }
+    public class SubtitleCodec : ICodec, IIDable
+    {
+        private string id;
+        public string ID
+        {
+            get { return id; }
+        }
+        public SubtitleCodec(string id)
+        {
+            this.id = id;
+        }
+        public static readonly SubtitleCodec TEXT = new SubtitleCodec("TEXT");
+        public static readonly SubtitleCodec IMAGE = new SubtitleCodec("IMAGE");
+    }
     #endregion
     #region video and audio encoder types
     /// <summary>
@@ -327,7 +341,6 @@ namespace MeGUI
             get { return name; }
         }
 
-        private ContainerType containerType;
         private string name, filterName, extension;
         /// <summary>
         /// used to display the output type in dropdowns

@@ -15,6 +15,10 @@ namespace MeGUI.core.gui
     {
         private AudioEncoderProvider audioEncoderProvider = new AudioEncoderProvider();
 
+        /// <summary>
+        /// This delegate is called when a job has been successfully configured and the queue button is pressed
+        /// </summary>
+        public Setter<AudioJob> QueueJob;
 
         #region handlers
         private FileTypeHandler<AudioType> fileTypeHandler;
@@ -63,6 +67,11 @@ namespace MeGUI.core.gui
         }
         #endregion
 
+        public string QueueButtonText
+        {
+            get { return queueAudioButton.Text; }
+            set { queueAudioButton.Text = value; }
+        }
 
         public AudioEncoderProvider AudioEncoderProvider
         {
@@ -88,7 +97,12 @@ namespace MeGUI.core.gui
             {
                 return codecHandler.CurrentSettingsProvider.GetCurrentSettings();
             }
+            private set
+            {
+                codecHandler.Setter(value);
+            }
         }
+
         public string verifyAudioSettings()
         {
             AudioJob stream = AudioJob;
@@ -123,30 +137,6 @@ namespace MeGUI.core.gui
             InitializeComponent();
         }
 
-        private void audioInput_DragDrop(object sender, DragEventArgs e)
-        {
-            e.Effect = DragDropEffects.Move;
-
-            Array data = e.Data.GetData("FileDrop") as Array;
-            if (data != null)
-            {
-                if (data.GetValue(0) is String)
-                {
-                    string filename = ((string[])data)[0];
-
-                    if (Path.GetExtension(filename) != null)
-                    {
-                        audioInput.Filename = filename;
-                        openAudioFile(audioInput.Filename);
-                    }
-                }
-            }
-        }
-
-        private void audioInput_DragOver(object sender, DragEventArgs e)
-        {
-            e.Effect = DragDropEffects.Move;
-        }
 
         private void audioInput_FileSelected(FileBar sender, FileBarEventArgs args)
         {
@@ -173,9 +163,10 @@ namespace MeGUI.core.gui
                 MessageBox.Show(settingsError, "Unsupported configuration", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return;
             }
-            MainForm.Instance.Jobs.addJobsToQueue(AudioJob);
+            QueueJob(AudioJob);
         }
 
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public AudioJob AudioJob
         {
             get
@@ -187,6 +178,14 @@ namespace MeGUI.core.gui
 
                 return new AudioJob(this.AudioInput, this.AudioOutput, this.cuts.Filename,
                     this.AudCodecSettings, (int)delay.Value);
+            }
+            set
+            {
+                AudioInput = value.Input;
+                AudioOutput = value.Output;
+                AudCodecSettings = value.Settings;
+                cuts.Filename = value.CutFile;
+                delay.Value = value.Delay;
             }
         }
 

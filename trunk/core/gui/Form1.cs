@@ -1774,6 +1774,8 @@ namespace MeGUI
             PackageSystem.JobPostProcessors.Register(OneClickPostProcessor.PostProcessor);
             PackageSystem.JobPostProcessors.Register(IndexJobPostProcessor.PostProcessor);
             PackageSystem.JobPostProcessors.Register(JobWorker.DeleteIntermediateFilesPostProcessor);
+            PackageSystem.JobConfigurers.Register(MuxWindow.Configurer);
+            PackageSystem.JobConfigurers.Register(AudioEncodingWindow.Configurer);
         }
 
         private static Mutex mySingleInstanceMutex = new Mutex(true, "MeGUI_D9D0C224154B489784998BF97B9C9414");

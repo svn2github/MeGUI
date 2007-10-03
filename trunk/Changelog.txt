@@ -1,12 +1,13 @@
-0.2.6.1018 work in progress
+0.2.6.1018
     - (berrinam) [Internal] : Remove Commandline field from Job
     - (berrinam) [Internal] : Remove commandline generation from CommandLineGenerator and put it in individual encoders
     - (berrinam) [Internal] : Remove Framecount and FPS from VideoJob
     - (berrinam) [Internal] : Separated Job into Job Queue info (now under TaggedJob) and job running info (under Job, as before). This may cause temporary Serialization bugs
     - (berrinam) [Internal] : Reworked/simplified BitrateCalculator
-    - (berrinam) [Main window] : Can have arbitrarily many audio tracks
+    - (berrinam) [Main window, Mux window, OneClick] : Can have arbitrarily many audio tracks
     - (berrinam) [Internal] : Documentation for MuxPath finding
-    - (berrinam) [OneClick] : Can have arbitrarily many audio tracks
+    - (berrinam) [Internal] : Moved drag & drop code to FileBar to avoid repetition
+    - (berrinam) Load jobs now works for mux and audio jobs
 
 0.2.6.1017
     - (berrinam) [OneClick, AviSynth Creator, Video Preview, AutoEncode, and Bitrate Calculator] : nicer comboboxes, for AR, FPS, and target sizes

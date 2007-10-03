@@ -31,7 +31,6 @@ namespace MeGUI.core.gui
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.Button abortButton;
             System.Windows.Forms.Button loadJobButton;
-            System.Windows.Forms.Button updateJobButton;
             System.Windows.Forms.Button button9;
             System.Windows.Forms.ColumnHeader jobColumHeader;
             System.Windows.Forms.ColumnHeader inputColumnHeader;
@@ -59,7 +58,6 @@ namespace MeGUI.core.gui
             this.pauseButton = new System.Windows.Forms.Button();
             abortButton = new System.Windows.Forms.Button();
             loadJobButton = new System.Windows.Forms.Button();
-            updateJobButton = new System.Windows.Forms.Button();
             button9 = new System.Windows.Forms.Button();
             jobColumHeader = new System.Windows.Forms.ColumnHeader();
             inputColumnHeader = new System.Windows.Forms.ColumnHeader();
@@ -91,7 +89,6 @@ namespace MeGUI.core.gui
             // 
             loadJobButton.AutoSize = true;
             loadJobButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            loadJobButton.Enabled = false;
             loadJobButton.Location = new System.Drawing.Point(179, 3);
             loadJobButton.Margin = new System.Windows.Forms.Padding(7, 3, 3, 3);
             loadJobButton.Name = "loadJobButton";
@@ -99,25 +96,13 @@ namespace MeGUI.core.gui
             loadJobButton.TabIndex = 4;
             loadJobButton.Text = "Load";
             loadJobButton.UseVisualStyleBackColor = true;
-            // 
-            // updateJobButton
-            // 
-            updateJobButton.AutoSize = true;
-            updateJobButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            updateJobButton.Enabled = false;
-            updateJobButton.Location = new System.Drawing.Point(226, 3);
-            updateJobButton.Margin = new System.Windows.Forms.Padding(3, 3, 7, 3);
-            updateJobButton.Name = "updateJobButton";
-            updateJobButton.Size = new System.Drawing.Size(52, 23);
-            updateJobButton.TabIndex = 5;
-            updateJobButton.Text = "Update";
-            updateJobButton.UseVisualStyleBackColor = true;
+            loadJobButton.Click += new System.EventHandler(this.loadJobButton_Click);
             // 
             // button9
             // 
             button9.AutoSize = true;
             button9.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            button9.Location = new System.Drawing.Point(384, 3);
+            button9.Location = new System.Drawing.Point(322, 3);
             button9.Name = "button9";
             button9.Size = new System.Drawing.Size(48, 23);
             button9.TabIndex = 8;
@@ -175,7 +160,7 @@ namespace MeGUI.core.gui
             // 
             this.upButton.AutoSize = true;
             this.upButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.upButton.Location = new System.Drawing.Point(292, 3);
+            this.upButton.Location = new System.Drawing.Point(230, 3);
             this.upButton.Margin = new System.Windows.Forms.Padding(7, 3, 3, 3);
             this.upButton.Name = "upButton";
             this.upButton.Size = new System.Drawing.Size(31, 23);
@@ -188,7 +173,7 @@ namespace MeGUI.core.gui
             // 
             this.downButton.AutoSize = true;
             this.downButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.downButton.Location = new System.Drawing.Point(329, 3);
+            this.downButton.Location = new System.Drawing.Point(267, 3);
             this.downButton.Margin = new System.Windows.Forms.Padding(3, 3, 7, 3);
             this.downButton.Name = "downButton";
             this.downButton.Size = new System.Drawing.Size(45, 23);
@@ -216,7 +201,7 @@ namespace MeGUI.core.gui
             this.queueListView.HideSelection = false;
             this.queueListView.Location = new System.Drawing.Point(0, 0);
             this.queueListView.Name = "queueListView";
-            this.queueListView.Size = new System.Drawing.Size(692, 542);
+            this.queueListView.Size = new System.Drawing.Size(692, 513);
             this.queueListView.TabIndex = 0;
             this.queueListView.UseCompatibleStateImageBehavior = false;
             this.queueListView.View = System.Windows.Forms.View.Details;
@@ -236,14 +221,14 @@ namespace MeGUI.core.gui
             this.AbortMenuItem,
             this.LoadMenuItem});
             this.queueContextMenu.Name = "queueContextMenu";
-            this.queueContextMenu.Size = new System.Drawing.Size(156, 92);
+            this.queueContextMenu.Size = new System.Drawing.Size(145, 92);
             this.queueContextMenu.Opened += new System.EventHandler(this.queueContextMenu_Opened);
             // 
             // DeleteMenuItem
             // 
             this.DeleteMenuItem.Name = "DeleteMenuItem";
             this.DeleteMenuItem.ShortcutKeyDisplayString = "";
-            this.DeleteMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.DeleteMenuItem.Size = new System.Drawing.Size(144, 22);
             this.DeleteMenuItem.Text = "&Delete";
             this.DeleteMenuItem.ToolTipText = "Delete this job";
             this.DeleteMenuItem.Click += new System.EventHandler(this.deleteJobButton_Click);
@@ -254,20 +239,20 @@ namespace MeGUI.core.gui
             this.PostponedMenuItem,
             this.WaitingMenuItem});
             this.StatusMenuItem.Name = "StatusMenuItem";
-            this.StatusMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.StatusMenuItem.Size = new System.Drawing.Size(144, 22);
             this.StatusMenuItem.Text = "&Change status";
             // 
             // PostponedMenuItem
             // 
             this.PostponedMenuItem.Name = "PostponedMenuItem";
-            this.PostponedMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.PostponedMenuItem.Size = new System.Drawing.Size(125, 22);
             this.PostponedMenuItem.Text = "&Postponed";
             this.PostponedMenuItem.Click += new System.EventHandler(this.postponeMenuItem_Click);
             // 
             // WaitingMenuItem
             // 
             this.WaitingMenuItem.Name = "WaitingMenuItem";
-            this.WaitingMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.WaitingMenuItem.Size = new System.Drawing.Size(125, 22);
             this.WaitingMenuItem.Text = "&Waiting";
             this.WaitingMenuItem.Click += new System.EventHandler(this.waitingMenuItem_Click);
             // 
@@ -275,7 +260,7 @@ namespace MeGUI.core.gui
             // 
             this.AbortMenuItem.Name = "AbortMenuItem";
             this.AbortMenuItem.ShortcutKeyDisplayString = "";
-            this.AbortMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.AbortMenuItem.Size = new System.Drawing.Size(144, 22);
             this.AbortMenuItem.Text = "&Abort";
             this.AbortMenuItem.ToolTipText = "Abort this job";
             this.AbortMenuItem.Click += new System.EventHandler(this.AbortMenuItem_Click);
@@ -285,7 +270,7 @@ namespace MeGUI.core.gui
             this.LoadMenuItem.Enabled = false;
             this.LoadMenuItem.Name = "LoadMenuItem";
             this.LoadMenuItem.ShortcutKeyDisplayString = "";
-            this.LoadMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.LoadMenuItem.Size = new System.Drawing.Size(144, 22);
             this.LoadMenuItem.Text = "&Load";
             this.LoadMenuItem.ToolTipText = "Load into MeGUI";
             // 
@@ -298,7 +283,6 @@ namespace MeGUI.core.gui
             this.flowLayoutPanel1.Controls.Add(this.pauseButton);
             this.flowLayoutPanel1.Controls.Add(abortButton);
             this.flowLayoutPanel1.Controls.Add(loadJobButton);
-            this.flowLayoutPanel1.Controls.Add(updateJobButton);
             this.flowLayoutPanel1.Controls.Add(this.upButton);
             this.flowLayoutPanel1.Controls.Add(this.downButton);
             this.flowLayoutPanel1.Controls.Add(button9);

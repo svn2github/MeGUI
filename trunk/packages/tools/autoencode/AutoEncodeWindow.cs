@@ -544,7 +544,7 @@ namespace MeGUI
                     getAudioStreamsForBitrate(),
                     desiredSizeBytes,
                     videoStream.NumberOfFrames,
-                    videoStream.Framerate,
+                    (double)videoStream.Framerate,
                     out videoSize);
 #warning check whether codecs use k=1000 or k=1024 for kbits // kick those that still use 1024...
                 this.videoSize.Text = new FileSize(Unit.KB, videoSize).ToString();
@@ -581,7 +581,7 @@ namespace MeGUI
                     getAudioStreamsForBitrate(),
                     desiredBitrate,
                     videoStream.NumberOfFrames,
-                    videoStream.Framerate,
+                    (double)videoStream.Framerate,
                     out rawVideoSize) / 1024L ;
                 this.videoSize.Text = new FileSize(Unit.KB, rawVideoSize).ToString();
                 this.targetSize.Value = new FileSize(Unit.MB, outputSize);
@@ -824,7 +824,7 @@ namespace MeGUI
                 myVideo.Input = info.Video.Info.VideoInput;
                 myVideo.Output = info.Video.Info.VideoOutput;
                 myVideo.NumberOfFrames = length;
-                myVideo.Framerate = framerate;
+                myVideo.Framerate = (decimal)framerate;
                 myVideo.DAR = info.Video.Info.DAR;
                 myVideo.VideoType = info.Video.CurrentMuxableVideoType;
                 myVideo.Settings = vSettings;

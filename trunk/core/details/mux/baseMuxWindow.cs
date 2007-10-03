@@ -27,6 +27,7 @@ using System.Windows.Forms;
 using System.IO;
 using MeGUI.core.util;
 using MeGUI.core.details;
+using MeGUI.core.details.mux;
 
 namespace MeGUI
 {
@@ -35,72 +36,53 @@ namespace MeGUI
     /// </summary>
     public class baseMuxWindow : System.Windows.Forms.Form
     {
+        protected List<MuxStreamControl> audioTracks;
+        protected List<MuxStreamControl> subtitleTracks;
+
+
         #region variables
         //protected int parX, parY;
         protected Dar? dar;
         protected string audioFilter, videoInputFilter, subtitleFilter, chaptersFilter, outputFilter;
-        protected MuxStream[] audioStreams;
-        protected MuxStream[] subtitleStreams;
         private MainForm mainForm;
         private MeGUISettings settings;
         private int lastSubtitle = 0, lastAudioTrack = 0;
-        private Dictionary<string, string> languages;
-        protected bool[] preconfigured;
-        protected Button openSubtitleButton;
-        protected TextBox subtitleInput;
-        protected Label subtitleInputLabel;
-        protected RadioButton subtitleTrack5;
-        protected RadioButton subtitleTrack4;
-        protected RadioButton subtitleTrack3;
-        protected RadioButton subtitleTrack2;
-        protected RadioButton subtitleTrack1;
-        protected RadioButton audioTrack2;
-        protected RadioButton audioTrack1;
-        protected TextBox audioInput;
-        protected Button audioInputOpenButton;
-        protected TextBox videoInput;
-        protected Button inputOpenButton;
         protected Label videoInputLabel;
-        protected TextBox chaptersInput;
-        protected Button openChaptersButton;
         protected OpenFileDialog openFileDialog;
-        protected Label audioLanguageLabel;
-        protected ComboBox audioLanguage;
-        protected Label subtitleLanguageLabel;
-        protected ComboBox subtitleLanguage;
         protected Button muxButton;
-        protected Button outputButton;
         protected Label MuxFPSLabel;
-        protected ComboBox muxFPS;
-        protected TextBox muxedOutput;
-        protected Label audioInputLabel;
         protected Label chaptersInputLabel;
         protected Label muxedOutputLabel;
-        protected CheckBox enableSplit;
-        protected TextBox splitSize;
-        protected Label mbLabel;
-        protected Button removeAudioTrackButton;
-        protected Button removeSubtitleTrack;
         protected Button cancelButton;
         protected SaveFileDialog saveFileDialog;
         protected GroupBox videoGroupbox;
         protected GroupBox outputGroupbox;
-        protected GroupBox audioGroupbox;
-        protected GroupBox subtitleGroupbox;
         protected GroupBox chaptersGroupbox;
-        protected TextBox audioName;
         protected TextBox videoName;
         protected Label videoNameLabel;
-        protected Label audioNameLabel;
-        protected NumericUpDown audioDelay;
-        protected Label delayLabel;
-        protected TextBox subName;
-        protected Label SubNamelabel;
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.Container components = null;
         #endregion
+        protected Panel audioPanel;
+
+        protected TabControl audio;
+        private TabPage audioPage1;
+        private MeGUI.core.details.mux.MuxStreamControl muxStreamControl2;
+        private ContextMenuStrip audioMenu;
+        private ContextMenuStrip subtitleMenu;
+        private ToolStripMenuItem audioAddTrack;
+        private ToolStripMenuItem audioRemoveTrack;
+        private ToolStripMenuItem subtitleAddTrack;
+        private ToolStripMenuItem subtitleRemoveTrack;
+        protected Panel subtitlePanel;
+        protected TabControl subtitles;
+        private TabPage subPage1;
+        private MeGUI.core.details.mux.MuxStreamControl muxStreamControl1;
+        protected FileBar vInput;
+        protected FileBar chapters;
+        protected Label splittingLabel;
+        protected MeGUI.core.gui.TargetSizeSCBox splitting;
+        protected FileBar output;
+        protected MeGUI.core.gui.FPSChooser fps;
+        private IContainer components;
         #region start/stop
         public baseMuxWindow()
         {
@@ -108,29 +90,12 @@ namespace MeGUI
             // Required for Windows Form Designer support
             //
             InitializeComponent();
-            audioStreams = new MuxStream[2];
-            audioStreams[0].path = "";
-            audioStreams[0].TrackInfo = new TrackInfo();
-            audioStreams[1].path = "";
-            audioStreams[1].TrackInfo = new TrackInfo(); 
-            subtitleStreams = new MuxStream[5];
-            subtitleStreams[0].path = "";
-            subtitleStreams[0].TrackInfo = new TrackInfo();
-            subtitleStreams[1].path = "";
-            subtitleStreams[1].TrackInfo = new TrackInfo();
-            subtitleStreams[2].path = "";
-            subtitleStreams[2].TrackInfo = new TrackInfo();
-            subtitleStreams[3].path = "";
-            subtitleStreams[3].TrackInfo = new TrackInfo();
-            subtitleStreams[4].path = "";
-            subtitleStreams[4].TrackInfo = new TrackInfo();
-            this.languages = LanguageSelectionContainer.Languages;
-            subtitleLanguage.DataSource = audioLanguage.DataSource = new List<string>(this.languages.Keys);
-            audioLanguage.BindingContext = new BindingContext();
-            subtitleLanguage.BindingContext = new BindingContext();
-            audioLanguage.SelectedItem = "English";
-            preconfigured = new bool[] { false, false };
-            this.muxFPS.Items.AddRange(new object[] { 23.976, 24.0, 25.0, 29.97, 30.0, 50, 59.94, 60.0 });
+            
+            audioTracks = new List<MuxStreamControl>();
+            audioTracks.Add(muxStreamControl2);
+            subtitleTracks = new List<MuxStreamControl>();
+            subtitleTracks.Add(muxStreamControl1);
+
         }
         public baseMuxWindow(MainForm mainForm)
             : this()
@@ -164,49 +129,33 @@ namespace MeGUI
         /// <param name="subtitleStreams">the subtitle streams</param>
         /// <param name="output">name of the output</param>
         /// <param name="splitSize">split size of the output</param>
-        public void setConfig(string videoInput, double framerate, MuxStream[] audioStreams, MuxStream[] subtitleStreams, string chapterFile, string output, FileSize? splitSize, Dar? dar)
+        public void setConfig(string videoInput, decimal framerate, MuxStream[] audioStreams, MuxStream[] subtitleStreams, string chapterFile, string output, FileSize? splitSize, Dar? dar)
         {
             this.dar = dar;
-            this.videoInput.Text = videoInput;
-            int fpsIndex = muxFPS.Items.IndexOf(framerate);
-            if (fpsIndex != -1)
-                muxFPS.SelectedIndex = fpsIndex;
+            vInput.Filename = videoInput;
+            fps.Value = framerate;
+            
             int index = 0;
             foreach (MuxStream stream in audioStreams)
             {
-                string lang = LanguageSelectionContainer.lookupISOCode(stream.language);
-                this.audioStreams[index] = stream;
-                if (lang != null)
-                    this.audioStreams[index].language = lang;
+                if (audioTracks.Count == index)
+                    AudioAddTrack();
+                audioTracks[index].Stream = stream;
                 index++;
             }
-            if (audioStreams.Length > 0) // set GUI elements
-            {
-                audioInput.Text = this.audioStreams[0].path;
-                audioLanguage.SelectedIndex = audioLanguage.Items.IndexOf(this.audioStreams[0].language);
-                audioDelay.Value = this.audioStreams[0].delay;
-            }
+
             index = 0;
             foreach (MuxStream stream in subtitleStreams)
             {
-                string lang = LanguageSelectionContainer.lookupISOCode(stream.language);
-                this.subtitleStreams[index] = stream;
-                if (lang != null)
-                    this.subtitleStreams[index].language = lang;
+                if (subtitleTracks.Count == index)
+                    SubtitleAddTrack();
+                subtitleTracks[index].Stream = stream;
                 index++;
             }
-            if (subtitleStreams.Length > 0)
-            {
-                subtitleInput.Text = this.subtitleStreams[0].path;
-                subtitleLanguage.SelectedIndex = subtitleLanguage.Items.IndexOf(this.subtitleStreams[0].language);
-            }
-            chaptersInput.Text = chapterFile;
-            muxedOutput.Text = output;
-            if (splitSize.HasValue)
-            {
-                enableSplit.Checked = true;
-                this.splitSize.Text = splitSize.Value.InUnits(Unit.MB).ToString();
-            }
+
+            chapters.Filename = chapterFile;
+            this.output.Filename = output;
+            this.splitting.Value = splitSize;
             this.muxButton.Text = "Update";
             checkIO();
         }
@@ -220,10 +169,20 @@ namespace MeGUI
         /// <param name="chapterFile">the assigned chapter file</param>
         public void getAdditionalStreams(out MuxStream[] aStreams, out MuxStream[] sStreams, out string chapterFile)
         {
-            convertLanguagesToISO();
-            aStreams = this.audioStreams;
-            sStreams = this.subtitleStreams;
-            chapterFile = chaptersInput.Text;
+            aStreams = getStreams(audioTracks);
+            sStreams = getStreams(subtitleTracks);
+            chapterFile = chapters.Filename;
+        }
+
+        private MuxStream[] getStreams(List<MuxStreamControl> controls)
+        {
+            List<MuxStream> streams = new List<MuxStream>();
+            foreach (MuxStreamControl t in controls)
+            {
+                if (t.Stream != null)
+                    streams.Add(t.Stream);
+            }
+            return streams.ToArray();
         }
         #endregion
         #region Windows Form Designer generated code
@@ -233,339 +192,69 @@ namespace MeGUI
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.muxButton = new System.Windows.Forms.Button();
-            this.subtitleGroupbox = new System.Windows.Forms.GroupBox();
-            this.removeSubtitleTrack = new System.Windows.Forms.Button();
-            this.subtitleLanguage = new System.Windows.Forms.ComboBox();
-            this.subtitleLanguageLabel = new System.Windows.Forms.Label();
-            this.openSubtitleButton = new System.Windows.Forms.Button();
-            this.subtitleInput = new System.Windows.Forms.TextBox();
-            this.subtitleInputLabel = new System.Windows.Forms.Label();
-            this.subtitleTrack5 = new System.Windows.Forms.RadioButton();
-            this.subtitleTrack4 = new System.Windows.Forms.RadioButton();
-            this.subtitleTrack3 = new System.Windows.Forms.RadioButton();
-            this.subtitleTrack2 = new System.Windows.Forms.RadioButton();
-            this.subtitleTrack1 = new System.Windows.Forms.RadioButton();
-            this.audioGroupbox = new System.Windows.Forms.GroupBox();
-            this.delayLabel = new System.Windows.Forms.Label();
-            this.audioDelay = new System.Windows.Forms.NumericUpDown();
-            this.audioName = new System.Windows.Forms.TextBox();
-            this.audioNameLabel = new System.Windows.Forms.Label();
-            this.removeAudioTrackButton = new System.Windows.Forms.Button();
-            this.audioLanguage = new System.Windows.Forms.ComboBox();
-            this.audioLanguageLabel = new System.Windows.Forms.Label();
-            this.audioTrack2 = new System.Windows.Forms.RadioButton();
-            this.audioTrack1 = new System.Windows.Forms.RadioButton();
-            this.audioInput = new System.Windows.Forms.TextBox();
-            this.audioInputOpenButton = new System.Windows.Forms.Button();
-            this.audioInputLabel = new System.Windows.Forms.Label();
             this.videoGroupbox = new System.Windows.Forms.GroupBox();
             this.videoName = new System.Windows.Forms.TextBox();
             this.videoNameLabel = new System.Windows.Forms.Label();
             this.MuxFPSLabel = new System.Windows.Forms.Label();
-            this.muxFPS = new System.Windows.Forms.ComboBox();
-            this.videoInput = new System.Windows.Forms.TextBox();
-            this.inputOpenButton = new System.Windows.Forms.Button();
             this.videoInputLabel = new System.Windows.Forms.Label();
             this.chaptersGroupbox = new System.Windows.Forms.GroupBox();
             this.chaptersInputLabel = new System.Windows.Forms.Label();
-            this.chaptersInput = new System.Windows.Forms.TextBox();
-            this.openChaptersButton = new System.Windows.Forms.Button();
             this.outputGroupbox = new System.Windows.Forms.GroupBox();
-            this.mbLabel = new System.Windows.Forms.Label();
-            this.splitSize = new System.Windows.Forms.TextBox();
-            this.enableSplit = new System.Windows.Forms.CheckBox();
+            this.splittingLabel = new System.Windows.Forms.Label();
             this.muxedOutputLabel = new System.Windows.Forms.Label();
-            this.muxedOutput = new System.Windows.Forms.TextBox();
-            this.outputButton = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.cancelButton = new System.Windows.Forms.Button();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
-            this.subName = new System.Windows.Forms.TextBox();
-            this.SubNamelabel = new System.Windows.Forms.Label();
-            this.subtitleGroupbox.SuspendLayout();
-            this.audioGroupbox.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.audioDelay)).BeginInit();
+            this.audioPanel = new System.Windows.Forms.Panel();
+            this.audioMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.audioAddTrack = new System.Windows.Forms.ToolStripMenuItem();
+            this.audioRemoveTrack = new System.Windows.Forms.ToolStripMenuItem();
+            this.audio = new System.Windows.Forms.TabControl();
+            this.audioPage1 = new System.Windows.Forms.TabPage();
+            this.subtitleMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.subtitleAddTrack = new System.Windows.Forms.ToolStripMenuItem();
+            this.subtitleRemoveTrack = new System.Windows.Forms.ToolStripMenuItem();
+            this.subtitlePanel = new System.Windows.Forms.Panel();
+            this.subtitles = new System.Windows.Forms.TabControl();
+            this.subPage1 = new System.Windows.Forms.TabPage();
+            this.muxStreamControl1 = new MeGUI.core.details.mux.MuxStreamControl();
+            this.muxStreamControl2 = new MeGUI.core.details.mux.MuxStreamControl();
+            this.splitting = new MeGUI.core.gui.TargetSizeSCBox();
+            this.output = new MeGUI.FileBar();
+            this.fps = new MeGUI.core.gui.FPSChooser();
+            this.vInput = new MeGUI.FileBar();
+            this.chapters = new MeGUI.FileBar();
             this.videoGroupbox.SuspendLayout();
             this.chaptersGroupbox.SuspendLayout();
             this.outputGroupbox.SuspendLayout();
+            this.audioPanel.SuspendLayout();
+            this.audioMenu.SuspendLayout();
+            this.audio.SuspendLayout();
+            this.audioPage1.SuspendLayout();
+            this.subtitleMenu.SuspendLayout();
+            this.subtitlePanel.SuspendLayout();
+            this.subtitles.SuspendLayout();
+            this.subPage1.SuspendLayout();
             this.SuspendLayout();
             // 
             // muxButton
             // 
-            this.muxButton.Location = new System.Drawing.Point(291, 430);
+            this.muxButton.Location = new System.Drawing.Point(291, 458);
             this.muxButton.Name = "muxButton";
             this.muxButton.Size = new System.Drawing.Size(56, 23);
             this.muxButton.TabIndex = 26;
             this.muxButton.Text = "Queue";
             this.muxButton.Click += new System.EventHandler(this.muxButton_Click);
             // 
-            // subtitleGroupbox
-            // 
-            this.subtitleGroupbox.Controls.Add(this.subName);
-            this.subtitleGroupbox.Controls.Add(this.SubNamelabel);
-            this.subtitleGroupbox.Controls.Add(this.removeSubtitleTrack);
-            this.subtitleGroupbox.Controls.Add(this.subtitleLanguage);
-            this.subtitleGroupbox.Controls.Add(this.subtitleLanguageLabel);
-            this.subtitleGroupbox.Controls.Add(this.openSubtitleButton);
-            this.subtitleGroupbox.Controls.Add(this.subtitleInput);
-            this.subtitleGroupbox.Controls.Add(this.subtitleInputLabel);
-            this.subtitleGroupbox.Controls.Add(this.subtitleTrack5);
-            this.subtitleGroupbox.Controls.Add(this.subtitleTrack4);
-            this.subtitleGroupbox.Controls.Add(this.subtitleTrack3);
-            this.subtitleGroupbox.Controls.Add(this.subtitleTrack2);
-            this.subtitleGroupbox.Controls.Add(this.subtitleTrack1);
-            this.subtitleGroupbox.Location = new System.Drawing.Point(8, 204);
-            this.subtitleGroupbox.Name = "subtitleGroupbox";
-            this.subtitleGroupbox.Size = new System.Drawing.Size(424, 80);
-            this.subtitleGroupbox.TabIndex = 24;
-            this.subtitleGroupbox.TabStop = false;
-            this.subtitleGroupbox.Text = "Subtitles";
-            // 
-            // removeSubtitleTrack
-            // 
-            this.removeSubtitleTrack.Location = new System.Drawing.Point(382, 48);
-            this.removeSubtitleTrack.Name = "removeSubtitleTrack";
-            this.removeSubtitleTrack.Size = new System.Drawing.Size(24, 23);
-            this.removeSubtitleTrack.TabIndex = 29;
-            this.removeSubtitleTrack.Text = "X";
-            this.removeSubtitleTrack.Click += new System.EventHandler(this.removeSubtitleTrack_Click);
-            // 
-            // subtitleLanguage
-            // 
-            this.subtitleLanguage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.subtitleLanguage.Location = new System.Drawing.Point(120, 50);
-            this.subtitleLanguage.Name = "subtitleLanguage";
-            this.subtitleLanguage.Size = new System.Drawing.Size(121, 21);
-            this.subtitleLanguage.Sorted = true;
-            this.subtitleLanguage.TabIndex = 28;
-            this.subtitleLanguage.SelectedIndexChanged += new System.EventHandler(this.subtitleLanguage_SelectedIndexChanged);
-            // 
-            // subtitleLanguageLabel
-            // 
-            this.subtitleLanguageLabel.Location = new System.Drawing.Point(16, 48);
-            this.subtitleLanguageLabel.Name = "subtitleLanguageLabel";
-            this.subtitleLanguageLabel.Size = new System.Drawing.Size(100, 23);
-            this.subtitleLanguageLabel.TabIndex = 5;
-            this.subtitleLanguageLabel.Text = "Language";
-            // 
-            // openSubtitleButton
-            // 
-            this.openSubtitleButton.Location = new System.Drawing.Point(382, 19);
-            this.openSubtitleButton.Name = "openSubtitleButton";
-            this.openSubtitleButton.Size = new System.Drawing.Size(24, 23);
-            this.openSubtitleButton.TabIndex = 3;
-            this.openSubtitleButton.Text = "...";
-            this.openSubtitleButton.Click += new System.EventHandler(this.openSubtitleButton_Click);
-            // 
-            // subtitleInput
-            // 
-            this.subtitleInput.Location = new System.Drawing.Point(120, 20);
-            this.subtitleInput.Name = "subtitleInput";
-            this.subtitleInput.ReadOnly = true;
-            this.subtitleInput.Size = new System.Drawing.Size(256, 21);
-            this.subtitleInput.TabIndex = 2;
-            // 
-            // subtitleInputLabel
-            // 
-            this.subtitleInputLabel.Location = new System.Drawing.Point(16, 22);
-            this.subtitleInputLabel.Name = "subtitleInputLabel";
-            this.subtitleInputLabel.Size = new System.Drawing.Size(100, 16);
-            this.subtitleInputLabel.TabIndex = 1;
-            this.subtitleInputLabel.Text = "Subtitle File";
-            // 
-            // subtitleTrack5
-            // 
-            this.subtitleTrack5.Location = new System.Drawing.Point(163, 1);
-            this.subtitleTrack5.Name = "subtitleTrack5";
-            this.subtitleTrack5.Size = new System.Drawing.Size(27, 13);
-            this.subtitleTrack5.TabIndex = 4;
-            this.subtitleTrack5.Text = "5";
-            this.subtitleTrack5.CheckedChanged += new System.EventHandler(this.subtitleTrack_CheckedChanged);
-            // 
-            // subtitleTrack4
-            // 
-            this.subtitleTrack4.Location = new System.Drawing.Point(136, 1);
-            this.subtitleTrack4.Name = "subtitleTrack4";
-            this.subtitleTrack4.Size = new System.Drawing.Size(27, 13);
-            this.subtitleTrack4.TabIndex = 3;
-            this.subtitleTrack4.Text = "4";
-            this.subtitleTrack4.CheckedChanged += new System.EventHandler(this.subtitleTrack_CheckedChanged);
-            // 
-            // subtitleTrack3
-            // 
-            this.subtitleTrack3.Location = new System.Drawing.Point(109, 1);
-            this.subtitleTrack3.Name = "subtitleTrack3";
-            this.subtitleTrack3.Size = new System.Drawing.Size(27, 13);
-            this.subtitleTrack3.TabIndex = 2;
-            this.subtitleTrack3.Text = "3";
-            this.subtitleTrack3.CheckedChanged += new System.EventHandler(this.subtitleTrack_CheckedChanged);
-            // 
-            // subtitleTrack2
-            // 
-            this.subtitleTrack2.Location = new System.Drawing.Point(82, 1);
-            this.subtitleTrack2.Name = "subtitleTrack2";
-            this.subtitleTrack2.Size = new System.Drawing.Size(27, 13);
-            this.subtitleTrack2.TabIndex = 1;
-            this.subtitleTrack2.Text = "2";
-            this.subtitleTrack2.CheckedChanged += new System.EventHandler(this.subtitleTrack_CheckedChanged);
-            // 
-            // subtitleTrack1
-            // 
-            this.subtitleTrack1.Checked = true;
-            this.subtitleTrack1.Location = new System.Drawing.Point(55, 1);
-            this.subtitleTrack1.Name = "subtitleTrack1";
-            this.subtitleTrack1.Size = new System.Drawing.Size(27, 13);
-            this.subtitleTrack1.TabIndex = 0;
-            this.subtitleTrack1.TabStop = true;
-            this.subtitleTrack1.Text = "1";
-            // 
-            // audioGroupbox
-            // 
-            this.audioGroupbox.Controls.Add(this.delayLabel);
-            this.audioGroupbox.Controls.Add(this.audioDelay);
-            this.audioGroupbox.Controls.Add(this.audioName);
-            this.audioGroupbox.Controls.Add(this.audioNameLabel);
-            this.audioGroupbox.Controls.Add(this.removeAudioTrackButton);
-            this.audioGroupbox.Controls.Add(this.audioLanguage);
-            this.audioGroupbox.Controls.Add(this.audioLanguageLabel);
-            this.audioGroupbox.Controls.Add(this.audioTrack2);
-            this.audioGroupbox.Controls.Add(this.audioTrack1);
-            this.audioGroupbox.Controls.Add(this.audioInput);
-            this.audioGroupbox.Controls.Add(this.audioInputOpenButton);
-            this.audioGroupbox.Controls.Add(this.audioInputLabel);
-            this.audioGroupbox.Location = new System.Drawing.Point(8, 92);
-            this.audioGroupbox.Name = "audioGroupbox";
-            this.audioGroupbox.Size = new System.Drawing.Size(424, 106);
-            this.audioGroupbox.TabIndex = 23;
-            this.audioGroupbox.TabStop = false;
-            this.audioGroupbox.Text = "Audio";
-            // 
-            // delayLabel
-            // 
-            this.delayLabel.AutoSize = true;
-            this.delayLabel.Location = new System.Drawing.Point(19, 76);
-            this.delayLabel.Name = "delayLabel";
-            this.delayLabel.Size = new System.Drawing.Size(34, 13);
-            this.delayLabel.TabIndex = 32;
-            this.delayLabel.Text = "Delay";
-            // 
-            // audioDelay
-            // 
-            this.audioDelay.Location = new System.Drawing.Point(120, 76);
-            this.audioDelay.Maximum = new decimal(new int[] {
-            5000,
-            0,
-            0,
-            0});
-            this.audioDelay.Minimum = new decimal(new int[] {
-            5000,
-            0,
-            0,
-            -2147483648});
-            this.audioDelay.Name = "audioDelay";
-            this.audioDelay.Size = new System.Drawing.Size(78, 21);
-            this.audioDelay.TabIndex = 31;
-            this.audioDelay.ValueChanged += new System.EventHandler(this.audioDelay_ValueChanged);
-            // 
-            // audioName
-            // 
-            this.audioName.Location = new System.Drawing.Point(286, 49);
-            this.audioName.MaxLength = 100;
-            this.audioName.Name = "audioName";
-            this.audioName.Size = new System.Drawing.Size(90, 21);
-            this.audioName.TabIndex = 30;
-            this.audioName.Leave += new System.EventHandler(this.audioName_Leave);
-            // 
-            // audioNameLabel
-            // 
-            this.audioNameLabel.AutoSize = true;
-            this.audioNameLabel.Location = new System.Drawing.Point(245, 53);
-            this.audioNameLabel.Name = "audioNameLabel";
-            this.audioNameLabel.Size = new System.Drawing.Size(34, 13);
-            this.audioNameLabel.TabIndex = 29;
-            this.audioNameLabel.Text = "Name";
-            // 
-            // removeAudioTrackButton
-            // 
-            this.removeAudioTrackButton.Location = new System.Drawing.Point(382, 48);
-            this.removeAudioTrackButton.Name = "removeAudioTrackButton";
-            this.removeAudioTrackButton.Size = new System.Drawing.Size(24, 23);
-            this.removeAudioTrackButton.TabIndex = 28;
-            this.removeAudioTrackButton.Text = "X";
-            this.removeAudioTrackButton.Click += new System.EventHandler(this.removeAudioTrackButton_Click);
-            // 
-            // audioLanguage
-            // 
-            this.audioLanguage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.audioLanguage.Location = new System.Drawing.Point(120, 48);
-            this.audioLanguage.Name = "audioLanguage";
-            this.audioLanguage.Size = new System.Drawing.Size(121, 21);
-            this.audioLanguage.Sorted = true;
-            this.audioLanguage.TabIndex = 27;
-            this.audioLanguage.SelectedIndexChanged += new System.EventHandler(this.audioLanguage_SelectedIndexChanged);
-            // 
-            // audioLanguageLabel
-            // 
-            this.audioLanguageLabel.Location = new System.Drawing.Point(16, 48);
-            this.audioLanguageLabel.Name = "audioLanguageLabel";
-            this.audioLanguageLabel.Size = new System.Drawing.Size(100, 23);
-            this.audioLanguageLabel.TabIndex = 26;
-            this.audioLanguageLabel.Text = "Language";
-            // 
-            // audioTrack2
-            // 
-            this.audioTrack2.Location = new System.Drawing.Point(67, 1);
-            this.audioTrack2.Name = "audioTrack2";
-            this.audioTrack2.Size = new System.Drawing.Size(27, 13);
-            this.audioTrack2.TabIndex = 25;
-            this.audioTrack2.Text = "2";
-            this.audioTrack2.Click += new System.EventHandler(this.audioTrack_CheckedChanged);
-            // 
-            // audioTrack1
-            // 
-            this.audioTrack1.Checked = true;
-            this.audioTrack1.Location = new System.Drawing.Point(40, 1);
-            this.audioTrack1.Name = "audioTrack1";
-            this.audioTrack1.Size = new System.Drawing.Size(27, 13);
-            this.audioTrack1.TabIndex = 24;
-            this.audioTrack1.TabStop = true;
-            this.audioTrack1.Text = "1";
-            this.audioTrack1.Click += new System.EventHandler(this.audioTrack_CheckedChanged);
-            // 
-            // audioInput
-            // 
-            this.audioInput.Location = new System.Drawing.Point(120, 21);
-            this.audioInput.Name = "audioInput";
-            this.audioInput.ReadOnly = true;
-            this.audioInput.Size = new System.Drawing.Size(256, 21);
-            this.audioInput.TabIndex = 17;
-            // 
-            // audioInputOpenButton
-            // 
-            this.audioInputOpenButton.Location = new System.Drawing.Point(382, 19);
-            this.audioInputOpenButton.Name = "audioInputOpenButton";
-            this.audioInputOpenButton.Size = new System.Drawing.Size(24, 23);
-            this.audioInputOpenButton.TabIndex = 18;
-            this.audioInputOpenButton.Text = "...";
-            this.audioInputOpenButton.Click += new System.EventHandler(this.audioInputOpenButton_Click);
-            // 
-            // audioInputLabel
-            // 
-            this.audioInputLabel.Location = new System.Drawing.Point(16, 22);
-            this.audioInputLabel.Name = "audioInputLabel";
-            this.audioInputLabel.Size = new System.Drawing.Size(100, 16);
-            this.audioInputLabel.TabIndex = 16;
-            this.audioInputLabel.Text = "Audio Input";
-            // 
             // videoGroupbox
             // 
+            this.videoGroupbox.Controls.Add(this.fps);
+            this.videoGroupbox.Controls.Add(this.vInput);
             this.videoGroupbox.Controls.Add(this.videoName);
             this.videoGroupbox.Controls.Add(this.videoNameLabel);
             this.videoGroupbox.Controls.Add(this.MuxFPSLabel);
-            this.videoGroupbox.Controls.Add(this.muxFPS);
-            this.videoGroupbox.Controls.Add(this.videoInput);
-            this.videoGroupbox.Controls.Add(this.inputOpenButton);
             this.videoGroupbox.Controls.Add(this.videoInputLabel);
             this.videoGroupbox.Location = new System.Drawing.Point(8, 7);
             this.videoGroupbox.Name = "videoGroupbox";
@@ -576,16 +265,16 @@ namespace MeGUI
             // 
             // videoName
             // 
-            this.videoName.Location = new System.Drawing.Point(283, 52);
+            this.videoName.Location = new System.Drawing.Point(283, 49);
             this.videoName.MaxLength = 100;
             this.videoName.Name = "videoName";
-            this.videoName.Size = new System.Drawing.Size(90, 21);
+            this.videoName.Size = new System.Drawing.Size(95, 21);
             this.videoName.TabIndex = 34;
             // 
             // videoNameLabel
             // 
             this.videoNameLabel.AutoSize = true;
-            this.videoNameLabel.Location = new System.Drawing.Point(243, 55);
+            this.videoNameLabel.Location = new System.Drawing.Point(243, 53);
             this.videoNameLabel.Name = "videoNameLabel";
             this.videoNameLabel.Size = new System.Drawing.Size(34, 13);
             this.videoNameLabel.TabIndex = 33;
@@ -593,37 +282,11 @@ namespace MeGUI
             // 
             // MuxFPSLabel
             // 
-            this.MuxFPSLabel.Location = new System.Drawing.Point(16, 54);
+            this.MuxFPSLabel.Location = new System.Drawing.Point(16, 51);
             this.MuxFPSLabel.Name = "MuxFPSLabel";
             this.MuxFPSLabel.Size = new System.Drawing.Size(40, 16);
             this.MuxFPSLabel.TabIndex = 32;
             this.MuxFPSLabel.Text = "FPS";
-            // 
-            // muxFPS
-            // 
-            this.muxFPS.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.muxFPS.Location = new System.Drawing.Point(118, 52);
-            this.muxFPS.Name = "muxFPS";
-            this.muxFPS.Size = new System.Drawing.Size(80, 21);
-            this.muxFPS.TabIndex = 31;
-            this.muxFPS.SelectedIndexChanged += new System.EventHandler(this.muxFPS_SelectedIndexChanged);
-            // 
-            // videoInput
-            // 
-            this.videoInput.Location = new System.Drawing.Point(118, 16);
-            this.videoInput.Name = "videoInput";
-            this.videoInput.ReadOnly = true;
-            this.videoInput.Size = new System.Drawing.Size(256, 21);
-            this.videoInput.TabIndex = 3;
-            // 
-            // inputOpenButton
-            // 
-            this.inputOpenButton.Location = new System.Drawing.Point(382, 15);
-            this.inputOpenButton.Name = "inputOpenButton";
-            this.inputOpenButton.Size = new System.Drawing.Size(24, 23);
-            this.inputOpenButton.TabIndex = 4;
-            this.inputOpenButton.Text = "...";
-            this.inputOpenButton.Click += new System.EventHandler(this.inputOpenButton_Click);
             // 
             // videoInputLabel
             // 
@@ -635,10 +298,9 @@ namespace MeGUI
             // 
             // chaptersGroupbox
             // 
+            this.chaptersGroupbox.Controls.Add(this.chapters);
             this.chaptersGroupbox.Controls.Add(this.chaptersInputLabel);
-            this.chaptersGroupbox.Controls.Add(this.chaptersInput);
-            this.chaptersGroupbox.Controls.Add(this.openChaptersButton);
-            this.chaptersGroupbox.Location = new System.Drawing.Point(8, 290);
+            this.chaptersGroupbox.Location = new System.Drawing.Point(8, 318);
             this.chaptersGroupbox.Name = "chaptersGroupbox";
             this.chaptersGroupbox.Size = new System.Drawing.Size(424, 48);
             this.chaptersGroupbox.TabIndex = 25;
@@ -653,64 +315,27 @@ namespace MeGUI
             this.chaptersInputLabel.TabIndex = 17;
             this.chaptersInputLabel.Text = "Chapters File";
             // 
-            // chaptersInput
-            // 
-            this.chaptersInput.Location = new System.Drawing.Point(120, 19);
-            this.chaptersInput.Name = "chaptersInput";
-            this.chaptersInput.ReadOnly = true;
-            this.chaptersInput.Size = new System.Drawing.Size(256, 21);
-            this.chaptersInput.TabIndex = 18;
-            // 
-            // openChaptersButton
-            // 
-            this.openChaptersButton.Location = new System.Drawing.Point(382, 19);
-            this.openChaptersButton.Name = "openChaptersButton";
-            this.openChaptersButton.Size = new System.Drawing.Size(24, 23);
-            this.openChaptersButton.TabIndex = 16;
-            this.openChaptersButton.Text = "...";
-            this.openChaptersButton.Click += new System.EventHandler(this.openChaptersButton_Click);
-            // 
             // outputGroupbox
             // 
-            this.outputGroupbox.Controls.Add(this.mbLabel);
-            this.outputGroupbox.Controls.Add(this.splitSize);
-            this.outputGroupbox.Controls.Add(this.enableSplit);
+            this.outputGroupbox.Controls.Add(this.splittingLabel);
+            this.outputGroupbox.Controls.Add(this.splitting);
+            this.outputGroupbox.Controls.Add(this.output);
             this.outputGroupbox.Controls.Add(this.muxedOutputLabel);
-            this.outputGroupbox.Controls.Add(this.muxedOutput);
-            this.outputGroupbox.Controls.Add(this.outputButton);
-            this.outputGroupbox.Location = new System.Drawing.Point(8, 344);
+            this.outputGroupbox.Location = new System.Drawing.Point(8, 372);
             this.outputGroupbox.Name = "outputGroupbox";
             this.outputGroupbox.Size = new System.Drawing.Size(424, 80);
             this.outputGroupbox.TabIndex = 28;
             this.outputGroupbox.TabStop = false;
             this.outputGroupbox.Text = "Output";
             // 
-            // mbLabel
+            // splittingLabel
             // 
-            this.mbLabel.Location = new System.Drawing.Point(182, 53);
-            this.mbLabel.Name = "mbLabel";
-            this.mbLabel.Size = new System.Drawing.Size(40, 16);
-            this.mbLabel.TabIndex = 21;
-            this.mbLabel.Text = "MB";
-            // 
-            // splitSize
-            // 
-            this.splitSize.Enabled = false;
-            this.splitSize.Location = new System.Drawing.Point(120, 51);
-            this.splitSize.Name = "splitSize";
-            this.splitSize.Size = new System.Drawing.Size(56, 21);
-            this.splitSize.TabIndex = 20;
-            this.splitSize.Text = "0";
-            this.splitSize.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.splitSize_KeyPress);
-            // 
-            // enableSplit
-            // 
-            this.enableSplit.Location = new System.Drawing.Point(14, 49);
-            this.enableSplit.Name = "enableSplit";
-            this.enableSplit.Size = new System.Drawing.Size(104, 24);
-            this.enableSplit.TabIndex = 19;
-            this.enableSplit.Text = "Split output";
-            this.enableSplit.CheckedChanged += new System.EventHandler(this.enableSplit_CheckedChanged);
+            this.splittingLabel.AutoSize = true;
+            this.splittingLabel.Location = new System.Drawing.Point(14, 53);
+            this.splittingLabel.Name = "splittingLabel";
+            this.splittingLabel.Size = new System.Drawing.Size(45, 13);
+            this.splittingLabel.TabIndex = 37;
+            this.splittingLabel.Text = "Splitting";
             // 
             // muxedOutputLabel
             // 
@@ -720,59 +345,215 @@ namespace MeGUI
             this.muxedOutputLabel.TabIndex = 17;
             this.muxedOutputLabel.Text = "Muxed Output";
             // 
-            // muxedOutput
-            // 
-            this.muxedOutput.Location = new System.Drawing.Point(120, 20);
-            this.muxedOutput.Name = "muxedOutput";
-            this.muxedOutput.Size = new System.Drawing.Size(256, 21);
-            this.muxedOutput.TabIndex = 18;
-            // 
-            // outputButton
-            // 
-            this.outputButton.Location = new System.Drawing.Point(380, 20);
-            this.outputButton.Name = "outputButton";
-            this.outputButton.Size = new System.Drawing.Size(24, 23);
-            this.outputButton.TabIndex = 16;
-            this.outputButton.Text = "...";
-            this.outputButton.Click += new System.EventHandler(this.outputButton_Click);
-            // 
             // cancelButton
             // 
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(376, 430);
+            this.cancelButton.Location = new System.Drawing.Point(376, 458);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(56, 23);
             this.cancelButton.TabIndex = 29;
             this.cancelButton.Text = "Cancel";
             // 
-            // subName
+            // audioPanel
             // 
-            this.subName.Location = new System.Drawing.Point(286, 50);
-            this.subName.MaxLength = 100;
-            this.subName.Name = "subName";
-            this.subName.Size = new System.Drawing.Size(90, 21);
-            this.subName.TabIndex = 32;
-            this.subName.Leave += new System.EventHandler(this.subName_Leave);
+            this.audioPanel.ContextMenuStrip = this.audioMenu;
+            this.audioPanel.Controls.Add(this.audio);
+            this.audioPanel.Location = new System.Drawing.Point(8, 93);
+            this.audioPanel.Name = "audioPanel";
+            this.audioPanel.Size = new System.Drawing.Size(424, 115);
+            this.audioPanel.TabIndex = 31;
             // 
-            // SubNamelabel
+            // audioMenu
             // 
-            this.SubNamelabel.AutoSize = true;
-            this.SubNamelabel.Location = new System.Drawing.Point(245, 54);
-            this.SubNamelabel.Name = "SubNamelabel";
-            this.SubNamelabel.Size = new System.Drawing.Size(34, 13);
-            this.SubNamelabel.TabIndex = 31;
-            this.SubNamelabel.Text = "Name";
+            this.audioMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.audioAddTrack,
+            this.audioRemoveTrack});
+            this.audioMenu.Name = "audioMenu";
+            this.audioMenu.Size = new System.Drawing.Size(141, 48);
+            this.audioMenu.Opening += new System.ComponentModel.CancelEventHandler(this.audioMenu_Opening);
+            // 
+            // audioAddTrack
+            // 
+            this.audioAddTrack.Name = "audioAddTrack";
+            this.audioAddTrack.Size = new System.Drawing.Size(140, 22);
+            this.audioAddTrack.Text = "Add track";
+            this.audioAddTrack.Click += new System.EventHandler(this.audioAddTrack_Click);
+            // 
+            // audioRemoveTrack
+            // 
+            this.audioRemoveTrack.Name = "audioRemoveTrack";
+            this.audioRemoveTrack.Size = new System.Drawing.Size(140, 22);
+            this.audioRemoveTrack.Text = "Remove track";
+            this.audioRemoveTrack.Click += new System.EventHandler(this.audioRemoveTrack_Click);
+            // 
+            // audio
+            // 
+            this.audio.Controls.Add(this.audioPage1);
+            this.audio.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.audio.Location = new System.Drawing.Point(0, 0);
+            this.audio.Name = "audio";
+            this.audio.SelectedIndex = 0;
+            this.audio.Size = new System.Drawing.Size(424, 115);
+            this.audio.TabIndex = 32;
+            // 
+            // audioPage1
+            // 
+            this.audioPage1.Controls.Add(this.muxStreamControl2);
+            this.audioPage1.Location = new System.Drawing.Point(4, 22);
+            this.audioPage1.Name = "audioPage1";
+            this.audioPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.audioPage1.Size = new System.Drawing.Size(416, 89);
+            this.audioPage1.TabIndex = 0;
+            this.audioPage1.Text = "Audio 1";
+            this.audioPage1.UseVisualStyleBackColor = true;
+            // 
+            // subtitleMenu
+            // 
+            this.subtitleMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.subtitleAddTrack,
+            this.subtitleRemoveTrack});
+            this.subtitleMenu.Name = "subtitleMenu";
+            this.subtitleMenu.Size = new System.Drawing.Size(141, 48);
+            this.subtitleMenu.Opening += new System.ComponentModel.CancelEventHandler(this.subtitleMenu_Opening);
+            // 
+            // subtitleAddTrack
+            // 
+            this.subtitleAddTrack.Name = "subtitleAddTrack";
+            this.subtitleAddTrack.Size = new System.Drawing.Size(140, 22);
+            this.subtitleAddTrack.Text = "Add track";
+            this.subtitleAddTrack.Click += new System.EventHandler(this.subtitleAddTrack_Click);
+            // 
+            // subtitleRemoveTrack
+            // 
+            this.subtitleRemoveTrack.Name = "subtitleRemoveTrack";
+            this.subtitleRemoveTrack.Size = new System.Drawing.Size(140, 22);
+            this.subtitleRemoveTrack.Text = "Remove track";
+            this.subtitleRemoveTrack.Click += new System.EventHandler(this.subtitleRemoveTrack_Click);
+            // 
+            // subtitlePanel
+            // 
+            this.subtitlePanel.ContextMenuStrip = this.subtitleMenu;
+            this.subtitlePanel.Controls.Add(this.subtitles);
+            this.subtitlePanel.Location = new System.Drawing.Point(8, 214);
+            this.subtitlePanel.Name = "subtitlePanel";
+            this.subtitlePanel.Size = new System.Drawing.Size(424, 98);
+            this.subtitlePanel.TabIndex = 34;
+            // 
+            // subtitles
+            // 
+            this.subtitles.Controls.Add(this.subPage1);
+            this.subtitles.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.subtitles.Location = new System.Drawing.Point(0, 0);
+            this.subtitles.Name = "subtitles";
+            this.subtitles.SelectedIndex = 0;
+            this.subtitles.Size = new System.Drawing.Size(424, 98);
+            this.subtitles.TabIndex = 31;
+            // 
+            // subPage1
+            // 
+            this.subPage1.Controls.Add(this.muxStreamControl1);
+            this.subPage1.Location = new System.Drawing.Point(4, 22);
+            this.subPage1.Name = "subPage1";
+            this.subPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.subPage1.Size = new System.Drawing.Size(416, 72);
+            this.subPage1.TabIndex = 0;
+            this.subPage1.Text = "Subtitle 1";
+            this.subPage1.UseVisualStyleBackColor = true;
+            // 
+            // muxStreamControl1
+            // 
+            this.muxStreamControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.muxStreamControl1.Filter = null;
+            this.muxStreamControl1.Location = new System.Drawing.Point(3, 3);
+            this.muxStreamControl1.Name = "muxStreamControl1";
+            this.muxStreamControl1.ShowDelay = false;
+            this.muxStreamControl1.Size = new System.Drawing.Size(410, 66);
+            this.muxStreamControl1.TabIndex = 0;
+            // 
+            // muxStreamControl2
+            // 
+            this.muxStreamControl2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.muxStreamControl2.Filter = null;
+            this.muxStreamControl2.Location = new System.Drawing.Point(3, 3);
+            this.muxStreamControl2.Name = "muxStreamControl2";
+            this.muxStreamControl2.ShowDelay = true;
+            this.muxStreamControl2.Size = new System.Drawing.Size(410, 83);
+            this.muxStreamControl2.TabIndex = 0;
+            // 
+            // splitting
+            // 
+            this.splitting.Location = new System.Drawing.Point(115, 45);
+            this.splitting.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.splitting.MinimumSize = new System.Drawing.Size(64, 29);
+            this.splitting.Name = "splitting";
+            this.splitting.NullString = "No splitting";
+            this.splitting.SelectedIndex = 0;
+            this.splitting.Size = new System.Drawing.Size(181, 29);
+            this.splitting.TabIndex = 36;
+            // 
+            // output
+            // 
+            this.output.Filename = "";
+            this.output.Filter = null;
+            this.output.FolderMode = false;
+            this.output.Location = new System.Drawing.Point(118, 13);
+            this.output.Name = "output";
+            this.output.ReadOnly = true;
+            this.output.SaveMode = false;
+            this.output.Size = new System.Drawing.Size(289, 26);
+            this.output.TabIndex = 35;
+            this.output.Title = null;
+            this.output.FileSelected += new MeGUI.FileBarEventHandler(this.output_FileSelected);
+            // 
+            // fps
+            // 
+            this.fps.Location = new System.Drawing.Point(115, 45);
+            this.fps.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.fps.MinimumSize = new System.Drawing.Size(64, 29);
+            this.fps.Name = "fps";
+            this.fps.NullString = "Not set";
+            this.fps.SelectedIndex = 0;
+            this.fps.Size = new System.Drawing.Size(119, 29);
+            this.fps.TabIndex = 36;
+            this.fps.SelectionChanged += new MeGUI.StringChanged(this.fps_SelectionChanged);
+            // 
+            // vInput
+            // 
+            this.vInput.Filename = "";
+            this.vInput.Filter = null;
+            this.vInput.FolderMode = false;
+            this.vInput.Location = new System.Drawing.Point(118, 13);
+            this.vInput.Name = "vInput";
+            this.vInput.ReadOnly = true;
+            this.vInput.SaveMode = false;
+            this.vInput.Size = new System.Drawing.Size(289, 26);
+            this.vInput.TabIndex = 35;
+            this.vInput.Title = null;
+            this.vInput.FileSelected += new MeGUI.FileBarEventHandler(this.vInput_FileSelected);
+            // 
+            // chapters
+            // 
+            this.chapters.Filename = "";
+            this.chapters.Filter = "\"Chapter files (*.txt)|*.txt\";";
+            this.chapters.FolderMode = false;
+            this.chapters.Location = new System.Drawing.Point(118, 12);
+            this.chapters.Name = "chapters";
+            this.chapters.ReadOnly = true;
+            this.chapters.SaveMode = false;
+            this.chapters.Size = new System.Drawing.Size(289, 26);
+            this.chapters.TabIndex = 35;
+            this.chapters.Title = null;
+            this.chapters.FileSelected += new MeGUI.FileBarEventHandler(this.chapters_FileSelected);
             // 
             // baseMuxWindow
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
-            this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(444, 460);
+            this.ClientSize = new System.Drawing.Size(444, 493);
+            this.Controls.Add(this.subtitlePanel);
+            this.Controls.Add(this.audioPanel);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.outputGroupbox);
             this.Controls.Add(this.muxButton);
-            this.Controls.Add(this.subtitleGroupbox);
-            this.Controls.Add(this.audioGroupbox);
             this.Controls.Add(this.videoGroupbox);
             this.Controls.Add(this.chaptersGroupbox);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -783,17 +564,19 @@ namespace MeGUI
             this.ShowInTaskbar = false;
             this.Text = "Mux";
             this.TopMost = true;
-            this.subtitleGroupbox.ResumeLayout(false);
-            this.subtitleGroupbox.PerformLayout();
-            this.audioGroupbox.ResumeLayout(false);
-            this.audioGroupbox.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.audioDelay)).EndInit();
             this.videoGroupbox.ResumeLayout(false);
             this.videoGroupbox.PerformLayout();
             this.chaptersGroupbox.ResumeLayout(false);
-            this.chaptersGroupbox.PerformLayout();
             this.outputGroupbox.ResumeLayout(false);
             this.outputGroupbox.PerformLayout();
+            this.audioPanel.ResumeLayout(false);
+            this.audioMenu.ResumeLayout(false);
+            this.audio.ResumeLayout(false);
+            this.audioPage1.ResumeLayout(false);
+            this.subtitleMenu.ResumeLayout(false);
+            this.subtitlePanel.ResumeLayout(false);
+            this.subtitles.ResumeLayout(false);
+            this.subPage1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -801,17 +584,17 @@ namespace MeGUI
         #region helper method
         protected virtual void checkIO()
         {
-            if (string.IsNullOrEmpty(videoInput.Text))
+            if (string.IsNullOrEmpty(vInput.Filename))
             {
                 muxButton.DialogResult = DialogResult.None;
                 return;
             }
-            else if (string.IsNullOrEmpty(muxedOutput.Text))
+            else if (string.IsNullOrEmpty(output.Filename))
             {
                 muxButton.DialogResult = DialogResult.None;
                 return;
             }
-            else if (muxFPS.SelectedIndex == -1 && isFPSRequired())
+            else if (fps.Value == null && isFPSRequired())
             {
                 muxButton.DialogResult = DialogResult.None;
                 return;
@@ -830,8 +613,8 @@ namespace MeGUI
         {
             try
             {
-                if (videoInput.Text.Length > 0)
-                    return (VideoUtil.guessVideoType(videoInput.Text).ContainerType == null);
+                if (vInput.Filename.Length > 0)
+                    return (VideoUtil.guessVideoType(vInput.Filename).ContainerType == null);
                 return true;
             }
             catch (NullReferenceException) // This will throw if it can't guess the video type
@@ -841,104 +624,52 @@ namespace MeGUI
         }
 
         #region button event handlers
-        private void inputOpenButton_Click(object sender, System.EventArgs e)
+        private void vInput_FileSelected(FileBar sender, FileBarEventArgs args)
         {
-            openFileDialog.Filter = VideoInputFilter;
-            openFileDialog.Title = "Select your video file";
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            try
             {
-                videoInput.Text = openFileDialog.FileName;
-                if (Path.GetExtension(openFileDialog.FileName).ToLower().Equals(".mp4")) // for mp4 input we don't need to specify a framerate
-                {
-                    muxFPS.SelectedIndex = -1;
-                    muxFPS.Enabled = false;
-                }
-                else
-                {
-                    muxFPS.Enabled = true;
-                }
-                checkIO();
-                fileUpdated();
-                if (string.IsNullOrEmpty(muxedOutput.Text))
-                    chooseOutputFilename();
+                fps.Value = (decimal)new MediaInfoFile(vInput.Filename).Info.FPS;
             }
+            catch (Exception) { fps.Value = null; }
+
+            if (string.IsNullOrEmpty(output.Filename))
+                chooseOutputFilename();
+
+            fileUpdated();
+            checkIO();
         }
 
         private void chooseOutputFilename()
         {
-            string file = videoInput.Text;
-            muxedOutput.Text = Path.Combine(Path.GetDirectoryName(file),
-                Path.GetFileNameWithoutExtension(file) + "-muxed" + Path.GetExtension(file));
+            output.Filename = FileUtil.AddToFileName(vInput.Filename, "-muxed");
         }
 
-        private void audioInputOpenButton_Click(object sender, System.EventArgs e)
+        private void chapters_FileSelected(FileBar sender, FileBarEventArgs args)
         {
-            openFileDialog.Filter = AudioFilter;
-            openFileDialog.Title = "Select your audio file";
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                int index = this.getSelectedAudioTrack();
-                audioInput.Text = openFileDialog.FileName;
-                audioStreams[index].path = openFileDialog.FileName;
-                audioStreams[index].language = audioLanguage.Text;
-                audioStreams[index].delay = PrettyFormatting.getDelay(openFileDialog.FileName);
-                audioDelay.Value = audioStreams[index].delay;
-                fileUpdated();
-            }
+            fileUpdated();
         }
 
-        private void openSubtitleButton_Click(object sender, System.EventArgs e)
+        private void output_FileSelected(FileBar sender, FileBarEventArgs args)
         {
-            openFileDialog.Filter = SubtitleFilter;
-            openFileDialog.Title = "Select your subtitle";
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                subtitleInput.Text = openFileDialog.FileName;
-                int index = this.getSelectedSubTitle();
-                subtitleStreams[index].path = openFileDialog.FileName;
-                subtitleStreams[index].language = subtitleLanguage.Text;
-                fileUpdated();
-            }
-        }
-
-        private void openChaptersButton_Click(object sender, System.EventArgs e)
-        {
-            openFileDialog.Filter = "Chapter files|*.txt";
-            openFileDialog.Title = "Select a chapter file";
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                chaptersInput.Text = openFileDialog.FileName;
-                fileUpdated();
-            }
-        }
-
-        private void outputButton_Click(object sender, System.EventArgs e)
-        {
-            saveFileDialog.Filter = OutputFilter;
-            saveFileDialog.Title = "Select your output";
-            if (saveFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                muxedOutput.Text = saveFileDialog.FileName;
-                checkIO();
-                fileUpdated();
-            }
+            checkIO();
+            fileUpdated();
         }
 
         protected virtual void muxButton_Click(object sender, System.EventArgs e)
         {
             if (muxButton.DialogResult != DialogResult.OK)
             {
-                if (string.IsNullOrEmpty(videoInput.Text))
+                if (string.IsNullOrEmpty(vInput.Filename))
                 {
                     MessageBox.Show("You must configure a video input file", "Missing input", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     return;
                 }
-                else if (string.IsNullOrEmpty(muxedOutput.Text))
+                else if (string.IsNullOrEmpty(output.Filename))
                 {
                     MessageBox.Show("You must configure an output file", "Missing input", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     return;
                 }
-                else if (muxFPS.SelectedIndex == -1 && isFPSRequired())
+                else if (!fps.Value.HasValue)
                 {
                     MessageBox.Show("You must select a framerate", "Missing input", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     return;
@@ -946,193 +677,16 @@ namespace MeGUI
             }
         }
         #endregion
-        #region job generation
-        /// <summary>
-        /// goes through all audio and subtitle tracks, and discards the improperly configured ones
-        /// in the same process, the language strings are converted to ISO strings that mp4box understands
-        /// </summary>
-        protected void convertLanguagesToISO()
-        {
-            ArrayList tracks = new ArrayList();
-            foreach (MuxStream stream in this.audioStreams)
-            {
-                if (!string.IsNullOrEmpty(stream.path)) // get all configured audio tracks
-                    tracks.Add(stream);
-            }
-            this.audioStreams = new MuxStream[tracks.Count];
-            int index = 0;
-            foreach (object o in tracks)
-            {
-                audioStreams[index] = (MuxStream)o;
-                object lang = languages[audioStreams[index].language];
-                if (lang != null)
-                    audioStreams[index].language = (string)lang;
-                index++;
-            }
-            index = 0;
-            tracks = new ArrayList();
-            foreach (MuxStream stream in this.subtitleStreams)
-            {
-                if (!string.IsNullOrEmpty(stream.path)) // get all configured audio tracks
-                    tracks.Add(stream);
-            }
-            this.subtitleStreams = new MuxStream[tracks.Count];
-            foreach (object o in tracks)
-            {
-                subtitleStreams[index] = (MuxStream)o;
-                object lang = languages[subtitleStreams[index].language];
-                if (lang != null)
-                    subtitleStreams[index].language = (string)lang;
-                index++;
-            }
-            tracks = null;
-        }
-        /// <summary>
-        /// generates the settings and muxjob based on the GUI settings
-        /// each non empty audio stream and subtitle stream is added
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        #endregion
-        #region radiobuttons
-        private void audioTrack_CheckedChanged(object sender, System.EventArgs e)
-        {
-            int currentAudioTrack = this.getSelectedAudioTrack();
-            this.audioStreams[lastAudioTrack].path = audioInput.Text;
-            this.audioStreams[lastAudioTrack].language = audioLanguage.Text;
-            this.audioStreams[lastAudioTrack].name = audioName.Text;
-            this.audioStreams[lastAudioTrack].delay = (int)audioDelay.Value;
-            audioInput.Text = audioStreams[currentAudioTrack].path;
-            audioName.Text = audioStreams[currentAudioTrack].name;
-            if (preconfigured[currentAudioTrack])
-            {
-                audioInputOpenButton.Enabled = false;
-                removeAudioTrackButton.Enabled = false;
-                audioDelay.Enabled = false;
-                audioDelay.Value = 0;
-            }
-            else
-            {
-                audioInputOpenButton.Enabled = true;
-                removeAudioTrackButton.Enabled = true;
-                audioDelay.Enabled = true;
-                audioDelay.Value = audioStreams[currentAudioTrack].delay;
-            }
-            if (!string.IsNullOrEmpty(audioStreams[currentAudioTrack].language))
-            {
-                int ind = audioLanguage.Items.IndexOf(audioStreams[currentAudioTrack].language);
-                audioLanguage.SelectedIndex = ind;
-            }
-            else
-                audioLanguage.SelectedIndex = -1;
-            this.lastAudioTrack = currentAudioTrack;
-        }
-        /// <summary>
-        /// gets the currently selected audio track
-        /// </summary>
-        /// <returns>0 based index of the currently selected audio track</returns>
-        private int getSelectedAudioTrack()
-        {
-            if (audioTrack1.Checked)
-                return 0;
-            else
-                return 1;
-        }
-        /// <summary>
-        /// gets the index of the currently selected subtitle
-        /// </summary>
-        /// <returns>0 based index of the currently selected subtitle</returns>
-        private int getSelectedSubTitle()
-        {
-            if (subtitleTrack1.Checked)
-                return 0;
-            else if (subtitleTrack2.Checked)
-                return 1;
-            else if (subtitleTrack3.Checked)
-                return 2;
-            else if (subtitleTrack4.Checked)
-                return 3;
-            else
-                return 4;
-        }
-        private void subtitleTrack_CheckedChanged(object sender, System.EventArgs e)
-        {
-            subtitleStreams[lastSubtitle].path = subtitleInput.Text;
-            subtitleStreams[lastSubtitle].language = subtitleLanguage.Text;
-            int index = this.getSelectedSubTitle();
-            subtitleInput.Text = subtitleStreams[index].path;
-            if (!string.IsNullOrEmpty(subtitleStreams[index].language))
-            {
-                int ind = audioLanguage.Items.IndexOf(subtitleStreams[index].language);
-                subtitleLanguage.SelectedIndex = ind;
-            }
-            else
-                subtitleLanguage.SelectedIndex = -1;
-            this.lastSubtitle = index;
-        }
-        #endregion
         #region language dropdowns
-        private void audioLanguage_SelectedIndexChanged(object sender, System.EventArgs e)
-        {
-            if (audioLanguage.SelectedIndex != -1)
-            {
-                int index = this.getSelectedAudioTrack();
-                audioStreams[index].language = audioLanguage.Text;
-            }
-        }
-        private void subtitleLanguage_SelectedIndexChanged(object sender, System.EventArgs e)
-        {
-            if (subtitleLanguage.SelectedIndex != -1)
-            {
-                int index = this.getSelectedSubTitle();
-                subtitleStreams[index].language = subtitleLanguage.Text;
-            }
-        }
-        #endregion
-        #region track removal
-        private void removeAudioTrackButton_Click(object sender, System.EventArgs e)
-        {
-            audioInput.Text = "";
-            int index = this.getSelectedAudioTrack();
-            audioStreams[index].path = "";
-            audioStreams[index].language = "";
-            audioStreams[index].name = "";
-            this.audioLanguage.SelectedIndex = -1;
-            fileUpdated();
-        }
-
-        private void removeSubtitleTrack_Click(object sender, System.EventArgs e)
-        {
-            subtitleInput.Text = "";
-            int index = this.getSelectedSubTitle();
-            subtitleStreams[index].path = "";
-            subtitleStreams[index].language = "";
-            subtitleLanguage.SelectedIndex = -1;
-            fileUpdated();
-        }
         #endregion
         #region other events
-        private void muxFPS_SelectedIndexChanged(object sender, System.EventArgs e)
+        private void fps_SelectionChanged(object sender, string val)
         {
             checkIO();
         }
-
-        private void enableSplit_CheckedChanged(object sender, System.EventArgs e)
-        {
-            if (enableSplit.Checked)
-                splitSize.Enabled = true;
-            else
-                splitSize.Enabled = false;
-        }
-
-        private void audioName_Leave(object sender, EventArgs e)
-        {
-            int index = this.getSelectedAudioTrack();
-            audioStreams[index].name = audioName.Text;
-        }
         #endregion
         #region properties
-        public virtual string AudioFilter
+/*        public virtual string AudioFilter
         {
             get { return audioFilter; }
         }
@@ -1151,19 +705,89 @@ namespace MeGUI
         public virtual string OutputFilter
         {
             get { return outputFilter; }
-        }
+        }*/
         #endregion
         protected virtual void fileUpdated() { }
 
-        private void audioDelay_ValueChanged(object sender, EventArgs e)
+
+        #region adding / removing tracks
+        private void audioAddTrack_Click(object sender, EventArgs e)
         {
-            audioStreams[getSelectedAudioTrack()].delay = (int)audioDelay.Value;
+            AudioAddTrack();
         }
 
-        private void subName_Leave(object sender, EventArgs e)
+        protected void AudioAddTrack()
         {
-            int index = this.getSelectedSubTitle();
-            subtitleStreams[index].name = subName.Text;
+            TabPage p = new TabPage("Audio " + (audioTracks.Count + 1));
+            p.UseVisualStyleBackColor = audio.TabPages[0].UseVisualStyleBackColor;
+            p.Padding = audio.TabPages[0].Padding;
+
+            MuxStreamControl a = new MuxStreamControl();
+            a.Dock = audioTracks[0].Dock;
+            a.Padding = audioTracks[0].Padding;
+            a.ShowDelay = audioTracks[0].ShowDelay;
+            a.Filter = audioTracks[0].Filter;
+
+            audio.TabPages.Add(p);
+            p.Controls.Add(a);
+            audioTracks.Add(a);
         }
+
+        private void audioRemoveTrack_Click(object sender, EventArgs e)
+        {
+            AudioRemoveTrack();
+        }
+
+        protected void AudioRemoveTrack()
+        {
+            audio.TabPages.RemoveAt(audio.TabPages.Count - 1);
+            audioTracks.RemoveAt(audioTracks.Count - 1);
+        }
+
+        private void subtitleAddTrack_Click(object sender, EventArgs e)
+        {
+            SubtitleAddTrack();
+        }
+
+        protected void SubtitleAddTrack()
+        {
+            TabPage p = new TabPage("Subtitle " + (subtitleTracks.Count + 1));
+            p.UseVisualStyleBackColor = subtitles.TabPages[0].UseVisualStyleBackColor;
+            p.Padding = subtitles.TabPages[0].Padding;
+
+            MuxStreamControl a = new MuxStreamControl();
+            a.Dock = subtitleTracks[0].Dock;
+            a.Padding = subtitleTracks[0].Padding;
+            a.ShowDelay = subtitleTracks[0].ShowDelay;
+            a.Filter = subtitleTracks[0].Filter;
+
+            subtitles.TabPages.Add(p);
+            p.Controls.Add(a);
+            subtitleTracks.Add(a);
+        }
+
+        private void subtitleRemoveTrack_Click(object sender, EventArgs e)
+        {
+            SubtitleRemoveTrack();
+        }
+
+        protected void SubtitleRemoveTrack()
+        {
+            subtitles.TabPages.RemoveAt(subtitles.TabPages.Count - 1);
+            subtitleTracks.RemoveAt(subtitleTracks.Count - 1);
+        }
+        #endregion
+
+        private void audioMenu_Opening(object sender, CancelEventArgs e)
+        {
+            audioRemoveTrack.Enabled = audioTracks.Count > 1;
+        }
+
+        private void subtitleMenu_Opening(object sender, CancelEventArgs e)
+        {
+            subtitleRemoveTrack.Enabled = subtitleTracks.Count > 1;
+        }
+
+
     }
 }

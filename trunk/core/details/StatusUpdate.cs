@@ -33,12 +33,10 @@ namespace MeGUI
         private string error, log, jobName, status;
         private TimeSpan? audioPosition, cliplength, estimatedTime;
         private ulong? nbFramesDone, nbFramesTotal;
-        private JobTypes jobType;
 		private TimeSpan timeElapsed;
         private FileSize? filesize, audioFileSize, projectedFileSize;
         private string processingspeed;
 		private decimal percentage;
-        private double fps;
 		internal StatusUpdate(string name)
 		{
             jobName = name;
@@ -54,7 +52,6 @@ namespace MeGUI
 			audioFileSize = null;
             nbFramesDone = null;
             nbFramesTotal = null;
-			fps = 0;
 			projectedFileSize = null;
 			timeElapsed = TimeSpan.Zero;
             processingspeed = null;

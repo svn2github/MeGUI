@@ -11,7 +11,6 @@ namespace MeGUI
 {
     public partial class AutoEncodeDefaults : Form
     {
-        private BitrateCalculator calc;
         public AutoEncodeDefaults()
         {
             InitializeComponent();

@@ -223,8 +223,6 @@ namespace MeGUI
             this.input.ReadOnly = true;
             this.input.Size = new System.Drawing.Size(256, 21);
             this.input.TabIndex = 1;
-            this.input.DragOver += new System.Windows.Forms.DragEventHandler(this.input_DragOver);
-            this.input.DragDrop += new System.Windows.Forms.DragEventHandler(this.input_DragDrop);
             // 
             // inputLabel
             // 
@@ -580,33 +578,6 @@ namespace MeGUI
         }
         #endregion
 
-        private void input_DragDrop(object sender, DragEventArgs e)
-        {
-            e.Effect = DragDropEffects.Move;
-
-            Array data = e.Data.GetData("FileDrop") as Array;
-            if (data != null)
-            {
-                if (data.GetValue(0) is String)
-                {
-                    string filename = ((string[])data)[0];
-
-                    if (Path.GetExtension(filename).ToLower().Equals(".vob") || Path.GetExtension(filename).ToLower().Equals(".mpg") ||
-                        Path.GetExtension(filename).ToLower().Equals(".ts")  || Path.GetExtension(filename).ToLower().Equals(".m2ts"))
-                    {
-                        openIFODialog.FileName = filename;
-                        openVideo(openIFODialog.FileName);
-                        projectName.Text = Path.ChangeExtension(openIFODialog.FileName, ".d2v");
-                        checkIndexIO();
-                    }
-                }
-            }
-        }
-
-        private void input_DragOver(object sender, DragEventArgs e)
-        {
-            e.Effect = DragDropEffects.Move;
-        }
     }
 
     public class D2VCreatorTool : MeGUI.core.plugins.interfaces.ITool
@@ -659,7 +630,6 @@ namespace MeGUI
             {
                 if (job.DemuxMode != 0)
                 {
-                    int counter = 0;
                     string[] files = new string[audioFiles.Values.Count];
                     audioFiles.Values.CopyTo(files, 0);
                     Util.ThreadSafeRun(mainForm, new MethodInvoker(

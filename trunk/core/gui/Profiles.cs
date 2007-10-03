@@ -356,7 +356,7 @@ namespace MeGUI.core.plugins.interfaces
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        public static bool Equals(object a, object b)
+        public static bool AreEqual(object a, object b)
         {
             if (a.GetType() != b.GetType()) return false;
             Type t = a.GetType();

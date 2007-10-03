@@ -54,6 +54,25 @@ namespace MeGUI.core.details
         internal abstract void MakeStartDepend(MakeDependant requiredEnd);
     }
 
+    internal sealed class EmptyJobChain : JobChain
+    {
+
+        internal override TaggedJob[] Jobs
+        {
+            get { return new TaggedJob[] { }; }
+        }
+
+        internal override void MakeJobDependOnChain(TaggedJob allowedEnd)
+        {
+            
+        }
+
+        internal override void MakeStartDepend(MakeDependant requiredEnd)
+        {
+            
+        }
+    }
+
     internal sealed class JobDependencyChain : JobChain
     {
         internal TaggedJob j;
@@ -125,6 +144,9 @@ namespace MeGUI.core.details
 
         private void resolve(JobChain[] chains)
         {
+            if (chains.Length == 0)
+                chains = new JobChain[] { new EmptyJobChain() };
+
             List<TaggedJob> jobs = new List<TaggedJob>();
             JobChain last = null;
 

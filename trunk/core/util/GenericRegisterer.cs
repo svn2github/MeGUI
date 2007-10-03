@@ -11,6 +11,26 @@ namespace MeGUI
         }
     }
 
+    public class IDable<T> : IIDable
+    {
+        public T Data;
+
+        public IDable(string id, T t)
+        {
+            this.id = id;
+            this.Data = t;
+        }
+
+        #region IIDable Members
+        private string id;
+        string IIDable.ID
+        {
+            get { return id; }
+        }
+
+        #endregion
+    }
+
     public class GenericRegisterer<TType>
         where TType : IIDable
     {

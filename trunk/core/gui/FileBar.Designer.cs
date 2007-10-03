@@ -34,6 +34,7 @@ namespace MeGUI
             // 
             // filename
             // 
+            this.filename.AllowDrop = true;
             this.filename.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
@@ -42,6 +43,8 @@ namespace MeGUI
             this.filename.ReadOnly = true;
             this.filename.Size = new System.Drawing.Size(239, 20);
             this.filename.TabIndex = 5;
+            this.filename.DragDrop += new System.Windows.Forms.DragEventHandler(this.filename_DragDrop);
+            this.filename.DragEnter += new System.Windows.Forms.DragEventHandler(this.filename_DragEnter);
             this.filename.TextChanged += new System.EventHandler(this.filename_TextChanged);
             // 
             // openButton
@@ -62,6 +65,8 @@ namespace MeGUI
             this.Controls.Add(this.openButton);
             this.Name = "FileBar";
             this.Size = new System.Drawing.Size(269, 26);
+            this.DragDrop += new System.Windows.Forms.DragEventHandler(this.filename_DragDrop);
+            this.DragEnter += new System.Windows.Forms.DragEventHandler(this.filename_DragEnter);
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -23,6 +23,15 @@ namespace MeGUI.core.util
             ar = dar;
         }
 
+        public Dar(decimal? dar, ulong width, ulong height)
+        {
+            ar = -1;
+            if (dar.HasValue)
+                ar = dar.Value;
+            else
+                init(width, height);
+        }
+
         private void init(ulong x, ulong y)
         {
             ar = (decimal)x / (decimal)y;
@@ -104,8 +113,24 @@ namespace MeGUI.core.util
             ar = sar;
         }
 
-        public ulong X { get { throw new Exception(); } }
-        public ulong Y { get { throw new Exception(); } }
+        public ulong X
+        {
+            get
+            {
+                ulong x, y;
+                RatioUtils.approximate(ar, out x, out y);
+                return x;
+            }
+        }
+
+        public ulong Y
+        {
+            get
+            {
+                ulong x, y; RatioUtils.approximate(ar, out x, out y);
+                return y;
+            }
+        }
 
         public Dar ToDar(int hres, int vres)
         {

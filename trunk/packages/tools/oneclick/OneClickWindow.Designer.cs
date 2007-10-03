@@ -407,8 +407,6 @@ namespace MeGUI
             this.input.TabIndex = 3;
             this.input.Title = null;
             this.input.FileSelected += new MeGUI.FileBarEventHandler(this.input_FileSelected);
-            this.input.DragOver += new System.Windows.Forms.DragEventHandler(this.input_DragOver);
-            this.input.DragDrop += new System.Windows.Forms.DragEventHandler(this.input_DragDrop);
             // 
             // outputLabel
             // 

@@ -295,7 +295,15 @@ namespace MeGUI.core.details.video
             {
                 return new SettingsSetter<TProfileSettings>(delegate(TProfileSettings settings)
                 {
-                    CurrentSettingsProvider.LoadSettings(settings);
+                    foreach (ISettingsProvider<TProfileSettings, TInfo, TCodec, TEncoder> p in impl.Items)
+                    {
+                        if (p.IsSameType((TProfileSettings)settings))
+                        {
+                            p.LoadSettings((TProfileSettings)settings);
+                            impl.SelectedItem = p;
+                            break;
+                        }
+                    }
                 });
             }
         }

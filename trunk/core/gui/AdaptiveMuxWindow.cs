@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using MeGUI.core.util;
 using MeGUI.core.details;
+using MeGUI.core.details.mux;
 
 namespace MeGUI
 {
@@ -18,11 +19,16 @@ namespace MeGUI
         private bool minimizedMode = false;
         private VideoEncoderType knownVideoType;
         private AudioEncoderType[] knownAudioTypes;
+
         public AdaptiveMuxWindow(MainForm mainForm)
         {
             InitializeComponent();
             jobUtil = new JobUtil(mainForm);
             muxProvider = mainForm.MuxProvider;
+
+            audioTracks[0].Filter = VideoUtil.GenerateCombinedFilter(ContainerManager.AudioTypes.ValuesArray);
+            subtitleTracks[0].Filter = VideoUtil.GenerateCombinedFilter(ContainerManager.SubtitleTypes.ValuesArray);
+            vInput.Filter = VideoUtil.GenerateCombinedFilter(ContainerManager.VideoTypes.ValuesArray);
         }
 
         protected override void fileUpdated()
@@ -32,7 +38,12 @@ namespace MeGUI
 
         private void containerFormat_SelectedIndexChanged(object sender, EventArgs e)
         {
-            this.muxedOutput.Text = Path.ChangeExtension(this.muxedOutput.Text, (this.containerFormat.SelectedItem as ContainerType).Extension);
+            output.Filename = Path.ChangeExtension(output.Filename, (this.containerFormat.SelectedItem as ContainerType).Extension);
+
+            if (containerFormat.SelectedItem is ContainerType)
+                output.Filter = (containerFormat.SelectedItem as ContainerType).OutputFilterString;
+            else
+                output.Filter = "";
         }
 
         private void getTypes(out AudioEncoderType[] aCodec, out MuxableType[] audioTypes, out MuxableType[] subtitleTypes)
@@ -40,17 +51,17 @@ namespace MeGUI
             List<MuxableType> audioTypesList = new List<MuxableType>();
             List<MuxableType> subTypesList = new List<MuxableType>();
             List<AudioEncoderType> audioCodecList = new List<AudioEncoderType>();
-
+            
             int counter = 0;
-            foreach (MuxStream stream in audioStreams)
+            foreach (MuxStreamControl c in audioTracks)
             {
                 if (minimizedMode && knownAudioTypes.Length > counter)
                 {
                     audioCodecList.Add(knownAudioTypes[counter]);
                 }
-                else
+                else if (c.Stream != null)
                 {
-                    AudioType audioType = VideoUtil.guessAudioType(stream.path);
+                    AudioType audioType = VideoUtil.guessAudioType(c.Stream.path);
                     if (audioType != null)
                     {
                         subTypesList.Add(new MuxableType(audioType, null));
@@ -58,9 +69,10 @@ namespace MeGUI
                 }
                 counter++;
             }
-            foreach (MuxStream stream in subtitleStreams)
+            foreach (MuxStreamControl c in subtitleTracks)
             {
-                SubtitleType subtitleType = VideoUtil.guessSubtitleType(stream.path);
+                if (c.Stream == null) continue;
+                SubtitleType subtitleType = VideoUtil.guessSubtitleType(c.Stream.path);
                 if (subtitleType != null)
                 {
                     subTypesList.Add(new MuxableType(subtitleType, null));
@@ -71,23 +83,6 @@ namespace MeGUI
             aCodec = audioCodecList.ToArray();
         }
 
-        private void getStreams(out MuxStream[] audioStreams, out MuxStream[] subtitleStreams)
-        {
-            List<MuxStream> audioStreamsList = new List<MuxStream>();
-            List<MuxStream> subtitleStreamList = new List<MuxStream>();
-            foreach (MuxStream stream in this.audioStreams)
-            {
-                if (!string.IsNullOrEmpty(stream.path))
-                    audioStreamsList.Add(stream);
-            }
-            foreach (MuxStream stream in this.subtitleStreams)
-            {
-                if (!string.IsNullOrEmpty(stream.path))
-                    subtitleStreamList.Add(stream);
-            }
-            audioStreams = audioStreamsList.ToArray();
-            subtitleStreams = subtitleStreamList.ToArray();
-        }
 
         protected override void checkIO()
         {
@@ -103,7 +98,7 @@ namespace MeGUI
                 videoType = null;
             else
             {
-                videoType = VideoUtil.guessVideoMuxableType(videoInput.Text, true);
+                videoType = VideoUtil.guessVideoMuxableType(vInput.Filename, true);
                 if (videoType != null && (videoType.codec == null || videoType.outputType == null))
                 {
                     MessageBox.Show("Unable to determine type of input video. Mux-path finding cannot continue. Your video could well be corrupt.", "Determining type failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -167,16 +162,13 @@ namespace MeGUI
             {
                 if (minimizedMode)
                     throw new Exception("Jobs property not accessible in minimized mode");
-                double framerate = -1;
-                if (this.muxFPS.SelectedIndex != -1)
-                    framerate = Double.Parse(muxFPS.Text);
-
+                
                 VideoStream myVideo = new VideoStream();
                 myVideo.Input = "";
-                myVideo.Output = videoInput.Text;
+                myVideo.Output = vInput.Filename;
                 myVideo.NumberOfFrames = 1000; // Just a guess, since we have no way of actually knowing
-                myVideo.Framerate = framerate;
-                myVideo.VideoType = VideoUtil.guessVideoMuxableType(videoInput.Text, true);
+                myVideo.Framerate = fps.Value.Value;
+                myVideo.VideoType = VideoUtil.guessVideoMuxableType(vInput.Filename, true);
                 myVideo.Settings = new x264Settings();
                 myVideo.Settings.NbBframes = 0;
 
@@ -185,25 +177,21 @@ namespace MeGUI
                 AudioEncoderType[] audioCodecs;
                 MuxStream[] audioStreams, subtitleStreams;
                 getTypes(out audioCodecs, out audioTypes, out subtitleTypes);
-                getStreams(out audioStreams, out subtitleStreams);
+                string chapters;
+                getAdditionalStreams(out audioStreams, out subtitleStreams, out chapters);
 
-                FileSize? splitSize = null;
-                if (enableSplit.Checked)
-                {
-                    int i;
-                    if (!int.TryParse(this.splitSize.Text, out i))
-                        splitSize = new FileSize(Unit.MB, i);
-                }
+                FileSize? splitSize = splitting.Value;
+
                 MuxableType chapterInputType = null;
-                if (!String.IsNullOrEmpty(chaptersInput.Text))
+                if (!String.IsNullOrEmpty(this.chapters.Filename))
                 {
-                    ChapterType type = VideoUtil.guessChapterType(chaptersInput.Text);
+                    ChapterType type = VideoUtil.guessChapterType(this.chapters.Filename);
                     if (type != null)
                         chapterInputType = new MuxableType(type, null);
                 }
 
                 return jobUtil.GenerateMuxJobs(myVideo, audioStreams, audioTypes, subtitleStreams,
-                    subtitleTypes, chaptersInput.Text, chapterInputType, (containerFormat.SelectedItem as ContainerType), muxedOutput.Text, splitSize, false);
+                    subtitleTypes, this.chapters.Filename, chapterInputType, (containerFormat.SelectedItem as ContainerType), output.Filename, splitSize, false);
             }
         }
         /// <summary>
@@ -218,94 +206,31 @@ namespace MeGUI
         public void setMinimizedMode(string videoInput, VideoEncoderType videoType, double framerate, MuxStream[] audioStreams, AudioEncoderType[] audioTypes, string output,
             FileSize? splitSize, ContainerType cft)
         {
+            base.setConfig(videoInput, (decimal)framerate, audioStreams, new MuxStream[0], null, output, splitSize, null);
+
             minimizedMode = true;
             knownVideoType = videoType;
             knownAudioTypes = audioTypes;
+
+            // disable everything
             videoGroupbox.Enabled = false;
-            this.videoInput.Text = videoInput;
-            int fpsIndex = muxFPS.Items.IndexOf(framerate);
-            if (fpsIndex != -1)
-                muxFPS.SelectedIndex = fpsIndex;
-            if (audioStreams.Length == 1) // 1 stream predefined
-            {
-                preconfigured = new bool[] { true, false };
-                this.audioStreams[0] = audioStreams[0];
-                audioInputOpenButton.Enabled = false;
-                removeAudioTrackButton.Enabled = false;
-                this.audioDelay.Enabled = false;
-                audioInput.Text = audioStreams[0].path;
-            }
-            else if (audioStreams.Length == 2) // both streams are defined, disable audio opening facilities
-            {
-                preconfigured = new bool[] { true, true };
-                this.audioStreams = audioStreams;
-                removeAudioTrackButton.Enabled = false;
-                audioInput.Text = audioStreams[0].path;
-                audioInputOpenButton.Enabled = false;
-                removeAudioTrackButton.Enabled = false;
-                this.audioDelay.Enabled = false;
-            }
-            else // no audio tracks predefined
-            {
-                preconfigured = new bool[] { false, false };
-            }
-            muxedOutput.Text = output;
-            this.splitSize.Text = splitSize.ToString();
-            if (splitSize.HasValue)
-                enableSplit.Checked = true;
+
+            for (int i = 0; i < audioStreams.Length; ++i)
+                audioTracks[i].Enabled = false;
+
+            this.output.Filename = output;
+            this.splitting.Value = splitSize;
             this.muxButton.Text = "Go";
             updatePossibleContainers();
             if (this.containerFormat.Items.Contains(cft))
                 containerFormat.SelectedItem = cft;
             checkIO();
         }
-        #region filters
-        public override string AudioFilter
-        {
-            get
-            {
-                return VideoUtil.GenerateCombinedFilter(ContainerManager.AudioTypes.ValuesArray);
-            }
-        }
-        public override string ChaptersFilter
-        {
-            get
-            {
-                return "Chapter files (*.txt)|*.txt";
-            }
-        }
-        public override string OutputFilter
-        {
-            get
-            {
-                if (containerFormat.SelectedItem is ContainerType)
-                {
-                    return (containerFormat.SelectedItem as ContainerType).OutputFilterString;
-                }
-                else
-                    return "";
-            }
-        }
-        public override string SubtitleFilter
-        {
-            get
-            {
-                return VideoUtil.GenerateCombinedFilter(ContainerManager.SubtitleTypes.ValuesArray);
-            }
-        }
-        public override string VideoInputFilter
-        {
-            get
-            {
-                return VideoUtil.GenerateCombinedFilter(ContainerManager.VideoTypes.ValuesArray);
-            }
-        }
-        #endregion
 
         public void getAdditionalStreams(out MuxStream[] audio, out MuxStream[] subtitles, out string chapters, out string output, out ContainerType cot)
         {
             cot = (containerFormat.SelectedItem as ContainerType);
-            output = muxedOutput.Text;
+            output = this.output.Filename;
             base.getAdditionalStreams(out audio, out subtitles, out chapters);
         }
     }

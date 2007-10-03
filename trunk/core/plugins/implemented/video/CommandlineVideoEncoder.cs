@@ -16,7 +16,7 @@ namespace MeGUI
         protected int lastStatusUpdateFramePosition = 0;
         ulong numberOfFrames;
         ulong? currentFrameNumber;
-        private int hres = 0, vres = 0;
+        protected int hres = 0, vres = 0;
         Dar? dar;
         protected bool usesSAR = false;
         #endregion
@@ -44,13 +44,6 @@ namespace MeGUI
             Dar d;
             JobUtil.GetAllInputProperties( out numberOfFrames, out fps, out hres, out vres,out d, job.Input);
             dar = job.DAR;
-            if (job.Settings.UsesSAR && job.DAR.HasValue)
-            {
-                Sar s = job.DAR.Value.ToSar(hres, vres);
-                Dar d2 = new Dar(s.ar);
-                throw new Exception();
-//                job.Commandline = CommandLineGenerator.generateVideoCommandline(job.Settings, job.Input, job.Output, d2);
-            }
             su.NbFramesTotal = numberOfFrames;
             su.ClipLength = TimeSpan.FromSeconds((double)numberOfFrames / fps);
         }

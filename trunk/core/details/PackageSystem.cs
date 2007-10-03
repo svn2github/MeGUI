@@ -5,6 +5,18 @@ using MeGUI.core.plugins.interfaces;
 
 namespace MeGUI.core.details
 {
+
+    /// <summary>
+    /// Shows a dialog (normally) which allows the user to view the job's settings
+    /// and reconfigure them. If a dialog is shown, the reconfigured job must be returned.
+    /// 
+    /// If null is returned, this is taken to mean that the job configurer is 
+    /// not valid for this type of job.
+    /// </summary>
+    /// <param name="j"></param>
+    /// <returns></returns>
+    public delegate Job ReconfigureJob(Job j);
+
     public class PackageSystem 
     {
 
@@ -17,7 +29,11 @@ namespace MeGUI.core.details
         GenericRegisterer<JobPreProcessor> jobPreProcessors = new GenericRegisterer<JobPreProcessor>();
         GenericRegisterer<JobPostProcessor> jobPostProcessors = new GenericRegisterer<JobPostProcessor>();
         GenericRegisterer<JobProcessorFactory> jobProcessors = new GenericRegisterer<JobProcessorFactory>();
-
+        
+        
+        
+        
+        public GenericRegisterer<IDable<ReconfigureJob>> JobConfigurers = new GenericRegisterer<IDable<ReconfigureJob>>();
 
         public GenericRegisterer<ITool> Tools
         {

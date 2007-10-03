@@ -454,14 +454,22 @@ namespace MeGUI.core.gui
         #endregion
 
         #region load/update
-        private void updateJobButton_Click(object sender, EventArgs e)
-        {
-            throw new Exception("Not yet implemented!");
-        }
-
         private void loadJobButton_Click(object sender, EventArgs e)
         {
-            throw new Exception("Not yet implemented!");
+            if (queueListView.SelectedItems.Count != 1)
+                return;
+
+            TaggedJob job = jobs[queueListView.SelectedItems[0].Text];
+
+            if (job.Status != JobStatus.WAITING)
+                return;
+
+            foreach (IDable<ReconfigureJob> i in MainForm.Instance.PackageSystem.JobConfigurers.Values)
+            {
+                Job j = i.Data(job.Job);
+                if (j != null)
+                    job.Job = j;
+            }
         }
         #endregion
 
@@ -640,7 +648,6 @@ namespace MeGUI.core.gui
             {
                 case PauseResumeMode.Disabled:
                     throw new Exception("The supposedly disabled pause button was clicked");
-                    break;
 
                 case PauseResumeMode.Pause:
 				    if (PauseClicked != null)

@@ -96,5 +96,48 @@ namespace MeGUI.core.util
                 Path.GetDirectoryName(filename),
                 Path.GetFileNameWithoutExtension(filename) + extra + Path.GetExtension(filename));
         }
+
+        /// <summary>
+        /// Returns true if the filename matches the filter specified. The format
+        /// of the filter is the same as that of a FileDialog.
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <param name="filename"></param>
+        /// <returns></returns>
+        public static bool MatchesFilter(string filter, string filename)
+        {
+            if (string.IsNullOrEmpty(filter))
+                return true;
+
+            filter = filter.ToLower();
+            filename = Path.GetFileName(filename).ToLower();
+            string[] filters = filter.Split('|');
+            
+            for (int i = 1; i < filters.Length; i += 2)
+            {
+                string[] iFilters = filters[i].Split(';');
+                foreach (string f in iFilters)
+                {
+                    if (f.IndexOf('*') > -1)
+                    {
+                        if (!f.StartsWith("*."))
+                            throw new Exception("Invalid filter format");
+
+                        if (f == "*.*" && filename.IndexOf('.') > -1)
+                            return true;
+
+                        string extension = f.Substring(1);
+                        if (filename.EndsWith(extension))
+                            return true;
+                    }
+                    else if (f == filename)
+                        return true;
+                    else return false;
+
+                }
+            }
+
+            return false;
+        }
     }
 }

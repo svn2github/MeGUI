@@ -29,24 +29,14 @@ namespace MeGUI
         private void InitializeComponent()
         {
             this.label1 = new System.Windows.Forms.Label();
-            this.muxedInput = new System.Windows.Forms.TextBox();
-            this.muxedInputOpenButton = new System.Windows.Forms.Button();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
+            this.muxedInput = new MeGUI.FileBar();
             this.videoGroupbox.SuspendLayout();
             this.outputGroupbox.SuspendLayout();
-            this.audioGroupbox.SuspendLayout();
-            this.subtitleGroupbox.SuspendLayout();
             this.chaptersGroupbox.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.audioDelay)).BeginInit();
+            this.audioPanel.SuspendLayout();
+            this.subtitlePanel.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // videoInput
-            // 
-            this.videoInput.Location = new System.Drawing.Point(118, 20);
-            // 
-            // inputOpenButton
-            // 
-            this.inputOpenButton.Location = new System.Drawing.Point(382, 19);
             // 
             // videoInputLabel
             // 
@@ -54,69 +44,62 @@ namespace MeGUI
             // 
             // muxButton
             // 
-            this.muxButton.Location = new System.Drawing.Point(294, 448);
+            this.muxButton.Location = new System.Drawing.Point(294, 468);
             // 
             // MuxFPSLabel
             // 
+            this.MuxFPSLabel.AutoSize = true;
             this.MuxFPSLabel.Location = new System.Drawing.Point(16, 79);
-            // 
-            // muxFPS
-            // 
-            this.muxFPS.Location = new System.Drawing.Point(118, 77);
-            // 
-            // muxedOutput
-            // 
-            this.muxedOutput.ReadOnly = false;
+            this.MuxFPSLabel.Size = new System.Drawing.Size(25, 13);
             // 
             // cancelButton
             // 
-            this.cancelButton.Location = new System.Drawing.Point(376, 448);
+            this.cancelButton.Location = new System.Drawing.Point(376, 468);
             // 
             // videoGroupbox
             // 
-            this.videoGroupbox.Controls.Add(this.muxedInput);
             this.videoGroupbox.Controls.Add(this.label1);
-            this.videoGroupbox.Controls.Add(this.muxedInputOpenButton);
+            this.videoGroupbox.Controls.Add(this.muxedInput);
             this.videoGroupbox.Location = new System.Drawing.Point(8, 3);
             this.videoGroupbox.Size = new System.Drawing.Size(428, 102);
+            this.videoGroupbox.Controls.SetChildIndex(this.fps, 0);
+            this.videoGroupbox.Controls.SetChildIndex(this.vInput, 0);
             this.videoGroupbox.Controls.SetChildIndex(this.videoNameLabel, 0);
             this.videoGroupbox.Controls.SetChildIndex(this.MuxFPSLabel, 0);
             this.videoGroupbox.Controls.SetChildIndex(this.videoName, 0);
-            this.videoGroupbox.Controls.SetChildIndex(this.muxedInputOpenButton, 0);
-            this.videoGroupbox.Controls.SetChildIndex(this.label1, 0);
-            this.videoGroupbox.Controls.SetChildIndex(this.muxFPS, 0);
             this.videoGroupbox.Controls.SetChildIndex(this.muxedInput, 0);
-            this.videoGroupbox.Controls.SetChildIndex(this.inputOpenButton, 0);
+            this.videoGroupbox.Controls.SetChildIndex(this.label1, 0);
             this.videoGroupbox.Controls.SetChildIndex(this.videoInputLabel, 0);
-            this.videoGroupbox.Controls.SetChildIndex(this.videoInput, 0);
             // 
             // outputGroupbox
             // 
-            this.outputGroupbox.Location = new System.Drawing.Point(8, 362);
+            this.outputGroupbox.Location = new System.Drawing.Point(8, 382);
             this.outputGroupbox.Size = new System.Drawing.Size(428, 80);
-            // 
-            // audioGroupbox
-            // 
-            this.audioGroupbox.Location = new System.Drawing.Point(8, 109);
-            this.audioGroupbox.Size = new System.Drawing.Size(428, 106);
-            // 
-            // subtitleGroupbox
-            // 
-            this.subtitleGroupbox.Location = new System.Drawing.Point(8, 222);
-            this.subtitleGroupbox.Size = new System.Drawing.Size(428, 80);
             // 
             // chaptersGroupbox
             // 
-            this.chaptersGroupbox.Location = new System.Drawing.Point(8, 308);
+            this.chaptersGroupbox.Location = new System.Drawing.Point(8, 328);
             this.chaptersGroupbox.Size = new System.Drawing.Size(428, 48);
             // 
             // videoName
             // 
-            this.videoName.Location = new System.Drawing.Point(283, 77);
+            this.videoName.Location = new System.Drawing.Point(283, 75);
             // 
             // videoNameLabel
             // 
-            this.videoNameLabel.Location = new System.Drawing.Point(243, 80);
+            this.videoNameLabel.Location = new System.Drawing.Point(243, 79);
+            // 
+            // audioPanel
+            // 
+            this.audioPanel.Location = new System.Drawing.Point(8, 107);
+            // 
+            // subtitlePanel
+            // 
+            this.subtitlePanel.Location = new System.Drawing.Point(8, 224);
+            // 
+            // fps
+            // 
+            this.fps.Location = new System.Drawing.Point(115, 71);
             // 
             // label1
             // 
@@ -127,61 +110,53 @@ namespace MeGUI
             this.label1.TabIndex = 35;
             this.label1.Text = "Muxed Input";
             // 
-            // muxedInput
-            // 
-            this.muxedInput.Location = new System.Drawing.Point(118, 50);
-            this.muxedInput.Name = "muxedInput";
-            this.muxedInput.ReadOnly = true;
-            this.muxedInput.Size = new System.Drawing.Size(256, 21);
-            this.muxedInput.TabIndex = 36;
-            // 
-            // muxedInputOpenButton
-            // 
-            this.muxedInputOpenButton.Location = new System.Drawing.Point(382, 48);
-            this.muxedInputOpenButton.Name = "muxedInputOpenButton";
-            this.muxedInputOpenButton.Size = new System.Drawing.Size(24, 23);
-            this.muxedInputOpenButton.TabIndex = 37;
-            this.muxedInputOpenButton.Text = "...";
-            this.muxedInputOpenButton.UseVisualStyleBackColor = true;
-            this.muxedInputOpenButton.Click += new System.EventHandler(this.muxedInputOpenButton_Click);
-            // 
             // helpButton1
             // 
             this.helpButton1.ArticleName = "Manual mux window";
             this.helpButton1.AutoSize = true;
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.helpButton1.Location = new System.Drawing.Point(8, 448);
+            this.helpButton1.Location = new System.Drawing.Point(8, 460);
             this.helpButton1.Name = "helpButton1";
             this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 30;
+            // 
+            // muxedInput
+            // 
+            this.muxedInput.Filename = "";
+            this.muxedInput.Filter = null;
+            this.muxedInput.FolderMode = false;
+            this.muxedInput.Location = new System.Drawing.Point(118, 45);
+            this.muxedInput.Name = "muxedInput";
+            this.muxedInput.ReadOnly = true;
+            this.muxedInput.SaveMode = false;
+            this.muxedInput.Size = new System.Drawing.Size(289, 26);
+            this.muxedInput.TabIndex = 37;
+            this.muxedInput.Title = null;
+            this.muxedInput.FileSelected += new MeGUI.FileBarEventHandler(this.muxedInput_FileSelected);
             // 
             // MuxWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(444, 474);
+            this.ClientSize = new System.Drawing.Size(444, 503);
             this.Controls.Add(this.helpButton1);
             this.Name = "MuxWindow";
             this.Text = "MuxWindow";
-            this.Controls.SetChildIndex(this.helpButton1, 0);
-            this.Controls.SetChildIndex(this.chaptersGroupbox, 0);
-            this.Controls.SetChildIndex(this.videoGroupbox, 0);
-            this.Controls.SetChildIndex(this.audioGroupbox, 0);
-            this.Controls.SetChildIndex(this.subtitleGroupbox, 0);
-            this.Controls.SetChildIndex(this.muxButton, 0);
             this.Controls.SetChildIndex(this.outputGroupbox, 0);
+            this.Controls.SetChildIndex(this.chaptersGroupbox, 0);
+            this.Controls.SetChildIndex(this.muxButton, 0);
+            this.Controls.SetChildIndex(this.subtitlePanel, 0);
             this.Controls.SetChildIndex(this.cancelButton, 0);
+            this.Controls.SetChildIndex(this.helpButton1, 0);
+            this.Controls.SetChildIndex(this.audioPanel, 0);
+            this.Controls.SetChildIndex(this.videoGroupbox, 0);
             this.videoGroupbox.ResumeLayout(false);
             this.videoGroupbox.PerformLayout();
             this.outputGroupbox.ResumeLayout(false);
             this.outputGroupbox.PerformLayout();
-            this.audioGroupbox.ResumeLayout(false);
-            this.audioGroupbox.PerformLayout();
-            this.subtitleGroupbox.ResumeLayout(false);
-            this.subtitleGroupbox.PerformLayout();
             this.chaptersGroupbox.ResumeLayout(false);
-            this.chaptersGroupbox.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.audioDelay)).EndInit();
+            this.audioPanel.ResumeLayout(false);
+            this.subtitlePanel.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -189,9 +164,8 @@ namespace MeGUI
 
         #endregion
 
-        private System.Windows.Forms.TextBox muxedInput;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button muxedInputOpenButton;
         private MeGUI.core.gui.HelpButton helpButton1;
+        private FileBar muxedInput;
     }
 }

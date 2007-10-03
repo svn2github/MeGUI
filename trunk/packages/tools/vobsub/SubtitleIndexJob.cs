@@ -9,7 +9,6 @@ namespace MeGUI
         private bool indexAllTracks;
         private List<int> trackIDs;
         private int pgc;
-        private string scriptFile;
         public SubtitleIndexJob()
             : base()
 		{

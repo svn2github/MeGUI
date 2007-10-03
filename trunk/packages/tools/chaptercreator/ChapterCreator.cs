@@ -718,6 +718,7 @@ namespace MeGUI
 	public struct Chapter
 	{
 		public string timecode;
+        public TimeSpan StartTime;
 		public string name;
 	}
 
