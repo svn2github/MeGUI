@@ -246,7 +246,7 @@ namespace MeGUI.core.gui
             // 
             this.colourCorrect.Location = new System.Drawing.Point(5, 45);
             this.colourCorrect.Name = "colourCorrect";
-            this.colourCorrect.Size = new System.Drawing.Size(111, 18);
+            this.colourCorrect.Size = new System.Drawing.Size(124, 18);
             this.colourCorrect.TabIndex = 9;
             this.colourCorrect.Text = "Colour Correction";
             // 

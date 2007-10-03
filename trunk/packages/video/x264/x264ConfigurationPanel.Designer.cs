@@ -193,7 +193,7 @@ namespace MeGUI.packages.video.x264
             // 
             this.tabControl1.Controls.Add(this.rateControlTabPage);
             this.tabControl1.Controls.Add(this.quantizationTabPage);
-            this.tabControl1.Size = new System.Drawing.Size(510, 445);
+            this.tabControl1.Size = new System.Drawing.Size(510, 429);
             this.tabControl1.TabIndex = 0;
             this.tabControl1.Controls.SetChildIndex(this.zoneTabPage, 0);
             this.tabControl1.Controls.SetChildIndex(this.quantizationTabPage, 0);
@@ -204,15 +204,15 @@ namespace MeGUI.packages.video.x264
             // 
             this.zoneTabPage.Controls.Add(this.customCommandlineOptionsLabel);
             this.zoneTabPage.Controls.Add(this.customCommandlineOptions);
-            this.zoneTabPage.Size = new System.Drawing.Size(502, 419);
+            this.zoneTabPage.Size = new System.Drawing.Size(502, 403);
             this.zoneTabPage.Controls.SetChildIndex(this.customCommandlineOptions, 0);
             this.zoneTabPage.Controls.SetChildIndex(this.customCommandlineOptionsLabel, 0);
             this.zoneTabPage.Controls.SetChildIndex(this.zonesControl, 0);
             // 
             // commandline
             // 
-            this.commandline.Location = new System.Drawing.Point(0, 451);
-            this.commandline.Size = new System.Drawing.Size(507, 39);
+            this.commandline.Location = new System.Drawing.Point(0, 431);
+            this.commandline.Size = new System.Drawing.Size(507, 59);
             this.commandline.TabIndex = 1;
             this.commandline.Text = " ";
             // 
@@ -223,7 +223,7 @@ namespace MeGUI.packages.video.x264
             this.mainTabPage.Controls.Add(this.avcProfileGroupbox);
             this.mainTabPage.Controls.Add(this.x264CodecToolsGroupbox);
             this.mainTabPage.Controls.Add(this.x264CodecGeneralGroupbox);
-            this.mainTabPage.Size = new System.Drawing.Size(502, 419);
+            this.mainTabPage.Size = new System.Drawing.Size(502, 403);
             // 
             // zonesControl
             // 
@@ -581,7 +581,7 @@ namespace MeGUI.packages.video.x264
             this.rateControlTabPage.Controls.Add(this.x264RCGroupbox);
             this.rateControlTabPage.Location = new System.Drawing.Point(4, 22);
             this.rateControlTabPage.Name = "rateControlTabPage";
-            this.rateControlTabPage.Size = new System.Drawing.Size(502, 419);
+            this.rateControlTabPage.Size = new System.Drawing.Size(502, 403);
             this.rateControlTabPage.TabIndex = 3;
             this.rateControlTabPage.Text = "RC and ME";
             this.rateControlTabPage.UseVisualStyleBackColor = true;
@@ -1186,7 +1186,7 @@ namespace MeGUI.packages.video.x264
             this.quantizationTabPage.Controls.Add(this.x264QuantizerGroupBox);
             this.quantizationTabPage.Location = new System.Drawing.Point(4, 22);
             this.quantizationTabPage.Name = "quantizationTabPage";
-            this.quantizationTabPage.Size = new System.Drawing.Size(502, 419);
+            this.quantizationTabPage.Size = new System.Drawing.Size(502, 403);
             this.quantizationTabPage.TabIndex = 4;
             this.quantizationTabPage.Text = "Advanced";
             this.quantizationTabPage.UseVisualStyleBackColor = true;
@@ -1355,14 +1355,14 @@ namespace MeGUI.packages.video.x264
             // 
             // cqmComboBox1
             // 
-            this.cqmComboBox1.CustomItems = new string[0];
             this.cqmComboBox1.Filter = "Quantizer matrix files (*.cfg)|*.cfg|All Files (*.*)|*.*";
             this.cqmComboBox1.Location = new System.Drawing.Point(15, 34);
             this.cqmComboBox1.MaximumSize = new System.Drawing.Size(1000, 29);
             this.cqmComboBox1.MinimumSize = new System.Drawing.Size(64, 29);
             this.cqmComboBox1.Name = "cqmComboBox1";
+            this.cqmComboBox1.SelectedIndex = -1;
+            this.cqmComboBox1.SelectedItem = null;
             this.cqmComboBox1.Size = new System.Drawing.Size(289, 29);
-            this.cqmComboBox1.StandardItems = new string[0];
             this.cqmComboBox1.TabIndex = 5;
             this.cqmComboBox1.SelectionChanged += new MeGUI.StringChanged(this.cqmComboBox1_SelectionChanged);
             // 
