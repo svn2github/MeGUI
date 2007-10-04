@@ -1487,9 +1487,10 @@ namespace MeGUI
                 ulong nbFrames = 0;
                 double framerate = 0.0;
                 if (!string.IsNullOrEmpty(info.Video.VideoInput))
+                {
                     JobUtil.getInputProperties(out nbFrames, out framerate, info.Video.VideoInput);
-                calc.setDefaults(nbFrames, framerate, info.Video.CurrentSettingsProvider, info.Audio.AudioStreams[0], info.Audio.AudioStreams[1]);
-
+                    calc.setDefaults(nbFrames, framerate, info.Video.CurrentSettingsProvider, info.Audio.AudioStreams[0], info.Audio.AudioStreams[1]);
+                }
                 DialogResult dr = calc.ShowDialog();
                 if (dr == DialogResult.OK)
                 {
