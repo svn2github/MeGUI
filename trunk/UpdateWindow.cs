@@ -158,6 +158,10 @@ namespace MeGUI
 
                 name.Text = this.Name;
 
+                Version v = GetLatestVersion();
+                if (v != null)
+                    latestVersion.Text = v.FileVersion;
+
                 if (this.CurrentVersion != null)
                     existingVersion.Text = this.CurrentVersion.FileVersion;
                 else
