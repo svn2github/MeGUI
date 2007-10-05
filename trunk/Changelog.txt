@@ -1,3 +1,11 @@
+0.2.6.1019 Work in progress
+    - (Kurtnoise) [One Click Encoder] : fix output filename according to the container selected in the Advanced Settings.
+    - (Kurtnoise) cosmetic - Move "cleanup" to EncodingMode instead of CodecString.
+    - (Kurtnoise) [Bitrate Calculator] : fix a runtime error.
+    - (berrinam) Fixed AutoEncode to queue jobs again
+    - (berrinam) Fixed #1805580 (Automatic output filename assumes .mp4 output in muxer)
+    - (berrinam) Fixed Bitrate Calculator to support multiple audio tracks; this fixes crash when opening it without input
+
 0.2.6.1018
     - (berrinam) [Internal] : Remove Commandline field from Job
     - (berrinam) [Internal] : Remove commandline generation from CommandLineGenerator and put it in individual encoders

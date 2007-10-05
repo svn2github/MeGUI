@@ -81,7 +81,7 @@ namespace MeGUI
             job.Output = job.Settings.MuxedOutput;
             job.MuxType = muxer.MuxerType;
             job.ContainerType = getContainerType(job.Settings.MuxedOutput);
-            job.Settings.Framerate = fps.Value.Value;
+            job.Settings.Framerate = fps.Value;
             job.Settings.SplitSize = splitting.Value;
             return job;
         }
@@ -98,12 +98,22 @@ namespace MeGUI
             }
         }
 
-        private void setConfig(string videoInput, string muxedInput, decimal framerate, MuxStream[] audioStreams,
+        private void setConfig(string videoInput, string muxedInput, decimal? framerate, MuxStream[] audioStreams,
             MuxStream[] subtitleStreams, string chapterFile, string output, FileSize? splitSize, Dar? dar)
         {
             base.setConfig(videoInput, framerate, audioStreams, subtitleStreams, chapterFile, output, splitSize, dar);
             this.muxedInput.Filename = muxedInput;
             this.checkIO();
+        }
+
+        protected override void ChangeOutputExtension()
+        {
+            foreach (ContainerType t in muxer.GetSupportedContainers())
+            {
+                if (output.Filename.ToLower().EndsWith(t.Extension.ToLower()))
+                    return;
+            }
+            output.Filename = Path.ChangeExtension(output.Filename, muxer.GetSupportedContainers()[0].Extension);
         }
 
         private ContainerType getContainerType(string outputFilename)

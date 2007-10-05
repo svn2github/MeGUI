@@ -33,7 +33,10 @@ new JobProcessorFactory(new ProcessorFactory(init), "Avc2AviMuxer");
         {
             get
             {
-                return "-f " + job.Settings.Framerate.ToString(new CultureInfo("en-us")) + 
+                if (!job.Settings.Framerate.HasValue)
+                    throw new JobRunException("Can't generate commandline because video framerate isn't known");
+
+                return "-f " + job.Settings.Framerate.Value.ToString(new CultureInfo("en-us")) + 
                     " -i \"" + job.Settings.VideoInput + 
                     "\" -o \"" + job.Settings.MuxedOutput + "\"";
             }

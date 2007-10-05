@@ -330,6 +330,12 @@
     <Compile Include="core\gui\JobWorkerWindow.Designer.cs">
       <DependentUpon>JobWorkerWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="core\gui\MultiTrackComponent.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="core\gui\MultiTrackComponent.Designer.cs">
+      <DependentUpon>MultiTrackComponent.cs</DependentUpon>
+    </Compile>
     <Compile Include="core\gui\NiceComboBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -509,6 +515,12 @@
     </Compile>
     <Compile Include="packages\tools\besplitter\Besplitter.Designer.cs">
       <DependentUpon>Besplitter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="packages\tools\calculator\AudioTrackSizeTab.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="packages\tools\calculator\AudioTrackSizeTab.Designer.cs">
+      <DependentUpon>AudioTrackSizeTab.cs</DependentUpon>
     </Compile>
     <Compile Include="packages\tools\calculator\Calculator.cs">
       <SubType>Form</SubType>
@@ -784,6 +796,10 @@
     <EmbeddedResource Include="packages\tools\besplitter\Besplitter.resx">
       <SubType>Designer</SubType>
       <DependentUpon>Besplitter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="packages\tools\calculator\AudioTrackSizeTab.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>AudioTrackSizeTab.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="packages\tools\calculator\Calculator.resx">
       <DependentUpon>Calculator.cs</DependentUpon>

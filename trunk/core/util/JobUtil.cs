@@ -117,7 +117,7 @@ namespace MeGUI
             }
         }
 
-        public JobChain GenerateMuxJobs(VideoStream video, MuxStream[] audioStreamsArray, MuxableType[] audioTypes,
+        public JobChain GenerateMuxJobs(VideoStream video, decimal? framerate, MuxStream[] audioStreamsArray, MuxableType[] audioTypes,
             MuxStream[] subtitleStreamsArray, MuxableType[] subTypes,
             string chapterFile, MuxableType chapterInputType, ContainerType container, string output, FileSize? splitSize, bool deleteInputs)
         {
@@ -151,7 +151,7 @@ namespace MeGUI
                 mjob.NbOfFrames = video.NumberOfFrames;
                 mjob.NbOfBFrames = video.Settings.NbBframes;
                 mjob.Codec = video.Settings.Codec.ToString();
-                mjob.Settings.Framerate = video.Framerate;
+                mjob.Settings.Framerate = framerate;
 
                 string tempOutputName = Path.Combine(Path.GetDirectoryName(output),
                     Path.GetFileNameWithoutExtension(output) + tempNumber + ".");

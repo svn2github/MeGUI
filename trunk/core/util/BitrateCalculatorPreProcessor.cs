@@ -43,8 +43,16 @@ namespace MeGUI.core.util
             int bitrateKBits;
             ulong videoSizeKB = 0;
 
-            bitrateKBits = BitrateCalculator.CalculateBitrateKBits(job.Settings.Codec, job.Settings.NbBframes > 0, b.Container,
+            try
+            {
+                bitrateKBits = BitrateCalculator.CalculateBitrateKBits(job.Settings.Codec, job.Settings.NbBframes > 0, b.Container,
                 audioStreams.ToArray(), b.DesiredSize.Bytes, framecount, framerate, out videoSizeKB);
+            }
+            catch (CalculationException e)
+            {
+                mainForm.addToLog("Calculation failed with message '{0}'", e);
+                return;
+            }
 
             mainForm.addToLog("Desired video size after subtracting audio size is {0}KBs. Setting the desired bitrate of the subsequent video jobs to {1} kbit/s.",
                 videoSizeKB, bitrateKBits);

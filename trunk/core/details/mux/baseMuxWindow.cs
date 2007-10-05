@@ -129,7 +129,7 @@ namespace MeGUI
         /// <param name="subtitleStreams">the subtitle streams</param>
         /// <param name="output">name of the output</param>
         /// <param name="splitSize">split size of the output</param>
-        public void setConfig(string videoInput, decimal framerate, MuxStream[] audioStreams, MuxStream[] subtitleStreams, string chapterFile, string output, FileSize? splitSize, Dar? dar)
+        public void setConfig(string videoInput, decimal? framerate, MuxStream[] audioStreams, MuxStream[] subtitleStreams, string chapterFile, string output, FileSize? splitSize, Dar? dar)
         {
             this.dar = dar;
             vInput.Filename = videoInput;
@@ -639,9 +639,12 @@ namespace MeGUI
             checkIO();
         }
 
+        protected virtual void ChangeOutputExtension() {}
+
         private void chooseOutputFilename()
         {
             output.Filename = FileUtil.AddToFileName(vInput.Filename, "-muxed");
+            ChangeOutputExtension();
         }
 
         private void chapters_FileSelected(FileBar sender, FileBarEventArgs args)

@@ -167,7 +167,6 @@ namespace MeGUI
                 myVideo.Input = "";
                 myVideo.Output = vInput.Filename;
                 myVideo.NumberOfFrames = 1000; // Just a guess, since we have no way of actually knowing
-                myVideo.Framerate = fps.Value.Value;
                 myVideo.VideoType = VideoUtil.guessVideoMuxableType(vInput.Filename, true);
                 myVideo.Settings = new x264Settings();
                 myVideo.Settings.NbBframes = 0;
@@ -190,7 +189,7 @@ namespace MeGUI
                         chapterInputType = new MuxableType(type, null);
                 }
 
-                return jobUtil.GenerateMuxJobs(myVideo, audioStreams, audioTypes, subtitleStreams,
+                return jobUtil.GenerateMuxJobs(myVideo, fps.Value, audioStreams, audioTypes, subtitleStreams,
                     subtitleTypes, this.chapters.Filename, chapterInputType, (containerFormat.SelectedItem as ContainerType), output.Filename, splitSize, false);
             }
         }

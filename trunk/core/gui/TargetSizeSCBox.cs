@@ -68,7 +68,7 @@ namespace MeGUI.core.gui
             get
             {
                 object o = base.SelectedObject;
-                if (NullString.Equals(o))
+                if (o.Equals(NullString))
                     return null;
                 Debug.Assert(o is Named<FileSize>);
                 return ((Named<FileSize>)o).Data;

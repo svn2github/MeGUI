@@ -24,6 +24,12 @@ using MeGUI.core.util;
 
 namespace MeGUI
 {
+    public class CalculationException : MeGUIException
+    {
+        public CalculationException(string message, Exception inner)
+            : base(message, inner) { }
+    }
+
 	/// <summary>
 	/// Summary description for BitrateCalculator.
 	/// </summary>
@@ -73,13 +79,21 @@ namespace MeGUI
 
         public Tuple<ulong, FileSize> getBitrateAndVideoSize(FileSize desiredSize)
         {
-            FileSize videoSize = desiredSize - VideoOverhead - AudioOverhead - AudioSize;
-            ulong sizeInBits = videoSize.Bytes * 8;
-            return new Tuple<ulong, FileSize>((ulong)(sizeInBits / (nbOfSeconds * 1000)), videoSize);
+            try
+            {
+                FileSize videoSize = desiredSize - VideoOverhead - AudioOverhead - AudioSize;
+                ulong sizeInBits = videoSize.Bytes * 8;
+                return new Tuple<ulong, FileSize>((ulong)(sizeInBits / (nbOfSeconds * 1000)), videoSize);
+            }
+            catch (OverflowException e)
+            {
+                throw new CalculationException("The filesize cannot be obtained", e);
+            }
         }
 
         public Tuple<FileSize, FileSize> getFileAndVideoSize(ulong bitrateKBits)
         {
+
             decimal bytesPerSecond = bitrateKBits * 1000 / 8;
 
             FileSize videoSize = new FileSize(Unit.B, (nbOfSeconds * bytesPerSecond));

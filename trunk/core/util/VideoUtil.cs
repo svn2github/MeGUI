@@ -499,7 +499,7 @@ namespace MeGUI
             foreach (MuxableType m in allInputAudioTypes)
                 mainForm.addToLog(m.codec.ToString());
 
-            JobChain muxJobs = this.jobUtil.GenerateMuxJobs(video, allAudioToMux.ToArray(), allInputAudioTypes.ToArray(),
+            JobChain muxJobs = this.jobUtil.GenerateMuxJobs(video, video.Framerate, allAudioToMux.ToArray(), allInputAudioTypes.ToArray(),
                 subtitles, allInputSubtitleTypes.ToArray(), chapters, chapterInputType, container, muxedOutput, splitSize, true);
 
 

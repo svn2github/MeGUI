@@ -165,18 +165,24 @@ namespace MeGUI.core.details.video
             if (ConfigureCompleted != null) ConfigureCompleted(this, null);
         }
 
+        public Profile CurrentProfile
+        {
+            get
+            {
+                string s = SelectedProfile;
+                if (string.IsNullOrEmpty(s))
+                    return null;
+
+                return mainForm.Profiles.Profiles(profileType)[s];
+            }
+        }
+
         private void avsProfile_SelectedIndexChanged(object sender, System.EventArgs e)
         {
             mainForm.Profiles.SetSelectedProfile(profileType, SelectedProfile);
             if (ProfileChanged != null)
             {
-                if (impl.avsProfile.SelectedIndex >= 0)
-                {
-                    Profile prof = this.mainForm.Profiles.Profiles(profileType)[impl.avsProfile.SelectedItem.ToString()];
-                    ProfileChanged(this, prof);
-                }
-                else
-                    ProfileChanged(this, null);
+                ProfileChanged(this, CurrentProfile);
             }
         }
 

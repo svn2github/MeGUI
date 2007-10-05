@@ -231,8 +231,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                 if (settings.SplitSize.HasValue)
                     sb.Append(" -splits " + settings.SplitSize.Value.KB);
 
-                string fpsString = settings.Framerate.ToString(ci);
-                sb.Append(" -fps " + fpsString);
+                if (settings.Framerate.HasValue)
+                {
+                    string fpsString = settings.Framerate.Value.ToString(ci);
+                    sb.Append(" -fps " + fpsString);
+                }
 
                 /*   sb.AppendFormat(" -tmp {0}", Path.GetDirectoryName(settings.MuxedOutput)); */
                 sb.Append(" -new \"" + settings.MuxedOutput + "\"");

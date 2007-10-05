@@ -27,6 +27,7 @@ using System.IO;
 using System.Diagnostics;
 using MeGUI.core.util;
 using MeGUI.core.details;
+using MeGUI.packages.tools.calculator;
 
 namespace MeGUI
 {
@@ -38,6 +39,7 @@ namespace MeGUI
 	{
 		#region variables
         private bool updatingContainers = false;
+        private List<AudioTrackSizeTab> audioTabs = new List<AudioTrackSizeTab>();
 		private BitrateCalculator calc;
         private MainForm mainForm;
         private MuxProvider muxProvider;
@@ -51,20 +53,8 @@ namespace MeGUI
 		private System.Windows.Forms.Label minutesLabel;
 		private System.Windows.Forms.Label secondsLabel;
         private System.Windows.Forms.Label framerateLabel;
-		private System.Windows.Forms.Label totalSecondsLabel;
-		private System.Windows.Forms.GroupBox audio1Groupbox;
-        private System.Windows.Forms.GroupBox audio2Groupbox;
-		private System.Windows.Forms.Button selectAudio2Button;
-		private System.Windows.Forms.Label audio2KBLabel;
-		private System.Windows.Forms.Label audio2MBLabel;
-        private System.Windows.Forms.Button selectAudio1Button;
-		private System.Windows.Forms.ComboBox audio1Type;
-		private System.Windows.Forms.Label audio1TypeLabel;
-		private System.Windows.Forms.ComboBox audio2Type;
-        private System.Windows.Forms.Label audio2TypeLabel;
-		private System.Windows.Forms.Button applyButton;
-		private System.Windows.Forms.Label audio1MBLabel;
-		private System.Windows.Forms.Label audio1KBLabel;
+        private System.Windows.Forms.Label totalSecondsLabel;
+        private System.Windows.Forms.Button applyButton;
         private System.Windows.Forms.GroupBox codecGroupbox;
         private System.Windows.Forms.GroupBox sizeGroupbox;
 		private System.Windows.Forms.RadioButton averageBitrateRadio;
@@ -73,37 +63,27 @@ namespace MeGUI
         private System.Windows.Forms.GroupBox resultGroupbox;
         private System.Windows.Forms.Label nbFramesLabel;
 		private System.Windows.Forms.Button cancelButton;
-		private System.Windows.Forms.OpenFileDialog openFileDialog;
-		private System.Windows.Forms.Button clearAudio1Button;
-		private System.Windows.Forms.Button clearAudio2Button;
+        private System.Windows.Forms.OpenFileDialog openFileDialog;
 		private System.Windows.Forms.GroupBox containerGroupbox;
         private System.Windows.Forms.CheckBox bframes;
         private ComboBox videoCodec;
         private ComboBox containerFormat;
-        private NumericUpDown audio1Bitrate;
-        private NumericUpDown audio2Bitrate;
         private NumericUpDown nbFrames;
         private NumericUpDown totalSeconds;
-        private NumericUpDown audio1SizeMB;
-        private NumericUpDown audio1SizeKB;
-        private NumericUpDown audio2SizeMB;
-        private NumericUpDown audio2SizeKB;
         private NumericUpDown projectedBitrate;
-        private Label label2;
-        private Label label1;
-        private Label label4;
-        private Label label3;
         private MeGUI.core.gui.HelpButton helpButton1;
         private MeGUI.core.gui.TargetSizeSCBox targetSize;
         private TextBox videoSize;
         private Label VideoFileSizeLabel;
         private MeGUI.core.gui.FPSChooser fpsChooser;
-
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.Container components = null;
+        private TabControl audio;
+        private TabPage audioPage1;
+        private AudioTrackSizeTab audioTrackSizeTab1;
 		#endregion
+        private ContextMenuStrip contextMenuStrip1;
+        private ToolStripMenuItem addTrackToolStripMenuItem;
+        private ToolStripMenuItem removeTrackToolStripMenuItem;
+        private IContainer components;
 		#region start / stop
 		public Calculator(MainForm mainForm)
 		{
@@ -111,11 +91,10 @@ namespace MeGUI
             this.mainForm = mainForm;
             this.muxProvider = mainForm.MuxProvider;
             this.videoCodec.Items.AddRange(CodecManager.ListOfVideoCodecs);
-            this.audio1Type.Items.AddRange(ContainerManager.AudioTypes.ValuesArray);
-            this.audio2Type.Items.AddRange(ContainerManager.AudioTypes.ValuesArray);
             videoCodec.SelectedItem = CodecManager.X264;
             this.containerFormat.Items.AddRange(muxProvider.GetSupportedContainers().ToArray());
             containerFormat.SelectedItem = ContainerType.MKV;
+            audioTabs.Add(audioTrackSizeTab1);
 		}
 
 		/// <summary>
@@ -140,8 +119,8 @@ namespace MeGUI
 		/// </summary>
 		private void InitializeComponent()
 		{
+            this.components = new System.ComponentModel.Container();
             this.videoGroupbox = new System.Windows.Forms.GroupBox();
-            this.fpsChooser = new MeGUI.core.gui.FPSChooser();
             this.nbFrames = new System.Windows.Forms.NumericUpDown();
             this.totalSeconds = new System.Windows.Forms.NumericUpDown();
             this.bframes = new System.Windows.Forms.CheckBox();
@@ -155,36 +134,11 @@ namespace MeGUI
             this.minutes = new System.Windows.Forms.NumericUpDown();
             this.hours = new System.Windows.Forms.NumericUpDown();
             this.applyButton = new System.Windows.Forms.Button();
-            this.audio1Groupbox = new System.Windows.Forms.GroupBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.audio1SizeMB = new System.Windows.Forms.NumericUpDown();
-            this.audio1SizeKB = new System.Windows.Forms.NumericUpDown();
-            this.audio1Bitrate = new System.Windows.Forms.NumericUpDown();
-            this.audio1MBLabel = new System.Windows.Forms.Label();
-            this.audio1KBLabel = new System.Windows.Forms.Label();
-            this.selectAudio1Button = new System.Windows.Forms.Button();
-            this.audio1Type = new System.Windows.Forms.ComboBox();
-            this.audio1TypeLabel = new System.Windows.Forms.Label();
-            this.clearAudio1Button = new System.Windows.Forms.Button();
-            this.audio2Groupbox = new System.Windows.Forms.GroupBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.audio2SizeMB = new System.Windows.Forms.NumericUpDown();
-            this.label3 = new System.Windows.Forms.Label();
-            this.audio2SizeKB = new System.Windows.Forms.NumericUpDown();
-            this.audio2Bitrate = new System.Windows.Forms.NumericUpDown();
-            this.clearAudio2Button = new System.Windows.Forms.Button();
-            this.audio2Type = new System.Windows.Forms.ComboBox();
-            this.audio2TypeLabel = new System.Windows.Forms.Label();
-            this.audio2MBLabel = new System.Windows.Forms.Label();
-            this.audio2KBLabel = new System.Windows.Forms.Label();
-            this.selectAudio2Button = new System.Windows.Forms.Button();
             this.codecGroupbox = new System.Windows.Forms.GroupBox();
             this.videoCodec = new System.Windows.Forms.ComboBox();
             this.containerGroupbox = new System.Windows.Forms.GroupBox();
             this.containerFormat = new System.Windows.Forms.ComboBox();
             this.sizeGroupbox = new System.Windows.Forms.GroupBox();
-            this.targetSize = new MeGUI.core.gui.TargetSizeSCBox();
             this.fileSizeRadio = new System.Windows.Forms.RadioButton();
             this.averageBitrateRadio = new System.Windows.Forms.RadioButton();
             this.AverageBitrateLabel = new System.Windows.Forms.Label();
@@ -194,26 +148,29 @@ namespace MeGUI
             this.VideoFileSizeLabel = new System.Windows.Forms.Label();
             this.cancelButton = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.audio = new System.Windows.Forms.TabControl();
+            this.audioPage1 = new System.Windows.Forms.TabPage();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.addTrackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.removeTrackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.audioTrackSizeTab1 = new MeGUI.packages.tools.calculator.AudioTrackSizeTab();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
+            this.targetSize = new MeGUI.core.gui.TargetSizeSCBox();
+            this.fpsChooser = new MeGUI.core.gui.FPSChooser();
             this.videoGroupbox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nbFrames)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.totalSeconds)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.seconds)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.minutes)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.hours)).BeginInit();
-            this.audio1Groupbox.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.audio1SizeMB)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.audio1SizeKB)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.audio1Bitrate)).BeginInit();
-            this.audio2Groupbox.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.audio2SizeMB)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.audio2SizeKB)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.audio2Bitrate)).BeginInit();
             this.codecGroupbox.SuspendLayout();
             this.containerGroupbox.SuspendLayout();
             this.sizeGroupbox.SuspendLayout();
             this.resultGroupbox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.projectedBitrate)).BeginInit();
+            this.audio.SuspendLayout();
+            this.audioPage1.SuspendLayout();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // videoGroupbox
@@ -237,17 +194,6 @@ namespace MeGUI
             this.videoGroupbox.TabIndex = 0;
             this.videoGroupbox.TabStop = false;
             this.videoGroupbox.Text = "Video";
-            // 
-            // fpsChooser
-            // 
-            this.fpsChooser.Location = new System.Drawing.Point(185, 73);
-            this.fpsChooser.MaximumSize = new System.Drawing.Size(1000, 29);
-            this.fpsChooser.MinimumSize = new System.Drawing.Size(64, 29);
-            this.fpsChooser.Name = "fpsChooser";
-            this.fpsChooser.SelectedIndex = 0;
-            this.fpsChooser.Size = new System.Drawing.Size(129, 29);
-            this.fpsChooser.TabIndex = 13;
-            this.fpsChooser.SelectionChanged += new MeGUI.StringChanged(this.fpsChooser_SelectionChanged);
             // 
             // nbFrames
             // 
@@ -382,272 +328,6 @@ namespace MeGUI
             this.applyButton.TabIndex = 0;
             this.applyButton.Text = "Apply";
             // 
-            // audio1Groupbox
-            // 
-            this.audio1Groupbox.Controls.Add(this.label2);
-            this.audio1Groupbox.Controls.Add(this.label1);
-            this.audio1Groupbox.Controls.Add(this.audio1SizeMB);
-            this.audio1Groupbox.Controls.Add(this.audio1SizeKB);
-            this.audio1Groupbox.Controls.Add(this.audio1Bitrate);
-            this.audio1Groupbox.Controls.Add(this.audio1MBLabel);
-            this.audio1Groupbox.Controls.Add(this.audio1KBLabel);
-            this.audio1Groupbox.Controls.Add(this.selectAudio1Button);
-            this.audio1Groupbox.Controls.Add(this.audio1Type);
-            this.audio1Groupbox.Controls.Add(this.audio1TypeLabel);
-            this.audio1Groupbox.Controls.Add(this.clearAudio1Button);
-            this.audio1Groupbox.Location = new System.Drawing.Point(8, 168);
-            this.audio1Groupbox.Name = "audio1Groupbox";
-            this.audio1Groupbox.Size = new System.Drawing.Size(156, 200);
-            this.audio1Groupbox.TabIndex = 5;
-            this.audio1Groupbox.TabStop = false;
-            this.audio1Groupbox.Text = "AudioTrack 1";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(8, 67);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(26, 13);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "Size";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(8, 22);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(39, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Bitrate";
-            // 
-            // audio1SizeMB
-            // 
-            this.audio1SizeMB.Location = new System.Drawing.Point(8, 110);
-            this.audio1SizeMB.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.audio1SizeMB.Name = "audio1SizeMB";
-            this.audio1SizeMB.Size = new System.Drawing.Size(97, 21);
-            this.audio1SizeMB.TabIndex = 5;
-            this.audio1SizeMB.ValueChanged += new System.EventHandler(this.textField_TextChanged);
-            // 
-            // audio1SizeKB
-            // 
-            this.audio1SizeKB.Location = new System.Drawing.Point(8, 83);
-            this.audio1SizeKB.Maximum = new decimal(new int[] {
-            10000000,
-            0,
-            0,
-            0});
-            this.audio1SizeKB.Name = "audio1SizeKB";
-            this.audio1SizeKB.Size = new System.Drawing.Size(97, 21);
-            this.audio1SizeKB.TabIndex = 3;
-            this.audio1SizeKB.ValueChanged += new System.EventHandler(this.textField_TextChanged);
-            // 
-            // audio1Bitrate
-            // 
-            this.audio1Bitrate.Increment = new decimal(new int[] {
-            16,
-            0,
-            0,
-            0});
-            this.audio1Bitrate.Location = new System.Drawing.Point(8, 43);
-            this.audio1Bitrate.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.audio1Bitrate.Name = "audio1Bitrate";
-            this.audio1Bitrate.Size = new System.Drawing.Size(97, 21);
-            this.audio1Bitrate.TabIndex = 1;
-            this.audio1Bitrate.ValueChanged += new System.EventHandler(this.textField_TextChanged);
-            // 
-            // audio1MBLabel
-            // 
-            this.audio1MBLabel.Location = new System.Drawing.Point(108, 112);
-            this.audio1MBLabel.Name = "audio1MBLabel";
-            this.audio1MBLabel.Size = new System.Drawing.Size(24, 16);
-            this.audio1MBLabel.TabIndex = 19;
-            this.audio1MBLabel.Text = "MB";
-            // 
-            // audio1KBLabel
-            // 
-            this.audio1KBLabel.Location = new System.Drawing.Point(108, 85);
-            this.audio1KBLabel.Name = "audio1KBLabel";
-            this.audio1KBLabel.Size = new System.Drawing.Size(24, 16);
-            this.audio1KBLabel.TabIndex = 4;
-            this.audio1KBLabel.Text = "KB";
-            // 
-            // selectAudio1Button
-            // 
-            this.selectAudio1Button.Location = new System.Drawing.Point(8, 164);
-            this.selectAudio1Button.Name = "selectAudio1Button";
-            this.selectAudio1Button.Size = new System.Drawing.Size(75, 23);
-            this.selectAudio1Button.TabIndex = 8;
-            this.selectAudio1Button.Text = "Select";
-            this.selectAudio1Button.Click += new System.EventHandler(this.selectAudio1Button_Click);
-            // 
-            // audio1Type
-            // 
-            this.audio1Type.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.audio1Type.Location = new System.Drawing.Point(54, 137);
-            this.audio1Type.Name = "audio1Type";
-            this.audio1Type.Size = new System.Drawing.Size(84, 21);
-            this.audio1Type.TabIndex = 7;
-            this.audio1Type.SelectedIndexChanged += new System.EventHandler(this.audio_SelectedIndexChanged);
-            // 
-            // audio1TypeLabel
-            // 
-            this.audio1TypeLabel.Location = new System.Drawing.Point(8, 140);
-            this.audio1TypeLabel.Name = "audio1TypeLabel";
-            this.audio1TypeLabel.Size = new System.Drawing.Size(40, 16);
-            this.audio1TypeLabel.TabIndex = 6;
-            this.audio1TypeLabel.Text = "Type";
-            // 
-            // clearAudio1Button
-            // 
-            this.clearAudio1Button.Location = new System.Drawing.Point(89, 164);
-            this.clearAudio1Button.Name = "clearAudio1Button";
-            this.clearAudio1Button.Size = new System.Drawing.Size(24, 23);
-            this.clearAudio1Button.TabIndex = 9;
-            this.clearAudio1Button.Text = "X";
-            this.clearAudio1Button.Click += new System.EventHandler(this.clearAudioButton_Click);
-            // 
-            // audio2Groupbox
-            // 
-            this.audio2Groupbox.Controls.Add(this.label4);
-            this.audio2Groupbox.Controls.Add(this.audio2SizeMB);
-            this.audio2Groupbox.Controls.Add(this.label3);
-            this.audio2Groupbox.Controls.Add(this.audio2SizeKB);
-            this.audio2Groupbox.Controls.Add(this.audio2Bitrate);
-            this.audio2Groupbox.Controls.Add(this.clearAudio2Button);
-            this.audio2Groupbox.Controls.Add(this.audio2Type);
-            this.audio2Groupbox.Controls.Add(this.audio2TypeLabel);
-            this.audio2Groupbox.Controls.Add(this.audio2MBLabel);
-            this.audio2Groupbox.Controls.Add(this.audio2KBLabel);
-            this.audio2Groupbox.Controls.Add(this.selectAudio2Button);
-            this.audio2Groupbox.Location = new System.Drawing.Point(168, 168);
-            this.audio2Groupbox.Name = "audio2Groupbox";
-            this.audio2Groupbox.Size = new System.Drawing.Size(160, 200);
-            this.audio2Groupbox.TabIndex = 6;
-            this.audio2Groupbox.TabStop = false;
-            this.audio2Groupbox.Text = "AudioTrack 2";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(13, 67);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(26, 13);
-            this.label4.TabIndex = 2;
-            this.label4.Text = "Size";
-            // 
-            // audio2SizeMB
-            // 
-            this.audio2SizeMB.Location = new System.Drawing.Point(16, 110);
-            this.audio2SizeMB.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.audio2SizeMB.Name = "audio2SizeMB";
-            this.audio2SizeMB.Size = new System.Drawing.Size(100, 21);
-            this.audio2SizeMB.TabIndex = 5;
-            this.audio2SizeMB.ValueChanged += new System.EventHandler(this.textField_TextChanged);
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(13, 22);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(39, 13);
-            this.label3.TabIndex = 0;
-            this.label3.Text = "Bitrate";
-            // 
-            // audio2SizeKB
-            // 
-            this.audio2SizeKB.Location = new System.Drawing.Point(16, 83);
-            this.audio2SizeKB.Maximum = new decimal(new int[] {
-            10000000,
-            0,
-            0,
-            0});
-            this.audio2SizeKB.Name = "audio2SizeKB";
-            this.audio2SizeKB.Size = new System.Drawing.Size(100, 21);
-            this.audio2SizeKB.TabIndex = 3;
-            this.audio2SizeKB.ValueChanged += new System.EventHandler(this.textField_TextChanged);
-            // 
-            // audio2Bitrate
-            // 
-            this.audio2Bitrate.Increment = new decimal(new int[] {
-            16,
-            0,
-            0,
-            0});
-            this.audio2Bitrate.Location = new System.Drawing.Point(16, 43);
-            this.audio2Bitrate.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.audio2Bitrate.Name = "audio2Bitrate";
-            this.audio2Bitrate.Size = new System.Drawing.Size(100, 21);
-            this.audio2Bitrate.TabIndex = 1;
-            this.audio2Bitrate.ValueChanged += new System.EventHandler(this.textField_TextChanged);
-            // 
-            // clearAudio2Button
-            // 
-            this.clearAudio2Button.Location = new System.Drawing.Point(97, 164);
-            this.clearAudio2Button.Name = "clearAudio2Button";
-            this.clearAudio2Button.Size = new System.Drawing.Size(24, 23);
-            this.clearAudio2Button.TabIndex = 10;
-            this.clearAudio2Button.Text = "X";
-            this.clearAudio2Button.Click += new System.EventHandler(this.clearAudioButton_Click);
-            // 
-            // audio2Type
-            // 
-            this.audio2Type.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.audio2Type.Location = new System.Drawing.Point(59, 137);
-            this.audio2Type.Name = "audio2Type";
-            this.audio2Type.Size = new System.Drawing.Size(84, 21);
-            this.audio2Type.TabIndex = 8;
-            this.audio2Type.SelectedIndexChanged += new System.EventHandler(this.audio_SelectedIndexChanged);
-            // 
-            // audio2TypeLabel
-            // 
-            this.audio2TypeLabel.Location = new System.Drawing.Point(13, 140);
-            this.audio2TypeLabel.Name = "audio2TypeLabel";
-            this.audio2TypeLabel.Size = new System.Drawing.Size(40, 16);
-            this.audio2TypeLabel.TabIndex = 7;
-            this.audio2TypeLabel.Text = "Type";
-            // 
-            // audio2MBLabel
-            // 
-            this.audio2MBLabel.Location = new System.Drawing.Point(122, 112);
-            this.audio2MBLabel.Name = "audio2MBLabel";
-            this.audio2MBLabel.Size = new System.Drawing.Size(24, 16);
-            this.audio2MBLabel.TabIndex = 6;
-            this.audio2MBLabel.Text = "MB";
-            // 
-            // audio2KBLabel
-            // 
-            this.audio2KBLabel.Location = new System.Drawing.Point(122, 85);
-            this.audio2KBLabel.Name = "audio2KBLabel";
-            this.audio2KBLabel.Size = new System.Drawing.Size(24, 16);
-            this.audio2KBLabel.TabIndex = 4;
-            this.audio2KBLabel.Text = "KB";
-            // 
-            // selectAudio2Button
-            // 
-            this.selectAudio2Button.Location = new System.Drawing.Point(16, 164);
-            this.selectAudio2Button.Name = "selectAudio2Button";
-            this.selectAudio2Button.Size = new System.Drawing.Size(75, 23);
-            this.selectAudio2Button.TabIndex = 9;
-            this.selectAudio2Button.Text = "Select";
-            this.selectAudio2Button.Click += new System.EventHandler(this.selectAudio2Button_Click);
-            // 
             // codecGroupbox
             // 
             this.codecGroupbox.Controls.Add(this.videoCodec);
@@ -698,18 +378,6 @@ namespace MeGUI
             this.sizeGroupbox.TabIndex = 3;
             this.sizeGroupbox.TabStop = false;
             this.sizeGroupbox.Text = "Total Size";
-            // 
-            // targetSize
-            // 
-            this.targetSize.Location = new System.Drawing.Point(18, 46);
-            this.targetSize.MaximumSize = new System.Drawing.Size(1000, 29);
-            this.targetSize.MinimumSize = new System.Drawing.Size(64, 29);
-            this.targetSize.Name = "targetSize";
-            this.targetSize.NullString = "Not calculated";
-            this.targetSize.SelectedIndex = 0;
-            this.targetSize.Size = new System.Drawing.Size(208, 29);
-            this.targetSize.TabIndex = 1;
-            this.targetSize.SelectionChanged += new MeGUI.StringChanged(this.targetSize_SelectionChanged);
             // 
             // fileSizeRadio
             // 
@@ -794,6 +462,59 @@ namespace MeGUI
             this.cancelButton.TabIndex = 9;
             this.cancelButton.Text = "Cancel";
             // 
+            // audio
+            // 
+            this.audio.Controls.Add(this.audioPage1);
+            this.audio.Location = new System.Drawing.Point(8, 168);
+            this.audio.Name = "audio";
+            this.audio.SelectedIndex = 0;
+            this.audio.Size = new System.Drawing.Size(316, 148);
+            this.audio.TabIndex = 10;
+            // 
+            // audioPage1
+            // 
+            this.audioPage1.Controls.Add(this.audioTrackSizeTab1);
+            this.audioPage1.Location = new System.Drawing.Point(4, 22);
+            this.audioPage1.Name = "audioPage1";
+            this.audioPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.audioPage1.Size = new System.Drawing.Size(308, 122);
+            this.audioPage1.TabIndex = 0;
+            this.audioPage1.Text = "Audio 1";
+            this.audioPage1.UseVisualStyleBackColor = true;
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addTrackToolStripMenuItem,
+            this.removeTrackToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(141, 48);
+            this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
+            // 
+            // addTrackToolStripMenuItem
+            // 
+            this.addTrackToolStripMenuItem.Name = "addTrackToolStripMenuItem";
+            this.addTrackToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+            this.addTrackToolStripMenuItem.Text = "Add track";
+            this.addTrackToolStripMenuItem.Click += new System.EventHandler(this.addTrackToolStripMenuItem_Click);
+            // 
+            // removeTrackToolStripMenuItem
+            // 
+            this.removeTrackToolStripMenuItem.Name = "removeTrackToolStripMenuItem";
+            this.removeTrackToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+            this.removeTrackToolStripMenuItem.Text = "Remove track";
+            this.removeTrackToolStripMenuItem.Click += new System.EventHandler(this.removeTrackToolStripMenuItem_Click);
+            // 
+            // audioTrackSizeTab1
+            // 
+            this.audioTrackSizeTab1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.audioTrackSizeTab1.Location = new System.Drawing.Point(3, 3);
+            this.audioTrackSizeTab1.Name = "audioTrackSizeTab1";
+            this.audioTrackSizeTab1.PlayLength = ((long)(0));
+            this.audioTrackSizeTab1.Size = new System.Drawing.Size(302, 116);
+            this.audioTrackSizeTab1.TabIndex = 0;
+            this.audioTrackSizeTab1.SomethingChanged += new System.EventHandler(this.audioTrackSizeTab1_SomethingChanged);
+            // 
             // helpButton1
             // 
             this.helpButton1.ArticleName = "Bitrate calculator";
@@ -804,18 +525,42 @@ namespace MeGUI
             this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 8;
             // 
+            // targetSize
+            // 
+            this.targetSize.Location = new System.Drawing.Point(18, 46);
+            this.targetSize.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.targetSize.MinimumSize = new System.Drawing.Size(64, 29);
+            this.targetSize.Name = "targetSize";
+            this.targetSize.NullString = "Not calculated";
+            this.targetSize.SelectedIndex = 0;
+            this.targetSize.Size = new System.Drawing.Size(208, 29);
+            this.targetSize.TabIndex = 1;
+            this.targetSize.SelectionChanged += new MeGUI.StringChanged(this.targetSize_SelectionChanged);
+            // 
+            // fpsChooser
+            // 
+            this.fpsChooser.Location = new System.Drawing.Point(185, 73);
+            this.fpsChooser.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.fpsChooser.MinimumSize = new System.Drawing.Size(64, 29);
+            this.fpsChooser.Name = "fpsChooser";
+            this.fpsChooser.NullString = null;
+            this.fpsChooser.SelectedIndex = 0;
+            this.fpsChooser.Size = new System.Drawing.Size(129, 29);
+            this.fpsChooser.TabIndex = 13;
+            this.fpsChooser.SelectionChanged += new MeGUI.StringChanged(this.fpsChooser_SelectionChanged);
+            // 
             // Calculator
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
             this.ClientSize = new System.Drawing.Size(576, 377);
+            this.ContextMenuStrip = this.contextMenuStrip1;
+            this.Controls.Add(this.audio);
             this.Controls.Add(this.helpButton1);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.resultGroupbox);
             this.Controls.Add(this.sizeGroupbox);
             this.Controls.Add(this.containerGroupbox);
             this.Controls.Add(this.codecGroupbox);
-            this.Controls.Add(this.audio2Groupbox);
-            this.Controls.Add(this.audio1Groupbox);
             this.Controls.Add(this.applyButton);
             this.Controls.Add(this.videoGroupbox);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -829,22 +574,15 @@ namespace MeGUI
             ((System.ComponentModel.ISupportInitialize)(this.seconds)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.minutes)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.hours)).EndInit();
-            this.audio1Groupbox.ResumeLayout(false);
-            this.audio1Groupbox.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.audio1SizeMB)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.audio1SizeKB)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.audio1Bitrate)).EndInit();
-            this.audio2Groupbox.ResumeLayout(false);
-            this.audio2Groupbox.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.audio2SizeMB)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.audio2SizeKB)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.audio2Bitrate)).EndInit();
             this.codecGroupbox.ResumeLayout(false);
             this.containerGroupbox.ResumeLayout(false);
             this.sizeGroupbox.ResumeLayout(false);
             this.resultGroupbox.ResumeLayout(false);
             this.resultGroupbox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.projectedBitrate)).EndInit();
+            this.audio.ResumeLayout(false);
+            this.audioPage1.ResumeLayout(false);
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -865,7 +603,7 @@ namespace MeGUI
 		/// <param name="container">container</param>
 		/// <param name="audio1Bitrate">bitrate of the first audio track</param>
 		/// <param name="audio2Bitrate">bitrate of the second audio track</param>
-        public void setDefaults(ulong nbFrames, double framerate, ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> codec, AudioJob audioStream1, AudioJob audioStream2)
+        public void setDefaults(ulong nbFrames, double framerate, ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> codec, List<AudioJob> audioStreams)
 		{
             setFPSToBest(framerate);
             try
@@ -880,19 +618,39 @@ namespace MeGUI
             if (videoCodec.Items.Contains(codec))
                 videoCodec.SelectedItem = codec;
 
-            if (audioStream1 != null && audioStream1.Settings != null)
+            int i = 0;
+            foreach (AudioJob s in audioStreams)
             {
-                audio1Bitrate.Value = audioStream1.Settings.Bitrate;
-                if (audioStream1.Type != null && audio1Type.Items.Contains(audioStream1.Type))
-                    audio1Type.SelectedItem = audioStream1.Type;
-            }
-            if (audioStream2 != null && audioStream2.Settings != null)
-            {
-                audio2Bitrate.Value = audioStream2.Settings.Bitrate;
-                if (audioStream2.Type != null && audio2Type.Items.Contains(audioStream2.Type))
-                    audio2Type.SelectedItem = audioStream2.Type;
+                if (audioTabs.Count == i)
+                    AddTab();
+
+                audioTabs[i].Job = s;
+                ++i;
             }
 		}
+
+        private void AddTab()
+        {
+            TabPage p = new TabPage("Audio " + (audioTabs.Count + 1));
+            p.UseVisualStyleBackColor = audio.TabPages[0].UseVisualStyleBackColor;
+            p.Padding = audio.TabPages[0].Padding;
+
+            AudioTrackSizeTab a = new AudioTrackSizeTab();
+            a.Dock = audioTabs[0].Dock;
+            a.Padding = audioTabs[0].Padding;
+            a.PlayLength = audioTabs[0].PlayLength;
+            a.SomethingChanged += audioTrackSizeTab1_SomethingChanged;
+
+            audio.TabPages.Add(p);
+            p.Controls.Add(a);
+            audioTabs.Add(a);
+        }
+
+        private void RemoveTab()
+        {
+            audio.TabPages.RemoveAt(audio.TabPages.Count - 1);
+            audioTabs.RemoveAt(audioTabs.Count - 1);
+        }
 		/// <summary>
 		/// gets the selected codec
 		/// </summary>
@@ -916,166 +674,6 @@ namespace MeGUI
             updateContainers();
             updateBitrateSize();
         }
-		#region audio1
-		/// <summary>
-		/// handles the select button for the first open audio track
-		/// launches a file open dialog to allow selection of an audio track
-		/// of a type supported by the currently selected container
-		/// after opening, the audio type is gotten from the file extension, 
-		/// and finally, depending on the container type selected, the audio
-		/// type is set in the audio type dropdown
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void selectAudio1Button_Click(object sender, System.EventArgs e)
-		{
-    		openFileDialog.Filter = VideoUtil.GenerateCombinedFilter(ContainerManager.AudioTypes.ValuesArray);
-			if (openFileDialog.ShowDialog() == DialogResult.OK)
-			{
-				FileInfo fi = new FileInfo(openFileDialog.FileName);
-				int sizeKB = (int)(fi.Length / 1024);
-				int sizeMB = sizeKB/1024;
-				AudioType aud1Type = VideoUtil.guessAudioType(openFileDialog.FileName);
-				audio1SizeKB.Text = sizeKB.ToString();
-				audio1SizeMB.Text = sizeMB.ToString();
-                if (audio1Type.Items.Contains(aud1Type))
-                    audio1Type.SelectedItem = aud1Type;
-			}
-            updateContainers();
-		}
-		/// <summary>
-		/// handles a change in the audio bitrate dropdowns
-		/// gets the bitrate from the selected item in the dropdown and assigns it to the
-		/// currently active audio track
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void audioBitrate_SelectedIndexChanged(object sender, System.EventArgs e)
-		{
-			NumericUpDown cb = (NumericUpDown)sender;
-			if (cb.Value > 0)
-			{
-				if (cb == audio1Bitrate)
-					calculateAudioSize(true, false);
-				else if (cb == audio2Bitrate)
-					calculateAudioSize(false, true);
-			}
-		}
-		
-		#endregion
-		#region generic
-		/// <summary>
-		/// calculates the size of a bitrate based audio track and sets its type
-		/// </summary>
-		/// <param name="track1">calculate for track1?</param>
-		/// <param name="track2">calculate for track2?</param>
-		private void calculateAudioSize(bool track1, bool track2)
-		{
-			int length = (int)totalSeconds.Value;
-            if (length <= 0)
-                return;
-			if (track1)
-			{
-                int bitrate = (int)audio1Bitrate.Value;
-                if (bitrate > 0 && audio1Type.SelectedIndex == -1)
-                    audio1Type.SelectedItem = AudioType.VBRMP3;
-				double bytesPerSecond = bitrate * 1000 / 8;
-				long sizeInBytes = (long)(length * bytesPerSecond);
-				long size = sizeInBytes / (long)1024;
-				audio1SizeKB.Text = size.ToString();
-				size = size / 1024;
-				audio1SizeMB.Text = size.ToString();
-			}
-			if (track2)
-			{
-                int bitrate = (int)audio2Bitrate.Value; ;
-                if (bitrate > 0 && audio2Type.SelectedIndex == -1)
-                    audio2Type.SelectedItem = AudioType.VBRMP3;
-                double bytesPerSecond = bitrate * 1000 / 8;
-				long sizeInBytes = (long)(length * bytesPerSecond);
-				long size = sizeInBytes / (long)1024;
-				audio2SizeKB.Text = size.ToString();
-				size = size / 1024;
-				audio2SizeMB.Text = size.ToString();
-			}
-		}
-
-        private void calculateAudioBitrate(bool track1, bool track2)
-        {
-            int length = (int)totalSeconds.Value;
-            if (length <= 0)
-                return;
-            if (track1)
-            {
-                long sizeInBytes = (long)audio1SizeKB.Value * 1024;
-                if (sizeInBytes > 0 && audio1Type.SelectedIndex == -1)
-                    audio1Type.SelectedItem = AudioType.VBRMP3;
-                double bytesPerSecond = (double)sizeInBytes / (double)length;
-                int bitrate = (int)(bytesPerSecond * 8.0 / 1000.0);
-                audio1Bitrate.Value = bitrate;
-            }
-            if (track2)
-            {
-                long sizeInBytes = (long)audio2SizeKB.Value * 1024;
-                if (sizeInBytes > 0 && audio2Type.SelectedIndex == -1)
-                    audio2Type.SelectedItem = AudioType.VBRMP3;
-                double bytesPerSecond = (double)sizeInBytes / (double)length;
-                int bitrate = (int)(bytesPerSecond * 8.0 / 1000.0);
-                audio2Bitrate.Value = bitrate;
-            }
-        }
-		/// <summary>
-		/// clears out an audio track
-		/// sets the audio type back to none, sets the bitrate to undefined
-		/// and activate bitrate mode
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void clearAudioButton_Click(object sender, System.EventArgs e)
-		{
-			Button button = (Button)sender;
-			if (button == this.clearAudio1Button)
-			{
-                audio1SizeKB.Value = 0;
-                audio1Type.SelectedIndex = -1;
-			}
-			else if (button == this.clearAudio2Button)
-			{
-                audio2SizeKB.Value = 0;
-                audio2Type.SelectedIndex = -1;
-			}
-            updateContainers();
-			this.updateBitrateSize();
-		}
-		#endregion
-		#region audio 2
-		/// <summary>
-		/// handles the select button for the first open audio track
-		/// launches a file open dialog to allow selection of an audio track
-		/// of a type supported by the currently selected container
-		/// after opening, the audio type is gotten from the file extension, 
-		/// and finally, depending on the container type selected, the audio
-		/// type is set in the audio type dropdown
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void selectAudio2Button_Click(object sender, System.EventArgs e)
-		{
-            openFileDialog.Filter = VideoUtil.GenerateCombinedFilter(ContainerManager.AudioTypes.ValuesArray);
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                FileInfo fi = new FileInfo(openFileDialog.FileName);
-                int sizeKB = (int)(fi.Length / 1024);
-                int sizeMB = sizeKB / 1024;
-                AudioType aud2Type = VideoUtil.guessAudioType(openFileDialog.FileName);
-                audio2SizeKB.Text = sizeKB.ToString();
-                audio2SizeMB.Text = sizeMB.ToString();
-                if (audio2Type.Items.Contains(aud2Type))
-                    audio2Type.SelectedItem = aud2Type;
-            }
-            updateContainers();
-		}
-		#endregion
 		#endregion
 		#region generic eventhandlers
 		private void textField_KeyPress(object sender, KeyPressEventArgs e)
@@ -1094,35 +692,7 @@ namespace MeGUI
                     this.isUpdating = true;
                     NumericUpDown tb = (NumericUpDown)sender;
                     decimal value = tb.Value;
-                    if (tb == audio1Bitrate)
-                    {
-                        calculateAudioSize(true, false);
-                    }
-                    else if (tb == audio2Bitrate)
-                    {
-                        calculateAudioSize(false, true);
-                    }
-                    else if (tb == audio1SizeKB)
-                    {
-                        audio1SizeMB.Value = value / 1024;
-                        calculateAudioBitrate(true, false);
-                    }
-                    else if (tb == audio1SizeMB)
-                    {
-                        audio1SizeKB.Value = value * 1024;
-                        calculateAudioBitrate(true, false);
-                    }
-                    else if (tb == audio2SizeKB)
-                    {
-                        audio2SizeMB.Value = value / 1024;
-                        calculateAudioBitrate(false, true);
-                    }
-                    else if (tb == audio2SizeMB)
-                    {
-                        audio2SizeKB.Value = value * 1024;
-                        calculateAudioBitrate(false, true);
-                    }
-                    else if (tb == totalSeconds)
+                    if (tb == totalSeconds)
                     {
                         int hours = (int)value / 3600;
                         value -= hours * 3600;
@@ -1141,6 +711,7 @@ namespace MeGUI
                             this.seconds.Value = this.seconds.Maximum - 1; //59 seconds
                             UpdateTotalSeconds();
                         }
+                        setAudioLength();
                         UpdateTotalFrames();
 
                     }
@@ -1166,6 +737,7 @@ namespace MeGUI
                             UpdateTotalFrames();
                         }
                         UpdateTotalSeconds();
+                        setAudioLength();
                     }
                     else if (tb == projectedBitrate)
                     {
@@ -1235,12 +807,18 @@ namespace MeGUI
                     }
                 }
                 UpdateTotalSeconds();
-                this.calculateAudioSize(true, true);
+                setAudioLength();
                 UpdateTotalFrames();
                 updateBitrateSize();
 
                 this.isUpdating = false;
             }
+        }
+
+        private void setAudioLength()
+        {
+            foreach (AudioTrackSizeTab t in audioTabs)
+                t.PlayLength = (int)totalSeconds.Value;
         }
 
         private void UpdateTotalFrames()
@@ -1297,18 +875,7 @@ namespace MeGUI
             VideoEncoderType vCodec = (videoCodec.SelectedItem as ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>).EncoderType;
             List<MuxableType> muxableTypes = new List<MuxableType>();
             AudioType type;
-            if (audio1Type.SelectedIndex > -1)
-            {
-                type = audio1Type.SelectedItem as AudioType;
-                if (type.SupportedCodecs.Length > 0)
-                    muxableTypes.Add(new MuxableType(type, type.SupportedCodecs[0]));
-            }
-            if (audio2Type.SelectedIndex > -1)
-            {
-                type = audio2Type.SelectedItem as AudioType;
-                if (type.SupportedCodecs.Length > 0)
-                    muxableTypes.Add(new MuxableType(type, type.SupportedCodecs[0]));
-            }
+            muxableTypes.AddRange(getAudioTypes());
             ContainerType previousContainer = null;
             try 
             {
@@ -1322,6 +889,20 @@ namespace MeGUI
                 containerFormat.SelectedItem = previousContainer;
             updatingContainers = false;
         }
+
+        private IEnumerable<MuxableType> getAudioTypes()
+        {
+            List<MuxableType> l = new List<MuxableType>();
+            foreach (AudioTrackSizeTab t in audioTabs)
+            {
+                if (t.Stream == null) continue;
+
+                AudioType type = (AudioType)t.Stream.Type;
+                l.Add(new MuxableType(type, type.SupportedCodecs[0]));
+            }
+            return l;
+        }
+
         #endregion
 		#region checkboxes
 		private void bframes_CheckedChanged(object sender, System.EventArgs e)
@@ -1335,24 +916,7 @@ namespace MeGUI
         {
             numberOfFrames = (ulong)nbFrames.Value;
             framerate = (double)fpsChooser.Value;
-            long[] audioSizes = { ((long)audio1SizeKB.Value)* 1024L, ((long)audio2SizeKB.Value) * 1024L };
-            List<AudioBitrateCalculationStream> audioStreams = new List<AudioBitrateCalculationStream>();
-            AudioBitrateCalculationStream stream;
-            if (audio1Type.SelectedIndex > -1)
-            {
-                stream = new AudioBitrateCalculationStream();
-                stream.Size = new FileSize(Unit.B, audioSizes[0]);
-                stream.Type = audio1Type.SelectedItem as AudioType;
-                audioStreams.Add(stream);
-            }
-            if (audio2Type.SelectedIndex > -1)
-            {
-                stream = new AudioBitrateCalculationStream();
-                stream.Size = new FileSize(Unit.B, audioSizes[1]);
-                stream.Type = audio2Type.SelectedItem as AudioType;
-                audioStreams.Add(stream);
-            }
-            audioStreamsArray = audioStreams.ToArray();
+            audioStreamsArray = getAudioStreams().ToArray();
             try
             {
                 codec = (videoCodec.SelectedItem as ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>).CodecType;
@@ -1367,6 +931,15 @@ namespace MeGUI
             if (numberOfFrames <= 0 || framerate <= 0)
                 return false;
             return true;
+        }
+
+        private List<AudioBitrateCalculationStream> getAudioStreams()
+        {
+            List<AudioBitrateCalculationStream> l = new List<AudioBitrateCalculationStream>();
+            foreach (AudioTrackSizeTab t in audioTabs)
+                if (t.Stream != null)
+                    l.Add(t.Stream);
+            return l;
         }
 
 		private bool updateSize()
@@ -1435,11 +1008,21 @@ namespace MeGUI
             ContainerType containerType;
             if (!getInfo(out vCodec, out audioStreams, out containerType, out numberOfFrames, out framerate))
                 return false;
-			int bitrateKBits = 0;
+			int bitrateKBits;
 			ulong videoSizeKBs = 0;
-            bitrateKBits = BitrateCalculator.CalculateBitrateKBits(vCodec, bframes.Checked, containerType, audioStreams, muxedSizeBytes,
+
+            try
+            {
+                bitrateKBits = BitrateCalculator.CalculateBitrateKBits(vCodec, bframes.Checked, containerType, audioStreams, muxedSizeBytes,
                 numberOfFrames, framerate, out videoSizeKBs);
-			int videoSizeMBs = (int) (videoSizeKBs / 1024);
+            }
+            catch (CalculationException)
+            {
+                videoSize.Text = "Calculation failed";
+                projectedBitrate.Value = 0;
+                return false;
+            }
+
             try
             {
                 videoSize.Text = new FileSize(Unit.KB, videoSizeKBs).ToString();
@@ -1469,6 +1052,29 @@ namespace MeGUI
 
         }
 
+        private void addTrackToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AddTab();
+        }
+
+        private void removeTrackToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            RemoveTab();
+        }
+
+        private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
+        {
+            if (audioTabs.Count == 1)
+                removeTrackToolStripMenuItem.Enabled = false;
+            else
+                removeTrackToolStripMenuItem.Enabled = true;
+        }
+
+        private void audioTrackSizeTab1_SomethingChanged(object sender, EventArgs e)
+        {
+            updateBitrateSize();
+        }
+
 	}
     public class CalculatorTool : MeGUI.core.plugins.interfaces.ITool
     {
@@ -1487,10 +1093,10 @@ namespace MeGUI
                 ulong nbFrames = 0;
                 double framerate = 0.0;
                 if (!string.IsNullOrEmpty(info.Video.VideoInput))
-                {
                     JobUtil.getInputProperties(out nbFrames, out framerate, info.Video.VideoInput);
-                    calc.setDefaults(nbFrames, framerate, info.Video.CurrentSettingsProvider, info.Audio.AudioStreams[0], info.Audio.AudioStreams[1]);
-                }
+
+                calc.setDefaults(nbFrames, framerate, info.Video.CurrentSettingsProvider, info.Audio.AudioStreams);
+                
                 DialogResult dr = calc.ShowDialog();
                 if (dr == DialogResult.OK)
                 {

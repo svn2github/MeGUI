@@ -546,7 +546,7 @@ namespace MeGUI
                     videoStream.NumberOfFrames,
                     (double)videoStream.Framerate,
                     out videoSize);
-#warning check whether codecs use k=1000 or k=1024 for kbits // kick those that still use 1024...
+
                 this.videoSize.Text = new FileSize(Unit.KB, videoSize).ToString();
                 this.projectedBitrateKBits.Text = bitrateKbits.ToString();
             }
@@ -698,8 +698,8 @@ namespace MeGUI
                         return;
                 }
                 removeStreamsToBeEncoded(ref audio, aStreams);
-                this.vUtil.GenerateJobSeries(this.videoStream, muxedOutput, aStreams, subtitles, chapters,
-                    new FileSize(desiredSizeBytes), splitSize, cot, this.prerender, audio);
+                mainForm.Jobs.addJobsWithDependencies(vUtil.GenerateJobSeries(this.videoStream, muxedOutput, aStreams, subtitles, chapters,
+                    new FileSize(desiredSizeBytes), splitSize, cot, this.prerender, audio));
                 this.Close();
 			}
 		}

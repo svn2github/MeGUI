@@ -95,7 +95,10 @@ namespace MeGUI.core.gui
         {
             get
             {
-                return codecHandler.CurrentSettingsProvider.GetCurrentSettings();
+                if (string.IsNullOrEmpty(profileHandler.SelectedProfile))
+                    return codecHandler.CurrentSettingsProvider.GetCurrentSettings();
+                else
+                    return (AudioCodecSettings)profileHandler.CurrentProfile.BaseSettings;
             }
             private set
             {
