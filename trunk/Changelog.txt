@@ -1,4 +1,4 @@
-0.2.6.1019 Work in progress
+0.2.6.1019
     - (Kurtnoise) [One Click Encoder] : fix output filename according to the container selected in the Advanced Settings.
     - (Kurtnoise) cosmetic - Move "cleanup" to EncodingMode instead of CodecString.
     - (Kurtnoise) [Bitrate Calculator] : fix a runtime error.
