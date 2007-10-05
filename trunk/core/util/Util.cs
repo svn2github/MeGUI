@@ -66,7 +66,7 @@ namespace MeGUI.core.util
             }
         }
 
-        public static T XmlDeserialize<T>(string path)
+        public static T XmlDeserializeOrDefault<T>(string path)
             where T : class, new()
         {
             XmlSerializer ser = new XmlSerializer(typeof(T));
@@ -92,6 +92,34 @@ namespace MeGUI.core.util
                 }
             }
             else return new T();
+        }
+        
+        public static T XmlDeserialize<T>(string path)
+            where T : class
+        {
+            XmlSerializer ser = new XmlSerializer(typeof(T));
+            if (File.Exists(path))
+            {
+                using (Stream s = File.OpenRead(path))
+                {
+                    try
+                    {
+                        return (T)ser.Deserialize(s);
+                    }
+                    catch (Exception e)
+                    {
+                        DialogResult r = MessageBox.Show("File '" + path + "' could not be loaded. Delete?", "Error loading Job", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
+                        if (r == DialogResult.Yes)
+                        {
+                            try { s.Close(); File.Delete(path); }
+                            catch (Exception) { }
+                        }
+                        Console.Write(e.Message);
+                        return null;
+                    }
+                }
+            }
+            else return null;
         }
 
 

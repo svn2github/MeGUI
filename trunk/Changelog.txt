@@ -1,3 +1,6 @@
+0.2.6.1020
+    - (berrinam) Support backwards-compatible loading of jobs from 0.2.6.1017. (But not vice-versa!)
+
 0.2.6.1019
     - (Kurtnoise) [One Click Encoder] : fix output filename according to the container selected in the Advanced Settings.
     - (Kurtnoise) cosmetic - Move "cleanup" to EncodingMode instead of CodecString.

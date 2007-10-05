@@ -172,6 +172,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="MessageBoxExLib.dll" />
+    <Compile Include="core\details\0_2_6_1017_jobloader\Job.cs" />
     <Compile Include="core\details\audio\AudioCodecSettings.cs" />
     <Compile Include="core\details\audio\AudioConfigurationPanel.cs">
       <SubType>UserControl</SubType>
@@ -329,12 +330,6 @@
     </Compile>
     <Compile Include="core\gui\JobWorkerWindow.Designer.cs">
       <DependentUpon>JobWorkerWindow.cs</DependentUpon>
-    </Compile>
-    <Compile Include="core\gui\MultiTrackComponent.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="core\gui\MultiTrackComponent.Designer.cs">
-      <DependentUpon>MultiTrackComponent.cs</DependentUpon>
     </Compile>
     <Compile Include="core\gui\NiceComboBox.cs">
       <SubType>UserControl</SubType>

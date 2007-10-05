@@ -330,7 +330,7 @@ namespace MeGUI.core.details
         {
             string path = Path.Combine(mainForm.MeGUIPath, "joblists.xml");
 
-            JobListSerializer s = Util.XmlDeserialize<JobListSerializer>(path);
+            JobListSerializer s = Util.XmlDeserializeOrDefault<JobListSerializer>(path);
             jobQueue.JobList = toJobList(s.mainJobList);
 
             foreach (Pair<string, List<string>> p in s.workersAndTheirJobLists)
@@ -421,6 +421,10 @@ namespace MeGUI.core.details
                 {
                     ser = new XmlSerializer(typeof(TaggedJob));
                     return (TaggedJob)ser.Deserialize(s);
+                }
+                catch (InvalidOperationException)
+                {
+                    return MeGUI.core.details._0_2_6_1017_jobloader.Loader.loadJob(name);
                 }
                 catch (Exception e)
                 {
