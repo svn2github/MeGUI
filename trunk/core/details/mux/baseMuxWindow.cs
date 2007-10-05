@@ -499,7 +499,7 @@ namespace MeGUI
             this.output.Location = new System.Drawing.Point(118, 13);
             this.output.Name = "output";
             this.output.ReadOnly = true;
-            this.output.SaveMode = false;
+            this.output.SaveMode = true;
             this.output.Size = new System.Drawing.Size(289, 26);
             this.output.TabIndex = 35;
             this.output.Title = null;
