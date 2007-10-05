@@ -1,3 +1,6 @@
+0.2.6.1021
+    - (Sharktooth) [Muxers] Fixed the output file dialog (save mode)
+
 0.2.6.1020
     - (berrinam) Support backwards-compatible loading of jobs from 0.2.6.1017. (But not vice-versa!)
 
@@ -9,6 +12,7 @@
     - (berrinam) Fixed #1805580 (Automatic output filename assumes .mp4 output in muxer)
     - (berrinam) Fixed Bitrate Calculator to support multiple audio tracks; this fixes crash when opening it without input
     - (berrinam) Fixed #1805603 (Automatic update not showing the Latest version number)
+    - (Sharktooth) Fixed some graphical interface glitches
 
 0.2.6.1018
     - (berrinam) [Internal] : Remove Commandline field from Job
