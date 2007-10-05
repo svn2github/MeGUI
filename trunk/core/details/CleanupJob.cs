@@ -26,17 +26,15 @@ namespace MeGUI.core.details
             return new SequentialChain(other, j);
         }
 
-
-
         public override string CodecString
         {
-            get { return "cleanup"; }
+            get { return ""; }
         }
 
         private string type;
         public override string EncodingMode
         {
-            get { return type; }
+            get { return "cleanup"; }
         }
     }
 
