@@ -190,6 +190,8 @@ namespace MeGUI.core.gui
         }
         #endregion
 
+        public event EventHandler WorkerFinishedJobs;
+
         private Dictionary<string, TaggedJob> localJobs = new Dictionary<string, TaggedJob>();
 
         public JobWorker(MainForm mf)
@@ -441,8 +443,6 @@ namespace MeGUI.core.gui
                     //ensureProgressWindowClosed();
                     HideProcessWindow();
                     currentProcessor = null;
-                    JobWorkerStatus oldStatus = status;
-                    status = JobWorkerStatus.Idle;
                     currentJob = null;
 
                     // Logging
@@ -467,15 +467,33 @@ namespace MeGUI.core.gui
                     else if (job.Status == JobStatus.ABORTED)
                     {
                         addToLog("The current job was aborted. Stopping queue mode\r\n");
-                        oldStatus = JobWorkerStatus.Idle;
+                        status = JobWorkerStatus.Idle;
                     }
                     else if (status == JobWorkerStatus.Stopping)
                     {
                         addToLog("Told to stop. Stopping queue mode.\r\n");
-                        oldStatus = JobWorkerStatus.Idle;
+                        status = JobWorkerStatus.Idle;
                     }
                     else
-                        startNextJobInQueue();
+                    {
+                        switch (startNextJobInQueue())
+                        {
+                            case JobStartInfo.JOB_STARTED:
+                                break;
+
+                            case JobStartInfo.COULDNT_START:
+                                status = JobWorkerStatus.Idle;
+                                break;
+
+                            case JobStartInfo.NO_JOBS_WAITING:
+                                status = JobWorkerStatus.Idle;
+                                new Thread(delegate ()
+                                {
+                                    WorkerFinishedJobs(this, EventArgs.Empty);
+                                }).Start();
+                                break;
+                        }
+                    }
 
                     refreshAll();
                 }));
@@ -536,10 +554,9 @@ namespace MeGUI.core.gui
         /// <returns>success / failure indicator</returns>
         private bool startEncoding(TaggedJob job)
         {
-            Debug.Assert(status == JobWorkerStatus.Idle);
-
             try
             {
+                status = JobWorkerStatus.Running;
                 //Check to see if output file already exists before encoding.
                 if (File.Exists(job.Job.Output) && !mainForm.DialogManager.overwriteJobOutput(job.Job.Output))
                     throw new JobStartException("File exists and the user doesn't want to overwrite", ExceptionType.UserSkip);
@@ -591,7 +608,6 @@ namespace MeGUI.core.gui
                 }
 
                 addToLog("successfully started encoding\r\n");
-
                 refreshAll();
                 return true;
             }
@@ -632,7 +648,11 @@ namespace MeGUI.core.gui
         {
             TaggedJob job = getNextJob();
 
-            if (job == null) return JobStartInfo.NO_JOBS_WAITING;
+            if (job == null)
+            {
+                status = JobWorkerStatus.Idle;
+                return JobStartInfo.NO_JOBS_WAITING;
+            }
 
             while (job != null)
             {
@@ -640,6 +660,7 @@ namespace MeGUI.core.gui
                     return JobStartInfo.JOB_STARTED;
                 job = getNextJob();
             }
+            status = JobWorkerStatus.Idle;
             return JobStartInfo.COULDNT_START;
         }
         #endregion
@@ -881,5 +902,6 @@ namespace MeGUI.core.gui
     public enum JobWorkerMode { RequestNewJobs, CloseOnLocalListCompleted }
     public enum JobWorkerStatus { Idle, Running, Stopping }
     public enum JobsOnQueue { Delete, ReturnToMainQueue }
-
+    public enum IdleReason { FinishedQueue, Stopped, Aborted }
+    
 }

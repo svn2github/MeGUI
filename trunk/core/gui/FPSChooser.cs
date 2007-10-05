@@ -25,7 +25,7 @@ namespace MeGUI.core.gui
             {
                 decimal result;
                 if (NumberChooser.ShowDialog(
-                    "Enter your AR:", "Custom AR", 3,
+                    "Enter your framerate:", "Custom framerate", 3,
                     1M, 1000M, Value ?? 25M, out result) == DialogResult.OK)
                     return new FPS(result);
                 else

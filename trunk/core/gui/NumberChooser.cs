@@ -34,17 +34,22 @@ namespace MeGUI.core.gui
             return r;
         }
 
-        private void numericUpDown1_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (e.KeyChar == '\r')
-                button2.PerformClick();
-        }
-
         private void NumberChooser_Shown(object sender, EventArgs e)
         {
-            numericUpDown1.Select(0, numericUpDown1.Value.ToString().Length);
+            numericUpDown1.Select(0, stringLength);
             numericUpDown1.Focus();
 
         }
+
+        private int stringLength
+        {
+            get
+            {
+                return Math.Round(numericUpDown1.Value, 0).ToString().Length + 
+                    (numericUpDown1.DecimalPlaces > 0 ? 1 : 0) + 
+                    numericUpDown1.DecimalPlaces;
+            }
+        }
+
     }
 }

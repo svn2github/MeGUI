@@ -280,6 +280,12 @@
     <Compile Include="core\gui\AviSynthProfileConfigPanel.Designer.cs">
       <DependentUpon>AviSynthProfileConfigPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="core\gui\CountdownWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="core\gui\CountdownWindow.Designer.cs">
+      <DependentUpon>CountdownWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="core\gui\FileBar.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -667,6 +673,10 @@
     <EmbeddedResource Include="core\gui\AviSynthProfileConfigPanel.resx">
       <SubType>Designer</SubType>
       <DependentUpon>AviSynthProfileConfigPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="core\gui\CountdownWindow.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>CountdownWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="core\gui\FileBar.resx">
       <DependentUpon>FileBar.cs</DependentUpon>

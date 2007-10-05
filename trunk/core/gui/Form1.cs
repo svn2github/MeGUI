@@ -1033,11 +1033,20 @@ namespace MeGUI
 
             if (settings.AfterEncoding == AfterEncoding.Shutdown)
             {
-                bool succ = Shutdown.shutdown();
-                if (!succ)
-                    addToLog("Tried shutting down system at " + DateTime.Now.ToShortTimeString() + " but the call failed");
-                else
-                    addToLog("Shutdown initiated at " + DateTime.Now.ToShortTimeString());
+                using (CountdownWindow countdown = new CountdownWindow(30))
+                {
+                    if (countdown.ShowDialog() == DialogResult.OK)
+                    {
+                        bool succ = Shutdown.shutdown();
+                        if (!succ)
+                            addToLog("Tried shutting down system at " + DateTime.Now.ToShortTimeString() + " but the call failed");
+                        else
+                            addToLog("Shutdown initiated at " + DateTime.Now.ToShortTimeString());
+                    }
+                    else
+                        addToLog("User aborts Shutdown at " + DateTime.Now.ToShortTimeString() + "\r\n");
+
+                }
             }
             else
             {
@@ -1056,8 +1065,8 @@ namespace MeGUI
                     p.Start();
                 }
                 catch (IOException e) { MessageBox.Show("Error when attempting to run command: " + e.Message, "Run command failed", MessageBoxButtons.OK, MessageBoxIcon.Error); }
-/*                try { File.Delete(filename); }
-                catch (IOException) { }*/
+                /*                try { File.Delete(filename); }
+                                catch (IOException) { }*/
 
             }
         }

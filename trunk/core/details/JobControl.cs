@@ -680,12 +680,22 @@ namespace MeGUI.core.details
 
             JobWorker w = new JobWorker(mainForm);
             w.Name = name;
+            w.WorkerFinishedJobs += new EventHandler(WorkerFinishedJobs);
             workers.Add(w.Name, w);
             summary.Add(w);
             mainForm.RegisterForm(w);
             if (show) w.Show();
 
             return w;
+        }
+
+        void WorkerFinishedJobs(object sender, EventArgs e)
+        {
+            foreach (JobWorker w in workers.Values)
+                if (w.Status != JobWorkerStatus.Idle)
+                    return;
+
+            mainForm.runAfterEncodingCommands();
         }
 
         internal void ShowSummary()
