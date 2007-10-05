@@ -35,6 +35,7 @@ namespace MeGUI
             this.trackTabPage1 = new System.Windows.Forms.TabPage();
             this.audio1 = new MeGUI.packages.tools.oneclick.AudioConfigControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.splitting = new MeGUI.core.gui.TargetSizeSCBox();
             this.locationGroupBox = new System.Windows.Forms.GroupBox();
             this.chapterFile = new MeGUI.FileBar();
             this.workingDirectory = new MeGUI.FileBar();
@@ -71,6 +72,8 @@ namespace MeGUI
             this.track1Label = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.encoderConfigTab = new System.Windows.Forms.TabPage();
+            this.containerFormatLabel = new System.Windows.Forms.Label();
+            this.containerFormat = new System.Windows.Forms.ComboBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.videoGroupBox = new System.Windows.Forms.GroupBox();
@@ -82,9 +85,6 @@ namespace MeGUI
             this.showAdvancedOptions = new System.Windows.Forms.CheckBox();
             this.goButton = new System.Windows.Forms.Button();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
-            this.splitting = new MeGUI.core.gui.TargetSizeSCBox();
-            this.containerFormatLabel = new System.Windows.Forms.Label();
-            this.containerFormat = new System.Windows.Forms.ComboBox();
             trackTabPage2 = new System.Windows.Forms.TabPage();
             label1 = new System.Windows.Forms.Label();
             trackTabPage2.SuspendLayout();
@@ -112,7 +112,7 @@ namespace MeGUI
             trackTabPage2.Location = new System.Drawing.Point(4, 22);
             trackTabPage2.Name = "trackTabPage2";
             trackTabPage2.Padding = new System.Windows.Forms.Padding(3);
-            trackTabPage2.Size = new System.Drawing.Size(423, 73);
+            trackTabPage2.Size = new System.Drawing.Size(423, 94);
             trackTabPage2.TabIndex = 1;
             trackTabPage2.Text = "Audio track 2";
             trackTabPage2.UseVisualStyleBackColor = true;
@@ -122,9 +122,18 @@ namespace MeGUI
             this.audio2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.audio2.Location = new System.Drawing.Point(3, 3);
             this.audio2.Name = "audio2";
-            this.audio2.Size = new System.Drawing.Size(417, 67);
+            this.audio2.Size = new System.Drawing.Size(417, 88);
             this.audio2.TabIndex = 0;
             this.audio2.SomethingChanged += new System.EventHandler(this.audio1_SomethingChanged);
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new System.Drawing.Point(24, 245);
+            label1.Name = "label1";
+            label1.Size = new System.Drawing.Size(47, 13);
+            label1.TabIndex = 37;
+            label1.Text = "Splitting:";
             // 
             // trackTabPage1
             // 
@@ -159,6 +168,19 @@ namespace MeGUI
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Advanced Config";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // splitting
+            // 
+            this.splitting.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.splitting.Location = new System.Drawing.Point(128, 237);
+            this.splitting.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.splitting.MinimumSize = new System.Drawing.Size(64, 29);
+            this.splitting.Name = "splitting";
+            this.splitting.NullString = "No splitting";
+            this.splitting.SelectedIndex = 0;
+            this.splitting.Size = new System.Drawing.Size(221, 29);
+            this.splitting.TabIndex = 38;
             // 
             // locationGroupBox
             // 
@@ -490,20 +512,20 @@ namespace MeGUI
             this.addTrackToolStripMenuItem,
             this.removeTrackToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(141, 48);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(152, 48);
             this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             // 
             // addTrackToolStripMenuItem
             // 
             this.addTrackToolStripMenuItem.Name = "addTrackToolStripMenuItem";
-            this.addTrackToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+            this.addTrackToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
             this.addTrackToolStripMenuItem.Text = "Add track";
             this.addTrackToolStripMenuItem.Click += new System.EventHandler(this.addTrackToolStripMenuItem_Click);
             // 
             // removeTrackToolStripMenuItem
             // 
             this.removeTrackToolStripMenuItem.Name = "removeTrackToolStripMenuItem";
-            this.removeTrackToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+            this.removeTrackToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
             this.removeTrackToolStripMenuItem.Text = "Remove track";
             this.removeTrackToolStripMenuItem.Click += new System.EventHandler(this.removeTrackToolStripMenuItem_Click);
             // 
@@ -593,6 +615,25 @@ namespace MeGUI
             this.encoderConfigTab.TabIndex = 2;
             this.encoderConfigTab.Text = "Encoder Config";
             this.encoderConfigTab.UseVisualStyleBackColor = true;
+            // 
+            // containerFormatLabel
+            // 
+            this.containerFormatLabel.Location = new System.Drawing.Point(15, 242);
+            this.containerFormatLabel.Name = "containerFormatLabel";
+            this.containerFormatLabel.Size = new System.Drawing.Size(92, 13);
+            this.containerFormatLabel.TabIndex = 38;
+            this.containerFormatLabel.Text = "Container Format";
+            // 
+            // containerFormat
+            // 
+            this.containerFormat.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.containerFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.containerFormat.Location = new System.Drawing.Point(124, 238);
+            this.containerFormat.Name = "containerFormat";
+            this.containerFormat.Size = new System.Drawing.Size(135, 21);
+            this.containerFormat.TabIndex = 37;
+            this.containerFormat.SelectedIndexChanged += new System.EventHandler(this.containerFormat_SelectedIndexChanged_1);
             // 
             // groupBox1
             // 
@@ -711,46 +752,6 @@ namespace MeGUI
             this.helpButton1.Name = "helpButton1";
             this.helpButton1.Size = new System.Drawing.Size(39, 23);
             this.helpButton1.TabIndex = 32;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Location = new System.Drawing.Point(24, 245);
-            label1.Name = "label1";
-            label1.Size = new System.Drawing.Size(47, 13);
-            label1.TabIndex = 37;
-            label1.Text = "Splitting:";
-            // 
-            // splitting
-            // 
-            this.splitting.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.splitting.Location = new System.Drawing.Point(128, 237);
-            this.splitting.MaximumSize = new System.Drawing.Size(1000, 29);
-            this.splitting.MinimumSize = new System.Drawing.Size(64, 29);
-            this.splitting.Name = "splitting";
-            this.splitting.NullString = "No splitting";
-            this.splitting.SelectedIndex = 0;
-            this.splitting.Size = new System.Drawing.Size(221, 29);
-            this.splitting.TabIndex = 38;
-            // 
-            // containerFormatLabel
-            // 
-            this.containerFormatLabel.Location = new System.Drawing.Point(15, 242);
-            this.containerFormatLabel.Name = "containerFormatLabel";
-            this.containerFormatLabel.Size = new System.Drawing.Size(92, 13);
-            this.containerFormatLabel.TabIndex = 38;
-            this.containerFormatLabel.Text = "Container Format";
-            // 
-            // containerFormat
-            // 
-            this.containerFormat.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.containerFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.containerFormat.Location = new System.Drawing.Point(124, 238);
-            this.containerFormat.Name = "containerFormat";
-            this.containerFormat.Size = new System.Drawing.Size(135, 21);
-            this.containerFormat.TabIndex = 37;
             // 
             // OneClickWindow
             // 
