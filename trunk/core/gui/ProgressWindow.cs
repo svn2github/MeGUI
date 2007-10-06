@@ -397,31 +397,36 @@ namespace MeGUI
 		/// <param name="su"></param>
 		public void UpdateStatus(StatusUpdate su)
 		{
-            // Current position
-            positionInClip.Text = (Util.ToString(su.ClipPosition) ?? "---") + 
-                " / " + (Util.ToString(su.ClipLength) ?? "---");
+            try
+            {
 
-            // Current frame
-            currentVideoFrame.Text = (Util.ToString(su.NbFramesDone) ?? "---") +
-                " / " + (Util.ToString(su.NbFramesTotal) ?? "---");
+                // Current position
+                positionInClip.Text = (Util.ToString(su.ClipPosition) ?? "---") +
+                    " / " + (Util.ToString(su.ClipLength) ?? "---");
 
-            // Data
-            videoData.Text = (su.CurrentFileSize.HasValue ? su.CurrentFileSize.Value.ToString() : "---") +
-                " / " + (su.ProjectedFileSize.HasValue ? su.ProjectedFileSize.Value.ToString() : "---");
+                // Current frame
+                currentVideoFrame.Text = (Util.ToString(su.NbFramesDone) ?? "---") +
+                    " / " + (Util.ToString(su.NbFramesTotal) ?? "---");
 
-            // Processing speed
-            fps.Text = su.ProcessingSpeed ?? "---";
+                // Data
+                videoData.Text = (su.CurrentFileSize.HasValue ? su.CurrentFileSize.Value.ToString() : "---") +
+                    " / " + (su.ProjectedFileSize.HasValue ? su.ProjectedFileSize.Value.ToString() : "---");
 
-            // Time elapsed
-            timeElapsed.Text = Util.ToString(su.TimeElapsed);
+                // Processing speed
+                fps.Text = su.ProcessingSpeed ?? "---";
 
-            // Estimated time
-            totalTime.Text = Util.ToString(su.EstimatedTime) ?? "---";
+                // Time elapsed
+                timeElapsed.Text = Util.ToString(su.TimeElapsed);
 
-            this.Text = "Status: " + (su.PercentageDoneExact ?? 0M).ToString("##.##") + " %";
-            statusLabel.Text = su.Status ?? "";
+                // Estimated time
+                totalTime.Text = Util.ToString(su.EstimatedTime) ?? "---";
 
-            progress.Value = su.PercentageDone;
+                this.Text = "Status: " + (su.PercentageDoneExact ?? 0M).ToString("##.##") + " %";
+                statusLabel.Text = su.Status ?? "";
+
+                progress.Value = su.PercentageDone;
+            }
+            catch (Exception) { }
 
             #region old code
             /*            if (su.JobType == JobTypes.VIDEO) // video status update
