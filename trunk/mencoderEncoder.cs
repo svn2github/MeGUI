@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Globalization;
+using MeGUI.core.util;
 
 namespace MeGUI
 {
@@ -31,9 +32,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "MencoderEncoder");
             get
             {
                 if (job.Settings is lavcSettings)
-                    return genLavcCommandline();
+                    return genLavcCommandline(job.Input, job.Output, job.DAR, job.Settings as lavcSettings);
                 else if (job.Settings is snowSettings)
-                    return genSnowCommandline();
+                    return genSnowCommandline(job.Input, job.Output, job.Settings as snowSettings);
                 else if (job.Settings is hfyuSettings)
                     return genHfyuCommandline();
                 throw new Exception();
@@ -65,12 +66,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "MencoderEncoder");
             return sb.ToString();
         }
 
-        private string genSnowCommandline()
+        public static string genSnowCommandline(string input, string output, snowSettings ss)
         {
-            snowSettings ss = (snowSettings)job.Settings;
             StringBuilder sb = new StringBuilder();
             CultureInfo ci = new CultureInfo("en-us");
-            sb.Append("\"" + job.Input + "\" -ovc lavc ");
+            sb.Append("\"" + input + "\" -ovc lavc ");
             switch (ss.EncodingMode)
             {
                 case 0: // CBR
@@ -171,8 +171,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "MencoderEncoder");
                 sb.Remove(sb.Length - 1, 1);
             if (ss.EncodingMode != 2)
             {
-                sb.Append(" -o \"" + job.Output + "\" -of "); // rest of mencoder options
-                int outputType = getVideoOutputType(job.Output);
+                sb.Append(" -o \"" + output + "\" -of "); // rest of mencoder options
+                int outputType = getVideoOutputType(output);
                 if (outputType == 0) // AVI
                     sb.Append("avi -ffourcc " + ss.FourCCs[ss.FourCC] + " ");
                 if (outputType >= 1) // RAW
@@ -181,12 +181,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "MencoderEncoder");
             return sb.ToString();
         }
 
-        private string genLavcCommandline()
+        public static string genLavcCommandline(string input, string output, Dar? d, lavcSettings ls)
         {
-            lavcSettings ls = (lavcSettings)job.Settings;
             CultureInfo ci = new CultureInfo("en-us");
             StringBuilder sb = new StringBuilder();
-            sb.Append("\"" + job.Input + "\" -ovc lavc ");
+            sb.Append("\"" + input + "\" -ovc lavc ");
             if (ls.EncodingMode == 4 || ls.EncodingMode == 7)
                 ls.Turbo = false;
             switch (ls.EncodingMode)
@@ -307,8 +306,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "MencoderEncoder");
                 sb.Append("intra_matrix=" + ls.IntraMatrix + ":");
             if (!ls.InterMatrix.Equals(""))
                 sb.Append("inter_matrix=" + ls.InterMatrix + ":");
-            if (job.DAR.HasValue)
-                sb.Append("aspect=" + job.DAR.Value.X + "/" + job.DAR.Value.Y + ":");
+            if (d.HasValue)
+                sb.Append("aspect=" + d.Value.X + "/" + d.Value.Y + ":");
             if (ls.NbMotionPredictors != (decimal)0)
                 sb.Append("last_pred=" + ls.NbMotionPredictors.ToString(ci) + ":");
 
@@ -317,8 +316,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "MencoderEncoder");
             //add the rest of the mencoder commandline regarding the output
             if (ls.EncodingMode != 2 && ls.EncodingMode != 5) // not 2 pass vbr first pass and 3 pass first pass, add output filename and output type
             {
-                sb.Append(" -o \"" + job.Output + "\" -of "); // rest of mencoder options
-                int outputType = getVideoOutputType(job.Output);
+                sb.Append(" -o \"" + output + "\" -of "); // rest of mencoder options
+                int outputType = getVideoOutputType(output);
                 if (outputType == 0) // AVI
                     sb.Append("avi -ffourcc " + ls.FourCCs[ls.FourCC] + " ");
                 if (outputType >= 1) // RAW

@@ -125,6 +125,11 @@ namespace MeGUI.packages.video.lmp4
         }
         #endregion
         #region codec-specific overload functions
+        protected override string getCommandline()
+        {
+            return mencoderEncoder.genLavcCommandline("input", "output", null, Settings as lavcSettings);
+        }
+
         /// <summary>
         /// Does all the necessary adjustments after a GUI change has been made.
         /// </summary>

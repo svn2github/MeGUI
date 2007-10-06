@@ -58,6 +58,15 @@ namespace MeGUI.core.details.video
 
         #endregion
         #region codec specific adjustments
+
+        /// <summary>
+        /// Generates the commandline
+        /// </summary>
+        /// <returns></returns>
+        protected virtual string getCommandline() {
+            return "";
+        }
+
         /// <summary>
         /// The method by which codecs can do their pre-commandline generation adjustments (eg tri-state adjustment).
         /// </summary>
@@ -100,7 +109,7 @@ namespace MeGUI.core.details.video
 
             doCodecSpecificAdjustments();
 
-            this.commandline.Text = ""; // encoderPath + " " + getCommandline();
+            this.commandline.Text = encoderPath + " " + getCommandline();
             updating = false;
         }
         #endregion

@@ -76,6 +76,11 @@ namespace MeGUI.packages.video.snow
         }    
         #endregion
         #region codec-specific overload functions
+        protected override string getCommandline()
+        {
+            return mencoderEncoder.genSnowCommandline("input", "output", (snowSettings)Settings);
+        }
+
         /// <summary>
         /// Does all the necessary adjustments after a GUI change has been made.
         /// </summary>

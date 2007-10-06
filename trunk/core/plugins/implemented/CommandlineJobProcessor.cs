@@ -127,6 +127,8 @@ namespace MeGUI
             ProcessStartInfo pstart = new ProcessStartInfo();
             pstart.FileName = executable;
             pstart.Arguments = Commandline;
+            log.AppendFormat("Job commandline: \"{0}\" {1}{2}",
+                pstart.FileName, pstart.Arguments, Environment.NewLine);
             pstart.RedirectStandardOutput = true;
             pstart.RedirectStandardError = true;
             pstart.WindowStyle = ProcessWindowStyle.Minimized;

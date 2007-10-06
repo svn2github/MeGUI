@@ -40,7 +40,6 @@ namespace MeGUI
 		private StringBuilder script;
 		public event OpenScriptCallback OpenScript;
         private Dar? suggestedDar;
-        private int sarX, sarY;
         private MainForm mainForm;
         private JobUtil jobUtil;
         private PossibleSources sourceType;
@@ -170,8 +169,6 @@ namespace MeGUI
             this.noiseFilterType.SelectedIndexChanged += new System.EventHandler(this.noiseFilterType_SelectedIndexChanged);
             this.resizeFilterType.SelectedIndexChanged += new System.EventHandler(this.resizeFilterType_SelectedIndexChanged);
 
-            sarX = sarY = -1;
-
 
 
 			player = null;
@@ -265,6 +262,7 @@ namespace MeGUI
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.optionsTab = new System.Windows.Forms.TabPage();
             this.videoGroupBox = new System.Windows.Forms.GroupBox();
+            this.arChooser = new MeGUI.core.gui.ARChooser();
             this.reopenOriginal = new System.Windows.Forms.Button();
             this.profileControl1 = new MeGUI.core.details.video.ProfileControl();
             this.mod16Box = new System.Windows.Forms.ComboBox();
@@ -307,7 +305,6 @@ namespace MeGUI
             this.deintProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.deintStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
-            this.arChooser = new MeGUI.core.gui.ARChooser();
             label2 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
             label4 = new System.Windows.Forms.Label();
@@ -627,6 +624,18 @@ namespace MeGUI
             this.videoGroupBox.TabIndex = 5;
             this.videoGroupBox.TabStop = false;
             this.videoGroupBox.Text = "Video";
+            // 
+            // arChooser
+            // 
+            this.arChooser.HasLater = false;
+            this.arChooser.Location = new System.Drawing.Point(96, 88);
+            this.arChooser.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.arChooser.MinimumSize = new System.Drawing.Size(64, 29);
+            this.arChooser.Name = "arChooser";
+            this.arChooser.SelectedIndex = 0;
+            this.arChooser.Size = new System.Drawing.Size(214, 29);
+            this.arChooser.TabIndex = 21;
+            this.arChooser.SelectionChanged += new MeGUI.StringChanged(this.arChooser_SelectionChanged);
             // 
             // reopenOriginal
             // 
@@ -1057,17 +1066,6 @@ namespace MeGUI
             this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 7;
             // 
-            // arChooser
-            // 
-            this.arChooser.CustomItems = new object[0];
-            this.arChooser.HasLater = false;
-            this.arChooser.Location = new System.Drawing.Point(96, 88);
-            this.arChooser.MaximumSize = new System.Drawing.Size(1000, 29);
-            this.arChooser.MinimumSize = new System.Drawing.Size(64, 29);
-            this.arChooser.Name = "arChooser";
-            this.arChooser.Size = new System.Drawing.Size(214, 29);
-            this.arChooser.TabIndex = 21;
-            // 
             // AviSynthWindow
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
@@ -1156,8 +1154,6 @@ namespace MeGUI
 			if (this.saveAvisynthScriptDialog.ShowDialog() == DialogResult.OK)
 			{
                 writeScript(saveAvisynthScriptDialog.FileName);
-                if (!this.signalAR.Checked)
-                    sarX = sarY = -1;
 				if (onSaveLoadScript.Checked)
 				{
                     if(player != null)
@@ -1190,10 +1186,10 @@ namespace MeGUI
             denoiseLines = ScriptServer.GetDenoiseLines(noiseFilter.Checked, (DenoiseFilterType)(noiseFilterType.SelectedItem as EnumProxy).RealValue);
 
             string newScript = ScriptServer.CreateScriptFromTemplate(settingsProvider.GetCurrentSettings().Template, inputLine, cropLine, resizeLine, denoiseLines, deinterlaceLines);
-			
-			if (this.signalAR.Checked)
-                newScript = string.Format("# Set DAR in encoder to {0} : {1}. The following line is for automatic signalling\r\nglobal MeGUI_darx = {0}\r\nglobal MeGUI_dary = {1}\r\n", sarX, sarY)
-                    + newScript;
+
+            if (this.signalAR.Checked)
+                newScript = string.Format("# Set DAR in encoder to {0} : {1}. The following line is for automatic signalling\r\nglobal MeGUI_darx = {0}\r\nglobal MeGUI_dary = {1}\r\n",
+                    arChooser.RealValue.X, arChooser.RealValue.Y) + newScript;
 			return newScript;
 
 		}
@@ -1623,19 +1619,6 @@ namespace MeGUI
 		{
 			this.showScript();
 		}
-/*		private void inputDAR_SelectedIndexChanged(object sender, System.EventArgs e)
-		{
-            double dar = VideoUtil.getAspectRatio((AspectRatio)inputDAR.SelectedIndex);
-            if (dar <= 0)
-                dar = 2.35; // Probably the most common custom DAR used
-            customDAR.Text = dar.ToString();
-            
-			if (inputDAR.SelectedIndex == 3)
-				customDAR.ReadOnly = false;
-			else
-				customDAR.ReadOnly = true;
-			suggestResolution_CheckedChanged(null, null);
-		}*/
 		#endregion
 		#region autocrop
 		/// <summary>
@@ -1909,6 +1892,12 @@ namespace MeGUI
         private void reopenOriginal_Click(object sender, EventArgs e)
         {
             showOriginal();
+        }
+
+        private void arChooser_SelectionChanged(object sender, string val)
+        {
+            suggestResolution_CheckedChanged(null, null);
+            showScript();
         }
     }
     public delegate void OpenScriptCallback(string avisynthScript);

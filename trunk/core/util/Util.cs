@@ -159,11 +159,25 @@ namespace MeGUI.core.util
             return d.Value.ToString("#####.##");
         }
 
-        public static string ToString(ulong? u)
+        public static string ToStringOrNull<T>(T t)
+            where T : class
         {
-            if (!u.HasValue) return null;
-            return u.Value.ToString();
+            if (t == null) return null;
+            return t.ToString();
         }
+
+        public static string ToStringOrNull<T>(T? t)
+            where T : struct
+        {
+            if (t == null) return null;
+            return t.Value.ToString();
+        }
+/*        public static string ToStringOrNull<T>(T? t)
+            where T : class
+        {
+            if (!t.HasValue) return null;
+            return t.Value.ToString();
+        }*/
 
         
         #region range clamping

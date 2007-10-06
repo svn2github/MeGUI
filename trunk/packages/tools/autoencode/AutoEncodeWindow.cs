@@ -652,32 +652,13 @@ namespace MeGUI
 		{
 			if (!string.IsNullOrEmpty(this.muxedOutput.Text))
 			{
-				long desiredSizeBytes;
-                if (!noTargetRadio.Checked)
-                {
-                    try
-                    {
-                        checked { desiredSizeBytes = (long)targetSize.CertainValue.Bytes; }
-                    }
-                    catch (Exception f)
-                    {
-                        MessageBox.Show("I'm not sure how you want me to reach a target size of <empty>.\r\nWhere I'm from that number doesn't exist.\r\n",
-                            "Target size undefined", MessageBoxButtons.OK);
-                        Console.Write(f.Message);
-                        return;
-                    }
-                }
-                else
-                {
-                    desiredSizeBytes = -1;
-                }
+                FileSize? desiredSize = targetSize.Value;
                 FileSize? splitSize = splitting.Value;
 
-                if (desiredSizeBytes > 0)
-                    logBuilder.Append("Desired size of this automated encoding series: " + desiredSizeBytes + " bytes, split size: " + splitSize + "MB\r\n");
-                else
-                    logBuilder.Append("No desired size of this encode. The profile settings will be used");
-				MuxStream[] audio;
+                logBuilder.AppendLine("Desired size of this job series: " + (Util.ToStringOrNull(desiredSize) ?? "N/A"));
+                logBuilder.AppendLine("Split size of this job series: " + (Util.ToStringOrNull(splitSize) ?? "N/A"));
+
+                MuxStream[] audio;
                 AudioJob[] aStreams;
                 AudioEncoderType[] muxTypes;
 				separateEncodableAndMuxableAudioStreams(out aStreams, out audio, out muxTypes);
@@ -699,7 +680,8 @@ namespace MeGUI
                 }
                 removeStreamsToBeEncoded(ref audio, aStreams);
                 mainForm.Jobs.addJobsWithDependencies(vUtil.GenerateJobSeries(this.videoStream, muxedOutput, aStreams, subtitles, chapters,
-                    new FileSize(desiredSizeBytes), splitSize, cot, this.prerender, audio));
+                    desiredSize, splitSize, cot, this.prerender, audio));
+                mainForm.addToLog(logBuilder.ToString());
                 this.Close();
 			}
 		}
