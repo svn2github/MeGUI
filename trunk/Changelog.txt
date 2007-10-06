@@ -1,3 +1,10 @@
+0.2.6.1022
+    - (berrinam) Fixed #1808324 (1 pass encode broken in autoencode)
+    - (berrinam) Fixed #1808055 (Encoder commandline options is not being shown in the codec config window)
+    - (berrinam) Fixed #1806911 (Clever anamorphic encoding not working)
+    - (berrinam) Shutdown when finished re-enabled (including countdown patch from imoon4)
+    - (berrinam) FPS chooser now says "choose your framerate" not "choose your AR"
+
 0.2.6.1021
     - (Sharktooth) [Muxers] Fixed the output file dialog (save mode)
 
