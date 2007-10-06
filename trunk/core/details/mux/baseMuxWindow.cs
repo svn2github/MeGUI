@@ -534,7 +534,7 @@ namespace MeGUI
             // chapters
             // 
             this.chapters.Filename = "";
-            this.chapters.Filter = "\"Chapter files (*.txt)|*.txt\";";
+            this.chapters.Filter = "Chapter files (*.txt)|*.txt";
             this.chapters.FolderMode = false;
             this.chapters.Location = new System.Drawing.Point(118, 12);
             this.chapters.Name = "chapters";
