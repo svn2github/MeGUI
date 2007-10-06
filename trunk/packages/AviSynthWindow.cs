@@ -1804,11 +1804,13 @@ namespace MeGUI
                 {
                     Invoke(new MethodInvoker(delegate
                     {
-//                        sourceTypeLabel.Text = "Source type: " + text;
                         deintProgressBar.Enabled = false;
                         this.DeintInfo = info;
                         deinterlace.Enabled = true;
-                        deinterlace.Checked = true;
+                        if (deinterlaceType.Text == "Do nothing")
+                            deinterlace.Checked = false;
+                        else
+                            deinterlace.Checked = true;
                         deintStatusLabel.Text = "Analysis finished!";
                         analyseButton.Text = "Analyse";
                     }));
