@@ -10,7 +10,7 @@ namespace MeGUI.core.gui
 {
     public partial class HelpButton : UserControl
     {
-        private static readonly string BaseURL = "http://mewiki.project357.com/wiki/MeGUI:";
+        private static readonly string BaseURL = "http://mewiki.project357.com/index.php/MeGUI:";
 
         public HelpButton()
         {
