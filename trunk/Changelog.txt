@@ -1,3 +1,9 @@
+0.2.6.1023
+    - (Kurtnoise) [Muxer] : Chapters Filter fixed.
+    - (Kurtnoise) [Avisynth Window] : deinterlace checkbox unchecked when Analysis returns "Do Nothing" (to avoid interlaced=true with ColorMatrix())
+    - (Kurtnoise) [Help Button] : url fixed for the wiki.
+    - (berrinam) Catch all exceptions in ProgressWindow.UpdateStatus. (It is a non-essential function, so errors should be silently caught). Should probably fix #1760486
+
 0.2.6.1022
     - (berrinam) Fixed #1808324 (1 pass encode broken in autoencode)
     - (berrinam) Fixed #1808055 (Encoder commandline options is not being shown in the codec config window)
