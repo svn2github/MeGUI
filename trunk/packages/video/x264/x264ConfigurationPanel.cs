@@ -297,6 +297,7 @@ namespace MeGUI.packages.video.x264
             {
                 case (int)VideoCodecSettings.Mode.CBR: //Actually, ABR
                     x264Turbo.Enabled = false;
+                    x264Turbo.Checked = false;
                     x264RateTol.Enabled = true;
                     x264RateTolLabel.Enabled = true;
                     logfileOpenButton.Enabled = false;
@@ -304,6 +305,7 @@ namespace MeGUI.packages.video.x264
 
                 case (int)VideoCodecSettings.Mode.CQ:
                     x264Turbo.Enabled = false;
+                    x264Turbo.Checked = false;
                     x264RateTol.Enabled = false;
                     x264RateTolLabel.Enabled = false;
                     logfileOpenButton.Enabled = false;
@@ -334,6 +336,7 @@ namespace MeGUI.packages.video.x264
                     break;
                 case (int)VideoCodecSettings.Mode.quality:
                     x264Turbo.Enabled = false;
+                    x264Turbo.Checked = false;
                     logfileOpenButton.Enabled = false;
                     x264RateTol.Enabled = false;
                     x264RateTolLabel.Enabled = false;
