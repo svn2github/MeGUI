@@ -1,3 +1,8 @@
+0.2.6.1024
+    - (Sharktooth) Fixed main window (Form1.cs) size (some Audio controls were not shown)
+    - (Sharktooth) Fixed #1810120 (x264 video configuration dialog problem)
+    - (Sharktooth) [Update Window] Workaround for #1808878 (Maximize/Minimize states don't work). Disabled Minimize and Maximize buttons.
+
 0.2.6.1023
     - (Kurtnoise) [Muxer] : Chapters Filter fixed.
     - (Kurtnoise) [Avisynth Window] : deinterlace checkbox unchecked when Analysis returns "Do Nothing" (to avoid interlaced=true with ColorMatrix())
