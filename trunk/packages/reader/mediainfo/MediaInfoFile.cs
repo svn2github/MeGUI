@@ -5,6 +5,7 @@ using MediaInfoWrapper;
 using System.Globalization;
 using MeGUI.core.util;
 using System.Text.RegularExpressions;
+using System.IO;
 
 namespace MeGUI
 {
@@ -245,7 +246,7 @@ namespace MeGUI
                 cType = getContainerType(info.General[0].Format, info.General[0].FormatString);
             
             if (aCodecs.Length == 1)
-                aType = getAudioType(aCodecs[0], cType);
+                aType = getAudioType(aCodecs[0], cType, file);
             else
                 aType = null;
 
@@ -259,7 +260,7 @@ namespace MeGUI
                     ulong frameCount = (ulong)easyParseInt(track.FrameCount);
                     double fps = (easyParseDouble(track.FrameRate) ?? 25.0);
                     vCodec = getVideoCodec(track.Codec);
-                    vType = getVideoType(vCodec, cType);
+                    vType = getVideoType(vCodec, cType, file);
                     Dar dar = new Dar((decimal?)easyParseDouble(track.AspectRatio), width, height);
                     this.info = new MediaFileInfo(hasVideo, width, height, dar, frameCount, fps, aCodecs.Length > 0);
                 }
@@ -324,24 +325,26 @@ namespace MeGUI
             return null;
         }
 
-        private static VideoType getVideoType(VideoCodec codec, ContainerType cft)
+        private static VideoType getVideoType(VideoCodec codec, ContainerType cft, string filename)
         {
+            string extension = Path.GetExtension(filename).ToLower();
             foreach (VideoType t in ContainerManager.VideoTypes.Values)
             {
-                if (t.ContainerType == cft && Array.IndexOf<VideoCodec>(t.SupportedCodecs, codec) >= 0)
+                if (t.ContainerType == cft && Array.IndexOf<VideoCodec>(t.SupportedCodecs, codec) >= 0 && "." + t.Extension == extension)
                     return t;
             }
             return null;
         }
 
-        private static AudioType getAudioType(AudioCodec codec, ContainerType cft)
+        private static AudioType getAudioType(AudioCodec codec, ContainerType cft, string filename)
         {
+            string extension = Path.GetExtension(filename).ToLower();
             ContainerType type = null;
             if (cft != null)
                 type = cft;
             foreach (AudioType t in ContainerManager.AudioTypes.Values)
             {
-                if (t.ContainerType == type && Array.IndexOf<AudioCodec>(t.SupportedCodecs, codec) >= 0)
+                if (t.ContainerType == type && Array.IndexOf<AudioCodec>(t.SupportedCodecs, codec) >= 0 && "." + t.Extension == extension)
                     return t;
             }
             return null;
