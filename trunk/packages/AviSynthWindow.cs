@@ -1187,9 +1187,9 @@ namespace MeGUI
 
             string newScript = ScriptServer.CreateScriptFromTemplate(settingsProvider.GetCurrentSettings().Template, inputLine, cropLine, resizeLine, denoiseLines, deinterlaceLines);
 
-            if (this.signalAR.Checked)
+            if (this.signalAR.Checked && suggestedDar.HasValue)
                 newScript = string.Format("# Set DAR in encoder to {0} : {1}. The following line is for automatic signalling\r\nglobal MeGUI_darx = {0}\r\nglobal MeGUI_dary = {1}\r\n",
-                    arChooser.RealValue.X, arChooser.RealValue.Y) + newScript;
+                    suggestedDar.Value.X, suggestedDar.Value.Y) + newScript;
 			return newScript;
 
 		}
