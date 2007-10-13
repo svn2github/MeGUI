@@ -329,12 +329,12 @@ namespace MeGUI.core.gui
         enum Direction { Up, Down }
         private void downButton_Click(object sender, EventArgs e)
         {
-            MoveListViewItem(Direction.Up);
+            MoveListViewItem(Direction.Down);
         }
 
         private void upButton_Click(object sender, EventArgs e)
         {
-            MoveListViewItem(Direction.Down);
+            MoveListViewItem(Direction.Up);
         }
 
         /// <summary>

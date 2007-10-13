@@ -207,6 +207,7 @@ namespace MeGUI.core.gui
             this.queueListView.View = System.Windows.Forms.View.Details;
             this.queueListView.DoubleClick += new System.EventHandler(this.queueListView_DoubleClick);
             this.queueListView.VisibleChanged += new System.EventHandler(this.queueListView_VisibleChanged);
+            this.queueListView.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.queueListView_ItemSelectionChanged);
             // 
             // ownerHeader
             // 
