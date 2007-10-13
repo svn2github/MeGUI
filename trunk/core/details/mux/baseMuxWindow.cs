@@ -469,6 +469,7 @@ namespace MeGUI
             this.muxStreamControl1.ShowDelay = false;
             this.muxStreamControl1.Size = new System.Drawing.Size(410, 66);
             this.muxStreamControl1.TabIndex = 0;
+            this.muxStreamControl1.FileUpdated += new System.EventHandler(this.muxStreamControl1_FileUpdated);
             // 
             // muxStreamControl2
             // 
@@ -479,6 +480,7 @@ namespace MeGUI
             this.muxStreamControl2.ShowDelay = true;
             this.muxStreamControl2.Size = new System.Drawing.Size(410, 83);
             this.muxStreamControl2.TabIndex = 0;
+            this.muxStreamControl2.FileUpdated += new System.EventHandler(this.muxStreamControl2_FileUpdated);
             // 
             // splitting
             // 
@@ -730,6 +732,7 @@ namespace MeGUI
             a.Padding = audioTracks[0].Padding;
             a.ShowDelay = audioTracks[0].ShowDelay;
             a.Filter = audioTracks[0].Filter;
+            a.FileUpdated += muxStreamControl2_FileUpdated;
 
             audio.TabPages.Add(p);
             p.Controls.Add(a);
@@ -763,6 +766,7 @@ namespace MeGUI
             a.Padding = subtitleTracks[0].Padding;
             a.ShowDelay = subtitleTracks[0].ShowDelay;
             a.Filter = subtitleTracks[0].Filter;
+            a.FileUpdated += muxStreamControl1_FileUpdated;
 
             subtitles.TabPages.Add(p);
             p.Controls.Add(a);
@@ -789,6 +793,16 @@ namespace MeGUI
         private void subtitleMenu_Opening(object sender, CancelEventArgs e)
         {
             subtitleRemoveTrack.Enabled = subtitleTracks.Count > 1;
+        }
+
+        private void muxStreamControl1_FileUpdated(object sender, EventArgs e)
+        {
+            fileUpdated();
+        }
+
+        private void muxStreamControl2_FileUpdated(object sender, EventArgs e)
+        {
+            fileUpdated();
         }
 
 
