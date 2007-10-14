@@ -49,11 +49,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "XviDEncoder");
         {
             get
             {
-                return genCommandline(job.Input, job.Output, job.DAR, job.Settings as xvidSettings);
+                return genCommandline(job.Input, job.Output, job.DAR, job.Settings as xvidSettings, hres, vres);
             }
         }
 
-        public static string genCommandline(string input, string output, Dar? d, xvidSettings xs)
+        public static string genCommandline(string input, string output, Dar? d, xvidSettings xs, int hres, int vres)
         {
             StringBuilder sb = new StringBuilder();
             CultureInfo ci = new CultureInfo("en-us");
@@ -176,7 +176,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "XviDEncoder");
             }
             if (d.HasValue) // custom PAR mode
             {
-                sb.Append("-par " + d.Value.X + ":" + d.Value.Y + " ");
+                Sar s = d.Value.ToSar(hres, vres);
+                sb.Append("-par " + s.X + ":" + s.Y + " ");
             }
             sb.Append("-threads " + xs.NbThreads + " ");
             if (xs.Zones != null && xs.Zones.Length > 0 && xs.CreditsQuantizer >= new decimal(1)
