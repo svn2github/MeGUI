@@ -495,7 +495,7 @@ namespace MeGUI
                 nbOfFrames = 0;
                 hRes = vRes = 0;
                 framerate = 0;
-                dar = Dar.ITU16x9;
+                dar = Dar.ITU16x9PAL;
                 return false;
             }
 		}

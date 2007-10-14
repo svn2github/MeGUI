@@ -12,8 +12,10 @@ namespace MeGUI.core.gui
         private static readonly string Later = "Auto-detect later";
 
         public static readonly Named<Dar>[] ARs = new Named<Dar>[] {
-                new Named<Dar>("ITU 16:9 (1.823)", Dar.ITU16x9),
-                new Named<Dar>("ITU 4:3 (1.3672)", Dar.ITU4x3),
+                new Named<Dar>("ITU 16:9 PAL (1.823361)", Dar.ITU16x9PAL),
+                new Named<Dar>("ITU 4:3 PAL (1.367521)", Dar.ITU4x3PAL),
+                new Named<Dar>("ITU 16:9 NTSC (1.822784)", Dar.ITU16x9NTSC),
+                new Named<Dar>("ITU 4:3 NTSC (1.367088)", Dar.ITU4x3NTSC),
                 new Named<Dar>("1:1", Dar.A1x1) };
 
         public ARChooser()
@@ -24,7 +26,7 @@ namespace MeGUI.core.gui
                 decimal result;
                 if (NumberChooser.ShowDialog(
                     "Enter your AR:", "Custom AR", 3,
-                    0.1M, 10M, (Value ?? Dar.ITU16x9).ar, out result) == DialogResult.OK)
+                    0.1M, 10M, (Value ?? Dar.ITU16x9PAL).ar, out result) == DialogResult.OK)
                     return new Named<Dar>(new Dar(result).ToString(), new Dar(result));
                 else
                     return null;

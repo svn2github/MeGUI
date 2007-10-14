@@ -138,12 +138,22 @@ namespace MeGUI
                         resolution = resolution.Substring(1, resolution.IndexOf('x')-1);
                         maxHorizontalResolution = Int32.Parse(resolution);
 						string ar = split[2].Substring(1, split[2].Length - 2);
-                        if (ar.Equals("16:9"))
-                            aspectRatio = Dar.ITU16x9;
-                        else if (ar.Equals("4:3"))
-                            aspectRatio = Dar.ITU4x3;
-                        else if (ar.Equals("1:1"))
-                            aspectRatio = Dar.A1x1;
+
+                        aspectRatio = Dar.A1x1;
+                        if (split[1].Contains("PAL"))
+                        {
+                            if (ar.Equals("16:9"))
+                                aspectRatio = Dar.ITU16x9PAL;
+                            else if (ar.Equals("4:3"))
+                                aspectRatio = Dar.ITU4x3PAL;
+                        }
+                        else if (split[1].Contains("NTSC"))
+                        {
+                            if (ar.Equals("16:9"))
+                                aspectRatio = Dar.ITU16x9NTSC;
+                            else if (ar.Equals("4:3"))
+                                aspectRatio = Dar.ITU4x3NTSC;
+                        }
 					}
 					else if (line.IndexOf("Audio") != -1)
 					{

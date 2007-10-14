@@ -107,7 +107,8 @@ namespace MeGUI
 		/// </summary>
 		private void readFileProperties()
 		{
-            Dar dar = Dar.ITU16x9;
+            info = reader.Info.Clone();
+            Dar dar = Dar.A1x1;
             using (StreamReader sr = new StreamReader(fileName))
             {
 				string line = sr.ReadLine();
@@ -116,13 +117,21 @@ namespace MeGUI
 					if (line.IndexOf("Aspect_Ratio") != -1) // this is the aspect ratio line
 					{
 						string ar = line.Substring(13);
-                        
-                        if (ar.Equals("16:9"))
-                            dar = Dar.ITU16x9;
-                        else if (ar.Equals("4:3"))
-                            dar = Dar.ITU4x3;
-                        else if (ar.Equals("1:1"))
-                            dar = Dar.A1x1;
+
+                        if (reader.Info.Width == 720 && reader.Info.Height == 576)
+                        {
+                            if (ar.Equals("16:9"))
+                                dar = Dar.ITU16x9PAL;
+                            else if (ar.Equals("4:3"))
+                                dar = Dar.ITU4x3PAL;
+                        }
+                        else if (reader.Info.Width == 720 && reader.Info.Height == 480)
+                        {
+                            if (ar.Equals("16:9"))
+                                dar = Dar.ITU16x9NTSC;
+                            else if (ar.Equals("4:3"))
+                                dar = Dar.ITU4x3NTSC;
+                        }
                     }
 					if (line.IndexOf("Field_Operation") != -1)
 					{
@@ -137,8 +146,9 @@ namespace MeGUI
 					}
 				}
 			}
-            info = reader.Info.Clone();
             info.DAR = dar;
+
+
 		}
 		#region properties
         public MediaFileInfo Info

@@ -6,8 +6,10 @@ namespace MeGUI.core.util
 {
     public struct Dar
     {
-        public static readonly Dar ITU16x9 = new Dar(1.823M);
-        public static readonly Dar ITU4x3 = new Dar(1.3672M);
+        public static readonly Dar ITU16x9PAL = new Dar(1.823361M);
+        public static readonly Dar ITU4x3PAL = new Dar(1.367521M);
+        public static readonly Dar ITU16x9NTSC = new Dar(1.822784M);
+        public static readonly Dar ITU4x3NTSC = new Dar(1.367088M);
         public static readonly Dar A1x1 = new Dar(1M);
 
         public decimal ar;

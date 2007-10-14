@@ -1657,20 +1657,23 @@ namespace MeGUI
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void suggestResolution_CheckedChanged(object sender, System.EventArgs e)
-		{
-            if (suggestResolution.Checked)
+        private void suggestResolution_CheckedChanged(object sender, System.EventArgs e)
+        {
+            try
             {
-                this.resize.Checked = true;
-                this.verticalResolution.Enabled = false;
-                bool signalAR = this.signalAR.Checked;
                 double dar = 1.0;
-                try
+                dar = (double)arChooser.RealValue.ar;
+                Dar? suggestedDar;
+
+                bool signalAR = this.signalAR.Checked;
+                int scriptVerticalResolution = Resolution.suggestResolution((int)file.Info.Height, (int)file.Info.Width, dar,
+                    Cropping, (int)horizontalResolution.Value, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out suggestedDar);
+
+
+                if (suggestResolution.Checked)
                 {
-                    dar = (double)arChooser.RealValue.ar;
-                    Dar? suggestedDar;
-                    int scriptVerticalResolution = Resolution.suggestResolution((int)file.Info.Height, (int)file.Info.Width, dar,
-                        Cropping, (int)horizontalResolution.Value, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out suggestedDar);
+                    this.resize.Checked = true;
+                    this.verticalResolution.Enabled = false;
                     if (scriptVerticalResolution > verticalResolution.Maximum)
                     { // Reduce horizontal resolution until a fit is found that doesn't require upsizing. This is really only needed for oddball DAR scenarios
                         int hres = (int)horizontalResolution.Value;
@@ -1685,17 +1688,20 @@ namespace MeGUI
                         eventsOn = true;
                     }
                     verticalResolution.Value = (decimal)scriptVerticalResolution;
-                    if (signalAR)
-                        this.suggestedDar = suggestedDar;
                 }
-                catch (Exception exc)
-                {
-                    MessageBox.Show("Error in computing resolution\r\n" + exc.Message, "Unspecified Error", MessageBoxButtons.OK);
-                }
+                else
+                    this.verticalResolution.Enabled = resize.Checked;
+
+
+                if (signalAR)
+                    this.suggestedDar = suggestedDar;
             }
-            else
-                this.verticalResolution.Enabled = resize.Checked;
-		}
+            catch (Exception exc)
+            {
+                MessageBox.Show("Error in computing resolution\r\n" + exc.Message, "Unspecified Error", MessageBoxButtons.OK);
+            }
+        }
+
 		private void customDAR_TextChanged(object sender, System.EventArgs e)
 		{
 			suggestResolution_CheckedChanged(null, null);

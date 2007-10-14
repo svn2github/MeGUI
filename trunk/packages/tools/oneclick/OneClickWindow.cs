@@ -911,7 +911,7 @@ namespace MeGUI
                     logBuilder.AppendFormat("Found aspect ratio of {0}.{1}", customDAR, Environment.NewLine);
                 else
                 {
-                    customDAR = Dar.ITU16x9.ar;
+                    customDAR = Dar.ITU16x9PAL.ar;
                     logBuilder.AppendFormat("No aspect ratio found, defaulting to {0}.{1}", customDAR, Environment.NewLine);
                 }
             }
