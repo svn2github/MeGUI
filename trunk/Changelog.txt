@@ -1,3 +1,11 @@
+0.2.6.1025
+    - (berrinam) Fixed #1812162 (Up & down buttons in queue are mixed up)
+    - (berrinam) [Adaptive Mux Window] Fixed some incorrect mux-path-finding which caused a crash -- the window thought it could mux something that it couldn't.
+    - (berrinam) Filetypes are better determined, by also looking at the extension. This may fix #1808882.
+    - (berrinam) Fixed xvid AR signalling. (Use PAR not DAR)
+    - (berrinam) Fix #1808573 (Not able to import xvid profiles anymore)
+    - (berrinam) Fix #1812842 (ITU 4:3 is wrong)
+
 0.2.6.1024
     - (Sharktooth) Fixed main window (Form1.cs) size (some Audio controls were not shown)
     - (Sharktooth) Fixed #1810120 (x264 video configuration dialog problem)
