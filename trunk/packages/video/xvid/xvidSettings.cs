@@ -39,7 +39,7 @@ namespace MeGUI
         {
             get
             {
-                return QuantizerMatrix != H263Matrix && QuantizerMatrix != MPEGMatrix;
+                return QuantizerMatrix != H263Matrix && QuantizerMatrix != MPEGMatrix && !string.IsNullOrEmpty(QuantizerMatrix);
             }
         }
 
