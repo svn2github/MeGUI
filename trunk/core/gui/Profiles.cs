@@ -210,18 +210,17 @@ namespace MeGUI.core.plugins.interfaces
 
         private void ConfigurationWindow_Load(object sender, EventArgs e)
         {
-            int index = -1;
+            Profile selected = null;
             foreach (Profile prof in this.profileManager.Profiles(new TSettings().getSettingsType()).Values)
             {
                 if (prof.BaseSettings is TSettings) // those are the profiles we're interested in
                 {
                     this.videoProfile.Items.Add(prof);
                     if (prof.Name == initialProfile)
-                        index = videoProfile.Items.IndexOf(prof);
+                        selected = prof;
                 }
             }
-            if (index != -1)
-                this.videoProfile.SelectedIndex = index;
+            this.videoProfile.SelectedItem = selected;
         }
         private void loadDefaultsButton_Click(object sender, EventArgs e)
         {
