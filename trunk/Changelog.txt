@@ -1,6 +1,7 @@
 0.2.6.1026
     - (berrinam) Fixed #1746055 (Video profile selection error)
     - (berrinam) Fixed #1749810 (For each level have max bitrate for main and high profiles)
+    - (berrinam) Fixed #1715064 (Crash under Vista when loading avisynth script)
 
 0.2.6.1025
     - (berrinam) Fixed #1812162 (Up & down buttons in queue are mixed up)
