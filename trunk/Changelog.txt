@@ -1,3 +1,7 @@
+0.2.6.1026
+    - (berrinam) Fixed #1746055 (Video profile selection error)
+    - (berrinam) Fixed #1749810 (For each level have max bitrate for main and high profiles)
+
 0.2.6.1025
     - (berrinam) Fixed #1812162 (Up & down buttons in queue are mixed up)
     - (berrinam) [Adaptive Mux Window] Fixed some incorrect mux-path-finding which caused a crash -- the window thought it could mux something that it couldn't.
