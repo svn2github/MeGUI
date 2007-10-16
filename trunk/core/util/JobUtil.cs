@@ -167,28 +167,34 @@ namespace MeGUI
                     }
                     else if (o.outputType is AudioType)
                     {
-                        foreach (MuxStream audioStream in audioStreams)
+                        MuxStream stream = audioStreams.Find(delegate(MuxStream m)
                         {
-                            if (VideoUtil.guessAudioType(audioStream.path) == o.outputType)
-                            {
-                                mjob.Settings.AudioStreams.Add(audioStream);
-                                //audioStreams.Remove(audioStream); // So that we don't mux this too many times
-                                if (deleteInputs)
-                                    filesToDeleteThisJob.Add(audioStream.path);
-                            }
+                            return (VideoUtil.guessAudioType(m.path) == o.outputType);
+                        });
+
+                        if (stream != null)
+                        {
+                            mjob.Settings.AudioStreams.Add(stream);
+                            audioStreams.Remove(stream);
+
+                            if (deleteInputs)
+                                filesToDeleteThisJob.Add(stream.path);
                         }
                     }
                     else if (o.outputType is SubtitleType)
                     {
-                        foreach (MuxStream subStream in subtitleStreams)
+                        MuxStream stream = subtitleStreams.Find(delegate(MuxStream m)
                         {
-                            if ((VideoUtil.guessSubtitleType(subStream.path) == o.outputType))
-                            {
-                                mjob.Settings.SubtitleStreams.Add(subStream);
-                                if (deleteInputs)
-                                    filesToDeleteThisJob.Add(subStream.path);
-                                //audioStreams.Remove(subStream); // So that we don't mux this too many times
-                            }
+                            return (VideoUtil.guessSubtitleType(m.path) == o.outputType);
+                        });
+
+                        if (stream != null)
+                        {
+                            mjob.Settings.SubtitleStreams.Add(stream);
+                            subtitleStreams.Remove(stream);
+
+                            if (deleteInputs)
+                                filesToDeleteThisJob.Add(stream.path);
                         }
                     }
                     else if (o.outputType is ChapterType)
