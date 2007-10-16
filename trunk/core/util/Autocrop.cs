@@ -185,7 +185,7 @@ namespace MeGUI.core.util
                         nbBadPixels++;
                     if (nbBadPixels > heightBadPixelThreshold)
                     {
-                        retval.right = b.Width - i;
+                        retval.right = b.Width - i - 1;
                         if (retval.right < 0)
                             retval.right = 0;
                         if (retval.right % 2 != 0)
@@ -214,7 +214,7 @@ namespace MeGUI.core.util
                         nbBadPixels++;
                     if (nbBadPixels > widthBadPixelThreshold)
                     {
-                        retval.bottom = b.Height - i;
+                        retval.bottom = b.Height - i - 1;
                         if (retval.bottom < 0)
                             retval.bottom = 0;
                         if (retval.bottom % 2 != 0)
