@@ -2,7 +2,6 @@ cd trunk
 start /wait compile.bat
 cd ..
 cd testsuite
-start /wait copy.bat
 start /wait compile.bat
 cd ..
 md trunk\Dist\updatecopier
