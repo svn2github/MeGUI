@@ -1364,7 +1364,7 @@ namespace MeGUI
                 }
                 catch
                 {
-                    AddTextToLog("Error: Could not unzip" + file.Name + ". Aborting...");
+                    AddTextToLog("Error: Could not unzip " + file.Name + ". Aborting...");
                     return ErrorState.CouldNotUnzip;
                 }
             }

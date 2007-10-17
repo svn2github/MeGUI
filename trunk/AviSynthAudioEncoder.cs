@@ -384,8 +384,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
 
                     if (audioJob.Settings is WinAmpAACSettings)
                     {
-                        if (File.Exists(encoder_path + "aac_encplus.dll") == false)
-                            _logBuilder.Append("aac_encplus.dll not found in the path...\n");
+                        if (File.Exists(encoder_path + "enc_aacplus.dll") == false)
+                            _logBuilder.Append("enc_aacplus.dll not found in the path...\n");
                         if (File.Exists(Environment.SystemDirectory + @"\nscrt.dll") == false)
                             _logBuilder.Append("nscrt.dll must be in your Windows System directory...\n");
                     }
