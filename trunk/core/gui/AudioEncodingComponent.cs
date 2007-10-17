@@ -130,7 +130,7 @@ namespace MeGUI
         private void RemoveTab()
         {
             tabs.RemoveAt(tabs.Count - 1);
-            tabControl1.TabPages.RemoveAt(tabControl1.TabPages.Count - 1);
+            tabControl1.TabPages.RemoveAt(tabControl1.SelectedIndex);
         }
 
         private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
