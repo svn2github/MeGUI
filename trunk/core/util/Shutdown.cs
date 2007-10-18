@@ -69,7 +69,7 @@ namespace MeGUI
 			tp.Attr = SE_PRIVILEGE_ENABLED;
 			success = LookupPrivilegeValue( null, SE_SHUTDOWN_NAME, ref tp.Luid );
 			success = AdjustTokenPrivileges(htok, false, ref tp, 0, IntPtr.Zero, IntPtr.Zero );
-            return ExitWindowsEx(EWX_POWEROFF + EWX_FORCEIFHUNG, SHTDN_REASON_MAJOR_APPLICATION | SHTDN_REASON_MINOR_NONE | SHTDN_REASON_FLAG_PLANNED);
+            return ExitWindowsEx(EWX_SHUTDOWN + EWX_FORCE, SHTDN_REASON_MAJOR_APPLICATION | SHTDN_REASON_MINOR_NONE | SHTDN_REASON_FLAG_PLANNED);
 		}
 	}
 }
