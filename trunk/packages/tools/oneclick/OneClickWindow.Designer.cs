@@ -377,7 +377,7 @@ namespace MeGUI
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage1.Size = new System.Drawing.Size(453, 272);
             this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Basic IO";
+            this.tabPage1.Text = "General";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // IOGroupbox
@@ -723,7 +723,7 @@ namespace MeGUI
             // 
             this.showAdvancedOptions.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.showAdvancedOptions.AutoSize = true;
-            this.showAdvancedOptions.Location = new System.Drawing.Point(76, 304);
+            this.showAdvancedOptions.Location = new System.Drawing.Point(74, 310);
             this.showAdvancedOptions.Name = "showAdvancedOptions";
             this.showAdvancedOptions.Size = new System.Drawing.Size(144, 17);
             this.showAdvancedOptions.TabIndex = 31;
@@ -748,7 +748,7 @@ namespace MeGUI
             this.helpButton1.ArticleName = "One click encoder";
             this.helpButton1.AutoSize = true;
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.helpButton1.Location = new System.Drawing.Point(12, 300);
+            this.helpButton1.Location = new System.Drawing.Point(12, 304);
             this.helpButton1.Name = "helpButton1";
             this.helpButton1.Size = new System.Drawing.Size(39, 23);
             this.helpButton1.TabIndex = 32;
