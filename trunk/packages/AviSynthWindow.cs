@@ -1151,7 +1151,7 @@ namespace MeGUI
 		}
 		private void saveButton_Click(object sender, System.EventArgs e)
 		{
-			if (this.saveAvisynthScriptDialog.ShowDialog() == DialogResult.OK)
+			if (saveAvisynthScriptDialog.ShowDialog() == DialogResult.OK)
 			{
                 writeScript(saveAvisynthScriptDialog.FileName);
 				if (onSaveLoadScript.Checked)
