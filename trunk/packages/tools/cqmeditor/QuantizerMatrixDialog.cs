@@ -1051,7 +1051,7 @@ namespace MeGUI
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.Name = "QuantizerMatrixDialog";
-            this.Text = "Quantizer Matrix Editor";
+            this.Text = "MeGUI - Quantizer Matrix Editor";
             this.Load += new System.EventHandler(this.QuantizerMatrixDialog_Load);
             this.matrixGroupbox.ResumeLayout(false);
             this.matrixGroupbox.PerformLayout();

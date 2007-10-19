@@ -45,12 +45,12 @@ namespace MeGUI.packages.tools.cutter
             this.closeButton = new System.Windows.Forms.Button();
             this.saveCuts = new System.Windows.Forms.Button();
             this.addCutsToScript = new System.Windows.Forms.Button();
+            this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.avsScript = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.sections = new System.Windows.Forms.ListView();
             this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
-            this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.flowLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.startFrame)).BeginInit();
@@ -261,6 +261,16 @@ namespace MeGUI.packages.tools.cutter
             this.addCutsToScript.UseVisualStyleBackColor = true;
             this.addCutsToScript.Click += new System.EventHandler(this.addCutsToScript_Click);
             // 
+            // helpButton1
+            // 
+            this.helpButton1.ArticleName = "Avs cutter";
+            this.helpButton1.AutoSize = true;
+            this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.helpButton1.Location = new System.Drawing.Point(80, 8);
+            this.helpButton1.Name = "helpButton1";
+            this.helpButton1.Size = new System.Drawing.Size(39, 23);
+            this.helpButton1.TabIndex = 3;
+            // 
             // avsScript
             // 
             this.avsScript.Dock = System.Windows.Forms.DockStyle.Top;
@@ -306,16 +316,6 @@ namespace MeGUI.packages.tools.cutter
             this.columnHeader2.Text = "End frame";
             this.columnHeader2.Width = 262;
             // 
-            // helpButton1
-            // 
-            this.helpButton1.ArticleName = "Avs cutter";
-            this.helpButton1.AutoSize = true;
-            this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.helpButton1.Location = new System.Drawing.Point(80, 8);
-            this.helpButton1.Name = "helpButton1";
-            this.helpButton1.Size = new System.Drawing.Size(39, 23);
-            this.helpButton1.TabIndex = 3;
-            // 
             // Cutter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -327,7 +327,7 @@ namespace MeGUI.packages.tools.cutter
             this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.flowLayoutPanel2);
             this.Name = "Cutter";
-            this.Text = "Cutter";
+            this.Text = "MeGUI - AVS Cutter";
             this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel1.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);

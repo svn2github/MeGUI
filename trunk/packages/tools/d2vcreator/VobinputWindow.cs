@@ -391,8 +391,8 @@ namespace MeGUI
             // openIFODialog
             // 
             this.openIFODialog.Filter = "VOB Files (*.vob)|*.vob|MPEG-1/2 Program Streams (*.mpg)|*.mpg|Transport Streams " +
-                "(*.m2ts;*.ts)|*.m2ts;*.ts|All DGIndex supported files|*.vob;*.mpg;*.mpeg;*.m2ts;*.m2v;*.mpv;*.tp;*.ts" +
-                ";*.trp;*.pva;*.vro";
+                "(*.m2ts;*.ts)|*.m2ts;*.ts|All DGIndex supported files|*.vob;*.mpg;*.mpeg;*.m2ts;" +
+                "*.m2v;*.mpv;*.tp;*.ts;*.trp;*.pva;*.vro";
             this.openIFODialog.FilterIndex = 4;
             // 
             // closeOnQueue
@@ -428,7 +428,7 @@ namespace MeGUI
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.Name = "VobinputWindow";
-            this.Text = "DGIndex Project Creator";
+            this.Text = "MeGUI - D2V Project Creator";
             this.inputGroupbox.ResumeLayout(false);
             this.inputGroupbox.PerformLayout();
             this.groupBox3.ResumeLayout(false);

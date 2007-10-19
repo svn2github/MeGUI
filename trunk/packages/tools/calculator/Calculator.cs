@@ -121,6 +121,7 @@ namespace MeGUI
 		{
             this.components = new System.ComponentModel.Container();
             this.videoGroupbox = new System.Windows.Forms.GroupBox();
+            this.fpsChooser = new MeGUI.core.gui.FPSChooser();
             this.nbFrames = new System.Windows.Forms.NumericUpDown();
             this.totalSeconds = new System.Windows.Forms.NumericUpDown();
             this.bframes = new System.Windows.Forms.CheckBox();
@@ -139,6 +140,7 @@ namespace MeGUI
             this.containerGroupbox = new System.Windows.Forms.GroupBox();
             this.containerFormat = new System.Windows.Forms.ComboBox();
             this.sizeGroupbox = new System.Windows.Forms.GroupBox();
+            this.targetSize = new MeGUI.core.gui.TargetSizeSCBox();
             this.fileSizeRadio = new System.Windows.Forms.RadioButton();
             this.averageBitrateRadio = new System.Windows.Forms.RadioButton();
             this.AverageBitrateLabel = new System.Windows.Forms.Label();
@@ -150,13 +152,11 @@ namespace MeGUI
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.audio = new System.Windows.Forms.TabControl();
             this.audioPage1 = new System.Windows.Forms.TabPage();
+            this.audioTrackSizeTab1 = new MeGUI.packages.tools.calculator.AudioTrackSizeTab();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addTrackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.removeTrackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.audioTrackSizeTab1 = new MeGUI.packages.tools.calculator.AudioTrackSizeTab();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
-            this.targetSize = new MeGUI.core.gui.TargetSizeSCBox();
-            this.fpsChooser = new MeGUI.core.gui.FPSChooser();
             this.videoGroupbox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nbFrames)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.totalSeconds)).BeginInit();
@@ -194,6 +194,18 @@ namespace MeGUI
             this.videoGroupbox.TabIndex = 0;
             this.videoGroupbox.TabStop = false;
             this.videoGroupbox.Text = "Video";
+            // 
+            // fpsChooser
+            // 
+            this.fpsChooser.Location = new System.Drawing.Point(185, 73);
+            this.fpsChooser.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.fpsChooser.MinimumSize = new System.Drawing.Size(64, 29);
+            this.fpsChooser.Name = "fpsChooser";
+            this.fpsChooser.NullString = null;
+            this.fpsChooser.SelectedIndex = 0;
+            this.fpsChooser.Size = new System.Drawing.Size(129, 29);
+            this.fpsChooser.TabIndex = 13;
+            this.fpsChooser.SelectionChanged += new MeGUI.StringChanged(this.fpsChooser_SelectionChanged);
             // 
             // nbFrames
             // 
@@ -322,7 +334,7 @@ namespace MeGUI
             // applyButton
             // 
             this.applyButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.applyButton.Location = new System.Drawing.Point(517, 336);
+            this.applyButton.Location = new System.Drawing.Point(517, 342);
             this.applyButton.Name = "applyButton";
             this.applyButton.Size = new System.Drawing.Size(48, 23);
             this.applyButton.TabIndex = 0;
@@ -378,6 +390,18 @@ namespace MeGUI
             this.sizeGroupbox.TabIndex = 3;
             this.sizeGroupbox.TabStop = false;
             this.sizeGroupbox.Text = "Total Size";
+            // 
+            // targetSize
+            // 
+            this.targetSize.Location = new System.Drawing.Point(18, 46);
+            this.targetSize.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.targetSize.MinimumSize = new System.Drawing.Size(64, 29);
+            this.targetSize.Name = "targetSize";
+            this.targetSize.NullString = "Not calculated";
+            this.targetSize.SelectedIndex = 0;
+            this.targetSize.Size = new System.Drawing.Size(208, 29);
+            this.targetSize.TabIndex = 1;
+            this.targetSize.SelectionChanged += new MeGUI.StringChanged(this.targetSize_SelectionChanged);
             // 
             // fileSizeRadio
             // 
@@ -456,7 +480,7 @@ namespace MeGUI
             // cancelButton
             // 
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(462, 336);
+            this.cancelButton.Location = new System.Drawing.Point(463, 342);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(48, 23);
             this.cancelButton.TabIndex = 9;
@@ -482,29 +506,6 @@ namespace MeGUI
             this.audioPage1.Text = "Audio 1";
             this.audioPage1.UseVisualStyleBackColor = true;
             // 
-            // contextMenuStrip1
-            // 
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.addTrackToolStripMenuItem,
-            this.removeTrackToolStripMenuItem});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(141, 48);
-            this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
-            // 
-            // addTrackToolStripMenuItem
-            // 
-            this.addTrackToolStripMenuItem.Name = "addTrackToolStripMenuItem";
-            this.addTrackToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
-            this.addTrackToolStripMenuItem.Text = "Add track";
-            this.addTrackToolStripMenuItem.Click += new System.EventHandler(this.addTrackToolStripMenuItem_Click);
-            // 
-            // removeTrackToolStripMenuItem
-            // 
-            this.removeTrackToolStripMenuItem.Name = "removeTrackToolStripMenuItem";
-            this.removeTrackToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
-            this.removeTrackToolStripMenuItem.Text = "Remove track";
-            this.removeTrackToolStripMenuItem.Click += new System.EventHandler(this.removeTrackToolStripMenuItem_Click);
-            // 
             // audioTrackSizeTab1
             // 
             this.audioTrackSizeTab1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -515,39 +516,38 @@ namespace MeGUI
             this.audioTrackSizeTab1.TabIndex = 0;
             this.audioTrackSizeTab1.SomethingChanged += new System.EventHandler(this.audioTrackSizeTab1_SomethingChanged);
             // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addTrackToolStripMenuItem,
+            this.removeTrackToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(147, 48);
+            this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
+            // 
+            // addTrackToolStripMenuItem
+            // 
+            this.addTrackToolStripMenuItem.Name = "addTrackToolStripMenuItem";
+            this.addTrackToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.addTrackToolStripMenuItem.Text = "Add track";
+            this.addTrackToolStripMenuItem.Click += new System.EventHandler(this.addTrackToolStripMenuItem_Click);
+            // 
+            // removeTrackToolStripMenuItem
+            // 
+            this.removeTrackToolStripMenuItem.Name = "removeTrackToolStripMenuItem";
+            this.removeTrackToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.removeTrackToolStripMenuItem.Text = "Remove track";
+            this.removeTrackToolStripMenuItem.Click += new System.EventHandler(this.removeTrackToolStripMenuItem_Click);
+            // 
             // helpButton1
             // 
             this.helpButton1.ArticleName = "Bitrate calculator";
             this.helpButton1.AutoSize = true;
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.helpButton1.Location = new System.Drawing.Point(344, 336);
+            this.helpButton1.Location = new System.Drawing.Point(8, 342);
             this.helpButton1.Name = "helpButton1";
             this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 8;
-            // 
-            // targetSize
-            // 
-            this.targetSize.Location = new System.Drawing.Point(18, 46);
-            this.targetSize.MaximumSize = new System.Drawing.Size(1000, 29);
-            this.targetSize.MinimumSize = new System.Drawing.Size(64, 29);
-            this.targetSize.Name = "targetSize";
-            this.targetSize.NullString = "Not calculated";
-            this.targetSize.SelectedIndex = 0;
-            this.targetSize.Size = new System.Drawing.Size(208, 29);
-            this.targetSize.TabIndex = 1;
-            this.targetSize.SelectionChanged += new MeGUI.StringChanged(this.targetSize_SelectionChanged);
-            // 
-            // fpsChooser
-            // 
-            this.fpsChooser.Location = new System.Drawing.Point(185, 73);
-            this.fpsChooser.MaximumSize = new System.Drawing.Size(1000, 29);
-            this.fpsChooser.MinimumSize = new System.Drawing.Size(64, 29);
-            this.fpsChooser.Name = "fpsChooser";
-            this.fpsChooser.NullString = null;
-            this.fpsChooser.SelectedIndex = 0;
-            this.fpsChooser.Size = new System.Drawing.Size(129, 29);
-            this.fpsChooser.TabIndex = 13;
-            this.fpsChooser.SelectionChanged += new MeGUI.StringChanged(this.fpsChooser_SelectionChanged);
             // 
             // Calculator
             // 
@@ -555,19 +555,19 @@ namespace MeGUI
             this.ClientSize = new System.Drawing.Size(576, 377);
             this.ContextMenuStrip = this.contextMenuStrip1;
             this.Controls.Add(this.audio);
-            this.Controls.Add(this.helpButton1);
-            this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.resultGroupbox);
+            this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.sizeGroupbox);
             this.Controls.Add(this.containerGroupbox);
             this.Controls.Add(this.codecGroupbox);
-            this.Controls.Add(this.applyButton);
+            this.Controls.Add(this.helpButton1);
             this.Controls.Add(this.videoGroupbox);
+            this.Controls.Add(this.applyButton);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.Name = "Calculator";
-            this.Text = "Calculator";
+            this.Text = "MeGUI - Bitrate Calculator";
             this.videoGroupbox.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.nbFrames)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.totalSeconds)).EndInit();

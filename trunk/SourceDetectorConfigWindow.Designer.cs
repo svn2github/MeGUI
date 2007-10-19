@@ -315,7 +315,7 @@ namespace MeGUI
             this.Name = "SourceDetectorConfigWindow";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
-            this.Text = "Source Detector Configuration";
+            this.Text = "MeGUI - Source Detector Configuration";
             ((System.ComponentModel.ISupportInitialize)(this.analysisPercent)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.minAnalyseSections)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.hybridThreshold)).EndInit();

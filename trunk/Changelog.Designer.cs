@@ -55,7 +55,7 @@ namespace MeGUI
             this.DataBindings.Add(new System.Windows.Forms.Binding("WindowState", global::MeGUI.Properties.Settings.Default, "ChangelogWindowState", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.Location = global::MeGUI.Properties.Settings.Default.ChangelogLocation;
             this.Name = "Changelog";
-            this.Text = "Changelog";
+            this.Text = "MeGUI - Changelog";
             this.WindowState = global::MeGUI.Properties.Settings.Default.ChangelogWindowState;
             this.Resize += new System.EventHandler(this.Changelog_Resize);
             this.Load += new System.EventHandler(this.Changelog_Load);

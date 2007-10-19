@@ -512,20 +512,20 @@ namespace MeGUI
             this.addTrackToolStripMenuItem,
             this.removeTrackToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(152, 48);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(147, 48);
             this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             // 
             // addTrackToolStripMenuItem
             // 
             this.addTrackToolStripMenuItem.Name = "addTrackToolStripMenuItem";
-            this.addTrackToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
+            this.addTrackToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.addTrackToolStripMenuItem.Text = "Add track";
             this.addTrackToolStripMenuItem.Click += new System.EventHandler(this.addTrackToolStripMenuItem_Click);
             // 
             // removeTrackToolStripMenuItem
             // 
             this.removeTrackToolStripMenuItem.Name = "removeTrackToolStripMenuItem";
-            this.removeTrackToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
+            this.removeTrackToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.removeTrackToolStripMenuItem.Text = "Remove track";
             this.removeTrackToolStripMenuItem.Click += new System.EventHandler(this.removeTrackToolStripMenuItem_Click);
             // 
@@ -763,7 +763,7 @@ namespace MeGUI
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.goButton);
             this.Name = "OneClickWindow";
-            this.Text = "One Click Encoder";
+            this.Text = "MeGUI - One Click Encoder";
             trackTabPage2.ResumeLayout(false);
             this.trackTabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);

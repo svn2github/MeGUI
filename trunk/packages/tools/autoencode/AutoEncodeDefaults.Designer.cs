@@ -29,6 +29,7 @@ namespace MeGUI
         private void InitializeComponent()
         {
             this.AutomaticEncodingGroup = new System.Windows.Forms.GroupBox();
+            this.fileSize = new MeGUI.core.gui.TargetSizeSCBox();
             this.noTargetRadio = new System.Windows.Forms.RadioButton();
             this.averageBitrateRadio = new System.Windows.Forms.RadioButton();
             this.FileSizeRadio = new System.Windows.Forms.RadioButton();
@@ -37,12 +38,11 @@ namespace MeGUI
             this.cancelButton = new System.Windows.Forms.Button();
             this.saveButton = new System.Windows.Forms.Button();
             this.OutputGroupBox = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.splitSize = new MeGUI.core.gui.TargetSizeSCBox();
             this.container = new System.Windows.Forms.ComboBox();
             this.containerLabel = new System.Windows.Forms.Label();
             this.addSubsNChapters = new System.Windows.Forms.CheckBox();
-            this.splitSize = new MeGUI.core.gui.TargetSizeSCBox();
-            this.fileSize = new MeGUI.core.gui.TargetSizeSCBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.AutomaticEncodingGroup.SuspendLayout();
             this.OutputGroupBox.SuspendLayout();
             this.SuspendLayout();
@@ -61,6 +61,18 @@ namespace MeGUI
             this.AutomaticEncodingGroup.TabIndex = 18;
             this.AutomaticEncodingGroup.TabStop = false;
             this.AutomaticEncodingGroup.Text = "Size and Bitrate";
+            // 
+            // fileSize
+            // 
+            this.fileSize.Location = new System.Drawing.Point(118, 12);
+            this.fileSize.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.fileSize.MinimumSize = new System.Drawing.Size(64, 29);
+            this.fileSize.Name = "fileSize";
+            this.fileSize.NullString = null;
+            this.fileSize.SelectedIndex = -1;
+            this.fileSize.SelectedItem = null;
+            this.fileSize.Size = new System.Drawing.Size(208, 29);
+            this.fileSize.TabIndex = 23;
             // 
             // noTargetRadio
             // 
@@ -143,6 +155,27 @@ namespace MeGUI
             this.OutputGroupBox.TabStop = false;
             this.OutputGroupBox.Text = "Output Options";
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(215, 28);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(49, 13);
+            this.label1.TabIndex = 27;
+            this.label1.Text = "Splitting:";
+            // 
+            // splitSize
+            // 
+            this.splitSize.Location = new System.Drawing.Point(270, 20);
+            this.splitSize.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.splitSize.MinimumSize = new System.Drawing.Size(64, 29);
+            this.splitSize.Name = "splitSize";
+            this.splitSize.NullString = null;
+            this.splitSize.SelectedIndex = -1;
+            this.splitSize.SelectedItem = null;
+            this.splitSize.Size = new System.Drawing.Size(136, 29);
+            this.splitSize.TabIndex = 26;
+            // 
             // container
             // 
             this.container.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -169,39 +202,6 @@ namespace MeGUI
             this.addSubsNChapters.TabIndex = 22;
             this.addSubsNChapters.Text = "Add additional content (audio, subs, chapters)";
             // 
-            // splitSize
-            // 
-            this.splitSize.Location = new System.Drawing.Point(270, 20);
-            this.splitSize.MaximumSize = new System.Drawing.Size(1000, 29);
-            this.splitSize.MinimumSize = new System.Drawing.Size(64, 29);
-            this.splitSize.Name = "splitSize";
-            this.splitSize.NullString = null;
-            this.splitSize.SelectedIndex = -1;
-            this.splitSize.SelectedItem = null;
-            this.splitSize.Size = new System.Drawing.Size(136, 29);
-            this.splitSize.TabIndex = 26;
-            // 
-            // fileSize
-            // 
-            this.fileSize.Location = new System.Drawing.Point(118, 12);
-            this.fileSize.MaximumSize = new System.Drawing.Size(1000, 29);
-            this.fileSize.MinimumSize = new System.Drawing.Size(64, 29);
-            this.fileSize.Name = "fileSize";
-            this.fileSize.NullString = null;
-            this.fileSize.SelectedIndex = -1;
-            this.fileSize.SelectedItem = null;
-            this.fileSize.Size = new System.Drawing.Size(208, 29);
-            this.fileSize.TabIndex = 23;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(215, 28);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(49, 13);
-            this.label1.TabIndex = 27;
-            this.label1.Text = "Splitting:";
-            // 
             // AutoEncodeDefaults
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -220,7 +220,7 @@ namespace MeGUI
             this.Name = "AutoEncodeDefaults";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
-            this.Text = "Auto Encode Defaults";
+            this.Text = "MeGUI - Auto Encode Defaults";
             this.AutomaticEncodingGroup.ResumeLayout(false);
             this.AutomaticEncodingGroup.PerformLayout();
             this.OutputGroupBox.ResumeLayout(false);

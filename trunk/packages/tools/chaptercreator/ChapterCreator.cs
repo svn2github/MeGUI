@@ -121,10 +121,11 @@ namespace MeGUI
             // helpButton1
             // 
             this.helpButton1.ArticleName = "Chapter creator";
+            this.helpButton1.AutoSize = true;
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.helpButton1.Location = new System.Drawing.Point(16, 347);
             this.helpButton1.Name = "helpButton1";
-            this.helpButton1.Size = new System.Drawing.Size(55, 23);
+            this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 41;
             // 
             // saveButton
@@ -276,7 +277,7 @@ namespace MeGUI
             this.Name = "ChapterCreator";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
-            this.Text = "MeGUI Chapter Creator";
+            this.Text = "MeGUI - Chapter Creator";
             this.chaptersGroupbox.ResumeLayout(false);
             this.chaptersGroupbox.PerformLayout();
             this.ResumeLayout(false);

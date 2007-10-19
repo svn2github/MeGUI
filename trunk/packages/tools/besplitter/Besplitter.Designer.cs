@@ -148,7 +148,7 @@ namespace MeGUI.packages.tools.besplitter
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Name = "Besplitter";
-            this.Text = "Besplitter";
+            this.Text = "MeGUI - Audio Cutter";
             this.ResumeLayout(false);
             this.PerformLayout();
 

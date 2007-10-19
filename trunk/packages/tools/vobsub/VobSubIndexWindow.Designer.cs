@@ -29,10 +29,12 @@ namespace MeGUI
         private void InitializeComponent()
         {
             this.inputGroupbox = new System.Windows.Forms.GroupBox();
+            this.input = new MeGUI.FileBar();
             this.pgc = new System.Windows.Forms.NumericUpDown();
             this.pgcLabel = new System.Windows.Forms.Label();
             this.inputLabel = new System.Windows.Forms.Label();
             this.outputGroupbox = new System.Windows.Forms.GroupBox();
+            this.output = new MeGUI.FileBar();
             this.nameLabel = new System.Windows.Forms.Label();
             this.subtitleGroupbox = new System.Windows.Forms.GroupBox();
             this.subtitleTracks = new System.Windows.Forms.CheckedListBox();
@@ -41,8 +43,6 @@ namespace MeGUI
             this.closeOnQueue = new System.Windows.Forms.CheckBox();
             this.queueButton = new System.Windows.Forms.Button();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
-            this.output = new MeGUI.FileBar();
-            this.input = new MeGUI.FileBar();
             this.inputGroupbox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pgc)).BeginInit();
             this.outputGroupbox.SuspendLayout();
@@ -61,6 +61,20 @@ namespace MeGUI
             this.inputGroupbox.TabIndex = 1;
             this.inputGroupbox.TabStop = false;
             this.inputGroupbox.Text = "Input";
+            // 
+            // input
+            // 
+            this.input.Filename = "";
+            this.input.Filter = "IFO Files|*.ifo";
+            this.input.FolderMode = false;
+            this.input.Location = new System.Drawing.Point(120, 13);
+            this.input.Name = "input";
+            this.input.ReadOnly = true;
+            this.input.SaveMode = false;
+            this.input.Size = new System.Drawing.Size(286, 26);
+            this.input.TabIndex = 5;
+            this.input.Title = null;
+            this.input.FileSelected += new MeGUI.FileBarEventHandler(this.input_FileSelected);
             // 
             // pgc
             // 
@@ -111,6 +125,20 @@ namespace MeGUI
             this.outputGroupbox.TabIndex = 13;
             this.outputGroupbox.TabStop = false;
             this.outputGroupbox.Text = "Output";
+            // 
+            // output
+            // 
+            this.output.Filename = "";
+            this.output.Filter = "VobSub Files|*.idx";
+            this.output.FolderMode = false;
+            this.output.Location = new System.Drawing.Point(120, 17);
+            this.output.Name = "output";
+            this.output.ReadOnly = true;
+            this.output.SaveMode = true;
+            this.output.Size = new System.Drawing.Size(286, 26);
+            this.output.TabIndex = 5;
+            this.output.Title = "Choose an output file";
+            this.output.FileSelected += new MeGUI.FileBarEventHandler(this.output_FileSelected);
             // 
             // nameLabel
             // 
@@ -185,34 +213,6 @@ namespace MeGUI
             this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 17;
             // 
-            // output
-            // 
-            this.output.Filename = "";
-            this.output.Filter = "VobSub Files|*.idx";
-            this.output.FolderMode = false;
-            this.output.Location = new System.Drawing.Point(120, 17);
-            this.output.Name = "output";
-            this.output.ReadOnly = true;
-            this.output.SaveMode = true;
-            this.output.Size = new System.Drawing.Size(286, 26);
-            this.output.TabIndex = 5;
-            this.output.Title = "Choose an output file";
-            this.output.FileSelected += new MeGUI.FileBarEventHandler(this.output_FileSelected);
-            // 
-            // input
-            // 
-            this.input.Filename = "";
-            this.input.Filter = "IFO Files|*.ifo";
-            this.input.FolderMode = false;
-            this.input.Location = new System.Drawing.Point(120, 13);
-            this.input.Name = "input";
-            this.input.ReadOnly = true;
-            this.input.SaveMode = false;
-            this.input.Size = new System.Drawing.Size(286, 26);
-            this.input.TabIndex = 5;
-            this.input.Title = null;
-            this.input.FileSelected += new MeGUI.FileBarEventHandler(this.input_FileSelected);
-            // 
             // VobSubIndexWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -230,7 +230,7 @@ namespace MeGUI
             this.MinimizeBox = false;
             this.Name = "VobSubIndexWindow";
             this.ShowInTaskbar = false;
-            this.Text = "VobSub Indexer";
+            this.Text = "MeGUI - VobSub Indexer";
             this.inputGroupbox.ResumeLayout(false);
             this.inputGroupbox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pgc)).EndInit();

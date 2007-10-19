@@ -100,34 +100,34 @@ namespace MeGUI
             this.uncheckToolStripMenuItem,
             this.reinstallToolStripMenuItem});
             this.statusToolStrip.Name = "statusToolStrip";
-            this.statusToolStrip.Size = new System.Drawing.Size(214, 92);
+            this.statusToolStrip.Size = new System.Drawing.Size(213, 92);
             // 
             // setIgnoreValue
             // 
             this.setIgnoreValue.CheckOnClick = true;
             this.setIgnoreValue.Name = "setIgnoreValue";
-            this.setIgnoreValue.Size = new System.Drawing.Size(213, 22);
+            this.setIgnoreValue.Size = new System.Drawing.Size(212, 22);
             this.setIgnoreValue.Text = "Ignore updates for this file";
             this.setIgnoreValue.Click += new System.EventHandler(this.setIgnoreValue_Click);
             // 
             // checkToolStripMenuItem
             // 
             this.checkToolStripMenuItem.Name = "checkToolStripMenuItem";
-            this.checkToolStripMenuItem.Size = new System.Drawing.Size(213, 22);
+            this.checkToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
             this.checkToolStripMenuItem.Text = "Check";
             this.checkToolStripMenuItem.Click += new System.EventHandler(this.checkToolStripMenuItem_Click);
             // 
             // uncheckToolStripMenuItem
             // 
             this.uncheckToolStripMenuItem.Name = "uncheckToolStripMenuItem";
-            this.uncheckToolStripMenuItem.Size = new System.Drawing.Size(213, 22);
+            this.uncheckToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
             this.uncheckToolStripMenuItem.Text = "Uncheck";
             this.uncheckToolStripMenuItem.Click += new System.EventHandler(this.uncheckToolStripMenuItem_Click);
             // 
             // reinstallToolStripMenuItem
             // 
             this.reinstallToolStripMenuItem.Name = "reinstallToolStripMenuItem";
-            this.reinstallToolStripMenuItem.Size = new System.Drawing.Size(213, 22);
+            this.reinstallToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
             this.reinstallToolStripMenuItem.Text = "Force (re)install";
             this.reinstallToolStripMenuItem.Click += new System.EventHandler(this.reinstallToolStripMenuItem_Click);
             // 
@@ -271,7 +271,7 @@ namespace MeGUI
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "UpdateWindow";
-            this.Text = "UpdateWindow";
+            this.Text = "MeGUI - Updater";
             this.WindowState = global::MeGUI.Properties.Settings.Default.UpdateWindowState;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.UpdateWindow_FormClosing);
             this.Load += new System.EventHandler(this.UpdateWindow_Load);

@@ -184,13 +184,17 @@ namespace MeGUI
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.Label label1;
             this.AutomaticEncodingGroup = new System.Windows.Forms.GroupBox();
+            this.videoSize = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.projectedBitrateKBits = new System.Windows.Forms.TextBox();
+            this.targetSize = new MeGUI.core.gui.TargetSizeSCBox();
             this.noTargetRadio = new System.Windows.Forms.RadioButton();
             this.averageBitrateRadio = new System.Windows.Forms.RadioButton();
             this.FileSizeRadio = new System.Windows.Forms.RadioButton();
             this.AverageBitrateLabel = new System.Windows.Forms.Label();
             this.queueButton = new System.Windows.Forms.Button();
             this.OutputGroupBox = new System.Windows.Forms.GroupBox();
+            this.splitting = new MeGUI.core.gui.TargetSizeSCBox();
             this.container = new System.Windows.Forms.ComboBox();
             this.containerLabel = new System.Windows.Forms.Label();
             this.muxedOutputLabel = new System.Windows.Forms.Label();
@@ -201,10 +205,6 @@ namespace MeGUI
             this.addSubsNChapters = new System.Windows.Forms.CheckBox();
             this.defaultToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
-            this.splitting = new MeGUI.core.gui.TargetSizeSCBox();
-            this.targetSize = new MeGUI.core.gui.TargetSizeSCBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.videoSize = new System.Windows.Forms.TextBox();
             label1 = new System.Windows.Forms.Label();
             this.AutomaticEncodingGroup.SuspendLayout();
             this.OutputGroupBox.SuspendLayout();
@@ -236,6 +236,23 @@ namespace MeGUI
             this.AutomaticEncodingGroup.TabStop = false;
             this.AutomaticEncodingGroup.Text = "Size and Bitrate";
             // 
+            // videoSize
+            // 
+            this.videoSize.Location = new System.Drawing.Point(310, 48);
+            this.videoSize.Name = "videoSize";
+            this.videoSize.ReadOnly = true;
+            this.videoSize.Size = new System.Drawing.Size(137, 21);
+            this.videoSize.TabIndex = 28;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(246, 51);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(58, 13);
+            this.label2.TabIndex = 27;
+            this.label2.Text = "Video size:";
+            // 
             // projectedBitrateKBits
             // 
             this.projectedBitrateKBits.Enabled = false;
@@ -245,6 +262,18 @@ namespace MeGUI
             this.projectedBitrateKBits.TabIndex = 9;
             this.projectedBitrateKBits.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textField_KeyPress);
             this.projectedBitrateKBits.TextChanged += new System.EventHandler(this.projectedBitrate_TextChanged);
+            // 
+            // targetSize
+            // 
+            this.targetSize.Location = new System.Drawing.Point(116, 15);
+            this.targetSize.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.targetSize.MinimumSize = new System.Drawing.Size(64, 29);
+            this.targetSize.Name = "targetSize";
+            this.targetSize.NullString = "Not calculated";
+            this.targetSize.SelectedIndex = 0;
+            this.targetSize.Size = new System.Drawing.Size(208, 29);
+            this.targetSize.TabIndex = 25;
+            this.targetSize.SelectionChanged += new MeGUI.StringChanged(this.targetSize_SelectionChanged);
             // 
             // noTargetRadio
             // 
@@ -317,6 +346,17 @@ namespace MeGUI
             this.OutputGroupBox.TabIndex = 18;
             this.OutputGroupBox.TabStop = false;
             this.OutputGroupBox.Text = "Output Options";
+            // 
+            // splitting
+            // 
+            this.splitting.Location = new System.Drawing.Point(243, 16);
+            this.splitting.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.splitting.MinimumSize = new System.Drawing.Size(64, 29);
+            this.splitting.Name = "splitting";
+            this.splitting.NullString = "No splitting";
+            this.splitting.SelectedIndex = 0;
+            this.splitting.Size = new System.Drawing.Size(208, 29);
+            this.splitting.TabIndex = 26;
             // 
             // container
             // 
@@ -398,46 +438,6 @@ namespace MeGUI
             this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 21;
             // 
-            // splitting
-            // 
-            this.splitting.Location = new System.Drawing.Point(243, 16);
-            this.splitting.MaximumSize = new System.Drawing.Size(1000, 29);
-            this.splitting.MinimumSize = new System.Drawing.Size(64, 29);
-            this.splitting.Name = "splitting";
-            this.splitting.NullString = "No splitting";
-            this.splitting.SelectedIndex = 0;
-            this.splitting.Size = new System.Drawing.Size(208, 29);
-            this.splitting.TabIndex = 26;
-            // 
-            // targetSize
-            // 
-            this.targetSize.Location = new System.Drawing.Point(116, 15);
-            this.targetSize.MaximumSize = new System.Drawing.Size(1000, 29);
-            this.targetSize.MinimumSize = new System.Drawing.Size(64, 29);
-            this.targetSize.Name = "targetSize";
-            this.targetSize.NullString = "Not calculated";
-            this.targetSize.SelectedIndex = 0;
-            this.targetSize.Size = new System.Drawing.Size(208, 29);
-            this.targetSize.TabIndex = 25;
-            this.targetSize.SelectionChanged += new MeGUI.StringChanged(this.targetSize_SelectionChanged);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(246, 51);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(58, 13);
-            this.label2.TabIndex = 27;
-            this.label2.Text = "Video size:";
-            // 
-            // videoSize
-            // 
-            this.videoSize.Location = new System.Drawing.Point(310, 48);
-            this.videoSize.Name = "videoSize";
-            this.videoSize.ReadOnly = true;
-            this.videoSize.Size = new System.Drawing.Size(137, 21);
-            this.videoSize.TabIndex = 28;
-            // 
             // AutoEncodeWindow
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
@@ -454,7 +454,7 @@ namespace MeGUI
             this.MinimizeBox = false;
             this.Name = "AutoEncodeWindow";
             this.ShowInTaskbar = false;
-            this.Text = "Automatic Encoding";
+            this.Text = "MeGUI - Automatic Encoding";
             this.AutomaticEncodingGroup.ResumeLayout(false);
             this.AutomaticEncodingGroup.PerformLayout();
             this.OutputGroupBox.ResumeLayout(false);
