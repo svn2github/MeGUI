@@ -1,3 +1,11 @@
+0.2.6.1027
+    - (Kurtnoise) [AviSynth Creator] : fixed Save Event for Vista OS.
+    - (Kurtnoise) change constant variables to shut down the PC correctly.
+    - (Kurtnoise) Cosmetic - fixed typos.
+    - (Kurtnoise) [AudioEncodingComponent]: remove the tab selected instead of the last one (#1814772)
+    - (berrinam) Fix #1813777 (Autocrop problem)
+    - (berrinam) Fixed #1814193 (AutoEncode with >1 audio track -> each audio track muxed twice)
+
 0.2.6.1026
     - (berrinam) Fixed #1746055 (Video profile selection error)
     - (berrinam) Fixed #1749810 (For each level have max bitrate for main and high profiles)
