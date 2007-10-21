@@ -118,6 +118,10 @@ namespace MeGUI
             // 
             this.splitting.Location = new System.Drawing.Point(114, 76);
             // 
+            // output
+            // 
+            this.output.ReadOnly = false;
+            // 
             // fps
             // 
             this.fps.Location = new System.Drawing.Point(115, 40);
@@ -158,7 +162,7 @@ namespace MeGUI
             this.ClientSize = new System.Drawing.Size(430, 513);
             this.Controls.Add(this.helpButton1);
             this.Name = "AdaptiveMuxWindow";
-            this.Text = "Adaptive Mux Window";
+            this.Text = "MeGUI - Adaptive Muxer";
             this.Controls.SetChildIndex(this.muxButton, 0);
             this.Controls.SetChildIndex(this.outputGroupbox, 0);
             this.Controls.SetChildIndex(this.chaptersGroupbox, 0);

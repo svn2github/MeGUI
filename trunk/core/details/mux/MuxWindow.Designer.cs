@@ -97,6 +97,10 @@ namespace MeGUI
             // 
             this.subtitlePanel.Location = new System.Drawing.Point(8, 224);
             // 
+            // output
+            // 
+            this.output.ReadOnly = false;
+            // 
             // fps
             // 
             this.fps.Location = new System.Drawing.Point(115, 71);
@@ -141,7 +145,7 @@ namespace MeGUI
             this.ClientSize = new System.Drawing.Size(444, 503);
             this.Controls.Add(this.helpButton1);
             this.Name = "MuxWindow";
-            this.Text = "MuxWindow";
+            this.Text = "MeGUI - Muxer";
             this.Controls.SetChildIndex(this.outputGroupbox, 0);
             this.Controls.SetChildIndex(this.chaptersGroupbox, 0);
             this.Controls.SetChildIndex(this.muxButton, 0);
