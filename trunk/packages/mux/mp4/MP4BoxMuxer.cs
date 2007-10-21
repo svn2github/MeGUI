@@ -237,7 +237,10 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                     sb.Append(" -fps " + fpsString);
                 }
 
-                /*   sb.AppendFormat(" -tmp {0}", Path.GetDirectoryName(settings.MuxedOutput)); */
+                // tmp directory
+                sb.AppendFormat(" -tmp \"{0}\"", Path.GetDirectoryName(settings.MuxedOutput));
+                
+                // force to create a new output file
                 sb.Append(" -new \"" + settings.MuxedOutput + "\"");
                 return sb.ToString();
             }
