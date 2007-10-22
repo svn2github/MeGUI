@@ -1,3 +1,10 @@
+0.2.6.1028
+    - (Shartoot) [Libs] Updated SharpZipLib (may fix some unzipping problems)
+    - (Kurtnoise) [Muxer] : output filename edition allowed.  
+    - (Kurtnoise) [MP4 Muxer] : renable the tmp command correctly (#1795829)
+    - (Kurtnoise) [One Click] : few tunings
+    - (Kurtnoise) Cosmetics
+
 0.2.6.1027
     - (Kurtnoise) [AviSynth Creator] : fixed Save Event for Vista OS.
     - (Kurtnoise) change constant variables to shut down the PC correctly.
