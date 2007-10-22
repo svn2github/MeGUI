@@ -1,5 +1,5 @@
 0.2.6.1028
-    - (Shartoot) [Libs] Updated SharpZipLib (may fix some unzipping problems)
+    - (Sharktooth) [Libs] Updated SharpZipLib (may fix some unzipping problems)
     - (Kurtnoise) [Muxer] : output filename edition allowed.  
     - (Kurtnoise) [MP4 Muxer] : renable the tmp command correctly (#1795829)
     - (Kurtnoise) [One Click] : few tunings
