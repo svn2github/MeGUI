@@ -14,6 +14,8 @@ namespace MeGUI.core.util
     public struct FileSize
     {
         public static readonly FileSize Empty = new FileSize(0);
+        public static readonly FileSize MinNonZero = new FileSize(1);
+
 
         public static FileSize Of(string filename)
         {

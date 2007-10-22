@@ -96,6 +96,7 @@ namespace MeGUI
             subtitleTracks = new List<MuxStreamControl>();
             subtitleTracks.Add(muxStreamControl1);
 
+            splitting.MinimumFileSize = new FileSize(Unit.MB, 1);
         }
         public baseMuxWindow(MainForm mainForm)
             : this()
@@ -485,6 +486,7 @@ namespace MeGUI
             // splitting
             // 
             this.splitting.Location = new System.Drawing.Point(115, 45);
+            this.splitting.MaximumFileSize = null;
             this.splitting.MaximumSize = new System.Drawing.Size(1000, 29);
             this.splitting.MinimumSize = new System.Drawing.Size(64, 29);
             this.splitting.Name = "splitting";

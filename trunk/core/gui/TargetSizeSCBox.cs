@@ -32,7 +32,25 @@ namespace MeGUI.core.gui
             get { return nullString; }
             set { nullString = value; fillStandard(); }
         }
+
+        private FileSize minSize = FileSize.MinNonZero;
+
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public FileSize MinimumFileSize
+        {
+            get { return minSize; }
+            set { minSize = value; }
+        }
+
+        private FileSize? maxSize = null;
         
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public FileSize? MaximumFileSize
+        {
+            get { return maxSize; }
+            set { maxSize = value; }
+        }
+
         public TargetSizeSCBox() : base("Clear user-selected sizes...", "Select size...")
         {
             base.Getter = new Getter<object>(getter);
@@ -53,9 +71,23 @@ namespace MeGUI.core.gui
         private object getter()
         {
             ofd.Value = Value ?? new FileSize(Unit.MB, 700);
-            if (ofd.ShowDialog() == DialogResult.OK && ofd.Value > FileSize.Empty)
-                return new Named<FileSize>(ofd.Value.ToString(), ofd.Value);
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                if (ofd.Value >= minSize &&
+                   maxSize == null || ofd.Value <= maxSize)
+                    return new Named<FileSize>(ofd.Value.ToString(), ofd.Value);
+                else
+                    MessageBox.Show(genRestrictions(), "Invalid filesize", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
             return null;
+        }
+
+        private string genRestrictions()
+        {
+            if (maxSize.HasValue)
+                return string.Format("Filesize must be between {0} and {1}.", minSize, maxSize);
+            else
+                return string.Format("Filesize must be at least {0}.", minSize);
         }
 
         /// <summary>

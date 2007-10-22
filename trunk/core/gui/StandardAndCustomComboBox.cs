@@ -29,6 +29,8 @@ namespace MeGUI.core.gui
         int numStandardItems, numCustomItems;
         protected Getter<object> Getter;
 
+        public StandardAndCustomComboBox() : base() { }
+
         public StandardAndCustomComboBox(string clearText, string chooseNewText)
             : base()
         {

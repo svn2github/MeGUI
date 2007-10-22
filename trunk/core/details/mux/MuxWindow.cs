@@ -82,6 +82,8 @@ namespace MeGUI
             job.MuxType = muxer.MuxerType;
             job.ContainerType = getContainerType(job.Settings.MuxedOutput);
             job.Settings.Framerate = fps.Value;
+            
+            Debug.Assert(!splitting.Value.HasValue || splitting.Value.Value >= new FileSize(Unit.MB, 1));
             job.Settings.SplitSize = splitting.Value;
             return job;
         }

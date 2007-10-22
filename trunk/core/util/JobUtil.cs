@@ -28,6 +28,7 @@ using System.Collections.Generic;
 using System.Text;
 using MeGUI.core.util;
 using MeGUI.core.details;
+using System.Diagnostics;
 
 namespace MeGUI
 {
@@ -121,6 +122,8 @@ namespace MeGUI
             MuxStream[] subtitleStreamsArray, MuxableType[] subTypes,
             string chapterFile, MuxableType chapterInputType, ContainerType container, string output, FileSize? splitSize, bool deleteInputs)
         {
+            Debug.Assert(splitSize == null || splitSize.Value != FileSize.Empty);
+
             MuxProvider prov = mainForm.MuxProvider;
             List<MuxableType> allTypes = new List<MuxableType>();
             allTypes.Add(video.VideoType);

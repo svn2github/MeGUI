@@ -99,6 +99,7 @@ namespace MeGUI
 			vUtil = new VideoUtil(mainForm);
             muxProvider = mainForm.MuxProvider;
             container.Items.AddRange(muxProvider.GetSupportedContainers().ToArray());
+            splitting.MinimumFileSize = new FileSize(Unit.MB, 1);
         }
         /// <summary>
         /// does the final initialization of the dialog
