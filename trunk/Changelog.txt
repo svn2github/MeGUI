@@ -1,3 +1,8 @@
+0.2.6.1030
+    - (berrinam) Forbid input and output filenames from being the same. (Should fix #1817324)
+    - (berrinam) Change AutoEncode default split size to "No splitting" and default target size to "1 CD." Hopefully  fixes #1813769 and #1816269
+    - (Kurtnoise) Added OS and Framework detection.
+
 0.2.6.1029
     - (berrinam) Fix #1817211 (Bitrate calculator - MP4 container problem)
     - (berrinam) Fix #1818125 (Unhandled exception on mux of x264 and neroaac into mkv)
