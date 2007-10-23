@@ -92,7 +92,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                     int trackID = 0;
                     if (stream.path.ToLower().EndsWith(".mp4") || stream.path.ToLower().EndsWith(".m4a"))
                         trackID = 1;
-                    if (!stream.language.Equals(""))
+                    if (!string.IsNullOrEmpty(stream.language))
                         sb.Append(" --language " + trackID + ":" + stream.language);
                     if (stream.name != null && !stream.name.Equals(""))
                         sb.Append(" --track-name \"" + trackID + ":" + stream.name + "\"");
@@ -106,14 +106,14 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                 {
                     MuxStream stream = (MuxStream)o;
                     int trackID = 0;
-                    if (!stream.language.Equals(""))
+                    if (!string.IsNullOrEmpty(stream.language))
                         sb.Append(" --language 0:" + stream.language);
                     if (stream.name != null && !stream.name.Equals(""))
                         sb.Append(" --track-name \"" + trackID + ":" + stream.name + "\"");
 
                     sb.Append(" -s 0 -D -A \"" + stream.path + "\"");
                 }
-                if (!settings.ChapterFile.Equals("")) // a chapter file is defined
+                if (!string.IsNullOrEmpty(settings.ChapterFile)) // a chapter file is defined
                     sb.Append(" --chapters \"" + settings.ChapterFile + "\"");
 
                 if (settings.SplitSize.HasValue)
