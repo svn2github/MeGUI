@@ -105,6 +105,9 @@ namespace MeGUI
         {
             Input = input;
             Output = output;
+            if (!string.IsNullOrEmpty(input) && input == output)
+                throw new MeGUIException("Input and output files may not be the same");
+
             FilesToDelete = new List<string>();
         }
         #endregion

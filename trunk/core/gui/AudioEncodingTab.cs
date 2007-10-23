@@ -108,7 +108,16 @@ namespace MeGUI.core.gui
 
         public string verifyAudioSettings()
         {
-            AudioJob stream = AudioJob;
+            AudioJob stream;
+
+            try
+            {
+                stream = AudioJob;
+            }
+            catch (MeGUIException m)
+            {
+                return m.Message;
+            }
 
             if (stream == null)
                 return "Audio input, audio output, and audio settings must all be configured";
