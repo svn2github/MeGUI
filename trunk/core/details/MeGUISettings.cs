@@ -13,7 +13,8 @@ namespace MeGUI
         private string faacPath, lamePath, neroAacEncPath, mencoderPath,  mp4boxPath, mkvmergePath, encAacPlusPath,
             ffmpegPath, besplitPath, yadifPath,
             x264Path, dgIndexPath, xvidEncrawPath, avc2aviPath, aviMuxGUIPath, oggEnc2Path, encAudXPath,
-            defaultLanguage1, defaultLanguage2, divxMuxerPath, afterEncodingCommand;
+            defaultLanguage1, defaultLanguage2, afterEncodingCommand;
+        public string divxMuxerPath;
         private bool recalculateMainMovieBitrate, autoForceFilm, autoStartQueue, enableMP3inMP4, autoOpenScript,
             overwriteStats, keep2of3passOutput, deleteCompletedJobs, autoSetNbThreads, deleteIntermediateFiles,
             deleteAbortedOutput, openProgressWindow, useadvancedtooltips, freshOggEnc2, autoscroll;
@@ -22,7 +23,7 @@ namespace MeGUI
         private decimal forceFilmThreshold, acceptableFPSError;
 		private int nbPasses, acceptableAspectError, maxServersToTry, autoUpdateServerSubList;
         private string videoExtension, audioExtension;
-        private bool safeProfileAlteration;
+        public bool safeProfileAlteration;
         private SourceDetectorSettings sdSettings;
         private AutoEncodeDefaultsSettings aedSettings;
         private DialogSettings dialogSettings;

@@ -68,8 +68,10 @@ namespace MeGUI
         }
 		private ChannelMode downmixMode;
 		private BitrateManagementMode bitrateMode;
-		private int bitrate, delay;
-		private bool delayEnabled, autoGain;
+		private int bitrate;
+        public int delay;
+		public bool delayEnabled;
+        private bool autoGain;
         private bool forceDirectShow;
         private bool improveAccuracy;
         private AudioCodec audioCodec;
@@ -162,6 +164,11 @@ namespace MeGUI
         {
             // This works for all known descendants
             return PropertyEqualityTester.AreEqual(this, obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
 
         ///// <summary>

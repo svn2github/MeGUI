@@ -39,7 +39,6 @@ namespace MeGUI
         private string inputFileName = null;
         private ZipFile inputFile;
         private ZipOutputStream outputFile;
-        private Dictionary<string, ZipEntry> extraFiles;
 
         public ProfilePorter(ProfileManager profiles, MainForm mainForm, Stream data)
             : this (profiles, true, mainForm)

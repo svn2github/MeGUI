@@ -228,7 +228,7 @@ namespace MeGUI
 
         #region REAL variables
         TimeSpan? _timeEstimate = null;
-        FileSize? _audioSize = null;
+        public FileSize? _audioSize = null;
         decimal? _fps = null;
 
 

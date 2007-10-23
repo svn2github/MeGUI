@@ -112,5 +112,10 @@ namespace MeGUI.core.gui
             decimal other = ((FPS)obj).val;
             return (Math.Abs(val - other) < MainForm.Instance.Settings.AcceptableFPSError);
         }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }

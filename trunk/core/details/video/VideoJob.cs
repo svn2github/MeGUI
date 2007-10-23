@@ -28,9 +28,6 @@ namespace MeGUI
 	public class VideoJob : Job
 	{
 		private VideoCodecSettings settings;
-        private ulong numberOfFrames;
-		private double framerate;
-
         public BitrateCalculationInfo BitrateCalculationInfo;
 
 		public VideoJob():base()

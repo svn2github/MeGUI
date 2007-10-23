@@ -22,7 +22,6 @@ namespace MeGUI
     public partial class UpdateWindow : Form
     {
         private string[] serverList;
-        private int currentServerIndex;
         
         private MainForm mainForm = null;
         public static MeGUISettings meGUISettings = null;
@@ -32,7 +31,7 @@ namespace MeGUI
         private StringBuilder logBuilder = new StringBuilder();
         private System.Threading.ManualResetEvent webUpdate = new ManualResetEvent(false);
         private XmlDocument upgradeXml = null;
-        private bool needsRestart = false;
+        public bool needsRestart = false;
         private bool isOrHasDownloadedUpgradeData = false;
         private string ServerAddress;
 

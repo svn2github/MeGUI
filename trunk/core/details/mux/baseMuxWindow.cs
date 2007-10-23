@@ -46,7 +46,7 @@ namespace MeGUI
         protected string audioFilter, videoInputFilter, subtitleFilter, chaptersFilter, outputFilter;
         private MainForm mainForm;
         private MeGUISettings settings;
-        private int lastSubtitle = 0, lastAudioTrack = 0;
+     //   private int lastSubtitle = 0;
         protected Label videoInputLabel;
         protected OpenFileDialog openFileDialog;
         protected Button muxButton;

@@ -15,6 +15,11 @@ namespace MeGUI
             return PropertyEqualityTester.AreEqual(this, obj);
         }
 
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
         public string getSettingsType()
         {
             return "AviSynth";

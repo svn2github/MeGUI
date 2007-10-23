@@ -75,7 +75,7 @@ namespace MeGUI
         private int decimateM;
         private int tffCount = 0, bffCount = 0;
         private FieldOrder fieldOrder = FieldOrder.UNKNOWN;
-        bool majorityFilm, usingPortions;
+        public bool majorityFilm, usingPortions;
 
         private string analysis;
         private List<DeinterlaceFilter> filters = new List<DeinterlaceFilter>();

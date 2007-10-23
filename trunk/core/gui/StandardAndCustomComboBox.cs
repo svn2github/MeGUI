@@ -231,6 +231,11 @@ namespace MeGUI.core.gui
             return ((obj as Named<T>) != null) && ((Named<T>)obj).Data.Equals(Data);
         }
 
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
         public override string ToString()
         {
             return Name;

@@ -29,9 +29,7 @@ namespace MeGUI
         private bool aborted;
         private ulong position;
         private Thread processorThread, statusThread;
-//       private ulong lastFPSUpdateFrame;
-//        private long lastFPSUpdateTime;
-        private StatusUpdate stup;
+        public StatusUpdate stup = null;
         private AviSynthJob job;
         #endregion
         #region start / stop

@@ -154,8 +154,14 @@ namespace MeGUI
 
         private static SubtitleCodec getSubtitleCodec(string p)
         {
-            return null;
-            throw new Exception("The method or operation is not implemented.");
+            try
+            {
+                return null;
+            }
+            catch (Exception)
+            {
+               throw new Exception("The method or operation is not implemented.");
+            }
         }
 
 

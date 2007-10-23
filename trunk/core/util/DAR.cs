@@ -82,6 +82,11 @@ namespace MeGUI.core.util
             return (Math.Abs(ar - ar2) < 0.001M * Math.Min(ar, ar2));
         }
 
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+        
         public Sar ToSar(int hres, int vres)
         {
             // sarX

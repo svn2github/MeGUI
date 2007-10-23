@@ -38,7 +38,6 @@ namespace MeGUI
 	public class AutoEncodeWindow : System.Windows.Forms.Form
 	{
 		#region variables
-		private BitrateCalculator calc;
         private List<AudioJob> audioStreams;
         private bool prerender;
         private MainForm mainForm;

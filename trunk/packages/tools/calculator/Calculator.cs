@@ -40,7 +40,6 @@ namespace MeGUI
 		#region variables
         private bool updatingContainers = false;
         private List<AudioTrackSizeTab> audioTabs = new List<AudioTrackSizeTab>();
-		private BitrateCalculator calc;
         private MainForm mainForm;
         private MuxProvider muxProvider;
         private CodecManager codecs = new CodecManager();
@@ -874,7 +873,6 @@ namespace MeGUI
             updatingContainers = true;
             VideoEncoderType vCodec = (videoCodec.SelectedItem as ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>).EncoderType;
             List<MuxableType> muxableTypes = new List<MuxableType>();
-            AudioType type;
             muxableTypes.AddRange(getAudioTypes());
             ContainerType previousContainer = null;
             try 
