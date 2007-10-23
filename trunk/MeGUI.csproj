@@ -419,6 +419,7 @@
     <Compile Include="core\util\JobUtil.cs" />
     <Compile Include="core\util\LanguageSelectionContainer.cs" />
     <Compile Include="core\util\NotifyCounter.cs" />
+    <Compile Include="core\util\OSInfo.cs" />
     <Compile Include="core\util\PrettyFormatting.cs" />
     <Compile Include="core\util\Resolution.cs" />
     <Compile Include="core\util\ScriptServer.cs" />
