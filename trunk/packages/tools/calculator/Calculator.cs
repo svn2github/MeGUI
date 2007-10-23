@@ -1072,6 +1072,7 @@ namespace MeGUI
 
         private void audioTrackSizeTab1_SomethingChanged(object sender, EventArgs e)
         {
+            updateContainers();
             updateBitrateSize();
         }
 
