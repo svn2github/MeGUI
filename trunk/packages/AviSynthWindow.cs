@@ -1659,6 +1659,8 @@ namespace MeGUI
 		/// <param name="e"></param>
         private void suggestResolution_CheckedChanged(object sender, System.EventArgs e)
         {
+            if (file == null) return;
+
             try
             {
                 double dar = 1.0;
