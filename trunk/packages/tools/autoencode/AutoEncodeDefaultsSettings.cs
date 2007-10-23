@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using MeGUI.core.util;
+using MeGUI.core.gui;
 
 namespace MeGUI
 {
@@ -9,7 +10,7 @@ namespace MeGUI
     {
         private bool fileSizeMode, bitrateMode, noTargetSizeMode, addAdditionalContent;
         private string container;
-        private FileSize? splitSize = null, fileSize = null;
+        private FileSize? splitSize = null, fileSize = TargetSizeSCBox.PredefinedFilesizes[2].Data;
         private int bitrate;
 
         public AutoEncodeDefaultsSettings()
@@ -76,7 +77,7 @@ namespace MeGUI
         public FileSize? FileSize
         {
             get { return fileSize; }
-            set { fileSize = value; }
+            set { }
         }
         /// <summary>
         /// gets / sets the default split size
@@ -84,7 +85,7 @@ namespace MeGUI
         public FileSize? SplitSize
         {
             get { return splitSize; }
-            set { splitSize = value; }
+            set { }
         }
         #endregion
     }
