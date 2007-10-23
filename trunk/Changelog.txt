@@ -1,3 +1,9 @@
+0.2.6.1029
+    - (berrinam) Fix #1817211 (Bitrate calculator - MP4 container problem)
+    - (berrinam) Fix #1818125 (Unhandled exception on mux of x264 and neroaac into mkv)
+    - (berrinam) Fixed #1818131 (Error in computing resolution)
+    - (berrinam) Enforce minimum split size of 1MB; add assertions to help track down #1816269
+
 0.2.6.1028
     - (Sharktooth) [Libs] Updated SharpZipLib (may fix some unzipping problems)
     - (Kurtnoise) [Muxer] : output filename edition allowed.  
