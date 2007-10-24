@@ -1472,6 +1472,7 @@ namespace MeGUI
             }
             StringBuilder sb = new StringBuilder();
             Version ver = Environment.Version;
+            sb.AppendFormat("MeGUI Version: {0} {1}", Application.ProductVersion, Environment.NewLine);
             sb.AppendFormat("OS used: Microsoft {0} {1} {2} {3}", OSInfo.GetOSName(), OSInfo.GetOSProductType(), OSInfo.GetOSServicePack(), Environment.NewLine);
             sb.AppendFormat(".Net Framework installed: {0}{1}", ver, Environment.NewLine);
             log.Text = sb.ToString();
