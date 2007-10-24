@@ -66,7 +66,8 @@ namespace MeGUI
             string updateCache = MeGUISettings.MeGUIUpdateCache;
 
             string localFilename = Path.Combine(updateCache, url);
-            if (File.Exists(localFilename))
+            FileInfo finfo = new FileInfo(localFilename);
+            if (File.Exists(localFilename) && (finfo.Length != 0))
                 goto gotLocalFile;
 
 
