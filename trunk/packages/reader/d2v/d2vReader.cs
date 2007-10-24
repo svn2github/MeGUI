@@ -118,19 +118,19 @@ namespace MeGUI
 					{
 						string ar = line.Substring(13);
 
-                        if (reader.Info.Width == 720 && reader.Info.Height == 576)
-                        {
-                            if (ar.Equals("16:9"))
-                                dar = Dar.ITU16x9PAL;
-                            else if (ar.Equals("4:3"))
-                                dar = Dar.ITU4x3PAL;
-                        }
-                        else if (reader.Info.Width == 720 && reader.Info.Height == 480)
+                        if (reader.Info.Width == 720 && reader.Info.Height == 480)
                         {
                             if (ar.Equals("16:9"))
                                 dar = Dar.ITU16x9NTSC;
                             else if (ar.Equals("4:3"))
                                 dar = Dar.ITU4x3NTSC;
+                        }
+                        else
+                        {
+                            if (ar.Equals("16:9"))
+                                dar = Dar.ITU16x9PAL;
+                            else if (ar.Equals("4:3"))
+                                dar = Dar.ITU4x3PAL;
                         }
                     }
 					if (line.IndexOf("Field_Operation") != -1)
