@@ -1322,48 +1322,51 @@ namespace MeGUI
             {
                 try
                 {
-                    ZipInputStream zip = new ZipInputStream(data);
-                    ZipEntry zipentry;
-
-                    while ((zipentry = zip.GetNextEntry()) != null)
+                    using (ZipInputStream zip = new ZipInputStream(data))
                     {
-                        filename = Path.Combine(filepath, zipentry.Name);
-                        if (zipentry.IsDirectory)
+                        ZipEntry zipentry;
+
+                        while ((zipentry = zip.GetNextEntry()) != null)
                         {
-                            if (!Directory.Exists(filename))
-                                Directory.CreateDirectory(filename);
-                            continue;
+                            filename = Path.Combine(filepath, zipentry.Name);
+                            if (zipentry.IsDirectory)
+                            {
+                                if (!Directory.Exists(filename))
+                                    Directory.CreateDirectory(filename);
+                                continue;
+                            }
+                            // create the output writer to save the file onto the harddisc
+                            string oldFileName = null;
+                            if (file.NeedsRestartedCopying)
+                            {
+                                oldFileName = filename;
+                                filename += ".tempcopy";
+                            }
+                            else
+                            {
+                                ErrorState result = manageBackups(filename, file.Name);
+                                if (result != ErrorState.Successful)
+                                    return result;
+                            }
+                            using (Stream outputWriter = new FileStream(filename, FileMode.Create))
+                            {
+                                FileUtil.copyData(zip, outputWriter);
+                            }
+                            if (file.NeedsRestartedCopying)
+                            {
+                                mainForm.AddFileToReplace(file.Name, filename, oldFileName, file.GetLatestVersion().FileVersion);
+                                needsRestart = true;
+                            }
                         }
-                        // create the output writer to save the file onto the harddisc
-                        string oldFileName = null;
-                        if (file.NeedsRestartedCopying)
-                        {
-                            oldFileName = filename;
-                            filename += ".tempcopy";
-                        }
-                        else
-                        {
-                            ErrorState result = manageBackups(filename, file.Name);
-                            if (result != ErrorState.Successful)
-                                return result;
-                        }
-                        using (Stream outputWriter = new FileStream(filename, FileMode.Create))
-                        {
-                            FileUtil.copyData(zip, outputWriter);
-                        }
-                        if (file.NeedsRestartedCopying)
-                        {
-                            mainForm.AddFileToReplace(file.Name, filename, oldFileName, file.GetLatestVersion().FileVersion);
-                            needsRestart = true;
-                        }
+                        if (!file.NeedsRestartedCopying)
+                            file.CurrentVersion = file.GetLatestVersion(); // the current installed version
+                        // is now the latest available version
                     }
-                    if (!file.NeedsRestartedCopying)
-                        file.CurrentVersion = file.GetLatestVersion(); // the current installed version
-                    // is now the latest available version
                 }
                 catch
                 {
-                    AddTextToLog("Error: Could not unzip " + file.Name + ". Aborting...");
+                    AddTextToLog("Error: Could not unzip " + file.Name + ". Deleting file. Please run updater again...");
+                    UpdateCacher.FlushFile(file.GetLatestVersion().Url);
                     return ErrorState.CouldNotUnzip;
                 }
             }

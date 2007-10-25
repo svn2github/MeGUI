@@ -109,5 +109,15 @@ namespace MeGUI
 
             return er;
         }
+
+        public static void FlushFile(string p)
+        {
+            string localFilename = Path.Combine(MeGUISettings.MeGUIUpdateCache, p);
+            try
+            {
+                File.Delete(localFilename);
+            }
+            catch (IOException) { }
+        }
     }
 }
