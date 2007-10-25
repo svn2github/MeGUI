@@ -447,9 +447,9 @@ namespace MeGUI.core.gui
 
                     // Logging
                     addToLog("Processing ended at " + DateTime.Now.ToLongTimeString() + "\r\n");
-                    addToLog("----------------------" +
+                    addToLog("------------------------------------------------------" +
                         "\r\n\r\nLog for job " + su.JobName + "\r\n\r\n" + su.Log +
-                        "\r\n----------------------\r\n");
+                        "\r\n------------------------------------------------------\r\n");
 
                     // Postprocessing
                     bool jobCompletedSuccessfully = (job.Status == JobStatus.DONE);
@@ -460,7 +460,7 @@ namespace MeGUI.core.gui
                         mainForm.Jobs.RemoveCompletedJob(job);
 
                     addToLog("End of log for " + job.Name + "\r\n" +
-                        "-------------------------------------------------------\r\n\r\n");
+                        "------------------------------------------------------\r\n\r\n");
 
                     if (shutdownWorkerIfJobsCompleted())
                     { }
