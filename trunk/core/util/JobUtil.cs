@@ -120,7 +120,7 @@ namespace MeGUI
 
         public JobChain GenerateMuxJobs(VideoStream video, decimal? framerate, MuxStream[] audioStreamsArray, MuxableType[] audioTypes,
             MuxStream[] subtitleStreamsArray, MuxableType[] subTypes,
-            string chapterFile, MuxableType chapterInputType, ContainerType container, string output, FileSize? splitSize, bool deleteInputs)
+            string chapterFile, MuxableType chapterInputType, ContainerType container, string output, FileSize? splitSize, List<string> inputsToDelete)
         {
             Debug.Assert(splitSize == null || splitSize.Value != FileSize.Empty);
 
@@ -164,7 +164,7 @@ namespace MeGUI
                     if (o.outputType is VideoType)
                     {
                         mjob.Settings.VideoInput = video.Output;
-                        if (deleteInputs)
+                        if (inputsToDelete.Contains(video.Output))
                             filesToDeleteThisJob.Add(video.Output);
                         mjob.Settings.DAR = video.DAR;
                     }
@@ -180,7 +180,7 @@ namespace MeGUI
                             mjob.Settings.AudioStreams.Add(stream);
                             audioStreams.Remove(stream);
 
-                            if (deleteInputs)
+                            if (inputsToDelete.Contains(stream.path))
                                 filesToDeleteThisJob.Add(stream.path);
                         }
                     }
@@ -196,7 +196,7 @@ namespace MeGUI
                             mjob.Settings.SubtitleStreams.Add(stream);
                             subtitleStreams.Remove(stream);
 
-                            if (deleteInputs)
+                            if (inputsToDelete.Contains(stream.path))
                                 filesToDeleteThisJob.Add(stream.path);
                         }
                     }
@@ -204,7 +204,7 @@ namespace MeGUI
                     {
                         if ((VideoUtil.guessChapterType(chapterFile) == o.outputType))
                             mjob.Settings.ChapterFile = chapterFile;
-                        if (deleteInputs)
+                        if (inputsToDelete.Contains(chapterFile))
                             filesToDeleteThisJob.Add(chapterFile);
                     }
                 }

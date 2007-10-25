@@ -503,8 +503,12 @@ namespace MeGUI
                     chapterInputType = new MuxableType(type, null);
             }
 
+            List<string> inputsToDelete = new List<string>();
+            inputsToDelete.Add(video.Output);
+            inputsToDelete.AddRange(Array.ConvertAll<AudioJob, string>(audioStreams, delegate(AudioJob a) { return a.Output; }));
+
             JobChain muxJobs = this.jobUtil.GenerateMuxJobs(video, video.Framerate, allAudioToMux.ToArray(), allInputAudioTypes.ToArray(),
-                subtitles, allInputSubtitleTypes.ToArray(), chapters, chapterInputType, container, muxedOutput, splitSize, true);
+                subtitles, allInputSubtitleTypes.ToArray(), chapters, chapterInputType, container, muxedOutput, splitSize, inputsToDelete);
 
 
 

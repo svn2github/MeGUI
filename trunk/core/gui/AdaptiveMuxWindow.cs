@@ -190,7 +190,7 @@ namespace MeGUI
                 }
 
                 return jobUtil.GenerateMuxJobs(myVideo, fps.Value, audioStreams, audioTypes, subtitleStreams,
-                    subtitleTypes, this.chapters.Filename, chapterInputType, (containerFormat.SelectedItem as ContainerType), output.Filename, splitSize, false);
+                    subtitleTypes, this.chapters.Filename, chapterInputType, (containerFormat.SelectedItem as ContainerType), output.Filename, splitSize, new List<string>());
             }
         }
         /// <summary>
