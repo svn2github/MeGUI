@@ -239,7 +239,7 @@ namespace MeGUI
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(508, 473);
+            this.tabControl1.Size = new System.Drawing.Size(508, 464);
             this.tabControl1.TabIndex = 0;
             // 
             // inputTab
@@ -250,7 +250,7 @@ namespace MeGUI
             this.inputTab.Controls.Add(this.videoEncodingComponent1);
             this.inputTab.Location = new System.Drawing.Point(4, 22);
             this.inputTab.Name = "inputTab";
-            this.inputTab.Size = new System.Drawing.Size(500, 447);
+            this.inputTab.Size = new System.Drawing.Size(500, 438);
             this.inputTab.TabIndex = 0;
             this.inputTab.Text = "Input";
             // 
@@ -263,7 +263,7 @@ namespace MeGUI
             this.flowLayoutPanel2.Controls.Add(this.helpButton1);
             this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.flowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 418);
+            this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 409);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
             this.flowLayoutPanel2.Size = new System.Drawing.Size(500, 29);
             this.flowLayoutPanel2.TabIndex = 2;
@@ -299,7 +299,7 @@ namespace MeGUI
             this.tabPage2.Controls.Add(this.jobControl1);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Size = new System.Drawing.Size(500, 427);
+            this.tabPage2.Size = new System.Drawing.Size(500, 447);
             this.tabPage2.TabIndex = 12;
             this.tabPage2.Text = "Queue";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -310,7 +310,7 @@ namespace MeGUI
             this.logTab.Controls.Add(this.flowLayoutPanel1);
             this.logTab.Location = new System.Drawing.Point(4, 22);
             this.logTab.Name = "logTab";
-            this.logTab.Size = new System.Drawing.Size(500, 427);
+            this.logTab.Size = new System.Drawing.Size(500, 447);
             this.logTab.TabIndex = 10;
             this.logTab.Text = "Log";
             this.logTab.UseVisualStyleBackColor = true;
@@ -323,7 +323,7 @@ namespace MeGUI
             this.log.Name = "log";
             this.log.ReadOnly = true;
             this.log.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.log.Size = new System.Drawing.Size(500, 398);
+            this.log.Size = new System.Drawing.Size(500, 418);
             this.log.TabIndex = 1;
             // 
             // flowLayoutPanel1
@@ -631,24 +631,24 @@ namespace MeGUI
             this.exitMeGUIToolStripMenuItem});
             this.trayMenu.Name = "trayMenu";
             this.trayMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.trayMenu.Size = new System.Drawing.Size(147, 54);
+            this.trayMenu.Size = new System.Drawing.Size(143, 54);
             // 
             // openMeGUIToolStripMenuItem
             // 
             this.openMeGUIToolStripMenuItem.Name = "openMeGUIToolStripMenuItem";
-            this.openMeGUIToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.openMeGUIToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
             this.openMeGUIToolStripMenuItem.Text = "Open MeGUI";
             this.openMeGUIToolStripMenuItem.Click += new System.EventHandler(this.openMeGUIToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(143, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(139, 6);
             // 
             // exitMeGUIToolStripMenuItem
             // 
             this.exitMeGUIToolStripMenuItem.Name = "exitMeGUIToolStripMenuItem";
-            this.exitMeGUIToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.exitMeGUIToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
             this.exitMeGUIToolStripMenuItem.Text = "Exit MeGUI";
             this.exitMeGUIToolStripMenuItem.Click += new System.EventHandler(this.exitMeGUIToolStripMenuItem_Click);
             // 
@@ -671,7 +671,7 @@ namespace MeGUI
             this.audioEncodingComponent1.Location = new System.Drawing.Point(0, 168);
             this.audioEncodingComponent1.MinimumSize = new System.Drawing.Size(400, 192);
             this.audioEncodingComponent1.Name = "audioEncodingComponent1";
-            this.audioEncodingComponent1.Size = new System.Drawing.Size(500, 244);
+            this.audioEncodingComponent1.Size = new System.Drawing.Size(500, 235);
             this.audioEncodingComponent1.TabIndex = 1;
             // 
             // videoEncodingComponent1
@@ -692,7 +692,7 @@ namespace MeGUI
             this.jobControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.jobControl1.Location = new System.Drawing.Point(0, 0);
             this.jobControl1.Name = "jobControl1";
-            this.jobControl1.Size = new System.Drawing.Size(500, 427);
+            this.jobControl1.Size = new System.Drawing.Size(500, 447);
             this.jobControl1.TabIndex = 0;
             // 
             // MainForm
@@ -700,7 +700,7 @@ namespace MeGUI
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(508, 473);
+            this.ClientSize = new System.Drawing.Size(508, 464);
             this.Controls.Add(this.tabControl1);
             this.DataBindings.Add(new System.Windows.Forms.Binding("Location", global::MeGUI.Properties.Settings.Default, "MainFormLocation", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -1578,7 +1578,6 @@ namespace MeGUI
         private MuxProvider muxProvider;
         private MeGUISettings settings = new MeGUISettings();
         private ProfileManager profileManager;
-        private BitrateCalculator calc;
 
         public MuxProvider MuxProvider
         {

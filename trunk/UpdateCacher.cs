@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Threading;
 using MeGUI.core.util;
 
+
 namespace MeGUI
 {
     class UpdateCacher
@@ -55,7 +56,7 @@ namespace MeGUI
 
         private static void setSensibleCacheFolder()
         {
-            MeGUISettings.MeGUIUpdateCache = Path.Combine(MainForm.Instance.MeGUIPath, "update_cache");
+            MeGUISettings.MeGUIUpdateCache = Path.Combine(MainForm.Instance.MeGUIPath, "\\update_cache\\");
         }
 
         public static UpdateWindow.ErrorState DownloadFile(string url, Uri serverAddress,
