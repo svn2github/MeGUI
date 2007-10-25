@@ -1,3 +1,12 @@
+0.2.6.1031
+    - (berrinam) Fix #1817324 (Original audio is deleted when encoding fails)
+    - (Kurtnoise) cosmetic - remove an unused variable & ensure update_cache folder creation.
+    - (berrinam) Fix #1819627 (Analysis Pass broken)
+    - (Sharktooth) [AutoUpdate] Another try at fixing the update failures on Vista.
+    - (Sharktooth) Added MeGUI version to the Log
+    - (Sharktooth) [AutoUpdate] Fix #1819257 (Auto-update doesnt delete failed updates from update_cache). Now UpdateCacher ignores 0 bytes files.
+    - (berrinam) Fixed DAR detection for non-DVD DGIndex files.
+
 0.2.6.1030
     - (berrinam) Forbid input and output filenames from being the same. (Should fix #1817324)
     - (berrinam) Change AutoEncode default split size to "No splitting" and default target size to "1 CD." Hopefully  fixes #1813769 and #1816269
