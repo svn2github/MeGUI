@@ -1,3 +1,9 @@
+0.2.6.1032
+    - (Sharktooth) [AutoUpdate] Added IOException handling when deleting 0 byte files.
+    - (Kurtnoise) [JobWorker] : Same separator width.
+    - (Kurtnoise) [Log] : Debug Infos were removed after jobs processing.
+    - (berrinam) [AutoUpdate] Fix #1819257 (Auto-update doesn't delete failed updates from update_cache)
+
 0.2.6.1031
     - (berrinam) Fix #1817324 (Original audio is deleted when encoding fails)
     - (Kurtnoise) cosmetic - remove an unused variable & ensure update_cache folder creation.
