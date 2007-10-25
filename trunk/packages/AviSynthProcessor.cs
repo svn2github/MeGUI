@@ -77,7 +77,7 @@ namespace MeGUI
         public void setup(Job job, StatusUpdate su)
         {
             Debug.Assert(job is AviSynthJob, "Job isn't an AviSynthJob");
-
+            stup = su;
             this.job = (AviSynthJob)job;
 
             try 
