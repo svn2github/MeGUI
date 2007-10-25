@@ -146,6 +146,7 @@ namespace MeGUI
             this.Controls.Add(this.helpButton1);
             this.Name = "MuxWindow";
             this.Text = "MeGUI - Muxer";
+            this.TopMost = false;
             this.Controls.SetChildIndex(this.outputGroupbox, 0);
             this.Controls.SetChildIndex(this.chaptersGroupbox, 0);
             this.Controls.SetChildIndex(this.muxButton, 0);

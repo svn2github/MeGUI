@@ -196,14 +196,19 @@ namespace MeGUI
             this.components = new System.ComponentModel.Container();
             this.muxButton = new System.Windows.Forms.Button();
             this.videoGroupbox = new System.Windows.Forms.GroupBox();
+            this.fps = new MeGUI.core.gui.FPSChooser();
+            this.vInput = new MeGUI.FileBar();
             this.videoName = new System.Windows.Forms.TextBox();
             this.videoNameLabel = new System.Windows.Forms.Label();
             this.MuxFPSLabel = new System.Windows.Forms.Label();
             this.videoInputLabel = new System.Windows.Forms.Label();
             this.chaptersGroupbox = new System.Windows.Forms.GroupBox();
+            this.chapters = new MeGUI.FileBar();
             this.chaptersInputLabel = new System.Windows.Forms.Label();
             this.outputGroupbox = new System.Windows.Forms.GroupBox();
             this.splittingLabel = new System.Windows.Forms.Label();
+            this.splitting = new MeGUI.core.gui.TargetSizeSCBox();
+            this.output = new MeGUI.FileBar();
             this.muxedOutputLabel = new System.Windows.Forms.Label();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.cancelButton = new System.Windows.Forms.Button();
@@ -214,6 +219,7 @@ namespace MeGUI
             this.audioRemoveTrack = new System.Windows.Forms.ToolStripMenuItem();
             this.audio = new System.Windows.Forms.TabControl();
             this.audioPage1 = new System.Windows.Forms.TabPage();
+            this.muxStreamControl2 = new MeGUI.core.details.mux.MuxStreamControl();
             this.subtitleMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.subtitleAddTrack = new System.Windows.Forms.ToolStripMenuItem();
             this.subtitleRemoveTrack = new System.Windows.Forms.ToolStripMenuItem();
@@ -221,12 +227,6 @@ namespace MeGUI
             this.subtitles = new System.Windows.Forms.TabControl();
             this.subPage1 = new System.Windows.Forms.TabPage();
             this.muxStreamControl1 = new MeGUI.core.details.mux.MuxStreamControl();
-            this.muxStreamControl2 = new MeGUI.core.details.mux.MuxStreamControl();
-            this.splitting = new MeGUI.core.gui.TargetSizeSCBox();
-            this.output = new MeGUI.FileBar();
-            this.fps = new MeGUI.core.gui.FPSChooser();
-            this.vInput = new MeGUI.FileBar();
-            this.chapters = new MeGUI.FileBar();
             this.videoGroupbox.SuspendLayout();
             this.chaptersGroupbox.SuspendLayout();
             this.outputGroupbox.SuspendLayout();
@@ -263,6 +263,32 @@ namespace MeGUI
             this.videoGroupbox.TabIndex = 22;
             this.videoGroupbox.TabStop = false;
             this.videoGroupbox.Text = "Video";
+            // 
+            // fps
+            // 
+            this.fps.Location = new System.Drawing.Point(115, 45);
+            this.fps.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.fps.MinimumSize = new System.Drawing.Size(64, 29);
+            this.fps.Name = "fps";
+            this.fps.NullString = "Not set";
+            this.fps.SelectedIndex = 0;
+            this.fps.Size = new System.Drawing.Size(119, 29);
+            this.fps.TabIndex = 36;
+            this.fps.SelectionChanged += new MeGUI.StringChanged(this.fps_SelectionChanged);
+            // 
+            // vInput
+            // 
+            this.vInput.Filename = "";
+            this.vInput.Filter = null;
+            this.vInput.FolderMode = false;
+            this.vInput.Location = new System.Drawing.Point(118, 13);
+            this.vInput.Name = "vInput";
+            this.vInput.ReadOnly = true;
+            this.vInput.SaveMode = false;
+            this.vInput.Size = new System.Drawing.Size(289, 26);
+            this.vInput.TabIndex = 35;
+            this.vInput.Title = null;
+            this.vInput.FileSelected += new MeGUI.FileBarEventHandler(this.vInput_FileSelected);
             // 
             // videoName
             // 
@@ -308,6 +334,20 @@ namespace MeGUI
             this.chaptersGroupbox.TabStop = false;
             this.chaptersGroupbox.Text = "Chapter";
             // 
+            // chapters
+            // 
+            this.chapters.Filename = "";
+            this.chapters.Filter = "Chapter files (*.txt)|*.txt";
+            this.chapters.FolderMode = false;
+            this.chapters.Location = new System.Drawing.Point(118, 12);
+            this.chapters.Name = "chapters";
+            this.chapters.ReadOnly = true;
+            this.chapters.SaveMode = false;
+            this.chapters.Size = new System.Drawing.Size(289, 26);
+            this.chapters.TabIndex = 35;
+            this.chapters.Title = null;
+            this.chapters.FileSelected += new MeGUI.FileBarEventHandler(this.chapters_FileSelected);
+            // 
             // chaptersInputLabel
             // 
             this.chaptersInputLabel.Location = new System.Drawing.Point(16, 22);
@@ -337,6 +377,31 @@ namespace MeGUI
             this.splittingLabel.Size = new System.Drawing.Size(45, 13);
             this.splittingLabel.TabIndex = 37;
             this.splittingLabel.Text = "Splitting";
+            // 
+            // splitting
+            // 
+            this.splitting.Location = new System.Drawing.Point(115, 45);
+            this.splitting.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.splitting.MinimumSize = new System.Drawing.Size(64, 29);
+            this.splitting.Name = "splitting";
+            this.splitting.NullString = "No splitting";
+            this.splitting.SelectedIndex = 0;
+            this.splitting.Size = new System.Drawing.Size(181, 29);
+            this.splitting.TabIndex = 36;
+            // 
+            // output
+            // 
+            this.output.Filename = "";
+            this.output.Filter = null;
+            this.output.FolderMode = false;
+            this.output.Location = new System.Drawing.Point(118, 13);
+            this.output.Name = "output";
+            this.output.ReadOnly = true;
+            this.output.SaveMode = true;
+            this.output.Size = new System.Drawing.Size(289, 26);
+            this.output.TabIndex = 35;
+            this.output.Title = null;
+            this.output.FileSelected += new MeGUI.FileBarEventHandler(this.output_FileSelected);
             // 
             // muxedOutputLabel
             // 
@@ -370,20 +435,20 @@ namespace MeGUI
             this.audioAddTrack,
             this.audioRemoveTrack});
             this.audioMenu.Name = "audioMenu";
-            this.audioMenu.Size = new System.Drawing.Size(141, 48);
+            this.audioMenu.Size = new System.Drawing.Size(152, 48);
             this.audioMenu.Opening += new System.ComponentModel.CancelEventHandler(this.audioMenu_Opening);
             // 
             // audioAddTrack
             // 
             this.audioAddTrack.Name = "audioAddTrack";
-            this.audioAddTrack.Size = new System.Drawing.Size(140, 22);
+            this.audioAddTrack.Size = new System.Drawing.Size(151, 22);
             this.audioAddTrack.Text = "Add track";
             this.audioAddTrack.Click += new System.EventHandler(this.audioAddTrack_Click);
             // 
             // audioRemoveTrack
             // 
             this.audioRemoveTrack.Name = "audioRemoveTrack";
-            this.audioRemoveTrack.Size = new System.Drawing.Size(140, 22);
+            this.audioRemoveTrack.Size = new System.Drawing.Size(151, 22);
             this.audioRemoveTrack.Text = "Remove track";
             this.audioRemoveTrack.Click += new System.EventHandler(this.audioRemoveTrack_Click);
             // 
@@ -408,26 +473,37 @@ namespace MeGUI
             this.audioPage1.Text = "Audio 1";
             this.audioPage1.UseVisualStyleBackColor = true;
             // 
+            // muxStreamControl2
+            // 
+            this.muxStreamControl2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.muxStreamControl2.Filter = null;
+            this.muxStreamControl2.Location = new System.Drawing.Point(3, 3);
+            this.muxStreamControl2.Name = "muxStreamControl2";
+            this.muxStreamControl2.ShowDelay = true;
+            this.muxStreamControl2.Size = new System.Drawing.Size(410, 83);
+            this.muxStreamControl2.TabIndex = 0;
+            this.muxStreamControl2.FileUpdated += new System.EventHandler(this.muxStreamControl2_FileUpdated);
+            // 
             // subtitleMenu
             // 
             this.subtitleMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.subtitleAddTrack,
             this.subtitleRemoveTrack});
             this.subtitleMenu.Name = "subtitleMenu";
-            this.subtitleMenu.Size = new System.Drawing.Size(141, 48);
+            this.subtitleMenu.Size = new System.Drawing.Size(152, 48);
             this.subtitleMenu.Opening += new System.ComponentModel.CancelEventHandler(this.subtitleMenu_Opening);
             // 
             // subtitleAddTrack
             // 
             this.subtitleAddTrack.Name = "subtitleAddTrack";
-            this.subtitleAddTrack.Size = new System.Drawing.Size(140, 22);
+            this.subtitleAddTrack.Size = new System.Drawing.Size(151, 22);
             this.subtitleAddTrack.Text = "Add track";
             this.subtitleAddTrack.Click += new System.EventHandler(this.subtitleAddTrack_Click);
             // 
             // subtitleRemoveTrack
             // 
             this.subtitleRemoveTrack.Name = "subtitleRemoveTrack";
-            this.subtitleRemoveTrack.Size = new System.Drawing.Size(140, 22);
+            this.subtitleRemoveTrack.Size = new System.Drawing.Size(151, 22);
             this.subtitleRemoveTrack.Text = "Remove track";
             this.subtitleRemoveTrack.Click += new System.EventHandler(this.subtitleRemoveTrack_Click);
             // 
@@ -472,83 +548,6 @@ namespace MeGUI
             this.muxStreamControl1.TabIndex = 0;
             this.muxStreamControl1.FileUpdated += new System.EventHandler(this.muxStreamControl1_FileUpdated);
             // 
-            // muxStreamControl2
-            // 
-            this.muxStreamControl2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.muxStreamControl2.Filter = null;
-            this.muxStreamControl2.Location = new System.Drawing.Point(3, 3);
-            this.muxStreamControl2.Name = "muxStreamControl2";
-            this.muxStreamControl2.ShowDelay = true;
-            this.muxStreamControl2.Size = new System.Drawing.Size(410, 83);
-            this.muxStreamControl2.TabIndex = 0;
-            this.muxStreamControl2.FileUpdated += new System.EventHandler(this.muxStreamControl2_FileUpdated);
-            // 
-            // splitting
-            // 
-            this.splitting.Location = new System.Drawing.Point(115, 45);
-            this.splitting.MaximumFileSize = null;
-            this.splitting.MaximumSize = new System.Drawing.Size(1000, 29);
-            this.splitting.MinimumSize = new System.Drawing.Size(64, 29);
-            this.splitting.Name = "splitting";
-            this.splitting.NullString = "No splitting";
-            this.splitting.SelectedIndex = 0;
-            this.splitting.Size = new System.Drawing.Size(181, 29);
-            this.splitting.TabIndex = 36;
-            // 
-            // output
-            // 
-            this.output.Filename = "";
-            this.output.Filter = null;
-            this.output.FolderMode = false;
-            this.output.Location = new System.Drawing.Point(118, 13);
-            this.output.Name = "output";
-            this.output.ReadOnly = true;
-            this.output.SaveMode = true;
-            this.output.Size = new System.Drawing.Size(289, 26);
-            this.output.TabIndex = 35;
-            this.output.Title = null;
-            this.output.FileSelected += new MeGUI.FileBarEventHandler(this.output_FileSelected);
-            // 
-            // fps
-            // 
-            this.fps.Location = new System.Drawing.Point(115, 45);
-            this.fps.MaximumSize = new System.Drawing.Size(1000, 29);
-            this.fps.MinimumSize = new System.Drawing.Size(64, 29);
-            this.fps.Name = "fps";
-            this.fps.NullString = "Not set";
-            this.fps.SelectedIndex = 0;
-            this.fps.Size = new System.Drawing.Size(119, 29);
-            this.fps.TabIndex = 36;
-            this.fps.SelectionChanged += new MeGUI.StringChanged(this.fps_SelectionChanged);
-            // 
-            // vInput
-            // 
-            this.vInput.Filename = "";
-            this.vInput.Filter = null;
-            this.vInput.FolderMode = false;
-            this.vInput.Location = new System.Drawing.Point(118, 13);
-            this.vInput.Name = "vInput";
-            this.vInput.ReadOnly = true;
-            this.vInput.SaveMode = false;
-            this.vInput.Size = new System.Drawing.Size(289, 26);
-            this.vInput.TabIndex = 35;
-            this.vInput.Title = null;
-            this.vInput.FileSelected += new MeGUI.FileBarEventHandler(this.vInput_FileSelected);
-            // 
-            // chapters
-            // 
-            this.chapters.Filename = "";
-            this.chapters.Filter = "Chapter files (*.txt)|*.txt";
-            this.chapters.FolderMode = false;
-            this.chapters.Location = new System.Drawing.Point(118, 12);
-            this.chapters.Name = "chapters";
-            this.chapters.ReadOnly = true;
-            this.chapters.SaveMode = false;
-            this.chapters.Size = new System.Drawing.Size(289, 26);
-            this.chapters.TabIndex = 35;
-            this.chapters.Title = null;
-            this.chapters.FileSelected += new MeGUI.FileBarEventHandler(this.chapters_FileSelected);
-            // 
             // baseMuxWindow
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
@@ -567,7 +566,6 @@ namespace MeGUI
             this.Name = "baseMuxWindow";
             this.ShowInTaskbar = false;
             this.Text = "Mux";
-            this.TopMost = true;
             this.videoGroupbox.ResumeLayout(false);
             this.videoGroupbox.PerformLayout();
             this.chaptersGroupbox.ResumeLayout(false);
