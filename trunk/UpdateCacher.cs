@@ -70,7 +70,11 @@ namespace MeGUI
             FileInfo finfo = new FileInfo(localFilename);
             if (File.Exists(localFilename) && (finfo.Length == 0))
             {
-                finfo.Delete();
+                try
+                {
+                    finfo.Delete();
+                }
+                catch (IOException) { }
             }
             else if (File.Exists(localFilename))
                 goto gotLocalFile;
