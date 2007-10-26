@@ -69,7 +69,7 @@ namespace MeGUI
 			defaultLanguage1 = "";
 			defaultLanguage2 = "";
             defaultPriority = ProcessPriority.IDLE;
-            acceptableAspectError = 5;
+            acceptableAspectError = 1;
             afterEncoding = AfterEncoding.DoNothing;
 			autoOpenScript = true;
 			enableMP3inMP4 = false;

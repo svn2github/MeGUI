@@ -477,9 +477,19 @@ namespace MeGUI
             0,
             0,
             0});
+            this.acceptableFPSError.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            196608});
             this.acceptableFPSError.Name = "acceptableFPSError";
             this.acceptableFPSError.Size = new System.Drawing.Size(79, 21);
             this.acceptableFPSError.TabIndex = 7;
+            this.acceptableFPSError.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            196608});
             // 
             // label15
             // 
@@ -493,7 +503,7 @@ namespace MeGUI
             // 
             this.acceptableAspectError.Location = new System.Drawing.Point(175, 43);
             this.acceptableAspectError.Maximum = new decimal(new int[] {
-            50,
+            5,
             0,
             0,
             0});
@@ -501,7 +511,7 @@ namespace MeGUI
             this.acceptableAspectError.Size = new System.Drawing.Size(54, 21);
             this.acceptableAspectError.TabIndex = 5;
             this.acceptableAspectError.Value = new decimal(new int[] {
-            5,
+            1,
             0,
             0,
             0});
