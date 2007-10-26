@@ -490,7 +490,7 @@ namespace MeGUI
                             return meGUISettings.FFMpegPath;
                         case ("encaudxcli"):
                             return meGUISettings.EncAudXPath;
-                        case ("encaacplus"):
+                        case ("enc_aacplus"):
                             return meGUISettings.EncAacPlusPath;
                         case ("oggenc2"):
                             return meGUISettings.OggEnc2Path;
@@ -548,7 +548,7 @@ namespace MeGUI
                         case ("encaudxcli"):
                             meGUISettings.EncAudXPath = value;
                             return;
-                        case ("encaacplus"):
+                        case ("enc_aacplus"):
                             meGUISettings.EncAacPlusPath = value;
                             return;
                         case ("yadif"):
