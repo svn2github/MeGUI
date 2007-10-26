@@ -731,6 +731,9 @@ namespace MeGUI
                                         audioStreams, audio, subtitles, job.PostprocessingProperties.ChapterFile,
                                         job.PostprocessingProperties.OutputSize, job.PostprocessingProperties.SplitSize,
                                         containerOverhead, type, new string[] { job.Output, videoInput });*/
+                if (c == null)
+                    return;
+
                 c = CleanupJob.AddAfter(c, intermediateFiles);
                 mainForm.Jobs.addJobsWithDependencies(c);
             }
@@ -887,6 +890,15 @@ namespace MeGUI
 
             //Autocrop
             CropValues final = Autocrop.autocrop(reader);
+
+            if (signalAR)
+            {
+                if (avsSettings.Mod16Method == mod16Method.overcrop)
+                    ScriptServer.overcrop(ref final);
+                else if (avsSettings.Mod16Method == mod16Method.mod4Horizontal)
+                    ScriptServer.cropMod4Horizontal(ref final);
+            }
+
             bool error = (final.left == -1);
             if (!error)
             {
@@ -971,7 +983,7 @@ namespace MeGUI
 
             cropLine = ScriptServer.GetCropLine(true, final);
             denoiseLines = ScriptServer.GetDenoiseLines(avsSettings.Denoise, (DenoiseFilterType)avsSettings.DenoiseMethod);
-            resizeLine = ScriptServer.GetResizeLine(true, horizontalResolution, scriptVerticalResolution, (ResizeFilterType)avsSettings.ResizeMethod);
+            resizeLine = ScriptServer.GetResizeLine(!signalAR || avsSettings.Mod16Method == mod16Method.resize, horizontalResolution, scriptVerticalResolution, (ResizeFilterType)avsSettings.ResizeMethod);
 
             string newScript = ScriptServer.CreateScriptFromTemplate(avsSettings.Template, inputLine, cropLine, resizeLine, denoiseLines, deinterlaceLines);
             if (dar.HasValue)
