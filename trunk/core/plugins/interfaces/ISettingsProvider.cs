@@ -408,7 +408,7 @@ namespace MeGUI
         AudXSettings, AudioCodecSettings, AudioCodec, AudioEncoderType>
     {
         public AudXSettingsProvider()
-            : base("MP3 Surround", AudioEncoderType.AUDX, AudioCodec.MP3)
+            : base("Aud-X", AudioEncoderType.AUDX, AudioCodec.MP3)
         { }
     }
     public class faacSettingsProvider : SettingsProviderImpl2<faacConfigurationPanel, string[],
