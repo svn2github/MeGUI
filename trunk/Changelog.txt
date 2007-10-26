@@ -1,3 +1,9 @@
+0.2.6.1033
+    - (Sharktooth) [UpdateWindow] Fixed the enc_aacplus discrepancies.
+    - (Kurtnoise) [SettingsForm]: fixed a missing Click Action for avc2avi.
+    - (berrinam) Fix #1820411 (OneClick overcrop to mod16 doesn't appear to work)
+    - (Sharktooth) Fixed "Select Size" dialog appearing behind mux window.
+
 0.2.6.1032
     - (Sharktooth) [AutoUpdate] Added IOException handling when deleting 0 byte files.
     - (Kurtnoise) [JobWorker] : Same separator width.
