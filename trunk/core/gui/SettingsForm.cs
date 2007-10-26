@@ -232,6 +232,7 @@ namespace MeGUI
             this.label12 = new System.Windows.Forms.Label();
             this.audioExtension = new System.Windows.Forms.TextBox();
             this.autoModeGroupbox = new System.Windows.Forms.GroupBox();
+            this.configAutoEncodeDefaults = new System.Windows.Forms.Button();
             this.keep2ndPassLogFile = new System.Windows.Forms.CheckBox();
             this.keep2ndPassOutput = new System.Windows.Forms.CheckBox();
             this.label13 = new System.Windows.Forms.Label();
@@ -305,7 +306,6 @@ namespace MeGUI
             this.autoEncodeDefaultsButton = new System.Windows.Forms.Button();
             this.nbPassesLabel = new System.Windows.Forms.Label();
             this.nbPasses = new System.Windows.Forms.NumericUpDown();
-            this.configAutoEncodeDefaults = new System.Windows.Forms.Button();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
             groupBox1 = new System.Windows.Forms.GroupBox();
             groupBox1.SuspendLayout();
@@ -861,6 +861,19 @@ namespace MeGUI
             this.autoModeGroupbox.TabStop = false;
             this.autoModeGroupbox.Text = "Automated Encoding";
             // 
+            // configAutoEncodeDefaults
+            // 
+            this.configAutoEncodeDefaults.AutoSize = true;
+            this.configAutoEncodeDefaults.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.configAutoEncodeDefaults.Location = new System.Drawing.Point(11, 43);
+            this.configAutoEncodeDefaults.Name = "configAutoEncodeDefaults";
+            this.configAutoEncodeDefaults.Size = new System.Drawing.Size(179, 23);
+            this.configAutoEncodeDefaults.TabIndex = 5;
+            this.configAutoEncodeDefaults.Text = "Configure AutoEncode defaults...";
+            this.configAutoEncodeDefaults.UseVisualStyleBackColor = true;
+            this.configAutoEncodeDefaults.Visible = false;
+            this.configAutoEncodeDefaults.Click += new System.EventHandler(this.autoEncodeDefaultsButton_Click);
+            // 
             // keep2ndPassLogFile
             // 
             this.keep2ndPassLogFile.AutoSize = true;
@@ -1317,6 +1330,7 @@ namespace MeGUI
             this.selectAvc2AviExecutableButton.Size = new System.Drawing.Size(24, 23);
             this.selectAvc2AviExecutableButton.TabIndex = 11;
             this.selectAvc2AviExecutableButton.Text = "...";
+            this.selectAvc2AviExecutableButton.Click += new System.EventHandler(this.selectAvc2AviExecutableButton_Click);
             // 
             // avc2aviPath
             // 
@@ -1598,19 +1612,6 @@ namespace MeGUI
             0,
             0,
             0});
-            // 
-            // configAutoEncodeDefaults
-            // 
-            this.configAutoEncodeDefaults.AutoSize = true;
-            this.configAutoEncodeDefaults.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.configAutoEncodeDefaults.Location = new System.Drawing.Point(11, 43);
-            this.configAutoEncodeDefaults.Name = "configAutoEncodeDefaults";
-            this.configAutoEncodeDefaults.Size = new System.Drawing.Size(179, 23);
-            this.configAutoEncodeDefaults.TabIndex = 5;
-            this.configAutoEncodeDefaults.Text = "Configure AutoEncode defaults...";
-            this.configAutoEncodeDefaults.UseVisualStyleBackColor = true;
-            this.configAutoEncodeDefaults.Visible = false;
-            this.configAutoEncodeDefaults.Click += new System.EventHandler(this.autoEncodeDefaultsButton_Click);
             // 
             // helpButton1
             // 
