@@ -58,7 +58,7 @@ namespace MeGUI
             {
                 StringBuilder sb = new StringBuilder();
                 string projName = Path.Combine(Path.GetDirectoryName(job.Output), Path.GetFileNameWithoutExtension(job.Output));
-                sb.Append("-AIF=[" + job.Input + "] -OF=[" + projName + "] -exit -minimize ");
+                sb.Append("-SD=! -AIF=!" + job.Input + "! -OF=!" + projName + "! -exit -minimize ");
                 if (job.DemuxMode == 2)
                     sb.Append("-OM=2"); // demux everything
                 else if (job.DemuxMode == 1)
