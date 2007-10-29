@@ -1,3 +1,13 @@
+0.2.6.1034
+    - (Kurtnoise) [JobWorker] small glitch.
+    - (Kurtnoise) [AutoEncodeWindow] fixed #1821471.
+    - (Kurtnoise) [ScriptServer] removed temporarily SimpleResize (#1820850)
+    - (Kurtnoise) Fixed a recovery for the systray (#1820842).
+    - (Kurtnoise) [DGindexer] changed the delimiter character to avoid filename issues.
+    - (Sharktooth) Changed Log font to LucidaConsole (fixed width).
+    - (Sharktooth) Fixed #1820720 (Bitrate Cal. makes MeGUI crash). Acceptable FPS rounding error has now a minimum value of 0,001. Acceptable Aspect Error has a new default of 1% and a new max of 5%.
+    - (Sharktooth) MP3 Surround -> Aud-X (ISettingsProvider.cs).
+
 0.2.6.1033
     - (Sharktooth) [UpdateWindow] Fixed the enc_aacplus discrepancies.
     - (Kurtnoise) [SettingsForm]: fixed a missing Click Action for avc2avi.
