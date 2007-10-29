@@ -66,7 +66,6 @@ namespace MeGUI.core.gui
             // jobQueue1
             // 
             this.jobQueue1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.jobQueue1.JobList = new MeGUI.core.details.TaggedJob[0];
             this.jobQueue1.Location = new System.Drawing.Point(3, 16);
             this.jobQueue1.Name = "jobQueue1";
             this.jobQueue1.Padding = new System.Windows.Forms.Padding(2);
@@ -96,10 +95,10 @@ namespace MeGUI.core.gui
             this.progressLabel.Margin = new System.Windows.Forms.Padding(3);
             this.progressLabel.Name = "progressLabel";
             this.progressLabel.Padding = new System.Windows.Forms.Padding(0, 5, 0, 5);
-            this.progressLabel.Size = new System.Drawing.Size(48, 26);
+            this.progressLabel.Size = new System.Drawing.Size(55, 26);
             this.progressLabel.TabIndex = 29;
             this.progressLabel.Text = "Progress";
-            this.progressLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.progressLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // jobProgress
             // 
@@ -152,26 +151,26 @@ namespace MeGUI.core.gui
             this.shutDownWhenFinishedLocalQueueToolStripMenuItem,
             this.shutDownWorkerNowToolStripMenuItem});
             this.workerToolStripMenuItem.Name = "workerToolStripMenuItem";
-            this.workerToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
+            this.workerToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
             this.workerToolStripMenuItem.Text = "Worker";
             // 
             // changeNameToolStripMenuItem
             // 
             this.changeNameToolStripMenuItem.Name = "changeNameToolStripMenuItem";
             this.changeNameToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F2;
-            this.changeNameToolStripMenuItem.Size = new System.Drawing.Size(251, 22);
+            this.changeNameToolStripMenuItem.Size = new System.Drawing.Size(272, 22);
             this.changeNameToolStripMenuItem.Text = "Change name";
             this.changeNameToolStripMenuItem.Click += new System.EventHandler(this.changeNameToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(248, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(269, 6);
             // 
             // shutDownWhenFinishedLocalQueueToolStripMenuItem
             // 
             this.shutDownWhenFinishedLocalQueueToolStripMenuItem.Name = "shutDownWhenFinishedLocalQueueToolStripMenuItem";
-            this.shutDownWhenFinishedLocalQueueToolStripMenuItem.Size = new System.Drawing.Size(251, 22);
+            this.shutDownWhenFinishedLocalQueueToolStripMenuItem.Size = new System.Drawing.Size(272, 22);
             this.shutDownWhenFinishedLocalQueueToolStripMenuItem.Text = "Shut down when finished local queue";
             this.shutDownWhenFinishedLocalQueueToolStripMenuItem.Click += new System.EventHandler(this.shutDownWhenFinishedLocalQueueToolStripMenuItem_Click);
             // 
@@ -179,7 +178,7 @@ namespace MeGUI.core.gui
             // 
             this.shutDownWorkerNowToolStripMenuItem.Name = "shutDownWorkerNowToolStripMenuItem";
             this.shutDownWorkerNowToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.W)));
-            this.shutDownWorkerNowToolStripMenuItem.Size = new System.Drawing.Size(251, 22);
+            this.shutDownWorkerNowToolStripMenuItem.Size = new System.Drawing.Size(272, 22);
             this.shutDownWorkerNowToolStripMenuItem.Text = "Shut down worker now";
             this.shutDownWorkerNowToolStripMenuItem.Click += new System.EventHandler(this.shutDownWorkerNowToolStripMenuItem_Click);
             // 
@@ -188,14 +187,14 @@ namespace MeGUI.core.gui
             this.progressWindowToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.showProgressWindowToolStripMenuItem});
             this.progressWindowToolStripMenuItem.Name = "progressWindowToolStripMenuItem";
-            this.progressWindowToolStripMenuItem.Size = new System.Drawing.Size(102, 20);
+            this.progressWindowToolStripMenuItem.Size = new System.Drawing.Size(111, 20);
             this.progressWindowToolStripMenuItem.Text = "Progress Window";
             this.progressWindowToolStripMenuItem.DropDownOpened += new System.EventHandler(this.progressWindowToolStripMenuItem_DropDownOpened);
             // 
             // showProgressWindowToolStripMenuItem
             // 
             this.showProgressWindowToolStripMenuItem.Name = "showProgressWindowToolStripMenuItem";
-            this.showProgressWindowToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.showProgressWindowToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
             this.showProgressWindowToolStripMenuItem.Text = "Show Progress Window";
             this.showProgressWindowToolStripMenuItem.Click += new System.EventHandler(this.showProgressWindowToolStripMenuItem_Click);
             // 
