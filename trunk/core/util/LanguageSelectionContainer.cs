@@ -32,6 +32,7 @@ namespace MeGUI
             languages = new Dictionary<string, string>();
             languagesReverse = new Dictionary<string, string>();
 
+            addLanguage("English", "eng");
             addLanguage("Abkhazian", "abk");
             addLanguage("Achinese", "ace");
             addLanguage("Acoli", "ach");
@@ -79,7 +80,7 @@ namespace MeGUI
             addLanguage("Czech", "ces");
             addLanguage("Danish", "dan");
             addLanguage("Dutch", "dut");
-            addLanguage("English", "eng");
+            
             addLanguage("Estonian", "est");
             addLanguage("Faroese", "fao");
             addLanguage("Finnish", "fin");

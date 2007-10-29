@@ -654,7 +654,6 @@ namespace MeGUI
             this.defaultLanguage2.Location = new System.Drawing.Point(126, 47);
             this.defaultLanguage2.Name = "defaultLanguage2";
             this.defaultLanguage2.Size = new System.Drawing.Size(104, 21);
-            this.defaultLanguage2.Sorted = true;
             this.defaultLanguage2.TabIndex = 6;
             // 
             // defaultAudioTrack2Label
@@ -672,7 +671,6 @@ namespace MeGUI
             this.defaultLanguage1.Location = new System.Drawing.Point(126, 20);
             this.defaultLanguage1.Name = "defaultLanguage1";
             this.defaultLanguage1.Size = new System.Drawing.Size(104, 21);
-            this.defaultLanguage1.Sorted = true;
             this.defaultLanguage1.TabIndex = 1;
             // 
             // defaultAudioTrack1Label
