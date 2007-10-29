@@ -739,18 +739,21 @@ namespace MeGUI
 			if (averageBitrateRadio.Checked)
 			{
 				targetSize.Enabled = false;
+                this.targetSize.SelectedIndex = 3;
 				this.projectedBitrateKBits.Enabled = true;
 				this.isBitrateMode = false;
 			}
             else if (noTargetRadio.Checked)
             {
                 targetSize.Enabled = false;
+                this.targetSize.SelectedIndex = 0;
                 this.projectedBitrateKBits.Enabled = false;
                 this.isBitrateMode = false;
             } 
             else
 			{
 				targetSize.Enabled = true;
+                this.targetSize.SelectedIndex = 3;
 				this.projectedBitrateKBits.Enabled = false;
 				this.isBitrateMode = true;
 			}
