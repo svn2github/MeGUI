@@ -22,8 +22,9 @@ namespace MeGUI
         Lanczos,
         [EnumTitle("Lanczos4 (Sharp)", "Lanczos4Resize({0},{1})")]
         Lanczos4,
-        [EnumTitle("Simple (Soft)", "SimpleResize({0},{1})")]
-        Simple,
+        // #1820850 : http://sourceforge.net/tracker/index.php?func=detail&aid=1820850&group_id=156112&atid=798476
+      //  [EnumTitle("Simple (Soft)", "SimpleResize({0},{1})")] 
+      //  Simple,
         [EnumTitle("Gauss (Neutral)", "GaussResize({0},{1})")]
         Gauss,
         [EnumTitle("Point (Sharp)", "PointResize({0},{1})")]
