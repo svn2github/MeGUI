@@ -70,6 +70,9 @@ Section "";
 	CreateShortcut "$SMPROGRAMS\MeGUI\Changelog.lnk" $INSTDIR\${FILE2}
 	CreateShortcut "$SMPROGRAMS\MeGUI\GPL.lnk" $INSTDIR\${FILE3}
 	CreateShortcut "$SMPROGRAMS\MeGUI\MeGUI Modern Media Encoder.lnk" $INSTDIR\${FILE5} "" $INSTDIR\megui.ico
+	CreateShortcut "$SMPROGRAMS\MeGUI\Tools.lnk" $INSTDIR\tools
+	CreateShortcut "$SMPROGRAMS\MeGUI\Log Files.lnk" $INSTDIR\logs
+	CreateShortcut "$SMPROGRAMS\MeGUI\Auto-Update cache.lnk" $INSTDIR\update_cache
 	CreateShortcut "$SMPROGRAMS\MeGUI\Uninstall MeGUI.lnk" $INSTDIR\megui-uninstall.exe
 
 	; write out uninstaller
