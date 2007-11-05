@@ -62,7 +62,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MencoderEncoder");
             StringBuilder sb = new StringBuilder();
             sb.Append("\"" + job.Input + "\" -o \"" + job.Output + "\" ");
             sb.Append("-of avi -forceidx "); // Make sure we don't get problems with filesizes > 2GB
-            sb.Append("-ovc lavc -lavcopts vcodec=ffvhuff:vstrict=-2:pred=2:context=1");
+            sb.Append("-ovc lavc -nosound -lavcopts vcodec=ffvhuff:vstrict=-2:pred=2:context=1");
             return sb.ToString();
         }
 
@@ -70,7 +70,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MencoderEncoder");
         {
             StringBuilder sb = new StringBuilder();
             CultureInfo ci = new CultureInfo("en-us");
-            sb.Append("\"" + input + "\" -ovc lavc ");
+            sb.Append("\"" + input + "\" -ovc lavc -nosound ");
             switch (ss.EncodingMode)
             {
                 case 0: // CBR
@@ -185,7 +185,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MencoderEncoder");
         {
             CultureInfo ci = new CultureInfo("en-us");
             StringBuilder sb = new StringBuilder();
-            sb.Append("\"" + input + "\" -ovc lavc ");
+            sb.Append("\"" + input + "\" -ovc lavc -nosound ");
             if (ls.EncodingMode == 4 || ls.EncodingMode == 7)
                 ls.Turbo = false;
             switch (ls.EncodingMode)
