@@ -1464,6 +1464,7 @@ namespace MeGUI
             if (player.loadVideo(mainForm, originalScript, PREVIEWTYPE.REGULAR, false, originalInlineAvs))
             {
                 player.Show();
+                reader = player.Reader;
                 sendCropValues();
                 return true;
             }
