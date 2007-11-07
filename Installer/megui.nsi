@@ -62,7 +62,10 @@ Section "";
 	File "${FILE7}"
 	File "${INPUT_PATH}${FILE8}"
 	File "${INPUT_PATH}${FILE9}"
-
+	CreateDirectory $INSTDIR\update_cache
+	CreateDirectory $INSTDIR\tools
+	CreateDirectory $INSTDIR\logs
+	
         SetOutPath "$INSTDIR\Data\"
         File "${INPUT_PATH}..\${HELP}"
 
@@ -75,6 +78,8 @@ Section "";
 	CreateShortcut "$SMPROGRAMS\MeGUI\Auto-Update cache.lnk" $INSTDIR\update_cache
 	CreateShortcut "$SMPROGRAMS\MeGUI\Uninstall MeGUI.lnk" $INSTDIR\megui-uninstall.exe
 
+	; sets update_cache registry entry
+	WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\MeGUI" "update_cache" "$INSTDIR\update_cache"
 	; write out uninstaller
 	WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "DisplayName" "${NAME} (remove only)"
 	WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "UninstallString" '"$INSTDIR\${UNINST_NAME}"'
@@ -105,7 +110,8 @@ Section Uninstall
 	Delete "$INSTDIR\${UNINST_NAME}"
         RMDir /r "$INSTDIR"
    
-	DeleteRegKey HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}"
+    DeleteRegKey HKEY_LOCAL_MACHINE "SOFTWARE\MeGUI"
+    DeleteRegKey HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}"
 	RMDir /r "$SMPROGRAMS\MeGUI"
 
 
