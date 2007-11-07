@@ -1,3 +1,13 @@
+0.2.6.1035
+    - (Sharktooth) [Installer] Creates (and removes during uninstall) update_cache reg key, also creates update_cache, logs and tools folders.
+    - (berrinam) At startup, jobs marked as "processing" are marked as "aborted". Should help #1826981.
+    - (berrinam) Fix autocrop crash in AVS creator after reopening original video window.
+    - (berrinam) Fixed #1825958 (Audio track tab numbering issue)
+    - (berrinam) Fixed #1825182 (Nero AAC settings not saved)
+    - (Kurtnoise) [Mencoder Encoder] force to set up only video command (fixed #1824505 & #1825708)
+    - (Sharktooth) [Installer] Added links to Tools, Logs and Auto-update cache folders.
+    - (Kurtnoise) [Settings Form] English as 1st Language (#1822098)
+
 0.2.6.1034
     - (Kurtnoise) [JobWorker] small glitch.
     - (Kurtnoise) [AutoEncodeWindow] fixed #1821471.
