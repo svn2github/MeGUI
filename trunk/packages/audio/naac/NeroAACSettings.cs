@@ -49,9 +49,26 @@ namespace MeGUI
             this.EncoderType = AudioEncoderType.NAAC;
 		}
 
-        public AacProfile Profile;
-        public Decimal Quality;
-        public bool CreateHintTrack;
+        private AacProfile profile;
+        public AacProfile Profile
+        {
+            get { return profile; }
+            set { profile = value; }
+        }
+
+        private decimal quality;
+        public Decimal Quality
+        {
+            get { return quality; }
+            set { quality = value; }
+        }
+
+        private bool createHintTrack;
+        public bool CreateHintTrack
+        {
+            get { return createHintTrack; }
+            set { createHintTrack = value; }
+        }
 
 
 	}
