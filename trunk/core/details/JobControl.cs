@@ -371,6 +371,9 @@ namespace MeGUI.core.details
 
             foreach (TaggedJob job in allJobs.Values)
             {
+                if (job.Status == JobStatus.PROCESSING)
+                    job.Status = JobStatus.ABORTED;
+
                 job.RequiredJobs = toJobList(job.RequiredJobNames);
                 job.EnabledJobs = toJobList(job.EnabledJobNames);
             }
