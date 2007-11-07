@@ -129,8 +129,11 @@ namespace MeGUI
 
         private void RemoveTab()
         {
-            tabs.RemoveAt(tabs.Count - 1);
+            tabs.RemoveAt(tabControl1.SelectedIndex);
             tabControl1.TabPages.RemoveAt(tabControl1.SelectedIndex);
+
+            for (int i = 0; i < tabControl1.TabPages.Count; ++i)
+                tabControl1.TabPages[i].Text = "Track " + (i + 1);
         }
 
         private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
