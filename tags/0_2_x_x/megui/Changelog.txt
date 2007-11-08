@@ -1,3 +1,8 @@
+0.2.6.1036
+    - (berrinam) Fixed exception in profile import when file already exists
+    - (Kurtnoise) [VideoEncoding] DAR values Initialization (fixed #1823977)
+    - (berrinam) Fix an exception when changing codec if no profile is selected
+
 0.2.6.1035
     - (Sharktooth) [Installer] Creates (and removes during uninstall) update_cache reg key, also creates update_cache, logs and tools folders.
     - (berrinam) At startup, jobs marked as "processing" are marked as "aborted". Should help #1826981.
