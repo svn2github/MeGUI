@@ -132,6 +132,9 @@ namespace MeGUI
                     substitutionTable[file] = pathname;
                         
                     // Copy the file
+                    if (File.Exists(pathname))
+                        File.Delete(pathname);
+
                     File.Move(Path.Combine(path, file), pathname);
                 }
             }
