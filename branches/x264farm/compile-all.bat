@@ -1,4 +1,4 @@
-cd trunk
+cd megui
 start /wait compile.bat
 cd ..
 cd testsuite
@@ -7,5 +7,5 @@ cd ..
 md trunk\Dist\updatecopier
 cd UpdateCopier
 start /wait compile-updatecopier.bat
-cd ..\trunk
+cd ..\megui
 copy ..\UpdateCopier\updatecopier.exe .\Dist\updatecopier
