@@ -1,6 +1,6 @@
 !define NAME "MeGUI modern media encoder"
 !define OUTFILE "megui-install.exe"
-!define INPUT_PATH "..\trunk\dist\bigdist\"
+!define INPUT_PATH "..\megui\dist\bigdist\"
 !define FILE1 "AvisynthWrapper.dll"
 !define FILE2 "Changelog.txt"
 !define FILE3 "gpl.txt"
