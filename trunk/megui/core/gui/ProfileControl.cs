@@ -241,7 +241,7 @@ namespace MeGUI.core.details.video
         void impl_SelectedIndexChanged(object sender, EventArgs e)
         {
             //only want to change the selected profile if the base setting do not match current settings provider.
-            if (CurrentSettingsProvider.IsSameType((TProfileSettings)pHandler.CurrentProfile.BaseSettings))
+            if (pHandler.CurrentProfile != null && CurrentSettingsProvider.IsSameType((TProfileSettings)pHandler.CurrentProfile.BaseSettings))
             {
                 return;
             }
