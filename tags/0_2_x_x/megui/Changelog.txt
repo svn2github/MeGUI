@@ -2,6 +2,8 @@
     - (berrinam) Fixed exception in profile import when file already exists
     - (Kurtnoise) [VideoEncoding] DAR values Initialization (fixed #1823977)
     - (berrinam) Fix an exception when changing codec if no profile is selected
+    - (patch by eamonh) fix profile scrolling issues (fixes #1822000, #1827268)
+    - (patch by eamonh) Fix #1827919 (OneClickEncode Settings not saved)
 
 0.2.6.1035
     - (Sharktooth) [Installer] Creates (and removes during uninstall) update_cache reg key, also creates update_cache, logs and tools folders.
