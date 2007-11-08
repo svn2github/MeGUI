@@ -182,6 +182,7 @@ namespace MeGUI
             if (this.player != null) // make sure only one preview window is open at all times
                 player.Close();
             player = new VideoPlayer();
+            info.DAR = null; // to be sure to initialize DAR values
             bool videoLoaded = player.loadVideo(mainForm, fileName, PREVIEWTYPE.CREDITS, true);
             if (videoLoaded)
             {
