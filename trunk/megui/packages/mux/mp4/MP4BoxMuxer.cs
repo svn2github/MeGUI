@@ -238,8 +238,14 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                 }
 
                 // tmp directory
-                sb.AppendFormat(" -tmp \"{0}\"", Path.GetDirectoryName(settings.MuxedOutput));
-                
+                // due to a bug from MP4Box, we need to test the path delimiter number
+                if (Util.CountStrings(settings.MuxedOutput, '\\') > 1) {
+                    sb.AppendFormat(" -tmp \"{0}\"", Path.GetDirectoryName(settings.MuxedOutput));
+                }
+                else { 
+                    sb.AppendFormat(" -tmp {0}", Path.GetDirectoryName(settings.MuxedOutput));
+                } 
+              
                 // force to create a new output file
                 sb.Append(" -new \"" + settings.MuxedOutput + "\"");
                 return sb.ToString();
