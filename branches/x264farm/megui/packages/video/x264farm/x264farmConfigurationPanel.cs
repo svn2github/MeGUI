@@ -62,7 +62,7 @@ namespace MeGUI.packages.video.x264farm
                 this.x264PBFrameFactor.Value = value.PBFactor;
                 this.x264QuantizerCompression.Value = value.QuantCompression;
                 this.x264TempFrameComplexityBlur.Value = value.TempComplexityBlur;
-                this.x264TempQuantBlur.Value = value.TempQuantBlur;
+                this.x264TempQuantBlur.Value = value.TempQuanBlurCC;
                 this.Zones = value.Zones;
 
                 //SPW make Default, to Omit from passes for x264farm
@@ -75,7 +75,7 @@ namespace MeGUI.packages.video.x264farm
                 value.PBFactor = x264defaultSettings.PBFactor;
                 value.QuantCompression = x264defaultSettings.QuantCompression;
                 value.TempComplexityBlur = x264defaultSettings.TempComplexityBlur;
-                value.TempQuantBlur = x264defaultSettings.TempQuantBlur;
+                value.TempQuanBlurCC = x264defaultSettings.TempQuanBlurCC;
                 value.Zones = x264defaultSettings.Zones;
                 x264defaultSettings = value.clone() as x264Settings;
 
