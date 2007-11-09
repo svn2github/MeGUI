@@ -4,7 +4,7 @@ cd ..
 cd testsuite
 start /wait compile.bat
 cd ..
-md trunk\Dist\updatecopier
+md megui\Dist\updatecopier
 cd UpdateCopier
 start /wait compile-updatecopier.bat
 cd ..\megui

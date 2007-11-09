@@ -49,46 +49,46 @@ InstallDir $PROGRAMFILES\megui
 
 Section "";
 
-	SetOutPath $INSTDIR
+        SetOutPath $INSTDIR
         RMDir /r $SMPROGRAMS\megui
 
         SetOverwrite on
-	File "${INPUT_PATH}${FILE1}"
-	File "${INPUT_PATH}${FILE2}"
-	File "${INPUT_PATH}${FILE3}"
-	File "${INPUT_PATH}${FILE4}"
-	File "${INPUT_PATH}${FILE5}"
-	File "${INPUT_PATH}${FILE6}"
-	File "${FILE7}"
-	File "${INPUT_PATH}${FILE8}"
-	File "${INPUT_PATH}${FILE9}"
-	CreateDirectory $INSTDIR\update_cache
-	CreateDirectory $INSTDIR\tools
-	CreateDirectory $INSTDIR\logs
-	
+        File "${INPUT_PATH}${FILE1}"
+        File "${INPUT_PATH}${FILE2}"
+        File "${INPUT_PATH}${FILE3}"
+        File "${INPUT_PATH}${FILE4}"
+        File "${INPUT_PATH}${FILE5}"
+        File "${INPUT_PATH}${FILE6}"
+        File "${FILE7}"
+        File "${INPUT_PATH}${FILE8}"
+        File "${INPUT_PATH}${FILE9}"
+        CreateDirectory $INSTDIR\update_cache
+        CreateDirectory $INSTDIR\tools
+        CreateDirectory $INSTDIR\logs
+
         SetOutPath "$INSTDIR\Data\"
         File "${INPUT_PATH}..\${HELP}"
 
-	CreateDirectory $SMPROGRAMS\MeGUI
-	CreateShortcut "$SMPROGRAMS\MeGUI\Changelog.lnk" $INSTDIR\${FILE2}
-	CreateShortcut "$SMPROGRAMS\MeGUI\GPL.lnk" $INSTDIR\${FILE3}
-	CreateShortcut "$SMPROGRAMS\MeGUI\MeGUI Modern Media Encoder.lnk" $INSTDIR\${FILE5} "" $INSTDIR\megui.ico
-	CreateShortcut "$SMPROGRAMS\MeGUI\Tools.lnk" $INSTDIR\tools
-	CreateShortcut "$SMPROGRAMS\MeGUI\Log Files.lnk" $INSTDIR\logs
-	CreateShortcut "$SMPROGRAMS\MeGUI\Auto-Update cache.lnk" $INSTDIR\update_cache
-	CreateShortcut "$SMPROGRAMS\MeGUI\Uninstall MeGUI.lnk" $INSTDIR\megui-uninstall.exe
+        CreateDirectory $SMPROGRAMS\MeGUI
+        CreateShortcut "$SMPROGRAMS\MeGUI\Changelog.lnk" $INSTDIR\${FILE2}
+        CreateShortcut "$SMPROGRAMS\MeGUI\GPL.lnk" $INSTDIR\${FILE3}
+        CreateShortcut "$SMPROGRAMS\MeGUI\MeGUI Modern Media Encoder.lnk" $INSTDIR\${FILE5} "" $INSTDIR\megui.ico
+        CreateShortcut "$SMPROGRAMS\MeGUI\Tools.lnk" $INSTDIR\tools
+        CreateShortcut "$SMPROGRAMS\MeGUI\Log Files.lnk" $INSTDIR\logs
+        CreateShortcut "$SMPROGRAMS\MeGUI\Auto-Update cache.lnk" $INSTDIR\update_cache
+        CreateShortcut "$SMPROGRAMS\MeGUI\Uninstall MeGUI.lnk" $INSTDIR\megui-uninstall.exe
 
-	; sets update_cache registry entry
-	WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\MeGUI" "update_cache" "$INSTDIR\update_cache"
-	; write out uninstaller
-	WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "DisplayName" "${NAME} (remove only)"
-	WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "UninstallString" '"$INSTDIR\${UNINST_NAME}"'
-	WriteUninstaller "$INSTDIR\${UNINST_NAME}"
+        ; sets update_cache registry entry
+        WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\MeGUI" "update_cache" "$INSTDIR\update_cache"
+        ; write out uninstaller
+        WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "DisplayName" "${NAME} (remove only)"
+        WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "UninstallString" '"$INSTDIR\${UNINST_NAME}"'
+        WriteUninstaller "$INSTDIR\${UNINST_NAME}"
 
 SectionEnd ; end of default section
 
 
-  
+
 
 ; ---------------------------------------------------------------------------
 
@@ -96,23 +96,23 @@ SectionEnd ; end of default section
 UninstallText "This will uninstall ${NAME} from your system"
 
 Section Uninstall
-	
-	; add delete commands to delete whatever files/registry keys/etc you installed here.
-	Delete /REBOOTOK "$INSTDIR\${FILE1}"
-	Delete /REBOOTOK "$INSTDIR\${FILE2}"
-	Delete /REBOOTOK "$INSTDIR\${FILE3}"
-	Delete /REBOOTOK "$INSTDIR\${FILE4}"
-	Delete /REBOOTOK "$INSTDIR\${FILE5}"
-	Delete /REBOOTOK "$INSTDIR\${FILE6}"
-	Delete /REBOOTOK "$INSTDIR\${FILE7}"
-	Delete /REBOOTOK "$INSTDIR\${FILE8}"
-	Delete /REBOOTOK "$INSTDIR\${FILE9}"
-	Delete "$INSTDIR\${UNINST_NAME}"
+
+        ; add delete commands to delete whatever files/registry keys/etc you installed here.
+        Delete /REBOOTOK "$INSTDIR\${FILE1}"
+        Delete /REBOOTOK "$INSTDIR\${FILE2}"
+        Delete /REBOOTOK "$INSTDIR\${FILE3}"
+        Delete /REBOOTOK "$INSTDIR\${FILE4}"
+        Delete /REBOOTOK "$INSTDIR\${FILE5}"
+        Delete /REBOOTOK "$INSTDIR\${FILE6}"
+        Delete /REBOOTOK "$INSTDIR\${FILE7}"
+        Delete /REBOOTOK "$INSTDIR\${FILE8}"
+        Delete /REBOOTOK "$INSTDIR\${FILE9}"
+        Delete "$INSTDIR\${UNINST_NAME}"
         RMDir /r "$INSTDIR"
-   
+
     DeleteRegKey HKEY_LOCAL_MACHINE "SOFTWARE\MeGUI"
     DeleteRegKey HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}"
-	RMDir /r "$SMPROGRAMS\MeGUI"
+        RMDir /r "$SMPROGRAMS\MeGUI"
 
 
 SectionEnd ; end of uninstall section
@@ -120,10 +120,10 @@ SectionEnd ; end of uninstall section
 ; ---------------------------------------------------------------------------
 
 Function un.onUninstSuccess
-	IfRebootFlag 0 NoReboot
-		MessageBox MB_OK \ 
-			"A file couldn't be deleted. It will be deleted at next reboot."
-	NoReboot:
+        IfRebootFlag 0 NoReboot
+                MessageBox MB_OK \
+                        "A file couldn't be deleted. It will be deleted at next reboot."
+        NoReboot:
 FunctionEnd
 
 ; ---------------------------------------------------------------------------
