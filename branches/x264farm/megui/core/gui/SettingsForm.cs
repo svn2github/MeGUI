@@ -144,9 +144,9 @@ namespace MeGUI
         private Button button10;
         private TextBox meguiUpdateCache;
         private Button configAutoEncodeDefaults;
-        private Label label18;
-        private Button button11;
-        private TextBox textBox10;
+        private Label x264farmControllerLabel;
+        private Button selectX264farmPath;
+        private TextBox x264farmControllerPath;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -243,8 +243,11 @@ namespace MeGUI
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.x264farmControllerLabel = new System.Windows.Forms.Label();
             this.xvidEncrawLabel = new System.Windows.Forms.Label();
+            this.selectX264farmPath = new System.Windows.Forms.Button();
             this.selectXvidEncrawButton = new System.Windows.Forms.Button();
+            this.x264farmControllerPath = new System.Windows.Forms.TextBox();
             this.xvidEncrawPath = new System.Windows.Forms.TextBox();
             this.selectMencoderExecutableButton = new System.Windows.Forms.Button();
             this.mencoderPath = new System.Windows.Forms.TextBox();
@@ -310,9 +313,6 @@ namespace MeGUI
             this.nbPassesLabel = new System.Windows.Forms.Label();
             this.nbPasses = new System.Windows.Forms.NumericUpDown();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
-            this.textBox10 = new System.Windows.Forms.TextBox();
-            this.button11 = new System.Windows.Forms.Button();
-            this.label18 = new System.Windows.Forms.Label();
             groupBox1 = new System.Windows.Forms.GroupBox();
             groupBox1.SuspendLayout();
             this.otherGroupBox.SuspendLayout();
@@ -734,10 +734,10 @@ namespace MeGUI
             // 
             this.tabPage1.Controls.Add(this.vobGroupBox);
             this.tabPage1.Controls.Add(this.otherGroupBox);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Location = new System.Drawing.Point(4, 21);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(475, 331);
+            this.tabPage1.Size = new System.Drawing.Size(475, 332);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Main";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -748,9 +748,9 @@ namespace MeGUI
             this.tabPage3.Controls.Add(this.autoUpdateGroupBox);
             this.tabPage3.Controls.Add(this.outputExtensions);
             this.tabPage3.Controls.Add(this.autoModeGroupbox);
-            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Location = new System.Drawing.Point(4, 21);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(475, 331);
+            this.tabPage3.Size = new System.Drawing.Size(475, 332);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Extra config";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -945,10 +945,10 @@ namespace MeGUI
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.tabControl2);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Location = new System.Drawing.Point(4, 21);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(475, 331);
+            this.tabPage2.Size = new System.Drawing.Size(475, 332);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Program Paths";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -967,11 +967,11 @@ namespace MeGUI
             // 
             // tabPage4
             // 
-            this.tabPage4.Controls.Add(this.label18);
+            this.tabPage4.Controls.Add(this.x264farmControllerLabel);
             this.tabPage4.Controls.Add(this.xvidEncrawLabel);
-            this.tabPage4.Controls.Add(this.button11);
+            this.tabPage4.Controls.Add(this.selectX264farmPath);
             this.tabPage4.Controls.Add(this.selectXvidEncrawButton);
-            this.tabPage4.Controls.Add(this.textBox10);
+            this.tabPage4.Controls.Add(this.x264farmControllerPath);
             this.tabPage4.Controls.Add(this.xvidEncrawPath);
             this.tabPage4.Controls.Add(this.selectMencoderExecutableButton);
             this.tabPage4.Controls.Add(this.mencoderPath);
@@ -979,13 +979,21 @@ namespace MeGUI
             this.tabPage4.Controls.Add(this.x264ExePathLabel);
             this.tabPage4.Controls.Add(this.x264ExePath);
             this.tabPage4.Controls.Add(this.selectX264ExecutableButton);
-            this.tabPage4.Location = new System.Drawing.Point(4, 22);
+            this.tabPage4.Location = new System.Drawing.Point(4, 21);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(451, 270);
+            this.tabPage4.Size = new System.Drawing.Size(451, 271);
             this.tabPage4.TabIndex = 0;
             this.tabPage4.Text = "Video";
             this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // x264farmControllerLabel
+            // 
+            this.x264farmControllerLabel.Location = new System.Drawing.Point(6, 96);
+            this.x264farmControllerLabel.Name = "x264farmControllerLabel";
+            this.x264farmControllerLabel.Size = new System.Drawing.Size(69, 33);
+            this.x264farmControllerLabel.TabIndex = 9;
+            this.x264farmControllerLabel.Text = "x264farm controller";
             // 
             // xvidEncrawLabel
             // 
@@ -995,6 +1003,15 @@ namespace MeGUI
             this.xvidEncrawLabel.TabIndex = 9;
             this.xvidEncrawLabel.Text = "xvid_encraw";
             // 
+            // selectX264farmPath
+            // 
+            this.selectX264farmPath.Location = new System.Drawing.Point(417, 96);
+            this.selectX264farmPath.Name = "selectX264farmPath";
+            this.selectX264farmPath.Size = new System.Drawing.Size(24, 23);
+            this.selectX264farmPath.TabIndex = 11;
+            this.selectX264farmPath.Text = "...";
+            this.selectX264farmPath.Click += new System.EventHandler(this.button11_Click);
+            // 
             // selectXvidEncrawButton
             // 
             this.selectXvidEncrawButton.Location = new System.Drawing.Point(417, 69);
@@ -1003,6 +1020,15 @@ namespace MeGUI
             this.selectXvidEncrawButton.TabIndex = 11;
             this.selectXvidEncrawButton.Text = "...";
             this.selectXvidEncrawButton.Click += new System.EventHandler(this.selectXvidEncrawButton_Click);
+            // 
+            // x264farmControllerPath
+            // 
+            this.x264farmControllerPath.Location = new System.Drawing.Point(81, 97);
+            this.x264farmControllerPath.Name = "x264farmControllerPath";
+            this.x264farmControllerPath.ReadOnly = true;
+            this.x264farmControllerPath.Size = new System.Drawing.Size(330, 21);
+            this.x264farmControllerPath.TabIndex = 10;
+            this.x264farmControllerPath.Text = "controller.exe";
             // 
             // xvidEncrawPath
             // 
@@ -1092,10 +1118,10 @@ namespace MeGUI
             this.tabPage5.Controls.Add(this.textBox1);
             this.tabPage5.Controls.Add(this.label1);
             this.tabPage5.Controls.Add(this.button1);
-            this.tabPage5.Location = new System.Drawing.Point(4, 22);
+            this.tabPage5.Location = new System.Drawing.Point(4, 21);
             this.tabPage5.Name = "tabPage5";
             this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(451, 270);
+            this.tabPage5.Size = new System.Drawing.Size(451, 271);
             this.tabPage5.TabIndex = 1;
             this.tabPage5.Text = "Audio";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -1332,10 +1358,10 @@ namespace MeGUI
             this.tabPage6.Controls.Add(this.mp4boxPathLabel);
             this.tabPage6.Controls.Add(this.mkvmergePath);
             this.tabPage6.Controls.Add(this.selectMP4boxExecutableButton);
-            this.tabPage6.Location = new System.Drawing.Point(4, 22);
+            this.tabPage6.Location = new System.Drawing.Point(4, 21);
             this.tabPage6.Name = "tabPage6";
             this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage6.Size = new System.Drawing.Size(451, 270);
+            this.tabPage6.Size = new System.Drawing.Size(451, 271);
             this.tabPage6.TabIndex = 2;
             this.tabPage6.Text = "Muxer";
             this.tabPage6.UseVisualStyleBackColor = true;
@@ -1458,10 +1484,10 @@ namespace MeGUI
             this.tabPage7.Controls.Add(this.dgIndexPath);
             this.tabPage7.Controls.Add(this.dgIndexLabel);
             this.tabPage7.Controls.Add(this.selectDGIndexExecutable);
-            this.tabPage7.Location = new System.Drawing.Point(4, 22);
+            this.tabPage7.Location = new System.Drawing.Point(4, 21);
             this.tabPage7.Name = "tabPage7";
             this.tabPage7.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage7.Size = new System.Drawing.Size(451, 270);
+            this.tabPage7.Size = new System.Drawing.Size(451, 271);
             this.tabPage7.TabIndex = 3;
             this.tabPage7.Text = "Others";
             this.tabPage7.UseVisualStyleBackColor = true;
@@ -1640,32 +1666,6 @@ namespace MeGUI
             this.helpButton1.Name = "helpButton1";
             this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 1;
-            // 
-            // textBox10
-            // 
-            this.textBox10.Location = new System.Drawing.Point(81, 97);
-            this.textBox10.Name = "textBox10";
-            this.textBox10.ReadOnly = true;
-            this.textBox10.Size = new System.Drawing.Size(330, 21);
-            this.textBox10.TabIndex = 10;
-            this.textBox10.Text = "controller.exe";
-            // 
-            // button11
-            // 
-            this.button11.Location = new System.Drawing.Point(417, 96);
-            this.button11.Name = "button11";
-            this.button11.Size = new System.Drawing.Size(24, 23);
-            this.button11.TabIndex = 11;
-            this.button11.Text = "...";
-            this.button11.Click += new System.EventHandler(this.button11_Click);
-            // 
-            // label18
-            // 
-            this.label18.Location = new System.Drawing.Point(6, 96);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(69, 33);
-            this.label18.TabIndex = 9;
-            this.label18.Text = "x264farm controller";
             // 
             // SettingsForm
             // 
@@ -1886,7 +1886,7 @@ namespace MeGUI
         {
             if (selectExe("controller"))
             {
-                textBox10.Text = openExecutableDialog.FileName;
+                x264farmControllerPath.Text = openExecutableDialog.FileName;
             }
         }
 
@@ -1981,6 +1981,7 @@ namespace MeGUI
                 settings.UseAdvancedTooltips = chkboxUseAdvancedTooltips.Checked;
                 settings.BeSplitPath = textBox8.Text;
 				settings.X264Path = x264ExePath.Text;
+			    settings.X264farmControllerPath = x264farmControllerPath.Text;
 				settings.DgIndexPath = dgIndexPath.Text;
 				settings.DefaultLanguage1 = defaultLanguage1.Text;
 				settings.DefaultLanguage2 = defaultLanguage2.Text;
@@ -2037,6 +2038,7 @@ namespace MeGUI
                 videoExtension.Text = settings.VideoExtension;
                 audioExtension.Text = settings.AudioExtension;
 				x264ExePath.Text = settings.X264Path;
+			    x264farmControllerPath.Text = settings.X264farmControllerPath;
 				dgIndexPath.Text = settings.DgIndexPath;
 				int index = this.defaultLanguage1.Items.IndexOf(settings.DefaultLanguage1);
 				if (index != -1)
