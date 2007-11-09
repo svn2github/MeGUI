@@ -179,6 +179,18 @@ namespace MeGUI.core.util
             return t.Value.ToString();
         }*/
 
+        public static int CountStrings(string src, char find)
+        {
+            int ret = 0;
+            foreach (char s in src)
+            {
+                if (s == find)
+                {
+                    ++ret;
+                }
+            }
+            return ret;
+        }        
         
         #region range clamping
         public static void clampedSet(NumericUpDown box, decimal value)
