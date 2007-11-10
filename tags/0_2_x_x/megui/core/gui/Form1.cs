@@ -734,7 +734,7 @@ namespace MeGUI
         /// <param name="e"></param>
         private void mnuGuide_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("http://mewiki.project357.com/index.php/Main_Page");
+            System.Diagnostics.Process.Start("http://mewiki.project357.com/wiki/Main_Page");
         }
         /// <summary>
         /// launches the encoder gui forum in the default browser
@@ -2040,7 +2040,7 @@ namespace MeGUI
 
         private void mnuDoc_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("http://mewiki.project357.com/index.php/Main_Page");
+            System.Diagnostics.Process.Start("http://mewiki.project357.com/wiki/Main_Page");
         }
 
         private void mnuOptionsSettings_Click(object sender, EventArgs e)
