@@ -11,7 +11,7 @@ namespace MeGUI
         public AC3Settings()
             : base()
         {
-            this.Bitrate = 256;
+            this.Bitrate = 384;
             this.Codec = AudioCodec.AC3;
             this.EncoderType = AudioEncoderType.FFAC3;
         }
