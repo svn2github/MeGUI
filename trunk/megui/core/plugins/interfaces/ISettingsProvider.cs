@@ -400,7 +400,7 @@ namespace MeGUI
     NeroAACSettings, AudioCodecSettings, AudioCodec, AudioEncoderType>
     {
         public NeroAACSettingsProvider()
-            : base("ND AAC", AudioEncoderType.NAAC, AudioCodec.AAC)
+            : base("AAC  -  Nero Digital", AudioEncoderType.NAAC, AudioCodec.AAC)
         {
         }
     }
@@ -408,49 +408,49 @@ namespace MeGUI
         AudXSettings, AudioCodecSettings, AudioCodec, AudioEncoderType>
     {
         public AudXSettingsProvider()
-            : base("Aud-X", AudioEncoderType.AUDX, AudioCodec.MP3)
+            : base("MP3  -  Aud-X", AudioEncoderType.AUDX, AudioCodec.MP3)
         { }
     }
     public class faacSettingsProvider : SettingsProviderImpl2<faacConfigurationPanel, string[],
         FaacSettings, AudioCodecSettings, AudioCodec, AudioEncoderType>
     {
         public faacSettingsProvider()
-            : base("FAAC", AudioEncoderType.FAAC, AudioCodec.AAC)
+            : base("AAC  -  FAAC", AudioEncoderType.FAAC, AudioCodec.AAC)
         { }
     }
     public class ffac3SettingsProvider : SettingsProviderImpl2<AC3ConfigurationPanel, string[],
    AC3Settings, AudioCodecSettings, AudioCodec, AudioEncoderType>
     {
         public ffac3SettingsProvider()
-            : base("FFMPEG AC-3", AudioEncoderType.FFAC3, AudioCodec.AC3)
+            : base("AC3  -  FFmpeg", AudioEncoderType.FFAC3, AudioCodec.AC3)
         { }
     }
     public class ffmp2SettingsProvider : SettingsProviderImpl2<MP2ConfigurationPanel, string[],
    MP2Settings, AudioCodecSettings, AudioCodec, AudioEncoderType>
     {
         public ffmp2SettingsProvider()
-            : base("FFMPEG MP2", AudioEncoderType.FFMP2, AudioCodec.MP2)
+            : base("MP2  -  FFmpeg", AudioEncoderType.FFMP2, AudioCodec.MP2)
         { }
     }
     public class lameSettingsProvider : SettingsProviderImpl2<lameConfigurationPanel, string[],
    MP3Settings, AudioCodecSettings, AudioCodec, AudioEncoderType>
     {
         public lameSettingsProvider()
-            : base("LAME MP3", AudioEncoderType.LAME, AudioCodec.MP3)
+            : base("MP3  -  Lame", AudioEncoderType.LAME, AudioCodec.MP3)
         { }
     }
     public class vorbisSettingsProvider : SettingsProviderImpl2<OggVorbisConfigurationPanel, string[],
    OggVorbisSettings, AudioCodecSettings, AudioCodec, AudioEncoderType>
     {
         public vorbisSettingsProvider()
-            : base("Ogg Vorbis", AudioEncoderType.VORBIS, AudioCodec.VORBIS)
+            : base("OGG  -  Xiph", AudioEncoderType.VORBIS, AudioCodec.VORBIS)
         { }
     }
     public class waacSettingsProvider : SettingsProviderImpl2<WinAmpAACConfigurationPanel, string[],
    WinAmpAACSettings, AudioCodecSettings, AudioCodec, AudioEncoderType>
     {
         public waacSettingsProvider()
-            : base("Winamp AAC", AudioEncoderType.WAAC, AudioCodec.AAC)
+            : base("AAC  -  Winamp", AudioEncoderType.WAAC, AudioCodec.AAC)
         { }
     }
 

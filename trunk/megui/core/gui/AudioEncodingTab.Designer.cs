@@ -132,6 +132,7 @@ namespace MeGUI.core.gui
             this.audioCodec.Location = new System.Drawing.Point(110, 119);
             this.audioCodec.Name = "audioCodec";
             this.audioCodec.Size = new System.Drawing.Size(136, 21);
+            this.audioCodec.Sorted = true;
             this.audioCodec.TabIndex = 23;
             // 
             // label2
