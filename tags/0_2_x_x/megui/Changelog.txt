@@ -1,3 +1,8 @@
+0.2.6.1037
+    - (Kurtnoise) [ProgressWindow] fixed timeElapsed issue for 24h+.
+    - (Kurtnoise) Updated wiki links.
+    - (Kurtnoise) [MP4BoxMuxer] workaround to avoid tmp command issues (fixed #1828277)
+
 0.2.6.1036
     - (berrinam) Fixed exception in profile import when file already exists
     - (Kurtnoise) [VideoEncoding] DAR values Initialization (fixed #1823977)
