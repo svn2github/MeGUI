@@ -415,8 +415,9 @@ namespace MeGUI
                 // Processing speed
                 fps.Text = su.ProcessingSpeed ?? "---";
 
-                // Time elapsed
-                timeElapsed.Text = Util.ToString(su.TimeElapsed);
+                // Time elapsed 
+                // Now using TotalHours, TotalMinutes, TotalSeconds to avoid 24h+ resets...
+                timeElapsed.Text = string.Format("{0:00}:{1:00}:{2:00}", (int)su.TimeElapsed.TotalHours, su.TimeElapsed.TotalMinutes, su.TimeElapsed.TotalSeconds);
 
                 // Estimated time
                 totalTime.Text = Util.ToString(su.EstimatedTime) ?? "---";
