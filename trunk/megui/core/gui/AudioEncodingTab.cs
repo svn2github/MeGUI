@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using MeGUI.core.details.video;
 using System.IO;
 using MeGUI.core.util;
+using System.Text.RegularExpressions;
 
 namespace MeGUI.core.gui
 {
@@ -108,6 +109,20 @@ namespace MeGUI.core.gui
 
         public string verifyAudioSettings()
         {
+            int inputDelay = PrettyFormatting.getDelay(AudioInput) ?? 0;
+            int? delay = PrettyFormatting.getDelay(AudioOutput);
+            if (delay != null && delay.Value != (inputDelay - (int)this.delay.Value))
+            {
+                if (MessageBox.Show(string.Format(
+                    "The output filename suggests the audio delay is {0}ms. " +
+                    "However, the input delay is {1}ms and the delay correction is {2}ms, " +
+                    "so a delay of {3}ms is more appropriate. Do you want MeGUI to correct " +
+                    "the output filename before adding the job?", delay.Value, inputDelay,
+                    this.delay.Value, (inputDelay - (int)this.delay.Value)),
+                    "Output filename suggests wrong delay", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    AudioOutput = PrettyFormatting.ReplaceDelay(AudioOutput, (inputDelay - (int)this.delay.Value));
+            }
+
             AudioJob stream;
 
             try
@@ -206,10 +221,12 @@ namespace MeGUI.core.gui
         {
             AudioInput = fileName;
 
-            AudioOutput = FileUtil.AddToFileName(fileName, MainForm.Instance.Settings.AudioExtension);
+            delay.Value = PrettyFormatting.getDelay(fileName) ?? 0;
+
+            AudioOutput = FileUtil.AddToFileName(PrettyFormatting.ReplaceDelay(fileName, 0),
+                MainForm.Instance.Settings.AudioExtension);
             audioContainer_SelectedIndexChanged(null, null);
             
-            delay.Value = PrettyFormatting.getDelay(fileName);
         }
 
         internal Size FileTypeComboBoxSize

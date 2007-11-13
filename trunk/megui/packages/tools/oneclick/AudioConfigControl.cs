@@ -83,7 +83,7 @@ namespace MeGUI.packages.tools.oneclick
         
         public void openAudioFile(string p)
         {
-            delay.Value = PrettyFormatting.getDelay(p);
+            delay.Value = PrettyFormatting.getDelay(p) ?? 0;
         }
 
         public AudioConfigControl()

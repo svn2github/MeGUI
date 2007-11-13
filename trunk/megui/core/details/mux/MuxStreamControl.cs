@@ -93,7 +93,7 @@ namespace MeGUI.core.details.mux
 
         private void input_FileSelected(FileBar sender, FileBarEventArgs args)
         {
-            audioDelay.Value = PrettyFormatting.getDelay(input.Filename);
+            audioDelay.Value = PrettyFormatting.getDelay(input.Filename) ?? 0;
             raiseEvent();
         }
     }

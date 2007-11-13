@@ -769,7 +769,7 @@ namespace MeGUI
                 {
                     int t = int.Parse(sub);
                     string s = audioFiles[t];
-                    delay = PrettyFormatting.getDelay(s);
+                    delay = PrettyFormatting.getDelay(s) ?? 0;
                     return s;
                 }
                 catch (Exception)

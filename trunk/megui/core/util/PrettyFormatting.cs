@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace MeGUI.core.util
 {
@@ -41,31 +42,33 @@ namespace MeGUI.core.util
             return A;
         }
 
+        private static readonly Regex delayRegex = new Regex("(?<match>-?[0-9]+)ms");
         /// <summary>
         /// gets the delay from an audio filename
         /// </summary>
         /// <param name="fileName">file name to be analyzed</param>
         /// <returns>the delay in milliseconds</returns>
-        public static int getDelay(string fileName)
+        public static int? getDelay(string fileName)
         {
-            int start = fileName.LastIndexOf("DELAY ");
-            if (start != -1) // delay is in filename
+            try
             {
-                try
-                {
-                    string delay = fileName.Substring(start + 6, fileName.LastIndexOf("ms.") - start - 6);
-                    int del = 0;
-                    del = Int32.Parse(delay);
-                    return del;
-                }
-                catch (Exception e) // problem parsing, assume 0s delay
-                {
-                    Console.WriteLine(e.Message);
-                    return 0;
-                }
+                return int.Parse(delayRegex.Match(fileName).Groups["match"].Value);
             }
-            return 0;
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
+        /// <summary>
+        /// replaces the delay in the audio filename with a new delay
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <param name="p"></param>
+        /// <returns></returns>
+        public static string ReplaceDelay(string fileName, int delay)
+        {
+            return delayRegex.Replace(fileName, delay + "ms", 1);
+        }
     }
 }
