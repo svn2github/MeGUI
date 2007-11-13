@@ -11,7 +11,7 @@ namespace MeGUI
         #region variables
         private string[][] autoUpdateServerLists;
         private string faacPath, lamePath, neroAacEncPath, mencoderPath,  mp4boxPath, mkvmergePath, encAacPlusPath,
-            ffmpegPath, besplitPath, yadifPath,
+            ffmpegPath, besplitPath, yadifPath, aftenPath,
             x264Path, dgIndexPath, xvidEncrawPath, avc2aviPath, aviMuxGUIPath, oggEnc2Path, encAudXPath,
             defaultLanguage1, defaultLanguage2, afterEncodingCommand;
         public string divxMuxerPath;
@@ -61,6 +61,7 @@ namespace MeGUI
             encAudXPath = "enc_AudX_CLI.exe";
             encAacPlusPath = "enc_aacPlus.exe";
             ffmpegPath = "ffmpeg.exe";
+            aftenPath = "aften.exe";
             yadifPath = "yadif.dll";
             recalculateMainMovieBitrate = false;
 			autoForceFilm = true;
@@ -308,6 +309,14 @@ namespace MeGUI
             get { return aviMuxGUIPath; }
             set { aviMuxGUIPath = value; }
         }
+        /// <summary>
+        /// filename and full path of the aften executable
+        /// </summary>
+        public string AftenPath
+        {
+            get { return aftenPath; }
+            set { aftenPath = value; }
+        }	
         /// <summary>
         /// folder containing the avisynth plugins
         /// </summary>

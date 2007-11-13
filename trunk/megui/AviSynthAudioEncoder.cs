@@ -46,7 +46,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 ((j as AudioJob).Settings is AudXSettings) ||
                 ((j as AudioJob).Settings is OggVorbisSettings) ||
                 ((j as AudioJob).Settings is FaacSettings) ||
-                ((j as AudioJob).Settings is NeroAACSettings)))
+                ((j as AudioJob).Settings is NeroAACSettings) ||
+                ((j as AudioJob).Settings is AftenSettings)))
                 return new AviSynthAudioEncoder(mf.Settings);
             return null;
         }
@@ -610,6 +611,13 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             }
 
             //let's obtain command line & other staff
+            if (audioJob.Settings is AftenSettings)
+            {
+                _mustSendWavHeaderToEncoderStdIn = true;
+                AftenSettings n = audioJob.Settings as AftenSettings;
+                _encoderExecutablePath = this._settings.AftenPath;
+                _encoderCommandLine = "-readtoeof 1 -b " + n.Bitrate + " - -o \"{0}\"";
+            }
             if (audioJob.Settings is AC3Settings)
             {
                 script.Append("6<=Audiochannels(last)?GetChannel(last,1,3,2,5,6,4):last" + Environment.NewLine);

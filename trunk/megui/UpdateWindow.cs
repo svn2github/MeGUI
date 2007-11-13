@@ -498,6 +498,8 @@ namespace MeGUI
                             return meGUISettings.Avc2aviPath;
                         case ("yadif"):
                             return meGUISettings.YadifPath;
+                        case ("aften"):
+                            return meGUISettings.AftenPath;
                         default:
                             return null;
                     }
@@ -553,6 +555,9 @@ namespace MeGUI
                             return;
                         case ("yadif"):
                             meGUISettings.YadifPath = value;
+                            return;
+                        case ("aften"):
+                            meGUISettings.AftenPath = value;
                             return;
                     }
                 }

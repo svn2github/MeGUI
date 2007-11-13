@@ -16,6 +16,7 @@ using MeGUI.packages.audio.ffmp2;
 using MeGUI.packages.audio.lame;
 using MeGUI.packages.audio.vorbis;
 using MeGUI.packages.audio.waac;
+using MeGUI.packages.audio.aften;
 using System.Windows.Forms;
 using MeGUI.core.util;
 
@@ -453,7 +454,13 @@ namespace MeGUI
             : base("AAC  -  Winamp", AudioEncoderType.WAAC, AudioCodec.AAC)
         { }
     }
-
+    public class aftenSettingsProvider : SettingsProviderImpl2<AftenConfigurationPanel, string[],
+   AftenSettings, AudioCodecSettings, AudioCodec, AudioEncoderType>
+    {
+        public aftenSettingsProvider()
+            : base("AC3  -  Aften", AudioEncoderType.AFTEN, AudioCodec.AC3)
+        { }
+    }
     #endregion
     #region old
     /*

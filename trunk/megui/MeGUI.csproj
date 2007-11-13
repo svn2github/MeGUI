@@ -428,6 +428,13 @@
     <Compile Include="core\util\Util.cs" />
     <Compile Include="core\util\VideoUtil.cs" />
     <Compile Include="core\util\WindowUtil.cs" />
+    <Compile Include="packages\audio\aften\AftenConfigurationPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="packages\audio\aften\AftenConfigurationPanel.Designer.cs">
+      <DependentUpon>AftenConfigurationPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="packages\audio\aften\AftenSettings.cs" />
     <Compile Include="packages\audio\audx\AudXConfigurationPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -754,6 +761,10 @@
     <EmbeddedResource Include="CropDialog.resx">
       <SubType>Designer</SubType>
       <DependentUpon>CropDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="packages\audio\aften\AftenConfigurationPanel.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>AftenConfigurationPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="packages\audio\audx\AudXConfigurationPanel.resx">
       <SubType>Designer</SubType>
