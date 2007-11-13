@@ -1,3 +1,6 @@
+0.2.6.1038
+    - (Kurtnoise) [Progress Window] use TotalHours only, dude...
+
 0.2.6.1037
     - (Kurtnoise) [ProgressWindow] fixed timeElapsed issue for 24h+.
     - (Kurtnoise) Updated wiki links.
