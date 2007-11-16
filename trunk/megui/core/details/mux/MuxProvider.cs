@@ -456,9 +456,6 @@ namespace MeGUI
             base.type = MuxerType.MP4BOX;
             maxFilesOfType = new int[] { 1, -1, -1, 1};
             name = "MP4 Muxer";
-//            base.audioInputFilter = "All supported types (*.aac, *.mp3, *.mp4)|*.aac;*.mp3;*.mp4|RAW AAC Files (*.aac)|*.aac|MP3 Files (*.mp3)|*.mp3|MP4 Audio Files (*.mp4)|*.mp4";
-//            base.videoInputFilter = "All supported types (*.m4v, *.264, *.mp4)|*.m4v;*.264;*.mp4|RAW MPEG-4 ASP Files (*.m4v)|*.m4v|RAW MPEG-4 AVC Files (*.264)|*.264|MP4 Files (*.mp4)|*.mp4";
-//            base.subtitleInputFilter = "All supported types (*.srt)|*.srt";
         }
 
         public override IJobProcessor GetMuxer(MeGUISettings settings)
@@ -487,6 +484,8 @@ namespace MeGUI
             supportsAnyInputtableVideoCodec = true;
             supportedSubtitleTypes.Add(SubtitleType.SUBRIP);
             supportedSubtitleTypes.Add(SubtitleType.VOBSUB);
+            supportedSubtitleTypes.Add(SubtitleType.SSA);
+            supportedSubtitleTypes.Add(SubtitleType.ASS);
             supportedChapterTypes.Add(ChapterType.OGG_TXT);
             supportedContainers.Add(ContainerType.MKV);
             supportedContainerInputTypes.Add(ContainerType.MP4);
@@ -495,10 +494,6 @@ namespace MeGUI
             maxFilesOfType = new int[] { -1, -1, -1, 1 };
             base.type = MuxerType.MKVMERGE;
             name = "MKV muxer";
-//            base.audioInputFilter = "All supported types (*.aac, *.ac3, *.dts, *.mp2, *.mp3, *.mp4, *.ogg)|*.aac;*.ac3;*.dts;*.mp2;*.mp3;*.mp4;*.ogg|RAW AAC Files (*.aac)|*.aac|AC3 Files (*.ac3)|*.ac3|DTS Files (*.dts)|*.dts" +
-//                "MP2 Files (*.mp2)|*.mp2|MP3 Files (*.mp3)|*.mp3|MP4 Audio Files (*.mp4)|*.mp4|Ogg Vorbis Files (*.ogg)|*.ogg";
-//            base.videoInputFilter = "All supported types (*.avi, *.mkv, *.mp4)|*.avi;*.mkv;*.mp4|AVI Files (*.avi)|*.avi|Matroska Files (*.mkv)|*.mkv|MP4 Files (*.mp4)|*.mp4";
-//            base.subtitleInputFilter = "All supported types (*.srt, *.idx)|*.srt;*.idx|Subrip Files (*.srt)|*.srt|VobSub Files (*.idx)|*.idx";
         }
 
         public override IJobProcessor GetMuxer(MeGUISettings settings)
@@ -539,35 +534,6 @@ namespace MeGUI
             return new AMGMuxer(settings.AviMuxGUIPath);
         }
     }
-    /*
-    public class DivXMuxProvider : MuxerProvider
-    {
-        public DivXMuxProvider()
-            : base("DivXMux")
-        {
-            supportedVideoTypes.Add(VideoType.AVI);
-            supportedAudioTypes.Add(AudioType.AC3);
-            supportedAudioTypes.Add(AudioType.MP3);
-            supportedAudioTypes.Add(AudioType.VBRMP3);
-            supportedAudioTypes.Add(AudioType.CBRMP3);
-            supportedSubtitleTypes.Add(SubtitleType.SUBRIP);
-            supportedSubtitleTypes.Add(SubtitleType.VOBSUB);
-            supportedVideoCodecs.Add(VideoCodec.ASP);
-            supportedAudioCodecs.Add(AudioCodec.AC3);
-            supportedAudioCodecs.Add(AudioCodec.MP3);
-            supportedContainerInputTypes.Add(ContainerType.AVI);
-            supportedContainers.Add(ContainerType.AVI);
-            maxFilesOfType = new int[] { 1, -1, -1, 1 };
-            base.type = MuxerType.DIVXMUX;
-            generator = CommandLineGenerator.generateDivXMuxCommandline;
-            name = "DivX AVI Muxer";
-        }
-
-        public override Muxer GetMuxer(MeGUISettings meguiSettings)
-        {
-            return new DivXMuxer(meguiSettings.DivXMuxPath);
-        }
-    }*/
     public class AVC2AVIMuxerProvider : MuxerProvider
     {
         public AVC2AVIMuxerProvider() : base("avc2avi")
@@ -578,7 +544,6 @@ namespace MeGUI
             base.type = MuxerType.AVC2AVI;
             name = "AVC2AVI";
             maxFilesOfType = new int[] { 1, 0, 0, 0 };
-//            base.videoInputFilter = "RAW MPEG-4 AVC Files (*.264)|*.264";
         }
 
         public override IJobProcessor GetMuxer(MeGUISettings settings)

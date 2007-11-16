@@ -258,6 +258,8 @@ namespace MeGUI
     {
         public SubtitleType(string name, string filterName, string extension, ContainerType containerType)
             : base(name, filterName, extension, containerType) { }
+        public static readonly SubtitleType SSA = new SubtitleType("SubStationAlpha", "SubStation Alpha Subtitle Files", "ssa", null);
+        public static readonly SubtitleType ASS = new SubtitleType("Advanced SubStationAlpha", "Advanced SubStation Alpha Subtitle Files", "ass", null);
         public static readonly SubtitleType SUBRIP = new SubtitleType("Subrip", "Subrip Subtitle Files", "srt", null);
         public static readonly SubtitleType VOBSUB = new SubtitleType("Vobsub", "Vobsub Subtitle Files", "idx", null);
     }
