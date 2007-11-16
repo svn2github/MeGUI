@@ -156,9 +156,9 @@ namespace MeGUI
             int nbSamples = (int)((double)samplingRate * length);
             int headerSize = mkvAudioTrackHeaderSize;
             int samplesPerBlock = 0;
-            if (audioType == AudioType.MP4AAC)
+            if (audioType == AudioType.MP4AAC || audioType == AudioType.M4A || audioType == AudioType.RAWAAC)
                 samplesPerBlock = AACBlockSize;
-            else if (audioType == AudioType.VBRMP3 || audioType == AudioType.CBRMP3 || audioType == AudioType.MP3)
+            else if (audioType == AudioType.VBRMP3 || audioType == AudioType.CBRMP3 || audioType == AudioType.MP3 || audioType == AudioType.DTS)
                 samplesPerBlock = MP3BlockSize;
             else if (audioType == AudioType.AC3)
                 samplesPerBlock = AC3BlockSize;
@@ -167,7 +167,7 @@ namespace MeGUI
                 samplesPerBlock = VorbisBlockSize;
                 headerSize = mkvVorbisTrackHeaderSize;
             }
-            else // unknown types.. we presume the same overhead as for DTS
+            else // unknown types..
             {
                 samplesPerBlock = AC3BlockSize;
             }
