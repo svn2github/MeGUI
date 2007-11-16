@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
+using MeGUI.core.util;
 
 namespace MeGUI
 {
 	/// <summary>
 	/// Summary description for MeGUISettings.
 	/// </summary>
-	public class MeGUISettings
+	[LogByMembers]
+    public class MeGUISettings
     {
         #region variables
         private string[][] autoUpdateServerLists;
@@ -14,7 +16,6 @@ namespace MeGUI
             ffmpegPath, besplitPath, yadifPath, aftenPath,
             x264Path, dgIndexPath, xvidEncrawPath, avc2aviPath, aviMuxGUIPath, oggEnc2Path, encAudXPath,
             defaultLanguage1, defaultLanguage2, afterEncodingCommand;
-        public string divxMuxerPath;
         private bool recalculateMainMovieBitrate, autoForceFilm, autoStartQueue, enableMP3inMP4, autoOpenScript,
             overwriteStats, keep2of3passOutput, deleteCompletedJobs, autoSetNbThreads, deleteIntermediateFiles,
             deleteAbortedOutput, openProgressWindow, useadvancedtooltips, freshOggEnc2, autoscroll;
@@ -52,8 +53,7 @@ namespace MeGUI
 			mp4boxPath = "mp4box.exe";
 			mkvmergePath = "mkvmerge.exe";
 			x264Path = "x264.exe";
-            divxMuxerPath = "divxmux.exe";
-			dgIndexPath = "dgindex.exe";
+            dgIndexPath = "dgindex.exe";
             xvidEncrawPath = "xvid_encraw.exe";
             lamePath = "lame.exe";
             neroAacEncPath = "neroAacEnc.exe";
