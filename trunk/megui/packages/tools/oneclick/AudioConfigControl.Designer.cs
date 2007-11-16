@@ -67,6 +67,7 @@ namespace MeGUI.packages.tools.oneclick
             this.audioCodec.Location = new System.Drawing.Point(107, 4);
             this.audioCodec.Name = "audioCodec";
             this.audioCodec.Size = new System.Drawing.Size(173, 21);
+            this.audioCodec.Sorted = true;
             this.audioCodec.TabIndex = 36;
             // 
             // audioProfileControl
