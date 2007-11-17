@@ -323,6 +323,7 @@ namespace MeGUI.packages.video.x264
                 case (int)VideoCodecSettings.Mode.threepass2:
                 case (int)VideoCodecSettings.Mode.threepass3:
                     x264Turbo.Enabled = false;
+                    x264Turbo.Checked = false;
                     x264RateTol.Enabled = true;
                     x264RateTolLabel.Enabled = true;
                     logfileOpenButton.Enabled = true;
@@ -514,7 +515,7 @@ namespace MeGUI.packages.video.x264
                 xs.AlphaDeblock = (int)x264AlphaDeblock.Value;
                 xs.BetaDeblock = (int)x264BetaDeblock.Value;
                 xs.Cabac = x264CabacEnabled.Checked;
-                xs.SubPelRefinement = x264SubpelRefinement.SelectedIndex;
+                xs.SubPelRefinement = this.x264SubpelRefinement.SelectedIndex;
                 xs.BRDO = bRDO.Checked;
                 xs.biME = BiME.Checked;
                 xs.WeightedBPrediction = x264WeightedBPrediction.Checked;
@@ -581,7 +582,7 @@ namespace MeGUI.packages.video.x264
                 x264NumberOfBFrames.Value = xs.NbBframes;
                 NoFastPSkip.Checked = xs.noFastPSkip;
                 x264MixedReferences.Checked = xs.MixedRefs;
-                x264SubpelRefinement.SelectedIndex = xs.SubPelRefinement;
+                this.x264SubpelRefinement.SelectedIndex = xs.SubPelRefinement;
                 fourCC.SelectedIndex = xs.FourCC;
                 x264Turbo.Checked = xs.Turbo;
                 x264BitrateQuantizer.Value = (isBitrateMode(xs.EncodingMode) || xs.QuantizerCRF == 0) ? xs.BitrateQuantizer : xs.QuantizerCRF;
