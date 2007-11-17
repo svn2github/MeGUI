@@ -417,10 +417,15 @@ namespace MeGUI
 
                 // Time elapsed 
                 // Now we use TotalHours to avoid 24h+ resets...
-                timeElapsed.Text = string.Format("{0:00}:{1:00}:{2:00}", (int)su.TimeElapsed.TotalHours, su.TimeElapsed.Minutes, su.TimeElapsed.Seconds);
+                if (su.TimeElapsed.TotalHours > 24)
+                    timeElapsed.Text = string.Format("{0:00}:{1:00}:{2:00}:{3:00}", (int)su.TimeElapsed.TotalDays, su.TimeElapsed.Hours, su.TimeElapsed.Minutes, su.TimeElapsed.Seconds);
+                else
+                    timeElapsed.Text = string.Format("{0:00}:{1:00}:{2:00}", (int)su.TimeElapsed.Hours, su.TimeElapsed.Minutes, su.TimeElapsed.Seconds);
 
                 // Estimated time
-                totalTime.Text = Util.ToString(su.EstimatedTime) ?? "---";
+                // totalTime.Text = Util.ToString(su.EstimatedTime) ?? "---"; 
+                // go back to the old function ;-)
+                totalTime.Text = getTimeString(su.TimeElapsed, su.PercentageDoneExact ?? 0M);
 
                 this.Text = "Status: " + (su.PercentageDoneExact ?? 0M).ToString("##.##") + " %";
                 statusLabel.Text = su.Status ?? "";
@@ -502,7 +507,7 @@ namespace MeGUI
         }
         #endregion
         #region helper methods
-        /*
+        
         /// <summary>
 		/// calculates the remaining encoding time from the elapsed timespan and the percentage the job is done
 		/// </summary>
@@ -512,25 +517,23 @@ namespace MeGUI
 		private string getTimeString(TimeSpan span, decimal percentageDone)
 		{
 			if (percentageDone == 0)
-				return "n/a";
+				return "---";
 			else
 			{
                 long ratio = (long)((decimal)span.Ticks / percentageDone * 100M);
 				TimeSpan t = new TimeSpan(ratio - span.Ticks);
-                string retval = t.Days + ":";
-                if (t.Hours < 10)
-                    retval += "0";
-                retval += t.Hours + ":";
-				if (t.Minutes < 10)
-					retval += "0";
-				retval += t.Minutes + ":";
-				if (t.Seconds < 10)
-					retval += "0";
-				retval += t.Seconds;
+                string retval = "";
+                if (t.TotalHours > 24)
+                {
+                    retval += string.Format("{0:00}:{1:00}:{2:00}:{3:00}", (int)t.TotalDays, t.Hours, t.Minutes, t.Seconds);
+                }
+                else
+                {
+                    retval += string.Format("{0:00}:{1:00}:{2:00}", (int)t.Hours, t.Minutes, t.Seconds);
+                }
 				return retval;
 			}
-		}
-         * */
+		}         
 
         private bool isSettingPriority = false;
         /// <summary>
