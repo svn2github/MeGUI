@@ -79,7 +79,7 @@ namespace MeGUI.core.util
             if (!( obj is Dar)) return false;
             decimal ar2 = ((Dar)obj).ar;
             
-            return (Math.Abs(ar - ar2) < 0.001M * Math.Min(ar, ar2));
+            return (Math.Abs(ar - ar2) < 0.0001M * Math.Min(ar, ar2));
         }
 
         public override int GetHashCode()
