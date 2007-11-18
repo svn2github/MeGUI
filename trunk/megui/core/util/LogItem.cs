@@ -99,7 +99,7 @@ namespace MeGUI.core.util
 
         public LogItem LogEvent(string eventName, ImageType image)
         {
-            return Add(new LogItem(string.Format("[{0:T}] {1}", DateTime.Now, eventName), image));
+            return Add(new LogItem(string.Format("[{0:G}] {1}", DateTime.Now, eventName), image));
         }
 
         public LogItem Info(string text)
