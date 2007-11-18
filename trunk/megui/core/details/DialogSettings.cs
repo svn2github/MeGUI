@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using MeGUI.core.util;
 
 namespace MeGUI
 {
+    [LogByMembers]
     public class DialogSettings
     {
         private bool ovewriteJobOutputResponse = true;

@@ -48,6 +48,39 @@ namespace MeGUI.core.details
                 return null;
             }), "cleanup");
 
+        public static readonly JobPostProcessor DeleteIntermediateFilesPostProcessor = new JobPostProcessor(
+            delegate(MainForm mf, Job j)
+            {
+                if (mf.Settings.DeleteIntermediateFiles)
+                    return deleteIntermediateFiles(j.FilesToDelete);
+                return null;
+            }
+            , "DeleteIntermediateFiles");
+
+
+        
+        /// <summary>
+        /// Attempts to delete all files listed in job.FilesToDelete if settings.DeleteIntermediateFiles is checked
+        /// </summary>
+        /// <param name="job">the job which should just have been completed</param>
+        private static LogItem deleteIntermediateFiles(List<string> files)
+        {
+            LogItem i = new LogItem("Deleting intermediate files");
+            foreach (string file in files)
+            {
+                try
+                {
+                    File.Delete(file);
+                    i.LogEvent("Successfully deleted " + file);
+                }
+                catch (IOException e)
+                {
+                    i.LogValue("Error deleting " + file, e, ImageType.Error);
+                }
+            }
+            return i;
+        }
+
         #region IJobProcessor Members
 
         private CleanupJobRunner(MainForm m)
@@ -58,10 +91,12 @@ namespace MeGUI.core.details
         StatusUpdate su;
         List<string> files;
         MainForm mf = MainForm.Instance;
+        LogItem log;
 
-        void IJobProcessor.setup(Job job, StatusUpdate su)
+        void IJobProcessor.setup(Job job, StatusUpdate su, LogItem log)
         {
             CleanupJob j = (CleanupJob)job;
+            this.log = log;
             this.su = su;
             this.files = j.files;
         }
@@ -70,27 +105,10 @@ namespace MeGUI.core.details
         {
             Thread.Sleep(2000); // just so that the job has properly registered as starting
 
-            if (!mf.Settings.DeleteIntermediateFiles)
-                su.Log = "Cleanup job running, but deletion of intermediate files is not set. Nothing will be deleted.";
-            else
-            {
-                StringBuilder log = new StringBuilder();
-                foreach (string file in files)
-                {
-                    log.AppendFormat("Found intermediate output file '{0}', deleting...", file);
+            log.LogValue("Delete Intermediate Files option set", mf.Settings.DeleteIntermediateFiles);
+            if (mf.Settings.DeleteIntermediateFiles)
+                log.Add(deleteIntermediateFiles(files));
 
-                    try
-                    {
-                        File.Delete(file);
-                        log.AppendLine("Deletion succeeded.");
-                    }
-                    catch (IOException)
-                    {
-                        log.AppendLine("Deletion failed.");
-                    }
-                }
-                su.Log = log.ToString();
-            }
             su.IsComplete = true;
             statusUpdate(su);
         }

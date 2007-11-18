@@ -617,11 +617,11 @@ namespace MeGUI
     public class IndexJobPostProcessor
     {
         public static JobPostProcessor PostProcessor = new JobPostProcessor(postprocess, "D2V_postprocessor");
-        private static void postprocess(MainForm mainForm, Job ajob)
+        private static LogItem postprocess(MainForm mainForm, Job ajob)
         {
-            if (!(ajob is IndexJob)) return;
+            if (!(ajob is IndexJob)) return null;
             IndexJob job = (IndexJob)ajob;
-            if (job.PostprocessingProperties != null) return;
+            if (job.PostprocessingProperties != null) return null;
 
             StringBuilder logBuilder = new StringBuilder();
             VideoUtil vUtil = new VideoUtil(mainForm);
@@ -642,6 +642,8 @@ namespace MeGUI
                 asw.OpenScript += new OpenScriptCallback(mainForm.Video.openVideoFile);
                 asw.Show();
             }
+
+            return null;
         }
     }
 

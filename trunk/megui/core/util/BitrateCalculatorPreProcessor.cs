@@ -23,15 +23,15 @@ namespace MeGUI.core.util
         /// </summary>
         /// <param name="firstAudio">the audio job that is linked to a video job</param>
         /// <param name="firstpass">the video job to which the audio job is linked</param>
-        public static void calculateBitrate(MainForm mainForm, Job ajob)
+        public static LogItem calculateBitrate(MainForm mainForm, Job ajob)
         {
-            if (!(ajob is VideoJob)) return;
+            if (!(ajob is VideoJob)) return null;
             VideoJob job = (VideoJob)ajob;
-            if (job.BitrateCalculationInfo == null) return;
+            if (job.BitrateCalculationInfo == null) return null;
 
             BitrateCalculationInfo b = job.BitrateCalculationInfo;
-            mainForm.addToLog("Doing bitrate calculation...");
-
+            LogItem log = new LogItem("Bitrate calculation for video");
+            
             List<AudioBitrateCalculationStream> audioStreams = new List<AudioBitrateCalculationStream>();
             foreach (string s in b.AudioFiles)
                 audioStreams.Add(new AudioBitrateCalculationStream(s));
@@ -50,15 +50,17 @@ namespace MeGUI.core.util
             }
             catch (CalculationException e)
             {
-                mainForm.addToLog("Calculation failed with message '{0}'", e);
-                return;
+                log.LogValue("Calculation failed", e, ImageType.Error);
+                return log;
             }
 
-            mainForm.addToLog("Desired video size after subtracting audio size is {0}KBs. Setting the desired bitrate of the subsequent video jobs to {1} kbit/s.",
-                videoSizeKB, bitrateKBits);
+            log.LogValue("Desired size after subtracting audio", videoSizeKB + "KBs");
+            log.LogValue("Calculated desired bitrate", bitrateKBits + "kbit/s");
 
             foreach (TaggedJob t in b.VideoJobs)
                 ((VideoJob)t.Job).Settings.BitrateQuantizer = bitrateKBits;
+
+            return log;
         }
         #endregion
     }

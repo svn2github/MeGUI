@@ -76,6 +76,8 @@ namespace MeGUI
 		{
 			get
 			{
+                return "video";
+                /*
 				int mode = settings.EncodingMode;
 				switch (mode)
 				{
@@ -99,7 +101,7 @@ namespace MeGUI
 					case (int)VideoCodecSettings.Mode.threepass3:
 						return "3 pass 3rd pass";
 				}
-				return "";
+				return "";*/
 			}
 		}
     }

@@ -65,6 +65,7 @@ namespace MeGUI.core.gui
         private ProgressWindow pw;
         private MainForm mainForm;
         private decimal progress;
+        private LogItem log;
 
         #region process window opening and closing
         public void HideProcessWindow()
@@ -115,7 +116,7 @@ namespace MeGUI.core.gui
             }
             catch (JobRunException e)
             {
-                mainForm.addToLog("Error when attempting to change priority: " + e.Message);
+                log.LogValue("Error attempting to change priority", e, ImageType.Error);
             }
         }
         #endregion
@@ -219,37 +220,6 @@ namespace MeGUI.core.gui
 
         #region job run util
 
-        #region delete intermediate files
-        public static readonly JobPostProcessor DeleteIntermediateFilesPostProcessor = new JobPostProcessor(
-            new Processor(deleteIntermediateFiles), "DeleteIntermediateFiles");
-
-        /// <summary>
-        /// Attempts to delete all files listed in job.FilesToDelete if settings.DeleteIntermediateFiles is checked
-        /// </summary>
-        /// <param name="job">the job which should just have been completed</param>
-        private static void deleteIntermediateFiles(MainForm mainForm, Job job)
-        {
-            if (mainForm.Settings.DeleteIntermediateFiles)
-            {
-                mainForm.addToLog("Job completed successfully and deletion of intermediate files is activated\r\n");
-                foreach (string file in job.FilesToDelete)
-                {
-                    mainForm.addToLog("Found intermediate output file '" + ((string)file)
-                        + "', deleting...");
-                    try
-                    {
-                        File.Delete(file);
-                        mainForm.addToLog("Deletion succeeded.\r\n");
-                    }
-                    catch (IOException)
-                    {
-                        mainForm.addToLog("Deletion failed.\r\n");
-                    }
-                }
-            }
-        }
-        #endregion
-
 
         /// <summary>
         /// Postprocesses the given job according to the JobPostProcessors in the mainForm's PackageSystem
@@ -257,12 +227,15 @@ namespace MeGUI.core.gui
         /// <param name="job"></param>
         private void postprocessJob(Job job)
         {
-            mainForm.addToLog("Starting postprocessing of job...\r\n");
+            LogItem i = log.LogEvent("Postprocessing");
             foreach (JobPostProcessor pp in mainForm.PackageSystem.JobPostProcessors.Values)
             {
-                pp.PostProcessor(mainForm, job);
+                LogItem plog = pp.PostProcessor(mainForm, job);
+                if (plog != null)
+                {
+                    i.Add(plog);
+                }
             }
-            mainForm.addToLog("Postprocessing finished!\r\n");
         }
 
         /// <summary>
@@ -271,27 +244,28 @@ namespace MeGUI.core.gui
         /// <param name="job"></param>
         private void preprocessJob(Job job)
         {
-            mainForm.addToLog("Starting preprocessing of job...\r\n");
+            LogItem i = log.LogEvent("Preprocessing");
             foreach (JobPreProcessor pp in mainForm.PackageSystem.JobPreProcessors.Values)
             {
-                pp.PreProcessor(mainForm, job);
+                LogItem plog = pp.PreProcessor(mainForm, job);
+                if (plog != null)
+                {
+                    i.Add(plog);
+                }
             }
-            mainForm.addToLog("Preprocessing finished!\r\n");
         }
 
         private IJobProcessor getProcessor(Job job)
         {
-            mainForm.addToLog("Looking for job processor for job...\r\n");
             foreach (JobProcessorFactory f in mainForm.PackageSystem.JobProcessors.Values)
             {
                 IJobProcessor p = f.Factory(mainForm, job);
                 if (p != null)
                 {
-                    mainForm.addToLog("Processor found!\r\n");
                     return p;
                 }
             }
-            mainForm.addToLog("No processor found!\r\n");
+            log.Error("No processor found");
             return null;
         }
         #endregion
@@ -375,7 +349,7 @@ namespace MeGUI.core.gui
             }
             catch (JobRunException er)
             {
-                mainForm.addToLog("Error when trying to stop processing: " + er.Message + "\r\n");
+                mainForm.Log.LogValue("Error attempting to stop processing", er, ImageType.Error);
             }
             markJobAborted();
             status = JobWorkerStatus.Idle;
@@ -446,10 +420,8 @@ namespace MeGUI.core.gui
                     currentJob = null;
 
                     // Logging
-                    addToLog("Processing ended at " + DateTime.Now.ToLongTimeString() + "\r\n");
-                    addToLog("------------------------------------------------------" +
-                        "\r\n\r\nLog for job " + su.JobName + "\r\n\r\n" + su.Log +
-                        "\r\n------------------------------------------------------\r\n");
+                    log.LogEvent("Job completed");
+                    log.Collapse();
 
                     // Postprocessing
                     bool jobCompletedSuccessfully = (job.Status == JobStatus.DONE);
@@ -459,19 +431,16 @@ namespace MeGUI.core.gui
                     if (jobCompletedSuccessfully && mainForm.Settings.DeleteCompletedJobs)
                         mainForm.Jobs.RemoveCompletedJob(job);
 
-                    addToLog("End of log for " + job.Name + "\r\n" +
-                        "------------------------------------------------------\r\n\r\n");
-
                     if (shutdownWorkerIfJobsCompleted())
                     { }
                     else if (job.Status == JobStatus.ABORTED)
                     {
-                        addToLog("The current job was aborted. Stopping queue mode\r\n");
+                        log.LogEvent("Current job was aborted");
                         status = JobWorkerStatus.Idle;
                     }
                     else if (status == JobWorkerStatus.Stopping)
                     {
-                        addToLog("Told to stop. Stopping queue mode.\r\n");
+                        log.LogEvent("Queue mode stopped");
                         status = JobWorkerStatus.Idle;
                     }
                     else
@@ -511,7 +480,7 @@ namespace MeGUI.core.gui
                 }
                 catch (Exception e)
                 {
-                    mainForm.addToLog("Exception when trying to update status while a job is running. Text: " + e.Message + " stacktrace: " + e.StackTrace);
+                    mainForm.Log.LogValue("Error trying to update status while a job is running", e, ImageType.Warning);
                 }
 
                 progress = su.PercentageDoneExact ?? 0;
@@ -556,6 +525,11 @@ namespace MeGUI.core.gui
         {
             try
             {
+                log = mainForm.Log.Info("Log for " + job.Name);
+                log.LogValue("Job type", job.Job.EncodingMode);
+                log.LogEvent("Started handling job");
+                log.Expand();
+
                 status = JobWorkerStatus.Running;
                 //Check to see if output file already exists before encoding.
                 if (File.Exists(job.Job.Output) && !mainForm.DialogManager.overwriteJobOutput(job.Job.Output))
@@ -566,8 +540,6 @@ namespace MeGUI.core.gui
                 if (currentProcessor == null)
                     throw new JobStartException("No processor could be found", ExceptionType.Error);
 
-                addToLog("\r\n\r\n------------------------------------------------------\r\n\r\n");
-                addToLog("Starting job " + job.Name + " at " + DateTime.Now.ToLongTimeString() + "\r\n");
 
                 // Preprocess
                 preprocessJob(job.Job);
@@ -575,7 +547,7 @@ namespace MeGUI.core.gui
                 // Setup
                 try
                 {
-                    currentProcessor.setup(job.Job, new StatusUpdate(job.Name));
+                    currentProcessor.setup(job.Job, new StatusUpdate(job.Name), log);
                 }
                 catch (JobRunException e)
                 {
@@ -607,13 +579,13 @@ namespace MeGUI.core.gui
                     throw new JobStartException("starting encoder failed with error '" + e.Message + "'", ExceptionType.Error);
                 }
 
-                addToLog("successfully started encoding\r\n");
+                log.LogEvent("Encoding started");
                 refreshAll();
                 return true;
             }
             catch (JobStartException e)
             {
-                addToLog("Job not started. Reason: " + e.Message + "\r\n");
+                mainForm.Log.LogValue("Error starting job", e);
                 if (e.type == ExceptionType.Error)
                     job.Status = JobStatus.ERROR;
                 else // ExceptionType.UserSkip
@@ -626,11 +598,6 @@ namespace MeGUI.core.gui
                 return false;
             }
 
-        }
-
-        private void addToLog(string p)
-        {
-            mainForm.addToLog(p);
         }
 
         private TaggedJob getNextJob()
@@ -674,19 +641,25 @@ namespace MeGUI.core.gui
             TaggedJob job = currentJob;
             job.Status = JobStatus.ABORTED;
             job.End = DateTime.Now;
+            
+            LogItem i = new LogItem("Deleting aborted output");
+
+            i.LogValue("Delete aborted ouptut set", mainForm.Settings.DeleteAbortedOutput);
+            
             if (mainForm.Settings.DeleteAbortedOutput)
             {
-                mainForm.addToLog("Job aborted, deleting output file...");
+                i.LogValue("File to delete", job.Job.Output);
                 try
                 {
                     File.Delete(job.Job.Output);
-                    mainForm.addToLog("Deletion successful.\r\n");
+                    i.LogEvent("File deleted");
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
-                    mainForm.addToLog("Deletion failed.\r\n");
+                    i.LogValue("Error deleting file", e, ImageType.Warning);
                 }
             }
+            log.Add(i);
         }
 
         #region pause / resume
@@ -701,7 +674,7 @@ namespace MeGUI.core.gui
             }
             catch (JobRunException ex)
             {
-                addToLog("Error when trying to pause encoding: " + ex.Message + Environment.NewLine);
+                mainForm.Log.LogValue("Error trying to pause encoding", ex, ImageType.Warning);
             }
         }
 
@@ -715,7 +688,7 @@ namespace MeGUI.core.gui
             }
             catch (JobRunException ex)
             {
-                addToLog("Error when trying to resume encoding: " + ex.Message + Environment.NewLine);
+                mainForm.Log.LogValue("Error trying to resume encoding", ex, ImageType.Warning);
             }
         }
         #endregion

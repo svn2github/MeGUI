@@ -63,8 +63,6 @@ namespace MeGUI
         //        private MeGUIInfo info;
         private System.Windows.Forms.TabPage inputTab;
         private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage logTab;
-        private System.Windows.Forms.TextBox log;
         private System.Windows.Forms.MainMenu mainMenu1;
         private System.Windows.Forms.MenuItem mnuFile;
         private System.Windows.Forms.MenuItem mnuFileExit;
@@ -91,13 +89,6 @@ namespace MeGUI
         private JobControl jobControl1;
         private MenuItem mnuHelp;
         private MenuItem mnuChangelog;
-        private FlowLayoutPanel flowLayoutPanel1;
-        private Button clearLogButton;
-        private FlowLayoutPanel flowLayoutPanel2;
-        private Button autoEncodeButton;
-        private Button resetButton;
-        private CheckBox autoscroll;
-        private MeGUI.core.gui.HelpButton helpButton1;
         private MenuItem menuItem1;
         private MenuItem createNewWorker;
         private MenuItem menuItem6;
@@ -122,6 +113,12 @@ namespace MeGUI
         private MenuItem mnuFeaturesReq;
         private MenuItem mnuOptions;
         private MenuItem mnuOptionsSettings;
+        private TabPage logTab;
+        private FlowLayoutPanel flowLayoutPanel2;
+        private Button autoEncodeButton;
+        private Button resetButton;
+        private HelpButton helpButton1;
+        private LogTree logTree1;
         private List<Form> formsToReopen = new List<Form>();
 
         public bool IsHiddenMode { get { return trayIcon.Visible; } }
@@ -170,10 +167,7 @@ namespace MeGUI
             this.resetButton = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.logTab = new System.Windows.Forms.TabPage();
-            this.log = new System.Windows.Forms.TextBox();
-            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.clearLogButton = new System.Windows.Forms.Button();
-            this.autoscroll = new System.Windows.Forms.CheckBox();
+            this.logTree1 = new MeGUI.core.gui.LogTree();
             this.mnuMuxers = new System.Windows.Forms.MenuItem();
             this.mnuToolsAdaptiveMuxer = new System.Windows.Forms.MenuItem();
             this.mainMenu1 = new System.Windows.Forms.MainMenu(this.components);
@@ -226,7 +220,6 @@ namespace MeGUI
             this.flowLayoutPanel2.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.logTab.SuspendLayout();
-            this.flowLayoutPanel1.SuspendLayout();
             this.trayMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -253,6 +246,7 @@ namespace MeGUI
             this.inputTab.Size = new System.Drawing.Size(500, 438);
             this.inputTab.TabIndex = 0;
             this.inputTab.Text = "Input";
+            this.inputTab.UseVisualStyleBackColor = true;
             // 
             // flowLayoutPanel2
             // 
@@ -299,70 +293,28 @@ namespace MeGUI
             this.tabPage2.Controls.Add(this.jobControl1);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Size = new System.Drawing.Size(500, 447);
+            this.tabPage2.Size = new System.Drawing.Size(500, 440);
             this.tabPage2.TabIndex = 12;
             this.tabPage2.Text = "Queue";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // logTab
             // 
-            this.logTab.Controls.Add(this.log);
-            this.logTab.Controls.Add(this.flowLayoutPanel1);
+            this.logTab.Controls.Add(this.logTree1);
             this.logTab.Location = new System.Drawing.Point(4, 22);
             this.logTab.Name = "logTab";
-            this.logTab.Size = new System.Drawing.Size(500, 447);
-            this.logTab.TabIndex = 10;
+            this.logTab.Size = new System.Drawing.Size(500, 440);
+            this.logTab.TabIndex = 13;
             this.logTab.Text = "Log";
             this.logTab.UseVisualStyleBackColor = true;
             // 
-            // log
+            // logTree1
             // 
-            this.log.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.log.Font = new System.Drawing.Font("Lucida Console", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.log.Location = new System.Drawing.Point(0, 29);
-            this.log.Multiline = true;
-            this.log.Name = "log";
-            this.log.ReadOnly = true;
-            this.log.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.log.Size = new System.Drawing.Size(500, 418);
-            this.log.TabIndex = 1;
-            // 
-            // flowLayoutPanel1
-            // 
-            this.flowLayoutPanel1.AutoSize = true;
-            this.flowLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.flowLayoutPanel1.Controls.Add(this.clearLogButton);
-            this.flowLayoutPanel1.Controls.Add(this.autoscroll);
-            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(500, 29);
-            this.flowLayoutPanel1.TabIndex = 0;
-            this.flowLayoutPanel1.WrapContents = false;
-            // 
-            // clearLogButton
-            // 
-            this.clearLogButton.AutoSize = true;
-            this.clearLogButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.clearLogButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.clearLogButton.Location = new System.Drawing.Point(3, 3);
-            this.clearLogButton.Name = "clearLogButton";
-            this.clearLogButton.Size = new System.Drawing.Size(62, 23);
-            this.clearLogButton.TabIndex = 0;
-            this.clearLogButton.Text = "Clear Log";
-            this.clearLogButton.UseVisualStyleBackColor = true;
-            this.clearLogButton.Click += new System.EventHandler(this.clearLogButton_Click);
-            // 
-            // autoscroll
-            // 
-            this.flowLayoutPanel1.SetFlowBreak(this.autoscroll, true);
-            this.autoscroll.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.autoscroll.Location = new System.Drawing.Point(71, 3);
-            this.autoscroll.Name = "autoscroll";
-            this.autoscroll.Size = new System.Drawing.Size(74, 23);
-            this.autoscroll.TabIndex = 1;
-            this.autoscroll.Text = "AutoScroll";
-            this.autoscroll.UseVisualStyleBackColor = true;
+            this.logTree1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.logTree1.Location = new System.Drawing.Point(0, 0);
+            this.logTree1.Name = "logTree1";
+            this.logTree1.Size = new System.Drawing.Size(500, 440);
+            this.logTree1.TabIndex = 0;
             // 
             // mnuMuxers
             // 
@@ -632,24 +584,24 @@ namespace MeGUI
             this.exitMeGUIToolStripMenuItem});
             this.trayMenu.Name = "trayMenu";
             this.trayMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.trayMenu.Size = new System.Drawing.Size(143, 54);
+            this.trayMenu.Size = new System.Drawing.Size(136, 54);
             // 
             // openMeGUIToolStripMenuItem
             // 
             this.openMeGUIToolStripMenuItem.Name = "openMeGUIToolStripMenuItem";
-            this.openMeGUIToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.openMeGUIToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
             this.openMeGUIToolStripMenuItem.Text = "Open MeGUI";
             this.openMeGUIToolStripMenuItem.Click += new System.EventHandler(this.openMeGUIToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(139, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(132, 6);
             // 
             // exitMeGUIToolStripMenuItem
             // 
             this.exitMeGUIToolStripMenuItem.Name = "exitMeGUIToolStripMenuItem";
-            this.exitMeGUIToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.exitMeGUIToolStripMenuItem.Size = new System.Drawing.Size(135, 22);
             this.exitMeGUIToolStripMenuItem.Text = "Exit MeGUI";
             this.exitMeGUIToolStripMenuItem.Click += new System.EventHandler(this.exitMeGUIToolStripMenuItem_Click);
             // 
@@ -719,9 +671,6 @@ namespace MeGUI
             this.flowLayoutPanel2.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.logTab.ResumeLayout(false);
-            this.logTab.PerformLayout();
-            this.flowLayoutPanel1.ResumeLayout(false);
-            this.flowLayoutPanel1.PerformLayout();
             this.trayMenu.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -773,6 +722,7 @@ namespace MeGUI
             this.Icon = trayIcon.Icon;
             constructMeGUIInfo();
             this.TitleText = Application.ProductName + " " + Application.ProductVersion;
+
             Jobs.showAfterEncodingStatus(Settings);
         }
 
@@ -937,12 +887,6 @@ namespace MeGUI
             return null;
         }
         #endregion
-        private void clearLogButton_Click(object sender, EventArgs e)
-        {
-            saveLog();
-            logBuilder = new StringBuilder();
-            log.Text = "";
-        }
         #endregion
         #region settings
         /// <summary>
@@ -1040,12 +984,12 @@ namespace MeGUI
                     {
                         bool succ = Shutdown.shutdown();
                         if (!succ)
-                            addToLog("Tried shutting down system at " + DateTime.Now.ToShortTimeString() + " but the call failed");
+                            Log.LogEvent("Tried and failed to shut down system");
                         else
-                            addToLog("Shutdown initiated at " + DateTime.Now.ToShortTimeString());
+                            Log.LogEvent("Shutdown initiated");
                     }
                     else
-                        addToLog("User aborts Shutdown at " + DateTime.Now.ToShortTimeString() + "\r\n");
+                        Log.LogEvent("User aborted shutdown");
 
                 }
             }
@@ -1071,60 +1015,30 @@ namespace MeGUI
 
             }
         }
-        /// <summary>
-        /// adds a string to the log
-        /// </summary>
-        /// <param name="logEntry"></param>
-        public void addToLog(string logEntry, params object[] args)
+
+        public LogItem Log
         {
-            logBuilder.AppendFormat(logEntry, args);
-            logBuilder.AppendLine();
-            Util.ThreadSafeRun(log, delegate
-            {
-                this.log.Text = logBuilder.ToString();
-                if (Settings.AutoScrollLog)
-                {
-                    log.Select(log.Text.Length - 1, 0);
-                    log.ScrollToCaret();
-                }
-            });
+            get { return logTree1.Log; }
         }
+
+
         /// <summary>
         /// saves the whole content of the log into a logfile
         /// </summary>
         public void saveLog()
         {
-            if (this.logBuilder.Length > 0)
+            string text = Log.ToString();
+            try
             {
-                StreamWriter sw = null;
-                try
-                {
-                    string logDirectory = path + @"\logs";
-                    if (!Directory.Exists(logDirectory))
-                        Directory.CreateDirectory(logDirectory);
-                    string fileName = logDirectory + @"\logfile-" + DateTime.Now.ToString("yy'-'MM'-'dd'_'HH'-'mm'-'ss") + ".log";
-                    sw = new StreamWriter(fileName, true);
-                    sw.WriteLine(this.logBuilder.ToString());
-                    sw.Close();
-                }
-                catch (Exception e)
-                {
-                    Console.Write(e.Message);
-                }
-                finally
-                {
-                    if (sw != null)
-                    {
-                        try
-                        {
-                            sw.Close();
-                        }
-                        catch (Exception f)
-                        {
-                            Console.Write(f.Message);
-                        }
-                    }
-                }
+                string logDirectory = path + @"\logs";
+                if (!Directory.Exists(logDirectory))
+                    Directory.CreateDirectory(logDirectory);
+                string fileName = logDirectory + @"\logfile-" + DateTime.Now.ToString("yy'-'MM'-'dd'_'HH'-'mm'-'ss") + ".log";
+                File.WriteAllText(fileName, text);
+            }
+            catch (Exception e)
+            {
+                Console.Write(e.Message);
             }
         }
         private void exitMeGUIToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1473,14 +1387,13 @@ namespace MeGUI
                 updateCheck.IsBackground = true;
                 updateCheck.Start();
             }
-            Version ver = Environment.Version;
-            logBuilder.AppendFormat("MeGUI Version: {0} {1}", Application.ProductVersion, Environment.NewLine);
-            logBuilder.AppendFormat("OS used: Microsoft {0} {1} {2} {3}", OSInfo.GetOSName(), OSInfo.GetOSProductType(), OSInfo.GetOSServicePack(), Environment.NewLine);
-            logBuilder.AppendFormat(".Net Framework installed: {0}{1}", ver, Environment.NewLine);
-            logBuilder.AppendLine();
-            logBuilder.AppendFormat("------------------------------------------------------ {0}", Environment.NewLine);
-            logBuilder.AppendLine();
-            this.log.Text = logBuilder.ToString();
+            
+            LogItem i = Log.Info("Version information");
+            i.LogValue("MeGUI Version", Application.ProductVersion);
+            i.LogValue("OS used", string.Format("Microsoft {0}{1}{2}", OSInfo.GetOSName(), OSInfo.GetOSProductType(), OSInfo.GetOSServicePack()));
+            i.LogValue(".Net Framework installed", Environment.Version);
+
+            Log.LogValue("Settings", Settings, ImageType.Information);
         }
 
         private void beginUpdateCheck()
@@ -1576,7 +1489,6 @@ namespace MeGUI
 /*        private List<string> otherFilesToInstall = new List<string>();*/
         private DialogManager dialogManager;
         private string path; // path the program was started from
-        private StringBuilder logBuilder; // made public so that system jobs can write to it
         private MediaFileFactory mediaFileFactory;
         private PackageSystem packageSystem = new PackageSystem();
         private JobUtil jobUtil;
@@ -1620,7 +1532,6 @@ namespace MeGUI
             muxProvider = new MuxProvider(this);
             this.codecs = new CodecManager();
             this.path = System.Windows.Forms.Application.StartupPath;
-            this.logBuilder = new StringBuilder();
             this.jobUtil = new JobUtil(this);
             this.settings = new MeGUISettings();
             addPackages();
@@ -1682,7 +1593,7 @@ namespace MeGUI
                     }
                 }
                 if (shortcutAttempted && newMenuItem.Shortcut == Shortcut.None)
-                    addToLog("Shortcut for '" + tool.Name + "' is already used. No shortcut selected.\r\n");
+                    Log.Warn("Shortcut for '" + tool.Name + "' is already used. No shortcut selected.");
                 toolsItems.Add(newMenuItem);
             }
 
@@ -1720,7 +1631,7 @@ namespace MeGUI
                     }
                 }
                 if (shortcutAttempted && newMenuItem.Shortcut == Shortcut.None)
-                    addToLog("Shortcut for '" + option.Name + "' is already used. No shortcut selected.\r\n");
+                    Log.Warn("Shortcut for '" + option.Name + "' is already used. No shortcut selected.");
                 optionsItems.Add(newMenuItem);
             }
 
@@ -1793,7 +1704,7 @@ namespace MeGUI
             PackageSystem.JobPreProcessors.Register(BitrateCalculatorPreProcessor.CalculationProcessor);
             PackageSystem.JobPostProcessors.Register(OneClickPostProcessor.PostProcessor);
             PackageSystem.JobPostProcessors.Register(IndexJobPostProcessor.PostProcessor);
-            PackageSystem.JobPostProcessors.Register(JobWorker.DeleteIntermediateFilesPostProcessor);
+            PackageSystem.JobPostProcessors.Register(CleanupJobRunner.DeleteIntermediateFilesPostProcessor);
             PackageSystem.JobConfigurers.Register(MuxWindow.Configurer);
             PackageSystem.JobConfigurers.Register(AudioEncodingWindow.Configurer);
         }
@@ -1931,11 +1842,6 @@ namespace MeGUI
         internal void showPlayer()
         {
             videoEncodingComponent1.showPlayer();
-        }
-
-        private void autoscroll_CheckedChanged(object sender, EventArgs e)
-        {
-            Settings.AutoScrollLog = autoscroll.Checked;
         }
 
 

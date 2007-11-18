@@ -92,22 +92,6 @@ namespace MeGUI
 			set {wasAborted = value;}
 		}
 		/// <summary>
-		/// error message in case of an encoding error
-		/// </summary>
-		public string Error
-		{
-			get {return error;}
-			set {error = value;}
-		}
-		/// <summary>
-		/// gets / sets the contents of the log for this job
-		/// </summary>
-		public string Log
-		{
-			get {return log;}
-			set {log = value;}
-		}
-		/// <summary>
 		/// name of the job this statusupdate is refering to
 		/// </summary>
 		public string JobName

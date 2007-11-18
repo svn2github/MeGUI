@@ -74,7 +74,7 @@ namespace MeGUI
         /// <param name="job">the job to be processed</param>
         /// <param name="error">output for any errors that might ocurr during this method</param>
         /// <returns>true if the setup has succeeded, false if it has not</returns>
-        public void setup(Job job, StatusUpdate su)
+        public void setup(Job job, StatusUpdate su, LogItem _)
         {
             Debug.Assert(job is AviSynthJob, "Job isn't an AviSynthJob");
             stup = su;

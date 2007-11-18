@@ -311,15 +311,15 @@ namespace MeGUI
 		/// <param name="aStreams">all encodable audio streams</param>
 		/// <param name="audio">all muxable audio streams</param>
 		/// <returns>the info to be added to the log</returns>
-		public string eliminatedDuplicateFilenames(ref string videoOutput, ref string muxedOutput, AudioJob[] aStreams)
+		public LogItem eliminatedDuplicateFilenames(ref string videoOutput, ref string muxedOutput, AudioJob[] aStreams)
 		{
-            StringBuilder logBuilder = new StringBuilder();
+            LogItem log = new LogItem("Eliminating duplicate filenames");
             videoOutput = Path.GetFullPath(videoOutput);
             muxedOutput = Path.GetFullPath(muxedOutput);
 
+            log.LogValue("Video output file", videoOutput);
             if (File.Exists(videoOutput))
             {
-                logBuilder.AppendFormat("Video output file '{0}' already exists. Finding new name...{1}", videoOutput, Environment.NewLine);
                 int counter = 0;
                 string directoryname = Path.GetDirectoryName(videoOutput);
                 string filename = Path.GetFileNameWithoutExtension(videoOutput);
@@ -332,12 +332,12 @@ namespace MeGUI
                     counter++;
                 }
 
-                logBuilder.AppendFormat("New filename found: '{0}'{1}", videoOutput, Environment.NewLine);
+                log.LogValue("File already exists. New video output filename", videoOutput);
             }
 
+            log.LogValue("Muxed output file", muxedOutput);
             if (File.Exists(muxedOutput) || muxedOutput == videoOutput)
             {
-                logBuilder.AppendFormat("Muxed output file '{0}' already exists. Finding new name...{1}", muxedOutput, Environment.NewLine);
                 int counter = 0;
                 string directoryname = Path.GetDirectoryName(muxedOutput);
                 string filename = Path.GetFileNameWithoutExtension(muxedOutput);
@@ -350,21 +350,21 @@ namespace MeGUI
                     counter++;
                 }
 
-                logBuilder.AppendFormat("New filename found: '{0}'{1}", muxedOutput, Environment.NewLine);
+                log.LogValue("File already exists. New muxed output filename", muxedOutput);
             }
 
 			for (int i = 0; i < aStreams.Length; i++)
 			{
 				string name = Path.GetFullPath(aStreams[i].Output);
+                log.LogValue("Encodable audio stream " + i, name);
 				if (name.Equals(videoOutput) || name.Equals(muxedOutput)) // audio will be overwritten -> no good
 				{
 					name = Path.Combine(Path.GetDirectoryName(name), Path.GetFileNameWithoutExtension(name) + i.ToString() + Path.GetExtension(name));
-					logBuilder.Append("Encodable audio stream number " + i + " has the same name as a video file\r\n" 
-						+ "Renaming stream to " + name);
 					aStreams[i].Output = name;
+                    log.LogValue("Stream has the same name as video stream. New audio stream output", name);
 				}
 			}
-			return logBuilder.ToString();
+            return log;
 
 		}
         #endregion
@@ -443,12 +443,11 @@ namespace MeGUI
 
         #region new stuff
         public JobChain GenerateJobSeries(VideoStream video, string muxedOutput, AudioJob[] audioStreams,
-            MuxStream[] subtitles, string chapters, FileSize? desiredSize, FileSize? splitSize, ContainerType container, bool prerender, MuxStream[] muxOnlyAudio)
+            MuxStream[] subtitles, string chapters, FileSize? desiredSize, FileSize? splitSize, ContainerType container, bool prerender, MuxStream[] muxOnlyAudio, LogItem log)
         {
-            StringBuilder logBuilder = new StringBuilder();
+            log.LogValue("Desired size", desiredSize);
             if (desiredSize.HasValue)
             {
-                logBuilder.Append("Generating jobs. Desired size: " + desiredSize.Value.ToString() + "\r\n");
                 if (video.Settings.EncodingMode != 4 && video.Settings.EncodingMode != 8) // no automated 2/3 pass
                 {
                     if (this.mainForm.Settings.NbPasses == 2)
@@ -457,12 +456,10 @@ namespace MeGUI
                         video.Settings.EncodingMode = 8;
                 }
             }
-            else
-                logBuilder.Append("Generating jobs. No desired size.\r\n");
 
             fixFileNameExtensions(video, audioStreams, container);
             string videoOutput = video.Output;
-            logBuilder.Append(eliminatedDuplicateFilenames(ref videoOutput, ref muxedOutput, audioStreams));
+            log.Add(eliminatedDuplicateFilenames(ref videoOutput, ref muxedOutput, audioStreams));
             video.Output = videoOutput;
 
             JobChain vjobs = jobUtil.prepareVideoJob(video.Input, video.Output, video.Settings, video.DAR, prerender, true);
@@ -573,7 +570,6 @@ namespace MeGUI
                 b.DesiredSize = desiredSize.Value;
                 ((VideoJob)vjobs.Jobs[0].Job).BitrateCalculationInfo = b;
             }
-            mainForm.addToLog(logBuilder.ToString());
 
 
             return 
@@ -791,7 +787,8 @@ namespace MeGUI
 	/// helper structure for cropping
 	/// holds the crop values for all 4 edges of a frame
 	/// </summary>
-	public sealed class CropValues
+	[LogByMembers]
+    public sealed class CropValues
 	{
 		public int left, top, right, bottom;
         public CropValues Clone()
@@ -879,4 +876,7 @@ namespace MeGUI
     }
 	#endregion
 }
+
+
+
 

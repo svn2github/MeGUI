@@ -43,7 +43,7 @@ namespace MeGUI
         private MainForm mainForm;
 		private JobUtil jobUtil;
 		private VideoUtil vUtil;
-		private StringBuilder logBuilder;
+        private LogItem log = new LogItem("AutoEncode job generation log", ImageType.Information);
 		private bool isBitrateMode = true;
 
         private System.Windows.Forms.GroupBox AutomaticEncodingGroup;
@@ -78,8 +78,8 @@ namespace MeGUI
 		#region start / stop
 		public AutoEncodeWindow()
 		{
-			InitializeComponent();
-			logBuilder = new StringBuilder();
+            mainForm.Log.Add(log);
+            InitializeComponent();
         }
         public AutoEncodeWindow(VideoStream videoStream, List<AudioJob> audioStreams, MainForm mainForm, bool prerender)
             : this()
@@ -652,11 +652,12 @@ namespace MeGUI
 		{
 			if (!string.IsNullOrEmpty(this.muxedOutput.Text))
 			{
+
                 FileSize? desiredSize = targetSize.Value;
                 FileSize? splitSize = splitting.Value;
 
-                logBuilder.AppendLine("Desired size of this job series: " + (Util.ToStringOrNull(desiredSize) ?? "N/A"));
-                logBuilder.AppendLine("Split size of this job series: " + (Util.ToStringOrNull(splitSize) ?? "N/A"));
+                log.LogValue("Desired size", desiredSize);
+                log.LogValue("Split size", splitSize);
 
                 MuxStream[] audio;
                 AudioJob[] aStreams;
@@ -680,8 +681,7 @@ namespace MeGUI
                 }
                 removeStreamsToBeEncoded(ref audio, aStreams);
                 mainForm.Jobs.addJobsWithDependencies(vUtil.GenerateJobSeries(this.videoStream, muxedOutput, aStreams, subtitles, chapters,
-                    desiredSize, splitSize, cot, this.prerender, audio));
-                mainForm.addToLog(logBuilder.ToString());
+                    desiredSize, splitSize, cot, this.prerender, audio, log));
                 this.Close();
 			}
 		}

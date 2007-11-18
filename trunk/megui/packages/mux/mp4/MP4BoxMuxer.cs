@@ -79,7 +79,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
             }
             catch (Exception e)
             {
-                log.Append("Exception in getPercentage(" + line + ") " + e.Message);
+                log.LogValue("Exception in getPercentage(" + line + ") ", e, ImageType.Warning);
                 return null;
             }
         }
@@ -116,25 +116,18 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                 if (!Path.GetExtension(job.Input).ToLower().Equals(".mp4"))
                 {
                     FileSize rawSize = FileSize.Of(job.Input);
-                    log.Append("MP4 muxing info:\r\n");
-                    log.AppendFormat(
-                        "Size of raw video stream: {1}{0}" +
-                        "Size of final MP4 file: {2}{0}" +
-                        "source information{0}" +
-                        "codec: {3}{0}" +
-                        "number of b-frames: {4}{0}" +
-                        "number of source frames: {5}{0}",
-                        Environment.NewLine,
-                        rawSize,
-                        len,
-                        job.Codec,
-                        job.NbOfBFrames,
-                        job.NbOfFrames);
+                    LogItem i = new LogItem("MP4 Muxing statistics");
+                    i.LogValue("Size of raw video stream", rawSize);
+                    i.LogValue("Size of final MP4 file", len);
+                    i.LogValue("Codec", job.Codec);
+                    i.LogValue("Number of b-frames", job.NbOfBFrames);
+                    i.LogValue("Number of source frames", job.NbOfFrames);
+                    log.Add(i);
                 }
             }
             catch (Exception e)
             {
-                log.Append("an exception ocurred when trying to read from stdout: " + e.Message);
+                log.LogValue("An exception occurred when printing mux statistics", e, ImageType.Warning);
             }
         }
         #endregion
@@ -169,13 +162,13 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                     break;
 
                 case LineType.other:
-                    log.AppendLine(line);
+                    base.ProcessLine(line, stream);
                     break;
 
                 case LineType.error:
-                    su.Error = line;
+                    log.LogValue("Error line", line, ImageType.Error);
                     su.HasError = true;
-                    log.AppendLine(line);
+                    base.ProcessLine(line, stream);
                     break;
             }
             lastLine = line;

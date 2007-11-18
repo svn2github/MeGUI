@@ -41,7 +41,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
             }
             catch (Exception e)
             {
-                log.AppendLine("Exception in getPercentage(" + line + ") " + e.Message);
+                log.LogValue("Exception in getPercentage(" + line + ")", e, MeGUI.core.util.ImageType.Warning);
                 return null;
             }
         }
@@ -58,12 +58,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                 su.PercentageDoneExact = getPercentage(line);
             else if (line.IndexOf("Error") != -1)
             {
-                log.Append(line);
+                log.LogValue("An error occurred", line, MeGUI.core.util.ImageType.Error);
                 su.HasError = true;
-                su.Error = line;
             }
             else
-                log.AppendLine(line);
+                base.ProcessLine(line, stream);
         }
 
         protected override string Commandline

@@ -30,7 +30,7 @@ namespace MeGUI
             }
             catch (Exception e)
             {
-                log.Append("Exception in getFrameNumber(" + line + ") " + e.Message);
+                log.LogValue("Exception in getFrameNumber(" + line + ")", e, ImageType.Warning);
                 return null;
             }
         }
@@ -38,20 +38,23 @@ namespace MeGUI
         public override void ProcessLine(string line, StreamType stream)
         {
             if (line.StartsWith("Pos:")) // status update
-                su.NbFramesDone = getFrameNumber(line);
-            else if (line.IndexOf("error") != -1)
             {
-                log.AppendLine(line);
+                su.NbFramesDone = getFrameNumber(line);
+                return;
+            }
+            
+            if (line.IndexOf("error") != -1)
+            {
+                log.LogValue("An error occurred", line, ImageType.Error);
                 su.HasError = true;
             }
             else if (line.IndexOf("not an MEncoder option") != -1)
             {
-                log.AppendLine("Error: Unrecognized commandline parameter detected.");
-                su.Error = line;
+                log.LogValue("Unrecognized commandline parameter", line, ImageType.Error);
                 su.HasError = true;
             }
-            else
-                log.AppendLine(line);
+
+            base.ProcessLine(line, stream);
         }
 
         protected override string Commandline

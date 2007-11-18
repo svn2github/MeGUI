@@ -24,7 +24,9 @@ namespace MeGUI
         protected ManualResetEvent stdoutDone = new ManualResetEvent(false);
         protected ManualResetEvent stderrDone = new ManualResetEvent(false);
         protected StatusUpdate su;
-        protected StringBuilder log = new StringBuilder();
+        protected LogItem log;
+        protected StringBuilder stdoutBuilder = new StringBuilder();
+        protected StringBuilder stderrBuilder = new StringBuilder();
         protected Thread readFromStdErrThread;
         protected Thread readFromStdOutThread;
         protected List<string> tempFiles = new List<string>();
@@ -98,16 +100,16 @@ namespace MeGUI
 
             su.IsComplete = true;
             doExitConfig();
-            su.Log = log.ToString();
             StatusUpdate(su);
         }
 
         #region IVideoEncoder overridden Members
 
-        public void setup(Job job2, StatusUpdate su)
+        public void setup(Job job2, StatusUpdate su, LogItem log)
         {
             Debug.Assert(job2 is TJob, "Job is the wrong type");
 
+            this.log = log;
             TJob job = (TJob)job2;
             this.job = job;
 
@@ -127,8 +129,7 @@ namespace MeGUI
             ProcessStartInfo pstart = new ProcessStartInfo();
             pstart.FileName = executable;
             pstart.Arguments = Commandline;
-            log.AppendFormat("Job commandline: \"{0}\" {1}{2}",
-                pstart.FileName, pstart.Arguments, Environment.NewLine);
+            log.LogValue("Job commandline", '"' + pstart.FileName + "\" " + pstart.Arguments);
             pstart.RedirectStandardOutput = true;
             pstart.RedirectStandardError = true;
             pstart.WindowStyle = ProcessWindowStyle.Minimized;
@@ -275,7 +276,7 @@ namespace MeGUI
             }
             catch (Exception e)
             {
-                log.Append("exception getting io reader for stdout: " + e.Message + "\r\nAborting CommandlineVideoEncoder.readStdOut");
+                log.LogValue("Exception getting IO reader for stdout", e, ImageType.Error);
                 stdoutDone.Set();
                 return;
             }
@@ -290,7 +291,7 @@ namespace MeGUI
             }
             catch (Exception e)
             {
-                log.Append("exception getting io reader for stderr: " + e.Message + "\r\nAborting CommandlineVideoEncoder.readStdErr");
+                log.LogValue("Exception getting IO reador for stderr", e, ImageType.Error);
                 stderrDone.Set();
                 return;
             }
@@ -299,7 +300,10 @@ namespace MeGUI
 
         public virtual void ProcessLine(string line, StreamType stream)
         {
-            log.AppendLine(line);
+            if (stream == StreamType.Stdout)
+                stdoutBuilder.AppendLine(line);
+            if (stream == StreamType.Stderr)
+                stderrBuilder.AppendLine(line);
         }
 
         #endregion

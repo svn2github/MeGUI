@@ -71,15 +71,18 @@ namespace MeGUI
 
                     double numberOfSeconds = (double)framecount / framerate;
                     long bitrate = (long)((double)(size * 8.0) / (numberOfSeconds * 1000.0));
+
+                    LogItem stats = log.Info("Final statistics");
+
                     if (job.Settings.EncodingMode != 1)
-                        log.Append("desired video bitrate of this job: " + job.Settings.BitrateQuantizer + " kbit/s - obtained video bitrate (approximate): " + bitrate + " kbit/s");
-                    else
-                        log.Append("This is a CQ job so there's no desired bitrate. Obtained video bitrate: " + bitrate + " kbit/s");
+                        stats.LogValue("Desired video bitrate", job.Settings.BitrateQuantizer + " kbit/s");
+
+                    stats.LogValue("Obtained video bitrate (approximate", bitrate + " kbit/s");
                 }
             }
             catch (Exception e)
             {
-                log.Append("Exception in compileFinalStats. Message: " + e.Message + " stacktrace: " + e.StackTrace);
+                log.LogValue("Exception in compileFinalStats", e, ImageType.Warning);
             }
         }
         #endregion
@@ -97,14 +100,11 @@ namespace MeGUI
             if (!string.IsNullOrEmpty(errorString))
             {
                 su.HasError = true;
-                if (string.IsNullOrEmpty(su.Error))
-                    su.Error = "";
-                su.Error += errorString + "\r\n";
-                log.AppendLine(errorString);
+                log.LogValue("An error occurred", errorString, ImageType.Error);
             }
             if (errorString == null && frameString == null)
             {
-                log.AppendLine(line);
+                base.ProcessLine(line, stream);
             }
         }
 

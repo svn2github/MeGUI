@@ -73,7 +73,7 @@ namespace MeGUI
 		{
 			get
 			{
-                return null;
+                return "audio";
             }
 		}
 

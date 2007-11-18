@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using MeGUI.core.util;
 
 namespace MeGUI
 {
     public delegate void JobProcessingStatusUpdateCallback(StatusUpdate su);
-    public delegate void Processor(MainForm info, Job job);
+    public delegate LogItem Processor(MainForm info, Job job);
     
     /// <summary>
     /// Returns an IJobProcessor if this job can be processed, returns null otherwise.
@@ -77,7 +78,7 @@ namespace MeGUI
         /// <param name="job">the job to be processed</param>
         /// <param name="error">output for any errors that might ocurr during this method</param>
         /// <returns>true if the setup has succeeded, false if it has not</returns>
-        void setup(Job job, StatusUpdate su);
+        void setup(Job job, StatusUpdate su, LogItem log);
         /// <summary>
         /// starts the encoding process
         /// </summary>

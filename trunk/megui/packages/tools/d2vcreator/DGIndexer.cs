@@ -84,7 +84,7 @@ namespace MeGUI
         {
             if (MainForm.Instance.Settings.AutoForceFilm && !su.HasError && !su.WasAborted )
             {
-                StringBuilder log = new StringBuilder();
+                LogItem l = log.LogEvent("Running auto force film");
                 double filmPercent;
                 try
                 {
@@ -92,24 +92,21 @@ namespace MeGUI
                 }
                 catch (Exception error)
                 {
-                    su.Error = "Applying force film failed. Consult the log for details";
-                    log.AppendFormat("Cannot open d2v file, '{0}'. Error message for your reference: {1}{2}", job.Output, error.Message, Environment.NewLine);
-                    log.AppendLine("Applying force film failed.");
+                    l.LogValue("Exception opening file to apply force film", error, ImageType.Error);
                     su.HasError = true;
                     return;
                 }
                 if (!su.HasError)
                 {
+                    l.LogValue("Film percentage", filmPercent);
                     if (MainForm.Instance.Settings.ForceFilmThreshold <= (decimal)filmPercent)
                     {
-                        log.Append("Film percentage: " + filmPercent + " meets force film threshold");
                         bool success = applyForceFilm(job.Output);
                         if (success)
-                            log.Append("Successfully applied force film");
+                            l.LogEvent("Applied force film");
                         else
                         {
-                            su.Error = "Applying force film failed";
-                            log.Append("Applying force film failed");
+                            l.Error("Applying force film failed");
                             su.HasError = true;
                         }
                     }
@@ -155,7 +152,7 @@ namespace MeGUI
             }
             catch (Exception e)
             {
-                log.Append("Exception in applyForceFilm: " + e.Message);
+                log.LogValue("Exception in applyForceFilm", e, ImageType.Error);
                 return false;
             }
         }

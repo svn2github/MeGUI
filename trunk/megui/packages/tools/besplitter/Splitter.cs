@@ -52,22 +52,17 @@ namespace MeGUI.packages.tools.besplitter
                     int secs = int.Parse(line.Substring(7, 2));
                     int millis = int.Parse(line.Substring(10, 3));
                     su.ClipPosition = new TimeSpan(0, hours, mins, secs, millis);
+                    return;
                 }
-                catch (FormatException)
+                catch (Exception)
                 {
-                    log.AppendLine(line);
                 }
-                catch (ArgumentOutOfRangeException)
-                {
-                    log.AppendLine(line);
-                }
-                return;
             }
-            
-            if (line.IndexOf("Usage") != -1)
-                su.HasError = true;
 
-            log.AppendLine(line);
+            if (line.IndexOf("Usage") != -1)
+                log.LogValue("Error in usage", line, MeGUI.core.util.ImageType.Error);
+
+            base.ProcessLine(line, stream);
         }
     }
 }

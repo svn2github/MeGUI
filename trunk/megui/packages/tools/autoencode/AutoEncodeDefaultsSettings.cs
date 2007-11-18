@@ -6,6 +6,7 @@ using MeGUI.core.gui;
 
 namespace MeGUI
 {
+    [LogByMembers]
     public class AutoEncodeDefaultsSettings
     {
         private bool fileSizeMode, bitrateMode, noTargetSizeMode, addAdditionalContent;

@@ -651,15 +651,15 @@ namespace MeGUI
     public class OneClickPostProcessor
     {
         #region postprocessor
-        private static void postprocess(MainForm mainForm, Job job)
+        private static LogItem postprocess(MainForm mainForm, Job job)
         {
             if (!(job is IndexJob))
-                return;
+                return null;
             IndexJob ijob = (IndexJob)job;
             if (ijob.PostprocessingProperties == null)
-                return;
+                return null;
             OneClickPostProcessor p = new OneClickPostProcessor(mainForm, ijob);
-            p.postprocess();
+            return p.postprocess();
         }
         public static JobPostProcessor PostProcessor = new JobPostProcessor(postprocess, "OneClick_postprocessor");
 
@@ -673,7 +673,7 @@ namespace MeGUI
         private bool finished = false;
         private bool interlaced = false;
         private DeinterlaceFilter[] filters;
-        private StringBuilder logBuilder = new StringBuilder();
+        private LogItem log = new LogItem("OneClick postprocessor", ImageType.Information);
 
         public OneClickPostProcessor(MainForm mainForm, IndexJob ijob)
         {
@@ -683,15 +683,16 @@ namespace MeGUI
             this.vUtil = new VideoUtil(mainForm);
         }
 
-        public void postprocess()
+        public LogItem postprocess()
         {
             audioFiles = vUtil.getAllDemuxedAudio(job.Output, 8);
 
             fillInAudioInformation();
 
 
-            logBuilder.Append("Desired size of this automated encoding series: " + job.PostprocessingProperties.OutputSize
-                + " split size: " + job.PostprocessingProperties.Splitting + "\r\n");
+            log.LogValue("Desired size", job.PostprocessingProperties.OutputSize);
+            log.LogValue("Split size", job.PostprocessingProperties.Splitting);
+
             VideoCodecSettings videoSettings = job.PostprocessingProperties.VideoSettings;
 
             string videoOutput = Path.Combine(Path.GetDirectoryName(job.Output),
@@ -701,7 +702,7 @@ namespace MeGUI
             //Open the video
             Dar? dar;
             string videoInput = openVideo(job.Output, job.PostprocessingProperties.DAR, 
-                job.PostprocessingProperties.HorizontalOutputResolution, job.PostprocessingProperties.SignalAR, logBuilder,
+                job.PostprocessingProperties.HorizontalOutputResolution, job.PostprocessingProperties.SignalAR, log,
                 job.PostprocessingProperties.AvsSettings, job.PostprocessingProperties.AutoDeinterlace, videoSettings, out dar);
 
             VideoStream myVideo = new VideoStream();
@@ -726,18 +727,21 @@ namespace MeGUI
                 JobChain c = vUtil.GenerateJobSeries(myVideo, muxedOutput, job.PostprocessingProperties.AudioJobs, subtitles,
                     job.PostprocessingProperties.ChapterFile, job.PostprocessingProperties.OutputSize,
                     job.PostprocessingProperties.Splitting, job.PostprocessingProperties.Container,
-                    false, job.PostprocessingProperties.DirectMuxAudio);
+                    false, job.PostprocessingProperties.DirectMuxAudio, log);
                 /*                    vUtil.generateJobSeries(videoInput, videoOutput, muxedOutput, videoSettings,
                                         audioStreams, audio, subtitles, job.PostprocessingProperties.ChapterFile,
                                         job.PostprocessingProperties.OutputSize, job.PostprocessingProperties.SplitSize,
                                         containerOverhead, type, new string[] { job.Output, videoInput });*/
                 if (c == null)
-                    return;
+                {
+                    log.Warn("Job creation aborted");
+                    return log;
+                }
 
                 c = CleanupJob.AddAfter(c, intermediateFiles);
                 mainForm.Jobs.addJobsWithDependencies(c);
             }
-            mainForm.addToLog(logBuilder.ToString());
+            return log;
         }
 
         private void fillInAudioInformation()
@@ -774,7 +778,7 @@ namespace MeGUI
                 }
                 catch (Exception)
                 {
-                    mainForm.addToLog("Couldn't find audio file for track {0}. Skipping track.", input);
+                    log.Warn(string.Format("Couldn't find audio file for track {0}. Skipping track.", input));
                     return null;
                 }
             }
@@ -867,7 +871,6 @@ namespace MeGUI
         /// <param name="aspectRatio">aspect ratio selection to be used</param>
         /// <param name="customDAR">custom display aspect ratio for this source</param>
         /// <param name="horizontalResolution">desired horizontal resolution of the output</param>
-        /// <param name="logBuilder">stringbuilder where to append log messages</param>
         /// <param name="settings">the codec settings (used only for x264)</param>
         /// <param name="sarX">pixel aspect ratio X</param>
         /// <param name="sarY">pixel aspect ratio Y</param>
@@ -876,7 +879,7 @@ namespace MeGUI
         /// (depending on this parameter, resizing changes to match the source AR)</param>
         /// <returns>the name of the AviSynth script created, empty of there was an error</returns>
         private string openVideo(string path, Dar? AR, int horizontalResolution,
-            bool signalAR, StringBuilder logBuilder, AviSynthSettings avsSettings, bool autoDeint,
+            bool signalAR, LogItem log, AviSynthSettings avsSettings, bool autoDeint,
             VideoCodecSettings settings, out Dar? dar)
         {
             dar = null;
@@ -884,7 +887,7 @@ namespace MeGUI
             IVideoReader reader = d2v.GetVideoReader();
             if (reader.FrameCount < 1)
             {
-                logBuilder.Append("DGDecode reported 0 frames in this file.\r\nThis is a fatal error.\r\n\r\nPlease recreate the DGIndex project");
+                log.Error("DGDecode reported 0 frames in this file. This is a fatal error. Please recreate the DGIndex project");
                 return "";
             }
 
@@ -901,30 +904,26 @@ namespace MeGUI
 
             bool error = (final.left == -1);
             if (!error)
-            {
-                logBuilder.Append("Autocropping successful. Using the following crop values: left: " + final.left +
-                    ", top: " + final.top + ", right: " + final.right + ", bottom: " + final.bottom + ".\r\n");
-            }
+                log.LogValue("Autocrop values", final);
             else
             {
-                logBuilder.Append("Autocropping did not find 3 frames that have matching crop values\r\n"
-                    + "Autocrop failed, aborting now");
+                log.Error("Autocrop failed, aborting now");
                 return "";
             }
 
             decimal customDAR;
 
+            log.LogValue("Auto-detect aspect ratio now", AR == null);
             //Check if AR needs to be autodetected now
             if (AR == null) // it does
             {
-                logBuilder.Append("Aspect Ratio set to auto-detect later, detecting now. ");
                 customDAR = d2v.Info.DAR.ar;
                 if (customDAR > 0)
-                    logBuilder.AppendFormat("Found aspect ratio of {0}.{1}", customDAR, Environment.NewLine);
+                    log.LogValue("Aspect ratio", customDAR);
                 else
                 {
                     customDAR = Dar.ITU16x9PAL.ar;
-                    logBuilder.AppendFormat("No aspect ratio found, defaulting to {0}.{1}", customDAR, Environment.NewLine);
+                    log.Warn(string.Format("No aspect ratio found, defaulting to {0}.", customDAR));
                 }
             }
             else customDAR = AR.Value.ar;
@@ -932,24 +931,26 @@ namespace MeGUI
             //Suggest a resolution (taken from AvisynthWindow.suggestResolution_CheckedChanged)
             int scriptVerticalResolution = Resolution.suggestResolution(d2v.Info.Height, d2v.Info.Width, (double)customDAR,
                 final, horizontalResolution, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out dar);
+
+            log.LogValue("Output resolution", horizontalResolution + "x" + scriptVerticalResolution);
+            
             if (settings != null && settings is x264Settings) // verify that the video corresponds to the chosen avc level, if not, change the resolution until it does fit
             {
                 x264Settings xs = (x264Settings)settings;
                 if (xs.Level != 15)
                 {
+                    AVCLevels al = new AVCLevels();
+                    log.LogValue("AVC level", al.getLevels()[xs.Level]);
+                    
                     int compliantLevel = 15;
                     while (!this.al.validateAVCLevel(horizontalResolution, scriptVerticalResolution, d2v.Info.FPS, xs, out compliantLevel))
                     { // resolution not profile compliant, reduce horizontal resolution by 16, get the new vertical resolution and try again
-                        AVCLevels al = new AVCLevels();
                         string levelName = al.getLevels()[xs.Level];
-                        logBuilder.Append("Your chosen AVC level " + levelName + " is too strict to allow your chosen resolution of " +
-                            horizontalResolution + "*" + scriptVerticalResolution + ". Reducing horizontal resolution by 16.\r\n");
                         horizontalResolution -= 16;
                         scriptVerticalResolution = Resolution.suggestResolution(d2v.Info.Height, d2v.Info.Width, (double)customDAR,
                             final, horizontalResolution, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out dar);
                     }
-                    logBuilder.Append("Final resolution that is compatible with the chosen AVC Level: " + horizontalResolution + "*"
-                        + scriptVerticalResolution + "\r\n");
+                    log.LogValue("Resolution adjusted for AVC Level", horizontalResolution + "x" + scriptVerticalResolution);
                 }
             }
 
@@ -963,9 +964,9 @@ namespace MeGUI
             inputLine = ScriptServer.GetInputLine(path, false, PossibleSources.d2v,
                 false, false, false, 0);
 
+            log.LogValue("Automatic deinterlacing", autoDeint);
             if (autoDeint)
             {
-                logBuilder.AppendLine("Automatic deinterlacing was checked. Running now...");
                 string d2vPath = path;
                 SourceDetector sd = new SourceDetector(inputLine, d2vPath, false,
                     mainForm.Settings.SourceDetectorSettings,
@@ -975,7 +976,7 @@ namespace MeGUI
                 sd.analyse();
                 waitTillAnalyseFinished();
                 deinterlaceLines = filters[0].Script;
-                logBuilder.AppendLine("Deinterlacing used: " + deinterlaceLines);
+                log.LogValue("Deinterlacing used", deinterlaceLines);
             }
 
             inputLine = ScriptServer.GetInputLine(path, interlaced, PossibleSources.d2v,
@@ -988,8 +989,8 @@ namespace MeGUI
             string newScript = ScriptServer.CreateScriptFromTemplate(avsSettings.Template, inputLine, cropLine, resizeLine, denoiseLines, deinterlaceLines);
             if (dar.HasValue)
                 newScript = string.Format("global MeGUI_darx = {0}\r\nglobal MeGUI_dary = {1}\r\n{2}", dar.Value.X, dar.Value.Y, newScript);
-            logBuilder.Append("Avisynth script created:\r\n");
-            logBuilder.Append(newScript);
+
+            log.LogValue("Generated Avisynth script", newScript);
             try
             {
                 StreamWriter sw = new StreamWriter(Path.ChangeExtension(path, ".avs"));
@@ -998,7 +999,7 @@ namespace MeGUI
             }
             catch (IOException i)
             {
-                logBuilder.Append("An error ocurred when trying to save the AviSynth script:\r\n" + i.Message);
+                log.LogValue("Error saving AviSynth script", i, ImageType.Error);
                 return "";
             }
             return Path.ChangeExtension(path, ".avs");

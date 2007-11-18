@@ -113,11 +113,17 @@ namespace MeGUI
         #endregion
 
         #region queue display details
+        /// <summary>
+        /// Codec used
+        /// </summary>
         public abstract string CodecString
         {
             get;
         }
 
+        /// <summary>
+        /// New meaning: Encoding mode means job type: video/audio/mux/index/split/etc
+        /// </summary>
         public abstract string EncodingMode
         {
             get;

@@ -82,7 +82,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "BeSplit_Joiner");
             
             if (line.IndexOf("Usage") != -1)
                 su.HasError = true;
-            log.AppendLine(line);
+            
+            base.ProcessLine(line, stream);
         }
     }
 }

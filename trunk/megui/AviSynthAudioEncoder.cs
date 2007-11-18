@@ -68,7 +68,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
         private Thread _readFromStdErrThread = null;
         private string _encoderStdErr = null;
         private string _encoderStdOut = null;
-        private StringBuilder _logBuilder = new StringBuilder();
+        private LogItem _log;
         private static readonly System.Text.RegularExpressions.Regex _cleanUpStringRegex = new System.Text.RegularExpressions.Regex(@"\n[^\n]+\r", System.Text.RegularExpressions.RegexOptions.Compiled | System.Text.RegularExpressions.RegexOptions.CultureInvariant);
 
         private MeGUISettings _settings = null;
@@ -199,7 +199,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
         private void raiseEvent()
         {
             if (su.IsComplete = (su.IsComplete || su.WasAborted || su.HasError))
-                su.Log = createLog();
+                createLog();
             if (StatusUpdate != null)
                 StatusUpdate(su);
         }
@@ -277,7 +277,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                         if (0 == a.ChannelsCount)
                             throw new ApplicationException("Can't find audio stream");
 
-                        _logBuilder.AppendFormat("Input: Channels={0}, BitsPerSample={1}, SampleRate={2}Hz{3}", a.ChannelsCount, a.BitsPerSample, a.AudioSampleRate, Environment.NewLine);
+                        LogItem inputLog = _log.Info("Input");
+                        inputLog.LogValue("Channels", a.ChannelsCount);
+                        inputLog.LogValue("Bits per sample", a.BitsPerSample);
+                        inputLog.LogValue("Sample rate", a.AudioSampleRate);
+
                         _start = DateTime.Now;
 
                         const int MAX_SAMPLES_PER_ONCE = 4096;
@@ -370,7 +374,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 deleteOutputFile();
                 if (e is ThreadAbortException)
                 {
-                    _logBuilder.Append("ABORTING!\n");
+                    _log.LogEvent("Aborting...");
                     su.WasAborted = true;
                     raiseEvent();
                 }
@@ -380,15 +384,14 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                     int encoder_path = _encoderExecutablePath.LastIndexOf(@"\");
                     string audio_encoder = _encoderExecutablePath.Substring(encoder_path + 1).ToLower();
 
-                    _logBuilder.Append("\n");
-                    _logBuilder.Append("\nError:\n");
+                    _log.LogValue("An error occurred", e, ImageType.Error);
 
                     if (audioJob.Settings is WinAmpAACSettings)
                     {
                         if (File.Exists(encoder_path + "enc_aacplus.dll") == false)
-                            _logBuilder.Append("enc_aacplus.dll not found in the path...\n");
+                            _log.Error("enc_aacplus.dll not found in the path...");
                         if (File.Exists(Environment.SystemDirectory + @"\nscrt.dll") == false)
-                            _logBuilder.Append("nscrt.dll must be in your Windows System directory...\n");
+                            _log.Error("nscrt.dll must be in your Windows System directory...");
                     }
                     su.HasError = true;
                     raiseEvent();
@@ -403,15 +406,13 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             raiseEvent();
         }
 
-        private string createLog()
+        private void createLog()
         {
             if (_encoderStdErr != null)
-                _logBuilder.Append(_encoderStdErr + Environment.NewLine);
+                _log.LogValue("Output from encoder via stderr", _encoderStdErr + Environment.NewLine);
 
             if (_encoderStdOut != null)
-                _logBuilder.Append(_encoderStdOut + Environment.NewLine);
-
-            return _logBuilder.ToString().Replace(Environment.NewLine, "\n").Replace("\n", Environment.NewLine);
+                _log.LogValue("Output from encoder via stdout", _encoderStdOut + Environment.NewLine);
         }
 
         private void deleteOutputFile()
@@ -435,7 +436,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 info.Arguments = string.Format(_encoderCommandLine,
                     audioJob.Output, a.AudioSampleRate, a.BitsPerSample, a.ChannelsCount, a.SamplesCount, a.AudioSizeInBytes);
                 info.FileName = _encoderExecutablePath;
-                _logBuilder.AppendFormat("Command line used: {0} {1}", _encoderExecutablePath, info.Arguments, Environment.NewLine);
+                _log.LogValue("Commandline", _encoderExecutablePath + " " + info.Arguments);
                 info.UseShellExecute = false;
                 info.RedirectStandardInput = true;
                 info.RedirectStandardOutput = true;
@@ -495,8 +496,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
         #region IJobProcessor Members
 
 
-        public void setup(Job job, StatusUpdate su)
+        public void setup(Job job, StatusUpdate su, LogItem log)
         {
+            this._log = log;
             this.audioJob = (AudioJob)job;
 
             this.su = su;
