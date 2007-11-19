@@ -396,7 +396,7 @@ namespace MeGUI
             this.output.FolderMode = false;
             this.output.Location = new System.Drawing.Point(118, 13);
             this.output.Name = "output";
-            this.output.ReadOnly = true;
+            this.output.ReadOnly = false;
             this.output.SaveMode = true;
             this.output.Size = new System.Drawing.Size(289, 26);
             this.output.TabIndex = 35;
@@ -435,20 +435,20 @@ namespace MeGUI
             this.audioAddTrack,
             this.audioRemoveTrack});
             this.audioMenu.Name = "audioMenu";
-            this.audioMenu.Size = new System.Drawing.Size(152, 48);
+            this.audioMenu.Size = new System.Drawing.Size(141, 48);
             this.audioMenu.Opening += new System.ComponentModel.CancelEventHandler(this.audioMenu_Opening);
             // 
             // audioAddTrack
             // 
             this.audioAddTrack.Name = "audioAddTrack";
-            this.audioAddTrack.Size = new System.Drawing.Size(151, 22);
+            this.audioAddTrack.Size = new System.Drawing.Size(140, 22);
             this.audioAddTrack.Text = "Add track";
             this.audioAddTrack.Click += new System.EventHandler(this.audioAddTrack_Click);
             // 
             // audioRemoveTrack
             // 
             this.audioRemoveTrack.Name = "audioRemoveTrack";
-            this.audioRemoveTrack.Size = new System.Drawing.Size(151, 22);
+            this.audioRemoveTrack.Size = new System.Drawing.Size(140, 22);
             this.audioRemoveTrack.Text = "Remove track";
             this.audioRemoveTrack.Click += new System.EventHandler(this.audioRemoveTrack_Click);
             // 
@@ -490,20 +490,20 @@ namespace MeGUI
             this.subtitleAddTrack,
             this.subtitleRemoveTrack});
             this.subtitleMenu.Name = "subtitleMenu";
-            this.subtitleMenu.Size = new System.Drawing.Size(152, 48);
+            this.subtitleMenu.Size = new System.Drawing.Size(141, 48);
             this.subtitleMenu.Opening += new System.ComponentModel.CancelEventHandler(this.subtitleMenu_Opening);
             // 
             // subtitleAddTrack
             // 
             this.subtitleAddTrack.Name = "subtitleAddTrack";
-            this.subtitleAddTrack.Size = new System.Drawing.Size(151, 22);
+            this.subtitleAddTrack.Size = new System.Drawing.Size(140, 22);
             this.subtitleAddTrack.Text = "Add track";
             this.subtitleAddTrack.Click += new System.EventHandler(this.subtitleAddTrack_Click);
             // 
             // subtitleRemoveTrack
             // 
             this.subtitleRemoveTrack.Name = "subtitleRemoveTrack";
-            this.subtitleRemoveTrack.Size = new System.Drawing.Size(151, 22);
+            this.subtitleRemoveTrack.Size = new System.Drawing.Size(140, 22);
             this.subtitleRemoveTrack.Text = "Remove track";
             this.subtitleRemoveTrack.Click += new System.EventHandler(this.subtitleRemoveTrack_Click);
             // 
@@ -596,6 +596,11 @@ namespace MeGUI
                 muxButton.DialogResult = DialogResult.None;
                 return;
             }
+            else if (MainForm.verifyOutputFile(output.Filename) != null)
+            {
+                muxButton.DialogResult = DialogResult.None;
+                return;
+            }
             else if (fps.Value == null && isFPSRequired())
             {
                 muxButton.DialogResult = DialogResult.None;
@@ -672,6 +677,11 @@ namespace MeGUI
                 else if (string.IsNullOrEmpty(output.Filename))
                 {
                     MessageBox.Show("You must configure an output file", "Missing input", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    return;
+                }
+                else if (MainForm.verifyOutputFile(output.Filename) != null)
+                {
+                    MessageBox.Show("Invalid output file", "Invalid output", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
                 else if (!fps.Value.HasValue)
