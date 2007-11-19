@@ -32,15 +32,15 @@ namespace MeGUI.core.gui
             System.Windows.Forms.Button abortButton;
             System.Windows.Forms.Button loadJobButton;
             System.Windows.Forms.Button button9;
-            System.Windows.Forms.ColumnHeader jobColumHeader;
-            System.Windows.Forms.ColumnHeader inputColumnHeader;
-            System.Windows.Forms.ColumnHeader outputColumnHeader;
-            System.Windows.Forms.ColumnHeader codecHeader;
-            System.Windows.Forms.ColumnHeader modeHeader;
-            System.Windows.Forms.ColumnHeader statusColumn;
-            System.Windows.Forms.ColumnHeader startColumn;
-            System.Windows.Forms.ColumnHeader endColumn;
-            System.Windows.Forms.ColumnHeader fpsColumn;
+            this.jobColumHeader = new System.Windows.Forms.ColumnHeader();
+            this.inputColumnHeader = new System.Windows.Forms.ColumnHeader();
+            this.outputColumnHeader = new System.Windows.Forms.ColumnHeader();
+            this.codecHeader = new System.Windows.Forms.ColumnHeader();
+            this.modeHeader = new System.Windows.Forms.ColumnHeader();
+            this.statusColumn = new System.Windows.Forms.ColumnHeader();
+            this.startColumn = new System.Windows.Forms.ColumnHeader();
+            this.endColumn = new System.Windows.Forms.ColumnHeader();
+            this.fpsColumn = new System.Windows.Forms.ColumnHeader();
             this.upButton = new System.Windows.Forms.Button();
             this.downButton = new System.Windows.Forms.Button();
             this.queueListView = new System.Windows.Forms.ListView();
@@ -59,15 +59,6 @@ namespace MeGUI.core.gui
             abortButton = new System.Windows.Forms.Button();
             loadJobButton = new System.Windows.Forms.Button();
             button9 = new System.Windows.Forms.Button();
-            jobColumHeader = new System.Windows.Forms.ColumnHeader();
-            inputColumnHeader = new System.Windows.Forms.ColumnHeader();
-            outputColumnHeader = new System.Windows.Forms.ColumnHeader();
-            codecHeader = new System.Windows.Forms.ColumnHeader();
-            modeHeader = new System.Windows.Forms.ColumnHeader();
-            statusColumn = new System.Windows.Forms.ColumnHeader();
-            startColumn = new System.Windows.Forms.ColumnHeader();
-            endColumn = new System.Windows.Forms.ColumnHeader();
-            fpsColumn = new System.Windows.Forms.ColumnHeader();
             this.queueContextMenu.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
@@ -112,49 +103,40 @@ namespace MeGUI.core.gui
             // 
             // jobColumHeader
             // 
-            jobColumHeader.Text = "Name";
-            jobColumHeader.Width = global::MeGUI.Properties.Settings.Default.JobColumnWidth;
+            this.jobColumHeader.Text = "Name";
             // 
             // inputColumnHeader
             // 
-            inputColumnHeader.Text = "Input";
-            inputColumnHeader.Width = global::MeGUI.Properties.Settings.Default.InputColumnWidth;
+            this.inputColumnHeader.Text = "Input";
             // 
             // outputColumnHeader
             // 
-            outputColumnHeader.Text = "Output";
-            outputColumnHeader.Width = global::MeGUI.Properties.Settings.Default.OutputColumnWidth;
+            this.outputColumnHeader.Text = "Output";
             // 
             // codecHeader
             // 
-            codecHeader.Text = "Codec";
-            codecHeader.Width = global::MeGUI.Properties.Settings.Default.CodecColumnWidth;
+            this.codecHeader.Text = "Codec";
             // 
             // modeHeader
             // 
-            modeHeader.Text = "Mode";
-            modeHeader.Width = global::MeGUI.Properties.Settings.Default.ModeColumnWidth;
+            this.modeHeader.Text = "Mode";
             // 
             // statusColumn
             // 
-            statusColumn.Text = "Status";
-            statusColumn.Width = global::MeGUI.Properties.Settings.Default.StatusColumnWidth;
+            this.statusColumn.Text = "Status";
             // 
             // startColumn
             // 
-            startColumn.Text = "Start";
-            startColumn.Width = global::MeGUI.Properties.Settings.Default.StartColumnWidth;
+            this.startColumn.Text = "Start";
             // 
             // endColumn
             // 
-            endColumn.Text = "End";
-            endColumn.Width = global::MeGUI.Properties.Settings.Default.EndColumnWidth;
+            this.endColumn.Text = "End";
             // 
             // fpsColumn
             // 
-            fpsColumn.Text = "FPS";
-            fpsColumn.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            fpsColumn.Width = global::MeGUI.Properties.Settings.Default.FPSColumnWidth;
+            this.fpsColumn.Text = "FPS";
+            this.fpsColumn.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // upButton
             // 
@@ -185,16 +167,16 @@ namespace MeGUI.core.gui
             // queueListView
             // 
             this.queueListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            jobColumHeader,
-            inputColumnHeader,
-            outputColumnHeader,
-            codecHeader,
-            modeHeader,
-            statusColumn,
+            this.jobColumHeader,
+            this.inputColumnHeader,
+            this.outputColumnHeader,
+            this.codecHeader,
+            this.modeHeader,
+            this.statusColumn,
             this.ownerHeader,
-            startColumn,
-            endColumn,
-            fpsColumn});
+            this.startColumn,
+            this.endColumn,
+            this.fpsColumn});
             this.queueListView.ContextMenuStrip = this.queueContextMenu;
             this.queueListView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.queueListView.FullRowSelect = true;
@@ -359,5 +341,14 @@ namespace MeGUI.core.gui
         private System.Windows.Forms.ToolStripMenuItem LoadMenuItem;
         private System.Windows.Forms.Button stopButton;
         private System.Windows.Forms.ColumnHeader ownerHeader;
+        private System.Windows.Forms.ColumnHeader jobColumHeader;
+        private System.Windows.Forms.ColumnHeader inputColumnHeader;
+        private System.Windows.Forms.ColumnHeader outputColumnHeader;
+        private System.Windows.Forms.ColumnHeader codecHeader;
+        private System.Windows.Forms.ColumnHeader modeHeader;
+        private System.Windows.Forms.ColumnHeader statusColumn;
+        private System.Windows.Forms.ColumnHeader startColumn;
+        private System.Windows.Forms.ColumnHeader endColumn;
+        private System.Windows.Forms.ColumnHeader fpsColumn;
     }
 }

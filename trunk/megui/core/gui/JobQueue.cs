@@ -9,6 +9,7 @@ using System.Diagnostics;
 using MeGUI.core.util;
 using System.Collections;
 using MeGUI.core.details;
+using System.Configuration;
 
 namespace MeGUI.core.gui
 {
@@ -21,7 +22,7 @@ namespace MeGUI.core.gui
     public enum PauseResumeMode { Pause, Resume, Disabled };
     public enum Dependencies { DeleteAll, RemoveDependencies }
 
-    public partial class JobQueue : UserControl
+    public partial class JobQueue : UserControl, IPersistComponentSettings
     {
         #region pause/play image
 #if CSC
@@ -281,6 +282,12 @@ namespace MeGUI.core.gui
             InitializeComponent();
             StartStopMode = StartStopMode.Start;
             PauseResumeMode = PauseResumeMode.Disabled;
+            
+            settings = new JobQueueSettings(this, Name);
+            this.LoadComponentSettings();
+            this.Disposed += delegate(object _, EventArgs __) {
+                SaveComponentSettings();
+            };
         }
 
         #region job deletion
@@ -747,6 +754,219 @@ namespace MeGUI.core.gui
                 downButton_Click(sender, e);
             if ((e.KeyCode == Keys.Enter) || (e.KeyCode == Keys.Escape))
                 startStopButton_Click(sender, e);
+        }
+
+        #region IPersistComponentSettings Members
+        JobQueueSettings settings;
+
+        public void LoadComponentSettings()
+        {
+            JobQueueSettings s = settings;
+            jobColumHeader.Width = s.JobColumnWidth;
+            inputColumnHeader.Width = s.InputColumnWidth;
+            outputColumnHeader.Width = s.OutputColumnWidth;
+            codecHeader.Width = s.CodecColumnWidth;
+            modeHeader.Width = s.ModeColumnWidth;
+            statusColumn.Width = s.StatusColumnWidth;
+            ownerHeader.Width = s.OwnerColumnWidth;
+            startColumn.Width = s.StartColumnWidth;
+            endColumn.Width = s.EndColumnWidth;
+            fpsColumn.Width = s.FPSColumnWidth;
+        }
+
+        public void ResetComponentSettings()
+        {
+            settings.Reset();
+        }
+
+        public void SaveComponentSettings()
+        {
+            settings.JobColumnWidth = jobColumHeader.Width;
+            settings.InputColumnWidth = inputColumnHeader.Width;
+            settings.OutputColumnWidth = outputColumnHeader.Width;
+            settings.CodecColumnWidth = codecHeader.Width;
+            settings.ModeColumnWidth = modeHeader.Width;
+            settings.StatusColumnWidth = statusColumn.Width;
+            settings.OwnerColumnWidth = ownerHeader.Width;
+            settings.StartColumnWidth = startColumn.Width;
+            settings.EndColumnWidth = endColumn.Width;
+            settings.FPSColumnWidth = fpsColumn.Width;
+            
+            settings.Save();
+        }
+
+       
+        public bool SaveSettings
+        {
+            get
+            {
+                return true;
+            }
+            set
+            {
+            }
+        }
+
+        public string SettingsKey
+        {
+            get
+            {
+                return Name;
+            }
+            set
+            {
+                if (settings != null)
+                    settings.SettingsKey = value;
+            }
+        }
+
+        #endregion
+    }
+
+    class JobQueueSettings : ApplicationSettingsBase
+    {
+        public JobQueueSettings(IComponent c, string k)
+            :base(c, k)
+        {}
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("40")]
+        public int JobColumnWidth
+        {
+            get
+            {
+                return ((int)(this["JobColumnWidth"]));
+            }
+            set
+            {
+                this["JobColumnWidth"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("89")]
+        public int InputColumnWidth
+        {
+            get
+            {
+                return ((int)(this["InputColumnWidth"]));
+            }
+            set
+            {
+                this["InputColumnWidth"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("89")]
+        public int OutputColumnWidth
+        {
+            get
+            {
+                return ((int)(this["OutputColumnWidth"]));
+            }
+            set
+            {
+                this["OutputColumnWidth"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("43")]
+        public int CodecColumnWidth
+        {
+            get
+            {
+                return ((int)(this["CodecColumnWidth"]));
+            }
+            set
+            {
+                this["CodecColumnWidth"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("75")]
+        public int ModeColumnWidth
+        {
+            get
+            {
+                return ((int)(this["ModeColumnWidth"]));
+            }
+            set
+            {
+                this["ModeColumnWidth"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSetting()]
+        [global::System.Configuration.DefaultSettingValue("60")]
+        public int OwnerColumnWidth
+        {
+            get
+            {
+                return ((int)(this["OwnerColumnWidth"]));
+            }
+            set
+            {
+                this["OwnerColumnWidth"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("51")]
+        public int StatusColumnWidth
+        {
+            get
+            {
+                return ((int)(this["StatusColumnWidth"]));
+            }
+            set
+            {
+                this["StatusColumnWidth"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("55")]
+        public int StartColumnWidth
+        {
+            get
+            {
+                return ((int)(this["StartColumnWidth"]));
+            }
+            set
+            {
+                this["StartColumnWidth"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("55")]
+        public int EndColumnWidth
+        {
+            get
+            {
+                return ((int)(this["EndColumnWidth"]));
+            }
+            set
+            {
+                this["EndColumnWidth"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("35")]
+        public int FPSColumnWidth
+        {
+            get
+            {
+                return ((int)(this["FPSColumnWidth"]));
+            }
+            set
+            {
+                this["FPSColumnWidth"] = value;
+            }
         }
     }
 

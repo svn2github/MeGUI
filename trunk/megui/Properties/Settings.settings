@@ -14,33 +14,6 @@
     <Setting Name="WorkerSummarySize" Type="System.Drawing.Size" Scope="User">
       <Value Profile="(Default)">352, 198</Value>
     </Setting>
-    <Setting Name="JobColumnWidth" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">40</Value>
-    </Setting>
-    <Setting Name="InputColumnWidth" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">89</Value>
-    </Setting>
-    <Setting Name="OutputColumnWidth" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">89</Value>
-    </Setting>
-    <Setting Name="CodecColumnWidth" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">43</Value>
-    </Setting>
-    <Setting Name="ModeColumnWidth" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">75</Value>
-    </Setting>
-    <Setting Name="StatusColumnWidth" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">51</Value>
-    </Setting>
-    <Setting Name="StartColumnWidth" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">55</Value>
-    </Setting>
-    <Setting Name="EndColumnWidth" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">55</Value>
-    </Setting>
-    <Setting Name="FPSColumnWidth" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">35</Value>
-    </Setting>
     <Setting Name="MainFormTabIndex" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
