@@ -2027,10 +2027,7 @@ namespace MeGUI
 
         public void Run(MainForm info)
         {
-            using (QuantizerMatrixDialog qmd = new QuantizerMatrixDialog())
-            {
-                qmd.ShowDialog();
-            }
+            new QuantizerMatrixDialog().Show();
         }
 
         public Shortcut[] Shortcuts

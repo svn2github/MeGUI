@@ -1928,11 +1928,9 @@ namespace MeGUI
         public void Run(MainForm info)
         {
             info.ClosePlayer();
-            using (AviSynthWindow asw = new AviSynthWindow(info))
-            {
-                asw.OpenScript += new OpenScriptCallback(info.Video.openVideoFile);
-                asw.ShowDialog(info);
-            }
+            AviSynthWindow asw = new AviSynthWindow(info);
+            asw.OpenScript += new OpenScriptCallback(info.Video.openVideoFile);
+            asw.Show();
         }
 
         public Shortcut[] Shortcuts

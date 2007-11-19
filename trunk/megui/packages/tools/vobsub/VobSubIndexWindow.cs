@@ -150,10 +150,7 @@ namespace MeGUI
         /// <param name="e"></param>
         public void Run(MainForm info)
         {
-            using (VobSubIndexWindow vsi = new VobSubIndexWindow(info))
-            {
-                vsi.ShowDialog();
-            }
+            new VobSubIndexWindow(info).Show();
         }
 
         public Shortcut[] Shortcuts

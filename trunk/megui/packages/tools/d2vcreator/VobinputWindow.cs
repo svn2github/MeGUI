@@ -592,8 +592,7 @@ namespace MeGUI
 
         public void Run(MainForm info)
         {
-            VobinputWindow vobInput = new VobinputWindow(info);
-            vobInput.ShowDialog();
+            new VobinputWindow(info).Show();
 
         }
 

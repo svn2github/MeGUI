@@ -624,11 +624,9 @@ namespace MeGUI
 
         public void Run(MainForm info)
         {
-            using (OneClickWindow ocmt = new OneClickWindow(info, info.JobUtil, info.Video.VideoEncoderProvider,
-                new AudioEncoderProvider()))
-            {
-                ocmt.ShowDialog();
-            }
+            OneClickWindow ocmt = new OneClickWindow(info, info.JobUtil, info.Video.VideoEncoderProvider,
+                new AudioEncoderProvider());
+            ocmt.Show();
         }
 
         public Shortcut[] Shortcuts

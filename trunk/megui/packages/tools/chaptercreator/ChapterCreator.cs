@@ -735,13 +735,11 @@ namespace MeGUI
 
         public void Run(MainForm info)
         {
-            using (ChapterCreator cc = new ChapterCreator(info))
-            {
-                cc.VideoInput = info.Video.Info.VideoInput;
-                cc.CreditsStartFrame = info.Video.Info.CreditsStartFrame;
-                cc.IntroEndFrame = info.Video.Info.IntroEndFrame;
-                cc.ShowDialog();
-            }
+            ChapterCreator cc = new ChapterCreator(info);
+            cc.VideoInput = info.Video.Info.VideoInput;
+            cc.CreditsStartFrame = info.Video.Info.CreditsStartFrame;
+            cc.IntroEndFrame = info.Video.Info.IntroEndFrame;
+            cc.Show();
         }
 
         public Shortcut[] Shortcuts
