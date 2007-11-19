@@ -9,6 +9,14 @@ namespace MeGUI.core.gui
 {
     public class ARChooser : StandardAndCustomComboBox
     {
+
+        protected override void Dispose(bool disposing)
+        {
+            //settings.CustomDARs = new ArrayConverter<Named<Dar>, DarConverter>().ToString(CustomDARs);
+            CustomUserSettings.Default.CustomDARs = CustomDARs;
+            base.Dispose(disposing);
+        }
+
         private static readonly string Later = "Auto-detect later";
 
         public static readonly Named<Dar>[] ARs = new Named<Dar>[] {
@@ -27,12 +35,13 @@ namespace MeGUI.core.gui
                 if (NumberChooser.ShowDialog(
                     "Enter your AR:", "Custom AR", 3,
                     0.1M, 10M, (Value ?? Dar.ITU16x9PAL).ar, out result) == DialogResult.OK)
-                    return new Named<Dar>(new Dar(result).ToString(), new Dar(result));
+                    return new Dar(result);
                 else
                     return null;
             };
 
             HasLater = true;
+            CustomDARs = CustomUserSettings.Default.CustomDARs;
         }
 
         bool hasLater;
@@ -65,14 +74,17 @@ namespace MeGUI.core.gui
             {
                 if (SelectedObject.Equals(Later))
                     return null;
-                return ((Named<Dar>)SelectedObject).Data;
+                if (SelectedObject is Named<Dar>)
+                    return ((Named<Dar>)SelectedObject).Data;
+                else
+                    return ((Dar)SelectedObject);
             }
             set
             {
                 if (value == null)
                     SelectedObject = Later;
                 else
-                    SelectedObject = new Named<Dar>(value.ToString(), value.Value);
+                    SelectedObject = value;
             }
         }
 
@@ -87,5 +99,20 @@ namespace MeGUI.core.gui
             }
             set { Value = value; }
         }
+
+        public Dar[] CustomDARs
+        {
+            get
+            {
+                return Util.CastAll<Dar>(CustomItems);
+            }
+            set
+            {
+                if (value == null)
+                    return;
+                base.CustomItems = Util.CastAll<Dar, object>(value);
+            }
+        }
     }
+    
 }

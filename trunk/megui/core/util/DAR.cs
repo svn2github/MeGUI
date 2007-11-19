@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.ComponentModel;
 
 namespace MeGUI.core.util
 {
+    [TypeConverter(typeof(DarConverter))]
     public struct Dar
     {
         public static readonly Dar ITU16x9PAL = new Dar(1.823361M);
@@ -104,6 +106,37 @@ namespace MeGUI.core.util
             decimal ratio = ar * (decimal)vres / (decimal)hres;
             return new Sar(ratio);
         }
+    }
+
+    class DarConverter : TypeConverter
+    {
+
+        #region SimpleTypeConverter<Named<Dar>> Members
+
+        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+        {
+            if (sourceType == typeof(string))
+                return true;
+            return false;
+        }
+
+        public override object ConvertFrom(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value)
+        {
+            if (value is string)
+                return new Dar(decimal.Parse((string)value));
+
+            throw new Exception();
+        }
+
+        public override object ConvertTo(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, Type destinationType)
+        {
+            if (destinationType == typeof(string))
+                return value.ToString();
+
+            throw new Exception();
+        }
+
+        #endregion
     }
 
     public struct Sar

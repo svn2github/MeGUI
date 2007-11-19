@@ -421,6 +421,7 @@
     <Compile Include="core\plugins\interfaces\Profile.cs" />
     <Compile Include="core\util\Autocrop.cs" />
     <Compile Include="core\util\BitrateCalculatorPreProcessor.cs" />
+    <Compile Include="core\util\CustomUserSettings.cs" />
     <Compile Include="core\util\DAR.cs" />
     <Compile Include="core\util\EnumProxy.cs" />
     <Compile Include="core\util\Exceptions.cs" />

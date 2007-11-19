@@ -6,6 +6,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Xml.Serialization;
 using System.Drawing;
+using System.ComponentModel;
+using System.Globalization;
 
 namespace MeGUI.core.util
 {
@@ -241,5 +243,28 @@ namespace MeGUI.core.util
             return (uint)clampPositive((long)val);
         }
         #endregion
+
+        public static To[] CastAll<From, To>(From[] fr)
+            where To : class
+        {
+            if (fr == null)
+                return null;
+            return Array.ConvertAll<From, To>(fr, delegate(From f) { return f as To; });
+        }
+
+        public static To[] CastAll<To>(object[] os)
+        {
+            return Array.ConvertAll<object, To>(os, delegate(object o) { return (To)o; });
+        }
+
+        public static void RegisterTypeConverter<T, TC>() where TC : TypeConverter
+        {
+            Attribute[] attr = new Attribute[1];
+            TypeConverterAttribute vConv = new TypeConverterAttribute(typeof(TC));
+            attr[0] = vConv;
+            TypeDescriptor.AddAttributes(typeof(T), attr);
+        }
+
+
     }
 }

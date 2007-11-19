@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.ComponentModel;
 using System.Windows.Forms;
+using MeGUI.core.util;
 
 namespace MeGUI.core.gui
 {
@@ -32,6 +33,13 @@ namespace MeGUI.core.gui
                     return null;
             };
             StandardItems = Framerates;
+            CustomFPSs = CustomUserSettings.Default.CustomFPSs;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            CustomUserSettings.Default.CustomFPSs = CustomFPSs;
+            base.Dispose(disposing);
         }
 
         private string nullString;
@@ -53,6 +61,12 @@ namespace MeGUI.core.gui
             objects.AddRange(Framerates);
             base.StandardItems = objects.ToArray();
 
+        }
+
+        private FPS[] CustomFPSs
+        {
+            get { return Util.CastAll<FPS>(CustomItems); }
+            set { CustomItems = Util.CastAll<FPS, object>(value); }
         }
 
 
@@ -92,6 +106,7 @@ namespace MeGUI.core.gui
         }
     }
 
+    [TypeConverter(typeof(FPSConverter))]
     internal struct FPS
     {
         internal FPS(decimal v)
@@ -106,6 +121,11 @@ namespace MeGUI.core.gui
             return val.ToString();
         }
 
+        public static FPS Parse(string s)
+        {
+            return new FPS(decimal.Parse(s));
+        }
+
         public override bool Equals(object obj)
         {
             if (!(obj is FPS)) return false;
@@ -116,6 +136,30 @@ namespace MeGUI.core.gui
         public override int GetHashCode()
         {
             return base.GetHashCode();
+        }
+    }
+
+    class FPSConverter : TypeConverter
+    {
+        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+        {
+            return (sourceType == typeof(string));
+        }
+
+        public override object ConvertFrom(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value)
+        {
+            if (value is string)
+                return FPS.Parse((string)value);
+
+            throw new Exception();
+        }
+
+        public override object ConvertTo(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, Type destinationType)
+        {
+            if (destinationType == typeof(string))
+                return value.ToString();
+
+            return base.ConvertTo(context, culture, value, destinationType);
         }
     }
 }

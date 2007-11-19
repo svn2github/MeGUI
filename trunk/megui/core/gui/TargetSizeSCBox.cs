@@ -22,6 +22,12 @@ namespace MeGUI.core.gui
             new Named<FileSize>("1 DVD (4479MB)", new FileSize(Unit.MB, 4479)),
             new Named<FileSize>("1 DVD-9 (8138MB)", new FileSize(Unit.MB, 8138)) };
 
+        protected override void Dispose(bool disposing)
+        {
+            CustomUserSettings.Default.CustomSizes = CustomSizes;
+            base.Dispose(disposing);
+        }
+
         private string nullString;
         /// <summary>
         /// String to display which represents "null" filesize. If NullString is set to null, then
@@ -54,6 +60,7 @@ namespace MeGUI.core.gui
         public TargetSizeSCBox() : base("Clear user-selected sizes...", "Select size...")
         {
             base.Getter = new Getter<object>(getter);
+            CustomSizes = CustomUserSettings.Default.CustomSizes;
         }
 
         private void fillStandard()
@@ -75,12 +82,25 @@ namespace MeGUI.core.gui
             {
                 if (ofd.Value >= minSize &&
                    maxSize == null || ofd.Value <= maxSize)
-                    return new Named<FileSize>(ofd.Value.ToString(), ofd.Value);
+                    return ofd.Value;
                 else
                     MessageBox.Show(genRestrictions(), "Invalid filesize", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             return null;
         }
+
+        public FileSize[] CustomSizes
+        {
+            get
+            {
+                return Util.CastAll<FileSize>(CustomItems);
+            }
+            set
+            {
+                CustomItems = Util.CastAll<FileSize, object>(value);
+            }
+        }
+
 
         private string genRestrictions()
         {
@@ -102,14 +122,16 @@ namespace MeGUI.core.gui
                 object o = base.SelectedObject;
                 if (o.Equals(NullString))
                     return null;
-                Debug.Assert(o is Named<FileSize>);
-                return ((Named<FileSize>)o).Data;
+                if (o is Named<FileSize>)
+                    return ((Named<FileSize>)o).Data;
+                else
+                    return (FileSize)o;
             }
 
             set
             {
                 if (value.HasValue)
-                    base.SelectedObject = new Named<FileSize>(value.Value.ToString(), value.Value);
+                    base.SelectedObject = value.Value;
                 else
                     base.SelectedObject = NullString;
             }

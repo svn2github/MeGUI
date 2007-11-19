@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using System.ComponentModel;
 
 namespace MeGUI.core.util
 {
@@ -11,6 +12,7 @@ namespace MeGUI.core.util
     /// Aims to be the universal representation of filesize in MeGUI.
     /// Should avoid problems of MB/KB/B, and gives nice formatting as required
     /// </summary>
+    [TypeConverter(typeof(FileSizeConverter))]
     public struct FileSize
     {
         public static readonly FileSize Empty = new FileSize(0);
@@ -116,6 +118,12 @@ namespace MeGUI.core.util
             Unit u = BestUnit;
             decimal d = InUnitsExact(u);
             return (Math.Round(d, 1)).ToString() + " " + UnitSuffixes[(ushort)u];
+        }
+        public static FileSize Parse(string s)
+        {
+            string[] parts = s.Split(' ');
+            return new FileSize((Unit)Array.IndexOf(UnitSuffixes, parts[1]), decimal.Parse(parts[0]));
+            
         }
         #endregion
         
@@ -285,6 +293,23 @@ namespace MeGUI.core.util
         {
             sizeInBytes = 0; // Dummy
             SetWithUnits(u, value);
+        }
+    }
+
+    class FileSizeConverter : TypeConverter
+    {
+        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+        {
+            if (sourceType == typeof(string))
+                return true;
+            return base.CanConvertFrom(context, sourceType);
+        }
+
+        public override object ConvertFrom(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value)
+        {
+            if (value is string)
+                return FileSize.Parse((string)value);
+            return base.ConvertFrom(context, culture, value);
         }
     }
 }

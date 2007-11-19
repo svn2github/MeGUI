@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using MeGUI.core.util;
+using System.Configuration;
 
 namespace MeGUI.core.gui
 {
@@ -120,13 +121,15 @@ namespace MeGUI.core.gui
 
                 for (int i = 0; i < numCustomItems; ++i)
                 {
-                    res[i] = Items[start + i].Tag;
+                    res[i] = ((SCItem)Items[start + i].Tag).Tag;
                 }
                 return res;
             }
             set
             {
                 clearCustomItems();
+                if (value == null)
+                    return;
                 foreach (object s in value)
                     AddCustomItem(s);
             }
@@ -228,7 +231,8 @@ namespace MeGUI.core.gui
 
         public override bool Equals(object obj)
         {
-            return ((obj as Named<T>) != null) && ((Named<T>)obj).Data.Equals(Data);
+            return (((obj as Named<T>) != null) && ((Named<T>)obj).Data.Equals(Data))
+                    || (obj is T && ((T)obj).Equals(Data));
         }
 
         public override int GetHashCode()
@@ -242,4 +246,5 @@ namespace MeGUI.core.gui
         }
     }
 }
+
 
