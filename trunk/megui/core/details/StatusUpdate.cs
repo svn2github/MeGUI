@@ -56,6 +56,12 @@ namespace MeGUI
 			timeElapsed = TimeSpan.Zero;
             processingspeed = null;
 			filesize = null;
+
+            for (int i = 0; i < UpdatesPerEstimate; ++i)
+            {
+                previousUpdates[i] = TimeSpan.Zero;
+                previousUpdatesProgress[i] = 0M;
+            }
 		}
 
         /// <summary>
@@ -302,11 +308,28 @@ namespace MeGUI
 
                 // Processing time
                 if (fraction.HasValue)
-                    estimatedTime = new TimeSpan((long)((decimal)timeElapsed.Ticks * ((1 / fraction.Value) - 1)));
+                {
+                    TimeSpan time = timeElapsed - previousUpdates[updateIndex];
+                    decimal progress = fraction.Value - previousUpdatesProgress[updateIndex];
+                    if (progress > 0 && time > FiveSeconds)
+                        estimatedTime = new TimeSpan((long)((decimal)time.Ticks * (1M - fraction) / progress));
+                    else
+                        estimatedTime = new TimeSpan((long)((decimal)timeElapsed.Ticks * ((1 / fraction.Value) - 1)));
+
+                    previousUpdates[updateIndex] = timeElapsed;
+                    previousUpdatesProgress[updateIndex] = fraction.Value;
+                    updateIndex = (updateIndex+1)% UpdatesPerEstimate;
+                }
             }
             catch (Exception)
             {
             }
         }
+
+        static readonly TimeSpan FiveSeconds = new TimeSpan(0, 0, 5);
+        const int UpdatesPerEstimate = 10;
+        TimeSpan[] previousUpdates = new TimeSpan[UpdatesPerEstimate];
+        decimal[] previousUpdatesProgress = new decimal[UpdatesPerEstimate];
+        int updateIndex = 0;
 	}
 }
