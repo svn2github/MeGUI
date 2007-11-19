@@ -18,6 +18,8 @@ namespace MeGUI.packages.tools.calculator
         {
             InitializeComponent();
             this.audio1Type.Items.AddRange(ContainerManager.AudioTypes.ValuesArray);
+
+            DragDropUtil.RegisterSingleFileDragDrop(this, selectAudioFile, this.filter);
         }
 
         public AudioJob Job
@@ -73,17 +75,25 @@ namespace MeGUI.packages.tools.calculator
             audio1Type.SelectedIndex = -1;
         }
 
+        private void selectAudioFile(string file)
+        {
+            FileSize f = FileSize.Of2(file) ?? FileSize.Empty;
+            size.CertainValue = f;
+
+            AudioType aud2Type = VideoUtil.guessAudioType(file);
+            if (audio1Type.Items.Contains(aud2Type))
+                audio1Type.SelectedItem = aud2Type;
+
+        }
+
+        private readonly string filter = VideoUtil.GenerateCombinedFilter(ContainerManager.AudioTypes.ValuesArray);
+
         private void selectAudio1Button_Click(object sender, EventArgs e)
         {
-            openFileDialog.Filter = VideoUtil.GenerateCombinedFilter(ContainerManager.AudioTypes.ValuesArray);
+            openFileDialog.Filter = this.filter;
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                FileSize f = FileSize.Of2(openFileDialog.FileName) ?? FileSize.Empty;
-                size.CertainValue = f;
-
-                AudioType aud2Type = VideoUtil.guessAudioType(openFileDialog.FileName);
-                if (audio1Type.Items.Contains(aud2Type))
-                    audio1Type.SelectedItem = aud2Type;
+                selectAudioFile(openFileDialog.FileName);
             }
         }
 
