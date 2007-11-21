@@ -1260,8 +1260,11 @@ namespace MeGUI
             {
                 case ".avs":
                     return FileType.VIDEOINPUT;
+                case ".aac":
                 case ".ac3":
+                case ".dts":
                 case ".mp2":
+                case ".mp3": 
                 case ".mpa":
                 case ".wav":
                     return FileType.AUDIOINPUT;
