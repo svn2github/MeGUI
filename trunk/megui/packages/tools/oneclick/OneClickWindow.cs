@@ -726,10 +726,6 @@ namespace MeGUI
                     job.PostprocessingProperties.ChapterFile, job.PostprocessingProperties.OutputSize,
                     job.PostprocessingProperties.Splitting, job.PostprocessingProperties.Container,
                     false, job.PostprocessingProperties.DirectMuxAudio, log);
-                /*                    vUtil.generateJobSeries(videoInput, videoOutput, muxedOutput, videoSettings,
-                                        audioStreams, audio, subtitles, job.PostprocessingProperties.ChapterFile,
-                                        job.PostprocessingProperties.OutputSize, job.PostprocessingProperties.SplitSize,
-                                        containerOverhead, type, new string[] { job.Output, videoInput });*/
                 if (c == null)
                 {
                     log.Warn("Job creation aborted");
@@ -783,82 +779,6 @@ namespace MeGUI
 
             return input;
         }
-
-/*        private void getAudioStreams(Dictionary<int, string> audioFiles, OneClickWindow.PartialAudioStream[] partialAudioStream, out List<AudioJob> encodableAudioStreams, out List<MuxStream> muxOnlyAudioStreams)
-        {
-            muxOnlyAudioStreams = new List<MuxStream>();
-            encodableAudioStreams = new List<AudioJob>();
-            int counter = 0;
-            foreach (OneClickWindow.PartialAudioStream propertiesStream in job.PostprocessingProperties.AudioStreams)
-            {
-                counter++; // The track number starts at 1, so we increment right here. This also ensures it will always be incremented
-
-                bool error = false;
-                string input = null, output = null, language = null;
-                AudioCodecSettings settings = null;
-                // Input
-                if (string.IsNullOrEmpty(propertiesStream.input))
-                    continue; // Here we have an unconfigured stream. Let's just go on to the next one
-
-                if (propertiesStream.useExternalInput)
-                    input = propertiesStream.input;
-                else if (audioFiles.ContainsKey(propertiesStream.trackNumber))
-                    input = audioFiles[propertiesStream.trackNumber];
-                else
-                    error = true;
-
-                // Settings
-                if (propertiesStream.dontEncode)
-                    settings = null;
-                else if (propertiesStream.settings != null)
-                    settings = propertiesStream.settings;
-                else
-                    error = true;
-
-                // Output
-                if (propertiesStream.dontEncode)
-                    output = input;
-                else if (!error)
-                    output = Path.Combine(
-                        Path.GetDirectoryName(input),
-                        Path.GetFileNameWithoutExtension(input) + "_" +
-                        propertiesStream.trackNumber + ".file");
-
-                // Language
-                if (!string.IsNullOrEmpty(propertiesStream.language))
-                    language = propertiesStream.language;
-                else
-                    language = "";
-
-                if (error)
-                {
-                    logBuilder.AppendFormat("Trouble with audio track {0}. Skipping track...{1}", counter, Environment.NewLine);
-                    output = null;
-                    input = null;
-                    input = null;
-                }
-                else
-                {
-                    if (propertiesStream.dontEncode)
-                    {
-                        MuxStream newStream = new MuxStream();
-                        newStream.path = input;
-                        newStream.name = "";
-                        newStream.language = language;
-                        muxOnlyAudioStreams.Add(newStream);
-                    }
-                    else
-                    {
-                        AudioJob encodeStream = new AudioJob();
-                        encodeStream.Input = input;
-                        encodeStream.Output = output;
-                        encodeStream.Settings = settings;
-                        encodableAudioStreams.Add(encodeStream);
-                    }
-                }
-            }
-        }*/
-
         /// <summary>
         /// opens a dgindex script
         /// if the file can be properly opened, auto-cropping is performed, then depending on the AR settings

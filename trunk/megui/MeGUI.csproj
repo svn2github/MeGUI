@@ -584,7 +584,6 @@
     <Compile Include="packages\tools\oneclick\OneClickConfigurationDialog.Designer.cs">
       <DependentUpon>OneClickConfigurationDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="packages\tools\oneclick\OneClickProfile.cs" />
     <Compile Include="packages\tools\oneclick\OneClickSettings.cs" />
     <Compile Include="packages\tools\oneclick\OneClickWindow.cs">
       <SubType>Form</SubType>
@@ -915,8 +914,6 @@
   <ItemGroup>
     <Folder Include="packages\misc\" />
     <Folder Include="packages\reader\avs\" />
-    <Folder Include="packages\tools\avscreator\" />
-    <Folder Include="packages\tools\levelvalidator\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

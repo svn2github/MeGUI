@@ -128,7 +128,6 @@ namespace MeGUI
             string muxedName = FileUtil.AddToFileName(mainForm.Video.Info.VideoOutput, "-muxed");
 
             this.muxedOutput.Text = Path.ChangeExtension(muxedName, (this.container.SelectedItem as ContainerType).Extension);
-//                this.sizeSelection.SelectedIndex = 2;
 
             splitting.Value = mainForm.Settings.AedSettings.SplitSize;
             if (mainForm.Settings.AedSettings.FileSizeMode && FileSizeRadio.Enabled)
@@ -779,8 +778,6 @@ namespace MeGUI
         {
             // normal video verification
             string error = null;
-            // update the current audio stream with the latest data
-            //            updateAudioStreams();
             if ((error = info.Video.verifyVideoSettings()) != null)
             {
                 MessageBox.Show(error, "Unsupported video configuration", MessageBoxButtons.OK, MessageBoxIcon.Stop);

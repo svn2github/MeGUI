@@ -14,9 +14,6 @@ namespace MeGUI
         public AutoEncodeDefaults()
         {
             InitializeComponent();
-#warning muxprovider needs to be added here
-//            MuxProvider muxProvider = new MuxProvider();
-//            this.container.Items.AddRange(muxProvider.GetSupportedContainers().ToArray());
         }
 
         public AutoEncodeDefaultsSettings Settings

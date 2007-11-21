@@ -24,6 +24,7 @@ namespace MeGUI.packages.tools.besplitter
 
             filters = new OutputFileType[] {
                     AudioType.AC3,
+                    AudioType.DTS,                    
                     AudioType.MP2,
                     AudioType.MP3,
                     AudioType.RAWAAC,

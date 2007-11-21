@@ -31,7 +31,6 @@ namespace MeGUI
         public VobSubIndexer()
         {
             executable = Environment.GetFolderPath(Environment.SpecialFolder.System) + @"\rundll32.exe";
-//            executable = Environment.GetFolderPath(Environment.SpecialFolder.System) + @"\vobsub.dll";
         }
         #region IJobProcessor Members
         protected override void checkJobIO()
