@@ -47,10 +47,6 @@ namespace MeGUI
         #endregion
     }
 
-/*    public class MediaInfoFile2
-    {
-    }*/
-
     public class MediaInfoFile : IMediaFile
     {
         public static MediaFile Open(string file)
