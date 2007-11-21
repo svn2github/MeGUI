@@ -205,7 +205,6 @@
     <Compile Include="core\details\mux\baseMuxWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="core\details\mux\Muxer.cs" />
     <Compile Include="core\details\mux\MuxJob.cs" />
     <Compile Include="core\details\mux\MuxPath.cs" />
     <Compile Include="core\details\mux\MuxPathComparer.cs" />
@@ -233,7 +232,6 @@
     <Compile Include="core\details\video\VideoConfigurationPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="core\details\video\VideoEncoder.cs" />
     <Compile Include="core\details\video\VideoEncodingComponent.cs">
       <SubType>UserControl</SubType>
     </Compile>

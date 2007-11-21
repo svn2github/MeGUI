@@ -139,10 +139,6 @@ namespace MeGUI
             get { return info.VideoOutput; }
             set { info.VideoOutput = value; }
         }
-/*        public ComboBox VideoProfile
-        {
-            get { return null; /* throw new Exception("NOt implemented"); *//*}
-        }*/
         public VideoType CurrentVideoOutputType
         {
             get { return this.fileType.SelectedItem as VideoType; }
@@ -152,14 +148,6 @@ namespace MeGUI
             get { return addPrerenderJob.Checked; }
             set { addPrerenderJob.Checked = value; }
         }
-/*        public ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> CurrentVideoCodecSettingsProvider
-        {
-            get
-            {
-                return videoCodec.SelectedItem as ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>;
-            }
-        }
-        */
         #endregion
         #region event handlers
         private void videoInput_FileSelected(FileBar sender, FileBarEventArgs args)
@@ -207,29 +195,6 @@ namespace MeGUI
                     this.player.IntroEnd = info.IntroEndFrame;
             }
         }
-/*        private void videoConfigButton_Click(object sender, System.EventArgs e)
-        {
-#warning fix this
-            /*if (player != null)
-                player.Hide();
-            VideoCodecSettings settings = CurrentVideoCodecSettingsProvider.GetCurrentSettings();
-            string selectedProfile;
-            if (CurrentVideoCodecSettingsProvider.EditSettings(mainForm, this.VideoProfile.Text,
-                this.VideoIO, new int[] { this.introEndFrame, this.creditsStartFrame }, out selectedProfile))
-            {
-                this.VideoProfile.Items.Clear();
-                foreach (string name in mainForm.Profiles.VideoProfiles.Keys)
-                {
-                    this.VideoProfile.Items.Add(name);
-                }
-                int index = this.VideoProfile.Items.IndexOf(selectedProfile);
-                if (index != -1)
-                    this.VideoProfile.SelectedIndex = index;
-            }
-            if (player != null)
-                player.Show();
-            updateIOConfig();*/
-        //}
         private void queueVideoButton_Click(object sender, System.EventArgs e)
         {
             string settingsError = verifyVideoSettings();  // basic input, logfile and output file settings are okay
@@ -248,31 +213,7 @@ namespace MeGUI
             videoOutput.Filter = currentType.OutputFilterString;
             this.VideoOutput = Path.ChangeExtension(this.VideoOutput, currentType.Extension);
         }
-        /// <summary>
-        /// handles the selection of a profile from the list
-        /// the profile is looked up from the profiles Hashtable (it uses the name as unique key), then
-        /// the settings from the new profile are displayed in the GUI
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-/*        private void VideoProfile_SelectedIndexChanged(object sender, System.EventArgs e)
-        {
-            if (this..SelectedIndex != -1) // if it's -1 it's bogus
-            {
-                GenericProfile<VideoCodecSettings> prof = (GenericProfile<VideoCodecSettings>)mainForm.Profiles.VideoProfiles[this.VideoProfile.SelectedItem.ToString()];
-                foreach (ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> p in this.VideoCodec.Items)
-                {
-                    if (p.IsSameType(prof.Settings))
-                    {
-                        p.LoadSettings(prof.Settings);
-                        VideoCodec.SelectedItem = p;
-                        break;
-                    }
-                }
-            }
-            updateIOConfig();
-        }*/
-        /// <summary>
+       /// <summary>
         /// handles changes in the codec selection
         /// enables / disabled the proper GUI fields
         /// and changes the available fourCCs
@@ -282,35 +223,6 @@ namespace MeGUI
         /// <param name="e"></param>
         private void codec_SelectedIndexChanged(object sender, System.EventArgs e)
         {
-/*            VideoType[] outputTypes = this.videoEncoderProvider.GetSupportedOutput(codecHandler.CurrentSettingsProvider.EncoderType);
-            VideoType currentType = null;
-            if (CurrentVideoOutputType != null)
-                currentType = CurrentVideoOutputType;
-            else
-                currentType = outputTypes[0];
-            this.fileType.Items.Clear();
-            this.fileType.Items.AddRange(outputTypes);
-            // now select the previously selected type again if possible
-            bool selected = false;
-            foreach (VideoType t in outputTypes)
-            {
-                if (currentType == t)
-                {
-                    this.fileType.SelectedItem = t;
-                    currentType = t;
-                    selected = true;
-                    break;
-                }
-            }
-            if (!selected)
-            {
-                currentType = outputTypes[0];
-                this.fileType.SelectedItem = outputTypes[0];
-            }
-            VideoCodecSettings settings = CurrentSettings;
-            this.updateIOConfig();
-            if (MainForm.verifyOutputFile(this.VideoOutput) == null)
-                this.VideoOutput = Path.ChangeExtension(this.VideoOutput, currentType.Extension);*/
         }
         /// <summary>
         /// enables / disables output fields depending on the codec configuration
@@ -374,19 +286,6 @@ namespace MeGUI
             {
                 return CurrentSettings;
             }
-/*
-            set
-            {
-                foreach (ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> p in VideoCodec.Items)
-                {
-                    if (p.IsSameType(value))
-                    {
-                        p.LoadSettings(value);
-                        VideoCodec.SelectedItem = p;
-                        break;
-                    }
-                }
-            }*/
         }
         public MuxableType CurrentMuxableVideoType
         {
@@ -551,7 +450,6 @@ namespace MeGUI
             }
 
             AviSynthJob job = new AviSynthJob(VideoInput);
-            // mainForm.JobUtil.generateAvisynthJob(VideoInput);
             mainForm.Jobs.addJobsToQueue(new AviSynthJob(VideoInput));
         }
     }

@@ -41,12 +41,10 @@ namespace MeGUI
 
 
         #region variables
-        //protected int parX, parY;
         protected Dar? dar;
         protected string audioFilter, videoInputFilter, subtitleFilter, chaptersFilter, outputFilter;
         private MainForm mainForm;
         private MeGUISettings settings;
-     //   private int lastSubtitle = 0;
         protected Label videoInputLabel;
         protected OpenFileDialog openFileDialog;
         protected Button muxButton;
@@ -700,29 +698,7 @@ namespace MeGUI
             checkIO();
         }
         #endregion
-        #region properties
-/*        public virtual string AudioFilter
-        {
-            get { return audioFilter; }
-        }
-        public virtual string VideoInputFilter
-        {
-            get { return videoInputFilter; }
-        }
-        public virtual string SubtitleFilter
-        {
-            get { return subtitleFilter; }
-        }
-        public virtual string ChaptersFilter
-        {
-            get { return chaptersFilter; }
-        }
-        public virtual string OutputFilter
-        {
-            get { return outputFilter; }
-        }*/
-        #endregion
-        protected virtual void fileUpdated() { }
+       protected virtual void fileUpdated() { }
 
 
         #region adding / removing tracks

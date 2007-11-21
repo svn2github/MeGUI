@@ -18,7 +18,6 @@ namespace MeGUI
     }
     public class MuxProvider
     {
-//        List<IMuxing> registeredMuxers;
         MainForm mainForm;
         MuxPathComparer comparer;
         VideoEncoderProvider vProvider = new VideoEncoderProvider();
@@ -26,20 +25,8 @@ namespace MeGUI
         public MuxProvider(MainForm mainForm)
         {
             this.mainForm = mainForm;
-#warning need to register muxers
-            /*            registeredMuxers = new List<IMuxing>();
-            registeredMuxers.Add(new MP4BoxMuxerProvider());
-            registeredMuxers.Add(new MKVMergeMuxerProvider());
-            registeredMuxers.Add(new AVC2AVIMuxerProvider());
-            registeredMuxers.Add(new DivXMuxProvider());*/
-//            registeredMuxers.Add(new AVIMuxGUIMuxerProvider() as IMuxing);
             comparer = new MuxPathComparer();
         }
-
-/*        public List<IMuxing> GetRegisteredMuxers()
-        {
-            return registeredMuxers;
-        }*/
 
         public IMuxing GetMuxer(MuxerType type)
         {
@@ -397,26 +384,6 @@ namespace MeGUI
             }
             return comparer.GetBestMuxPath(allMuxPaths);
         }
-        /// <summary>
-        /// gets the video type from the container type
-        /// if it cannot be identified, null is returned
-        /// </summary>
-        /// <param name="containerType">the container type</param>
-        /// <returns>the video type</returns>
-/*        private OutputType videoTypeFromContainerType(ContainerType containerType)
-        {
-            switch (containerType)
-            {
-                case ContainerType.AVI:
-                    return VideoType.AVI;
-                case ContainerType.MKV:
-                    return VideoType.MKV;
-                case ContainerType.MP4:
-                    return VideoType.MP4;
-            }
-            return null;
-        }*/
-
         #endregion
     }
     public struct MuxPathLeg

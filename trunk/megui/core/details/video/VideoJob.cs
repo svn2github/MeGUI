@@ -77,31 +77,6 @@ namespace MeGUI
 			get
 			{
                 return "video";
-                /*
-				int mode = settings.EncodingMode;
-				switch (mode)
-				{
-					case (int)VideoCodecSettings.Mode.CBR:
-						if (settings is x264Settings)
-							return "ABR";
-						else
-							return "CBR";
-					case (int)VideoCodecSettings.Mode.CQ:
-						return "CQ";
-					case (int)VideoCodecSettings.Mode.twopass1:
-						return "2 pass 1st pass";
-					case (int)VideoCodecSettings.Mode.twopass2:
-						return "2 pass 2nd pass";
-					case (int)VideoCodecSettings.Mode.twopassAutomated:
-						return "2 pass automated";
-					case (int)VideoCodecSettings.Mode.threepass1:
-						return "3 pass 1st pass";
-					case (int)VideoCodecSettings.Mode.threepass2:
-						return "3 pass 2nd pass";
-					case (int)VideoCodecSettings.Mode.threepass3:
-						return "3 pass 3rd pass";
-				}
-				return "";*/
 			}
 		}
     }

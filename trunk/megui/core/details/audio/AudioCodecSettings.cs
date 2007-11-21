@@ -131,16 +131,6 @@ namespace MeGUI
 			get {return bitrate;}
 			set {bitrate = value;}
 		}
-/*		public int Delay
-		{
-			get {return delay;}
-			set {delay = value;}
-		}*/
-/*		public bool DelayEnabled
-		{
-			get {return delayEnabled;}
-			set {delayEnabled = value;}
-		}*/
 		public bool AutoGain
 		{
 			get {return autoGain;}
@@ -171,46 +161,6 @@ namespace MeGUI
         {
             return base.GetHashCode();
         }
-
-        ///// <summary>
-        ///// Must return command line arguments string for command-line audio encoder
-        ///// {0} means output file name
-        ///// {1} means samplerate in Hz
-        ///// {2} means bits per sample
-        ///// {3} means channel count
-        ///// {4} means samplecount
-        ///// {5} means size in bytes
-        ///// </summary>
-        ///// <returns>command line arguments</returns>
-        //public abstract string GetCommandLineArguments();
-
-        ///// <summary>
-        ///// Must return logical flag
-        ///// </summary>
-        //public abstract bool IsRawPcmSupportedByEncoder
-        //{
-        //    get;
-        //}
-
-        ///// <summary>
-        ///// Must read executable path from settings
-        ///// </summary>
-        ///// <param name="from">settings to read path from</param>
-        ///// <returns>path to encoder executable</returns>
-        //public abstract string GetExecutablePath(MeGUISettings from);
-
-
-        ///// <summary>
-        ///// Return some additional code to be applied to the end of DSP
-        ///// Example - 6==Audiochannels(last)?GetChannel(last,2,3,1,6,4,5):last{0}
-        ///// </summary>
-        //public abstract string AdjasmentAvisynthScript
-        //{
-        //    get;
-        //}
-
-
-
 
         #region GenericSettings Members
 
