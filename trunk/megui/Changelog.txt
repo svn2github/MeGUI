@@ -1,3 +1,47 @@
+0.3.0.1
+    - (berrinam) Sliding window time estimation instead of based on entire code. (#1832899)
+    - (berrinam) Add extra files for dragdrop and dropdown persistence
+    - (berrinam) Remember columns position for the job queue (#1817092)
+    - (berrinam) Dragdrop support in the bitrate calculator (#1819618)
+    - (berrinam) The custom filesizes, ARs, and FPSs in the dropdown comboboxes are now persistent. (#1822492)
+    - (berrinam) Make mux window output file editable.
+    - (berrinam) Change tools windows from modal dialogs to standalone windows. (#1822493)
+    - (Kurtnoise) [LogItem] added the Date.
+    - (berrinam) Commit the newlog patch. Changes:
+                 - new, hierarchical log
+                 - moved delete intermediate files stuff to cleanupjob
+                 - Log and Error removed from StatusUpdate -> use log.LogValue("Encoder log", encodeLog), and log.Error(...) instead
+                 - added a non-null check to Util.ThreadSafeRun
+    - (Kurtnoise) ASS & SSA support for the MKV muxer.
+    - (Kurtnoise) [MeGUISettings] removed divxMuxerPath.
+    - (Kurtnoise) [OneClick] sorted = true for Audio codecs.
+    - (Kurtnoise) Added more bitrate values for AC3 encoders.
+    - (Kurtnoise) Aften support as AC-3 encoder (FR #1663719)
+    - (Kurtnoise) Delays on audio output filenames now have meaning and are checked for correctness (implements #1819281)
+    - (Kurtnoise) Changed the default bitrate for FFAC3 (256 to 384 kbps).
+    - (Kurtnoise) Audio codecs List refactoring.
+
+0.2.6.1039
+    - (berrinam) Increase sensitivity of DAR. (fixes #1832218)
+    - (Kurtnoise) [x264] checked = false for Turbo with manual multipasses modes & cosmetics.
+    - (Kurtnoise) [ProgressWindow] New format for Time Elapsed/Remaining.
+    - (Kurtnoise) [BitrateCalculator] DTSBlockSize != AC3BlockSize
+
+0.2.6.1038
+    - (Kurtnoise) [Progress Window] use TotalHours only, dude...
+
+0.2.6.1037
+    - (Kurtnoise) [ProgressWindow] fixed timeElapsed issue for 24h+.
+    - (Kurtnoise) Updated wiki links.
+    - (Kurtnoise) [MP4BoxMuxer] workaround to avoid tmp command issues (fixed #1828277)
+
+0.2.6.1036
+    - (berrinam) Fixed exception in profile import when file already exists
+    - (Kurtnoise) [VideoEncoding] DAR values Initialization (fixed #1823977)
+    - (berrinam) Fix an exception when changing codec if no profile is selected
+    - (patch by eamonh) fix profile scrolling issues (fixes #1822000, #1827268)
+    - (patch by eamonh) Fix #1827919 (OneClickEncode Settings not saved)
+
 0.2.6.1035
     - (Sharktooth) [Installer] Creates (and removes during uninstall) update_cache reg key, also creates update_cache, logs and tools folders.
     - (berrinam) At startup, jobs marked as "processing" are marked as "aborted". Should help #1826981.
