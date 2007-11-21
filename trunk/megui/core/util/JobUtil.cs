@@ -243,44 +243,6 @@ namespace MeGUI
 
             return new SequentialChain(jobs.ToArray());
         }
-/*		/// <summary>
-		/// generates a muxing job based on a video and audio job that precede the muxing
-		/// </summary>
-		/// <param name="vjob">the video job whose output is to be muxed into an mp4</param>
-		/// <param name="audioStreams">the audio streams to be muxed into the mp4</param>
-		/// <returns>the complete MuxJob</returns>
-		public MuxJob generateMuxJob(VideoJob vjob, SubStream[] audioStreams, SubStream[] subtitleStreams, 
-			string chapterFile, MuxerType type, string output)
-		{
-			MuxJob job = new MuxJob();
-			job.Input = vjob.Output;
-			job.Output = output;
-			job.NbOfFrames = vjob.NumberOfFrames;
-			job.Settings.Framerate = vjob.Framerate;
-			job.NbOfBFrames = vjob.Settings.NbBframes;
-			job.Codec = vjob.CodecString;
-			job.Settings.PARX = vjob.Settings.PARX;
-			job.Settings.PARY = vjob.Settings.PARY;
-			if (audioStreams != null)
-			{
-				foreach (SubStream stream in audioStreams)
-				{
-					job.Settings.AudioStreams.Add(stream);
-				}
-			}
-			if (subtitleStreams != null)
-			{
-				foreach (SubStream stream in subtitleStreams)
-				{
-					job.Settings.SubtitleStreams.Add(stream);
-				}
-			}
-			job.Settings.ChapterFile = chapterFile;
-			job.Priority = mainForm.Settings.DefaultPriority;
-			job.MuxType = type;
-            job.Commandline = gen.generateMuxCommandline(job.Settings, job.MuxType);
-			return job;
-		}*/
 		#endregion
 		#region job preparation (aka multiple job generation)
 

@@ -200,26 +200,6 @@ namespace MeGUI
 				}
 			}
 		}
-/*		/// <summary>
-		/// gets all the audio languages from a defined source info file
-		/// </summary>
-		/// <param name="infoFile">the info file containing the language info</param>
-		/// <returns>an array listing all tracks and their language</returns>
-		public List<string> getAudioLanguages(string infoFile)
-		{
-			List<string> retval = new List<string>();
-			List<AudioTrackInfo> audioTracks;
-            List<SubtitleInfo> subtitles;
-			Dar? ar;
-            int maxHorizontalResolution;
-			getSourceInfo(infoFile, out audioTracks, out subtitles, out ar, out maxHorizontalResolution);
-			foreach (AudioTrackInfo ati in audioTracks)
-			{
-				retval.Add(ati.TrackInfo.Language);
-			}
-			return retval;
-
-		}*/
 		#endregion
 		#region dgindex preprocessing
 		/// <summary>
@@ -507,57 +487,8 @@ namespace MeGUI
             JobChain muxJobs = this.jobUtil.GenerateMuxJobs(video, video.Framerate, allAudioToMux.ToArray(), allInputAudioTypes.ToArray(),
                 subtitles, allInputSubtitleTypes.ToArray(), chapters, chapterInputType, container, muxedOutput, splitSize, inputsToDelete);
 
-
-
-
-            /*                foreach (Job mJob in muxJobs)
-                                foreach (Job job in jobs)
-                                    mJob.AddDependency(job);*/
-
-
-            /*
-            foreach (VideoJob job in vjobs)
-            {
-                jobs.Add(job);
-            }
-            foreach (MuxJob job in muxJobs)
-            {
-                jobs.Add(job);
-            }
-             */
-
             if (desiredSize.HasValue)
             {
-                /*                    if (encodedAudioPresent) // no audio encoding, we can calculate the video bitrate directly
-                                    {
-                                        logBuilder.Append("No audio encoding. Calculating desired video bitrate directly.\r\n");
-                                        List<AudioStream> calculationAudioStreams = new List<AudioStream>();
-                                        foreach (SubStream stream in muxOnlyAudio)
-                                        {
-                                            FileInfo fi = new FileInfo(stream.path);
-                                            AudioStream newStream = new AudioStream();
-                                            newStream.SizeBytes = fi.Length;
-                                            newStream.Type = guessAudioType(stream.path);
-                                            newStream.BitrateMode = BitrateManagementMode.VBR;
-                                            calculationAudioStreams.Add(newStream);
-                                            logBuilder.Append("Encoded audio file is present: " + stream.path +
-                                                " It has a size of " + fi.Length + " bytes. \r\n");
-                                        }
-
-                                        long videoSizeKB;
-                                        bool useBframes = false;
-                                        if (video.Settings.NbBframes > 0)
-                                            useBframes = true;
-
-                                        bitrateKBits = calc.CalculateBitrateKBits(video.Settings.Codec, useBframes, container, calculationAudioStreams.ToArray(),
-                                            desiredSizeBytes, video.NumberOfFrames, video.Framerate, out videoSizeKB);
-                                        desiredSizeBytes = (long)videoSizeKB * 1024L; // convert kb back to bytes
-                                        logBuilder.Append("Setting video bitrate for the video jobs to " + bitrateKBits + " kbit/s\r\n");
-                                        foreach (VideoJob vJob in vjobs)
-                                        {
-                                            jobUtil.updateVideoBitrate(vJob, bitrateKBits);
-                                        }
-                                    }*/
                 BitrateCalculationInfo b = new BitrateCalculationInfo();
                 
                 List<string> audiofiles = new List<string>();

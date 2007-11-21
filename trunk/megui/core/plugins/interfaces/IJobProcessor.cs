@@ -110,12 +110,6 @@ namespace MeGUI
         /// <param name="error">output for any errors that might ocurr during this method</param>
         /// <returns>true if the priority has been changed, false if not</returns>
         void changePriority(ProcessPriority priority);
-/*        /// <summary>
-        /// returns whether this jobprocessor can process the job given as parameter
-        /// </summary>
-        /// <param name="job">the job to be processed</param>
-        /// <returns>true of the job can be processed, false if not</returns>
-        bool canBeProcessed(Job job);*/
         event JobProcessingStatusUpdateCallback StatusUpdate;
     }
 }

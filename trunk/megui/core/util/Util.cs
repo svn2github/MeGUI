@@ -174,13 +174,6 @@ namespace MeGUI.core.util
             if (t == null) return null;
             return t.Value.ToString();
         }
-/*        public static string ToStringOrNull<T>(T? t)
-            where T : class
-        {
-            if (!t.HasValue) return null;
-            return t.Value.ToString();
-        }*/
-
         public static int CountStrings(string src, char find)
         {
             int ret = 0;
@@ -264,7 +257,5 @@ namespace MeGUI.core.util
             attr[0] = vConv;
             TypeDescriptor.AddAttributes(typeof(T), attr);
         }
-
-
     }
 }

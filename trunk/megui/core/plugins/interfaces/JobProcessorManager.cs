@@ -18,8 +18,6 @@ namespace MeGUI.core.plugins.implemented
                     processors.Add(factory, processor);
             }
             return null;
-#warning must add a job processor comparer
-//            return info.JobProcessorComparer.FindBestProcessor(processors);
         }
     }
 }

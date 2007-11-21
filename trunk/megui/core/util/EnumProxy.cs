@@ -145,22 +145,6 @@ namespace MeGUI
                     return i;
             }
             return -1;            
-        }
-        
-        //static void Main(string[] arg)
-        //{
-        //    object[] a = EnumProxy.CreateArray(new object[] { MyTestEnum.x, MyTestEnum.y, MyTestEnum.z });
-        //    foreach (object o in a)
-        //        Console.WriteLine(o.ToString());
-        //}
+        }     
     }
-    
-    //public enum MyTestEnum
-    //{
-    //    [EnumTitle("Title 1")]
-    //    x,
-    //    [EnumTitle("Title 2 - dimzon is the best")]
-    //    y,
-    //    z
-    //}
 }

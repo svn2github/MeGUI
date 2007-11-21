@@ -54,8 +54,6 @@ namespace MeGUI.core.util
                         parX = (int)Math.Round(realAspectRatio * ((double)parY));
                     }
                 }
-				//sarX = (int)Math.Round(realAspectRatio * resizedVerticalResolution);
-                //sarY = (int)Math.Round(horizontalResolution);
                 Debug.Assert(parX > 0 && parY > 0);
                 dar = new Dar((ulong)parX, (ulong)parY);
 				

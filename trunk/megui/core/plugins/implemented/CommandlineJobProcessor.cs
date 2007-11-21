@@ -234,11 +234,6 @@ namespace MeGUI
             }
         }
 
-/*        public virtual bool canBeProcessed(Job job)
-        {
-            return (job is TJob);
-        }
-        */
         public virtual bool canPause
         {
             get { return true; }
@@ -309,11 +304,6 @@ namespace MeGUI
         #endregion
         #region status updates
         public event JobProcessingStatusUpdateCallback StatusUpdate;
-/*        {
-            add { statusUpdate += value; }
-            remove { statusUpdate -= value; }
-        }*/
-
         protected void RunStatusCycle()
         {
             while (isRunning())

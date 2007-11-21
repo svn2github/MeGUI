@@ -121,8 +121,6 @@ namespace MeGUI.core.util
                 pixel = lineBegin;
                 for (int j = 0; j < b.Height; j++)
                 {
-                    //if (b.GetPixel(i, j) != prevColor)
-                    //if (isBadPixel(b.GetPixel(i, j)))
                     if (isBadPixel(*pixel))
                         nbBadPixels++;
                     if (nbBadPixels > heightBadPixelThreshold)
@@ -150,8 +148,6 @@ namespace MeGUI.core.util
                 pixel = lineBegin;
                 for (int j = 0; j < b.Width; j++)
                 {
-                    //if (b.GetPixel(j, i) != prevColor)
-                    //if (isBadPixel(b.GetPixel(j, i)))
                     if (isBadPixel(*pixel))
                         nbBadPixels++;
                     if (nbBadPixels > widthBadPixelThreshold)
@@ -179,8 +175,6 @@ namespace MeGUI.core.util
                 pixel = lineBegin;
                 for (int j = 0; j < b.Height; j++)
                 {
-                    //if (b.GetPixel(i, j) != prevColor)
-                    //if (isBadPixel(b.GetPixel(i, j)))
                     if (isBadPixel(*pixel))
                         nbBadPixels++;
                     if (nbBadPixels > heightBadPixelThreshold)
@@ -208,8 +202,6 @@ namespace MeGUI.core.util
                 pixel = lineBegin;
                 for (int j = 0; j < b.Width; j++)
                 {
-                    //if (b.GetPixel(j, i) != prevColor)
-                    //if (isBadPixel(b.GetPixel(j, i)))
                     if (isBadPixel(*pixel))
                         nbBadPixels++;
                     if (nbBadPixels > widthBadPixelThreshold)

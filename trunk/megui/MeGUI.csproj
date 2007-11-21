@@ -407,7 +407,6 @@
     <Compile Include="core\gui\ZonesControl.Designer.cs">
       <DependentUpon>ZonesControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="core\plugins\implemented\audio\CommandlineAudioEncoder.cs" />
     <Compile Include="core\plugins\implemented\CommandlineJobProcessor.cs" />
     <Compile Include="core\plugins\implemented\CommandlineMuxer.cs" />
     <Compile Include="core\plugins\implemented\video\CommandlineVideoEncoder.cs" />
@@ -910,10 +909,6 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="packages\misc\" />
-    <Folder Include="packages\reader\avs\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
