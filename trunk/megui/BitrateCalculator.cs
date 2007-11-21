@@ -203,48 +203,6 @@ namespace MeGUI
         }
         #endregion
 
-
-		#region predefined output sizes
-/*		/// <summary>
-		/// gets the predefined output size given the index of the dropdown
-		/// </summary>
-		/// <param name="index">the index which is currently selected in the size selection dropdown</param>
-		/// <returns>the size in kilobytes</returns>
-		public static int getOutputSizeKBs(int index)
-		{
-			if (index == 0) // 1/4 CD
-				return 179200;
-			if (index == 1) // 1/2 CD
-				return 358400;
-			if (index == 2) // 1 CD
-				return 716800;
-			if (index == 3) // 2 CDs
-				return 1433600;
-			if (index == 4) // 3 CDs
-				return 2150400;
-			if (index == 5) // 1/3 DVD
-				return 1501184;
-			if (index == 6) // 1/4 DVD
-				return 1126400;
-			if (index == 7) // 1/5 DVD
-				return 901120;
-			if (index == 8) // 1 DVD
-				return 4586496;
-            if (index == 9) //1 DVD-9
-                return 8333760;
-			return 716800;
-		}
-		/// <summary>
-		/// gets all the predefined output sizes
-		/// </summary>
-		/// <returns>an array of strings</returns>
-		public static string[] getPredefinedOutputSizes()
-		{
-			string[] values = {"1/4 CD", "1/2 CD", "1 CD", "2 CD", "3 CD", "1/3 DVD-R", "1/4 DVD-R", "1/5 DVD-R", "DVD-5", "DVD-9"};
-			return values;
-		}*/
-		#endregion
-
         public static long CalculateFileSizeKB(VideoCodec vCodec, bool p, ContainerType containerType, AudioBitrateCalculationStream[] audioStreams, int bitrate, ulong nbOfFrames, double framerate, out int vidSize)
         {
             BitrateCalculator c = new BitrateCalculator(vCodec, p, containerType, audioStreams, nbOfFrames, framerate);

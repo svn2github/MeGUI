@@ -479,13 +479,6 @@ InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         [PreserveSig]
         int GetFiltergraph([Out] out IGraphBuilder ppfg);
 
-        /*[PreserveSig]
-        int SetOutputFileName(
-            [In]											ref Guid pType,
-            [In, MarshalAs(UnmanagedType.LPWStr)]			string lpstrFile,
-            [Out]										out IBaseFilter ppbf,
-            [Out]										out IFileSinkFilter ppSink);*/
-
         [PreserveSig]
         int FindInterface(
             [In]											ref Guid pCategory,
@@ -516,14 +509,6 @@ InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         int AllocCapFile(
             [In, MarshalAs(UnmanagedType.LPWStr)]			string lpstrFile,
             [In]											long dwlSize);
-
-        /*[PreserveSig]
-        int CopyCaptureFile(
-            [In, MarshalAs(UnmanagedType.LPWStr)]			string lpwstrOld,
-            [In, MarshalAs(UnmanagedType.LPWStr)]			string lpwstrNew,
-            [In]											int fAllowEscAbort,
-            [In]											IAMCopyCaptureFileProgress pFilter);*/
-
 
         [PreserveSig]
         int FindPin(

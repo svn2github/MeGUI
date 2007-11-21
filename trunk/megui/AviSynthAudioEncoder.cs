@@ -243,13 +243,12 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
 
         private void readStdStream(bool bStdOut)
         {
-            //EncoderCallbackEventArgs e = new EncoderCallbackEventArgs(bStdOut?EncoderCallbackEventArgs.EventType.StdOut:EncoderCallbackEventArgs.EventType.StdErr);
             using (StreamReader r = bStdOut ? _encoderProcess.StandardOutput : _encoderProcess.StandardError)
             {
                 while (!_encoderProcess.HasExited)
                 {
                     Thread.Sleep(0);
-                    string text1 = r.ReadToEnd(); //r.ReadLine();
+                    string text1 = r.ReadToEnd();
                     if (text1 != null)
                     {
                         if (text1.Length > 0)
@@ -682,8 +681,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             if (audioJob.Settings is OggVorbisSettings)
             {
                 // http://forum.doom9.org/showthread.php?p=831098#post831098
-                //if(!this._settings.FreshOggEnc2)
-                    script.Append("6==Audiochannels(last)?GetChannel(last,1,3,2,5,6,4):last" + Environment.NewLine);
+                script.Append("6==Audiochannels(last)?GetChannel(last,1,3,2,5,6,4):last" + Environment.NewLine);
                 _mustSendWavHeaderToEncoderStdIn = false;
                 OggVorbisSettings n = audioJob.Settings as OggVorbisSettings;
                 _encoderExecutablePath = this._settings.OggEnc2Path;

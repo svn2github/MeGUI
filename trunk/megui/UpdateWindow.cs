@@ -1122,7 +1122,7 @@ namespace MeGUI
         }
         #endregion
         #region updating
-        private /*bool*/ void InstallFiles(SortedDictionary<uint, List<iUpgradeable>> groups /*, bool silentMode*/)
+        private void InstallFiles(SortedDictionary<uint, List<iUpgradeable>> groups)
         {
             continueUpdate = true;
             int currentFile = 1; //the first file we update is file 1.
@@ -1209,8 +1209,6 @@ namespace MeGUI
                             AddTextToLog(string.Format("The following files could not be updated, since they depend on another component which will only be installed when MeGUI restarts. Please run the updater later.{0}", Environment.NewLine));
                         firstTime = false;
                         AddTextToLog(file.Name + Environment.NewLine);
-                        // Maybe useful later
-                        //mainForm.AddFileToInstall(file.Name);
                     }
                 }
             }
@@ -1233,8 +1231,7 @@ namespace MeGUI
 
             if (needsRestart)
             {
-                if (/*silentMode ||*/
-                    MessageBox.Show("In order to finish the update, MeGUI needs to be restarted. Do you want to restart now?",
+                if (MessageBox.Show("In order to finish the update, MeGUI needs to be restarted. Do you want to restart now?",
                     "Restart now?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     mainForm.Restart = true;
@@ -1499,25 +1496,6 @@ namespace MeGUI
             btnUpdate.Enabled = true;
             btnAbort.Enabled = false;
         }
-
-        /// This function is intended to silently install the list of files, restarting if necessary. 
-        /// It doesn't work yet, and was left out because it was too much work for this point in time.
-        /*
-        public bool InstallFiles(List<string> list)
-        {
-            SortedDictionary<uint, List<iUpgradeable>> files = new SortedDictionary<uint,List<iUpgradeable>>();
-            foreach (string name in list)
-            {
-                iUpgradeable file = upgradeData.FindByName(name);
-                if (file != null)
-                {
-                    if (!files.ContainsKey(file.InstallPriority))
-                        files[file.InstallPriority] = new List<iUpgradeable>();
-                    files[file.InstallPriority].Add(file);
-                }
-            }
-            return InstallFiles(files, true);
-        }*/
     }
     public class UpdateOptions : MeGUI.core.plugins.interfaces.IOption
     {

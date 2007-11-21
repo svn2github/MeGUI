@@ -81,7 +81,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "MencoderEncoder");
                     break;
                 case 2: // 2 pass first pass
                     sb.Append("-o NUL: -passlogfile " + "\"" + ss.Logfile + "\" "); // add logfile
-                    //sb.Append("-lavcopts vcodec=snow:vpass=1:vbitrate=" + ss.BitrateQuantizer + ":"); // add pass & bitrate
                     sb.Append("-lavcopts vcodec=snow:vpass=1:vqscale=5:"); // workaround for corrupted first passes
                     break;
                 case 3: // 2 pass second pass
@@ -91,7 +90,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "MencoderEncoder");
                     break;
                 case 5:
                     sb.Append("-o NUL: -passlogfile " + "\"" + ss.Logfile + "\" "); // add logfile
-                    //sb.Append("-lavcopts vcodec=snow:vpass=1:vbitrate=" + ss.BitrateQuantizer + ":"); // add pass & bitrate
                     sb.Append("-lavcopts vcodec=snow:vpass=1:vqscale=5:"); // workaround for corrupted first passes
                     break;
                 case 6:
