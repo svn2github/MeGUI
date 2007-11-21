@@ -1,3 +1,9 @@
+0.2.6.1039
+    - (berrinam) Increase sensitivity of DAR. (fixes #1832218)
+    - (Kurtnoise) [x264] checked = false for Turbo with manual multipasses modes & cosmetics.
+    - (Kurtnoise) [ProgressWindow] New format for Time Elapsed/Remaining.
+    - (Kurtnoise) [BitrateCalculator] DTSBlockSize != AC3BlockSize
+
 0.2.6.1038
     - (Kurtnoise) [Progress Window] use TotalHours only, dude...
 
