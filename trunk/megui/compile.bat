@@ -1,7 +1,5 @@
 %windir%\Microsoft.NET\Framework\v2.0.50727\csc /platform:x86 /res:App.ico /res:Changelog.txt,MeGUI.Changelog.txt /res:pause.ico /res:play.ico /r:MessageBoxExLib.dll /r:Microsoft.VisualBasic.dll /r:ICSharpCode.SharpZiplib.dll /r:MediaInfoWrapper.dll /target:winexe /out:megui.exe /win32icon:app.ico /unsafe+ /recurse:*.cs /d:CSC /o /warn:0
 
-PAUSE
-
 rem make dist with everything
 md Dist\BigDist
 copy *.exe .\Dist\BigDist

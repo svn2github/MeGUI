@@ -23,4 +23,3 @@ ECHO Deleting temp files
 del bautodeint.exe
 rename main.exe bautodeint.exe
 del *.obj main.map
-PAUSE
