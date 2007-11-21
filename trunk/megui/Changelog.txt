@@ -1,4 +1,4 @@
-0.3.0.1
+0.3.0.0001
     - (berrinam) Sliding window time estimation instead of based on entire code. (#1832899)
     - (berrinam) Add extra files for dragdrop and dropdown persistence
     - (berrinam) Remember columns position for the job queue (#1817092)
