@@ -203,55 +203,6 @@ namespace MeGUI
             else
                 return MainProfileMaxBRs[level];
         }
-		/*	switch (level)
-			{
-				case 0: // level 1
-					return 64;
-				case 1: // level 1.1
-					return 192;
-					
-				case 2: // level 1.2
-					return 384;
-					
-				case 3: // level 1.3
-					return 768;
-					
-				case 4: // level 2
-					return 2000;
-					
-				case 5: // level 2.1
-					return 4000;
-					
-				case 6: // level 2.2
-					return 4000;
-					
-				case 7: // level 3
-					return 10000;
-					
-				case 8: // level 3.1
-					return 14000;
-					
-				case 9: // level 3.2
-					return 20000;
-					
-				case 10: // level 4
-					return 20000;
-					
-				case 11: // level 4.1
-					return 50000;
-					
-				case 12: // level 4.2
-					return 50000;
-					
-				case 13: // level 5
-					return 135000;
-					
-				case 14: // level 5.1
-					return 240000;
-					
-			}
-			return 240000;
-		}*/
 		/// <summary>
 		/// gets the max cbp rate in bytes for a given level
 		/// </summary>

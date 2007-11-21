@@ -1283,7 +1283,6 @@ namespace MeGUI
                     this.flipVertical.Enabled = true;
                     break;
             }
-            resetSourceDetection();
         }
 
         private SourceInfo DeintInfo
@@ -1330,29 +1329,6 @@ namespace MeGUI
                 this.deinterlaceType.DataSource = ScriptServer.GetDeinterlacers(value);
                 this.deinterlaceType.BindingContext = new BindingContext();
             }
-        }
-
-        private void resetSourceDetection()
-        {/*
-            if (detector != null)
-            {
-                detector.stop();
-                detector = null;
-            }
-            analyseButton.Enabled = true;
-            analyseButton.Text = "Analyse";
-            analyseProgressBar.Value = 0;
-            deinterlace.Checked = false;
-            deinterlace.Enabled = false;
-            deinterlaceType.Enabled = false;
-            deinterlaceType.DataSource = new DeinterlaceFilter[] { new DeinterlaceFilter("Do nothing (source not detected)", "#blank deinterlace line") };
-            deinterlaceType.SelectedIndex = 0;
-
-            deintIsAnime.Checked = false;
-            deintIsAnime.Enabled = true;
-
-            sourceTypeLabel.Text = "Source type:";
-            */
         }
         /// <summary>
         /// Check whether direct show can render the avi and then open it through an avisynth script.
@@ -1421,25 +1397,6 @@ namespace MeGUI
             MessageBox.Show("You can't open MPEG files with the AviSynth Script Creator. You'll have to index it first with the D2V indexer, and open the created project file (*.d2v) here.",
                 "Can't open MPEG files", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
-        /*
-            VobinputWindow mpegInput = new VobinputWindow(this.mainForm, fileName, true);
-            mpegInput.setConfig(fileName, Path.ChangeExtension(fileName,".d2v"), 2, 0, -1,
-                false, true, true, false);
-            mpegInput.ShowDialog();
-            if (mpegInput.JobCreated)
-            {
-                if (mainForm.Jobs.startEncoding(mpegInput.LastJob))
-                {
-#warning allow a way to specify that the d2v is the only job run
-//                    mainForm.Jobs.QueueEncoding = false;
-                }
-                else
-                {
-                    MessageBox.Show("Your dgindexing job is in the queue. This will reopen when it has finished.", "DGIndexing job queued", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                this.Close();
-            }
-        }*/
 
         private void enableControls(bool enable)
         {

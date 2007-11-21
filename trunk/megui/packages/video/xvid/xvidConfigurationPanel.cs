@@ -187,7 +187,6 @@ namespace MeGUI.packages.video.xvid
                 xs.QPel = xvidQpel.Checked;
                 xs.GMC = xvidGMC.Checked;
                 xs.NbThreads = (int)nbThreads.Value;
-//                xs.CartoonMode = xvidCartoonMode.Checked;
                 xs.ChromaMotion = xvidChromaMotion.Checked;
                 xs.ClosedGOP = xvidClosedGop.Checked;
                 xs.Greyscale = xvidGreyScale.Checked;
@@ -219,8 +218,6 @@ namespace MeGUI.packages.video.xvid
                 if (!xvidRCBufferSize.Text.Equals("") && !xvidRCBufferSize.Text.Equals("0"))
                     xs.RateControlBuffer = Int32.Parse(xvidRCBufferSize.Text);
                 xs.BframeThreshold = this.xvidBframeThreshold.Value;
-//                xs.ChromaOptimizer = this.xvidChromaOptimizer.Checked;
-//                xs.HQAC = this.xvidHQAC.Checked;
                 xs.FrameDropRatio = (int)xvidFrameDropRatio.Value;
                 xs.QuantizerMatrix = cqmComboBox1.SelectedText;
                 xs.CustomEncoderOptions = xvidCustomCommandlineOptions.Text;
@@ -250,7 +247,6 @@ namespace MeGUI.packages.video.xvid
                 xvidUseVHQForBframes.Checked = xs.VHQForBframes;
                 xvidQpel.Checked = xs.QPel;
                 xvidGMC.Checked = xs.GMC;
-//                xvidCartoonMode.Checked = xs.CartoonMode;
                 xvidChromaMotion.Checked = xs.ChromaMotion;
                 xvidClosedGop.Checked = xs.ClosedGOP;
                 xvidGreyScale.Checked = xs.Greyscale;
@@ -281,8 +277,6 @@ namespace MeGUI.packages.video.xvid
                 else
                     xvidRCBufferSize.Text = "";
                 this.xvidBframeThreshold.Value = xs.BframeThreshold;
-//                this.xvidChromaOptimizer.Checked = xs.ChromaOptimizer;
-//                this.xvidHQAC.Checked = xs.HQAC;
                 xvidFrameDropRatio.Value = (decimal)xs.FrameDropRatio;
                 cqmComboBox1.SelectedObject = xs.QuantizerMatrix;
                 xvidCustomCommandlineOptions.Text = xs.CustomEncoderOptions;

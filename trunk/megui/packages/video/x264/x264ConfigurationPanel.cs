@@ -186,13 +186,6 @@ namespace MeGUI.packages.video.x264
                     this.Settings = verifiedSettings;
                     levelEnforced = false;
 
-                    // Set the config boxes to the correct values
-                    // if (!enforcement.EnableP4x4mv)
-                    //     this.x264P4x4mv.Checked = false;
-                    // if (!enforcement.EnableVBVMaxRate)
-                    //     this.x264VBVMaxRate.Text = "";
-                    // if (!enforcement.EnableVBVBufferSize)
-                    //     this.x264VBVBufferSize.Text = "";
                     if (enforcement.Panic)
                         MessageBox.Show(enforcement.PanicString, "Level Violation", MessageBoxButtons.OK);
                 }
@@ -260,14 +253,7 @@ namespace MeGUI.packages.video.x264
                 {
                     this.x264BitrateQuantizerLabel.Text = "Quality";
                 }
-
-                // If x264 gets float for a quantizer, then this is correct
-                /*x264BitrateQuantizer.Maximum = 64;
-                x264BitrateQuantizer.Minimum = 0.1M;
-                x264BitrateQuantizer.DecimalPlaces = 1;
-                x264BitrateQuantizer.Increment = 0.1M;*/
-
-                
+              
                 x264BitrateQuantizer.Maximum = 64;
                 if (x264EncodingMode.SelectedIndex == 9) // crf
                 {
@@ -360,22 +346,6 @@ namespace MeGUI.packages.video.x264
             lastEncodingMode = x264EncodingMode.SelectedIndex;
         }
         #endregion
-        #region textboxes
-        private void doTextFieldAdjustments()
-        {
-/*            if (!x264BitrateQuantizer.Text.Equals(""))
-            {
-                int val = Int32.Parse(x264Bitratequantizer.text);
-                if (val == 0 && !x264LosslessMode.Checked) // stop quantizer 0
-                {
-                    if (isBitrateMode(x264EncodingMode.SelectedIndex))
-                        x264BitrateQuantizer.Value = 700;
-                    else
-                        x264BitrateQuantizer.Value = 26;
-                }
-            }*/
-        }
-        #endregion
         #region level -> mb
         /// <summary>
         /// adjust the mb selection dropdown in function of the selected profile and the activated
@@ -424,9 +394,7 @@ namespace MeGUI.packages.video.x264
             doEncodingModeAdjustments();
             doCheckBoxAdjustments();
             doTrellisAdjustments();
-            doTextFieldAdjustments();
             doAVCLevelAdjustments();
-
             x264DialogTriStateAdjustment();
             doMacroBlockAdjustments();
         }

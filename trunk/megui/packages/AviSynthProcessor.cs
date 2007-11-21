@@ -38,12 +38,7 @@ namespace MeGUI
         }
         #endregion
         #region processing
-/*        public bool canBeProcessed(Job job)
-        {
-            if (job is AviSynthJob)
-                return true;
-            return false;
-        }*/
+
         private void update()
         {
             while (!aborted && position < stup.NbFramesTotal)
