@@ -106,7 +106,5 @@ namespace MeGUI.core.details
             Type = AType = VideoUtil.guessAudioType(Filename);
         }
     }
-
-
 }
 

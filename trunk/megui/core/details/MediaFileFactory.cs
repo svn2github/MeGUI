@@ -10,10 +10,6 @@ namespace MeGUI
         public MediaFileFactory(MainForm mainForm)
         {
             this.mainForm = mainForm;
-#warning need to register media file factories
-            /*            Register(new AvsFileFactory());
-            Register(new d2vFileFactory());
-            Register(new MediaInfoFileFactory());*/
         }
 
         public IMediaFile Open(string file)

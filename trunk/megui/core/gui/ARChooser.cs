@@ -12,7 +12,6 @@ namespace MeGUI.core.gui
 
         protected override void Dispose(bool disposing)
         {
-            //settings.CustomDARs = new ArrayConverter<Named<Dar>, DarConverter>().ToString(CustomDARs);
             CustomUserSettings.Default.CustomDARs = CustomDARs;
             base.Dispose(disposing);
         }

@@ -505,34 +505,6 @@ namespace MeGUI.core.details
         private void updateProcessingStatus()
         {
             throw new Exception();
-            /*
-            if (this.isEncoding)
-            {
-                if (this.stopTheQueue)
-                {
-                    startStopButton.Text = "Start";
-                    mainForm.StartStopMenuItemTS.Text = "Start";
-                }
-                else
-                {
-                    startStopButton.Text = "Stop";
-                    mainForm.StartStopMenuItemTS.Text = "Stop";
-                }
-                mainForm.AbortMenuItemTS.Enabled = true;
-                abortButton.Enabled = true;
-            }
-            else
-            {
-                startStopButton.Text = "Start";
-                mainForm.StartStopMenuItemTS.Text = "Start";
-                pauseButton.Image = pauseImage;
-                pauseButton.Enabled = false;
-                mainForm.PauseMenuItemTS.Image = pauseImage;
-                mainForm.PauseMenuItemTS.Text = "Pause";
-                mainForm.PauseMenuItemTS.Enabled = false;
-                mainForm.AbortMenuItemTS.Enabled = false;
-                abortButton.Enabled = false;
-            }*/
         }
 
         internal void showAfterEncodingStatus(MeGUISettings Settings)

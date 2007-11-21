@@ -144,14 +144,6 @@ namespace MeGUI
         
         // Audio Codecs
         public static readonly ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType> NAAC = new NeroAACSettingsProvider();
-/*        public static readonly ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType> WAAC = new WinAmpAACSettingsProvider();
-        public static readonly ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType> Lame = new LameMP3SettingsProvider();
-        public static readonly ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType> FAAC = new FaacSettingsProvider();
-        public static readonly ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType> Vorbis = new OggVorbisSettingsProvider();
-        public static readonly ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType> AudX = new AudXSettingsProvider();
-        public static readonly ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType> AC3 = new AC3SettingsProvider();
-        public static readonly ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType> MP2 = new MP2SettingsProvider();*/
-
         // Video Codecs
         public static readonly ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> X264 = new X264SettingsProvider();
         public static readonly ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> Snow = new SnowSettingsProvider();

@@ -17,8 +17,6 @@ namespace MeGUI.core.gui
             this.resizeFilterType.BindingContext = new BindingContext();
             this.noiseFilterType.DataSource = ScriptServer.ListOfDenoiseFilterType;
             this.noiseFilterType.BindingContext = new BindingContext();
-//            this.path = mainForm.MeGUIPath;
-//            this.pluginsDirectory = MeGUISettings.AvisynthPluginsPath;
         }
 
         #region Gettable<AviSynthSettings> Members

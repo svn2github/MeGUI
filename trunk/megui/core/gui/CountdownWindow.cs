@@ -81,7 +81,6 @@ namespace MeGUI.core.gui
                 SetProgressBar(0, 1, 1);
                 SetButtonText("0");
                 base.DialogResult = DialogResult.OK;
-//                base.Close();
             }
         }
     }

@@ -187,7 +187,6 @@ namespace MeGUI
 		/// </summary>
 		public FileSize? AudioFileSize
 		{
-//			get {return audioFileSize;}
 			set {audioFileSize = value;}
 		}
 		/// <summary>
