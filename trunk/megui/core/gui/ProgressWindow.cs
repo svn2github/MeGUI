@@ -213,9 +213,9 @@ namespace MeGUI
             this.totalTimeLabel.AutoSize = true;
             this.totalTimeLabel.Location = new System.Drawing.Point(8, 152);
             this.totalTimeLabel.Name = "totalTimeLabel";
-            this.totalTimeLabel.Size = new System.Drawing.Size(85, 13);
+            this.totalTimeLabel.Size = new System.Drawing.Size(82, 13);
             this.totalTimeLabel.TabIndex = 10;
-            this.totalTimeLabel.Text = "Remaining Time:";
+            this.totalTimeLabel.Text = "Time remaining:";
             // 
             // timeElapsed
             // 
