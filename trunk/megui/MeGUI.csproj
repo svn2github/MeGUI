@@ -480,6 +480,7 @@
     <Compile Include="packages\audio\lame\lameConfigurationPanel.Designer.cs">
       <DependentUpon>lameConfigurationPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="packages\audio\lame\MP3Settings.cs" />
     <Compile Include="packages\audio\naac\NeroAACSettings.cs" />
     <Compile Include="packages\audio\naac\neroConfigurationPanel.cs">
       <SubType>UserControl</SubType>
@@ -642,9 +643,6 @@
     <Compile Include="hfyuSettings.cs" />
     <Compile Include="mencoderEncoder.cs" />
     <Compile Include="MencoderMuxer.cs" />
-    <Compile Include="MP3Settings.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
