@@ -79,21 +79,6 @@ namespace MeGUI.core.gui
             if (pw != null)
                 Util.ThreadSafeRun(pw, delegate { pw.Show(); });
         }
-
-/*        public bool ProcessWindowAccessible
-        {
-            get { return (pw != null); }
-        }*/
-        /// <summary>
-        /// callback for the Progress Window
-        /// This is called when the progress window has been closed and ensures that
-        /// no futher attempt is made to send a statusupdate to the progress window
-        /// </summary>
-/*        private void pw_WindowClosed(bool hideOnly)
-        {
-            if (!hideOnly)
-                pw = null;
-        }*/
         /// <summary>
         /// callback for the progress window
         /// this method is called if the abort button in the progress window is called
@@ -209,9 +194,7 @@ namespace MeGUI.core.gui
             });
 
             pw = new ProgressWindow(JobTypes.AUDIO);
-//            pw.WindowClosed += new WindowClosedCallback(pw_WindowClosed);
             pw.Abort += new AbortCallback(pw_Abort);
-//            pw.setPriority(job.Priority);
             pw.PriorityChanged += new PriorityChangedCallback(pw_PriorityChanged);
             pw.CreateControl();
             mainForm.RegisterForm(pw);
@@ -290,7 +273,6 @@ namespace MeGUI.core.gui
         private void returnJobsToMainQueue()
         {
             List<TaggedJob> list = new List<TaggedJob>(localJobs.Values);
-//            IEnumerable<Job> list = localJobs.Values;
             foreach (TaggedJob j in list)
                 mainForm.Jobs.ReleaseJob(j);
         }
@@ -298,7 +280,6 @@ namespace MeGUI.core.gui
         internal void GUIDeleteJob(TaggedJob j)
         {
             mainForm.Jobs.DeleteJob(j);
-            //            mainForm.Jobs
         }
 
         #region gui updates
@@ -414,7 +395,6 @@ namespace MeGUI.core.gui
 
                     copyInfoIntoJob(job, su);
                     progress = 0;
-                    //ensureProgressWindowClosed();
                     HideProcessWindow();
                     currentProcessor = null;
                     currentJob = null;
@@ -485,14 +465,6 @@ namespace MeGUI.core.gui
 
                 progress = su.PercentageDoneExact ?? 0;
                 updateProgress();
-                /*
-                string percentage = (su.PercentageDoneExact ?? 0M).ToString("##.##");
-                if (percentage.IndexOf(".") != -1 && percentage.Substring(percentage.IndexOf(".")).Length == 1)
-                    percentage += "0";
-                mainForm.TitleText = "MeGUI " + su.JobName + " " + percentage + "% ";
-                if (mainForm.Settings.AfterEncoding == AfterEncoding.Shutdown)
-                    mainForm.TitleText += "- SHUTDOWN after encode";
-                this.jobProgress.Value = su.PercentageDone;*/
             }
         }
 
@@ -555,7 +527,6 @@ namespace MeGUI.core.gui
                 }
 
                 // Do JobControl setup
-                //addToLog("encoder commandline:\r\n" + job.Commandline + "\r\n");
                 currentProcessor.StatusUpdate += new JobProcessingStatusUpdateCallback(UpdateGUIStatus);
 
                 // Progress window
@@ -702,24 +673,6 @@ namespace MeGUI.core.gui
             e.Cancel = true;
             Hide();
         }
-        
-        /// <summary>
-        /// Makes sure that the progress window is closed
-        /// </summary>
-/*        private void ensureProgressWindowClosed()
-        {
-            if (pw != null)
-            {
-                pw.IsUserAbort = false; // ensures that the window will be closed
-/*                if (pw.InvokeRequired && pw.IsHandleCreated) pw.Invoke(new MethodInvoker(delegate { 
-                    pw.Close(); }));
-                else *///pw.Close();
-        /*
-                pw = null;
-            }
-        }*/
-
-
         internal void RemoveJobFromQueue(TaggedJob job)
         {
             localJobs.Remove(job.Name);
@@ -845,7 +798,6 @@ namespace MeGUI.core.gui
 
         private void JobWorker_FormClosed(object sender, FormClosedEventArgs e)
         {
-//            MeGUI.Properties.Settings.Default.JobWorkerSize = ClientSize;
         }
 
         private void JobWorker_ClientSizeChanged(object sender, EventArgs e)

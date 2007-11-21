@@ -252,7 +252,6 @@ namespace MeGUI.core.plugins.interfaces
             {
                 this.videoProfile.Items.Add(prof);
                 this.videoProfile.SelectedItem = prof;
-//                this.oldVideoProfile = prof;
             }
             else
                 MessageBox.Show("Sorry, profiles must have unique names", "Duplicate name detected", MessageBoxButtons.OK);
@@ -281,8 +280,6 @@ namespace MeGUI.core.plugins.interfaces
 
         private void okButton_Click(object sender, EventArgs e)
         {
-
-            // Empty, has been moved to EditorProvider.Create
         }
     }
 

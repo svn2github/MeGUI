@@ -39,7 +39,6 @@ namespace MeGUI
 	public class ProgressWindow : System.Windows.Forms.Form
     {
         #region variables
-//        public event WindowClosedCallback WindowClosed; // event fired if the window closes
 		public event AbortCallback Abort; // event fired if the abort button has been pressed
 		public event PriorityChangedCallback PriorityChanged; // event fired if the priority dropdown has changed
 		private System.Windows.Forms.Label currentVideoFrameLabel;
@@ -80,17 +79,6 @@ namespace MeGUI
 			//
 			InitializeComponent();
 			isUserClosing = true;
-/*			if (type == JobTypes.AUDIO)
-			{
-				currentVideoFrameLabel.Text = "Current audio position:";
-				videoDataLabel.Text = "Audio data:";
-				fpsLabel.Text = "";
-			}
-            if (type == JobTypes.MUX)
-            {
-                currentVideoFrameLabel.Text = "Audio data:";
-                fpsLabel.Text = "Current operation:";
-            }*/
 		}
 		/// <summary>
 		/// handles the onclosing event
@@ -104,11 +92,9 @@ namespace MeGUI
             {
                 e.Cancel = true;
                 this.Hide();
-//                WindowClosed(true);
             }
             else
             {
-//                WindowClosed(false);
                 base.OnClosing(e);
             }
         }
@@ -423,7 +409,6 @@ namespace MeGUI
                     timeElapsed.Text = string.Format("{0:00}:{1:00}:{2:00}", (int)su.TimeElapsed.Hours, su.TimeElapsed.Minutes, su.TimeElapsed.Seconds);
 
                 // Estimated time
-                // totalTime.Text = Util.ToString(su.EstimatedTime) ?? "---"; 
                 // go back to the old function ;-)
                 totalTime.Text = getTimeString(su.TimeElapsed, su.PercentageDoneExact ?? 0M);
 
@@ -433,77 +418,6 @@ namespace MeGUI
                 progress.Value = su.PercentageDone;
             }
             catch (Exception) { }
-
-            #region old code
-            /*            if (su.JobType == JobTypes.VIDEO) // video status update
-			{
-				this.currentVideoFrame.Text = su.NbFramesDone + "/" + su.NbFramesTotal;
-				this.videoData.Text = su.FileSize.ToString();
-                if (su.FileSize.HasValue)
-                {
-                    FileSize projectedSize = su.FileSize.Value * (100M / su.PercentageDoneExact);
-                    this.filesize.Text = projectedSize.ToString();
-                }
-                else
-                    this.filesize.Text = "unknown";
-                this.fps.Text = su.FPS.ToString("##.##") + " FPS";
-				this.timeElapsed.Text = su.TimeElapsedString;
-				this.totalTime.Text = getTimeString(su.TimeElapsed, su.PercentageDoneExact);
-				this.progress.Value = su.PercentageDone;
-				this.Text = "Status: " + su.PercentageDoneExact.ToString("##.##") + " %";
-			}
-			if (su.JobType == JobTypes.AUDIO) // audio status update
-			{
-				this.currentVideoFrame.Text = Util.ToString(su.ClipPosition);
-				this.videoData.Text = su.FileSize.ToString();
-                if (!su.FileSize.HasValue) // first pass
-                {
-                    this.filesize.Text = "N/A (first pass)";
-                    this.totalTime.Text = "N/A (first pass)";
-                    this.Text = "Status: first pass";
-                }
-                else
-				{
-                    FileSize projectedSize = su.FileSize.Value * (100M / su.PercentageDoneExact);
-                    this.filesize.Text = projectedSize.ToString();
-					this.totalTime.Text = getTimeString(su.TimeElapsed, su.PercentageDoneExact);
-					this.progress.Value = su.PercentageDone;
-                    this.Text = "Status: " + su.PercentageDoneExact.ToString("##.##") + " %";
-				}
-				this.timeElapsed.Text = su.TimeElapsedString;
-			}
-			if (su.JobType == JobTypes.MUX) // mux status update
-			{
-				this.currentVideoFrame.Text = su.AudioFileSize.ToString(); // audio data
-				this.videoData.Text = su.FileSize.ToString();
-				this.filesize.Text = su.ProjectedFileSize.ToString();
-                this.fps.Text = Util.ToString(su.ClipPosition);
-                this.Text = "Status: " + su.PercentageDoneExact.ToString("##.##") + " %";
-				this.progress.Value = su.PercentageDone;
-				this.timeElapsed.Text = su.TimeElapsedString;
-			}
-            if (su.JobType == JobTypes.AVS) // video status update
-            {
-                this.currentVideoFrame.Text = su.NbFramesDone + "/" + su.NbFramesTotal;
-                this.videoData.Text = "N/A";
-                this.filesize.Text = "N/A";
-                this.fps.Text = su.FPS.ToString("##.##") + " FPS";
-                this.timeElapsed.Text = su.TimeElapsedString;
-                this.totalTime.Text = getTimeString(su.TimeElapsed, su.PercentageDoneExact);
-                this.progress.Value = su.PercentageDone;
-                this.Text = "Status: " + su.PercentageDoneExact.ToString("##.##") + " %";
-            }
-            if (su.JobType == JobTypes.INDEX)
-            {
-                this.currentVideoFrame.Text = "N/A";
-                this.videoData.Text = "N/A";
-                this.filesize.Text = "N/A";
-                this.fps.Text = "N/A";
-                this.totalTime.Text = "N/A";
-                this.progress.Value = 0;
-                this.timeElapsed.Text = su.TimeElapsedString;
-            }*/
-            #endregion
         }
         #endregion
         #region helper methods

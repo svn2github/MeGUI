@@ -370,27 +370,6 @@ namespace MeGUI.core.details.video
 
             fileType.SelectedItem = currentType;
             if (FileTypeChanged != null) FileTypeChanged(this, currentType);
-/*            // now select the previously selected type again if possible
-            bool selected = false;
-            foreach (TType t in outputTypes)
-            {
-                if (currentType == t)
-                {
-                    fileType.SelectedItem = t;
-                    currentType = t;
-                    selected = true;
-                    break;
-                }
-            }
-            if (!selected)
-            {
-                currentType = outputTypes[0];
-                this.fileType.SelectedItem = outputTypes[0];
-            }*/
-/*            VideoCodecSettings settings = CurrentSettings;
-            this.updateIOConfig();
-            if (MainForm.verifyOutputFile(this.VideoOutput) == null)
-                this.VideoOutput = Path.ChangeExtension(this.VideoOutput, currentType.Extension);*/
         }
 
         public void RefreshFiletypes()

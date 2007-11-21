@@ -13,7 +13,7 @@ namespace MeGUI.core.gui
         public static readonly Named<FileSize>[] PredefinedFilesizes = new Named<FileSize>[] {
             new Named<FileSize>("1/4 CD (175MB)", new FileSize(Unit.MB, 175)),
             new Named<FileSize>("1/2 CD (350MB)", new FileSize(Unit.MB, 350)),
-            new Named<FileSize>(  "1 CD (700MB)", new FileSize(Unit.MB, 700)),
+            new Named<FileSize>("1 CD   (700MB)", new FileSize(Unit.MB, 700)),
             new Named<FileSize>("2 CDs (1400MB)", new FileSize(Unit.MB, 1400)),
             new Named<FileSize>("3 CDs (2100MB)", new FileSize(Unit.MB, 2100)),
             new Named<FileSize>("1/3 DVD (1493MB)", new FileSize(Unit.MB, 1493)),

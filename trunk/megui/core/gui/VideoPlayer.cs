@@ -282,20 +282,7 @@ namespace MeGUI
                     (formControl.Width >= this.MinimumSize.Width) &&
                     (formControl.Height >= this.MinimumSize.Height))
                 {
-                    /*
-                    int deltax = Math.Abs(formControl.Width - this.videoWindowWidth - formWidthDelta);
-                    int deltay = Math.Abs(formControl.Height - this.videoWindowHeight - formHeightDelta);
-                    if (deltax > deltay)
-                    {
-                        this.videoWindowWidth = formControl.Width - formWidthDelta;
-                        this.videoWindowHeight = (int)((formControl.Width - formWidthDelta) / desiredAspectRatio);
-                    }
-                    else
-                    {
-                        this.videoWindowWidth = (int)(formControl.Height - formHeightDelta / desiredAspectRatio);
-                        this.videoWindowHeight = (int)(formControl.Height - formHeightDelta);
-                    }
-                    */  // Unusable without events from .NET 2.0 
+                    // Unusable without events from .NET 2.0 
                     resize(formControl.Width - formWidthDelta, showPAR.Checked);
                 }
             }

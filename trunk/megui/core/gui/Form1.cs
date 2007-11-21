@@ -60,7 +60,6 @@ namespace MeGUI
 
         #region variable declaration
         private List<string> filesToDeleteOnClosing = new List<string>();
-        //        private MeGUIInfo info;
         private System.Windows.Forms.TabPage inputTab;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.MainMenu mainMenu1;
@@ -125,22 +124,6 @@ namespace MeGUI
 
         public void RegisterForm(Form f)
         {
-/*            allForms.Add(f);
-            f.VisibleChanged += new EventHandler(delegate(object sender, EventArgs e) {
-                Form f2 = (Form)sender;
-
-                if (f2.IsDisposed)
-                {
-                    if (allForms.Contains(f2))
-                        allForms.Remove(f2);
-                    if (formsToReopen.Contains(f2))
-                        formsToReopen.Remove(f2);
-                } 
-                
-                if (f2.Visible && IsHiddenMode)
-                    f2.Visible = false;
-
-            });*/
         }
 
         public void DeleteOnClosing(string file)
@@ -744,24 +727,7 @@ namespace MeGUI
         {
             get { return audioEncodingComponent1; }
         }
-        
-/*        public Menu ToolsMenu
-        {
-            get { return mnuTools; }
-        }
-        public Menu FileMenu
-        {
-            get { return mnuFile; }
-        }
-        public TextBox Changelog
-        {
-            get { return txtChangelog; }
-        }
-        public TextBox Log
-        {
-            get { return log; }
-        }*/
-        #endregion
+       #endregion
         /// <summary>
         /// initializes all the dropdown elements in the GUI to their default values
         /// </summary>
@@ -801,12 +767,6 @@ namespace MeGUI
             }
             base.Dispose(disposing);
         }
-
-/*        internal void AttachInfo(MeGUIInfo info)
-        {
-            this.info = info;
-            info.MainForm = this;
-        }*/
         #region reset
         private void resetButton_Click(object sender, System.EventArgs e)
         {
@@ -835,9 +795,6 @@ namespace MeGUI
         #endregion
         #region job management
         #region I/O verification
-
-
-
         /// <summary>
         /// Test whether a filename is suitable for writing to
         /// </summary>
@@ -1010,9 +967,6 @@ namespace MeGUI
                     p.Start();
                 }
                 catch (IOException e) { MessageBox.Show("Error when attempting to run command: " + e.Message, "Run command failed", MessageBoxButtons.OK, MessageBoxIcon.Error); }
-                /*                try { File.Delete(filename); }
-                                catch (IOException) { }*/
-
             }
         }
 
@@ -1096,13 +1050,6 @@ namespace MeGUI
                 }
             }
         }
-/*        private void mnuAVCLevelValidation_Popup(object sender, System.EventArgs e)
-        {
-            if (Video.VideoInput.Equals(""))
-                mnuAVCLevelValidation.Enabled = false;
-            else
-                mnuAVCLevelValidation.Enabled = true;
-        }*/
         private void mnuTool_Click(object sender, System.EventArgs e)
         {
             if ((!(sender is System.Windows.Forms.MenuItem)) || (!((sender as MenuItem).Tag is ITool)))
@@ -1163,35 +1110,8 @@ namespace MeGUI
             else
                 Jobs.ShowProgressWindow(i.Text);
         }
-/*            if (Jobs.ProcessWindowAccessible)
-            {
-                mnuViewProcessStatus.Enabled = true;
-            }
-            else
-            {
-                mnuViewProcessStatus.Enabled = false;
-            }*/
         private void mnuViewProcessStatus_Click(object sender, System.EventArgs e)
         {
-            /*
-            if (Jobs.ProcessWindowAccessible)
-            {
-                if (mnuViewProcessStatus.Checked)
-                {
-                    mnuViewProcessStatus.Checked = false;
-                    Jobs.HideProcessWindow();
-                }
-                else
-                {
-                    mnuViewProcessStatus.Checked = true;
-                    Jobs.ShowProcessWindow();
-                }
-            }
-            else
-            {
-                Debug.Assert(false, "ProgressWindow should not be null if we can get here");
-            }
-             * */
         }
 
         #endregion
@@ -1432,12 +1352,6 @@ namespace MeGUI
             filesToReplace.Add(iUpgradeableName, data);
         }
 
-/*        internal void AddFileToInstall(string file)
-        {
-            if (!otherFilesToInstall.Contains(file))
-                otherFilesToInstall.Add(file);
-        }*/
-
         internal void CloseSilent()
         {
             this.profileManager.SaveProfiles();
@@ -1448,7 +1362,6 @@ namespace MeGUI
             deleteFiles();
             this.runRestarter();
             Application.ApplicationExit += new EventHandler(Application_ApplicationExit);
-//            Application.Exit();
         }
 
         void Application_ApplicationExit(object sender, EventArgs e)
@@ -1490,7 +1403,6 @@ namespace MeGUI
         #region variable declaration
         private bool restart = false;
         private Dictionary<string, CommandlineUpgradeData> filesToReplace = new Dictionary<string, CommandlineUpgradeData>();
-/*        private List<string> otherFilesToInstall = new List<string>();*/
         private DialogManager dialogManager;
         private string path; // path the program was started from
         private MediaFileFactory mediaFileFactory;
@@ -1518,10 +1430,6 @@ namespace MeGUI
                 UpdateWindow update = new UpdateWindow(this, Settings);
                 foreach (string file in parser.upgradeData.Keys)
                     update.UpdateVersionNumber(file, parser.upgradeData[file]);
-                
-/*                if (update.InstallFiles(parser.filesToInstall)) // returns true if we need to restart afterwards
-                    parser.start = false;*/
-
                 update.SaveSettings();
             }
         }
@@ -1550,8 +1458,6 @@ namespace MeGUI
             jobControl1.MainForm = this;
             jobControl1.loadJobs();
             this.dialogManager = new DialogManager(this);
-
-            //MessageBox.Show(String.Join("|", this.GetType().Assembly.GetManifestResourceNames()));
         }
 
         private void fillMenus()
@@ -1651,9 +1557,6 @@ namespace MeGUI
 
         private void addPackages()
         {
-//            PackageSystem.JobProcessors.Register(VideoEncoder.Factory);
-//            PackageSystem.JobProcessors.Register(AudioEncoder.Factory);
-//            PackageSystem.JobProcessors.Register(Muxer.Factory);
             PackageSystem.JobProcessors.Register(AviSynthAudioEncoder.Factory);
 
             PackageSystem.JobProcessors.Register(mencoderEncoder.Factory);
@@ -1674,7 +1577,6 @@ namespace MeGUI
             PackageSystem.MuxerProviders.Register(new MKVMergeMuxerProvider());
             PackageSystem.MuxerProviders.Register(new MP4BoxMuxerProvider());
             PackageSystem.MuxerProviders.Register(new AVC2AVIMuxerProvider());
-//            PackageSystem.MuxerProviders.Register(new DivXMuxProvider());
             PackageSystem.MuxerProviders.Register(new AVIMuxGUIMuxerProvider());
             PackageSystem.Tools.Register(new CutterTool());
             PackageSystem.Tools.Register(new AviSynthWindowTool());
@@ -1684,7 +1586,6 @@ namespace MeGUI
             PackageSystem.Tools.Register(new ChapterCreatorTool());
             PackageSystem.Options.Register(new UpdateOptions());
             PackageSystem.Tools.Register(new BesplitterTool());
-//            PackageSystem.Tools.Register(new OneClickConfigTool());
             PackageSystem.Tools.Register(new OneClickTool());
             PackageSystem.Tools.Register(new D2VCreatorTool());
             PackageSystem.Tools.Register(new AVCLevelTool());
@@ -1731,9 +1632,7 @@ namespace MeGUI
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
             CommandlineParser parser = new CommandlineParser();
             parser.Parse(args);
-//            MeGUIInfo info = new MeGUIInfo();
             MainForm mainForm = new MainForm();
-//            mainForm.AttachInfo(info);
             mainForm.handleCommandline(parser);
             if (parser.start)
                 Application.Run(mainForm);
@@ -1773,10 +1672,6 @@ namespace MeGUI
                        filesToReplace[file].tempFilename[i]);
                 }
             }
-            /*foreach (string file in otherFilesToInstall)
-            {
-                pstart.Arguments += string.Format("--then-install \"{0}\" ", file);
-            }*/
             if (restart)
                 pstart.Arguments += "--restart ";
             else
@@ -1811,11 +1706,6 @@ namespace MeGUI
         {
             get { return dialogManager; }
         }
-/*        public MeGUISettings Settings
-        {
-            get { return settings; }
-        }*/
-
         /// <summary>
         /// gets the path from where MeGUI was launched
         /// </summary>
@@ -1823,13 +1713,6 @@ namespace MeGUI
         {
             get { return this.path; }
         }
-/*        /// <summary>
-        /// gets  / sets the currently selected audiostream
-        /// </summary>
-        public ProfileManager Profiles
-        {
-            get { return profileManager; }
-        }*/
         #endregion
 #endregion
 
@@ -1970,12 +1853,6 @@ namespace MeGUI
 
         private void MainForm_Resize(object sender, EventArgs e)
         {
-            /*if (FormWindowState.Minimized == this.WindowState)
-            {
-                trayIcon.Visible = true;
-                trayIcon.ShowBalloonTip(500);
-                this.Hide();
-            }*/
         }
     }
     public class CommandlineUpgradeData

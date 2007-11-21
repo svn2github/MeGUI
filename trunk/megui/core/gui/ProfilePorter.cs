@@ -13,19 +13,6 @@ using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
 using System.Windows.Forms;
 using MeGUI.core.util;
 
-/*                    try
-                    {
-                    }
-                    catch (IOException ioe)
-                    {
-                        MessageBox.Show(
-                            string.Format("Error opening selected file: {0}{1}{0}Import cancelled", Environment.NewLine, ioe.Message),
-                            "Error opening file",
-                            MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        this.Close();
-                        return;
-                    }
-*/
 namespace MeGUI
 {
     public partial class ProfilePorter : Form
@@ -369,88 +356,6 @@ namespace MeGUI
 
             importedProfiles = new ProfileManager(path);
             importedProfiles.LoadProfiles();
-            #region old code
-            /*
-            XmlSerializer videoSerializer, audioSerializer, avsSerializer, oneclickSerializer;
-            videoSerializer = new XmlSerializer(typeof(GenericProfile<VideoCodecSettings>));
-            audioSerializer = new XmlSerializer(typeof(GenericProfile<AudioCodecSettings>));
-            avsSerializer = new XmlSerializer(typeof(GenericProfile<AviSynthSettings>));
-            oneclickSerializer = new XmlSerializer(typeof(GenericProfile<OneClickSettings>));
-
-#warning We are generating a list of failed attempts, but we aren't doing anything with it (below).
-            List<string> failedEntries = new List<string>(); 
-            foreach (ZipEntry entry in inputFile)
-            {
-                // Check if the entry is in the video/audio/avs/oneclick/extra folders.
-                // Try to deserialize if it is a profile, list the files in the extra folders
-                #region terribly boring cases
-                if (entry.IsFile)
-                {
-                    if (entry.Name.ToLower().StartsWith("profiles\\video")
-                        || entry.Name.ToLower().StartsWith("profiles/video"))
-                    {
-                        try
-                        {
-                            importedProfiles.AddVideoProfile(
-                               (GenericProfile<VideoCodecSettings>)videoSerializer.Deserialize(inputFile.GetInputStream(entry)));
-                        }
-                        catch (Exception)
-                        {
-                            failedEntries.Add(entry.Name);
-                        }
-                    }
-
-                    else if (entry.Name.ToLower().StartsWith("profiles\\audio")
-                        || entry.Name.ToLower().StartsWith("profiles/audio"))
-                    {
-                        try
-                        {
-                            importedProfiles.AddProfile(
-                               (GenericProfile<AudioCodecSettings>)audioSerializer.Deserialize(inputFile.GetInputStream(entry)));
-                        }
-                        catch (Exception)
-                        {
-                            failedEntries.Add(entry.Name);
-                        }
-                    }
-
-                    else if (entry.Name.ToLower().StartsWith("profiles\\avs")
-                        || entry.Name.ToLower().StartsWith("profiles/avs"))
-                    {
-                        try
-                        {
-                            importedProfiles.AddProfile(
-                               (GenericProfile<AviSynthSettings>)avsSerializer.Deserialize(inputFile.GetInputStream(entry)));
-                        }
-                        catch (Exception)
-                        {
-                            failedEntries.Add(entry.Name);
-                        }
-                    }
-
-                    else if (entry.Name.ToLower().StartsWith("profiles\\oneclick")
-                        || entry.Name.ToLower().StartsWith("profiles/oneclick"))
-                    {
-                        try
-                        {
-                            importedProfiles.AddProfile(
-                               (GenericProfile<OneClickSettings>)oneclickSerializer.Deserialize(inputFile.GetInputStream(entry)));
-                        }
-                        catch (Exception)
-                        {
-                            failedEntries.Add(entry.Name);
-                        }
-                    }
-                    else if (entry.Name.ToLower().StartsWith("extra\\")
-                        || entry.Name.ToLower().StartsWith("extra/"))
-                    {
-                        extraFiles.Add(entry.Name, entry);
-                    }
-                }
-                #endregion
-            }
-            */
-            #endregion
             profileListBox.DataSource = importedProfiles.AllProfileNames;
         }
     }
