@@ -78,12 +78,12 @@ namespace MeGUI
 		#region start / stop
 		public AutoEncodeWindow()
 		{
-            mainForm.Log.Add(log);
             InitializeComponent();
         }
         public AutoEncodeWindow(VideoStream videoStream, List<AudioJob> audioStreams, MainForm mainForm, bool prerender)
             : this()
         {
+            mainForm.Log.Add(log);
             if (videoStream.Settings.EncodingMode == 1 || videoStream.Settings.EncodingMode == 9) // CQ and CRF -- no bitrate possible
             {
                 averageBitrateRadio.Enabled = false;
