@@ -39,15 +39,6 @@ namespace MeGUI
     MeGUI.packages.tools.oneclick.OneClickConfigPanel, Empty, OneClickSettings, OneClickSettings, int, int>("OneClick", 0, 0);
         private void initOneClickHandler()
         {
-            // Init oneclick handlers
-            ProfilesControlHandler<OneClickSettings, Empty> profileHandler = new ProfilesControlHandler<OneClickSettings, Empty>(
-    "OneClick", mainForm, profileControl2, oneClickSettingsProvider.EditSettings, Empty.Getter,
-    new SettingsGetter<OneClickSettings>(oneClickSettingsProvider.GetCurrentSettings), new SettingsSetter<OneClickSettings>(oneClickSettingsProvider.LoadSettings));
-            SingleConfigurerHandler<OneClickSettings, Empty, int, int> configurerHandler = new SingleConfigurerHandler<OneClickSettings, Empty, int, int>(profileHandler, oneClickSettingsProvider);
-            profileHandler.ProfileChanged += new SelectedProfileChangedEvent(OneClickProfileChanged);
-            profileHandler.ConfigureCompleted += new EventHandler(profileHandler_ConfigureCompleted);
-            profileHandler.RefreshProfiles();
-            
             audioTrack = new List<FileSCBox>();
             audioTrack.Add(audioTrack1);
             audioTrack.Add(audioTrack2);
@@ -59,6 +50,15 @@ namespace MeGUI
             audioConfigControl = new List<AudioConfigControl>();
             audioConfigControl.Add(audio1);
             audioConfigControl.Add(audio2);
+
+            // Init oneclick handlers
+            ProfilesControlHandler<OneClickSettings, Empty> profileHandler = new ProfilesControlHandler<OneClickSettings, Empty>(
+            "OneClick", mainForm, profileControl2, oneClickSettingsProvider.EditSettings, Empty.Getter,
+            new SettingsGetter<OneClickSettings>(oneClickSettingsProvider.GetCurrentSettings), new SettingsSetter<OneClickSettings>(oneClickSettingsProvider.LoadSettings));
+            SingleConfigurerHandler<OneClickSettings, Empty, int, int> configurerHandler = new SingleConfigurerHandler<OneClickSettings, Empty, int, int>(profileHandler, oneClickSettingsProvider);
+            profileHandler.ProfileChanged += new SelectedProfileChangedEvent(OneClickProfileChanged);
+            profileHandler.ConfigureCompleted += new EventHandler(profileHandler_ConfigureCompleted);
+            profileHandler.RefreshProfiles();
         }
 
         private void refreshAssistingProfiles()
@@ -175,9 +175,13 @@ namespace MeGUI
             audioTrack1.StandardItems = audioTrack2.StandardItems = new object[] { "None" };
             audioTrack1.SelectedIndex = audioTrack2.SelectedIndex = 0;
 
-            containerFormat.Items.AddRange(muxProvider.GetSupportedContainers().ToArray());
-            this.containerFormat.SelectedIndex = 0;
-            
+            //if containerFormat has not yet been set by the oneclick profile, add supported containers
+            if (containerFormat.Items.Count == 0)
+            {
+                containerFormat.Items.AddRange(muxProvider.GetSupportedContainers().ToArray());
+                this.containerFormat.SelectedIndex = 0;
+            }
+
             showAdvancedOptions_CheckedChanged(null, null);
         }
         #endregion
