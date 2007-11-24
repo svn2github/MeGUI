@@ -98,6 +98,8 @@ namespace MeGUI
             if (checkExitCode && proc.ExitCode != 0) // check the exitcode because x264.exe sometimes exits with error but without
                 su.HasError = true; // any commandline indication as to why
 
+            log.LogValue("Standard output stream", stdoutBuilder);
+            log.LogValue("Standard error stream", stderrBuilder);
             su.IsComplete = true;
             doExitConfig();
             StatusUpdate(su);
