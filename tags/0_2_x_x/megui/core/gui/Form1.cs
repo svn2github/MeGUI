@@ -709,9 +709,9 @@ namespace MeGUI
             this.Menu = this.mainMenu1;
             this.MinimumSize = new System.Drawing.Size(516, 500);
             this.Name = "MainForm";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
-            this.Resize += new System.EventHandler(this.MainForm_Resize);
             this.Load += new System.EventHandler(this.MeGUI_Load);
+            this.Shown += new System.EventHandler(this.MainForm_Shown);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
             this.tabControl1.ResumeLayout(false);
             this.inputTab.ResumeLayout(false);
             this.inputTab.PerformLayout();
@@ -1466,13 +1466,7 @@ namespace MeGUI
         private void MeGUI_Load(object sender, EventArgs e)
         {
             RegisterForm(this);
-            if (settings.AutoUpdate)
-            {
-                // Need a seperate thread to run the updater to stop internet lookups from freezing the app.
-                Thread updateCheck = new Thread(new ThreadStart(beginUpdateCheck));
-                updateCheck.IsBackground = true;
-                updateCheck.Start();
-            }
+
             Version ver = Environment.Version;
             logBuilder.AppendFormat("MeGUI Version: {0} {1}", Application.ProductVersion, Environment.NewLine);
             logBuilder.AppendFormat("OS used: Microsoft {0} {1} {2} {3}", OSInfo.GetOSName(), OSInfo.GetOSProductType(), OSInfo.GetOSServicePack(), Environment.NewLine);
@@ -2057,15 +2051,17 @@ namespace MeGUI
             }
         }
 
-        private void MainForm_Resize(object sender, EventArgs e)
+        private void MainForm_Shown(object sender, EventArgs e)
         {
-            /*if (FormWindowState.Minimized == this.WindowState)
+            if (settings.AutoUpdate)
             {
-                trayIcon.Visible = true;
-                trayIcon.ShowBalloonTip(500);
-                this.Hide();
-            }*/
+                // Need a seperate thread to run the updater to stop internet lookups from freezing the app.
+                Thread updateCheck = new Thread(new ThreadStart(beginUpdateCheck));
+                updateCheck.IsBackground = true;
+                updateCheck.Start();
+            }
         }
+
     }
     public class CommandlineUpgradeData
     {
