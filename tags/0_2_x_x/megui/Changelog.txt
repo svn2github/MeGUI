@@ -1,3 +1,9 @@
+0.2.6.1040
+    - (Kurtnoise) [MainForm] move AutoUpdate checking to the shown Event (to have the MessageBox in the foreground). bob0r should be happy now...;-)
+    - (Kurtnoise) Added several new languages.
+    - (Kurtnoise) [OneClickWindow] re-ordered the initOneClickHandler() (#1832675). patch by Eamonh.
+    - (Kurtnoise) Updated MediaInfo.dll and his wrapper. 
+
 0.2.6.1039
     - (berrinam) Increase sensitivity of DAR. (fixes #1832218)
     - (Kurtnoise) [x264] checked = false for Turbo with manual multipasses modes & cosmetics.

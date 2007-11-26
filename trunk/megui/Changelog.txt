@@ -1,4 +1,19 @@
-0.3.0.0001
+0.3.0.1001 (includes 0.2.x branch fixes)
+    - (berrinam) Add missing output streams back to log (fixes #1836281)
+    - (Kurtnoise) [AutoEncodeWindow] mainform was being referenced in default constructor before it had ever
+been assigned (#1836041). patch by Eamonh.  
+    - (Kurtnoise) Removed unused code
+    - (Kurtnoise) more Audio Input FileType.
+    - (Kurtnoise) [ProgressWindow] Remaining Time -> Time Remaining.
+
+0.2.6.1040
+    - (Kurtnoise) [MainForm] move AutoUpdate checking to the shown Event (to have the MessageBox in the foreground). bob0r should be happy now...;-)
+    - (Kurtnoise) Added several new languages.
+    - (Kurtnoise) [OneClickWindow] re-ordered the initOneClickHandler() (#1832675). patch by Eamonh.
+    - (Kurtnoise) Updated MediaInfo.dll and his wrapper. 
+
+
+0.3.0.0001 (includes 0.2.x branch fixes)
     - (berrinam) Sliding window time estimation instead of based on entire code. (#1832899)
     - (berrinam) Add extra files for dragdrop and dropdown persistence
     - (berrinam) Remember columns position for the job queue (#1817092)
