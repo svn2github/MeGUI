@@ -44,8 +44,7 @@ namespace MeGUI
             addLanguage("Afro-Asiatic (Other)", "afa");
             addLanguage("Akan", "aka");
             addLanguage("Akkadian", "akk");
-
-            addLanguage("Albanian", "alb/sqi");
+            addLanguage("Albanian", "alb");
             addLanguage("Aleut", "ale");
             addLanguage("Algonquian languages", "alg");
             addLanguage("Altaic (Other)", "tut");
@@ -56,7 +55,7 @@ namespace MeGUI
             addLanguage("Arapaho", "arp");
             addLanguage("Araucanian", "arn");
             addLanguage("Arawak", "arw");
-            addLanguage("Armenian", "arm/hye");
+            addLanguage("Armenian", "arm");
             addLanguage("Assamese", "ast");
             addLanguage("Athapascan languages", "art");
             addLanguage("Australian languages", "aus");
@@ -66,26 +65,25 @@ namespace MeGUI
             addLanguage("Awadhi", "awa");
             addLanguage("Aymara", "aym");
             addLanguage("Azerbaijani", "aze");
-
             addLanguage("Balinese", "ban");
             addLanguage("Bantu", "bnt");
             addLanguage("Basque", "baq");
+            addLanguage("Belarusian", "bel");
+            addLanguage("Bosnian", "bos");
             addLanguage("Breton", "bre");
             addLanguage("Bulgarian", "bul");
             addLanguage("Burmese", "bur");
             addLanguage("Catalan", "cat");
             addLanguage("Chinese", "chi");
             addLanguage("Corsican", "cos");
-            addLanguage("Croatian", "hr");
-            addLanguage("Czech", "ces");
+            addLanguage("Croatian", "scr");
+            addLanguage("Czech", "cze");
             addLanguage("Danish", "dan");
-            addLanguage("Dutch", "dut");
-            
+            addLanguage("Dutch", "dut");            
             addLanguage("Estonian", "est");
             addLanguage("Faroese", "fao");
             addLanguage("Finnish", "fin");
             addLanguage("French", "fre");
-            addLanguage("Français", "fra");
             addLanguage("Georgian", "geo");
             addLanguage("German", "ger");
             addLanguage("Greek", "gre");
@@ -101,6 +99,7 @@ namespace MeGUI
             addLanguage("Kongo", "kon");
             addLanguage("Korean", "kor");
             addLanguage("Latvian", "lav");
+            addLanguage("Lithuanian", "lit");
             addLanguage("Macedonian", "mac");
             addLanguage("Maltese", "mlt");
             addLanguage("Moldavian", "mol");
@@ -111,20 +110,21 @@ namespace MeGUI
             addLanguage("Portuguese", "por");
             addLanguage("Romanian", "ron");
             addLanguage("Russian", "rus");
-            addLanguage("Serbian", "sr");
-            addLanguage("Serbo-Croatian", "sh");
+            addLanguage("Serbian", "scc");
             addLanguage("Slovak", "slk");
             addLanguage("Slovenian", "slv");
             addLanguage("Spanish", "spa");
+            addLanguage("Swahili", "swa");
             addLanguage("Swedish", "swe");
             addLanguage("Thai", "tha");
             addLanguage("Tibetan", "tib");
             addLanguage("Turkish", "tur");
+            addLanguage("Ukrainian", "ukr");
             addLanguage("Uzbek", "uzb");
             addLanguage("Vietnamese", "vie");
-            addLanguage("Zulu", "zun");
-
-
+            addLanguage("Zhuang", "zha");
+            addLanguage("Zulu", "zul");
+            addLanguage("Zuni", "zun");
         }
 
 		private LanguageSelectionContainer()
