@@ -136,7 +136,6 @@ namespace MeGUI.core.gui
             // fpsColumn
             // 
             this.fpsColumn.Text = "FPS";
-            this.fpsColumn.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // upButton
             // 
@@ -187,8 +186,8 @@ namespace MeGUI.core.gui
             this.queueListView.TabIndex = 0;
             this.queueListView.UseCompatibleStateImageBehavior = false;
             this.queueListView.View = System.Windows.Forms.View.Details;
-            this.queueListView.DoubleClick += new System.EventHandler(this.queueListView_DoubleClick);
             this.queueListView.VisibleChanged += new System.EventHandler(this.queueListView_VisibleChanged);
+            this.queueListView.DoubleClick += new System.EventHandler(this.queueListView_DoubleClick);
             this.queueListView.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.queueListView_ItemSelectionChanged);
             // 
             // ownerHeader
@@ -204,14 +203,14 @@ namespace MeGUI.core.gui
             this.AbortMenuItem,
             this.LoadMenuItem});
             this.queueContextMenu.Name = "queueContextMenu";
-            this.queueContextMenu.Size = new System.Drawing.Size(145, 92);
+            this.queueContextMenu.Size = new System.Drawing.Size(150, 92);
             this.queueContextMenu.Opened += new System.EventHandler(this.queueContextMenu_Opened);
             // 
             // DeleteMenuItem
             // 
             this.DeleteMenuItem.Name = "DeleteMenuItem";
             this.DeleteMenuItem.ShortcutKeyDisplayString = "";
-            this.DeleteMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.DeleteMenuItem.Size = new System.Drawing.Size(149, 22);
             this.DeleteMenuItem.Text = "&Delete";
             this.DeleteMenuItem.ToolTipText = "Delete this job";
             this.DeleteMenuItem.Click += new System.EventHandler(this.deleteJobButton_Click);
@@ -222,20 +221,20 @@ namespace MeGUI.core.gui
             this.PostponedMenuItem,
             this.WaitingMenuItem});
             this.StatusMenuItem.Name = "StatusMenuItem";
-            this.StatusMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.StatusMenuItem.Size = new System.Drawing.Size(149, 22);
             this.StatusMenuItem.Text = "&Change status";
             // 
             // PostponedMenuItem
             // 
             this.PostponedMenuItem.Name = "PostponedMenuItem";
-            this.PostponedMenuItem.Size = new System.Drawing.Size(125, 22);
+            this.PostponedMenuItem.Size = new System.Drawing.Size(131, 22);
             this.PostponedMenuItem.Text = "&Postponed";
             this.PostponedMenuItem.Click += new System.EventHandler(this.postponeMenuItem_Click);
             // 
             // WaitingMenuItem
             // 
             this.WaitingMenuItem.Name = "WaitingMenuItem";
-            this.WaitingMenuItem.Size = new System.Drawing.Size(125, 22);
+            this.WaitingMenuItem.Size = new System.Drawing.Size(131, 22);
             this.WaitingMenuItem.Text = "&Waiting";
             this.WaitingMenuItem.Click += new System.EventHandler(this.waitingMenuItem_Click);
             // 
@@ -243,7 +242,7 @@ namespace MeGUI.core.gui
             // 
             this.AbortMenuItem.Name = "AbortMenuItem";
             this.AbortMenuItem.ShortcutKeyDisplayString = "";
-            this.AbortMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.AbortMenuItem.Size = new System.Drawing.Size(149, 22);
             this.AbortMenuItem.Text = "&Abort";
             this.AbortMenuItem.ToolTipText = "Abort this job";
             this.AbortMenuItem.Click += new System.EventHandler(this.AbortMenuItem_Click);
@@ -253,7 +252,7 @@ namespace MeGUI.core.gui
             this.LoadMenuItem.Enabled = false;
             this.LoadMenuItem.Name = "LoadMenuItem";
             this.LoadMenuItem.ShortcutKeyDisplayString = "";
-            this.LoadMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.LoadMenuItem.Size = new System.Drawing.Size(149, 22);
             this.LoadMenuItem.Text = "&Load";
             this.LoadMenuItem.ToolTipText = "Load into MeGUI";
             // 
