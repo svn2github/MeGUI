@@ -497,8 +497,7 @@ namespace MeGUI.core.gui
         {
             try
             {
-                log = mainForm.Log.Info("Log for " + job.Name);
-                log.LogValue("Job type", job.Job.EncodingMode);
+                log = mainForm.Log.Info(string.Format("Log for {0} ({1}, {2} -> {3})", job.Name, job.Job.EncodingMode, job.InputFileName, job.OutputFileName));
                 log.LogEvent("Started handling job");
                 log.Expand();
 
