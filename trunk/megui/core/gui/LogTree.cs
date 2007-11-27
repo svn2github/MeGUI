@@ -132,5 +132,39 @@ namespace MeGUI.core.gui
             }
 
         }
+
+       private void expandOrCollapseAll(LogItem i, bool expand)
+        {
+            if (expand)
+                i.Expand();
+            else
+                i.Collapse();
+
+            foreach (LogItem i2 in i.SubEvents)
+                expandOrCollapseAll(i2, expand);
+        }
+
+        private void expandAll(LogItem i) { expandOrCollapseAll(i, true); }
+        private void collapseAll(LogItem i) { expandOrCollapseAll(i, false); }
+
+        private void expandLog_Click(object sender, EventArgs e)
+        {
+            expandAll(Log);
+        }
+
+        private void expandBranch_Click(object sender, EventArgs e)
+        {
+            expandAll(selectedLogItem);
+        }
+
+        private void collapseLog_Click(object sender, EventArgs e)
+        {
+            collapseAll(Log);
+        }
+
+        private void collapseBranch_Click(object sender, EventArgs e)
+        {
+            collapseAll(selectedLogItem);
+        }
     }
 }
