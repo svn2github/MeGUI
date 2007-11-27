@@ -44,12 +44,8 @@ namespace MeGUI.core.details
         public void StartAll(bool restartStopping)
         {
             if (workers.Values.Count == 0)
-            {
-                DialogResult r = MessageBox.Show("Can't start queue because there are no workers. You can create one from the Workers menu. Do you want to create one now?",
-                    "Create new worker?", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
-                if (r == DialogResult.OK)
-                    RequestNewWorker();
-            }
+              NewWorker(freeWorkerName(), false);
+
             foreach (JobWorker w in workers.Values)
                 if (!w.IsEncoding) w.StartEncoding(false);
                 else if (restartStopping && w.Status == JobWorkerStatus.Stopping) w.SetRunning();
