@@ -46,10 +46,8 @@ namespace MediaInfoWrapper
         /// every information MediaInfo.dll can collect.
         /// Tracks are accessibles as properties.
         /// </summary>
-     public class MediaInfo
+    public class MediaInfo : IDisposable
     {
-       
-       
 
         [DllImport("MediaInfo.dll")]
         internal static extern int MediaInfo_Close(IntPtr Handle);
@@ -72,7 +70,7 @@ namespace MediaInfoWrapper
         [DllImport("MediaInfo.dll")]
         internal static extern int MediaInfo_State_Get(IntPtr Handle);
 
-     
+
         private List<VideoTrack> _Video;
         private List<GeneralTrack> _General;
         private List<AudioTrack> _Audio;
@@ -87,7 +85,7 @@ namespace MediaInfoWrapper
         private string _InfoStandard;
         private string _InfoCustom;
         private string _FileName;
-        private bool disposedValue;
+
         private IntPtr Handle;
        //public static const string MediaInfoPath="MediaInfo.dll";
        
@@ -103,35 +101,76 @@ namespace MediaInfoWrapper
             //if (!CheckFileExistence("MediaInfo.dll")) return;
             if (!CheckFileExistence(path)) return;
             _FileName = path;
-
+            
             this.Handle = MediaInfo.MediaInfo_New();
             MediaInfo.MediaInfo_Open(this.Handle, path);
-
-            getStreamCount();
-            getAllInfos();
-
-            MediaInfo.MediaInfo_Close(this.Handle);
+            try
+            {
+                getStreamCount();
+                getAllInfos();
+            }
+            finally //ensure MediaInfo_Close is called even if something goes wrong 
+            {
+                MediaInfo.MediaInfo_Close(this.Handle);
+            }
 
         }
+
+        #region Disposable Pattern
+        private bool disposed;
+
+        ~MediaInfo()
+        {
+            Dispose(false);
+        }
+
+        protected bool IsDisposed
+        {
+            get { return disposed; }
+        }
+
+        protected void CheckDisposed()
+        {
+            if (disposed)
+            {
+                throw new ObjectDisposedException(this.ToString());
+            }
+        }
+
         /// <summary>Call this one to kill the wrapper, and close his handle to the MediaInfo.dll, you should never need it anyway </summary>
         public void Dispose()
         {
             this.Dispose(true);
             GC.SuppressFinalize(this);
         }
-        
-        
-        
-        /// <summary>Call this one to kill the wrapper, and close his handle to the MediaInfo.dll, you should never need it anyway </summary>
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="disposing"></param>
         protected virtual void Dispose(bool disposing)
         {
-            if (!this.disposedValue && disposing)
+            if (!this.disposed)
             {
-                MediaInfo.MediaInfo_Close(this.Handle);
-                MediaInfo.MediaInfo_Delete(this.Handle);
+                if (disposing)
+                {
+                    DisposeManagedResources();
+                }
+                DisposeUnmanagedResources();
             }
-            this.disposedValue = true;
+            this.disposed = true;
         }
+
+        protected virtual void DisposeManagedResources()
+        {
+        }
+        protected virtual void DisposeUnmanagedResources()
+        {
+            MediaInfo.MediaInfo_Close(this.Handle);
+            MediaInfo.MediaInfo_Delete(this.Handle);
+        }
+        #endregion
+
         /// <summary>
         /// Simply checks file presence else throws a FileNotFoundException
         /// </summary>
@@ -780,5 +819,6 @@ public Int32 ChaptersCount
               return this._ChaptersCount;
             }
         }
-}
+
+    }
 }
