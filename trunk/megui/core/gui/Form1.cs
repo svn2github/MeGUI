@@ -789,7 +789,7 @@ namespace MeGUI
             }
             catch (KeyNotFoundException)
             {
-                MessageBox.Show("Required tool, '" + p + "', not found.");
+                MessageBox.Show("Required tool, '" + p + "', not found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         #endregion
@@ -889,7 +889,7 @@ namespace MeGUI
                     }
                     catch (Exception e)
                     {
-                        MessageBox.Show("Settings could not be loaded.", "Error loading profile", MessageBoxButtons.OK);
+                        MessageBox.Show("Settings could not be loaded.", "Error loading profile", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         Console.Write(e.Message);
                     }
                 }
@@ -1319,7 +1319,7 @@ namespace MeGUI
             if (update.HasUpdatableFiles()) // If there are updated files, display the window
             {
                 if (MessageBox.Show("There are updated files available. Do you wish to update to the latest versions?",
-                    "Updates Available", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    "Updates Available", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     update.ShowDialog();
             }
         }
