@@ -1305,9 +1305,9 @@ namespace MeGUI
             RegisterForm(this);
             
             LogItem i = Log.Info("Version information");
-            i.LogValue("MeGUI Version", Application.ProductVersion);
-            i.LogValue("OS used", string.Format("Microsoft {0}{1}{2}", OSInfo.GetOSName(), OSInfo.GetOSProductType(), OSInfo.GetOSServicePack()));
-            i.LogValue(".Net Framework installed", Environment.Version);
+            i.LogValue("MeGUI Version ", Application.ProductVersion);
+            i.LogValue("OS ", string.Format("Microsoft {0}{1}{2}", OSInfo.GetOSName(), OSInfo.GetOSProductType(), OSInfo.GetOSServicePack()));
+            i.LogValue("Runtime used ", Environment.Version);
 
             Log.LogValue("Settings", Settings, ImageType.Information);
         }
