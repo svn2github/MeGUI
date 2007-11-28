@@ -14,7 +14,7 @@ using System.Configuration;
 namespace MeGUI.core.gui
 {
     internal delegate Pair<string, MultiJobHandler>[] MultiJobMenuGenerator();
-    public delegate void JobChangeEvent(object sender, JobQueueEventArgs info);
+    internal delegate void JobChangeEvent(object sender, JobQueueEventArgs info);
     internal delegate void RequestJobDeleted(TaggedJob jobs);
     internal delegate void SingleJobHandler(TaggedJob job);
     internal delegate void MultiJobHandler(List<TaggedJob> jobs);
