@@ -97,9 +97,9 @@ namespace MeGUI
             // 
             this.subtitlePanel.Location = new System.Drawing.Point(8, 224);
             // 
-            // output
+            // splitting
             // 
-            this.output.ReadOnly = false;
+            this.splitting.CustomSizes = new MeGUI.core.util.FileSize[0];
             // 
             // fps
             // 
@@ -119,7 +119,7 @@ namespace MeGUI
             this.helpButton1.ArticleName = "Manual mux window";
             this.helpButton1.AutoSize = true;
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.helpButton1.Location = new System.Drawing.Point(8, 460);
+            this.helpButton1.Location = new System.Drawing.Point(8, 468);
             this.helpButton1.Name = "helpButton1";
             this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 30;
@@ -146,13 +146,12 @@ namespace MeGUI
             this.Controls.Add(this.helpButton1);
             this.Name = "MuxWindow";
             this.Text = "MeGUI - Muxer";
-            this.TopMost = false;
             this.Controls.SetChildIndex(this.outputGroupbox, 0);
             this.Controls.SetChildIndex(this.chaptersGroupbox, 0);
             this.Controls.SetChildIndex(this.muxButton, 0);
+            this.Controls.SetChildIndex(this.helpButton1, 0);
             this.Controls.SetChildIndex(this.subtitlePanel, 0);
             this.Controls.SetChildIndex(this.cancelButton, 0);
-            this.Controls.SetChildIndex(this.helpButton1, 0);
             this.Controls.SetChildIndex(this.audioPanel, 0);
             this.Controls.SetChildIndex(this.videoGroupbox, 0);
             this.videoGroupbox.ResumeLayout(false);
