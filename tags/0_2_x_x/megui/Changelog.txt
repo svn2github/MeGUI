@@ -1,3 +1,8 @@
+0.2.6.1041
+    - (Kurtnoise) Refactoring the dispose functionality. Patch by Eamon.
+    - (Kurtnoise) [MuxWindow] Help button was at the wrong place.
+    - (Kurtnoise) Updated the correct MediaInfoWrapper library.
+
 0.2.6.1040
     - (Kurtnoise) [MainForm] move AutoUpdate checking to the shown Event (to have the MessageBox in the foreground). bob0r should be happy now...;-)
     - (Kurtnoise) Added several new languages.

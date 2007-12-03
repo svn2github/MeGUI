@@ -1,3 +1,18 @@
+0.3.0.1002 (includes 0.2.x branch fixes)
+    - (Kurtnoise) added a manifest file for the UAC level required on Vista.
+    - (Kurtnoise) [JobQueue] changed public to internal for the JobChangeEvent (to fix the compilation within MSVC2008).
+    - (Kurtnoise) [MainForm] cosmetics.
+    - (Kurtnoise) [MainForm] added some MessageBoxIcons.
+    - (Kurtnoise) Expand/Collapse all for logs.
+    - (Kurtnoise) silent worker creation if none exists (#1837578).
+    - (Kurtnoise) More informative logtree names for each jobs.
+    - (Kurtnoise) [JobQueue] FPS columm aligned to left.
+
+0.2.6.1041
+    - (Kurtnoise) Refactoring the dispose functionality. Patch by Eamon.
+    - (Kurtnoise) [MuxWindow] Help button was at the wrong place.
+    - (Kurtnoise) Updated the correct MediaInfoWrapper library.
+
 0.3.0.1001 (includes 0.2.x branch fixes)
     - (berrinam) Add missing output streams back to log (fixes #1836281)
     - (Kurtnoise) [AutoEncodeWindow] mainform was being referenced in default constructor before it had ever
