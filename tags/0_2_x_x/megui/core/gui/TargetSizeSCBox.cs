@@ -82,6 +82,19 @@ namespace MeGUI.core.gui
             return null;
         }
 
+        public FileSize[] CustomSizes
+        {
+            get
+            {
+                return Util.CastAll<FileSize>(CustomItems);
+            }
+            set
+            {
+                CustomItems = Util.CastAll<FileSize, object>(value);
+            }
+        }
+
+
         private string genRestrictions()
         {
             if (maxSize.HasValue)

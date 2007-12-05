@@ -241,5 +241,19 @@ namespace MeGUI.core.util
             return (uint)clampPositive((long)val);
         }
         #endregion
+
+        public static To[] CastAll<From, To>(From[] fr)
+            where To : class
+        {
+            if (fr == null)
+                return null;
+            return Array.ConvertAll<From, To>(fr, delegate(From f) { return f as To; });
+        }
+
+        public static To[] CastAll<To>(object[] os)
+        {
+            return Array.ConvertAll<object, To>(os, delegate(object o) { return (To)o; });
+        }
+
     }
 }
