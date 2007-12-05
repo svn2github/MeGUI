@@ -1,4 +1,4 @@
-0.3.0.1002 (includes 0.2.x branch fixes)
+0.3.0.1002 (includes 0.2.6.1041 fixes)
     - (Kurtnoise) added a manifest file for the UAC level required on Vista.
     - (Kurtnoise) [JobQueue] changed public to internal for the JobChangeEvent (to fix the compilation within MSVC2008).
     - (Kurtnoise) [MainForm] cosmetics.
@@ -8,27 +8,14 @@
     - (Kurtnoise) More informative logtree names for each jobs.
     - (Kurtnoise) [JobQueue] FPS columm aligned to left.
 
-0.2.6.1041
-    - (Kurtnoise) Refactoring the dispose functionality. Patch by Eamon.
-    - (Kurtnoise) [MuxWindow] Help button was at the wrong place.
-    - (Kurtnoise) Updated the correct MediaInfoWrapper library.
-
-0.3.0.1001 (includes 0.2.x branch fixes)
+0.3.0.1001 (includes 0.2.6.1040 fixes)
     - (berrinam) Add missing output streams back to log (fixes #1836281)
-    - (Kurtnoise) [AutoEncodeWindow] mainform was being referenced in default constructor before it had ever
-been assigned (#1836041). patch by Eamonh.  
+    - (Kurtnoise) [AutoEncodeWindow] mainform was being referenced in default constructor before it had ever been assigned (#1836041). patch by Eamonh.  
     - (Kurtnoise) Removed unused code
     - (Kurtnoise) more Audio Input FileType.
     - (Kurtnoise) [ProgressWindow] Remaining Time -> Time Remaining.
 
-0.2.6.1040
-    - (Kurtnoise) [MainForm] move AutoUpdate checking to the shown Event (to have the MessageBox in the foreground). bob0r should be happy now...;-)
-    - (Kurtnoise) Added several new languages.
-    - (Kurtnoise) [OneClickWindow] re-ordered the initOneClickHandler() (#1832675). patch by Eamonh.
-    - (Kurtnoise) Updated MediaInfo.dll and his wrapper. 
-
-
-0.3.0.0001 (includes 0.2.x branch fixes)
+0.3.0.0001 (includes 0.2.6.1039 fixes)
     - (berrinam) Sliding window time estimation instead of based on entire code. (#1832899)
     - (berrinam) Add extra files for dragdrop and dropdown persistence
     - (berrinam) Remember columns position for the job queue (#1817092)
@@ -50,6 +37,17 @@ been assigned (#1836041). patch by Eamonh.
     - (Kurtnoise) Delays on audio output filenames now have meaning and are checked for correctness (implements #1819281)
     - (Kurtnoise) Changed the default bitrate for FFAC3 (256 to 384 kbps).
     - (Kurtnoise) Audio codecs List refactoring.
+
+0.2.6.1041
+    - (Kurtnoise) Refactoring the dispose functionality. Patch by Eamon.
+    - (Kurtnoise) [MuxWindow] Help button was at the wrong place.
+    - (Kurtnoise) Updated the correct MediaInfoWrapper library.
+
+0.2.6.1040
+    - (Kurtnoise) [MainForm] move AutoUpdate checking to the shown Event (to have the MessageBox in the foreground). bob0r should be happy now...;-)
+    - (Kurtnoise) Added several new languages.
+    - (Kurtnoise) [OneClickWindow] re-ordered the initOneClickHandler() (#1832675). patch by Eamonh.
+    - (Kurtnoise) Updated MediaInfo.dll and his wrapper. 
 
 0.2.6.1039
     - (berrinam) Increase sensitivity of DAR. (fixes #1832218)
