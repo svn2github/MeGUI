@@ -1470,7 +1470,7 @@ namespace MeGUI
             Version ver = Environment.Version;
             logBuilder.AppendFormat("MeGUI Version: {0} {1}", Application.ProductVersion, Environment.NewLine);
             logBuilder.AppendFormat("OS used: Microsoft {0}{1}{2}{3}", OSInfo.GetOSName(), OSInfo.GetOSProductType(), OSInfo.GetOSServicePack(), Environment.NewLine);
-            logBuilder.AppendFormat("Runtime used: {0}{1}", ver, Environment.NewLine);
+            logBuilder.AppendFormat("Framework used: {0}", OSInfo.FormatDotNetVersion());
             logBuilder.AppendLine();
             logBuilder.AppendFormat("------------------------------------------------------ {0}", Environment.NewLine);
             logBuilder.AppendLine();

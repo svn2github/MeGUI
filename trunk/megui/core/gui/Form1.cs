@@ -1307,7 +1307,7 @@ namespace MeGUI
             LogItem i = Log.Info("Version information");
             i.LogValue("MeGUI Version ", Application.ProductVersion);
             i.LogValue("OS ", string.Format("Microsoft {0}{1}{2}", OSInfo.GetOSName(), OSInfo.GetOSProductType(), OSInfo.GetOSServicePack()));
-            i.LogValue("Runtime used ", Environment.Version);
+            i.LogValue("Framework used ", OSInfo.FormatDotNetVersion());
 
             Log.LogValue("Settings", Settings, ImageType.Information);
         }

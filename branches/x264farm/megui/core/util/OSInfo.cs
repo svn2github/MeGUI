@@ -249,6 +249,111 @@ namespace MeGUI
 
             return osName;
         }
+
+        /// <summary>
+        /// Returns the name of the dotNet Framework running on this computer.
+        /// </summary>
+        /// <returns>A string containing the Name of the Framework Version.</returns>
+        /// 
+        public static string FormatDotNetVersion()
+        {
+            string fv = "unknown";
+            Version clr = Environment.Version;
+
+            switch (clr.Major)
+            {
+                case 1:
+                    {
+                        switch (clr.Minor)
+                        {
+                            case 0:
+                                {
+                                    if (clr.Revision.ToString()  == "209")
+                                    {
+                                        fv = "1.0 SP1";
+                                        break;
+                                    }
+                                    else if (clr.Revision.ToString() == "288")
+                                    {
+                                        fv = "1.0 SP2";
+                                        break;
+                                    }
+                                    else if (clr.Revision.ToString() == "6018")
+                                    {
+                                        fv = "1.0 SP3";
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        fv = "1.0";
+                                        break;
+                                    }
+                                }
+                            case 1:
+                                {
+                                    if (clr.Revision.ToString() == "2032" || clr.Revision.ToString() == "2300")
+                                    {
+                                        fv = "1.1 SP1";
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        fv = "1.1";
+                                        break;
+                                    }
+                                }
+                        }
+                        break;
+                    }
+                case 2:
+                    {
+                        if (clr.Revision.ToString() == "42" ||
+                            clr.Revision.ToString() == "312" || // Vista
+                            clr.Revision.ToString() == "832")   // KB928365
+                        {
+                            fv = "2.0";
+                            break;
+                        }
+                        else
+                        {
+                            fv = "2.0 SP1";
+                            break;
+                        }
+                    }
+                case 3:
+                    {
+                        switch (clr.Minor)
+                        {
+                            case 0:
+                                {
+                                    if (clr.Revision.ToString() == "26" || // Vista
+                                        clr.Revision.ToString() == "30")
+                                    {
+                                        fv = "3.0";
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        fv = "3.0 SP1";
+                                        break;
+                                    }
+                                }
+                            case 5:
+                                {
+                                    if (clr.Revision.ToString() == "08")
+                                    {
+                                        fv = "3.5";
+                                        break;
+                                    }
+                                }
+                                break;
+                        }
+                        break;
+                    }
+            }
+
+            return fv;
+        }
         #endregion
 
         #region Public Properties
