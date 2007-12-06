@@ -1,3 +1,6 @@
+0.3.0.1003 (includes 0.2.6.1042 fixes)
+    - use the proper command syntax for svn and stable builds concerning Aften encoder
+
 0.3.0.1002 (includes 0.2.6.1041 fixes)
     - (Kurtnoise) added a manifest file for the UAC level required on Vista.
     - (Kurtnoise) [JobQueue] changed public to internal for the JobChangeEvent (to fix the compilation within MSVC2008).
@@ -37,6 +40,10 @@
     - (Kurtnoise) Delays on audio output filenames now have meaning and are checked for correctness (implements #1819281)
     - (Kurtnoise) Changed the default bitrate for FFAC3 (256 to 384 kbps).
     - (Kurtnoise) Audio codecs List refactoring.
+
+0.2.6.1042
+    - (Kurtnoise) better Framework handling.
+    - (Kurtnoise) added a warning for Vista users when the Framework is not up-to-dated.
 
 0.2.6.1041
     - (Kurtnoise) Refactoring the dispose functionality. Patch by Eamon.

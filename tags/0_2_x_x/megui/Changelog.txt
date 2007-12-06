@@ -1,3 +1,7 @@
+0.2.6.1042
+    - (Kurtnoise) better Framework handling.
+    - (Kurtnoise) added a warning for Vista users when the Framework is not up-to-dated.
+
 0.2.6.1041
     - (Kurtnoise) Refactoring the dispose functionality. Patch by Eamon.
     - (Kurtnoise) [MuxWindow] Help button was at the wrong place.
