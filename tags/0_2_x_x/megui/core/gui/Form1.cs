@@ -2060,6 +2060,32 @@ namespace MeGUI
                 updateCheck.IsBackground = true;
                 updateCheck.Start();
             }
+
+            if (OSInfo.GetOSName() == "Windows Vista")
+            {
+                if (Environment.Version.ToString() == "3.5.21022.08" ||  // 3.5 RTM
+                    Environment.Version.ToString() == "3.0.04506.648" || // 3.0 SP1
+                    Environment.Version.ToString() == "3.0.04506.26" || // 3.0 RTM
+                    Environment.Version.ToString() == "2.0.50727.1433") // 2.0 SP1
+                {
+                    //do nothing;
+                }
+                else
+                {
+                    if (AskToDownloadDotNet() == true)
+                        System.Diagnostics.Process.Start("http://www.microsoft.com/downloads/details.aspx?familyid=79BC3B77-E02C-4AD3-AACF-A7633F706BA5&displaylang=en");
+                }
+            }
+        }
+
+        private bool AskToDownloadDotNet()
+        {
+            if (MessageBox.Show("You're running MeGUI on Windows Vista but to avoid several issues,\n" +
+                                "may I ask you to upgrade your .Net Framework ?\n", "Warning",
+                                MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                return true;
+            else
+                return false;
         }
 
     }

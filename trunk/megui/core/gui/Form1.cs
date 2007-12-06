@@ -215,7 +215,7 @@ namespace MeGUI
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(508, 464);
+            this.tabControl1.Size = new System.Drawing.Size(508, 466);
             this.tabControl1.TabIndex = 0;
             // 
             // inputTab
@@ -226,7 +226,7 @@ namespace MeGUI
             this.inputTab.Controls.Add(this.videoEncodingComponent1);
             this.inputTab.Location = new System.Drawing.Point(4, 22);
             this.inputTab.Name = "inputTab";
-            this.inputTab.Size = new System.Drawing.Size(500, 438);
+            this.inputTab.Size = new System.Drawing.Size(500, 440);
             this.inputTab.TabIndex = 0;
             this.inputTab.Text = "Input";
             this.inputTab.UseVisualStyleBackColor = true;
@@ -240,7 +240,7 @@ namespace MeGUI
             this.flowLayoutPanel2.Controls.Add(this.helpButton1);
             this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.flowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 409);
+            this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 411);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
             this.flowLayoutPanel2.Size = new System.Drawing.Size(500, 29);
             this.flowLayoutPanel2.TabIndex = 2;
@@ -290,7 +290,7 @@ namespace MeGUI
             this.audioEncodingComponent1.Location = new System.Drawing.Point(0, 168);
             this.audioEncodingComponent1.MinimumSize = new System.Drawing.Size(400, 192);
             this.audioEncodingComponent1.Name = "audioEncodingComponent1";
-            this.audioEncodingComponent1.Size = new System.Drawing.Size(500, 235);
+            this.audioEncodingComponent1.Size = new System.Drawing.Size(500, 237);
             this.audioEncodingComponent1.TabIndex = 1;
             // 
             // videoEncodingComponent1
@@ -610,24 +610,24 @@ namespace MeGUI
             this.exitMeGUIToolStripMenuItem});
             this.trayMenu.Name = "trayMenu";
             this.trayMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.trayMenu.Size = new System.Drawing.Size(143, 54);
+            this.trayMenu.Size = new System.Drawing.Size(147, 54);
             // 
             // openMeGUIToolStripMenuItem
             // 
             this.openMeGUIToolStripMenuItem.Name = "openMeGUIToolStripMenuItem";
-            this.openMeGUIToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.openMeGUIToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.openMeGUIToolStripMenuItem.Text = "Open MeGUI";
             this.openMeGUIToolStripMenuItem.Click += new System.EventHandler(this.openMeGUIToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(139, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(143, 6);
             // 
             // exitMeGUIToolStripMenuItem
             // 
             this.exitMeGUIToolStripMenuItem.Name = "exitMeGUIToolStripMenuItem";
-            this.exitMeGUIToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.exitMeGUIToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.exitMeGUIToolStripMenuItem.Text = "Exit MeGUI";
             this.exitMeGUIToolStripMenuItem.Click += new System.EventHandler(this.exitMeGUIToolStripMenuItem_Click);
             // 
@@ -636,7 +636,7 @@ namespace MeGUI
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(508, 464);
+            this.ClientSize = new System.Drawing.Size(508, 466);
             this.Controls.Add(this.tabControl1);
             this.DataBindings.Add(new System.Windows.Forms.Binding("Location", global::MeGUI.Properties.Settings.Default, "MainFormLocation", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -1853,7 +1853,34 @@ namespace MeGUI
                 updateCheck.IsBackground = true;
                 updateCheck.Start();
             }
+
+            if (OSInfo.GetOSName() == "Windows Vista")
+            {
+                if (Environment.Version.ToString() == "3.5.21022.08" ||  // 3.5 RTM
+                    Environment.Version.ToString() == "3.0.04506.648" || // 3.0 SP1
+                    Environment.Version.ToString() == "3.0.04506.26" || // 3.0 RTM
+                    Environment.Version.ToString() == "2.0.50727.1433") // 2.0 SP1
+                {
+                    //do nothing;
+                }
+                else
+                {
+                    if (AskToDownloadDotNet() == true)
+                        System.Diagnostics.Process.Start("http://www.microsoft.com/downloads/details.aspx?familyid=79BC3B77-E02C-4AD3-AACF-A7633F706BA5&displaylang=en");
+                }
+            }
         }
+
+        private bool AskToDownloadDotNet()
+        {
+            if (MessageBox.Show("You're running MeGUI on Windows Vista but to avoid several issues,\n" +
+                                "may I ask you to upgrade your .Net Framework ?\n", "Warning",
+                                MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                return true;
+            else
+                return false;
+        }
+
     }
     public class CommandlineUpgradeData
     {
