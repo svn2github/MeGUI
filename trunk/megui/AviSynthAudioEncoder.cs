@@ -617,7 +617,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 _mustSendWavHeaderToEncoderStdIn = true;
                 AftenSettings n = audioJob.Settings as AftenSettings;
                 _encoderExecutablePath = this._settings.AftenPath;
-                _encoderCommandLine = "-readtoeof 1 -b " + n.Bitrate + " - -o \"{0}\"";
+                _encoderCommandLine = "-readtoeof 1 -b " + n.Bitrate + " - \"{0}\"";
             }
             if (audioJob.Settings is AC3Settings)
             {
