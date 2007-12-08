@@ -774,7 +774,7 @@ namespace MeGUI.packages.video.x264
             // x264KeyframeInterval
             // 
             this.x264KeyframeInterval.Location = new System.Drawing.Point(150, 17);
-            this.x264KeyframeInterval.MaxLength = 3;
+            this.x264KeyframeInterval.MaxLength = 6;
             this.x264KeyframeInterval.Name = "x264KeyframeInterval";
             this.x264KeyframeInterval.Size = new System.Drawing.Size(48, 20);
             this.x264KeyframeInterval.TabIndex = 1;
