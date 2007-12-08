@@ -1866,7 +1866,7 @@ namespace MeGUI
                 else
                 {
                     if (AskToDownloadDotNet() == true)
-                        System.Diagnostics.Process.Start("http://www.microsoft.com/downloads/details.aspx?familyid=79BC3B77-E02C-4AD3-AACF-A7633F706BA5&displaylang=en");
+                        System.Diagnostics.Process.Start("http://www.microsoft.com/downloads/details.aspx?familyid=333325FD-AE52-4E35-B531-508D977D32A6&displaylang=en");
                 }
             }
         }
