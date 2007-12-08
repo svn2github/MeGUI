@@ -19,7 +19,6 @@ namespace MeGUI
         public FileBar()
         {
             InitializeComponent();
-            DragDropUtil.RegisterSingleFileDragDrop(filename, setFilename, delegate() { return Filter; });
         }
 
         private bool saveMode = false;
@@ -117,6 +116,11 @@ namespace MeGUI
         {
             setFilename(filename.Text);
             triggerEvent();
+        }
+
+        private void FileBar_Load(object sender, EventArgs e)
+        {
+            DragDropUtil.RegisterSingleFileDragDrop(filename, setFilename, delegate() { return Filter; });
         }
     }
     public class FileBarEventArgs : EventArgs
