@@ -109,12 +109,12 @@ namespace MeGUI.core.details.mux
             // 
             this.audioDelay.Location = new System.Drawing.Point(112, 61);
             this.audioDelay.Maximum = new decimal(new int[] {
-            5000,
+            2147483647,
             0,
             0,
             0});
             this.audioDelay.Minimum = new decimal(new int[] {
-            5000,
+            -2147483648,
             0,
             0,
             -2147483648});

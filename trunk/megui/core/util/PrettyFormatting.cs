@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
 namespace MeGUI.core.util
 {
@@ -43,6 +44,29 @@ namespace MeGUI.core.util
         }
 
         private static readonly Regex delayRegex = new Regex("(?<match>-?[0-9]+)ms");
+
+        /// <summary>
+        /// Gets the delay from the filename, but warns the user if this delay is larger than
+        /// 10 seconds.
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns>The delay, or null if no valid delay was found</returns>
+        public static int? getDelayAndCheck(string filename)
+        {
+            int? delay = getDelay(filename);
+            
+            if (delay.HasValue && Math.Abs(delay.Value) > 10000)
+            {
+                if (MessageBox.Show(string.Format("Your input filename suggests the delay is {0}ms ({1}s), " +
+                    "which is surprisingly large. Try checking the tool used to create this file to see " +
+                    "if it got the delay wrong.\n\nAre you sure this delay is correct?", delay, (delay / 1000)),
+                    "Very large delay", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
+                    delay = null;
+            }
+            
+            return delay;
+        }
+
         /// <summary>
         /// gets the delay from an audio filename
         /// </summary>

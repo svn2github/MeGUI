@@ -221,7 +221,7 @@ namespace MeGUI.core.gui
         {
             AudioInput = fileName;
 
-            delay.Value = PrettyFormatting.getDelay(fileName) ?? 0;
+            delay.Value = PrettyFormatting.getDelayAndCheck(fileName) ?? 0;
 
             AudioOutput = FileUtil.AddToFileName(PrettyFormatting.ReplaceDelay(fileName, 0),
                 MainForm.Instance.Settings.AudioExtension);

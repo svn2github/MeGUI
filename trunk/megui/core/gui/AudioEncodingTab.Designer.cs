@@ -148,12 +148,12 @@ namespace MeGUI.core.gui
             // 
             this.delay.Location = new System.Drawing.Point(110, 147);
             this.delay.Maximum = new decimal(new int[] {
-            10000,
+            2147483647,
             0,
             0,
             0});
             this.delay.Minimum = new decimal(new int[] {
-            10000,
+            -2147483648,
             0,
             0,
             -2147483648});
