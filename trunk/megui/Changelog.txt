@@ -1,3 +1,11 @@
+0.3.0.1004 (includes 0.2.6.1043 fixes)
+    - (berrinam) Handle large delays better.
+    - (berrinam) Fix Drag-and-Drop bug
+    - (berrinam) Improved AVS Cutter Remove button (#1847139)
+    - (berrinam) More information logged by the audio encoder
+    - (Kurtnoise) fixed Drag&Drop for the dev builds (#1835900, #1841103, #1843717)
+    - (berrinam) Maximum GOP size can now have up to 6 digits.
+
 0.3.0.1003 (includes 0.2.6.1042 fixes)
     - (Kurtnoise) use the proper command syntax for svn and stable builds concerning Aften encoder
 
@@ -40,6 +48,9 @@
     - (Kurtnoise) Delays on audio output filenames now have meaning and are checked for correctness (implements #1819281)
     - (Kurtnoise) Changed the default bitrate for FFAC3 (256 to 384 kbps).
     - (Kurtnoise) Audio codecs List refactoring.
+
+0.2.6.1043
+    - (Kurtnoise) updated the link to the latest framework.
 
 0.2.6.1042
     - (Kurtnoise) better Framework handling.
