@@ -299,12 +299,14 @@ namespace MeGUI.packages.tools.cutter
             this.columnHeader1,
             this.columnHeader2});
             this.sections.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.sections.FullRowSelect = true;
             this.sections.Location = new System.Drawing.Point(5, 18);
             this.sections.Name = "sections";
             this.sections.Size = new System.Drawing.Size(466, 248);
             this.sections.TabIndex = 17;
             this.sections.UseCompatibleStateImageBehavior = false;
             this.sections.View = System.Windows.Forms.View.Details;
+            this.sections.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.sections_ItemSelectionChanged);
             // 
             // columnHeader1
             // 

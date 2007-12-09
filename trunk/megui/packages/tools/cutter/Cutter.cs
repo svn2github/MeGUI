@@ -133,6 +133,13 @@ namespace MeGUI.packages.tools.cutter
             }
         }
 
+
+        private void sections_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        {
+            removeZoneButton.Enabled = sections.SelectedItems.Count > 0;
+        }
+
+
         private void removeZoneButton_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show("Are you sure you want to delete the selected sections?", "Are you sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
@@ -234,7 +241,6 @@ namespace MeGUI.packages.tools.cutter
 
             
         }
-
 
     }
 
