@@ -268,11 +268,13 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
         {
             try
             {
-
+                _log.LogEvent("Encode thread started");
                 using (AviSynthScriptEnvironment env = new AviSynthScriptEnvironment())
                 {
+                    _log.LogEvent("Avisynth script environment opened");
                     using (AviSynthClip a = env.ParseScript(_avisynthAudioScript))
                     {
+                        _log.LogEvent("Script loaded");
                         if (0 == a.ChannelsCount)
                             throw new ApplicationException("Can't find audio stream");
 
@@ -289,6 +291,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                         int frameBufferTotalSize = MAX_SAMPLES_PER_ONCE * a.ChannelsCount * a.BytesPerSample;
                         byte[] frameBuffer = new byte[frameBufferTotalSize];
                         createEncoderProcess(a);
+                        _log.LogEvent("Encoder process started");
                         try
                         {
                             using (Stream target = _encoderProcess.StandardInput.BaseStream)
@@ -879,6 +882,8 @@ function x_upmixC" + id + @"(clip stereo)
         );
             _avisynthAudioScript = script.ToString();
 
+            _log.LogValue("Avisynth script", _avisynthAudioScript);
+            _log.LogValue("Commandline used", _encoderCommandLine);
         }
 
         public void start()
