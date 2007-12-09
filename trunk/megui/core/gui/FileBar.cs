@@ -19,13 +19,14 @@ namespace MeGUI
         public FileBar()
         {
             InitializeComponent();
+            DragDropUtil.RegisterSingleFileDragDrop(filename, setFilename, delegate() { return Filter; });
         }
 
         private bool saveMode = false;
         public bool SaveMode
         {
             get { return saveMode; }
-            set { saveMode = value; filename.AllowDrop = value; }
+            set { saveMode = value; filename.AllowDrop = !value; }
         }
 
         public bool ReadOnly
@@ -116,11 +117,6 @@ namespace MeGUI
         {
             setFilename(filename.Text);
             triggerEvent();
-        }
-
-        private void FileBar_Load(object sender, EventArgs e)
-        {
-            DragDropUtil.RegisterSingleFileDragDrop(filename, setFilename, delegate() { return Filter; });
         }
     }
     public class FileBarEventArgs : EventArgs

@@ -62,7 +62,6 @@ namespace MeGUI
             this.Controls.Add(this.openButton);
             this.Name = "FileBar";
             this.Size = new System.Drawing.Size(269, 26);
-            this.Load += new System.EventHandler(this.FileBar_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
