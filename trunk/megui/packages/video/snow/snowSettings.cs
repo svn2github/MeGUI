@@ -27,21 +27,15 @@ namespace MeGUI
 	[Serializable]
 	public class snowSettings : VideoCodecSettings
 	{
+        public static readonly string ID = "Snow";
 		private decimal quantizer, nbMotionPredictors;
 		private int predictionMode, meCompFullpel, meCompHpel, mbComp;
 		private bool losslessMode;
-        public override VideoCodec Codec
-        {
-            get { return VideoCodec.SNOW; }
-        }
-        public override VideoEncoderType EncoderType
-        {
-            get { return VideoEncoderType.SNOW; }
-        }
+
         /// <summary>
 		/// default contructor, initializes codec default values
 		/// </summary>
-		public snowSettings():base()
+		public snowSettings():base(ID, VideoEncoderType.SNOW)
 		{
 			EncodingMode = 0;
 			BitrateQuantizer = 700;

@@ -36,7 +36,6 @@ namespace MeGUI
             AudioEncodingTab a = new AudioEncodingTab();
             tabs.Add(a);
             a.Dock = System.Windows.Forms.DockStyle.Fill;
-            a.InitializeDropdowns();
             a.QueueJob = tabs[0].QueueJob;
             
             TabPage p = new TabPage("Track " + tabs.Count);
@@ -103,18 +102,6 @@ namespace MeGUI
                 tabs[i].openAudioFile(files[i]);
             }
             tabControl1.SelectedIndex = files.Length - 1;
-        }
-
-        internal void RefreshProfiles()
-        {
-            foreach (AudioEncodingTab t in tabs)
-                t.RefreshProfiles();
-        }
-
-        internal void InitializeDropdowns()
-        {
-            foreach (AudioEncodingTab t in tabs)
-                t.InitializeDropdowns();
         }
 
         private void newTrackToolStripMenuItem_Click(object sender, EventArgs e)

@@ -6,7 +6,7 @@ namespace MeGUI
 {
     public class WinAmpAACSettings: AudioCodecSettings
 	{
-
+        public static readonly string ID = "Winamp AAC";
         public enum AacStereoMode
         {
             Joint,
@@ -17,7 +17,7 @@ namespace MeGUI
         public static readonly AacProfile[] SupportedProfiles = new AacProfile[] { AacProfile.PS, AacProfile.HE, AacProfile.LC };
 
         public WinAmpAACSettings()
-            : base()
+            : base(ID)
 		{
             this.Bitrate = 48;
             this.Profile = AacProfile.PS;

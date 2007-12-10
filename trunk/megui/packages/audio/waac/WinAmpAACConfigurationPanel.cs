@@ -8,10 +8,9 @@ using System.Windows.Forms;
 
 namespace MeGUI.packages.audio.waac
 {
-    public partial class WinAmpAACConfigurationPanel : MeGUI.core.details.audio.AudioConfigurationPanel
+    public partial class WinAmpAACConfigurationPanel : MeGUI.core.details.audio.AudioConfigurationPanel, Editable<WinAmpAACSettings>
     {
-        public WinAmpAACConfigurationPanel(MainForm mainForm, string[] info)
-            : base(mainForm, info)
+        public WinAmpAACConfigurationPanel():base()
         {
             InitializeComponent();
             comboBox1.Items.AddRange(EnumProxy.CreateArray(WinAmpAACSettings.SupportedProfiles));
@@ -50,6 +49,25 @@ namespace MeGUI.packages.audio.waac
         }
 
 
+
+        #region Editable<WinAmpAACSettings> Members
+
+        WinAmpAACSettings Editable<WinAmpAACSettings>.Settings
+        {
+            get
+            {
+                return (WinAmpAACSettings)Settings;
+            }
+            set
+            {
+                Settings = value;
+            }
+        }
+
+        #endregion
     }
 }
+
+
+
 

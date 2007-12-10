@@ -6,10 +6,12 @@ namespace MeGUI
 {
     public class AC3Settings : AudioCodecSettings
     {
+        public static string ID = "FFmpeg AC-3";
+
         public static readonly object[] SupportedBitrates = new object[] { 64, 128, 160, 192, 224, 256, 288, 320, 352, 384, 448, 512, 576, 640};
 
         public AC3Settings()
-            : base()
+            : base(ID)
         {
             this.Bitrate = 384;
             this.Codec = AudioCodec.AC3;

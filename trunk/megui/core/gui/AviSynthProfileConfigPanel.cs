@@ -8,9 +8,9 @@ using System.Windows.Forms;
 
 namespace MeGUI.core.gui
 {
-    public partial class AviSynthProfileConfigPanel : UserControl, MeGUI.core.plugins.interfaces.Gettable<AviSynthSettings>
+    public partial class AviSynthProfileConfigPanel : UserControl, Editable<AviSynthSettings>
     {
-        public AviSynthProfileConfigPanel(MainForm mainForm, MeGUI.core.details.video.Empty dummy) 
+        public AviSynthProfileConfigPanel() 
         {
             InitializeComponent();
             this.resizeFilterType.DataSource = ScriptServer.ListOfResizeFilterType;

@@ -8,10 +8,9 @@ using System.Windows.Forms;
 
 namespace MeGUI.packages.audio.vorbis
 {
-    public partial class OggVorbisConfigurationPanel : MeGUI.core.details.audio.AudioConfigurationPanel
+    public partial class OggVorbisConfigurationPanel : MeGUI.core.details.audio.AudioConfigurationPanel, Editable<OggVorbisSettings>
     {
-        public OggVorbisConfigurationPanel(MainForm mainForm, string[] info)
-            : base(mainForm, info)
+        public OggVorbisConfigurationPanel():base()
         {
             InitializeComponent();
             vQuality_ValueChanged(null, null);
@@ -40,6 +39,25 @@ namespace MeGUI.packages.audio.vorbis
             Decimal q = ((Decimal)vQuality.Value) * 10.0M / vQuality.Maximum;
             label1.Text = String.Format("Variable Bitrate (Q={0}) ", q);
         }
+
+        #region Editable<OggVorbisSettings> Members
+
+        OggVorbisSettings Editable<OggVorbisSettings>.Settings
+        {
+            get
+            {
+                return (OggVorbisSettings)Settings;
+            }
+            set
+            {
+                Settings = value;
+            }
+        }
+
+        #endregion
     }
 }
+
+
+
 

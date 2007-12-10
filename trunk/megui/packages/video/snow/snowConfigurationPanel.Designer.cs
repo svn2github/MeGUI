@@ -73,10 +73,6 @@ namespace MeGUI.packages.video.snow
             // 
             this.tabControl1.Size = new System.Drawing.Size(446, 337);
             // 
-            // zoneTabPage
-            // 
-            this.zoneTabPage.Size = new System.Drawing.Size(438, 311);
-            // 
             // commandline
             // 
             this.commandline.Location = new System.Drawing.Point(3, 339);

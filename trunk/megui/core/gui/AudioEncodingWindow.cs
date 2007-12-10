@@ -22,15 +22,12 @@ namespace MeGUI.core.gui
             if (w.ShowDialog() == DialogResult.OK)
                 j = w.audioEncodingTab1.AudioJob;
 
-            MainForm.Instance.Audio.RefreshProfiles();
-
             return j;
         });
 
         public AudioEncodingWindow()
         {
             InitializeComponent();
-            audioEncodingTab1.InitializeDropdowns();
             audioEncodingTab1.QueueJob = delegate(AudioJob j)
             {
                 this.DialogResult = DialogResult.OK;

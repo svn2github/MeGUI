@@ -29,7 +29,12 @@ namespace MeGUI
         }
 
         #region variables
-        private event UpdateConfigGUI updateGUI;
+        private void updateGUI()
+        {
+            if (UpdateGUIEvent != null)
+                UpdateGUIEvent();
+        }
+        public event UpdateConfigGUI UpdateGUIEvent;
         private Zone[] zones;
         private string input;
         private VideoPlayer player;
@@ -304,21 +309,6 @@ namespace MeGUI
             set { input = value; showVideoButton.Enabled = !string.IsNullOrEmpty(value); }
             get { return input; }
         }
-        /// <summary>
-        /// Configures the event handling for GUI updates when the zones have been modified.
-        /// </summary>
-        public event UpdateConfigGUI UpdateGUIEvent
-        {
-            add
-            {
-                updateGUI += value;
-            }
-            remove
-            {
-                updateGUI -= value;
-            }
-        }
-
         #endregion
 
         public void closePlayer()

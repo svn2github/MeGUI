@@ -10,11 +10,11 @@ using MeGUI.core.plugins.interfaces;
 
 namespace MeGUI.packages.video.lmp4
 {
-    public partial class lavcConfigurationPanel : MeGUI.core.details.video.VideoConfigurationPanel, Gettable<VideoCodecSettings>
+    public partial class lavcConfigurationPanel : MeGUI.core.details.video.VideoConfigurationPanel, Editable<lavcSettings>
     {
         #region start / stop
-        public lavcConfigurationPanel(MainForm mainForm, VideoInfo info)
-            : base(mainForm, info)
+        public lavcConfigurationPanel()
+            : base()
         {
             InitializeComponent();
         }
@@ -175,7 +175,7 @@ namespace MeGUI.packages.video.lmp4
         /// <summary>
         /// gets / sets the settings currently displayed on the GUI
         /// </summary>
-        public VideoCodecSettings Settings
+        public lavcSettings Settings
         {
             get
             {
@@ -226,14 +226,11 @@ namespace MeGUI.packages.video.lmp4
                 ls.TemporalMask = this.temporalMask.Value;
                 ls.NbMotionPredictors = lavcNBPredictors.Value;
                 ls.Logfile = this.logfile.Text;
-                ls.Zones = this.Zones;
                 return ls;
             }
             set
             {
-                if (!(value is lavcSettings))
-                    return;
-                lavcSettings ls = value as lavcSettings;
+                lavcSettings ls = value;
                 fourCC.SelectedIndex = ls.FourCC;
                 lavcEncodingMode.SelectedIndex = ls.EncodingMode;
                 lavcBitrateQuantizer.Text = ls.BitrateQuantizer.ToString();
@@ -272,7 +269,6 @@ namespace MeGUI.packages.video.lmp4
                 this.spatialMask.Value = ls.SpatialMask;
                 this.temporalMask.Value = ls.TemporalMask;
                 lavcNBPredictors.Value = ls.NbMotionPredictors;
-                this.Zones = ls.Zones;
                 this.logfile.Text = ls.Logfile;
                 lavcTurbo.Checked = ls.Turbo;
             }
@@ -297,6 +293,10 @@ namespace MeGUI.packages.video.lmp4
             }
         }
         #endregion
+
     }
 }
+
+
+
 

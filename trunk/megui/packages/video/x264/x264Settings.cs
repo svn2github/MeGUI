@@ -28,6 +28,8 @@ namespace MeGUI
 	[Serializable]
 	public class x264Settings: VideoCodecSettings
 	{
+        public static string ID = "x264";
+
         public override void setAdjustedNbThreads(int nbThreads)
         {
             base.setAdjustedNbThreads(0);
@@ -61,18 +63,10 @@ namespace MeGUI
 			bFramePyramid, chromaME, adaptiveDCT, lossless, mixedRefs, bRDO, NoFastPSkip, BiME, psnrCalc, noDctDecimate, ssimCalc;
 		string quantizerMatrix;
 		#region constructor
-        public override VideoCodec Codec
-        {
-            get { return VideoCodec.AVC; }
-        }
-        public override VideoEncoderType EncoderType
-        {
-            get { return VideoEncoderType.X264; }
-        }
         /// <summary>
 		/// default constructor, initializes codec default values
 		/// </summary>
-		public x264Settings():base()
+		public x264Settings():base(ID, VideoEncoderType.X264)
 		{
             deadZoneInter = 21;
             deadZoneIntra = 11;

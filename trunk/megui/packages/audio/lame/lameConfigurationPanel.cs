@@ -8,10 +8,9 @@ using System.Windows.Forms;
 
 namespace MeGUI.packages.audio.lame
 {
-    public partial class lameConfigurationPanel : MeGUI.core.details.audio.AudioConfigurationPanel
+    public partial class lameConfigurationPanel : MeGUI.core.details.audio.AudioConfigurationPanel, Editable<MP3Settings>
     {
-        public lameConfigurationPanel(MainForm mainForm, string[] info)
-            : base(mainForm, info)
+        public lameConfigurationPanel():base()
         {
             InitializeComponent();
             this.encodingMode.Items.Add(BitrateManagementMode.CBR);
@@ -88,6 +87,25 @@ namespace MeGUI.packages.audio.lame
 		}
 
 		#endregion
+
+        #region Editable<MP3Settings> Members
+
+        MP3Settings Editable<MP3Settings>.Settings
+        {
+            get
+            {
+                return (MP3Settings)Settings;
+            }
+            set
+            {
+                Settings = value;
+            }
+        }
+
+        #endregion
     }
 }
+
+
+
 

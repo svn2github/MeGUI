@@ -9,6 +9,8 @@ namespace MeGUI
 	/// </summary>
     public class OneClickSettings : GenericSettings
 	{
+        public string SettingsID { get { return "OneClick"; } }
+
         public virtual void FixFileNames(Dictionary<string, string> _) { }
         public override bool Equals(object obj)
         {
@@ -18,11 +20,6 @@ namespace MeGUI
         public override int GetHashCode()
         {
             return base.GetHashCode();
-        }
-
-        public string getSettingsType()
-        {
-            return "OneClick";
         }
 
         private string videoProfileName;

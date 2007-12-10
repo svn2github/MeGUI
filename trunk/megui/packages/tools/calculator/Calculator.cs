@@ -89,8 +89,8 @@ namespace MeGUI
             InitializeComponent();
             this.mainForm = mainForm;
             this.muxProvider = mainForm.MuxProvider;
-            this.videoCodec.Items.AddRange(CodecManager.ListOfVideoCodecs);
-            videoCodec.SelectedItem = CodecManager.X264;
+            this.videoCodec.Items.AddRange(CodecManager.VideoEncoderTypes.ValuesArray);
+            videoCodec.SelectedItem = CodecManager.VideoEncoderTypes["X264"];
             this.containerFormat.Items.AddRange(muxProvider.GetSupportedContainers().ToArray());
             containerFormat.SelectedItem = ContainerType.MKV;
             audioTabs.Add(audioTrackSizeTab1);
@@ -602,20 +602,20 @@ namespace MeGUI
 		/// <param name="container">container</param>
 		/// <param name="audio1Bitrate">bitrate of the first audio track</param>
 		/// <param name="audio2Bitrate">bitrate of the second audio track</param>
-        public void setDefaults(ulong nbFrames, double framerate, ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> codec, List<AudioJob> audioStreams)
+        public void setDefaults(ulong nbFrames, double framerate, VideoCodecSettings vSettings, List<AudioJob> audioStreams)
 		{
             setFPSToBest(framerate);
             try
             {
-                bframes.Checked = codec.GetCurrentSettings().NbBframes > 0;
+                bframes.Checked = vSettings.NbBframes > 0;
             }
             catch (Exception) { }
 
 			if (nbFrames > 0)
 				this.nbFrames.Value = nbFrames;
 
-            if (videoCodec.Items.Contains(codec))
-                videoCodec.SelectedItem = codec;
+            if (videoCodec.Items.Contains(vSettings.EncoderType))
+                videoCodec.SelectedItem = vSettings.EncoderType;
 
             int i = 0;
             foreach (AudioJob s in audioStreams)
@@ -654,10 +654,15 @@ namespace MeGUI
 		/// gets the selected codec
 		/// </summary>
 		/// <returns></returns>
-		public ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> getSelectedCodec()
+/*		public ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> getSelectedCodec()
 		{
             return (ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>)videoCodec.SelectedItem;
-		}
+		}*/
+
+        public VideoEncoderType SelectedVCodec
+        {
+            get { return (VideoEncoderType)videoCodec.SelectedItem; }
+        }
 		/// <summary>
 		/// gets the calculated bitrate
 		/// </summary>
@@ -871,7 +876,7 @@ namespace MeGUI
             if (updatingContainers)
                 return;
             updatingContainers = true;
-            VideoEncoderType vCodec = (videoCodec.SelectedItem as ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>).EncoderType;
+            VideoEncoderType vCodec = SelectedVCodec;
             List<MuxableType> muxableTypes = new List<MuxableType>();
             muxableTypes.AddRange(getAudioTypes());
             ContainerType previousContainer = null;
@@ -917,7 +922,7 @@ namespace MeGUI
             audioStreamsArray = getAudioStreams().ToArray();
             try
             {
-                codec = (videoCodec.SelectedItem as ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>).CodecType;
+                codec = SelectedVCodec.VCodec;
                 containerType = (containerFormat.SelectedItem as ContainerType);
             }
             catch (Exception)
@@ -1094,19 +1099,25 @@ namespace MeGUI
                 if (!string.IsNullOrEmpty(info.Video.VideoInput))
                     JobUtil.getInputProperties(out nbFrames, out framerate, info.Video.VideoInput);
 
-                calc.setDefaults(nbFrames, framerate, info.Video.CurrentSettingsProvider, info.Audio.AudioStreams);
-                
+                calc.setDefaults(nbFrames, framerate, info.Video.CurrentSettings, info.Audio.AudioStreams);
+
                 DialogResult dr = calc.ShowDialog();
-                if (dr == DialogResult.OK)
+                if (dr != DialogResult.OK)
+                    return;
+
+                if (info.Video.CurrentSettings.EncoderType != calc.SelectedVCodec)
+                    return;
+
+                dr = MessageBox.Show("Copy calculated bitrate into video settings?", "Save calculated bitrate?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (dr != DialogResult.Yes)
+                    return;
+
+                VideoCodecSettings settings = info.Video.CurrentSettings;
+                if (settings.EncodingMode == 1 || settings.EncodingMode == 9)
                 {
-                    info.Video.CurrentSettingsProvider = calc.getSelectedCodec();
-                    VideoCodecSettings settings = info.Video.CodecHandler.Getter();
-                    if (settings.EncodingMode == 1 || settings.EncodingMode == 9)
-                    {
-                        settings.EncodingMode = 0;
-                    }
-                    settings.BitrateQuantizer = calc.getBitrate();
+                    settings.EncodingMode = 0;
                 }
+                settings.BitrateQuantizer = calc.getBitrate();
             }
         }
 

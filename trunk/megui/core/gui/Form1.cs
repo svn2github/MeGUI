@@ -693,6 +693,7 @@ namespace MeGUI
         public MainForm()
         {
             Instance = this;
+            constructMeGUIInfo();
             InitializeComponent();
             Util.SetSize(this, MeGUI.Properties.Settings.Default.MainFormSize, MeGUI.Properties.Settings.Default.MainFormWindowState);
             System.Reflection.Assembly myAssembly = this.GetType().Assembly;
@@ -703,9 +704,8 @@ namespace MeGUI
             string[] resources = myAssembly.GetManifestResourceNames();
             this.trayIcon.Icon = new Icon(myAssembly.GetManifestResourceStream(name + "App.ico"));
             this.Icon = trayIcon.Icon;
-            constructMeGUIInfo();
             this.TitleText = Application.ProductName + " " + Application.ProductVersion;
-
+            setGUIInfo();
             Jobs.showAfterEncodingStatus(Settings);
         }
 
@@ -985,8 +985,7 @@ namespace MeGUI
             try
             {
                 string logDirectory = path + @"\logs";
-                if (!Directory.Exists(logDirectory))
-                    Directory.CreateDirectory(logDirectory);
+                FileUtil.ensureDirectoryExists(logDirectory);
                 string fileName = logDirectory + @"\logfile-" + DateTime.Now.ToString("yy'-'MM'-'dd'_'HH'-'mm'-'ss") + ".log";
                 File.WriteAllText(fileName, text);
             }
@@ -1235,10 +1234,7 @@ namespace MeGUI
 
         private void importProfiles(string file)
         {
-            ProfilePorter importer = new ProfilePorter(profileManager, file, this);
-            importer.ShowDialog();
-            Video.RefreshProfiles();
-            Audio.RefreshProfiles();
+            new ProfileImporter(this, file).ShowDialog();
         }
         #endregion
         #region Drag 'n' Drop
@@ -1266,29 +1262,25 @@ namespace MeGUI
         #region importing
         public void importProfiles(Stream data)
         {
-            if (this.InvokeRequired)
+            Util.ThreadSafeRun(this, delegate
             {
-                Invoke(new MethodInvoker(delegate { importProfiles(data); }));
-                return;
-            }
-            ProfilePorter importer = new ProfilePorter(profileManager, this, data);
-            importer.ShowDialog();
-            Video.RefreshProfiles();
-            Audio.RefreshProfiles();
+                ProfileImporter importer = new ProfileImporter(this, data);
+                importer.ShowDialog();
+            });
         }
 
         private void mnuFileImport_Click(object sender, EventArgs e)
         {
-            ProfilePorter importer = new ProfilePorter(profileManager, true, this);
-            importer.ShowDialog();
-            Video.RefreshProfiles();
-            Audio.RefreshProfiles();
+            try
+            {
+                new ProfileImporter(this).ShowDialog();
+            }
+            catch (CancelledException) { }
         }
 
         private void mnuFileExport_Click(object sender, EventArgs e)
         {
-            ProfilePorter exporter = new ProfilePorter(profileManager, false, this);
-            exporter.ShowDialog();
+            new ProfileExporter(this).ShowDialog();
         }
         #endregion
 
@@ -1373,7 +1365,7 @@ namespace MeGUI
             {
                 try
                 {
-                    if (Directory.Exists(file)) Directory.Delete(file, true);
+                    FileUtil.DeleteDirectoryIfExists(file, true);
                     if (File.Exists(file)) File.Delete(file);
                 }
                 catch { }
@@ -1427,6 +1419,14 @@ namespace MeGUI
             }
         }
 
+        public void setGUIInfo()
+        {
+            fillMenus();
+            jobControl1.MainForm = this;
+            jobControl1.loadJobs();
+
+        }
+
         /// <summary>
         /// default constructor
         /// initializes all the GUI components, initializes the internal objects and makes a default selection for all the GUI dropdowns
@@ -1440,16 +1440,10 @@ namespace MeGUI
             this.jobUtil = new JobUtil(this);
             this.settings = new MeGUISettings();
             addPackages();
-            fillMenus();
-            videoEncodingComponent1.MainForm = this;
             this.profileManager = new ProfileManager(this.path);
             this.profileManager.LoadProfiles();
             this.mediaFileFactory = new MediaFileFactory(this);
-            videoEncodingComponent1.InitializeDropdowns();
-            audioEncodingComponent1.InitializeDropdowns();
             this.loadSettings();
-            jobControl1.MainForm = this;
-            jobControl1.loadJobs();
             this.dialogManager = new DialogManager(this);
         }
 
@@ -1583,19 +1577,6 @@ namespace MeGUI
             PackageSystem.Tools.Register(new D2VCreatorTool());
             PackageSystem.Tools.Register(new AVCLevelTool());
             PackageSystem.Tools.Register(new VobSubTool());
-            PackageSystem.VideoSettingsProviders.Register(new X264SettingsProvider());
-            PackageSystem.VideoSettingsProviders.Register(new XviDSettingsProvider());
-            PackageSystem.VideoSettingsProviders.Register(new SnowSettingsProvider());
-            PackageSystem.VideoSettingsProviders.Register(new LavcSettingsProvider());
-            PackageSystem.AudioSettingsProviders.Register(new NeroAACSettingsProvider());
-            PackageSystem.AudioSettingsProviders.Register(new AudXSettingsProvider());
-            PackageSystem.AudioSettingsProviders.Register(new faacSettingsProvider());
-            PackageSystem.AudioSettingsProviders.Register(new ffac3SettingsProvider());
-            PackageSystem.AudioSettingsProviders.Register(new ffmp2SettingsProvider());
-            PackageSystem.AudioSettingsProviders.Register(new lameSettingsProvider());
-            PackageSystem.AudioSettingsProviders.Register(new vorbisSettingsProvider());
-            PackageSystem.AudioSettingsProviders.Register(new waacSettingsProvider());
-            PackageSystem.AudioSettingsProviders.Register(new aftenSettingsProvider());
             PackageSystem.MediaFileTypes.Register(new AvsFileFactory());
             PackageSystem.MediaFileTypes.Register(new d2vFileFactory());
             PackageSystem.MediaFileTypes.Register(new MediaInfoFileFactory());

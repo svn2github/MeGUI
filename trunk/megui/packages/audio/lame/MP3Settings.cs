@@ -7,8 +7,9 @@ namespace MeGUI
 	/// </summary>
 	public class MP3Settings : AudioCodecSettings
 	{
+        public static readonly string ID = "LAME MP3";
 		int quality;
-		public MP3Settings():base()
+		public MP3Settings():base(ID)
 		{
 			quality = 50;
             Codec = AudioCodec.MP3;

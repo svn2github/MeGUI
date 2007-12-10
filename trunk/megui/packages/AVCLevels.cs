@@ -21,7 +21,7 @@ namespace MeGUI
             else
             {
                 int compliantLevel = 15;
-                x264Settings currentX264Settings = (x264Settings)CodecManager.X264.GetCurrentSettings();
+                x264Settings currentX264Settings = (x264Settings)MainForm.Instance.Profiles.GetCurrentSettings("x264");
                 bool succ = info.JobUtil.validateAVCLevel(info.Video.VideoInput, currentX264Settings, out compliantLevel);
                 if (succ)
                     MessageBox.Show("This file matches the criteria for the level chosen", "Video validated",

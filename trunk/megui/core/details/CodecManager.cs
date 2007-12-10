@@ -96,6 +96,11 @@ namespace MeGUI
             this.id = id;
             this.codec = codec;
         }
+
+        public override string ToString()
+        {
+            return ID;
+        }
         public static readonly VideoEncoderType XVID = new VideoEncoderType("XVID", VideoCodec.ASP);
         public static readonly VideoEncoderType LMP4 = new VideoEncoderType("LMP4", VideoCodec.ASP);
         public static readonly VideoEncoderType X264 = new VideoEncoderType("X264", VideoCodec.AVC);
@@ -141,21 +146,6 @@ namespace MeGUI
         public static GenericRegisterer<AudioCodec> AudioCodecs = new GenericRegisterer<AudioCodec>();
         public static GenericRegisterer<VideoEncoderType> VideoEncoderTypes = new GenericRegisterer<VideoEncoderType>();
         public static GenericRegisterer<AudioEncoderType> AudioEncoderTypes = new GenericRegisterer<AudioEncoderType>();
-        
-        // Audio Codecs
-        public static readonly ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType> NAAC = new NeroAACSettingsProvider();
-        // Video Codecs
-        public static readonly ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> X264 = new X264SettingsProvider();
-        public static readonly ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> Snow = new SnowSettingsProvider();
-        public static readonly ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> Lavc = new LavcSettingsProvider();
-        public static readonly ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> XviD = new XviDSettingsProvider();
-
-        // All Audio Codecs
-#warning this must be renamed
-        public static readonly ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType>[] ListOfAudioCodecs = new ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType>[] { NAAC/*, WAAC, Lame, AudX, Vorbis, AC3, MP2, FAAC*/};
-        // All Audio Codecs
-#warning this must be renamed
-        public static readonly ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>[] ListOfVideoCodecs = new ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>[] { Lavc, X264, Snow, XviD };
         
         static CodecManager()
         {

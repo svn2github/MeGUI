@@ -14,29 +14,23 @@ using MeGUI.core.util;
 
 namespace MeGUI.packages.tools.oneclick
 {
-    public partial class OneClickConfigPanel : UserControl, MeGUI.core.plugins.interfaces.Gettable<OneClickSettings>
+    public partial class OneClickConfigPanel : UserControl, Editable<OneClickSettings>
     {
         private MainForm mainForm;
         #region profiles
         #region AVS profiles
-        ISettingsProvider<AviSynthSettings, MeGUI.core.details.video.Empty, int, int> avsSettingsProvider = new SettingsProviderImpl2<
-    MeGUI.core.gui.AviSynthProfileConfigPanel, MeGUI.core.details.video.Empty, AviSynthSettings, AviSynthSettings, int, int>("AviSynth", 0, 0);
-        ProfilesControlHandler<AviSynthSettings, Empty> avsProfileHandler;
         private void initAvsHandler()
         {
             // Init AVS handlers
-            avsProfileHandler = new ProfilesControlHandler<AviSynthSettings, Empty>(
-    "AviSynth", mainForm, avsProfileControl, avsSettingsProvider.EditSettings, Empty.Getter,
-    new SettingsGetter<AviSynthSettings>(avsSettingsProvider.GetCurrentSettings), new SettingsSetter<AviSynthSettings>(avsSettingsProvider.LoadSettings));
-            SingleConfigurerHandler<AviSynthSettings, Empty, int, int> configurerHandler = new SingleConfigurerHandler<AviSynthSettings, Empty, int, int>(avsProfileHandler, avsSettingsProvider);
+            avsProfile.Manager = mainForm.Profiles;
         }
         #endregion
         #region Video profiles
-        MultipleConfigurersHandler<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> videoCodecHandler;
-        ProfilesControlHandler<VideoCodecSettings, VideoInfo> videoProfileHandler;
+        /*MultipleConfigurersHandler<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> videoCodecHandler;
+        ProfilesControlHandler<VideoCodecSettings, VideoInfo> videoProfileHandler;*/
         private void initVideoHandler()
         {
-            this.videoCodec.Items.AddRange(mainForm.PackageSystem.VideoSettingsProviders.ValuesArray);
+            /*this.videoCodec.Items.AddRange(mainForm.PackageSystem.VideoSettingsProviders.ValuesArray);
             try
             {
                 this.videoCodec.SelectedItem = mainForm.PackageSystem.VideoSettingsProviders["x264"];
@@ -49,15 +43,16 @@ namespace MeGUI.packages.tools.oneclick
                 new ProfilesControlHandler<VideoCodecSettings, VideoInfo>("Video", mainForm, videoProfileControl,
                 videoCodecHandler.EditSettings, new InfoGetter<VideoInfo>(delegate() { return new VideoInfo(); }),
                 videoCodecHandler.Getter, videoCodecHandler.Setter);
-            videoCodecHandler.Register(videoProfileHandler);
+            videoCodecHandler.Register(videoProfileHandler);*/
+            videoProfile.Manager = mainForm.Profiles;
         }
         #endregion
         #region Audio profiles
-        MultipleConfigurersHandler<AudioCodecSettings, string[], AudioCodec, AudioEncoderType> audioCodecHandler;
-        ProfilesControlHandler<AudioCodecSettings, string[]> audioProfileHandler;
+        /*MultipleConfigurersHandler<AudioCodecSettings, string[], AudioCodec, AudioEncoderType> audioCodecHandler;
+        ProfilesControlHandler<AudioCodecSettings, string[]> audioProfileHandler;*/
         private void initAudioHandler()
         {
-            this.audioCodec.Items.AddRange(mainForm.PackageSystem.AudioSettingsProviders.ValuesArray);
+            /*this.audioCodec.Items.AddRange(mainForm.PackageSystem.AudioSettingsProviders.ValuesArray);
             try
             {
                 this.audioCodec.SelectedItem = mainForm.PackageSystem.AudioSettingsProviders["ND AAC"];
@@ -68,16 +63,16 @@ namespace MeGUI.packages.tools.oneclick
             audioCodecHandler = new MultipleConfigurersHandler<AudioCodecSettings, string[], AudioCodec, AudioEncoderType>(audioCodec);
             audioProfileHandler = new ProfilesControlHandler<AudioCodecSettings, string[]>("Audio", mainForm, audioProfileControl, audioCodecHandler.EditSettings,
                 new InfoGetter<string[]>(delegate { return new string[] { "input", "output" }; }), audioCodecHandler.Getter, audioCodecHandler.Setter);
-            audioCodecHandler.Register(audioProfileHandler);
+            audioCodecHandler.Register(audioProfileHandler);*/
+            audioProfile.Manager = mainForm.Profiles;
         }
         #endregion
         #endregion
         
-        public OneClickConfigPanel(MainForm mainForm, MeGUI.core.details.video.Empty dummy) 
+        public OneClickConfigPanel() 
         {
-            this.mainForm = mainForm;
             InitializeComponent();
-
+            mainForm = MainForm.Instance;
             // We do this because the designer will attempt to put such a long string in the resources otherwise
             containerFormatLabel.Text = "Since the possible output filetypes are not known until the input is configured, the output type cannot be configured in a profile. Instead, here is a list of known file-types. You choose which you are happy with, and MeGUI will attempt to encode to one of those on the list.";
 
@@ -95,9 +90,9 @@ namespace MeGUI.packages.tools.oneclick
             get
             {
                 OneClickSettings val = new OneClickSettings();
-                val.AudioProfileName = audioProfileHandler.SelectedProfile;
+                val.AudioProfileName = audioProfile.SelectedProfile.FQName;
                 val.AutomaticDeinterlacing = autoDeint.Checked;
-                val.AvsProfileName = avsProfileHandler.SelectedProfile;
+                val.AvsProfileName = avsProfile.SelectedProfile.FQName;
                 val.ContainerCandidates = ContainerCandidates;
                 val.DontEncodeAudio = dontEncodeAudio.Checked;
                 val.Filesize = fileSize.Value;
@@ -105,22 +100,22 @@ namespace MeGUI.packages.tools.oneclick
                 val.PrerenderVideo = preprocessVideo.Checked;
                 val.SignalAR = signalAR.Checked;
                 val.SplitSize = splitSize.Value;
-                val.VideoProfileName = videoProfileHandler.SelectedProfile;
+                val.VideoProfileName = videoProfile.SelectedProfile.FQName;
                 return val;
             }
             set
             {
-                try { audioProfileHandler.SelectedProfile = value.AudioProfileName; } catch (ProfileCouldntBeSelectedException) { }
+                audioProfile.SetProfileNameOrWarn(value.AudioProfileName);
                 autoDeint.Checked = value.AutomaticDeinterlacing;
-                try { avsProfileHandler.SelectedProfile = value.AvsProfileName; } catch (ProfileCouldntBeSelectedException) { }
-                ContainerCandidates = value.ContainerCandidates;
+                avsProfile.SetProfileNameOrWarn(value.AvsProfileName);
+                ContainerCandidates = value.ContainerCandidates; 
                 dontEncodeAudio.Checked = value.DontEncodeAudio;
                 fileSize.Value = value.Filesize;
                 horizontalResolution.Value = value.OutputResolution;
                 preprocessVideo.Checked = value.PrerenderVideo;
                 signalAR.Checked = value.SignalAR;
                 splitSize.Value = value.SplitSize;
-                try { videoProfileHandler.SelectedProfile = value.VideoProfileName; } catch (ProfileCouldntBeSelectedException) { }
+                videoProfile.SetProfileNameOrWarn(value.VideoProfileName);
             }
         }
 
@@ -128,8 +123,7 @@ namespace MeGUI.packages.tools.oneclick
 
         private void dontEncodeAudio_CheckedChanged(object sender, EventArgs e)
         {
-            audioProfileControl.Enabled = !dontEncodeAudio.Checked;
-            audioCodec.Enabled = !dontEncodeAudio.Checked;
+            audioProfile.Enabled = !dontEncodeAudio.Checked;
         }
 
         private string[] ContainerCandidates

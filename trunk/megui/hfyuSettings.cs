@@ -6,18 +6,12 @@ namespace MeGUI
 {
     public class hfyuSettings : VideoCodecSettings
     {
+        public static string ID = "huffyuv";
+
         private static readonly string[] m_fourCCs = { "FFVH" };
-        public override VideoCodec Codec
-        {
-            get { return VideoCodec.HFYU; }
-        }
-        public override VideoEncoderType EncoderType
-        {
-            get { return VideoEncoderType.HFYU; }
-        }
 
         public hfyuSettings()
-            : base()
+            : base(ID, VideoEncoderType.HFYU)
         {
             base.BitrateQuantizer = 0;
             base.EncodingMode = (int)Mode.CQ;

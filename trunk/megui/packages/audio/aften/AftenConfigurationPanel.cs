@@ -8,10 +8,9 @@ using System.Windows.Forms;
 
 namespace MeGUI.packages.audio.aften
 {
-    public partial class AftenConfigurationPanel : MeGUI.core.details.audio.AudioConfigurationPanel
+    public partial class AftenConfigurationPanel : MeGUI.core.details.audio.AudioConfigurationPanel, Editable<AftenSettings>
     {
-       public AftenConfigurationPanel(MainForm mainForm, string[] info)
-            : base(mainForm, info)
+       public AftenConfigurationPanel():base()
         {
             InitializeComponent();
             comboBox1.Items.AddRange(AftenSettings.SupportedBitrates);
@@ -36,6 +35,25 @@ namespace MeGUI.packages.audio.aften
             }
         }
         #endregion
+
+        #region Editable<AftenSettings> Members
+
+        AftenSettings Editable<AftenSettings>.Settings
+        {
+            get
+            {
+                return (AftenSettings)Settings;
+            }
+            set
+            {
+                Settings = value;
+            }
+        }
+
+        #endregion
     }
 }
+
+
+
 

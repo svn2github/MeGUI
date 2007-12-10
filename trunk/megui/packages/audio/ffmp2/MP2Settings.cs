@@ -6,12 +6,13 @@ namespace MeGUI
 {
     public class MP2Settings : AudioCodecSettings
     {
+        public static readonly string ID = "FFmpeg MP2";
 
         public static readonly object[] SupportedBitrates = new object[] { 64, 128, 160, 192, 224, 256, 288, 320 };
 
 
         public MP2Settings()
-            : base()
+            : base(ID)
         {
             this.Codec = AudioCodec.MP2;
             this.EncoderType = AudioEncoderType.FFMP2;

@@ -60,13 +60,12 @@ namespace MeGUI
         XmlInclude(typeof(OggVorbisSettings)),
         XmlInclude(typeof(AftenSettings))
     ]
-	public class AudioCodecSettings : MeGUI.core.plugins.interfaces.GenericSettings
+	public abstract class AudioCodecSettings : MeGUI.core.plugins.interfaces.GenericSettings
 	{
+        private readonly string id;
+        public string SettingsID { get { return id; } }
+
         public virtual void FixFileNames(Dictionary<string, string> _) {}
-        public string getSettingsType()
-        {
-            return "Audio";
-        }
 		private ChannelMode downmixMode;
 		private BitrateManagementMode bitrateMode;
 		private int bitrate;
@@ -92,8 +91,9 @@ namespace MeGUI
             set { audioEncoderType = value; }
         }
 
-		public AudioCodecSettings()
+		public AudioCodecSettings(string id)
 		{
+            this.id = id;
 			downmixMode = ChannelMode.KeepOriginal;
 			bitrateMode = BitrateManagementMode.CBR;
 			bitrate = 128;

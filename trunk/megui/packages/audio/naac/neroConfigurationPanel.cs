@@ -10,7 +10,7 @@ using MeGUI.core.plugins.interfaces;
 
 namespace MeGUI.packages.audio.naac
 {
-    public partial class neroConfigurationPanel : MeGUI.core.details.audio.AudioConfigurationPanel, Gettable<AudioCodecSettings>
+    public partial class neroConfigurationPanel : MeGUI.core.details.audio.AudioConfigurationPanel, Editable<NeroAACSettings>
     {
         public TrackBar vQuality;
         public RadioButton rbtnVBR;
@@ -23,9 +23,7 @@ namespace MeGUI.packages.audio.naac
 
         #endregion
         #region start / stop
-        public neroConfigurationPanel(MainForm mainForm, string[] audioInfo)
-            : base(mainForm, audioInfo)
-
+        public neroConfigurationPanel():base()
 		{
 			//
 			// Required for Windows Form Designer support
@@ -184,7 +182,7 @@ namespace MeGUI.packages.audio.naac
 			}
 			set
 			{
-                NeroAACSettings nas = value as NeroAACSettings;
+                NeroAACSettings nas = (NeroAACSettings)value;
                 rbtnABR.Checked = nas.BitrateMode == BitrateManagementMode.ABR;
                 rbtnCBR.Checked = nas.BitrateMode == BitrateManagementMode.CBR;
                 rbtnVBR.Checked = nas.BitrateMode == BitrateManagementMode.VBR;
@@ -213,7 +211,26 @@ namespace MeGUI.packages.audio.naac
             Decimal q = ((Decimal)vQuality.Value) / vQuality.Maximum;
             rbtnVBR.Text = String.Format("Variable Bitrate (Q={0}) ", q);
         }
+
+        #region Editable<NeroAACSettings> Members
+
+        NeroAACSettings Editable<NeroAACSettings>.Settings
+        {
+            get
+            {
+                return (NeroAACSettings)Settings;
+            }
+            set
+            {
+                Settings = value;
+            }
+        }
+
+        #endregion
     }
 }
+
+
+
 
 

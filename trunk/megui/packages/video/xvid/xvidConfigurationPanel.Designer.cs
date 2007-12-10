@@ -130,7 +130,6 @@ namespace MeGUI.packages.video.xvid
             this.xvidCustomCommandlineOptions = new System.Windows.Forms.TextBox();
             this.quantizerMatrixGroupbox = new System.Windows.Forms.GroupBox();
             this.tabControl1.SuspendLayout();
-            this.zoneTabPage.SuspendLayout();
             this.mainTabPage.SuspendLayout();
             this.xvidOtherGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nbThreads)).BeginInit();
@@ -168,16 +167,8 @@ namespace MeGUI.packages.video.xvid
             // 
             this.tabControl1.Controls.Add(this.advancedTabPage);
             this.tabControl1.Size = new System.Drawing.Size(500, 458);
-            this.tabControl1.Controls.SetChildIndex(this.zoneTabPage, 0);
             this.tabControl1.Controls.SetChildIndex(this.advancedTabPage, 0);
             this.tabControl1.Controls.SetChildIndex(this.mainTabPage, 0);
-            // 
-            // zoneTabPage
-            // 
-            this.zoneTabPage.Controls.Add(this.quantizerMatrixGroupbox);
-            this.zoneTabPage.Size = new System.Drawing.Size(492, 432);
-            this.zoneTabPage.Controls.SetChildIndex(this.quantizerMatrixGroupbox, 0);
-            this.zoneTabPage.Controls.SetChildIndex(this.zonesControl, 0);
             // 
             // commandline
             // 
@@ -1326,8 +1317,6 @@ namespace MeGUI.packages.video.xvid
             this.Name = "xvidConfigurationPanel";
             this.Size = new System.Drawing.Size(503, 526);
             this.tabControl1.ResumeLayout(false);
-            this.zoneTabPage.ResumeLayout(false);
-            this.zoneTabPage.PerformLayout();
             this.mainTabPage.ResumeLayout(false);
             this.xvidOtherGroupBox.ResumeLayout(false);
             this.xvidOtherGroupBox.PerformLayout();

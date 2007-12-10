@@ -633,7 +633,7 @@ namespace MeGUI
 		{
 			Zone introZone = new Zone();
 			Zone creditsZone = new Zone();
-			ulong nbOfFrames = getNumberOfFrames(mainForm.Video.Info.VideoInput);
+			ulong nbOfFrames = getNumberOfFrames(mainForm.Video.VideoInput);
 			bool doIntroZone = false, doCreditsZone = false;
 			int flushZonesStart = 0, flushZonesEnd = 0;
 			if (introEndFrame > 0) // add the intro zone

@@ -21,6 +21,7 @@
 using System;
 using System.Xml.Serialization;
 using MeGUI.core.plugins.interfaces;
+using System.Diagnostics;
 
 namespace MeGUI
 {
@@ -28,7 +29,7 @@ namespace MeGUI
 	/// Superclass of an actual video or audio profile
 	/// defines some basic properties
 	/// </summary>
-	public abstract class Profile
+	public abstract class Profile : IIDable
 	{
 		private string name; // name of the profile
 		/// <summary>
@@ -42,14 +43,34 @@ namespace MeGUI
 		{
 			this.name = name;
 		}
+
 		/// <summary>
-		/// name of the profile as shown in the profile dropdown in the GUI
+		/// Local name of the profile. Within a given settings type, this
+        /// is guaranteed to be unique, but not within the entire profile
+        /// collection
 		/// </summary>
-		public string Name
-		{
-			get {return name;}
-			set {name = value;}
-		}
+        public string Name
+        {
+            get
+            {
+                Debug.Assert(!string.IsNullOrEmpty(name));
+                return name;
+            }
+            set
+            {
+                name = value;
+                Debug.Assert(!string.IsNullOrEmpty(name));
+            }
+        }
+
+        /// <summary>
+        /// Fully qualified name in format 'type: name'. For a given profile
+        /// collection, this is guaranteed to be unique.
+        /// </summary>
+        public string FQName
+        {
+            get { return BaseSettings.SettingsID + ": " + Name; }
+        }
 
         public override string ToString()
         {
@@ -64,6 +85,8 @@ namespace MeGUI
         }
 
         public abstract Profile baseClone();
+
+        public string ID { get { return FQName; } }
 	}
 
     public class GenericProfile<TSettings> : Profile

@@ -6,7 +6,7 @@ namespace MeGUI
 {
     public class AudXSettings: AudioCodecSettings
 	{
-
+        public static readonly string ID = "Aud-X MP3";
         public enum QualityMode
         {
             //0 (STRQ 80 kbps), 1 (STDQ 128 kbps), 2 (HGHQ 192 kbps) or 3 (SPBQ 192 kbps), default is 1
@@ -23,7 +23,7 @@ namespace MeGUI
         public QualityMode Quality;
 
         public AudXSettings()
-            : base()
+            : base(ID)
 		{
             this.Quality = QualityMode.STDQ;
             this.Codec = AudioCodec.MP3;

@@ -214,7 +214,6 @@ namespace MeGUI.packages.video.lmp4
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.advancedTabPage = new System.Windows.Forms.TabPage();
             this.tabControl1.SuspendLayout();
-            this.zoneTabPage.SuspendLayout();
             this.mainTabPage.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.meRange)).BeginInit();
@@ -288,16 +287,8 @@ namespace MeGUI.packages.video.lmp4
             // 
             this.tabControl1.Controls.Add(this.advancedTabPage);
             this.tabControl1.Size = new System.Drawing.Size(496, 444);
-            this.tabControl1.Controls.SetChildIndex(this.zoneTabPage, 0);
             this.tabControl1.Controls.SetChildIndex(this.advancedTabPage, 0);
             this.tabControl1.Controls.SetChildIndex(this.mainTabPage, 0);
-            // 
-            // zoneTabPage
-            // 
-            this.zoneTabPage.Controls.Add(this.quantizerMatrixGroupbox);
-            this.zoneTabPage.Size = new System.Drawing.Size(488, 418);
-            this.zoneTabPage.Controls.SetChildIndex(this.zonesControl, 0);
-            this.zoneTabPage.Controls.SetChildIndex(this.quantizerMatrixGroupbox, 0);
             // 
             // commandline
             // 
@@ -2695,7 +2686,6 @@ namespace MeGUI.packages.video.lmp4
             this.Name = "lavcConfigurationPanel";
             this.Size = new System.Drawing.Size(496, 528);
             this.tabControl1.ResumeLayout(false);
-            this.zoneTabPage.ResumeLayout(false);
             this.mainTabPage.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.meRange)).EndInit();

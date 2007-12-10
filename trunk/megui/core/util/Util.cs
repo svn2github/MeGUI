@@ -8,9 +8,16 @@ using System.Xml.Serialization;
 using System.Drawing;
 using System.ComponentModel;
 using System.Globalization;
+using System.Collections;
+using System.Reflection;
 
 namespace MeGUI.core.util
 {
+    public delegate R Delegate<R>();
+    public delegate R Delegate<R, P1>(P1 p1);
+    public delegate R Delegate<R, P1, P2>(P1 p1, P2 p2);
+    public delegate R Delegate<R, P1, P2, P3>(P1 p1, P2 p2, P3 p3);
+    public delegate R Delegate<R, P1, P2, P3, P4>(P1 p1, P2 P2, P3 p3);
 
     public class Pair<T1, T2>
     {
@@ -28,8 +35,36 @@ namespace MeGUI.core.util
     public delegate T Getter<T>();
     public delegate void Setter<T>(T thing);
 
+    public delegate void Action();
+
     public class Util
     {
+        public static void CatchAndTellUser<TException>(string processDescription, Action action)
+            where TException : Exception
+        {
+            try { action(); }
+            catch (TException e)
+            {
+                MessageBox.Show(processDescription + ". Error message: " + e.Message, "Error occurred", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public static void CatchAndTellUser<TException>(Action action)
+            where TException : Exception
+        {
+            CatchAndTellUser<TException>("An error occurred", action);
+        }
+
+        public static void CatchExceptionsAndTellUser(string processDescription, Action action)
+        {
+            CatchAndTellUser<Exception>(processDescription, action);
+        }
+
+        public static void CatchExceptionsAndTellUser(Action action)
+        {
+            CatchAndTellUser<Exception>(action);
+        }
+
         public static void SetSize(Form f, Size s, FormWindowState state)
         {
             f.WindowState = state;
@@ -52,17 +87,24 @@ namespace MeGUI.core.util
                 m();
         }
 
-        public static void XmlSerialize<T>(T t, string path)
+        public static void XmlSerialize(object o, string path)
         {
-            XmlSerializer ser = new XmlSerializer(typeof(T));
+            FileUtil.ensureDirectoryExists(Path.GetDirectoryName(path));
+            XmlSerializer ser = new XmlSerializer(o.GetType());
             using (Stream s = File.Open(path, System.IO.FileMode.Create, System.IO.FileAccess.Write))
             {
                 try
                 {
-                    ser.Serialize(s, t);
+                    ser.Serialize(s, o);
                 }
                 catch (Exception e)
                 {
+                    s.Close();
+                    try
+                    {
+                        File.Delete(path);
+                    }
+                    catch (IOException) { }
                     Console.Write(e.Message);
                 }
             }
@@ -95,7 +137,15 @@ namespace MeGUI.core.util
             }
             else return new T();
         }
-        
+
+        public static object XmlDeserialize(string path, Type t)
+        {
+            MethodInfo ms = (MethodInfo)Array.Find(typeof(Util).GetMember("XmlDeserialize"),
+                delegate(MemberInfo m) { return (m is MethodInfo) && (m as MethodInfo).IsGenericMethod; });
+            ms = ms.MakeGenericMethod(t);
+            return ms.Invoke(null, new object[] { path });
+        }
+
         public static T XmlDeserialize<T>(string path)
             where T : class
         {
@@ -185,8 +235,122 @@ namespace MeGUI.core.util
                 }
             }
             return ret;
-        }        
-        
+        }
+
+        public static T ByID<T>(IEnumerable<T> i, string id)
+            where T : IIDable
+        {
+            foreach (T t in i)
+                if (t.ID == id)
+                    return t;
+
+            return default(T);
+        }
+
+        public static List<T> Unique<T>(List<T> l, Delegate<bool, T, T> cmp)
+            where T : class
+        {
+            for (int i = 0; i < l.Count; ++i)
+            {
+                if (l.FindIndex(0, i, delegate(T t) { return cmp(t, l[i]); }) >= 0)
+                {
+                    l.RemoveAt(i);
+                    --i;
+                }
+            }
+            return l.FindAll(delegate(T t) { 
+                return l.FindIndex(delegate(T t2) { return cmp(t, t2); }) == l.IndexOf(t); });
+        }
+
+        public static List<T> Unique<T>(List<T> l)
+            where T : class
+        {
+            return Unique(l, delegate(T t1, T t2) { return t1.Equals(t2); });
+        }
+
+        public static List<T> UniqueByIDs<T>(List<T> l)
+            where T : class, IIDable
+        {
+            return Unique(l, delegate(T t1, T t2) { return t1.ID == t2.ID; });
+        }
+
+        public static List<T> RemoveDuds<T>(List<T> ps)
+            where T : class, IIDable
+        {
+            ps = ps.FindAll(delegate(T p) { return p != null; });
+
+            // eliminate duplicate names
+            return Util.UniqueByIDs(ps);
+        }
+
+
+        public static IEnumerable<To> CastAll<To>(IEnumerable i)
+        {
+            foreach (To t in i)
+                yield return t;
+        }
+
+
+        public static IEnumerable<To> CastAll<From, To>(IEnumerable<From> i)
+            where To : class
+        {
+            foreach (From f in i)
+                yield return f as To;
+        }
+
+        public static List<To> CastAll<From, To>(List<From> i)
+            where To : class
+        {
+            return i.ConvertAll<To>(delegate(From f) { return f as To; });
+        }
+
+        public static To[] CastAll<From, To>(From[] fr)
+            where To : class
+        {
+            if (fr == null)
+                return null;
+            return Array.ConvertAll<From, To>(fr, delegate(From f) { return f as To; });
+        }
+
+        public static To[] CastAll<To>(object[] os)
+        {
+            return Array.ConvertAll<object, To>(os, delegate(object o) { return (To)o; });
+        }
+
+        public static void RegisterTypeConverter<T, TC>() where TC : TypeConverter
+        {
+            Attribute[] attr = new Attribute[1];
+            TypeConverterAttribute vConv = new TypeConverterAttribute(typeof(TC));
+            attr[0] = vConv;
+            TypeDescriptor.AddAttributes(typeof(T), attr);
+        }
+
+        public static T[] ToArray<T>(IEnumerable<T> i)
+        {
+            return new List<T>(i).ToArray();
+        }
+
+        public static object[] ToArray(IEnumerable i)
+        {
+            List<object> l = new List<object>();
+            foreach (object o in i)
+                l.Add(o);
+            return l.ToArray();
+        }
+
+        public static IEnumerable<T> Append<T>(params IEnumerable<T>[] lists)
+        {
+            foreach (IEnumerable<T> list in lists)
+                foreach (T t in list)
+                    yield return t;
+        }
+
+        public static IEnumerable<TOut> ConvertAll<TIn, TOut>(IEnumerable<TIn> input, Converter<TIn, TOut> c)
+        {
+            foreach (TIn t in input)
+                yield return c(t);
+        }
+
         #region range clamping
         public static void clampedSet(NumericUpDown box, decimal value)
         {
@@ -237,25 +401,21 @@ namespace MeGUI.core.util
         }
         #endregion
 
-        public static To[] CastAll<From, To>(From[] fr)
-            where To : class
+
+        public static void ChangeItemsKeepingSelectedSame<T>(ComboBox box, T[] newItems)
         {
-            if (fr == null)
-                return null;
-            return Array.ConvertAll<From, To>(fr, delegate(From f) { return f as To; });
+            T sel = (T)box.SelectedItem;
+            if (Array.IndexOf(newItems, sel) < 0 || sel == null)
+                sel = newItems[0];
+
+            box.Items.Clear();
+            box.Items.AddRange(Util.CastAll<T, object>(newItems));
+            box.SelectedItem = sel;
         }
 
-        public static To[] CastAll<To>(object[] os)
-        {
-            return Array.ConvertAll<object, To>(os, delegate(object o) { return (To)o; });
-        }
 
-        public static void RegisterTypeConverter<T, TC>() where TC : TypeConverter
-        {
-            Attribute[] attr = new Attribute[1];
-            TypeConverterAttribute vConv = new TypeConverterAttribute(typeof(TC));
-            attr[0] = vConv;
-            TypeDescriptor.AddAttributes(typeof(T), attr);
-        }
+
     }
+
+    public delegate TOut Converter<TIn, TOut>(TIn iinput);
 }

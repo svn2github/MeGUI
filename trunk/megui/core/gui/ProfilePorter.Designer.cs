@@ -1,4 +1,4 @@
-namespace MeGUI
+namespace MeGUI.core.gui
 {
     partial class ProfilePorter
     {
@@ -28,87 +28,70 @@ namespace MeGUI
         /// </summary>
         private void InitializeComponent()
         {
-            this.profileListBox = new System.Windows.Forms.ListBox();
-            this.okButton = new System.Windows.Forms.Button();
-            this.cancelButton = new System.Windows.Forms.Button();
+            System.Windows.Forms.Button cancelButton;
+            this.profileList = new System.Windows.Forms.CheckedListBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.helpButton1 = new MeGUI.core.gui.HelpButton();
-            this.helpProvider1 = new System.Windows.Forms.HelpProvider();
+            this.button2 = new System.Windows.Forms.Button();
+            cancelButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // profileListBox
+            // profileList
             // 
-            this.profileListBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.profileList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.profileListBox.FormattingEnabled = true;
-            this.profileListBox.Location = new System.Drawing.Point(12, 25);
-            this.profileListBox.Name = "profileListBox";
-            this.profileListBox.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.profileListBox.Size = new System.Drawing.Size(358, 251);
-            this.profileListBox.TabIndex = 0;
-            // 
-            // okButton
-            // 
-            this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.okButton.Location = new System.Drawing.Point(214, 282);
-            this.okButton.Name = "okButton";
-            this.okButton.Size = new System.Drawing.Size(75, 23);
-            this.okButton.TabIndex = 1;
-            this.okButton.Text = "Export...";
-            this.okButton.UseVisualStyleBackColor = true;
-            this.okButton.Click += new System.EventHandler(this.okButton_Click);
-            // 
-            // cancelButton
-            // 
-            this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(295, 282);
-            this.cancelButton.Name = "cancelButton";
-            this.cancelButton.Size = new System.Drawing.Size(75, 23);
-            this.cancelButton.TabIndex = 2;
-            this.cancelButton.Text = "Cancel";
-            this.cancelButton.UseVisualStyleBackColor = true;
+            this.profileList.FormattingEnabled = true;
+            this.profileList.IntegralHeight = false;
+            this.profileList.Location = new System.Drawing.Point(12, 25);
+            this.profileList.Name = "profileList";
+            this.profileList.Size = new System.Drawing.Size(359, 288);
+            this.profileList.TabIndex = 0;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(12, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(295, 13);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "Select the profiles you want to export (Ctrl or Shift might help):";
+            this.label1.Size = new System.Drawing.Size(168, 13);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Select the profiles to import/export";
             // 
-            // helpButton1
+            // cancelButton
             // 
-            this.helpButton1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.helpButton1.ArticleName = "Profile exporter";
-            this.helpButton1.AutoSize = true;
-            this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.helpButton1.Location = new System.Drawing.Point(12, 282);
-            this.helpButton1.Name = "helpButton1";
-            this.helpButton1.Size = new System.Drawing.Size(39, 23);
-            this.helpButton1.TabIndex = 4;
+            cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            cancelButton.AutoSize = true;
+            cancelButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            cancelButton.Location = new System.Drawing.Point(321, 323);
+            cancelButton.Name = "cancelButton";
+            cancelButton.Size = new System.Drawing.Size(50, 23);
+            cancelButton.TabIndex = 2;
+            cancelButton.Text = "Cancel";
+            cancelButton.UseVisualStyleBackColor = true;
             // 
-            // ProfilePorter
+            // button2
+            // 
+            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button2.AutoSize = true;
+            this.button2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.button2.Location = new System.Drawing.Point(216, 323);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(99, 23);
+            this.button2.TabIndex = 2;
+            this.button2.Text = "Import.../Export...";
+            this.button2.UseVisualStyleBackColor = true;
+            // 
+            // ProfilePorter2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(382, 313);
-            this.Controls.Add(this.helpButton1);
+            this.ClientSize = new System.Drawing.Size(383, 358);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(cancelButton);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.cancelButton);
-            this.Controls.Add(this.okButton);
-            this.Controls.Add(this.profileListBox);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.Name = "ProfilePorter";
-            this.ShowIcon = false;
-            this.ShowInTaskbar = false;
-            this.Text = "Profile Exporter";
-            this.TopMost = true;
-            this.Load += new System.EventHandler(this.ProfileExporter_Load);
+            this.Controls.Add(this.profileList);
+            this.Name = "ProfilePorter2";
+            this.Text = "ProfilePorter2";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -116,11 +99,8 @@ namespace MeGUI
 
         #endregion
 
-        private System.Windows.Forms.ListBox profileListBox;
-        private System.Windows.Forms.Button okButton;
-        private System.Windows.Forms.Button cancelButton;
-        private System.Windows.Forms.Label label1;
-        private MeGUI.core.gui.HelpButton helpButton1;
-        private System.Windows.Forms.HelpProvider helpProvider1;
+        private System.Windows.Forms.CheckedListBox profileList;
+        protected System.Windows.Forms.Label label1;
+        protected System.Windows.Forms.Button button2;
     }
 }

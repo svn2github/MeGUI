@@ -27,6 +27,7 @@ namespace MeGUI
     /// </summary>
     public class xvidSettings : VideoCodecSettings
     {
+        public static readonly string ID = "XviD";
         public static readonly string H263Matrix = "H.263";
         public static readonly string MPEGMatrix = "MPEG";
 
@@ -71,15 +72,6 @@ namespace MeGUI
             greyscale, interlaced, bottomFieldFirst, lumiMasking;
         private decimal bframeThreshold, quantizer;
         private string customQuantizerMatrix;
-        public override VideoCodec Codec
-        {
-            get { return VideoCodec.ASP; }
-        }
-        public override VideoEncoderType EncoderType
-        {
-            get { return VideoEncoderType.XVID; }
-        }
-
         public override bool UsesSAR
         {
             get { return true; }
@@ -89,7 +81,7 @@ namespace MeGUI
         /// initializes all the variables at the codec's default (based on the xvid VfW defaults
         /// </summary>
         public xvidSettings()
-            : base()
+            : base(ID, VideoEncoderType.XVID)
         {
             EncodingMode = 0;
             quantizer = 0;

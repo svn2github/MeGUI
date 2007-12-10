@@ -8,18 +8,10 @@ using System.Windows.Forms;
 
 namespace MeGUI.core.details.audio
 {
-    public partial class AudioConfigurationPanel : UserControl, MeGUI.core.plugins.interfaces.Gettable<AudioCodecSettings>
+    public partial class AudioConfigurationPanel : UserControl
     {
-		#region variables
-		private string input, output;
-        private MainForm mainForm;
-
-
         private EnumProxy[] _avisynthChannelSet;
 	    
-		#endregion
-        #region polyphormism
-        #endregion
         #region start / stop
 
 	    public AudioConfigurationPanel()
@@ -63,18 +55,6 @@ namespace MeGUI.core.details.audio
             this.besweetDownmixMode.BindingContext = new BindingContext();
         }
 	    
-	    public AudioConfigurationPanel(MainForm mainForm, string[] audioInfo):this()
-		{
-            InitDialog(mainForm, audioInfo);
-        }
-
-        public void InitDialog(MainForm mainForm, string[] audioInfo)
-        {
-            this.mainForm = mainForm;
-            this.input = audioInfo[0];
-            this.output = audioInfo[1];
-        }
-
 		#endregion
 		#region dropdowns
 			
@@ -114,11 +94,11 @@ namespace MeGUI.core.details.audio
         {
             get
             {
-                return new AudioCodecSettings();
+                throw new NotImplementedException("Must be overridden");
             }
             set
             {
-                // Do nothing
+                throw new NotImplementedException("Must be overridden");
             }
         }
 

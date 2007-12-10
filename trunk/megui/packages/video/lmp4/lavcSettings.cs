@@ -26,6 +26,8 @@ namespace MeGUI
 	/// </summary>
 	public class lavcSettings: VideoCodecSettings
 	{
+        public static string ID = "LMP4";
+
 		private int mbDecisionAlgo, scd, subpelRefinement, maxQuantDelta, minBitrate, maxBitrate, 
 			bufferSize, filesizeTolerance, fieldOrder;
 		private decimal lumiMasking, darkMask, ipFactor, pbFactor, bQuantOffset, quantizerBlur, quantizerCompression, 
@@ -37,19 +39,11 @@ namespace MeGUI
         {
             get { return false; }
         }
-        public override VideoCodec Codec
-        {
-            get { return VideoCodec.ASP; }
-        }
-        public override VideoEncoderType EncoderType
-        {
-            get { return VideoEncoderType.LMP4; }
-        }
         /// <summary>
 		/// default constructor
 		/// initializes all the variables at the codec's default
 		/// </summary>
-		public lavcSettings():base()
+		public lavcSettings():base(ID, VideoEncoderType.LMP4)
 		{
 			EncodingMode = 0;
 			BitrateQuantizer = 800;

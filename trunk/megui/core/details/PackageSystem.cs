@@ -23,8 +23,6 @@ namespace MeGUI.core.details
         GenericRegisterer<ITool> tools = new GenericRegisterer<ITool>();
         GenericRegisterer<IOption> options = new GenericRegisterer<IOption>();
         GenericRegisterer<IMediaFileFactory> mediaFileTypes = new GenericRegisterer<IMediaFileFactory>();
-        GenericRegisterer<ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>> videoSettingsProviders = new GenericRegisterer<ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>>();
-        GenericRegisterer<ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType>> audioSettingsProviders = new GenericRegisterer<ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType>>();
         GenericRegisterer<IMuxing> muxers = new GenericRegisterer<IMuxing>();
         GenericRegisterer<JobPreProcessor> jobPreProcessors = new GenericRegisterer<JobPreProcessor>();
         GenericRegisterer<JobPostProcessor> jobPostProcessors = new GenericRegisterer<JobPostProcessor>();
@@ -46,14 +44,6 @@ namespace MeGUI.core.details
         public GenericRegisterer<IMediaFileFactory> MediaFileTypes
         {
             get { return mediaFileTypes; }
-        }
-        public GenericRegisterer<ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>> VideoSettingsProviders
-        {
-            get { return videoSettingsProviders; }
-        }
-        public GenericRegisterer<ISettingsProvider<AudioCodecSettings, string[], AudioCodec, AudioEncoderType>> AudioSettingsProviders
-        {
-            get { return audioSettingsProviders; }
         }
         public GenericRegisterer<IMuxing> MuxerProviders
         {

@@ -10,11 +10,11 @@ using MeGUI.core.plugins.interfaces;
 
 namespace MeGUI.packages.video.snow
 {
-    public partial class snowConfigurationPanel : MeGUI.core.details.video.VideoConfigurationPanel, Gettable<VideoCodecSettings>
+    public partial class snowConfigurationPanel : MeGUI.core.details.video.VideoConfigurationPanel, Editable<snowSettings>
     {
         #region start / stop
-        public snowConfigurationPanel(MainForm mainForm, VideoInfo info)
-            : base(mainForm, info)
+        public snowConfigurationPanel()
+            : base()
         {
             InitializeComponent();
         }
@@ -130,7 +130,7 @@ namespace MeGUI.packages.video.snow
         /// <summary>
         /// gets / sets the settings currently displayed on the GUI
         /// </summary>
-        public VideoCodecSettings Settings
+        public snowSettings Settings
         {
             get
             {
@@ -149,14 +149,11 @@ namespace MeGUI.packages.video.snow
                 ss.CreditsQuantizer = this.snowCreditsQuantizer.Value;
                 ss.LosslessMode = this.snowLosslessMode.Checked;
                 ss.Logfile = this.logfile.Text;
-                ss.Zones = this.Zones;
                 return ss;
             }
             set
             {
-                if (!(value is snowSettings))
-                    return;
-                snowSettings ss = value as snowSettings;
+                snowSettings ss = value;
                 snowEncodingMode.SelectedIndex = ss.EncodingMode;
                 snowQuantizer.Value = ss.Quantizer;
                 snowPredictionMode.SelectedIndex = ss.PredictionMode;
@@ -170,7 +167,6 @@ namespace MeGUI.packages.video.snow
                 this.snowCreditsQuantizer.Value = ss.CreditsQuantizer;
                 this.snowLosslessMode.Checked = ss.LosslessMode;
                 this.logfile.Text = ss.Logfile;
-                this.Zones = ss.Zones;
             }
         }
         #endregion
@@ -195,4 +191,7 @@ namespace MeGUI.packages.video.snow
         #endregion
     }
 }
+
+
+
 

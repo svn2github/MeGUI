@@ -8,10 +8,9 @@ using System.Windows.Forms;
 
 namespace MeGUI.packages.audio.faac
 {
-    public partial class faacConfigurationPanel : MeGUI.core.details.audio.AudioConfigurationPanel
+    public partial class faacConfigurationPanel : MeGUI.core.details.audio.AudioConfigurationPanel, Editable<FaacSettings>
     {
-        public faacConfigurationPanel(MainForm mainForm, string[] info)
-            : base(mainForm, info)
+        public faacConfigurationPanel():base()
         {
             InitializeComponent();
             cbrBitrate.DataSource = FaacSettings.SupportedBitrates;
@@ -47,6 +46,25 @@ namespace MeGUI.packages.audio.faac
             cbrBitrate.Enabled = !(vbrQuality.Enabled = qualityModeRadioButton.Checked);
         }
         #endregion
+
+        #region Editable<FaacSettings> Members
+
+        FaacSettings Editable<FaacSettings>.Settings
+        {
+            get
+            {
+                return (FaacSettings)Settings;
+            }
+            set
+            {
+                Settings = value;
+            }
+        }
+
+        #endregion
     }
 }
+
+
+
 

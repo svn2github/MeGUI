@@ -10,12 +10,12 @@ using MeGUI.core.plugins.interfaces;
 
 namespace MeGUI.packages.video.xvid
 {
-    public partial class xvidConfigurationPanel : MeGUI.core.details.video.VideoConfigurationPanel, Gettable<VideoCodecSettings>
+    public partial class xvidConfigurationPanel : MeGUI.core.details.video.VideoConfigurationPanel, Editable<xvidSettings>
     {
 
         #region start / stop
-        public xvidConfigurationPanel(MainForm mainForm, VideoInfo info)
-            : base(mainForm, info)
+        public xvidConfigurationPanel()
+            : base()
         {
             InitializeComponent();
             cqmComboBox1.StandardItems = new string[] { xvidSettings.H263Matrix, xvidSettings.MPEGMatrix };
@@ -166,7 +166,7 @@ namespace MeGUI.packages.video.xvid
         /// <summary>
         /// gets / sets the settings currently displayed on the GUI
         /// </summary>
-        public VideoCodecSettings Settings
+        public xvidSettings Settings
         {
             get
             {
@@ -222,14 +222,11 @@ namespace MeGUI.packages.video.xvid
                 xs.QuantizerMatrix = cqmComboBox1.SelectedText;
                 xs.CustomEncoderOptions = xvidCustomCommandlineOptions.Text;
                 xs.Logfile = this.logfile.Text;
-                xs.Zones = Zones;
                 return xs;
             }
             set
             {
-                if (!(value is xvidSettings))
-                    return;
-                xvidSettings xs = (xvidSettings)value;
+                xvidSettings xs = value;
                 fourCC.SelectedIndex = xs.FourCC;
                 this.xvidTurbo.Checked = xs.Turbo;
                 this.xvidEncodingMode.SelectedIndex = xs.EncodingMode;
@@ -281,7 +278,6 @@ namespace MeGUI.packages.video.xvid
                 cqmComboBox1.SelectedObject = xs.QuantizerMatrix;
                 xvidCustomCommandlineOptions.Text = xs.CustomEncoderOptions;
                 this.logfile.Text = xs.Logfile;
-                this.Zones = xs.Zones;
             }
         }
         #endregion
@@ -311,4 +307,7 @@ namespace MeGUI.packages.video.xvid
         }
     }
 }
+
+
+
 

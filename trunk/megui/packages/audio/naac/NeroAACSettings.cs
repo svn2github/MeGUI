@@ -38,7 +38,8 @@ namespace MeGUI
 
     public class NeroAACSettings : AudioCodecSettings
 	{
-		public NeroAACSettings() : base()
+        public static readonly string ID = "Nero AAC";
+		public NeroAACSettings() : base(ID)
 		{
             Quality = 0.5M;
             Profile = AacProfile.Auto;

@@ -20,7 +20,7 @@ namespace MeGUI.core.details.video
 
         private bool loaded;
         private int introEndFrame = 0, creditsStartFrame = 0;
-        protected string input = "", output = "", encoderPath = "";
+        protected string input = "input", output = "output", encoderPath = "program";
         #endregion
         protected ToolTip tooltipHelp;
         private IContainer components;
@@ -34,14 +34,9 @@ namespace MeGUI.core.details.video
         {
             loaded = false;
             InitializeComponent();
-            zonesControl.UpdateGUIEvent += new ZonesControl.UpdateConfigGUI(genericUpdate);
-            zonesControl.MainForm = mainForm;
 
             input = info.VideoInput;
-            zonesControl.Input = input;
             output = info.VideoOutput;
-            zonesControl.IntroEndFrame = info.IntroEndFrame;
-            zonesControl.CreditsStartFrame = info.CreditsStartFrame;
         }
 
         private void VideoConfigurationPanel_Load(object sender, EventArgs e)
@@ -49,11 +44,6 @@ namespace MeGUI.core.details.video
             loaded = true;
             doCodecSpecificLoadAdjustments();
             genericUpdate();
-        }
-
-        private void VideoConfigurationPanel_VisibleChanged(object sender, EventArgs e)
-        {
-            if (!Visible) zonesControl.closePlayer();
         }
 
         #endregion
@@ -133,65 +123,14 @@ namespace MeGUI.core.details.video
             set { bytesPerFrame = value; }
         }
 
-        /// <summary>
-        /// sets the video input (for commandline generation and zone previews)
-        /// </summary>
-        public string Input
-        {
-            set
-            {
-                this.input = value;
-                zonesControl.Input = value;
-            }
-        }
-        /// <summary>
-        ///  sets the video output (for commandline generation)
-        /// </summary>
-        public string Output
-        {
-            set { this.output = value; }
-        }
-        /// <summary>
-        /// sets the path of besweet
-        /// </summary>
-        public string EncoderPath
-        {
-            set { this.encoderPath = value; }
-        }
-        /// <summary>
-        /// gets / sets the start frame of the credits
-        /// </summary>
-        public int CreditsStartFrame
-        {
-            get { return this.creditsStartFrame; }
-            set { creditsStartFrame = value; }
-        }
-        /// <summary>
-        /// gets / sets the end frame of the intro
-        /// </summary>
-        public int IntroEndFrame
-        {
-            get { return this.introEndFrame; }
-            set { introEndFrame = value; }
-        }
-        /// <summary>
-        /// gets / sets the zones of the video
-        /// </summary>
-        public Zone[] Zones
-        {
-            get { return zonesControl.Zones; }
-            set { zonesControl.Zones = value; }
-        }
         #endregion
-        
-        
-        
-        
+
+
+
+
         protected TabControl tabControl1;
-        protected TabPage zoneTabPage;
         protected TextBox commandline;
         protected TabPage mainTabPage;
-        protected ZonesControl zonesControl;
     
 
         private void InitializeComponent()
@@ -199,12 +138,9 @@ namespace MeGUI.core.details.video
             this.components = new System.ComponentModel.Container();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.mainTabPage = new System.Windows.Forms.TabPage();
-            this.zoneTabPage = new System.Windows.Forms.TabPage();
-            this.zonesControl = new MeGUI.ZonesControl();
             this.commandline = new System.Windows.Forms.TextBox();
             this.tooltipHelp = new System.Windows.Forms.ToolTip(this.components);
             this.tabControl1.SuspendLayout();
-            this.zoneTabPage.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -213,7 +149,6 @@ namespace MeGUI.core.details.video
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.mainTabPage);
-            this.tabControl1.Controls.Add(this.zoneTabPage);
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -225,33 +160,10 @@ namespace MeGUI.core.details.video
             this.mainTabPage.Location = new System.Drawing.Point(4, 22);
             this.mainTabPage.Name = "mainTabPage";
             this.mainTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.mainTabPage.Size = new System.Drawing.Size(319, 318);
+            this.mainTabPage.Size = new System.Drawing.Size(360, 318);
             this.mainTabPage.TabIndex = 0;
             this.mainTabPage.Text = "Main";
             this.mainTabPage.UseVisualStyleBackColor = true;
-            // 
-            // zoneTabPage
-            // 
-            this.zoneTabPage.Controls.Add(this.zonesControl);
-            this.zoneTabPage.Location = new System.Drawing.Point(4, 22);
-            this.zoneTabPage.Name = "zoneTabPage";
-            this.zoneTabPage.Size = new System.Drawing.Size(360, 318);
-            this.zoneTabPage.TabIndex = 2;
-            this.zoneTabPage.Text = "Zones";
-            this.zoneTabPage.UseVisualStyleBackColor = true;
-            // 
-            // zonesControl
-            // 
-            this.zonesControl.AutoSize = true;
-            this.zonesControl.CreditsStartFrame = 0;
-            this.zonesControl.Input = "";
-            this.zonesControl.IntroEndFrame = 0;
-            this.zonesControl.Location = new System.Drawing.Point(0, 3);
-            this.zonesControl.MainForm = null;
-            this.zonesControl.Name = "zonesControl";
-            this.zonesControl.Size = new System.Drawing.Size(319, 286);
-            this.zonesControl.TabIndex = 0;
-            this.zonesControl.Zones = new MeGUI.Zone[0];
             // 
             // commandline
             // 
@@ -278,11 +190,8 @@ namespace MeGUI.core.details.video
             this.Controls.Add(this.tabControl1);
             this.Name = "VideoConfigurationPanel";
             this.Size = new System.Drawing.Size(372, 409);
-            this.VisibleChanged += new System.EventHandler(this.VideoConfigurationPanel_VisibleChanged);
             this.Load += new System.EventHandler(this.VideoConfigurationPanel_Load);
             this.tabControl1.ResumeLayout(false);
-            this.zoneTabPage.ResumeLayout(false);
-            this.zoneTabPage.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 

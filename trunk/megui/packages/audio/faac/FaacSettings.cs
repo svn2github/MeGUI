@@ -27,6 +27,8 @@ namespace MeGUI
 	/// </summary>
 	public class FaacSettings : AudioCodecSettings
 	{
+        public static string ID = "FAAC";
+
         public static readonly int[] SupportedBitrates = new int[] {
             64,
             80,
@@ -42,7 +44,7 @@ namespace MeGUI
             448};
 
 		private decimal quality;
-		public FaacSettings() : base()
+		public FaacSettings() : base(ID)
 		{
 			Quality = 100;
             Bitrate = 128;

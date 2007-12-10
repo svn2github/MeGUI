@@ -35,7 +35,15 @@ namespace MeGUI
             this.trackTabPage1 = new System.Windows.Forms.TabPage();
             this.audio1 = new MeGUI.packages.tools.oneclick.AudioConfigControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.splitting = new MeGUI.core.gui.TargetSizeSCBox();
+            this.avsBox = new System.Windows.Forms.GroupBox();
+            this.avsProfile = new MeGUI.core.gui.ConfigableProfilesControl();
+            this.ar = new MeGUI.core.gui.ARChooser();
+            this.autoDeint = new System.Windows.Forms.CheckBox();
+            this.signalAR = new System.Windows.Forms.CheckBox();
+            this.outputResolutionLabel = new System.Windows.Forms.Label();
+            this.horizontalResolution = new System.Windows.Forms.NumericUpDown();
+            this.label2 = new System.Windows.Forms.Label();
+            this.ARLabel = new System.Windows.Forms.Label();
             this.locationGroupBox = new System.Windows.Forms.GroupBox();
             this.chapterFile = new MeGUI.FileBar();
             this.workingDirectory = new MeGUI.FileBar();
@@ -43,14 +51,7 @@ namespace MeGUI
             this.workingDirectoryLabel = new System.Windows.Forms.Label();
             this.workingName = new System.Windows.Forms.TextBox();
             this.projectNameLabel = new System.Windows.Forms.Label();
-            this.avsBox = new System.Windows.Forms.GroupBox();
-            this.ar = new MeGUI.core.gui.ARChooser();
-            this.profileControl1 = new MeGUI.core.details.video.ProfileControl();
-            this.autoDeint = new System.Windows.Forms.CheckBox();
-            this.signalAR = new System.Windows.Forms.CheckBox();
-            this.outputResolutionLabel = new System.Windows.Forms.Label();
-            this.horizontalResolution = new System.Windows.Forms.NumericUpDown();
-            this.ARLabel = new System.Windows.Forms.Label();
+            this.splitting = new MeGUI.core.gui.TargetSizeSCBox();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.IOGroupbox = new System.Windows.Forms.GroupBox();
             this.output = new MeGUI.FileBar();
@@ -58,8 +59,9 @@ namespace MeGUI
             this.outputLabel = new System.Windows.Forms.Label();
             this.inputLabel = new System.Windows.Forms.Label();
             this.targetGroupBox = new System.Windows.Forms.GroupBox();
+            this.oneclickProfile = new MeGUI.core.gui.ConfigableProfilesControl();
             this.optionalTargetSizeBox1 = new MeGUI.core.gui.TargetSizeSCBox();
-            this.profileControl2 = new MeGUI.core.details.video.ProfileControl();
+            this.label3 = new System.Windows.Forms.Label();
             this.filesizeLabel = new System.Windows.Forms.Label();
             this.audioGroupbox = new System.Windows.Forms.GroupBox();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -77,10 +79,9 @@ namespace MeGUI
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.videoGroupBox = new System.Windows.Forms.GroupBox();
-            this.videoProfileControl = new MeGUI.core.details.video.ProfileControl();
+            this.label4 = new System.Windows.Forms.Label();
+            this.videoProfile = new MeGUI.core.gui.ConfigableProfilesControl();
             this.addPrerenderJob = new System.Windows.Forms.CheckBox();
-            this.videoCodecLabel = new System.Windows.Forms.Label();
-            this.videoCodec = new System.Windows.Forms.ComboBox();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.showAdvancedOptions = new System.Windows.Forms.CheckBox();
             this.goButton = new System.Windows.Forms.Button();
@@ -90,9 +91,9 @@ namespace MeGUI
             trackTabPage2.SuspendLayout();
             this.trackTabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
-            this.locationGroupBox.SuspendLayout();
             this.avsBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.horizontalResolution)).BeginInit();
+            this.locationGroupBox.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.IOGroupbox.SuspendLayout();
             this.targetGroupBox.SuspendLayout();
@@ -112,7 +113,7 @@ namespace MeGUI
             trackTabPage2.Location = new System.Drawing.Point(4, 22);
             trackTabPage2.Name = "trackTabPage2";
             trackTabPage2.Padding = new System.Windows.Forms.Padding(3);
-            trackTabPage2.Size = new System.Drawing.Size(423, 94);
+            trackTabPage2.Size = new System.Drawing.Size(172, 94);
             trackTabPage2.TabIndex = 1;
             trackTabPage2.Text = "Audio track 2";
             trackTabPage2.UseVisualStyleBackColor = true;
@@ -122,14 +123,14 @@ namespace MeGUI
             this.audio2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.audio2.Location = new System.Drawing.Point(3, 3);
             this.audio2.Name = "audio2";
-            this.audio2.Size = new System.Drawing.Size(417, 88);
+            this.audio2.Size = new System.Drawing.Size(166, 88);
             this.audio2.TabIndex = 0;
             this.audio2.SomethingChanged += new System.EventHandler(this.audio1_SomethingChanged);
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new System.Drawing.Point(24, 245);
+            label1.Location = new System.Drawing.Point(24, 236);
             label1.Name = "label1";
             label1.Size = new System.Drawing.Size(47, 13);
             label1.TabIndex = 37;
@@ -141,7 +142,7 @@ namespace MeGUI
             this.trackTabPage1.Location = new System.Drawing.Point(4, 22);
             this.trackTabPage1.Name = "trackTabPage1";
             this.trackTabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.trackTabPage1.Size = new System.Drawing.Size(423, 94);
+            this.trackTabPage1.Size = new System.Drawing.Size(433, 94);
             this.trackTabPage1.TabIndex = 0;
             this.trackTabPage1.Text = "Audio track 1";
             this.trackTabPage1.UseVisualStyleBackColor = true;
@@ -151,16 +152,16 @@ namespace MeGUI
             this.audio1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.audio1.Location = new System.Drawing.Point(3, 3);
             this.audio1.Name = "audio1";
-            this.audio1.Size = new System.Drawing.Size(417, 88);
+            this.audio1.Size = new System.Drawing.Size(427, 88);
             this.audio1.TabIndex = 0;
             this.audio1.SomethingChanged += new System.EventHandler(this.audio1_SomethingChanged);
             // 
             // tabPage2
             // 
-            this.tabPage2.Controls.Add(label1);
-            this.tabPage2.Controls.Add(this.splitting);
-            this.tabPage2.Controls.Add(this.locationGroupBox);
             this.tabPage2.Controls.Add(this.avsBox);
+            this.tabPage2.Controls.Add(label1);
+            this.tabPage2.Controls.Add(this.locationGroupBox);
+            this.tabPage2.Controls.Add(this.splitting);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -169,141 +170,45 @@ namespace MeGUI
             this.tabPage2.Text = "Advanced Config";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // splitting
-            // 
-            this.splitting.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.splitting.Location = new System.Drawing.Point(128, 237);
-            this.splitting.MaximumSize = new System.Drawing.Size(1000, 29);
-            this.splitting.MinimumSize = new System.Drawing.Size(64, 29);
-            this.splitting.Name = "splitting";
-            this.splitting.NullString = "No splitting";
-            this.splitting.SelectedIndex = 0;
-            this.splitting.Size = new System.Drawing.Size(221, 29);
-            this.splitting.TabIndex = 38;
-            // 
-            // locationGroupBox
-            // 
-            this.locationGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.locationGroupBox.Controls.Add(this.chapterFile);
-            this.locationGroupBox.Controls.Add(this.workingDirectory);
-            this.locationGroupBox.Controls.Add(this.chapterLabel);
-            this.locationGroupBox.Controls.Add(this.workingDirectoryLabel);
-            this.locationGroupBox.Controls.Add(this.workingName);
-            this.locationGroupBox.Controls.Add(this.projectNameLabel);
-            this.locationGroupBox.Location = new System.Drawing.Point(8, 6);
-            this.locationGroupBox.Name = "locationGroupBox";
-            this.locationGroupBox.Size = new System.Drawing.Size(437, 95);
-            this.locationGroupBox.TabIndex = 23;
-            this.locationGroupBox.TabStop = false;
-            this.locationGroupBox.Text = "Extra IO";
-            // 
-            // chapterFile
-            // 
-            this.chapterFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.chapterFile.Filename = "";
-            this.chapterFile.Filter = "Chapter files (*.txt)|*.txt";
-            this.chapterFile.FolderMode = false;
-            this.chapterFile.Location = new System.Drawing.Point(120, 38);
-            this.chapterFile.Name = "chapterFile";
-            this.chapterFile.ReadOnly = true;
-            this.chapterFile.SaveMode = false;
-            this.chapterFile.Size = new System.Drawing.Size(301, 26);
-            this.chapterFile.TabIndex = 39;
-            this.chapterFile.Title = null;
-            // 
-            // workingDirectory
-            // 
-            this.workingDirectory.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.workingDirectory.Filename = "";
-            this.workingDirectory.Filter = null;
-            this.workingDirectory.FolderMode = true;
-            this.workingDirectory.Location = new System.Drawing.Point(120, 8);
-            this.workingDirectory.Name = "workingDirectory";
-            this.workingDirectory.ReadOnly = true;
-            this.workingDirectory.SaveMode = false;
-            this.workingDirectory.Size = new System.Drawing.Size(301, 26);
-            this.workingDirectory.TabIndex = 38;
-            this.workingDirectory.Title = null;
-            this.workingDirectory.FileSelected += new MeGUI.FileBarEventHandler(this.workingDirectory_FileSelected);
-            // 
-            // chapterLabel
-            // 
-            this.chapterLabel.Location = new System.Drawing.Point(16, 41);
-            this.chapterLabel.Name = "chapterLabel";
-            this.chapterLabel.Size = new System.Drawing.Size(100, 13);
-            this.chapterLabel.TabIndex = 36;
-            this.chapterLabel.Text = "Chapter file";
-            // 
-            // workingDirectoryLabel
-            // 
-            this.workingDirectoryLabel.Location = new System.Drawing.Point(16, 15);
-            this.workingDirectoryLabel.Name = "workingDirectoryLabel";
-            this.workingDirectoryLabel.Size = new System.Drawing.Size(100, 13);
-            this.workingDirectoryLabel.TabIndex = 32;
-            this.workingDirectoryLabel.Text = "Working Directory";
-            // 
-            // workingName
-            // 
-            this.workingName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.workingName.Location = new System.Drawing.Point(120, 64);
-            this.workingName.Name = "workingName";
-            this.workingName.Size = new System.Drawing.Size(301, 20);
-            this.workingName.TabIndex = 30;
-            this.workingName.TextChanged += new System.EventHandler(this.workingName_TextChanged);
-            // 
-            // projectNameLabel
-            // 
-            this.projectNameLabel.Location = new System.Drawing.Point(16, 67);
-            this.projectNameLabel.Name = "projectNameLabel";
-            this.projectNameLabel.Size = new System.Drawing.Size(73, 16);
-            this.projectNameLabel.TabIndex = 31;
-            this.projectNameLabel.Text = "Project Name";
-            // 
             // avsBox
             // 
-            this.avsBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.avsBox.Controls.Add(this.avsProfile);
             this.avsBox.Controls.Add(this.ar);
-            this.avsBox.Controls.Add(this.profileControl1);
             this.avsBox.Controls.Add(this.autoDeint);
             this.avsBox.Controls.Add(this.signalAR);
             this.avsBox.Controls.Add(this.outputResolutionLabel);
             this.avsBox.Controls.Add(this.horizontalResolution);
+            this.avsBox.Controls.Add(this.label2);
             this.avsBox.Controls.Add(this.ARLabel);
-            this.avsBox.Location = new System.Drawing.Point(8, 107);
+            this.avsBox.Dock = System.Windows.Forms.DockStyle.Top;
+            this.avsBox.Location = new System.Drawing.Point(3, 98);
             this.avsBox.Name = "avsBox";
-            this.avsBox.Size = new System.Drawing.Size(437, 124);
+            this.avsBox.Size = new System.Drawing.Size(447, 124);
             this.avsBox.TabIndex = 23;
             this.avsBox.TabStop = false;
             this.avsBox.Text = "AviSynth setup";
+            // 
+            // avsProfile
+            // 
+            this.avsProfile.Location = new System.Drawing.Point(123, 73);
+            this.avsProfile.Name = "avsProfile";
+            this.avsProfile.ProfileSet = "AviSynth";
+            this.avsProfile.Size = new System.Drawing.Size(319, 22);
+            this.avsProfile.TabIndex = 23;
             // 
             // ar
             // 
             this.ar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.ar.CustomDARs = new MeGUI.core.util.Dar[0];
             this.ar.HasLater = true;
             this.ar.Location = new System.Drawing.Point(120, 42);
             this.ar.MaximumSize = new System.Drawing.Size(1000, 29);
             this.ar.MinimumSize = new System.Drawing.Size(64, 29);
             this.ar.Name = "ar";
             this.ar.SelectedIndex = 0;
-            this.ar.Size = new System.Drawing.Size(213, 29);
+            this.ar.Size = new System.Drawing.Size(325, 29);
             this.ar.TabIndex = 22;
-            // 
-            // profileControl1
-            // 
-            this.profileControl1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.profileControl1.LabelText = "AVS profile";
-            this.profileControl1.Location = new System.Drawing.Point(19, 69);
-            this.profileControl1.Name = "profileControl1";
-            this.profileControl1.Size = new System.Drawing.Size(402, 29);
-            this.profileControl1.TabIndex = 21;
             // 
             // autoDeint
             // 
@@ -318,7 +223,7 @@ namespace MeGUI
             // signalAR
             // 
             this.signalAR.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.signalAR.Location = new System.Drawing.Point(339, 43);
+            this.signalAR.Location = new System.Drawing.Point(349, 43);
             this.signalAR.Name = "signalAR";
             this.signalAR.Size = new System.Drawing.Size(82, 24);
             this.signalAR.TabIndex = 5;
@@ -359,6 +264,15 @@ namespace MeGUI
             0,
             0});
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(15, 78);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(78, 13);
+            this.label2.TabIndex = 4;
+            this.label2.Text = "Avisynth profile";
+            // 
             // ARLabel
             // 
             this.ARLabel.Location = new System.Drawing.Point(16, 48);
@@ -366,6 +280,101 @@ namespace MeGUI
             this.ARLabel.Size = new System.Drawing.Size(24, 13);
             this.ARLabel.TabIndex = 4;
             this.ARLabel.Text = "AR:";
+            // 
+            // locationGroupBox
+            // 
+            this.locationGroupBox.Controls.Add(this.chapterFile);
+            this.locationGroupBox.Controls.Add(this.workingDirectory);
+            this.locationGroupBox.Controls.Add(this.chapterLabel);
+            this.locationGroupBox.Controls.Add(this.workingDirectoryLabel);
+            this.locationGroupBox.Controls.Add(this.workingName);
+            this.locationGroupBox.Controls.Add(this.projectNameLabel);
+            this.locationGroupBox.Dock = System.Windows.Forms.DockStyle.Top;
+            this.locationGroupBox.Location = new System.Drawing.Point(3, 3);
+            this.locationGroupBox.Name = "locationGroupBox";
+            this.locationGroupBox.Size = new System.Drawing.Size(447, 95);
+            this.locationGroupBox.TabIndex = 23;
+            this.locationGroupBox.TabStop = false;
+            this.locationGroupBox.Text = "Extra IO";
+            // 
+            // chapterFile
+            // 
+            this.chapterFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.chapterFile.Filename = "";
+            this.chapterFile.Filter = "Chapter files (*.txt)|*.txt";
+            this.chapterFile.FolderMode = false;
+            this.chapterFile.Location = new System.Drawing.Point(120, 38);
+            this.chapterFile.Name = "chapterFile";
+            this.chapterFile.ReadOnly = true;
+            this.chapterFile.SaveMode = false;
+            this.chapterFile.Size = new System.Drawing.Size(321, 26);
+            this.chapterFile.TabIndex = 39;
+            this.chapterFile.Title = null;
+            // 
+            // workingDirectory
+            // 
+            this.workingDirectory.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.workingDirectory.Filename = "";
+            this.workingDirectory.Filter = null;
+            this.workingDirectory.FolderMode = true;
+            this.workingDirectory.Location = new System.Drawing.Point(120, 15);
+            this.workingDirectory.Name = "workingDirectory";
+            this.workingDirectory.ReadOnly = true;
+            this.workingDirectory.SaveMode = false;
+            this.workingDirectory.Size = new System.Drawing.Size(321, 26);
+            this.workingDirectory.TabIndex = 38;
+            this.workingDirectory.Title = null;
+            this.workingDirectory.FileSelected += new MeGUI.FileBarEventHandler(this.workingDirectory_FileSelected);
+            // 
+            // chapterLabel
+            // 
+            this.chapterLabel.Location = new System.Drawing.Point(16, 41);
+            this.chapterLabel.Name = "chapterLabel";
+            this.chapterLabel.Size = new System.Drawing.Size(100, 13);
+            this.chapterLabel.TabIndex = 36;
+            this.chapterLabel.Text = "Chapter file";
+            // 
+            // workingDirectoryLabel
+            // 
+            this.workingDirectoryLabel.Location = new System.Drawing.Point(16, 15);
+            this.workingDirectoryLabel.Name = "workingDirectoryLabel";
+            this.workingDirectoryLabel.Size = new System.Drawing.Size(100, 13);
+            this.workingDirectoryLabel.TabIndex = 32;
+            this.workingDirectoryLabel.Text = "Working Directory";
+            // 
+            // workingName
+            // 
+            this.workingName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.workingName.Location = new System.Drawing.Point(120, 64);
+            this.workingName.Name = "workingName";
+            this.workingName.Size = new System.Drawing.Size(324, 20);
+            this.workingName.TabIndex = 30;
+            this.workingName.TextChanged += new System.EventHandler(this.workingName_TextChanged);
+            // 
+            // projectNameLabel
+            // 
+            this.projectNameLabel.Location = new System.Drawing.Point(16, 67);
+            this.projectNameLabel.Name = "projectNameLabel";
+            this.projectNameLabel.Size = new System.Drawing.Size(73, 16);
+            this.projectNameLabel.TabIndex = 31;
+            this.projectNameLabel.Text = "Project Name";
+            // 
+            // splitting
+            // 
+            this.splitting.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.splitting.CustomSizes = new MeGUI.core.util.FileSize[0];
+            this.splitting.Location = new System.Drawing.Point(123, 228);
+            this.splitting.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.splitting.MinimumSize = new System.Drawing.Size(64, 29);
+            this.splitting.Name = "splitting";
+            this.splitting.NullString = "No splitting";
+            this.splitting.SelectedIndex = 0;
+            this.splitting.Size = new System.Drawing.Size(162, 29);
+            this.splitting.TabIndex = 38;
             // 
             // tabPage1
             // 
@@ -450,8 +459,9 @@ namespace MeGUI
             // 
             this.targetGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.targetGroupBox.Controls.Add(this.oneclickProfile);
             this.targetGroupBox.Controls.Add(this.optionalTargetSizeBox1);
-            this.targetGroupBox.Controls.Add(this.profileControl2);
+            this.targetGroupBox.Controls.Add(this.label3);
             this.targetGroupBox.Controls.Add(this.filesizeLabel);
             this.targetGroupBox.Location = new System.Drawing.Point(8, 184);
             this.targetGroupBox.Name = "targetGroupBox";
@@ -461,10 +471,20 @@ namespace MeGUI
             this.targetGroupBox.Text = "Target";
             this.targetGroupBox.Enter += new System.EventHandler(this.targetGroupBox_Enter);
             // 
+            // oneclickProfile
+            // 
+            this.oneclickProfile.Location = new System.Drawing.Point(123, 19);
+            this.oneclickProfile.Name = "oneclickProfile";
+            this.oneclickProfile.ProfileSet = "OneClick";
+            this.oneclickProfile.Size = new System.Drawing.Size(298, 22);
+            this.oneclickProfile.TabIndex = 25;
+            this.oneclickProfile.SelectedProfileChanged += new System.EventHandler(this.OneClickProfileChanged);
+            // 
             // optionalTargetSizeBox1
             // 
             this.optionalTargetSizeBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.optionalTargetSizeBox1.CustomSizes = new MeGUI.core.util.FileSize[0];
             this.optionalTargetSizeBox1.Location = new System.Drawing.Point(125, 43);
             this.optionalTargetSizeBox1.MaximumSize = new System.Drawing.Size(1000, 29);
             this.optionalTargetSizeBox1.MinimumSize = new System.Drawing.Size(64, 29);
@@ -474,15 +494,14 @@ namespace MeGUI
             this.optionalTargetSizeBox1.Size = new System.Drawing.Size(298, 29);
             this.optionalTargetSizeBox1.TabIndex = 24;
             // 
-            // profileControl2
+            // label3
             // 
-            this.profileControl2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.profileControl2.LabelText = "One Click profile";
-            this.profileControl2.Location = new System.Drawing.Point(21, 12);
-            this.profileControl2.Name = "profileControl2";
-            this.profileControl2.Size = new System.Drawing.Size(402, 29);
-            this.profileControl2.TabIndex = 23;
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(16, 24);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(81, 13);
+            this.label3.TabIndex = 21;
+            this.label3.Text = "OneClick profile";
             // 
             // filesizeLabel
             // 
@@ -512,20 +531,20 @@ namespace MeGUI
             this.addTrackToolStripMenuItem,
             this.removeTrackToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(147, 48);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(141, 48);
             this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             // 
             // addTrackToolStripMenuItem
             // 
             this.addTrackToolStripMenuItem.Name = "addTrackToolStripMenuItem";
-            this.addTrackToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.addTrackToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.addTrackToolStripMenuItem.Text = "Add track";
             this.addTrackToolStripMenuItem.Click += new System.EventHandler(this.addTrackToolStripMenuItem_Click);
             // 
             // removeTrackToolStripMenuItem
             // 
             this.removeTrackToolStripMenuItem.Name = "removeTrackToolStripMenuItem";
-            this.removeTrackToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.removeTrackToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.removeTrackToolStripMenuItem.Text = "Remove track";
             this.removeTrackToolStripMenuItem.Click += new System.EventHandler(this.removeTrackToolStripMenuItem_Click);
             // 
@@ -618,9 +637,10 @@ namespace MeGUI
             // 
             // containerFormatLabel
             // 
+            this.containerFormatLabel.AutoSize = true;
             this.containerFormatLabel.Location = new System.Drawing.Point(15, 242);
             this.containerFormatLabel.Name = "containerFormatLabel";
-            this.containerFormatLabel.Size = new System.Drawing.Size(92, 13);
+            this.containerFormatLabel.Size = new System.Drawing.Size(87, 13);
             this.containerFormatLabel.TabIndex = 38;
             this.containerFormatLabel.Text = "Container Format";
             // 
@@ -629,21 +649,20 @@ namespace MeGUI
             this.containerFormat.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.containerFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.containerFormat.Location = new System.Drawing.Point(124, 238);
+            this.containerFormat.Location = new System.Drawing.Point(124, 239);
             this.containerFormat.Name = "containerFormat";
-            this.containerFormat.Size = new System.Drawing.Size(135, 21);
+            this.containerFormat.Size = new System.Drawing.Size(127, 21);
             this.containerFormat.TabIndex = 37;
             this.containerFormat.SelectedIndexChanged += new System.EventHandler(this.containerFormat_SelectedIndexChanged_1);
             // 
             // groupBox1
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.ContextMenuStrip = this.contextMenuStrip1;
             this.groupBox1.Controls.Add(this.tabControl2);
-            this.groupBox1.Location = new System.Drawing.Point(8, 89);
+            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBox1.Location = new System.Drawing.Point(3, 80);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(437, 139);
+            this.groupBox1.Size = new System.Drawing.Size(447, 139);
             this.groupBox1.TabIndex = 35;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Audio";
@@ -656,63 +675,50 @@ namespace MeGUI
             this.tabControl2.Location = new System.Drawing.Point(3, 16);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
-            this.tabControl2.Size = new System.Drawing.Size(431, 120);
+            this.tabControl2.Size = new System.Drawing.Size(441, 120);
             this.tabControl2.TabIndex = 32;
             // 
             // videoGroupBox
             // 
-            this.videoGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.videoGroupBox.Controls.Add(this.videoProfileControl);
+            this.videoGroupBox.Controls.Add(this.label4);
+            this.videoGroupBox.Controls.Add(this.videoProfile);
             this.videoGroupBox.Controls.Add(this.addPrerenderJob);
-            this.videoGroupBox.Controls.Add(this.videoCodecLabel);
-            this.videoGroupBox.Controls.Add(this.videoCodec);
-            this.videoGroupBox.Location = new System.Drawing.Point(8, 6);
+            this.videoGroupBox.Dock = System.Windows.Forms.DockStyle.Top;
+            this.videoGroupBox.Location = new System.Drawing.Point(3, 3);
             this.videoGroupBox.Name = "videoGroupBox";
-            this.videoGroupBox.Size = new System.Drawing.Size(437, 77);
+            this.videoGroupBox.Size = new System.Drawing.Size(447, 77);
             this.videoGroupBox.TabIndex = 31;
             this.videoGroupBox.TabStop = false;
-            this.videoGroupBox.Text = "Video";
+            this.videoGroupBox.Text = "Video Settings";
             // 
-            // videoProfileControl
+            // label4
             // 
-            this.videoProfileControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.videoProfileControl.LabelText = "Video Profile";
-            this.videoProfileControl.Location = new System.Drawing.Point(12, 42);
-            this.videoProfileControl.Name = "videoProfileControl";
-            this.videoProfileControl.Size = new System.Drawing.Size(415, 29);
-            this.videoProfileControl.TabIndex = 17;
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(12, 24);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(66, 13);
+            this.label4.TabIndex = 38;
+            this.label4.Text = "Video Profile";
+            // 
+            // videoProfile
+            // 
+            this.videoProfile.Location = new System.Drawing.Point(121, 19);
+            this.videoProfile.Name = "videoProfile";
+            this.videoProfile.ProfileSet = "Video";
+            this.videoProfile.Size = new System.Drawing.Size(319, 22);
+            this.videoProfile.TabIndex = 17;
+            this.videoProfile.SelectedProfileChanged += new System.EventHandler(this.ProfileChanged);
             // 
             // addPrerenderJob
             // 
             this.addPrerenderJob.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.addPrerenderJob.AutoSize = true;
-            this.addPrerenderJob.Location = new System.Drawing.Point(259, 22);
+            this.addPrerenderJob.Location = new System.Drawing.Point(121, 47);
             this.addPrerenderJob.Name = "addPrerenderJob";
             this.addPrerenderJob.Size = new System.Drawing.Size(127, 17);
             this.addPrerenderJob.TabIndex = 16;
             this.addPrerenderJob.Text = "Add pre-rendering job";
             this.addPrerenderJob.UseVisualStyleBackColor = true;
-            // 
-            // videoCodecLabel
-            // 
-            this.videoCodecLabel.Location = new System.Drawing.Point(9, 18);
-            this.videoCodecLabel.Name = "videoCodecLabel";
-            this.videoCodecLabel.Size = new System.Drawing.Size(100, 23);
-            this.videoCodecLabel.TabIndex = 7;
-            this.videoCodecLabel.Text = "Codec";
-            this.videoCodecLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // videoCodec
-            // 
-            this.videoCodec.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.videoCodec.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.videoCodec.Location = new System.Drawing.Point(116, 20);
-            this.videoCodec.Name = "videoCodec";
-            this.videoCodec.Size = new System.Drawing.Size(130, 21);
-            this.videoCodec.TabIndex = 8;
             // 
             // openFileDialog
             // 
@@ -768,20 +774,22 @@ namespace MeGUI
             this.trackTabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
-            this.locationGroupBox.ResumeLayout(false);
-            this.locationGroupBox.PerformLayout();
             this.avsBox.ResumeLayout(false);
             this.avsBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.horizontalResolution)).EndInit();
+            this.locationGroupBox.ResumeLayout(false);
+            this.locationGroupBox.PerformLayout();
             this.tabPage1.ResumeLayout(false);
             this.IOGroupbox.ResumeLayout(false);
             this.targetGroupBox.ResumeLayout(false);
+            this.targetGroupBox.PerformLayout();
             this.audioGroupbox.ResumeLayout(false);
             this.contextMenuStrip1.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.tabControl1.ResumeLayout(false);
             this.encoderConfigTab.ResumeLayout(false);
+            this.encoderConfigTab.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.tabControl2.ResumeLayout(false);
             this.videoGroupBox.ResumeLayout(false);
@@ -819,17 +827,12 @@ namespace MeGUI
         private System.Windows.Forms.TabPage encoderConfigTab;
         private System.Windows.Forms.GroupBox videoGroupBox;
         private System.Windows.Forms.CheckBox addPrerenderJob;
-        private System.Windows.Forms.Label videoCodecLabel;
-        private System.Windows.Forms.ComboBox videoCodec;
         private System.Windows.Forms.CheckBox showAdvancedOptions;
         private System.Windows.Forms.Button goButton;
-        private MeGUI.core.details.video.ProfileControl profileControl1;
-        private MeGUI.core.details.video.ProfileControl videoProfileControl;
         private FileBar input;
         private FileBar output;
         private FileBar workingDirectory;
         private FileBar chapterFile;
-        private MeGUI.core.details.video.ProfileControl profileControl2;
         private MeGUI.core.gui.HelpButton helpButton1;
         private System.Windows.Forms.TabControl tabControl2;
         private MeGUI.packages.tools.oneclick.AudioConfigControl audio1;
@@ -847,6 +850,12 @@ namespace MeGUI
         private MeGUI.core.gui.TargetSizeSCBox splitting;
         private System.Windows.Forms.Label containerFormatLabel;
         private System.Windows.Forms.ComboBox containerFormat;
+        private MeGUI.core.gui.ConfigableProfilesControl oneclickProfile;
+        private MeGUI.core.gui.ConfigableProfilesControl videoProfile;
+        private MeGUI.core.gui.ConfigableProfilesControl avsProfile;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
 
 
     }

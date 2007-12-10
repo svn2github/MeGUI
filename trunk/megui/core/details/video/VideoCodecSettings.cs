@@ -29,6 +29,9 @@ namespace MeGUI
 	[XmlInclude(typeof(lavcSettings)), XmlInclude(typeof(x264Settings)), XmlInclude(typeof(snowSettings)), XmlInclude(typeof(xvidSettings)), XmlInclude(typeof(hfyuSettings))]
     public abstract class VideoCodecSettings : MeGUI.core.plugins.interfaces.GenericSettings
 	{
+        private string id;
+        public string SettingsID { get { return id; } }
+
         public virtual void setAdjustedNbThreads(int nbThreads)
         {
             NbThreads = nbThreads;
@@ -44,10 +47,6 @@ namespace MeGUI
             return base.GetHashCode();
         }
 
-        public string getSettingsType()
-        {
-            return "Video";
-        }
         public enum Mode : int { CBR = 0, CQ, twopass1, twopass2, twopassAutomated, threepass1, threepass2, threepass3, threepassAutomated, quality };
         int encodingMode, bitrateQuantizer, keyframeInterval, nbBframes, minQuantizer, maxQuantizer, fourCC,
             maxNumberOfPasses, nbThreads;
@@ -56,27 +55,30 @@ namespace MeGUI
 		private string logfile, customEncoderOptions;
 		private Zone[] zones;
         private string[] fourCCs;
+        private VideoEncoderType vet;
 
         public abstract bool UsesSAR
         {
             get;
         }
 
-		public VideoCodecSettings()
+		public VideoCodecSettings(string id, VideoEncoderType vet)
 		{
+            this.id = id;
+            this.vet = vet;
 			logfile = ".stats";
 			customEncoderOptions = "";
 			fourCC = 0;
             nbThreads = 1;
 			zones = new Zone[0];
 		}
-        public abstract VideoCodec Codec
+        public VideoCodec Codec
         {
-            get;
+            get { return EncoderType.VCodec; }
         }
-        public abstract VideoEncoderType EncoderType
+        public VideoEncoderType EncoderType
         {
-            get;
+            get { return vet; }
         }
 		public int EncodingMode
 		{

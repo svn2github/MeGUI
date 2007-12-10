@@ -347,9 +347,7 @@ namespace MeGUI.core.details
         public void loadJobs()
         {
             string jobsPath = mainForm.MeGUIPath + "\\jobs\\";
-            if (!Directory.Exists(jobsPath))
-                Directory.CreateDirectory(jobsPath);
-            DirectoryInfo di = new DirectoryInfo(mainForm.MeGUIPath + "\\jobs\\");
+            DirectoryInfo di = FileUtil.ensureDirectoryExists(jobsPath);
             FileInfo[] files = di.GetFiles("*.xml");
             foreach (FileInfo fi in files)
             {

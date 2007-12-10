@@ -788,14 +788,14 @@ namespace MeGUI
                 return;
             }
 #warning must be fixed up to be more generic
-            if (info.Video.CurrentVideoCodecSettings.EncodingMode == 2 || info.Video.CurrentVideoCodecSettings.EncodingMode == 5)
+            if (info.Video.CurrentSettings.EncodingMode == 2 || info.Video.CurrentSettings.EncodingMode == 5)
             {
                 MessageBox.Show("First pass encoding is not supported for automated encoding as no output is generated.\nPlease choose another encoding mode", "Improper configuration",
                     MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return;
             }
 
-            VideoCodecSettings vSettings = info.Video.CurrentVideoCodecSettings.clone();
+            VideoCodecSettings vSettings = info.Video.CurrentSettings.clone();
             bool cont = info.JobUtil.getFinalZoneConfiguration(vSettings, info.Video.Info.IntroEndFrame, info.Video.Info.CreditsStartFrame);
             if (cont)
             {

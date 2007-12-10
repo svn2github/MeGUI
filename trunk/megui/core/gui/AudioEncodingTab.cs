@@ -21,53 +21,6 @@ namespace MeGUI.core.gui
         /// </summary>
         public Setter<AudioJob> QueueJob;
 
-        #region handlers
-        private FileTypeHandler<AudioType> fileTypeHandler;
-        public FileTypeHandler<AudioType> FileTypeHandler
-        {
-            get { return fileTypeHandler; }
-        }
-
-        private ProfilesControlHandler<AudioCodecSettings, string[]> profileHandler;
-        public ProfilesControlHandler<AudioCodecSettings, string[]> ProfileHandler
-        {
-            get { return profileHandler; }
-        }
-
-        private MultipleConfigurersHandler<AudioCodecSettings, string[], AudioCodec, AudioEncoderType> codecHandler;
-        public MultipleConfigurersHandler<AudioCodecSettings, string[], AudioCodec, AudioEncoderType> CodecHandler
-        {
-            get { return codecHandler; }
-        }
-        #endregion
-        
-        #region init
-        public void InitializeDropdowns()
-        {
-            audioCodec.Items.Clear();
-            audioCodec.Items.AddRange(MainForm.Instance.PackageSystem.AudioSettingsProviders.ValuesArray);
-            try { audioCodec.SelectedItem = MainForm.Instance.PackageSystem.AudioSettingsProviders["NAAC"]; }
-            catch (Exception)
-            {
-                try { audioCodec.SelectedIndex = 0; }
-                catch (Exception) { MessageBox.Show("No valid audio codecs are set up", "No valid audio codecs", MessageBoxButtons.OK, MessageBoxIcon.Error); }
-            }
-
-            fileTypeHandler = new FileTypeHandler<AudioType>(audioContainer, audioCodec, new FileTypeHandler<AudioType>.SupportedOutputGetter(delegate
-            {
-                return audioEncoderProvider.GetSupportedOutput(codecHandler.CurrentSettingsProvider.EncoderType);
-            }));
-
-            codecHandler = new MultipleConfigurersHandler<AudioCodecSettings, string[], AudioCodec, AudioEncoderType>(audioCodec);
-
-            profileHandler = new ProfilesControlHandler<AudioCodecSettings, string[]>("Audio", MainForm.Instance, profileControl1, codecHandler.EditSettings,
-                new InfoGetter<string[]>(delegate { return new string[] { AudioInput, AudioOutput }; }), codecHandler.Getter, codecHandler.Setter);
-
-            codecHandler.Register(profileHandler);
-            fileTypeHandler.RefreshFiletypes();
-        }
-        #endregion
-
         public string QueueButtonText
         {
             get { return queueAudioButton.Text; }
@@ -96,14 +49,11 @@ namespace MeGUI.core.gui
         {
             get
             {
-                if (string.IsNullOrEmpty(profileHandler.SelectedProfile))
-                    return codecHandler.CurrentSettingsProvider.GetCurrentSettings();
-                else
-                    return (AudioCodecSettings)profileHandler.CurrentProfile.BaseSettings;
+                return (AudioCodecSettings)audioProfile.SelectedProfile.BaseSettings;
             }
             private set
             {
-                codecHandler.Setter(value);
+                audioProfile.SetSettings(value);
             }
         }
 
@@ -162,6 +112,7 @@ namespace MeGUI.core.gui
         public AudioEncodingTab()
         {
             InitializeComponent();
+            audioProfile.Manager = MainForm.Instance.Profiles;
         }
 
 
@@ -243,12 +194,18 @@ namespace MeGUI.core.gui
             this.AudioOutput = "";
             this.delay.Value = 0;
         }
-
-        internal void RefreshProfiles()
-        {
-            profileHandler.RefreshProfiles();
-        }
         #endregion
+
+
+        private AudioEncoderType lastCodec = null;
+        private void audioProfile_SelectedProfileChanged(object sender, EventArgs e)
+        {
+            if (lastCodec == AudCodecSettings.EncoderType)
+                return;
+
+            lastCodec = AudCodecSettings.EncoderType;
+            Util.ChangeItemsKeepingSelectedSame(audioContainer, AudioEncoderProvider.GetSupportedOutput(lastCodec));
+        }
 
     }
 }

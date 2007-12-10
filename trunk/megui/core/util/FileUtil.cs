@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using ICSharpCode.SharpZipLib.Zip;
 
 namespace MeGUI.core.util
 {
@@ -9,12 +10,76 @@ namespace MeGUI.core.util
 
     class FileUtil
     {
-        public static void ensureDirectoryExists(string p)
+        public static DirectoryInfo CreateTempDirectory()
         {
-            if (Directory.Exists(p)) return;
+            while (true)
+            {
+                string file = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+
+                if (!File.Exists(file) && !Directory.Exists(file))
+                {
+                    MainForm.Instance.DeleteOnClosing(file);
+                    return Directory.CreateDirectory(file);
+                }
+            }
+        }
+
+        public static void CreateZipFile(string path, string filename)
+        {
+            using (ZipOutputStream outputFile = new ZipOutputStream(File.OpenWrite(filename)))
+            {
+                foreach (string file in FileUtil.AllFiles(path))
+                {
+                    ZipEntry newEntry = new ZipEntry(file.Substring(path.Length).TrimStart('\\', '/'));
+                    outputFile.PutNextEntry(newEntry);
+                    FileStream input = File.OpenRead(file);
+                    FileUtil.copyData(input, outputFile);
+                    input.Close();
+                }
+            }
+        }
+
+        public static void ExtractZipFile(string file, string extractFolder)
+        {
+            ExtractZipFile(File.OpenRead(file), extractFolder);
+        }
+
+        public static void ExtractZipFile(Stream s, string extractFolder)
+        {
+            using (ZipFile inputFile = new ZipFile(s))
+            {
+                foreach (ZipEntry entry in inputFile)
+                {
+                    string pathname = Path.Combine(extractFolder, entry.Name);
+                    if (entry.IsDirectory)
+                    {
+                        Directory.CreateDirectory(pathname);
+                    }
+                    else // entry.isFile
+                    {
+                        System.Diagnostics.Debug.Assert(entry.IsFile);
+                        FileUtil.ensureDirectoryExists(Path.GetDirectoryName(pathname));
+                        Stream outputStream = File.OpenWrite(pathname);
+                        FileUtil.copyData(inputFile.GetInputStream(entry), outputStream);
+                        outputStream.Close();
+                    }
+                }
+            }
+        }
+
+        public static void DeleteDirectoryIfExists(string p, bool recursive)
+        {
+            if (Directory.Exists(p))
+                Directory.Delete(p, recursive);
+        }
+
+
+        public static DirectoryInfo ensureDirectoryExists(string p)
+        {
+            if (Directory.Exists(p)) return new DirectoryInfo(p);
             if (string.IsNullOrEmpty(p)) throw new IOException("Can't create directory");
             ensureDirectoryExists(Path.GetDirectoryName(p));
-            Directory.CreateDirectory(p);
+            return Directory.CreateDirectory(p);
         }
         /// <summary>
         /// Generates a filename not in the list

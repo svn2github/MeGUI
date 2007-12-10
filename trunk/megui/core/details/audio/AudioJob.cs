@@ -65,7 +65,7 @@ namespace MeGUI
 		{
 			get
 			{
-                return Settings.getSettingsType();
+                return Settings.SettingsID;
 			}
 		}
 

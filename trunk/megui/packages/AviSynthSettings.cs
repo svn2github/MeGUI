@@ -8,6 +8,9 @@ namespace MeGUI
 	/// </summary>
     public sealed class AviSynthSettings : GenericSettings
 	{
+        public static string ID = "AviSynth";
+        public string SettingsID { get { return ID; } }
+
         public void FixFileNames(System.Collections.Generic.Dictionary<string, string> _) { }
 
         public override bool Equals(object obj)
@@ -20,10 +23,6 @@ namespace MeGUI
             return base.GetHashCode();
         }
 
-        public string getSettingsType()
-        {
-            return "AviSynth";
-        }
         private string template;
         private ResizeFilterType resizeMethod;
         private DenoiseFilterType denoiseMethod;

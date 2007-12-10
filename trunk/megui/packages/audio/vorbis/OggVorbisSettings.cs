@@ -6,8 +6,10 @@ namespace MeGUI
 {
     public class OggVorbisSettings: AudioCodecSettings
 	{
+        public static readonly string ID = "Vorbis";
+
         public OggVorbisSettings()
-            : base()
+            : base(ID)
 		{
             this.Quality = 1.0M;
             this.Codec = AudioCodec.VORBIS;

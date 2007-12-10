@@ -29,15 +29,18 @@ namespace MeGUI
         List<AudioConfigControl> audioConfigControl;
 
         #region profiles
-        void ProfileChanged(object sender, Profile prof)
+        void ProfileChanged(object sender, EventArgs e)
         {
             updatePossibleContainers();
         }
 
         #region OneClick profiles
-        ISettingsProvider<OneClickSettings, Empty, int, int> oneClickSettingsProvider = new SettingsProviderImpl2<
-    MeGUI.packages.tools.oneclick.OneClickConfigPanel, Empty, OneClickSettings, OneClickSettings, int, int>("OneClick", 0, 0);
         private void initOneClickHandler()
+        {
+            oneclickProfile.Manager = mainForm.Profiles;
+        }
+
+        private void initTabs()
         {
             audioTrack = new List<FileSCBox>();
             audioTrack.Add(audioTrack1);
@@ -50,81 +53,17 @@ namespace MeGUI
             audioConfigControl = new List<AudioConfigControl>();
             audioConfigControl.Add(audio1);
             audioConfigControl.Add(audio2);
-
-            // Init oneclick handlers
-            ProfilesControlHandler<OneClickSettings, Empty> profileHandler = new ProfilesControlHandler<OneClickSettings, Empty>(
-    "OneClick", mainForm, profileControl2, oneClickSettingsProvider.EditSettings, Empty.Getter,
-    new SettingsGetter<OneClickSettings>(oneClickSettingsProvider.GetCurrentSettings), new SettingsSetter<OneClickSettings>(oneClickSettingsProvider.LoadSettings));
-            SingleConfigurerHandler<OneClickSettings, Empty, int, int> configurerHandler = new SingleConfigurerHandler<OneClickSettings, Empty, int, int>(profileHandler, oneClickSettingsProvider);
-            profileHandler.ProfileChanged += new SelectedProfileChangedEvent(OneClickProfileChanged);
-            profileHandler.ConfigureCompleted += new EventHandler(profileHandler_ConfigureCompleted);
-            profileHandler.RefreshProfiles();
-            
-            
         }
 
-        private void refreshAssistingProfiles()
+        void OneClickProfileChanged(object sender, EventArgs e)
         {
-            videoProfileHandler.RefreshProfiles();
-            audio1.RefreshProfiles();
-            audio2.RefreshProfiles();
-            avsProfileHandler.RefreshProfiles();
-        }
-
-        void profileHandler_ConfigureCompleted(object sender, EventArgs e)
-        {
-            refreshAssistingProfiles();
-        }
-
-        void OneClickProfileChanged(object sender, Profile prof)
-        {
-            if (prof != null)
-            {
-                this.Settings = ((OneClickSettings)prof.BaseSettings);
-            }
+            this.Settings = (OneClickSettings)oneclickProfile.SelectedProfile.BaseSettings;
         } 
-        #endregion
-        #region AVS profiles
-        ISettingsProvider<AviSynthSettings, MeGUI.core.details.video.Empty, int, int> avsSettingsProvider = new SettingsProviderImpl2<
-    MeGUI.core.gui.AviSynthProfileConfigPanel, MeGUI.core.details.video.Empty, AviSynthSettings, AviSynthSettings, int, int>("AviSynth", 0, 0);
-        ProfilesControlHandler<AviSynthSettings, Empty> avsProfileHandler; 
-        private void initAvsHandler()
-        {
-            // Init AVS handlers
-            avsProfileHandler = new ProfilesControlHandler<AviSynthSettings, Empty>(
-    "AviSynth", mainForm, profileControl1, avsSettingsProvider.EditSettings, Empty.Getter,
-    new SettingsGetter<AviSynthSettings>(avsSettingsProvider.GetCurrentSettings), new SettingsSetter<AviSynthSettings>(avsSettingsProvider.LoadSettings));
-            SingleConfigurerHandler<AviSynthSettings, Empty, int, int> configurerHandler = new SingleConfigurerHandler<AviSynthSettings, Empty, int, int>(avsProfileHandler, avsSettingsProvider);
-        }
         #endregion
         #region Video profiles
         private VideoCodecSettings VideoSettings
         {
-            get { return VideoSettingsProvider.GetCurrentSettings(); }
-        }
-        private ISettingsProvider<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> VideoSettingsProvider
-        {
-            get { return videoCodecHandler.CurrentSettingsProvider; }
-        }
-        MultipleConfigurersHandler<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> videoCodecHandler;
-        ProfilesControlHandler<VideoCodecSettings, VideoInfo> videoProfileHandler;
-        private void initVideoHandler()
-        {
-            this.videoCodec.Items.AddRange(mainForm.PackageSystem.VideoSettingsProviders.ValuesArray);
-            try
-            {
-                this.videoCodec.SelectedItem = mainForm.PackageSystem.VideoSettingsProviders["x264"];
-            }
-            catch (Exception) { }
-            // Init Video handlers
-            videoCodecHandler =
-                new MultipleConfigurersHandler<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>(videoCodec);
-            videoProfileHandler =
-                new ProfilesControlHandler<VideoCodecSettings, VideoInfo>("Video", mainForm, videoProfileControl,
-                videoCodecHandler.EditSettings, new InfoGetter<VideoInfo>(delegate() { return new VideoInfo(); }),
-                videoCodecHandler.Getter, videoCodecHandler.Setter);
-            videoCodecHandler.Register(videoProfileHandler);
-            videoProfileHandler.ProfileChanged += new SelectedProfileChangedEvent(ProfileChanged);
+            get { return (VideoCodecSettings)videoProfile.SelectedProfile.BaseSettings; }
         }
         #endregion
         #region Audio profiles
@@ -168,9 +107,11 @@ namespace MeGUI
 
             InitializeComponent();
 
-            initVideoHandler();
+            initTabs();
+
+            videoProfile.Manager = mainForm.Profiles;
             initAudioHandler();
-            initAvsHandler();
+            avsProfile.Manager = mainForm.Profiles;
             initOneClickHandler();
 
             audioTrack1.StandardItems = audioTrack2.StandardItems = new object[] { "None" };
@@ -332,7 +273,7 @@ namespace MeGUI
             }
 
             List<ContainerType> tempSupportedOutputTypes = this.muxProvider.GetSupportedContainers(
-                VideoSettingsProvider.EncoderType, audioCodecs.ToArray(), dictatedOutputTypes.ToArray());
+                VideoSettings.EncoderType, audioCodecs.ToArray(), dictatedOutputTypes.ToArray());
 
             List<ContainerType> supportedOutputTypes = new List<ContainerType>();
 
@@ -376,30 +317,11 @@ namespace MeGUI
             {
                 OneClickSettings settings = value;
 
-                refreshAssistingProfiles();
+                foreach (AudioConfigControl a in audioConfigControl)
+                    a.SelectProfileNameOrWarn(settings.AudioProfileName);
 
-                // Do extra defaults config (same code as in OneClickDefaultWindow)
-                // strings
-                try
-                {
-                    foreach (AudioConfigControl a in audioConfigControl)
-                        a.SelectedProfile = settings.AudioProfileName;
-                }
-                catch (ProfileCouldntBeSelectedException e)
-                {
-                    MessageBox.Show("The audio profile '" + e.ProfileName + "' could not be properly configured. Presumably the profile no longer exists.", "Some options misconfigured", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-                
-                try { videoProfileHandler.SelectedProfile = settings.VideoProfileName; }
-                catch (ProfileCouldntBeSelectedException e)
-                {
-                    MessageBox.Show("The video profile '" + e.ProfileName + "' could not be properly configured. Presumably the profile no longer exists.", "Some options misconfigured", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-                try { avsProfileHandler.SelectedProfile = settings.AvsProfileName; }
-                catch (ProfileCouldntBeSelectedException e)
-                {
-                    MessageBox.Show("The Avisynth profile '" + e.ProfileName + "' could not be properly configured. Presumably the profile no longer exists.", "Some options misconfigured", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
+                videoProfile.SetProfileNameOrWarn(settings.VideoProfileName);
+                avsProfile.SetProfileNameOrWarn(settings.AvsProfileName);
 
                 List<ContainerType> temp = new List<ContainerType>();
                 List<ContainerType> allContainerTypes = muxProvider.GetSupportedContainers();
@@ -433,13 +355,12 @@ namespace MeGUI
             }
         }
 
-
+        //private VideoCodecSettings VideoSettings { get { throw new Exception(); } }
 
         private void goButton_Click(object sender, EventArgs e)
         {
             if ((verifyAudioSettings() == null)
                 && (VideoSettings != null) 
-                && (avsSettingsProvider.GetCurrentSettings() != null)
                 && !string.IsNullOrEmpty(input.Filename)
                 && !string.IsNullOrEmpty(workingName.Text))
             {
@@ -476,7 +397,7 @@ namespace MeGUI
                 dpp.DirectMuxAudio = muxOnlyAudio.ToArray();
                 dpp.AudioJobs = aJobs.ToArray();
                 dpp.AutoDeinterlace = autoDeint.Checked;
-                dpp.AvsSettings = avsSettingsProvider.GetCurrentSettings();
+                dpp.AvsSettings = (AviSynthSettings)avsProfile.SelectedProfile.BaseSettings;
                 dpp.ChapterFile = chapterFile.Filename;
                 dpp.Container = (ContainerType)containerFormat.SelectedItem;
                 dpp.FinalOutput = output.Filename;
@@ -617,6 +538,7 @@ namespace MeGUI
         {
             RemoveTrack();
         }
+
     }
     public class OneClickTool : MeGUI.core.plugins.interfaces.ITool
     {

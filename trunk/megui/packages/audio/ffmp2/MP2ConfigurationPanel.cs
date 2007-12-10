@@ -8,10 +8,9 @@ using System.Windows.Forms;
 
 namespace MeGUI.packages.audio.ffmp2
 {
-    public partial class MP2ConfigurationPanel : MeGUI.core.details.audio.AudioConfigurationPanel
+    public partial class MP2ConfigurationPanel : MeGUI.core.details.audio.AudioConfigurationPanel, Editable<MP2Settings>
     {
-        public MP2ConfigurationPanel(MainForm mainForm, string[] info)
-            : base(mainForm, info)
+        public MP2ConfigurationPanel():base() 
         {
             InitializeComponent();
             comboBox1.Items.AddRange(MP2Settings.SupportedBitrates);
@@ -44,6 +43,25 @@ namespace MeGUI.packages.audio.ffmp2
             }
         }
         #endregion
+
+        #region Editable<MP2Settings> Members
+
+        MP2Settings Editable<MP2Settings>.Settings
+        {
+            get
+            {
+                return (MP2Settings)Settings;
+            }
+            set
+            {
+                Settings = value;
+            }
+        }
+
+        #endregion
     }
 }
+
+
+
 

@@ -8,10 +8,9 @@ using System.Windows.Forms;
 
 namespace MeGUI.packages.audio.audx
 {
-    public partial class AudXConfigurationPanel : MeGUI.core.details.audio.AudioConfigurationPanel
+    public partial class AudXConfigurationPanel : MeGUI.core.details.audio.AudioConfigurationPanel, Editable<AudXSettings>
     {
-        public AudXConfigurationPanel(MainForm mainForm, string[] info)
-            : base(mainForm, info)
+        public AudXConfigurationPanel():base()
         {
             InitializeComponent();
             comboBox1.Items.AddRange(EnumProxy.CreateArray(typeof(AudXSettings.QualityMode)));
@@ -43,6 +42,25 @@ namespace MeGUI.packages.audio.audx
             }
         }
         #endregion
+
+        #region Editable<AudXSettings> Members
+
+        AudXSettings Editable<AudXSettings>.Settings
+        {
+            get
+            {
+                return (AudXSettings)Settings;
+            }
+            set
+            {
+                Settings = value;
+            }
+        }
+
+        #endregion
     }
 }
+
+
+
 

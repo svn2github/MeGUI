@@ -147,7 +147,6 @@ namespace MeGUI.packages.video.x264
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.customCommandlineOptions = new System.Windows.Forms.TextBox();
             this.tabControl1.SuspendLayout();
-            this.zoneTabPage.SuspendLayout();
             this.mainTabPage.SuspendLayout();
             this.x264GeneralMiscGroupbox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.x264NbThreads)).BeginInit();
@@ -195,19 +194,9 @@ namespace MeGUI.packages.video.x264
             this.tabControl1.Controls.Add(this.quantizationTabPage);
             this.tabControl1.Size = new System.Drawing.Size(510, 429);
             this.tabControl1.TabIndex = 0;
-            this.tabControl1.Controls.SetChildIndex(this.zoneTabPage, 0);
             this.tabControl1.Controls.SetChildIndex(this.quantizationTabPage, 0);
             this.tabControl1.Controls.SetChildIndex(this.rateControlTabPage, 0);
             this.tabControl1.Controls.SetChildIndex(this.mainTabPage, 0);
-            // 
-            // zoneTabPage
-            // 
-            this.zoneTabPage.Controls.Add(this.customCommandlineOptionsLabel);
-            this.zoneTabPage.Controls.Add(this.customCommandlineOptions);
-            this.zoneTabPage.Size = new System.Drawing.Size(502, 403);
-            this.zoneTabPage.Controls.SetChildIndex(this.customCommandlineOptions, 0);
-            this.zoneTabPage.Controls.SetChildIndex(this.customCommandlineOptionsLabel, 0);
-            this.zoneTabPage.Controls.SetChildIndex(this.zonesControl, 0);
             // 
             // commandline
             // 
@@ -224,13 +213,6 @@ namespace MeGUI.packages.video.x264
             this.mainTabPage.Controls.Add(this.x264CodecToolsGroupbox);
             this.mainTabPage.Controls.Add(this.x264CodecGeneralGroupbox);
             this.mainTabPage.Size = new System.Drawing.Size(502, 403);
-            // 
-            // zonesControl
-            // 
-            this.zonesControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.zonesControl.MinimumSize = new System.Drawing.Size(323, 289);
-            this.zonesControl.Size = new System.Drawing.Size(499, 289);
             // 
             // x264GeneralMiscGroupbox
             // 
@@ -1806,8 +1788,6 @@ namespace MeGUI.packages.video.x264
             this.Controls.SetChildIndex(this.tabControl1, 0);
             this.Controls.SetChildIndex(this.commandline, 0);
             this.tabControl1.ResumeLayout(false);
-            this.zoneTabPage.ResumeLayout(false);
-            this.zoneTabPage.PerformLayout();
             this.mainTabPage.ResumeLayout(false);
             this.x264GeneralMiscGroupbox.ResumeLayout(false);
             this.x264GeneralMiscGroupbox.PerformLayout();

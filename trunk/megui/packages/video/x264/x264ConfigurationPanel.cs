@@ -12,13 +12,8 @@ using MeGUI.core.plugins.interfaces;
 
 namespace MeGUI.packages.video.x264
 {
-    public partial class x264ConfigurationPanel : MeGUI.core.details.video.VideoConfigurationPanel, Gettable<VideoCodecSettings>
+    public partial class x264ConfigurationPanel : MeGUI.core.details.video.VideoConfigurationPanel, Editable<x264Settings>
     {
-        public x264ConfigurationPanel()
-        {
-            InitializeComponent();
-        }
-
         #region variables
         public static bool levelEnforced; // flag to prevent recursion in EnforceLevels. There's probably a better way to do this.
         private XmlDocument ContextHelp = new XmlDocument();
@@ -26,12 +21,12 @@ namespace MeGUI.packages.video.x264
 
 
         #region start / stop
-        public x264ConfigurationPanel(MainForm mainForm, VideoInfo info)
-            : base(mainForm, info)
+        public x264ConfigurationPanel()
+            : base()
         {
             InitializeComponent();
             cqmComboBox1.StandardItems = new string[] { "Flat (none)", "JVT" };
-            this.AdvancedToolTips = mainForm.Settings.UseAdvancedTooltips;
+            this.AdvancedToolTips = MainForm.Instance.Settings.UseAdvancedTooltips;
             AVCLevels al = new AVCLevels();
             this.avcLevel.Items.AddRange(al.getLevels());
         }
@@ -455,7 +450,7 @@ namespace MeGUI.packages.video.x264
         /// <summary>
         /// gets / sets the settings currently displayed on the GUI
         /// </summary>
-        public VideoCodecSettings Settings
+        public x264Settings Settings
         {
             get
             {
@@ -521,7 +516,6 @@ namespace MeGUI.packages.video.x264
                 xs.Logfile = this.logfile.Text;
                 xs.AdaptiveDCT = adaptiveDCT.Checked;
                 xs.CustomEncoderOptions = customCommandlineOptions.Text;
-                xs.Zones = this.Zones;
                 if (cqmComboBox1.SelectedIndex > 1)
                     xs.QuantizerMatrixType = 2;
                 else
@@ -536,7 +530,7 @@ namespace MeGUI.packages.video.x264
             }
             set
             {  // Warning! The ordering of components matters because of the dependency code!
-                x264Settings xs = (x264Settings)value;
+                x264Settings xs = value;
                 deadzoneInter.Value = xs.DeadZoneInter;
                 deadzoneIntra.Value = xs.DeadZoneIntra;
                 interlaced.Checked = xs.EncodeInterlaced;
@@ -601,7 +595,6 @@ namespace MeGUI.packages.video.x264
                 x264MinGOPSize.Text = xs.MinGOPSize.ToString();
                 customCommandlineOptions.Text = xs.CustomEncoderOptions;
                 this.logfile.Text = xs.Logfile;
-                this.Zones = xs.Zones;
                 cqmComboBox1.SelectedObject = xs.QuantizerMatrix;
                 x264LosslessMode.Checked = xs.Lossless;
                 psnr.Checked = xs.PSNRCalculation;
@@ -885,4 +878,7 @@ namespace MeGUI.packages.video.x264
         }
     }
 }
+
+
+
 

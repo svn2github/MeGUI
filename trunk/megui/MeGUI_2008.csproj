@@ -191,6 +191,7 @@
     </Content>
     <Content Include="MessageBoxExLib.dll" />
     <Compile Include="core\details\0_2_6_1017_jobloader\Job.cs" />
+    <Compile Include="core\details\0_2_6_x_profileloader\Loader.cs" />
     <Compile Include="core\details\audio\AudioCodecSettings.cs" />
     <Compile Include="core\details\audio\AudioConfigurationPanel.cs">
       <SubType>UserControl</SubType>
@@ -296,6 +297,12 @@
     <Compile Include="core\gui\AviSynthProfileConfigPanel.Designer.cs">
       <DependentUpon>AviSynthProfileConfigPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="core\gui\ConfigableProfilesControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="core\gui\ConfigableProfilesControl.Designer.cs">
+      <DependentUpon>ConfigableProfilesControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="core\gui\CountdownWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -371,11 +378,23 @@
     <Compile Include="core\gui\NumberChooser.Designer.cs">
       <DependentUpon>NumberChooser.cs</DependentUpon>
     </Compile>
-    <Compile Include="core\gui\ProfileControl.cs">
-      <SubType>UserControl</SubType>
+    <Compile Include="core\gui\ProfileConfigurationWindow.cs">
+      <SubType>Form</SubType>
     </Compile>
-    <Compile Include="core\gui\ProfileControl.Designer.cs">
-      <DependentUpon>ProfileControl.cs</DependentUpon>
+    <Compile Include="core\gui\ProfileConfigurationWindow.Designer.cs">
+      <DependentUpon>ProfileConfigurationWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="core\gui\ProfileExporter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="core\gui\ProfileExporter.Designer.cs">
+      <DependentUpon>ProfileExporter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="core\gui\ProfileImporter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="core\gui\ProfileImporter.Designer.cs">
+      <DependentUpon>ProfileImporter.cs</DependentUpon>
     </Compile>
     <Compile Include="core\gui\ProfilePorter.cs">
       <SubType>Form</SubType>
@@ -384,7 +403,6 @@
       <DependentUpon>ProfilePorter.cs</DependentUpon>
     </Compile>
     <Compile Include="core\gui\Profiles.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="core\gui\ProgressWindow.cs">
       <SubType>Form</SubType>
@@ -392,6 +410,12 @@
     <Compile Include="core\gui\ProgressWindowInfo.cs" />
     <Compile Include="core\gui\SettingsForm.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="core\gui\SimpleProfilesControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="core\gui\SimpleProfilesControl.Designer.cs">
+      <DependentUpon>SimpleProfilesControl.cs</DependentUpon>
     </Compile>
     <Compile Include="core\gui\StandardAndCustomComboBox.cs">
       <SubType>UserControl</SubType>
@@ -706,6 +730,10 @@
       <SubType>Designer</SubType>
       <DependentUpon>AviSynthProfileConfigPanel.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="core\gui\ConfigableProfilesControl.resx">
+      <DependentUpon>ConfigableProfilesControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="core\gui\CountdownWindow.resx">
       <SubType>Designer</SubType>
       <DependentUpon>CountdownWindow.cs</DependentUpon>
@@ -754,8 +782,12 @@
       <SubType>Designer</SubType>
       <DependentUpon>NumberChooser.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="core\gui\ProfileControl.resx">
-      <DependentUpon>ProfileControl.cs</DependentUpon>
+    <EmbeddedResource Include="core\gui\ProfileExporter.resx">
+      <DependentUpon>ProfileExporter.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="core\gui\ProfileImporter.resx">
+      <DependentUpon>ProfileImporter.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="core\gui\ProfilePorter.resx">
@@ -772,6 +804,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="core\gui\SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="core\gui\SimpleProfilesControl.resx">
+      <DependentUpon>SimpleProfilesControl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="core\gui\TextViewer.resx">

@@ -6,10 +6,11 @@ namespace MeGUI
 {
     public class AftenSettings : AudioCodecSettings
     {
+        public static readonly string ID = "Aften AC-3";
         public static readonly object[] SupportedBitrates = new object[] {64, 128, 160, 192, 224, 256, 288, 320, 352, 384, 448, 512, 576, 640};
 
         public AftenSettings()
-            : base()
+            : base(ID)
         {
             this.Bitrate = 384;
             this.Codec = AudioCodec.AC3;

@@ -8,10 +8,9 @@ using System.Windows.Forms;
 
 namespace MeGUI.packages.audio.ffac3
 {
-    public partial class AC3ConfigurationPanel : MeGUI.core.details.audio.AudioConfigurationPanel
+    public partial class AC3ConfigurationPanel : MeGUI.core.details.audio.AudioConfigurationPanel, Editable<AC3Settings>
     {
-        public AC3ConfigurationPanel(MainForm mainForm, string[] info)
-            : base(mainForm, info)
+        public AC3ConfigurationPanel():base()
         {
             InitializeComponent();
             comboBox1.Items.AddRange(AC3Settings.SupportedBitrates);
@@ -36,6 +35,25 @@ namespace MeGUI.packages.audio.ffac3
             }
         }
         #endregion
+
+        #region Editable<AC3Settings> Members
+
+        AC3Settings Editable<AC3Settings>.Settings
+        {
+            get
+            {
+                return (AC3Settings)Settings;
+            }
+            set
+            {
+                Settings = value;
+            }
+        }
+
+        #endregion
     }
 }
+
+
+
 
