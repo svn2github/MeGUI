@@ -4,6 +4,30 @@ using System.Text;
 
 namespace MeGUI.core.util
 {
+    public static class Tuple
+    {
+        public static Tuple<A, B, C, D, E, F> Create<A, B, C, D, E, F>(A a, B b, C c, D d, E e, F f)
+        {
+            return new Tuple<A, B, C, D, E, F>(a, b, c, d, e, f);
+        }
+        public static Tuple<A, B, C, D, E> Create<A, B, C, D, E>(A a, B b, C c, D d, E e)
+        {
+            return new Tuple<A, B, C, D, E>(a, b, c, d, e);
+        }
+        public static Tuple<A, B, C, D> Create<A, B, C, D>(A a, B b, C c, D d)
+        {
+            return new Tuple<A, B, C, D>(a, b, c, d);
+        }
+        public static Tuple<A, B, C> Create<A, B, C>(A a, B b, C c)
+        {
+            return new Tuple<A, B, C>(a, b, c);
+        }
+        public static Tuple<A, B> Create<A, B>(A a, B b)
+        {
+            return new Tuple<A, B>(a, b);
+        }
+    }
+
     public class Tuple<A, B>
     {
         public A a;
