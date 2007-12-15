@@ -528,7 +528,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                         script.AppendFormat("WavSource(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
                         break;
                     case ".dts":
-                        script.AppendFormat("NicDtsSource(\"{0}\")", audioJob.Input);
+                        script.AppendFormat("NicDtsSource(\"{0}\"", audioJob.Input);
                         if (audioJob.Settings.AutoGain)
                             script.AppendFormat(", DRC=1){0}", Environment.NewLine);
                         else
