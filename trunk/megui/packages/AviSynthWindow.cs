@@ -490,9 +490,9 @@ namespace MeGUI
             // 
             // crop
             // 
-            this.crop.Location = new System.Drawing.Point(11, 37);
+            this.crop.Location = new System.Drawing.Point(11, 28);
             this.crop.Name = "crop";
-            this.crop.Size = new System.Drawing.Size(80, 17);
+            this.crop.Size = new System.Drawing.Size(97, 42);
             this.crop.TabIndex = 2;
             this.crop.Text = "Crop";
             this.crop.CheckedChanged += new System.EventHandler(this.crop_CheckedChanged);
@@ -634,6 +634,7 @@ namespace MeGUI
             // 
             // arChooser
             // 
+            this.arChooser.CustomDARs = new MeGUI.core.util.Dar[0];
             this.arChooser.HasLater = false;
             this.arChooser.Location = new System.Drawing.Point(96, 88);
             this.arChooser.MaximumSize = new System.Drawing.Size(1000, 29);
