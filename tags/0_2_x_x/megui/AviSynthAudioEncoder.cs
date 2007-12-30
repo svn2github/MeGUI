@@ -548,10 +548,10 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 }
             }
             if (directShow)
+            {
                 script.AppendFormat("DirectShowSource(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
-
-            script.AppendFormat("EnsureVBRMP3Sync(){0}", Environment.NewLine);
-
+                script.AppendFormat("EnsureVBRMP3Sync(){0}", Environment.NewLine);
+            }
 
             if (audioJob.Delay != 0)
                 script.AppendFormat("DelayAudio({0}.0/1000.0){1}", audioJob.Delay, Environment.NewLine);
