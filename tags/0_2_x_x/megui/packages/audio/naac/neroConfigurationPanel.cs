@@ -198,6 +198,7 @@ namespace MeGUI.packages.audio.naac
         private void rbtnABR_CheckedChanged(object sender, EventArgs e)
         {
             vBitrate.Enabled = !(vQuality.Enabled = rbtnVBR.Checked);
+            vBitrate_ValueChanged(sender, e);
         }
 
         private void vBitrate_ValueChanged(object sender, EventArgs e)
