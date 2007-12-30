@@ -782,104 +782,115 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             }
 
             script.AppendFormat("ConvertAudioTo16bit(){0}", Environment.NewLine);
+            script.AppendLine(@"return last");
 
-
-            script.AppendLine(
-@"
-
-return last
-
+            // copy the appropriate function at the end of the script
+            switch (audioJob.Settings.DownmixMode)
+            {
+                case ChannelMode.KeepOriginal:
+                    break;
+                case ChannelMode.ConvertToMono:
+                    break;
+                case ChannelMode.DPLDownmix:
+                    script.AppendLine(@"
 function x_dpl" + id + @"(clip a) 
-{
-	fl = GetChannel(a, 1)
-	fr = GetChannel(a, 2)
-	c = GetChannel(a, 3)
-	sl = GetChannel(a, 5)
-	sr = GetChannel(a, 6)
-	ssr = MixAudio(sl, sr, 0.2222, 0.2222)
-	ssl = Amplify(ssr, -1.0)
-	fl_c = MixAudio(fl, c, 0.3254, 0.2301)
-	fr_c = MixAudio(fr, c, 0.3254, 0.2301)
-	l = MixAudio(ssl, fl_c, 1.0, 1.0)
-	r = MixAudio(ssr, fr_c, 1.0, 1.0)
-	return MergeChannels(l, r)
-}
-
+  {
+     fl = GetChannel(a, 1)
+     fr = GetChannel(a, 2)
+     c = GetChannel(a, 3)
+     sl = GetChannel(a, 5)
+     sr = GetChannel(a, 6)
+     ssr = MixAudio(sl, sr, 0.2222, 0.2222)
+     ssl = Amplify(ssr, -1.0)
+     fl_c = MixAudio(fl, c, 0.3254, 0.2301)
+     fr_c = MixAudio(fr, c, 0.3254, 0.2301)
+     l = MixAudio(ssl, fl_c, 1.0, 1.0)
+     r = MixAudio(ssr, fr_c, 1.0, 1.0)
+     return MergeChannels(l, r)
+  }");
+                    break;
+                case ChannelMode.DPLIIDownmix:
+                    script.AppendLine(@"
 function x_dpl2" + id + @"(clip a) 
-{
-	fl = GetChannel(a, 1)
-	fr = GetChannel(a, 2)
-	c = GetChannel(a, 3)
-	sl = GetChannel(a, 5)
-	sr = GetChannel(a, 6)
-	ssl = MixAudio(sl, sr, 0.2818, 0.1627).Amplify(-1.0)
-	fl_c = MixAudio(fl, c, 0.3254, 0.2301)
-	ssr = MixAudio(sl, sr, 0.1627, 0.2818)
-	fr_c = MixAudio(fr, c, 0.3254, 0.2301)
-	l = MixAudio(ssl, fl_c, 1.0, 1.0)
-	r = MixAudio(ssr, fr_c, 1.0, 1.0)
-	return MergeChannels(l, r)
-}
-
+  {
+     fl = GetChannel(a, 1)
+     fr = GetChannel(a, 2)
+     c = GetChannel(a, 3)
+     sl = GetChannel(a, 5)
+     sr = GetChannel(a, 6)
+     ssl = MixAudio(sl, sr, 0.2818, 0.1627).Amplify(-1.0)
+     fl_c = MixAudio(fl, c, 0.3254, 0.2301)
+     ssr = MixAudio(sl, sr, 0.1627, 0.2818)
+     fr_c = MixAudio(fr, c, 0.3254, 0.2301)
+     l = MixAudio(ssl, fl_c, 1.0, 1.0)
+     r = MixAudio(ssr, fr_c, 1.0, 1.0)
+     return MergeChannels(l, r)
+  }");
+                    break;
+                case ChannelMode.StereoDownmix:
+                    script.AppendLine(@"
 function x_stereo" + id + @"(clip a) 
-{
-	fl = GetChannel(a, 1)
-	fr = GetChannel(a, 2)
-	c = GetChannel(a, 3)
-	lfe = GetChannel(a, 4)
-	sl = GetChannel(a, 5)
-	sr = GetChannel(a, 6)
-	l_sl = MixAudio(fl, sl, 0.2929, 0.2929)
-	c_lfe = MixAudio(lfe, c, 0.2071, 0.2071)
-	r_sr = MixAudio(fr, sr, 0.2929, 0.2929)
-	l = MixAudio(l_sl, c_lfe, 1.0, 1.0)
-	r = MixAudio(r_sr, c_lfe, 1.0, 1.0)
-	return MergeChannels(l, r)
-}
-
+  {
+     fl = GetChannel(a, 1)
+     fr = GetChannel(a, 2)
+     c = GetChannel(a, 3)
+     lfe = GetChannel(a, 4)
+     sl = GetChannel(a, 5)
+     sr = GetChannel(a, 6)
+     l_sl = MixAudio(fl, sl, 0.2929, 0.2929)
+     c_lfe = MixAudio(lfe, c, 0.2071, 0.2071)
+     r_sr = MixAudio(fr, sr, 0.2929, 0.2929)
+     l = MixAudio(l_sl, c_lfe, 1.0, 1.0)
+     r = MixAudio(r_sr, c_lfe, 1.0, 1.0)
+     return MergeChannels(l, r)
+  }");
+                    break;
+                case ChannelMode.Upmix:
+                    script.AppendLine(@"
 function x_upmix" + id + @"(clip a) 
-{
+ {
     m = ConvertToMono(a)
-    f = SuperEQ(a,""" + tmp + @"front.feq"")
-    s = SuperEQ(a,""" + tmp + @"back.feq"") 
     c = SuperEQ(m,""" + tmp + @"center.feq"") 
     lfe = SuperEQ(m,""" + tmp + @"lfe.feq"") 
     return MergeChannels( f.getleftchannel, f.getrightchannel , c, lfe, s.getleftchannel, s.getrightchannel)
-}
-
+ }");
+                    break;
+                case ChannelMode.UpmixUsingSoxEq:
+                    script.AppendLine(@"
 function x_upmixR" + id + @"(clip Stereo) 
-{
-	Front = mixaudio(Stereo.soxfilter(""filter 0-600""),mixaudio(Stereo.soxfilter(""filter 600-1200""),Stereo.soxfilter(""filter 1200-7000""),0.45,0.25),0.50,1)
-	Back = mixaudio(Stereo.soxfilter(""filter 0-600""),mixaudio(Stereo.soxfilter(""filter 600-1200""),Stereo.soxfilter(""filter 1200-7000""),0.35,0.15),0.40,1)
-	fl = GetLeftChannel(Front)
-	fr = GetRightChannel(Front)
-	cc = ConvertToMono(stereo).SoxFilter(""filter 625-24000"")
-	lfe = ConvertToMono(stereo).SoxFilter(""lowpass 100"",""vol -0.5"")
-	sl = GetLeftChannel(Back)
-	sr = GetRightChannel(Back)
-	sl = DelayAudio(sl,0.02)
-	sr = DelayAudio(sr,0.02)
+ {
+    Front = mixaudio(Stereo.soxfilter(""filter 0-600""),mixaudio(Stereo.soxfilter(""filter 600-1200""),Stereo.soxfilter(""filter 1200-7000""),0.45,0.25),0.50,1)
+    Back = mixaudio(Stereo.soxfilter(""filter 0-600""),mixaudio(Stereo.soxfilter(""filter 600-1200""),Stereo.soxfilter(""filter 1200-7000""),0.35,0.15),0.40,1)
+    fl = GetLeftChannel(Front)
+    fr = GetRightChannel(Front)
+    cc = ConvertToMono(stereo).SoxFilter(""filter 625-24000"")
+    lfe = ConvertToMono(stereo).SoxFilter(""lowpass 100"",""vol -0.5"")
+    sl = GetLeftChannel(Back)
+    sr = GetRightChannel(Back)
+    sl = DelayAudio(sl,0.02)
+    sr = DelayAudio(sr,0.02)
     return MergeChannels(fl,fr,cc,lfe,sl,sr)
-}
-
+ }");
+                    break;
+                case ChannelMode.UpmixWithCenterChannelDialog:
+                    script.AppendLine(@"
 function x_upmixC" + id + @"(clip stereo) 
-{
-	left = stereo.GetLeftChannel()
-	right = stereo.GetRightChannel()
-	fl = mixaudio(left.soxfilter(""filter 0-24000""),right.soxfilter(""filter 0-24000""),0.6,-0.5)
-	fr = mixaudio(right.soxfilter(""filter 0-24000""),left.soxfilter(""filter 0-24000""),0.6,-0.5)
-	cc = ConvertToMono(stereo).SoxFilter(""filter 625-24000"")
-	lfe = ConvertToMono(stereo).SoxFilter(""lowpass 100"",""vol -0.5"")
-	sl = mixaudio(left.soxfilter(""filter 0-24000""),right.soxfilter(""filter 0-24000""),0.5,-0.4)
-	sr = mixaudio(right.soxfilter(""filter 0-24000""),left.soxfilter(""filter 0-24000""),0.5,-0.4)
-	sl = DelayAudio(sl,0.02)
-	sr = DelayAudio(sr,0.02)
-    return MergeChannels(fl,fr,cc,lfe,sl,sr)
-}
-                                                                                                                                                     
+ {
+    left = stereo.GetLeftChannel()
+    right = stereo.GetRightChannel()
+    fl = mixaudio(left.soxfilter(""filter 0-24000""),right.soxfilter(""filter 0-24000""),0.6,-0.5)
+    fr = mixaudio(right.soxfilter(""filter 0-24000""),left.soxfilter(""filter 0-24000""),0.6,-0.5)
+    cc = ConvertToMono(stereo).SoxFilter(""filter 625-24000"")
+    lfe = ConvertToMono(stereo).SoxFilter(""lowpass 100"",""vol -0.5"")
+    sl = mixaudio(left.soxfilter(""filter 0-24000""),right.soxfilter(""filter 0-24000""),0.5,-0.4)
+    sr = mixaudio(right.soxfilter(""filter 0-24000""),left.soxfilter(""filter 0-24000""),0.5,-0.4)
+    sl = DelayAudio(sl,0.02)
+    sr = DelayAudio(sr,0.02)
+     return MergeChannels(fl,fr,cc,lfe,sl,sr)                                                                                                                                              
+ }");
+                    break;
+            }
 
-"
-        );
             _avisynthAudioScript = script.ToString();
 
             _log.LogValue("Avisynth script", _avisynthAudioScript);
