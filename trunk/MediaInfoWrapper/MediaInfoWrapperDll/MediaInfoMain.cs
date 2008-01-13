@@ -562,7 +562,7 @@ private void getVideoInfo()
                         {VideoTrack _tracktemp_ = new VideoTrack();
                             
                                                     
-                            _tracktemp_.Count= GetSpecificMediaInfo(MediaInfoStreamKind.Video,num2,"Count");
+_tracktemp_.Count= GetSpecificMediaInfo(MediaInfoStreamKind.Video,num2,"Count");
 _tracktemp_.StreamCount= GetSpecificMediaInfo(MediaInfoStreamKind.Video,num2,"StreamCount");
 _tracktemp_.StreamKind= GetSpecificMediaInfo(MediaInfoStreamKind.Video,num2,"StreamKind");
 _tracktemp_.StreamKindID= GetSpecificMediaInfo(MediaInfoStreamKind.Video,num2,"StreamKindID");
@@ -642,7 +642,7 @@ private void getAudioInfo()
                         {AudioTrack _tracktemp_ = new AudioTrack();
                             
                                                     
-                            _tracktemp_.Count= GetSpecificMediaInfo(MediaInfoStreamKind.Audio,num2,"Count");
+_tracktemp_.Count= GetSpecificMediaInfo(MediaInfoStreamKind.Audio,num2,"Count");
 _tracktemp_.StreamCount= GetSpecificMediaInfo(MediaInfoStreamKind.Audio,num2,"StreamCount");
 _tracktemp_.StreamKind= GetSpecificMediaInfo(MediaInfoStreamKind.Audio,num2,"StreamKind");
 _tracktemp_.StreamKindID= GetSpecificMediaInfo(MediaInfoStreamKind.Audio,num2,"StreamKindID");
@@ -721,7 +721,7 @@ private void getTextInfo()
                         {TextTrack _tracktemp_ = new TextTrack();
                             
                                                     
-                            _tracktemp_.Count= GetSpecificMediaInfo(MediaInfoStreamKind.Text,num2,"Count");
+_tracktemp_.Count= GetSpecificMediaInfo(MediaInfoStreamKind.Text,num2,"Count");
 _tracktemp_.StreamCount= GetSpecificMediaInfo(MediaInfoStreamKind.Text,num2,"StreamCount");
 _tracktemp_.StreamKind= GetSpecificMediaInfo(MediaInfoStreamKind.Text,num2,"StreamKind");
 _tracktemp_.StreamKindID= GetSpecificMediaInfo(MediaInfoStreamKind.Text,num2,"StreamKindID");
@@ -787,7 +787,7 @@ private void getChaptersInfo()
                         {ChaptersTrack _tracktemp_ = new ChaptersTrack();
                             
                                                     
-                            _tracktemp_.Count= GetSpecificMediaInfo(MediaInfoStreamKind.Chapters,num2,"Count");
+_tracktemp_.Count= GetSpecificMediaInfo(MediaInfoStreamKind.Chapters,num2,"Count");
 _tracktemp_.StreamCount= GetSpecificMediaInfo(MediaInfoStreamKind.Chapters,num2,"StreamCount");
 _tracktemp_.StreamKind= GetSpecificMediaInfo(MediaInfoStreamKind.Chapters,num2,"StreamKind");
 _tracktemp_.StreamKindID= GetSpecificMediaInfo(MediaInfoStreamKind.Chapters,num2,"StreamKindID");
