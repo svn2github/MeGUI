@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("MediaInfoWrapper")]
-[assembly: AssemblyCopyright("Copyright © 2006")]
+[assembly: AssemblyCopyright("Copyright © 2008")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -31,5 +31,5 @@ using System.Runtime.InteropServices;
 //
 // Vous pouvez spécifier toutes les valeurs ou indiquer les numéros de révision et de build par défaut 
 // en utilisant '*', comme indiqué ci-dessous :
-[assembly: AssemblyVersion("0.7.5.5")]
-[assembly: AssemblyFileVersion("0.7.5.5")]
+[assembly: AssemblyVersion("0.7.5.7")]
+[assembly: AssemblyFileVersion("0.7.5.7")]
