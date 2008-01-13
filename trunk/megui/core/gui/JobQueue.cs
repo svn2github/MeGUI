@@ -746,14 +746,14 @@ namespace MeGUI.core.gui
 
         private void queueListView_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Delete)
-                deleteJobButton_Click(sender, e);
-            if (e.KeyCode == Keys.Up)
-                upButton_Click(sender, e);
-            if (e.KeyCode == Keys.Down)
-                downButton_Click(sender, e);
-            if ((e.KeyCode == Keys.Enter) || (e.KeyCode == Keys.Escape))
-                startStopButton_Click(sender, e);
+            switch (e.KeyCode)
+            {
+                case Keys.Delete: deleteJobButton_Click(sender, e); break;
+                case Keys.Up: upButton_Click(sender, e); break;
+                case Keys.Down: downButton_Click(sender, e); break;
+                case Keys.Escape:
+                case Keys.Enter: startStopButton_Click(sender, e); break;               
+            }
         }
 
         #region IPersistComponentSettings Members
