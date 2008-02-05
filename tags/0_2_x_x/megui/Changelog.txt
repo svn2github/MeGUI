@@ -1,3 +1,11 @@
+0.2.6.1044
+    - (Kurtnoise) [neroConfigurationPanel] added vBitrate_ValueChanged() event for ABR & CBR checking. 
+    - (Kurtnoise) display only the function used in the avs script for audio encodings instead of the 5 ones.
+    - (Kurtnoise) use EnsureVBRMP3Sync() with DirectShowSource only.
+    - (Kurtnoise) [JobQueue] changed public to internal for the JobChangeEvent (to fix the compilation within MSVC# 2008).
+    - (Kurtnoise) [AviSynthWindow] fixed width & height for Crop checkbox when "overcrop to achieve mod16" is selected (#1852845).
+    - (Kurtnoise) [AviSynthAudioEncoder] fixed bug #1850574 for DTS files sources.
+
 0.2.6.1043
     - (Kurtnoise) updated the link to the latest framework.
 
