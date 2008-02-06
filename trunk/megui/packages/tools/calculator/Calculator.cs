@@ -213,6 +213,9 @@ namespace MeGUI
             5400000,
             0,
             0,
+            10000000,
+            10000000,
+            10000000,
             0});
             this.nbFrames.Name = "nbFrames";
             this.nbFrames.Size = new System.Drawing.Size(120, 21);
@@ -931,7 +934,7 @@ namespace MeGUI
                 containerType = null;
                 return false;
             }
-            if (numberOfFrames <= 0 || framerate <= 0)
+            if (numberOfFrames <= 0 || framerate <= 0 || containerType == null)
                 return false;
             return true;
         }
