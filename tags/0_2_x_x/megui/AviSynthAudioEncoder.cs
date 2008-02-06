@@ -442,7 +442,16 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 info.CreateNoWindow = true;
                 _encoderProcess.StartInfo = info;
                 _encoderProcess.Start();
-                _encoderProcess.PriorityClass = ProcessPriorityClass.Idle;
+
+                // Take priority from Avisynth thread rather than default in settings
+                // just in case user has managed to change job setting before getting here.
+                if (_encoderThread.Priority == ThreadPriority.Lowest)
+                    _encoderProcess.PriorityClass = ProcessPriorityClass.Idle;
+                else if (_encoderThread.Priority == ThreadPriority.Normal)
+                    _encoderProcess.PriorityClass = ProcessPriorityClass.Normal;
+                else if (_encoderThread.Priority == ThreadPriority.AboveNormal)
+                    _encoderProcess.PriorityClass = ProcessPriorityClass.High;
+
                 _readFromStdOutThread = new Thread(new ThreadStart(readStdOut));
                 _readFromStdErrThread = new Thread(new ThreadStart(readStdErr));
                 _readFromStdOutThread.Start();
