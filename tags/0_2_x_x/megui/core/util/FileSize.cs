@@ -102,7 +102,7 @@ namespace MeGUI.core.util
             get
             {
                 Unit u = Unit.B;
-                while (u <= Unit.GB)
+                while (u < Unit.GB)
                 {
                     if (InUnitsExact(u) < 1000M)
                         break;
