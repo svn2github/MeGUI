@@ -95,6 +95,7 @@ namespace MeGUI.packages.tools.cutter
                 item.Tag = cut;
                 sections.Items.Add(item);
             }
+            clearZonesButton.Enabled = sections.Items.Count > 0;
             sections.EndUpdate();
         }
 
@@ -110,12 +111,6 @@ namespace MeGUI.packages.tools.cutter
 
         private void updateZoneButton_Click(object sender, EventArgs e)
         {
-            if (sections.SelectedItems.Count != 1)
-            {
-                MessageBox.Show("You must select exactly one section to update", "Bad selection", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
             Cuts old = cuts.clone();
             removeSelectedZones();
             
@@ -136,7 +131,7 @@ namespace MeGUI.packages.tools.cutter
 
         private void sections_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
-            removeZoneButton.Enabled = sections.SelectedItems.Count > 0;
+            updateZoneButton.Enabled = sections.SelectedItems.Count == 1;
         }
 
 

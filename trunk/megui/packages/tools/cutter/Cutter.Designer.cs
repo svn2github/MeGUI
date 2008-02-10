@@ -90,6 +90,7 @@ namespace MeGUI.packages.tools.cutter
             // 
             this.clearZonesButton.AutoSize = true;
             this.clearZonesButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.clearZonesButton.Enabled = false;
             this.clearZonesButton.Location = new System.Drawing.Point(50, 8);
             this.clearZonesButton.Name = "clearZonesButton";
             this.clearZonesButton.Size = new System.Drawing.Size(41, 23);
@@ -101,6 +102,7 @@ namespace MeGUI.packages.tools.cutter
             // 
             this.updateZoneButton.AutoSize = true;
             this.updateZoneButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.updateZoneButton.Enabled = false;
             this.updateZoneButton.Location = new System.Drawing.Point(97, 8);
             this.updateZoneButton.Name = "updateZoneButton";
             this.updateZoneButton.Size = new System.Drawing.Size(52, 23);
@@ -112,6 +114,7 @@ namespace MeGUI.packages.tools.cutter
             // 
             this.removeZoneButton.AutoSize = true;
             this.removeZoneButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.removeZoneButton.Enabled = false;
             this.removeZoneButton.Location = new System.Drawing.Point(155, 8);
             this.removeZoneButton.Name = "removeZoneButton";
             this.removeZoneButton.Size = new System.Drawing.Size(57, 23);
