@@ -384,8 +384,8 @@ namespace MeGUI
 			VideoJob job = new VideoJob();
 			job.Input = oldJob.Input;
 			job.Output = oldJob.Output;
-			job.Settings = oldJob.Settings.clone();
-			return job;
+            job.Settings = oldJob.Settings.Clone();
+            return job;
 		}
 		#endregion
 		#endregion

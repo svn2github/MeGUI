@@ -14,7 +14,12 @@ namespace MeGUI
         public virtual void FixFileNames(Dictionary<string, string> _) { }
         public override bool Equals(object obj)
         {
-            return PropertyEqualityTester.AreEqual(this, obj);
+            return Equals(obj as GenericSettings);
+        }
+
+        public bool Equals(GenericSettings other)
+        {
+            return other == null ? false : PropertyEqualityTester.AreEqual(this, other);
         }
 
         public override int GetHashCode()
@@ -99,13 +104,17 @@ namespace MeGUI
             set { containerCandidates = value; }
         }
 
-
-        public GenericSettings baseClone()
+        object ICloneable.Clone()
         {
-            return clone();
+            return Clone();
+        }
+
+        GenericSettings GenericSettings.Clone()
+        {
+            return Clone();
         }
         
-        public OneClickSettings clone()
+        public OneClickSettings Clone()
         {
             return this.MemberwiseClone() as OneClickSettings;
         }

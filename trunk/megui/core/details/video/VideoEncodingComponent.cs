@@ -136,8 +136,8 @@ namespace MeGUI
                 MessageBox.Show(settingsError, "Unsupported configuration", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return;
             }
-            VideoCodecSettings vSettings = this.CurrentSettings.clone();
-            mainForm.JobUtil.AddVideoJobs(info.VideoInput, info.VideoOutput, this.CurrentSettings.clone(),
+            VideoCodecSettings vSettings = this.CurrentSettings.Clone();
+            mainForm.JobUtil.AddVideoJobs(info.VideoInput, info.VideoOutput, this.CurrentSettings.Clone(),
                 info.IntroEndFrame, info.CreditsStartFrame, info.DAR, PrerenderJob, true);
         }
         private void fileType_SelectedIndexChanged(object sender, EventArgs e)

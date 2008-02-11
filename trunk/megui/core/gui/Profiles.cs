@@ -7,7 +7,7 @@ using MeGUI.core.gui;
 
 namespace MeGUI.core.plugins.interfaces
 {
-    public interface GenericSettings 
+    public interface GenericSettings : IEquatable<GenericSettings>, ICloneable
     {
         /************************************************************************************
          *                   Classes implementing GenericSettings must                      *
@@ -20,7 +20,7 @@ namespace MeGUI.core.plugins.interfaces
         /// Deep-clones the settings
         /// </summary>
         /// <returns></returns>
-        GenericSettings baseClone();
+        new GenericSettings Clone();
 
         /// <summary>
         /// Returns the meta type of a profile. This is used as a lookup in the ProfileManager class
@@ -68,13 +68,20 @@ namespace MeGUI.core.plugins.interfaces
         /// <returns></returns>
         public static bool AreEqual(object a, object b)
         {
-            if (a.GetType() != b.GetType()) return false;
+            // If they are the same object or are both null
+            if (a == b)
+                return true;
+
+            // If only one is null
+            if (a == null || b == null || (a.GetType() != b.GetType()))
+                return false;
+
             Type t = a.GetType();
             foreach (PropertyInfo info in t.GetProperties())
             {
-                object[] attributes = info.GetCustomAttributes(true);
-                if (info.GetCustomAttributes(typeof(PropertyEqualityIgnoreAttribute), true).Length > 0)
+                if (info.IsDefined(typeof(PropertyEqualityIgnoreAttribute), true))
                     continue;
+
                 object aVal = null, bVal = null;
                 try { aVal = info.GetValue(a, null); }
                 catch { }
@@ -95,20 +102,25 @@ namespace MeGUI.core.plugins.interfaces
         /// <returns></returns>
         private static bool ArrayEqual(object a, object b)
         {
-            if (a == b) return true;
-            if (a == null || b == null) return false;
+            if (a == b)
+                return true;
 
-            if (a.GetType() != b.GetType()) return false;
+            if (a == null || b == null || (a.GetType() != b.GetType()))
+                return false;
+
             if (!a.GetType().IsArray)
                 return a.Equals(b);
 
             object[] arrayA = (object[])a;
             object[] arrayB = (object[])b;
 
-            if (arrayA.Length != arrayB.Length) return false;
+            if (arrayA.Length != arrayB.Length)
+                return false;
+
             for (int i = 0; i < arrayA.Length; i++)
             {
-                if (!ArrayEqual(arrayA[i], arrayB[i])) return false;
+                if (!ArrayEqual(arrayA[i], arrayB[i]))
+                    return false;
             }
             return true;
         }

@@ -116,7 +116,7 @@ namespace MeGUI
         }
         public GenericProfile<TSettings> clone()
         {
-            return new GenericProfile<TSettings>(Name, (TSettings)settings.baseClone());
+            return new GenericProfile<TSettings>(Name, (TSettings)settings.Clone());
         }
         public override Profile baseClone()
         {

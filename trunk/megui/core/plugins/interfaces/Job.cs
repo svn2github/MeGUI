@@ -68,7 +68,7 @@ namespace MeGUI
 
         public override int GetHashCode()
         {
-            return ToString().GetHashCode();
+            return name.GetHashCode() ^ uniqueID.GetHashCode();
         }
     }
 

@@ -237,7 +237,7 @@ namespace MeGUI.core.gui
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return 0;
         }
 
         public override string ToString()

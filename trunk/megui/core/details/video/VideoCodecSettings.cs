@@ -39,12 +39,18 @@ namespace MeGUI
 
         public override bool Equals(object obj)
         {
-            return PropertyEqualityTester.AreEqual(this, obj);
+            return Equals(obj as GenericSettings);
+        }
+
+        public virtual bool Equals(GenericSettings other)
+        {
+            return PropertyEqualityTester.AreEqual(this, other);
         }
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            // DO NOT CALL BASE.GETHASHCODE!
+            return 0;
         }
 
         public enum Mode : int { CBR = 0, CQ, twopass1, twopass2, twopassAutomated, threepass1, threepass2, threepass3, threepassAutomated, quality };
@@ -196,12 +202,17 @@ namespace MeGUI
 		/// generates a copy of this object
 		/// </summary>
 		/// <returns>the codec specific settings of this object</returns>
-        public GenericSettings baseClone()
+        object ICloneable.Clone()
         {
-            return clone();
+            return Clone();
+        }
+
+        GenericSettings GenericSettings.Clone()
+        {
+            return Clone();
         }
         
-        public VideoCodecSettings clone()
+        public VideoCodecSettings Clone()
         {
             // This method is sutable for all known descendants!
             return this.MemberwiseClone() as VideoCodecSettings;

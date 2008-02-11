@@ -136,16 +136,18 @@ namespace MeGUI
 			get {return autoGain;}
 			set {autoGain = value;}
 		}
-        /// <summary>
-        /// generates a copy of this object
-        /// </summary>
-        /// <returns>the codec specific settings of this object</returns>
-        public GenericSettings baseClone()
+
+        object ICloneable.Clone()
         {
-            return clone();
+            return Clone();
         }
-        
-        public AudioCodecSettings clone()
+
+        GenericSettings GenericSettings.Clone()
+        {
+            return Clone();
+        }
+
+        public AudioCodecSettings Clone()
         {
             // This method is sutable for all known descendants!
             return this.MemberwiseClone() as AudioCodecSettings;
@@ -153,17 +155,20 @@ namespace MeGUI
 
         public override bool Equals(object obj)
         {
+            return Equals(obj as GenericSettings);
+        }
+
+        public bool Equals(GenericSettings other)
+        {
             // This works for all known descendants
-            return PropertyEqualityTester.AreEqual(this, obj);
+            return other == null ? false : PropertyEqualityTester.AreEqual(this, other);
         }
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            // DO NOT CALL base.GetHashCode();
+            return 0;
         }
-
-        #region GenericSettings Members
-
 
         public string[] RequiredFiles
         {
@@ -174,7 +179,5 @@ namespace MeGUI
         {
             get { return new string[0]; }
         }
-
-        #endregion
     }
 }

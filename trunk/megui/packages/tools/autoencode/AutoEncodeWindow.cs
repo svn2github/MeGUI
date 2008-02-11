@@ -795,7 +795,7 @@ namespace MeGUI
                 return;
             }
 
-            VideoCodecSettings vSettings = info.Video.CurrentSettings.clone();
+            VideoCodecSettings vSettings = info.Video.CurrentSettings.Clone();
             bool cont = info.JobUtil.getFinalZoneConfiguration(vSettings, info.Video.Info.IntroEndFrame, info.Video.Info.CreditsStartFrame);
             if (cont)
             {

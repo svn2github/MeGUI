@@ -405,7 +405,7 @@ namespace MeGUI
                 dpp.OutputSize = desiredSize;
                 dpp.SignalAR = signalAR.Checked;
                 dpp.Splitting = splitting.Value;
-                dpp.VideoSettings = VideoSettings.clone();
+                dpp.VideoSettings = VideoSettings.Clone();
                 IndexJob job = new IndexJob(input.Filename, d2vName, 1,
                     audioTrack1.SelectedIndex - 1, audioTrack2.SelectedIndex - 1, dpp, false);
                 mainForm.Jobs.addJobsToQueue(job);

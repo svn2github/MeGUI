@@ -86,7 +86,7 @@ namespace MeGUI.core.util
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return 0;
         }
         
         public Sar ToSar(int hres, int vres)

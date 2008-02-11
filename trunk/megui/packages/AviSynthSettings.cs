@@ -15,7 +15,12 @@ namespace MeGUI
 
         public override bool Equals(object obj)
         {
-            return PropertyEqualityTester.AreEqual(this, obj);
+            return Equals(obj as GenericSettings);
+        }
+
+        public bool Equals(GenericSettings other)
+        {
+            return other == null ? false : PropertyEqualityTester.AreEqual(this, other);
         }
 
         public override int GetHashCode()
@@ -30,12 +35,17 @@ namespace MeGUI
 		private bool deinterlace, denoise, ivtc, mpeg2deblock, colourCorrect;
         private bool resize;
 
-        public GenericSettings baseClone()
+        object ICloneable.Clone()
         {
-            return clone();
+            return Clone();
         }
-        
-        public AviSynthSettings clone()
+
+        GenericSettings GenericSettings.Clone()
+        {
+            return this.MemberwiseClone() as AviSynthSettings;
+        }
+
+        public AviSynthSettings Clone()
         {
             return this.MemberwiseClone() as AviSynthSettings;
         }

@@ -471,7 +471,7 @@ namespace MeGUI
         /// <returns>A compliant set of x264Settings</returns>
         public x264Settings EnforceSettings(int level, x264Settings inputSettings, double frameSize, out AVCLevelEnforcementReturn enforcement)
         {
-            x264Settings enforcedSettings = (x264Settings) inputSettings.clone();
+            x264Settings enforcedSettings = (x264Settings) inputSettings.Clone();
             enforcement = new AVCLevelEnforcementReturn();
             enforcement.Altered = false;
             enforcement.EnableP4x4mv = true;
@@ -515,7 +515,7 @@ namespace MeGUI
                             enforcement.Panic = true;
                             enforcement.PanicString = "Can't force settings to conform to level (the frame size is too large)";
                             // reset output settings to original and set level to unrestrained
-                            enforcedSettings = (x264Settings) inputSettings.clone();
+                            enforcedSettings = (x264Settings)inputSettings.Clone();
                             enforcedSettings.Level = 15;
                             return enforcedSettings;
                         }   
@@ -549,7 +549,7 @@ namespace MeGUI
 		/// the source could not be read</returns>
         public bool validateAVCLevel( int hRes, int vRes, double framerate, x264Settings settings, out int compliantLevel)
         {
-            settings = (x264Settings)settings.clone(); //Otherwise this sets it to the lowest compliant level anyway.
+            settings = (x264Settings)settings.Clone(); //Otherwise this sets it to the lowest compliant level anyway.
             const int unrestricted = 15; // maybe this should be set as a global constant
             compliantLevel = unrestricted;
             if (settings.Level == unrestricted) // 15 = unrestricted
