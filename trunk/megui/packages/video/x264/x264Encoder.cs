@@ -239,6 +239,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                     sb.Append("umh ");
                 if (xs.METype + 1 == 4)
                     sb.Append("esa ");
+                if (xs.METype + 1 == 5)
+                    sb.Append("tesa ");
             }
             if (xs.MERange != 16)
                 sb.Append("--merange " + xs.MERange + " ");
