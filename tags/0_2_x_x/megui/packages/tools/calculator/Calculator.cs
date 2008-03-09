@@ -210,9 +210,6 @@ namespace MeGUI
             // 
             this.nbFrames.Location = new System.Drawing.Point(189, 105);
             this.nbFrames.Maximum = new decimal(new int[] {
-            5400000,
-            0,
-            0,
             10000000,
             10000000,
             10000000,
