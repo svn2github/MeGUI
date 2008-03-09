@@ -256,7 +256,8 @@ namespace MeGUI.core.details
             foreach (TaggedJob j in job.EnabledJobs)
                 j.RequiredJobs.Remove(job);
 
-            string fileName = mainForm.MeGUIPath + "\\jobs\\" + job.Name + ".xml";
+            string fileName = Path.Combine(mainForm.MeGUIPath, "jobs");
+                   fileName = Path.Combine(fileName, job.Name + ".xml");
             if (File.Exists(fileName))
                 File.Delete(fileName);
             
@@ -346,7 +347,7 @@ namespace MeGUI.core.details
         /// </summary>
         public void loadJobs()
         {
-            string jobsPath = mainForm.MeGUIPath + "\\jobs\\";
+            string jobsPath = Path.Combine(mainForm.MeGUIPath, "jobs");
             DirectoryInfo di = FileUtil.ensureDirectoryExists(jobsPath);
             FileInfo[] files = di.GetFiles("*.xml");
             foreach (FileInfo fi in files)
@@ -401,7 +402,8 @@ namespace MeGUI.core.details
         /// <param name="path">The path where the program was launched from</param>
         internal void saveJob(TaggedJob job, string path)
         {
-            string fileName = path + "\\jobs\\" + job.Name + ".xml";
+            string fileName = Path.Combine(path, "jobs");
+                   fileName = Path.Combine(fileName, job.Name + ".xml");
             Util.XmlSerialize(job, fileName);
         }
         /// <summary>

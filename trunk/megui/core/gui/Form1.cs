@@ -871,7 +871,7 @@ namespace MeGUI
         /// </summary>
         public void loadSettings()
         {
-            string fileName = path + "\\settings.xml";
+            string fileName = Path.Combine(path, "settings.xml");
             if (File.Exists(fileName))
             {
                 XmlSerializer ser = null;

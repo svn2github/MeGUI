@@ -419,7 +419,9 @@ namespace MeGUI.packages.video.x264
             lastEncodingMode = this.x264EncodingMode.SelectedIndex;
             try
             {
-                ContextHelp.Load(Application.StartupPath + "\\Data\\ContextHelp.xml");
+                string p = System.IO.Path.Combine (Application.StartupPath, "Data");
+                p = System.IO.Path.Combine (p, "ContextHelp.xml");
+                ContextHelp.Load(p);
                 SetToolTips();
             }
             catch

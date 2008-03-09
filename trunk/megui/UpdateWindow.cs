@@ -446,8 +446,9 @@ namespace MeGUI
                 if (!File.Exists(SavePath))
                 {
                     string extension = Path.GetExtension(SavePath);
-                    SavePath = Path.Combine(Path.Combine(System.Windows.Forms.Application.StartupPath, "tools\\" + Name),
-                        Name + extension);
+                    string path = Path.Combine(System.Windows.Forms.Application.StartupPath, "tools");
+                    path = Path.Combine(path, Name);
+                    SavePath = Path.Combine(path,  Name + extension);
                     MeGUIFilePath = SavePath;
                 }
             }
@@ -747,12 +748,13 @@ namespace MeGUI
         #region load and save
         private void LoadSettings()
         {
-            if (File.Exists(Application.StartupPath + "\\AutoUpdate.xml"))
+            string path = Path.Combine(Application.StartupPath, "AutoUpdate.xml");
+            if (File.Exists(path))
             {
                 try
                 {
                     XmlSerializer serializer = new XmlSerializer(typeof(iUpgradeableCollection), new Type[] { typeof(ProgramFile), typeof(AviSynthFile), typeof(ProfilesFile) , typeof(MeGUIFile)});
-                    StreamReader settingsReader = new StreamReader(Application.StartupPath + "\\AutoUpdate.xml");
+                    StreamReader settingsReader = new StreamReader(path);
                     this.upgradeData = (iUpgradeableCollection)serializer.Deserialize(settingsReader);
                     settingsReader.Dispose();
 
@@ -779,7 +781,7 @@ namespace MeGUI
             try
             {
                 XmlSerializer serializer = new XmlSerializer(typeof(iUpgradeableCollection), new Type[] { typeof(ProgramFile), typeof(AviSynthFile), typeof(ProfilesFile), typeof(MeGUIFile) });
-                StreamWriter output = new StreamWriter(Application.StartupPath + "\\AutoUpdate.xml", false);
+                StreamWriter output = new StreamWriter(Path.Combine(Application.StartupPath, "AutoUpdate.xml"), false);
                 serializer.Serialize(output, this.upgradeData);
                 output.Dispose();
                 return; //settings saved

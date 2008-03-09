@@ -100,7 +100,7 @@ namespace MeGUI.core.gui
 
         protected static string getZippedExtraFileName(string p)
         {
-            return "extra\\" + p;
+            return Path.Combine("extra", p);
         }
 
     }
