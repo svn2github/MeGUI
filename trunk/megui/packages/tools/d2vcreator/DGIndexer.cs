@@ -36,8 +36,6 @@ namespace MeGUI
 
         private static readonly TimeSpan TwoSeconds = new TimeSpan(0, 0, 2);
 
-        IntPtr ptr = IntPtr.Zero;
-
         public static readonly JobProcessorFactory Factory =
             new JobProcessorFactory(new ProcessorFactory(init), "DGIndexer");
 
@@ -163,12 +161,7 @@ namespace MeGUI
             {
                 if (su.TimeElapsed < TwoSeconds) // give it some time to start up, otherwise MainWindowHandle remains null
                     return; 
-
-
-                if (ptr == IntPtr.Zero)
-                    ptr = proc.MainWindowHandle;
-
-                string text = WindowUtil.GetText(ptr);
+                string text = proc.MainWindowTitle;
 
                 Match m = DGPercent.Match(text);
                 if (m.Success)
