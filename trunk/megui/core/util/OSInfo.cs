@@ -48,6 +48,20 @@ namespace MeGUI
         /// <returns>A string containing the the operating system product type.</returns>
         public static string GetOSProductType()
         {
+            PlatformID id = Environment.OSVersion.Platform;
+            if (id == PlatformID.WinCE || id == PlatformID.Win32Windows || id == PlatformID.Win32S || id == PlatformID.Win32NT)
+                return GetWindowsProductType();
+            else
+                return GetGenericProductType();
+        }
+
+        private static string GetGenericProductType()
+        {
+            return Environment.OSVersion.VersionString;
+        }
+
+        private static string GetWindowsProductType()
+        {
             OSVERSIONINFOEX osVersionInfo = new OSVERSIONINFOEX();
             OperatingSystem osInfo = Environment.OSVersion;
 

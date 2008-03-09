@@ -3,34 +3,63 @@ using System.Runtime.InteropServices;
 
 namespace MeGUI
 {
-	/// <summary>
-	/// Summary description for Shutdown.
-	/// </summary>
-	public class Shutdown
-	{
-		[StructLayout(LayoutKind.Sequential, Pack=1)]
-			internal struct TokPriv1Luid
-		{
-			public int  Count;
-			public long  Luid;
-			public int  Attr;
-		}
+    public abstract class Shutdown
+    {
+        private static Shutdown instance;
 
-		[DllImport("kernel32.dll", ExactSpelling=true) ]
-		internal static extern IntPtr GetCurrentProcess();
+        static Shutdown()
+        {
+            PlatformID id = Environment.OSVersion.Platform;
+            if (id == PlatformID.Win32NT || id == PlatformID.Win32S || id == PlatformID.Win32Windows || id == PlatformID.WinCE)
+                instance = new WindowsShutdown();
+            else
+                instance = new NullShutdown();
+        }
 
-		[DllImport("advapi32.dll", ExactSpelling=true, SetLastError=true) ]
-		internal static extern bool OpenProcessToken( IntPtr h, int acc, ref IntPtr phtok );
+        public abstract bool DoShutdown();
 
-		[DllImport("advapi32.dll", SetLastError=true) ]
-		internal static extern bool LookupPrivilegeValue( string host, string name, ref long pluid );
+        public static bool shutdown()
+        {
+            return instance.DoShutdown();
+        }
 
-		[DllImport("advapi32.dll", ExactSpelling=true, SetLastError=true) ]
-		internal static extern bool AdjustTokenPrivileges( IntPtr htok, bool disall,
-			ref TokPriv1Luid newst, int len, IntPtr prev, IntPtr relen );
+        private class NullShutdown : Shutdown
+        {
+            public override bool DoShutdown()
+            {
+                // FIXME: Do nothing would be best...
+                return false;
+            }
+        }
 
-		[DllImport("user32.dll", ExactSpelling=true, SetLastError=true) ]
-		internal static extern bool ExitWindowsEx( int flg, uint rea );
+        /// <summary>
+        /// Summary description for Shutdown.
+        /// </summary>
+        private class WindowsShutdown : Shutdown
+        {
+            [StructLayout(LayoutKind.Sequential, Pack = 1)]
+            internal struct TokPriv1Luid
+            {
+                public int Count;
+                public long Luid;
+                public int Attr;
+            }
+
+        [DllImport("kernel32.dll", ExactSpelling = true)]
+        internal static extern IntPtr GetCurrentProcess();
+
+        [DllImport("advapi32.dll", ExactSpelling = true, SetLastError = true)]
+        internal static extern bool OpenProcessToken(IntPtr h, int acc, ref IntPtr phtok);
+
+        [DllImport("advapi32.dll", SetLastError = true)]
+        internal static extern bool LookupPrivilegeValue(string host, string name, ref long pluid);
+
+        [DllImport("advapi32.dll", ExactSpelling = true, SetLastError = true)]
+        internal static extern bool AdjustTokenPrivileges(IntPtr htok, bool disall,
+        ref TokPriv1Luid newst, int len, IntPtr prev, IntPtr relen);
+
+        [DllImport("user32.dll", ExactSpelling = true, SetLastError = true)]
+        internal static extern bool ExitWindowsEx(int flg, uint rea);
 
         private const int SE_PRIVILEGE_ENABLED = 0x00000002;
         private const int TOKEN_QUERY = 0x00000008;
@@ -52,24 +81,24 @@ namespace MeGUI
 
         private const uint SHTDN_REASON_FLAG_PLANNED = 0x80000000;
 
+        public WindowsShutdown()
+        {
+        }
 
-		public Shutdown()
-		{
-		}
-
-		public static bool shutdown()
-		{
-			bool success;
-			TokPriv1Luid tp;
-			IntPtr hproc = GetCurrentProcess();
-			IntPtr htok = IntPtr.Zero;
-			success = OpenProcessToken( hproc, TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, ref htok );
-			tp.Count = 1;
-			tp.Luid = 0;
-			tp.Attr = SE_PRIVILEGE_ENABLED;
-			success = LookupPrivilegeValue( null, SE_SHUTDOWN_NAME, ref tp.Luid );
-			success = AdjustTokenPrivileges(htok, false, ref tp, 0, IntPtr.Zero, IntPtr.Zero );
+        public override bool DoShutdown()
+        {
+            bool success;
+            TokPriv1Luid tp;
+            IntPtr hproc = GetCurrentProcess();
+            IntPtr htok = IntPtr.Zero;
+            success = OpenProcessToken(hproc, TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, ref htok);
+            tp.Count = 1;
+            tp.Luid = 0;
+            tp.Attr = SE_PRIVILEGE_ENABLED;
+            success = LookupPrivilegeValue(null, SE_SHUTDOWN_NAME, ref tp.Luid);
+            success = AdjustTokenPrivileges(htok, false, ref tp, 0, IntPtr.Zero, IntPtr.Zero);
             return ExitWindowsEx(EWX_SHUTDOWN + EWX_FORCE, SHTDN_REASON_MAJOR_APPLICATION | SHTDN_REASON_MINOR_NONE | SHTDN_REASON_FLAG_PLANNED);
-		}
-	}
+        }
+     }
+  }
 }
