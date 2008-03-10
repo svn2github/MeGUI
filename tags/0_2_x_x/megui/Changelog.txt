@@ -1,3 +1,14 @@
+0.2.6.1045
+    - (Sharktooth) [d2vcreator] Default to "Demux All Audio Tracks"
+    - (Kurtnoise) updated MediaInfo.dll and MediaInfoWrapper to the last SVN revision.
+    - (Kurtnoise) [Calculator] fixed the wrong max value for nbFrames.
+    - (Sharktooth) Added --me TESA x264 option
+    - (Kurtnoise) [app.manifest] better interoperation with Vista. Patch by smcgovern (#1849658)
+    - (Kurtnoise) [AviSynthAudioEncoder] fixed thread priorities changes. Now, audio encoders are also affected by the changing. Patch by Mitsubishi (#1862154)
+    - (Kurtnoise) [BitrateCalculator] - fixed a crash when none containers are available in the list.
+    - (kurtnoise) [BitrateCalculator] - fixed a bug for video longer than ~2hours. Patches by Mutant_Fruit (#1887539)
+    - (Kurtnoise) [FileSize] fixed an error which causes a crash on big numbers. Patch by mutant_fruit (#1887546)
+
 0.2.6.1044
     - (Kurtnoise) updated MediaInfo library & his wrapper.
     - (Kurtnoise) [neroConfigurationPanel] added vBitrate_ValueChanged() event for ABR & CBR checking. 
