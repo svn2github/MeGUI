@@ -313,6 +313,7 @@ namespace MeGUI
             // track2
             // 
             this.track2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.track2.Enabled = false;
             this.track2.Location = new System.Drawing.Point(118, 120);
             this.track2.Name = "track2";
             this.track2.Size = new System.Drawing.Size(256, 21);
@@ -321,6 +322,7 @@ namespace MeGUI
             // track1
             // 
             this.track1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.track1.Enabled = false;
             this.track1.Location = new System.Drawing.Point(118, 96);
             this.track1.Name = "track1";
             this.track1.Size = new System.Drawing.Size(256, 21);
@@ -328,21 +330,21 @@ namespace MeGUI
             // 
             // demuxSelectedTracks
             // 
-            this.demuxSelectedTracks.Checked = true;
             this.demuxSelectedTracks.Location = new System.Drawing.Point(16, 64);
             this.demuxSelectedTracks.Name = "demuxSelectedTracks";
             this.demuxSelectedTracks.Size = new System.Drawing.Size(336, 24);
             this.demuxSelectedTracks.TabIndex = 8;
-            this.demuxSelectedTracks.TabStop = true;
             this.demuxSelectedTracks.Text = "Select Audio Streams to demux (Stream Info File required)";
             this.demuxSelectedTracks.CheckedChanged += new System.EventHandler(this.radioButton_CheckedChanged);
             // 
             // demuxAllTracks
             // 
+            this.demuxAllTracks.Checked = true;
             this.demuxAllTracks.Location = new System.Drawing.Point(16, 40);
             this.demuxAllTracks.Name = "demuxAllTracks";
             this.demuxAllTracks.Size = new System.Drawing.Size(160, 24);
             this.demuxAllTracks.TabIndex = 7;
+            this.demuxAllTracks.TabStop = true;
             this.demuxAllTracks.Text = "Demux all Audio Tracks";
             this.demuxAllTracks.CheckedChanged += new System.EventHandler(this.radioButton_CheckedChanged);
             // 
