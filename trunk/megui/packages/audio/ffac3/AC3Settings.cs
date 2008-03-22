@@ -11,11 +11,9 @@ namespace MeGUI
         public static readonly object[] SupportedBitrates = new object[] { 64, 128, 160, 192, 224, 256, 288, 320, 352, 384, 448, 512, 576, 640};
 
         public AC3Settings()
-            : base(ID)
+            : base(ID, AudioCodec.AC3, AudioEncoderType.FFAC3, 384)
         {
-            this.Bitrate = 384;
-            this.Codec = AudioCodec.AC3;
-            this.EncoderType = AudioEncoderType.FFAC3;
+            base.supportedBitrates = Array.ConvertAll<object, int>(SupportedBitrates, delegate(object o) { return (int)o; });
         }
 
         public override BitrateManagementMode BitrateMode
@@ -28,34 +26,6 @@ namespace MeGUI
             {
                 // Do Nothing
             }
-        }
-
-        public override int Bitrate
-        {
-            get
-            {
-                return NormalizeVar(base.Bitrate, SupportedBitrates);
-            }
-            set
-            {
-                base.Bitrate = value;
-            }
-        }
-
-        internal static int NormalizeVar(int n, object[] SupportedBitrates)
-        {
-            int x = n;
-            int d = int.MaxValue;
-            foreach (int i in SupportedBitrates)
-            {
-                int d1 = Math.Abs(i - n);
-                if (d1 <= d)
-                {
-                    x = i;
-                    d = d1;
-                }
-            }
-            return x;
         }
     }
 }

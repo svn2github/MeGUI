@@ -12,10 +12,9 @@ namespace MeGUI
 
 
         public MP2Settings()
-            : base(ID)
+            : base(ID, AudioCodec.MP2, AudioEncoderType.FFMP2, 128)
         {
-            this.Codec = AudioCodec.MP2;
-            this.EncoderType = AudioEncoderType.FFMP2;
+
         }
 
         public override BitrateManagementMode BitrateMode
@@ -27,18 +26,6 @@ namespace MeGUI
             set
             {
                 // Do Nothing
-            }
-        }
-
-        public override int Bitrate
-        {
-            get
-            {
-                return AC3Settings.NormalizeVar(base.Bitrate, SupportedBitrates);
-            }
-            set
-            {
-                base.Bitrate = value;
             }
         }
     }

@@ -44,13 +44,10 @@ namespace MeGUI
             448};
 
 		private decimal quality;
-		public FaacSettings() : base(ID)
+		public FaacSettings()
+            : base(ID, AudioCodec.AAC, AudioEncoderType.FAAC, 128, BitrateManagementMode.VBR)
 		{
 			Quality = 100;
-            Bitrate = 128;
-            BitrateMode = BitrateManagementMode.VBR;
-            Codec = AudioCodec.AAC;
-            EncoderType = AudioEncoderType.FAAC;
 		}
 		/// <summary>
 		/// gets / sets the vbr quality

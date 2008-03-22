@@ -62,6 +62,7 @@ namespace MeGUI
     ]
 	public abstract class AudioCodecSettings : MeGUI.core.plugins.interfaces.GenericSettings
 	{
+        protected int[] supportedBitrates;
         private readonly string id;
         public string SettingsID { get { return id; } }
 
@@ -91,12 +92,20 @@ namespace MeGUI
             set { audioEncoderType = value; }
         }
 
-		public AudioCodecSettings(string id)
+		public AudioCodecSettings(string id, AudioCodec codec, AudioEncoderType encoder, int bitrate)
+            : this(id, codec, encoder, bitrate, BitrateManagementMode.CBR)
+        {
+
+        }
+
+		public AudioCodecSettings(string id, AudioCodec codec, AudioEncoderType encoder, int bitrate, BitrateManagementMode mode)
 		{
             this.id = id;
+			audioCodec = codec;
+			audioEncoderType = encoder;
 			downmixMode = ChannelMode.KeepOriginal;
-			bitrateMode = BitrateManagementMode.CBR;
-			bitrate = 128;
+			bitrateMode = mode;
+			this.bitrate = bitrate;
 			delay = 0;
 			delayEnabled = false;
 			autoGain = true;
@@ -128,7 +137,7 @@ namespace MeGUI
 		}
 		public virtual int Bitrate
 		{
-			get {return bitrate;}
+			get {return NormalizeVar(bitrate, supportedBitrates);}
 			set {bitrate = value;}
 		}
 		public bool AutoGain
@@ -162,6 +171,26 @@ namespace MeGUI
         {
             // This works for all known descendants
             return other == null ? false : PropertyEqualityTester.AreEqual(this, other);
+        }
+
+        internal virtual int NormalizeVar(int bitrate, int[] supportedBitrates)
+        {
+            if (supportedBitrates == null)
+                return bitrate;
+
+            int closest = bitrate;
+            int d = int.MaxValue;
+
+            foreach (int i in supportedBitrates)
+            {
+                int d1 = Math.Abs(i - bitrate);
+                if (d1 <= d)
+                {
+                    closest = i;
+                    d = d1;
+                }
+            }
+            return closest;
         }
 
         public override int GetHashCode()

@@ -39,15 +39,12 @@ namespace MeGUI
     public class NeroAACSettings : AudioCodecSettings
 	{
         public static readonly string ID = "Nero AAC";
-		public NeroAACSettings() : base(ID)
+		public NeroAACSettings() 
+            : base(ID, AudioCodec.AAC, AudioEncoderType.NAAC, 0, BitrateManagementMode.VBR)
 		{
             Quality = 0.5M;
             Profile = AacProfile.Auto;
             CreateHintTrack = false;
-            BitrateMode = BitrateManagementMode.VBR;
-
-            Codec = AudioCodec.AAC;
-            this.EncoderType = AudioEncoderType.NAAC;
 		}
 
         private AacProfile profile;

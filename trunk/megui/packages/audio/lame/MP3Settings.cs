@@ -9,11 +9,10 @@ namespace MeGUI
 	{
         public static readonly string ID = "LAME MP3";
 		int quality;
-		public MP3Settings():base(ID)
+		public MP3Settings()
+            : base(ID, AudioCodec.MP3, AudioEncoderType.LAME, 128)
 		{
 			quality = 50;
-            Codec = AudioCodec.MP3;
-            EncoderType = AudioEncoderType.LAME;
 		}
 		/// <summary>
 		/// gets / sets the quality for vbr mode

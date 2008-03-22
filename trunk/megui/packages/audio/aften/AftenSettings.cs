@@ -6,15 +6,13 @@ namespace MeGUI
 {
     public class AftenSettings : AudioCodecSettings
     {
+        public static object[] SupportedBitrates = new object[] { 64, 128, 160, 192, 224, 256, 288, 320, 352, 384, 448, 512, 576, 640 };
         public static readonly string ID = "Aften AC-3";
-        public static readonly object[] SupportedBitrates = new object[] {64, 128, 160, 192, 224, 256, 288, 320, 352, 384, 448, 512, 576, 640};
 
         public AftenSettings()
-            : base(ID)
+            : base(ID, AudioCodec.AC3, AudioEncoderType.AFTEN, 384)
         {
-            this.Bitrate = 384;
-            this.Codec = AudioCodec.AC3;
-            this.EncoderType = AudioEncoderType.AFTEN;
+            base.supportedBitrates = Array.ConvertAll<object, int>(SupportedBitrates, delegate(object o) { return (int)o; });
         }
 
         public override BitrateManagementMode BitrateMode
@@ -27,34 +25,6 @@ namespace MeGUI
             {
                 // Do Nothing
             }
-        }
-
-        public override int Bitrate
-        {
-            get
-            {
-                return NormalizeVar(base.Bitrate, SupportedBitrates);
-            }
-            set
-            {
-                base.Bitrate = value;
-            }
-        }
-
-        internal static int NormalizeVar(int n, object[] SupportedBitrates)
-        {
-            int x = n;
-            int d = int.MaxValue;
-            foreach (int i in SupportedBitrates)
-            {
-                int d1 = Math.Abs(i - n);
-                if (d1 <= d)
-                {
-                    x = i;
-                    d = d1;
-                }
-            }
-            return x;
         }
     }
 }

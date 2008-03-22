@@ -23,11 +23,9 @@ namespace MeGUI
         public QualityMode Quality;
 
         public AudXSettings()
-            : base(ID)
+            : base(ID, AudioCodec.MP3, AudioEncoderType.AUDX, 80)
 		{
             this.Quality = QualityMode.STDQ;
-            this.Codec = AudioCodec.MP3;
-            this.EncoderType = AudioEncoderType.AUDX;
 		}
 
 

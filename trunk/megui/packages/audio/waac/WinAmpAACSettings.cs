@@ -17,15 +17,11 @@ namespace MeGUI
         public static readonly AacProfile[] SupportedProfiles = new AacProfile[] { AacProfile.PS, AacProfile.HE, AacProfile.LC };
 
         public WinAmpAACSettings()
-            : base(ID)
+            : base(ID, AudioCodec.AAC, AudioEncoderType.WAAC, 48)
 		{
-            this.Bitrate = 48;
             this.Profile = AacProfile.PS;
             this.StereoMode = AacStereoMode.Joint;
             this.Mpeg2AAC = false;
-
-            this.Codec = AudioCodec.AAC;
-            this.EncoderType = AudioEncoderType.WAAC;
 		}
 
         public AacProfile Profile;

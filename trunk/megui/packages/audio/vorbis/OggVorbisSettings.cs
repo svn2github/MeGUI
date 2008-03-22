@@ -9,12 +9,11 @@ namespace MeGUI
         public static readonly string ID = "Vorbis";
 
         public OggVorbisSettings()
-            : base(ID)
+            : base(ID, AudioCodec.VORBIS, AudioEncoderType.VORBIS, 0)
 		{
             this.Quality = 1.0M;
-            this.Codec = AudioCodec.VORBIS;
-            this.EncoderType = AudioEncoderType.VORBIS;
 		}
+
         public decimal Quality;
 
         public override BitrateManagementMode BitrateMode
