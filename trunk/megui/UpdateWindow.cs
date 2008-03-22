@@ -36,73 +36,7 @@ namespace MeGUI
         private string ServerAddress;
 
         #region Classes
-        /// <summary>
-        /// Helper method to parse a version numbers. Takes in a string and returns the numerical
-        /// equivilent of it.
-        /// </summary>
-        /// <param name="str_version">The string containing the version number</param>
-        /// <returns>a double indicating the version number</returns>
-        public static int CompareVersionNumber(Version version1, Version version2)
-        {
-            if (version1 == null && version2 == null)
-                return 0;
-            else if (version1 == null)
-                return 1;
-            else if (version2 == null)
-                return -1;
-            return CompareVersionNumber(version1.FileVersion, version2.FileVersion);
-        }
-        public static int CompareVersionNumber(string version1, string version2)
-        {
-            if (string.IsNullOrEmpty(version1) && string.IsNullOrEmpty(version2))
-                return 0;
-            else if (string.IsNullOrEmpty(version1))
-                return 1;
-            else if (string.IsNullOrEmpty(version2))
-                return -1;
 
-            string[] versionStrings = { version1, version2 };
-            int[] versionNumbers = new int[2];
-            string[] smallVersionStrings = new string[2];
-
-            for (int iVersion = 0; iVersion < versionStrings.Length; iVersion++)
-            {
-                char[] versionString = versionStrings[iVersion].ToCharArray();
-                int numberStartIndex = -1;
-                int textStartIndex = -1;
-                int textStopIndex = -1;
-                for (int iString = 0; iString < versionString.Length; iString++)
-                {
-                    if (numberStartIndex == -1)
-                    {
-                        if (char.IsDigit(versionString[iString]))
-                            numberStartIndex = iString;
-                    }
-                    else if (textStartIndex == -1)
-                    {
-                        if (!char.IsDigit(versionString[iString]))
-                            textStartIndex = iString;
-                    }
-                    else if (textStartIndex != -1)
-                    {
-                        if (char.IsDigit(versionString[iString]))
-                        {
-                            textStopIndex = iString;
-                            break;
-                        }
-                    }
-                }
-                if (numberStartIndex >= 0 && textStartIndex > 0)
-                    versionNumbers[iVersion] = int.Parse(versionStrings[iVersion].Substring(numberStartIndex, textStartIndex-numberStartIndex));
-                else if (numberStartIndex >= 0)
-                    versionNumbers[iVersion] = int.Parse(versionStrings[iVersion].Substring(numberStartIndex));
-                if (textStopIndex > 0)
-                    smallVersionStrings[iVersion] = versionStrings[iVersion].Substring(textStopIndex);
-            }
-            if (versionNumbers[0] != versionNumbers[1])
-                return versionNumbers[1] - versionNumbers[0];
-            return CompareVersionNumber(smallVersionStrings[0], smallVersionStrings[1]);
-        }
         public abstract class iUpgradeable
         {
             /// <summary>
@@ -119,10 +53,9 @@ namespace MeGUI
             // Overrideable methods
             public Version GetLatestVersion()
             {
-            
                 Version latest = new Version();
                 foreach (Version v in this.availableVersions)
-                    if ( CompareVersionNumber(v, latest) < 0)
+                    if (v.CompareTo(latest) > 0)
                         latest = v;
 
                 return latest;
@@ -133,9 +66,7 @@ namespace MeGUI
                 get
                 {
                     Version latest = GetLatestVersion();
-                    return !(latest == null || latest.FileVersion == null ||
-                   (latest != null && this.CurrentVersion != null &&
-                   CompareVersionNumber(latest.FileVersion, currentVersion.FileVersion) >= 0));
+                    return latest != null && (latest.CompareTo(currentVersion) > 0);
                 }
             }
 
@@ -569,7 +500,7 @@ namespace MeGUI
                 return ErrorState.CouldNotDownloadFile;
             }
         }
-        public class Version
+        public class Version : IComparable<Version>
         {
             public Version()
             {
@@ -592,6 +523,85 @@ namespace MeGUI
                 get { return url; }
                 set { url = value; }
             }
+
+            /// <summary>
+            /// Helper method to parse a version numbers. Takes in a string and returns the numerical
+            /// equivilent of it.
+            /// </summary>
+            /// <param name="str_version">The string containing the version number</param>
+            /// <returns>a double indicating the version number</returns>
+            private int CompareVersionNumber(Version version1, Version version2)
+            {
+                if (version1 == null && version2 == null)
+                    return 0;
+                else if (version1 == null)
+                    return -1;
+                else if (version2 == null)
+                    return 1;
+                return CompareVersionNumber(version1.FileVersion, version2.FileVersion);
+            }
+
+            private int CompareVersionNumber(string version1, string version2)
+            {
+                if (string.IsNullOrEmpty(version1) && string.IsNullOrEmpty(version2))
+                    return 0;
+                else if (string.IsNullOrEmpty(version1))
+                    return -1;
+                else if (string.IsNullOrEmpty(version2))
+                    return 1;
+
+                List<char> v1 = new List<char>(version1.ToCharArray());
+                List<char> v2 = new List<char>(version2.ToCharArray());
+                int start1 = 0;
+                int start2 = 0;
+                int end1 = 0;
+                int end2 = 0;
+
+                while (true)
+                {
+                    // Here we find the start and end indexes of the next number in the version string.
+                    start1 = v1.FindIndex(end1, delegate(char c) { return char.IsDigit(c); });
+                    end1 = v1.FindIndex(Math.Max(0, start1), delegate(char c) { return !char.IsDigit(c); });
+
+                    start2 = v2.FindIndex(end2, delegate(char c) { return char.IsDigit(c); });
+                    end2 = v2.FindIndex(Math.Max(0, start2), delegate(char c) { return !char.IsDigit(c); });
+
+                    // If one of versions has run out of valid numbers, we have nothing left to compare
+                    if ((start1 == -1 && start2 == -1) )
+                        return 0;
+                    if ((start1 == -1 && start2 != -1))
+                        return -1;
+                    if ((start1 != -1 && start2 == -1))
+                        return 1;
+
+                    // Generally we parse (end - start) digits into an integer. When we reach the
+                    // end of the string we parse (string.Length - start) digits
+                    int count1 = (end1 != -1 ? end1 : version1.Length) - start1;
+                    int count2 = (end2 != -1 ? end2 : version2.Length) - start2;
+
+                    int result = int.Parse(version1.Substring(start1, count1)) - int.Parse(version2.Substring(start2, count2));
+                    if (result != 0)
+                        return result;
+
+                    // If one of the strings has reached the end, we bail out
+                    if ((end1 == -1 && end2 == -1))
+                        return 0;
+                    if ((end1 == -1 && end2 != -1))
+                        return -1;
+                    if ((end1 != -1 && end2 == -1))
+                        return 1;
+                }
+            }
+
+            #region IComparable<Version> Members
+
+            public int CompareTo(Version other)
+            {
+                return CompareVersionNumber(this, other);
+            }
+
+
+            #endregion
         }
         public class Versions : CollectionBase
         {
@@ -1008,7 +1018,7 @@ namespace MeGUI
 
                 file.AvailableVersions.Add(availableFile);
             }
-            if ( CompareVersionNumber(file.GetLatestVersion(), file.CurrentVersion) < 0 && file.AllowUpdate)
+            if (file.GetLatestVersion().CompareTo(file.CurrentVersion) > 0 && file.AllowUpdate)
                 file.DownloadChecked = true;
 
             if (!fileAlreadyAdded)
@@ -1091,7 +1101,7 @@ namespace MeGUI
                         item.SubItems["Status"].Text = "Updates Available";
                         item.Checked = true;
                     }
-                    else if (CompareVersionNumber(latest, file.CurrentVersion) < 0)
+                    else if (latest.CompareTo(file.CurrentVersion) > 0)
                     {
                         item.SubItems["Status"].Text = "Updates Available";
                         item.Checked = true;
@@ -1139,11 +1149,7 @@ namespace MeGUI
             bool needsRestart = false;
             foreach (List<iUpgradeable> group in groups.Values)
             {
-                foreach (iUpgradeable file in group)
-                {
-                    if (file.NeedsRestartedCopying)
-                        needsRestart = true;
-                }
+                needsRestart = group.Exists(delegate(iUpgradeable f) { return f.NeedsRestartedCopying; });
                 updateableFileCount += group.Count;
                 if (needsRestart)
                 {
@@ -1455,7 +1461,7 @@ namespace MeGUI
             foreach (iUpgradeable upgradeable in upgradeData)
             {
                 if (upgradeable.AllowUpdate && 
-                    CompareVersionNumber(upgradeable.GetLatestVersion(), upgradeable.CurrentVersion)< 0)
+                    upgradeable.GetLatestVersion().CompareTo(upgradeable.CurrentVersion)> 0)
                     numUpdateableFiles++;
             }
             return numUpdateableFiles;
