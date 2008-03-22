@@ -112,7 +112,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>MessageBoxExLib\bin\Release\MessageBoxExLib.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -329,6 +328,12 @@
     </Compile>
     <Compile Include="core\gui\IndividualWorkerSummary.Designer.cs">
       <DependentUpon>IndividualWorkerSummary.cs</DependentUpon>
+    </Compile>
+    <Compile Include="core\gui\InputBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="core\gui\InputBox.Designer.cs">
+      <DependentUpon>InputBox.cs</DependentUpon>
     </Compile>
     <Compile Include="core\gui\JobQueue.cs">
       <SubType>UserControl</SubType>
@@ -742,6 +747,10 @@
     <EmbeddedResource Include="core\gui\IndividualWorkerSummary.resx">
       <SubType>Designer</SubType>
       <DependentUpon>IndividualWorkerSummary.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="core\gui\InputBox.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>InputBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="core\gui\JobQueue.resx">
       <SubType>Designer</SubType>

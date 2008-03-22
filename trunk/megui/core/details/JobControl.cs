@@ -630,10 +630,7 @@ namespace MeGUI.core.details
 
         internal void RequestNewWorker()
         {
-            string name = 
-                Microsoft.VisualBasic.Interaction.InputBox(
-                "Please enter a name for this new worker", "Please enter a name",
-                freeWorkerName(), -1, -1);
+            string name = InputBox.Show("Please enter a name for this new worker", "Please enter a name", freeWorkerName());
             if (string.IsNullOrEmpty(name)) return;
             if (workers.ContainsKey(name))
             {

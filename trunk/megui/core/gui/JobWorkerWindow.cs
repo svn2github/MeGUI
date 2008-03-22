@@ -696,9 +696,7 @@ namespace MeGUI.core.gui
         {
             try
             {
-                string name = Microsoft.VisualBasic.Interaction.InputBox(
-                    "Please enter the new name for this worker", "Please enter the new name",
-                    "New Worker Name", -1, -1);
+                string name = InputBox.Show("Please enter the new name for this worker", "Please enter the new name", "New Worker Name");
                 if (name != null)
                     setName(name);
             }

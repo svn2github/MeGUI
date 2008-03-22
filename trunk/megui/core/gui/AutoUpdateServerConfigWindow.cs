@@ -21,10 +21,10 @@ namespace MeGUI.core.gui
 
         private void addServerButton_Click(object sender, EventArgs e)
         {
-            string serverName = Microsoft.VisualBasic.Interaction.InputBox(
+            string serverName = InputBox.Show(
                 "Please enter the server address", 
                 "Please enter the server address",
-                "http://yourserver.org/path/to/update/folder/", -1, -1);
+                "http://yourserver.org/path/to/update/folder/");
             if (serverName == null) return;
             serverName = serverName.Trim();
             if (serverList.Items.Contains(serverName))

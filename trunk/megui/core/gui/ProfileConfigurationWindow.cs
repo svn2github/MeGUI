@@ -74,7 +74,7 @@ namespace MeGUI.core.gui
 
         private void newVideoProfileButton_Click(object sender, EventArgs e)
         {
-            string profileName = Microsoft.VisualBasic.Interaction.InputBox("Please give the profile a name", "Please give the profile a name", "", -1, -1);
+            string profileName = InputBox.Show("Please give the profile a name", "Please give the profile a name", "");
             if (profileName == null)
                 return;
             profileName = profileName.Trim();
