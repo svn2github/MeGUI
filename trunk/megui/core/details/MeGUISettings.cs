@@ -322,13 +322,20 @@ namespace MeGUI
         /// </summary>
         public static string AvisynthPluginsPath
         {
-            get 
+            get
             {
-                Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\AviSynth");
-                if(key==null)
+                try
+                {
+                    Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\AviSynth");
+                    if (key == null)
+                        return null;
+                    else
+                        return (string)key.GetValue("plugindir2_5");
+                }
+                catch
+                {
                     return null;
-                else
-                    return (string)key.GetValue("plugindir2_5");
+                }
             }
             set 
             {
@@ -336,8 +343,15 @@ namespace MeGUI
                     throw new ArgumentException("Path must be absolute");
                 if(!System.IO.Directory.Exists(value))
                     throw new ArgumentException("Directory " + value + " does not exists");
-                Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\AviSynth", true);
-                key.SetValue("plugindir2_5", value);
+                try
+                {
+                    Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\AviSynth", true);
+                    key.SetValue("plugindir2_5", value);
+                }
+                catch
+                {
+                    // Swallow the error
+                }
             }
         }
 
@@ -348,18 +362,32 @@ namespace MeGUI
         {
             get
             {
-                Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\MeGUI");
-                if (key == null)
+                try
+                {
+                    Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\MeGUI");
+                    if (key == null)
+                        return null;
+                    else
+                        return (string)key.GetValue("update_cache");
+                }
+                catch
+                {
                     return null;
-                else
-                    return (string)key.GetValue("update_cache");
+                }
             }
             set
             {
                 if (!System.IO.Path.IsPathRooted(value))
                     throw new ArgumentException("Path must be absolute");
-                Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine.CreateSubKey(@"SOFTWARE\MeGUI");
-                key.SetValue("update_cache", value);
+                try
+                {
+                    Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine.CreateSubKey(@"SOFTWARE\MeGUI");
+                    key.SetValue("update_cache", value);
+                }
+                catch
+                {
+                    // Swallow the error
+                }
             }
         }
 
