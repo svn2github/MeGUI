@@ -1840,7 +1840,8 @@ namespace MeGUI
                 if (Environment.Version.ToString() == "3.5.21022.08" ||  // 3.5 RTM
                     Environment.Version.ToString() == "3.0.04506.648" || // 3.0 SP1
                     Environment.Version.ToString() == "3.0.04506.26" || // 3.0 RTM
-                    Environment.Version.ToString() == "2.0.50727.1433") // 2.0 SP1
+                    Environment.Version.ToString() == "2.0.50727.1433" || // 2.0 SP1
+                    Environment.Version.ToString() == "2.0.50727.1434") // 2.0 Vista SP1 or Server 2008 
                 {
                     //do nothing;
                 }
