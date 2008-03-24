@@ -826,7 +826,7 @@ namespace MeGUI.core.gui
     class JobQueueSettings : ApplicationSettingsBase
     {
         public JobQueueSettings(IComponent c, string k)
-            :base(c, k)
+            :base(k)
         {}
 
         [global::System.Configuration.UserScopedSettingAttribute()]
