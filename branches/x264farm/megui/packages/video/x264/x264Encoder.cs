@@ -198,7 +198,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             }
             else
             {
-                sb.Append("--analyse none ");
+                sb.Append("--partitions none ");
             }
             if (xs.EncodingMode != 1) // doesn't apply to CQ mode
             {

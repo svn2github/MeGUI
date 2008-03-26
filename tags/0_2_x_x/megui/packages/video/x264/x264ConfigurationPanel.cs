@@ -98,6 +98,7 @@ namespace MeGUI.packages.video.x264
                     if (adaptiveDCT.Checked)
                     {
                         x264I8x8mv.Enabled = true;
+                        x264I8x8mv.Checked = true;
                     }
                     else
                     {
@@ -390,8 +391,8 @@ namespace MeGUI.packages.video.x264
             }
             switch (avcProfile.SelectedIndex)
             {
-                case 0:
-                case 1:
+                case 0: // BP
+                case 1: // MP
                     if (x264P8x8mv.Checked && x264B8x8mv.Checked && x264I4x4mv.Checked && x264P4x4mv.Checked)
                         this.macroblockOptions.SelectedIndex = 0;
                     else if (!x264P8x8mv.Checked && !x264B8x8mv.Checked && !x264I4x4mv.Checked && !x264P4x4mv.Checked)
@@ -399,7 +400,7 @@ namespace MeGUI.packages.video.x264
                     else
                         this.macroblockOptions.SelectedIndex = 2;
                     break;
-                case 2:
+                case 2: // HP
                     if (x264P8x8mv.Checked && x264B8x8mv.Checked && x264I4x4mv.Checked && x264I8x8mv.Checked && x264P4x4mv.Checked && adaptiveDCT.Checked)
                         this.macroblockOptions.SelectedIndex = 0;
                     else if (!x264P8x8mv.Checked && !x264B8x8mv.Checked && !x264I4x4mv.Checked && !x264I8x8mv.Checked && !x264P4x4mv.Checked && !adaptiveDCT.Checked)
@@ -696,11 +697,11 @@ namespace MeGUI.packages.video.x264
             tooltipHelp.SetToolTip(bRDO, SelectHelpText("b-rdo"));
             tooltipHelp.SetToolTip(x264I8x8mv, SelectHelpText("i8x8dct"));
             tooltipHelp.SetToolTip(x264I8x8mv, SelectHelpText("i8x8dct"));
-            tooltipHelp.SetToolTip(x264B8x8mv, SelectHelpText("analyse"));
-            tooltipHelp.SetToolTip(x264P8x8mv, SelectHelpText("analyse"));
-            tooltipHelp.SetToolTip(x264P4x4mv, SelectHelpText("analyse"));
-            tooltipHelp.SetToolTip(x264I4x4mv, SelectHelpText("analyse"));
-            tooltipHelp.SetToolTip(macroblockOptions, SelectHelpText("analyse"));
+            tooltipHelp.SetToolTip(x264B8x8mv, SelectHelpText("partitions"));
+            tooltipHelp.SetToolTip(x264P8x8mv, SelectHelpText("partitions"));
+            tooltipHelp.SetToolTip(x264P4x4mv, SelectHelpText("partitions"));
+            tooltipHelp.SetToolTip(x264I4x4mv, SelectHelpText("partitions"));
+            tooltipHelp.SetToolTip(macroblockOptions, SelectHelpText("partitions"));
             tooltipHelp.SetToolTip(x264ChromaMe, SelectHelpText("no-chroma-me"));
             tooltipHelp.SetToolTip(x264WeightedBPrediction, SelectHelpText("weightb"));
             tooltipHelp.SetToolTip(x264SubpelRefinement, SelectHelpText("subme"));

@@ -180,7 +180,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                         sb.Append("i4x4,");
                     if (xs.P4x4mv) // default is unchecked
                         sb.Append("p4x4,");
-                    if (xs.I8x8mv) // default is unchecked
+                    if (xs.I8x8mv) // default is checked
                         sb.Append("i8x8");
                     if (sb.ToString().EndsWith(","))
                         sb.Remove(sb.Length - 1, 1);
@@ -192,7 +192,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             }
             else
             {
-                sb.Append("--analyse none ");
+                sb.Append("--partitions none ");
             }
             if (xs.EncodingMode != 1) // doesn't apply to CQ mode
             {

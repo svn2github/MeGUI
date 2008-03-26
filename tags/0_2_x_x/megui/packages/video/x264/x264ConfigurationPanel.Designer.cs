@@ -1428,6 +1428,8 @@ namespace MeGUI.packages.video.x264
             // 
             // x264I8x8mv
             // 
+            this.x264I8x8mv.Checked = true;
+            this.x264I8x8mv.CheckState = System.Windows.Forms.CheckState.Checked;
             this.x264I8x8mv.Location = new System.Drawing.Point(9, 93);
             this.x264I8x8mv.Name = "x264I8x8mv";
             this.x264I8x8mv.Size = new System.Drawing.Size(56, 24);

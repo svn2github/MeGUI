@@ -696,11 +696,11 @@ namespace MeGUI.packages.video.x264
             tooltipHelp.SetToolTip(bRDO, SelectHelpText("b-rdo"));
             tooltipHelp.SetToolTip(x264I8x8mv, SelectHelpText("i8x8dct"));
             tooltipHelp.SetToolTip(x264I8x8mv, SelectHelpText("i8x8dct"));
-            tooltipHelp.SetToolTip(x264B8x8mv, SelectHelpText("analyse"));
-            tooltipHelp.SetToolTip(x264P8x8mv, SelectHelpText("analyse"));
-            tooltipHelp.SetToolTip(x264P4x4mv, SelectHelpText("analyse"));
-            tooltipHelp.SetToolTip(x264I4x4mv, SelectHelpText("analyse"));
-            tooltipHelp.SetToolTip(macroblockOptions, SelectHelpText("analyse"));
+            tooltipHelp.SetToolTip(x264B8x8mv, SelectHelpText("partitions"));
+            tooltipHelp.SetToolTip(x264P8x8mv, SelectHelpText("partitions"));
+            tooltipHelp.SetToolTip(x264P4x4mv, SelectHelpText("partitions"));
+            tooltipHelp.SetToolTip(x264I4x4mv, SelectHelpText("partitions"));
+            tooltipHelp.SetToolTip(macroblockOptions, SelectHelpText("partitions"));
             tooltipHelp.SetToolTip(x264ChromaMe, SelectHelpText("no-chroma-me"));
             tooltipHelp.SetToolTip(x264WeightedBPrediction, SelectHelpText("weightb"));
             tooltipHelp.SetToolTip(x264SubpelRefinement, SelectHelpText("subme"));

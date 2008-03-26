@@ -746,8 +746,8 @@ namespace MeGUI.packages.video.x264
             this.NoiseReduction.Name = "NoiseReduction";
             this.NoiseReduction.Size = new System.Drawing.Size(48, 20);
             this.NoiseReduction.TabIndex = 5;
-            this.NoiseReduction.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textField_KeyPress);
             this.NoiseReduction.TextChanged += new System.EventHandler(this.updateEvent);
+            this.NoiseReduction.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textField_KeyPress);
             // 
             // NoiseReductionLabel
             // 
@@ -779,8 +779,8 @@ namespace MeGUI.packages.video.x264
             this.x264KeyframeInterval.Size = new System.Drawing.Size(48, 20);
             this.x264KeyframeInterval.TabIndex = 1;
             this.x264KeyframeInterval.Text = "250";
-            this.x264KeyframeInterval.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textField_KeyPress);
             this.x264KeyframeInterval.TextChanged += new System.EventHandler(this.updateEvent);
+            this.x264KeyframeInterval.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textField_KeyPress);
             // 
             // x264MinGOPSize
             // 
@@ -788,8 +788,8 @@ namespace MeGUI.packages.video.x264
             this.x264MinGOPSize.Name = "x264MinGOPSize";
             this.x264MinGOPSize.Size = new System.Drawing.Size(48, 20);
             this.x264MinGOPSize.TabIndex = 3;
-            this.x264MinGOPSize.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textField_KeyPress);
             this.x264MinGOPSize.TextChanged += new System.EventHandler(this.updateEvent);
+            this.x264MinGOPSize.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textField_KeyPress);
             // 
             // x264MinGOPSizeLabel
             // 
@@ -1025,8 +1025,8 @@ namespace MeGUI.packages.video.x264
             this.x264VBVMaxRate.Name = "x264VBVMaxRate";
             this.x264VBVMaxRate.Size = new System.Drawing.Size(48, 20);
             this.x264VBVMaxRate.TabIndex = 3;
-            this.x264VBVMaxRate.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textField_KeyPress);
             this.x264VBVMaxRate.TextChanged += new System.EventHandler(this.updateEvent);
+            this.x264VBVMaxRate.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textField_KeyPress);
             // 
             // x264TempQuantBlur
             // 
@@ -1101,8 +1101,8 @@ namespace MeGUI.packages.video.x264
             this.x264VBVBufferSize.Name = "x264VBVBufferSize";
             this.x264VBVBufferSize.Size = new System.Drawing.Size(48, 20);
             this.x264VBVBufferSize.TabIndex = 1;
-            this.x264VBVBufferSize.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textField_KeyPress);
             this.x264VBVBufferSize.TextChanged += new System.EventHandler(this.updateEvent);
+            this.x264VBVBufferSize.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textField_KeyPress);
             // 
             // x264TempQuantBlurLabel
             // 
@@ -1427,6 +1427,8 @@ namespace MeGUI.packages.video.x264
             // 
             // x264I8x8mv
             // 
+            this.x264I8x8mv.Checked = true;
+            this.x264I8x8mv.CheckState = System.Windows.Forms.CheckState.Checked;
             this.x264I8x8mv.Location = new System.Drawing.Point(9, 93);
             this.x264I8x8mv.Name = "x264I8x8mv";
             this.x264I8x8mv.Size = new System.Drawing.Size(56, 24);
