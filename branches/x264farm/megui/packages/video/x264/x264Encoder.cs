@@ -173,7 +173,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             // now it's time for the macroblock types
             if (xs.P8x8mv || xs.B8x8mv || xs.I4x4mv || xs.I8x8mv || xs.P4x4mv || xs.AdaptiveDCT)
             {
-                sb.Append("--analyse ");
+                sb.Append("--partitions ");
                 if (xs.I4x4mv && xs.P4x4mv && xs.I8x8mv && xs.P8x8mv && xs.B8x8mv)
                     sb.Append("all ");
                 else
