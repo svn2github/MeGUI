@@ -613,7 +613,7 @@ namespace MeGUI.packages.video.x264
             this.x264MixedReferences.Padding = new System.Windows.Forms.Padding(3);
             this.x264MixedReferences.Size = new System.Drawing.Size(201, 24);
             this.x264MixedReferences.TabIndex = 4;
-            this.x264MixedReferences.Text = "Mixed Reference frames";
+            this.x264MixedReferences.Text = "Mixed Reference Frames";
             this.x264MixedReferences.CheckedChanged += new System.EventHandler(this.updateEvent);
             // 
             // x264NumberOfRefFrames

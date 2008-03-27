@@ -1,3 +1,8 @@
+0.2.6.1046
+    - (kurtnoise) few more updates for the x264 compressor.
+    - (Kurtnoise) updated a switch for the x264 compressor.
+    - (Kurtnoise) Added .NET Framework version detection from Vista SP1.
+
 0.2.6.1045
     - (Sharktooth) [d2vcreator] Default to "Demux All Audio Tracks"
     - (Kurtnoise) updated MediaInfo.dll and MediaInfoWrapper to the last SVN revision.
