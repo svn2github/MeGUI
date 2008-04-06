@@ -533,9 +533,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                     case ".avs":
                         script.AppendFormat("Import(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
                         break;
-                    case ".wav":
-                        script.AppendFormat("WavSource(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
-                        break;
                     case ".dts":
                         script.AppendFormat("NicDtsSource(\"{0}\"", audioJob.Input);
                         if (audioJob.Settings.AutoGain)
@@ -546,10 +543,16 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                     case ".mpa":
                     case ".mpg":
                     case ".mp2":
-                        script.AppendFormat("NicMPASource(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
-                        break;
                     case ".mp3":
                         script.AppendFormat("NicMPG123Source(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
+                        break;
+                    case ".wav":
+                    case ".w64":
+                    case ".aif":
+                    case ".au":
+                    case ".caf":
+                    case ".bwf":
+                        script.AppendFormat("RaWavSource(\"{0}\", 2){1}", audioJob.Input, Environment.NewLine);
                         break;
                     default:
                         directShow = true;
