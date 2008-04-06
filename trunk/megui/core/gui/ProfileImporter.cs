@@ -81,6 +81,24 @@ namespace MeGUI.core.gui
                 DialogResult = DialogResult.OK;
             });
         }
+
+        private void checkAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem ts = (ToolStripMenuItem)sender;
+            for (int i = 0; i < profileList.Items.Count; i++)
+            {
+                profileList.SetItemChecked(i, true);
+            } 
+        }
+
+        private void checkNoneToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem ts = (ToolStripMenuItem)sender;
+            for (int i = 0; i < profileList.Items.Count; i++)
+            {
+                profileList.SetItemChecked(i, false);
+            } 
+        }
     }
 
     public class CancelledException : MeGUIException

@@ -35,6 +35,19 @@ namespace MeGUI.core.gui
             cancelButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
+            // cancelButton
+            // 
+            cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            cancelButton.AutoSize = true;
+            cancelButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            cancelButton.Location = new System.Drawing.Point(321, 323);
+            cancelButton.Name = "cancelButton";
+            cancelButton.Size = new System.Drawing.Size(50, 23);
+            cancelButton.TabIndex = 2;
+            cancelButton.Text = "Cancel";
+            cancelButton.UseVisualStyleBackColor = true;
+            // 
             // profileList
             // 
             this.profileList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
@@ -56,19 +69,6 @@ namespace MeGUI.core.gui
             this.label1.TabIndex = 1;
             this.label1.Text = "Select the profiles to import/export";
             // 
-            // cancelButton
-            // 
-            cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            cancelButton.AutoSize = true;
-            cancelButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            cancelButton.Location = new System.Drawing.Point(321, 323);
-            cancelButton.Name = "cancelButton";
-            cancelButton.Size = new System.Drawing.Size(50, 23);
-            cancelButton.TabIndex = 2;
-            cancelButton.Text = "Cancel";
-            cancelButton.UseVisualStyleBackColor = true;
-            // 
             // button2
             // 
             this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -81,7 +81,7 @@ namespace MeGUI.core.gui
             this.button2.Text = "Import.../Export...";
             this.button2.UseVisualStyleBackColor = true;
             // 
-            // ProfilePorter2
+            // ProfilePorter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -90,7 +90,7 @@ namespace MeGUI.core.gui
             this.Controls.Add(cancelButton);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.profileList);
-            this.Name = "ProfilePorter2";
+            this.Name = "ProfilePorter";
             this.Text = "ProfilePorter2";
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -99,8 +99,8 @@ namespace MeGUI.core.gui
 
         #endregion
 
-        private System.Windows.Forms.CheckedListBox profileList;
         protected System.Windows.Forms.Label label1;
         protected System.Windows.Forms.Button button2;
+        public System.Windows.Forms.CheckedListBox profileList;
     }
 }
