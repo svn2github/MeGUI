@@ -56,9 +56,9 @@ namespace MeGUI
         }
 		int nbRefFrames, alphaDeblock, betaDeblock, subPelRefinement, maxQuantDelta, tempQuantBlur, 
 			bframePredictionMode, vbvBufferSize, vbvMaxBitrate, meType, meRange, minGOPSize, 
-			quantizerMatrixType, profile, x264Trellis, level, noiseReduction, deadZoneInter, deadZoneIntra;
+			quantizerMatrixType, profile, x264Trellis, level, noiseReduction, deadZoneInter, deadZoneIntra, AQMode;
 		decimal ipFactor, pbFactor, chromaQPOffset, vbvInitialBuffer, bitrateVariance, quantCompression, 
-			tempComplexityBlur, tempQuanBlurCC, scdSensitivity, bframeBias, quantizerCrf;
+			tempComplexityBlur, tempQuanBlurCC, scdSensitivity, bframeBias, quantizerCrf, AQStrength;
 		bool deblock, cabac, p4x4mv, p8x8mv, b8x8mv, i4x4mv, i8x8mv, weightedBPrediction, adaptiveBFrames, encodeInterlaced,
 			bFramePyramid, chromaME, adaptiveDCT, lossless, mixedRefs, bRDO, NoFastPSkip, BiME, psnrCalc, noDctDecimate, ssimCalc;
 		string quantizerMatrix;
@@ -126,6 +126,8 @@ namespace MeGUI
 			x264Trellis = 0;
 			level = 15;
             base.MaxNumberOfPasses = 3;
+            AQMode = 2;
+            AQStrength = new decimal(1.0);
 		}
 		#endregion
 		#region properties
@@ -380,19 +382,27 @@ namespace MeGUI
 			get {return quantizerMatrixType;}
 			set {quantizerMatrixType = value;}
 		}
-		#endregion
         public int DeadZoneInter
         {
             get { return deadZoneInter; }
             set { deadZoneInter = value; }
         }
-
         public int DeadZoneIntra
         {
             get { return deadZoneIntra; }
             set { deadZoneIntra = value; }
         }
-
+        public int AQmode
+        {
+            get { return AQMode; }
+            set { AQMode = value; }
+        }
+        public decimal AQstrength
+        {
+            get { return AQStrength; }
+            set { AQStrength = value; }
+        }
+        #endregion
         public override bool UsesSAR
         {
             get { return true; }

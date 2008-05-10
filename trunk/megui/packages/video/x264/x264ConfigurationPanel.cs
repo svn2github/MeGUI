@@ -9,6 +9,7 @@ using System.Xml;
 
 using MeGUI.core.details.video;
 using MeGUI.core.plugins.interfaces;
+using MeGUI.core.gui;
 
 namespace MeGUI.packages.video.x264
 {
@@ -416,6 +417,8 @@ namespace MeGUI.packages.video.x264
                 cqmComboBox1.SelectedIndex = 0; // flat matrix
             if (this.avcProfile.SelectedIndex == -1)
                 avcProfile.SelectedIndex = 1; // 
+            if (cbAQMode.SelectedIndex == -1)
+                cbAQMode.SelectedIndex = 2;
 
             lastEncodingMode = this.x264EncodingMode.SelectedIndex;
             try
@@ -529,6 +532,8 @@ namespace MeGUI.packages.video.x264
                 xs.Lossless = x264LosslessMode.Checked;
                 if (!NoiseReduction.Text.Equals(""))
                     xs.NoiseReduction = Int32.Parse(NoiseReduction.Text);
+                xs.AQmode = (int)cbAQMode.SelectedIndex;
+                xs.AQstrength = numAQStrength.Value;
                 return xs;
             }
             set
@@ -601,6 +606,8 @@ namespace MeGUI.packages.video.x264
                 cqmComboBox1.SelectedObject = xs.QuantizerMatrix;
                 x264LosslessMode.Checked = xs.Lossless;
                 psnr.Checked = xs.PSNRCalculation;
+                cbAQMode.SelectedIndex = xs.AQmode;
+                numAQStrength.Value = xs.AQstrength;
                 NoiseReduction.Text = xs.NoiseReduction.ToString(); ;
             }
         }
@@ -878,6 +885,33 @@ namespace MeGUI.packages.video.x264
         private void cqmComboBox1_SelectionChanged(object sender, string val)
         {
             genericUpdate();
+        }
+
+        private void cbAQMode_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbAQMode.SelectedIndex != 0)
+                numAQStrength.Enabled = true;
+            else numAQStrength.Enabled = false;
+            genericUpdate();
+        }
+
+        private void linkx264website_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            try
+            {
+                VisitLink();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Unable to open link that was clicked.");
+            }
+        }
+
+        private void VisitLink()
+        {
+            //Call the Process.Start method to open the default browser 
+            //with a URL:
+            System.Diagnostics.Process.Start("http://www.videolan.org/developers/x264.html");
         }
     }
 }

@@ -249,6 +249,20 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             if (xs.NbThreads == 0)
                 sb.Append("--threads auto ");
             sb.Append("--thread-input ");
+
+            if (xs.AQmode + 1 != 3)
+            {
+                sb.Append("--aq-mode ");
+                if (xs.AQmode + 1 == 1)
+                    sb.Append("0 ");
+                if (xs.AQmode + 1 == 2)
+                    sb.Append("1 ");
+            }
+            if (xs.AQmode > 0)
+            {
+                if (xs.AQstrength != new decimal(1.0))
+                    sb.Append("--aq-strength " + xs.AQstrength.ToString(ci) + " ");
+            }
             if (xs.Zones != null && xs.Zones.Length > 0 && xs.CreditsQuantizer >= new decimal(1))
             {
                 sb.Append("--zones ");
