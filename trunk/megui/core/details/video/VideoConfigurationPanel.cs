@@ -183,6 +183,7 @@ namespace MeGUI.core.details.video
             this.tooltipHelp.IsBalloon = true;
             this.tooltipHelp.ReshowDelay = 100;
             this.tooltipHelp.ShowAlways = true;
+            this.tooltipHelp.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
             // 
             // VideoConfigurationPanel
             // 

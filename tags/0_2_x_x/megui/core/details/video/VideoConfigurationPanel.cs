@@ -225,7 +225,7 @@ namespace MeGUI.core.details.video
             this.mainTabPage.Location = new System.Drawing.Point(4, 22);
             this.mainTabPage.Name = "mainTabPage";
             this.mainTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.mainTabPage.Size = new System.Drawing.Size(319, 318);
+            this.mainTabPage.Size = new System.Drawing.Size(360, 318);
             this.mainTabPage.TabIndex = 0;
             this.mainTabPage.Text = "Main";
             this.mainTabPage.UseVisualStyleBackColor = true;
@@ -271,6 +271,7 @@ namespace MeGUI.core.details.video
             this.tooltipHelp.IsBalloon = true;
             this.tooltipHelp.ReshowDelay = 100;
             this.tooltipHelp.ShowAlways = true;
+            this.tooltipHelp.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
             // 
             // VideoConfigurationPanel
             // 
@@ -278,8 +279,8 @@ namespace MeGUI.core.details.video
             this.Controls.Add(this.tabControl1);
             this.Name = "VideoConfigurationPanel";
             this.Size = new System.Drawing.Size(372, 409);
-            this.VisibleChanged += new System.EventHandler(this.VideoConfigurationPanel_VisibleChanged);
             this.Load += new System.EventHandler(this.VideoConfigurationPanel_Load);
+            this.VisibleChanged += new System.EventHandler(this.VideoConfigurationPanel_VisibleChanged);
             this.tabControl1.ResumeLayout(false);
             this.zoneTabPage.ResumeLayout(false);
             this.zoneTabPage.PerformLayout();
