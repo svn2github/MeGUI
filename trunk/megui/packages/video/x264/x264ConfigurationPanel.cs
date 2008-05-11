@@ -665,12 +665,6 @@ namespace MeGUI.packages.video.x264
             tooltipHelp.SetToolTip(x264MinimimQuantizer, SelectHelpText("qpmin"));
             tooltipHelp.SetToolTip(NoFastPSkip, SelectHelpText("no-fast-pskip"));
             tooltipHelp.SetToolTip(bRDO, SelectHelpText("b-rdo"));
-            tooltipHelp.SetToolTip(x264I8x8mv, SelectHelpText("i8x8dct"));
-            tooltipHelp.SetToolTip(x264I8x8mv, SelectHelpText("i8x8dct"));
-            tooltipHelp.SetToolTip(x264B8x8mv, SelectHelpText("partitions"));
-            tooltipHelp.SetToolTip(x264P8x8mv, SelectHelpText("partitions"));
-            tooltipHelp.SetToolTip(x264P4x4mv, SelectHelpText("partitions"));
-            tooltipHelp.SetToolTip(x264I4x4mv, SelectHelpText("partitions"));
             tooltipHelp.SetToolTip(macroblockOptions, SelectHelpText("partitions"));
             tooltipHelp.SetToolTip(x264ChromaMe, SelectHelpText("no-chroma-me"));
             tooltipHelp.SetToolTip(x264WeightedBPrediction, SelectHelpText("weightb"));
@@ -680,7 +674,7 @@ namespace MeGUI.packages.video.x264
             tooltipHelp.SetToolTip(x264AdaptiveBframes, SelectHelpText("no-b-adapt"));
             tooltipHelp.SetToolTip(x264PyramidBframes, SelectHelpText("b-pyramid"));
             tooltipHelp.SetToolTip(x264MixedReferences, SelectHelpText("mixed-refs"));
-            tooltipHelp.SetToolTip(x264LosslessMode, SelectHelpText("lossless"));
+            tooltipHelp.SetToolTip(x264LosslessMode, SelectHelpText("losslessmode"));
             tooltipHelp.SetToolTip(x264NumberOfRefFrames, SelectHelpText("ref"));
             tooltipHelp.SetToolTip(x264NumberOfBFrames, SelectHelpText("bframes"));
             tooltipHelp.SetToolTip(x264AlphaDeblock, SelectHelpText("filter"));
@@ -715,8 +709,25 @@ namespace MeGUI.packages.video.x264
             tooltipHelp.SetToolTip(x264NbThreads, SelectHelpText("threads"));
             tooltipHelp.SetToolTip(x264MinGOPSize, SelectHelpText("min-keyint"));
             tooltipHelp.SetToolTip(trellis, SelectHelpText("trellis"));
-            tooltipHelp.SetToolTip(psnr, SelectHelpText("no-psnr"));
+            tooltipHelp.SetToolTip(psnr, SelectHelpText("psnr"));
+            tooltipHelp.SetToolTip(ssim, SelectHelpText("ssim"));
             tooltipHelp.SetToolTip(fourCC, SelectHelpText("fourcc"));
+            tooltipHelp.SetToolTip(avcLevel, SelectHelpText("level"));
+            tooltipHelp.SetToolTip(avcProfile, SelectHelpText("profile"));
+            tooltipHelp.SetToolTip(cqmComboBox1, SelectHelpText("cqm"));
+
+            /*************************/
+            /* Advanced Tab Tooltips */
+            /*************************/
+            tooltipHelp.SetToolTip(cbAQMode, SelectHelpText("aqmode"));
+            tooltipHelp.SetToolTip(numAQStrength, SelectHelpText("aqstrength"));
+            tooltipHelp.SetToolTip(macroblockOptions, SelectHelpText("analyse"));
+            tooltipHelp.SetToolTip(adaptiveDCT, SelectHelpText("i8x8dct"));
+            tooltipHelp.SetToolTip(x264B8x8mv, SelectHelpText("b8x8mv"));
+            tooltipHelp.SetToolTip(x264P8x8mv, SelectHelpText("p8x8mv"));
+            tooltipHelp.SetToolTip(x264P4x4mv, SelectHelpText("p4x4mv"));
+            tooltipHelp.SetToolTip(x264I4x4mv, SelectHelpText("i4x4mv"));
+
         }
         #endregion
         #region GUI State adjustment

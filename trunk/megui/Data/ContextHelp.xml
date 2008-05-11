@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ContextHelp version="0.3" Author="LiFers" LastUpdated="15-1-06">
+<ContextHelp version="0.4" Author="Kurtnoise" LastUpdated="11-05-08">
 	<Codec name="x264">
 		<!--To Do List: 
 1 Use info from x264 help  -  DONE
@@ -124,7 +124,7 @@ heavier deblocking, you should increase the threshold so that more data is deblo
 			<Recommended>0:0</Recommended>
 			<Default>0:0</Default>
 		</filter>
-		<!--Reate control options:-->
+		<!--Rate control options:-->
 		<qp name="Constant Quantizer">
 			<Advanced>
 In Constant Quantizer mode, each frame is encoded with the same mathematical quality
@@ -188,7 +188,8 @@ level of quality.</Advanced>
 			<Default>4</Default>
 		</qpstep>
 		<ratetol name="Average Bit rate Variance (%)">
-			<Advanced>Regulates how much the bit rate can fluctuate from the target Average Bit Rate that has
+			<Advanced>
+Regulates how much the bit rate can fluctuate from the target Average Bit Rate that has
 been set. Lower settings constrict bit rate changes, producing a file that will stream better
 and more closely match a predicted file size based on the set bit rate, while reducing the
 codec's ability to adapt to complex scenes. Higher settings increase bit rate variability which
@@ -201,7 +202,8 @@ complexity. (A setting of 100% would result in Constant Quantizer compression.</
 			<Default>1.0</Default>
 		</ratetol>
 		<vbv-maxrate name="VBV Maximum Bit rate">
-			<Advanced>Specifies the maximum bit rate allowed in the Video Buffer.</Advanced>
+			<Advanced>
+Specifies the maximum bit rate allowed in the Video Buffer.</Advanced>
 			<Basic>Max local bit rate of Video Buffer Verifier.</Basic>
 			<Recommended>0 (Automatic)</Recommended>
 			<Default>0</Default>
@@ -231,12 +233,13 @@ compressed P-frames that follow.</Advanced>
 			<Default>1.4</Default>
 		</ipratio>
 		<pbratio name="P-B Quantizer Factor">
-			<Advanced>Specifies the level of quality reduction between P-frames and the more compressed B-frames that follow.</Advanced>
+			<Advanced>
+Specifies the level of quality reduction between P-frames and the more compressed B-frames that follow.</Advanced>
 			<Basic>Quantization factor between P- and B-frames.</Basic>
 			<Recommended>1.3</Recommended>
 			<Default>1.3</Default>
 		</pbratio>
-		<chroma-qp-offset name="Chroma and Luma Qunatizer Offset">
+		<chroma-qp-offset name="Chroma and Luma Quantizer Offset">
 			<Advanced>
 Specifies the level of quality reduction between colour and brightness information.
 The human eye is more sensitive to changes in brightness than colour, so compression
@@ -263,7 +266,8 @@ more informed choices on the finial pass.</Advanced>
 			<Default>x264_2pass.log</Default>
 		</stats>
 		<rceq name="Rate Control Equation">
-			<Advanced>This is the mathematical model used to determine rate control during encoding.</Advanced>
+			<Advanced>
+This is the mathematical model used to determine rate control during encoding.</Advanced>
 			<Basic>Rate Control Equation.</Basic>
 			<Recommended>blurCplx^(1-qComp)</Recommended>
 			<Default>blurCplx^(1-qComp)</Default>
@@ -327,7 +331,8 @@ mode per frame. Works best in 2pass (enable in both passes).</Advanced>
 			<Default>Spatial</Default>
 		</direct>
 		<weightb name="B-frame Weighted Prediction">
-			<Advanced>Enables 'brightness' weighting of B-frames which improves fades and colour gradients ie sky.</Advanced>
+			<Advanced>
+Enables 'brightness' weighting of B-frames which improves fades and colour gradients ie sky.</Advanced>
 			<Basic>Weighted prediction for B-frames</Basic>
 			<Recommended>Enabled</Recommended>
 			<Default>Disabled</Default>
@@ -360,7 +365,8 @@ mode 6 (RDO) must be used to enable RDO for B-frames.</Advanced>
 			<Default>5</Default>
 		</subme>
 		<b-rdo name="RDO for B-frames">
-			<Advanced>Improved motion estimation for B-frames at the cost of encoding speed. Note: requires Sub Pixel Refinement.</Advanced>
+			<Advanced>
+Improved motion estimation for B-frames at the cost of encoding speed. Note: requires Sub Pixel Refinement.</Advanced>
 			<Basic>Rate Distortion Optimisation mode decision for B-frames.</Basic>
 			<Recommended>Enabled</Recommended>
 			<Default>Disabled</Default>
@@ -375,13 +381,15 @@ as opposed to only one reference frame per macroblock.</Advanced>
 		</mixed-refs>
 		<!--WARNING DOUBLE NEGATIVE-->
 		<no-chroma-me name="Chroma Motion Estimation">
-			<Advanced>Enables Motion Estimation to take colour components of the video into account when calculating movement, improving quality.</Advanced>
+			<Advanced>
+Enables Motion Estimation to take colour components of the video into account when calculating movement, improving quality.</Advanced>
 			<Basic>Use chroma in motion estimation</Basic>
 			<Recommended>Enabled</Recommended>
 			<Default>Enabled</Default>
 		</no-chroma-me>
 		<bime name="Bi-Directional Motion Estimation">
-			<Advanced>Enables an additional search for forwards and backwards vectors when encoding
+			<Advanced>
+Enables an additional search for forwards and backwards vectors when encoding
 a bi-directional B-frames, improving quality. Note: Does not effect B-frames encoded
 as direct/skip (no motion vector), forward (1 MV pointing to a past reference), backwards
 (1 MV pointing to a future reference).</Advanced>
@@ -391,11 +399,41 @@ as direct/skip (no motion vector), forward (1 MV pointing to a past reference), 
 		</bime>
 		<!--Note: name changed from 8x8dct due to invalid XML character warning-->
 		<i8x8dct name="Adaptive 8x8 DCT">
-			<Advanced>Enables the intelligent adaptive use of 8x8 transforms in I-frames.</Advanced>
+			<Advanced>
+Enables the intelligent adaptive use of 8x8 transforms in I-frames.</Advanced>
 			<Basic>Adaptive spatial transform size</Basic>
 			<Recommended>Enabled</Recommended>
 			<Default>Disabled</Default>
 		</i8x8dct>
+    <i4x4mv name="4x4 sub-partitions for I-Frames">
+      <Advanced>
+Enables the use of 4x4 sub-partitions in predicted macroblocks, for I-frames.</Advanced>
+      <Basic>4x4 sub-partitions for I-Frames</Basic>
+      <Recommended>Enabled</Recommended>
+      <Default>Disabled</Default>
+    </i4x4mv>
+    <p4x4mv name="4x4 sub-partitions for P-Frames">
+      <Advanced>
+Enables the use of 4x4 sub-partitions in predicated macroblocks, for P-frames. 
+Improves compression by about 0.5%, at the cost of encoding speed. Requires P8X8 enabled.</Advanced>
+      <Basic>4x4 sub-partitions for P-Frames</Basic>
+      <Recommended>Disabled</Recommended>
+      <Default>Disabled</Default>
+    </p4x4mv>
+    <p8x8mv name="8x8 sub-partitions for P-Frames">
+      <Advanced>
+Enables the use of 8x8 sub-partitions in predicted macroblocks, for P-frames.</Advanced>
+      <Basic>8x8 sub-partitions for P-Frames</Basic>
+      <Recommended>Enabled</Recommended>
+      <Default>Disabled</Default>
+    </p8x8mv>
+    <b8x8mv name="8x8 sub-partitions for B-Frames">
+      <Advanced>
+Enables the use of 8x8 sub-partitions in predicted macroblocks, for B-frames.</Advanced>
+      <Basic>8x8 sub-partitions for B-Frames</Basic>
+      <Recommended>Enabled</Recommended>
+      <Default>Disabled</Default>
+    </b8x8mv>
 		<trellis name="Trellis Quantization">
 			<Advanced>
 Performs Trellis quantisation to increase efficiency. On Macroblock provides a
@@ -437,13 +475,15 @@ of a good external noise reduction filter, but it performs very fast.</Advanced>
 			<Default>Disabled</Default>
 		</cqmfile>
 		<cqm4 name="4x4 Quantization Matrices">
-			<Advanced>Takes a comma separated list of 16 integers.</Advanced>
+			<Advanced>
+Takes a comma separated list of 16 integers.</Advanced>
 			<Basic>Set all 4x4 quantization matrices.</Basic>
 			<Recommended>Disabled</Recommended>
 			<Default>Disabled</Default>
 		</cqm4>
 		<cqm8 name="8x8 Quantization Matrices">
-			<Advanced>Takes a comma separated list of 64 integers.</Advanced>
+			<Advanced>
+Takes a comma separated list of 64 integers.</Advanced>
 			<Basic>Set all 8x8 quantization matrices.</Basic>
 			<Recommended>Disabled</Recommended>
 			<Default>Disabled</Default>
@@ -453,8 +493,9 @@ of a good external noise reduction filter, but it performs very fast.</Advanced>
 	cqm4iy, cqm4ic, cqm4py, cqm4pc: Set individual quant matrices-->
 		<!--Video Usability options:
 Note: these settings are not used by the encoder but are suggestions to the playback equipment-->
-		<sar name="Sample Aspect Ration">
-			<Advanced>Stores the size of non-square pixels in the video stream for use during playback. This enables anamorphic video.</Advanced>
+		<sar name="Sample Aspect Ratio">
+			<Advanced>
+Stores the size of non-square pixels in the video stream for use during playback. This enables anamorphic video.</Advanced>
 			<Basic>Specify Sample Aspect Ratio</Basic>
 			<Recommended>1:1</Recommended>
 			<Default>1:1</Default>
@@ -511,7 +552,8 @@ This can be used to change the frame rate of the video during encoding
 			<Default></Default>
 		</output>
 		<threads name="Number of Threads">
-			<Advanced>For optimum speed, this should be left at 0, ie automatic detection.
+			<Advanced>
+For optimum speed, this should be left at 0, ie automatic detection.
 The automatic setting is 1.5 x logical CPUs. Threads increase encoding
 speed and negligibly negatively affect quality.</Advanced>
 			<Basic>Enable parallel encoding by using more than 1 thread to increase speed</Basic>
@@ -519,7 +561,7 @@ speed and negligibly negatively affect quality.</Advanced>
 			<Default>0 (auto)</Default>
 		</threads>
 		<!--WARNING DOUBLE NEGATIVE-->
-		<no-asm name="Disable CPU Optimizations">
+		<no-asm name="CPU Optimizations">
 			<Advanced>
 Codecs use advanced CPU SIMD (Single Instruction, Multiple Data) instruction
 sets allowing massive speed increases. This should only be enabled for
@@ -529,12 +571,34 @@ troubleshooting purposes.</Advanced>
 			<Default>Disabled</Default>
 		</no-asm>
 		<!--WARNING DOUBLE NEGATIVE-->
-		<no-psnr name="Disable PSNR Computation">
-			<Advanced>Prevents PSNR calculations that are reported on completion. Provides a small increase in speed.</Advanced>
-			<Basic>Disable PSNR computation.</Basic>
+		<psnr name="PSNR Computation">
+			<Advanced>
+Prevents PSNR calculations that are reported on completion.</Advanced>
+			<Basic>Enable PSNR computation.</Basic>
 			<Recommended>Disabled</Recommended>
 			<Default>Disabled</Default>
-		</no-psnr>
+		</psnr>
+    <ssim name="SSIM Computation">
+      <Advanced>
+Prevents SSIM calculations that are reported on completion.</Advanced>
+      <Basic>Enable SSIM computation</Basic>
+      <Recommended>Disabled</Recommended>
+      <Default>Disabled</Default>
+    </ssim>
+    <losslessmode name="Lossless Mode">
+      <Advanced>
+Set QP to 0 to activate the lossless Mode.</Advanced>
+      <Basic>Enable the lossless Mode</Basic>
+      <Recommended>Disabled</Recommended>
+      <Default>Disabled</Default>
+    </losslessmode>
+    <fourcc name="The FourCC">
+      <Advanced>
+Specify the AVC FourCC you what you want. Depends mostly on the decoder used.</Advanced>
+      <Basic>Specify the AVC FourCC</Basic>
+      <Recommended>x264</Recommended>
+      <Default>x264</Default>
+    </fourcc>
 		<quiet name="Quiet Mode">
 			<Advanced></Advanced>
 			<Basic>Enable Quiet Mode (do not display output information).</Basic>
@@ -554,17 +618,54 @@ troubleshooting purposes.</Advanced>
 			<Default>Disabled</Default>
 		</progress>
 		<visualize name="Visualize Analysis">
-			<Advanced>Debugging option used to understand what is happening on a frame by frame basis.</Advanced>
+			<Advanced>
+Debugging option used to understand what is happening on a frame by frame basis.</Advanced>
 			<Basic>Show Macroblock types overlayed on the encoded video.</Basic>
 			<Recommended>Disabled</Recommended>
 			<Default>Disabled</Default>
 		</visualize>
 		<aud name="Access Unit Delimiters">
-			<Advanced>Used for compatibility when using AVC in some transport streams (inc MPEG-2 TS).</Advanced>
+			<Advanced>
+Used for compatibility when using AVC in some transport streams (inc MPEG-2 TS).</Advanced>
 			<Basic>Use access unit delimiters</Basic>
 			<Recommended>Disabled</Recommended>
 			<Default>Disabled</Default>
 		</aud>
+    <aqmode name="AQ Mode">
+      <Advanced>
+This option controls how AQ distributes bits. Mode 0 disables the feature whereas
+Mode 1 avoids moving bits between frames and Mode 2 is able to move the bits between frames.</Advanced>
+      <Basic>The Mode of the Adaptive Quantizers</Basic>
+      <Recommended>2</Recommended>
+      <Default>2</Default>
+    </aqmode>
+    <aqstrength name="AQ Strength">
+      <Advanced>
+Reduces blocking and blurring in flat and textured areas. To have a weak AQ choose 0.5
+and a strong one 1.5  as value.</Advanced>
+      <Basic>Strength of the Adaptive Quantizers</Basic>
+      <Recommended>1.0</Recommended>
+      <Default>1.0</Default>
+    </aqstrength>
+    <profile name="AVC Profiles">
+      <Advanced>
+The H.264 standard includes the following seven sets of capabilities, which are referred to as profiles,
+targeting specific classes of applications:
+    - Baseline Profile (BP): Primarily for lower-cost applications with limited computing resources,
+      this profile is used widely in videoconferencing and mobile applications.
+    - Main Profile (MP): Originally intended as the mainstream consumer profile for broadcast and
+      storage applications, the importance of this profile faded when the High profile was 
+      developed for those applications.
+    - Extended Profile (XP): Intended as the streaming video profile, this profile has relatively high
+      compression capability and some extra tricks for robustness to data losses and server stream switching.
+    - High Profile (HiP): The primary profile for broadcast and disc storage applications, particularly
+      for high-definition television applications (this is the profile adopted into HD DVD and Blu-ray Disc,
+      for example).
+      </Advanced>
+      <Basic>Choose your AVC Profile.</Basic>
+      <Recommended>High Profile</Recommended>
+      <Default>High Profile</Default>
+    </profile>
 	</Codec>
 	<Codec name="Xvid">
 		<setting1 name="setting1">
