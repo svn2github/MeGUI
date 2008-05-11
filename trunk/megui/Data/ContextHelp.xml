@@ -649,7 +649,7 @@ and a strong one 1.5  as value.</Advanced>
     </aqstrength>
     <profile name="AVC Profiles">
       <Advanced>
-The H.264 standard includes the following seven sets of capabilities, which are referred to as profiles,
+The H.264 standard includes the following sets of capabilities, which are referred to as profiles,
 targeting specific classes of applications:
     - Baseline Profile (BP): Primarily for lower-cost applications with limited computing resources,
       this profile is used widely in videoconferencing and mobile applications.
