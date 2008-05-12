@@ -400,7 +400,8 @@ as direct/skip (no motion vector), forward (1 MV pointing to a past reference), 
 		<!--Note: name changed from 8x8dct due to invalid XML character warning-->
 		<i8x8dct name="Adaptive 8x8 DCT">
 			<Advanced>
-Enables the intelligent adaptive use of 8x8 transforms in I-frames.</Advanced>
+Enables the intelligent adaptive use of 8x8 transforms in I-frames. Requires I8X8 checked.
+      </Advanced>
 			<Basic>Adaptive spatial transform size</Basic>
 			<Recommended>Enabled</Recommended>
 			<Default>Disabled</Default>
@@ -414,7 +415,7 @@ Enables the use of 4x4 sub-partitions in predicted macroblocks, for I-frames.</A
     </i4x4mv>
     <p4x4mv name="4x4 sub-partitions for P-Frames">
       <Advanced>
-Enables the use of 4x4 sub-partitions in predicated macroblocks, for P-frames. 
+Enables the use of 4x4 sub-partitions in predicted macroblocks, for P-frames. 
 Improves compression by about 0.5%, at the cost of encoding speed. Requires P8X8 enabled.</Advanced>
       <Basic>4x4 sub-partitions for P-Frames</Basic>
       <Recommended>Disabled</Recommended>
@@ -434,6 +435,13 @@ Enables the use of 8x8 sub-partitions in predicted macroblocks, for B-frames.</A
       <Recommended>Enabled</Recommended>
       <Default>Disabled</Default>
     </b8x8mv>
+    <i8x8mv name="8x8 sub-partitions for I-Frames">
+      <Advanced>
+Enables the use of 8x8 sub-partitions in predicted macroblocks, for I-frames.</Advanced>
+      <Basic>8x8 sub-partitions for I-Frames</Basic>
+      <Recommended>Enabled</Recommended>
+      <Default>Disabled</Default>
+    </i8x8mv>
 		<trellis name="Trellis Quantization">
 			<Advanced>
 Performs Trellis quantisation to increase efficiency. On Macroblock provides a

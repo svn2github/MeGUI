@@ -727,6 +727,7 @@ namespace MeGUI.packages.video.x264
             tooltipHelp.SetToolTip(x264P8x8mv, SelectHelpText("p8x8mv"));
             tooltipHelp.SetToolTip(x264P4x4mv, SelectHelpText("p4x4mv"));
             tooltipHelp.SetToolTip(x264I4x4mv, SelectHelpText("i4x4mv"));
+            tooltipHelp.SetToolTip(x264I8x8mv, SelectHelpText("i8x8mv"));
 
         }
         #endregion
