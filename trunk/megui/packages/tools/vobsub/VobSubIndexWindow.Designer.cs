@@ -162,6 +162,7 @@ namespace MeGUI
             // 
             // subtitleTracks
             // 
+            this.subtitleTracks.CheckOnClick = true;
             this.subtitleTracks.FormattingEnabled = true;
             this.subtitleTracks.Location = new System.Drawing.Point(50, 72);
             this.subtitleTracks.Name = "subtitleTracks";
