@@ -376,6 +376,7 @@ namespace MeGUI
             this.fwdButton = new System.Windows.Forms.Button();
             this.creditsStartButton = new System.Windows.Forms.Button();
             this.buttonPanel = new System.Windows.Forms.Panel();
+            this.arChooser = new MeGUI.core.gui.ARChooser();
             this.showPAR = new System.Windows.Forms.CheckBox();
             this.originalSizeButton = new System.Windows.Forms.Button();
             this.introEndButton = new System.Windows.Forms.Button();
@@ -384,7 +385,6 @@ namespace MeGUI
             this.zoneEndButton = new System.Windows.Forms.Button();
             this.chapterButton = new System.Windows.Forms.Button();
             this.defaultToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.arChooser = new MeGUI.core.gui.ARChooser();
             goToFrameButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.videoPreview)).BeginInit();
             this.previewGroupbox.SuspendLayout();
@@ -559,6 +559,18 @@ namespace MeGUI
             this.buttonPanel.Size = new System.Drawing.Size(333, 80);
             this.buttonPanel.TabIndex = 8;
             // 
+            // arChooser
+            // 
+            this.arChooser.HasLater = false;
+            this.arChooser.Location = new System.Drawing.Point(8, 48);
+            this.arChooser.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.arChooser.MinimumSize = new System.Drawing.Size(64, 29);
+            this.arChooser.Name = "arChooser";
+            this.arChooser.SelectedIndex = 0;
+            this.arChooser.Size = new System.Drawing.Size(208, 29);
+            this.arChooser.TabIndex = 15;
+            this.arChooser.SelectionChanged += new MeGUI.StringChanged(this.arChooser_SelectionChanged);
+            // 
             // showPAR
             // 
             this.showPAR.AutoSize = true;
@@ -630,18 +642,6 @@ namespace MeGUI
             this.defaultToolTip.SetToolTip(this.chapterButton, "Sets the end frame of a new zone");
             this.chapterButton.Click += new System.EventHandler(this.chapterButton_Click);
             // 
-            // arChooser
-            // 
-            this.arChooser.CustomItems = new object[0];
-            this.arChooser.HasLater = false;
-            this.arChooser.Location = new System.Drawing.Point(8, 48);
-            this.arChooser.MaximumSize = new System.Drawing.Size(1000, 29);
-            this.arChooser.MinimumSize = new System.Drawing.Size(64, 29);
-            this.arChooser.Name = "arChooser";
-            this.arChooser.Size = new System.Drawing.Size(208, 29);
-            this.arChooser.TabIndex = 15;
-            this.arChooser.SelectionChanged += new MeGUI.StringChanged(this.arChooser_SelectionChanged);
-            // 
             // VideoPlayer
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
@@ -657,6 +657,7 @@ namespace MeGUI
             this.Name = "VideoPlayer";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.Text = "VideoPlayer";
+            this.TopMost = true;
             ((System.ComponentModel.ISupportInitialize)(this.videoPreview)).EndInit();
             this.previewGroupbox.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.positionSlider)).EndInit();
