@@ -74,7 +74,7 @@ namespace MeGUI.core.gui
 
         private void newVideoProfileButton_Click(object sender, EventArgs e)
         {
-            string profileName = InputBox.Show("Please give the profile a name", "Please give the profile a name", "");
+            string profileName = InputBox.Show("Please give the preset a name", "Please give the preset a name", "");
             if (profileName == null)
                 return;
             profileName = profileName.Trim();
@@ -82,7 +82,7 @@ namespace MeGUI.core.gui
                 return;
             GenericProfile<TSettings> prof = new GenericProfile<TSettings>(profileName, s.Settings);
             if (byName(profileName) != null)
-                MessageBox.Show("Sorry, profiles must have unique names", "Duplicate profile name", MessageBoxButtons.OK);
+                MessageBox.Show("Sorry, presets must have unique names", "Duplicate preset name", MessageBoxButtons.OK);
             else
             {
                 videoProfile.Items.Add(prof);

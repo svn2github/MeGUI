@@ -4,7 +4,7 @@ namespace MeGUI.core.gui
 {
     partial class ProfileConfigurationWindow<TSettings, TPanel>
     {
-        protected GroupBox profilesGroupbox;
+        protected GroupBox presetsGroupbox;
         private Panel panel1;
         protected Button cancelButton;
         protected Button okButton;
@@ -41,7 +41,7 @@ namespace MeGUI.core.gui
         /// </summary>
         private void InitializeComponent()
         {
-            this.profilesGroupbox = new System.Windows.Forms.GroupBox();
+            this.presetsGroupbox = new System.Windows.Forms.GroupBox();
             this.updateButton = new System.Windows.Forms.Button();
             this.loadDefaultsButton = new System.Windows.Forms.Button();
             this.videoProfile = new System.Windows.Forms.ComboBox();
@@ -50,24 +50,24 @@ namespace MeGUI.core.gui
             this.panel1 = new System.Windows.Forms.Panel();
             this.cancelButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
-            this.profilesGroupbox.SuspendLayout();
+            this.presetsGroupbox.SuspendLayout();
             this.SuspendLayout();
             // 
-            // profilesGroupbox
+            // presetsGroupbox
             // 
-            this.profilesGroupbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+            this.presetsGroupbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.profilesGroupbox.Controls.Add(this.updateButton);
-            this.profilesGroupbox.Controls.Add(this.loadDefaultsButton);
-            this.profilesGroupbox.Controls.Add(this.videoProfile);
-            this.profilesGroupbox.Controls.Add(this.newVideoProfileButton);
-            this.profilesGroupbox.Controls.Add(this.deleteVideoProfileButton);
-            this.profilesGroupbox.Location = new System.Drawing.Point(6, 405);
-            this.profilesGroupbox.Name = "profilesGroupbox";
-            this.profilesGroupbox.Size = new System.Drawing.Size(400, 48);
-            this.profilesGroupbox.TabIndex = 44;
-            this.profilesGroupbox.TabStop = false;
-            this.profilesGroupbox.Text = "Profiles";
+            this.presetsGroupbox.Controls.Add(this.updateButton);
+            this.presetsGroupbox.Controls.Add(this.loadDefaultsButton);
+            this.presetsGroupbox.Controls.Add(this.videoProfile);
+            this.presetsGroupbox.Controls.Add(this.newVideoProfileButton);
+            this.presetsGroupbox.Controls.Add(this.deleteVideoProfileButton);
+            this.presetsGroupbox.Location = new System.Drawing.Point(6, 405);
+            this.presetsGroupbox.Name = "presetsGroupbox";
+            this.presetsGroupbox.Size = new System.Drawing.Size(400, 48);
+            this.presetsGroupbox.TabIndex = 44;
+            this.presetsGroupbox.TabStop = false;
+            this.presetsGroupbox.Text = "Presets";
             // 
             // updateButton
             // 
@@ -160,9 +160,9 @@ namespace MeGUI.core.gui
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.panel1);
-            this.Controls.Add(this.profilesGroupbox);
+            this.Controls.Add(this.presetsGroupbox);
             this.Name = "ProfileConfigurationWindow";
-            this.profilesGroupbox.ResumeLayout(false);
+            this.presetsGroupbox.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
