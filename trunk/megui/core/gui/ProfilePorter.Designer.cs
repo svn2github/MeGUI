@@ -53,6 +53,7 @@ namespace MeGUI.core.gui
             this.profileList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.profileList.CheckOnClick = true;
             this.profileList.FormattingEnabled = true;
             this.profileList.IntegralHeight = false;
             this.profileList.Location = new System.Drawing.Point(12, 25);

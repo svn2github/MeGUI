@@ -42,11 +42,16 @@ namespace MeGUI.core.gui
             this.button2.Text = "Export...";
             this.button2.Click += new System.EventHandler(this.export_Click);
             // 
+            // profileList
+            // 
+            this.profileList.CheckOnClick = true;
+            // 
             // ProfileExporter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.ClientSize = new System.Drawing.Size(383, 358);
             this.Name = "ProfileExporter";
+            this.Controls.SetChildIndex(this.profileList, 0);
             this.Controls.SetChildIndex(this.label1, 0);
             this.Controls.SetChildIndex(this.button2, 0);
             this.ResumeLayout(false);

@@ -50,6 +50,7 @@ namespace MeGUI.core.gui
             // 
             // profileList
             // 
+            this.profileList.CheckOnClick = true;
             this.profileList.ContextMenuStrip = this.statusCheck;
             // 
             // statusCheck
