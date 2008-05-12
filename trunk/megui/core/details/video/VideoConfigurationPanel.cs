@@ -184,6 +184,7 @@ namespace MeGUI.core.details.video
             this.tooltipHelp.ReshowDelay = 100;
             this.tooltipHelp.ShowAlways = true;
             this.tooltipHelp.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+            this.tooltipHelp.ToolTipTitle = "toolTip";
             // 
             // VideoConfigurationPanel
             // 
