@@ -638,8 +638,6 @@ namespace MeGUI
             this.Controls.Add(this.previewGroupbox);
             this.Controls.Add(this.positionSlider);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
-            this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(1920, 1600);
             this.MinimumSize = new System.Drawing.Size(368, 416);
             this.Name = "VideoPlayer";
