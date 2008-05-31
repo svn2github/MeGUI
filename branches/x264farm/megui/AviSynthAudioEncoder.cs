@@ -851,9 +851,15 @@ function x_stereo" + id + @"(clip a)
 function x_upmix" + id + @"(clip a) 
  {
     m = ConvertToMono(a)
+    a1 = GetLeftChannel(a)
+    a2 = GetRightChannel(a)
+    fl = SuperEQ(a1,""" + tmp + @"front.feq"")
+    fr = SuperEQ(a2,""" + tmp + @"front.feq"")
     c = SuperEQ(m,""" + tmp + @"center.feq"") 
     lfe = SuperEQ(m,""" + tmp + @"lfe.feq"") 
-    return MergeChannels( f.getleftchannel, f.getrightchannel , c, lfe, s.getleftchannel, s.getrightchannel)
+    sl = SuperEQ(a1,""" + tmp + @"back.feq"")
+    sr = SuperEQ(a2,""" + tmp + @"back.feq"")
+    return MergeChannels(fl,fr,c,lfe,sl,sr)
  }");
                     break;
                 case ChannelMode.UpmixUsingSoxEq:
