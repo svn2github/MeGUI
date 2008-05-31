@@ -156,7 +156,8 @@ namespace MeGUI
             // 
             // currentVideoFrame
             // 
-            this.currentVideoFrame.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.currentVideoFrame.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.currentVideoFrame.Enabled = false;
             this.currentVideoFrame.Location = new System.Drawing.Point(173, 41);
             this.currentVideoFrame.Name = "currentVideoFrame";
@@ -166,6 +167,8 @@ namespace MeGUI
             // 
             // groupBox1
             // 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.totalTime);
             this.groupBox1.Controls.Add(this.totalTimeLabel);
             this.groupBox1.Controls.Add(this.timeElapsed);
@@ -186,7 +189,8 @@ namespace MeGUI
             // 
             // totalTime
             // 
-            this.totalTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.totalTime.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.totalTime.Enabled = false;
             this.totalTime.Location = new System.Drawing.Point(173, 149);
             this.totalTime.Name = "totalTime";
@@ -205,7 +209,8 @@ namespace MeGUI
             // 
             // timeElapsed
             // 
-            this.timeElapsed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.timeElapsed.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.timeElapsed.Enabled = false;
             this.timeElapsed.Location = new System.Drawing.Point(173, 122);
             this.timeElapsed.Name = "timeElapsed";
@@ -224,7 +229,8 @@ namespace MeGUI
             // 
             // fps
             // 
-            this.fps.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.fps.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.fps.Enabled = false;
             this.fps.Location = new System.Drawing.Point(173, 95);
             this.fps.Name = "fps";
@@ -243,7 +249,8 @@ namespace MeGUI
             // 
             // videoData
             // 
-            this.videoData.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.videoData.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.videoData.Enabled = false;
             this.videoData.Location = new System.Drawing.Point(173, 68);
             this.videoData.Name = "videoData";
@@ -271,7 +278,8 @@ namespace MeGUI
             // 
             // positionInClip
             // 
-            this.positionInClip.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.positionInClip.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.positionInClip.Enabled = false;
             this.positionInClip.Location = new System.Drawing.Point(173, 14);
             this.positionInClip.Name = "positionInClip";
@@ -281,6 +289,7 @@ namespace MeGUI
             // 
             // abortButton
             // 
+            this.abortButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.abortButton.Location = new System.Drawing.Point(237, 247);
             this.abortButton.Name = "abortButton";
             this.abortButton.Size = new System.Drawing.Size(75, 23);
@@ -298,6 +307,8 @@ namespace MeGUI
             // 
             // progress
             // 
+            this.progress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.progress.Location = new System.Drawing.Point(122, 191);
             this.progress.Name = "progress";
             this.progress.Size = new System.Drawing.Size(193, 23);
@@ -313,6 +324,8 @@ namespace MeGUI
             // 
             // priority
             // 
+            this.priority.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.priority.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.priority.Items.AddRange(new object[] {
             "LOW",
@@ -342,12 +355,13 @@ namespace MeGUI
             // 
             // helpButton1
             // 
+            this.helpButton1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.helpButton1.ArticleName = "Status window";
             this.helpButton1.AutoSize = true;
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.helpButton1.Location = new System.Drawing.Point(12, 247);
             this.helpButton1.Name = "helpButton1";
-            this.helpButton1.Size = new System.Drawing.Size(38, 23);
+            this.helpButton1.Size = new System.Drawing.Size(44, 23);
             this.helpButton1.TabIndex = 5;
             // 
             // ProgressWindow
@@ -363,7 +377,6 @@ namespace MeGUI
             this.Controls.Add(this.abortButton);
             this.Controls.Add(this.groupBox1);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.Name = "ProgressWindow";
             this.Text = "Status";
