@@ -1,5 +1,6 @@
 using System.Globalization;
 using System;
+using System.IO;
 using System.Windows.Forms;
 using System.Collections;
 using System.Collections.Generic;
@@ -101,6 +102,9 @@ namespace MeGUI
             bool colormatrix, bool mpeg2deblock, bool flipVertical, double fps)
         {
             string inputLine = "#input";
+            FileInfo fi = new FileInfo(input);
+            long size = fi.Length;
+
             switch (sourceType)
             {
                 case PossibleSources.d2v:
@@ -114,11 +118,16 @@ namespace MeGUI
                         inputLine += string.Format("\r\nColorMatrix(hints=true{0})", interlaced ? ",interlaced=true" : "");
                     break;
                 case PossibleSources.vdr:
-                    inputLine = "AviSource(\"" + input + "\")";
+                        inputLine = "AVISource(\"" + input + ", audio=false\")";
                     break;
                 case PossibleSources.directShow:
                     if (input.ToLower().EndsWith(".avi"))
-                        inputLine = "AviSource(\"" + input + "\")";
+                    {
+                        if (size >= 268435456) // 1GB = 134217728 bytes
+                            inputLine = "OpenDMLSource(\"" + input + ", audio=false\")";
+                        else
+                            inputLine = "AVISource(\"" + input + ", audio=false\")";
+                    }
                     else
                     {
                         inputLine = "DirectShowSource(\"" + input + "\"" + ((fps > 0) ? ",fps=" + fps.ToString(new CultureInfo("en-us")) : string.Empty) + ",audio=false)";

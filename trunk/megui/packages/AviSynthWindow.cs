@@ -1402,7 +1402,7 @@ namespace MeGUI
             }
             else
             {
-                openVideo("AviSource(\"" + fileName + "\")\r\n", fileName, true);
+                openVideo("AviSource(\"" + fileName + ", audio=false\")\r\n", fileName, true);
             }
         }
         /// <summary>

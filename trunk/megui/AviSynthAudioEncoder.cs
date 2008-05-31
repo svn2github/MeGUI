@@ -520,8 +520,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
 
             string id = _uniqueId;
             string tmp = Path.Combine(Path.GetTempPath(), id);
-
-
+            FileInfo fi = new FileInfo(audioJob.Input);
+            long size = fi.Length;
 
             bool directShow = audioJob.Settings.ForceDecodingViaDirectShow;
             if (!directShow)
@@ -566,7 +566,17 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             }
             if (directShow)
             {
-                script.AppendFormat("DirectShowSource(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
+                if (audioJob.Input.ToLower().EndsWith(".avi"))
+                {
+                    if (size >= 268435456) // 1GB = 134217728 bytes
+                        script.AppendFormat("OpenDMLSource(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
+                    else
+                        script.AppendFormat("AVISource(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
+                }
+                else
+                {
+                    script.AppendFormat("DirectShowSource(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
+                }
                 script.AppendFormat("EnsureVBRMP3Sync(){0}", Environment.NewLine);
             } 
             
