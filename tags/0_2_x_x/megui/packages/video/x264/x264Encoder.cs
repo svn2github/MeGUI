@@ -63,7 +63,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                     break;
                 case 1: // CQ
                     if (xs.Lossless) sb.Append("--qp 0 ");
-                    else sb.Append("--qp " + xs.QuantizerCRF + " ");
+                    else sb.Append("--qp " + xs.QuantizerCRF.ToString(new CultureInfo("en-us")) + " ");
                     break;
                 case 2: // 2 pass first pass
                     sb.Append("--pass 1 --bitrate " + xs.BitrateQuantizer + " --stats " + "\"" + xs.Logfile + "\" ");
