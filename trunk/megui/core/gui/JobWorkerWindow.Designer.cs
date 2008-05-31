@@ -70,12 +70,14 @@ namespace MeGUI.core.gui
             this.jobQueue1.Name = "jobQueue1";
             this.jobQueue1.Padding = new System.Windows.Forms.Padding(2);
             this.jobQueue1.PauseResumeMode = MeGUI.core.gui.PauseResumeMode.Disabled;
+            this.jobQueue1.SaveSettings = true;
+            this.jobQueue1.SettingsKey = "JobQueue";
             this.jobQueue1.Size = new System.Drawing.Size(551, 392);
             this.jobQueue1.StartStopMode = MeGUI.core.gui.StartStopMode.Start;
             this.jobQueue1.TabIndex = 0;
-            this.jobQueue1.StopClicked += new System.EventHandler(this.jobQueue1_StopClicked);
-            this.jobQueue1.AbortClicked += new System.EventHandler(this.jobQueue1_AbortClicked);
             this.jobQueue1.StartClicked += new System.EventHandler(this.jobQueue1_StartClicked);
+            this.jobQueue1.AbortClicked += new System.EventHandler(this.jobQueue1_AbortClicked);
+            this.jobQueue1.StopClicked += new System.EventHandler(this.jobQueue1_StopClicked);
             // 
             // panel1
             // 
@@ -118,7 +120,7 @@ namespace MeGUI.core.gui
             helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             helpButton1.Location = new System.Drawing.Point(3, 3);
             helpButton1.Name = "helpButton1";
-            helpButton1.Size = new System.Drawing.Size(39, 23);
+            helpButton1.Size = new System.Drawing.Size(48, 23);
             helpButton1.TabIndex = 36;
             // 
             // flowLayoutPanel2
@@ -211,10 +213,11 @@ namespace MeGUI.core.gui
             this.Padding = new System.Windows.Forms.Padding(4);
             this.Text = "Job Worker Window";
             this.WindowState = global::MeGUI.Properties.Settings.Default.JobWorkerWindowState;
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.JobWorker_FormClosed);
             this.ClientSizeChanged += new System.EventHandler(this.JobWorker_ClientSizeChanged);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.JobWorker_FormClosed);
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
+            ((System.Configuration.IPersistComponentSettings)(this.jobQueue1)).LoadComponentSettings();
             this.panel1.ResumeLayout(false);
             this.flowLayoutPanel2.ResumeLayout(false);
             this.flowLayoutPanel2.PerformLayout();
