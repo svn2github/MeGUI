@@ -171,13 +171,19 @@ namespace MeGUI.core.gui
         public void openAudioFile(string fileName)
         {
             AudioInput = fileName;
-
             delay.Value = PrettyFormatting.getDelayAndCheck(fileName) ?? 0;
 
-            AudioOutput = FileUtil.AddToFileName(PrettyFormatting.ReplaceDelay(fileName, 0),
-                MainForm.Instance.Settings.AudioExtension);
-            audioContainer_SelectedIndexChanged(null, null);
+            try
+            {
+                AudioOutput = FileUtil.AddToFileName(PrettyFormatting.ReplaceDelay(fileName, 0), MainForm.Instance.Settings.AudioExtension);
+            }
+            catch (Exception e)
+            {
+               throw new ApplicationException("The value detected as delay in your filename seems to be too high/low for MeGUI." +
+                                              "Try to recreate it with the appropriate tools." + e.Message, e);
+             }
             
+           audioContainer_SelectedIndexChanged(null, null);         
         }
 
         internal Size FileTypeComboBoxSize

@@ -318,6 +318,7 @@ namespace MeGUI
             // 
             // videoEncodingComponent1
             // 
+            this.videoEncodingComponent1.BackColor = System.Drawing.SystemColors.Control;
             this.videoEncodingComponent1.Dock = System.Windows.Forms.DockStyle.Top;
             this.videoEncodingComponent1.Location = new System.Drawing.Point(0, 0);
             this.videoEncodingComponent1.MinimumSize = new System.Drawing.Size(500, 168);
