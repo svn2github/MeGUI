@@ -150,7 +150,7 @@ namespace MeGUI
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.helpButton1.Location = new System.Drawing.Point(12, 30);
             this.helpButton1.Name = "helpButton1";
-            this.helpButton1.Size = new System.Drawing.Size(39, 23);
+            this.helpButton1.Size = new System.Drawing.Size(51, 23);
             this.helpButton1.TabIndex = 8;
             // 
             // splitContainer1
@@ -273,8 +273,8 @@ namespace MeGUI
             this.Name = "UpdateWindow";
             this.Text = "MeGUI - Updater";
             this.WindowState = global::MeGUI.Properties.Settings.Default.UpdateWindowState;
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.UpdateWindow_FormClosing);
             this.Load += new System.EventHandler(this.UpdateWindow_Load);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.UpdateWindow_FormClosing);
             this.statusToolStrip.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
