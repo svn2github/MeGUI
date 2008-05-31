@@ -102,8 +102,8 @@ namespace MeGUI
             bool colormatrix, bool mpeg2deblock, bool flipVertical, double fps)
         {
             string inputLine = "#input";
-            FileInfo fi = new FileInfo(input);
-            long size = fi.Length;
+      //      FileInfo fi = new FileInfo(input);
+       //     long size = fi.Length;
 
             switch (sourceType)
             {
@@ -118,15 +118,15 @@ namespace MeGUI
                         inputLine += string.Format("\r\nColorMatrix(hints=true{0})", interlaced ? ",interlaced=true" : "");
                     break;
                 case PossibleSources.vdr:
-                        inputLine = "AVISource(\"" + input + ", audio=false\")";
+                        inputLine = "AVISource(\"" + input + "\", audio=false)";
                     break;
                 case PossibleSources.directShow:
                     if (input.ToLower().EndsWith(".avi"))
                     {
-                        if (size >= 268435456) // 1GB = 134217728 bytes
-                            inputLine = "OpenDMLSource(\"" + input + ", audio=false\")";
+                        if (input.Length >= 268435456) // 1GB = 134217728 bytes
+                            inputLine = "OpenDMLSource(\"" + input + "\", audio=false)";
                         else
-                            inputLine = "AVISource(\"" + input + ", audio=false\")";
+                            inputLine = "AVISource(\"" + input + "\", audio=false)";
                     }
                     else
                     {
