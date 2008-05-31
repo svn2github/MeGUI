@@ -250,6 +250,9 @@ namespace MeGUI
             this.x264ExePath = new System.Windows.Forms.TextBox();
             this.selectX264ExecutableButton = new System.Windows.Forms.Button();
             this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.tbAften = new System.Windows.Forms.TextBox();
+            this.lbAften = new System.Windows.Forms.Label();
+            this.selectAftenExecutableButton = new System.Windows.Forms.Button();
             this.textBox7 = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
             this.button7 = new System.Windows.Forms.Button();
@@ -307,9 +310,6 @@ namespace MeGUI
             this.nbPassesLabel = new System.Windows.Forms.Label();
             this.nbPasses = new System.Windows.Forms.NumericUpDown();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
-            this.tbAften = new System.Windows.Forms.TextBox();
-            this.lbAften = new System.Windows.Forms.Label();
-            this.selectAftenExecutableButton = new System.Windows.Forms.Button();
             groupBox1 = new System.Windows.Forms.GroupBox();
             groupBox1.SuspendLayout();
             this.otherGroupBox.SuspendLayout();
@@ -1094,6 +1094,32 @@ namespace MeGUI
             this.tabPage5.Text = "Audio";
             this.tabPage5.UseVisualStyleBackColor = true;
             // 
+            // tbAften
+            // 
+            this.tbAften.Location = new System.Drawing.Point(89, 178);
+            this.tbAften.Name = "tbAften";
+            this.tbAften.ReadOnly = true;
+            this.tbAften.Size = new System.Drawing.Size(322, 21);
+            this.tbAften.TabIndex = 26;
+            this.tbAften.Text = "aften.exe";
+            // 
+            // lbAften
+            // 
+            this.lbAften.Location = new System.Drawing.Point(3, 182);
+            this.lbAften.Name = "lbAften";
+            this.lbAften.Size = new System.Drawing.Size(80, 13);
+            this.lbAften.TabIndex = 25;
+            this.lbAften.Text = "aften";
+            // 
+            // selectAftenExecutableButton
+            // 
+            this.selectAftenExecutableButton.Location = new System.Drawing.Point(417, 177);
+            this.selectAftenExecutableButton.Name = "selectAftenExecutableButton";
+            this.selectAftenExecutableButton.Size = new System.Drawing.Size(24, 23);
+            this.selectAftenExecutableButton.TabIndex = 27;
+            this.selectAftenExecutableButton.Text = "...";
+            this.selectAftenExecutableButton.Click += new System.EventHandler(this.selectAftenExecutableButton_Click);
+            // 
             // textBox7
             // 
             this.textBox7.Location = new System.Drawing.Point(89, 151);
@@ -1635,34 +1661,8 @@ namespace MeGUI
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.helpButton1.Location = new System.Drawing.Point(12, 362);
             this.helpButton1.Name = "helpButton1";
-            this.helpButton1.Size = new System.Drawing.Size(38, 23);
+            this.helpButton1.Size = new System.Drawing.Size(47, 23);
             this.helpButton1.TabIndex = 1;
-            // 
-            // tbAften
-            // 
-            this.tbAften.Location = new System.Drawing.Point(89, 178);
-            this.tbAften.Name = "tbAften";
-            this.tbAften.ReadOnly = true;
-            this.tbAften.Size = new System.Drawing.Size(322, 21);
-            this.tbAften.TabIndex = 26;
-            this.tbAften.Text = "aften.exe";
-            // 
-            // lbAften
-            // 
-            this.lbAften.Location = new System.Drawing.Point(3, 182);
-            this.lbAften.Name = "lbAften";
-            this.lbAften.Size = new System.Drawing.Size(80, 13);
-            this.lbAften.TabIndex = 25;
-            this.lbAften.Text = "aften";
-            // 
-            // selectAftenExecutableButton
-            // 
-            this.selectAftenExecutableButton.Location = new System.Drawing.Point(417, 177);
-            this.selectAftenExecutableButton.Name = "selectAftenExecutableButton";
-            this.selectAftenExecutableButton.Size = new System.Drawing.Size(24, 23);
-            this.selectAftenExecutableButton.TabIndex = 27;
-            this.selectAftenExecutableButton.Text = "...";
-            this.selectAftenExecutableButton.Click += new System.EventHandler(this.selectAftenExecutableButton_Click);
             // 
             // SettingsForm
             // 
