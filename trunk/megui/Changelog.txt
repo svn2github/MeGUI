@@ -1,3 +1,48 @@
+0.3.0.1005 (includes the fixes and additions up to ver. 0.2.6.1047)
+    - (kurtnoise) updated MediaInfo library and his wrapper to the latest release (0.7.7.2).
+    - (kurtnoise) several x264 options weren't updated.
+    - (kurtnoise) added support for OpenDMLSource(..) for AVI files >= 2GB and forced "audio=false" for the avs script creation within AVISource(.) 
+    - (kurtnoise) [ProgressWindow] allowed resize form (#1968515).
+    - (kurtnoise) [JobWorkerWindow] help button was biased.
+    - (kurtnoise) added EVO files support for the Main and Avisynth Forms.
+    - (kurtnoise) [UpdateWindows] help button was biased.
+    - (kurtnoise) allowed minimize/maximize the video preview form.
+    - (kurtnoise) removed TooltipIcon and TooltipTitle.
+    - (kurtnoise) [MainForm] changed the back color (transparent to control).
+    - (kurtnoise) [VideoConfigurationPanel] added a title for the tooltip.
+    - (Kurtnoise) updated several tooltips for the x264 compressor.
+    - (kurtnoise) added ProfileConfigurationWindow.resx
+    - (kurtnoise) [ProfileConfigurationWindow] use Presets now instead of Profiles to avoid confusions.
+    - (kurtnoise) CheckOnClick = True for the ProfileExporter, ProfileImporter and ProfilePorter ListBoxes.
+    - (kurtnoise) [VobSubber] CheckOnClick = True for the Subtitles ListBox.
+    - (kurtnoise) [x264ConfigurationPanel] updated some missing tooltips.
+    - (kurtnoise) added a x264 picture in the main tab.
+    - (kurtnoise) updated the x264 Settings (AQ, Custom commandline) with several changes. 
+    - (kurtnoise) [DGIndexer] using hide state instead of minimize.
+    - (kurtnoise) [ProfileImporter] added an option to check all/none items from the list (available via a right click).
+    - (sharktooth) Updated VS 2008 project files to include the new InputBox replacement files
+    - (kurtnoise) fixed .NET bootstrapping for MSVC2005 project file. Patch by Sean McGovern.
+    - (Mutant Fruit) Fix for mono compatibility to avoid a bug in ApplicationSettingsBase constructor
+    - (Mutant Fruit) Put try/catches around registry access to avoid issues on non-windows systems
+    - (Mutant Fruit) Two fixes for the new InputBox
+    - (Mutant Fruit) Created a replacement for the VisualBasic InputBox class and removed references to the VisualBasic dll
+    - (Mutant Fruit) Applied patch for #1887531
+    - (Mutant Fruit) Committed patch for #1886000
+    - (sharktooth) [d2vcreator] Default to "Demux All Audio Tracks"
+    - (kurtnoise) Transformed OSInfo & Shutdown classes cross-platform. Patch by mutant_fruit.
+    - (kurtnoise) fixed hardcoded windows style paths. Patch by mutant_fruit.
+    - (kurtnoise) [D2VCreator] remove Windows API for better X-platform using.
+    - (kurtnoise) Fixed bug in GenericSettings implementation & implemented GetHashCode correctly. patches by Mutant_Fruit (#1887494 + #1887508)
+    - (kurtnoise) [AVSCutter] altered the behaviour of the Clear, Update and Remove buttons. Patch by darkklor (#1858629)
+    - (kurtnoise) [mediaInfoWrapper] fixed some tabs.
+    - (kurtnoise) [JobQueue] re-enabled Key Down event.
+    - (berrinam) Profile refactor. Excerpts:
+                 - All video settings must now be contained within a profile. 
+                 - There is a default profile called *scratchpad* for every type of setting. 
+                 - Zones have been removed from video profiles, soon to be added back to the main window.
+                 - Removed code for reading very old profiles (from 0.2.4.1004 and below)
+    - (berrinam) (internal) Added Tuple.Create to allow implicit Generics instantiation.
+    
 0.3.0.1004 (includes 0.2.6.1043 fixes)
     - (berrinam) Handle large delays better.
     - (berrinam) Fix Drag-and-Drop bug
@@ -275,22 +320,22 @@
     - (Kurtnoise) [Main Form] : added bugs tracker and features requests SF links (#1789800) 
 
 0.2.6.1007
-    - (Sharx1976) New changelog format
-    - (Sharx1976) Fixed 1735676 (Video Output filename can't be changed directly)
+    - (Sharktooth) New changelog format
+    - (Sharktooth) Fixed 1735676 (Video Output filename can't be changed directly)
     - (Kurtnoise) fix wiki link
     - (Kurtnoise) fix label typos
     - (Kurtnoise) remove hint track option for NDAAC encoder + several tunings
     - (Kurtnoise) few tunings for audio encoders
 
 0.2.6.1006
-    - (Sharx1976) Fixed some visual interface glitches
-    - (Sharx1976) AVS Creator: Checking "Resize" enables "Suggest Resolution"
-    - (Sharx1976) AVS Creator: Checking "Suggest Resolution" automatically checks "Resize"
+    - (Sharktooth) Fixed some visual interface glitches
+    - (Sharktooth) AVS Creator: Checking "Resize" enables "Suggest Resolution"
+    - (Sharktooth) AVS Creator: Checking "Suggest Resolution" automatically checks "Resize"
     - (Kurtnoise) fix subtitles streams parsing when we have strings instead of numbers
 
 0.2.6.1005
-    - (Sharx1976) Using Avisource() to open .avi files.
-    - (Sharx1976) Added a warning if avisynth is not installed and automatically disables the update button.
+    - (Sharktooth) Using Avisource() to open .avi files.
+    - (Sharktooth) Added a warning if avisynth is not installed and automatically disables the update button.
     - (Kurtnoise) m4a extension missing for MKV mux.
     - (Kurtnoise) allow m4a extension for AudioType.
     - (Kurtnoise) Drag & Drop support for Audio Encoding.
@@ -301,12 +346,12 @@
     - (Kurtnoise) enable some missing features for the Muxers. Adaptive Muxer issues not fixed yet...
 
 0.2.6.1004
-    - (Sharx1976) Always check to see if an event handler delegate is non-null before calling it (Patch by Sean McGovern)
-    - (Sharx1976) Increased the neroaac encoder max bitrate to 640kbps
+    - (Sharktooth) Always check to see if an event handler delegate is non-null before calling it (Patch by Sean McGovern)
+    - (Sharktooth) Increased the neroaac encoder max bitrate to 640kbps
     - (Kurtnoise) add "Français" in the Language Selection (supported by the ISO 639 code and also needed for the parsing of the DVDDecrypter Info Text File)
 
 0.2.6.1003
-Commit by Sharx1976:
+Commit by Sharktooth:
     - Fix One Click Encoder crash (patch by bbel)
     - Drag&Drop support for avs input in main window (patch by dako-kun)
 
@@ -407,7 +452,7 @@ Commit by berrinam:
     - Fixed 1652312 (xvid b-frames default wrong)
     
 0.2.4.1039
-Commit by Sharx1976:
+Commit by Sharktooth:
     - Fixed 1672842 (x264 lossless broken)
     - Fixed MediaInfoWrapper reference in the megui project
 
@@ -495,15 +540,15 @@ Commit by berrinam:
     - Fix the OneClick+Config+compile.bat crash -- the text was too long, and delegated to a resource that wasn't compiled in
 
 0.2.4.1022
-Commit by Sharx1976:
+Commit by Sharktooth:
     - More cosmetic fixes
 
 0.2.4.1021
-Commit by Sharx1976:
+Commit by Sharktooth:
     - Cosmetic fixes
 
 0.2.4.1020
-Commit by Sharx1976:
+Commit by Sharktooth:
     - Fixed the behaviour of the UseAutoUpdate checkbox in Settings (now it works and the value is saved correctly into the settings)
 
 0.2.4.1019
@@ -544,15 +589,15 @@ Commit by berrinam:
     - Re-enabled the right-click menu in the job queue
 
 0.2.4.1012
-Commit by Sharx1976:
+Commit by Sharktooth:
     - Fixed the delay option in audio configuration window
 
 0.2.4.1011
-Commit by Sharx1976:
+Commit by Sharktooth:
     - Better codecs profiles management: the OK button in the codec config window now pops up a messagebox asking if you want to update the profile
 
 0.2.4.1010
-Commit by Sharx1976:
+Commit by Sharktooth:
     - Max number of threads for x264 is now '16'
 
 0.2.4.1009
@@ -560,7 +605,7 @@ Commit by berrinam:
     - Fixed the 'modify filename doesn't work' bug
 
 0.2.4.1008
-Commit by Sharx1976:
+Commit by Sharktooth:
     - Added "--threads auto" support in x264 config and commandline generator
     
 0.2.4.1007
@@ -598,7 +643,7 @@ Commit by berrinam:
     - New deinterlacing options in avs creator
 
 0.2.4.0000
-Commit by Sharx1976:
+Commit by Sharktooth:
     - New version number
 
 0.2.3.2193: *Development version*
@@ -645,7 +690,7 @@ Commit by Doom9
   - Swapped Crop and Resize controls position in Avisynth Script Creator window to better represent the correct workflow
 
 0.2.3.2187
-Commit by Sharx1976:
+Commit by Sharktooth:
   - Cosmetic fixes (part 2...)
 
 0.2.3.2186
@@ -658,33 +703,33 @@ Commit by Doom9
   - Renamed Vorbis container to Ogg since that's the container's name
 
 0.2.3.2185
-Commit by Sharx1976:
+Commit by Sharktooth:
   - Several cosmetic fixes
 
 0.2.3.2184
-Commit by Sharx1976:
+Commit by Sharktooth:
   - Fixed xvid custom commandline options in CommandlineGenerator.cs
 
 0.2.3.2183
-Commit by Sharx1976:
+Commit by Sharktooth:
   - Fix: Unchecking lossless in x264 configuration now re-enables the bitrate/quantizer textbox
 
 0.2.3.2182
-Commit by Sharx1976:
+Commit by Sharktooth:
   - Cosmetics on the xvid panel, plus enabling custom commandline
   - Packed bistream fix
   (both patches by foxyshadis)
 
 0.2.3.2181
-Commit by Sharx1976:
+Commit by Sharktooth:
   - Made x264 thread-input enabled by default
 
 0.2.3.2180
-Commit by Sharx1976:
+Commit by Sharktooth:
   - Fixed x264 command line generation ("--analise " --> "--analyse none" when all macroblock disabled and adaptive dct enabled)
 
 0.2.3.2179
-Commit by Sharx1976:
+Commit by Sharktooth:
   - Foxyshadis quote: "Don't code while asleep"
 
 0.2.3.2178
@@ -701,11 +746,11 @@ Commit by berrinam:
   - Fix 'safe profile alteration' feature. Does anyone actually need this?
 
 0.2.3.2175
-Commit by Sharx1976:
+Commit by Sharktooth:
   - Restored the menu item title to "Avisynth Script Creator" and changed the title of the form instead
 
 0.2.3.2174
-Commit by Sharx1976:
+Commit by Sharktooth:
   - Fixed MediaInfoWrapper.dll resource dependancy in the project file
   - Added a confirmation MessageBox when clearing the queue
   - Changed a menu item title to "Avisynth Script Generator" to keep consistency with the form title
@@ -773,7 +818,7 @@ Commit by berrinam:
   - Fixed bug of wrong raw filetype being assigned
 
 0.2.3.2159
-Commit by Sharx1976
+Commit by Sharktooth
   - Moved shutdown prevention into Abort event. Shutdown now gets automatically disabled if the Abort event is triggered.
 
 0.2.3.2158
@@ -790,11 +835,11 @@ Commit by berrinam:
   - Partway to fix of bitrate calculations, but it is more complicated than it seems...
 
 0.2.3.2155
-Commit by Sharx1976:
+Commit by Sharktooth:
   - Fixed a wrong slash ("/" to "\") in UpdateWindow.cs
 
 0.2.3.2154 26 May 2006
-Commit by Sharx1976:
+Commit by Sharktooth:
   - Added a "Quick & Dirty way (tm)" to prevent accidental shutdowns when aborting a job and the "Shutdown at end of encoding" checkbox is enabled (works only with the Abort button in the Queue tab)
   - Some more controls alignment
 
@@ -809,7 +854,7 @@ Commit by dimzon:
   - Fixed OggVorbis 5.1 Channel mapping (http://forum.doom9.org/showthread.php?p=831098#post831098)
   
 0.2.3.2151
-Commit by Sharx1976:
+Commit by Sharktooth:
   - Better alignment of some controls
 
 0.2.3.2150 22 May 2006
@@ -898,7 +943,7 @@ Commit by berrinam:
   - Fixed up annoying video profile bug that's been around for ages
 
 0.2.3.2134 8 May 2006
-Commit by Sharx1976
+Commit by Sharktooth
   - Expanded bitrate fields to 5 chars in x264 config dialog.
   - Fixed an aesthetic glitch (video config button position) in main form.
 
@@ -907,7 +952,7 @@ Commit by berrinam:
   - First commit of mux-path-finding refactor. Work in progress (development build)
 
 0.2.3.2132 3 May 2006
-Commit by Sharx1976:
+Commit by Sharktooth:
   - Removed all the remaining #if SVN
   - Some x264 config dialog cosmetics
 
@@ -916,7 +961,7 @@ Commit by berrinam:
   - Added x264 '--no-dct-decimate' option
 
 0.2.3.2130 26 April 2006
-Commit by Sharx1976:
+Commit by Sharktooth:
   - Fixed a glitch in x264 command line generation: Direct mode was set even with 0 b-frames.
 
 0.2.3.2129 20 April 2006
@@ -976,7 +1021,7 @@ Commit by berrinam:
   - Changed mpeg2source() to DGDecode_mpeg2source() in AviSynth scripts to fix clashes with mpeg2dec(3)
 
 0.2.3.2117 22 March 2006
-Commit by Sharx1976:
+Commit by Sharktooth:
   - Fixed the shutdown problem (patch by IMOON).
 
 0.2.3.2116 22 March 2006
@@ -989,7 +1034,7 @@ Commit by berrinam:
   - Script Generation window is now smaller through the use of tabs.
 
 0.2.3.2114 19 March 2006
-Commit by Sharx1976:
+Commit by Sharktooth:
   - Added support for --thread-input x264 option in CommandLineGenerator.cs
 
 0.2.3.2113 17 March 2006
@@ -1008,11 +1053,11 @@ Commit by berrinam:
   - Removed useless LoadPlugin(<dgdecode>) line at the beginning of generated AviSynth scripts. dgdecode.dll is required in the AviSynth plugins anyway
 
 0.2.3.2110 16 March 2006
-Commit by Sharx1976:
+Commit by Sharktooth:
   - Fixed a bug in ChapterCreator.cs. If you want to add a chapter in the middle of an existing list the programm lost all chapter after the new one(+1). (patch by IMOON)
 
 0.2.3.2109 16 March 2006
-Commit by Sharx1976:
+Commit by Sharktooth:
   - Added a file type of all supported audio formats to the audio open dialog and defaulted to that (patch by SysKin).
 
 0.2.3.2108 7 March 2006
@@ -1026,7 +1071,7 @@ Commit by berrinam:
   - Fixed OneClickConfig bug with 'delete' button not working
 
 0.2.3.2106 5 March 2006
-Commit by Sharx1976:
+Commit by Sharktooth:
   - Added Auto option to x264 B-Frames direct mode. Spatial is now the default mode.
 
 0.2.3.2105 5 March 2006
@@ -1039,7 +1084,7 @@ Commit by berrinam:
   - Fixed trellis dependencies in x264 encoder dialog
 
 0.2.3.2103 3 March 2006
-Commit by Sharx1976:
+Commit by Sharktooth:
   - Fixed wording on "Queue" buttons in main Form
   - Fixed a bug in OneClickWindow.cs output file textbox state adjustment
 
@@ -1074,7 +1119,7 @@ Commit by berrinam:
   - Updated Source Detection to recognize sources that need decimation
 
 0.2.3.2095 24 Feb 2006
-Commit by Sharx1976:
+Commit by Sharktooth:
   - Some work on aesthetics
 
 0.2.3.2094 23 Feb 2006
@@ -1082,11 +1127,11 @@ Commit by berrinam:
   - Fixed bug in 'One Click Profile Setup' which didn't allow selected profile to be selected
 
 0.2.3.2093 22 Feb 2006
-Commit by Sharx1976:
+Commit by Sharktooth:
   - Fixed a bug in the calculator introduced in 0.2.3.2092 (patch by Mutant_Fruit).
 
 0.2.3.2092 19 Feb 2006
-Commit by Sharx1976:
+Commit by Sharktooth:
   - Fixed a few bugs with number of frames changing from what the user inserts (patch by Mutant_Fruit).
 
 0.2.3.2091 17 Feb 2006
