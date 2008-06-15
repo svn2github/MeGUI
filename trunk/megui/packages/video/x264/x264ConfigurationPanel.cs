@@ -515,7 +515,7 @@ namespace MeGUI.packages.video.x264
                 xs.BframeBias = (int)this.x264BframeBias.Value;
                 xs.BframePredictionMode = this.x264BframePredictionMode.SelectedIndex;
                 xs.METype = this.x264METype.SelectedIndex;
-                xs.MERange = (int)x26MERange.Value;
+                xs.MERange = (int)x264MERange.Value;
                 xs.NbThreads = (int)x264NbThreads.Value;
                 if (!x264MinGOPSize.Text.Equals(""))
                     xs.MinGOPSize = Int32.Parse(x264MinGOPSize.Text);
@@ -577,7 +577,7 @@ namespace MeGUI.packages.video.x264
                 x264MinimimQuantizer.Value = xs.MinQuantizer;
                 x264MaximumQuantizer.Value = xs.MaxQuantizer;
                 x264MaxQuantDelta.Value = xs.MaxQuantDelta;
-                x264CreditsQuantizer.Value = xs.CreditsQuantizer;
+                this.x264CreditsQuantizer.Value = xs.CreditsQuantizer;
                 x264IPFrameFactor.Value = xs.IPFactor;
                 x264PBFrameFactor.Value = xs.PBFactor;
                 x264ChromaQPOffset.Value = xs.ChromaQPOffset;
@@ -598,7 +598,7 @@ namespace MeGUI.packages.video.x264
                 this.x264BframeBias.Value = xs.BframeBias;
                 this.x264BframePredictionMode.SelectedIndex = xs.BframePredictionMode;
                 this.x264METype.SelectedIndex = xs.METype;
-                x26MERange.Value = xs.MERange;
+                x264MERange.Value = xs.MERange;
                 x264NbThreads.Value = xs.NbThreads;
                 x264MinGOPSize.Text = xs.MinGOPSize.ToString();
                 customCommandlineOptions.Text = xs.CustomEncoderOptions;
@@ -705,7 +705,7 @@ namespace MeGUI.packages.video.x264
             tooltipHelp.SetToolTip(x264BframeBias, SelectHelpText("b-bias"));
             tooltipHelp.SetToolTip(x264BframePredictionMode, SelectHelpText("direct"));
             tooltipHelp.SetToolTip(x264METype, SelectHelpText("me"));
-            tooltipHelp.SetToolTip(x26MERange, SelectHelpText("merange"));
+            tooltipHelp.SetToolTip(x264MERange, SelectHelpText("merange"));
             tooltipHelp.SetToolTip(x264NbThreads, SelectHelpText("threads"));
             tooltipHelp.SetToolTip(x264MinGOPSize, SelectHelpText("min-keyint"));
             tooltipHelp.SetToolTip(trellis, SelectHelpText("trellis"));
