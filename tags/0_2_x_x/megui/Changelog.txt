@@ -1,3 +1,13 @@
+0.2.6.1047
+    - (kurtnoise) updated MediaInfo library and his wrapper to the latest release (0.7.7.2).
+    - (kurtnoise) [AudioEncodingTab] added a try/catch statement for better error handling for end-users concerning delays values too high/low detected in filenames (#1965905).
+    - (kurtnoise) [x264Encoder] fixed a comma use associated with Const. Quantizer (#1975472).
+    - (kurtnoise) [AvisynthAudioEncoder] fixed an error in the upmix function.
+    - (kurtnoise) [VideoPlayer] video preview always on top from now...
+    - (kurtnoise) added an icon for the ToolTip.
+    - (kurtnoise) [AudioEncoder] added support for NicAudio v2 (needed to fix some bugs) >> http://www.codeplex.com/NicAudio
+    - (kurtnoise) added several languages in the nsis script.
+
 0.2.6.1046
     - (kurtnoise) few more updates for the x264 compressor.
     - (Kurtnoise) updated a switch for the x264 compressor.
