@@ -1289,7 +1289,7 @@ namespace MeGUI.packages.video.x264
             0,
             0,
             65536});
-            this.numAQStrength.ValueChanged += new System.EventHandler(this.numAQStrength_ValueChanged);
+            this.numAQStrength.ValueChanged += new System.EventHandler(this.updateEvent);
             // 
             // lbAQStrength
             // 

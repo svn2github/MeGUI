@@ -925,11 +925,6 @@ namespace MeGUI.packages.video.x264
             else numAQStrength.Enabled = false;
                 genericUpdate();
         }
-
-        private void numAQStrength_ValueChanged(object sender, EventArgs e)
-        {
-            genericUpdate();
-        }
     }
 }
 
