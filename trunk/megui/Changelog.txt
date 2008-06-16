@@ -1,3 +1,6 @@
+0.3.0.1006
+    - (sharktooth) Fixed x264 AQ settings
+
 0.3.0.1005 (includes the fixes and additions up to ver. 0.2.6.1047)
     - (kurtnoise) updated MediaInfo library and his wrapper to the latest release (0.7.7.2).
     - (kurtnoise) several x264 options weren't updated.
