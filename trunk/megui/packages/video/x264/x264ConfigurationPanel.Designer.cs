@@ -639,6 +639,7 @@ namespace MeGUI.packages.video.x264
             this.x264SubpelRefinement.Name = "x264SubpelRefinement";
             this.x264SubpelRefinement.Size = new System.Drawing.Size(154, 21);
             this.x264SubpelRefinement.TabIndex = 8;
+            this.x264SubpelRefinement.SelectedIndexChanged += new System.EventHandler(this.updateEvent);
             // 
             // x264SubpelRefinementLabel
             // 
@@ -701,6 +702,7 @@ namespace MeGUI.packages.video.x264
             this.x264METype.Name = "x264METype";
             this.x264METype.Size = new System.Drawing.Size(109, 21);
             this.x264METype.TabIndex = 6;
+            this.x264METype.SelectedIndexChanged += new System.EventHandler(this.updateEvent);
             // 
             // x264MERange
             // 
