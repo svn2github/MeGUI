@@ -161,10 +161,6 @@ namespace MeGUI
 						string[] split = line.Split(separator, 1000); 
 						AudioTrackInfo ati = new AudioTrackInfo();
 						ati.Type = split[0].Substring(split[0].LastIndexOf("-") + 1).Trim();
-                        if (ati.Type.Equals("DTS"))
-							continue; // skip DTS tracks as BeSweet can't handle them
-						string trackID = split[0].Substring(3, 1);
-						ati.TrackID = Int32.Parse(trackID) + 1;
 						ati.NbChannels = split[1].Trim();
                         ati.TrackInfo = new TrackInfo(split[4].Trim(), null);
                         audioTracks.Add(ati);
