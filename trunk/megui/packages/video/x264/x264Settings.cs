@@ -478,7 +478,9 @@ namespace MeGUI
                 this.VBVInitialBuffer != otherSettings.VBVInitialBuffer ||
                 this.VBVMaxBitrate != otherSettings.VBVMaxBitrate ||
                 this.WeightedBPrediction != otherSettings.WeightedBPrediction ||
-                this.X264Trellis != otherSettings.X264Trellis
+                this.X264Trellis != otherSettings.X264Trellis ||
+                this.AQmode != otherSettings.AQmode ||
+                this.AQstrength != otherSettings.AQstrength
                 )
                 return true;
             else

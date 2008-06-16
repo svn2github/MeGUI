@@ -899,14 +899,6 @@ namespace MeGUI.packages.video.x264
             genericUpdate();
         }
 
-        private void cbAQMode_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (cbAQMode.SelectedIndex != 0)
-                numAQStrength.Enabled = true;
-            else numAQStrength.Enabled = false;
-            genericUpdate();
-        }
-
         private void linkx264website_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             try
@@ -924,6 +916,19 @@ namespace MeGUI.packages.video.x264
             //Call the Process.Start method to open the default browser 
             //with a URL:
             System.Diagnostics.Process.Start("http://www.videolan.org/developers/x264.html");
+        }
+
+        private void cbAQMode_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbAQMode.SelectedIndex != 0)
+                numAQStrength.Enabled = true;
+            else numAQStrength.Enabled = false;
+                genericUpdate();
+        }
+
+        private void numAQStrength_ValueChanged(object sender, EventArgs e)
+        {
+            genericUpdate();
         }
     }
 }

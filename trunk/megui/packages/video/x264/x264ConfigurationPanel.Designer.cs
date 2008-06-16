@@ -1245,7 +1245,7 @@ namespace MeGUI.packages.video.x264
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.customCommandlineOptions.Location = new System.Drawing.Point(12, 25);
             this.customCommandlineOptions.Name = "customCommandlineOptions";
-            this.customCommandlineOptions.Size = new System.Drawing.Size(292, 20);
+            this.customCommandlineOptions.Size = new System.Drawing.Size(300, 20);
             this.customCommandlineOptions.TabIndex = 0;
             this.customCommandlineOptions.TextChanged += new System.EventHandler(this.updateEvent);
             // 
@@ -1287,6 +1287,7 @@ namespace MeGUI.packages.video.x264
             0,
             0,
             65536});
+            this.numAQStrength.ValueChanged += new System.EventHandler(this.numAQStrength_ValueChanged);
             // 
             // lbAQStrength
             // 
@@ -1311,6 +1312,7 @@ namespace MeGUI.packages.video.x264
             this.cbAQMode.Name = "cbAQMode";
             this.cbAQMode.Size = new System.Drawing.Size(229, 21);
             this.cbAQMode.TabIndex = 1;
+            this.cbAQMode.SelectedIndexChanged += new System.EventHandler(this.cbAQMode_SelectedIndexChanged);
             // 
             // lbAQMode
             // 
@@ -1336,7 +1338,7 @@ namespace MeGUI.packages.video.x264
             this.x264GeneralBFramesgGroupbox.Controls.Add(this.x264NumberOfBFrames);
             this.x264GeneralBFramesgGroupbox.Controls.Add(this.x264AdaptiveBframes);
             this.x264GeneralBFramesgGroupbox.Controls.Add(this.x264PyramidBframes);
-            this.x264GeneralBFramesgGroupbox.Location = new System.Drawing.Point(325, 132);
+            this.x264GeneralBFramesgGroupbox.Location = new System.Drawing.Point(324, 131);
             this.x264GeneralBFramesgGroupbox.Name = "x264GeneralBFramesgGroupbox";
             this.x264GeneralBFramesgGroupbox.Size = new System.Drawing.Size(174, 268);
             this.x264GeneralBFramesgGroupbox.TabIndex = 6;
@@ -1497,7 +1499,7 @@ namespace MeGUI.packages.video.x264
             this.cqmComboBox1.Name = "cqmComboBox1";
             this.cqmComboBox1.SelectedIndex = -1;
             this.cqmComboBox1.SelectedItem = null;
-            this.cqmComboBox1.Size = new System.Drawing.Size(298, 29);
+            this.cqmComboBox1.Size = new System.Drawing.Size(306, 29);
             this.cqmComboBox1.TabIndex = 5;
             this.cqmComboBox1.SelectionChanged += new MeGUI.StringChanged(this.cqmComboBox1_SelectionChanged);
             // 
