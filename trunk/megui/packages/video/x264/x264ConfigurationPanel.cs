@@ -749,7 +749,6 @@ namespace MeGUI.packages.video.x264
                     x264NumberOfBFrames.Enabled = false;
                     x264NumberOfRefFramesLabel.Enabled = false;
                     cqmComboBox1.SelectedIndex = 0;
-                    quantizerMatrixGroupbox.Text = "";
                     quantizerMatrixGroupbox.Enabled = false;
                     x264LosslessMode.Checked = false;
                     x264LosslessMode.Enabled = false;
@@ -759,7 +758,6 @@ namespace MeGUI.packages.video.x264
                     x264NumberOfBFrames.Enabled = true;
                     x264NumberOfRefFramesLabel.Enabled = true;
                     cqmComboBox1.SelectedIndex = 0;
-                    quantizerMatrixGroupbox.Text = "";
                     quantizerMatrixGroupbox.Enabled = false;
                     x264LosslessMode.Checked = false;
                     x264LosslessMode.Enabled = false;

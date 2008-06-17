@@ -1496,13 +1496,13 @@ namespace MeGUI.packages.video.x264
             this.cqmComboBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.cqmComboBox1.Filter = "Quantizer matrix files (*.cfg)|*.cfg|All Files (*.*)|*.*";
-            this.cqmComboBox1.Location = new System.Drawing.Point(6, 19);
+            this.cqmComboBox1.Location = new System.Drawing.Point(12, 19);
             this.cqmComboBox1.MaximumSize = new System.Drawing.Size(1000, 29);
             this.cqmComboBox1.MinimumSize = new System.Drawing.Size(64, 29);
             this.cqmComboBox1.Name = "cqmComboBox1";
             this.cqmComboBox1.SelectedIndex = -1;
             this.cqmComboBox1.SelectedItem = null;
-            this.cqmComboBox1.Size = new System.Drawing.Size(348, 29);
+            this.cqmComboBox1.Size = new System.Drawing.Size(300, 29);
             this.cqmComboBox1.TabIndex = 5;
             this.cqmComboBox1.SelectionChanged += new MeGUI.StringChanged(this.cqmComboBox1_SelectionChanged);
             // 
