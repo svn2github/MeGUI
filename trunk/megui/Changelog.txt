@@ -1,3 +1,7 @@
+0.3.0.1008
+    - (sharktooth) Fix for x264config custom quantizer matrices controls out of groupbox bound
+    - (berrinam) Fix for #1945737: Error message with Adaptive Muxer
+
 0.3.0.1007
     - (sharktooth) fixed some more x264config missing events. patch by Underground78
     - (sharktooth) [x264ConfigurationPanel] Code cleanups
