@@ -1,3 +1,9 @@
+0.3.0.1007
+    - (sharktooth) fixed some more x264config missing events. patch by Underground78
+    - (sharktooth) [x264ConfigurationPanel] Code cleanups
+    - (kurtnoise) [VideoUtil] allowed DTS indentation and removed trackID for audio streams (not used).
+    - (kurtnoise) [x264ConfigurationPanel] added updateEvent for Subpel Refinement & ME Type.
+
 0.3.0.1006
     - (sharktooth) Fixed x264 AQ settings
 
