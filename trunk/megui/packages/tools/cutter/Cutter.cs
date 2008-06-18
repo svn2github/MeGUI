@@ -131,6 +131,7 @@ namespace MeGUI.packages.tools.cutter
 
         private void sections_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
+            removeZoneButton.Enabled = sections.SelectedItems.Count > 0;
             updateZoneButton.Enabled = sections.SelectedItems.Count == 1;
         }
 
