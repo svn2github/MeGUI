@@ -121,6 +121,7 @@ namespace MeGUI
 			InitializeComponent();
             this.controlsToDisable = new List<Control>();
 
+            this.controlsToDisable.Add(reopenOriginal);
             this.controlsToDisable.Add(filtersGroupbox);
             this.controlsToDisable.Add(deinterlacingGroupBox);
             this.controlsToDisable.Add(mpegOptGroupBox);
