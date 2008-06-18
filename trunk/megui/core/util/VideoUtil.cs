@@ -196,6 +196,41 @@ namespace MeGUI
 				}
 			}
 		}
+        /// <summary>
+        /// gets basic information about a video source based on its DGindex generated log file
+        /// </summary>
+        /// <param name="logFile">the log file to be analyzed</param>
+        /// <param name="audioTrackIDs">the audio tracks IDs found</param>
+        public void getDGindexLogInfo(string logFile, out List<AudioTrackInfo> audioTrackIDs)
+        {
+            StreamReader sr = null;
+            audioTrackIDs = new List<AudioTrackInfo>();
+            try
+            {
+                sr = new StreamReader(logFile, System.Text.Encoding.Default);
+                string line = "";
+                while ((line = sr.ReadLine()) != null)
+                {
+                    if (line.IndexOf("Audio Stream") != -1)
+                    {
+                        char[] separator = { ':' };
+                        string[] split = line.Split(separator, 1000);
+                        AudioTrackInfo ati = new AudioTrackInfo();
+                        string myTrackID = split[0].Substring(split[0].Length + 1, 2).Trim();
+                        ati.TrackID = Int32.Parse(myTrackID);
+                        ati.Type = split[1].Substring(split[1].Length + 1, 3).Trim();
+                        audioTrackIDs.Add(ati);
+                    }
+                }
+            }
+            catch
+                (Exception i)
+            {
+                MessageBox.Show("The following error ocurred when parsing the log file " + logFile + "\r\n" + i.Message, "Error parsing log file", MessageBoxButtons.OK);
+                audioTrackIDs.Clear();
+            }
+        }
+        
 		#endregion
 		#region dgindex preprocessing
 		/// <summary>
