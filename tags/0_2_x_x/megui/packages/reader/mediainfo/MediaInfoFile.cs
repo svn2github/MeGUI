@@ -261,9 +261,9 @@ namespace MeGUI
                 MediaInfoWrapper.VideoTrack track = info.Video[0];
                 checked
                 {
-                    ulong width = (ulong)easyParseInt(track.Width);
-                    ulong height = (ulong)easyParseInt(track.Height);
-                    ulong frameCount = (ulong)easyParseInt(track.FrameCount);
+                    ulong width = (ulong)easyParseInt(track.Width).Value;
+                    ulong height = (ulong)easyParseInt(track.Height).Value;
+                    ulong frameCount = (ulong)(easyParseInt(track.FrameCount) ?? 0);
                     double fps = (easyParseDouble(track.FrameRate) ?? 25.0);
                     vCodec = getVideoCodec(track.Codec);
                     vType = getVideoType(vCodec, cType, file);
@@ -278,7 +278,7 @@ namespace MeGUI
         }
 
         #region methods
-        private static int easyParseInt(string value)
+        private static int? easyParseInt(string value)
         {
             try
             {
@@ -286,7 +286,7 @@ namespace MeGUI
             }
             catch (Exception)
             {
-                return -1;
+				return null;
             }
         }
 
