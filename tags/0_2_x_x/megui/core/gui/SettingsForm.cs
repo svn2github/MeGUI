@@ -59,12 +59,10 @@ namespace MeGUI
         private TextBox audioExtension;
         private GroupBox autoModeGroupbox;
         private Label label13;
-        private NumericUpDown numericUpDown1;
+        private NumericUpDown nbPasses;
         private Label audioExtLabel;
         private Label videoExtLabel;
         private Button autoEncodeDefaultsButton;
-        private Label nbPassesLabel;
-        private NumericUpDown nbPasses;
         private TextBox command;
         private RadioButton runCommand;
         private RadioButton shutdown;
@@ -236,7 +234,7 @@ namespace MeGUI
             this.keep2ndPassLogFile = new System.Windows.Forms.CheckBox();
             this.keep2ndPassOutput = new System.Windows.Forms.CheckBox();
             this.label13 = new System.Windows.Forms.Label();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.nbPasses = new System.Windows.Forms.NumericUpDown();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage4 = new System.Windows.Forms.TabPage();
@@ -304,8 +302,6 @@ namespace MeGUI
             this.audioExtLabel = new System.Windows.Forms.Label();
             this.videoExtLabel = new System.Windows.Forms.Label();
             this.autoEncodeDefaultsButton = new System.Windows.Forms.Button();
-            this.nbPassesLabel = new System.Windows.Forms.Label();
-            this.nbPasses = new System.Windows.Forms.NumericUpDown();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
             groupBox1 = new System.Windows.Forms.GroupBox();
             groupBox1.SuspendLayout();
@@ -322,14 +318,13 @@ namespace MeGUI
             ((System.ComponentModel.ISupportInitialize)(this.maxServersToTry)).BeginInit();
             this.outputExtensions.SuspendLayout();
             this.autoModeGroupbox.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nbPasses)).BeginInit();
             this.tabPage2.SuspendLayout();
             this.tabControl2.SuspendLayout();
             this.tabPage4.SuspendLayout();
             this.tabPage5.SuspendLayout();
             this.tabPage6.SuspendLayout();
             this.tabPage7.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nbPasses)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -861,7 +856,7 @@ namespace MeGUI
             this.autoModeGroupbox.Controls.Add(this.keep2ndPassLogFile);
             this.autoModeGroupbox.Controls.Add(this.keep2ndPassOutput);
             this.autoModeGroupbox.Controls.Add(this.label13);
-            this.autoModeGroupbox.Controls.Add(this.numericUpDown1);
+            this.autoModeGroupbox.Controls.Add(this.nbPasses);
             this.autoModeGroupbox.Location = new System.Drawing.Point(4, 3);
             this.autoModeGroupbox.Name = "autoModeGroupbox";
             this.autoModeGroupbox.Size = new System.Drawing.Size(463, 73);
@@ -916,21 +911,21 @@ namespace MeGUI
             // 
             // numericUpDown1
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(117, 20);
-            this.numericUpDown1.Maximum = new decimal(new int[] {
+            this.nbPasses.Location = new System.Drawing.Point(117, 20);
+            this.nbPasses.Maximum = new decimal(new int[] {
             3,
             0,
             0,
             0});
-            this.numericUpDown1.Minimum = new decimal(new int[] {
+            this.nbPasses.Minimum = new decimal(new int[] {
             2,
             0,
             0,
             0});
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(40, 21);
-            this.numericUpDown1.TabIndex = 1;
-            this.numericUpDown1.Value = new decimal(new int[] {
+            this.nbPasses.Name = "nbPasses";
+            this.nbPasses.Size = new System.Drawing.Size(40, 21);
+            this.nbPasses.TabIndex = 1;
+            this.nbPasses.Value = new decimal(new int[] {
             2,
             0,
             0,
@@ -1591,36 +1586,6 @@ namespace MeGUI
             this.autoEncodeDefaultsButton.Text = "Configure Defaults";
             this.autoEncodeDefaultsButton.UseVisualStyleBackColor = true;
             // 
-            // nbPassesLabel
-            // 
-            this.nbPassesLabel.Location = new System.Drawing.Point(8, 24);
-            this.nbPassesLabel.Name = "nbPassesLabel";
-            this.nbPassesLabel.Size = new System.Drawing.Size(100, 23);
-            this.nbPassesLabel.TabIndex = 2;
-            this.nbPassesLabel.Text = "Number of passes";
-            // 
-            // nbPasses
-            // 
-            this.nbPasses.Location = new System.Drawing.Point(120, 22);
-            this.nbPasses.Maximum = new decimal(new int[] {
-            3,
-            0,
-            0,
-            0});
-            this.nbPasses.Minimum = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
-            this.nbPasses.Name = "nbPasses";
-            this.nbPasses.Size = new System.Drawing.Size(40, 20);
-            this.nbPasses.TabIndex = 1;
-            this.nbPasses.Value = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
-            // 
             // helpButton1
             // 
             this.helpButton1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -1668,7 +1633,7 @@ namespace MeGUI
             this.outputExtensions.PerformLayout();
             this.autoModeGroupbox.ResumeLayout(false);
             this.autoModeGroupbox.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nbPasses)).EndInit();
             this.tabPage2.ResumeLayout(false);
             this.tabControl2.ResumeLayout(false);
             this.tabPage4.ResumeLayout(false);
@@ -1679,7 +1644,6 @@ namespace MeGUI
             this.tabPage6.PerformLayout();
             this.tabPage7.ResumeLayout(false);
             this.tabPage7.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nbPasses)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
