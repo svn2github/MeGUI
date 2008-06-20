@@ -75,6 +75,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
 
                 if (settings.DAR.HasValue)
                     sb.Append(" --aspect-ratio 0:" + settings.DAR.Value.X + "/" + settings.DAR.Value.Y);
+                else
+                    sb.Append(" --engage keep_bitstream_ar_info");
 
                 if (settings.VideoName.Length > 0)
                     sb.Append(" --track-name \"0:" + settings.VideoName + "\"");
