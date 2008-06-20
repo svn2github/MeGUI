@@ -18,7 +18,7 @@ namespace MeGUI
             defaultLanguage1, defaultLanguage2, afterEncodingCommand;
         private bool recalculateMainMovieBitrate, autoForceFilm, autoStartQueue, enableMP3inMP4, autoOpenScript,
             overwriteStats, keep2of3passOutput, deleteCompletedJobs, autoSetNbThreads, deleteIntermediateFiles,
-            deleteAbortedOutput, openProgressWindow, useadvancedtooltips, freshOggEnc2, autoscroll;
+            deleteAbortedOutput, openProgressWindow, useadvancedtooltips, freshOggEnc2, autoscroll, alwaysOnTop;
         private ulong audioSamplesPerUpdate;
         private AfterEncoding afterEncoding;
         private decimal forceFilmThreshold, acceptableFPSError;
@@ -86,6 +86,7 @@ namespace MeGUI
             videoExtension = "";
             audioExtension = "";
             safeProfileAlteration = false;
+            alwaysOnTop = false;
         }
         #region properties
         public string YadifPath
@@ -173,6 +174,14 @@ namespace MeGUI
         {
             get { return useadvancedtooltips; }
             set { useadvancedtooltips = value; }
+        }
+        ///<summary>
+        /// gets / sets whether megui puts the Video Preview Form "Alwyas on Top" or not
+        /// </summary>
+        public bool AlwaysOnTop
+        {
+            get { return alwaysOnTop; }
+            set { alwaysOnTop = value; }
         }
 
         /// <summary>

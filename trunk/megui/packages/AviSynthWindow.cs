@@ -1441,6 +1441,7 @@ namespace MeGUI
                 player.Show();
                 reader = player.Reader;
                 sendCropValues();
+                if (mainForm.Settings.AlwaysOnTop) player.TopMost = true;
                 return true;
             }
             else

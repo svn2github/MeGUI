@@ -142,6 +142,8 @@ namespace MeGUI
         private TextBox tbAften;
         private Label lbAften;
         private Button selectAftenExecutableButton;
+        private GroupBox gbVideoPreview;
+        private CheckBox chAlwaysOnTop;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -306,6 +308,8 @@ namespace MeGUI
             this.videoExtLabel = new System.Windows.Forms.Label();
             this.autoEncodeDefaultsButton = new System.Windows.Forms.Button();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
+            this.gbVideoPreview = new System.Windows.Forms.GroupBox();
+            this.chAlwaysOnTop = new System.Windows.Forms.CheckBox();
             groupBox1 = new System.Windows.Forms.GroupBox();
             groupBox1.SuspendLayout();
             this.otherGroupBox.SuspendLayout();
@@ -328,6 +332,7 @@ namespace MeGUI
             this.tabPage5.SuspendLayout();
             this.tabPage6.SuspendLayout();
             this.tabPage7.SuspendLayout();
+            this.gbVideoPreview.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -736,6 +741,7 @@ namespace MeGUI
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.gbVideoPreview);
             this.tabPage3.Controls.Add(groupBox1);
             this.tabPage3.Controls.Add(this.autoUpdateGroupBox);
             this.tabPage3.Controls.Add(this.outputExtensions);
@@ -755,7 +761,7 @@ namespace MeGUI
             this.autoUpdateGroupBox.Controls.Add(this.useAutoUpdateCheckbox);
             this.autoUpdateGroupBox.Location = new System.Drawing.Point(227, 82);
             this.autoUpdateGroupBox.Name = "autoUpdateGroupBox";
-            this.autoUpdateGroupBox.Size = new System.Drawing.Size(240, 203);
+            this.autoUpdateGroupBox.Size = new System.Drawing.Size(240, 139);
             this.autoUpdateGroupBox.TabIndex = 3;
             this.autoUpdateGroupBox.TabStop = false;
             this.autoUpdateGroupBox.Text = "Auto Update";
@@ -1629,6 +1635,26 @@ namespace MeGUI
             this.helpButton1.Size = new System.Drawing.Size(47, 23);
             this.helpButton1.TabIndex = 1;
             // 
+            // gbVideoPreview
+            // 
+            this.gbVideoPreview.Controls.Add(this.chAlwaysOnTop);
+            this.gbVideoPreview.Location = new System.Drawing.Point(228, 228);
+            this.gbVideoPreview.Name = "gbVideoPreview";
+            this.gbVideoPreview.Size = new System.Drawing.Size(239, 62);
+            this.gbVideoPreview.TabIndex = 4;
+            this.gbVideoPreview.TabStop = false;
+            this.gbVideoPreview.Text = "Video Preview";
+            // 
+            // chAlwaysOnTop
+            // 
+            this.chAlwaysOnTop.AutoSize = true;
+            this.chAlwaysOnTop.Location = new System.Drawing.Point(8, 21);
+            this.chAlwaysOnTop.Name = "chAlwaysOnTop";
+            this.chAlwaysOnTop.Size = new System.Drawing.Size(169, 17);
+            this.chAlwaysOnTop.TabIndex = 0;
+            this.chAlwaysOnTop.Text = "Set the Form \"Always on Top\"";
+            this.chAlwaysOnTop.UseVisualStyleBackColor = true;
+            // 
             // SettingsForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
@@ -1676,6 +1702,8 @@ namespace MeGUI
             this.tabPage6.PerformLayout();
             this.tabPage7.ResumeLayout(false);
             this.tabPage7.PerformLayout();
+            this.gbVideoPreview.ResumeLayout(false);
+            this.gbVideoPreview.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1972,6 +2000,7 @@ namespace MeGUI
                 settings.FFMpegPath = textBox7.Text;
                 settings.AftenPath = tbAften.Text;
                 settings.AedSettings = this.autoEncodeDefaults;
+                settings.AlwaysOnTop = chAlwaysOnTop.Checked;
 				return settings;
 			}
 			set
@@ -2030,6 +2059,7 @@ namespace MeGUI
                 textBox7.Text = settings.FFMpegPath;
                 tbAften.Text = settings.AftenPath;
                 this.autoEncodeDefaults = settings.AedSettings;
+                chAlwaysOnTop.Checked = settings.AlwaysOnTop;
 			}
 		}
 		#endregion

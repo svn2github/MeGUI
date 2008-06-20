@@ -643,7 +643,6 @@ namespace MeGUI
             this.Name = "VideoPlayer";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.Text = "VideoPlayer";
-            this.TopMost = true;
             ((System.ComponentModel.ISupportInitialize)(this.videoPreview)).EndInit();
             this.previewGroupbox.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.positionSlider)).EndInit();

@@ -97,7 +97,7 @@ namespace MeGUI
         /// gets the properties of the video, registers the callbacks, updates the video bitrate (we know the lenght of the video now) and updates the commandline
         /// with the scriptname
         /// </summary>
-        /// <param name="fileName">the AviSynth scrip to be opened</param>
+        /// <param name="fileName">the AviSynth script to be opened</param>
         private void openAvisynthScript(string fileName)
         {
             if (this.player != null) // make sure only one preview window is open at all times
@@ -113,6 +113,7 @@ namespace MeGUI
                 player.IntroCreditsFrameSet += new IntroCreditsFrameSetCallback(player_IntroCreditsFrameSet);
                 player.Closed += new EventHandler(player_Closed);
                 player.Show();
+                if (mainForm.Settings.AlwaysOnTop) player.TopMost = true;
             }
         }
 
