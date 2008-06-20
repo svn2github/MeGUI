@@ -1,3 +1,14 @@
+0.3.0.1009 (includes the fixes and additions up to ver. 0.2.6.1048)
+    - (kurtnoise) updated project files
+    - (kurtnoise) moved Avc2AviMuxer.cs in the mux folder.
+    - (kurtnoise) added an option in the Settings to set up the video preview always on top or not.
+    - (kurtnoise) fixed a stupid copy & paste, spotted by Underground78.
+    - (kurtnoise) added manifest files for the x86 & x64 platforms.
+    - (berrinam) Add "--engage keep_bitstream_ar_info" to mkvmerge commandline so that muxed mkv files have same AR as source.
+    - (kurtnoise) added x86 and x64 target platforms for the file project.
+    - (kurtnoise) [VideoUtil] added a function to get basic information about a video source based on its DGindex generated log file. Useful to use the last DGindex release...
+    - (berrinam) [AVSCutter] Reenabled "Remove" button
+
 0.3.0.1008
     - (sharktooth) Fix for x264config custom quantizer matrices controls out of groupbox bound
     - (berrinam) Fix for #1945737: Error message with Adaptive Muxer
@@ -106,6 +117,47 @@
     - (Kurtnoise) Delays on audio output filenames now have meaning and are checked for correctness (implements #1819281)
     - (Kurtnoise) Changed the default bitrate for FFAC3 (256 to 384 kbps).
     - (Kurtnoise) Audio codecs List refactoring.
+
+0.2.6.1048
+    - (berrinam) Fix #1939862 ("Number of Passes" Setting Ignored)
+    - (berrinam) Fix for #1945737 (Error message with Adaptive Muxer)
+    - (berrinam) Fix #1996457 (preview and autoencode window priorities): opening AutoEncode closes preview window.
+    - (berrinam) Fix #1996499 (re-open original video player button glitch)
+
+0.2.6.1047
+    - (kurtnoise) updated MediaInfo library and his wrapper to the latest release (0.7.7.2).
+    - (kurtnoise) [AudioEncodingTab] added a try/catch statement for better error handling for end-users concerning delays values too high/low detected in filenames (#1965905).
+    - (kurtnoise) [x264Encoder] fixed a comma use associated with Const. Quantizer (#1975472).
+    - (kurtnoise) [AvisynthAudioEncoder] fixed an error in the upmix function.
+    - (kurtnoise) [VideoPlayer] video preview always on top from now...
+    - (kurtnoise) added an icon for the ToolTip.
+    - (kurtnoise) [AudioEncoder] added support for NicAudio v2 (needed to fix some bugs) >> http://www.codeplex.com/NicAudio
+    - (kurtnoise) added several languages in the nsis script.
+
+0.2.6.1046
+    - (kurtnoise) few more updates for the x264 compressor.
+    - (Kurtnoise) updated a switch for the x264 compressor.
+    - (Kurtnoise) Added .NET Framework version detection from Vista SP1.
+
+0.2.6.1045
+    - (Sharktooth) [d2vcreator] Default to "Demux All Audio Tracks"
+    - (Kurtnoise) updated MediaInfo.dll and MediaInfoWrapper to the last SVN revision.
+    - (Kurtnoise) [Calculator] fixed the wrong max value for nbFrames.
+    - (Sharktooth) Added --me TESA x264 option
+    - (Kurtnoise) [app.manifest] better interoperation with Vista. Patch by smcgovern (#1849658)
+    - (Kurtnoise) [AviSynthAudioEncoder] fixed thread priorities changes. Now, audio encoders are also affected by the changing. Patch by Mitsubishi (#1862154)
+    - (Kurtnoise) [BitrateCalculator] - fixed a crash when none containers are available in the list.
+    - (kurtnoise) [BitrateCalculator] - fixed a bug for video longer than ~2hours. Patches by Mutant_Fruit (#1887539)
+    - (Kurtnoise) [FileSize] fixed an error which causes a crash on big numbers. Patch by mutant_fruit (#1887546)
+
+0.2.6.1044
+    - (Kurtnoise) updated MediaInfo library & his wrapper.
+    - (Kurtnoise) [neroConfigurationPanel] added vBitrate_ValueChanged() event for ABR & CBR checking. 
+    - (Kurtnoise) display only the function used in the avs script for audio encodings instead of the 5 ones.
+    - (Kurtnoise) use EnsureVBRMP3Sync() with DirectShowSource only.
+    - (Kurtnoise) [JobQueue] changed public to internal for the JobChangeEvent (to fix the compilation within MSVC# 2008).
+    - (Kurtnoise) [AviSynthWindow] fixed width & height for Crop checkbox when "overcrop to achieve mod16" is selected (#1852845).
+    - (Kurtnoise) [AviSynthAudioEncoder] fixed bug #1850574 for DTS files sources.
 
 0.2.6.1043
     - (Kurtnoise) updated the link to the latest framework.
