@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ContextHelp version="0.4" Author="Kurtnoise" LastUpdated="11-05-08">
+<ContextHelp version="0.5" Author="Kurtnoise" LastUpdated="20-06-08">
 	<Codec name="x264">
 		<!--To Do List: 
 1 Use info from x264 help  -  DONE
@@ -165,16 +165,16 @@ quality. This mode is only tuned for qcomp=0.6.</Advanced>
 		</crf>
 		<qpmin name="Minimum Quantizer">
 			<Advanced>
-Enforces a minimum Quantizer. Prevents the codec from outputting frames with too much compression,
-causing reduced quality. Note: This is disregarded in Constant Quality or Quality Based VBR modes.</Advanced>
+Enforces a minimum Quantizer. Prevents the codec from outputting frames with too little
+compression, wasting bits. Note: This is disregarded in Constant Quality or Quality Based VBR modes.</Advanced>
 			<Basic>Set minimum Quantizer factor.</Basic>
 			<Recommended>10</Recommended>
 			<Default>10</Default>
 		</qpmin>
 		<qpmax name="Maximum Quantizer">
 			<Advanced>
-Enforces a maximum Quantizer. Prevents the codec from outputting frames with too little
-compression, wasting bits. Note: This is disregarded in Constant Quality or Quality Based VBR modes.</Advanced>
+Enforces a maximum Quantizer. Prevents the codec from outputting frames with too much compression,
+causing reduced quality. Note: This is disregarded in Constant Quality or Quality Based VBR modes.</Advanced>
 			<Basic>Set maximum Quantizer factor.</Basic>
 			<Recommended>51</Recommended>
 			<Default>51</Default>
