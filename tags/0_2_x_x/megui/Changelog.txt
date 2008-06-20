@@ -1,3 +1,9 @@
+0.2.6.1048
+    - (berrinam) Fix #1939862 ("Number of Passes" Setting Ignored)
+    - (berrinam) Fix for #1945737 (Error message with Adaptive Muxer)
+    - (berrinam) Fix #1996457 (preview and autoencode window priorities): opening AutoEncode closes preview window.
+    - (berrinam) Fix #1996499 (re-open original video player button glitch)
+
 0.2.6.1047
     - (kurtnoise) updated MediaInfo library and his wrapper to the latest release (0.7.7.2).
     - (kurtnoise) [AudioEncodingTab] added a try/catch statement for better error handling for end-users concerning delays values too high/low detected in filenames (#1965905).
