@@ -622,7 +622,7 @@
     </Compile>
     <Compile Include="packages\audio\waac\WinAmpAACSettings.cs" />
     <Compile Include="packages\audio\audx\AudXSettings.cs" />
-    <Compile Include="packages\Avc2AviMuxer.cs" />
+    <Compile Include="packages\mux\Avc2AviMuxer.cs" />
     <Compile Include="packages\AVCLevels.cs" />
     <Compile Include="packages\AviSynthJob.cs" />
     <Compile Include="packages\AviSynthProcessor.cs" />
