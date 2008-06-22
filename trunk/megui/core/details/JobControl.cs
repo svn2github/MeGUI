@@ -538,6 +538,7 @@ namespace MeGUI.core.details
             return true;
         }
 
+        private object nextJobLock = new object();
         /// <summary>
         /// Returns the first job on the queue whose dependencies have been met, whose status
         /// is set to 'waiting', and which isn't owned by any JobWorkers
@@ -545,14 +546,17 @@ namespace MeGUI.core.details
         /// <returns></returns>
         internal TaggedJob getJobToProcess()
         {
-            foreach (TaggedJob job in jobQueue.JobList)
+            lock (nextJobLock)
             {
-                if (job.Status == JobStatus.WAITING &&
-                    job.OwningWorker == null &&
-                    areDependenciesMet(job))
-                    return job;
+                foreach (TaggedJob job in jobQueue.JobList)
+                {
+                    if (job.Status == JobStatus.WAITING &&
+                        job.OwningWorker == null &&
+                        areDependenciesMet(job))
+                        return job;
+                }
+                return null;
             }
-            return null;
         }
 
         internal void RenameWorker(string name, string value)
