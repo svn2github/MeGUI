@@ -810,14 +810,17 @@ namespace MeGUI
                 myVideo.DAR = info.Video.Info.DAR;
                 myVideo.VideoType = info.Video.CurrentMuxableVideoType;
                 myVideo.Settings = vSettings;
-                AutoEncodeWindow aew = new AutoEncodeWindow(myVideo, info.Audio.AudioStreams, info, info.Video.PrerenderJob);
-                if (aew.init())
+                
+                using (AutoEncodeWindow aew = new AutoEncodeWindow(myVideo, info.Audio.AudioStreams, info, info.Video.PrerenderJob))
                 {
-                    info.ClosePlayer();
-                    aew.ShowDialog();
+                    if (aew.init())
+                    {
+                        info.ClosePlayer();
+                        aew.ShowDialog();
+                    }
+                    else
+                        MessageBox.Show("The currently selected combination of video and audio output cannot be muxed", "Unsupported configuration", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
-                else
-                    MessageBox.Show("The currently selected combination of video and audio output cannot be muxed", "Unsupported configuration", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }           
         }
 
