@@ -373,6 +373,7 @@ namespace MeGUI
             knownVideoDescriptions.Add("huffman", VideoCodec.HFYU);
             knownVideoDescriptions.Add("ffvh", VideoCodec.HFYU);
             knownVideoDescriptions.Add("snow", VideoCodec.SNOW);
+            knownVideoDescriptions.Add("mpeg-4v", VideoCodec.ASP);
 
             knownAudioDescriptions = new Dictionary<string, AudioCodec>();
             knownAudioDescriptions.Add("aac", AudioCodec.AAC);
