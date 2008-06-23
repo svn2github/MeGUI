@@ -1,3 +1,7 @@
+0.3.0.1010 (includes the fixes and additions up to ver. 0.2.6.1049)
+    - (berrinam) [AvisynthAudioEncoder] Log audio error messages.
+    - (berrinam) Better rationalisation of ARs in AVS window. Patch by i_a
+
 0.3.0.1009 (includes the fixes and additions up to ver. 0.2.6.1048)
     - (kurtnoise) updated project files
     - (kurtnoise) moved Avc2AviMuxer.cs in the mux folder.
@@ -117,6 +121,12 @@
     - (Kurtnoise) Delays on audio output filenames now have meaning and are checked for correctness (implements #1819281)
     - (Kurtnoise) Changed the default bitrate for FFAC3 (256 to 384 kbps).
     - (Kurtnoise) Audio codecs List refactoring.
+
+0.2.6.1049
+    - (berrinam) Added locking around getJobToProcess() to eliminate race condition on job starting (should fix #1932378: Two workers started working on same job)
+    - (berrinam) MediaInfo should now properly detect .m4v files. (Fixes adaptive muxing for .m4v files)
+    - (berrinam) Removed MP4 output from xvid_encraw, since it was never actually supported.
+    - (berrinam) Fixed #1870331 (User specified sizes in bitrate calcs not remembered)
 
 0.2.6.1048
     - (berrinam) Fix #1939862 ("Number of Passes" Setting Ignored)
