@@ -382,6 +382,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                     _logBuilder.Append("\n");
                     _logBuilder.Append("\nError:\n");
 
+                    _logBuilder.Append(e.Message);
+
                     if (audioJob.Settings is WinAmpAACSettings)
                     {
                         if (File.Exists(encoder_path + "enc_aacplus.dll") == false)
