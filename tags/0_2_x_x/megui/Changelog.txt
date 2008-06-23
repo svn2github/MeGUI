@@ -1,4 +1,5 @@
 0.2.6.1049
+    - (berrinam) [AvisynthAudioEncoder] Log audio error messages.
     - (berrinam) Added locking around getJobToProcess() to eliminate race condition on job starting (should fix #1932378: Two workers started working on same job)
     - (berrinam) MediaInfo should now properly detect .m4v files. (Fixes adaptive muxing for .m4v files)
     - (berrinam) Removed MP4 output from xvid_encraw, since it was never actually supported.
