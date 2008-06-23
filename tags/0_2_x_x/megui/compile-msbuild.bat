@@ -1,4 +1,4 @@
-"%windir%\Microsoft.NET\Framework\v3.5\MSBuild.exe" MeGUI_2008.csproj /t:Rebuild /p:Configuration=Release
+"%windir%\Microsoft.NET\Framework\v3.5\MSBuild.exe" MeGUI_2008.csproj /t:Rebuild /p:Configuration=Release /p:Platform="x86"
 copy Bin\Release\*.exe .
 
 rem make dist with everything
