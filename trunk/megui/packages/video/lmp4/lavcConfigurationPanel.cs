@@ -127,7 +127,7 @@ namespace MeGUI.packages.video.lmp4
         #region codec-specific overload functions
         protected override string getCommandline()
         {
-            return mencoderEncoder.genLavcCommandline("input", "output", null, Settings as lavcSettings);
+            return mencoderEncoder.genLavcCommandline("input", "output", null, Settings as lavcSettings, null);
         }
 
         /// <summary>
@@ -296,6 +296,7 @@ namespace MeGUI.packages.video.lmp4
 
     }
 }
+
 
 
 

@@ -34,12 +34,23 @@ namespace MeGUI
 		{
 		}
 
+        private Zone[] zones = new Zone[] { };
+        /// <summary>
+        /// gets / sets the zones
+        /// </summary>
+        public Zone[] Zones
+        {
+            get { return zones; }
+            set { zones = value; }
+        }
+
         public VideoJob(string input, string output,
-            VideoCodecSettings settings, Dar? dar)
+            VideoCodecSettings settings, Dar? dar, Zone[] zones)
             : base(input, output)
         {
             Settings = settings;
             DAR = dar;
+            Zones = zones;
         }
 
         private Dar? dar;

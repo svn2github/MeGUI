@@ -49,11 +49,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "XviDEncoder");
         {
             get
             {
-                return genCommandline(job.Input, job.Output, job.DAR, job.Settings as xvidSettings, hres, vres);
+                return genCommandline(job.Input, job.Output, job.DAR, job.Settings as xvidSettings, hres, vres, job.Zones);
             }
         }
 
-        public static string genCommandline(string input, string output, Dar? d, xvidSettings xs, int hres, int vres)
+        public static string genCommandline(string input, string output, Dar? d, xvidSettings xs, int hres, int vres, Zone[] zones)
         {
             StringBuilder sb = new StringBuilder();
             CultureInfo ci = new CultureInfo("en-us");
@@ -180,10 +180,10 @@ new JobProcessorFactory(new ProcessorFactory(init), "XviDEncoder");
                 sb.Append("-par " + s.X + ":" + s.Y + " ");
             }
             sb.Append("-threads " + xs.NbThreads + " ");
-            if (xs.Zones != null && xs.Zones.Length > 0 && xs.CreditsQuantizer >= new decimal(1)
+            if (zones != null && zones.Length > 0 && xs.CreditsQuantizer >= new decimal(1)
                 && xs.EncodingMode != 1) // only for non CQ mode at the moment
             {
-                foreach (Zone zone in xs.Zones)
+                foreach (Zone zone in zones)
                 {
                     if (zone.mode == ZONEMODE.QUANTIZER)
                         sb.Append("-zq " + zone.startFrame + " " + zone.modifier + " ");

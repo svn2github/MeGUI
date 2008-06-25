@@ -43,6 +43,7 @@ namespace MeGUI
         private MainForm mainForm;
 		private JobUtil jobUtil;
 		private VideoUtil vUtil;
+        private VideoInfo vInfo;
         private LogItem log = new LogItem("AutoEncode job generation log", ImageType.Information);
 		private bool isBitrateMode = true;
 
@@ -80,9 +81,10 @@ namespace MeGUI
 		{
             InitializeComponent();
         }
-        public AutoEncodeWindow(VideoStream videoStream, List<AudioJob> audioStreams, MainForm mainForm, bool prerender)
+        public AutoEncodeWindow(VideoStream videoStream, List<AudioJob> audioStreams, MainForm mainForm, bool prerender, VideoInfo vInfo)
             : this()
         {
+            this.vInfo = vInfo;
             mainForm.Log.Add(log);
             if (videoStream.Settings.EncodingMode == 1 || videoStream.Settings.EncodingMode == 9) // CQ and CRF -- no bitrate possible
             {
@@ -125,7 +127,7 @@ namespace MeGUI
             this.container.Items.Clear();
             this.container.Items.AddRange(supportedOutputTypes.ToArray());
             this.container.SelectedIndex = 0;
-            string muxedName = FileUtil.AddToFileName(mainForm.Video.Info.VideoOutput, "-muxed");
+            string muxedName = FileUtil.AddToFileName(vInfo.VideoOutput, "-muxed");
 
             this.muxedOutput.Text = Path.ChangeExtension(muxedName, (this.container.SelectedItem as ContainerType).Extension);
 
@@ -664,8 +666,8 @@ namespace MeGUI
 				separateEncodableAndMuxableAudioStreams(out aStreams, out audio, out muxTypes);
 				MuxStream[] subtitles = new MuxStream[0];
 				string chapters = "";
-				string videoInput = mainForm.Video.Info.VideoInput;
-                string videoOutput = mainForm.Video.Info.VideoOutput;
+				string videoInput = vInfo.VideoInput;
+                string videoOutput = vInfo.VideoOutput;
                 string muxedOutput = this.muxedOutput.Text;
                 ContainerType cot = this.container.SelectedItem as ContainerType;
                 if (addSubsNChapters.Checked)
@@ -796,7 +798,8 @@ namespace MeGUI
             }
 
             VideoCodecSettings vSettings = info.Video.CurrentSettings.Clone();
-            bool cont = info.JobUtil.getFinalZoneConfiguration(vSettings, info.Video.Info.IntroEndFrame, info.Video.Info.CreditsStartFrame);
+            Zone[] zones = info.Video.Info.Zones; // We can't simply modify the zones in place because that would reveal the final zones config to the user, including the credits/start zones
+            bool cont = info.JobUtil.getFinalZoneConfiguration(vSettings, info.Video.Info.IntroEndFrame, info.Video.Info.CreditsStartFrame, ref zones);
             if (cont)
             {
                 ulong length = 0;
@@ -811,7 +814,10 @@ namespace MeGUI
                 myVideo.VideoType = info.Video.CurrentMuxableVideoType;
                 myVideo.Settings = vSettings;
                 
-                using (AutoEncodeWindow aew = new AutoEncodeWindow(myVideo, info.Audio.AudioStreams, info, info.Video.PrerenderJob))
+                VideoInfo vInfo = info.Video.Info.Clone(); // so we don't modify the data on the main form
+                vInfo.Zones = zones;
+
+                using (AutoEncodeWindow aew = new AutoEncodeWindow(myVideo, info.Audio.AudioStreams, info, info.Video.PrerenderJob, vInfo))
                 {
                     if (aew.init())
                     {

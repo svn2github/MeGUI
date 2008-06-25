@@ -59,7 +59,6 @@ namespace MeGUI
 		bool turbo, v4mv, qpel, trellis;
 		decimal creditsQuantizer;
 		private string logfile, customEncoderOptions;
-		private Zone[] zones;
         private string[] fourCCs;
         private VideoEncoderType vet;
 
@@ -76,7 +75,6 @@ namespace MeGUI
 			customEncoderOptions = "";
 			fourCC = 0;
             nbThreads = 1;
-			zones = new Zone[0];
 		}
         public VideoCodec Codec
         {
@@ -173,14 +171,6 @@ namespace MeGUI
 		{
 			get {return fourCC;}
 			set {fourCC = value;}
-		}
-		/// <summary>
-		/// gets / sets the zones
-		/// </summary>
-		public Zone[] Zones
-		{
-			get {return zones;}
-			set {zones = value;}
 		}
 		/// <summary>
         ///  gets / sets the maximum number of passes that can be performed with the current codec

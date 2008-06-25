@@ -50,7 +50,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             return null;
         }
 
-        public static string genCommandline(string input, string output, Dar? d, int hres, int vres, x264Settings xs)
+        public static string genCommandline(string input, string output, Dar? d, int hres, int vres, x264Settings xs, Zone[] zones)
         {
             StringBuilder sb = new StringBuilder();
             CultureInfo ci = new CultureInfo("en-us");
@@ -263,10 +263,10 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                 if (xs.AQstrength != new decimal(1.0))
                     sb.Append("--aq-strength " + xs.AQstrength.ToString(ci) + " ");
             }
-            if (xs.Zones != null && xs.Zones.Length > 0 && xs.CreditsQuantizer >= new decimal(1))
+            if (zones != null && zones.Length > 0 && xs.CreditsQuantizer >= new decimal(1))
             {
                 sb.Append("--zones ");
-                foreach (Zone zone in xs.Zones)
+                foreach (Zone zone in zones)
                 {
                     sb.Append(zone.startFrame + "," + zone.endFrame + ",");
                     if (zone.mode == ZONEMODE.QUANTIZER)
@@ -321,7 +321,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
         protected override string Commandline
         {
             get {
-                return genCommandline(job.Input, job.Output, job.DAR, hres, vres, job.Settings as x264Settings);
+                return genCommandline(job.Input, job.Output, job.DAR, hres, vres, job.Settings as x264Settings, job.Zones);
             }
         }
     }

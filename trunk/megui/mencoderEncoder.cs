@@ -32,9 +32,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "MencoderEncoder");
             get
             {
                 if (job.Settings is lavcSettings)
-                    return genLavcCommandline(job.Input, job.Output, job.DAR, job.Settings as lavcSettings);
+                    return genLavcCommandline(job.Input, job.Output, job.DAR, job.Settings as lavcSettings, job.Zones);
                 else if (job.Settings is snowSettings)
-                    return genSnowCommandline(job.Input, job.Output, job.Settings as snowSettings);
+                    return genSnowCommandline(job.Input, job.Output, job.Settings as snowSettings, job.Zones);
                 else if (job.Settings is hfyuSettings)
                     return genHfyuCommandline();
                 throw new Exception();
@@ -66,7 +66,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MencoderEncoder");
             return sb.ToString();
         }
 
-        public static string genSnowCommandline(string input, string output, snowSettings ss)
+        public static string genSnowCommandline(string input, string output, snowSettings ss, Zone[] zones)
         {
             StringBuilder sb = new StringBuilder();
             CultureInfo ci = new CultureInfo("en-us");
@@ -152,10 +152,10 @@ new JobProcessorFactory(new ProcessorFactory(init), "MencoderEncoder");
             if (ss.NbMotionPredictors != 0)
                 sb.Append("last_pred=" + ss.NbMotionPredictors.ToString(ci) + ":");
             sb.Append("vstrict=-2:");
-            if (ss.Zones != null && ss.Zones.Length > 0 && ss.CreditsQuantizer >= new decimal(1))
+            if (zones != null && zones.Length > 0 && ss.CreditsQuantizer >= new decimal(1))
             {
                 sb.Append("-vrc_override=");
-                foreach (Zone zone in ss.Zones)
+                foreach (Zone zone in zones)
                 {
                     if (zone.mode == ZONEMODE.QUANTIZER)
                         sb.Append(zone.startFrame + "," + zone.endFrame + "," + zone.modifier + "/");
@@ -179,7 +179,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MencoderEncoder");
             return sb.ToString();
         }
 
-        public static string genLavcCommandline(string input, string output, Dar? d, lavcSettings ls)
+        public static string genLavcCommandline(string input, string output, Dar? d, lavcSettings ls, Zone[] zones)
         {
             CultureInfo ci = new CultureInfo("en-us");
             StringBuilder sb = new StringBuilder();
@@ -287,10 +287,10 @@ new JobProcessorFactory(new ProcessorFactory(init), "MencoderEncoder");
                 sb.Append("vrc_buf_size=" + ls.BufferSize + ":");
             if (ls.FilesizeTolerance != 8000) // default is 8000 kbits
                 sb.Append("vratetol=" + ls.FilesizeTolerance + ":");
-            if (ls.Zones != null && ls.Zones.Length > 0 && ls.CreditsQuantizer >= new decimal(1))
+            if (zones != null && zones.Length > 0 && ls.CreditsQuantizer >= new decimal(1))
             {
                 sb.Append("vrc_override=");
-                foreach (Zone zone in ls.Zones)
+                foreach (Zone zone in zones)
                 {
                     if (zone.mode == ZONEMODE.QUANTIZER)
                         sb.Append(zone.startFrame + "," + zone.endFrame + "," + zone.modifier + "/");

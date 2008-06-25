@@ -473,7 +473,7 @@ namespace MeGUI
             log.Add(eliminatedDuplicateFilenames(ref videoOutput, ref muxedOutput, audioStreams));
             video.Output = videoOutput;
 
-            JobChain vjobs = jobUtil.prepareVideoJob(video.Input, video.Output, video.Settings, video.DAR, prerender, true);
+            JobChain vjobs = jobUtil.prepareVideoJob(video.Input, video.Output, video.Settings, video.DAR, prerender, true, null);
 
             if (vjobs == null) return null;
             /* Here, we guess the types of the files based on extension.
@@ -838,6 +838,7 @@ namespace MeGUI
     }
 	#endregion
 }
+
 
 
 

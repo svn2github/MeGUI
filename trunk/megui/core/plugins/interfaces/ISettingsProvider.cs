@@ -66,15 +66,29 @@ namespace MeGUI
             set { creditsStartFrame = value; }
         }
 
-        public VideoInfo(string videoInput, string videoOutput, int darX, int darY, int creditsStartFrame, int introEndFrame)
+        private Zone[] zones;
+        public Zone[] Zones
+        {
+            get { return zones; }
+            set { zones = value ?? new Zone[0]; }
+        }
+
+
+        public VideoInfo(string videoInput, string videoOutput, int darX, int darY, int creditsStartFrame, int introEndFrame, Zone[] zones)
         {
             this.videoInput = videoInput;
             this.videoOutput = videoOutput;
             this.creditsStartFrame = creditsStartFrame;
             this.introEndFrame = introEndFrame;
+            this.zones = zones;
         }
 
         public VideoInfo()
-            : this("", "", -1, -1, -1, -1) { }
+            : this("", "", -1, -1, -1, -1, null) { }
+
+        internal VideoInfo Clone()
+        {
+            return (VideoInfo)this.MemberwiseClone();
+        }
     }
 }

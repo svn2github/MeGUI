@@ -35,11 +35,12 @@ namespace MeGUI
             this.addPrerenderJob = new System.Windows.Forms.CheckBox();
             this.addAnalysisPass = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.videoProfile = new MeGUI.core.gui.ConfigableProfilesControl();
+            this.editZonesButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.videoProfile = new MeGUI.core.gui.ConfigableProfilesControl();
             this.videoOutput = new MeGUI.FileBar();
             this.videoInput = new MeGUI.FileBar();
-            this.label2 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -103,6 +104,7 @@ namespace MeGUI
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.editZonesButton);
             this.groupBox1.Controls.Add(this.videoProfile);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.videoInputLabel);
@@ -122,6 +124,35 @@ namespace MeGUI
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Video encoding";
             // 
+            // editZonesButton
+            // 
+            this.editZonesButton.Enabled = false;
+            this.editZonesButton.Location = new System.Drawing.Point(409, 108);
+            this.editZonesButton.Name = "editZonesButton";
+            this.editZonesButton.Size = new System.Drawing.Size(75, 23);
+            this.editZonesButton.TabIndex = 13;
+            this.editZonesButton.Text = "Edit zones...";
+            this.editZonesButton.UseVisualStyleBackColor = true;
+            this.editZonesButton.Click += new System.EventHandler(this.editZonesButton_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 110);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(55, 13);
+            this.label1.TabIndex = 6;
+            this.label1.Text = "File format";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 84);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(86, 13);
+            this.label2.TabIndex = 2;
+            this.label2.Text = "Encoder settings";
+            // 
             // videoProfile
             // 
             this.videoProfile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
@@ -132,15 +163,6 @@ namespace MeGUI
             this.videoProfile.Size = new System.Drawing.Size(371, 22);
             this.videoProfile.TabIndex = 12;
             this.videoProfile.SelectedProfileChanged += new System.EventHandler(this.videoProfile_SelectedProfileChanged);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 110);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(55, 13);
-            this.label1.TabIndex = 6;
-            this.label1.Text = "File format";
             // 
             // videoOutput
             // 
@@ -175,15 +197,6 @@ namespace MeGUI
             this.videoInput.Title = "Open AviSynth script";
             this.videoInput.FileSelected += new MeGUI.FileBarEventHandler(this.videoInput_FileSelected);
             // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 84);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(86, 13);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "Encoder settings";
-            // 
             // VideoEncodingComponent
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -211,6 +224,7 @@ namespace MeGUI
         private System.Windows.Forms.Label label1;
         private MeGUI.core.gui.ConfigableProfilesControl videoProfile;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button editZonesButton;
 
     }
 }

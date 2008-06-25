@@ -11,6 +11,7 @@ using MeGUI.core.plugins.interfaces;
 using MeGUI.core.details.video;
 using MeGUI.packages.video;
 using MeGUI.core.util;
+using MeGUI.core.gui;
 
 namespace MeGUI
 {
@@ -86,6 +87,7 @@ namespace MeGUI
         private void videoInput_FileSelected(FileBar sender, FileBarEventArgs args)
         {
             if (!string.IsNullOrEmpty(videoInput.Filename)) openVideoFile(videoInput.Filename);
+            editZonesButton.Enabled = !string.IsNullOrEmpty(videoInput.Filename);
         }
 
         private void videoOutput_FileSelected(FileBar sender, FileBarEventArgs args)
@@ -104,11 +106,13 @@ namespace MeGUI
                 player.Close();
             player = new VideoPlayer();
             info.DAR = null; // to be sure to initialize DAR values
+            info.Zones = null;
             bool videoLoaded = player.loadVideo(mainForm, fileName, PREVIEWTYPE.CREDITS, true);
             if (videoLoaded)
             {
                 info.DAR = info.DAR ?? player.File.Info.DAR;
                 player.DAR = info.DAR;
+
 
                 player.IntroCreditsFrameSet += new IntroCreditsFrameSetCallback(player_IntroCreditsFrameSet);
                 player.Closed += new EventHandler(player_Closed);
@@ -139,7 +143,7 @@ namespace MeGUI
             }
             VideoCodecSettings vSettings = this.CurrentSettings.Clone();
             mainForm.JobUtil.AddVideoJobs(info.VideoInput, info.VideoOutput, this.CurrentSettings.Clone(),
-                info.IntroEndFrame, info.CreditsStartFrame, info.DAR, PrerenderJob, true);
+                info.IntroEndFrame, info.CreditsStartFrame, info.DAR, PrerenderJob, true, info.Zones);
         }
         private void fileType_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -293,8 +297,7 @@ namespace MeGUI
         /// <returns>returns true if there is no intersetion between zones and credits and false if there is an intersection</returns>
         private bool validateCredits(int creditsStartFrame)
         {
-            VideoCodecSettings settings = this.CurrentSettings;
-            foreach (Zone z in settings.Zones)
+            foreach (Zone z in Info.Zones)
             {
                 if (creditsStartFrame <= z.endFrame) // credits start before end of this zone -> intersection
                 {
@@ -313,8 +316,7 @@ namespace MeGUI
         /// <returns>true if the intro zone does not interesect with a zone, false otherwise</returns>
         private bool validateIntro(int introEndFrame)
         {
-            VideoCodecSettings settings = this.CurrentSettings;
-            foreach (Zone z in settings.Zones)
+            foreach (Zone z in Info.Zones)
             {
                 if (introEndFrame >= z.startFrame)
                 {
@@ -338,6 +340,8 @@ namespace MeGUI
             this.VideoInput = "";
             this.VideoOutput = "";
             info.CreditsStartFrame = 0;
+            editZonesButton.Enabled = false;
+            info.Zones = null;
         }
         #endregion
 
@@ -362,6 +366,16 @@ namespace MeGUI
             lastCodec = CurrentSettings.EncoderType;
             Util.ChangeItemsKeepingSelectedSame(fileType, videoEncoderProvider.GetSupportedOutput(lastCodec));
 
+        }
+
+
+        private void editZonesButton_Click(object sender, EventArgs e)
+        {
+            ClosePlayer();
+            ZonesWindow zw = new ZonesWindow(mainForm, VideoInput);
+            zw.Zones = Info.Zones;
+            if (zw.ShowDialog() == DialogResult.OK)
+                Info.Zones = zw.Zones;
         }
     }
 }

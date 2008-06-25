@@ -52,9 +52,9 @@ namespace MeGUI
 		#region job generation
 		#region single job generation
         
-        public VideoJob generateVideoJob(string input, string output, VideoCodecSettings settings, Dar? dar)
+        public VideoJob generateVideoJob(string input, string output, VideoCodecSettings settings, Dar? dar, Zone[] zones)
         {
-            return generateVideoJob(input, output, settings, false, dar);
+            return generateVideoJob(input, output, settings, false, dar, zones);
         }
         
         /// <summary>
@@ -66,9 +66,9 @@ namespace MeGUI
 		/// <param name="output">the video output</param>
 		/// <param name="settings">the codec settings for this job</param>
 		/// <returns>the generated job or null if there was an error with the video source</returns>
-		public VideoJob generateVideoJob(string input, string output, VideoCodecSettings settings, bool skipVideoCheck, Dar? dar)
+		public VideoJob generateVideoJob(string input, string output, VideoCodecSettings settings, bool skipVideoCheck, Dar? dar, Zone[] zones)
 		{
-			VideoJob job = new VideoJob(input, output, settings, dar);
+			VideoJob job = new VideoJob(input, output, settings, dar, zones);
 			
             if (mainForm.Settings.AutoSetNbThreads)
 				adjustNbThreads(settings);
@@ -247,21 +247,17 @@ namespace MeGUI
 		#region job preparation (aka multiple job generation)
 
         public bool AddVideoJobs(string movieInput, string movieOutput, VideoCodecSettings settings,
-            int introEndFrame, int creditsStartFrame, Dar? dar, bool prerender, bool checkVideo)
+            int introEndFrame, int creditsStartFrame, Dar? dar, bool prerender, bool checkVideo, Zone[] zones)
         {
-            bool cont = getFinalZoneConfiguration(settings, introEndFrame, creditsStartFrame);
+            bool cont = getFinalZoneConfiguration(settings, introEndFrame, creditsStartFrame, ref zones);
             if (!cont) // abort
                 return false;
-            JobChain jobs = prepareVideoJob(movieInput, movieOutput, settings, dar, prerender, checkVideo);
+            JobChain jobs = prepareVideoJob(movieInput, movieOutput, settings, dar, prerender, checkVideo, zones);
             if (jobs == null)
                 return false;
             mainForm.Jobs.addJobsWithDependencies(jobs);
 
             return false;
-        }
-        public JobChain prepareVideoJob(string movieInput, string movieOutput, VideoCodecSettings settings, Dar? dar)
-        {
-            return prepareVideoJob(movieInput, movieOutput, settings, dar, false, false);
         }
 		/// <summary>
 		/// at first, the job from the currently configured settings is generated. In addition, we find out if this job is 
@@ -270,7 +266,7 @@ namespace MeGUI
 		/// then, all the generated jobs are returned
 		/// </summary>
 		/// <returns>an Array of VideoJobs in the order they are to be encoded</returns>
-		public JobChain prepareVideoJob(string movieInput, string movieOutput, VideoCodecSettings settings, Dar? dar, bool prerender, bool checkVideo)
+		public JobChain prepareVideoJob(string movieInput, string movieOutput, VideoCodecSettings settings, Dar? dar, bool prerender, bool checkVideo, Zone[] zones)
 		{
 			bool twoPasses = false, turbo = settings.Turbo, threePasses = false;
 			if (settings.EncodingMode == 4) // automated twopass
@@ -310,7 +306,7 @@ namespace MeGUI
                 {
                     return null;
                 }
-                prerenderJob = this.generateVideoJob(movieInput, hfyuFile, new hfyuSettings(), dar);
+                prerenderJob = this.generateVideoJob(movieInput, hfyuFile, new hfyuSettings(), dar, zones);
                 if (prerenderJob == null)
                     return null;
             }
@@ -328,7 +324,7 @@ namespace MeGUI
                     }
                 }
             }
-            VideoJob job = this.generateVideoJob(inputAVS, movieOutput, settings, prerender, dar);
+            VideoJob job = this.generateVideoJob(inputAVS, movieOutput, settings, prerender, dar, zones);
 			VideoJob firstpass = null;
 			VideoJob middlepass = null;
 			if (job != null)
@@ -629,7 +625,7 @@ namespace MeGUI
 		/// <param name="creditsStartFrame">the frame where the credits begin</param>
 		/// <param name="newZones">the zones that are returned</param>
 		/// <returns>an array of zones objects in the proper order</returns>
-		public bool getFinalZoneConfiguration(VideoCodecSettings vSettings, int introEndFrame, int creditsStartFrame)
+		public bool getFinalZoneConfiguration(VideoCodecSettings vSettings, int introEndFrame, int creditsStartFrame, ref Zone[] zones)
 		{
 			Zone introZone = new Zone();
 			Zone creditsZone = new Zone();
@@ -642,18 +638,18 @@ namespace MeGUI
 				introZone.endFrame = introEndFrame;
 				introZone.mode = ZONEMODE.QUANTIZER;
 				introZone.modifier = vSettings.CreditsQuantizer;
-				if (vSettings.Zones.Length > 0)
+				if (zones.Length > 0)
 				{
-					Zone z = vSettings.Zones[0];
+					Zone z = zones[0];
 					if (z.startFrame > introZone.endFrame) // the first configured zone starts after the intro zone
 						doIntroZone = true;
 					else
 					{
 						flushZonesStart = 1;
-						int numberOfConfiguredZones = vSettings.Zones.Length;
+						int numberOfConfiguredZones = zones.Length;
 						while (flushZonesStart <= numberOfConfiguredZones)// iterate through all zones backwards until we find the first that goes with the intro
 						{
-							Zone conflict = vSettings.Zones[flushZonesStart];
+							Zone conflict = zones[flushZonesStart];
 							if (conflict.startFrame <= introZone.endFrame) // zone starts before the end of the intro -> conflict
 								flushZonesStart++;
 							else
@@ -678,18 +674,18 @@ namespace MeGUI
 				creditsZone.endFrame = (int)nbOfFrames-1;
 				creditsZone.mode = ZONEMODE.QUANTIZER;
 				creditsZone.modifier = vSettings.CreditsQuantizer;
-				if (vSettings.Zones.Length > 0)
+				if (zones.Length > 0)
 				{
-					Zone z = vSettings.Zones[vSettings.Zones.Length - 1]; // get the last zone
+					Zone z = zones[zones.Length - 1]; // get the last zone
 					if (z.endFrame < creditsZone.startFrame) // the last configured zone ends before the credits start zone
 						doCreditsZone = true;
 					else
 					{
 						flushZonesEnd = 1;
-						int numberOfConfiguredZones = vSettings.Zones.Length;
+						int numberOfConfiguredZones = zones.Length;
 						while (numberOfConfiguredZones - flushZonesEnd -1 >= 0)// iterate through all zones backwards until we find the first that goes with the credits
 						{
-							Zone conflict = vSettings.Zones[numberOfConfiguredZones - flushZonesEnd -1];
+							Zone conflict = zones[numberOfConfiguredZones - flushZonesEnd -1];
 							if (conflict.endFrame >= creditsZone.startFrame) // zone ends after the end of the credits -> conflict
 								flushZonesEnd++;
 							else
@@ -708,7 +704,7 @@ namespace MeGUI
 				else // no additional zones configured
 					doCreditsZone = true;
 			}
-			int newZoneSize = vSettings.Zones.Length - flushZonesStart - flushZonesEnd;
+			int newZoneSize = zones.Length - flushZonesStart - flushZonesEnd;
 			if (doIntroZone)
 				newZoneSize++;
 			if (doCreditsZone)
@@ -720,9 +716,9 @@ namespace MeGUI
 				newZones[index] = introZone;
 				index++;
 			}
-			for (int i = flushZonesStart; i < vSettings.Zones.Length - flushZonesEnd; i++)
+			for (int i = flushZonesStart; i < zones.Length - flushZonesEnd; i++)
 			{
-				newZones[index] = vSettings.Zones[i];
+				newZones[index] = zones[i];
 				index++;
 			}
 			if (doCreditsZone)
@@ -737,11 +733,11 @@ namespace MeGUI
 					return false;
 				else
 				{
-					vSettings.Zones = xvidZones;
+					zones = xvidZones;
 					return true;
 				}
 			}
-			vSettings.Zones = newZones;
+			zones = newZones;
 			return true;
 		}
 		#endregion
