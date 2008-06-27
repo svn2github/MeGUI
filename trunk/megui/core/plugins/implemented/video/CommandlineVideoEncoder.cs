@@ -74,10 +74,14 @@ namespace MeGUI
 
                     LogItem stats = log.Info("Final statistics");
 
-                    if (job.Settings.EncodingMode != 1)
-                        stats.LogValue("Desired video bitrate", job.Settings.BitrateQuantizer + " kbit/s");
+                    if (job.Settings.EncodingMode == 1) // QP mode
+                        stats.LogValue("Constant Quantizer Mode", "quantizer " + job.Settings.BitrateQuantizer + " used");
+                    else if (job.Settings.EncodingMode == 9) // CRF mode
+                        stats.LogValue("Constant Quality Mode", "quality " + job.Settings.BitrateQuantizer + " used");
+                    else
+                        stats.LogValue("Video Bitrate Desired", job.Settings.BitrateQuantizer + " kbit/s");
 
-                    stats.LogValue("Obtained video bitrate (approximate", bitrate + " kbit/s");
+                    stats.LogValue("Video Bitrate Obtained (approximate)", bitrate + " kbit/s");
                 }
             }
             catch (Exception e)
