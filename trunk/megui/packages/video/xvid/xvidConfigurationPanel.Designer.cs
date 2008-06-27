@@ -498,6 +498,8 @@ namespace MeGUI.packages.video.xvid
             this.xvidKeyframeInterval.Size = new System.Drawing.Size(40, 20);
             this.xvidKeyframeInterval.TabIndex = 6;
             this.xvidKeyframeInterval.Text = "300";
+            this.xvidKeyframeInterval.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textField_KeyPress);
+            this.xvidKeyframeInterval.TextChanged += new System.EventHandler(this.updateEvent);
             // 
             // xvidKeyframeIntervalLabel
             // 
