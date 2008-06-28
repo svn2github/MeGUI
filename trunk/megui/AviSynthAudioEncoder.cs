@@ -552,6 +552,52 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                         script.AppendFormat("NicMPG123Source(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
                         break;
                     case ".wav":
+                        using (FileStream fs = new FileStream(audioJob.Input, FileMode.Open, FileAccess.ReadWrite))
+                        {
+                            using (BinaryReader r = new BinaryReader(fs))
+                            {
+                                fs.Position = 20; // Offset
+                                UInt16 AudioFormat = r.ReadUInt16();  // read a LE int_16
+
+                                switch (AudioFormat)
+                                {
+                                    case 0x0001:           // PCM Format Int
+                                        fs.Position = 44;  // Offset
+                                        UInt32 DtsHeader = r.ReadUInt32(); // read a LE int_32
+
+                                        if (DtsHeader == 0xE8001FFF)
+                                        {
+                                            script.AppendFormat("NicDtsSource(\"{0}\"", audioJob.Input);
+                                            if (audioJob.Settings.AutoGain)
+                                                script.AppendFormat(", DRC=1){0}", Environment.NewLine);
+                                            else
+                                                script.Append(")");
+                                            break;
+                                        }
+                                        break;
+                                    case 0x0003:         // IEEE Float
+                                    case 0xFFFE:         // WAVE_FORMAT_EXTENSIBLE header
+                                        script.AppendFormat("RaWavSource(\"{0}\", 2){1}", audioJob.Input, Environment.NewLine);
+                                        break;
+                                    case 0x0055:         // MPEG Layer 3
+                                        script.AppendFormat("NicMPG123Source(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
+                                        break;
+                                    case 0x2000:         // AC3
+                                        script.AppendFormat("NicAc3Source(\"{0}\"", audioJob.Input);
+                                        if (audioJob.Settings.AutoGain)
+                                            script.AppendFormat(", DRC=1){0}", Environment.NewLine);
+                                        else
+                                            script.Append(")");
+                                        break;
+                                    default:
+                                        script.AppendFormat("WavSource(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
+                                        break;
+                                }
+                                r.Close();
+                            }
+                            fs.Close();
+                        }
+                        break;
                     case ".w64":
                     case ".aif":
                     case ".au":
