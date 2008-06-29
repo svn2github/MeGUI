@@ -50,7 +50,7 @@ namespace MeGUI.core.gui
                         copyExtraFilesToFolder(getRequiredFiles(profs),
                         Path.Combine(tempFolder.FullName, "extra"));
 
-                    turnValuesToZippedStyleName(subTable);
+                    subTable = turnValuesToZippedStyleName(subTable);
 
                     fixFileNames(profs, subTable);
 
@@ -68,10 +68,12 @@ namespace MeGUI.core.gui
             });
         }
 
-        private void turnValuesToZippedStyleName(Dictionary<string, string> subTable)
+        private Dictionary<string, string> turnValuesToZippedStyleName(Dictionary<string, string> subTable)
         {
+            Dictionary<string, string> newTable = new Dictionary<string, string>();
             foreach (string key in subTable.Keys)
-                subTable[key] = getZippedExtraFileName(subTable[key]);
+                newTable[key] = getZippedExtraFileName(subTable[key]);
+            return newTable;
         }
 
         private static string askForFilename()
@@ -86,4 +88,5 @@ namespace MeGUI.core.gui
         }
     }
 }
+
 
