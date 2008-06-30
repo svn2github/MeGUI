@@ -1551,8 +1551,6 @@ namespace MeGUI
 			if (noiseFilter.Checked)
 			{
 				this.noiseFilterType.Enabled = true;
-				if (noiseFilterType.SelectedIndex == -1) // make sure something is selected
-					noiseFilterType.SelectedIndex = 0;
 			}
 			else
 				this.noiseFilterType.Enabled = false;
