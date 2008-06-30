@@ -1,3 +1,13 @@
+0.3.0.1011 (includes the fixes and additions up to ver. 0.2.6.1050)
+    - (berrinam) [ProfileExporter] Fixed bug where exporting 2 profiles each with associated files would fail (bug not reported)
+    - (berrinam) Add ZonesWindow to VS2005 project file (patch by Sean McGovern)
+    - (kurtnoise) [AviSynthAudioEncoder] better detection of several data streams (AC3, MP3, DTS, etc...) from the wav container. Mainly based on Tebasuna's code.
+    - (kurtnoise) [LanguageSelectionContainer] added 'Français'.
+    - (kurtnoise) 'computed' instead of 'used' in CommandlineVideoEncoder
+    - (kurtnoise) [CommandlineVideoEncoder] better handling for several Encoding Modes.
+    - (kurtnoise) updated a missing event for max key Frame interval in the Xvid Configuration Panel. Patch by Underground78.
+    - (berrinam) Added zones back to main window (outside codec configs)
+
 0.3.0.1010 (includes the fixes and additions up to ver. 0.2.6.1049)
     - (berrinam) Better rationalisation of ARs in AVS window. Patch by i_a
 
@@ -120,6 +130,10 @@
     - (Kurtnoise) Delays on audio output filenames now have meaning and are checked for correctness (implements #1819281)
     - (Kurtnoise) Changed the default bitrate for FFAC3 (256 to 384 kbps).
     - (Kurtnoise) Audio codecs List refactoring.
+
+0.2.6.1050
+    - (kurtnoise) updated MediaInfo library and his wrapper to the latest release (0.7.7.3).
+    - (sharktooth) Set default platform to x86 in the compile-msbuild scripts to avoid #1999136 (Broken on x64 Windows)
 
 0.2.6.1049
     - (berrinam) [AvisynthAudioEncoder] Log audio error messages.

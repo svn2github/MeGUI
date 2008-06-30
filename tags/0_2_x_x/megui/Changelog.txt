@@ -1,3 +1,7 @@
+0.2.6.1050
+    - (kurtnoise) updated MediaInfo library and his wrapper to the latest release (0.7.7.3).
+    - (sharktooth) Set default platform to x86 in the compile-msbuild scripts to avoid #1999136 (Broken on x64 Windows)
+
 0.2.6.1049
     - (berrinam) [AvisynthAudioEncoder] Log audio error messages.
     - (berrinam) Added locking around getJobToProcess() to eliminate race condition on job starting (should fix #1932378: Two workers started working on same job)
