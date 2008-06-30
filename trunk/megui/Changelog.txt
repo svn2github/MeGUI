@@ -1,3 +1,6 @@
+0.3.0.1012
+    - (sharktooth) fix for #2001332 ([0.3.0.1010] AviSynth script creator does not open)
+
 0.3.0.1011 (includes the fixes and additions up to ver. 0.2.6.1050)
     - (berrinam) [ProfileExporter] Fixed bug where exporting 2 profiles each with associated files would fail (bug not reported)
     - (berrinam) Add ZonesWindow to VS2005 project file (patch by Sean McGovern)
