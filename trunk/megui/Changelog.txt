@@ -1,3 +1,9 @@
+0.3.0.1013
+    - (kurtnoise) cosmetics - Presets instead of Profiles.
+    - (kurtnoise) removed .net framework checking for vista users during the loading. It should be fine now with all apps updated and frankly it's also to avoid to waste some time to upgrade each number indefinitely...;-)
+    - (berrinam) Reset zones even when preview window doesn't open (fixes #2007133 - Error when loading "AutoEncode")
+    - (kurtnoise) removed audio tracks selection from the D2V creator.
+
 0.3.0.1012
     - (sharktooth) fix for #2001332 ([0.3.0.1010] AviSynth script creator does not open)
 
