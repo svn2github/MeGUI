@@ -1837,23 +1837,6 @@ namespace MeGUI
                 updateCheck.IsBackground = true;
                 updateCheck.Start();
             }
-
-            if (OSInfo.GetOSName() == "Windows Vista")
-            {
-                if (Environment.Version.ToString() == "3.5.21022.08" ||  // 3.5 RTM
-                    Environment.Version.ToString() == "3.0.04506.648" || // 3.0 SP1
-                    Environment.Version.ToString() == "3.0.04506.26" || // 3.0 RTM
-                    Environment.Version.ToString() == "2.0.50727.1433" || // 2.0 SP1
-                    Environment.Version.ToString() == "2.0.50727.1434") // 2.0 Vista SP1 or Server 2008 
-                {
-                    //do nothing;
-                }
-                else
-                {
-                    if (AskToDownloadDotNet() == true)
-                        System.Diagnostics.Process.Start("http://www.microsoft.com/downloads/details.aspx?familyid=333325FD-AE52-4E35-B531-508D977D32A6&displaylang=en");
-                }
-            }
         }
 
         private bool AskToDownloadDotNet()
