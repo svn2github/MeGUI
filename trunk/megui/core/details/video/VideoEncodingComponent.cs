@@ -106,7 +106,6 @@ namespace MeGUI
                 player.Close();
             player = new VideoPlayer();
             info.DAR = null; // to be sure to initialize DAR values
-            info.Zones = null;
             bool videoLoaded = player.loadVideo(mainForm, fileName, PREVIEWTYPE.CREDITS, true);
             if (videoLoaded)
             {
@@ -212,6 +211,7 @@ namespace MeGUI
             info.IntroEndFrame = -1;
             info.VideoInput = fileName;
             info.DAR = null;
+            info.Zones = null;
 
             if (mainForm.Settings.AutoOpenScript)
                 openAvisynthScript(fileName);
