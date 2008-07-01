@@ -32,8 +32,8 @@ namespace MeGUI.core.gui
             // 
             // label1
             // 
-            this.label1.Size = new System.Drawing.Size(135, 13);
-            this.label1.Text = "Select the profiles to export";
+            this.label1.Size = new System.Drawing.Size(136, 13);
+            this.label1.Text = "Select the presets to export";
             // 
             // button2
             // 
@@ -42,15 +42,12 @@ namespace MeGUI.core.gui
             this.button2.Text = "Export...";
             this.button2.Click += new System.EventHandler(this.export_Click);
             // 
-            // profileList
-            // 
-            this.profileList.CheckOnClick = true;
-            // 
             // ProfileExporter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.ClientSize = new System.Drawing.Size(383, 358);
             this.Name = "ProfileExporter";
+            this.Text = "Presets Exporter";
             this.Controls.SetChildIndex(this.profileList, 0);
             this.Controls.SetChildIndex(this.label1, 0);
             this.Controls.SetChildIndex(this.button2, 0);

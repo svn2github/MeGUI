@@ -390,14 +390,14 @@ namespace MeGUI
             // 
             this.mnuFileImport.Index = 1;
             this.mnuFileImport.Shortcut = System.Windows.Forms.Shortcut.CtrlI;
-            this.mnuFileImport.Text = "&Import Profiles";
+            this.mnuFileImport.Text = "&Import Presets";
             this.mnuFileImport.Click += new System.EventHandler(this.mnuFileImport_Click);
             // 
             // mnuFileExport
             // 
             this.mnuFileExport.Index = 2;
             this.mnuFileExport.Shortcut = System.Windows.Forms.Shortcut.CtrlE;
-            this.mnuFileExport.Text = "&Export Profiles";
+            this.mnuFileExport.Text = "&Export Presets";
             this.mnuFileExport.Click += new System.EventHandler(this.mnuFileExport_Click);
             // 
             // mnuFileExit

@@ -66,9 +66,9 @@ namespace MeGUI.core.gui
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(12, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(168, 13);
+            this.label1.Size = new System.Drawing.Size(169, 13);
             this.label1.TabIndex = 1;
-            this.label1.Text = "Select the profiles to import/export";
+            this.label1.Text = "Select the presets to import/export";
             // 
             // button2
             // 
@@ -92,7 +92,7 @@ namespace MeGUI.core.gui
             this.Controls.Add(this.label1);
             this.Controls.Add(this.profileList);
             this.Name = "ProfilePorter";
-            this.Text = "ProfilePorter2";
+            this.Text = "Presets Importer/Exporter";
             this.ResumeLayout(false);
             this.PerformLayout();
 

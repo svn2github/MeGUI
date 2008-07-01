@@ -38,8 +38,8 @@ namespace MeGUI.core.gui
             // label1
             // 
             this.label1.Location = new System.Drawing.Point(12, 7);
-            this.label1.Size = new System.Drawing.Size(134, 13);
-            this.label1.Text = "Select the profiles to import";
+            this.label1.Size = new System.Drawing.Size(135, 13);
+            this.label1.Text = "Select the presets to import";
             // 
             // button2
             // 
@@ -50,7 +50,6 @@ namespace MeGUI.core.gui
             // 
             // profileList
             // 
-            this.profileList.CheckOnClick = true;
             this.profileList.ContextMenuStrip = this.statusCheck;
             // 
             // statusCheck
@@ -80,7 +79,7 @@ namespace MeGUI.core.gui
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.ClientSize = new System.Drawing.Size(383, 358);
             this.Name = "ProfileImporter";
-            this.Text = "Profile Importer";
+            this.Text = "Preset Importer";
             this.Controls.SetChildIndex(this.profileList, 0);
             this.Controls.SetChildIndex(this.label1, 0);
             this.Controls.SetChildIndex(this.button2, 0);
