@@ -1838,17 +1838,6 @@ namespace MeGUI
                 updateCheck.Start();
             }
         }
-
-        private bool AskToDownloadDotNet()
-        {
-            if (MessageBox.Show("You're running MeGUI on Windows Vista but to avoid several issues,\n" +
-                                "may I ask you to upgrade your .Net Framework ?\n", "Warning",
-                                MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
-                return true;
-            else
-                return false;
-        }
-
     }
     public class CommandlineUpgradeData
     {
