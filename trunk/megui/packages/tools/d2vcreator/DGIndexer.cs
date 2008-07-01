@@ -58,22 +58,9 @@ namespace MeGUI
                 string projName = Path.Combine(Path.GetDirectoryName(job.Output), Path.GetFileNameWithoutExtension(job.Output));
                 sb.Append("-SD=< -AIF=<" + job.Input + "< -OF=<" + projName + "< -exit -hide ");
                 if (job.DemuxMode == 2)
-                    sb.Append("-OM=2"); // demux everything
-                else if (job.DemuxMode == 1)
-                {
-                    int t1 = job.AudioTrackID1 + 1;
-                    int t2 = job.AudioTrackID2 + 1;
-                    if (t1 - 1 != -1 && t2 - 1 == -1) // demux the first track
-                        sb.Append("-OM=1 -TN=" + t1); // demux only the selected track
-                    else if (t2 - 1 != -1 && t1 - 1 == -1) // demux the second track
-                        sb.Append("-OM=1 -TN=" + t2); // demux only the selected track
-                    else if (t1 - 1 == -1 && t2 - 1 == -1)
-                        sb.Append("-OM=0");
-                    else
-                        sb.Append("-OM=1 -TN=" + t1 + "," + t2); // demux everything
-                }
-                else if (job.DemuxMode == 0) // no audio demux
-                    sb.Append("-OM=0");
+                    sb.Append(" -OM=2"); // demux everything
+               else // no audio demux
+                    sb.Append(" -OM=0");
                 return sb.ToString();
             }
         }

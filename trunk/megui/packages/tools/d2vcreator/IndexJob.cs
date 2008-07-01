@@ -8,24 +8,21 @@ namespace MeGUI
 	public class IndexJob : Job
 	{
 		private bool loadSources;
-		private int audioTrackID1, audioTrackID2, demuxMode;
+		private int demuxMode;
 		private DGIndexPostprocessingProperties postprocessingProperties;
 		
 		public IndexJob():base()
 		{
 			loadSources = false;
 			demuxMode = 0;
-			audioTrackID1 = audioTrackID2 = -1;
 		}
 
-        public IndexJob(string input, string output, int demuxType, int trackID1, int trackID2,
+        public IndexJob(string input, string output, int demuxType,
             DGIndexPostprocessingProperties properties, bool loadSources)
         {
             Input = input;
             Output = output;
             DemuxMode = demuxType;
-            AudioTrackID1 = trackID1;
-            AudioTrackID2 = trackID2;
             PostprocessingProperties = properties;
             LoadSources = loadSources;
         }
@@ -39,23 +36,7 @@ namespace MeGUI
 			get {return loadSources;}
 			set {loadSources = value;}
 		}
-		/// <summary>
-		/// gets / sets the track ID of the first audio track to be demuxed
-		/// </summary>
-		public int AudioTrackID1
-		{
-			get {return audioTrackID1;}
-			set {audioTrackID1 = value;}
-		}
-		/// <summary>
-		///  gets / sets the track ID of the second audio track to be demuxed
-		/// </summary>
-		public int AudioTrackID2
-		{
-			get {return audioTrackID2;}
-			set {audioTrackID2 = value;}
-		}
-		/// <summary>
+    	/// <summary>
 		/// gets / sets the demux mode
 		/// 0 = no audio demux
 		/// 1 = demux selected audio track

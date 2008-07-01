@@ -58,15 +58,8 @@ namespace MeGUI
 		private System.Windows.Forms.OpenFileDialog openIFODialog;
 		private System.Windows.Forms.Button pickOutputButton;
 		private System.Windows.Forms.GroupBox inputGroupbox;
-		private System.Windows.Forms.RadioButton demuxAllTracks;
-		private System.Windows.Forms.RadioButton demuxSelectedTracks;
-		private System.Windows.Forms.ComboBox track1;
-		private System.Windows.Forms.ComboBox track2;
-		private System.Windows.Forms.Label track1Label;
-		private System.Windows.Forms.Label track2Label;
-		private System.Windows.Forms.RadioButton demuxNoAudiotracks;
-		private System.Windows.Forms.Button button1;
-		private System.Windows.Forms.Button clearAudio1Button;
+        private System.Windows.Forms.RadioButton demuxAllTracks;
+        private System.Windows.Forms.RadioButton demuxNoAudiotracks;
 		private System.Windows.Forms.Button queueButton;
 		private System.Windows.Forms.CheckBox loadOnComplete;
 		private System.Windows.Forms.CheckBox closeOnQueue;
@@ -77,7 +70,7 @@ namespace MeGUI
 		private System.ComponentModel.Container components = null;
 		#endregion
 		#region start / stop
-		public void setConfig(string input, string projectName, int demuxType, int track1Index, int track2Index,
+		public void setConfig(string input, string projectName, int demuxType,
             bool showCloseOnQueue, bool closeOnQueue, bool loadOnComplete, bool updateMode)
 		{
 			openVideo(input);
@@ -85,12 +78,8 @@ namespace MeGUI
 			this.projectName.Text = projectName;
 			if (demuxType == 0)
 				demuxNoAudiotracks.Checked = true;
-			else if (demuxType == 1)
-				demuxSelectedTracks.Checked = true;
 			else
 				demuxAllTracks.Checked = true;
-			track1.SelectedIndex = track1Index;
-			track2.SelectedIndex = track2Index;
 			this.loadOnComplete.Checked = loadOnComplete;
             if (updateMode)
             {
@@ -171,14 +160,7 @@ namespace MeGUI
             this.queueButton = new System.Windows.Forms.Button();
             this.loadOnComplete = new System.Windows.Forms.CheckBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.clearAudio1Button = new System.Windows.Forms.Button();
             this.demuxNoAudiotracks = new System.Windows.Forms.RadioButton();
-            this.track2Label = new System.Windows.Forms.Label();
-            this.track1Label = new System.Windows.Forms.Label();
-            this.track2 = new System.Windows.Forms.ComboBox();
-            this.track1 = new System.Windows.Forms.ComboBox();
-            this.demuxSelectedTracks = new System.Windows.Forms.RadioButton();
             this.demuxAllTracks = new System.Windows.Forms.RadioButton();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.pickOutputButton = new System.Windows.Forms.Button();
@@ -234,7 +216,7 @@ namespace MeGUI
             // 
             // queueButton
             // 
-            this.queueButton.Location = new System.Drawing.Point(360, 264);
+            this.queueButton.Location = new System.Drawing.Point(360, 201);
             this.queueButton.Name = "queueButton";
             this.queueButton.Size = new System.Drawing.Size(74, 23);
             this.queueButton.TabIndex = 10;
@@ -243,7 +225,7 @@ namespace MeGUI
             // 
             // loadOnComplete
             // 
-            this.loadOnComplete.Location = new System.Drawing.Point(52, 263);
+            this.loadOnComplete.Location = new System.Drawing.Point(59, 200);
             this.loadOnComplete.Name = "loadOnComplete";
             this.loadOnComplete.Size = new System.Drawing.Size(144, 24);
             this.loadOnComplete.TabIndex = 11;
@@ -251,109 +233,39 @@ namespace MeGUI
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.button1);
-            this.groupBox3.Controls.Add(this.clearAudio1Button);
             this.groupBox3.Controls.Add(this.demuxNoAudiotracks);
-            this.groupBox3.Controls.Add(this.track2Label);
-            this.groupBox3.Controls.Add(this.track1Label);
-            this.groupBox3.Controls.Add(this.track2);
-            this.groupBox3.Controls.Add(this.track1);
-            this.groupBox3.Controls.Add(this.demuxSelectedTracks);
             this.groupBox3.Controls.Add(this.demuxAllTracks);
             this.groupBox3.Location = new System.Drawing.Point(10, 56);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(424, 152);
+            this.groupBox3.Size = new System.Drawing.Size(424, 73);
             this.groupBox3.TabIndex = 8;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Audio";
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(382, 120);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(24, 23);
-            this.button1.TabIndex = 20;
-            this.button1.Text = "X";
-            this.button1.Click += new System.EventHandler(this.clearAudio2Button_Click);
-            // 
-            // clearAudio1Button
-            // 
-            this.clearAudio1Button.Location = new System.Drawing.Point(382, 94);
-            this.clearAudio1Button.Name = "clearAudio1Button";
-            this.clearAudio1Button.Size = new System.Drawing.Size(24, 23);
-            this.clearAudio1Button.TabIndex = 19;
-            this.clearAudio1Button.Text = "X";
-            this.clearAudio1Button.Click += new System.EventHandler(this.clearAudio1Button_Click);
-            // 
             // demuxNoAudiotracks
             // 
+            this.demuxNoAudiotracks.Checked = true;
             this.demuxNoAudiotracks.Location = new System.Drawing.Point(16, 16);
             this.demuxNoAudiotracks.Name = "demuxNoAudiotracks";
             this.demuxNoAudiotracks.Size = new System.Drawing.Size(120, 24);
             this.demuxNoAudiotracks.TabIndex = 13;
+            this.demuxNoAudiotracks.TabStop = true;
             this.demuxNoAudiotracks.Text = "No Audio demux";
-            this.demuxNoAudiotracks.CheckedChanged += new System.EventHandler(this.radioButton_CheckedChanged);
-            // 
-            // track2Label
-            // 
-            this.track2Label.Location = new System.Drawing.Point(16, 120);
-            this.track2Label.Name = "track2Label";
-            this.track2Label.Size = new System.Drawing.Size(72, 23);
-            this.track2Label.TabIndex = 12;
-            this.track2Label.Text = "Track 2";
-            // 
-            // track1Label
-            // 
-            this.track1Label.Location = new System.Drawing.Point(16, 96);
-            this.track1Label.Name = "track1Label";
-            this.track1Label.Size = new System.Drawing.Size(72, 23);
-            this.track1Label.TabIndex = 11;
-            this.track1Label.Text = "Track 1";
-            // 
-            // track2
-            // 
-            this.track2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.track2.Enabled = false;
-            this.track2.Location = new System.Drawing.Point(118, 120);
-            this.track2.Name = "track2";
-            this.track2.Size = new System.Drawing.Size(256, 21);
-            this.track2.TabIndex = 10;
-            // 
-            // track1
-            // 
-            this.track1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.track1.Enabled = false;
-            this.track1.Location = new System.Drawing.Point(118, 96);
-            this.track1.Name = "track1";
-            this.track1.Size = new System.Drawing.Size(256, 21);
-            this.track1.TabIndex = 9;
-            // 
-            // demuxSelectedTracks
-            // 
-            this.demuxSelectedTracks.Location = new System.Drawing.Point(16, 64);
-            this.demuxSelectedTracks.Name = "demuxSelectedTracks";
-            this.demuxSelectedTracks.Size = new System.Drawing.Size(336, 24);
-            this.demuxSelectedTracks.TabIndex = 8;
-            this.demuxSelectedTracks.Text = "Select Audio Streams to demux (Stream Info File required)";
-            this.demuxSelectedTracks.CheckedChanged += new System.EventHandler(this.radioButton_CheckedChanged);
             // 
             // demuxAllTracks
             // 
-            this.demuxAllTracks.Checked = true;
             this.demuxAllTracks.Location = new System.Drawing.Point(16, 40);
             this.demuxAllTracks.Name = "demuxAllTracks";
             this.demuxAllTracks.Size = new System.Drawing.Size(160, 24);
             this.demuxAllTracks.TabIndex = 7;
-            this.demuxAllTracks.TabStop = true;
             this.demuxAllTracks.Text = "Demux all Audio Tracks";
-            this.demuxAllTracks.CheckedChanged += new System.EventHandler(this.radioButton_CheckedChanged);
             // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.pickOutputButton);
             this.groupBox2.Controls.Add(this.projectName);
             this.groupBox2.Controls.Add(this.projectNameLabel);
-            this.groupBox2.Location = new System.Drawing.Point(8, 208);
+            this.groupBox2.Location = new System.Drawing.Point(10, 135);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(424, 49);
             this.groupBox2.TabIndex = 12;
@@ -399,7 +311,7 @@ namespace MeGUI
             // 
             // closeOnQueue
             // 
-            this.closeOnQueue.Location = new System.Drawing.Point(280, 264);
+            this.closeOnQueue.Location = new System.Drawing.Point(280, 201);
             this.closeOnQueue.Name = "closeOnQueue";
             this.closeOnQueue.Size = new System.Drawing.Size(72, 24);
             this.closeOnQueue.TabIndex = 13;
@@ -410,15 +322,15 @@ namespace MeGUI
             this.helpButton1.ArticleName = "D2v creator window";
             this.helpButton1.AutoSize = true;
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.helpButton1.Location = new System.Drawing.Point(8, 263);
+            this.helpButton1.Location = new System.Drawing.Point(8, 200);
             this.helpButton1.Name = "helpButton1";
-            this.helpButton1.Size = new System.Drawing.Size(38, 23);
+            this.helpButton1.Size = new System.Drawing.Size(45, 23);
             this.helpButton1.TabIndex = 14;
             // 
             // VobinputWindow
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
-            this.ClientSize = new System.Drawing.Size(444, 292);
+            this.ClientSize = new System.Drawing.Size(444, 232);
             this.Controls.Add(this.helpButton1);
             this.Controls.Add(this.closeOnQueue);
             this.Controls.Add(this.groupBox2);
@@ -469,29 +381,6 @@ namespace MeGUI
 		private void openVideo(string fileName)
 		{
 			input.Text = fileName;
-			track1.Items.Clear();
-			track2.Items.Clear();
-			Dar? ar;
-            int maxHorizontalResolution;
-            List<AudioTrackInfo> audioTracks;
-            List<SubtitleInfo> subtitles;
-            demuxSelectedTracks.Checked = vUtil.openVideoSource(fileName, out audioTracks, out subtitles, out ar, out maxHorizontalResolution);
-            track1.Items.AddRange(audioTracks.ToArray());
-            track2.Items.AddRange(audioTracks.ToArray());
-            foreach (AudioTrackInfo ati in audioTracks)
-            {
-                if (ati.Language.ToLower().Equals(mainForm.Settings.DefaultLanguage1.ToLower()))
-                {
-                    track1.SelectedItem = ati;
-                    continue;
-                }
-                if (ati.Language.ToLower().Equals(mainForm.Settings.DefaultLanguage2.ToLower()))
-                {
-                    track2.SelectedItem = ati;
-                    continue;
-                }
-            }
-			demuxSelectedTracks.Checked = !demuxAllTracks.Checked;
 		}
 		/// <summary>
 		/// creates a dgindex project
@@ -515,30 +404,6 @@ namespace MeGUI
 				MessageBox.Show("You must select a Video Input and DGIndex project file to continue", 
 					"Configuration incomplete", MessageBoxButtons.OK);
 		}
-		private void clearAudio1Button_Click(object sender, System.EventArgs e)
-		{
-			track1.SelectedIndex = -1;
-		}
-
-		private void clearAudio2Button_Click(object sender, System.EventArgs e)
-		{
-			track2.SelectedIndex = -1;
-		}
-		#endregion
-		#region radio buttons
-		private void radioButton_CheckedChanged(object sender, System.EventArgs e)
-		{
-			if (demuxSelectedTracks.Checked)
-			{
-				track1.Enabled = true;
-				track2.Enabled = true;
-			}
-			else
-			{
-				track1.Enabled = false;
-				track2.Enabled = false;
-			}
-		}
 		#endregion
 		#region helper methods
 		private void checkIndexIO()
@@ -554,10 +419,7 @@ namespace MeGUI
 			int demuxType = 0;
 			if (demuxAllTracks.Checked)
 				demuxType = 2;
-			else if (demuxSelectedTracks.Checked)
-				demuxType = 1;
-			return new IndexJob(this.input.Text, this.projectName.Text, demuxType, 
-				track1.SelectedIndex, track2.SelectedIndex, null, loadOnComplete.Checked);
+			return new IndexJob(this.input.Text, this.projectName.Text, demuxType, null, loadOnComplete.Checked);
 		}
 		#endregion
 		#region properties
