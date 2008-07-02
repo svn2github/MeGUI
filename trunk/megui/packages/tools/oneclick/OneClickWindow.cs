@@ -406,7 +406,7 @@ namespace MeGUI
                 dpp.SignalAR = signalAR.Checked;
                 dpp.Splitting = splitting.Value;
                 dpp.VideoSettings = VideoSettings.Clone();
-                IndexJob job = new IndexJob(input.Filename, d2vName, 1, dpp, false);
+                IndexJob job = new IndexJob(input.Filename, d2vName, 2, dpp, false);
                 mainForm.Jobs.addJobsToQueue(job);
                 this.Close();
             }
