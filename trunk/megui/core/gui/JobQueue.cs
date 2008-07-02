@@ -749,8 +749,8 @@ namespace MeGUI.core.gui
             switch (e.KeyCode)
             {
                 case Keys.Delete: deleteJobButton_Click(sender, e); break;
-                case Keys.Up: upButton_Click(sender, e); break;
-                case Keys.Down: downButton_Click(sender, e); break;
+                case Keys.Up: if (upButton.Enabled) upButton_Click(sender, e); break;
+                case Keys.Down: if (downButton.Enabled) downButton_Click(sender, e); break;
                 case Keys.Escape:
                 case Keys.Enter: startStopButton_Click(sender, e); break;               
             }
