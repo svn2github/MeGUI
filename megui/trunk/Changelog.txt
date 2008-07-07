@@ -1,3 +1,6 @@
+0.3.0.1015
+    - (kurtnoise) fixed a bug with rawavsource(..) (#2009368)
+
 0.3.0.1014
     - (berrinam) Fixed #2008444 (crash using One Click Encoder). The One Click Encoder uses the "Demux all audio" mode.
     - (berrinam) Fix #2008276 (Fatal Error On Queue Tab With 0.3.0.1013)
