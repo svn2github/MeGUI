@@ -1,3 +1,7 @@
+0.3.0.1016
+    - (sharktooth) Temporary workaround to avoid closing of the preview window and loosing the AR. Also added some more resize buttons (half and quarter size) since the Video Player control box was removed.
+    - (sharktooth) [x264ConfigurationPanel] VBV MaxRate control disabled until a buffer size is specified.
+
 0.3.0.1015
     - (kurtnoise) fixed a bug with rawavsource(..) (#2009368)
 
