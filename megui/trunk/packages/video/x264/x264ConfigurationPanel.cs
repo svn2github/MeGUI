@@ -419,7 +419,6 @@ namespace MeGUI.packages.video.x264
                 avcProfile.SelectedIndex = 1; // 
             if (cbAQMode.SelectedIndex == -1)
                 cbAQMode.SelectedIndex = 2;
-
             lastEncodingMode = this.x264EncodingMode.SelectedIndex;
             try
             {
@@ -582,11 +581,24 @@ namespace MeGUI.packages.video.x264
                 x264PBFrameFactor.Value = xs.PBFactor;
                 x264ChromaQPOffset.Value = xs.ChromaQPOffset;
                 if (xs.VBVBufferSize > 0)
+                {
+                    this.x264VBVMaxRate.Enabled = true;
+                    this.x264VBVMaxRateLabel.Enabled = true;
+                    this.x264VBVMaxRate.Text = xs.VBVMaxBitrate.ToString();
                     x264VBVBufferSize.Text = xs.VBVBufferSize.ToString();
+                }
                 else
+                {
+                    this.x264VBVMaxRate.Enabled = false;
+                    this.x264VBVMaxRateLabel.Enabled = false;
                     x264VBVBufferSize.Text = "";
+                }
                 if (xs.VBVMaxBitrate > 0)
+                {
+                    this.x264VBVMaxRate.Enabled = true;
+                    this.x264VBVMaxRateLabel.Enabled = true;
                     x264VBVMaxRate.Text = xs.VBVMaxBitrate.ToString();
+                }
                 else
                     x264VBVBufferSize.Text = "";
                 x264VBVInitialBuffer.Value = xs.VBVInitialBuffer;
@@ -833,6 +845,11 @@ namespace MeGUI.packages.video.x264
 
             // Now we do some additional checks -- ref frames, cabac
             #region extra checks
+            if (x264VBVBufferSize.Text != "")
+            {
+                this.x264VBVMaxRate.Enabled = true;
+                this.x264VBVMaxRateLabel.Enabled = true;
+            }
             if (this.x264NumberOfRefFrames.Value > 1 && !turboOptions) // mixed references require at least two reference frames
             {
                 this.x264MixedReferences.Enabled = true;
