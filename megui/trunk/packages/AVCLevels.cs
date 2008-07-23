@@ -179,7 +179,7 @@ namespace MeGUI
 		{
 			return new string[] {"Level 1", "Level 1.1", "Level 1.2", "Level 1.3", "Level 2", "Level 2.1",
 									"Level 2.2", "Level 3", "Level 3.1", "Level 3.2", "Level 4", "Level 4.1",
-									"Level 4.2", "Level 5", "Level 5.1", "Unrestricted"};
+									"Level 4.2", "Level 5", "Level 5.1", "Unrestricted/Autoguess"};
 		}
 
         public static string[] getCLILevelNames()

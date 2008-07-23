@@ -333,9 +333,9 @@ namespace MeGUI.packages.video.x264
             // avcLevel
             // 
             this.avcLevel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.avcLevel.Location = new System.Drawing.Point(27, 16);
+            this.avcLevel.Location = new System.Drawing.Point(10, 16);
             this.avcLevel.Name = "avcLevel";
-            this.avcLevel.Size = new System.Drawing.Size(121, 21);
+            this.avcLevel.Size = new System.Drawing.Size(157, 21);
             this.avcLevel.TabIndex = 0;
             this.avcLevel.SelectedIndexChanged += new System.EventHandler(this.updateEvent);
             // 
@@ -357,9 +357,9 @@ namespace MeGUI.packages.video.x264
             "Baseline Profile",
             "Main Profile",
             "High Profile"});
-            this.avcProfile.Location = new System.Drawing.Point(27, 16);
+            this.avcProfile.Location = new System.Drawing.Point(10, 16);
             this.avcProfile.Name = "avcProfile";
-            this.avcProfile.Size = new System.Drawing.Size(121, 21);
+            this.avcProfile.Size = new System.Drawing.Size(157, 21);
             this.avcProfile.TabIndex = 0;
             this.avcProfile.SelectedIndexChanged += new System.EventHandler(this.updateEvent);
             // 
@@ -1343,7 +1343,7 @@ namespace MeGUI.packages.video.x264
             this.x264GeneralBFramesgGroupbox.Controls.Add(this.x264NumberOfBFrames);
             this.x264GeneralBFramesgGroupbox.Controls.Add(this.x264AdaptiveBframes);
             this.x264GeneralBFramesgGroupbox.Controls.Add(this.x264PyramidBframes);
-            this.x264GeneralBFramesgGroupbox.Location = new System.Drawing.Point(321, 132);
+            this.x264GeneralBFramesgGroupbox.Location = new System.Drawing.Point(321, 131);
             this.x264GeneralBFramesgGroupbox.Name = "x264GeneralBFramesgGroupbox";
             this.x264GeneralBFramesgGroupbox.Size = new System.Drawing.Size(174, 268);
             this.x264GeneralBFramesgGroupbox.TabIndex = 6;

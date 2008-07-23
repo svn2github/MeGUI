@@ -530,8 +530,8 @@ Stores the size of non-square pixels in the video stream for use during playback
 		<level name="AVC Complexity Level">
 			<Advanced></Advanced>
 			<Basic>Specify level (as defined by Annex A)</Basic>
-			<Recommended>Unrestricted</Recommended>
-			<Default>Unrestricted</Default>
+			<Recommended>Unrestricted/AutGuess</Recommended>
+			<Default>Unrestricted/AutoGuess</Default>
 		</level>
 		<fps name="Frame Rate">
 			<Advanced>
