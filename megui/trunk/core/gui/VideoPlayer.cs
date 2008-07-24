@@ -382,6 +382,7 @@ namespace MeGUI
             this.buttonPanel = new System.Windows.Forms.Panel();
             this.quarterSizeButton = new System.Windows.Forms.Button();
             this.halfSizeButton = new System.Windows.Forms.Button();
+            this.arChooser = new MeGUI.core.gui.ARChooser();
             this.showPAR = new System.Windows.Forms.CheckBox();
             this.originalSizeButton = new System.Windows.Forms.Button();
             this.introEndButton = new System.Windows.Forms.Button();
@@ -390,7 +391,6 @@ namespace MeGUI
             this.zoneEndButton = new System.Windows.Forms.Button();
             this.chapterButton = new System.Windows.Forms.Button();
             this.defaultToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.arChooser = new MeGUI.core.gui.ARChooser();
             goToFrameButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.videoPreview)).BeginInit();
             this.previewGroupbox.SuspendLayout();
@@ -587,6 +587,19 @@ namespace MeGUI
             this.halfSizeButton.UseVisualStyleBackColor = true;
             this.halfSizeButton.Click += new System.EventHandler(this.halfSizeButton_Click);
             // 
+            // arChooser
+            // 
+            this.arChooser.CustomDARs = new MeGUI.core.util.Dar[0];
+            this.arChooser.HasLater = false;
+            this.arChooser.Location = new System.Drawing.Point(8, 48);
+            this.arChooser.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.arChooser.MinimumSize = new System.Drawing.Size(64, 29);
+            this.arChooser.Name = "arChooser";
+            this.arChooser.SelectedIndex = 0;
+            this.arChooser.Size = new System.Drawing.Size(208, 29);
+            this.arChooser.TabIndex = 15;
+            this.arChooser.SelectionChanged += new MeGUI.StringChanged(this.arChooser_SelectionChanged);
+            // 
             // showPAR
             // 
             this.showPAR.AutoSize = true;
@@ -658,24 +671,10 @@ namespace MeGUI
             this.defaultToolTip.SetToolTip(this.chapterButton, "Sets the end frame of a new zone");
             this.chapterButton.Click += new System.EventHandler(this.chapterButton_Click);
             // 
-            // arChooser
-            // 
-            this.arChooser.CustomDARs = new MeGUI.core.util.Dar[0];
-            this.arChooser.HasLater = false;
-            this.arChooser.Location = new System.Drawing.Point(8, 48);
-            this.arChooser.MaximumSize = new System.Drawing.Size(1000, 29);
-            this.arChooser.MinimumSize = new System.Drawing.Size(64, 29);
-            this.arChooser.Name = "arChooser";
-            this.arChooser.SelectedIndex = 0;
-            this.arChooser.Size = new System.Drawing.Size(208, 29);
-            this.arChooser.TabIndex = 15;
-            this.arChooser.SelectionChanged += new MeGUI.StringChanged(this.arChooser_SelectionChanged);
-            // 
             // VideoPlayer
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
-            this.ClientSize = new System.Drawing.Size(500, 392);
-            this.ControlBox = false;
+            this.ClientSize = new System.Drawing.Size(500, 408);
             this.Controls.Add(this.buttonPanel);
             this.Controls.Add(this.previewGroupbox);
             this.Controls.Add(this.positionSlider);
