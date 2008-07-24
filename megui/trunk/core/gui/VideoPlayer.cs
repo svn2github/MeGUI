@@ -382,7 +382,6 @@ namespace MeGUI
             this.buttonPanel = new System.Windows.Forms.Panel();
             this.quarterSizeButton = new System.Windows.Forms.Button();
             this.halfSizeButton = new System.Windows.Forms.Button();
-            this.arChooser = new MeGUI.core.gui.ARChooser();
             this.showPAR = new System.Windows.Forms.CheckBox();
             this.originalSizeButton = new System.Windows.Forms.Button();
             this.introEndButton = new System.Windows.Forms.Button();
@@ -391,6 +390,7 @@ namespace MeGUI
             this.zoneEndButton = new System.Windows.Forms.Button();
             this.chapterButton = new System.Windows.Forms.Button();
             this.defaultToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.arChooser = new MeGUI.core.gui.ARChooser();
             goToFrameButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.videoPreview)).BeginInit();
             this.previewGroupbox.SuspendLayout();
@@ -472,7 +472,7 @@ namespace MeGUI
             this.positionSlider.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.positionSlider.AutoSize = false;
             this.positionSlider.LargeChange = 1000;
-            this.positionSlider.Location = new System.Drawing.Point(116, 259);
+            this.positionSlider.Location = new System.Drawing.Point(116, 257);
             this.positionSlider.Name = "positionSlider";
             this.positionSlider.Size = new System.Drawing.Size(280, 45);
             this.positionSlider.TabIndex = 1;
@@ -562,7 +562,7 @@ namespace MeGUI
             this.buttonPanel.Controls.Add(this.setZoneButton);
             this.buttonPanel.Controls.Add(this.zoneEndButton);
             this.buttonPanel.Controls.Add(this.chapterButton);
-            this.buttonPanel.Location = new System.Drawing.Point(14, 310);
+            this.buttonPanel.Location = new System.Drawing.Point(14, 333);
             this.buttonPanel.Name = "buttonPanel";
             this.buttonPanel.Size = new System.Drawing.Size(474, 80);
             this.buttonPanel.TabIndex = 8;
@@ -586,19 +586,6 @@ namespace MeGUI
             this.halfSizeButton.Text = "HalfSize";
             this.halfSizeButton.UseVisualStyleBackColor = true;
             this.halfSizeButton.Click += new System.EventHandler(this.halfSizeButton_Click);
-            // 
-            // arChooser
-            // 
-            this.arChooser.CustomDARs = new MeGUI.core.util.Dar[0];
-            this.arChooser.HasLater = false;
-            this.arChooser.Location = new System.Drawing.Point(8, 48);
-            this.arChooser.MaximumSize = new System.Drawing.Size(1000, 29);
-            this.arChooser.MinimumSize = new System.Drawing.Size(64, 29);
-            this.arChooser.Name = "arChooser";
-            this.arChooser.SelectedIndex = 0;
-            this.arChooser.Size = new System.Drawing.Size(208, 29);
-            this.arChooser.TabIndex = 15;
-            this.arChooser.SelectionChanged += new MeGUI.StringChanged(this.arChooser_SelectionChanged);
             // 
             // showPAR
             // 
@@ -671,10 +658,23 @@ namespace MeGUI
             this.defaultToolTip.SetToolTip(this.chapterButton, "Sets the end frame of a new zone");
             this.chapterButton.Click += new System.EventHandler(this.chapterButton_Click);
             // 
+            // arChooser
+            // 
+            this.arChooser.CustomDARs = new MeGUI.core.util.Dar[0];
+            this.arChooser.HasLater = false;
+            this.arChooser.Location = new System.Drawing.Point(8, 48);
+            this.arChooser.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.arChooser.MinimumSize = new System.Drawing.Size(64, 29);
+            this.arChooser.Name = "arChooser";
+            this.arChooser.SelectedIndex = 0;
+            this.arChooser.Size = new System.Drawing.Size(208, 29);
+            this.arChooser.TabIndex = 15;
+            this.arChooser.SelectionChanged += new MeGUI.StringChanged(this.arChooser_SelectionChanged);
+            // 
             // VideoPlayer
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
-            this.ClientSize = new System.Drawing.Size(500, 408);
+            this.ClientSize = new System.Drawing.Size(500, 421);
             this.Controls.Add(this.buttonPanel);
             this.Controls.Add(this.previewGroupbox);
             this.Controls.Add(this.positionSlider);
@@ -682,6 +682,7 @@ namespace MeGUI
             this.MaximumSize = new System.Drawing.Size(1920, 1600);
             this.MinimumSize = new System.Drawing.Size(368, 416);
             this.Name = "VideoPlayer";
+            this.ShowIcon = false;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.Text = "VideoPlayer";
             ((System.ComponentModel.ISupportInitialize)(this.videoPreview)).EndInit();
