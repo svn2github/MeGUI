@@ -1,3 +1,6 @@
+0.3.0.1020
+    - (sharktooth) [VideoPlayer.cs] Nicer zoomin/out functions
+
 0.3.0.1019
     - (sharktooth) [VideoPlayer.cs] Fixed stupid visual bug caused by VS2008 designer which sometimes automatically relocate controls for no apparent reasons.
 
