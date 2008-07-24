@@ -1,3 +1,6 @@
+0.3.0.1018
+    - (sharktooth) [VideoPlayer.cs] Restored the ControlBox to allow closing the preview.
+
 0.3.0.1017
     - (sharktooth) [AVCLevels] Unrestricted->AutoGuess since x264 rev915 changes.
 
