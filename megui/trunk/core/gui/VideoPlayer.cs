@@ -70,8 +70,7 @@ namespace MeGUI
         private int videoWindowWidth, videoWindowHeight;
         private PREVIEWTYPE viewerType;
         private static bool sizeLock; // recursion lock for resize event handler
-        private int fractionalWidth;
-
+        private int zoomWidth;
 
 		private System.Windows.Forms.Button playButton;
 		private System.Windows.Forms.Button nextFrameButton;
@@ -94,8 +93,8 @@ namespace MeGUI
         private Button originalSizeButton;
         private CheckBox showPAR;
         private ARChooser arChooser;
-        private Button halfSizeButton;
-        private Button quarterSizeButton;
+        private Button zoomInButton;
+        private Button zoomOutButton;
 		private System.ComponentModel.IContainer components;
 		#endregion
 		#region constructor
@@ -104,7 +103,7 @@ namespace MeGUI
 			InitializeComponent();
             sizeLock = false;
             this.Resize += new EventHandler(formResized);
-			right = top = left = bottom = 0;
+            right = top = left = bottom = 0;
 		}
 
         public bool AllowClose
@@ -118,7 +117,6 @@ namespace MeGUI
                 return this.ControlBox;
             }
         }
-
 
 		/// <summary>
 		/// loads the video, sets up the proper window size and enables / disables the GUI buttons depending on the
@@ -193,6 +191,7 @@ namespace MeGUI
                 this.hasAR = hasAR;
                 this.videoWindowWidth = (int)file.Info.Width;
                 this.videoWindowHeight = (int)file.Info.Height;
+                zoomWidth = (int)file.Info.Width;
                 doInitialAdjustment();
                 adjustSize();
 				positionSlider_Scroll(null, null); // makes the image visible
@@ -222,20 +221,22 @@ namespace MeGUI
         {
             resize((int)file.Info.Width, showPAR.Checked);
         }
-
-
-        void halfSizeButton_Click(object sender, EventArgs e)
+        private void zoomInButton_Click(object sender, EventArgs e)
         {
-            fractionalWidth = (int)file.Info.Width / 2;
-            resize(fractionalWidth, showPAR.Checked);
+            if (zoomWidth <= (int)file.Info.Width * 4) // hardcoded 4x limit
+            {
+                zoomWidth = (int)(zoomWidth * 2);
+                resize(zoomWidth, showPAR.Checked);
+            }
         }
-
-        void quarterSizeButton_Click(object sender, EventArgs e)
+        private void zoomOutButton_Click(object sender, EventArgs e)
         {
-            fractionalWidth = (int)file.Info.Width / 4;
-            resize(fractionalWidth, showPAR.Checked);
+            if (zoomWidth > (int)file.Info.Width / 4) // hardcoded 4x limit
+            {
+                zoomWidth = (int)(zoomWidth / 2);
+                resize(zoomWidth, showPAR.Checked);
+            }
         }
-
         private void doInitialAdjustment()
         {
             switch (this.viewerType)
@@ -380,8 +381,9 @@ namespace MeGUI
             this.fwdButton = new System.Windows.Forms.Button();
             this.creditsStartButton = new System.Windows.Forms.Button();
             this.buttonPanel = new System.Windows.Forms.Panel();
-            this.quarterSizeButton = new System.Windows.Forms.Button();
-            this.halfSizeButton = new System.Windows.Forms.Button();
+            this.zoomOutButton = new System.Windows.Forms.Button();
+            this.zoomInButton = new System.Windows.Forms.Button();
+            this.arChooser = new MeGUI.core.gui.ARChooser();
             this.showPAR = new System.Windows.Forms.CheckBox();
             this.originalSizeButton = new System.Windows.Forms.Button();
             this.introEndButton = new System.Windows.Forms.Button();
@@ -390,7 +392,6 @@ namespace MeGUI
             this.zoneEndButton = new System.Windows.Forms.Button();
             this.chapterButton = new System.Windows.Forms.Button();
             this.defaultToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.arChooser = new MeGUI.core.gui.ARChooser();
             goToFrameButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.videoPreview)).BeginInit();
             this.previewGroupbox.SuspendLayout();
@@ -472,7 +473,7 @@ namespace MeGUI
             this.positionSlider.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.positionSlider.AutoSize = false;
             this.positionSlider.LargeChange = 1000;
-            this.positionSlider.Location = new System.Drawing.Point(116, 257);
+            this.positionSlider.Location = new System.Drawing.Point(46, 259);
             this.positionSlider.Name = "positionSlider";
             this.positionSlider.Size = new System.Drawing.Size(280, 45);
             this.positionSlider.TabIndex = 1;
@@ -534,7 +535,7 @@ namespace MeGUI
             // 
             this.creditsStartButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.creditsStartButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.creditsStartButton.Location = new System.Drawing.Point(419, 30);
+            this.creditsStartButton.Location = new System.Drawing.Point(278, 30);
             this.creditsStartButton.Name = "creditsStartButton";
             this.creditsStartButton.Size = new System.Drawing.Size(44, 19);
             this.creditsStartButton.TabIndex = 7;
@@ -545,8 +546,8 @@ namespace MeGUI
             // buttonPanel
             // 
             this.buttonPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonPanel.Controls.Add(this.quarterSizeButton);
-            this.buttonPanel.Controls.Add(this.halfSizeButton);
+            this.buttonPanel.Controls.Add(this.zoomOutButton);
+            this.buttonPanel.Controls.Add(this.zoomInButton);
             this.buttonPanel.Controls.Add(this.arChooser);
             this.buttonPanel.Controls.Add(this.showPAR);
             this.buttonPanel.Controls.Add(this.originalSizeButton);
@@ -562,101 +563,30 @@ namespace MeGUI
             this.buttonPanel.Controls.Add(this.setZoneButton);
             this.buttonPanel.Controls.Add(this.zoneEndButton);
             this.buttonPanel.Controls.Add(this.chapterButton);
-            this.buttonPanel.Location = new System.Drawing.Point(14, 333);
+            this.buttonPanel.Location = new System.Drawing.Point(14, 310);
             this.buttonPanel.Name = "buttonPanel";
-            this.buttonPanel.Size = new System.Drawing.Size(474, 80);
+            this.buttonPanel.Size = new System.Drawing.Size(333, 80);
             this.buttonPanel.TabIndex = 8;
             // 
-            // quarterSizeButton
+            // zoomOutButton
             // 
-            this.quarterSizeButton.Location = new System.Drawing.Point(125, 30);
-            this.quarterSizeButton.Name = "quarterSizeButton";
-            this.quarterSizeButton.Size = new System.Drawing.Size(72, 19);
-            this.quarterSizeButton.TabIndex = 17;
-            this.quarterSizeButton.Text = "QuarterSize";
-            this.quarterSizeButton.UseVisualStyleBackColor = true;
-            this.quarterSizeButton.Click += new System.EventHandler(this.quarterSizeButton_Click);
+            this.zoomOutButton.Location = new System.Drawing.Point(52, 30);
+            this.zoomOutButton.Name = "zoomOutButton";
+            this.zoomOutButton.Size = new System.Drawing.Size(17, 19);
+            this.zoomOutButton.TabIndex = 9;
+            this.zoomOutButton.Text = "-";
+            this.zoomOutButton.UseVisualStyleBackColor = true;
+            this.zoomOutButton.Click += new System.EventHandler(this.zoomOutButton_Click);
             // 
-            // halfSizeButton
+            // zoomInButton
             // 
-            this.halfSizeButton.Location = new System.Drawing.Point(63, 30);
-            this.halfSizeButton.Name = "halfSizeButton";
-            this.halfSizeButton.Size = new System.Drawing.Size(61, 19);
-            this.halfSizeButton.TabIndex = 16;
-            this.halfSizeButton.Text = "HalfSize";
-            this.halfSizeButton.UseVisualStyleBackColor = true;
-            this.halfSizeButton.Click += new System.EventHandler(this.halfSizeButton_Click);
-            // 
-            // showPAR
-            // 
-            this.showPAR.AutoSize = true;
-            this.showPAR.Location = new System.Drawing.Point(236, 54);
-            this.showPAR.Name = "showPAR";
-            this.showPAR.Size = new System.Drawing.Size(76, 17);
-            this.showPAR.TabIndex = 2;
-            this.showPAR.Text = "Show DAR";
-            this.showPAR.UseVisualStyleBackColor = true;
-            this.showPAR.CheckedChanged += new System.EventHandler(this.showPAR_CheckedChanged);
-            // 
-            // originalSizeButton
-            // 
-            this.originalSizeButton.Location = new System.Drawing.Point(8, 30);
-            this.originalSizeButton.Name = "originalSizeButton";
-            this.originalSizeButton.Size = new System.Drawing.Size(54, 19);
-            this.originalSizeButton.TabIndex = 14;
-            this.originalSizeButton.Text = "OrigSize";
-            this.originalSizeButton.Click += new System.EventHandler(this.originalSizeButton_Click);
-            // 
-            // introEndButton
-            // 
-            this.introEndButton.Location = new System.Drawing.Point(377, 30);
-            this.introEndButton.Name = "introEndButton";
-            this.introEndButton.Size = new System.Drawing.Size(38, 19);
-            this.introEndButton.TabIndex = 12;
-            this.introEndButton.Text = "Intro";
-            this.defaultToolTip.SetToolTip(this.introEndButton, "Set the frame where the intro ends");
-            this.introEndButton.Click += new System.EventHandler(this.introEndButton_Click);
-            // 
-            // zoneStartButton
-            // 
-            this.zoneStartButton.Location = new System.Drawing.Point(205, 30);
-            this.zoneStartButton.Name = "zoneStartButton";
-            this.zoneStartButton.Size = new System.Drawing.Size(64, 19);
-            this.zoneStartButton.TabIndex = 9;
-            this.zoneStartButton.Text = "Zone Start";
-            this.defaultToolTip.SetToolTip(this.zoneStartButton, "Sets the start frame of a new zone");
-            this.zoneStartButton.Click += new System.EventHandler(this.zoneStartButton_Click);
-            // 
-            // setZoneButton
-            // 
-            this.setZoneButton.Location = new System.Drawing.Point(345, 30);
-            this.setZoneButton.Name = "setZoneButton";
-            this.setZoneButton.Size = new System.Drawing.Size(30, 19);
-            this.setZoneButton.TabIndex = 9;
-            this.setZoneButton.Text = "Set";
-            this.defaultToolTip.SetToolTip(this.setZoneButton, "Adds the zone to the codec configuration");
-            this.setZoneButton.Click += new System.EventHandler(this.setZoneButton_Click);
-            // 
-            // zoneEndButton
-            // 
-            this.zoneEndButton.Location = new System.Drawing.Point(275, 30);
-            this.zoneEndButton.Name = "zoneEndButton";
-            this.zoneEndButton.Size = new System.Drawing.Size(64, 19);
-            this.zoneEndButton.TabIndex = 11;
-            this.zoneEndButton.Text = "Zone End";
-            this.defaultToolTip.SetToolTip(this.zoneEndButton, "Sets the end frame of a new zone");
-            this.zoneEndButton.Click += new System.EventHandler(this.zoneEndButton_Click);
-            // 
-            // chapterButton
-            // 
-            this.chapterButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.chapterButton.Location = new System.Drawing.Point(305, 30);
-            this.chapterButton.Name = "chapterButton";
-            this.chapterButton.Size = new System.Drawing.Size(72, 19);
-            this.chapterButton.TabIndex = 13;
-            this.chapterButton.Text = "Set Chapter";
-            this.defaultToolTip.SetToolTip(this.chapterButton, "Sets the end frame of a new zone");
-            this.chapterButton.Click += new System.EventHandler(this.chapterButton_Click);
+            this.zoomInButton.Location = new System.Drawing.Point(8, 30);
+            this.zoomInButton.Name = "zoomInButton";
+            this.zoomInButton.Size = new System.Drawing.Size(14, 19);
+            this.zoomInButton.TabIndex = 9;
+            this.zoomInButton.Text = "+";
+            this.zoomInButton.UseVisualStyleBackColor = true;
+            this.zoomInButton.Click += new System.EventHandler(this.zoomInButton_Click);
             // 
             // arChooser
             // 
@@ -671,10 +601,81 @@ namespace MeGUI
             this.arChooser.TabIndex = 15;
             this.arChooser.SelectionChanged += new MeGUI.StringChanged(this.arChooser_SelectionChanged);
             // 
+            // showPAR
+            // 
+            this.showPAR.AutoSize = true;
+            this.showPAR.Location = new System.Drawing.Point(236, 54);
+            this.showPAR.Name = "showPAR";
+            this.showPAR.Size = new System.Drawing.Size(76, 17);
+            this.showPAR.TabIndex = 2;
+            this.showPAR.Text = "Show DAR";
+            this.showPAR.UseVisualStyleBackColor = true;
+            this.showPAR.CheckedChanged += new System.EventHandler(this.showPAR_CheckedChanged);
+            // 
+            // originalSizeButton
+            // 
+            this.originalSizeButton.Location = new System.Drawing.Point(22, 30);
+            this.originalSizeButton.Name = "originalSizeButton";
+            this.originalSizeButton.Size = new System.Drawing.Size(30, 19);
+            this.originalSizeButton.TabIndex = 14;
+            this.originalSizeButton.Text = "1x";
+            this.originalSizeButton.Click += new System.EventHandler(this.originalSizeButton_Click);
+            // 
+            // introEndButton
+            // 
+            this.introEndButton.Location = new System.Drawing.Point(236, 30);
+            this.introEndButton.Name = "introEndButton";
+            this.introEndButton.Size = new System.Drawing.Size(38, 19);
+            this.introEndButton.TabIndex = 12;
+            this.introEndButton.Text = "Intro";
+            this.defaultToolTip.SetToolTip(this.introEndButton, "Set the frame where the intro ends");
+            this.introEndButton.Click += new System.EventHandler(this.introEndButton_Click);
+            // 
+            // zoneStartButton
+            // 
+            this.zoneStartButton.Location = new System.Drawing.Point(70, 30);
+            this.zoneStartButton.Name = "zoneStartButton";
+            this.zoneStartButton.Size = new System.Drawing.Size(64, 19);
+            this.zoneStartButton.TabIndex = 9;
+            this.zoneStartButton.Text = "Zone Start";
+            this.defaultToolTip.SetToolTip(this.zoneStartButton, "Sets the start frame of a new zone");
+            this.zoneStartButton.Click += new System.EventHandler(this.zoneStartButton_Click);
+            // 
+            // setZoneButton
+            // 
+            this.setZoneButton.Location = new System.Drawing.Point(204, 30);
+            this.setZoneButton.Name = "setZoneButton";
+            this.setZoneButton.Size = new System.Drawing.Size(30, 19);
+            this.setZoneButton.TabIndex = 9;
+            this.setZoneButton.Text = "Set";
+            this.defaultToolTip.SetToolTip(this.setZoneButton, "Adds the zone to the codec configuration");
+            this.setZoneButton.Click += new System.EventHandler(this.setZoneButton_Click);
+            // 
+            // zoneEndButton
+            // 
+            this.zoneEndButton.Location = new System.Drawing.Point(137, 30);
+            this.zoneEndButton.Name = "zoneEndButton";
+            this.zoneEndButton.Size = new System.Drawing.Size(64, 19);
+            this.zoneEndButton.TabIndex = 11;
+            this.zoneEndButton.Text = "Zone End";
+            this.defaultToolTip.SetToolTip(this.zoneEndButton, "Sets the end frame of a new zone");
+            this.zoneEndButton.Click += new System.EventHandler(this.zoneEndButton_Click);
+            // 
+            // chapterButton
+            // 
+            this.chapterButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.chapterButton.Location = new System.Drawing.Point(236, 30);
+            this.chapterButton.Name = "chapterButton";
+            this.chapterButton.Size = new System.Drawing.Size(72, 18);
+            this.chapterButton.TabIndex = 13;
+            this.chapterButton.Text = "Set Chapter";
+            this.defaultToolTip.SetToolTip(this.chapterButton, "Sets the end frame of a new zone");
+            this.chapterButton.Click += new System.EventHandler(this.chapterButton_Click);
+            // 
             // VideoPlayer
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
-            this.ClientSize = new System.Drawing.Size(500, 421);
+            this.ClientSize = new System.Drawing.Size(360, 392);
             this.Controls.Add(this.buttonPanel);
             this.Controls.Add(this.previewGroupbox);
             this.Controls.Add(this.positionSlider);
