@@ -1,5 +1,8 @@
 using System;
+using System.Collections;
+using System.Management;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace MeGUI
 {
@@ -171,7 +174,7 @@ namespace MeGUI
             }
             else
             {
-                return " " + osVersionInfo.szCSDVersion;
+                return " SP" + osVersionInfo.szCSDVersion.Substring(13, 1);
             }
         }
 
@@ -367,6 +370,33 @@ namespace MeGUI
             }
 
             return fv;
+        }
+
+        /// <summary>
+        /// Get some stuff from the Management Object Queries
+        /// </summary>
+        /// <returns>A string containing the result of the MO query.</returns>
+        /// 
+        public static string GetMOStuff(string queryObject)
+        {
+            ManagementObjectSearcher searcher = null;
+            string res = "";
+            try
+            {
+               searcher = new ManagementObjectSearcher("SELECT * FROM " + queryObject);
+               foreach (ManagementObject mo in searcher.Get())
+                {
+                    if (queryObject == "Win32_OperatingSystem")
+                    {
+                        res = mo["Caption"].ToString();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+            return res;
         }
         #endregion
 
