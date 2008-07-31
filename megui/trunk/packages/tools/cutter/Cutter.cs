@@ -94,6 +94,10 @@ namespace MeGUI.packages.tools.cutter
                 ListViewItem item = new ListViewItem(new string[] { cut.startFrame.ToString(), cut.endFrame.ToString() });
                 item.Tag = cut;
                 sections.Items.Add(item);
+                if (item.Index % 2 != 0)
+                    item.BackColor = Color.White;
+                else
+                    item.BackColor = Color.WhiteSmoke;
             }
             clearZonesButton.Enabled = sections.Items.Count > 0;
             sections.EndUpdate();

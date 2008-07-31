@@ -297,6 +297,10 @@ namespace MeGUI
 				ListViewItem item = new ListViewItem(new string[] {chap.timecode, chap.name});
 				item.Tag = chap;
 				chapterListView.Items.Add(item);
+                if (item.Index % 2 != 0)
+                    item.BackColor = Color.White;
+                else
+                    item.BackColor = Color.WhiteSmoke;
 			}
 		}
 		

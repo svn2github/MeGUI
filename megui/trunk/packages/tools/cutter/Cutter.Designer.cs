@@ -269,9 +269,9 @@ namespace MeGUI.packages.tools.cutter
             this.helpButton1.ArticleName = "Avs cutter";
             this.helpButton1.AutoSize = true;
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.helpButton1.Location = new System.Drawing.Point(80, 8);
+            this.helpButton1.Location = new System.Drawing.Point(75, 8);
             this.helpButton1.Name = "helpButton1";
-            this.helpButton1.Size = new System.Drawing.Size(39, 23);
+            this.helpButton1.Size = new System.Drawing.Size(44, 23);
             this.helpButton1.TabIndex = 3;
             // 
             // avsScript

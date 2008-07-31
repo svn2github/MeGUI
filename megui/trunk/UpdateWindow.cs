@@ -1,10 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Windows.Forms;
+using System.Drawing;
 using System.IO;
 using System.Net;
+using System.Text;
 using System.Threading;
+using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -12,7 +14,6 @@ using ICSharpCode.SharpZipLib.Zip;
 using ICSharpCode.SharpZipLib.GZip;
 using ICSharpCode.SharpZipLib.BZip2;
 
-using System.Text;
 using MeGUI.core.util;
 
 
@@ -681,7 +682,11 @@ namespace MeGUI
             }
             else
                 this.listViewDetails.Items.Add(item);
-   
+
+            if (item.Index % 2 != 0)
+                item.BackColor = Color.White;
+            else
+                item.BackColor = Color.WhiteSmoke;
         }
         private void ClearListview(ListView listview)
         {
