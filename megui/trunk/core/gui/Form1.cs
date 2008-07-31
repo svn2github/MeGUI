@@ -1299,10 +1299,10 @@ namespace MeGUI
         {
             RegisterForm(this);
             
-            LogItem i = Log.Info("Version information");
+            LogItem i = Log.Info("Versions");
             i.LogValue("MeGUI Version ", Application.ProductVersion);
-            i.LogValue("OS ", string.Format("Microsoft {0}{1}{2}", OSInfo.GetOSName(), OSInfo.GetOSProductType(), OSInfo.GetOSServicePack()));
-            i.LogValue("Framework used ", OSInfo.FormatDotNetVersion());
+            i.LogValue("OS ", string.Format("{0}{1} ({2}.{3}.{4}.{5})", OSInfo.GetMOStuff("Win32_OperatingSystem"), OSInfo.GetOSServicePack(), OSInfo.OSMajorVersion, OSInfo.OSMinorVersion, OSInfo.OSRevisionVersion, OSInfo.OSBuildVersion));
+            i.LogValue("Framework used ", string.Format("{0} ({1})", OSInfo.FormatDotNetVersion(), Environment.Version.ToString()));
 
             Log.LogValue("Settings", Settings, ImageType.Information);
         }
