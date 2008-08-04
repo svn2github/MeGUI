@@ -653,9 +653,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 }
             }
 
-            if (audioJob.Settings.AutoGain)
-                script.AppendFormat("Normalize(){0}", Environment.NewLine);
-
             switch (audioJob.Settings.DownmixMode)
             {
                 case ChannelMode.KeepOriginal:
@@ -683,6 +680,10 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                     script.Append("2==Audiochannels(last)?x_upmixC" + id + @"(last):last" + Environment.NewLine);
                     break;
             }
+
+            // put Normalize() after downmix cases >> http://forum.doom9.org/showthread.php?p=1166117#post1166117
+            if (audioJob.Settings.AutoGain)
+                script.AppendFormat("Normalize(){0}", Environment.NewLine);
 
             //let's obtain command line & other staff
             if (audioJob.Settings is AftenSettings)
