@@ -19,16 +19,17 @@
 // ****************************************************************************
 
 using System;
-using System.IO;
-using System.Windows.Forms;
-using System.Threading;
-using System.Xml.Serialization;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
-using MeGUI.core.util;
-using MeGUI.core.details;
 using System.Diagnostics;
+using System.IO;
+using System.Text;
+using System.Threading;
+using System.Windows.Forms;
+using System.Xml.Serialization;
+
+using MeGUI.core.details;
+using MeGUI.core.util;
 
 namespace MeGUI
 {

@@ -2,11 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+
 using MeGUI.core.plugins.interfaces;
-using System.Diagnostics;
 using MeGUI.core.util;
 
 namespace MeGUI.core.gui

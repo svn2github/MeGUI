@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Xml.Serialization;
-using MeGUI.packages.tools.besplitter;
 using System.Diagnostics;
-using System.Xml;
 using System.IO;
+using System.Text;
+using System.Xml;
+using System.Xml.Serialization;
+
+using MeGUI.packages.tools.besplitter;
 
 namespace MeGUI.core.details._0_2_6_1017_jobloader
 {

@@ -1,15 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Data;
+using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Text;
-using System.Diagnostics;
 using System.Windows.Forms;
+using System.Xml.Serialization;
+
 using MeGUI.core.util;
 using MeGUI.core.gui;
-using System.Xml.Serialization;
 
 namespace MeGUI.core.details
 {

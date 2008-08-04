@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows.Forms;
 
-using MeGUI.core.plugins.interfaces;
 using MeGUI.core.details.video;
+using MeGUI.core.plugins.interfaces;
+using MeGUI.core.util;
 using MeGUI.packages.video.x264;
 using MeGUI.packages.video.lmp4;
 using MeGUI.packages.video.snow;
@@ -17,8 +19,6 @@ using MeGUI.packages.audio.lame;
 using MeGUI.packages.audio.vorbis;
 using MeGUI.packages.audio.waac;
 using MeGUI.packages.audio.aften;
-using System.Windows.Forms;
-using MeGUI.core.util;
 
 namespace MeGUI
 {

@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.IO;
+using System.Text;
+
 using MeGUI.core.util;
 
 namespace MeGUI.packages.tools.besplitter

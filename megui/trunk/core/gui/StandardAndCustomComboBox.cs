@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+
 using MeGUI.core.util;
-using System.Configuration;
 
 namespace MeGUI.core.gui
 {

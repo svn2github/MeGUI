@@ -19,14 +19,15 @@
 // ****************************************************************************
 
 using System;
-using System.Drawing;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Windows.Forms;
-using System.IO;
 using System.Diagnostics;
-using MeGUI.core.util;
+using System.Drawing;
+using System.IO;
+using System.Windows.Forms;
+
 using MeGUI.core.details;
+using MeGUI.core.util;
 using MeGUI.packages.tools.calculator;
 
 namespace MeGUI

@@ -8,8 +8,8 @@ using System.Windows.Forms;
 using System.Xml;
 
 using MeGUI.core.details.video;
-using MeGUI.core.plugins.interfaces;
 using MeGUI.core.gui;
+using MeGUI.core.plugins.interfaces;
 
 namespace MeGUI.packages.video.x264
 {

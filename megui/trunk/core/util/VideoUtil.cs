@@ -19,19 +19,21 @@
 // ****************************************************************************
 
 using Utils.MessageBoxExLib;
+
 using System;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
+using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using System.IO;
-using System.Diagnostics;
-using System.Text;
-using MeGUI.core.util;
-using MeGUI.core.gui;
+
 using MeGUI.core.details;
+using MeGUI.core.gui;
+using MeGUI.core.util;
 
 namespace MeGUI
 {

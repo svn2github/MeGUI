@@ -19,9 +19,11 @@
 // ****************************************************************************
 
 using System;
-using System.Xml.Serialization;
 using System.Collections.Generic;
+using System.Xml.Serialization;
+
 using MeGUI.core.plugins.interfaces;
+
 namespace MeGUI
 {
 	/// <summary>

@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Configuration;
-using MeGUI.core.gui;
 using System.ComponentModel;
+using System.Text;
+
+using MeGUI.core.gui;
 
 namespace MeGUI.core.util
 {

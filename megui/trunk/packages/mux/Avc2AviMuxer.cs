@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms;
-using System.IO;
-using System.Threading;
-using MeGUI.core.util;
 using System.Globalization;
+using System.IO;
+using System.Text;
+using System.Threading;
+using System.Windows.Forms;
+
+using MeGUI.core.util;
 
 namespace MeGUI
 {

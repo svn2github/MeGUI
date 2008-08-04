@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
+using System.Diagnostics;
 using System.Data;
+using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using System.Diagnostics;
+
 using MeGUI.core.details.video;
 using MeGUI.core.util;
 

@@ -19,15 +19,16 @@
 // ****************************************************************************
 
 using System;
-using System.Drawing;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Windows.Forms;
+using System.Drawing;
 using System.IO;
-using MeGUI.core.util;
+using System.Windows.Forms;
+
 using MeGUI.core.details;
 using MeGUI.core.details.mux;
+using MeGUI.core.util;
 
 namespace MeGUI
 {

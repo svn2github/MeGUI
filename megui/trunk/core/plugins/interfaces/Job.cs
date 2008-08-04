@@ -18,13 +18,14 @@
 // 
 // ****************************************************************************
 using System;
-using System.Xml.Serialization;
 using System.Collections.Generic;
-using MeGUI.core.plugins.interfaces;
-using MeGUI.packages.tools.besplitter;
-using MeGUI.core.util;
 using System.Diagnostics;
+using System.Xml.Serialization;
+
 using MeGUI.core.details;
+using MeGUI.core.plugins.interfaces;
+using MeGUI.core.util;
+using MeGUI.packages.tools.besplitter;
 
 namespace MeGUI
 {

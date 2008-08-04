@@ -1,7 +1,8 @@
-using System.Xml.Serialization;
 using System;
-using MeGUI.core.util;
+using System.Xml.Serialization;
+
 using MeGUI.core.details;
+using MeGUI.core.util;
 
 namespace MeGUI
 {

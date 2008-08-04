@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.IO;
-using MeGUI.core.util;
+using System.Text;
 using System.Xml.Serialization;
+
 using MeGUI.core.plugins.interfaces;
+using MeGUI.core.util;
 
 namespace MeGUI.core.details._0_2_6_x_profileloader
 {

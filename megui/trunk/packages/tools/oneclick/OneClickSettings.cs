@@ -1,7 +1,9 @@
 using System;
-using MeGUI.core.plugins.interfaces;
 using System.Collections.Generic;
+
+using MeGUI.core.plugins.interfaces;
 using MeGUI.core.util;
+
 namespace MeGUI
 {
 	/// <summary>

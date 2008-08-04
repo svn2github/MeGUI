@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using MediaInfoWrapper;
 using System.Globalization;
-using MeGUI.core.util;
-using System.Text.RegularExpressions;
 using System.IO;
+using System.Text;
+using System.Text.RegularExpressions;
+
+using MediaInfoWrapper;
+
+using MeGUI.core.util;
+
 
 namespace MeGUI
 {

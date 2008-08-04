@@ -1,18 +1,18 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Collections;
-using System.ComponentModel;
-using System.Windows.Forms;
 using System.Globalization;
+using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.IO;
-using System.Collections.Generic;
+using System.Windows.Forms;
 
 using MeGUI.core.details.video;
 using MeGUI.core.plugins.interfaces;
-using System.Diagnostics;
 using MeGUI.core.util;
 
 namespace MeGUI

@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
+
+using MeGUI.core.details;
 using MeGUI.core.plugins.interfaces;
 using MeGUI.core.util;
-using System.IO;
-using MeGUI.core.details;
 
 namespace MeGUI.packages.tools.besplitter
 {

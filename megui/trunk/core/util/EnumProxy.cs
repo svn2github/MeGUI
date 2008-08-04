@@ -19,9 +19,9 @@
 // ****************************************************************************
 
 using System;
-using System.Text;
-using System.Reflection;
 using System.Collections.Generic;
+using System.Reflection;
+using System.Text;
 
 namespace MeGUI
 {

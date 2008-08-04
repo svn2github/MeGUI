@@ -1,10 +1,11 @@
 using System;
-using System.Drawing;
 using System.Collections.Generic;
-using System.Text;
-using MeGUI.core.util;
-using MeGUI.core.details;
 using System.Diagnostics;
+using System.Drawing;
+using System.Text;
+
+using MeGUI.core.details;
+using MeGUI.core.util;
 
 namespace MeGUI
 {

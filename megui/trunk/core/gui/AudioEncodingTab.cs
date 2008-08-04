@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Data;
-using System.Text;
-using System.Windows.Forms;
-using MeGUI.core.details.video;
 using System.IO;
-using MeGUI.core.util;
+using System.Text;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
+
+using MeGUI.core.details.video;
+using MeGUI.core.util;
 
 namespace MeGUI.core.gui
 {

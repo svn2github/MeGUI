@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms; // used for the MethodInvoker
-using System.Text;
-using System.IO;
-using MeGUI.core.plugins.implemented;
 using System.Globalization;
+using System.IO;
+using System.Text;
+using System.Windows.Forms; // used for the MethodInvoker
+
+using MeGUI.core.plugins.implemented;
 using MeGUI.core.util;
 
 namespace MeGUI

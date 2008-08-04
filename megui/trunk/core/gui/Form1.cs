@@ -18,24 +18,25 @@
 // 
 // ****************************************************************************
 using System;
-using System.Threading;
-using System.Drawing;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Windows.Forms;
 using System.Data;
-using System.IO;
 using System.Diagnostics;
-using System.Xml.Serialization;
-using System.Text;
-using MeGUI.core.details;
-using MeGUI.core.plugins.interfaces;
+using System.Drawing;
+using System.IO;
 using System.Reflection;
-using MeGUI.core.util;
-using MeGUI.packages.tools.cutter;
-using MeGUI.packages.tools.besplitter;
+using System.Text;
+using System.Threading;
+using System.Windows.Forms;
+using System.Xml.Serialization;
+
+using MeGUI.core.details;
 using MeGUI.core.gui;
+using MeGUI.core.plugins.interfaces;
+using MeGUI.core.util;
+using MeGUI.packages.tools.besplitter;
+using MeGUI.packages.tools.cutter;
 
 namespace MeGUI
 {

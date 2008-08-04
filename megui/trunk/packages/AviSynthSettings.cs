@@ -1,6 +1,8 @@
 using System;
 using System.Text;
+
 using MeGUI.core.plugins.interfaces;
+
 namespace MeGUI
 {
 	/// <summary>

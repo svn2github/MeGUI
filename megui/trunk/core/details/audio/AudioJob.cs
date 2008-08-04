@@ -19,9 +19,10 @@
 // ****************************************************************************
 
 using System;
-using MeGUI.core.plugins.interfaces;
 using System.Xml.Serialization;
+
 using MeGUI.core.details;
+using MeGUI.core.plugins.interfaces;
 
 namespace MeGUI
 {

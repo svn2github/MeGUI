@@ -20,8 +20,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Drawing;
+using System.Text;
+
 using MeGUI.core.util;
 
 namespace MeGUI
