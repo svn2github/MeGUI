@@ -390,6 +390,10 @@ namespace MeGUI
                     {
                         res = mo["Caption"].ToString();
                     }
+                    else if (queryObject == "Win32_Processor")
+                    {
+                        res = mo["Name"].ToString();
+                    }
                 }
             }
             catch (Exception ex)
