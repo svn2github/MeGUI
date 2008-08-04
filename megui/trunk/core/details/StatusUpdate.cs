@@ -73,6 +73,24 @@ namespace MeGUI
             set { status = value; }
         }
 
+        /// <summary>
+        /// Does the job have any Log?
+        /// </summary>
+        public string Log
+        {
+            get { return log; }
+            set { log = value; }
+        }
+
+        /// <summary>
+        /// What is the error ?
+        /// </summary>
+        public string Error
+        {
+            get { return error; }
+            set { error = value; }
+        }
+
 		/// <summary>
 		/// does the job have any errors?
 		/// </summary>

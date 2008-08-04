@@ -19,7 +19,6 @@ namespace MeGUI.core.details.video
         protected int lastEncodingMode = 0;
 
         private bool loaded;
-        private int introEndFrame = 0, creditsStartFrame = 0;
         protected string input = "input", output = "output", encoderPath = "program";
         #endregion
         protected ToolTip tooltipHelp;
