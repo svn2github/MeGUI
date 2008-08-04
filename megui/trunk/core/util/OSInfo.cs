@@ -394,6 +394,19 @@ namespace MeGUI
                     {
                         res = mo["Name"].ToString();
                     }
+                    else if (queryObject == "Win32_LogicalDisk")
+                    {
+                        if (mo["DriveType"].ToString() == "3") // HDD
+                        {
+                            long freespace = long.Parse(mo["FreeSpace"].ToString()) / 1073741824;
+                            long totalsize = long.Parse(mo["Size"].ToString()) / 1073741824;
+
+                            if (mo["VolumeName"].ToString() == "")
+                                mo["VolumeName"] = "Local Disk";
+
+                            res += mo["VolumeName"].ToString() + " (" + mo["Name"].ToString() + ")  -  " + Convert.ToString(freespace) + " Go free of " + Convert.ToString(totalsize) + " Go\n";
+                        }
+                    }
                 }
             }
             catch (Exception ex)
