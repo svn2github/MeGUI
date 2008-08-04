@@ -1841,6 +1841,21 @@ namespace MeGUI
                 updateCheck.IsBackground = true;
                 updateCheck.Start();
             }
+
+            if (MeGUISettings.AvisynthPluginsPath == null)
+            {
+                if (AskToDownloadAvisynth() == true)
+                    System.Diagnostics.Process.Start("http://www.avisynth.org");
+            }
+        }
+
+        private bool AskToDownloadAvisynth()
+        {
+            if (MessageBox.Show("MeGUI cannot find Avisynth on your system. May I ask you to install it first ?\n", "Warning",
+                                     MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                return true;
+            else
+                return false;
         }
     }
     public class CommandlineUpgradeData
