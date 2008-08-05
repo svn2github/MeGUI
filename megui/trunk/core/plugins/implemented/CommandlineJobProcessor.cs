@@ -232,13 +232,25 @@ namespace MeGUI
             {
                 try
                 {
-                    if (priority == ProcessPriority.IDLE)
-                        proc.PriorityClass = ProcessPriorityClass.Idle;
-                    else if (priority == ProcessPriority.NORMAL)
-                        proc.PriorityClass = ProcessPriorityClass.Normal;
-                    else if (priority == ProcessPriority.HIGH)
-                        proc.PriorityClass = ProcessPriorityClass.High;
-                    return;
+    				switch (priority)
+					{
+						case ProcessPriority.IDLE:
+	    						proc.PriorityClass = ProcessPriorityClass.Idle;
+								break;
+						case ProcessPriority.BELOW_NORMAL:
+								proc.PriorityClass = ProcessPriorityClass.BelowNormal;
+								break;
+		    			case ProcessPriority.NORMAL:
+			    				proc.PriorityClass = ProcessPriorityClass.Normal;
+				    			break;
+						case ProcessPriority.ABOVE_NORMAL:
+					    		proc.PriorityClass = ProcessPriorityClass.AboveNormal;
+								break;
+						case ProcessPriority.HIGH:
+						    	proc.PriorityClass = ProcessPriorityClass.RealTime;
+								break;
+					}
+				    return;
                 }
                 catch (Exception e) // process could not be running anymore
                 {

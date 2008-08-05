@@ -493,7 +493,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
         internal void Start()
         {
             _encoderThread = new Thread(new ThreadStart(this.encode));
-            _encoderThread.Priority = ThreadPriority.Lowest;
+            _encoderThread.Priority = ThreadPriority.BelowNormal;
             _encoderThread.Start();
         }
 
@@ -1017,14 +1017,26 @@ function x_upmixC" + id + @"(clip stereo)
             {
                 try
                 {
-                    if (priority == ProcessPriority.IDLE)
-                        _encoderThread.Priority = ThreadPriority.Lowest;
-                    else if (priority == ProcessPriority.NORMAL)
-                        _encoderThread.Priority = ThreadPriority.Normal;
-                    else if (priority == ProcessPriority.HIGH)
-                        _encoderThread.Priority = ThreadPriority.AboveNormal;
-                    return;
-                }
+                    switch (priority)
+					{
+					    case ProcessPriority.IDLE:
+							_encoderThread.Priority = ThreadPriority.Lowest;
+							break;
+						case ProcessPriority.BELOW_NORMAL:
+							_encoderThread.Priority = ThreadPriority.BelowNormal;
+							break;
+						case ProcessPriority.NORMAL:
+							_encoderThread.Priority = ThreadPriority.Normal;
+							break;
+						case ProcessPriority.ABOVE_NORMAL:
+							_encoderThread.Priority = ThreadPriority.AboveNormal;
+							break;
+						case ProcessPriority.HIGH:
+							_encoderThread.Priority = ThreadPriority.Highest;
+							break;
+				    }
+                  return;
+               }
                 catch (Exception e) // process could not be running anymore
                 {
                     throw new JobRunException(e);

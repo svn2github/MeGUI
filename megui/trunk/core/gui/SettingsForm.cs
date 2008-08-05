@@ -639,7 +639,9 @@ namespace MeGUI
             this.priority.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.priority.Items.AddRange(new object[] {
             "Low",
+            "Below Normal",
             "Normal",
+            "Above Normal",
             "High"});
             this.priority.Location = new System.Drawing.Point(150, 16);
             this.priority.Name = "priority";

@@ -330,11 +330,13 @@ namespace MeGUI
             this.priority.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.priority.Items.AddRange(new object[] {
             "LOW",
+            "BELOW NORMAL",
             "NORMAL",
+            "ABOVE NORMAL",
             "HIGH"});
             this.priority.Location = new System.Drawing.Point(122, 220);
             this.priority.Name = "priority";
-            this.priority.Size = new System.Drawing.Size(80, 21);
+            this.priority.Size = new System.Drawing.Size(120, 21);
             this.priority.TabIndex = 4;
             this.priority.SelectedIndexChanged += new System.EventHandler(this.priority_SelectedIndexChanged);
             // 
@@ -496,11 +498,27 @@ namespace MeGUI
         private void priority_SelectedIndexChanged(object sender, System.EventArgs e)
         {
             if (PriorityChanged != null && !isSettingPriority)
-            {
-                PriorityChanged((ProcessPriority)priority.SelectedIndex);
-            }
-        }
-        #endregion
+		    {
+			    if (!WarnVistaPriority((ProcessPriority)priority.SelectedIndex))
+				    return;
+				else
+					PriorityChanged((ProcessPriority)priority.SelectedIndex);
+			}
+		}
+
+		private bool WarnVistaPriority(ProcessPriority priority)
+		{
+		    if ((Environment.OSVersion.Platform == PlatformID.Win32NT) && (Environment.OSVersion.Version.Major == 6) && priority == ProcessPriority.HIGH)
+			{
+			    // we're on WinVista and the user chose 'HIGH' priority
+				// TODO: reset dropdown if user picked 'No'.
+				DialogResult res = MessageBox.Show("On Windows Vista, running processes at high priority causes them to compete against the window manager and compositor processes. Are you sure you want to proceed?", "MeGUI", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+				    return res == DialogResult.Yes;
+			}
+			else
+				return true;
+ 		}
+		#endregion
         #region properties
         /// <summary>
 		/// gets / sets whether the user closed this window or if the system is closing it
