@@ -18,6 +18,10 @@
 // 
 // ****************************************************************************
 
+// Some Functions used in this class come from SubtitleCreator.
+// http://subtitlecreator.svn.sourceforge.net/viewvc/subtitlecreator/trunk/DVDinfo.cs?view=markup
+// Thanks to the author for that.
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -28,6 +32,50 @@ namespace MeGUI.core.util
 {
     public sealed class IFOparser
     {
+        /// <summary>
+        /// Determine the IFO file that contains the menu: although it often is the largest
+        /// IFO, this is not always the case, especially with elaborate DVDs with many extras.
+        /// Therefore, look for the largest VOBs, and determine the IFO based on that.
+        /// </summary>
+        /// <param name="inputPath">Path that contains the DVD</param>
+        /// <returns>Filename of the IFO that contains the movie</returns>
+        public static string DetermineMovieIFO(string inputPath)
+        {
+            // The first 7 characters are the same for each VOB set, e.g.
+            // VTS_24_0.VOB, VTS_24_1.VOB etc.
+            string[] vobFiles = Directory.GetFiles(inputPath, "vts*.vob");
+
+            // Look for the largest VOB set
+            string vtsNameCurrent;
+            string vtsNamePrevious = Path.GetFileName(vobFiles[0]).Substring(0, 7);
+            long vtsSizeLargest = 0;
+            long vtsSize = 0;
+            string vtsNumber = "01";
+            foreach (string file in vobFiles)
+            {
+                vtsNameCurrent = Path.GetFileName(file).Substring(0, 7);
+                if (vtsNameCurrent.Equals(vtsNamePrevious))
+                    vtsSize += new FileInfo(file).Length;
+                else
+                {
+                    if (vtsSize > vtsSizeLargest)
+                    {
+                        vtsSizeLargest = vtsSize;
+                        vtsNumber = vtsNamePrevious.Substring(4, 2);
+                    }
+                    vtsNamePrevious = vtsNameCurrent;
+                    vtsSize = new FileInfo(file).Length;
+                }
+            }
+            // Check whether the last one isn't the largest
+            if (vtsSize > vtsSizeLargest)
+                vtsNumber = vtsNamePrevious.Substring(4, 2);
+
+            string ifoFile = inputPath + Path.DirectorySeparatorChar + "VTS_" + vtsNumber + "_0.IFO";
+            // Name of largest VOB set is the name of the IFO, so we can now create the IFO file
+            return ifoFile;
+        }
+        
         public static string[] GetSubtitlesStreamsInfos(string FileName)
         {
             byte[] buff = new byte[2];
