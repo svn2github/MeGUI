@@ -75,9 +75,11 @@ namespace MeGUI
         #endregion
         private void openVideo(string fileName)
         {
-            input.Filename = fileName;
+            string mypath = Path.GetDirectoryName(fileName) + "\\";
+            string myifofile = IFOparser.DetermineMovieIFO(mypath);
+            input.Filename = myifofile;
             subtitleTracks.Items.Clear();
-            subtitleTracks.Items.AddRange(IFOparser.GetSubtitlesStreamsInfos(input.Filename));
+            subtitleTracks.Items.AddRange(IFOparser.GetSubtitlesStreamsInfos(myifofile));
             demuxSelectedTracks.Checked = !keepAllTracks.Checked;
         }
         private void checkIndexIO()
