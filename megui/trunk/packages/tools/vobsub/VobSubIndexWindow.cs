@@ -76,13 +76,8 @@ namespace MeGUI
         private void openVideo(string fileName)
         {
             input.Filename = fileName;
-            Dar? ar;
-            int maxHorizontalResolution;
-            List<AudioTrackInfo> audioTracks;
-            List<SubtitleInfo> subtitles;
-            keepAllTracks.Checked = vUtil.openVideoSource(fileName, out audioTracks, out subtitles, out ar, out maxHorizontalResolution);
             subtitleTracks.Items.Clear();
-            subtitleTracks.Items.AddRange(subtitles.ToArray());
+            subtitleTracks.Items.AddRange(IFOparser.GetSubtitlesStreamsInfos(input.Filename));
             demuxSelectedTracks.Checked = !keepAllTracks.Checked;
         }
         private void checkIndexIO()
@@ -97,10 +92,9 @@ namespace MeGUI
         private SubtitleIndexJob generateJob()
         {
             List<int> trackIDs = new List<int>();
-            foreach (object itemChecked in subtitleTracks.CheckedItems)
+            foreach (string s in subtitleTracks.CheckedItems)
             {
-                SubtitleInfo si = (SubtitleInfo)itemChecked;
-                trackIDs.Add(si.Index);
+                trackIDs.Add(Int32.Parse(s.Substring(1,2)));
             }
             return new SubtitleIndexJob(input.Filename, output.Filename, keepAllTracks.Checked, trackIDs, (int)pgc.Value);
         }

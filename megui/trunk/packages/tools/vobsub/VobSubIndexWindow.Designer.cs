@@ -177,7 +177,7 @@ namespace MeGUI
             this.demuxSelectedTracks.Size = new System.Drawing.Size(336, 24);
             this.demuxSelectedTracks.TabIndex = 8;
             this.demuxSelectedTracks.TabStop = true;
-            this.demuxSelectedTracks.Text = "Select Subtitle Streams  (Stream Info File required)";
+            this.demuxSelectedTracks.Text = "Select Subtitle Streams";
             // 
             // keepAllTracks
             // 
@@ -211,7 +211,7 @@ namespace MeGUI
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.helpButton1.Location = new System.Drawing.Point(7, 364);
             this.helpButton1.Name = "helpButton1";
-            this.helpButton1.Size = new System.Drawing.Size(38, 23);
+            this.helpButton1.Size = new System.Drawing.Size(47, 23);
             this.helpButton1.TabIndex = 17;
             // 
             // VobSubIndexWindow
