@@ -188,7 +188,7 @@ namespace MeGUI.core.util
                 if (isAudio) // We need to generate a fake video track to add
                 {
                     s.WriteLine("__just_audio = __film");
-                    s.WriteLine("__blank = BlankClip(length={0}, fps={1}, fps_denominator=1001)", cuts.MinLength, Math.Round(cuts.Framerate*100, 0));
+                    s.WriteLine("__blank = BlankClip(length={0}, fps={1}, fps_denominator=1001)", cuts.MinLength, Math.Round(cuts.Framerate*1000, 0));
                     s.WriteLine("__film = AudioDub(__blank, __film)");
                 }
 
