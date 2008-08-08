@@ -188,7 +188,7 @@ namespace MeGUI.core.util
                 if (isAudio) // We need to generate a fake video track to add
                 {
                     s.WriteLine("__just_audio = __film");
-                    s.WriteLine("__blank = BlankClip(length={0}, fps={1}, fps_denominator=1001)", cuts.MinLength, Math.Round(cuts.Framerate*1000, 0));
+                    s.WriteLine("__blank = BlankClip(length={0}, fps={1})", cuts.MinLength, Math.Round(cuts.Framerate, 3).ToString().Replace(",","."));
                     s.WriteLine("__film = AudioDub(__blank, __film)");
                 }
 
@@ -250,7 +250,7 @@ namespace MeGUI.core.util
 
         private static string addFades(string p, bool first, bool last, bool isAudio, double framerate)
         {
-            string number = ((int)framerate).ToString();
+            string number = (Math.Round(framerate, 3)).ToString();
             if (first && last) return p;
             if (isAudio)
             {
