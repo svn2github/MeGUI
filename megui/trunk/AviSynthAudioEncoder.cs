@@ -617,10 +617,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             {
                 if (audioJob.Input.ToLower().EndsWith(".avi"))
                 {
-                    if (size >= 268435456) // 1GB = 134217728 bytes
-                        script.AppendFormat("OpenDMLSource(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
-                    else
-                        script.AppendFormat("AVISource(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
+                    script.AppendFormat("AVISource(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
                 }
                 else
                 {
