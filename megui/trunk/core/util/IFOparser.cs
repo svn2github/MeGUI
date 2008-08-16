@@ -75,6 +75,112 @@ namespace MeGUI.core.util
             // Name of largest VOB set is the name of the IFO, so we can now create the IFO file
             return ifoFile;
         }
+
+        public static string[] GetAudioStreamsInfos(string FileName)
+        {
+            byte[] buff = new byte[2];
+            byte a = 0;
+            string[] audiodesc = new string[a];
+            string codingMode = "";
+            string LanguageType = "";
+            string ApplicationMode = "";
+            string quantization = "";
+            string SamplingRate = "";
+            byte trackID = 0x80;
+            bool Multichannel_Ext = false;
+            bool DRC = true;
+
+            try
+            {
+                FileStream fs = new FileStream(FileName, FileMode.Open, FileAccess.Read);
+                BinaryReader br = new BinaryReader(fs);
+                Stream sr = br.BaseStream;
+
+                // got to audio stream #1
+                sr.Seek(0x203, SeekOrigin.Begin);
+
+                a = br.ReadByte();
+                if (a > 8)
+                    a = 8; // force the max #. According to the specs 8 is the max value for audio streams.
+
+                audiodesc = new string[a];
+
+                for (int i = 0; i < a; i++)
+                {
+                    switch (( a & 0xD0) >> 5)
+                    {
+                        case 0: codingMode = "AC3"; trackID = (byte)(0x80 + i); break;
+                        case 1: codingMode = "Unknown"; break;
+                        case 2: codingMode = "Mpeg-1"; break;
+                        case 3: codingMode = "Mpeg-2 Ext"; break;
+                        case 4: codingMode = "LPCM"; trackID = (byte)(0xA0 + i); break;
+                        case 5: codingMode = "Unknown"; break;
+                        case 6: codingMode = "DTS"; trackID = (byte)(0x88 + i); break;
+                        case 7: codingMode = "SDDS"; break;
+                    }
+
+                    if (((a & 0x20) >> 4) == 0)
+                         Multichannel_Ext = false;
+                    else Multichannel_Ext = true;
+
+                    if (((a & 0x0C) >> 2) == 0)
+                         LanguageType = "Not Present";
+                    else LanguageType = "Present";
+
+                    switch (a & 0x03)
+                    {
+                        case 0: ApplicationMode = "Unspecified"; break;
+                        case 1: ApplicationMode = "Karaoke"; break;
+                        case 2: ApplicationMode = "Surround"; break;
+                    }
+
+                    byte ee = br.ReadByte(); // byte 1
+                    switch ((ee & 0xC0) >> 6)
+                    {
+                        case 0: quantization = "16 Bits"; break;
+                        case 1: quantization = "20 Bits"; break;
+                        case 2: quantization = "24 Bits"; break;
+                    }
+
+                    // Several cases
+                    if (codingMode != "LPCM") quantization = "16 Bits";
+                    if ((codingMode == "Mpeg-1") || (codingMode == "Mpeg-2 Ext"))
+                         DRC = false;
+                    else DRC = true;
+
+                    if (((ee & 0x30) >> 4) == 0)
+                        SamplingRate = "48 Khz";
+
+                    int Channels = (ee & 0x07) + 1;
+
+                    ee = br.ReadByte();  // byte 2
+                    br.Read(buff, 0, 2); 
+                    string ShortLangCode = String.Format("{0}{1}", (char)buff[0], (char)buff[1]);
+
+                    audiodesc[i] = "[" + trackID.ToString("X") + "]  - " + codingMode + " / " + SamplingRate + " / " + LanguageSelectionContainer.Short2FullLanguageName(ShortLangCode);
+/*                   
+                    sr.Seek(1, SeekOrigin.Current);
+                    ee = br.ReadByte(); // byte 5
+                    switch (ee & 0x0F)
+                    {
+                        case 0: audiodesc[i] += " Unspecified"; break;
+                        case 1: audiodesc[i] += " Normal"; break;
+                        case 2: audiodesc[i] += " For Visually Impaired"; break;
+                        case 3: audiodesc[i] += " Director's Comments"; break;
+                        case 4: audiodesc[i] += " Alternate Director's Comments"; break;
+                    }
+*/                    
+                    sr.Seek(4, SeekOrigin.Current); // next audio stream
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+            return audiodesc;
+
+        }
+             
         
         public static string[] GetSubtitlesStreamsInfos(string FileName)
         {
