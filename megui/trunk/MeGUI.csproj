@@ -237,7 +237,6 @@
       <DependentUpon>MuxWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="core\details\PackageSystem.cs" />
-    <Compile Include="core\details\JobWorker.cs" />
     <Compile Include="core\details\ProfileManager.cs" />
     <Compile Include="core\details\StatusUpdate.cs" />
     <Compile Include="core\details\Streams.cs" />
