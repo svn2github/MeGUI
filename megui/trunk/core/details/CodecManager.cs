@@ -298,23 +298,25 @@ namespace MeGUI
         static ContainerManager()
         {
             if (!(
-                VideoTypes.Register(VideoType.AVI) &&
-                VideoTypes.Register(VideoType.MKV) &&
-                VideoTypes.Register(VideoType.MP4) &&
+                VideoTypes.Register(VideoType.AVI)    &&
+                VideoTypes.Register(VideoType.MKV)    &&
+                VideoTypes.Register(VideoType.MP4)    &&
                 VideoTypes.Register(VideoType.RAWASP) &&
                 VideoTypes.Register(VideoType.RAWAVC)))
                 throw new Exception("Failed to register a video type");
             if (!(
-                AudioTypes.Register(AudioType.AC3) &&
-                AudioTypes.Register(AudioType.MP3) &&
-                AudioTypes.Register(AudioType.DTS) &&
-                AudioTypes.Register(AudioType.MP2) &&
+                AudioTypes.Register(AudioType.AC3)    &&
+                AudioTypes.Register(AudioType.MP3)    &&
+                AudioTypes.Register(AudioType.DTS)    &&
+                AudioTypes.Register(AudioType.MP2)    &&
                 AudioTypes.Register(AudioType.MP4AAC) &&
-                AudioTypes.Register(AudioType.M4A) &&
+                AudioTypes.Register(AudioType.M4A)    &&
                 AudioTypes.Register(AudioType.RAWAAC) &&
                 AudioTypes.Register(AudioType.VORBIS)))
                 throw new Exception("Failed to register an audio type");
             if (!(
+                SubtitleTypes.Register(SubtitleType.ASS)    &&
+                SubtitleTypes.Register(SubtitleType.SSA)    &&
                 SubtitleTypes.Register(SubtitleType.SUBRIP) &&
                 SubtitleTypes.Register(SubtitleType.VOBSUB)))
                 throw new Exception("Failed to register a subtitle type");
