@@ -61,8 +61,7 @@ namespace MeGUI
 		private System.Windows.Forms.CheckBox deleteCompletedJobs;
 		private System.Windows.Forms.CheckBox deleteAbortedOutput;
 		private System.Windows.Forms.CheckBox deleteIntermediateFiles;
-		private System.Windows.Forms.CheckBox openProgressWindow;
-        private System.Windows.Forms.CheckBox autosetNbThreads;
+        private System.Windows.Forms.CheckBox openProgressWindow;
         private NumericUpDown acceptableAspectError;
         private Label acceptableAspectErrorLabel;
         private AutoEncodeDefaultsSettings autoEncodeDefaults;
@@ -220,7 +219,6 @@ namespace MeGUI
             this.configSourceDetector = new System.Windows.Forms.Button();
             this.chkboxUseAdvancedTooltips = new System.Windows.Forms.CheckBox();
             this.openProgressWindow = new System.Windows.Forms.CheckBox();
-            this.autosetNbThreads = new System.Windows.Forms.CheckBox();
             this.deleteIntermediateFiles = new System.Windows.Forms.CheckBox();
             this.deleteAbortedOutput = new System.Windows.Forms.CheckBox();
             this.deleteCompletedJobs = new System.Windows.Forms.CheckBox();
@@ -241,6 +239,8 @@ namespace MeGUI
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.gbVideoPreview = new System.Windows.Forms.GroupBox();
+            this.chAlwaysOnTop = new System.Windows.Forms.CheckBox();
             this.autoUpdateGroupBox = new System.Windows.Forms.GroupBox();
             this.label14 = new System.Windows.Forms.Label();
             this.maxServersToTry = new System.Windows.Forms.NumericUpDown();
@@ -328,8 +328,6 @@ namespace MeGUI
             this.videoExtLabel = new System.Windows.Forms.Label();
             this.autoEncodeDefaultsButton = new System.Windows.Forms.Button();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
-            this.gbVideoPreview = new System.Windows.Forms.GroupBox();
-            this.chAlwaysOnTop = new System.Windows.Forms.CheckBox();
             groupBox1 = new System.Windows.Forms.GroupBox();
             groupBox1.SuspendLayout();
             this.otherGroupBox.SuspendLayout();
@@ -341,6 +339,7 @@ namespace MeGUI
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage3.SuspendLayout();
+            this.gbVideoPreview.SuspendLayout();
             this.autoUpdateGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.maxServersToTry)).BeginInit();
             this.outputExtensions.SuspendLayout();
@@ -352,7 +351,6 @@ namespace MeGUI
             this.tabPage5.SuspendLayout();
             this.tabPage6.SuspendLayout();
             this.tabPage7.SuspendLayout();
-            this.gbVideoPreview.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -441,7 +439,6 @@ namespace MeGUI
             this.otherGroupBox.Controls.Add(this.configSourceDetector);
             this.otherGroupBox.Controls.Add(this.chkboxUseAdvancedTooltips);
             this.otherGroupBox.Controls.Add(this.openProgressWindow);
-            this.otherGroupBox.Controls.Add(this.autosetNbThreads);
             this.otherGroupBox.Controls.Add(this.deleteIntermediateFiles);
             this.otherGroupBox.Controls.Add(this.deleteAbortedOutput);
             this.otherGroupBox.Controls.Add(this.deleteCompletedJobs);
@@ -570,7 +567,7 @@ namespace MeGUI
             // 
             // chkboxUseAdvancedTooltips
             // 
-            this.chkboxUseAdvancedTooltips.Location = new System.Drawing.Point(13, 105);
+            this.chkboxUseAdvancedTooltips.Location = new System.Drawing.Point(13, 128);
             this.chkboxUseAdvancedTooltips.Name = "chkboxUseAdvancedTooltips";
             this.chkboxUseAdvancedTooltips.Size = new System.Drawing.Size(152, 17);
             this.chkboxUseAdvancedTooltips.TabIndex = 8;
@@ -586,14 +583,6 @@ namespace MeGUI
             this.openProgressWindow.TabIndex = 15;
             this.openProgressWindow.Text = "Open Progress Window";
             // 
-            // autosetNbThreads
-            // 
-            this.autosetNbThreads.Location = new System.Drawing.Point(13, 174);
-            this.autosetNbThreads.Name = "autosetNbThreads";
-            this.autosetNbThreads.Size = new System.Drawing.Size(208, 17);
-            this.autosetNbThreads.TabIndex = 14;
-            this.autosetNbThreads.Text = "Automatically set number of Threads";
-            // 
             // deleteIntermediateFiles
             // 
             this.deleteIntermediateFiles.Location = new System.Drawing.Point(300, 151);
@@ -604,7 +593,7 @@ namespace MeGUI
             // 
             // deleteAbortedOutput
             // 
-            this.deleteAbortedOutput.Location = new System.Drawing.Point(13, 151);
+            this.deleteAbortedOutput.Location = new System.Drawing.Point(13, 174);
             this.deleteAbortedOutput.Name = "deleteAbortedOutput";
             this.deleteAbortedOutput.Size = new System.Drawing.Size(184, 17);
             this.deleteAbortedOutput.TabIndex = 12;
@@ -620,7 +609,7 @@ namespace MeGUI
             // 
             // openScript
             // 
-            this.openScript.Location = new System.Drawing.Point(13, 128);
+            this.openScript.Location = new System.Drawing.Point(13, 151);
             this.openScript.Name = "openScript";
             this.openScript.Size = new System.Drawing.Size(248, 17);
             this.openScript.TabIndex = 10;
@@ -774,6 +763,26 @@ namespace MeGUI
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Extra config";
             this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // gbVideoPreview
+            // 
+            this.gbVideoPreview.Controls.Add(this.chAlwaysOnTop);
+            this.gbVideoPreview.Location = new System.Drawing.Point(228, 228);
+            this.gbVideoPreview.Name = "gbVideoPreview";
+            this.gbVideoPreview.Size = new System.Drawing.Size(239, 62);
+            this.gbVideoPreview.TabIndex = 4;
+            this.gbVideoPreview.TabStop = false;
+            this.gbVideoPreview.Text = "Video Preview";
+            // 
+            // chAlwaysOnTop
+            // 
+            this.chAlwaysOnTop.AutoSize = true;
+            this.chAlwaysOnTop.Location = new System.Drawing.Point(8, 21);
+            this.chAlwaysOnTop.Name = "chAlwaysOnTop";
+            this.chAlwaysOnTop.Size = new System.Drawing.Size(169, 17);
+            this.chAlwaysOnTop.TabIndex = 0;
+            this.chAlwaysOnTop.Text = "Set the Form \"Always on Top\"";
+            this.chAlwaysOnTop.UseVisualStyleBackColor = true;
             // 
             // autoUpdateGroupBox
             // 
@@ -940,7 +949,7 @@ namespace MeGUI
             this.label13.TabIndex = 0;
             this.label13.Text = "Number of passes";
             // 
-            // numericUpDown1
+            // nbPasses
             // 
             this.nbPasses.Location = new System.Drawing.Point(117, 20);
             this.nbPasses.Maximum = new decimal(new int[] {
@@ -1657,26 +1666,6 @@ namespace MeGUI
             this.helpButton1.Size = new System.Drawing.Size(47, 23);
             this.helpButton1.TabIndex = 1;
             // 
-            // gbVideoPreview
-            // 
-            this.gbVideoPreview.Controls.Add(this.chAlwaysOnTop);
-            this.gbVideoPreview.Location = new System.Drawing.Point(228, 228);
-            this.gbVideoPreview.Name = "gbVideoPreview";
-            this.gbVideoPreview.Size = new System.Drawing.Size(239, 62);
-            this.gbVideoPreview.TabIndex = 4;
-            this.gbVideoPreview.TabStop = false;
-            this.gbVideoPreview.Text = "Video Preview";
-            // 
-            // chAlwaysOnTop
-            // 
-            this.chAlwaysOnTop.AutoSize = true;
-            this.chAlwaysOnTop.Location = new System.Drawing.Point(8, 21);
-            this.chAlwaysOnTop.Name = "chAlwaysOnTop";
-            this.chAlwaysOnTop.Size = new System.Drawing.Size(169, 17);
-            this.chAlwaysOnTop.TabIndex = 0;
-            this.chAlwaysOnTop.Text = "Set the Form \"Always on Top\"";
-            this.chAlwaysOnTop.UseVisualStyleBackColor = true;
-            // 
             // SettingsForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
@@ -1706,6 +1695,8 @@ namespace MeGUI
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
+            this.gbVideoPreview.ResumeLayout(false);
+            this.gbVideoPreview.PerformLayout();
             this.autoUpdateGroupBox.ResumeLayout(false);
             this.autoUpdateGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.maxServersToTry)).EndInit();
@@ -1724,8 +1715,6 @@ namespace MeGUI
             this.tabPage6.PerformLayout();
             this.tabPage7.ResumeLayout(false);
             this.tabPage7.PerformLayout();
-            this.gbVideoPreview.ResumeLayout(false);
-            this.gbVideoPreview.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2011,7 +2000,6 @@ namespace MeGUI
 				settings.DeleteIntermediateFiles = deleteIntermediateFiles.Checked;
 				settings.DeleteAbortedOutput = deleteAbortedOutput.Checked;
 				settings.OpenProgressWindow = openProgressWindow.Checked;
-				settings.AutoSetNbThreads = autosetNbThreads.Checked;
 				settings.Keep2of3passOutput = keep2ndPassOutput.Checked;
 				settings.OverwriteStats = keep2ndPassLogFile.Checked;
 				settings.NbPasses = (int)nbPasses.Value;
@@ -2071,7 +2059,6 @@ namespace MeGUI
 				deleteIntermediateFiles.Checked = settings.DeleteIntermediateFiles;
 				deleteAbortedOutput.Checked = settings.DeleteAbortedOutput;
 				openProgressWindow.Checked = settings.OpenProgressWindow;
-				autosetNbThreads.Checked = settings.AutoSetNbThreads;
 				keep2ndPassOutput.Checked = settings.Keep2of3passOutput;
 				keep2ndPassLogFile.Checked = settings.OverwriteStats;
 				nbPasses.Value = (decimal)settings.NbPasses;

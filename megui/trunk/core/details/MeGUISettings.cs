@@ -38,7 +38,7 @@ namespace MeGUI
             x264Path, dgIndexPath, xvidEncrawPath, avc2aviPath, aviMuxGUIPath, oggEnc2Path, encAudXPath,
             defaultLanguage1, defaultLanguage2, afterEncodingCommand;
         private bool recalculateMainMovieBitrate, autoForceFilm, autoStartQueue, enableMP3inMP4, autoOpenScript,
-            overwriteStats, keep2of3passOutput, deleteCompletedJobs, autoSetNbThreads, deleteIntermediateFiles,
+            overwriteStats, keep2of3passOutput, deleteCompletedJobs, deleteIntermediateFiles,
             deleteAbortedOutput, openProgressWindow, useadvancedtooltips, freshOggEnc2, autoscroll, alwaysOnTop;
         private ulong audioSamplesPerUpdate;
         private AfterEncoding afterEncoding;
@@ -98,7 +98,6 @@ namespace MeGUI
 			overwriteStats = true;
 			keep2of3passOutput = false;
 			deleteCompletedJobs = false;
-			autoSetNbThreads = true;
 			nbPasses = 2;
 			deleteIntermediateFiles = true;
 			deleteAbortedOutput = true;
@@ -462,15 +461,6 @@ namespace MeGUI
 		{
 			get {return autoOpenScript;}
 			set {autoOpenScript = value;}
-		}
-		/// <summary>
-		/// gets / sets whether megui automatically detects multicore / HT capable CPUs and sets the number of 
-		/// encoder threads accordingly
-		/// </summary>
-		public bool AutoSetNbThreads
-		{
-			get {return autoSetNbThreads;}
-			set {autoSetNbThreads = value;}
 		}
 		/// <summary>
 		/// gets / sets whether the progress window should be opened for each job
