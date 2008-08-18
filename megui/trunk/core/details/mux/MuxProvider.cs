@@ -989,7 +989,6 @@ namespace MeGUI
             : base()
         {
             this.RegisterEncoder(new SnowMencoderEncoderProvider());
-            this.RegisterEncoder(new LMP4MencoderEncoderProvider());
             this.RegisterEncoder(new X264EncoderProvider());
             this.RegisterEncoder(new XviDEncoderProvider());
         }
@@ -1053,21 +1052,6 @@ namespace MeGUI
             supportedCodecs.Add(VideoCodec.SNOW);
             supportedTypes.Add(VideoType.AVI);
             supportedEncoderTypes.Add(VideoEncoderType.SNOW);
-        }
-
-        public override IJobProcessor CreateEncoder(MeGUISettings settings)
-        {
-            return new mencoderEncoder(settings.MencoderPath);
-        }
-    }
-    public class LMP4MencoderEncoderProvider : EncodingProvider<VideoCodec, VideoType, VideoEncoderType>
-    {
-        public LMP4MencoderEncoderProvider()
-        {
-            supportedCodecs.Add(VideoCodec.ASP);
-            supportedTypes.Add(VideoType.AVI);
-            supportedTypes.Add(VideoType.RAWASP);
-            supportedEncoderTypes.Add(VideoEncoderType.LMP4);
         }
 
         public override IJobProcessor CreateEncoder(MeGUISettings settings)

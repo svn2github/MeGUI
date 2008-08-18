@@ -122,7 +122,6 @@ namespace MeGUI
             return ID;
         }
         public static readonly VideoEncoderType XVID = new VideoEncoderType("XVID", VideoCodec.ASP);
-        public static readonly VideoEncoderType LMP4 = new VideoEncoderType("LMP4", VideoCodec.ASP);
         public static readonly VideoEncoderType X264 = new VideoEncoderType("X264", VideoCodec.AVC);
         public static readonly VideoEncoderType SNOW = new VideoEncoderType("SNOW", VideoCodec.SNOW);
         public static readonly VideoEncoderType HFYU = new VideoEncoderType("HFYU", VideoCodec.HFYU);
@@ -185,7 +184,6 @@ namespace MeGUI
                 throw new Exception("Failed to register a standard audio codec");
             if (!(
                 VideoEncoderTypes.Register(VideoEncoderType.HFYU) &&
-                VideoEncoderTypes.Register(VideoEncoderType.LMP4) &&
                 VideoEncoderTypes.Register(VideoEncoderType.SNOW) &&
                 VideoEncoderTypes.Register(VideoEncoderType.X264) &&
                 VideoEncoderTypes.Register(VideoEncoderType.XVID)))

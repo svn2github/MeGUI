@@ -723,13 +723,6 @@
     <Compile Include="packages\tools\vobsub\VobSubIndexWindow.Designer.cs">
       <DependentUpon>VobSubIndexWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="packages\video\lmp4\lavcConfigurationPanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="packages\video\lmp4\lavcConfigurationPanel.Designer.cs">
-      <DependentUpon>lavcConfigurationPanel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="packages\video\lmp4\lavcSettings.cs" />
     <Compile Include="packages\video\snow\snowConfigurationPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1017,10 +1010,6 @@
     <EmbeddedResource Include="packages\tools\vobsub\VobSubIndexWindow.resx">
       <DependentUpon>VobSubIndexWindow.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="packages\video\lmp4\lavcConfigurationPanel.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>lavcConfigurationPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="packages\video\snow\snowConfigurationPanel.resx">
       <SubType>Designer</SubType>
