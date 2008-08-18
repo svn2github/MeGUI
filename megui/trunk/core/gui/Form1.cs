@@ -1310,7 +1310,7 @@ namespace MeGUI
             i.LogValue("CPU ", string.Format("{0}", OSInfo.GetMOStuff("Win32_Processor")));
             i.LogValue("HDD :", string.Format("{0}", OSInfo.GetMOStuff("Win32_LogicalDisk")));
 
-            Log.LogValue("Settings", Settings, ImageType.Information);
+            //Log.LogValue("Settings", Settings, ImageType.Information);
         }
 
         private void beginUpdateCheck()
