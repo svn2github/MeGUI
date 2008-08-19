@@ -1,3 +1,38 @@
+0.3.0.2001
+    - (sharktooth) [Installer] New megui.ico and uninstall.ico
+    - (kurtnoise) [JobWorkerWindow] a workaround to shutdown the Worker Form (fix bug #2042450).
+    - (kurtnoise) [CodecManager] added SubtitleType.Register for ASS & SSA subtitles format.
+    - (kurtnoise) disabled "Settings" from the log.
+    - (kurtnoise) removed LMP4 codec.
+    - (kurtnoise) removed "Automatically set the number of threads" from the Settings in order to avoid override from users.
+    - (sharktooth) New application icon
+    - (kurtnoise) [IFOparser] added GetAudioStreamInfos(). 1st working draft...
+    - (kurtnoise) remove unused code from project files.
+    - (kurtnoise) [AudioEncoder] OpenDMLSource was a bad idea (fix bug #2016146)
+    - (kurtnoise) [FilmCutter] more accurate fps value to avoid desync issues.
+    - (kurtnoise) [FilmCutter] 10l for me...multiply by 1000 instead of 100 give the appropriate result.
+    - (kurtnoise) retrieve automatically the proper IFO file when we have many of them in the current path.
+    - (kurtnoise) added DetermineMovieIFO(.) to retrieve the correct IFO file from the given path.
+    - (kurtnoise) applied GetSubtitlesStreamsInfos(.) to the VobSubber.
+    - (kurtnoise) add IFOparser.cs to the project files.
+    - (kurtnoise) added IFOparser class. My first working draft. Only use with VobSubTool for the moment.
+    - (kurtnoise) add Short2FullLanguageName(.) function to retrieve the full language name from the 2 char code. Needed for the IFO parser.
+    - (kurtnoise) [FilmCutter] add fps_denominator in GetCutsScript() to have more accuracy. (fixed bug #2023354)
+    - (kurtnoise) make process priority more granular. Patch by Sean McGovern.
+    - (kurtnoise) add/update GPL license header.
+    - (kurtnoise) put references in alphabetical order.
+    - (kurtnoise) fixed several warning for the compilation.
+    - (kurtnoise) added an Avisynth checking in the shown Event.
+    - (kurtnoise) added free disk space detection. Might be useful for troubleshooting.
+    - (kurtnoise) added CPU detection.
+    - (kurtnoise) [AudioEncoder] switched Normalize() after the downmix cases.
+    - (kurtnoise) better OS detection.
+    - (kurtnoise) added GetMOStuff function.
+    - (kurtnoise) added System.Management reference to the project files
+    - (kurtnoise) added alternate backcolors for ListViews.
+    - (kurtnoise) added DRC to the script for Wav Sources if specified.
+    - (kurtnoise) updated MediaInfo library and its wrapper to the latest release (0.7.7.4).
+
 0.3.0.1020
     - (sharktooth) [VideoPlayer.cs] Nicer zoomin/out functions
 
