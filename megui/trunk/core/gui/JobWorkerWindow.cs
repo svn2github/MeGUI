@@ -495,9 +495,7 @@ namespace MeGUI.core.gui
         /// <returns>true if worker was shut down, false otherwise</returns>
         private bool shutdownWorkerIfJobsCompleted()
         {
-            /* bug #2042450 >> https://sourceforge.net/tracker/index.php?func=detail&aid=2042450&group_id=156112&atid=798476
-               So, a workaround to solve it by disabling the first check
-            if (mode != JobWorkerMode.CloseOnLocalListCompleted) return false;*/
+            if (mode != JobWorkerMode.CloseOnLocalListCompleted) return false;
             foreach (TaggedJob j in localJobs.Values)
                 if (j.Status != JobStatus.DONE)
                     return false;
