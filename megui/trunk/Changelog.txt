@@ -1,3 +1,6 @@
+0.3.0.2002
+    - (kurtnoise) [JobWorkerWindow] revert to previous state...
+
 0.3.0.2001
     - (sharktooth) [Installer] New megui.ico and uninstall.ico
     - (kurtnoise) [JobWorkerWindow] a workaround to shutdown the Worker Form (fix bug #2042450).
