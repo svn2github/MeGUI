@@ -260,9 +260,9 @@ namespace MeGUI.core.util
             }
             else
             {
-                if (!first && !last) return "FadeIO(" + p + ", " + number + ")";
-                if (first) return "FadeOut(" + p + ", " + number + ")";
-                if (last) return "FadeIn(" + p + ", " + number + ")";
+                if (!first && !last) return "FadeIO(" + p + ", , " + number + ")";
+                if (first) return "FadeOut(" + p + ", , " + number + ")";
+                if (last) return "FadeIn(" + p + ", , " + number + ")";
             }
             Debug.Assert(false);
             return null;
