@@ -254,9 +254,9 @@ namespace MeGUI.core.util
             if (first && last) return p;
             if (isAudio)
             {
-                if (!first && !last) return string.Format("FadeIO(FadeIO0({0}, {1}), {1})", p, number);
-                if (first) return string.Format("FadeOut(FadeOut0({0}, {1}), {1})", p, number);
-                if (last) return string.Format("FadeIn(FadeIn0({0}, {1}), {1})", p, number);
+                if (!first && !last) return string.Format("FadeIO(FadeIO0({0}, , {1}), , {1})", p, number);
+                if (first) return string.Format("FadeOut(FadeOut0({0}, , {1}), , {1})", p, number);
+                if (last) return string.Format("FadeIn(FadeIn0({0}, , {1}), , {1})", p, number);
             }
             else
             {
