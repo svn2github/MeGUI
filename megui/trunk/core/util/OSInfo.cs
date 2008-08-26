@@ -194,7 +194,14 @@ namespace MeGUI
             }
             else
             {
-                return " SP" + osVersionInfo.szCSDVersion.Substring(13, 1);
+                if (osVersionInfo.szCSDVersion != "")
+                {
+                    return " SP" + osVersionInfo.szCSDVersion.Substring(13, 1);
+                }
+                else
+                {
+                    return "";
+                }
             }
         }
 
