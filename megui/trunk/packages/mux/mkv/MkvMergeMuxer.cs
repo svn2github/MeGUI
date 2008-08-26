@@ -94,29 +94,33 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                 MuxSettings settings = job.Settings;
                 sb.Append("-o \"" + settings.MuxedOutput + "\"");
 
-                if (settings.DAR.HasValue)
-                    sb.Append(" --aspect-ratio 0:" + settings.DAR.Value.X + "/" + settings.DAR.Value.Y);
-                else
-                    sb.Append(" --engage keep_bitstream_ar_info");
-
-                if (settings.VideoName.Length > 0)
-                    sb.Append(" --track-name \"0:" + settings.VideoName + "\"");
-
-                if (settings.MuxedInput.Length > 0)
-                    sb.Append(" \"" + settings.MuxedInput + "\"");
-
                 if (settings.VideoInput.Length > 0)
+                {
                     sb.Append(" -A -S \"" + settings.VideoInput + "\"");
+                    if (settings.DAR.HasValue)
+                        sb.Append(" --aspect-ratio 0:" + settings.DAR.Value.X + "/" + settings.DAR.Value.Y);
+                    else
+                        sb.Append(" --engage keep_bitstream_ar_info");
+                    if (!settings.VideoName.Equals(""))
+                        sb.Append(" --track-name \"0:" + settings.VideoName + "\"");
+                }
+                
+                if (settings.MuxedInput.Length > 0)
+                {
+                    sb.Append(" \"" + settings.MuxedInput + "\"");
+                    if (!settings.VideoName.Equals(""))
+                        sb.Append(" --track-name \"0:" + settings.VideoName + "\"");
+                }
 
                 foreach (object o in settings.AudioStreams)
                 {
                     MuxStream stream = (MuxStream)o;
                     int trackID = 0;
                     if (stream.path.ToLower().EndsWith(".mp4") || stream.path.ToLower().EndsWith(".m4a"))
-                        trackID = 1;
+                        trackID = 1; // FIXME : not always the case. Sometimes we can have trackID >= 100. MediaInfo is able to retrieve the correct value.
                     if (!string.IsNullOrEmpty(stream.language))
                         sb.Append(" --language " + trackID + ":" + stream.language);
-                    if (stream.name != null && !stream.name.Equals(""))
+                    if (!string.IsNullOrEmpty(stream.name))
                         sb.Append(" --track-name \"" + trackID + ":" + stream.name + "\"");
                     if (stream.delay != 0)
                         sb.AppendFormat(" --delay {0}:{1}ms", trackID, stream.delay);
@@ -130,7 +134,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                     int trackID = 0;
                     if (!string.IsNullOrEmpty(stream.language))
                         sb.Append(" --language 0:" + stream.language);
-                    if (stream.name != null && !stream.name.Equals(""))
+                    if (!string.IsNullOrEmpty(stream.name))
                         sb.Append(" --track-name \"" + trackID + ":" + stream.name + "\"");
 
                     sb.Append(" -s 0 -D -A \"" + stream.path + "\"");
