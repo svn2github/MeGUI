@@ -65,7 +65,7 @@ namespace MeGUI.core.gui
             this.expandAllSubitemsToolStripMenuItem,
             this.collapseAllSubitemsToolStripMenuItem});
             this.contextMenu.Name = "contextMenuStrip1";
-            this.contextMenu.Size = new System.Drawing.Size(173, 114);
+            this.contextMenu.Size = new System.Drawing.Size(186, 92);
             // 
             // editTextToolStripMenuItem
             // 
@@ -74,27 +74,27 @@ namespace MeGUI.core.gui
             this.editBranch,
             this.editLog});
             this.editTextToolStripMenuItem.Name = "editTextToolStripMenuItem";
-            this.editTextToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.editTextToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
             this.editTextToolStripMenuItem.Text = "Edit text";
             // 
             // editIndividualNode
             // 
             this.editIndividualNode.Name = "editIndividualNode";
-            this.editIndividualNode.Size = new System.Drawing.Size(107, 22);
+            this.editIndividualNode.Size = new System.Drawing.Size(111, 22);
             this.editIndividualNode.Text = "node";
             this.editIndividualNode.Click += new System.EventHandler(this.ofIndividualNodeToolStripMenuItem_Click);
             // 
             // editBranch
             // 
             this.editBranch.Name = "editBranch";
-            this.editBranch.Size = new System.Drawing.Size(107, 22);
+            this.editBranch.Size = new System.Drawing.Size(111, 22);
             this.editBranch.Text = "branch";
             this.editBranch.Click += new System.EventHandler(this.ofBranchToolStripMenuItem_Click);
             // 
             // editLog
             // 
             this.editLog.Name = "editLog";
-            this.editLog.Size = new System.Drawing.Size(107, 22);
+            this.editLog.Size = new System.Drawing.Size(111, 22);
             this.editLog.Text = "log";
             this.editLog.Click += new System.EventHandler(this.editLog_Click);
             // 
@@ -104,43 +104,43 @@ namespace MeGUI.core.gui
             this.saveBranch,
             this.saveLog});
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
             this.saveToolStripMenuItem.Text = "Save";
             // 
             // saveBranch
             // 
             this.saveBranch.Name = "saveBranch";
-            this.saveBranch.Size = new System.Drawing.Size(107, 22);
+            this.saveBranch.Size = new System.Drawing.Size(111, 22);
             this.saveBranch.Text = "branch";
             this.saveBranch.Click += new System.EventHandler(this.saveBranch_Click);
             // 
             // saveLog
             // 
             this.saveLog.Name = "saveLog";
-            this.saveLog.Size = new System.Drawing.Size(107, 22);
+            this.saveLog.Size = new System.Drawing.Size(111, 22);
             this.saveLog.Text = "log";
             this.saveLog.Click += new System.EventHandler(this.saveLog_Click);
-            //
+            // 
             // expandAllSubitemsToolStripMenuItem
             // 
             this.expandAllSubitemsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.expandLog,
             this.expandBranch});
             this.expandAllSubitemsToolStripMenuItem.Name = "expandAllSubitemsToolStripMenuItem";
-            this.expandAllSubitemsToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.expandAllSubitemsToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
             this.expandAllSubitemsToolStripMenuItem.Text = "Expand all subitems";
             // 
             // expandLog
             // 
             this.expandLog.Name = "expandLog";
-            this.expandLog.Size = new System.Drawing.Size(120, 22);
+            this.expandLog.Size = new System.Drawing.Size(125, 22);
             this.expandLog.Text = "of log";
             this.expandLog.Click += new System.EventHandler(this.expandLog_Click);
             // 
             // expandBranch
             // 
             this.expandBranch.Name = "expandBranch";
-            this.expandBranch.Size = new System.Drawing.Size(120, 22);
+            this.expandBranch.Size = new System.Drawing.Size(125, 22);
             this.expandBranch.Text = "of branch";
             this.expandBranch.Click += new System.EventHandler(this.expandBranch_Click);
             // 
@@ -150,23 +150,23 @@ namespace MeGUI.core.gui
             this.collapseLog,
             this.collapseBranch});
             this.collapseAllSubitemsToolStripMenuItem.Name = "collapseAllSubitemsToolStripMenuItem";
-            this.collapseAllSubitemsToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.collapseAllSubitemsToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
             this.collapseAllSubitemsToolStripMenuItem.Text = "Collapse all subitems";
             // 
             // collapseLog
             // 
             this.collapseLog.Name = "collapseLog";
-            this.collapseLog.Size = new System.Drawing.Size(152, 22);
+            this.collapseLog.Size = new System.Drawing.Size(125, 22);
             this.collapseLog.Text = "of log";
             this.collapseLog.Click += new System.EventHandler(this.collapseLog_Click);
             // 
             // collapseBranch
             // 
             this.collapseBranch.Name = "collapseBranch";
-            this.collapseBranch.Size = new System.Drawing.Size(152, 22);
+            this.collapseBranch.Size = new System.Drawing.Size(125, 22);
             this.collapseBranch.Text = "of branch";
             this.collapseBranch.Click += new System.EventHandler(this.collapseBranch_Click);
-            //
+            // 
             // saveDialog
             // 
             this.saveDialog.Filter = "Log files (*.log)|*.log|All files (*.*)|*.*";
@@ -180,6 +180,7 @@ namespace MeGUI.core.gui
             this.Controls.Add(this.treeView);
             this.Name = "LogTree";
             this.Size = new System.Drawing.Size(596, 478);
+            this.Load += new System.EventHandler(this.LogTree_Load);
             this.contextMenu.ResumeLayout(false);
             this.ResumeLayout(false);
 

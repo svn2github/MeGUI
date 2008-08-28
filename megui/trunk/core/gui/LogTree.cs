@@ -187,5 +187,14 @@ namespace MeGUI.core.gui
         {
             collapseAll(selectedLogItem);
         }
+
+        private void LogTree_Load(object sender, EventArgs e)
+        {
+
+            if (VistaStuff.IsVistaOrNot)
+            {
+                VistaStuff.SetWindowTheme(treeView.Handle, "explorer", null);
+            }
+        }
     }
 }

@@ -109,7 +109,7 @@ namespace MeGUI
 
                 name.Text = this.Name;
 
-                Version v = GetLatestVersion();
+                Version v = GetLatestVersion(); 
                 if (v != null)
                     latestVersion.Text = v.FileVersion;
 
@@ -778,6 +778,12 @@ namespace MeGUI
         private void UpdateWindow_Load(object sender, EventArgs e)
         {
             GetUpdateData(false);
+
+            if (VistaStuff.IsVistaOrNot)
+            {
+                VistaStuff.SetWindowTheme(treeView.Handle, "explorer", null);
+                VistaStuff.SetWindowTheme(listViewDetails.Handle, "explorer", null);
+            }
         }
         #endregion
         #region load and save

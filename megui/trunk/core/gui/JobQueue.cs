@@ -842,6 +842,15 @@ namespace MeGUI.core.gui
         }
 
         #endregion
+
+        private void JobQueue_Load(object sender, EventArgs e)
+        {
+
+            if (VistaStuff.IsVistaOrNot)
+            {
+                VistaStuff.SetWindowTheme(queueListView.Handle, "explorer", null);
+            }
+        }
     }
 
     class JobQueueSettings : ApplicationSettingsBase

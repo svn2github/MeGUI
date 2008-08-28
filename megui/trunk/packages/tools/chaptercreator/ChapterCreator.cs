@@ -25,6 +25,8 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 
+using MeGUI.core.util;
+
 namespace MeGUI
 {
 
@@ -298,6 +300,7 @@ namespace MeGUI
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.Text = "MeGUI - Chapter Creator";
+            this.Load += new System.EventHandler(this.ChapterCreator_Load);
             this.chaptersGroupbox.ResumeLayout(false);
             this.chaptersGroupbox.PerformLayout();
             this.ResumeLayout(false);
@@ -739,6 +742,15 @@ namespace MeGUI
 			chapterName.Text = "";
 			addZoneButton_Click(null, null);
 		}
+
+        private void ChapterCreator_Load(object sender, EventArgs e)
+        {
+
+            if (VistaStuff.IsVistaOrNot)
+            {
+                VistaStuff.SetWindowTheme(chapterListView.Handle, "explorer", null);
+            }
+        }
 	}
 	public struct Chapter
 	{
