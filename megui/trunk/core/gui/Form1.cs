@@ -1300,6 +1300,7 @@ namespace MeGUI
         private void MeGUI_Load(object sender, EventArgs e)
         {
             RegisterForm(this);
+            DriveInfo[] allDrives = DriveInfo.GetDrives();
             
             LogItem i = Log.Info("Versions");
             i.LogValue("MeGUI Version ", Application.ProductVersion);
@@ -1308,7 +1309,27 @@ namespace MeGUI
 
             i = Log.Info("Hardware");
             i.LogValue("CPU ", string.Format("{0}", OSInfo.GetMOStuff("Win32_Processor")));
-            i.LogValue("HDD :", string.Format("{0}", OSInfo.GetMOStuff("Win32_LogicalDisk")));
+
+            foreach (DriveInfo d in allDrives)
+            {
+                if (d.DriveType == DriveType.Fixed)
+                {
+                    try
+                    {
+                        long freespace = long.Parse(d.AvailableFreeSpace.ToString()) / 1073741824;
+                        long totalsize = long.Parse(d.TotalSize.ToString()) / 1073741824;
+
+                        if (d.VolumeLabel.ToString() == "")
+                            d.VolumeLabel = "Local Disk";
+
+                        i.LogValue("HDD ", string.Format("{0} ({1})  -  {2} Go free of {3} Go", d.VolumeLabel, d.Name, Convert.ToString(freespace), Convert.ToString(totalsize)));
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.ToString());
+                    }
+                }
+            }
 
             //Log.LogValue("Settings", Settings, ImageType.Information);
         }
