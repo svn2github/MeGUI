@@ -1,3 +1,10 @@
+0.3.0.2003
+    - (kurtnoise) [CodecManager] vertical alignment.
+    - (kurtnoise) Now use DriveInfo class to retrieve free space from hard drives.
+    - (kurtnoise) updated MediaInfo library and its wrapper to the latest release (0.7.7.5)
+    - (kurtnoise) [MKVMuxer] some cleanup in the code.
+    - (sharktooth) [FilmCutter.cs] Fixed the fades syntax.
+
 0.3.0.2002
     - (kurtnoise) [JobWorkerWindow] revert to previous state...
 
