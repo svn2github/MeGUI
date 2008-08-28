@@ -487,6 +487,7 @@
     <Compile Include="core\util\Shutdown.cs" />
     <Compile Include="core\util\Tuples.cs" />
     <Compile Include="core\util\Util.cs" />
+    <Compile Include="core\util\VistaStuff.cs" />
     <Compile Include="core\util\VideoUtil.cs" />
     <Compile Include="packages\audio\aften\AftenConfigurationPanel.cs">
       <SubType>UserControl</SubType>
