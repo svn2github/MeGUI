@@ -42,8 +42,8 @@ namespace MeGUI
         {
             this.id = id;
         }
-        public static readonly VideoCodec ASP = new VideoCodec("ASP");
-        public static readonly VideoCodec AVC = new VideoCodec("AVC");
+        public static readonly VideoCodec ASP  = new VideoCodec("ASP");
+        public static readonly VideoCodec AVC  = new VideoCodec("AVC");
         public static readonly VideoCodec SNOW = new VideoCodec("SNOW");
         public static readonly VideoCodec HFYU = new VideoCodec("HFYU");
     }
@@ -58,14 +58,14 @@ namespace MeGUI
         {
             this.id = id;
         }
-        public static readonly AudioCodec MP3 = new AudioCodec("MP3");
-        public static readonly AudioCodec AAC = new AudioCodec("AAC");
+        public static readonly AudioCodec MP3    = new AudioCodec("MP3");
+        public static readonly AudioCodec AAC    = new AudioCodec("AAC");
         public static readonly AudioCodec VORBIS = new AudioCodec("VORBIS");
-        public static readonly AudioCodec DTS = new AudioCodec("DTS");
-        public static readonly AudioCodec AC3 = new AudioCodec("AC3");
-        public static readonly AudioCodec MP2 = new AudioCodec("MP2");
-        public static readonly AudioCodec WAV = new AudioCodec("WAV");
-        public static readonly AudioCodec PCM = new AudioCodec("PCM");
+        public static readonly AudioCodec DTS    = new AudioCodec("DTS");
+        public static readonly AudioCodec AC3    = new AudioCodec("AC3");
+        public static readonly AudioCodec MP2    = new AudioCodec("MP2");
+        public static readonly AudioCodec WAV    = new AudioCodec("WAV");
+        public static readonly AudioCodec PCM    = new AudioCodec("PCM");
     }
     public class SubtitleCodec : ICodec, IIDable
     {
@@ -78,7 +78,7 @@ namespace MeGUI
         {
             this.id = id;
         }
-        public static readonly SubtitleCodec TEXT = new SubtitleCodec("TEXT");
+        public static readonly SubtitleCodec TEXT  = new SubtitleCodec("TEXT");
         public static readonly SubtitleCodec IMAGE = new SubtitleCodec("IMAGE");
     }
     #endregion
@@ -147,15 +147,15 @@ namespace MeGUI
             this.id = id;
             this.codec = codec;
         }
-        public static readonly AudioEncoderType LAME = new AudioEncoderType("LAME", AudioCodec.MP3);
-        public static readonly AudioEncoderType AUDX = new AudioEncoderType("AUDX", AudioCodec.MP3);
-        public static readonly AudioEncoderType WAAC = new AudioEncoderType("WAAC", AudioCodec.AAC);
-        public static readonly AudioEncoderType NAAC = new AudioEncoderType("NAAC", AudioCodec.AAC);
-        public static readonly AudioEncoderType FAAC = new AudioEncoderType("FAAC", AudioCodec.AAC);
+        public static readonly AudioEncoderType LAME   = new AudioEncoderType("LAME", AudioCodec.MP3);
+        public static readonly AudioEncoderType AUDX   = new AudioEncoderType("AUDX", AudioCodec.MP3);
+        public static readonly AudioEncoderType WAAC   = new AudioEncoderType("WAAC", AudioCodec.AAC);
+        public static readonly AudioEncoderType NAAC   = new AudioEncoderType("NAAC", AudioCodec.AAC);
+        public static readonly AudioEncoderType FAAC   = new AudioEncoderType("FAAC", AudioCodec.AAC);
         public static readonly AudioEncoderType VORBIS = new AudioEncoderType("VORBIS", AudioCodec.VORBIS);
-        public static readonly AudioEncoderType FFAC3 = new AudioEncoderType("FFAC3", AudioCodec.AC3);
-        public static readonly AudioEncoderType FFMP2 = new AudioEncoderType("FFMP2", AudioCodec.MP2);
-        public static readonly AudioEncoderType AFTEN = new AudioEncoderType("AFTEN", AudioCodec.AC3);
+        public static readonly AudioEncoderType FFAC3  = new AudioEncoderType("FFAC3", AudioCodec.AC3);
+        public static readonly AudioEncoderType FFMP2  = new AudioEncoderType("FFMP2", AudioCodec.MP2);
+        public static readonly AudioEncoderType AFTEN  = new AudioEncoderType("AFTEN", AudioCodec.AC3);
     }
     #endregion
     
@@ -169,8 +169,8 @@ namespace MeGUI
         static CodecManager()
         {
             if (!(
-                VideoCodecs.Register(VideoCodec.ASP) &&
-                VideoCodecs.Register(VideoCodec.AVC) &&
+                VideoCodecs.Register(VideoCodec.ASP)  &&
+                VideoCodecs.Register(VideoCodec.AVC)  &&
                 VideoCodecs.Register(VideoCodec.HFYU) &&
                 VideoCodecs.Register(VideoCodec.SNOW)))
                 throw new Exception("Failed to register a standard video codec");
@@ -189,14 +189,14 @@ namespace MeGUI
                 VideoEncoderTypes.Register(VideoEncoderType.XVID)))
                 throw new Exception("Failed to register a standard video encoder type");
             if (!(
-                AudioEncoderTypes.Register(AudioEncoderType.AUDX) &&
-                AudioEncoderTypes.Register(AudioEncoderType.FAAC) &&
-                AudioEncoderTypes.Register(AudioEncoderType.FFAC3) &&
-                AudioEncoderTypes.Register(AudioEncoderType.FFMP2) &&
-                AudioEncoderTypes.Register(AudioEncoderType.LAME) &&
-                AudioEncoderTypes.Register(AudioEncoderType.NAAC) &&
+                AudioEncoderTypes.Register(AudioEncoderType.AUDX)   &&
+                AudioEncoderTypes.Register(AudioEncoderType.FAAC)   &&
+                AudioEncoderTypes.Register(AudioEncoderType.FFAC3)  &&
+                AudioEncoderTypes.Register(AudioEncoderType.FFMP2)  &&
+                AudioEncoderTypes.Register(AudioEncoderType.LAME)   &&
+                AudioEncoderTypes.Register(AudioEncoderType.NAAC)   &&
                 AudioEncoderTypes.Register(AudioEncoderType.VORBIS) &&
-                AudioEncoderTypes.Register(AudioEncoderType.WAAC) &&
+                AudioEncoderTypes.Register(AudioEncoderType.WAAC)   &&
                 AudioEncoderTypes.Register(AudioEncoderType.AFTEN)))
                 throw new Exception("Failed to register a standard audio encoder type");
                 
@@ -219,11 +219,11 @@ namespace MeGUI
             : base(name, filterName, extension, containerType) {
                 this.supportedCodecs = supportedCodecs;
         }
-        public static readonly VideoType MP4 = new VideoType("MP4", "MP4 Files", "mp4", ContainerType.MP4, new VideoCodec[] { VideoCodec.ASP, VideoCodec.AVC });
+        public static readonly VideoType MP4    = new VideoType("MP4", "MP4 Files", "mp4", ContainerType.MP4, new VideoCodec[] { VideoCodec.ASP, VideoCodec.AVC });
         public static readonly VideoType RAWASP = new VideoType("RAWASP", "RAW MPEG-4 ASP Files", "m4v", null, VideoCodec.ASP);
         public static readonly VideoType RAWAVC = new VideoType("RAWAVC", "RAW MPEG-4 AVC Files", "264", null, VideoCodec.AVC);
-        public static readonly VideoType MKV = new VideoType("MKV", "Matroska Files", "mkv", ContainerType.MKV, new VideoCodec[] { VideoCodec.ASP, VideoCodec.AVC, VideoCodec.SNOW, VideoCodec.HFYU});
-        public static readonly VideoType AVI = new VideoType("AVI", "AVI Files", "avi", ContainerType.AVI, new VideoCodec[] { VideoCodec.ASP, VideoCodec.AVC, VideoCodec.HFYU, VideoCodec.SNOW });
+        public static readonly VideoType MKV    = new VideoType("MKV", "Matroska Files", "mkv", ContainerType.MKV, new VideoCodec[] { VideoCodec.ASP, VideoCodec.AVC, VideoCodec.SNOW, VideoCodec.HFYU});
+        public static readonly VideoType AVI    = new VideoType("AVI", "AVI Files", "avi", ContainerType.AVI, new VideoCodec[] { VideoCodec.ASP, VideoCodec.AVC, VideoCodec.HFYU, VideoCodec.SNOW });
     }
     public class AudioType : OutputType
     {
@@ -242,15 +242,15 @@ namespace MeGUI
                 this.supportedCodecs = supportedCodecs;
         }
         public static readonly AudioType MP4AAC = new AudioType("MP4-AAC", "MP4 AAC Files", "mp4", ContainerType.MP4, AudioCodec.AAC);
-        public static readonly AudioType M4A = new AudioType("M4A", "MP4 Audio Files", "m4a", ContainerType.MP4, AudioCodec.AAC);
+        public static readonly AudioType M4A    = new AudioType("M4A", "MP4 Audio Files", "m4a", ContainerType.MP4, AudioCodec.AAC);
         public static readonly AudioType RAWAAC = new AudioType("Raw-AAC", "RAW AAC Files", "aac", null, AudioCodec.AAC);
-        public static readonly AudioType MP3 = new AudioType("MP3", "MP3 Files", "mp3", null, AudioCodec.MP3);
+        public static readonly AudioType MP3    = new AudioType("MP3", "MP3 Files", "mp3", null, AudioCodec.MP3);
         public static readonly AudioType VORBIS = new AudioType("Ogg", "Ogg Vorbis Files", "ogg", null, AudioCodec.VORBIS);
-        public static readonly AudioType AC3 = new AudioType("AC3", "AC3 Files", "ac3", null, AudioCodec.AC3);
-        public static readonly AudioType MP2 = new AudioType("MP2", "MP2 Files", "mp2", null, AudioCodec.MP2);
-        public static readonly AudioType DTS = new AudioType("DTS", "DTS Files", "dts", null, AudioCodec.DTS);
-        public static readonly AudioType WAV = new AudioType("WAV", "WAV Files", "wav", null, AudioCodec.WAV);
-        public static readonly AudioType PCM = new AudioType("DTS", "DTS Files", "dts", null, AudioCodec.PCM);
+        public static readonly AudioType AC3    = new AudioType("AC3", "AC3 Files", "ac3", null, AudioCodec.AC3);
+        public static readonly AudioType MP2    = new AudioType("MP2", "MP2 Files", "mp2", null, AudioCodec.MP2);
+        public static readonly AudioType DTS    = new AudioType("DTS", "DTS Files", "dts", null, AudioCodec.DTS);
+        public static readonly AudioType WAV    = new AudioType("WAV", "WAV Files", "wav", null, AudioCodec.WAV);
+        public static readonly AudioType PCM    = new AudioType("DTS", "DTS Files", "dts", null, AudioCodec.PCM);
         public static readonly AudioType CBRMP3 = new AudioType("CBR MP3", "CBR MP3 Files", "mp3", null, AudioCodec.MP3);
         public static readonly AudioType VBRMP3 = new AudioType("VBR MP3", "VBR MP3 Files", "mp3", null, AudioCodec.MP3);
     }
@@ -258,8 +258,8 @@ namespace MeGUI
     {
         public SubtitleType(string name, string filterName, string extension, ContainerType containerType)
             : base(name, filterName, extension, containerType) { }
-        public static readonly SubtitleType SSA = new SubtitleType("SubStationAlpha", "SubStation Alpha Subtitle Files", "ssa", null);
-        public static readonly SubtitleType ASS = new SubtitleType("Advanced SubStationAlpha", "Advanced SubStation Alpha Subtitle Files", "ass", null);
+        public static readonly SubtitleType SSA    = new SubtitleType("SubStationAlpha", "SubStation Alpha Subtitle Files", "ssa", null);
+        public static readonly SubtitleType ASS    = new SubtitleType("Advanced SubStationAlpha", "Advanced SubStation Alpha Subtitle Files", "ass", null);
         public static readonly SubtitleType SUBRIP = new SubtitleType("Subrip", "Subrip Subtitle Files", "srt", null);
         public static readonly SubtitleType VOBSUB = new SubtitleType("Vobsub", "Vobsub Subtitle Files", "idx", null);
     }
