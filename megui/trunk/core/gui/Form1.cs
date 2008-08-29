@@ -1312,7 +1312,7 @@ namespace MeGUI
 
             foreach (DriveInfo d in allDrives)
             {
-                if (d.DriveType == DriveType.Fixed)
+                if ((d.DriveType == DriveType.Fixed) && (d.DriveFormat != null)) 
                 {
                     try
                     {
@@ -1324,9 +1324,9 @@ namespace MeGUI
 
                         i.LogValue("HDD ", string.Format("{0} ({1})  -  {2} Go free of {3} Go", d.VolumeLabel, d.Name, Convert.ToString(freespace), Convert.ToString(totalsize)));
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
-                        MessageBox.Show(ex.ToString());
+                        MessageBox.Show("MeGUI cannot access to the disk " + d.Name);
                     }
                 }
             }
