@@ -1,4 +1,15 @@
+0.3.0.2004
+    - (kurtnoise) [VideoPlayer] allow control via the Left and Right arrows keys (Feature Request #2064673) for the prev/next frame buttons.
+    - (kurtnoise) [x264] Anchor = Top & Left only.
+    - (kurtnoise) [xvid] misc.
+    - (kurtnoise) [xvid] added custom command line & several other tunings.
+    - (kurtnoise) [Form1] better errors catching for retrieving free disk spaces.
+    - (kurtnoise) [VistaStuff] added GPL header.
+    - (kurtnoise) Now, ListViews & Treeviews components use the neat and clean Vista theme. :p 
+    - (kurtnoise) added VistaStuff class.
+
 0.3.0.2003
+
     - (kurtnoise) [CodecManager] vertical alignment.
     - (kurtnoise) Now use DriveInfo class to retrieve free space from hard drives.
     - (kurtnoise) updated MediaInfo library and its wrapper to the latest release (0.7.7.5)
