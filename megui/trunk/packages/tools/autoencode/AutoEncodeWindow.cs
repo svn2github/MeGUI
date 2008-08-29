@@ -658,8 +658,12 @@ namespace MeGUI
                 FileSize? desiredSize = targetSize.Value;
                 FileSize? splitSize = splitting.Value;
 
-                log.LogValue("Desired size", desiredSize);
-                log.LogValue("Split size", splitSize);
+                if (FileSizeRadio.Checked)
+                    log.LogValue("Desired Size ", desiredSize);
+                else if (averageBitrateRadio.Checked)
+                    log.LogValue("Projected Bitrate ", string.Format("{0}kbps", projectedBitrateKBits.Text));
+
+                log.LogValue("Split Size ", splitSize);
 
                 MuxStream[] audio;
                 AudioJob[] aStreams;

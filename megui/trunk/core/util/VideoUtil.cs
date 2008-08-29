@@ -458,7 +458,6 @@ namespace MeGUI
         public JobChain GenerateJobSeries(VideoStream video, string muxedOutput, AudioJob[] audioStreams,
             MuxStream[] subtitles, string chapters, FileSize? desiredSize, FileSize? splitSize, ContainerType container, bool prerender, MuxStream[] muxOnlyAudio, LogItem log)
         {
-            log.LogValue("Desired size", desiredSize);
             if (desiredSize.HasValue)
             {
                 if (video.Settings.EncodingMode != 4 && video.Settings.EncodingMode != 8) // no automated 2/3 pass
