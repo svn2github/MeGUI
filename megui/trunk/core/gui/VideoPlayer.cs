@@ -501,6 +501,7 @@ namespace MeGUI
             this.nextFrameButton.Text = ">";
             this.defaultToolTip.SetToolTip(this.nextFrameButton, "Advance by 1 frame");
             this.nextFrameButton.Click += new System.EventHandler(this.nextFrameButton_Click);
+            this.nextFrameButton.KeyDown += new System.Windows.Forms.KeyEventHandler(this.nextFrameButton_KeyDown);
             // 
             // previousFrameButton
             // 
@@ -511,6 +512,7 @@ namespace MeGUI
             this.previousFrameButton.Text = "<";
             this.defaultToolTip.SetToolTip(this.previousFrameButton, "Go back 1 frame");
             this.previousFrameButton.Click += new System.EventHandler(this.previousFrameButton_Click);
+            this.previousFrameButton.KeyDown += new System.Windows.Forms.KeyEventHandler(this.previousFrameButton_KeyDown);
             // 
             // ffButton
             // 
@@ -1168,6 +1170,18 @@ namespace MeGUI
         private void arChooser_SelectionChanged(object sender, string val)
         {
             resize(videoWindowWidth, showPAR.Checked);
+        }
+
+        private void nextFrameButton_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Right)
+                safeChangePosition(1);
+        }
+
+        private void previousFrameButton_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Right)
+                safeChangePosition(-1);
         }
 	}
 }
