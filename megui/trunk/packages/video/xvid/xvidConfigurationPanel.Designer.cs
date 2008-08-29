@@ -29,6 +29,14 @@ namespace MeGUI.packages.video.xvid
         private void InitializeComponent()
         {
             this.xvidOtherGroupBox = new System.Windows.Forms.GroupBox();
+            this.xvidMotionSearchPrecision = new System.Windows.Forms.ComboBox();
+            this.xvidMotionSearchPrecisionLabel = new System.Windows.Forms.Label();
+            this.xvidPackedBitstream = new System.Windows.Forms.CheckBox();
+            this.xvidPackedBitstreamLabel = new System.Windows.Forms.Label();
+            this.xvidNbBFrames = new System.Windows.Forms.NumericUpDown();
+            this.xvidNbBframesLabel = new System.Windows.Forms.Label();
+            this.xvidKeyframeInterval = new System.Windows.Forms.TextBox();
+            this.xvidKeyframeIntervalLabel = new System.Windows.Forms.Label();
             this.xvidThreadsLabel = new System.Windows.Forms.Label();
             this.nbThreads = new System.Windows.Forms.NumericUpDown();
             this.xvidInterlaced = new System.Windows.Forms.CheckBox();
@@ -55,22 +63,14 @@ namespace MeGUI.packages.video.xvid
             this.xvidVHQ = new System.Windows.Forms.ComboBox();
             this.xvidVHQLabel = new System.Windows.Forms.Label();
             this.xvidGeneralOptionsGroupBox = new System.Windows.Forms.GroupBox();
+            this.logfile = new System.Windows.Forms.TextBox();
+            this.logfileOpenButton = new System.Windows.Forms.Button();
+            this.logfileLabel = new System.Windows.Forms.Label();
             this.xvidBitrateQuantizer = new System.Windows.Forms.NumericUpDown();
-            this.xvidKeyframeInterval = new System.Windows.Forms.TextBox();
-            this.xvidKeyframeIntervalLabel = new System.Windows.Forms.Label();
-            this.xvidPackedBitstream = new System.Windows.Forms.CheckBox();
-            this.xvidPackedBitstreamLabel = new System.Windows.Forms.Label();
-            this.xvidMotionSearchPrecision = new System.Windows.Forms.ComboBox();
-            this.xvidMotionSearchPrecisionLabel = new System.Windows.Forms.Label();
-            this.xvidNbBFrames = new System.Windows.Forms.NumericUpDown();
-            this.xvidNbBframesLabel = new System.Windows.Forms.Label();
             this.xvidBitrateQuantLabel = new System.Windows.Forms.Label();
             this.xvidTurbo = new System.Windows.Forms.CheckBox();
             this.xvidEncodingMode = new System.Windows.Forms.ComboBox();
             this.xvidModeLabel = new System.Windows.Forms.Label();
-            this.logfile = new System.Windows.Forms.TextBox();
-            this.logfileOpenButton = new System.Windows.Forms.Button();
-            this.logfileLabel = new System.Windows.Forms.Label();
             this.xvidOtherOptionsGroupbox = new System.Windows.Forms.GroupBox();
             this.xvidFrameDropRatio = new System.Windows.Forms.NumericUpDown();
             this.xvidFrameDropRatioLabel = new System.Windows.Forms.Label();
@@ -126,17 +126,19 @@ namespace MeGUI.packages.video.xvid
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.advancedTabPage = new System.Windows.Forms.TabPage();
+            this.gbx264CustomCmd = new System.Windows.Forms.GroupBox();
+            this.customCommandlineOptions = new System.Windows.Forms.TextBox();
             this.xvidCustomCommandlineOptionsLabel = new System.Windows.Forms.Label();
             this.xvidCustomCommandlineOptions = new System.Windows.Forms.TextBox();
             this.quantizerMatrixGroupbox = new System.Windows.Forms.GroupBox();
             this.tabControl1.SuspendLayout();
             this.mainTabPage.SuspendLayout();
             this.xvidOtherGroupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.xvidNbBFrames)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nbThreads)).BeginInit();
             this.xvidCodecToolsGroupBox.SuspendLayout();
             this.xvidGeneralOptionsGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.xvidBitrateQuantizer)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.xvidNbBFrames)).BeginInit();
             this.xvidOtherOptionsGroupbox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.xvidFrameDropRatio)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.xvidBframeThreshold)).BeginInit();
@@ -160,6 +162,7 @@ namespace MeGUI.packages.video.xvid
             ((System.ComponentModel.ISupportInitialize)(this.xvidMinIQuant)).BeginInit();
             this.xvidCBRRcGroupBox.SuspendLayout();
             this.advancedTabPage.SuspendLayout();
+            this.gbx264CustomCmd.SuspendLayout();
             this.quantizerMatrixGroupbox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -185,6 +188,14 @@ namespace MeGUI.packages.video.xvid
             // 
             // xvidOtherGroupBox
             // 
+            this.xvidOtherGroupBox.Controls.Add(this.xvidMotionSearchPrecision);
+            this.xvidOtherGroupBox.Controls.Add(this.xvidMotionSearchPrecisionLabel);
+            this.xvidOtherGroupBox.Controls.Add(this.xvidPackedBitstream);
+            this.xvidOtherGroupBox.Controls.Add(this.xvidPackedBitstreamLabel);
+            this.xvidOtherGroupBox.Controls.Add(this.xvidNbBFrames);
+            this.xvidOtherGroupBox.Controls.Add(this.xvidNbBframesLabel);
+            this.xvidOtherGroupBox.Controls.Add(this.xvidKeyframeInterval);
+            this.xvidOtherGroupBox.Controls.Add(this.xvidKeyframeIntervalLabel);
             this.xvidOtherGroupBox.Controls.Add(this.xvidThreadsLabel);
             this.xvidOtherGroupBox.Controls.Add(this.nbThreads);
             this.xvidOtherGroupBox.Controls.Add(this.xvidInterlaced);
@@ -195,15 +206,94 @@ namespace MeGUI.packages.video.xvid
             this.xvidOtherGroupBox.Controls.Add(this.fourCC);
             this.xvidOtherGroupBox.Location = new System.Drawing.Point(326, 3);
             this.xvidOtherGroupBox.Name = "xvidOtherGroupBox";
-            this.xvidOtherGroupBox.Size = new System.Drawing.Size(162, 176);
+            this.xvidOtherGroupBox.Size = new System.Drawing.Size(162, 423);
             this.xvidOtherGroupBox.TabIndex = 24;
             this.xvidOtherGroupBox.TabStop = false;
             this.xvidOtherGroupBox.Text = "Other Settings";
             // 
+            // xvidMotionSearchPrecision
+            // 
+            this.xvidMotionSearchPrecision.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.xvidMotionSearchPrecision.Items.AddRange(new object[] {
+            "0 - None",
+            "1 - Very Low",
+            "2 - Low",
+            "3 - Medium",
+            "4 - High",
+            "5 - Very High",
+            "6 - Ultra High"});
+            this.xvidMotionSearchPrecision.Location = new System.Drawing.Point(11, 288);
+            this.xvidMotionSearchPrecision.Name = "xvidMotionSearchPrecision";
+            this.xvidMotionSearchPrecision.Size = new System.Drawing.Size(145, 21);
+            this.xvidMotionSearchPrecision.TabIndex = 15;
+            this.xvidMotionSearchPrecision.SelectedIndexChanged += new System.EventHandler(this.updateEvent);
+            // 
+            // xvidMotionSearchPrecisionLabel
+            // 
+            this.xvidMotionSearchPrecisionLabel.Location = new System.Drawing.Point(8, 269);
+            this.xvidMotionSearchPrecisionLabel.Name = "xvidMotionSearchPrecisionLabel";
+            this.xvidMotionSearchPrecisionLabel.Size = new System.Drawing.Size(136, 24);
+            this.xvidMotionSearchPrecisionLabel.TabIndex = 14;
+            this.xvidMotionSearchPrecisionLabel.Text = "Motion Search Precision :";
+            // 
+            // xvidPackedBitstream
+            // 
+            this.xvidPackedBitstream.Location = new System.Drawing.Point(11, 110);
+            this.xvidPackedBitstream.Name = "xvidPackedBitstream";
+            this.xvidPackedBitstream.Size = new System.Drawing.Size(16, 24);
+            this.xvidPackedBitstream.TabIndex = 13;
+            this.xvidPackedBitstream.CheckedChanged += new System.EventHandler(this.updateEvent);
+            // 
+            // xvidPackedBitstreamLabel
+            // 
+            this.xvidPackedBitstreamLabel.Location = new System.Drawing.Point(27, 115);
+            this.xvidPackedBitstreamLabel.Name = "xvidPackedBitstreamLabel";
+            this.xvidPackedBitstreamLabel.Size = new System.Drawing.Size(100, 23);
+            this.xvidPackedBitstreamLabel.TabIndex = 12;
+            this.xvidPackedBitstreamLabel.Text = "Packed Bitstream";
+            // 
+            // xvidNbBFrames
+            // 
+            this.xvidNbBFrames.Location = new System.Drawing.Point(116, 173);
+            this.xvidNbBFrames.Maximum = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
+            this.xvidNbBFrames.Name = "xvidNbBFrames";
+            this.xvidNbBFrames.Size = new System.Drawing.Size(40, 20);
+            this.xvidNbBFrames.TabIndex = 11;
+            this.xvidNbBFrames.ValueChanged += new System.EventHandler(this.updateEvent);
+            // 
+            // xvidNbBframesLabel
+            // 
+            this.xvidNbBframesLabel.Location = new System.Drawing.Point(8, 175);
+            this.xvidNbBframesLabel.Name = "xvidNbBframesLabel";
+            this.xvidNbBframesLabel.Size = new System.Drawing.Size(83, 23);
+            this.xvidNbBframesLabel.TabIndex = 10;
+            this.xvidNbBframesLabel.Text = "Nb of B-frames";
+            // 
+            // xvidKeyframeInterval
+            // 
+            this.xvidKeyframeInterval.Location = new System.Drawing.Point(116, 150);
+            this.xvidKeyframeInterval.Name = "xvidKeyframeInterval";
+            this.xvidKeyframeInterval.Size = new System.Drawing.Size(40, 20);
+            this.xvidKeyframeInterval.TabIndex = 9;
+            this.xvidKeyframeInterval.Text = "300";
+            this.xvidKeyframeInterval.TextChanged += new System.EventHandler(this.updateEvent);
+            // 
+            // xvidKeyframeIntervalLabel
+            // 
+            this.xvidKeyframeIntervalLabel.Location = new System.Drawing.Point(8, 150);
+            this.xvidKeyframeIntervalLabel.Name = "xvidKeyframeIntervalLabel";
+            this.xvidKeyframeIntervalLabel.Size = new System.Drawing.Size(104, 25);
+            this.xvidKeyframeIntervalLabel.TabIndex = 8;
+            this.xvidKeyframeIntervalLabel.Text = "Max Keyframe Int.";
+            // 
             // xvidThreadsLabel
             // 
             this.xvidThreadsLabel.AutoSize = true;
-            this.xvidThreadsLabel.Location = new System.Drawing.Point(13, 117);
+            this.xvidThreadsLabel.Location = new System.Drawing.Point(8, 203);
             this.xvidThreadsLabel.Name = "xvidThreadsLabel";
             this.xvidThreadsLabel.Size = new System.Drawing.Size(46, 13);
             this.xvidThreadsLabel.TabIndex = 4;
@@ -211,7 +301,7 @@ namespace MeGUI.packages.video.xvid
             // 
             // nbThreads
             // 
-            this.nbThreads.Location = new System.Drawing.Point(75, 115);
+            this.nbThreads.Location = new System.Drawing.Point(84, 201);
             this.nbThreads.Minimum = new decimal(new int[] {
             1,
             0,
@@ -265,11 +355,11 @@ namespace MeGUI.packages.video.xvid
             // 
             // fourCCLabel
             // 
-            this.fourCCLabel.Location = new System.Drawing.Point(13, 139);
+            this.fourCCLabel.Location = new System.Drawing.Point(8, 230);
             this.fourCCLabel.Name = "fourCCLabel";
-            this.fourCCLabel.Size = new System.Drawing.Size(40, 16);
+            this.fourCCLabel.Size = new System.Drawing.Size(46, 18);
             this.fourCCLabel.TabIndex = 6;
-            this.fourCCLabel.Text = "fourCC";
+            this.fourCCLabel.Text = "FourCC";
             // 
             // fourCC
             // 
@@ -279,7 +369,7 @@ namespace MeGUI.packages.video.xvid
             "DIVX",
             "DX50",
             "MP4V"});
-            this.fourCC.Location = new System.Drawing.Point(75, 136);
+            this.fourCC.Location = new System.Drawing.Point(84, 227);
             this.fourCC.Name = "fourCC";
             this.fourCC.Size = new System.Drawing.Size(72, 21);
             this.fourCC.TabIndex = 7;
@@ -312,14 +402,14 @@ namespace MeGUI.packages.video.xvid
             // 
             // cqmComboBox1
             // 
-            this.cqmComboBox1.CustomItems = new string[0];
             this.cqmComboBox1.Filter = "";
             this.cqmComboBox1.Location = new System.Drawing.Point(10, 209);
             this.cqmComboBox1.MaximumSize = new System.Drawing.Size(1000, 29);
             this.cqmComboBox1.MinimumSize = new System.Drawing.Size(64, 29);
             this.cqmComboBox1.Name = "cqmComboBox1";
+            this.cqmComboBox1.SelectedIndex = -1;
+            this.cqmComboBox1.SelectedItem = null;
             this.cqmComboBox1.Size = new System.Drawing.Size(302, 29);
-            this.cqmComboBox1.StandardItems = new string[0];
             this.cqmComboBox1.TabIndex = 16;
             this.cqmComboBox1.SelectionChanged += new MeGUI.StringChanged(this.cqmComboBox1_SelectionChanged);
             // 
@@ -458,15 +548,10 @@ namespace MeGUI.packages.video.xvid
             // 
             // xvidGeneralOptionsGroupBox
             // 
+            this.xvidGeneralOptionsGroupBox.Controls.Add(this.logfile);
+            this.xvidGeneralOptionsGroupBox.Controls.Add(this.logfileOpenButton);
+            this.xvidGeneralOptionsGroupBox.Controls.Add(this.logfileLabel);
             this.xvidGeneralOptionsGroupBox.Controls.Add(this.xvidBitrateQuantizer);
-            this.xvidGeneralOptionsGroupBox.Controls.Add(this.xvidKeyframeInterval);
-            this.xvidGeneralOptionsGroupBox.Controls.Add(this.xvidKeyframeIntervalLabel);
-            this.xvidGeneralOptionsGroupBox.Controls.Add(this.xvidPackedBitstream);
-            this.xvidGeneralOptionsGroupBox.Controls.Add(this.xvidPackedBitstreamLabel);
-            this.xvidGeneralOptionsGroupBox.Controls.Add(this.xvidMotionSearchPrecision);
-            this.xvidGeneralOptionsGroupBox.Controls.Add(this.xvidMotionSearchPrecisionLabel);
-            this.xvidGeneralOptionsGroupBox.Controls.Add(this.xvidNbBFrames);
-            this.xvidGeneralOptionsGroupBox.Controls.Add(this.xvidNbBframesLabel);
             this.xvidGeneralOptionsGroupBox.Controls.Add(this.xvidBitrateQuantLabel);
             this.xvidGeneralOptionsGroupBox.Controls.Add(this.xvidTurbo);
             this.xvidGeneralOptionsGroupBox.Controls.Add(this.xvidEncodingMode);
@@ -477,6 +562,32 @@ namespace MeGUI.packages.video.xvid
             this.xvidGeneralOptionsGroupBox.TabIndex = 22;
             this.xvidGeneralOptionsGroupBox.TabStop = false;
             this.xvidGeneralOptionsGroupBox.Text = "General";
+            // 
+            // logfile
+            // 
+            this.logfile.Location = new System.Drawing.Point(57, 77);
+            this.logfile.Name = "logfile";
+            this.logfile.ReadOnly = true;
+            this.logfile.Size = new System.Drawing.Size(225, 20);
+            this.logfile.TabIndex = 15;
+            this.logfile.Text = "2pass.stats";
+            // 
+            // logfileOpenButton
+            // 
+            this.logfileOpenButton.Location = new System.Drawing.Point(288, 75);
+            this.logfileOpenButton.Name = "logfileOpenButton";
+            this.logfileOpenButton.Size = new System.Drawing.Size(24, 23);
+            this.logfileOpenButton.TabIndex = 16;
+            this.logfileOpenButton.Text = "...";
+            this.logfileOpenButton.Click += new System.EventHandler(this.logfileOpenButton_Click);
+            // 
+            // logfileLabel
+            // 
+            this.logfileLabel.Location = new System.Drawing.Point(8, 80);
+            this.logfileLabel.Name = "logfileLabel";
+            this.logfileLabel.Size = new System.Drawing.Size(56, 20);
+            this.logfileLabel.TabIndex = 14;
+            this.logfileLabel.Text = "Logfile";
             // 
             // xvidBitrateQuantizer
             // 
@@ -490,86 +601,6 @@ namespace MeGUI.packages.video.xvid
             this.xvidBitrateQuantizer.Size = new System.Drawing.Size(120, 20);
             this.xvidBitrateQuantizer.TabIndex = 13;
             this.xvidBitrateQuantizer.ValueChanged += new System.EventHandler(this.updateEvent);
-            // 
-            // xvidKeyframeInterval
-            // 
-            this.xvidKeyframeInterval.Location = new System.Drawing.Point(272, 72);
-            this.xvidKeyframeInterval.Name = "xvidKeyframeInterval";
-            this.xvidKeyframeInterval.Size = new System.Drawing.Size(40, 20);
-            this.xvidKeyframeInterval.TabIndex = 6;
-            this.xvidKeyframeInterval.Text = "300";
-            this.xvidKeyframeInterval.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textField_KeyPress);
-            this.xvidKeyframeInterval.TextChanged += new System.EventHandler(this.updateEvent);
-            // 
-            // xvidKeyframeIntervalLabel
-            // 
-            this.xvidKeyframeIntervalLabel.Location = new System.Drawing.Point(8, 72);
-            this.xvidKeyframeIntervalLabel.Name = "xvidKeyframeIntervalLabel";
-            this.xvidKeyframeIntervalLabel.Size = new System.Drawing.Size(120, 25);
-            this.xvidKeyframeIntervalLabel.TabIndex = 5;
-            this.xvidKeyframeIntervalLabel.Text = "Max Keyframe Interval";
-            // 
-            // xvidPackedBitstream
-            // 
-            this.xvidPackedBitstream.Location = new System.Drawing.Point(296, 120);
-            this.xvidPackedBitstream.Name = "xvidPackedBitstream";
-            this.xvidPackedBitstream.Size = new System.Drawing.Size(16, 24);
-            this.xvidPackedBitstream.TabIndex = 10;
-            this.xvidPackedBitstream.CheckedChanged += new System.EventHandler(this.updateEvent);
-            // 
-            // xvidPackedBitstreamLabel
-            // 
-            this.xvidPackedBitstreamLabel.Location = new System.Drawing.Point(8, 120);
-            this.xvidPackedBitstreamLabel.Name = "xvidPackedBitstreamLabel";
-            this.xvidPackedBitstreamLabel.Size = new System.Drawing.Size(100, 23);
-            this.xvidPackedBitstreamLabel.TabIndex = 9;
-            this.xvidPackedBitstreamLabel.Text = "Packed Bitstream";
-            // 
-            // xvidMotionSearchPrecision
-            // 
-            this.xvidMotionSearchPrecision.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.xvidMotionSearchPrecision.Items.AddRange(new object[] {
-            "0 - None",
-            "1 - Very Low",
-            "2 - Low",
-            "3 - Medium",
-            "4 - High",
-            "5 - Very High",
-            "6 - Ultra High"});
-            this.xvidMotionSearchPrecision.Location = new System.Drawing.Point(192, 144);
-            this.xvidMotionSearchPrecision.Name = "xvidMotionSearchPrecision";
-            this.xvidMotionSearchPrecision.Size = new System.Drawing.Size(120, 21);
-            this.xvidMotionSearchPrecision.TabIndex = 12;
-            this.xvidMotionSearchPrecision.SelectedIndexChanged += new System.EventHandler(this.updateEvent);
-            // 
-            // xvidMotionSearchPrecisionLabel
-            // 
-            this.xvidMotionSearchPrecisionLabel.Location = new System.Drawing.Point(8, 144);
-            this.xvidMotionSearchPrecisionLabel.Name = "xvidMotionSearchPrecisionLabel";
-            this.xvidMotionSearchPrecisionLabel.Size = new System.Drawing.Size(136, 24);
-            this.xvidMotionSearchPrecisionLabel.TabIndex = 11;
-            this.xvidMotionSearchPrecisionLabel.Text = "Motion Search Precision";
-            // 
-            // xvidNbBFrames
-            // 
-            this.xvidNbBFrames.Location = new System.Drawing.Point(272, 96);
-            this.xvidNbBFrames.Maximum = new decimal(new int[] {
-            4,
-            0,
-            0,
-            0});
-            this.xvidNbBFrames.Name = "xvidNbBFrames";
-            this.xvidNbBFrames.Size = new System.Drawing.Size(40, 20);
-            this.xvidNbBFrames.TabIndex = 8;
-            this.xvidNbBFrames.ValueChanged += new System.EventHandler(this.updateEvent);
-            // 
-            // xvidNbBframesLabel
-            // 
-            this.xvidNbBframesLabel.Location = new System.Drawing.Point(8, 96);
-            this.xvidNbBframesLabel.Name = "xvidNbBframesLabel";
-            this.xvidNbBframesLabel.Size = new System.Drawing.Size(120, 23);
-            this.xvidNbBframesLabel.TabIndex = 7;
-            this.xvidNbBframesLabel.Text = "Number of B-frames";
             // 
             // xvidBitrateQuantLabel
             // 
@@ -610,33 +641,6 @@ namespace MeGUI.packages.video.xvid
             this.xvidModeLabel.Size = new System.Drawing.Size(100, 24);
             this.xvidModeLabel.TabIndex = 0;
             this.xvidModeLabel.Text = "Mode";
-            // 
-            // logfile
-            // 
-            this.logfile.Location = new System.Drawing.Point(72, 396);
-            this.logfile.Name = "logfile";
-            this.logfile.ReadOnly = true;
-            this.logfile.Size = new System.Drawing.Size(168, 20);
-            this.logfile.TabIndex = 5;
-            this.logfile.Text = "2pass.stats";
-            this.logfile.TextChanged += new System.EventHandler(this.updateEvent);
-            // 
-            // logfileOpenButton
-            // 
-            this.logfileOpenButton.Location = new System.Drawing.Point(248, 396);
-            this.logfileOpenButton.Name = "logfileOpenButton";
-            this.logfileOpenButton.Size = new System.Drawing.Size(24, 23);
-            this.logfileOpenButton.TabIndex = 6;
-            this.logfileOpenButton.Text = "...";
-            this.logfileOpenButton.Click += new System.EventHandler(this.logfileOpenButton_Click);
-            // 
-            // logfileLabel
-            // 
-            this.logfileLabel.Location = new System.Drawing.Point(8, 399);
-            this.logfileLabel.Name = "logfileLabel";
-            this.logfileLabel.Size = new System.Drawing.Size(56, 20);
-            this.logfileLabel.TabIndex = 4;
-            this.logfileLabel.Text = "Logfile";
             // 
             // xvidOtherOptionsGroupbox
             // 
@@ -870,8 +874,8 @@ namespace MeGUI.packages.video.xvid
             this.xvidKeyframeTreshold.Size = new System.Drawing.Size(56, 20);
             this.xvidKeyframeTreshold.TabIndex = 3;
             this.xvidKeyframeTreshold.Text = "1";
-            this.xvidKeyframeTreshold.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textField_KeyPress);
             this.xvidKeyframeTreshold.TextChanged += new System.EventHandler(this.updateEvent);
+            this.xvidKeyframeTreshold.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textField_KeyPress);
             // 
             // xvidIframeBoost
             // 
@@ -1218,8 +1222,8 @@ namespace MeGUI.packages.video.xvid
             this.xvidRCBufferSize.Name = "xvidRCBufferSize";
             this.xvidRCBufferSize.Size = new System.Drawing.Size(48, 20);
             this.xvidRCBufferSize.TabIndex = 5;
-            this.xvidRCBufferSize.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textField_KeyPress);
             this.xvidRCBufferSize.TextChanged += new System.EventHandler(this.updateEvent);
+            this.xvidRCBufferSize.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textField_KeyPress);
             // 
             // xvidRCBufferSizeLabel
             // 
@@ -1244,8 +1248,8 @@ namespace MeGUI.packages.video.xvid
             this.xvidRCAveragingPeriod.Size = new System.Drawing.Size(48, 20);
             this.xvidRCAveragingPeriod.TabIndex = 3;
             this.xvidRCAveragingPeriod.Text = "100";
-            this.xvidRCAveragingPeriod.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textField_KeyPress);
             this.xvidRCAveragingPeriod.TextChanged += new System.EventHandler(this.updateEvent);
+            this.xvidRCAveragingPeriod.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textField_KeyPress);
             // 
             // xvidRCDelayFactorLabel
             // 
@@ -1262,8 +1266,8 @@ namespace MeGUI.packages.video.xvid
             this.xvidRCDelayFactor.Size = new System.Drawing.Size(48, 20);
             this.xvidRCDelayFactor.TabIndex = 1;
             this.xvidRCDelayFactor.Text = "16";
-            this.xvidRCDelayFactor.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textField_KeyPress);
             this.xvidRCDelayFactor.TextChanged += new System.EventHandler(this.updateEvent);
+            this.xvidRCDelayFactor.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textField_KeyPress);
             // 
             // openFileDialog
             // 
@@ -1271,9 +1275,7 @@ namespace MeGUI.packages.video.xvid
             // 
             // advancedTabPage
             // 
-            this.advancedTabPage.Controls.Add(this.logfile);
-            this.advancedTabPage.Controls.Add(this.logfileOpenButton);
-            this.advancedTabPage.Controls.Add(this.logfileLabel);
+            this.advancedTabPage.Controls.Add(this.gbx264CustomCmd);
             this.advancedTabPage.Controls.Add(this.xvidOtherOptionsGroupbox);
             this.advancedTabPage.Controls.Add(this.xvidRCGroupbox);
             this.advancedTabPage.Controls.Add(this.xvidQuantizerGroupbox);
@@ -1284,6 +1286,26 @@ namespace MeGUI.packages.video.xvid
             this.advancedTabPage.TabIndex = 3;
             this.advancedTabPage.Text = "Advanced";
             this.advancedTabPage.UseVisualStyleBackColor = true;
+            // 
+            // gbx264CustomCmd
+            // 
+            this.gbx264CustomCmd.Controls.Add(this.customCommandlineOptions);
+            this.gbx264CustomCmd.Location = new System.Drawing.Point(0, 384);
+            this.gbx264CustomCmd.Name = "gbx264CustomCmd";
+            this.gbx264CustomCmd.Size = new System.Drawing.Size(488, 45);
+            this.gbx264CustomCmd.TabIndex = 9;
+            this.gbx264CustomCmd.TabStop = false;
+            this.gbx264CustomCmd.Text = "Custom Command Line";
+            // 
+            // customCommandlineOptions
+            // 
+            this.customCommandlineOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.customCommandlineOptions.Location = new System.Drawing.Point(10, 16);
+            this.customCommandlineOptions.Name = "customCommandlineOptions";
+            this.customCommandlineOptions.Size = new System.Drawing.Size(462, 20);
+            this.customCommandlineOptions.TabIndex = 0;
+            this.customCommandlineOptions.TextChanged += new System.EventHandler(this.updateEvent);
             // 
             // xvidCustomCommandlineOptionsLabel
             // 
@@ -1322,12 +1344,12 @@ namespace MeGUI.packages.video.xvid
             this.mainTabPage.ResumeLayout(false);
             this.xvidOtherGroupBox.ResumeLayout(false);
             this.xvidOtherGroupBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.xvidNbBFrames)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nbThreads)).EndInit();
             this.xvidCodecToolsGroupBox.ResumeLayout(false);
             this.xvidGeneralOptionsGroupBox.ResumeLayout(false);
             this.xvidGeneralOptionsGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.xvidBitrateQuantizer)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.xvidNbBFrames)).EndInit();
             this.xvidOtherOptionsGroupbox.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.xvidFrameDropRatio)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.xvidBframeThreshold)).EndInit();
@@ -1353,7 +1375,8 @@ namespace MeGUI.packages.video.xvid
             this.xvidCBRRcGroupBox.ResumeLayout(false);
             this.xvidCBRRcGroupBox.PerformLayout();
             this.advancedTabPage.ResumeLayout(false);
-            this.advancedTabPage.PerformLayout();
+            this.gbx264CustomCmd.ResumeLayout(false);
+            this.gbx264CustomCmd.PerformLayout();
             this.quantizerMatrixGroupbox.ResumeLayout(false);
             this.quantizerMatrixGroupbox.PerformLayout();
             this.ResumeLayout(false);
@@ -1387,19 +1410,10 @@ namespace MeGUI.packages.video.xvid
         private System.Windows.Forms.ComboBox xvidVHQ;
         private System.Windows.Forms.Label xvidVHQLabel;
         private System.Windows.Forms.GroupBox xvidGeneralOptionsGroupBox;
-        private System.Windows.Forms.CheckBox xvidPackedBitstream;
-        private System.Windows.Forms.Label xvidPackedBitstreamLabel;
-        private System.Windows.Forms.ComboBox xvidMotionSearchPrecision;
-        private System.Windows.Forms.Label xvidMotionSearchPrecisionLabel;
-        private System.Windows.Forms.NumericUpDown xvidNbBFrames;
-        private System.Windows.Forms.Label xvidNbBframesLabel;
         private System.Windows.Forms.Label xvidBitrateQuantLabel;
         private System.Windows.Forms.CheckBox xvidTurbo;
         private System.Windows.Forms.ComboBox xvidEncodingMode;
         private System.Windows.Forms.Label xvidModeLabel;
-        private System.Windows.Forms.TextBox logfile;
-        private System.Windows.Forms.Button logfileOpenButton;
-        private System.Windows.Forms.Label logfileLabel;
         private System.Windows.Forms.GroupBox xvidOtherOptionsGroupbox;
         private System.Windows.Forms.NumericUpDown xvidFrameDropRatio;
         private System.Windows.Forms.Label xvidFrameDropRatioLabel;
@@ -1457,12 +1471,23 @@ namespace MeGUI.packages.video.xvid
         private System.Windows.Forms.TabPage advancedTabPage;
         private System.Windows.Forms.Label xvidThreadsLabel;
         private System.Windows.Forms.NumericUpDown nbThreads;
-        private System.Windows.Forms.TextBox xvidKeyframeInterval;
-        private System.Windows.Forms.Label xvidKeyframeIntervalLabel;
         private System.Windows.Forms.NumericUpDown xvidBitrateQuantizer;
         private MeGUI.core.gui.FileSCBox cqmComboBox1;
         private System.Windows.Forms.GroupBox quantizerMatrixGroupbox;
         private System.Windows.Forms.TextBox xvidCustomCommandlineOptions;
         private System.Windows.Forms.Label xvidCustomCommandlineOptionsLabel;
+        private System.Windows.Forms.TextBox xvidKeyframeInterval;
+        private System.Windows.Forms.Label xvidKeyframeIntervalLabel;
+        private System.Windows.Forms.NumericUpDown xvidNbBFrames;
+        private System.Windows.Forms.Label xvidNbBframesLabel;
+        private System.Windows.Forms.CheckBox xvidPackedBitstream;
+        private System.Windows.Forms.Label xvidPackedBitstreamLabel;
+        private System.Windows.Forms.ComboBox xvidMotionSearchPrecision;
+        private System.Windows.Forms.Label xvidMotionSearchPrecisionLabel;
+        private System.Windows.Forms.TextBox logfile;
+        private System.Windows.Forms.Button logfileOpenButton;
+        private System.Windows.Forms.Label logfileLabel;
+        private System.Windows.Forms.GroupBox gbx264CustomCmd;
+        private System.Windows.Forms.TextBox customCommandlineOptions;
     }
 }

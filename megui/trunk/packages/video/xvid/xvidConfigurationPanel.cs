@@ -240,7 +240,7 @@ namespace MeGUI.packages.video.xvid
                 xs.BframeThreshold = this.xvidBframeThreshold.Value;
                 xs.FrameDropRatio = (int)xvidFrameDropRatio.Value;
                 xs.QuantizerMatrix = cqmComboBox1.SelectedText;
-                xs.CustomEncoderOptions = xvidCustomCommandlineOptions.Text;
+                xs.CustomEncoderOptions = customCommandlineOptions.Text;
                 xs.Logfile = this.logfile.Text;
                 return xs;
             }
@@ -296,7 +296,7 @@ namespace MeGUI.packages.video.xvid
                 this.xvidBframeThreshold.Value = xs.BframeThreshold;
                 xvidFrameDropRatio.Value = (decimal)xs.FrameDropRatio;
                 cqmComboBox1.SelectedObject = xs.QuantizerMatrix;
-                xvidCustomCommandlineOptions.Text = xs.CustomEncoderOptions;
+                customCommandlineOptions.Text = xs.CustomEncoderOptions;
                 this.logfile.Text = xs.Logfile;
             }
         }
@@ -324,6 +324,11 @@ namespace MeGUI.packages.video.xvid
         private void cqmComboBox1_SelectionChanged(object sender, string val)
         {
             genericUpdate();
+        }
+
+        private void logfileOpenButton_Click_1(object sender, EventArgs e)
+        {
+
         }
     }
 }
