@@ -654,7 +654,7 @@ namespace MeGUI.packages.video.xvid
             this.xvidOtherOptionsGroupbox.Controls.Add(this.xvidBframeThreshold);
             this.xvidOtherOptionsGroupbox.Location = new System.Drawing.Point(289, 246);
             this.xvidOtherOptionsGroupbox.Name = "xvidOtherOptionsGroupbox";
-            this.xvidOtherOptionsGroupbox.Size = new System.Drawing.Size(199, 136);
+            this.xvidOtherOptionsGroupbox.Size = new System.Drawing.Size(200, 136);
             this.xvidOtherOptionsGroupbox.TabIndex = 3;
             this.xvidOtherOptionsGroupbox.TabStop = false;
             this.xvidOtherOptionsGroupbox.Text = "Other options";
@@ -941,7 +941,7 @@ namespace MeGUI.packages.video.xvid
             this.xvidQuantizerGroupbox.Controls.Add(this.xvidMinIQuantLabel);
             this.xvidQuantizerGroupbox.Location = new System.Drawing.Point(0, 3);
             this.xvidQuantizerGroupbox.Name = "xvidQuantizerGroupbox";
-            this.xvidQuantizerGroupbox.Size = new System.Drawing.Size(488, 144);
+            this.xvidQuantizerGroupbox.Size = new System.Drawing.Size(489, 144);
             this.xvidQuantizerGroupbox.TabIndex = 0;
             this.xvidQuantizerGroupbox.TabStop = false;
             this.xvidQuantizerGroupbox.Text = "Quantizers";
@@ -1210,7 +1210,7 @@ namespace MeGUI.packages.video.xvid
             this.xvidCBRRcGroupBox.Controls.Add(this.xvidRCDelayFactor);
             this.xvidCBRRcGroupBox.Location = new System.Drawing.Point(289, 150);
             this.xvidCBRRcGroupBox.Name = "xvidCBRRcGroupBox";
-            this.xvidCBRRcGroupBox.Size = new System.Drawing.Size(199, 90);
+            this.xvidCBRRcGroupBox.Size = new System.Drawing.Size(200, 90);
             this.xvidCBRRcGroupBox.TabIndex = 2;
             this.xvidCBRRcGroupBox.TabStop = false;
             this.xvidCBRRcGroupBox.Text = "CBR RC";
@@ -1292,7 +1292,7 @@ namespace MeGUI.packages.video.xvid
             this.gbx264CustomCmd.Controls.Add(this.customCommandlineOptions);
             this.gbx264CustomCmd.Location = new System.Drawing.Point(0, 384);
             this.gbx264CustomCmd.Name = "gbx264CustomCmd";
-            this.gbx264CustomCmd.Size = new System.Drawing.Size(488, 45);
+            this.gbx264CustomCmd.Size = new System.Drawing.Size(489, 45);
             this.gbx264CustomCmd.TabIndex = 9;
             this.gbx264CustomCmd.TabStop = false;
             this.gbx264CustomCmd.Text = "Custom Command Line";
@@ -1303,7 +1303,7 @@ namespace MeGUI.packages.video.xvid
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.customCommandlineOptions.Location = new System.Drawing.Point(10, 16);
             this.customCommandlineOptions.Name = "customCommandlineOptions";
-            this.customCommandlineOptions.Size = new System.Drawing.Size(462, 20);
+            this.customCommandlineOptions.Size = new System.Drawing.Size(463, 20);
             this.customCommandlineOptions.TabIndex = 0;
             this.customCommandlineOptions.TextChanged += new System.EventHandler(this.updateEvent);
             // 
