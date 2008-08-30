@@ -107,7 +107,7 @@ namespace MeGUI.core.util
 
                 for (int i = 0; i < a; i++)
                 {
-                    switch (( a & 0xD0) >> 5)
+                    switch (( a & 0xE0) >> 5)
                     {
                         case 0: codingMode = "AC3"; trackID = (byte)(0x80 + i); break;
                         case 1: codingMode = "Unknown"; break;
@@ -179,8 +179,7 @@ namespace MeGUI.core.util
             }
             return audiodesc;
 
-        }
-             
+        }             
         
         public static string[] GetSubtitlesStreamsInfos(string FileName)
         {
@@ -245,5 +244,144 @@ namespace MeGUI.core.util
             }
            return subdesc;
         }
+
+        public static string GetVideoInfos(string FileName)
+        {
+            FileStream fs = new FileStream(FileName, FileMode.Open, FileAccess.Read);
+            BinaryReader br = new BinaryReader(fs);
+            Stream sr = br.BaseStream;
+
+            sr.Seek(0x200, SeekOrigin.Begin);
+            byte[] array = new byte[2];
+            fs.Read(array, 0, 2);
+            fs.Close();
+
+            string videodesc = "";
+            string cm = GetVideoCodingMode(array);
+            string std = GetVideoStandard(array);
+            string ar = GetVideoAR(array);
+            string resolution = GetVideoResolution(array);
+            string letterboxed = GetVideoLetterboxed(array);
+            string stdType = GetVideoStandardType(array);
+
+            videodesc = cm + " / " + std + " / " + ar + " / " + resolution + " / " + letterboxed + " / " + stdType;
+
+            return videodesc;
+        }
+
+        public static string GetVideoCodingMode(byte[] bytes)
+        {
+            byte b = (byte)((0xC0 & bytes[0]) >> 6);
+            string codingMode = "";
+
+            switch (b)
+            {
+                case 0: codingMode = "Mpeg-1"; break;
+                case 1: codingMode = "Mpeg-2"; break;
+            }
+            return codingMode;
+        }
+
+        public static string GetVideoStandard(byte[] bytes)
+        {
+            byte b = (byte)((0x30 & bytes[0]) >> 4);
+            string standard = "";
+
+            switch (b)
+            {
+                case 0: standard = "NTSC"; break;
+                case 1: standard = "PAL"; break;
+            }
+            return standard;
+        }
+
+        public static string GetVideoAR(byte[] bytes)
+        {
+            byte b = (byte)((0x0C & bytes[0]) >> 2);
+            string ar = "";
+
+            switch (b)
+            {
+                case 0: ar = "4:3"; break;
+                case 1:
+                case 2: ar = "Reserved"; break; 
+                case 3: ar = "16:9"; break;        
+            }
+            return ar;
+        }
+
+        public static bool GetVideoAutoPanScan(byte[] bytes)
+        {
+            byte b = (byte)((0x02 & bytes[0]) >> 1);
+            if (b == 1) return false;
+            else return true;
+        }
+
+        public static bool GetVideoAutoLetterbox(byte[] bytes)
+        {
+            byte b = (byte)(0x01 & bytes[0]);
+            if (b == 1) return false;
+            else return true;
+        }
+
+        public static string GetVideoResolution(byte[] bytes)
+        {
+            byte b = (byte)((0x30 & bytes[0]) >> 4); // Standard
+            byte c = (byte)((0x38 & bytes[1]) >> 3); // Resolution
+            string res = "";
+
+            switch (b)
+            {
+                case 0: // NTSC
+                    {
+                        switch (c)
+                        {
+                            case 0: res = "720x480"; break;
+                            case 1: res = "704x480"; break;
+                            case 2: res = "352x480"; break;
+                            case 3: res = "352x240"; break;
+                        }
+                    }; break;
+                case 1: // PAL
+                    {
+                        switch (c)
+                        {
+                            case 0: res = "720x576"; break;
+                            case 1: res = "704x576"; break;
+                            case 2: res = "352x576"; break;
+                            case 3: res = "352x288"; break;
+                        }
+                    }; break;
+            }
+            return res;
+        }
+
+        public static string GetVideoLetterboxed(byte[] bytes)
+        {
+            byte b = (byte)((4 & bytes[1]));
+            string Letterboxed = "";
+
+            if (b > 0)
+                Letterboxed = "Not Letterboxed";
+            else
+                Letterboxed = "Letterboxed";
+
+            return Letterboxed;
+        }
+
+        public static string GetVideoStandardType(byte[] bytes)
+        {
+            byte b = (byte)((0x30 & bytes[0]) >> 4); // Standard
+            byte c = (byte)(1 & bytes[1]); // type
+            string StandardType = "";
+
+            if (b == 1) // PAL
+            {
+                if (c > 0) StandardType = "Camera"; 
+                else StandardType = "Film";
+            }
+            return StandardType;
+        }
+
     }
 }
