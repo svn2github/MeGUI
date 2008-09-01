@@ -116,9 +116,7 @@ namespace MeGUI.core.util
                 br.Read(buff, 0, 2);
                 string ShortLangCode = String.Format("{0}{1}", (char)buff[0], (char)buff[1]);
 
-                audiodesc[i] = "[" + trackID.ToString("X") + "]  - " + cm + " / " + sp + " / " + 
-                               LanguageSelectionContainer.Short2FullLanguageName(ShortLangCode) +
-                               " / " + String.Format("{0}ch", ch);
+                audiodesc[i] = String.Format("[{0:X}] - {1} - {2}ch / {3} / {4}", trackID, cm, ch, sp, LanguageSelectionContainer.Short2FullLanguageName(ShortLangCode));
                 
                 // go to the next audio stream
                 sr.Seek(4, SeekOrigin.Current);
