@@ -249,6 +249,7 @@ namespace MeGUI
             // 
             // AudioTracks
             // 
+            this.AudioTracks.CheckOnClick = true;
             this.AudioTracks.Enabled = false;
             this.AudioTracks.FormattingEnabled = true;
             this.AudioTracks.Location = new System.Drawing.Point(50, 68);
