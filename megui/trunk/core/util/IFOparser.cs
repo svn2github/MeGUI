@@ -18,9 +18,9 @@
 // 
 // ****************************************************************************
 
-// Some Functions used in this class come from SubtitleCreator.
-// http://subtitlecreator.svn.sourceforge.net/viewvc/subtitlecreator/trunk/DVDinfo.cs?view=markup
-// Thanks to the author for that.
+// Todo : 
+//        - Chapters part
+//        - PGCs         
 
 using System;
 using System.Collections.Generic;
@@ -76,111 +76,181 @@ namespace MeGUI.core.util
             return ifoFile;
         }
 
-        public static string[] GetAudioStreamsInfos(string FileName)
+        /// <summary>
+        /// gets several Audio Informations from the IFO file
+        /// </summary>
+        /// <param name="fileName">name of the IFO file</param>
+        /// <returns>several infos as String</returns>
+        public static string[] GetAudioInfos(string FileName)
         {
-            byte[] buff = new byte[2];
-            byte a = 0;
+            FileStream fs = new FileStream(FileName, FileMode.Open, FileAccess.Read);
+            BinaryReader br = new BinaryReader(fs);
+            Stream sr = br.BaseStream;
+
+            // go to audio stream number
+            sr.Seek(0x203, SeekOrigin.Begin);
+
+            byte a = br.ReadByte();
+            if (a > 8)
+                a = 8; // force the max #. According to the specs 8 is the max value for audio streams.
+
             string[] audiodesc = new string[a];
-            string codingMode = "";
-            string LanguageType = "";
-            string ApplicationMode = "";
-            string quantization = "";
-            string SamplingRate = "";
-            byte trackID = 0x80;
-            bool Multichannel_Ext = false;
-            bool DRC = true;
 
-            try
+            for (int i = 0; i < a; i++)
             {
-                FileStream fs = new FileStream(FileName, FileMode.Open, FileAccess.Read);
-                BinaryReader br = new BinaryReader(fs);
-                Stream sr = br.BaseStream;
+                byte[] array = new byte[2];
+                fs.Read(array, 0, 2);
+                string cm = GetAudioCodingMode(array);
+                string sp = GetAudioSamplingRate(array);
+                int ch = (int)((GetAudioChannels(array)) + 1);
+                byte trackID = 0xBD;
 
-                // got to audio stream #1
-                sr.Seek(0x203, SeekOrigin.Begin);
-
-                a = br.ReadByte();
-                if (a > 8)
-                    a = 8; // force the max #. According to the specs 8 is the max value for audio streams.
-
-                audiodesc = new string[a];
-
-                for (int i = 0; i < a; i++)
+                switch (cm)
                 {
-                    switch (( a & 0xE0) >> 5)
-                    {
-                        case 0: codingMode = "AC3"; trackID = (byte)(0x80 + i); break;
-                        case 1: codingMode = "Unknown"; break;
-                        case 2: codingMode = "Mpeg-1"; break;
-                        case 3: codingMode = "Mpeg-2 Ext"; break;
-                        case 4: codingMode = "LPCM"; trackID = (byte)(0xA0 + i); break;
-                        case 5: codingMode = "Unknown"; break;
-                        case 6: codingMode = "DTS"; trackID = (byte)(0x88 + i); break;
-                        case 7: codingMode = "SDDS"; break;
-                    }
-
-                    if (((a & 0x20) >> 4) == 0)
-                         Multichannel_Ext = false;
-                    else Multichannel_Ext = true;
-
-                    if (((a & 0x0C) >> 2) == 0)
-                         LanguageType = "Not Present";
-                    else LanguageType = "Present";
-
-                    switch (a & 0x03)
-                    {
-                        case 0: ApplicationMode = "Unspecified"; break;
-                        case 1: ApplicationMode = "Karaoke"; break;
-                        case 2: ApplicationMode = "Surround"; break;
-                    }
-
-                    byte ee = br.ReadByte(); // byte 1
-                    switch ((ee & 0xC0) >> 6)
-                    {
-                        case 0: quantization = "16 Bits"; break;
-                        case 1: quantization = "20 Bits"; break;
-                        case 2: quantization = "24 Bits"; break;
-                    }
-
-                    // Several cases
-                    if (codingMode != "LPCM") quantization = "16 Bits";
-                    if ((codingMode == "Mpeg-1") || (codingMode == "Mpeg-2 Ext"))
-                         DRC = false;
-                    else DRC = true;
-
-                    if (((ee & 0x30) >> 4) == 0)
-                        SamplingRate = "48 Khz";
-
-                    int Channels = (ee & 0x07) + 1;
-
-                    ee = br.ReadByte();  // byte 2
-                    br.Read(buff, 0, 2); 
-                    string ShortLangCode = String.Format("{0}{1}", (char)buff[0], (char)buff[1]);
-
-                    audiodesc[i] = "[" + trackID.ToString("X") + "]  - " + codingMode + " / " + SamplingRate + " / " + LanguageSelectionContainer.Short2FullLanguageName(ShortLangCode);
-/*                   
-                    sr.Seek(1, SeekOrigin.Current);
-                    ee = br.ReadByte(); // byte 5
-                    switch (ee & 0x0F)
-                    {
-                        case 0: audiodesc[i] += " Unspecified"; break;
-                        case 1: audiodesc[i] += " Normal"; break;
-                        case 2: audiodesc[i] += " For Visually Impaired"; break;
-                        case 3: audiodesc[i] += " Director's Comments"; break;
-                        case 4: audiodesc[i] += " Alternate Director's Comments"; break;
-                    }
-*/                    
-                    sr.Seek(4, SeekOrigin.Current); // next audio stream
+                    case "AC3": trackID = (byte)(0x80 + i); break;
+                    case "LPCM": trackID = (byte)(0xA0 + i); break;
+                    case "DTS": trackID = (byte)(0x88 + i); break;
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-            }
-            return audiodesc;
 
-        }             
-        
+                byte[] buff = new byte[2];
+                br.Read(buff, 0, 2);
+                string ShortLangCode = String.Format("{0}{1}", (char)buff[0], (char)buff[1]);
+
+                audiodesc[i] = "[" + trackID.ToString("X") + "]  - " + cm + " / " + sp + " / " + 
+                               LanguageSelectionContainer.Short2FullLanguageName(ShortLangCode) +
+                               " / " + String.Format("{0}ch", ch);
+                
+                // go to the next audio stream
+                sr.Seek(4, SeekOrigin.Current);
+            }
+
+            fs.Close();
+
+            return audiodesc;
+        }
+
+        /// <summary>
+        /// gets the Audio Coding Mode from the Audio Stream
+        /// </summary>
+        /// <param name="bytes">array of bytes</param>
+        /// <returns>Coding Mode as String</returns>
+        public static string GetAudioCodingMode(byte[] bytes)
+        {
+            byte b = (byte)((0xE0 & bytes[0]) >> 5);
+            string codingMode = "";
+
+            switch (b)
+            {
+                case 0: codingMode = "AC3"; break;
+                case 1: codingMode = "Unknown"; break;
+                case 2: codingMode = "Mpeg-1"; break;
+                case 3: codingMode = "Mpeg-2 Ext"; break;
+                case 4: codingMode = "LPCM"; break;
+                case 5: codingMode = "Unknown"; break;
+                case 6: codingMode = "DTS"; break;
+                case 7: codingMode = "SDDS"; break;
+            }
+            return codingMode;
+        }
+
+        /// <summary>
+        /// gets the Multichannel Extension flag from the Audio Stream
+        /// </summary>
+        /// <param name="bytes">array of bytes</param>
+        /// <returns>Multichannel Extension as Bool</returns>
+        public static bool GetAudioMultichannelExt(byte[] bytes)
+        {
+            byte b = (byte)((0x20 & bytes[0]) >> 4);
+
+            if (b == 0) return false;
+            else return true;
+        }
+
+        /// <summary>
+        /// gets the Audio Language Type from the Audio Stream
+        /// </summary>
+        /// <param name="bytes">array of bytes</param>
+        /// <returns>Language Type as String</returns>
+        public static string GetAudioLanguageType(byte[] bytes)
+        {
+            byte b = (byte)((0x0C & bytes[0]) >> 2);
+            string LanguageType = "Present";
+
+            if (b == 0) LanguageType = "Not Present";
+            return LanguageType;
+        }
+
+        /// <summary>
+        /// gets the Audio Application Mode from the Audio Stream
+        /// </summary>
+        /// <param name="bytes">array of bytes</param>
+        /// <returns>Application Mode as String</returns>
+        public static string GetAudioApplicationMode(byte[] bytes)
+        {
+            byte b = (byte)(0x03 & bytes[0]);
+            string ApplicationMode = "";
+            
+            switch (b)
+            {
+                case 0: ApplicationMode = "Unspecified"; break;
+                case 1: ApplicationMode = "Karaoke"; break;
+                case 2: ApplicationMode = "Surround"; break;
+            }
+            return ApplicationMode;
+        }
+
+        /// <summary>
+        /// gets the Audio Quantization from the Audio Stream
+        /// </summary>
+        /// <param name="bytes">array of bytes</param>
+        /// <returns>Quantization as String</returns>
+        public static string GetAudioQuantization(byte[] bytes)
+        {
+            byte b = (byte)((0xC0 & bytes[1]) >> 6);
+            string quantization = "16 Bits";
+
+            switch (b)
+            {
+                case 0: quantization = "16 Bits"; break;
+                case 1: quantization = "20 Bits"; break;
+                case 2: quantization = "24 Bits"; break;
+            }
+            return quantization;
+        }
+
+        /// <summary>
+        /// gets the Audio Sampling Rate from the Audio Stream
+        /// </summary>
+        /// <param name="bytes">array of bytes</param>
+        /// <returns>Coding Mode as String</returns>
+        public static string GetAudioSamplingRate(byte[] bytes)
+        {
+            byte b = (byte)((0x30 & bytes[1]) >> 4);
+            string samplingRate = "";
+
+            if (b == 0) samplingRate = "48 KHz";
+            return samplingRate;
+        }
+
+        /// <summary>
+        /// gets the Audio Channels Number from the Audio Stream
+        /// Specs specifies this value as Channels - 1
+        /// That's why we must add +1 when we grab this info
+        /// </summary>
+        /// <param name="bytes">array of bytes</param>
+        /// <returns>Channels as Byte</returns>
+        public static byte GetAudioChannels(byte[] bytes)
+        {
+            byte b = (byte)(0x07 & bytes[1]);
+            return b;
+        }
+
+
+        /// <summary>
+        /// gets several Subtitles Informations from the IFO file
+        /// </summary>
+        /// <param name="fileName">name of the IFO file</param>
+        /// <returns>several infos as String</returns>       
         public static string[] GetSubtitlesStreamsInfos(string FileName)
         {
             byte[] buff = new byte[2];
@@ -244,6 +314,7 @@ namespace MeGUI.core.util
             }
            return subdesc;
         }
+
         /// <summary>
         /// gets several Video Informations from the IFO file
         /// </summary>
@@ -272,6 +343,7 @@ namespace MeGUI.core.util
 
             return videodesc;
         }
+
         /// <summary>
         /// gets the Video Coding Mode from the Video Stream
         /// </summary>
@@ -289,6 +361,7 @@ namespace MeGUI.core.util
             }
             return codingMode;
         }
+
         /// <summary>
         /// gets the Standard used from the Video Stream
         /// </summary>
@@ -306,6 +379,7 @@ namespace MeGUI.core.util
             }
             return standard;
         }
+
         /// <summary>
         /// gets the Video Aspect Ratio from the Video Stream
         /// </summary>
@@ -325,6 +399,7 @@ namespace MeGUI.core.util
             }
             return ar;
         }
+
         /// <summary>
         /// gets the Automatic Pan&Scan flag from the Video Stream
         /// </summary>
@@ -336,6 +411,7 @@ namespace MeGUI.core.util
             if (b == 1) return false;
             else return true;
         }
+
         /// <summary>
         /// gets the Automatic Letterboxing flag from the Video Stream
         /// </summary>
@@ -347,6 +423,7 @@ namespace MeGUI.core.util
             if (b == 1) return false;
             else return true;
         }
+
         /// <summary>
         /// gets the Resolution from the Video Stream
         /// </summary>
@@ -383,6 +460,7 @@ namespace MeGUI.core.util
             }
             return res;
         }
+
         /// <summary>
         /// gets the Letterboxed Info from the Video Stream
         /// </summary>
@@ -400,6 +478,7 @@ namespace MeGUI.core.util
 
             return Letterboxed;
         }
+
         /// <summary>
         /// gets the Video Type from the Video Stream
         /// </summary>
@@ -418,6 +497,5 @@ namespace MeGUI.core.util
             }
             return StandardType;
         }
-
     }
 }
