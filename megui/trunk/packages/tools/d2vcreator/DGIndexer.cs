@@ -58,11 +58,19 @@ namespace MeGUI
             {
                 StringBuilder sb = new StringBuilder();
                 string projName = Path.Combine(Path.GetDirectoryName(job.Output), Path.GetFileNameWithoutExtension(job.Output));
-                sb.Append("-SD=< -AIF=<" + job.Input + "< -OF=<" + projName + "< -exit -hide ");
+                sb.Append("-SD=< -AIF=<" + job.Input + "< -OF=<" + projName + "< -exit -hide");
                 if (job.DemuxMode == 2)
                     sb.Append(" -OM=2"); // demux everything
-               else // no audio demux
-                    sb.Append(" -OM=0");
+                else if (job.DemuxMode == 1)
+                {
+                    sb.Append(" -OM=1 -TN="); // demux only tracks checked
+                    foreach (string id in job.TrackIDs)
+                    {
+                        sb.Append(id + ",");
+                    }
+                }
+                else
+                    sb.Append(" -OM=0"); // no audio demux
                 return sb.ToString();
             }
         }
