@@ -386,6 +386,7 @@ namespace MeGUI
 
                 List<AudioJob> aJobs = new List<AudioJob>();
                 List<MuxStream> muxOnlyAudio = new List<MuxStream>();
+                List<string> TrackIDs = new List<string>();
                 for (int i = 0; i < audioConfigControl.Count; ++i)
                 {
                     if (audioTrack[i].SelectedIndex == 0) // "None"
@@ -424,7 +425,7 @@ namespace MeGUI
                 dpp.SignalAR = signalAR.Checked;
                 dpp.Splitting = splitting.Value;
                 dpp.VideoSettings = VideoSettings.Clone();
-                IndexJob job = new IndexJob(input.Filename, d2vName, 2, dpp, false);
+                IndexJob job = new IndexJob(input.Filename, d2vName, 2, TrackIDs, dpp, false);
                 mainForm.Jobs.addJobsToQueue(job);
                 this.Close();
             }
