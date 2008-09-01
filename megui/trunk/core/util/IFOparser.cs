@@ -77,7 +77,7 @@ namespace MeGUI.core.util
         }
 
         /// <summary>
-        /// gets several Audio Informations from the IFO file
+        /// get several Audio Informations from the IFO file
         /// </summary>
         /// <param name="fileName">name of the IFO file</param>
         /// <returns>several infos as String</returns>
@@ -128,7 +128,7 @@ namespace MeGUI.core.util
         }
 
         /// <summary>
-        /// gets the Audio Coding Mode from the Audio Stream
+        /// get the Audio Coding Mode from the Audio Stream
         /// </summary>
         /// <param name="bytes">array of bytes</param>
         /// <returns>Coding Mode as String</returns>
@@ -152,7 +152,7 @@ namespace MeGUI.core.util
         }
 
         /// <summary>
-        /// gets the Multichannel Extension flag from the Audio Stream
+        /// get the Multichannel Extension flag from the Audio Stream
         /// </summary>
         /// <param name="bytes">array of bytes</param>
         /// <returns>Multichannel Extension as Bool</returns>
@@ -165,7 +165,7 @@ namespace MeGUI.core.util
         }
 
         /// <summary>
-        /// gets the Audio Language Type from the Audio Stream
+        /// get the Audio Language Type from the Audio Stream
         /// </summary>
         /// <param name="bytes">array of bytes</param>
         /// <returns>Language Type as String</returns>
@@ -179,7 +179,7 @@ namespace MeGUI.core.util
         }
 
         /// <summary>
-        /// gets the Audio Application Mode from the Audio Stream
+        /// get the Audio Application Mode from the Audio Stream
         /// </summary>
         /// <param name="bytes">array of bytes</param>
         /// <returns>Application Mode as String</returns>
@@ -198,7 +198,7 @@ namespace MeGUI.core.util
         }
 
         /// <summary>
-        /// gets the Audio Quantization from the Audio Stream
+        /// get the Audio Quantization from the Audio Stream
         /// </summary>
         /// <param name="bytes">array of bytes</param>
         /// <returns>Quantization as String</returns>
@@ -217,7 +217,7 @@ namespace MeGUI.core.util
         }
 
         /// <summary>
-        /// gets the Audio Sampling Rate from the Audio Stream
+        /// get the Audio Sampling Rate from the Audio Stream
         /// </summary>
         /// <param name="bytes">array of bytes</param>
         /// <returns>Coding Mode as String</returns>
@@ -231,7 +231,7 @@ namespace MeGUI.core.util
         }
 
         /// <summary>
-        /// gets the Audio Channels Number from the Audio Stream
+        /// get the Audio Channels Number from the Audio Stream
         /// Specs specifies this value as Channels - 1
         /// That's why we must add +1 when we grab this info
         /// </summary>
@@ -245,7 +245,7 @@ namespace MeGUI.core.util
 
 
         /// <summary>
-        /// gets several Subtitles Informations from the IFO file
+        /// get several Subtitles Informations from the IFO file
         /// </summary>
         /// <param name="fileName">name of the IFO file</param>
         /// <returns>several infos as String</returns>       
@@ -314,7 +314,7 @@ namespace MeGUI.core.util
         }
 
         /// <summary>
-        /// gets several Video Informations from the IFO file
+        /// get several Video Informations from the IFO file
         /// </summary>
         /// <param name="fileName">name of the IFO file</param>
         /// <returns>several infos as String</returns>
@@ -343,7 +343,7 @@ namespace MeGUI.core.util
         }
 
         /// <summary>
-        /// gets the Video Coding Mode from the Video Stream
+        /// get the Video Coding Mode from the Video Stream
         /// </summary>
         /// <param name="bytes">array of bytes</param>
         /// <returns>Coding Mode as String</returns>
@@ -361,7 +361,7 @@ namespace MeGUI.core.util
         }
 
         /// <summary>
-        /// gets the Standard used from the Video Stream
+        /// get the Standard used from the Video Stream
         /// </summary>
         /// <param name="bytes">array of bytes</param>
         /// <returns>PAL or NTSC</returns>
@@ -379,7 +379,7 @@ namespace MeGUI.core.util
         }
 
         /// <summary>
-        /// gets the Video Aspect Ratio from the Video Stream
+        /// get the Video Aspect Ratio from the Video Stream
         /// </summary>
         /// <param name="bytes">array of bytes</param>
         /// <returns>AR as String</returns>
@@ -399,7 +399,7 @@ namespace MeGUI.core.util
         }
 
         /// <summary>
-        /// gets the Automatic Pan&Scan flag from the Video Stream
+        /// get the Automatic Pan&Scan flag from the Video Stream
         /// </summary>
         /// <param name="bytes">array of bytes</param>
         /// <returns>Automatic Pan&Scan as Bool</returns>
@@ -411,7 +411,7 @@ namespace MeGUI.core.util
         }
 
         /// <summary>
-        /// gets the Automatic Letterboxing flag from the Video Stream
+        /// get the Automatic Letterboxing flag from the Video Stream
         /// </summary>
         /// <param name="bytes">array of bytes</param>
         /// <returns>Automatic Letterboxing as Bool</returns>
@@ -423,7 +423,7 @@ namespace MeGUI.core.util
         }
 
         /// <summary>
-        /// gets the Resolution from the Video Stream
+        /// get the Resolution from the Video Stream
         /// </summary>
         /// <param name="bytes">array of bytes</param>
         /// <returns>Resolution as String</returns>
@@ -460,7 +460,7 @@ namespace MeGUI.core.util
         }
 
         /// <summary>
-        /// gets the Letterboxed Info from the Video Stream
+        /// get the Letterboxed Info from the Video Stream
         /// </summary>
         /// <param name="bytes">array of bytes</param>
         /// <returns>Letterboxed as String</returns>
@@ -478,7 +478,7 @@ namespace MeGUI.core.util
         }
 
         /// <summary>
-        /// gets the Video Type from the Video Stream
+        /// get the Video Type from the Video Stream
         /// </summary>
         /// <param name="bytes">array of bytes</param>
         /// <returns>Camera/Film as String</returns>
