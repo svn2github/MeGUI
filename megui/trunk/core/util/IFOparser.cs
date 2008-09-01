@@ -244,7 +244,11 @@ namespace MeGUI.core.util
             }
            return subdesc;
         }
-
+        /// <summary>
+        /// gets several Video Informations from the IFO file
+        /// </summary>
+        /// <param name="fileName">name of the IFO file</param>
+        /// <returns>several infos as String</returns>
         public static string GetVideoInfos(string FileName)
         {
             FileStream fs = new FileStream(FileName, FileMode.Open, FileAccess.Read);
@@ -268,7 +272,11 @@ namespace MeGUI.core.util
 
             return videodesc;
         }
-
+        /// <summary>
+        /// gets the Video Coding Mode from the Video Stream
+        /// </summary>
+        /// <param name="bytes">array of bytes</param>
+        /// <returns>Coding Mode as String</returns>
         public static string GetVideoCodingMode(byte[] bytes)
         {
             byte b = (byte)((0xC0 & bytes[0]) >> 6);
@@ -281,7 +289,11 @@ namespace MeGUI.core.util
             }
             return codingMode;
         }
-
+        /// <summary>
+        /// gets the Standard used from the Video Stream
+        /// </summary>
+        /// <param name="bytes">array of bytes</param>
+        /// <returns>PAL or NTSC</returns>
         public static string GetVideoStandard(byte[] bytes)
         {
             byte b = (byte)((0x30 & bytes[0]) >> 4);
@@ -294,7 +306,11 @@ namespace MeGUI.core.util
             }
             return standard;
         }
-
+        /// <summary>
+        /// gets the Video Aspect Ratio from the Video Stream
+        /// </summary>
+        /// <param name="bytes">array of bytes</param>
+        /// <returns>AR as String</returns>
         public static string GetVideoAR(byte[] bytes)
         {
             byte b = (byte)((0x0C & bytes[0]) >> 2);
@@ -309,21 +325,33 @@ namespace MeGUI.core.util
             }
             return ar;
         }
-
+        /// <summary>
+        /// gets the Automatic Pan&Scan flag from the Video Stream
+        /// </summary>
+        /// <param name="bytes">array of bytes</param>
+        /// <returns>Automatic Pan&Scan as Bool</returns>
         public static bool GetVideoAutoPanScan(byte[] bytes)
         {
             byte b = (byte)((0x02 & bytes[0]) >> 1);
             if (b == 1) return false;
             else return true;
         }
-
+        /// <summary>
+        /// gets the Automatic Letterboxing flag from the Video Stream
+        /// </summary>
+        /// <param name="bytes">array of bytes</param>
+        /// <returns>Automatic Letterboxing as Bool</returns>
         public static bool GetVideoAutoLetterbox(byte[] bytes)
         {
             byte b = (byte)(0x01 & bytes[0]);
             if (b == 1) return false;
             else return true;
         }
-
+        /// <summary>
+        /// gets the Resolution from the Video Stream
+        /// </summary>
+        /// <param name="bytes">array of bytes</param>
+        /// <returns>Resolution as String</returns>
         public static string GetVideoResolution(byte[] bytes)
         {
             byte b = (byte)((0x30 & bytes[0]) >> 4); // Standard
@@ -355,7 +383,11 @@ namespace MeGUI.core.util
             }
             return res;
         }
-
+        /// <summary>
+        /// gets the Letterboxed Info from the Video Stream
+        /// </summary>
+        /// <param name="bytes">array of bytes</param>
+        /// <returns>Letterboxed as String</returns>
         public static string GetVideoLetterboxed(byte[] bytes)
         {
             byte b = (byte)((4 & bytes[1]));
@@ -368,7 +400,11 @@ namespace MeGUI.core.util
 
             return Letterboxed;
         }
-
+        /// <summary>
+        /// gets the Video Type from the Video Stream
+        /// </summary>
+        /// <param name="bytes">array of bytes</param>
+        /// <returns>Camera/Film as String</returns>
         public static string GetVideoStandardType(byte[] bytes)
         {
             byte b = (byte)((0x30 & bytes[0]) >> 4); // Standard
