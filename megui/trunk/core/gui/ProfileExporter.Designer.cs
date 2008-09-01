@@ -48,6 +48,7 @@ namespace MeGUI.core.gui
             this.ClientSize = new System.Drawing.Size(383, 358);
             this.Name = "ProfileExporter";
             this.Text = "Presets Exporter";
+            this.TopMost = true;
             this.Controls.SetChildIndex(this.profileList, 0);
             this.Controls.SetChildIndex(this.label1, 0);
             this.Controls.SetChildIndex(this.button2, 0);

@@ -93,6 +93,7 @@ namespace MeGUI.core.gui
             this.Controls.Add(this.profileList);
             this.Name = "ProfilePorter";
             this.Text = "Presets Importer/Exporter";
+            this.TopMost = true;
             this.ResumeLayout(false);
             this.PerformLayout();
 
