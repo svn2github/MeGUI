@@ -19,6 +19,7 @@
 // ****************************************************************************
 
 using System;
+using System.Collections.Generic;
 
 namespace MeGUI
 {
@@ -29,20 +30,23 @@ namespace MeGUI
 	{
 		private bool loadSources;
 		private int demuxMode;
+        private List<string> trackIDs;
 		private DGIndexPostprocessingProperties postprocessingProperties;
 		
 		public IndexJob():base()
 		{
 			loadSources = false;
 			demuxMode = 0;
+            trackIDs = new List<string>();
 		}
 
-        public IndexJob(string input, string output, int demuxType,
+        public IndexJob(string input, string output, int demuxType, List<string> trackIDs,
             DGIndexPostprocessingProperties properties, bool loadSources)
         {
             Input = input;
             Output = output;
             DemuxMode = demuxType;
+            TrackIDs = trackIDs;
             PostprocessingProperties = properties;
             LoadSources = loadSources;
         }
@@ -67,6 +71,13 @@ namespace MeGUI
 			get {return demuxMode;}
 			set {demuxMode = value;}
 		}
+
+        public List<string> TrackIDs
+        {
+            get { return trackIDs; }
+            set { trackIDs = value; }
+        }
+
 		/// <summary>
 		/// gets / sets the postprocessing properties
 		/// if this is not set, we're just dealing with a regular demuxing job
