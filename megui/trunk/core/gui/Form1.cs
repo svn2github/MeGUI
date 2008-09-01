@@ -1309,7 +1309,7 @@ namespace MeGUI
 
             i = Log.Info("Hardware");
             i.LogValue("CPU ", string.Format("{0}", OSInfo.GetMOStuff("Win32_Processor")));
-
+/*
             foreach (DriveInfo d in allDrives)
             {
                 if ((d.DriveType == DriveType.Fixed) && (d.DriveFormat != null)) 
@@ -1330,7 +1330,7 @@ namespace MeGUI
                     }
                 }
             }
-
+*/
             //Log.LogValue("Settings", Settings, ImageType.Information);
         }
 
