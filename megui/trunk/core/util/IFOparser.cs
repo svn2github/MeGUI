@@ -340,14 +340,23 @@ namespace MeGUI.core.util
 
             if (verbose)
             {
-                string PS = "";
-                string LT = "";
+                StringBuilder vd = new StringBuilder();
+                string aps = "Not allowed";
+                string alb = "Not allowed";
                 if (GetVideoAutoPanScan(array))
-                    PS = "Auto Pan&Scan allowed";
+                    aps = "allowed";
                 if (GetVideoAutoLetterbox(array))
-                    LT = "Auto Letterbox allowed";
+                    alb = "allowed";
 
-                videodesc = string.Format("{0} / {1} / {2} / {3} / {4} / {5} / {6} / {7}", cm, std, ar, resolution, letterboxed, stdType, PS, LT);
+                vd.AppendFormat("Coding Mode    : {0}", cm, Environment.NewLine);
+                vd.AppendFormat("Standard       : {0}", std, Environment.NewLine);
+                vd.AppendFormat("Aspect Ratio   : {0}", ar, Environment.NewLine);
+                vd.AppendFormat("Resolution     : {0}", resolution, Environment.NewLine);
+                vd.AppendFormat("Letterboxed    : {0}", letterboxed, Environment.NewLine);
+                vd.AppendFormat("Standard Type  : {0}", stdType, Environment.NewLine);
+                vd.AppendFormat("Auto Pan&Scan  : {0}", aps, Environment.NewLine);
+                vd.AppendFormat("Auto Letterbox : {0}", alb, Environment.NewLine);
+                videodesc = vd.ToString();
             }
             else
             {
