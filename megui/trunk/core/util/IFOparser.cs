@@ -107,9 +107,9 @@ namespace MeGUI.core.util
 
                 switch (cm)
                 {
-                    case "AC3": trackID = (byte)(0x80 + i); break;
+                    case "AC3":  trackID = (byte)(0x80 + i); break;
                     case "LPCM": trackID = (byte)(0xA0 + i); break;
-                    case "DTS": trackID = (byte)(0x88 + i); break;
+                    case "DTS":  trackID = (byte)(0x88 + i); break;
                 }
 
                 byte[] buff = new byte[2];
@@ -337,7 +337,7 @@ namespace MeGUI.core.util
             string letterboxed = GetVideoLetterboxed(array);
             string stdType = GetVideoStandardType(array);
 
-            videodesc = cm + " / " + std + " / " + ar + " / " + resolution + " / " + letterboxed + " / " + stdType;
+            videodesc = string.Format("{0} / {1} / {2} / {3} / {4} / {5}", cm, std, ar, resolution, letterboxed, stdType);
 
             return videodesc;
         }
