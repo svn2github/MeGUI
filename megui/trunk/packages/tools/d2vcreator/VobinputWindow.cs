@@ -60,13 +60,14 @@ namespace MeGUI
 		private System.Windows.Forms.OpenFileDialog openIFODialog;
 		private System.Windows.Forms.Button pickOutputButton;
 		private System.Windows.Forms.GroupBox gbInput;
-        private System.Windows.Forms.RadioButton demuxAllTracks;
+        private System.Windows.Forms.RadioButton demuxTracks;
         private System.Windows.Forms.RadioButton demuxNoAudiotracks;
 		private System.Windows.Forms.Button queueButton;
 		private System.Windows.Forms.CheckBox loadOnComplete;
 		private System.Windows.Forms.CheckBox closeOnQueue;
         private MeGUI.core.gui.HelpButton helpButton1;
         private CheckedListBox AudioTracks;
+        private RadioButton demuxAll;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -82,7 +83,7 @@ namespace MeGUI
 			if (demuxType == 0)
 				demuxNoAudiotracks.Checked = true;
 			else
-				demuxAllTracks.Checked = true;
+				demuxTracks.Checked = true;
 			this.loadOnComplete.Checked = loadOnComplete;
             if (updateMode)
             {
@@ -163,9 +164,10 @@ namespace MeGUI
             this.queueButton = new System.Windows.Forms.Button();
             this.loadOnComplete = new System.Windows.Forms.CheckBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.demuxAll = new System.Windows.Forms.RadioButton();
             this.AudioTracks = new System.Windows.Forms.CheckedListBox();
             this.demuxNoAudiotracks = new System.Windows.Forms.RadioButton();
-            this.demuxAllTracks = new System.Windows.Forms.RadioButton();
+            this.demuxTracks = new System.Windows.Forms.RadioButton();
             this.gbOutput = new System.Windows.Forms.GroupBox();
             this.pickOutputButton = new System.Windows.Forms.Button();
             this.projectName = new System.Windows.Forms.TextBox();
@@ -237,15 +239,28 @@ namespace MeGUI
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.demuxAll);
             this.groupBox3.Controls.Add(this.AudioTracks);
             this.groupBox3.Controls.Add(this.demuxNoAudiotracks);
-            this.groupBox3.Controls.Add(this.demuxAllTracks);
+            this.groupBox3.Controls.Add(this.demuxTracks);
             this.groupBox3.Location = new System.Drawing.Point(10, 56);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(424, 223);
             this.groupBox3.TabIndex = 8;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Audio";
+            // 
+            // demuxAll
+            // 
+            this.demuxAll.AutoSize = true;
+            this.demuxAll.Location = new System.Drawing.Point(142, 20);
+            this.demuxAll.Name = "demuxAll";
+            this.demuxAll.Size = new System.Drawing.Size(106, 17);
+            this.demuxAll.TabIndex = 15;
+            this.demuxAll.TabStop = true;
+            this.demuxAll.Text = "Demux All Tracks";
+            this.demuxAll.UseVisualStyleBackColor = true;
+            this.demuxAll.CheckedChanged += new System.EventHandler(this.rbtracks_CheckedChanged);
             // 
             // AudioTracks
             // 
@@ -266,14 +281,16 @@ namespace MeGUI
             this.demuxNoAudiotracks.TabIndex = 13;
             this.demuxNoAudiotracks.TabStop = true;
             this.demuxNoAudiotracks.Text = "No Audio demux";
+            this.demuxNoAudiotracks.CheckedChanged += new System.EventHandler(this.rbtracks_CheckedChanged);
             // 
-            // demuxAllTracks
+            // demuxTracks
             // 
-            this.demuxAllTracks.Location = new System.Drawing.Point(16, 40);
-            this.demuxAllTracks.Name = "demuxAllTracks";
-            this.demuxAllTracks.Size = new System.Drawing.Size(160, 24);
-            this.demuxAllTracks.TabIndex = 7;
-            this.demuxAllTracks.Text = "Select Audio Tracks";
+            this.demuxTracks.Location = new System.Drawing.Point(16, 40);
+            this.demuxTracks.Name = "demuxTracks";
+            this.demuxTracks.Size = new System.Drawing.Size(160, 24);
+            this.demuxTracks.TabIndex = 7;
+            this.demuxTracks.Text = "Select Audio Tracks";
+            this.demuxTracks.CheckedChanged += new System.EventHandler(this.rbtracks_CheckedChanged);
             // 
             // gbOutput
             // 
@@ -361,6 +378,7 @@ namespace MeGUI
             this.gbInput.ResumeLayout(false);
             this.gbInput.PerformLayout();
             this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.gbOutput.ResumeLayout(false);
             this.gbOutput.PerformLayout();
             this.ResumeLayout(false);
@@ -405,7 +423,7 @@ namespace MeGUI
                 if (!string.IsNullOrEmpty(myifofile))
                 {
                     AudioTracks.Items.AddRange(IFOparser.GetAudioInfos(myifofile, false));
-                    demuxAllTracks.Checked = true;
+                    demuxTracks.Checked = true;
                     AudioTracks.Enabled = true;
                 }
                 else
@@ -450,10 +468,12 @@ namespace MeGUI
 		private IndexJob generateIndexJob()
 		{
 			int demuxType = 0;
-			if (demuxAllTracks.Checked)
+			if (demuxTracks.Checked)
 				demuxType = 1;
-            if (demuxNoAudiotracks.Checked)
+            else if (demuxNoAudiotracks.Checked)
                 demuxType = 0;
+            else
+                demuxType = 2;
 
             List<string> trackIDs = new List<string>();
             foreach (string s in AudioTracks.CheckedItems)
@@ -483,6 +503,18 @@ namespace MeGUI
             get { return lastJob != null; }
         }
         #endregion
+
+        private void rbtracks_CheckedChanged(object sender, EventArgs e)
+        {
+            if ((demuxNoAudiotracks.Checked) || (demuxAll.Checked))
+            {
+                AudioTracks.Enabled = false;
+            }
+            else
+            { 
+                AudioTracks.Enabled = true;
+            }
+        }
     }
 
     public class D2VCreatorTool : MeGUI.core.plugins.interfaces.ITool
