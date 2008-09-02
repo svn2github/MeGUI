@@ -116,10 +116,15 @@ namespace MeGUI.core.util
                 br.Read(buff, 0, 2);
                 string ShortLangCode = String.Format("{0}{1}", (char)buff[0], (char)buff[1]);
 
+                sr.Seek(1, SeekOrigin.Current);
+                byte[] l = new byte[1];
+                fs.Read(l, 0, 1);
+                string lce = GetAudioLanguageCodeExt(l);
+                                
                 audiodesc[i] = String.Format("[{0:X}] - {1} - {2}ch / {3} / {4}", trackID, cm, ch, sp, LanguageSelectionContainer.Short2FullLanguageName(ShortLangCode));
                 
                 // go to the next audio stream
-                sr.Seek(4, SeekOrigin.Current);
+                sr.Seek(2, SeekOrigin.Current);
             }
 
             fs.Close();
@@ -241,6 +246,26 @@ namespace MeGUI.core.util
         {
             byte b = (byte)(0x07 & bytes[1]);
             return b;
+        }
+
+        /// <summary>
+        /// get the Language Code Extension from the Audio Stream
+        /// </summary>
+        /// <param name="bytes">array of bytes</param>
+        /// <returns>Language Code Extension as String</returns>
+        public static string GetAudioLanguageCodeExt(byte[] bytes)
+        {
+            byte b = (byte)(0xFF & bytes[0]);
+            string lce = "";
+            switch (b)
+            {
+                case 0: lce = " Unspecified"; break;
+                case 1: lce = " Normal"; break;
+                case 2: lce = " For Visually Impaired"; break;
+                case 3: lce = " Director's Comments"; break;
+                case 4: lce = " Alternate Director's Comments"; break;
+            }
+            return lce;
         }
 
 
