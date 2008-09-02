@@ -317,8 +317,9 @@ namespace MeGUI.core.util
         /// get several Video Informations from the IFO file
         /// </summary>
         /// <param name="fileName">name of the IFO file</param>
+        /// <param name="verbose">to have complete infos or not</param>
         /// <returns>several infos as String</returns>
-        public static string GetVideoInfos(string FileName)
+        public static string GetVideoInfos(string FileName, bool verbose)
         {
             FileStream fs = new FileStream(FileName, FileMode.Open, FileAccess.Read);
             BinaryReader br = new BinaryReader(fs);
@@ -337,7 +338,21 @@ namespace MeGUI.core.util
             string letterboxed = GetVideoLetterboxed(array);
             string stdType = GetVideoStandardType(array);
 
-            videodesc = string.Format("{0} / {1} / {2} / {3} / {4} / {5}", cm, std, ar, resolution, letterboxed, stdType);
+            if (verbose)
+            {
+                string PS = "";
+                string LT = "";
+                if (GetVideoAutoPanScan(array))
+                    PS = "Auto Pan&Scan allowed";
+                if (GetVideoAutoLetterbox(array))
+                    LT = "Auto Letterbox allowed";
+
+                videodesc = string.Format("{0} / {1} / {2} / {3} / {4} / {5} / {6} / {7}", cm, std, ar, resolution, letterboxed, stdType, PS, LT);
+            }
+            else
+            {
+                videodesc = string.Format("{0} / {1} / {2} / {3} / {4} / {5}", cm, std, ar, resolution, letterboxed, stdType);
+            }
 
             return videodesc;
         }
