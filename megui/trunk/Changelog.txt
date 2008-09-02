@@ -1,16 +1,16 @@
 0.3.0.2005
     - (kurtnoise) [IFOparser] fixed typos.
-	- (kurtnoise) [IFOparser] better Format for audiodesc.
-	- (kurtnoise) TopMost = true for Presets Forms.
-	- (kurtnoise) [VobinputWindow] checkOnClick = true for AudioTracks component.
-	- (kurtnoise) [OneClickWindow] updated IndexJob().
-	- (kurtnoise) [DGIndexer] updated command line in order to retrieve trackIDs.
-	- (kurtnoise) [IndexJob] updated the code to use trackIDs as List.
-	- (kurtnoise) [VobinputWindow] added a checkedListbox component to select audio tracks & the code to parse the IFO file.
-	- (kurtnoise) [IFOparser] updated Audio functions & comments.
-	- (kurtnoise) disabled code to retrieve free disk space until to find a better way.
-	- (kurtnoise) [IFOparser] added some comments.
-	- (kurtnoise) [IFOparser] added GetVideoInfos part. Might be useful later...
+    - (kurtnoise) [IFOparser] better Format for audiodesc.
+    - (kurtnoise) TopMost = true for Presets Forms.
+    - (kurtnoise) [VobinputWindow] checkOnClick = true for AudioTracks component.
+    - (kurtnoise) [OneClickWindow] updated IndexJob().
+    - (kurtnoise) [DGIndexer] updated command line in order to retrieve trackIDs.
+    - (kurtnoise) [IndexJob] updated the code to use trackIDs as List.
+    - (kurtnoise) [VobinputWindow] added a checkedListbox component to select audio tracks & the code to parse the IFO file.
+    - (kurtnoise) [IFOparser] updated Audio functions & comments.
+    - (kurtnoise) disabled code to retrieve free disk space until to find a better way.
+    - (kurtnoise) [IFOparser] added some comments.
+    - (kurtnoise) [IFOparser] added GetVideoInfos part. Might be useful later...
     - (kurtnoise) [AutoEncode] now, log returns a better value according to the radiobutton selected. 
 
 0.3.0.2004
