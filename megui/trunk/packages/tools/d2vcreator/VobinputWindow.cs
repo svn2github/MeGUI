@@ -404,7 +404,7 @@ namespace MeGUI
 
                 if (!string.IsNullOrEmpty(myifofile))
                 {
-                    AudioTracks.Items.AddRange(IFOparser.GetAudioInfos(myifofile));
+                    AudioTracks.Items.AddRange(IFOparser.GetAudioInfos(myifofile, false));
                     demuxAllTracks.Checked = true;
                     AudioTracks.Enabled = true;
                 }
