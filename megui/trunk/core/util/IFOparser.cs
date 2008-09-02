@@ -80,8 +80,9 @@ namespace MeGUI.core.util
         /// get several Audio Informations from the IFO file
         /// </summary>
         /// <param name="fileName">name of the IFO file</param>
+        /// <param name="verbose">to have complete infos or not</param>
         /// <returns>several infos as String</returns>
-        public static string[] GetAudioInfos(string FileName)
+        public static string[] GetAudioInfos(string FileName, bool verbose)
         {
             FileStream fs = new FileStream(FileName, FileMode.Open, FileAccess.Read);
             BinaryReader br = new BinaryReader(fs);
@@ -104,12 +105,32 @@ namespace MeGUI.core.util
                 string sp = GetAudioSamplingRate(array);
                 int ch = (int)((GetAudioChannels(array)) + 1);
                 byte trackID = 0xBD;
+                StringBuilder ad = new StringBuilder();
 
                 switch (cm)
                 {
                     case "AC3":  trackID = (byte)(0x80 + i); break;
                     case "LPCM": trackID = (byte)(0xA0 + i); break;
                     case "DTS":  trackID = (byte)(0x88 + i); break;
+                }
+
+                if (verbose)
+                {
+                    string mce = "Not Present";
+                    if (GetAudioMultichannelExt(array))
+                        mce = "Present";
+                    string lt = GetAudioLanguageType(array);
+                    string ap = GetAudioApplicationMode(array);
+                    string aq = GetAudioQuantization(array);
+
+                    ad.AppendFormat("Track# : {0:00} - [{1:X}]", i, trackID, Environment.NewLine); 
+                    ad.AppendFormat("Coding Mode            : {0}", cm, Environment.NewLine);
+                    ad.AppendFormat("Multichannel Extension : {0}", mce, Environment.NewLine);
+                    ad.AppendFormat("Language Type          : {0}", lt, Environment.NewLine);
+                    ad.AppendFormat("Application Mode       : {0}", ap, Environment.NewLine);
+                    ad.AppendFormat("Quantization           : {0}", aq, Environment.NewLine);
+                    ad.AppendFormat("Sampling Rate          : {0}", sp, Environment.NewLine);
+                    ad.AppendFormat("Channels               : {0}", ch, Environment.NewLine);
                 }
 
                 byte[] buff = new byte[2];
@@ -120,9 +141,19 @@ namespace MeGUI.core.util
                 byte[] l = new byte[1];
                 fs.Read(l, 0, 1);
                 string lce = GetAudioLanguageCodeExt(l);
-                                
-                audiodesc[i] = String.Format("[{0:X}] - {1} - {2}ch / {3} / {4}", trackID, cm, ch, sp, LanguageSelectionContainer.Short2FullLanguageName(ShortLangCode));
-                
+
+                if (verbose)
+                {
+                    ad.AppendFormat("Language              : {0} - {1}", LanguageSelectionContainer.Short2FullLanguageName(ShortLangCode), ShortLangCode, Environment.NewLine);
+                    ad.AppendFormat("Language Extension    : {0}", lce, Environment.NewLine);
+                    ad.AppendLine();
+                    audiodesc[i] = ad.ToString();
+                }
+                else
+                {
+                    audiodesc[i] = String.Format("[{0:X}] - {1} - {2}ch / {3} / {4}", trackID, cm, ch, sp, LanguageSelectionContainer.Short2FullLanguageName(ShortLangCode));
+                }
+
                 // go to the next audio stream
                 sr.Seek(2, SeekOrigin.Current);
             }
