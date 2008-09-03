@@ -285,6 +285,7 @@ namespace MeGUI
             // 
             // demuxTracks
             // 
+            this.demuxTracks.Enabled = false;
             this.demuxTracks.Location = new System.Drawing.Point(16, 40);
             this.demuxTracks.Name = "demuxTracks";
             this.demuxTracks.Size = new System.Drawing.Size(160, 24);
@@ -425,6 +426,7 @@ namespace MeGUI
                     AudioTracks.Items.AddRange(IFOparser.GetAudioInfos(myifofile, false));
                     demuxTracks.Checked = true;
                     AudioTracks.Enabled = true;
+                    demuxTracks.Enabled = true;
                 }
                 else
                 {
