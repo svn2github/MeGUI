@@ -1,3 +1,14 @@
+0.3.0.2006
+    - (kurtnoise) [VobinputWindow] demuxTracks disabled by default.
+    - (kurtnoise) [VobinputWindow] added "Demux All Tracks".
+    - (kurtnoise) [VobinputWindow] updated GetAudioInfos().
+    - (kurtnoise) [IFOparser] added a verbose param for GetAudioInfos() to retrieve complete informations from the file.
+    - (kurtnoise) [IFOparser] added GetAudioLanguageCodeExt() to the parser.
+    - (kurtnoise) [IFOparser] GetVideoInfos() : use a StringBuilder for verbose mode.
+    - (kurtnoise) remove trailing white space from ChangeLog.txt
+    - (kurtnoise) [IFOparser] added a verbose param for GetVideoInfos() to retrieve complete informations from the file.
+    - (kurtnoise) [IFOparser] vertical alignment & better string format for videodesc.
+
 0.3.0.2005
     - (kurtnoise) [IFOparser] fixed typos.
     - (kurtnoise) [IFOparser] better Format for audiodesc.
