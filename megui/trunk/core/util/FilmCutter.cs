@@ -254,15 +254,15 @@ namespace MeGUI.core.util
             if (first && last) return p;
             if (isAudio)
             {
-                if (!first && !last) return string.Format("FadeIO(FadeIO0({0}, , {1}), , {1})", p, number);
-                if (first) return string.Format("FadeOut(FadeOut0({0}, , {1}), , {1})", p, number);
-                if (last) return string.Format("FadeIn(FadeIn0({0}, , {1}), , {1})", p, number);
+                if (!first && !last) return string.Format("FadeIO(FadeIO0({0}, 0, {1}), 0, {1})", p, number);
+                if (first) return string.Format("FadeOut(FadeOut0({0}, 0, {1}), 0, {1})", p, number);
+                if (last) return string.Format("FadeIn(FadeIn0({0}, 0, {1}), 0, {1})", p, number);
             }
             else
             {
-                if (!first && !last) return "FadeIO(" + p + ", , " + number + ")";
-                if (first) return "FadeOut(" + p + ", , " + number + ")";
-                if (last) return "FadeIn(" + p + ", , " + number + ")";
+                if (!first && !last) return string.Format("FadeIO({0}, 0, {1})", p, number);
+                if (first) return string.Format("FadeOut({0}, 0, {1})", p, number);
+                if (last) return string.Format("FadeIn({0}, 0, {1})", p, number);
             }
             Debug.Assert(false);
             return null;
