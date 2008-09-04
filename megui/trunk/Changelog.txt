@@ -1,3 +1,6 @@
+0.3.0.2007
+    - (kurtnoise) [FilmCutter] fixed issue #2090575
+
 0.3.0.2006
     - (kurtnoise) [VobinputWindow] demuxTracks disabled by default.
     - (kurtnoise) [VobinputWindow] added "Demux All Tracks".
