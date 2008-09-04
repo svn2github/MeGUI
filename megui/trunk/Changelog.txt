@@ -1,6 +1,6 @@
 0.3.0.2008
     - (sharktooth) [AVCLevels.cs] Fixed all level limits, part 2. Differentiation between baseline/main and high profiles CPBs.
-	- (sharktooth) [AVCLevels.cs] Fixed all level limits.
+    - (sharktooth) [AVCLevels.cs] Fixed all level limits.
 
 0.3.0.2007
     - (kurtnoise) [FilmCutter] fixed issue #2090575
