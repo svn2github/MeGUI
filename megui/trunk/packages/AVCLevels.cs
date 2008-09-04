@@ -209,6 +209,7 @@ namespace MeGUI
 
         public static readonly string[] CLILevelNames = new string[] { "1", "1.1", "1.2", "1.3",  "2", "2.1", "2.2",   "3", "3.1", "3.2",   "4",  "4.1",  "4.2",    "5", "5.1" };
         public static readonly int[] MainProfileMaxBRs = new int[]   {  64,   192,   384,   768, 2000,  4000,  4000, 10000, 14000, 20000, 20000,  50000,  50000, 135000, 240000 };
+        // all bitrates and cbps are multiplied by 1.25 in high profile
         public static readonly int[] HighProfileMaxBRs = new int[]   { 80,   240,  480,  960, 2500, 5000, 5000, 12500, 17500, 25000, 25000, 50000, 50000, 168750, 300000 };
 		/// <summary>
 		/// gets the MaxBR value corresponding to a given AVC Level
@@ -228,57 +229,114 @@ namespace MeGUI
 		/// </summary>
 		/// <param name="level">the level</param>
 		/// <returns>the MaxCBP in bits</returns>
-		public int getMaxCBP(int level)
+		public int getMaxCBP(int level, bool isHighProfile)
 		{
-			switch (level)
-			{
-				case 0: // level 1
-					return 175;
-					
-				case 1: // level 1.1
-					return 500;
-					
-				case 2: // level 1.2
-					return 1000;
-					
-				case 3: // level 1.3
-					return 2000;
-					
-				case 4: // level 2
-					return 2000;
-					
-				case 5: // level 2.1
-					return 4000;
-					
-				case 6: // level 2.2
-					return 4000;
-					
-				case 7: // level 3
-					return 10000;
-					
-				case 8: // level 3.1
-					return 14000;
-					
-				case 9: // level 3.2
-					return 20000;
-					
-				case 10: // level 4
-					return 25000;
-					
-				case 11: // level 4.1
-					return 62500;
-					
-				case 12: // level 4.2
-					return 62500;
-					
-				case 13: // level 5
-					return 135000;
-					
-				case 14: // level 5.1
-					return 240000;
-					
-			}
-			return 240000;
+            if (isHighProfile) // all bitrates and cbps are multiplied by 1.25 in high profile
+            {
+                switch (level)
+			    {
+				    case 0: // level 1
+					    return 210;
+					    
+				    case 1: // level 1.1
+					    return 625;
+					    
+				    case 2: // level 1.2
+					    return 1250;
+					    
+				    case 3: // level 1.3
+					    return 2500;
+					    
+				    case 4: // level 2
+					    return 2500;
+					    
+				    case 5: // level 2.1
+					    return 5000;
+					    
+				    case 6: // level 2.2
+					    return 5000;
+					    
+				    case 7: // level 3
+					    return 12500;
+					    
+				    case 8: // level 3.1
+					    return 17500;
+					    
+				    case 9: // level 3.2
+					    return 25000;
+					    
+				    case 10: // level 4
+					    return 31250;
+					    
+				    case 11: // level 4.1
+					    return 78125;
+					    
+				    case 12: // level 4.2
+					    return 78125;
+					    
+				    case 13: // level 5
+					    return 168750;
+					    
+				    case 14: // level 5.1
+					    return 300000;
+                }
+
+            }
+            else
+            {
+                switch (level)
+			    {
+				    case 0: // level 1
+					    return 175;
+					    
+				    case 1: // level 1.1
+					    return 500;
+					    
+				    case 2: // level 1.2
+					    return 1000;
+					    
+				    case 3: // level 1.3
+					    return 2000;
+					    
+				    case 4: // level 2
+					    return 2000;
+					    
+				    case 5: // level 2.1
+					    return 4000;
+					    
+				    case 6: // level 2.2
+					    return 4000;
+					    
+				    case 7: // level 3
+					    return 10000;
+					    
+				    case 8: // level 3.1
+					    return 14000;
+					    
+				    case 9: // level 3.2
+					    return 20000;
+					    
+				    case 10: // level 4
+					    return 25000;
+					    
+				    case 11: // level 4.1
+					    return 62500;
+					    
+				    case 12: // level 4.2
+					    return 62500;
+					    
+				    case 13: // level 5
+					    return 135000;
+					    
+				    case 14: // level 5.1
+					    return 240000;
+
+			    }
+            }
+            if (isHighProfile)
+                return 300000;
+            else
+                return 240000;
 		}
 		/// <summary>
 		/// gets the Maximum macroblock rate given a level
@@ -477,7 +535,7 @@ namespace MeGUI
             if (settings.VBVMaxBitrate > this.getMaxBR(level, settings.Profile == 2))
                 return 3;
 
-            if (settings.VBVBufferSize > this.getMaxCBP(level))
+            if (settings.VBVBufferSize > this.getMaxCBP(level, settings.Profile == 2))
                 return 4;
 
             return 0;
