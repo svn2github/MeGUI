@@ -1181,7 +1181,8 @@ namespace MeGUI
 		}
 		private void saveButton_Click(object sender, System.EventArgs e)
 		{
-			if (saveAvisynthScriptDialog.ShowDialog() == DialogResult.OK)
+            saveAvisynthScriptDialog.FileName = Path.GetFileNameWithoutExtension(videoInput.Text);
+            if (saveAvisynthScriptDialog.ShowDialog() == DialogResult.OK)
 			{
                 writeScript(saveAvisynthScriptDialog.FileName);
 				if (onSaveLoadScript.Checked)
