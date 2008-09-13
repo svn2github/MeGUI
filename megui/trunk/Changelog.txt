@@ -1,3 +1,8 @@
+0.3.0.2009
+    - (sharktooth) [MkvMergeMuxer.cs] --delay -> --sync for compatibility with mkvtoolnix 2.3.0
+    - (kurtnoise) [AVS Creator] added "Apply auto Preview" feature. When it's checked, Crop & Resize modifications will be applied automatically in the video preview. No need to click anymore on "Preview AVS Script" button with this...
+    - (kurtnoise) [AVS Creator] use input filename as default for the save dialog.
+
 0.3.0.2008
     - (sharktooth) [AVCLevels.cs] Fixed all level limits, part 2. Differentiation between baseline/main and high profiles CPBs.
     - (sharktooth) [AVCLevels.cs] Fixed all level limits.
