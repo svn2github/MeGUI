@@ -123,7 +123,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                     if (!string.IsNullOrEmpty(stream.name))
                         sb.Append(" --track-name \"" + trackID + ":" + stream.name + "\"");
                     if (stream.delay != 0)
-                        sb.AppendFormat(" --delay {0}:{1}ms", trackID, stream.delay);
+                        sb.AppendFormat(" --sync {0}:{1}ms", trackID, stream.delay);
 
                     sb.Append(" -a " + trackID + " -D -S \"" + stream.path + "\"");
                 }
