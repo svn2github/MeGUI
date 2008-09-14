@@ -271,11 +271,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                 sb.Append("--threads auto ");
             sb.Append("--thread-input ");
 
-            if (xs.AQmode != 1)
+            if (xs.AQmode == 0)
             {
-                sb.Append("--aq-mode ");
-                if (xs.AQmode == 0)
-                    sb.Append("0 ");
+                sb.Append("--aq-mode 0 ");
             }
             if (xs.AQmode > 0)
             {
