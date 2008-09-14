@@ -438,7 +438,7 @@ namespace MeGUI.packages.video.x264
             if (this.avcProfile.SelectedIndex == -1)
                 avcProfile.SelectedIndex = 1; // 
             if (cbAQMode.SelectedIndex == -1)
-                cbAQMode.SelectedIndex = 2;
+                cbAQMode.SelectedIndex = 1;
             lastEncodingMode = this.x264EncodingMode.SelectedIndex;
             try
             {
@@ -638,7 +638,12 @@ namespace MeGUI.packages.video.x264
                 cqmComboBox1.SelectedObject = xs.QuantizerMatrix;
                 x264LosslessMode.Checked = xs.Lossless;
                 psnr.Checked = xs.PSNRCalculation;
-                cbAQMode.SelectedIndex = xs.AQmode;
+                // To be removed if a new AQmode is added to x264
+                if (xs.AQmode > 1)
+                    cbAQMode.SelectedIndex = 1;
+                else
+                // ---
+                    cbAQMode.SelectedIndex = xs.AQmode;
                 numAQStrength.Value = xs.AQstrength;
                 NoiseReduction.Text = xs.NoiseReduction.ToString(); ;
             }

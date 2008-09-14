@@ -642,10 +642,10 @@ Used for compatibility when using AVC in some transport streams (inc MPEG-2 TS).
     <aqmode name="AQ Mode">
       <Advanced>
 This option controls how AQ distributes bits. Mode 0 disables the feature whereas
-Mode 1 avoids moving bits between frames and Mode 2 is able to move the bits between frames.</Advanced>
+Mode 1 enables Variance AQ (complexity mask).</Advanced>
       <Basic>The Mode of the Adaptive Quantizers</Basic>
-      <Recommended>2</Recommended>
-      <Default>2</Default>
+      <Recommended>1</Recommended>
+      <Default>1</Default>
     </aqmode>
     <aqstrength name="AQ Strength">
       <Advanced>

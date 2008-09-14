@@ -1301,8 +1301,7 @@ namespace MeGUI.packages.video.x264
             this.cbAQMode.FormattingEnabled = true;
             this.cbAQMode.Items.AddRange(new object[] {
             "Disabled",
-            "Avoid moving bits between Frames",
-            "Move bits between Frames"});
+            "Variance AQ (complexity mask)"});
             this.cbAQMode.Location = new System.Drawing.Point(76, 19);
             this.cbAQMode.Name = "cbAQMode";
             this.cbAQMode.Size = new System.Drawing.Size(229, 21);

@@ -127,7 +127,7 @@ namespace MeGUI
 			x264Trellis = 0;
 			level = 15;
             base.MaxNumberOfPasses = 3;
-            AQMode = 2;
+            AQMode = 1;
             AQStrength = new decimal(1.0);
 		}
 		#endregion
