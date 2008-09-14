@@ -1161,7 +1161,9 @@ namespace MeGUI
 			if (this.openVideoDialog.ShowDialog() == DialogResult.OK)
 			{
                 openVideoSource(openVideoDialog.FileName);
-			}
+                if (chAutoPreview.Checked == true)
+                    previewButton_Click(sender, e);
+            }
 		}
 		private void openDLLButton_Click(object sender, System.EventArgs e)
 		{
@@ -1932,7 +1934,8 @@ namespace MeGUI
                 previewButton_Click(sender, e);
             }
             else
-                showOriginal();
+                if (this.isPreviewMode == true)
+                    showOriginal();
         }
     }
     public delegate void OpenScriptCallback(string avisynthScript);
