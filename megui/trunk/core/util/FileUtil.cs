@@ -82,7 +82,6 @@ namespace MeGUI.core.util
                         FileUtil.ensureDirectoryExists(Path.GetDirectoryName(pathname));
                         Stream outputStream = File.OpenWrite(pathname);
                         FileUtil.copyData(inputFile.GetInputStream(entry), outputStream);
-                        File.SetLastWriteTime(pathname, entry.DateTime);
                         outputStream.Close();
                     }
                 }
