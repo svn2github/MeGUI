@@ -450,7 +450,7 @@ speed further.</Advanced>
 			<Recommended>On Macro Block</Recommended>
 			<Default>Disabled</Default>
 		</trellis>
-		<psyrd>
+		<psyrd name="Psychovisual RDO">
 			<Advanced>
 Modifies the rate-distortion metric to improve sharpness and detail retention.
 			</Advanced>
@@ -458,7 +458,7 @@ Modifies the rate-distortion metric to improve sharpness and detail retention.
 			<Recommended>1.0</Recommended>
 			<Default>1.0</Default>
 		</psyrd>
-		<psytrellis>
+		<psytrellis name="Psychovisual Trellis optimizations">
 			<Advanced>
 Experimental: attempts to improve sharpness beyond that of the ordinary trellis algorithm.
 Your mileage may vary.			
