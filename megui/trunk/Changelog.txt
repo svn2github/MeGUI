@@ -1,3 +1,7 @@
+0.3.0.2011
+    - (kurtnoise) updated MediaInfo library and its wrapper to the last release (0.7.7.6)
+    - (kurtnoise) [x264Encoder] enable aq-mode only for index=0
+
 0.3.0.2010
     - (sharktooth) [AviSynthWindow.cs] Check if player window is already the original player before trying to reopen it (fixes an issue introduced with the previous commit)
     - (sharktooth) [AviSynthWindow.cs] Auto-Preview disabled by default. When unchecked it now re-opens the original video player.
