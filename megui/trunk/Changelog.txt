@@ -1,3 +1,11 @@
+0.3.0.2013
+    - (shatktooth) Fixed typos in the previous commit + x264 default subme set to 6 (RDO)
+    - (sharktooth) Updated tooltips for the new options.
+    - (sharktooth) EN/US localization for psy-trellis and psy-rdo values.
+    - (sharktooth) x264 psy-trellis and psy-rdo controls. changed the b-adapt option name to avoid errors when importing old profiles.
+    - (sharktooth) x264 new b-adapt option (replaces no-b-adapt). this update breaks the presets compatibility.
+    - (sharktooth) [FileUtil.cs] Re-added SetLastWriteTime in the ExtractZipFile method (this time in the right place...)
+
 0.3.0.2012
     - (sharktooth) Reverted r704 ([FileUtil.cs] Added SetLastWriteTime in the ExtractZipFile method.) since it was causing problems to the auto-update
 
