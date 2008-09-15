@@ -55,12 +55,12 @@ namespace MeGUI
                 return list.ToArray();
             }
         }
-		int nbRefFrames, alphaDeblock, betaDeblock, subPelRefinement, maxQuantDelta, tempQuantBlur, 
+        int adaptiveBFrames, nbRefFrames, alphaDeblock, betaDeblock, subPelRefinement, maxQuantDelta, tempQuantBlur, 
 			bframePredictionMode, vbvBufferSize, vbvMaxBitrate, meType, meRange, minGOPSize, 
 			quantizerMatrixType, profile, x264Trellis, level, noiseReduction, deadZoneInter, deadZoneIntra, AQMode;
 		decimal ipFactor, pbFactor, chromaQPOffset, vbvInitialBuffer, bitrateVariance, quantCompression, 
 			tempComplexityBlur, tempQuanBlurCC, scdSensitivity, bframeBias, quantizerCrf, AQStrength;
-		bool deblock, cabac, p4x4mv, p8x8mv, b8x8mv, i4x4mv, i8x8mv, weightedBPrediction, adaptiveBFrames, encodeInterlaced,
+		bool deblock, cabac, p4x4mv, p8x8mv, b8x8mv, i4x4mv, i8x8mv, weightedBPrediction, encodeInterlaced,
 			bFramePyramid, chromaME, adaptiveDCT, lossless, mixedRefs, bRDO, NoFastPSkip, BiME, psnrCalc, noDctDecimate, ssimCalc;
 		string quantizerMatrix;
 		#region constructor
@@ -87,7 +87,7 @@ namespace MeGUI
 			betaDeblock = 0;
 			cabac = true;
 			weightedBPrediction = false;
-			adaptiveBFrames = false;
+			adaptiveBFrames = 1;
 			bFramePyramid = false;
 			subPelRefinement = 4;
 			BiME = false;
@@ -308,7 +308,7 @@ namespace MeGUI
 			get {return weightedBPrediction;}
 			set {weightedBPrediction = value;}
 		}
-		public bool AdaptiveBFrames
+		public int AdaptiveBFrames
 		{
 			get {return adaptiveBFrames;}
 			set {adaptiveBFrames = value;}
@@ -495,7 +495,7 @@ namespace MeGUI
                 case 0:
                     Cabac = false;
                     NbBframes = 0;
-                    AdaptiveBFrames = false;
+                    AdaptiveBFrames = 0;
                     BFramePyramid = false;
                     I8x8mv = false;
                     AdaptiveDCT = false;
@@ -542,7 +542,7 @@ namespace MeGUI
                 BFramePyramid = false;
             if (NbBframes == 0)
             {
-                AdaptiveBFrames = false;
+                AdaptiveBFrames = 0;
                 biME = false;
                 WeightedBPrediction = false;
             }

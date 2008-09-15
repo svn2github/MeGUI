@@ -108,6 +108,8 @@ namespace MeGUI.packages.video.x264
             this.cbAQMode = new System.Windows.Forms.ComboBox();
             this.lbAQMode = new System.Windows.Forms.Label();
             this.x264GeneralBFramesgGroupbox = new System.Windows.Forms.GroupBox();
+            this.x264AdaptiveBframesLabel = new System.Windows.Forms.Label();
+            this.x264AdaptiveBframes = new System.Windows.Forms.ComboBox();
             this.BiME = new System.Windows.Forms.CheckBox();
             this.bRDO = new System.Windows.Forms.CheckBox();
             this.x264BframePredictionMode = new System.Windows.Forms.ComboBox();
@@ -117,7 +119,6 @@ namespace MeGUI.packages.video.x264
             this.x264BframePredictionModeLabel = new System.Windows.Forms.Label();
             this.x264NumberOfBFramesLabel = new System.Windows.Forms.Label();
             this.x264NumberOfBFrames = new System.Windows.Forms.NumericUpDown();
-            this.x264AdaptiveBframes = new System.Windows.Forms.CheckBox();
             this.x264PyramidBframes = new System.Windows.Forms.CheckBox();
             this.quantizerMatrixGroupbox = new System.Windows.Forms.GroupBox();
             this.cqmComboBox1 = new MeGUI.core.gui.FileSCBox();
@@ -229,7 +230,8 @@ namespace MeGUI.packages.video.x264
             this.mainTabPage.Controls.Add(this.avcProfileGroupbox);
             this.mainTabPage.Controls.Add(this.x264CodecToolsGroupbox);
             this.mainTabPage.Controls.Add(this.x264CodecGeneralGroupbox);
-            this.mainTabPage.Size = new System.Drawing.Size(502, 403);
+            this.mainTabPage.Location = new System.Drawing.Point(4, 23);
+            this.mainTabPage.Size = new System.Drawing.Size(502, 402);
             // 
             // x264GeneralMiscGroupbox
             // 
@@ -596,9 +598,9 @@ namespace MeGUI.packages.video.x264
             this.rateControlTabPage.Controls.Add(this.x264QuantOptionsGroupbox);
             this.rateControlTabPage.Controls.Add(this.x264RateControlMiscGroupbox);
             this.rateControlTabPage.Controls.Add(this.x264RCGroupbox);
-            this.rateControlTabPage.Location = new System.Drawing.Point(4, 22);
+            this.rateControlTabPage.Location = new System.Drawing.Point(4, 23);
             this.rateControlTabPage.Name = "rateControlTabPage";
-            this.rateControlTabPage.Size = new System.Drawing.Size(502, 403);
+            this.rateControlTabPage.Size = new System.Drawing.Size(502, 402);
             this.rateControlTabPage.TabIndex = 3;
             this.rateControlTabPage.Text = "RC and ME";
             this.rateControlTabPage.UseVisualStyleBackColor = true;
@@ -1219,9 +1221,9 @@ namespace MeGUI.packages.video.x264
             this.quantizationTabPage.Controls.Add(this.quantizerMatrixGroupbox);
             this.quantizationTabPage.Controls.Add(this.x264MBGroupbox);
             this.quantizationTabPage.Controls.Add(this.x264QuantizerGroupBox);
-            this.quantizationTabPage.Location = new System.Drawing.Point(4, 22);
+            this.quantizationTabPage.Location = new System.Drawing.Point(4, 23);
             this.quantizationTabPage.Name = "quantizationTabPage";
-            this.quantizationTabPage.Size = new System.Drawing.Size(502, 403);
+            this.quantizationTabPage.Size = new System.Drawing.Size(502, 402);
             this.quantizationTabPage.TabIndex = 4;
             this.quantizationTabPage.Text = "Advanced";
             this.quantizationTabPage.UseVisualStyleBackColor = true;
@@ -1320,6 +1322,8 @@ namespace MeGUI.packages.video.x264
             // 
             // x264GeneralBFramesgGroupbox
             // 
+            this.x264GeneralBFramesgGroupbox.Controls.Add(this.x264AdaptiveBframesLabel);
+            this.x264GeneralBFramesgGroupbox.Controls.Add(this.x264AdaptiveBframes);
             this.x264GeneralBFramesgGroupbox.Controls.Add(this.BiME);
             this.x264GeneralBFramesgGroupbox.Controls.Add(this.bRDO);
             this.x264GeneralBFramesgGroupbox.Controls.Add(this.x264BframePredictionMode);
@@ -1329,7 +1333,6 @@ namespace MeGUI.packages.video.x264
             this.x264GeneralBFramesgGroupbox.Controls.Add(this.x264BframePredictionModeLabel);
             this.x264GeneralBFramesgGroupbox.Controls.Add(this.x264NumberOfBFramesLabel);
             this.x264GeneralBFramesgGroupbox.Controls.Add(this.x264NumberOfBFrames);
-            this.x264GeneralBFramesgGroupbox.Controls.Add(this.x264AdaptiveBframes);
             this.x264GeneralBFramesgGroupbox.Controls.Add(this.x264PyramidBframes);
             this.x264GeneralBFramesgGroupbox.Location = new System.Drawing.Point(325, 131);
             this.x264GeneralBFramesgGroupbox.Name = "x264GeneralBFramesgGroupbox";
@@ -1337,6 +1340,29 @@ namespace MeGUI.packages.video.x264
             this.x264GeneralBFramesgGroupbox.TabIndex = 6;
             this.x264GeneralBFramesgGroupbox.TabStop = false;
             this.x264GeneralBFramesgGroupbox.Text = "B-Frames";
+            // 
+            // x264AdaptiveBframesLabel
+            // 
+            this.x264AdaptiveBframesLabel.AutoSize = true;
+            this.x264AdaptiveBframesLabel.Location = new System.Drawing.Point(6, 48);
+            this.x264AdaptiveBframesLabel.Name = "x264AdaptiveBframesLabel";
+            this.x264AdaptiveBframesLabel.Padding = new System.Windows.Forms.Padding(3);
+            this.x264AdaptiveBframesLabel.Size = new System.Drawing.Size(102, 19);
+            this.x264AdaptiveBframesLabel.TabIndex = 12;
+            this.x264AdaptiveBframesLabel.Text = "Adaptive B-Frames";
+            // 
+            // x264AdaptiveBframes
+            // 
+            this.x264AdaptiveBframes.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.x264AdaptiveBframes.Items.AddRange(new object[] {
+            "0 - Off",
+            "1 - Fast",
+            "2 - Slow"});
+            this.x264AdaptiveBframes.Location = new System.Drawing.Point(109, 47);
+            this.x264AdaptiveBframes.Name = "x264AdaptiveBframes";
+            this.x264AdaptiveBframes.Size = new System.Drawing.Size(57, 21);
+            this.x264AdaptiveBframes.TabIndex = 11;
+            this.x264AdaptiveBframes.SelectedIndexChanged += new System.EventHandler(this.updateEvent);
             // 
             // BiME
             // 
@@ -1424,7 +1450,7 @@ namespace MeGUI.packages.video.x264
             // x264NumberOfBFramesLabel
             // 
             this.x264NumberOfBFramesLabel.AutoSize = true;
-            this.x264NumberOfBFramesLabel.Location = new System.Drawing.Point(7, 19);
+            this.x264NumberOfBFramesLabel.Location = new System.Drawing.Point(6, 19);
             this.x264NumberOfBFramesLabel.Name = "x264NumberOfBFramesLabel";
             this.x264NumberOfBFramesLabel.Padding = new System.Windows.Forms.Padding(3);
             this.x264NumberOfBFramesLabel.Size = new System.Drawing.Size(106, 19);
@@ -1444,18 +1470,6 @@ namespace MeGUI.packages.video.x264
             this.x264NumberOfBFrames.Size = new System.Drawing.Size(47, 20);
             this.x264NumberOfBFrames.TabIndex = 1;
             this.x264NumberOfBFrames.ValueChanged += new System.EventHandler(this.updateEvent);
-            // 
-            // x264AdaptiveBframes
-            // 
-            this.x264AdaptiveBframes.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.x264AdaptiveBframes.Enabled = false;
-            this.x264AdaptiveBframes.Location = new System.Drawing.Point(6, 46);
-            this.x264AdaptiveBframes.Name = "x264AdaptiveBframes";
-            this.x264AdaptiveBframes.Padding = new System.Windows.Forms.Padding(3);
-            this.x264AdaptiveBframes.Size = new System.Drawing.Size(163, 23);
-            this.x264AdaptiveBframes.TabIndex = 2;
-            this.x264AdaptiveBframes.Text = "Adaptive B-Frames";
-            this.x264AdaptiveBframes.CheckedChanged += new System.EventHandler(this.updateEvent);
             // 
             // x264PyramidBframes
             // 
@@ -2131,7 +2145,6 @@ namespace MeGUI.packages.video.x264
         private System.Windows.Forms.Label x264BframePredictionModeLabel;
         private System.Windows.Forms.Label x264NumberOfBFramesLabel;
         private System.Windows.Forms.NumericUpDown x264NumberOfBFrames;
-        private System.Windows.Forms.CheckBox x264AdaptiveBframes;
         private System.Windows.Forms.CheckBox x264PyramidBframes;
         private System.Windows.Forms.NumericUpDown x264IPFrameFactor;
         private System.Windows.Forms.Label lbQuantizersRatio;
@@ -2159,5 +2172,7 @@ namespace MeGUI.packages.video.x264
         private System.Windows.Forms.NumericUpDown x264MERange;
         private System.Windows.Forms.NumericUpDown x264SCDSensitivity;
         private System.Windows.Forms.Label x264SCDSensitivityLabel;
+        private System.Windows.Forms.Label x264AdaptiveBframesLabel;
+        private System.Windows.Forms.ComboBox x264AdaptiveBframes;
     }
 }

@@ -497,7 +497,7 @@ namespace MeGUI.packages.video.x264
                     xs.KeyframeInterval = Int32.Parse(x264KeyframeInterval.Text);
                 xs.NbRefFrames = (int)x264NumberOfRefFrames.Value;
                 xs.NbBframes = (int)x264NumberOfBFrames.Value;
-                xs.AdaptiveBFrames = x264AdaptiveBframes.Checked;
+                xs.AdaptiveBFrames = x264AdaptiveBframes.SelectedIndex;
                 xs.BFramePyramid = x264PyramidBframes.Checked;
                 xs.Deblock = x264DeblockActive.Checked;
                 xs.AlphaDeblock = (int)x264AlphaDeblock.Value;
@@ -576,7 +576,7 @@ namespace MeGUI.packages.video.x264
                 x264Turbo.Checked = xs.Turbo;
                 x264BitrateQuantizer.Value = (isBitrateMode(xs.EncodingMode) || xs.QuantizerCRF == 0) ? xs.BitrateQuantizer : xs.QuantizerCRF;
                 x264KeyframeInterval.Text = xs.KeyframeInterval.ToString() ;
-                x264AdaptiveBframes.Checked = xs.AdaptiveBFrames;
+                x264AdaptiveBframes.SelectedIndex = xs.AdaptiveBFrames;
                 x264DeblockActive.Checked = xs.Deblock;
                 x264PyramidBframes.Checked = xs.BFramePyramid;
                 x264AlphaDeblock.Value = xs.AlphaDeblock;
@@ -825,8 +825,9 @@ namespace MeGUI.packages.video.x264
             #region b-frames
             if (this.x264NumberOfBFrames.Value == 0)
             {
-                this.x264AdaptiveBframes.Checked = false;
+                this.x264AdaptiveBframes.SelectedIndex = 1;
                 this.x264AdaptiveBframes.Enabled = false;
+                this.x264AdaptiveBframesLabel.Enabled = false;
                 this.x264BframePredictionMode.Enabled = false;
                 this.x264BframePredictionModeLabel.Enabled = false;
                 this.x264WeightedBPrediction.Checked = false;
@@ -844,6 +845,7 @@ namespace MeGUI.packages.video.x264
             else
             {
                 this.x264AdaptiveBframes.Enabled = true;
+                this.x264AdaptiveBframesLabel.Enabled = true;
                 this.x264BframePredictionMode.Enabled = true;
                 this.x264BframePredictionModeLabel.Enabled = true;
                 // We can enable these if we don't have turbo options
