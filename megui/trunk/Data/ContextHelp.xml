@@ -43,7 +43,7 @@ improvement in quality.</Advanced>
 Bi-directional Predictive Frames are highly compressed as they only store the data that
 has changed from the previous frame or that is different from the next frame. B-frames
 generally have less quality than I- or P- frames but can increase the overall quality of the
-video by storing data very efficiently. A setting of 2 to 3 will usually provide the best
+video by storing data very efficiently. A setting of 2 to 3 will usually provide a good
 overall quality while allowing significant compression advantages.</Advanced>
 			<Basic>Maximum number of B-frames between I and P frames</Basic>
 			<Recommended>2 to 3</Recommended>
@@ -264,13 +264,6 @@ more informed choices on the finial pass.</Advanced>
 			<Recommended>x264_2pass.log</Recommended>
 			<Default>x264_2pass.log</Default>
 		</stats>
-		<rceq name="Rate Control Equation">
-			<Advanced>
-This is the mathematical model used to determine rate control during encoding.</Advanced>
-			<Basic>Rate Control Equation.</Basic>
-			<Recommended>blurCplx^(1-qComp)</Recommended>
-			<Default>blurCplx^(1-qComp)</Default>
-		</rceq>
 		<qcomp name="Quantizer Curve Compression">
 			<Advanced>
 Regulates how much the quality can fluctuate within the target Average Bit Rate that
@@ -359,9 +352,9 @@ Larger values may increase efficiency but will increase encoding time.</Advanced
 Controls the decision quality of motion estimation. Lower values will make faster and less
 accurate decisions. Higher values will improve quality but will slow encoding speed. Note:
 mode 6 (RDO) must be used to enable RDO for B-frames.</Advanced>
-			<Basic>Sub Pixel motion estimation and partition decision quality: 1=fast, 6=best.</Basic>
-			<Recommended>5 to 6</Recommended>
-			<Default>5</Default>
+			<Basic>Sub Pixel motion estimation and partition decision quality: 1=fast, 7=best.</Basic>
+			<Recommended>6</Recommended>
+			<Default>6</Default>
 		</subme>
 		<b-rdo name="RDO for B-frames">
 			<Advanced>
@@ -450,7 +443,7 @@ speed further.</Advanced>
 			<Recommended>On Macro Block</Recommended>
 			<Default>Disabled</Default>
 		</trellis>
-		<psyrd name="Psychovisual RDO">
+		<psyrd name="Psychovisual RD optimizations">
 			<Advanced>
 Modifies the rate-distortion metric to improve sharpness and detail retention.
 			</Advanced>
