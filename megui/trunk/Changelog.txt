@@ -1,3 +1,6 @@
+0.3.0.2012
+    - (sharktooth) Reverted r704 ([FileUtil.cs] Added SetLastWriteTime in the ExtractZipFile method.) since it was causing problems to the auto-update
+
 0.3.0.2011
     - (kurtnoise) updated MediaInfo library and its wrapper to the last release (0.7.7.6)
     - (kurtnoise) [x264Encoder] enable aq-mode only for index=0
@@ -6,6 +9,7 @@
     - (sharktooth) [AviSynthWindow.cs] Check if player window is already the original player before trying to reopen it (fixes an issue introduced with the previous commit)
     - (sharktooth) [AviSynthWindow.cs] Auto-Preview disabled by default. When unchecked it now re-opens the original video player.
     - (sharktooth) Updated AQ settings for the new x264 revisions
+    - (sharktooth) [FileUtil.cs] Added SetLastWriteTime in the ExtractZipFile method.
 
 0.3.0.2009
     - (sharktooth) [MkvMergeMuxer.cs] --delay -> --sync for compatibility with mkvtoolnix 2.3.0
