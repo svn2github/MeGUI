@@ -712,7 +712,7 @@ namespace MeGUI.packages.video.x264
             tooltipHelp.SetToolTip(x264SubpelRefinement, SelectHelpText("subme"));
             tooltipHelp.SetToolTip(x264CabacEnabled, SelectHelpText("no-cabac"));
             tooltipHelp.SetToolTip(x264DeblockActive, SelectHelpText("nf"));
-            tooltipHelp.SetToolTip(x264NewAdaptiveBframes, SelectHelpText("no-b-adapt"));
+            tooltipHelp.SetToolTip(x264NewAdaptiveBframes, SelectHelpText("b-adapt"));
             tooltipHelp.SetToolTip(x264PyramidBframes, SelectHelpText("b-pyramid"));
             tooltipHelp.SetToolTip(x264MixedReferences, SelectHelpText("mixed-refs"));
             tooltipHelp.SetToolTip(x264LosslessMode, SelectHelpText("losslessmode"));
@@ -727,7 +727,6 @@ namespace MeGUI.packages.video.x264
             tooltipHelp.SetToolTip(x264PBFrameFactor, SelectHelpText("pbratio"));
             tooltipHelp.SetToolTip(x264ChromaQPOffset, SelectHelpText("chroma-qp-offset"));
 
-
             /*************************/
             /* Rate Control Tooltips */
             /*************************/
@@ -738,6 +737,8 @@ namespace MeGUI.packages.video.x264
             tooltipHelp.SetToolTip(x264QuantizerCompression, SelectHelpText("qcomp"));
             tooltipHelp.SetToolTip(x264TempFrameComplexityBlur, SelectHelpText("cplxblur"));
             tooltipHelp.SetToolTip(x264TempQuantBlur, SelectHelpText("qblur"));
+            tooltipHelp.SetToolTip(PsyRD, SelectHelpText("psyrd");
+            toottipHelp.SetToolTip(PsyTrellis, SelectHelpText("psytrellis");
 
             /**************************/
             /* Other Options Tooltips */

@@ -49,15 +49,14 @@ overall quality while allowing significant compression advantages.</Advanced>
 			<Recommended>2 to 3</Recommended>
 			<Default>0</Default>
 		</bframes>
-		<!-- WARNING DOUBLE NEGATIVE -->
-		<no-b-adapt name="Adaptive B-frames">
+		<b-adapt name="Adaptive B-frames">
 			<Advanced>
 Enables x264 to make adaptive decisions on where B-frames should be used, decreasing
 the number of consecutive B-frames where it makes sense.</Advanced>
 			<Basic>Enables adaptive B-frame decisions</Basic>
-			<Recommended>Enabled</Recommended>
-			<Default>Enabled</Default>
-		</no-b-adapt>
+			<Recommended>1 - Fast</Recommended>
+			<Default>1 - Fast</Default>
+		</b-adapt>
 		<b-bias name="B-frame Bias">
 			<Advanced>
 Positive values increase the likelihood that a B-frame will be used, negative values decrease
@@ -444,13 +443,30 @@ Enables the use of 8x8 sub-partitions in predicted macroblocks, for I-frames.</A
     </i8x8mv>
 		<trellis name="Trellis Quantization">
 			<Advanced>
-Performs Trellis quantisation to increase efficiency. On Macroblock provides a
+Performs Trellis quantization to increase efficiency. On Macroblock provides a
 good compromise between speed and efficiency. On all decisions reduces
 speed further.</Advanced>
 			<Basic>Trellis Rate Distortion quantization. (Requires CABAC, disables deadzone)</Basic>
 			<Recommended>On Macro Block</Recommended>
 			<Default>Disabled</Default>
 		</trellis>
+		<psyrd>
+			<Advanced>
+Modifies the rate-distortion metric to improve sharpness and detail retention.
+			</Advanced>
+			<Basic>Improves detail retention</Basic>
+			<Recommended>1.0</Recommended>
+			<Default>1.0<Default>
+		</psyrd>
+		<psytrellis>
+			<Advanced>
+Experimental: attempts to improve sharpness beyond that of the ordinary trellis algorithm.
+Your mileage may vary.			
+			</Advanced>
+			<Basic>Experimental modification to trellis.</Basic>
+			<Recommended>0.0</Recommended>
+			<Default>0.0<Default>
+		</psytrellis>
 		<!--WARNING DOUBLE NEGATIVE-->
 		<no-fast-pskip name="Fast P-frame Skip Detection">
 			<Advanced>
