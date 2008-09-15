@@ -55,11 +55,11 @@ namespace MeGUI
                 return list.ToArray();
             }
         }
-        int adaptiveBFrames, nbRefFrames, alphaDeblock, betaDeblock, subPelRefinement, maxQuantDelta, tempQuantBlur, 
+        int NewadaptiveBFrames, nbRefFrames, alphaDeblock, betaDeblock, subPelRefinement, maxQuantDelta, tempQuantBlur, 
 			bframePredictionMode, vbvBufferSize, vbvMaxBitrate, meType, meRange, minGOPSize, 
 			quantizerMatrixType, profile, x264Trellis, level, noiseReduction, deadZoneInter, deadZoneIntra, AQMode;
 		decimal ipFactor, pbFactor, chromaQPOffset, vbvInitialBuffer, bitrateVariance, quantCompression, 
-			tempComplexityBlur, tempQuanBlurCC, scdSensitivity, bframeBias, quantizerCrf, AQStrength;
+			tempComplexityBlur, tempQuanBlurCC, scdSensitivity, bframeBias, quantizerCrf, AQStrength, psyRDO, psyTrellis;
 		bool deblock, cabac, p4x4mv, p8x8mv, b8x8mv, i4x4mv, i8x8mv, weightedBPrediction, encodeInterlaced,
 			bFramePyramid, chromaME, adaptiveDCT, lossless, mixedRefs, bRDO, NoFastPSkip, BiME, psnrCalc, noDctDecimate, ssimCalc;
 		string quantizerMatrix;
@@ -87,11 +87,13 @@ namespace MeGUI
 			betaDeblock = 0;
 			cabac = true;
 			weightedBPrediction = false;
-			adaptiveBFrames = 1;
+			NewadaptiveBFrames = 1;
 			bFramePyramid = false;
 			subPelRefinement = 4;
 			BiME = false;
-			bRDO = false;
+            psyRDO = new decimal(1.0);
+            psyTrellis = new decimal(0.0);
+            bRDO = false;
 			chromaME = true;
 			p8x8mv = true;
 			b8x8mv = true;
@@ -293,6 +295,16 @@ namespace MeGUI
 			get {return bframeBias;}
 			set {bframeBias = value;}
 		}
+        public decimal PsyRDO
+        {
+            get { return psyRDO; }
+            set { psyRDO = value; }
+        }
+        public decimal PsyTrellis
+        {
+            get { return psyTrellis; }
+            set { psyTrellis = value; }
+        }
 		public bool Deblock
 		{
 			get {return deblock;}
@@ -308,10 +320,10 @@ namespace MeGUI
 			get {return weightedBPrediction;}
 			set {weightedBPrediction = value;}
 		}
-		public int AdaptiveBFrames
+		public int NewAdaptiveBFrames
 		{
-			get {return adaptiveBFrames;}
-			set {adaptiveBFrames = value;}
+			get {return NewadaptiveBFrames;}
+			set {NewadaptiveBFrames = value;}
 		}
 		public bool BFramePyramid
 		{
@@ -424,7 +436,7 @@ namespace MeGUI
         public bool IsAltered(x264Settings otherSettings)
         {
             if (
-                this.AdaptiveBFrames != otherSettings.AdaptiveBFrames ||
+                this.NewAdaptiveBFrames != otherSettings.NewAdaptiveBFrames ||
                 this.AdaptiveDCT != otherSettings.AdaptiveDCT ||
                 this.AlphaDeblock != otherSettings.AlphaDeblock ||
                 this.NoFastPSkip != otherSettings.NoFastPSkip ||
@@ -436,6 +448,8 @@ namespace MeGUI
                 this.BitrateVariance != otherSettings.BitrateVariance ||
                 this.biME != otherSettings.biME ||
                 this.BRDO != otherSettings.BRDO ||
+                this.PsyRDO != otherSettings.PsyRDO ||
+                this.PsyTrellis != otherSettings.PsyTrellis ||
                 this.Cabac != otherSettings.Cabac ||
                 this.ChromaME != otherSettings.ChromaME ||
                 this.ChromaQPOffset != otherSettings.ChromaQPOffset ||
@@ -495,7 +509,7 @@ namespace MeGUI
                 case 0:
                     Cabac = false;
                     NbBframes = 0;
-                    AdaptiveBFrames = 0;
+                    NewAdaptiveBFrames = 0;
                     BFramePyramid = false;
                     I8x8mv = false;
                     AdaptiveDCT = false;
@@ -542,7 +556,7 @@ namespace MeGUI
                 BFramePyramid = false;
             if (NbBframes == 0)
             {
-                AdaptiveBFrames = 0;
+                NewAdaptiveBFrames = 0;
                 biME = false;
                 WeightedBPrediction = false;
             }

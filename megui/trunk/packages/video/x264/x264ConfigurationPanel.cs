@@ -497,7 +497,9 @@ namespace MeGUI.packages.video.x264
                     xs.KeyframeInterval = Int32.Parse(x264KeyframeInterval.Text);
                 xs.NbRefFrames = (int)x264NumberOfRefFrames.Value;
                 xs.NbBframes = (int)x264NumberOfBFrames.Value;
-                xs.AdaptiveBFrames = x264AdaptiveBframes.SelectedIndex;
+                xs.NewAdaptiveBFrames = x264NewAdaptiveBframes.SelectedIndex;
+                xs.PsyRDO = this.PsyRD.Value;
+                xs.PsyTrellis = this.PsyTrellis.Value;
                 xs.BFramePyramid = x264PyramidBframes.Checked;
                 xs.Deblock = x264DeblockActive.Checked;
                 xs.AlphaDeblock = (int)x264AlphaDeblock.Value;
@@ -576,7 +578,7 @@ namespace MeGUI.packages.video.x264
                 x264Turbo.Checked = xs.Turbo;
                 x264BitrateQuantizer.Value = (isBitrateMode(xs.EncodingMode) || xs.QuantizerCRF == 0) ? xs.BitrateQuantizer : xs.QuantizerCRF;
                 x264KeyframeInterval.Text = xs.KeyframeInterval.ToString() ;
-                x264AdaptiveBframes.SelectedIndex = xs.AdaptiveBFrames;
+                x264NewAdaptiveBframes.SelectedIndex = xs.NewAdaptiveBFrames;
                 x264DeblockActive.Checked = xs.Deblock;
                 x264PyramidBframes.Checked = xs.BFramePyramid;
                 x264AlphaDeblock.Value = xs.AlphaDeblock;
@@ -586,6 +588,8 @@ namespace MeGUI.packages.video.x264
                 BiME.Checked = xs.biME;
                 x264WeightedBPrediction.Checked = xs.WeightedBPrediction;
                 x264ChromaMe.Checked = xs.ChromaME;
+                PsyRD.Value = xs.PsyRDO;
+                PsyTrellis.Value = xs.PsyTrellis;
                 trellis.SelectedIndex = xs.X264Trellis;
                 adaptiveDCT.Checked = xs.AdaptiveDCT;
                 x264P8x8mv.Checked = xs.P8x8mv;
@@ -708,7 +712,7 @@ namespace MeGUI.packages.video.x264
             tooltipHelp.SetToolTip(x264SubpelRefinement, SelectHelpText("subme"));
             tooltipHelp.SetToolTip(x264CabacEnabled, SelectHelpText("no-cabac"));
             tooltipHelp.SetToolTip(x264DeblockActive, SelectHelpText("nf"));
-            tooltipHelp.SetToolTip(x264AdaptiveBframes, SelectHelpText("no-b-adapt"));
+            tooltipHelp.SetToolTip(x264NewAdaptiveBframes, SelectHelpText("no-b-adapt"));
             tooltipHelp.SetToolTip(x264PyramidBframes, SelectHelpText("b-pyramid"));
             tooltipHelp.SetToolTip(x264MixedReferences, SelectHelpText("mixed-refs"));
             tooltipHelp.SetToolTip(x264LosslessMode, SelectHelpText("losslessmode"));
@@ -825,8 +829,8 @@ namespace MeGUI.packages.video.x264
             #region b-frames
             if (this.x264NumberOfBFrames.Value == 0)
             {
-                this.x264AdaptiveBframes.SelectedIndex = 1;
-                this.x264AdaptiveBframes.Enabled = false;
+                this.x264NewAdaptiveBframes.SelectedIndex = 1;
+                this.x264NewAdaptiveBframes.Enabled = false;
                 this.x264AdaptiveBframesLabel.Enabled = false;
                 this.x264BframePredictionMode.Enabled = false;
                 this.x264BframePredictionModeLabel.Enabled = false;
@@ -844,7 +848,7 @@ namespace MeGUI.packages.video.x264
             }
             else
             {
-                this.x264AdaptiveBframes.Enabled = true;
+                this.x264NewAdaptiveBframes.Enabled = true;
                 this.x264AdaptiveBframesLabel.Enabled = true;
                 this.x264BframePredictionMode.Enabled = true;
                 this.x264BframePredictionModeLabel.Enabled = true;
@@ -896,6 +900,26 @@ namespace MeGUI.packages.video.x264
             {
                 this.trellis.Enabled = true;
                 this.trellisLabel.Enabled = true;
+            }
+            if (this.x264SubpelRefinement.SelectedIndex > 4 && !turboOptions)
+            {
+                this.PsyRD.Enabled = true;
+                this.PsyRDLabel.Enabled = true;
+            }
+            else
+            {
+                this.PsyRD.Enabled = false;
+                this.PsyRDLabel.Enabled = false;
+            }
+            if (this.trellis.SelectedIndex > 0 && this.PsyRD.Enabled)
+            {
+                this.PsyTrellis.Enabled = true;
+                this.PsyTrellisLabel.Enabled = true;
+            }
+            else
+            {
+                this.PsyTrellis.Enabled = false;
+                this.PsyTrellisLabel.Enabled = false;
             }
             #endregion
 

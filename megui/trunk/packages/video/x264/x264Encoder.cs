@@ -146,8 +146,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             if (xs.NbBframes != 0) // 0 is default value, adaptive and pyramid are conditional on b frames being enabled
             {
                 sb.Append("--bframes " + xs.NbBframes + " ");
-                if (xs.AdaptiveBFrames != 1)
-                    sb.Append("--b-adapt " + xs.AdaptiveBFrames + " ");
+                if (xs.NewAdaptiveBFrames != 1)
+                    sb.Append("--b-adapt " + xs.NewAdaptiveBFrames + " ");
                 if (xs.NbBframes > 1 && xs.BFramePyramid) // pyramid needs a minimum of 2 b frames
                     sb.Append("--b-pyramid ");
                 if (xs.BRDO)
@@ -170,7 +170,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             if (xs.Deblock) // deblocker active, add options
             {
                 if (xs.AlphaDeblock != 0 || xs.BetaDeblock != 0) // 0 is default value
-                    sb.Append("--filter " + xs.AlphaDeblock + "," + xs.BetaDeblock + " ");
+                    sb.Append("--filter " + xs.AlphaDeblock + ":" + xs.BetaDeblock + " ");
             }
             else // no deblocking
                 sb.Append("--nf ");
@@ -185,6 +185,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                 sb.Append("--no-chroma-me ");
             if (xs.X264Trellis > 0)
                 sb.Append("--trellis " + xs.X264Trellis + " ");
+            if ((xs.PsyRDO != new decimal(1.0) || xs.PsyTrellis != new decimal(0.0)) && xs.SubPelRefinement + 1 > 5)
+                sb.Append("--psy-rd " + xs.PsyRDO + ":" + xs.PsyTrellis + " ");
             // now it's time for the macroblock types
             if (xs.P8x8mv || xs.B8x8mv || xs.I4x4mv || xs.I8x8mv || xs.P4x4mv || xs.AdaptiveDCT)
             {
