@@ -83,6 +83,7 @@ namespace MeGUI.core.util
                         Stream outputStream = File.OpenWrite(pathname);
                         FileUtil.copyData(inputFile.GetInputStream(entry), outputStream);
                         outputStream.Close();
+                        File.SetLastWriteTime(pathname, entry.DateTime);
                     }
                 }
             }
