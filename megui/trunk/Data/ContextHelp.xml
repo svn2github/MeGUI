@@ -456,7 +456,7 @@ Modifies the rate-distortion metric to improve sharpness and detail retention.
 			</Advanced>
 			<Basic>Improves detail retention</Basic>
 			<Recommended>1.0</Recommended>
-			<Default>1.0<Default>
+			<Default>1.0</Default>
 		</psyrd>
 		<psytrellis>
 			<Advanced>
@@ -465,7 +465,7 @@ Your mileage may vary.
 			</Advanced>
 			<Basic>Experimental modification to trellis.</Basic>
 			<Recommended>0.0</Recommended>
-			<Default>0.0<Default>
+			<Default>0.0</Default>
 		</psytrellis>
 		<!--WARNING DOUBLE NEGATIVE-->
 		<no-fast-pskip name="Fast P-frame Skip Detection">

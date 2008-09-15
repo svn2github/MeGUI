@@ -176,7 +176,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                 sb.Append("--nf ");
             if (!xs.Cabac) // no cabac
                 sb.Append("--no-cabac ");
-            if (xs.SubPelRefinement + 1 != 5) // non default subpel refinement
+            if (xs.SubPelRefinement + 1 != 6) // non default subpel refinement
             {
                 int subq = xs.SubPelRefinement + 1;
                 sb.Append("--subme " + subq + " ");

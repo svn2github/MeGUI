@@ -426,7 +426,7 @@ namespace MeGUI.packages.video.x264
             if (x264EncodingMode.SelectedIndex == -1)
                 this.x264EncodingMode.SelectedIndex = 0;
             if (x264SubpelRefinement.SelectedIndex == -1)
-                this.x264SubpelRefinement.SelectedIndex = 4;
+                this.x264SubpelRefinement.SelectedIndex = 5;
             if (x264BframePredictionMode.SelectedIndex == -1)
                 this.x264BframePredictionMode.SelectedIndex = 1;
             if (x264METype.SelectedIndex == -1)
@@ -737,8 +737,8 @@ namespace MeGUI.packages.video.x264
             tooltipHelp.SetToolTip(x264QuantizerCompression, SelectHelpText("qcomp"));
             tooltipHelp.SetToolTip(x264TempFrameComplexityBlur, SelectHelpText("cplxblur"));
             tooltipHelp.SetToolTip(x264TempQuantBlur, SelectHelpText("qblur"));
-            tooltipHelp.SetToolTip(PsyRD, SelectHelpText("psyrd");
-            toottipHelp.SetToolTip(PsyTrellis, SelectHelpText("psytrellis");
+            tooltipHelp.SetToolTip(PsyRD, SelectHelpText("psyrd"));
+            tooltipHelp.SetToolTip(PsyTrellis, SelectHelpText("psytrellis"));
 
             /**************************/
             /* Other Options Tooltips */
