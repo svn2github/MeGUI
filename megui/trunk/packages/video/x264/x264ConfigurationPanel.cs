@@ -145,6 +145,7 @@ namespace MeGUI.packages.video.x264
         {
             deadzoneInter.Enabled = (trellis.SelectedIndex == 0);
             deadzoneIntra.Enabled = (trellis.SelectedIndex == 0);
+            lbx264DeadZones.Enabled = (trellis.SelectedIndex == 0);
             if (trellis.SelectedIndex != 0)
             {
                 deadzoneIntra.Value = 11;
