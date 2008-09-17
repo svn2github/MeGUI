@@ -1,3 +1,8 @@
+0.3.0.2014
+    - (sharktooth) [x264Encoder.cs] Fixed a rare bug that happens switching from CRF to CQ modes.
+    - (sharktooth) [x264ConfigurationPanel.cs] Deadzones label gets greyed when trellis > 0 for coherence.
+    - (sharktooth) Feature #2114153
+
 0.3.0.2013
     - (shatktooth) Fixed typos in the previous commit + x264 default subme set to 6 (RDO)
     - (sharktooth) Updated tooltips for the new options.
