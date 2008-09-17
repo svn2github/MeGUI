@@ -73,6 +73,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
 
         public static string genCommandline(string input, string output, Dar? d, int hres, int vres, x264Settings xs, Zone[] zones)
         {
+            int qp;
             StringBuilder sb = new StringBuilder();
             CultureInfo ci = new CultureInfo("en-us");
             if (xs.EncodingMode == 4 || xs.EncodingMode == 7)
@@ -84,7 +85,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                     break;
                 case 1: // CQ
                     if (xs.Lossless) sb.Append("--qp 0 ");
-                    else sb.Append("--qp " + xs.QuantizerCRF.ToString(new CultureInfo("en-us")) + " ");
+                    else
+                    {
+                        qp = (int)xs.QuantizerCRF;
+                        sb.Append("--qp " + qp.ToString(new CultureInfo("en-us")) + " ");
+                    }
                     break;
                 case 2: // 2 pass first pass
                     sb.Append("--pass 1 --bitrate " + xs.BitrateQuantizer + " --stats " + "\"" + xs.Logfile + "\" ");
