@@ -123,7 +123,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             if (xs.Turbo)
             {
                 xs.NbRefFrames = 1;
-                xs.SubPelRefinement = 0; // Q-Pel 1 iteration
+                xs.SubPelRefinement = 1; // Q-Pel 2 iterations
                 xs.METype = 0; // diamond search
                 xs.I4x4mv = false;
                 xs.P4x4mv = false;

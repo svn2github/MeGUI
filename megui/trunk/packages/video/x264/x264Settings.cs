@@ -533,7 +533,7 @@ namespace MeGUI
             if (Turbo)
             {
                 NbRefFrames = 1;
-                SubPelRefinement = 0;
+                SubPelRefinement = 1;
                 METype = 0; // diamond search
                 I4x4mv = false;
                 P4x4mv = false;

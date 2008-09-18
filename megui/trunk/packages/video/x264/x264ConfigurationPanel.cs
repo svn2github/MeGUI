@@ -942,8 +942,8 @@ namespace MeGUI.packages.video.x264
                 // Uncheck everything
                 this.BiME.Checked = false;
                 this.x264NumberOfRefFrames.Value = new decimal(1);
-                this.x264SubpelRefinement.SelectedIndex = 0;
-                this.x264METype.SelectedIndex = 0;
+                this.x264SubpelRefinement.SelectedIndex = 1;
+                this.x264METype.SelectedIndex = 1;
                 this.x264MixedReferences.Checked = false;
                 this.bRDO.Checked = false;
                 this.NoFastPSkip.Checked = false;
