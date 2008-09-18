@@ -1,3 +1,7 @@
+0.3.0.2015
+    - (sharktooth) [ProgressWindow] Fix for #2114239 (Progress Windows size).
+    - (sharktooth) [x264] Changed subme to 2 for turbo first pass. Should ensure a much lower quality drop at the cost of some encoding speed in the first pass.
+
 0.3.0.2014
     - (sharktooth) [x264Encoder.cs] Fixed a rare bug that happens switching from CRF to CQ modes.
     - (sharktooth) [x264ConfigurationPanel.cs] Deadzones label gets greyed when trellis > 0 for coherence.
