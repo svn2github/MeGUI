@@ -162,7 +162,7 @@ namespace MeGUI
             this.currentVideoFrame.Enabled = false;
             this.currentVideoFrame.Location = new System.Drawing.Point(173, 41);
             this.currentVideoFrame.Name = "currentVideoFrame";
-            this.currentVideoFrame.Size = new System.Drawing.Size(128, 21);
+            this.currentVideoFrame.Size = new System.Drawing.Size(130, 21);
             this.currentVideoFrame.TabIndex = 3;
             this.currentVideoFrame.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
@@ -184,7 +184,7 @@ namespace MeGUI
             this.groupBox1.Controls.Add(this.positionInClip);
             this.groupBox1.Location = new System.Drawing.Point(8, 8);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(307, 177);
+            this.groupBox1.Size = new System.Drawing.Size(309, 177);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             // 
@@ -195,7 +195,7 @@ namespace MeGUI
             this.totalTime.Enabled = false;
             this.totalTime.Location = new System.Drawing.Point(173, 149);
             this.totalTime.Name = "totalTime";
-            this.totalTime.Size = new System.Drawing.Size(128, 21);
+            this.totalTime.Size = new System.Drawing.Size(130, 21);
             this.totalTime.TabIndex = 11;
             this.totalTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
@@ -215,7 +215,7 @@ namespace MeGUI
             this.timeElapsed.Enabled = false;
             this.timeElapsed.Location = new System.Drawing.Point(173, 122);
             this.timeElapsed.Name = "timeElapsed";
-            this.timeElapsed.Size = new System.Drawing.Size(128, 21);
+            this.timeElapsed.Size = new System.Drawing.Size(130, 21);
             this.timeElapsed.TabIndex = 9;
             this.timeElapsed.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
@@ -235,7 +235,7 @@ namespace MeGUI
             this.fps.Enabled = false;
             this.fps.Location = new System.Drawing.Point(173, 95);
             this.fps.Name = "fps";
-            this.fps.Size = new System.Drawing.Size(128, 21);
+            this.fps.Size = new System.Drawing.Size(130, 21);
             this.fps.TabIndex = 7;
             this.fps.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
@@ -255,7 +255,7 @@ namespace MeGUI
             this.videoData.Enabled = false;
             this.videoData.Location = new System.Drawing.Point(173, 68);
             this.videoData.Name = "videoData";
-            this.videoData.Size = new System.Drawing.Size(128, 21);
+            this.videoData.Size = new System.Drawing.Size(130, 21);
             this.videoData.TabIndex = 5;
             this.videoData.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
@@ -284,14 +284,14 @@ namespace MeGUI
             this.positionInClip.Enabled = false;
             this.positionInClip.Location = new System.Drawing.Point(173, 14);
             this.positionInClip.Name = "positionInClip";
-            this.positionInClip.Size = new System.Drawing.Size(128, 21);
+            this.positionInClip.Size = new System.Drawing.Size(130, 21);
             this.positionInClip.TabIndex = 1;
             this.positionInClip.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // abortButton
             // 
             this.abortButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.abortButton.Location = new System.Drawing.Point(237, 247);
+            this.abortButton.Location = new System.Drawing.Point(239, 252);
             this.abortButton.Name = "abortButton";
             this.abortButton.Size = new System.Drawing.Size(75, 23);
             this.abortButton.TabIndex = 6;
@@ -312,7 +312,7 @@ namespace MeGUI
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.progress.Location = new System.Drawing.Point(122, 191);
             this.progress.Name = "progress";
-            this.progress.Size = new System.Drawing.Size(193, 23);
+            this.progress.Size = new System.Drawing.Size(195, 23);
             this.progress.TabIndex = 2;
             // 
             // priorityLabel
@@ -336,7 +336,7 @@ namespace MeGUI
             "HIGH"});
             this.priority.Location = new System.Drawing.Point(122, 220);
             this.priority.Name = "priority";
-            this.priority.Size = new System.Drawing.Size(120, 21);
+            this.priority.Size = new System.Drawing.Size(122, 21);
             this.priority.TabIndex = 4;
             this.priority.SelectedIndexChanged += new System.EventHandler(this.priority_SelectedIndexChanged);
             // 
@@ -344,9 +344,9 @@ namespace MeGUI
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.statusLabel});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 279);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 284);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(324, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(326, 22);
             this.statusStrip1.TabIndex = 7;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -362,7 +362,7 @@ namespace MeGUI
             this.helpButton1.ArticleName = "Status window";
             this.helpButton1.AutoSize = true;
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.helpButton1.Location = new System.Drawing.Point(12, 247);
+            this.helpButton1.Location = new System.Drawing.Point(12, 252);
             this.helpButton1.Name = "helpButton1";
             this.helpButton1.Size = new System.Drawing.Size(44, 23);
             this.helpButton1.TabIndex = 5;
@@ -370,7 +370,7 @@ namespace MeGUI
             // ProgressWindow
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
-            this.ClientSize = new System.Drawing.Size(324, 301);
+            this.ClientSize = new System.Drawing.Size(326, 306);
             this.Controls.Add(this.helpButton1);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.priority);
@@ -380,8 +380,11 @@ namespace MeGUI
             this.Controls.Add(this.abortButton);
             this.Controls.Add(this.groupBox1);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(332, 330);
             this.Name = "ProgressWindow";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "Status";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
