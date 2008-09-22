@@ -431,6 +431,8 @@ namespace MeGUI
             // 
             // suggestResolution
             // 
+            this.suggestResolution.Checked = true;
+            this.suggestResolution.CheckState = System.Windows.Forms.CheckState.Checked;
             this.suggestResolution.Location = new System.Drawing.Point(286, 80);
             this.suggestResolution.Name = "suggestResolution";
             this.suggestResolution.Size = new System.Drawing.Size(120, 17);
@@ -629,9 +631,9 @@ namespace MeGUI
             // 
             this.optionsTab.Controls.Add(this.videoGroupBox);
             this.optionsTab.Controls.Add(this.resNCropGroupbox);
-            this.optionsTab.Location = new System.Drawing.Point(4, 23);
+            this.optionsTab.Location = new System.Drawing.Point(4, 22);
             this.optionsTab.Name = "optionsTab";
-            this.optionsTab.Size = new System.Drawing.Size(418, 387);
+            this.optionsTab.Size = new System.Drawing.Size(418, 388);
             this.optionsTab.TabIndex = 0;
             this.optionsTab.Text = "Options";
             this.optionsTab.UseVisualStyleBackColor = true;
@@ -773,9 +775,9 @@ namespace MeGUI
             this.filterTab.Controls.Add(this.aviOptGroupBox);
             this.filterTab.Controls.Add(this.mpegOptGroupBox);
             this.filterTab.Controls.Add(this.filtersGroupbox);
-            this.filterTab.Location = new System.Drawing.Point(4, 23);
+            this.filterTab.Location = new System.Drawing.Point(4, 22);
             this.filterTab.Name = "filterTab";
-            this.filterTab.Size = new System.Drawing.Size(418, 387);
+            this.filterTab.Size = new System.Drawing.Size(192, 74);
             this.filterTab.TabIndex = 2;
             this.filterTab.Text = "Filters";
             this.filterTab.UseVisualStyleBackColor = true;
@@ -1015,9 +1017,9 @@ namespace MeGUI
             this.editTab.Controls.Add(this.dllPath);
             this.editTab.Controls.Add(this.label1);
             this.editTab.Controls.Add(this.avisynthScript);
-            this.editTab.Location = new System.Drawing.Point(4, 23);
+            this.editTab.Location = new System.Drawing.Point(4, 22);
             this.editTab.Name = "editTab";
-            this.editTab.Size = new System.Drawing.Size(418, 387);
+            this.editTab.Size = new System.Drawing.Size(192, 74);
             this.editTab.TabIndex = 1;
             this.editTab.Text = "Edit";
             this.editTab.UseVisualStyleBackColor = true;
@@ -1025,7 +1027,7 @@ namespace MeGUI
             // openDLLButton
             // 
             this.openDLLButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.openDLLButton.Location = new System.Drawing.Point(385, 356);
+            this.openDLLButton.Location = new System.Drawing.Point(159, 43);
             this.openDLLButton.Name = "openDLLButton";
             this.openDLLButton.Size = new System.Drawing.Size(24, 23);
             this.openDLLButton.TabIndex = 3;
@@ -1036,16 +1038,16 @@ namespace MeGUI
             // 
             this.dllPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.dllPath.Location = new System.Drawing.Point(77, 358);
+            this.dllPath.Location = new System.Drawing.Point(77, 45);
             this.dllPath.Name = "dllPath";
             this.dllPath.ReadOnly = true;
-            this.dllPath.Size = new System.Drawing.Size(294, 21);
+            this.dllPath.Size = new System.Drawing.Size(68, 21);
             this.dllPath.TabIndex = 2;
             // 
             // label1
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.label1.Location = new System.Drawing.Point(8, 361);
+            this.label1.Location = new System.Drawing.Point(8, 48);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(66, 13);
             this.label1.TabIndex = 1;
@@ -1060,7 +1062,7 @@ namespace MeGUI
             this.avisynthScript.Multiline = true;
             this.avisynthScript.Name = "avisynthScript";
             this.avisynthScript.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.avisynthScript.Size = new System.Drawing.Size(401, 342);
+            this.avisynthScript.Size = new System.Drawing.Size(175, 29);
             this.avisynthScript.TabIndex = 0;
             // 
             // openVideoDialog
@@ -1558,7 +1560,6 @@ namespace MeGUI
 				this.cropRight.Enabled = true;
 				this.cropBottom.Enabled = true;
 				sendCropValues();
-                chAutoPreview_CheckedChanged(sender, e);
 			}
 			else
 			{
@@ -1570,7 +1571,8 @@ namespace MeGUI
 					player.crop(0, 0, 0, 0);
 			}
             suggestResolution_CheckedChanged(null, null);
-			this.showScript();
+            chAutoPreview_CheckedChanged(sender, e);
+            this.showScript();
 		}
 		private void deinterlace_CheckedChanged(object sender, System.EventArgs e)
 		{
@@ -1662,6 +1664,7 @@ namespace MeGUI
 				if (!crop.Checked)
 					crop.Checked = true;
                 chAutoPreview_CheckedChanged(sender, e);
+                this.showScript();
 			}
 			else
 				MessageBox.Show("I'm afraid I was unable to find 3 frames that have matching crop values");
@@ -1707,6 +1710,7 @@ namespace MeGUI
                     }
                     verticalResolution.Value = (decimal)scriptVerticalResolution;
                     chAutoPreview_CheckedChanged(sender, e);
+                    this.showScript();
                 }
                 else
                     this.verticalResolution.Enabled = resize.Checked;
@@ -1872,6 +1876,7 @@ namespace MeGUI
                 this.horizontalResolution.Enabled = this.verticalResolution.Enabled = false;
                 this.suggestResolution.Enabled = this.suggestResolution.Checked = false;
             }
+            chAutoPreview_CheckedChanged(sender, e);
             this.showScript();
         }
 
@@ -1918,7 +1923,10 @@ namespace MeGUI
 
         private void reopenOriginal_Click(object sender, EventArgs e)
         {
-            showOriginal();
+            if (chAutoPreview.Checked)
+                chAutoPreview.Checked = false;
+            else
+                showOriginal();
         }
 
         private void arChooser_SelectionChanged(object sender, string val)
@@ -1932,10 +1940,10 @@ namespace MeGUI
             if (chAutoPreview.Checked)
             {
                 previewButton_Click(sender, e);
+                previewButton_Click(sender, e);
             }
-            else
-                if (this.isPreviewMode == true)
-                    showOriginal();
+            else if (this.isPreviewMode == true)
+                showOriginal();
         }
     }
     public delegate void OpenScriptCallback(string avisynthScript);
