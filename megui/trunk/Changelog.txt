@@ -1,3 +1,8 @@
+0.3.0.2016
+    - (sharktooth) [MainForm] Fixed a cosmetic bug (#2120787)
+    - (sharktooth) [AviSynthWindow] Fixed various bugs in Auto-Preview
+    - (sharktooth) [ProgressWindow] Cosmetics (feature request #2119132)
+
 0.3.0.2015
     - (sharktooth) [ProgressWindow] Fix for #2114239 (Progress Windows size).
     - (sharktooth) [x264] Changed subme to 2 for turbo first pass. Should ensure a much lower quality drop at the cost of some encoding speed in the first pass.
