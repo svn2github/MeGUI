@@ -1463,7 +1463,15 @@ namespace MeGUI
 					matrixType.Enabled = true;
 					matrixType.SelectedIndex = 0;
 					enable4x4Matrix();
-					this.i4x4Matrix();
+                    this.I8x8 = this.flat8x8;
+                    this.P8x8 = this.flat8x8;
+                    this.I4x4L = this.flat4x4;
+                    this.I4x4CU = this.flat4x4;
+                    this.I4x4CY = this.flat4x4;
+                    this.P4x4L = this.flat4x4;
+                    this.P4x4CU = this.flat4x4;
+                    this.P4x4CY = this.flat4x4;
+                    this.i4x4Matrix();
 					break;
 			}
 			doEvents = true;
