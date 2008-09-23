@@ -1,3 +1,8 @@
+0.3.0.2017
+    - (sharktooth) [x264ConfigurationPanel] Fixed #2123859 (psy-trellis value passed to the commandline when trellis disabled).
+    - (sharktooth) [AVC CQM Editor] Fixed bug #2120046 (CQM editor crash)
+    - (sharktooth) [x264] Removed --weightb from the "turbo" options since its behavior was changed when --b-adapt 2 was added.
+
 0.3.0.2016
     - (sharktooth) [MainForm] Fixed a cosmetic bug (#2120787)
     - (sharktooth) [AviSynthWindow] Fixed various bugs in Auto-Preview
