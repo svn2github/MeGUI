@@ -854,8 +854,8 @@ namespace MeGUI.packages.video.x264
                 this.x264AdaptiveBframesLabel.Enabled = true;
                 this.x264BframePredictionMode.Enabled = true;
                 this.x264BframePredictionModeLabel.Enabled = true;
+                this.x264WeightedBPrediction.Enabled = true;
                 // We can enable these if we don't have turbo options
-                this.x264WeightedBPrediction.Enabled = !turboOptions;
                 this.BiME.Enabled = !turboOptions;
                 this.x264BframeBias.Enabled = true;
                 this.x264BframeBiasLabel.Enabled = true;
@@ -947,7 +947,6 @@ namespace MeGUI.packages.video.x264
                 this.x264MixedReferences.Checked = false;
                 this.bRDO.Checked = false;
                 this.NoFastPSkip.Checked = false;
-                this.x264WeightedBPrediction.Checked = false;
                 this.macroblockOptions.SelectedIndex = 1;
             }
             else

@@ -135,7 +135,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                 xs.BRDO = false;
                 xs.X264Trellis = 0; // disable trellis
                 xs.noFastPSkip = false;
-                xs.WeightedBPrediction = false;
                 xs.biME = false;
             }
             if (xs.DeadZoneInter != 21)
