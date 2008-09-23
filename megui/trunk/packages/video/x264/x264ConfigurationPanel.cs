@@ -920,6 +920,7 @@ namespace MeGUI.packages.video.x264
             }
             else
             {
+                this.PsyTrellis.Value = 0;
                 this.PsyTrellis.Enabled = false;
                 this.PsyTrellisLabel.Enabled = false;
             }
