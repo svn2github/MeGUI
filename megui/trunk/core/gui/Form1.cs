@@ -1186,13 +1186,19 @@ namespace MeGUI
                     return FileType.VIDEOINPUT;
                 case ".aac":
                 case ".ac3":
+                case ".aif":
+                case ".au":
+                case ".caf":
+                case ".bwf":
+                case ".dtsma":
+                case ".dtshd":               
                 case ".dts":
                 case ".mp2":
                 case ".mp3": 
                 case ".mpa":
                 case ".wav":
-                    return FileType.AUDIOINPUT;
-
+                case ".w64":
+                   return FileType.AUDIOINPUT;
                 case ".vob":
                 case ".mpg":
                 case ".mpeg":

@@ -539,6 +539,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                     case ".avs":
                         script.AppendFormat("Import(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
                         break;
+                    case ".dtshd":
+                    case ".dtsma":
                     case ".dts":
                         script.AppendFormat("NicDtsSource(\"{0}\"", audioJob.Input);
                         if (audioJob.Settings.AutoGain)
@@ -573,11 +575,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                                             script.Append(")");
                                     }
                                     else
-                                        script.AppendFormat("RaWavSource(\"{0}\", 2){1}", audioJob.Input, Environment.NewLine);
+                                        script.AppendFormat("RaWavSource(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
                                     break;
                                 case 0x0003:         // IEEE Float
                                 case 0xFFFE:         // WAVE_FORMAT_EXTENSIBLE header
-                                    script.AppendFormat("RaWavSource(\"{0}\", 2){1}", audioJob.Input, Environment.NewLine);
+                                    script.AppendFormat("RaWavSource(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
                                     break;
                                 case 0x0055:         // MPEG Layer 3
                                     script.AppendFormat("NicMPG123Source(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
