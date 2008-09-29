@@ -417,8 +417,10 @@ namespace MeGUI
 			input.Text = fileName;
             if (Path.GetExtension(fileName.ToLower()) == ".vob")
             {
-                string mypath = Path.GetDirectoryName(fileName) + "\\";
-                string myifofile = IFOparser.DetermineMovieIFO(mypath);
+                string myfilepath = Path.GetDirectoryName(fileName) + Path.DirectorySeparatorChar;
+                string myfilename = Path.GetFileName(fileName);
+                //string myifofile = IFOparser.DetermineMovieIFO(mypath);
+                string myifofile = myfilepath + "VTS_" + myfilename.Substring(4, 2) + "_0.IFO";
                 AudioTracks.Items.Clear();
 
                 if (!string.IsNullOrEmpty(myifofile))
