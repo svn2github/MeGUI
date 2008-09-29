@@ -88,7 +88,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                     else
                     {
                         qp = (int)xs.QuantizerCRF;
-                        sb.Append("--qp " + qp.ToString(new CultureInfo("en-us")) + " ");
+                        sb.Append("--qp " + qp.ToString(ci) + " ");
                     }
                     break;
                 case 2: // 2 pass first pass
@@ -109,7 +109,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                     sb.Append("--pass 3 --bitrate " + xs.BitrateQuantizer + " --stats " + "\"" + xs.Logfile + "\" ");
                     break;
                 case 9: // constant quality
-                    sb.Append("--crf " + xs.QuantizerCRF.ToString(new CultureInfo("en-us")) + " ");
+                    sb.Append("--crf " + xs.QuantizerCRF.ToString(ci) + " ");
                     break;
             } // now add the rest of the x264 encoder options
 
