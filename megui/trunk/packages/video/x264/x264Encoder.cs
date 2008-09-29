@@ -49,9 +49,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
 
         public override string GetFrameString(string line, StreamType stream)
         {
-            if (line.StartsWith("encoded frames:")) // status update
+            if (line.StartsWith("[")) // status update
             {
-                int frameNumberStart = line.IndexOf(":", 4) + 2;
+                int frameNumberStart = line.IndexOf("]", 4) + 2;
                 int frameNumberEnd = line.IndexOf("/");
                 return line.Substring(frameNumberStart, frameNumberEnd - frameNumberStart).Trim();
             }
