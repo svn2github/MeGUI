@@ -121,6 +121,11 @@ namespace MeGUI.core.gui
                 profileList.SetItemChecked(i, false);
             } 
         }
+
+        private void ProfileImporter_Load(object sender, EventArgs e)
+        {
+            PresetImporterToolTip.SetToolTip(this.profileList, "To check all presets, right click on this list and select all...");
+        }
     }
 
     public class CancelledException : MeGUIException

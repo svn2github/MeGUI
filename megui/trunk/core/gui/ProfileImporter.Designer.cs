@@ -32,6 +32,7 @@ namespace MeGUI.core.gui
             this.statusCheck = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.checkAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkNoneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.PresetImporterToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.statusCheck.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -74,13 +75,19 @@ namespace MeGUI.core.gui
             this.checkNoneToolStripMenuItem.Text = "Check None";
             this.checkNoneToolStripMenuItem.Click += new System.EventHandler(this.checkNoneToolStripMenuItem_Click);
             // 
+            // PresetImporterToolTip
+            // 
+            this.PresetImporterToolTip.AutoPopDelay = 5000;
+            this.PresetImporterToolTip.InitialDelay = 1000;
+            this.PresetImporterToolTip.ReshowDelay = 100;
+            // 
             // ProfileImporter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.ClientSize = new System.Drawing.Size(383, 358);
             this.Name = "ProfileImporter";
             this.Text = "Preset Importer";
-            this.TopMost = true;
+            this.Load += new System.EventHandler(this.ProfileImporter_Load);
             this.Controls.SetChildIndex(this.profileList, 0);
             this.Controls.SetChildIndex(this.label1, 0);
             this.Controls.SetChildIndex(this.button2, 0);
@@ -95,6 +102,7 @@ namespace MeGUI.core.gui
         private System.Windows.Forms.ContextMenuStrip statusCheck;
         private System.Windows.Forms.ToolStripMenuItem checkAllToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem checkNoneToolStripMenuItem;
+        private System.Windows.Forms.ToolTip PresetImporterToolTip;
 
     }
 }
