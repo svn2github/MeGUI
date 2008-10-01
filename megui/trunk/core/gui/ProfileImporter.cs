@@ -122,9 +122,9 @@ namespace MeGUI.core.gui
             } 
         }
 
-        private void ProfileImporter_Load(object sender, EventArgs e)
+        private void ProfileImporter_Shown(object sender, EventArgs e)
         {
-            PresetImporterToolTip.SetToolTip(this.profileList, "To check all presets, right click on this list and select all...");
+            PresetImporterToolTip.SetToolTip(this.profileList, "To import all presets in once, right click on this list and select all...");
         }
     }
 
