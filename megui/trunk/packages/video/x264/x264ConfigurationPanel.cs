@@ -508,7 +508,6 @@ namespace MeGUI.packages.video.x264
                 xs.Cabac = x264CabacEnabled.Checked;
                 xs.SubPelRefinement = this.x264SubpelRefinement.SelectedIndex;
                 xs.BRDO = bRDO.Checked;
-                xs.biME = BiME.Checked;
                 xs.WeightedBPrediction = x264WeightedBPrediction.Checked;
                 xs.ChromaME = this.x264ChromaMe.Checked;
                 xs.X264Trellis = trellis.SelectedIndex;
@@ -586,7 +585,6 @@ namespace MeGUI.packages.video.x264
                 x264BetaDeblock.Value = xs.BetaDeblock;
                 x264CabacEnabled.Checked = xs.Cabac;
                 bRDO.Checked = xs.BRDO;
-                BiME.Checked = xs.biME;
                 x264WeightedBPrediction.Checked = xs.WeightedBPrediction;
                 x264ChromaMe.Checked = xs.ChromaME;
                 PsyRD.Value = xs.PsyRDO;
@@ -703,7 +701,6 @@ namespace MeGUI.packages.video.x264
             tooltipHelp.SetToolTip(x264KeyframeInterval, SelectHelpText("keyint"));
             tooltipHelp.SetToolTip(NoiseReduction, SelectHelpText("nr"));
             tooltipHelp.SetToolTip(x264BitrateQuantizer, SelectHelpText("bitrate"));
-            tooltipHelp.SetToolTip(BiME, SelectHelpText("bime"));
             tooltipHelp.SetToolTip(x264MinimimQuantizer, SelectHelpText("qpmin"));
             tooltipHelp.SetToolTip(NoFastPSkip, SelectHelpText("no-fast-pskip"));
             tooltipHelp.SetToolTip(bRDO, SelectHelpText("b-rdo"));
@@ -843,8 +840,6 @@ namespace MeGUI.packages.video.x264
                 this.x264BframeBiasLabel.Enabled = false;
                 this.bRDO.Checked = false;
                 this.bRDO.Enabled = false;
-                this.BiME.Checked = false;
-                this.BiME.Enabled = false;
                 this.x264PyramidBframes.Checked = false;
                 this.x264PyramidBframes.Enabled = false;
             }
@@ -856,7 +851,6 @@ namespace MeGUI.packages.video.x264
                 this.x264BframePredictionModeLabel.Enabled = true;
                 this.x264WeightedBPrediction.Enabled = true;
                 // We can enable these if we don't have turbo options
-                this.BiME.Enabled = !turboOptions;
                 this.x264BframeBias.Enabled = true;
                 this.x264BframeBiasLabel.Enabled = true;
                 if (this.x264SubpelRefinement.SelectedIndex > 4 && !turboOptions)
@@ -941,7 +935,6 @@ namespace MeGUI.packages.video.x264
                 this.macroblockOptions.Enabled = false;
 
                 // Uncheck everything
-                this.BiME.Checked = false;
                 this.x264NumberOfRefFrames.Value = new decimal(1);
                 this.x264SubpelRefinement.SelectedIndex = 1;
                 this.x264METype.SelectedIndex = 1;

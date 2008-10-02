@@ -61,7 +61,7 @@ namespace MeGUI
 		decimal ipFactor, pbFactor, chromaQPOffset, vbvInitialBuffer, bitrateVariance, quantCompression, 
 			tempComplexityBlur, tempQuanBlurCC, scdSensitivity, bframeBias, quantizerCrf, AQStrength, psyRDO, psyTrellis;
 		bool deblock, cabac, p4x4mv, p8x8mv, b8x8mv, i4x4mv, i8x8mv, weightedBPrediction, encodeInterlaced,
-			bFramePyramid, chromaME, adaptiveDCT, lossless, mixedRefs, bRDO, NoFastPSkip, BiME, psnrCalc, noDctDecimate, ssimCalc;
+			bFramePyramid, chromaME, adaptiveDCT, lossless, mixedRefs, bRDO, NoFastPSkip, psnrCalc, noDctDecimate, ssimCalc;
 		string quantizerMatrix;
 		#region constructor
         /// <summary>
@@ -90,8 +90,7 @@ namespace MeGUI
 			NewadaptiveBFrames = 1;
 			bFramePyramid = false;
 			subPelRefinement = 5;
-			BiME = false;
-            psyRDO = new decimal(1.0);
+			psyRDO = new decimal(1.0);
             psyTrellis = new decimal(0.0);
             bRDO = false;
 			chromaME = true;
@@ -335,11 +334,6 @@ namespace MeGUI
 			get {return bRDO;}
 			set {bRDO = value;}
 		}
-		public bool biME
-		{
-			get {return BiME;}
-			set {BiME = value;}
-		}
 		public bool ChromaME
 		{
 			get {return chromaME;}
@@ -446,7 +440,6 @@ namespace MeGUI
                 this.BframePredictionMode != otherSettings.BframePredictionMode ||
                 this.BFramePyramid != otherSettings.BFramePyramid ||
                 this.BitrateVariance != otherSettings.BitrateVariance ||
-                this.biME != otherSettings.biME ||
                 this.BRDO != otherSettings.BRDO ||
                 this.PsyRDO != otherSettings.PsyRDO ||
                 this.PsyTrellis != otherSettings.PsyTrellis ||
@@ -546,7 +539,6 @@ namespace MeGUI
                 Trellis = false;
                 noFastPSkip = false;
                 WeightedBPrediction = false;
-                biME = false;
             }
             if (Profile != 2) // lossless requires High Profile
                 Lossless = false;
@@ -557,7 +549,6 @@ namespace MeGUI
             if (NbBframes == 0)
             {
                 NewAdaptiveBFrames = 0;
-                biME = false;
                 WeightedBPrediction = false;
             }
             if (!Cabac) // trellis requires CABAC

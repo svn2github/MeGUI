@@ -114,7 +114,6 @@ namespace MeGUI.packages.video.x264
             this.x264GeneralBFramesgGroupbox = new System.Windows.Forms.GroupBox();
             this.x264AdaptiveBframesLabel = new System.Windows.Forms.Label();
             this.x264NewAdaptiveBframes = new System.Windows.Forms.ComboBox();
-            this.BiME = new System.Windows.Forms.CheckBox();
             this.bRDO = new System.Windows.Forms.CheckBox();
             this.x264BframePredictionMode = new System.Windows.Forms.ComboBox();
             this.x264BframeBias = new System.Windows.Forms.NumericUpDown();
@@ -232,8 +231,7 @@ namespace MeGUI.packages.video.x264
             this.mainTabPage.Controls.Add(this.avcProfileGroupbox);
             this.mainTabPage.Controls.Add(this.x264CodecToolsGroupbox);
             this.mainTabPage.Controls.Add(this.x264CodecGeneralGroupbox);
-            this.mainTabPage.Location = new System.Drawing.Point(4, 23);
-            this.mainTabPage.Size = new System.Drawing.Size(502, 402);
+            this.mainTabPage.Size = new System.Drawing.Size(502, 403);
             // 
             // x264GeneralMiscGroupbox
             // 
@@ -600,9 +598,9 @@ namespace MeGUI.packages.video.x264
             this.rateControlTabPage.Controls.Add(this.x264QuantOptionsGroupbox);
             this.rateControlTabPage.Controls.Add(this.x264RateControlMiscGroupbox);
             this.rateControlTabPage.Controls.Add(this.x264RCGroupbox);
-            this.rateControlTabPage.Location = new System.Drawing.Point(4, 23);
+            this.rateControlTabPage.Location = new System.Drawing.Point(4, 22);
             this.rateControlTabPage.Name = "rateControlTabPage";
-            this.rateControlTabPage.Size = new System.Drawing.Size(502, 402);
+            this.rateControlTabPage.Size = new System.Drawing.Size(502, 403);
             this.rateControlTabPage.TabIndex = 3;
             this.rateControlTabPage.Text = "RC and ME";
             this.rateControlTabPage.UseVisualStyleBackColor = true;
@@ -1281,9 +1279,9 @@ namespace MeGUI.packages.video.x264
             this.quantizationTabPage.Controls.Add(this.quantizerMatrixGroupbox);
             this.quantizationTabPage.Controls.Add(this.x264MBGroupbox);
             this.quantizationTabPage.Controls.Add(this.x264QuantizerGroupBox);
-            this.quantizationTabPage.Location = new System.Drawing.Point(4, 23);
+            this.quantizationTabPage.Location = new System.Drawing.Point(4, 22);
             this.quantizationTabPage.Name = "quantizationTabPage";
-            this.quantizationTabPage.Size = new System.Drawing.Size(502, 402);
+            this.quantizationTabPage.Size = new System.Drawing.Size(502, 403);
             this.quantizationTabPage.TabIndex = 4;
             this.quantizationTabPage.Text = "Advanced";
             this.quantizationTabPage.UseVisualStyleBackColor = true;
@@ -1384,7 +1382,6 @@ namespace MeGUI.packages.video.x264
             // 
             this.x264GeneralBFramesgGroupbox.Controls.Add(this.x264AdaptiveBframesLabel);
             this.x264GeneralBFramesgGroupbox.Controls.Add(this.x264NewAdaptiveBframes);
-            this.x264GeneralBFramesgGroupbox.Controls.Add(this.BiME);
             this.x264GeneralBFramesgGroupbox.Controls.Add(this.bRDO);
             this.x264GeneralBFramesgGroupbox.Controls.Add(this.x264BframePredictionMode);
             this.x264GeneralBFramesgGroupbox.Controls.Add(this.x264BframeBias);
@@ -1423,17 +1420,6 @@ namespace MeGUI.packages.video.x264
             this.x264NewAdaptiveBframes.Size = new System.Drawing.Size(76, 21);
             this.x264NewAdaptiveBframes.TabIndex = 11;
             this.x264NewAdaptiveBframes.SelectedIndexChanged += new System.EventHandler(this.updateEvent);
-            // 
-            // BiME
-            // 
-            this.BiME.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.BiME.Location = new System.Drawing.Point(4, 166);
-            this.BiME.Name = "BiME";
-            this.BiME.Padding = new System.Windows.Forms.Padding(3);
-            this.BiME.Size = new System.Drawing.Size(192, 23);
-            this.BiME.TabIndex = 6;
-            this.BiME.Text = "Bidirectional M.E.";
-            this.BiME.CheckedChanged += new System.EventHandler(this.updateEvent);
             // 
             // bRDO
             // 
@@ -2149,7 +2135,6 @@ namespace MeGUI.packages.video.x264
         private System.Windows.Forms.NumericUpDown x264BitrateQuantizer;
         private MeGUI.core.gui.FileSCBox cqmComboBox1;
         private System.Windows.Forms.GroupBox x264GeneralBFramesgGroupbox;
-        private System.Windows.Forms.CheckBox BiME;
         private System.Windows.Forms.CheckBox bRDO;
         private System.Windows.Forms.ComboBox x264BframePredictionMode;
         private System.Windows.Forms.NumericUpDown x264BframeBias;

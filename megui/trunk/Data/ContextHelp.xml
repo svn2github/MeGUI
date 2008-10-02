@@ -379,16 +379,6 @@ Enables Motion Estimation to take colour components of the video into account wh
 			<Recommended>Enabled</Recommended>
 			<Default>Enabled</Default>
 		</no-chroma-me>
-		<bime name="Bi-Directional Motion Estimation">
-			<Advanced>
-Enables an additional search for forwards and backwards vectors when encoding
-a bi-directional B-frames, improving quality. Note: Does not effect B-frames encoded
-as direct/skip (no motion vector), forward (1 MV pointing to a past reference), backwards
-(1 MV pointing to a future reference).</Advanced>
-			<Basic>Jointly optimize both Motion Vectors in B-frames</Basic>
-			<Recommended>Enabled</Recommended>
-			<Default>Disabled</Default>
-		</bime>
 		<!--Note: name changed from 8x8dct due to invalid XML character warning-->
 		<i8x8dct name="Adaptive 8x8 DCT">
 			<Advanced>

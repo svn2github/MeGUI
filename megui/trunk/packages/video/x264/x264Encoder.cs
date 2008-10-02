@@ -135,7 +135,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                 xs.BRDO = false;
                 xs.X264Trellis = 0; // disable trellis
                 xs.noFastPSkip = false;
-                xs.biME = false;
             }
             if (xs.DeadZoneInter != 21)
                 sb.Append("--deadzone-inter " + xs.DeadZoneInter + " ");
@@ -156,8 +155,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                     sb.Append("--b-pyramid ");
                 if (xs.BRDO)
                     sb.Append("--b-rdo ");
-                if (xs.biME)
-                    sb.Append("--bime ");
                 if (xs.WeightedBPrediction)
                     sb.Append("--weightb ");
                 if (xs.BframePredictionMode != 1)
