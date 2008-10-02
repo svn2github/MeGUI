@@ -40,11 +40,6 @@ namespace MeGUI
             return new d2vFile(file);
         }
 
-        #endregion
-
-        #region IMediaFileFactory Members
-
-
         public int HandleLevel(string file)
         {
             if (file.ToLower().EndsWith(".d2v"))
