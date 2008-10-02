@@ -629,7 +629,7 @@ namespace MeGUI
 
         public LogItem postprocess()
         {
-            audioFiles = vUtil.getAllDemuxedAudio(job.Output, 8);
+            audioFiles = vUtil.getAllDemuxedAudio(job.TrackIDs, job.Output, 8);
 
             fillInAudioInformation();
 

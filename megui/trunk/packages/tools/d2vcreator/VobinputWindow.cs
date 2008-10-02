@@ -565,7 +565,7 @@ namespace MeGUI
 
             StringBuilder logBuilder = new StringBuilder();
             VideoUtil vUtil = new VideoUtil(mainForm);
-            Dictionary<int, string> audioFiles = vUtil.getAllDemuxedAudio(job.Output, 8);
+            Dictionary<int, string> audioFiles = vUtil.getAllDemuxedAudio(job.TrackIDs, job.Output, 8);
             if (job.LoadSources)
             {
                 if (job.DemuxMode != 0)
