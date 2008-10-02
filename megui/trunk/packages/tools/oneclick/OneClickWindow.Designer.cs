@@ -85,6 +85,7 @@ namespace MeGUI
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.showAdvancedOptions = new System.Windows.Forms.CheckBox();
             this.goButton = new System.Windows.Forms.Button();
+            this.openOnQueue = new System.Windows.Forms.CheckBox();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
             trackTabPage2 = new System.Windows.Forms.TabPage();
             label1 = new System.Windows.Forms.Label();
@@ -428,7 +429,8 @@ namespace MeGUI
             this.input.Filename = "";
             this.input.Filter = "VOB Files (*.vob)|*.vob|MPEG-1/2 Program Streams (*.mpg)|*.mpg|Transport Streams " +
                 "(*.m2ts,*.ts)|*.m2ts;*.ts|All DGIndex supported files|*.vob;*.mpg;*.mpeg;*.m2ts;" +
-                "*.m2v;*.mpv;*.tp;*.ts;*.trp;*.pva;*.vro";
+                "*.m2v;*.m2p;*.mpv;*.tp;*.ts;*.trp;*.pva;*.vro";
+            this.input.FilterIndex = 4;
             this.input.FolderMode = false;
             this.input.Location = new System.Drawing.Point(123, 13);
             this.input.Name = "input";
@@ -747,6 +749,15 @@ namespace MeGUI
             this.goButton.Text = "Go!";
             this.goButton.UseVisualStyleBackColor = true;
             this.goButton.Click += new System.EventHandler(this.goButton_Click);
+            //
+            // openOnQueue
+            // 
+            this.openOnQueue.Location = new System.Drawing.Point(242, 306);
+            this.openOnQueue.Name = "openOnQueue";
+            this.openOnQueue.Size = new System.Drawing.Size(96, 24);
+            this.openOnQueue.TabIndex = 33;
+            this.openOnQueue.Text = "and open next";
+            //
             // 
             // helpButton1
             // 
@@ -764,6 +775,7 @@ namespace MeGUI
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(461, 335);
+            this.Controls.Add(this.openOnQueue);
             this.Controls.Add(this.helpButton1);
             this.Controls.Add(this.showAdvancedOptions);
             this.Controls.Add(this.tabControl1);
@@ -856,7 +868,6 @@ namespace MeGUI
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
-
-
+        private System.Windows.Forms.CheckBox openOnQueue;
     }
 }
