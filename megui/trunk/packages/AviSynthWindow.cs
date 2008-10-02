@@ -1277,7 +1277,11 @@ namespace MeGUI
                 case ".ts":
                 case ".tp":
                     sourceType = PossibleSources.mpeg2;
-                    gotoD2vCreator(videoInput);
+                    if (gotoD2vCreator(videoInput) == DialogResult.Cancel )
+                    {
+                        sourceType = PossibleSources.directShow;
+                        openDirectShow(videoInput);
+                    }
                     break;
                 case ".vdr":
                     sourceType = PossibleSources.vdr;
@@ -1449,10 +1453,10 @@ namespace MeGUI
         ///  call the d2v creator which will pass a queued job back to the main form
         /// </summary>
         /// <param name="fileName"></param>
-        private void gotoD2vCreator(string fileName)
+        private DialogResult gotoD2vCreator(string fileName)
         {
-            MessageBox.Show("You can't open MPEG files with the AviSynth Script Creator. You'll have to index it first with the D2V indexer, and open the created project file (*.d2v) here.",
-                "Can't open MPEG files", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return MessageBox.Show("You can't open MPEG files with the AviSynth Script Creator. You'll have to index it first with the D2V indexer, and open the created project file (*.d2v) here.",
+                "Can't open MPEG files", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
         }
 
         private void enableControls(bool enable)
