@@ -525,8 +525,14 @@ namespace MeGUI
 
         private void rbtracks_CheckedChanged(object sender, EventArgs e)
         {
+            bool selectState = false;
+            if (demuxAll.Checked)
+                selectState = true;
+
             if ((demuxNoAudiotracks.Checked) || (demuxAll.Checked))
             {
+                for (int i = 0; i < AudioTracks.Items.Count; i++)
+                    AudioTracks.SetItemChecked(i, selectState);
                 AudioTracks.Enabled = false;
             }
             else
