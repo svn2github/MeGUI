@@ -1,3 +1,37 @@
+0.3.0.3001
+    - (kurtnoise) [VideoUtil] remove one iterator.
+    - (kurtnoise) [x264] update subME items.
+    - (kurtnoise) [x264] remove bRDO code.
+    - (kurtnoise) [x264] remove biME code.
+    - (kurtnoise) [OnClickWindow.Designer] add openOnQueue checkbox. Patch by ateeq.
+    - (kurtnoise) [OneClickWindow] update to the last changes. Mainly from the patch provided by ateeq.
+    - (kurtnoise) [FileBar] add performClick() function. Patch by ateeq.
+    - (kurtnoise) [VobinputWindow] add selectStat as boolean to reflect changes in the radioboxes CheckedChanged events. Patch by ateeq.
+    - (kurtnoise) [VobinputWindow] use "]" as delimiter for the 2nd argument. Patch by ateeq.
+    - (kurtnoise) [VobinputWindow] add getSourceMediaInfo() from vUtil & reconstruct ifofile creation into openVideo(). Patch by ateeq.
+    - (kurtnoise) [VobinputWindow] clear AudioTracks items for all new files, not only VOBs. Patch by ateeq.
+    - (kurtnoise) [VobinputWindow] add *.m2p as file extension. Patch by ateeq.
+    - (kurtnoise) [d2vReader] remove duplicated code. Patch by ateeq.
+    - (kurtnoise) [AviSynthWindow] suggestResolution checked by default. Patch by ateeq.
+    - (kurtnoise) [AviSynthWindow] return a DialogResult now for gotoD2vCreator() instead of a void & update openVideoSource(). Patch by ateeq.
+    - (kurtnoise) propagate the last changes to getAllDemuxedAudio() used elsewhere in the code.
+    - (kurtnoise) [VideoUtil] add audioTrackIDs as List in getAllDemuxAudio(). Patch by ateeq.
+    - (kurtnoise) [VideoUtil] add getSourceMediaInfo() to the openVideoSource(). Patch by ateeq.
+    - (kurtnoise) [VideoUtil] remove unused code.
+    - (kurtnoise) [VideoUtil] modify trackID & Type in the getDGindexLogInfo() function. Patch by ateeq.
+    - (kurtnoise) [VideoUtil] add SamplingRate as getter/setter & getSourceMediaInfo() function to retrieve some infos via the MediaInfo library. Patch by ateeq.
+    - (kurtnoise) [PrettyFormatting] use IsNullOrEmpty function & add '\' as delimiter. Patch by ateeq.
+    - (kurtnoise) [IFOparser] add a test to check whether or not the length of vobFiles is equal to 0. Patch by ateeq.
+    - (kurtnoise) [VideoPlayer] fix a typo in the VideoPlayer Class summary. Patch by ateeq.
+    - (kurtnoise) [MainForm] add openAudioFile() to the other video FileType. Patch by ateeq.
+    - (kurtnoise) [FileBar] add FilterIndex in the openButton_Click() - Patch by ateeq.
+    - (kurtnoise) [FileBar] add FilterIndex as getter/setter. Patch by ateeq.
+    - (kurtnoise) [AviSynthAudioEncoder] force the 2nd portion to be long. Patch by ateeq.
+    - (kurtnoise) [AviSynthAudioEncoder] move AVI sources in the non DShow part. Patch by ateeq.
+    - (kurtnoise) [ProfileExporter] added a tooltip to the list.
+    - (kurtnoise) [ProfileImporter] use the ContextHelp stuff for the tooltip like in the x264 config.
+    - (kurtnoise) [ProfileImporter] put SetToolTips method in the Shown Event instead of the Load one. Presets Importation failed otherwise...
+
 0.3.0.2018
     - (kurtnoise) added DTS MA & DTS HD as file extension for audio inputs. updated RaWavSource config according to the last library default settings. Both require NicAudio 2.02 or higher...
     - (kurtnoise) [x264Encoder] cosmetics.
