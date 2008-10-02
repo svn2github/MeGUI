@@ -237,6 +237,12 @@ namespace MeGUI
                 }
             }
 
+            // If nothing matches DefaultLanguage select 1st track
+            if (audioTrack1.SelectedIndex == 0)
+            {
+                audioTrack1.SelectedObject = audioTracks[0];
+            }
+    
             horizontalResolution.Maximum = maxHorizontalResolution;
             
             string chapterFile = VideoUtil.getChapterFile(fileName);
@@ -248,9 +254,6 @@ namespace MeGUI
             this.updateFilename();
             this.ar.Value = ar;
         }
-
-
-
 
         private bool beingCalled;
         private void updatePossibleContainers()
@@ -397,6 +400,7 @@ namespace MeGUI
                     int delay = audioConfigControl[i].Delay;
                     if (audioTrack[i].SelectedSCItem.IsStandard)
                     {
+                        TrackIDs.Add(((MeGUI.AudioTrackInfo)(audioTrack[i].SelectedObject)).TrackID.ToString("x"));
                         aInput = "::" + (audioTrack[i].SelectedIndex - 1) + "::"; // -1 since "None" is first
                         info = new TrackInfo(((AudioTrackInfo)audioTrack[i].SelectedObject).Language, null);
                     }
@@ -427,7 +431,10 @@ namespace MeGUI
                 dpp.VideoSettings = VideoSettings.Clone();
                 IndexJob job = new IndexJob(input.Filename, d2vName, 2, TrackIDs, dpp, false);
                 mainForm.Jobs.addJobsToQueue(job);
-                this.Close();
+                if (this.openOnQueue.Checked)
+                    input.PerformClick();
+                else
+                    this.Close();
             }
             else
                 MessageBox.Show("You must select audio and video profile, output name and working directory to continue",
@@ -633,6 +640,9 @@ namespace MeGUI
 
             fillInAudioInformation();
 
+            // Look for any .d2a and .log files from DGIndex to clean up
+            string[] d2aFiles = Directory.GetFiles(Path.GetDirectoryName(job.Output),
+                Path.GetFileNameWithoutExtension(job.Output) + ".d2a");
 
             log.LogValue("Desired size", job.PostprocessingProperties.OutputSize);
             log.LogValue("Split size", job.PostprocessingProperties.Splitting);
@@ -664,6 +674,10 @@ namespace MeGUI
             intermediateFiles.Add(videoInput);
             intermediateFiles.Add(job.Output);
             intermediateFiles.AddRange(audioFiles.Values);
+
+            if (d2aFiles.Length > 0)
+                intermediateFiles.AddRange(d2aFiles);
+
             if (!string.IsNullOrEmpty(videoInput))
             {
                 //Create empty subtitles for muxing (subtitles not supported in one click mode)
@@ -791,6 +805,11 @@ namespace MeGUI
                 }
             }
             else customDAR = AR.Value.ar;
+
+            // Don't resize up if I've forgotten to change resolution from profile
+            // TODO: make this a setting
+            if (horizontalResolution > (int)d2v.Info.Width)
+                horizontalResolution = (int)d2v.Info.Width;
 
             //Suggest a resolution (taken from AvisynthWindow.suggestResolution_CheckedChanged)
             int scriptVerticalResolution = Resolution.suggestResolution(d2v.Info.Height, d2v.Info.Width, (double)customDAR,
