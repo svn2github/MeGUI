@@ -95,6 +95,14 @@ namespace MeGUI
             set { filter = value; }
         }
 
+        private int filterIndex;
+
+        public int FilterIndex
+        {
+            get { return filterIndex; }
+            set { filterIndex = value; }
+        }
+
         public event FileBarEventHandler FileSelected;
 
         private void openButton_Click(object sender, EventArgs e)
