@@ -692,4 +692,9 @@ targeting specific classes of applications:
 			<Default>Disabled</Default>
 		</setting1>
 	</Codec>
+  <Form name="PresetImporter">
+    <presetList name="info">
+      <Basic>To import all presets in once, right click on this list and select all...</Basic>
+    </presetList>
+  </Form> 
 </ContextHelp>

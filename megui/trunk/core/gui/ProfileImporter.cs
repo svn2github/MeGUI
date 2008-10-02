@@ -26,6 +26,7 @@ using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
+using System.Xml;
 
 using ICSharpCode.SharpZipLib.Zip;
 
@@ -50,6 +51,7 @@ namespace MeGUI.core.gui
         private DirectoryInfo tempFolder;
         private DirectoryInfo extraFiles;
         private MainForm mainForm;
+        private XmlDocument ContextHelp = new XmlDocument();
 
         public ProfileImporter(MainForm mf)
             :this(mf, askForZipFile())
@@ -122,9 +124,42 @@ namespace MeGUI.core.gui
             } 
         }
 
+        private string SelectHelpText(string node)
+        {
+            StringBuilder HelpText = new StringBuilder(64);
+
+            string xpath = "/ContextHelp/Form[@name='PresetImporter']/" + node;
+            XmlNodeList nl = ContextHelp.SelectNodes(xpath); // Return the details for the specified node
+
+            if (nl.Count == 1) // if it finds the required HelpText, count should be 1
+            {
+                HelpText.AppendLine(nl[0]["Basic"].InnerText);
+                HelpText.AppendLine();
+            }
+            else // If count isn't 1, then theres no valid data.
+                HelpText.Append("Error: No data available");
+
+            return (HelpText.ToString());
+        }
+
+        private void SetToolTips()
+        {
+            PresetImporterToolTip.SetToolTip(this.profileList, SelectHelpText("presetList"));
+        }
+
         private void ProfileImporter_Shown(object sender, EventArgs e)
         {
-            PresetImporterToolTip.SetToolTip(this.profileList, "To import all presets in once, right click on this list and select all...");
+            try
+            {
+                string p = System.IO.Path.Combine(Application.StartupPath, "Data");
+                p = System.IO.Path.Combine(p, "ContextHelp.xml");
+                ContextHelp.Load(p);
+                SetToolTips();
+            }
+            catch
+            {
+                MessageBox.Show("The ContextHelp.xml file could not be found. Please check in the 'Data' directory to see if it exists. Help tooltips will not be available.", "File Not Found", MessageBoxButtons.OK);
+            }           
         }
     }
 
