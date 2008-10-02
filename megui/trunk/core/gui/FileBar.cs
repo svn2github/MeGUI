@@ -120,6 +120,7 @@ namespace MeGUI
                     (FileDialog)new OpenFileDialog();
 
                 dialog.Filter = filter;
+                dialog.FilterIndex = filterIndex;
                 dialog.Title = title;
                 if (dialog.ShowDialog() == DialogResult.OK)
                     setFilename(dialog.FileName);
