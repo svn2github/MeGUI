@@ -300,6 +300,10 @@ namespace MeGUI
 
             if (putDummyTracks)
 			{
+                getSourceMediaInfo(fileName, out audioTracks, out maxHorizontalResolution);
+                if (audioTracks.Count > 0)
+                    putDummyTracks = false;
+                
                 for (int i = 1; i <= 8; i++)
                 {
                     audioTracks.Add(new AudioTrackInfo("Track " + i, "", "", i));
