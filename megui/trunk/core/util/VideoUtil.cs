@@ -257,9 +257,8 @@ namespace MeGUI
                         char[] separator = { ':' };
                         string[] split = line.Split(separator, 1000);
                         AudioTrackInfo ati = new AudioTrackInfo();
-                        string myTrackID = split[0].Substring(split[0].Length + 1, 2).Trim();
-                        ati.TrackID = Int32.Parse(myTrackID);
-                        ati.Type = split[1].Substring(split[1].Length + 1, 3).Trim();
+                        ati.TrackID = Int32.Parse(split[1], System.Globalization.NumberStyles.HexNumber);
+                        ati.Type = split[2].Trim().Substring(0, 3);
                         audioTrackIDs.Add(ati);
                     }
                 }
