@@ -339,7 +339,7 @@ namespace MeGUI
             // 
             this.openIFODialog.Filter = "VOB Files (*.vob)|*.vob|MPEG-1/2 Program Streams (*.mpg)|*.mpg|Transport Streams " +
                 "(*.m2ts;*.ts)|*.m2ts;*.ts|All DGIndex supported files|*.vob;*.mpg;*.mpeg;*.m2ts;" +
-                "*.m2v;*.mpv;*.tp;*.ts;*.trp;*.pva;*.vro";
+                "*.m2v;*.m2p;*.mpv;*.tp;*.ts;*.trp;*.pva;*.vro";
             this.openIFODialog.FilterIndex = 4;
             // 
             // closeOnQueue
