@@ -421,22 +421,36 @@ namespace MeGUI
             {
                 string myfilepath = Path.GetDirectoryName(fileName) + Path.DirectorySeparatorChar;
                 string myfilename = Path.GetFileName(fileName);
-                //string myifofile = IFOparser.DetermineMovieIFO(mypath);
-                string myifofile = myfilepath + "VTS_" + myfilename.Substring(4, 2) + "_0.IFO";                
+                string myifofile;
 
-                if (!string.IsNullOrEmpty(myifofile))
-                {
-                    AudioTracks.Items.AddRange(IFOparser.GetAudioInfos(myifofile, false));
-                    demuxTracks.Checked = true;
-                    AudioTracks.Enabled = true;
-                    demuxTracks.Enabled = true;
-                }
-                else
-                {
-                    MessageBox.Show("MeGUI cannot find an IFO File from your folder. Audio Tracks selection will be disabled then.");
-                    demuxNoAudiotracks.Checked = true;
-                }
-            }            
+                if (myfilename.Substring(0, 4) == "VTS_")
+                     myifofile = myfilename.Substring(0, myfilename.LastIndexOf("_")) + "_0.IFO";
+                else myifofile = Path.ChangeExtension(myfilename, ".IFO");
+
+                if (Directory.GetFiles(myfilepath, myifofile).Length > 0)
+                    AudioTracks.Items.AddRange(IFOparser.GetAudioInfos(myfilepath + myifofile, false));
+            }
+
+            if (AudioTracks.Items.Count < 1)
+            {
+                int unused;
+                List<AudioTrackInfo> audioTracks; 
+                vUtil.getSourceMediaInfo(fileName, out audioTracks, out unused);
+                foreach (AudioTrackInfo atrack in audioTracks)
+                    AudioTracks.Items.Add(atrack.ToString());
+            }
+
+            if (AudioTracks.Items.Count > 0)
+            {
+                demuxTracks.Checked = true;
+                AudioTracks.Enabled = true;
+                demuxTracks.Enabled = true;
+            }
+            else
+            {
+                MessageBox.Show("MeGUI cannot find audio track information. Audio Tracks selection will be disabled.");
+                demuxNoAudiotracks.Checked = true;
+            }       
 		}
 		/// <summary>
 		/// creates a dgindex project
