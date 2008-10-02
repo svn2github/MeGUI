@@ -1235,6 +1235,7 @@ namespace MeGUI
 
                 case FileType.OTHERVIDEO:
                     openOtherVideoFile(file);
+                    audioEncodingComponent1.openAudioFile(file); // for Non-MPEG OneClick fudge
                     break;
 
                 case FileType.ZIPPED_PROFILES:
