@@ -536,6 +536,10 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                         else
                             script.Append(")");
                         break;
+                    case ".avi":
+                        script.AppendFormat("AVISource(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
+                        script.AppendFormat("EnsureVBRMP3Sync(){0}", Environment.NewLine);
+                        break;
                     case ".avs":
                         script.AppendFormat("Import(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
                         break;
@@ -617,14 +621,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             }
             if (directShow)
             {
-                if (audioJob.Input.ToLower().EndsWith(".avi"))
-                {
-                    script.AppendFormat("AVISource(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
-                }
-                else
-                {
-                    script.AppendFormat("DirectShowSource(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
-                }
+                script.AppendFormat("DirectShowSource(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
                 script.AppendFormat("EnsureVBRMP3Sync(){0}", Environment.NewLine);
             } 
             
