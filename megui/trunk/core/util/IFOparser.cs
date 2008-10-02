@@ -44,6 +44,7 @@ namespace MeGUI.core.util
             // The first 7 characters are the same for each VOB set, e.g.
             // VTS_24_0.VOB, VTS_24_1.VOB etc.
             string[] vobFiles = Directory.GetFiles(inputPath, "vts*.vob");
+            if (vobFiles.Length == 0) return null;            
 
             // Look for the largest VOB set
             string vtsNameCurrent;
