@@ -474,7 +474,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
         {
             const uint FAAD_MAGIC_VALUE = 0xFFFFFF00;
             const uint WAV_HEADER_SIZE = 36;
-            bool useFaadTrick = a.AudioSizeInBytes >= (uint.MaxValue - WAV_HEADER_SIZE);
+            bool useFaadTrick = a.AudioSizeInBytes >= ((long)uint.MaxValue - WAV_HEADER_SIZE);
             target.Write(System.Text.Encoding.ASCII.GetBytes("RIFF"), 0, 4);
             target.Write(BitConverter.GetBytes(useFaadTrick ? FAAD_MAGIC_VALUE : (uint)(a.AudioSizeInBytes + WAV_HEADER_SIZE)), 0, 4);
             target.Write(System.Text.Encoding.ASCII.GetBytes("WAVEfmt "), 0, 8);
