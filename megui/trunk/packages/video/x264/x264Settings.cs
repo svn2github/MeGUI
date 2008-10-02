@@ -61,7 +61,7 @@ namespace MeGUI
 		decimal ipFactor, pbFactor, chromaQPOffset, vbvInitialBuffer, bitrateVariance, quantCompression, 
 			tempComplexityBlur, tempQuanBlurCC, scdSensitivity, bframeBias, quantizerCrf, AQStrength, psyRDO, psyTrellis;
 		bool deblock, cabac, p4x4mv, p8x8mv, b8x8mv, i4x4mv, i8x8mv, weightedBPrediction, encodeInterlaced,
-			bFramePyramid, chromaME, adaptiveDCT, lossless, mixedRefs, bRDO, NoFastPSkip, psnrCalc, noDctDecimate, ssimCalc;
+			bFramePyramid, chromaME, adaptiveDCT, lossless, mixedRefs, NoFastPSkip, psnrCalc, noDctDecimate, ssimCalc;
 		string quantizerMatrix;
 		#region constructor
         /// <summary>
@@ -92,8 +92,7 @@ namespace MeGUI
 			subPelRefinement = 5;
 			psyRDO = new decimal(1.0);
             psyTrellis = new decimal(0.0);
-            bRDO = false;
-			chromaME = true;
+            chromaME = true;
 			p8x8mv = true;
 			b8x8mv = true;
 			p4x4mv = false;
@@ -329,12 +328,7 @@ namespace MeGUI
 			get {return bFramePyramid;}
 			set {bFramePyramid = value;}
 		}
-		public bool BRDO
-		{
-			get {return bRDO;}
-			set {bRDO = value;}
-		}
-		public bool ChromaME
+        public bool ChromaME
 		{
 			get {return chromaME;}
 			set {chromaME = value;}
@@ -440,7 +434,6 @@ namespace MeGUI
                 this.BframePredictionMode != otherSettings.BframePredictionMode ||
                 this.BFramePyramid != otherSettings.BFramePyramid ||
                 this.BitrateVariance != otherSettings.BitrateVariance ||
-                this.BRDO != otherSettings.BRDO ||
                 this.PsyRDO != otherSettings.PsyRDO ||
                 this.PsyTrellis != otherSettings.PsyTrellis ||
                 this.Cabac != otherSettings.Cabac ||
@@ -535,7 +528,6 @@ namespace MeGUI
                 B8x8mv = false;
                 AdaptiveDCT = false;
                 MixedRefs = false;
-                BRDO = false;
                 Trellis = false;
                 noFastPSkip = false;
                 WeightedBPrediction = false;
@@ -553,8 +545,6 @@ namespace MeGUI
             }
             if (!Cabac) // trellis requires CABAC
                 X264Trellis = 0;
-            if (NbBframes == 0 || SubPelRefinement < 5) // BRDO requires RDO and b-frames
-                BRDO = false;
             if (!P8x8mv) // p8x8 requires p4x4
                 P4x4mv = false;
             if (Lossless) // This needs CQ 0

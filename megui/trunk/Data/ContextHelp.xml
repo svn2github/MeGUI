@@ -356,13 +356,6 @@ mode 6 (RDO) must be used to enable RDO for B-frames.</Advanced>
 			<Recommended>6</Recommended>
 			<Default>6</Default>
 		</subme>
-		<b-rdo name="RDO for B-frames">
-			<Advanced>
-Improved motion estimation for B-frames at the cost of encoding speed. Note: requires Sub Pixel Refinement.</Advanced>
-			<Basic>Rate Distortion Optimisation mode decision for B-frames.</Basic>
-			<Recommended>Enabled</Recommended>
-			<Default>Disabled</Default>
-		</b-rdo>
 		<mixed-refs name="Mixed References">
 			<Advanced>
 Allows each 8x8 or 16x8 partition in a macroblock to independently select a reference frame,

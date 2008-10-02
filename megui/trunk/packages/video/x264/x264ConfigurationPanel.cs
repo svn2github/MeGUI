@@ -507,7 +507,6 @@ namespace MeGUI.packages.video.x264
                 xs.BetaDeblock = (int)x264BetaDeblock.Value;
                 xs.Cabac = x264CabacEnabled.Checked;
                 xs.SubPelRefinement = this.x264SubpelRefinement.SelectedIndex;
-                xs.BRDO = bRDO.Checked;
                 xs.WeightedBPrediction = x264WeightedBPrediction.Checked;
                 xs.ChromaME = this.x264ChromaMe.Checked;
                 xs.X264Trellis = trellis.SelectedIndex;
@@ -584,7 +583,6 @@ namespace MeGUI.packages.video.x264
                 x264AlphaDeblock.Value = xs.AlphaDeblock;
                 x264BetaDeblock.Value = xs.BetaDeblock;
                 x264CabacEnabled.Checked = xs.Cabac;
-                bRDO.Checked = xs.BRDO;
                 x264WeightedBPrediction.Checked = xs.WeightedBPrediction;
                 x264ChromaMe.Checked = xs.ChromaME;
                 PsyRD.Value = xs.PsyRDO;
@@ -703,7 +701,6 @@ namespace MeGUI.packages.video.x264
             tooltipHelp.SetToolTip(x264BitrateQuantizer, SelectHelpText("bitrate"));
             tooltipHelp.SetToolTip(x264MinimimQuantizer, SelectHelpText("qpmin"));
             tooltipHelp.SetToolTip(NoFastPSkip, SelectHelpText("no-fast-pskip"));
-            tooltipHelp.SetToolTip(bRDO, SelectHelpText("b-rdo"));
             tooltipHelp.SetToolTip(macroblockOptions, SelectHelpText("partitions"));
             tooltipHelp.SetToolTip(x264ChromaMe, SelectHelpText("no-chroma-me"));
             tooltipHelp.SetToolTip(x264WeightedBPrediction, SelectHelpText("weightb"));
@@ -838,8 +835,6 @@ namespace MeGUI.packages.video.x264
                 this.x264BframeBias.Value = 0;
                 this.x264BframeBias.Enabled = false;
                 this.x264BframeBiasLabel.Enabled = false;
-                this.bRDO.Checked = false;
-                this.bRDO.Enabled = false;
                 this.x264PyramidBframes.Checked = false;
                 this.x264PyramidBframes.Enabled = false;
             }
@@ -853,13 +848,6 @@ namespace MeGUI.packages.video.x264
                 // We can enable these if we don't have turbo options
                 this.x264BframeBias.Enabled = true;
                 this.x264BframeBiasLabel.Enabled = true;
-                if (this.x264SubpelRefinement.SelectedIndex > 4 && !turboOptions)
-                    this.bRDO.Enabled = true;
-                else
-                {
-                    this.bRDO.Checked = false;
-                    this.bRDO.Enabled = false;
-                }
                 if (this.x264NumberOfBFrames.Value >= 2) // pyramid requires at least two b-frames
                     this.x264PyramidBframes.Enabled = true;
                 else
@@ -930,7 +918,6 @@ namespace MeGUI.packages.video.x264
                 this.x264SubpelRefinement.Enabled = false;
                 this.x264METype.Enabled = false;
                 this.macroblockOptions.SelectedIndex = 0; // None
-                this.bRDO.Enabled = false;
                 this.NoFastPSkip.Enabled = false;
                 this.macroblockOptions.Enabled = false;
 
@@ -939,7 +926,6 @@ namespace MeGUI.packages.video.x264
                 this.x264SubpelRefinement.SelectedIndex = 1;
                 this.x264METype.SelectedIndex = 1;
                 this.x264MixedReferences.Checked = false;
-                this.bRDO.Checked = false;
                 this.NoFastPSkip.Checked = false;
                 this.macroblockOptions.SelectedIndex = 1;
             }

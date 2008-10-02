@@ -114,7 +114,6 @@ namespace MeGUI.packages.video.x264
             this.x264GeneralBFramesgGroupbox = new System.Windows.Forms.GroupBox();
             this.x264AdaptiveBframesLabel = new System.Windows.Forms.Label();
             this.x264NewAdaptiveBframes = new System.Windows.Forms.ComboBox();
-            this.bRDO = new System.Windows.Forms.CheckBox();
             this.x264BframePredictionMode = new System.Windows.Forms.ComboBox();
             this.x264BframeBias = new System.Windows.Forms.NumericUpDown();
             this.x264WeightedBPrediction = new System.Windows.Forms.CheckBox();
@@ -1382,7 +1381,6 @@ namespace MeGUI.packages.video.x264
             // 
             this.x264GeneralBFramesgGroupbox.Controls.Add(this.x264AdaptiveBframesLabel);
             this.x264GeneralBFramesgGroupbox.Controls.Add(this.x264NewAdaptiveBframes);
-            this.x264GeneralBFramesgGroupbox.Controls.Add(this.bRDO);
             this.x264GeneralBFramesgGroupbox.Controls.Add(this.x264BframePredictionMode);
             this.x264GeneralBFramesgGroupbox.Controls.Add(this.x264BframeBias);
             this.x264GeneralBFramesgGroupbox.Controls.Add(this.x264WeightedBPrediction);
@@ -1420,17 +1418,6 @@ namespace MeGUI.packages.video.x264
             this.x264NewAdaptiveBframes.Size = new System.Drawing.Size(76, 21);
             this.x264NewAdaptiveBframes.TabIndex = 11;
             this.x264NewAdaptiveBframes.SelectedIndexChanged += new System.EventHandler(this.updateEvent);
-            // 
-            // bRDO
-            // 
-            this.bRDO.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.bRDO.Location = new System.Drawing.Point(4, 104);
-            this.bRDO.Name = "bRDO";
-            this.bRDO.Padding = new System.Windows.Forms.Padding(3);
-            this.bRDO.Size = new System.Drawing.Size(192, 23);
-            this.bRDO.TabIndex = 4;
-            this.bRDO.Text = "RDO for B-frames";
-            this.bRDO.CheckedChanged += new System.EventHandler(this.updateEvent);
             // 
             // x264BframePredictionMode
             // 
@@ -2135,7 +2122,6 @@ namespace MeGUI.packages.video.x264
         private System.Windows.Forms.NumericUpDown x264BitrateQuantizer;
         private MeGUI.core.gui.FileSCBox cqmComboBox1;
         private System.Windows.Forms.GroupBox x264GeneralBFramesgGroupbox;
-        private System.Windows.Forms.CheckBox bRDO;
         private System.Windows.Forms.ComboBox x264BframePredictionMode;
         private System.Windows.Forms.NumericUpDown x264BframeBias;
         private System.Windows.Forms.CheckBox x264WeightedBPrediction;

@@ -132,7 +132,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                 xs.B8x8mv = false;
                 xs.AdaptiveDCT = false;
                 xs.MixedRefs = false;
-                xs.BRDO = false;
                 xs.X264Trellis = 0; // disable trellis
                 xs.noFastPSkip = false;
             }
@@ -153,8 +152,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                     sb.Append("--b-adapt " + xs.NewAdaptiveBFrames + " ");
                 if (xs.NbBframes > 1 && xs.BFramePyramid) // pyramid needs a minimum of 2 b frames
                     sb.Append("--b-pyramid ");
-                if (xs.BRDO)
-                    sb.Append("--b-rdo ");
                 if (xs.WeightedBPrediction)
                     sb.Append("--weightb ");
                 if (xs.BframePredictionMode != 1)
