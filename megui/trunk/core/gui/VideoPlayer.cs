@@ -38,7 +38,7 @@ namespace MeGUI
 	public delegate void SimpleDelegate();
 	public enum PREVIEWTYPE {REGULAR, CREDITS, ZONES, CHAPTERS};
 	/// <summary>
-	/// The video player is used to peview an AviSynth script or DGIndex project. 
+	/// The video player is used to preview an AviSynth script or DGIndex project. 
 	/// It can also be used to set the credits and intro and is used to generate zones visually
 	/// </summary>
 	public class VideoPlayer : System.Windows.Forms.Form
