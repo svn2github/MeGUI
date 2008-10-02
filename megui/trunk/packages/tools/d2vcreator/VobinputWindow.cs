@@ -415,13 +415,14 @@ namespace MeGUI
 		private void openVideo(string fileName)
 		{
 			input.Text = fileName;
+            AudioTracks.Items.Clear();
+
             if (Path.GetExtension(fileName.ToLower()) == ".vob")
             {
                 string myfilepath = Path.GetDirectoryName(fileName) + Path.DirectorySeparatorChar;
                 string myfilename = Path.GetFileName(fileName);
                 //string myifofile = IFOparser.DetermineMovieIFO(mypath);
-                string myifofile = myfilepath + "VTS_" + myfilename.Substring(4, 2) + "_0.IFO";
-                AudioTracks.Items.Clear();
+                string myifofile = myfilepath + "VTS_" + myfilename.Substring(4, 2) + "_0.IFO";                
 
                 if (!string.IsNullOrEmpty(myifofile))
                 {
