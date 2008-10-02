@@ -34,7 +34,7 @@ namespace MeGUI.core.util
             string A = Path.GetFileNameWithoutExtension(fileName); // In case they all fail
 
             int count = 0;
-            while (Path.GetDirectoryName(fileName).Length > 0 && count < 3)
+            while (!string.IsNullOrEmpty(Path.GetDirectoryName(fileName)) && count < 3)
             {
                 string temp = Path.GetFileNameWithoutExtension(fileName).ToLower();
                 if (!temp.Contains("vts") && !temp.Contains("video") && !temp.Contains("audio"))
@@ -56,7 +56,7 @@ namespace MeGUI.core.util
                 // Turn '_' into ' '
                 if (chars[i] == '_') chars[i] = ' ';
 
-                beginningOfWord = !char.IsLetter(chars[i]);
+                beginningOfWord = !char.IsLetter(chars[i]) && !(chars[i] == '\'');
             }
 
             A = new string(chars);
