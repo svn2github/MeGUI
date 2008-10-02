@@ -627,13 +627,15 @@ namespace MeGUI.packages.video.x264
             this.x264SubpelRefinement.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.x264SubpelRefinement.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.x264SubpelRefinement.Items.AddRange(new object[] {
-            "1 - QPel 1 iteration",
-            "2 - QPel 2 iterations",
+            "1 - QPel SAD",
+            "2 - QPel SATD",
             "3 - HPel on MB then QPel",
             "4 - Always QPel",
-            "5 - Multi QPel",
-            "6 - RDO (Slow)",
-            "7 - RDO Level 2 (Slower)"});
+            "5 - QPel & Bidir ME",
+            "6 - RD on I/P frames",
+            "7 - RD on all frames",
+            "8 - RD refinement on I/P frames",
+            "9 - RD refinement on all frames"});
             this.x264SubpelRefinement.Location = new System.Drawing.Point(125, 117);
             this.x264SubpelRefinement.Name = "x264SubpelRefinement";
             this.x264SubpelRefinement.Size = new System.Drawing.Size(154, 21);

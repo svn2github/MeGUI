@@ -350,9 +350,8 @@ Larger values may increase efficiency but will increase encoding time.</Advanced
 		<subme name="Sub Pixel Refinement">
 			<Advanced>
 Controls the decision quality of motion estimation. Lower values will make faster and less
-accurate decisions. Higher values will improve quality but will slow encoding speed. Note:
-mode 6 (RDO) must be used to enable RDO for B-frames.</Advanced>
-			<Basic>Sub Pixel motion estimation and partition decision quality: 1=fast, 7=best.</Basic>
+accurate decisions. Higher values will improve quality but will slow encoding speed.</Advanced>
+			<Basic>Sub Pixel motion estimation and partition decision quality: 1=fast, 9=best.</Basic>
 			<Recommended>6</Recommended>
 			<Default>6</Default>
 		</subme>
