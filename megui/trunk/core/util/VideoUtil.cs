@@ -322,22 +322,26 @@ namespace MeGUI
 		/// gets all demuxed audio files from a given dgindex project
 		/// starts with the first file and returns the desired number of files
 		/// </summary>
+        /// <param name="audioTrackIDs">list of audio TrackIDs</param>
 		/// <param name="projectName">the name of the dgindex project</param>
 		/// <param name="cutoff">maximum number of results to be returned</param>
 		/// <returns>an array of string of filenames</returns>
-		public Dictionary<int, string> getAllDemuxedAudio(string projectName, int cutoff)
+       public Dictionary<int, string> getAllDemuxedAudio(List<string> audioTrackIDs, string projectName, int cutoff)
 		{
 			Dictionary<int, string> audioFiles = new Dictionary<int, string>();
 			string[] files = Directory.GetFiles(Path.GetDirectoryName(projectName),
 				Path.GetFileNameWithoutExtension(projectName) + "*");
-			int counter = 0;
-			while (counter < cutoff)
-			{
-				string trackNumber = "T" + ((counter+1).ToString()).PadLeft(2, '0');
-				foreach (string file in files)
-				{
-					if (file.IndexOf(trackNumber) != -1 &&
-                        (file.EndsWith(".ac3") || 
+
+            for (int counter = 0; counter < audioTrackIDs.Count; counter++)
+            {
+                string trackNumberMPG = "T" + audioTrackIDs[counter].ToLower();
+                string trackNumberTS = "PID " + audioTrackIDs[counter].ToLower();
+                foreach (string file in files)
+                {
+                    if ((file.IndexOf(trackNumberMPG) != -1 ||
+                          file.IndexOf(trackNumberTS) != -1) &&
+                       (
+                         file.EndsWith(".ac3") ||
                          file.EndsWith(".mp3") ||
                          file.EndsWith(".mp2") ||
                          file.EndsWith(".mpa") ||
