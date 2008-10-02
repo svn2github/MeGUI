@@ -297,12 +297,8 @@ namespace MeGUI
                 if (audioTracks.Count > 0)
 					putDummyTracks = false;
 			}
-			else
-			{
-				if (Path.GetExtension(fileName).ToLower().Equals(".vob") || Path.GetExtension(fileName).ToLower().Equals(".ifo"))
-					MessageBox.Show("Could not find DVD Decrypter generated info file " + infoFile, "Missing File", MessageBoxButtons.OK);
-			}
-			if (putDummyTracks)
+
+            if (putDummyTracks)
 			{
                 for (int i = 1; i <= 8; i++)
                 {
