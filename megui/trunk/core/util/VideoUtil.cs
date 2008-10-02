@@ -352,7 +352,6 @@ namespace MeGUI
                         break;
 					}
 				}
-				counter++;
 			}
             return audioFiles;
 		}
