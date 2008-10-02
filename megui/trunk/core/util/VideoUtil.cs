@@ -35,6 +35,8 @@ using MeGUI.core.details;
 using MeGUI.core.gui;
 using MeGUI.core.util;
 
+using MediaInfoWrapper;
+
 namespace MeGUI
 {
 	/// <summary>
@@ -198,6 +200,43 @@ namespace MeGUI
 				}
 			}
 		}
+
+        /// gets information about a video source using MediaInfo
+        /// </summary>
+        /// <param name="infoFile">the info file to be analyzed</param>
+        /// <param name="audioTracks">the audio tracks found</param>
+        /// <param name="maxHorizontalResolution">the width of the video</param>
+        public void getSourceMediaInfo(string fileName, out List<AudioTrackInfo> audioTracks, out int maxHorizontalResolution)
+        {
+            MediaInfo info;
+            audioTracks = new List<AudioTrackInfo>();
+            maxHorizontalResolution = 5000;
+            try
+            {
+                info = new MediaInfo(fileName);
+                maxHorizontalResolution = Int32.Parse(info.Video[0].Width);
+                foreach (MediaInfoWrapper.AudioTrack atrack in info.Audio)
+                {
+                    AudioTrackInfo ati = new AudioTrackInfo();
+                    // the MediaInfo Audio ID is hex for MPEG-PS but decimal for MPEG-TS
+                    if (info.General[0].Format == "MPEG-TS")
+                        ati.TrackID = Int32.Parse(atrack.ID);
+                    else
+                        ati.TrackID = Int32.Parse(atrack.ID, System.Globalization.NumberStyles.HexNumber);
+                    ati.Type = atrack.CodecString;
+                    ati.NbChannels = atrack.ChannelsString;
+                    ati.SamplingRate = atrack.SamplingRateString;
+                    ati.TrackInfo = new TrackInfo(atrack.LanguageString, null);
+                    audioTracks.Add(ati);
+                }
+            }
+            catch (Exception i)
+            {
+                MessageBox.Show("The following error ocurred when trying to get Media info for file " + fileName + "\r\n" + i.Message, "Error parsing mediainfo data", MessageBoxButtons.OK);
+                audioTracks.Clear();
+            }
+        }
+
         /// <summary>
         /// gets basic information about a video source based on its DGindex generated log file
         /// </summary>
@@ -761,7 +800,7 @@ namespace MeGUI
 	}
     public class AudioTrackInfo
     {
-        private string nbChannels, type;
+        private string nbChannels, type, samplingRate;
         private int trackID;
         public AudioTrackInfo() :this(null, null, null, 0)
         {
@@ -807,9 +846,27 @@ namespace MeGUI
             set { nbChannels = value; }
         }
 
+        public string SamplingRate
+        {
+            get { return samplingRate; }
+            set { samplingRate = value; }
+        }
+
         public override string ToString()
         {
-            string fullString = TrackInfo.Language + " " + this.type + " " + this.nbChannels;
+            string fullString = "[" + trackID.ToString("x") + "] - " + this.type;
+            if (!string.IsNullOrEmpty(nbChannels))
+            {
+                fullString += " - " + this.nbChannels;
+            }
+            if (!string.IsNullOrEmpty(samplingRate))
+            {
+                fullString += " / " + samplingRate;
+            }
+            if (!string.IsNullOrEmpty(TrackInfo.Language))
+            {
+                fullString += " / " + TrackInfo.Language;
+            }
             return fullString.Trim();
         }
     }
