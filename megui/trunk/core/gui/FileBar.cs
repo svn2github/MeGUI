@@ -127,6 +127,11 @@ namespace MeGUI
             }
         }
 
+        public void PerformClick()
+        {
+            openButton.PerformClick();
+        }
+
         private void setFilename(string filename)
         {
             oldName = this.filename.Text;
