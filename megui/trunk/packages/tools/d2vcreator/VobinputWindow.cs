@@ -497,7 +497,7 @@ namespace MeGUI
             List<string> trackIDs = new List<string>();
             foreach (string s in AudioTracks.CheckedItems)
             {
-                trackIDs.Add(s.Substring(1, 2));
+                trackIDs.Add(s.Substring(1, s.IndexOf("]") - 1));
             }
 
             return new IndexJob(this.input.Text, this.projectName.Text, demuxType, trackIDs, null, loadOnComplete.Checked);
