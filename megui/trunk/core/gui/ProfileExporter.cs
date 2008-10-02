@@ -26,6 +26,7 @@ using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
+using System.Xml;
 
 using MeGUI.core.util;
 
@@ -35,6 +36,7 @@ namespace MeGUI.core.gui
     {
         private MainForm mainForm;
         private DirectoryInfo tempFolder;
+        private XmlDocument ContextHelp = new XmlDocument();
 
         public ProfileExporter(MainForm mainForm)
         {
@@ -106,6 +108,62 @@ namespace MeGUI.core.gui
                 throw new CancelledException();
 
             return outputFilesChooser.FileName;
+        }
+
+        private string SelectHelpText(string node)
+        {
+            StringBuilder HelpText = new StringBuilder(64);
+
+            string xpath = "/ContextHelp/Form[@name='PresetExporter']/" + node;
+            XmlNodeList nl = ContextHelp.SelectNodes(xpath); // Return the details for the specified node
+
+            if (nl.Count == 1) // if it finds the required HelpText, count should be 1
+            {
+                HelpText.AppendLine(nl[0]["Basic"].InnerText);
+                HelpText.AppendLine();
+            }
+            else // If count isn't 1, then theres no valid data.
+                HelpText.Append("Error: No data available");
+
+            return (HelpText.ToString());
+        }
+
+        private void SetToolTips()
+        {
+            PresetExporterToolTip.SetToolTip(this.profileList, SelectHelpText("presetList"));
+        }
+
+        private void ProfileExporter_Shown(object sender, EventArgs e)
+        {
+            try
+            {
+                string p = System.IO.Path.Combine(Application.StartupPath, "Data");
+                p = System.IO.Path.Combine(p, "ContextHelp.xml");
+                ContextHelp.Load(p);
+                SetToolTips();
+            }
+            catch
+            {
+                MessageBox.Show("The ContextHelp.xml file could not be found. Please check in the 'Data' directory to see if it exists. Help tooltips will not be available.", "File Not Found", MessageBoxButtons.OK);
+            }
+        }
+
+        private void checkAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem ts = (ToolStripMenuItem)sender;
+            for (int i = 0; i < profileList.Items.Count; i++)
+            {
+                profileList.SetItemChecked(i, true);
+            } 
+        }
+
+        private void checkNoneToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem ts = (ToolStripMenuItem)sender;
+            for (int i = 0; i < profileList.Items.Count; i++)
+            {
+                profileList.SetItemChecked(i, false);
+            } 
         }
     }
 }

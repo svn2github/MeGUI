@@ -696,5 +696,10 @@ targeting specific classes of applications:
     <presetList name="info">
       <Basic>To import all presets in once, right click on this list and select all...</Basic>
     </presetList>
-  </Form> 
+  </Form>
+  <Form name="PresetExporter">
+    <presetList name="info">
+      <Basic>To export all presets in once, right click on this list and select all...</Basic>
+    </presetList>
+  </Form>
 </ContextHelp>
