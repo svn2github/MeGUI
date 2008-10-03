@@ -1292,7 +1292,7 @@ namespace MeGUI.packages.video.x264
             this.gbx264CustomCmd.Controls.Add(this.customCommandlineOptions);
             this.gbx264CustomCmd.Location = new System.Drawing.Point(0, 341);
             this.gbx264CustomCmd.Name = "gbx264CustomCmd";
-            this.gbx264CustomCmd.Size = new System.Drawing.Size(291, 58);
+            this.gbx264CustomCmd.Size = new System.Drawing.Size(499, 58);
             this.gbx264CustomCmd.TabIndex = 8;
             this.gbx264CustomCmd.TabStop = false;
             this.gbx264CustomCmd.Text = "Custom Command Line";
@@ -1303,7 +1303,7 @@ namespace MeGUI.packages.video.x264
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.customCommandlineOptions.Location = new System.Drawing.Point(12, 25);
             this.customCommandlineOptions.Name = "customCommandlineOptions";
-            this.customCommandlineOptions.Size = new System.Drawing.Size(265, 20);
+            this.customCommandlineOptions.Size = new System.Drawing.Size(473, 20);
             this.customCommandlineOptions.TabIndex = 0;
             this.customCommandlineOptions.TextChanged += new System.EventHandler(this.updateEvent);
             // 
@@ -1393,7 +1393,7 @@ namespace MeGUI.packages.video.x264
             this.x264GeneralBFramesgGroupbox.Controls.Add(this.x264PyramidBframes);
             this.x264GeneralBFramesgGroupbox.Location = new System.Drawing.Point(297, 131);
             this.x264GeneralBFramesgGroupbox.Name = "x264GeneralBFramesgGroupbox";
-            this.x264GeneralBFramesgGroupbox.Size = new System.Drawing.Size(202, 268);
+            this.x264GeneralBFramesgGroupbox.Size = new System.Drawing.Size(202, 204);
             this.x264GeneralBFramesgGroupbox.TabIndex = 6;
             this.x264GeneralBFramesgGroupbox.TabStop = false;
             this.x264GeneralBFramesgGroupbox.Text = "B-Frames";
@@ -1429,7 +1429,7 @@ namespace MeGUI.packages.video.x264
             "Spatial",
             "Temporal",
             "Auto"});
-            this.x264BframePredictionMode.Location = new System.Drawing.Point(120, 202);
+            this.x264BframePredictionMode.Location = new System.Drawing.Point(120, 141);
             this.x264BframePredictionMode.Name = "x264BframePredictionMode";
             this.x264BframePredictionMode.Size = new System.Drawing.Size(76, 21);
             this.x264BframePredictionMode.TabIndex = 8;
@@ -1437,14 +1437,14 @@ namespace MeGUI.packages.video.x264
             // 
             // x264BframeBias
             // 
-            this.x264BframeBias.Location = new System.Drawing.Point(120, 236);
+            this.x264BframeBias.Location = new System.Drawing.Point(149, 175);
             this.x264BframeBias.Minimum = new decimal(new int[] {
             100,
             0,
             0,
             -2147483648});
             this.x264BframeBias.Name = "x264BframeBias";
-            this.x264BframeBias.Size = new System.Drawing.Size(76, 20);
+            this.x264BframeBias.Size = new System.Drawing.Size(47, 20);
             this.x264BframeBias.TabIndex = 10;
             this.x264BframeBias.ValueChanged += new System.EventHandler(this.updateEvent);
             // 
@@ -1452,7 +1452,7 @@ namespace MeGUI.packages.video.x264
             // 
             this.x264WeightedBPrediction.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.x264WeightedBPrediction.Enabled = false;
-            this.x264WeightedBPrediction.Location = new System.Drawing.Point(4, 137);
+            this.x264WeightedBPrediction.Location = new System.Drawing.Point(4, 104);
             this.x264WeightedBPrediction.Name = "x264WeightedBPrediction";
             this.x264WeightedBPrediction.Padding = new System.Windows.Forms.Padding(3);
             this.x264WeightedBPrediction.Size = new System.Drawing.Size(192, 23);
@@ -1463,7 +1463,7 @@ namespace MeGUI.packages.video.x264
             // x264BframeBiasLabel
             // 
             this.x264BframeBiasLabel.AutoSize = true;
-            this.x264BframeBiasLabel.Location = new System.Drawing.Point(6, 235);
+            this.x264BframeBiasLabel.Location = new System.Drawing.Point(6, 174);
             this.x264BframeBiasLabel.Name = "x264BframeBiasLabel";
             this.x264BframeBiasLabel.Padding = new System.Windows.Forms.Padding(3);
             this.x264BframeBiasLabel.Size = new System.Drawing.Size(71, 19);
@@ -1474,7 +1474,7 @@ namespace MeGUI.packages.video.x264
             // x264BframePredictionModeLabel
             // 
             this.x264BframePredictionModeLabel.AutoSize = true;
-            this.x264BframePredictionModeLabel.Location = new System.Drawing.Point(6, 202);
+            this.x264BframePredictionModeLabel.Location = new System.Drawing.Point(6, 141);
             this.x264BframePredictionModeLabel.Name = "x264BframePredictionModeLabel";
             this.x264BframePredictionModeLabel.Padding = new System.Windows.Forms.Padding(3);
             this.x264BframePredictionModeLabel.Size = new System.Drawing.Size(78, 19);
