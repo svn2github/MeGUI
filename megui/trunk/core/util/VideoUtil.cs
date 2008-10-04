@@ -898,8 +898,3 @@ namespace MeGUI
     }
 	#endregion
 }
-
-
-
-
-
