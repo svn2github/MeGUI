@@ -1164,13 +1164,9 @@ namespace MeGUI
         }
         public void openOneClickFile(string fileName)
         {
-#warning fix bitrate calculator
-/*            OneClickWindow ocmt = new OneClickWindow(this, VideoProfile.SelectedIndex,
-                GenericProfile<AudioCodecSettings>.SelectedIndex, jobUtil, 
-                videoEncodingComponent1.VideoEncoderProvider, 
-                audioEncodingComponent1.AudioEncoderProvider);
-            ocmt.Input = fileName;
-            ocmt.ShowDialog();*/
+            OneClickWindow ocmt = new OneClickWindow(this, jobUtil, videoEncodingComponent1.VideoEncoderProvider, new AudioEncoderProvider());
+            ocmt.openInput(fileName);
+            ocmt.ShowDialog();
         }
         public void openD2VCreatorFile(string fileName)
         {
