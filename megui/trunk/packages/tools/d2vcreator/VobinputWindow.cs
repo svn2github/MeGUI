@@ -122,7 +122,6 @@ namespace MeGUI
             openVideo(fileName);
             this.loadOnComplete.Checked = true;
             this.closeOnQueue.Checked = true;
-            projectName.Text = Path.ChangeExtension(fileName, ".d2v");
             checkIndexIO();
         }
 
@@ -408,7 +407,6 @@ namespace MeGUI
 				if (openIFODialog.ShowDialog() == DialogResult.OK)
 				{
 					openVideo(openIFODialog.FileName);
-					projectName.Text = Path.ChangeExtension(openIFODialog.FileName, ".d2v");
 					checkIndexIO();
 				}
 			}
@@ -416,6 +414,13 @@ namespace MeGUI
 		private void openVideo(string fileName)
 		{
 			input.Text = fileName;
+
+            string projectPath;
+            string fileNameNoPath = Path.GetFileName(fileName);
+            if (string.IsNullOrEmpty(projectPath = mainForm.Settings.DefaultOutputDir))
+                projectPath = Path.GetDirectoryName(fileName);
+            projectName.Text = Path.Combine(projectPath, Path.ChangeExtension(fileNameNoPath, ".d2v"));
+
             AudioTracks.Items.Clear();
 
             if (Path.GetExtension(fileName.ToLower()) == ".vob")
