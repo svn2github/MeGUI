@@ -204,7 +204,7 @@ namespace MeGUI
             updateFilename();
         }
         
-        private void openInput(string fileName)
+        public void openInput(string fileName)
         {
             input.Filename = fileName;
             Dar? ar;
