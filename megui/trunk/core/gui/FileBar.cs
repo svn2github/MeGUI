@@ -122,6 +122,8 @@ namespace MeGUI
                 dialog.Filter = filter;
                 dialog.FilterIndex = filterIndex;
                 dialog.Title = title;
+                if (!string.IsNullOrEmpty(Filename))
+                    dialog.FileName = Path.GetFileName(Filename);
                 if (dialog.ShowDialog() == DialogResult.OK)
                     setFilename(dialog.FileName);
             }
