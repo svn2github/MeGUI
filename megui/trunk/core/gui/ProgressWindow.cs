@@ -493,33 +493,37 @@ namespace MeGUI
 		{
 		    Abort();
 		}
-		/// <summary>
-		/// handles changes in the priority dropdwon
-		/// </summary>
+		/// <summary>Handles changes in the priority dropdwon</summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
         private void priority_SelectedIndexChanged(object sender, System.EventArgs e)
         {
             if (PriorityChanged != null && !isSettingPriority)
-		    {
-			    if (!WarnVistaPriority((ProcessPriority)priority.SelectedIndex))
-				    return;
-				else
-					PriorityChanged((ProcessPriority)priority.SelectedIndex);
-			}
+            {
+                if (!WarnVistaPriority((ProcessPriority)priority.SelectedIndex))
+                {
+                    // priority.Tag contains previous SelectedIndex
+                    setPriority((ProcessPriority)priority.Tag);
+                    return;
+                }
+                else
+                {
+                    PriorityChanged((ProcessPriority)priority.SelectedIndex);
+                }
+                
+                priority.Tag = priority.SelectedIndex;
+            }
 		}
 
 		private bool WarnVistaPriority(ProcessPriority priority)
 		{
-		    if ((Environment.OSVersion.Platform == PlatformID.Win32NT) && (Environment.OSVersion.Version.Major == 6) && priority == ProcessPriority.HIGH)
+            if (VistaStuff.IsVistaOrNot && priority == ProcessPriority.HIGH)
 			{
-			    // we're on WinVista and the user chose 'HIGH' priority
-				// TODO: reset dropdown if user picked 'No'.
+			    // Running on Vista (or higher) and the user selected 'HIGH' priority
 				DialogResult res = MessageBox.Show("On Windows Vista, running processes at high priority causes them to compete against the window manager and compositor processes. Are you sure you want to proceed?", "MeGUI", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-				    return res == DialogResult.Yes;
+                return res == DialogResult.Yes;
 			}
-			else
-				return true;
+			else return true;
  		}
 		#endregion
         #region properties
