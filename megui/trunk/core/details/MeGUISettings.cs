@@ -37,7 +37,7 @@ namespace MeGUI
                        encAacPlusPath, ffmpegPath, besplitPath, yadifPath, aftenPath, x264Path, 
                        dgIndexPath, xvidEncrawPath, avc2aviPath, aviMuxGUIPath, oggEnc2Path, encAudXPath,
                        defaultLanguage1, defaultLanguage2, afterEncodingCommand, videoExtension, audioExtension,
-                       httpproxyaddress, httpproxyport, httpproxyuid, httpproxypwd;
+                       httpproxyaddress, httpproxyport, httpproxyuid, httpproxypwd, defaultOutputDir;
         private bool recalculateMainMovieBitrate, autoForceFilm, autoStartQueue, enableMP3inMP4, autoOpenScript,
                      overwriteStats, keep2of3passOutput, deleteCompletedJobs, deleteIntermediateFiles,
                      deleteAbortedOutput, openProgressWindow, useadvancedtooltips, freshOggEnc2, autoscroll, 
@@ -111,6 +111,7 @@ namespace MeGUI
             httpproxyport = "";
             httpproxyuid = "";
             httpproxypwd = "";
+            defaultOutputDir = "";
         }
         #region properties
         public string YadifPath
@@ -212,6 +213,15 @@ namespace MeGUI
         {
             get { return alwaysOnTop; }
             set { alwaysOnTop = value; }
+        }
+
+        /// <summary>
+        /// gets / sets the default output directory
+        /// </summary>
+        public string DefaultOutputDir
+        {
+            get { return defaultOutputDir; }
+            set { defaultOutputDir = value; }
         }
 
         /// <summary>
