@@ -79,7 +79,8 @@ namespace MeGUI
 		{
 			openVideo(input);
 			this.input.Text = input;
-			this.projectName.Text = projectName;
+			if (!string.IsNullOrEmpty(projectName))
+                this.projectName.Text = projectName;
 			if (demuxType == 0)
 				demuxNoAudiotracks.Checked = true;
 			else
