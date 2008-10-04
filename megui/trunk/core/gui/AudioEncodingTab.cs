@@ -202,9 +202,13 @@ namespace MeGUI.core.gui
             {
                throw new ApplicationException("The value detected as delay in your filename seems to be too high/low for MeGUI." +
                                               "Try to recreate it with the appropriate tools." + e.Message, e);
-             }
+            }
+
+            string projectPath;
+            if (!string.IsNullOrEmpty(projectPath = MainForm.Instance.Settings.DefaultOutputDir))
+                AudioOutput = Path.Combine(projectPath, Path.GetFileName(AudioOutput));
             
-           audioContainer_SelectedIndexChanged(null, null);         
+            audioContainer_SelectedIndexChanged(null, null);         
         }
 
         internal Size FileTypeComboBoxSize
@@ -212,7 +216,6 @@ namespace MeGUI.core.gui
             get { return audioContainer.Size; }
             set { audioContainer.Size = value; }
         }
-
 
         internal void Reset()
         {
