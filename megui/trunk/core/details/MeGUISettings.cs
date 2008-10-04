@@ -33,24 +33,23 @@ namespace MeGUI
     {
         #region variables
         private string[][] autoUpdateServerLists;
-        private string faacPath, lamePath, neroAacEncPath, mencoderPath,  mp4boxPath, mkvmergePath, encAacPlusPath,
-            ffmpegPath, besplitPath, yadifPath, aftenPath,
-            x264Path, dgIndexPath, xvidEncrawPath, avc2aviPath, aviMuxGUIPath, oggEnc2Path, encAudXPath,
-            defaultLanguage1, defaultLanguage2, afterEncodingCommand;
+        private string faacPath, lamePath, neroAacEncPath, mencoderPath,  mp4boxPath, mkvmergePath, 
+                       encAacPlusPath, ffmpegPath, besplitPath, yadifPath, aftenPath, x264Path, 
+                       dgIndexPath, xvidEncrawPath, avc2aviPath, aviMuxGUIPath, oggEnc2Path, encAudXPath,
+                       defaultLanguage1, defaultLanguage2, afterEncodingCommand, videoExtension, audioExtension,
+                       httpproxyaddress, httpproxyport, httpproxyuid, httpproxypwd;
         private bool recalculateMainMovieBitrate, autoForceFilm, autoStartQueue, enableMP3inMP4, autoOpenScript,
-            overwriteStats, keep2of3passOutput, deleteCompletedJobs, deleteIntermediateFiles,
-            deleteAbortedOutput, openProgressWindow, useadvancedtooltips, freshOggEnc2, autoscroll, alwaysOnTop;
+                     overwriteStats, keep2of3passOutput, deleteCompletedJobs, deleteIntermediateFiles,
+                     deleteAbortedOutput, openProgressWindow, useadvancedtooltips, freshOggEnc2, autoscroll, 
+                     alwaysOnTop, safeProfileAlteration, autoUpdate, usehttpproxy;
         private ulong audioSamplesPerUpdate;
         private AfterEncoding afterEncoding;
         private decimal forceFilmThreshold, acceptableFPSError;
 		private int nbPasses, acceptableAspectError, maxServersToTry, autoUpdateServerSubList;
-        private string videoExtension, audioExtension;
-        public bool safeProfileAlteration;
         private SourceDetectorSettings sdSettings;
         private AutoEncodeDefaultsSettings aedSettings;
         private DialogSettings dialogSettings;
         private ProcessPriority defaultPriority;
-        private bool autoUpdate;
         #endregion
         public MeGUISettings()
 		{
@@ -107,6 +106,11 @@ namespace MeGUI
             audioExtension = "";
             safeProfileAlteration = false;
             alwaysOnTop = false;
+            usehttpproxy = false;
+            httpproxyaddress = "";
+            httpproxyport = "";
+            httpproxyuid = "";
+            httpproxypwd = "";
         }
         #region properties
         public string YadifPath
@@ -128,6 +132,12 @@ namespace MeGUI
         {
             get { return autoscroll; }
             set { autoscroll = value; }
+        }
+
+        public bool SafeProfileAlteration
+        {
+            get { return safeProfileAlteration; }
+            set { safeProfileAlteration = value; }
         }
 
         /// <summary>
@@ -594,6 +604,46 @@ namespace MeGUI
         {
             get { return aedSettings; }
             set { aedSettings = value; }
+        }
+        /// <summary>
+        /// gets / sets the default settings for the Proxy
+        /// </summary>
+        public bool UseHttpProxy 
+        {
+            get { return usehttpproxy; }
+            set { usehttpproxy = value; }
+        }
+        /// <summary>
+        /// gets / sets the default settings for the Proxy Adress
+        /// </summary>
+        public string HttpProxyAddress
+        { 
+            get { return httpproxyaddress;}
+            set {httpproxyaddress = value;}
+        }
+        /// <summary>
+        /// gets / sets the default settings for the Proxy Port
+        /// </summary>
+        public string HttpProxyPort
+        { 
+            get { return httpproxyport;}
+            set {httpproxyport = value;}
+        }
+        /// <summary>
+        /// gets / sets the default settings for the Proxy Uid
+        /// </summary>
+        public string HttpProxyUid
+        { 
+            get { return httpproxyuid;}
+            set {httpproxyuid = value;}
+        }
+        /// <summary>
+        /// gets / sets the default settings for the Proxy Password
+        /// </summary>
+        public string HttpProxyPwd
+        {
+            get { return httpproxypwd; }
+            set { httpproxypwd = value; }
         }
         #endregion
     }
