@@ -163,6 +163,16 @@ namespace MeGUI
         private Button selectAftenExecutableButton;
         private GroupBox gbVideoPreview;
         private CheckBox chAlwaysOnTop;
+        private GroupBox groupBox2;
+        private TextBox txt_httpproxyuid;
+        private TextBox txt_httpproxyaddress;
+        private Label label21;
+        private Label label20;
+        private Label label19;
+        private Label label18;
+        private CheckBox cbx_usehttpproxy;
+        private TextBox txt_httpproxypwd;
+        private TextBox txt_httpproxyport;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -239,6 +249,16 @@ namespace MeGUI
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.txt_httpproxyport = new System.Windows.Forms.TextBox();
+            this.txt_httpproxypwd = new System.Windows.Forms.TextBox();
+            this.txt_httpproxyuid = new System.Windows.Forms.TextBox();
+            this.txt_httpproxyaddress = new System.Windows.Forms.TextBox();
+            this.label21 = new System.Windows.Forms.Label();
+            this.label20 = new System.Windows.Forms.Label();
+            this.label19 = new System.Windows.Forms.Label();
+            this.label18 = new System.Windows.Forms.Label();
+            this.cbx_usehttpproxy = new System.Windows.Forms.CheckBox();
             this.gbVideoPreview = new System.Windows.Forms.GroupBox();
             this.chAlwaysOnTop = new System.Windows.Forms.CheckBox();
             this.autoUpdateGroupBox = new System.Windows.Forms.GroupBox();
@@ -339,6 +359,7 @@ namespace MeGUI
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage3.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.gbVideoPreview.SuspendLayout();
             this.autoUpdateGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.maxServersToTry)).BeginInit();
@@ -359,9 +380,9 @@ namespace MeGUI
             groupBox1.Controls.Add(this.runCommand);
             groupBox1.Controls.Add(this.shutdown);
             groupBox1.Controls.Add(this.donothing);
-            groupBox1.Location = new System.Drawing.Point(4, 171);
+            groupBox1.Location = new System.Drawing.Point(4, 166);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new System.Drawing.Size(217, 119);
+            groupBox1.Size = new System.Drawing.Size(217, 117);
             groupBox1.TabIndex = 2;
             groupBox1.TabStop = false;
             groupBox1.Text = "After encoding";
@@ -369,7 +390,7 @@ namespace MeGUI
             // command
             // 
             this.command.Enabled = false;
-            this.command.Location = new System.Drawing.Point(14, 89);
+            this.command.Location = new System.Drawing.Point(10, 89);
             this.command.Name = "command";
             this.command.Size = new System.Drawing.Size(197, 21);
             this.command.TabIndex = 3;
@@ -411,7 +432,7 @@ namespace MeGUI
             // 
             this.saveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.saveButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.saveButton.Location = new System.Drawing.Point(370, 362);
+            this.saveButton.Location = new System.Drawing.Point(359, 371);
             this.saveButton.Name = "saveButton";
             this.saveButton.Size = new System.Drawing.Size(48, 23);
             this.saveButton.TabIndex = 2;
@@ -421,7 +442,7 @@ namespace MeGUI
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(429, 362);
+            this.cancelButton.Location = new System.Drawing.Point(430, 371);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(48, 23);
             this.cancelButton.TabIndex = 3;
@@ -735,7 +756,7 @@ namespace MeGUI
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(483, 357);
+            this.tabControl1.Size = new System.Drawing.Size(483, 364);
             this.tabControl1.TabIndex = 0;
             // 
             // tabPage1
@@ -745,13 +766,14 @@ namespace MeGUI
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(475, 331);
+            this.tabPage1.Size = new System.Drawing.Size(475, 338);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Main";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.groupBox2);
             this.tabPage3.Controls.Add(this.gbVideoPreview);
             this.tabPage3.Controls.Add(groupBox1);
             this.tabPage3.Controls.Add(this.autoUpdateGroupBox);
@@ -759,17 +781,115 @@ namespace MeGUI
             this.tabPage3.Controls.Add(this.autoModeGroupbox);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(475, 331);
+            this.tabPage3.Size = new System.Drawing.Size(475, 338);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Extra config";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.txt_httpproxyport);
+            this.groupBox2.Controls.Add(this.txt_httpproxypwd);
+            this.groupBox2.Controls.Add(this.txt_httpproxyuid);
+            this.groupBox2.Controls.Add(this.txt_httpproxyaddress);
+            this.groupBox2.Controls.Add(this.label21);
+            this.groupBox2.Controls.Add(this.label20);
+            this.groupBox2.Controls.Add(this.label19);
+            this.groupBox2.Controls.Add(this.label18);
+            this.groupBox2.Controls.Add(this.cbx_usehttpproxy);
+            this.groupBox2.Location = new System.Drawing.Point(227, 166);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(240, 165);
+            this.groupBox2.TabIndex = 5;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Auto Update Http Proxy:";
+            // 
+            // txt_httpproxyport
+            // 
+            this.txt_httpproxyport.Enabled = false;
+            this.txt_httpproxyport.Location = new System.Drawing.Point(191, 43);
+            this.txt_httpproxyport.Name = "txt_httpproxyport";
+            this.txt_httpproxyport.Size = new System.Drawing.Size(43, 21);
+            this.txt_httpproxyport.TabIndex = 8;
+            // 
+            // txt_httpproxypwd
+            // 
+            this.txt_httpproxypwd.Enabled = false;
+            this.txt_httpproxypwd.Location = new System.Drawing.Point(55, 99);
+            this.txt_httpproxypwd.Name = "txt_httpproxypwd";
+            this.txt_httpproxypwd.PasswordChar = '*';
+            this.txt_httpproxypwd.Size = new System.Drawing.Size(179, 21);
+            this.txt_httpproxypwd.TabIndex = 7;
+            // 
+            // txt_httpproxyuid
+            // 
+            this.txt_httpproxyuid.Enabled = false;
+            this.txt_httpproxyuid.Location = new System.Drawing.Point(55, 72);
+            this.txt_httpproxyuid.Name = "txt_httpproxyuid";
+            this.txt_httpproxyuid.Size = new System.Drawing.Size(179, 21);
+            this.txt_httpproxyuid.TabIndex = 6;
+            // 
+            // txt_httpproxyaddress
+            // 
+            this.txt_httpproxyaddress.Enabled = false;
+            this.txt_httpproxyaddress.Location = new System.Drawing.Point(55, 43);
+            this.txt_httpproxyaddress.Name = "txt_httpproxyaddress";
+            this.txt_httpproxyaddress.Size = new System.Drawing.Size(103, 21);
+            this.txt_httpproxyaddress.TabIndex = 5;
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(6, 102);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(31, 13);
+            this.label21.TabIndex = 4;
+            this.label21.Text = "Pwd:";
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(6, 75);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(36, 13);
+            this.label20.TabIndex = 3;
+            this.label20.Text = "Login:";
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(164, 45);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(31, 13);
+            this.label19.TabIndex = 2;
+            this.label19.Text = "Port:";
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(6, 45);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(43, 13);
+            this.label18.TabIndex = 1;
+            this.label18.Text = "Server:";
+            // 
+            // cbx_usehttpproxy
+            // 
+            this.cbx_usehttpproxy.AutoSize = true;
+            this.cbx_usehttpproxy.Location = new System.Drawing.Point(9, 21);
+            this.cbx_usehttpproxy.Name = "cbx_usehttpproxy";
+            this.cbx_usehttpproxy.Size = new System.Drawing.Size(75, 17);
+            this.cbx_usehttpproxy.TabIndex = 0;
+            this.cbx_usehttpproxy.Text = "Use Proxy";
+            this.cbx_usehttpproxy.UseVisualStyleBackColor = true;
+            this.cbx_usehttpproxy.CheckedChanged += new System.EventHandler(this.cbx_usehttpproxy_CheckedChanged);
+            // 
             // gbVideoPreview
             // 
             this.gbVideoPreview.Controls.Add(this.chAlwaysOnTop);
-            this.gbVideoPreview.Location = new System.Drawing.Point(228, 228);
+            this.gbVideoPreview.Location = new System.Drawing.Point(4, 288);
             this.gbVideoPreview.Name = "gbVideoPreview";
-            this.gbVideoPreview.Size = new System.Drawing.Size(239, 62);
+            this.gbVideoPreview.Size = new System.Drawing.Size(217, 43);
             this.gbVideoPreview.TabIndex = 4;
             this.gbVideoPreview.TabStop = false;
             this.gbVideoPreview.Text = "Video Preview";
@@ -777,7 +897,7 @@ namespace MeGUI
             // chAlwaysOnTop
             // 
             this.chAlwaysOnTop.AutoSize = true;
-            this.chAlwaysOnTop.Location = new System.Drawing.Point(8, 21);
+            this.chAlwaysOnTop.Location = new System.Drawing.Point(8, 17);
             this.chAlwaysOnTop.Name = "chAlwaysOnTop";
             this.chAlwaysOnTop.Size = new System.Drawing.Size(169, 17);
             this.chAlwaysOnTop.TabIndex = 0;
@@ -792,7 +912,7 @@ namespace MeGUI
             this.autoUpdateGroupBox.Controls.Add(this.useAutoUpdateCheckbox);
             this.autoUpdateGroupBox.Location = new System.Drawing.Point(227, 82);
             this.autoUpdateGroupBox.Name = "autoUpdateGroupBox";
-            this.autoUpdateGroupBox.Size = new System.Drawing.Size(240, 139);
+            this.autoUpdateGroupBox.Size = new System.Drawing.Size(240, 78);
             this.autoUpdateGroupBox.TabIndex = 3;
             this.autoUpdateGroupBox.TabStop = false;
             this.autoUpdateGroupBox.Text = "Auto Update";
@@ -800,22 +920,22 @@ namespace MeGUI
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(6, 84);
+            this.label14.Location = new System.Drawing.Point(6, 53);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(176, 13);
+            this.label14.Size = new System.Drawing.Size(152, 13);
             this.label14.TabIndex = 2;
-            this.label14.Text = "Maximum number of servers to try:";
+            this.label14.Text = "Max number of servers to try:";
             // 
             // maxServersToTry
             // 
-            this.maxServersToTry.Location = new System.Drawing.Point(9, 104);
+            this.maxServersToTry.Location = new System.Drawing.Point(190, 51);
             this.maxServersToTry.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
             this.maxServersToTry.Name = "maxServersToTry";
-            this.maxServersToTry.Size = new System.Drawing.Size(120, 21);
+            this.maxServersToTry.Size = new System.Drawing.Size(44, 21);
             this.maxServersToTry.TabIndex = 3;
             this.maxServersToTry.Value = new decimal(new int[] {
             5,
@@ -827,7 +947,7 @@ namespace MeGUI
             // 
             this.configureServersButton.AutoSize = true;
             this.configureServersButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.configureServersButton.Location = new System.Drawing.Point(9, 46);
+            this.configureServersButton.Location = new System.Drawing.Point(119, 18);
             this.configureServersButton.Name = "configureServersButton";
             this.configureServersButton.Size = new System.Drawing.Size(115, 23);
             this.configureServersButton.TabIndex = 1;
@@ -977,7 +1097,7 @@ namespace MeGUI
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(475, 331);
+            this.tabPage2.Size = new System.Drawing.Size(475, 338);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Program Paths";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -1661,7 +1781,7 @@ namespace MeGUI
             this.helpButton1.ArticleName = "Settings window";
             this.helpButton1.AutoSize = true;
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.helpButton1.Location = new System.Drawing.Point(12, 362);
+            this.helpButton1.Location = new System.Drawing.Point(12, 371);
             this.helpButton1.Name = "helpButton1";
             this.helpButton1.Size = new System.Drawing.Size(47, 23);
             this.helpButton1.TabIndex = 1;
@@ -1669,7 +1789,7 @@ namespace MeGUI
             // SettingsForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
-            this.ClientSize = new System.Drawing.Size(483, 393);
+            this.ClientSize = new System.Drawing.Size(483, 399);
             this.Controls.Add(this.helpButton1);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.cancelButton);
@@ -1695,6 +1815,8 @@ namespace MeGUI
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.gbVideoPreview.ResumeLayout(false);
             this.gbVideoPreview.PerformLayout();
             this.autoUpdateGroupBox.ResumeLayout(false);
@@ -1953,6 +2075,13 @@ namespace MeGUI
             }
         }
 
+        private void cbx_usehttpproxy_CheckedChanged(object sender, EventArgs e)
+        {
+            txt_httpproxyaddress.Enabled = cbx_usehttpproxy.Checked;
+            txt_httpproxyport.Enabled = cbx_usehttpproxy.Checked;
+            txt_httpproxyuid.Enabled = cbx_usehttpproxy.Checked;
+            txt_httpproxypwd.Enabled = cbx_usehttpproxy.Checked;
+        }
 		#endregion
 		#region properties
 		public MeGUISettings Settings
@@ -2011,6 +2140,11 @@ namespace MeGUI
                 settings.AftenPath = tbAften.Text;
                 settings.AedSettings = this.autoEncodeDefaults;
                 settings.AlwaysOnTop = chAlwaysOnTop.Checked;
+                settings.UseHttpProxy = cbx_usehttpproxy.Checked;
+                settings.HttpProxyAddress = txt_httpproxyaddress.Text;
+                settings.HttpProxyPort = txt_httpproxyport.Text;
+                settings.HttpProxyUid = txt_httpproxyuid.Text;
+                settings.HttpProxyPwd = txt_httpproxypwd.Text; 
 				return settings;
 			}
 			set
@@ -2070,9 +2204,13 @@ namespace MeGUI
                 tbAften.Text = settings.AftenPath;
                 this.autoEncodeDefaults = settings.AedSettings;
                 chAlwaysOnTop.Checked = settings.AlwaysOnTop;
+                cbx_usehttpproxy.Checked = settings.UseHttpProxy;
+                txt_httpproxyaddress.Text = settings.HttpProxyAddress;
+                txt_httpproxyport.Text = settings.HttpProxyPort;
+                txt_httpproxyuid.Text = settings.HttpProxyUid;
+                txt_httpproxypwd.Text = settings.HttpProxyPwd;
 			}
 		}
 		#endregion
-
 	}
 }
