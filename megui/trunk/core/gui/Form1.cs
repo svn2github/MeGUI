@@ -1175,7 +1175,7 @@ namespace MeGUI
         public void openD2VCreatorFile(string fileName)
         {
             VobinputWindow mpegInput = new VobinputWindow(this, fileName);
-            mpegInput.setConfig(fileName, Path.ChangeExtension(fileName, ".d2v"), 2, true, true, true, false);
+            mpegInput.setConfig(fileName, null, 2, true, true, true, false);
             mpegInput.ShowDialog();
         }
         private FileType getFileType(string fileName)
