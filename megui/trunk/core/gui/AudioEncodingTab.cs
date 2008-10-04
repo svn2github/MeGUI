@@ -133,7 +133,8 @@ namespace MeGUI.core.gui
         public AudioEncodingTab()
         {
             InitializeComponent();
-            audioProfile.Manager = MainForm.Instance.Profiles;
+            if (MainForm.Instance != null) // Fix to allow VS2008 designer to load Form1
+                audioProfile.Manager = MainForm.Instance.Profiles;
         }
 
 

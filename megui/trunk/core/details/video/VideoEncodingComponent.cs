@@ -78,8 +78,8 @@ namespace MeGUI
         {
             initVideoInfo();
             InitializeComponent();
-            videoProfile.Manager = MainForm.Instance.Profiles;
-
+            if (mainForm != null)  // Fix to allow VS2008 designer to load Form1
+                videoProfile.Manager = mainForm.Profiles;
         }
         #endregion
         #region extra properties
