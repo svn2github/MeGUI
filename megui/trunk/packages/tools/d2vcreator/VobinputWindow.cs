@@ -425,16 +425,14 @@ namespace MeGUI
 
             if (Path.GetExtension(fileName.ToLower()) == ".vob")
             {
-                string myfilepath = Path.GetDirectoryName(fileName) + Path.DirectorySeparatorChar;
-                string myfilename = Path.GetFileName(fileName);
-                string myifofile;
+                string ifoFile;
 
-                if (myfilename.Substring(0, 4) == "VTS_")
-                     myifofile = myfilename.Substring(0, myfilename.LastIndexOf("_")) + "_0.IFO";
-                else myifofile = Path.ChangeExtension(myfilename, ".IFO");
+                if (fileNameNoPath.Substring(0, 4) == "VTS_")
+                     ifoFile = fileName.Substring(0, fileName.LastIndexOf("_")) + "_0.IFO";
+                else ifoFile = Path.ChangeExtension(fileName, ".IFO");
 
-                if (Directory.GetFiles(myfilepath, myifofile).Length > 0)
-                    AudioTracks.Items.AddRange(IFOparser.GetAudioInfos(myfilepath + myifofile, false));
+                if (File.Exists(ifoFile))
+                    AudioTracks.Items.AddRange(IFOparser.GetAudioInfos(ifoFile, false));
             }
 
             if (AudioTracks.Items.Count < 1)
