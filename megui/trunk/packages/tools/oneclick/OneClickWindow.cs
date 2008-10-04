@@ -249,7 +249,9 @@ namespace MeGUI
             if (File.Exists(chapterFile))
                 this.chapterFile.Filename = chapterFile;
 
-            workingDirectory.Filename = Path.GetDirectoryName(fileName);
+            if (string.IsNullOrEmpty(workingDirectory.Filename = mainForm.Settings.DefaultOutputDir))
+                workingDirectory.Filename = Path.GetDirectoryName(fileName);
+
             workingName.Text = PrettyFormatting.ExtractWorkingName(fileName);
             this.updateFilename();
             this.ar.Value = ar;
