@@ -173,6 +173,10 @@ namespace MeGUI
         private CheckBox cbx_usehttpproxy;
         private TextBox txt_httpproxypwd;
         private TextBox txt_httpproxyport;
+        private GroupBox gbDefaultOutput;
+        private Button clearDefaultOutputDir;
+        private FileBar defaultOutputDir;
+
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -348,6 +352,9 @@ namespace MeGUI
             this.videoExtLabel = new System.Windows.Forms.Label();
             this.autoEncodeDefaultsButton = new System.Windows.Forms.Button();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
+            this.gbDefaultOutput = new System.Windows.Forms.GroupBox();
+            this.clearDefaultOutputDir = new System.Windows.Forms.Button();
+            this.defaultOutputDir = new MeGUI.FileBar();
             groupBox1 = new System.Windows.Forms.GroupBox();
             groupBox1.SuspendLayout();
             this.otherGroupBox.SuspendLayout();
@@ -372,6 +379,7 @@ namespace MeGUI
             this.tabPage5.SuspendLayout();
             this.tabPage6.SuspendLayout();
             this.tabPage7.SuspendLayout();
+            this.gbDefaultOutput.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -432,7 +440,7 @@ namespace MeGUI
             // 
             this.saveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.saveButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.saveButton.Location = new System.Drawing.Point(359, 371);
+            this.saveButton.Location = new System.Drawing.Point(359, 418);
             this.saveButton.Name = "saveButton";
             this.saveButton.Size = new System.Drawing.Size(48, 23);
             this.saveButton.TabIndex = 2;
@@ -442,7 +450,7 @@ namespace MeGUI
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(430, 371);
+            this.cancelButton.Location = new System.Drawing.Point(430, 418);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(48, 23);
             this.cancelButton.TabIndex = 3;
@@ -756,17 +764,18 @@ namespace MeGUI
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(483, 364);
+            this.tabControl1.Size = new System.Drawing.Size(483, 413);
             this.tabControl1.TabIndex = 0;
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.gbDefaultOutput);
             this.tabPage1.Controls.Add(this.vobGroupBox);
             this.tabPage1.Controls.Add(this.otherGroupBox);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(475, 338);
+            this.tabPage1.Size = new System.Drawing.Size(475, 387);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Main";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -781,7 +790,7 @@ namespace MeGUI
             this.tabPage3.Controls.Add(this.autoModeGroupbox);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(475, 338);
+            this.tabPage3.Size = new System.Drawing.Size(475, 387);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Extra config";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -1097,7 +1106,7 @@ namespace MeGUI
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(475, 338);
+            this.tabPage2.Size = new System.Drawing.Size(475, 387);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Program Paths";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -1781,15 +1790,50 @@ namespace MeGUI
             this.helpButton1.ArticleName = "Settings window";
             this.helpButton1.AutoSize = true;
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.helpButton1.Location = new System.Drawing.Point(12, 371);
+            this.helpButton1.Location = new System.Drawing.Point(12, 418);
             this.helpButton1.Name = "helpButton1";
             this.helpButton1.Size = new System.Drawing.Size(47, 23);
             this.helpButton1.TabIndex = 1;
             // 
+            // gbDefaultOutput
+            // 
+            this.gbDefaultOutput.Controls.Add(this.clearDefaultOutputDir);
+            this.gbDefaultOutput.Controls.Add(this.defaultOutputDir);
+            this.gbDefaultOutput.Location = new System.Drawing.Point(2, 322);
+            this.gbDefaultOutput.Name = "gbDefaultOutput";
+            this.gbDefaultOutput.Size = new System.Drawing.Size(467, 57);
+            this.gbDefaultOutput.TabIndex = 7;
+            this.gbDefaultOutput.TabStop = false;
+            this.gbDefaultOutput.Text = "Default Output Directory";
+            // 
+            // clearDefaultOutputDir
+            // 
+            this.clearDefaultOutputDir.Location = new System.Drawing.Point(429, 21);
+            this.clearDefaultOutputDir.Name = "clearDefaultOutputDir";
+            this.clearDefaultOutputDir.Size = new System.Drawing.Size(24, 23);
+            this.clearDefaultOutputDir.TabIndex = 41;
+            this.clearDefaultOutputDir.Text = "x";
+            // 
+            // defaultOutputDir
+            // 
+            this.defaultOutputDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.defaultOutputDir.Filename = "";
+            this.defaultOutputDir.Filter = null;
+            this.defaultOutputDir.FilterIndex = 0;
+            this.defaultOutputDir.FolderMode = true;
+            this.defaultOutputDir.Location = new System.Drawing.Point(10, 20);
+            this.defaultOutputDir.Name = "defaultOutputDir";
+            this.defaultOutputDir.ReadOnly = true;
+            this.defaultOutputDir.SaveMode = false;
+            this.defaultOutputDir.Size = new System.Drawing.Size(417, 26);
+            this.defaultOutputDir.TabIndex = 40;
+            this.defaultOutputDir.Title = null;
+            // 
             // SettingsForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
-            this.ClientSize = new System.Drawing.Size(483, 399);
+            this.ClientSize = new System.Drawing.Size(483, 446);
             this.Controls.Add(this.helpButton1);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.cancelButton);
@@ -1837,6 +1881,7 @@ namespace MeGUI
             this.tabPage6.PerformLayout();
             this.tabPage7.ResumeLayout(false);
             this.tabPage7.PerformLayout();
+            this.gbDefaultOutput.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2082,6 +2127,12 @@ namespace MeGUI
             txt_httpproxyuid.Enabled = cbx_usehttpproxy.Checked;
             txt_httpproxypwd.Enabled = cbx_usehttpproxy.Checked;
         }
+
+        private void clearDefaultOutputDir_Click(object sender, EventArgs e)
+        {
+            defaultOutputDir.Filename = "";
+        }
+
 		#endregion
 		#region properties
 		public MeGUISettings Settings
@@ -2144,7 +2195,8 @@ namespace MeGUI
                 settings.HttpProxyAddress = txt_httpproxyaddress.Text;
                 settings.HttpProxyPort = txt_httpproxyport.Text;
                 settings.HttpProxyUid = txt_httpproxyuid.Text;
-                settings.HttpProxyPwd = txt_httpproxypwd.Text; 
+                settings.HttpProxyPwd = txt_httpproxypwd.Text;
+                settings.DefaultOutputDir = defaultOutputDir.Filename; 
 				return settings;
 			}
 			set
@@ -2209,6 +2261,7 @@ namespace MeGUI
                 txt_httpproxyport.Text = settings.HttpProxyPort;
                 txt_httpproxyuid.Text = settings.HttpProxyUid;
                 txt_httpproxypwd.Text = settings.HttpProxyPwd;
+                defaultOutputDir.Filename = settings.DefaultOutputDir;
 			}
 		}
 		#endregion
