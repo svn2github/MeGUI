@@ -33,8 +33,8 @@ using MeGUI.core.details;
 using MeGUI.core.details.video;
 using MeGUI.core.gui;
 using MeGUI.core.plugins.interfaces;
-using MeGUI.packages.tools.oneclick;
 using MeGUI.core.util;
+using MeGUI.packages.tools.oneclick;
 
 namespace MeGUI
 {
@@ -328,9 +328,6 @@ namespace MeGUI
                 this.containerFormat.SelectedIndex = 0;
                 this.output.Filename = Path.ChangeExtension(output.Filename, (this.containerFormat.SelectedItem as ContainerType).Extension);
             }
-            else
-            {
-            }
             beingCalled = false;
         }
 
@@ -350,9 +347,7 @@ namespace MeGUI
                 List<ContainerType> allContainerTypes = muxProvider.GetSupportedContainers();
                 foreach (string s in settings.ContainerCandidates)
                 {
-                    ContainerType ct = allContainerTypes.Find(
-                        new Predicate<ContainerType>(delegate(ContainerType t)
-                        { return t.ToString() == s; }));
+                    ContainerType ct = allContainerTypes.Find(new Predicate<ContainerType>(delegate(ContainerType t) { return t.ToString() == s; }));
                     if (ct != null)
                         temp.Add(ct);
                 }
@@ -371,14 +366,11 @@ namespace MeGUI
                 optionalTargetSizeBox1.Value = settings.Filesize;
                 horizontalResolution.Value = settings.OutputResolution;
 
-
                 // Clean up after those settings were set
                 updatePossibleContainers();
                 containerFormat_SelectedIndexChanged_1(null, null);
             }
         }
-
-        //private VideoCodecSettings VideoSettings { get { throw new Exception(); } }
 
         private void goButton_Click(object sender, EventArgs e)
         {
@@ -402,7 +394,7 @@ namespace MeGUI
                     int delay = audioConfigControl[i].Delay;
                     if (audioTrack[i].SelectedSCItem.IsStandard)
                     {
-                        TrackIDs.Add(((MeGUI.AudioTrackInfo)(audioTrack[i].SelectedObject)).TrackID.ToString("x"));
+                        TrackIDs.Add(((AudioTrackInfo)(audioTrack[i].SelectedObject)).TrackID.ToString("x"));
                         aInput = "::" + (audioTrack[i].SelectedIndex - 1) + "::"; // -1 since "None" is first
                         info = new TrackInfo(((AudioTrackInfo)audioTrack[i].SelectedObject).Language, null);
                     }
@@ -470,11 +462,6 @@ namespace MeGUI
             public int trackNumber;
             public AudioCodecSettings settings;
         }
-
-        #region updates
-
-
-        #endregion
 
         private void AddTrack()
         {
@@ -544,11 +531,6 @@ namespace MeGUI
         private void audio1_SomethingChanged(object sender, EventArgs e)
         {
             updatePossibleContainers();
-        }
-
-        private void targetGroupBox_Enter(object sender, EventArgs e)
-        {
-
         }
 
         private void addTrackToolStripMenuItem_Click(object sender, EventArgs e)
@@ -864,8 +846,7 @@ namespace MeGUI
                 log.LogValue("Deinterlacing used", deinterlaceLines);
             }
 
-            inputLine = ScriptServer.GetInputLine(path, interlaced, PossibleSources.d2v,
-                avsSettings.ColourCorrect, avsSettings.MPEG2Deblock, false, 0);
+            inputLine = ScriptServer.GetInputLine(path, interlaced, PossibleSources.d2v, avsSettings.ColourCorrect, avsSettings.MPEG2Deblock, false, 0);
 
             cropLine = ScriptServer.GetCropLine(true, final);
             denoiseLines = ScriptServer.GetDenoiseLines(avsSettings.Denoise, (DenoiseFilterType)avsSettings.DenoiseMethod);
@@ -889,8 +870,7 @@ namespace MeGUI
             }
             return Path.ChangeExtension(path, ".avs");
         }
-
-
+        
         public void finishedAnalysis(SourceInfo info, bool error, string errorMessage)
         {
             if (error)

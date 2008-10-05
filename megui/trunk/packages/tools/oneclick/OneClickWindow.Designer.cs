@@ -471,7 +471,6 @@ namespace MeGUI
             this.targetGroupBox.TabIndex = 18;
             this.targetGroupBox.TabStop = false;
             this.targetGroupBox.Text = "Target";
-            this.targetGroupBox.Enter += new System.EventHandler(this.targetGroupBox_Enter);
             // 
             // oneclickProfile
             // 
