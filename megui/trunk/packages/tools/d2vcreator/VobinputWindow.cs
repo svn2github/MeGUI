@@ -583,7 +583,7 @@ namespace MeGUI
             Dictionary<int, string> audioFiles = vUtil.getAllDemuxedAudio(job.TrackIDs, job.Output, 8);
             if (job.LoadSources)
             {
-                if (job.DemuxMode != 0)
+                if (job.DemuxMode != 0 && audioFiles.Count > 0)
                 {
                     string[] files = new string[audioFiles.Values.Count];
                     audioFiles.Values.CopyTo(files, 0);
@@ -593,9 +593,15 @@ namespace MeGUI
                             mainForm.Audio.openAudioFile(files);
                         }));
                 }
-                AviSynthWindow asw = new AviSynthWindow(mainForm, job.Output);
-                asw.OpenScript += new OpenScriptCallback(mainForm.Video.openVideoFile);
-                asw.Show();
+                // if the above needed delegation for openAudioFile this needs it for openVideoFile?
+                // It seems to fix the problem of ASW dissapearing as soon as it appears on a system (Vista X64)
+                Util.ThreadSafeRun(mainForm, new MethodInvoker(
+                    delegate
+                    {
+                        AviSynthWindow asw = new AviSynthWindow(mainForm, job.Output);
+                        asw.OpenScript += new OpenScriptCallback(mainForm.Video.openVideoFile);
+                        asw.Show();
+                    }));
             }
 
             return null;
