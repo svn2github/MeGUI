@@ -422,7 +422,8 @@ namespace MeGUI
             projectName.Text = Path.Combine(projectPath, Path.ChangeExtension(fileNameNoPath, ".d2v"));
 
             AudioTracks.Items.Clear();
-
+            demuxNoAudiotracks.Checked = true; // here to trigger rbtracks_CheckedChanged on new File selection
+            
             if (Path.GetExtension(fileName.ToLower()) == ".vob")
             {
                 string ifoFile;
@@ -453,7 +454,6 @@ namespace MeGUI
             else
             {
                 MessageBox.Show("MeGUI cannot find audio track information. Audio Tracks selection will be disabled.");
-                demuxNoAudiotracks.Checked = true;
             }       
 		}
 		/// <summary>
@@ -529,20 +529,10 @@ namespace MeGUI
 
         private void rbtracks_CheckedChanged(object sender, EventArgs e)
         {
-            bool selectState = false;
-            if (demuxAll.Checked)
-                selectState = true;
-
-            if ((demuxNoAudiotracks.Checked) || (demuxAll.Checked))
-            {
-                for (int i = 0; i < AudioTracks.Items.Count; i++)
-                    AudioTracks.SetItemChecked(i, selectState);
-                AudioTracks.Enabled = false;
-            }
-            else
-            { 
-                AudioTracks.Enabled = true;
-            }
+            // Now defaults to starting with every track selected
+            for (int i = 0; i < AudioTracks.Items.Count; i++)
+                AudioTracks.SetItemChecked(i, !demuxNoAudiotracks.Checked);
+            AudioTracks.Enabled = demuxTracks.Checked;
         }
     }
 
