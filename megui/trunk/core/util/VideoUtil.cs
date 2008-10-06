@@ -291,19 +291,11 @@ namespace MeGUI
 			bool putDummyTracks = true; // indicates whether audio tracks have been found or not
 			ar = null;
             maxHorizontalResolution = 5000;
-			if (!string.IsNullOrEmpty(infoFile))
-			{
-                getSourceInfo(infoFile, out audioTracks, out subtitles, out ar, out maxHorizontalResolution);
-                if (audioTracks.Count > 0)
-					putDummyTracks = false;
-			}
 
-            if (putDummyTracks)
-			{
-                getSourceMediaInfo(fileName, out audioTracks, out maxHorizontalResolution);
-                if (audioTracks.Count > 0)
-                    putDummyTracks = false;
-            }
+            getSourceMediaInfo(fileName, out audioTracks, out maxHorizontalResolution);
+            if (audioTracks.Count > 0)
+                putDummyTracks = false;
+
 			if (putDummyTracks)
 			{                
                 for (int i = 1; i <= 8; i++)
