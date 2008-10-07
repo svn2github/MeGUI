@@ -1,3 +1,31 @@
+0.3.0.3002
+    - (kurtnoise) [VobinputWindow] add ThreadSafeRun() to fix the problem of ASW dissapearing as soon as it appears on the system. Patch by ateeq (#2141406)
+    - (kurtnoise) [VobinputWindow] better rbtracks_CheckedChanged() event. Patch by ateeq (#2141406)
+    - (kurtnoise) [VideoUtil] remove getSourceInfo() entries to switch using Stream Information DVDDecrypter file.
+    - (kurtnoise) [OneClickWindow] some clean up.
+    - (kurtnoise) [VideoUtil] fix a if statement which has been omitted in rev 757. 
+    - (kurtnoise) [MainForm] fix openOneClickFile(). Patch by ateeq (#2141406).
+    - (kurtnoise) [VideoEncodingComponent & AudioEncodingTab] fix instance Profiles to allow VS2008 designer to load the MainForm. Patch by ateeq (#2141406)
+    - (kurtnoise) [OneClickWindow] change accessibility for openVideo(). Patch by ateeq. (#2141406)
+    - (kurtnoise) [OneClickWindow] use DefaultOutputDir for matching the workingDirectory. Patch by ateeq (#2144486)
+    - (kurtnoise) [VobinputWindow] few tunings in the ifoFile creation. Patch by ateeq (#2144486).
+    - (kurtnoise) [VobinputWindow] move projectName.Text & add projectPath to the openVideo(). Patch by ateeq (#2144486)
+    - (kurtnoise) [VobinputWindow] add a checking for projectName. Patch by ateeq (#2144486)
+    - (kurtnoise) [PrettyFormatting] fix weird results when the source file has the letters vts or video anywhere in the file name. Patch by ateeq (#2144486)
+    - (kurtnoise) [AviSynthWindow] include an output FileBar. Patch by ateeq (#2144486)
+    - (kurtnoise) [VideoUtil] remove empty lines at the end.
+    - (kurtnoise) [MainForm] use null as file extension for openD2VCreatorFile(). Patch by ateeq (#2144486)
+    - (kurtnoise) [SettingsForm] add Default Output Directory components. Patch by ateeq (#2144486)
+    - (kurtnoise) [FileBar] add a checking for the Filename. Patch by ateeq (#2144486)
+    - (kurtnoise) [AudioEncodingTab] use DefaultOutputDir to test the projectPath. Patch by ateeq (#2144486)
+    - (kurtnoise) [VideoEncodingComponent] use now DefaultOutputDir to test the filePath. Patch by ateeq (#2144486)
+    - (kurtnoise) [MeGUISettings] add defaultOutputDir as string and its getter/setter. Patch by ateeq (#2144486) 
+    - (kurtnoise) [UpdateWindow] add Proxy support. Patch by gigibop (#2142498)
+    - (kurtnoise) [MeGUISettings] add getters/setters & default values for the proxy support. Patch by gigibop (#2142498)
+    - (kurtnoise) [SettingsForm] add autoUpdate Proxy components. Patch by gigibop (#2142498)
+    - (kurtnoise) [ProgressWindow] fix a priority setting on Vista. Patch by griffore (#2145806)
+    - (kurtnoise) [x264ConfigurationPanel] few refactoring.
+
 0.3.0.3001
     - (kurtnoise) [VideoUtil] remove one iterator.
     - (kurtnoise) [x264] update subME items.
