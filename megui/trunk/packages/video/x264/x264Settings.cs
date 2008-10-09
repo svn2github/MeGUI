@@ -442,7 +442,6 @@ namespace MeGUI
                 this.CustomEncoderOptions != otherSettings.CustomEncoderOptions ||
                 this.Deblock != otherSettings.Deblock ||
                 this.EncodingMode != otherSettings.EncodingMode ||
-                this.FourCC != otherSettings.FourCC ||
                 this.I4x4mv != otherSettings.I4x4mv ||
                 this.I8x8mv != otherSettings.I8x8mv ||
                 this.IPFactor != otherSettings.IPFactor ||

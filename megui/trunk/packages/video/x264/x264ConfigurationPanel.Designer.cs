@@ -30,8 +30,6 @@ namespace MeGUI.packages.video.x264
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(x264ConfigurationPanel));
             this.x264GeneralMiscGroupbox = new System.Windows.Forms.GroupBox();
-            this.fourCC = new System.Windows.Forms.ComboBox();
-            this.fourCCLabel = new System.Windows.Forms.Label();
             this.ssim = new System.Windows.Forms.CheckBox();
             this.psnr = new System.Windows.Forms.CheckBox();
             this.x264NbThreadsLabel = new System.Windows.Forms.Label();
@@ -235,8 +233,6 @@ namespace MeGUI.packages.video.x264
             // x264GeneralMiscGroupbox
             // 
             this.x264GeneralMiscGroupbox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.x264GeneralMiscGroupbox.Controls.Add(this.fourCC);
-            this.x264GeneralMiscGroupbox.Controls.Add(this.fourCCLabel);
             this.x264GeneralMiscGroupbox.Controls.Add(this.ssim);
             this.x264GeneralMiscGroupbox.Controls.Add(this.psnr);
             this.x264GeneralMiscGroupbox.Controls.Add(this.x264NbThreadsLabel);
@@ -247,31 +243,6 @@ namespace MeGUI.packages.video.x264
             this.x264GeneralMiscGroupbox.TabIndex = 1;
             this.x264GeneralMiscGroupbox.TabStop = false;
             this.x264GeneralMiscGroupbox.Text = "Misc";
-            // 
-            // fourCC
-            // 
-            this.fourCC.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.fourCC.Items.AddRange(new object[] {
-            "VSSH",
-            "x264",
-            "avc1"});
-            this.fourCC.Location = new System.Drawing.Point(85, 101);
-            this.fourCC.Name = "fourCC";
-            this.fourCC.Size = new System.Drawing.Size(82, 21);
-            this.fourCC.TabIndex = 5;
-            this.fourCC.SelectedIndexChanged += new System.EventHandler(this.updateEvent);
-            // 
-            // fourCCLabel
-            // 
-            this.fourCCLabel.AutoSize = true;
-            this.fourCCLabel.Location = new System.Drawing.Point(7, 100);
-            this.fourCCLabel.Margin = new System.Windows.Forms.Padding(3);
-            this.fourCCLabel.Name = "fourCCLabel";
-            this.fourCCLabel.Padding = new System.Windows.Forms.Padding(3);
-            this.fourCCLabel.Size = new System.Drawing.Size(45, 19);
-            this.fourCCLabel.TabIndex = 4;
-            this.fourCCLabel.Text = "fourCC";
-            this.fourCCLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // ssim
             // 
@@ -2037,8 +2008,6 @@ namespace MeGUI.packages.video.x264
         #endregion
 
         private System.Windows.Forms.GroupBox x264GeneralMiscGroupbox;
-        private System.Windows.Forms.ComboBox fourCC;
-        private System.Windows.Forms.Label fourCCLabel;
         private System.Windows.Forms.CheckBox psnr;
         private System.Windows.Forms.Label x264NbThreadsLabel;
         private System.Windows.Forms.NumericUpDown x264NbThreads;

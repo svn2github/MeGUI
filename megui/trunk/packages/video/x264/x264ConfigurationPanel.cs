@@ -422,8 +422,6 @@ namespace MeGUI.packages.video.x264
         /// </summary>
         protected override void doCodecSpecificLoadAdjustments()
         {
-            if (fourCC.SelectedIndex == -1)
-                this.fourCC.SelectedIndex = 0;
             if (x264EncodingMode.SelectedIndex == -1)
                 this.x264EncodingMode.SelectedIndex = 0;
             if (x264SubpelRefinement.SelectedIndex == -1)
@@ -488,7 +486,6 @@ namespace MeGUI.packages.video.x264
                 xs.SSIMCalculation = this.ssim.Checked;
                 xs.PSNRCalculation = this.psnr.Checked;
                 xs.noFastPSkip = this.NoFastPSkip.Checked;
-                xs.FourCC = fourCC.SelectedIndex;
                 xs.Turbo = this.x264Turbo.Checked;
                 xs.MixedRefs = this.x264MixedReferences.Checked;
                 xs.EncodingMode = x264EncodingMode.SelectedIndex;
@@ -573,7 +570,6 @@ namespace MeGUI.packages.video.x264
                 NoFastPSkip.Checked = xs.noFastPSkip;
                 x264MixedReferences.Checked = xs.MixedRefs;
                 this.x264SubpelRefinement.SelectedIndex = xs.SubPelRefinement;
-                fourCC.SelectedIndex = xs.FourCC;
                 x264Turbo.Checked = xs.Turbo;
                 x264BitrateQuantizer.Value = (isBitrateMode(xs.EncodingMode) || xs.QuantizerCRF == 0) ? xs.BitrateQuantizer : xs.QuantizerCRF;
                 x264KeyframeInterval.Text = xs.KeyframeInterval.ToString() ;
@@ -748,7 +744,6 @@ namespace MeGUI.packages.video.x264
             tooltipHelp.SetToolTip(trellis, SelectHelpText("trellis"));
             tooltipHelp.SetToolTip(psnr, SelectHelpText("psnr"));
             tooltipHelp.SetToolTip(ssim, SelectHelpText("ssim"));
-            tooltipHelp.SetToolTip(fourCC, SelectHelpText("fourcc"));
             tooltipHelp.SetToolTip(avcLevel, SelectHelpText("level"));
             tooltipHelp.SetToolTip(avcProfile, SelectHelpText("profile"));
             tooltipHelp.SetToolTip(cqmComboBox1, SelectHelpText("cqm"));

@@ -591,13 +591,6 @@ Set QP to 0 to activate the lossless Mode.</Advanced>
       <Recommended>Disabled</Recommended>
       <Default>Disabled</Default>
     </losslessmode>
-    <fourcc name="The FourCC">
-      <Advanced>
-Specify the AVC FourCC you what you want. Depends mostly on the decoder used.</Advanced>
-      <Basic>Specify the AVC FourCC</Basic>
-      <Recommended>x264</Recommended>
-      <Default>x264</Default>
-    </fourcc>
 		<quiet name="Quiet Mode">
 			<Advanced></Advanced>
 			<Basic>Enable Quiet Mode (do not display output information).</Basic>
