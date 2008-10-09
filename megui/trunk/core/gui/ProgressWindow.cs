@@ -196,7 +196,7 @@ namespace MeGUI
             this.totalTime.Location = new System.Drawing.Point(173, 149);
             this.totalTime.Name = "totalTime";
             this.totalTime.Size = new System.Drawing.Size(130, 21);
-            this.totalTime.TabIndex = 11;
+            this.totalTime.TabIndex = 4;
             this.totalTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // totalTimeLabel
@@ -337,7 +337,7 @@ namespace MeGUI
             this.priority.Location = new System.Drawing.Point(122, 220);
             this.priority.Name = "priority";
             this.priority.Size = new System.Drawing.Size(122, 21);
-            this.priority.TabIndex = 4;
+            this.priority.TabIndex = 11;
             this.priority.SelectedIndexChanged += new System.EventHandler(this.priority_SelectedIndexChanged);
             // 
             // statusStrip1
