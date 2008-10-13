@@ -188,7 +188,7 @@ namespace MeGUI.core.util
                 if (isAudio) // We need to generate a fake video track to add
                 {
                     s.WriteLine("__just_audio = __film");
-                    s.WriteLine("__blank = BlankClip(length={0}, fps={1})", cuts.MinLength, Math.Round(cuts.Framerate, 3).ToString().Replace(",","."));
+                    s.WriteLine("__blank = BlankClip(length={0}, fps={1})", cuts.MinLength, Math.Round(cuts.Framerate, 3).ToString(new CultureInfo("en-us")));
                     s.WriteLine("__film = AudioDub(__blank, __film)");
                 }
 
@@ -214,7 +214,7 @@ namespace MeGUI.core.util
                     {
                         bool first = (i == 0);
                         bool last = (i == (counter - 1));
-                        s.Write(addFades("__t" + i, first, last, isAudio, cuts.Framerate));
+                        s.Write(addFades("__t" + i, first, last, isAudio));
                         if (!last) s.Write(" ++ ");
                     }
                     s.WriteLine();
@@ -248,21 +248,20 @@ namespace MeGUI.core.util
         }
 
 
-        private static string addFades(string p, bool first, bool last, bool isAudio, double framerate)
+        private static string addFades(string p, bool first, bool last, bool isAudio)
         {
-            string number = (Math.Round(framerate, 3)).ToString();
             if (first && last) return p;
             if (isAudio)
             {
-                if (!first && !last) return string.Format("FadeIO(FadeIO0({0}, 0, {1}), 0, {1})", p, number);
-                if (first) return string.Format("FadeOut(FadeOut0({0}, 0, {1}), 0, {1})", p, number);
-                if (last) return string.Format("FadeIn(FadeIn0({0}, 0, {1}), 0, {1})", p, number);
+                if (!first && !last) return string.Format("FadeIO(FadeIO0({0}, 0, AudioRate(__just_audio)), 0, AudioRate(__just_audio))", p);
+                if (first) return string.Format("FadeOut(FadeOut0({0}, 0, AudioRate(__just_audio)), 0, AudioRate(__just_audio))", p);
+                if (last) return string.Format("FadeIn(FadeIn0({0}, 0, AudioRate(__just_audio)), 0, AudioRate(__just_audio))", p);
             }
             else
             {
-                if (!first && !last) return string.Format("FadeIO({0}, 0, {1})", p, number);
-                if (first) return string.Format("FadeOut({0}, 0, {1})", p, number);
-                if (last) return string.Format("FadeIn({0}, 0, {1})", p, number);
+                if (!first && !last) return string.Format("FadeIO({0}, 0, AudioRate(__just_audio))", p);
+                if (first) return string.Format("FadeOut({0}, 0, AudioRate(__just_audio))", p);
+                if (last) return string.Format("FadeIn({0}, 0, AudioRate(__just_audio))", p);
             }
             Debug.Assert(false);
             return null;
