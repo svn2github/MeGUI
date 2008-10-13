@@ -1,3 +1,10 @@
+0.3.0.3003
+    - (kurtnoise) [AviSynthWindow] fix a small issue with avs profiles (#2152972). Patch by ateeq.
+    - (kurtnoise) [FilmCutter] replace framerate value by AudioRate(). Fix issue #2152576
+    - (kurtnoise) [x264] remove fourCC component.
+    - (kurtnoise) ensure that "," are replaced by "." in the custom lines for x264 & xvid.
+    - (kurtnoise) [ProgressWindow] change the priority focus to avoid bad surprises...:> 
+
 0.3.0.3002
     - (kurtnoise) [VobinputWindow] add ThreadSafeRun() to fix the problem of ASW dissapearing as soon as it appears on the system. Patch by ateeq (#2141406)
     - (kurtnoise) [VobinputWindow] better rbtracks_CheckedChanged() event. Patch by ateeq (#2141406)
