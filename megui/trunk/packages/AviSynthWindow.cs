@@ -1576,7 +1576,8 @@ namespace MeGUI
 
                 cropLeft.Maximum = cropRight.Maximum = file.Info.Width / 2;
                 cropTop.Maximum = cropBottom.Maximum = file.Info.Height / 2;
-                this.suggestResolution.Checked = true;
+                if (resize.Enabled && resize.Checked)
+                    suggestResolution.Checked = true;
 				this.showScript();
 			}
 		}
