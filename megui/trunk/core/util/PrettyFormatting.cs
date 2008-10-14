@@ -44,9 +44,9 @@ namespace MeGUI.core.util
                     int idxVideo = temp.IndexOf("video");
                     int idxAudio = temp.IndexOf("audio");
                     if (idxVideo < 3) // Too close to start, ignore
-                        idxVideo = temp.Length - 1;
+                        idxVideo = temp.Length;
                     if (idxAudio < 3)
-                        idxAudio = temp.Length - 1;
+                        idxAudio = temp.Length;
                     A = temp.Substring(0, Math.Min(idxVideo,idxAudio)).Trim();
                     break;
                 }
