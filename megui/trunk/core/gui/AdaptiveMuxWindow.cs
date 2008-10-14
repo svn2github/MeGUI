@@ -191,6 +191,7 @@ namespace MeGUI
                 myVideo.VideoType = VideoUtil.guessVideoMuxableType(vInput.Filename, true);
                 myVideo.Settings = new x264Settings();
                 myVideo.Settings.NbBframes = 0;
+                myVideo.Settings.VideoName = this.videoName.Text;
 
                 MuxableType[] audioTypes;
                 MuxableType[] subtitleTypes;

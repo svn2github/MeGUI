@@ -60,7 +60,7 @@ namespace MeGUI
             maxNumberOfPasses, nbThreads;
 		bool turbo, v4mv, qpel, trellis;
 		decimal creditsQuantizer;
-		private string logfile, customEncoderOptions;
+		private string logfile, customEncoderOptions, videoName;
         private string[] fourCCs;
         private VideoEncoderType vet;
 
@@ -73,9 +73,10 @@ namespace MeGUI
 		{
             this.id = id;
             this.vet = vet;
-			logfile = ".stats";
-			customEncoderOptions = "";
-			fourCC = 0;
+            logfile = ".stats";
+            customEncoderOptions = "";
+            videoName = "";
+            fourCC = 0;
             nbThreads = 1;
 		}
         public VideoCodec Codec
@@ -88,58 +89,58 @@ namespace MeGUI
         }
 		public int EncodingMode
 		{
-			get {return encodingMode;}
-			set {encodingMode = value;}
+			get { return encodingMode; }
+			set { encodingMode = value; }
 		}
 		public int BitrateQuantizer
 		{
-			get {return bitrateQuantizer;}
-			set {bitrateQuantizer = value;}
+			get { return bitrateQuantizer; }
+			set { bitrateQuantizer = value; }
 		}
 		public int KeyframeInterval
 		{
-			get {return keyframeInterval;}
-			set {keyframeInterval = value;}
+			get { return keyframeInterval; }
+			set { keyframeInterval = value; }
 		}
 		public int NbBframes
 		{
-			get {return nbBframes;}
-			set {nbBframes = value;}
+			get { return nbBframes; }
+			set { nbBframes = value; }
 		}
 		public int MinQuantizer
 		{
-			get {return minQuantizer;}
-			set {minQuantizer = value;}
+			get { return minQuantizer; }
+			set { minQuantizer = value; }
 		}
 		public int MaxQuantizer
 		{
-			get {return maxQuantizer;}
-			set {maxQuantizer = value;}
+			get { return maxQuantizer; }
+			set { maxQuantizer = value; }
 		}
 		public bool Turbo
 		{
-			get {return turbo;}
-			set {turbo = value;}
+			get { return turbo; }
+			set { turbo = value; }
 		}
 		public bool V4MV
 		{
-			get {return v4mv;}
-			set {v4mv = value;}
+			get { return v4mv; }
+			set { v4mv = value; }
 		}
 		public bool QPel
 		{
-			get {return qpel;}
-			set {qpel = value;}
+			get { return qpel; }
+			set { qpel = value; }
 		}
 		public bool Trellis
 		{
-			get {return trellis;}
-			set {trellis = value;}
+			get { return trellis; }
+			set { trellis = value; }
 		}
 		public decimal CreditsQuantizer
 		{
-			get {return creditsQuantizer;}
-			set {creditsQuantizer = value;}
+			get { return creditsQuantizer; }
+			set { creditsQuantizer = value; }
 		}
 		/// <summary>
 		/// returns the available FourCCs for the codec
@@ -155,24 +156,32 @@ namespace MeGUI
 		/// </summary>
 		public string Logfile
 		{
-			get {return logfile;}
-			set {logfile = value;}
+			get { return logfile; }
+			set { logfile = value; }
 		}
+        /// <summary>
+        /// gets / sets Video Tracks Name (used with the muxers)
+        /// </summary>
+        public string VideoName
+        {
+            get { return videoName; }
+            set { videoName = value; }
+        }
 		/// <summary>
 		/// gets / set custom commandline options for the encoder
 		/// </summary>
 		public string CustomEncoderOptions
 		{
-			get {return customEncoderOptions;}
-			set {customEncoderOptions = value;}
+			get { return customEncoderOptions; }
+			set { customEncoderOptions = value; }
 		}
 		/// <summary>
 		/// gets / sets which fourcc from the FourCCs array is to be used
 		/// </summary>
 		public int FourCC
 		{
-			get {return fourCC;}
-			set {fourCC = value;}
+			get { return fourCC; }
+			set { fourCC = value; }
 		}
 		/// <summary>
         ///  gets / sets the maximum number of passes that can be performed with the current codec

@@ -154,6 +154,7 @@ namespace MeGUI
                 mjob.NbOfBFrames = video.Settings.NbBframes;
                 mjob.Codec = video.Settings.Codec.ToString();
                 mjob.Settings.Framerate = framerate;
+                mjob.Settings.VideoName = video.Settings.VideoName;
 
                 string tempOutputName = Path.Combine(Path.GetDirectoryName(output),
                     Path.GetFileNameWithoutExtension(output) + tempNumber + ".");
