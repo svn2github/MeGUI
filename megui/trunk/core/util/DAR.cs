@@ -124,7 +124,9 @@ namespace MeGUI.core.util
             // sarX      parX        horizontalResolution        realAspectRatio * scriptVerticalResolution
             // ---- =    ---- /   -------------------------- =  --------------------------------------------   
             // sarY      parY     scriptVerticalResolution               horizontalResolution
-            decimal ratio = ar * (decimal)vres / (decimal)hres;
+            //
+            // rounding value is mandatory here because some encoders (x264, xvid...) clamp sarX & sarY
+            decimal ratio = Math.Round(ar * (decimal)vres / (decimal)hres, 3);
             return new Sar(ratio);
         }
     }
