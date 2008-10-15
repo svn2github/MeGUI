@@ -259,9 +259,9 @@ namespace MeGUI.core.util
             }
             else
             {
-                if (!first && !last) return string.Format("FadeIO({0}, 0, AudioRate(__just_audio))", p);
-                if (first) return string.Format("FadeOut({0}, 0, AudioRate(__just_audio))", p);
-                if (last) return string.Format("FadeIn({0}, 0, AudioRate(__just_audio))", p);
+                if (!first && !last) return string.Format("FadeIO({0}, 0, AudioRate(__film))", p);
+                if (first) return string.Format("FadeOut({0}, 0, AudioRate(__film))", p);
+                if (last) return string.Format("FadeIn({0}, 0, AudioRate(__film))", p);
             }
             Debug.Assert(false);
             return null;
