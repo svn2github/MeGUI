@@ -500,7 +500,7 @@ namespace MeGUI
         {
             if (PriorityChanged != null && !isSettingPriority)
             {
-                if (!WarnVistaPriority((ProcessPriority)priority.SelectedIndex))
+                if (!WarnPriority((ProcessPriority)priority.SelectedIndex))
                 {
                     // priority.Tag contains previous SelectedIndex
                     setPriority((ProcessPriority)priority.Tag);
@@ -515,12 +515,12 @@ namespace MeGUI
             }
 		}
 
-		private bool WarnVistaPriority(ProcessPriority priority)
+		private bool WarnPriority(ProcessPriority priority)
 		{
-            if (VistaStuff.IsVistaOrNot && priority == ProcessPriority.HIGH)
+            if (priority == ProcessPriority.HIGH)
 			{
-			    // Running on Vista (or higher) and the user selected 'HIGH' priority
-				DialogResult res = MessageBox.Show("On Windows Vista, running processes at high priority causes them to compete against the window manager and compositor processes. Are you sure you want to proceed?", "MeGUI", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+			    // when user selected 'HIGH' priority
+				DialogResult res = MessageBox.Show("On Windows System, running processes at high priority causes them to compete against the window manager and compositor processes. Are you sure you want to proceed?", "MeGUI", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                 return res == DialogResult.Yes;
 			}
 			else return true;
