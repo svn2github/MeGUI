@@ -175,8 +175,7 @@ namespace MeGUI.core.details
                 }
                 return list;
             }));
-        }
-                
+        }                
 
         #region properties
         public MainForm MainForm
@@ -207,13 +206,16 @@ namespace MeGUI.core.details
 
         private void deleteAllJobsButton_Click(object sender, EventArgs e)
         {
-            DialogResult dr = MessageBox.Show("Are you sure you want to clear the queue? This will delete all jobs in all workers.", "Are you sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (dr == DialogResult.Yes)
+            DialogResult dr = MessageBox.Show("Delete incomplete jobs as well?\n\nYes for All, No for completed or Cancel to abort:", "Are you sure you want to clear the queue?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+            if (dr != DialogResult.Cancel)
             {
                 TaggedJob[] jobList = new TaggedJob[allJobs.Count];
                 allJobs.Values.CopyTo(jobList, 0);
                 foreach (TaggedJob j in jobList)
-                    reallyDeleteJob(j);
+                {
+                    if (dr == DialogResult.Yes || j.Status == JobStatus.DONE)
+                        reallyDeleteJob(j);
+                }
             }
         }
         #endregion
