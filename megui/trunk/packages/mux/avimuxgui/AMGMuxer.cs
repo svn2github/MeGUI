@@ -125,7 +125,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "AMGMuxer");
             script.AppendLine("SET OUTPUT OPTIONS");
             // split size
             if (settings.SplitSize.HasValue)
+            {
                 script.AppendFormat("SET OPTION MAXFILESIZE {0}{1}", settings.SplitSize, Environment.NewLine);
+            }
 
             // Now do the rest of the setup
             script.AppendLine(
@@ -135,6 +137,7 @@ SET OPTION MP3 VERIFY RESDLG OFF
 SET OPTION AVI FIXDX50 1
 SET OPTION CHAPTERS IMPORT 1
 SET OUTPUT OPTIONS
+SET OPTION NUMBERING ON
 SET OPTION ALL SUBTITLES 1
 SET OPTION ALL AUDIO 1
 SET OPTION CLOSEAPP 1
@@ -142,9 +145,7 @@ SET OPTION DONEDLG 0
 SET OPTION OVERWRITEDLG 0
 SET OPTION STDIDX AUTO");
 
-            script.AppendFormat("START {0}{1}", settings.MuxedOutput, Environment.NewLine);
-
-            
+            script.AppendFormat("START {0}{1}", settings.MuxedOutput, Environment.NewLine);            
 
             /// the script is now created; let's write it to a temp file
             string filename = Path.GetTempFileName();
