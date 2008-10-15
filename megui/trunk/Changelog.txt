@@ -1,3 +1,11 @@
+0.3.0.3004
+    - (kurtnoise) [FilmCutter] AudioRate(__film) instead of AudioRate(__just_audio) for else case.
+    - (kurtnoise) [AMGMuxer] Splitting feature works fine now. Fix issue #2145143. 
+    - (kurtnoise) [JobControl] allow to remove only completed jobs from the queue. Patch by ateeq.
+    - (kurtnoise) [DAR] use rounding value for SAR calculation. Should fixed issues #2010131 & #2013287.
+    - (kurtnoise) allow name for Video Tracks in the AdaptiveMuxer & fix several cosmetics spaces. Fix #2063188
+    - (kurtnoise) [PrettyFormatting] fix issue #2164193 about the wrong length for output filename in the oneClick encoder. Patch by ateeq.
+
 0.3.0.3003
     - (kurtnoise) [AviSynthWindow] fix a small issue with avs profiles (#2152972). Patch by ateeq.
     - (kurtnoise) [FilmCutter] replace framerate value by AudioRate(). Fix issue #2152576
