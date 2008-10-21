@@ -385,14 +385,10 @@ namespace MeGUI.core.gui
             job.End = DateTime.Now;
             job.EncodingSpeed = su.ProcessingSpeed;
 
-            JobStatus s;
             if (su.WasAborted)
-                s = JobStatus.ABORTED;
+                job.Status = JobStatus.ABORTED;
             else if (su.HasError)
-                s = JobStatus.ERROR;
-            else
-                s = JobStatus.DONE;
-            job.Status = s;
+                job.Status = JobStatus.ERROR;
         }
 
         /// <summary>
@@ -417,6 +413,15 @@ namespace MeGUI.core.gui
                     copyInfoIntoJob(job, su);
                     progress = 0;
                     HideProcessWindow();
+
+                    // Postprocessing
+                    bool jobFailed = (job.Status != JobStatus.PROCESSING);
+                    if (!jobFailed)
+                    {
+                        postprocessJob(job.Job);
+                        job.Status = JobStatus.DONE;
+                    }
+
                     currentProcessor = null;
                     currentJob = null;
 
@@ -424,13 +429,10 @@ namespace MeGUI.core.gui
                     log.LogEvent("Job completed");
                     log.Collapse();
 
-                    // Postprocessing
-                    bool jobCompletedSuccessfully = (job.Status == JobStatus.DONE);
-                    if (jobCompletedSuccessfully)
-                        postprocessJob(job.Job);
-
-                    if (jobCompletedSuccessfully && mainForm.Settings.DeleteCompletedJobs)
+                    if (!jobFailed  && mainForm.Settings.DeleteCompletedJobs)
                         mainForm.Jobs.RemoveCompletedJob(job);
+                    else
+                        mainForm.Jobs.saveJob(job, mainForm.MeGUIPath);     //AAA: save state more often
 
                     if (shutdownWorkerIfJobsCompleted())
                     { }
