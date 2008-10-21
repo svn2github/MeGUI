@@ -1170,7 +1170,7 @@ namespace MeGUI
         }
         public void openD2VCreatorFile(string fileName)
         {
-            VobinputWindow mpegInput = new VobinputWindow(this, fileName);
+            VobinputWindow mpegInput = new VobinputWindow(this);
             mpegInput.setConfig(fileName, null, 2, true, true, true, false);
             mpegInput.ShowDialog();
         }
