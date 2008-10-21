@@ -75,11 +75,8 @@ namespace MeGUI
         private System.Windows.Forms.TabPage editTab;
 		private System.Windows.Forms.GroupBox videoGroupBox;
         private System.Windows.Forms.Label videoInputLabel;
-		private System.Windows.Forms.TextBox videoInput;
-		private System.Windows.Forms.Button openVideoButton;
         private System.Windows.Forms.Label inputDARLabel;
-		private System.Windows.Forms.Label tvTypeLabel;
-		private System.Windows.Forms.OpenFileDialog openVideoDialog;
+        private System.Windows.Forms.Label tvTypeLabel;
 		private System.Windows.Forms.SaveFileDialog saveAvisynthScriptDialog;
         private System.Windows.Forms.TextBox avisynthScript;
 		private System.Windows.Forms.NumericUpDown horizontalResolution;
@@ -132,6 +129,7 @@ namespace MeGUI
         private GroupBox gbOutput;
         private Label label7;
         private FileBar videoOutput;
+        private FileBar input;
 
 		/// <summary>
 		/// Required designer variable.
@@ -169,12 +167,6 @@ namespace MeGUI
 
             script = new StringBuilder();
 
-            this.openVideoDialog.Filter = "DGIndex Project Files|*.d2v" +
-                "|MPEG2 files|*.vob;*.mpg;*.mpeg;*.m2ts;*.m2v;*.mpv;*.tp;*.ts;*.trp;*.pva;*.vro" +
-                "|DirectShow-loadable files (*.avi, *.mp4, *.mkv, *.rmvb, *.evo)|*.avi;*.mp4;*.mkv;*.rmvb;*.evo" +
-                "|VirtualDub frameserver files|*.vdr" +
-                "|All supported files|*.d2v;*.vob;*.mpg;*.mpeg;*.m2ts;*.m2v;*.mpv;*.tp;*.ts;*.trp;*.pva;*.vro;*.avi;*.vdr;*.mp4;*.mkv;*.rmvb;*.evo" +
-                "|All files|*.*";
 			this.path = mainForm.MeGUIPath;
 
             this.resizeFilterType.Items.Clear();
@@ -264,6 +256,7 @@ namespace MeGUI
             System.Windows.Forms.Label label3;
             System.Windows.Forms.Label label4;
             System.Windows.Forms.Label label5;
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AviSynthWindow));
             this.resNCropGroupbox = new System.Windows.Forms.GroupBox();
             this.chAutoPreview = new System.Windows.Forms.CheckBox();
             this.resize = new System.Windows.Forms.CheckBox();
@@ -285,6 +278,7 @@ namespace MeGUI
             this.videoOutput = new MeGUI.FileBar();
             this.label7 = new System.Windows.Forms.Label();
             this.videoGroupBox = new System.Windows.Forms.GroupBox();
+            this.input = new MeGUI.FileBar();
             this.avsProfile = new MeGUI.core.gui.ConfigableProfilesControl();
             this.arChooser = new MeGUI.core.gui.ARChooser();
             this.reopenOriginal = new System.Windows.Forms.Button();
@@ -293,9 +287,7 @@ namespace MeGUI
             this.tvTypeLabel = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.inputDARLabel = new System.Windows.Forms.Label();
-            this.videoInput = new System.Windows.Forms.TextBox();
             this.videoInputLabel = new System.Windows.Forms.Label();
-            this.openVideoButton = new System.Windows.Forms.Button();
             this.filterTab = new System.Windows.Forms.TabPage();
             this.deinterlacingGroupBox = new System.Windows.Forms.GroupBox();
             this.deintM = new System.Windows.Forms.NumericUpDown();
@@ -322,7 +314,6 @@ namespace MeGUI
             this.dllPath = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.avisynthScript = new System.Windows.Forms.TextBox();
-            this.openVideoDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveAvisynthScriptDialog = new System.Windows.Forms.SaveFileDialog();
             this.openFilterDialog = new System.Windows.Forms.OpenFileDialog();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
@@ -683,6 +674,7 @@ namespace MeGUI
             // 
             // videoGroupBox
             // 
+            this.videoGroupBox.Controls.Add(this.input);
             this.videoGroupBox.Controls.Add(this.avsProfile);
             this.videoGroupBox.Controls.Add(this.arChooser);
             this.videoGroupBox.Controls.Add(this.reopenOriginal);
@@ -691,15 +683,31 @@ namespace MeGUI
             this.videoGroupBox.Controls.Add(this.tvTypeLabel);
             this.videoGroupBox.Controls.Add(this.label6);
             this.videoGroupBox.Controls.Add(this.inputDARLabel);
-            this.videoGroupBox.Controls.Add(this.videoInput);
             this.videoGroupBox.Controls.Add(this.videoInputLabel);
-            this.videoGroupBox.Controls.Add(this.openVideoButton);
             this.videoGroupBox.Location = new System.Drawing.Point(3, 8);
             this.videoGroupBox.Name = "videoGroupBox";
             this.videoGroupBox.Size = new System.Drawing.Size(412, 182);
             this.videoGroupBox.TabIndex = 5;
             this.videoGroupBox.TabStop = false;
             this.videoGroupBox.Text = "Video";
+            // 
+            // input
+            // 
+            this.input.AllowDrop = true;
+            this.input.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.input.Filename = "";
+            this.input.Filter = resources.GetString("input.Filter");
+            this.input.FilterIndex = 5;
+            this.input.FolderMode = false;
+            this.input.Location = new System.Drawing.Point(77, 15);
+            this.input.Name = "input";
+            this.input.ReadOnly = true;
+            this.input.SaveMode = false;
+            this.input.Size = new System.Drawing.Size(329, 26);
+            this.input.TabIndex = 1;
+            this.input.Title = "Select a source file";
+            this.input.FileSelected += new MeGUI.FileBarEventHandler(this.input_FileSelected);
             // 
             // avsProfile
             // 
@@ -746,7 +754,8 @@ namespace MeGUI
             "Resize to mod16",
             "Overcrop to achieve mod16",
             "Encode non-mod16",
-            "Crop mod4 horizontally"});
+            "Crop mod4 horizontally",
+            "Undercrop to achieve mod16"});
             this.mod16Box.Location = new System.Drawing.Point(249, 119);
             this.mod16Box.Name = "mod16Box";
             this.mod16Box.Size = new System.Drawing.Size(157, 21);
@@ -787,14 +796,6 @@ namespace MeGUI
             this.inputDARLabel.TabIndex = 7;
             this.inputDARLabel.Text = "Input DAR";
             // 
-            // videoInput
-            // 
-            this.videoInput.Location = new System.Drawing.Point(96, 20);
-            this.videoInput.Name = "videoInput";
-            this.videoInput.ReadOnly = true;
-            this.videoInput.Size = new System.Drawing.Size(280, 21);
-            this.videoInput.TabIndex = 1;
-            // 
             // videoInputLabel
             // 
             this.videoInputLabel.Location = new System.Drawing.Point(8, 24);
@@ -802,15 +803,6 @@ namespace MeGUI
             this.videoInputLabel.Size = new System.Drawing.Size(80, 13);
             this.videoInputLabel.TabIndex = 0;
             this.videoInputLabel.Text = "Video Input";
-            // 
-            // openVideoButton
-            // 
-            this.openVideoButton.Location = new System.Drawing.Point(382, 19);
-            this.openVideoButton.Name = "openVideoButton";
-            this.openVideoButton.Size = new System.Drawing.Size(24, 23);
-            this.openVideoButton.TabIndex = 6;
-            this.openVideoButton.Text = "...";
-            this.openVideoButton.Click += new System.EventHandler(this.openVideoButton_Click);
             // 
             // filterTab
             // 
@@ -1108,11 +1100,6 @@ namespace MeGUI
             this.avisynthScript.Size = new System.Drawing.Size(401, 368);
             this.avisynthScript.TabIndex = 0;
             // 
-            // openVideoDialog
-            // 
-            this.openVideoDialog.FilterIndex = 5;
-            this.openVideoDialog.Title = "Select a source file";
-            // 
             // saveAvisynthScriptDialog
             // 
             this.saveAvisynthScriptDialog.DefaultExt = "avs";
@@ -1203,14 +1190,11 @@ namespace MeGUI
 
 		#endregion
         #region buttons
-        private void openVideoButton_Click(object sender, System.EventArgs e)
-		{
-			if (this.openVideoDialog.ShowDialog() == DialogResult.OK)
-			{
-                openVideoSource(openVideoDialog.FileName);
-                if (chAutoPreview.Checked == true)
-                    previewButton_Click(sender, e);
-            }
+        private void input_FileSelected(FileBar sender, FileBarEventArgs args)
+        {
+            openVideoSource(input.Filename);
+            if (chAutoPreview.Checked == true)
+                previewButton_Click(sender, args);
 		}
 		private void openDLLButton_Click(object sender, System.EventArgs e)
 		{
@@ -1244,7 +1228,7 @@ namespace MeGUI
 		}
 		private void saveButton_Click(object sender, System.EventArgs e)
 		{
-            //saveAvisynthScriptDialog.FileName = Path.GetFileNameWithoutExtension(videoInput.Text);
+            //saveAvisynthScriptDialog.FileName = Path.GetFileNameWithoutExtension(input.Filename);
             //if (saveAvisynthScriptDialog.ShowDialog() == DialogResult.OK)
 			//{
             writeScript(videoOutput.Filename);
@@ -1273,7 +1257,7 @@ namespace MeGUI
 			string resizeLine = "#resize";
 
             double fps = (double)fpsBox.Value;
-            inputLine = ScriptServer.GetInputLine(this.videoInput.Text, deinterlace.Checked, sourceType, colourCorrect.Checked, mpeg2Deblocking.Checked, flipVertical.Checked, fps);
+            inputLine = ScriptServer.GetInputLine(this.input.Filename, deinterlace.Checked, sourceType, colourCorrect.Checked, mpeg2Deblocking.Checked, flipVertical.Checked, fps);
             
             if (deinterlace.Checked && deinterlaceType.SelectedItem is DeinterlaceFilter)
                 deinterlaceLines = ((DeinterlaceFilter)deinterlaceType.SelectedItem).Script;
@@ -1555,14 +1539,14 @@ namespace MeGUI
 		private void openVideo(string videoInput, string textBoxName, bool inlineAvs)
 		{
 			this.crop.Checked = false;
-            this.videoInput.Text = "";
+            this.input.Filename = "";
             this.originalScript = videoInput;
             this.originalInlineAvs = inlineAvs;
             bool videoLoaded = showOriginal();
             enableControls(videoLoaded);
 			if (videoLoaded)
 			{
-                this.videoInput.Text = textBoxName;
+                this.input.Filename = textBoxName;
                 file = player.File;
                 reader = player.Reader;
                 this.fpsBox.Value = (decimal)file.Info.FPS;
@@ -1828,6 +1812,8 @@ namespace MeGUI
                         ScriptServer.overcrop(ref returnValue);
                     else if (Mod16Method == mod16Method.mod4Horizontal)
                         ScriptServer.cropMod4Horizontal(ref returnValue);
+                    else if (Mod16Method == mod16Method.undercrop)
+                        ScriptServer.undercrop(ref returnValue);
                 }
                 return returnValue;
             }
@@ -1847,15 +1833,15 @@ namespace MeGUI
         #region autodeint
         private void analyseButton_Click(object sender, EventArgs e)
         {
-            if (videoInput.Text.Length > 0)
+            if (input.Filename.Length > 0)
             {
                 if (detector == null) // We want to start the analysis
                 {
                     string d2v = "";
-                    if (videoInput.Text.ToLower().EndsWith(".d2v"))
-                        d2v = videoInput.Text;
+                    if (input.Filename.ToLower().EndsWith(".d2v"))
+                        d2v = input.Filename;
                     detector = new SourceDetector(
-                        ScriptServer.GetInputLine(videoInput.Text, false,
+                        ScriptServer.GetInputLine(input.Filename, false,
                         sourceType, false, false, false, 25),
                         d2v, deintIsAnime.Checked,
                         mainForm.Settings.SourceDetectorSettings,
@@ -1943,17 +1929,13 @@ namespace MeGUI
         {
             if (Mod16Method == mod16Method.overcrop)
                 crop.Text = "Crop (will be rounded up to mod16)";
+            else if (Mod16Method == mod16Method.undercrop)
+                crop.Text = "Crop (will be rounded down to mod16)";
             else
                 crop.Text = "Crop";
             crop_CheckedChanged(null, null);
 
-            if (Mod16Method == mod16Method.overcrop || Mod16Method == mod16Method.nonMod16 || Mod16Method == mod16Method.mod4Horizontal)
-            {
-                resize.Checked = false;
-                resize.Enabled = false;
-                resize_CheckedChanged(null, null);
-            }
-            else if (Mod16Method == mod16Method.resize)
+            if (Mod16Method == mod16Method.resize)
             {
                 this.suggestResolution.Enabled = false;
                 this.suggestResolution.Checked = true;
@@ -1966,6 +1948,12 @@ namespace MeGUI
             {
                 resize.Enabled = true;
                 suggestResolution.Enabled = true;
+                resize_CheckedChanged(null, null);
+            }
+            else
+            {
+                resize.Checked = false;
+                resize.Enabled = false;
                 resize_CheckedChanged(null, null);
             }
             showScript();
@@ -2007,7 +1995,7 @@ namespace MeGUI
     }
     public delegate void OpenScriptCallback(string avisynthScript);
     public enum PossibleSources { d2v, mpeg2, vdr, directShow };
-    public enum mod16Method : int { none = -1, resize = 0, overcrop, nonMod16, mod4Horizontal };
+    public enum mod16Method : int { none = -1, resize = 0, overcrop, nonMod16, mod4Horizontal, undercrop };
 
     public class AviSynthWindowTool : MeGUI.core.plugins.interfaces.ITool
     {

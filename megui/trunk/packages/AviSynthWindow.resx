@@ -129,9 +129,9 @@
   <metadata name="label5.GenerateMember" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>False</value>
   </metadata>
-  <metadata name="openVideoDialog.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>324, 17</value>
-  </metadata>
+  <data name="input.Filter" xml:space="preserve">
+    <value>DGIndex Project Files|*.d2v|MPEG2 files|*.vob;*.mpg;*.mpeg;*.m2ts;*.m2v;*.mpv;*.tp;*.ts;*.trp;*.pva;*.vro|DirectShow-loadable files (*.avi, *.mp4, *.mkv, *.rmvb, *.evo)|*.avi;*.mp4;*.mkv;*.rmvb;*.evo|VirtualDub frameserver files|*.vdr|All supported files|*.d2v;*.vob;*.mpg;*.mpeg;*.m2ts;*.m2v;*.mpv;*.tp;*.ts;*.trp;*.pva;*.vro;*.avi;*.vdr;*.mp4;*.mkv;*.rmvb;*.evo|All files|*.*</value>
+  </data>
   <metadata name="saveAvisynthScriptDialog.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>149, 17</value>
   </metadata>

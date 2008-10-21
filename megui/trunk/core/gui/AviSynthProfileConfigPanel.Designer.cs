@@ -215,7 +215,8 @@ namespace MeGUI.core.gui
             "Resize to mod16",
             "Overcrop to achieve mod16",
             "Encode non-mod16",
-            "Crop mod4 horizontally"});
+            "Crop mod4 horizontally",
+            "Undercrop to achieve mod16"});
             this.mod16Box.Location = new System.Drawing.Point(210, 181);
             this.mod16Box.Name = "mod16Box";
             this.mod16Box.Size = new System.Drawing.Size(157, 21);

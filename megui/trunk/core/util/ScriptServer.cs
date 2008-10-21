@@ -491,7 +491,46 @@ SelectRangeEvery({3},{4},0)
         }
         #endregion
 
+        public static void undercrop(ref CropValues crop)
+        {
+            if (crop.left % 2 != 0 && crop.top % 2 != 0 && crop.bottom % 2 != 0 && crop.right % 2 != 0)
+                throw new Exception("Cropping by odd numbers not supported in undercropping to mod16");
 
+            while ((crop.left + crop.right) % 16 > 0)
+            {
+                if (crop.left > crop.right)
+                {
+                    if (crop.left > 1)
+                        crop.left -= 2;
+                    else
+                        crop.left = 0;
+                }
+                else
+                {
+                    if (crop.right > 1)
+                        crop.right -= 2;
+                    else
+                        crop.right = 0;
+                }
+            }
+            while ((crop.top + crop.bottom) % 16 > 0)
+            {
+                if (crop.top > crop.bottom)
+                {
+                    if (crop.top > 1)
+                        crop.top -= 2;
+                    else
+                        crop.top = 0;
+                }
+                else
+                {
+                    if (crop.bottom > 1)
+                        crop.bottom -= 2;
+                    else
+                        crop.bottom = 0;
+                }
+            }
+        }
 
         public static void overcrop(ref CropValues crop)
         {
