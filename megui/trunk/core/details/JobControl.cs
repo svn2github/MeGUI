@@ -206,16 +206,24 @@ namespace MeGUI.core.details
 
         private void deleteAllJobsButton_Click(object sender, EventArgs e)
         {
-            DialogResult dr = MessageBox.Show("Delete incomplete jobs as well?\n\nYes for All, No for completed or Cancel to abort:", "Are you sure you want to clear the queue?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
-            if (dr != DialogResult.Cancel)
+            int incompleteJobs = 0;
+            DialogResult dr = DialogResult.No;
+            TaggedJob[] jobList = new TaggedJob[allJobs.Count];
+            allJobs.Values.CopyTo(jobList, 0);
+            foreach (TaggedJob j in jobList)
             {
-                TaggedJob[] jobList = new TaggedJob[allJobs.Count];
-                allJobs.Values.CopyTo(jobList, 0);
-                foreach (TaggedJob j in jobList)
-                {
-                    if (dr == DialogResult.Yes || j.Status == JobStatus.DONE)
-                        reallyDeleteJob(j);
-                }
+                if (j.Status != JobStatus.DONE)
+                    ++incompleteJobs;
+            }
+            if (incompleteJobs != 0)
+            {
+                dr = MessageBox.Show("Delete incomplete jobs as well?\n\nYes for All, No for completed or Cancel to abort:", "Are you sure you want to clear the queue?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                if (dr == DialogResult.Cancel) return;
+            }
+            foreach (TaggedJob j in jobList)
+            {
+                if (dr == DialogResult.Yes || j.Status == JobStatus.DONE)
+                    reallyDeleteJob(j);
             }
         }
         #endregion
