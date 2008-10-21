@@ -30,23 +30,23 @@ namespace MeGUI
 	{
 		private bool loadSources;
 		private int demuxMode;
-        private List<string> trackIDs;
+        private List<AudioTrackInfo> audioTracks;
 		private DGIndexPostprocessingProperties postprocessingProperties;
 		
 		public IndexJob():base()
 		{
 			loadSources = false;
 			demuxMode = 0;
-            trackIDs = new List<string>();
+            audioTracks = new List<AudioTrackInfo>();
 		}
 
-        public IndexJob(string input, string output, int demuxType, List<string> trackIDs,
+        public IndexJob(string input, string output, int demuxType, List<AudioTrackInfo> audioTracks,
             DGIndexPostprocessingProperties properties, bool loadSources)
         {
             Input = input;
             Output = output;
             DemuxMode = demuxType;
-            TrackIDs = trackIDs;
+            this.audioTracks = audioTracks;
             PostprocessingProperties = properties;
             LoadSources = loadSources;
         }
@@ -72,10 +72,10 @@ namespace MeGUI
 			set {demuxMode = value;}
 		}
 
-        public List<string> TrackIDs
+        public List<AudioTrackInfo> AudioTracks
         {
-            get { return trackIDs; }
-            set { trackIDs = value; }
+            get { return audioTracks; }
+            set { audioTracks = value; }
         }
 
 		/// <summary>

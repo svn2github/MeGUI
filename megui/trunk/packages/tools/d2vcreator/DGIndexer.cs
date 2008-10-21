@@ -64,9 +64,9 @@ namespace MeGUI
                 else if (job.DemuxMode == 1)
                 {
                     sb.Append(" -OM=1 -TN="); // demux only tracks checked
-                    foreach (string id in job.TrackIDs)
+                    foreach (AudioTrackInfo ati in job.AudioTracks)
                     {
-                        sb.Append(id + ",");
+                        sb.Append(ati.DgIndexID + ",");
                     }
                 }
                 else

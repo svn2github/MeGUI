@@ -124,9 +124,9 @@ namespace MeGUI
                         }
                         else
                         {
-                            if (ar.Equals("16:9"))
+                            if (ar.StartsWith("16:9"))
                                 dar = Dar.ITU16x9PAL;
-                            else if (ar.Equals("4:3"))
+                            else if (ar.StartsWith("4:3"))  //AAA: I got 4:3,625 from DGIndex
                                 dar = Dar.ITU4x3PAL;
                         }
                     }

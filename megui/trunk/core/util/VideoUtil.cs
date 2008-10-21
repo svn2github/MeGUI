@@ -215,19 +215,36 @@ namespace MeGUI
             {
                 info = new MediaInfo(fileName);
                 maxHorizontalResolution = Int32.Parse(info.Video[0].Width);
-                foreach (MediaInfoWrapper.AudioTrack atrack in info.Audio)
+                for (int counter = 0; counter < info.Audio.Count; counter++)
                 {
+                    MediaInfoWrapper.AudioTrack atrack = info.Audio[counter];
                     AudioTrackInfo ati = new AudioTrackInfo();
+                    // DGIndex expects audio index not ID for TS
+                    ati.ContainerType = info.General[0].Format;
+                    ati.Index = counter;
                     // the MediaInfo Audio ID is hex for MPEG-PS but decimal for MPEG-TS
                     if (info.General[0].Format == "MPEG-TS")
                         ati.TrackID = Int32.Parse(atrack.ID);
+                    else if (info.General[0].Format == "CDXA/MPEG-PS")
+                        // MediaInfo doesn't give TrackID for VCD, specs indicate only MP1L2 is supported
+                        ati.TrackID = (0xC0 + counter);
+                    else if (atrack.ID != "0")
+                        ati.TrackIDx = atrack.ID;
                     else
-                        ati.TrackID = Int32.Parse(atrack.ID, System.Globalization.NumberStyles.HexNumber);
+                        // MediaInfo failed to get ID try guessing based on codec
+                        switch (atrack.Codec.Substring(0,3))
+                        {
+                            case "AC3": ati.TrackID = (0x80 + counter); break;
+                            case "PCM": ati.TrackID = (0xA0 + counter); break;
+                            case "MPA": ati.TrackID = (0xC0 + counter); break;
+                        }
                     ati.Type = atrack.CodecString;
                     ati.NbChannels = atrack.ChannelsString;
                     ati.SamplingRate = atrack.SamplingRateString;
                     ati.TrackInfo = new TrackInfo(atrack.LanguageString, null);
                     audioTracks.Add(ati);
+                    if (info.General[0].Format == "MPEG-TS")
+                        break;  // DGIndex only supports first audio stream with TS files
                 }
             }
             catch (Exception i)
@@ -257,7 +274,7 @@ namespace MeGUI
                         char[] separator = { ':' };
                         string[] split = line.Split(separator, 1000);
                         AudioTrackInfo ati = new AudioTrackInfo();
-                        ati.TrackID = Int32.Parse(split[1], System.Globalization.NumberStyles.HexNumber);
+                        ati.TrackIDx = split[1];
                         ati.Type = split[2].Trim().Substring(0, 3);
                         audioTrackIDs.Add(ati);
                     }
@@ -320,27 +337,24 @@ namespace MeGUI
 		/// <param name="projectName">the name of the dgindex project</param>
 		/// <param name="cutoff">maximum number of results to be returned</param>
 		/// <returns>an array of string of filenames</returns>
-       public Dictionary<int, string> getAllDemuxedAudio(List<string> audioTrackIDs, string projectName, int cutoff)
-		{
-			Dictionary<int, string> audioFiles = new Dictionary<int, string>();
-			string[] files = Directory.GetFiles(Path.GetDirectoryName(projectName),
-				Path.GetFileNameWithoutExtension(projectName) + "*");
-
-            for (int counter = 0; counter < audioTrackIDs.Count; counter++)
+        public Dictionary<int, string> getAllDemuxedAudio(List<AudioTrackInfo> audioTracks, string projectName, int cutoff)
+        {
+		    Dictionary<int, string> audioFiles = new Dictionary<int, string>();
+            for (int counter = 0; counter < audioTracks.Count; counter++)
             {
-                string trackNumberMPG = "T" + audioTrackIDs[counter].ToLower();
-                string trackNumberTS = "PID " + audioTrackIDs[counter].ToLower();
+                string trackNumber = audioTracks[counter].ContainerType == "MPEG-TS" ? " PID " : " T";
+                trackNumber += audioTracks[counter].TrackIDx + "*";
+                string [] files = Directory.GetFiles(Path.GetDirectoryName(projectName),
+				        Path.GetFileNameWithoutExtension(projectName) + trackNumber);
                 foreach (string file in files)
                 {
-                    if ((file.IndexOf(trackNumberMPG) != -1 ||
-                          file.IndexOf(trackNumberTS) != -1) &&
-                       (
-                         file.EndsWith(".ac3") ||
+                    if ( file.EndsWith(".ac3") ||
                          file.EndsWith(".mp3") ||
                          file.EndsWith(".mp2") ||
+                         file.EndsWith(".mp1") ||
                          file.EndsWith(".mpa") ||
                          file.EndsWith(".dts") ||
-                         file.EndsWith(".wav"))) // It is the right track
+                         file.EndsWith(".wav")) // It is the right track
 					{
 						audioFiles.Add(counter, file);
                         break;
@@ -796,8 +810,8 @@ namespace MeGUI
 	}
     public class AudioTrackInfo
     {
-        private string nbChannels, type, samplingRate;
-        private int trackID;
+        private string nbChannels, type, samplingRate, containerType, description;
+        private int index, trackID;
         public AudioTrackInfo() :this(null, null, null, 0)
         {
         }
@@ -825,10 +839,34 @@ namespace MeGUI
         }
 
         public TrackInfo TrackInfo;
+        public string TrackIDx
+        {
+            get { return containerType == "MPEG-TS" ? trackID.ToString("x3") : trackID.ToString("x"); }
+            set { trackID = Int32.Parse(value, System.Globalization.NumberStyles.HexNumber); }
+        }
         public int TrackID
         {
             get { return trackID; }
             set { trackID = value; }
+        }
+        public string DgIndexID
+        {
+            get { return containerType == "MPEG-TS" ? index.ToString() : TrackIDx; }
+        }
+        public string ContainerType
+        {
+            get { return containerType; }
+            set { containerType = value; }
+        }
+        public int Index
+        {
+            get { return index; }
+            set { index = value; }
+        }
+        public string Description
+        {
+            get { return description; }
+            set { description = value; }
         }
         public string Type
         {
@@ -850,7 +888,7 @@ namespace MeGUI
 
         public override string ToString()
         {
-            string fullString = "[" + trackID.ToString("x") + "] - " + this.type;
+            string fullString = "[" + TrackIDx + "] - " + this.type;
             if (!string.IsNullOrEmpty(nbChannels))
             {
                 fullString += " - " + this.nbChannels;

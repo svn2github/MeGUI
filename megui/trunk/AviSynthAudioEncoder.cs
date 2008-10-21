@@ -557,6 +557,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                     case ".mp2":
                     case ".mp3":
                         script.AppendFormat("NicMPG123Source(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
+                        audioJob.FilesToDelete.Add(audioJob.Input + ".d2a");
                         break;
                     case ".wav":
                         BinaryReader r = new BinaryReader(File.Open(audioJob.Input, FileMode.Open));

@@ -383,7 +383,7 @@ namespace MeGUI
 
                 List<AudioJob> aJobs = new List<AudioJob>();
                 List<MuxStream> muxOnlyAudio = new List<MuxStream>();
-                List<string> TrackIDs = new List<string>();
+                List<AudioTrackInfo> audioTracks = new List<AudioTrackInfo>();
                 for (int i = 0; i < audioConfigControl.Count; ++i)
                 {
                     if (audioTrack[i].SelectedIndex == 0) // "None"
@@ -394,9 +394,9 @@ namespace MeGUI
                     int delay = audioConfigControl[i].Delay;
                     if (audioTrack[i].SelectedSCItem.IsStandard)
                     {
-                        TrackIDs.Add(((AudioTrackInfo)(audioTrack[i].SelectedObject)).TrackID.ToString("x"));
+                        audioTracks.Add((AudioTrackInfo)audioTrack[i].SelectedObject);
                         aInput = "::" + (audioTrack[i].SelectedIndex - 1) + "::"; // -1 since "None" is first
-                        info = new TrackInfo(((AudioTrackInfo)audioTrack[i].SelectedObject).Language, null);
+                        info = ((AudioTrackInfo)audioTrack[i].SelectedObject).TrackInfo;
                     }
                     else
                         aInput = audioTrack[i].SelectedText;
@@ -423,7 +423,7 @@ namespace MeGUI
                 dpp.SignalAR = signalAR.Checked;
                 dpp.Splitting = splitting.Value;
                 dpp.VideoSettings = VideoSettings.Clone();
-                IndexJob job = new IndexJob(input.Filename, d2vName, 2, TrackIDs, dpp, false);
+                IndexJob job = new IndexJob(input.Filename, d2vName, 1, audioTracks, dpp, false);  //AAA: Only demux selected tracks (prevents leftover files when not all audio tracks are used)
                 mainForm.Jobs.addJobsToQueue(job);
                 if (this.openOnQueue.Checked)
                     input.PerformClick();
@@ -548,7 +548,7 @@ namespace MeGUI
             RemoveTrack();
         }
 
-    }
+        }
     public class OneClickTool : MeGUI.core.plugins.interfaces.ITool
     {
 
@@ -620,13 +620,9 @@ namespace MeGUI
 
         public LogItem postprocess()
         {
-            audioFiles = vUtil.getAllDemuxedAudio(job.TrackIDs, job.Output, 8);
+            audioFiles = vUtil.getAllDemuxedAudio(job.AudioTracks, job.Output, 8);
 
             fillInAudioInformation();
-
-            // Look for any .d2a and .log files from DGIndex to clean up
-            string[] d2aFiles = Directory.GetFiles(Path.GetDirectoryName(job.Output),
-                Path.GetFileNameWithoutExtension(job.Output) + ".d2a");
 
             log.LogValue("Desired size", job.PostprocessingProperties.OutputSize);
             log.LogValue("Split size", job.PostprocessingProperties.Splitting);
@@ -658,9 +654,6 @@ namespace MeGUI
             intermediateFiles.Add(videoInput);
             intermediateFiles.Add(job.Output);
             intermediateFiles.AddRange(audioFiles.Values);
-
-            if (d2aFiles.Length > 0)
-                intermediateFiles.AddRange(d2aFiles);
 
             if (!string.IsNullOrEmpty(videoInput))
             {
@@ -762,6 +755,8 @@ namespace MeGUI
                     ScriptServer.overcrop(ref final);
                 else if (avsSettings.Mod16Method == mod16Method.mod4Horizontal)
                     ScriptServer.cropMod4Horizontal(ref final);
+                else if (avsSettings.Mod16Method == mod16Method.undercrop)
+                    ScriptServer.undercrop(ref final);
             }
 
             bool error = (final.left == -1);
@@ -790,17 +785,23 @@ namespace MeGUI
             }
             else customDAR = AR.Value.ar;
 
-            // Don't resize up if I've forgotten to change resolution from profile
-            // TODO: make this a setting
-            if (horizontalResolution > (int)d2v.Info.Width)
-                horizontalResolution = (int)d2v.Info.Width;
+            // Minimise upsizing
+            int sourceHorizontalResolution = (int)d2v.Info.Width - final.right - final.left;
+            if (horizontalResolution > sourceHorizontalResolution)
+            {
+                if (avsSettings.Mod16Method == mod16Method.resize)
+                    while (horizontalResolution > sourceHorizontalResolution + 16)
+                        horizontalResolution -= 16;
+                else
+                    horizontalResolution = sourceHorizontalResolution;
+            }
 
             //Suggest a resolution (taken from AvisynthWindow.suggestResolution_CheckedChanged)
             int scriptVerticalResolution = Resolution.suggestResolution(d2v.Info.Height, d2v.Info.Width, (double)customDAR,
                 final, horizontalResolution, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out dar);
 
             log.LogValue("Output resolution", horizontalResolution + "x" + scriptVerticalResolution);
-            
+
             if (settings != null && settings is x264Settings) // verify that the video corresponds to the chosen avc level, if not, change the resolution until it does fit
             {
                 x264Settings xs = (x264Settings)settings;
@@ -808,7 +809,7 @@ namespace MeGUI
                 {
                     AVCLevels al = new AVCLevels();
                     log.LogValue("AVC level", al.getLevels()[xs.Level]);
-                    
+
                     int compliantLevel = 15;
                     while (!this.al.validateAVCLevel(horizontalResolution, scriptVerticalResolution, d2v.Info.FPS, xs, out compliantLevel))
                     { // resolution not profile compliant, reduce horizontal resolution by 16, get the new vertical resolution and try again

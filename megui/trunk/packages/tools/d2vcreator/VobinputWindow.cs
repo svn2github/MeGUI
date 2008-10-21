@@ -50,14 +50,11 @@ namespace MeGUI
 		private JobUtil jobUtil;
 
 		private System.Windows.Forms.GroupBox groupBox3;
-		private System.Windows.Forms.GroupBox gbOutput;
-		private System.Windows.Forms.Button openButton;
-		private System.Windows.Forms.TextBox input;
+        private System.Windows.Forms.GroupBox gbOutput;
 		private System.Windows.Forms.Label inputLabel;
 		private System.Windows.Forms.TextBox projectName;
 		private System.Windows.Forms.Label projectNameLabel;
-		private System.Windows.Forms.SaveFileDialog saveProjectDialog;
-		private System.Windows.Forms.OpenFileDialog openIFODialog;
+        private System.Windows.Forms.SaveFileDialog saveProjectDialog;
 		private System.Windows.Forms.Button pickOutputButton;
 		private System.Windows.Forms.GroupBox gbInput;
         private System.Windows.Forms.RadioButton demuxTracks;
@@ -68,6 +65,7 @@ namespace MeGUI
         private MeGUI.core.gui.HelpButton helpButton1;
         private CheckedListBox AudioTracks;
         private RadioButton demuxAll;
+        private FileBar input;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -78,7 +76,6 @@ namespace MeGUI
             bool showCloseOnQueue, bool closeOnQueue, bool loadOnComplete, bool updateMode)
 		{
 			openVideo(input);
-			this.input.Text = input;
 			if (!string.IsNullOrEmpty(projectName))
                 this.projectName.Text = projectName;
 			if (demuxType == 0)
@@ -157,9 +154,8 @@ namespace MeGUI
 		/// </summary>
 		private void InitializeComponent()
 		{
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(VobinputWindow));
             this.gbInput = new System.Windows.Forms.GroupBox();
-            this.openButton = new System.Windows.Forms.Button();
-            this.input = new System.Windows.Forms.TextBox();
             this.inputLabel = new System.Windows.Forms.Label();
             this.queueButton = new System.Windows.Forms.Button();
             this.loadOnComplete = new System.Windows.Forms.CheckBox();
@@ -173,9 +169,9 @@ namespace MeGUI
             this.projectName = new System.Windows.Forms.TextBox();
             this.projectNameLabel = new System.Windows.Forms.Label();
             this.saveProjectDialog = new System.Windows.Forms.SaveFileDialog();
-            this.openIFODialog = new System.Windows.Forms.OpenFileDialog();
             this.closeOnQueue = new System.Windows.Forms.CheckBox();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
+            this.input = new MeGUI.FileBar();
             this.gbInput.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.gbOutput.SuspendLayout();
@@ -183,7 +179,6 @@ namespace MeGUI
             // 
             // gbInput
             // 
-            this.gbInput.Controls.Add(this.openButton);
             this.gbInput.Controls.Add(this.input);
             this.gbInput.Controls.Add(this.inputLabel);
             this.gbInput.Location = new System.Drawing.Point(10, 8);
@@ -192,25 +187,6 @@ namespace MeGUI
             this.gbInput.TabIndex = 0;
             this.gbInput.TabStop = false;
             this.gbInput.Text = "Input";
-            // 
-            // openButton
-            // 
-            this.openButton.AllowDrop = true;
-            this.openButton.Location = new System.Drawing.Point(382, 16);
-            this.openButton.Name = "openButton";
-            this.openButton.Size = new System.Drawing.Size(24, 23);
-            this.openButton.TabIndex = 2;
-            this.openButton.Text = "...";
-            this.openButton.Click += new System.EventHandler(this.openButton_Click);
-            // 
-            // input
-            // 
-            this.input.AllowDrop = true;
-            this.input.Location = new System.Drawing.Point(118, 17);
-            this.input.Name = "input";
-            this.input.ReadOnly = true;
-            this.input.Size = new System.Drawing.Size(256, 21);
-            this.input.TabIndex = 1;
             // 
             // inputLabel
             // 
@@ -335,13 +311,6 @@ namespace MeGUI
             this.saveProjectDialog.Filter = "DGIndex project files|*.d2v";
             this.saveProjectDialog.Title = "Pick a name for your DGIndex project";
             // 
-            // openIFODialog
-            // 
-            this.openIFODialog.Filter = "VOB Files (*.vob)|*.vob|MPEG-1/2 Program Streams (*.mpg)|*.mpg|Transport Streams " +
-                "(*.m2ts;*.ts)|*.m2ts;*.ts|All DGIndex supported files|*.vob;*.mpg;*.mpeg;*.m2ts;" +
-                "*.m2v;*.m2p;*.mpv;*.tp;*.ts;*.trp;*.pva;*.vro";
-            this.openIFODialog.FilterIndex = 4;
-            // 
             // closeOnQueue
             // 
             this.closeOnQueue.Location = new System.Drawing.Point(285, 341);
@@ -360,6 +329,24 @@ namespace MeGUI
             this.helpButton1.Size = new System.Drawing.Size(45, 23);
             this.helpButton1.TabIndex = 14;
             // 
+            // input
+            // 
+            this.input.AllowDrop = true;
+            this.input.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.input.Filename = "";
+            this.input.Filter = resources.GetString("input.Filter");
+            this.input.FilterIndex = 4;
+            this.input.FolderMode = false;
+            this.input.Location = new System.Drawing.Point(79, 16);
+            this.input.Name = "input";
+            this.input.ReadOnly = true;
+            this.input.SaveMode = false;
+            this.input.Size = new System.Drawing.Size(329, 26);
+            this.input.TabIndex = 4;
+            this.input.Title = null;
+            this.input.FileSelected += new MeGUI.FileBarEventHandler(this.input_FileSelected);
+            // 
             // VobinputWindow
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
@@ -377,7 +364,6 @@ namespace MeGUI
             this.Name = "VobinputWindow";
             this.Text = "MeGUI - D2V Project Creator";
             this.gbInput.ResumeLayout(false);
-            this.gbInput.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.gbOutput.ResumeLayout(false);
@@ -400,20 +386,16 @@ namespace MeGUI
 			}
 		}
 
-		private void openButton_Click(object sender, System.EventArgs e)
-		{
-			if (!processing)
-			{
-				if (openIFODialog.ShowDialog() == DialogResult.OK)
-				{
-					openVideo(openIFODialog.FileName);
-					checkIndexIO();
-				}
-			}
+        private void input_FileSelected(FileBar sender, FileBarEventArgs args)
+        {
+			//AAA: processing doesn't seem to get set to true anywhere so hopefully safe to remove check
+			openVideo(input.Filename);
+			checkIndexIO();
 		}
 		private void openVideo(string fileName)
 		{
-			input.Text = fileName;
+			if (input.Filename != fileName)
+                input.Filename = fileName;
 
             string projectPath;
             string fileNameNoPath = Path.GetFileName(fileName);
@@ -442,7 +424,7 @@ namespace MeGUI
                 List<AudioTrackInfo> audioTracks; 
                 vUtil.getSourceMediaInfo(fileName, out audioTracks, out unused);
                 foreach (AudioTrackInfo atrack in audioTracks)
-                    AudioTracks.Items.Add(atrack.ToString());
+                    AudioTracks.Items.Add(atrack);
             }
 
             if (AudioTracks.Items.Count > 0)
@@ -482,7 +464,7 @@ namespace MeGUI
 		#region helper methods
 		private void checkIndexIO()
 		{
-			configured = (!input.Text.Equals("") && !projectName.Text.Equals(""));
+			configured = (!input.Filename.Equals("") && !projectName.Text.Equals(""));
 			if (configured && dialogMode)
 				queueButton.DialogResult = DialogResult.OK;
 			else
@@ -498,13 +480,13 @@ namespace MeGUI
             else
                 demuxType = 2;
 
-            List<string> trackIDs = new List<string>();
-            foreach (string s in AudioTracks.CheckedItems)
+            List<AudioTrackInfo> audioTracks = new List<AudioTrackInfo>();
+            foreach (AudioTrackInfo ati in AudioTracks.CheckedItems)
             {
-                trackIDs.Add(s.Substring(1, s.IndexOf("]") - 1));
+                audioTracks.Add(ati);
             }
 
-            return new IndexJob(this.input.Text, this.projectName.Text, demuxType, trackIDs, null, loadOnComplete.Checked);
+            return new IndexJob(this.input.Filename, this.projectName.Text, demuxType, audioTracks, null, loadOnComplete.Checked);
 		}
 		#endregion
 		#region properties
@@ -580,7 +562,7 @@ namespace MeGUI
 
             StringBuilder logBuilder = new StringBuilder();
             VideoUtil vUtil = new VideoUtil(mainForm);
-            Dictionary<int, string> audioFiles = vUtil.getAllDemuxedAudio(job.TrackIDs, job.Output, 8);
+            Dictionary<int, string> audioFiles = vUtil.getAllDemuxedAudio(job.AudioTracks, job.Output, 8);
             if (job.LoadSources)
             {
                 if (job.DemuxMode != 0 && audioFiles.Count > 0)

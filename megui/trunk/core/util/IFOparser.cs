@@ -83,7 +83,7 @@ namespace MeGUI.core.util
         /// <param name="fileName">name of the IFO file</param>
         /// <param name="verbose">to have complete infos or not</param>
         /// <returns>several infos as String</returns>
-        public static string[] GetAudioInfos(string FileName, bool verbose)
+        public static AudioTrackInfo[] GetAudioInfos(string FileName, bool verbose)
         {
             FileStream fs = new FileStream(FileName, FileMode.Open, FileAccess.Read);
             BinaryReader br = new BinaryReader(fs);
@@ -96,10 +96,11 @@ namespace MeGUI.core.util
             if (a > 8)
                 a = 8; // force the max #. According to the specs 8 is the max value for audio streams.
 
-            string[] audiodesc = new string[a];
+            AudioTrackInfo[] ati = new AudioTrackInfo[a];
 
             for (int i = 0; i < a; i++)
             {
+                ati[i] = new AudioTrackInfo();
                 byte[] array = new byte[2];
                 fs.Read(array, 0, 2);
                 string cm = GetAudioCodingMode(array);
@@ -143,16 +144,21 @@ namespace MeGUI.core.util
                 fs.Read(l, 0, 1);
                 string lce = GetAudioLanguageCodeExt(l);
 
+                ati[i].TrackID = trackID;
+                ati[i].NbChannels = ch + " channels";
+                ati[i].SamplingRate = sp;
+                ati[i].Type = cm;
+                ati[i].Language = LanguageSelectionContainer.Short2FullLanguageName(ShortLangCode);
                 if (verbose)
                 {
                     ad.AppendFormat("Language              : {0} - {1}", LanguageSelectionContainer.Short2FullLanguageName(ShortLangCode), ShortLangCode, Environment.NewLine);
                     ad.AppendFormat("Language Extension    : {0}", lce, Environment.NewLine);
                     ad.AppendLine();
-                    audiodesc[i] = ad.ToString();
+                    ati[i].Description = ad.ToString();
                 }
                 else
                 {
-                    audiodesc[i] = String.Format("[{0:X}] - {1} - {2}ch / {3} / {4}", trackID, cm, ch, sp, LanguageSelectionContainer.Short2FullLanguageName(ShortLangCode));
+                    ati[i].Description = String.Format("[{0:X}] - {1} - {2}ch / {3} / {4}", trackID, cm, ch, sp, LanguageSelectionContainer.Short2FullLanguageName(ShortLangCode));
                 }
 
                 // go to the next audio stream
@@ -161,7 +167,7 @@ namespace MeGUI.core.util
 
             fs.Close();
 
-            return audiodesc;
+            return ati;
         }
 
         /// <summary>
