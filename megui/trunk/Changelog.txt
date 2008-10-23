@@ -1,3 +1,11 @@
+0.3.0.3005
+    - (ateeq) Removed filename passed to new VobinputWindow as SetConfig passes it anyway.  This way OpenVideo isn't called twice.
+    - (ateeq) clear queue without prompting if all jobs are done
+    - (ateeq) oneclick fixes
+    - (ateeq) mod16 undercrop for anamorphic encoding
+    - (ateeq) delay setting status to done till after postprocessing
+    - (kurtnoise) [ProgressWindow] trigger the high priority warning for all Windows OS, not only Vista.
+
 0.3.0.3004
     - (kurtnoise) [FilmCutter] AudioRate(__film) instead of AudioRate(__just_audio) for else case.
     - (kurtnoise) [AMGMuxer] Splitting feature works fine now. Fix issue #2145143. 
