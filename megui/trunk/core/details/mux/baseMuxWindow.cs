@@ -44,7 +44,7 @@ namespace MeGUI
         #region variables
         protected Dar? dar;
         protected string audioFilter, videoInputFilter, subtitleFilter, chaptersFilter, outputFilter;
-        private MainForm mainForm;
+        protected MainForm mainForm;
         private MeGUISettings settings;
         protected Label videoInputLabel;
         protected OpenFileDialog openFileDialog;
@@ -649,7 +649,11 @@ namespace MeGUI
 
         private void chooseOutputFilename()
         {
-            output.Filename = FileUtil.AddToFileName(vInput.Filename, "-muxed");
+            string projectPath;
+            string fileNameNoPath = Path.GetFileName(vInput.Filename);
+            if (string.IsNullOrEmpty(projectPath = mainForm.Settings.DefaultOutputDir))
+                projectPath = Path.GetDirectoryName(vInput.Filename);
+            output.Filename = FileUtil.AddToFileName(Path.Combine(projectPath, fileNameNoPath), "-muxed");
             ChangeOutputExtension();
         }
 
