@@ -122,11 +122,18 @@ new JobProcessorFactory(new ProcessorFactory(init), "AMGMuxer");
             
             // AR can't be signalled in AVI
 
-            script.AppendLine("SET OUTPUT OPTIONS");
             // split size
+            script.AppendLine("SET OUTPUT OPTIONS");
             if (settings.SplitSize.HasValue)
             {
-                script.AppendFormat("SET OPTION MAXFILESIZE {0}{1}", settings.SplitSize, Environment.NewLine);
+                script.AppendLine("SET OPTION NUMBERING ON");
+                script.AppendLine("SET OPTION MAXFILESIZE ON");
+                script.AppendFormat("SET OPTION MAXFILESIZE {0}{1}", ((MeGUI.core.util.FileSize)settings.SplitSize).MB, Environment.NewLine);
+            }
+            else
+            {
+                script.AppendLine("SET OPTION NUMBERING OFF");
+                script.AppendLine("SET OPTION MAXFILESIZE OFF");
             }
 
             // Now do the rest of the setup
@@ -137,7 +144,6 @@ SET OPTION MP3 VERIFY RESDLG OFF
 SET OPTION AVI FIXDX50 1
 SET OPTION CHAPTERS IMPORT 1
 SET OUTPUT OPTIONS
-SET OPTION NUMBERING ON
 SET OPTION ALL SUBTITLES 1
 SET OPTION ALL AUDIO 1
 SET OPTION CLOSEAPP 1
