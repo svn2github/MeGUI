@@ -55,13 +55,11 @@ namespace MeGUI
         }
 
         private IMuxing muxer;
-        private MainForm mainForm;
 
         public MuxWindow(IMuxing muxer, MainForm mainForm)
-            : base()
+            : base(mainForm)
         {
             InitializeComponent();
-            this.mainForm = mainForm;
             this.muxer = muxer;
             if (muxer.GetSupportedAudioTypes().Count == 0)
                 audio.Enabled = false;
