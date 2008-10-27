@@ -42,6 +42,7 @@ namespace MeGUI
         private AudioEncoderType[] knownAudioTypes;
 
         public AdaptiveMuxWindow(MainForm mainForm)
+            : base(mainForm)
         {
             InitializeComponent();
             jobUtil = new JobUtil(mainForm);
