@@ -130,7 +130,7 @@ namespace MeGUI
             allTypes.AddRange(subTypes);
             if (chapterInputType != null)
                 allTypes.Add(chapterInputType);
-            MuxPath muxPath = prov.GetMuxPath(container, allTypes.ToArray());
+            MuxPath muxPath = prov.GetMuxPath(container, splitSize.HasValue, allTypes.ToArray());
             List<MuxJob> jobs = new List<MuxJob>();
             List<MuxStream> subtitleStreams = new List<MuxStream>(subtitleStreamsArray);
             List<MuxStream> audioStreams = new List<MuxStream>(audioStreamsArray);

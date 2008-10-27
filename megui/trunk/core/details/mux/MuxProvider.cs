@@ -94,17 +94,17 @@ namespace MeGUI
         /// <param name="containerType"></param>
         /// <param name="allTypes"></param>
         /// <returns></returns>
-        public MuxPath GetMuxPath(ContainerType containerType, params MuxableType[] allTypes)
+        public MuxPath GetMuxPath(ContainerType containerType, bool alwaysMux, params MuxableType[] allTypes)
         {
             List<MuxableType> inputTypes = new List<MuxableType>();
             inputTypes.AddRange(allTypes);
-            MuxPath shortestPath = getShortestMuxPath(new MuxPath(inputTypes, containerType), inputTypes, containerType);
+            MuxPath shortestPath = getShortestMuxPath(new MuxPath(inputTypes, containerType, alwaysMux), inputTypes, containerType);
             return shortestPath;
         }
 
         public bool CanBeMuxed(ContainerType containerType, params MuxableType[] allTypes)
         {
-            MuxPath muxPath = GetMuxPath(containerType, allTypes);
+            MuxPath muxPath = GetMuxPath(containerType, false, allTypes);
             if (muxPath != null)
                 return true;
             else

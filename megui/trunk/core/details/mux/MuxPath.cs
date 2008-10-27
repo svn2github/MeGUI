@@ -32,6 +32,7 @@ namespace MeGUI
         private List<MuxPathLeg> path;
         private List<MuxableType> initialInputTypes;
         private ContainerType targetType;
+        private bool alwaysMux;
 
         public ContainerType TargetType
         {
@@ -60,12 +61,19 @@ namespace MeGUI
             path = new List<MuxPathLeg>();
             initialInputTypes = new List<MuxableType>();
             this.targetType = targetType;
+            alwaysMux = false;
         }
 
         public MuxPath(IEnumerable<MuxableType> initialInputTypes, ContainerType targetType)
             : this(targetType)
         {
             this.initialInputTypes.AddRange(initialInputTypes);
+        }
+
+        public MuxPath(IEnumerable<MuxableType> initialInputTypes, ContainerType targetType, bool alwaysMux)
+            : this(initialInputTypes, targetType)
+        {
+            this.alwaysMux = alwaysMux;
         }
 
         public MuxPath Clone()
@@ -90,7 +98,7 @@ namespace MeGUI
             if (path.Count == 0)
             {
                 return (initialInputTypes.Count == 0 || 
-                    (initialInputTypes.Count == 1 &&
+                    (initialInputTypes.Count == 1 && !alwaysMux &&
                     (initialInputTypes[0].outputType.ContainerType == this.targetType)) );
             }
             else
