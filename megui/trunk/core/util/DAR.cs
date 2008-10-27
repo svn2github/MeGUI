@@ -126,7 +126,7 @@ namespace MeGUI.core.util
             // sarY      parY     scriptVerticalResolution               horizontalResolution
             //
             // rounding value is mandatory here because some encoders (x264, xvid...) clamp sarX & sarY
-            decimal ratio = Math.Round(ar * (decimal)vres / (decimal)hres, 3);
+            decimal ratio = ar * (decimal)vres / (decimal)hres;
             return new Sar(ratio);
         }
     }
@@ -228,13 +228,13 @@ namespace MeGUI.core.util
 
         public static void approximate(decimal val, out ulong x, out ulong y)
         {
-            approximate(val, out x, out y, 5000);
+            approximate(val, out x, out y, 1.0E-5);
         }
 
-        public static void approximate(decimal val, out ulong x, out ulong y, ulong limit)
+        public static void approximate(decimal val, out ulong x, out ulong y, double precision)
         {
             // Fraction.Test();
-            Fraction f = Fraction.toFract((double)val);
+            Fraction f = Fraction.toFract((double)val, precision);
 
             x = f.num;
             y = f.denom;
