@@ -6,7 +6,6 @@
     - (ateeq) [baseMuxWindow.cs] Add DefaultOutputDir and mainForm visibility change
     - (ateeq) [MuxWindow.cs] Remove duplication of mainForm between MuxWindow and baseMuxWindow
 
-
 0.3.0.3005
     - (ateeq) Removed filename passed to new VobinputWindow as SetConfig passes it anyway.  This way OpenVideo isn't called twice.
     - (ateeq) clear queue without prompting if all jobs are done
