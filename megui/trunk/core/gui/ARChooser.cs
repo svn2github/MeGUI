@@ -128,7 +128,7 @@ namespace MeGUI.core.gui
             }
             set
             {
-                if (value == null)
+                if (value == null || value.Length == 0)
                     return;
                 base.CustomItems = Util.CastAll<Dar, object>(value);
             }
