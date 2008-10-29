@@ -1228,18 +1228,15 @@ namespace MeGUI
 		}
 		private void saveButton_Click(object sender, System.EventArgs e)
 		{
-            //saveAvisynthScriptDialog.FileName = Path.GetFileNameWithoutExtension(input.Filename);
-            //if (saveAvisynthScriptDialog.ShowDialog() == DialogResult.OK)
-			//{
-            writeScript(videoOutput.Filename);
+            string fileName = videoOutput.Filename;
+            writeScript(fileName);
 			if (onSaveLoadScript.Checked)
 			{
                 if(player != null)
 				    player.Close();
-				OpenScript(videoOutput.Filename);
 				this.Close();
-			}
-			//}
+                OpenScript(fileName);
+            }
 		}
 		#endregion
 		#region script generation
