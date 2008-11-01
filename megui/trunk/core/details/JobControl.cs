@@ -284,6 +284,9 @@ namespace MeGUI.core.details
             if (jobQueue.HasJob(job))
                 jobQueue.removeJobFromQueue(job);
 
+            foreach (TaggedJob p in job.RequiredJobs)
+                p.EnabledJobs.Remove (job);
+
             foreach (TaggedJob j in job.EnabledJobs)
                 j.RequiredJobs.Remove(job);
 
