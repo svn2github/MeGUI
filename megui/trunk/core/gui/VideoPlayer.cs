@@ -716,6 +716,7 @@ namespace MeGUI
             if (this.videoPreview.Image != null)
                 this.videoPreview.Image.Dispose(); // get rid of previous bitmap
 			this.videoPreview.Image = resizeBitmap(b, this.videoWindowWidth,this.videoWindowHeight);
+            b.Dispose ();
 			setTitleText();
 		}
 		/// <summary>
