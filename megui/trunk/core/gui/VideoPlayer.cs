@@ -128,7 +128,7 @@ namespace MeGUI
 		/// <returns>true if the video could be opened, false if not</returns>
         public bool loadVideo(MainForm mainForm, string path, PREVIEWTYPE type, bool hasAR)
         {
-            return loadVideo(mainForm, path, type, hasAR, false);
+            return loadVideo(mainForm, path, type, hasAR, false, -1);
         }
 
 		/// <summary>
@@ -139,12 +139,28 @@ namespace MeGUI
 		/// <param name="type">type of window</param>
         /// <param name="inlineAvs">true if path contain not filename but avsynth script to be parsed</param>
 		/// <returns>true if the video could be opened, false if not</returns>
-		public bool loadVideo(MainForm mainForm, string path, PREVIEWTYPE type, bool hasAR, bool inlineAvs)
+        public bool loadVideo(MainForm mainForm, string path, PREVIEWTYPE type, bool hasAR, bool inlineAvs)
+        {
+            return loadVideo(mainForm, path, type, hasAR, inlineAvs, -1);
+        }
+
+        /// <summary>
+		/// loads the video, sets up the proper window size and enables / disables the GUI buttons depending on the
+		/// preview type set
+		/// </summary>
+		/// <param name="path">path of the video file to be loaded</param>
+		/// <param name="type">type of window</param>
+        /// <param name="inlineAvs">true if path contain not filename but avsynth script to be parsed</param>
+        /// <param name="startFrame">Select a specific frame to start off with or -1 for middle of video</param>
+		/// <returns>true if the video could be opened, false if not</returns>
+		public bool loadVideo(MainForm mainForm, string path, PREVIEWTYPE type, bool hasAR, bool inlineAvs, int startFrame)
 		{
             lock (this)
             {
                 if (file != null)
                     file.Dispose();
+                if (videoPreview.Image != null)
+                    videoPreview.Image.Dispose(); // get rid of previous bitmap
             }
 
             try
@@ -185,8 +201,9 @@ namespace MeGUI
 
 			if (reader != null && reader.FrameCount > 0)
 			{
+                this.positionSlider.Minimum = 0;
 				this.positionSlider.Maximum = reader.FrameCount - 1;
-				this.positionSlider.Value = reader.FrameCount / 2;
+				this.positionSlider.Value = startFrame >= 0 ? startFrame : reader.FrameCount / 2;
                 this.positionSlider.TickFrequency = this.positionSlider.Maximum / 20;
                 this.viewerType = type;
                 this.hasAR = hasAR;
@@ -480,7 +497,8 @@ namespace MeGUI
             this.positionSlider.TabIndex = 1;
             this.positionSlider.TickFrequency = 1500;
             this.positionSlider.TickStyle = System.Windows.Forms.TickStyle.Both;
-            this.positionSlider.Value = 6;
+            this.positionSlider.Minimum = -1;
+            this.positionSlider.Value = -1;
             this.positionSlider.Scroll += new System.EventHandler(this.positionSlider_Scroll);
             // 
             // playButton
