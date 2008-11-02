@@ -1813,6 +1813,7 @@ namespace MeGUI
             this.clearDefaultOutputDir.Size = new System.Drawing.Size(24, 23);
             this.clearDefaultOutputDir.TabIndex = 41;
             this.clearDefaultOutputDir.Text = "x";
+            this.clearDefaultOutputDir.Click += new System.EventHandler (this.clearDefaultOutputDir_Click);
             // 
             // defaultOutputDir
             // 
