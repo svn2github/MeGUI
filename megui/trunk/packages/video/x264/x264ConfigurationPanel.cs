@@ -556,6 +556,7 @@ namespace MeGUI.packages.video.x264
             set
             {  // Warning! The ordering of components matters because of the dependency code!
                 x264Settings xs = value;
+                updating = true;
                 deadzoneInter.Value = xs.DeadZoneInter;
                 deadzoneIntra.Value = xs.DeadZoneIntra;
                 interlaced.Checked = xs.EncodeInterlaced;
@@ -564,7 +565,7 @@ namespace MeGUI.packages.video.x264
                 avcProfile.SelectedIndex = xs.Profile;
                 avcLevel.SelectedIndex = xs.Level;
                 x264EncodingMode.SelectedIndex = xs.EncodingMode;
-                lastEncodingMode = xs.EncodingMode;
+                doEncodingModeAdjustments();
                 x264NumberOfRefFrames.Value = xs.NbRefFrames;
                 x264NumberOfBFrames.Value = xs.NbBframes;
                 NoFastPSkip.Checked = xs.noFastPSkip;
@@ -582,8 +583,8 @@ namespace MeGUI.packages.video.x264
                 x264WeightedBPrediction.Checked = xs.WeightedBPrediction;
                 x264ChromaMe.Checked = xs.ChromaME;
                 PsyRD.Value = xs.PsyRDO;
-                PsyTrellis.Value = xs.PsyTrellis;
                 trellis.SelectedIndex = xs.X264Trellis;
+                PsyTrellis.Value = xs.PsyTrellis;
                 adaptiveDCT.Checked = xs.AdaptiveDCT;
                 x264P8x8mv.Checked = xs.P8x8mv;
                 x264B8x8mv.Checked = xs.B8x8mv;
@@ -642,7 +643,9 @@ namespace MeGUI.packages.video.x264
                 // ---
                     cbAQMode.SelectedIndex = xs.AQmode;
                 numAQStrength.Value = xs.AQstrength;
-                NoiseReduction.Text = xs.NoiseReduction.ToString(); ;
+                NoiseReduction.Text = xs.NoiseReduction.ToString();
+                updating = false;
+                genericUpdate();
             }
         }
         #endregion

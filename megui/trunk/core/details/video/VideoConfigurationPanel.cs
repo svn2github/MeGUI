@@ -33,7 +33,7 @@ namespace MeGUI.core.details.video
     public class VideoConfigurationPanel : UserControl
     {
         #region variables
-        private bool updating = false;
+        protected bool updating = false;
         private double bytesPerFrame;
         private bool advancedToolTips;
         protected int lastEncodingMode = 0;
