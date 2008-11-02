@@ -566,7 +566,7 @@ namespace MeGUI.core.details
         internal bool areDependenciesMet(TaggedJob j)
         {
             foreach (TaggedJob job in j.RequiredJobs)
-                if (job.Status != JobStatus.DONE)
+                if (job.Status != JobStatus.DONE && job.Status != JobStatus.SKIP)
                     return false;
 
             return true;
