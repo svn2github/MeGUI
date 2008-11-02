@@ -1216,7 +1216,7 @@ namespace MeGUI
             if (player == null || player.IsDisposed) 
                 player = new VideoPlayer();
 
-            bool videoLoaded = player.loadVideo(mainForm, avisynthScript.Text, PREVIEWTYPE.REGULAR, false, true);
+            bool videoLoaded = player.loadVideo(mainForm, avisynthScript.Text, PREVIEWTYPE.REGULAR, false, true, player.CurrentFrame);
 			if (videoLoaded)
 			{
 				player.disableIntroAndCredits();
@@ -1506,14 +1506,12 @@ namespace MeGUI
 
         private bool showOriginal()
         {
-            if (player != null)
+            if (player == null || player.IsDisposed)
             {
-                player.Close();
-                player = null;
+                player = new VideoPlayer();
             }
             this.isPreviewMode = false;
-            player = new VideoPlayer();
-            if (player.loadVideo(mainForm, originalScript, PREVIEWTYPE.REGULAR, false, originalInlineAvs))
+            if (player.loadVideo(mainForm, originalScript, PREVIEWTYPE.REGULAR, false, originalInlineAvs, player.CurrentFrame))
             {
                 player.Show();
                 reader = player.Reader;
@@ -1539,6 +1537,8 @@ namespace MeGUI
             this.input.Filename = "";
             this.originalScript = videoInput;
             this.originalInlineAvs = inlineAvs;
+            if (player != null)
+                player.Dispose();
             bool videoLoaded = showOriginal();
             enableControls(videoLoaded);
 			if (videoLoaded)
@@ -1983,7 +1983,6 @@ namespace MeGUI
         {
             if (chAutoPreview.Checked)
             {
-                previewButton_Click(sender, e);
                 previewButton_Click(sender, e);
             }
             else if (this.isPreviewMode == true)
