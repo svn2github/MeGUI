@@ -52,9 +52,6 @@ namespace MeGUI
         private System.Windows.Forms.RadioButton FileSizeRadio;
         private System.Windows.Forms.Label AverageBitrateLabel;
         private System.Windows.Forms.GroupBox OutputGroupBox;
-        private System.Windows.Forms.TextBox muxedOutput;
-		private System.Windows.Forms.SaveFileDialog saveDialog;
-        private System.Windows.Forms.Button muxedOutputButton;
 		private System.Windows.Forms.Button queueButton;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.TextBox projectedBitrateKBits;
@@ -74,6 +71,7 @@ namespace MeGUI
         private MeGUI.core.gui.TargetSizeSCBox targetSize;
         private TextBox videoSize;
         private Label label2;
+        protected FileBar muxedOutput;
 
 
         private IContainer components;
@@ -130,7 +128,7 @@ namespace MeGUI
             this.container.SelectedIndex = 0;
             string muxedName = FileUtil.AddToFileName(vInfo.VideoOutput, "-muxed");
 
-            this.muxedOutput.Text = Path.ChangeExtension(muxedName, (this.container.SelectedItem as ContainerType).Extension);
+            this.muxedOutput.Filename = Path.ChangeExtension(muxedName, (this.container.SelectedItem as ContainerType).Extension);
 
             splitting.Value = mainForm.Settings.AedSettings.SplitSize;
             if (mainForm.Settings.AedSettings.FileSizeMode && FileSizeRadio.Enabled)
@@ -200,10 +198,8 @@ namespace MeGUI
             this.container = new System.Windows.Forms.ComboBox();
             this.containerLabel = new System.Windows.Forms.Label();
             this.muxedOutputLabel = new System.Windows.Forms.Label();
-            this.muxedOutput = new System.Windows.Forms.TextBox();
-            this.muxedOutputButton = new System.Windows.Forms.Button();
+            this.muxedOutput = new MeGUI.FileBar ();
             this.cancelButton = new System.Windows.Forms.Button();
-            this.saveDialog = new System.Windows.Forms.SaveFileDialog();
             this.addSubsNChapters = new System.Windows.Forms.CheckBox();
             this.defaultToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
@@ -341,13 +337,26 @@ namespace MeGUI
             this.OutputGroupBox.Controls.Add(this.containerLabel);
             this.OutputGroupBox.Controls.Add(this.muxedOutputLabel);
             this.OutputGroupBox.Controls.Add(this.muxedOutput);
-            this.OutputGroupBox.Controls.Add(this.muxedOutputButton);
             this.OutputGroupBox.Location = new System.Drawing.Point(10, 4);
             this.OutputGroupBox.Name = "OutputGroupBox";
             this.OutputGroupBox.Size = new System.Drawing.Size(458, 76);
             this.OutputGroupBox.TabIndex = 18;
             this.OutputGroupBox.TabStop = false;
             this.OutputGroupBox.Text = "Output Options";
+            // 
+            // muxedOutput
+            // 
+            this.muxedOutput.Filename = "";
+            this.muxedOutput.Filter = null;
+            this.muxedOutput.FilterIndex = 0;
+            this.muxedOutput.FolderMode = false;
+            this.muxedOutput.Location = new System.Drawing.Point (97, 44);
+            this.muxedOutput.Name = "muxedOutput";
+            this.muxedOutput.ReadOnly = false;
+            this.muxedOutput.SaveMode = true;
+            this.muxedOutput.Size = new System.Drawing.Size (352, 26);
+            this.muxedOutput.TabIndex = 36;
+            this.muxedOutput.Title = null;
             // 
             // splitting
             // 
@@ -387,23 +396,6 @@ namespace MeGUI
             this.muxedOutputLabel.Size = new System.Drawing.Size(82, 13);
             this.muxedOutputLabel.TabIndex = 23;
             this.muxedOutputLabel.Text = "Name of output";
-            // 
-            // muxedOutput
-            // 
-            this.muxedOutput.Location = new System.Drawing.Point(97, 48);
-            this.muxedOutput.Name = "muxedOutput";
-            this.muxedOutput.ReadOnly = true;
-            this.muxedOutput.Size = new System.Drawing.Size(322, 21);
-            this.muxedOutput.TabIndex = 0;
-            // 
-            // muxedOutputButton
-            // 
-            this.muxedOutputButton.Location = new System.Drawing.Point(425, 46);
-            this.muxedOutputButton.Name = "muxedOutputButton";
-            this.muxedOutputButton.Size = new System.Drawing.Size(24, 23);
-            this.muxedOutputButton.TabIndex = 19;
-            this.muxedOutputButton.Text = "...";
-            this.muxedOutputButton.Click += new System.EventHandler(this.muxedOutputButton_Click);
             // 
             // cancelButton
             // 
@@ -474,23 +466,15 @@ namespace MeGUI
         /// <param name="e"></param>
         private void container_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (!String.IsNullOrEmpty(muxedOutput.Text))
+            ContainerType cot = this.container.SelectedItem as ContainerType;
+            this.muxedOutput.Filter = cot.OutputFilterString;
+            if (!String.IsNullOrEmpty (muxedOutput.Filename))
             {
-                this.muxedOutput.Text = Path.ChangeExtension(muxedOutput.Text, (this.container.SelectedItem as ContainerType).Extension);
+                this.muxedOutput.Filename = Path.ChangeExtension(muxedOutput.Filename, (this.container.SelectedItem as ContainerType).Extension);
             }
         }
         #endregion
 		#region additional events
-		private void muxedOutputButton_Click(object sender, System.EventArgs e)
-		{
-            ContainerType cot = this.container.SelectedItem as ContainerType;
-            this.saveDialog.Filter = cot.OutputFilterString;
-            if (saveDialog.ShowDialog() == DialogResult.OK)
-            {
-                this.muxedOutput.Text = saveDialog.FileName;
-            }
-        }
-
 		/// <summary>
 		/// handles the selection of the output format
 		/// in case of avi, if an encodeable audio stream is already present,
@@ -503,7 +487,7 @@ namespace MeGUI
 		private void outputFormat_CheckedChanged(object sender, System.EventArgs e)
 		{
             ContainerType cot = this.container.SelectedItem as ContainerType;
-            this.muxedOutput.Text = Path.ChangeExtension(this.muxedOutput.Text, cot.Extension);
+            this.muxedOutput.Filename = Path.ChangeExtension(this.muxedOutput.Filename, cot.Extension);
         }
 		/// <summary>
 		/// separates encodable from muxable audio streams
@@ -652,7 +636,7 @@ namespace MeGUI
 		/// <param name="e"></param>
 		private void queueButton_Click(object sender, System.EventArgs e)
 		{
-			if (!string.IsNullOrEmpty(this.muxedOutput.Text))
+			if (!string.IsNullOrEmpty(this.muxedOutput.Filename))
 			{
 
                 FileSize? desiredSize = targetSize.Value;
@@ -673,7 +657,7 @@ namespace MeGUI
 				string chapters = "";
 				string videoInput = vInfo.VideoInput;
                 string videoOutput = vInfo.VideoOutput;
-                string muxedOutput = this.muxedOutput.Text;
+                string muxedOutput = this.muxedOutput.Filename;
                 ContainerType cot = this.container.SelectedItem as ContainerType;
                 if (addSubsNChapters.Checked)
 				{
