@@ -1,3 +1,17 @@
+0.3.0.3007
+    - (ateeq) [x264ConfigurationPanel] set updating to avoid triggering spurious events during x264 profile switching
+    - (ateeq) [VideoConfigurationPanel] Change visibility of updating variable
+    - (ateeq) [AviSynthWindow] Remember current frame unless loading a new video
+    - (ateeq) [VideoPlayer] Add startFrame parameter to loadVideo to allow starting with specific frame
+    - (ateeq) [SettingsForm] Add missing clearDefaultOutputDir EventHandler link
+    - (ateeq) [AutoEncodeWindow] Change muxedOutput to FileBar
+    - (ateeq) [FileBar] Set File Dialog InitialDirectory to where current Filename is located
+    - (ateeq) [JobControl] Allow dependent jobs to run on JobStatus.SKIP
+    - (ateeq) [VideoPlayer] Help C# with memory management by disposing bitmap as soon as we're finished with it
+    - (ateeq) [JobControl] Remove job from parent/required job's EnabledJobs list (fixes #2124850)
+    - (ateeq) [AviSynthWindow] Delay OpenScript until ASW is closed to prevent ARChooser race condition with VideoPlayer
+    - (ateeq) [ARChooser] Fix to keep user selected ARs
+
 0.3.0.3006
     - (ateeq) [DAR] Alternative SAR fraction calculations for slightly better accuracy
     - (ateeq) (AdaptiveMuxer) Allow splitting to same container with Adaptive Muxer
