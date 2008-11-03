@@ -56,7 +56,7 @@ namespace MeGUI
             }
         }
         int NewadaptiveBFrames, nbRefFrames, alphaDeblock, betaDeblock, subPelRefinement, maxQuantDelta, tempQuantBlur, 
-			bframePredictionMode, vbvBufferSize, vbvMaxBitrate, meType, meRange, minGOPSize, 
+			bframePredictionMode, vbvBufferSize, vbvMaxBitrate, meType, meRange, minGOPSize, macroBlockOptions,
 			quantizerMatrixType, profile, x264Trellis, level, noiseReduction, deadZoneInter, deadZoneIntra, AQMode;
 		decimal ipFactor, pbFactor, chromaQPOffset, vbvInitialBuffer, bitrateVariance, quantCompression, 
 			tempComplexityBlur, tempQuanBlurCC, scdSensitivity, bframeBias, quantizerCrf, AQStrength, psyRDO, psyTrellis;
@@ -92,6 +92,7 @@ namespace MeGUI
 			subPelRefinement = 5;
 			psyRDO = new decimal(1.0);
             psyTrellis = new decimal(0.0);
+            macroBlockOptions = 2;
             chromaME = true;
 			p8x8mv = true;
 			b8x8mv = true;
@@ -333,7 +334,12 @@ namespace MeGUI
 			get {return chromaME;}
 			set {chromaME = value;}
 		}
-		public bool P8x8mv
+        public int MacroBlockOptions
+        {
+            get { return macroBlockOptions; }
+            set { macroBlockOptions = value; }
+        }
+        public bool P8x8mv
 		{
 			get {return p8x8mv;}
 			set {p8x8mv = value;}

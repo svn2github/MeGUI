@@ -507,6 +507,7 @@ namespace MeGUI.packages.video.x264
                 xs.WeightedBPrediction = x264WeightedBPrediction.Checked;
                 xs.ChromaME = this.x264ChromaMe.Checked;
                 xs.X264Trellis = trellis.SelectedIndex;
+                xs.MacroBlockOptions = macroblockOptions.SelectedIndex; 
                 xs.P8x8mv = x264P8x8mv.Checked;
                 xs.B8x8mv = x264B8x8mv.Checked;
                 xs.I4x4mv = x264I4x4mv.Checked;
@@ -585,12 +586,16 @@ namespace MeGUI.packages.video.x264
                 PsyRD.Value = xs.PsyRDO;
                 trellis.SelectedIndex = xs.X264Trellis;
                 PsyTrellis.Value = xs.PsyTrellis;
-                adaptiveDCT.Checked = xs.AdaptiveDCT;
-                x264P8x8mv.Checked = xs.P8x8mv;
-                x264B8x8mv.Checked = xs.B8x8mv;
-                x264I4x4mv.Checked = xs.I4x4mv;
-                x264I8x8mv.Checked = xs.I8x8mv;
-                x264P4x4mv.Checked = xs.P4x4mv;
+                macroblockOptions.SelectedIndex = xs.MacroBlockOptions;
+                if (xs.MacroBlockOptions == 2)
+                {
+                    adaptiveDCT.Checked = xs.AdaptiveDCT;
+                    x264P8x8mv.Checked = xs.P8x8mv;
+                    x264B8x8mv.Checked = xs.B8x8mv;
+                    x264I4x4mv.Checked = xs.I4x4mv;
+                    x264I8x8mv.Checked = xs.I8x8mv;
+                    x264P4x4mv.Checked = xs.P4x4mv;
+                }
                 x264MinimimQuantizer.Value = xs.MinQuantizer;
                 x264MaximumQuantizer.Value = xs.MaxQuantizer;
                 x264MaxQuantDelta.Value = xs.MaxQuantDelta;
