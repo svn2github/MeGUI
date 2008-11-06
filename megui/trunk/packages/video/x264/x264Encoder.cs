@@ -168,7 +168,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             if (xs.Deblock) // deblocker active, add options
             {
                 if (xs.AlphaDeblock != 0 || xs.BetaDeblock != 0) // 0 is default value
-                    sb.Append("--filter " + xs.AlphaDeblock + ":" + xs.BetaDeblock + " ");
+                    sb.Append("--deblock " + xs.AlphaDeblock + ":" + xs.BetaDeblock + " ");
             }
             else // no deblocking
                 sb.Append("--nf ");
