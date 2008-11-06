@@ -1553,6 +1553,8 @@ namespace MeGUI
 					this.tvTypeLabel.Text = "NTSC";
                 horizontalResolution.Maximum = file.Info.Width;
                 verticalResolution.Maximum = file.Info.Height;
+                horizontalResolution.Value = file.Info.Width;
+                verticalResolution.Value = file.Info.Height;
                 arChooser.Value = file.Info.DAR;
 
                 cropLeft.Maximum = cropRight.Maximum = file.Info.Width / 2;
