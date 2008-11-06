@@ -1,3 +1,9 @@
+0.3.0.3008
+    - (sharktooth) [AviSynthWindow.cs] Default resize values now equal to the source file resolution values.
+    - (sharktooth) [x264Encoder.cs] --filter -> --deblock
+    - (ateeq) [x264Settings] Add MacroBlockOptions
+    - (ateeq) [x264ConfigurationPanel] set/get MacroBlockOptions to/from profiles
+
 0.3.0.3007
     - (ateeq) [x264ConfigurationPanel] set updating to avoid triggering spurious events during x264 profile switching
     - (ateeq) [VideoConfigurationPanel] Change visibility of updating variable
