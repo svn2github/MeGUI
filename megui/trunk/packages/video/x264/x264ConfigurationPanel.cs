@@ -63,18 +63,31 @@ namespace MeGUI.packages.video.x264
         #region dropdowns
         private void doMacroBlockAdjustments()
         {
+            bool enableOptions = (macroblockOptions.SelectedIndex == 2); // custom
+            x264I4x4mv.Enabled = enableOptions;
+            x264P4x4mv.Enabled = enableOptions;
+            x264P8x8mv.Enabled = enableOptions;
+            x264B8x8mv.Enabled = enableOptions;
+            x264I8x8mv.Enabled = enableOptions;
+            adaptiveDCT.Enabled = enableOptions;
+
+            if (macroblockOptions.SelectedIndex == 1) // none
+            {
+                x264I4x4mv.Checked = false;
+                x264P4x4mv.Checked = false;
+                x264P8x8mv.Checked = false;
+                x264B8x8mv.Checked = false;
+                x264I8x8mv.Checked = false;
+                adaptiveDCT.Checked = false;
+                return;
+            }
+
             if (macroblockOptions.SelectedIndex == 0) // all
             {
                 x264P8x8mv.Checked = true;
-                x264P8x8mv.Enabled = false;
                 x264I4x4mv.Checked = true;
-                x264I4x4mv.Enabled = false;
                 x264P4x4mv.Checked = true;
-                x264P4x4mv.Enabled = false;
                 x264B8x8mv.Checked = true;
-                x264B8x8mv.Enabled = false;
-                adaptiveDCT.Enabled = false;
-                x264I8x8mv.Enabled = false;
 
                 if (avcProfile.SelectedIndex == 2)
                 {
@@ -86,34 +99,14 @@ namespace MeGUI.packages.video.x264
                     adaptiveDCT.Checked = false;
                     x264I8x8mv.Checked = false;
                 }
-            }
-            else if (macroblockOptions.SelectedIndex == 1) // none
-            {
-                x264I4x4mv.Checked = false;
-                x264I4x4mv.Enabled = false;
-                x264P4x4mv.Checked = false;
-                x264P4x4mv.Enabled = false;
-                x264P8x8mv.Checked = false;
-                x264P8x8mv.Enabled = false;
-                x264B8x8mv.Checked = false;
-                x264B8x8mv.Enabled = false;
-                x264I8x8mv.Checked = false;
-                x264I8x8mv.Enabled = false;
-                adaptiveDCT.Checked = false;
-                adaptiveDCT.Enabled = false;
+                   
             }
             else if (macroblockOptions.SelectedIndex == 2) // custom
             {
-                x264I4x4mv.Enabled = true;
-                x264P8x8mv.Enabled = true;
-                x264B8x8mv.Enabled = true;
-
                 if (avcProfile.SelectedIndex == 2)
                 {
-                    adaptiveDCT.Enabled = true;
                     if (adaptiveDCT.Checked)
                     {
-                        x264I8x8mv.Enabled = true;
                         x264I8x8mv.Checked = true;
                     }
                     else
@@ -130,15 +123,17 @@ namespace MeGUI.packages.video.x264
                     x264I8x8mv.Checked = false;
                 }
 
-                if (!this.x264P8x8mv.Checked) // p8x8 requires p4x4
+                if (!this.x264P8x8mv.Checked) // p4x4 requires p8x8 
                 {
                     this.x264P4x4mv.Checked = false;
                     this.x264P4x4mv.Enabled = false;
                 }
-                else
-                {
-                    this.x264P4x4mv.Enabled = true;
-                }
+            }
+            if (avcLevel.SelectedIndex > 7 && x264NumberOfBFrames.Value > 0   // Level 3.0
+               || avcLevel.SelectedIndex > 8)   // Level 3.1
+            {
+                x264P4x4mv.Enabled = false;
+                x264P4x4mv.Checked = false;
             }
         }
         private void doTrellisAdjustments()
@@ -412,6 +407,8 @@ namespace MeGUI.packages.video.x264
             doEncodingModeAdjustments();
             doCheckBoxAdjustments();
             doTrellisAdjustments();
+            if (macroblockOptions.SelectedIndex==0) // All
+                doMacroBlockAdjustments();
             doAVCLevelAdjustments();
             x264DialogTriStateAdjustment();
             doMacroBlockAdjustments();
