@@ -145,7 +145,7 @@ namespace MeGUI
 			this.DenoiseMethod = 0; // UnDot
 			this.Deinterlace = false;
 			this.Denoise = false;
-            this.resize = true;
+            this.resize = false;
 			this.IVTC = false;
 			this.MPEG2Deblock = false;
 			this.ColourCorrect = true;

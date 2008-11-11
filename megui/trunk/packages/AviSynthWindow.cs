@@ -417,8 +417,6 @@ namespace MeGUI
             // resize
             // 
             this.resize.AutoSize = true;
-            this.resize.Checked = true;
-            this.resize.CheckState = System.Windows.Forms.CheckState.Checked;
             this.resize.Location = new System.Drawing.Point(11, 80);
             this.resize.Name = "resize";
             this.resize.Size = new System.Drawing.Size(57, 17);
@@ -429,13 +427,11 @@ namespace MeGUI
             // 
             // suggestResolution
             // 
-            this.suggestResolution.Checked = true;
-            this.suggestResolution.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.suggestResolution.Location = new System.Drawing.Point(286, 80);
+            this.suggestResolution.Location = new System.Drawing.Point(238, 80);
             this.suggestResolution.Name = "suggestResolution";
-            this.suggestResolution.Size = new System.Drawing.Size(120, 17);
+            this.suggestResolution.Size = new System.Drawing.Size(168, 17);
             this.suggestResolution.TabIndex = 8;
-            this.suggestResolution.Text = "Suggest Resolution";
+            this.suggestResolution.Text = "Suggest Resolution (mod16)";
             this.suggestResolution.CheckedChanged += new System.EventHandler(this.suggestResolution_CheckedChanged);
             // 
             // cropLeft
@@ -534,19 +530,20 @@ namespace MeGUI
             // 
             // verticalResolution
             // 
+            this.verticalResolution.Enabled = false;
             this.verticalResolution.Increment = new decimal(new int[] {
             16,
             0,
             0,
             0});
-            this.verticalResolution.Location = new System.Drawing.Point(192, 78);
+            this.verticalResolution.Location = new System.Drawing.Point(168, 79);
             this.verticalResolution.Maximum = new decimal(new int[] {
             1200,
             0,
             0,
             0});
             this.verticalResolution.Name = "verticalResolution";
-            this.verticalResolution.Size = new System.Drawing.Size(56, 21);
+            this.verticalResolution.Size = new System.Drawing.Size(48, 21);
             this.verticalResolution.TabIndex = 1;
             this.verticalResolution.Value = new decimal(new int[] {
             272,
@@ -557,19 +554,20 @@ namespace MeGUI
             // 
             // horizontalResolution
             // 
+            this.horizontalResolution.Enabled = false;
             this.horizontalResolution.Increment = new decimal(new int[] {
             16,
             0,
             0,
             0});
-            this.horizontalResolution.Location = new System.Drawing.Point(130, 78);
+            this.horizontalResolution.Location = new System.Drawing.Point(114, 79);
             this.horizontalResolution.Maximum = new decimal(new int[] {
             1920,
             0,
             0,
             0});
             this.horizontalResolution.Name = "horizontalResolution";
-            this.horizontalResolution.Size = new System.Drawing.Size(56, 21);
+            this.horizontalResolution.Size = new System.Drawing.Size(48, 21);
             this.horizontalResolution.TabIndex = 0;
             this.horizontalResolution.Value = new decimal(new int[] {
             640,
@@ -656,7 +654,7 @@ namespace MeGUI
             this.videoOutput.Filter = "AVI Synth Scripts|*.avs";
             this.videoOutput.FilterIndex = 0;
             this.videoOutput.FolderMode = false;
-            this.videoOutput.Location = new System.Drawing.Point(96, 16);
+            this.videoOutput.Location = new System.Drawing.Point(96, 17);
             this.videoOutput.Name = "videoOutput";
             this.videoOutput.ReadOnly = true;
             this.videoOutput.SaveMode = true;
@@ -1062,9 +1060,9 @@ namespace MeGUI
             // openDLLButton
             // 
             this.openDLLButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.openDLLButton.Location = new System.Drawing.Point(385, 382);
+            this.openDLLButton.Location = new System.Drawing.Point(385, 387);
             this.openDLLButton.Name = "openDLLButton";
-            this.openDLLButton.Size = new System.Drawing.Size(24, 23);
+            this.openDLLButton.Size = new System.Drawing.Size(24, 21);
             this.openDLLButton.TabIndex = 3;
             this.openDLLButton.Text = "...";
             this.openDLLButton.Click += new System.EventHandler(this.openDLLButton_Click);
@@ -1073,7 +1071,7 @@ namespace MeGUI
             // 
             this.dllPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.dllPath.Location = new System.Drawing.Point(80, 382);
+            this.dllPath.Location = new System.Drawing.Point(80, 387);
             this.dllPath.Name = "dllPath";
             this.dllPath.ReadOnly = true;
             this.dllPath.Size = new System.Drawing.Size(291, 21);
@@ -1082,7 +1080,7 @@ namespace MeGUI
             // label1
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.label1.Location = new System.Drawing.Point(8, 385);
+            this.label1.Location = new System.Drawing.Point(8, 390);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(66, 13);
             this.label1.TabIndex = 1;
@@ -1097,7 +1095,7 @@ namespace MeGUI
             this.avisynthScript.Multiline = true;
             this.avisynthScript.Name = "avisynthScript";
             this.avisynthScript.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.avisynthScript.Size = new System.Drawing.Size(401, 368);
+            this.avisynthScript.Size = new System.Drawing.Size(401, 373);
             this.avisynthScript.TabIndex = 0;
             // 
             // saveAvisynthScriptDialog
@@ -1559,8 +1557,10 @@ namespace MeGUI
 
                 cropLeft.Maximum = cropRight.Maximum = file.Info.Width / 2;
                 cropTop.Maximum = cropBottom.Maximum = file.Info.Height / 2;
-                if (resize.Enabled && resize.Checked)
-                    suggestResolution.Checked = true;
+                /// Commented out to ensure to keep the source file resolution when opening it
+                /// if (resize.Enabled && resize.Checked)
+                ///    suggestResolution.Checked = true;
+                /// --------------------------------------------------------------------------
 				this.showScript();
 			}
 		}
