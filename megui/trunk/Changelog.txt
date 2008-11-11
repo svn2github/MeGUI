@@ -1,3 +1,7 @@
+0.3.0.3009
+    - (sharktooth) [AVSCreator] Resize filter now disabled by default. AVS presets settings will not be overridden though.
+    - (ateeq) [x264ConfigurationPanel] Fix doMacroBlockAdjustments for P4x4 compliance at Level 3+ when All option is selected.
+
 0.3.0.3008
     - (sharktooth) [AviSynthWindow.cs] Default resize values now equal to the source file resolution values.
     - (sharktooth) [x264Encoder.cs] --filter -> --deblock
