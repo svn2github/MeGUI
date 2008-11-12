@@ -129,8 +129,8 @@ namespace MeGUI.packages.video.x264
                     this.x264P4x4mv.Enabled = false;
                 }
             }
-            if (avcLevel.SelectedIndex > 7 && x264NumberOfBFrames.Value > 0   // Level 3.0
-               || avcLevel.SelectedIndex > 8)   // Level 3.1
+            if (avcLevel.SelectedIndex == 7 && x264NumberOfBFrames.Value > 0   // Level 3.0
+               || avcLevel.SelectedIndex >= 8 && avcLevel.SelectedIndex != 15)   // Level 3.1 - 14
             {
                 x264P4x4mv.Enabled = false;
                 x264P4x4mv.Checked = false;
