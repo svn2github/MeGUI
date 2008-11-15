@@ -755,9 +755,6 @@
     <Compile Include="BitrateCalculator.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CropDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="DeinterlaceFilter.cs" />
     <Compile Include="DirectShow.cs" />
     <Compile Include="hfyuSettings.cs" />
@@ -911,10 +908,6 @@
     <EmbeddedResource Include="core\gui\ZonesWindow.resx">
       <DependentUpon>ZonesWindow.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="CropDialog.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>CropDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="packages\audio\aften\AftenConfigurationPanel.resx">
       <SubType>Designer</SubType>
