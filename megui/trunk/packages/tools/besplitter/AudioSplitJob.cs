@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Text;
 
@@ -34,6 +35,7 @@ namespace MeGUI.packages.tools.besplitter
         public string generateSplitCommandline()
         {
             StringBuilder sb = new StringBuilder();
+            CultureInfo ci = new CultureInfo("en-us");
 
             sb.AppendFormat("-core( -input \"{0}\" -prefix \"{1}\" -type {2} -a )", Input,
                 Output, Path.GetExtension(Input).Substring(1));
@@ -42,7 +44,7 @@ namespace MeGUI.packages.tools.besplitter
             {
                 double start = ((double)s.startFrame) / c.Framerate;
                 double end = ((double)s.endFrame) / c.Framerate;
-                sb.AppendFormat("{0} {1} ", start, end);
+                sb.AppendFormat("{0} {1} ", start.ToString(ci), end.ToString(ci));
             }
             sb.Append(")");
 
