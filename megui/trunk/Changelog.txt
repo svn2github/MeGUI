@@ -1,9 +1,17 @@
+0.3.0.3010
+    - (kurtnoise) removed CropDialog Form from projects files. This is not used anyway...
+    - (kurtnoise) revert rev805...shame on me (#2231667).
+    - (kurtnoise) [BeSplitter] one frame is missing for end value (#2283781)
+    - (kurtnoise) [BeSplitter] use dot instead of comma for start & end values (#2283781)
+    - (kurtnoise) updated MediaInfo library and its wrapper to the latest release (0.7.7.8)
+    - (ateeq) [x264ConfigurationPanel] Fix to correctly apply last P4x4 change to level 3.1 and unrestricted
+
 0.3.0.3009
-    - (sharktooth) [AVSCreator] Resize filter now disabled by default. AVS presets settings will not be overridden though.
-    - (ateeq) [x264ConfigurationPanel] Fix doMacroBlockAdjustments for P4x4 compliance at Level 3+ when All option is selected.
+    - (sharktooth) [AVSCreator] Resize filter now disabled by default. AVS presets settings will not be overridden though
+    - (ateeq) [x264ConfigurationPanel] Fix doMacroBlockAdjustments for P4x4 compliance at Level 3+ when All option is selected
 
 0.3.0.3008
-    - (sharktooth) [AviSynthWindow.cs] Default resize values now equal to the source file resolution values.
+    - (sharktooth) [AviSynthWindow.cs] Default resize values now equal to the source file resolution values
     - (sharktooth) [x264Encoder.cs] --filter -> --deblock
     - (ateeq) [x264Settings] Add MacroBlockOptions
     - (ateeq) [x264ConfigurationPanel] set/get MacroBlockOptions to/from profiles
