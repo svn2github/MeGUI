@@ -331,7 +331,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                 sb.Append("--output " + "\"" + output + "\" ");
             sb.Append("\"" + input + "\" ");
             if (!xs.CustomEncoderOptions.Equals("")) // add custom encoder options
-                sb.Append(xs.CustomEncoderOptions.Replace(",","."));
+                sb.Append(xs.CustomEncoderOptions);
             return sb.ToString();
         }
 
