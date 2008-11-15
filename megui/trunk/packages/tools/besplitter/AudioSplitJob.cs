@@ -43,7 +43,7 @@ namespace MeGUI.packages.tools.besplitter
             foreach (CutSection s in c.AllCuts)
             {
                 double start = ((double)s.startFrame) / c.Framerate;
-                double end = ((double)s.endFrame) / c.Framerate;
+                double end = ((double)(s.endFrame + 1)) / c.Framerate;
                 sb.AppendFormat("{0} {1} ", start.ToString(ci), end.ToString(ci));
             }
             sb.Append(")");
