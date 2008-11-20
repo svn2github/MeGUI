@@ -222,14 +222,11 @@ namespace MeGUI
                     // DGIndex expects audio index not ID for TS
                     ati.ContainerType = info.General[0].Format;
                     ati.Index = counter;
-                    // the MediaInfo Audio ID is hex for MPEG-PS but decimal for MPEG-TS
-                    if (info.General[0].Format == "MPEG-TS")
-                        ati.TrackID = Int32.Parse(atrack.ID);
-                    else if (info.General[0].Format == "CDXA/MPEG-PS")
+                    if (info.General[0].Format == "CDXA/MPEG-PS")
                         // MediaInfo doesn't give TrackID for VCD, specs indicate only MP1L2 is supported
                         ati.TrackID = (0xC0 + counter);
                     else if (atrack.ID != "0")
-                        ati.TrackIDx = atrack.ID;
+                        ati.TrackID = Int32.Parse(atrack.ID);
                     else
                         // MediaInfo failed to get ID try guessing based on codec
                         switch (atrack.Codec.Substring(0,3))
