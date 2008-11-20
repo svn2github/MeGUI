@@ -50,7 +50,9 @@ namespace MeGUI
         [EnumTitle("Spline16 (Neutral)", "Spline16Resize({0},{1})")]
         Spline16,
         [EnumTitle("Spline36 (Neutral)", "Spline36Resize({0},{1})")]
-        Spline32
+        Spline32,
+        [EnumTitle("Spline64 (Sharp)", "Spline64Resize({0},{1})")]
+        Spline64
 
     }
 
