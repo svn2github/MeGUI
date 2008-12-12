@@ -432,6 +432,7 @@ namespace MeGUI
             supportedVideoCodecs.Add(VideoCodec.ASP);
             supportedVideoCodecs.Add(VideoCodec.AVC);
             supportedAudioCodecs.Add(AudioCodec.AAC);
+            supportedAudioCodecs.Add(AudioCodec.AC3);
             supportedAudioCodecs.Add(AudioCodec.MP3);
             supportedSubtitleTypes.Add(SubtitleType.SUBRIP);
             supportedSubtitleTypes.Add(SubtitleType.VOBSUB);
