@@ -152,7 +152,7 @@ namespace MeGUI
                     }
                     else
                     {
-                        inputLine = "DirectShowSource(\"" + input + "\"" + ((fps > 0) ? ",fps=" + fps.ToString(new CultureInfo("en-us")) : string.Empty) + ",audio=false)";
+                        inputLine = "DirectShowSource(\"" + input + "\"" + ((fps > 0) ? ", fps=" + fps.ToString("F3", new CultureInfo("en-us")) : string.Empty) + ", audio=false)";
                         if (flipVertical)
                             inputLine = inputLine + "\r\nFlipVertical()";
                     }
