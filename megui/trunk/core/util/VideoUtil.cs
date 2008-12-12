@@ -234,6 +234,7 @@ namespace MeGUI
                             case "AC3": ati.TrackID = (0x80 + counter); break;
                             case "PCM": ati.TrackID = (0xA0 + counter); break;
                             case "MPA": ati.TrackID = (0xC0 + counter); break;
+                            case "DTS": ati.TrackID = (0x88 + counter); break;
                         }
                     ati.Type = atrack.CodecString;
                     ati.NbChannels = atrack.ChannelsString;
