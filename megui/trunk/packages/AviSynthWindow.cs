@@ -1334,9 +1334,11 @@ namespace MeGUI
 		{
 			try
 			{
-				StreamWriter sw = new StreamWriter(path);
-				sw.Write(avisynthScript.Text);
-				sw.Close();
+				using (StreamWriter sw = new StreamWriter(path, false, Encoding.Default))
+                {
+				    sw.Write(avisynthScript.Text);
+				    sw.Close();
+                }
 			}
 			catch (IOException i)
 			{
