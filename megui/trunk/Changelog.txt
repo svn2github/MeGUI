@@ -1,3 +1,12 @@
+0.3.0.3012
+    - (kurtnoise) enable SAR in command lines even if the video preview is disabled.
+    - (kurtnoise) [MuxProvider] add also AC3 streams as supported audio codec for the mp4 muxer.
+    - (kurtnoise) [ScriptServer] format fps value for DSS (#2320136)
+    - (kurtnoise) [VideoUtil] add DTS case for getSourceMediaInfo()
+    - (kurtnoise) [MuxProvider] add AC3 streams support for the mp4 muxer. Requires MP4Box 0.4.5 or higher...
+    - (kurtnoise) [AviSynthWindow] use the default Encoding Text System to write the avs script (#2306045).
+    - (kurtnoise) update MediaInfo and its wrapper to the last release (0.7.8.0).
+
 0.3.0.3011
     - (ateeq) [VideoUtil] MediaInfo Track ID has changed to decimal for all tracks
     - (ateeq) [ScriptServer] Add Spline64Resize option
