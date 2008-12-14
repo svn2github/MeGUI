@@ -235,6 +235,13 @@ namespace MeGUI
 
             if (mainForm.Settings.AutoOpenScript)
                 openAvisynthScript(fileName);
+            else
+            {
+                using (AvsFile avi = AvsFile.OpenScriptFile(fileName))
+                {
+                    info.DAR = avi.Info.DAR;
+                }
+            }
             string filePath;
             if (string.IsNullOrEmpty(filePath = mainForm.Settings.DefaultOutputDir))
                     filePath = Path.GetDirectoryName(fileName);

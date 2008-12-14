@@ -2176,7 +2176,7 @@ namespace MeGUI
                     settings.AfterEncoding = AfterEncoding.RunCommand;
                     settings.AfterEncodingCommand = command.Text;
                 }
-				settings.AutoOpenScript = true;
+                settings.AutoOpenScript = openScript.Checked;
 				settings.DeleteCompletedJobs = deleteCompletedJobs.Checked;
 				settings.DeleteIntermediateFiles = deleteIntermediateFiles.Checked;
 				settings.DeleteAbortedOutput = deleteAbortedOutput.Checked;
@@ -2241,8 +2241,7 @@ namespace MeGUI
                 runCommand.Checked = settings.AfterEncoding == AfterEncoding.RunCommand;
                 command.Text = settings.AfterEncodingCommand;
 				deleteCompletedJobs.Checked = settings.DeleteCompletedJobs;
-				openScript.Checked = true;
-                openScript.Enabled = false;
+                openScript.Checked = settings.AutoOpenScript;
 				deleteIntermediateFiles.Checked = settings.DeleteIntermediateFiles;
 				deleteAbortedOutput.Checked = settings.DeleteAbortedOutput;
 				openProgressWindow.Checked = settings.OpenProgressWindow;
