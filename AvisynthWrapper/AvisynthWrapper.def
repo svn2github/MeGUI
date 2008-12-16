@@ -1,0 +1,15 @@
+LIBRARY	AvisynthWrapper
+EXPORTS
+;	avs_create
+;	avs_destroy
+;	avs_getvframe
+;	avs_getaframe
+;	avs_close
+;	avs_getlasterror
+;	avs_eval
+	dimzon_avs_init
+	dimzon_avs_destroy
+	dimzon_avs_getlasterror
+	dimzon_avs_getvframe
+	dimzon_avs_getaframe
+	dimzon_avs_getintvariable	
