@@ -176,6 +176,7 @@ namespace MeGUI
         private GroupBox gbDefaultOutput;
         private Button clearDefaultOutputDir;
         private FileBar defaultOutputDir;
+        private CheckBox cbAddTimePos;
 
 		/// <summary>
 		/// Required designer variable.
@@ -252,6 +253,8 @@ namespace MeGUI
             this.openFolderDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.gbDefaultOutput = new System.Windows.Forms.GroupBox();
+            this.clearDefaultOutputDir = new System.Windows.Forms.Button();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.txt_httpproxyport = new System.Windows.Forms.TextBox();
@@ -351,9 +354,8 @@ namespace MeGUI
             this.audioExtLabel = new System.Windows.Forms.Label();
             this.videoExtLabel = new System.Windows.Forms.Label();
             this.autoEncodeDefaultsButton = new System.Windows.Forms.Button();
+            this.cbAddTimePos = new System.Windows.Forms.CheckBox();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
-            this.gbDefaultOutput = new System.Windows.Forms.GroupBox();
-            this.clearDefaultOutputDir = new System.Windows.Forms.Button();
             this.defaultOutputDir = new MeGUI.FileBar();
             groupBox1 = new System.Windows.Forms.GroupBox();
             groupBox1.SuspendLayout();
@@ -365,6 +367,7 @@ namespace MeGUI
             ((System.ComponentModel.ISupportInitialize)(this.forceFilmPercentage)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.gbDefaultOutput.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.gbVideoPreview.SuspendLayout();
@@ -379,7 +382,6 @@ namespace MeGUI
             this.tabPage5.SuspendLayout();
             this.tabPage6.SuspendLayout();
             this.tabPage7.SuspendLayout();
-            this.gbDefaultOutput.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -780,6 +782,26 @@ namespace MeGUI
             this.tabPage1.Text = "Main";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // gbDefaultOutput
+            // 
+            this.gbDefaultOutput.Controls.Add(this.clearDefaultOutputDir);
+            this.gbDefaultOutput.Controls.Add(this.defaultOutputDir);
+            this.gbDefaultOutput.Location = new System.Drawing.Point(2, 322);
+            this.gbDefaultOutput.Name = "gbDefaultOutput";
+            this.gbDefaultOutput.Size = new System.Drawing.Size(467, 57);
+            this.gbDefaultOutput.TabIndex = 7;
+            this.gbDefaultOutput.TabStop = false;
+            this.gbDefaultOutput.Text = "Default Output Directory";
+            // 
+            // clearDefaultOutputDir
+            // 
+            this.clearDefaultOutputDir.Location = new System.Drawing.Point(429, 21);
+            this.clearDefaultOutputDir.Name = "clearDefaultOutputDir";
+            this.clearDefaultOutputDir.Size = new System.Drawing.Size(24, 23);
+            this.clearDefaultOutputDir.TabIndex = 41;
+            this.clearDefaultOutputDir.Text = "x";
+            this.clearDefaultOutputDir.Click += new System.EventHandler(this.clearDefaultOutputDir_Click);
+            // 
             // tabPage3
             // 
             this.tabPage3.Controls.Add(this.groupBox2);
@@ -808,7 +830,7 @@ namespace MeGUI
             this.groupBox2.Controls.Add(this.cbx_usehttpproxy);
             this.groupBox2.Location = new System.Drawing.Point(227, 166);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(240, 165);
+            this.groupBox2.Size = new System.Drawing.Size(240, 191);
             this.groupBox2.TabIndex = 5;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Auto Update Http Proxy:";
@@ -895,10 +917,11 @@ namespace MeGUI
             // 
             // gbVideoPreview
             // 
+            this.gbVideoPreview.Controls.Add(this.cbAddTimePos);
             this.gbVideoPreview.Controls.Add(this.chAlwaysOnTop);
             this.gbVideoPreview.Location = new System.Drawing.Point(4, 288);
             this.gbVideoPreview.Name = "gbVideoPreview";
-            this.gbVideoPreview.Size = new System.Drawing.Size(217, 43);
+            this.gbVideoPreview.Size = new System.Drawing.Size(217, 69);
             this.gbVideoPreview.TabIndex = 4;
             this.gbVideoPreview.TabStop = false;
             this.gbVideoPreview.Text = "Video Preview";
@@ -1784,6 +1807,16 @@ namespace MeGUI
             this.autoEncodeDefaultsButton.Text = "Configure Defaults";
             this.autoEncodeDefaultsButton.UseVisualStyleBackColor = true;
             // 
+            // cbAddTimePos
+            // 
+            this.cbAddTimePos.AutoSize = true;
+            this.cbAddTimePos.Location = new System.Drawing.Point(8, 40);
+            this.cbAddTimePos.Name = "cbAddTimePos";
+            this.cbAddTimePos.Size = new System.Drawing.Size(110, 17);
+            this.cbAddTimePos.TabIndex = 1;
+            this.cbAddTimePos.Text = "Add Time Position";
+            this.cbAddTimePos.UseVisualStyleBackColor = true;
+            // 
             // helpButton1
             // 
             this.helpButton1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -1794,26 +1827,6 @@ namespace MeGUI
             this.helpButton1.Name = "helpButton1";
             this.helpButton1.Size = new System.Drawing.Size(47, 23);
             this.helpButton1.TabIndex = 1;
-            // 
-            // gbDefaultOutput
-            // 
-            this.gbDefaultOutput.Controls.Add(this.clearDefaultOutputDir);
-            this.gbDefaultOutput.Controls.Add(this.defaultOutputDir);
-            this.gbDefaultOutput.Location = new System.Drawing.Point(2, 322);
-            this.gbDefaultOutput.Name = "gbDefaultOutput";
-            this.gbDefaultOutput.Size = new System.Drawing.Size(467, 57);
-            this.gbDefaultOutput.TabIndex = 7;
-            this.gbDefaultOutput.TabStop = false;
-            this.gbDefaultOutput.Text = "Default Output Directory";
-            // 
-            // clearDefaultOutputDir
-            // 
-            this.clearDefaultOutputDir.Location = new System.Drawing.Point(429, 21);
-            this.clearDefaultOutputDir.Name = "clearDefaultOutputDir";
-            this.clearDefaultOutputDir.Size = new System.Drawing.Size(24, 23);
-            this.clearDefaultOutputDir.TabIndex = 41;
-            this.clearDefaultOutputDir.Text = "x";
-            this.clearDefaultOutputDir.Click += new System.EventHandler (this.clearDefaultOutputDir_Click);
             // 
             // defaultOutputDir
             // 
@@ -1859,6 +1872,7 @@ namespace MeGUI
             ((System.ComponentModel.ISupportInitialize)(this.forceFilmPercentage)).EndInit();
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
+            this.gbDefaultOutput.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
@@ -1882,7 +1896,6 @@ namespace MeGUI
             this.tabPage6.PerformLayout();
             this.tabPage7.ResumeLayout(false);
             this.tabPage7.PerformLayout();
-            this.gbDefaultOutput.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2197,7 +2210,8 @@ namespace MeGUI
                 settings.HttpProxyPort = txt_httpproxyport.Text;
                 settings.HttpProxyUid = txt_httpproxyuid.Text;
                 settings.HttpProxyPwd = txt_httpproxypwd.Text;
-                settings.DefaultOutputDir = defaultOutputDir.Filename; 
+                settings.DefaultOutputDir = defaultOutputDir.Filename;
+                settings.AddTimePosition = cbAddTimePos.Checked;
 				return settings;
 			}
 			set
@@ -2262,6 +2276,7 @@ namespace MeGUI
                 txt_httpproxyuid.Text = settings.HttpProxyUid;
                 txt_httpproxypwd.Text = settings.HttpProxyPwd;
                 defaultOutputDir.Filename = settings.DefaultOutputDir;
+                cbAddTimePos.Checked = settings.AddTimePosition;
 			}
 		}
 		#endregion

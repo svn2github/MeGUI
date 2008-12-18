@@ -41,7 +41,7 @@ namespace MeGUI
         private bool recalculateMainMovieBitrate, autoForceFilm, autoStartQueue, enableMP3inMP4, autoOpenScript,
                      overwriteStats, keep2of3passOutput, deleteCompletedJobs, deleteIntermediateFiles,
                      deleteAbortedOutput, openProgressWindow, useadvancedtooltips, freshOggEnc2, autoscroll, 
-                     alwaysOnTop, safeProfileAlteration, autoUpdate, usehttpproxy;
+                     alwaysOnTop, safeProfileAlteration, autoUpdate, usehttpproxy, addTimePosition;
         private ulong audioSamplesPerUpdate;
         private AfterEncoding afterEncoding;
         private decimal forceFilmThreshold, acceptableFPSError;
@@ -112,6 +112,7 @@ namespace MeGUI
             httpproxyuid = "";
             httpproxypwd = "";
             defaultOutputDir = "";
+            addTimePosition = false;
         }
         #region properties
         public string YadifPath
@@ -214,7 +215,14 @@ namespace MeGUI
             get { return alwaysOnTop; }
             set { alwaysOnTop = value; }
         }
-
+        ///<summary>
+        /// gets / sets whether megui add the Time Position or not to the Video Player
+        /// </summary>
+        public bool AddTimePosition
+        {
+            get { return addTimePosition; }
+            set { addTimePosition = value; }
+        }
         /// <summary>
         /// gets / sets the default output directory
         /// </summary>
