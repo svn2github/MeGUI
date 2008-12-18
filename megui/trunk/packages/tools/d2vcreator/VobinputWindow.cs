@@ -207,6 +207,8 @@ namespace MeGUI
             // 
             // loadOnComplete
             // 
+            this.loadOnComplete.Checked = true;
+            this.loadOnComplete.CheckState = System.Windows.Forms.CheckState.Checked;
             this.loadOnComplete.Location = new System.Drawing.Point(64, 340);
             this.loadOnComplete.Name = "loadOnComplete";
             this.loadOnComplete.Size = new System.Drawing.Size(144, 24);
@@ -228,10 +230,9 @@ namespace MeGUI
             // 
             // demuxAll
             // 
-            this.demuxAll.AutoSize = true;
-            this.demuxAll.Location = new System.Drawing.Point(142, 20);
+            this.demuxAll.Location = new System.Drawing.Point(142, 16);
             this.demuxAll.Name = "demuxAll";
-            this.demuxAll.Size = new System.Drawing.Size(106, 17);
+            this.demuxAll.Size = new System.Drawing.Size(179, 24);
             this.demuxAll.TabIndex = 15;
             this.demuxAll.TabStop = true;
             this.demuxAll.Text = "Demux All Tracks";
@@ -313,6 +314,8 @@ namespace MeGUI
             // 
             // closeOnQueue
             // 
+            this.closeOnQueue.Checked = true;
+            this.closeOnQueue.CheckState = System.Windows.Forms.CheckState.Checked;
             this.closeOnQueue.Location = new System.Drawing.Point(285, 341);
             this.closeOnQueue.Name = "closeOnQueue";
             this.closeOnQueue.Size = new System.Drawing.Size(72, 24);
