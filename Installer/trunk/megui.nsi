@@ -1,5 +1,7 @@
 !define NAME "MeGUI modern media encoder"
-!define OUTFILE "megui-install.exe"
+!define OUTFILE "megui-setup.exe"
+!define PRODUCT_VERSION "0.3.0.3012"
+!define PRODUCT_WEB_SITE "www.doom9.net"
 !define INPUT_PATH "..\..\megui\trunk\dist\bigdist\"
 !define FILE1 "AvisynthWrapper.dll"
 !define FILE2 "Changelog.txt"
@@ -130,9 +132,14 @@ Section "";
 
 	; sets update_cache registry entry
 	WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\MeGUI" "update_cache" "$INSTDIR\update_cache"
-	; write out uninstaller
+
 	WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "DisplayName" "${NAME} (remove only)"
 	WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "UninstallString" '"$INSTDIR\${UNINST_NAME}"'
+	WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "DisplayIcon" "$INSTDIR\megui.exe"
+	WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "DisplayVersion" "${PRODUCT_VERSION}"
+	WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "URLInfoAbout" "${PRODUCT_WEB_SITE}"
+       
+        ; write out uninstaller
 	WriteUninstaller "$INSTDIR\${UNINST_NAME}"
 
 SectionEnd ; end of default section
