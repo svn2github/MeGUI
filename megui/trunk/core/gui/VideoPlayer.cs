@@ -72,6 +72,9 @@ namespace MeGUI
         private PREVIEWTYPE viewerType;
         private static bool sizeLock; // recursion lock for resize event handler
         private int zoomWidth;
+        private long totalseconds;
+        private long currentseconds;
+        private MainForm mainForm = MainForm.Instance;
 
 		private System.Windows.Forms.Button playButton;
 		private System.Windows.Forms.Button nextFrameButton;
@@ -213,9 +216,10 @@ namespace MeGUI
                 doInitialAdjustment();
                 adjustSize();
 				positionSlider_Scroll(null, null); // makes the image visible
+                totalseconds = (int)(this.positionSlider.Maximum * file.Info.FPS);
 				this.Text = "Current position: " + this.positionSlider.Value + "/" + this.positionSlider.Maximum;
 				isRunning = false;
-                millisecondsPerFrame = (int)(1000 / file.Info.FPS);
+                millisecondsPerFrame = (int)(1000 / file.Info.FPS);                
 				return true;
 			}
 			return false;
@@ -742,25 +746,29 @@ namespace MeGUI
 		/// </summary>
 		private void setTitleText()
 		{
-			if (this.zoneStart > -1 || this.zoneEnd > -1)
-			{
-				this.Text = "Pos: " + positionSlider.Value + "/" + positionSlider.Maximum + " Zone start: ";
-				if (zoneStart > -1)
-					this.Text += zoneStart;
-				else
-					this.Text += "?";
-				this.Text += " end: ";
-				if (zoneEnd > -1)
-					this.Text += zoneEnd;
-				else
-					this.Text += "?";
-			}
-			else
-				this.Text = "Current position: " + this.positionSlider.Value + "/" + this.positionSlider.Maximum;
-			if (this.introEndFrame > -1)
+            totalseconds = (long)(this.positionSlider.Maximum / file.Info.FPS);
+            currentseconds = (long)(this.positionSlider.Value / file.Info.FPS);
+            if (this.zoneStart > -1 || this.zoneEnd > -1)
+            {
+                this.Text = "Pos: " + positionSlider.Value + "/" + positionSlider.Maximum + " Zone start: ";
+                if (zoneStart > -1)
+                    this.Text += zoneStart;
+                else
+                    this.Text += "?";
+                this.Text += " end: ";
+                if (zoneEnd > -1)
+                    this.Text += zoneEnd;
+                else
+                    this.Text += "?";
+            }
+            else
+                this.Text = "Current position: " + this.positionSlider.Value + "/" + this.positionSlider.Maximum;
+            if (this.introEndFrame > -1)
 				this.Text += " Intro end: " + this.introEndFrame;
 			if (this.creditsStartFrame > -1)
 				this.Text += " Credits start: " + this.creditsStartFrame;
+            if (mainForm.Settings.AddTimePosition)
+                this.Text += "   -   " + Util.TimeString(currentseconds) + "/" + Util.TimeString(totalseconds);
 		}
 		#endregion
 		#region cropping
