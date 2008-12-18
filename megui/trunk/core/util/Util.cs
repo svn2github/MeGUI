@@ -433,7 +433,34 @@ namespace MeGUI.core.util
             box.SelectedItem = sel;
         }
 
+        public static string TimeString(long seconds)
+        {
+            long sec;
+            long min;
+            long hrs;
 
+            sec = seconds;
+            hrs = (int)(sec / 3600);
+            min = (int)((sec / 60) - (hrs * 60));
+            sec = (int)(sec % 60);
+
+            string myTime;
+
+            if (sec == 60)
+            {
+                sec = 0;
+                min = min + 1;
+            }
+
+            if (min == 60)
+            {
+                min = 0;
+                hrs = hrs + 1;
+            }
+
+            myTime = string.Format("{0:00}:{1:00}:{2:00}", hrs, min, sec);
+            return myTime;
+        }
 
     }
 
