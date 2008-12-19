@@ -553,7 +553,6 @@
     </Compile>
     <Compile Include="packages\audio\waac\WinAmpAACSettings.cs" />
     <Compile Include="packages\audio\audx\AudXSettings.cs" />
-    <Compile Include="packages\AVCLevels.cs" />
     <Compile Include="packages\AviSynthJob.cs" />
     <Compile Include="packages\AviSynthProcessor.cs" />
     <Compile Include="packages\AviSynthSettings.cs" />
@@ -585,6 +584,7 @@
     <Compile Include="packages\tools\autoencode\AutoEncodeWindow.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="packages\tools\avclevelchecker\AVCLevels.cs" />
     <Compile Include="packages\tools\besplitter\AudioJoinJob.cs" />
     <Compile Include="packages\tools\besplitter\AudioSplitJob.cs" />
     <Compile Include="packages\tools\besplitter\Joiner.cs" />
