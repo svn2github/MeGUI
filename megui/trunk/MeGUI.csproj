@@ -600,6 +600,7 @@
     <Compile Include="packages\tools\calculator\AudioTrackSizeTab.Designer.cs">
       <DependentUpon>AudioTrackSizeTab.cs</DependentUpon>
     </Compile>
+    <Compile Include="packages\tools\calculator\BitrateCalculator.cs" />
     <Compile Include="packages\tools\calculator\Calculator.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -677,9 +678,6 @@
     <Compile Include="packages\video\xvid\XviDEncoder.cs" />
     <Compile Include="packages\video\xvid\xvidSettings.cs" />
     <Compile Include="AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="BitrateCalculator.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DeinterlaceFilter.cs" />
