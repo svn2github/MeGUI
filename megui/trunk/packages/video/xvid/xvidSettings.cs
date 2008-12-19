@@ -66,11 +66,10 @@ namespace MeGUI
         }
 
         private int motionSearchPrecision, vhqMode, minPQuant, maxPQuant, minBQuant, maxBQuant, bQuantRatio, bQuantOffset,
-            keyFrameBoost, keyframeThreshold, keyframeReduction, overflowControlStrength,
-            maxOverflowImprovement, maxOverflowDegradation, highBitrateDegradation, lowBitrateImprovement, reactionDelayFactor, averagingPeriod,
-            rateControlBuffer, frameDropRatio, vbvBuffer, vbvMaxRate, vbvPeakRate;
-        private bool packedBitstream, gmc, chromaMotion, closedGOP, vhqForBframes, adaptiveQuant,
-            greyscale, interlaced, bottomFieldFirst, lumiMasking;
+                    keyFrameBoost, keyframeThreshold, keyframeReduction, overflowControlStrength,
+                    maxOverflowImprovement, maxOverflowDegradation, highBitrateDegradation, lowBitrateImprovement, reactionDelayFactor, averagingPeriod,
+                    rateControlBuffer, frameDropRatio, vbvBuffer, vbvMaxRate, vbvPeakRate;
+        private bool packedBitstream, gmc, chromaMotion, closedGOP, vhqForBframes, adaptiveQuant, interlaced, bottomFieldFirst, lumiMasking;
         private decimal bframeThreshold, quantizer;
         private string customQuantizerMatrix;
         public override bool UsesSAR
@@ -121,7 +120,6 @@ namespace MeGUI
             adaptiveQuant = false;
             bframeThreshold = new decimal(0);
             interlaced = false;
-            greyscale = false;
             lumiMasking = false;
             frameDropRatio = 0;
             bottomFieldFirst = true;
@@ -301,11 +299,6 @@ namespace MeGUI
             get { return adaptiveQuant; }
             set { adaptiveQuant = value; }
         }
-        public bool Greyscale
-        {
-            get { return greyscale; }
-            set { greyscale = value; }
-        }
         public bool Interlaced
         {
             get { return interlaced; }
@@ -375,7 +368,6 @@ namespace MeGUI
                this.EncodingMode != otherSettings.EncodingMode ||
                this.FrameDropRatio != otherSettings.FrameDropRatio ||
                this.GMC != otherSettings.GMC ||
-               this.Greyscale != otherSettings.Greyscale ||
                this.HighBitrateDegradation != otherSettings.HighBitrateDegradation ||
                this.Interlaced != otherSettings.Interlaced ||
                this.KeyFrameBoost != otherSettings.KeyFrameBoost ||

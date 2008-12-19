@@ -209,7 +209,6 @@ namespace MeGUI.packages.video.xvid
                 xs.NbThreads = (int)nbThreads.Value;
                 xs.ChromaMotion = xvidChromaMotion.Checked;
                 xs.ClosedGOP = xvidClosedGop.Checked;
-                xs.Greyscale = xvidGreyScale.Checked;
                 xs.Interlaced = xvidInterlaced.Checked;
                 xs.MinQuantizer = (int)xvidMinIQuant.Value;
                 xs.MaxQuantizer = (int)xvidMaxIQuant.Value;
@@ -266,7 +265,6 @@ namespace MeGUI.packages.video.xvid
                 xvidGMC.Checked = xs.GMC;
                 xvidChromaMotion.Checked = xs.ChromaMotion;
                 xvidClosedGop.Checked = xs.ClosedGOP;
-                xvidGreyScale.Checked = xs.Greyscale;
                 xvidInterlaced.Checked = xs.Interlaced;
                 xvidMinIQuant.Value = xs.MinQuantizer;
                 xvidMaxIQuant.Value = xs.MaxQuantizer;

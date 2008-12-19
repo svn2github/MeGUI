@@ -160,8 +160,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "XviDEncoder");
                 else
                     sb.Append("2 ");
             }
-            if (xs.Greyscale)
-                sb.Append("-grey ");
             if (xs.LumiMasking)
                 sb.Append("-lumimasking ");
             if (!xs.Trellis)

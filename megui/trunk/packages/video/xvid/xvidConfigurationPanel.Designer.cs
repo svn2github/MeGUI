@@ -40,7 +40,6 @@ namespace MeGUI.packages.video.xvid
             this.xvidThreadsLabel = new System.Windows.Forms.Label();
             this.nbThreads = new System.Windows.Forms.NumericUpDown();
             this.xvidInterlaced = new System.Windows.Forms.CheckBox();
-            this.xvidGreyScale = new System.Windows.Forms.CheckBox();
             this.xvidTrellisQuant = new System.Windows.Forms.CheckBox();
             this.xvidAdaptiveQuant = new System.Windows.Forms.CheckBox();
             this.fourCCLabel = new System.Windows.Forms.Label();
@@ -199,7 +198,6 @@ namespace MeGUI.packages.video.xvid
             this.xvidOtherGroupBox.Controls.Add(this.xvidThreadsLabel);
             this.xvidOtherGroupBox.Controls.Add(this.nbThreads);
             this.xvidOtherGroupBox.Controls.Add(this.xvidInterlaced);
-            this.xvidOtherGroupBox.Controls.Add(this.xvidGreyScale);
             this.xvidOtherGroupBox.Controls.Add(this.xvidTrellisQuant);
             this.xvidOtherGroupBox.Controls.Add(this.xvidAdaptiveQuant);
             this.xvidOtherGroupBox.Controls.Add(this.fourCCLabel);
@@ -238,7 +236,7 @@ namespace MeGUI.packages.video.xvid
             // 
             // xvidPackedBitstream
             // 
-            this.xvidPackedBitstream.Location = new System.Drawing.Point(11, 110);
+            this.xvidPackedBitstream.Location = new System.Drawing.Point(11, 92);
             this.xvidPackedBitstream.Name = "xvidPackedBitstream";
             this.xvidPackedBitstream.Size = new System.Drawing.Size(16, 24);
             this.xvidPackedBitstream.TabIndex = 13;
@@ -246,7 +244,7 @@ namespace MeGUI.packages.video.xvid
             // 
             // xvidPackedBitstreamLabel
             // 
-            this.xvidPackedBitstreamLabel.Location = new System.Drawing.Point(27, 115);
+            this.xvidPackedBitstreamLabel.Location = new System.Drawing.Point(27, 97);
             this.xvidPackedBitstreamLabel.Name = "xvidPackedBitstreamLabel";
             this.xvidPackedBitstreamLabel.Size = new System.Drawing.Size(100, 23);
             this.xvidPackedBitstreamLabel.TabIndex = 12;
@@ -319,21 +317,12 @@ namespace MeGUI.packages.video.xvid
             // 
             // xvidInterlaced
             // 
-            this.xvidInterlaced.Location = new System.Drawing.Point(11, 88);
+            this.xvidInterlaced.Location = new System.Drawing.Point(11, 70);
             this.xvidInterlaced.Name = "xvidInterlaced";
             this.xvidInterlaced.Size = new System.Drawing.Size(104, 24);
             this.xvidInterlaced.TabIndex = 3;
             this.xvidInterlaced.Text = "Interlaced";
             this.xvidInterlaced.CheckedChanged += new System.EventHandler(this.updateEvent);
-            // 
-            // xvidGreyScale
-            // 
-            this.xvidGreyScale.Location = new System.Drawing.Point(11, 64);
-            this.xvidGreyScale.Name = "xvidGreyScale";
-            this.xvidGreyScale.Size = new System.Drawing.Size(104, 24);
-            this.xvidGreyScale.TabIndex = 2;
-            this.xvidGreyScale.Text = "Greyscale";
-            this.xvidGreyScale.CheckedChanged += new System.EventHandler(this.updateEvent);
             // 
             // xvidTrellisQuant
             // 
@@ -1388,7 +1377,6 @@ namespace MeGUI.packages.video.xvid
 
         private System.Windows.Forms.GroupBox xvidOtherGroupBox;
         private System.Windows.Forms.CheckBox xvidInterlaced;
-        private System.Windows.Forms.CheckBox xvidGreyScale;
         private System.Windows.Forms.CheckBox xvidTrellisQuant;
         private System.Windows.Forms.CheckBox xvidAdaptiveQuant;
         private System.Windows.Forms.Label fourCCLabel;
