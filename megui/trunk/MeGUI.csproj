@@ -564,9 +564,14 @@
     <Compile Include="packages\mux\mkv\MkvMergeMuxer.cs" />
     <Compile Include="packages\mux\mp4\MP4BoxMuxer.cs" />
     <Compile Include="packages\mux\Avc2AviMuxer.cs" />
+    <Compile Include="packages\reader\avi\AviReader.cs" />
+    <Compile Include="packages\reader\avs\AvsReader.cs">
+      <SubType>Code</SubType>
+    </Compile>    
     <Compile Include="packages\reader\d2v\d2vReader.cs" />
     <Compile Include="packages\reader\dvddecrypter\DVDD_File.cs" />
     <Compile Include="packages\reader\mediainfo\MediaInfoFile.cs" />
+    <Compile Include="packages\reader\video\VideoReader.cs" />    
     <Compile Include="packages\reader\vobsub\idxReader.cs" />    
     <Compile Include="packages\tools\autoencode\AutoEncodeDefaults.cs">
       <SubType>Form</SubType>
@@ -674,7 +679,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AviSynthAudioEncoder.cs" />
-    <Compile Include="AvsReader.cs" />
     <Compile Include="BitrateCalculator.cs">
       <SubType>Code</SubType>
     </Compile>
