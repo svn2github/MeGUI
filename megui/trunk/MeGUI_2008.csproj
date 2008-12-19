@@ -631,7 +631,6 @@
     </Compile>
     <Compile Include="packages\audio\waac\WinAmpAACSettings.cs" />
     <Compile Include="packages\audio\audx\AudXSettings.cs" />
-    <Compile Include="packages\mux\Avc2AviMuxer.cs" />
     <Compile Include="packages\AVCLevels.cs" />
     <Compile Include="packages\AviSynthJob.cs" />
     <Compile Include="packages\AviSynthProcessor.cs" />
@@ -640,7 +639,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="packages\AvisynthWrapper.cs" />
+    <Compile Include="packages\mux\avc2avi\Avc2AviMuxer.cs" />
     <Compile Include="packages\mux\avimuxgui\AMGMuxer.cs" />
+    <Compile Include="packages\mux\mencoder\MencoderMuxer.cs" />
     <Compile Include="packages\mux\mkv\MkvMergeMuxer.cs" />
     <Compile Include="packages\mux\mp4\MP4BoxMuxer.cs" />
     <Compile Include="packages\reader\avi\AviReader.cs" />
@@ -762,7 +763,6 @@
     <Compile Include="DirectShow.cs" />
     <Compile Include="hfyuSettings.cs" />
     <Compile Include="mencoderEncoder.cs" />
-    <Compile Include="MencoderMuxer.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
