@@ -556,6 +556,8 @@
     <Compile Include="core\util\BitrateCalculatorPreProcessor.cs" />
     <Compile Include="core\util\CustomUserSettings.cs" />
     <Compile Include="core\util\DAR.cs" />
+    <Compile Include="core\util\DeinterlaceFilter.cs" />
+    <Compile Include="core\util\DirectShow.cs" />
     <Compile Include="core\util\DragDropUtil.cs" />
     <Compile Include="core\util\EnumProxy.cs" />
     <Compile Include="core\util\Exceptions.cs" />
@@ -772,8 +774,6 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DeinterlaceFilter.cs" />
-    <Compile Include="DirectShow.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
