@@ -553,13 +553,6 @@
     </Compile>
     <Compile Include="packages\audio\waac\WinAmpAACSettings.cs" />
     <Compile Include="packages\audio\audx\AudXSettings.cs" />
-    <Compile Include="packages\AviSynthJob.cs" />
-    <Compile Include="packages\AviSynthProcessor.cs" />
-    <Compile Include="packages\AviSynthSettings.cs" />
-    <Compile Include="packages\AviSynthWindow.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="packages\AvisynthWrapper.cs" />
     <Compile Include="packages\mux\avc2avi\Avc2AviMuxer.cs" />
     <Compile Include="packages\mux\avimuxgui\AMGMuxer.cs" />
     <Compile Include="packages\mux\mencoder\MencoderMuxer.cs" />
@@ -585,6 +578,13 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="packages\tools\avclevelchecker\AVCLevels.cs" />
+    <Compile Include="packages\tools\avscreator\AviSynthJob.cs" />
+    <Compile Include="packages\tools\avscreator\AviSynthProcessor.cs" />
+    <Compile Include="packages\tools\avscreator\AviSynthSettings.cs" />
+    <Compile Include="packages\tools\avscreator\AviSynthWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="packages\tools\avscreator\AvisynthWrapper.cs" />
     <Compile Include="packages\tools\besplitter\AudioJoinJob.cs" />
     <Compile Include="packages\tools\besplitter\AudioSplitJob.cs" />
     <Compile Include="packages\tools\besplitter\Joiner.cs" />
@@ -874,16 +874,16 @@
       <SubType>Designer</SubType>
       <DependentUpon>WinAmpAACConfigurationPanel.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="packages\AviSynthWindow.resx">
-      <DependentUpon>AviSynthWindow.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="packages\tools\autoencode\AutoEncodeDefaults.resx">
       <DependentUpon>AutoEncodeDefaults.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="packages\tools\autoencode\AutoEncodeWindow.resx">
       <DependentUpon>AutoEncodeWindow.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="packages\tools\avscreator\AviSynthWindow.resx">
+      <DependentUpon>AviSynthWindow.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="packages\tools\besplitter\Besplitter.resx">
