@@ -492,6 +492,7 @@
     <Compile Include="packages\audio\aften\AftenConfigurationPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="packages\audio\AviSynthAudioEncoder.cs" />
     <Compile Include="packages\audio\aften\AftenConfigurationPanel.Designer.cs">
       <DependentUpon>AftenConfigurationPanel.cs</DependentUpon>
     </Compile>
@@ -678,7 +679,6 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="AviSynthAudioEncoder.cs" />
     <Compile Include="BitrateCalculator.cs">
       <SubType>Code</SubType>
     </Compile>
