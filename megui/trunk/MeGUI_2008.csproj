@@ -257,7 +257,11 @@
     <Content Include="Data\ContextHelp.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="MessageBoxExLib.dll" />
+    <Content Include="lib\AvisynthWrapper.dll" />
+    <Content Include="lib\ICSharpCode.SharpZipLib.dll" />
+    <Content Include="lib\MediaInfo.dll" />
+    <Content Include="lib\MediaInfoWrapper.dll" />
+    <Content Include="lib\MessageBoxExLib.dll" />
     <Compile Include="core\details\0_2_6_1017_jobloader\Job.cs" />
     <Compile Include="core\details\0_2_6_x_profileloader\Loader.cs" />
     <Compile Include="core\details\audio\AudioCodecSettings.cs" />
