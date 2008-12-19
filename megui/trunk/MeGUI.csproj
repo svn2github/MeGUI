@@ -176,10 +176,6 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="App.ico" />
-    <EmbeddedResource Include="Changelog.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>Changelog.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Changelog.txt" />
     <Content Include="Data\ContextHelp.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -195,12 +191,6 @@
       <DependentUpon>AudioConfigurationPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="core\details\audio\AudioJob.cs" />
-    <Compile Include="Changelog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Changelog.Designer.cs">
-      <DependentUpon>Changelog.cs</DependentUpon>
-    </Compile>
     <Compile Include="core\details\CleanupJob.cs" />
     <Compile Include="core\details\CodecManager.cs" />
     <Compile Include="core\details\CommandlineParser.cs" />
@@ -290,6 +280,12 @@
     </Compile>
     <Compile Include="core\gui\AviSynthProfileConfigPanel.Designer.cs">
       <DependentUpon>AviSynthProfileConfigPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="core\gui\Changelog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="core\gui\Changelog.Designer.cs">
+      <DependentUpon>Changelog.cs</DependentUpon>
     </Compile>
     <Compile Include="core\gui\ConfigableProfilesControl.cs">
       <SubType>UserControl</SubType>
@@ -729,6 +725,10 @@
     <EmbeddedResource Include="core\gui\AviSynthProfileConfigPanel.resx">
       <SubType>Designer</SubType>
       <DependentUpon>AviSynthProfileConfigPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="core\gui\Changelog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>Changelog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="core\gui\ConfigableProfilesControl.resx">
       <SubType>Designer</SubType>
