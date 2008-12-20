@@ -131,13 +131,36 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                 foreach (object o in settings.SubtitleStreams)
                 {
                     MuxStream stream = (MuxStream)o;
+                    List<SubtitleInfo> subTracks;
+                    idxReader.readFileProperties(stream.path, out subTracks);
                     int trackID = 0;
-                    if (!string.IsNullOrEmpty(stream.language))
-                        sb.Append(" --language 0:" + stream.language);
-                    if (!string.IsNullOrEmpty(stream.name))
-                        sb.Append(" --track-name \"" + trackID + ":" + stream.name + "\"");
+                    if (stream.path.ToLower().EndsWith(".idx"))
+                    {
+                        foreach (SubtitleInfo strack in subTracks)
+                        {
+                            sb.Append(" --language " + strack.Index.ToString() + ":" + strack.Name);
+                            if (!string.IsNullOrEmpty(stream.name))
+                                sb.Append(" --track-name \"" + strack.Index.ToString() + ":" + stream.name + "\"");
+                        }
+                        sb.Append(" -s ");
+                        foreach (SubtitleInfo strack in subTracks)
+                        {
+                            if (strack.Index > 0)
+                                sb.Append("," + strack.Index.ToString());
+                            else
+                                sb.Append(strack.Index.ToString());
+                        }
 
-                    sb.Append(" -s 0 -D -A \"" + stream.path + "\"");
+                        sb.Append(" -D -A \"" + stream.path + "\"");
+                    }
+                    else
+                    {
+                        if (!string.IsNullOrEmpty(stream.language))
+                             sb.Append(" --language " + trackID + ":" + stream.language);
+                        if (!string.IsNullOrEmpty(stream.name))
+                             sb.Append(" --track-name \"" + trackID + ":" + stream.name + "\"");
+                        sb.Append(" -s 0 -D -A \"" + stream.path + "\"");
+                    }
                 }
                 if (!string.IsNullOrEmpty(settings.ChapterFile)) // a chapter file is defined
                     sb.Append(" --chapters \"" + settings.ChapterFile + "\"");
