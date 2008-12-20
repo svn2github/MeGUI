@@ -51,26 +51,23 @@ namespace MeGUI
 		/// this method reads indexes and languages and store it internally, then 
 		/// closes the idx file again
 		/// </summary>
-        public void readFileProperties(string infoFile, out List<SubtitleInfo> subtitles)
+        public static void readFileProperties(string infoFile, out List<SubtitleInfo> subtitles)
         {
             subtitles = new List<SubtitleInfo>();
 
             try
             {
-                using (StreamReader sr = new StreamReader(fileName))
+                using (StreamReader sr = new StreamReader(infoFile))
                 {
                     string line = sr.ReadLine();
                     while ((line = sr.ReadLine()) != null)
                     {
-                        if (line.IndexOf("# VobSub index file, v7") != -1) // support only vobsub v7
+                        if (line.StartsWith("id")) // Language & Index values found
                         {
-                            if (line.IndexOf("id") != -1) // Language & Index values found
-                            {
-                                string lng = line.Substring(6, 2);
-                                int idx = Convert.ToInt32(line.Substring(17, 1));
-                                SubtitleInfo si = new SubtitleInfo(lng, idx);
-                                subtitles.Add(si);
-                            }
+                            string lng = line.Substring(4, 2);
+                            int idx = Convert.ToInt32(line.Substring(15, 1));
+                            SubtitleInfo si = new SubtitleInfo(lng, idx);
+                            subtitles.Add(si);
                         }
                     }
                 }
