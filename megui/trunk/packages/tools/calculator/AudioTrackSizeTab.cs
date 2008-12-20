@@ -29,6 +29,8 @@ using System.Windows.Forms;
 using MeGUI.core.details;
 using MeGUI.core.util;
 
+using MediaInfoWrapper;
+
 namespace MeGUI.packages.tools.calculator
 {
     public partial class AudioTrackSizeTab : UserControl
@@ -104,6 +106,21 @@ namespace MeGUI.packages.tools.calculator
             AudioType aud2Type = VideoUtil.guessAudioType(file);
             if (audio1Type.Items.Contains(aud2Type))
                 audio1Type.SelectedItem = aud2Type;
+
+            MediaInfo info;
+            try
+            {
+                info = new MediaInfo(file);
+                MediaInfoWrapper.AudioTrack atrack = info.Audio[0];
+                if (atrack.CodecString == "DTS")
+                {
+                    audio1Bitrate.Value = (Convert.ToInt32(atrack.BitRate) / 1000);
+                }
+            }
+            catch (Exception i)
+            {
+                MessageBox.Show("The following error ocurred when trying to get Media info for file " + file + "\r\n" + i.Message, "Error parsing mediainfo data", MessageBoxButtons.OK);                
+            }
 
         }
 
