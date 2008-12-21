@@ -252,6 +252,30 @@ namespace MeGUI
             }
         }
 
+        /// gets ID from a first video stream using MediaInfo
+        /// </summary>
+        /// <param name="infoFile">the file to be analyzed</param>
+        /// <returns>the video track ID found</returns>
+        public static int getIDFromFirstVideoStream(string fileName)
+        {
+            MediaInfo info;
+            int TrackID = 0;
+            try
+            {
+                info = new MediaInfo(fileName);
+                if (info.VideoCount >= 0)
+                {
+                    MediaInfoWrapper.VideoTrack vtrack = info.Video[0];
+                    TrackID = Int32.Parse(vtrack.ID);
+                }
+            }
+            catch (Exception i)
+            {
+                MessageBox.Show("The following error ocurred when trying to get Media info for file " + fileName + "\r\n" + i.Message, "Error parsing mediainfo data", MessageBoxButtons.OK);
+            }
+            return TrackID;
+        }
+
         /// <summary>
         /// gets basic information about a video source based on its DGindex generated log file
         /// </summary>
