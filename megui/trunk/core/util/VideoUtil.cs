@@ -276,6 +276,31 @@ namespace MeGUI
             return TrackID;
         }
 
+        /// gets ID from audio stream using MediaInfo
+        /// </summary>
+        /// <param name="infoFile">the file to be analyzed</param>
+        /// <param name="count">the counter</param>
+        /// <returns>the audio track ID found</returns>
+        public static int getIDFromAudioStream(string fileName, int count)
+        {
+            MediaInfo info;
+            int TrackID = 0;
+            try
+            {
+                info = new MediaInfo(fileName);
+                if (info.AudioCount >= 0)
+                {
+                    MediaInfoWrapper.AudioTrack atrack = info.Audio[count];
+                    TrackID = Int32.Parse(atrack.ID);
+                }
+            }
+            catch (Exception i)
+            {
+                MessageBox.Show("The following error ocurred when trying to get Media info for file " + fileName + "\r\n" + i.Message, "Error parsing mediainfo data", MessageBoxButtons.OK);
+            }
+            return TrackID;
+        }
+
         /// <summary>
         /// gets basic information about a video source based on its DGindex generated log file
         /// </summary>
