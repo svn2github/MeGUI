@@ -94,6 +94,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                 StringBuilder sb = new StringBuilder();
                 MuxSettings settings = job.Settings;
                 int trackID;
+                int count = 0;
                 
                 sb.Append("-o \"" + settings.MuxedOutput + "\"");
 
@@ -134,15 +135,15 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                     MuxStream stream = (MuxStream)o;
                     trackID = 0;
                     if (stream.path.ToLower().EndsWith(".mp4") || stream.path.ToLower().EndsWith(".m4a"))
-                        trackID = 1; // FIXME : not always the case. Sometimes we can have trackID >= 100. MediaInfo is able to retrieve the correct value.
+                        trackID = VideoUtil.getIDFromAudioStream(stream.path, count);
                     if (!string.IsNullOrEmpty(stream.language))
                         sb.Append(" --language " + trackID + ":" + stream.language);
                     if (!string.IsNullOrEmpty(stream.name))
                         sb.Append(" --track-name \"" + trackID + ":" + stream.name + "\"");
                     if (stream.delay != 0)
                         sb.AppendFormat(" --sync {0}:{1}ms", trackID, stream.delay);
-
                     sb.Append(" -a " + trackID + " -D -S \"" + stream.path + "\"");
+                    count++;
                 }
 
                 foreach (object o in settings.SubtitleStreams)

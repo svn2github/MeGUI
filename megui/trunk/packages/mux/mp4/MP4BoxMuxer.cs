@@ -202,6 +202,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                 MuxSettings settings = job.Settings;
                 CultureInfo ci = new CultureInfo("en-us");
                 StringBuilder sb = new StringBuilder();
+                int count = 0;
+
                 if (settings.VideoInput.Length > 0)
                 {
                     sb.Append("-add \"" + settings.VideoInput);
@@ -209,6 +211,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                     {
                         int trackID = VideoUtil.getIDFromFirstVideoStream(settings.VideoInput);
                         sb.Append("#trackID=" + trackID);
+                    }
+                    if (settings.Framerate.HasValue)
+                    {
+                        string fpsString = settings.Framerate.Value.ToString(ci);
+                        sb.Append(":fps=" + fpsString);
                     }
                     if (!settings.VideoName.Equals(""))
                         sb.Append(":name=" + settings.VideoName);
@@ -222,6 +229,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                         int trackID = VideoUtil.getIDFromFirstVideoStream(settings.MuxedInput);
                         sb.Append("#trackID=" + trackID);
                     }
+                    if (settings.Framerate.HasValue)
+                    {
+                        string fpsString = settings.Framerate.Value.ToString(ci);
+                        sb.Append(":fps=" + fpsString);
+                    }
                     if (!settings.VideoName.Equals(""))
                         sb.Append(":name=" + settings.VideoName);
                     sb.Append("\"");
@@ -230,6 +242,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                 {
                     MuxStream stream = (MuxStream)o;
                     sb.Append(" -add \"" + stream.path);
+                    if (stream.path.ToLower().EndsWith(".mp4") || stream.path.ToLower().EndsWith(".m4a"))
+                    {
+                        int trackID = VideoUtil.getIDFromAudioStream(stream.path, count);
+                        sb.Append("#trackID=" + trackID);
+                    }
                     if (stream.language != null && !stream.language.Equals(""))
                         sb.Append(":lang=" + stream.language);
                     if (stream.name != null && !stream.name.Equals(""))
@@ -237,6 +254,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                     if (stream.delay != 0)
                         sb.AppendFormat(":delay={0}", stream.delay);
                     sb.Append("\"");
+                    count++;
                 }
                 foreach (object o in settings.SubtitleStreams)
                 {
@@ -254,12 +272,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
 
                 if (settings.SplitSize.HasValue)
                     sb.Append(" -splits " + settings.SplitSize.Value.KB);
-
-                if (settings.Framerate.HasValue)
-                {
-                    string fpsString = settings.Framerate.Value.ToString(ci);
-                    sb.Append(" -fps " + fpsString);
-                }
 
                 // tmp directory
                 // due to a bug from MP4Box, we need to test the path delimiter number
