@@ -205,9 +205,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                 if (settings.VideoInput.Length > 0)
                 {
                     sb.Append("-add \"" + settings.VideoInput);
-                    int trackID = VideoUtil.getIDFromFirstVideoStream(settings.VideoInput);
                     if (settings.VideoInput.ToLower().EndsWith(".mp4"))
+                    {
+                        int trackID = VideoUtil.getIDFromFirstVideoStream(settings.VideoInput);
                         sb.Append("#trackID=" + trackID);
+                    }
                     if (!settings.VideoName.Equals(""))
                         sb.Append(":name=" + settings.VideoName);
                     sb.Append("\"");
@@ -215,9 +217,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                 if (settings.MuxedInput.Length > 0)
                 {
                     sb.Append(" -add \"" + settings.MuxedInput);
-                    int trackID = VideoUtil.getIDFromFirstVideoStream(settings.MuxedInput);
                     if (settings.MuxedInput.ToLower().EndsWith(".mp4"))
+                    {
+                        int trackID = VideoUtil.getIDFromFirstVideoStream(settings.MuxedInput);
                         sb.Append("#trackID=" + trackID);
+                    }
                     if (!settings.VideoName.Equals(""))
                         sb.Append(":name=" + settings.VideoName);
                     sb.Append("\"");
