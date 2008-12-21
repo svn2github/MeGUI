@@ -32,7 +32,7 @@ namespace MeGUI
     {
         public static readonly JobProcessorFactory Factory =
 new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
-
+        
         private static IJobProcessor init(MainForm mf, Job j)
         {
             if (j is MuxJob && (j as MuxJob).MuxType == MuxerType.MKVMERGE)
@@ -93,38 +93,46 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
             {
                 StringBuilder sb = new StringBuilder();
                 MuxSettings settings = job.Settings;
+                int trackID;
+                
                 sb.Append("-o \"" + settings.MuxedOutput + "\"");
 
                 if (settings.VideoInput.Length > 0)
                 {
-                    sb.Append(" -A -S \"" + settings.VideoInput + "\"");
+                    if (settings.VideoInput.ToLower().EndsWith(".mp4"))
+                         trackID = VideoUtil.getIDFromFirstVideoStream(settings.VideoInput);
+                    else trackID = 0;
                     if (settings.DAR.HasValue)
-                        sb.Append(" --aspect-ratio 0:" + settings.DAR.Value.X + "/" + settings.DAR.Value.Y);
+                        sb.Append(" --aspect-ratio " + trackID + ":" + settings.DAR.Value.X + "/" + settings.DAR.Value.Y);
                     else
                         sb.Append(" --engage keep_bitstream_ar_info");
                     if (!settings.VideoName.Equals(""))
-                        sb.Append(" --track-name \"0:" + settings.VideoName + "\"");
+                        sb.Append(" --track-name \"" + trackID + ":" + settings.VideoName + "\"");
                     if (settings.Framerate.HasValue)
-                        sb.Append(" --default-duration 0:" + PrettyFormatting.ReplaceFPSValue(settings.Framerate.ToString()) + "fps");
+                        sb.Append(" --default-duration " + trackID + ":" + PrettyFormatting.ReplaceFPSValue(settings.Framerate.ToString()) + "fps");
+                    sb.Append(" -d " + trackID + " -A -S \"" + settings.VideoInput + "\"");                    
                 }
                 
                 if (settings.MuxedInput.Length > 0)
                 {
-                    sb.Append(" \"" + settings.MuxedInput + "\"");
+                    if (settings.MuxedInput.ToLower().EndsWith(".mp4"))
+                         trackID = VideoUtil.getIDFromFirstVideoStream(settings.MuxedInput);
+                    else trackID = 0;
                     if (settings.DAR.HasValue)
-                        sb.Append(" --aspect-ratio 0:" + settings.DAR.Value.X + "/" + settings.DAR.Value.Y);
+                        sb.Append(" --aspect-ratio " + trackID + ":" + settings.DAR.Value.X + "/" + settings.DAR.Value.Y);
                     else
                         sb.Append(" --engage keep_bitstream_ar_info");
                     if (!settings.VideoName.Equals(""))
-                        sb.Append(" --track-name \"0:" + settings.VideoName + "\"");
+                        sb.Append(" --track-name \"" + trackID + ":" + settings.VideoName + "\"");
                     if (settings.Framerate.HasValue)
-                        sb.Append(" --default-duration 0:" + PrettyFormatting.ReplaceFPSValue(settings.Framerate.ToString()) + "fps");
+                        sb.Append(" --default-duration " + trackID + ":" + PrettyFormatting.ReplaceFPSValue(settings.Framerate.ToString()) + "fps");
+                    sb.Append(" -d " + trackID + " -A -S \"" + settings.MuxedInput + "\""); 
                 }
 
                 foreach (object o in settings.AudioStreams)
                 {
                     MuxStream stream = (MuxStream)o;
-                    int trackID = 0;
+                    trackID = 0;
                     if (stream.path.ToLower().EndsWith(".mp4") || stream.path.ToLower().EndsWith(".m4a"))
                         trackID = 1; // FIXME : not always the case. Sometimes we can have trackID >= 100. MediaInfo is able to retrieve the correct value.
                     if (!string.IsNullOrEmpty(stream.language))
@@ -142,7 +150,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                     MuxStream stream = (MuxStream)o;
                     List<SubtitleInfo> subTracks;
                     idxReader.readFileProperties(stream.path, out subTracks);
-                    int trackID = 0;
+                    trackID = 0;
                     if (stream.path.ToLower().EndsWith(".idx"))
                     {
                         foreach (SubtitleInfo strack in subTracks)
