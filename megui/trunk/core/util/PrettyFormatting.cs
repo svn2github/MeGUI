@@ -122,5 +122,29 @@ namespace MeGUI.core.util
         {
             return delayRegex.Replace(fileName, delay + "ms", 1);
         }
+
+        /// <summary>
+        /// replace the fps value by something more mkvmerge compliant
+        /// </summary>
+        /// <param name="fpsIn">the input fps</param>
+        /// <returns>the output fps formated</returns>
+        public static string ReplaceFPSValue(string fpsIn)
+        {
+            string fpsOut = "25";
+
+            switch (fpsIn)
+            {
+                case "23,976" : fpsOut = "24000/1001"; break;
+                case "24,0"   : fpsOut = "24"; break;
+                case "25,0"   : fpsOut = "25"; break;
+                case "29,97"  : fpsOut = "30000/1001"; break;
+                case "30,0"   : fpsOut = "30"; break;
+                case "50,0"   : fpsOut = "50"; break;
+                case "59,94"  : fpsOut = "60000/1001"; break;
+                case "60,0"   : fpsOut = "60"; break;
+            }
+
+            return fpsOut;
+        }
     }
 }

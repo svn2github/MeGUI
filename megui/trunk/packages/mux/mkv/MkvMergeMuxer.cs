@@ -24,6 +24,7 @@ using System.Text;
 using System.Windows.Forms;
 
 using MeGUI.core.details;
+using MeGUI.core.util;
 
 namespace MeGUI
 {
@@ -103,13 +104,21 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                         sb.Append(" --engage keep_bitstream_ar_info");
                     if (!settings.VideoName.Equals(""))
                         sb.Append(" --track-name \"0:" + settings.VideoName + "\"");
+                    if (settings.Framerate.HasValue)
+                        sb.Append(" --default-duration 0:" + PrettyFormatting.ReplaceFPSValue(settings.Framerate.ToString()) + "fps");
                 }
                 
                 if (settings.MuxedInput.Length > 0)
                 {
                     sb.Append(" \"" + settings.MuxedInput + "\"");
+                    if (settings.DAR.HasValue)
+                        sb.Append(" --aspect-ratio 0:" + settings.DAR.Value.X + "/" + settings.DAR.Value.Y);
+                    else
+                        sb.Append(" --engage keep_bitstream_ar_info");
                     if (!settings.VideoName.Equals(""))
                         sb.Append(" --track-name \"0:" + settings.VideoName + "\"");
+                    if (settings.Framerate.HasValue)
+                        sb.Append(" --default-duration 0:" + PrettyFormatting.ReplaceFPSValue(settings.Framerate.ToString()) + "fps");
                 }
 
                 foreach (object o in settings.AudioStreams)
@@ -150,7 +159,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                             else
                                 sb.Append(strack.Index.ToString());
                         }
-
                         sb.Append(" -D -A \"" + stream.path + "\"");
                     }
                     else

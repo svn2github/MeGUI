@@ -459,6 +459,7 @@ namespace MeGUI
             supportedVideoTypes.Add(VideoType.AVI);
             supportedVideoTypes.Add(VideoType.MKV);
             supportedVideoTypes.Add(VideoType.MP4);
+            supportedVideoTypes.Add(VideoType.RAWAVC);
             supportedAudioTypes.Add(AudioType.RAWAAC);
             supportedAudioTypes.Add(AudioType.MP4AAC);
             supportedAudioTypes.Add(AudioType.M4A);
