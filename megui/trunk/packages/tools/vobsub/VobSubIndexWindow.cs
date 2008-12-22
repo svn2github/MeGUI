@@ -35,7 +35,7 @@ namespace MeGUI
     public partial class VobSubIndexWindow : Form
     {
         #region variables
-        private bool dialogMode = false; // $%£%$^>*"%$%%$#{"!!! Affects the public behaviour!
+        private bool dialogMode = false;
         private bool configured = false;
         private MainForm mainForm;
         private VideoUtil vUtil;
@@ -75,8 +75,6 @@ namespace MeGUI
         #endregion
         private void openVideo(string fileName)
         {
-            //string mypath = Path.GetDirectoryName(fileName) + "\\";
-            //string myifofile = IFOparser.DetermineMovieIFO(mypath);
             input.Filename = fileName;
             subtitleTracks.Items.Clear();
             subtitleTracks.Items.AddRange(IFOparser.GetSubtitlesStreamsInfos(input.Filename));
