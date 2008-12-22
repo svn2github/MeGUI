@@ -497,7 +497,7 @@ namespace MeGUI.core.gui
         /// <returns>true if worker was shut down, false otherwise</returns>
         private bool shutdownWorkerIfJobsCompleted()
         {
-            if (mode != JobWorkerMode.CloseOnLocalListCompleted) return false;
+            mode = JobWorkerMode.CloseOnLocalListCompleted; // to force the enclosure
             foreach (TaggedJob j in localJobs.Values)
                 if (j.Status != JobStatus.DONE)
                     return false;
