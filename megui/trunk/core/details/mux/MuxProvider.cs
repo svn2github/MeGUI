@@ -532,7 +532,7 @@ namespace MeGUI
             supportedContainers.Add(ContainerType.AVI);
             supportedVideoCodecs.Add(VideoCodec.AVC);
             base.type = MuxerType.AVC2AVI;
-            name = "AVC2AVI";
+            name = "AVC2AVI Muxer";
             maxFilesOfType = new int[] { 1, 0, 0, 0 };
         }
 

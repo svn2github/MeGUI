@@ -2004,7 +2004,7 @@ namespace MeGUI
 
         public string Name
         {
-            get { return "AviSynth Script Creator"; }
+            get { return "AVS Script Creator"; }
         }
 
         public void Run(MainForm info)

@@ -30,7 +30,7 @@ namespace MeGUI
 
         public string Name
         {
-            get { return "Validate AVC Level"; }
+            get { return "AVC Levels Checker"; }
         }
 
         public void Run(MainForm info)
