@@ -880,6 +880,12 @@ namespace MeGUI
                 filters = new DeinterlaceFilter[] {
                     new DeinterlaceFilter("Error", "#An error occurred in source detection. Doing no processing")};
             }
+            else if (info.sourceType == SourceType.NOT_ENOUGH_SECTIONS)
+            {
+                MessageBox.Show("Could not find enough useful sections to determine source type for " + job.Input, "Source detection failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                filters = new DeinterlaceFilter[] {
+                    new DeinterlaceFilter("Error", "#Not enough useful sections for source detection. Doing no processing")};
+            }
             else
                 this.filters = ScriptServer.GetDeinterlacers(info).ToArray();
             interlaced = (info.sourceType != SourceType.PROGRESSIVE);
