@@ -1,3 +1,8 @@
+0.3.1.1002
+    - (kurtnoise) use string.IsNullOrEmpty() internal function for muxers.
+	- (kurtnoise) [MKVMergeMuxer] fix a missing case with mkv files as input.
+    - (ateeq) [OneClickPostProcessor]  Assume non-interlaced if source type not detected due to insufficient useful sections to prevent crash during post-processing
+
 0.3.1.1001
     - (kurtnoise) [VobSubIndexWindow] cleanup...
     - (kurtnoise) cosmetics renaming.
