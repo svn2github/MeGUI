@@ -100,7 +100,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
 
                 if (settings.VideoInput.Length > 0)
                 {
-                    if (settings.VideoInput.ToLower().EndsWith(".mp4"))
+                    if (settings.VideoInput.ToLower().EndsWith(".mp4") || settings.VideoInput.ToLower().EndsWith(".mkv"))
                          trackID = VideoUtil.getIDFromFirstVideoStream(settings.VideoInput);
                     else trackID = 0;
                     if (settings.DAR.HasValue)
@@ -116,7 +116,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                 
                 if (settings.MuxedInput.Length > 0)
                 {
-                    if (settings.MuxedInput.ToLower().EndsWith(".mp4"))
+                    if (settings.MuxedInput.ToLower().EndsWith(".mp4") || settings.MuxedInput.ToLower().EndsWith(".mkv"))
                          trackID = VideoUtil.getIDFromFirstVideoStream(settings.MuxedInput);
                     else trackID = 0;
                     if (settings.DAR.HasValue)
