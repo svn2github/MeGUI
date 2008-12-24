@@ -217,7 +217,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                         string fpsString = settings.Framerate.Value.ToString(ci);
                         sb.Append(":fps=" + fpsString);
                     }
-                    if (!settings.VideoName.Equals(""))
+                    if (!string.IsNullOrEmpty(settings.VideoName))
                         sb.Append(":name=" + settings.VideoName);
                     sb.Append("\"");
                 }
@@ -234,7 +234,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                         string fpsString = settings.Framerate.Value.ToString(ci);
                         sb.Append(":fps=" + fpsString);
                     }
-                    if (!settings.VideoName.Equals(""))
+                    if (!string.IsNullOrEmpty(settings.VideoName))
                         sb.Append(":name=" + settings.VideoName);
                     sb.Append("\"");
                 }
@@ -247,9 +247,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                         int trackID = VideoUtil.getIDFromAudioStream(stream.path, count);
                         sb.Append("#trackID=" + trackID);
                     }
-                    if (stream.language != null && !stream.language.Equals(""))
+                    if (!string.IsNullOrEmpty(stream.language))
                         sb.Append(":lang=" + stream.language);
-                    if (stream.name != null && !stream.name.Equals(""))
+                    if (!string.IsNullOrEmpty(stream.name))
                         sb.Append(":name=" + stream.name);
                     if (stream.delay != 0)
                         sb.AppendFormat(":delay={0}", stream.delay);
@@ -260,14 +260,14 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                 {
                     MuxStream stream = (MuxStream)o;
                     sb.Append(" -add \"" + stream.path);
-                    if (!stream.language.Equals(""))
+                    if (!string.IsNullOrEmpty(stream.language))
                         sb.Append(":lang=" + stream.language);
-                    if (stream.name != null && !stream.name.Equals(""))
+                    if (!string.IsNullOrEmpty(stream.name))
                         sb.Append(":name=" + stream.name);
                     sb.Append("\"");
                 }
 
-                if (!settings.ChapterFile.Equals("")) // a chapter file is defined
+                if (!string.IsNullOrEmpty(settings.ChapterFile)) // a chapter file is defined
                     sb.Append(" -chap \"" + settings.ChapterFile + "\"");
 
                 if (settings.SplitSize.HasValue)
