@@ -133,10 +133,21 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                 foreach (object o in settings.AudioStreams)
                 {
                     MuxStream stream = (MuxStream)o;
-                    trackID = 0;
+                    trackID = 0; int heaac_flag = 0;
                     if (stream.path.ToLower().EndsWith(".mp4") || stream.path.ToLower().EndsWith(".m4a"))
+                    {
                         trackID = VideoUtil.getIDFromAudioStream(stream.path, count);
-                    if (!string.IsNullOrEmpty(stream.language))
+                        heaac_flag = VideoUtil.getFlagFromAACStream(stream.path, count);
+                        if (heaac_flag > 0)
+                            sb.Append(" --aac-is-sbr "+ trackID + ":1");
+                    }
+                    if (stream.path.ToLower().EndsWith(".aac"))
+                    {
+                        heaac_flag = VideoUtil.getFlagFromAACStream(stream.path, count);
+                        if (heaac_flag > 0)
+                            sb.Append(" --aac-is-sbr 0:1");
+                    }
+                     if (!string.IsNullOrEmpty(stream.language))
                         sb.Append(" --language " + trackID + ":" + stream.language);
                     if (!string.IsNullOrEmpty(stream.name))
                         sb.Append(" --track-name \"" + trackID + ":" + stream.name + "\"");

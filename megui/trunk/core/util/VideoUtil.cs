@@ -301,6 +301,42 @@ namespace MeGUI
             return TrackID;
         }
 
+        /// gets SBR & PS flag from AAC streams using MediaInfo
+        /// </summary>
+        /// <param name="infoFile">the file to be analyzed</param>
+        /// <param name="count">the counter</param>
+        /// <returns>the flag found</returns>
+        public static int getFlagFromAACStream(string fileName, int count)
+        {
+            MediaInfo info;
+            int flag = 0;
+            try
+            {
+                info = new MediaInfo(fileName);
+                if (info.AudioCount >= 0)
+                {
+                    MediaInfoWrapper.AudioTrack atrack = info.Audio[count];
+                    if (atrack.Format == "AAC")
+                    {
+                        if (atrack.FormatSettingsSBR == "Yes" && atrack.FormatSettingsPS == "No")
+                             flag = 1;
+                        if (atrack.FormatSettingsSBR == "Yes" && atrack.FormatSettingsPS == "Yes")
+                             flag = 2;
+                        if (atrack.Channels == "2" && atrack.SamplingRate == "24000") // workaround for raw aac
+                             flag = 1;
+                        if (atrack.Channels == "1" && atrack.SamplingRate == "24000") // workaround for raw aac
+                             flag = 2;
+                    }
+                }
+            }
+            catch (Exception i)
+            {
+                MessageBox.Show("The following error ocurred when trying to get Media info for file " + fileName + "\r\n" + i.Message, "Error parsing mediainfo data", MessageBoxButtons.OK);
+            }
+            return flag;
+        }
+
+
         /// <summary>
         /// gets basic information about a video source based on its DGindex generated log file
         /// </summary>
