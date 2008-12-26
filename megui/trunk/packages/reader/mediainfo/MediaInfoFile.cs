@@ -102,7 +102,7 @@ namespace MeGUI
                 foreach (MediaInfoWrapper.AudioTrack t in m.Audio)
                 {
                     AudioTrack a = new AudioTrack();
-                    a.Codec = a.ACodec = getAudioCodec(t.Codec);
+                    a.Codec = a.ACodec = getAudioCodec(t.Format);
                     a.Info = new MeGUI.core.details.TrackInfo(t.Language, t.Title);
 
                     a.StreamInfo = new AudioInfo();
@@ -259,7 +259,7 @@ namespace MeGUI
             int i = 0;
             foreach (MediaInfoWrapper.AudioTrack track in info.Audio)
             {
-                aCodecs[i] = getAudioCodec(track.Codec);
+                aCodecs[i] = getAudioCodec(track.Format);
                 if (track.BitRateMode == "VBR")
                     aBitrateModes[i] = BitrateManagementMode.VBR;
                 else

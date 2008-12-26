@@ -112,7 +112,7 @@ namespace MeGUI.packages.tools.calculator
             {
                 info = new MediaInfo(file);
                 MediaInfoWrapper.AudioTrack atrack = info.Audio[0];
-                if (atrack.CodecString == "DTS")
+                if (atrack.Format == "DTS")
                 {
                     audio1Bitrate.Value = (Convert.ToInt32(atrack.BitRate) / 1000);
                 }

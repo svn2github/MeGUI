@@ -229,14 +229,14 @@ namespace MeGUI
                         ati.TrackID = Int32.Parse(atrack.ID);
                     else
                         // MediaInfo failed to get ID try guessing based on codec
-                        switch (atrack.Codec.Substring(0,3))
+                        switch (atrack.Format.Substring(0,3))
                         {
                             case "AC3": ati.TrackID = (0x80 + counter); break;
                             case "PCM": ati.TrackID = (0xA0 + counter); break;
                             case "MPA": ati.TrackID = (0xC0 + counter); break;
                             case "DTS": ati.TrackID = (0x88 + counter); break;
                         }
-                    ati.Type = atrack.CodecString;
+                    ati.Type = atrack.Format;
                     ati.NbChannels = atrack.ChannelsString;
                     ati.SamplingRate = atrack.SamplingRateString;
                     ati.TrackInfo = new TrackInfo(atrack.LanguageString, null);
