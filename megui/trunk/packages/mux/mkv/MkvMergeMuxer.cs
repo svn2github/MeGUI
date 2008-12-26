@@ -110,7 +110,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                     if (!string.IsNullOrEmpty(settings.VideoName))
                         sb.Append(" --track-name \"" + trackID + ":" + settings.VideoName + "\"");
                     if (settings.Framerate.HasValue)
-                        sb.Append(" --default-duration " + trackID + ":" + PrettyFormatting.ReplaceFPSValue(settings.Framerate.ToString()) + "fps");
+                        sb.Append(" --default-duration " + trackID + ":" + PrettyFormatting.ReplaceFPSValue(settings.Framerate.Value.ToString()) + "fps");
                     sb.Append(" -d " + trackID + " -A -S \"" + settings.VideoInput + "\"");                    
                 }
                 
@@ -126,7 +126,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                     if (!string.IsNullOrEmpty(settings.VideoName))
                         sb.Append(" --track-name \"" + trackID + ":" + settings.VideoName + "\"");
                     if (settings.Framerate.HasValue)
-                        sb.Append(" --default-duration " + trackID + ":" + PrettyFormatting.ReplaceFPSValue(settings.Framerate.ToString()) + "fps");
+                        sb.Append(" --default-duration " + trackID + ":" + PrettyFormatting.ReplaceFPSValue(settings.Framerate.Value.ToString()) + "fps");
                     sb.Append(" -d " + trackID + " -A -S \"" + settings.MuxedInput + "\""); 
                 }
 

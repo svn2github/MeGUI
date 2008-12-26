@@ -134,14 +134,22 @@ namespace MeGUI.core.util
 
             switch (fpsIn)
             {
-                case "23,976" : fpsOut = "24000/1001"; break;
-                case "24,0"   : fpsOut = "24"; break;
-                case "25,0"   : fpsOut = "25"; break;
-                case "29,97"  : fpsOut = "30000/1001"; break;
-                case "30,0"   : fpsOut = "30"; break;
-                case "50,0"   : fpsOut = "50"; break;
-                case "59,94"  : fpsOut = "60000/1001"; break;
-                case "60,0"   : fpsOut = "60"; break;
+                case "23,976" : 
+                case "23.976" : fpsOut = "24000/1001"; break;
+                case "24,0"   :
+                case "24.0"   : fpsOut = "24"; break;
+                case "25,0"   :
+                case "25.0"   : fpsOut = "25"; break;
+                case "29,97"  :
+                case "29.97"  : fpsOut = "30000/1001"; break;
+                case "30,0"   :
+                case "30.0"   : fpsOut = "30"; break;
+                case "50,0"   :
+                case "50.0"   : fpsOut = "50"; break;
+                case "59,94"  :
+                case "59.94"  : fpsOut = "60000/1001"; break;
+                case "60,0"   :
+                case "60.0"   : fpsOut = "60"; break;
             }
 
             return fpsOut;
