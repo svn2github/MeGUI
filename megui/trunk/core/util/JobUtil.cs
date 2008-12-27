@@ -153,7 +153,8 @@ namespace MeGUI
                 mjob.NbOfFrames = video.NumberOfFrames;
                 mjob.NbOfBFrames = video.Settings.NbBframes;
                 mjob.Codec = video.Settings.Codec.ToString();
-                mjob.Settings.Framerate = framerate;
+                string fpsFormated = String.Format("{0:##.###}", framerate); // this formating is required for mkvmerge at least to avoid fps rounding error
+                mjob.Settings.Framerate = Convert.ToDecimal(fpsFormated); 
                 mjob.Settings.VideoName = video.Settings.VideoName;
 
                 string tempOutputName = Path.Combine(Path.GetDirectoryName(output),
