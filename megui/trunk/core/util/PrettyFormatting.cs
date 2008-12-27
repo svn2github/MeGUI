@@ -150,6 +150,7 @@ namespace MeGUI.core.util
                 case "59.94"  : fpsOut = "60000/1001"; break;
                 case "60,0"   :
                 case "60.0"   : fpsOut = "60"; break;
+                default       : fpsOut = fpsIn; break;
             }
 
             return fpsOut;
