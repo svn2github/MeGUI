@@ -1,6 +1,13 @@
+0.3.1.1003
+    - (kurtnoise)
+    - (kurtnoise) add automatic SBR detection from aac streams to the MKV & MP4 muxers.
+    - (kurtnoise) update MediaInfoWrapper library and code using the new settings.
+    - (kurtnoise) updated AudioTrack part.
+    - (kurtnoise) add dots cases in ReplaceFPSValue() function (country environment dependent). That should fix fps rounding errors for the mkv muxer.  
+
 0.3.1.1002
     - (kurtnoise) use string.IsNullOrEmpty() internal function for muxers.
-	- (kurtnoise) [MKVMergeMuxer] fix a missing case with mkv files as input.
+    - (kurtnoise) [MKVMergeMuxer] fix a missing case with mkv files as input.
     - (ateeq) [OneClickPostProcessor]  Assume non-interlaced if source type not detected due to insufficient useful sections to prevent crash during post-processing
 
 0.3.1.1001
