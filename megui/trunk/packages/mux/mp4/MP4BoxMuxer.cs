@@ -246,13 +246,13 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                     {
                         int trackID = VideoUtil.getIDFromAudioStream(stream.path, count);
                         sb.Append("#trackID=" + trackID);
-                        int heaac_flag = VideoUtil.getFlagFromAACStream(stream.path, count);
+                        int heaac_flag = VideoUtil.getSBRFlagFromAACStream(stream.path, count);
                         if (heaac_flag > 0)
                             sb.Append(":sbr");
                     }
                     if (stream.path.ToLower().EndsWith(".aac"))
                     {
-                        int heaac_flag = VideoUtil.getFlagFromAACStream(stream.path, count);
+                        int heaac_flag = VideoUtil.getSBRFlagFromAACStream(stream.path, count);
                         if (heaac_flag > 0)
                             sb.Append(":sbr");
                     }

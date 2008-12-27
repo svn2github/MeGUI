@@ -137,13 +137,13 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                     if (stream.path.ToLower().EndsWith(".mp4") || stream.path.ToLower().EndsWith(".m4a"))
                     {
                         trackID = VideoUtil.getIDFromAudioStream(stream.path, count);
-                        heaac_flag = VideoUtil.getFlagFromAACStream(stream.path, count);
+                        heaac_flag = VideoUtil.getSBRFlagFromAACStream(stream.path, count);
                         if (heaac_flag > 0)
                             sb.Append(" --aac-is-sbr "+ trackID + ":1");
                     }
                     if (stream.path.ToLower().EndsWith(".aac"))
                     {
-                        heaac_flag = VideoUtil.getFlagFromAACStream(stream.path, count);
+                        heaac_flag = VideoUtil.getSBRFlagFromAACStream(stream.path, count);
                         if (heaac_flag > 0)
                             sb.Append(" --aac-is-sbr 0:1");
                     }

@@ -301,12 +301,12 @@ namespace MeGUI
             return TrackID;
         }
 
-        /// gets SBR & PS flag from AAC streams using MediaInfo
+        /// gets SBR flag from AAC streams using MediaInfo
         /// </summary>
         /// <param name="infoFile">the file to be analyzed</param>
         /// <param name="count">the counter</param>
         /// <returns>the flag found</returns>
-        public static int getFlagFromAACStream(string fileName, int count)
+        public static int getSBRFlagFromAACStream(string fileName, int count)
         {
             MediaInfo info;
             int flag = 0;
@@ -318,14 +318,10 @@ namespace MeGUI
                     MediaInfoWrapper.AudioTrack atrack = info.Audio[count];
                     if (atrack.Format == "AAC")
                     {
-                        if (atrack.FormatSettingsSBR == "Yes" && atrack.FormatSettingsPS == "No")
+                        if (atrack.FormatSettingsSBR == "Yes")
                              flag = 1;
-                        if (atrack.FormatSettingsSBR == "Yes" && atrack.FormatSettingsPS == "Yes")
-                             flag = 2;
-                        if (atrack.Channels == "2" && atrack.SamplingRate == "24000") // workaround for raw aac
+                        if ((atrack.Channels == "2") || (atrack.Channels == "1") && (atrack.SamplingRate == "24000")) // workaround for raw aac
                              flag = 1;
-                        if (atrack.Channels == "1" && atrack.SamplingRate == "24000") // workaround for raw aac
-                             flag = 2;
                     }
                 }
             }
