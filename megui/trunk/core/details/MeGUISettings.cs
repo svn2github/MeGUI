@@ -35,7 +35,7 @@ namespace MeGUI
         private string[][] autoUpdateServerLists;
         private string faacPath, lamePath, neroAacEncPath, mencoderPath,  mp4boxPath, mkvmergePath, 
                        encAacPlusPath, ffmpegPath, besplitPath, yadifPath, aftenPath, x264Path, 
-                       dgIndexPath, xvidEncrawPath, avc2aviPath, aviMuxGUIPath, oggEnc2Path, encAudXPath,
+                       dgIndexPath, xvidEncrawPath, aviMuxGUIPath, oggEnc2Path, encAudXPath,
                        defaultLanguage1, defaultLanguage2, afterEncodingCommand, videoExtension, audioExtension,
                        httpproxyaddress, httpproxyport, httpproxyuid, httpproxypwd, defaultOutputDir;
         private bool recalculateMainMovieBitrate, autoForceFilm, autoStartQueue, enableMP3inMP4, autoOpenScript,
@@ -65,7 +65,6 @@ namespace MeGUI
             autoUpdate = true;
             useadvancedtooltips = true;
             audioSamplesPerUpdate = 100000;
-            avc2aviPath = "avc2avi.exe";
             aviMuxGUIPath = "avimux_gui.exe";
             besplitPath = "besplit.exe";
             faacPath = "faac.exe";
@@ -349,14 +348,6 @@ namespace MeGUI
         {
             get { return xvidEncrawPath; }
             set { xvidEncrawPath = value; }
-        }
-        /// <summary>
-        /// gets / sets the path of the avc2avi executable
-        /// </summary>
-        public string Avc2aviPath
-        {
-            get { return avc2aviPath; }
-            set { avc2aviPath = value; }
         }
         /// <summary>
         /// gets / sets the path of the avimuxgui executable

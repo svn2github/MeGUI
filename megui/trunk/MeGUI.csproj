@@ -570,7 +570,6 @@
     </Compile>
     <Compile Include="packages\audio\waac\WinAmpAACSettings.cs" />
     <Compile Include="packages\audio\audx\AudXSettings.cs" />
-    <Compile Include="packages\mux\avc2avi\Avc2AviMuxer.cs" />
     <Compile Include="packages\mux\avimuxgui\AMGMuxer.cs" />
     <Compile Include="packages\mux\mencoder\MencoderMuxer.cs" />
     <Compile Include="packages\mux\mkv\MkvMergeMuxer.cs" />

@@ -210,10 +210,10 @@ namespace MeGUI
 
             foreach (MuxPathLeg mpl in x)
             {
-                if (mpl.muxerInterface is AVC2AVIMuxerProvider)
+               /* if (mpl.muxerInterface is AVC2AVIMuxerProvider)
                 {
                     return true;
-                }
+                }*/
             }
             return false;
         }

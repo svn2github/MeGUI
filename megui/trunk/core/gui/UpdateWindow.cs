@@ -447,8 +447,6 @@ namespace MeGUI
                             return meGUISettings.EncAacPlusPath;
                         case ("oggenc2"):
                             return meGUISettings.OggEnc2Path;
-                        case ("avc2avi"):
-                            return meGUISettings.Avc2aviPath;
                         case ("yadif"):
                             return meGUISettings.YadifPath;
                         case ("aften"):
@@ -463,9 +461,6 @@ namespace MeGUI
                     {
                         case ("oggenc2"):
                             meGUISettings.OggEnc2Path = value;
-                            return;
-                        case ("avc2avi"):
-                            meGUISettings.Avc2aviPath = value;
                             return;
                         case ("dgindex"):
                             meGUISettings.DgIndexPath = value;

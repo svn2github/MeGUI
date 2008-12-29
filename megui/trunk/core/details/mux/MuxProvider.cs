@@ -25,7 +25,7 @@ using System.Text;
 
 namespace MeGUI
 {
-    public enum MuxerType { MP4BOX, MKVMERGE, AVC2AVI, AVIMUXGUI, DIVXMUX, FFMPEG, ATOMCHANGER };
+    public enum MuxerType { MP4BOX, MKVMERGE, AVIMUXGUI };
     public class MuxableType
     {
         public OutputType outputType;
@@ -524,23 +524,7 @@ namespace MeGUI
             return new AMGMuxer(settings.AviMuxGUIPath);
         }
     }
-    public class AVC2AVIMuxerProvider : MuxerProvider
-    {
-        public AVC2AVIMuxerProvider() : base("avc2avi")
-        {
-            supportedVideoTypes.Add(VideoType.RAWAVC);
-            supportedContainers.Add(ContainerType.AVI);
-            supportedVideoCodecs.Add(VideoCodec.AVC);
-            base.type = MuxerType.AVC2AVI;
-            name = "AVC2AVI Muxer";
-            maxFilesOfType = new int[] { 1, 0, 0, 0 };
-        }
 
-        public override IJobProcessor GetMuxer(MeGUISettings settings)
-        {
-            return new Avc2AviMuxer(settings.Avc2aviPath);
-        }
-    }
     #endregion
     #region top level providers
     public abstract class MuxerProvider : IMuxing

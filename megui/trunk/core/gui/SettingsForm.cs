@@ -146,9 +146,6 @@ namespace MeGUI
         private TextBox textBox1;
         private Label label1;
         private Button button1;
-        private Button selectAvc2AviExecutableButton;
-        private TextBox avc2aviPath;
-        private Label label5;
         private CheckBox keep2ndPassOutput;
         private CheckBox keep2ndPassLogFile;
         private Label label17;
@@ -255,6 +252,7 @@ namespace MeGUI
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.gbDefaultOutput = new System.Windows.Forms.GroupBox();
             this.clearDefaultOutputDir = new System.Windows.Forms.Button();
+            this.defaultOutputDir = new MeGUI.FileBar();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.txt_httpproxyport = new System.Windows.Forms.TextBox();
@@ -267,6 +265,7 @@ namespace MeGUI
             this.label18 = new System.Windows.Forms.Label();
             this.cbx_usehttpproxy = new System.Windows.Forms.CheckBox();
             this.gbVideoPreview = new System.Windows.Forms.GroupBox();
+            this.cbAddTimePos = new System.Windows.Forms.CheckBox();
             this.chAlwaysOnTop = new System.Windows.Forms.CheckBox();
             this.autoUpdateGroupBox = new System.Windows.Forms.GroupBox();
             this.label14 = new System.Windows.Forms.Label();
@@ -323,9 +322,6 @@ namespace MeGUI
             this.label1 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.tabPage6 = new System.Windows.Forms.TabPage();
-            this.selectAvc2AviExecutableButton = new System.Windows.Forms.Button();
-            this.avc2aviPath = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
             this.aviMuxGUIPath = new System.Windows.Forms.TextBox();
             this.mp4boxPath = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -354,9 +350,7 @@ namespace MeGUI
             this.audioExtLabel = new System.Windows.Forms.Label();
             this.videoExtLabel = new System.Windows.Forms.Label();
             this.autoEncodeDefaultsButton = new System.Windows.Forms.Button();
-            this.cbAddTimePos = new System.Windows.Forms.CheckBox();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
-            this.defaultOutputDir = new MeGUI.FileBar();
             groupBox1 = new System.Windows.Forms.GroupBox();
             groupBox1.SuspendLayout();
             this.otherGroupBox.SuspendLayout();
@@ -802,6 +796,22 @@ namespace MeGUI
             this.clearDefaultOutputDir.Text = "x";
             this.clearDefaultOutputDir.Click += new System.EventHandler(this.clearDefaultOutputDir_Click);
             // 
+            // defaultOutputDir
+            // 
+            this.defaultOutputDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.defaultOutputDir.Filename = "";
+            this.defaultOutputDir.Filter = null;
+            this.defaultOutputDir.FilterIndex = 0;
+            this.defaultOutputDir.FolderMode = true;
+            this.defaultOutputDir.Location = new System.Drawing.Point(10, 20);
+            this.defaultOutputDir.Name = "defaultOutputDir";
+            this.defaultOutputDir.ReadOnly = true;
+            this.defaultOutputDir.SaveMode = false;
+            this.defaultOutputDir.Size = new System.Drawing.Size(417, 26);
+            this.defaultOutputDir.TabIndex = 40;
+            this.defaultOutputDir.Title = null;
+            // 
             // tabPage3
             // 
             this.tabPage3.Controls.Add(this.groupBox2);
@@ -925,6 +935,16 @@ namespace MeGUI
             this.gbVideoPreview.TabIndex = 4;
             this.gbVideoPreview.TabStop = false;
             this.gbVideoPreview.Text = "Video Preview";
+            // 
+            // cbAddTimePos
+            // 
+            this.cbAddTimePos.AutoSize = true;
+            this.cbAddTimePos.Location = new System.Drawing.Point(8, 40);
+            this.cbAddTimePos.Name = "cbAddTimePos";
+            this.cbAddTimePos.Size = new System.Drawing.Size(110, 17);
+            this.cbAddTimePos.TabIndex = 1;
+            this.cbAddTimePos.Text = "Add Time Position";
+            this.cbAddTimePos.UseVisualStyleBackColor = true;
             // 
             // chAlwaysOnTop
             // 
@@ -1498,9 +1518,6 @@ namespace MeGUI
             // 
             // tabPage6
             // 
-            this.tabPage6.Controls.Add(this.selectAvc2AviExecutableButton);
-            this.tabPage6.Controls.Add(this.avc2aviPath);
-            this.tabPage6.Controls.Add(this.label5);
             this.tabPage6.Controls.Add(this.aviMuxGUIPath);
             this.tabPage6.Controls.Add(this.mp4boxPath);
             this.tabPage6.Controls.Add(this.label4);
@@ -1517,32 +1534,6 @@ namespace MeGUI
             this.tabPage6.TabIndex = 2;
             this.tabPage6.Text = "Muxer";
             this.tabPage6.UseVisualStyleBackColor = true;
-            // 
-            // selectAvc2AviExecutableButton
-            // 
-            this.selectAvc2AviExecutableButton.Location = new System.Drawing.Point(417, 98);
-            this.selectAvc2AviExecutableButton.Name = "selectAvc2AviExecutableButton";
-            this.selectAvc2AviExecutableButton.Size = new System.Drawing.Size(24, 23);
-            this.selectAvc2AviExecutableButton.TabIndex = 11;
-            this.selectAvc2AviExecutableButton.Text = "...";
-            this.selectAvc2AviExecutableButton.Click += new System.EventHandler(this.selectAvc2AviExecutableButton_Click);
-            // 
-            // avc2aviPath
-            // 
-            this.avc2aviPath.Location = new System.Drawing.Point(89, 98);
-            this.avc2aviPath.Name = "avc2aviPath";
-            this.avc2aviPath.ReadOnly = true;
-            this.avc2aviPath.Size = new System.Drawing.Size(322, 21);
-            this.avc2aviPath.TabIndex = 10;
-            this.avc2aviPath.Text = "avc2avi.exe";
-            // 
-            // label5
-            // 
-            this.label5.Location = new System.Drawing.Point(6, 101);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(47, 18);
-            this.label5.TabIndex = 9;
-            this.label5.Text = "avc2avi";
             // 
             // aviMuxGUIPath
             // 
@@ -1807,16 +1798,6 @@ namespace MeGUI
             this.autoEncodeDefaultsButton.Text = "Configure Defaults";
             this.autoEncodeDefaultsButton.UseVisualStyleBackColor = true;
             // 
-            // cbAddTimePos
-            // 
-            this.cbAddTimePos.AutoSize = true;
-            this.cbAddTimePos.Location = new System.Drawing.Point(8, 40);
-            this.cbAddTimePos.Name = "cbAddTimePos";
-            this.cbAddTimePos.Size = new System.Drawing.Size(110, 17);
-            this.cbAddTimePos.TabIndex = 1;
-            this.cbAddTimePos.Text = "Add Time Position";
-            this.cbAddTimePos.UseVisualStyleBackColor = true;
-            // 
             // helpButton1
             // 
             this.helpButton1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -1827,22 +1808,6 @@ namespace MeGUI
             this.helpButton1.Name = "helpButton1";
             this.helpButton1.Size = new System.Drawing.Size(47, 23);
             this.helpButton1.TabIndex = 1;
-            // 
-            // defaultOutputDir
-            // 
-            this.defaultOutputDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.defaultOutputDir.Filename = "";
-            this.defaultOutputDir.Filter = null;
-            this.defaultOutputDir.FilterIndex = 0;
-            this.defaultOutputDir.FolderMode = true;
-            this.defaultOutputDir.Location = new System.Drawing.Point(10, 20);
-            this.defaultOutputDir.Name = "defaultOutputDir";
-            this.defaultOutputDir.ReadOnly = true;
-            this.defaultOutputDir.SaveMode = false;
-            this.defaultOutputDir.Size = new System.Drawing.Size(417, 26);
-            this.defaultOutputDir.TabIndex = 40;
-            this.defaultOutputDir.Title = null;
             // 
             // SettingsForm
             // 
@@ -2007,14 +1972,7 @@ namespace MeGUI
                 aviMuxGUIPath.Text = openExecutableDialog.FileName;
             }
         }
-
-        private void selectAvc2AviExecutableButton_Click(object sender, EventArgs e)
-        {
-            if (selectExe("avc2avi"))
-            {
-                avc2aviPath.Text = openExecutableDialog.FileName;
-            }
-        }
+   
         private void resetDialogs_Click(object sender, EventArgs e)
         {
             internalSettings.DialogSettings = new DialogSettings();
@@ -2166,7 +2124,6 @@ namespace MeGUI
                 settings.NeroAacEncPath = textBox2.Text;
                 settings.LamePath = textBox3.Text;
 				settings.Mp4boxPath = mp4boxPath.Text;
-                settings.Avc2aviPath = avc2aviPath.Text;
                 settings.AviMuxGUIPath = aviMuxGUIPath.Text;
 				settings.MkvmergePath = mkvmergePath.Text;
                 settings.XviDEncrawPath = xvidEncrawPath.Text;
@@ -2234,7 +2191,6 @@ namespace MeGUI
 				mp4boxPath.Text = settings.Mp4boxPath;
 				mkvmergePath.Text = settings.MkvmergePath;
                 xvidEncrawPath.Text = settings.XviDEncrawPath;
-                avc2aviPath.Text = settings.Avc2aviPath;
                 aviMuxGUIPath.Text = settings.AviMuxGUIPath;
                 videoExtension.Text = settings.VideoExtension;
                 audioExtension.Text = settings.AudioExtension;
