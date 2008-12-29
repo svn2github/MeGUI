@@ -101,6 +101,7 @@ namespace MeGUI.packages.tools.oneclick
             // 
             // splitSize
             // 
+            this.splitSize.CustomSizes = new MeGUI.core.util.FileSize[0];
             this.splitSize.Location = new System.Drawing.Point(110, 45);
             this.splitSize.MaximumSize = new System.Drawing.Size(1000, 29);
             this.splitSize.MinimumSize = new System.Drawing.Size(64, 29);
@@ -112,6 +113,7 @@ namespace MeGUI.packages.tools.oneclick
             // 
             // fileSize
             // 
+            this.fileSize.CustomSizes = new MeGUI.core.util.FileSize[0];
             this.fileSize.Location = new System.Drawing.Point(110, 19);
             this.fileSize.MaximumSize = new System.Drawing.Size(1000, 29);
             this.fileSize.MinimumSize = new System.Drawing.Size(64, 29);
@@ -281,6 +283,7 @@ namespace MeGUI.packages.tools.oneclick
             // 
             // containerTypeList
             // 
+            this.containerTypeList.CheckOnClick = true;
             this.containerTypeList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.containerTypeList.Location = new System.Drawing.Point(3, 59);
             this.containerTypeList.Name = "containerTypeList";
