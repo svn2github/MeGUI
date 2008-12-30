@@ -1,3 +1,10 @@
+0.3.1.1005
+    - (kurtnoise) [VideoEncodingComponent] same anchor settings for Edit Zones & Enqueue buttons.
+    - (kurtnoise) [MainForm] few tunings: move Help & Reset buttons to the bottom left corner, add a One-Click button to the bottom right corner.
+    - (kurtnoise) [OneClickConfigPanel] CheckOnClick = True
+    - (kurtnoise) [VideoUtil] use IFOParser class to retrieve audio streams infos if ifo file detected. Hence, we have Languages in the Audio Streams selection for the One-Click Encoder like in the d2v creator.
+    - (kurtnoise) removed avc2avi muxer.
+
 0.3.1.1004
     - (kurtnoise) [PrettyFormatting] add default value for ReplaceFPSValue() in the switch/case.
     - (kurtnoise) [JobUtil] format framerate value to avoid desync. Fix bug #2463080
