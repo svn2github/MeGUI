@@ -28,6 +28,7 @@ namespace MeGUI
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Changelog));
             this.txtChangelog = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
@@ -53,12 +54,13 @@ namespace MeGUI
             this.DataBindings.Add(new System.Windows.Forms.Binding("Location", global::MeGUI.Properties.Settings.Default, "ChangelogLocation", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.DataBindings.Add(new System.Windows.Forms.Binding("ClientSize", global::MeGUI.Properties.Settings.Default, "ChangelogSize", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.DataBindings.Add(new System.Windows.Forms.Binding("WindowState", global::MeGUI.Properties.Settings.Default, "ChangelogWindowState", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Location = global::MeGUI.Properties.Settings.Default.ChangelogLocation;
             this.Name = "Changelog";
             this.Text = "MeGUI - Changelog";
             this.WindowState = global::MeGUI.Properties.Settings.Default.ChangelogWindowState;
-            this.Resize += new System.EventHandler(this.Changelog_Resize);
             this.Load += new System.EventHandler(this.Changelog_Load);
+            this.Resize += new System.EventHandler(this.Changelog_Resize);
             this.ResumeLayout(false);
             this.PerformLayout();
 

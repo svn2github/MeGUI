@@ -29,6 +29,7 @@ namespace MeGUI.core.gui
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WorkerSummary));
             this.panel1 = new System.Windows.Forms.Panel();
             this.individualWorkerSummary3 = new MeGUI.core.gui.IndividualWorkerSummary();
             this.individualWorkerSummary2 = new MeGUI.core.gui.IndividualWorkerSummary();
@@ -89,12 +90,12 @@ namespace MeGUI.core.gui
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newWorkerToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(132, 26);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(138, 26);
             // 
             // newWorkerToolStripMenuItem
             // 
             this.newWorkerToolStripMenuItem.Name = "newWorkerToolStripMenuItem";
-            this.newWorkerToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
+            this.newWorkerToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
             this.newWorkerToolStripMenuItem.Text = "New worker";
             this.newWorkerToolStripMenuItem.Click += new System.EventHandler(this.newWorkerToolStripMenuItem_Click);
             // 
@@ -107,6 +108,7 @@ namespace MeGUI.core.gui
             this.ContextMenuStrip = this.contextMenuStrip1;
             this.Controls.Add(this.panel1);
             this.DataBindings.Add(new System.Windows.Forms.Binding("Location", global::MeGUI.Properties.Settings.Default, "WorkerSummaryLocation", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Location = global::MeGUI.Properties.Settings.Default.WorkerSummaryLocation;
             this.Name = "WorkerSummary";
             this.Text = "WorkerSummary";

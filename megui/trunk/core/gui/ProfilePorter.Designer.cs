@@ -29,6 +29,7 @@ namespace MeGUI.core.gui
         private void InitializeComponent()
         {
             System.Windows.Forms.Button cancelButton;
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProfilePorter));
             this.profileList = new System.Windows.Forms.CheckedListBox();
             this.label1 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
@@ -91,6 +92,7 @@ namespace MeGUI.core.gui
             this.Controls.Add(cancelButton);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.profileList);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ProfilePorter";
             this.Text = "Presets Importer/Exporter";
             this.TopMost = true;

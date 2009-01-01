@@ -28,6 +28,7 @@ namespace MeGUI.core.gui
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AutoUpdateServerConfigWindow));
             this.serverList = new System.Windows.Forms.ListBox();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.addServerButton = new System.Windows.Forms.Button();
@@ -178,6 +179,7 @@ namespace MeGUI.core.gui
             this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.flowLayoutPanel2);
             this.Controls.Add(this.flowLayoutPanel3);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "AutoUpdateServerConfigWindow";
             this.Text = "AutoUpdateServerConfigWindow";
             this.flowLayoutPanel1.ResumeLayout(false);

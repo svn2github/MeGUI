@@ -28,6 +28,7 @@ namespace MeGUI.core.gui
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(InputBox));
             this.btnOk = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.text = new System.Windows.Forms.TextBox();
@@ -79,6 +80,7 @@ namespace MeGUI.core.gui
             this.Controls.Add(this.text);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOk);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "InputBox";
             this.Text = "InputBox";
             this.ResumeLayout(false);

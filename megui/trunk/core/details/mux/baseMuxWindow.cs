@@ -193,6 +193,7 @@ namespace MeGUI
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(baseMuxWindow));
             this.muxButton = new System.Windows.Forms.Button();
             this.videoGroupbox = new System.Windows.Forms.GroupBox();
             this.fps = new MeGUI.core.gui.FPSChooser();
@@ -279,6 +280,7 @@ namespace MeGUI
             // 
             this.vInput.Filename = "";
             this.vInput.Filter = null;
+            this.vInput.FilterIndex = 0;
             this.vInput.FolderMode = false;
             this.vInput.Location = new System.Drawing.Point(118, 13);
             this.vInput.Name = "vInput";
@@ -337,6 +339,7 @@ namespace MeGUI
             // 
             this.chapters.Filename = "";
             this.chapters.Filter = "Chapter files (*.txt)|*.txt";
+            this.chapters.FilterIndex = 0;
             this.chapters.FolderMode = false;
             this.chapters.Location = new System.Drawing.Point(118, 12);
             this.chapters.Name = "chapters";
@@ -379,6 +382,7 @@ namespace MeGUI
             // 
             // splitting
             // 
+            this.splitting.CustomSizes = new MeGUI.core.util.FileSize[0];
             this.splitting.Location = new System.Drawing.Point(115, 45);
             this.splitting.MaximumSize = new System.Drawing.Size(1000, 29);
             this.splitting.MinimumSize = new System.Drawing.Size(64, 29);
@@ -392,6 +396,7 @@ namespace MeGUI
             // 
             this.output.Filename = "";
             this.output.Filter = null;
+            this.output.FilterIndex = 0;
             this.output.FolderMode = false;
             this.output.Location = new System.Drawing.Point(118, 13);
             this.output.Name = "output";
@@ -434,20 +439,20 @@ namespace MeGUI
             this.audioAddTrack,
             this.audioRemoveTrack});
             this.audioMenu.Name = "audioMenu";
-            this.audioMenu.Size = new System.Drawing.Size(141, 48);
+            this.audioMenu.Size = new System.Drawing.Size(147, 48);
             this.audioMenu.Opening += new System.ComponentModel.CancelEventHandler(this.audioMenu_Opening);
             // 
             // audioAddTrack
             // 
             this.audioAddTrack.Name = "audioAddTrack";
-            this.audioAddTrack.Size = new System.Drawing.Size(140, 22);
+            this.audioAddTrack.Size = new System.Drawing.Size(146, 22);
             this.audioAddTrack.Text = "Add track";
             this.audioAddTrack.Click += new System.EventHandler(this.audioAddTrack_Click);
             // 
             // audioRemoveTrack
             // 
             this.audioRemoveTrack.Name = "audioRemoveTrack";
-            this.audioRemoveTrack.Size = new System.Drawing.Size(140, 22);
+            this.audioRemoveTrack.Size = new System.Drawing.Size(146, 22);
             this.audioRemoveTrack.Text = "Remove track";
             this.audioRemoveTrack.Click += new System.EventHandler(this.audioRemoveTrack_Click);
             // 
@@ -489,20 +494,20 @@ namespace MeGUI
             this.subtitleAddTrack,
             this.subtitleRemoveTrack});
             this.subtitleMenu.Name = "subtitleMenu";
-            this.subtitleMenu.Size = new System.Drawing.Size(141, 48);
+            this.subtitleMenu.Size = new System.Drawing.Size(147, 48);
             this.subtitleMenu.Opening += new System.ComponentModel.CancelEventHandler(this.subtitleMenu_Opening);
             // 
             // subtitleAddTrack
             // 
             this.subtitleAddTrack.Name = "subtitleAddTrack";
-            this.subtitleAddTrack.Size = new System.Drawing.Size(140, 22);
+            this.subtitleAddTrack.Size = new System.Drawing.Size(146, 22);
             this.subtitleAddTrack.Text = "Add track";
             this.subtitleAddTrack.Click += new System.EventHandler(this.subtitleAddTrack_Click);
             // 
             // subtitleRemoveTrack
             // 
             this.subtitleRemoveTrack.Name = "subtitleRemoveTrack";
-            this.subtitleRemoveTrack.Size = new System.Drawing.Size(140, 22);
+            this.subtitleRemoveTrack.Size = new System.Drawing.Size(146, 22);
             this.subtitleRemoveTrack.Text = "Remove track";
             this.subtitleRemoveTrack.Click += new System.EventHandler(this.subtitleRemoveTrack_Click);
             // 
@@ -560,6 +565,7 @@ namespace MeGUI
             this.Controls.Add(this.chaptersGroupbox);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "baseMuxWindow";

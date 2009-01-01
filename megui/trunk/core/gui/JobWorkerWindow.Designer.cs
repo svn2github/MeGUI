@@ -30,6 +30,7 @@ namespace MeGUI.core.gui
         {
             System.Windows.Forms.GroupBox groupBox1;
             MeGUI.core.gui.HelpButton helpButton1;
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(JobWorker));
             this.jobQueue1 = new MeGUI.core.gui.JobQueue();
             this.panel1 = new System.Windows.Forms.Panel();
             this.progressLabel = new System.Windows.Forms.Label();
@@ -209,6 +210,7 @@ namespace MeGUI.core.gui
             this.Controls.Add(this.flowLayoutPanel2);
             this.Controls.Add(this.menuStrip1);
             this.DataBindings.Add(new System.Windows.Forms.Binding("WindowState", global::MeGUI.Properties.Settings.Default, "JobWorkerWindowState", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "JobWorker";
             this.Padding = new System.Windows.Forms.Padding(4);
             this.Text = "Job Worker Window";

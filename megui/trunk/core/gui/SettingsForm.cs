@@ -214,6 +214,7 @@ namespace MeGUI
 		private void InitializeComponent()
 		{
             System.Windows.Forms.GroupBox groupBox1;
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsForm));
             this.command = new System.Windows.Forms.TextBox();
             this.runCommand = new System.Windows.Forms.RadioButton();
             this.shutdown = new System.Windows.Forms.RadioButton();
@@ -1820,6 +1821,7 @@ namespace MeGUI
             this.DataBindings.Add(new System.Windows.Forms.Binding("Location", global::MeGUI.Properties.Settings.Default, "SettingsFormSize", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Location = global::MeGUI.Properties.Settings.Default.SettingsFormSize;
             this.MaximizeBox = false;
             this.MinimizeBox = false;

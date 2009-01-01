@@ -28,6 +28,7 @@ namespace MeGUI
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MuxWindow));
             this.label1 = new System.Windows.Forms.Label();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.muxedInput = new MeGUI.FileBar();
@@ -128,6 +129,7 @@ namespace MeGUI
             // 
             this.muxedInput.Filename = "";
             this.muxedInput.Filter = null;
+            this.muxedInput.FilterIndex = 0;
             this.muxedInput.FolderMode = false;
             this.muxedInput.Location = new System.Drawing.Point(118, 45);
             this.muxedInput.Name = "muxedInput";
@@ -144,6 +146,7 @@ namespace MeGUI
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(444, 503);
             this.Controls.Add(this.helpButton1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MuxWindow";
             this.Text = "MeGUI - Muxer";
             this.Controls.SetChildIndex(this.outputGroupbox, 0);

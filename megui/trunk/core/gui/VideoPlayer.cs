@@ -388,6 +388,7 @@ namespace MeGUI
 		{
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.Button goToFrameButton;
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(VideoPlayer));
             this.videoPreview = new System.Windows.Forms.PictureBox();
             this.contextMenu1 = new System.Windows.Forms.ContextMenu();
             this.mnuIntroEnd = new System.Windows.Forms.MenuItem();
@@ -496,12 +497,12 @@ namespace MeGUI
             this.positionSlider.AutoSize = false;
             this.positionSlider.LargeChange = 1000;
             this.positionSlider.Location = new System.Drawing.Point(46, 259);
+            this.positionSlider.Minimum = -1;
             this.positionSlider.Name = "positionSlider";
             this.positionSlider.Size = new System.Drawing.Size(280, 45);
             this.positionSlider.TabIndex = 1;
             this.positionSlider.TickFrequency = 1500;
             this.positionSlider.TickStyle = System.Windows.Forms.TickStyle.Both;
-            this.positionSlider.Minimum = -1;
             this.positionSlider.Value = -1;
             this.positionSlider.Scroll += new System.EventHandler(this.positionSlider_Scroll);
             // 
@@ -705,6 +706,7 @@ namespace MeGUI
             this.Controls.Add(this.previewGroupbox);
             this.Controls.Add(this.positionSlider);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximumSize = new System.Drawing.Size(1920, 1600);
             this.MinimumSize = new System.Drawing.Size(368, 416);
             this.Name = "VideoPlayer";

@@ -28,6 +28,7 @@ namespace MeGUI
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AdaptiveMuxWindow));
             this.containerFormat = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
@@ -116,11 +117,8 @@ namespace MeGUI
             // 
             // splitting
             // 
+            this.splitting.CustomSizes = new MeGUI.core.util.FileSize[0];
             this.splitting.Location = new System.Drawing.Point(114, 76);
-            // 
-            // output
-            // 
-            this.output.ReadOnly = false;
             // 
             // fps
             // 
@@ -161,6 +159,7 @@ namespace MeGUI
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(430, 513);
             this.Controls.Add(this.helpButton1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "AdaptiveMuxWindow";
             this.Text = "MeGUI - Adaptive Muxer";
             this.Controls.SetChildIndex(this.muxButton, 0);

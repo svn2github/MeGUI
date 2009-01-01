@@ -29,6 +29,7 @@ namespace MeGUI.core.gui
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProfileExporter));
             this.PresetExporterToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.statusCheck = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.checkAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -85,6 +86,7 @@ namespace MeGUI.core.gui
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.ClientSize = new System.Drawing.Size(383, 358);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ProfileExporter";
             this.Text = "Presets Exporter";
             this.Shown += new System.EventHandler(this.ProfileExporter_Shown);
