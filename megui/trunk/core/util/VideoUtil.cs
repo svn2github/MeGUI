@@ -320,8 +320,11 @@ namespace MeGUI
                     {
                         if (atrack.FormatSettingsSBR == "Yes")
                              flag = 1;
-                        if ((atrack.Channels == "2") || (atrack.Channels == "1") && (atrack.SamplingRate == "24000")) // workaround for raw aac
-                             flag = 1;
+                        if (atrack.SamplingRate == "24000")
+                        {
+                            if ((atrack.Channels == "2") || (atrack.Channels == "1")) // workaround for raw aac
+                                flag = 1;
+                        }
                     }
                 }
             }
