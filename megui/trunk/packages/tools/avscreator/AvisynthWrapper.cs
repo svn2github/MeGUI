@@ -147,7 +147,7 @@ namespace MeGUI
 
 
         [DllImport("AvisynthWrapper", ExactSpelling = true, SetLastError = false, CharSet = CharSet.Ansi)]
-        private static extern int dimzon_avs_init(ref IntPtr avs, string func, string arg, ref AVSDLLVideoInfo vi, ref AviSynthColorspace originalColorspace, ref AudioSampleType originalSampleType, string cs);
+        private static extern int dimzon_avs_init_2(ref IntPtr avs, string func, string arg, ref AVSDLLVideoInfo vi, ref AviSynthColorspace originalColorspace, ref AudioSampleType originalSampleType, string cs);
         [DllImport("AvisynthWrapper", ExactSpelling = true, SetLastError = false, CharSet = CharSet.Ansi)]
         private static extern int dimzon_avs_destroy(ref IntPtr avs);
         [DllImport("AvisynthWrapper", ExactSpelling = true, SetLastError = false, CharSet = CharSet.Ansi)]
@@ -155,7 +155,7 @@ namespace MeGUI
         [DllImport("AvisynthWrapper", ExactSpelling = true, SetLastError = false, CharSet = CharSet.Ansi)]
         private static extern int dimzon_avs_getaframe(IntPtr avs, IntPtr buf, long sampleNo, long sampleCount);
         [DllImport("AvisynthWrapper", ExactSpelling = true, SetLastError = false, CharSet = CharSet.Ansi)]
-        private static extern int dimzon_avs_getvframe(IntPtr avs, IntPtr buf, int stride, int frm);
+        private static extern int dimzon_avs_getvframe(IntPtr avs, IntPtr buf, int frm);
         [DllImport("AvisynthWrapper", ExactSpelling = true, SetLastError = false, CharSet = CharSet.Ansi)]
         private static extern int dimzon_avs_getintvariable(IntPtr avs, string name, ref int val);
 
@@ -420,9 +420,9 @@ namespace MeGUI
 			}
 		}
 
-        public void ReadFrame(IntPtr addr, int stride, int frame)
+        public void ReadFrame(IntPtr addr, int frame)
         {
-            if (0 != dimzon_avs_getvframe(_avs, addr, stride, frame))
+            if (0 != dimzon_avs_getvframe(_avs, addr, frame))
                 throw new AviSynthException(getLastError());
         }
 
@@ -433,7 +433,7 @@ namespace MeGUI
             _avs =  new IntPtr(0);
             _colorSpace = AviSynthColorspace.Unknown;
             _sampleType = AudioSampleType.Unknown;
-            if(0!=dimzon_avs_init(ref _avs, func, arg, ref _vi, ref _colorSpace, ref _sampleType, forceColorspace.ToString()))
+            if(0!=dimzon_avs_init_2(ref _avs, func, arg, ref _vi, ref _colorSpace, ref _sampleType, forceColorspace.ToString()))
             {
                 string err = getLastError();
                 cleanup(false);
