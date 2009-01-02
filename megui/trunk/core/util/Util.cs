@@ -449,13 +449,13 @@ namespace MeGUI.core.util
             if (sec == 60)
             {
                 sec = 0;
-                min = min + 1;
+                min += 1;
             }
 
             if (min == 60)
             {
                 min = 0;
-                hrs = hrs + 1;
+                hrs += 1;
             }
 
             myTime = string.Format("{0:00}:{1:00}:{2:00}", hrs, min, sec);
