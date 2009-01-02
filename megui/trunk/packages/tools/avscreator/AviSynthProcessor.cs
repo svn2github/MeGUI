@@ -79,7 +79,7 @@ namespace MeGUI
             IntPtr zero = new IntPtr(0);
             for (position = 0; position < stup.NbFramesTotal && !aborted; position++)
             {
-                file.Clip.ReadFrame(zero, (int)position);
+                file.Clip.ReadFrame(zero, 0, (int)position);
                 mre.WaitOne();
             }
             file.Dispose();

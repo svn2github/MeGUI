@@ -145,7 +145,8 @@ namespace MeGUI
 			public long num_audio_samples;
 		}
 
-
+        [DllImport("AvisynthWrapper", ExactSpelling = true, SetLastError = false, CharSet = CharSet.Ansi)]
+        private static extern int dimzon_avs_init(ref IntPtr avs, string func, string arg, ref AVSDLLVideoInfo vi, ref AviSynthColorspace originalColorspace, ref AudioSampleType originalSampleType, string cs);
         [DllImport("AvisynthWrapper", ExactSpelling = true, SetLastError = false, CharSet = CharSet.Ansi)]
         private static extern int dimzon_avs_init_2(ref IntPtr avs, string func, string arg, ref AVSDLLVideoInfo vi, ref AviSynthColorspace originalColorspace, ref AudioSampleType originalSampleType, string cs);
         [DllImport("AvisynthWrapper", ExactSpelling = true, SetLastError = false, CharSet = CharSet.Ansi)]
@@ -155,7 +156,7 @@ namespace MeGUI
         [DllImport("AvisynthWrapper", ExactSpelling = true, SetLastError = false, CharSet = CharSet.Ansi)]
         private static extern int dimzon_avs_getaframe(IntPtr avs, IntPtr buf, long sampleNo, long sampleCount);
         [DllImport("AvisynthWrapper", ExactSpelling = true, SetLastError = false, CharSet = CharSet.Ansi)]
-        private static extern int dimzon_avs_getvframe(IntPtr avs, IntPtr buf, int frm);
+        private static extern int dimzon_avs_getvframe(IntPtr avs, IntPtr buf, int stride, int frm);
         [DllImport("AvisynthWrapper", ExactSpelling = true, SetLastError = false, CharSet = CharSet.Ansi)]
         private static extern int dimzon_avs_getintvariable(IntPtr avs, string name, ref int val);
 
@@ -389,7 +390,6 @@ namespace MeGUI
 
 		#endregion
 
-
         public int GetIntVariable(string variableName, int defaultValue)
         {
             int v = 0;
@@ -420,9 +420,9 @@ namespace MeGUI
 			}
 		}
 
-        public void ReadFrame(IntPtr addr, int frame)
+        public void ReadFrame(IntPtr addr, int stride, int frame)
         {
-            if (0 != dimzon_avs_getvframe(_avs, addr, frame))
+            if (0 != dimzon_avs_getvframe(_avs, addr, stride, frame))
                 throw new AviSynthException(getLastError());
         }
 
