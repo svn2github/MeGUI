@@ -850,7 +850,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 throw new EncoderMissingException(_encoderExecutablePath);
             }
 
-            script.AppendFormat("ConvertAudioTo16bit(){0}", Environment.NewLine);
+         //   script.AppendFormat("ConvertAudioTo16bit(){0}", Environment.NewLine);
+            script.AppendLine(Environment.NewLine);
             script.AppendLine(@"return last");
 
             // copy the appropriate function at the end of the script
