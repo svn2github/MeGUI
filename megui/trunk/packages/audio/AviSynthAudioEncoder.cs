@@ -279,7 +279,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                         if (0 == a.ChannelsCount)
                             throw new ApplicationException("Can't find audio stream");
 
-                        LogItem inputLog = _log.Info("Input");
+                        LogItem inputLog = _log.Info("Output Decoder");
                         inputLog.LogValue("Channels", a.ChannelsCount);
                         inputLog.LogValue("Bits per sample", a.BitsPerSample);
                         inputLog.LogValue("Sample rate", a.AudioSampleRate);
@@ -479,7 +479,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             target.Write(BitConverter.GetBytes(useFaadTrick ? FAAD_MAGIC_VALUE : (uint)(a.AudioSizeInBytes + WAV_HEADER_SIZE)), 0, 4);
             target.Write(System.Text.Encoding.ASCII.GetBytes("WAVEfmt "), 0, 8);
             target.Write(BitConverter.GetBytes((uint)0x10), 0, 4);
-            target.Write(BitConverter.GetBytes((short)0x01), 0, 2);
+            target.Write(BitConverter.GetBytes((a.SampleType==AudioSampleType.FLOAT) ? (short)0x03 : (short)0x01), 0, 2);
             target.Write(BitConverter.GetBytes(a.ChannelsCount), 0, 2);
             target.Write(BitConverter.GetBytes(a.AudioSampleRate), 0, 4);
             target.Write(BitConverter.GetBytes(a.AvgBytesPerSec), 0, 4);
@@ -850,9 +850,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 throw new EncoderMissingException(_encoderExecutablePath);
             }
 
-            script.AppendFormat("ConvertAudioTo16bit(){0}", Environment.NewLine);
-          //  script.AppendLine(Environment.NewLine);
+            script.AppendLine(Environment.NewLine);
             script.AppendLine(@"return last");
+            script.AppendLine(Environment.NewLine);
 
             // copy the appropriate function at the end of the script
             switch (audioJob.Settings.DownmixMode)
