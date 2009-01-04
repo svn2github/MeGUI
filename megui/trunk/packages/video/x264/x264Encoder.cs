@@ -313,6 +313,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                 if (xs.QuantizerMatrixType == 2)
                     sb.Append("--cqmfile \"" + xs.QuantizerMatrix + "\" ");
             }
+            if (output.EndsWith(".264"))
+                sb.Append("--aud ");  // recommended by the specs
             sb.Append("--progress "); // ensure that the progress is shown
             if (xs.NoDCTDecimate)
                 sb.Append("--no-dct-decimate ");
@@ -324,7 +326,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                 sb.Append("--interlaced ");
             if (xs.NoiseReduction > 0)
                 sb.Append("--nr " + xs.NoiseReduction + " ");
-            //add the rest of the mencoder commandline regarding the output
+            //add the rest of the commandline regarding the output
             if (xs.EncodingMode == 2 || xs.EncodingMode == 5)
                 sb.Append("--output NUL ");
             else
