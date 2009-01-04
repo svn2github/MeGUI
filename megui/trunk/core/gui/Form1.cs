@@ -118,11 +118,11 @@ namespace MeGUI
         private LogTree logTree1;
         private SplitContainer splitContainer1;
         private FlowLayoutPanel flowLayoutPanel1;
-        private HelpButton helpButton2;
         private FlowLayoutPanel flowLayoutPanel2;
         private Button autoEncodeButton;
         private Button resetButton;
         private Button OneClickEncButton;
+        private Button HelpButton;
         private List<Form> formsToReopen = new List<Form>();
 
         public bool IsHiddenMode { get { return trayIcon.Visible; } }
@@ -153,7 +153,6 @@ namespace MeGUI
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.resetButton = new System.Windows.Forms.Button();
-            this.helpButton2 = new MeGUI.core.gui.HelpButton();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
             this.autoEncodeButton = new System.Windows.Forms.Button();
             this.OneClickEncButton = new System.Windows.Forms.Button();
@@ -206,6 +205,7 @@ namespace MeGUI
             this.openMeGUIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.exitMeGUIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.HelpButton = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.inputTab.SuspendLayout();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -265,7 +265,7 @@ namespace MeGUI
             // 
             this.flowLayoutPanel1.BackColor = System.Drawing.SystemColors.Control;
             this.flowLayoutPanel1.Controls.Add(this.resetButton);
-            this.flowLayoutPanel1.Controls.Add(this.helpButton2);
+            this.flowLayoutPanel1.Controls.Add(this.HelpButton);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
@@ -278,22 +278,12 @@ namespace MeGUI
             this.resetButton.AutoSize = true;
             this.resetButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.resetButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.resetButton.Location = new System.Drawing.Point(3, 5);
+            this.resetButton.Location = new System.Drawing.Point(3, 3);
             this.resetButton.Name = "resetButton";
             this.resetButton.Size = new System.Drawing.Size(45, 23);
             this.resetButton.TabIndex = 4;
             this.resetButton.Text = "Reset";
             this.resetButton.Click += new System.EventHandler(this.resetButton_Click);
-            // 
-            // helpButton2
-            // 
-            this.helpButton2.ArticleName = "Main window#Input";
-            this.helpButton2.AutoSize = true;
-            this.helpButton2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.helpButton2.Location = new System.Drawing.Point(54, 3);
-            this.helpButton2.Name = "helpButton2";
-            this.helpButton2.Size = new System.Drawing.Size(41, 25);
-            this.helpButton2.TabIndex = 2;
             // 
             // flowLayoutPanel2
             // 
@@ -686,6 +676,18 @@ namespace MeGUI
             this.exitMeGUIToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
             this.exitMeGUIToolStripMenuItem.Text = "Exit MeGUI";
             this.exitMeGUIToolStripMenuItem.Click += new System.EventHandler(this.exitMeGUIToolStripMenuItem_Click);
+            // 
+            // HelpButton
+            // 
+            this.HelpButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.HelpButton.AutoSize = true;
+            this.HelpButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.HelpButton.Location = new System.Drawing.Point(54, 3);
+            this.HelpButton.Name = "HelpButton";
+            this.HelpButton.Size = new System.Drawing.Size(38, 23);
+            this.HelpButton.TabIndex = 5;
+            this.HelpButton.Text = "Help";
+            this.HelpButton.Click += new System.EventHandler(this.HelpButton_Click);
             // 
             // MainForm
             // 
@@ -1940,6 +1942,11 @@ namespace MeGUI
         private void OneClickEncButton_Click(object sender, EventArgs e)
         {
             RunTool("one_click");
+        }
+
+        private void HelpButton_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://mewiki.project357.com/wiki/Main_Page");
         }
     }
     public class CommandlineUpgradeData
