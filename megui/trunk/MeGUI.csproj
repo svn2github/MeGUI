@@ -324,7 +324,7 @@
     <Compile Include="core\gui\FileSizeDialog.Designer.cs">
       <DependentUpon>FileSizeDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="core\gui\Form1.cs">
+    <Compile Include="core\gui\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="core\gui\FPSChooser.cs">
@@ -753,8 +753,8 @@
       <SubType>Designer</SubType>
       <DependentUpon>FileSizeDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="core\gui\Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="core\gui\MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="core\gui\HelpButton.resx">
