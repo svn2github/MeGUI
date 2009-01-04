@@ -224,7 +224,7 @@ namespace MeGUI
             // signalAR
             // 
             this.signalAR.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.signalAR.Location = new System.Drawing.Point(349, 43);
+            this.signalAR.Location = new System.Drawing.Point(190, 17);
             this.signalAR.Name = "signalAR";
             this.signalAR.Size = new System.Drawing.Size(82, 24);
             this.signalAR.TabIndex = 5;
