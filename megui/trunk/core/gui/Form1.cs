@@ -283,6 +283,7 @@ namespace MeGUI
             this.resetButton.Size = new System.Drawing.Size(45, 23);
             this.resetButton.TabIndex = 4;
             this.resetButton.Text = "Reset";
+            this.resetButton.Click += new System.EventHandler(this.resetButton_Click);
             // 
             // helpButton2
             // 
