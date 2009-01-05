@@ -1,3 +1,21 @@
+0.3.1.1006
+    - (kurtnoise) [UpdateWindow] cosmetics - singular/plural for comments.
+    - (kurtnoise) [x264Encoder] enable --aud command for all output types.
+    - (kurtnoise) Form1.cs --> MainForm.cs
+    - (kurtnoise) [MainForm] help button refactoring.
+    - (kurtnoise) [MainForm] enable reset button event.
+    - (kurtnoise) [x264Encoder] add --aud switch for raw avc output files. Recommended by the specs.
+    - (ateeq) [OneClickWindow] Move SignalAR check box within window so it's visible
+    - (kurtnoise) update copyright date...;-)
+    - (kurtnoise) [AviSynthAudioEncoder] fix an error in the wav header writing. Now, the avisynth decoder filter will always use the highest resolution supported by the encoder. No more restriction...
+    - (kurtnoise) [AviSynthAudioEncoder] re enable temporary the 16bits conversion. Without this, it produces an output garbage with the current code...
+    - (kurtnoise) [Util] cosmetics
+    - (kurtnoise) Fix a buffer overrun issue. Dohh !!! First time I see this...
+    - (kurtnoise) [AviSynthAudioEncoder] remove ConvertAudioTo16Bit() restriction.
+    - (kurtnoise) update AvisynWrapper library and its wrapper to support any audio bits depth. Requires Avisynth 2.5.7 or higher...
+    - (kurtnoise) put megui icon to all forms.
+    - (kurtnoise) [VideoUtil] fix an error in getSBRFlagFromAACStream()
+
 0.3.1.1005
     - (kurtnoise) [VideoEncodingComponent] same anchor settings for Edit Zones & Enqueue buttons.
     - (kurtnoise) [MainForm] few tunings: move Help & Reset buttons to the bottom left corner, add a One-Click button to the bottom right corner.
