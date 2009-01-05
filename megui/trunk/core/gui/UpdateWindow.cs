@@ -120,20 +120,20 @@ namespace MeGUI
 
                 if (!HasAvailableVersions)
                 {
-                    status.Text = "No Updates Available";
+                    status.Text = "No Update Available";
                 }
                 else
                 {
                     if (this.AllowUpdate)
                     {
-                        status.Text = "Updates Available";
+                        status.Text = "Update Available";
                         if (this.DownloadChecked)
                             myitem.Checked = true;
                         else
                             myitem.Checked = false;
                     }
                     else
-                        status.Text = "Updates Ignored";
+                        status.Text = "Update Ignored";
                 }
 
                 myitem.SubItems.Add(name);
@@ -958,7 +958,9 @@ namespace MeGUI
                     d(node, null, node.Name);
                 }
             }
-            AddTextToLog(string.Format("There are {0} files that can be updated.", NumUpdatableFiles()));
+            if (NumUpdatableFiles() > 1)
+                 AddTextToLog(string.Format("There are {0} files that can be updated.", NumUpdatableFiles()));
+            else AddTextToLog(string.Format("There is {0} file that can be updated.", NumUpdatableFiles()));
             webUpdate.Set();
         }
         /// <summary>
@@ -1089,8 +1091,8 @@ namespace MeGUI
         {
             ListViewItem itm = this.listViewDetails.Items[e.Index];
             // Do not allow checking if there are no updates or it is set to ignore.
-            if (itm.SubItems["Status"].Text.Equals("No Updates Available")
-                || itm.SubItems["Status"].Text.Equals("Updates Ignored"))
+            if (itm.SubItems["Status"].Text.Equals("No Update Available")
+                || itm.SubItems["Status"].Text.Equals("Update Ignored"))
                 e.NewValue = CheckState.Unchecked;
 
 
@@ -1101,7 +1103,7 @@ namespace MeGUI
                 file.DownloadChecked = false;
 
             if (e.NewValue == CheckState.Unchecked && itm.SubItems["Status"].Text == "Reinstalling")
-                itm.SubItems["Status"].Text = file.AllowUpdate ? (file.HasAvailableVersions ? "Updates Available" : "No Updates Available") : "Updates Ignored";
+                itm.SubItems["Status"].Text = file.AllowUpdate ? (file.HasAvailableVersions ? "Update Available" : "No Update Available") : "Update Ignored";
         }
 
         private void listViewDetails_MouseClick(object sender, MouseEventArgs e)
@@ -1136,26 +1138,26 @@ namespace MeGUI
                 {
                     if (latest == null && file.CurrentVersion == null)
                     {
-                        item.SubItems["Status"].Text = "No Updates Available";
+                        item.SubItems["Status"].Text = "No Update Available";
                         item.Checked = false;
                     }
                     else if (latest != null && file.CurrentVersion == null)
                     {
-                        item.SubItems["Status"].Text = "Updates Available";
+                        item.SubItems["Status"].Text = "Update Available";
                         item.Checked = true;
                     }
                     else if (latest.CompareTo(file.CurrentVersion) > 0)
                     {
-                        item.SubItems["Status"].Text = "Updates Available";
+                        item.SubItems["Status"].Text = "Update Available";
                         item.Checked = true;
                     }
                     else
-                        item.SubItems["Status"].Text = "No Updates Available";
+                        item.SubItems["Status"].Text = "No Update Available";
                 }
                 else
                 {
                     item.Checked = false;
-                    item.SubItems["Status"].Text = "Updates Ignored";
+                    item.SubItems["Status"].Text = "Update Ignored";
                 }
             }
         }
@@ -1268,10 +1270,40 @@ namespace MeGUI
             SetProgressBar(0, 1, 1); //make sure progress bar is at 100%.
 
             if (failedFiles.Count > 0)
-                AddTextToLog(string.Format("Update completed.{2}{0} files were completed successfully{2}{1} files had problems.",
-                    succeededFiles.Count, failedFiles.Count, Environment.NewLine));
+            {
+                if (failedFiles.Count > 1)
+                {
+                    if (succeededFiles.Count > 1)
+                    {
+                        AddTextToLog(string.Format("Update completed.{2}{0} files were completed successfully{2}{1} files had problems.",
+                                     succeededFiles.Count, failedFiles.Count, Environment.NewLine));
+                    }
+                    else
+                    {
+                        AddTextToLog(string.Format("Update completed.{2}{0} file was completed successfully{2}{1} files had problems.",
+                                     succeededFiles.Count, failedFiles.Count, Environment.NewLine));
+                    }
+                }
+                else
+                {
+                    if (succeededFiles.Count > 1)
+                    {
+                        AddTextToLog(string.Format("Update completed.{2}{0} files were completed successfully{2}{1} file had problems.",
+                                     succeededFiles.Count, failedFiles.Count, Environment.NewLine));
+                    }
+                    else
+                    {
+                        AddTextToLog(string.Format("Update completed.{2}{0} file was completed successfully{2}{1} file had problems.",
+                                     succeededFiles.Count, failedFiles.Count, Environment.NewLine));
+                    }
+                }
+            }
             else
-                AddTextToLog(string.Format("Update completed successfully. {0} files updated", succeededFiles.Count));
+            {
+                if (succeededFiles.Count > 1)
+                     AddTextToLog(string.Format("Update completed successfully. {0} files updated", succeededFiles.Count));
+                else AddTextToLog(string.Format("Update completed successfully. {0} file updated", succeededFiles.Count));
+            }
 
             List<string> files = new List<string>();
             foreach (iUpgradeable u in upgradeData)
