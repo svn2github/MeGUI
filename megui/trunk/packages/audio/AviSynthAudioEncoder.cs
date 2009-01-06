@@ -756,7 +756,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 _mustSendWavHeaderToEncoderStdIn = true;
                 OggVorbisSettings n = audioJob.Settings as OggVorbisSettings;
                 _encoderExecutablePath = this._settings.OggEnc2Path;
-                _encoderCommandLine = "-Q --quality " + n.Quality.ToString(System.Globalization.CultureInfo.InvariantCulture) + " -o \"{0}\" -";
+                _encoderCommandLine = "-Q --ignorelength --quality " + n.Quality.ToString(System.Globalization.CultureInfo.InvariantCulture) + " -o \"{0}\" -";
             }
             if (audioJob.Settings is NeroAACSettings)
             {
@@ -777,8 +777,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                         sb.Append("-lc ");
                         break;
                 }
-                if (n.CreateHintTrack)
-                    sb.Append("-hinttrack ");
 
                 switch (n.BitrateMode)
                 {
