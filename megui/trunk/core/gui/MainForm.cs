@@ -1915,24 +1915,26 @@ namespace MeGUI
 
         private void MainForm_Shown(object sender, EventArgs e)
         {
-            if (settings.AutoUpdate)
-            {
-                // Need a seperate thread to run the updater to stop internet lookups from freezing the app.
-                Thread updateCheck = new Thread(new ThreadStart(beginUpdateCheck));
-                updateCheck.IsBackground = true;
-                updateCheck.Start();
-            }
-
             if (MeGUISettings.AvisynthPluginsPath == null)
             {
                 if (AskToDownloadAvisynth() == true)
                     System.Diagnostics.Process.Start("http://www.avisynth.org");
             }
+            else
+            { // launch the updater only if avisynth is found to avoid installation issues
+                if (settings.AutoUpdate)
+                {
+                    // Need a seperate thread to run the updater to stop internet lookups from freezing the app.
+                    Thread updateCheck = new Thread(new ThreadStart(beginUpdateCheck));
+                    updateCheck.IsBackground = true;
+                    updateCheck.Start();
+                }
+            }
         }
 
         private bool AskToDownloadAvisynth()
         {
-            if (MessageBox.Show("MeGUI cannot find Avisynth on your system. May I ask you to install it first ?\n", "Warning",
+            if (MessageBox.Show("MeGUI cannot find Avisynth on your system. Without this, it won't run properly. May I ask you to install it first ?\n", "Warning",
                                      MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                 return true;
             else
