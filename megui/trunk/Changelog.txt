@@ -1,3 +1,8 @@
+0.3.1.1007
+    - (kurtnoise) [MainForm] launch the updater only if avisynth is installed.
+    - (kurtnoise) [AviSynthAudioEncoder] add --ignorelength to the vorbis command line. Useful with +4GB files.
+    - (kurtnoise) [AviSynthAudioEncoder] fix a bug with the vorbis encoder and add a conditional case for accuracy concerning input bits depth.
+
 0.3.1.1006
     - (kurtnoise) [UpdateWindow] cosmetics - singular/plural for comments.
     - (kurtnoise) [x264Encoder] enable --aud command for all output types.
