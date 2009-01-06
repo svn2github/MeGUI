@@ -62,7 +62,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
 
         private int _sampleRate;
 
-
         private System.Threading.ManualResetEvent _mre = new System.Threading.ManualResetEvent(true); // lock used to pause encoding
         private Thread _encoderThread = null;
         private Thread _readFromStdOutThread = null;
@@ -629,9 +628,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             if (audioJob.Delay != 0)
                 script.AppendFormat("DelayAudio({0}.0/1000.0){1}", audioJob.Delay, Environment.NewLine);
 
-            if (audioJob.Settings.ImproveAccuracy || audioJob.Settings.AutoGain /* to fix the bug */)
-                script.AppendFormat("ConvertAudioToFloat(){0}", Environment.NewLine);
-
             if (!string.IsNullOrEmpty(audioJob.CutFile))
             {
                 try
@@ -678,6 +674,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                     script.Append("2==Audiochannels(last)?x_upmixC" + id + @"(last):last" + Environment.NewLine);
                     break;
             }
+
+            if (audioJob.Settings.ImproveAccuracy)
+                script.Append("32==Audiobits(last)?ConvertAudioTo32bit(last):last" + Environment.NewLine);
 
             // put Normalize() after downmix cases >> http://forum.doom9.org/showthread.php?p=1166117#post1166117
             if (audioJob.Settings.AutoGain)
@@ -754,10 +753,10 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             {
                 // http://forum.doom9.org/showthread.php?p=831098#post831098
                 script.Append("6==Audiochannels(last)?GetChannel(last,1,3,2,5,6,4):last" + Environment.NewLine);
-                _mustSendWavHeaderToEncoderStdIn = false;
+                _mustSendWavHeaderToEncoderStdIn = true;
                 OggVorbisSettings n = audioJob.Settings as OggVorbisSettings;
                 _encoderExecutablePath = this._settings.OggEnc2Path;
-                _encoderCommandLine = "-Q --raw --raw-bits={2} --raw-chan={3} --raw-rate={1} --quality " + n.Quality.ToString(System.Globalization.CultureInfo.InvariantCulture) + " -o \"{0}\" -";
+                _encoderCommandLine = "-Q --quality " + n.Quality.ToString(System.Globalization.CultureInfo.InvariantCulture) + " -o \"{0}\" -";
             }
             if (audioJob.Settings is NeroAACSettings)
             {
