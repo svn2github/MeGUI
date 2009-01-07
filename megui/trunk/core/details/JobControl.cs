@@ -278,7 +278,7 @@ namespace MeGUI.core.details
         {
             if (job.Status == JobStatus.PROCESSING) return;
 
-            if (job.OwningWorker != null)
+            if (job.OwningWorker != null && workers.ContainsKey(job.OwningWorker))
                 workers[job.OwningWorker].RemoveJobFromQueue(job);
 
             if (jobQueue.HasJob(job))
@@ -366,11 +366,17 @@ namespace MeGUI.core.details
 
             foreach (Pair<string, List<string>> p in s.workersAndTheirJobLists)
             {
+                JobWorkerMode mode = JobWorkerMode.RequestNewJobs;
+                if (p.fst.StartsWith("Temporary worker "))
+                {
+                    if (p.snd.Count == 0) continue;
+                    mode = JobWorkerMode.CloseOnLocalListCompleted;
+                }
                 JobWorker w = NewWorker(p.fst, false);
+                w.Mode = mode;
                 IEnumerable<TaggedJob> list = toJobList(p.snd);
-                w.Jobs = list;
                 foreach (TaggedJob j in list)
-                    j.OwningWorker = w.Name;
+                    w.AddJob(j);
             }
         }
 
