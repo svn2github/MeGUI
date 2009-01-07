@@ -145,7 +145,9 @@ namespace MeGUI.core.gui
             {
                 if (status == JobWorkerStatus.Idle)
                     return "idle";
-                string _status = string.Format("running {0} ({1:P2})", currentJob.Name, progress/100M);
+                string _status = "running"; 
+                if (currentJob != null)
+                    _status += string.Format(" {0} ({1:P2})", currentJob.Name, progress/100M);
                 if (status == JobWorkerStatus.Stopping)
                     _status += " (stopping after this job)";
                 if (pauseStatus == PauseState.Paused)
