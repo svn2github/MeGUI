@@ -94,7 +94,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                 StringBuilder sb = new StringBuilder();
                 MuxSettings settings = job.Settings;
                 int trackID;
-                int count = 0;
                 
                 sb.Append("-o \"" + settings.MuxedOutput + "\"");
 
@@ -133,17 +132,17 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                 foreach (object o in settings.AudioStreams)
                 {
                     MuxStream stream = (MuxStream)o;
-                    trackID = 0; int heaac_flag = 0;
+                    trackID = 0; int heaac_flag = 0; 
                     if (stream.path.ToLower().EndsWith(".mp4") || stream.path.ToLower().EndsWith(".m4a"))
                     {
-                        trackID = VideoUtil.getIDFromAudioStream(stream.path, count);
-                        heaac_flag = VideoUtil.getSBRFlagFromAACStream(stream.path, count);
+                        trackID = VideoUtil.getIDFromAudioStream(stream.path);
+                        heaac_flag = VideoUtil.getSBRFlagFromAACStream(stream.path);
                         if (heaac_flag > 0)
                             sb.Append(" --aac-is-sbr "+ trackID + ":1");
                     }
                     if (stream.path.ToLower().EndsWith(".aac"))
                     {
-                        heaac_flag = VideoUtil.getSBRFlagFromAACStream(stream.path, count);
+                        heaac_flag = VideoUtil.getSBRFlagFromAACStream(stream.path);
                         if (heaac_flag > 0)
                             sb.Append(" --aac-is-sbr 0:1");
                     }
@@ -154,7 +153,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                     if (stream.delay != 0)
                         sb.AppendFormat(" --sync {0}:{1}ms", trackID, stream.delay);
                     sb.Append(" -a " + trackID + " -D -S \"" + stream.path + "\"");
-                    count++;
                 }
 
                 foreach (object o in settings.SubtitleStreams)

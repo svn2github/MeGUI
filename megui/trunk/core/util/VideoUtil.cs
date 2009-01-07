@@ -263,7 +263,7 @@ namespace MeGUI
             try
             {
                 info = new MediaInfo(fileName);
-                if (info.VideoCount >= 0)
+                if (info.Video.Count > 0)
                 {
                     MediaInfoWrapper.VideoTrack vtrack = info.Video[0];
                     TrackID = Int32.Parse(vtrack.ID);
@@ -281,16 +281,16 @@ namespace MeGUI
         /// <param name="infoFile">the file to be analyzed</param>
         /// <param name="count">the counter</param>
         /// <returns>the audio track ID found</returns>
-        public static int getIDFromAudioStream(string fileName, int count)
+        public static int getIDFromAudioStream(string fileName)
         {
             MediaInfo info;
             int TrackID = 0;
             try
             {
                 info = new MediaInfo(fileName);
-                if (info.AudioCount >= 0)
+                if (info.Audio.Count > 0)
                 {
-                    MediaInfoWrapper.AudioTrack atrack = info.Audio[count];
+                    MediaInfoWrapper.AudioTrack atrack = info.Audio[0];
                     TrackID = Int32.Parse(atrack.ID);
                 }
             }
@@ -306,16 +306,16 @@ namespace MeGUI
         /// <param name="infoFile">the file to be analyzed</param>
         /// <param name="count">the counter</param>
         /// <returns>the flag found</returns>
-        public static int getSBRFlagFromAACStream(string fileName, int count)
+        public static int getSBRFlagFromAACStream(string fileName)
         {
             MediaInfo info;
             int flag = 0;
             try
             {
                 info = new MediaInfo(fileName);
-                if (info.AudioCount >= 0)
+                if (info.Audio.Count > 0)
                 {
-                    MediaInfoWrapper.AudioTrack atrack = info.Audio[count];
+                    MediaInfoWrapper.AudioTrack atrack = info.Audio[0];
                     if (atrack.Format == "AAC")
                     {
                         if (atrack.FormatSettingsSBR == "Yes")

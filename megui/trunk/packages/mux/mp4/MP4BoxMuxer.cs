@@ -202,7 +202,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                 MuxSettings settings = job.Settings;
                 CultureInfo ci = new CultureInfo("en-us");
                 StringBuilder sb = new StringBuilder();
-                int count = 0;
 
                 if (settings.VideoInput.Length > 0)
                 {
@@ -244,15 +243,15 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                     sb.Append(" -add \"" + stream.path);
                     if (stream.path.ToLower().EndsWith(".mp4") || stream.path.ToLower().EndsWith(".m4a"))
                     {
-                        int trackID = VideoUtil.getIDFromAudioStream(stream.path, count);
+                        int trackID = VideoUtil.getIDFromAudioStream(stream.path);
                         sb.Append("#trackID=" + trackID);
-                        int heaac_flag = VideoUtil.getSBRFlagFromAACStream(stream.path, count);
+                        int heaac_flag = VideoUtil.getSBRFlagFromAACStream(stream.path);
                         if (heaac_flag > 0)
                             sb.Append(":sbr");
                     }
                     if (stream.path.ToLower().EndsWith(".aac"))
                     {
-                        int heaac_flag = VideoUtil.getSBRFlagFromAACStream(stream.path, count);
+                        int heaac_flag = VideoUtil.getSBRFlagFromAACStream(stream.path);
                         if (heaac_flag > 0)
                             sb.Append(":sbr");
                     }
@@ -263,7 +262,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                     if (stream.delay != 0)
                         sb.AppendFormat(":delay={0}", stream.delay);
                     sb.Append("\"");
-                    count++;
                 }
                 foreach (object o in settings.SubtitleStreams)
                 {
