@@ -1,3 +1,8 @@
+0.3.1.1008
+    - (kurtnoise) fix a bug for muxers when we have several tracks. 
+    - (ateeq) [JobControl] Ignore workers starting with "Temporary worker " without any jobs, set w.Mode to CloseOnLocalListCompleted and add jobs to worker queue using w.AddJob.
+    - (ateeq) [JobWorkerWindow] Fix for race condition with "shutdown worker" prompt and job progress updates although it may not happen outside a debug session.
+
 0.3.1.1007
     - (kurtnoise) [MainForm] launch the updater only if avisynth is installed.
     - (kurtnoise) [AviSynthAudioEncoder] add --ignorelength to the vorbis command line. Useful with +4GB files.
