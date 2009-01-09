@@ -383,18 +383,18 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 else
                 {
                     // Better Errors Exception for Audio Encoders
-                    int encoder_path = _encoderExecutablePath.LastIndexOf(@"\");
-                    string audio_encoder = _encoderExecutablePath.Substring(encoder_path + 1).ToLower();
+                    string encoder_path = Path.GetDirectoryName(_encoderExecutablePath);
 
                     _log.LogValue("An error occurred", e, ImageType.Error);
 
                     if (audioJob.Settings is WinAmpAACSettings)
                     {
-                        if (File.Exists(encoder_path + "enc_aacplus.dll") == false)
+                        if (File.Exists(Path.Combine(encoder_path, "enc_aacplus.dll")) == false)
                             _log.Error("enc_aacplus.dll not found in the path...");
                         if (File.Exists(Environment.SystemDirectory + @"\nscrt.dll") == false)
                             _log.Error("nscrt.dll must be in your Windows System directory...");
                     }
+
                     su.HasError = true;
                     raiseEvent();
                 }
@@ -848,7 +848,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             _encoderExecutablePath = Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase, _encoderExecutablePath);
             if (!File.Exists(_encoderExecutablePath))
             {
-                deleteTempFiles();
+                deleteTempFiles();             
                 throw new EncoderMissingException(_encoderExecutablePath);
             }
 
