@@ -1,3 +1,7 @@
+0.3.1.1009
+    - (kurtnoise) [AviSynthAudioEncoder] cosmetics.
+    - (kurtnoise) [AviSynthAudioEncoder] workaround for encoders which don't support 32 bits depth.
+
 0.3.1.1008
     - (kurtnoise) fix a bug for muxers when we have several tracks. 
     - (ateeq) [JobControl] Ignore workers starting with "Temporary worker " without any jobs, set w.Mode to CloseOnLocalListCompleted and add jobs to worker queue using w.AddJob.
