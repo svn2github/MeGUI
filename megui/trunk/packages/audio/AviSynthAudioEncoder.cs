@@ -693,6 +693,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             if (audioJob.Settings is AC3Settings)
             {
                 script.Append("6<=Audiochannels(last)?GetChannel(last,1,3,2,5,6,4):last" + Environment.NewLine);
+                script.Append("32==Audiobits(last)?ConvertAudioTo16bit(last):last" + Environment.NewLine);
                 _mustSendWavHeaderToEncoderStdIn = true;
                 AC3Settings n = audioJob.Settings as AC3Settings;
                 _encoderExecutablePath = this._settings.FFMpegPath;
@@ -700,6 +701,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             }
             if (audioJob.Settings is MP2Settings)
             {
+                script.Append("32==Audiobits(last)?ConvertAudioTo16bit(last):last" + Environment.NewLine);
                 _mustSendWavHeaderToEncoderStdIn = true;
                 MP2Settings n = audioJob.Settings as MP2Settings;
                 _encoderExecutablePath = this._settings.FFMpegPath;
@@ -710,6 +712,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 _mustSendWavHeaderToEncoderStdIn = false;
                 WinAmpAACSettings n = audioJob.Settings as WinAmpAACSettings;
                 _encoderExecutablePath = this._settings.EncAacPlusPath;
+                script.Append("32==Audiobits(last)?ConvertAudioTo16bit(last):last" + Environment.NewLine);
                 StringBuilder sb = new StringBuilder("- \"{0}\" --rawpcm {1} {3} {2} --cbr ");
                 sb.Append(n.Bitrate * 1000);
                 if (n.Mpeg2AAC)
@@ -743,6 +746,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             if (audioJob.Settings is AudXSettings)
             {
                 script.Append("ResampleAudio(last,48000)" + Environment.NewLine);
+                script.Append("32==Audiobits(last)?ConvertAudioTo16bit(last):last" + Environment.NewLine);
                 script.Append("6==Audiochannels(last)?last:GetChannel(last,1,1,1,1,1,1)" + Environment.NewLine);
                 _mustSendWavHeaderToEncoderStdIn = false;
                 AudXSettings n = audioJob.Settings as AudXSettings;
@@ -822,6 +826,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 MP3Settings m = audioJob.Settings as MP3Settings;
                 _mustSendWavHeaderToEncoderStdIn = true;
                 _encoderExecutablePath = this._settings.LamePath;
+                script.Append("32==Audiobits(last)?ConvertAudioTo16bit(last):last" + Environment.NewLine);
 
                 switch (m.BitrateMode)
                 {
