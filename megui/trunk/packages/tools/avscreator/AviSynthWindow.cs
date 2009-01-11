@@ -1497,6 +1497,13 @@ namespace MeGUI
         {
             foreach (Control ctrl in this.controlsToDisable)
                 ctrl.Enabled = enable;
+                if (deintSourceType.SelectedIndex < 1)
+                {
+                    deinterlace.Enabled = false;
+                    deinterlace.Checked = false;
+                }
+                else
+                    deinterlace.Enabled = true;
         }
 
         private void openVideo(string videoInput)
@@ -1881,7 +1888,13 @@ namespace MeGUI
                     {
                         deintProgressBar.Enabled = false;
                         this.DeintInfo = info;
-                        deinterlace.Enabled = true;
+                        if (deintSourceType.SelectedIndex < 1)
+                        {
+                            deinterlace.Enabled = false;
+                            deinterlace.Checked = false;
+                        }
+                        else
+                            deinterlace.Enabled = true;
                         if (deinterlaceType.Text == "Do nothing")
                             deinterlace.Checked = false;
                         else
@@ -1966,6 +1979,13 @@ namespace MeGUI
             deintFieldOrder.Enabled = !(deintSourceType.SelectedItem == ScriptServer.ListOfSourceTypes[(int)UserSourceType.Progressive]);
             deinterlaceType.DataSource = ScriptServer.GetDeinterlacers(DeintInfo);
             deinterlaceType.BindingContext = new BindingContext();
+            if (deintSourceType.SelectedIndex < 1)
+            {
+                deinterlace.Enabled = false;
+                deinterlace.Checked = false;
+            }
+            else
+                deinterlace.Enabled = true;
             showScript();
         }
 
