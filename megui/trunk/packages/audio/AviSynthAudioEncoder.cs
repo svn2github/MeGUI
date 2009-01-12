@@ -803,21 +803,14 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             {
                 FaacSettings f = audioJob.Settings as FaacSettings;
                 _encoderExecutablePath = this._settings.FaacPath;
-                _mustSendWavHeaderToEncoderStdIn = false;
+                _mustSendWavHeaderToEncoderStdIn = true;
                 switch (f.BitrateMode)
                 {
-                    // {0} means output file name
-                    // {1} means samplerate in Hz
-                    // {2} means bits per sample
-                    // {3} means channel count
-                    // {4} means samplecount
-                    // {5} means size in bytes
-
                     case BitrateManagementMode.VBR:
-                        _encoderCommandLine = "-q " + f.Quality + " -o \"{0}\" -P -X -R {1} -B {2} -C {3} --mpeg-vers 4 -";
+                        _encoderCommandLine = "-q " + f.Quality + " --mpeg-vers 4 -o \"{0}\" -"; 
                         break;
                     default:
-                        _encoderCommandLine = "-b " + f.Bitrate + " -o \"{0}\" -P -X -R {1} -B {2} -C {3} --mpeg-vers 4 -";
+                        _encoderCommandLine = "-b " + f.Bitrate + " --mpeg-vers 4 -o \"{0}\" -";
                         break;
                 }
             }
@@ -840,8 +833,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                         _encoderCommandLine = "--abr " + m.Bitrate + " -h --silent - \"{0}\"";
                         break;
                 }
-
-
             }
 
             //Just check encoder existance
