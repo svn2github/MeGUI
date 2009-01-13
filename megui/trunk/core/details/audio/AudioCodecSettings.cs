@@ -50,7 +50,7 @@ namespace MeGUI
         [EnumTitle("Upmix 2 to 5.1 with center channel dialog")]
         UpmixWithCenterChannelDialog
 	};
-
+ 
     [
         XmlInclude(typeof(MP2Settings)),
         XmlInclude(typeof(AC3Settings)), 
@@ -71,12 +71,14 @@ namespace MeGUI
         public virtual void FixFileNames(Dictionary<string, string> _) {}
 		private ChannelMode downmixMode;
 		private BitrateManagementMode bitrateMode;
+        private int sampleRateType;
 		private int bitrate;
+        private int normalize;
         public int delay;
 		public bool delayEnabled;
         private bool autoGain;
         private bool forceDirectShow;
-        private bool improveAccuracy;
+        private bool applyDRC;
         private AudioCodec audioCodec;
         private AudioEncoderType audioEncoderType;
 
@@ -112,15 +114,11 @@ namespace MeGUI
 			delayEnabled = false;
 			autoGain = true;
             forceDirectShow = false;
-            improveAccuracy = true;
+            applyDRC = false;
+            sampleRateType = 0;
+            normalize = 100;
 		}
 
-        public bool ImproveAccuracy
-        {
-            get { return improveAccuracy; }
-            set { improveAccuracy = value; }
-        }
-	
 	    public bool ForceDecodingViaDirectShow
 	    {
             get { return forceDirectShow; }
@@ -129,24 +127,42 @@ namespace MeGUI
 	    
 		public ChannelMode DownmixMode
 		{
-			get {return downmixMode;}
-			set {downmixMode = value;}
+			get { return downmixMode; }
+			set { downmixMode = value; }
 		}
 		public virtual BitrateManagementMode BitrateMode
 		{
-			get {return bitrateMode;}
-			set {bitrateMode = value;}
+			get { return bitrateMode; }
+			set { bitrateMode = value; }
 		}
 		public virtual int Bitrate
 		{
-			get {return NormalizeVar(bitrate, supportedBitrates);}
-			set {bitrate = value;}
+			get { return NormalizeVar(bitrate, supportedBitrates); }
+			set { bitrate = value; }
 		}
 		public bool AutoGain
 		{
-			get {return autoGain;}
-			set {autoGain = value;}
+			get { return autoGain; }
+			set { autoGain = value; }
 		}
+
+        public int SampleRateType
+        {
+            get { return sampleRateType; }
+            set { sampleRateType = value; }
+        }
+
+        public bool ApplyDRC
+        {
+            get { return applyDRC; }
+            set { applyDRC = value; }
+        }
+
+        public int Normalize
+        {
+            get { return normalize; }
+            set { normalize = value; }
+        }
 
         object ICloneable.Clone()
         {

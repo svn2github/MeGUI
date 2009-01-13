@@ -73,6 +73,7 @@ namespace MeGUI.core.details.audio
             InitializeComponent();
             this.besweetDownmixMode.DataSource = _avisynthChannelSet;
             this.besweetDownmixMode.BindingContext = new BindingContext();
+            this.cbSampleRate.SelectedIndex = 0;
         }
 	    
 		#endregion
@@ -133,21 +134,25 @@ namespace MeGUI.core.details.audio
 			get
 			{
                 AudioCodecSettings fas = CodecSettings;
-                fas.ImproveAccuracy = improvedAccuracy.Checked;
                 fas.ForceDecodingViaDirectShow = forceDShowDecoding.Checked;
                 EnumProxy o = besweetDownmixMode.SelectedItem as EnumProxy;
-			    if(o!=null)
-				    fas.DownmixMode = (ChannelMode) o.RealValue ;
+			    if(o != null)
+				    fas.DownmixMode = (ChannelMode)o.RealValue ;
 				fas.AutoGain = autoGain.Checked;
+                fas.SampleRateType = cbSampleRate.SelectedIndex;
+                fas.ApplyDRC = applyDRC.Checked;
+                fas.Normalize = (int)normalize.Value;
 				return fas;
 			}
 			set
 			{
 				AudioCodecSettings fas = value;
                 besweetDownmixMode.SelectedItem = EnumProxy.Create(fas.DownmixMode);
-                improvedAccuracy.Checked = fas.ImproveAccuracy;
                 forceDShowDecoding.Checked = fas.ForceDecodingViaDirectShow;
 				autoGain.Checked = fas.AutoGain;
+                cbSampleRate.SelectedIndex = fas.SampleRateType;
+                applyDRC.Checked = fas.ApplyDRC;
+                normalize.Value = fas.Normalize;
                 CodecSettings = fas;
 			}
 		}
@@ -170,5 +175,16 @@ namespace MeGUI.core.details.audio
 		{
 		}
 		#endregion
+
+        private void applyDRC_CheckedChanged(object sender, EventArgs e)
+        {
+            autoGain.Checked = applyDRC.Checked;
+            autoGain_CheckedChanged(sender, e);
+        }
+
+        private void autoGain_CheckedChanged(object sender, EventArgs e)
+        {
+            normalize.Enabled = autoGain.Checked;
+        }
     }
 }

@@ -22,6 +22,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -61,6 +62,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
         private bool _mustSendWavHeaderToEncoderStdIn;
 
         private int _sampleRate;
+        private int _downMixModeNb;
 
         private System.Threading.ManualResetEvent _mre = new System.Threading.ManualResetEvent(true); // lock used to pause encoding
         private Thread _encoderThread = null;
@@ -530,10 +532,10 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 {
                     case ".ac3":
                         script.AppendFormat("NicAc3Source(\"{0}\"", audioJob.Input);
-                        if (audioJob.Settings.AutoGain)
+                        if (audioJob.Settings.ApplyDRC)
                             script.AppendFormat(", DRC=1){0}", Environment.NewLine);
                         else
-                            script.Append(")");
+                            script.AppendFormat("){0}", Environment.NewLine);
                         break;
                     case ".avi":
                         script.AppendFormat("AVISource(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
@@ -546,10 +548,10 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                     case ".dtsma":
                     case ".dts":
                         script.AppendFormat("NicDtsSource(\"{0}\"", audioJob.Input);
-                        if (audioJob.Settings.AutoGain)
+                        if (audioJob.Settings.ApplyDRC)
                             script.AppendFormat(", DRC=1){0}", Environment.NewLine);
                         else
-                            script.Append(")");
+                            script.AppendFormat("){0}", Environment.NewLine);
                         break;
                     case ".mpa":
                     case ".mpg":
@@ -573,10 +575,10 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                                     if (DtsHeader == 0xE8001FFF)
                                     {
                                         script.AppendFormat("NicDtsSource(\"{0}\"", audioJob.Input);
-                                        if (audioJob.Settings.AutoGain)
+                                        if (audioJob.Settings.ApplyDRC)
                                             script.AppendFormat(", DRC=1){0}", Environment.NewLine);
                                         else
-                                            script.Append(")");
+                                            script.AppendFormat("){0}", Environment.NewLine);
                                     }
                                     else
                                         script.AppendFormat("RaWavSource(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
@@ -590,10 +592,10 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                                     break;
                                 case 0x2000:         // AC3
                                     script.AppendFormat("NicAc3Source(\"{0}\"", audioJob.Input);
-                                    if (audioJob.Settings.AutoGain)
+                                    if (audioJob.Settings.ApplyDRC)
                                         script.AppendFormat(", DRC=1){0}", Environment.NewLine);
                                     else
-                                        script.Append(")"); 
+                                        script.AppendFormat("){0}", Environment.NewLine); 
                                     break;
                                 default:
                                     script.AppendFormat("WavSource(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
@@ -650,37 +652,58 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             switch (audioJob.Settings.DownmixMode)
             {
                 case ChannelMode.KeepOriginal:
+                    _downMixModeNb = 0;
                     break;
                 case ChannelMode.ConvertToMono:
-                    script.AppendFormat("ConvertToMono(){0}", Environment.NewLine);
+                    script.AppendFormat("ConvertToMono(){0}", Environment.NewLine); _downMixModeNb = 1;
                     break;
                 case ChannelMode.DPLDownmix:
-                    script.Append("6<=Audiochannels(last)?x_dpl" + id + @"(ConvertAudioToFloat(last)):last" + Environment.NewLine);
+                    script.Append("6<=Audiochannels(last)?x_dpl" + id + @"(ConvertAudioToFloat(last)):last" + Environment.NewLine); _downMixModeNb = 2;
                     break;
                 case ChannelMode.DPLIIDownmix:
-                    script.Append("6<=Audiochannels(last)?x_dpl2" + id + @"(ConvertAudioToFloat(last)):last" + Environment.NewLine);
+                    script.Append("6<=Audiochannels(last)?x_dpl2" + id + @"(ConvertAudioToFloat(last)):last" + Environment.NewLine); _downMixModeNb = 3;
                     break;
                 case ChannelMode.StereoDownmix:
-                    script.Append("6<=Audiochannels(last)?x_stereo" + id + @"(ConvertAudioToFloat(last)):last" + Environment.NewLine);
+                    script.Append("6<=Audiochannels(last)?x_stereo" + id + @"(ConvertAudioToFloat(last)):last" + Environment.NewLine); _downMixModeNb = 4;
                     break;
                 case ChannelMode.Upmix:
                     createTemporallyEqFiles(tmp);
-                    script.Append("2==Audiochannels(last)?x_upmix" + id + @"(last):last" + Environment.NewLine);
+                    script.Append("2==Audiochannels(last)?x_upmix" + id + @"(last):last" + Environment.NewLine); _downMixModeNb = 5;
                     break;
                 case ChannelMode.UpmixUsingSoxEq:
-                    script.Append("2==Audiochannels(last)?x_upmixR" + id + @"(last):last" + Environment.NewLine);
+                    script.Append("2==Audiochannels(last)?x_upmixR" + id + @"(last):last" + Environment.NewLine); _downMixModeNb = 6;
                     break;
                 case ChannelMode.UpmixWithCenterChannelDialog:
-                    script.Append("2==Audiochannels(last)?x_upmixC" + id + @"(last):last" + Environment.NewLine);
+                    script.Append("2==Audiochannels(last)?x_upmixC" + id + @"(last):last" + Environment.NewLine); _downMixModeNb = 7;
                     break;
             }
 
-            if (audioJob.Settings.ImproveAccuracy)
-                script.Append("32==Audiobits(last)?ConvertAudioTo32bit(last):last" + Environment.NewLine);
+            // SampleRate
+            switch (audioJob.Settings.SampleRateType)
+            {
+                case 0:
+                    break;
+                case 1:
+                    script.Append("SSRC(44100)" + Environment.NewLine);
+                    break;
+                case 2:
+                    script.Append("SSRC(48000)" + Environment.NewLine);
+                    break;
+                case 3:
+                    script.Append("AssumeSampleRate((AudioRate()*1001+480)/960).SSRC(AudioRate())" + Environment.NewLine);
+                    break;
+                case 4:
+                    script.Append("SSRC((AudioRate()*1001+480)/960).AssumeSampleRate(AudioRate())" + Environment.NewLine);
+                    break;
+            }
 
             // put Normalize() after downmix cases >> http://forum.doom9.org/showthread.php?p=1166117#post1166117
-            if (audioJob.Settings.AutoGain)
-                script.AppendFormat("Normalize(){0}", Environment.NewLine);
+            if (audioJob.Settings.AutoGain || _downMixModeNb > 0)
+            {
+                if (audioJob.Settings.Normalize != 100)
+                     script.AppendFormat("Normalize(" + (audioJob.Settings.Normalize / 100.0).ToString(new CultureInfo("en-us")) + "){0}", Environment.NewLine);
+                else script.AppendFormat("Normalize(){0}", Environment.NewLine);
+            }
 
             //let's obtain command line & other staff
             if (audioJob.Settings is AftenSettings)
@@ -693,7 +716,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             if (audioJob.Settings is AC3Settings)
             {
                 script.Append("6<=Audiochannels(last)?GetChannel(last,1,3,2,5,6,4):last" + Environment.NewLine);
-                script.Append("32==Audiobits(last)?ConvertAudioTo16bit(last):last" + Environment.NewLine);
+                script.Append("32==Audiobits(last)?ConvertAudioTo16bit(last):last" + Environment.NewLine); // ffac3 encoder doesn't support 32bits streams
                 _mustSendWavHeaderToEncoderStdIn = true;
                 AC3Settings n = audioJob.Settings as AC3Settings;
                 _encoderExecutablePath = this._settings.FFMpegPath;
@@ -701,7 +724,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             }
             if (audioJob.Settings is MP2Settings)
             {
-                script.Append("32==Audiobits(last)?ConvertAudioTo16bit(last):last" + Environment.NewLine);
+                script.Append("32==Audiobits(last)?ConvertAudioTo16bit(last):last" + Environment.NewLine); // ffmp2 encoder doesn't support 32 bits streams
                 _mustSendWavHeaderToEncoderStdIn = true;
                 MP2Settings n = audioJob.Settings as MP2Settings;
                 _encoderExecutablePath = this._settings.FFMpegPath;
@@ -712,7 +735,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 _mustSendWavHeaderToEncoderStdIn = false;
                 WinAmpAACSettings n = audioJob.Settings as WinAmpAACSettings;
                 _encoderExecutablePath = this._settings.EncAacPlusPath;
-                script.Append("32==Audiobits(last)?ConvertAudioTo16bit(last):last" + Environment.NewLine);
+                script.Append("32==Audiobits(last)?ConvertAudioTo16bit(last):last" + Environment.NewLine);  // winamp aac encoder doesn't support 32bits streams
                 StringBuilder sb = new StringBuilder("- \"{0}\" --rawpcm {1} {3} {2} --cbr ");
                 sb.Append(n.Bitrate * 1000);
                 if (n.Mpeg2AAC)
@@ -746,7 +769,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             if (audioJob.Settings is AudXSettings)
             {
                 script.Append("ResampleAudio(last,48000)" + Environment.NewLine);
-                script.Append("32==Audiobits(last)?ConvertAudioTo16bit(last):last" + Environment.NewLine);
+                script.Append("32==Audiobits(last)?ConvertAudioTo16bit(last):last" + Environment.NewLine);  // audX encoder doesn't support 32bits streams
                 script.Append("6==Audiochannels(last)?last:GetChannel(last,1,1,1,1,1,1)" + Environment.NewLine);
                 _mustSendWavHeaderToEncoderStdIn = false;
                 AudXSettings n = audioJob.Settings as AudXSettings;
@@ -819,7 +842,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 MP3Settings m = audioJob.Settings as MP3Settings;
                 _mustSendWavHeaderToEncoderStdIn = true;
                 _encoderExecutablePath = this._settings.LamePath;
-                script.Append("32==Audiobits(last)?ConvertAudioTo16bit(last):last" + Environment.NewLine);
+                script.Append("32==Audiobits(last)?ConvertAudioTo16bit(last):last" + Environment.NewLine); // lame encoder doesn't support 32bits streams
 
                 switch (m.BitrateMode)
                 {
