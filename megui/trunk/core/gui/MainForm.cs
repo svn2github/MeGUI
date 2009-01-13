@@ -153,6 +153,7 @@ namespace MeGUI
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.resetButton = new System.Windows.Forms.Button();
+            this.HelpButton = new System.Windows.Forms.Button();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
             this.autoEncodeButton = new System.Windows.Forms.Button();
             this.OneClickEncButton = new System.Windows.Forms.Button();
@@ -205,7 +206,6 @@ namespace MeGUI
             this.openMeGUIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.exitMeGUIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.HelpButton = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.inputTab.SuspendLayout();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -284,6 +284,18 @@ namespace MeGUI
             this.resetButton.TabIndex = 4;
             this.resetButton.Text = "Reset";
             this.resetButton.Click += new System.EventHandler(this.resetButton_Click);
+            // 
+            // HelpButton
+            // 
+            this.HelpButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.HelpButton.AutoSize = true;
+            this.HelpButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.HelpButton.Location = new System.Drawing.Point(54, 3);
+            this.HelpButton.Name = "HelpButton";
+            this.HelpButton.Size = new System.Drawing.Size(38, 23);
+            this.HelpButton.TabIndex = 5;
+            this.HelpButton.Text = "Help";
+            this.HelpButton.Click += new System.EventHandler(this.HelpButton_Click);
             // 
             // flowLayoutPanel2
             // 
@@ -677,18 +689,6 @@ namespace MeGUI
             this.exitMeGUIToolStripMenuItem.Text = "Exit MeGUI";
             this.exitMeGUIToolStripMenuItem.Click += new System.EventHandler(this.exitMeGUIToolStripMenuItem_Click);
             // 
-            // HelpButton
-            // 
-            this.HelpButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.HelpButton.AutoSize = true;
-            this.HelpButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.HelpButton.Location = new System.Drawing.Point(54, 3);
-            this.HelpButton.Name = "HelpButton";
-            this.HelpButton.Size = new System.Drawing.Size(38, 23);
-            this.HelpButton.TabIndex = 5;
-            this.HelpButton.Text = "Help";
-            this.HelpButton.Click += new System.EventHandler(this.HelpButton_Click);
-            // 
             // MainForm
             // 
             this.AllowDrop = true;
@@ -700,8 +700,9 @@ namespace MeGUI
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Location = global::MeGUI.Properties.Settings.Default.MainFormLocation;
             this.Menu = this.mainMenu1;
-            this.MinimumSize = new System.Drawing.Size(516, 516);
+            this.MinimumSize = new System.Drawing.Size(524, 537);
             this.Name = "MainForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Load += new System.EventHandler(this.MeGUI_Load);
             this.Shown += new System.EventHandler(this.MainForm_Shown);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);

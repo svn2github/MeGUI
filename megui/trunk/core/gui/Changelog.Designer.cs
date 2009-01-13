@@ -57,6 +57,7 @@ namespace MeGUI
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Location = global::MeGUI.Properties.Settings.Default.ChangelogLocation;
             this.Name = "Changelog";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "MeGUI - Changelog";
             this.WindowState = global::MeGUI.Properties.Settings.Default.ChangelogWindowState;
             this.Load += new System.EventHandler(this.Changelog_Load);

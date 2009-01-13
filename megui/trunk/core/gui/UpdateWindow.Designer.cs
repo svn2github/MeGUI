@@ -273,6 +273,7 @@ namespace MeGUI
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "UpdateWindow";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "MeGUI - Updater";
             this.WindowState = global::MeGUI.Properties.Settings.Default.UpdateWindowState;
             this.Load += new System.EventHandler(this.UpdateWindow_Load);
