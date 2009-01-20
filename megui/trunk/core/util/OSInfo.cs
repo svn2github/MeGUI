@@ -51,6 +51,9 @@ namespace MeGUI
         [DllImport("kernel32.dll")]
         private static extern bool GetVersionEx(ref OSVERSIONINFOEX osVersionInfo);
 
+        [DllImport("kernel32.dll")]
+        private static extern bool GetProductInfo(int dwOSMajorVersion, int dwOSMinorVersion, int dwSpMajorVersion, int dwSpMinorVersion, out uint pdwReturnedProductType);
+
         #region Private Constants
         private const int VER_NT_WORKSTATION = 1;
         private const int VER_NT_DOMAIN_CONTROLLER = 2;
@@ -62,122 +65,18 @@ namespace MeGUI
         private const int VER_SUITE_SINGLEUSERTS = 256;
         private const int VER_SUITE_PERSONAL = 512;
         private const int VER_SUITE_BLADE = 1024;
+        private const int PRODUCT_UNDEFINED = 0x00000000;
+        private const int PRODUCT_ULTIMATE = 0x00000001;
+        private const int PRODUCT_HOME_BASIC = 0x00000002;
+        private const int PRODUCT_HOME_PREMIUM = 0x00000003;
+        private const int PRODUCT_ENTREPRISE = 0x00000004;
+        private const int PRODUCT_HOME_BASIC_N = 0x00000005;
+        private const int PRODUCT_BUSINESS = 0x00000006;
+        private const int PRODUCT_BUSINESS_N = 0x00000010;
+        private const int PRODUCT_STARTER = 0x0000000B;
         #endregion
 
         #region Public Methods
-        /// <summary>
-        /// Returns the product type of the operating system running on this computer.
-        /// </summary>
-        /// <returns>A string containing the the operating system product type.</returns>
-        public static string GetOSProductType()
-        {
-            PlatformID id = Environment.OSVersion.Platform;
-            if (id == PlatformID.WinCE || id == PlatformID.Win32Windows || id == PlatformID.Win32S || id == PlatformID.Win32NT)
-                return GetWindowsProductType();
-            else
-                return GetGenericProductType();
-        }
-
-        private static string GetGenericProductType()
-        {
-            return Environment.OSVersion.VersionString;
-        }
-
-        private static string GetWindowsProductType()
-        {
-            OSVERSIONINFOEX osVersionInfo = new OSVERSIONINFOEX();
-            OperatingSystem osInfo = Environment.OSVersion;
-
-            osVersionInfo.dwOSVersionInfoSize = Marshal.SizeOf(typeof(OSVERSIONINFOEX));
-
-            if (!GetVersionEx(ref osVersionInfo))
-            {
-                return "";
-            }
-            else
-            {
-                if (osInfo.Version.Major == 4)
-                {
-                    if (osVersionInfo.wProductType == VER_NT_WORKSTATION)
-                    {
-                        // Windows NT 4.0 Workstation
-                        return " Workstation";
-                    }
-                    else if (osVersionInfo.wProductType == VER_NT_SERVER)
-                    {
-                        // Windows NT 4.0 Server
-                        return " Server";
-                    }
-                    else
-                    {
-                        return "";
-                    }
-                }
-                else if (osInfo.Version.Major == 5)
-                {
-                    if (osVersionInfo.wProductType == VER_NT_WORKSTATION)
-                    {
-                        if ((osVersionInfo.wSuiteMask & VER_SUITE_PERSONAL) == VER_SUITE_PERSONAL)
-                        {
-                            // Windows XP Home Edition
-                            return " Home Edition";
-                        }
-                        else
-                        {
-                            // Windows XP / Windows 2000 Professional
-                            return " Professional";
-                        }
-                    }
-                    else if (osVersionInfo.wProductType == VER_NT_SERVER)
-                    {
-                        if (osInfo.Version.Minor == 0)
-                        {
-                            if ((osVersionInfo.wSuiteMask & VER_SUITE_DATACENTER) == VER_SUITE_DATACENTER)
-                            {
-                                // Windows 2000 Datacenter Server
-                                return " Datacenter Server";
-                            }
-                            else if ((osVersionInfo.wSuiteMask & VER_SUITE_ENTERPRISE) == VER_SUITE_ENTERPRISE)
-                            {
-                                // Windows 2000 Advanced Server
-                                return " Advanced Server";
-                            }
-                            else
-                            {
-                                // Windows 2000 Server
-                                return " Server";
-                            }
-                        }
-                        else
-                        {
-                            if ((osVersionInfo.wSuiteMask & VER_SUITE_DATACENTER) == VER_SUITE_DATACENTER)
-                            {
-                                // Windows Server 2003 Datacenter Edition
-                                return " Datacenter Edition";
-                            }
-                            else if ((osVersionInfo.wSuiteMask & VER_SUITE_ENTERPRISE) == VER_SUITE_ENTERPRISE)
-                            {
-                                // Windows Server 2003 Enterprise Edition
-                                return " Enterprise Edition";
-                            }
-                            else if ((osVersionInfo.wSuiteMask & VER_SUITE_BLADE) == VER_SUITE_BLADE)
-                            {
-                                // Windows Server 2003 Web Edition
-                                return " Web Edition";
-                            }
-                            else
-                            {
-                                // Windows Server 2003 Standard Edition
-                                return " Standard Edition";
-                            }
-                        }
-                    }
-                }
-            }
-
-            return "";
-        }
-
         /// <summary>
         /// Returns the service pack information of the operating system running on this computer.
         /// </summary>
@@ -212,85 +111,145 @@ namespace MeGUI
         public static string GetOSName()
         {
             OperatingSystem osInfo = Environment.OSVersion;
+            OSVERSIONINFOEX osVersionInfo = new OSVERSIONINFOEX();
+            osVersionInfo.dwOSVersionInfoSize = Marshal.SizeOf(typeof(OSVERSIONINFOEX));
             string osName = "UNKNOWN";
 
-            switch (osInfo.Platform)
+            if (!GetVersionEx(ref osVersionInfo))
             {
-                case PlatformID.Win32Windows:
-                    {
-                        switch (osInfo.Version.Minor)
-                        {
-                            case 0:
-                                {
-                                    osName = "Windows 95";
-                                    break;
-                                }
-
-                            case 10:
-                                {
-                                    if (osInfo.Version.Revision.ToString() == "2222A")
-                                    {
-                                        osName = "Windows 98 Second Edition";
-                                    }
-                                    else
-                                    {
-                                        osName = "Windows 98";
-                                    }
-                                    break;
-                                }
-
-                            case 90:
-                                {
-                                    osName = "Windows Me";
-                                    break;
-                                }
-                        }
-                        break;
-                    }
-
-                case PlatformID.Win32NT:
-                    {
-                        switch (osInfo.Version.Major)
-                        {
-                            case 3:
-                                {
-                                    osName = "Windows NT 3.51";
-                                    break;
-                                }
-
-                            case 4:
-                                {
-                                    osName = "Windows NT 4.0";
-                                    break;
-                                }
-
-                            case 5:
-                                {
-                                    if (osInfo.Version.Minor == 0)
-                                    {
-                                        osName = "Windows 2000";
-                                    }
-                                    else if (osInfo.Version.Minor == 1)
-                                    {
-                                        osName = "Windows XP";
-                                    }
-                                    else if (osInfo.Version.Minor == 2)
-                                    {
-                                        osName = "Windows Server 2003";
-                                    }
-                                    break;
-                                }
-
-                            case 6:
-                                {
-                                    osName = "Windows Vista";
-                                    break;
-                                }
-                        }
-                        break;
-                    }
+                return "";
             }
-
+            else
+            {
+                switch (osInfo.Platform)
+                {
+                    case PlatformID.Win32Windows:
+                        {
+                            switch (osInfo.Version.Minor)
+                            {
+                                case 0: osName = "Windows 95"; break;
+                                case 10:
+                                    {
+                                        if (osInfo.Version.Revision.ToString() == "2222A")
+                                             osName = "Windows 98 Second Edition";
+                                        else osName = "Windows 98";
+                                    } break;
+                                case 90: osName = "Windows Me"; break;
+                            }
+                            break;
+                        }
+                    case PlatformID.Win32NT:
+                        {
+                            switch (osInfo.Version.Major)
+                            {
+                                case 3: osName = "Windows NT 3.51"; break;
+                                case 4:
+                                    {
+                                        switch (osVersionInfo.wProductType)
+                                        {
+                                            case 1: osName = "Windows NT 4.0 Workstation"; break;
+                                            case 3: osName = "Windows NT 4.0 Server"; break;
+                                        }
+                                        break;
+                                    }
+                                case 5:
+                                    {
+                                        switch (osInfo.Version.Minor)
+                                        {
+                                            case 0: // win2K
+                                                {
+                                                    if ((osVersionInfo.wSuiteMask & VER_SUITE_DATACENTER) == VER_SUITE_DATACENTER)
+                                                         osName = "Windows 2000 Datacenter Server";
+                                                    else if ((osVersionInfo.wSuiteMask & VER_SUITE_ENTERPRISE) == VER_SUITE_ENTERPRISE)
+                                                         osName = "Windows 2000 Advanced Server";
+                                                    else
+                                                         osName = "Windows 2000";
+                                                    break;
+                                                }                                            
+                                            case 1: // winXP
+                                                {
+                                                    if ((osVersionInfo.wSuiteMask & VER_SUITE_PERSONAL) == VER_SUITE_PERSONAL)
+                                                         osName = "Windows XP Home Edition";
+                                                    else osName = "Windows XP Professional";
+                                                    break;
+                                                }
+                                            case 2: // winserver 2003
+                                                {
+                                                     uint edition = PRODUCT_UNDEFINED;
+                                                     if (GetProductInfo(osVersionInfo.dwMajorVersion,
+                                                                        osVersionInfo.dwMinorVersion,
+                                                                        osVersionInfo.wServicePackMajor,
+                                                                        osVersionInfo.wServicePackMinor,
+                                                                        out edition))
+                                                     {
+                                                        switch (edition)
+                                                        {                                                    
+                                                            case VER_SUITE_DATACENTER : osName = "Windows Server 2003 Datacenter Edition"; break;
+                                                            case VER_SUITE_ENTERPRISE : osName = "Windows Server 2003 Enterprise Edition"; break;
+                                                            case VER_SUITE_BLADE :      osName = "Windows Server 2003 Web Edition"; break;
+                                                            default :                   osName = "Windows Server 2003 Standard Edition"; break;                                                            
+                                                        }
+                                                     }
+                                                     break;
+                                                }
+                                        } break;
+                                    }
+                                case 6:
+                                    {
+                                        switch (osInfo.Version.Minor)
+                                        {
+                                            case 0:
+                                                {
+                                                    switch (osVersionInfo.wProductType)
+                                                    {
+                                                        case 1: // Vista
+                                                            {
+                                                                uint edition = PRODUCT_UNDEFINED;
+                                                                if (GetProductInfo(osVersionInfo.dwMajorVersion,
+                                                                                   osVersionInfo.dwMinorVersion,
+                                                                                   osVersionInfo.wServicePackMajor,
+                                                                                   osVersionInfo.wServicePackMinor,
+                                                                                   out edition))
+                                                                {
+                                                                    switch (edition)
+                                                                    {
+                                                                        case PRODUCT_ULTIMATE:     osName = "Windows Vista Ultimate Edition";   break;
+                                                                        case PRODUCT_HOME_BASIC:
+                                                                        case PRODUCT_HOME_BASIC_N: osName = "Windows Vista Home Basic Edition"; break;
+                                                                        case PRODUCT_HOME_PREMIUM: osName = "Windows Vista Premium Edition";    break;
+                                                                        case PRODUCT_ENTREPRISE:   osName = "Windows Vista Entreprise Edition"; break;
+                                                                        case PRODUCT_BUSINESS:
+                                                                        case PRODUCT_BUSINESS_N:   osName = "Windows Vista Business Edition";   break;
+                                                                        case PRODUCT_STARTER:      osName = "Windows Vista Starter Edition";    break;
+                                                                        default:                   osName = "Windows Vista";                    break;
+                                                                    }
+                                                                } break;
+                                                            }
+                                                        case 3: // Server 2008
+                                                            {
+                                                                if ((osVersionInfo.wSuiteMask & VER_SUITE_DATACENTER) == VER_SUITE_DATACENTER)
+                                                                    osName = "Windows Server 2008 Datacenter Server";
+                                                                else if ((osVersionInfo.wSuiteMask & VER_SUITE_ENTERPRISE) == VER_SUITE_ENTERPRISE)
+                                                                    osName = "Windows Server 2008 Advanced Server";
+                                                                else
+                                                                    osName = "Windows Server 2008";
+                                                                break;
+                                                            }
+                                                    } break;
+                                                }
+                                            case 1:
+                                                {
+                                                    osName = "Windows Seven";
+                                                    break;
+                                                }
+                                        }
+                                        break;
+                                    }
+                            } break;
+                        }
+                }
+            }
+    
             return osName;
         }
 
