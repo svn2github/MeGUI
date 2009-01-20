@@ -81,6 +81,10 @@ namespace MeGUI
         protected MeGUI.core.gui.TargetSizeSCBox splitting;
         protected FileBar output;
         protected MeGUI.core.gui.FPSChooser fps;
+        private TableLayoutPanel tableLayoutPanel1;
+        private TableLayoutPanel tableLayoutPanel2;
+        private TableLayoutPanel tableLayoutPanel3;
+        private TableLayoutPanel tableLayoutPanel4;
         private IContainer components;
         #region start/stop
         public baseMuxWindow()
@@ -196,20 +200,23 @@ namespace MeGUI
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(baseMuxWindow));
             this.muxButton = new System.Windows.Forms.Button();
             this.videoGroupbox = new System.Windows.Forms.GroupBox();
-            this.fps = new MeGUI.core.gui.FPSChooser();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.vInput = new MeGUI.FileBar();
+            this.videoInputLabel = new System.Windows.Forms.Label();
             this.videoName = new System.Windows.Forms.TextBox();
+            this.fps = new MeGUI.core.gui.FPSChooser();
             this.videoNameLabel = new System.Windows.Forms.Label();
             this.MuxFPSLabel = new System.Windows.Forms.Label();
-            this.videoInputLabel = new System.Windows.Forms.Label();
             this.chaptersGroupbox = new System.Windows.Forms.GroupBox();
-            this.chapters = new MeGUI.FileBar();
+            this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.chaptersInputLabel = new System.Windows.Forms.Label();
+            this.chapters = new MeGUI.FileBar();
             this.outputGroupbox = new System.Windows.Forms.GroupBox();
-            this.splittingLabel = new System.Windows.Forms.Label();
-            this.splitting = new MeGUI.core.gui.TargetSizeSCBox();
-            this.output = new MeGUI.FileBar();
+            this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.muxedOutputLabel = new System.Windows.Forms.Label();
+            this.splitting = new MeGUI.core.gui.TargetSizeSCBox();
+            this.splittingLabel = new System.Windows.Forms.Label();
+            this.output = new MeGUI.FileBar();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.cancelButton = new System.Windows.Forms.Button();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
@@ -227,9 +234,13 @@ namespace MeGUI
             this.subtitles = new System.Windows.Forms.TabControl();
             this.subPage1 = new System.Windows.Forms.TabPage();
             this.muxStreamControl1 = new MeGUI.core.details.mux.MuxStreamControl();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.videoGroupbox.SuspendLayout();
+            this.tableLayoutPanel2.SuspendLayout();
             this.chaptersGroupbox.SuspendLayout();
+            this.tableLayoutPanel3.SuspendLayout();
             this.outputGroupbox.SuspendLayout();
+            this.tableLayoutPanel4.SuspendLayout();
             this.audioPanel.SuspendLayout();
             this.audioMenu.SuspendLayout();
             this.audio.SuspendLayout();
@@ -238,200 +249,278 @@ namespace MeGUI
             this.subtitlePanel.SuspendLayout();
             this.subtitles.SuspendLayout();
             this.subPage1.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // muxButton
             // 
-            this.muxButton.Location = new System.Drawing.Point(291, 458);
+            this.muxButton.Location = new System.Drawing.Point(296, 480);
+            this.muxButton.Margin = new System.Windows.Forms.Padding(12, 9, 12, 9);
             this.muxButton.Name = "muxButton";
             this.muxButton.Size = new System.Drawing.Size(56, 23);
-            this.muxButton.TabIndex = 26;
-            this.muxButton.Text = "Queue";
+            this.muxButton.TabIndex = 5;
+            this.muxButton.Text = "&Queue";
             this.muxButton.Click += new System.EventHandler(this.muxButton_Click);
             // 
             // videoGroupbox
             // 
-            this.videoGroupbox.Controls.Add(this.fps);
-            this.videoGroupbox.Controls.Add(this.vInput);
-            this.videoGroupbox.Controls.Add(this.videoName);
-            this.videoGroupbox.Controls.Add(this.videoNameLabel);
-            this.videoGroupbox.Controls.Add(this.MuxFPSLabel);
-            this.videoGroupbox.Controls.Add(this.videoInputLabel);
-            this.videoGroupbox.Location = new System.Drawing.Point(8, 7);
+            this.videoGroupbox.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.videoGroupbox.AutoSize = true;
+            this.tableLayoutPanel1.SetColumnSpan(this.videoGroupbox, 3);
+            this.videoGroupbox.Controls.Add(this.tableLayoutPanel2);
+            this.videoGroupbox.Location = new System.Drawing.Point(3, 3);
             this.videoGroupbox.Name = "videoGroupbox";
-            this.videoGroupbox.Size = new System.Drawing.Size(424, 80);
-            this.videoGroupbox.TabIndex = 22;
+            this.videoGroupbox.Size = new System.Drawing.Size(438, 90);
+            this.videoGroupbox.TabIndex = 0;
             this.videoGroupbox.TabStop = false;
             this.videoGroupbox.Text = "Video";
             // 
+            // tableLayoutPanel2
+            // 
+            this.tableLayoutPanel2.AutoSize = true;
+            this.tableLayoutPanel2.ColumnCount = 4;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 66.66666F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel2.Controls.Add(this.videoInputLabel, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.videoName, 3, 1);
+            this.tableLayoutPanel2.Controls.Add(this.fps, 1, 1);
+            this.tableLayoutPanel2.Controls.Add(this.videoNameLabel, 2, 1);
+            this.tableLayoutPanel2.Controls.Add(this.vInput, 1, 0);
+            this.tableLayoutPanel2.Controls.Add(this.MuxFPSLabel, 0, 1);
+            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 17);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowCount = 2;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(432, 70);
+            this.tableLayoutPanel2.TabIndex = 0;
+            // 
+            // vInput
+            // 
+            this.vInput.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel2.SetColumnSpan(this.vInput, 3);
+            this.vInput.Filename = "";
+            this.vInput.Filter = null;
+            this.vInput.FilterIndex = 0;
+            this.vInput.FolderMode = false;
+            this.vInput.Location = new System.Drawing.Point(71, 4);
+            this.vInput.Name = "vInput";
+            this.vInput.ReadOnly = true;
+            this.vInput.SaveMode = false;
+            this.vInput.Size = new System.Drawing.Size(358, 26);
+            this.vInput.TabIndex = 1;
+            this.vInput.Title = null;
+            this.vInput.FileSelected += new MeGUI.FileBarEventHandler(this.vInput_FileSelected);
+            // 
+            // videoInputLabel
+            // 
+            this.videoInputLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.videoInputLabel.AutoSize = true;
+            this.videoInputLabel.Location = new System.Drawing.Point(3, 11);
+            this.videoInputLabel.Name = "videoInputLabel";
+            this.videoInputLabel.Size = new System.Drawing.Size(62, 13);
+            this.videoInputLabel.TabIndex = 0;
+            this.videoInputLabel.Text = "Video Input";
+            // 
+            // videoName
+            // 
+            this.videoName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.videoName.Location = new System.Drawing.Point(327, 42);
+            this.videoName.MaxLength = 100;
+            this.videoName.Name = "videoName";
+            this.videoName.Size = new System.Drawing.Size(102, 21);
+            this.videoName.TabIndex = 5;
+            // 
             // fps
             // 
-            this.fps.Location = new System.Drawing.Point(115, 45);
+            this.fps.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.fps.Location = new System.Drawing.Point(71, 38);
             this.fps.MaximumSize = new System.Drawing.Size(1000, 29);
             this.fps.MinimumSize = new System.Drawing.Size(64, 29);
             this.fps.Name = "fps";
             this.fps.NullString = "Not set";
             this.fps.SelectedIndex = 0;
-            this.fps.Size = new System.Drawing.Size(119, 29);
-            this.fps.TabIndex = 36;
+            this.fps.Size = new System.Drawing.Size(210, 29);
+            this.fps.TabIndex = 3;
             this.fps.SelectionChanged += new MeGUI.StringChanged(this.fps_SelectionChanged);
-            // 
-            // vInput
-            // 
-            this.vInput.Filename = "";
-            this.vInput.Filter = null;
-            this.vInput.FilterIndex = 0;
-            this.vInput.FolderMode = false;
-            this.vInput.Location = new System.Drawing.Point(118, 13);
-            this.vInput.Name = "vInput";
-            this.vInput.ReadOnly = true;
-            this.vInput.SaveMode = false;
-            this.vInput.Size = new System.Drawing.Size(289, 26);
-            this.vInput.TabIndex = 35;
-            this.vInput.Title = null;
-            this.vInput.FileSelected += new MeGUI.FileBarEventHandler(this.vInput_FileSelected);
-            // 
-            // videoName
-            // 
-            this.videoName.Location = new System.Drawing.Point(283, 49);
-            this.videoName.MaxLength = 100;
-            this.videoName.Name = "videoName";
-            this.videoName.Size = new System.Drawing.Size(95, 21);
-            this.videoName.TabIndex = 34;
             // 
             // videoNameLabel
             // 
+            this.videoNameLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.videoNameLabel.AutoSize = true;
-            this.videoNameLabel.Location = new System.Drawing.Point(243, 53);
+            this.videoNameLabel.Location = new System.Drawing.Point(287, 46);
             this.videoNameLabel.Name = "videoNameLabel";
             this.videoNameLabel.Size = new System.Drawing.Size(34, 13);
-            this.videoNameLabel.TabIndex = 33;
+            this.videoNameLabel.TabIndex = 4;
             this.videoNameLabel.Text = "Name";
             // 
             // MuxFPSLabel
             // 
-            this.MuxFPSLabel.Location = new System.Drawing.Point(16, 51);
+            this.MuxFPSLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.MuxFPSLabel.AutoSize = true;
+            this.MuxFPSLabel.Location = new System.Drawing.Point(3, 46);
             this.MuxFPSLabel.Name = "MuxFPSLabel";
-            this.MuxFPSLabel.Size = new System.Drawing.Size(40, 16);
-            this.MuxFPSLabel.TabIndex = 32;
+            this.MuxFPSLabel.Size = new System.Drawing.Size(25, 13);
+            this.MuxFPSLabel.TabIndex = 2;
             this.MuxFPSLabel.Text = "FPS";
-            // 
-            // videoInputLabel
-            // 
-            this.videoInputLabel.Location = new System.Drawing.Point(16, 20);
-            this.videoInputLabel.Name = "videoInputLabel";
-            this.videoInputLabel.Size = new System.Drawing.Size(100, 13);
-            this.videoInputLabel.TabIndex = 0;
-            this.videoInputLabel.Text = "Video Input";
             // 
             // chaptersGroupbox
             // 
-            this.chaptersGroupbox.Controls.Add(this.chapters);
-            this.chaptersGroupbox.Controls.Add(this.chaptersInputLabel);
-            this.chaptersGroupbox.Location = new System.Drawing.Point(8, 318);
+            this.tableLayoutPanel1.SetColumnSpan(this.chaptersGroupbox, 3);
+            this.chaptersGroupbox.Controls.Add(this.tableLayoutPanel3);
+            this.chaptersGroupbox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.chaptersGroupbox.Location = new System.Drawing.Point(3, 324);
             this.chaptersGroupbox.Name = "chaptersGroupbox";
-            this.chaptersGroupbox.Size = new System.Drawing.Size(424, 48);
-            this.chaptersGroupbox.TabIndex = 25;
+            this.chaptersGroupbox.Size = new System.Drawing.Size(438, 48);
+            this.chaptersGroupbox.TabIndex = 3;
             this.chaptersGroupbox.TabStop = false;
             this.chaptersGroupbox.Text = "Chapter";
             // 
+            // tableLayoutPanel3
+            // 
+            this.tableLayoutPanel3.ColumnCount = 2;
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel3.Controls.Add(this.chaptersInputLabel, 0, 0);
+            this.tableLayoutPanel3.Controls.Add(this.chapters, 1, 0);
+            this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 17);
+            this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+            this.tableLayoutPanel3.RowCount = 1;
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(432, 28);
+            this.tableLayoutPanel3.TabIndex = 0;
+            // 
+            // chaptersInputLabel
+            // 
+            this.chaptersInputLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.chaptersInputLabel.AutoSize = true;
+            this.chaptersInputLabel.Location = new System.Drawing.Point(3, 7);
+            this.chaptersInputLabel.Name = "chaptersInputLabel";
+            this.chaptersInputLabel.Size = new System.Drawing.Size(70, 13);
+            this.chaptersInputLabel.TabIndex = 0;
+            this.chaptersInputLabel.Text = "Chapters File";
+            // 
             // chapters
             // 
+            this.chapters.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.chapters.Filename = "";
             this.chapters.Filter = "Chapter files (*.txt)|*.txt";
             this.chapters.FilterIndex = 0;
             this.chapters.FolderMode = false;
-            this.chapters.Location = new System.Drawing.Point(118, 12);
+            this.chapters.Location = new System.Drawing.Point(79, 3);
             this.chapters.Name = "chapters";
             this.chapters.ReadOnly = true;
             this.chapters.SaveMode = false;
-            this.chapters.Size = new System.Drawing.Size(289, 26);
-            this.chapters.TabIndex = 35;
+            this.chapters.Size = new System.Drawing.Size(350, 22);
+            this.chapters.TabIndex = 1;
             this.chapters.Title = null;
             this.chapters.FileSelected += new MeGUI.FileBarEventHandler(this.chapters_FileSelected);
             // 
-            // chaptersInputLabel
-            // 
-            this.chaptersInputLabel.Location = new System.Drawing.Point(16, 22);
-            this.chaptersInputLabel.Name = "chaptersInputLabel";
-            this.chaptersInputLabel.Size = new System.Drawing.Size(100, 16);
-            this.chaptersInputLabel.TabIndex = 17;
-            this.chaptersInputLabel.Text = "Chapters File";
-            // 
             // outputGroupbox
             // 
-            this.outputGroupbox.Controls.Add(this.splittingLabel);
-            this.outputGroupbox.Controls.Add(this.splitting);
-            this.outputGroupbox.Controls.Add(this.output);
-            this.outputGroupbox.Controls.Add(this.muxedOutputLabel);
-            this.outputGroupbox.Location = new System.Drawing.Point(8, 372);
+            this.outputGroupbox.AutoSize = true;
+            this.tableLayoutPanel1.SetColumnSpan(this.outputGroupbox, 3);
+            this.outputGroupbox.Controls.Add(this.tableLayoutPanel4);
+            this.outputGroupbox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.outputGroupbox.Location = new System.Drawing.Point(3, 378);
             this.outputGroupbox.Name = "outputGroupbox";
-            this.outputGroupbox.Size = new System.Drawing.Size(424, 80);
-            this.outputGroupbox.TabIndex = 28;
+            this.outputGroupbox.Size = new System.Drawing.Size(438, 90);
+            this.outputGroupbox.TabIndex = 4;
             this.outputGroupbox.TabStop = false;
             this.outputGroupbox.Text = "Output";
             // 
-            // splittingLabel
+            // tableLayoutPanel4
             // 
-            this.splittingLabel.AutoSize = true;
-            this.splittingLabel.Location = new System.Drawing.Point(14, 53);
-            this.splittingLabel.Name = "splittingLabel";
-            this.splittingLabel.Size = new System.Drawing.Size(45, 13);
-            this.splittingLabel.TabIndex = 37;
-            this.splittingLabel.Text = "Splitting";
+            this.tableLayoutPanel4.AutoSize = true;
+            this.tableLayoutPanel4.ColumnCount = 2;
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel4.Controls.Add(this.muxedOutputLabel, 0, 0);
+            this.tableLayoutPanel4.Controls.Add(this.splitting, 1, 1);
+            this.tableLayoutPanel4.Controls.Add(this.splittingLabel, 0, 1);
+            this.tableLayoutPanel4.Controls.Add(this.output, 1, 0);
+            this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 17);
+            this.tableLayoutPanel4.Name = "tableLayoutPanel4";
+            this.tableLayoutPanel4.RowCount = 2;
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(432, 70);
+            this.tableLayoutPanel4.TabIndex = 0;
+            // 
+            // muxedOutputLabel
+            // 
+            this.muxedOutputLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.muxedOutputLabel.AutoSize = true;
+            this.muxedOutputLabel.Location = new System.Drawing.Point(3, 11);
+            this.muxedOutputLabel.Name = "muxedOutputLabel";
+            this.muxedOutputLabel.Size = new System.Drawing.Size(76, 13);
+            this.muxedOutputLabel.TabIndex = 0;
+            this.muxedOutputLabel.Text = "Muxed Output";
             // 
             // splitting
             // 
+            this.splitting.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.splitting.CustomSizes = new MeGUI.core.util.FileSize[0];
-            this.splitting.Location = new System.Drawing.Point(115, 45);
+            this.splitting.Location = new System.Drawing.Point(85, 38);
             this.splitting.MaximumSize = new System.Drawing.Size(1000, 29);
             this.splitting.MinimumSize = new System.Drawing.Size(64, 29);
             this.splitting.Name = "splitting";
             this.splitting.NullString = "No splitting";
             this.splitting.SelectedIndex = 0;
-            this.splitting.Size = new System.Drawing.Size(181, 29);
-            this.splitting.TabIndex = 36;
+            this.splitting.Size = new System.Drawing.Size(344, 29);
+            this.splitting.TabIndex = 3;
+            // 
+            // splittingLabel
+            // 
+            this.splittingLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.splittingLabel.AutoSize = true;
+            this.splittingLabel.Location = new System.Drawing.Point(3, 46);
+            this.splittingLabel.Name = "splittingLabel";
+            this.splittingLabel.Size = new System.Drawing.Size(45, 13);
+            this.splittingLabel.TabIndex = 2;
+            this.splittingLabel.Text = "Splitting";
             // 
             // output
             // 
+            this.output.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.output.Filename = "";
             this.output.Filter = null;
             this.output.FilterIndex = 0;
             this.output.FolderMode = false;
-            this.output.Location = new System.Drawing.Point(118, 13);
+            this.output.Location = new System.Drawing.Point(85, 4);
             this.output.Name = "output";
             this.output.ReadOnly = false;
             this.output.SaveMode = true;
-            this.output.Size = new System.Drawing.Size(289, 26);
-            this.output.TabIndex = 35;
+            this.output.Size = new System.Drawing.Size(344, 26);
+            this.output.TabIndex = 1;
             this.output.Title = null;
             this.output.FileSelected += new MeGUI.FileBarEventHandler(this.output_FileSelected);
-            // 
-            // muxedOutputLabel
-            // 
-            this.muxedOutputLabel.Location = new System.Drawing.Point(14, 23);
-            this.muxedOutputLabel.Name = "muxedOutputLabel";
-            this.muxedOutputLabel.Size = new System.Drawing.Size(100, 16);
-            this.muxedOutputLabel.TabIndex = 17;
-            this.muxedOutputLabel.Text = "Muxed Output";
             // 
             // cancelButton
             // 
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(376, 458);
+            this.cancelButton.Location = new System.Drawing.Point(376, 480);
+            this.cancelButton.Margin = new System.Windows.Forms.Padding(12, 9, 12, 9);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(56, 23);
-            this.cancelButton.TabIndex = 29;
-            this.cancelButton.Text = "Cancel";
+            this.cancelButton.TabIndex = 6;
+            this.cancelButton.Text = "&Cancel";
             // 
             // audioPanel
             // 
+            this.tableLayoutPanel1.SetColumnSpan(this.audioPanel, 3);
             this.audioPanel.ContextMenuStrip = this.audioMenu;
             this.audioPanel.Controls.Add(this.audio);
-            this.audioPanel.Location = new System.Drawing.Point(8, 93);
+            this.audioPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.audioPanel.Location = new System.Drawing.Point(3, 99);
             this.audioPanel.Name = "audioPanel";
-            this.audioPanel.Size = new System.Drawing.Size(424, 115);
-            this.audioPanel.TabIndex = 31;
+            this.audioPanel.Size = new System.Drawing.Size(438, 115);
+            this.audioPanel.TabIndex = 1;
             // 
             // audioMenu
             // 
@@ -463,8 +552,8 @@ namespace MeGUI
             this.audio.Location = new System.Drawing.Point(0, 0);
             this.audio.Name = "audio";
             this.audio.SelectedIndex = 0;
-            this.audio.Size = new System.Drawing.Size(424, 115);
-            this.audio.TabIndex = 32;
+            this.audio.Size = new System.Drawing.Size(438, 115);
+            this.audio.TabIndex = 0;
             // 
             // audioPage1
             // 
@@ -472,7 +561,7 @@ namespace MeGUI
             this.audioPage1.Location = new System.Drawing.Point(4, 22);
             this.audioPage1.Name = "audioPage1";
             this.audioPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.audioPage1.Size = new System.Drawing.Size(416, 89);
+            this.audioPage1.Size = new System.Drawing.Size(430, 89);
             this.audioPage1.TabIndex = 0;
             this.audioPage1.Text = "Audio 1";
             this.audioPage1.UseVisualStyleBackColor = true;
@@ -484,7 +573,7 @@ namespace MeGUI
             this.muxStreamControl2.Location = new System.Drawing.Point(3, 3);
             this.muxStreamControl2.Name = "muxStreamControl2";
             this.muxStreamControl2.ShowDelay = true;
-            this.muxStreamControl2.Size = new System.Drawing.Size(410, 83);
+            this.muxStreamControl2.Size = new System.Drawing.Size(424, 83);
             this.muxStreamControl2.TabIndex = 0;
             this.muxStreamControl2.FileUpdated += new System.EventHandler(this.muxStreamControl2_FileUpdated);
             // 
@@ -513,12 +602,14 @@ namespace MeGUI
             // 
             // subtitlePanel
             // 
+            this.tableLayoutPanel1.SetColumnSpan(this.subtitlePanel, 3);
             this.subtitlePanel.ContextMenuStrip = this.subtitleMenu;
             this.subtitlePanel.Controls.Add(this.subtitles);
-            this.subtitlePanel.Location = new System.Drawing.Point(8, 214);
+            this.subtitlePanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.subtitlePanel.Location = new System.Drawing.Point(3, 220);
             this.subtitlePanel.Name = "subtitlePanel";
-            this.subtitlePanel.Size = new System.Drawing.Size(424, 98);
-            this.subtitlePanel.TabIndex = 34;
+            this.subtitlePanel.Size = new System.Drawing.Size(438, 98);
+            this.subtitlePanel.TabIndex = 2;
             // 
             // subtitles
             // 
@@ -527,8 +618,8 @@ namespace MeGUI
             this.subtitles.Location = new System.Drawing.Point(0, 0);
             this.subtitles.Name = "subtitles";
             this.subtitles.SelectedIndex = 0;
-            this.subtitles.Size = new System.Drawing.Size(424, 98);
-            this.subtitles.TabIndex = 31;
+            this.subtitles.Size = new System.Drawing.Size(438, 98);
+            this.subtitles.TabIndex = 0;
             // 
             // subPage1
             // 
@@ -536,7 +627,7 @@ namespace MeGUI
             this.subPage1.Location = new System.Drawing.Point(4, 22);
             this.subPage1.Name = "subPage1";
             this.subPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.subPage1.Size = new System.Drawing.Size(416, 72);
+            this.subPage1.Size = new System.Drawing.Size(430, 72);
             this.subPage1.TabIndex = 0;
             this.subPage1.Text = "Subtitle 1";
             this.subPage1.UseVisualStyleBackColor = true;
@@ -548,21 +639,43 @@ namespace MeGUI
             this.muxStreamControl1.Location = new System.Drawing.Point(3, 3);
             this.muxStreamControl1.Name = "muxStreamControl1";
             this.muxStreamControl1.ShowDelay = false;
-            this.muxStreamControl1.Size = new System.Drawing.Size(410, 66);
+            this.muxStreamControl1.Size = new System.Drawing.Size(424, 66);
             this.muxStreamControl1.TabIndex = 0;
             this.muxStreamControl1.FileUpdated += new System.EventHandler(this.muxStreamControl1_FileUpdated);
+            // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.AutoSize = true;
+            this.tableLayoutPanel1.ColumnCount = 3;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.Controls.Add(this.videoGroupbox, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.audioPanel, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.subtitlePanel, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.cancelButton, 2, 5);
+            this.tableLayoutPanel1.Controls.Add(this.chaptersGroupbox, 0, 3);
+            this.tableLayoutPanel1.Controls.Add(this.muxButton, 1, 5);
+            this.tableLayoutPanel1.Controls.Add(this.outputGroupbox, 0, 4);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 6;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(444, 514);
+            this.tableLayoutPanel1.TabIndex = 0;
             // 
             // baseMuxWindow
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
-            this.ClientSize = new System.Drawing.Size(444, 493);
-            this.Controls.Add(this.subtitlePanel);
-            this.Controls.Add(this.audioPanel);
-            this.Controls.Add(this.cancelButton);
-            this.Controls.Add(this.outputGroupbox);
-            this.Controls.Add(this.muxButton);
-            this.Controls.Add(this.videoGroupbox);
-            this.Controls.Add(this.chaptersGroupbox);
+            this.CancelButton = this.cancelButton;
+            this.ClientSize = new System.Drawing.Size(444, 514);
+            this.Controls.Add(this.tableLayoutPanel1);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -573,9 +686,15 @@ namespace MeGUI
             this.Text = "Mux";
             this.videoGroupbox.ResumeLayout(false);
             this.videoGroupbox.PerformLayout();
+            this.tableLayoutPanel2.ResumeLayout(false);
+            this.tableLayoutPanel2.PerformLayout();
             this.chaptersGroupbox.ResumeLayout(false);
+            this.tableLayoutPanel3.ResumeLayout(false);
+            this.tableLayoutPanel3.PerformLayout();
             this.outputGroupbox.ResumeLayout(false);
             this.outputGroupbox.PerformLayout();
+            this.tableLayoutPanel4.ResumeLayout(false);
+            this.tableLayoutPanel4.PerformLayout();
             this.audioPanel.ResumeLayout(false);
             this.audioMenu.ResumeLayout(false);
             this.audio.ResumeLayout(false);
@@ -584,7 +703,10 @@ namespace MeGUI
             this.subtitlePanel.ResumeLayout(false);
             this.subtitles.ResumeLayout(false);
             this.subPage1.ResumeLayout(false);
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
         #endregion
