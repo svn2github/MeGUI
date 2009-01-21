@@ -80,12 +80,6 @@ namespace MeGUI
             this.outputGroupbox.Location = new System.Drawing.Point(7, 361);
             this.outputGroupbox.Size = new System.Drawing.Size(414, 111);
             this.outputGroupbox.TabIndex = 4;
-            this.outputGroupbox.Controls.SetChildIndex(this.muxedOutputLabel, 0);
-            this.outputGroupbox.Controls.SetChildIndex(this.output, 0);
-            this.outputGroupbox.Controls.SetChildIndex(this.splitting, 0);
-            this.outputGroupbox.Controls.SetChildIndex(this.splittingLabel, 0);
-            this.outputGroupbox.Controls.SetChildIndex(this.label1, 0);
-            this.outputGroupbox.Controls.SetChildIndex(this.containerFormat, 0);
             // 
             // chaptersGroupbox
             // 
@@ -162,14 +156,6 @@ namespace MeGUI
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "AdaptiveMuxWindow";
             this.Text = "MeGUI - Adaptive Muxer";
-            this.Controls.SetChildIndex(this.muxButton, 0);
-            this.Controls.SetChildIndex(this.outputGroupbox, 0);
-            this.Controls.SetChildIndex(this.chaptersGroupbox, 0);
-            this.Controls.SetChildIndex(this.helpButton1, 0);
-            this.Controls.SetChildIndex(this.subtitlePanel, 0);
-            this.Controls.SetChildIndex(this.audioPanel, 0);
-            this.Controls.SetChildIndex(this.cancelButton, 0);
-            this.Controls.SetChildIndex(this.videoGroupbox, 0);
             this.videoGroupbox.ResumeLayout(false);
             this.videoGroupbox.PerformLayout();
             this.outputGroupbox.ResumeLayout(false);
