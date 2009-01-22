@@ -57,6 +57,7 @@ namespace MeGUI
             get
             {
                 StringBuilder sb = new StringBuilder();
+                int idx = 0;
                 string projName = Path.Combine(Path.GetDirectoryName(job.Output), Path.GetFileNameWithoutExtension(job.Output));
                 sb.Append("-SD=< -AIF=<" + job.Input + "< -OF=<" + projName + "< -exit -hide");
                 if (job.DemuxMode == 2)
@@ -66,7 +67,10 @@ namespace MeGUI
                     sb.Append(" -OM=1 -TN="); // demux only tracks checked
                     foreach (AudioTrackInfo ati in job.AudioTracks)
                     {
-                        sb.Append(ati.DgIndexID + ",");
+                        if (idx > 0)
+                             sb.Append("," + ati.DgIndexID);
+                        else sb.Append(ati.DgIndexID);
+                        ++idx;
                     }
                 }
                 else
