@@ -175,22 +175,14 @@ namespace MeGUI
                                                 }
                                             case 2: // winserver 2003
                                                 {
-                                                     uint edition = PRODUCT_UNDEFINED;
-                                                     if (GetProductInfo(osVersionInfo.dwMajorVersion,
-                                                                        osVersionInfo.dwMinorVersion,
-                                                                        osVersionInfo.wServicePackMajor,
-                                                                        osVersionInfo.wServicePackMinor,
-                                                                        out edition))
-                                                     {
-                                                        switch (edition)
-                                                        {                                                    
-                                                            case VER_SUITE_DATACENTER : osName = "Windows Server 2003 Datacenter Edition"; break;
-                                                            case VER_SUITE_ENTERPRISE : osName = "Windows Server 2003 Enterprise Edition"; break;
-                                                            case VER_SUITE_BLADE :      osName = "Windows Server 2003 Web Edition"; break;
-                                                            default :                   osName = "Windows Server 2003 Standard Edition"; break;                                                            
-                                                        }
-                                                     }
-                                                     break;
+                                                    if ((osVersionInfo.wSuiteMask & VER_SUITE_DATACENTER) == VER_SUITE_DATACENTER)
+                                                         osName = "Windows Server 2003 DataCenter Edition";
+                                                    else if ((osVersionInfo.wSuiteMask & VER_SUITE_ENTERPRISE) == VER_SUITE_ENTERPRISE)
+                                                         osName = "Windows Server 2003 Entreprise Edition";
+                                                    else if ((osVersionInfo.wSuiteMask & VER_SUITE_BLADE) == VER_SUITE_BLADE)
+                                                         osName = "Windows Server 2003 Web Edition";
+                                                    else osName = "Windows Serber 2003 Standard Edition";
+                                                    break;
                                                 }
                                         } break;
                                     }
