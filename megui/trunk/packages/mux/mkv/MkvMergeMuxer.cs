@@ -160,22 +160,32 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                     MuxStream stream = (MuxStream)o;
                     List<SubtitleInfo> subTracks;
                     idxReader.readFileProperties(stream.path, out subTracks);
-                    trackID = 0;
+                    trackID = 0; int nb = 0; int nt = 0;
                     if (stream.path.ToLower().EndsWith(".idx"))
                     {
                         foreach (SubtitleInfo strack in subTracks)
                         {
-                            sb.Append(" --language " + strack.Index.ToString() + ":" + strack.Name);
-                            if (!string.IsNullOrEmpty(stream.name))
-                                sb.Append(" --track-name \"" + strack.Index.ToString() + ":" + stream.name + "\"");
+                            if (nt > 0)
+                            {
+                                sb.Append(" --language " + strack.Index.ToString() + ":" + strack.Name);
+                                if (!string.IsNullOrEmpty(stream.name))
+                                    sb.Append(" --track-name \"" + strack.Index.ToString() + ":" + stream.name + "\"");
+                            }
+                            else
+                            {
+                                sb.Append(" --language " + "0:" + strack.Name);
+                                if (!string.IsNullOrEmpty(stream.name))
+                                    sb.Append(" --track-name \"" + "0:" + stream.name + "\"");
+                            }
+                            ++nt;
                         }
                         sb.Append(" -s ");
                         foreach (SubtitleInfo strack in subTracks)
                         {
-                            if (strack.Index > 0)
-                                sb.Append("," + strack.Index.ToString());
-                            else
-                                sb.Append(strack.Index.ToString());
+                            if (nb > 0)
+                                 sb.Append("," + strack.Index.ToString());
+                            else sb.Append("0");
+                            ++nb;
                         }
                         sb.Append(" -D -A \"" + stream.path + "\"");
                     }

@@ -54,21 +54,37 @@ namespace MeGUI
         public static void readFileProperties(string infoFile, out List<SubtitleInfo> subtitles)
         {
             subtitles = new List<SubtitleInfo>();
+            long countL = 0;
+            long numOfLines = 0;
+            string lng = "";
+            int idx = 0;
+            SubtitleInfo si;
 
             try
             {
                 using (StreamReader sr = new StreamReader(infoFile))
                 {
                     string line = sr.ReadLine();
-                    while ((line = sr.ReadLine()) != null)
+                    while (line != null)
                     {
-                        if (line.StartsWith("id")) // Language & Index values found
+                        line = sr.ReadLine();
+                        if (line != null)
                         {
-                            string lng = line.Substring(4, 2);
-                            int idx = Convert.ToInt32(line.Substring(15, 1));
-                            SubtitleInfo si = new SubtitleInfo(lng, idx);
-                            subtitles.Add(si);
-                        }
+                            ++numOfLines;
+
+                            if (line.StartsWith("id")) // Language & Index values found
+                            {
+                                lng = line.Substring(4, 2);
+                                idx = Convert.ToInt32(line.Substring(15, 1));
+                                countL = numOfLines;                                
+                            }
+
+                            if (line.StartsWith("timestamp: ") && (numOfLines == countL + 4)) // to ensure to have a sub, not just an idx/lng
+                            {
+                                si = new SubtitleInfo(lng, idx);
+                                subtitles.Add(si);
+                            }
+                        }                           
                     }
                 }
             }
