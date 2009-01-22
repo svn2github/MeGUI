@@ -167,13 +167,17 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                         {
                             if (nt > 0)
                             {
-                                sb.Append(" --language " + strack.Index.ToString() + ":" + strack.Name);
+                                if (!string.IsNullOrEmpty(stream.language))
+                                     sb.Append(" --language " + strack.Index.ToString() + ":" + stream.language);
+                                else sb.Append(" --language " + strack.Index.ToString() + ":" + stream.name);
                                 if (!string.IsNullOrEmpty(stream.name))
                                     sb.Append(" --track-name \"" + strack.Index.ToString() + ":" + stream.name + "\"");
                             }
                             else
                             {
-                                sb.Append(" --language " + "0:" + strack.Name);
+                                if (!string.IsNullOrEmpty(stream.language))
+                                     sb.Append(" --language " + "0:" + stream.language);
+                                else sb.Append(" --language " + "0:" + strack.Name);
                                 if (!string.IsNullOrEmpty(stream.name))
                                     sb.Append(" --track-name \"" + "0:" + stream.name + "\"");
                             }
