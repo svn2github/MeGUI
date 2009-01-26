@@ -393,6 +393,7 @@ namespace MeGUI
             // 
             // targetSize
             // 
+            this.targetSize.CustomSizes = new MeGUI.core.util.FileSize[0];
             this.targetSize.Location = new System.Drawing.Point(18, 46);
             this.targetSize.MaximumSize = new System.Drawing.Size(1000, 29);
             this.targetSize.MinimumSize = new System.Drawing.Size(64, 29);
@@ -459,7 +460,7 @@ namespace MeGUI
             // 
             this.projectedBitrate.Location = new System.Drawing.Point(112, 23);
             this.projectedBitrate.Maximum = new decimal(new int[] {
-            10000000,
+            100000,
             0,
             0,
             0});
@@ -508,6 +509,7 @@ namespace MeGUI
             // 
             // audioTrackSizeTab1
             // 
+            this.audioTrackSizeTab1.AllowDrop = true;
             this.audioTrackSizeTab1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.audioTrackSizeTab1.Location = new System.Drawing.Point(3, 3);
             this.audioTrackSizeTab1.Name = "audioTrackSizeTab1";
