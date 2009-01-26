@@ -124,20 +124,18 @@ namespace MeGUI
             bool colormatrix, bool mpeg2deblock, bool flipVertical, double fps)
         {
             string inputLine = "#input";
-      //      FileInfo fi = new FileInfo(input);
-       //     long size = fi.Length;
 
             switch (sourceType)
             {
                 case PossibleSources.d2v:
                     inputLine = "DGDecode_mpeg2source(\"" + input + "\"";
                     if (mpeg2deblock)
-                        inputLine += ",cpu=4";
+                        inputLine += ", cpu=4";
                     if (colormatrix)
-                        inputLine += ",info=3";
+                        inputLine += ", info=3";
                     inputLine += ")";
                     if (colormatrix)
-                        inputLine += string.Format("\r\nColorMatrix(hints=true{0})", interlaced ? ",interlaced=true" : "");
+                        inputLine += string.Format("\r\nColorMatrix(hints=true{0}, threads=0)", interlaced ? ", interlaced=true" : "");
                     break;
                 case PossibleSources.vdr:
                         inputLine = "AVISource(\"" + input + "\", audio=false)";
