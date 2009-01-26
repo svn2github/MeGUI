@@ -164,22 +164,23 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                 case LineType.importing:
                     su.PercentageDoneExact = getPercentage(line);
                     if (trackNumber == 1) // video
-                        su.Status = "importing video";
+                        su.Status = "Importing Video Track...";
                     else if (trackNumber == 2 && numberOfAudioTracks > 0) // first audio track
-                        su.Status = "importing audio 1";
+                        su.Status = "Importing Audio Track 1...";
                     else if (trackNumber == 3 && numberOfAudioTracks > 1) // second audio track
-                        su.Status = "importing audio 2";
+                        su.Status = "Importing Audio Track 2...";
                     else
-                        su.Status = "importing";
+                        su.Status = "Importing Tracks...";
                     break;
 
                 case LineType.splitting:
                     su.PercentageDoneExact = getPercentage(line);
+                    su.Status = "Splitting...";
                     break;
 
                 case LineType.writing:
                     su.PercentageDoneExact = getPercentage(line);
-                    su.Status = "writing";
+                    su.Status = "Writing...";
                     break;
 
                 case LineType.other:
