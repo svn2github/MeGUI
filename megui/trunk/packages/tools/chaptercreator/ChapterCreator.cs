@@ -635,7 +635,7 @@ namespace MeGUI
 					Chapter chap = (Chapter)chapterListView.SelectedItems[0].Tag;
 					int time = this.getTimeCode(chap.timecode);
 					double framerate = player.Framerate;
-					int frameNumber = convertTimecodeToFrameNumber(time, framerate);
+                    int frameNumber = Util.convertTimecodeToFrameNumber(time, framerate);
 					player.CurrentFrame = frameNumber;
 
 				}
@@ -645,7 +645,7 @@ namespace MeGUI
 					{
 						int time = this.getTimeCode(startTime.Text);
 						double framerate = player.Framerate;
-						int frameNumber = convertTimecodeToFrameNumber(time, framerate);
+                        int frameNumber = Util.convertTimecodeToFrameNumber(time, framerate);
 						player.CurrentFrame = frameNumber;
 					}
 				}
@@ -653,54 +653,7 @@ namespace MeGUI
 			else
 				MessageBox.Show("Please configure video input first", "No video input found", MessageBoxButtons.OK, MessageBoxIcon.Stop);
 		}
-		#region timecode <-> frame number conversion routines
-		/// <summary>
-		/// convers a timecode to a framenumber
-		/// </summary>
-		/// <param name="timeCode">position in the movie in milliseconds</param>
-		/// <param name="framerate">framerate of the movie</param>
-		/// <returns>the frame corresponding to the timecode</returns>
-		private int convertTimecodeToFrameNumber(int timeCode, double framerate)
-		{
-			double millisecondsPerFrame = (double)(1000 / framerate);
-			double frameNumber = (double)timeCode / millisecondsPerFrame;
-			return (int)frameNumber;
 
-		}
-		/// <summary>
-		/// converts a framenumber into a chapter format compatible timecode given the framerate of the video
-		/// </summary>
-		/// <param name="frameNumber">the position of the video</param>
-		/// <param name="framerate">the framerate of the video</param>
-		/// <returns>the chapter compatible timecode</returns>
-		private string converFrameNumberToTimecode(int frameNumber, double framerate)
-		{
-			double millisecondsPerFrame = (double)(1000 / framerate);
-			int milliseconds = (int)(millisecondsPerFrame * (double)frameNumber);
-			int hours = milliseconds / (3600 * 1000);
-			milliseconds -= hours * 3600 * 1000;
-			int minutes = milliseconds / (60 * 1000);
-			milliseconds -= minutes * 60 * 1000;
-			int seconds = milliseconds / 1000;
-			milliseconds -= seconds * 1000;
-			string retval = "";
-			if (hours < 10)
-				retval += "0";
-			retval += hours + ":";
-			if (minutes < 10)
-				retval += "0";
-			retval += minutes + ":";
-			if (seconds < 10)
-				retval += "0";
-			retval += seconds + ".";
-			if (milliseconds < 100)
-				retval += "0";
-			if (milliseconds < 10)
-				retval += "0";
-			retval += milliseconds;
-			return retval;
-		}
-		#endregion
 		#region properties
 		/// <summary>
 		/// sets the video input to be used for a zone preview
@@ -737,7 +690,7 @@ namespace MeGUI
 
 		private void player_ChapterSet(int frameNumber)
 		{
-			string timeCode = converFrameNumberToTimecode(frameNumber, player.Framerate);
+			string timeCode = Util.converFrameNumberToTimecode(frameNumber, player.Framerate);
 			startTime.Text = timeCode;
 			chapterName.Text = "";
 			addZoneButton_Click(null, null);

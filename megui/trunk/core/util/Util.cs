@@ -433,6 +433,55 @@ namespace MeGUI.core.util
             box.SelectedItem = sel;
         }
 
+        #region timecode <-> frame number conversion routines
+        /// <summary>
+        /// convers a timecode to a framenumber
+        /// </summary>
+        /// <param name="timeCode">position in the movie in milliseconds</param>
+        /// <param name="framerate">framerate of the movie</param>
+        /// <returns>the frame corresponding to the timecode</returns>
+        public static int convertTimecodeToFrameNumber(int timeCode, double framerate)
+        {
+            double millisecondsPerFrame = (double)(1000 / framerate);
+            double frameNumber = (double)timeCode / millisecondsPerFrame;
+            return (int)frameNumber;
+
+        }
+        /// <summary>
+        /// converts a framenumber into a chapter format compatible timecode given the framerate of the video
+        /// </summary>
+        /// <param name="frameNumber">the position of the video</param>
+        /// <param name="framerate">the framerate of the video</param>
+        /// <returns>the chapter compatible timecode</returns>
+        public static string converFrameNumberToTimecode(int frameNumber, double framerate)
+        {
+            double millisecondsPerFrame = (double)(1000 / framerate);
+            int milliseconds = (int)(millisecondsPerFrame * (double)frameNumber);
+            int hours = milliseconds / (3600 * 1000);
+            milliseconds -= hours * 3600 * 1000;
+            int minutes = milliseconds / (60 * 1000);
+            milliseconds -= minutes * 60 * 1000;
+            int seconds = milliseconds / 1000;
+            milliseconds -= seconds * 1000;
+            string retval = "";
+            if (hours < 10)
+                retval += "0";
+            retval += hours + ":";
+            if (minutes < 10)
+                retval += "0";
+            retval += minutes + ":";
+            if (seconds < 10)
+                retval += "0";
+            retval += seconds + ".";
+            if (milliseconds < 100)
+                retval += "0";
+            if (milliseconds < 10)
+                retval += "0";
+            retval += milliseconds;
+            return retval;
+        }
+        #endregion
+
         public static string TimeString(long seconds)
         {
             long sec;
