@@ -72,8 +72,8 @@ namespace MeGUI
         private PREVIEWTYPE viewerType;
         private static bool sizeLock; // recursion lock for resize event handler
         private int zoomWidth;
-        private long totalseconds;
-        private long currentseconds;
+        private string totalTime;
+        private string currentTime;
         private MainForm mainForm = MainForm.Instance;
 
 		private System.Windows.Forms.Button playButton;
@@ -216,8 +216,7 @@ namespace MeGUI
                 doInitialAdjustment();
                 adjustSize();
 				positionSlider_Scroll(null, null); // makes the image visible
-                totalseconds = (int)(this.positionSlider.Maximum * file.Info.FPS);
-				this.Text = "Current position: " + this.positionSlider.Value + "/" + this.positionSlider.Maximum;
+                this.Text = "Current position: " + this.positionSlider.Value + "/" + this.positionSlider.Maximum;
 				isRunning = false;
                 millisecondsPerFrame = (int)(1000 / file.Info.FPS);                
 				return true;
@@ -748,8 +747,8 @@ namespace MeGUI
 		/// </summary>
 		private void setTitleText()
 		{
-            totalseconds = (long)(this.positionSlider.Maximum / file.Info.FPS);
-            currentseconds = (long)(this.positionSlider.Value / file.Info.FPS);
+            totalTime = Util.converFrameNumberToTimecode(this.positionSlider.Maximum, file.Info.FPS);
+            currentTime = Util.converFrameNumberToTimecode(this.positionSlider.Value, file.Info.FPS);
             if (this.zoneStart > -1 || this.zoneEnd > -1)
             {
                 this.Text = "Pos: " + positionSlider.Value + "/" + positionSlider.Maximum + " Zone start: ";
@@ -770,7 +769,7 @@ namespace MeGUI
 			if (this.creditsStartFrame > -1)
 				this.Text += " Credits start: " + this.creditsStartFrame;
             if (mainForm.Settings.AddTimePosition)
-                this.Text += "   -   " + Util.TimeString(currentseconds) + "/" + Util.TimeString(totalseconds);
+                this.Text += "   -   " + currentTime + "/" + totalTime;
 		}
 		#endregion
 		#region cropping
