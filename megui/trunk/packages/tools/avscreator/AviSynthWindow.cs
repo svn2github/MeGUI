@@ -1146,6 +1146,7 @@ namespace MeGUI
             this.saveButton.Size = new System.Drawing.Size(41, 23);
             this.saveButton.TabIndex = 20;
             this.saveButton.Text = "Save";
+            this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
             // 
             // previewAvsButton
             // 
@@ -1157,6 +1158,7 @@ namespace MeGUI
             this.previewAvsButton.Size = new System.Drawing.Size(107, 23);
             this.previewAvsButton.TabIndex = 19;
             this.previewAvsButton.Text = "Preview AVS Script";
+            this.previewAvsButton.Click += new System.EventHandler(this.previewButton_Click);
             // 
             // helpButton1
             // 
