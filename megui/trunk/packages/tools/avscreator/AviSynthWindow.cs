@@ -118,7 +118,6 @@ namespace MeGUI
         private ToolStripStatusLabel deintStatusLabel;
         private Button reopenOriginal;
         private NumericUpDown fpsBox;
-        private MeGUI.core.gui.HelpButton helpButton1;
         private MeGUI.core.gui.ARChooser arChooser;
         private MeGUI.core.gui.ConfigableProfilesControl avsProfile;
         private Label label6;
@@ -130,6 +129,7 @@ namespace MeGUI
         private CheckBox onSaveLoadScript;
         private Button saveButton;
         private Button previewAvsButton;
+        private MeGUI.core.gui.HelpButton helpButton1;
 
 		/// <summary>
 		/// Required designer variable.
@@ -271,12 +271,13 @@ namespace MeGUI
             this.horizontalResolution = new System.Windows.Forms.NumericUpDown();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.optionsTab = new System.Windows.Forms.TabPage();
-            this.onSaveLoadScript = new System.Windows.Forms.CheckBox();
-            this.saveButton = new System.Windows.Forms.Button();
-            this.previewAvsButton = new System.Windows.Forms.Button();
             this.gbOutput = new System.Windows.Forms.GroupBox();
+            this.videoOutput = new MeGUI.FileBar();
             this.label7 = new System.Windows.Forms.Label();
             this.videoGroupBox = new System.Windows.Forms.GroupBox();
+            this.input = new MeGUI.FileBar();
+            this.avsProfile = new MeGUI.core.gui.ConfigableProfilesControl();
+            this.arChooser = new MeGUI.core.gui.ARChooser();
             this.reopenOriginal = new System.Windows.Forms.Button();
             this.mod16Box = new System.Windows.Forms.ComboBox();
             this.signalAR = new System.Windows.Forms.CheckBox();
@@ -315,11 +316,10 @@ namespace MeGUI
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.deintProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.deintStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.onSaveLoadScript = new System.Windows.Forms.CheckBox();
+            this.saveButton = new System.Windows.Forms.Button();
+            this.previewAvsButton = new System.Windows.Forms.Button();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
-            this.videoOutput = new MeGUI.FileBar();
-            this.input = new MeGUI.FileBar();
-            this.avsProfile = new MeGUI.core.gui.ConfigableProfilesControl();
-            this.arChooser = new MeGUI.core.gui.ARChooser();
             label2 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
             label4 = new System.Windows.Forms.Label();
@@ -585,64 +585,24 @@ namespace MeGUI
             this.tabControl1.Controls.Add(this.optionsTab);
             this.tabControl1.Controls.Add(this.filterTab);
             this.tabControl1.Controls.Add(this.editTab);
-            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Top;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(463, 493);
+            this.tabControl1.Size = new System.Drawing.Size(463, 448);
             this.tabControl1.TabIndex = 5;
             // 
             // optionsTab
             // 
-            this.optionsTab.Controls.Add(this.onSaveLoadScript);
-            this.optionsTab.Controls.Add(this.saveButton);
-            this.optionsTab.Controls.Add(this.previewAvsButton);
-            this.optionsTab.Controls.Add(this.helpButton1);
             this.optionsTab.Controls.Add(this.gbOutput);
             this.optionsTab.Controls.Add(this.videoGroupBox);
             this.optionsTab.Controls.Add(this.resNCropGroupbox);
             this.optionsTab.Location = new System.Drawing.Point(4, 22);
             this.optionsTab.Name = "optionsTab";
-            this.optionsTab.Size = new System.Drawing.Size(455, 467);
+            this.optionsTab.Size = new System.Drawing.Size(455, 422);
             this.optionsTab.TabIndex = 0;
             this.optionsTab.Text = "Options";
             this.optionsTab.UseVisualStyleBackColor = true;
-            // 
-            // onSaveLoadScript
-            // 
-            this.onSaveLoadScript.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.onSaveLoadScript.AutoSize = true;
-            this.onSaveLoadScript.Checked = true;
-            this.onSaveLoadScript.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.onSaveLoadScript.Location = new System.Drawing.Point(77, 423);
-            this.onSaveLoadScript.Name = "onSaveLoadScript";
-            this.onSaveLoadScript.Size = new System.Drawing.Size(210, 17);
-            this.onSaveLoadScript.TabIndex = 14;
-            this.onSaveLoadScript.Text = "On Save close and load to be encoded";
-            // 
-            // saveButton
-            // 
-            this.saveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.saveButton.AutoSize = true;
-            this.saveButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.saveButton.Location = new System.Drawing.Point(406, 420);
-            this.saveButton.Name = "saveButton";
-            this.saveButton.Size = new System.Drawing.Size(41, 23);
-            this.saveButton.TabIndex = 16;
-            this.saveButton.Text = "Save";
-            this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
-            // 
-            // previewAvsButton
-            // 
-            this.previewAvsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.previewAvsButton.AutoSize = true;
-            this.previewAvsButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.previewAvsButton.Location = new System.Drawing.Point(293, 420);
-            this.previewAvsButton.Name = "previewAvsButton";
-            this.previewAvsButton.Size = new System.Drawing.Size(107, 23);
-            this.previewAvsButton.TabIndex = 15;
-            this.previewAvsButton.Text = "Preview AVS Script";
-            this.previewAvsButton.Click += new System.EventHandler(this.previewButton_Click);
             // 
             // gbOutput
             // 
@@ -656,6 +616,22 @@ namespace MeGUI
             this.gbOutput.TabIndex = 13;
             this.gbOutput.TabStop = false;
             this.gbOutput.Text = "Output";
+            // 
+            // videoOutput
+            // 
+            this.videoOutput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.videoOutput.Filename = "";
+            this.videoOutput.Filter = "AVI Synth Scripts|*.avs";
+            this.videoOutput.FilterIndex = 0;
+            this.videoOutput.FolderMode = false;
+            this.videoOutput.Location = new System.Drawing.Point(96, 17);
+            this.videoOutput.Name = "videoOutput";
+            this.videoOutput.ReadOnly = true;
+            this.videoOutput.SaveMode = true;
+            this.videoOutput.Size = new System.Drawing.Size(348, 26);
+            this.videoOutput.TabIndex = 7;
+            this.videoOutput.Title = null;
             // 
             // label7
             // 
@@ -685,6 +661,48 @@ namespace MeGUI
             this.videoGroupBox.TabIndex = 5;
             this.videoGroupBox.TabStop = false;
             this.videoGroupBox.Text = "Video";
+            // 
+            // input
+            // 
+            this.input.AllowDrop = true;
+            this.input.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.input.Filename = "";
+            this.input.Filter = resources.GetString("input.Filter");
+            this.input.FilterIndex = 6;
+            this.input.FolderMode = false;
+            this.input.Location = new System.Drawing.Point(77, 15);
+            this.input.Name = "input";
+            this.input.ReadOnly = true;
+            this.input.SaveMode = false;
+            this.input.Size = new System.Drawing.Size(367, 26);
+            this.input.TabIndex = 1;
+            this.input.Title = "Select a source file";
+            this.input.FileSelected += new MeGUI.FileBarEventHandler(this.input_FileSelected);
+            // 
+            // avsProfile
+            // 
+            this.avsProfile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.avsProfile.Location = new System.Drawing.Point(96, 147);
+            this.avsProfile.Name = "avsProfile";
+            this.avsProfile.ProfileSet = "AviSynth";
+            this.avsProfile.Size = new System.Drawing.Size(348, 22);
+            this.avsProfile.TabIndex = 22;
+            this.avsProfile.SelectedProfileChanged += new System.EventHandler(this.ProfileChanged);
+            // 
+            // arChooser
+            // 
+            this.arChooser.CustomDARs = new MeGUI.core.util.Dar[0];
+            this.arChooser.HasLater = false;
+            this.arChooser.Location = new System.Drawing.Point(96, 76);
+            this.arChooser.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.arChooser.MinimumSize = new System.Drawing.Size(64, 29);
+            this.arChooser.Name = "arChooser";
+            this.arChooser.SelectedIndex = 0;
+            this.arChooser.Size = new System.Drawing.Size(214, 29);
+            this.arChooser.TabIndex = 21;
+            this.arChooser.SelectionChanged += new MeGUI.StringChanged(this.arChooser_SelectionChanged);
             // 
             // reopenOriginal
             // 
@@ -765,7 +783,7 @@ namespace MeGUI
             this.filterTab.Controls.Add(this.filtersGroupbox);
             this.filterTab.Location = new System.Drawing.Point(4, 22);
             this.filterTab.Name = "filterTab";
-            this.filterTab.Size = new System.Drawing.Size(455, 467);
+            this.filterTab.Size = new System.Drawing.Size(455, 422);
             this.filterTab.TabIndex = 2;
             this.filterTab.Text = "Filters";
             this.filterTab.UseVisualStyleBackColor = true;
@@ -1029,7 +1047,7 @@ namespace MeGUI
             this.editTab.Controls.Add(this.avisynthScript);
             this.editTab.Location = new System.Drawing.Point(4, 22);
             this.editTab.Name = "editTab";
-            this.editTab.Size = new System.Drawing.Size(455, 467);
+            this.editTab.Size = new System.Drawing.Size(455, 422);
             this.editTab.TabIndex = 1;
             this.editTab.Text = "Edit";
             this.editTab.UseVisualStyleBackColor = true;
@@ -1037,7 +1055,7 @@ namespace MeGUI
             // openDLLButton
             // 
             this.openDLLButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.openDLLButton.Location = new System.Drawing.Point(423, 399);
+            this.openDLLButton.Location = new System.Drawing.Point(418, 387);
             this.openDLLButton.Name = "openDLLButton";
             this.openDLLButton.Size = new System.Drawing.Size(24, 21);
             this.openDLLButton.TabIndex = 3;
@@ -1048,7 +1066,7 @@ namespace MeGUI
             // 
             this.dllPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.dllPath.Location = new System.Drawing.Point(74, 399);
+            this.dllPath.Location = new System.Drawing.Point(60, 387);
             this.dllPath.Name = "dllPath";
             this.dllPath.ReadOnly = true;
             this.dllPath.Size = new System.Drawing.Size(343, 21);
@@ -1057,7 +1075,7 @@ namespace MeGUI
             // label1
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.label1.Location = new System.Drawing.Point(15, 402);
+            this.label1.Location = new System.Drawing.Point(3, 390);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(66, 13);
             this.label1.TabIndex = 1;
@@ -1067,11 +1085,11 @@ namespace MeGUI
             // 
             this.avisynthScript.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.avisynthScript.Location = new System.Drawing.Point(8, 8);
+            this.avisynthScript.Location = new System.Drawing.Point(8, 15);
             this.avisynthScript.Multiline = true;
             this.avisynthScript.Name = "avisynthScript";
             this.avisynthScript.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.avisynthScript.Size = new System.Drawing.Size(439, 373);
+            this.avisynthScript.Size = new System.Drawing.Size(439, 356);
             this.avisynthScript.TabIndex = 0;
             // 
             // saveAvisynthScriptDialog
@@ -1090,7 +1108,7 @@ namespace MeGUI
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.deintProgressBar,
             this.deintStatusLabel});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 471);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 495);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(463, 22);
             this.statusStrip1.TabIndex = 6;
@@ -1106,79 +1124,59 @@ namespace MeGUI
             this.deintStatusLabel.Name = "deintStatusLabel";
             this.deintStatusLabel.Size = new System.Drawing.Size(0, 17);
             // 
+            // onSaveLoadScript
+            // 
+            this.onSaveLoadScript.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.onSaveLoadScript.AutoSize = true;
+            this.onSaveLoadScript.Checked = true;
+            this.onSaveLoadScript.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.onSaveLoadScript.Location = new System.Drawing.Point(84, 462);
+            this.onSaveLoadScript.Name = "onSaveLoadScript";
+            this.onSaveLoadScript.Size = new System.Drawing.Size(210, 17);
+            this.onSaveLoadScript.TabIndex = 18;
+            this.onSaveLoadScript.Text = "On Save close and load to be encoded";
+            // 
+            // saveButton
+            // 
+            this.saveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.saveButton.AutoSize = true;
+            this.saveButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.saveButton.Location = new System.Drawing.Point(413, 459);
+            this.saveButton.Name = "saveButton";
+            this.saveButton.Size = new System.Drawing.Size(41, 23);
+            this.saveButton.TabIndex = 20;
+            this.saveButton.Text = "Save";
+            // 
+            // previewAvsButton
+            // 
+            this.previewAvsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.previewAvsButton.AutoSize = true;
+            this.previewAvsButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.previewAvsButton.Location = new System.Drawing.Point(300, 459);
+            this.previewAvsButton.Name = "previewAvsButton";
+            this.previewAvsButton.Size = new System.Drawing.Size(107, 23);
+            this.previewAvsButton.TabIndex = 19;
+            this.previewAvsButton.Text = "Preview AVS Script";
+            // 
             // helpButton1
             // 
             this.helpButton1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.helpButton1.ArticleName = "Avisynth script creator";
             this.helpButton1.AutoSize = true;
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.helpButton1.Location = new System.Drawing.Point(8, 417);
+            this.helpButton1.Location = new System.Drawing.Point(15, 456);
             this.helpButton1.Name = "helpButton1";
             this.helpButton1.Size = new System.Drawing.Size(38, 23);
-            this.helpButton1.TabIndex = 7;
-            // 
-            // videoOutput
-            // 
-            this.videoOutput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.videoOutput.Filename = "";
-            this.videoOutput.Filter = "AVI Synth Scripts|*.avs";
-            this.videoOutput.FilterIndex = 0;
-            this.videoOutput.FolderMode = false;
-            this.videoOutput.Location = new System.Drawing.Point(96, 17);
-            this.videoOutput.Name = "videoOutput";
-            this.videoOutput.ReadOnly = true;
-            this.videoOutput.SaveMode = true;
-            this.videoOutput.Size = new System.Drawing.Size(348, 26);
-            this.videoOutput.TabIndex = 7;
-            this.videoOutput.Title = null;
-            // 
-            // input
-            // 
-            this.input.AllowDrop = true;
-            this.input.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.input.Filename = "";
-            this.input.Filter = resources.GetString("input.Filter");
-            this.input.FilterIndex = 6;
-            this.input.FolderMode = false;
-            this.input.Location = new System.Drawing.Point(77, 15);
-            this.input.Name = "input";
-            this.input.ReadOnly = true;
-            this.input.SaveMode = false;
-            this.input.Size = new System.Drawing.Size(367, 26);
-            this.input.TabIndex = 1;
-            this.input.Title = "Select a source file";
-            this.input.FileSelected += new MeGUI.FileBarEventHandler(this.input_FileSelected);
-            // 
-            // avsProfile
-            // 
-            this.avsProfile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.avsProfile.Location = new System.Drawing.Point(96, 147);
-            this.avsProfile.Name = "avsProfile";
-            this.avsProfile.ProfileSet = "AviSynth";
-            this.avsProfile.Size = new System.Drawing.Size(348, 22);
-            this.avsProfile.TabIndex = 22;
-            this.avsProfile.SelectedProfileChanged += new System.EventHandler(this.ProfileChanged);
-            // 
-            // arChooser
-            // 
-            this.arChooser.CustomDARs = new MeGUI.core.util.Dar[0];
-            this.arChooser.HasLater = false;
-            this.arChooser.Location = new System.Drawing.Point(96, 76);
-            this.arChooser.MaximumSize = new System.Drawing.Size(1000, 29);
-            this.arChooser.MinimumSize = new System.Drawing.Size(64, 29);
-            this.arChooser.Name = "arChooser";
-            this.arChooser.SelectedIndex = 0;
-            this.arChooser.Size = new System.Drawing.Size(214, 29);
-            this.arChooser.TabIndex = 21;
-            this.arChooser.SelectionChanged += new MeGUI.StringChanged(this.arChooser_SelectionChanged);
+            this.helpButton1.TabIndex = 17;
             // 
             // AviSynthWindow
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
-            this.ClientSize = new System.Drawing.Size(463, 493);
+            this.ClientSize = new System.Drawing.Size(463, 517);
+            this.Controls.Add(this.onSaveLoadScript);
+            this.Controls.Add(this.saveButton);
+            this.Controls.Add(this.previewAvsButton);
+            this.Controls.Add(this.helpButton1);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.tabControl1);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -1196,7 +1194,6 @@ namespace MeGUI
             ((System.ComponentModel.ISupportInitialize)(this.horizontalResolution)).EndInit();
             this.tabControl1.ResumeLayout(false);
             this.optionsTab.ResumeLayout(false);
-            this.optionsTab.PerformLayout();
             this.gbOutput.ResumeLayout(false);
             this.videoGroupBox.ResumeLayout(false);
             this.videoGroupBox.PerformLayout();
