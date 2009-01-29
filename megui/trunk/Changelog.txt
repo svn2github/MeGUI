@@ -1,3 +1,22 @@
+0.3.1.1011
+    - (kurtnoise) [AVSCreator] of course, I forgot to enable some events...\0/
+    - (kurtnoise) [AVSCreator] minor improvements in the form.
+    - (kurtnoise) [BitrateCalculator] restrict max desired bitrate to 100000, to avoid out of bounds errors with presets.
+    - (kurtnoise) [ScriptServer] add threads param to ColorMatrix.
+    - (kurtnoise) [VideoPlayer] add milliseconds to the Time Position.
+    - (kurtnoise) move converFrameNumberToTimecode() & convertTimecodeToFrameNumber() to the Util Class.
+    - (kurtnoise) [MP4Muxer] cosmetics
+    - (kurtnoise) [AVSCreator] reenable several components/events.
+    - (kurtnoise) [DGIndexer] fix a typo in the Commandline.
+    - (kurtnoise) [MkvMergeMuxer] readd streams Languages for vobsub files when it's selected in the dropdown List.
+    - (kurtnoise) better vobsub files handling for the idx reader & the mkv muxer.
+    - (kurtnoise) [AVSCreator] few tunings in the form for resizing & use the last index for input FileBar as default selection.   
+    - (kurtnoise) [OSInfo] remove GetProductInfo for Win Server 2003 coz it's only supported for Vista & higher...(#2523573)
+    - (kurtnoise) [AdaptiveMuxWindow.Designer] remove SetChildIndex from Controls.
+    - (kurtnoise) update MediaInfo library and its wrapper to the latest release (0.7.9)
+    - (kurtnoise) fix large DPI issue with layout controls. Patch by Zooba. 
+    - (kurtnoise) add Windows Seven & Server 2008 as OS type detection.
+
 0.3.1.1010
     - (kurtnoise) [x264Encoder] restrict --aud command to raw avc output files.
     - (kurtnoise) Some improvements for audio settings.
