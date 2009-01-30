@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 9.00
-# Visual Studio 2005
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaInfoTest", "MediaInfoDisplay\MediaInfoTest.csproj", "{0909166D-982A-40E5-A3F9-9EA99B2B8AC5}"
 EndProject
 Global
