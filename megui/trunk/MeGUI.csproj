@@ -147,10 +147,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="core\details\audio\AudioConfigurationPanel.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>AudioConfigurationPanel.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="core\details\JobControl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>JobControl.cs</DependentUpon>
@@ -187,14 +183,6 @@
     <Content Include="lib\MessageBoxExLib.dll" />
     <Compile Include="core\details\0_2_6_1017_jobloader\Job.cs" />
     <Compile Include="core\details\0_2_6_x_profileloader\Loader.cs" />
-    <Compile Include="core\details\audio\AudioCodecSettings.cs" />
-    <Compile Include="core\details\audio\AudioConfigurationPanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="core\details\audio\AudioConfigurationPanel.Designer.cs">
-      <DependentUpon>AudioConfigurationPanel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="core\details\audio\AudioJob.cs" />
     <Compile Include="core\details\CleanupJob.cs" />
     <Compile Include="core\details\CodecManager.cs" />
     <Compile Include="core\details\CommandlineParser.cs" />
@@ -509,11 +497,19 @@
     <Compile Include="packages\audio\aften\AftenConfigurationPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="packages\audio\AviSynthAudioEncoder.cs" />
+    <Compile Include="packages\audio\AudioEncoderInterface.cs" />
     <Compile Include="packages\audio\aften\AftenConfigurationPanel.Designer.cs">
       <DependentUpon>AftenConfigurationPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="packages\audio\aften\AftenSettings.cs" />
+    <Compile Include="packages\audio\AudioCodecSettings.cs" />
+    <Compile Include="packages\audio\AudioConfigurationPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="packages\audio\AudioConfigurationPanel.Designer.cs">
+      <DependentUpon>AudioConfigurationPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="packages\audio\AudioJob.cs" />
     <Compile Include="packages\audio\audx\AudXConfigurationPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -852,6 +848,10 @@
     <EmbeddedResource Include="packages\audio\aften\AftenConfigurationPanel.resx">
       <SubType>Designer</SubType>
       <DependentUpon>AftenConfigurationPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="packages\audio\AudioConfigurationPanel.resx">
+      <DependentUpon>AudioConfigurationPanel.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="packages\audio\audx\AudXConfigurationPanel.resx">
       <SubType>Designer</SubType>
