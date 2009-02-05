@@ -31,6 +31,8 @@ using System.Windows.Forms;
 
 using MeGUI.core.util;
 
+using MediaInfoWrapper;
+
 namespace MeGUI
 {
     public sealed class AviSynthAudioEncoder : IJobProcessor // : AudioEncoder
@@ -623,8 +625,22 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             }
             if (directShow)
             {
-                script.AppendFormat("DirectShowSource(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
-                script.AppendFormat("EnsureVBRMP3Sync(){0}", Environment.NewLine);
+                try
+                {
+                    MediaInfo info = new MediaInfo(audioJob.Input);
+                    if (info.Audio.Count > 0)
+                    {
+                        if (info.Video.Count > 0)
+                             script.AppendFormat("DirectShowSource(\"{0}\", video=false){1}", audioJob.Input, Environment.NewLine);
+                        else script.AppendFormat("DirectShowSource(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
+                        script.AppendFormat("EnsureVBRMP3Sync(){0}", Environment.NewLine);
+                    }
+                }
+                catch (Exception)
+                {
+                    deleteTempFiles();
+                    throw new JobRunException("Broken input file, " + audioJob.Input + ", can't continue.");
+                } 
             } 
             
             if (audioJob.Delay != 0)
