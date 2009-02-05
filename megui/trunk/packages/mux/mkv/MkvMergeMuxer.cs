@@ -102,10 +102,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                     if (settings.VideoInput.ToLower().EndsWith(".mp4") || settings.VideoInput.ToLower().EndsWith(".mkv"))
                          trackID = VideoUtil.getIDFromFirstVideoStream(settings.VideoInput);
                     else trackID = 0;
-                    if (settings.DAR.HasValue)
-                        sb.Append(" --aspect-ratio " + trackID + ":" + settings.DAR.Value.X + "/" + settings.DAR.Value.Y);
-                    else
-                        sb.Append(" --engage keep_bitstream_ar_info");
+                    sb.Append(" --engage keep_bitstream_ar_info"); // assuming that SAR info is already in the stream...
                     if (!string.IsNullOrEmpty(settings.VideoName))
                         sb.Append(" --track-name \"" + trackID + ":" + settings.VideoName + "\"");
                     if (settings.Framerate.HasValue)
