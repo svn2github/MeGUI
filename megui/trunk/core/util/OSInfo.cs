@@ -181,7 +181,7 @@ namespace MeGUI
                                                          osName = "Windows Server 2003 Entreprise Edition";
                                                     else if ((osVersionInfo.wSuiteMask & VER_SUITE_BLADE) == VER_SUITE_BLADE)
                                                          osName = "Windows Server 2003 Web Edition";
-                                                    else osName = "Windows Serber 2003 Standard Edition";
+                                                    else osName = "Windows Server 2003 Standard Edition";
                                                     break;
                                                 }
                                         } break;
