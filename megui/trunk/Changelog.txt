@@ -7,7 +7,7 @@
                   - rename AvisynthAudioEncoder to AudioEncoderInterface.
                   - update project files accordingly.
     - (kurtnoise) [AudioConfigurationPanel] add KeepOriginal as ChannelMode for stereo case.
-	- (kurtnoise) update MediaInfo library and its wrapper to the last release (0.7.10)
+    - (kurtnoise) update MediaInfo library and its wrapper to the last release (0.7.10)
 
 0.3.1.1011
     - (kurtnoise) [AVSCreator] of course, I forgot to enable some events...\0/
