@@ -1,3 +1,14 @@
+0.3.1.1012
+    - (kurtnoise) [MKVmuxer] force keep_bitstream_ar_info for AutoEncode Mode. (#2493312)
+    - (kurtnoise) [VideoUtil] remove auto change file extension when EncoderType equals to X264.
+    - (kurtnoise) [AudioEncoderInterface] few tunings for DSS use.
+    - (kurtnoise) [OSInfo] fix typo.
+    - (kurtnoise) - move AudioConfigurationPanel, AudioCodecSettings, AudioJob to the audio packages folder.
+                  - rename AvisynthAudioEncoder to AudioEncoderInterface.
+                  - update project files accordingly.
+    - (kurtnoise) [AudioConfigurationPanel] add KeepOriginal as ChannelMode for stereo case.
+	- (kurtnoise) update MediaInfo library and its wrapper to the last release (0.7.10)
+
 0.3.1.1011
     - (kurtnoise) [AVSCreator] of course, I forgot to enable some events...\0/
     - (kurtnoise) [AVSCreator] minor improvements in the form.
