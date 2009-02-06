@@ -34,7 +34,7 @@
     - (kurtnoise) small changes for the Changelog, UpdateWindow and MainForm forms. (#2496930)
     - (kurtnoise) [Calculator] more accurate bitrate results for DTS files.
     - (kurtnoise) [AviSynthAudioEncoder] fix FAAC bug within the new avisynth init...
-    - (sharktoot) [AVSCreator] Deinterlace control state now depends on deintSourceType
+    - (sharktooth) [AVSCreator] Deinterlace control state now depends on deintSourceType
 
 0.3.1.1009
     - (kurtnoise) [AviSynthAudioEncoder] cosmetics.
