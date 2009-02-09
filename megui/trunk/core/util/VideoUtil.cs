@@ -708,7 +708,8 @@ namespace MeGUI
                 {
                     // see http://forum.doom9.org/showthread.php?p=1243370#post1243370
                     if (video.Settings.EncoderType != VideoEncoderType.X264)
-                    video.Output = Path.ChangeExtension(video.Output,type.outputType.Extension);
+                         video.Output = Path.ChangeExtension(video.Output, type.outputType.Extension);
+                    else video.Output = Path.ChangeExtension(video.Output, ".264");
                     video.VideoType = type;
                 }
                 if (type.outputType is AudioType)
