@@ -1,7 +1,7 @@
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>8.0.50727</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{12D5215B-0254-4616-A53C-C8B7B6A2C8E9}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -25,6 +25,9 @@
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -35,9 +38,11 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <ApplicationManifest>app_x86.manifest</ApplicationManifest>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>bin\Debug\</OutputPath>
@@ -61,6 +66,7 @@
     <WarningLevel>4</WarningLevel>
     <DebugType>full</DebugType>
     <ErrorReport>prompt</ErrorReport>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -86,6 +92,7 @@
     <ErrorReport>prompt</ErrorReport>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
     <UseVSHostingProcess>false</UseVSHostingProcess>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'test|AnyCPU' ">
     <OutputPath>bin\test\</OutputPath>
@@ -110,6 +117,75 @@
     <WarningLevel>1</WarningLevel>
     <DebugType>full</DebugType>
     <ErrorReport>prompt</ErrorReport>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <BaseAddress>285212672</BaseAddress>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <FileAlignment>4096</FileAlignment>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <BaseAddress>285212672</BaseAddress>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Optimize>true</Optimize>
+    <FileAlignment>4096</FileAlignment>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'test|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\test\</OutputPath>
+    <BaseAddress>285212672</BaseAddress>
+    <WarningLevel>1</WarningLevel>
+    <FileAlignment>4096</FileAlignment>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <BaseAddress>285212672</BaseAddress>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <FileAlignment>4096</FileAlignment>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <BaseAddress>285212672</BaseAddress>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Optimize>true</Optimize>
+    <FileAlignment>4096</FileAlignment>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'test|x64' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\test\</OutputPath>
+    <BaseAddress>285212672</BaseAddress>
+    <WarningLevel>1</WarningLevel>
+    <FileAlignment>4096</FileAlignment>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Accessibility" />
@@ -125,6 +201,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>MessageBoxExLib\bin\Release\MessageBoxExLib.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -133,6 +210,7 @@
       <Name>System.Data</Name>
     </Reference>
     <Reference Include="System.Deployment" />
+    <Reference Include="System.Design" />
     <Reference Include="System.Drawing">
       <Name>System.Drawing</Name>
     </Reference>
@@ -276,7 +354,7 @@
     <Compile Include="core\gui\Changelog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="core\gui\Changelog.Designer.cs">
+    <Compile Include="core\gui\Changelog.designer.cs">
       <DependentUpon>Changelog.cs</DependentUpon>
     </Compile>
     <Compile Include="core\gui\ConfigableProfilesControl.cs">
@@ -409,7 +487,7 @@
     <Compile Include="core\gui\SourceDetectorConfigWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="core\gui\SourceDetectorConfigWindow.Designer.cs">
+    <Compile Include="core\gui\SourceDetectorConfigWindow.designer.cs">
       <DependentUpon>SourceDetectorConfigWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="core\gui\SourceDetectorSettings.cs" />
@@ -432,7 +510,7 @@
     <Compile Include="core\gui\UpdateWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="core\gui\UpdateWindow.Designer.cs">
+    <Compile Include="core\gui\UpdateWindow.designer.cs">
       <DependentUpon>UpdateWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="core\gui\VideoPlayer.cs">
@@ -480,7 +558,7 @@
     <Compile Include="core\util\FileUtil.cs" />
     <Compile Include="core\util\FilmCutter.cs" />
     <Compile Include="core\util\GenericRegisterer.cs" />
-    <Compile Include="core\util\IFOparser.cs" />    
+    <Compile Include="core\util\IFOparser.cs" />
     <Compile Include="core\util\JobUtil.cs" />
     <Compile Include="core\util\LanguageSelectionContainer.cs" />
     <Compile Include="core\util\LogItem.cs" />
@@ -492,12 +570,12 @@
     <Compile Include="core\util\Shutdown.cs" />
     <Compile Include="core\util\Tuples.cs" />
     <Compile Include="core\util\Util.cs" />
-    <Compile Include="core\util\VistaStuff.cs" />
     <Compile Include="core\util\VideoUtil.cs" />
+    <Compile Include="core\util\VistaStuff.cs" />
+    <Compile Include="core\util\WindowUtil.cs" />
     <Compile Include="packages\audio\aften\AftenConfigurationPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="packages\audio\AudioEncoderInterface.cs" />
     <Compile Include="packages\audio\aften\AftenConfigurationPanel.Designer.cs">
       <DependentUpon>AftenConfigurationPanel.cs</DependentUpon>
     </Compile>
@@ -516,6 +594,7 @@
     <Compile Include="packages\audio\audx\AudXConfigurationPanel.Designer.cs">
       <DependentUpon>AudXConfigurationPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="packages\audio\AudioEncoderInterface.cs" />
     <Compile Include="packages\audio\faac\faacConfigurationPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -573,14 +652,14 @@
     <Compile Include="packages\reader\avi\AviReader.cs" />
     <Compile Include="packages\reader\avs\AvsReader.cs">
       <SubType>Code</SubType>
-    </Compile>    
+    </Compile>
     <Compile Include="packages\reader\d2v\d2vReader.cs" />
     <Compile Include="packages\reader\dga\dgaReader.cs" />
     <Compile Include="packages\reader\dgv\dgvReader.cs" />
     <Compile Include="packages\reader\dvddecrypter\DVDD_File.cs" />
     <Compile Include="packages\reader\mediainfo\MediaInfoFile.cs" />
-    <Compile Include="packages\reader\video\VideoReader.cs" />    
-    <Compile Include="packages\reader\vobsub\idxReader.cs" />    
+    <Compile Include="packages\reader\video\VideoReader.cs" />
+    <Compile Include="packages\reader\vobsub\idxReader.cs" />
     <Compile Include="packages\tools\autoencode\AutoEncodeDefaults.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -591,7 +670,7 @@
     <Compile Include="packages\tools\autoencode\AutoEncodeWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="packages\tools\avclevelchecker\AVCLevels.cs" />
+    <Compile Include="packages\tools\avclevelschecker\AVCLevels.cs" />
     <Compile Include="packages\tools\avscreator\AviSynthJob.cs" />
     <Compile Include="packages\tools\avscreator\AviSynthProcessor.cs" />
     <Compile Include="packages\tools\avscreator\AviSynthSettings.cs" />
@@ -728,7 +807,6 @@
       <DependentUpon>AviSynthProfileConfigPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="core\gui\Changelog.resx">
-      <SubType>Designer</SubType>
       <DependentUpon>Changelog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="core\gui\ConfigableProfilesControl.resx">
@@ -764,8 +842,8 @@
       <DependentUpon>IndividualWorkerSummary.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="core\gui\InputBox.resx">
-      <SubType>Designer</SubType>
       <DependentUpon>InputBox.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="core\gui\JobQueue.resx">
       <SubType>Designer</SubType>
@@ -786,10 +864,6 @@
     <EmbeddedResource Include="core\gui\NumberChooser.resx">
       <SubType>Designer</SubType>
       <DependentUpon>NumberChooser.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="core\gui\ProfileConfigurationWindow.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>ProfileConfigurationWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="core\gui\ProfileExporter.resx">
       <SubType>Designer</SubType>
@@ -821,7 +895,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="core\gui\SourceDetectorConfigWindow.resx">
       <DependentUpon>SourceDetectorConfigWindow.cs</DependentUpon>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="core\gui\TextViewer.resx">
       <SubType>Designer</SubType>
@@ -829,7 +902,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="core\gui\UpdateWindow.resx">
       <DependentUpon>UpdateWindow.cs</DependentUpon>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="core\gui\VideoPlayer.resx">
       <DependentUpon>VideoPlayer.cs</DependentUpon>
@@ -897,7 +969,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="packages\tools\avscreator\AviSynthWindow.resx">
       <DependentUpon>AviSynthWindow.cs</DependentUpon>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="packages\tools\besplitter\Besplitter.resx">
       <SubType>Designer</SubType>
@@ -964,9 +1035,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="app_x86.manifest">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <None Include="app_x64.manifest" />
+    <None Include="app_x86.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -975,7 +1045,17 @@
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
       <Visible>False</Visible>
-      <ProductName>.NET Framework 2.0</ProductName>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">

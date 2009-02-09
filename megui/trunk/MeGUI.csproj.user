@@ -21,9 +21,10 @@
     </UpdateUrlHistory>
     <BootstrapperUrlHistory>
     </BootstrapperUrlHistory>
-    <ApplicationRevision>0</ApplicationRevision>
     <FallbackCulture>en-US</FallbackCulture>
     <VerifyUploadedFiles>false</VerifyUploadedFiles>
+    <ErrorReportUrlHistory>
+    </ErrorReportUrlHistory>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <EnableASPDebugging>false</EnableASPDebugging>
@@ -86,6 +87,12 @@
     </StartURL>
     <StartWorkingDirectory>
     </StartWorkingDirectory>
+    <StartWithIE>true</StartWithIE>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'test|x86' ">
+    <StartWithIE>true</StartWithIE>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'test|x64' ">
     <StartWithIE>true</StartWithIE>
   </PropertyGroup>
 </Project>
