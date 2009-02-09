@@ -654,6 +654,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="packages\reader\d2v\d2vReader.cs" />
+    <Compile Include="packages\reader\dga\dgaReader.cs" />
+    <Compile Include="packages\reader\dgv\dgvReader.cs" />
     <Compile Include="packages\reader\dvddecrypter\DVDD_File.cs" />
     <Compile Include="packages\reader\mediainfo\MediaInfoFile.cs" />
     <Compile Include="packages\reader\video\VideoReader.cs" />
