@@ -137,6 +137,12 @@ namespace MeGUI
                     if (colormatrix)
                         inputLine += string.Format("\r\nColorMatrix(hints=true{0}, threads=0)", interlaced ? ", interlaced=true" : "");
                     break;
+                case PossibleSources.dga:
+                    inputLine = "AVCSource(\"" + input + "\")";
+                    break;
+                case PossibleSources.dgv:
+                    inputLine = "VC1Source(\"" + input + "\")";
+                    break;
                 case PossibleSources.vdr:
                         inputLine = "AVISource(\"" + input + "\", audio=false)";
                     break;

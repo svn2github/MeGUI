@@ -63,7 +63,7 @@ namespace MeGUI
         private JobUtil jobUtil;
         private PossibleSources sourceType;
         private SourceDetector detector;
-
+        
         private System.Windows.Forms.GroupBox resNCropGroupbox;
 		private System.Windows.Forms.CheckBox crop;
         private System.Windows.Forms.Button autoCropButton;
@@ -1330,6 +1330,14 @@ namespace MeGUI
                     sourceType = PossibleSources.d2v;
                     openVideo(videoInput);
                     break;
+                case ".dga":
+                    sourceType = PossibleSources.dga;
+                    openVideo(videoInput);
+                    break;
+                case ".dgv":
+                    sourceType = PossibleSources.dgv;
+                    openVideo(videoInput);
+                    break;
                 case ".mpeg": // include case variants 
                 case ".mpg":
                 case ".m2v":
@@ -1391,6 +1399,8 @@ namespace MeGUI
                     this.flipVertical.Checked = false;
                     break;
                 case PossibleSources.vdr:
+                case PossibleSources.dga:
+                case PossibleSources.dgv:
                     this.mpeg2Deblocking.Checked = false;
                     this.mpeg2Deblocking.Enabled = false;
                     this.colourCorrect.Enabled = false;
@@ -1472,7 +1482,7 @@ namespace MeGUI
                 DirectShow ds = new DirectShow();
                 if (!ds.checkRender(fileName)) // make sure graphedit can render the file
                 {
-                    MessageBox.Show("Unable to render the file.\r\nYou probably don't have the correct filters installled", "Direct Show Error", MessageBoxButtons.OK);
+                    MessageBox.Show("Unable to render the file.\r\nYou probably don't have the correct filters installed", "Direct Show Error", MessageBoxButtons.OK);
                 }
                 else
                 {
@@ -2044,7 +2054,7 @@ namespace MeGUI
         }
     }
     public delegate void OpenScriptCallback(string avisynthScript);
-    public enum PossibleSources { d2v, mpeg2, vdr, directShow };
+    public enum PossibleSources { dga, dgv, d2v, mpeg2, vdr, directShow };
     public enum mod16Method : int { none = -1, resize = 0, overcrop, nonMod16, mod4Horizontal, undercrop };
 
     public class AviSynthWindowTool : MeGUI.core.plugins.interfaces.ITool

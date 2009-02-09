@@ -1393,28 +1393,28 @@ namespace MeGUI
 
             i = Log.Info("Hardware");
             i.LogValue("CPU ", string.Format("{0}", OSInfo.GetMOStuff("Win32_Processor")));
-/*
-            foreach (DriveInfo d in allDrives)
-            {
-                if ((d.DriveType == DriveType.Fixed) && (d.DriveFormat != null)) 
-                {
-                    try
-                    {
-                        long freespace = long.Parse(d.AvailableFreeSpace.ToString()) / 1073741824;
-                        long totalsize = long.Parse(d.TotalSize.ToString()) / 1073741824;
+            /*
+                        foreach (DriveInfo d in allDrives)   //OSInfo.GetMOStuff("Win32_OperatingSystem")
+                        {
+                            if ((d.DriveType == DriveType.Fixed) && (d.DriveFormat != null)) 
+                            {
+                                try
+                                {
+                                    long freespace = long.Parse(d.AvailableFreeSpace.ToString()) / 1073741824;
+                                    long totalsize = long.Parse(d.TotalSize.ToString()) / 1073741824;
 
-                        if (d.VolumeLabel.ToString() == "")
-                            d.VolumeLabel = "Local Disk";
+                                    if (d.VolumeLabel.ToString() == "")
+                                        d.VolumeLabel = "Local Disk";
 
-                        i.LogValue("HDD ", string.Format("{0} ({1})  -  {2} Go free of {3} Go", d.VolumeLabel, d.Name, Convert.ToString(freespace), Convert.ToString(totalsize)));
-                    }
-                    catch (Exception)
-                    {
-                        MessageBox.Show("MeGUI cannot access to the disk " + d.Name);
-                    }
-                }
-            }
-*/
+                                    i.LogValue("HDD ", string.Format("{0} ({1})  -  {2} Go free of {3} Go", d.VolumeLabel, d.Name, Convert.ToString(freespace), Convert.ToString(totalsize)));
+                                }
+                                catch (Exception)
+                                {
+                                    MessageBox.Show("MeGUI cannot access to the disk " + d.Name);
+                                }
+                            }
+                        }
+            */
             //Log.LogValue("Settings", Settings, ImageType.Information);
         }
 
@@ -1691,6 +1691,8 @@ namespace MeGUI
             PackageSystem.Tools.Register(new VobSubTool());
             PackageSystem.MediaFileTypes.Register(new AvsFileFactory());
             PackageSystem.MediaFileTypes.Register(new d2vFileFactory());
+            PackageSystem.MediaFileTypes.Register(new dgaFileFactory());
+            PackageSystem.MediaFileTypes.Register(new dgvFileFactory());
             PackageSystem.MediaFileTypes.Register(new MediaInfoFileFactory());
             PackageSystem.JobPreProcessors.Register(BitrateCalculatorPreProcessor.CalculationProcessor);
             PackageSystem.JobPostProcessors.Register(OneClickPostProcessor.PostProcessor);
