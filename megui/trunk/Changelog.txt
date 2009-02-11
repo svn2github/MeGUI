@@ -1,3 +1,11 @@
+0.3.1.1013
+    - (kurtnoise) [VideoUtil] force .264 extension otherwise MP4 mux fails with the One-Click.
+    - (kurtnoise) modify compile batch file to reflect previous commit.
+    - (kurtnoise) Renaming project files. Now, MSVC2008 is the default one and the old MSVC2005 has been renamed to MeGUI_2005. 
+    - (kurtnoise) apply dga & dgv files to the AVSCreator and ScriptServer.
+    - (kurtnoise) add dga & dgv files reader to the project files.
+    - (kurtnoise) add dga & dgv files Reader.
+
 0.3.1.1012
     - (kurtnoise) [MKVmuxer] force keep_bitstream_ar_info for AutoEncode Mode. (#2493312)
     - (kurtnoise) [VideoUtil] remove auto change file extension when EncoderType equals to X264.
