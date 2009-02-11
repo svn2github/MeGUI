@@ -141,7 +141,7 @@ namespace MeGUI
                     inputLine = "AVCSource(\"" + input + "\")";
                     break;
                 case PossibleSources.dgm:
-                    inputLine = "MPEGSource(\"" + input + "\")";
+                    inputLine = "MPGSource(\"" + input + "\")";
                     break;
                 case PossibleSources.dgv:
                     inputLine = "VC1Source(\"" + input + "\")";
