@@ -248,6 +248,12 @@ namespace MeGUI.packages.video.x264
                 x264TempQuantBlurLabel.Enabled = true;
 
                 x264BitrateQuantizer.Maximum = 100000;
+                if (x264LosslessMode.Checked)
+                {
+                    this.x264BitrateQuantizerLabel.Text = "Quantizer";
+                    x264BitrateQuantizer.Minimum = 0;
+                }
+                else
                 x264BitrateQuantizer.Minimum = 10;
                 x264BitrateQuantizer.DecimalPlaces = 0;
                 x264BitrateQuantizer.Increment = 10;
@@ -278,7 +284,7 @@ namespace MeGUI.packages.video.x264
                 {
                     // This first line makes sure it is an integer, in case we just swapped from crf
                     x264BitrateQuantizer.Value = (int)x264BitrateQuantizer.Value; 
-                    x264BitrateQuantizer.Minimum = 1;
+                    x264BitrateQuantizer.Minimum = 0;
                     x264BitrateQuantizer.DecimalPlaces = 0;
                     x264BitrateQuantizer.Increment = 1;
                 }
@@ -810,6 +816,10 @@ namespace MeGUI.packages.video.x264
                         x264EncodingMode.SelectedIndex = 1;
                         lastEncodingMode = 1;
                         x264EncodingMode.Enabled = false;
+                        if (x264BitrateQuantizer.Value != 0)
+                            x264BitrateQuantizer.Value = 0;
+                        if (x264Turbo.Checked)
+                            x264Turbo.Checked = false;
                     }
                     else
                     {
