@@ -474,6 +474,7 @@
     <Compile Include="core\util\DeinterlaceFilter.cs" />
     <Compile Include="core\util\DirectShow.cs" />
     <Compile Include="core\util\DragDropUtil.cs" />
+    <Compile Include="core\util\Drives.cs" />
     <Compile Include="core\util\EnumProxy.cs" />
     <Compile Include="core\util\Exceptions.cs" />
     <Compile Include="core\util\FileSize.cs" />
