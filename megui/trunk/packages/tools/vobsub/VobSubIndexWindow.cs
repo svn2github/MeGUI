@@ -58,19 +58,25 @@ namespace MeGUI
         #region button handlers
         private void queueButton_Click(object sender, EventArgs e)
         {
-            if (configured)
+            if (Drives.ableToWriteOnThisDrive(Path.GetPathRoot(output.Filename)))
             {
-                if (!dialogMode)
+                if (configured)
                 {
-                    SubtitleIndexJob job = generateJob();
-                    mainForm.Jobs.addJobsToQueue(job);
-                    if (this.closeOnQueue.Checked)
-                        this.Close();
+                    if (!dialogMode)
+                    {
+                        SubtitleIndexJob job = generateJob();
+                        mainForm.Jobs.addJobsToQueue(job);
+                        if (this.closeOnQueue.Checked)
+                            this.Close();
+                    }
                 }
+                else
+                    MessageBox.Show("You must select an Input and Output file to continue",
+                        "Configuration incomplete", MessageBoxButtons.OK);
             }
             else
-                MessageBox.Show("You must select an Input and Output file to continue",
-                    "Configuration incomplete", MessageBoxButtons.OK);
+                MessageBox.Show("MeGUI cannot write on " + Path.GetPathRoot(output.Filename) +
+                                ". Please, select another output path.", "Configuration Incomplete", MessageBoxButtons.OK);
         }
         #endregion
         private void openVideo(string fileName)

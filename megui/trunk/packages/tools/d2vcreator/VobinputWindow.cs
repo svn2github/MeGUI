@@ -448,20 +448,26 @@ namespace MeGUI
 		/// <param name="e"></param>
 		private void queueButton_Click(object sender, System.EventArgs e)
 		{
-			if (configured)
-			{
-				if (!dialogMode)
-				{
-					IndexJob job = generateIndexJob();
-                    lastJob = job;
-					mainForm.Jobs.addJobsToQueue(job);
-					if (this.closeOnQueue.Checked)
-						this.Close();
-				}
-			}
-			else
-				MessageBox.Show("You must select a Video Input and DGIndex project file to continue", 
-					"Configuration incomplete", MessageBoxButtons.OK);
+            if (Drives.ableToWriteOnThisDrive(Path.GetPathRoot(projectName.Text)))
+            {
+                if (configured)
+                {
+                    if (!dialogMode)
+                    {
+                        IndexJob job = generateIndexJob();
+                        lastJob = job;
+                        mainForm.Jobs.addJobsToQueue(job);
+                        if (this.closeOnQueue.Checked)
+                            this.Close();
+                    }
+                }
+                else
+                    MessageBox.Show("You must select a Video Input and DGIndex project file to continue",
+                        "Configuration incomplete", MessageBoxButtons.OK);
+            }
+            else
+                MessageBox.Show("MeGUI cannot write on " + Path.GetPathRoot(projectName.Text) +
+                                ". Please, select another output path.", "Configuration Incomplete", MessageBoxButtons.OK);
 		}
 		#endregion
 		#region helper methods
