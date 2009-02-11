@@ -63,7 +63,7 @@ namespace MeGUI
 
         private void generateScript()
         {
-            configFile = Path.ChangeExtension(job.Input, ".vobsub");
+            configFile = Path.ChangeExtension(job.Output, ".vobsub");
 
             using (StreamWriter sw = new StreamWriter(configFile, false, Encoding.Default))
             {
