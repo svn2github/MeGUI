@@ -1334,6 +1334,10 @@ namespace MeGUI
                     sourceType = PossibleSources.dga;
                     openVideo(videoInput);
                     break;
+                case ".dgm":
+                    sourceType = PossibleSources.dgm;
+                    openVideo(videoInput);
+                    break;
                 case ".dgv":
                     sourceType = PossibleSources.dgv;
                     openVideo(videoInput);
@@ -1400,6 +1404,7 @@ namespace MeGUI
                     break;
                 case PossibleSources.vdr:
                 case PossibleSources.dga:
+                case PossibleSources.dgm:
                 case PossibleSources.dgv:
                     this.mpeg2Deblocking.Checked = false;
                     this.mpeg2Deblocking.Enabled = false;
@@ -2054,7 +2059,7 @@ namespace MeGUI
         }
     }
     public delegate void OpenScriptCallback(string avisynthScript);
-    public enum PossibleSources { dga, dgv, d2v, mpeg2, vdr, directShow };
+    public enum PossibleSources { dga, dgm, dgv, d2v, mpeg2, vdr, directShow };
     public enum mod16Method : int { none = -1, resize = 0, overcrop, nonMod16, mod4Horizontal, undercrop };
 
     public class AviSynthWindowTool : MeGUI.core.plugins.interfaces.ITool

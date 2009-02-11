@@ -1693,6 +1693,7 @@ namespace MeGUI
             PackageSystem.MediaFileTypes.Register(new d2vFileFactory());
             PackageSystem.MediaFileTypes.Register(new dgaFileFactory());
             PackageSystem.MediaFileTypes.Register(new dgvFileFactory());
+            PackageSystem.MediaFileTypes.Register(new dgmFileFactory());
             PackageSystem.MediaFileTypes.Register(new MediaInfoFileFactory());
             PackageSystem.JobPreProcessors.Register(BitrateCalculatorPreProcessor.CalculationProcessor);
             PackageSystem.JobPostProcessors.Register(OneClickPostProcessor.PostProcessor);
