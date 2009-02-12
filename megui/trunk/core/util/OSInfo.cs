@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections;
+using System.Diagnostics;
 using System.Management;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -54,6 +55,10 @@ namespace MeGUI
         [DllImport("kernel32.dll")]
         private static extern bool GetProductInfo(int dwOSMajorVersion, int dwOSMinorVersion, int dwSpMajorVersion, int dwSpMinorVersion, out uint pdwReturnedProductType);
 
+        [DllImport("kernel32.dll", SetLastError = true, CallingConvention = CallingConvention.Winapi)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool IsWow64Process([In] IntPtr hProcess, [Out] out bool wow64Process);
+
         #region Private Constants
         private const int VER_NT_WORKSTATION = 1;
         private const int VER_NT_DOMAIN_CONTROLLER = 2;
@@ -77,6 +82,22 @@ namespace MeGUI
         #endregion
 
         #region Public Methods
+        /// <summary>
+        /// Determines whether the specified process is running under WOW64. 
+        /// </summary>
+        /// <returns>a boolean</returns>
+        public static bool isWow64()
+        {           
+             Process p = Process.GetCurrentProcess();
+             IntPtr handle = p.Handle;
+             bool isWow64;
+             bool success = IsWow64Process(handle, out isWow64);
+             if ((!success) && (IntPtr.Size != 8))
+                 throw new Exception();
+             else
+                 return isWow64;
+        }
+
         /// <summary>
         /// Returns the service pack information of the operating system running on this computer.
         /// </summary>
@@ -114,6 +135,7 @@ namespace MeGUI
             OSVERSIONINFOEX osVersionInfo = new OSVERSIONINFOEX();
             osVersionInfo.dwOSVersionInfoSize = Marshal.SizeOf(typeof(OSVERSIONINFOEX));
             string osName = "UNKNOWN";
+            bool x64Detection = false;
 
             if (!GetVersionEx(ref osVersionInfo))
             {
@@ -171,6 +193,7 @@ namespace MeGUI
                                                     if ((osVersionInfo.wSuiteMask & VER_SUITE_PERSONAL) == VER_SUITE_PERSONAL)
                                                          osName = "Windows XP Home Edition";
                                                     else osName = "Windows XP Professional";
+                                                    x64Detection = true;
                                                     break;
                                                 }
                                             case 2: // winserver 2003
@@ -182,12 +205,14 @@ namespace MeGUI
                                                     else if ((osVersionInfo.wSuiteMask & VER_SUITE_BLADE) == VER_SUITE_BLADE)
                                                          osName = "Windows Server 2003 Web Edition";
                                                     else osName = "Windows Server 2003 Standard Edition";
+                                                    x64Detection = true;
                                                     break;
                                                 }
                                         } break;
                                     }
                                 case 6:
                                     {
+                                        x64Detection = true;
                                         switch (osInfo.Version.Minor)
                                         {
                                             case 0:
@@ -241,7 +266,13 @@ namespace MeGUI
                         }
                 }
             }
-    
+
+            if (x64Detection)
+            {
+                if (isWow64())
+                     osName += " x64";
+                else osName += " x86";
+            }
             return osName;
         }
 
