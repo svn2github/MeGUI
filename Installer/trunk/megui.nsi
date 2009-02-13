@@ -165,12 +165,13 @@ Section Uninstall
 	Delete /REBOOTOK "$INSTDIR\${FILE8}"
 	Delete /REBOOTOK "$INSTDIR\${FILE9}"
 	Delete "$INSTDIR\${UNINST_NAME}"
-        RMDir /r "$INSTDIR"
-   
-    DeleteRegKey HKEY_LOCAL_MACHINE "SOFTWARE\MeGUI"
-    DeleteRegKey HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}"
-	RMDir /r "$SMPROGRAMS\MeGUI"
 
+	DeleteRegKey HKEY_LOCAL_MACHINE "SOFTWARE\MeGUI"
+        DeleteRegKey HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}"
+
+        RMDIR /r "$LOCALAPPDATA\${PRODUCT_WEB_SITE}"
+        RMDIR /r "$SMPROGRAMS\MeGUI"
+        RMDIR /r "$INSTDIR"
 
 SectionEnd ; end of uninstall section
 
