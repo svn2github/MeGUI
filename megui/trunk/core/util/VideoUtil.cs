@@ -529,9 +529,7 @@ namespace MeGUI
 
 		}
         #endregion
-        #region SAR calculation
 
-        #endregion
         #region source checking
         public string checkVideo(string avsFile)
         {
@@ -682,13 +680,11 @@ namespace MeGUI
                 ((VideoJob)vjobs.Jobs[0].Job).BitrateCalculationInfo = b;
             }
 
-
             return 
                 new SequentialChain(
                     new ParallelChain((Job[])audioStreams),
                     new SequentialChain(vjobs),
                     new SequentialChain(muxJobs));
-
         }
 
         private void fixFileNameExtensions(VideoStream video, AudioJob[] audioStreams, ContainerType container)
