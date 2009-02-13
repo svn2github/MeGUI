@@ -248,7 +248,8 @@ namespace MeGUI
             }
             else if (info.sourceType == SourceType.INTERLACED)
             {
-                ScriptServer.AddYadif(info.fieldOrder, filters);
+                ScriptServer.AddYadif(info.fieldOrder, filters, false);
+                ScriptServer.AddYadif(info.fieldOrder, filters, true);
                 ScriptServer.AddTDeint(info.fieldOrder, filters, true, false);
                 ScriptServer.AddTDeint(info.fieldOrder, filters, true, true);
                 if (info.fieldOrder != FieldOrder.VARIABLE)
@@ -273,7 +274,8 @@ namespace MeGUI
             }
             else if (info.sourceType == SourceType.HYBRID_PROGRESSIVE_INTERLACED)
             {
-                ScriptServer.AddYadif(info.fieldOrder, filters);
+                ScriptServer.AddYadif(info.fieldOrder, filters, false);
+                ScriptServer.AddYadif(info.fieldOrder, filters, true);
                 ScriptServer.AddTDeint(info.fieldOrder, filters, false, false);
                 ScriptServer.AddTDeint(info.fieldOrder, filters, false, true);
                 ScriptServer.AddFieldDeint(info.fieldOrder, filters, false, true);
@@ -296,13 +298,13 @@ namespace MeGUI
             return i_order;
         }
 
-        public static void AddYadif(FieldOrder order, List<DeinterlaceFilter> filters)
+        public static void AddYadif(FieldOrder order, List<DeinterlaceFilter> filters, bool bobber)
         {
             filters.Add(new DeinterlaceFilter(
-                "Yadif",
-                string.Format("Load_Stdcall_Plugin(\"{0}\"){1}Yadif(order={2})", 
+                bobber ? "Yadif (with Bob)" : "Yadif",
+                string.Format("Load_Stdcall_Plugin(\"{0}\"){1}Yadif({2}order={3})", 
                     MainForm.Instance.Settings.YadifPath, Environment.NewLine,
-                    Order(order))));
+                    bobber ? "mode=1, " : "", Order(order))));
         }
 
         public static void AddLeakDeint(FieldOrder order, List<DeinterlaceFilter> filters)
