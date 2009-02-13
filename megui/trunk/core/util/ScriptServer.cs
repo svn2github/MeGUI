@@ -250,8 +250,10 @@ namespace MeGUI
             {
                 ScriptServer.AddYadif(info.fieldOrder, filters, false);
                 ScriptServer.AddYadif(info.fieldOrder, filters, true);
-                ScriptServer.AddTDeint(info.fieldOrder, filters, true, false);
-                ScriptServer.AddTDeint(info.fieldOrder, filters, true, true);
+                ScriptServer.AddTDeint(info.fieldOrder, filters, true, false, false);
+                ScriptServer.AddTDeint(info.fieldOrder, filters, true, false, true);
+                ScriptServer.AddTDeint(info.fieldOrder, filters, true, true, false);
+                ScriptServer.AddTDeint(info.fieldOrder, filters, true, true, true);
                 if (info.fieldOrder != FieldOrder.VARIABLE)
                     ScriptServer.AddLeakDeint(info.fieldOrder, filters);
                 ScriptServer.AddTMC(info.fieldOrder, filters);
@@ -276,8 +278,10 @@ namespace MeGUI
             {
                 ScriptServer.AddYadif(info.fieldOrder, filters, false);
                 ScriptServer.AddYadif(info.fieldOrder, filters, true);
-                ScriptServer.AddTDeint(info.fieldOrder, filters, false, false);
-                ScriptServer.AddTDeint(info.fieldOrder, filters, false, true);
+                ScriptServer.AddTDeint(info.fieldOrder, filters, false, false, false);
+                ScriptServer.AddTDeint(info.fieldOrder, filters, true, false, true);
+                ScriptServer.AddTDeint(info.fieldOrder, filters, true, true, false);
+                ScriptServer.AddTDeint(info.fieldOrder, filters, false, true, true);
                 ScriptServer.AddFieldDeint(info.fieldOrder, filters, false, true);
                 ScriptServer.AddFieldDeint(info.fieldOrder, filters, false, false);
                 if (info.fieldOrder != FieldOrder.VARIABLE)
@@ -314,7 +318,7 @@ namespace MeGUI
                 string.Format("LeakKernelDeint(order={0},sharp=true)", Order(order))));
         }
 
-        public static void AddTDeint(FieldOrder order, List<DeinterlaceFilter> filters, bool processAll, bool eedi2)
+        public static void AddTDeint(FieldOrder order, List<DeinterlaceFilter> filters, bool processAll, bool eedi2, bool bob)
         {
             StringBuilder script = new StringBuilder();
             if (eedi2)
@@ -327,8 +331,9 @@ namespace MeGUI
                 script.Append("SeparateFields().SelectEven().EEDI2(field=-1)\r\n");
             }
             script.Append("TDeint(");
-            
 
+            if (bob)
+                script.Append("mode=1,");
             if (order != FieldOrder.VARIABLE)
                 script.Append("order=" + Order(order) + ",");
             if (!processAll) // For hybrid clips
@@ -339,7 +344,7 @@ namespace MeGUI
             script = new StringBuilder(script.ToString().TrimEnd(new char[] { ',' }));
             script.Append(")");
             filters.Add(new DeinterlaceFilter(
-                eedi2 ? "TDeint (with EDI)" : "TDeint",
+                bob ? (eedi2 ? "TDeint (with EDI + Bob)" : "TDeint (with Bob)") : (eedi2 ? "TDeint (with EDI)" : "TDeint"),
                 script.ToString()));
         }
 
