@@ -69,6 +69,16 @@ namespace MeGUI
         HeavyNoise
     }
 
+    public enum NvDeinterlacerType
+    {
+        [EnumTitle("No Deinterlacing", ", deinterlace=0)")]
+        nvDeInterlacerNone = 0,
+        [EnumTitle("Single Rate Deinterlacing", ", deinterlace=1)")]
+        nvDeInterlacerSingle,
+        [EnumTitle("Bobbing", ", deinterlace=2)")]
+        nvDeInterlacerDouble
+    }
+
     public enum UserSourceType
     {
         [EnumTitle("Progressive", SourceType.PROGRESSIVE)]
@@ -109,6 +119,8 @@ namespace MeGUI
 
         public static readonly IList ListOfFieldOrders = EnumProxy.CreateArray(typeof(UserFieldOrder));
 
+        public static readonly IList ListOfNvDeIntType = EnumProxy.CreateArray(typeof(NvDeinterlacerType));
+
         public static string CreateScriptFromTemplate(string template, string inputLine, string cropLine, string resizeLine, string denoiseLines, string deinterlaceLines)
         {
             string newScript = template;
@@ -138,13 +150,13 @@ namespace MeGUI
                         inputLine += string.Format("\r\nColorMatrix(hints=true{0}, threads=0)", interlaced ? ", interlaced=true" : "");
                     break;
                 case PossibleSources.dga:
-                    inputLine = "AVCSource(\"" + input + "\")";
+                    inputLine = "AVCSource(\"" + input + "\"";
                     break;
                 case PossibleSources.dgm:
-                    inputLine = "MPGSource(\"" + input + "\")";
+                    inputLine = "MPGSource(\"" + input + "\"";
                     break;
                 case PossibleSources.dgv:
-                    inputLine = "VC1Source(\"" + input + "\")";
+                    inputLine = "VC1Source(\"" + input + "\"";
                     break;
                 case PossibleSources.vdr:
                         inputLine = "AVISource(\"" + input + "\", audio=false)";
@@ -207,6 +219,19 @@ namespace MeGUI
             }
             return denoiseLines;
         }
+
+        public static string GetNvDeInterlacerLine(bool deint, NvDeinterlacerType type)
+        {
+            string nvDeInterlacerLine = "";
+            if (deint)
+            {
+                EnumProxy p = EnumProxy.Create(type);
+                if (p.Tag != null)
+                    nvDeInterlacerLine = string.Format(p.Tag + " # Source");
+            }
+            return nvDeInterlacerLine;
+        }
+
 
         public static List<DeinterlaceFilter> GetDeinterlacers(SourceInfo info)
         {
