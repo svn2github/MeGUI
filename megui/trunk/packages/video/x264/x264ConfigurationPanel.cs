@@ -905,7 +905,7 @@ namespace MeGUI.packages.video.x264
                 this.PsyRD.Enabled = false;
                 this.PsyRDLabel.Enabled = false;
             }
-            if (this.trellis.SelectedIndex > 0 && this.PsyRD.Enabled)
+            if (this.trellis.SelectedIndex > 0)
             {
                 this.PsyTrellis.Enabled = true;
                 this.PsyTrellisLabel.Enabled = true;

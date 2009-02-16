@@ -183,8 +183,17 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                 sb.Append("--no-chroma-me ");
             if (xs.X264Trellis > 0)
                 sb.Append("--trellis " + xs.X264Trellis + " ");
-            if ((xs.PsyRDO != new decimal(1.0) || xs.PsyTrellis != new decimal(0.0)) && xs.SubPelRefinement + 1 > 5)
-                sb.Append("--psy-rd " + xs.PsyRDO.ToString(ci) + ":" + xs.PsyTrellis.ToString(ci) + " ");
+            if ((xs.SubPelRefinement + 1) > 5)
+            {
+                if (xs.PsyRDO != new decimal(1.0) || xs.PsyTrellis != new decimal(0.0))
+                    sb.Append("--psy-rd " + xs.PsyRDO.ToString(ci) + ":" + xs.PsyTrellis.ToString(ci) + " ");
+            }
+            else
+            {
+                if (xs.PsyTrellis != new decimal(0.0))
+                    sb.Append("--psy-rd 0:" + xs.PsyTrellis.ToString(ci) + " ");
+            }
+            
             // now it's time for the macroblock types
             if (xs.P8x8mv || xs.B8x8mv || xs.I4x4mv || xs.I8x8mv || xs.P4x4mv || xs.AdaptiveDCT)
             {
