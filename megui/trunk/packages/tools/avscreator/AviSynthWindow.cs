@@ -966,6 +966,7 @@ namespace MeGUI
             this.nvDeInt.TabIndex = 0;
             this.nvDeInt.Text = "Nvidia Deinterlacer";
             this.nvDeInt.UseVisualStyleBackColor = true;
+            this.nvDeInt.CheckedChanged += new System.EventHandler(this.nvDeInt_CheckedChanged);
             // 
             // deinterlacingGroupBox
             // 
