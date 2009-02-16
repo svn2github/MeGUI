@@ -1,3 +1,23 @@
+0.3.1.1014
+    - (sharktooth) [x264Config] Fixed psy-trellis control behaviour with subme < 6 as well as commandline generation.
+    - (kurtnoise) [ScriptServer] add Bob parameter for TDeint filter.
+    - (kurtnoise) [ScriptServer] add Bob parameter for Yadif script.
+    - (kurtnoise) [VideoUtil] some cleanup.
+    - (kurtnoise) update MediaInfo library and its wrapper to the latest release (0.7.11)
+    - (kurtnoise) add RMDIR /r "$LOCALAPPDATA\${PRODUCT_WEB_SITE}" to the megui installer (#2584544)
+    - (kurtnoise) [AVSCreator] cosmetics.
+    - (kurtnoise) [AVSCreator] several tunings.
+    - (kurtnoise) [ScriptServer] add Nvidia deinterlacer parameter for DGx files.
+    - (kurtnoise) [OSInfo] add x86/x64 platforms detection.
+    - (kurtnoise) [ScriptServer] MPGSource for dgm files sources.
+    - (kurtnoise) enable dgm files support in the AVSCreator & ScriptServer.
+    - (kurtnoise) add dgm files Reader.
+    - (kurtnoise) enable ableToWriteOnThisDrive() to VobSubber & D2VCreator. This is a checking to know if the output drive chosen has the write permission. (#2196169)
+    - (kurtnoise) add Drives Class to the project files.
+    - (kurtnoise) add a Class to retrieve infos from Drives.
+    - (kurtnoise) [VobSubIndexer] use Job Output instead of Job Input as path for the config file. (fix partially bug #2196169)
+    - (kurtnoise) [x264ConfigurationPanel] fix issue with Lossless Mode (#2584569)
+
 0.3.1.1013
     - (kurtnoise) [VideoUtil] force .264 extension otherwise MP4 mux fails with the One-Click.
     - (kurtnoise) modify compile batch file to reflect previous commit.
