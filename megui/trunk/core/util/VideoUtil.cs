@@ -301,6 +301,27 @@ namespace MeGUI
             return TrackID;
         }
 
+        /// <summary>
+        /// gets Audio Streams Number from input file using MediaInfo
+        /// </summary>
+        /// <param name="fileName">input</param>
+        /// <returns>nb of audio streams found</returns>
+        public static int getAudioStreamsNb(string fileName)
+        {
+            MediaInfo info;
+            int nb = 0;
+            try
+            {
+                info = new MediaInfo(fileName);
+                nb = info.Audio.Count;
+            }
+            catch (Exception i)
+            {
+                MessageBox.Show("The following error ocurred when trying to get Media info for file " + fileName + "\r\n" + i.Message, "Error parsing mediainfo data", MessageBoxButtons.OK);
+            }
+            return nb;
+        }
+
         /// gets SBR flag from AAC streams using MediaInfo
         /// </summary>
         /// <param name="infoFile">the file to be analyzed</param>
