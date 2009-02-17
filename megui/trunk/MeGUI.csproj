@@ -730,11 +730,6 @@
     <Compile Include="packages\tools\oneclick\OneClickConfigPanel.Designer.cs">
       <DependentUpon>OneClickConfigPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="packages\tools\oneclick\OneClickConfigurationDialog.cs">
-    </Compile>
-    <Compile Include="packages\tools\oneclick\OneClickConfigurationDialog.Designer.cs">
-      <DependentUpon>OneClickConfigurationDialog.cs</DependentUpon>
-    </Compile>
     <Compile Include="packages\tools\oneclick\OneClickSettings.cs" />
     <Compile Include="packages\tools\oneclick\OneClickWindow.cs">
       <SubType>Form</SubType>
@@ -1007,10 +1002,6 @@
     <EmbeddedResource Include="packages\tools\oneclick\OneClickConfigPanel.resx">
       <SubType>Designer</SubType>
       <DependentUpon>OneClickConfigPanel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="packages\tools\oneclick\OneClickConfigurationDialog.resx">
-      <DependentUpon>OneClickConfigurationDialog.cs</DependentUpon>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="packages\tools\oneclick\OneClickWindow.resx">
       <DependentUpon>OneClickWindow.cs</DependentUpon>
