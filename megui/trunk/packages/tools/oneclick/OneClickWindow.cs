@@ -212,7 +212,8 @@ namespace MeGUI
             List<AudioTrackInfo> audioTracks;
             List<SubtitleInfo> subtitles;
             vUtil.openVideoSource(fileName, out audioTracks, out subtitles, out ar, out maxHorizontalResolution);
-            
+            int nb = VideoUtil.getAudioStreamsNb(fileName);
+
             List<object> trackNames = new List<object>();
             trackNames.Add("None");
             foreach (object o in audioTracks)
@@ -241,6 +242,17 @@ namespace MeGUI
             if (audioTrack1.SelectedIndex == 0)
             {
                 audioTrack1.SelectedObject = audioTracks[0];
+            }
+
+            // just to ensure that we have audio streams
+            // otherwise select "None" to avoid crashing 
+            if (nb == 0)
+            {
+                audioTrack1.SelectedIndex = 0;
+                audioTrack2.SelectedIndex = 0;
+                MessageBox.Show("MeGUI has detected that your input file [" + Path.GetFileName(fileName) +
+                                "] doesn't seem to contain any audio streams. Audio Selection won't be accessible in this case...", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                audioGroupbox.Enabled = false;
             }
     
             horizontalResolution.Maximum = maxHorizontalResolution;
