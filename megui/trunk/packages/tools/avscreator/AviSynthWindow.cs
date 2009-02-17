@@ -191,7 +191,7 @@ namespace MeGUI
             this.cbNvDeInt.BindingContext = new BindingContext();
             deintFieldOrder.SelectedIndex = -1;
             deintSourceType.SelectedIndex = -1;
-            cbNvDeInt.SelectedIndex = 0; 
+            cbNvDeInt.SelectedIndex = 0;
 
             this.noiseFilterType.SelectedIndexChanged += new System.EventHandler(this.noiseFilterType_SelectedIndexChanged);
             this.resizeFilterType.SelectedIndexChanged += new System.EventHandler(this.resizeFilterType_SelectedIndexChanged);
@@ -846,6 +846,7 @@ namespace MeGUI
             this.colourCorrect.Size = new System.Drawing.Size(111, 17);
             this.colourCorrect.TabIndex = 9;
             this.colourCorrect.Text = "Colour Correction";
+            this.colourCorrect.CheckedChanged += new System.EventHandler(this.checkedChanged);
             // 
             // mpeg2Deblocking
             // 
@@ -854,6 +855,7 @@ namespace MeGUI
             this.mpeg2Deblocking.Size = new System.Drawing.Size(124, 17);
             this.mpeg2Deblocking.TabIndex = 8;
             this.mpeg2Deblocking.Text = "Mpeg2 Deblocking";
+            this.mpeg2Deblocking.CheckedChanged += new System.EventHandler(this.checkedChanged);
             // 
             // tabPage2
             // 
@@ -904,6 +906,7 @@ namespace MeGUI
             0,
             0,
             196608});
+            this.fpsBox.ValueChanged += new System.EventHandler(this.checkedChanged);
             // 
             // fpsLabel
             // 
@@ -920,6 +923,7 @@ namespace MeGUI
             this.flipVertical.Size = new System.Drawing.Size(90, 17);
             this.flipVertical.TabIndex = 0;
             this.flipVertical.Text = "Vertical Flip";
+            this.flipVertical.CheckedChanged += new System.EventHandler(this.checkedChanged);
             // 
             // tabPage3
             // 
@@ -1495,6 +1499,8 @@ namespace MeGUI
         /// </summary>
         private void setSourceInterface()
         {
+            mod16Box.SelectedIndex = 0;
+
             switch (this.sourceType)
             {
                 case PossibleSources.d2v:
@@ -1752,14 +1758,14 @@ namespace MeGUI
             if (eventsOn)
             {
                 suggestResolution_CheckedChanged(null, null);
-                chAutoPreview_CheckedChanged(sender, e);
+                chAutoPreview_CheckedChanged(null, null);
                 this.showScript();
             }
 		}
 
 		private void verticalResolution_ValueChanged(object sender, System.EventArgs e)
 		{
-            chAutoPreview_CheckedChanged(sender, e);
+            chAutoPreview_CheckedChanged(null, null);
             this.showScript();
 		}
 		private void sendCropValues()
@@ -1794,7 +1800,7 @@ namespace MeGUI
 					player.crop(0, 0, 0, 0);
 			}
             suggestResolution_CheckedChanged(null, null);
-            chAutoPreview_CheckedChanged(sender, e);
+            chAutoPreview_CheckedChanged(null, null);
             this.showScript();
 		}
 		private void deinterlace_CheckedChanged(object sender, System.EventArgs e)
@@ -1826,16 +1832,15 @@ namespace MeGUI
             if (signalAR.Checked)
             {
                 this.mod16Box.Enabled = true;
-                if (mod16Box.SelectedIndex == -1)
-                    mod16Box.SelectedIndex = 0;
-                mod16Box_SelectedIndexChanged(null, null);
+                this.suggestResolution.Enabled = true;
+                this.suggestResolution.Checked = true;
+                suggestResolution_CheckedChanged(null, null);
             }
             else
             {
                 this.mod16Box.Enabled = false;
-                mod16Box_SelectedIndexChanged(null, null);
                 this.suggestResolution.Enabled = true;
-                suggestResolution_CheckedChanged(null, null);
+                this.suggestResolution.Checked = false;
             }
             this.showScript();
         }
@@ -1891,7 +1896,7 @@ namespace MeGUI
 				cropBottom.Value = final.bottom;
 				if (!crop.Checked)
 					crop.Checked = true;
-                chAutoPreview_CheckedChanged(sender, e);
+                chAutoPreview_CheckedChanged(null, null);
                 this.showScript();
 			}
 			else
@@ -1921,7 +1926,6 @@ namespace MeGUI
 
                 if (suggestResolution.Checked)
                 {
-                    this.resize.Checked = true;
                     this.verticalResolution.Enabled = false;
                     if (scriptVerticalResolution > verticalResolution.Maximum)
                     { // Reduce horizontal resolution until a fit is found that doesn't require upsizing. This is really only needed for oddball DAR scenarios
@@ -1937,7 +1941,7 @@ namespace MeGUI
                         eventsOn = true;
                     }
                     verticalResolution.Value = (decimal)scriptVerticalResolution;
-                    chAutoPreview_CheckedChanged(sender, e);
+                    chAutoPreview_CheckedChanged(null, null);
                     this.showScript();
                 }
                 else
@@ -2109,7 +2113,7 @@ namespace MeGUI
                 this.horizontalResolution.Enabled = this.verticalResolution.Enabled = false;
                 this.suggestResolution.Enabled = this.suggestResolution.Checked = false;
             }
-            chAutoPreview_CheckedChanged(sender, e);
+            chAutoPreview_CheckedChanged(null, null);
             this.showScript();
         }
 
