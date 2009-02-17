@@ -114,6 +114,8 @@ namespace MeGUI.core.util
                     case "AC3":  trackID = (byte)(0x80 + i); break;
                     case "LPCM": trackID = (byte)(0xA0 + i); break;
                     case "DTS":  trackID = (byte)(0x88 + i); break;
+                    case "Mpeg-1":
+                    case "Mpeg-2 Ext": trackID = (byte)(0xC0 + i); break;
                 }
 
                 if (verbose)
