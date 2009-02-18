@@ -1,3 +1,11 @@
+0.3.1.1015
+    - (kurtnoise) add MPEG Audio case to the IFOParser & VideoUtil Classes. (#2602264)
+    - (kurtnoise) [OneClickWindow] use getAudioStreamsNb to ensure that we have some audio tracks. Otherwise, raise a message...This workaround fixes a potential bug when input file doesn't contain any audio streams.
+    - (kurtnoise) [VideoUtil] add getAudioStreamsNb function.
+    - (kurtnoise) Remove OneClickConfigurationDialog from project files. Not used anyway...
+    - (kurtnoise) [AVSCreator] enable CheckedChanged events for mpeg2 deblocking & color correction. Fix an issue with clever anamorphic and resize filter (#2606624)
+    - (kurtnoise) [AVSCreator] enable CheckedChanged event for Nvidia Deinterlacer.
+	
 0.3.1.1014
     - (sharktooth) [x264Config] Fixed psy-trellis control behaviour with subme < 6 as well as commandline generation.
     - (kurtnoise) [ScriptServer] add Bob parameter for TDeint filter.
