@@ -646,10 +646,10 @@
     </Compile>
     <Compile Include="packages\audio\waac\WinAmpAACSettings.cs" />
     <Compile Include="packages\audio\audx\AudXSettings.cs" />
-    <Compile Include="packages\mux\avimuxgui\AMGMuxer.cs" />
-    <Compile Include="packages\mux\mencoder\MencoderMuxer.cs" />
-    <Compile Include="packages\mux\mkv\MkvMergeMuxer.cs" />
-    <Compile Include="packages\mux\mp4\MP4BoxMuxer.cs" />
+    <Compile Include="packages\muxer\avimuxgui\AMGMuxer.cs" />
+    <Compile Include="packages\muxer\mencoder\MencoderMuxer.cs" />
+    <Compile Include="packages\muxer\mkvmerge\MkvMergeMuxer.cs" />
+    <Compile Include="packages\muxer\mp4box\MP4BoxMuxer.cs" />
     <Compile Include="packages\reader\avi\AviReader.cs" />
     <Compile Include="packages\reader\avs\AvsReader.cs">
       <SubType>Code</SubType>
