@@ -1,3 +1,11 @@
+0.3.1.1016
+    - (kurtnoise) [MuxProvider] fix typo.
+    - (kurtnoise) add HD Audio Formats registration & enable EAC3 support to the MKVMuxer.
+    - (kurtnoise) add MPEG2 & VC1 format support for MKVMuxer.
+    - (kurtnoise) Rename mux to muxer for project files.
+    - (kurtnoise) [OneClickWindow] the workaround was a bad idea after more testing & digging...
+
+
 0.3.1.1015
     - (kurtnoise) add MPEG Audio case to the IFOParser & VideoUtil Classes. (#2602264)
     - (kurtnoise) [OneClickWindow] use getAudioStreamsNb to ensure that we have some audio tracks. Otherwise, raise a message...This workaround fixes a potential bug when input file doesn't contain any audio streams.
