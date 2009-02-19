@@ -68,6 +68,10 @@ namespace MeGUI
         public static readonly AudioCodec MP2    = new AudioCodec("MP2");
         public static readonly AudioCodec WAV    = new AudioCodec("WAV");
         public static readonly AudioCodec PCM    = new AudioCodec("PCM");
+        public static readonly AudioCodec EAC3   = new AudioCodec("EAC3");
+        public static readonly AudioCodec THD    = new AudioCodec("THD");
+        public static readonly AudioCodec DTSHD  = new AudioCodec("DTSHD");
+        public static readonly AudioCodec DTSMA  = new AudioCodec("DTSMA");
     }
     public class SubtitleCodec : ICodec, IIDable
     {
@@ -184,7 +188,13 @@ namespace MeGUI
                 AudioCodecs.Register(AudioCodec.DTS) &&
                 AudioCodecs.Register(AudioCodec.MP2) &&
                 AudioCodecs.Register(AudioCodec.MP3) &&
-                AudioCodecs.Register(AudioCodec.VORBIS)))
+                AudioCodecs.Register(AudioCodec.VORBIS) &&
+                AudioCodecs.Register(AudioCodec.DTSHD)  &&
+                AudioCodecs.Register(AudioCodec.DTSMA)  &&
+                AudioCodecs.Register(AudioCodec.EAC3)   &&
+                AudioCodecs.Register(AudioCodec.PCM)    &&
+                AudioCodecs.Register(AudioCodec.THD)    &&
+                AudioCodecs.Register(AudioCodec.WAV)))
                 throw new Exception("Failed to register a standard audio codec");
             if (!(
                 VideoEncoderTypes.Register(VideoEncoderType.HFYU) &&
@@ -259,6 +269,10 @@ namespace MeGUI
         public static readonly AudioType PCM    = new AudioType("DTS", "DTS Files", "dts", null, AudioCodec.PCM);
         public static readonly AudioType CBRMP3 = new AudioType("CBR MP3", "CBR MP3 Files", "mp3", null, AudioCodec.MP3);
         public static readonly AudioType VBRMP3 = new AudioType("VBR MP3", "VBR MP3 Files", "mp3", null, AudioCodec.MP3);
+        public static readonly AudioType EAC3   = new AudioType("EAC3", "EAC3 Files", "eac3", null, AudioCodec.EAC3);
+        public static readonly AudioType THD    = new AudioType("THD", "TrueHD Files", "thd", null, AudioCodec.THD);
+        public static readonly AudioType DTSHD  = new AudioType("DTSHD", "DTS-HD High Resolution Files", "dtshd", null, AudioCodec.DTSHD);
+        public static readonly AudioType DTSMA  = new AudioType("DTSMA", "DTS Master Audio Files", "dtsma", null, AudioCodec.DTSMA);
     }
     public class SubtitleType : OutputType
     {
@@ -320,7 +334,11 @@ namespace MeGUI
                 AudioTypes.Register(AudioType.MP4AAC) &&
                 AudioTypes.Register(AudioType.M4A)    &&
                 AudioTypes.Register(AudioType.RAWAAC) &&
-                AudioTypes.Register(AudioType.VORBIS)))
+                AudioTypes.Register(AudioType.VORBIS) &&
+                AudioTypes.Register(AudioType.DTSHD)  &&
+                AudioTypes.Register(AudioType.DTSMA)  &&
+                AudioTypes.Register(AudioType.EAC3)   &&
+                AudioTypes.Register(AudioType.THD)))
                 throw new Exception("Failed to register an audio type");
             if (!(
                 SubtitleTypes.Register(SubtitleType.ASS)    &&
