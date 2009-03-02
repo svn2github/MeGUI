@@ -277,6 +277,32 @@ namespace MeGUI
             return TrackID;
         }
 
+        /// detect AVC stream from a file using MediaInfo
+        /// </summary>
+        /// <param name="infoFile">the file to be analyzed</param>
+        /// <returns>AVC stream found whether or not</returns>
+        public static bool detecAVCStreamFromFile(string fileName)
+        {
+            MediaInfo info;
+            bool avcS = false;
+            try
+            {
+                info = new MediaInfo(fileName);
+                if (info.Video.Count > 0)
+                {
+                    MediaInfoWrapper.VideoTrack vtrack = info.Video[0];
+                    string format = vtrack.Format;
+                    if (format == "AVC")
+                        avcS = true;
+                }
+            }
+            catch (Exception i)
+            {
+                MessageBox.Show("The following error ocurred when trying to get Media info for file " + fileName + "\r\n" + i.Message, "Error parsing mediainfo data", MessageBoxButtons.OK);
+            }
+            return avcS;
+        }
+
         /// gets ID from audio stream using MediaInfo
         /// </summary>
         /// <param name="infoFile">the file to be analyzed</param>
