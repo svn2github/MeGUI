@@ -634,7 +634,7 @@ namespace MeGUI
             // mnutoolsdgaCreator
             // 
             this.mnutoolsdgaCreator.Index = 1;
-            this.mnutoolsdgaCreator.Shortcut = System.Windows.Forms.Shortcut.Ctrl3;
+            this.mnutoolsdgaCreator.Shortcut = System.Windows.Forms.Shortcut.Ctrl6;
             this.mnutoolsdgaCreator.Text = "DGA Creator";
             this.mnutoolsdgaCreator.Click += new System.EventHandler(this.mnutoolsdgaCreator_Click);
             // 
@@ -649,6 +649,7 @@ namespace MeGUI
             this.mnutoolsdgvCreator.Index = 3;
             this.mnutoolsdgvCreator.Shortcut = System.Windows.Forms.Shortcut.Ctrl5;
             this.mnutoolsdgvCreator.Text = "DGV Creator";
+            this.mnutoolsdgvCreator.Click += new System.EventHandler(this.mnutoolsdgvCreator_Click);
             // 
             // mnuOptions
             // 
@@ -1728,6 +1729,7 @@ namespace MeGUI
             PackageSystem.JobProcessors.Register(AviSynthProcessor.Factory);
             PackageSystem.JobProcessors.Register(DGIndexer.Factory);
             PackageSystem.JobProcessors.Register(DGAVCIndexer.Factory);
+            PackageSystem.JobProcessors.Register(DGVC1Indexer.Factory);
             PackageSystem.JobProcessors.Register(VobSubIndexer.Factory);
             PackageSystem.JobProcessors.Register(Joiner.Factory);
             PackageSystem.JobProcessors.Register(MeGUI.packages.tools.besplitter.Splitter.Factory);
@@ -1756,6 +1758,7 @@ namespace MeGUI
             PackageSystem.JobPostProcessors.Register(OneClickPostProcessor.PostProcessor);
             PackageSystem.JobPostProcessors.Register(IndexJobPostProcessor.PostProcessor);
             PackageSystem.JobPostProcessors.Register(dgavcIndexJobPostProcessor.PostProcessor);
+            PackageSystem.JobPostProcessors.Register(dgvc1IndexJobPostProcessor.PostProcessor);
             PackageSystem.JobPostProcessors.Register(CleanupJobRunner.DeleteIntermediateFilesPostProcessor);
             PackageSystem.JobConfigurers.Register(MuxWindow.Configurer);
             PackageSystem.JobConfigurers.Register(AudioEncodingWindow.Configurer);
@@ -2046,6 +2049,12 @@ namespace MeGUI
         {
             DGAinputWindow dgac = new DGAinputWindow(this);
             dgac.ShowDialog();
+        }
+
+        private void mnutoolsdgvCreator_Click(object sender, EventArgs e)
+        {
+            DGVinputWindow dgvc = new DGVinputWindow(this);
+            dgvc.ShowDialog();
         }
     }
     public class CommandlineUpgradeData
