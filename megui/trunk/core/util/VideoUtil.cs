@@ -303,6 +303,32 @@ namespace MeGUI
             return avcS;
         }
 
+        /// detect VC-1 stream from a file using MediaInfo
+        /// </summary>
+        /// <param name="infoFile">the file to be analyzed</param>
+        /// <returns>VC-1 stream found whether or not</returns>
+        public static bool detecVC1StreamFromFile(string fileName)
+        {
+            MediaInfo info;
+            bool vc1S = false;
+            try
+            {
+                info = new MediaInfo(fileName);
+                if (info.Video.Count > 0)
+                {
+                    MediaInfoWrapper.VideoTrack vtrack = info.Video[0];
+                    string format = vtrack.Format;
+                    if (format == "VC-1")
+                        vc1S = true;
+                }
+            }
+            catch (Exception i)
+            {
+                MessageBox.Show("The following error ocurred when trying to get Media info for file " + fileName + "\r\n" + i.Message, "Error parsing mediainfo data", MessageBoxButtons.OK);
+            }
+            return vc1S;
+        }
+
         /// gets ID from audio stream using MediaInfo
         /// </summary>
         /// <param name="infoFile">the file to be analyzed</param>
