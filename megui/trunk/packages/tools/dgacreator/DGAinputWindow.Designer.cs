@@ -67,7 +67,6 @@ namespace MeGUI
             this.pickOutputButton = new System.Windows.Forms.Button();
             this.projectName = new System.Windows.Forms.TextBox();
             this.projectNameLabel = new System.Windows.Forms.Label();
-            this.loadOnComplete = new System.Windows.Forms.CheckBox();
             this.queueButton = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.AudioTracks = new System.Windows.Forms.ListBox();
@@ -78,6 +77,7 @@ namespace MeGUI
             this.inputLabel = new System.Windows.Forms.Label();
             this.saveProjectDialog = new System.Windows.Forms.SaveFileDialog();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
+            this.loadOnComplete = new System.Windows.Forms.CheckBox();
             this.gbOutput.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.gbInput.SuspendLayout();
@@ -129,16 +129,6 @@ namespace MeGUI
             this.projectNameLabel.Size = new System.Drawing.Size(100, 13);
             this.projectNameLabel.TabIndex = 3;
             this.projectNameLabel.Text = "dga Project Output";
-            // 
-            // loadOnComplete
-            // 
-            this.loadOnComplete.Checked = true;
-            this.loadOnComplete.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.loadOnComplete.Location = new System.Drawing.Point(62, 342);
-            this.loadOnComplete.Name = "loadOnComplete";
-            this.loadOnComplete.Size = new System.Drawing.Size(144, 24);
-            this.loadOnComplete.TabIndex = 18;
-            this.loadOnComplete.Text = "On completion load files";
             // 
             // queueButton
             // 
@@ -240,16 +230,26 @@ namespace MeGUI
             this.helpButton1.Size = new System.Drawing.Size(39, 23);
             this.helpButton1.TabIndex = 21;
             // 
+            // loadOnComplete
+            // 
+            this.loadOnComplete.Checked = true;
+            this.loadOnComplete.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.loadOnComplete.Location = new System.Drawing.Point(68, 343);
+            this.loadOnComplete.Name = "loadOnComplete";
+            this.loadOnComplete.Size = new System.Drawing.Size(144, 24);
+            this.loadOnComplete.TabIndex = 23;
+            this.loadOnComplete.Text = "On completion load files";
+            // 
             // DGAinputWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(444, 377);
+            this.Controls.Add(this.loadOnComplete);
             this.Controls.Add(this.gbInput);
             this.Controls.Add(this.helpButton1);
             this.Controls.Add(this.closeOnQueue);
             this.Controls.Add(this.gbOutput);
-            this.Controls.Add(this.loadOnComplete);
             this.Controls.Add(this.queueButton);
             this.Controls.Add(this.groupBox3);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -274,7 +274,6 @@ namespace MeGUI
         private System.Windows.Forms.Button pickOutputButton;
         private System.Windows.Forms.TextBox projectName;
         private System.Windows.Forms.Label projectNameLabel;
-        private System.Windows.Forms.CheckBox loadOnComplete;
         private System.Windows.Forms.Button queueButton;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.RadioButton demuxAll;
@@ -284,5 +283,6 @@ namespace MeGUI
         private System.Windows.Forms.Label inputLabel;
         private FileBar input;
         private System.Windows.Forms.SaveFileDialog saveProjectDialog;
+        private System.Windows.Forms.CheckBox loadOnComplete;
     }
 }

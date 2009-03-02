@@ -50,6 +50,7 @@ namespace MeGUI
             this.mainForm = mainForm;
             this.vUtil = new VideoUtil(mainForm);
             this.jobUtil = new JobUtil(mainForm);
+            this.Closing += new CancelEventHandler(DGAinputWindow_Closing);
         }
 
         public DGAinputWindow(MainForm mainForm, string fileName): this(mainForm)
@@ -86,14 +87,20 @@ namespace MeGUI
             
             AudioTracks.Items.Clear();
             
-            if ((AudioTracks.Items.Count < 1) && (avcStream = true))
+            if (avcStream)
             {
                 int unused;
                 List<AudioTrackInfo> audioTracks;
                 vUtil.getSourceMediaInfo(fileName, out audioTracks, out unused);
                 foreach (AudioTrackInfo atrack in audioTracks)
                     AudioTracks.Items.Add(atrack);
-            }            
+            }
+
+            if (AudioTracks.Items.Count < 1)
+            {
+                demuxNoAudiotracks.Enabled = false;
+                demuxAll.Enabled = false;
+            }
         }
 
         private void checkIndexIO()
@@ -196,8 +203,8 @@ namespace MeGUI
         public static JobPostProcessor PostProcessor = new JobPostProcessor(postprocess, "Dga_postprocessor");
         private static LogItem postprocess(MainForm mainForm, Job ajob)
         {
-            if (!(ajob is IndexJob)) return null;
-            IndexJob job = (IndexJob)ajob;
+            if (!(ajob is DGAIndexJob)) return null;
+            DGAIndexJob job = (DGAIndexJob)ajob;
             if (job.PostprocessingProperties != null) return null;
 
             StringBuilder logBuilder = new StringBuilder();
