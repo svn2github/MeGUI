@@ -81,18 +81,20 @@ namespace MeGUI
             string fileNameNoPath = Path.GetFileName(fileName);
             if (string.IsNullOrEmpty(projectPath = mainForm.Settings.DefaultOutputDir))
                 projectPath = Path.GetDirectoryName(fileName);
-            projectName.Text = Path.Combine(projectPath, Path.ChangeExtension(fileNameNoPath, ".dgv"));
-
+            
             AudioTracks.Items.Clear();
 
             if (vc1Stream)
             {
                 int unused;
                 List<AudioTrackInfo> audioTracks;
+                projectName.Text = Path.Combine(projectPath, Path.ChangeExtension(fileNameNoPath, ".dgv"));
                 vUtil.getSourceMediaInfo(fileName, out audioTracks, out unused);
                 foreach (AudioTrackInfo atrack in audioTracks)
                     AudioTracks.Items.Add(atrack);
             }
+            else MessageBox.Show("MeGUI is not able to find a VC-1 stream from " + Path.GetFileName(fileName) + "...",
+                        "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             if (AudioTracks.Items.Count < 1)
             {

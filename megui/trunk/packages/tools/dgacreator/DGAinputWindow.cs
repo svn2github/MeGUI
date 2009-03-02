@@ -83,7 +83,6 @@ namespace MeGUI
             string fileNameNoPath = Path.GetFileName(fileName);
             if (string.IsNullOrEmpty(projectPath = mainForm.Settings.DefaultOutputDir))
                 projectPath = Path.GetDirectoryName(fileName);
-            projectName.Text = Path.Combine(projectPath, Path.ChangeExtension(fileNameNoPath, ".dga"));
             
             AudioTracks.Items.Clear();
             
@@ -91,10 +90,13 @@ namespace MeGUI
             {
                 int unused;
                 List<AudioTrackInfo> audioTracks;
+                projectName.Text = Path.Combine(projectPath, Path.ChangeExtension(fileNameNoPath, ".dga"));            
                 vUtil.getSourceMediaInfo(fileName, out audioTracks, out unused);
                 foreach (AudioTrackInfo atrack in audioTracks)
                     AudioTracks.Items.Add(atrack);
             }
+            else MessageBox.Show("MeGUI is not able to find an AVC stream from "+ Path.GetFileName(fileName)+ "...",
+                        "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             if (AudioTracks.Items.Count < 1)
             {
