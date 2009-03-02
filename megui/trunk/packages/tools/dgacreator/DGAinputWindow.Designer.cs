@@ -218,7 +218,7 @@ namespace MeGUI
             // saveProjectDialog
             // 
             this.saveProjectDialog.Filter = "DGAVCIndex project files|*.dga";
-            this.saveProjectDialog.Title = "Pick a name for your DAVCGIndex project";
+            this.saveProjectDialog.Title = "Pick a name for your DGAVCIndex project";
             // 
             // helpButton1
             // 
