@@ -725,6 +725,14 @@
       <DependentUpon>DGAinputWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="packages\tools\dgacreator\DGAVCIndexer.cs" />
+    <Compile Include="packages\tools\dgvcreator\DGVC1Indexer.cs" />
+    <Compile Include="packages\tools\dgvcreator\DGVIndexJob.cs" />
+    <Compile Include="packages\tools\dgvcreator\DGVinputWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="packages\tools\dgvcreator\DGVinputWindow.Designer.cs">
+      <DependentUpon>DGVinputWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="packages\tools\oneclick\AudioConfigControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1005,6 +1013,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="packages\tools\dgacreator\DGAinputWindow.resx">
       <DependentUpon>DGAinputWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="packages\tools\dgvcreator\DGVinputWindow.resx">
+      <DependentUpon>DGVinputWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="packages\tools\oneclick\AudioConfigControl.resx">
       <SubType>Designer</SubType>
