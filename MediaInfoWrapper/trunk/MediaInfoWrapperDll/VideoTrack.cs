@@ -32,14 +32,34 @@ namespace MediaInfoWrapper
         private string _Resolution;
         private string _BitsPixelFrame;
         private string _Delay;
-        private string _PlayTime;
-        private string _PlayTimeString;
-        private string _PlayTimeString1;
-        private string _PlayTimeString2;
-        private string _PlayTimeString3;
+        private string _Duration;
+        private string _DurationString;
+        private string _DurationString1;
+        private string _DurationString2;
+        private string _DurationString3;
         private string _Language;
         private string _LanguageString;
         private string _LanguageMore;
+        private string _Format;
+        private string _FormatInfo;
+        private string _FormatUrl;
+        private string _FormatVersion;
+        private string _FormatProfile;
+        private string _FormatSettings;
+        private string _FormatSettingsBVOP;
+        private string _FormatSettingsBVOPString;
+        private string _FormatSettingsQPel;
+        private string _FormatSettingsQPelString;
+        private string _FormatSettingsGMC;
+        private string _FormatSettingsGMCString;
+        private string _FormatSettingsMatrix;
+        private string _FormatSettingsMatrixString;
+        private string _FormatSettingsMatrixData;
+        private string _FormatSettingsCABAC;
+        private string _FormatSettingsCABACString;
+        private string _FormatSettingsRefFrames;
+        private string _FormatSettingsRefFramesString;
+        private string _FormatSettingsPulldown;
 
         ///<summary> Count of objects available in this stream </summary>
         public string Count
@@ -473,82 +493,82 @@ namespace MediaInfoWrapper
         }
 
 
-        ///<summary> Play time of the stream </summary>
-        public string PlayTime
+        ///<summary> Duration of the stream </summary>
+        public string Duration
         {
             get
             {
-                if (String.IsNullOrEmpty(this._PlayTime))
-                    this._PlayTime = "";
-                return _PlayTime;
+                if (String.IsNullOrEmpty(this._Duration))
+                    this._Duration = "";
+                return _Duration;
             }
             set
             {
-                this._PlayTime = value;
+                this._Duration = value;
             }
         }
 
 
-        ///<summary> Play time (formated) </summary>
-        public string PlayTimeString
+        ///<summary> Duration (formated) </summary>
+        public string DurationString
         {
             get
             {
-                if (String.IsNullOrEmpty(this._PlayTimeString))
-                    this._PlayTimeString = "";
-                return _PlayTimeString;
+                if (String.IsNullOrEmpty(this._DurationString))
+                    this._DurationString = "";
+                return _DurationString;
             }
             set
             {
-                this._PlayTimeString = value;
+                this._DurationString = value;
             }
         }
 
 
-        ///<summary> Play time in format : HHh MMmn SSs MMMms, XX omited if zero </summary>
-        public string PlayTimeString1
+        ///<summary> Duration in format : HHh MMmn SSs MMMms, XX omited if zero </summary>
+        public string DurationString1
         {
             get
             {
-                if (String.IsNullOrEmpty(this._PlayTimeString1))
-                    this._PlayTimeString1 = "";
-                return _PlayTimeString1;
+                if (String.IsNullOrEmpty(this._DurationString1))
+                    this._DurationString1 = "";
+                return _DurationString1;
             }
             set
             {
-                this._PlayTimeString1 = value;
+                this._DurationString1 = value;
             }
         }
 
 
-        ///<summary> Play time in format : XXx YYy only, YYy omited if zero </summary>
-        public string PlayTimeString2
+        ///<summary> Duration in format : XXx YYy only, YYy omited if zero </summary>
+        public string DurationString2
         {
             get
             {
-                if (String.IsNullOrEmpty(this._PlayTimeString2))
-                    this._PlayTimeString2 = "";
-                return _PlayTimeString2;
+                if (String.IsNullOrEmpty(this._DurationString2))
+                    this._DurationString2 = "";
+                return _DurationString2;
             }
             set
             {
-                this._PlayTimeString2 = value;
+                this._DurationString2 = value;
             }
         }
 
 
-        ///<summary> Play time in format : HH:MM:SS.MMM </summary>
-        public string PlayTimeString3
+        ///<summary> Duration in format : HH:MM:SS.MMM </summary>
+        public string DurationString3
         {
             get
             {
-                if (String.IsNullOrEmpty(this._PlayTimeString3))
-                    this._PlayTimeString3 = "";
-                return _PlayTimeString3;
+                if (String.IsNullOrEmpty(this._DurationString3))
+                    this._DurationString3 = "";
+                return _DurationString3;
             }
             set
             {
-                this._PlayTimeString3 = value;
+                this._DurationString3 = value;
             }
         }
 
@@ -568,7 +588,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Language (full) </summary>
         public string LanguageString
         {
@@ -583,7 +602,6 @@ namespace MediaInfoWrapper
                 this._LanguageString = value;
             }
         }
-
 
         ///<summary> More info about Language (director s comment...) </summary>
         public string LanguageMore
@@ -600,7 +618,304 @@ namespace MediaInfoWrapper
             }
         }
 
+        ///<summary> Format </summary>
+        public string Format
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(this._Format))
+                    this._Format = "";
+                return _Format;
+            }
+            set
+            {
+                this._Format = value;
+            }
+        }
 
+        ///<summary> Info about Format </summary>
+        public string FormatInfo
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(this._FormatInfo))
+                    this._FormatInfo = "";
+                return _FormatInfo;
+            }
+            set
+            {
+                this._FormatInfo = value;
+            }
+        }
 
+        ///<summary> Url about Format </summary>
+        public string FormatUrl
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(this._FormatUrl))
+                    this._FormatUrl = "";
+                return _FormatUrl;
+            }
+            set
+            {
+                this._FormatUrl = value;
+            }
+        }
+
+        ///<summary> Version of the Format </summary>
+        public string FormatVersion
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(this._FormatVersion))
+                    this._FormatVersion = "";
+                return _FormatVersion;
+            }
+            set
+            {
+                this._FormatVersion = value;
+            }
+        }
+
+        ///<summary> Profile of the Format </summary>
+        public string FormatProfile
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(this._FormatProfile))
+                    this._FormatProfile = "";
+                return _FormatProfile;
+            }
+            set
+            {
+                this._FormatProfile = value;
+            }
+        }
+
+        ///<summary> Settings of the Format </summary>
+        public string FormatSettings
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(this._FormatSettings))
+                    this._FormatSettings = "";
+                return _FormatSettings;
+            }
+            set
+            {
+                this._FormatSettings = value;
+            }
+        }
+
+        ///<summary> BVOP Info </summary>
+        public string FormatSettingsBVOP
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(this._FormatSettingsBVOP))
+                    this._FormatSettingsBVOP = "";
+                return _FormatSettingsBVOP;
+            }
+            set
+            {
+                this._FormatSettingsBVOP = value;
+            }
+        }
+
+        ///<summary> BVOP Info (string format)</summary>
+        public string FormatSettingsBVOPString
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(this._FormatSettingsBVOPString))
+                    this._FormatSettingsBVOPString = "";
+                return _FormatSettingsBVOPString;
+            }
+            set
+            {
+                this._FormatSettingsBVOPString = value;
+            }
+        }
+
+        ///<summary> Qpel Info </summary>
+        public string FormatSettingsQPel
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(this._FormatSettingsQPel))
+                    this._FormatSettingsQPel = "";
+                return _FormatSettingsQPel;
+            }
+            set
+            {
+                this._FormatSettingsQPel = value;
+            }
+        }
+
+        ///<summary> Qpel Info (string format)</summary>
+        public string FormatSettingsQPelString
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(this._FormatSettingsQPelString))
+                    this._FormatSettingsQPelString = "";
+                return _FormatSettingsQPelString;
+            }
+            set
+            {
+                this._FormatSettingsQPelString = value;
+            }
+        }
+
+        ///<summary> GMC Info </summary>
+        public string FormatSettingsGMC
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(this._FormatSettingsGMC))
+                    this._FormatSettingsGMC = "";
+                return _FormatSettingsGMC;
+            }
+            set
+            {
+                this._FormatSettingsGMC = value;
+            }
+        }
+
+        ///<summary> GMC Info (string format)</summary>
+        public string FormatSettingsGMCString
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(this._FormatSettingsGMCString))
+                    this._FormatSettingsGMCString = "";
+                return _FormatSettingsGMCString;
+            }
+            set
+            {
+                this._FormatSettingsGMCString = value;
+            }
+        }
+
+        ///<summary> Matrix Info </summary>
+        public string FormatSettingsMatrix
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(this._FormatSettingsMatrix))
+                    this._FormatSettingsMatrix = "";
+                return _FormatSettingsMatrix;
+            }
+            set
+            {
+                this._FormatSettingsMatrix = value;
+            }
+        }
+
+        ///<summary> Matrix Info (string format)</summary>
+        public string FormatSettingsMatrixString
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(this._FormatSettingsMatrixString))
+                    this._FormatSettingsMatrixString = "";
+                return _FormatSettingsMatrixString;
+            }
+            set
+            {
+                this._FormatSettingsMatrixString = value;
+            }
+        }
+
+        ///<summary> Matrix Info (data format)</summary>
+        public string FormatSettingsMatrixData
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(this._FormatSettingsMatrixData))
+                    this._FormatSettingsMatrixData = "";
+                return _FormatSettingsMatrixData;
+            }
+            set
+            {
+                this._FormatSettingsMatrixData = value;
+            }
+        }
+
+        ///<summary> CABAC Info </summary>
+        public string FormatSettingsCABAC
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(this._FormatSettingsCABAC))
+                    this._FormatSettingsCABAC = "";
+                return _FormatSettingsCABAC;
+            }
+            set
+            {
+                this._FormatSettingsCABAC = value;
+            }
+        }
+
+        ///<summary> CABAC Info (string format)</summary>
+        public string FormatSettingsCABACString
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(this._FormatSettingsCABACString))
+                    this._FormatSettingsCABACString = "";
+                return _FormatSettingsCABACString;
+            }
+            set
+            {
+                this._FormatSettingsCABACString = value;
+            }
+        }
+
+        ///<summary> RefFrames Info </summary>
+        public string FormatSettingsRefFrames
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(this._FormatSettingsRefFrames))
+                    this._FormatSettingsRefFrames = "";
+                return _FormatSettingsRefFrames;
+            }
+            set
+            {
+                this._FormatSettingsRefFrames = value;
+            }
+        }
+
+        ///<summary> RefFrames Info (string format)</summary>
+        public string FormatSettingsRefFramesString
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(this._FormatSettingsRefFramesString))
+                    this._FormatSettingsRefFramesString = "";
+                return _FormatSettingsRefFramesString;
+            }
+            set
+            {
+                this._FormatSettingsRefFramesString = value;
+            }
+        }
+
+        ///<summary> Pulldown Info </summary>
+        public string FormatSettingsPulldown
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(this._FormatSettingsPulldown))
+                    this._FormatSettingsPulldown = "";
+                return _FormatSettingsPulldown;
+            }
+            set
+            {
+                this._FormatSettingsPulldown = value;
+            }
+        }
     }
 }
