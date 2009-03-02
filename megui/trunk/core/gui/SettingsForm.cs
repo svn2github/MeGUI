@@ -180,6 +180,9 @@ namespace MeGUI
         private TextBox dgvIndexPath;
         private Label label5;
         private Button selectDGVIndexExecutable;
+        private TextBox dgmIndexPath;
+        private Label label22;
+        private Button selectDGMIndexExecutable;
 
 		/// <summary>
 		/// Required designer variable.
@@ -339,6 +342,12 @@ namespace MeGUI
             this.mkvmergePath = new System.Windows.Forms.TextBox();
             this.selectMP4boxExecutableButton = new System.Windows.Forms.Button();
             this.tabPage7 = new System.Windows.Forms.TabPage();
+            this.dgmIndexPath = new System.Windows.Forms.TextBox();
+            this.label22 = new System.Windows.Forms.Label();
+            this.selectDGMIndexExecutable = new System.Windows.Forms.Button();
+            this.dgvIndexPath = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.selectDGVIndexExecutable = new System.Windows.Forms.Button();
             this.dgaIndexPath = new System.Windows.Forms.TextBox();
             this.DGAIndex = new System.Windows.Forms.Label();
             this.selectDGAIndexExecutable = new System.Windows.Forms.Button();
@@ -361,9 +370,6 @@ namespace MeGUI
             this.videoExtLabel = new System.Windows.Forms.Label();
             this.autoEncodeDefaultsButton = new System.Windows.Forms.Button();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
-            this.dgvIndexPath = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.selectDGVIndexExecutable = new System.Windows.Forms.Button();
             groupBox1 = new System.Windows.Forms.GroupBox();
             groupBox1.SuspendLayout();
             this.otherGroupBox.SuspendLayout();
@@ -1628,6 +1634,9 @@ namespace MeGUI
             // 
             // tabPage7
             // 
+            this.tabPage7.Controls.Add(this.dgmIndexPath);
+            this.tabPage7.Controls.Add(this.label22);
+            this.tabPage7.Controls.Add(this.selectDGMIndexExecutable);
             this.tabPage7.Controls.Add(this.dgvIndexPath);
             this.tabPage7.Controls.Add(this.label5);
             this.tabPage7.Controls.Add(this.selectDGVIndexExecutable);
@@ -1657,6 +1666,58 @@ namespace MeGUI
             this.tabPage7.Text = "Others";
             this.tabPage7.UseVisualStyleBackColor = true;
             // 
+            // dgmIndexPath
+            // 
+            this.dgmIndexPath.Location = new System.Drawing.Point(96, 214);
+            this.dgmIndexPath.Name = "dgmIndexPath";
+            this.dgmIndexPath.ReadOnly = true;
+            this.dgmIndexPath.Size = new System.Drawing.Size(315, 21);
+            this.dgmIndexPath.TabIndex = 34;
+            this.dgmIndexPath.Text = "dgmpgindex.exe";
+            // 
+            // label22
+            // 
+            this.label22.Location = new System.Drawing.Point(4, 217);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(94, 19);
+            this.label22.TabIndex = 33;
+            this.label22.Text = "DGMPGIndex(NV)";
+            // 
+            // selectDGMIndexExecutable
+            // 
+            this.selectDGMIndexExecutable.Location = new System.Drawing.Point(417, 213);
+            this.selectDGMIndexExecutable.Name = "selectDGMIndexExecutable";
+            this.selectDGMIndexExecutable.Size = new System.Drawing.Size(24, 23);
+            this.selectDGMIndexExecutable.TabIndex = 35;
+            this.selectDGMIndexExecutable.Text = "...";
+            this.selectDGMIndexExecutable.Click += new System.EventHandler(this.selectDGMIndexExecutable_Click);
+            // 
+            // dgvIndexPath
+            // 
+            this.dgvIndexPath.Location = new System.Drawing.Point(96, 183);
+            this.dgvIndexPath.Name = "dgvIndexPath";
+            this.dgvIndexPath.ReadOnly = true;
+            this.dgvIndexPath.Size = new System.Drawing.Size(315, 21);
+            this.dgvIndexPath.TabIndex = 31;
+            this.dgvIndexPath.Text = "dgvc1index.exe";
+            // 
+            // label5
+            // 
+            this.label5.Location = new System.Drawing.Point(4, 186);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(94, 19);
+            this.label5.TabIndex = 30;
+            this.label5.Text = "DGVC1Index(NV)";
+            // 
+            // selectDGVIndexExecutable
+            // 
+            this.selectDGVIndexExecutable.Location = new System.Drawing.Point(417, 182);
+            this.selectDGVIndexExecutable.Name = "selectDGVIndexExecutable";
+            this.selectDGVIndexExecutable.Size = new System.Drawing.Size(24, 23);
+            this.selectDGVIndexExecutable.TabIndex = 32;
+            this.selectDGVIndexExecutable.Text = "...";
+            this.selectDGVIndexExecutable.Click += new System.EventHandler(this.selectDGVIndexExecutable_Click);
+            // 
             // dgaIndexPath
             // 
             this.dgaIndexPath.Location = new System.Drawing.Point(96, 153);
@@ -1668,7 +1729,7 @@ namespace MeGUI
             // 
             // DGAIndex
             // 
-            this.DGAIndex.Location = new System.Drawing.Point(6, 156);
+            this.DGAIndex.Location = new System.Drawing.Point(4, 156);
             this.DGAIndex.Name = "DGAIndex";
             this.DGAIndex.Size = new System.Drawing.Size(94, 19);
             this.DGAIndex.TabIndex = 27;
@@ -1698,7 +1759,7 @@ namespace MeGUI
             this.besplit.Name = "besplit";
             this.besplit.Size = new System.Drawing.Size(80, 13);
             this.besplit.TabIndex = 21;
-            this.besplit.Text = "besplit";
+            this.besplit.Text = "BeSplit";
             // 
             // button8
             // 
@@ -1853,32 +1914,6 @@ namespace MeGUI
             this.helpButton1.Name = "helpButton1";
             this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 1;
-            // 
-            // dgvIndexPath
-            // 
-            this.dgvIndexPath.Location = new System.Drawing.Point(96, 183);
-            this.dgvIndexPath.Name = "dgvIndexPath";
-            this.dgvIndexPath.ReadOnly = true;
-            this.dgvIndexPath.Size = new System.Drawing.Size(315, 21);
-            this.dgvIndexPath.TabIndex = 31;
-            this.dgvIndexPath.Text = "dgvc1index.exe";
-            // 
-            // label5
-            // 
-            this.label5.Location = new System.Drawing.Point(6, 186);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(94, 19);
-            this.label5.TabIndex = 30;
-            this.label5.Text = "DGVC1Index(NV)";
-            // 
-            // selectDGVIndexExecutable
-            // 
-            this.selectDGVIndexExecutable.Location = new System.Drawing.Point(417, 182);
-            this.selectDGVIndexExecutable.Name = "selectDGVIndexExecutable";
-            this.selectDGVIndexExecutable.Size = new System.Drawing.Size(24, 23);
-            this.selectDGVIndexExecutable.TabIndex = 32;
-            this.selectDGVIndexExecutable.Text = "...";
-            this.selectDGVIndexExecutable.Click += new System.EventHandler(this.selectDGVIndexExecutable_Click);
             // 
             // SettingsForm
             // 
@@ -2139,6 +2174,14 @@ namespace MeGUI
             }
         }
 
+        private void selectDGMIndexExecutable_Click(object sender, EventArgs e)
+        {
+            if (selectExe("DGMPGIndexNV"))
+            {
+                dgmIndexPath.Text = openExecutableDialog.FileName;
+            }
+        }
+
         private void runCommand_CheckedChanged(object sender, EventArgs e)
         {
             command.Enabled = runCommand.Checked;
@@ -2259,6 +2302,7 @@ namespace MeGUI
                 settings.AddTimePosition = cbAddTimePos.Checked;
                 settings.DgavcIndexPath = dgaIndexPath.Text;
                 settings.Dgvc1IndexPath = dgvIndexPath.Text;
+                settings.DgmpgIndexPath = dgmIndexPath.Text;
 				return settings;
 			}
 			set
@@ -2325,8 +2369,10 @@ namespace MeGUI
                 cbAddTimePos.Checked = settings.AddTimePosition;
                 dgaIndexPath.Text = settings.DgavcIndexPath;
                 dgvIndexPath.Text = settings.Dgvc1IndexPath;
+                dgmIndexPath.Text = settings.DgmpgIndexPath;
 			}
 		}
 		#endregion
+
 	}
 }

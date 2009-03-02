@@ -35,7 +35,7 @@ namespace MeGUI
         private string[][] autoUpdateServerLists;
         private string faacPath, lamePath, neroAacEncPath, mencoderPath,  mp4boxPath, mkvmergePath, 
                        encAacPlusPath, ffmpegPath, besplitPath, yadifPath, aftenPath, x264Path, 
-                       dgIndexPath, xvidEncrawPath, aviMuxGUIPath, oggEnc2Path, encAudXPath, dgavcIndexPath, dgvc1IndexPath,
+                       dgIndexPath, xvidEncrawPath, aviMuxGUIPath, oggEnc2Path, encAudXPath, dgavcIndexPath, dgvc1IndexPath, dgmpgIndexPath,
                        defaultLanguage1, defaultLanguage2, afterEncodingCommand, videoExtension, audioExtension,
                        httpproxyaddress, httpproxyport, httpproxyuid, httpproxypwd, defaultOutputDir;
         private bool recalculateMainMovieBitrate, autoForceFilm, autoStartQueue, enableMP3inMP4, autoOpenScript,
@@ -114,6 +114,7 @@ namespace MeGUI
             addTimePosition = false;
             dgavcIndexPath = "dgavcindex.exe";
             dgvc1IndexPath = "dgvc1index.exe";
+            dgmpgIndexPath = "dgmpgindex.exe";
         }
         #region properties
         public string YadifPath
@@ -382,6 +383,14 @@ namespace MeGUI
         {
             get { return dgvc1IndexPath; }
             set { dgvc1IndexPath = value; }
+        }
+        /// <summary>
+        /// filename and full path of the dgmpgindex executable
+        /// </summary>
+        public string DgmpgIndexPath
+        {
+            get { return dgmpgIndexPath; }
+            set { dgmpgIndexPath = value; }
         }
         /// <summary>
         /// folder containing the avisynth plugins

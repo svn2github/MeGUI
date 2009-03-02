@@ -643,6 +643,7 @@ namespace MeGUI
             this.mnutoolsdgmCreator.Index = 2;
             this.mnutoolsdgmCreator.Shortcut = System.Windows.Forms.Shortcut.Ctrl4;
             this.mnutoolsdgmCreator.Text = "DGM Creator";
+            this.mnutoolsdgmCreator.Click += new System.EventHandler(this.mnutoolsdgmCreator_Click);
             // 
             // mnutoolsdgvCreator
             // 
@@ -1730,6 +1731,7 @@ namespace MeGUI
             PackageSystem.JobProcessors.Register(DGIndexer.Factory);
             PackageSystem.JobProcessors.Register(DGAVCIndexer.Factory);
             PackageSystem.JobProcessors.Register(DGVC1Indexer.Factory);
+            PackageSystem.JobProcessors.Register(DGMPGIndexer.Factory);
             PackageSystem.JobProcessors.Register(VobSubIndexer.Factory);
             PackageSystem.JobProcessors.Register(Joiner.Factory);
             PackageSystem.JobProcessors.Register(MeGUI.packages.tools.besplitter.Splitter.Factory);
@@ -1759,6 +1761,7 @@ namespace MeGUI
             PackageSystem.JobPostProcessors.Register(IndexJobPostProcessor.PostProcessor);
             PackageSystem.JobPostProcessors.Register(dgavcIndexJobPostProcessor.PostProcessor);
             PackageSystem.JobPostProcessors.Register(dgvc1IndexJobPostProcessor.PostProcessor);
+            PackageSystem.JobPostProcessors.Register(dgmpgIndexJobPostProcessor.PostProcessor);
             PackageSystem.JobPostProcessors.Register(CleanupJobRunner.DeleteIntermediateFilesPostProcessor);
             PackageSystem.JobConfigurers.Register(MuxWindow.Configurer);
             PackageSystem.JobConfigurers.Register(AudioEncodingWindow.Configurer);
@@ -2055,6 +2058,12 @@ namespace MeGUI
         {
             DGVinputWindow dgvc = new DGVinputWindow(this);
             dgvc.ShowDialog();
+        }
+
+        private void mnutoolsdgmCreator_Click(object sender, EventArgs e)
+        {
+            DGMinputWindow dgmc = new DGMinputWindow(this);
+            dgmc.ShowDialog();
         }
     }
     public class CommandlineUpgradeData
