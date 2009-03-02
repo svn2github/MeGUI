@@ -725,6 +725,14 @@
       <DependentUpon>DGAinputWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="packages\tools\dgacreator\DGAVCIndexer.cs" />
+    <Compile Include="packages\tools\dgmcreator\DGMIndexJob.cs" />
+    <Compile Include="packages\tools\dgmcreator\DGMinputWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="packages\tools\dgmcreator\DGMinputWindow.Designer.cs">
+      <DependentUpon>DGMinputWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="packages\tools\dgmcreator\DGMPGIndexer.cs" />
     <Compile Include="packages\tools\dgvcreator\DGVC1Indexer.cs" />
     <Compile Include="packages\tools\dgvcreator\DGVIndexJob.cs" />
     <Compile Include="packages\tools\dgvcreator\DGVinputWindow.cs">
@@ -1013,6 +1021,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="packages\tools\dgacreator\DGAinputWindow.resx">
       <DependentUpon>DGAinputWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="packages\tools\dgmcreator\DGMinputWindow.resx">
+      <DependentUpon>DGMinputWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="packages\tools\dgvcreator\DGVinputWindow.resx">
       <DependentUpon>DGVinputWindow.cs</DependentUpon>
