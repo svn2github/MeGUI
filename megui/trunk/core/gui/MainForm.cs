@@ -124,6 +124,11 @@ namespace MeGUI
         private Button OneClickEncButton;
         private Button HelpButton;
         private SplitContainer splitContainer2;
+        private MenuItem mnudgIndexers;
+        private MenuItem mnutoolsD2VCreator;
+        private MenuItem mnutoolsdgaCreator;
+        private MenuItem mnutoolsdgmCreator;
+        private MenuItem mnutoolsdgvCreator;
         private List<Form> formsToReopen = new List<Form>();
 
         public bool IsHiddenMode { get { return trayIcon.Visible; } }
@@ -191,6 +196,11 @@ namespace MeGUI
             this.menuItem3 = new System.Windows.Forms.MenuItem();
             this.viewSummary = new System.Windows.Forms.MenuItem();
             this.mnuTools = new System.Windows.Forms.MenuItem();
+            this.mnudgIndexers = new System.Windows.Forms.MenuItem();
+            this.mnutoolsD2VCreator = new System.Windows.Forms.MenuItem();
+            this.mnutoolsdgaCreator = new System.Windows.Forms.MenuItem();
+            this.mnutoolsdgmCreator = new System.Windows.Forms.MenuItem();
+            this.mnutoolsdgvCreator = new System.Windows.Forms.MenuItem();
             this.mnuOptions = new System.Windows.Forms.MenuItem();
             this.mnuOptionsSettings = new System.Windows.Forms.MenuItem();
             this.mnuHelp = new System.Windows.Forms.MenuItem();
@@ -599,9 +609,46 @@ namespace MeGUI
             // 
             this.mnuTools.Index = 3;
             this.mnuTools.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.mnuMuxers});
+            this.mnuMuxers,
+            this.mnudgIndexers});
             this.mnuTools.Shortcut = System.Windows.Forms.Shortcut.CtrlT;
             this.mnuTools.Text = "&Tools";
+            // 
+            // mnudgIndexers
+            // 
+            this.mnudgIndexers.Index = 1;
+            this.mnudgIndexers.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.mnutoolsD2VCreator,
+            this.mnutoolsdgaCreator,
+            this.mnutoolsdgmCreator,
+            this.mnutoolsdgvCreator});
+            this.mnudgIndexers.Text = "DG Indexer";
+            // 
+            // mnutoolsD2VCreator
+            // 
+            this.mnutoolsD2VCreator.Index = 0;
+            this.mnutoolsD2VCreator.Shortcut = System.Windows.Forms.Shortcut.Ctrl2;
+            this.mnutoolsD2VCreator.Text = "D2V Creator";
+            this.mnutoolsD2VCreator.Click += new System.EventHandler(this.menuItem5_Click);
+            // 
+            // mnutoolsdgaCreator
+            // 
+            this.mnutoolsdgaCreator.Index = 1;
+            this.mnutoolsdgaCreator.Shortcut = System.Windows.Forms.Shortcut.Ctrl3;
+            this.mnutoolsdgaCreator.Text = "DGA Creator";
+            this.mnutoolsdgaCreator.Click += new System.EventHandler(this.mnutoolsdgaCreator_Click);
+            // 
+            // mnutoolsdgmCreator
+            // 
+            this.mnutoolsdgmCreator.Index = 2;
+            this.mnutoolsdgmCreator.Shortcut = System.Windows.Forms.Shortcut.Ctrl4;
+            this.mnutoolsdgmCreator.Text = "DGM Creator";
+            // 
+            // mnutoolsdgvCreator
+            // 
+            this.mnutoolsdgvCreator.Index = 3;
+            this.mnutoolsdgvCreator.Shortcut = System.Windows.Forms.Shortcut.Ctrl5;
+            this.mnutoolsdgvCreator.Text = "DGV Creator";
             // 
             // mnuOptions
             // 
@@ -1378,7 +1425,6 @@ namespace MeGUI
             AdaptiveMuxWindow amw = new AdaptiveMuxWindow(this);
             if (amw.ShowDialog() == DialogResult.OK)
                 Jobs.addJobsWithDependencies(amw.Jobs);
-
         }
 
         private void MeGUI_Load(object sender, EventArgs e)
@@ -1577,35 +1623,45 @@ namespace MeGUI
                 mnuMuxers.MenuItems.Add(newMenuItem);
                 newMenuItem.Click += new System.EventHandler(this.mnuMuxer_Click);
             }
-
+            mnudgIndexers.MenuItems.Clear();
+            mnudgIndexers.MenuItems.Add(mnutoolsD2VCreator);
+            mnudgIndexers.MenuItems.Add(mnutoolsdgaCreator);
+            mnudgIndexers.MenuItems.Add(mnutoolsdgmCreator);
+            mnudgIndexers.MenuItems.Add(mnutoolsdgvCreator);
+            
             // Fill the tools menu
             mnuTools.MenuItems.Clear();
             List<MenuItem> toolsItems = new List<MenuItem>();
             List<Shortcut> usedShortcuts = new List<Shortcut>();
             toolsItems.Add(mnuMuxers);
+            toolsItems.Add(mnudgIndexers);
             usedShortcuts.Add(mnuMuxers.Shortcut);
             
             foreach (ITool tool in PackageSystem.Tools.Values)
             {
-                MenuItem newMenuItem = new MenuItem();
-                newMenuItem.Text = tool.Name;
-                newMenuItem.Tag = tool;
-                newMenuItem.Click += new System.EventHandler(this.mnuTool_Click);
-                bool shortcutAttempted = false;
-                foreach (Shortcut s in tool.Shortcuts)
+                if (tool.Name != "D2V Creator")
                 {
-                    shortcutAttempted = true;
-                    Debug.Assert(s != Shortcut.None);
-                    if (!usedShortcuts.Contains(s))
+                    MenuItem newMenuItem = new MenuItem();
+                    newMenuItem.Text = tool.Name;
+                    newMenuItem.Tag = tool;
+                    newMenuItem.Click += new System.EventHandler(this.mnuTool_Click);
+                    bool shortcutAttempted = false;
+                    foreach (Shortcut s in tool.Shortcuts)
                     {
-                        usedShortcuts.Add(s);
-                        newMenuItem.Shortcut = s;
-                        break;
+                        shortcutAttempted = true;
+                        Debug.Assert(s != Shortcut.None);
+                        if (!usedShortcuts.Contains(s))
+                        {
+                            usedShortcuts.Add(s);
+                            newMenuItem.Shortcut = s;
+                            break;
+                        }
                     }
+
+                    if (shortcutAttempted && newMenuItem.Shortcut == Shortcut.None)
+                        Log.Warn("Shortcut for '" + tool.Name + "' is already used. No shortcut selected.");
+                    toolsItems.Add(newMenuItem);
                 }
-                if (shortcutAttempted && newMenuItem.Shortcut == Shortcut.None)
-                    Log.Warn("Shortcut for '" + tool.Name + "' is already used. No shortcut selected.");
-                toolsItems.Add(newMenuItem);
             }
 
             toolsItems.Sort(new Comparison<MenuItem>(delegate(MenuItem a, MenuItem b) { return (a.Text.CompareTo(b.Text)); }));
@@ -1671,6 +1727,7 @@ namespace MeGUI
 
             PackageSystem.JobProcessors.Register(AviSynthProcessor.Factory);
             PackageSystem.JobProcessors.Register(DGIndexer.Factory);
+            PackageSystem.JobProcessors.Register(DGAVCIndexer.Factory);
             PackageSystem.JobProcessors.Register(VobSubIndexer.Factory);
             PackageSystem.JobProcessors.Register(Joiner.Factory);
             PackageSystem.JobProcessors.Register(MeGUI.packages.tools.besplitter.Splitter.Factory);
@@ -1698,6 +1755,7 @@ namespace MeGUI
             PackageSystem.JobPreProcessors.Register(BitrateCalculatorPreProcessor.CalculationProcessor);
             PackageSystem.JobPostProcessors.Register(OneClickPostProcessor.PostProcessor);
             PackageSystem.JobPostProcessors.Register(IndexJobPostProcessor.PostProcessor);
+            PackageSystem.JobPostProcessors.Register(dgavcIndexJobPostProcessor.PostProcessor);
             PackageSystem.JobPostProcessors.Register(CleanupJobRunner.DeleteIntermediateFilesPostProcessor);
             PackageSystem.JobConfigurers.Register(MuxWindow.Configurer);
             PackageSystem.JobConfigurers.Register(AudioEncodingWindow.Configurer);
@@ -1976,6 +2034,18 @@ namespace MeGUI
         private void HelpButton_Click(object sender, EventArgs e)
         {
             System.Diagnostics.Process.Start("http://mewiki.project357.com/wiki/Main_Page");
+        }
+
+        private void menuItem5_Click(object sender, EventArgs e)
+        {
+            VobinputWindow d2vc = new VobinputWindow(this);
+            d2vc.ShowDialog();
+        }
+
+        private void mnutoolsdgaCreator_Click(object sender, EventArgs e)
+        {
+            DGAinputWindow dgac = new DGAinputWindow(this);
+            dgac.ShowDialog();
         }
     }
     public class CommandlineUpgradeData

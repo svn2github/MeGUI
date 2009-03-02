@@ -174,6 +174,9 @@ namespace MeGUI
         private Button clearDefaultOutputDir;
         private FileBar defaultOutputDir;
         private CheckBox cbAddTimePos;
+        private TextBox dgaIndexPath;
+        private Label DGAIndex;
+        private Button selectDGAIndexExecutable;
 
 		/// <summary>
 		/// Required designer variable.
@@ -333,6 +336,9 @@ namespace MeGUI
             this.mkvmergePath = new System.Windows.Forms.TextBox();
             this.selectMP4boxExecutableButton = new System.Windows.Forms.Button();
             this.tabPage7 = new System.Windows.Forms.TabPage();
+            this.dgaIndexPath = new System.Windows.Forms.TextBox();
+            this.DGAIndex = new System.Windows.Forms.Label();
+            this.selectDGAIndexExecutable = new System.Windows.Forms.Button();
             this.textBox8 = new System.Windows.Forms.TextBox();
             this.besplit = new System.Windows.Forms.Label();
             this.button8 = new System.Windows.Forms.Button();
@@ -1616,6 +1622,9 @@ namespace MeGUI
             // 
             // tabPage7
             // 
+            this.tabPage7.Controls.Add(this.dgaIndexPath);
+            this.tabPage7.Controls.Add(this.DGAIndex);
+            this.tabPage7.Controls.Add(this.selectDGAIndexExecutable);
             this.tabPage7.Controls.Add(this.textBox8);
             this.tabPage7.Controls.Add(this.besplit);
             this.tabPage7.Controls.Add(this.button8);
@@ -1638,6 +1647,32 @@ namespace MeGUI
             this.tabPage7.TabIndex = 3;
             this.tabPage7.Text = "Others";
             this.tabPage7.UseVisualStyleBackColor = true;
+            // 
+            // dgaIndexPath
+            // 
+            this.dgaIndexPath.Location = new System.Drawing.Point(96, 153);
+            this.dgaIndexPath.Name = "dgaIndexPath";
+            this.dgaIndexPath.ReadOnly = true;
+            this.dgaIndexPath.Size = new System.Drawing.Size(315, 21);
+            this.dgaIndexPath.TabIndex = 28;
+            this.dgaIndexPath.Text = "dgavcindex.exe";
+            // 
+            // DGAIndex
+            // 
+            this.DGAIndex.Location = new System.Drawing.Point(6, 156);
+            this.DGAIndex.Name = "DGAIndex";
+            this.DGAIndex.Size = new System.Drawing.Size(94, 19);
+            this.DGAIndex.TabIndex = 27;
+            this.DGAIndex.Text = "DGAVCIndex(NV)";
+            // 
+            // selectDGAIndexExecutable
+            // 
+            this.selectDGAIndexExecutable.Location = new System.Drawing.Point(417, 152);
+            this.selectDGAIndexExecutable.Name = "selectDGAIndexExecutable";
+            this.selectDGAIndexExecutable.Size = new System.Drawing.Size(24, 23);
+            this.selectDGAIndexExecutable.TabIndex = 29;
+            this.selectDGAIndexExecutable.Text = "...";
+            this.selectDGAIndexExecutable.Click += new System.EventHandler(this.selectDGAIndexExecutable_Click);
             // 
             // textBox8
             // 
@@ -1805,9 +1840,9 @@ namespace MeGUI
             this.helpButton1.ArticleName = "Settings window";
             this.helpButton1.AutoSize = true;
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.helpButton1.Location = new System.Drawing.Point(12, 418);
+            this.helpButton1.Location = new System.Drawing.Point(21, 418);
             this.helpButton1.Name = "helpButton1";
-            this.helpButton1.Size = new System.Drawing.Size(47, 23);
+            this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 1;
             // 
             // SettingsForm
@@ -2053,6 +2088,14 @@ namespace MeGUI
             }
         }
 
+        private void selectDGAIndexExecutable_Click(object sender, EventArgs e)
+        {
+            if ((selectExe("DGAVCIndex")) || (selectExe("DGAVCIndexNV")))
+            {
+                dgaIndexPath.Text = openExecutableDialog.FileName;
+            }
+        }
+
         private void runCommand_CheckedChanged(object sender, EventArgs e)
         {
             command.Enabled = runCommand.Checked;
@@ -2171,6 +2214,7 @@ namespace MeGUI
                 settings.HttpProxyPwd = txt_httpproxypwd.Text;
                 settings.DefaultOutputDir = defaultOutputDir.Filename;
                 settings.AddTimePosition = cbAddTimePos.Checked;
+                settings.DgavcIndexPath = dgaIndexPath.Text;
 				return settings;
 			}
 			set
@@ -2235,6 +2279,7 @@ namespace MeGUI
                 txt_httpproxypwd.Text = settings.HttpProxyPwd;
                 defaultOutputDir.Filename = settings.DefaultOutputDir;
                 cbAddTimePos.Checked = settings.AddTimePosition;
+                dgaIndexPath.Text = settings.DgavcIndexPath;
 			}
 		}
 		#endregion
