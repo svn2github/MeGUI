@@ -1860,6 +1860,8 @@ namespace MeGUI
                 this.mod16Box.Enabled = true;
                 this.suggestResolution.Enabled = true;
                 this.suggestResolution.Checked = true;
+                if (mod16Box.SelectedIndex == -1)
+                    mod16Box.SelectedIndex = 0;
                 suggestResolution_CheckedChanged(null, null);
             }
             else
@@ -1867,6 +1869,7 @@ namespace MeGUI
                 this.mod16Box.Enabled = false;
                 this.suggestResolution.Enabled = true;
                 this.suggestResolution.Checked = false;
+                mod16Box_SelectedIndexChanged(null, null);
             }
             this.showScript();
         }
