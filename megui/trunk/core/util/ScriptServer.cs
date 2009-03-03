@@ -164,10 +164,7 @@ namespace MeGUI
                 case PossibleSources.directShow:
                     if (input.ToLower().EndsWith(".avi"))
                     {
-                        if (input.Length >= 268435456) // 1GB = 134217728 bytes
-                            inputLine = "OpenDMLSource(\"" + input + "\", audio=false)";
-                        else
-                            inputLine = "AVISource(\"" + input + "\", audio=false)";
+                        inputLine = "AVISource(\"" + input + "\", audio=false)";
                     }
                     else
                     {
