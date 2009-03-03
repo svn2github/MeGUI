@@ -970,6 +970,7 @@ namespace MeGUI
             this.nvDeInt.TabIndex = 0;
             this.nvDeInt.Text = "Nvidia Deinterlacer";
             this.nvDeInt.UseVisualStyleBackColor = true;
+            this.nvDeInt.Click += new System.EventHandler(this.nvDeInt_Click);
             this.nvDeInt.CheckedChanged += new System.EventHandler(this.nvDeInt_CheckedChanged);
             // 
             // deinterlacingGroupBox
@@ -1555,6 +1556,31 @@ namespace MeGUI
                     this.tabSources.SelectedTab = tabPage3;
                     this.showScript();
                     break;
+            }
+        }
+
+        /// <summary>
+        /// check whether or not it's an NV file compatible (for DGxNV tools)
+        /// </summary>
+        ///
+        private void checkNVCompatibleFile(string input)
+        {
+            bool flag = false;
+            using (StreamReader sr = new StreamReader(input))
+            {
+                string line = sr.ReadLine();
+                switch (this.sourceType)
+                {
+                    case PossibleSources.dga: if (line.IndexOf("DGAVCIndexFileNV2") == -1) flag = true; break;
+                    case PossibleSources.dgm: if (line.IndexOf("DGMPGIndexFileNV1") == -1) flag = true; break;
+                    case PossibleSources.dgv: if (line.IndexOf("DGVC1IndexFileNV2") == -1) flag = true; break; 
+                }
+            }
+            if (flag)
+            {
+                if (MessageBox.Show("You cannot use this option with " + Path.GetFileName(input) + " file. It's not compatible...",
+                    "Information", MessageBoxButtons.OK, MessageBoxIcon.Information) == DialogResult.OK)
+                    this.nvDeInt.Checked = false;
             }
         }
 
@@ -2195,6 +2221,12 @@ namespace MeGUI
                  cbNvDeInt.Enabled = true;
             else cbNvDeInt.Enabled = false;
             this.showScript();
+        }
+
+        private void nvDeInt_Click(object sender, EventArgs e)
+        {
+            // just to be sure
+            checkNVCompatibleFile(input.Filename);
         }
     }
     public delegate void OpenScriptCallback(string avisynthScript);
