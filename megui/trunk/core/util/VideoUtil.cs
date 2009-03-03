@@ -240,6 +240,22 @@ namespace MeGUI
                     ati.Type = atrack.Format;
                     ati.NbChannels = atrack.ChannelsString;
                     ati.SamplingRate = atrack.SamplingRateString;
+                    if (atrack.LanguageString == "") // to retrieve Language 
+                    {
+                        if (Path.GetExtension(fileName.ToLower()) == ".vob")
+                        {
+                            string ifoFile;
+                            string fileNameNoPath = Path.GetFileName(fileName);
+
+                            // Languages are not present in VOB, so we check the main IFO
+                            if (fileNameNoPath.Substring(0, 4) == "VTS_")
+                                 ifoFile = fileName.Substring(0, fileName.LastIndexOf("_")) + "_0.IFO";
+                            else ifoFile = Path.ChangeExtension(fileName, ".IFO");
+
+                            if (File.Exists(ifoFile))
+                                atrack.LanguageString = IFOparser.getAudioLanguage(ifoFile, counter);
+                        }
+                    }
                     ati.TrackInfo = new TrackInfo(atrack.LanguageString, null);
                     audioTracks.Add(ati);
                     if (info.General[0].Format == "MPEG-TS")
