@@ -821,7 +821,7 @@ namespace MeGUI
 
         public Shortcut[] Shortcuts
         {
-            get { return new Shortcut[] { Shortcut.Ctrl3 }; }
+            get { return new Shortcut[] { Shortcut.CtrlF6 }; }
         }
 
         #endregion
