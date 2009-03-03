@@ -408,18 +408,6 @@ namespace MeGUI
 
             AudioTracks.Items.Clear();
             demuxNoAudiotracks.Checked = true; // here to trigger rbtracks_CheckedChanged on new File selection
-            
-            if (Path.GetExtension(fileName.ToLower()) == ".vob")
-            {
-                string ifoFile;
-
-                if (fileNameNoPath.Substring(0, 4) == "VTS_")
-                     ifoFile = fileName.Substring(0, fileName.LastIndexOf("_")) + "_0.IFO";
-                else ifoFile = Path.ChangeExtension(fileName, ".IFO");
-
-                if (File.Exists(ifoFile))
-                    AudioTracks.Items.AddRange(IFOparser.GetAudioInfos(ifoFile, false));
-            }
 
             if (AudioTracks.Items.Count < 1)
             {
