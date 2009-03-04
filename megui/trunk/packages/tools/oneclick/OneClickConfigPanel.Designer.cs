@@ -113,7 +113,6 @@ namespace MeGUI.packages.tools.oneclick
             // 
             // fileSize
             // 
-            this.fileSize.CustomSizes = new MeGUI.core.util.FileSize[0];
             this.fileSize.Location = new System.Drawing.Point(110, 19);
             this.fileSize.MaximumSize = new System.Drawing.Size(1000, 29);
             this.fileSize.MinimumSize = new System.Drawing.Size(64, 29);

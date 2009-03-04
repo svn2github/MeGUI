@@ -153,8 +153,6 @@ namespace MeGUI
                     break;
                 }
             }
-
-
             return true;
         }
 

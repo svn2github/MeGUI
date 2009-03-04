@@ -485,7 +485,6 @@ namespace MeGUI
             // 
             this.optionalTargetSizeBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.optionalTargetSizeBox1.CustomSizes = new MeGUI.core.util.FileSize[0];
             this.optionalTargetSizeBox1.Location = new System.Drawing.Point(125, 43);
             this.optionalTargetSizeBox1.MaximumSize = new System.Drawing.Size(1000, 29);
             this.optionalTargetSizeBox1.MinimumSize = new System.Drawing.Size(64, 29);

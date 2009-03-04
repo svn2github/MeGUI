@@ -393,7 +393,6 @@ namespace MeGUI
             // 
             // targetSize
             // 
-            this.targetSize.CustomSizes = new MeGUI.core.util.FileSize[0];
             this.targetSize.Location = new System.Drawing.Point(18, 46);
             this.targetSize.MaximumSize = new System.Drawing.Size(1000, 29);
             this.targetSize.MinimumSize = new System.Drawing.Size(64, 29);
