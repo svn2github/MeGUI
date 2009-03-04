@@ -481,24 +481,8 @@ namespace MeGUI
 			ar = null;
             maxHorizontalResolution = 5000;
 
-            if (Path.GetExtension(fileName.ToLower()) == ".vob")
-            {
-                string ifoFile;
-                string fileNameNoPath = Path.GetFileName(fileName);
-
-                if (fileNameNoPath.Substring(0, 4) == "VTS_")
-                    ifoFile = fileName.Substring(0, fileName.LastIndexOf("_")) + "_0.IFO";
-                else ifoFile = Path.ChangeExtension(fileName, ".IFO");
-
-                if (File.Exists(ifoFile))
-                    audioTracks.AddRange(IFOparser.GetAudioInfos(ifoFile, false));
-                else
-                    getSourceMediaInfo(fileName, out audioTracks, out maxHorizontalResolution);
-            }
-            else
-            {
-                getSourceMediaInfo(fileName, out audioTracks, out maxHorizontalResolution);
-            }
+            getSourceMediaInfo(fileName, out audioTracks, out maxHorizontalResolution);
+            
             if (audioTracks.Count > 0)
                 putDummyTracks = false;
 
