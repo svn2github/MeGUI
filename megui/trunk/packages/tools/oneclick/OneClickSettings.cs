@@ -98,6 +98,13 @@ namespace MeGUI
             set { automaticDeinterlacing = value; }
         }
 
+        private bool autoCrop;
+        public bool AutoCrop
+        {
+            get { return autoCrop; }
+            set { autoCrop = value; }
+        }
+
         private long outputResolution;
         public long OutputResolution
         {
@@ -150,6 +157,7 @@ namespace MeGUI
             PrerenderVideo = false;
 			DontEncodeAudio = false;
 			SignalAR = false;
+            AutoCrop = true;
 			OutputResolution = 640;
             SplitSize = null;
             ContainerCandidates = new string[0];

@@ -31,11 +31,13 @@ namespace MeGUI
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.TabPage trackTabPage2;
             System.Windows.Forms.Label label1;
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OneClickWindow));
             this.audio2 = new MeGUI.packages.tools.oneclick.AudioConfigControl();
             this.trackTabPage1 = new System.Windows.Forms.TabPage();
             this.audio1 = new MeGUI.packages.tools.oneclick.AudioConfigControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.avsBox = new System.Windows.Forms.GroupBox();
+            this.autoCrop = new System.Windows.Forms.CheckBox();
             this.avsProfile = new MeGUI.core.gui.ConfigableProfilesControl();
             this.ar = new MeGUI.core.gui.ARChooser();
             this.autoDeint = new System.Windows.Forms.CheckBox();
@@ -114,7 +116,7 @@ namespace MeGUI
             trackTabPage2.Location = new System.Drawing.Point(4, 22);
             trackTabPage2.Name = "trackTabPage2";
             trackTabPage2.Padding = new System.Windows.Forms.Padding(3);
-            trackTabPage2.Size = new System.Drawing.Size(172, 94);
+            trackTabPage2.Size = new System.Drawing.Size(433, 94);
             trackTabPage2.TabIndex = 1;
             trackTabPage2.Text = "Audio track 2";
             trackTabPage2.UseVisualStyleBackColor = true;
@@ -124,7 +126,7 @@ namespace MeGUI
             this.audio2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.audio2.Location = new System.Drawing.Point(3, 3);
             this.audio2.Name = "audio2";
-            this.audio2.Size = new System.Drawing.Size(166, 88);
+            this.audio2.Size = new System.Drawing.Size(427, 88);
             this.audio2.TabIndex = 0;
             this.audio2.SomethingChanged += new System.EventHandler(this.audio1_SomethingChanged);
             // 
@@ -173,6 +175,7 @@ namespace MeGUI
             // 
             // avsBox
             // 
+            this.avsBox.Controls.Add(this.autoCrop);
             this.avsBox.Controls.Add(this.avsProfile);
             this.avsBox.Controls.Add(this.ar);
             this.avsBox.Controls.Add(this.autoDeint);
@@ -188,6 +191,18 @@ namespace MeGUI
             this.avsBox.TabIndex = 23;
             this.avsBox.TabStop = false;
             this.avsBox.Text = "AviSynth setup";
+            // 
+            // autoCrop
+            // 
+            this.autoCrop.AutoSize = true;
+            this.autoCrop.Checked = true;
+            this.autoCrop.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.autoCrop.Location = new System.Drawing.Point(191, 19);
+            this.autoCrop.Name = "autoCrop";
+            this.autoCrop.Size = new System.Drawing.Size(70, 17);
+            this.autoCrop.TabIndex = 24;
+            this.autoCrop.Text = "AutoCrop";
+            this.autoCrop.UseVisualStyleBackColor = true;
             // 
             // avsProfile
             // 
@@ -224,7 +239,7 @@ namespace MeGUI
             // signalAR
             // 
             this.signalAR.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.signalAR.Location = new System.Drawing.Point(190, 17);
+            this.signalAR.Location = new System.Drawing.Point(285, 16);
             this.signalAR.Name = "signalAR";
             this.signalAR.Size = new System.Drawing.Size(82, 24);
             this.signalAR.TabIndex = 5;
@@ -304,6 +319,7 @@ namespace MeGUI
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.chapterFile.Filename = "";
             this.chapterFile.Filter = "Chapter files (*.txt)|*.txt";
+            this.chapterFile.FilterIndex = 0;
             this.chapterFile.FolderMode = false;
             this.chapterFile.Location = new System.Drawing.Point(120, 38);
             this.chapterFile.Name = "chapterFile";
@@ -319,6 +335,7 @@ namespace MeGUI
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.workingDirectory.Filename = "";
             this.workingDirectory.Filter = null;
+            this.workingDirectory.FilterIndex = 0;
             this.workingDirectory.FolderMode = true;
             this.workingDirectory.Location = new System.Drawing.Point(120, 15);
             this.workingDirectory.Name = "workingDirectory";
@@ -367,6 +384,7 @@ namespace MeGUI
             // 
             this.splitting.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.splitting.AutoSize = true;
             this.splitting.CustomSizes = new MeGUI.core.util.FileSize[0];
             this.splitting.Location = new System.Drawing.Point(123, 228);
             this.splitting.MaximumSize = new System.Drawing.Size(1000, 29);
@@ -374,7 +392,7 @@ namespace MeGUI
             this.splitting.Name = "splitting";
             this.splitting.NullString = "No splitting";
             this.splitting.SelectedIndex = 0;
-            this.splitting.Size = new System.Drawing.Size(162, 29);
+            this.splitting.Size = new System.Drawing.Size(208, 29);
             this.splitting.TabIndex = 38;
             // 
             // tabPage1
@@ -411,6 +429,7 @@ namespace MeGUI
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.output.Filename = "";
             this.output.Filter = "MP4 Files|*.mp4";
+            this.output.FilterIndex = 0;
             this.output.FolderMode = false;
             this.output.Location = new System.Drawing.Point(123, 42);
             this.output.Name = "output";
@@ -427,9 +446,7 @@ namespace MeGUI
             this.input.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.input.Filename = "";
-            this.input.Filter = "VOB Files (*.vob)|*.vob|MPEG-1/2 Program Streams (*.mpg)|*.mpg|Transport Streams " +
-                "(*.m2ts,*.ts)|*.m2ts;*.ts|All DGIndex supported files|*.vob;*.mpg;*.mpeg;*.m2ts;" +
-                "*.m2v;*.m2p;*.mpv;*.tp;*.ts;*.trp;*.pva;*.vro";
+            this.input.Filter = resources.GetString("input.Filter");
             this.input.FilterIndex = 4;
             this.input.FolderMode = false;
             this.input.Location = new System.Drawing.Point(123, 13);
@@ -485,6 +502,7 @@ namespace MeGUI
             // 
             this.optionalTargetSizeBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.optionalTargetSizeBox1.CustomSizes = new MeGUI.core.util.FileSize[0];
             this.optionalTargetSizeBox1.Location = new System.Drawing.Point(125, 43);
             this.optionalTargetSizeBox1.MaximumSize = new System.Drawing.Size(1000, 29);
             this.optionalTargetSizeBox1.MinimumSize = new System.Drawing.Size(64, 29);
@@ -531,20 +549,20 @@ namespace MeGUI
             this.addTrackToolStripMenuItem,
             this.removeTrackToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(141, 48);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(147, 48);
             this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             // 
             // addTrackToolStripMenuItem
             // 
             this.addTrackToolStripMenuItem.Name = "addTrackToolStripMenuItem";
-            this.addTrackToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+            this.addTrackToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.addTrackToolStripMenuItem.Text = "Add track";
             this.addTrackToolStripMenuItem.Click += new System.EventHandler(this.addTrackToolStripMenuItem_Click);
             // 
             // removeTrackToolStripMenuItem
             // 
             this.removeTrackToolStripMenuItem.Name = "removeTrackToolStripMenuItem";
-            this.removeTrackToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+            this.removeTrackToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.removeTrackToolStripMenuItem.Text = "Remove track";
             this.removeTrackToolStripMenuItem.Click += new System.EventHandler(this.removeTrackToolStripMenuItem_Click);
             // 
@@ -646,8 +664,6 @@ namespace MeGUI
             // 
             // containerFormat
             // 
-            this.containerFormat.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
             this.containerFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.containerFormat.Location = new System.Drawing.Point(124, 239);
             this.containerFormat.Name = "containerFormat";
@@ -747,7 +763,7 @@ namespace MeGUI
             this.goButton.Text = "Go!";
             this.goButton.UseVisualStyleBackColor = true;
             this.goButton.Click += new System.EventHandler(this.goButton_Click);
-            //
+            // 
             // openOnQueue
             // 
             this.openOnQueue.Location = new System.Drawing.Point(242, 306);
@@ -755,7 +771,6 @@ namespace MeGUI
             this.openOnQueue.Size = new System.Drawing.Size(96, 24);
             this.openOnQueue.TabIndex = 33;
             this.openOnQueue.Text = "and open next";
-            //
             // 
             // helpButton1
             // 
@@ -778,6 +793,7 @@ namespace MeGUI
             this.Controls.Add(this.showAdvancedOptions);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.goButton);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "OneClickWindow";
             this.Text = "MeGUI - One Click Encoder";
             trackTabPage2.ResumeLayout(false);
@@ -867,5 +883,6 @@ namespace MeGUI
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.CheckBox openOnQueue;
+        private System.Windows.Forms.CheckBox autoCrop;
     }
 }

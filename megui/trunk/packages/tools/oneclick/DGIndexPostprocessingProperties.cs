@@ -31,7 +31,7 @@ namespace MeGUI
 	/// </summary>
 	public class DGIndexPostprocessingProperties
 	{
-		private bool autoDeriveAR, signalAR, autoDeint;
+		private bool autoDeriveAR, signalAR, autoDeint, autoCrop;
 		private int horizontalOutputResolution;
         private FileSize? splitSize;
         private ContainerType container;
@@ -46,6 +46,7 @@ namespace MeGUI
 		{
 			autoDeriveAR = false;
 			signalAR = false;
+            autoCrop = true;
             ar = null;
             avsSettings = new AviSynthSettings();
 			horizontalOutputResolution = 640;
@@ -68,8 +69,8 @@ namespace MeGUI
 		/// </summary>
 		public bool AutoDeriveAR
 		{
-			get {return autoDeriveAR;}
-			set {autoDeriveAR = value;}
+			get { return autoDeriveAR; }
+			set { autoDeriveAR = value; }
 		}
 		/// <summary>
 		/// gets / sets whether the aspect ratio should be signalled in the output and thus
@@ -77,16 +78,25 @@ namespace MeGUI
 		/// </summary>
 		public bool SignalAR
 		{
-			get {return signalAR;}
-			set {signalAR = value;}
+			get { return signalAR; }
+			set { signalAR = value; }
 		}
+        /// <summary>
+        /// gets / sets the AutoCrop function
+        /// </summary>
+        public bool AutoCrop
+        {
+            get { return autoCrop; }
+            set { autoCrop = value; }
+        }
+
 		/// <summary>
 		/// gets / sets the horizontal output resolution the output should have
 		/// </summary>
 		public int HorizontalOutputResolution
 		{
-			get {return horizontalOutputResolution;}
-			set {horizontalOutputResolution = value;}
+			get { return horizontalOutputResolution; }
+			set { horizontalOutputResolution = value; }
 		}
 		/// <summary>
 		/// gets / sets the container of the output
@@ -94,8 +104,8 @@ namespace MeGUI
         [XmlIgnore()]
         public ContainerType Container
 		{
-			get {return container;}
-			set {container = value;}
+			get { return container; }
+			set { container = value; }
 		}
 
         public string ContainerTypeString
@@ -115,24 +125,24 @@ namespace MeGUI
 		/// </summary>
 		public FileSize? OutputSize
 		{
-			get {return outputSize;}
-			set {outputSize = value;}
+			get { return outputSize; }
+			set { outputSize = value; }
 		}
 		/// <summary>
 		/// gets / sets the split size for the output
 		/// </summary>
 		public FileSize? Splitting
 		{
-			get {return splitSize;}
-			set {splitSize = value;}
+			get { return splitSize; }
+			set { splitSize = value; }
 		}
 		/// <summary>
 		/// gets / sets the aspect ratio of the video input (if known)
 		/// </summary>
 		public Dar? DAR
 		{
-			get {return ar;}
-			set {ar = value;}
+			get { return ar; }
+			set { ar = value; }
 		}
         public AviSynthSettings AvsSettings
         {
@@ -144,8 +154,8 @@ namespace MeGUI
 		/// </summary>
 		public VideoCodecSettings VideoSettings
 		{
-			get {return videoSettings;}
-			set {videoSettings = value;}
+			get { return videoSettings; }
+			set { videoSettings = value; }
 		}
 		/// <summary>
 		/// gets / sets a custom aspect ratio for the input
@@ -153,24 +163,24 @@ namespace MeGUI
 		/// </summary>
 		public double CustomAR
 		{
-			get {return customAR;}
-			set {customAR = value;}
+			get { return customAR; }
+			set { customAR = value; }
 		}
 		/// <summary>
 		/// gets / sets the chapter file for the output
 		/// </summary>
 		public string ChapterFile
 		{
-			get {return chapterFile;}
-			set {chapterFile = value;}
+			get { return chapterFile; }
+			set { chapterFile = value; }
 		}
 		/// <summary>
 		/// gets / sets the path and name of the final output file
 		/// </summary>
 		public string FinalOutput
 		{
-			get {return finalOutput;}
-			set {finalOutput = value;}
+			get { return finalOutput; }
+			set { finalOutput = value; }
 		}
 		/// <summary>
 		/// gets / sets the path and name of the AviSynth script created from the dgindex project
@@ -178,8 +188,8 @@ namespace MeGUI
 		/// </summary>
 		public string AviSynthScript
 		{
-			get {return aviSynthScript;}
-			set {aviSynthScript = value;}
+			get { return aviSynthScript; }
+			set { aviSynthScript = value; }
 		}
 	}
 }

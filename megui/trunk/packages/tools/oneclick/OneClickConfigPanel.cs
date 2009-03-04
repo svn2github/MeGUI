@@ -46,44 +46,14 @@ namespace MeGUI.packages.tools.oneclick
         }
         #endregion
         #region Video profiles
-        /*MultipleConfigurersHandler<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType> videoCodecHandler;
-        ProfilesControlHandler<VideoCodecSettings, VideoInfo> videoProfileHandler;*/
         private void initVideoHandler()
         {
-            /*this.videoCodec.Items.AddRange(mainForm.PackageSystem.VideoSettingsProviders.ValuesArray);
-            try
-            {
-                this.videoCodec.SelectedItem = mainForm.PackageSystem.VideoSettingsProviders["x264"];
-            }
-            catch (Exception) { }
-            // Init Video handlers
-            videoCodecHandler =
-                new MultipleConfigurersHandler<VideoCodecSettings, VideoInfo, VideoCodec, VideoEncoderType>(videoCodec);
-            videoProfileHandler =
-                new ProfilesControlHandler<VideoCodecSettings, VideoInfo>("Video", mainForm, videoProfileControl,
-                videoCodecHandler.EditSettings, new InfoGetter<VideoInfo>(delegate() { return new VideoInfo(); }),
-                videoCodecHandler.Getter, videoCodecHandler.Setter);
-            videoCodecHandler.Register(videoProfileHandler);*/
             videoProfile.Manager = mainForm.Profiles;
         }
         #endregion
         #region Audio profiles
-        /*MultipleConfigurersHandler<AudioCodecSettings, string[], AudioCodec, AudioEncoderType> audioCodecHandler;
-        ProfilesControlHandler<AudioCodecSettings, string[]> audioProfileHandler;*/
         private void initAudioHandler()
         {
-            /*this.audioCodec.Items.AddRange(mainForm.PackageSystem.AudioSettingsProviders.ValuesArray);
-            try
-            {
-                this.audioCodec.SelectedItem = mainForm.PackageSystem.AudioSettingsProviders["ND AAC"];
-            }
-            catch (Exception) { }
-
-            // Init audio handlers
-            audioCodecHandler = new MultipleConfigurersHandler<AudioCodecSettings, string[], AudioCodec, AudioEncoderType>(audioCodec);
-            audioProfileHandler = new ProfilesControlHandler<AudioCodecSettings, string[]>("Audio", mainForm, audioProfileControl, audioCodecHandler.EditSettings,
-                new InfoGetter<string[]>(delegate { return new string[] { "input", "output" }; }), audioCodecHandler.Getter, audioCodecHandler.Setter);
-            audioCodecHandler.Register(audioProfileHandler);*/
             audioProfile.Manager = mainForm.Profiles;
         }
         #endregion
@@ -120,6 +90,7 @@ namespace MeGUI.packages.tools.oneclick
                 val.PrerenderVideo = preprocessVideo.Checked;
                 val.SignalAR = signalAR.Checked;
                 val.SplitSize = splitSize.Value;
+                val.AutoCrop = autoCrop.Checked;
                 val.VideoProfileName = videoProfile.SelectedProfile.FQName;
                 return val;
             }
@@ -135,6 +106,7 @@ namespace MeGUI.packages.tools.oneclick
                 preprocessVideo.Checked = value.PrerenderVideo;
                 signalAR.Checked = value.SignalAR;
                 splitSize.Value = value.SplitSize;
+                autoCrop.Checked = value.AutoCrop;
                 videoProfile.SetProfileNameOrWarn(value.VideoProfileName);
             }
         }

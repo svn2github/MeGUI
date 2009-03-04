@@ -361,6 +361,7 @@ namespace MeGUI
                 // bools
                 signalAR.Checked = settings.SignalAR;
                 autoDeint.Checked = settings.AutomaticDeinterlacing;
+                autoCrop.Checked = settings.AutoCrop;
 
                 splitting.Value = settings.SplitSize;
                 optionalTargetSizeBox1.Value = settings.Filesize;
@@ -421,6 +422,7 @@ namespace MeGUI
                 dpp.HorizontalOutputResolution = (int)horizontalResolution.Value;
                 dpp.OutputSize = desiredSize;
                 dpp.SignalAR = signalAR.Checked;
+                dpp.AutoCrop = autoCrop.Checked;
                 dpp.Splitting = splitting.Value;
                 dpp.VideoSettings = VideoSettings.Clone();
                 IndexJob job = new IndexJob(input.Filename, d2vName, 1, audioTracks, dpp, false);  //AAA: Only demux selected tracks (prevents leftover files when not all audio tracks are used)
@@ -637,7 +639,8 @@ namespace MeGUI
             Dar? dar;
             string videoInput = openVideo(job.Output, job.PostprocessingProperties.DAR, 
                 job.PostprocessingProperties.HorizontalOutputResolution, job.PostprocessingProperties.SignalAR, log,
-                job.PostprocessingProperties.AvsSettings, job.PostprocessingProperties.AutoDeinterlace, videoSettings, out dar);
+                job.PostprocessingProperties.AvsSettings, job.PostprocessingProperties.AutoDeinterlace, videoSettings, out dar,
+                job.PostprocessingProperties.AutoCrop);
 
             VideoStream myVideo = new VideoStream();
             ulong length;
@@ -732,10 +735,11 @@ namespace MeGUI
         /// <param name="height">the final height of the video</param>
         /// <param name="signalAR">whether or not ar signalling is to be used for the output 
         /// (depending on this parameter, resizing changes to match the source AR)</param>
+        /// <param name="autoCrop">whether or not autoCrop is used for the input</param>
         /// <returns>the name of the AviSynth script created, empty of there was an error</returns>
         private string openVideo(string path, Dar? AR, int horizontalResolution,
             bool signalAR, LogItem log, AviSynthSettings avsSettings, bool autoDeint,
-            VideoCodecSettings settings, out Dar? dar)
+            VideoCodecSettings settings, out Dar? dar, bool autoCrop)
         {
             dar = null;
             IMediaFile d2v = new d2vFile(path);
@@ -760,12 +764,15 @@ namespace MeGUI
             }
 
             bool error = (final.left == -1);
-            if (!error)
-                log.LogValue("Autocrop values", final);
-            else
+            if (autoCrop)
             {
-                log.Error("Autocrop failed, aborting now");
-                return "";
+                if (!error)
+                    log.LogValue("Autocrop values", final);
+                else
+                {
+                    log.Error("Autocrop failed, aborting now");
+                    return "";
+                }
             }
 
             decimal customDAR;
@@ -787,6 +794,9 @@ namespace MeGUI
 
             // Minimise upsizing
             int sourceHorizontalResolution = (int)d2v.Info.Width - final.right - final.left;
+            if (autoCrop)
+                sourceHorizontalResolution = (int)d2v.Info.Width;
+
             if (horizontalResolution > sourceHorizontalResolution)
             {
                 if (avsSettings.Mod16Method == mod16Method.resize)
@@ -849,7 +859,9 @@ namespace MeGUI
 
             inputLine = ScriptServer.GetInputLine(path, interlaced, PossibleSources.d2v, avsSettings.ColourCorrect, avsSettings.MPEG2Deblock, false, 0);
 
-            cropLine = ScriptServer.GetCropLine(true, final);
+            if (autoCrop)
+                 cropLine = ScriptServer.GetCropLine(true, final);
+            else cropLine = ScriptServer.GetCropLine(false, final);
             denoiseLines = ScriptServer.GetDenoiseLines(avsSettings.Denoise, (DenoiseFilterType)avsSettings.DenoiseMethod);
             resizeLine = ScriptServer.GetResizeLine(!signalAR || avsSettings.Mod16Method == mod16Method.resize, horizontalResolution, scriptVerticalResolution, (ResizeFilterType)avsSettings.ResizeMethod);
 

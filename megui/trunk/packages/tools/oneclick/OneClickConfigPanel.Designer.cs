@@ -52,6 +52,7 @@ namespace MeGUI.packages.tools.oneclick
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.autoCrop = new System.Windows.Forms.CheckBox();
             label3 = new System.Windows.Forms.Label();
             this.otherGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.horizontalResolution)).BeginInit();
@@ -72,6 +73,7 @@ namespace MeGUI.packages.tools.oneclick
             // 
             // otherGroupBox
             // 
+            this.otherGroupBox.Controls.Add(this.autoCrop);
             this.otherGroupBox.Controls.Add(label3);
             this.otherGroupBox.Controls.Add(this.avsProfile);
             this.otherGroupBox.Controls.Add(this.splitSize);
@@ -161,7 +163,7 @@ namespace MeGUI.packages.tools.oneclick
             // 
             // signalAR
             // 
-            this.signalAR.Location = new System.Drawing.Point(178, 80);
+            this.signalAR.Location = new System.Drawing.Point(274, 77);
             this.signalAR.Name = "signalAR";
             this.signalAR.Size = new System.Drawing.Size(76, 24);
             this.signalAR.TabIndex = 32;
@@ -324,6 +326,18 @@ namespace MeGUI.packages.tools.oneclick
             this.tabPage2.Text = "Container type";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // autoCrop
+            // 
+            this.autoCrop.AutoSize = true;
+            this.autoCrop.Checked = true;
+            this.autoCrop.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.autoCrop.Location = new System.Drawing.Point(189, 81);
+            this.autoCrop.Name = "autoCrop";
+            this.autoCrop.Size = new System.Drawing.Size(70, 17);
+            this.autoCrop.TabIndex = 41;
+            this.autoCrop.Text = "AutoCrop";
+            this.autoCrop.UseVisualStyleBackColor = true;
+            // 
             // OneClickConfigPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -367,5 +381,6 @@ namespace MeGUI.packages.tools.oneclick
         private MeGUI.core.gui.ConfigableProfilesControl avsProfile;
         private MeGUI.core.gui.ConfigableProfilesControl audioProfile;
         private MeGUI.core.gui.ConfigableProfilesControl videoProfile;
+        private System.Windows.Forms.CheckBox autoCrop;
     }
 }
