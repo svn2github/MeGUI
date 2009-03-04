@@ -30,6 +30,8 @@ namespace MeGUI.packages.tools.oneclick
         {
             System.Windows.Forms.Label label3;
             this.otherGroupBox = new System.Windows.Forms.GroupBox();
+            this.keepInputResolution = new System.Windows.Forms.CheckBox();
+            this.autoCrop = new System.Windows.Forms.CheckBox();
             this.avsProfile = new MeGUI.core.gui.ConfigableProfilesControl();
             this.splitSize = new MeGUI.core.gui.TargetSizeSCBox();
             this.fileSize = new MeGUI.core.gui.TargetSizeSCBox();
@@ -52,7 +54,6 @@ namespace MeGUI.packages.tools.oneclick
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.autoCrop = new System.Windows.Forms.CheckBox();
             label3 = new System.Windows.Forms.Label();
             this.otherGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.horizontalResolution)).BeginInit();
@@ -65,7 +66,7 @@ namespace MeGUI.packages.tools.oneclick
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new System.Drawing.Point(6, 111);
+            label3.Location = new System.Drawing.Point(5, 128);
             label3.Name = "label3";
             label3.Size = new System.Drawing.Size(78, 13);
             label3.TabIndex = 40;
@@ -73,6 +74,7 @@ namespace MeGUI.packages.tools.oneclick
             // 
             // otherGroupBox
             // 
+            this.otherGroupBox.Controls.Add(this.keepInputResolution);
             this.otherGroupBox.Controls.Add(this.autoCrop);
             this.otherGroupBox.Controls.Add(label3);
             this.otherGroupBox.Controls.Add(this.avsProfile);
@@ -88,14 +90,37 @@ namespace MeGUI.packages.tools.oneclick
             this.otherGroupBox.Dock = System.Windows.Forms.DockStyle.Top;
             this.otherGroupBox.Location = new System.Drawing.Point(3, 3);
             this.otherGroupBox.Name = "otherGroupBox";
-            this.otherGroupBox.Size = new System.Drawing.Size(419, 165);
+            this.otherGroupBox.Size = new System.Drawing.Size(419, 175);
             this.otherGroupBox.TabIndex = 38;
             this.otherGroupBox.TabStop = false;
             this.otherGroupBox.Text = "Filesize and Avisynth setup";
             // 
+            // keepInputResolution
+            // 
+            this.keepInputResolution.AutoSize = true;
+            this.keepInputResolution.Location = new System.Drawing.Point(60, 103);
+            this.keepInputResolution.Name = "keepInputResolution";
+            this.keepInputResolution.Size = new System.Drawing.Size(242, 17);
+            this.keepInputResolution.TabIndex = 42;
+            this.keepInputResolution.Text = "Keep Input Resolution (disable Crop && Resize)";
+            this.keepInputResolution.UseVisualStyleBackColor = true;
+            this.keepInputResolution.CheckedChanged += new System.EventHandler(this.keepInputResolution_CheckedChanged);
+            // 
+            // autoCrop
+            // 
+            this.autoCrop.AutoSize = true;
+            this.autoCrop.Checked = true;
+            this.autoCrop.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.autoCrop.Location = new System.Drawing.Point(189, 81);
+            this.autoCrop.Name = "autoCrop";
+            this.autoCrop.Size = new System.Drawing.Size(70, 17);
+            this.autoCrop.TabIndex = 41;
+            this.autoCrop.Text = "AutoCrop";
+            this.autoCrop.UseVisualStyleBackColor = true;
+            // 
             // avsProfile
             // 
-            this.avsProfile.Location = new System.Drawing.Point(110, 106);
+            this.avsProfile.Location = new System.Drawing.Point(109, 123);
             this.avsProfile.Name = "avsProfile";
             this.avsProfile.ProfileSet = "AviSynth";
             this.avsProfile.Size = new System.Drawing.Size(298, 22);
@@ -115,6 +140,7 @@ namespace MeGUI.packages.tools.oneclick
             // 
             // fileSize
             // 
+            this.fileSize.CustomSizes = new MeGUI.core.util.FileSize[0];
             this.fileSize.Location = new System.Drawing.Point(110, 19);
             this.fileSize.MaximumSize = new System.Drawing.Size(1000, 29);
             this.fileSize.MinimumSize = new System.Drawing.Size(64, 29);
@@ -127,7 +153,7 @@ namespace MeGUI.packages.tools.oneclick
             // preprocessVideo
             // 
             this.preprocessVideo.AutoSize = true;
-            this.preprocessVideo.Location = new System.Drawing.Point(61, 135);
+            this.preprocessVideo.Location = new System.Drawing.Point(60, 152);
             this.preprocessVideo.Name = "preprocessVideo";
             this.preprocessVideo.Size = new System.Drawing.Size(179, 17);
             this.preprocessVideo.TabIndex = 37;
@@ -154,7 +180,7 @@ namespace MeGUI.packages.tools.oneclick
             // 
             this.autoDeint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.autoDeint.AutoSize = true;
-            this.autoDeint.Location = new System.Drawing.Point(274, 135);
+            this.autoDeint.Location = new System.Drawing.Point(273, 152);
             this.autoDeint.Name = "autoDeint";
             this.autoDeint.Size = new System.Drawing.Size(138, 17);
             this.autoDeint.TabIndex = 35;
@@ -213,9 +239,9 @@ namespace MeGUI.packages.tools.oneclick
             this.extraGroupbox.Controls.Add(this.dontEncodeAudio);
             this.extraGroupbox.Controls.Add(this.videoCodecLabel);
             this.extraGroupbox.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.extraGroupbox.Location = new System.Drawing.Point(3, 172);
+            this.extraGroupbox.Location = new System.Drawing.Point(3, 184);
             this.extraGroupbox.Name = "extraGroupbox";
-            this.extraGroupbox.Size = new System.Drawing.Size(419, 155);
+            this.extraGroupbox.Size = new System.Drawing.Size(419, 143);
             this.extraGroupbox.TabIndex = 39;
             this.extraGroupbox.TabStop = false;
             this.extraGroupbox.Text = "Encoding Setup";
@@ -326,18 +352,6 @@ namespace MeGUI.packages.tools.oneclick
             this.tabPage2.Text = "Container type";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // autoCrop
-            // 
-            this.autoCrop.AutoSize = true;
-            this.autoCrop.Checked = true;
-            this.autoCrop.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.autoCrop.Location = new System.Drawing.Point(189, 81);
-            this.autoCrop.Name = "autoCrop";
-            this.autoCrop.Size = new System.Drawing.Size(70, 17);
-            this.autoCrop.TabIndex = 41;
-            this.autoCrop.Text = "AutoCrop";
-            this.autoCrop.UseVisualStyleBackColor = true;
-            // 
             // OneClickConfigPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -382,5 +396,6 @@ namespace MeGUI.packages.tools.oneclick
         private MeGUI.core.gui.ConfigableProfilesControl audioProfile;
         private MeGUI.core.gui.ConfigableProfilesControl videoProfile;
         private System.Windows.Forms.CheckBox autoCrop;
+        private System.Windows.Forms.CheckBox keepInputResolution;
     }
 }

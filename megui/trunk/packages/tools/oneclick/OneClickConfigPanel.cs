@@ -91,6 +91,7 @@ namespace MeGUI.packages.tools.oneclick
                 val.SignalAR = signalAR.Checked;
                 val.SplitSize = splitSize.Value;
                 val.AutoCrop = autoCrop.Checked;
+                val.KeepInputResolution = keepInputResolution.Checked;
                 val.VideoProfileName = videoProfile.SelectedProfile.FQName;
                 return val;
             }
@@ -107,6 +108,7 @@ namespace MeGUI.packages.tools.oneclick
                 signalAR.Checked = value.SignalAR;
                 splitSize.Value = value.SplitSize;
                 autoCrop.Checked = value.AutoCrop;
+                keepInputResolution.Checked = value.KeepInputResolution;
                 videoProfile.SetProfileNameOrWarn(value.VideoProfileName);
             }
         }
@@ -137,6 +139,20 @@ namespace MeGUI.packages.tools.oneclick
                     if (index > -1)
                         containerTypeList.SetItemChecked(index, true);
                 }
+            }
+        }
+
+        private void keepInputResolution_CheckedChanged(object sender, EventArgs e)
+        {
+            if (keepInputResolution.Checked)
+            {
+                horizontalResolution.Enabled = false;
+                autoCrop.Checked = false;
+            }
+            else
+            {
+                horizontalResolution.Enabled = true;
+                autoCrop.Checked = true;
             }
         }
     }

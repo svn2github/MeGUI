@@ -31,7 +31,7 @@ namespace MeGUI
 	/// </summary>
 	public class DGIndexPostprocessingProperties
 	{
-		private bool autoDeriveAR, signalAR, autoDeint, autoCrop;
+		private bool autoDeriveAR, signalAR, autoDeint, autoCrop, keepInputResolution;
 		private int horizontalOutputResolution;
         private FileSize? splitSize;
         private ContainerType container;
@@ -47,6 +47,7 @@ namespace MeGUI
 			autoDeriveAR = false;
 			signalAR = false;
             autoCrop = true;
+            keepInputResolution = false;
             ar = null;
             avsSettings = new AviSynthSettings();
 			horizontalOutputResolution = 640;
@@ -89,7 +90,14 @@ namespace MeGUI
             get { return autoCrop; }
             set { autoCrop = value; }
         }
-
+        /// <summary>
+        /// gets / sets Keep Input Resolution
+        /// </summary>
+        public bool KeepInputResolution
+        {
+            get { return keepInputResolution; }
+            set { keepInputResolution = value; }
+        }
 		/// <summary>
 		/// gets / sets the horizontal output resolution the output should have
 		/// </summary>

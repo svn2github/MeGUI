@@ -423,6 +423,7 @@ namespace MeGUI
                 dpp.OutputSize = desiredSize;
                 dpp.SignalAR = signalAR.Checked;
                 dpp.AutoCrop = autoCrop.Checked;
+                dpp.KeepInputResolution = keepInputResolution.Checked;
                 dpp.Splitting = splitting.Value;
                 dpp.VideoSettings = VideoSettings.Clone();
                 IndexJob job = new IndexJob(input.Filename, d2vName, 1, audioTracks, dpp, false);  //AAA: Only demux selected tracks (prevents leftover files when not all audio tracks are used)
@@ -550,6 +551,20 @@ namespace MeGUI
             RemoveTrack();
         }
 
+        private void keepInputResolution_CheckedChanged(object sender, EventArgs e)
+        {
+            if (keepInputResolution.Checked)
+            {
+                horizontalResolution.Enabled = false;
+                autoCrop.Checked = false;
+            }
+            else
+            {
+                horizontalResolution.Enabled = true;
+                autoCrop.Checked = true;
+            }
+        }
+
         }
     public class OneClickTool : MeGUI.core.plugins.interfaces.ITool
     {
@@ -640,7 +655,7 @@ namespace MeGUI
             string videoInput = openVideo(job.Output, job.PostprocessingProperties.DAR, 
                 job.PostprocessingProperties.HorizontalOutputResolution, job.PostprocessingProperties.SignalAR, log,
                 job.PostprocessingProperties.AvsSettings, job.PostprocessingProperties.AutoDeinterlace, videoSettings, out dar,
-                job.PostprocessingProperties.AutoCrop);
+                job.PostprocessingProperties.AutoCrop, job.PostprocessingProperties.KeepInputResolution);
 
             VideoStream myVideo = new VideoStream();
             ulong length;
@@ -739,7 +754,7 @@ namespace MeGUI
         /// <returns>the name of the AviSynth script created, empty of there was an error</returns>
         private string openVideo(string path, Dar? AR, int horizontalResolution,
             bool signalAR, LogItem log, AviSynthSettings avsSettings, bool autoDeint,
-            VideoCodecSettings settings, out Dar? dar, bool autoCrop)
+            VideoCodecSettings settings, out Dar? dar, bool autoCrop, bool keepInputResolution)
         {
             dar = null;
             IMediaFile d2v = new d2vFile(path);
@@ -863,6 +878,8 @@ namespace MeGUI
                  cropLine = ScriptServer.GetCropLine(true, final);
             else cropLine = ScriptServer.GetCropLine(false, final);
             denoiseLines = ScriptServer.GetDenoiseLines(avsSettings.Denoise, (DenoiseFilterType)avsSettings.DenoiseMethod);
+
+            if (keepInputResolution == false)
             resizeLine = ScriptServer.GetResizeLine(!signalAR || avsSettings.Mod16Method == mod16Method.resize, horizontalResolution, scriptVerticalResolution, (ResizeFilterType)avsSettings.ResizeMethod);
 
             string newScript = ScriptServer.CreateScriptFromTemplate(avsSettings.Template, inputLine, cropLine, resizeLine, denoiseLines, deinterlaceLines);

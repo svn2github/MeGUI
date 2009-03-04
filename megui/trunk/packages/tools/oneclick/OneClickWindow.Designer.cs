@@ -37,6 +37,7 @@ namespace MeGUI
             this.audio1 = new MeGUI.packages.tools.oneclick.AudioConfigControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.avsBox = new System.Windows.Forms.GroupBox();
+            this.keepInputResolution = new System.Windows.Forms.CheckBox();
             this.autoCrop = new System.Windows.Forms.CheckBox();
             this.avsProfile = new MeGUI.core.gui.ConfigableProfilesControl();
             this.ar = new MeGUI.core.gui.ARChooser();
@@ -116,7 +117,7 @@ namespace MeGUI
             trackTabPage2.Location = new System.Drawing.Point(4, 22);
             trackTabPage2.Name = "trackTabPage2";
             trackTabPage2.Padding = new System.Windows.Forms.Padding(3);
-            trackTabPage2.Size = new System.Drawing.Size(433, 94);
+            trackTabPage2.Size = new System.Drawing.Size(172, 94);
             trackTabPage2.TabIndex = 1;
             trackTabPage2.Text = "Audio track 2";
             trackTabPage2.UseVisualStyleBackColor = true;
@@ -126,14 +127,14 @@ namespace MeGUI
             this.audio2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.audio2.Location = new System.Drawing.Point(3, 3);
             this.audio2.Name = "audio2";
-            this.audio2.Size = new System.Drawing.Size(427, 88);
+            this.audio2.Size = new System.Drawing.Size(166, 88);
             this.audio2.TabIndex = 0;
             this.audio2.SomethingChanged += new System.EventHandler(this.audio1_SomethingChanged);
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new System.Drawing.Point(24, 236);
+            label1.Location = new System.Drawing.Point(19, 247);
             label1.Name = "label1";
             label1.Size = new System.Drawing.Size(47, 13);
             label1.TabIndex = 37;
@@ -175,6 +176,7 @@ namespace MeGUI
             // 
             // avsBox
             // 
+            this.avsBox.Controls.Add(this.keepInputResolution);
             this.avsBox.Controls.Add(this.autoCrop);
             this.avsBox.Controls.Add(this.avsProfile);
             this.avsBox.Controls.Add(this.ar);
@@ -187,10 +189,21 @@ namespace MeGUI
             this.avsBox.Dock = System.Windows.Forms.DockStyle.Top;
             this.avsBox.Location = new System.Drawing.Point(3, 98);
             this.avsBox.Name = "avsBox";
-            this.avsBox.Size = new System.Drawing.Size(447, 124);
+            this.avsBox.Size = new System.Drawing.Size(447, 135);
             this.avsBox.TabIndex = 23;
             this.avsBox.TabStop = false;
             this.avsBox.Text = "AviSynth setup";
+            // 
+            // keepInputResolution
+            // 
+            this.keepInputResolution.AutoSize = true;
+            this.keepInputResolution.Location = new System.Drawing.Point(123, 42);
+            this.keepInputResolution.Name = "keepInputResolution";
+            this.keepInputResolution.Size = new System.Drawing.Size(242, 17);
+            this.keepInputResolution.TabIndex = 25;
+            this.keepInputResolution.Text = "Keep Input Resolution (disable Crop && Resize)";
+            this.keepInputResolution.UseVisualStyleBackColor = true;
+            this.keepInputResolution.CheckedChanged += new System.EventHandler(this.keepInputResolution_CheckedChanged);
             // 
             // autoCrop
             // 
@@ -206,7 +219,7 @@ namespace MeGUI
             // 
             // avsProfile
             // 
-            this.avsProfile.Location = new System.Drawing.Point(123, 73);
+            this.avsProfile.Location = new System.Drawing.Point(122, 88);
             this.avsProfile.Name = "avsProfile";
             this.avsProfile.ProfileSet = "AviSynth";
             this.avsProfile.Size = new System.Drawing.Size(319, 22);
@@ -218,7 +231,7 @@ namespace MeGUI
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.ar.CustomDARs = new MeGUI.core.util.Dar[0];
             this.ar.HasLater = true;
-            this.ar.Location = new System.Drawing.Point(120, 42);
+            this.ar.Location = new System.Drawing.Point(119, 61);
             this.ar.MaximumSize = new System.Drawing.Size(1000, 29);
             this.ar.MinimumSize = new System.Drawing.Size(64, 29);
             this.ar.Name = "ar";
@@ -229,7 +242,7 @@ namespace MeGUI
             // autoDeint
             // 
             this.autoDeint.AutoSize = true;
-            this.autoDeint.Location = new System.Drawing.Point(123, 101);
+            this.autoDeint.Location = new System.Drawing.Point(123, 112);
             this.autoDeint.Name = "autoDeint";
             this.autoDeint.Size = new System.Drawing.Size(138, 17);
             this.autoDeint.TabIndex = 20;
@@ -283,7 +296,7 @@ namespace MeGUI
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(15, 78);
+            this.label2.Location = new System.Drawing.Point(14, 93);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(78, 13);
             this.label2.TabIndex = 4;
@@ -291,7 +304,7 @@ namespace MeGUI
             // 
             // ARLabel
             // 
-            this.ARLabel.Location = new System.Drawing.Point(16, 48);
+            this.ARLabel.Location = new System.Drawing.Point(15, 67);
             this.ARLabel.Name = "ARLabel";
             this.ARLabel.Size = new System.Drawing.Size(24, 13);
             this.ARLabel.TabIndex = 4;
@@ -386,7 +399,7 @@ namespace MeGUI
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.splitting.AutoSize = true;
             this.splitting.CustomSizes = new MeGUI.core.util.FileSize[0];
-            this.splitting.Location = new System.Drawing.Point(123, 228);
+            this.splitting.Location = new System.Drawing.Point(118, 239);
             this.splitting.MaximumSize = new System.Drawing.Size(1000, 29);
             this.splitting.MinimumSize = new System.Drawing.Size(64, 29);
             this.splitting.Name = "splitting";
@@ -884,5 +897,6 @@ namespace MeGUI
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.CheckBox openOnQueue;
         private System.Windows.Forms.CheckBox autoCrop;
+        private System.Windows.Forms.CheckBox keepInputResolution;
     }
 }

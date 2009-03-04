@@ -105,6 +105,13 @@ namespace MeGUI
             set { autoCrop = value; }
         }
 
+        private bool keepInputResolution;
+        public bool KeepInputResolution
+        {
+            get { return keepInputResolution; }
+            set { keepInputResolution = value; }
+        }
+
         private long outputResolution;
         public long OutputResolution
         {
@@ -158,6 +165,7 @@ namespace MeGUI
 			DontEncodeAudio = false;
 			SignalAR = false;
             AutoCrop = true;
+            KeepInputResolution = false;
 			OutputResolution = 640;
             SplitSize = null;
             ContainerCandidates = new string[0];
