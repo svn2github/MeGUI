@@ -97,6 +97,11 @@ namespace MeGUI
                 demuxNoAudiotracks.Enabled = false;
                 demuxAll.Enabled = false;
             }
+            else
+            {
+                demuxNoAudiotracks.Enabled = true;
+                demuxAll.Enabled = true;
+            }
         }
 
         private void checkIndexIO()
