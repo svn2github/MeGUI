@@ -156,7 +156,7 @@ namespace MeGUI
             }
             else
                 MessageBox.Show("MeGUI cannot write on " + Path.GetPathRoot(projectName.Text) +
-                                ". Please, select another output path.", "Configuration Incomplete", MessageBoxButtons.OK);
+                                ". Please, select an other Output path.", "Configuration Incomplete", MessageBoxButtons.OK);
         }
 
         private DGAIndexJob generateIndexJob()
