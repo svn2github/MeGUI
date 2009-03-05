@@ -1,10 +1,40 @@
+0.3.1.1017
+    - (kurtnoise) enable HDBDExtractor to the other Forms/Classes.
+    - (kurtnoise) add HDBDExtractor to the project files.
+    - (kurtnoise) [DGx Creator] fix typos.
+    - (kurtnoise) [OneClick Encoder] add Keep Input Resolution checkbox in the Avisynth setup. This disables Crop&Resize (#2609605)
+    - (kurtnoise) [VideoUtil] remove unused code.
+    - (kurtnoise) [OneClickEncoder] add AutoCrop checkbox in the Avisynth settings (#2609605)
+    - (kurtnoise) Remember Custom file sizes for the Bitrate Calculator & the One-Click Encoder.
+    - (kurtnoise) [DGACreator/DGMCreator/DGVCreator] enable demuxNoAudioTracks & demuxAll checkboxes when Audio Tracks items are > 0.
+    - (kurtnoise) [D2VCreator/DGMCreator] reflect the last changes.
+    - (kurtnoise) [VideoUtil] apply getAudioLanguage(.) to getSourceMediaInfo(.)
+    - (kurtnoise) [IFOparser] add getAudioLanguage(.) to retrieve only audio Language from IFO file. 
+    - (kurtnoise) change some shortcuts. CTRL + keyboard number doesn't work (at least on Vista).
+    - (kurtnoise) [AviSynthWindow] ensure mod16 in some cases.
+    - (kurtnoise) [AviSynthWindow] add a checking for nvidia deinterlacer option.
+    - (kurtnoise) [ScriptServer] remove code unneeded.
+    - (kurtnoise) [DGACreator/DGVCreator] add Message Info when none AVC or VC-1 streams found.
+    - (kurtnoise) enable DGM Creator to the required Forms/Classes.
+    - (kurtnoise) [DGVCreator] fix a typo.
+    - (kurtnoise) add dgm files Creator to the project files.
+    - (kurtnoise) enable DGV Creator to the required Forms/Classes.
+    - (kurtnoise) add dgv files Creator to the project files.
+    - (kurtnoise) [DGACreator] fix a typo.
+    - (kurtnoise) [VideoUtil] add detectVC1StreamFromFile(.) function.
+    - (kurtnoise) [DGACreator] fix some internal errors.
+    - (kurtnoise) enable DGA Creator to the required Forms/Classes.
+    - (kurtnoise) add DGA files Creator to the project files.
+    - (kurtnoise) [VideoUtil] add detectAVCStreamFromFile(.) function.
+    - (kurtnoise) update MediaInfoWrapper library to reflect the last changes.
+    - (kurtnoise) [MediaInfoWrapper] update some properties for Video Track.
+
 0.3.1.1016
     - (kurtnoise) [MuxProvider] fix typo.
     - (kurtnoise) add HD Audio Formats registration & enable EAC3 support to the MKVMuxer.
     - (kurtnoise) add MPEG2 & VC1 format support for MKVMuxer.
     - (kurtnoise) Rename mux to muxer for project files.
     - (kurtnoise) [OneClickWindow] the workaround was a bad idea after more testing & digging...
-
 
 0.3.1.1015
     - (kurtnoise) add MPEG Audio case to the IFOParser & VideoUtil Classes. (#2602264)
