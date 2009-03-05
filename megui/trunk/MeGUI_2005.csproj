@@ -662,6 +662,29 @@
     <Compile Include="packages\tools\dgvcreator\DGVinputWindow.Designer.cs">
       <DependentUpon>DGVinputWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="packages\tools\hdbdextractor\CustomDataGridView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="packages\tools\hdbdextractor\eac3to\AudioStream.cs" />
+    <Compile Include="packages\tools\hdbdextractor\eac3to\AudioStreamType.cs" />
+    <Compile Include="packages\tools\hdbdextractor\eac3to\Chapter.cs" />
+    <Compile Include="packages\tools\hdbdextractor\eac3to\ChapterStream.cs" />
+    <Compile Include="packages\tools\hdbdextractor\eac3to\Feature.cs" />
+    <Compile Include="packages\tools\hdbdextractor\eac3to\File.cs" />
+    <Compile Include="packages\tools\hdbdextractor\eac3to\JoinStream.cs" />
+    <Compile Include="packages\tools\hdbdextractor\eac3to\Stream.cs" />
+    <Compile Include="packages\tools\hdbdextractor\eac3to\StreamType.cs" />
+    <Compile Include="packages\tools\hdbdextractor\eac3to\SubtitleStream.cs" />
+    <Compile Include="packages\tools\hdbdextractor\eac3to\VideoStream.cs" />
+    <Compile Include="packages\tools\hdbdextractor\eac3to\VideoStreamType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="packages\tools\hdbdextractor\Extensions.cs" />
+    <Compile Include="packages\tools\hdbdextractor\HDBDStreamExtractor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="packages\tools\hdbdextractor\HDStreamExtractorIndexer.cs" />
+    <Compile Include="packages\tools\hdbdextractor\HDStreamsExJob.cs" />
     <Compile Include="packages\tools\oneclick\AudioConfigControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -956,6 +979,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="packages\tools\dgvcreator\DGVinputWindow.resx">
       <DependentUpon>DGVinputWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="packages\tools\hdbdextractor\HDBDStreamExtractor.resx">
+      <DependentUpon>HDBDStreamExtractor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="packages\tools\oneclick\AudioConfigControl.resx">
       <SubType>Designer</SubType>
