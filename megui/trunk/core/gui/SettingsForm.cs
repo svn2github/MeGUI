@@ -183,6 +183,9 @@ namespace MeGUI
         private TextBox dgmIndexPath;
         private Label label22;
         private Button selectDGMIndexExecutable;
+        private TextBox eac3toPath;
+        private Label label23;
+        private Button selectEAC3toExecutable;
 
 		/// <summary>
 		/// Required designer variable.
@@ -370,6 +373,9 @@ namespace MeGUI
             this.videoExtLabel = new System.Windows.Forms.Label();
             this.autoEncodeDefaultsButton = new System.Windows.Forms.Button();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
+            this.eac3toPath = new System.Windows.Forms.TextBox();
+            this.label23 = new System.Windows.Forms.Label();
+            this.selectEAC3toExecutable = new System.Windows.Forms.Button();
             groupBox1 = new System.Windows.Forms.GroupBox();
             groupBox1.SuspendLayout();
             this.otherGroupBox.SuspendLayout();
@@ -1182,7 +1188,7 @@ namespace MeGUI
             this.tabControl2.Location = new System.Drawing.Point(8, 6);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
-            this.tabControl2.Size = new System.Drawing.Size(459, 296);
+            this.tabControl2.Size = new System.Drawing.Size(459, 310);
             this.tabControl2.TabIndex = 0;
             // 
             // tabPage4
@@ -1634,6 +1640,9 @@ namespace MeGUI
             // 
             // tabPage7
             // 
+            this.tabPage7.Controls.Add(this.eac3toPath);
+            this.tabPage7.Controls.Add(this.label23);
+            this.tabPage7.Controls.Add(this.selectEAC3toExecutable);
             this.tabPage7.Controls.Add(this.dgmIndexPath);
             this.tabPage7.Controls.Add(this.label22);
             this.tabPage7.Controls.Add(this.selectDGMIndexExecutable);
@@ -1661,7 +1670,7 @@ namespace MeGUI
             this.tabPage7.Location = new System.Drawing.Point(4, 22);
             this.tabPage7.Name = "tabPage7";
             this.tabPage7.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage7.Size = new System.Drawing.Size(451, 270);
+            this.tabPage7.Size = new System.Drawing.Size(451, 284);
             this.tabPage7.TabIndex = 3;
             this.tabPage7.Text = "Others";
             this.tabPage7.UseVisualStyleBackColor = true;
@@ -1914,6 +1923,32 @@ namespace MeGUI
             this.helpButton1.Name = "helpButton1";
             this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 1;
+            // 
+            // eac3toPath
+            // 
+            this.eac3toPath.Location = new System.Drawing.Point(96, 244);
+            this.eac3toPath.Name = "eac3toPath";
+            this.eac3toPath.ReadOnly = true;
+            this.eac3toPath.Size = new System.Drawing.Size(315, 21);
+            this.eac3toPath.TabIndex = 37;
+            this.eac3toPath.Text = "eac3to.exe";
+            // 
+            // label23
+            // 
+            this.label23.Location = new System.Drawing.Point(6, 247);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(80, 13);
+            this.label23.TabIndex = 36;
+            this.label23.Text = "EAC3to";
+            // 
+            // selectEAC3toExecutable
+            // 
+            this.selectEAC3toExecutable.Location = new System.Drawing.Point(417, 242);
+            this.selectEAC3toExecutable.Name = "selectEAC3toExecutable";
+            this.selectEAC3toExecutable.Size = new System.Drawing.Size(24, 23);
+            this.selectEAC3toExecutable.TabIndex = 38;
+            this.selectEAC3toExecutable.Text = "...";
+            this.selectEAC3toExecutable.Click += new System.EventHandler(this.selectEAC3toExecutable_Click);
             // 
             // SettingsForm
             // 
@@ -2303,6 +2338,7 @@ namespace MeGUI
                 settings.DgavcIndexPath = dgaIndexPath.Text;
                 settings.Dgvc1IndexPath = dgvIndexPath.Text;
                 settings.DgmpgIndexPath = dgmIndexPath.Text;
+                settings.EAC3toPath = eac3toPath.Text;
 				return settings;
 			}
 			set
@@ -2370,9 +2406,18 @@ namespace MeGUI
                 dgaIndexPath.Text = settings.DgavcIndexPath;
                 dgvIndexPath.Text = settings.Dgvc1IndexPath;
                 dgmIndexPath.Text = settings.DgmpgIndexPath;
+                eac3toPath.Text = settings.EAC3toPath;
 			}
 		}
 		#endregion
+
+        private void selectEAC3toExecutable_Click(object sender, EventArgs e)
+        {
+            if (selectExe("eac3to"))
+            {
+                eac3toPath.Text = openExecutableDialog.FileName;
+            }
+        }
 
 	}
 }

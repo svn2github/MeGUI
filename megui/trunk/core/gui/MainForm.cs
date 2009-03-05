@@ -38,6 +38,7 @@ using MeGUI.core.plugins.interfaces;
 using MeGUI.core.util;
 using MeGUI.packages.tools.besplitter;
 using MeGUI.packages.tools.cutter;
+using MeGUI.packages.tools.hdbdextractor;
 
 namespace MeGUI
 {
@@ -1750,6 +1751,7 @@ namespace MeGUI
             PackageSystem.Tools.Register(new D2VCreatorTool());
             PackageSystem.Tools.Register(new AVCLevelTool());
             PackageSystem.Tools.Register(new VobSubTool());
+            PackageSystem.Tools.Register(new HdBdExtractorTool());
             PackageSystem.MediaFileTypes.Register(new AvsFileFactory());
             PackageSystem.MediaFileTypes.Register(new d2vFileFactory());
             PackageSystem.MediaFileTypes.Register(new dgaFileFactory());

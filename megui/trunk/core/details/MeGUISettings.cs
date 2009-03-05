@@ -35,7 +35,8 @@ namespace MeGUI
         private string[][] autoUpdateServerLists;
         private string faacPath, lamePath, neroAacEncPath, mencoderPath,  mp4boxPath, mkvmergePath, 
                        encAacPlusPath, ffmpegPath, besplitPath, yadifPath, aftenPath, x264Path, 
-                       dgIndexPath, xvidEncrawPath, aviMuxGUIPath, oggEnc2Path, encAudXPath, dgavcIndexPath, dgvc1IndexPath, dgmpgIndexPath,
+                       dgIndexPath, xvidEncrawPath, aviMuxGUIPath, oggEnc2Path, encAudXPath, dgavcIndexPath, dgvc1IndexPath, 
+                       dgmpgIndexPath, eac3toPath,
                        defaultLanguage1, defaultLanguage2, afterEncodingCommand, videoExtension, audioExtension,
                        httpproxyaddress, httpproxyport, httpproxyuid, httpproxypwd, defaultOutputDir;
         private bool recalculateMainMovieBitrate, autoForceFilm, autoStartQueue, enableMP3inMP4, autoOpenScript,
@@ -115,6 +116,7 @@ namespace MeGUI
             dgavcIndexPath = "dgavcindex.exe";
             dgvc1IndexPath = "dgvc1index.exe";
             dgmpgIndexPath = "dgmpgindex.exe";
+            eac3toPath = "eac3to.exe";
         }
         #region properties
         public string YadifPath
@@ -391,6 +393,14 @@ namespace MeGUI
         {
             get { return dgmpgIndexPath; }
             set { dgmpgIndexPath = value; }
+        }
+        /// <summary>
+        /// filename and full path of the eac3to executable
+        /// </summary>
+        public string EAC3toPath
+        {
+            get { return eac3toPath; }
+            set { eac3toPath = value; }
         }
         /// <summary>
         /// folder containing the avisynth plugins
