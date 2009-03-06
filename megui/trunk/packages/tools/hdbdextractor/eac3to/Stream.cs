@@ -40,8 +40,10 @@ namespace eac3to
 
             Number = int.Parse(s.Substring(0, s.IndexOf(":")));
 
-            if (s.Contains("Joined"))
+            if (s.Contains("Joined EVO"))
                 Name = "Joined EVO";
+            if (s.Contains("Joined VOB"))
+                Name = "Joined VOB";
             else if (s.Contains("Subtitle"))
                 Name = s.Substring(s.LastIndexOf(",") + 1);
             else

@@ -29,7 +29,15 @@ namespace eac3to
         {
             get
             {
-                return new object[] { "EVO" };
+                switch (base.Name.ToString())
+                {
+                    case "Joined EVO":
+                        return new object[] { "EVO" };
+                    case "Joined VOB":
+                        return new object[] { "VOB" };
+                    default:
+                        return new object[] { "" };
+                }
             }
         }
 
