@@ -451,6 +451,8 @@ namespace MeGUI
                             return meGUISettings.YadifPath;
                         case ("aften"):
                             return meGUISettings.AftenPath;
+                        case ("eac3to"):
+                            return meGUISettings.EAC3toPath;
                         default:
                             return null;
                     }
@@ -506,6 +508,9 @@ namespace MeGUI
                             return;
                         case ("aften"):
                             meGUISettings.AftenPath = value;
+                            return;
+                        case ("eac3to"):
+                            meGUISettings.EAC3toPath = value;
                             return;
                     }
                 }
