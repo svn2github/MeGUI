@@ -572,6 +572,7 @@ namespace MeGUI.packages.tools.hdbdextractor
             this.FolderOutputSourceButton.TabIndex = 13;
             this.FolderOutputSourceButton.Text = "...";
             this.FolderOutputSourceButton.UseVisualStyleBackColor = true;
+            this.FolderOutputSourceButton.Click += new System.EventHandler(this.FolderOutputSourceButton_Click);
             // 
             // FolderOutputTextBox
             // 
