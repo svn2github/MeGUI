@@ -44,6 +44,18 @@ namespace eac3to
                         return new object[] { "DTS", "DTSHD", "AC3", "FLAC", "AAC", "WAV", "WAVS", "RAW", "W64", "RF64", "AGM" };
                     case AudioStreamType.TrueHD:
                         return new object[] { "THD", "THD+AC3", "AC3", "FLAC", "AAC", "WAV", "WAVS", "RAW", "W64", "RF64", "AGM" };
+                    case AudioStreamType.MPA:
+                        return new object[] { "MPA", "AC3", "FLAC", "AAC", "WAV", "WAVS", "RAW", "W64", "RF64", "AGM" };
+                    case AudioStreamType.AAC:
+                        return new object[] { "AAC", "AC3", "FLAC", "AAC", "WAV", "WAVS", "RAW", "W64", "RF64", "AGM" };
+                    case AudioStreamType.FLAC:
+                        return new object[] { "FLAC", "AC3", "AAC", "WAV", "WAVS", "RAW", "W64", "RF64", "AGM" };
+                    case AudioStreamType.VORBIS:
+                        return new object[] { "OGG", "AC3", "FLAC", "AAC", "WAV", "WAVS", "RAW", "W64", "RF64", "AGM" };
+                    case AudioStreamType.TTA:
+                        return new object[] { "TTA", "AC3", "FLAC", "AAC", "WAV", "WAVS", "RAW", "W64", "RF64", "AGM" };
+                    case AudioStreamType.WAVPACK:
+                        return new object[] { "WV", "AC3", "FLAC", "AAC", "WAV", "WAVS", "RAW", "W64", "RF64", "AGM" };
                     default:
                         return new object[] { "AC3", "FLAC", "AAC", "WAV", "WAVS", "RAW", "W64", "RF64", "AGM" };
                 }
@@ -95,6 +107,27 @@ namespace eac3to
                     break;
                 case "WAVS":
                     audioStream.AudioType = AudioStreamType.WAVS;
+                    break;
+                case "MP1":
+                case "MP2":
+                case "MP3":
+                case "MPA":
+                    audioStream.AudioType = AudioStreamType.MPA;
+                    break;
+                case "AAC":
+                    audioStream.AudioType = AudioStreamType.AAC;
+                    break;
+                case "FLAC":
+                    audioStream.AudioType = AudioStreamType.FLAC;
+                    break;
+                case "TTA1":
+                    audioStream.AudioType = AudioStreamType.TTA;
+                    break;
+                case "WAVPACK4":
+                    audioStream.AudioType = AudioStreamType.WAVPACK;
+                    break;
+                case "VORBIS":
+                    audioStream.AudioType = AudioStreamType.VORBIS;
                     break;
                 case "RAW":
                 default:

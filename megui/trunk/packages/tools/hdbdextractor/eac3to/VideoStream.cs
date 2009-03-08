@@ -43,6 +43,10 @@ namespace eac3to
                         return new object[] { "MKV", "VC1" };
                     case "MPEG":
                         return new object[] { "MKV", "M2V" };
+                    case "THEO":
+                        return new object[] { "MKV", "OGG" };
+                    case "DIRA":
+                        return new object[] { "MKV", "DRC" };
                     default:
                         return new object[] { "MKV" };
                 }
@@ -77,6 +81,12 @@ namespace eac3to
                 case "MPEG":
                 case "MPEG2":
                     videoStream.VType = VStreamType.MPEG;
+                    break;
+                case "THEORA":
+                    videoStream.VType = VStreamType.THEORA;
+                    break;
+                case "DIRAC":
+                    videoStream.VType = VStreamType.DIRAC;
                     break;
             }
 

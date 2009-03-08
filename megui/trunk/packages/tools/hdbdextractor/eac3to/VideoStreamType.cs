@@ -30,6 +30,10 @@ namespace eac3to
         [StringValue("VC-1")]
         VC1,
         [StringValue("MPEG")]
-        MPEG
+        MPEG,
+        [StringValue("DIRAC")]
+        DIRAC,
+        [StringValue("THEORA")]
+        THEORA
     }
 }

@@ -42,7 +42,7 @@ namespace eac3to
 
             if (s.Contains("Joined EVO"))
                 Name = "Joined EVO";
-            if (s.Contains("Joined VOB"))
+            else if (s.Contains("Joined VOB"))
                 Name = "Joined VOB";
             else if (s.Contains("Subtitle"))
                 Name = s.Substring(s.LastIndexOf(",") + 1);
@@ -70,9 +70,11 @@ namespace eac3to
 
             Stream stream = null;
 
-            if (s.Contains("AVC") || s.Contains("VC-1") || s.Contains("MPEG"))
+            if (s.Contains("AVC") || s.Contains("VC-1") || s.Contains("MPEG") || s.Contains("DIRAC") || s.Contains("THEORA"))
                 stream = VideoStream.Parse(s);
-            else if (s.Contains("AC3") || s.Contains("TrueHD") || s.Contains("DTS") || s.Contains("RAW") || s.Contains("PCM"))
+            else if (s.Contains("AC3") || s.Contains("TrueHD") || s.Contains("DTS") || 
+                     s.Contains("RAW") || s.Contains("PCM") || s.Contains("MP") || s.Contains("AAC") ||
+                     s.Contains("FLAC") || s.Contains("WAVPACK") || s.Contains("TTA") || s.Contains("VORBIS"))
                 stream = AudioStream.Parse(s);
             else if (s.Contains("Subtitle"))
                 stream = SubtitleStream.Parse(s);

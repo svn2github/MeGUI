@@ -43,6 +43,18 @@ namespace eac3to
         [StringValue("WAV")]
         WAV,
         [StringValue("Multi-Channel WAV")]
-        WAVS
+        WAVS,
+        [StringValue("MPA")]
+        MPA,
+        [StringValue("AAC")]
+        AAC,
+        [StringValue("FLAC")]
+        FLAC,
+        [StringValue("TTA1")]
+        TTA,
+        [StringValue("WAVPACK4")]
+        WAVPACK,
+        [StringValue("VORBIS")]
+        VORBIS
     }
 }

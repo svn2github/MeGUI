@@ -32,7 +32,20 @@ namespace eac3to
         {
             get
             {
-                return new object[] { "SUP" };
+                switch (base.Description.Substring(11, 3))
+                {
+                    case "ASS":
+                        return new object[] { "ASS" };
+                    case "SSA":
+                        return new object[] { "SSA" };
+                    case "SRT":
+                        return new object[] { "SRT" };
+                    case "Vob":
+                        return new object[] { "IDX" };
+                    default:
+                        return new object[] { "SUP" };
+                }
+
             }
         }
 
