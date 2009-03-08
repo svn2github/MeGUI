@@ -362,6 +362,7 @@ namespace MeGUI
                 signalAR.Checked = settings.SignalAR;
                 autoDeint.Checked = settings.AutomaticDeinterlacing;
                 autoCrop.Checked = settings.AutoCrop;
+                keepInputResolution.Checked = settings.KeepInputResolution;
 
                 splitting.Value = settings.SplitSize;
                 optionalTargetSizeBox1.Value = settings.Filesize;
