@@ -642,12 +642,17 @@ namespace MeGUI
                         return string.Format("AviSynth clip is in {0} not in YV12, even though ConvertToYV12() has been appended.", avi.Clip.OriginalColorspace.ToString());
                     }
 
-                    if (avi.Clip.VideoHeight % 16 != 0 ||
-                        avi.Clip.VideoWidth % 16 != 0)
-                        return string.Format("AviSynth clip doesn't have mod16 dimensions:\r\nWidth: {0}\r\nHeight:{1}\r\n" +
-                            "This could cause problems with some encoders,\r\n" +
-                            "and will also result in a loss of compressibility.\r\n" +
-                            "I suggest you resize to a mod16 resolution.", avi.Clip.VideoWidth, avi.Clip.VideoHeight);
+                    VideoCodecSettings settings = mainForm.Video.CurrentSettings;
+
+                    if (settings != null && settings.SettingsID != "x264") // mod16 restriction
+                    {
+                        if (avi.Clip.VideoHeight % 16 != 0 ||
+                            avi.Clip.VideoWidth % 16 != 0)
+                            return string.Format("AviSynth clip doesn't have mod16 dimensions:\r\nWidth: {0}\r\nHeight:{1}\r\n" +
+                                "This could cause problems with some encoders,\r\n" +
+                                "and will also result in a loss of compressibility.\r\n" +
+                                "I suggest you resize to a mod16 resolution.", avi.Clip.VideoWidth, avi.Clip.VideoHeight);
+                    }
                 }
             }
             catch (Exception e)
