@@ -529,7 +529,7 @@ namespace MeGUI
                          file.EndsWith(".dts") ||
                          file.EndsWith(".wav")) // It is the right track
 					{
-						audioFiles.Add(counter, file);
+                        audioFiles.Add(audioTracks[counter].TrackID, file);
                         break;
 					}
 				}

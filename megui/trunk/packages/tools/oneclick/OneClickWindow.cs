@@ -396,9 +396,10 @@ namespace MeGUI
                     int delay = audioConfigControl[i].Delay;
                     if (audioTrack[i].SelectedSCItem.IsStandard)
                     {
-                        audioTracks.Add((AudioTrackInfo)audioTrack[i].SelectedObject);
-                        aInput = "::" + (audioTrack[i].SelectedIndex - 1) + "::"; // -1 since "None" is first
-                        info = ((AudioTrackInfo)audioTrack[i].SelectedObject).TrackInfo;
+                        AudioTrackInfo a = (AudioTrackInfo)audioTrack[i].SelectedObject;
+                        audioTracks.Add(a);
+                        aInput = "::" + a.TrackID + "::";
+                        info = a.TrackInfo;
                     }
                     else
                         aInput = audioTrack[i].SelectedText;
