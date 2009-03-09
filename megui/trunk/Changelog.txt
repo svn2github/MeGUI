@@ -1,3 +1,11 @@
+0.3.1.1018
+    - (kurtnoise) [UpdateWindow] add eac3to case to the updater.
+    - (kurtnoise) [OneClickWindow] add a missing boolean for settings.
+    - (kurtnoise) [HdBdStreamExtractor] enable Click event for Output button.
+    - (kurtnoise) [HDBDExtractor] add new Audios, Videos and Subtitles streams to prepare MKV format support.
+    - (kurtnoise) [HdBdStreamExtractor] allow multiple input files & several fixes.
+    - (kurtnoise) [eac3to] add VOB format in Join Streams.
+
 0.3.1.1017
     - (kurtnoise) enable HDBDExtractor to the other Forms/Classes.
     - (kurtnoise) add HDBDExtractor to the project files.
