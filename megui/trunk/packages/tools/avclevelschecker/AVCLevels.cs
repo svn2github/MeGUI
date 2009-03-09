@@ -56,7 +56,7 @@ namespace MeGUI
                         string[] levels = al.getLevels();
                         string levelRequired = levels[compliantLevel];
                         string message = "This video source cannot be encoded to comply with the chosen level.\n"
-                            + "You need at least level " + levelRequired + " for this source. Do you want\n"
+                            + "You need at least " + levelRequired + " for this source. Do you want\n"
                             + "to increase the level automatically now?";
                         DialogResult dr = MessageBox.Show(message, "Test failed", MessageBoxButtons.YesNo,
                             MessageBoxIcon.Question);
