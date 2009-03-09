@@ -110,9 +110,9 @@ namespace MeGUI
         /// <returns>true if the settings are compliant with the level</returns>
         private bool checkP4x4Enabled(int level, x264Settings settings)
         {
-            if (level != 15 && (level > 7 || (level == 7 && settings.NbBframes != 0)))
-                return false;
-            else
+            //if (level != 15 && (level > 7 || (level == 7 && settings.NbBframes != 0)))
+            //    return false;
+            //else
                 return true;
         }
         private bool checkP4x4(int level, x264Settings settings)
