@@ -1,3 +1,9 @@
+0.3.1.1019
+    - (kurtnoise) [AVCLevelTool] cosmetic.
+    - (kurtnoise) [HDBDExtractor] allow to use default output directory from MeGUI settings.
+    - (sharktooth) [x264] Removed p4x4 checks for levels 3.0+bframes and higher.
+    - (kurtnoise) [VideoUtil] remove mod16 restriction for x264.
+
 0.3.1.1018
     - (kurtnoise) [UpdateWindow] add eac3to case to the updater.
     - (kurtnoise) [OneClickWindow] add a missing boolean for settings.
