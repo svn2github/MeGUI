@@ -1089,9 +1089,16 @@ namespace MeGUI.packages.tools.hdbdextractor
 
             if (FolderInputTextBox.Text != "")
             {
-                if (idx > 0) // seamless branching
-                     FolderOutputTextBox.Text = FolderInputTextBox.Text.Substring(0, (FolderInputTextBox.Text.LastIndexOf("\\") - FolderInputTextBox.Text.LastIndexOf("+")));
-                else FolderOutputTextBox.Text = FolderInputTextBox.Text.Substring(0, FolderInputTextBox.Text.LastIndexOf("\\") + 1);
+                string projectPath;
+                if (!string.IsNullOrEmpty(projectPath = MainForm.Instance.Settings.DefaultOutputDir))
+                    FolderOutputTextBox.Text = projectPath;
+                else
+                {
+
+                    if (idx > 0) // seamless branching
+                        FolderOutputTextBox.Text = FolderInputTextBox.Text.Substring(0, (FolderInputTextBox.Text.LastIndexOf("\\") - FolderInputTextBox.Text.LastIndexOf("+")));
+                    else FolderOutputTextBox.Text = FolderInputTextBox.Text.Substring(0, FolderInputTextBox.Text.LastIndexOf("\\") + 1);
+                }
 
                 if ((settings.EAC3toPath == "") || (settings.EAC3toPath == "eac3to.exe"))
                 {
