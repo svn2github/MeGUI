@@ -1,3 +1,8 @@
+0.3.1.1020
+    - (sharktooth) [CountdownWindow] #2581618 - Make the shut down notification show on top.
+    - (ateeq) [VideoUtil]  Use TrackID instead of counter in getAllDemuxedAudio
+    - (ateeq) [OneClickWindow] Use TrackID instead of SelectedIndex in goButton_Click (#2606513 - hopefully)
+
 0.3.1.1019
     - (kurtnoise) [AVCLevelTool] cosmetic.
     - (kurtnoise) [HDBDExtractor] allow to use default output directory from MeGUI settings.
