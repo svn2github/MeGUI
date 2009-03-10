@@ -47,8 +47,9 @@ namespace MeGUI.core.gui
         private void CountdownWindow_Load(object sender, EventArgs e)
         {
             //bool b = this.TopMost;
-            this.BringToFront();
+            this.Activate();
             this.Focus();
+            this.BringToFront();
             remain = countdown;
             SetProgressBar(0, 1, 0);
             SetButtonText(remain.ToString());
