@@ -28,20 +28,23 @@ namespace MeGUI
     {
         private string featureNb;
         private string args;
+        private int inputType;
 
         public HDStreamsExJob()
             : base()
         {
             featureNb = "";
             args = "";
+            inputType = 1;
         }
 
-        public HDStreamsExJob(string input, string ouput, string featureNb, string args)
+        public HDStreamsExJob(string input, string ouput, string featureNb, string args, int inputType)
         {
             Input = input;
             Output = ouput;
             FeatureNb = featureNb;
             Args = args;
+            InputType = inputType;
         }
 
         public string FeatureNb
@@ -54,6 +57,14 @@ namespace MeGUI
         {
             get { return args; }
             set { args = value; }
+        }
+
+        // 1 = Folder as Input
+        // 2 = File(s) as Input
+        public int InputType
+        {
+            get { return inputType; }
+            set { inputType = value; }
         }
 
         public override string CodecString
