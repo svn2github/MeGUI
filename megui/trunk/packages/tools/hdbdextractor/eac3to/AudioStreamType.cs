@@ -44,8 +44,10 @@ namespace eac3to
         WAV,
         [StringValue("Multi-Channel WAV")]
         WAVS,
-        [StringValue("MPA")]
-        MPA,
+        [StringValue("MP2")]
+        MP2,
+        [StringValue("MP3")]
+        MP3,
         [StringValue("AAC")]
         AAC,
         [StringValue("FLAC")]

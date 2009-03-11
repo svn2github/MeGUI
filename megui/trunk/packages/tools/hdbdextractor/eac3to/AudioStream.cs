@@ -44,8 +44,10 @@ namespace eac3to
                         return new object[] { "DTS", "DTSHD", "AC3", "FLAC", "AAC", "WAV", "WAVS", "RAW", "W64", "RF64", "AGM" };
                     case AudioStreamType.TrueHD:
                         return new object[] { "THD", "THD+AC3", "AC3", "FLAC", "AAC", "WAV", "WAVS", "RAW", "W64", "RF64", "AGM" };
-                    case AudioStreamType.MPA:
-                        return new object[] { "MPA", "AC3", "FLAC", "AAC", "WAV", "WAVS", "RAW", "W64", "RF64", "AGM" };
+                    case AudioStreamType.MP2:
+                        return new object[] { "MP2", "AC3", "FLAC", "AAC", "WAV", "WAVS", "RAW", "W64", "RF64", "AGM" };
+                    case AudioStreamType.MP3:
+                        return new object[] { "MP3", "AC3", "FLAC", "AAC", "WAV", "WAVS", "RAW", "W64", "RF64", "AGM" };
                     case AudioStreamType.AAC:
                         return new object[] { "AAC", "AC3", "FLAC", "AAC", "WAV", "WAVS", "RAW", "W64", "RF64", "AGM" };
                     case AudioStreamType.FLAC:
@@ -108,11 +110,11 @@ namespace eac3to
                 case "WAVS":
                     audioStream.AudioType = AudioStreamType.WAVS;
                     break;
-                case "MP1":
                 case "MP2":
+                    audioStream.AudioType = AudioStreamType.MP2;
+                    break;
                 case "MP3":
-                case "MPA":
-                    audioStream.AudioType = AudioStreamType.MPA;
+                    audioStream.AudioType = AudioStreamType.MP3;
                     break;
                 case "AAC":
                     audioStream.AudioType = AudioStreamType.AAC;
