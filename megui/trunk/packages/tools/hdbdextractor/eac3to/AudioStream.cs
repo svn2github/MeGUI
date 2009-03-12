@@ -26,7 +26,7 @@ namespace eac3to
     public class AudioStream : Stream
     {
         public AudioStreamType AudioType { get; set; }
-        public string Language { get; set; }
+        public override string Language { get; set; }
         public string Channels { get; set; }
         public string Bitrate { get; set; }
         public string DialogNormalization { get; set; }

@@ -25,7 +25,7 @@ namespace eac3to
     /// <summary>A Stream of StreamType Subtitle</summary>
     public class SubtitleStream : Stream
     {
-        public string Language { get; set; }
+        public override string Language { get; set; }
         public bool IsSDH { get; set; }
 
         public override object[] ExtractTypes
