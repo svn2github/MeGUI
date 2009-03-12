@@ -165,7 +165,7 @@ namespace MeGUI.packages.video.xvid
         }
 
         /// <summary>
-        /// Returns whether settings is lavcSettings
+        /// Returns whether settings is xvidSettings
         /// </summary>
         /// <param name="settings">The settings to check</param>
         /// <returns>Whether the settings are valid</returns>
@@ -175,9 +175,9 @@ namespace MeGUI.packages.video.xvid
         }
 
         /// <summary>
-        /// Returns a new instance of lavcSettings.
+        /// Returns a new instance of xvidSettings.
         /// </summary>
-        /// <returns>A new instance of lavcSettings</returns>
+        /// <returns>A new instance of xvidSettings</returns>
         protected override VideoCodecSettings defaultSettings()
         {
             return new xvidSettings();
@@ -322,11 +322,6 @@ namespace MeGUI.packages.video.xvid
         private void cqmComboBox1_SelectionChanged(object sender, string val)
         {
             genericUpdate();
-        }
-
-        private void logfileOpenButton_Click_1(object sender, EventArgs e)
-        {
-
         }
     }
 }
