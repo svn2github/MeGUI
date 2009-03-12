@@ -29,6 +29,7 @@ namespace eac3to
         virtual public string Name { get; set; }
         virtual public StreamType Type { get; set; }
         virtual public string Description { get; set; }
+        virtual public string Language { get; set; }
         abstract public object[] ExtractTypes { get; }
 
         protected Stream() { }
