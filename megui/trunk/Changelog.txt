@@ -1,3 +1,12 @@
+0.3.1.1021
+    - (kurtnoise) [xvidConfig] cosmetics...
+    - (kurtnoise) [eac3to] fix some warnings.
+    - (kurtnoise) [eac3to] missing Language getter/setter init for Stream Class.
+    - (kurtnoise) [HdBdStreamExtractor] - Rebuild Job Process. Doesn't work yet...
+    - (kurtnoise) [HdBdStreamExtractor] - Reformat Name of the files extracted.
+    - (kurtnoise) [HdBdStreamExtractor] - add Language Column in the Streams DataGridView. 
+    - (kurtnoise) [eac3to] fix issue with MPEG Audio Streams.
+
 0.3.1.1020
     - (sharktooth) [CountdownWindow] #2581618 - Make the shut down notification show on top.
     - (ateeq) [VideoUtil]  Use TrackID instead of counter in getAllDemuxedAudio
