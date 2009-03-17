@@ -100,6 +100,7 @@ namespace MeGUI
 
             if (AudioTracks.Items.Count < 1)
             {
+                MessageBox.Show("MeGUI cannot find audio track information. Audio Tracks selection will be disabled.");             
                 demuxNoAudiotracks.Enabled = false;
                 demuxAll.Enabled = false;
             }
