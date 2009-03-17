@@ -1553,6 +1553,8 @@ namespace MeGUI
                     this.fpsBox.Enabled = false;
                     this.cbNvDeInt.Enabled = false;
                     this.nvDeInt.Enabled = true;
+                    this.nvDeInt.Checked = false;
+                    this.cbNvDeInt.SelectedIndex = 0;
                     this.tabSources.SelectedTab = tabPage3;
                     this.showScript();
                     break;
