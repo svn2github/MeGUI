@@ -363,6 +363,7 @@ namespace MeGUI
                 autoDeint.Checked = settings.AutomaticDeinterlacing;
                 autoCrop.Checked = settings.AutoCrop;
                 keepInputResolution.Checked = settings.KeepInputResolution;
+                addPrerenderJob.Checked = settings.PrerenderVideo;
 
                 splitting.Value = settings.SplitSize;
                 optionalTargetSizeBox1.Value = settings.Filesize;
@@ -426,6 +427,7 @@ namespace MeGUI
                 dpp.SignalAR = signalAR.Checked;
                 dpp.AutoCrop = autoCrop.Checked;
                 dpp.KeepInputResolution = keepInputResolution.Checked;
+                dpp.PrerenderJob = addPrerenderJob.Checked;
                 dpp.Splitting = splitting.Value;
                 dpp.VideoSettings = VideoSettings.Clone();
                 IndexJob job = new IndexJob(input.Filename, d2vName, 1, audioTracks, dpp, false);  //AAA: Only demux selected tracks (prevents leftover files when not all audio tracks are used)
@@ -682,7 +684,7 @@ namespace MeGUI
                 JobChain c = vUtil.GenerateJobSeries(myVideo, muxedOutput, job.PostprocessingProperties.AudioJobs, subtitles,
                     job.PostprocessingProperties.ChapterFile, job.PostprocessingProperties.OutputSize,
                     job.PostprocessingProperties.Splitting, job.PostprocessingProperties.Container,
-                    false, job.PostprocessingProperties.DirectMuxAudio, log);
+                    job.PostprocessingProperties.PrerenderJob, job.PostprocessingProperties.DirectMuxAudio, log);
                 if (c == null)
                 {
                     log.Warn("Job creation aborted");

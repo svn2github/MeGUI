@@ -31,7 +31,7 @@ namespace MeGUI
 	/// </summary>
 	public class DGIndexPostprocessingProperties
 	{
-		private bool autoDeriveAR, signalAR, autoDeint, autoCrop, keepInputResolution;
+		private bool autoDeriveAR, signalAR, autoDeint, autoCrop, keepInputResolution, prerenderJob;
 		private int horizontalOutputResolution;
         private FileSize? splitSize;
         private ContainerType container;
@@ -55,6 +55,7 @@ namespace MeGUI
 			container = MeGUI.ContainerType.MKV;
             outputSize = null;
 			splitSize = null;
+            prerenderJob = false;
 		}
 
         public AudioJob[] AudioJobs;
@@ -97,6 +98,14 @@ namespace MeGUI
         {
             get { return keepInputResolution; }
             set { keepInputResolution = value; }
+        }
+        /// <summary>
+        /// gets / sets Prerender Job
+        /// </summary>
+        public bool PrerenderJob
+        {
+            get { return prerenderJob; }
+            set { prerenderJob = value; }
         }
 		/// <summary>
 		/// gets / sets the horizontal output resolution the output should have
