@@ -94,14 +94,19 @@ namespace MeGUI
                 vUtil.getSourceMediaInfo(fileName, out audioTracks, out unused);
                 foreach (AudioTrackInfo atrack in audioTracks)
                     AudioTracks.Items.Add(atrack);
-                demuxNoAudiotracks.Enabled = false;
-                demuxAll.Enabled = false;
             }
-            else
+
+            if (AudioTracks.Items.Count > 0)
             {
                 demuxNoAudiotracks.Enabled = true;
                 demuxAll.Enabled = true;
             }
+            else
+            {
+                MessageBox.Show("MeGUI cannot find audio track information. Audio Tracks selection will be disabled.");             
+                demuxNoAudiotracks.Enabled = false;
+                demuxAll.Enabled = false;
+            }           
         }
 
         private void checkIndexIO()
