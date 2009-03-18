@@ -1,3 +1,10 @@
+0.3.1.1022
+    - (kurtnoise) [OneClick Encoder] enable prerender Job.(#2687941)
+    - (kurtnoise) [AvisynthWindow] fix issue #2685909
+    - (kurtnoise) [DGxx tools] add message when no audio streams found.
+    - (kurtnoise) [DGMCreator] fix issue #2685910
+    - (kurtnoise) update MediaInfo library and its wrapper to the latest beta. Speed up to 30% for some streams parsing.
+
 0.3.1.1021
     - (kurtnoise) [xvidConfig] cosmetics...
     - (kurtnoise) [eac3to] fix some warnings.
