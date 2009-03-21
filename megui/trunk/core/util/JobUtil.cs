@@ -299,7 +299,7 @@ namespace MeGUI
                 }
                 try
                 {
-                    StreamWriter hfyuWrapper = new StreamWriter(inputAVS);
+                    StreamWriter hfyuWrapper = new StreamWriter(inputAVS, false, Encoding.Default);
                     hfyuWrapper.WriteLine("AviSource(\"" + hfyuFile + "\")");
                     hfyuWrapper.Close();
                 }
