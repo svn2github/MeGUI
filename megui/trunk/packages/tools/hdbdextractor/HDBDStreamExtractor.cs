@@ -60,7 +60,7 @@ namespace MeGUI.packages.tools.hdbdextractor
         private System.Windows.Forms.Button CancelButton2;
         private System.Windows.Forms.StatusStrip StatusStrip;
         private System.Windows.Forms.ToolStripStatusLabel ToolStripStatusLabel;
-        private System.Windows.Forms.ToolStripProgressBar ToolStripProgresBar;
+        private System.Windows.Forms.ToolStripProgressBar ToolStripProgressBar;
         private MeGUI.packages.tools.hdbdextractor.CustomDataGridView FeatureDataGridView;
         private DataGridViewTextBoxColumn FeatureNumberDataGridViewTextBoxColumn1;
         private DataGridViewTextBoxColumn FeatureNameDataGridViewTextBoxColumn;
@@ -116,7 +116,7 @@ namespace MeGUI.packages.tools.hdbdextractor
             this.LogTextBox = new System.Windows.Forms.TextBox();
             this.StatusStrip = new System.Windows.Forms.StatusStrip();
             this.ToolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.ToolStripProgresBar = new System.Windows.Forms.ToolStripProgressBar();
+            this.ToolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.FolderInputTextBox = new System.Windows.Forms.TextBox();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.HelpButton2 = new System.Windows.Forms.Button();
@@ -184,7 +184,7 @@ namespace MeGUI.packages.tools.hdbdextractor
             // 
             this.StatusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ToolStripStatusLabel,
-            this.ToolStripProgresBar});
+            this.ToolStripProgressBar});
             this.StatusStrip.Location = new System.Drawing.Point(0, 456);
             this.StatusStrip.Name = "StatusStrip";
             this.StatusStrip.ShowItemToolTips = true;
@@ -202,10 +202,10 @@ namespace MeGUI.packages.tools.hdbdextractor
             // 
             // ToolStripProgresBar
             // 
-            this.ToolStripProgresBar.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.ToolStripProgresBar.Name = "ToolStripProgresBar";
-            this.ToolStripProgresBar.Size = new System.Drawing.Size(200, 16);
-            this.ToolStripProgresBar.ToolTipText = "Progress";
+            this.ToolStripProgressBar.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.ToolStripProgressBar.Name = "ToolStripProgresBar";
+            this.ToolStripProgressBar.Size = new System.Drawing.Size(200, 16);
+            this.ToolStripProgressBar.ToolTipText = "Progress";
             // 
             // FolderInputTextBox
             // 
@@ -766,10 +766,10 @@ namespace MeGUI.packages.tools.hdbdextractor
 
         void backgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            ToolStripProgresBar.Value = e.ProgressPercentage;
+            SetToolStripProgressBarValue(e.ProgressPercentage);
 
             if (e.UserState != null)
-                ToolStripStatusLabel.Text = e.UserState.ToString();
+                SetToolStripLabelText(e.UserState.ToString());
         }
 
         void backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -785,8 +785,8 @@ namespace MeGUI.packages.tools.hdbdextractor
                 WriteToLog(e.Error.StackTrace);
             }
 
-            ToolStripStatusLabel.Text = Extensions.GetStringValue(((ResultState)e.Result));
-            ToolStripProgresBar.Value = 0;
+            SetToolStripProgressBarValue(0);
+            SetToolStripLabelText(Extensions.GetStringValue(((ResultState)e.Result)));
 
             if (e.Result != null)
             {
@@ -1035,6 +1035,30 @@ namespace MeGUI.packages.tools.hdbdextractor
         #endregion
 
         #region GUI
+        delegate void SetToolStripProgressBarValueCallback(int value);
+        private void SetToolStripProgressBarValue(int value)
+        {
+            lock (this)
+            {
+                if (this.InvokeRequired)
+                    this.BeginInvoke(new SetToolStripProgressBarValueCallback(SetToolStripProgressBarValue), value);
+                else
+                    this.ToolStripProgressBar.Value = value;
+            }
+        }
+
+        delegate void SetToolStripLabelTextCallback(string message);
+        private void SetToolStripLabelText(string message)
+        {
+            lock (this)
+            {
+                if (this.InvokeRequired)
+                    this.BeginInvoke(new SetToolStripLabelTextCallback(SetToolStripLabelText), message);
+                else
+                    this.ToolStripStatusLabel.Text = message;
+            }
+        }
+
         delegate void ResetCursorCallback(System.Windows.Forms.Cursor cursor);
         private void ResetCursor(System.Windows.Forms.Cursor cursor)
         {
