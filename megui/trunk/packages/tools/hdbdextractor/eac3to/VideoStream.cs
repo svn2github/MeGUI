@@ -35,17 +35,17 @@ namespace eac3to
         {
             get
             {
-                switch (base.Name.ToUpper().Substring(0, 4))
+                switch (VType)
                 {
-                    case "H264":
+                    case VStreamType.AVC:
                         return new object[] { "MKV", "H264" };
-                    case "VC-1":
+                    case VStreamType.VC1:
                         return new object[] { "MKV", "VC1" };
-                    case "MPEG":
+                    case VStreamType.MPEG:
                         return new object[] { "MKV", "M2V" };
-                    case "THEO":
+                    case VStreamType.THEORA:
                         return new object[] { "MKV", "OGG" };
-                    case "DIRA":
+                    case VStreamType.DIRAC:
                         return new object[] { "MKV", "DRC" };
                     default:
                         return new object[] { "MKV" };
@@ -90,7 +90,7 @@ namespace eac3to
                     break;
             }
 
-            return new VideoStream(s);
+            return videoStream;
         }
 
         public override string ToString()
