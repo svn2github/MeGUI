@@ -488,8 +488,7 @@
     <Compile Include="core\util\NotifyCounter.cs" />
     <Compile Include="core\util\OSInfo.cs" />
     <Compile Include="core\util\PrettyFormatting.cs" />
-    <Compile Include="core\util\Resolution.cs" />
-    <Compile Include="core\util\ScriptServer.cs" />
+    <Compile Include="core\util\Resolution.cs" />    
     <Compile Include="core\util\Shutdown.cs" />
     <Compile Include="core\util\Tuples.cs" />
     <Compile Include="core\util\Util.cs" />
@@ -601,6 +600,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="packages\tools\avscreator\AvisynthWrapper.cs" />
+    <Compile Include="packages\tools\ScriptServer.cs" />
     <Compile Include="packages\tools\besplitter\AudioJoinJob.cs" />
     <Compile Include="packages\tools\besplitter\AudioSplitJob.cs" />
     <Compile Include="packages\tools\besplitter\Joiner.cs" />
