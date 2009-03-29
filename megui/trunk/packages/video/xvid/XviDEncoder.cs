@@ -61,8 +61,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "XviDEncoder");
 
         public override string GetErrorString(string line, StreamType stream)
         {
-            if (line.IndexOf("Usage") != -1) // we get the usage message if there's an unrecognized parameter
-                return line;
+            if ((line.IndexOf("Usage") != -1)  || // we get the usage message if there's an unrecognized parameter
+                (line.IndexOf("error") != -1)  ||
+                (line.IndexOf("AVIStreamWrite") != -1))
+               return line;
+            
             return null;
         }
 
