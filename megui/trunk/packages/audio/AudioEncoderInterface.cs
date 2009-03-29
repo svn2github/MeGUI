@@ -540,8 +540,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                             script.AppendFormat("){0}", Environment.NewLine);
                         break;
                     case ".avi":
-                        script.AppendFormat("AVISource(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
+                        script.AppendFormat("AVISource(\"{0}\", audio=true){1}", audioJob.Input, Environment.NewLine);
                         script.AppendFormat("EnsureVBRMP3Sync(){0}", Environment.NewLine);
+                        script.AppendFormat("Trim(0,0){0}", Environment.NewLine); // to match audio length
                         break;
                     case ".avs":
                         script.AppendFormat("Import(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
