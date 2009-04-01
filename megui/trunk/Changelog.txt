@@ -1,3 +1,16 @@
+0.3.1.1023
+    - (kurtnoise) add few tunings for some MessageBoxes.
+    - (kurtnoise) [CodecManager] add BDSUP format as Subtitle Type.
+    - (kurtnoise) [AudioEncoderInterface] few tunings for AVISource.
+    - (kurtnoise) [XviDEncoder] flag JobStatus as error when issues occur (#2695467)
+    - (kurtnoise) move ScriptServer Class to the avscreator tool folder.
+    - (griffore) [HdBdStreamExtractor] added Delegates & CallBacks to set ToolStripProgressBar and ToolStripStatusLabel for cross-thread UI calls
+    - (griffore) [HdBdStreamExtractor] corrected spelling of ToolStripProgresBar to ToolStripProgressBar
+    - (griffore) [HdBdStreamExtractor] return initialized VideoStream object instead new instance
+    - (griffore) [HdBdStreamExtractor] use VType in switch statement instead of string comparison
+    - (kurtnoise) [JobUtil] use Default Encoding settings instead of UTF-8 for huffyuv temp script. Patch by viceice (#2694449)
+    - (kurtnoise) update MediaInfo library and its wrapper to the latest release (0.7.12)
+
 0.3.1.1022
     - (kurtnoise) [OneClick Encoder] enable prerender Job.(#2687941)
     - (kurtnoise) [AvisynthWindow] fix issue #2685909
