@@ -174,13 +174,13 @@ namespace MeGUI
         private Button clearDefaultOutputDir;
         private FileBar defaultOutputDir;
         private CheckBox cbAddTimePos;
-        private TextBox dgaIndexPath;
+        private TextBox dgavcIndexPath;
         private Label DGAIndex;
         private Button selectDGAIndexExecutable;
-        private TextBox dgvIndexPath;
+        private TextBox dgvc1IndexPath;
         private Label label5;
         private Button selectDGVIndexExecutable;
-        private TextBox dgmIndexPath;
+        private TextBox dgmpgIndexPath;
         private Label label22;
         private Button selectDGMIndexExecutable;
         private TextBox eac3toPath;
@@ -345,13 +345,16 @@ namespace MeGUI
             this.mkvmergePath = new System.Windows.Forms.TextBox();
             this.selectMP4boxExecutableButton = new System.Windows.Forms.Button();
             this.tabPage7 = new System.Windows.Forms.TabPage();
-            this.dgmIndexPath = new System.Windows.Forms.TextBox();
+            this.eac3toPath = new System.Windows.Forms.TextBox();
+            this.label23 = new System.Windows.Forms.Label();
+            this.selectEAC3toExecutable = new System.Windows.Forms.Button();
+            this.dgmpgIndexPath = new System.Windows.Forms.TextBox();
             this.label22 = new System.Windows.Forms.Label();
             this.selectDGMIndexExecutable = new System.Windows.Forms.Button();
-            this.dgvIndexPath = new System.Windows.Forms.TextBox();
+            this.dgvc1IndexPath = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.selectDGVIndexExecutable = new System.Windows.Forms.Button();
-            this.dgaIndexPath = new System.Windows.Forms.TextBox();
+            this.dgavcIndexPath = new System.Windows.Forms.TextBox();
             this.DGAIndex = new System.Windows.Forms.Label();
             this.selectDGAIndexExecutable = new System.Windows.Forms.Button();
             this.textBox8 = new System.Windows.Forms.TextBox();
@@ -373,9 +376,6 @@ namespace MeGUI
             this.videoExtLabel = new System.Windows.Forms.Label();
             this.autoEncodeDefaultsButton = new System.Windows.Forms.Button();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
-            this.eac3toPath = new System.Windows.Forms.TextBox();
-            this.label23 = new System.Windows.Forms.Label();
-            this.selectEAC3toExecutable = new System.Windows.Forms.Button();
             groupBox1 = new System.Windows.Forms.GroupBox();
             groupBox1.SuspendLayout();
             this.otherGroupBox.SuspendLayout();
@@ -1205,7 +1205,7 @@ namespace MeGUI
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(451, 270);
+            this.tabPage4.Size = new System.Drawing.Size(451, 284);
             this.tabPage4.TabIndex = 0;
             this.tabPage4.Text = "Video";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -1318,7 +1318,7 @@ namespace MeGUI
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
             this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(451, 270);
+            this.tabPage5.Size = new System.Drawing.Size(451, 284);
             this.tabPage5.TabIndex = 1;
             this.tabPage5.Text = "Audio";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -1555,7 +1555,7 @@ namespace MeGUI
             this.tabPage6.Location = new System.Drawing.Point(4, 22);
             this.tabPage6.Name = "tabPage6";
             this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage6.Size = new System.Drawing.Size(451, 270);
+            this.tabPage6.Size = new System.Drawing.Size(451, 284);
             this.tabPage6.TabIndex = 2;
             this.tabPage6.Text = "Muxer";
             this.tabPage6.UseVisualStyleBackColor = true;
@@ -1643,13 +1643,13 @@ namespace MeGUI
             this.tabPage7.Controls.Add(this.eac3toPath);
             this.tabPage7.Controls.Add(this.label23);
             this.tabPage7.Controls.Add(this.selectEAC3toExecutable);
-            this.tabPage7.Controls.Add(this.dgmIndexPath);
+            this.tabPage7.Controls.Add(this.dgmpgIndexPath);
             this.tabPage7.Controls.Add(this.label22);
             this.tabPage7.Controls.Add(this.selectDGMIndexExecutable);
-            this.tabPage7.Controls.Add(this.dgvIndexPath);
+            this.tabPage7.Controls.Add(this.dgvc1IndexPath);
             this.tabPage7.Controls.Add(this.label5);
             this.tabPage7.Controls.Add(this.selectDGVIndexExecutable);
-            this.tabPage7.Controls.Add(this.dgaIndexPath);
+            this.tabPage7.Controls.Add(this.dgavcIndexPath);
             this.tabPage7.Controls.Add(this.DGAIndex);
             this.tabPage7.Controls.Add(this.selectDGAIndexExecutable);
             this.tabPage7.Controls.Add(this.textBox8);
@@ -1675,14 +1675,40 @@ namespace MeGUI
             this.tabPage7.Text = "Others";
             this.tabPage7.UseVisualStyleBackColor = true;
             // 
-            // dgmIndexPath
+            // eac3toPath
             // 
-            this.dgmIndexPath.Location = new System.Drawing.Point(96, 214);
-            this.dgmIndexPath.Name = "dgmIndexPath";
-            this.dgmIndexPath.ReadOnly = true;
-            this.dgmIndexPath.Size = new System.Drawing.Size(315, 21);
-            this.dgmIndexPath.TabIndex = 34;
-            this.dgmIndexPath.Text = "dgmpgindex.exe";
+            this.eac3toPath.Location = new System.Drawing.Point(96, 244);
+            this.eac3toPath.Name = "eac3toPath";
+            this.eac3toPath.ReadOnly = true;
+            this.eac3toPath.Size = new System.Drawing.Size(315, 21);
+            this.eac3toPath.TabIndex = 37;
+            this.eac3toPath.Text = "eac3to.exe";
+            // 
+            // label23
+            // 
+            this.label23.Location = new System.Drawing.Point(6, 247);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(80, 13);
+            this.label23.TabIndex = 36;
+            this.label23.Text = "EAC3to";
+            // 
+            // selectEAC3toExecutable
+            // 
+            this.selectEAC3toExecutable.Location = new System.Drawing.Point(417, 242);
+            this.selectEAC3toExecutable.Name = "selectEAC3toExecutable";
+            this.selectEAC3toExecutable.Size = new System.Drawing.Size(24, 23);
+            this.selectEAC3toExecutable.TabIndex = 38;
+            this.selectEAC3toExecutable.Text = "...";
+            this.selectEAC3toExecutable.Click += new System.EventHandler(this.selectEAC3toExecutable_Click);
+            // 
+            // dgmpgIndexPath
+            // 
+            this.dgmpgIndexPath.Location = new System.Drawing.Point(96, 214);
+            this.dgmpgIndexPath.Name = "dgmpgIndexPath";
+            this.dgmpgIndexPath.ReadOnly = true;
+            this.dgmpgIndexPath.Size = new System.Drawing.Size(315, 21);
+            this.dgmpgIndexPath.TabIndex = 34;
+            this.dgmpgIndexPath.Text = "dgmpgindex.exe";
             // 
             // label22
             // 
@@ -1701,14 +1727,14 @@ namespace MeGUI
             this.selectDGMIndexExecutable.Text = "...";
             this.selectDGMIndexExecutable.Click += new System.EventHandler(this.selectDGMIndexExecutable_Click);
             // 
-            // dgvIndexPath
+            // dgvc1IndexPath
             // 
-            this.dgvIndexPath.Location = new System.Drawing.Point(96, 183);
-            this.dgvIndexPath.Name = "dgvIndexPath";
-            this.dgvIndexPath.ReadOnly = true;
-            this.dgvIndexPath.Size = new System.Drawing.Size(315, 21);
-            this.dgvIndexPath.TabIndex = 31;
-            this.dgvIndexPath.Text = "dgvc1index.exe";
+            this.dgvc1IndexPath.Location = new System.Drawing.Point(96, 183);
+            this.dgvc1IndexPath.Name = "dgvc1IndexPath";
+            this.dgvc1IndexPath.ReadOnly = true;
+            this.dgvc1IndexPath.Size = new System.Drawing.Size(315, 21);
+            this.dgvc1IndexPath.TabIndex = 31;
+            this.dgvc1IndexPath.Text = "dgvc1index.exe";
             // 
             // label5
             // 
@@ -1727,14 +1753,14 @@ namespace MeGUI
             this.selectDGVIndexExecutable.Text = "...";
             this.selectDGVIndexExecutable.Click += new System.EventHandler(this.selectDGVIndexExecutable_Click);
             // 
-            // dgaIndexPath
+            // dgavcIndexPath
             // 
-            this.dgaIndexPath.Location = new System.Drawing.Point(96, 153);
-            this.dgaIndexPath.Name = "dgaIndexPath";
-            this.dgaIndexPath.ReadOnly = true;
-            this.dgaIndexPath.Size = new System.Drawing.Size(315, 21);
-            this.dgaIndexPath.TabIndex = 28;
-            this.dgaIndexPath.Text = "dgavcindex.exe";
+            this.dgavcIndexPath.Location = new System.Drawing.Point(96, 153);
+            this.dgavcIndexPath.Name = "dgavcIndexPath";
+            this.dgavcIndexPath.ReadOnly = true;
+            this.dgavcIndexPath.Size = new System.Drawing.Size(315, 21);
+            this.dgavcIndexPath.TabIndex = 28;
+            this.dgavcIndexPath.Text = "dgavcindex.exe";
             // 
             // DGAIndex
             // 
@@ -1923,32 +1949,6 @@ namespace MeGUI
             this.helpButton1.Name = "helpButton1";
             this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 1;
-            // 
-            // eac3toPath
-            // 
-            this.eac3toPath.Location = new System.Drawing.Point(96, 244);
-            this.eac3toPath.Name = "eac3toPath";
-            this.eac3toPath.ReadOnly = true;
-            this.eac3toPath.Size = new System.Drawing.Size(315, 21);
-            this.eac3toPath.TabIndex = 37;
-            this.eac3toPath.Text = "eac3to.exe";
-            // 
-            // label23
-            // 
-            this.label23.Location = new System.Drawing.Point(6, 247);
-            this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(80, 13);
-            this.label23.TabIndex = 36;
-            this.label23.Text = "EAC3to";
-            // 
-            // selectEAC3toExecutable
-            // 
-            this.selectEAC3toExecutable.Location = new System.Drawing.Point(417, 242);
-            this.selectEAC3toExecutable.Name = "selectEAC3toExecutable";
-            this.selectEAC3toExecutable.Size = new System.Drawing.Size(24, 23);
-            this.selectEAC3toExecutable.TabIndex = 38;
-            this.selectEAC3toExecutable.Text = "...";
-            this.selectEAC3toExecutable.Click += new System.EventHandler(this.selectEAC3toExecutable_Click);
             // 
             // SettingsForm
             // 
@@ -2197,7 +2197,7 @@ namespace MeGUI
         {
             if ((selectExe("DGAVCIndex")) || (selectExe("DGAVCIndexNV")))
             {
-                dgaIndexPath.Text = openExecutableDialog.FileName;
+                dgavcIndexPath.Text = openExecutableDialog.FileName;
             }
         }
 
@@ -2205,7 +2205,7 @@ namespace MeGUI
         {
             if (selectExe("DGVC1IndexNV"))
             {
-                dgvIndexPath.Text = openExecutableDialog.FileName;
+                dgvc1IndexPath.Text = openExecutableDialog.FileName;
             }
         }
 
@@ -2213,7 +2213,7 @@ namespace MeGUI
         {
             if (selectExe("DGMPGIndexNV"))
             {
-                dgmIndexPath.Text = openExecutableDialog.FileName;
+                dgmpgIndexPath.Text = openExecutableDialog.FileName;
             }
         }
 
@@ -2335,9 +2335,9 @@ namespace MeGUI
                 settings.HttpProxyPwd = txt_httpproxypwd.Text;
                 settings.DefaultOutputDir = defaultOutputDir.Filename;
                 settings.AddTimePosition = cbAddTimePos.Checked;
-                settings.DgavcIndexPath = dgaIndexPath.Text;
-                settings.Dgvc1IndexPath = dgvIndexPath.Text;
-                settings.DgmpgIndexPath = dgmIndexPath.Text;
+                settings.DgavcIndexPath = dgavcIndexPath.Text;
+                settings.Dgvc1IndexPath = dgvc1IndexPath.Text;
+                settings.DgmpgIndexPath = dgmpgIndexPath.Text;
                 settings.EAC3toPath = eac3toPath.Text;
 				return settings;
 			}
@@ -2403,9 +2403,9 @@ namespace MeGUI
                 txt_httpproxypwd.Text = settings.HttpProxyPwd;
                 defaultOutputDir.Filename = settings.DefaultOutputDir;
                 cbAddTimePos.Checked = settings.AddTimePosition;
-                dgaIndexPath.Text = settings.DgavcIndexPath;
-                dgvIndexPath.Text = settings.Dgvc1IndexPath;
-                dgmIndexPath.Text = settings.DgmpgIndexPath;
+                dgavcIndexPath.Text = settings.DgavcIndexPath;
+                dgvc1IndexPath.Text = settings.Dgvc1IndexPath;
+                dgmpgIndexPath.Text = settings.DgmpgIndexPath;
                 eac3toPath.Text = settings.EAC3toPath;
 			}
 		}
