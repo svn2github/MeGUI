@@ -453,6 +453,8 @@ namespace MeGUI
                             return meGUISettings.AftenPath;
                         case ("eac3to"):
                             return meGUISettings.EAC3toPath;
+                        case ("dgavcindex"):
+                            return meGUISettings.DgavcIndexPath;
                         default:
                             return null;
                     }
@@ -511,6 +513,9 @@ namespace MeGUI
                             return;
                         case ("eac3to"):
                             meGUISettings.EAC3toPath = value;
+                            return;
+                        case ("dgavcindex"):
+                            meGUISettings.DgavcIndexPath = value;
                             return;
                     }
                 }
