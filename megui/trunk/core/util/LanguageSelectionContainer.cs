@@ -126,6 +126,7 @@ namespace MeGUI
             addLanguage("Moldavian", "mol");
             addLanguage("Mongolian", "mon");
             addLanguage("Norwegian", "nor");
+            addLanguage("Punjabi", "pan");
             addLanguage("Persian", "per");
             addLanguage("Polish", "pol");
             addLanguage("Portuguese", "por");
@@ -140,6 +141,7 @@ namespace MeGUI
             addLanguage("Thai", "tha");
             addLanguage("Tibetan", "tib");
             addLanguage("Turkish", "tur");
+            addLanguage("Urdu", "urd");
             addLanguage("Ukrainian", "ukr");
             addLanguage("Uzbek", "uzb");
             addLanguage("Vietnamese", "vie");
