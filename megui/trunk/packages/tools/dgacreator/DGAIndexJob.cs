@@ -26,6 +26,7 @@ namespace MeGUI
     public class DGAIndexJob : Job
     {
 		private bool loadSources;
+        private bool demuxVideo;
 		private int demuxMode;
         private List<AudioTrackInfo> audioTracks;
 		private DGIndexPostprocessingProperties postprocessingProperties;
@@ -33,12 +34,13 @@ namespace MeGUI
 		public DGAIndexJob():base()
 		{
 			loadSources = false;
+            demuxVideo = false;
 			demuxMode = 0;
             audioTracks = new List<AudioTrackInfo>();
 		}
 
         public DGAIndexJob(string input, string output, int demuxType, List<AudioTrackInfo> audioTracks,
-            DGIndexPostprocessingProperties properties, bool loadSources)
+            DGIndexPostprocessingProperties properties, bool loadSources, bool demuxVideo)
         {
             Input = input;
             Output = output;
@@ -46,9 +48,17 @@ namespace MeGUI
             this.audioTracks = audioTracks;
             PostprocessingProperties = properties;
             LoadSources = loadSources;
+            DemuxVideo = demuxVideo;
         }
 
-
+        /// <summary>
+        /// gets / sets whether video stream is extracted
+        /// </summary>
+        public bool DemuxVideo
+        {
+            get { return demuxVideo; }
+            set { demuxVideo = value; }
+        }
 		/// <summary>
 		/// gets / sets whether the audio and video files should be loaded after indexing
 		/// </summary>

@@ -48,7 +48,9 @@ public static readonly JobProcessorFactory Factory =
             get
             {
                 StringBuilder sb = new StringBuilder();
-                sb.Append("-i \"" + job.Input + "\" -o \"" + job.Output + "\" -e -h");
+                if (job.DemuxVideo)
+                     sb.Append("-i \"" + job.Input + "\" -od \"" + job.Output + "\" -e -h");
+                else sb.Append("-i \"" + job.Input + "\" -o \"" + job.Output + "\" -e -h");
                 if (job.DemuxMode == 2)
                     sb.Append(" -a"); // demux everything
                 return sb.ToString();
