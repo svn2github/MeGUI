@@ -68,31 +68,25 @@ namespace MeGUI
             this.inputLabel = new System.Windows.Forms.Label();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.closeOnQueue = new System.Windows.Forms.CheckBox();
-            this.gbOutput = new System.Windows.Forms.GroupBox();
-            this.pickOutputButton = new System.Windows.Forms.Button();
-            this.projectName = new System.Windows.Forms.TextBox();
-            this.projectNameLabel = new System.Windows.Forms.Label();
             this.queueButton = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.AudioTracks = new System.Windows.Forms.ListBox();
             this.demuxAll = new System.Windows.Forms.RadioButton();
             this.demuxNoAudiotracks = new System.Windows.Forms.RadioButton();
             this.saveProjectDialog = new System.Windows.Forms.SaveFileDialog();
-            this.demuxVideo = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.gbOutput = new System.Windows.Forms.GroupBox();
+            this.demuxVideo = new System.Windows.Forms.CheckBox();
+            this.pickOutputButton = new System.Windows.Forms.Button();
+            this.projectName = new System.Windows.Forms.TextBox();
+            this.projectNameLabel = new System.Windows.Forms.Label();
             this.gbInput.SuspendLayout();
-            this.gbOutput.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox1.SuspendLayout();
-            this.groupBox2.SuspendLayout();
+            this.gbOutput.SuspendLayout();
             this.SuspendLayout();
             // 
             // loadOnComplete
@@ -160,44 +154,6 @@ namespace MeGUI
             this.closeOnQueue.TabIndex = 27;
             this.closeOnQueue.Text = "and close";
             // 
-            // gbOutput
-            // 
-            this.gbOutput.Controls.Add(this.demuxVideo);
-            this.gbOutput.Controls.Add(this.pickOutputButton);
-            this.gbOutput.Controls.Add(this.projectName);
-            this.gbOutput.Controls.Add(this.projectNameLabel);
-            this.gbOutput.Location = new System.Drawing.Point(8, 287);
-            this.gbOutput.Name = "gbOutput";
-            this.gbOutput.Size = new System.Drawing.Size(424, 72);
-            this.gbOutput.TabIndex = 26;
-            this.gbOutput.TabStop = false;
-            this.gbOutput.Text = "Output";
-            // 
-            // pickOutputButton
-            // 
-            this.pickOutputButton.Location = new System.Drawing.Point(384, 16);
-            this.pickOutputButton.Name = "pickOutputButton";
-            this.pickOutputButton.Size = new System.Drawing.Size(24, 23);
-            this.pickOutputButton.TabIndex = 5;
-            this.pickOutputButton.Text = "...";
-            this.pickOutputButton.Click += new System.EventHandler(this.pickOutputButton_Click);
-            // 
-            // projectName
-            // 
-            this.projectName.Location = new System.Drawing.Point(120, 17);
-            this.projectName.Name = "projectName";
-            this.projectName.ReadOnly = true;
-            this.projectName.Size = new System.Drawing.Size(256, 20);
-            this.projectName.TabIndex = 4;
-            // 
-            // projectNameLabel
-            // 
-            this.projectNameLabel.Location = new System.Drawing.Point(6, 21);
-            this.projectNameLabel.Name = "projectNameLabel";
-            this.projectNameLabel.Size = new System.Drawing.Size(108, 16);
-            this.projectNameLabel.TabIndex = 3;
-            this.projectNameLabel.Text = "dgm Project Output";
-            // 
             // queueButton
             // 
             this.queueButton.Location = new System.Drawing.Point(364, 366);
@@ -253,16 +209,6 @@ namespace MeGUI
             this.saveProjectDialog.Filter = "DGMIndex project files|*.dgm";
             this.saveProjectDialog.Title = "Pick a name for your DGMIndex project";
             // 
-            // demuxVideo
-            // 
-            this.demuxVideo.AutoSize = true;
-            this.demuxVideo.Location = new System.Drawing.Point(9, 49);
-            this.demuxVideo.Name = "demuxVideo";
-            this.demuxVideo.Size = new System.Drawing.Size(125, 17);
-            this.demuxVideo.TabIndex = 8;
-            this.demuxVideo.Text = "Demux Video Stream";
-            this.demuxVideo.UseVisualStyleBackColor = true;
-            // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.listBox1);
@@ -304,65 +250,63 @@ namespace MeGUI
             this.radioButton2.TabStop = true;
             this.radioButton2.Text = "No Audio demux";
             // 
-            // groupBox2
+            // gbOutput
             // 
-            this.groupBox2.Controls.Add(this.checkBox1);
-            this.groupBox2.Controls.Add(this.button1);
-            this.groupBox2.Controls.Add(this.textBox1);
-            this.groupBox2.Controls.Add(this.label1);
-            this.groupBox2.Location = new System.Drawing.Point(10, 287);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(424, 72);
-            this.groupBox2.TabIndex = 26;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Output";
+            this.gbOutput.Controls.Add(this.demuxVideo);
+            this.gbOutput.Controls.Add(this.pickOutputButton);
+            this.gbOutput.Controls.Add(this.projectName);
+            this.gbOutput.Controls.Add(this.projectNameLabel);
+            this.gbOutput.Location = new System.Drawing.Point(8, 288);
+            this.gbOutput.Name = "gbOutput";
+            this.gbOutput.Size = new System.Drawing.Size(424, 72);
+            this.gbOutput.TabIndex = 31;
+            this.gbOutput.TabStop = false;
+            this.gbOutput.Text = "Output";
             // 
-            // checkBox1
+            // demuxVideo
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(9, 49);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(125, 17);
-            this.checkBox1.TabIndex = 8;
-            this.checkBox1.Text = "Demux Video Stream";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.demuxVideo.AutoSize = true;
+            this.demuxVideo.Location = new System.Drawing.Point(9, 49);
+            this.demuxVideo.Name = "demuxVideo";
+            this.demuxVideo.Size = new System.Drawing.Size(125, 17);
+            this.demuxVideo.TabIndex = 8;
+            this.demuxVideo.Text = "Demux Video Stream";
+            this.demuxVideo.UseVisualStyleBackColor = true;
             // 
-            // button1
+            // pickOutputButton
             // 
-            this.button1.Location = new System.Drawing.Point(384, 16);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(24, 23);
-            this.button1.TabIndex = 5;
-            this.button1.Text = "...";
-            this.button1.Click += new System.EventHandler(this.pickOutputButton_Click);
+            this.pickOutputButton.Location = new System.Drawing.Point(384, 16);
+            this.pickOutputButton.Name = "pickOutputButton";
+            this.pickOutputButton.Size = new System.Drawing.Size(24, 23);
+            this.pickOutputButton.TabIndex = 5;
+            this.pickOutputButton.Text = "...";
             // 
-            // textBox1
+            // projectName
             // 
-            this.textBox1.Location = new System.Drawing.Point(120, 17);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(256, 20);
-            this.textBox1.TabIndex = 4;
+            this.projectName.Location = new System.Drawing.Point(120, 17);
+            this.projectName.Name = "projectName";
+            this.projectName.ReadOnly = true;
+            this.projectName.Size = new System.Drawing.Size(256, 20);
+            this.projectName.TabIndex = 4;
             // 
-            // label1
+            // projectNameLabel
             // 
-            this.label1.Location = new System.Drawing.Point(6, 21);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(108, 16);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "dgm Project Output";
+            this.projectNameLabel.Location = new System.Drawing.Point(6, 21);
+            this.projectNameLabel.Name = "projectNameLabel";
+            this.projectNameLabel.Size = new System.Drawing.Size(108, 16);
+            this.projectNameLabel.TabIndex = 3;
+            this.projectNameLabel.Text = "dgm Project Output";
             // 
             // DGMinputWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(444, 402);
+            this.Controls.Add(this.gbOutput);
             this.Controls.Add(this.loadOnComplete);
             this.Controls.Add(this.gbInput);
             this.Controls.Add(this.helpButton1);
             this.Controls.Add(this.closeOnQueue);
-            this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.gbOutput);
             this.Controls.Add(this.queueButton);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBox3);
@@ -372,12 +316,10 @@ namespace MeGUI
             this.Text = "MeGUI - DGM Project Creator";
             this.gbInput.ResumeLayout(false);
             this.gbInput.PerformLayout();
-            this.gbOutput.ResumeLayout(false);
-            this.gbOutput.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
+            this.gbOutput.ResumeLayout(false);
+            this.gbOutput.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -391,25 +333,20 @@ namespace MeGUI
         private System.Windows.Forms.Label inputLabel;
         private MeGUI.core.gui.HelpButton helpButton1;
         private System.Windows.Forms.CheckBox closeOnQueue;
-        private System.Windows.Forms.GroupBox gbOutput;
-        private System.Windows.Forms.Button pickOutputButton;
-        private System.Windows.Forms.TextBox projectName;
-        private System.Windows.Forms.Label projectNameLabel;
         private System.Windows.Forms.Button queueButton;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.ListBox AudioTracks;
         private System.Windows.Forms.RadioButton demuxAll;
         private System.Windows.Forms.RadioButton demuxNoAudiotracks;
         private System.Windows.Forms.SaveFileDialog saveProjectDialog;
-        private System.Windows.Forms.CheckBox demuxVideo;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.RadioButton radioButton1;
         private System.Windows.Forms.RadioButton radioButton2;
-        private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.CheckBox checkBox1;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.GroupBox gbOutput;
+        private System.Windows.Forms.CheckBox demuxVideo;
+        private System.Windows.Forms.Button pickOutputButton;
+        private System.Windows.Forms.TextBox projectName;
+        private System.Windows.Forms.Label projectNameLabel;
     }
 }

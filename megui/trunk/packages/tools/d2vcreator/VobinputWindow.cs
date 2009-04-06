@@ -167,13 +167,13 @@ namespace MeGUI
             this.demuxNoAudiotracks = new System.Windows.Forms.RadioButton();
             this.demuxTracks = new System.Windows.Forms.RadioButton();
             this.gbOutput = new System.Windows.Forms.GroupBox();
+            this.demuxVideo = new System.Windows.Forms.CheckBox();
             this.pickOutputButton = new System.Windows.Forms.Button();
             this.projectName = new System.Windows.Forms.TextBox();
             this.projectNameLabel = new System.Windows.Forms.Label();
             this.saveProjectDialog = new System.Windows.Forms.SaveFileDialog();
             this.closeOnQueue = new System.Windows.Forms.CheckBox();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
-            this.demuxVideo = new System.Windows.Forms.CheckBox();
             this.gbInput.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.gbOutput.SuspendLayout();
@@ -214,7 +214,7 @@ namespace MeGUI
             this.inputLabel.Name = "inputLabel";
             this.inputLabel.Size = new System.Drawing.Size(100, 13);
             this.inputLabel.TabIndex = 0;
-            this.inputLabel.Text = "Video Input";
+            this.inputLabel.Text = "Input File";
             // 
             // queueButton
             // 
@@ -303,6 +303,16 @@ namespace MeGUI
             this.gbOutput.TabStop = false;
             this.gbOutput.Text = "Output";
             // 
+            // demuxVideo
+            // 
+            this.demuxVideo.AutoSize = true;
+            this.demuxVideo.Location = new System.Drawing.Point(19, 46);
+            this.demuxVideo.Name = "demuxVideo";
+            this.demuxVideo.Size = new System.Drawing.Size(125, 17);
+            this.demuxVideo.TabIndex = 6;
+            this.demuxVideo.Text = "Demux Video Stream";
+            this.demuxVideo.UseVisualStyleBackColor = true;
+            // 
             // pickOutputButton
             // 
             this.pickOutputButton.Location = new System.Drawing.Point(384, 16);
@@ -352,16 +362,6 @@ namespace MeGUI
             this.helpButton1.Name = "helpButton1";
             this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 14;
-            // 
-            // demuxVideo
-            // 
-            this.demuxVideo.AutoSize = true;
-            this.demuxVideo.Location = new System.Drawing.Point(19, 46);
-            this.demuxVideo.Name = "demuxVideo";
-            this.demuxVideo.Size = new System.Drawing.Size(125, 17);
-            this.demuxVideo.TabIndex = 6;
-            this.demuxVideo.Text = "Demux Video Stream";
-            this.demuxVideo.UseVisualStyleBackColor = true;
             // 
             // VobinputWindow
             // 
