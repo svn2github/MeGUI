@@ -17,6 +17,8 @@ namespace MediaInfoWrapper
         private string _CodecString;
         private string _CodecInfo;
         private string _CodecUrl;
+        private string _CodecID;
+        private string _CodecIDInfo;
         private string _BitRate;
         private string _BitRateString;
         private string _BitRateMode;
@@ -203,8 +205,7 @@ namespace MediaInfoWrapper
                 this._Codec = value;
             }
         }
-
-
+        
         ///<summary> Codec used (text) </summary>
         public string CodecString
         {
@@ -219,7 +220,6 @@ namespace MediaInfoWrapper
                 this._CodecString = value;
             }
         }
-
 
         ///<summary> Info about codec </summary>
         public string CodecInfo
@@ -236,7 +236,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Link </summary>
         public string CodecUrl
         {
@@ -252,6 +251,35 @@ namespace MediaInfoWrapper
             }
         }
 
+        ///<summary> Codec ID used </summary>
+        public string CodecID
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(this._CodecID))
+                    this._CodecID = "";
+                return _CodecID;
+            }
+            set
+            {
+                this._CodecID = value;
+            }
+        }
+
+        ///<summary> Info about codec ID </summary>
+        public string CodecIDInfo
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(this._CodecIDInfo))
+                    this._CodecIDInfo = "";
+                return _CodecIDInfo;
+            }
+            set
+            {
+                this._CodecIDInfo = value;
+            }
+        }
 
         ///<summary> Bit rate in bps </summary>
         public string BitRate
