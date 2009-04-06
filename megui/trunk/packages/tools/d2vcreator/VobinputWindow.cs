@@ -66,6 +66,7 @@ namespace MeGUI
         private CheckedListBox AudioTracks;
         private RadioButton demuxAll;
         private FileBar input;
+        private CheckBox demuxVideo;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -156,6 +157,7 @@ namespace MeGUI
 		{
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(VobinputWindow));
             this.gbInput = new System.Windows.Forms.GroupBox();
+            this.input = new MeGUI.FileBar();
             this.inputLabel = new System.Windows.Forms.Label();
             this.queueButton = new System.Windows.Forms.Button();
             this.loadOnComplete = new System.Windows.Forms.CheckBox();
@@ -171,7 +173,7 @@ namespace MeGUI
             this.saveProjectDialog = new System.Windows.Forms.SaveFileDialog();
             this.closeOnQueue = new System.Windows.Forms.CheckBox();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
-            this.input = new MeGUI.FileBar();
+            this.demuxVideo = new System.Windows.Forms.CheckBox();
             this.gbInput.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.gbOutput.SuspendLayout();
@@ -183,10 +185,28 @@ namespace MeGUI
             this.gbInput.Controls.Add(this.inputLabel);
             this.gbInput.Location = new System.Drawing.Point(10, 8);
             this.gbInput.Name = "gbInput";
-            this.gbInput.Size = new System.Drawing.Size(424, 48);
+            this.gbInput.Size = new System.Drawing.Size(424, 54);
             this.gbInput.TabIndex = 0;
             this.gbInput.TabStop = false;
             this.gbInput.Text = "Input";
+            // 
+            // input
+            // 
+            this.input.AllowDrop = true;
+            this.input.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.input.Filename = "";
+            this.input.Filter = resources.GetString("input.Filter");
+            this.input.FilterIndex = 4;
+            this.input.FolderMode = false;
+            this.input.Location = new System.Drawing.Point(79, 16);
+            this.input.Name = "input";
+            this.input.ReadOnly = true;
+            this.input.SaveMode = false;
+            this.input.Size = new System.Drawing.Size(329, 26);
+            this.input.TabIndex = 4;
+            this.input.Title = null;
+            this.input.FileSelected += new MeGUI.FileBarEventHandler(this.input_FileSelected);
             // 
             // inputLabel
             // 
@@ -198,7 +218,7 @@ namespace MeGUI
             // 
             // queueButton
             // 
-            this.queueButton.Location = new System.Drawing.Point(365, 341);
+            this.queueButton.Location = new System.Drawing.Point(365, 373);
             this.queueButton.Name = "queueButton";
             this.queueButton.Size = new System.Drawing.Size(74, 23);
             this.queueButton.TabIndex = 10;
@@ -209,7 +229,7 @@ namespace MeGUI
             // 
             this.loadOnComplete.Checked = true;
             this.loadOnComplete.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.loadOnComplete.Location = new System.Drawing.Point(64, 340);
+            this.loadOnComplete.Location = new System.Drawing.Point(64, 372);
             this.loadOnComplete.Name = "loadOnComplete";
             this.loadOnComplete.Size = new System.Drawing.Size(144, 24);
             this.loadOnComplete.TabIndex = 11;
@@ -221,7 +241,7 @@ namespace MeGUI
             this.groupBox3.Controls.Add(this.AudioTracks);
             this.groupBox3.Controls.Add(this.demuxNoAudiotracks);
             this.groupBox3.Controls.Add(this.demuxTracks);
-            this.groupBox3.Location = new System.Drawing.Point(10, 56);
+            this.groupBox3.Location = new System.Drawing.Point(10, 68);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(424, 223);
             this.groupBox3.TabIndex = 8;
@@ -272,12 +292,13 @@ namespace MeGUI
             // 
             // gbOutput
             // 
+            this.gbOutput.Controls.Add(this.demuxVideo);
             this.gbOutput.Controls.Add(this.pickOutputButton);
             this.gbOutput.Controls.Add(this.projectName);
             this.gbOutput.Controls.Add(this.projectNameLabel);
-            this.gbOutput.Location = new System.Drawing.Point(10, 285);
+            this.gbOutput.Location = new System.Drawing.Point(10, 297);
             this.gbOutput.Name = "gbOutput";
-            this.gbOutput.Size = new System.Drawing.Size(424, 49);
+            this.gbOutput.Size = new System.Drawing.Size(424, 69);
             this.gbOutput.TabIndex = 12;
             this.gbOutput.TabStop = false;
             this.gbOutput.Text = "Output";
@@ -316,7 +337,7 @@ namespace MeGUI
             // 
             this.closeOnQueue.Checked = true;
             this.closeOnQueue.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.closeOnQueue.Location = new System.Drawing.Point(285, 341);
+            this.closeOnQueue.Location = new System.Drawing.Point(285, 373);
             this.closeOnQueue.Name = "closeOnQueue";
             this.closeOnQueue.Size = new System.Drawing.Size(72, 24);
             this.closeOnQueue.TabIndex = 13;
@@ -327,33 +348,25 @@ namespace MeGUI
             this.helpButton1.ArticleName = "D2v creator window";
             this.helpButton1.AutoSize = true;
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.helpButton1.Location = new System.Drawing.Point(13, 340);
+            this.helpButton1.Location = new System.Drawing.Point(13, 372);
             this.helpButton1.Name = "helpButton1";
-            this.helpButton1.Size = new System.Drawing.Size(45, 23);
+            this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 14;
             // 
-            // input
+            // demuxVideo
             // 
-            this.input.AllowDrop = true;
-            this.input.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.input.Filename = "";
-            this.input.Filter = resources.GetString("input.Filter");
-            this.input.FilterIndex = 4;
-            this.input.FolderMode = false;
-            this.input.Location = new System.Drawing.Point(79, 16);
-            this.input.Name = "input";
-            this.input.ReadOnly = true;
-            this.input.SaveMode = false;
-            this.input.Size = new System.Drawing.Size(329, 26);
-            this.input.TabIndex = 4;
-            this.input.Title = null;
-            this.input.FileSelected += new MeGUI.FileBarEventHandler(this.input_FileSelected);
+            this.demuxVideo.AutoSize = true;
+            this.demuxVideo.Location = new System.Drawing.Point(19, 46);
+            this.demuxVideo.Name = "demuxVideo";
+            this.demuxVideo.Size = new System.Drawing.Size(125, 17);
+            this.demuxVideo.TabIndex = 6;
+            this.demuxVideo.Text = "Demux Video Stream";
+            this.demuxVideo.UseVisualStyleBackColor = true;
             // 
             // VobinputWindow
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
-            this.ClientSize = new System.Drawing.Size(444, 377);
+            this.ClientSize = new System.Drawing.Size(444, 403);
             this.Controls.Add(this.helpButton1);
             this.Controls.Add(this.closeOnQueue);
             this.Controls.Add(this.gbOutput);
@@ -368,7 +381,6 @@ namespace MeGUI
             this.Text = "MeGUI - D2V Project Creator";
             this.gbInput.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
             this.gbOutput.ResumeLayout(false);
             this.gbOutput.PerformLayout();
             this.ResumeLayout(false);
@@ -484,7 +496,7 @@ namespace MeGUI
                 audioTracks.Add(ati);
             }
 
-            return new IndexJob(this.input.Filename, this.projectName.Text, demuxType, audioTracks, null, loadOnComplete.Checked);
+            return new IndexJob(this.input.Filename, this.projectName.Text, demuxType, audioTracks, null, loadOnComplete.Checked, demuxVideo.Checked);
 		}
 		#endregion
 		#region properties

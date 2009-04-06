@@ -430,7 +430,7 @@ namespace MeGUI
                 dpp.PrerenderJob = addPrerenderJob.Checked;
                 dpp.Splitting = splitting.Value;
                 dpp.VideoSettings = VideoSettings.Clone();
-                IndexJob job = new IndexJob(input.Filename, d2vName, 1, audioTracks, dpp, false);  //AAA: Only demux selected tracks (prevents leftover files when not all audio tracks are used)
+                IndexJob job = new IndexJob(input.Filename, d2vName, 1, audioTracks, dpp, false, false);
                 mainForm.Jobs.addJobsToQueue(job);
                 if (this.openOnQueue.Checked)
                     input.PerformClick();
