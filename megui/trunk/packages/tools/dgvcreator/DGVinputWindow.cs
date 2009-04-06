@@ -174,7 +174,7 @@ namespace MeGUI
                 audioTracks.Add(ati);
             }
 
-            return new DGVIndexJob(this.input.Filename, this.projectName.Text, demuxType, audioTracks, null, loadOnComplete.Checked);
+            return new DGVIndexJob(this.input.Filename, this.projectName.Text, demuxType, audioTracks, null, loadOnComplete.Checked, demuxVideo.Checked);
         }
 
 

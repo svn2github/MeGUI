@@ -77,6 +77,7 @@ namespace MeGUI
             this.demuxNoAudiotracks = new System.Windows.Forms.RadioButton();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.saveProjectDialog = new System.Windows.Forms.SaveFileDialog();
+            this.demuxVideo = new System.Windows.Forms.CheckBox();
             this.gbInput.SuspendLayout();
             this.gbOutput.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -86,7 +87,7 @@ namespace MeGUI
             // 
             this.loadOnComplete.Checked = true;
             this.loadOnComplete.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.loadOnComplete.Location = new System.Drawing.Point(68, 343);
+            this.loadOnComplete.Location = new System.Drawing.Point(67, 360);
             this.loadOnComplete.Name = "loadOnComplete";
             this.loadOnComplete.Size = new System.Drawing.Size(144, 24);
             this.loadOnComplete.TabIndex = 30;
@@ -125,15 +126,15 @@ namespace MeGUI
             this.inputLabel.AutoSize = true;
             this.inputLabel.Location = new System.Drawing.Point(20, 20);
             this.inputLabel.Name = "inputLabel";
-            this.inputLabel.Size = new System.Drawing.Size(61, 13);
+            this.inputLabel.Size = new System.Drawing.Size(50, 13);
             this.inputLabel.TabIndex = 0;
-            this.inputLabel.Text = "Video Input";
+            this.inputLabel.Text = "Input File";
             // 
             // closeOnQueue
             // 
             this.closeOnQueue.Checked = true;
             this.closeOnQueue.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.closeOnQueue.Location = new System.Drawing.Point(283, 343);
+            this.closeOnQueue.Location = new System.Drawing.Point(282, 360);
             this.closeOnQueue.Name = "closeOnQueue";
             this.closeOnQueue.Size = new System.Drawing.Size(72, 24);
             this.closeOnQueue.TabIndex = 27;
@@ -141,12 +142,13 @@ namespace MeGUI
             // 
             // gbOutput
             // 
+            this.gbOutput.Controls.Add(this.demuxVideo);
             this.gbOutput.Controls.Add(this.pickOutputButton);
             this.gbOutput.Controls.Add(this.projectName);
             this.gbOutput.Controls.Add(this.projectNameLabel);
             this.gbOutput.Location = new System.Drawing.Point(8, 287);
             this.gbOutput.Name = "gbOutput";
-            this.gbOutput.Size = new System.Drawing.Size(424, 49);
+            this.gbOutput.Size = new System.Drawing.Size(424, 67);
             this.gbOutput.TabIndex = 26;
             this.gbOutput.TabStop = false;
             this.gbOutput.Text = "Output";
@@ -178,7 +180,7 @@ namespace MeGUI
             // 
             // queueButton
             // 
-            this.queueButton.Location = new System.Drawing.Point(363, 343);
+            this.queueButton.Location = new System.Drawing.Point(362, 360);
             this.queueButton.Name = "queueButton";
             this.queueButton.Size = new System.Drawing.Size(74, 23);
             this.queueButton.TabIndex = 25;
@@ -231,7 +233,7 @@ namespace MeGUI
             this.helpButton1.ArticleName = "D2v creator window";
             this.helpButton1.AutoSize = true;
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.helpButton1.Location = new System.Drawing.Point(11, 342);
+            this.helpButton1.Location = new System.Drawing.Point(10, 359);
             this.helpButton1.Name = "helpButton1";
             this.helpButton1.Size = new System.Drawing.Size(39, 23);
             this.helpButton1.TabIndex = 28;
@@ -241,11 +243,21 @@ namespace MeGUI
             this.saveProjectDialog.Filter = "DGVIndex project files|*.dgv";
             this.saveProjectDialog.Title = "Pick a name for your DGVIndex project";
             // 
+            // demuxVideo
+            // 
+            this.demuxVideo.AutoSize = true;
+            this.demuxVideo.Location = new System.Drawing.Point(16, 43);
+            this.demuxVideo.Name = "demuxVideo";
+            this.demuxVideo.Size = new System.Drawing.Size(125, 17);
+            this.demuxVideo.TabIndex = 8;
+            this.demuxVideo.Text = "Demux Video Stream";
+            this.demuxVideo.UseVisualStyleBackColor = true;
+            // 
             // DGVinputWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(444, 377);
+            this.ClientSize = new System.Drawing.Size(444, 396);
             this.Controls.Add(this.loadOnComplete);
             this.Controls.Add(this.gbInput);
             this.Controls.Add(this.helpButton1);
@@ -285,5 +297,6 @@ namespace MeGUI
         private System.Windows.Forms.RadioButton demuxAll;
         private System.Windows.Forms.RadioButton demuxNoAudiotracks;
         private System.Windows.Forms.SaveFileDialog saveProjectDialog;
+        private System.Windows.Forms.CheckBox demuxVideo;
     }
 }
