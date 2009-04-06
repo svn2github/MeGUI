@@ -393,6 +393,7 @@ namespace MeGUI
             knownVideoDescriptions.Add("ffvh", VideoCodec.HFYU);
             knownVideoDescriptions.Add("snow", VideoCodec.SNOW);
             knownVideoDescriptions.Add("mpeg-4v", VideoCodec.ASP);
+            knownVideoDescriptions.Add("vc-1", VideoCodec.VC1);
 
             knownAudioDescriptions = new Dictionary<string, AudioCodec>();
             knownAudioDescriptions.Add("aac", AudioCodec.AAC);
@@ -408,6 +409,7 @@ namespace MeGUI
             knownContainerTypes.Add("Matroska", ContainerType.MKV);
             knownContainerTypes.Add("MPEG-4", ContainerType.MP4);
             knownContainerTypes.Add("3GPP", ContainerType.MP4);
+            knownContainerTypes.Add("BDAV", ContainerType.M2TS);
 
             knownContainerDescriptions = new Dictionary<string,ContainerType>();
         }
