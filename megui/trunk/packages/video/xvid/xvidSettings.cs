@@ -68,7 +68,7 @@ namespace MeGUI
         private int motionSearchPrecision, vhqMode, minPQuant, maxPQuant, minBQuant, maxBQuant, bQuantRatio, bQuantOffset,
                     keyFrameBoost, keyframeThreshold, keyframeReduction, overflowControlStrength,
                     maxOverflowImprovement, maxOverflowDegradation, highBitrateDegradation, lowBitrateImprovement, reactionDelayFactor, averagingPeriod,
-                    rateControlBuffer, frameDropRatio, vbvBuffer, vbvMaxRate, vbvPeakRate;
+                    rateControlBuffer, frameDropRatio, xvidProfile, vbvBuffer, vbvMaxRate, vbvPeakRate;
         private bool packedBitstream, gmc, chromaMotion, closedGOP, vhqForBframes, adaptiveQuant, interlaced, bottomFieldFirst, lumiMasking;
         private decimal bframeThreshold, quantizer;
         private string customQuantizerMatrix;
@@ -124,6 +124,7 @@ namespace MeGUI
             frameDropRatio = 0;
             bottomFieldFirst = true;
             customQuantizerMatrix = "";
+            xvidProfile = 0;
             vbvBuffer = 0;
             vbvMaxRate = 0;
             vbvPeakRate = 0;
@@ -244,6 +245,11 @@ namespace MeGUI
         {
             get { return rateControlBuffer; }
             set { rateControlBuffer = value; }
+        }
+        public int XvidProfile
+        {
+            get { return xvidProfile; }
+            set { xvidProfile = value; }
         }
         /// <summary>
         /// gets / sets the VBV peak bitrate
@@ -394,6 +400,7 @@ namespace MeGUI
                this.Turbo != otherSettings.Turbo ||
                this.V4MV != otherSettings.V4MV ||
                this.VHQForBframes != otherSettings.VHQForBframes ||
+               this.XvidProfile != otherSettings.XvidProfile ||
                this.VHQMode != otherSettings.VHQMode
                )
                 return true;

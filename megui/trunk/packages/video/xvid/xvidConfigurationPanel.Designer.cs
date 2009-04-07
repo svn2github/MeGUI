@@ -29,6 +29,8 @@ namespace MeGUI.packages.video.xvid
         private void InitializeComponent()
         {
             this.xvidOtherGroupBox = new System.Windows.Forms.GroupBox();
+            this.xvidProfile = new System.Windows.Forms.ComboBox();
+            this.xvidProfileLabel = new System.Windows.Forms.Label();
             this.xvidMotionSearchPrecision = new System.Windows.Forms.ComboBox();
             this.xvidMotionSearchPrecisionLabel = new System.Windows.Forms.Label();
             this.xvidPackedBitstream = new System.Windows.Forms.CheckBox();
@@ -187,6 +189,8 @@ namespace MeGUI.packages.video.xvid
             // 
             // xvidOtherGroupBox
             // 
+            this.xvidOtherGroupBox.Controls.Add(this.xvidProfile);
+            this.xvidOtherGroupBox.Controls.Add(this.xvidProfileLabel);
             this.xvidOtherGroupBox.Controls.Add(this.xvidMotionSearchPrecision);
             this.xvidOtherGroupBox.Controls.Add(this.xvidMotionSearchPrecisionLabel);
             this.xvidOtherGroupBox.Controls.Add(this.xvidPackedBitstream);
@@ -208,6 +212,29 @@ namespace MeGUI.packages.video.xvid
             this.xvidOtherGroupBox.TabIndex = 24;
             this.xvidOtherGroupBox.TabStop = false;
             this.xvidOtherGroupBox.Text = "Other Settings";
+            // 
+            // xvidProfile
+            // 
+            this.xvidProfile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.xvidProfile.DropDownWidth = 145;
+            this.xvidProfile.Items.AddRange(new object[] {
+            "Unrestricted",
+            "Home Theatre",
+            "Hi-Def (720p)",
+            "Hi-Def (1080p)"});
+            this.xvidProfile.Location = new System.Drawing.Point(11, 335);
+            this.xvidProfile.Name = "xvidProfile";
+            this.xvidProfile.Size = new System.Drawing.Size(145, 21);
+            this.xvidProfile.TabIndex = 17;
+            this.xvidProfile.SelectedIndexChanged += new System.EventHandler(this.xvidProfile_SelectedIndexChanged);
+            // 
+            // xvidProfileLabel
+            // 
+            this.xvidProfileLabel.Location = new System.Drawing.Point(8, 319);
+            this.xvidProfileLabel.Name = "xvidProfileLabel";
+            this.xvidProfileLabel.Size = new System.Drawing.Size(136, 24);
+            this.xvidProfileLabel.TabIndex = 16;
+            this.xvidProfileLabel.Text = "DXN Profile:";
             // 
             // xvidMotionSearchPrecision
             // 
@@ -1477,5 +1504,7 @@ namespace MeGUI.packages.video.xvid
         private System.Windows.Forms.Label logfileLabel;
         private System.Windows.Forms.GroupBox gbx264CustomCmd;
         private System.Windows.Forms.TextBox customCommandlineOptions;
+        private System.Windows.Forms.ComboBox xvidProfile;
+        private System.Windows.Forms.Label xvidProfileLabel;
     }
 }

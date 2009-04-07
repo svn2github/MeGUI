@@ -44,6 +44,38 @@ namespace MeGUI.packages.video.xvid
         #region adjustments
         private void doCheckBoxAdjustments()
         {
+            switch (this.xvidProfile.SelectedIndex)
+            {
+                case 0: // Unrestricted
+                    this.xvidNbBFrames.Maximum = 4;
+                    this.xvidPackedBitstream.Enabled = true;
+                    this.cqmComboBox1.Enabled = true;
+                    break;
+                case 1: // Home Theater
+                    this.xvidNbBFrames.Maximum = 1;
+                    // this.xvidPackedBitstream.Enabled = false;
+                    this.xvidPackedBitstream.Checked = true;
+                    this.fourCC.SelectedIndex = 2;
+                    this.cqmComboBox1.SelectedIndex = 0;
+                    this.cqmComboBox1.Enabled = false;
+                    break;
+                case 2: // Hi-Def 720p
+                    this.xvidNbBFrames.Maximum = 2;
+                    // this.xvidPackedBitstream.Enabled = false;
+                    this.xvidPackedBitstream.Checked = false;
+                    this.fourCC.SelectedIndex = 2;
+                    this.cqmComboBox1.SelectedIndex = 0;
+                    this.cqmComboBox1.Enabled = false;
+                    break;
+                case 3: // Hi-Def 1080p
+                    this.xvidNbBFrames.Maximum = 2;
+                    // this.xvidPackedBitstream.Enabled = false;
+                    this.xvidPackedBitstream.Checked = false;
+                    this.fourCC.SelectedIndex = 2;
+                    this.cqmComboBox1.SelectedIndex = 0;
+                    this.cqmComboBox1.Enabled = false;
+                    break;
+            }
             if ((int)xvidNbBFrames.Value > 0)
             {
                 xvidUseVHQForBframes.Enabled = true;
@@ -222,6 +254,7 @@ namespace MeGUI.packages.video.xvid
                     xs.KeyframeInterval = Int32.Parse(this.xvidKeyframeInterval.Text);
                 xs.NbBframes = (int)xvidNbBFrames.Value;
                 xs.PackedBitstream = xvidPackedBitstream.Checked;
+                xs.XvidProfile = xvidProfile.SelectedIndex;
                 xs.MotionSearchPrecision = xvidMotionSearchPrecision.SelectedIndex;
                 xs.VHQMode = xvidVHQ.SelectedIndex;
                 xs.VHQForBframes = xvidUseVHQForBframes.Checked;
@@ -279,6 +312,7 @@ namespace MeGUI.packages.video.xvid
                 this.xvidKeyframeInterval.Text = xs.KeyframeInterval.ToString(); ;
                 xvidNbBFrames.Value = xs.NbBframes;
                 xvidPackedBitstream.Checked = xs.PackedBitstream;
+                xvidProfile.SelectedIndex = xs.XvidProfile;
                 xvidMotionSearchPrecision.SelectedIndex = xs.MotionSearchPrecision;
                 xvidVHQ.SelectedIndex = xs.VHQMode;
                 xvidUseVHQForBframes.Checked = xs.VHQForBframes;
@@ -341,6 +375,11 @@ namespace MeGUI.packages.video.xvid
         #endregion
 
         private void cqmComboBox1_SelectionChanged(object sender, string val)
+        {
+            genericUpdate();
+        }
+
+        private void xvidProfile_SelectedIndexChanged(object sender, EventArgs e)
         {
             genericUpdate();
         }

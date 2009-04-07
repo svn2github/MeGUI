@@ -95,7 +95,10 @@ new JobProcessorFactory(new ProcessorFactory(init), "XviDEncoder");
                     break;
                 case 3: // 2 pass second pass
                 case 4: // automated twopass
-                    sb.Append("-pass2 " + "\"" + xs.Logfile + "\" -bitrate " + xs.BitrateQuantizer + " "); // add logfile
+                    if (xs.XvidProfile == 0)
+                        sb.Append("-pass2 " + "\"" + xs.Logfile + "\" -bitrate " + xs.BitrateQuantizer + " "); // add logfile
+                    else
+                        sb.Append("-alt2pass " + "\"" + xs.Logfile + "\" -bitrate " + xs.BitrateQuantizer + " "); // add logfile
                     break;
             }
             if (xs.EncodingMode <= 1) // 1 pass modes
@@ -195,6 +198,20 @@ new JobProcessorFactory(new ProcessorFactory(init), "XviDEncoder");
                     sb.Append("-bmin " + xs.MinBQuant + " ");
                 if (xs.MaxBQuant != 31)
                     sb.Append("-bmax " + xs.MaxBQuant + " ");
+            }
+            switch (xs.XvidProfile)
+            {
+                case 0:
+                    break;
+                case 1:
+                    sb.Append("-vbv 4854000,3145728,2359296 ");
+                    break;
+                case 2:
+                    sb.Append("-vbv 9708400,6291456,4718592 ");
+                    break;
+                case 3:
+                    sb.Append("-vbv 20000000,16000000,12000000 ");
+                    break;
             }
             if (d.HasValue) // custom PAR mode
             {
