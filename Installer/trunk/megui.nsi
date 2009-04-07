@@ -1,6 +1,6 @@
 !define NAME "MeGUI modern media encoder"
 !define OUTFILE "megui-setup.exe"
-!define PRODUCT_VERSION "0.3.1.1024"
+!define PRODUCT_VERSION "0.3.1.1025"
 !define PRODUCT_WEB_SITE "www.doom9.net"
 !define INPUT_PATH "..\..\megui\trunk\dist\bigdist\"
 !define FILE1 "AvisynthWrapper.dll"
