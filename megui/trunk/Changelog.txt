@@ -1,4 +1,5 @@
 0.3.2.1024
+    - (sharktooth) [CodecManager] Added M2TS case to ContainerType.
     - (kurtnoise) [XvidConfigurationPanel] fix issue #2690826
     - (kurtnoise) cosmetics
     - (kurtnoise) add "demux video stream" option to the DGVCreator.
