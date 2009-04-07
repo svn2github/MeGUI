@@ -1,3 +1,16 @@
+0.3.2.1024
+    - (kurtnoise) [XvidConfigurationPanel] fix issue #2690826
+    - (kurtnoise) cosmetics
+    - (kurtnoise) add "demux video stream" option to the DGVCreator.
+    - (kurtnoise) add "demux video stream" option to the DGMCreator.
+    - (kurtnoise) add "demux video stream" option to the DGACreator.
+    - (kurtnoise) [MediaInfoFile] add VC-1 & M2TS informations.
+    - (kurtnoise) add "demux video stream" option to the D2VCreator.
+    - (kurtnoise) update MediaInfo library and its wrapper to the latest revision.
+    - (kurtnoise) [LanguageSelectionContainer] add Urdu & Punjabi languages (#2725585)
+    - (kurtnoise) [SettingsForm] cosmetics
+    - (kurtnoise) [UpdateWindow] add dgavcindex case.
+
 0.3.1.1023
     - (kurtnoise) add few tunings for some MessageBoxes.
     - (kurtnoise) [CodecManager] add BDSUP format as Subtitle Type.
