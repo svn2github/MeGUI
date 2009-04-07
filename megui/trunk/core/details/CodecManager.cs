@@ -294,10 +294,11 @@ namespace MeGUI
     {
         public ContainerType(string name, string filterName, string extension)
             : base(name, filterName, extension) { }
-        public static readonly ContainerType MP4 = new ContainerType("MP4", "MP4 Files", "mp4");
-        public static readonly ContainerType MKV = new ContainerType("MKV", "Matroska Files", "mkv");
-        public static readonly ContainerType AVI = new ContainerType("AVI", "AVI Files", "avi");
-        public static readonly ContainerType[] Containers = new ContainerType[] { MP4, MKV, AVI };
+        public static readonly ContainerType MP4  = new ContainerType("MP4", "MP4 Files", "mp4");
+        public static readonly ContainerType MKV  = new ContainerType("MKV", "Matroska Files", "mkv");
+        public static readonly ContainerType AVI  = new ContainerType("AVI", "AVI Files", "avi");
+        public static readonly ContainerType M2TS = new ContainerType("M2TS", "M2TS Files", "m2ts");
+        public static readonly ContainerType[] Containers = new ContainerType[] { MP4, MKV, AVI, M2TS };
 
         public static ContainerType ByName(string id)
         {
