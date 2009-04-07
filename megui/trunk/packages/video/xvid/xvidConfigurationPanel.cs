@@ -66,27 +66,34 @@ namespace MeGUI.packages.video.xvid
                 xvidFrameDropRatio.Enabled = false;
             }
         }
-
+        /// <summary>
+        /// Returns whether the given mode is a bitrate or quality-based mode
+        /// </summary>
+        /// <param name="mode">selected encoding mode</param>
+        /// <returns>true if the mode is a bitrate mode, false otherwise</returns>
+        private bool isBitrateMode(int mode)
+        {
+            return !(mode == (int)VideoCodecSettings.Mode.CQ ||
+                mode == (int)VideoCodecSettings.Mode.quality);
+        }
         private void doDropDownAdjustments()
         {
             logfileOpenButton.Enabled = false;
-            if (this.lastEncodingMode == 1 && xvidEncodingMode.SelectedIndex != 1)
+            if (isBitrateMode(xvidEncodingMode.SelectedIndex))
             {
                 xvidBitrateQuantLabel.Text = "Bitrate";
                 xvidBitrateQuantizer.Maximum = 10000;
                 xvidBitrateQuantizer.Minimum = 1;
                 xvidBitrateQuantizer.Increment = 1;
                 xvidBitrateQuantizer.DecimalPlaces = 0;
-                xvidBitrateQuantizer.Value = 700;
             }
-            else if (lastEncodingMode != 1 && xvidEncodingMode.SelectedIndex == 1)
+            else
             {
                 xvidBitrateQuantLabel.Text = "Quantizer";
                 xvidBitrateQuantizer.Maximum = 31;
                 xvidBitrateQuantizer.Minimum = 1;
                 xvidBitrateQuantizer.Increment = 0.1M;
                 xvidBitrateQuantizer.DecimalPlaces = 1;
-                xvidBitrateQuantizer.Value = 8;
             }
             switch (this.xvidEncodingMode.SelectedIndex)
             {
@@ -121,6 +128,20 @@ namespace MeGUI.packages.video.xvid
                     logfileOpenButton.Enabled = true;
                     break;
             }
+
+            // We check whether the bitrate/quality text needs to be changed
+            if (isBitrateMode(lastEncodingMode) != isBitrateMode(xvidEncodingMode.SelectedIndex))
+            {
+                if (isBitrateMode(xvidEncodingMode.SelectedIndex))
+                {
+                    this.xvidBitrateQuantizer.Value = 700;
+                }
+                else
+                {
+                    this.xvidBitrateQuantizer.Value = 8;
+                }
+            }
+
             lastEncodingMode = this.xvidEncodingMode.SelectedIndex;
 
             if (xvidVHQ.SelectedIndex == 0)
