@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{12D5215B-0254-4616-A53C-C8B7B6A2C8E9}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -852,6 +852,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="core\gui\Changelog.resx">
       <DependentUpon>Changelog.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="core\gui\ConfigableProfilesControl.resx">
       <SubType>Designer</SubType>
@@ -939,6 +940,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="core\gui\SourceDetectorConfigWindow.resx">
       <DependentUpon>SourceDetectorConfigWindow.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="core\gui\TextViewer.resx">
       <SubType>Designer</SubType>
@@ -946,6 +948,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="core\gui\UpdateWindow.resx">
       <DependentUpon>UpdateWindow.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="core\gui\VideoPlayer.resx">
       <DependentUpon>VideoPlayer.cs</DependentUpon>
@@ -1013,6 +1016,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="packages\tools\avscreator\AviSynthWindow.resx">
       <DependentUpon>AviSynthWindow.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="packages\tools\besplitter\Besplitter.resx">
       <SubType>Designer</SubType>
@@ -1044,15 +1048,19 @@
     </EmbeddedResource>
     <EmbeddedResource Include="packages\tools\dgacreator\DGAinputWindow.resx">
       <DependentUpon>DGAinputWindow.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="packages\tools\dgmcreator\DGMinputWindow.resx">
       <DependentUpon>DGMinputWindow.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="packages\tools\dgvcreator\DGVinputWindow.resx">
       <DependentUpon>DGVinputWindow.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="packages\tools\hdbdextractor\HDBDStreamExtractor.resx">
       <DependentUpon>HDBDStreamExtractor.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="packages\tools\oneclick\AudioConfigControl.resx">
       <SubType>Designer</SubType>

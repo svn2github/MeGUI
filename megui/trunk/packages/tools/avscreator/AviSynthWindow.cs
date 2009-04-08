@@ -83,6 +83,7 @@ namespace MeGUI
 		private System.Windows.Forms.NumericUpDown cropBottom;
 		private System.Windows.Forms.NumericUpDown cropTop;
         private System.Windows.Forms.OpenFileDialog openFilterDialog;
+        private System.Windows.Forms.OpenFileDialog openSubsDialog;
 		private System.Windows.Forms.CheckBox suggestResolution;
         private CheckBox signalAR;
 
@@ -137,6 +138,9 @@ namespace MeGUI
         private GroupBox dgOptions;
         private ComboBox cbNvDeInt;
         private CheckBox nvDeInt;
+        private Label SubtitlesLabel;
+        private Button openSubtitlesButton;
+        private TextBox SubtitlesPath;
 
 		/// <summary>
 		/// Required designer variable.
@@ -314,6 +318,9 @@ namespace MeGUI
             this.deinterlace = new System.Windows.Forms.CheckBox();
             this.deinterlaceType = new System.Windows.Forms.ComboBox();
             this.filtersGroupbox = new System.Windows.Forms.GroupBox();
+            this.openSubtitlesButton = new System.Windows.Forms.Button();
+            this.SubtitlesPath = new System.Windows.Forms.TextBox();
+            this.SubtitlesLabel = new System.Windows.Forms.Label();
             this.noiseFilterType = new System.Windows.Forms.ComboBox();
             this.noiseFilter = new System.Windows.Forms.CheckBox();
             this.resizeFilterType = new System.Windows.Forms.ComboBox();
@@ -325,6 +332,7 @@ namespace MeGUI
             this.avisynthScript = new System.Windows.Forms.TextBox();
             this.saveAvisynthScriptDialog = new System.Windows.Forms.SaveFileDialog();
             this.openFilterDialog = new System.Windows.Forms.OpenFileDialog();
+            this.openSubsDialog = new System.Windows.Forms.OpenFileDialog();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.deintProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.deintStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
@@ -368,9 +376,9 @@ namespace MeGUI
             label2.AutoSize = true;
             label2.Location = new System.Drawing.Point(9, 22);
             label2.Name = "label2";
-            label2.Size = new System.Drawing.Size(289, 13);
+            label2.Size = new System.Drawing.Size(258, 13);
             label2.TabIndex = 11;
-            label2.Text = "Source info:       (enter info or click analyse to auto-detect)";
+            label2.Text = "Source Info (Click on \'Analyse...\' for autodetection):";
             // 
             // label3
             // 
@@ -384,7 +392,7 @@ namespace MeGUI
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new System.Drawing.Point(9, 104);
+            label4.Location = new System.Drawing.Point(9, 79);
             label4.Name = "label4";
             label4.Size = new System.Drawing.Size(62, 13);
             label4.TabIndex = 14;
@@ -395,11 +403,11 @@ namespace MeGUI
             label5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             label5.AutoSize = true;
-            label5.Location = new System.Drawing.Point(211, 77);
+            label5.Location = new System.Drawing.Point(342, 50);
             label5.Name = "label5";
-            label5.Size = new System.Drawing.Size(61, 13);
+            label5.Size = new System.Drawing.Size(19, 13);
             label5.TabIndex = 17;
-            label5.Text = "Value of \'M\'";
+            label5.Text = "M:";
             // 
             // resNCropGroupbox
             // 
@@ -809,10 +817,10 @@ namespace MeGUI
             this.tabSources.Controls.Add(this.tabPage1);
             this.tabSources.Controls.Add(this.tabPage2);
             this.tabSources.Controls.Add(this.tabPage3);
-            this.tabSources.Location = new System.Drawing.Point(7, 3);
+            this.tabSources.Location = new System.Drawing.Point(3, 3);
             this.tabSources.Name = "tabSources";
             this.tabSources.SelectedIndex = 0;
-            this.tabSources.Size = new System.Drawing.Size(443, 116);
+            this.tabSources.Size = new System.Drawing.Size(449, 116);
             this.tabSources.TabIndex = 14;
             // 
             // tabPage1
@@ -821,7 +829,7 @@ namespace MeGUI
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(435, 90);
+            this.tabPage1.Size = new System.Drawing.Size(441, 90);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "MPEG2 Source";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -835,7 +843,7 @@ namespace MeGUI
             this.mpegOptGroupBox.Enabled = false;
             this.mpegOptGroupBox.Location = new System.Drawing.Point(6, 3);
             this.mpegOptGroupBox.Name = "mpegOptGroupBox";
-            this.mpegOptGroupBox.Size = new System.Drawing.Size(420, 80);
+            this.mpegOptGroupBox.Size = new System.Drawing.Size(426, 80);
             this.mpegOptGroupBox.TabIndex = 22;
             this.mpegOptGroupBox.TabStop = false;
             // 
@@ -863,7 +871,7 @@ namespace MeGUI
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(435, 90);
+            this.tabPage2.Size = new System.Drawing.Size(441, 90);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "AVI Source / DSSource";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -878,7 +886,7 @@ namespace MeGUI
             this.aviOptGroupBox.Enabled = false;
             this.aviOptGroupBox.Location = new System.Drawing.Point(6, 3);
             this.aviOptGroupBox.Name = "aviOptGroupBox";
-            this.aviOptGroupBox.Size = new System.Drawing.Size(420, 80);
+            this.aviOptGroupBox.Size = new System.Drawing.Size(426, 80);
             this.aviOptGroupBox.TabIndex = 23;
             this.aviOptGroupBox.TabStop = false;
             // 
@@ -899,7 +907,7 @@ namespace MeGUI
             0,
             196608});
             this.fpsBox.Name = "fpsBox";
-            this.fpsBox.Size = new System.Drawing.Size(124, 21);
+            this.fpsBox.Size = new System.Drawing.Size(130, 21);
             this.fpsBox.TabIndex = 3;
             this.fpsBox.Value = new decimal(new int[] {
             1,
@@ -931,7 +939,7 @@ namespace MeGUI
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(435, 90);
+            this.tabPage3.Size = new System.Drawing.Size(441, 90);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "DGx Source";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -944,7 +952,7 @@ namespace MeGUI
             this.dgOptions.Controls.Add(this.nvDeInt);
             this.dgOptions.Location = new System.Drawing.Point(6, 3);
             this.dgOptions.Name = "dgOptions";
-            this.dgOptions.Size = new System.Drawing.Size(420, 80);
+            this.dgOptions.Size = new System.Drawing.Size(426, 80);
             this.dgOptions.TabIndex = 14;
             this.dgOptions.TabStop = false;
             // 
@@ -957,7 +965,7 @@ namespace MeGUI
             this.cbNvDeInt.FormattingEnabled = true;
             this.cbNvDeInt.Location = new System.Drawing.Point(155, 18);
             this.cbNvDeInt.Name = "cbNvDeInt";
-            this.cbNvDeInt.Size = new System.Drawing.Size(259, 21);
+            this.cbNvDeInt.Size = new System.Drawing.Size(265, 21);
             this.cbNvDeInt.TabIndex = 1;
             // 
             // nvDeInt
@@ -991,7 +999,7 @@ namespace MeGUI
             this.deinterlacingGroupBox.Enabled = false;
             this.deinterlacingGroupBox.Location = new System.Drawing.Point(3, 121);
             this.deinterlacingGroupBox.Name = "deinterlacingGroupBox";
-            this.deinterlacingGroupBox.Size = new System.Drawing.Size(449, 186);
+            this.deinterlacingGroupBox.Size = new System.Drawing.Size(449, 164);
             this.deinterlacingGroupBox.TabIndex = 12;
             this.deinterlacingGroupBox.TabStop = false;
             this.deinterlacingGroupBox.Text = "Deinterlacing";
@@ -1000,9 +1008,9 @@ namespace MeGUI
             // 
             this.deintM.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.deintM.Location = new System.Drawing.Point(278, 73);
+            this.deintM.Location = new System.Drawing.Point(367, 47);
             this.deintM.Name = "deintM";
-            this.deintM.Size = new System.Drawing.Size(165, 21);
+            this.deintM.Size = new System.Drawing.Size(76, 21);
             this.deintM.TabIndex = 16;
             this.deintM.ValueChanged += new System.EventHandler(this.deintSourceType_SelectedIndexChanged);
             // 
@@ -1012,9 +1020,9 @@ namespace MeGUI
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.deintFieldOrder.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.deintFieldOrder.FormattingEnabled = true;
-            this.deintFieldOrder.Location = new System.Drawing.Point(169, 100);
+            this.deintFieldOrder.Location = new System.Drawing.Point(97, 76);
             this.deintFieldOrder.Name = "deintFieldOrder";
-            this.deintFieldOrder.Size = new System.Drawing.Size(274, 21);
+            this.deintFieldOrder.Size = new System.Drawing.Size(239, 21);
             this.deintFieldOrder.TabIndex = 15;
             this.deintFieldOrder.SelectedIndexChanged += new System.EventHandler(this.deintSourceType_SelectedIndexChanged);
             // 
@@ -1024,20 +1032,20 @@ namespace MeGUI
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.deintSourceType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.deintSourceType.FormattingEnabled = true;
-            this.deintSourceType.Location = new System.Drawing.Point(169, 46);
+            this.deintSourceType.Location = new System.Drawing.Point(97, 47);
             this.deintSourceType.Name = "deintSourceType";
-            this.deintSourceType.Size = new System.Drawing.Size(274, 21);
+            this.deintSourceType.Size = new System.Drawing.Size(239, 21);
             this.deintSourceType.TabIndex = 12;
             this.deintSourceType.SelectedIndexChanged += new System.EventHandler(this.deintSourceType_SelectedIndexChanged);
             // 
             // deintIsAnime
             // 
             this.deintIsAnime.AutoSize = true;
-            this.deintIsAnime.Location = new System.Drawing.Point(9, 127);
+            this.deintIsAnime.Location = new System.Drawing.Point(9, 133);
             this.deintIsAnime.Name = "deintIsAnime";
-            this.deintIsAnime.Size = new System.Drawing.Size(243, 17);
+            this.deintIsAnime.Size = new System.Drawing.Size(297, 17);
             this.deintIsAnime.TabIndex = 10;
-            this.deintIsAnime.Text = "Source is Anime (isn\'t detected automatically)";
+            this.deintIsAnime.Text = "Source is Anime (not automatically detected by Analisys)";
             this.deintIsAnime.UseVisualStyleBackColor = true;
             this.deintIsAnime.CheckedChanged += new System.EventHandler(this.deintSourceType_SelectedIndexChanged);
             // 
@@ -1055,9 +1063,9 @@ namespace MeGUI
             // 
             // deinterlace
             // 
-            this.deinterlace.Location = new System.Drawing.Point(9, 148);
+            this.deinterlace.Location = new System.Drawing.Point(9, 103);
             this.deinterlace.Name = "deinterlace";
-            this.deinterlace.Size = new System.Drawing.Size(104, 24);
+            this.deinterlace.Size = new System.Drawing.Size(82, 24);
             this.deinterlace.TabIndex = 2;
             this.deinterlace.Text = "Deinterlace";
             this.deinterlace.CheckedChanged += new System.EventHandler(this.deinterlace_CheckedChanged);
@@ -1073,9 +1081,9 @@ namespace MeGUI
             "Field Deinterlace",
             "Field Deinterlace (no blend)",
             "Telecide for PAL"});
-            this.deinterlaceType.Location = new System.Drawing.Point(169, 150);
+            this.deinterlaceType.Location = new System.Drawing.Point(97, 105);
             this.deinterlaceType.Name = "deinterlaceType";
-            this.deinterlaceType.Size = new System.Drawing.Size(274, 21);
+            this.deinterlaceType.Size = new System.Drawing.Size(239, 21);
             this.deinterlaceType.TabIndex = 4;
             this.deinterlaceType.SelectedIndexChanged += new System.EventHandler(this.deinterlaceType_SelectedIndexChanged);
             // 
@@ -1083,17 +1091,47 @@ namespace MeGUI
             // 
             this.filtersGroupbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.filtersGroupbox.Controls.Add(this.openSubtitlesButton);
+            this.filtersGroupbox.Controls.Add(this.SubtitlesPath);
+            this.filtersGroupbox.Controls.Add(this.SubtitlesLabel);
             this.filtersGroupbox.Controls.Add(this.noiseFilterType);
             this.filtersGroupbox.Controls.Add(this.noiseFilter);
             this.filtersGroupbox.Controls.Add(this.resizeFilterType);
             this.filtersGroupbox.Controls.Add(this.resizeFilterLabel);
             this.filtersGroupbox.Enabled = false;
-            this.filtersGroupbox.Location = new System.Drawing.Point(3, 313);
+            this.filtersGroupbox.Location = new System.Drawing.Point(3, 291);
             this.filtersGroupbox.Name = "filtersGroupbox";
-            this.filtersGroupbox.Size = new System.Drawing.Size(449, 76);
+            this.filtersGroupbox.Size = new System.Drawing.Size(449, 128);
             this.filtersGroupbox.TabIndex = 9;
             this.filtersGroupbox.TabStop = false;
             this.filtersGroupbox.Text = "Filters";
+            // 
+            // openSubtitlesButton
+            // 
+            this.openSubtitlesButton.Location = new System.Drawing.Point(418, 95);
+            this.openSubtitlesButton.Name = "openSubtitlesButton";
+            this.openSubtitlesButton.Size = new System.Drawing.Size(25, 22);
+            this.openSubtitlesButton.TabIndex = 9;
+            this.openSubtitlesButton.Text = "...";
+            this.openSubtitlesButton.UseVisualStyleBackColor = true;
+            this.openSubtitlesButton.Click += new System.EventHandler(this.openSubtitlesButton_Click);
+            // 
+            // SubtitlesPath
+            // 
+            this.SubtitlesPath.BackColor = System.Drawing.SystemColors.Control;
+            this.SubtitlesPath.Location = new System.Drawing.Point(9, 96);
+            this.SubtitlesPath.Name = "SubtitlesPath";
+            this.SubtitlesPath.Size = new System.Drawing.Size(391, 21);
+            this.SubtitlesPath.TabIndex = 8;
+            // 
+            // SubtitlesLabel
+            // 
+            this.SubtitlesLabel.AutoSize = true;
+            this.SubtitlesLabel.Location = new System.Drawing.Point(9, 80);
+            this.SubtitlesLabel.Name = "SubtitlesLabel";
+            this.SubtitlesLabel.Size = new System.Drawing.Size(52, 13);
+            this.SubtitlesLabel.TabIndex = 7;
+            this.SubtitlesLabel.Text = "Subtitles:";
             // 
             // noiseFilterType
             // 
@@ -1101,9 +1139,9 @@ namespace MeGUI
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.noiseFilterType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.noiseFilterType.Enabled = false;
-            this.noiseFilterType.Location = new System.Drawing.Point(169, 44);
+            this.noiseFilterType.Location = new System.Drawing.Point(97, 44);
             this.noiseFilterType.Name = "noiseFilterType";
-            this.noiseFilterType.Size = new System.Drawing.Size(158, 21);
+            this.noiseFilterType.Size = new System.Drawing.Size(263, 21);
             this.noiseFilterType.TabIndex = 5;
             this.noiseFilterType.SelectedIndexChanged += new System.EventHandler(this.noiseFilterType_SelectedIndexChanged);
             // 
@@ -1121,9 +1159,9 @@ namespace MeGUI
             this.resizeFilterType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.resizeFilterType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.resizeFilterType.Location = new System.Drawing.Point(169, 17);
+            this.resizeFilterType.Location = new System.Drawing.Point(97, 17);
             this.resizeFilterType.Name = "resizeFilterType";
-            this.resizeFilterType.Size = new System.Drawing.Size(158, 21);
+            this.resizeFilterType.Size = new System.Drawing.Size(263, 21);
             this.resizeFilterType.TabIndex = 1;
             this.resizeFilterType.SelectedIndexChanged += new System.EventHandler(this.resizeFilterType_SelectedIndexChanged);
             // 
@@ -1163,7 +1201,7 @@ namespace MeGUI
             // 
             this.dllPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.dllPath.Location = new System.Drawing.Point(60, 387);
+            this.dllPath.Location = new System.Drawing.Point(61, 387);
             this.dllPath.Name = "dllPath";
             this.dllPath.ReadOnly = true;
             this.dllPath.Size = new System.Drawing.Size(343, 21);
@@ -1172,7 +1210,7 @@ namespace MeGUI
             // label1
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.label1.Location = new System.Drawing.Point(3, 390);
+            this.label1.Location = new System.Drawing.Point(5, 390);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(66, 13);
             this.label1.TabIndex = 1;
@@ -1199,6 +1237,11 @@ namespace MeGUI
             // 
             this.openFilterDialog.Filter = "AviSynth Filters|*.dll";
             this.openFilterDialog.Title = "Select an AviSynth Filter";
+            // 
+            // openSubsDialog
+            // 
+            this.openSubsDialog.Filter = "Subs Files|*.srt;*.ass;*.ssa";
+            this.openSubsDialog.Title = "Select a subtitle file";
             // 
             // statusStrip1
             // 
@@ -1310,6 +1353,7 @@ namespace MeGUI
             this.deinterlacingGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.deintM)).EndInit();
             this.filtersGroupbox.ResumeLayout(false);
+            this.filtersGroupbox.PerformLayout();
             this.editTab.ResumeLayout(false);
             this.editTab.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
@@ -2232,6 +2276,19 @@ namespace MeGUI
         {
             // just to be sure
             checkNVCompatibleFile(input.Filename);
+        }
+
+        private void openSubtitlesButton_Click(object sender, EventArgs e)
+        {
+            if (this.openSubsDialog.ShowDialog() == DialogResult.OK)
+            {
+                this.SubtitlesPath.Text = openSubsDialog.FileName;
+                string temp = avisynthScript.Text;
+                script = new StringBuilder();
+                script.Append(temp);
+                script.Append("TextSub(\"" + openSubsDialog.FileName + "\")\r\n");
+                avisynthScript.Text = script.ToString();
+            }
         }
     }
     public delegate void OpenScriptCallback(string avisynthScript);
