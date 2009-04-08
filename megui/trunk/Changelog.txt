@@ -1,3 +1,8 @@
+0.3.1.1030
+    - (sharktooth) [AviSynthWindow] Added a messagebox to notify the subtitles has been succesfully added to the avisynth script.
+    - (sharktooth) [AviSynthWindow] Added a check to prevent to add the same subs twice.
+    - (sharktooth) [AviSynthWindow] Subtitles path textbox is now read-only.
+
 0.3.1.1029
     - (sharktooth) [AviSynthWindow] Added support for subtitles (srt,ass,ssa).
 
