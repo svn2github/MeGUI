@@ -204,13 +204,13 @@ new JobProcessorFactory(new ProcessorFactory(init), "XviDEncoder");
                 case 0:
                     break;
                 case 1:
-                    sb.Append("-vbv 4854000,3145728,2359296 ");
+                    sb.Append("-vbvmax 4854000 -vbvsize 3145728 -vbvpeak 2359296 ");
                     break;
                 case 2:
-                    sb.Append("-vbv 9708400,6291456,4718592 ");
+                    sb.Append("-vbvmax 9708400 -vbvsize 6291456 -vbvpeak 4718592 ");
                     break;
                 case 3:
-                    sb.Append("-vbv 20000000,16000000,12000000 ");
+                    sb.Append("-vbvmax 20000000 -vbvsize 16000000 -vbvpeak 12000000 ");
                     break;
             }
             if (d.HasValue) // custom PAR mode
