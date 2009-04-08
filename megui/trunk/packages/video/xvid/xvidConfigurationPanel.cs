@@ -50,6 +50,15 @@ namespace MeGUI.packages.video.xvid
                     this.xvidNbBFrames.Maximum = 4;
                     this.xvidPackedBitstream.Enabled = true;
                     this.cqmComboBox1.Enabled = true;
+                    this.xvidOverflowControlStrength.Minimum = 0;
+                    this.xvidMaxOverflowDegradation.Minimum = 0;
+                    this.xvidMaxOverflowImprovement.Minimum = 0;
+                    if ((this.xvidOverflowControlStrength.Value == 10) & (this.xvidMaxOverflowDegradation.Value == 10) & (this.xvidMaxOverflowImprovement.Value == 10))
+                    {
+                        this.xvidOverflowControlStrength.Value = 5;
+                        this.xvidMaxOverflowDegradation.Value = 5;
+                        this.xvidMaxOverflowImprovement.Value = 5;
+                    }
                     break;
                 case 1: // Home Theater
                     this.xvidNbBFrames.Maximum = 1;
@@ -58,6 +67,9 @@ namespace MeGUI.packages.video.xvid
                     this.fourCC.SelectedIndex = 2;
                     this.cqmComboBox1.SelectedIndex = 0;
                     this.cqmComboBox1.Enabled = false;
+                    this.xvidOverflowControlStrength.Minimum = 10;
+                    this.xvidMaxOverflowDegradation.Minimum = 10;
+                    this.xvidMaxOverflowImprovement.Minimum = 10;
                     break;
                 case 2: // Hi-Def 720p
                     this.xvidNbBFrames.Maximum = 2;
@@ -66,6 +78,9 @@ namespace MeGUI.packages.video.xvid
                     this.fourCC.SelectedIndex = 2;
                     this.cqmComboBox1.SelectedIndex = 0;
                     this.cqmComboBox1.Enabled = false;
+                    this.xvidOverflowControlStrength.Minimum = 10;
+                    this.xvidMaxOverflowDegradation.Minimum = 10;
+                    this.xvidMaxOverflowImprovement.Minimum = 10;
                     break;
                 case 3: // Hi-Def 1080p
                     this.xvidNbBFrames.Maximum = 2;
@@ -74,6 +89,9 @@ namespace MeGUI.packages.video.xvid
                     this.fourCC.SelectedIndex = 2;
                     this.cqmComboBox1.SelectedIndex = 0;
                     this.cqmComboBox1.Enabled = false;
+                    this.xvidOverflowControlStrength.Minimum = 10;
+                    this.xvidMaxOverflowDegradation.Minimum = 10;
+                    this.xvidMaxOverflowImprovement.Minimum = 10;
                     break;
             }
             if ((int)xvidNbBFrames.Value > 0)
