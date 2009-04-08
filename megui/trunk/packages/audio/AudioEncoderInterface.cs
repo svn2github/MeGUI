@@ -306,7 +306,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
 
                                 _sampleRate = a.AudioSampleRate;
 
-                                raiseEvent("Preprocessing...");
+                                raiseEvent("Preprocessing...   ***PLEASE WAIT***");
                                 bool hasStartedEncoding = false;
 
                                 GCHandle h = GCHandle.Alloc(frameBuffer, GCHandleType.Pinned);
