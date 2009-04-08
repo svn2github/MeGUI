@@ -152,10 +152,16 @@ namespace MeGUI.packages.video.xvid
                         this.xvidMaxOverflowDegradation.Value = 5;
                         this.xvidMaxOverflowImprovement.Value = 5;
                     }
+                    this.xvidInterlaced.Enabled = true;
+                    this.xvidVbvBuffer.Enabled = false;
+                    this.xvidVbvMaxRate.Enabled = false;
+                    this.xvidVbvPeakRate.Enabled = false;
+                    this.xvidVbvBuffer.Text = "0";
+                    this.xvidVbvMaxRate.Text = "0";
+                    this.xvidVbvPeakRate.Text = "0";
                     break;
                 case 1: // Home Theater
                     this.xvidNbBFrames.Maximum = 1;
-                    // this.xvidPackedBitstream.Enabled = false;
                     this.xvidPackedBitstream.Checked = true;
                     this.fourCC.SelectedIndex = 2;
                     this.cqmComboBox1.SelectedIndex = 0;
@@ -167,10 +173,16 @@ namespace MeGUI.packages.video.xvid
                     this.xvidOverflowControlStrength.Minimum = 10;
                     this.xvidMaxOverflowDegradation.Minimum = 10;
                     this.xvidMaxOverflowImprovement.Minimum = 10;
+                    this.xvidInterlaced.Enabled = true;
+                    this.xvidVbvBuffer.Enabled = false;
+                    this.xvidVbvMaxRate.Enabled = false;
+                    this.xvidVbvPeakRate.Enabled = false;
+                    this.xvidVbvBuffer.Text = "0";
+                    this.xvidVbvMaxRate.Text = "0";
+                    this.xvidVbvPeakRate.Text = "0";
                     break;
                 case 2: // Hi-Def 720p
                     this.xvidNbBFrames.Maximum = 2;
-                    // this.xvidPackedBitstream.Enabled = false;
                     this.xvidPackedBitstream.Checked = false;
                     this.fourCC.SelectedIndex = 2;
                     this.cqmComboBox1.SelectedIndex = 0;
@@ -182,10 +194,16 @@ namespace MeGUI.packages.video.xvid
                     this.xvidOverflowControlStrength.Minimum = 10;
                     this.xvidMaxOverflowDegradation.Minimum = 10;
                     this.xvidMaxOverflowImprovement.Minimum = 10;
+                    this.xvidInterlaced.Enabled = true;
+                    this.xvidVbvBuffer.Enabled = false;
+                    this.xvidVbvMaxRate.Enabled = false;
+                    this.xvidVbvPeakRate.Enabled = false;
+                    this.xvidVbvBuffer.Text = "0";
+                    this.xvidVbvMaxRate.Text = "0";
+                    this.xvidVbvPeakRate.Text = "0";
                     break;
                 case 3: // Hi-Def 1080p
                     this.xvidNbBFrames.Maximum = 2;
-                    // this.xvidPackedBitstream.Enabled = false;
                     this.xvidPackedBitstream.Checked = false;
                     this.fourCC.SelectedIndex = 2;
                     this.cqmComboBox1.SelectedIndex = 0;
@@ -197,6 +215,63 @@ namespace MeGUI.packages.video.xvid
                     this.xvidOverflowControlStrength.Minimum = 10;
                     this.xvidMaxOverflowDegradation.Minimum = 10;
                     this.xvidMaxOverflowImprovement.Minimum = 10;
+                    this.xvidInterlaced.Enabled = true;
+                    this.xvidVbvBuffer.Enabled = false;
+                    this.xvidVbvMaxRate.Enabled = false;
+                    this.xvidVbvPeakRate.Enabled = false;
+                    this.xvidVbvBuffer.Text = "0";
+                    this.xvidVbvMaxRate.Text = "0";
+                    this.xvidVbvPeakRate.Text = "0";
+                    break;
+                case 4: // Handheld
+                    this.xvidNbBFrames.Maximum = 0;
+                    this.fourCC.SelectedIndex = 2;
+                    this.cqmComboBox1.SelectedIndex = 0;
+                    this.cqmComboBox1.Enabled = false;
+                    this.xvidQpel.Enabled = false;
+                    this.xvidQpel.Checked = false;
+                    this.xvidGMC.Enabled = false;
+                    this.xvidGMC.Checked = false;
+                    this.xvidOverflowControlStrength.Minimum = 10;
+                    this.xvidMaxOverflowDegradation.Minimum = 10;
+                    this.xvidMaxOverflowImprovement.Minimum = 10;
+                    this.xvidInterlaced.Checked = false;
+                    this.xvidInterlaced.Enabled = false;
+                    this.xvidVbvBuffer.Enabled = false;
+                    this.xvidVbvMaxRate.Enabled = false;
+                    this.xvidVbvPeakRate.Enabled = false;
+                    this.xvidVbvBuffer.Text = "0";
+                    this.xvidVbvMaxRate.Text = "0";
+                    this.xvidVbvPeakRate.Text = "0";
+                    break;
+                case 5: // Portable
+                    this.xvidNbBFrames.Maximum = 0;
+                    this.fourCC.SelectedIndex = 2;
+                    this.cqmComboBox1.SelectedIndex = 0;
+                    this.cqmComboBox1.Enabled = false;
+                    this.xvidQpel.Enabled = false;
+                    this.xvidQpel.Checked = false;
+                    this.xvidGMC.Enabled = false;
+                    this.xvidGMC.Checked = false;
+                    this.xvidOverflowControlStrength.Minimum = 10;
+                    this.xvidMaxOverflowDegradation.Minimum = 10;
+                    this.xvidMaxOverflowImprovement.Minimum = 10;
+                    this.xvidInterlaced.Checked = false;
+                    this.xvidInterlaced.Enabled = false;
+                    this.xvidVbvBuffer.Enabled = false;
+                    this.xvidVbvMaxRate.Enabled = false;
+                    this.xvidVbvPeakRate.Enabled = false;
+                    this.xvidVbvBuffer.Text = "0";
+                    this.xvidVbvMaxRate.Text = "0";
+                    this.xvidVbvPeakRate.Text = "0";
+                    break;
+                case 6: // Custom
+                    this.xvidOverflowControlStrength.Minimum = 10;
+                    this.xvidMaxOverflowDegradation.Minimum = 10;
+                    this.xvidMaxOverflowImprovement.Minimum = 10;
+                    this.xvidVbvBuffer.Enabled = true;
+                    this.xvidVbvMaxRate.Enabled = true;
+                    this.xvidVbvPeakRate.Enabled = true;
                     break;
             }
             // We check whether the bitrate/quality text needs to be changed
@@ -293,6 +368,9 @@ namespace MeGUI.packages.video.xvid
                 xs.NbBframes = (int)xvidNbBFrames.Value;
                 xs.PackedBitstream = xvidPackedBitstream.Checked;
                 xs.XvidProfile = xvidProfile.SelectedIndex;
+                xs.VbvBuffer = Int32.Parse(xvidVbvBuffer.Text);
+                xs.VbvMaxRate = Int32.Parse(xvidVbvMaxRate.Text);
+                xs.VbvPeakRate = Int32.Parse(xvidVbvPeakRate.Text);
                 xs.MotionSearchPrecision = xvidMotionSearchPrecision.SelectedIndex;
                 xs.VHQMode = xvidVHQ.SelectedIndex;
                 xs.VHQForBframes = xvidUseVHQForBframes.Checked;
@@ -418,6 +496,21 @@ namespace MeGUI.packages.video.xvid
         }
 
         private void xvidProfile_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            genericUpdate();
+        }
+
+        private void xvidVbvBuffer_TextChanged(object sender, EventArgs e)
+        {
+            genericUpdate();
+        }
+
+        private void xvidVbvMaxRate_TextChanged(object sender, EventArgs e)
+        {
+            genericUpdate();
+        }
+
+        private void xvidVbvPeakRate_TextChanged(object sender, EventArgs e)
         {
             genericUpdate();
         }

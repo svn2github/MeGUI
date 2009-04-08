@@ -129,12 +129,37 @@ new JobProcessorFactory(new ProcessorFactory(init), "XviDEncoder");
                 if (xs.LowBitrateImprovement != 0)
                     sb.Append("-clow " + xs.LowBitrateImprovement + " ");
                 sb.Append("-overhead 0 ");
-                if (xs.VbvBuffer != 0)
-                    sb.Append("-vbvsize " + xs.VbvBuffer + " ");
-                if (xs.VbvMaxRate != 0)
-                    sb.Append("-vbvmax " + xs.VbvMaxRate + " ");
-                if (xs.VbvPeakRate != 0)
-                    sb.Append("-vbvpeak " + xs.VbvPeakRate + " ");
+                if (xs.XvidProfile != 0)
+                {
+                    switch (xs.XvidProfile)
+                    {
+                        case 0:
+                            break;
+                        case 1:
+                            sb.Append("-vbvmax 4854000 -vbvsize 3145728 -vbvpeak 2359296 ");
+                            break;
+                        case 2:
+                            sb.Append("-vbvmax 9708400 -vbvsize 6291456 -vbvpeak 4718592 ");
+                            break;
+                        case 3:
+                            sb.Append("-vbvmax 20000000 -vbvsize 16000000 -vbvpeak 12000000 ");
+                            break;
+                        case 4:
+                            sb.Append("-vbvmax 200000 -vbvsize 262144 -vbvpeak 196608 ");
+                            break;
+                        case 5:
+                            sb.Append("-vbvmax 600000 -vbvsize 655360 -vbvpeak 491520 ");
+                            break;
+                        case 6:
+                            if (xs.VbvBuffer != 0)
+                                sb.Append("-vbvsize " + xs.VbvBuffer + " ");
+                            if (xs.VbvMaxRate != 0)
+                                sb.Append("-vbvmax " + xs.VbvMaxRate + " ");
+                            if (xs.VbvPeakRate != 0)
+                                sb.Append("-vbvpeak " + xs.VbvPeakRate + " ");
+                            break;
+                    }
+                }
             }
             if (xs.Turbo)
                 sb.Append("-turbo ");
@@ -198,20 +223,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "XviDEncoder");
                     sb.Append("-bmin " + xs.MinBQuant + " ");
                 if (xs.MaxBQuant != 31)
                     sb.Append("-bmax " + xs.MaxBQuant + " ");
-            }
-            switch (xs.XvidProfile)
-            {
-                case 0:
-                    break;
-                case 1:
-                    sb.Append("-vbvmax 4854000 -vbvsize 3145728 -vbvpeak 2359296 ");
-                    break;
-                case 2:
-                    sb.Append("-vbvmax 9708400 -vbvsize 6291456 -vbvpeak 4718592 ");
-                    break;
-                case 3:
-                    sb.Append("-vbvmax 20000000 -vbvsize 16000000 -vbvpeak 12000000 ");
-                    break;
             }
             if (d.HasValue) // custom PAR mode
             {

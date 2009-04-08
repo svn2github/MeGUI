@@ -401,6 +401,9 @@ namespace MeGUI
                this.V4MV != otherSettings.V4MV ||
                this.VHQForBframes != otherSettings.VHQForBframes ||
                this.XvidProfile != otherSettings.XvidProfile ||
+               this.VbvBuffer != otherSettings.VbvBuffer ||
+               this.VbvMaxRate != otherSettings.VbvMaxRate ||
+               this.VbvPeakRate != otherSettings.VbvPeakRate ||
                this.VHQMode != otherSettings.VHQMode
                )
                 return true;

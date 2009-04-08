@@ -29,6 +29,12 @@ namespace MeGUI.packages.video.xvid
         private void InitializeComponent()
         {
             this.xvidOtherGroupBox = new System.Windows.Forms.GroupBox();
+            this.xvidVbvPeakRateLabel = new System.Windows.Forms.Label();
+            this.xvidVbvMaxRateLabel = new System.Windows.Forms.Label();
+            this.xvidVbvBufferLabel = new System.Windows.Forms.Label();
+            this.xvidVbvPeakRate = new System.Windows.Forms.TextBox();
+            this.xvidVbvMaxRate = new System.Windows.Forms.TextBox();
+            this.xvidVbvBuffer = new System.Windows.Forms.TextBox();
             this.xvidProfile = new System.Windows.Forms.ComboBox();
             this.xvidProfileLabel = new System.Windows.Forms.Label();
             this.xvidMotionSearchPrecision = new System.Windows.Forms.ComboBox();
@@ -189,6 +195,12 @@ namespace MeGUI.packages.video.xvid
             // 
             // xvidOtherGroupBox
             // 
+            this.xvidOtherGroupBox.Controls.Add(this.xvidVbvPeakRateLabel);
+            this.xvidOtherGroupBox.Controls.Add(this.xvidVbvMaxRateLabel);
+            this.xvidOtherGroupBox.Controls.Add(this.xvidVbvBufferLabel);
+            this.xvidOtherGroupBox.Controls.Add(this.xvidVbvPeakRate);
+            this.xvidOtherGroupBox.Controls.Add(this.xvidVbvMaxRate);
+            this.xvidOtherGroupBox.Controls.Add(this.xvidVbvBuffer);
             this.xvidOtherGroupBox.Controls.Add(this.xvidProfile);
             this.xvidOtherGroupBox.Controls.Add(this.xvidProfileLabel);
             this.xvidOtherGroupBox.Controls.Add(this.xvidMotionSearchPrecision);
@@ -213,6 +225,61 @@ namespace MeGUI.packages.video.xvid
             this.xvidOtherGroupBox.TabStop = false;
             this.xvidOtherGroupBox.Text = "Other Settings";
             // 
+            // xvidVbvPeakRateLabel
+            // 
+            this.xvidVbvPeakRateLabel.AutoSize = true;
+            this.xvidVbvPeakRateLabel.Location = new System.Drawing.Point(8, 392);
+            this.xvidVbvPeakRateLabel.Name = "xvidVbvPeakRateLabel";
+            this.xvidVbvPeakRateLabel.Size = new System.Drawing.Size(32, 13);
+            this.xvidVbvPeakRateLabel.TabIndex = 23;
+            this.xvidVbvPeakRateLabel.Text = "Peak";
+            // 
+            // xvidVbvMaxRateLabel
+            // 
+            this.xvidVbvMaxRateLabel.Location = new System.Drawing.Point(8, 358);
+            this.xvidVbvMaxRateLabel.Name = "xvidVbvMaxRateLabel";
+            this.xvidVbvMaxRateLabel.Size = new System.Drawing.Size(42, 23);
+            this.xvidVbvMaxRateLabel.TabIndex = 22;
+            this.xvidVbvMaxRateLabel.Text = "Max";
+            // 
+            // xvidVbvBufferLabel
+            // 
+            this.xvidVbvBufferLabel.Location = new System.Drawing.Point(8, 324);
+            this.xvidVbvBufferLabel.Name = "xvidVbvBufferLabel";
+            this.xvidVbvBufferLabel.Size = new System.Drawing.Size(42, 23);
+            this.xvidVbvBufferLabel.TabIndex = 21;
+            this.xvidVbvBufferLabel.Text = "Buffer";
+            // 
+            // xvidVbvPeakRate
+            // 
+            this.xvidVbvPeakRate.Enabled = false;
+            this.xvidVbvPeakRate.Location = new System.Drawing.Point(56, 389);
+            this.xvidVbvPeakRate.Name = "xvidVbvPeakRate";
+            this.xvidVbvPeakRate.Size = new System.Drawing.Size(100, 20);
+            this.xvidVbvPeakRate.TabIndex = 20;
+            this.xvidVbvPeakRate.Text = "0";
+            this.xvidVbvPeakRate.TextChanged += new System.EventHandler(this.xvidVbvPeakRate_TextChanged);
+            // 
+            // xvidVbvMaxRate
+            // 
+            this.xvidVbvMaxRate.Enabled = false;
+            this.xvidVbvMaxRate.Location = new System.Drawing.Point(56, 355);
+            this.xvidVbvMaxRate.Name = "xvidVbvMaxRate";
+            this.xvidVbvMaxRate.Size = new System.Drawing.Size(100, 20);
+            this.xvidVbvMaxRate.TabIndex = 19;
+            this.xvidVbvMaxRate.Text = "0";
+            this.xvidVbvMaxRate.TextChanged += new System.EventHandler(this.xvidVbvMaxRate_TextChanged);
+            // 
+            // xvidVbvBuffer
+            // 
+            this.xvidVbvBuffer.Enabled = false;
+            this.xvidVbvBuffer.Location = new System.Drawing.Point(56, 321);
+            this.xvidVbvBuffer.Name = "xvidVbvBuffer";
+            this.xvidVbvBuffer.Size = new System.Drawing.Size(100, 20);
+            this.xvidVbvBuffer.TabIndex = 18;
+            this.xvidVbvBuffer.Text = "0";
+            this.xvidVbvBuffer.TextChanged += new System.EventHandler(this.xvidVbvBuffer_TextChanged);
+            // 
             // xvidProfile
             // 
             this.xvidProfile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -221,7 +288,10 @@ namespace MeGUI.packages.video.xvid
             "Unrestricted",
             "Home Theatre",
             "Hi-Def (720p)",
-            "Hi-Def (1080p)"});
+            "Hi-Def (1080p)",
+            "Handheld",
+            "Portable",
+            "Custom"});
             this.xvidProfile.Location = new System.Drawing.Point(11, 287);
             this.xvidProfile.Name = "xvidProfile";
             this.xvidProfile.Size = new System.Drawing.Size(145, 21);
@@ -1506,5 +1576,11 @@ namespace MeGUI.packages.video.xvid
         private System.Windows.Forms.TextBox customCommandlineOptions;
         private System.Windows.Forms.ComboBox xvidProfile;
         private System.Windows.Forms.Label xvidProfileLabel;
+        private System.Windows.Forms.TextBox xvidVbvPeakRate;
+        private System.Windows.Forms.TextBox xvidVbvMaxRate;
+        private System.Windows.Forms.TextBox xvidVbvBuffer;
+        private System.Windows.Forms.Label xvidVbvPeakRateLabel;
+        private System.Windows.Forms.Label xvidVbvMaxRateLabel;
+        private System.Windows.Forms.Label xvidVbvBufferLabel;
     }
 }
