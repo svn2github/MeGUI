@@ -1,3 +1,6 @@
+0.3.1.1027
+    - (sharktooth) [XviDEncoder] 10l
+
 0.3.1.1026
     - (sharktooth) [xvidConfigurationPanel] Moved Profiles checks into doDropDownAdjustments (where they should be...) and added additional checks for encoding modes (profiles are enabled only for 2pass modes).
     - (sharktooth) [xvidConfigurationPanel] Cosmetics.
