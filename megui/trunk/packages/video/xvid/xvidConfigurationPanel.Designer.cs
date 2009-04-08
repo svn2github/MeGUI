@@ -222,7 +222,7 @@ namespace MeGUI.packages.video.xvid
             "Home Theatre",
             "Hi-Def (720p)",
             "Hi-Def (1080p)"});
-            this.xvidProfile.Location = new System.Drawing.Point(11, 335);
+            this.xvidProfile.Location = new System.Drawing.Point(11, 287);
             this.xvidProfile.Name = "xvidProfile";
             this.xvidProfile.Size = new System.Drawing.Size(145, 21);
             this.xvidProfile.TabIndex = 17;
@@ -230,11 +230,11 @@ namespace MeGUI.packages.video.xvid
             // 
             // xvidProfileLabel
             // 
-            this.xvidProfileLabel.Location = new System.Drawing.Point(8, 319);
+            this.xvidProfileLabel.Location = new System.Drawing.Point(8, 271);
             this.xvidProfileLabel.Name = "xvidProfileLabel";
             this.xvidProfileLabel.Size = new System.Drawing.Size(136, 24);
             this.xvidProfileLabel.TabIndex = 16;
-            this.xvidProfileLabel.Text = "DXN Profile:";
+            this.xvidProfileLabel.Text = "Profile:";
             // 
             // xvidMotionSearchPrecision
             // 
@@ -247,7 +247,7 @@ namespace MeGUI.packages.video.xvid
             "4 - High",
             "5 - Very High",
             "6 - Ultra High"});
-            this.xvidMotionSearchPrecision.Location = new System.Drawing.Point(11, 288);
+            this.xvidMotionSearchPrecision.Location = new System.Drawing.Point(11, 244);
             this.xvidMotionSearchPrecision.Name = "xvidMotionSearchPrecision";
             this.xvidMotionSearchPrecision.Size = new System.Drawing.Size(145, 21);
             this.xvidMotionSearchPrecision.TabIndex = 15;
@@ -255,7 +255,7 @@ namespace MeGUI.packages.video.xvid
             // 
             // xvidMotionSearchPrecisionLabel
             // 
-            this.xvidMotionSearchPrecisionLabel.Location = new System.Drawing.Point(8, 269);
+            this.xvidMotionSearchPrecisionLabel.Location = new System.Drawing.Point(8, 225);
             this.xvidMotionSearchPrecisionLabel.Name = "xvidMotionSearchPrecisionLabel";
             this.xvidMotionSearchPrecisionLabel.Size = new System.Drawing.Size(136, 24);
             this.xvidMotionSearchPrecisionLabel.TabIndex = 14;
@@ -263,7 +263,7 @@ namespace MeGUI.packages.video.xvid
             // 
             // xvidPackedBitstream
             // 
-            this.xvidPackedBitstream.Location = new System.Drawing.Point(11, 92);
+            this.xvidPackedBitstream.Location = new System.Drawing.Point(11, 87);
             this.xvidPackedBitstream.Name = "xvidPackedBitstream";
             this.xvidPackedBitstream.Size = new System.Drawing.Size(16, 24);
             this.xvidPackedBitstream.TabIndex = 13;
@@ -271,7 +271,7 @@ namespace MeGUI.packages.video.xvid
             // 
             // xvidPackedBitstreamLabel
             // 
-            this.xvidPackedBitstreamLabel.Location = new System.Drawing.Point(27, 97);
+            this.xvidPackedBitstreamLabel.Location = new System.Drawing.Point(27, 92);
             this.xvidPackedBitstreamLabel.Name = "xvidPackedBitstreamLabel";
             this.xvidPackedBitstreamLabel.Size = new System.Drawing.Size(100, 23);
             this.xvidPackedBitstreamLabel.TabIndex = 12;
@@ -279,7 +279,7 @@ namespace MeGUI.packages.video.xvid
             // 
             // xvidNbBFrames
             // 
-            this.xvidNbBFrames.Location = new System.Drawing.Point(116, 173);
+            this.xvidNbBFrames.Location = new System.Drawing.Point(116, 144);
             this.xvidNbBFrames.Maximum = new decimal(new int[] {
             4,
             0,
@@ -292,7 +292,7 @@ namespace MeGUI.packages.video.xvid
             // 
             // xvidNbBframesLabel
             // 
-            this.xvidNbBframesLabel.Location = new System.Drawing.Point(8, 175);
+            this.xvidNbBframesLabel.Location = new System.Drawing.Point(8, 146);
             this.xvidNbBframesLabel.Name = "xvidNbBframesLabel";
             this.xvidNbBframesLabel.Size = new System.Drawing.Size(83, 23);
             this.xvidNbBframesLabel.TabIndex = 10;
@@ -300,7 +300,7 @@ namespace MeGUI.packages.video.xvid
             // 
             // xvidKeyframeInterval
             // 
-            this.xvidKeyframeInterval.Location = new System.Drawing.Point(116, 150);
+            this.xvidKeyframeInterval.Location = new System.Drawing.Point(116, 119);
             this.xvidKeyframeInterval.Name = "xvidKeyframeInterval";
             this.xvidKeyframeInterval.Size = new System.Drawing.Size(40, 20);
             this.xvidKeyframeInterval.TabIndex = 9;
@@ -309,7 +309,7 @@ namespace MeGUI.packages.video.xvid
             // 
             // xvidKeyframeIntervalLabel
             // 
-            this.xvidKeyframeIntervalLabel.Location = new System.Drawing.Point(8, 150);
+            this.xvidKeyframeIntervalLabel.Location = new System.Drawing.Point(8, 119);
             this.xvidKeyframeIntervalLabel.Name = "xvidKeyframeIntervalLabel";
             this.xvidKeyframeIntervalLabel.Size = new System.Drawing.Size(104, 25);
             this.xvidKeyframeIntervalLabel.TabIndex = 8;
@@ -318,7 +318,7 @@ namespace MeGUI.packages.video.xvid
             // xvidThreadsLabel
             // 
             this.xvidThreadsLabel.AutoSize = true;
-            this.xvidThreadsLabel.Location = new System.Drawing.Point(8, 203);
+            this.xvidThreadsLabel.Location = new System.Drawing.Point(8, 172);
             this.xvidThreadsLabel.Name = "xvidThreadsLabel";
             this.xvidThreadsLabel.Size = new System.Drawing.Size(46, 13);
             this.xvidThreadsLabel.TabIndex = 4;
@@ -326,7 +326,7 @@ namespace MeGUI.packages.video.xvid
             // 
             // nbThreads
             // 
-            this.nbThreads.Location = new System.Drawing.Point(84, 201);
+            this.nbThreads.Location = new System.Drawing.Point(84, 170);
             this.nbThreads.Minimum = new decimal(new int[] {
             1,
             0,
@@ -344,7 +344,7 @@ namespace MeGUI.packages.video.xvid
             // 
             // xvidInterlaced
             // 
-            this.xvidInterlaced.Location = new System.Drawing.Point(11, 70);
+            this.xvidInterlaced.Location = new System.Drawing.Point(11, 64);
             this.xvidInterlaced.Name = "xvidInterlaced";
             this.xvidInterlaced.Size = new System.Drawing.Size(104, 24);
             this.xvidInterlaced.TabIndex = 3;
@@ -371,7 +371,7 @@ namespace MeGUI.packages.video.xvid
             // 
             // fourCCLabel
             // 
-            this.fourCCLabel.Location = new System.Drawing.Point(8, 230);
+            this.fourCCLabel.Location = new System.Drawing.Point(8, 199);
             this.fourCCLabel.Name = "fourCCLabel";
             this.fourCCLabel.Size = new System.Drawing.Size(46, 18);
             this.fourCCLabel.TabIndex = 6;
@@ -385,7 +385,7 @@ namespace MeGUI.packages.video.xvid
             "DIVX",
             "DX50",
             "MP4V"});
-            this.fourCC.Location = new System.Drawing.Point(84, 227);
+            this.fourCC.Location = new System.Drawing.Point(84, 196);
             this.fourCC.Name = "fourCC";
             this.fourCC.Size = new System.Drawing.Size(72, 21);
             this.fourCC.TabIndex = 7;
@@ -1319,7 +1319,7 @@ namespace MeGUI.packages.video.xvid
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.customCommandlineOptions.Location = new System.Drawing.Point(10, 16);
             this.customCommandlineOptions.Name = "customCommandlineOptions";
-            this.customCommandlineOptions.Size = new System.Drawing.Size(463, 20);
+            this.customCommandlineOptions.Size = new System.Drawing.Size(466, 20);
             this.customCommandlineOptions.TabIndex = 0;
             this.customCommandlineOptions.TextChanged += new System.EventHandler(this.updateEvent);
             // 
