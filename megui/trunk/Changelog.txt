@@ -1,3 +1,6 @@
+0.3.1.1028
+    - (sharktooth) [Xvid] Added Handheld, Portable and Custom profiles along with VBV parameters controls.
+
 0.3.1.1027
     - (sharktooth) [XviDEncoder] 10l
 
