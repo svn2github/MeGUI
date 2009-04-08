@@ -1,3 +1,6 @@
+0.3.1.1029
+    - (sharktooth) [AviSynthWindow] Added support for subtitles (srt,ass,ssa).
+
 0.3.1.1028
     - (sharktooth) [Xvid] Added Handheld, Portable and Custom profiles along with VBV parameters controls.
 
