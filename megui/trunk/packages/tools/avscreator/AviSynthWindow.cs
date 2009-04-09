@@ -1108,11 +1108,11 @@ namespace MeGUI
             // 
             // openSubtitlesButton
             // 
-            this.openSubtitlesButton.Location = new System.Drawing.Point(406, 95);
+            this.openSubtitlesButton.Location = new System.Drawing.Point(416, 95);
             this.openSubtitlesButton.Name = "openSubtitlesButton";
-            this.openSubtitlesButton.Size = new System.Drawing.Size(37, 22);
+            this.openSubtitlesButton.Size = new System.Drawing.Size(27, 22);
             this.openSubtitlesButton.TabIndex = 9;
-            this.openSubtitlesButton.Text = "Add";
+            this.openSubtitlesButton.Text = "...";
             this.openSubtitlesButton.UseVisualStyleBackColor = true;
             this.openSubtitlesButton.Click += new System.EventHandler(this.openSubtitlesButton_Click);
             // 
@@ -1191,9 +1191,9 @@ namespace MeGUI
             // openDLLButton
             // 
             this.openDLLButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.openDLLButton.Location = new System.Drawing.Point(423, 388);
+            this.openDLLButton.Location = new System.Drawing.Point(420, 388);
             this.openDLLButton.Name = "openDLLButton";
-            this.openDLLButton.Size = new System.Drawing.Size(24, 21);
+            this.openDLLButton.Size = new System.Drawing.Size(27, 21);
             this.openDLLButton.TabIndex = 3;
             this.openDLLButton.Text = "...";
             this.openDLLButton.Click += new System.EventHandler(this.openDLLButton_Click);
@@ -1448,8 +1448,11 @@ namespace MeGUI
             if (this.signalAR.Checked && suggestedDar.HasValue)
                 newScript = string.Format("# Set DAR in encoder to {0} : {1}. The following line is for automatic signalling\r\nglobal MeGUI_darx = {0}\r\nglobal MeGUI_dary = {1}\r\n",
                     suggestedDar.Value.X, suggestedDar.Value.Y) + newScript;
-			return newScript;
 
+            if (this.SubtitlesPath.Text != "")
+                newScript += "\r\nTextSub(\"" + SubtitlesPath.Text + "\")\r\n";
+
+            return newScript;
 		}
 
         private AviSynthSettings GetProfileSettings()
@@ -2291,10 +2294,11 @@ namespace MeGUI
                     script.Append(temp);
                     script.Append("TextSub(\"" + openSubsDialog.FileName + "\")\r\n");
                     avisynthScript.Text = script.ToString();
-                    MessageBox.Show("Subtitles successfully added to the script");
+                    MessageBox.Show("Subtitles successfully added to the script...", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-                else MessageBox.Show("The subtitles you chosen was already added");
+                else MessageBox.Show("The subtitles you chosen was already added...", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
+            this.showScript();
         }
     }
     public delegate void OpenScriptCallback(string avisynthScript);
