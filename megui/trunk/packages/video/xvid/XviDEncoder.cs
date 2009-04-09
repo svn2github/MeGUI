@@ -98,7 +98,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "XviDEncoder");
                     if (xs.XvidProfile == 0)
                         sb.Append("-pass2 " + "\"" + xs.Logfile + "\" -bitrate " + xs.BitrateQuantizer + " "); // add logfile
                     else
-                        sb.Append("-alt2pass " + "\"" + xs.Logfile + "\" -bitrate " + xs.BitrateQuantizer + " "); // add logfile
+                        sb.Append("-altpass2 " + "\"" + xs.Logfile + "\" -bitrate " + xs.BitrateQuantizer + " "); // add logfile
                     break;
             }
             if (xs.EncodingMode <= 1) // 1 pass modes
