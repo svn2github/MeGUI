@@ -1,3 +1,11 @@
+0.3.1.1031
+    - (sharktooth) [AviSynthWindow] Removed the possibility to add multiple subs, that also fixed an issue (TextSub part of the script was trashed if another filter was selected after loading the subtitles).
+    - (kurtnoise) [XvidEncoder] format quantizer values.
+    - (sharktooth) [MainForm] Cosmetics
+    - (kurtnoise) [XvidEncoder] fix typo in the command line for alternative pass 2.
+    - (kurtnoise) [AviSynthWindow] fix a typo...
+    - (sharktooth) [AudioEncoderInterface] Cosmetics
+
 0.3.1.1030
     - (sharktooth) [AviSynthWindow] Added a messagebox to notify the subtitles has been succesfully added to the avisynth script.
     - (sharktooth) [AviSynthWindow] Added a check to prevent to add the same subs twice.
