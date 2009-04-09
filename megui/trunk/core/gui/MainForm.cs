@@ -243,7 +243,7 @@ namespace MeGUI
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(516, 510);
+            this.tabControl1.Size = new System.Drawing.Size(516, 500);
             this.tabControl1.TabIndex = 0;
             // 
             // inputTab
@@ -253,7 +253,7 @@ namespace MeGUI
             this.inputTab.Controls.Add(this.splitContainer1);
             this.inputTab.Location = new System.Drawing.Point(4, 22);
             this.inputTab.Name = "inputTab";
-            this.inputTab.Size = new System.Drawing.Size(508, 484);
+            this.inputTab.Size = new System.Drawing.Size(508, 474);
             this.inputTab.TabIndex = 0;
             this.inputTab.Text = "Input";
             this.inputTab.UseVisualStyleBackColor = true;
@@ -273,8 +273,8 @@ namespace MeGUI
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.audioEncodingComponent1);
-            this.splitContainer2.Size = new System.Drawing.Size(508, 452);
-            this.splitContainer2.SplitterDistance = 173;
+            this.splitContainer2.Size = new System.Drawing.Size(508, 442);
+            this.splitContainer2.SplitterDistance = 169;
             this.splitContainer2.TabIndex = 4;
             // 
             // videoEncodingComponent1
@@ -285,7 +285,7 @@ namespace MeGUI
             this.videoEncodingComponent1.MinimumSize = new System.Drawing.Size(500, 168);
             this.videoEncodingComponent1.Name = "videoEncodingComponent1";
             this.videoEncodingComponent1.PrerenderJob = false;
-            this.videoEncodingComponent1.Size = new System.Drawing.Size(508, 173);
+            this.videoEncodingComponent1.Size = new System.Drawing.Size(508, 169);
             this.videoEncodingComponent1.TabIndex = 0;
             this.videoEncodingComponent1.VideoInput = "";
             this.videoEncodingComponent1.VideoOutput = "";
@@ -298,14 +298,14 @@ namespace MeGUI
             this.audioEncodingComponent1.Location = new System.Drawing.Point(0, 0);
             this.audioEncodingComponent1.MinimumSize = new System.Drawing.Size(400, 192);
             this.audioEncodingComponent1.Name = "audioEncodingComponent1";
-            this.audioEncodingComponent1.Size = new System.Drawing.Size(508, 275);
+            this.audioEncodingComponent1.Size = new System.Drawing.Size(508, 269);
             this.audioEncodingComponent1.TabIndex = 1;
             // 
             // splitContainer1
             // 
             this.splitContainer1.BackColor = System.Drawing.SystemColors.Control;
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 452);
+            this.splitContainer1.Location = new System.Drawing.Point(0, 442);
             this.splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
@@ -765,7 +765,7 @@ namespace MeGUI
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(516, 510);
+            this.ClientSize = new System.Drawing.Size(516, 500);
             this.Controls.Add(this.tabControl1);
             this.DataBindings.Add(new System.Windows.Forms.Binding("Location", global::MeGUI.Properties.Settings.Default, "MainFormLocation", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
