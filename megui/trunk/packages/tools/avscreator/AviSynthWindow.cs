@@ -1045,7 +1045,7 @@ namespace MeGUI
             this.deintIsAnime.Name = "deintIsAnime";
             this.deintIsAnime.Size = new System.Drawing.Size(297, 17);
             this.deintIsAnime.TabIndex = 10;
-            this.deintIsAnime.Text = "Source is Anime (not automatically detected by Analisys)";
+            this.deintIsAnime.Text = "Source is Anime (not automatically detected by Analysis)";
             this.deintIsAnime.UseVisualStyleBackColor = true;
             this.deintIsAnime.CheckedChanged += new System.EventHandler(this.deintSourceType_SelectedIndexChanged);
             // 
