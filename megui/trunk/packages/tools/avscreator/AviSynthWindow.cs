@@ -1765,8 +1765,8 @@ namespace MeGUI
         /// <param name="fileName"></param>
         private DialogResult gotoD2vCreator(string fileName)
         {
-            return MessageBox.Show("You can't open MPEG files with the AviSynth Script Creator. You'll have to index it first with the D2V indexer, and open the created project file (*.d2v) here.",
-                "Can't open MPEG files", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
+            return MessageBox.Show("You can't open such files with the AviSynth Script Creator. You'll have to index it first with a DG indexer, and open the created project file here.",
+                "Can't open files", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
         }
 
         private void enableControls(bool enable)
