@@ -62,19 +62,12 @@ namespace MeGUI
             set { askAboutDuplicates = value; }
         }
 
-        private bool warnAboutRDO2;
         private bool askAboutVOBs;
         private bool addConvertToYV12;
         private bool askAboutYV12;
         private bool useOneClick;
         private bool continueDespiteError;
         private bool askAboutError;
-
-        public bool WarnAboutRDO2
-        {
-            get { return warnAboutRDO2; }
-            set { warnAboutRDO2 = value; }
-        }
 
         public bool AskAboutError
         {
@@ -121,7 +114,6 @@ namespace MeGUI
             askAboutYV12 = true;
             addConvertToYV12 = true;
             continueDespiteError = true;
-            warnAboutRDO2 = true;
             askAboutDuplicates = true;
             dupResponse = true;
         }
