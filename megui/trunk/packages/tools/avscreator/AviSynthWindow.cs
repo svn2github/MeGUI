@@ -1493,14 +1493,18 @@ namespace MeGUI
                     break;
                 case ".dga":
                     sourceType = PossibleSources.dga;
+                    if (Path.GetFileName(mainForm.Settings.DgavcIndexPath.ToLower()) != "dgavcindex.exe")
+                        mainForm.DialogManager.runCUVIDServer();
                     openVideo(videoInput);
                     break;
                 case ".dgm":
                     sourceType = PossibleSources.dgm;
+                    mainForm.DialogManager.runCUVIDServer();
                     openVideo(videoInput);
                     break;
                 case ".dgv":
                     sourceType = PossibleSources.dgv;
+                    mainForm.DialogManager.runCUVIDServer();
                     openVideo(videoInput);
                     break;
                 case ".mpeg": // include case variants 
