@@ -770,7 +770,7 @@ namespace MeGUI
             // 
             // tvTypeLabel
             // 
-            this.tvTypeLabel.Location = new System.Drawing.Point(276, 85);
+            this.tvTypeLabel.Location = new System.Drawing.Point(316, 82);
             this.tvTypeLabel.Name = "tvTypeLabel";
             this.tvTypeLabel.Size = new System.Drawing.Size(48, 23);
             this.tvTypeLabel.TabIndex = 10;
