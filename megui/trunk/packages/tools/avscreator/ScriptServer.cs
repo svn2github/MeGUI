@@ -139,6 +139,9 @@ namespace MeGUI
 
             switch (sourceType)
             {
+                case PossibleSources.avs:
+                    inputLine = "Import(\"" + input + "\")";
+                    break;
                 case PossibleSources.d2v:
                     inputLine = "DGDecode_mpeg2source(\"" + input + "\"";
                     if (mpeg2deblock)

@@ -1482,6 +1482,11 @@ namespace MeGUI
             string ext = Path.GetExtension(videoInput).ToLower();
             switch (ext)
             {
+                case ".avs":
+                    sourceType = PossibleSources.avs;
+                    videoOutput.Filename = Path.Combine(projectPath, Path.ChangeExtension(fileNameNoPath, "_new.avs")); // to avoid overwritten
+                    openAVSScript(videoInput);
+                    break;           
                 case ".d2v":
                     sourceType = PossibleSources.d2v;
                     openVideo(videoInput);
@@ -1540,7 +1545,7 @@ namespace MeGUI
 			}
 			catch (IOException i)
 			{
-				MessageBox.Show("An error ocurred when trying to save the AviSynth script:\r\n" + i.Message);
+				MessageBox.Show("An error occurred when trying to save the AviSynth script:\r\n" + i.Message);
 			}
 		}
         /// <summary>
@@ -1551,7 +1556,7 @@ namespace MeGUI
             mod16Box.SelectedIndex = 0;
 
             switch (this.sourceType)
-            {
+            {            
                 case PossibleSources.d2v:
                 case PossibleSources.mpeg2:
                     this.mpeg2Deblocking.Enabled = true;
@@ -1565,6 +1570,7 @@ namespace MeGUI
                     this.tabSources.SelectedTab = tabPage1;
                     break;
                 case PossibleSources.vdr:
+                case PossibleSources.avs:
                     this.mpeg2Deblocking.Checked = false;
                     this.mpeg2Deblocking.Enabled = false;
                     this.colourCorrect.Enabled = false;
@@ -1735,6 +1741,22 @@ namespace MeGUI
             else
             {
                 openVideo("AviSource(\"" + fileName + ", audio=false\")\r\n", fileName, true);
+            }
+        }
+        /// <summary>
+        /// Create a temporary avs to wrap the frameserver file then open it as for any other avs
+        /// </summary>
+        /// <param name="fileName">Name of the avs script</param>
+        private void openAVSScript(string fileName)
+        {
+            if (!File.Exists(fileName))
+            {
+                MessageBox.Show(fileName + " could not be found", "File Not Found", MessageBoxButtons.OK);
+                return;
+            }
+            else
+            {
+                openVideo("Import(\"" + fileName + "\")\r\n", fileName, true);
             }
         }
         /// <summary>
@@ -2302,7 +2324,7 @@ namespace MeGUI
         }
     }
     public delegate void OpenScriptCallback(string avisynthScript);
-    public enum PossibleSources { d2v, dga, dgm, dgv, mpeg2, vdr, directShow };
+    public enum PossibleSources { d2v, dga, dgm, dgv, mpeg2, vdr, directShow, avs };
     public enum mod16Method : int { none = -1, resize = 0, overcrop, nonMod16, mod4Horizontal, undercrop };
 
     public class AviSynthWindowTool : MeGUI.core.plugins.interfaces.ITool
