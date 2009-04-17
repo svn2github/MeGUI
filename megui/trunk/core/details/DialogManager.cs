@@ -188,16 +188,6 @@ namespace MeGUI
             return mainForm.Settings.DialogSettings.AddConvertToYV12;
         }
 
-        public void showRDO2Warning()
-        {
-            if (mainForm.Settings.DialogSettings.WarnAboutRDO2)
-            {
-                mainForm.Settings.DialogSettings.WarnAboutRDO2 = 
-                    showMessage("RDO 2 (subpel refinement) is not supported in SVN builds. Clipping it to RDO 1",
-                    "RDO 2 not supported", MessageBoxIcon.Warning);
-            }
-        }
-
         public void runCUVIDServer()
         {
             string filePath = "";
