@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Forms;
@@ -196,5 +197,25 @@ namespace MeGUI
                     "RDO 2 not supported", MessageBoxIcon.Warning);
             }
         }
+
+        public void runCUVIDServer()
+        {
+            string filePath = "";
+            if (mainForm.Settings.DgavcIndexPath != "" && mainForm.Settings.DgavcIndexPath.ToLower() != "dgavcindexnv.exe")
+                filePath = Path.GetDirectoryName(mainForm.Settings.DgavcIndexPath);
+
+            if (filePath == "")
+            {
+                if (mainForm.Settings.DgmpgIndexPath != "" && mainForm.Settings.DgmpgIndexPath.ToLower() != "dgmpgindexnv.exe")
+                    filePath = Path.GetDirectoryName(mainForm.Settings.DgmpgIndexPath);
+
+                else if (mainForm.Settings.Dgvc1IndexPath != "" && mainForm.Settings.DgmpgIndexPath.ToLower() != "dgvc1indexnv.exe")
+                    filePath = Path.GetDirectoryName(mainForm.Settings.Dgvc1IndexPath);
+            }
+
+            if (filePath != "") System.Diagnostics.Process.Start(Path.Combine(filePath, "CUVIDServer.exe"));
+            else MessageBox.Show("Cannot run CUVID Server executable...\nAre you sure is it installed ?", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
     }
 }
