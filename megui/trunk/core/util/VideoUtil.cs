@@ -237,7 +237,21 @@ namespace MeGUI
                             case "MPA": ati.TrackID = (0xC0 + counter); break;
                             case "DTS": ati.TrackID = (0x88 + counter); break;
                         }
-                    ati.Type = atrack.Format;
+                    if (atrack.FormatProfile != "") // some tunings to have a more useful info instead of a typical audio Format
+                    {
+                        switch (atrack.FormatProfile)
+                        {   
+                            case "Dolby Digital": ati.Type = "AC-3"; break;
+                            case "HRA": ati.Type = "DTS-HD High Resolution"; break;
+                            case "Layer 1": ati.Type = "MPA"; break;
+                            case "Layer 2": ati.Type = "MP2"; break;
+                            case "Layer 3": ati.Type = "MP3"; break;
+                            case "LC": ati.Type = "AAC"; break;
+                            case "MA": ati.Type = "DTS-HD Master Audio"; break;
+                            case "TrueHD": ati.Type = "TrueHD"; break;
+                        }
+                    }
+                    else ati.Type = atrack.Format;
                     ati.NbChannels = atrack.ChannelsString;
                     ati.SamplingRate = atrack.SamplingRateString;
                     if (atrack.LanguageString == "") // to retrieve Language 
