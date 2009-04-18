@@ -701,15 +701,24 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 case 0:
                     break;
                 case 1:
-                    script.Append("SSRC(44100)" + Environment.NewLine);
+                    script.Append("SSRC(8000)" + Environment.NewLine);
                     break;
                 case 2:
-                    script.Append("SSRC(48000)" + Environment.NewLine);
+                    script.Append("SSRC(11025)" + Environment.NewLine);
                     break;
                 case 3:
-                    script.Append("AssumeSampleRate((AudioRate()*1001+480)/960).SSRC(AudioRate())" + Environment.NewLine);
+                    script.Append("SSRC(22050)" + Environment.NewLine);
                     break;
                 case 4:
+                    script.Append("SSRC(44100)" + Environment.NewLine);
+                    break;
+                case 5:
+                    script.Append("SSRC(48000)" + Environment.NewLine);
+                    break;
+                case 6:
+                    script.Append("AssumeSampleRate((AudioRate()*1001+480)/960).SSRC(AudioRate())" + Environment.NewLine);
+                    break;
+                case 7:
                     script.Append("SSRC((AudioRate()*1001+480)/960).AssumeSampleRate(AudioRate())" + Environment.NewLine);
                     break;
             }
