@@ -1,3 +1,17 @@
+0.3.1.1032
+    - (kurtnoise) [AaudioEncoderInterface] reflect the last changes for SamplingRate values in the script.
+    - (kurtnoise) [AudioConfigurationPanel] add new SamplingRate values (8000Hz - 11025 Hz - 22050 Hz)
+    - (kurtnoise) update MediaInfo library and its wrapper to the latest release (0.7.14)
+    - (kurtnoise) [VideoUtil] add some tunings regarding audio Type for getSourceMediaInfo().
+    - (kurtnoise) [DialogSettings] remove unused code.
+    - (kurtnoise) [DialogManager] remove unused code.
+    - (kurtnoise) [AVSCreator] apply runCUVIDServer() to the dga/dgm/dgv cases.
+    - (kurtnoise) [DialogManager] add runCUVIDServer() function.
+    - (kurtnoise) [AVSCreator] cosmetic.
+    - (kurtnoise) [AVSCreator] gotoD2vCreator() - rewrite error message because TS files can contain AVC streams...
+    - (kurtnoise) [AVSCreator] better avs script support for input file.
+    - (kurtnoise) [HDStreamExtractor] add a checkbox to close the form after extraction.
+
 0.3.1.1031
     - (sharktooth) [AviSynthWindow] Removed the possibility to add multiple subs, that also fixed an issue (TextSub part of the script was trashed if another filter was selected after loading the subtitles).
     - (kurtnoise) [XvidEncoder] format quantizer values.
