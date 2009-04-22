@@ -609,5 +609,35 @@ namespace MeGUI.core.util
             }
             return StandardType;
         }
+
+        /// <summary>
+        /// get number of PGCs
+        /// </summary>
+        /// <param name="fileName">name of the IFO file</param>
+        /// <returns>number of PGS as unsigned integer</returns>
+        public static uint getPGCnb(string FileName)
+        {
+            FileStream fs = new FileStream(FileName, FileMode.Open, FileAccess.Read);
+            BinaryReader br = new BinaryReader(fs);
+            Stream sr = br.BaseStream;
+
+            sr.Seek(0xCC, SeekOrigin.Begin);
+            uint buf = ReadUInt32(br);									// Read PGC offset
+            sr.Seek(2048 * buf + 0x1, SeekOrigin.Begin);			// Move to beginning of PGC
+            long VTS_PGCITI_start_position = sr.Position - 1;
+            byte nPGCs = br.ReadByte();									// Number of PGCs
+
+            return nPGCs;
+        }
+
+        private static uint ReadUInt32(BinaryReader br)
+        {
+            uint val = (
+                ((uint)br.ReadByte()) << 24 |
+                ((uint)br.ReadByte()) << 16 |
+                ((uint)br.ReadByte()) << 8 |
+                ((uint)br.ReadByte()));
+            return val;
+        }
     }
 }
