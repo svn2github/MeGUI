@@ -66,6 +66,7 @@ namespace MeGUI
             // 
             this.input.Filename = "";
             this.input.Filter = "IFO Files|*.ifo";
+            this.input.FilterIndex = 0;
             this.input.FolderMode = false;
             this.input.Location = new System.Drawing.Point(120, 13);
             this.input.Name = "input";
@@ -130,6 +131,7 @@ namespace MeGUI
             // 
             this.output.Filename = "";
             this.output.Filter = "VobSub Files|*.idx";
+            this.output.FilterIndex = 0;
             this.output.FolderMode = false;
             this.output.Location = new System.Drawing.Point(120, 17);
             this.output.Name = "output";
@@ -207,7 +209,6 @@ namespace MeGUI
             // helpButton1
             // 
             this.helpButton1.ArticleName = "Vobsub indexer window";
-            this.helpButton1.AutoSize = true;
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.helpButton1.Location = new System.Drawing.Point(7, 364);
             this.helpButton1.Name = "helpButton1";
@@ -238,7 +239,6 @@ namespace MeGUI
             this.outputGroupbox.ResumeLayout(false);
             this.subtitleGroupbox.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 

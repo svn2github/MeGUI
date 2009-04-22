@@ -83,6 +83,8 @@ namespace MeGUI
         {
             input.Filename = fileName;
             subtitleTracks.Items.Clear();
+            uint nbPGC = IFOparser.getPGCnb(fileName);
+            pgc.Maximum = nbPGC;
             subtitleTracks.Items.AddRange(IFOparser.GetSubtitlesStreamsInfos(input.Filename));
             demuxSelectedTracks.Checked = !keepAllTracks.Checked;
         }
