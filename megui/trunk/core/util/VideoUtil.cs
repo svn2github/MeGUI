@@ -283,6 +283,88 @@ namespace MeGUI
             }
         }
 
+        /// gets information about a video source using MediaInfo
+        /// </summary>
+        /// <param name="infoFile">the info file to be analyzed</param>
+        /// <param name="audioTracks">the audio tracks found</param>
+        /// <param name="maxHorizontalResolution">the width of the video</param>
+        public static void getSubtitlesInfo(string fileName, out List<SubtitleInfo> subtitlesTracks, bool vobsubber)
+        {
+            MediaInfo info;
+            subtitlesTracks = new List<SubtitleInfo>();
+            try
+            {
+                info = new MediaInfo(fileName);
+                for (int counter = 0; counter < info.Text.Count; counter++)
+                {
+                    MediaInfoWrapper.TextTrack strack = info.Text[counter];
+                    SubtitleInfo sti = new SubtitleInfo("", 0);
+                    if (strack.ID != "0")
+                        sti.Index = Int32.Parse(strack.ID);
+                    else sti.Index = counter;
+                    
+                    if (strack.LanguageString == "") // to retrieve Language 
+                    {
+                        if (vobsubber)
+                        {
+                            if (File.Exists(fileName))
+                                strack.LanguageString = IFOparser.getSubtitlesLanguage(fileName, counter);
+                        }
+                    }
+                    sti.Name = strack.LanguageString;
+                    
+                    subtitlesTracks.Add(sti);
+                }
+            }
+            catch (Exception i)
+            {
+                MessageBox.Show("The following error ocurred when trying to get Media info for file " + fileName + "\r\n" + i.Message, "Error parsing mediainfo data", MessageBoxButtons.OK);
+                subtitlesTracks.Clear();
+            }
+        }
+        public void getSourceMediaInfo2(string fileName, out List<SubtitleInfo> subtitlesTracks)
+        {
+            MediaInfo info;
+            subtitlesTracks = new List<SubtitleInfo>();
+            try
+            {
+                info = new MediaInfo(fileName);
+                for (int counter = 0; counter < info.Text.Count; counter++)
+                {
+                    MediaInfoWrapper.TextTrack strack = info.Text[counter];
+                    SubtitleInfo sti = new SubtitleInfo("", 0);
+                    // DGIndex expects audio index not ID for TS
+                    sti.Index = counter;
+                    
+                    if (strack.LanguageString == "") // to retrieve Language 
+                    {
+                        if (Path.GetExtension(fileName.ToLower()) == ".vob")
+                        {
+                            string ifoFile;
+                            string fileNameNoPath = Path.GetFileName(fileName);
+
+                            // Languages are not present in VOB, so we check the main IFO
+                            if (fileNameNoPath.Substring(0, 4) == "VTS_")
+                                ifoFile = fileName.Substring(0, fileName.LastIndexOf("_")) + "_0.IFO";
+                            else ifoFile = Path.ChangeExtension(fileName, ".IFO");
+
+                            if (File.Exists(ifoFile))
+                                strack.LanguageString = IFOparser.getSubtitlesLanguage(ifoFile, counter);
+                        }
+                    }
+
+                    sti.Name = strack.LanguageString;
+                    sti.Index = counter;
+                    subtitlesTracks.Add(sti);
+                }
+            }
+            catch (Exception i)
+            {
+                MessageBox.Show("The following error ocurred when trying to get Media info for file " + fileName + "\r\n" + i.Message, "Error parsing mediainfo data", MessageBoxButtons.OK);
+                subtitlesTracks.Clear();
+            }
+        }
+
         /// gets ID from a first video stream using MediaInfo
         /// </summary>
         /// <param name="infoFile">the file to be analyzed</param>
@@ -375,6 +457,26 @@ namespace MeGUI
                 {
                     MediaInfoWrapper.AudioTrack atrack = info.Audio[0];
                     TrackID = Int32.Parse(atrack.ID);
+                }
+            }
+            catch (Exception i)
+            {
+                MessageBox.Show("The following error ocurred when trying to get Media info for file " + fileName + "\r\n" + i.Message, "Error parsing mediainfo data", MessageBoxButtons.OK);
+            }
+            return TrackID;
+        }
+
+        public static int getIDFromSubStream(string fileName)
+        {
+            MediaInfo info;
+            int TrackID = 0;
+            try
+            {
+                info = new MediaInfo(fileName);
+                if (info.Text.Count > 0)
+                {
+                    MediaInfoWrapper.TextTrack strack = info.Text[0];
+                    TrackID = Int32.Parse(strack.ID);
                 }
             }
             catch (Exception i)
@@ -496,8 +598,9 @@ namespace MeGUI
             maxHorizontalResolution = 5000;
 
             getSourceMediaInfo(fileName, out audioTracks, out maxHorizontalResolution);
+            getSourceMediaInfo2(fileName, out subtitles);
             
-            if (audioTracks.Count > 0)
+            if ((audioTracks.Count > 0) || (subtitles.Count > 0))
                 putDummyTracks = false;
 
 			if (putDummyTracks)
@@ -506,10 +609,11 @@ namespace MeGUI
                 {
                     audioTracks.Add(new AudioTrackInfo("Track " + i, "", "", i));
                 }
+
                 subtitles.Clear();
                 for (int i = 1; i <= 32; i++)
                 {
-                    subtitles.Add(new SubtitleInfo("Track " + i, i));
+                     subtitles.Add(new SubtitleInfo("Track " + i, i));
                 }
 			}
 			return putDummyTracks;
@@ -550,6 +654,29 @@ namespace MeGUI
 			}
             return audioFiles;
 		}
+
+        public Dictionary<int, string> getAllDemuxedSubtitles(List<SubtitleInfo> subTracks, string projectName)
+        {
+            Dictionary<int, string> subFiles = new Dictionary<int, string>();
+            for (int counter = 0; counter < subTracks.Count; counter++)
+            {
+                string[] files = Directory.GetFiles(Path.GetDirectoryName(projectName),
+                        Path.GetFileNameWithoutExtension(projectName));
+                foreach (string file in files)
+                {
+                    if (file.EndsWith(".idx") ||
+                        file.EndsWith(".srt") ||
+                        file.EndsWith(".ssa") ||
+                        file.EndsWith(".ass")) // It is the right track
+                    {
+                        subFiles.Add(subTracks[counter].Index, file);
+                        break;
+                    }
+                }
+            }
+            return subFiles;
+        }
+
 		#endregion
 		#region automated job generation
 		/// <summary>
@@ -1116,7 +1243,8 @@ namespace MeGUI
         }
         public override string ToString()
         {
-            return this.name;
+            string fullString = "[" + this.index.ToString("D2") + "] - " + this.name;
+            return fullString.Trim();
         }
     }
 	#endregion

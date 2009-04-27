@@ -531,7 +531,7 @@ namespace MeGUI
 			ArrayList newZones = new ArrayList();
 			Zone z = zones[0];
 			Zone newZone = new Zone();
-			newZone.mode = ZONEMODE.WEIGHT;
+			newZone.mode = ZONEMODE.Weight;
 			newZone.modifier = (decimal)100;
 			if (z.startFrame > 0) // zone doesn't start at the beginning, add zone before the first configured zone
 			{
@@ -637,7 +637,7 @@ namespace MeGUI
 			{
 				introZone.startFrame = 0;
 				introZone.endFrame = introEndFrame;
-				introZone.mode = ZONEMODE.QUANTIZER;
+				introZone.mode = ZONEMODE.Quantizer;
 				introZone.modifier = vSettings.CreditsQuantizer;
 				if (zones.Length > 0)
 				{
@@ -673,7 +673,7 @@ namespace MeGUI
 			{
 				creditsZone.startFrame = creditsStartFrame;
 				creditsZone.endFrame = (int)nbOfFrames-1;
-				creditsZone.mode = ZONEMODE.QUANTIZER;
+				creditsZone.mode = ZONEMODE.Quantizer;
 				creditsZone.modifier = vSettings.CreditsQuantizer;
 				if (zones.Length > 0)
 				{

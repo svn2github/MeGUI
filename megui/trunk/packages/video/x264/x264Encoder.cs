@@ -295,12 +295,12 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                 foreach (Zone zone in zones)
                 {
                     sb.Append(zone.startFrame + "," + zone.endFrame + ",");
-                    if (zone.mode == ZONEMODE.QUANTIZER)
+                    if (zone.mode == ZONEMODE.Quantizer)
                     {
                         sb.Append("q=");
                         sb.Append(zone.modifier + "/");
                     }
-                    if (zone.mode == ZONEMODE.WEIGHT)
+                    if (zone.mode == ZONEMODE.Weight)
                     {
                         sb.Append("b=");
                         double mod = (double)zone.modifier / 100.0;

@@ -235,9 +235,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "XviDEncoder");
             {
                 foreach (Zone zone in zones)
                 {
-                    if (zone.mode == ZONEMODE.QUANTIZER)
+                    if (zone.mode == ZONEMODE.Quantizer)
                         sb.Append("-zq " + zone.startFrame + " " + zone.modifier + " ");
-                    if (zone.mode == ZONEMODE.WEIGHT)
+                    if (zone.mode == ZONEMODE.Weight)
                     {
                         sb.Append("-zw " + zone.startFrame + " ");
                         double mod = (double)zone.modifier / 100.0;

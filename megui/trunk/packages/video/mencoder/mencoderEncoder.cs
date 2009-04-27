@@ -176,7 +176,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MencoderEncoder");
                 sb.Append("-vrc_override=");
                 foreach (Zone zone in zones)
                 {
-                    if (zone.mode == ZONEMODE.QUANTIZER)
+                    if (zone.mode == ZONEMODE.Quantizer)
                         sb.Append(zone.startFrame + "," + zone.endFrame + "," + zone.modifier + "/");
                     else
                         sb.Append(zone.startFrame + "," + zone.endFrame + ",-" + zone.modifier + "/");

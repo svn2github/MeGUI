@@ -122,9 +122,9 @@ namespace MeGUI
                     return;
                 }
                 if (zoneMode.SelectedIndex == 0)
-                    zone.mode = ZONEMODE.QUANTIZER;
+                    zone.mode = ZONEMODE.Quantizer;
                 else
-                    zone.mode = ZONEMODE.WEIGHT;
+                    zone.mode = ZONEMODE.Weight;
                 zone.modifier = zoneModifier.Value;
                 Zone[] newZones = new Zone[zones.Length + 1];
                 int index = 0;
@@ -192,7 +192,7 @@ namespace MeGUI
                     Zone z = (Zone)item.Tag;
                     startFrame.Text = z.startFrame.ToString();
                     endFrame.Text = z.endFrame.ToString();
-                    if (z.mode == ZONEMODE.QUANTIZER)
+                    if (z.mode == ZONEMODE.Quantizer)
                         zoneMode.SelectedIndex = 0;
                     else
                         zoneMode.SelectedIndex = 1;
@@ -218,9 +218,9 @@ namespace MeGUI
                         return;
                     }
                     if (zoneMode.SelectedIndex == 0)
-                        zone.mode = ZONEMODE.QUANTIZER;
+                        zone.mode = ZONEMODE.Quantizer;
                     else
-                        zone.mode = ZONEMODE.WEIGHT;
+                        zone.mode = ZONEMODE.Weight;
                     zone.modifier = zoneModifier.Value;
                     zones[item.Index] = zone;
                     this.showZones(zones);

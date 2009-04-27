@@ -234,7 +234,7 @@ namespace MeGUI
 
         #endregion
     }
-	public enum ZONEMODE: int {QUANTIZER = 0, WEIGHT};
+	public enum ZONEMODE: int {Quantizer = 0, Weight};
 	public class Zone
 	{
 		public int startFrame;
