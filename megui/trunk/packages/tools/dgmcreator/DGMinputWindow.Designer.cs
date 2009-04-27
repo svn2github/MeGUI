@@ -74,10 +74,6 @@ namespace MeGUI
             this.demuxAll = new System.Windows.Forms.RadioButton();
             this.demuxNoAudiotracks = new System.Windows.Forms.RadioButton();
             this.saveProjectDialog = new System.Windows.Forms.SaveFileDialog();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.listBox1 = new System.Windows.Forms.ListBox();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.gbOutput = new System.Windows.Forms.GroupBox();
             this.demuxVideo = new System.Windows.Forms.CheckBox();
             this.pickOutputButton = new System.Windows.Forms.Button();
@@ -85,7 +81,6 @@ namespace MeGUI
             this.projectNameLabel = new System.Windows.Forms.Label();
             this.gbInput.SuspendLayout();
             this.groupBox3.SuspendLayout();
-            this.groupBox1.SuspendLayout();
             this.gbOutput.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -209,47 +204,6 @@ namespace MeGUI
             this.saveProjectDialog.Filter = "DGMIndex project files|*.dgm";
             this.saveProjectDialog.Title = "Pick a name for your DGMIndex project";
             // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.listBox1);
-            this.groupBox1.Controls.Add(this.radioButton1);
-            this.groupBox1.Controls.Add(this.radioButton2);
-            this.groupBox1.Location = new System.Drawing.Point(10, 58);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(424, 223);
-            this.groupBox1.TabIndex = 24;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Audio";
-            // 
-            // listBox1
-            // 
-            this.listBox1.Enabled = false;
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(24, 54);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(384, 147);
-            this.listBox1.TabIndex = 16;
-            // 
-            // radioButton1
-            // 
-            this.radioButton1.Location = new System.Drawing.Point(142, 16);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(179, 24);
-            this.radioButton1.TabIndex = 15;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "Demux All Tracks";
-            this.radioButton1.UseVisualStyleBackColor = true;
-            // 
-            // radioButton2
-            // 
-            this.radioButton2.Checked = true;
-            this.radioButton2.Location = new System.Drawing.Point(16, 16);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(120, 24);
-            this.radioButton2.TabIndex = 13;
-            this.radioButton2.TabStop = true;
-            this.radioButton2.Text = "No Audio demux";
-            // 
             // gbOutput
             // 
             this.gbOutput.Controls.Add(this.demuxVideo);
@@ -308,7 +262,6 @@ namespace MeGUI
             this.Controls.Add(this.helpButton1);
             this.Controls.Add(this.closeOnQueue);
             this.Controls.Add(this.queueButton);
-            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBox3);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
@@ -317,7 +270,6 @@ namespace MeGUI
             this.gbInput.ResumeLayout(false);
             this.gbInput.PerformLayout();
             this.groupBox3.ResumeLayout(false);
-            this.groupBox1.ResumeLayout(false);
             this.gbOutput.ResumeLayout(false);
             this.gbOutput.PerformLayout();
             this.ResumeLayout(false);
@@ -339,10 +291,6 @@ namespace MeGUI
         private System.Windows.Forms.RadioButton demuxAll;
         private System.Windows.Forms.RadioButton demuxNoAudiotracks;
         private System.Windows.Forms.SaveFileDialog saveProjectDialog;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.ListBox listBox1;
-        private System.Windows.Forms.RadioButton radioButton1;
-        private System.Windows.Forms.RadioButton radioButton2;
         private System.Windows.Forms.GroupBox gbOutput;
         private System.Windows.Forms.CheckBox demuxVideo;
         private System.Windows.Forms.Button pickOutputButton;
