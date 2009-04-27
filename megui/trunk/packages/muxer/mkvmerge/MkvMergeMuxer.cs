@@ -78,7 +78,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
         {
             if (line.StartsWith("Progress: ")) //status update
                 su.PercentageDoneExact = getPercentage(line);
-            else if (line.IndexOf("Error") != -1)
+            else if (line.StartsWith("Error: "))
             {
                 log.LogValue("An error occurred", line, MeGUI.core.util.ImageType.Error);
                 su.HasError = true;
