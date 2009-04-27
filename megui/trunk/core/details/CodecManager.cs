@@ -233,13 +233,14 @@ namespace MeGUI
             : base(name, filterName, extension, containerType) {
                 this.supportedCodecs = supportedCodecs;
         }
-        public static readonly VideoType MP4    = new VideoType("MP4", "MP4 Files", "mp4", ContainerType.MP4, new VideoCodec[] { VideoCodec.ASP, VideoCodec.AVC });
-        public static readonly VideoType RAWASP = new VideoType("RAWASP", "RAW MPEG-4 ASP Files", "m4v", null, VideoCodec.ASP);
-        public static readonly VideoType RAWAVC = new VideoType("RAWAVC", "RAW MPEG-4 AVC Files", "264", null, VideoCodec.AVC);
-        public static readonly VideoType MKV    = new VideoType("MKV", "Matroska Files", "mkv", ContainerType.MKV, new VideoCodec[] { VideoCodec.ASP, VideoCodec.AVC, VideoCodec.SNOW, VideoCodec.HFYU});
-        public static readonly VideoType AVI    = new VideoType("AVI", "AVI Files", "avi", ContainerType.AVI, new VideoCodec[] { VideoCodec.ASP, VideoCodec.AVC, VideoCodec.HFYU, VideoCodec.SNOW });
-        public static readonly VideoType MPEG2  = new VideoType("MPEG2", "MPEG-2 Files", "m2v", null, VideoCodec.MPEG2);
-        public static readonly VideoType VC1    = new VideoType("VC1", "VC-1 Files", "vc1", null, VideoCodec.VC1);
+        public static readonly VideoType MP4     = new VideoType("MP4", "MP4 Files", "mp4", ContainerType.MP4, new VideoCodec[] { VideoCodec.ASP, VideoCodec.AVC, VideoCodec.MPEG2 });
+        public static readonly VideoType RAWASP  = new VideoType("RAWASP", "RAW MPEG-4 ASP Files", "m4v", null, VideoCodec.ASP);
+        public static readonly VideoType RAWAVC  = new VideoType("RAWAVC", "RAW MPEG-4 AVC Files", "264", null, VideoCodec.AVC);
+        public static readonly VideoType RAWAVC2 = new VideoType("RAWAVC", "RAW MPEG-4 AVC Files", "h264", null, VideoCodec.AVC);
+        public static readonly VideoType MKV     = new VideoType("MKV", "Matroska Files", "mkv", ContainerType.MKV, new VideoCodec[] { VideoCodec.ASP, VideoCodec.AVC, VideoCodec.SNOW, VideoCodec.HFYU, VideoCodec.MPEG2, VideoCodec.VC1});
+        public static readonly VideoType AVI     = new VideoType("AVI", "AVI Files", "avi", ContainerType.AVI, new VideoCodec[] { VideoCodec.ASP, VideoCodec.AVC, VideoCodec.HFYU, VideoCodec.SNOW });
+        public static readonly VideoType MPEG2   = new VideoType("MPEG2", "MPEG-2 Files", "m2v", null, VideoCodec.MPEG2);
+        public static readonly VideoType VC1     = new VideoType("VC1", "VC-1 Files", "vc1", null, VideoCodec.VC1);
     }
     public class AudioType : OutputType
     {
@@ -269,7 +270,7 @@ namespace MeGUI
         public static readonly AudioType PCM    = new AudioType("DTS", "DTS Files", "dts", null, AudioCodec.PCM);
         public static readonly AudioType CBRMP3 = new AudioType("CBR MP3", "CBR MP3 Files", "mp3", null, AudioCodec.MP3);
         public static readonly AudioType VBRMP3 = new AudioType("VBR MP3", "VBR MP3 Files", "mp3", null, AudioCodec.MP3);
-        public static readonly AudioType EAC3   = new AudioType("EAC3", "EAC3 Files", "eac3", null, AudioCodec.EAC3);
+        public static readonly AudioType EAC3   = new AudioType("EAC3", "EAC3 Files", "ddp", null, AudioCodec.EAC3);
         public static readonly AudioType THD    = new AudioType("THD", "TrueHD Files", "thd", null, AudioCodec.THD);
         public static readonly AudioType DTSHD  = new AudioType("DTSHD", "DTS-HD High Resolution Files", "dtshd", null, AudioCodec.DTSHD);
         public static readonly AudioType DTSMA  = new AudioType("DTSMA", "DTS Master Audio Files", "dtsma", null, AudioCodec.DTSMA);
