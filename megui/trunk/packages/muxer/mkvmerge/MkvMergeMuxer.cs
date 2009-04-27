@@ -76,7 +76,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
 
         public override void ProcessLine(string line, StreamType stream)
         {
-            if (line.StartsWith("progress: ")) //status update
+            if (line.StartsWith("Progress: ")) //status update
                 su.PercentageDoneExact = getPercentage(line);
             else if (line.IndexOf("Error") != -1)
             {
