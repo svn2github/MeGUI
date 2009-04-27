@@ -80,9 +80,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                 su.PercentageDoneExact = getPercentage(line);
             else if (line.StartsWith("Error: "))
             {
-                log.LogValue("An error occurred", line, MeGUI.core.util.ImageType.Error);
+                log.LogValue("An error occurred", line, ImageType.Error);
                 su.HasError = true;
             }
+            else if (line.StartsWith("Warning: "))
+                log.LogValue("A warning occurred", line, ImageType.Warning);
             else
                 base.ProcessLine(line, stream);
         }
