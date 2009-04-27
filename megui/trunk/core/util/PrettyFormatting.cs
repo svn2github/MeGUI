@@ -47,7 +47,7 @@ namespace MeGUI.core.util
                         idxVideo = temp.Length;
                     if (idxAudio < 3)
                         idxAudio = temp.Length;
-                    A = temp.Substring(0, Math.Min(idxVideo,idxAudio)).Trim();
+                    A = A.Substring(0, Math.Min(idxVideo, idxAudio)).Trim();
                     break;
                 }
                 fileName = Path.GetDirectoryName(fileName);
@@ -55,19 +55,7 @@ namespace MeGUI.core.util
             }
 
             // Format it nicely:
-            char[] chars = A.ToCharArray();
-            bool beginningOfWord = true;
-            for (int i = 0; i < chars.Length; i++)
-            {
-                // Capitalize the beginning of words
-                if (char.IsLetter(chars[i]) && beginningOfWord) chars[i] = char.ToUpper(chars[i]);
-                // Turn '_' into ' '
-                if (chars[i] == '_') chars[i] = ' ';
-
-                beginningOfWord = !char.IsLetter(chars[i]) && !(chars[i] == '\'');
-            }
-
-            A = new string(chars);
+            A = A.Replace("_", " ");
             return A;
         }
 
