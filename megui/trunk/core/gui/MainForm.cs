@@ -1434,11 +1434,6 @@ namespace MeGUI
         private void MeGUI_Load(object sender, EventArgs e)
         {
             RegisterForm(this);
-
-            this.Size = MeGUI.Properties.Settings.Default.MainFormSize;
-            this.Location = MeGUI.Properties.Settings.Default.MainFormLocation;
-            this.WindowState = MeGUI.Properties.Settings.Default.MainFormWindowState;
-
             DriveInfo[] allDrives = DriveInfo.GetDrives();
             
             LogItem i = Log.Info("Versions");
@@ -2014,6 +2009,10 @@ namespace MeGUI
 
         private void MainForm_Shown(object sender, EventArgs e)
         {
+            this.Size = MeGUI.Properties.Settings.Default.MainFormSize;
+            this.Location = MeGUI.Properties.Settings.Default.MainFormLocation;
+            this.WindowState = MeGUI.Properties.Settings.Default.MainFormWindowState;
+
             if (MeGUISettings.AvisynthPluginsPath == null)
             {
                 if (AskToDownloadAvisynth() == true)
