@@ -421,6 +421,7 @@ namespace MeGUI
             supportedVideoTypes.Add(VideoType.AVI);
             supportedVideoTypes.Add(VideoType.RAWASP);
             supportedVideoTypes.Add(VideoType.RAWAVC);
+            supportedVideoTypes.Add(VideoType.RAWAVC2);
             supportedVideoTypes.Add(VideoType.MPEG2);
             supportedVideoTypes.Add(VideoType.MP4);
             supportedAudioTypes.Add(AudioType.AC3);
@@ -461,6 +462,7 @@ namespace MeGUI
             supportedVideoTypes.Add(VideoType.MKV);
             supportedVideoTypes.Add(VideoType.MP4);
             supportedVideoTypes.Add(VideoType.RAWAVC);
+            supportedVideoTypes.Add(VideoType.RAWAVC2);
             supportedVideoTypes.Add(VideoType.MPEG2);
             supportedVideoTypes.Add(VideoType.VC1);
             supportedAudioTypes.Add(AudioType.RAWAAC);
