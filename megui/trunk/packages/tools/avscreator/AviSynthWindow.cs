@@ -1557,7 +1557,8 @@ namespace MeGUI
         /// </summary>
         private void setSourceInterface()
         {
-            mod16Box.SelectedIndex = 0;
+            if (Mod16Method.Equals(mod16Method.none)) 
+                mod16Box.SelectedIndex = 0;
 
             switch (this.sourceType)
             {            
