@@ -31,7 +31,7 @@ namespace MeGUI
     public class AutoEncodeDefaultsSettings
     {
         private bool fileSizeMode, bitrateMode, noTargetSizeMode, addAdditionalContent;
-        private string container;
+        private string container, deviceType;
         private FileSize? splitSize = null, fileSize = TargetSizeSCBox.PredefinedFilesizes[2].Data;
         private int bitrate;
 
@@ -42,6 +42,7 @@ namespace MeGUI
             noTargetSizeMode = false;
             addAdditionalContent = false;
             container = "MP4";
+            deviceType = "";
             bitrate = 700;
         }
         #region properties
@@ -84,6 +85,14 @@ namespace MeGUI
         {
             get { return container; }
             set { container = value; }
+        }
+        /// <summary>
+        ///  gets / sets the device output type
+        /// </summary>
+        public string DeviceOutputType
+        {
+            get { return deviceType; }
+            set { deviceType = value; }
         }
         /// <summary>
         /// gets / sets the output video bitrate

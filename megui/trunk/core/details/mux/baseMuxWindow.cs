@@ -689,7 +689,6 @@ namespace MeGUI
             // splitting
             // 
             this.splitting.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.splitting.CustomSizes = new MeGUI.core.util.FileSize[0];
             this.splitting.Location = new System.Drawing.Point(85, 35);
             this.splitting.MaximumSize = new System.Drawing.Size(1000, 29);
             this.splitting.MinimumSize = new System.Drawing.Size(64, 29);

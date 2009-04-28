@@ -72,6 +72,8 @@ namespace MeGUI
         private TextBox videoSize;
         private Label label2;
         protected FileBar muxedOutput;
+        private Label DeviceLabel;
+        private ComboBox device;
 
 
         private IContainer components;
@@ -126,6 +128,11 @@ namespace MeGUI
             this.container.Items.Clear();
             this.container.Items.AddRange(supportedOutputTypes.ToArray());
             this.container.SelectedIndex = 0;
+
+            List<DeviceType> supportedOutputDeviceTypes = this.muxProvider.GetSupportedDevices();
+            this.device.Items.AddRange(supportedOutputDeviceTypes.ToArray());
+            this.device.SelectedIndex = 0;
+                
             string muxedName = FileUtil.AddToFileName(vInfo.VideoOutput, "-muxed");
 
             this.muxedOutput.Filename = Path.ChangeExtension(muxedName, (this.container.SelectedItem as ContainerType).Extension);
@@ -192,11 +199,13 @@ namespace MeGUI
             this.AverageBitrateLabel = new System.Windows.Forms.Label();
             this.queueButton = new System.Windows.Forms.Button();
             this.OutputGroupBox = new System.Windows.Forms.GroupBox();
+            this.device = new System.Windows.Forms.ComboBox();
+            this.DeviceLabel = new System.Windows.Forms.Label();
             this.splitting = new MeGUI.core.gui.TargetSizeSCBox();
             this.container = new System.Windows.Forms.ComboBox();
             this.containerLabel = new System.Windows.Forms.Label();
             this.muxedOutputLabel = new System.Windows.Forms.Label();
-            this.muxedOutput = new MeGUI.FileBar ();
+            this.muxedOutput = new MeGUI.FileBar();
             this.cancelButton = new System.Windows.Forms.Button();
             this.addSubsNChapters = new System.Windows.Forms.CheckBox();
             this.defaultToolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -225,7 +234,7 @@ namespace MeGUI
             this.AutomaticEncodingGroup.Controls.Add(this.averageBitrateRadio);
             this.AutomaticEncodingGroup.Controls.Add(this.FileSizeRadio);
             this.AutomaticEncodingGroup.Controls.Add(this.AverageBitrateLabel);
-            this.AutomaticEncodingGroup.Location = new System.Drawing.Point(12, 86);
+            this.AutomaticEncodingGroup.Location = new System.Drawing.Point(10, 116);
             this.AutomaticEncodingGroup.Name = "AutomaticEncodingGroup";
             this.AutomaticEncodingGroup.Size = new System.Drawing.Size(456, 106);
             this.AutomaticEncodingGroup.TabIndex = 17;
@@ -256,8 +265,8 @@ namespace MeGUI
             this.projectedBitrateKBits.Name = "projectedBitrateKBits";
             this.projectedBitrateKBits.Size = new System.Drawing.Size(85, 21);
             this.projectedBitrateKBits.TabIndex = 9;
-            this.projectedBitrateKBits.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textField_KeyPress);
             this.projectedBitrateKBits.TextChanged += new System.EventHandler(this.projectedBitrate_TextChanged);
+            this.projectedBitrateKBits.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textField_KeyPress);
             // 
             // targetSize
             // 
@@ -320,7 +329,7 @@ namespace MeGUI
             this.queueButton.AutoSize = true;
             this.queueButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.queueButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.queueButton.Location = new System.Drawing.Point(358, 201);
+            this.queueButton.Location = new System.Drawing.Point(358, 228);
             this.queueButton.Name = "queueButton";
             this.queueButton.Size = new System.Drawing.Size(49, 23);
             this.queueButton.TabIndex = 8;
@@ -329,6 +338,8 @@ namespace MeGUI
             // 
             // OutputGroupBox
             // 
+            this.OutputGroupBox.Controls.Add(this.device);
+            this.OutputGroupBox.Controls.Add(this.DeviceLabel);
             this.OutputGroupBox.Controls.Add(label1);
             this.OutputGroupBox.Controls.Add(this.splitting);
             this.OutputGroupBox.Controls.Add(this.container);
@@ -337,24 +348,30 @@ namespace MeGUI
             this.OutputGroupBox.Controls.Add(this.muxedOutput);
             this.OutputGroupBox.Location = new System.Drawing.Point(10, 4);
             this.OutputGroupBox.Name = "OutputGroupBox";
-            this.OutputGroupBox.Size = new System.Drawing.Size(458, 76);
+            this.OutputGroupBox.Size = new System.Drawing.Size(458, 106);
             this.OutputGroupBox.TabIndex = 18;
             this.OutputGroupBox.TabStop = false;
             this.OutputGroupBox.Text = "Output Options";
             // 
-            // muxedOutput
+            // device
             // 
-            this.muxedOutput.Filename = "";
-            this.muxedOutput.Filter = null;
-            this.muxedOutput.FilterIndex = 0;
-            this.muxedOutput.FolderMode = false;
-            this.muxedOutput.Location = new System.Drawing.Point (97, 44);
-            this.muxedOutput.Name = "muxedOutput";
-            this.muxedOutput.ReadOnly = false;
-            this.muxedOutput.SaveMode = true;
-            this.muxedOutput.Size = new System.Drawing.Size (352, 26);
-            this.muxedOutput.TabIndex = 36;
-            this.muxedOutput.Title = null;
+            this.device.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.device.FormattingEnabled = true;
+            this.device.Items.AddRange(new object[] {
+            "Standard"});
+            this.device.Location = new System.Drawing.Point(97, 47);
+            this.device.Name = "device";
+            this.device.Size = new System.Drawing.Size(85, 21);
+            this.device.TabIndex = 38;
+            // 
+            // DeviceLabel
+            // 
+            this.DeviceLabel.AutoSize = true;
+            this.DeviceLabel.Location = new System.Drawing.Point(6, 51);
+            this.DeviceLabel.Name = "DeviceLabel";
+            this.DeviceLabel.Size = new System.Drawing.Size(39, 13);
+            this.DeviceLabel.TabIndex = 37;
+            this.DeviceLabel.Text = "Device";
             // 
             // splitting
             // 
@@ -389,11 +406,25 @@ namespace MeGUI
             // muxedOutputLabel
             // 
             this.muxedOutputLabel.AutoSize = true;
-            this.muxedOutputLabel.Location = new System.Drawing.Point(6, 51);
+            this.muxedOutputLabel.Location = new System.Drawing.Point(6, 81);
             this.muxedOutputLabel.Name = "muxedOutputLabel";
             this.muxedOutputLabel.Size = new System.Drawing.Size(82, 13);
             this.muxedOutputLabel.TabIndex = 23;
             this.muxedOutputLabel.Text = "Name of output";
+            // 
+            // muxedOutput
+            // 
+            this.muxedOutput.Filename = "";
+            this.muxedOutput.Filter = null;
+            this.muxedOutput.FilterIndex = 0;
+            this.muxedOutput.FolderMode = false;
+            this.muxedOutput.Location = new System.Drawing.Point(97, 74);
+            this.muxedOutput.Name = "muxedOutput";
+            this.muxedOutput.ReadOnly = false;
+            this.muxedOutput.SaveMode = true;
+            this.muxedOutput.Size = new System.Drawing.Size(352, 26);
+            this.muxedOutput.TabIndex = 36;
+            this.muxedOutput.Title = null;
             // 
             // cancelButton
             // 
@@ -401,7 +432,7 @@ namespace MeGUI
             this.cancelButton.AutoSize = true;
             this.cancelButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(413, 201);
+            this.cancelButton.Location = new System.Drawing.Point(413, 228);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(49, 23);
             this.cancelButton.TabIndex = 19;
@@ -410,7 +441,7 @@ namespace MeGUI
             // addSubsNChapters
             // 
             this.addSubsNChapters.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.addSubsNChapters.Location = new System.Drawing.Point(88, 201);
+            this.addSubsNChapters.Location = new System.Drawing.Point(88, 228);
             this.addSubsNChapters.Name = "addSubsNChapters";
             this.addSubsNChapters.Size = new System.Drawing.Size(256, 24);
             this.addSubsNChapters.TabIndex = 20;
@@ -425,7 +456,7 @@ namespace MeGUI
             this.helpButton1.ArticleName = "AutoEncode window";
             this.helpButton1.AutoSize = true;
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.helpButton1.Location = new System.Drawing.Point(10, 201);
+            this.helpButton1.Location = new System.Drawing.Point(10, 228);
             this.helpButton1.Name = "helpButton1";
             this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 21;
@@ -433,7 +464,7 @@ namespace MeGUI
             // AutoEncodeWindow
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
-            this.ClientSize = new System.Drawing.Size(471, 231);
+            this.ClientSize = new System.Drawing.Size(471, 258);
             this.Controls.Add(this.helpButton1);
             this.Controls.Add(this.addSubsNChapters);
             this.Controls.Add(this.cancelButton);
@@ -468,6 +499,9 @@ namespace MeGUI
             this.muxedOutput.Filter = cot.OutputFilterString;
             if (!String.IsNullOrEmpty (muxedOutput.Filename))
             {
+                if (this.container.Text != "MP4")
+                    this.device.Enabled = false;
+                else this.device.Enabled = true;
                 this.muxedOutput.Filename = Path.ChangeExtension(muxedOutput.Filename, (this.container.SelectedItem as ContainerType).Extension);
             }
         }
@@ -657,6 +691,7 @@ namespace MeGUI
                 string videoOutput = vInfo.VideoOutput;
                 string muxedOutput = this.muxedOutput.Filename;
                 ContainerType cot = this.container.SelectedItem as ContainerType;
+
                 if (addSubsNChapters.Checked)
 				{
                     AdaptiveMuxWindow amw = new AdaptiveMuxWindow(mainForm);
@@ -669,7 +704,7 @@ namespace MeGUI
                 }
                 removeStreamsToBeEncoded(ref audio, aStreams);
                 mainForm.Jobs.addJobsWithDependencies(vUtil.GenerateJobSeries(this.videoStream, muxedOutput, aStreams, subtitles, chapters,
-                    desiredSize, splitSize, cot, this.prerender, audio, log, null));
+                    desiredSize, splitSize, cot, this.prerender, audio, log, this.device.Text));
                 this.Close();
 			}
 		}
