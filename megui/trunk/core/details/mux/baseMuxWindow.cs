@@ -59,6 +59,7 @@ namespace MeGUI
         protected GroupBox chaptersGroupbox;
         protected TextBox videoName;
         protected Label videoNameLabel;
+        private MuxProvider muxProvider;
         #endregion
         protected Panel audioPanel;
 
@@ -85,6 +86,11 @@ namespace MeGUI
         private TableLayoutPanel tableLayoutPanel2;
         private TableLayoutPanel tableLayoutPanel3;
         private TableLayoutPanel tableLayoutPanel4;
+        private MeGUI.core.gui.HelpButton helpButton1;
+        protected ComboBox cbType;
+        protected Label label1;
+        protected ComboBox cbContainer;
+        protected Label lbContainer;
         private IContainer components;
         #region start/stop
         public baseMuxWindow()
@@ -99,13 +105,18 @@ namespace MeGUI
             subtitleTracks = new List<MuxStreamControl>();
             subtitleTracks.Add(muxStreamControl1);
 
-            splitting.MinimumFileSize = new FileSize(Unit.MB, 1);
+            splitting.MinimumFileSize = new FileSize(Unit.MB, 1);            
         }
         public baseMuxWindow(MainForm mainForm)
             : this()
         {
             this.mainForm = mainForm;
             this.settings = mainForm.Settings;
+
+            muxProvider = mainForm.MuxProvider;
+            cbType.Items.Add("Standard");
+            cbType.Items.AddRange(muxProvider.GetSupportedDevices().ToArray());
+            cbType.SelectedIndex = 0;
         }
         /// <summary>
         /// Clean up any resources being used.
@@ -133,7 +144,7 @@ namespace MeGUI
         /// <param name="subtitleStreams">the subtitle streams</param>
         /// <param name="output">name of the output</param>
         /// <param name="splitSize">split size of the output</param>
-        public void setConfig(string videoInput, decimal? framerate, MuxStream[] audioStreams, MuxStream[] subtitleStreams, string chapterFile, string output, FileSize? splitSize, Dar? dar)
+        public void setConfig(string videoInput, decimal? framerate, MuxStream[] audioStreams, MuxStream[] subtitleStreams, string chapterFile, string output, FileSize? splitSize, Dar? dar, string deviceType)
         {
             this.dar = dar;
             vInput.Filename = videoInput;
@@ -161,6 +172,7 @@ namespace MeGUI
             this.output.Filename = output;
             this.splitting.Value = splitSize;
             this.muxButton.Text = "Update";
+            this.cbType.Text = deviceType;
             checkIO();
         }
         /// <summary>
@@ -201,22 +213,21 @@ namespace MeGUI
             this.muxButton = new System.Windows.Forms.Button();
             this.videoGroupbox = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.vInput = new MeGUI.FileBar();
             this.videoInputLabel = new System.Windows.Forms.Label();
             this.videoName = new System.Windows.Forms.TextBox();
-            this.fps = new MeGUI.core.gui.FPSChooser();
             this.videoNameLabel = new System.Windows.Forms.Label();
             this.MuxFPSLabel = new System.Windows.Forms.Label();
             this.chaptersGroupbox = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.chaptersInputLabel = new System.Windows.Forms.Label();
-            this.chapters = new MeGUI.FileBar();
             this.outputGroupbox = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+            this.lbContainer = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.muxedOutputLabel = new System.Windows.Forms.Label();
-            this.splitting = new MeGUI.core.gui.TargetSizeSCBox();
             this.splittingLabel = new System.Windows.Forms.Label();
-            this.output = new MeGUI.FileBar();
+            this.cbType = new System.Windows.Forms.ComboBox();
+            this.cbContainer = new System.Windows.Forms.ComboBox();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.cancelButton = new System.Windows.Forms.Button();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
@@ -226,15 +237,21 @@ namespace MeGUI
             this.audioRemoveTrack = new System.Windows.Forms.ToolStripMenuItem();
             this.audio = new System.Windows.Forms.TabControl();
             this.audioPage1 = new System.Windows.Forms.TabPage();
-            this.muxStreamControl2 = new MeGUI.core.details.mux.MuxStreamControl();
             this.subtitleMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.subtitleAddTrack = new System.Windows.Forms.ToolStripMenuItem();
             this.subtitleRemoveTrack = new System.Windows.Forms.ToolStripMenuItem();
             this.subtitlePanel = new System.Windows.Forms.Panel();
             this.subtitles = new System.Windows.Forms.TabControl();
             this.subPage1 = new System.Windows.Forms.TabPage();
-            this.muxStreamControl1 = new MeGUI.core.details.mux.MuxStreamControl();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.fps = new MeGUI.core.gui.FPSChooser();
+            this.vInput = new MeGUI.FileBar();
+            this.chapters = new MeGUI.FileBar();
+            this.splitting = new MeGUI.core.gui.TargetSizeSCBox();
+            this.output = new MeGUI.FileBar();
+            this.muxStreamControl2 = new MeGUI.core.details.mux.MuxStreamControl();
+            this.muxStreamControl1 = new MeGUI.core.details.mux.MuxStreamControl();
+            this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.videoGroupbox.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.chaptersGroupbox.SuspendLayout();
@@ -254,7 +271,7 @@ namespace MeGUI
             // 
             // muxButton
             // 
-            this.muxButton.Location = new System.Drawing.Point(296, 480);
+            this.muxButton.Location = new System.Drawing.Point(296, 531);
             this.muxButton.Margin = new System.Windows.Forms.Padding(12, 9, 12, 9);
             this.muxButton.Name = "muxButton";
             this.muxButton.Size = new System.Drawing.Size(56, 23);
@@ -298,23 +315,6 @@ namespace MeGUI
             this.tableLayoutPanel2.Size = new System.Drawing.Size(432, 70);
             this.tableLayoutPanel2.TabIndex = 0;
             // 
-            // vInput
-            // 
-            this.vInput.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableLayoutPanel2.SetColumnSpan(this.vInput, 3);
-            this.vInput.Filename = "";
-            this.vInput.Filter = null;
-            this.vInput.FilterIndex = 0;
-            this.vInput.FolderMode = false;
-            this.vInput.Location = new System.Drawing.Point(71, 4);
-            this.vInput.Name = "vInput";
-            this.vInput.ReadOnly = true;
-            this.vInput.SaveMode = false;
-            this.vInput.Size = new System.Drawing.Size(358, 26);
-            this.vInput.TabIndex = 1;
-            this.vInput.Title = null;
-            this.vInput.FileSelected += new MeGUI.FileBarEventHandler(this.vInput_FileSelected);
-            // 
             // videoInputLabel
             // 
             this.videoInputLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
@@ -333,19 +333,6 @@ namespace MeGUI
             this.videoName.Name = "videoName";
             this.videoName.Size = new System.Drawing.Size(102, 21);
             this.videoName.TabIndex = 5;
-            // 
-            // fps
-            // 
-            this.fps.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.fps.Location = new System.Drawing.Point(71, 38);
-            this.fps.MaximumSize = new System.Drawing.Size(1000, 29);
-            this.fps.MinimumSize = new System.Drawing.Size(64, 29);
-            this.fps.Name = "fps";
-            this.fps.NullString = "Not set";
-            this.fps.SelectedIndex = 0;
-            this.fps.Size = new System.Drawing.Size(210, 29);
-            this.fps.TabIndex = 3;
-            this.fps.SelectionChanged += new MeGUI.StringChanged(this.fps_SelectionChanged);
             // 
             // videoNameLabel
             // 
@@ -404,22 +391,6 @@ namespace MeGUI
             this.chaptersInputLabel.TabIndex = 0;
             this.chaptersInputLabel.Text = "Chapters File";
             // 
-            // chapters
-            // 
-            this.chapters.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.chapters.Filename = "";
-            this.chapters.Filter = "Chapter files (*.txt)|*.txt";
-            this.chapters.FilterIndex = 0;
-            this.chapters.FolderMode = false;
-            this.chapters.Location = new System.Drawing.Point(79, 3);
-            this.chapters.Name = "chapters";
-            this.chapters.ReadOnly = true;
-            this.chapters.SaveMode = false;
-            this.chapters.Size = new System.Drawing.Size(350, 22);
-            this.chapters.TabIndex = 1;
-            this.chapters.Title = null;
-            this.chapters.FileSelected += new MeGUI.FileBarEventHandler(this.chapters_FileSelected);
-            // 
             // outputGroupbox
             // 
             this.outputGroupbox.AutoSize = true;
@@ -428,7 +399,7 @@ namespace MeGUI
             this.outputGroupbox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.outputGroupbox.Location = new System.Drawing.Point(3, 378);
             this.outputGroupbox.Name = "outputGroupbox";
-            this.outputGroupbox.Size = new System.Drawing.Size(438, 90);
+            this.outputGroupbox.Size = new System.Drawing.Size(438, 141);
             this.outputGroupbox.TabIndex = 4;
             this.outputGroupbox.TabStop = false;
             this.outputGroupbox.Text = "Output";
@@ -439,72 +410,92 @@ namespace MeGUI
             this.tableLayoutPanel4.ColumnCount = 2;
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel4.Controls.Add(this.lbContainer, 0, 4);
+            this.tableLayoutPanel4.Controls.Add(this.label1, 0, 2);
             this.tableLayoutPanel4.Controls.Add(this.muxedOutputLabel, 0, 0);
             this.tableLayoutPanel4.Controls.Add(this.splitting, 1, 1);
             this.tableLayoutPanel4.Controls.Add(this.splittingLabel, 0, 1);
             this.tableLayoutPanel4.Controls.Add(this.output, 1, 0);
+            this.tableLayoutPanel4.Controls.Add(this.cbType, 1, 2);
+            this.tableLayoutPanel4.Controls.Add(this.cbContainer, 1, 4);
             this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 17);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
-            this.tableLayoutPanel4.RowCount = 2;
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(432, 70);
+            this.tableLayoutPanel4.RowCount = 5;
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(432, 121);
             this.tableLayoutPanel4.TabIndex = 0;
+            // 
+            // lbContainer
+            // 
+            this.lbContainer.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.lbContainer.AutoSize = true;
+            this.lbContainer.Location = new System.Drawing.Point(3, 101);
+            this.lbContainer.Name = "lbContainer";
+            this.lbContainer.Size = new System.Drawing.Size(54, 13);
+            this.lbContainer.TabIndex = 11;
+            this.lbContainer.Text = "Container";
+            this.lbContainer.Visible = false;
+            // 
+            // label1
+            // 
+            this.label1.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(3, 74);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(66, 13);
+            this.label1.TabIndex = 9;
+            this.label1.Text = "Device Type";
             // 
             // muxedOutputLabel
             // 
             this.muxedOutputLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.muxedOutputLabel.AutoSize = true;
-            this.muxedOutputLabel.Location = new System.Drawing.Point(3, 11);
+            this.muxedOutputLabel.Location = new System.Drawing.Point(3, 9);
             this.muxedOutputLabel.Name = "muxedOutputLabel";
             this.muxedOutputLabel.Size = new System.Drawing.Size(76, 13);
             this.muxedOutputLabel.TabIndex = 0;
             this.muxedOutputLabel.Text = "Muxed Output";
             // 
-            // splitting
-            // 
-            this.splitting.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.splitting.CustomSizes = new MeGUI.core.util.FileSize[0];
-            this.splitting.Location = new System.Drawing.Point(85, 38);
-            this.splitting.MaximumSize = new System.Drawing.Size(1000, 29);
-            this.splitting.MinimumSize = new System.Drawing.Size(64, 29);
-            this.splitting.Name = "splitting";
-            this.splitting.NullString = "No splitting";
-            this.splitting.SelectedIndex = 0;
-            this.splitting.Size = new System.Drawing.Size(344, 29);
-            this.splitting.TabIndex = 3;
-            // 
             // splittingLabel
             // 
             this.splittingLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.splittingLabel.AutoSize = true;
-            this.splittingLabel.Location = new System.Drawing.Point(3, 46);
+            this.splittingLabel.Location = new System.Drawing.Point(3, 43);
             this.splittingLabel.Name = "splittingLabel";
             this.splittingLabel.Size = new System.Drawing.Size(45, 13);
             this.splittingLabel.TabIndex = 2;
             this.splittingLabel.Text = "Splitting";
             // 
-            // output
+            // cbType
             // 
-            this.output.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.output.Filename = "";
-            this.output.Filter = null;
-            this.output.FilterIndex = 0;
-            this.output.FolderMode = false;
-            this.output.Location = new System.Drawing.Point(85, 4);
-            this.output.Name = "output";
-            this.output.ReadOnly = false;
-            this.output.SaveMode = true;
-            this.output.Size = new System.Drawing.Size(344, 26);
-            this.output.TabIndex = 1;
-            this.output.Title = null;
-            this.output.FileSelected += new MeGUI.FileBarEventHandler(this.output_FileSelected);
+            this.cbType.Dock = System.Windows.Forms.DockStyle.Left;
+            this.cbType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbType.FormattingEnabled = true;
+            this.cbType.Location = new System.Drawing.Point(85, 70);
+            this.cbType.Name = "cbType";
+            this.cbType.Size = new System.Drawing.Size(121, 21);
+            this.cbType.TabIndex = 7;
+            // 
+            // cbContainer
+            // 
+            this.cbContainer.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbContainer.FormattingEnabled = true;
+            this.cbContainer.Location = new System.Drawing.Point(85, 97);
+            this.cbContainer.Name = "cbContainer";
+            this.cbContainer.Size = new System.Drawing.Size(121, 21);
+            this.cbContainer.TabIndex = 10;
+            this.cbContainer.Visible = false;
+            this.cbContainer.SelectedIndexChanged += new System.EventHandler(this.cbContainer_SelectedIndexChanged);
             // 
             // cancelButton
             // 
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(376, 480);
+            this.cancelButton.Location = new System.Drawing.Point(376, 531);
             this.cancelButton.Margin = new System.Windows.Forms.Padding(12, 9, 12, 9);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(56, 23);
@@ -566,17 +557,6 @@ namespace MeGUI
             this.audioPage1.Text = "Audio 1";
             this.audioPage1.UseVisualStyleBackColor = true;
             // 
-            // muxStreamControl2
-            // 
-            this.muxStreamControl2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.muxStreamControl2.Filter = null;
-            this.muxStreamControl2.Location = new System.Drawing.Point(3, 3);
-            this.muxStreamControl2.Name = "muxStreamControl2";
-            this.muxStreamControl2.ShowDelay = true;
-            this.muxStreamControl2.Size = new System.Drawing.Size(424, 83);
-            this.muxStreamControl2.TabIndex = 0;
-            this.muxStreamControl2.FileUpdated += new System.EventHandler(this.muxStreamControl2_FileUpdated);
-            // 
             // subtitleMenu
             // 
             this.subtitleMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -632,17 +612,6 @@ namespace MeGUI
             this.subPage1.Text = "Subtitle 1";
             this.subPage1.UseVisualStyleBackColor = true;
             // 
-            // muxStreamControl1
-            // 
-            this.muxStreamControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.muxStreamControl1.Filter = null;
-            this.muxStreamControl1.Location = new System.Drawing.Point(3, 3);
-            this.muxStreamControl1.Name = "muxStreamControl1";
-            this.muxStreamControl1.ShowDelay = false;
-            this.muxStreamControl1.Size = new System.Drawing.Size(424, 66);
-            this.muxStreamControl1.TabIndex = 0;
-            this.muxStreamControl1.FileUpdated += new System.EventHandler(this.muxStreamControl1_FileUpdated);
-            // 
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.AutoSize = true;
@@ -650,6 +619,7 @@ namespace MeGUI
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.Controls.Add(this.helpButton1, 0, 5);
             this.tableLayoutPanel1.Controls.Add(this.videoGroupbox, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.audioPanel, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.subtitlePanel, 0, 2);
@@ -667,14 +637,121 @@ namespace MeGUI
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(444, 514);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(444, 558);
             this.tableLayoutPanel1.TabIndex = 0;
+            // 
+            // fps
+            // 
+            this.fps.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.fps.Location = new System.Drawing.Point(71, 38);
+            this.fps.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.fps.MinimumSize = new System.Drawing.Size(64, 29);
+            this.fps.Name = "fps";
+            this.fps.NullString = "Not set";
+            this.fps.SelectedIndex = 0;
+            this.fps.Size = new System.Drawing.Size(210, 29);
+            this.fps.TabIndex = 3;
+            this.fps.SelectionChanged += new MeGUI.StringChanged(this.fps_SelectionChanged);
+            // 
+            // vInput
+            // 
+            this.vInput.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel2.SetColumnSpan(this.vInput, 3);
+            this.vInput.Filename = "";
+            this.vInput.Filter = null;
+            this.vInput.FilterIndex = 0;
+            this.vInput.FolderMode = false;
+            this.vInput.Location = new System.Drawing.Point(71, 4);
+            this.vInput.Name = "vInput";
+            this.vInput.ReadOnly = true;
+            this.vInput.SaveMode = false;
+            this.vInput.Size = new System.Drawing.Size(358, 26);
+            this.vInput.TabIndex = 1;
+            this.vInput.Title = null;
+            this.vInput.FileSelected += new MeGUI.FileBarEventHandler(this.vInput_FileSelected);
+            // 
+            // chapters
+            // 
+            this.chapters.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.chapters.Filename = "";
+            this.chapters.Filter = "Chapter files (*.txt)|*.txt";
+            this.chapters.FilterIndex = 0;
+            this.chapters.FolderMode = false;
+            this.chapters.Location = new System.Drawing.Point(79, 3);
+            this.chapters.Name = "chapters";
+            this.chapters.ReadOnly = true;
+            this.chapters.SaveMode = false;
+            this.chapters.Size = new System.Drawing.Size(350, 22);
+            this.chapters.TabIndex = 1;
+            this.chapters.Title = null;
+            this.chapters.FileSelected += new MeGUI.FileBarEventHandler(this.chapters_FileSelected);
+            // 
+            // splitting
+            // 
+            this.splitting.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.splitting.CustomSizes = new MeGUI.core.util.FileSize[0];
+            this.splitting.Location = new System.Drawing.Point(85, 35);
+            this.splitting.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.splitting.MinimumSize = new System.Drawing.Size(64, 29);
+            this.splitting.Name = "splitting";
+            this.splitting.NullString = "No splitting";
+            this.splitting.SelectedIndex = 0;
+            this.splitting.Size = new System.Drawing.Size(344, 29);
+            this.splitting.TabIndex = 3;
+            // 
+            // output
+            // 
+            this.output.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.output.Filename = "";
+            this.output.Filter = null;
+            this.output.FilterIndex = 0;
+            this.output.FolderMode = false;
+            this.output.Location = new System.Drawing.Point(85, 3);
+            this.output.Name = "output";
+            this.output.ReadOnly = false;
+            this.output.SaveMode = true;
+            this.output.Size = new System.Drawing.Size(344, 26);
+            this.output.TabIndex = 1;
+            this.output.Title = null;
+            this.output.FileSelected += new MeGUI.FileBarEventHandler(this.output_FileSelected);
+            // 
+            // muxStreamControl2
+            // 
+            this.muxStreamControl2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.muxStreamControl2.Filter = null;
+            this.muxStreamControl2.Location = new System.Drawing.Point(3, 3);
+            this.muxStreamControl2.Name = "muxStreamControl2";
+            this.muxStreamControl2.ShowDelay = true;
+            this.muxStreamControl2.Size = new System.Drawing.Size(424, 83);
+            this.muxStreamControl2.TabIndex = 0;
+            this.muxStreamControl2.FileUpdated += new System.EventHandler(this.muxStreamControl2_FileUpdated);
+            // 
+            // muxStreamControl1
+            // 
+            this.muxStreamControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.muxStreamControl1.Filter = null;
+            this.muxStreamControl1.Location = new System.Drawing.Point(3, 3);
+            this.muxStreamControl1.Name = "muxStreamControl1";
+            this.muxStreamControl1.ShowDelay = false;
+            this.muxStreamControl1.Size = new System.Drawing.Size(424, 66);
+            this.muxStreamControl1.TabIndex = 0;
+            this.muxStreamControl1.FileUpdated += new System.EventHandler(this.muxStreamControl1_FileUpdated);
+            // 
+            // helpButton1
+            // 
+            this.helpButton1.ArticleName = "Manual mux window";
+            this.helpButton1.AutoSize = true;
+            this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.helpButton1.Location = new System.Drawing.Point(3, 525);
+            this.helpButton1.Name = "helpButton1";
+            this.helpButton1.Size = new System.Drawing.Size(38, 23);
+            this.helpButton1.TabIndex = 8;
             // 
             // baseMuxWindow
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(444, 514);
+            this.ClientSize = new System.Drawing.Size(444, 558);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -831,7 +908,8 @@ namespace MeGUI
             checkIO();
         }
         #endregion
-       protected virtual void fileUpdated() { }
+        protected virtual void fileUpdated() { }
+        protected virtual void upDeviceTypes() { }
 
 
         #region adding / removing tracks
@@ -922,6 +1000,11 @@ namespace MeGUI
         private void muxStreamControl2_FileUpdated(object sender, EventArgs e)
         {
             fileUpdated();
+        }
+
+        private void cbContainer_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            upDeviceTypes();
         }
 
 

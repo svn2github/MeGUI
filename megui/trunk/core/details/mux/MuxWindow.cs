@@ -69,6 +69,8 @@ namespace MeGUI
                 subtitles.Enabled = false;
             if (muxer.GetSupportedChapterTypes().Count == 0)
                 chaptersGroupbox.Enabled = false;
+            if (muxer.GetSupportedDeviceTypes().Count == 0)
+                cbType.Enabled = false;
             muxedInput.Filter = muxer.GetMuxedInputFilter();
 
             audioTracks[0].Filter = muxer.GetAudioInputFilter();
@@ -91,6 +93,7 @@ namespace MeGUI
             job.Settings.MuxedOutput = output.Filename;
             job.Settings.MuxedInput = this.muxedInput.Filename;
             job.Settings.DAR = base.dar;
+            job.Settings.DeviceType = this.cbType.Text;
             
             if (string.IsNullOrEmpty(job.Settings.VideoInput))
                 job.Input = job.Settings.MuxedInput;
@@ -115,14 +118,14 @@ namespace MeGUI
                 setConfig(value.Settings.VideoInput, value.Settings.MuxedInput, value.Settings.Framerate,
                     value.Settings.AudioStreams.ToArray(), value.Settings.SubtitleStreams.ToArray(),
                     value.Settings.ChapterFile, value.Settings.MuxedOutput, value.Settings.SplitSize,
-                    value.Settings.DAR);
+                    value.Settings.DAR, value.Settings.DeviceType);
             }
         }
 
         private void setConfig(string videoInput, string muxedInput, decimal? framerate, MuxStream[] audioStreams,
-            MuxStream[] subtitleStreams, string chapterFile, string output, FileSize? splitSize, Dar? dar)
+            MuxStream[] subtitleStreams, string chapterFile, string output, FileSize? splitSize, Dar? dar, string deviceType)
         {
-            base.setConfig(videoInput, framerate, audioStreams, subtitleStreams, chapterFile, output, splitSize, dar);
+            base.setConfig(videoInput, framerate, audioStreams, subtitleStreams, chapterFile, output, splitSize, dar, deviceType);
             this.muxedInput.Filename = muxedInput;
             this.checkIO();
         }

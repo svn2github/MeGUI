@@ -31,92 +31,7 @@ namespace MeGUI
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AdaptiveMuxWindow));
             this.containerFormat = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.helpButton1 = new MeGUI.core.gui.HelpButton();
-            this.videoGroupbox.SuspendLayout();
-            this.outputGroupbox.SuspendLayout();
-            this.chaptersGroupbox.SuspendLayout();
-            this.audioPanel.SuspendLayout();
-            this.subtitlePanel.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // videoInputLabel
-            // 
-            this.videoInputLabel.Location = new System.Drawing.Point(9, 19);
-            // 
-            // muxButton
-            // 
-            this.muxButton.Location = new System.Drawing.Point(303, 478);
-            this.muxButton.TabIndex = 6;
-            // 
-            // MuxFPSLabel
-            // 
-            this.MuxFPSLabel.Location = new System.Drawing.Point(9, 46);
-            this.MuxFPSLabel.TabIndex = 3;
-            // 
-            // chaptersInputLabel
-            // 
-            this.chaptersInputLabel.Location = new System.Drawing.Point(9, 20);
-            this.chaptersInputLabel.TabIndex = 0;
-            // 
-            // muxedOutputLabel
-            // 
-            this.muxedOutputLabel.Location = new System.Drawing.Point(10, 18);
-            this.muxedOutputLabel.TabIndex = 2;
-            // 
-            // cancelButton
-            // 
-            this.cancelButton.Location = new System.Drawing.Point(365, 478);
-            this.cancelButton.TabIndex = 7;
-            // 
-            // videoGroupbox
-            // 
-            this.videoGroupbox.Size = new System.Drawing.Size(414, 70);
-            this.videoGroupbox.TabIndex = 0;
-            // 
-            // outputGroupbox
-            // 
-            this.outputGroupbox.Controls.Add(this.containerFormat);
-            this.outputGroupbox.Controls.Add(this.label1);
-            this.outputGroupbox.Location = new System.Drawing.Point(7, 361);
-            this.outputGroupbox.Size = new System.Drawing.Size(414, 111);
-            this.outputGroupbox.TabIndex = 4;
-            // 
-            // chaptersGroupbox
-            // 
-            this.chaptersGroupbox.Location = new System.Drawing.Point(7, 307);
-            this.chaptersGroupbox.Size = new System.Drawing.Size(414, 48);
-            this.chaptersGroupbox.TabIndex = 3;
-            // 
-            // videoName
-            // 
-            this.videoName.Location = new System.Drawing.Point(283, 43);
-            this.videoName.TabIndex = 6;
-            // 
-            // videoNameLabel
-            // 
-            this.videoNameLabel.Location = new System.Drawing.Point(243, 46);
-            this.videoNameLabel.TabIndex = 5;
-            // 
-            // audioPanel
-            // 
-            this.audioPanel.Location = new System.Drawing.Point(4, 83);
-            // 
-            // subtitlePanel
-            // 
-            this.subtitlePanel.Location = new System.Drawing.Point(4, 204);
-            // 
-            // splittingLabel
-            // 
-            this.splittingLabel.Location = new System.Drawing.Point(10, 84);
-            // 
-            // splitting
-            // 
-            this.splitting.CustomSizes = new MeGUI.core.util.FileSize[0];
-            this.splitting.Location = new System.Drawing.Point(114, 76);
-            // 
-            // fps
-            // 
-            this.fps.Location = new System.Drawing.Point(115, 40);
             // 
             // containerFormat
             // 
@@ -126,7 +41,7 @@ namespace MeGUI
             this.containerFormat.Name = "containerFormat";
             this.containerFormat.Size = new System.Drawing.Size(141, 21);
             this.containerFormat.TabIndex = 1;
-            this.containerFormat.SelectedIndexChanged += new System.EventHandler(this.containerFormat_SelectedIndexChanged);
+            //this.cbContainer.SelectedIndexChanged += new System.EventHandler(this.cbContainer_SelectedIndexChanged);
             // 
             // label1
             // 
@@ -137,32 +52,14 @@ namespace MeGUI
             this.label1.TabIndex = 0;
             this.label1.Text = "Container Format";
             // 
-            // helpButton1
-            // 
-            this.helpButton1.ArticleName = "Adaptive mux window";
-            this.helpButton1.AutoSize = true;
-            this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.helpButton1.Location = new System.Drawing.Point(7, 478);
-            this.helpButton1.Name = "helpButton1";
-            this.helpButton1.Size = new System.Drawing.Size(38, 23);
-            this.helpButton1.TabIndex = 5;
-            // 
             // AdaptiveMuxWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(430, 513);
-            this.Controls.Add(this.helpButton1);
+            this.ClientSize = new System.Drawing.Size(444, 559);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "AdaptiveMuxWindow";
             this.Text = "MeGUI - Adaptive Muxer";
-            this.videoGroupbox.ResumeLayout(false);
-            this.videoGroupbox.PerformLayout();
-            this.outputGroupbox.ResumeLayout(false);
-            this.outputGroupbox.PerformLayout();
-            this.chaptersGroupbox.ResumeLayout(false);
-            this.audioPanel.ResumeLayout(false);
-            this.subtitlePanel.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -172,6 +69,5 @@ namespace MeGUI
 
         private System.Windows.Forms.ComboBox containerFormat;
         private System.Windows.Forms.Label label1;
-        private MeGUI.core.gui.HelpButton helpButton1;
     }
 }

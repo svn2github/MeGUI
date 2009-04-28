@@ -51,6 +51,10 @@ namespace MeGUI
             audioTracks[0].Filter = VideoUtil.GenerateCombinedFilter(ContainerManager.AudioTypes.ValuesArray);
             subtitleTracks[0].Filter = VideoUtil.GenerateCombinedFilter(ContainerManager.SubtitleTypes.ValuesArray);
             vInput.Filter = VideoUtil.GenerateCombinedFilter(ContainerManager.VideoTypes.ValuesArray);
+            cbContainer.Visible = true;
+            lbContainer.Visible = true;
+
+            this.cbContainer.SelectedIndexChanged += new System.EventHandler(this.cbContainer_SelectedIndexChanged);
         }
 
         protected override void fileUpdated()
@@ -58,12 +62,17 @@ namespace MeGUI
             updatePossibleContainers();
         }
 
-        private void containerFormat_SelectedIndexChanged(object sender, EventArgs e)
+        protected override void upDeviceTypes()
         {
-            output.Filename = Path.ChangeExtension(output.Filename, (this.containerFormat.SelectedItem as ContainerType).Extension);
+            updateDeviceTypes();
+        }
 
-            if (containerFormat.SelectedItem is ContainerType)
-                output.Filter = (containerFormat.SelectedItem as ContainerType).OutputFilterString;
+        private void cbContainer_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            output.Filename = Path.ChangeExtension(output.Filename, (this.cbContainer.SelectedItem as ContainerType).Extension);
+
+            if (cbContainer.SelectedItem is ContainerType)
+                output.Filter = (cbContainer.SelectedItem as ContainerType).OutputFilterString;
             else
                 output.Filter = "";
         }
@@ -109,8 +118,15 @@ namespace MeGUI
         protected override void checkIO()
         {
             base.checkIO();
-            if (!(containerFormat.SelectedItem is ContainerType))
+            if (!(cbContainer.SelectedItem is ContainerType))
                 muxButton.DialogResult = DialogResult.None;
+        }
+
+        private void updateDeviceTypes()
+        {
+            if (this.cbContainer.Text != "MP4")
+                this.cbType.Enabled = false;
+            else this.cbType.Enabled = true;
         }
 
         private void updatePossibleContainers()
@@ -130,9 +146,9 @@ namespace MeGUI
 
             if (!minimizedMode && videoType == null)
             {
-                this.containerFormat.Items.Clear();
-                this.containerFormat.Items.AddRange(muxProvider.GetSupportedContainers().ToArray());
-                this.containerFormat.SelectedIndex = 0;
+                this.cbContainer.Items.Clear();
+                this.cbContainer.Items.AddRange(muxProvider.GetSupportedContainers().ToArray());
+                this.cbContainer.SelectedIndex = 0;
                 return;
             }
 
@@ -160,20 +176,20 @@ namespace MeGUI
             }
 
             ContainerType lastSelectedFileType = null;
-            if (containerFormat.SelectedItem is ContainerType)
-                lastSelectedFileType = containerFormat.SelectedItem as ContainerType;
+            if (cbContainer.SelectedItem is ContainerType)
+                lastSelectedFileType = cbContainer.SelectedItem as ContainerType;
 
             if (supportedOutputTypes.Count > 0)
             {
-                this.containerFormat.Items.Clear();
-                this.containerFormat.Items.AddRange(supportedOutputTypes.ToArray());
-                this.containerFormat.SelectedIndex = 0;
-                if (lastSelectedFileType != null && containerFormat.Items.Contains(lastSelectedFileType))
-                    containerFormat.SelectedItem = lastSelectedFileType;
+                this.cbContainer.Items.Clear();
+                this.cbContainer.Items.AddRange(supportedOutputTypes.ToArray());
+                this.cbContainer.SelectedIndex = 0;
+                if (lastSelectedFileType != null && cbContainer.Items.Contains(lastSelectedFileType))
+                    cbContainer.SelectedItem = lastSelectedFileType;
             }
             else
             {
-                this.containerFormat.Items.Clear();
+                this.cbContainer.Items.Clear();
                 MessageBox.Show("No muxer can be found that supports this input configuration", "Muxing impossible", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -212,8 +228,16 @@ namespace MeGUI
                         chapterInputType = new MuxableType(type, null);
                 }
 
+                MuxableType deviceOutputType = null;
+                if (!String.IsNullOrEmpty(this.cbType.Text))
+                {
+                    DeviceType type = VideoUtil.guessDeviceType(this.cbType.Text);
+                    if (type != null)
+                        deviceOutputType = new MuxableType(type, null);
+                }
+
                 return jobUtil.GenerateMuxJobs(myVideo, fps.Value, audioStreams, audioTypes, subtitleStreams,
-                    subtitleTypes, this.chapters.Filename, chapterInputType, (containerFormat.SelectedItem as ContainerType), output.Filename, splitSize, new List<string>());
+                    subtitleTypes, this.chapters.Filename, chapterInputType, (cbContainer.SelectedItem as ContainerType), output.Filename, splitSize, new List<string>(), this.cbType.Text, deviceOutputType);
             }
         }
         /// <summary>
@@ -228,7 +252,7 @@ namespace MeGUI
         public void setMinimizedMode(string videoInput, VideoEncoderType videoType, double framerate, MuxStream[] audioStreams, AudioEncoderType[] audioTypes, string output,
             FileSize? splitSize, ContainerType cft)
         {
-            base.setConfig(videoInput, (decimal)framerate, audioStreams, new MuxStream[0], null, output, splitSize, null);
+            base.setConfig(videoInput, (decimal)framerate, audioStreams, new MuxStream[0], null, output, splitSize, null, null);
 
             minimizedMode = true;
             knownVideoType = videoType;
@@ -244,14 +268,14 @@ namespace MeGUI
             this.splitting.Value = splitSize;
             this.muxButton.Text = "Go";
             updatePossibleContainers();
-            if (this.containerFormat.Items.Contains(cft))
-                containerFormat.SelectedItem = cft;
+            if (this.cbContainer.Items.Contains(cft))
+                cbContainer.SelectedItem = cft;
             checkIO();
         }
 
         public void getAdditionalStreams(out MuxStream[] audio, out MuxStream[] subtitles, out string chapters, out string output, out ContainerType cot)
         {
-            cot = (containerFormat.SelectedItem as ContainerType);
+            cot = (cbContainer.SelectedItem as ContainerType);
             output = this.output.Filename;
             base.getAdditionalStreams(out audio, out subtitles, out chapters);
         }
