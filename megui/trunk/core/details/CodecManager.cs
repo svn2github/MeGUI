@@ -291,6 +291,17 @@ namespace MeGUI
             : base(name, filterName, extension, containerType) { }
         public static readonly ChapterType OGG_TXT = new ChapterType("Ogg chapter", "Ogg chapter files", "txt", null);
     }
+    public class DeviceType : OutputType
+    {
+        public DeviceType(string name, string filterName, string extension, ContainerType containerType)
+            : base(name, filterName, extension, containerType) { }
+        public static readonly DeviceType IPOD = new DeviceType("iPod", "iPod", "iPod", ContainerType.MP4);
+        public static readonly DeviceType IPHONE = new DeviceType("iPhone", "iPhone", "iPhone", ContainerType.MP4);
+        public static readonly DeviceType ISMA = new DeviceType("ISMA", "ISMA", "ISMA", ContainerType.MP4);
+        public static readonly DeviceType PSP = new DeviceType("PSP", "PSP", "PSP", ContainerType.MP4);
+        public static readonly DeviceType BD = new DeviceType("BD", "Blu-ray", "BD", ContainerType.M2TS);
+        public static readonly DeviceType AVCHD = new DeviceType("AVCHD", "AVCHD", "AVCHD", ContainerType.M2TS);
+    }
     public class ContainerType : OutputFileType
     {
         public ContainerType(string name, string filterName, string extension)
@@ -316,7 +327,8 @@ namespace MeGUI
         public static GenericRegisterer<AudioType> AudioTypes = new GenericRegisterer<AudioType>();
         public static GenericRegisterer<SubtitleType> SubtitleTypes = new GenericRegisterer<SubtitleType>();
         public static GenericRegisterer<ContainerType> ContainerTypes = new GenericRegisterer<ContainerType>();
-	public static GenericRegisterer<ChapterType> ChapterTypes = new GenericRegisterer<ChapterType>();
+        public static GenericRegisterer<ChapterType> ChapterTypes = new GenericRegisterer<ChapterType>();
+        public static GenericRegisterer<DeviceType> DeviceTypes = new GenericRegisterer<DeviceType>();
 
         static ContainerManager()
         {
@@ -358,6 +370,14 @@ namespace MeGUI
             if (!(
 	            ChapterTypes.Register(ChapterType.OGG_TXT)))
 		        throw new Exception("Failed to register a chapter type");
+            if (!(
+                DeviceTypes.Register(DeviceType.AVCHD) &&
+                DeviceTypes.Register(DeviceType.BD) &&
+                DeviceTypes.Register(DeviceType.IPOD) &&
+                DeviceTypes.Register(DeviceType.PSP) &&
+                DeviceTypes.Register(DeviceType.IPHONE) &&
+                DeviceTypes.Register(DeviceType.ISMA)))
+                throw new Exception("Failed to register a device type");
         }
     }
 
