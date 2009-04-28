@@ -119,7 +119,7 @@ namespace MeGUI
 
         public JobChain GenerateMuxJobs(VideoStream video, decimal? framerate, MuxStream[] audioStreamsArray, MuxableType[] audioTypes,
             MuxStream[] subtitleStreamsArray, MuxableType[] subTypes,
-            string chapterFile, MuxableType chapterInputType, ContainerType container, string output, FileSize? splitSize, List<string> inputsToDelete)
+            string chapterFile, MuxableType chapterInputType, ContainerType container, string output, FileSize? splitSize, List<string> inputsToDelete, string deviceType, MuxableType deviceOutputType)
         {
             Debug.Assert(splitSize == null || splitSize.Value != FileSize.Empty);
 
@@ -130,6 +130,8 @@ namespace MeGUI
             allTypes.AddRange(subTypes);
             if (chapterInputType != null)
                 allTypes.Add(chapterInputType);
+            if (deviceOutputType != null)
+                allTypes.Add(deviceOutputType);
             MuxPath muxPath = prov.GetMuxPath(container, splitSize.HasValue, allTypes.ToArray());
             List<MuxJob> jobs = new List<MuxJob>();
             List<MuxStream> subtitleStreams = new List<MuxStream>(subtitleStreamsArray);
@@ -207,6 +209,11 @@ namespace MeGUI
                             mjob.Settings.ChapterFile = chapterFile;
                         if (inputsToDelete.Contains(chapterFile))
                             filesToDeleteThisJob.Add(chapterFile);
+                    }
+                    else if (o.outputType is DeviceType)
+                    {
+                        if ((VideoUtil.guessDeviceType(deviceType) == o.outputType))
+                            mjob.Settings.DeviceType = deviceType;
                     }
                 }
                 foreach (MuxStream s in mjob.Settings.AudioStreams)
