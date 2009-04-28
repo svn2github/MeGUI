@@ -47,7 +47,7 @@ namespace MeGUI.core.util
                         idxVideo = temp.Length;
                     if (idxAudio < 3)
                         idxAudio = temp.Length;
-                    A = A.Substring(0, Math.Min(idxVideo, idxAudio)).Trim();
+                    A = temp.Substring(0, Math.Min(idxVideo, idxAudio)).Trim();
                     break;
                 }
                 fileName = Path.GetDirectoryName(fileName);
