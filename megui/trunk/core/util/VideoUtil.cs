@@ -822,7 +822,7 @@ namespace MeGUI
 
         #region new stuff
         public JobChain GenerateJobSeries(VideoStream video, string muxedOutput, AudioJob[] audioStreams,
-            MuxStream[] subtitles, string chapters, FileSize? desiredSize, FileSize? splitSize, ContainerType container, bool prerender, MuxStream[] muxOnlyAudio, LogItem log)
+            MuxStream[] subtitles, string chapters, FileSize? desiredSize, FileSize? splitSize, ContainerType container, bool prerender, MuxStream[] muxOnlyAudio, LogItem log, string deviceType)
         {
             if (desiredSize.HasValue)
             {
@@ -878,12 +878,20 @@ namespace MeGUI
                     chapterInputType = new MuxableType(type, null);
             }
 
+            MuxableType deviceOutputType = null;
+            if (!String.IsNullOrEmpty(deviceType))
+            {
+                DeviceType type = VideoUtil.guessDeviceType(deviceType);
+                if (type != null)
+                    deviceOutputType = new MuxableType(type, null);
+            }
+
             List<string> inputsToDelete = new List<string>();
             inputsToDelete.Add(video.Output);
             inputsToDelete.AddRange(Array.ConvertAll<AudioJob, string>(audioStreams, delegate(AudioJob a) { return a.Output; }));
 
             JobChain muxJobs = this.jobUtil.GenerateMuxJobs(video, video.Framerate, allAudioToMux.ToArray(), allInputAudioTypes.ToArray(),
-                subtitles, allInputSubtitleTypes.ToArray(), chapters, chapterInputType, container, muxedOutput, splitSize, inputsToDelete);
+                subtitles, allInputSubtitleTypes.ToArray(), chapters, chapterInputType, container, muxedOutput, splitSize, inputsToDelete, deviceType, deviceOutputType);
 
             if (desiredSize.HasValue)
             {
@@ -984,6 +992,16 @@ namespace MeGUI
             foreach (ChapterType type in ContainerManager.ChapterTypes.Values)
             {
                 if (Path.GetExtension(p.ToLower()) == "." + type.Extension)
+                    return type;
+            }
+            return null;
+        }
+
+        public static DeviceType guessDeviceType(string p)
+        {
+            foreach (DeviceType type in ContainerManager.DeviceTypes.Values)
+            {
+                if (p == type.Extension)
                     return type;
             }
             return null;
