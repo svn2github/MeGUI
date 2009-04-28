@@ -40,7 +40,7 @@ namespace MeGUI
 		private VideoCodecSettings videoSettings;
         private AviSynthSettings avsSettings;
 		private double customAR;
-		private string chapterFile, finalOutput, aviSynthScript;
+		private string chapterFile, finalOutput, aviSynthScript, deviceType;
 
 		public DGIndexPostprocessingProperties()
 		{
@@ -56,6 +56,7 @@ namespace MeGUI
             outputSize = null;
 			splitSize = null;
             prerenderJob = false;
+            deviceType = null;
 		}
 
         public AudioJob[] AudioJobs;
@@ -208,5 +209,14 @@ namespace MeGUI
 			get { return aviSynthScript; }
 			set { aviSynthScript = value; }
 		}
+        /// <summary>
+        /// gets / sets the device output type
+        /// </summary>
+        public string DeviceOutputType
+        {
+            get { return deviceType; }
+            set { deviceType = value; }
+        }
+
 	}
 }

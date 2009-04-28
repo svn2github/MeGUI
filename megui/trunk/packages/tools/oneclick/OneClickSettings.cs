@@ -140,6 +140,13 @@ namespace MeGUI
             set { containerCandidates = value; }
         }
 
+        private string deviceType;
+        public string DeviceOutputType
+        {
+            get { return deviceType; }
+            set { deviceType = value; }
+        }
+
         object ICloneable.Clone()
         {
             return Clone();

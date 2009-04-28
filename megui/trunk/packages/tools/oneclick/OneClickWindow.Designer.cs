@@ -77,6 +77,8 @@ namespace MeGUI
             this.track1Label = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.encoderConfigTab = new System.Windows.Forms.TabPage();
+            this.devicetype = new System.Windows.Forms.ComboBox();
+            this.deviceLabel = new System.Windows.Forms.Label();
             this.containerFormatLabel = new System.Windows.Forms.Label();
             this.containerFormat = new System.Windows.Forms.ComboBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -169,7 +171,7 @@ namespace MeGUI
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(453, 272);
+            this.tabPage2.Size = new System.Drawing.Size(453, 279);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Advanced Config";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -416,7 +418,7 @@ namespace MeGUI
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(453, 272);
+            this.tabPage1.Size = new System.Drawing.Size(453, 279);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "General";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -495,7 +497,7 @@ namespace MeGUI
             this.targetGroupBox.Controls.Add(this.optionalTargetSizeBox1);
             this.targetGroupBox.Controls.Add(this.label3);
             this.targetGroupBox.Controls.Add(this.filesizeLabel);
-            this.targetGroupBox.Location = new System.Drawing.Point(8, 184);
+            this.targetGroupBox.Location = new System.Drawing.Point(8, 191);
             this.targetGroupBox.Name = "targetGroupBox";
             this.targetGroupBox.Size = new System.Drawing.Size(437, 82);
             this.targetGroupBox.TabIndex = 18;
@@ -551,7 +553,7 @@ namespace MeGUI
             this.audioGroupbox.Controls.Add(this.panel1);
             this.audioGroupbox.Location = new System.Drawing.Point(8, 88);
             this.audioGroupbox.Name = "audioGroupbox";
-            this.audioGroupbox.Size = new System.Drawing.Size(437, 91);
+            this.audioGroupbox.Size = new System.Drawing.Size(437, 98);
             this.audioGroupbox.TabIndex = 5;
             this.audioGroupbox.TabStop = false;
             this.audioGroupbox.Text = "Audio";
@@ -589,7 +591,7 @@ namespace MeGUI
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(3, 16);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(431, 72);
+            this.panel1.Size = new System.Drawing.Size(431, 79);
             this.panel1.TabIndex = 21;
             // 
             // audioTrack1
@@ -649,11 +651,13 @@ namespace MeGUI
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(461, 298);
+            this.tabControl1.Size = new System.Drawing.Size(461, 305);
             this.tabControl1.TabIndex = 0;
             // 
             // encoderConfigTab
             // 
+            this.encoderConfigTab.Controls.Add(this.devicetype);
+            this.encoderConfigTab.Controls.Add(this.deviceLabel);
             this.encoderConfigTab.Controls.Add(this.containerFormatLabel);
             this.encoderConfigTab.Controls.Add(this.containerFormat);
             this.encoderConfigTab.Controls.Add(this.groupBox1);
@@ -661,15 +665,33 @@ namespace MeGUI
             this.encoderConfigTab.Location = new System.Drawing.Point(4, 22);
             this.encoderConfigTab.Name = "encoderConfigTab";
             this.encoderConfigTab.Padding = new System.Windows.Forms.Padding(3);
-            this.encoderConfigTab.Size = new System.Drawing.Size(453, 272);
+            this.encoderConfigTab.Size = new System.Drawing.Size(453, 279);
             this.encoderConfigTab.TabIndex = 2;
             this.encoderConfigTab.Text = "Encoder Config";
             this.encoderConfigTab.UseVisualStyleBackColor = true;
             // 
+            // devicetype
+            // 
+            this.devicetype.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.devicetype.FormattingEnabled = true;
+            this.devicetype.Location = new System.Drawing.Point(124, 251);
+            this.devicetype.Name = "devicetype";
+            this.devicetype.Size = new System.Drawing.Size(127, 21);
+            this.devicetype.TabIndex = 40;
+            // 
+            // deviceLabel
+            // 
+            this.deviceLabel.AutoSize = true;
+            this.deviceLabel.Location = new System.Drawing.Point(15, 256);
+            this.deviceLabel.Name = "deviceLabel";
+            this.deviceLabel.Size = new System.Drawing.Size(68, 13);
+            this.deviceLabel.TabIndex = 39;
+            this.deviceLabel.Text = "Device Type";
+            // 
             // containerFormatLabel
             // 
             this.containerFormatLabel.AutoSize = true;
-            this.containerFormatLabel.Location = new System.Drawing.Point(15, 242);
+            this.containerFormatLabel.Location = new System.Drawing.Point(15, 228);
             this.containerFormatLabel.Name = "containerFormatLabel";
             this.containerFormatLabel.Size = new System.Drawing.Size(87, 13);
             this.containerFormatLabel.TabIndex = 38;
@@ -678,7 +700,7 @@ namespace MeGUI
             // containerFormat
             // 
             this.containerFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.containerFormat.Location = new System.Drawing.Point(124, 239);
+            this.containerFormat.Location = new System.Drawing.Point(124, 225);
             this.containerFormat.Name = "containerFormat";
             this.containerFormat.Size = new System.Drawing.Size(127, 21);
             this.containerFormat.TabIndex = 37;
@@ -758,7 +780,7 @@ namespace MeGUI
             // 
             this.showAdvancedOptions.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.showAdvancedOptions.AutoSize = true;
-            this.showAdvancedOptions.Location = new System.Drawing.Point(74, 310);
+            this.showAdvancedOptions.Location = new System.Drawing.Point(74, 317);
             this.showAdvancedOptions.Name = "showAdvancedOptions";
             this.showAdvancedOptions.Size = new System.Drawing.Size(144, 17);
             this.showAdvancedOptions.TabIndex = 31;
@@ -769,7 +791,7 @@ namespace MeGUI
             // goButton
             // 
             this.goButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.goButton.Location = new System.Drawing.Point(374, 304);
+            this.goButton.Location = new System.Drawing.Point(374, 311);
             this.goButton.Name = "goButton";
             this.goButton.Size = new System.Drawing.Size(75, 23);
             this.goButton.TabIndex = 29;
@@ -779,7 +801,7 @@ namespace MeGUI
             // 
             // openOnQueue
             // 
-            this.openOnQueue.Location = new System.Drawing.Point(242, 306);
+            this.openOnQueue.Location = new System.Drawing.Point(247, 313);
             this.openOnQueue.Name = "openOnQueue";
             this.openOnQueue.Size = new System.Drawing.Size(96, 24);
             this.openOnQueue.TabIndex = 33;
@@ -791,7 +813,7 @@ namespace MeGUI
             this.helpButton1.ArticleName = "One click encoder";
             this.helpButton1.AutoSize = true;
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.helpButton1.Location = new System.Drawing.Point(12, 304);
+            this.helpButton1.Location = new System.Drawing.Point(12, 311);
             this.helpButton1.Name = "helpButton1";
             this.helpButton1.Size = new System.Drawing.Size(39, 23);
             this.helpButton1.TabIndex = 32;
@@ -800,9 +822,9 @@ namespace MeGUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(461, 335);
-            this.Controls.Add(this.openOnQueue);
+            this.ClientSize = new System.Drawing.Size(461, 342);
             this.Controls.Add(this.helpButton1);
+            this.Controls.Add(this.openOnQueue);
             this.Controls.Add(this.showAdvancedOptions);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.goButton);
@@ -898,5 +920,7 @@ namespace MeGUI
         private System.Windows.Forms.CheckBox openOnQueue;
         private System.Windows.Forms.CheckBox autoCrop;
         private System.Windows.Forms.CheckBox keepInputResolution;
+        private System.Windows.Forms.ComboBox devicetype;
+        private System.Windows.Forms.Label deviceLabel;
     }
 }

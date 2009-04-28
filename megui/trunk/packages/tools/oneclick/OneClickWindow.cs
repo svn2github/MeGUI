@@ -142,6 +142,14 @@ namespace MeGUI
                 this.containerFormat.SelectedIndex = 0;
             }
 
+            //add device type
+            if (devicetype.Items.Count == 0)
+            {
+                devicetype.Items.Add("Standard");
+                devicetype.Items.AddRange(muxProvider.GetSupportedDevices().ToArray());
+                this.devicetype.SelectedIndex = 0;
+            }
+
             showAdvancedOptions_CheckedChanged(null, null);
         }
         #endregion
@@ -166,6 +174,9 @@ namespace MeGUI
         }
         private void containerFormat_SelectedIndexChanged_1(object sender, EventArgs e)
         {
+            if (this.containerFormat.Text != "MP4")
+                this.devicetype.Enabled = false;
+            else this.devicetype.Enabled = true;
             updateFilename();
         }
 
@@ -369,6 +380,9 @@ namespace MeGUI
                 optionalTargetSizeBox1.Value = settings.Filesize;
                 horizontalResolution.Value = settings.OutputResolution;
 
+                // device type
+                devicetype.Text = settings.DeviceOutputType;
+
                 // Clean up after those settings were set
                 updatePossibleContainers();
                 containerFormat_SelectedIndexChanged_1(null, null);
@@ -429,6 +443,7 @@ namespace MeGUI
                 dpp.KeepInputResolution = keepInputResolution.Checked;
                 dpp.PrerenderJob = addPrerenderJob.Checked;
                 dpp.Splitting = splitting.Value;
+                dpp.DeviceOutputType = devicetype.Text;
                 dpp.VideoSettings = VideoSettings.Clone();
                 IndexJob job = new IndexJob(input.Filename, d2vName, 1, audioTracks, dpp, false, false);
                 mainForm.Jobs.addJobsToQueue(job);
@@ -684,7 +699,7 @@ namespace MeGUI
                 JobChain c = vUtil.GenerateJobSeries(myVideo, muxedOutput, job.PostprocessingProperties.AudioJobs, subtitles,
                     job.PostprocessingProperties.ChapterFile, job.PostprocessingProperties.OutputSize,
                     job.PostprocessingProperties.Splitting, job.PostprocessingProperties.Container,
-                    job.PostprocessingProperties.PrerenderJob, job.PostprocessingProperties.DirectMuxAudio, log, null);
+                    job.PostprocessingProperties.PrerenderJob, job.PostprocessingProperties.DirectMuxAudio, log, job.PostprocessingProperties.DeviceOutputType);
                 if (c == null)
                 {
                     log.Warn("Job creation aborted");
