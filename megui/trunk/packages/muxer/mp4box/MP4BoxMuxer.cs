@@ -281,6 +281,17 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                 if (settings.SplitSize.HasValue)
                     sb.Append(" -splits " + settings.SplitSize.Value.KB);
 
+                if (settings.DeviceType != "Standard")
+                {
+                    switch (settings.DeviceType)
+                    {
+                        case "iPod": sb.Append(" -ipod"); break;
+                        case "iPhone": sb.Append(" -ipod -brand M4VP:1"); break;
+                        case "ISMA": sb.Append(" -isma"); break;
+                        case "PSP": sb.Append(" -psp"); break;
+                    }
+                }
+
                 // tmp directory
                 // due to a bug from MP4Box, we need to test the path delimiter number
                 if (Util.CountStrings(settings.MuxedOutput, '\\') > 1) {
