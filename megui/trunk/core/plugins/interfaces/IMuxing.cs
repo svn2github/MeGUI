@@ -42,6 +42,7 @@ namespace MeGUI
         List<AudioType> GetSupportedAudioTypes();
         List<SubtitleType> GetSupportedSubtitleTypes();
         List<ChapterType> GetSupportedChapterTypes();
+        List<DeviceType> GetSupportedDeviceTypes();
         List<ContainerType> GetSupportedContainers();
         List<ContainerType> GetSupportedContainerTypes();
         List<ContainerType> GetSupportedContainerInputTypes();
@@ -71,6 +72,7 @@ namespace MeGUI
         string GetChapterInputFilter();
         string GetOutputTypeFilter();
         string GetMuxedInputFilter();
+        string GetDeviceInputFilter();
         string Name { get;}
         List<ContainerType> GetContainersInCommon(IMuxing iMuxing);
     }
