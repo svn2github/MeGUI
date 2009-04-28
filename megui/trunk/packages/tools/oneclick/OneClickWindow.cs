@@ -684,7 +684,7 @@ namespace MeGUI
                 JobChain c = vUtil.GenerateJobSeries(myVideo, muxedOutput, job.PostprocessingProperties.AudioJobs, subtitles,
                     job.PostprocessingProperties.ChapterFile, job.PostprocessingProperties.OutputSize,
                     job.PostprocessingProperties.Splitting, job.PostprocessingProperties.Container,
-                    job.PostprocessingProperties.PrerenderJob, job.PostprocessingProperties.DirectMuxAudio, log);
+                    job.PostprocessingProperties.PrerenderJob, job.PostprocessingProperties.DirectMuxAudio, log, null);
                 if (c == null)
                 {
                     log.Warn("Job creation aborted");
