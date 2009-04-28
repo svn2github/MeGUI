@@ -135,6 +135,21 @@ namespace MeGUI
             }
             return supportedContainers;
         }
+
+        public List<DeviceType> GetSupportedDevices()
+        {
+            List<DeviceType> supportedDevices = new List<DeviceType>();
+            foreach (IMuxing muxerInterface in mainForm.PackageSystem.MuxerProviders.Values)
+            {
+                List<DeviceType> outputTypes = muxerInterface.GetSupportedDeviceTypes();
+                foreach (DeviceType type in outputTypes)
+                {
+                    if (!supportedDevices.Contains(type))
+                        supportedDevices.Add(type);
+                }
+            }
+            return supportedDevices;
+        }
         /// <summary>
         /// gets all the containers that can be supported given the video and a list of audio types
         /// this is used to limit the container dropdown in the autoencode window
@@ -442,10 +457,14 @@ namespace MeGUI
             supportedContainers.Add(ContainerType.MP4);
             supportedContainerInputTypes.Add(ContainerType.AVI);
             supportedContainerInputTypes.Add(ContainerType.MP4);
+            supportedDeviceTypes.Add(DeviceType.IPHONE);
+            supportedDeviceTypes.Add(DeviceType.IPOD);
+            supportedDeviceTypes.Add(DeviceType.ISMA);
+            supportedDeviceTypes.Add(DeviceType.PSP);   
             supportsAnyInputtableAudioCodec = false;
             supportsAnyInputtableVideoCodec = false;
             base.type = MuxerType.MP4BOX;
-            maxFilesOfType = new int[] { 1, -1, -1, 1};
+            maxFilesOfType = new int[] { 1, -1, -1, 1, 1};
             name = "MP4 Muxer";
         }
 
@@ -487,7 +506,7 @@ namespace MeGUI
             supportedContainerInputTypes.Add(ContainerType.MP4);
             supportedContainerInputTypes.Add(ContainerType.AVI);
             supportedContainerInputTypes.Add(ContainerType.MKV);
-            maxFilesOfType = new int[] { -1, -1, -1, 1 };
+            maxFilesOfType = new int[] { -1, -1, -1, 1, 0};
             base.type = MuxerType.MKVMERGE;
             name = "MKV muxer";
         }
@@ -520,7 +539,7 @@ namespace MeGUI
 
             supportedContainerInputTypes.Add(ContainerType.AVI);
             
-            maxFilesOfType = new int[] { 1, -1, -1, 0 };
+            maxFilesOfType = new int[] { 1, -1, -1, 0, 0};
             base.type = MuxerType.AVIMUXGUI;
             name = "AVI Muxer";
         }
@@ -543,6 +562,7 @@ namespace MeGUI
         protected List<ChapterType> supportedChapterTypes;
         protected List<ContainerType> supportedContainers;
         protected List<ContainerType> supportedContainerInputTypes;
+        protected List<DeviceType> supportedDeviceTypes;
         protected bool supportsAnyInputtableAudioCodec = false;
         protected bool supportsAnyInputtableVideoCodec = false;
         protected string videoInputFilter, audioInputFilter, subtitleInputFilter;
@@ -560,6 +580,7 @@ namespace MeGUI
             supportedVideoCodecs = new List<VideoCodec>();
             supportedContainers = new List<ContainerType>();
             supportedContainerInputTypes = new List<ContainerType>();
+            supportedDeviceTypes = new List<DeviceType>();
             videoInputFilter = audioInputFilter = subtitleInputFilter = "";
             this.id = id;
         }
@@ -633,6 +654,11 @@ namespace MeGUI
             return this.supportedContainers;
         }
 
+        public List<DeviceType> GetSupportedDeviceTypes()
+        {
+            return this.supportedDeviceTypes;
+        }
+
         public List<ContainerType> GetSupportedContainerTypes()
         {
             List<ContainerType> supportedOutputTypes = GetSupportedContainers();
@@ -681,6 +707,8 @@ namespace MeGUI
                 return 2;
             if (type.outputType is ChapterType && supportedChapterTypes.Contains((ChapterType)type.outputType))
                 return 3;
+            if (type.outputType is DeviceType && supportedDeviceTypes.Contains((DeviceType)type.outputType))
+                return 4;
             return -1;
         }
 
@@ -689,7 +717,7 @@ namespace MeGUI
         {
             handledInputTypes = new List<MuxableType>();
             unhandledInputTypes = new List<MuxableType>();
-            int[] filesOfType = new int[4];
+            int[] filesOfType = new int[5];
             foreach (MuxableType inputType in inputTypes)
             {
                 int type = getSupportedType(inputType);
@@ -778,6 +806,11 @@ namespace MeGUI
         public string GetMuxedInputFilter()
         {
             return VideoUtil.GenerateCombinedFilter(GetSupportedContainerInputTypes().ToArray());
+        }
+
+        public string GetDeviceInputFilter()
+        {
+            return VideoUtil.GenerateCombinedFilter(supportedDeviceTypes.ToArray());
         }
         #endregion
     }
