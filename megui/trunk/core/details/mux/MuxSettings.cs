@@ -34,7 +34,7 @@ namespace MeGUI
 		private List<MuxStream> audioStreams, subtitleStreams;
 		private decimal? framerate;
 		private string chapterFile, videoName;
-        private string muxedInput, videoInput, muxedOutput;
+        private string muxedInput, videoInput, muxedOutput, deviceType;
 
         private FileSize? splitSize;
 
@@ -48,6 +48,7 @@ namespace MeGUI
             videoName = "";
             videoInput = "";
             muxedOutput = "";
+            deviceType = "";
 			splitSize = null;
 		}
 
@@ -116,6 +117,11 @@ namespace MeGUI
             set { dar = value; }
         }
 
+        public string DeviceType
+        {
+            get { return deviceType; }
+            set { deviceType = value; }
+        }
 		
         /// <summary>
         /// gets / sets the name of the video track
