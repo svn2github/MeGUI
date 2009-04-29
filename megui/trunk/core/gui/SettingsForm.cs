@@ -123,7 +123,7 @@ namespace MeGUI
         private Button selectMP4boxExecutableButton;
         private Label mp4boxPathLabel;
         private Label mkvmergePathLabel;
-        private Label label4;
+        private Label avimuxguiPathLabel;
         private TextBox textBox7;
         private Label label10;
         private Button button7;
@@ -186,6 +186,9 @@ namespace MeGUI
         private TextBox eac3toPath;
         private Label label23;
         private Button selectEAC3toExecutable;
+        private TextBox tsmuxerPath;
+        private Label tsmuxerPathLabel;
+        private Button selectTSMuxerExecutableButton;
 
 		/// <summary>
 		/// Required designer variable.
@@ -335,9 +338,12 @@ namespace MeGUI
             this.label1 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.tsmuxerPath = new System.Windows.Forms.TextBox();
+            this.tsmuxerPathLabel = new System.Windows.Forms.Label();
+            this.selectTSMuxerExecutableButton = new System.Windows.Forms.Button();
             this.aviMuxGUIPath = new System.Windows.Forms.TextBox();
             this.mp4boxPath = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
+            this.avimuxguiPathLabel = new System.Windows.Forms.Label();
             this.selectMkvmergeExecutableButton = new System.Windows.Forms.Button();
             this.mkvmergePathLabel = new System.Windows.Forms.Label();
             this.selectAviMuxGUIExecutableButton = new System.Windows.Forms.Button();
@@ -1543,9 +1549,12 @@ namespace MeGUI
             // 
             // tabPage6
             // 
+            this.tabPage6.Controls.Add(this.tsmuxerPath);
+            this.tabPage6.Controls.Add(this.tsmuxerPathLabel);
+            this.tabPage6.Controls.Add(this.selectTSMuxerExecutableButton);
             this.tabPage6.Controls.Add(this.aviMuxGUIPath);
             this.tabPage6.Controls.Add(this.mp4boxPath);
-            this.tabPage6.Controls.Add(this.label4);
+            this.tabPage6.Controls.Add(this.avimuxguiPathLabel);
             this.tabPage6.Controls.Add(this.selectMkvmergeExecutableButton);
             this.tabPage6.Controls.Add(this.mkvmergePathLabel);
             this.tabPage6.Controls.Add(this.selectAviMuxGUIExecutableButton);
@@ -1559,6 +1568,32 @@ namespace MeGUI
             this.tabPage6.TabIndex = 2;
             this.tabPage6.Text = "Muxer";
             this.tabPage6.UseVisualStyleBackColor = true;
+            // 
+            // tsmuxerPath
+            // 
+            this.tsmuxerPath.Location = new System.Drawing.Point(89, 97);
+            this.tsmuxerPath.Name = "tsmuxerPath";
+            this.tsmuxerPath.ReadOnly = true;
+            this.tsmuxerPath.Size = new System.Drawing.Size(322, 21);
+            this.tsmuxerPath.TabIndex = 10;
+            this.tsmuxerPath.Text = "tsmuxer.exe";
+            // 
+            // tsmuxerPathLabel
+            // 
+            this.tsmuxerPathLabel.Location = new System.Drawing.Point(6, 100);
+            this.tsmuxerPathLabel.Name = "tsmuxerPathLabel";
+            this.tsmuxerPathLabel.Size = new System.Drawing.Size(57, 17);
+            this.tsmuxerPathLabel.TabIndex = 9;
+            this.tsmuxerPathLabel.Text = "tsmuxer";
+            // 
+            // selectTSMuxerExecutableButton
+            // 
+            this.selectTSMuxerExecutableButton.Location = new System.Drawing.Point(417, 96);
+            this.selectTSMuxerExecutableButton.Name = "selectTSMuxerExecutableButton";
+            this.selectTSMuxerExecutableButton.Size = new System.Drawing.Size(24, 23);
+            this.selectTSMuxerExecutableButton.TabIndex = 11;
+            this.selectTSMuxerExecutableButton.Text = "...";
+            this.selectTSMuxerExecutableButton.Click += new System.EventHandler(this.selectTSMuxerExecutableButton_Click);
             // 
             // aviMuxGUIPath
             // 
@@ -1578,13 +1613,13 @@ namespace MeGUI
             this.mp4boxPath.TabIndex = 1;
             this.mp4boxPath.Text = "mp4box.exe";
             // 
-            // label4
+            // avimuxguiPathLabel
             // 
-            this.label4.Location = new System.Drawing.Point(6, 72);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(70, 17);
-            this.label4.TabIndex = 6;
-            this.label4.Text = "avimux_gui";
+            this.avimuxguiPathLabel.Location = new System.Drawing.Point(6, 72);
+            this.avimuxguiPathLabel.Name = "avimuxguiPathLabel";
+            this.avimuxguiPathLabel.Size = new System.Drawing.Size(70, 17);
+            this.avimuxguiPathLabel.TabIndex = 6;
+            this.avimuxguiPathLabel.Text = "avimux_gui";
             // 
             // selectMkvmergeExecutableButton
             // 
@@ -2217,6 +2252,22 @@ namespace MeGUI
             }
         }
 
+        private void selectEAC3toExecutable_Click(object sender, EventArgs e)
+        {
+            if (selectExe("eac3to"))
+            {
+                eac3toPath.Text = openExecutableDialog.FileName;
+            }
+        }
+
+        private void selectTSMuxerExecutableButton_Click(object sender, EventArgs e)
+        {
+            if (selectExe("tsmuxer"))
+            {
+                tsmuxerPath.Text = openExecutableDialog.FileName;
+            }
+        }
+
         private void runCommand_CheckedChanged(object sender, EventArgs e)
         {
             command.Enabled = runCommand.Checked;
@@ -2339,6 +2390,7 @@ namespace MeGUI
                 settings.Dgvc1IndexPath = dgvc1IndexPath.Text;
                 settings.DgmpgIndexPath = dgmpgIndexPath.Text;
                 settings.EAC3toPath = eac3toPath.Text;
+                settings.TSMuxerPath = tsmuxerPath.Text;
 				return settings;
 			}
 			set
@@ -2407,17 +2459,10 @@ namespace MeGUI
                 dgvc1IndexPath.Text = settings.Dgvc1IndexPath;
                 dgmpgIndexPath.Text = settings.DgmpgIndexPath;
                 eac3toPath.Text = settings.EAC3toPath;
+                tsmuxerPath.Text = settings.TSMuxerPath;
 			}
 		}
 		#endregion
-
-        private void selectEAC3toExecutable_Click(object sender, EventArgs e)
-        {
-            if (selectExe("eac3to"))
-            {
-                eac3toPath.Text = openExecutableDialog.FileName;
-            }
-        }
 
 	}
 }
