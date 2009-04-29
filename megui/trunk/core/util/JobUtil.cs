@@ -72,7 +72,7 @@ namespace MeGUI
 			VideoJob job = new VideoJob(input, output, settings, dar, zones);
 			
 			if (Path.GetDirectoryName(settings.Logfile).Equals("")) // no path set
-				settings.Logfile = Path.ChangeExtension(input, ".stats");
+				settings.Logfile = Path.ChangeExtension(output, ".stats");
 			if (job.Settings.EncodingMode == 4) // automated 2 pass, change type to 2 pass 2nd pass
 			{
 				job.Settings.EncodingMode = 3;
