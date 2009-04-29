@@ -282,89 +282,6 @@ namespace MeGUI
                 audioTracks.Clear();
             }
         }
-
-        /// gets information about a video source using MediaInfo
-        /// </summary>
-        /// <param name="infoFile">the info file to be analyzed</param>
-        /// <param name="audioTracks">the audio tracks found</param>
-        /// <param name="maxHorizontalResolution">the width of the video</param>
-        public static void getSubtitlesInfo(string fileName, out List<SubtitleInfo> subtitlesTracks, bool vobsubber)
-        {
-            MediaInfo info;
-            subtitlesTracks = new List<SubtitleInfo>();
-            try
-            {
-                info = new MediaInfo(fileName);
-                for (int counter = 0; counter < info.Text.Count; counter++)
-                {
-                    MediaInfoWrapper.TextTrack strack = info.Text[counter];
-                    SubtitleInfo sti = new SubtitleInfo("", 0);
-                    if (strack.ID != "0")
-                        sti.Index = Int32.Parse(strack.ID);
-                    else sti.Index = counter;
-                    
-                    if (strack.LanguageString == "") // to retrieve Language 
-                    {
-                        if (vobsubber)
-                        {
-                            if (File.Exists(fileName))
-                                strack.LanguageString = IFOparser.getSubtitlesLanguage(fileName, counter);
-                        }
-                    }
-                    sti.Name = strack.LanguageString;
-                    
-                    subtitlesTracks.Add(sti);
-                }
-            }
-            catch (Exception i)
-            {
-                MessageBox.Show("The following error ocurred when trying to get Media info for file " + fileName + "\r\n" + i.Message, "Error parsing mediainfo data", MessageBoxButtons.OK);
-                subtitlesTracks.Clear();
-            }
-        }
-        public void getSourceMediaInfo2(string fileName, out List<SubtitleInfo> subtitlesTracks)
-        {
-            MediaInfo info;
-            subtitlesTracks = new List<SubtitleInfo>();
-            try
-            {
-                info = new MediaInfo(fileName);
-                for (int counter = 0; counter < info.Text.Count; counter++)
-                {
-                    MediaInfoWrapper.TextTrack strack = info.Text[counter];
-                    SubtitleInfo sti = new SubtitleInfo("", 0);
-                    // DGIndex expects audio index not ID for TS
-                    sti.Index = counter;
-                    
-                    if (strack.LanguageString == "") // to retrieve Language 
-                    {
-                        if (Path.GetExtension(fileName.ToLower()) == ".vob")
-                        {
-                            string ifoFile;
-                            string fileNameNoPath = Path.GetFileName(fileName);
-
-                            // Languages are not present in VOB, so we check the main IFO
-                            if (fileNameNoPath.Substring(0, 4) == "VTS_")
-                                ifoFile = fileName.Substring(0, fileName.LastIndexOf("_")) + "_0.IFO";
-                            else ifoFile = Path.ChangeExtension(fileName, ".IFO");
-
-                            if (File.Exists(ifoFile))
-                                strack.LanguageString = IFOparser.getSubtitlesLanguage(ifoFile, counter);
-                        }
-                    }
-
-                    sti.Name = strack.LanguageString;
-                    sti.Index = counter;
-                    subtitlesTracks.Add(sti);
-                }
-            }
-            catch (Exception i)
-            {
-                MessageBox.Show("The following error ocurred when trying to get Media info for file " + fileName + "\r\n" + i.Message, "Error parsing mediainfo data", MessageBoxButtons.OK);
-                subtitlesTracks.Clear();
-            }
-        }
-
         /// gets ID from a first video stream using MediaInfo
         /// </summary>
         /// <param name="infoFile">the file to be analyzed</param>
@@ -598,7 +515,6 @@ namespace MeGUI
             maxHorizontalResolution = 5000;
 
             getSourceMediaInfo(fileName, out audioTracks, out maxHorizontalResolution);
-            getSourceMediaInfo2(fileName, out subtitles);
             
             if ((audioTracks.Count > 0) || (subtitles.Count > 0))
                 putDummyTracks = false;
