@@ -141,6 +141,7 @@ namespace MeGUI.core.gui
             // 
             this.upButton.AutoSize = true;
             this.upButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.upButton.Enabled = false;
             this.upButton.Location = new System.Drawing.Point(230, 3);
             this.upButton.Margin = new System.Windows.Forms.Padding(7, 3, 3, 3);
             this.upButton.Name = "upButton";
@@ -154,6 +155,7 @@ namespace MeGUI.core.gui
             // 
             this.downButton.AutoSize = true;
             this.downButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.downButton.Enabled = false;
             this.downButton.Location = new System.Drawing.Point(267, 3);
             this.downButton.Margin = new System.Windows.Forms.Padding(3, 3, 7, 3);
             this.downButton.Name = "downButton";
