@@ -25,7 +25,7 @@ using System.Text;
 
 namespace MeGUI
 {
-    public enum MuxerType { MP4BOX, MKVMERGE, AVIMUXGUI };
+    public enum MuxerType { MP4BOX, MKVMERGE, AVIMUXGUI, TSMUXER };
     public class MuxableType
     {
         public OutputType outputType;
@@ -129,8 +129,11 @@ namespace MeGUI
                 List<ContainerType> outputTypes = muxerInterface.GetSupportedContainers();
                 foreach (ContainerType type in outputTypes)
                 {
-                    if (!supportedContainers.Contains(type))
-                        supportedContainers.Add(type);
+                    if (type.ID != "M2TS") // M2TS not available for the Bitrate Calculator yet
+                    {
+                        if (!supportedContainers.Contains(type))
+                            supportedContainers.Add(type);
+                    }
                 }
             }
             return supportedContainers;
@@ -547,6 +550,44 @@ namespace MeGUI
         public override IJobProcessor GetMuxer(MeGUISettings settings)
         {
             return new AMGMuxer(settings.AviMuxGUIPath);
+        }
+    }
+
+    public class TSMuxerProvider : MuxerProvider
+    {
+        public TSMuxerProvider() : base("tsMuxeR")
+        {
+            supportedVideoTypes.Add(VideoType.MPEG2);
+            supportedVideoTypes.Add(VideoType.RAWAVC);
+            supportedVideoTypes.Add(VideoType.RAWAVC2);
+            supportedVideoTypes.Add(VideoType.VC1);
+            supportedAudioTypes.Add(AudioType.AC3);
+            supportedAudioTypes.Add(AudioType.DTS);
+            supportedAudioTypes.Add(AudioType.EAC3);
+            supportedAudioTypes.Add(AudioType.RAWAAC);
+            supportedVideoCodecs.Add(VideoCodec.AVC);
+            supportedAudioCodecs.Add(AudioCodec.AAC);
+            supportedAudioCodecs.Add(AudioCodec.AC3);
+            supportedAudioCodecs.Add(AudioCodec.DTS);
+            supportedSubtitleTypes.Add(SubtitleType.SUBRIP);
+            supportedSubtitleTypes.Add(SubtitleType.BDSUP);
+            //supportedChapterTypes.Add(ChapterType.OGG_TXT);
+            supportedContainers.Add(ContainerType.M2TS);
+            supportedContainerInputTypes.Add(ContainerType.MKV);
+            supportedContainerInputTypes.Add(ContainerType.MP4);
+            supportedContainerInputTypes.Add(ContainerType.M2TS);
+           // supportedDeviceTypes.Add(DeviceType.AVCHD);
+           // supportedDeviceTypes.Add(DeviceType.BD);
+            supportsAnyInputtableAudioCodec = true;
+            supportsAnyInputtableVideoCodec = true;
+            base.type = MuxerType.TSMUXER;
+            maxFilesOfType = new int[] { 1, -1, -1, 1, 1};
+            name = "M2TS Muxer";
+        }
+ 
+        public override IJobProcessor GetMuxer(MeGUISettings settings)
+        {
+            return new tsMuxeR(settings.TSMuxerPath);
         }
     }
 
