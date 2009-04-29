@@ -570,6 +570,7 @@
     <Compile Include="packages\muxer\mencoder\MencoderMuxer.cs" />
     <Compile Include="packages\muxer\mkvmerge\MkvMergeMuxer.cs" />
     <Compile Include="packages\muxer\mp4box\MP4BoxMuxer.cs" />
+    <Compile Include="packages\muxer\tsmuxer\tsMuxeR.cs" />
     <Compile Include="packages\reader\avi\AviReader.cs" />
     <Compile Include="packages\reader\avs\AvsReader.cs">
       <SubType>Code</SubType>
