@@ -285,6 +285,8 @@ namespace MeGUI
                     ulong frameCount = (ulong)(easyParseInt(track.FrameCount) ?? 0);
                     double fps = (easyParseDouble(track.FrameRate) ?? 25.0);
                     vCodec = getVideoCodec(track.Codec);
+                    if (vCodec == null)
+                        vCodec = getVideoCodec(track.Format); // sometimes codec info is not available, check the format then...
                     vType = getVideoType(vCodec, cType, file);
                     Dar dar = new Dar((decimal?)easyParseDouble(track.AspectRatio), width, height);
                     this.info = new MediaFileInfo(hasVideo, width, height, dar, frameCount, fps, aCodecs.Length > 0);
