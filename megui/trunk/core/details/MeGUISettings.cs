@@ -35,8 +35,8 @@ namespace MeGUI
         private string[][] autoUpdateServerLists;
         private string faacPath, lamePath, neroAacEncPath, mencoderPath,  mp4boxPath, mkvmergePath, 
                        encAacPlusPath, ffmpegPath, besplitPath, yadifPath, aftenPath, x264Path, 
-                       dgIndexPath, xvidEncrawPath, aviMuxGUIPath, oggEnc2Path, encAudXPath, dgavcIndexPath, dgvc1IndexPath, 
-                       dgmpgIndexPath, eac3toPath,
+                       dgIndexPath, xvidEncrawPath, aviMuxGUIPath, oggEnc2Path, encAudXPath, dgavcIndexPath, dgvc1IndexPath,
+                       dgmpgIndexPath, eac3toPath, tsmuxerPath,
                        defaultLanguage1, defaultLanguage2, afterEncodingCommand, videoExtension, audioExtension,
                        httpproxyaddress, httpproxyport, httpproxyuid, httpproxypwd, defaultOutputDir;
         private bool recalculateMainMovieBitrate, autoForceFilm, autoStartQueue, enableMP3inMP4, autoOpenScript,
@@ -117,6 +117,7 @@ namespace MeGUI
             dgvc1IndexPath = "dgvc1index.exe";
             dgmpgIndexPath = "dgmpgindex.exe";
             eac3toPath = "eac3to.exe";
+            tsmuxerPath = "tsmuxer.exe";
         }
         #region properties
         public string YadifPath
@@ -401,6 +402,14 @@ namespace MeGUI
         {
             get { return eac3toPath; }
             set { eac3toPath = value; }
+        }
+         /// <summary>
+        /// filename and full path of the tsmuxer executable
+        /// </summary>
+        public string TSMuxerPath
+        {
+            get { return tsmuxerPath; }
+            set { tsmuxerPath = value; }
         }
         /// <summary>
         /// folder containing the avisynth plugins
