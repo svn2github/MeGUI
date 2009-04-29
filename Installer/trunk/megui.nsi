@@ -1,7 +1,8 @@
-!define NAME "MeGUI modern media encoder"
+!define NAME "MeGUI"
 !define OUTFILE "megui-setup.exe"
 !define PRODUCT_VERSION "0.3.1.1033"
 !define PRODUCT_WEB_SITE "www.doom9.net"
+!define APPNAMEANDVERSION "MeGUI 0.3.1.1033"
 !define INPUT_PATH "..\..\megui\trunk\dist\bigdist\"
 !define FILE1 "AvisynthWrapper.dll"
 !define FILE2 "Changelog.txt"
@@ -27,7 +28,7 @@
 ; NOTE: this .NSI script is designed for NSIS v2.07+
 ; ---------------------------------------------------------------------------
 
-Name "${NAME}"
+Name "${APPNAMEANDVERSION}"
 OutFile "${OUTFILE}"
 SetCompressor /FINAL /SOLID lzma
 
@@ -39,10 +40,18 @@ ShowInstDetails show ; (can be show to have them shown, or nevershow to disable)
 ShowUnInstDetails show ; (can be show to have them shown, or nevershow to disable)
 SetDateSave off ; (can be on to have files restored to their orginal date)
 
+!insertmacro MUI_PAGE_WELCOME
+!insertmacro MUI_PAGE_LICENSE "${INPUT_PATH}\${FILE3}"
+!insertmacro MUI_PAGE_COMPONENTS
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_INSTFILES
+!insertmacro MUI_PAGE_FINISH
+
+!insertmacro MUI_UNPAGE_WELCOME
 !insertmacro MUI_UNPAGE_CONFIRM
 !insertmacro MUI_UNPAGE_INSTFILES
+!insertmacro MUI_UNPAGE_FINISH
+
 !insertmacro MUI_LANGUAGE "English"
 !insertmacro MUI_LANGUAGE "French"
 !insertmacro MUI_LANGUAGE "German"
@@ -99,7 +108,7 @@ SetDateSave off ; (can be on to have files restored to their orginal date)
 
 InstallDir $PROGRAMFILES\megui
 
-Section "";
+Section "MeGUI";
 
 	SetOutPath $INSTDIR
         RMDir /r $SMPROGRAMS\megui
@@ -121,14 +130,16 @@ Section "";
         SetOutPath "$INSTDIR\Data\"
         File "${INPUT_PATH}..\${HELP}"
 
-	CreateDirectory $SMPROGRAMS\MeGUI
-	CreateShortcut "$SMPROGRAMS\MeGUI\Changelog.lnk" $INSTDIR\${FILE2}
-	CreateShortcut "$SMPROGRAMS\MeGUI\GPL.lnk" $INSTDIR\${FILE3}
-	CreateShortcut "$SMPROGRAMS\MeGUI\MeGUI Modern Media Encoder.lnk" $INSTDIR\${FILE5} "" $INSTDIR\megui.ico
-	CreateShortcut "$SMPROGRAMS\MeGUI\Tools.lnk" $INSTDIR\tools
-	CreateShortcut "$SMPROGRAMS\MeGUI\Log Files.lnk" $INSTDIR\logs
-	CreateShortcut "$SMPROGRAMS\MeGUI\Auto-Update cache.lnk" $INSTDIR\update_cache
-	CreateShortcut "$SMPROGRAMS\MeGUI\Uninstall MeGUI.lnk" $INSTDIR\megui-uninstall.exe
+
+	CreateDirectory "$SMPROGRAMS\${NAME}\"
+	CreateShortcut  "$SMPROGRAMS\${NAME}\Changelog.lnk" $INSTDIR\${FILE2}
+	CreateShortcut  "$SMPROGRAMS\${NAME}\GPL.lnk" $INSTDIR\${FILE3}
+	CreateShortcut  "$SMPROGRAMS\${NAME}\MeGUI Modern Media Encoder.lnk" $INSTDIR\${FILE5} "" $INSTDIR\megui.ico
+	CreateShortcut  "$SMPROGRAMS\${NAME}\Tools.lnk" $INSTDIR\tools
+	CreateShortcut  "$SMPROGRAMS\${NAME}\Log Files.lnk" $INSTDIR\logs
+	CreateShortcut  "$SMPROGRAMS\${NAME}\Auto-Update cache.lnk" $INSTDIR\update_cache
+	CreateShortcut  "$SMPROGRAMS\${NAME}\Uninstall MeGUI.lnk" $INSTDIR\megui-uninstall.exe
+
 
 	; sets update_cache registry entry
 	WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\MeGUI" "update_cache" "$INSTDIR\update_cache"
@@ -170,7 +181,7 @@ Section Uninstall
         DeleteRegKey HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}"
 
         RMDIR /r "$LOCALAPPDATA\${PRODUCT_WEB_SITE}"
-        RMDIR /r "$SMPROGRAMS\MeGUI"
+        RMDIR /r "$SMPROGRAMS\${NAME}"
         RMDIR /r "$INSTDIR"
 
 SectionEnd ; end of uninstall section
