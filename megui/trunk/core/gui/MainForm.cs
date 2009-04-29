@@ -1727,6 +1727,7 @@ namespace MeGUI
             PackageSystem.JobProcessors.Register(MkvMergeMuxer.Factory);
             PackageSystem.JobProcessors.Register(MP4BoxMuxer.Factory);
             PackageSystem.JobProcessors.Register(AMGMuxer.Factory);
+            PackageSystem.JobProcessors.Register(tsMuxeR.Factory);
             PackageSystem.JobProcessors.Register(CleanupJobRunner.Factory);
 
             PackageSystem.JobProcessors.Register(AviSynthProcessor.Factory);
@@ -1740,6 +1741,7 @@ namespace MeGUI
             PackageSystem.MuxerProviders.Register(new MKVMergeMuxerProvider());
             PackageSystem.MuxerProviders.Register(new MP4BoxMuxerProvider());
             PackageSystem.MuxerProviders.Register(new AVIMuxGUIMuxerProvider());
+            PackageSystem.MuxerProviders.Register(new TSMuxerProvider());
             PackageSystem.Tools.Register(new CutterTool());
             PackageSystem.Tools.Register(new AviSynthWindowTool());
             PackageSystem.Tools.Register(new AutoEncodeTool());
