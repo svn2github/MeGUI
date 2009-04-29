@@ -1,3 +1,40 @@
+0.3.1.1033
+    - (kurtnoise) [CodecManager] disable BD & AVCHD devices type. Not yet functional...
+    - (kurtnoise) [MainForm] register tsmuxer as JobProcessor & MuxerProvider.
+    - (kurtnoise) [MuxProvider] add tsmuxer.
+    - (kurtnoise) add tsMuxeR class.
+    - (kurtnoise) add tsmuxer in the project files.
+    - (kurtnoise) [SettingsForm] add tsmuxer components in the Muxer tab. 
+    - (kurtnoise) [MeGUISettings] add TSMuxerPath
+    - (kurtnoise) [CodecManager] add M2TS as VideoType & ContainerType
+    - (kurtnoise) [MediaInfoFile] when VCodec is null, check the video format in this case. 
+    - (kurtnoise) [JobUtil] use output name to create logfile instead of input. #2690832
+    - (kurtnoise) [FileSize] rounding values with 2 digits instead of 1. Feature Requests #2772018 & #2465440
+    - (kurtnoise) add Device Output Type to the One-Click Encoder. Available through Advanced Settings.
+    - (kurtnoise) [PrettyFormatting] fix an error with temporal substring...Note to myself : test external patches before to commit them like a dumb. 
+    - (kurtnoise) [AutoEncodeTool] add Device Output Type.
+    - (kurtnoise) update the One Click & AutoEncode tools to the latest changes.
+    - (kurtnoise) [MP4BoxMuxer] apply device type to the command line.
+    - (kurtnoise) add Device Types to the Adaptive & Manual Muxers. Now, we can force either iPod, iPhone, ISMA or PSP output when we select MP4 Muxer.  
+    - (kurtnoise) [VideoUtil] update GenerateJobSeries()
+    - (kurtnoise) [JobUtil] update GenerateMuxJobs()
+    - (kurtnoise) [IMuxing] add new List<DeviceType> & GetDeviceInputFilter() string.
+    - (kurtnoise) [MuxSettings] update settings with the DeviceType.
+    - (kurtnoise) [MuxProvider] add GetSupportedDevices(), GetSupportedDeviceTypes() & register the new device types.
+    - (kurtnoise) [CodecManager] add DeviceType as OutputType.
+    - (kurtnoise) [MainForm] move MeGUI size/position/windowstate settings in Shown Event instead of Load Event.
+    - (kurtnoise) [MainForm] add MeGUI size/position/windowstate settings in Load Event.
+    - (kurtnoise) [MuxProvider] add h264 file extension to the MKV & MP4 Muxers.
+    - (kurtnoise) [CodecManager] change EAC3 files extension & add a new AVC files extension.
+    - (kurtnoise) [AVSCreator] fix issue #2776469.
+    - (kurtnoise) [MkvMergeMuxer] add Warning handling to ProcessLine().
+    - (kurtnoise) [MkvMergeMuxer] better Error Handling in ProcessLine().
+    - (kurtnoise) [MkvMergeMuxer] update ProcessLine() to match the correct string.
+    - (kurtnoise) [DGMCreator] remove duplicate components. Patch by UsedUser from http://forum.doom9.org/showthread.php?p=1278274#post1278274
+    - (kurtnoise) [PrettyFormatting] simplify ExtractWorkingName(). Patch by UsedUser from http://forum.doom9.org/showthread.php?p=1278251#post1278251
+    - (kurtnoise) [Vobsubber] use getPGCnb() to retrieve max value.
+    - (kurtnoise) [IFOparser] add getPGCnb() function.
+
 0.3.1.1032
     - (kurtnoise) [AaudioEncoderInterface] reflect the last changes for SamplingRate values in the script.
     - (kurtnoise) [AudioConfigurationPanel] add new SamplingRate values (8000Hz - 11025 Hz - 22050 Hz)
