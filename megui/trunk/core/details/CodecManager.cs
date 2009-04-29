@@ -241,6 +241,7 @@ namespace MeGUI
         public static readonly VideoType AVI     = new VideoType("AVI", "AVI Files", "avi", ContainerType.AVI, new VideoCodec[] { VideoCodec.ASP, VideoCodec.AVC, VideoCodec.HFYU, VideoCodec.SNOW });
         public static readonly VideoType MPEG2   = new VideoType("MPEG2", "MPEG-2 Files", "m2v", null, VideoCodec.MPEG2);
         public static readonly VideoType VC1     = new VideoType("VC1", "VC-1 Files", "vc1", null, VideoCodec.VC1);
+        public static readonly VideoType M2TS    = new VideoType("M2TS", "M2TS Files", "m2ts", ContainerType.M2TS, new VideoCodec[] { VideoCodec.AVC, VideoCodec.MPEG2, VideoCodec.VC1 });
     }
     public class AudioType : OutputType
     {
@@ -299,7 +300,7 @@ namespace MeGUI
         public static readonly DeviceType IPHONE = new DeviceType("iPhone", "iPhone", "iPhone", ContainerType.MP4);
         public static readonly DeviceType ISMA = new DeviceType("ISMA", "ISMA", "ISMA", ContainerType.MP4);
         public static readonly DeviceType PSP = new DeviceType("PSP", "PSP", "PSP", ContainerType.MP4);
-        public static readonly DeviceType BD = new DeviceType("BD", "Blu-ray", "BD", ContainerType.M2TS);
+        public static readonly DeviceType BD = new DeviceType("Blu-ray", "Blu-ray", "Blu-ray", ContainerType.M2TS);
         public static readonly DeviceType AVCHD = new DeviceType("AVCHD", "AVCHD", "AVCHD", ContainerType.M2TS);
     }
     public class ContainerType : OutputFileType
@@ -333,13 +334,14 @@ namespace MeGUI
         static ContainerManager()
         {
             if (!(
-                VideoTypes.Register(VideoType.AVI)    &&
-                VideoTypes.Register(VideoType.MKV)    &&
-                VideoTypes.Register(VideoType.MP4)    &&
-                VideoTypes.Register(VideoType.RAWASP) &&
-                VideoTypes.Register(VideoType.RAWAVC) &&
-                VideoTypes.Register(VideoType.MPEG2)  &&
-                VideoTypes.Register(VideoType.VC1)))
+                VideoTypes.Register(VideoType.AVI)     &&
+                VideoTypes.Register(VideoType.MKV)     &&
+                VideoTypes.Register(VideoType.MP4)     &&
+                VideoTypes.Register(VideoType.RAWASP)  &&
+                VideoTypes.Register(VideoType.RAWAVC)  &&
+                VideoTypes.Register(VideoType.MPEG2)   &&
+                VideoTypes.Register(VideoType.VC1)     &&
+                VideoTypes.Register(VideoType.M2TS)))
                 throw new Exception("Failed to register a video type");
             if (!(
                 AudioTypes.Register(AudioType.AC3)    &&
@@ -365,7 +367,8 @@ namespace MeGUI
             if (!(
                 ContainerTypes.Register(ContainerType.AVI) &&
                 ContainerTypes.Register(ContainerType.MKV) &&
-                ContainerTypes.Register(ContainerType.MP4)))
+                ContainerTypes.Register(ContainerType.MP4) &&
+                ContainerTypes.Register(ContainerType.M2TS)))
                 throw new Exception("Failed to register a container type");
             if (!(
 	            ChapterTypes.Register(ChapterType.OGG_TXT)))
