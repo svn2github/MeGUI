@@ -40,8 +40,11 @@ namespace MeGUI.core.gui
             new Named<FileSize>("1/3 DVD (1493MB)", new FileSize(Unit.MB, 1493)),
             new Named<FileSize>("1/4 DVD (1120MB)", new FileSize(Unit.MB, 1120)),
             new Named<FileSize>("1/5 DVD (896MB)", new FileSize(Unit.MB, 896)),
-            new Named<FileSize>("1 DVD (4479MB)", new FileSize(Unit.MB, 4479)),
-            new Named<FileSize>("1 DVD-9 (8138MB)", new FileSize(Unit.MB, 8138)) };
+            new Named<FileSize>("1 DVD (4482MB)", new FileSize(Unit.MB, 4482)),
+            new Named<FileSize>("1 DVD-9 (8152MB)", new FileSize(Unit.MB, 8152)),
+            new Named<FileSize>("1 BD-5 (4482MB)", new FileSize(Unit.MB, 4482)),
+            new Named<FileSize>("1 BD-9 (8152MB)", new FileSize(Unit.MB, 8152)),
+            new Named<FileSize>("1 BD (23450MB)", new FileSize(Unit.MB, 23450)) };
 
         protected override void Dispose(bool disposing)
         {
