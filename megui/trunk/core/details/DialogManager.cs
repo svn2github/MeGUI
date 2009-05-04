@@ -199,7 +199,7 @@ namespace MeGUI
                 if (mainForm.Settings.DgmpgIndexPath != "" && mainForm.Settings.DgmpgIndexPath.ToLower() != "dgmpgindexnv.exe")
                     filePath = Path.GetDirectoryName(mainForm.Settings.DgmpgIndexPath);
 
-                else if (mainForm.Settings.Dgvc1IndexPath != "" && mainForm.Settings.DgmpgIndexPath.ToLower() != "dgvc1indexnv.exe")
+                else if (mainForm.Settings.Dgvc1IndexPath != "" && mainForm.Settings.Dgvc1IndexPath.ToLower() != "dgvc1indexnv.exe")
                     filePath = Path.GetDirectoryName(mainForm.Settings.Dgvc1IndexPath);
             }
 
