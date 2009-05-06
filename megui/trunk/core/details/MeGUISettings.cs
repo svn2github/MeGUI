@@ -702,5 +702,5 @@ namespace MeGUI
         }
         #endregion
     }
-    public enum AfterEncoding { DoNothing, Shutdown, RunCommand }
+    public enum AfterEncoding { DoNothing = 0, Shutdown = 1, RunCommand = 2 }
 }

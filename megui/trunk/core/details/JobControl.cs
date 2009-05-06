@@ -40,6 +40,7 @@ namespace MeGUI.core.details
         private Dictionary<string, JobWorker> workers = new Dictionary<string, JobWorker>();
         private MainForm mainForm;
         private WorkerSummary summary;
+        private AfterEncoding currentAfterEncoding;
 
         #region public interface: process windows, start/stop/abort
         public void ShowAllProcessWindows()
@@ -194,6 +195,13 @@ namespace MeGUI.core.details
                 foreach (JobWorker w in workers.Values)
                     if (w.IsEncoding) return true;
                 return false;
+            }
+        }
+        public AfterEncoding CurrentAfterEncoding
+        {
+            get
+            {
+                return currentAfterEncoding;
             }
         }
         #endregion
@@ -545,12 +553,9 @@ namespace MeGUI.core.details
 
         internal void showAfterEncodingStatus(MeGUISettings Settings)
         {
-            if (Settings.AfterEncoding == AfterEncoding.DoNothing)
-                afterEncoding.Text = "After encoding: do nothing";
-            else if (Settings.AfterEncoding == AfterEncoding.Shutdown)
-                afterEncoding.Text = "After encoding: shutdown";
-            else
-                afterEncoding.Text = "After encoding: run '" + Settings.AfterEncodingCommand + "'";
+            currentAfterEncoding = Settings.AfterEncoding;
+            cbAfterEncoding.SelectedIndex = (int) currentAfterEncoding;
+            cbAfterEncoding.Items[2] = "Run '" + Settings.AfterEncodingCommand + "'";
         }
 
 
@@ -771,6 +776,11 @@ namespace MeGUI.core.details
         {
             if (workers[p].IsProgressWindowAvailable)
                 workers[p].ShowProcessWindow();
+        }
+
+        private void cbAfterEncoding_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            currentAfterEncoding = (AfterEncoding) cbAfterEncoding.SelectedIndex;
         }
     }
     enum JobStartInfo { JOB_STARTED, NO_JOBS_WAITING, COULDNT_START }

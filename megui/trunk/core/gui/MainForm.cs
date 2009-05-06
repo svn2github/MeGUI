@@ -1065,13 +1065,13 @@ namespace MeGUI
         /// </summary>
         public void runAfterEncodingCommands()
         {
-            if (settings.AfterEncoding == AfterEncoding.DoNothing) return;
+            if (Jobs.CurrentAfterEncoding == AfterEncoding.DoNothing) return;
             this.profileManager.SaveProfiles();
             this.saveSettings();
             jobControl1.saveJobs();
             this.saveLog();
 
-            if (settings.AfterEncoding == AfterEncoding.Shutdown)
+            if (Jobs.CurrentAfterEncoding == AfterEncoding.Shutdown)
             {
                 using (CountdownWindow countdown = new CountdownWindow(30))
                 {
