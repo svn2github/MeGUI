@@ -276,7 +276,7 @@ namespace MeGUI.packages.video.x264
                 }
               
                 x264BitrateQuantizer.Maximum = 64;
-                if (x264EncodingMode.SelectedIndex == 9) // crf
+                if (x264EncodingMode.SelectedIndex == (int)VideoCodecSettings.Mode.quality) // crf
                 {
                     x264BitrateQuantizer.Minimum = 0.1M;
                     x264BitrateQuantizer.DecimalPlaces = 1;
@@ -284,9 +284,8 @@ namespace MeGUI.packages.video.x264
                 }
                 else // qp
                 {
-                    // This first line makes sure it is an integer, in case we just swapped from crf
-                    x264BitrateQuantizer.Value = (int)x264BitrateQuantizer.Value; 
                     x264BitrateQuantizer.Minimum = 0;
+                    x264BitrateQuantizer.Value = (int)x264BitrateQuantizer.Value; // makes sure it is an integer, in case we just swapped from crf                    
                     x264BitrateQuantizer.DecimalPlaces = 0;
                     x264BitrateQuantizer.Increment = 1;
                 }
@@ -819,7 +818,7 @@ namespace MeGUI.packages.video.x264
                         lastEncodingMode = 1;
                         x264EncodingMode.Enabled = false;
                         if (x264BitrateQuantizer.Value != 0)
-                            x264BitrateQuantizer.Value = 0;
+                            x264BitrateQuantizer.Value = x264BitrateQuantizer.Minimum;
                         if (x264Turbo.Checked)
                             x264Turbo.Checked = false;
                     }
