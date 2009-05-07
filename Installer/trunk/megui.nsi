@@ -1,6 +1,6 @@
 !define NAME "MeGUI"
 !define OUTFILE "megui-setup.exe"
-!define PRODUCT_VERSION "0.3.1.1033"
+!define PRODUCT_VERSION "0.3.1.1034"
 !define PRODUCT_WEB_SITE "www.doom9.net"
 !define APPNAMEANDVERSION "MeGUI 0.3.1.1033"
 !define INPUT_PATH "..\..\megui\trunk\dist\bigdist\"

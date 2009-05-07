@@ -1,3 +1,15 @@
+0.3.1.1034
+    - (ateeq) Add Job Control option to change after encoding setting for current session (2777417 & 2784396)
+    - (kurtnoise) [baseMuxWindow] change output_FileSelected() to output_Click() event (#2786990)
+    - (kurtnoise) [x264ConfigurationPanel] fix few issues with the quantizer value when qp < 1.
+    - (kurtnoise) [DialogManager] fix DGVC1IndexNV path (#2784428)
+    - (kurtnoise) [UpdateWindow] add tsmuxer case.
+    - (kurtnoise) [TargetSizeSCBox] add BD FileSize Presets.
+    - (kurtnoise) update MediaInfo library and its wrapper to the latest release (0.7.15)
+    - (ateeq) [JobQueue] Up/Down buttons enabled = false to avoid crash on empty queue/selection
+    - (kurtnoise) [VideoUtil] remove unused code...
+    - (kurtnoise) add some enhancements to the nsis script.
+
 0.3.1.1033
     - (kurtnoise) [CodecManager] disable BD & AVCHD devices type. Not yet functional...
     - (kurtnoise) [MainForm] register tsmuxer as JobProcessor & MuxerProvider.
