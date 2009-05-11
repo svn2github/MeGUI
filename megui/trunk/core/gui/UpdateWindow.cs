@@ -1444,9 +1444,12 @@ namespace MeGUI
                             }
                             else
                             {
-                                ErrorState result = manageBackups(filename, file.Name);
-                                if (result != ErrorState.Successful)
-                                    return result;
+                                if (mainForm.Settings.AlwaysBackUpFiles)
+                                {
+                                    ErrorState result = manageBackups(filename, file.Name);
+                                    if (result != ErrorState.Successful)
+                                        return result;
+                                }
                             }
                             using (Stream outputWriter = new FileStream(filename, FileMode.Create))
                             {

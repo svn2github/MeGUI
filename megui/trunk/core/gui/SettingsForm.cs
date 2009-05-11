@@ -189,6 +189,7 @@ namespace MeGUI
         private TextBox tsmuxerPath;
         private Label tsmuxerPathLabel;
         private Button selectTSMuxerExecutableButton;
+        private CheckBox backupfiles;
 
 		/// <summary>
 		/// Required designer variable.
@@ -268,7 +269,6 @@ namespace MeGUI
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.gbDefaultOutput = new System.Windows.Forms.GroupBox();
             this.clearDefaultOutputDir = new System.Windows.Forms.Button();
-            this.defaultOutputDir = new MeGUI.FileBar();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.txt_httpproxyport = new System.Windows.Forms.TextBox();
@@ -284,6 +284,7 @@ namespace MeGUI
             this.cbAddTimePos = new System.Windows.Forms.CheckBox();
             this.chAlwaysOnTop = new System.Windows.Forms.CheckBox();
             this.autoUpdateGroupBox = new System.Windows.Forms.GroupBox();
+            this.backupfiles = new System.Windows.Forms.CheckBox();
             this.label14 = new System.Windows.Forms.Label();
             this.maxServersToTry = new System.Windows.Forms.NumericUpDown();
             this.configureServersButton = new System.Windows.Forms.Button();
@@ -382,6 +383,7 @@ namespace MeGUI
             this.videoExtLabel = new System.Windows.Forms.Label();
             this.autoEncodeDefaultsButton = new System.Windows.Forms.Button();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
+            this.defaultOutputDir = new MeGUI.FileBar();
             groupBox1 = new System.Windows.Forms.GroupBox();
             groupBox1.SuspendLayout();
             this.otherGroupBox.SuspendLayout();
@@ -415,7 +417,7 @@ namespace MeGUI
             groupBox1.Controls.Add(this.runCommand);
             groupBox1.Controls.Add(this.shutdown);
             groupBox1.Controls.Add(this.donothing);
-            groupBox1.Location = new System.Drawing.Point(4, 166);
+            groupBox1.Location = new System.Drawing.Point(4, 187);
             groupBox1.Name = "groupBox1";
             groupBox1.Size = new System.Drawing.Size(217, 117);
             groupBox1.TabIndex = 2;
@@ -827,22 +829,6 @@ namespace MeGUI
             this.clearDefaultOutputDir.Text = "x";
             this.clearDefaultOutputDir.Click += new System.EventHandler(this.clearDefaultOutputDir_Click);
             // 
-            // defaultOutputDir
-            // 
-            this.defaultOutputDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.defaultOutputDir.Filename = "";
-            this.defaultOutputDir.Filter = null;
-            this.defaultOutputDir.FilterIndex = 0;
-            this.defaultOutputDir.FolderMode = true;
-            this.defaultOutputDir.Location = new System.Drawing.Point(10, 20);
-            this.defaultOutputDir.Name = "defaultOutputDir";
-            this.defaultOutputDir.ReadOnly = true;
-            this.defaultOutputDir.SaveMode = false;
-            this.defaultOutputDir.Size = new System.Drawing.Size(417, 26);
-            this.defaultOutputDir.TabIndex = 40;
-            this.defaultOutputDir.Title = null;
-            // 
             // tabPage3
             // 
             this.tabPage3.Controls.Add(this.groupBox2);
@@ -869,7 +855,7 @@ namespace MeGUI
             this.groupBox2.Controls.Add(this.label19);
             this.groupBox2.Controls.Add(this.label18);
             this.groupBox2.Controls.Add(this.cbx_usehttpproxy);
-            this.groupBox2.Location = new System.Drawing.Point(227, 166);
+            this.groupBox2.Location = new System.Drawing.Point(227, 187);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(240, 191);
             this.groupBox2.TabIndex = 5;
@@ -960,7 +946,7 @@ namespace MeGUI
             // 
             this.gbVideoPreview.Controls.Add(this.cbAddTimePos);
             this.gbVideoPreview.Controls.Add(this.chAlwaysOnTop);
-            this.gbVideoPreview.Location = new System.Drawing.Point(4, 288);
+            this.gbVideoPreview.Location = new System.Drawing.Point(4, 309);
             this.gbVideoPreview.Name = "gbVideoPreview";
             this.gbVideoPreview.Size = new System.Drawing.Size(217, 69);
             this.gbVideoPreview.TabIndex = 4;
@@ -989,16 +975,30 @@ namespace MeGUI
             // 
             // autoUpdateGroupBox
             // 
+            this.autoUpdateGroupBox.Controls.Add(this.backupfiles);
             this.autoUpdateGroupBox.Controls.Add(this.label14);
             this.autoUpdateGroupBox.Controls.Add(this.maxServersToTry);
             this.autoUpdateGroupBox.Controls.Add(this.configureServersButton);
             this.autoUpdateGroupBox.Controls.Add(this.useAutoUpdateCheckbox);
             this.autoUpdateGroupBox.Location = new System.Drawing.Point(227, 82);
             this.autoUpdateGroupBox.Name = "autoUpdateGroupBox";
-            this.autoUpdateGroupBox.Size = new System.Drawing.Size(240, 78);
+            this.autoUpdateGroupBox.Size = new System.Drawing.Size(240, 99);
             this.autoUpdateGroupBox.TabIndex = 3;
             this.autoUpdateGroupBox.TabStop = false;
             this.autoUpdateGroupBox.Text = "Auto Update";
+            // 
+            // backupfiles
+            // 
+            this.backupfiles.AutoSize = true;
+            this.backupfiles.Checked = true;
+            this.backupfiles.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.backupfiles.Location = new System.Drawing.Point(9, 76);
+            this.backupfiles.Name = "backupfiles";
+            this.backupfiles.Size = new System.Drawing.Size(187, 17);
+            this.backupfiles.TabIndex = 4;
+            this.backupfiles.Text = "Always backup files when needed";
+            this.backupfiles.UseVisualStyleBackColor = true;
+            this.backupfiles.CheckedChanged += new System.EventHandler(this.backupfiles_CheckedChanged);
             // 
             // label14
             // 
@@ -1056,7 +1056,7 @@ namespace MeGUI
             this.outputExtensions.Controls.Add(this.audioExtension);
             this.outputExtensions.Location = new System.Drawing.Point(3, 82);
             this.outputExtensions.Name = "outputExtensions";
-            this.outputExtensions.Size = new System.Drawing.Size(218, 78);
+            this.outputExtensions.Size = new System.Drawing.Size(218, 99);
             this.outputExtensions.TabIndex = 1;
             this.outputExtensions.TabStop = false;
             this.outputExtensions.Text = "Optional output extensions";
@@ -1117,7 +1117,6 @@ namespace MeGUI
             this.configAutoEncodeDefaults.TabIndex = 5;
             this.configAutoEncodeDefaults.Text = "Configure AutoEncode defaults...";
             this.configAutoEncodeDefaults.UseVisualStyleBackColor = true;
-            this.configAutoEncodeDefaults.Visible = false;
             this.configAutoEncodeDefaults.Click += new System.EventHandler(this.autoEncodeDefaultsButton_Click);
             // 
             // keep2ndPassLogFile
@@ -1985,6 +1984,22 @@ namespace MeGUI
             this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 1;
             // 
+            // defaultOutputDir
+            // 
+            this.defaultOutputDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.defaultOutputDir.Filename = "";
+            this.defaultOutputDir.Filter = null;
+            this.defaultOutputDir.FilterIndex = 0;
+            this.defaultOutputDir.FolderMode = true;
+            this.defaultOutputDir.Location = new System.Drawing.Point(10, 20);
+            this.defaultOutputDir.Name = "defaultOutputDir";
+            this.defaultOutputDir.ReadOnly = true;
+            this.defaultOutputDir.SaveMode = false;
+            this.defaultOutputDir.Size = new System.Drawing.Size(417, 26);
+            this.defaultOutputDir.TabIndex = 40;
+            this.defaultOutputDir.Title = null;
+            // 
             // SettingsForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
@@ -2391,6 +2406,7 @@ namespace MeGUI
                 settings.DgmpgIndexPath = dgmpgIndexPath.Text;
                 settings.EAC3toPath = eac3toPath.Text;
                 settings.TSMuxerPath = tsmuxerPath.Text;
+                settings.AlwaysBackUpFiles = backupfiles.Checked;
 				return settings;
 			}
 			set
@@ -2460,9 +2476,30 @@ namespace MeGUI
                 dgmpgIndexPath.Text = settings.DgmpgIndexPath;
                 eac3toPath.Text = settings.EAC3toPath;
                 tsmuxerPath.Text = settings.TSMuxerPath;
+                backupfiles.Checked = settings.AlwaysBackUpFiles;
 			}
 		}
 		#endregion
+
+        private void backupfiles_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!backupfiles.Checked)
+            {
+                string meguiToolsFolder = Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf('\\')) + "\\tools\\";
+                string meguiAvisynthFolder = MeGUISettings.AvisynthPluginsPath + "\\";
+                try
+                {  // remove all backup files found
+                    Array.ForEach(Directory.GetFiles(meguiToolsFolder, "*.backup", SearchOption.AllDirectories),
+                      delegate(string path) { File.Delete(path); });
+                    Array.ForEach(Directory.GetFiles(meguiAvisynthFolder, "*.backup", SearchOption.AllDirectories),
+                      delegate(string path) { File.Delete(path); });
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                } 
+            }
+        }
 
 	}
 }

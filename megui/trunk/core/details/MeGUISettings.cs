@@ -42,7 +42,7 @@ namespace MeGUI
         private bool recalculateMainMovieBitrate, autoForceFilm, autoStartQueue, enableMP3inMP4, autoOpenScript,
                      overwriteStats, keep2of3passOutput, deleteCompletedJobs, deleteIntermediateFiles,
                      deleteAbortedOutput, openProgressWindow, useadvancedtooltips, freshOggEnc2, autoscroll, 
-                     alwaysOnTop, safeProfileAlteration, autoUpdate, usehttpproxy, addTimePosition;
+                     alwaysOnTop, safeProfileAlteration, autoUpdate, usehttpproxy, addTimePosition, alwaysbackupfiles;
         private ulong audioSamplesPerUpdate;
         private AfterEncoding afterEncoding;
         private decimal forceFilmThreshold, acceptableFPSError;
@@ -118,6 +118,7 @@ namespace MeGUI
             dgmpgIndexPath = "dgmpgindex.exe";
             eac3toPath = "eac3to.exe";
             tsmuxerPath = "tsmuxer.exe";
+            alwaysbackupfiles = true;
         }
         #region properties
         public string YadifPath
@@ -410,6 +411,14 @@ namespace MeGUI
         {
             get { return tsmuxerPath; }
             set { tsmuxerPath = value; }
+        }
+        ///<summary>
+        /// gets / sets whether megui backup files from updater or not
+        /// </summary>
+        public bool AlwaysBackUpFiles
+        {
+            get { return alwaysbackupfiles; }
+            set { alwaysbackupfiles = value; }
         }
         /// <summary>
         /// folder containing the avisynth plugins
