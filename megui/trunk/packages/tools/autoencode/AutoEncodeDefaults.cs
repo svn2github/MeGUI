@@ -73,6 +73,7 @@ namespace MeGUI
                 averageBitrateRadio.Checked = defaults.BitrateMode;
                 projectedBitrateKBits.Text = defaults.Bitrate.ToString();
                 noTargetRadio.Checked = defaults.NoTargetSizeMode;
+                container.Items.AddRange(MainForm.Instance.MuxProvider.GetSupportedContainers( ).ToArray( ));
                 foreach (object o in container.Items) // I know this is ugly, but using the ContainerType doesn't work unless we're switching to manual serialization
                 {
                     if (o.ToString().Equals(defaults.Container))

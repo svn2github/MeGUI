@@ -166,13 +166,13 @@ namespace MeGUI
             // 
             // splitSize
             // 
+            this.splitSize.CustomSizes = new MeGUI.core.util.FileSize[0];
             this.splitSize.Location = new System.Drawing.Point(270, 20);
             this.splitSize.MaximumSize = new System.Drawing.Size(1000, 29);
             this.splitSize.MinimumSize = new System.Drawing.Size(64, 29);
             this.splitSize.Name = "splitSize";
-            this.splitSize.NullString = null;
-            this.splitSize.SelectedIndex = -1;
-            this.splitSize.SelectedItem = null;
+            this.splitSize.NullString = "No splitting";
+            this.splitSize.SelectedIndex = 0;
             this.splitSize.Size = new System.Drawing.Size(136, 29);
             this.splitSize.TabIndex = 26;
             // 

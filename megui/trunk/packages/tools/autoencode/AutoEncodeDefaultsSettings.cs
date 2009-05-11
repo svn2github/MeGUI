@@ -108,7 +108,7 @@ namespace MeGUI
         public FileSize? FileSize
         {
             get { return fileSize; }
-            set { }
+            set { fileSize = value; }
         }
         /// <summary>
         /// gets / sets the default split size
@@ -116,7 +116,7 @@ namespace MeGUI
         public FileSize? SplitSize
         {
             get { return splitSize; }
-            set { }
+            set { splitSize = value; }
         }
         #endregion
     }
