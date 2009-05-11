@@ -67,6 +67,7 @@ namespace MeGUI
             this.inputLabel = new System.Windows.Forms.Label();
             this.closeOnQueue = new System.Windows.Forms.CheckBox();
             this.gbOutput = new System.Windows.Forms.GroupBox();
+            this.demuxVideo = new System.Windows.Forms.CheckBox();
             this.pickOutputButton = new System.Windows.Forms.Button();
             this.projectName = new System.Windows.Forms.TextBox();
             this.projectNameLabel = new System.Windows.Forms.Label();
@@ -77,7 +78,6 @@ namespace MeGUI
             this.demuxNoAudiotracks = new System.Windows.Forms.RadioButton();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.saveProjectDialog = new System.Windows.Forms.SaveFileDialog();
-            this.demuxVideo = new System.Windows.Forms.CheckBox();
             this.gbInput.SuspendLayout();
             this.gbOutput.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -110,7 +110,7 @@ namespace MeGUI
             this.input.Filter = "Matroska Files (*.mkv)|*.mkv|Transport Streams (*.m2ts,*.ts)|*.m2ts;*.ts|VC-1 Fil" +
                 "es (*.vc1)|*.vc1|All DGVC1Index supported files|*.mkv;*.m2ts;*.tp;*.ts;*.trp;*.p" +
                 "va;*.vro;*.vc1";
-            this.input.FilterIndex = 5;
+            this.input.FilterIndex = 4;
             this.input.FolderMode = false;
             this.input.Location = new System.Drawing.Point(87, 14);
             this.input.Name = "input";
@@ -152,6 +152,16 @@ namespace MeGUI
             this.gbOutput.TabIndex = 26;
             this.gbOutput.TabStop = false;
             this.gbOutput.Text = "Output";
+            // 
+            // demuxVideo
+            // 
+            this.demuxVideo.AutoSize = true;
+            this.demuxVideo.Location = new System.Drawing.Point(16, 43);
+            this.demuxVideo.Name = "demuxVideo";
+            this.demuxVideo.Size = new System.Drawing.Size(125, 17);
+            this.demuxVideo.TabIndex = 8;
+            this.demuxVideo.Text = "Demux Video Stream";
+            this.demuxVideo.UseVisualStyleBackColor = true;
             // 
             // pickOutputButton
             // 
@@ -242,16 +252,6 @@ namespace MeGUI
             // 
             this.saveProjectDialog.Filter = "DGVIndex project files|*.dgv";
             this.saveProjectDialog.Title = "Pick a name for your DGVIndex project";
-            // 
-            // demuxVideo
-            // 
-            this.demuxVideo.AutoSize = true;
-            this.demuxVideo.Location = new System.Drawing.Point(16, 43);
-            this.demuxVideo.Name = "demuxVideo";
-            this.demuxVideo.Size = new System.Drawing.Size(125, 17);
-            this.demuxVideo.TabIndex = 8;
-            this.demuxVideo.Text = "Demux Video Stream";
-            this.demuxVideo.UseVisualStyleBackColor = true;
             // 
             // DGVinputWindow
             // 
