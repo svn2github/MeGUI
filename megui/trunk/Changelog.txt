@@ -1,3 +1,8 @@
+0.3.1.1035
+    - (kurtnoise) add "Always backup files when needed" option in MeGUI Settings. Enabled by default. If you don't want to backup them or simply remove them, just unchecked it...
+    - (kurtnoise) [AutoEncode] enable setting AutoEncode defaults via Settings and uses them in the AutoEncode Form. Patch by Nasty Bob (#2789291)
+    - (kurtnoise) [DGVCreator] change Filter index value (#2789475)
+
 0.3.1.1034
     - (ateeq) Add Job Control option to change after encoding setting for current session (2777417 & 2784396)
     - (kurtnoise) [baseMuxWindow] change output_FileSelected() to output_Click() event (#2786990)
