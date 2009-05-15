@@ -994,6 +994,55 @@ namespace MeGUI
             return outputFile;
         }
 
+        public static string convertChaptersTextFileTox264QPFile(string filename, double framerate)
+        {
+            StreamWriter sw = null;
+            string qpfile = "";
+            if (File.Exists(filename))
+            {
+                StreamReader sr = null;
+                string line = null;
+                qpfile = Path.ChangeExtension(filename, ".qpf");
+                sw = new StreamWriter(qpfile, false, System.Text.Encoding.Default);
+                try
+                {
+                    sr = new StreamReader(filename);
+                    Chapter chap = new Chapter();
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        if (line.IndexOf("NAME") == -1) // chapter time
+                        {
+                            string tc = line.Substring(line.IndexOf("=") + 1);
+                            chap.timecode = tc;
+                            int chapTime = Util.getTimeCode(chap.timecode);
+                            int frameNumber = Util.convertTimecodeToFrameNumber(chapTime, framerate);
+                            sw.WriteLine(frameNumber.ToString() + " I -1");
+                        }
+                    }
+
+                }
+                catch (Exception f)
+                {
+                    MessageBox.Show(f.Message);
+                }
+                finally
+                {
+                    if (sw != null)
+                    {
+                        try
+                        {
+                            sw.Close();
+                        }
+                        catch (Exception f)
+                        {
+                            MessageBox.Show(f.Message);
+                        }
+                    }
+                }                
+            }
+            return qpfile;
+        }
+
         public static string GetNameForNth(int n)
         {
             switch (n)
