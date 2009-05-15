@@ -326,53 +326,6 @@ namespace MeGUI
                     item.BackColor = Color.WhiteSmoke;
 			}
 		}
-		
-		/// <summary>
-		/// converts a string timecode into number of milliseconds
-		/// </summary>
-		/// <param name="timecode">the time string to be analyzed</param>
-		/// <returns>the time in milliseconds from the string or -1 if there was an error parsing</returns>
-		private int getTimeCode(string timecode)
-		{
-			if (timecode.Equals(""))
-				return -1;
-			else if (timecode.Length == 12) // must be 12 chars
-			{
-				char[] separator = new char[] {':'};
-				string[] subItems = timecode.Split(separator);
-				if (subItems.Length == 3)
-				{
-					int hours, minutes, seconds, milliseconds;
-					try
-					{
-						hours = Int32.Parse(subItems[0]);
-						minutes = Int32.Parse(subItems[1]);
-						separator = new char[] {'.'};
-						string[] str = subItems[2].Split(separator);
-						if (str.Length == 2)
-						{
-							seconds = Int32.Parse(str[0]);
-							milliseconds = Int32.Parse(str[1]);
-						}
-						else
-							return -1;
-						if (hours > 24 || minutes > 59 || seconds > 59)
-							return -1;
-						int retval = milliseconds + seconds * 1000 + minutes * 60 * 1000 + hours * 60 * 60 * 1000;
-						return retval;
-					}
-					catch (Exception e) // integer parsing error
-					{
-						Console.Write(e.Message);
-						return -1;
-					}
-				}
-				else
-					return -1;
-			}
-			else // incorrect length
-				return -1;
-		}
 		#endregion
 		#region buttons
 		private void removeZoneButton_Click(object sender, System.EventArgs e)
@@ -402,7 +355,7 @@ namespace MeGUI
 			{
 				ListViewItem item = chapterListView.SelectedItems[0];
 				Chapter chap = (Chapter)item.Tag;
-				int timecode = getTimeCode(startTime.Text);
+				int timecode = Util.getTimeCode(startTime.Text);
 				if (timecode < 0)
 					MessageBox.Show("You must specify a valid timecode in the format hh:mm:ss.ccc", "Incorrect timecode", MessageBoxButtons.OK, MessageBoxIcon.Stop);
 				else
@@ -436,7 +389,7 @@ namespace MeGUI
 		}
 		private void addZoneButton_Click(object sender, System.EventArgs e)
 		{
-			int timecode = getTimeCode(startTime.Text);
+			int timecode = Util.getTimeCode(startTime.Text);
 			if (timecode >= 0)
 			{
 				Chapter newChapter = new Chapter();
@@ -447,7 +400,7 @@ namespace MeGUI
 				bool interationAborted = false, chapterInserted = false;
 				foreach (Chapter chap in chapters)
 				{
-					int chapTime = getTimeCode(chap.timecode);
+					int chapTime = Util.getTimeCode(chap.timecode);
 					if (chapTime > timecode) // the new chapter comes before the one we're currently looking at
 					{
                         if (!chapterInserted)
@@ -633,7 +586,7 @@ namespace MeGUI
 				if (chapterListView.SelectedItems.Count == 1) // a zone has been selected, show that zone
 				{
 					Chapter chap = (Chapter)chapterListView.SelectedItems[0].Tag;
-					int time = this.getTimeCode(chap.timecode);
+					int time = Util.getTimeCode(chap.timecode);
 					double framerate = player.Framerate;
                     int frameNumber = Util.convertTimecodeToFrameNumber(time, framerate);
 					player.CurrentFrame = frameNumber;
@@ -643,7 +596,7 @@ namespace MeGUI
 				{
 					if (!startTime.Text.Equals(""))
 					{
-						int time = this.getTimeCode(startTime.Text);
+						int time = Util.getTimeCode(startTime.Text);
 						double framerate = player.Framerate;
                         int frameNumber = Util.convertTimecodeToFrameNumber(time, framerate);
 						player.CurrentFrame = frameNumber;
