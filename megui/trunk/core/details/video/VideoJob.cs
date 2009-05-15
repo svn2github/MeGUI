@@ -78,7 +78,7 @@ namespace MeGUI
 		{
 			get
 			{
-                return settings.Codec.ID;
+                return settings.SettingsID;
 			}
 		}
 		/// <summary>
