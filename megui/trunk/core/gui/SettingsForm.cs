@@ -2487,17 +2487,30 @@ namespace MeGUI
             {
                 string meguiToolsFolder = Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf('\\')) + "\\tools\\";
                 string meguiAvisynthFolder = MeGUISettings.AvisynthPluginsPath + "\\";
-                try
-                {  // remove all backup files found
-                    Array.ForEach(Directory.GetFiles(meguiToolsFolder, "*.backup", SearchOption.AllDirectories),
-                      delegate(string path) { File.Delete(path); });
-                    Array.ForEach(Directory.GetFiles(meguiAvisynthFolder, "*.backup", SearchOption.AllDirectories),
-                      delegate(string path) { File.Delete(path); });
-                }
-                catch (Exception ex)
+                if (Directory.Exists(meguiToolsFolder))
                 {
-                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                } 
+                    try
+                    {  // remove all backup files found
+                        Array.ForEach(Directory.GetFiles(meguiToolsFolder, "*.backup", SearchOption.AllDirectories),
+                          delegate(string path) { File.Delete(path); });
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                if (Directory.Exists(meguiAvisynthFolder))
+                {
+                    try
+                    {  // remove all backup files found
+                        Array.ForEach(Directory.GetFiles(meguiAvisynthFolder, "*.backup", SearchOption.AllDirectories),
+                          delegate(string path) { File.Delete(path); });
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
             }
         }
 
