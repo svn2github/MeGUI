@@ -113,6 +113,16 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                     break;
             } // now add the rest of the x264 encoder options
 
+            if (xs.UseQPFile)
+            {
+                if (xs.EncodingMode == 0 ||
+                    xs.EncodingMode == 1 ||
+                    xs.EncodingMode == 2 ||
+                    xs.EncodingMode == 5 ||
+                    xs.EncodingMode == 9)
+                    sb.Append("--qpfile " + "\"" + xs.QPFile + "\" ");
+            }
+
             // AVC Level
             if (xs.Level != 15) // unrestricted (x264.exe default)
                 sb.Append("--level " + AVCLevels.getCLILevelNames()[xs.Level] + " ");

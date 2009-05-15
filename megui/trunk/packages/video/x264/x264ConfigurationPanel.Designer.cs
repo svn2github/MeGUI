@@ -45,6 +45,9 @@ namespace MeGUI.packages.video.x264
             this.x264BetaDeblockLabel = new System.Windows.Forms.Label();
             this.x264AlphaDeblockLabel = new System.Windows.Forms.Label();
             this.x264CodecGeneralGroupbox = new System.Windows.Forms.GroupBox();
+            this.qpfile = new System.Windows.Forms.TextBox();
+            this.qpfileOpenButton = new System.Windows.Forms.Button();
+            this.useQPFile = new System.Windows.Forms.CheckBox();
             this.x264BitrateQuantizer = new System.Windows.Forms.NumericUpDown();
             this.logfile = new System.Windows.Forms.TextBox();
             this.x264EncodingMode = new System.Windows.Forms.ComboBox();
@@ -432,6 +435,9 @@ namespace MeGUI.packages.video.x264
             // 
             this.x264CodecGeneralGroupbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.x264CodecGeneralGroupbox.Controls.Add(this.qpfile);
+            this.x264CodecGeneralGroupbox.Controls.Add(this.qpfileOpenButton);
+            this.x264CodecGeneralGroupbox.Controls.Add(this.useQPFile);
             this.x264CodecGeneralGroupbox.Controls.Add(this.x264BitrateQuantizer);
             this.x264CodecGeneralGroupbox.Controls.Add(this.logfile);
             this.x264CodecGeneralGroupbox.Controls.Add(this.x264EncodingMode);
@@ -447,6 +453,40 @@ namespace MeGUI.packages.video.x264
             this.x264CodecGeneralGroupbox.TabIndex = 0;
             this.x264CodecGeneralGroupbox.TabStop = false;
             this.x264CodecGeneralGroupbox.Text = "General";
+            // 
+            // qpfile
+            // 
+            this.qpfile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.qpfile.Enabled = false;
+            this.qpfile.Location = new System.Drawing.Point(96, 119);
+            this.qpfile.Name = "qpfile";
+            this.qpfile.ReadOnly = true;
+            this.qpfile.Size = new System.Drawing.Size(182, 20);
+            this.qpfile.TabIndex = 10;
+            this.qpfile.Text = ".qp";
+            // 
+            // qpfileOpenButton
+            // 
+            this.qpfileOpenButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.qpfileOpenButton.Enabled = false;
+            this.qpfileOpenButton.Location = new System.Drawing.Point(284, 118);
+            this.qpfileOpenButton.Name = "qpfileOpenButton";
+            this.qpfileOpenButton.Size = new System.Drawing.Size(24, 23);
+            this.qpfileOpenButton.TabIndex = 11;
+            this.qpfileOpenButton.Text = "...";
+            this.qpfileOpenButton.Click += new System.EventHandler(this.qpfileOpenButton_Click);
+            // 
+            // useQPFile
+            // 
+            this.useQPFile.AutoSize = true;
+            this.useQPFile.Location = new System.Drawing.Point(9, 122);
+            this.useQPFile.Name = "useQPFile";
+            this.useQPFile.Size = new System.Drawing.Size(79, 17);
+            this.useQPFile.TabIndex = 9;
+            this.useQPFile.Text = "Use qp File";
+            this.useQPFile.UseVisualStyleBackColor = true;
+            this.useQPFile.CheckedChanged += new System.EventHandler(this.useQPFile_CheckedChanged);
             // 
             // x264BitrateQuantizer
             // 
@@ -1908,7 +1948,7 @@ namespace MeGUI.packages.video.x264
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.helpButton1.Location = new System.Drawing.Point(448, 348);
             this.helpButton1.Name = "helpButton1";
-            this.helpButton1.Size = new System.Drawing.Size(42, 26);
+            this.helpButton1.Size = new System.Drawing.Size(39, 23);
             this.helpButton1.TabIndex = 10;
             // 
             // x264PicBox
@@ -2131,5 +2171,8 @@ namespace MeGUI.packages.video.x264
         private System.Windows.Forms.Label PsyRDLabel;
         private System.Windows.Forms.Label PsyTrellisLabel;
         private System.Windows.Forms.NumericUpDown PsyTrellis;
+        private System.Windows.Forms.TextBox qpfile;
+        private System.Windows.Forms.Button qpfileOpenButton;
+        private System.Windows.Forms.CheckBox useQPFile;
     }
 }

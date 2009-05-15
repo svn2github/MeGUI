@@ -556,6 +556,8 @@ namespace MeGUI.packages.video.x264
                     xs.NoiseReduction = Int32.Parse(NoiseReduction.Text);
                 xs.AQmode = (int)cbAQMode.SelectedIndex;
                 xs.AQstrength = numAQStrength.Value;
+                xs.UseQPFile = useQPFile.Checked;
+                xs.QPFile = this.qpfile.Text;
                 return xs;
             }
             set
@@ -982,6 +984,23 @@ namespace MeGUI.packages.video.x264
                 numAQStrength.Enabled = true;
             else numAQStrength.Enabled = false;
                 genericUpdate();
+        }
+
+        private void useQPFile_CheckedChanged(object sender, EventArgs e)
+        {
+            qpfile.Enabled = useQPFile.Checked;
+            qpfileOpenButton.Enabled = useQPFile.Checked;
+        }
+
+        private void qpfileOpenButton_Click(object sender, EventArgs e)
+        {
+            openFileDialog.Filter = "x264 QP Files (*.qpf, *.txt)|*.qpf;*.txt";
+            openFileDialog.FilterIndex = 1;
+            if (this.openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                this.qpfile.Text = openFileDialog.FileName;
+                this.showCommandLine();
+            }
         }
     }
 }

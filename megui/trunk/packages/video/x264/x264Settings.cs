@@ -61,8 +61,8 @@ namespace MeGUI
 		decimal ipFactor, pbFactor, chromaQPOffset, vbvInitialBuffer, bitrateVariance, quantCompression, 
 			tempComplexityBlur, tempQuanBlurCC, scdSensitivity, bframeBias, quantizerCrf, AQStrength, psyRDO, psyTrellis;
 		bool deblock, cabac, p4x4mv, p8x8mv, b8x8mv, i4x4mv, i8x8mv, weightedBPrediction, encodeInterlaced,
-			bFramePyramid, chromaME, adaptiveDCT, lossless, mixedRefs, NoFastPSkip, psnrCalc, noDctDecimate, ssimCalc;
-		string quantizerMatrix;
+			bFramePyramid, chromaME, adaptiveDCT, lossless, mixedRefs, NoFastPSkip, psnrCalc, noDctDecimate, ssimCalc, useQPFile;
+		string quantizerMatrix, qpfile;
 		#region constructor
         /// <summary>
 		/// default constructor, initializes codec default values
@@ -130,6 +130,8 @@ namespace MeGUI
             base.MaxNumberOfPasses = 3;
             AQMode = 1;
             AQStrength = new decimal(1.0);
+            useQPFile = false;
+            qpfile = "";
 		}
 		#endregion
 		#region properties
@@ -314,6 +316,11 @@ namespace MeGUI
 			get {return cabac;}
 			set {cabac = value;}
 		}
+        public bool UseQPFile
+        {
+            get { return useQPFile; }
+            set { useQPFile = value; }
+        }
 		public bool WeightedBPrediction
 		{
 			get {return weightedBPrediction;}
@@ -409,6 +416,11 @@ namespace MeGUI
             get { return AQStrength; }
             set { AQStrength = value; }
         }
+        public string QPFile
+        {
+            get { return qpfile; }
+            set { qpfile = value; }
+        }
         #endregion
         public override bool UsesSAR
         {
@@ -486,7 +498,8 @@ namespace MeGUI
                 this.WeightedBPrediction != otherSettings.WeightedBPrediction ||
                 this.X264Trellis != otherSettings.X264Trellis ||
                 this.AQmode != otherSettings.AQmode ||
-                this.AQstrength != otherSettings.AQstrength
+                this.AQstrength != otherSettings.AQstrength ||
+                this.UseQPFile != otherSettings.UseQPFile
                 )
                 return true;
             else
