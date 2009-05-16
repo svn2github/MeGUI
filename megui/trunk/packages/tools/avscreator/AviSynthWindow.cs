@@ -1721,7 +1721,7 @@ namespace MeGUI
                     catch (Exception)
                     { }
                     string tempAvs = string.Format(
-                            @"DirectShowSource(""{0}"", audio=false{1}){2}",
+                            @"DirectShowSource(""{0}"", audio=false{1}, convertfps=true){2}",
                             fileName,
                             frameRateString == null ? string.Empty : (", fps=" + frameRateString),
                             this.flipVertical.Checked ? ".FlipVertical()" : string.Empty
