@@ -290,7 +290,8 @@ namespace MeGUI
     {
         public ChapterType(string name, string filterName, string extension, ContainerType containerType)
             : base(name, filterName, extension, containerType) { }
-        public static readonly ChapterType OGG_TXT = new ChapterType("Ogg chapter", "Ogg chapter files", "txt", null);
+        public static readonly ChapterType OGG_TXT = new ChapterType("Ogg Chapter", "Ogg Chapter Files", "txt", null);
+        public static readonly ChapterType MKV_XML = new ChapterType("Matroska Chapter", "Matroska Chapter Files", "xml", null);
     }
     public class DeviceType : OutputType
     {
@@ -371,7 +372,8 @@ namespace MeGUI
                 ContainerTypes.Register(ContainerType.M2TS)))
                 throw new Exception("Failed to register a container type");
             if (!(
-	            ChapterTypes.Register(ChapterType.OGG_TXT)))
+	            ChapterTypes.Register(ChapterType.OGG_TXT) &&
+                ChapterTypes.Register(ChapterType.MKV_XML)))
 		        throw new Exception("Failed to register a chapter type");
             if (!(
             //    DeviceTypes.Register(DeviceType.AVCHD) &&

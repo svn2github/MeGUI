@@ -425,7 +425,7 @@ namespace MeGUI
             // 
             this.chapters.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.chapters.Filename = "";
-            this.chapters.Filter = "Chapter files (*.txt)|*.txt";
+            this.chapters.Filter = "";
             this.chapters.FilterIndex = 0;
             this.chapters.FolderMode = false;
             this.chapters.Location = new System.Drawing.Point(79, 3);
@@ -1006,7 +1006,5 @@ namespace MeGUI
             checkIO();
             fileUpdated();
         }
-
-
     }
 }
