@@ -151,6 +151,7 @@ namespace MeGUI
                 if (info.IntroEndFrame > -1)
                     this.player.IntroEnd = info.IntroEndFrame;
             }
+            else MessageBox.Show("Load an avisynth script first...", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         private void queueVideoButton_Click(object sender, System.EventArgs e)
         {
@@ -397,7 +398,6 @@ namespace MeGUI
 
         }
 
-
         private void editZonesButton_Click(object sender, EventArgs e)
         {
             ClosePlayer();
@@ -405,6 +405,11 @@ namespace MeGUI
             zw.Zones = Info.Zones;
             if (zw.ShowDialog() == DialogResult.OK)
                 Info.Zones = zw.Zones;
+        }
+
+        private void videopreview_Click(object sender, EventArgs e)
+        {
+            VideoInput_DoubleClick(null, null);
         }
     }
 }
