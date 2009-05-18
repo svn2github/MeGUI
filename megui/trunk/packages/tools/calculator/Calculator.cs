@@ -334,7 +334,7 @@ namespace MeGUI
             // applyButton
             // 
             this.applyButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.applyButton.Location = new System.Drawing.Point(517, 342);
+            this.applyButton.Location = new System.Drawing.Point(462, 342);
             this.applyButton.Name = "applyButton";
             this.applyButton.Size = new System.Drawing.Size(48, 23);
             this.applyButton.TabIndex = 0;
@@ -480,7 +480,7 @@ namespace MeGUI
             // cancelButton
             // 
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(463, 342);
+            this.cancelButton.Location = new System.Drawing.Point(516, 342);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(48, 23);
             this.cancelButton.TabIndex = 9;
@@ -557,8 +557,8 @@ namespace MeGUI
             this.ContextMenuStrip = this.contextMenuStrip1;
             this.Controls.Add(this.audio);
             this.Controls.Add(this.resultGroupbox);
-            this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.sizeGroupbox);
+            this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.containerGroupbox);
             this.Controls.Add(this.codecGroupbox);
             this.Controls.Add(this.helpButton1);
