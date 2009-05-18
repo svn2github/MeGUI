@@ -43,6 +43,7 @@ namespace MeGUI.packages.tools.oneclick
             this.horizontalResolution = new System.Windows.Forms.NumericUpDown();
             this.outputResolutionLabel = new System.Windows.Forms.Label();
             this.extraGroupbox = new System.Windows.Forms.GroupBox();
+            this.usechaptersmarks = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.audioProfile = new MeGUI.core.gui.ConfigableProfilesControl();
             this.videoProfile = new MeGUI.core.gui.ConfigableProfilesControl();
@@ -232,6 +233,7 @@ namespace MeGUI.packages.tools.oneclick
             // 
             // extraGroupbox
             // 
+            this.extraGroupbox.Controls.Add(this.usechaptersmarks);
             this.extraGroupbox.Controls.Add(this.label1);
             this.extraGroupbox.Controls.Add(this.audioProfile);
             this.extraGroupbox.Controls.Add(this.videoProfile);
@@ -245,6 +247,16 @@ namespace MeGUI.packages.tools.oneclick
             this.extraGroupbox.TabIndex = 39;
             this.extraGroupbox.TabStop = false;
             this.extraGroupbox.Text = "Encoding Setup";
+            // 
+            // usechaptersmarks
+            // 
+            this.usechaptersmarks.AutoSize = true;
+            this.usechaptersmarks.Location = new System.Drawing.Point(168, 77);
+            this.usechaptersmarks.Name = "usechaptersmarks";
+            this.usechaptersmarks.Size = new System.Drawing.Size(229, 17);
+            this.usechaptersmarks.TabIndex = 40;
+            this.usechaptersmarks.Text = "Force using Key-Frames for chapters marks";
+            this.usechaptersmarks.UseVisualStyleBackColor = true;
             // 
             // label1
             // 
@@ -284,9 +296,10 @@ namespace MeGUI.packages.tools.oneclick
             // dontEncodeAudio
             // 
             this.dontEncodeAudio.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.dontEncodeAudio.Location = new System.Drawing.Point(44, 75);
+            this.dontEncodeAudio.AutoSize = true;
+            this.dontEncodeAudio.Location = new System.Drawing.Point(28, 77);
             this.dontEncodeAudio.Name = "dontEncodeAudio";
-            this.dontEncodeAudio.Size = new System.Drawing.Size(130, 21);
+            this.dontEncodeAudio.Size = new System.Drawing.Size(119, 17);
             this.dontEncodeAudio.TabIndex = 25;
             this.dontEncodeAudio.Text = "Don\'t encode audio";
             this.dontEncodeAudio.CheckedChanged += new System.EventHandler(this.dontEncodeAudio_CheckedChanged);
@@ -297,7 +310,7 @@ namespace MeGUI.packages.tools.oneclick
             this.videoCodecLabel.Name = "videoCodecLabel";
             this.videoCodecLabel.Size = new System.Drawing.Size(90, 13);
             this.videoCodecLabel.TabIndex = 17;
-            this.videoCodecLabel.Text = "Video Profile";
+            this.videoCodecLabel.Text = "Video Preset";
             // 
             // containerFormatLabel
             // 
@@ -363,6 +376,7 @@ namespace MeGUI.packages.tools.oneclick
             this.otherGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.horizontalResolution)).EndInit();
             this.extraGroupbox.ResumeLayout(false);
+            this.extraGroupbox.PerformLayout();
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
@@ -397,5 +411,6 @@ namespace MeGUI.packages.tools.oneclick
         private MeGUI.core.gui.ConfigableProfilesControl videoProfile;
         private System.Windows.Forms.CheckBox autoCrop;
         private System.Windows.Forms.CheckBox keepInputResolution;
+        private System.Windows.Forms.CheckBox usechaptersmarks;
     }
 }

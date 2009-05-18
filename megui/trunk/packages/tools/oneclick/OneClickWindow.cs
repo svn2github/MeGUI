@@ -266,6 +266,9 @@ namespace MeGUI
             workingName.Text = PrettyFormatting.ExtractWorkingName(fileName);
             this.updateFilename();
             this.ar.Value = ar;
+
+            if (VideoSettings.EncoderType.ID == "x264" && this.chapterFile.Filename != null)
+                this.usechaptersmarks.Enabled = true; 
         }
 
         private bool beingCalled;
@@ -375,6 +378,8 @@ namespace MeGUI
                 autoCrop.Checked = settings.AutoCrop;
                 keepInputResolution.Checked = settings.KeepInputResolution;
                 addPrerenderJob.Checked = settings.PrerenderVideo;
+                if (usechaptersmarks.Enabled)
+                    usechaptersmarks.Checked = settings.UseChaptersMarks;
 
                 splitting.Value = settings.SplitSize;
                 optionalTargetSizeBox1.Value = settings.Filesize;
@@ -444,6 +449,7 @@ namespace MeGUI
                 dpp.PrerenderJob = addPrerenderJob.Checked;
                 dpp.Splitting = splitting.Value;
                 dpp.DeviceOutputType = devicetype.Text;
+                dpp.UseChaptersMarks = usechaptersmarks.Checked;
                 dpp.VideoSettings = VideoSettings.Clone();
                 IndexJob job = new IndexJob(input.Filename, d2vName, 1, audioTracks, dpp, false, false);
                 mainForm.Jobs.addJobsToQueue(job);
@@ -583,8 +589,7 @@ namespace MeGUI
                 autoCrop.Checked = true;
             }
         }
-
-        }
+    }
     public class OneClickTool : MeGUI.core.plugins.interfaces.ITool
     {
 
@@ -645,7 +650,8 @@ namespace MeGUI
         private bool interlaced = false;
         private DeinterlaceFilter[] filters;
         private LogItem log = new LogItem("OneClick postprocessor", ImageType.Information);
-
+        string qpfile = string.Empty;
+        
         public OneClickPostProcessor(MainForm mainForm, IndexJob ijob)
         {
             this.job = ijob;
@@ -674,11 +680,12 @@ namespace MeGUI
             string videoInput = openVideo(job.Output, job.PostprocessingProperties.DAR, 
                 job.PostprocessingProperties.HorizontalOutputResolution, job.PostprocessingProperties.SignalAR, log,
                 job.PostprocessingProperties.AvsSettings, job.PostprocessingProperties.AutoDeinterlace, videoSettings, out dar,
-                job.PostprocessingProperties.AutoCrop, job.PostprocessingProperties.KeepInputResolution);
+                job.PostprocessingProperties.AutoCrop, job.PostprocessingProperties.KeepInputResolution,
+                job.PostprocessingProperties.UseChaptersMarks);
 
             VideoStream myVideo = new VideoStream();
             ulong length;
-            double framerate;
+            double framerate;        
             JobUtil.getInputProperties(out length, out framerate, videoInput);
             myVideo.Input = videoInput;
             myVideo.Output = videoOutput;
@@ -691,6 +698,8 @@ namespace MeGUI
             intermediateFiles.Add(videoInput);
             intermediateFiles.Add(job.Output);
             intermediateFiles.AddRange(audioFiles.Values);
+            if (!string.IsNullOrEmpty(qpfile))
+                intermediateFiles.Add(qpfile);
 
             if (!string.IsNullOrEmpty(videoInput))
             {
@@ -773,9 +782,9 @@ namespace MeGUI
         /// <returns>the name of the AviSynth script created, empty of there was an error</returns>
         private string openVideo(string path, Dar? AR, int horizontalResolution,
             bool signalAR, LogItem log, AviSynthSettings avsSettings, bool autoDeint,
-            VideoCodecSettings settings, out Dar? dar, bool autoCrop, bool keepInputResolution)
+            VideoCodecSettings settings, out Dar? dar, bool autoCrop, bool keepInputResolution, bool useChaptersMarks)
         {
-            dar = null;
+            dar = null; 
             IMediaFile d2v = new d2vFile(path);
             IVideoReader reader = d2v.GetVideoReader();
             if (reader.FrameCount < 1)
@@ -863,6 +872,12 @@ namespace MeGUI
                             final, horizontalResolution, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out dar);
                     }
                     log.LogValue("Resolution adjusted for AVC Level", horizontalResolution + "x" + scriptVerticalResolution);
+                }
+                if (useChaptersMarks)
+                {
+                    xs.UseQPFile = true;
+                    qpfile = VideoUtil.convertChaptersTextFileTox264QPFile(job.PostprocessingProperties.ChapterFile, d2v.Info.FPS);
+                    xs.QPFile = qpfile;
                 }
             }
 

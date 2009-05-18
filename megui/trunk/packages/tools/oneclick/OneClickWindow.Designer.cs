@@ -84,6 +84,7 @@ namespace MeGUI
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.videoGroupBox = new System.Windows.Forms.GroupBox();
+            this.usechaptersmarks = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
             this.videoProfile = new MeGUI.core.gui.ConfigableProfilesControl();
             this.addPrerenderJob = new System.Windows.Forms.CheckBox();
@@ -731,6 +732,7 @@ namespace MeGUI
             // 
             // videoGroupBox
             // 
+            this.videoGroupBox.Controls.Add(this.usechaptersmarks);
             this.videoGroupBox.Controls.Add(this.label4);
             this.videoGroupBox.Controls.Add(this.videoProfile);
             this.videoGroupBox.Controls.Add(this.addPrerenderJob);
@@ -741,6 +743,16 @@ namespace MeGUI
             this.videoGroupBox.TabIndex = 31;
             this.videoGroupBox.TabStop = false;
             this.videoGroupBox.Text = "Video Settings";
+            // 
+            // usechaptersmarks
+            // 
+            this.usechaptersmarks.AutoSize = true;
+            this.usechaptersmarks.Location = new System.Drawing.Point(168, 47);
+            this.usechaptersmarks.Name = "usechaptersmarks";
+            this.usechaptersmarks.Size = new System.Drawing.Size(229, 17);
+            this.usechaptersmarks.TabIndex = 39;
+            this.usechaptersmarks.Text = "Force using Key-Frames for chapters marks";
+            this.usechaptersmarks.UseVisualStyleBackColor = true;
             // 
             // label4
             // 
@@ -764,7 +776,7 @@ namespace MeGUI
             // 
             this.addPrerenderJob.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.addPrerenderJob.AutoSize = true;
-            this.addPrerenderJob.Location = new System.Drawing.Point(121, 47);
+            this.addPrerenderJob.Location = new System.Drawing.Point(15, 47);
             this.addPrerenderJob.Name = "addPrerenderJob";
             this.addPrerenderJob.Size = new System.Drawing.Size(127, 17);
             this.addPrerenderJob.TabIndex = 16;
@@ -922,5 +934,6 @@ namespace MeGUI
         private System.Windows.Forms.CheckBox keepInputResolution;
         private System.Windows.Forms.ComboBox devicetype;
         private System.Windows.Forms.Label deviceLabel;
+        private System.Windows.Forms.CheckBox usechaptersmarks;
     }
 }

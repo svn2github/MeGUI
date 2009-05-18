@@ -31,7 +31,7 @@ namespace MeGUI
 	/// </summary>
 	public class DGIndexPostprocessingProperties
 	{
-		private bool autoDeriveAR, signalAR, autoDeint, autoCrop, keepInputResolution, prerenderJob;
+		private bool autoDeriveAR, signalAR, autoDeint, autoCrop, keepInputResolution, prerenderJob, useChapterMarks;
 		private int horizontalOutputResolution;
         private FileSize? splitSize;
         private ContainerType container;
@@ -57,6 +57,7 @@ namespace MeGUI
 			splitSize = null;
             prerenderJob = false;
             deviceType = null;
+            useChapterMarks = false;
 		}
 
         public AudioJob[] AudioJobs;
@@ -218,5 +219,10 @@ namespace MeGUI
             set { deviceType = value; }
         }
 
+        public bool UseChaptersMarks
+        {
+            get { return useChapterMarks; }
+            set { useChapterMarks = value; }
+        }
 	}
 }

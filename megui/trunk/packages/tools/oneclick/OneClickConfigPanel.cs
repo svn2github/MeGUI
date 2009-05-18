@@ -93,6 +93,7 @@ namespace MeGUI.packages.tools.oneclick
                 val.AutoCrop = autoCrop.Checked;
                 val.KeepInputResolution = keepInputResolution.Checked;
                 val.VideoProfileName = videoProfile.SelectedProfile.FQName;
+                val.UseChaptersMarks = usechaptersmarks.Checked;
                 return val;
             }
             set
@@ -110,6 +111,7 @@ namespace MeGUI.packages.tools.oneclick
                 autoCrop.Checked = value.AutoCrop;
                 keepInputResolution.Checked = value.KeepInputResolution;
                 videoProfile.SetProfileNameOrWarn(value.VideoProfileName);
+                usechaptersmarks.Checked = value.UseChaptersMarks;
             }
         }
 

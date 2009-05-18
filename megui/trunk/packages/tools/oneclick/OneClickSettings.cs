@@ -147,6 +147,13 @@ namespace MeGUI
             set { deviceType = value; }
         }
 
+        private bool useChaptersMarks;
+        public bool UseChaptersMarks
+        {
+            get { return useChaptersMarks; }
+            set { useChaptersMarks = value; }
+        }
+
         object ICloneable.Clone()
         {
             return Clone();
