@@ -1,3 +1,13 @@
+0.3.1.1036
+    - (kurtnoise) Added "Reopen Video Preview" button on the mainform (#1996591)
+    - (kurtnoise) Added convertfps=true for DSS() (#2788480)
+    - (kurtnoise) Added support for Matroska xml chapter files (#2789168)
+    - (kurtnoise) [VideoJob] changed Codec.ID to SettingsID for CodecString()
+    - (kurtnoise) [x264Config] added qpfile feature
+    - (kurtnoise) [VideoUtil] add convertChaptersTextFileTox264QPFile()
+    - (kurtnoise) move getTimeCode() function to the Util class.
+    - (kurtnoise) [SettingsForm] test whether or not directories exist for backup_CheckedChanged() event.
+
 0.3.1.1035
     - (kurtnoise) add "Always backup files when needed" option in MeGUI Settings. Enabled by default. If you don't want to backup them or simply remove them, just unchecked it...
     - (kurtnoise) [AutoEncode] enable setting AutoEncode defaults via Settings and uses them in the AutoEncode Form. Patch by Nasty Bob (#2789291)
