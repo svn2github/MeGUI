@@ -127,10 +127,10 @@ namespace MeGUI
         {
             return ID;
         }
-        public static readonly VideoEncoderType XVID = new VideoEncoderType("XVID", VideoCodec.ASP);
-        public static readonly VideoEncoderType X264 = new VideoEncoderType("X264", VideoCodec.AVC);
-        public static readonly VideoEncoderType SNOW = new VideoEncoderType("SNOW", VideoCodec.SNOW);
-        public static readonly VideoEncoderType HFYU = new VideoEncoderType("HFYU", VideoCodec.HFYU);
+        public static readonly VideoEncoderType XVID = new VideoEncoderType("Xvid", VideoCodec.ASP);
+        public static readonly VideoEncoderType X264 = new VideoEncoderType("x264", VideoCodec.AVC);
+        public static readonly VideoEncoderType SNOW = new VideoEncoderType("Snow", VideoCodec.SNOW);
+        public static readonly VideoEncoderType HFYU = new VideoEncoderType("Huffyuv", VideoCodec.HFYU);
     }
     public class AudioEncoderType : IEncoderType, IIDable
     {

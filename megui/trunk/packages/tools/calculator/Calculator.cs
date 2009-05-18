@@ -91,7 +91,7 @@ namespace MeGUI
             this.mainForm = mainForm;
             this.muxProvider = mainForm.MuxProvider;
             this.videoCodec.Items.AddRange(CodecManager.VideoEncoderTypes.ValuesArray);
-            videoCodec.SelectedItem = CodecManager.VideoEncoderTypes["X264"];
+            videoCodec.SelectedItem = CodecManager.VideoEncoderTypes["x264"];
             this.containerFormat.Items.AddRange(muxProvider.GetSupportedContainers().ToArray());
             containerFormat.SelectedItem = ContainerType.MKV;
             audioTabs.Add(audioTrackSizeTab1);
