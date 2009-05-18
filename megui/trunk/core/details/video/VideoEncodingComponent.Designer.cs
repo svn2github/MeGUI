@@ -36,13 +36,13 @@ namespace MeGUI
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
             this.editZonesButton = new System.Windows.Forms.Button();
+            this.videoProfile = new MeGUI.core.gui.ConfigableProfilesControl();
             this.label2 = new System.Windows.Forms.Label();
+            this.videoInput = new MeGUI.FileBar();
+            this.videoOutput = new MeGUI.FileBar();
             this.fileType = new System.Windows.Forms.ComboBox();
             this.videopreview = new System.Windows.Forms.Button();
             this.addPrerenderJob = new System.Windows.Forms.CheckBox();
-            this.videoProfile = new MeGUI.core.gui.ConfigableProfilesControl();
-            this.videoInput = new MeGUI.FileBar();
-            this.videoOutput = new MeGUI.FileBar();
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
@@ -160,49 +160,6 @@ namespace MeGUI
             this.editZonesButton.UseVisualStyleBackColor = true;
             this.editZonesButton.Click += new System.EventHandler(this.editZonesButton_Click);
             // 
-            // label2
-            // 
-            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 66);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(127, 13);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "Encoder settings";
-            // 
-            // fileType
-            // 
-            this.fileType.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.fileType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.fileType.Location = new System.Drawing.Point(136, 91);
-            this.fileType.Name = "fileType";
-            this.fileType.Size = new System.Drawing.Size(136, 21);
-            this.fileType.TabIndex = 14;
-            // 
-            // videopreview
-            // 
-            this.videopreview.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.videopreview.AutoSize = true;
-            this.videopreview.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.videopreview.Location = new System.Drawing.Point(136, 121);
-            this.videopreview.Name = "videopreview";
-            this.videopreview.Size = new System.Drawing.Size(136, 23);
-            this.videopreview.TabIndex = 16;
-            this.videopreview.Text = "Reopen Video Preview";
-            this.videopreview.UseVisualStyleBackColor = true;
-            this.videopreview.Click += new System.EventHandler(this.videopreview_Click);
-            // 
-            // addPrerenderJob
-            // 
-            this.addPrerenderJob.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.addPrerenderJob.AutoSize = true;
-            this.addPrerenderJob.Location = new System.Drawing.Point(3, 124);
-            this.addPrerenderJob.Name = "addPrerenderJob";
-            this.addPrerenderJob.Size = new System.Drawing.Size(127, 17);
-            this.addPrerenderJob.TabIndex = 17;
-            this.addPrerenderJob.Text = "Add pre-rendering job";
-            this.addPrerenderJob.UseVisualStyleBackColor = true;
-            // 
             // videoProfile
             // 
             this.videoProfile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
@@ -213,6 +170,16 @@ namespace MeGUI
             this.videoProfile.Size = new System.Drawing.Size(345, 22);
             this.videoProfile.TabIndex = 12;
             this.videoProfile.SelectedProfileChanged += new System.EventHandler(this.videoProfile_SelectedProfileChanged);
+            // 
+            // label2
+            // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(3, 66);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(127, 13);
+            this.label2.TabIndex = 2;
+            this.label2.Text = "Encoder settings";
             // 
             // videoInput
             // 
@@ -248,6 +215,40 @@ namespace MeGUI
             this.videoOutput.TabIndex = 3;
             this.videoOutput.Title = "Enter name of output";
             this.videoOutput.FileSelected += new MeGUI.FileBarEventHandler(this.videoOutput_FileSelected);
+            // 
+            // fileType
+            // 
+            this.fileType.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.fileType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.fileType.Location = new System.Drawing.Point(136, 91);
+            this.fileType.Name = "fileType";
+            this.fileType.Size = new System.Drawing.Size(136, 21);
+            this.fileType.TabIndex = 14;
+            this.fileType.SelectedIndexChanged += new System.EventHandler(this.fileType_SelectedIndexChanged);
+            // 
+            // videopreview
+            // 
+            this.videopreview.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.videopreview.AutoSize = true;
+            this.videopreview.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.videopreview.Location = new System.Drawing.Point(136, 121);
+            this.videopreview.Name = "videopreview";
+            this.videopreview.Size = new System.Drawing.Size(136, 23);
+            this.videopreview.TabIndex = 16;
+            this.videopreview.Text = "Reopen Video Preview";
+            this.videopreview.UseVisualStyleBackColor = true;
+            this.videopreview.Click += new System.EventHandler(this.videopreview_Click);
+            // 
+            // addPrerenderJob
+            // 
+            this.addPrerenderJob.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.addPrerenderJob.AutoSize = true;
+            this.addPrerenderJob.Location = new System.Drawing.Point(3, 124);
+            this.addPrerenderJob.Name = "addPrerenderJob";
+            this.addPrerenderJob.Size = new System.Drawing.Size(127, 17);
+            this.addPrerenderJob.TabIndex = 17;
+            this.addPrerenderJob.Text = "Add pre-rendering job";
+            this.addPrerenderJob.UseVisualStyleBackColor = true;
             // 
             // VideoEncodingComponent
             // 
