@@ -569,7 +569,8 @@ namespace MeGUI
                     desiredSizeBytes,
                     videoStream.NumberOfFrames,
                     (double)videoStream.Framerate,
-                    out videoSize);
+                    out videoSize,
+                    string.Empty);
 
                 this.videoSize.Text = new FileSize(Unit.KB, videoSize).ToString();
                 this.projectedBitrateKBits.Text = bitrateKbits.ToString();
@@ -606,7 +607,8 @@ namespace MeGUI
                     desiredBitrate,
                     videoStream.NumberOfFrames,
                     (double)videoStream.Framerate,
-                    out rawVideoSize) / 1024L ;
+                    out rawVideoSize,
+                    string.Empty) / 1024L ;
                 this.videoSize.Text = new FileSize(Unit.KB, rawVideoSize).ToString();
                 this.targetSize.Value = new FileSize(Unit.MB, outputSize);
             }

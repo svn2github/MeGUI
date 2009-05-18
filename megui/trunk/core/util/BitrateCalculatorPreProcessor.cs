@@ -67,7 +67,7 @@ namespace MeGUI.core.util
             try
             {
                 bitrateKBits = BitrateCalculator.CalculateBitrateKBits(job.Settings.Codec, job.Settings.NbBframes > 0, b.Container,
-                audioStreams.ToArray(), b.DesiredSize.Bytes, framecount, framerate, out videoSizeKB);
+                audioStreams.ToArray(), b.DesiredSize.Bytes, framecount, framerate, out videoSizeKB, string.Empty);
             }
             catch (CalculationException e)
             {

@@ -56,7 +56,7 @@ namespace MeGUI
         // FileSize desiredSize, 
         // out FileSize targetVideoSize
         public BitrateCalculator(VideoCodec codec, bool useBframes, ContainerType container, 
-            AudioBitrateCalculationStream[] audioStreams, ulong nbOfFrames, double framerate)
+            AudioBitrateCalculationStream[] audioStreams, ulong nbOfFrames, double framerate, string extra)
 		{
             nbOfSeconds = (decimal)nbOfFrames / (decimal)framerate;
 
@@ -69,11 +69,14 @@ namespace MeGUI
                 AudioSize += s.Size ?? FileSize.Empty;
                 AudioOverhead += getAudioOverhead(container, s.AType, nbOfSeconds, nbOfFrames);
             }
+
+            ExtraSize = (!string.IsNullOrEmpty(extra)) ? FileSize.Parse(extra) : FileSize.Empty; 
         }
 
         public FileSize VideoOverhead;
         public FileSize AudioOverhead;
         public FileSize AudioSize;
+        public FileSize ExtraSize;
 
         private decimal nbOfSeconds;
 
@@ -81,7 +84,7 @@ namespace MeGUI
         {
             try
             {
-                FileSize videoSize = desiredSize - VideoOverhead - AudioOverhead - AudioSize;
+                FileSize videoSize = desiredSize - VideoOverhead - AudioOverhead - AudioSize - ExtraSize;
                 ulong sizeInBits = videoSize.Bytes * 8;
                 return new Tuple<ulong, FileSize>((ulong)(sizeInBits / (nbOfSeconds * 1000)), videoSize);
             }
@@ -98,7 +101,7 @@ namespace MeGUI
 
             FileSize videoSize = new FileSize(Unit.B, (nbOfSeconds * bytesPerSecond));
 
-            return new Tuple<FileSize, FileSize>(videoSize + VideoOverhead + AudioOverhead + AudioSize, videoSize);
+            return new Tuple<FileSize, FileSize>(videoSize + VideoOverhead + AudioOverhead + AudioSize + ExtraSize, videoSize);
         }
 
 
@@ -203,18 +206,18 @@ namespace MeGUI
         }
         #endregion
 
-        public static long CalculateFileSizeKB(VideoCodec vCodec, bool p, ContainerType containerType, AudioBitrateCalculationStream[] audioStreams, int bitrate, ulong nbOfFrames, double framerate, out int vidSize)
+        public static long CalculateFileSizeKB(VideoCodec vCodec, bool p, ContainerType containerType, AudioBitrateCalculationStream[] audioStreams, int bitrate, ulong nbOfFrames, double framerate, out int vidSize, string extra)
         {
-            BitrateCalculator c = new BitrateCalculator(vCodec, p, containerType, audioStreams, nbOfFrames, framerate);
+            BitrateCalculator c = new BitrateCalculator(vCodec, p, containerType, audioStreams, nbOfFrames, framerate, extra);
             FileSize a, b;
             c.getFileAndVideoSize((ulong)bitrate).get(out a, out b);
             vidSize = (int)b.KB;
             return (long)a.KB;
         }
 
-        public static int CalculateBitrateKBits(VideoCodec vCodec, bool p, ContainerType containerType, AudioBitrateCalculationStream[] audioStreams, ulong muxedSizeBytes, ulong numberOfFrames, double framerate, out ulong videoSizeKBs)
+        public static int CalculateBitrateKBits(VideoCodec vCodec, bool p, ContainerType containerType, AudioBitrateCalculationStream[] audioStreams, ulong muxedSizeBytes, ulong numberOfFrames, double framerate, out ulong videoSizeKBs, string extra)
         {
-            BitrateCalculator c = new BitrateCalculator(vCodec, p, containerType, audioStreams, numberOfFrames, framerate);
+            BitrateCalculator c = new BitrateCalculator(vCodec, p, containerType, audioStreams, numberOfFrames, framerate, extra);
             FileSize b;
             ulong a;
             c.getBitrateAndVideoSize(new FileSize(Unit.B, muxedSizeBytes)).get(out a, out b);
