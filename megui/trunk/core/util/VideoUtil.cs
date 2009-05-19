@@ -491,8 +491,7 @@ namespace MeGUI
                 MessageBox.Show("The following error ocurred when parsing the log file " + logFile + "\r\n" + i.Message, "Error parsing log file", MessageBoxButtons.OK);
                 audioTrackIDs.Clear();
             }
-        }
-        
+        }   
 		#endregion
 		#region dgindex preprocessing
 		/// <summary>
@@ -699,7 +698,7 @@ namespace MeGUI
                         return string.Format("AviSynth clip is in {0} not in YV12, even though ConvertToYV12() has been appended.", avi.Clip.OriginalColorspace.ToString());
                     }
 
-                    VideoCodecSettings settings = mainForm.Video.CurrentSettings;
+                    VideoCodecSettings settings = GetCurrentVideoSettings();
 
                     if (settings != null && settings.SettingsID != "x264") // mod16 restriction
                     {
@@ -733,6 +732,15 @@ namespace MeGUI
                 return false; 
             }
             return true;
+        }
+
+        delegate VideoCodecSettings CurrentSettingsDelegate();
+        private VideoCodecSettings GetCurrentVideoSettings()
+        {
+            if (mainForm.InvokeRequired)
+                return (VideoCodecSettings)mainForm.Invoke(new CurrentSettingsDelegate(GetCurrentVideoSettings));
+            else
+                return mainForm.Video.CurrentSettings;
         }
         #endregion
 
