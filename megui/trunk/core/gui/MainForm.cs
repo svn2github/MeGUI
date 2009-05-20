@@ -1738,10 +1738,10 @@ namespace MeGUI
             PackageSystem.JobProcessors.Register(VobSubIndexer.Factory);
             PackageSystem.JobProcessors.Register(Joiner.Factory);
             PackageSystem.JobProcessors.Register(MeGUI.packages.tools.besplitter.Splitter.Factory);
+            PackageSystem.MuxerProviders.Register(new AVIMuxGUIMuxerProvider());
+            PackageSystem.MuxerProviders.Register(new TSMuxerProvider());            
             PackageSystem.MuxerProviders.Register(new MKVMergeMuxerProvider());
             PackageSystem.MuxerProviders.Register(new MP4BoxMuxerProvider());
-            PackageSystem.MuxerProviders.Register(new AVIMuxGUIMuxerProvider());
-            PackageSystem.MuxerProviders.Register(new TSMuxerProvider());
             PackageSystem.Tools.Register(new CutterTool());
             PackageSystem.Tools.Register(new AviSynthWindowTool());
             PackageSystem.Tools.Register(new AutoEncodeTool());
