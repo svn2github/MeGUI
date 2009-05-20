@@ -1,3 +1,11 @@
+0.3.1.1037
+    - (kurtnoise) [VideoUtil] fix an invalid UI interaction from background. Patch by ViceIce (#2793562)
+    - (kurtnoise) [One-Click] added "force using key-frames for chapters marks". When this is enabled and if the video compressor selected is x264 *and* if a chapter file is found, megui will create an x264 qp file automatically and will use it to force start chapter frame as key-frame. Useful for splitting...In the near future, chapter file restriction will be removed.
+    - (kurtnoise) Added Extra part for the Bitrate Calculator. You can load any files there (subtitles, pictures, etc). This way, files size from this part is also taken into account during final bitrate calculation. Not tested too much though...  
+    - (kurtnoise) [VideoEncodingComponent] enable fileType_SelectedIndexChanged event which was disabled previously (#2793289)
+    - (kurtnoise) [Calculator] cosmetic
+    - (kurtnoise) [CodecManager] better description for VideoEncoderType
+
 0.3.1.1036
     - (kurtnoise) Added "Reopen Video Preview" button on the mainform (#1996591)
     - (kurtnoise) Added convertfps=true for DSS() (#2788480)
