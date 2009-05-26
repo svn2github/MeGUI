@@ -102,6 +102,7 @@ namespace MeGUI
 		{
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ChapterCreator));
             this.chaptersGroupbox = new System.Windows.Forms.GroupBox();
+            this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.saveButton = new System.Windows.Forms.Button();
             this.loadButton = new System.Windows.Forms.Button();
             this.chapterName = new System.Windows.Forms.TextBox();
@@ -118,7 +119,6 @@ namespace MeGUI
             this.removeZoneButton = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
-            this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.chaptersGroupbox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -143,6 +143,16 @@ namespace MeGUI
             this.chaptersGroupbox.TabIndex = 23;
             this.chaptersGroupbox.TabStop = false;
             this.chaptersGroupbox.Text = "Chapters";
+            // 
+            // helpButton1
+            // 
+            this.helpButton1.ArticleName = "Chapter creator";
+            this.helpButton1.AutoSize = true;
+            this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.helpButton1.Location = new System.Drawing.Point(16, 347);
+            this.helpButton1.Name = "helpButton1";
+            this.helpButton1.Size = new System.Drawing.Size(38, 23);
+            this.helpButton1.TabIndex = 41;
             // 
             // saveButton
             // 
@@ -275,9 +285,9 @@ namespace MeGUI
             // openFileDialog
             // 
             this.openFileDialog.DefaultExt = "txt";
-            this.openFileDialog.Filter = "IFO Files (*.ifo)|*.ifo|Chapter Files (*.txt)|*.txt|All Files supported (*.ifo;*." +
-                "txt)|*.ifo;*.txt";
-            this.openFileDialog.FilterIndex = 3;
+            this.openFileDialog.Filter = "Blu-ray Playlist Files (*.mpls)|*.mpls|IFO Files (*.ifo)|*.ifo|Chapter Files (*.t" +
+                "xt)|*.txt|All Files supported (*.ifo;*.txt;*.mpls)|*.ifo;*.mpls;*.txt";
+            this.openFileDialog.FilterIndex = 4;
             // 
             // saveFileDialog
             // 
@@ -285,16 +295,6 @@ namespace MeGUI
             this.saveFileDialog.Filter = "x264 qp Files (.qpf)|*.qpf|Chapter Files (*.txt)|*.txt|All supported Files (*.qpf" +
                 ";*.txt)|*.qpf;*.txt";
             this.saveFileDialog.FilterIndex = 3;
-            // 
-            // helpButton1
-            // 
-            this.helpButton1.ArticleName = "Chapter creator";
-            this.helpButton1.AutoSize = true;
-            this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.helpButton1.Location = new System.Drawing.Point(16, 347);
-            this.helpButton1.Name = "helpButton1";
-            this.helpButton1.Size = new System.Drawing.Size(38, 23);
-            this.helpButton1.TabIndex = 41;
             // 
             // ChapterCreator
             // 
@@ -494,6 +494,13 @@ namespace MeGUI
                 if (openFileDialog.FileName.ToLower().EndsWith("ifo"))
                 {
                     ChapterExtractor ex = new IfoExtractor();
+                    pgc = ex.GetStreams(openFileDialog.FileName)[0];
+                    FreshChapterView();
+                    updateTimeLine();
+                }
+                else if (openFileDialog.FileName.ToLower().EndsWith("mpls"))
+                {
+                    ChapterExtractor ex = new MplsExtractor();
                     pgc = ex.GetStreams(openFileDialog.FileName)[0];
                     FreshChapterView();
                     updateTimeLine();

@@ -624,12 +624,20 @@
     <Compile Include="packages\tools\calculator\Calculator.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="packages\tools\chaptercreator\BDInfoExtractor.cs" />
+    <Compile Include="packages\tools\chaptercreator\BDInfo\LanguageCodes.cs" />
+    <Compile Include="packages\tools\chaptercreator\BDInfo\TSPlaylistFile.cs" />
+    <Compile Include="packages\tools\chaptercreator\BDInfo\TSStream.cs" />
+    <Compile Include="packages\tools\chaptercreator\BDInfo\TSStreamClip.cs" />
+    <Compile Include="packages\tools\chaptercreator\BDInfo\TSStreamClipFile.cs" />
+    <Compile Include="packages\tools\chaptercreator\BlurayExtractor.cs" />
     <Compile Include="packages\tools\chaptercreator\ChapterCreator.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="packages\tools\chaptercreator\ChapterExtractor.cs" />
     <Compile Include="packages\tools\chaptercreator\ChapterInfo.cs" />
     <Compile Include="packages\tools\chaptercreator\IfoExtractor.cs" />
+    <Compile Include="packages\tools\chaptercreator\MplsExtractor.cs" />
     <Compile Include="packages\tools\cqmeditor\QuantizerMatrixDialog.cs">
       <SubType>Form</SubType>
     </Compile>
