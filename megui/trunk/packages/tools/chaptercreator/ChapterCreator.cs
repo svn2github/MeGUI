@@ -102,7 +102,6 @@ namespace MeGUI
 		{
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ChapterCreator));
             this.chaptersGroupbox = new System.Windows.Forms.GroupBox();
-            this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.saveButton = new System.Windows.Forms.Button();
             this.loadButton = new System.Windows.Forms.Button();
             this.chapterName = new System.Windows.Forms.TextBox();
@@ -119,6 +118,7 @@ namespace MeGUI
             this.removeZoneButton = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
+            this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.chaptersGroupbox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -144,16 +144,6 @@ namespace MeGUI
             this.chaptersGroupbox.TabStop = false;
             this.chaptersGroupbox.Text = "Chapters";
             // 
-            // helpButton1
-            // 
-            this.helpButton1.ArticleName = "Chapter creator";
-            this.helpButton1.AutoSize = true;
-            this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.helpButton1.Location = new System.Drawing.Point(16, 347);
-            this.helpButton1.Name = "helpButton1";
-            this.helpButton1.Size = new System.Drawing.Size(38, 23);
-            this.helpButton1.TabIndex = 41;
-            // 
             // saveButton
             // 
             this.saveButton.Location = new System.Drawing.Point(392, 347);
@@ -178,7 +168,7 @@ namespace MeGUI
             this.chapterName.Name = "chapterName";
             this.chapterName.Size = new System.Drawing.Size(306, 21);
             this.chapterName.TabIndex = 38;
-            this.chapterName.Text = "Chapter1";
+            this.chapterName.Text = "Chapter 01";
             this.chapterName.TextChanged += new System.EventHandler(this.chapterName_TextChanged);
             // 
             // chapterNameLabel
@@ -292,7 +282,19 @@ namespace MeGUI
             // saveFileDialog
             // 
             this.saveFileDialog.DefaultExt = "txt";
-            this.saveFileDialog.Filter = "Chapter Files (*.txt)|*.txt";
+            this.saveFileDialog.Filter = "x264 qp Files (.qpf)|*.qpf|Chapter Files (*.txt)|*.txt|All supported Files (*.qpf" +
+                ";*.txt)|*.qpf;*.txt";
+            this.saveFileDialog.FilterIndex = 3;
+            // 
+            // helpButton1
+            // 
+            this.helpButton1.ArticleName = "Chapter creator";
+            this.helpButton1.AutoSize = true;
+            this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.helpButton1.Location = new System.Drawing.Point(16, 347);
+            this.helpButton1.Name = "helpButton1";
+            this.helpButton1.Size = new System.Drawing.Size(38, 23);
+            this.helpButton1.TabIndex = 41;
             // 
             // ChapterCreator
             // 
@@ -571,40 +573,11 @@ namespace MeGUI
 		{
 			if (this.saveFileDialog.ShowDialog() == DialogResult.OK)
 			{
-				StreamWriter sw = null;
-				try
-				{	// ANSI System instead of UTF-8 (needed for the mp4 muxer)
-					sw = new StreamWriter(saveFileDialog.FileName, false, System.Text.Encoding.Default);
-					int index = 1;
-					foreach (Chapter chap in chapters)
-					{
-						string lineIdent = "CHAPTER";
-						if (index <= 9)
-							lineIdent += "0";
-						lineIdent += index;
-						sw.WriteLine(lineIdent + "=" + chap.timecode);
-						sw.WriteLine(lineIdent + "NAME=" + chap.name);
-						index++;
-					}
-				}
-				catch (Exception f)
-				{
-					Console.Write(f.Message);
-				}
-				finally
-				{
-					if (sw != null)
-					{
-						try
-						{
-							sw.Close();
-						}
-						catch (Exception f)
-						{
-							Console.Write(f.Message);
-						}
-					}
-				}
+                switch (saveFileDialog.FilterIndex)
+                {
+                    case 1: pgc.SaveQpfile(saveFileDialog.FileName); break;
+                    default: pgc.SaveText(saveFileDialog.FileName); break;
+                }
 			}
 		}
 		#endregion
