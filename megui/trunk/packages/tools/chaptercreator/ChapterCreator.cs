@@ -23,6 +23,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 using MeGUI.core.util;
@@ -41,6 +42,8 @@ namespace MeGUI
 		private VideoPlayer player;
 		private int introEndFrame = 0, creditsStartFrame = 0;
         private MainForm mainForm;
+        private ChapterInfo pgc;
+        private int intIndex;
 
 		private System.Windows.Forms.GroupBox chaptersGroupbox;
 		private System.Windows.Forms.Button addZoneButton;
@@ -97,6 +100,7 @@ namespace MeGUI
 		/// </summary>
 		private void InitializeComponent()
 		{
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ChapterCreator));
             this.chaptersGroupbox = new System.Windows.Forms.GroupBox();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.saveButton = new System.Windows.Forms.Button();
@@ -280,7 +284,9 @@ namespace MeGUI
             // openFileDialog
             // 
             this.openFileDialog.DefaultExt = "txt";
-            this.openFileDialog.Filter = "Chapter Files (*.txt)|*.txt";
+            this.openFileDialog.Filter = "IFO Files (*.ifo)|*.ifo|Chapter Files (*.txt)|*.txt|All Files supported (*.ifo;*." +
+                "txt)|*.ifo;*.txt";
+            this.openFileDialog.FilterIndex = 3;
             // 
             // saveFileDialog
             // 
@@ -294,10 +300,10 @@ namespace MeGUI
             this.Controls.Add(this.chaptersGroupbox);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "ChapterCreator";
-            this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.Text = "MeGUI - Chapter Creator";
             this.Load += new System.EventHandler(this.ChapterCreator_Load);
@@ -326,6 +332,38 @@ namespace MeGUI
                     item.BackColor = Color.WhiteSmoke;
 			}
 		}
+
+        private void FreshChapterView()
+        {
+            this.Cursor = Cursors.WaitCursor;
+            try
+            {
+                this.chapterListView.Items.Clear();
+                //fill list
+                foreach (Chapter c in pgc.Chapters)
+                {
+                    //don't show short last chapter depending on settings
+                      if (pgc.Duration != TimeSpan.Zero && 
+                      c.Equals(pgc.Chapters.Last()) && (pgc.Duration.Add(-c.Time).TotalSeconds < 10))
+                       continue;
+
+                    chapterListView.Items.Add(new ListViewItem(new string[] { c.Time.ToString(), c.Name }));
+                }
+            }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
+            finally { this.Cursor = Cursors.Default; }
+        }
+
+        private void updateTimeLine()
+        {
+            for (int i = 0; i < chapterListView.Items.Count; i++)
+            {
+                if (chapterListView.Items[i].SubItems[0].Text.Length == 8)
+                    chapterListView.Items[i].SubItems[0].Text = chapterListView.Items[i].SubItems[0].Text + ".000";
+                else
+                    chapterListView.Items[i].SubItems[0].Text = chapterListView.Items[i].SubItems[0].Text.Substring(0, 12);
+            }
+        }
 		#endregion
 		#region buttons
 		private void removeZoneButton_Click(object sender, System.EventArgs e)
@@ -376,16 +414,14 @@ namespace MeGUI
 
 		private void chapterListView_SelectedIndexChanged(object sender, System.EventArgs e)
 		{
-			if (chapterListView.SelectedIndices.Count != 0)
-			{
-				if (chapterListView.SelectedIndices.Count == 1)
-				{
-					ListViewItem item = chapterListView.SelectedItems[0];
-					Chapter chap = (Chapter)item.Tag;
-					startTime.Text = chap.timecode;
-					chapterName.Text = chap.name;
-				}
-			}
+            ListView lv = (ListView)sender;
+
+            if (lv.SelectedItems.Count == 1) intIndex = lv.SelectedItems[0].Index;
+            if (pgc.Chapters.Count > 0)
+            {
+                this.startTime.Text = FileUtil.ToShortString(pgc.Chapters[intIndex].Time);
+                this.chapterName.Text = pgc.Chapters[intIndex].Name;
+            }
 		}
 		private void addZoneButton_Click(object sender, System.EventArgs e)
 		{
@@ -452,12 +488,22 @@ namespace MeGUI
 		{
 			if (this.openFileDialog.ShowDialog() == DialogResult.OK)
 			{
-				Chapter[] newChapters = loadChapterFile(openFileDialog.FileName);
-				if (newChapters != null)
-				{
-					this.chapters = newChapters;
-					this.showChapters(this.chapters);
-				}
+                if (openFileDialog.FileName.ToLower().EndsWith("ifo"))
+                {
+                    ChapterExtractor ex = new IfoExtractor();
+                    pgc = ex.GetStreams(openFileDialog.FileName)[0];
+                    FreshChapterView();
+                    updateTimeLine();
+                }
+                else
+                {
+                    Chapter[] newChapters = loadChapterFile(openFileDialog.FileName);
+                    if (newChapters != null)
+                    {
+                        this.chapters = newChapters;
+                        this.showChapters(this.chapters);
+                    }
+                }
 			}
 		}
 		/// <summary>
@@ -663,6 +709,16 @@ namespace MeGUI
 		public string timecode;
         public TimeSpan StartTime;
 		public string name;
+
+        //add-on
+        public TimeSpan Time { get; set; }
+        public string Name { get; set; }
+
+        //public string Lang { get; set; }
+        public override string ToString()
+        {
+            return Time.ToString() + ": " + Name;
+        }
 	}
 
     public class ChapterCreatorTool : MeGUI.core.plugins.interfaces.ITool

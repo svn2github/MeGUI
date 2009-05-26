@@ -193,6 +193,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>.\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
+    <Reference Include="LinqBridge, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c2b14eb747628076, processorArchitecture=MSIL" />
     <Reference Include="MediaInfoWrapper, Version=0.7.4.4, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>.\MediaInfoWrapper.dll</HintPath>
@@ -256,6 +257,7 @@
     </Content>
     <Content Include="lib\AvisynthWrapper.dll" />
     <Content Include="lib\ICSharpCode.SharpZipLib.dll" />
+    <Content Include="lib\LinqBridge.dll" />
     <Content Include="lib\MediaInfo.dll" />
     <Content Include="lib\MediaInfoWrapper.dll" />
     <Content Include="lib\MessageBoxExLib.dll" />
@@ -704,6 +706,9 @@
     <Compile Include="packages\tools\chaptercreator\ChapterCreator.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="packages\tools\chaptercreator\ChapterExtractor.cs" />
+    <Compile Include="packages\tools\chaptercreator\ChapterInfo.cs" />
+    <Compile Include="packages\tools\chaptercreator\IfoExtractor.cs" />
     <Compile Include="packages\tools\cqmeditor\QuantizerMatrixDialog.cs">
       <SubType>Form</SubType>
     </Compile>
