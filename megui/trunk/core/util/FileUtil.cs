@@ -172,6 +172,21 @@ namespace MeGUI.core.util
         }
 
         /// <summary>
+        /// Returns TimeSpan value formatted
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static string ToShortString(TimeSpan ts)
+        {
+            string time;
+            time = ts.Hours.ToString("00");
+            time = time + ":" + ts.Minutes.ToString("00");
+            time = time + ":" + ts.Seconds.ToString("00");
+            time = time + "." + ts.Milliseconds.ToString("000");
+            return time;
+        }
+
+        /// <summary>
         /// Adds extra to the filename, modifying the filename but keeping the extension and folder the same.
         /// </summary>
         /// <param name="filename"></param>
