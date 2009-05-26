@@ -179,6 +179,7 @@ namespace MeGUI
             this.chapterName.Size = new System.Drawing.Size(306, 21);
             this.chapterName.TabIndex = 38;
             this.chapterName.Text = "Chapter1";
+            this.chapterName.TextChanged += new System.EventHandler(this.chapterName_TextChanged);
             // 
             // chapterNameLabel
             // 
@@ -701,6 +702,25 @@ namespace MeGUI
             if (VistaStuff.IsVistaOrNot)
             {
                 VistaStuff.SetWindowTheme(chapterListView.Handle, "explorer", null);
+            }
+        }
+
+        private void chapterName_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                intIndex = chapterListView.SelectedIndices[0];
+                pgc.Chapters[intIndex] = new Chapter()
+                {
+                    Time = TimeSpan.Parse(startTime.Text),
+                    Name = chapterName.Text
+                };
+                chapterListView.SelectedItems[0].SubItems[0].Text = startTime.Text;
+                chapterListView.SelectedItems[0].SubItems[1].Text = chapterName.Text;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
 	}
