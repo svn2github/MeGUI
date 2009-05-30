@@ -1,3 +1,16 @@
+0.3.1.1038
+    - (sharktooth) [x264Encoder.cs] Added "--senecut -1" in case of adaptive b-frames option is set to 0-Off.
+    - (sharktooth) [x264Encoder.cs] Added "--fullrange on" flag.
+    - (kurtnoise) [ChapterCreator] add Blu-ray Playlist input files support.
+    - (kurtnoise) [ChapterCreator] add x264 qp file as saving format.
+    - (kurtnoise) [ChapterCreator] added ChapterNameText_Changed Event.
+    - (kurtnoise) add LinqBridge library to the project files and improve the Chapter Creator. Now, it's able to read directly chapters from IFO files. Thanks to Jarrett Vance for the code from ChapterGrabber.
+    - (kurtnoise) [IFOparser] add some useful functions.
+    - (kurtnoise) [FileUtil] add ToShortString() function.
+    - (kurtnoise) update MediaInfo library and its wrapper to the latest release (0.7.16)
+    - (kurtnoise) [MainForm] cosmetic - put muxers in alphabetical order
+
+
 0.3.1.1037
     - (kurtnoise) [VideoUtil] fix an invalid UI interaction from background. Patch by ViceIce (#2793562)
     - (kurtnoise) [One-Click] added "force using key-frames for chapters marks". When this is enabled and if the video compressor selected is x264 *and* if a chapter file is found, megui will create an x264 qp file automatically and will use it to force start chapter frame as key-frame. Useful for splitting...In the near future, chapter file restriction will be removed.
