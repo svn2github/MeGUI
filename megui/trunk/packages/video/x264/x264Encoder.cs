@@ -158,8 +158,14 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             if (xs.NbBframes != 0) // 0 is default value, adaptive and pyramid are conditional on b frames being enabled
             {
                 sb.Append("--bframes " + xs.NbBframes + " ");
-                if (xs.NewAdaptiveBFrames != 1)
+                if (xs.NewAdaptiveBFrames > 1)
+                {
                     sb.Append("--b-adapt " + xs.NewAdaptiveBFrames + " ");
+                }
+                else if (xs.NewAdaptiveBFrames < 1)
+                {
+                    sb.Append("--b-adapt " + xs.NewAdaptiveBFrames + " --scenecut -1 ");
+                }
                 if (xs.NbBframes > 1 && xs.BFramePyramid) // pyramid needs a minimum of 2 b frames
                     sb.Append("--b-pyramid ");
                 if (xs.WeightedBPrediction)
