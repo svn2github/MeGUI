@@ -352,6 +352,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             else
                 sb.Append("--output " + "\"" + output + "\" ");
             sb.Append("\"" + input + "\" ");
+            sb.Append("--fullrange on ");
             if (!xs.CustomEncoderOptions.Equals("")) // add custom encoder options
                 sb.Append(xs.CustomEncoderOptions);
             return sb.ToString();
