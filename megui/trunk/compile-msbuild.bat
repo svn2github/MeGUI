@@ -23,6 +23,7 @@ copy .\lib\MessageBoxExLib.dll .\Dist\libs
 copy .\lib\ICSharpCode.SharpZipLib.dll .\Dist\libs
 copy .\lib\MediaInfo.dll .\Dist\libs
 copy .\lib\MediaInfoWrapper.dll .\Dist\libs
+copy .\lib\LinqBridge.dll .\Dist\libs
 md Dist\avswrapper
 copy .\lib\AviSynthWrapper.dll .\Dist\avswrapper
 md Dist\Data
