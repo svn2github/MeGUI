@@ -1,3 +1,8 @@
+0.3.1.1039
+    - (sharktooth) [x264] Made FullRange an option.
+    - (sharktooth) Added AvisynthWrapper solution and project files for VS2008
+    - (sharktooth) Updated compilation script
+
 0.3.1.1038
     - (sharktooth) [x264Encoder.cs] Added "--senecut -1" in case of adaptive b-frames option is set to 0-Off.
     - (sharktooth) [x264Encoder.cs] Added "--fullrange on" flag.
