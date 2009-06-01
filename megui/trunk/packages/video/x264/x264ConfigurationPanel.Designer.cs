@@ -82,6 +82,7 @@ namespace MeGUI.packages.video.x264
             this.x264NumberOfRefFramesLabel = new System.Windows.Forms.Label();
             this.trellisLabel = new System.Windows.Forms.Label();
             this.x264RateControlMiscGroupbox = new System.Windows.Forms.GroupBox();
+            this.x264FullRange = new System.Windows.Forms.CheckBox();
             this.interlaced = new System.Windows.Forms.CheckBox();
             this.NoiseReduction = new System.Windows.Forms.TextBox();
             this.NoiseReductionLabel = new System.Windows.Forms.Label();
@@ -957,6 +958,7 @@ namespace MeGUI.packages.video.x264
             // 
             // x264RateControlMiscGroupbox
             // 
+            this.x264RateControlMiscGroupbox.Controls.Add(this.x264FullRange);
             this.x264RateControlMiscGroupbox.Controls.Add(this.interlaced);
             this.x264RateControlMiscGroupbox.Controls.Add(this.NoiseReduction);
             this.x264RateControlMiscGroupbox.Controls.Add(this.NoiseReductionLabel);
@@ -970,6 +972,17 @@ namespace MeGUI.packages.video.x264
             this.x264RateControlMiscGroupbox.TabIndex = 1;
             this.x264RateControlMiscGroupbox.TabStop = false;
             this.x264RateControlMiscGroupbox.Text = "Misc";
+            // 
+            // x264FullRange
+            // 
+            this.x264FullRange.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.x264FullRange.Location = new System.Drawing.Point(8, 116);
+            this.x264FullRange.Name = "x264FullRange";
+            this.x264FullRange.Size = new System.Drawing.Size(193, 24);
+            this.x264FullRange.TabIndex = 7;
+            this.x264FullRange.Text = "Full Range";
+            this.x264FullRange.UseVisualStyleBackColor = true;
+            this.x264FullRange.CheckedChanged += new System.EventHandler(this.x264FullRange_CheckedChanged);
             // 
             // interlaced
             // 
@@ -2174,5 +2187,6 @@ namespace MeGUI.packages.video.x264
         private System.Windows.Forms.TextBox qpfile;
         private System.Windows.Forms.Button qpfileOpenButton;
         private System.Windows.Forms.CheckBox useQPFile;
+        private System.Windows.Forms.CheckBox x264FullRange;
     }
 }

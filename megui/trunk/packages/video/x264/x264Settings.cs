@@ -61,7 +61,7 @@ namespace MeGUI
 		decimal ipFactor, pbFactor, chromaQPOffset, vbvInitialBuffer, bitrateVariance, quantCompression, 
 			tempComplexityBlur, tempQuanBlurCC, scdSensitivity, bframeBias, quantizerCrf, AQStrength, psyRDO, psyTrellis;
 		bool deblock, cabac, p4x4mv, p8x8mv, b8x8mv, i4x4mv, i8x8mv, weightedBPrediction, encodeInterlaced,
-			bFramePyramid, chromaME, adaptiveDCT, lossless, mixedRefs, NoFastPSkip, psnrCalc, noDctDecimate, ssimCalc, useQPFile;
+			bFramePyramid, chromaME, adaptiveDCT, lossless, mixedRefs, NoFastPSkip, psnrCalc, noDctDecimate, ssimCalc, useQPFile, FullRange;
 		string quantizerMatrix, qpfile;
 		#region constructor
         /// <summary>
@@ -132,6 +132,7 @@ namespace MeGUI
             AQStrength = new decimal(1.0);
             useQPFile = false;
             qpfile = "";
+            FullRange = false;
 		}
 		#endregion
 		#region properties
@@ -421,6 +422,11 @@ namespace MeGUI
             get { return qpfile; }
             set { qpfile = value; }
         }
+        public bool fullRange
+        {
+            get { return FullRange; }
+            set { FullRange = value; }
+        }
         #endregion
         public override bool UsesSAR
         {
@@ -499,7 +505,8 @@ namespace MeGUI
                 this.X264Trellis != otherSettings.X264Trellis ||
                 this.AQmode != otherSettings.AQmode ||
                 this.AQstrength != otherSettings.AQstrength ||
-                this.UseQPFile != otherSettings.UseQPFile
+                this.UseQPFile != otherSettings.UseQPFile ||
+                this.fullRange != otherSettings.fullRange
                 )
                 return true;
             else

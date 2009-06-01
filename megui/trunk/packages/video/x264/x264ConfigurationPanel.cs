@@ -558,6 +558,7 @@ namespace MeGUI.packages.video.x264
                 xs.AQstrength = numAQStrength.Value;
                 xs.UseQPFile = useQPFile.Checked;
                 xs.QPFile = this.qpfile.Text;
+                xs.fullRange = this.x264FullRange.Checked;
                 return xs;
             }
             set
@@ -653,6 +654,7 @@ namespace MeGUI.packages.video.x264
                 else
                 // ---
                     cbAQMode.SelectedIndex = xs.AQmode;
+                x264FullRange.Checked = xs.fullRange;
                 numAQStrength.Value = xs.AQstrength;
                 NoiseReduction.Text = xs.NoiseReduction.ToString();
                 updating = false;
@@ -1001,6 +1003,11 @@ namespace MeGUI.packages.video.x264
                 this.qpfile.Text = openFileDialog.FileName;
                 this.showCommandLine();
             }
+        }
+
+        private void x264FullRange_CheckedChanged(object sender, EventArgs e)
+        {
+            genericUpdate();
         }
     }
 }
