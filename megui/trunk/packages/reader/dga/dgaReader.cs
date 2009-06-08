@@ -73,7 +73,10 @@ namespace MeGUI
         public dgaFile(string fileName)
         {
             this.fileName = fileName;
-            reader = AvsFile.ParseScript("AVCSource(\"" + this.fileName + "\")");
+            bool flag = ScriptServer.checkDGDecodeNVdll();
+            if (flag)
+                 reader = AvsFile.ParseScript("DGSource(\"" + this.fileName + "\")");
+            else reader = AvsFile.ParseScript("AVCSource(\"" + this.fileName + "\")");
             this.readFileProperties();
         }
 

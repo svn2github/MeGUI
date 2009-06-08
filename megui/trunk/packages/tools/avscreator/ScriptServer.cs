@@ -121,6 +121,8 @@ namespace MeGUI
 
         public static readonly IList ListOfNvDeIntType = EnumProxy.CreateArray(typeof(NvDeinterlacerType));
 
+        private static MainForm mainForm = new MainForm();
+
         public static string CreateScriptFromTemplate(string template, string inputLine, string cropLine, string resizeLine, string denoiseLines, string deinterlaceLines)
         {
             string newScript = template;
@@ -135,7 +137,8 @@ namespace MeGUI
         public static string GetInputLine(string input, bool interlaced, PossibleSources sourceType,
             bool colormatrix, bool mpeg2deblock, bool flipVertical, double fps)
         {
-            string inputLine = "#input";
+            string inputLine = "#input"; 
+            bool flag = checkDGDecodeNVdll();
 
             switch (sourceType)
             {
@@ -153,13 +156,17 @@ namespace MeGUI
                         inputLine += string.Format("\r\nColorMatrix(hints=true{0}, threads=0)", interlaced ? ", interlaced=true" : "");
                     break;
                 case PossibleSources.dga:
-                    inputLine = "AVCSource(\"" + input + "\"";
+                    {
+                        if (flag)
+                             inputLine = "DGSource(\"" + input + "\"";
+                        else inputLine = "AVCSource(\"" + input + "\"";
+                    }
                     break;
                 case PossibleSources.dgm:
-                    inputLine = "MPGSource(\"" + input + "\"";
+                    inputLine = "DGSource(\"" + input + "\"";
                     break;
                 case PossibleSources.dgv:
-                    inputLine = "VC1Source(\"" + input + "\"";
+                    inputLine = "DGSource(\"" + input + "\"";
                     break;
                 case PossibleSources.vdr:
                         inputLine = "AVISource(\"" + input + "\", audio=false)";
@@ -178,6 +185,40 @@ namespace MeGUI
                     break;
             }
             return inputLine;
+        }
+
+        public static bool checkDGDecodeNVdll()
+        {
+            bool flag = false;
+            string dgdecodenv = string.Empty;
+            if (!string.IsNullOrEmpty(MeGUISettings.AvisynthPluginsPath))
+            {
+                dgdecodenv = MeGUISettings.AvisynthPluginsPath + "\\DGDecodeNV.dll";
+                if (File.Exists(dgdecodenv))
+                    flag = true;
+            }
+            else // check somewhere else
+            {                    
+                if (!string.IsNullOrEmpty(mainForm.Settings.DgavcIndexPath))
+                {
+                    dgdecodenv = Path.GetDirectoryName(mainForm.Settings.DgavcIndexPath) + "\\DGDecodeNV.dll";
+                    if (File.Exists(dgdecodenv))
+                        flag = true;
+                }
+                if (!string.IsNullOrEmpty(mainForm.Settings.DgmpgIndexPath) && (!flag))
+                {
+                    dgdecodenv = Path.GetDirectoryName(mainForm.Settings.DgmpgIndexPath) + "\\DGDecodeNV.dll";
+                    if (File.Exists(dgdecodenv))
+                        flag = true;
+                }
+                if (!string.IsNullOrEmpty(mainForm.Settings.Dgvc1IndexPath) && (!flag))
+                {
+                    dgdecodenv = Path.GetDirectoryName(mainForm.Settings.Dgvc1IndexPath) + "\\DGDecodeNV.dll";
+                    if (File.Exists(dgdecodenv))
+                        flag = true;
+                }
+            }
+            return flag;
         }
 
         public static string GetCropLine(bool crop, CropValues cropValues)
