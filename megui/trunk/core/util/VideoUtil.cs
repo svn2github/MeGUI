@@ -282,6 +282,33 @@ namespace MeGUI
                 audioTracks.Clear();
             }
         }
+
+        /// <summary>
+        /// gets chapters from IFO file and save them as Ogg Text File
+        /// </summary>
+        /// <param name="fileName"></param>
+        public static void getChaptersFromIFO(string fileName)
+        {
+            if (Path.GetExtension(fileName.ToLower()) == ".vob")
+            {
+                string ifoFile;
+                string fileNameNoPath = Path.GetFileName(fileName);
+
+                // we check the main IFO
+                if (fileNameNoPath.Substring(0, 4) == "VTS_")
+                    ifoFile = fileName.Substring(0, fileName.LastIndexOf("_")) + "_0.IFO";
+                else ifoFile = Path.ChangeExtension(fileName, ".IFO");
+
+                if (File.Exists(ifoFile))
+                {
+                    ChapterInfo pgc;
+                    ChapterExtractor ex = new IfoExtractor();
+                    pgc = ex.GetStreams(ifoFile)[0];
+                    pgc.SaveText(Path.GetDirectoryName(ifoFile) + "\\" + fileNameNoPath.Substring(0, 6) + " - Chapter Information - OGG.txt");
+                }
+            }            
+        }
+
         /// gets ID from a first video stream using MediaInfo
         /// </summary>
         /// <param name="infoFile">the file to be analyzed</param>
@@ -491,7 +518,19 @@ namespace MeGUI
                 MessageBox.Show("The following error ocurred when parsing the log file " + logFile + "\r\n" + i.Message, "Error parsing log file", MessageBoxButtons.OK);
                 audioTrackIDs.Clear();
             }
-        }   
+        }
+
+        public static List<string> setDeviceTypes(string outputFormat)
+        {
+            List<string> deviceList = new List<string>();
+            switch (outputFormat)
+            {
+                case ".mp4": deviceList.AddRange(new string[] { "iPhone", "iPod", "ISMA", "PSP" }); break;
+                case ".m2ts": deviceList.AddRange(new string[] { "AVCHD", "Blu-ray" }); break;
+            }
+
+            return deviceList;
+        }    
 		#endregion
 		#region dgindex preprocessing
 		/// <summary>
