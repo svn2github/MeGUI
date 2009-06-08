@@ -86,7 +86,7 @@ namespace MeGUI
                 MuxSettings settings = job.Settings;
 
                 sb.Append("-ovc copy -oac copy ");
-                if (settings.MuxedInput.Length > 0)
+                if (!string.IsNullOrEmpty(settings.VideoInput))
                 {
                     sb.Append("\"" + settings.MuxedInput + "\" ");
                 }
@@ -94,7 +94,7 @@ namespace MeGUI
                 {
                     sb.Append("\"" + settings.VideoInput + "\" ");
                 }
-                if (settings.AudioStreams.Count > 0)
+                if (!string.IsNullOrEmpty(settings.MuxedInput))
                 {
                     MuxStream stream = (MuxStream)settings.AudioStreams[0];
                     sb.Append("-audiofile \"" + stream.path + "\" ");

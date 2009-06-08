@@ -204,7 +204,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                 CultureInfo ci = new CultureInfo("en-us");
                 StringBuilder sb = new StringBuilder();
 
-                if (settings.VideoInput.Length > 0)
+                if (!string.IsNullOrEmpty(settings.VideoInput))
                 {
                     sb.Append("-add \"" + settings.VideoInput);
                     if (settings.VideoInput.ToLower().EndsWith(".mp4"))
@@ -221,7 +221,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                         sb.Append(":name=" + settings.VideoName);
                     sb.Append("\"");
                 }
-                if (settings.MuxedInput.Length > 0)
+                if (!string.IsNullOrEmpty(settings.MuxedInput))
                 {
                     sb.Append(" -add \"" + settings.MuxedInput);
                     if (settings.MuxedInput.ToLower().EndsWith(".mp4"))

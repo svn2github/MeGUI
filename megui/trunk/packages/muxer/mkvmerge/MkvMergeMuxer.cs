@@ -99,7 +99,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                 
                 sb.Append("-o \"" + settings.MuxedOutput + "\"");
 
-                if (settings.VideoInput.Length > 0)
+                if (!string.IsNullOrEmpty(settings.VideoInput))
                 {
                     if (settings.VideoInput.ToLower().EndsWith(".mp4") || settings.VideoInput.ToLower().EndsWith(".mkv"))
                          trackID = VideoUtil.getIDFromFirstVideoStream(settings.VideoInput);
@@ -112,7 +112,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                     sb.Append(" -d " + trackID + " -A -S \"" + settings.VideoInput + "\"");                    
                 }
                 
-                if (settings.MuxedInput.Length > 0)
+                if (!string.IsNullOrEmpty(settings.MuxedInput))
                 {
                     if (settings.MuxedInput.ToLower().EndsWith(".mp4") || settings.MuxedInput.ToLower().EndsWith(".mkv"))
                          trackID = VideoUtil.getIDFromFirstVideoStream(settings.MuxedInput);

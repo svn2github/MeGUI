@@ -136,8 +136,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "TSMuxer");
                         case "AVCHD": sw.Write(" --avchd"); break;
                     }
                 }
-                
-                if (settings.VideoInput.Length > 0)
+
+                if (!string.IsNullOrEmpty(settings.VideoInput))
                 {
                     if (settings.VideoInput.ToLower().EndsWith(".264"))
                     {
@@ -152,7 +152,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "TSMuxer");
                     sw.Write("\"" + settings.VideoInput + "\"");
                 }
 
-                if (settings.MuxedInput.Length > 0)
+                if (!string.IsNullOrEmpty(settings.MuxedInput))
                 {
                     if (settings.MuxedInput.ToLower().EndsWith(".264"))
                     {
