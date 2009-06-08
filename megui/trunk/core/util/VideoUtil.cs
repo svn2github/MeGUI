@@ -309,6 +309,32 @@ namespace MeGUI
             }            
         }
 
+        /// gets Timeline from Chapters Text file (formally as Ogg Format)
+        /// </summary>
+        /// <param name="fileName">the file read</param>
+        /// <returns>chapters Timeline as string</returns>
+        public static string getChapterTimeLine(string fileName)
+        {
+            long count = 0;
+            string line;
+            string chap = "=";
+                
+            using (StreamReader r = new StreamReader(fileName))
+            {
+                while ((line = r.ReadLine()) != null)
+                {
+                    count++;
+                    if (count % 2 != 0) // odd line
+                    {
+                        if (count >= 2)
+                            chap += ";";
+                        chap += line.Substring(line.IndexOf("=") + 1, 12);
+                    }
+                }
+            }
+            return chap;
+        }
+
         /// gets ID from a first video stream using MediaInfo
         /// </summary>
         /// <param name="infoFile">the file to be analyzed</param>
