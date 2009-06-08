@@ -53,7 +53,12 @@ namespace MeGUI
       foreach (Chapter c in Chapters)
       {
         i++;
-        lines.Add("CHAPTER" + i.ToString("00") + "=" + c.Time.ToString());
+        if (c.Time.ToString().Length == 8)
+            lines.Add("CHAPTER" + i.ToString("00") + "=" + c.Time.ToString() + ".000"); // better formating
+        else if (c.Time.ToString().Length > 12)
+            lines.Add("CHAPTER" + i.ToString("00") + "=" + c.Time.ToString().Substring(0, 12)); // remove some duration length too long
+        else
+            lines.Add("CHAPTER" + i.ToString("00") + "=" + c.Time.ToString());
         lines.Add("CHAPTER" + i.ToString("00") + "NAME=" + c.Name);
       }
       File.WriteAllLines(filename, lines.ToArray());
