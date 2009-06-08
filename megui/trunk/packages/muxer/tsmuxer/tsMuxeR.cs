@@ -135,11 +135,20 @@ new JobProcessorFactory(new ProcessorFactory(init), "TSMuxer");
                         case "Blu-ray": sw.Write(" --blu-ray"); break;
                         case "AVCHD": sw.Write(" --avchd"); break;
                     }
+
+                    if (!string.IsNullOrEmpty(settings.ChapterFile)) // a chapter file is defined
+                    {
+                        string chapterTimeLine = VideoUtil.getChapterTimeLine(settings.ChapterFile);
+                        sw.Write(" --custom-chapters" + chapterTimeLine);
+                    }
+
+                    job.Output = Path.ChangeExtension(job.Output, ""); // remove m2ts file extension - use folder name only with this mode
                 }
 
                 if (!string.IsNullOrEmpty(settings.VideoInput))
                 {
-                    if (settings.VideoInput.ToLower().EndsWith(".264"))
+                    if (settings.VideoInput.ToLower().EndsWith(".264") ||
+                        settings.VideoInput.ToLower().EndsWith(".h264"))
                     {
                         vcodecID = "V_MPEG4/ISO/AVC";
                         extra = " insertSEI, contSPS";
@@ -154,7 +163,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "TSMuxer");
 
                 if (!string.IsNullOrEmpty(settings.MuxedInput))
                 {
-                    if (settings.MuxedInput.ToLower().EndsWith(".264"))
+                    if (settings.MuxedInput.ToLower().EndsWith(".264") |
+                        settings.MuxedInput.ToLower().EndsWith(".h264"))
                     {
                         vcodecID = "V_MPEG4/ISO/AVC";
                         extra = " insertSEI, contSPS";
