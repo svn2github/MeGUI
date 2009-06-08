@@ -259,6 +259,13 @@ namespace MeGUI
             string chapterFile = VideoUtil.getChapterFile(fileName);
             if (File.Exists(chapterFile))
                 this.chapterFile.Filename = chapterFile;
+            if (string.IsNullOrEmpty(this.chapterFile.Filename))
+            {
+                VideoUtil.getChaptersFromIFO(fileName);
+                chapterFile = VideoUtil.getChapterFile(fileName);
+                if (File.Exists(chapterFile))
+                    this.chapterFile.Filename = chapterFile;
+            }
 
             if (string.IsNullOrEmpty(workingDirectory.Filename = mainForm.Settings.DefaultOutputDir))
                 workingDirectory.Filename = Path.GetDirectoryName(fileName);
