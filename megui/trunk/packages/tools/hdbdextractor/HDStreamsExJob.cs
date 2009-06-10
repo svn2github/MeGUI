@@ -69,12 +69,12 @@ namespace MeGUI
 
         public override string CodecString
         {
-            get { return ""; }
+            get { return "eac3to"; }
         }
 
         public override string EncodingMode
         {
-            get { return "eac3to"; }
+            get { return "ext"; }
         }
     }
 }
