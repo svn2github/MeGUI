@@ -26,7 +26,7 @@ namespace MeGUI
 {
     public class hfyuSettings : VideoCodecSettings
     {
-        public static string ID = "huffyuv";
+        public static string ID = "Huffyuv";
 
         private static readonly string[] m_fourCCs = { "FFVH" };
 
