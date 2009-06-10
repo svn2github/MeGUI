@@ -1,3 +1,24 @@
+0.3.1.1040
+    - (kurtnoise) add LinqBridge lib to the megui NSIS script.
+    - (kurtnoise) [MainForm] activate HDStreamExtractorIndexer.Factory
+    - (kurtnoise) [Job] add HDStreamExJob to the Job Interface.
+    - (kurtnoise) [HDStreamExtractor] add megui job support.
+    - (kurtnoise) [HDStreamExtractorIndexer] better lines parsing.
+    - (kurtnoise) [HDStreamExJob] change CodecString & EncodingMode
+    - (kurtnoise) [hfyuSettings] change ID : huffyuv -> Huffyuv
+    - (kurtnoise) [AudioStream] add "AC3 EX" case.
+    - (kurtnoise) [JobWorkerWindow] few improvements in the log reporting.
+    - (kurtnoise) [DGMCreator] add vob files support.
+    - (kurtnoise) [tsMuxeR] add Chapters file support.
+    - (kurtnoise) [VideoUtil] add getChapterTimeLine() function.
+    - (kurtnoise) [OneClick] apply getChaptersFromIFO to the One Click Encoder code.
+    - (kurtnoise) [VideoUtil] add getChaptersFromIFO() function.
+    - (kurtnoise) [ChapterInfo] better formating for SaveText() function.
+    - (kurtnoise) fix a potential NullPointer Exception for several Muxers. Based on patch from ViceIce (#2799156)
+    - (kurtnoise) [Megui NSIS SCript] Remove old entry in the register key from the previous installer. Patch by XhmikosR (#2801959)
+    - (kurtnoise) update script & reader to support the last beta DGxxxNV tools package.
+    - (kurtnoise) [DialogManager] cosmetic changes for RunCUVIDServer()
+
 0.3.1.1039
     - (sharktooth) [x264] Made FullRange an option.
     - (sharktooth) Added AvisynthWrapper solution and project files for VS2008
