@@ -13,6 +13,7 @@
 !define FILE7 "megui.ico"
 !define FILE8 "MediaInfo.dll"
 !define FILE9 "MediaInfoWrapper.dll"
+!define FILE10 "LinqBridge.dll"
 !define HELP "Data\*.xml"
 !define UNINST_NAME "megui-uninstall.exe"
 !define MUI_ICON megui.ico
@@ -123,6 +124,8 @@ Section "MeGUI";
 	File "${FILE7}"
 	File "${INPUT_PATH}${FILE8}"
 	File "${INPUT_PATH}${FILE9}"
+	File "${INPUT_PATH}${FILE10}"
+        
 	CreateDirectory $INSTDIR\update_cache
 	CreateDirectory $INSTDIR\tools
 	CreateDirectory $INSTDIR\logs
@@ -179,6 +182,7 @@ Section Uninstall
 	Delete /REBOOTOK "$INSTDIR\${FILE7}"
 	Delete /REBOOTOK "$INSTDIR\${FILE8}"
 	Delete /REBOOTOK "$INSTDIR\${FILE9}"
+	Delete /REBOOTOK "$INSTDIR\${FILE10}"        
 	Delete "$INSTDIR\${UNINST_NAME}"
 
 	DeleteRegKey HKEY_LOCAL_MACHINE "SOFTWARE\MeGUI"
