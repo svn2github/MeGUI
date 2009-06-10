@@ -42,6 +42,7 @@ namespace MeGUI.packages.tools.hdbdextractor
         private MeGUISettings settings;
         private HDStreamsExJob lastJob = null;
         private int inputType = 1;
+        string dummyInput = "";
 
         #region Windows Form Designer generated code
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
@@ -238,7 +239,7 @@ namespace MeGUI.packages.tools.hdbdextractor
             this.QueueButton.Name = "QueueButton";
             this.QueueButton.Size = new System.Drawing.Size(75, 23);
             this.QueueButton.TabIndex = 9;
-            this.QueueButton.Text = "Extract";
+            this.QueueButton.Text = "Queue";
             this.QueueButton.UseVisualStyleBackColor = true;
             this.QueueButton.Click += new System.EventHandler(this.QueueButton_Click);
             // 
@@ -820,8 +821,6 @@ namespace MeGUI.packages.tools.hdbdextractor
                         break;
                     case ResultState.ExtractCompleted:
                         QueueButton.Enabled = true;
-                        if (this.closeOnQueue.Checked)
-                            this.Close();
                         break;
                 }
             }
@@ -1216,7 +1215,6 @@ namespace MeGUI.packages.tools.hdbdextractor
                 Stream s = row.DataBoundItem as Stream;
                 DataGridViewComboBoxCell comboBox = row.Cells["StreamExtractAsComboBox"] as DataGridViewComboBoxCell;
                 DataGridViewTextBoxCell tbLang = row.Cells["languageDataGridViewTextBoxColumn"] as DataGridViewTextBoxCell;
-
                 comboBox.Items.AddRange(s.ExtractTypes);
 
                 switch (s.Type)
@@ -1301,9 +1299,8 @@ namespace MeGUI.packages.tools.hdbdextractor
                 return;
             }
 
-//#if HdBrStreamExtractor
             eac3toArgs args = new eac3toArgs();
-          //  HDStreamsExJob job;
+            HDStreamsExJob job;
            
             args.eac3toPath = eac3toPath;
             args.inputPath = FolderInputTextBox.Text;
@@ -1322,23 +1319,24 @@ namespace MeGUI.packages.tools.hdbdextractor
                 return;
             }
 
-
+/*
             InitBackgroundWorker();
             backgroundWorker.ReportProgress(0, "Extracting streams");
             WriteToLog("Extracting streams");
             QueueButton.Enabled = false;
             Cursor = Cursors.WaitCursor;
 
-            backgroundWorker.RunWorkerAsync(args);
-//#else
+            backgroundWorker.RunWorkerAsync(args);*/
+
             // Load to MeGUI job queue
-/*            if (FolderSelection.Checked)
-                job = new HDStreamsExJob(this.FolderInputTextBox.Text, this.FolderOutputTextBox.Text, args.featureNumber, args.args, inputType);
-            else job = new HDStreamsExJob(this.FolderInputTextBox.Text, this.FolderOutputTextBox.Text, null, args.args, inputType);
+            if (FolderSelection.Checked)
+                job = new HDStreamsExJob(dummyInput, this.FolderOutputTextBox.Text+"xxx", args.featureNumber, args.args, inputType);
+            else job = new HDStreamsExJob(this.FolderInputTextBox.Text, this.FolderOutputTextBox.Text+"xxx", null, args.args, inputType);
 
             lastJob = job;
-            info.Jobs.addJobsToQueue(job);*/
-//#endif
+            info.Jobs.addJobsToQueue(job);
+            if (this.closeOnQueue.Checked)
+                this.Close();
         }
 
         public HDStreamsExJob LastJob
@@ -1451,8 +1449,17 @@ namespace MeGUI.packages.tools.hdbdextractor
                         args.resultState = ResultState.StreamCompleted;
                         args.args = ((Feature)FeatureDataGridView.SelectedRows[0].DataBoundItem).Number.ToString();
 
-                        backgroundWorker.ReportProgress(0, "Retrieving streams");
-                        WriteToLog("Retrieving streams");
+                        // create dummy input string for megui job
+                        if (feature.Description.Contains("EVO"))
+                            dummyInput = args.inputPath + "HVDVD_TS\\" + feature.Description.Substring(0, feature.Description.IndexOf(","));
+                        else if (feature.Description.Contains("(angle"))
+                            dummyInput = args.inputPath + "BDMV\\PLAYLIST\\" + feature.Description.Substring(0, feature.Description.IndexOf(" ("));
+                        else if (feature.Description.Substring(feature.Description.LastIndexOf(".")+1, 4) == "m2ts")
+                            dummyInput = args.inputPath + "BDMV\\STREAM\\" + feature.Description.Substring(feature.Description.IndexOf(",") + 2, feature.Description.LastIndexOf(",") - feature.Description.IndexOf(",") - 2);
+                        else dummyInput = args.inputPath + "BDMV\\PLAYLIST\\" + feature.Description.Substring(0, feature.Description.IndexOf(","));
+
+                        backgroundWorker.ReportProgress(0, "Retrieving streams...");
+                        WriteToLog("Retrieving streams...");
                         Cursor = Cursors.WaitCursor;
 
                         backgroundWorker.RunWorkerAsync(args);
