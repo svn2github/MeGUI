@@ -85,6 +85,7 @@ namespace eac3to
             switch (audioStream.Name.ToUpper())
             {
                 case "AC3":
+                case "AC3 EX":
                     audioStream.AudioType = AudioStreamType.AC3;
                     break;
                 case "DTS":
