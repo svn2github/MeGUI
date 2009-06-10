@@ -56,7 +56,12 @@ namespace MeGUI
         {
             try
             {
-                if (Regex.IsMatch(line, "^progress: [0-9]{1,3}%$", RegexOptions.Compiled))
+                if (Regex.IsMatch(line, "^process: [0-9]{1,3}%$", RegexOptions.Compiled))
+                {
+                    int pct = Int32.Parse(Regex.Match(line, "[0-9]{1,3}").Value);
+                    return pct;
+                }
+                else if (Regex.IsMatch(line, "^analyze: [0-9]{1,3}%$", RegexOptions.Compiled))
                 {
                     int pct = Int32.Parse(Regex.Match(line, "[0-9]{1,3}").Value);
                     return pct;
@@ -72,8 +77,26 @@ namespace MeGUI
 
         public override void ProcessLine(string line, StreamType stream)
         {
-            su.PercentageDoneExact = getPercentage(line);
-            su.Status = "Extract Tracks...";
+            if (line.StartsWith("process: ")) //status update
+            {
+                su.PercentageDoneExact = getPercentage(line);
+                su.Status = "Extracting Tracks...";
+            }
+            else if (line.ToLower().Contains("error"))
+            {
+                log.LogValue("An error occurred", line, ImageType.Error);
+                su.HasError = true;
+            }
+            else if (line.ToLower().Contains("warning"))
+                log.LogValue("A warning occurred", line, ImageType.Warning);
+            else if (line.StartsWith("analyze: "))
+            {
+                su.PercentageDoneExact = getPercentage(line);
+                su.Status = "Analyze...";
+            }
+            else
+                base.ProcessLine(line, stream);
+            
             lastLine = line;
         }
 
@@ -82,14 +105,10 @@ namespace MeGUI
             get
             {
                 StringBuilder sb = new StringBuilder();
-                if (job.InputType == 1) // Folder as Inpput
-                {
-                    sb.Append(string.Format("\"{0}\" {1}) {2}", job.Input, job.FeatureNb, job.Args + " -progressnumbers"));
-                }
+                if (job.InputType == 1) // Folder as Input
+                    sb.Append(string.Format("\"{0}\" {1}) {2}", job.Input.Substring(0, 3), job.FeatureNb, job.Args + " -progressnumbers"));
                 else
-                {
                     sb.Append(string.Format("\"{0}\" {1}", job.Input, job.Args + " -progressnumbers"));
-                }
 
                 return sb.ToString();
             }
