@@ -574,7 +574,14 @@ namespace MeGUI.core.gui
                     throw new JobStartException("starting encoder failed with error '" + e.Message + "'", ExceptionType.Error);
                 }
 
-                log.LogEvent("Encoding started");
+                if (job.Job.EncodingMode.Equals("ext"))
+                    log.LogEvent("Extracting started");
+                else if (job.Job.EncodingMode.Equals("mux"))
+                    log.LogEvent("Muxing started");
+                else if (job.Job.EncodingMode.Equals("idx"))
+                    log.LogEvent("Indexing started");
+                else
+                    log.LogEvent("Encoding started");
                 refreshAll();
                 return true;
             }
