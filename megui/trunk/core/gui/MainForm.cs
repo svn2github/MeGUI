@@ -1738,6 +1738,7 @@ namespace MeGUI
             PackageSystem.JobProcessors.Register(VobSubIndexer.Factory);
             PackageSystem.JobProcessors.Register(Joiner.Factory);
             PackageSystem.JobProcessors.Register(MeGUI.packages.tools.besplitter.Splitter.Factory);
+            PackageSystem.JobProcessors.Register(HDStreamExtractorIndexer.Factory);
             PackageSystem.MuxerProviders.Register(new AVIMuxGUIMuxerProvider());
             PackageSystem.MuxerProviders.Register(new TSMuxerProvider());            
             PackageSystem.MuxerProviders.Register(new MKVMergeMuxerProvider());
