@@ -50,6 +50,7 @@ namespace MeGUI.core.gui
             this.resize = new System.Windows.Forms.CheckBox();
             this.noiseFilter = new System.Windows.Forms.CheckBox();
             this.resizeFilterType = new System.Windows.Forms.ComboBox();
+            this.dss2 = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.templatePage.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
@@ -87,6 +88,7 @@ namespace MeGUI.core.gui
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.dllBar.Filename = "";
             this.dllBar.Filter = "DLL Files (*.dll)|*.dll";
+            this.dllBar.FilterIndex = 0;
             this.dllBar.FolderMode = false;
             this.dllBar.Location = new System.Drawing.Point(63, 350);
             this.dllBar.Name = "dllBar";
@@ -196,6 +198,7 @@ namespace MeGUI.core.gui
             // 
             // extraSetupPage
             // 
+            this.extraSetupPage.Controls.Add(this.dss2);
             this.extraSetupPage.Controls.Add(this.mod16Box);
             this.extraSetupPage.Controls.Add(this.signalAR);
             this.extraSetupPage.Controls.Add(this.mpegOptGroupBox);
@@ -313,6 +316,17 @@ namespace MeGUI.core.gui
             this.resizeFilterType.Size = new System.Drawing.Size(121, 21);
             this.resizeFilterType.TabIndex = 1;
             // 
+            // dss2
+            // 
+            this.dss2.AutoSize = true;
+            this.dss2.Enabled = false;
+            this.dss2.Location = new System.Drawing.Point(13, 218);
+            this.dss2.Name = "dss2";
+            this.dss2.Size = new System.Drawing.Size(201, 17);
+            this.dss2.TabIndex = 22;
+            this.dss2.Text = "Prefer DSS2 over DirectShowSource";
+            this.dss2.UseVisualStyleBackColor = true;
+            // 
             // AviSynthProfileConfigPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -357,6 +371,7 @@ namespace MeGUI.core.gui
         private System.Windows.Forms.ComboBox resizeFilterType;
         private FileBar dllBar;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private System.Windows.Forms.CheckBox dss2;
 
     }
 }

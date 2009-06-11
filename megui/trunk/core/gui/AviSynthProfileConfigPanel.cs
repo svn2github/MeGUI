@@ -37,6 +37,8 @@ namespace MeGUI.core.gui
             this.resizeFilterType.BindingContext = new BindingContext();
             this.noiseFilterType.DataSource = ScriptServer.ListOfDenoiseFilterType;
             this.noiseFilterType.BindingContext = new BindingContext();
+            if (!string.IsNullOrEmpty(MeGUISettings.HaaliMSPath))
+                dss2.Enabled = true;
         }
 
         #region Gettable<AviSynthSettings> Members
