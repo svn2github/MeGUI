@@ -1,3 +1,10 @@
+0.3.1.1041
+    - (kurtnoise) enable DSS2 in Avisynth Script/Settings.
+    - (kurtnoise) [AviSynthProfileConfigPanel] add DSS2 over DSS checkbox.
+    - (kurtnoise) [MeGUISettings] add Haali Media Splitter Path detection.
+    - (kurtnoise) better handling of DGDecodeNV lib.
+    - (kurtnoise) add eac3 & ddp files extension to the AudioEncoderInterface & MainForm.
+
 0.3.1.1040
     - (kurtnoise) add LinqBridge lib to the megui NSIS script.
     - (kurtnoise) [MainForm] activate HDStreamExtractorIndexer.Factory
