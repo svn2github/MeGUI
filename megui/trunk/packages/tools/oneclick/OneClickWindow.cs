@@ -896,7 +896,7 @@ namespace MeGUI
             string resizeLine = "#resize";
 
             inputLine = ScriptServer.GetInputLine(path, false, PossibleSources.d2v,
-                false, false, false, 0);
+                false, false, false, 0, false);
 
             log.LogValue("Automatic deinterlacing", autoDeint);
             if (autoDeint)
@@ -913,7 +913,7 @@ namespace MeGUI
                 log.LogValue("Deinterlacing used", deinterlaceLines);
             }
 
-            inputLine = ScriptServer.GetInputLine(path, interlaced, PossibleSources.d2v, avsSettings.ColourCorrect, avsSettings.MPEG2Deblock, false, 0);
+            inputLine = ScriptServer.GetInputLine(path, interlaced, PossibleSources.d2v, avsSettings.ColourCorrect, avsSettings.MPEG2Deblock, false, 0, false);
 
             if (autoCrop)
                  cropLine = ScriptServer.GetCropLine(true, final);

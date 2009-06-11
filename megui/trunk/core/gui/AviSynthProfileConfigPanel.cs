@@ -29,7 +29,7 @@ using System.Windows.Forms;
 namespace MeGUI.core.gui
 {
     public partial class AviSynthProfileConfigPanel : UserControl, Editable<AviSynthSettings>
-    {
+    {     
         public AviSynthProfileConfigPanel() 
         {
             InitializeComponent();
@@ -57,7 +57,8 @@ namespace MeGUI.core.gui
                     noiseFilter.Checked,
                     mpeg2Deblocking.Checked,
                     colourCorrect.Checked,
-                    method);
+                    method,
+                    dss2.Checked);
             }
             set
             {
@@ -70,6 +71,7 @@ namespace MeGUI.core.gui
                 colourCorrect.Checked = value.ColourCorrect;
                 signalAR.Checked = (value.Mod16Method != mod16Method.none);
                 mod16Box.SelectedIndex = (int)value.Mod16Method;
+                dss2.Checked = value.DSS2;
             }
         }
 

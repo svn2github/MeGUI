@@ -141,6 +141,7 @@ namespace MeGUI
         private Label SubtitlesLabel;
         private Button openSubtitlesButton;
         private TextBox SubtitlesPath;
+        private CheckBox dss2;
 
 		/// <summary>
 		/// Required designer variable.
@@ -302,6 +303,7 @@ namespace MeGUI
             this.mpeg2Deblocking = new System.Windows.Forms.CheckBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.aviOptGroupBox = new System.Windows.Forms.GroupBox();
+            this.dss2 = new System.Windows.Forms.CheckBox();
             this.fpsBox = new System.Windows.Forms.NumericUpDown();
             this.fpsLabel = new System.Windows.Forms.Label();
             this.flipVertical = new System.Windows.Forms.CheckBox();
@@ -880,6 +882,7 @@ namespace MeGUI
             // 
             this.aviOptGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.aviOptGroupBox.Controls.Add(this.dss2);
             this.aviOptGroupBox.Controls.Add(this.fpsBox);
             this.aviOptGroupBox.Controls.Add(this.fpsLabel);
             this.aviOptGroupBox.Controls.Add(this.flipVertical);
@@ -889,6 +892,17 @@ namespace MeGUI
             this.aviOptGroupBox.Size = new System.Drawing.Size(426, 80);
             this.aviOptGroupBox.TabIndex = 23;
             this.aviOptGroupBox.TabStop = false;
+            // 
+            // dss2
+            // 
+            this.dss2.AutoSize = true;
+            this.dss2.Location = new System.Drawing.Point(120, 20);
+            this.dss2.Name = "dss2";
+            this.dss2.Size = new System.Drawing.Size(185, 17);
+            this.dss2.TabIndex = 4;
+            this.dss2.Text = "Prefer DSSource2 over DSSource";
+            this.dss2.UseVisualStyleBackColor = true;
+            this.dss2.CheckedChanged += new System.EventHandler(this.checkedChanged);
             // 
             // fpsBox
             // 
@@ -1346,6 +1360,7 @@ namespace MeGUI
             this.mpegOptGroupBox.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.aviOptGroupBox.ResumeLayout(false);
+            this.aviOptGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fpsBox)).EndInit();
             this.tabPage3.ResumeLayout(false);
             this.dgOptions.ResumeLayout(false);
@@ -1430,7 +1445,14 @@ namespace MeGUI
 			string resizeLine = "#resize";
 
             double fps = (double)fpsBox.Value;
-            inputLine = ScriptServer.GetInputLine(this.input.Filename, deinterlace.Checked, sourceType, colourCorrect.Checked, mpeg2Deblocking.Checked, flipVertical.Checked, fps);
+            inputLine = ScriptServer.GetInputLine(this.input.Filename, 
+                                                  deinterlace.Checked, 
+                                                  sourceType, 
+                                                  colourCorrect.Checked, 
+                                                  mpeg2Deblocking.Checked, 
+                                                  flipVertical.Checked, 
+                                                  fps,
+                                                  dss2.Checked);
             if (nvDeInt.Enabled)
             {
                 if (nvDeInt.Checked)
@@ -1572,6 +1594,7 @@ namespace MeGUI
                     this.cbNvDeInt.Enabled = false;
                     this.nvDeInt.Enabled = false;
                     this.nvDeInt.Checked = false;
+                    this.dss2.Enabled = false;
                     this.tabSources.SelectedTab = tabPage1;
                     break;
                 case PossibleSources.vdr:
@@ -1582,6 +1605,7 @@ namespace MeGUI
                     this.colourCorrect.Checked = false;
                     this.flipVertical.Enabled = false;
                     this.flipVertical.Checked = false;
+                    this.dss2.Enabled = false;
                     this.fpsBox.Enabled = false;
                     this.cbNvDeInt.Enabled = false;
                     this.nvDeInt.Enabled = false;
@@ -1593,6 +1617,7 @@ namespace MeGUI
                     this.mpeg2Deblocking.Enabled = false;
                     this.colourCorrect.Enabled = false;
                     this.colourCorrect.Checked = false;
+                    this.dss2.Enabled = true;
                     this.fpsBox.Enabled = true;
                     this.flipVertical.Enabled = true;
                     this.cbNvDeInt.Enabled = false;
@@ -1609,6 +1634,7 @@ namespace MeGUI
                     this.colourCorrect.Checked = false;
                     this.flipVertical.Enabled = false;
                     this.flipVertical.Checked = false;
+                    this.dss2.Enabled = false;
                     this.fpsBox.Enabled = false;
                     this.cbNvDeInt.Enabled = false;
                     this.nvDeInt.Enabled = true;
@@ -2089,6 +2115,7 @@ namespace MeGUI
                 this.resize.Checked = value.Resize;
                 this.mod16Box.SelectedIndex = (int)value.Mod16Method;
                 this.signalAR.Checked = (value.Mod16Method != mod16Method.none);
+                this.dss2.Checked = value.DSS2;
 				this.showScript();
 			}
         }
@@ -2132,7 +2159,7 @@ namespace MeGUI
             {
                 if (detector == null) // We want to start the analysis
                 {
-                    string source = ScriptServer.GetInputLine(input.Filename, false, sourceType, false, false, false, 25);
+                    string source = ScriptServer.GetInputLine(input.Filename, false, sourceType, false, false, false, 25, false);
                     if (nvDeInt.Enabled) source += ")";
                     detector = new SourceDetector(source,
                         input.Filename, deintIsAnime.Checked,

@@ -54,7 +54,7 @@ namespace MeGUI
         private ResizeFilterType resizeMethod;
         private DenoiseFilterType denoiseMethod;
         private mod16Method mod16Method;
-		private bool deinterlace, denoise, ivtc, mpeg2deblock, colourCorrect;
+		private bool deinterlace, denoise, ivtc, mpeg2deblock, colourCorrect, dss2;
         private bool resize;
 
         object ICloneable.Clone()
@@ -104,39 +104,44 @@ namespace MeGUI
 		}
 		public ResizeFilterType ResizeMethod
 		{
-			get {return resizeMethod;}
-			set {resizeMethod = value;}
+			get { return resizeMethod; }
+			set { resizeMethod = value; }
 		}
 		public DenoiseFilterType DenoiseMethod
 		{
-			get {return denoiseMethod;}
-			set {denoiseMethod = value;}
+			get { return denoiseMethod; }
+			set { denoiseMethod = value; }
 		}
 		public bool Deinterlace
 		{
-			get {return deinterlace;}
-			set {deinterlace = value;}
+			get { return deinterlace; }
+			set { deinterlace = value; }
 		}
 		public bool Denoise
 		{
-			get {return denoise;}
-			set {denoise = value;}
+			get { return denoise; }
+			set { denoise = value; }
 		}
 		public bool IVTC
 		{
-			get {return ivtc;}
-			set {ivtc = value;}
+			get { return ivtc; }
+			set { ivtc = value; }
 		}
 		public bool MPEG2Deblock
 		{
-			get {return mpeg2deblock;}
-			set {mpeg2deblock = value;}
+			get { return mpeg2deblock; }
+			set { mpeg2deblock = value; }
 		}
 		public bool ColourCorrect
 		{
-			get {return colourCorrect;}
-			set {colourCorrect = value;}
+			get { return colourCorrect; }
+			set { colourCorrect = value; }
 		}
+        public bool DSS2
+        {
+            get { return dss2; }
+            set { dss2 = value; }
+        }
 
 		public AviSynthSettings()
 		{
@@ -150,10 +155,11 @@ namespace MeGUI
 			this.MPEG2Deblock = false;
 			this.ColourCorrect = true;
             this.Mod16Method = mod16Method.none;
+            this.DSS2 = false;
 		}
 
 		public AviSynthSettings(string template, ResizeFilterType resizeMethod, bool resize,
-			DenoiseFilterType denoiseMethod, bool denoise, bool mpeg2deblock, bool colourCorrect, mod16Method method)
+			DenoiseFilterType denoiseMethod, bool denoise, bool mpeg2deblock, bool colourCorrect, mod16Method method, bool dss2)
 		{
 			this.Template = template;
             this.Resize = resize;
@@ -165,6 +171,7 @@ namespace MeGUI
 			this.MPEG2Deblock = mpeg2deblock;
 			this.ColourCorrect = colourCorrect;
             this.Mod16Method = method;
+            this.DSS2 = dss2;
 		}
 
         #region GenericSettings Members

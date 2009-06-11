@@ -122,6 +122,7 @@ namespace MeGUI
         public static readonly IList ListOfNvDeIntType = EnumProxy.CreateArray(typeof(NvDeinterlacerType));
 
         private static MainForm mainForm = new MainForm();
+        
 
         public static string CreateScriptFromTemplate(string template, string inputLine, string cropLine, string resizeLine, string denoiseLines, string deinterlaceLines)
         {
@@ -135,7 +136,7 @@ namespace MeGUI
         }
 
         public static string GetInputLine(string input, bool interlaced, PossibleSources sourceType,
-            bool colormatrix, bool mpeg2deblock, bool flipVertical, double fps)
+            bool colormatrix, bool mpeg2deblock, bool flipVertical, double fps, bool dss2)
         {
             string inputLine = "#input";
             int c;
@@ -194,6 +195,9 @@ namespace MeGUI
                     }
                     else
                     {
+                        if (dss2)
+                            inputLine = "LoadPlugin(\"" + MeGUISettings.HaaliMSPath + "\\avss.dll" + "\")\r\ndss2(\"" + input + "\"" + ((fps > 0) ? ", fps=" + fps.ToString("F3", new CultureInfo("en-us")) : string.Empty) + ")";
+                        else
                         inputLine = "DirectShowSource(\"" + input + "\"" + ((fps > 0) ? ", fps=" + fps.ToString("F3", new CultureInfo("en-us")) : string.Empty) + ", audio=false, convertfps=true)";
                         if (flipVertical)
                             inputLine = inputLine + "\r\nFlipVertical()";

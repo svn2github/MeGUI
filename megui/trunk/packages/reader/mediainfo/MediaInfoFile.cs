@@ -444,7 +444,7 @@ namespace MeGUI
                     if (videoSourceFile == null)
                     {
                         videoSourceFile = AvsFile.ParseScript(ScriptServer.GetInputLine(file, false,
-                        PossibleSources.directShow, false, false, false, Info.FPS));
+                        PossibleSources.directShow, false, false, false, Info.FPS, false));
                         videoReader = null;
                     }
                     if (videoReader == null)
