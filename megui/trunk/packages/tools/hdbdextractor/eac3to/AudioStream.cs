@@ -86,9 +86,11 @@ namespace eac3to
             {
                 case "AC3":
                 case "AC3 EX":
+                case "AC3 SURROUND":
                     audioStream.AudioType = AudioStreamType.AC3;
                     break;
                 case "DTS":
+                case "DTS-ES":
                 case "DTS MASTER AUDIO":
                 case "DTS HI-RES":
                     audioStream.AudioType = AudioStreamType.DTS;
