@@ -137,8 +137,9 @@ namespace MeGUI
         public static string GetInputLine(string input, bool interlaced, PossibleSources sourceType,
             bool colormatrix, bool mpeg2deblock, bool flipVertical, double fps)
         {
-            string inputLine = "#input"; 
-            bool flag = checkDGDecodeNVdll();
+            string inputLine = "#input";
+            int c;
+            string dgdecodenv = DGDecodeNVdllPath(out c);
 
             switch (sourceType)
             {
@@ -157,16 +158,31 @@ namespace MeGUI
                     break;
                 case PossibleSources.dga:
                     {
-                        if (flag)
-                             inputLine = "DGSource(\"" + input + "\"";
-                        else inputLine = "AVCSource(\"" + input + "\"";
+                        switch (c)
+                        {
+                            case 1: inputLine = "DGSource(\"" + input + "\""; break;
+                            case 2: inputLine = "LoadPlugin(\"" + dgdecodenv + "\")\r\nDGSource(\"" + input + "\""; break;
+                            default: inputLine = "AVCSource(\"" + input + "\""; break;
+                        }
                     }
                     break;
                 case PossibleSources.dgm:
-                    inputLine = "DGSource(\"" + input + "\"";
+                    {
+                        switch (c)
+                        {
+                            case 1: inputLine = "DGSource(\"" + input + "\""; break;
+                            case 2: inputLine = "LoadPlugin(\"" + dgdecodenv + "\")\r\nDGSource(\"" + input + "\""; break;
+                        }
+                    }
                     break;
                 case PossibleSources.dgv:
-                    inputLine = "DGSource(\"" + input + "\"";
+                    {
+                        switch (c)
+                        {
+                            case 1: inputLine = "DGSource(\"" + input + "\""; break;
+                            case 2: inputLine = "LoadPlugin(\"" + dgdecodenv + "\")\r\nDGSource(\"" + input + "\""; break;
+                        }
+                    }
                     break;
                 case PossibleSources.vdr:
                         inputLine = "AVISource(\"" + input + "\", audio=false)";
@@ -187,38 +203,53 @@ namespace MeGUI
             return inputLine;
         }
 
-        public static bool checkDGDecodeNVdll()
+        public static string DGDecodeNVdllPath(out int Counter)
         {
             bool flag = false;
             string dgdecodenv = string.Empty;
+            Counter = 0;
+            
             if (!string.IsNullOrEmpty(MeGUISettings.AvisynthPluginsPath))
             {
                 dgdecodenv = MeGUISettings.AvisynthPluginsPath + "\\DGDecodeNV.dll";
                 if (File.Exists(dgdecodenv))
+                {
                     flag = true;
+                    Counter = 1;
+                }
             }
-            else // check somewhere else
+            
+            if (!flag) // check somewhere else
             {                    
                 if (!string.IsNullOrEmpty(mainForm.Settings.DgavcIndexPath))
                 {
                     dgdecodenv = Path.GetDirectoryName(mainForm.Settings.DgavcIndexPath) + "\\DGDecodeNV.dll";
                     if (File.Exists(dgdecodenv))
+                    {
                         flag = true;
+                        Counter = 2;
+                    }
                 }
                 if (!string.IsNullOrEmpty(mainForm.Settings.DgmpgIndexPath) && (!flag))
                 {
                     dgdecodenv = Path.GetDirectoryName(mainForm.Settings.DgmpgIndexPath) + "\\DGDecodeNV.dll";
                     if (File.Exists(dgdecodenv))
+                    {
                         flag = true;
+                        Counter = 2;
+                    }
                 }
                 if (!string.IsNullOrEmpty(mainForm.Settings.Dgvc1IndexPath) && (!flag))
                 {
                     dgdecodenv = Path.GetDirectoryName(mainForm.Settings.Dgvc1IndexPath) + "\\DGDecodeNV.dll";
                     if (File.Exists(dgdecodenv))
+                    {
                         flag = true;
+                        Counter = 2;
+                    }
                 }
             }
-            return flag;
+            return dgdecodenv;
         }
 
         public static string GetCropLine(bool crop, CropValues cropValues)
