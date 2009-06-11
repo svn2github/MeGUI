@@ -420,6 +420,29 @@ namespace MeGUI
             get { return alwaysbackupfiles; }
             set { alwaysbackupfiles = value; }
         }
+
+        /// <summary>
+        /// Haali Media Splitter Path
+        /// </summary>
+        public static string HaaliMSPath
+        {
+            get
+            {
+                try
+                {
+                    Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\HaaliMkx");
+                    if (key == null)
+                        return null;
+                    else
+                        return (string)key.GetValue("Install_Dir");
+                }
+                catch
+                {
+                    return null;
+                }
+            }
+        }
+
         /// <summary>
         /// folder containing the avisynth plugins
         /// </summary>
