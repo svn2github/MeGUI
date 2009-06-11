@@ -1326,6 +1326,8 @@ namespace MeGUI
                 case ".mpa":
                 case ".wav":
                 case ".w64":
+                case ".eac3":
+                case ".ddp":
                    return FileType.AUDIOINPUT;
                 case ".vob":
                 case ".mpg":

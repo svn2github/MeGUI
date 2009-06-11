@@ -533,6 +533,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 switch (Path.GetExtension(audioJob.Input).ToLower())
                 {
                     case ".ac3":
+                    case ".ddp":
+                    case ".eac3":
                         script.AppendFormat("NicAc3Source(\"{0}\"", audioJob.Input);
                         if (audioJob.Settings.ApplyDRC)
                             script.AppendFormat(", DRC=1){0}", Environment.NewLine);
