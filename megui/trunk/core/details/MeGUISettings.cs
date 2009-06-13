@@ -42,7 +42,8 @@ namespace MeGUI
         private bool recalculateMainMovieBitrate, autoForceFilm, autoStartQueue, enableMP3inMP4, autoOpenScript,
                      overwriteStats, keep2of3passOutput, deleteCompletedJobs, deleteIntermediateFiles,
                      deleteAbortedOutput, openProgressWindow, useadvancedtooltips, freshOggEnc2, autoscroll, 
-                     alwaysOnTop, safeProfileAlteration, autoUpdate, usehttpproxy, addTimePosition, alwaysbackupfiles;
+                     alwaysOnTop, safeProfileAlteration, autoUpdate, usehttpproxy, addTimePosition, alwaysbackupfiles,
+                     forcerawavcextension;
         private ulong audioSamplesPerUpdate;
         private AfterEncoding afterEncoding;
         private decimal forceFilmThreshold, acceptableFPSError;
@@ -119,6 +120,7 @@ namespace MeGUI
             eac3toPath = "eac3to.exe";
             tsmuxerPath = "tsmuxer.exe";
             alwaysbackupfiles = true;
+            forcerawavcextension = false;
         }
         #region properties
         public string YadifPath
@@ -404,7 +406,7 @@ namespace MeGUI
             get { return eac3toPath; }
             set { eac3toPath = value; }
         }
-         /// <summary>
+        /// <summary>
         /// filename and full path of the tsmuxer executable
         /// </summary>
         public string TSMuxerPath
@@ -419,6 +421,15 @@ namespace MeGUI
         {
             get { return alwaysbackupfiles; }
             set { alwaysbackupfiles = value; }
+        }
+        ///<summary>
+        /// gets / sets whether to force raw AVC file Extension for QuickTime compatibility
+        /// more infos here : http://forum.doom9.org/showthread.php?p=1243370#post1243370
+        /// </summary>
+        public bool ForceRawAVCExtension
+        {
+            get { return forcerawavcextension; }
+            set { forcerawavcextension = value; }
         }
 
         /// <summary>

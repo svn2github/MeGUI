@@ -190,6 +190,7 @@ namespace MeGUI
         private Label tsmuxerPathLabel;
         private Button selectTSMuxerExecutableButton;
         private CheckBox backupfiles;
+        private CheckBox forcerawavcuse;
 
 		/// <summary>
 		/// Required designer variable.
@@ -382,6 +383,7 @@ namespace MeGUI
             this.audioExtLabel = new System.Windows.Forms.Label();
             this.videoExtLabel = new System.Windows.Forms.Label();
             this.autoEncodeDefaultsButton = new System.Windows.Forms.Button();
+            this.forcerawavcuse = new System.Windows.Forms.CheckBox();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.defaultOutputDir = new MeGUI.FileBar();
             groupBox1 = new System.Windows.Forms.GroupBox();
@@ -487,6 +489,7 @@ namespace MeGUI
             // 
             // otherGroupBox
             // 
+            this.otherGroupBox.Controls.Add(this.forcerawavcuse);
             this.otherGroupBox.Controls.Add(this.audiosamplesperupdate);
             this.otherGroupBox.Controls.Add(this.label6);
             this.otherGroupBox.Controls.Add(this.acceptableFPSError);
@@ -625,7 +628,7 @@ namespace MeGUI
             // 
             // chkboxUseAdvancedTooltips
             // 
-            this.chkboxUseAdvancedTooltips.Location = new System.Drawing.Point(13, 128);
+            this.chkboxUseAdvancedTooltips.Location = new System.Drawing.Point(13, 105);
             this.chkboxUseAdvancedTooltips.Name = "chkboxUseAdvancedTooltips";
             this.chkboxUseAdvancedTooltips.Size = new System.Drawing.Size(152, 17);
             this.chkboxUseAdvancedTooltips.TabIndex = 8;
@@ -651,7 +654,7 @@ namespace MeGUI
             // 
             // deleteAbortedOutput
             // 
-            this.deleteAbortedOutput.Location = new System.Drawing.Point(13, 174);
+            this.deleteAbortedOutput.Location = new System.Drawing.Point(13, 151);
             this.deleteAbortedOutput.Name = "deleteAbortedOutput";
             this.deleteAbortedOutput.Size = new System.Drawing.Size(184, 17);
             this.deleteAbortedOutput.TabIndex = 12;
@@ -667,7 +670,7 @@ namespace MeGUI
             // 
             // openScript
             // 
-            this.openScript.Location = new System.Drawing.Point(13, 151);
+            this.openScript.Location = new System.Drawing.Point(13, 128);
             this.openScript.Name = "openScript";
             this.openScript.Size = new System.Drawing.Size(248, 17);
             this.openScript.TabIndex = 10;
@@ -1973,6 +1976,15 @@ namespace MeGUI
             this.autoEncodeDefaultsButton.Text = "Configure Defaults";
             this.autoEncodeDefaultsButton.UseVisualStyleBackColor = true;
             // 
+            // forcerawavcuse
+            // 
+            this.forcerawavcuse.Location = new System.Drawing.Point(13, 174);
+            this.forcerawavcuse.Name = "forcerawavcuse";
+            this.forcerawavcuse.Size = new System.Drawing.Size(258, 17);
+            this.forcerawavcuse.TabIndex = 18;
+            this.forcerawavcuse.Text = "Force Video File Extension for QT compatibility";
+            this.forcerawavcuse.UseVisualStyleBackColor = true;
+            // 
             // helpButton1
             // 
             this.helpButton1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -2407,6 +2419,7 @@ namespace MeGUI
                 settings.EAC3toPath = eac3toPath.Text;
                 settings.TSMuxerPath = tsmuxerPath.Text;
                 settings.AlwaysBackUpFiles = backupfiles.Checked;
+                settings.ForceRawAVCExtension = forcerawavcuse.Checked;
 				return settings;
 			}
 			set
@@ -2477,6 +2490,7 @@ namespace MeGUI
                 eac3toPath.Text = settings.EAC3toPath;
                 tsmuxerPath.Text = settings.TSMuxerPath;
                 backupfiles.Checked = settings.AlwaysBackUpFiles;
+                forcerawavcuse.Checked = settings.ForceRawAVCExtension;
 			}
 		}
 		#endregion

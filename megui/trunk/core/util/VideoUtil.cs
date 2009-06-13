@@ -359,6 +359,18 @@ namespace MeGUI
             return TrackID;
         }
 
+        public static string detectVideoStreamType(string fileName)
+        {
+            string vst;
+            if (detecAVCStreamFromFile(fileName))
+                vst = "avc";
+            else if (detecVC1StreamFromFile(fileName))
+                vst = "vc1";
+            else
+                vst = "mpeg2";
+            return vst;
+        }
+
         /// detect AVC stream from a file using MediaInfo
         /// </summary>
         /// <param name="infoFile">the file to be analyzed</param>
@@ -920,9 +932,9 @@ namespace MeGUI
                 if (type.outputType is VideoType)
                 {
                     // see http://forum.doom9.org/showthread.php?p=1243370#post1243370
-                    if (video.Settings.EncoderType != VideoEncoderType.X264)
-                         video.Output = Path.ChangeExtension(video.Output, type.outputType.Extension);
-                    else video.Output = Path.ChangeExtension(video.Output, ".264");
+                    if (mainForm.Settings.ForceRawAVCExtension)
+                         video.Output = Path.ChangeExtension(video.Output, ".264");
+                    else video.Output = Path.ChangeExtension(video.Output, type.outputType.Extension);
                     video.VideoType = type;
                 }
                 if (type.outputType is AudioType)
