@@ -95,6 +95,7 @@ namespace MeGUI
             addLanguage("Burmese", "bur");
             addLanguage("Catalan", "cat");
             addLanguage("Chinese", "chi");
+            addLanguage("Chinese (Alt)", "zho");
             addLanguage("Corsican", "cos");
             addLanguage("Croatian", "scr");
             addLanguage("Czech", "cze");
