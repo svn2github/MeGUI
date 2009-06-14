@@ -73,7 +73,13 @@ namespace MeGUI
         public dgmFile(string fileName)
         {
             this.fileName = fileName;
-            reader = AvsFile.ParseScript("MPGSource(\"" + this.fileName + "\")");
+            int c;
+            string dgdecodenv = ScriptServer.DGDecodeNVdllPath(out c);
+            switch (c)
+            {
+                case 1: reader = AvsFile.ParseScript("DGSource(\"" + this.fileName + "\")"); break;
+                case 2: reader = AvsFile.ParseScript("LoadPlugin(\"" + dgdecodenv + "\")\r\nDGSource(\"" + this.fileName + "\")"); break;
+            }
             this.readFileProperties();
         }
 
