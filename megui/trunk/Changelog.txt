@@ -1,3 +1,9 @@
+0.3.1.1042
+    - (kurtnoise) Add an option in MeGUI settings to force video file extension for QuickTime compatibility (http://forum.doom9.org/showthread.php?p=1243370#post1243370). This way, fix issue #2797133
+    - (kurtnoise) [LanguageSelectionContainer] add zho as alternative Chinese Language.
+    - (kurtnoise) [HdBdStreamExtractor] add a DirectorySeparatorChar for input when the selected path is not the root disk. Fix issue #2805803
+    - (kurtnoise) [AudioStream] add DTS-ES & AC3 Surround cases.
+
 0.3.1.1041
     - (kurtnoise) enable DSS2 in Avisynth Script/Settings.
     - (kurtnoise) [AviSynthProfileConfigPanel] add DSS2 over DSS checkbox.
