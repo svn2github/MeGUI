@@ -1453,12 +1453,31 @@ namespace MeGUI.packages.tools.hdbdextractor
 
                         // create dummy input string for megui job
                         if (feature.Description.Contains("EVO"))
-                            dummyInput = args.inputPath + "HVDVD_TS\\" + feature.Description.Substring(0, feature.Description.IndexOf(","));
+                        {
+                            if (args.inputPath.ToUpper().Contains("HVDVD_TS"))
+                                 dummyInput = args.inputPath + feature.Description.Substring(0, feature.Description.IndexOf(","));
+                            else dummyInput = args.inputPath + "HVDVD_TS\\" + feature.Description.Substring(0, feature.Description.IndexOf(","));
+                        }
                         else if (feature.Description.Contains("(angle"))
-                            dummyInput = args.inputPath + "BDMV\\PLAYLIST\\" + feature.Description.Substring(0, feature.Description.IndexOf(" ("));
-                        else if (feature.Description.Substring(feature.Description.LastIndexOf(".")+1, 4) == "m2ts")
-                            dummyInput = args.inputPath + "BDMV\\STREAM\\" + feature.Description.Substring(feature.Description.IndexOf(",") + 2, feature.Description.LastIndexOf(",") - feature.Description.IndexOf(",") - 2);
-                        else dummyInput = args.inputPath + "BDMV\\PLAYLIST\\" + feature.Description.Substring(0, feature.Description.IndexOf(","));
+                        {
+                            if (args.inputPath.ToUpper().Contains("BDMV\\PLAYLIST"))
+                                 dummyInput = args.inputPath + feature.Description.Substring(0, feature.Description.IndexOf(" ("));
+                            else if (args.inputPath.ToUpper().Contains("BDMV\\STREAM"))
+                                 dummyInput = args.inputPath.Substring(0, args.inputPath.LastIndexOf("BDMV")) + "BDMV\\PLAYLIST\\" + feature.Description.Substring(0, feature.Description.IndexOf(" ("));
+                            else dummyInput = args.inputPath + "BDMV\\PLAYLIST\\" + feature.Description.Substring(0, feature.Description.IndexOf(" ("));
+                        }
+                        else if (feature.Description.Substring(feature.Description.LastIndexOf(".") + 1, 4) == "m2ts")
+                        {
+                            if (args.inputPath.ToUpper().Contains("BDMV\\STREAM"))
+                                 dummyInput = args.inputPath + feature.Description.Substring(feature.Description.IndexOf(",") + 2, feature.Description.LastIndexOf(",") - feature.Description.IndexOf(",") - 2);
+                            else dummyInput = args.inputPath + "BDMV\\STREAM\\" + feature.Description.Substring(feature.Description.IndexOf(",") + 2, feature.Description.LastIndexOf(",") - feature.Description.IndexOf(",") - 2);
+                        }
+                        else
+                        {
+                            if (args.inputPath.ToUpper().Contains("BDMV\\PLAYLIST"))
+                                 dummyInput = args.inputPath + feature.Description.Substring(0, feature.Description.IndexOf(","));
+                            else dummyInput = args.inputPath + "BDMV\\PLAYLIST\\" + feature.Description.Substring(0, feature.Description.IndexOf(","));
+                        }
 
                         backgroundWorker.ReportProgress(0, "Retrieving streams...");
                         WriteToLog("Retrieving streams...");
