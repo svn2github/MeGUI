@@ -106,7 +106,12 @@ namespace MeGUI
             {
                 StringBuilder sb = new StringBuilder();
                 if (job.InputType == 1) // Folder as Input
-                    sb.Append(string.Format("\"{0}\" {1}) {2}", job.Input.Substring(0, 3), job.FeatureNb, job.Args + " -progressnumbers"));
+                {
+                    if (job.Input.EndsWith(".m2ts"))
+                        sb.Append(string.Format("\"{0}\" {1}) {2}", job.Input.Substring(0, job.Input.IndexOf("BDMV")), job.FeatureNb, job.Args + " -progressnumbers"));
+                    else
+                        sb.Append(string.Format("\"{0}\" {1}) {2}", job.Input, job.FeatureNb, job.Args + " -progressnumbers"));
+                }
                 else
                     sb.Append(string.Format("\"{0}\" {1}", job.Input, job.Args + " -progressnumbers"));
 
