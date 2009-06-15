@@ -1117,7 +1117,7 @@ namespace MeGUI.packages.tools.hdbdextractor
                 folderBrowserDialog1.Description = "Choose an input directory";
                 folderBrowserDialog1.ShowNewFolderButton = false;
                 dr = folderBrowserDialog1.ShowDialog();
-                if (folderBrowserDialog1.SelectedPath.EndsWith(":\""))
+                if (folderBrowserDialog1.SelectedPath.EndsWith(":\\"))
                      myinput = folderBrowserDialog1.SelectedPath;
                 else myinput = folderBrowserDialog1.SelectedPath + System.IO.Path.DirectorySeparatorChar;
             }
