@@ -1,3 +1,7 @@
+0.3.1.1043
+    - (kurtnoise) [AviSynthWindow] update DGxxxIndexFile version string.
+    - (kurtnoise) updpate dgmReader & dgvReader to the latest DGSource().
+
 0.3.1.1042
     - (kurtnoise) Add an option in MeGUI settings to force video file extension for QuickTime compatibility (http://forum.doom9.org/showthread.php?p=1243370#post1243370). This way, fix issue #2797133
     - (kurtnoise) [LanguageSelectionContainer] add zho as alternative Chinese Language.
