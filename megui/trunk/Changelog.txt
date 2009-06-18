@@ -1,3 +1,9 @@
+0.3.1.1044
+    - (kurtnoise) [HDBDStreamExtractor] fix some issues for HD-DVD.
+    - (kurtnoise) [VideoUtil] forceRawAVCExtension only if videoEncoderType is x264
+    - (kurtnoise) [HdBdStreamExtractor] improve dummyInput creation.
+    - (kurtnoise) [HDStreamExtractorIndexer] fix an issue in the command line with M2TS as job input.
+
 0.3.1.1043
     - (kurtnoise) [AviSynthWindow] update DGxxxIndexFile version string.
     - (kurtnoise) updpate dgmReader & dgvReader to the latest DGSource().
