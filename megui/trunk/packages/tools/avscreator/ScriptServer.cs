@@ -121,7 +121,7 @@ namespace MeGUI
 
         public static readonly IList ListOfNvDeIntType = EnumProxy.CreateArray(typeof(NvDeinterlacerType));
 
-        private static MainForm mainForm = new MainForm();
+        public static MainForm mainForm;
         
 
         public static string CreateScriptFromTemplate(string template, string inputLine, string cropLine, string resizeLine, string denoiseLines, string deinterlaceLines)
