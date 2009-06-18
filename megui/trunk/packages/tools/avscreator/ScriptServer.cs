@@ -158,30 +158,14 @@ namespace MeGUI
                         inputLine += string.Format("\r\nColorMatrix(hints=true{0}, threads=0)", interlaced ? ", interlaced=true" : "");
                     break;
                 case PossibleSources.dga:
-                    {
-                        switch (c)
-                        {
-                            case 1: inputLine = "DGSource(\"" + input + "\""; break;
-                            case 2: inputLine = "LoadPlugin(\"" + dgdecodenv + "\")\r\nDGSource(\"" + input + "\""; break;
-                            default: inputLine = "AVCSource(\"" + input + "\""; break;
-                        }
-                    }
-                    break;
                 case PossibleSources.dgm:
-                    {
-                        switch (c)
-                        {
-                            case 1: inputLine = "DGSource(\"" + input + "\""; break;
-                            case 2: inputLine = "LoadPlugin(\"" + dgdecodenv + "\")\r\nDGSource(\"" + input + "\""; break;
-                        }
-                    }
-                    break;
                 case PossibleSources.dgv:
                     {
                         switch (c)
                         {
                             case 1: inputLine = "DGSource(\"" + input + "\""; break;
                             case 2: inputLine = "LoadPlugin(\"" + dgdecodenv + "\")\r\nDGSource(\"" + input + "\""; break;
+                            default: inputLine = "AVCSource(\"" + input + "\""; break;
                         }
                     }
                     break;
@@ -224,7 +208,8 @@ namespace MeGUI
             }
             
             if (!flag) // check somewhere else
-            {                    
+            {
+                mainForm = MainForm.Instance;
                 if (!string.IsNullOrEmpty(mainForm.Settings.DgavcIndexPath))
                 {
                     dgdecodenv = Path.GetDirectoryName(mainForm.Settings.DgavcIndexPath) + "\\DGDecodeNV.dll";
