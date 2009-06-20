@@ -1,3 +1,7 @@
+0.3.1.1045
+    - (kurtnoise) [ScriptServer] remove duplicate code.
+    - (kurtnoise) [ScriptServer] fix incorrect static member. (#2807518)
+
 0.3.1.1044
     - (kurtnoise) [HDBDStreamExtractor] fix some issues for HD-DVD.
     - (kurtnoise) [VideoUtil] forceRawAVCExtension only if videoEncoderType is x264
