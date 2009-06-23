@@ -930,7 +930,7 @@ namespace MeGUI
             log.LogValue("Generated Avisynth script", newScript);
             try
             {
-                StreamWriter sw = new StreamWriter(Path.ChangeExtension(path, ".avs"));
+                StreamWriter sw = new StreamWriter(Path.ChangeExtension(path, ".avs"),false, System.Text.Encoding.Default);
                 sw.Write(newScript);
                 sw.Close();
             }
