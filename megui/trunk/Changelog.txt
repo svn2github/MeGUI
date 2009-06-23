@@ -1,3 +1,8 @@
+0.3.1.1046
+    - (Sharktooth) [Dialogs] *.m2ts -> *.m2t* to support .m2t extension.
+    - (Sharktooth) [VideoUtil] Added ".aac" extension to the list of the audio files demuxed by DGIndex since getAllDexumedAudio() is now used for DGAVCIndex as well.
+    - (Sharktooth) [OneClickWindow] Fixed incorrect charset encoding for non-english file names (patch by Fight16)
+
 0.3.1.1045
     - (kurtnoise) [ScriptServer] remove duplicate code.
     - (kurtnoise) [ScriptServer] fix incorrect static member. (#2807518)
