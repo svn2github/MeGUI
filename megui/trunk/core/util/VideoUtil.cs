@@ -637,7 +637,8 @@ namespace MeGUI
                          file.EndsWith(".mp1") ||
                          file.EndsWith(".mpa") ||
                          file.EndsWith(".dts") ||
-                         file.EndsWith(".wav")) // It is the right track
+                         file.EndsWith(".wav") ||
+                         file.EndsWith(".aac")) // It is the right track
 					{
                         audioFiles.Add(audioTracks[counter].TrackID, file);
                         break;
