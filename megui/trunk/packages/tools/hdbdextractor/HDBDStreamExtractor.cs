@@ -592,8 +592,8 @@ namespace MeGUI.packages.tools.hdbdextractor
             // 
             // openFileDialog1
             // 
-            this.openFileDialog1.Filter = "E-VOB Files (.*evo,*.vob)|*.evo;*.vob|Transport Streams Files (*.m2ts,*.mts,*.ts)" +
-                "|*.m2ts;*.ts|All Files supported (*.*)|*.evo;*.vob;*.m2ts;*.mts;*.ts";
+            this.openFileDialog1.Filter = "E-VOB Files (.*evo,*.vob)|*.evo;*.vob|Transport Streams Files (*.m2t*,*.mts,*.ts)" +
+                "|*.m2t*;*.ts|All Files supported (*.*)|*.evo;*.vob;*.m2t*;*.mts;*.ts";
             this.openFileDialog1.FilterIndex = 3;
             this.openFileDialog1.Multiselect = true;
             // 

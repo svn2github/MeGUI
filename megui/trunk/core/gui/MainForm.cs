@@ -1152,11 +1152,11 @@ namespace MeGUI
         {
             openFileDialog.Filter = "AviSynth Scripts (*.avs)|*.avs|" +
                 "Audio Files (*.ac3, *.mp2, *.mpa, *.wav)|*.ac3;*.mp2;*.mpa;*.wav|" +
-                "MPEG-2 Files (*.vob, *.mpg, *.mpeg, *.m2ts, *.m2v, *.mpv, *.tp, *.ts, *.trp, *.pva, *.vro)|" +
-                "*.vob;*.mpg;*.mpeg;*.m2ts;*.m2v;*.mpv;*.tp;*.ts;*.trp;*.pva;*.vro|" +
+                "MPEG-2 Files (*.vob, *.mpg, *.mpeg, *.m2t*, *.m2v, *.mpv, *.tp, *.ts, *.trp, *.pva, *.vro)|" +
+                "*.vob;*.mpg;*.mpeg;*.m2t*;*.m2v;*.mpv;*.tp;*.ts;*.trp;*.pva;*.vro|" +
                 "Other Video Files (*.d2v, *.avi, *.mp4, *.mkv, *.rmvb)|*.d2v;*.avi;*.mp4;*.mkv;*.rmvb|" +
                 "All supported encodable files|" +
-                "*.avs;*.ac3;*.mp2;*.mpa;*.wav;*.vob;*.mpg;*.mpeg;*.m2ts;*.m2v;*.mpv;*.tp;*.ts;*.trp;*.pva;*.vro;*.d2v;*.avi;*.mp4;*.mkv;*.rmvb|" +
+                "*.avs;*.ac3;*.mp2;*.mpa;*.wav;*.vob;*.mpg;*.mpeg;*.m2t*;*.m2v;*.mpv;*.tp;*.ts;*.trp;*.pva;*.vro;*.d2v;*.avi;*.mp4;*.mkv;*.rmvb|" +
                 "All files|*.*";
             openFileDialog.Title = "Select your input file";
             if (openFileDialog.ShowDialog() == DialogResult.OK)

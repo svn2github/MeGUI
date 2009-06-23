@@ -107,8 +107,8 @@ namespace MeGUI
             // input
             // 
             this.input.Filename = "";
-            this.input.Filter = "Matroska Files (*.mkv)|*.mkv|Transport Streams (*.m2ts,*.ts)|*.m2ts;*.ts|VC-1 Fil" +
-                "es (*.vc1)|*.vc1|All DGVC1Index supported files|*.mkv;*.m2ts;*.tp;*.ts;*.trp;*.p" +
+            this.input.Filter = "Matroska Files (*.mkv)|*.mkv|Transport Streams (*.m2t*,*.ts)|*.m2t*;*.ts|VC-1 Fil" +
+                "es (*.vc1)|*.vc1|All DGVC1Index supported files|*.mkv;*.m2t*;*.tp;*.ts;*.trp;*.p" +
                 "va;*.vro;*.vc1";
             this.input.FilterIndex = 4;
             this.input.FolderMode = false;

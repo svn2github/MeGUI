@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="input.Filter" xml:space="preserve">
-    <value>VOB Files (*.vob)|*.vob|MPEG-1/2 Program Streams (*.mpg)|*.mpg|Transport Streams (*.m2ts,*.ts)|*.m2ts;*.ts|All DGIndex supported files|*.vob;*.mpg;*.mpeg;*.m2ts;*.m2v;*.m2p;*.mpv;*.tp;*.ts;*.trp;*.pva;*.vro</value>
+    <value>VOB Files (*.vob)|*.vob|MPEG-1/2 Program Streams (*.mpg)|*.mpg|Transport Streams (*.m2t*,*.ts)|*.m2t*;*.ts|All DGIndex supported files|*.vob;*.mpg;*.mpeg;*.m2t*;*.m2v;*.m2p;*.mpv;*.tp;*.ts;*.trp;*.pva;*.vro</value>
   </data>
   <metadata name="saveProjectDialog.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
