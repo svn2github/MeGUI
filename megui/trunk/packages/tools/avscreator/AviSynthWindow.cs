@@ -1658,14 +1658,14 @@ namespace MeGUI
                 string line = sr.ReadLine();
                 switch (this.sourceType)
                 {
-                    case PossibleSources.dga: if (line.IndexOf("DGAVCIndexFileNV3") == -1) flag = true; break;
-                    case PossibleSources.dgm: if (line.IndexOf("DGMPGIndexFileNV2") == -1) flag = true; break;
-                    case PossibleSources.dgv: if (line.IndexOf("DGVC1IndexFileNV3") == -1) flag = true; break; 
+                    case PossibleSources.dga: if (line.ToLower().Contains("dgavcindexfilenv")) flag = true; break;
+                    case PossibleSources.dgm: if (line.ToLower().Contains("dgmpgindexfilenv")) flag = true; break;
+                    case PossibleSources.dgv: if (line.ToLower().Contains("dgvc1indexfilenv")) flag = true; break; 
                 }
             }
-            if (flag)
+            if (!flag)
             {
-                if (MessageBox.Show("You cannot use this option with " + Path.GetFileName(input) + " file. It's not compatible...",
+                if (MessageBox.Show("You cannot use this option with the " + Path.GetFileName(input) + " file. It's not compatible...",
                     "Information", MessageBoxButtons.OK, MessageBoxIcon.Information) == DialogResult.OK)
                     this.nvDeInt.Checked = false;
             }
