@@ -151,8 +151,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                 sb.Append("--deadzone-intra " + xs.DeadZoneIntra + " ");
             if (xs.NbRefFrames != 1) // 1 ref frame is default
                 sb.Append("--ref " + xs.NbRefFrames + " ");
-            if (xs.MixedRefs)
-                sb.Append("--mixed-refs ");
+            if (!xs.MixedRefs)
+                sb.Append("--no-mixed-refs ");
             if (xs.noFastPSkip)
                 sb.Append("--no-fast-pskip ");
             if (xs.NbBframes != 0) // 0 is default value, adaptive and pyramid are conditional on b frames being enabled
@@ -168,8 +168,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                 }
                 if (xs.NbBframes > 1 && xs.BFramePyramid) // pyramid needs a minimum of 2 b frames
                     sb.Append("--b-pyramid ");
-                if (xs.WeightedBPrediction)
-                    sb.Append("--weightb ");
+                if (!xs.WeightedBPrediction)
+                    sb.Append("--no-weightb ");
                 if (xs.BframePredictionMode != 1)
                 {
                     sb.Append("--direct ");
@@ -231,8 +231,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                     if (sb.ToString().EndsWith(","))
                         sb.Remove(sb.Length - 1, 1);
                 }
-                if (xs.AdaptiveDCT) // default is unchecked
-                    sb.Append(" --8x8dct ");
+                if (!xs.AdaptiveDCT) // default is unchecked
+                    sb.Append(" --no-8x8dct ");
                 if (!sb.ToString().EndsWith(" "))
                     sb.Append(" ");
             }
@@ -344,10 +344,10 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             sb.Append("--progress "); // ensure that the progress is shown
             if (xs.NoDCTDecimate)
                 sb.Append("--no-dct-decimate ");
-            if (!xs.PSNRCalculation)
-                sb.Append("--no-psnr ");
-            if (!xs.SSIMCalculation)
-                sb.Append("--no-ssim ");
+            if (xs.PSNRCalculation)
+                sb.Append("--psnr ");
+            if (xs.SSIMCalculation)
+                sb.Append("--ssim ");
             if (xs.EncodeInterlaced)
                 sb.Append("--interlaced ");
             if (xs.NoiseReduction > 0)
