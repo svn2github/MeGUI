@@ -341,7 +341,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
 
             if (output.EndsWith(".264"))
                 sb.Append("--aud ");  // recommended by the specs
-            sb.Append("--progress "); // ensure that the progress is shown
             if (xs.NoDCTDecimate)
                 sb.Append("--no-dct-decimate ");
             if (xs.PSNRCalculation)
