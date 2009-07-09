@@ -1,3 +1,9 @@
+0.3.1.1047
+    - (sharktooth) [x264Encoder] Removed --progress switch since it's a new x264 default option.
+    - (sharktooth) [x264] Reconfigured default settings and commandline generation due to the changes in x264 defaults and CLI options.
+    - (kurtnoise) [AviSynthWindow] revisit checkNVCompatibleFile() function.
+    - (kurtnoise) update MediaInfo library and its wrapper to the latest release (0.7.17)
+
 0.3.1.1046
     - (Sharktooth) [Dialogs] *.m2ts -> *.m2t* to support .m2t extension.
     - (Sharktooth) [VideoUtil] Added ".aac" extension to the list of the audio files demuxed by DGIndex since getAllDexumedAudio() is now used for DGAVCIndex as well.
