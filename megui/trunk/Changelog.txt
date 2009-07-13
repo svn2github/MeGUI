@@ -1,3 +1,10 @@
+0.3.1.1050
+    - (sharktooth) [x264] Added --profile support with a slight difference with x264 defaults. Autoguess means no --profile option will be specified. High/Main/Baseline will set the --profile option accordingly.
+    - (sharktooth) [x264] Set CRF 23 as default encoding mode.
+    - (sharktooth) [x264ConfigurationPanel] Trellis is now enabled by default as well...
+    - (sharktooth) [x264ConfigurationPanel] More fixes...
+    - (sharktooth) [x264ConfigurationPanel] Additional checks and fixes for h.264 Profiles restrictions.
+
 0.3.1.1049
     - (sharktooth) [x264ConfigurationPanel] Additional checks to ensure proper options values are passed to the commandline generator.
     - (sharktooth) [x264] Fixed x264 --subme & --ref commandline options generation due to the new x264 defaults.

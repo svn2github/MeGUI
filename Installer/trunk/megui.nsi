@@ -2,7 +2,7 @@
 !define OUTFILE "megui-setup.exe"
 !define PRODUCT_VERSION "0.3.1.1049"
 !define PRODUCT_WEB_SITE "www.doom9.net"
-!define APPNAMEANDVERSION "MeGUI 0.3.1.1049"
+!define APPNAMEANDVERSION "MeGUI 0.3.1.1050"
 !define INPUT_PATH "..\..\megui\trunk\dist\bigdist\"
 !define FILE1 "AvisynthWrapper.dll"
 !define FILE2 "Changelog.txt"
