@@ -155,10 +155,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                 sb.Append("--no-mixed-refs ");
             if (xs.noFastPSkip)
                 sb.Append("--no-fast-pskip ");
-            if (xs.NbBframes != 0) // 0 is default value, adaptive and pyramid are conditional on b frames being enabled
-            {
+            if (xs.NbBframes != 3) // 3 is default value
                 sb.Append("--bframes " + xs.NbBframes + " ");
-                if (xs.NewAdaptiveBFrames > 1)
+            if (xs.NbBframes > 0)
+            {
+                if (xs.NewAdaptiveBFrames > 1) // adaptive b-frames is conditional on b frames being enabled
                 {
                     sb.Append("--b-adapt " + xs.NewAdaptiveBFrames + " ");
                 }
@@ -168,11 +169,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                 }
                 if (xs.NbBframes > 1 && xs.BFramePyramid) // pyramid needs a minimum of 2 b frames
                     sb.Append("--b-pyramid ");
-                if (!xs.WeightedBPrediction)
+                if (!xs.WeightedBPrediction) // weighted BPredictioon is conditional on b frames being enabled
                     sb.Append("--no-weightb ");
-                if (xs.BframePredictionMode != 1)
+                if (xs.BframePredictionMode != 1) // BframePredicionMode is conditional on b frames being enabled
                 {
-                    sb.Append("--direct ");
+                    sb.Append("--direct "); // mode = 1 (spatial) is default value
                     if (xs.BframePredictionMode == 0)
                         sb.Append("none ");
                     else if (xs.BframePredictionMode == 2)

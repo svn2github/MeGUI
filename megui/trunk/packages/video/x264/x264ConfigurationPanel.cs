@@ -803,7 +803,11 @@ namespace MeGUI.packages.video.x264
                     break;
                 case 1: // main profile, disable i8x8
                     x264CabacEnabled.Enabled = true;
-                    x264NumberOfBFrames.Enabled = true;
+                    if (!x264NumberOfBFrames.Enabled)
+                    {
+                        x264NumberOfBFrames.Enabled = true;
+                        x264NumberOfBFrames.Value = 3;
+                    }
                     x264NumberOfRefFramesLabel.Enabled = true;
                     cqmComboBox1.SelectedIndex = 0;
                     quantizerMatrixGroupbox.Enabled = false;
@@ -812,7 +816,11 @@ namespace MeGUI.packages.video.x264
                     break;
                 case 2: // high profile, enable everything
                     x264CabacEnabled.Enabled = true;
-                    x264NumberOfBFrames.Enabled = true;
+                    if (!x264NumberOfBFrames.Enabled)
+                    {
+                        x264NumberOfBFrames.Enabled = true;
+                        x264NumberOfBFrames.Value = 3;
+                    }
                     x264NumberOfRefFramesLabel.Enabled = true;
                     x264LosslessMode.Enabled = true;
                     if (x264LosslessMode.Checked)

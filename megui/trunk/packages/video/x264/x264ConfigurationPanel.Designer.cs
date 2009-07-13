@@ -1528,6 +1528,11 @@ namespace MeGUI.packages.video.x264
             this.x264NumberOfBFrames.Name = "x264NumberOfBFrames";
             this.x264NumberOfBFrames.Size = new System.Drawing.Size(47, 20);
             this.x264NumberOfBFrames.TabIndex = 1;
+            this.x264NumberOfBFrames.Value = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
             this.x264NumberOfBFrames.ValueChanged += new System.EventHandler(this.updateEvent);
             // 
             // x264PyramidBframes
