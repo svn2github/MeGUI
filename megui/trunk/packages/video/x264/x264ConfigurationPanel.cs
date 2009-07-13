@@ -796,29 +796,22 @@ namespace MeGUI.packages.video.x264
                     x264NumberOfBFrames.Value = 0;
                     x264NumberOfBFrames.Enabled = false;
                     x264NumberOfBFramesLabel.Enabled = false;
-                    x264NumberOfRefFrames.Value = 1;
-                    x264NumberOfRefFrames.Enabled = false;
-                    x264NumberOfRefFramesLabel.Enabled = false;
-                    x264MixedReferences.Checked = false;
-                    x264MixedReferences.Enabled = false;
                     cqmComboBox1.SelectedIndex = 0;
                     quantizerMatrixGroupbox.Enabled = false;
                     x264LosslessMode.Checked = false;
                     x264LosslessMode.Enabled = false;
                     break;
                 case 1: // main profile, disable i8x8
-                    x264CabacEnabled.Enabled = true;
+                    if (!x264CabacEnabled.Enabled)
+                    {
+                        x264CabacEnabled.Enabled = true;
+                        x264CabacEnabled.Checked = true;
+                    }
                     if (!x264NumberOfBFrames.Enabled)
                     {
                         x264NumberOfBFrames.Enabled = true;
                         x264NumberOfBFrames.Value = 3;
                         x264NumberOfBFramesLabel.Enabled = true;
-                    }
-                    if (!x264NumberOfRefFramesLabel.Enabled)
-                    {
-                        x264NumberOfRefFrames.Enabled = true;
-                        x264NumberOfRefFrames.Value = 3;
-                        x264NumberOfRefFramesLabel.Enabled = true;
                     }
                     cqmComboBox1.SelectedIndex = 0;
                     quantizerMatrixGroupbox.Enabled = false;
@@ -826,18 +819,16 @@ namespace MeGUI.packages.video.x264
                     x264LosslessMode.Enabled = false;
                     break;
                 case 2: // high profile, enable everything
-                    x264CabacEnabled.Enabled = true;
+                    if (!x264CabacEnabled.Enabled)
+                    {
+                        x264CabacEnabled.Enabled = true;
+                        x264CabacEnabled.Checked = true;
+                    }
                     if (!x264NumberOfBFrames.Enabled)
                     {
                         x264NumberOfBFrames.Enabled = true;
                         x264NumberOfBFrames.Value = 3;
                         x264NumberOfBFramesLabel.Enabled = true;
-                    }
-                    if (!x264NumberOfRefFramesLabel.Enabled)
-                    {
-                        x264NumberOfRefFrames.Enabled = true;
-                        x264NumberOfRefFrames.Value = 3;
-                        x264NumberOfRefFramesLabel.Enabled = true;
                     }
                     x264LosslessMode.Enabled = true;
                     if (x264LosslessMode.Checked)
