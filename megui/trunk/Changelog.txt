@@ -1,3 +1,6 @@
+0.3.1.1048
+    - (sharktooth) [x264] Fixed b-frames controls behavior and commandline generation to respect the new x264 b-frames default value. Should also fix the baseline profile encoding.
+
 0.3.1.1047
     - (sharktooth) [x264Encoder] Removed --progress switch since it's a new x264 default option.
     - (sharktooth) [x264] Reconfigured default settings and commandline generation due to the changes in x264 defaults and CLI options.
