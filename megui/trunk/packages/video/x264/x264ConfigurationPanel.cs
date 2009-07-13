@@ -439,7 +439,7 @@ namespace MeGUI.packages.video.x264
             if (cqmComboBox1.SelectedIndex == -1)
                 cqmComboBox1.SelectedIndex = 0; // flat matrix
             if (this.avcProfile.SelectedIndex == -1)
-                avcProfile.SelectedIndex = 1; // 
+                avcProfile.SelectedIndex = 2; // 
             if (cbAQMode.SelectedIndex == -1)
                 cbAQMode.SelectedIndex = 1;
             lastEncodingMode = this.x264EncodingMode.SelectedIndex;
@@ -829,6 +829,11 @@ namespace MeGUI.packages.video.x264
                         x264NumberOfBFrames.Enabled = true;
                         x264NumberOfBFrames.Value = 3;
                         x264NumberOfBFramesLabel.Enabled = true;
+                    }
+                    if (!adaptiveDCT.Enabled)
+                    {
+                        adaptiveDCT.Enabled = true;
+                        adaptiveDCT.Checked = true;
                     }
                     x264LosslessMode.Enabled = true;
                     if (x264LosslessMode.Checked)

@@ -113,7 +113,7 @@ namespace MeGUI
 			quantCompression = new decimal(0.6);
 			tempComplexityBlur = 20;
 			tempQuanBlurCC = new decimal(0.5);
-			bframePredictionMode = 2;
+			bframePredictionMode = 1;
 			scdSensitivity = new decimal(40);
 			bframeBias = new decimal(0);
 			meType = 1;
@@ -123,7 +123,7 @@ namespace MeGUI
 			adaptiveDCT = true;
 			quantizerMatrix = "";
 			quantizerMatrixType = 0; // none
-			profile = 1; // main profile
+			profile = 2; // high profile
 			lossless = false;
 			x264Trellis = 1;
 			level = 15;

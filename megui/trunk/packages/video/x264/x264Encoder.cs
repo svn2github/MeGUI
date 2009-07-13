@@ -198,7 +198,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             }
             if (!xs.ChromaME)
                 sb.Append("--no-chroma-me ");
-            if (xs.X264Trellis > 0)
+            if (xs.X264Trellis != 0)
                 sb.Append("--trellis " + xs.X264Trellis + " ");
             if ((xs.SubPelRefinement + 1) > 5)
             {
@@ -291,10 +291,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             }
             if (xs.MERange != 16)
                 sb.Append("--merange " + xs.MERange + " ");
-            if (xs.NbThreads > 1)
+            if (xs.NbThreads > 0)
                 sb.Append("--threads " + xs.NbThreads + " ");
-            if (xs.NbThreads == 0)
-                sb.Append("--threads auto ");
+            // --threads auto is now default.
+            // if (xs.NbThreads == 0)
+            //    sb.Append("--threads auto ");
             sb.Append("--thread-input ");
 
             if (xs.AQmode == 0)

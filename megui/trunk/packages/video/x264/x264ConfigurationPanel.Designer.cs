@@ -1602,6 +1602,8 @@ namespace MeGUI.packages.video.x264
             // 
             // adaptiveDCT
             // 
+            this.adaptiveDCT.Checked = true;
+            this.adaptiveDCT.CheckState = System.Windows.Forms.CheckState.Checked;
             this.adaptiveDCT.Location = new System.Drawing.Point(9, 40);
             this.adaptiveDCT.Name = "adaptiveDCT";
             this.adaptiveDCT.Size = new System.Drawing.Size(104, 24);
