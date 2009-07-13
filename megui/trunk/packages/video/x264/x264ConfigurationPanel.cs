@@ -795,7 +795,12 @@ namespace MeGUI.packages.video.x264
                     x264CabacEnabled.Enabled = false;
                     x264NumberOfBFrames.Value = 0;
                     x264NumberOfBFrames.Enabled = false;
+                    x264NumberOfBFramesLabel.Enabled = false;
+                    x264NumberOfRefFrames.Value = 1;
+                    x264NumberOfRefFrames.Enabled = false;
                     x264NumberOfRefFramesLabel.Enabled = false;
+                    x264MixedReferences.Checked = false;
+                    x264MixedReferences.Enabled = false;
                     cqmComboBox1.SelectedIndex = 0;
                     quantizerMatrixGroupbox.Enabled = false;
                     x264LosslessMode.Checked = false;
@@ -807,8 +812,14 @@ namespace MeGUI.packages.video.x264
                     {
                         x264NumberOfBFrames.Enabled = true;
                         x264NumberOfBFrames.Value = 3;
+                        x264NumberOfBFramesLabel.Enabled = true;
                     }
-                    x264NumberOfRefFramesLabel.Enabled = true;
+                    if (!x264NumberOfRefFramesLabel.Enabled)
+                    {
+                        x264NumberOfRefFrames.Enabled = true;
+                        x264NumberOfRefFrames.Value = 3;
+                        x264NumberOfRefFramesLabel.Enabled = true;
+                    }
                     cqmComboBox1.SelectedIndex = 0;
                     quantizerMatrixGroupbox.Enabled = false;
                     x264LosslessMode.Checked = false;
@@ -820,8 +831,14 @@ namespace MeGUI.packages.video.x264
                     {
                         x264NumberOfBFrames.Enabled = true;
                         x264NumberOfBFrames.Value = 3;
+                        x264NumberOfBFramesLabel.Enabled = true;
                     }
-                    x264NumberOfRefFramesLabel.Enabled = true;
+                    if (!x264NumberOfRefFramesLabel.Enabled)
+                    {
+                        x264NumberOfRefFrames.Enabled = true;
+                        x264NumberOfRefFrames.Value = 3;
+                        x264NumberOfRefFramesLabel.Enabled = true;
+                    }
                     x264LosslessMode.Enabled = true;
                     if (x264LosslessMode.Checked)
                     {
@@ -890,7 +907,11 @@ namespace MeGUI.packages.video.x264
             }
             if (this.x264NumberOfRefFrames.Value > 1 && !turboOptions) // mixed references require at least two reference frames
             {
-                this.x264MixedReferences.Enabled = true;
+                if (!this.x264MixedReferences.Enabled)
+                {
+                    this.x264MixedReferences.Enabled = true;
+                    this.x264MixedReferences.Checked = true; // mixed=refs is x264 default
+                }
             }
             else
             {
