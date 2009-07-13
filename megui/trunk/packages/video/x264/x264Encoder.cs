@@ -198,7 +198,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             }
             if (!xs.ChromaME)
                 sb.Append("--no-chroma-me ");
-            if (xs.X264Trellis != 0)
+            if (xs.X264Trellis != 1)
                 sb.Append("--trellis " + xs.X264Trellis + " ");
             if ((xs.SubPelRefinement + 1) > 5)
             {
