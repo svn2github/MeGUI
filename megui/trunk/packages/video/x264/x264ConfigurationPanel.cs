@@ -359,7 +359,7 @@ namespace MeGUI.packages.video.x264
                 }
                 else
                 {
-                    this.x264BitrateQuantizer.Value = 26;
+                    this.x264BitrateQuantizer.Value = 23;
                 }
             }
 

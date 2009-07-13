@@ -109,7 +109,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                     sb.Append("--pass 3 --bitrate " + xs.BitrateQuantizer + " --stats " + "\"" + xs.Logfile + "\" ");
                     break;
                 case 9: // constant quality
-                    sb.Append("--crf " + xs.QuantizerCRF.ToString(ci) + " ");
+                    if (xs.QuantizerCRF != 23)
+                        sb.Append("--crf " + xs.QuantizerCRF.ToString(ci) + " ");
                     break;
             } // now add the rest of the x264 encoder options
 

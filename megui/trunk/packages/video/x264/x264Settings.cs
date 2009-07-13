@@ -75,8 +75,8 @@ namespace MeGUI
 			noFastPSkip = false;
             ssimCalc = false;
             psnrCalc = false;
-			EncodingMode = 0;
-			BitrateQuantizer = 700;
+			EncodingMode = 9;
+			BitrateQuantizer = 23;
 			KeyframeInterval = 250;
 			nbRefFrames = 3;
 			mixedRefs = true;
