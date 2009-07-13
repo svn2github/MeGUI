@@ -332,7 +332,8 @@ namespace MeGUI.packages.video.x264
             this.avcProfile.Items.AddRange(new object[] {
             "Baseline Profile",
             "Main Profile",
-            "High Profile"});
+            "High Profile",
+            "Autoguess"});
             this.avcProfile.Location = new System.Drawing.Point(10, 16);
             this.avcProfile.Name = "avcProfile";
             this.avcProfile.Size = new System.Drawing.Size(157, 21);

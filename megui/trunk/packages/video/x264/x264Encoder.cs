@@ -78,6 +78,20 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             CultureInfo ci = new CultureInfo("en-us");
             if (xs.EncodingMode == 4 || xs.EncodingMode == 7)
                 xs.Turbo = false; // turn off turbo to prevent inconsistent commandline preview
+            switch (xs.Profile)
+            {
+                case 0: // Baseline
+                    sb.Append("--profile baseline ");
+                    break;
+                case 1: // Main
+                    sb.Append("--profile main ");
+                    break;
+                case 2: // High
+                    sb.Append("--profile high ");
+                    break;
+                default: // Autoguess
+                    break;
+            }
             switch (xs.EncodingMode)
             {
                 case 0: // ABR
@@ -233,7 +247,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                     if (sb.ToString().EndsWith(","))
                         sb.Remove(sb.Length - 1, 1);
                 }
-                if (!xs.AdaptiveDCT) // default is unchecked
+                if (!xs.AdaptiveDCT) // default is checked
                     sb.Append(" --no-8x8dct ");
                 if (!sb.ToString().EndsWith(" "))
                     sb.Append(" ");

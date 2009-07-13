@@ -89,7 +89,7 @@ namespace MeGUI.packages.video.x264
                 x264P4x4mv.Checked = true;
                 x264B8x8mv.Checked = true;
 
-                if (avcProfile.SelectedIndex == 2)
+                if (avcProfile.SelectedIndex > 1)
                 {
                     adaptiveDCT.Checked = true;
                     x264I8x8mv.Checked = true;
@@ -103,7 +103,7 @@ namespace MeGUI.packages.video.x264
             }
             else if (macroblockOptions.SelectedIndex == 2) // custom
             {
-                if (avcProfile.SelectedIndex == 2)
+                if (avcProfile.SelectedIndex > 1)
                 {
                     if (adaptiveDCT.Checked)
                     {
@@ -397,6 +397,14 @@ namespace MeGUI.packages.video.x264
                     else
                         this.macroblockOptions.SelectedIndex = 2;
                     break;
+                default: // Autoguess
+                    if (x264P8x8mv.Checked && x264B8x8mv.Checked && x264I4x4mv.Checked && x264I8x8mv.Checked && x264P4x4mv.Checked && adaptiveDCT.Checked)
+                        this.macroblockOptions.SelectedIndex = 0;
+                    else if (!x264P8x8mv.Checked && !x264B8x8mv.Checked && !x264I4x4mv.Checked && !x264I8x8mv.Checked && !x264P4x4mv.Checked && !adaptiveDCT.Checked)
+                        this.macroblockOptions.SelectedIndex = 1;
+                    else
+                        this.macroblockOptions.SelectedIndex = 2;
+                    break;
             }
         }
         #endregion
@@ -439,7 +447,7 @@ namespace MeGUI.packages.video.x264
             if (cqmComboBox1.SelectedIndex == -1)
                 cqmComboBox1.SelectedIndex = 0; // flat matrix
             if (this.avcProfile.SelectedIndex == -1)
-                avcProfile.SelectedIndex = 2; // 
+                avcProfile.SelectedIndex = 3; // 
             if (cbAQMode.SelectedIndex == -1)
                 cbAQMode.SelectedIndex = 1;
             lastEncodingMode = this.x264EncodingMode.SelectedIndex;
@@ -819,6 +827,42 @@ namespace MeGUI.packages.video.x264
                     x264LosslessMode.Enabled = false;
                     break;
                 case 2: // high profile, enable everything
+                    if (!x264CabacEnabled.Enabled)
+                    {
+                        x264CabacEnabled.Enabled = true;
+                        x264CabacEnabled.Checked = true;
+                    }
+                    if (!x264NumberOfBFrames.Enabled)
+                    {
+                        x264NumberOfBFrames.Enabled = true;
+                        x264NumberOfBFrames.Value = 3;
+                        x264NumberOfBFramesLabel.Enabled = true;
+                    }
+                    if (!adaptiveDCT.Enabled)
+                    {
+                        adaptiveDCT.Enabled = true;
+                        adaptiveDCT.Checked = true;
+                    }
+                    x264LosslessMode.Enabled = true;
+                    if (x264LosslessMode.Checked)
+                    {
+                        x264BitrateQuantizer.Enabled = false;
+                        x264EncodingMode.SelectedIndex = 1;
+                        lastEncodingMode = 1;
+                        x264EncodingMode.Enabled = false;
+                        if (x264BitrateQuantizer.Value != 0)
+                            x264BitrateQuantizer.Value = x264BitrateQuantizer.Minimum;
+                        if (x264Turbo.Checked)
+                            x264Turbo.Checked = false;
+                    }
+                    else
+                    {
+                        x264EncodingMode.Enabled = true;
+                        x264BitrateQuantizer.Enabled = true;
+                    }
+                    quantizerMatrixGroupbox.Enabled = true;
+                    break;
+                default: // Autoguess
                     if (!x264CabacEnabled.Enabled)
                     {
                         x264CabacEnabled.Enabled = true;

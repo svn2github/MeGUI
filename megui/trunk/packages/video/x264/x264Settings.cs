@@ -123,7 +123,7 @@ namespace MeGUI
 			adaptiveDCT = true;
 			quantizerMatrix = "";
 			quantizerMatrixType = 0; // none
-			profile = 2; // high profile
+			profile = 3; // Autoguess. High if using default options.
 			lossless = false;
 			x264Trellis = 1;
 			level = 15;
