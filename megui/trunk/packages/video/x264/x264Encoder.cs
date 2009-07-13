@@ -149,7 +149,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                 sb.Append("--deadzone-inter " + xs.DeadZoneInter + " ");
             if (xs.DeadZoneIntra != 11)
                 sb.Append("--deadzone-intra " + xs.DeadZoneIntra + " ");
-            if (xs.NbRefFrames != 1) // 1 ref frame is default
+            if (xs.NbRefFrames != 3) // 3 ref frame is default
                 sb.Append("--ref " + xs.NbRefFrames + " ");
             if (!xs.MixedRefs)
                 sb.Append("--no-mixed-refs ");
@@ -191,7 +191,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                 sb.Append("--nf ");
             if (!xs.Cabac) // no cabac
                 sb.Append("--no-cabac ");
-            if (xs.SubPelRefinement + 1 != 6) // non default subpel refinement
+            if (xs.SubPelRefinement + 1 != 7) // non default subpel refinement
             {
                 int subq = xs.SubPelRefinement + 1;
                 sb.Append("--subme " + subq + " ");
