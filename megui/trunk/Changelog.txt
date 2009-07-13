@@ -1,3 +1,7 @@
+0.3.1.1049
+    - (sharktooth) [x264ConfigurationPanel] Additional checks to ensure proper options values are passed to the commandline generator.
+    - (sharktooth) [x264] Fixed x264 --subme & --ref commandline options generation due to the new x264 defaults.
+
 0.3.1.1048
     - (sharktooth) [x264] Fixed b-frames controls behavior and commandline generation to respect the new x264 b-frames default value. Should also fix the baseline profile encoding.
 
