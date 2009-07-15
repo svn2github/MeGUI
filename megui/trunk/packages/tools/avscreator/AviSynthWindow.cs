@@ -1658,9 +1658,9 @@ namespace MeGUI
                 string line = sr.ReadLine();
                 switch (this.sourceType)
                 {
-                    case PossibleSources.dga: if (line.ToLower().Contains("dgavcindexfilenv")) flag = true; break;
-                    case PossibleSources.dgm: if (line.ToLower().Contains("dgmpgindexfilenv")) flag = true; break;
-                    case PossibleSources.dgv: if (line.ToLower().Contains("dgvc1indexfilenv")) flag = true; break; 
+                    case PossibleSources.dga: if (line.Contains("DGAVCIndexFileNV")) flag = true; break;
+                    case PossibleSources.dgm: if (line.Contains("DGMPGIndexFileNV")) flag = true; break;
+                    case PossibleSources.dgv: if (line.Contains("DGVC1IndexFileNV")) flag = true; break; 
                 }
             }
             if (!flag)
