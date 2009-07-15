@@ -843,23 +843,8 @@ namespace MeGUI.packages.video.x264
                         adaptiveDCT.Enabled = true;
                         adaptiveDCT.Checked = true;
                     }
-                    x264LosslessMode.Enabled = true;
-                    if (x264LosslessMode.Checked)
-                    {
-                        x264BitrateQuantizer.Enabled = false;
-                        x264EncodingMode.SelectedIndex = 1;
-                        lastEncodingMode = 1;
-                        x264EncodingMode.Enabled = false;
-                        if (x264BitrateQuantizer.Value != 0)
-                            x264BitrateQuantizer.Value = x264BitrateQuantizer.Minimum;
-                        if (x264Turbo.Checked)
-                            x264Turbo.Checked = false;
-                    }
-                    else
-                    {
-                        x264EncodingMode.Enabled = true;
-                        x264BitrateQuantizer.Enabled = true;
-                    }
+                    x264LosslessMode.Checked = false;
+                    x264LosslessMode.Enabled = false;
                     quantizerMatrixGroupbox.Enabled = true;
                     break;
                 default: // Autoguess
