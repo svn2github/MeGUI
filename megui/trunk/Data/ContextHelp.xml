@@ -1,13 +1,6 @@
 <?xml version="1.0"?>
-<ContextHelp version="0.5" Author="Kurtnoise" LastUpdated="20-06-08">
+<ContextHelp version="0.6" Author="Kurtnoise" LastUpdated="2009-07-15">
 	<Codec name="x264">
-		<!--To Do List: 
-1 Use info from x264 help  -  DONE
-2: Use info from MeGUI  - No Info Here
-3: Begin Doom9 perusal (x264 GUIDE) - DONE
-4: Begin Doom9 perusal (forum) - commencing
-4: Clear up remaining with Devs
--->
 		<!--Frame type options:-->
 		<keyint name="Maximum Key Frame Interval">
 			<Advanced>
@@ -47,7 +40,7 @@ video by storing data very efficiently. A setting of 2 to 3 will usually provide
 overall quality while allowing significant compression advantages.</Advanced>
 			<Basic>Maximum number of B-frames between I and P frames</Basic>
 			<Recommended>2 to 3</Recommended>
-			<Default>0</Default>
+			<Default>3</Default>
 		</bframes>
 		<b-adapt name="Adaptive B-frames">
 			<Advanced>
@@ -92,7 +85,7 @@ as more frames are used. The maximum value is 16, however quality increases beco
 with more than 5 reference frames.</Advanced>
 			<Basic>Number of reference frames</Basic>
 			<Recommended>1 to 5</Recommended>
-			<Default>1</Default>
+			<Default>3</Default>
 		</ref>
 		<nf name="Deblocking (in loop) Filter">
 			<Advanced>
@@ -133,8 +126,8 @@ compression (higher quality). There is no way to predict file size in this mode.
 under 15 are only useful for archival/reproduction quality and values over 40 show considerable
 loss in quality.</Advanced>
 			<Basic>Encode in Constant Quality mode (0 = lossless) regardless of bit rate. Note: This mode only requires 1 pass.</Basic>
-			<Recommended>24 to 28</Recommended>
-			<Default>26</Default>
+			<Recommended>21 to 28</Recommended>
+			<Default>23</Default>
 		</qp>
 		<bitrate name="Average Bit Rate">
 			<Advanced>
@@ -159,8 +152,8 @@ compression (higher quality). There is no way to predict file size in this mode.
 15 are only useful for archival/reproduction quality and values over 40 show considerable loss in
 quality. This mode is only tuned for qcomp=0.6.</Advanced>
 			<Basic>Encode in Quality Based Variable Bit Rate mode, regardless of bit rate. Note: This mode can perform best in 2 passes.</Basic>
-			<Recommended>24 to 28</Recommended>
-			<Default>26</Default>
+			<Recommended>21 to 28</Recommended>
+			<Default>23</Default>
 		</crf>
 		<qpmin name="Minimum Quantizer">
 			<Advanced>
@@ -327,12 +320,12 @@ mode per frame. Works best in 2pass (enable in both passes).</Advanced>
 Enables 'brightness' weighting of B-frames which improves fades and colour gradients ie sky.</Advanced>
 			<Basic>Weighted prediction for B-frames</Basic>
 			<Recommended>Enabled</Recommended>
-			<Default>Disabled</Default>
+			<Default>Enabled</Default>
 		</weightb>
 		<me name="Motion Estimation Mode">
 			<Advanced>
 Controls the method used to search for motion vectors. Diamond search radius 1 (fastest),
- hexagonal search radius 2 (fast), uneven multi-hexagon search (slow), exhaustive search
+ hexagonal search radius 2 (fast), uneven multi-hexagon search (slow), exhaustive search, hadamard exhaustive search
 (slowest). Exhaustive search is not recommended for normal use as it is exceptionally slow
 and does not provide significant quality increases.</Advanced>
 			<Basic>Motion estimation method: 1=fast, 4=best</Basic>
@@ -352,8 +345,8 @@ Larger values may increase efficiency but will increase encoding time.</Advanced
 Controls the decision quality of motion estimation. Lower values will make faster and less
 accurate decisions. Higher values will improve quality but will slow encoding speed.</Advanced>
 			<Basic>Sub Pixel motion estimation and partition decision quality: 1=fast, 9=best.</Basic>
-			<Recommended>6</Recommended>
-			<Default>6</Default>
+			<Recommended>7</Recommended>
+			<Default>7</Default>
 		</subme>
 		<mixed-refs name="Mixed References">
 			<Advanced>
@@ -361,7 +354,7 @@ Allows each 8x8 or 16x8 partition in a macroblock to independently select a refe
 as opposed to only one reference frame per macroblock.</Advanced>
 			<Basic>Decide references on a per partition basis</Basic>
 			<Recommended>Enabled</Recommended>
-			<Default>Disabled</Default>
+			<Default>Enabled</Default>
 		</mixed-refs>
 		<!--WARNING DOUBLE NEGATIVE-->
 		<no-chroma-me name="Chroma Motion Estimation">
@@ -378,7 +371,7 @@ Enables the intelligent adaptive use of 8x8 transforms in I-frames. Requires I8X
       </Advanced>
 			<Basic>Adaptive spatial transform size</Basic>
 			<Recommended>Enabled</Recommended>
-			<Default>Disabled</Default>
+			<Default>Enabled</Default>
 		</i8x8dct>
     <i4x4mv name="4x4 sub-partitions for I-Frames">
       <Advanced>
@@ -422,8 +415,8 @@ Performs Trellis quantization to increase efficiency. On Macroblock provides a
 good compromise between speed and efficiency. On all decisions reduces
 speed further.</Advanced>
 			<Basic>Trellis Rate Distortion quantization. (Requires CABAC, disables deadzone)</Basic>
-			<Recommended>On Macro Block</Recommended>
-			<Default>Disabled</Default>
+			<Recommended>1 - Only on the final encode of a Macro Block</Recommended>
+			<Default>Enabled</Default>
 		</trellis>
 		<psyrd name="Psychovisual RD optimizations">
 			<Advanced>
@@ -450,7 +443,7 @@ of solid colour or slight gradients such as dark scenes or sky.
 Enabling this option will DISABLE the Fast Skip detection.</Advanced>
 			<Basic>Disables early Skip detection on P-frames.</Basic>
 			<Recommended>Enabled</Recommended>
-			<Default>Disabled</Default>
+			<Default>Enabled</Default>
 		</no-fast-pskip>
 		<nr name="Noise Reduction">
 			<Advanced>
@@ -627,7 +620,7 @@ Used for compatibility when using AVC in some transport streams (inc MPEG-2 TS).
       <Advanced>
 This option controls how AQ distributes bits. Mode 0 disables the feature whereas
 Mode 1 enables Variance AQ (complexity mask).</Advanced>
-      <Basic>The Mode of the Adaptive Quantizers</Basic>
+      <Basic>The Mode of the Adaptive Quantizers - 0 =  Disabled / 1 = Variance AQ</Basic>
       <Recommended>1</Recommended>
       <Default>1</Default>
     </aqmode>
