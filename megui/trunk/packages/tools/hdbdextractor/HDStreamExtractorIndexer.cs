@@ -82,7 +82,8 @@ namespace MeGUI
                 su.PercentageDoneExact = getPercentage(line);
                 su.Status = "Extracting Tracks...";
             }
-            else if (line.ToLower().Contains("error"))
+            else if (line.ToLower().Contains("error") ||
+                     line.ToLower().Contains("doesn"))
             {
                 log.LogValue("An error occurred", line, ImageType.Error);
                 su.HasError = true;
@@ -93,6 +94,10 @@ namespace MeGUI
             {
                 su.PercentageDoneExact = getPercentage(line);
                 su.Status = "Analyze...";
+            }
+            else if (line.ToLower().Contains("2nd"))
+            {
+                su.Status = "Starting 2nd pass to fix audio gaps/overlaps...";
             }
             else
                 base.ProcessLine(line, stream);

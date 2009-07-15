@@ -43,6 +43,7 @@ namespace MeGUI.packages.tools.hdbdextractor
         private HDStreamsExJob lastJob = null;
         private int inputType = 1;
         string dummyInput = "";
+        bool seamless = false;
 
         #region Windows Form Designer generated code
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
@@ -1307,7 +1308,12 @@ namespace MeGUI.packages.tools.hdbdextractor
             args.eac3toPath = eac3toPath;
             args.inputPath = FolderInputTextBox.Text;
             if (FolderSelection.Checked)
-            args.featureNumber = ((Feature)FeatureDataGridView.SelectedRows[0].DataBoundItem).Number.ToString();
+            {
+                if (seamless)
+                    args.featureNumber = "1"; // force the feature number
+                else
+                    args.featureNumber = ((Feature)FeatureDataGridView.SelectedRows[0].DataBoundItem).Number.ToString();
+            }
             args.workingFolder = string.IsNullOrEmpty(FolderOutputTextBox.Text) ? FolderOutputTextBox.Text : System.IO.Path.GetDirectoryName(args.eac3toPath);
             args.resultState = ResultState.ExtractCompleted;
 
@@ -1468,9 +1474,22 @@ namespace MeGUI.packages.tools.hdbdextractor
                         }
                         else if (feature.Description.Substring(feature.Description.LastIndexOf(".") + 1, 4) == "m2ts")
                         {
-                            if (args.inputPath.ToUpper().Contains("BDMV\\STREAM"))
-                                 dummyInput = args.inputPath + feature.Description.Substring(feature.Description.IndexOf(",") + 2, feature.Description.LastIndexOf(",") - feature.Description.IndexOf(",") - 2);
-                            else dummyInput = args.inputPath + "BDMV\\STREAM\\" + feature.Description.Substring(feature.Description.IndexOf(",") + 2, feature.Description.LastIndexOf(",") - feature.Description.IndexOf(",") - 2);
+                            string des = feature.Description.Substring(feature.Description.IndexOf(",") + 2, feature.Description.LastIndexOf(",") - feature.Description.IndexOf(",") - 2); 
+
+                            if (des.Contains("+")) // seamless branching
+                            {
+                                seamless = true;
+                                if (args.inputPath.ToUpper().Contains("BDMV\\STREAM"))
+                                     dummyInput = args.inputPath.Substring(0, args.inputPath.IndexOf("BDMV")) + "BDMV\\PLAYLIST\\" + feature.Description.Substring(0, feature.Description.IndexOf(","));
+                                else
+                                     dummyInput = args.inputPath + "BDMV\\PLAYLIST\\" + feature.Description.Substring(0, feature.Description.IndexOf(","));
+                            }
+                            else
+                            {
+                                if (args.inputPath.ToUpper().Contains("BDMV\\STREAM"))
+                                     dummyInput = args.inputPath + des;
+                                else dummyInput = args.inputPath + "BDMV\\STREAM\\" + des;
+                            }
                         }
                         else
                         {
