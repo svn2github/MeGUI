@@ -157,5 +157,16 @@ namespace MeGUI.packages.tools.oneclick
                 autoCrop.Checked = true;
             }
         }
+
+        private void videoProfile_SelectedProfileChanged(object sender, EventArgs e)
+        {
+            if (Settings.VideoProfileName.StartsWith("x264"))
+                usechaptersmarks.Enabled = true;
+            else
+            {
+                usechaptersmarks.Enabled = false;
+                usechaptersmarks.Checked = usechaptersmarks.Enabled;
+            }
+        }
     }
 }

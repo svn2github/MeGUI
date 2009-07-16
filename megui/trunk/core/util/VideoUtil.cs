@@ -103,14 +103,14 @@ namespace MeGUI
 			string name = Path.GetFileName(fileName);
 			string vts = name.Substring(0, 6);
 			string chapterFile = "";
-			string[] files = Directory.GetFiles(path, vts + "*.txt");
+            string[] files = Directory.GetFiles(path, vts + "*Chapter Information*");
 			foreach (string file in files)
 			{
-				if (file.IndexOf("Chapter Information - OGG") != -1) // we found our file
-				{
+				if (file.ToLower().EndsWith(".txt") || file.ToLower().EndsWith(".qpf"))
+                {
 					chapterFile = file;
 					break;
-				}
+				}                   
 			}
 			return chapterFile;
 		}
@@ -287,7 +287,7 @@ namespace MeGUI
         /// gets chapters from IFO file and save them as Ogg Text File
         /// </summary>
         /// <param name="fileName"></param>
-        public static void getChaptersFromIFO(string fileName)
+        public static void getChaptersFromIFO(string fileName, bool qpfile)
         {
             if (Path.GetExtension(fileName.ToLower()) == ".vob")
             {
@@ -305,9 +305,14 @@ namespace MeGUI
                     ChapterExtractor ex = new IfoExtractor();
                     pgc = ex.GetStreams(ifoFile)[0];
                     if (Drives.ableToWriteOnThisDrive(Path.GetPathRoot(ifoFile)))
-                        pgc.SaveText(Path.GetDirectoryName(ifoFile) + "\\" + fileNameNoPath.Substring(0, 6) + " - Chapter Information - OGG.txt");
+                    {
+                        if (qpfile)
+                            pgc.SaveQpfile(Path.GetDirectoryName(ifoFile) + "\\" + fileNameNoPath.Substring(0, 6) + " - Chapter Information.qpf");
+                        else
+                            pgc.SaveText(Path.GetDirectoryName(ifoFile) + "\\" + fileNameNoPath.Substring(0, 6) + " - Chapter Information - OGG.txt");
+                    }
                     else
-                        MessageBox.Show("MeGUI cannot write on the disc " + Path.GetPathRoot(ifoFile) +" \n" +
+                        MessageBox.Show("MeGUI cannot write on the disc " + Path.GetPathRoot(ifoFile) + " \n" +
                                         "Please, select an other output path to save the chapters file...", "Configuration Incomplete", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 }

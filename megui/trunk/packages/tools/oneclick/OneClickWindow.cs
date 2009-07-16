@@ -49,6 +49,13 @@ namespace MeGUI
         #region profiles
         void ProfileChanged(object sender, EventArgs e)
         {
+            if (VideoSettings.EncoderType.ID == "x264")
+                usechaptersmarks.Enabled = true;
+            else
+            {
+                usechaptersmarks.Enabled = false;
+                usechaptersmarks.Checked = usechaptersmarks.Enabled;
+            }            
             updatePossibleContainers();
         }
 
@@ -261,7 +268,10 @@ namespace MeGUI
                 this.chapterFile.Filename = chapterFile;
             if (string.IsNullOrEmpty(this.chapterFile.Filename))
             {
-                VideoUtil.getChaptersFromIFO(fileName);
+                bool useqpFile = false;
+                if (usechaptersmarks.Checked && usechaptersmarks.Enabled)
+                    useqpFile = true;
+                VideoUtil.getChaptersFromIFO(fileName, useqpFile);
                 chapterFile = VideoUtil.getChapterFile(fileName);
                 if (File.Exists(chapterFile))
                     this.chapterFile.Filename = chapterFile;
@@ -272,7 +282,7 @@ namespace MeGUI
 
             workingName.Text = PrettyFormatting.ExtractWorkingName(fileName);
             this.updateFilename();
-            this.ar.Value = ar;
+            this.ar.Value = ar;            
 
             if (VideoSettings.EncoderType.ID == "x264" && this.chapterFile.Filename != null)
                 this.usechaptersmarks.Enabled = true; 
@@ -893,9 +903,14 @@ namespace MeGUI
                 }
                 if (useChaptersMarks)
                 {
-                    xs.UseQPFile = true;
-                    qpfile = VideoUtil.convertChaptersTextFileTox264QPFile(job.PostprocessingProperties.ChapterFile, d2v.Info.FPS);
-                    xs.QPFile = qpfile;
+                    qpfile = job.PostprocessingProperties.ChapterFile;
+                    if ((Path.GetExtension(qpfile).ToLower()) == ".txt")
+                        qpfile = VideoUtil.convertChaptersTextFileTox264QPFile(job.PostprocessingProperties.ChapterFile, d2v.Info.FPS);
+                    if (File.Exists(qpfile))
+                    {
+                        xs.UseQPFile = true;
+                        xs.QPFile = qpfile;
+                    }
                 }
             }
 
