@@ -82,13 +82,13 @@ namespace MeGUI
                 su.PercentageDoneExact = getPercentage(line);
                 su.Status = "Extracting Tracks...";
             }
-            else if (line.ToLower().Contains("error") ||
-                     line.ToLower().Contains("doesn"))
+            else if (line.ToLower().Contains("error"))
             {
                 log.LogValue("An error occurred", line, ImageType.Error);
                 su.HasError = true;
             }
-            else if (line.ToLower().Contains("warning"))
+            else if (line.ToLower().Contains("warning") ||
+                     line.ToLower().Contains("doesn"))
                 log.LogValue("A warning occurred", line, ImageType.Warning);
             else if (line.StartsWith("analyze: "))
             {
