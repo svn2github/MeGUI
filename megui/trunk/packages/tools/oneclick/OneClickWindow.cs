@@ -403,75 +403,82 @@ namespace MeGUI
 
         private void goButton_Click(object sender, EventArgs e)
         {
-            if ((verifyAudioSettings() == null)
-                && (VideoSettings != null) 
-                && !string.IsNullOrEmpty(input.Filename)
-                && !string.IsNullOrEmpty(workingName.Text))
+            if (Drives.ableToWriteOnThisDrive(Path.GetPathRoot(output.Filename)) || // check whether the output path is read-only
+                Drives.ableToWriteOnThisDrive(Path.GetPathRoot(workingName.Text)))
             {
-                FileSize? desiredSize = optionalTargetSizeBox1.Value;
-
-                List<AudioJob> aJobs = new List<AudioJob>();
-                List<MuxStream> muxOnlyAudio = new List<MuxStream>();
-                List<AudioTrackInfo> audioTracks = new List<AudioTrackInfo>();
-                for (int i = 0; i < audioConfigControl.Count; ++i)
+                if ((verifyAudioSettings() == null)
+                    && (VideoSettings != null)
+                    && !string.IsNullOrEmpty(input.Filename)
+                    && !string.IsNullOrEmpty(workingName.Text))
                 {
-                    if (audioTrack[i].SelectedIndex == 0) // "None"
-                        continue;
+                    FileSize? desiredSize = optionalTargetSizeBox1.Value;
 
-                    string aInput;
-                    TrackInfo info = null;
-                    int delay = audioConfigControl[i].Delay;
-                    if (audioTrack[i].SelectedSCItem.IsStandard)
+                    List<AudioJob> aJobs = new List<AudioJob>();
+                    List<MuxStream> muxOnlyAudio = new List<MuxStream>();
+                    List<AudioTrackInfo> audioTracks = new List<AudioTrackInfo>();
+                    for (int i = 0; i < audioConfigControl.Count; ++i)
                     {
-                        AudioTrackInfo a = (AudioTrackInfo)audioTrack[i].SelectedObject;
-                        audioTracks.Add(a);
-                        aInput = "::" + a.TrackID + "::";
-                        info = a.TrackInfo;
+                        if (audioTrack[i].SelectedIndex == 0) // "None"
+                            continue;
+
+                        string aInput;
+                        TrackInfo info = null;
+                        int delay = audioConfigControl[i].Delay;
+                        if (audioTrack[i].SelectedSCItem.IsStandard)
+                        {
+                            AudioTrackInfo a = (AudioTrackInfo)audioTrack[i].SelectedObject;
+                            audioTracks.Add(a);
+                            aInput = "::" + a.TrackID + "::";
+                            info = a.TrackInfo;
+                        }
+                        else
+                            aInput = audioTrack[i].SelectedText;
+
+                        if (audioConfigControl[i].DontEncode)
+                            muxOnlyAudio.Add(new MuxStream(aInput, info, delay));
+                        else
+                            aJobs.Add(new AudioJob(aInput, null, null, audioConfigControl[i].Settings, delay));
+                    }
+
+                    string d2vName = Path.Combine(workingDirectory.Filename, workingName.Text + ".d2v");
+
+                    DGIndexPostprocessingProperties dpp = new DGIndexPostprocessingProperties();
+                    dpp.DAR = ar.Value;
+                    dpp.DirectMuxAudio = muxOnlyAudio.ToArray();
+                    dpp.AudioJobs = aJobs.ToArray();
+                    dpp.AutoDeinterlace = autoDeint.Checked;
+                    dpp.AvsSettings = (AviSynthSettings)avsProfile.SelectedProfile.BaseSettings;
+                    dpp.ChapterFile = chapterFile.Filename;
+                    dpp.Container = (ContainerType)containerFormat.SelectedItem;
+                    dpp.FinalOutput = output.Filename;
+                    dpp.HorizontalOutputResolution = (int)horizontalResolution.Value;
+                    dpp.OutputSize = desiredSize;
+                    dpp.SignalAR = signalAR.Checked;
+                    dpp.AutoCrop = autoCrop.Checked;
+                    dpp.KeepInputResolution = keepInputResolution.Checked;
+                    dpp.PrerenderJob = addPrerenderJob.Checked;
+                    dpp.Splitting = splitting.Value;
+                    dpp.DeviceOutputType = devicetype.Text;
+                    dpp.UseChaptersMarks = usechaptersmarks.Checked;
+                    dpp.VideoSettings = VideoSettings.Clone();
+                    IndexJob job = new IndexJob(input.Filename, d2vName, 1, audioTracks, dpp, false, false);
+                    mainForm.Jobs.addJobsToQueue(job);
+                    if (this.openOnQueue.Checked)
+                    {
+                        if (!string.IsNullOrEmpty(this.chapterFile.Filename))
+                            this.chapterFile.Filename = string.Empty; // clean up  
+                        input.PerformClick();
                     }
                     else
-                        aInput = audioTrack[i].SelectedText;
-
-                    if (audioConfigControl[i].DontEncode)
-                        muxOnlyAudio.Add(new MuxStream(aInput, info, delay));
-                    else
-                        aJobs.Add(new AudioJob(aInput, null, null, audioConfigControl[i].Settings, delay));
-                }
-
-                string d2vName = Path.Combine(workingDirectory.Filename, workingName.Text + ".d2v");
-                
-                DGIndexPostprocessingProperties dpp = new DGIndexPostprocessingProperties();
-                dpp.DAR = ar.Value;
-                dpp.DirectMuxAudio = muxOnlyAudio.ToArray();
-                dpp.AudioJobs = aJobs.ToArray();
-                dpp.AutoDeinterlace = autoDeint.Checked;
-                dpp.AvsSettings = (AviSynthSettings)avsProfile.SelectedProfile.BaseSettings;
-                dpp.ChapterFile = chapterFile.Filename;
-                dpp.Container = (ContainerType)containerFormat.SelectedItem;
-                dpp.FinalOutput = output.Filename;
-                dpp.HorizontalOutputResolution = (int)horizontalResolution.Value;
-                dpp.OutputSize = desiredSize;
-                dpp.SignalAR = signalAR.Checked;
-                dpp.AutoCrop = autoCrop.Checked;
-                dpp.KeepInputResolution = keepInputResolution.Checked;
-                dpp.PrerenderJob = addPrerenderJob.Checked;
-                dpp.Splitting = splitting.Value;
-                dpp.DeviceOutputType = devicetype.Text;
-                dpp.UseChaptersMarks = usechaptersmarks.Checked;
-                dpp.VideoSettings = VideoSettings.Clone();
-                IndexJob job = new IndexJob(input.Filename, d2vName, 1, audioTracks, dpp, false, false);
-                mainForm.Jobs.addJobsToQueue(job);
-                if (this.openOnQueue.Checked)
-                {
-                    if (!string.IsNullOrEmpty(this.chapterFile.Filename))
-                        this.chapterFile.Filename = string.Empty; // clean up  
-                    input.PerformClick();
+                        this.Close();
                 }
                 else
-                    this.Close();
+                    MessageBox.Show("You must select audio and video profile, output name and working directory to continue",
+                        "Incomplete configuration", MessageBoxButtons.OK, MessageBoxIcon.Stop);
             }
-            else
-                MessageBox.Show("You must select audio and video profile, output name and working directory to continue",
-                    "Incomplete configuration", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+            else MessageBox.Show("MeGUI cannot write on the disc " + Path.GetPathRoot(output.Filename) + " \n" +
+                                 "Please, select an other output path to save your project...", "Configuration Incomplete", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
         }
 
         #endregion

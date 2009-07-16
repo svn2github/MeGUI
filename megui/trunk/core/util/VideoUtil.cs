@@ -304,7 +304,12 @@ namespace MeGUI
                     ChapterInfo pgc;
                     ChapterExtractor ex = new IfoExtractor();
                     pgc = ex.GetStreams(ifoFile)[0];
-                    pgc.SaveText(Path.GetDirectoryName(ifoFile) + "\\" + fileNameNoPath.Substring(0, 6) + " - Chapter Information - OGG.txt");
+                    if (Drives.ableToWriteOnThisDrive(Path.GetPathRoot(ifoFile)))
+                        pgc.SaveText(Path.GetDirectoryName(ifoFile) + "\\" + fileNameNoPath.Substring(0, 6) + " - Chapter Information - OGG.txt");
+                    else
+                        MessageBox.Show("MeGUI cannot write on the disc " + Path.GetPathRoot(ifoFile) +" \n" +
+                                        "Please, select an other output path to save the chapters file...", "Configuration Incomplete", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
                 }
             }            
         }
