@@ -1292,7 +1292,7 @@ namespace MeGUI.packages.tools.hdbdextractor
             if (!Drives.ableToWriteOnThisDrive(System.IO.Path.GetPathRoot(FolderOutputTextBox.Text)))
             {
                 MessageBox.Show("MeGUI cannot write on " + System.IO.Path.GetPathRoot(FolderOutputTextBox.Text) +
-                                "\nPlease, select an other Output path.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                "\nPlease, select another Output path.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 

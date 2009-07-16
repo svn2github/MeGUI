@@ -487,7 +487,7 @@ namespace MeGUI
                         "Incomplete configuration", MessageBoxButtons.OK, MessageBoxIcon.Stop);
             }
             else MessageBox.Show("MeGUI cannot write on the disc " + Path.GetPathRoot(output.Filename) + " \n" +
-                                 "Please, select an other output path to save your project...", "Configuration Incomplete", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                 "Please, select another output path to save your project...", "Configuration Incomplete", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
         }
 
