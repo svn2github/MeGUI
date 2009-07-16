@@ -467,8 +467,8 @@ namespace MeGUI
                         "Configuration incomplete", MessageBoxButtons.OK);
             }
             else
-                MessageBox.Show("MeGUI cannot write on " + Path.GetPathRoot(projectName.Text) +
-                                ". Please, select an other Output path.", "Configuration Incomplete", MessageBoxButtons.OK);
+                MessageBox.Show("MeGUI cannot write on the disc " + Path.GetPathRoot(projectName.Text) +"\n" +
+                                "Please, select an other output path to save your project...", "Configuration Incomplete", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 		}
 		#endregion
 		#region helper methods
