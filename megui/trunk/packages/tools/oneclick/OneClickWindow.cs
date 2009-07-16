@@ -461,7 +461,11 @@ namespace MeGUI
                 IndexJob job = new IndexJob(input.Filename, d2vName, 1, audioTracks, dpp, false, false);
                 mainForm.Jobs.addJobsToQueue(job);
                 if (this.openOnQueue.Checked)
+                {
+                    if (!string.IsNullOrEmpty(this.chapterFile.Filename))
+                        this.chapterFile.Filename = string.Empty; // clean up  
                     input.PerformClick();
+                }
                 else
                     this.Close();
             }
