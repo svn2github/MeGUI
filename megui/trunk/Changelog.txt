@@ -1,3 +1,17 @@
+0.3.1.1051
+    - (kurtnoise) Update MediaInfo library and its wrapper to the latest release (0.7.19)
+    - (kurtnoise) [HDStreamExtractor] move a line parsing to the warning instead of error.
+    - (kurtnoise) Few cosmetics for the batch files & add a NSIS installer detection. Patch by XhmikosR (#2822466)
+    - (kurtnoise) Fix a typo. Patch by XhmikosR (#2822464)
+    - (kurtnoise) [OneClick Encoder] few internal changes for better chapters handling. 
+    - (kurtnoise) cosmetics...
+    - (kurtnoise) [OneClick Encoder] add read only disc detection (fix issue #2814331).
+    - (kurtnoise) [OneClick Encoder] fix issue #2810643
+    - (kurtnoise) [AVSCreator] remove ToLower() from checkNVCompatibleFile() function.
+    - (kurtnoise) [HDStreamExtractor] fix issue #2817463 for seamless branching.
+    - (kurtnoise) update ContextHelp.xml file to reflect the last x264 settings.
+    - (kurtnoise) [x264Config] fix bug #2821332 for lossless mode. An update of this preset is required.
+
 0.3.1.1050
     - (sharktooth) [x264] Added --profile support with a slight difference with x264 defaults. Autoguess means no --profile option will be specified. High/Main/Baseline will set the --profile option accordingly.
     - (sharktooth) [x264] Set CRF 23 as default encoding mode.
