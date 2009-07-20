@@ -47,6 +47,7 @@ namespace MeGUI.packages.video.x264
         {
             InitializeComponent();
             cqmComboBox1.StandardItems = new string[] { "Flat (none)", "JVT" };
+            cqmComboBox1.SelectedIndex = 0;
             this.AdvancedToolTips = MainForm.Instance.Settings.UseAdvancedTooltips;
             AVCLevels al = new AVCLevels();
             this.avcLevel.Items.AddRange(al.getLevels());
@@ -439,7 +440,7 @@ namespace MeGUI.packages.video.x264
             if (cqmComboBox1.SelectedIndex == -1)
                 cqmComboBox1.SelectedIndex = 0; // flat matrix
             if (this.avcProfile.SelectedIndex == -1)
-                avcProfile.SelectedIndex = 3; // 
+                avcProfile.SelectedIndex = 3; // Autoguess
             if (cbAQMode.SelectedIndex == -1)
                 cbAQMode.SelectedIndex = 1;
             lastEncodingMode = this.x264EncodingMode.SelectedIndex;
@@ -594,7 +595,7 @@ namespace MeGUI.packages.video.x264
                 trellis.SelectedIndex = xs.X264Trellis;
                 PsyTrellis.Value = xs.PsyTrellis;
                 macroblockOptions.SelectedIndex = xs.MacroBlockOptions;
-                if (xs.MacroBlockOptions == 2)
+                if (xs.MacroBlockOptions > 1)
                 {
                     adaptiveDCT.Checked = xs.AdaptiveDCT;
                     x264P8x8mv.Checked = xs.P8x8mv;
@@ -988,7 +989,6 @@ namespace MeGUI.packages.video.x264
                 this.x264METype.SelectedIndex = 1;
                 this.x264MixedReferences.Checked = false;
                 this.NoFastPSkip.Checked = false;
-                this.macroblockOptions.SelectedIndex = 1;
             }
             else
             {

@@ -92,7 +92,7 @@ namespace MeGUI
 			subPelRefinement = 6;
 			psyRDO = new decimal(1.0);
             psyTrellis = new decimal(0.0);
-            macroBlockOptions = 2;
+            macroBlockOptions = 3;
             chromaME = true;
 			p8x8mv = true;
 			b8x8mv = true;
