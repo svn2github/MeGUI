@@ -306,16 +306,14 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             }
             if (xs.MERange != 16)
                 sb.Append("--merange " + xs.MERange + " ");
+
+            sb.Append("--thread-input ");
             if (xs.NbThreads > 0)
                 sb.Append("--threads " + xs.NbThreads + " ");
-            // --threads auto is now default.
-            // if (xs.NbThreads == 0)
-            //    sb.Append("--threads auto ");
-            sb.Append("--thread-input ");
 
-            if (xs.AQmode == 0)
+            if (xs.AQmode != 1)
             {
-                sb.Append("--aq-mode 0 ");
+                sb.Append("--aq-mode " + xs.AQmode.ToString() + " ");
             }
             if (xs.AQmode > 0)
             {

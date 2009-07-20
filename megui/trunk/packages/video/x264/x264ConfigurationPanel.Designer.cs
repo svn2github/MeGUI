@@ -1387,7 +1387,8 @@ namespace MeGUI.packages.video.x264
             this.cbAQMode.FormattingEnabled = true;
             this.cbAQMode.Items.AddRange(new object[] {
             "Disabled",
-            "Variance AQ (complexity mask)"});
+            "Variance AQ (complexity mask)",
+            "Auto-variance AQ (experimental)"});
             this.cbAQMode.Location = new System.Drawing.Point(48, 19);
             this.cbAQMode.Name = "cbAQMode";
             this.cbAQMode.Size = new System.Drawing.Size(229, 21);

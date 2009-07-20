@@ -618,9 +618,9 @@ Used for compatibility when using AVC in some transport streams (inc MPEG-2 TS).
 		</aud>
     <aqmode name="AQ Mode">
       <Advanced>
-This option controls how AQ distributes bits. Mode 0 disables the feature whereas
-Mode 1 enables Variance AQ (complexity mask).</Advanced>
-      <Basic>The Mode of the Adaptive Quantizers - 0 =  Disabled / 1 = Variance AQ</Basic>
+This option controls how AQ distributes bits. Mode 0 disables the feature whereas 
+Mode 1 enables Variance AQ (complexity mask) and Mode 2 enables Auto-Variance AQ (still experimental)</Advanced>
+      <Basic>The Mode of the Adaptive Quantizers - 0 =  Disabled / 1 = Variance AQ / 2 = Auto-Variance AQ</Basic>
       <Recommended>1</Recommended>
       <Default>1</Default>
     </aqmode>
