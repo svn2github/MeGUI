@@ -227,34 +227,37 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             }
             
             // now it's time for the macroblock types
-            if (xs.P8x8mv || xs.B8x8mv || xs.I4x4mv || xs.I8x8mv || xs.P4x4mv || xs.AdaptiveDCT)
+            if (xs.MacroBlockOptions != 3)
             {
-                sb.Append("--partitions ");
-                if (xs.I4x4mv && xs.P4x4mv && xs.I8x8mv && xs.P8x8mv && xs.B8x8mv)
-                    sb.Append("all ");
+                if (xs.P8x8mv || xs.B8x8mv || xs.I4x4mv || xs.I8x8mv || xs.P4x4mv || xs.AdaptiveDCT)
+                {
+                    sb.Append("--partitions ");
+                    if (xs.I4x4mv && xs.P4x4mv && xs.I8x8mv && xs.P8x8mv && xs.B8x8mv)
+                        sb.Append("all ");
+                    else
+                    {
+                        if (xs.P8x8mv) // default is checked
+                            sb.Append("p8x8,");
+                        if (xs.B8x8mv) // default is checked
+                            sb.Append("b8x8,");
+                        if (xs.I4x4mv) // default is checked
+                            sb.Append("i4x4,");
+                        if (xs.P4x4mv) // default is unchecked
+                            sb.Append("p4x4,");
+                        if (xs.I8x8mv) // default is checked
+                            sb.Append("i8x8");
+                        if (sb.ToString().EndsWith(","))
+                            sb.Remove(sb.Length - 1, 1);
+                    }
+                    if (!xs.AdaptiveDCT) // default is checked
+                        sb.Append(" --no-8x8dct ");
+                    if (!sb.ToString().EndsWith(" "))
+                        sb.Append(" ");
+                }
                 else
                 {
-                    if (xs.P8x8mv) // default is checked
-                        sb.Append("p8x8,");
-                    if (xs.B8x8mv) // default is checked
-                        sb.Append("b8x8,");
-                    if (xs.I4x4mv) // default is checked
-                        sb.Append("i4x4,");
-                    if (xs.P4x4mv) // default is unchecked
-                        sb.Append("p4x4,");
-                    if (xs.I8x8mv) // default is checked
-                        sb.Append("i8x8");
-                    if (sb.ToString().EndsWith(","))
-                        sb.Remove(sb.Length - 1, 1);
+                    sb.Append("--partitions none ");
                 }
-                if (!xs.AdaptiveDCT) // default is checked
-                    sb.Append(" --no-8x8dct ");
-                if (!sb.ToString().EndsWith(" "))
-                    sb.Append(" ");
-            }
-            else
-            {
-                sb.Append("--partitions none ");
             }
             if (xs.EncodingMode != 1) // doesn't apply to CQ mode
             {

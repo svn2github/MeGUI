@@ -506,7 +506,8 @@ namespace MeGUI
                 this.AQmode != otherSettings.AQmode ||
                 this.AQstrength != otherSettings.AQstrength ||
                 this.UseQPFile != otherSettings.UseQPFile ||
-                this.fullRange != otherSettings.fullRange
+                this.fullRange != otherSettings.fullRange ||
+                this.MacroBlockOptions != otherSettings.MacroBlockOptions
                 )
                 return true;
             else

@@ -129,14 +129,6 @@ namespace MeGUI.packages.video.x264
                     this.x264P4x4mv.Enabled = false;
                 }
             }
-            //p4x4 restriction on level 3.0 + b-frames and levels 3.1 and higher
-
-            //if (avcLevel.SelectedIndex == 7 && x264NumberOfBFrames.Value > 0   // Level 3.0
-            //   || avcLevel.SelectedIndex >= 8 && avcLevel.SelectedIndex != 15)   // Level 3.1 - 14
-            //{
-            //    x264P4x4mv.Enabled = false;
-            //    x264P4x4mv.Checked = false;
-            //}
         }
         private void doTrellisAdjustments()
         {
@@ -387,7 +379,7 @@ namespace MeGUI.packages.video.x264
                     else if (!x264P8x8mv.Checked && !x264B8x8mv.Checked && !x264I4x4mv.Checked && !x264P4x4mv.Checked)
                         this.macroblockOptions.SelectedIndex = 1;
                     else
-                        this.macroblockOptions.SelectedIndex = 2;
+                        this.macroblockOptions.SelectedIndex = 3;
                     break;
                 case 2: // HP
                     if (x264P8x8mv.Checked && x264B8x8mv.Checked && x264I4x4mv.Checked && x264I8x8mv.Checked && x264P4x4mv.Checked && adaptiveDCT.Checked)
@@ -395,7 +387,7 @@ namespace MeGUI.packages.video.x264
                     else if (!x264P8x8mv.Checked && !x264B8x8mv.Checked && !x264I4x4mv.Checked && !x264I8x8mv.Checked && !x264P4x4mv.Checked && !adaptiveDCT.Checked)
                         this.macroblockOptions.SelectedIndex = 1;
                     else
-                        this.macroblockOptions.SelectedIndex = 2;
+                        this.macroblockOptions.SelectedIndex = 3;
                     break;
                 default: // Autoguess
                     if (x264P8x8mv.Checked && x264B8x8mv.Checked && x264I4x4mv.Checked && x264I8x8mv.Checked && x264P4x4mv.Checked && adaptiveDCT.Checked)
@@ -403,7 +395,7 @@ namespace MeGUI.packages.video.x264
                     else if (!x264P8x8mv.Checked && !x264B8x8mv.Checked && !x264I4x4mv.Checked && !x264I8x8mv.Checked && !x264P4x4mv.Checked && !adaptiveDCT.Checked)
                         this.macroblockOptions.SelectedIndex = 1;
                     else
-                        this.macroblockOptions.SelectedIndex = 2;
+                        this.macroblockOptions.SelectedIndex = 3;
                     break;
             }
         }
@@ -443,7 +435,7 @@ namespace MeGUI.packages.video.x264
             if (x264METype.SelectedIndex == -1)
                 this.x264METype.SelectedIndex = 0;
             if (macroblockOptions.SelectedIndex == -1)
-                macroblockOptions.SelectedIndex = 2;
+                macroblockOptions.SelectedIndex = 3;
             if (cqmComboBox1.SelectedIndex == -1)
                 cqmComboBox1.SelectedIndex = 0; // flat matrix
             if (this.avcProfile.SelectedIndex == -1)

@@ -157,6 +157,7 @@ namespace MeGUI.packages.video.x264
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.x264PicBox = new System.Windows.Forms.PictureBox();
             this.linkx264website = new System.Windows.Forms.LinkLabel();
+            this.label1 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.mainTabPage.SuspendLayout();
             this.x264GeneralMiscGroupbox.SuspendLayout();
@@ -1575,6 +1576,7 @@ namespace MeGUI.packages.video.x264
             // 
             // x264MBGroupbox
             // 
+            this.x264MBGroupbox.Controls.Add(this.label1);
             this.x264MBGroupbox.Controls.Add(this.macroblockOptions);
             this.x264MBGroupbox.Controls.Add(this.adaptiveDCT);
             this.x264MBGroupbox.Controls.Add(this.x264I4x4mv);
@@ -1595,10 +1597,11 @@ namespace MeGUI.packages.video.x264
             this.macroblockOptions.Items.AddRange(new object[] {
             "All",
             "None",
-            "Custom"});
-            this.macroblockOptions.Location = new System.Drawing.Point(9, 16);
+            "Custom",
+            "Default"});
+            this.macroblockOptions.Location = new System.Drawing.Point(66, 16);
             this.macroblockOptions.Name = "macroblockOptions";
-            this.macroblockOptions.Size = new System.Drawing.Size(88, 21);
+            this.macroblockOptions.Size = new System.Drawing.Size(111, 21);
             this.macroblockOptions.TabIndex = 0;
             this.macroblockOptions.SelectedIndexChanged += new System.EventHandler(this.updateEvent);
             // 
@@ -1998,6 +2001,15 @@ namespace MeGUI.packages.video.x264
             this.linkx264website.Text = "Official x264 Website";
             this.linkx264website.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkx264website_LinkClicked);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 19);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(50, 13);
+            this.label1.TabIndex = 7;
+            this.label1.Text = "Partitions";
+            // 
             // x264ConfigurationPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2050,6 +2062,7 @@ namespace MeGUI.packages.video.x264
             ((System.ComponentModel.ISupportInitialize)(this.x264NumberOfBFrames)).EndInit();
             this.quantizerMatrixGroupbox.ResumeLayout(false);
             this.x264MBGroupbox.ResumeLayout(false);
+            this.x264MBGroupbox.PerformLayout();
             this.x264QuantizerGroupBox.ResumeLayout(false);
             this.x264QuantizerGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.deadzoneIntra)).EndInit();
@@ -2197,5 +2210,6 @@ namespace MeGUI.packages.video.x264
         private System.Windows.Forms.Button qpfileOpenButton;
         private System.Windows.Forms.CheckBox useQPFile;
         private System.Windows.Forms.CheckBox x264FullRange;
+        private System.Windows.Forms.Label label1;
     }
 }
