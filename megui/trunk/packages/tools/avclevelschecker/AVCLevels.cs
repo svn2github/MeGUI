@@ -210,7 +210,7 @@ namespace MeGUI
         public static readonly string[] CLILevelNames = new string[] { "1", "1.1", "1.2", "1.3",  "2", "2.1", "2.2",   "3", "3.1", "3.2",   "4",  "4.1",  "4.2",    "5", "5.1" };
         public static readonly int[] MainProfileMaxBRs = new int[]   {  64,   192,   384,   768, 2000,  4000,  4000, 10000, 14000, 20000, 20000,  50000,  50000, 135000, 240000 };
         // all bitrates and cbps are multiplied by 1.25 in high profile
-        public static readonly int[] HighProfileMaxBRs = new int[]   { 80,   240,  480,  960, 2500, 5000, 5000, 12500, 17500, 25000, 25000, 50000, 50000, 168750, 300000 };
+        public static readonly int[] HighProfileMaxBRs = new int[]   { 80,   240,  480,  960, 2500, 5000, 5000, 12500, 17500, 25000, 25000, 62500, 62500, 168750, 300000 };
 		/// <summary>
 		/// gets the MaxBR value corresponding to a given AVC Level
 		/// </summary>
