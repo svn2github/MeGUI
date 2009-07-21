@@ -347,7 +347,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             if (d.HasValue)
             {
                 Sar s = d.Value.ToSar(hres, vres);
-                sb.Append("--sar " + s.X + ":" + s.Y + " ");
+                if ((s.X != 1) && (s.Y != 1))
+                    sb.Append("--sar " + s.X + ":" + s.Y + " ");
             }
             if (xs.QuantizerMatrixType > 0) // custom matrices enabled
             {
