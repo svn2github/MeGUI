@@ -45,11 +45,11 @@ namespace MeGUI
                 bool succ = info.JobUtil.validateAVCLevel(info.Video.VideoInput, currentX264Settings, out compliantLevel);
                 if (succ)
                     MessageBox.Show("This file matches the criteria for the level chosen", "Video validated",
-                        MessageBoxButtons.OK);
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
                 else
                 {
                     if (compliantLevel == -1)
-                        MessageBox.Show("Unable to open video", "Test failed", MessageBoxButtons.OK);
+                        MessageBox.Show("Unable to open video", "Test failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     else
                     {
                         AVCLevels al = new AVCLevels();
@@ -91,7 +91,7 @@ namespace MeGUI
     /// MaxFS >= width*height
     /// sqrt(MaxFS*8) >= width
     /// sqrt(MaxFS*8) >= height
-    /// MaxDPB >= (bytes in a frame) * min(16, ref + (pyramid ? 2 : bframes ? 1 : 0))
+    /// MaxDPB >= (bytes in a frame) * min(16, ref)
     /// MaxBR >= vbv_maxrate. It isn't strictly required since we don't write the VCL HRD parameters, but this satisfies the intent.
     /// MaxCPB >= vbv_bufsize. Likewise.
     /// MaxVmvR >= max_mv_range. (Not exposed in the cli, I'll add it if people care.)
@@ -125,13 +125,8 @@ namespace MeGUI
         private double pictureBufferSize(x264Settings settings, double bytesInUncompressedFrame)
         {
             double decodedPictureBufferSizeTestValue = 0;
-            if (settings.BFramePyramid)
-                decodedPictureBufferSizeTestValue = bytesInUncompressedFrame * Math.Min(16, settings.NbRefFrames + 2);
-            else
-                if (settings.NbBframes > 0)
-                    decodedPictureBufferSizeTestValue = bytesInUncompressedFrame * Math.Min(16, settings.NbRefFrames + 1);
-                else
-                    decodedPictureBufferSizeTestValue = bytesInUncompressedFrame * Math.Min(16, settings.NbRefFrames);
+            if (settings != null)
+                decodedPictureBufferSizeTestValue = bytesInUncompressedFrame * Math.Min(16, settings.NbRefFrames);
             return decodedPictureBufferSizeTestValue;
         }
         private bool checkMaxDPB(int level, x264Settings settings, double bytesInUncompressedFrame)
@@ -478,7 +473,7 @@ namespace MeGUI
 					maxDPB =  891;
 					break;
 				case 5: // level 2.1
-					 maxDPB = 1782;
+					maxDPB = 1782;
 					break;
 				case 6: // level 2.2
 					maxDPB = 3037.5;
@@ -571,32 +566,20 @@ namespace MeGUI
             // step through various options to enforce the max decoded picture buffer size
             while (!this.checkMaxDPB(level,enforcedSettings, frameSize))
             {
-                if (enforcedSettings.BFramePyramid)
+                if (enforcedSettings.NbRefFrames > 1)
                 {
                     enforcement.Altered = true;
-                    enforcedSettings.BFramePyramid = false; // try turning off pyramid first
+                    enforcedSettings.NbRefFrames -= 1; // try reducing the number of reference frames
                 }
                 else
-                    if (enforcedSettings.NbRefFrames > 1)
-                    {
-                        enforcement.Altered = true;
-                        enforcedSettings.NbRefFrames -= 1; // try reducing the number of reference frames
-                    }
-                    else
-                        if (enforcedSettings.NbBframes > 0)
-                        {
-                            enforcement.Altered = true;
-                            enforcedSettings.NbBframes = 0; // try turning off B frames
-                        }
-                        else
-                        {
-                            enforcement.Panic = true;
-                            enforcement.PanicString = "Can't force settings to conform to level (the frame size is too large)";
-                            // reset output settings to original and set level to unrestrained
-                            enforcedSettings = (x264Settings)inputSettings.Clone();
-                            enforcedSettings.Level = 15;
-                            return enforcedSettings;
-                        }   
+                {
+                    enforcement.Panic = true;
+                    enforcement.PanicString = "Can't force settings to conform to level (the frame size is too large)";
+                    // reset output settings to original and set level to unrestrained
+                    enforcedSettings = (x264Settings)inputSettings.Clone();
+                    enforcedSettings.Level = 15;
+                    return enforcedSettings;
+                }   
             }
 
             // Disallow independent specification of MaxBitrate and MaxBufferSize unless Unrestrained
