@@ -308,8 +308,9 @@ namespace MeGUI
                     {
                         if (qpfile)
                             pgc.SaveQpfile(Path.GetDirectoryName(ifoFile) + "\\" + fileNameNoPath.Substring(0, 6) + " - Chapter Information.qpf");
-                        else
-                            pgc.SaveText(Path.GetDirectoryName(ifoFile) + "\\" + fileNameNoPath.Substring(0, 6) + " - Chapter Information - OGG.txt");
+
+                        // save always this format - some users want it for the mux
+                        pgc.SaveText(Path.GetDirectoryName(ifoFile) + "\\" + fileNameNoPath.Substring(0, 6) + " - Chapter Information - OGG.txt");
                     }
                     else
                         MessageBox.Show("MeGUI cannot write on the disc " + Path.GetPathRoot(ifoFile) + " \n" +
