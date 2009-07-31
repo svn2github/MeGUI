@@ -142,6 +142,16 @@ namespace MeGUI.packages.video.x264
                 deadzoneInter.Value = 21;
             }
         }
+        private void doSubmeAdjustments()
+        {
+            if (x264SubpelRefinement.SelectedIndex == 9)
+            {
+                if (trellis.SelectedIndex != 2)
+                    trellis.SelectedIndex = 2;
+                if (cbAQMode.SelectedIndex == 0)
+                    cbAQMode.SelectedIndex = 1;
+            }
+        }
 
         #endregion
         #region levels
@@ -347,13 +357,9 @@ namespace MeGUI.packages.video.x264
             if (isBitrateMode(lastEncodingMode) != isBitrateMode(x264EncodingMode.SelectedIndex))
             {
                 if (isBitrateMode(x264EncodingMode.SelectedIndex))
-                {
                     this.x264BitrateQuantizer.Value = 700;
-                }
                 else
-                {
                     this.x264BitrateQuantizer.Value = 23;
-                }
             }
 
             lastEncodingMode = x264EncodingMode.SelectedIndex;
@@ -414,12 +420,13 @@ namespace MeGUI.packages.video.x264
         {
             doEncodingModeAdjustments();
             doCheckBoxAdjustments();
-            doTrellisAdjustments();
+            doTrellisAdjustments();            
             if (macroblockOptions.SelectedIndex==0) // All
                 doMacroBlockAdjustments();
             doAVCLevelAdjustments();
             x264DialogTriStateAdjustment();
             doMacroBlockAdjustments();
+            doSubmeAdjustments();
         }
 
         /// <summary>
@@ -430,7 +437,7 @@ namespace MeGUI.packages.video.x264
             if (x264EncodingMode.SelectedIndex == -1)
                 this.x264EncodingMode.SelectedIndex = 0;
             if (x264SubpelRefinement.SelectedIndex == -1)
-                this.x264SubpelRefinement.SelectedIndex = 5;
+                this.x264SubpelRefinement.SelectedIndex = 6;
             if (x264BframePredictionMode.SelectedIndex == -1)
                 this.x264BframePredictionMode.SelectedIndex = 1;
             if (x264METype.SelectedIndex == -1)
@@ -1031,7 +1038,7 @@ namespace MeGUI.packages.video.x264
             if (cbAQMode.SelectedIndex != 0)
                 numAQStrength.Enabled = true;
             else numAQStrength.Enabled = false;
-                genericUpdate();
+            genericUpdate();
         }
 
         private void useQPFile_CheckedChanged(object sender, EventArgs e)

@@ -344,7 +344,7 @@ Larger values may increase efficiency but will increase encoding time.</Advanced
 			<Advanced>
 Controls the decision quality of motion estimation. Lower values will make faster and less
 accurate decisions. Higher values will improve quality but will slow encoding speed.</Advanced>
-			<Basic>Sub Pixel motion estimation and partition decision quality: 1=fast, 9=best.</Basic>
+			<Basic>Sub Pixel motion estimation and mode decision quality: 1=fast, 10=best.</Basic>
 			<Recommended>7</Recommended>
 			<Default>7</Default>
 		</subme>

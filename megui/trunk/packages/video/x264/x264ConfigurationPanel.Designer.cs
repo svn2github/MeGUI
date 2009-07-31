@@ -127,6 +127,7 @@ namespace MeGUI.packages.video.x264
             this.quantizerMatrixGroupbox = new System.Windows.Forms.GroupBox();
             this.cqmComboBox1 = new MeGUI.core.gui.FileSCBox();
             this.x264MBGroupbox = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.macroblockOptions = new System.Windows.Forms.ComboBox();
             this.adaptiveDCT = new System.Windows.Forms.CheckBox();
             this.x264I4x4mv = new System.Windows.Forms.CheckBox();
@@ -157,7 +158,6 @@ namespace MeGUI.packages.video.x264
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.x264PicBox = new System.Windows.Forms.PictureBox();
             this.linkx264website = new System.Windows.Forms.LinkLabel();
-            this.label1 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.mainTabPage.SuspendLayout();
             this.x264GeneralMiscGroupbox.SuspendLayout();
@@ -641,15 +641,16 @@ namespace MeGUI.packages.video.x264
             this.x264SubpelRefinement.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.x264SubpelRefinement.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.x264SubpelRefinement.Items.AddRange(new object[] {
-            "1 - QPel SAD",
-            "2 - QPel SATD",
-            "3 - HPel on MB then QPel",
-            "4 - Always QPel",
-            "5 - QPel & Bidir ME",
-            "6 - RD on I/P frames",
-            "7 - RD on all frames",
-            "8 - RD refinement on I/P frames",
-            "9 - RD refinement on all frames"});
+            "01 - QPel SAD",
+            "02 - QPel SATD",
+            "03 - HPel on MB then QPel",
+            "04 - Always QPel",
+            "05 - QPel & Bidir ME",
+            "06 - RD on I/P frames",
+            "07 - RD on all frames",
+            "08 - RD refinement on I/P frames",
+            "09 - RD refinement on all frames",
+            "10 - QP-RD"});
             this.x264SubpelRefinement.Location = new System.Drawing.Point(125, 117);
             this.x264SubpelRefinement.Name = "x264SubpelRefinement";
             this.x264SubpelRefinement.Size = new System.Drawing.Size(154, 21);
@@ -939,7 +940,7 @@ namespace MeGUI.packages.video.x264
             // x264NumberOfRefFramesLabel
             // 
             this.x264NumberOfRefFramesLabel.AutoSize = true;
-            this.x264NumberOfRefFramesLabel.Location = new System.Drawing.Point(4, 44);
+            this.x264NumberOfRefFramesLabel.Location = new System.Drawing.Point(4, 42);
             this.x264NumberOfRefFramesLabel.Name = "x264NumberOfRefFramesLabel";
             this.x264NumberOfRefFramesLabel.Padding = new System.Windows.Forms.Padding(3);
             this.x264NumberOfRefFramesLabel.Size = new System.Drawing.Size(152, 19);
@@ -1591,6 +1592,15 @@ namespace MeGUI.packages.video.x264
             this.x264MBGroupbox.TabStop = false;
             this.x264MBGroupbox.Text = "Macroblock Options";
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 19);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(50, 13);
+            this.label1.TabIndex = 7;
+            this.label1.Text = "Partitions";
+            // 
             // macroblockOptions
             // 
             this.macroblockOptions.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -2000,15 +2010,6 @@ namespace MeGUI.packages.video.x264
             this.linkx264website.TabStop = true;
             this.linkx264website.Text = "Official x264 Website";
             this.linkx264website.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkx264website_LinkClicked);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 19);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(50, 13);
-            this.label1.TabIndex = 7;
-            this.label1.Text = "Partitions";
             // 
             // x264ConfigurationPanel
             // 
