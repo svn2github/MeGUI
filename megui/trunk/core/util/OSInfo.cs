@@ -288,37 +288,40 @@ namespace MeGUI
             
             // Find out in the registry anything under:
             //    HKLM\SOFTWARE\Microsoft\Active Setup\Installed Components & ".NET Framework" in the name
-            try
+
+            using (Microsoft.Win32.RegistryKey componentsKey = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(componentsKeyName))
             {
-                Microsoft.Win32.RegistryKey componentsKey = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(componentsKeyName);
-                string[] instComps = componentsKey.GetSubKeyNames();
-
-                foreach (string instComp in instComps)
+                try
                 {
-                    Microsoft.Win32.RegistryKey key = componentsKey.OpenSubKey(instComp);
-                    string friendlyName = (string)key.GetValue(null); // Gets the (Default) value from this key
-                    if (friendlyName != null && friendlyName.IndexOf(".NET Framework") >= 0)
+                    string[] instComps = componentsKey.GetSubKeyNames();
+
+                    foreach (string instComp in instComps)
                     {
-                        // let's try to get any version information available
-                        string version = (string)key.GetValue("Version");
-                        string[] versions = version.Split(',');
-                        string major = versions[0].ToString();
-
-                        if (version != null)
+                        Microsoft.Win32.RegistryKey key = componentsKey.OpenSubKey(instComp);
+                        string friendlyName = (string)key.GetValue(null); // Gets the (Default) value from this key
+                        if (friendlyName != null && friendlyName.IndexOf(".NET Framework") >= 0)
                         {
-                            // grab the version formated
-                            fv = DotNetVersionFormated(version);
+                            // let's try to get any version information available
+                            string version = (string)key.GetValue("Version");
+                            string[] versions = version.Split(',');
+                            string major = versions[0].ToString();
 
-                            // break the loop to keep the most up to date
-                            if ((major == "4") || (major == "3") || (major == "2"))
-                                break;
+                            if (version != null)
+                            {
+                                // grab the version formated
+                                fv = DotNetVersionFormated(version);
+
+                                // break the loop to keep the most up to date
+                                if ((major == "4") || (major == "3") || (major == "2"))
+                                    break;
+                            }
                         }
                     }
                 }
-            }
-            catch
-            {
-                return null;
+                catch
+                {
+                    return null;
+                }
             }
 
             return fv;
