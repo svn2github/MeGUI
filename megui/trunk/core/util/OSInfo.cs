@@ -284,101 +284,152 @@ namespace MeGUI
         public static string FormatDotNetVersion()
         {
             string fv = "unknown";
-            Version clr = Environment.Version;
-
-            switch (clr.Major)
+            string componentsKeyName = "SOFTWARE\\Microsoft\\Active Setup\\Installed Components";
+            
+            // Find out in the registry anything under:
+            //    HKLM\SOFTWARE\Microsoft\Active Setup\Installed Components & ".NET Framework" in the name
+            try
             {
-                case 1:
+                Microsoft.Win32.RegistryKey componentsKey = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(componentsKeyName);
+                string[] instComps = componentsKey.GetSubKeyNames();
+
+                foreach (string instComp in instComps)
+                {
+                    Microsoft.Win32.RegistryKey key = componentsKey.OpenSubKey(instComp);
+                    string friendlyName = (string)key.GetValue(null); // Gets the (Default) value from this key
+                    if (friendlyName != null && friendlyName.IndexOf(".NET Framework") >= 0)
                     {
-                        switch (clr.Minor)
+                        // let's try to get any version information available
+                        string version = (string)key.GetValue("Version");
+                        string[] versions = version.Split(',');
+                        string major = versions[0].ToString();
+
+                        if (version != null)
                         {
-                            case 0:
-                                {
-                                    if (clr.Revision.ToString()  == "209")
-                                    {
-                                        fv = "1.0 SP1";
-                                        break;
-                                    }
-                                    else if (clr.Revision.ToString() == "288")
-                                    {
-                                        fv = "1.0 SP2";
-                                        break;
-                                    }
-                                    else if (clr.Revision.ToString() == "6018")
-                                    {
-                                        fv = "1.0 SP3";
-                                        break;
-                                    }
-                                    else
-                                    {
-                                        fv = "1.0";
-                                        break;
-                                    }
-                                }
-                            case 1:
-                                {
-                                    if (clr.Revision.ToString() == "2032" || clr.Revision.ToString() == "2300")
-                                    {
-                                        fv = "1.1 SP1";
-                                        break;
-                                    }
-                                    else
-                                    {
-                                        fv = "1.1";
-                                        break;
-                                    }
-                                }
-                        }
-                        break;
-                    }
-                case 2:
-                    {
-                        if (clr.Revision.ToString() == "42" ||
-                            clr.Revision.ToString() == "312" || // Vista
-                            clr.Revision.ToString() == "832")   // KB928365
-                        {
-                            fv = "2.0";
-                            break;
-                        }
-                        else
-                        {
-                            fv = "2.0 SP1";
-                            break;
-                        }
-                    }
-                case 3:
-                    {
-                        switch (clr.Minor)
-                        {
-                            case 0:
-                                {
-                                    if (clr.Revision.ToString() == "26" || // Vista
-                                        clr.Revision.ToString() == "30")
-                                    {
-                                        fv = "3.0";
-                                        break;
-                                    }
-                                    else
-                                    {
-                                        fv = "3.0 SP1";
-                                        break;
-                                    }
-                                }
-                            case 5:
-                                {
-                                    if (clr.Revision.ToString() == "08")
-                                    {
-                                        fv = "3.5";
-                                        break;
-                                    }
-                                }
+                            // grab the version formated
+                            fv = DotNetVersionFormated(version);
+
+                            // break the loop to keep the most up to date
+                            if ((major == "4") || (major == "3") || (major == "2"))
                                 break;
                         }
-                        break;
                     }
+                }
+            }
+            catch
+            {
+                return null;
             }
 
             return fv;
+        }
+
+        /// <summary>
+        /// Returns the name of the dotNet Framework formated
+        /// </summary>
+        /// <returns>A string containing the dotNet Framework</returns>
+        /// 
+        private static string DotNetVersionFormated(string dotNetVersion)
+        {
+            string dnvf = "unknown";
+
+            if (dotNetVersion != "unknown")
+            {
+                string[] versions = dotNetVersion.Split(',');
+                string major = versions[0].ToString();
+                string minor = versions[1].ToString();
+                string build = versions[2].ToString();
+                string revision = versions[3].ToString();
+
+                switch (major)
+                {
+                    case "1":
+                        {
+                            switch (minor)
+                            {
+                                case "0":
+                                    {
+                                        switch (revision)
+                                        {
+                                            case "209": dnvf = "1.0 SP1"; break;
+                                            case "288": dnvf = "1.0 SP2"; break;
+                                            case "6018": dnvf = "1.0 SP3"; break;
+                                            default: dnvf = "1.0"; break;
+                                        }
+                                    }
+                                    break;
+                                case "1":
+                                    {
+                                        switch (revision)
+                                        {
+                                            case "2032":
+                                            case "2300": dnvf = "1.1 SP1"; break;
+                                            default: dnvf = "1.1"; break;
+                                        }
+                                    }
+                                    break;
+                            }
+                            break;
+                        }
+                    case "2":
+                        {
+                            switch (revision)
+                            {
+                                case "1433": dnvf = "2.0 SP1"; break;
+                                case "2407": dnvf = "2.0 SP2"; break;
+                                case "4926": dnvf = "2.0 SP3"; break;
+                                default: dnvf = "2.0"; break;
+                            }
+                        }
+                        break;
+                    case "3":
+                        {
+                            switch (minor)
+                            {
+                                case "0":
+                                    {
+                                        switch (revision)
+                                        {
+                                            case "26": // Vista
+                                            case "30": dnvf = "3.0"; break;
+                                            default: dnvf = "3.0 SP1"; break;
+                                        }
+                                    }
+                                    break;
+                                case "5":
+                                    {
+                                        switch (revision)
+                                        {
+                                            case "1": dnvf = "3.5 SP1"; break;
+                                            default: dnvf = "3.5"; break;
+                                        }
+                                    }
+                                    break;
+                            }
+                        }
+                        break;
+                    case "4":
+                        {
+                            switch (minor)
+                            {
+                                case "0":
+                                    {
+                                        switch (build)
+                                        {
+                                            case "20506": dnvf = "4.0 Beta 1"; break;
+                                            default: dnvf = "4.0"; break;
+                                        }
+                                    }
+                                    break;
+                            }
+                        }
+                        break;
+                }
+
+                dnvf += " (" + major + "." + minor + "." + build + "." + revision + ")";
+            }
+
+            return dnvf;
         }
 
         /// <summary>
