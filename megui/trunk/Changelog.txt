@@ -1,3 +1,20 @@
+0.3.1.1052
+    - (kurtnoise) [Avs Script Creator] redesign CUVIDServer management. (#2786306)
+    - (kurtnoise) apply FindandKillProcess("CUVIDSERVER") when all jobs are done in the queue & when megui is closing.
+    - (kurtnoise) [DialogManager] add FindProcess() & FindAndKillProcess() functions.
+    - (kurtnoise) update MediaInfo library and its wrapper to the latest release (0.7.20.0)
+    - (kurtnoise) [VideoUtil] getChaptersFromIFO(...) : save chapters files as text always by default. Some users may want it for the mux (#2825428)
+    - (kurtnoise) [OSInfo] using...try...catch instead.
+    - (kurtnoise) better .Net Framework handling.
+    - (kurtnoise) [x264Config] add QP-RD support as subme = 10. x264 rev 1187 or higher required.
+    - (kurtnoise) [AVCLevelsChecker] remove b-pyramid & b-frames computation. Not used anymore...
+    - (kurtnoise) [AVCLevelsChecker] update MaxBR values.
+    - (kurtnoise) [x264Encoder] apply sar command only when X & Y values are different to 1. 
+    - (kurtnoise) [x264Config] fix x264 scratchpad default settings.
+    - (kurtnoise) [x264Config] few improvements in the partitions command line construction.
+    - (kurtnoise) [x264Encoder] add AQ mode 2. requires x264 r1184 or higher.
+
+
 0.3.1.1051
     - (kurtnoise) Update MediaInfo library and its wrapper to the latest release (0.7.19)
     - (kurtnoise) [HDStreamExtractor] move a line parsing to the warning instead of error.
