@@ -1972,6 +1972,7 @@ namespace MeGUI
                 delegate(System.Drawing.Size s) { MeGUI.Properties.Settings.Default.MainFormSize = s; },
                 delegate(FormWindowState s) { MeGUI.Properties.Settings.Default.MainFormWindowState = s; });
 
+            DialogManager.FindAndKillProcess("CUVIDSERVER"); // close CUVIDServer from DGxxxNV tools if is running
         }
         private void mnuForum_Click(object sender, EventArgs e)
         {

@@ -461,6 +461,7 @@ namespace MeGUI.core.gui
 
                             case JobStartInfo.NO_JOBS_WAITING:
                                 status = JobWorkerStatus.Idle;
+                                mainForm.DialogManager.FindAndKillProcess("CUVIDSERVER");
                                 new Thread(delegate ()
                                 {
                                     WorkerFinishedJobs(this, EventArgs.Empty);
