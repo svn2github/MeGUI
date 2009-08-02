@@ -1490,6 +1490,29 @@ namespace MeGUI
 		#endregion
 		#region helper methods
         /// <summary>
+        /// Manage CUVIDServer from DGxxxNV tools package
+        /// </summary>
+        private bool manageCUVIDServer()
+        {
+            if (mainForm.DialogManager.FindProcess("CUVIDSERVER"))
+            {
+                if (MessageBox.Show("MeGUI has detected that CUVIDServer is already running...\nAre you sure you want to stop the current process and load your file ?",
+                                    "Information",
+                                    MessageBoxButtons.YesNo,
+                                    MessageBoxIcon.Information) == DialogResult.Yes)
+                {
+                    mainForm.DialogManager.FindAndKillProcess("CUVIDSERVER");
+                    System.Threading.Thread.Sleep(500); // needed otherwise CUVIDServer doesn't restart...:-/
+                    mainForm.DialogManager.runCUVIDServer();
+                }
+                else return false;
+            }
+            else mainForm.DialogManager.runCUVIDServer();
+
+            return true;
+        }
+
+        /// <summary>
         /// Opens a video source using the correct method based on the extension of the file name
         /// </summary>
         /// <param name="videoInput"></param>
@@ -1514,20 +1537,23 @@ namespace MeGUI
                     openVideo(videoInput);
                     break;
                 case ".dga":
-                    sourceType = PossibleSources.dga;
-                    if (Path.GetFileName(mainForm.Settings.DgavcIndexPath.ToLower()) != "dgavcindex.exe")
-                        mainForm.DialogManager.runCUVIDServer();
-                    openVideo(videoInput);
+                    sourceType = PossibleSources.dga;                    
+                    if (Path.GetFileName(mainForm.Settings.DgavcIndexPath.ToLower().ToString()) == "dgavcindexnv.exe")
+                    {
+                        if (manageCUVIDServer())
+                            openVideo(videoInput);                        
+                    }
+                    else openVideo(videoInput);
                     break;
                 case ".dgm":
                     sourceType = PossibleSources.dgm;
-                    mainForm.DialogManager.runCUVIDServer();
-                    openVideo(videoInput);
+                    if (manageCUVIDServer())
+                        openVideo(videoInput); 
                     break;
                 case ".dgv":
                     sourceType = PossibleSources.dgv;
-                    mainForm.DialogManager.runCUVIDServer();
-                    openVideo(videoInput);
+                    if (manageCUVIDServer())
+                        openVideo(videoInput); 
                     break;
                 case ".mpeg": // include case variants 
                 case ".mpg":
