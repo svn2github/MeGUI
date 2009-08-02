@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Windows;
@@ -191,20 +192,72 @@ namespace MeGUI
         public void runCUVIDServer()
         {
             string filePath = string.Empty;
-            if (mainForm.Settings.DgavcIndexPath != "" && Path.GetFileName(mainForm.Settings.DgavcIndexPath).ToLower() == "dgavcindexnv.exe")
+            if (mainForm.Settings.DgavcIndexPath != "" && Path.GetFileName(mainForm.Settings.DgavcIndexPath).ToLower().ToString() == "dgavcindexnv.exe")
                 filePath = Path.GetDirectoryName(mainForm.Settings.DgavcIndexPath);
 
             if (string.IsNullOrEmpty(filePath))
             {
-                if (mainForm.Settings.DgmpgIndexPath != "" && Path.GetFileName(mainForm.Settings.DgmpgIndexPath).ToLower() == "dgmpgindexnv.exe")
+                if (mainForm.Settings.DgmpgIndexPath != "" && Path.GetFileName(mainForm.Settings.DgmpgIndexPath).ToLower().ToString() == "dgmpgindexnv.exe")
                     filePath = Path.GetDirectoryName(mainForm.Settings.DgmpgIndexPath);
 
-                else if (mainForm.Settings.Dgvc1IndexPath != "" && Path.GetFileName(mainForm.Settings.Dgvc1IndexPath).ToLower() == "dgvc1indexnv.exe")
+                else if (mainForm.Settings.Dgvc1IndexPath != "" && Path.GetFileName(mainForm.Settings.Dgvc1IndexPath).ToLower().ToString() == "dgvc1indexnv.exe")
                     filePath = Path.GetDirectoryName(mainForm.Settings.Dgvc1IndexPath);
             }
 
             if (!string.IsNullOrEmpty(filePath)) System.Diagnostics.Process.Start(Path.Combine(filePath, "CUVIDServer.exe"));
             else MessageBox.Show("Cannot run CUVID Server executable...\nAre you sure is it installed ?", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        public bool FindProcess(string name)
+        {
+            Process[] processlist = Process.GetProcesses();
+            //here we're going to get a list of all running processes on
+            //the computer
+            foreach (Process myProcess in processlist)
+            {
+                //now we're going to see if any of the running processes
+                //match the currently running processes by using the StartsWith Method,
+                //this prevents us from incluing the .EXE for the process we're looking for.
+                //. Be sure to not
+                //add the .exe to the name you provide, i.e: NOTEPAD,
+                //not NOTEPAD.EXE or false is always returned even if
+                //notepad is running
+                if (myProcess.ProcessName.ToUpper().ToString() == name)
+                    return true;
+            }
+            //process not found, return false
+            return false;
+        }
+
+        public bool FindAndKillProcess(string name)
+        {
+            Process[] processlist = Process.GetProcesses();
+            //here we're going to get a list of all running processes on
+            //the computer
+            foreach (Process myProcess in processlist)
+            {
+                //now we're going to see if any of the running processes
+                //match the currently running processes by using the StartsWith Method,
+                //this prevents us from incluing the .EXE for the process we're looking for.
+                //. Be sure to not
+                //add the .exe to the name you provide, i.e: NOTEPAD,
+                //not NOTEPAD.EXE or false is always returned even if
+                //notepad is running
+                if (myProcess.ProcessName.ToUpper().ToString() == name)
+                {
+                    //since we found the proccess we now need to use the
+                    //Kill Method to kill the process. Remember, if you have
+                    //the process running more than once, say IE open 4
+                    //times the loop thr way it is now will close all 4,
+                    //if you want it to just close the first one it finds
+                    //then add a return; after the Kill
+                    myProcess.Kill();
+                    //process killed, return true
+                    return true;
+                }
+            }
+            //process not found, return false
+            return false;
         }
 
     }
