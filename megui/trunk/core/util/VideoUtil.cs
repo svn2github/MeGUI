@@ -579,7 +579,32 @@ namespace MeGUI
             }
 
             return deviceList;
-        }    
+        }
+
+        /// <summary>
+        /// Manage CUVIDServer from DGxxxNV tools package
+        /// </summary>
+        public static bool manageCUVIDServer()
+        {
+            MainForm mainF = MainForm.Instance;
+            if (mainF.DialogManager.FindProcess("CUVIDSERVER"))
+            {
+                if (MessageBox.Show("MeGUI has detected that CUVIDServer is already running...\nAre you sure you want to stop the current process and load your file ?",
+                                    "Information",
+                                    MessageBoxButtons.YesNo,
+                                    MessageBoxIcon.Information) == DialogResult.Yes)
+                {
+                    mainF.DialogManager.FindAndKillProcess("CUVIDSERVER");
+                    System.Threading.Thread.Sleep(500); // needed otherwise CUVIDServer doesn't restart...:-/
+                    mainF.DialogManager.runCUVIDServer();
+                }
+                else return false;
+            }
+            else mainF.DialogManager.runCUVIDServer();
+
+            return true;
+        }
+
 		#endregion
 		#region dgindex preprocessing
 		/// <summary>
