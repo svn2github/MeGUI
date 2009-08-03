@@ -106,7 +106,16 @@ namespace MeGUI
         #region event handlers
         private void videoInput_FileSelected(FileBar sender, FileBarEventArgs args)
         {
-            if (!string.IsNullOrEmpty(videoInput.Filename)) openVideoFile(videoInput.Filename);
+            if (!string.IsNullOrEmpty(videoInput.Filename))
+            {
+                if (findDGSource(videoInput.Filename))
+                {
+                    if (VideoUtil.manageCUVIDServer())
+                        openVideoFile(videoInput.Filename);
+                }
+                else
+                    openVideoFile(videoInput.Filename);
+            }
             editZonesButton.Enabled = !string.IsNullOrEmpty(videoInput.Filename);
         }
 
@@ -259,6 +268,24 @@ namespace MeGUI
             else
                 return false;
         }
+        public bool findDGSource(string FileName)
+        {
+            
+            using (StreamReader sr = new StreamReader(FileName))
+            {
+                string line = string.Empty;
+                while ((line = sr.ReadLine()) != null)
+                {
+                    if (line.ToLower().Contains("dgsource"))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
         #endregion
         #region player info
 
