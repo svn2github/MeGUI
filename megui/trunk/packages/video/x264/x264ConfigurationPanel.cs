@@ -656,12 +656,7 @@ namespace MeGUI.packages.video.x264
                 cqmComboBox1.SelectedObject = xs.QuantizerMatrix;
                 x264LosslessMode.Checked = xs.Lossless;
                 psnr.Checked = xs.PSNRCalculation;
-                // To be removed if a new AQmode is added to x264
-                if (xs.AQmode > 1)
-                    cbAQMode.SelectedIndex = 1;
-                else
-                // ---
-                    cbAQMode.SelectedIndex = xs.AQmode;
+                cbAQMode.SelectedIndex = xs.AQmode;
                 x264FullRange.Checked = xs.fullRange;
                 numAQStrength.Value = xs.AQstrength;
                 NoiseReduction.Text = xs.NoiseReduction.ToString();
