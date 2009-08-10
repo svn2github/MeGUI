@@ -76,22 +76,52 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             int qp;
             StringBuilder sb = new StringBuilder();
             CultureInfo ci = new CultureInfo("en-us");
-            if (xs.EncodingMode == 4 || xs.EncodingMode == 7)
-                xs.Turbo = false; // turn off turbo to prevent inconsistent commandline preview
+
+            #region main tab
+            ///<summary>
+            /// x264 Main Tab Settings
+            ///</summary>
+            // AVC Profiles
             switch (xs.Profile)
             {
-                case 0: // Baseline
-                    sb.Append("--profile baseline ");
-                    break;
-                case 1: // Main
-                    sb.Append("--profile main ");
-                    break;
-                case 2: // High
-                    sb.Append("--profile high ");
-                    break;
-                default: // Autoguess
-                    break;
+                case 0: sb.Append("--profile baseline "); break;
+                case 1: sb.Append("--profile main "); break;
+                case 2: sb.Append("--profile high "); break;
+                default: break; // Autoguess                    
             }
+
+            // AVC Levels
+            if (xs.Level != 15) // unrestricted (x264.exe default)
+                sb.Append("--level " + AVCLevels.getCLILevelNames()[xs.Level] + " ");
+
+            // x264 Presets
+            switch (xs.x264Preset)
+            {
+                case 0: sb.Append("--preset ultrafast "); break;
+                case 1: sb.Append("--preset veryfast "); break;
+                case 2: sb.Append("--preset faster "); break;
+                case 3: sb.Append("--preset fast "); break;
+                case 5: sb.Append("--preset slow "); break;
+                case 6: sb.Append("--preset slower "); break;
+                case 7: sb.Append("--preset veryslow "); break;
+                case 8: sb.Append("--preset placebo "); break;
+                default: break; // medium
+            }
+
+            // x264 Tunings
+            switch (xs.x264Tuning)
+            {
+                case 1: sb.Append("--tune film "); break;
+                case 2: sb.Append("--tune animation "); break;
+                case 3: sb.Append("--tune grain "); break;
+                case 4: sb.Append("--tune psnr "); break;
+                case 5: sb.Append("--tune ssim "); break;
+                case 6: sb.Append("--tune touhou "); break;
+                case 7: sb.Append("--tune fastdecode "); break;
+                default: break; // default
+            }
+
+            // Encoding Modes
             switch (xs.EncodingMode)
             {
                 case 0: // ABR
@@ -126,25 +156,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                     if (xs.QuantizerCRF != 23)
                         sb.Append("--crf " + xs.QuantizerCRF.ToString(ci) + " ");
                     break;
-            } // now add the rest of the x264 encoder options
+            } 
 
-            if (xs.UseQPFile)
-            {
-                if (xs.EncodingMode == 0 ||
-                    xs.EncodingMode == 1 ||
-                    xs.EncodingMode == 2 ||
-                    xs.EncodingMode == 5 ||
-                    xs.EncodingMode == 9)
-                    sb.Append("--qpfile " + "\"" + xs.QPFile + "\" ");
-            }
-
-            // AVC Level
-            if (xs.Level != 15) // unrestricted (x264.exe default)
-                sb.Append("--level " + AVCLevels.getCLILevelNames()[xs.Level] + " ");
-            if (xs.KeyframeInterval != 250) // gop size of 250 is default
-                sb.Append("--keyint " + xs.KeyframeInterval + " ");
-            if (xs.MinGOPSize != 25)
-                sb.Append("--min-keyint " + xs.MinGOPSize + " ");
+            // Turbo
             if (xs.Turbo)
             {
                 xs.NbRefFrames = 1;
@@ -160,43 +174,28 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                 xs.X264Trellis = 0; // disable trellis
                 xs.noFastPSkip = false;
             }
-            if (xs.DeadZoneInter != 21)
-                sb.Append("--deadzone-inter " + xs.DeadZoneInter + " ");
-            if (xs.DeadZoneIntra != 11)
-                sb.Append("--deadzone-intra " + xs.DeadZoneIntra + " ");
-            if (xs.NbRefFrames != 3) // 3 ref frame is default
-                sb.Append("--ref " + xs.NbRefFrames + " ");
-            if (!xs.MixedRefs)
-                sb.Append("--no-mixed-refs ");
-            if (xs.noFastPSkip)
-                sb.Append("--no-fast-pskip ");
-            if (xs.NbBframes != 3) // 3 is default value
-                sb.Append("--bframes " + xs.NbBframes + " ");
-            if (xs.NbBframes > 0)
-            {
-                if (xs.NewAdaptiveBFrames > 1) // adaptive b-frames is conditional on b frames being enabled
-                {
-                    sb.Append("--b-adapt " + xs.NewAdaptiveBFrames + " ");
-                }
-                else if (xs.NewAdaptiveBFrames < 1)
-                {
-                    sb.Append("--b-adapt " + xs.NewAdaptiveBFrames + " --scenecut -1 ");
-                }
-                if (xs.NbBframes > 1 && xs.BFramePyramid) // pyramid needs a minimum of 2 b frames
-                    sb.Append("--b-pyramid ");
-                if (!xs.WeightedBPrediction) // weighted BPredictioon is conditional on b frames being enabled
-                    sb.Append("--no-weightb ");
-                if (xs.BframePredictionMode != 1) // BframePredicionMode is conditional on b frames being enabled
-                {
-                    sb.Append("--direct "); // mode = 1 (spatial) is default value
-                    if (xs.BframePredictionMode == 0)
-                        sb.Append("none ");
-                    else if (xs.BframePredictionMode == 2)
-                        sb.Append("temporal ");
-                    else if (xs.BframePredictionMode == 3)
-                        sb.Append("auto ");
-                }
-            }
+
+            // Slow 1st Pass
+            if ((!xs.Turbo) &&
+               ((xs.EncodingMode == 2) || // 2 pass first pass
+                (xs.EncodingMode == 4) || // automated twopass
+                (xs.EncodingMode == 5) || // 3 pass first pass
+                (xs.EncodingMode == 8)))  // automated threepass
+                sb.Append("--slow-firstpass ");
+
+            // Threads
+            if (xs.ThreadInput)
+                sb.Append("--thread-input ");
+            if (xs.NbThreads > 0)
+                sb.Append("--threads " + xs.NbThreads + " ");
+            #endregion
+
+            #region frame-type tab
+            ///<summary>
+            /// x264 Frame-Type Tab Settings
+            ///</summary>
+            
+            // H.264 Features
             if (xs.Deblock) // deblocker active, add options
             {
                 if (xs.AlphaDeblock != 0 || xs.BetaDeblock != 0) // 0 is default value
@@ -204,29 +203,167 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             }
             else // no deblocking
                 sb.Append("--nf ");
+
             if (!xs.Cabac) // no cabac
                 sb.Append("--no-cabac ");
-            if (xs.SubPelRefinement + 1 != 7) // non default subpel refinement
+
+            // GOP Size
+            if (xs.KeyframeInterval != 250) // gop size of 250 is default
+                sb.Append("--keyint " + xs.KeyframeInterval + " ");
+            if (xs.MinGOPSize != 25)
+                sb.Append("--min-keyint " + xs.MinGOPSize + " ");
+
+            // B-Frames
+            if (xs.NbBframes != 3) // 3 is default value
+                sb.Append("--bframes " + xs.NbBframes + " ");
+
+            // B-Frames bias
+            if (xs.BframeBias != 0.0M)
+                sb.Append("--b-bias " + xs.BframeBias.ToString(ci) + " ");
+
+            if (xs.NbBframes > 0)
+            {
+                if (xs.NewAdaptiveBFrames > 1) // adaptive b-frames is conditional on b frames being enabled
+                    sb.Append("--b-adapt " + xs.NewAdaptiveBFrames + " ");
+                else if (xs.NewAdaptiveBFrames < 1)
+                    sb.Append("--b-adapt " + xs.NewAdaptiveBFrames + " --scenecut -1 ");
+                if (xs.NbBframes > 1 && xs.BFramePyramid) // pyramid needs a minimum of 2 b frames
+                    sb.Append("--b-pyramid ");
+                if (!xs.WeightedBPrediction) // weighted BPredictioon is conditional on b frames being enabled
+                    sb.Append("--no-weightb ");
+                if (xs.BframePredictionMode != 1) // BframePredicionMode is conditional on b frames being enabled
+                {
+                    switch (xs.BframePredictionMode)
+                    {
+                        case 0: sb.Append("--direct none "); break;
+                        case 2: sb.Append("--direct temporal "); break;
+                        case 3: sb.Append("--direct auto "); break;
+                        default: break; // spatial
+                    }
+                }
+            }
+
+            // Other
+            if (xs.EncodeInterlaced)
+                sb.Append("--interlaced ");
+
+            if (xs.SCDSensitivity != 40M)
+                sb.Append("--scenecut " + xs.SCDSensitivity.ToString(ci) + " ");
+
+            if (xs.NbRefFrames != 3) // 3 ref frame is default
+                sb.Append("--ref " + xs.NbRefFrames + " ");
+
+            if (xs.NoiseReduction > 0)
+                sb.Append("--nr " + xs.NoiseReduction + " ");
+            #endregion
+
+            #region rc tab
+            ///<summary>
+            /// x264 Rate Control Tab Settings
+            /// </summary>
+
+            if (xs.EncodingMode != 1) // doesn't apply to CQ mode
+            {
+                if (xs.MinQuantizer != 10) // default min quantizer is 10
+                    sb.Append("--qpmin " + xs.MinQuantizer + " ");
+                if (xs.MaxQuantizer != 51) // 51 is the default max quanitzer
+                    sb.Append("--qpmax " + xs.MaxQuantizer + " ");
+                if (xs.MaxQuantDelta != 4) // 4 is the default value
+                    sb.Append("--qpstep " + xs.MaxQuantDelta + " ");
+                if (xs.IPFactor != 1.4M) // 1.4 is the default value
+                    sb.Append("--ipratio " + xs.IPFactor.ToString(ci) + " ");
+                if (xs.PBFactor != 1.3M) // 1.3 is the default value here
+                    sb.Append("--pbratio " + xs.PBFactor.ToString(ci) + " ");
+                if (xs.ChromaQPOffset != 0.0M)
+                    sb.Append("--chroma-qp-offset " + xs.ChromaQPOffset.ToString(ci) + " ");
+                if (xs.VBVBufferSize > 0)
+                    sb.Append("--vbv-bufsize " + xs.VBVBufferSize + " ");
+                if (xs.VBVMaxBitrate > 0)
+                    sb.Append("--vbv-maxrate " + xs.VBVMaxBitrate + " ");
+                if (xs.VBVInitialBuffer != 0.9M)
+                    sb.Append("--vbv-init " + xs.VBVInitialBuffer.ToString(ci) + " ");
+                if (xs.BitrateVariance != 1)
+                    sb.Append("--ratetol " + xs.BitrateVariance.ToString(ci) + " ");
+                if (xs.QuantCompression != 0.6M)
+                    sb.Append("--qcomp " + xs.QuantCompression.ToString(ci) + " ");
+                if (xs.EncodingMode > 1) // applies only to twopass
+                {
+                    if (xs.TempComplexityBlur != 20)
+                        sb.Append("--cplxblur " + xs.TempComplexityBlur.ToString(ci) + " ");
+                    if (xs.TempQuanBlurCC != 0.5M)
+                        sb.Append("--qblur " + xs.TempQuanBlurCC.ToString(ci) + " ");
+                }
+            }
+            
+            // Dead Zones
+            if (xs.DeadZoneInter != 21)
+                sb.Append("--deadzone-inter " + xs.DeadZoneInter + " ");
+            if (xs.DeadZoneIntra != 11)
+                sb.Append("--deadzone-intra " + xs.DeadZoneIntra + " ");
+
+            // RC Lookahead
+            if (xs.Lookahead != 40)
+                sb.Append("--rc-lookahead " + xs.Lookahead + " ");
+            
+            // Disable Macroblok Tree
+            if (!xs.NoMBTree)
+                sb.Append("--no-mbtree ");
+
+            // AQ-Mode
+            if (xs.AQmode != 1)
+                sb.Append("--aq-mode " + xs.AQmode.ToString() + " ");
+            if (xs.AQmode > 0)
+            {
+                if (xs.AQstrength != 1.0M)
+                    sb.Append("--aq-strength " + xs.AQstrength.ToString(ci) + " ");
+            }
+
+            // custom matrices 
+            if (xs.QuantizerMatrixType > 0) 
+            {
+                switch (xs.QuantizerMatrixType)
+                {
+                    case 1: sb.Append("--cqm \"jvt\" "); break;
+                    case 2: sb.Append("--cqmfile \"" + xs.QuantizerMatrix + "\" "); break;
+                }
+            }
+
+            #endregion
+
+            #region analysis tab
+            ///<summary>
+            /// x264 Analysis Tab Settings
+            /// </summary>
+             
+            // Disable Chroma Motion Estimation
+            if (!xs.ChromaME)
+                sb.Append("--no-chroma-me ");
+
+            // Motion Estimation Range
+            if (xs.MERange != 16)
+                sb.Append("--merange " + xs.MERange + " ");
+
+            // ME Type
+            if (xs.METype + 1 != 2)
+            {
+                switch (xs.METype + 1)
+                {
+                    case 1: sb.Append("--me dia "); break;
+                    case 3: sb.Append("--me umh "); break;
+                    case 4: sb.Append("--me esa "); break;
+                    case 5: sb.Append("--me tesa "); break;
+                    default: break; // --me hex
+                }
+            }
+
+            // subpel refinement
+            if (xs.SubPelRefinement + 1 != 7) 
             {
                 int subq = xs.SubPelRefinement + 1;
                 sb.Append("--subme " + subq + " ");
             }
-            if (!xs.ChromaME)
-                sb.Append("--no-chroma-me ");
-            if (xs.X264Trellis != 1)
-                sb.Append("--trellis " + xs.X264Trellis + " ");
-            if ((xs.SubPelRefinement + 1) > 5)
-            {
-                if (xs.PsyRDO != new decimal(1.0) || xs.PsyTrellis != new decimal(0.0))
-                    sb.Append("--psy-rd " + xs.PsyRDO.ToString(ci) + ":" + xs.PsyTrellis.ToString(ci) + " ");
-            }
-            else
-            {
-                if (xs.PsyTrellis != new decimal(0.0))
-                    sb.Append("--psy-rd 0:" + xs.PsyTrellis.ToString(ci) + " ");
-            }
-            
-            // now it's time for the macroblock types
+
+            // macroblock types
             if (xs.MacroBlockOptions != 3)
             {
                 if (xs.P8x8mv || xs.B8x8mv || xs.I4x4mv || xs.I8x8mv || xs.P4x4mv || xs.AdaptiveDCT)
@@ -259,71 +396,68 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                     sb.Append("--partitions none ");
                 }
             }
-            if (xs.EncodingMode != 1) // doesn't apply to CQ mode
-            {
-                if (xs.MinQuantizer != 10) // default min quantizer is 10
-                    sb.Append("--qpmin " + xs.MinQuantizer + " ");
-                if (xs.MaxQuantizer != 51) // 51 is the default max quanitzer
-                    sb.Append("--qpmax " + xs.MaxQuantizer + " ");
-                if (xs.MaxQuantDelta != 4) // 4 is the default value
-                    sb.Append("--qpstep " + xs.MaxQuantDelta + " ");
-                if (xs.IPFactor != new decimal(1.4)) // 1.4 is the default value
-                    sb.Append("--ipratio " + xs.IPFactor.ToString(ci) + " ");
-                if (xs.PBFactor != new decimal(1.3)) // 1.3 is the default value here
-                    sb.Append("--pbratio " + xs.PBFactor.ToString(ci) + " ");
-                if (xs.ChromaQPOffset != new decimal(0.0))
-                    sb.Append("--chroma-qp-offset " + xs.ChromaQPOffset.ToString(ci) + " ");
-                if (xs.VBVBufferSize > 0)
-                    sb.Append("--vbv-bufsize " + xs.VBVBufferSize + " ");
-                if (xs.VBVMaxBitrate > 0)
-                    sb.Append("--vbv-maxrate " + xs.VBVMaxBitrate + " ");
-                if (xs.VBVInitialBuffer != new decimal(0.9))
-                    sb.Append("--vbv-init " + xs.VBVInitialBuffer.ToString(ci) + " ");
-                if (xs.BitrateVariance != 1)
-                    sb.Append("--ratetol " + xs.BitrateVariance.ToString(ci) + " ");
-                if (xs.QuantCompression != new decimal(0.6))
-                    sb.Append("--qcomp " + xs.QuantCompression.ToString(ci) + " ");
-                if (xs.EncodingMode > 1) // applies only to twopass
-                {
-                    if (xs.TempComplexityBlur != 20)
-                        sb.Append("--cplxblur " + xs.TempComplexityBlur.ToString(ci) + " ");
-                    if (xs.TempQuanBlurCC != new decimal(0.5))
-                        sb.Append("--qblur " + xs.TempQuanBlurCC.ToString(ci) + " ");
-                }
-            }
-            if (xs.SCDSensitivity != new decimal(40))
-                sb.Append("--scenecut " + xs.SCDSensitivity.ToString(ci) + " ");
-            if (xs.BframeBias != new decimal(0))
-                sb.Append("--b-bias " + xs.BframeBias.ToString(ci) + " ");
-            if (xs.METype + 1 != 2)
-            {
-                sb.Append("--me ");
-                if (xs.METype + 1 == 1)
-                    sb.Append("dia ");
-                if (xs.METype + 1 == 3)
-                    sb.Append("umh ");
-                if (xs.METype + 1 == 4)
-                    sb.Append("esa ");
-                if (xs.METype + 1 == 5)
-                    sb.Append("tesa ");
-            }
-            if (xs.MERange != 16)
-                sb.Append("--merange " + xs.MERange + " ");
 
-            sb.Append("--thread-input ");
-            if (xs.NbThreads > 0)
-                sb.Append("--threads " + xs.NbThreads + " ");
+            // Trellis
+            if (xs.X264Trellis != 1)
+                sb.Append("--trellis " + xs.X264Trellis + " ");
 
-            if (xs.AQmode != 1)
+            if ((xs.SubPelRefinement + 1) > 5)
             {
-                sb.Append("--aq-mode " + xs.AQmode.ToString() + " ");
+                if ((xs.PsyRDO != 1.0M) || (xs.PsyTrellis != 0.0M))
+                    sb.Append("--psy-rd " + xs.PsyRDO.ToString(ci) + ":" + xs.PsyTrellis.ToString(ci) + " ");
             }
-            if (xs.AQmode > 0)
+            else
             {
-                if (xs.AQstrength != new decimal(1.0))
-                    sb.Append("--aq-strength " + xs.AQstrength.ToString(ci) + " ");
+                if (xs.PsyTrellis != 0.0M)
+                    sb.Append("--psy-rd 0:" + xs.PsyTrellis.ToString(ci) + " ");
             }
-            if (zones != null && zones.Length > 0 && xs.CreditsQuantizer >= new decimal(1))
+
+            if (!xs.MixedRefs)
+                sb.Append("--no-mixed-refs ");
+
+            if (xs.NoDCTDecimate)
+                sb.Append("--no-dct-decimate ");
+
+            if (xs.noFastPSkip)
+                sb.Append("--no-fast-pskip ");
+
+            if (xs.NoPsy)
+                sb.Append("--no-psy ");
+
+            #endregion
+
+            #region misc tab
+            ///<summary>
+            /// x264 Misc Tab Settings
+            /// </summary>
+
+            // QPFile
+            if (xs.UseQPFile)
+            {
+                if (xs.EncodingMode == 0 ||
+                    xs.EncodingMode == 1 ||
+                    xs.EncodingMode == 2 ||
+                    xs.EncodingMode == 5 ||
+                    xs.EncodingMode == 9)
+                    sb.Append("--qpfile " + "\"" + xs.QPFile + "\" ");
+            }
+
+            if (xs.PSNRCalculation)
+                sb.Append("--psnr ");
+
+            if (xs.SSIMCalculation)
+                sb.Append("--ssim ");
+
+            if (xs.fullRange)
+                sb.Append("--fullrange on ");
+
+            if (!xs.CustomEncoderOptions.Equals("")) // add custom encoder options
+                sb.Append(xs.CustomEncoderOptions);
+
+            #endregion
+
+            #region zones
+            if (zones != null && zones.Length > 0 && xs.CreditsQuantizer >= 1.0M)
             {
                 sb.Append("--zones ");
                 foreach (Zone zone in zones)
@@ -344,42 +478,30 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                 sb.Remove(sb.Length - 1, 1);
                 sb.Append(" ");
             }
+            #endregion
+
+            #region input
             if (d.HasValue)
             {
                 Sar s = d.Value.ToSar(hres, vres);
                 if ((s.X != 1) && (s.Y != 1))
                     sb.Append("--sar " + s.X + ":" + s.Y + " ");
             }
-            if (xs.QuantizerMatrixType > 0) // custom matrices enabled
-            {
-                if (xs.QuantizerMatrixType == 1)
-                    sb.Append("--cqm \"jvt\" ");
-                if (xs.QuantizerMatrixType == 2)
-                    sb.Append("--cqmfile \"" + xs.QuantizerMatrix + "\" ");
-            }
+            #endregion
 
+            #region output
+            // recommended by the specs
             if (output.EndsWith(".264"))
-                sb.Append("--aud ");  // recommended by the specs
-            if (xs.NoDCTDecimate)
-                sb.Append("--no-dct-decimate ");
-            if (xs.PSNRCalculation)
-                sb.Append("--psnr ");
-            if (xs.SSIMCalculation)
-                sb.Append("--ssim ");
-            if (xs.EncodeInterlaced)
-                sb.Append("--interlaced ");
-            if (xs.NoiseReduction > 0)
-                sb.Append("--nr " + xs.NoiseReduction + " ");
+                sb.Append("--aud ");  
+            
             //add the rest of the commandline regarding the output
             if (xs.EncodingMode == 2 || xs.EncodingMode == 5)
                 sb.Append("--output NUL ");
             else
                 sb.Append("--output " + "\"" + output + "\" ");
             sb.Append("\"" + input + "\" ");
-            if (xs.fullRange)
-                sb.Append("--fullrange on ");
-            if (!xs.CustomEncoderOptions.Equals("")) // add custom encoder options
-                sb.Append(xs.CustomEncoderOptions);
+            #endregion
+
             return sb.ToString();
         }
 

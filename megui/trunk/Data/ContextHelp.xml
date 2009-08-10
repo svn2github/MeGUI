@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ContextHelp version="0.6" Author="Kurtnoise" LastUpdated="2009-07-15">
+<ContextHelp version="0.7" Author="Kurtnoise" LastUpdated="2009-08-09">
 	<Codec name="x264">
 		<!--Frame type options:-->
 		<keyint name="Maximum Key Frame Interval">
@@ -435,6 +435,34 @@ Your mileage may vary.
 			<Recommended>0.0</Recommended>
 			<Default>0.0</Default>
 		</psytrellis>
+    <mbtree name="MB-Tree Rate Control">
+      <Advanced>
+        It tracks the propagation of information from future blocks to past blocks across motion vectors.
+        It could be described as localizing qcomp to act on individual blocks instead of whole scenes.
+        Thus instead of lowering quality in high-complexity scenes (like x264 currently does), it'll only
+        lower quality on the complex part of the scene, while for example a static background
+        will remain high-quality.
+        It also has many other more subtle effects, some potentially negative, most probably not.
+      </Advanced>  
+      <Basic>
+This helps at all bitrates, but can even help at phenomenally low bitrates where 
+the video would otherwise fall apart completely...
+      </Basic>
+      <Recommended>Enabled</Recommended>
+      <Default>Enabled</Default>
+    </mbtree>
+    <lookahead name="RC-Lookahead">
+      <Advanced>
+        Sets the number of frames to use for mb-tree ratecontrol. 
+        Increasing the frame count generates better results but it's also slower. 
+        Maximum value is 250 or keyint, whichever is smaller.
+      </Advanced>
+      <Basic>
+        Number of frames for frametype lookahead.
+      </Basic>
+      <Recommended>40-50</Recommended>
+      <Default>40</Default>
+    </lookahead>
 		<!--WARNING DOUBLE NEGATIVE-->
 		<no-fast-pskip name="Fast P-frame Skip Detection">
 			<Advanced>
@@ -651,6 +679,30 @@ targeting specific classes of applications:
       <Recommended>High Profile</Recommended>
       <Default>High Profile</Default>
     </profile>
+    <presets name="x264 Presets">
+      <Advanded>
+        Change options to trade off compression efficiency and quality. 
+        If you specify a preset, the changes it makes will be applied 
+        before all other parameters are applied.
+      </Advanded>
+      <Basic>
+        Specify an internal Preset.
+      </Basic>
+      <Recommended></Recommended>
+      <Default>Medium</Default>
+    </presets>
+    <tunes name="x264 Tunings">
+      <Advanced>
+        Tune options to further optimise them for your input content. 
+        If you specify a tuning, the changes will be applied after 
+        a preset but before all other parameters.
+      </Advanced>
+      <Basic>
+        Specify an internal tuning.
+      </Basic>
+      <Recommended></Recommended>
+      <Default>none</Default>
+    </tunes>
 	</Codec>
 	<Codec name="Xvid">
 		<setting1 name="setting1">

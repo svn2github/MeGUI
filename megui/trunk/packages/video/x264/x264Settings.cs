@@ -57,11 +57,13 @@ namespace MeGUI
         }
         int NewadaptiveBFrames, nbRefFrames, alphaDeblock, betaDeblock, subPelRefinement, maxQuantDelta, tempQuantBlur, 
 			bframePredictionMode, vbvBufferSize, vbvMaxBitrate, meType, meRange, minGOPSize, macroBlockOptions,
-			quantizerMatrixType, profile, x264Trellis, level, noiseReduction, deadZoneInter, deadZoneIntra, AQMode;
+            quantizerMatrixType, profile, x264Trellis, level, noiseReduction, deadZoneInter, deadZoneIntra, AQMode, preset, 
+            tune, lookahead;
 		decimal ipFactor, pbFactor, chromaQPOffset, vbvInitialBuffer, bitrateVariance, quantCompression, 
 			tempComplexityBlur, tempQuanBlurCC, scdSensitivity, bframeBias, quantizerCrf, AQStrength, psyRDO, psyTrellis;
 		bool deblock, cabac, p4x4mv, p8x8mv, b8x8mv, i4x4mv, i8x8mv, weightedBPrediction, encodeInterlaced,
-			bFramePyramid, chromaME, adaptiveDCT, lossless, mixedRefs, NoFastPSkip, psnrCalc, noDctDecimate, ssimCalc, useQPFile, FullRange;
+			bFramePyramid, chromaME, adaptiveDCT, lossless, mixedRefs, NoFastPSkip, psnrCalc, noDctDecimate, ssimCalc, useQPFile, 
+            FullRange, advSet, noMBTree, threadInput, noPsy;
 		string quantizerMatrix, qpfile;
 		#region constructor
         /// <summary>
@@ -133,6 +135,13 @@ namespace MeGUI
             useQPFile = false;
             qpfile = "";
             FullRange = false;
+            preset = 3;
+            tune = 0;
+            advSet = false;
+            lookahead = 40;
+            noMBTree = false;
+            threadInput = true;
+            noPsy = false;
 		}
 		#endregion
 		#region properties
@@ -427,6 +436,41 @@ namespace MeGUI
             get { return FullRange; }
             set { FullRange = value; }
         }
+        public int x264Preset
+        {
+            get { return preset; }
+            set { preset = value; }
+        }
+        public int x264Tuning
+        {
+            get { return tune; }
+            set { tune = value; }
+        }
+        public bool x264AdvancedSettings
+        {
+            get { return advSet; }
+            set { advSet = value; }
+        }
+        public int Lookahead
+        {
+            get { return lookahead; }
+            set { lookahead = value; }
+        }
+        public bool NoMBTree
+        {
+            get { return noMBTree; }
+            set { noMBTree = value; }
+        }
+        public bool ThreadInput
+        {
+            get { return threadInput; }
+            set { threadInput = value; }
+        }
+        public bool NoPsy
+        {
+            get { return noPsy; }
+            set { noPsy = value; }
+        }
         #endregion
         public override bool UsesSAR
         {
@@ -507,7 +551,14 @@ namespace MeGUI
                 this.AQstrength != otherSettings.AQstrength ||
                 this.UseQPFile != otherSettings.UseQPFile ||
                 this.fullRange != otherSettings.fullRange ||
-                this.MacroBlockOptions != otherSettings.MacroBlockOptions
+                this.MacroBlockOptions != otherSettings.MacroBlockOptions ||
+                this.preset != otherSettings.x264Preset ||
+                this.tune != otherSettings.x264Tuning ||
+                this.advSet != otherSettings.x264AdvancedSettings ||
+                this.lookahead != otherSettings.Lookahead ||
+                this.noMBTree != otherSettings.NoMBTree ||
+                this.threadInput != otherSettings.ThreadInput ||
+                this.noPsy != otherSettings.NoPsy
                 )
                 return true;
             else
