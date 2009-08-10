@@ -1,3 +1,14 @@
+0.3.1.1053
+    - (kurtnoise) [x264 Config] * add presets/tunings/mb-tree/rc-lookahead/no-psy options. Requires x264 revision 1206 or higher.
+
+                                * redesign config panel in 4 tabs (Main, the default one + Frame-type + Rate-Control + Analysis + Misc)
+                  
+              * clean up the code for better reading. 
+    - (kurtnoise) Fix some changes in batch files. Patch by XhmikosR (#2832669)
+    - (kurtnoise) [x264Config] remove AQ Mode restriction from x264 settings.
+    - (kurtnoise) [VideoEncodingComponent] add findDGSource() function and use it during input file loading to check whether or not CUVIDServer must be run. 
+    - (kurtnoise) move manageCUVIDServer() to VideoUtil.cs
+
 0.3.1.1052
     - (kurtnoise) [Avs Script Creator] redesign CUVIDServer management. (#2786306)
     - (kurtnoise) apply FindandKillProcess("CUVIDSERVER") when all jobs are done in the queue & when megui is closing.
