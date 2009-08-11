@@ -1152,11 +1152,11 @@ namespace MeGUI.packages.video.x264
         private void dSettings_Click(object sender, EventArgs e)
         {
             // Main Tab
-            this.x264EncodingMode.SelectedIndex = 0;
+            this.x264EncodingMode.SelectedIndex = 9;
             this.x264Tunes.SelectedIndex = 0;
             this.tbx264Presets.Value = 4;
             this.avcProfile.SelectedIndex = 3; 
-            this.avcLevel.SelectedIndex = 0;
+            this.avcLevel.SelectedIndex = 15;
             x264Turbo.Checked = false;
             x264LosslessMode.Checked = false;
             advancedSettings.Checked = false;
@@ -1229,6 +1229,9 @@ namespace MeGUI.packages.video.x264
             psnr.Checked = false;
             ssim.Checked = false;
             x264FullRange.Checked = false;
+
+            // to update presets label
+            tbx264Presets_Scroll(null, null);
         }
     }
 }
