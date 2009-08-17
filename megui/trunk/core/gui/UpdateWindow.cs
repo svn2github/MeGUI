@@ -1303,12 +1303,12 @@ namespace MeGUI
                 {
                     if (succeededFiles.Count > 1)
                     {
-                        AddTextToLog(string.Format("Update completed.{2}{0} files were completed successfully{2}{1} file had problems.",
+                        AddTextToLog(string.Format("Update completed.{2}{0} files were completed successfully{2}{1} file had problem.",
                                      succeededFiles.Count, failedFiles.Count, Environment.NewLine));
                     }
                     else
                     {
-                        AddTextToLog(string.Format("Update completed.{2}{0} file was completed successfully{2}{1} file had problems.",
+                        AddTextToLog(string.Format("Update completed.{2}{0} file was completed successfully{2}{1} file had problem.",
                                      succeededFiles.Count, failedFiles.Count, Environment.NewLine));
                     }
                 }
