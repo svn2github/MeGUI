@@ -836,9 +836,7 @@ namespace MeGUI.packages.video.x264
         {
             bool turboOptions = this.x264Turbo.Checked &&
                 (this.x264EncodingMode.SelectedIndex == (int)VideoCodecSettings.Mode.threepass1 ||
-                 this.x264EncodingMode.SelectedIndex == (int)VideoCodecSettings.Mode.twopass1   ||
-                 this.x264EncodingMode.SelectedIndex == (int)VideoCodecSettings.Mode.twopassAutomated ||
-                 this.x264EncodingMode.SelectedIndex == (int)VideoCodecSettings.Mode.threepassAutomated);
+                 this.x264EncodingMode.SelectedIndex == (int)VideoCodecSettings.Mode.twopass1);
 
             // First we do the Profile Adjustments
             #region profile adjustments
