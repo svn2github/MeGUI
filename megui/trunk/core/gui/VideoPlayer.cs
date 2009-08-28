@@ -240,7 +240,8 @@ namespace MeGUI
         /// <param name="e"></param>
         void originalSizeButton_Click(object sender, EventArgs e)
         {
-            resize((int)file.Info.Width, showPAR.Checked);
+            zoomWidth = (int)file.Info.Width;
+            resize(zoomWidth, showPAR.Checked);
         }
         private void zoomInButton_Click(object sender, EventArgs e)
         {
