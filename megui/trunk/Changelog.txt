@@ -1,3 +1,12 @@
+0.3.1.1054
+    - (kurtnoise) [x264Config] fix & update few lines.
+    - (kurtnoise) remove manifest file integration from project file to allow drag & drop in the main window on vista & seven.
+    - (kurtnoise) remove few unused resources files from the project file. Patch by Underground78. 
+    - (kurtnoise) [VideoPlayer] button 1x didn't reset zoom variable. Patch by Underground78.
+    - (kurtnoise) [UpdateWindow] cosmetic...
+    - (kurtnoise) [x264Config] turboOptions = true - only with twopass1 & threepass1
+    - (kurtnoise) [x264Config] fix few errors for default settings.
+
 0.3.1.1053
     - (kurtnoise) [x264 Config] * add presets/tunings/mb-tree/rc-lookahead/no-psy options. Requires x264 revision 1206 or higher.
 
