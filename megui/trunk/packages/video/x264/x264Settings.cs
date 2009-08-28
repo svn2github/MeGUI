@@ -63,7 +63,7 @@ namespace MeGUI
 			tempComplexityBlur, tempQuanBlurCC, scdSensitivity, bframeBias, quantizerCrf, AQStrength, psyRDO, psyTrellis;
 		bool deblock, cabac, p4x4mv, p8x8mv, b8x8mv, i4x4mv, i8x8mv, weightedBPrediction, encodeInterlaced,
 			bFramePyramid, chromaME, adaptiveDCT, lossless, mixedRefs, NoFastPSkip, psnrCalc, noDctDecimate, ssimCalc, useQPFile, 
-            FullRange, advSet, noMBTree, threadInput, noPsy;
+            FullRange, advSet, noMBTree, threadInput, noPsy, scenecut;
 		string quantizerMatrix, qpfile;
 		#region constructor
         /// <summary>
@@ -142,6 +142,7 @@ namespace MeGUI
             noMBTree = false;
             threadInput = true;
             noPsy = false;
+            scenecut = true;
 		}
 		#endregion
 		#region properties
@@ -471,6 +472,11 @@ namespace MeGUI
             get { return noPsy; }
             set { noPsy = value; }
         }
+        public bool Scenecut
+        {
+            get { return scenecut; }
+            set { scenecut = value; }
+        }
         #endregion
         public override bool UsesSAR
         {
@@ -558,7 +564,8 @@ namespace MeGUI
                 this.lookahead != otherSettings.Lookahead ||
                 this.noMBTree != otherSettings.NoMBTree ||
                 this.threadInput != otherSettings.ThreadInput ||
-                this.noPsy != otherSettings.NoPsy
+                this.noPsy != otherSettings.NoPsy ||
+                this.scenecut != otherSettings.Scenecut
                 )
                 return true;
             else

@@ -491,7 +491,7 @@ namespace MeGUI.packages.video.x264
             this.scenecut.CheckState = System.Windows.Forms.CheckState.Checked;
             this.scenecut.Location = new System.Drawing.Point(11, 55);
             this.scenecut.Name = "scenecut";
-            this.scenecut.Size = new System.Drawing.Size(233, 24);
+            this.scenecut.Size = new System.Drawing.Size(216, 24);
             this.scenecut.TabIndex = 19;
             this.scenecut.Text = "Adaptive I-Frame Decision";
             this.scenecut.UseVisualStyleBackColor = true;
