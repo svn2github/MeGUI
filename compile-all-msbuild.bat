@@ -16,8 +16,13 @@ COPY UpdateCopier\trunk\updatecopier.exe^
  megui\trunk\Dist\updatecopier
 
 CD Installer\trunk
-REM Set the path and version of NSIS and compile installer
-SET "U_=HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall"
+REM Detect if we are running on 64bit WIN and use Wow6432Node, set the path
+REM of NSIS accordingly and compile installer
+IF "%PROGRAMFILES(x86)%zzz"=="zzz" (SET "U_=HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall"
+) ELSE (
+SET "U_=HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall"
+)
+
 SET "K_=NSIS"
 SET "M_=NSIS IS NOT INSTALLED!!!"
 FOR /f "delims=" %%a IN (
