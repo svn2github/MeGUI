@@ -1,3 +1,14 @@
+0.3.1.1055
+    - (kurtnoise) [ChapterCreator] fix issue #2814357.
+    - (kurtnoise) [ProgressWindow] change tabIndex values from textboxes.
+    - (kurtnoise) [ProgressWindow] put textboxes as read-only instead of disabled.
+    - (kurtnoise) [AVS Creator] add Charset feature with TextSub() line...
+    - (kurtnoise) [x264Config] add slicing support. Requires x264 rev1243 or higher.
+    - (kurtnoise) [x264Config] fix noFastPSKip & MixedRefs commands.
+    - (kurtnoise) [x264Config] fix issue #2846728
+    - (kurtnoise) [ScriptServer] force flag = false & Counter = 0 in DGDecodeNVdllPath(..) when dgavcindex is found in the path to avoid inappropriate error message during dga files loading from the AVSCreator. 
+    - (kurtnoise) [x264Config] fix subme crash w/ veryslow & placebo presets.
+
 0.3.1.1054
     - (kurtnoise) [x264Config] fix & update few lines.
     - (kurtnoise) remove manifest file integration from project file to allow drag & drop in the main window on vista & seven.
