@@ -1613,6 +1613,7 @@ namespace MeGUI.packages.video.x264
                     "preset, the changes it makes will be applied before\nall other parameters are app" +
                     "lied.");
             this.tbx264Presets.Value = 4;
+            this.tbx264Presets.ValueChanged += new System.EventHandler(this.tbx264Presets_ValueChanged);
             this.tbx264Presets.Scroll += new System.EventHandler(this.tbx264Presets_Scroll);
             // 
             // gbTunes

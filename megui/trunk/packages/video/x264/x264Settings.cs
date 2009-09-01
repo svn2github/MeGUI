@@ -558,14 +558,14 @@ namespace MeGUI
                 this.UseQPFile != otherSettings.UseQPFile ||
                 this.fullRange != otherSettings.fullRange ||
                 this.MacroBlockOptions != otherSettings.MacroBlockOptions ||
-                this.preset != otherSettings.x264Preset ||
-                this.tune != otherSettings.x264Tuning ||
-                this.advSet != otherSettings.x264AdvancedSettings ||
-                this.lookahead != otherSettings.Lookahead ||
-                this.noMBTree != otherSettings.NoMBTree ||
-                this.threadInput != otherSettings.ThreadInput ||
-                this.noPsy != otherSettings.NoPsy ||
-                this.scenecut != otherSettings.Scenecut
+                this.x264Preset != otherSettings.x264Preset ||
+                this.x264Tuning != otherSettings.x264Tuning ||
+                this.x264AdvancedSettings != otherSettings.x264AdvancedSettings ||
+                this.Lookahead != otherSettings.Lookahead ||
+                this.NoMBTree != otherSettings.NoMBTree ||
+                this.ThreadInput != otherSettings.ThreadInput ||
+                this.NoPsy != otherSettings.NoPsy ||
+                this.Scenecut != otherSettings.Scenecut
                 )
                 return true;
             else

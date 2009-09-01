@@ -1414,10 +1414,13 @@ namespace MeGUI.packages.video.x264
             }
             lbPreset.Enabled = (this.tbx264Presets.Value != 4);
 
-            if (tbx264Presets.Value != 4)
-               doPresetsAdjustments();
-
             genericUpdate();
+        }
+
+        private void tbx264Presets_ValueChanged(object sender, EventArgs e)
+        {
+            if (tbx264Presets.Value != 4)
+                doPresetsAdjustments();
         }
 
         private void advancedSettings_CheckedChanged(object sender, EventArgs e)
@@ -1531,6 +1534,7 @@ namespace MeGUI.packages.video.x264
             // to update presets label
             tbx264Presets_Scroll(null, null);
         }
+
     }
 }
 
