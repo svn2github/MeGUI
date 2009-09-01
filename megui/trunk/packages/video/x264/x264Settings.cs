@@ -58,7 +58,7 @@ namespace MeGUI
         int NewadaptiveBFrames, nbRefFrames, alphaDeblock, betaDeblock, subPelRefinement, maxQuantDelta, tempQuantBlur, 
 			bframePredictionMode, vbvBufferSize, vbvMaxBitrate, meType, meRange, minGOPSize, macroBlockOptions,
             quantizerMatrixType, profile, x264Trellis, level, noiseReduction, deadZoneInter, deadZoneIntra, AQMode, preset, 
-            tune, lookahead;
+            tune, lookahead, slicesnb, maxSliceSyzeBytes, maxSliceSyzeMBs;
 		decimal ipFactor, pbFactor, chromaQPOffset, vbvInitialBuffer, bitrateVariance, quantCompression, 
 			tempComplexityBlur, tempQuanBlurCC, scdSensitivity, bframeBias, quantizerCrf, AQStrength, psyRDO, psyTrellis;
 		bool deblock, cabac, p4x4mv, p8x8mv, b8x8mv, i4x4mv, i8x8mv, weightedBPrediction, encodeInterlaced,
@@ -143,6 +143,9 @@ namespace MeGUI
             threadInput = true;
             noPsy = false;
             scenecut = true;
+            slicesnb = 0;
+            maxSliceSyzeBytes = 0;
+            maxSliceSyzeMBs = 0;
 		}
 		#endregion
 		#region properties
@@ -477,6 +480,21 @@ namespace MeGUI
             get { return scenecut; }
             set { scenecut = value; }
         }
+        public int SlicesNb
+        {
+            get { return slicesnb; }
+            set { slicesnb = value; }
+        }
+        public int MaxSliceSyzeBytes
+        {
+            get { return maxSliceSyzeBytes; }
+            set { maxSliceSyzeBytes = value; }
+        }
+        public int MaxSliceSyzeMBs
+        {
+            get { return maxSliceSyzeMBs; }
+            set { maxSliceSyzeMBs = value; }
+        }
         #endregion
         public override bool UsesSAR
         {
@@ -565,7 +583,10 @@ namespace MeGUI
                 this.NoMBTree != otherSettings.NoMBTree ||
                 this.ThreadInput != otherSettings.ThreadInput ||
                 this.NoPsy != otherSettings.NoPsy ||
-                this.Scenecut != otherSettings.Scenecut
+                this.Scenecut != otherSettings.Scenecut ||
+                this.SlicesNb != otherSettings.SlicesNb ||
+                this.MaxSliceSyzeBytes != otherSettings.MaxSliceSyzeBytes ||
+                this.MaxSliceSyzeMBs != otherSettings.MaxSliceSyzeMBs
                 )
                 return true;
             else

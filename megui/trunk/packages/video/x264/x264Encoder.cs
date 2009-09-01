@@ -166,7 +166,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             } 
 
             // Turbo
-            if (xs.Turbo)
+/*            if (xs.Turbo)
             {
                 xs.NbRefFrames = 1;
                 xs.SubPelRefinement = 1; // Q-Pel 2 iterations
@@ -178,10 +178,10 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                 xs.B8x8mv = false;
                 xs.AdaptiveDCT = false;
                // xs.MixedRefs = false;
-                xs.X264Trellis = 0; // disable trellis
+               // xs.X264Trellis = 0; // disable trellis
               //  xs.NoFastPSkip = false;
             }
-
+*/
             // Slow 1st Pass
             if ((!xs.Turbo) &&
                ((xs.EncodingMode == 2) || // 2 pass first pass
@@ -286,6 +286,14 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
 
                 if (xs.NoiseReduction > 0)
                     sb.Append("--nr " + xs.NoiseReduction + " ");
+
+                // Slicing
+                if (xs.SlicesNb != 0)
+                    sb.Append("--slices " + xs.SlicesNb + " ");
+                if (xs.MaxSliceSyzeBytes != 0)
+                    sb.Append("--slice-max-size " + xs.MaxSliceSyzeBytes + " ");
+                if (xs.MaxSliceSyzeMBs != 0)
+                    sb.Append("--slice-max-mbs " + xs.MaxSliceSyzeMBs + " ");
                 #endregion
 
                 #region rc tab

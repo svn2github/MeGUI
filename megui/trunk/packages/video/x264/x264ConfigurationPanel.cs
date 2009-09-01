@@ -814,8 +814,8 @@ namespace MeGUI.packages.video.x264
                 xs.QuantizerCRF = x264BitrateQuantizer.Value;
                 if (!x264KeyframeInterval.Text.Equals(""))
                     xs.KeyframeInterval = Int32.Parse(x264KeyframeInterval.Text);
-                xs.NbRefFrames = (int)x264NumberOfRefFrames.Value;
-                xs.NbBframes = (int)x264NumberOfBFrames.Value;
+                xs.NbRefFrames = (int)this.x264NumberOfRefFrames.Value;
+                xs.NbBframes = (int)this.x264NumberOfBFrames.Value;
                 xs.NewAdaptiveBFrames = x264NewAdaptiveBframes.SelectedIndex;
                 xs.PsyRDO = this.PsyRD.Value;
                 xs.PsyTrellis = this.PsyTrellis.Value;
@@ -884,6 +884,9 @@ namespace MeGUI.packages.video.x264
                 xs.ThreadInput = threadin.Checked;
                 xs.NoPsy = nopsy.Checked;
                 xs.Scenecut = scenecut.Checked;
+                xs.SlicesNb = (int)this.slicesnb.Value;
+                xs.MaxSliceSyzeBytes = (int)this.maxSliceSizeBytes.Value;
+                xs.MaxSliceSyzeMBs = (int)this.maxSliceSizeMB.Value;
                 return xs;
             }
             set
@@ -899,8 +902,8 @@ namespace MeGUI.packages.video.x264
                 avcLevel.SelectedIndex = xs.Level;
                 x264EncodingMode.SelectedIndex = xs.EncodingMode;
                 doEncodingModeAdjustments();
-                x264NumberOfRefFrames.Value = xs.NbRefFrames;
-                x264NumberOfBFrames.Value = xs.NbBframes;
+                this.x264NumberOfRefFrames.Value = xs.NbRefFrames;
+                this.x264NumberOfBFrames.Value = xs.NbBframes;
                 noFastPSkip.Checked = xs.NoFastPSkip;
                 this.x264SubpelRefinement.SelectedIndex = xs.SubPelRefinement;
                 x264Turbo.Checked = xs.Turbo;
@@ -985,6 +988,9 @@ namespace MeGUI.packages.video.x264
                 nopsy.Checked = xs.NoPsy;
                 x264MixedReferences.Checked = xs.MixedRefs;
                 scenecut.Checked = xs.Scenecut;
+                this.slicesnb.Value = xs.SlicesNb;
+                this.maxSliceSizeBytes.Value = xs.MaxSliceSyzeBytes;
+                this.maxSliceSizeMB.Value = xs.MaxSliceSyzeMBs;
                 updating = false;
                 genericUpdate();
             }
@@ -1410,14 +1416,9 @@ namespace MeGUI.packages.video.x264
                 case 8: lbPreset.Text = "Placebo"; break;
             }
             lbPreset.Enabled = (this.tbx264Presets.Value != 4);
+            btPresetSettings.Enabled = (this.tbx264Presets.Value != 4);
 
             genericUpdate();
-        }
-
-        private void tbx264Presets_ValueChanged(object sender, EventArgs e)
-        {
-            if (tbx264Presets.Value != 4)
-                doPresetsAdjustments();
         }
 
         private void advancedSettings_CheckedChanged(object sender, EventArgs e)
@@ -1477,6 +1478,9 @@ namespace MeGUI.packages.video.x264
             this.NoiseReduction.Text = "0";
             this.x264KeyframeInterval.Text = "250";
             this.x264MinGOPSize.Text = "25";
+            this.slicesnb.Value = 0;
+            this.maxSliceSizeBytes.Value = 0;
+            this.maxSliceSizeMB.Value = 0;
 
             // Rate Control Tab
             this.x264MinimimQuantizer.Value = 10;
@@ -1530,6 +1534,12 @@ namespace MeGUI.packages.video.x264
 
             // to update presets label
             tbx264Presets_Scroll(null, null);
+        }
+
+        private void btPresetSettings_Click(object sender, EventArgs e)
+        {
+            if (tbx264Presets.Value != 4)
+                doPresetsAdjustments();
         }
 
     }
