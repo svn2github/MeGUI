@@ -2247,18 +2247,6 @@ namespace MeGUI.packages.video.x264
             this.PsyRDLabel.TabIndex = 9;
             this.PsyRDLabel.Text = "Psy-RD Strength";
             // 
-            // x264CabacEnabled
-            // 
-            this.x264CabacEnabled.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.x264CabacEnabled.Checked = true;
-            this.x264CabacEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.x264CabacEnabled.Location = new System.Drawing.Point(3, 18);
-            this.x264CabacEnabled.Name = "x264CabacEnabled";
-            this.x264CabacEnabled.Padding = new System.Windows.Forms.Padding(3);
-            this.x264CabacEnabled.Size = new System.Drawing.Size(200, 23);
-            this.x264CabacEnabled.TabIndex = 5;
-            this.x264CabacEnabled.Text = "CABAC";
-            // 
             // x264NumberOfRefFramesLabel
             // 
             this.x264NumberOfRefFramesLabel.AutoSize = true;

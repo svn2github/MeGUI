@@ -823,7 +823,7 @@ namespace MeGUI.packages.video.x264
                 xs.Deblock = x264DeblockActive.Checked;
                 xs.AlphaDeblock = (int)x264AlphaDeblock.Value;
                 xs.BetaDeblock = (int)x264BetaDeblock.Value;
-                xs.Cabac = x264CabacEnabled.Checked;
+                xs.Cabac = cabac.Checked;
                 xs.SubPelRefinement = this.x264SubpelRefinement.SelectedIndex;
                 xs.WeightedBPrediction = x264WeightedBPrediction.Checked;
                 xs.ChromaME = this.x264ChromaMe.Checked;
@@ -914,7 +914,7 @@ namespace MeGUI.packages.video.x264
                 x264PyramidBframes.Checked = xs.BFramePyramid;
                 x264AlphaDeblock.Value = xs.AlphaDeblock;
                 x264BetaDeblock.Value = xs.BetaDeblock;
-                x264CabacEnabled.Checked = xs.Cabac;
+                cabac.Checked = xs.Cabac;
                 x264WeightedBPrediction.Checked = xs.WeightedBPrediction;
                 x264ChromaMe.Checked = xs.ChromaME;
                 PsyRD.Value = xs.PsyRDO;
@@ -1287,7 +1287,7 @@ namespace MeGUI.packages.video.x264
                 this.x264MixedReferences.Checked = false;
                 this.x264MixedReferences.Enabled = false;
             }
-            if (!this.x264CabacEnabled.Checked || turboOptions) // trellis requires CABAC
+            if (!this.cabac.Checked || turboOptions) // trellis requires CABAC
             {
                 this.trellis.Enabled = false;
                 this.trellisLabel.Enabled = false;
