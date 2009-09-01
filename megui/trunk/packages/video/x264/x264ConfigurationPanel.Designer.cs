@@ -129,7 +129,6 @@ namespace MeGUI.packages.video.x264
             this.AnalysisTabPage = new System.Windows.Forms.TabPage();
             this.x264QuantOptionsGroupbox = new System.Windows.Forms.GroupBox();
             this.nopsy = new System.Windows.Forms.CheckBox();
-            this.x264MixedReferences = new System.Windows.Forms.CheckBox();
             this.x264BframePredictionMode = new System.Windows.Forms.ComboBox();
             this.x264BframePredictionModeLabel = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -137,7 +136,7 @@ namespace MeGUI.packages.video.x264
             this.label5 = new System.Windows.Forms.Label();
             this.PsyRD = new System.Windows.Forms.NumericUpDown();
             this.noDCTDecimateOption = new System.Windows.Forms.CheckBox();
-            this.NoFastPSkip = new System.Windows.Forms.CheckBox();
+            this.noFastPSkip = new System.Windows.Forms.CheckBox();
             this.trellis = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
             this.x264MBGroupbox = new System.Windows.Forms.GroupBox();
@@ -181,6 +180,7 @@ namespace MeGUI.packages.video.x264
             this.useQPFile = new System.Windows.Forms.CheckBox();
             this.gbx264CustomCmd = new System.Windows.Forms.GroupBox();
             this.customCommandlineOptions = new System.Windows.Forms.TextBox();
+            this.x264MixedReferences = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.mainTabPage.SuspendLayout();
             this.avcLevelGroupbox.SuspendLayout();
@@ -1670,7 +1670,7 @@ namespace MeGUI.packages.video.x264
             this.x264QuantOptionsGroupbox.Controls.Add(this.label5);
             this.x264QuantOptionsGroupbox.Controls.Add(this.PsyRD);
             this.x264QuantOptionsGroupbox.Controls.Add(this.noDCTDecimateOption);
-            this.x264QuantOptionsGroupbox.Controls.Add(this.NoFastPSkip);
+            this.x264QuantOptionsGroupbox.Controls.Add(this.noFastPSkip);
             this.x264QuantOptionsGroupbox.Controls.Add(this.trellis);
             this.x264QuantOptionsGroupbox.Controls.Add(this.label7);
             this.x264QuantOptionsGroupbox.Location = new System.Drawing.Point(6, 135);
@@ -1690,19 +1690,6 @@ namespace MeGUI.packages.video.x264
             this.nopsy.Text = "No Psychovisual Enhancements";
             this.nopsy.UseVisualStyleBackColor = true;
             this.nopsy.CheckedChanged += new System.EventHandler(this.updateEvent);
-            // 
-            // x264MixedReferences
-            // 
-            this.x264MixedReferences.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.x264MixedReferences.Checked = true;
-            this.x264MixedReferences.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.x264MixedReferences.Location = new System.Drawing.Point(13, 148);
-            this.x264MixedReferences.Name = "x264MixedReferences";
-            this.x264MixedReferences.Padding = new System.Windows.Forms.Padding(3);
-            this.x264MixedReferences.Size = new System.Drawing.Size(258, 24);
-            this.x264MixedReferences.TabIndex = 14;
-            this.x264MixedReferences.Text = "Mixed Reference frames";
-            this.x264MixedReferences.CheckedChanged += new System.EventHandler(this.updateEvent);
             // 
             // x264BframePredictionMode
             // 
@@ -1798,16 +1785,16 @@ namespace MeGUI.packages.video.x264
             this.noDCTDecimateOption.Text = "No Dct Decimation";
             this.noDCTDecimateOption.CheckedChanged += new System.EventHandler(this.updateEvent);
             // 
-            // NoFastPSkip
+            // noFastPSkip
             // 
-            this.NoFastPSkip.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.NoFastPSkip.Location = new System.Drawing.Point(13, 192);
-            this.NoFastPSkip.Name = "NoFastPSkip";
-            this.NoFastPSkip.Padding = new System.Windows.Forms.Padding(3);
-            this.NoFastPSkip.Size = new System.Drawing.Size(258, 23);
-            this.NoFastPSkip.TabIndex = 7;
-            this.NoFastPSkip.Text = "No Fast P-Skip";
-            this.NoFastPSkip.CheckedChanged += new System.EventHandler(this.updateEvent);
+            this.noFastPSkip.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.noFastPSkip.Location = new System.Drawing.Point(13, 192);
+            this.noFastPSkip.Name = "noFastPSkip";
+            this.noFastPSkip.Padding = new System.Windows.Forms.Padding(3);
+            this.noFastPSkip.Size = new System.Drawing.Size(258, 23);
+            this.noFastPSkip.TabIndex = 7;
+            this.noFastPSkip.Text = "No Fast P-Skip";
+            this.noFastPSkip.CheckedChanged += new System.EventHandler(this.updateEvent);
             // 
             // trellis
             // 
@@ -2339,6 +2326,19 @@ namespace MeGUI.packages.video.x264
             this.customCommandlineOptions.TabIndex = 0;
             this.customCommandlineOptions.TextChanged += new System.EventHandler(this.updateEvent);
             // 
+            // x264MixedReferences
+            // 
+            this.x264MixedReferences.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.x264MixedReferences.Checked = true;
+            this.x264MixedReferences.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.x264MixedReferences.Location = new System.Drawing.Point(13, 148);
+            this.x264MixedReferences.Name = "x264MixedReferences";
+            this.x264MixedReferences.Padding = new System.Windows.Forms.Padding(3);
+            this.x264MixedReferences.Size = new System.Drawing.Size(258, 24);
+            this.x264MixedReferences.TabIndex = 14;
+            this.x264MixedReferences.Text = "Mixed Reference frames";
+            this.x264MixedReferences.CheckedChanged += new System.EventHandler(this.updateEvent);
+            // 
             // x264ConfigurationPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2557,10 +2557,9 @@ namespace MeGUI.packages.video.x264
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.NumericUpDown PsyRD;
         private System.Windows.Forms.CheckBox noDCTDecimateOption;
-        private System.Windows.Forms.CheckBox NoFastPSkip;
+        private System.Windows.Forms.CheckBox noFastPSkip;
         private System.Windows.Forms.ComboBox trellis;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.CheckBox x264MixedReferences;
         private System.Windows.Forms.GroupBox gbQPFile;
         private System.Windows.Forms.Button qpfileOpenButton;
         private System.Windows.Forms.TextBox qpfile;
@@ -2576,5 +2575,6 @@ namespace MeGUI.packages.video.x264
         private System.Windows.Forms.GroupBox gbVUI;
         private System.Windows.Forms.CheckBox x264FullRange;
         private System.Windows.Forms.Button dSettings;
+        private System.Windows.Forms.CheckBox x264MixedReferences;
     }
 }

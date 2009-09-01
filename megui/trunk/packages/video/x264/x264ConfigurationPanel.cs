@@ -188,8 +188,8 @@ namespace MeGUI.packages.video.x264
                             x264MixedReferences.Checked = false;
                         if (mbtree.Checked)
                             mbtree.Checked = false;
-                        if (NoFastPSkip.Checked)
-                            NoFastPSkip.Checked = false;
+                        if (noFastPSkip.Checked)
+                            noFastPSkip.Checked = false;
                     }
                     break;
                 case 1: // Very Fast
@@ -224,14 +224,12 @@ namespace MeGUI.packages.video.x264
                             scenecut.Checked = true;
                         if (this.x264MERange.Value != 16)
                             this.x264MERange.Value = 16;
-                        if (NoFastPSkip.Checked)
-                            NoFastPSkip.Checked = false;
+                        if (noFastPSkip.Checked)
+                            noFastPSkip.Checked = false;
                     }
                     break;
                 case 2: // Faster
                     {
-                        if (x264MixedReferences.Checked)
-                            x264MixedReferences.Checked = false;
                         if (this.x264NumberOfRefFrames.Value != 2)
                             this.x264NumberOfRefFrames.Value = 2;
                         if (x264SubpelRefinement.SelectedIndex != 4)
@@ -258,8 +256,8 @@ namespace MeGUI.packages.video.x264
                              scenecut.Checked = true;
                         if (this.x264MERange.Value != 16)
                             this.x264MERange.Value = 16;
-                        if (NoFastPSkip.Checked)
-                            NoFastPSkip.Checked = false;
+                        if (noFastPSkip.Checked)
+                            noFastPSkip.Checked = false;
                     }
                     break;
                 case 3: // Fast
@@ -292,8 +290,8 @@ namespace MeGUI.packages.video.x264
                              scenecut.Checked = true;
                         if (this.x264MERange.Value != 16)
                             this.x264MERange.Value = 16;
-                        if (NoFastPSkip.Checked)
-                            NoFastPSkip.Checked = false;
+                        if (noFastPSkip.Checked)
+                            noFastPSkip.Checked = false;
                     }
                     break;
                 case 5: // Slow
@@ -328,8 +326,8 @@ namespace MeGUI.packages.video.x264
                              scenecut.Checked = true;
                         if (this.x264MERange.Value != 16)
                             this.x264MERange.Value = 16;
-                        if (NoFastPSkip.Checked)
-                            NoFastPSkip.Checked = false;
+                        if (noFastPSkip.Checked)
+                            noFastPSkip.Checked = false;
                     }
                     break;
                 case 6: // Slower
@@ -364,8 +362,8 @@ namespace MeGUI.packages.video.x264
                              scenecut.Checked = true;
                         if (this.x264MERange.Value != 16)
                             this.x264MERange.Value = 16;
-                        if (NoFastPSkip.Checked)
-                            NoFastPSkip.Checked = false;
+                        if (noFastPSkip.Checked)
+                            noFastPSkip.Checked = false;
                     }
                     break;
                 case 7: // Very Slow
@@ -400,8 +398,8 @@ namespace MeGUI.packages.video.x264
                              x264DeblockActive.Checked = true;
                         if (!scenecut.Checked)
                              scenecut.Checked = true;
-                        if (NoFastPSkip.Checked)
-                            NoFastPSkip.Checked = false;
+                        if (noFastPSkip.Checked)
+                            noFastPSkip.Checked = false;
                     }
                     break;
                 case 8: // Placebo
@@ -420,8 +418,8 @@ namespace MeGUI.packages.video.x264
                             x264BframePredictionMode.SelectedIndex = 3;
                         if (macroblockOptions.SelectedIndex != 0)
                             macroblockOptions.SelectedIndex = 0;
-                        if (!NoFastPSkip.Checked)
-                            NoFastPSkip.Checked = true;
+                        if (!noFastPSkip.Checked)
+                            noFastPSkip.Checked = true;
                         if (trellis.SelectedIndex != 2)
                             trellis.SelectedIndex = 2;
                         if (this.x264NumberOfBFrames.Value != 16)
@@ -808,7 +806,7 @@ namespace MeGUI.packages.video.x264
                 xs.NoDCTDecimate = this.noDCTDecimateOption.Checked;
                 xs.SSIMCalculation = this.ssim.Checked;
                 xs.PSNRCalculation = this.psnr.Checked;
-                xs.noFastPSkip = this.NoFastPSkip.Checked;
+                xs.NoFastPSkip = noFastPSkip.Checked;
                 xs.Turbo = this.x264Turbo.Checked;
                 xs.MixedRefs = x264MixedReferences.Checked;
                 xs.EncodingMode = x264EncodingMode.SelectedIndex;
@@ -903,8 +901,7 @@ namespace MeGUI.packages.video.x264
                 doEncodingModeAdjustments();
                 x264NumberOfRefFrames.Value = xs.NbRefFrames;
                 x264NumberOfBFrames.Value = xs.NbBframes;
-                NoFastPSkip.Checked = xs.noFastPSkip;
-                x264MixedReferences.Checked = xs.MixedRefs;
+                noFastPSkip.Checked = xs.NoFastPSkip;
                 this.x264SubpelRefinement.SelectedIndex = xs.SubPelRefinement;
                 x264Turbo.Checked = xs.Turbo;
                 x264BitrateQuantizer.Value = (isBitrateMode(xs.EncodingMode) || xs.QuantizerCRF == 0) ? xs.BitrateQuantizer : xs.QuantizerCRF;
@@ -1061,7 +1058,7 @@ namespace MeGUI.packages.video.x264
             tooltipHelp.SetToolTip(NoiseReduction, SelectHelpText("nr"));
             tooltipHelp.SetToolTip(x264BitrateQuantizer, SelectHelpText("bitrate"));
             tooltipHelp.SetToolTip(x264MinimimQuantizer, SelectHelpText("qpmin"));
-            tooltipHelp.SetToolTip(NoFastPSkip, SelectHelpText("no-fast-pskip"));
+            tooltipHelp.SetToolTip(noFastPSkip, SelectHelpText("no-fast-pskip"));
             tooltipHelp.SetToolTip(macroblockOptions, SelectHelpText("partitions"));
             tooltipHelp.SetToolTip(x264ChromaMe, SelectHelpText("no-chroma-me"));
             tooltipHelp.SetToolTip(x264WeightedBPrediction, SelectHelpText("weightb"));
@@ -1341,7 +1338,7 @@ namespace MeGUI.packages.video.x264
                 // Enable everything
                 this.x264NumberOfRefFrames.Enabled = true;
                 this.x264SubpelRefinement.Enabled = true;
-                this.NoFastPSkip.Enabled = true;
+                this.noFastPSkip.Enabled = true;
                 this.macroblockOptions.Enabled = true;
                 this.x264METype.Enabled = true;
             }
@@ -1515,7 +1512,7 @@ namespace MeGUI.packages.video.x264
             this.PsyTrellis.Value = 0.0M;
             x264MixedReferences.Checked = true;
             noDCTDecimateOption.Checked = false;
-            NoFastPSkip.Checked = false;
+            noFastPSkip.Checked = false;
             nopsy.Checked = false;
             this.macroblockOptions.SelectedIndex = 3;
             adaptiveDCT.Checked = true;

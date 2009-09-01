@@ -62,7 +62,7 @@ namespace MeGUI
 		decimal ipFactor, pbFactor, chromaQPOffset, vbvInitialBuffer, bitrateVariance, quantCompression, 
 			tempComplexityBlur, tempQuanBlurCC, scdSensitivity, bframeBias, quantizerCrf, AQStrength, psyRDO, psyTrellis;
 		bool deblock, cabac, p4x4mv, p8x8mv, b8x8mv, i4x4mv, i8x8mv, weightedBPrediction, encodeInterlaced,
-			bFramePyramid, chromaME, adaptiveDCT, lossless, mixedRefs, NoFastPSkip, psnrCalc, noDctDecimate, ssimCalc, useQPFile, 
+			bFramePyramid, chromaME, adaptiveDCT, lossless, mixedRefs, noFastPSkip, psnrCalc, noDctDecimate, ssimCalc, useQPFile, 
             FullRange, advSet, noMBTree, threadInput, noPsy, scenecut;
 		string quantizerMatrix, qpfile;
 		#region constructor
@@ -167,10 +167,10 @@ namespace MeGUI
             get { return psnrCalc; }
             set { psnrCalc = value; }
         }
-		public bool noFastPSkip
+		public bool NoFastPSkip
 		{
-			get {return NoFastPSkip;}
-			set {NoFastPSkip = value;}
+			get {return noFastPSkip;}
+			set {noFastPSkip = value;}
 		}
 		public int NoiseReduction
         {
@@ -613,7 +613,7 @@ namespace MeGUI
                 AdaptiveDCT = false;
                 MixedRefs = false;
                 Trellis = false;
-                noFastPSkip = false;
+                NoFastPSkip = false;
                 WeightedBPrediction = false;
             }
             if (Profile != 2) // lossless requires High Profile

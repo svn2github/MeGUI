@@ -177,9 +177,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                 xs.P8x8mv = false;
                 xs.B8x8mv = false;
                 xs.AdaptiveDCT = false;
-                xs.MixedRefs = false;
+               // xs.MixedRefs = false;
                 xs.X264Trellis = 0; // disable trellis
-                xs.noFastPSkip = false;
+              //  xs.NoFastPSkip = false;
             }
 
             // Slow 1st Pass
@@ -474,7 +474,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                 if (xs.NoDCTDecimate)
                     sb.Append("--no-dct-decimate ");
 
-                if (xs.noFastPSkip)
+                if (xs.NoFastPSkip)
                     sb.Append("--no-fast-pskip ");
 
                 if (xs.NoPsy)
