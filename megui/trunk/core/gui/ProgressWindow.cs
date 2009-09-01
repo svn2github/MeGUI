@@ -164,7 +164,7 @@ namespace MeGUI
             this.currentVideoFrame.Name = "currentVideoFrame";
             this.currentVideoFrame.ReadOnly = true;
             this.currentVideoFrame.Size = new System.Drawing.Size(130, 21);
-            this.currentVideoFrame.TabIndex = 3;
+            this.currentVideoFrame.TabIndex = 17;
             this.currentVideoFrame.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // groupBox1
@@ -186,7 +186,7 @@ namespace MeGUI
             this.groupBox1.Location = new System.Drawing.Point(8, 8);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(309, 177);
-            this.groupBox1.TabIndex = 0;
+            this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             // 
             // totalTime
@@ -197,7 +197,7 @@ namespace MeGUI
             this.totalTime.Name = "totalTime";
             this.totalTime.ReadOnly = true;
             this.totalTime.Size = new System.Drawing.Size(130, 21);
-            this.totalTime.TabIndex = 4;
+            this.totalTime.TabIndex = 25;
             this.totalTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // totalTimeLabel
@@ -217,7 +217,7 @@ namespace MeGUI
             this.timeElapsed.Name = "timeElapsed";
             this.timeElapsed.ReadOnly = true;
             this.timeElapsed.Size = new System.Drawing.Size(130, 21);
-            this.timeElapsed.TabIndex = 9;
+            this.timeElapsed.TabIndex = 23;
             this.timeElapsed.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // timeElapsedLabel
@@ -237,7 +237,7 @@ namespace MeGUI
             this.fps.Name = "fps";
             this.fps.ReadOnly = true;
             this.fps.Size = new System.Drawing.Size(130, 21);
-            this.fps.TabIndex = 7;
+            this.fps.TabIndex = 21;
             this.fps.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // fpsLabel
@@ -257,7 +257,7 @@ namespace MeGUI
             this.videoData.Name = "videoData";
             this.videoData.ReadOnly = true;
             this.videoData.Size = new System.Drawing.Size(130, 21);
-            this.videoData.TabIndex = 5;
+            this.videoData.TabIndex = 19;
             this.videoData.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // videoDataLabel
@@ -286,7 +286,7 @@ namespace MeGUI
             this.positionInClip.Name = "positionInClip";
             this.positionInClip.ReadOnly = true;
             this.positionInClip.Size = new System.Drawing.Size(130, 21);
-            this.positionInClip.TabIndex = 1;
+            this.positionInClip.TabIndex = 15;
             this.positionInClip.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // abortButton
@@ -314,7 +314,7 @@ namespace MeGUI
             this.progress.Location = new System.Drawing.Point(122, 191);
             this.progress.Name = "progress";
             this.progress.Size = new System.Drawing.Size(195, 23);
-            this.progress.TabIndex = 2;
+            this.progress.TabIndex = 1;
             // 
             // priorityLabel
             // 
@@ -338,7 +338,7 @@ namespace MeGUI
             this.priority.Location = new System.Drawing.Point(122, 220);
             this.priority.Name = "priority";
             this.priority.Size = new System.Drawing.Size(122, 21);
-            this.priority.TabIndex = 11;
+            this.priority.TabIndex = 2;
             this.priority.SelectedIndexChanged += new System.EventHandler(this.priority_SelectedIndexChanged);
             // 
             // statusStrip1
