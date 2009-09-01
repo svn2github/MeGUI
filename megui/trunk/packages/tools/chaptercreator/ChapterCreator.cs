@@ -350,7 +350,12 @@ namespace MeGUI
                       c.Equals(pgc.Chapters.Last()) && (pgc.Duration.Add(-c.Time).TotalSeconds < 10))
                        continue;
 
-                    chapterListView.Items.Add(new ListViewItem(new string[] { c.Time.ToString(), c.Name }));
+                    ListViewItem item = new ListViewItem(new string[] { c.Time.ToString(), c.Name });
+                    chapterListView.Items.Add(item);
+                    if (item.Index % 2 != 0)
+                        item.BackColor = Color.White;
+                    else
+                        item.BackColor = Color.WhiteSmoke;
                 }
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
@@ -489,7 +494,7 @@ namespace MeGUI
 		#region loading / saving files
 		private void loadButton_Click(object sender, System.EventArgs e)
 		{
-			if (this.openFileDialog.ShowDialog() == DialogResult.OK)
+            if (this.openFileDialog.ShowDialog() == DialogResult.OK)
 			{
                 if (openFileDialog.FileName.ToLower().EndsWith("ifo"))
                 {
@@ -507,84 +512,28 @@ namespace MeGUI
                 }
                 else
                 {
-                    Chapter[] newChapters = loadChapterFile(openFileDialog.FileName);
-                    if (newChapters != null)
-                    {
-                        this.chapters = newChapters;
-                        this.showChapters(this.chapters);
-                    }
+                    ChapterExtractor ex = new TextExtractor();
+                    pgc = ex.GetStreams(openFileDialog.FileName)[0];
+                    FreshChapterView();
+                    updateTimeLine();
                 }
 			}
+
+            if (chapterListView.Items.Count != 0)
+                chapterListView.Items[0].Selected = true;
 		}
-		/// <summary>
-		/// loads chapters from a file
-		/// </summary>
-		/// <param name="fileName">name of the file containing the chapters to be loaded</param>
-		/// <returns>the chapters loaded</returns>
-		private Chapter[] loadChapterFile(string fileName)
-		{
-			StreamReader sr = null;
-			string line = null;
-			Chapter[] loadedChapters = null;
-			try
-			{
-				sr = new StreamReader(fileName);
-				ArrayList chapters = new ArrayList();
-				Chapter chap = new Chapter();
-				while ((line = sr.ReadLine()) != null)
-				{
-					if (line.IndexOf("NAME") == -1) // chapter time
-					{
-						string tc = line.Substring(line.IndexOf("=") + 1);
-						chap.timecode = tc;
-					}
-					if (line.IndexOf("NAME") != -1) // chapter name
-					{
-						string name = line.Substring(line.IndexOf("=") + 1);
-						chap.name = name;
-						chapters.Add(chap);
-					}
-				}
-				loadedChapters = new Chapter[chapters.Count];
-				int index = 0;
-				foreach (object o in chapters)
-				{
-					chap = (Chapter)o;
-					loadedChapters[index] = chap;
-					index++;
-				}
-			}
-			catch (Exception f)
-			{
-				Console.Write(f.Message);
-				loadedChapters = null;
-			}
-			finally
-			{
-				if (sr != null)
-				{
-					try
-					{
-						sr.Close();
-					}
-					catch (Exception f)
-					{
-						Console.Write(f.Message);
-						loadedChapters = null;
-					}
-				}
-			}
-			return loadedChapters;
-		}
+
 		private void saveButton_Click(object sender, System.EventArgs e)
 		{
 			if (this.saveFileDialog.ShowDialog() == DialogResult.OK)
 			{
-                switch (saveFileDialog.FilterIndex)
-                {
-                    case 1: pgc.SaveQpfile(saveFileDialog.FileName); break;
-                    default: pgc.SaveText(saveFileDialog.FileName); break;
-                }
+                string ext = Path.GetExtension(saveFileDialog.FileName).ToLower();
+                if (ext == "qpf")
+                    pgc.SaveQpfile(saveFileDialog.FileName);
+                else if (ext == "txt")
+                    pgc.SaveText(saveFileDialog.FileName);
+                else
+                    pgc.SaveText(saveFileDialog.FileName);
 			}
 		}
 		#endregion
