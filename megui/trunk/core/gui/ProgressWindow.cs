@@ -160,9 +160,9 @@ namespace MeGUI
             // 
             this.currentVideoFrame.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.currentVideoFrame.Enabled = false;
             this.currentVideoFrame.Location = new System.Drawing.Point(173, 41);
             this.currentVideoFrame.Name = "currentVideoFrame";
+            this.currentVideoFrame.ReadOnly = true;
             this.currentVideoFrame.Size = new System.Drawing.Size(130, 21);
             this.currentVideoFrame.TabIndex = 3;
             this.currentVideoFrame.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
@@ -193,9 +193,9 @@ namespace MeGUI
             // 
             this.totalTime.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.totalTime.Enabled = false;
             this.totalTime.Location = new System.Drawing.Point(173, 149);
             this.totalTime.Name = "totalTime";
+            this.totalTime.ReadOnly = true;
             this.totalTime.Size = new System.Drawing.Size(130, 21);
             this.totalTime.TabIndex = 4;
             this.totalTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
@@ -213,9 +213,9 @@ namespace MeGUI
             // 
             this.timeElapsed.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.timeElapsed.Enabled = false;
             this.timeElapsed.Location = new System.Drawing.Point(173, 122);
             this.timeElapsed.Name = "timeElapsed";
+            this.timeElapsed.ReadOnly = true;
             this.timeElapsed.Size = new System.Drawing.Size(130, 21);
             this.timeElapsed.TabIndex = 9;
             this.timeElapsed.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
@@ -233,9 +233,9 @@ namespace MeGUI
             // 
             this.fps.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.fps.Enabled = false;
             this.fps.Location = new System.Drawing.Point(173, 95);
             this.fps.Name = "fps";
+            this.fps.ReadOnly = true;
             this.fps.Size = new System.Drawing.Size(130, 21);
             this.fps.TabIndex = 7;
             this.fps.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
@@ -253,9 +253,9 @@ namespace MeGUI
             // 
             this.videoData.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.videoData.Enabled = false;
             this.videoData.Location = new System.Drawing.Point(173, 68);
             this.videoData.Name = "videoData";
+            this.videoData.ReadOnly = true;
             this.videoData.Size = new System.Drawing.Size(130, 21);
             this.videoData.TabIndex = 5;
             this.videoData.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
@@ -282,9 +282,9 @@ namespace MeGUI
             // 
             this.positionInClip.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.positionInClip.Enabled = false;
             this.positionInClip.Location = new System.Drawing.Point(173, 14);
             this.positionInClip.Name = "positionInClip";
+            this.positionInClip.ReadOnly = true;
             this.positionInClip.Size = new System.Drawing.Size(130, 21);
             this.positionInClip.TabIndex = 1;
             this.positionInClip.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
