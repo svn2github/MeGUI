@@ -142,6 +142,8 @@ namespace MeGUI
         private Button openSubtitlesButton;
         private TextBox SubtitlesPath;
         private CheckBox dss2;
+        private Label label8;
+        private ComboBox cbCharset;
 
 		/// <summary>
 		/// Required designer variable.
@@ -197,6 +199,7 @@ namespace MeGUI
             deintFieldOrder.SelectedIndex = -1;
             deintSourceType.SelectedIndex = -1;
             cbNvDeInt.SelectedIndex = 0;
+            cbCharset.SelectedIndex = 0;
 
             this.noiseFilterType.SelectedIndexChanged += new System.EventHandler(this.noiseFilterType_SelectedIndexChanged);
             this.resizeFilterType.SelectedIndexChanged += new System.EventHandler(this.resizeFilterType_SelectedIndexChanged);
@@ -320,6 +323,8 @@ namespace MeGUI
             this.deinterlace = new System.Windows.Forms.CheckBox();
             this.deinterlaceType = new System.Windows.Forms.ComboBox();
             this.filtersGroupbox = new System.Windows.Forms.GroupBox();
+            this.cbCharset = new System.Windows.Forms.ComboBox();
+            this.label8 = new System.Windows.Forms.Label();
             this.openSubtitlesButton = new System.Windows.Forms.Button();
             this.SubtitlesPath = new System.Windows.Forms.TextBox();
             this.SubtitlesLabel = new System.Windows.Forms.Label();
@@ -616,7 +621,7 @@ namespace MeGUI
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(463, 448);
+            this.tabControl1.Size = new System.Drawing.Size(463, 459);
             this.tabControl1.TabIndex = 5;
             // 
             // optionsTab
@@ -626,7 +631,7 @@ namespace MeGUI
             this.optionsTab.Controls.Add(this.resNCropGroupbox);
             this.optionsTab.Location = new System.Drawing.Point(4, 22);
             this.optionsTab.Name = "optionsTab";
-            this.optionsTab.Size = new System.Drawing.Size(455, 422);
+            this.optionsTab.Size = new System.Drawing.Size(455, 433);
             this.optionsTab.TabIndex = 0;
             this.optionsTab.Text = "Options";
             this.optionsTab.UseVisualStyleBackColor = true;
@@ -809,7 +814,7 @@ namespace MeGUI
             this.filterTab.Controls.Add(this.filtersGroupbox);
             this.filterTab.Location = new System.Drawing.Point(4, 22);
             this.filterTab.Name = "filterTab";
-            this.filterTab.Size = new System.Drawing.Size(455, 422);
+            this.filterTab.Size = new System.Drawing.Size(455, 433);
             this.filterTab.TabIndex = 2;
             this.filterTab.Text = "Filters";
             this.filterTab.UseVisualStyleBackColor = true;
@@ -1105,6 +1110,8 @@ namespace MeGUI
             // 
             this.filtersGroupbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.filtersGroupbox.Controls.Add(this.cbCharset);
+            this.filtersGroupbox.Controls.Add(this.label8);
             this.filtersGroupbox.Controls.Add(this.openSubtitlesButton);
             this.filtersGroupbox.Controls.Add(this.SubtitlesPath);
             this.filtersGroupbox.Controls.Add(this.SubtitlesLabel);
@@ -1115,14 +1122,54 @@ namespace MeGUI
             this.filtersGroupbox.Enabled = false;
             this.filtersGroupbox.Location = new System.Drawing.Point(3, 291);
             this.filtersGroupbox.Name = "filtersGroupbox";
-            this.filtersGroupbox.Size = new System.Drawing.Size(449, 128);
+            this.filtersGroupbox.Size = new System.Drawing.Size(449, 139);
             this.filtersGroupbox.TabIndex = 9;
             this.filtersGroupbox.TabStop = false;
             this.filtersGroupbox.Text = "Filters";
             // 
+            // cbCharset
+            // 
+            this.cbCharset.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbCharset.FormattingEnabled = true;
+            this.cbCharset.Items.AddRange(new object[] {
+            "Default",
+            "ANSI",
+            "Symbol",
+            "Shiftjis",
+            "Hangeul",
+            "Hangul",
+            "GB2312",
+            "Chinese Big 5",
+            "OEM",
+            "Johab",
+            "Hebrew",
+            "Arabic",
+            "Greek",
+            "Turkish",
+            "Vietnamese",
+            "Thai",
+            "East Europe",
+            "Russian",
+            "Mac",
+            "Baltic"});
+            this.cbCharset.Location = new System.Drawing.Point(151, 108);
+            this.cbCharset.Name = "cbCharset";
+            this.cbCharset.Size = new System.Drawing.Size(121, 21);
+            this.cbCharset.TabIndex = 11;
+            this.cbCharset.SelectedIndexChanged += new System.EventHandler(this.cbCharset_SelectedIndexChanged);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(96, 111);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(49, 13);
+            this.label8.TabIndex = 10;
+            this.label8.Text = "Charset:";
+            // 
             // openSubtitlesButton
             // 
-            this.openSubtitlesButton.Location = new System.Drawing.Point(416, 95);
+            this.openSubtitlesButton.Location = new System.Drawing.Point(416, 80);
             this.openSubtitlesButton.Name = "openSubtitlesButton";
             this.openSubtitlesButton.Size = new System.Drawing.Size(27, 22);
             this.openSubtitlesButton.TabIndex = 9;
@@ -1133,16 +1180,16 @@ namespace MeGUI
             // SubtitlesPath
             // 
             this.SubtitlesPath.BackColor = System.Drawing.SystemColors.Control;
-            this.SubtitlesPath.Location = new System.Drawing.Point(9, 96);
+            this.SubtitlesPath.Location = new System.Drawing.Point(97, 80);
             this.SubtitlesPath.Name = "SubtitlesPath";
             this.SubtitlesPath.ReadOnly = true;
-            this.SubtitlesPath.Size = new System.Drawing.Size(391, 21);
+            this.SubtitlesPath.Size = new System.Drawing.Size(313, 21);
             this.SubtitlesPath.TabIndex = 8;
             // 
             // SubtitlesLabel
             // 
             this.SubtitlesLabel.AutoSize = true;
-            this.SubtitlesLabel.Location = new System.Drawing.Point(9, 80);
+            this.SubtitlesLabel.Location = new System.Drawing.Point(9, 83);
             this.SubtitlesLabel.Name = "SubtitlesLabel";
             this.SubtitlesLabel.Size = new System.Drawing.Size(52, 13);
             this.SubtitlesLabel.TabIndex = 7;
@@ -1197,7 +1244,7 @@ namespace MeGUI
             this.editTab.Controls.Add(this.avisynthScript);
             this.editTab.Location = new System.Drawing.Point(4, 22);
             this.editTab.Name = "editTab";
-            this.editTab.Size = new System.Drawing.Size(455, 422);
+            this.editTab.Size = new System.Drawing.Size(455, 433);
             this.editTab.TabIndex = 1;
             this.editTab.Text = "Edit";
             this.editTab.UseVisualStyleBackColor = true;
@@ -1205,7 +1252,7 @@ namespace MeGUI
             // openDLLButton
             // 
             this.openDLLButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.openDLLButton.Location = new System.Drawing.Point(420, 388);
+            this.openDLLButton.Location = new System.Drawing.Point(420, 399);
             this.openDLLButton.Name = "openDLLButton";
             this.openDLLButton.Size = new System.Drawing.Size(27, 21);
             this.openDLLButton.TabIndex = 3;
@@ -1216,7 +1263,7 @@ namespace MeGUI
             // 
             this.dllPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.dllPath.Location = new System.Drawing.Point(65, 388);
+            this.dllPath.Location = new System.Drawing.Point(65, 399);
             this.dllPath.Name = "dllPath";
             this.dllPath.ReadOnly = true;
             this.dllPath.Size = new System.Drawing.Size(338, 21);
@@ -1225,7 +1272,7 @@ namespace MeGUI
             // label1
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.label1.Location = new System.Drawing.Point(9, 391);
+            this.label1.Location = new System.Drawing.Point(9, 402);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(66, 13);
             this.label1.TabIndex = 1;
@@ -1263,7 +1310,7 @@ namespace MeGUI
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.deintProgressBar,
             this.deintStatusLabel});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 495);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 511);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(463, 22);
             this.statusStrip1.TabIndex = 6;
@@ -1285,7 +1332,7 @@ namespace MeGUI
             this.onSaveLoadScript.AutoSize = true;
             this.onSaveLoadScript.Checked = true;
             this.onSaveLoadScript.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.onSaveLoadScript.Location = new System.Drawing.Point(84, 462);
+            this.onSaveLoadScript.Location = new System.Drawing.Point(84, 478);
             this.onSaveLoadScript.Name = "onSaveLoadScript";
             this.onSaveLoadScript.Size = new System.Drawing.Size(210, 17);
             this.onSaveLoadScript.TabIndex = 18;
@@ -1296,7 +1343,7 @@ namespace MeGUI
             this.saveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.saveButton.AutoSize = true;
             this.saveButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.saveButton.Location = new System.Drawing.Point(413, 459);
+            this.saveButton.Location = new System.Drawing.Point(413, 475);
             this.saveButton.Name = "saveButton";
             this.saveButton.Size = new System.Drawing.Size(41, 23);
             this.saveButton.TabIndex = 20;
@@ -1308,7 +1355,7 @@ namespace MeGUI
             this.previewAvsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.previewAvsButton.AutoSize = true;
             this.previewAvsButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.previewAvsButton.Location = new System.Drawing.Point(300, 459);
+            this.previewAvsButton.Location = new System.Drawing.Point(300, 475);
             this.previewAvsButton.Name = "previewAvsButton";
             this.previewAvsButton.Size = new System.Drawing.Size(107, 23);
             this.previewAvsButton.TabIndex = 19;
@@ -1321,7 +1368,7 @@ namespace MeGUI
             this.helpButton1.ArticleName = "Avisynth script creator";
             this.helpButton1.AutoSize = true;
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.helpButton1.Location = new System.Drawing.Point(15, 456);
+            this.helpButton1.Location = new System.Drawing.Point(15, 472);
             this.helpButton1.Name = "helpButton1";
             this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 17;
@@ -1329,7 +1376,7 @@ namespace MeGUI
             // AviSynthWindow
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
-            this.ClientSize = new System.Drawing.Size(463, 517);
+            this.ClientSize = new System.Drawing.Size(463, 533);
             this.Controls.Add(this.onSaveLoadScript);
             this.Controls.Add(this.saveButton);
             this.Controls.Add(this.previewAvsButton);
@@ -1472,8 +1519,14 @@ namespace MeGUI
                     suggestedDar.Value.X, suggestedDar.Value.Y) + newScript;
 
             if (this.SubtitlesPath.Text != "")
-                newScript += "\r\nTextSub(\"" + SubtitlesPath.Text + "\")\r\n";
-
+            {
+                if (cbCharset.SelectedIndex != 0)
+                {
+                    string charset = cbCharset_();
+                    newScript += "\r\nTextSub(\"" + SubtitlesPath.Text + "\"" + ", " + charset + ")\r\n";
+                }
+                else newScript += "\r\nTextSub(\"" + SubtitlesPath.Text + "\")\r\n";
+            }
             return newScript;
 		}
 
@@ -2355,6 +2408,44 @@ namespace MeGUI
                 }
                 else MessageBox.Show("The subtitles you chosen was already added...", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
+            this.showScript();
+        }
+
+        private string cbCharset_()
+        {
+            string c = string.Empty;
+
+            if (!string.IsNullOrEmpty(SubtitlesPath.Text))
+            {
+                switch (cbCharset.SelectedIndex)
+                {
+                    case 1: c = "0"; break;
+                    case 2: c = "2"; break;
+                    case 3: c = "128"; break;
+                    case 4:
+                    case 5: c = "129"; break;
+                    case 6: c = "134"; break;
+                    case 7: c = "136"; break;
+                    case 8: c = "255"; break;
+                    case 9: c = "130"; break;
+                    case 10: c = "177"; break;
+                    case 11: c = "178"; break;
+                    case 12: c = "161"; break;
+                    case 13: c = "162"; break;
+                    case 14: c = "163"; break;
+                    case 15: c = "222"; break;
+                    case 16: c = "238"; break;
+                    case 17: c = "204"; break;
+                    case 18: c = "77"; break;
+                    case 19: c = "186"; break;
+                    default: c = "1"; break;
+                }
+            }
+            return c;
+        }
+
+        private void cbCharset_SelectedIndexChanged(object sender, EventArgs e)
+        {
             this.showScript();
         }
     }
