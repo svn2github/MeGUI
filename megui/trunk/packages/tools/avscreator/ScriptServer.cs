@@ -237,6 +237,12 @@ namespace MeGUI
                         Counter = 2;
                     }
                 }
+
+                if (Path.GetFileName(mainForm.Settings.DgavcIndexPath.ToLower().ToString()) == "dgavcindex.exe")
+                {
+                    flag = false;
+                    Counter = 0;
+                }
             }
             return dgdecodenv;
         }
