@@ -1302,7 +1302,7 @@ namespace MeGUI
             // 
             // openSubsDialog
             // 
-            this.openSubsDialog.Filter = "Subs Files|*.srt;*.ass;*.ssa";
+            this.openSubsDialog.Filter = "Subs Files|*.srt;*.ass;*.ssa;*.idx";
             this.openSubsDialog.Title = "Select a subtitle file";
             // 
             // statusStrip1
@@ -1520,12 +1520,13 @@ namespace MeGUI
 
             if (this.SubtitlesPath.Text != "")
             {
-                if (cbCharset.SelectedIndex != 0)
+                if (cbCharset.Enabled)
                 {
-                    string charset = cbCharset_();
+                    string charset = CharsetValue();
                     newScript += "\r\nTextSub(\"" + SubtitlesPath.Text + "\"" + ", " + charset + ")\r\n";
                 }
-                else newScript += "\r\nTextSub(\"" + SubtitlesPath.Text + "\")\r\n";
+                else
+                    newScript += "\r\nVobSub(\"" + SubtitlesPath.Text + "\")\r\n";
             }
             return newScript;
 		}
@@ -2398,12 +2399,10 @@ namespace MeGUI
             {
                 if (this.SubtitlesPath.Text != openSubsDialog.FileName)
                 {
+                    string ext = Path.GetExtension(openSubsDialog.FileName).ToString().ToLower();
                     this.SubtitlesPath.Text = openSubsDialog.FileName;
-                    string temp = avisynthScript.Text;
-                    script = new StringBuilder();
-                    script.Append(temp);
-                    script.Append("TextSub(\"" + openSubsDialog.FileName + "\")\r\n");
-                    avisynthScript.Text = script.ToString();
+                    if (ext == ".idx")
+                        cbCharset.Enabled = false;
                     MessageBox.Show("Subtitles successfully added to the script...", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else MessageBox.Show("The subtitles you chosen was already added...", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -2411,7 +2410,7 @@ namespace MeGUI
             this.showScript();
         }
 
-        private string cbCharset_()
+        private string CharsetValue()
         {
             string c = string.Empty;
 
