@@ -94,5 +94,36 @@ namespace MeGUI
             }
         }
 
+        /// <summary>
+        /// reads the idx file to retrieve the default Language Index Value
+        /// </summary>
+        public static int defaultLangIdx(string idxFile)
+        {
+            int idx = 0;
+
+            try
+            {
+                using (StreamReader sr = new StreamReader(idxFile))
+                {
+                    string line = sr.ReadLine();
+                    while (line != null)
+                    {
+                        line = sr.ReadLine();
+                        if (line != null)
+                        {
+                            if (line.StartsWith("langidx:"))
+                                idx = Convert.ToInt32(line.Substring(9));
+                        }
+                    }
+                }
+            }
+            catch (Exception i)
+            {
+                MessageBox.Show("The following error ocurred when parsing the idx file " + idxFile + "\r\n" + i.Message, "Error parsing idx file", MessageBoxButtons.OK);
+            }
+
+            return idx;
+        }
+
     }
 }
