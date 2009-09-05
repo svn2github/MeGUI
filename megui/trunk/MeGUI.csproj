@@ -254,11 +254,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="App.ico" />
     <EmbeddedResource Include="Changelog.txt" />
-    <Content Include="AvisynthWrapper.dll" />
+    <Content Include="AvisynthWrapper.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Data\ContextHelp.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="MediaInfo.dll" />
+    <Content Include="MediaInfo.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Compile Include="core\details\0_2_6_1017_jobloader\Job.cs" />
     <Compile Include="core\details\0_2_6_x_profileloader\Loader.cs" />
     <Compile Include="core\details\CleanupJob.cs" />
