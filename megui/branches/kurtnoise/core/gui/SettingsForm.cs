@@ -161,9 +161,6 @@ namespace MeGUI
         private CheckBox cbx_usehttpproxy;
         private TextBox txt_httpproxypwd;
         private TextBox txt_httpproxyport;
-        private GroupBox gbDefaultOutput;
-        private Button clearDefaultOutputDir;
-        private FileBar defaultOutputDir;
         private CheckBox cbAddTimePos;
         private TextBox dgavcIndexPath;
         private Label DGAIndex;
@@ -185,6 +182,9 @@ namespace MeGUI
         private Label label1;
         private TextBox DivXAVCPath;
         private Button selectDivXAVCExecButton;
+        private GroupBox gbDefaultOutput;
+        private Button clearDefaultOutputDir;
+        private FileBar defaultOutputDir;
 
 		/// <summary>
 		/// Required designer variable.
@@ -299,6 +299,9 @@ namespace MeGUI
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.label1 = new System.Windows.Forms.Label();
+            this.DivXAVCPath = new System.Windows.Forms.TextBox();
+            this.selectDivXAVCExecButton = new System.Windows.Forms.Button();
             this.xvidEncrawLabel = new System.Windows.Forms.Label();
             this.selectXvidEncrawButton = new System.Windows.Forms.Button();
             this.xvidEncrawPath = new System.Windows.Forms.TextBox();
@@ -369,9 +372,7 @@ namespace MeGUI
             this.audioExtLabel = new System.Windows.Forms.Label();
             this.videoExtLabel = new System.Windows.Forms.Label();
             this.autoEncodeDefaultsButton = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.DivXAVCPath = new System.Windows.Forms.TextBox();
-            this.selectDivXAVCExecButton = new System.Windows.Forms.Button();
+            this.defaultOutputDir = new MeGUI.FileBar();
             groupBox1 = new System.Windows.Forms.GroupBox();
             groupBox1.SuspendLayout();
             this.otherGroupBox.SuspendLayout();
@@ -809,11 +810,12 @@ namespace MeGUI
             // 
             // gbDefaultOutput
             // 
+            this.gbDefaultOutput.Controls.Add(this.defaultOutputDir);
             this.gbDefaultOutput.Controls.Add(this.clearDefaultOutputDir);
             this.gbDefaultOutput.Location = new System.Drawing.Point(2, 322);
             this.gbDefaultOutput.Name = "gbDefaultOutput";
             this.gbDefaultOutput.Size = new System.Drawing.Size(467, 57);
-            this.gbDefaultOutput.TabIndex = 7;
+            this.gbDefaultOutput.TabIndex = 8;
             this.gbDefaultOutput.TabStop = false;
             this.gbDefaultOutput.Text = "Default Output Directory";
             // 
@@ -824,7 +826,6 @@ namespace MeGUI
             this.clearDefaultOutputDir.Size = new System.Drawing.Size(24, 23);
             this.clearDefaultOutputDir.TabIndex = 41;
             this.clearDefaultOutputDir.Text = "x";
-            this.clearDefaultOutputDir.Click += new System.EventHandler(this.clearDefaultOutputDir_Click);
             // 
             // tabPage3
             // 
@@ -1214,6 +1215,32 @@ namespace MeGUI
             this.tabPage4.TabIndex = 0;
             this.tabPage4.Text = "Video";
             this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // label1
+            // 
+            this.label1.Location = new System.Drawing.Point(6, 100);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(38, 16);
+            this.label1.TabIndex = 12;
+            this.label1.Text = "DivXAVC";
+            // 
+            // DivXAVCPath
+            // 
+            this.DivXAVCPath.Location = new System.Drawing.Point(81, 97);
+            this.DivXAVCPath.Name = "DivXAVCPath";
+            this.DivXAVCPath.ReadOnly = true;
+            this.DivXAVCPath.Size = new System.Drawing.Size(330, 21);
+            this.DivXAVCPath.TabIndex = 13;
+            this.DivXAVCPath.Text = "DivXAVC.exe";
+            // 
+            // selectDivXAVCExecButton
+            // 
+            this.selectDivXAVCExecButton.Location = new System.Drawing.Point(417, 96);
+            this.selectDivXAVCExecButton.Name = "selectDivXAVCExecButton";
+            this.selectDivXAVCExecButton.Size = new System.Drawing.Size(24, 23);
+            this.selectDivXAVCExecButton.TabIndex = 14;
+            this.selectDivXAVCExecButton.Text = "...";
+            this.selectDivXAVCExecButton.Click += new System.EventHandler(this.selectDivXAVCExecButton_Click);
             // 
             // xvidEncrawLabel
             // 
@@ -1886,31 +1913,21 @@ namespace MeGUI
             this.autoEncodeDefaultsButton.Text = "Configure Defaults";
             this.autoEncodeDefaultsButton.UseVisualStyleBackColor = true;
             // 
-            // label1
+            // defaultOutputDir
             // 
-            this.label1.Location = new System.Drawing.Point(6, 100);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(38, 16);
-            this.label1.TabIndex = 12;
-            this.label1.Text = "DivXAVC";
-            // 
-            // DivXAVCPath
-            // 
-            this.DivXAVCPath.Location = new System.Drawing.Point(81, 97);
-            this.DivXAVCPath.Name = "DivXAVCPath";
-            this.DivXAVCPath.ReadOnly = true;
-            this.DivXAVCPath.Size = new System.Drawing.Size(330, 21);
-            this.DivXAVCPath.TabIndex = 13;
-            this.DivXAVCPath.Text = "DivXAVC.exe";
-            // 
-            // selectDivXAVCExecButton
-            // 
-            this.selectDivXAVCExecButton.Location = new System.Drawing.Point(417, 96);
-            this.selectDivXAVCExecButton.Name = "selectDivXAVCExecButton";
-            this.selectDivXAVCExecButton.Size = new System.Drawing.Size(24, 23);
-            this.selectDivXAVCExecButton.TabIndex = 14;
-            this.selectDivXAVCExecButton.Text = "...";
-            this.selectDivXAVCExecButton.Click += new System.EventHandler(this.selectDivXAVCExecButton_Click);
+            this.defaultOutputDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.defaultOutputDir.Filename = "";
+            this.defaultOutputDir.Filter = null;
+            this.defaultOutputDir.FilterIndex = 0;
+            this.defaultOutputDir.FolderMode = true;
+            this.defaultOutputDir.Location = new System.Drawing.Point(6, 20);
+            this.defaultOutputDir.Name = "defaultOutputDir";
+            this.defaultOutputDir.ReadOnly = true;
+            this.defaultOutputDir.SaveMode = false;
+            this.defaultOutputDir.Size = new System.Drawing.Size(417, 26);
+            this.defaultOutputDir.TabIndex = 42;
+            this.defaultOutputDir.Title = null;
             // 
             // SettingsForm
             // 
@@ -2033,13 +2050,6 @@ namespace MeGUI
             if (selectExe("xvid_encraw"))
             {
                 xvidEncrawPath.Text = openExecutableDialog.FileName;
-            }
-        }
-        private void button1_Click(object sender, EventArgs e)
-        {
-            if (selectExe("faac"))
-            {
-                DivXAVCPath.Text = openExecutableDialog.FileName;
             }
         }
 
@@ -2175,6 +2185,14 @@ namespace MeGUI
             }
         }
 
+        private void selectDivXAVCExecButton_Click(object sender, EventArgs e)
+        {
+            if (selectExe("DivX264"))
+            {
+                DivXAVCPath.Text = openExecutableDialog.FileName;
+            }
+        }
+
         private void runCommand_CheckedChanged(object sender, EventArgs e)
         {
             command.Enabled = runCommand.Checked;
@@ -2244,7 +2262,6 @@ namespace MeGUI
                 settings.AcceptableAspectErrorPercent = (int)acceptableAspectError.Value;
 				settings.MencoderPath = mencoderPath.Text;
                 settings.SourceDetectorSettings = sdSettings;
-                settings.FaacPath = DivXAVCPath.Text;
                 settings.NeroAacEncPath = textBox2.Text;
                 settings.LamePath = textBox3.Text;
 				settings.Mp4boxPath = mp4boxPath.Text;
@@ -2312,7 +2329,6 @@ namespace MeGUI
                 useAutoUpdateCheckbox.Checked = settings.AutoUpdate;
                 acceptableAspectError.Value = (decimal)settings.AcceptableAspectErrorPercent;
 				mencoderPath.Text = settings.MencoderPath;      
-                DivXAVCPath.Text = settings.FaacPath;
                 textBox2.Text = settings.NeroAacEncPath;
                 textBox3.Text = settings.LamePath;
                 textBox8.Text = settings.BeSplitPath;
@@ -2405,14 +2421,5 @@ namespace MeGUI
                 }
             }
         }
-
-        private void selectDivXAVCExecButton_Click(object sender, EventArgs e)
-        {
-            if (selectExe("DivX264"))
-            {
-                DivXAVCPath.Text = openExecutableDialog.FileName;
-            }
-        }
-
 	}
 }

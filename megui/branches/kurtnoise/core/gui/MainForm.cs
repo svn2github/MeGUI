@@ -1173,20 +1173,7 @@ namespace MeGUI
         {
             this.Close();
         }
-
-        private void mnuToolsSettings_Click(object sender, System.EventArgs e)
-        {
-            using (SettingsForm sform = new SettingsForm())
-            {
-                sform.Settings = this.settings;
-                if (sform.ShowDialog() == DialogResult.OK)
-                {
-                    this.settings = sform.Settings;
-                    this.saveSettings();
-                    Jobs.showAfterEncodingStatus(settings);
-                }
-            }
-        }
+ 
         private void mnuTool_Click(object sender, System.EventArgs e)
         {
             if ((!(sender is System.Windows.Forms.MenuItem)) || (!((sender as MenuItem).Tag is ITool)))
