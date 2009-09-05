@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{12D5215B-0254-4616-A53C-C8B7B6A2C8E9}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -590,34 +590,7 @@
       <DependentUpon>AudioConfigurationPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="packages\audio\AudioJob.cs" />
-    <Compile Include="packages\audio\audx\AudXConfigurationPanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="packages\audio\audx\AudXConfigurationPanel.Designer.cs">
-      <DependentUpon>AudXConfigurationPanel.cs</DependentUpon>
-    </Compile>
     <Compile Include="packages\audio\AudioEncoderInterface.cs" />
-    <Compile Include="packages\audio\faac\faacConfigurationPanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="packages\audio\faac\faacConfigurationPanel.Designer.cs">
-      <DependentUpon>faacConfigurationPanel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="packages\audio\ffac3\AC3ConfigurationPanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="packages\audio\ffac3\AC3ConfigurationPanel.Designer.cs">
-      <DependentUpon>AC3ConfigurationPanel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="packages\audio\ffac3\AC3Settings.cs" />
-    <Compile Include="packages\audio\faac\FaacSettings.cs" />
-    <Compile Include="packages\audio\ffmp2\MP2ConfigurationPanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="packages\audio\ffmp2\MP2ConfigurationPanel.Designer.cs">
-      <DependentUpon>MP2ConfigurationPanel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="packages\audio\ffmp2\MP2Settings.cs" />
     <Compile Include="packages\audio\lame\lameConfigurationPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -646,7 +619,6 @@
       <DependentUpon>WinAmpAACConfigurationPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="packages\audio\waac\WinAmpAACSettings.cs" />
-    <Compile Include="packages\audio\audx\AudXSettings.cs" />
     <Compile Include="packages\muxer\avimuxgui\AMGMuxer.cs" />
     <Compile Include="packages\muxer\mencoder\MencoderMuxer.cs" />
     <Compile Include="packages\muxer\mkvmerge\MkvMergeMuxer.cs" />
@@ -988,22 +960,6 @@
     <EmbeddedResource Include="packages\audio\AudioConfigurationPanel.resx">
       <DependentUpon>AudioConfigurationPanel.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="packages\audio\audx\AudXConfigurationPanel.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>AudXConfigurationPanel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="packages\audio\faac\faacConfigurationPanel.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>faacConfigurationPanel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="packages\audio\ffac3\AC3ConfigurationPanel.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>AC3ConfigurationPanel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="packages\audio\ffmp2\MP2ConfigurationPanel.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>MP2ConfigurationPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="packages\audio\lame\lameConfigurationPanel.resx">
       <SubType>Designer</SubType>
