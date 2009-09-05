@@ -421,8 +421,6 @@ namespace MeGUI
                     {
                         case ("dgindex"):
                             return meGUISettings.DgIndexPath;
-                        case ("faac"):
-                            return meGUISettings.FaacPath;
                         case ("mencoder"):
                             return meGUISettings.MencoderPath;
                         case ("mkvmerge"):
@@ -439,10 +437,6 @@ namespace MeGUI
                             return meGUISettings.X264Path;
                         case ("xvid_encraw"):
                             return meGUISettings.XviDEncrawPath;
-                        case ("ffmpeg"):
-                            return meGUISettings.FFMpegPath;
-                        case ("encaudxcli"):
-                            return meGUISettings.EncAudXPath;
                         case ("enc_aacplus"):
                             return meGUISettings.EncAacPlusPath;
                         case ("oggenc2"):
@@ -471,9 +465,6 @@ namespace MeGUI
                         case ("dgindex"):
                             meGUISettings.DgIndexPath = value;
                             break;
-                        case ("faac"):
-                            meGUISettings.FaacPath = value;
-                            break;
                         case ("lame"):
                             meGUISettings.LamePath = value;
                             break;
@@ -498,12 +489,6 @@ namespace MeGUI
                         case ("xvid_encraw"):
                             meGUISettings.XviDEncrawPath = value;
                             break;
-                        case ("ffmpeg"):
-                            meGUISettings.FFMpegPath = value;
-                            return;
-                        case ("encaudxcli"):
-                            meGUISettings.EncAudXPath = value;
-                            return;
                         case ("enc_aacplus"):
                             meGUISettings.EncAacPlusPath = value;
                             return;

@@ -1059,6 +1059,7 @@ namespace MeGUI
             this.RegisterEncoder(new SnowMencoderEncoderProvider());
             this.RegisterEncoder(new X264EncoderProvider());
             this.RegisterEncoder(new XviDEncoderProvider());
+            this.RegisterEncoder(new DivX264EncoderProvider());
         }
     }
     public class AudioEncoderProvider : AllEncoderProvider<AudioCodec, AudioType, AudioEncoderType>
@@ -1110,6 +1111,21 @@ namespace MeGUI
         public override IJobProcessor CreateEncoder(MeGUISettings settings)
         {
             return new x264Encoder(settings.X264Path);
+        }
+    }
+
+    public class DivX264EncoderProvider : EncodingProvider<VideoCodec, VideoType, VideoEncoderType>
+    {
+        public DivX264EncoderProvider()
+        {
+            supportedCodecs.Add(VideoCodec.AVC);
+            supportedTypes.Add(VideoType.RAWAVC);
+            supportedEncoderTypes.Add(VideoEncoderType.DIVXAVC);
+        }
+
+        public override IJobProcessor CreateEncoder(MeGUISettings settings)
+        {
+            return new DivXAVCEncoder(settings.DivXAVCPath);
         }
     }
 

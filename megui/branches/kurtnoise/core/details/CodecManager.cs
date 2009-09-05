@@ -131,7 +131,7 @@ namespace MeGUI
         public static readonly VideoEncoderType X264 = new VideoEncoderType("x264", VideoCodec.AVC);
         public static readonly VideoEncoderType SNOW = new VideoEncoderType("Snow", VideoCodec.SNOW);
         public static readonly VideoEncoderType HFYU = new VideoEncoderType("Huffyuv", VideoCodec.HFYU);
-        public static readonly VideoEncoderType DIVXAVC = new VideoEncoderType("DIVXAVC", VideoCodec.AVC);
+        public static readonly VideoEncoderType DIVXAVC = new VideoEncoderType("DivX264", VideoCodec.AVC);
     }
     public class AudioEncoderType : IEncoderType, IIDable
     {

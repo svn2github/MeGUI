@@ -32,7 +32,6 @@ using MeGUI.core.gui;
 using MeGUI.core.plugins.interfaces;
 using MeGUI.core.util;
 using MeGUI.packages.tools.oneclick;
-using MeGUI.packages.video.x264;
 
 namespace MeGUI
 {
@@ -52,7 +51,7 @@ namespace MeGUI
         {
             this.path = path;
             profileGroups.Add(new ProfileGroup(typeof(VideoCodecSettings), "Video"));
-            SafeRegister<x264Settings, x264ConfigurationPanel>("Video");
+            SafeRegister<x264Settings, MeGUI.packages.video.x264.x264ConfigurationPanel>("Video");
             SafeRegister<xvidSettings, MeGUI.packages.video.xvid.xvidConfigurationPanel>("Video");
             SafeRegister<snowSettings, MeGUI.packages.video.snow.snowConfigurationPanel>("Video");
             SafeRegister<DivXAVCSettings, MeGUI.packages.video.divxavc.DivXAVCConfigurationPanel>("Video");
