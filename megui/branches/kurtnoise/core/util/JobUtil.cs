@@ -277,10 +277,18 @@ namespace MeGUI
 		public JobChain prepareVideoJob(string movieInput, string movieOutput, VideoCodecSettings settings, Dar? dar, bool prerender, bool checkVideo, Zone[] zones)
 		{
 			bool twoPasses = false, turbo = settings.Turbo, threePasses = false;
-			if (settings.EncodingMode == 4) // automated twopass
-				twoPasses = true;
-			else if (settings.EncodingMode == 8) // automated threepass
-				threePasses = true;
+            if (settings.SettingsID.Equals("DivX264"))
+            {
+                if (settings.EncodingMode == 2)
+                    twoPasses = true;
+            }
+            else
+            {
+                if (settings.EncodingMode == 4) // automated twopass
+                    twoPasses = true;
+                else if (settings.EncodingMode == 8) // automated threepass
+                    threePasses = true;
+            }
 
             VideoJob prerenderJob = null;
             string hfyuFile = null;
@@ -341,8 +349,10 @@ namespace MeGUI
 				{
 					job.FilesToDelete.Add(job.Settings.Logfile);
                     firstpass = cloneJob(job);
-					firstpass.Output = ""; // the first pass has no output
-					firstpass.Settings.EncodingMode = 2;
+					firstpass.Output = "NUL"; // the first pass has no output
+                    if (settings.SettingsID.Equals("DivX264"))
+                         firstpass.Settings.EncodingMode = 0;
+                    else firstpass.Settings.EncodingMode = 2;
 					firstpass.Settings.Turbo = turbo;
                     firstpass.DAR = dar;
 					if (threePasses)
