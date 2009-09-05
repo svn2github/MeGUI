@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{12D5215B-0254-4616-A53C-C8B7B6A2C8E9}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -191,16 +191,18 @@
     <Reference Include="Accessibility" />
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.84.0.0, Culture=neutral, PublicKeyToken=1b03e6acf1164f73">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\ICSharpCode.SharpZipLib.dll</HintPath>
+      <HintPath>lib\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
-    <Reference Include="LinqBridge, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c2b14eb747628076, processorArchitecture=MSIL" />
+    <Reference Include="LinqBridge, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c2b14eb747628076, processorArchitecture=MSIL">
+      <HintPath>lib\LinqBridge.dll</HintPath>
+    </Reference>
     <Reference Include="MediaInfoWrapper, Version=0.7.4.4, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\MediaInfoWrapper.dll</HintPath>
+      <HintPath>lib\MediaInfoWrapper.dll</HintPath>
     </Reference>
     <Reference Include="MessageBoxExLib, Version=1.0.2218.28317, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>MessageBoxExLib\bin\Release\MessageBoxExLib.dll</HintPath>
+      <HintPath>lib\MessageBoxExLib.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System">
@@ -252,15 +254,11 @@
     </EmbeddedResource>
     <EmbeddedResource Include="App.ico" />
     <EmbeddedResource Include="Changelog.txt" />
+    <Content Include="AvisynthWrapper.dll" />
     <Content Include="Data\ContextHelp.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="lib\AvisynthWrapper.dll" />
-    <Content Include="lib\ICSharpCode.SharpZipLib.dll" />
-    <Content Include="lib\LinqBridge.dll" />
-    <Content Include="lib\MediaInfo.dll" />
-    <Content Include="lib\MediaInfoWrapper.dll" />
-    <Content Include="lib\MessageBoxExLib.dll" />
+    <Content Include="MediaInfo.dll" />
     <Compile Include="core\details\0_2_6_1017_jobloader\Job.cs" />
     <Compile Include="core\details\0_2_6_x_profileloader\Loader.cs" />
     <Compile Include="core\details\CleanupJob.cs" />
