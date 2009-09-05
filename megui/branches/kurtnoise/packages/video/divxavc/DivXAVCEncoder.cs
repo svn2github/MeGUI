@@ -45,7 +45,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "divxAVCEncoder");
         public DivXAVCEncoder(string encoderPath)
             : base()
         {
-            executable = encoderPath;
+            executable = encoderPath;            
         }
         
        public override string GetFrameString(string line, StreamType stream)
@@ -93,11 +93,14 @@ new JobProcessorFactory(new ProcessorFactory(init), "divxAVCEncoder");
             }
 
             double framerate = 0.0;
-            using (AvsFile avi = AvsFile.ParseScript(Path.GetDirectoryName(input)))
+            ulong length = 0;
+            MainForm mainForm = MainForm.Instance;
+
+            if (!string.IsNullOrEmpty(mainForm.Video.VideoInput))
             {
-                framerate = avi.Info.FPS;
+                JobUtil.getInputProperties(out length, out framerate, mainForm.Video.VideoInput);
+                sb.Append(" -fps " + framerate.ToString(ci));
             }
-            sb.Append(" -fps " + framerate.ToString(ci));
 
             if (xs.Turbo)
             {

@@ -69,6 +69,7 @@
             // tabControl1
             // 
             this.tabControl1.Size = new System.Drawing.Size(396, 306);
+            this.tabControl1.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight;
             // 
             // commandline
             // 
@@ -84,6 +85,8 @@
             // 
             // divxavcGeneralOptionsGroupBox
             // 
+            this.divxavcGeneralOptionsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.divxavcGeneralOptionsGroupBox.BackColor = System.Drawing.Color.Transparent;
             this.divxavcGeneralOptionsGroupBox.Controls.Add(this.divxavcTurbo);
             this.divxavcGeneralOptionsGroupBox.Controls.Add(this.logfile);
@@ -190,6 +193,8 @@
             // 
             // divxavcMoreOptions
             // 
+            this.divxavcMoreOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.divxavcMoreOptions.Controls.Add(this.divxavcThreadsLabel);
             this.divxavcMoreOptions.Controls.Add(this.nbThreads);
             this.divxavcMoreOptions.Controls.Add(this.divxavcPyramid);
