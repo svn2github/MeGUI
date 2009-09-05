@@ -469,10 +469,6 @@ namespace MeGUI.core.details
                     ser = new XmlSerializer(typeof(TaggedJob));
                     return (TaggedJob)ser.Deserialize(s);
                 }
-                catch (InvalidOperationException)
-                {
-                    return MeGUI.core.details._0_2_6_1017_jobloader.Loader.loadJob(name);
-                }
                 catch (Exception e)
                 {
                     DialogResult r = MessageBox.Show("Job " + name + " could not be loaded. Delete?", "Error loading Job", MessageBoxButtons.YesNo, MessageBoxIcon.Error);

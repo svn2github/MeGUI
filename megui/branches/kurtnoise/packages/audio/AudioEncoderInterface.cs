@@ -44,12 +44,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
         {
             if (j is AudioJob &&
                 (((j as AudioJob).Settings is MP3Settings) ||
-                ((j as AudioJob).Settings is MP2Settings) ||
-                ((j as AudioJob).Settings is AC3Settings) ||
                 ((j as AudioJob).Settings is WinAmpAACSettings) ||
-                ((j as AudioJob).Settings is AudXSettings) ||
                 ((j as AudioJob).Settings is OggVorbisSettings) ||
-                ((j as AudioJob).Settings is FaacSettings) ||
                 ((j as AudioJob).Settings is NeroAACSettings) ||
                 ((j as AudioJob).Settings is AftenSettings)))
                 return new AviSynthAudioEncoder(mf.Settings);
@@ -741,23 +737,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 _encoderExecutablePath = this._settings.AftenPath;
                 _encoderCommandLine = "-readtoeof 1 -b " + n.Bitrate + " - \"{0}\"";
             }
-            if (audioJob.Settings is AC3Settings)
-            {
-                script.Append("6<=Audiochannels(last)?GetChannel(last,1,3,2,5,6,4):last" + Environment.NewLine);
-                script.Append("32==Audiobits(last)?ConvertAudioTo16bit(last):last" + Environment.NewLine); // ffac3 encoder doesn't support 32bits streams
-                _mustSendWavHeaderToEncoderStdIn = true;
-                AC3Settings n = audioJob.Settings as AC3Settings;
-                _encoderExecutablePath = this._settings.FFMpegPath;
-                _encoderCommandLine = "-i - -y -acodec ac3 -ab " + n.Bitrate + "k \"{0}\"";
-            }
-            if (audioJob.Settings is MP2Settings)
-            {
-                script.Append("32==Audiobits(last)?ConvertAudioTo16bit(last):last" + Environment.NewLine); // ffmp2 encoder doesn't support 32 bits streams
-                _mustSendWavHeaderToEncoderStdIn = true;
-                MP2Settings n = audioJob.Settings as MP2Settings;
-                _encoderExecutablePath = this._settings.FFMpegPath;
-                _encoderCommandLine = "-i - -y -acodec mp2 -ab " + n.Bitrate + "k \"{0}\"";
-            } 
             if (audioJob.Settings is WinAmpAACSettings)
             {
                 _mustSendWavHeaderToEncoderStdIn = false;
@@ -792,17 +771,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
 
                 }
                 _encoderCommandLine = sb.ToString();
-            }
-
-            if (audioJob.Settings is AudXSettings)
-            {
-                script.Append("ResampleAudio(last,48000)" + Environment.NewLine);
-                script.Append("32==Audiobits(last)?ConvertAudioTo16bit(last):last" + Environment.NewLine);  // audX encoder doesn't support 32bits streams
-                script.Append("6==Audiochannels(last)?last:GetChannel(last,1,1,1,1,1,1)" + Environment.NewLine);
-                _mustSendWavHeaderToEncoderStdIn = false;
-                AudXSettings n = audioJob.Settings as AudXSettings;
-                _encoderExecutablePath = this._settings.EncAudXPath;
-                _encoderCommandLine = "- \"{0}\" --q " + ((int)n.Quality) + " --raw {1}";
             }
             if (audioJob.Settings is OggVorbisSettings)
             {
@@ -849,21 +817,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 sb.Append("-if - -of \"{0}\"");
 
                 _encoderCommandLine = sb.ToString();
-            }
-            if (audioJob.Settings is FaacSettings)
-            {
-                FaacSettings f = audioJob.Settings as FaacSettings;
-                _encoderExecutablePath = this._settings.FaacPath;
-                _mustSendWavHeaderToEncoderStdIn = true;
-                switch (f.BitrateMode)
-                {
-                    case BitrateManagementMode.VBR:
-                        _encoderCommandLine = "-q " + f.Quality + " --mpeg-vers 4 -o \"{0}\" -"; 
-                        break;
-                    default:
-                        _encoderCommandLine = "-b " + f.Bitrate + " --mpeg-vers 4 -o \"{0}\" -";
-                        break;
-                }
             }
             if (audioJob.Settings is MP3Settings)
             {

@@ -240,7 +240,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "XviDEncoder");
                     if (zone.mode == ZONEMODE.Weight)
                     {
                         sb.Append("-zw " + zone.startFrame + " ");
-                        double mod = (double)zone.modifier / 100.0;
+                        double mod = (double)zone.value / 100.0;
                         sb.Append(mod.ToString(ci) + " ");
                     }
                 }

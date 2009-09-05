@@ -261,8 +261,6 @@
     <Content Include="lib\MediaInfo.dll" />
     <Content Include="lib\MediaInfoWrapper.dll" />
     <Content Include="lib\MessageBoxExLib.dll" />
-    <Compile Include="core\details\0_2_6_1017_jobloader\Job.cs" />
-    <Compile Include="core\details\0_2_6_x_profileloader\Loader.cs" />
     <Compile Include="core\details\CleanupJob.cs" />
     <Compile Include="core\details\CodecManager.cs" />
     <Compile Include="core\details\CommandlineParser.cs" />
@@ -779,6 +777,14 @@
     <Compile Include="packages\tools\vobsub\VobSubIndexWindow.Designer.cs">
       <DependentUpon>VobSubIndexWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="packages\video\divxavc\DivXAVCConfigurationPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="packages\video\divxavc\DivXAVCConfigurationPanel.Designer.cs">
+      <DependentUpon>DivXAVCConfigurationPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="packages\video\divxavc\DivXAVCEncoder.cs" />
+    <Compile Include="packages\video\divxavc\DivXAVCSettings.cs" />
     <Compile Include="packages\video\huffyuv\hfyuSettings.cs" />
     <Compile Include="packages\video\mencoder\mencoderEncoder.cs" />
     <Compile Include="packages\video\snow\snowConfigurationPanel.cs">
@@ -1048,6 +1054,9 @@
     <EmbeddedResource Include="packages\tools\vobsub\VobSubIndexWindow.resx">
       <DependentUpon>VobSubIndexWindow.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="packages\video\divxavc\DivXAVCConfigurationPanel.resx">
+      <DependentUpon>DivXAVCConfigurationPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="packages\video\snow\snowConfigurationPanel.resx">
       <SubType>Designer</SubType>

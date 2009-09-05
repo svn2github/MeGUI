@@ -36,7 +36,7 @@ namespace MeGUI
         private string faacPath, lamePath, neroAacEncPath, mencoderPath,  mp4boxPath, mkvmergePath, 
                        encAacPlusPath, ffmpegPath, besplitPath, yadifPath, aftenPath, x264Path, 
                        dgIndexPath, xvidEncrawPath, aviMuxGUIPath, oggEnc2Path, encAudXPath, dgavcIndexPath, dgvc1IndexPath,
-                       dgmpgIndexPath, eac3toPath, tsmuxerPath,
+                       dgmpgIndexPath, eac3toPath, tsmuxerPath, divxavcPath,
                        defaultLanguage1, defaultLanguage2, afterEncodingCommand, videoExtension, audioExtension,
                        httpproxyaddress, httpproxyport, httpproxyuid, httpproxypwd, defaultOutputDir;
         private bool recalculateMainMovieBitrate, autoForceFilm, autoStartQueue, enableMP3inMP4, autoOpenScript,
@@ -121,6 +121,7 @@ namespace MeGUI
             tsmuxerPath = "tsmuxer.exe";
             alwaysbackupfiles = true;
             forcerawavcextension = false;
+            divxavcPath = "DivX264.exe";
         }
         #region properties
         public string YadifPath
@@ -413,6 +414,14 @@ namespace MeGUI
         {
             get { return tsmuxerPath; }
             set { tsmuxerPath = value; }
+        }
+        /// <summary>
+        /// filename and full path of the DivX264 executable
+        /// </summary>
+        public string DivXAVCPath
+        {
+            get { return divxavcPath; }
+            set { divxavcPath = value; }
         }
         ///<summary>
         /// gets / sets whether megui backup files from updater or not
