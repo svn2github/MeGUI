@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
@@ -76,6 +77,12 @@ namespace MeGUI
 			InitializeComponent();
 			chapters = new Chapter[0];
             this.mainForm = mainForm;
+            pgc = new ChapterInfo()
+            {
+                Chapters = new List<Chapter>(),
+                FramesPerSecond = 25.0,
+                LangCode = string.Empty
+            };
 		}
 
 		/// <summary>
