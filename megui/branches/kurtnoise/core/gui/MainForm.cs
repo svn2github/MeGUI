@@ -90,7 +90,6 @@ namespace MeGUI
         private TabPage tabPage2;
         private JobControl jobControl1;
         private MenuItem mnuHelp;
-        private MenuItem mnuChangelog;
         private MenuItem menuItem1;
         private MenuItem createNewWorker;
         private MenuItem menuItem6;
@@ -205,7 +204,6 @@ namespace MeGUI
             this.mnuOptions = new System.Windows.Forms.MenuItem();
             this.mnuOptionsSettings = new System.Windows.Forms.MenuItem();
             this.mnuHelp = new System.Windows.Forms.MenuItem();
-            this.mnuChangelog = new System.Windows.Forms.MenuItem();
             this.mnuDoc = new System.Windows.Forms.MenuItem();
             this.mnuWebsite = new System.Windows.Forms.MenuItem();
             this.mnuHome = new System.Windows.Forms.MenuItem();
@@ -672,26 +670,19 @@ namespace MeGUI
             // 
             this.mnuHelp.Index = 5;
             this.mnuHelp.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.mnuChangelog,
             this.mnuDoc,
             this.mnuWebsite});
             this.mnuHelp.Text = "&Help";
             // 
-            // mnuChangelog
-            // 
-            this.mnuChangelog.Index = 0;
-            this.mnuChangelog.Text = "Changelog";
-            this.mnuChangelog.Click += new System.EventHandler(this.mnuChangelog_Click);
-            // 
             // mnuDoc
             // 
-            this.mnuDoc.Index = 1;
+            this.mnuDoc.Index = 0;
             this.mnuDoc.Text = "Wiki - User Guides";
             this.mnuDoc.Click += new System.EventHandler(this.mnuDoc_Click);
             // 
             // mnuWebsite
             // 
-            this.mnuWebsite.Index = 2;
+            this.mnuWebsite.Index = 1;
             this.mnuWebsite.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.mnuHome,
             this.mnuForum,
@@ -806,28 +797,7 @@ namespace MeGUI
         {
             System.Diagnostics.Process.Start("http://mewiki.project357.com/wiki/Main_Page");
         }
-        /// <summary>
-        /// launches the encoder gui forum in the default browser
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void menuItem2_Click(object sender, EventArgs e)
-        {
-            
-        }
-        /// <summary>
-        /// shows the changelog dialog window
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void mnuChangelog_Click(object sender, EventArgs e)
-        {
-            using (Changelog cl = new Changelog())
-            {
-                cl.ShowDialog();
-            }
-        }
-
+ 
         public MainForm()
         {
             Instance = this;
