@@ -7,6 +7,7 @@ REM make dist with everything
 MD Dist\BigDist >NUL 2>&1
 COPY *.exe Dist\BigDist /Y
 COPY lib\*.dll Dist\BigDist /Y
+COPY *.dll Dist\BigDist /Y
 COPY *.txt Dist\BigDist /Y
 
 REM make minimum distribution for install
