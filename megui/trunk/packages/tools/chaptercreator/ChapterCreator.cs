@@ -48,8 +48,7 @@ namespace MeGUI
 
 		private System.Windows.Forms.GroupBox chaptersGroupbox;
 		private System.Windows.Forms.Button addZoneButton;
-		private System.Windows.Forms.Button clearZonesButton;
-		private System.Windows.Forms.Button updateZoneButton;
+        private System.Windows.Forms.Button clearZonesButton;
 		private System.Windows.Forms.Button showVideoButton;
 		private System.Windows.Forms.Button removeZoneButton;
 		private System.Windows.Forms.ColumnHeader timecodeColumn;
@@ -75,6 +74,7 @@ namespace MeGUI
 			// Required for Windows Form Designer support
 			//
 			InitializeComponent();
+            intIndex = 0;
 			chapters = new Chapter[0];
             this.mainForm = mainForm;
             pgc = new ChapterInfo()
@@ -121,7 +121,6 @@ namespace MeGUI
             this.startTimeLabel = new System.Windows.Forms.Label();
             this.addZoneButton = new System.Windows.Forms.Button();
             this.clearZonesButton = new System.Windows.Forms.Button();
-            this.updateZoneButton = new System.Windows.Forms.Button();
             this.showVideoButton = new System.Windows.Forms.Button();
             this.removeZoneButton = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
@@ -141,7 +140,6 @@ namespace MeGUI
             this.chaptersGroupbox.Controls.Add(this.startTimeLabel);
             this.chaptersGroupbox.Controls.Add(this.addZoneButton);
             this.chaptersGroupbox.Controls.Add(this.clearZonesButton);
-            this.chaptersGroupbox.Controls.Add(this.updateZoneButton);
             this.chaptersGroupbox.Controls.Add(this.showVideoButton);
             this.chaptersGroupbox.Controls.Add(this.removeZoneButton);
             this.chaptersGroupbox.Location = new System.Drawing.Point(8, 8);
@@ -186,7 +184,6 @@ namespace MeGUI
             this.chapterName.Size = new System.Drawing.Size(306, 21);
             this.chapterName.TabIndex = 38;
             this.chapterName.Text = "Chapter 01";
-            this.chapterName.TextChanged += new System.EventHandler(this.chapterName_TextChanged);
             // 
             // chapterNameLabel
             // 
@@ -240,7 +237,7 @@ namespace MeGUI
             // addZoneButton
             // 
             this.addZoneButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.addZoneButton.Location = new System.Drawing.Point(392, 241);
+            this.addZoneButton.Location = new System.Drawing.Point(392, 24);
             this.addZoneButton.Name = "addZoneButton";
             this.addZoneButton.Size = new System.Drawing.Size(55, 23);
             this.addZoneButton.TabIndex = 33;
@@ -250,29 +247,19 @@ namespace MeGUI
             // clearZonesButton
             // 
             this.clearZonesButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.clearZonesButton.Location = new System.Drawing.Point(392, 24);
+            this.clearZonesButton.Location = new System.Drawing.Point(392, 82);
             this.clearZonesButton.Name = "clearZonesButton";
             this.clearZonesButton.Size = new System.Drawing.Size(55, 23);
             this.clearZonesButton.TabIndex = 29;
             this.clearZonesButton.Text = "&Clear";
             this.clearZonesButton.Click += new System.EventHandler(this.clearZonesButton_Click);
             // 
-            // updateZoneButton
-            // 
-            this.updateZoneButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.updateZoneButton.Location = new System.Drawing.Point(392, 53);
-            this.updateZoneButton.Name = "updateZoneButton";
-            this.updateZoneButton.Size = new System.Drawing.Size(55, 23);
-            this.updateZoneButton.TabIndex = 35;
-            this.updateZoneButton.Text = "&Update";
-            this.updateZoneButton.Click += new System.EventHandler(this.updateZoneButton_Click);
-            // 
             // showVideoButton
             // 
             this.showVideoButton.AutoSize = true;
             this.showVideoButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.showVideoButton.Enabled = false;
-            this.showVideoButton.Location = new System.Drawing.Point(392, 82);
+            this.showVideoButton.Location = new System.Drawing.Point(392, 111);
             this.showVideoButton.Name = "showVideoButton";
             this.showVideoButton.Size = new System.Drawing.Size(55, 23);
             this.showVideoButton.TabIndex = 34;
@@ -282,7 +269,7 @@ namespace MeGUI
             // removeZoneButton
             // 
             this.removeZoneButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.removeZoneButton.Location = new System.Drawing.Point(392, 212);
+            this.removeZoneButton.Location = new System.Drawing.Point(392, 53);
             this.removeZoneButton.Name = "removeZoneButton";
             this.removeZoneButton.Size = new System.Drawing.Size(55, 23);
             this.removeZoneButton.TabIndex = 32;
@@ -383,42 +370,12 @@ namespace MeGUI
 		#region buttons
 		private void removeZoneButton_Click(object sender, System.EventArgs e)
 		{
-			if (this.chapterListView.SelectedItems.Count > 0)
-			{
-				foreach (ListViewItem item in chapterListView.SelectedItems)
-				{
-					chapterListView.Items.Remove(item);
-				}
-				Chapter[] newChapters = new Chapter[chapterListView.Items.Count];
-				int index = 0;
-				foreach (ListViewItem item in chapterListView.Items)
-				{
-					Chapter chap = (Chapter)item.Tag;
-					newChapters[index] = chap;
-					index++;
-				}
-				chapters = newChapters;
-				showChapters(chapters);
-			}
-		}
-
-		private void updateZoneButton_Click(object sender, System.EventArgs e)
-		{
-			if (this.chapterListView.SelectedIndices.Count == 1)
-			{
-				ListViewItem item = chapterListView.SelectedItems[0];
-				Chapter chap = (Chapter)item.Tag;
-				int timecode = Util.getTimeCode(startTime.Text);
-				if (timecode < 0)
-					MessageBox.Show("You must specify a valid timecode in the format hh:mm:ss.ccc", "Incorrect timecode", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-				else
-				{
-					chap.timecode = startTime.Text;
-					chap.name = chapterName.Text;
-					chapters[item.Index] = chap;
-					this.showChapters(chapters);
-				}
-			}
+            if (chapterListView.Items.Count < 1 || pgc.Chapters.Count < 1) return;
+            intIndex = chapterListView.SelectedIndices[0];
+            pgc.Chapters.Remove(pgc.Chapters[intIndex]);
+            if (intIndex != 0) intIndex--;
+            FreshChapterView();
+            updateTimeLine();
 		}
 
 		private void clearZonesButton_Click(object sender, System.EventArgs e)
@@ -438,64 +395,31 @@ namespace MeGUI
                 this.chapterName.Text = pgc.Chapters[intIndex].Name;
             }
 		}
+
 		private void addZoneButton_Click(object sender, System.EventArgs e)
 		{
-			int timecode = Util.getTimeCode(startTime.Text);
-			if (timecode >= 0)
-			{
-				Chapter newChapter = new Chapter();
-				newChapter.timecode = startTime.Text;
-				newChapter.name = chapterName.Text;
-				Chapter[] newChapters = new Chapter[chapters.Length + 1];
-				int index = 0, number = 0;
-				bool interationAborted = false, chapterInserted = false;
-				foreach (Chapter chap in chapters)
-				{
-					int chapTime = Util.getTimeCode(chap.timecode);
-					if (chapTime > timecode) // the new chapter comes before the one we're currently looking at
-					{
-                        if (!chapterInserted)
-                        {
-                            if (newChapter.name.Equals("")) // add a default name just in case
-                            {
-                                number = index + 1;
-                                newChapter.name = "Chapter" + number;
-                            }
-                            newChapters[index] = newChapter;
-                            chapterInserted = true;
-                            index++;
-                            newChapters[index] = chap;
-                        }
-                        else
-                            newChapters[index] = chap;
-					}
-					else if (chapTime < timecode) // new chapter comes at a later point
-						newChapters[index] = chap;
-					else // the two chapters match
-					{
-						MessageBox.Show("The chapter you're trying to add starts at the same point as the\nexisting chapter with name " + chap.name + ".\nYou cannot have two chapters that start at the same time.", 
-							"Duplicate chapter detected", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-						interationAborted = true;
-					}
-					index++;
-				}
-				if (!chapterInserted) // chapter is the last one
-				{
-					if (newChapter.name.Equals(""))
-					{
-						number = index + 1;
-						newChapter.name = "Chapter" + number;
-					}
-					newChapters[index] = newChapter;
-				}
-				if (!interationAborted)
-				{
-					chapters = newChapters;
-					showChapters(newChapters);
-				}
-			}
-			else
-				MessageBox.Show("Cannot parse the timecode you have entered.\nIt must be given in the hh:mm:ss.ccc format", "Incorrect timecode", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+            Chapter c;
+            if (chapterListView.Items.Count != 0)
+                 intIndex = chapterListView.Items.Count;
+            else intIndex = 0;
+            TimeSpan ts = new TimeSpan(0);
+            try
+            {//try to get a valid time input					
+                 ts = TimeSpan.Parse(startTime.Text);
+            }
+            catch (Exception parse)
+            { //invalid time input
+                startTime.Focus();
+                startTime.SelectAll();
+                MessageBox.Show("Cannot parse the timecode you have entered.\nIt must be given in the hh:mm:ss.ccc format"
+                                + Environment.NewLine + parse.Message, "Incorrect timecode", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                return;
+            }
+            //create a new chapter
+            c = new Chapter() { Time = ts, Name = chapterName.Text };
+            pgc.Chapters.Insert(intIndex, c);
+            FreshChapterView();
+            updateTimeLine();
 		}
 		#endregion
 		#region loading / saving files
@@ -535,10 +459,8 @@ namespace MeGUI
 			if (this.saveFileDialog.ShowDialog() == DialogResult.OK)
 			{
                 string ext = Path.GetExtension(saveFileDialog.FileName).ToLower();
-                if (ext == "qpf")
+                if (ext == ".qpf")
                     pgc.SaveQpfile(saveFileDialog.FileName);
-                else if (ext == "txt")
-                    pgc.SaveText(saveFileDialog.FileName);
                 else
                     pgc.SaveText(saveFileDialog.FileName);
 			}
@@ -626,9 +548,10 @@ namespace MeGUI
 
 		private void player_ChapterSet(int frameNumber)
 		{
-			string timeCode = Util.converFrameNumberToTimecode(frameNumber, player.Framerate);
-			startTime.Text = timeCode;
-			chapterName.Text = "";
+            startTime.Text = Util.converFrameNumberToTimecode(frameNumber, player.Framerate);
+            if (chapterListView.Items.Count < 9)
+                 chapterName.Text = "Chapter 0" + Convert.ToString(chapterListView.Items.Count+1);
+            else chapterName.Text = "Chapter " + Convert.ToString(chapterListView.Items.Count+1);
 			addZoneButton_Click(null, null);
 		}
 
@@ -638,25 +561,6 @@ namespace MeGUI
             if (VistaStuff.IsVistaOrNot)
             {
                 VistaStuff.SetWindowTheme(chapterListView.Handle, "explorer", null);
-            }
-        }
-
-        private void chapterName_TextChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                intIndex = chapterListView.SelectedIndices[0];
-                pgc.Chapters[intIndex] = new Chapter()
-                {
-                    Time = TimeSpan.Parse(startTime.Text),
-                    Name = chapterName.Text
-                };
-                chapterListView.SelectedItems[0].SubItems[0].Text = startTime.Text;
-                chapterListView.SelectedItems[0].SubItems[1].Text = chapterName.Text;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
             }
         }
 	}
