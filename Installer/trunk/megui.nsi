@@ -3,7 +3,7 @@
 !define PRODUCT_VERSION "0.3.1.1055"
 !define PRODUCT_WEB_SITE "www.doom9.net"
 !define APPNAMEANDVERSION "MeGUI 0.3.1.1055"
-!define INPUT_PATH "..\..\megui\trunk\dist\bigdist\"
+!define INPUT_PATH "..\..\megui\trunk\dist\BigDist\"
 !define FILE1 "AvisynthWrapper.dll"
 !define FILE2 "Changelog.txt"
 !define FILE3 "gpl.txt"
@@ -33,13 +33,12 @@ Name "${APPNAMEANDVERSION}"
 OutFile "${OUTFILE}"
 SetCompressor /FINAL /SOLID lzma
 
-SetOverwrite ifnewer
 RequestExecutionLevel admin ; needed on Vista/Seven
 SetDatablockOptimize on ; (can be off)
 CRCCheck on ; (can be off)
 AutoCloseWindow false ; (can be true for the window go away automatically at end)
 ShowInstDetails show ; (can be show to have them shown, or nevershow to disable)
-ShowUnInstDetails show ; (can be show to have them shown, or nevershow to disable)
+ShowUnInstDetails nevershow ; (can be show to have them shown, or nevershow to disable)
 SetDateSave off ; (can be on to have files restored to their orginal date)
 
 !insertmacro MUI_PAGE_WELCOME
@@ -190,7 +189,14 @@ Section Uninstall
         DeleteRegKey HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}"
 
         RMDIR /r "$LOCALAPPDATA\${PRODUCT_WEB_SITE}"
-        RMDIR /r "$SMPROGRAMS\${NAME}"
+        Delete /REBOOTOK "$SMPROGRAMS\${NAME}\Changelog.lnk"
+        Delete /REBOOTOK "$SMPROGRAMS\${NAME}\GPL.lnk"
+        Delete /REBOOTOK "$SMPROGRAMS\${NAME}\MeGUI Modern Media Encoder.lnk"
+        Delete /REBOOTOK "$SMPROGRAMS\${NAME}\Tools.lnk"
+        Delete /REBOOTOK "$SMPROGRAMS\${NAME}\Log Files.lnk"
+        Delete /REBOOTOK "$SMPROGRAMS\${NAME}\Auto-Update cache.lnk"
+        Delete /REBOOTOK "$SMPROGRAMS\${NAME}\Uninstall MeGUI.lnk"
+        RMDIR "$SMPROGRAMS\${NAME}"
         RMDIR /r "$INSTDIR"
 
 SectionEnd ; end of uninstall section

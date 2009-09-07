@@ -1,37 +1,47 @@
 @ECHO OFF
 "%WINDIR%\Microsoft.NET\Framework\v3.5\MSBuild.exe" MeGUI.csproj^
  /t:Rebuild /p:Configuration=Release /p:Platform="x86" /v:minimal
-COPY Bin\x86\Release\*.exe . /Y
 
+ECHO.
 REM make dist with everything
 MD Dist\BigDist >NUL 2>&1
-COPY *.exe Dist\BigDist /Y
-COPY lib\*.dll Dist\BigDist /Y
-COPY *.dll Dist\BigDist /Y
-COPY *.txt Dist\BigDist /Y
+ECHO:Copying files...
+
+COPY Bin\x86\Release\AvisynthWrapper.dll Dist\BigDist /V /Y >NUL >NUL
+COPY Changelog.txt Dist\BigDist /V /Y >NUL
+COPY gpl.txt Dist\BigDist /V /Y >NUL
+COPY lib\ICSharpCode.SharpZipLib.dll Dist\BigDist /V /Y >NUL
+COPY lib\LinqBridge.dll Dist\BigDist /V /Y >NUL
+COPY Bin\x86\Release\MediaInfo.dll Dist\BigDist /V /Y >NUL
+COPY lib\MediaInfoWrapper.dll Dist\BigDist /V /Y >NUL
+COPY Bin\x86\Release\MeGUI.exe Dist\BigDist /V /Y >NUL
+COPY lib\MessageBoxExLib.dll Dist\BigDist /V /Y >NUL
 
 REM make minimum distribution for install
 MD Dist\MinDist >NUL 2>&1
-COPY megui.exe Dist\MinDist /Y
-COPY gpl.txt Dist\MinDist /Y
-COPY changelog.txt Dist\MinDist /Y
-COPY lib\MessageBoxExLib.dll Dist\MinDist /Y
-COPY lib\ICSharpCode.SharpZipLib.dll Dist\MinDist /Y
+COPY Changelog.txt Dist\MinDist /V /Y >NUL
+COPY gpl.txt Dist\MinDist /V /Y >NUL
+COPY lib\ICSharpCode.SharpZipLib.dll Dist\MinDist /V /Y >NUL
+COPY Bin\x86\Release\MeGUI.exe Dist\MinDist /V /Y >NUL
+COPY lib\MessageBoxExLib.dll Dist\MinDist /V /Y >NUL
 
 REM also separate distribution into packages
 MD Dist\core >NUL 2>&1
-COPY megui.exe Dist\core /Y
-COPY gpl.txt Dist\core /Y
-COPY changelog.txt Dist\core /Y
+COPY Changelog.txt Dist\core /V /Y >NUL
+COPY gpl.txt Dist\core /V /Y >NUL
+COPY Bin\x86\Release\MeGUI.exe Dist\core /V /Y >NUL
+
 MD Dist\libs >NUL 2>&1
-COPY lib\MessageBoxExLib.dll Dist\libs /Y
-COPY lib\ICSharpCode.SharpZipLib.dll Dist\libs /Y
-COPY MediaInfo.dll Dist\libs /Y
-COPY lib\MediaInfoWrapper.dll Dist\libs /Y
-COPY lib\LinqBridge.dll Dist\libs /Y
+COPY lib\ICSharpCode.SharpZipLib.dll Dist\libs /V /Y >NUL
+COPY lib\LinqBridge.dll Dist\libs /V /Y >NUL
+COPY Bin\x86\Release\MediaInfo.dll Dist\libs /V /Y >NUL
+COPY lib\MediaInfoWrapper.dll Dist\libs /V /Y >NUL
+COPY lib\MessageBoxExLib.dll Dist\libs /V /Y >NUL
+
 MD Dist\avswrapper >NUL 2>&1
-COPY AviSynthWrapper.dll Dist\avswrapper /Y
+COPY Bin\x86\Release\AvisynthWrapper.dll Dist\avswrapper /V /Y >NUL
+
 MD Dist\Data >NUL 2>&1
-COPY Data\*.xml Dist\Data /Y
+COPY Data\ContextHelp.xml Dist\Data /V /Y >NUL
 
 EXIT
