@@ -286,9 +286,9 @@ namespace MeGUI
             // saveFileDialog
             // 
             this.saveFileDialog.DefaultExt = "txt";
-            this.saveFileDialog.Filter = "x264 qp Files (.qpf)|*.qpf|Chapter Files (*.txt)|*.txt|All supported Files (*.qpf" +
-                ";*.txt)|*.qpf;*.txt";
-            this.saveFileDialog.FilterIndex = 3;
+            this.saveFileDialog.Filter = "x264 qp Files (.qpf)|*.qpf|Chapter Files (*.txt)|*.txt|Matroska Chapters files (*" +
+                ".xml)|*.xml|All supported Files (*.qpf;*.txt;*.xml)|*.qpf;*.txt;*.xml";
+            this.saveFileDialog.FilterIndex = 4;
             // 
             // ChapterCreator
             // 
@@ -456,6 +456,8 @@ namespace MeGUI
                 string ext = Path.GetExtension(saveFileDialog.FileName).ToLower();
                 if (ext == ".qpf")
                     pgc.SaveQpfile(saveFileDialog.FileName);
+                else if (ext == ".xml")
+                    pgc.SaveXml(saveFileDialog.FileName);
                 else
                     pgc.SaveText(saveFileDialog.FileName);
 			}

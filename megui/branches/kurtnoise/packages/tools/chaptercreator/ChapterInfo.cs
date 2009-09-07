@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
-//using System.Xml.Linq;
+using System.Xml;
 using System.Windows.Forms;
 
 namespace MeGUI
@@ -146,39 +146,36 @@ namespace MeGUI
               new XAttribute("time", c.Time.ToString()),
               new XAttribute("name", c.Name)))))).Save(filename);
     }
-
+*/
     public void SaveXml(string filename)
     {
-      new XDocument(new XElement("Chapters",
-        new XElement("EditionEntry",
-          new XElement("EditionFlagHidden", "0"),
-          new XElement("EditionFlagDefault", "0"),
-          //new XElement("EditionUID", "1"),
-          Chapters.Select(c =>
-            new XElement("ChapterAtom",
-            new XElement("ChapterDisplay", 
-              new XElement("ChapterString", c.Name),
-              new XElement("ChapterLanguage", LangCode == null ? "und" : LangCode)),
-            new XElement("ChapterTimeStart", c.Time.ToString()),
-            new XElement("ChapterFlagHidden", "0"),
-            new XElement("ChapterFlagEnabled", "1")))
-          ))).Save(filename);
-    
-  //    <Chapters>
-  //<EditionEntry>
-  //  <EditionFlagHidden>0</EditionFlagHidden>
-  //  <EditionFlagDefault>0</EditionFlagDefault>
-  //  <EditionUID>62811788</EditionUID>
-  //  <ChapterAtom>
-  //    <ChapterDisplay>
-  //      <ChapterString>Test1</ChapterString>
-  //      <ChapterLanguage>und</ChapterLanguage>
-  //    </ChapterDisplay>
-  //    <ChapterUID>2401693056</ChapterUID>
-  //    <ChapterTimeStart>00:01:40.000000000</ChapterTimeStart>
-  //    <ChapterFlagHidden>0</ChapterFlagHidden>
-  //    <ChapterFlagEnabled>1</ChapterFlagEnabled>
-  //  </ChapterAtom>
-    }                           */
+        XmlTextWriter xmlchap = new XmlTextWriter(filename, Encoding.UTF8);
+        xmlchap.Formatting = Formatting.Indented;
+        xmlchap.WriteStartDocument();
+        xmlchap.WriteComment("<!DOCTYPE Tags SYSTEM " + "\"" + "matroskatags.dtd" + "\"" + ">");
+        xmlchap.WriteStartElement("Chapters");
+        xmlchap.WriteStartElement("EditionEntry");
+        xmlchap.WriteElementString("EditionFlagHidden", "0");
+        xmlchap.WriteElementString("EditionFlagDefault", "0");
+        foreach (Chapter c in Chapters)
+        {
+            xmlchap.WriteStartElement("ChapterAtom");
+            xmlchap.WriteStartElement("ChapterDisplay");
+            xmlchap.WriteElementString("ChapterString", c.Name);
+            xmlchap.WriteElementString("ChapterLanguage", LangCode == null ? "und" : LangCode);
+            xmlchap.WriteEndElement();
+            if (c.Time.ToString().Length == 8)
+                xmlchap.WriteElementString("ChapterTimeStart", c.Time.ToString() + ".0000000");
+            else
+                xmlchap.WriteElementString("ChapterTimeStart", c.Time.ToString());
+            xmlchap.WriteElementString("ChapterFlagHidden", "0");
+            xmlchap.WriteElementString("ChapterFlagEnabled", "1");
+            xmlchap.WriteEndElement();
+        }
+        xmlchap.WriteEndElement();
+        xmlchap.WriteEndElement();
+        xmlchap.Flush();
+        xmlchap.Close();
+    }                           
   }
 }
