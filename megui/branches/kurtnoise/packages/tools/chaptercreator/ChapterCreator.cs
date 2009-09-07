@@ -109,7 +109,6 @@ namespace MeGUI
 		{
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ChapterCreator));
             this.chaptersGroupbox = new System.Windows.Forms.GroupBox();
-            this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.saveButton = new System.Windows.Forms.Button();
             this.loadButton = new System.Windows.Forms.Button();
             this.chapterName = new System.Windows.Forms.TextBox();
@@ -125,6 +124,7 @@ namespace MeGUI
             this.removeZoneButton = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
+            this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.chaptersGroupbox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -148,16 +148,6 @@ namespace MeGUI
             this.chaptersGroupbox.TabIndex = 23;
             this.chaptersGroupbox.TabStop = false;
             this.chaptersGroupbox.Text = "Chapters";
-            // 
-            // helpButton1
-            // 
-            this.helpButton1.ArticleName = "Chapter creator";
-            this.helpButton1.AutoSize = true;
-            this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.helpButton1.Location = new System.Drawing.Point(16, 347);
-            this.helpButton1.Name = "helpButton1";
-            this.helpButton1.Size = new System.Drawing.Size(38, 23);
-            this.helpButton1.TabIndex = 41;
             // 
             // saveButton
             // 
@@ -184,6 +174,7 @@ namespace MeGUI
             this.chapterName.Size = new System.Drawing.Size(306, 21);
             this.chapterName.TabIndex = 38;
             this.chapterName.Text = "Chapter 01";
+            this.chapterName.TextChanged += new System.EventHandler(this.chapterName_TextChanged);
             // 
             // chapterNameLabel
             // 
@@ -290,6 +281,16 @@ namespace MeGUI
                 ".xml)|*.xml|All supported Files (*.qpf;*.txt;*.xml)|*.qpf;*.txt;*.xml";
             this.saveFileDialog.FilterIndex = 4;
             // 
+            // helpButton1
+            // 
+            this.helpButton1.ArticleName = "Chapter creator";
+            this.helpButton1.AutoSize = true;
+            this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.helpButton1.Location = new System.Drawing.Point(16, 347);
+            this.helpButton1.Name = "helpButton1";
+            this.helpButton1.Size = new System.Drawing.Size(38, 23);
+            this.helpButton1.TabIndex = 41;
+            // 
             // ChapterCreator
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
@@ -381,6 +382,10 @@ namespace MeGUI
 
 		private void chapterListView_SelectedIndexChanged(object sender, System.EventArgs e)
 		{
+            if (chapterListView.Items.Count < 1) return;
+
+            chapterName.TextChanged -= new System.EventHandler(this.chapterName_TextChanged);
+            startTime.TextChanged -= new System.EventHandler(this.chapterName_TextChanged);            
             ListView lv = (ListView)sender;
 
             if (lv.SelectedItems.Count == 1) intIndex = lv.SelectedItems[0].Index;
@@ -389,6 +394,9 @@ namespace MeGUI
                 this.startTime.Text = FileUtil.ToShortString(pgc.Chapters[intIndex].Time);
                 this.chapterName.Text = pgc.Chapters[intIndex].Name;
             }
+
+            chapterName.TextChanged += new System.EventHandler(this.chapterName_TextChanged);
+            startTime.TextChanged += new System.EventHandler(this.chapterName_TextChanged); 
 		}
 
 		private void addZoneButton_Click(object sender, System.EventArgs e)
@@ -558,6 +566,29 @@ namespace MeGUI
             if (VistaStuff.IsVistaOrNot)
             {
                 VistaStuff.SetWindowTheme(chapterListView.Handle, "explorer", null);
+            }
+        }
+
+        private void chapterName_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                intIndex = chapterListView.SelectedIndices[0];
+                pgc.Chapters[intIndex] = new Chapter()
+                {
+                    Time = TimeSpan.Parse(startTime.Text),
+                    Name = chapterName.Text
+                };
+                chapterListView.SelectedItems[0].SubItems[0].Text = startTime.Text;
+                chapterListView.SelectedItems[0].SubItems[1].Text = chapterName.Text;
+            }
+            catch (Exception parse)
+            { //invalid time input
+                startTime.Focus();
+                startTime.SelectAll();
+                MessageBox.Show("Cannot parse the timecode you have entered.\nIt must be given in the hh:mm:ss.ccc format"
+                                + Environment.NewLine + parse.Message, "Incorrect timecode", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                return;
             }
         }
 	}

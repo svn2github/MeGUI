@@ -149,6 +149,7 @@ namespace MeGUI
 */
     public void SaveXml(string filename)
     {
+        Random rndb = new Random();
         XmlTextWriter xmlchap = new XmlTextWriter(filename, Encoding.UTF8);
         xmlchap.Formatting = Formatting.Indented;
         xmlchap.WriteStartDocument();
@@ -157,6 +158,7 @@ namespace MeGUI
         xmlchap.WriteStartElement("EditionEntry");
         xmlchap.WriteElementString("EditionFlagHidden", "0");
         xmlchap.WriteElementString("EditionFlagDefault", "0");
+        xmlchap.WriteElementString("EditionUID", Convert.ToString(rndb.Next(1, Int32.MaxValue)));
         foreach (Chapter c in Chapters)
         {
             xmlchap.WriteStartElement("ChapterAtom");
@@ -164,6 +166,7 @@ namespace MeGUI
             xmlchap.WriteElementString("ChapterString", c.Name);
             xmlchap.WriteElementString("ChapterLanguage", LangCode == null ? "und" : LangCode);
             xmlchap.WriteEndElement();
+            xmlchap.WriteElementString("ChapterUID", Convert.ToString(rndb.Next(1, Int32.MaxValue)));
             if (c.Time.ToString().Length == 8)
                 xmlchap.WriteElementString("ChapterTimeStart", c.Time.ToString() + ".0000000");
             else
