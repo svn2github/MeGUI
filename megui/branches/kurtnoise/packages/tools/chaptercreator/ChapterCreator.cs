@@ -339,11 +339,6 @@ namespace MeGUI
                 //fill list
                 foreach (Chapter c in pgc.Chapters)
                 {
-                    //don't show short last chapter depending on settings
-                      if (pgc.Duration != TimeSpan.Zero && 
-                      c.Equals(pgc.Chapters.Last()) && (pgc.Duration.Add(-c.Time).TotalSeconds < 10))
-                       continue;
-
                     ListViewItem item = new ListViewItem(new string[] { c.Time.ToString(), c.Name });
                     chapterListView.Items.Add(item);
                     if (item.Index % 2 != 0)
