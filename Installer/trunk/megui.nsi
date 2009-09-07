@@ -34,6 +34,7 @@ OutFile "${OUTFILE}"
 SetCompressor /FINAL /SOLID lzma
 
 SetOverwrite ifnewer
+RequestExecutionLevel admin ; needed on Vista/Seven
 SetDatablockOptimize on ; (can be off)
 CRCCheck on ; (can be off)
 AutoCloseWindow false ; (can be true for the window go away automatically at end)
