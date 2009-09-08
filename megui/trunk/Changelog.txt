@@ -1,3 +1,17 @@
+0.3.1.1056
+    - (kurtnoise) [ChapterCreator] - add EditionUID & ChapterUID in the output xml Matroska format.
+
+                                   - enable chapterName_TextChanged event which was removed previously.
+    - (kurtnoise) [ChapterCreator] add Matroska Chapters xml file as output format.
+    - (kurtnoise) [ChapterCreator] fix issue #2845174.
+    - (kurtnoise) update batch files. Patch by XhmikosR
+    - (kurtnoise) [ChapterCreator] fix issues with Preview, Add & Remove buttons events (#2848657)
+    - (kurtnoise) update MediaInfo library and its wrapper to the latest release (0.7.21)
+    - (kurtnoise) [AudioEncoderInterface] readjust LAME quality scaling to match the documentation.
+    - (kurtnoise) [AVSCreator] add vobsub files support in Subtitle Filtering.
+    - (kurtnoise) [x264Config] remove duplicate code about CABAC.
+
+
 0.3.1.1055
     - (kurtnoise) [ChapterCreator] fix issue #2814357.
     - (kurtnoise) [ProgressWindow] change tabIndex values from textboxes.
