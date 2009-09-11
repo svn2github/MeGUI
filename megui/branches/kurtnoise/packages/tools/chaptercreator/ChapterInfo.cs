@@ -29,7 +29,12 @@ namespace MeGUI
 
     public override string ToString()
     {
-      return string.Format("{0}, {1}, {2} chapter(s)", SourceName, Duration.ToString(), Chapters.Count);
+        if (Chapters.Count == 0)
+            return string.Empty;
+        else if (Chapters.Count > 1)
+            return string.Format("{0}  -  {1}  -  [{2} Chapters]", SourceName, Duration.ToString(), Chapters.Count);
+        else
+            return string.Format("{0}  -  {1}  -  [{2} Chapter]", SourceName, Duration.ToString(), Chapters.Count);
     }
 
     public void ChangeFps(double fps)

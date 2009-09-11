@@ -44,6 +44,7 @@ namespace MeGUI
         #region start/stop
 		MainForm mainForm;
         AVCLevels al;
+        string mbtreeFile = ".stats.mbtree";
 		public JobUtil(MainForm mainForm)
 		{
 			this.mainForm = mainForm;
@@ -73,6 +74,8 @@ namespace MeGUI
 			
 			if (Path.GetDirectoryName(settings.Logfile).Equals("")) // no path set
 				settings.Logfile = Path.ChangeExtension(output, ".stats");
+            if (settings.SettingsID.Equals("x264"))
+                mbtreeFile = Path.ChangeExtension(output, ".stats.mbtree");
 			if (job.Settings.EncodingMode == 4) // automated 2 pass, change type to 2 pass 2nd pass
 			{
 				job.Settings.EncodingMode = 3;
@@ -347,7 +350,9 @@ namespace MeGUI
 			{
 				if (twoPasses || threePasses) // we just created the last pass, now create previous one(s)
 				{
-					job.FilesToDelete.Add(job.Settings.Logfile);
+                    job.FilesToDelete.Add(job.Settings.Logfile);
+                    if (settings.SettingsID.Equals("x264"))
+                        job.FilesToDelete.Add(mbtreeFile);
                     firstpass = cloneJob(job);
 					firstpass.Output = "NUL"; // the first pass has no output
                     if (settings.SettingsID.Equals("DivX264"))

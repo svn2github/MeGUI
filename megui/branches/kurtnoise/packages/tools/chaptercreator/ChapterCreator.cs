@@ -54,15 +54,20 @@ namespace MeGUI
 		private System.Windows.Forms.ColumnHeader timecodeColumn;
 		private System.Windows.Forms.ColumnHeader nameColumn;
 		private System.Windows.Forms.Label startTimeLabel;
-		private System.Windows.Forms.Label chapterNameLabel;
-		private System.Windows.Forms.Button loadButton;
-		private System.Windows.Forms.Button saveButton;
+        private System.Windows.Forms.Label chapterNameLabel;
 		private System.Windows.Forms.TextBox startTime;
 		private System.Windows.Forms.TextBox chapterName;
 		private System.Windows.Forms.ListView chapterListView;
 		private System.Windows.Forms.OpenFileDialog openFileDialog;
-		private System.Windows.Forms.SaveFileDialog saveFileDialog;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog;
+        private GroupBox gbInput;
+        private RadioButton rbFromFile;
+        private RadioButton rbFromDisk;
+        private Button btInput;
+        private TextBox input;
+        private Button saveButton;
         private MeGUI.core.gui.HelpButton helpButton1;
+        private CheckBox closeOnQueue;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -109,8 +114,6 @@ namespace MeGUI
 		{
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ChapterCreator));
             this.chaptersGroupbox = new System.Windows.Forms.GroupBox();
-            this.saveButton = new System.Windows.Forms.Button();
-            this.loadButton = new System.Windows.Forms.Button();
             this.chapterName = new System.Windows.Forms.TextBox();
             this.chapterNameLabel = new System.Windows.Forms.Label();
             this.chapterListView = new System.Windows.Forms.ListView();
@@ -124,15 +127,20 @@ namespace MeGUI
             this.removeZoneButton = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
+            this.gbInput = new System.Windows.Forms.GroupBox();
+            this.btInput = new System.Windows.Forms.Button();
+            this.input = new System.Windows.Forms.TextBox();
+            this.rbFromFile = new System.Windows.Forms.RadioButton();
+            this.rbFromDisk = new System.Windows.Forms.RadioButton();
+            this.saveButton = new System.Windows.Forms.Button();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
+            this.closeOnQueue = new System.Windows.Forms.CheckBox();
             this.chaptersGroupbox.SuspendLayout();
+            this.gbInput.SuspendLayout();
             this.SuspendLayout();
             // 
             // chaptersGroupbox
             // 
-            this.chaptersGroupbox.Controls.Add(this.helpButton1);
-            this.chaptersGroupbox.Controls.Add(this.saveButton);
-            this.chaptersGroupbox.Controls.Add(this.loadButton);
             this.chaptersGroupbox.Controls.Add(this.chapterName);
             this.chaptersGroupbox.Controls.Add(this.chapterNameLabel);
             this.chaptersGroupbox.Controls.Add(this.chapterListView);
@@ -142,30 +150,12 @@ namespace MeGUI
             this.chaptersGroupbox.Controls.Add(this.clearZonesButton);
             this.chaptersGroupbox.Controls.Add(this.showVideoButton);
             this.chaptersGroupbox.Controls.Add(this.removeZoneButton);
-            this.chaptersGroupbox.Location = new System.Drawing.Point(8, 8);
+            this.chaptersGroupbox.Location = new System.Drawing.Point(4, 86);
             this.chaptersGroupbox.Name = "chaptersGroupbox";
-            this.chaptersGroupbox.Size = new System.Drawing.Size(458, 376);
+            this.chaptersGroupbox.Size = new System.Drawing.Size(458, 336);
             this.chaptersGroupbox.TabIndex = 23;
             this.chaptersGroupbox.TabStop = false;
             this.chaptersGroupbox.Text = "Chapters";
-            // 
-            // saveButton
-            // 
-            this.saveButton.Location = new System.Drawing.Point(392, 347);
-            this.saveButton.Name = "saveButton";
-            this.saveButton.Size = new System.Drawing.Size(55, 23);
-            this.saveButton.TabIndex = 40;
-            this.saveButton.Text = "&Save";
-            this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
-            // 
-            // loadButton
-            // 
-            this.loadButton.Location = new System.Drawing.Point(329, 347);
-            this.loadButton.Name = "loadButton";
-            this.loadButton.Size = new System.Drawing.Size(55, 23);
-            this.loadButton.TabIndex = 39;
-            this.loadButton.Text = "&Load";
-            this.loadButton.Click += new System.EventHandler(this.loadButton_Click);
             // 
             // chapterName
             // 
@@ -281,20 +271,96 @@ namespace MeGUI
                 ".xml)|*.xml|All supported Files (*.qpf;*.txt;*.xml)|*.qpf;*.txt;*.xml";
             this.saveFileDialog.FilterIndex = 4;
             // 
+            // gbInput
+            // 
+            this.gbInput.Controls.Add(this.btInput);
+            this.gbInput.Controls.Add(this.input);
+            this.gbInput.Controls.Add(this.rbFromFile);
+            this.gbInput.Controls.Add(this.rbFromDisk);
+            this.gbInput.Location = new System.Drawing.Point(4, 4);
+            this.gbInput.Name = "gbInput";
+            this.gbInput.Size = new System.Drawing.Size(458, 76);
+            this.gbInput.TabIndex = 24;
+            this.gbInput.TabStop = false;
+            this.gbInput.Text = "Input";
+            // 
+            // btInput
+            // 
+            this.btInput.Location = new System.Drawing.Point(392, 20);
+            this.btInput.Name = "btInput";
+            this.btInput.Size = new System.Drawing.Size(55, 23);
+            this.btInput.TabIndex = 10;
+            this.btInput.Text = "...";
+            this.btInput.UseVisualStyleBackColor = true;
+            this.btInput.Click += new System.EventHandler(this.btInput_Click);
+            // 
+            // input
+            // 
+            this.input.Location = new System.Drawing.Point(18, 20);
+            this.input.Name = "input";
+            this.input.ReadOnly = true;
+            this.input.Size = new System.Drawing.Size(363, 21);
+            this.input.TabIndex = 9;
+            // 
+            // rbFromFile
+            // 
+            this.rbFromFile.AutoSize = true;
+            this.rbFromFile.Checked = true;
+            this.rbFromFile.Location = new System.Drawing.Point(124, 45);
+            this.rbFromFile.Name = "rbFromFile";
+            this.rbFromFile.Size = new System.Drawing.Size(68, 17);
+            this.rbFromFile.TabIndex = 8;
+            this.rbFromFile.TabStop = true;
+            this.rbFromFile.Text = "From File";
+            this.rbFromFile.UseVisualStyleBackColor = true;
+            // 
+            // rbFromDisk
+            // 
+            this.rbFromDisk.AutoSize = true;
+            this.rbFromDisk.Location = new System.Drawing.Point(25, 45);
+            this.rbFromDisk.Name = "rbFromDisk";
+            this.rbFromDisk.Size = new System.Drawing.Size(71, 17);
+            this.rbFromDisk.TabIndex = 7;
+            this.rbFromDisk.Text = "From Disk";
+            this.rbFromDisk.UseVisualStyleBackColor = true;
+            // 
+            // saveButton
+            // 
+            this.saveButton.Location = new System.Drawing.Point(396, 428);
+            this.saveButton.Name = "saveButton";
+            this.saveButton.Size = new System.Drawing.Size(55, 23);
+            this.saveButton.TabIndex = 41;
+            this.saveButton.Text = "&Save";
+            this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
+            // 
             // helpButton1
             // 
             this.helpButton1.ArticleName = "Chapter creator";
             this.helpButton1.AutoSize = true;
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.helpButton1.Location = new System.Drawing.Point(16, 347);
+            this.helpButton1.Location = new System.Drawing.Point(12, 428);
             this.helpButton1.Name = "helpButton1";
             this.helpButton1.Size = new System.Drawing.Size(38, 23);
-            this.helpButton1.TabIndex = 41;
+            this.helpButton1.TabIndex = 42;
+            // 
+            // closeOnQueue
+            // 
+            this.closeOnQueue.Checked = true;
+            this.closeOnQueue.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.closeOnQueue.Location = new System.Drawing.Point(313, 428);
+            this.closeOnQueue.Name = "closeOnQueue";
+            this.closeOnQueue.Size = new System.Drawing.Size(72, 24);
+            this.closeOnQueue.TabIndex = 43;
+            this.closeOnQueue.Text = "and close";
             // 
             // ChapterCreator
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
-            this.ClientSize = new System.Drawing.Size(474, 392);
+            this.ClientSize = new System.Drawing.Size(468, 458);
+            this.Controls.Add(this.closeOnQueue);
+            this.Controls.Add(this.helpButton1);
+            this.Controls.Add(this.saveButton);
+            this.Controls.Add(this.gbInput);
             this.Controls.Add(this.chaptersGroupbox);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -307,7 +373,10 @@ namespace MeGUI
             this.Load += new System.EventHandler(this.ChapterCreator_Load);
             this.chaptersGroupbox.ResumeLayout(false);
             this.chaptersGroupbox.PerformLayout();
+            this.gbInput.ResumeLayout(false);
+            this.gbInput.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
 		}
 		#endregion
@@ -426,36 +495,6 @@ namespace MeGUI
 		}
 		#endregion
 		#region loading / saving files
-		private void loadButton_Click(object sender, System.EventArgs e)
-		{
-            if (this.openFileDialog.ShowDialog() == DialogResult.OK)
-			{
-                if (openFileDialog.FileName.ToLower().EndsWith("ifo"))
-                {
-                    ChapterExtractor ex = new IfoExtractor();
-                    pgc = ex.GetStreams(openFileDialog.FileName)[0];
-                    FreshChapterView();
-                    updateTimeLine();
-                }
-                else if (openFileDialog.FileName.ToLower().EndsWith("mpls"))
-                {
-                    ChapterExtractor ex = new MplsExtractor();
-                    pgc = ex.GetStreams(openFileDialog.FileName)[0];
-                    FreshChapterView();
-                    updateTimeLine();
-                }
-                else
-                {
-                    ChapterExtractor ex = new TextExtractor();
-                    pgc = ex.GetStreams(openFileDialog.FileName)[0];
-                    FreshChapterView();
-                    updateTimeLine();
-                }
-			}
-
-            if (chapterListView.Items.Count != 0)
-                chapterListView.Items[0].Selected = true;
-		}
 
 		private void saveButton_Click(object sender, System.EventArgs e)
 		{
@@ -469,6 +508,9 @@ namespace MeGUI
                 else
                     pgc.SaveText(saveFileDialog.FileName);
 			}
+
+            if (this.closeOnQueue.Checked)
+                this.Close();
 		}
 		#endregion
 
@@ -590,6 +632,92 @@ namespace MeGUI
                                 + Environment.NewLine + parse.Message, "Incorrect timecode", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return;
             }
+        }
+
+        private void btInput_Click(object sender, EventArgs e)
+        {
+            if (rbFromFile.Checked)
+            {
+                openFileDialog.Filter = "IFO Files (*.ifo)|*.ifo|MPLS Files (*.mpls)|*.mpls|Text Files (*.txt)|*.txt|All Files supported (*.ifo,*.mpls,*.txt)|*.ifo;*.mpls;*.txt";
+                openFileDialog.FilterIndex = 4;
+
+                if (this.openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    input.Text = openFileDialog.FileName;
+
+                    if (input.Text.ToLower().EndsWith("ifo"))
+                    {
+                        ChapterExtractor ex = new IfoExtractor();
+                        pgc = ex.GetStreams(input.Text)[0];
+                        FreshChapterView();
+                        updateTimeLine();
+                    }
+                    else if (input.Text.ToLower().EndsWith("mpls"))
+                    {
+                        ChapterExtractor ex = new MplsExtractor();
+                        pgc = ex.GetStreams(input.Text)[0];
+                        FreshChapterView();
+                        updateTimeLine();
+                    }
+                    else
+                    {
+                        ChapterExtractor ex = new TextExtractor();
+                        pgc = ex.GetStreams(input.Text)[0];
+                        FreshChapterView();
+                        updateTimeLine();
+                    }
+                }
+            }
+            else
+            {
+                using (FolderBrowserDialog d = new FolderBrowserDialog())
+                {
+                    d.ShowNewFolderButton = false;
+                    d.Description = "Select DVD, BluRay disc, or folder.";
+                    if (d.ShowDialog() == DialogResult.OK)
+                    {
+                        input.Text = d.SelectedPath;                       
+                        try
+                        {
+                            ChapterExtractor ex =
+                              Directory.Exists(Path.Combine(input.Text, "VIDEO_TS")) ?
+                              new DvdExtractor() as ChapterExtractor :
+                              Directory.Exists(Path.Combine(Path.Combine(input.Text, "BDMV"), "PLAYLIST")) ?
+                              new BlurayExtractor() as ChapterExtractor :
+                              null;
+
+                            if (ex == null)
+                                throw new Exception("The location was not detected as DVD, or Blu-Ray.");
+
+
+                            using (frmStreamSelect frm = new frmStreamSelect(ex))
+                            {
+                                if (ex is DvdExtractor)
+                                    frm.Text = "Select your PGC";
+                                else
+                                    frm.Text = "Select your Playlist";
+                                ex.GetStreams(input.Text);
+                                if (frm.ShowDialog(this) == DialogResult.OK)
+                                {
+                                    pgc = frm.ProgramChain;
+                                    if (pgc.FramesPerSecond == 0) pgc.FramesPerSecond = 25.0;
+                                    if (pgc.LangCode == null) pgc.LangCode = "und";
+                                }
+                            }
+                            FreshChapterView();
+                            updateTimeLine();
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message);
+                        }
+                    }
+                }
+            }
+
+
+            if (chapterListView.Items.Count != 0)
+                chapterListView.Items[0].Selected = true;
         }
 	}
 	public struct Chapter

@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{12D5215B-0254-4616-A53C-C8B7B6A2C8E9}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -681,6 +681,13 @@
     </Compile>
     <Compile Include="packages\tools\chaptercreator\ChapterExtractor.cs" />
     <Compile Include="packages\tools\chaptercreator\ChapterInfo.cs" />
+    <Compile Include="packages\tools\chaptercreator\DvdExtractor.cs" />
+    <Compile Include="packages\tools\chaptercreator\frmStreamSelect.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="packages\tools\chaptercreator\frmStreamSelect.designer.cs">
+      <DependentUpon>frmStreamSelect.cs</DependentUpon>
+    </Compile>
     <Compile Include="packages\tools\chaptercreator\IfoExtractor.cs" />
     <Compile Include="packages\tools\chaptercreator\MplsExtractor.cs" />
     <Compile Include="packages\tools\chaptercreator\TextExtractor.cs" />
@@ -1003,6 +1010,10 @@
       <DependentUpon>ChapterCreator.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="packages\tools\chaptercreator\frmStreamSelect.resx">
+      <DependentUpon>frmStreamSelect.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="packages\tools\cqmeditor\QuantizerMatrixDialog.resx">
       <DependentUpon>QuantizerMatrixDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -1049,6 +1060,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="packages\video\divxavc\DivXAVCConfigurationPanel.resx">
       <DependentUpon>DivXAVCConfigurationPanel.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="packages\video\snow\snowConfigurationPanel.resx">
       <SubType>Designer</SubType>

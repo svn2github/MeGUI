@@ -144,6 +144,8 @@ namespace MeGUI
         private CheckBox dss2;
         private Label label8;
         private ComboBox cbCharset;
+        private ComboBox cbLang;
+        private Label lbLang;
 
 		/// <summary>
 		/// Required designer variable.
@@ -285,12 +287,8 @@ namespace MeGUI
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.optionsTab = new System.Windows.Forms.TabPage();
             this.gbOutput = new System.Windows.Forms.GroupBox();
-            this.videoOutput = new MeGUI.FileBar();
             this.label7 = new System.Windows.Forms.Label();
             this.videoGroupBox = new System.Windows.Forms.GroupBox();
-            this.input = new MeGUI.FileBar();
-            this.avsProfile = new MeGUI.core.gui.ConfigableProfilesControl();
-            this.arChooser = new MeGUI.core.gui.ARChooser();
             this.reopenOriginal = new System.Windows.Forms.Button();
             this.mod16Box = new System.Windows.Forms.ComboBox();
             this.signalAR = new System.Windows.Forms.CheckBox();
@@ -323,6 +321,8 @@ namespace MeGUI
             this.deinterlace = new System.Windows.Forms.CheckBox();
             this.deinterlaceType = new System.Windows.Forms.ComboBox();
             this.filtersGroupbox = new System.Windows.Forms.GroupBox();
+            this.cbLang = new System.Windows.Forms.ComboBox();
+            this.lbLang = new System.Windows.Forms.Label();
             this.cbCharset = new System.Windows.Forms.ComboBox();
             this.label8 = new System.Windows.Forms.Label();
             this.openSubtitlesButton = new System.Windows.Forms.Button();
@@ -347,6 +347,10 @@ namespace MeGUI
             this.saveButton = new System.Windows.Forms.Button();
             this.previewAvsButton = new System.Windows.Forms.Button();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
+            this.videoOutput = new MeGUI.FileBar();
+            this.input = new MeGUI.FileBar();
+            this.avsProfile = new MeGUI.core.gui.ConfigableProfilesControl();
+            this.arChooser = new MeGUI.core.gui.ARChooser();
             label2 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
             label4 = new System.Windows.Forms.Label();
@@ -649,22 +653,6 @@ namespace MeGUI
             this.gbOutput.TabStop = false;
             this.gbOutput.Text = "Output";
             // 
-            // videoOutput
-            // 
-            this.videoOutput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.videoOutput.Filename = "";
-            this.videoOutput.Filter = "AVI Synth Scripts|*.avs";
-            this.videoOutput.FilterIndex = 0;
-            this.videoOutput.FolderMode = false;
-            this.videoOutput.Location = new System.Drawing.Point(96, 17);
-            this.videoOutput.Name = "videoOutput";
-            this.videoOutput.ReadOnly = true;
-            this.videoOutput.SaveMode = true;
-            this.videoOutput.Size = new System.Drawing.Size(348, 26);
-            this.videoOutput.TabIndex = 7;
-            this.videoOutput.Title = null;
-            // 
             // label7
             // 
             this.label7.Location = new System.Drawing.Point(8, 24);
@@ -693,48 +681,6 @@ namespace MeGUI
             this.videoGroupBox.TabIndex = 5;
             this.videoGroupBox.TabStop = false;
             this.videoGroupBox.Text = "Input";
-            // 
-            // input
-            // 
-            this.input.AllowDrop = true;
-            this.input.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.input.Filename = "";
-            this.input.Filter = resources.GetString("input.Filter");
-            this.input.FilterIndex = 6;
-            this.input.FolderMode = false;
-            this.input.Location = new System.Drawing.Point(77, 15);
-            this.input.Name = "input";
-            this.input.ReadOnly = true;
-            this.input.SaveMode = false;
-            this.input.Size = new System.Drawing.Size(367, 26);
-            this.input.TabIndex = 1;
-            this.input.Title = "Select a source file";
-            this.input.FileSelected += new MeGUI.FileBarEventHandler(this.input_FileSelected);
-            // 
-            // avsProfile
-            // 
-            this.avsProfile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.avsProfile.Location = new System.Drawing.Point(96, 147);
-            this.avsProfile.Name = "avsProfile";
-            this.avsProfile.ProfileSet = "AviSynth";
-            this.avsProfile.Size = new System.Drawing.Size(348, 22);
-            this.avsProfile.TabIndex = 22;
-            this.avsProfile.SelectedProfileChanged += new System.EventHandler(this.ProfileChanged);
-            // 
-            // arChooser
-            // 
-            this.arChooser.CustomDARs = new MeGUI.core.util.Dar[0];
-            this.arChooser.HasLater = false;
-            this.arChooser.Location = new System.Drawing.Point(96, 76);
-            this.arChooser.MaximumSize = new System.Drawing.Size(1000, 29);
-            this.arChooser.MinimumSize = new System.Drawing.Size(64, 29);
-            this.arChooser.Name = "arChooser";
-            this.arChooser.SelectedIndex = 0;
-            this.arChooser.Size = new System.Drawing.Size(214, 29);
-            this.arChooser.TabIndex = 21;
-            this.arChooser.SelectionChanged += new MeGUI.StringChanged(this.arChooser_SelectionChanged);
             // 
             // reopenOriginal
             // 
@@ -1110,6 +1056,8 @@ namespace MeGUI
             // 
             this.filtersGroupbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.filtersGroupbox.Controls.Add(this.cbLang);
+            this.filtersGroupbox.Controls.Add(this.lbLang);
             this.filtersGroupbox.Controls.Add(this.cbCharset);
             this.filtersGroupbox.Controls.Add(this.label8);
             this.filtersGroupbox.Controls.Add(this.openSubtitlesButton);
@@ -1126,6 +1074,28 @@ namespace MeGUI
             this.filtersGroupbox.TabIndex = 9;
             this.filtersGroupbox.TabStop = false;
             this.filtersGroupbox.Text = "Filters";
+            // 
+            // cbLang
+            // 
+            this.cbLang.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbLang.Enabled = false;
+            this.cbLang.FormattingEnabled = true;
+            this.cbLang.Location = new System.Drawing.Point(277, 108);
+            this.cbLang.Name = "cbLang";
+            this.cbLang.Size = new System.Drawing.Size(133, 21);
+            this.cbLang.TabIndex = 13;
+            this.cbLang.SelectedIndexChanged += new System.EventHandler(this.cbLang_SelectedIndexChanged);
+            this.cbLang.Leave += new System.EventHandler(this.cbLang_Leave);
+            // 
+            // lbLang
+            // 
+            this.lbLang.AutoSize = true;
+            this.lbLang.Enabled = false;
+            this.lbLang.Location = new System.Drawing.Point(233, 110);
+            this.lbLang.Name = "lbLang";
+            this.lbLang.Size = new System.Drawing.Size(34, 13);
+            this.lbLang.TabIndex = 12;
+            this.lbLang.Text = "Lang:";
             // 
             // cbCharset
             // 
@@ -1152,7 +1122,7 @@ namespace MeGUI
             "Russian",
             "Mac",
             "Baltic"});
-            this.cbCharset.Location = new System.Drawing.Point(151, 108);
+            this.cbCharset.Location = new System.Drawing.Point(97, 107);
             this.cbCharset.Name = "cbCharset";
             this.cbCharset.Size = new System.Drawing.Size(121, 21);
             this.cbCharset.TabIndex = 11;
@@ -1161,7 +1131,7 @@ namespace MeGUI
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(96, 111);
+            this.label8.Location = new System.Drawing.Point(9, 110);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(49, 13);
             this.label8.TabIndex = 10;
@@ -1373,6 +1343,64 @@ namespace MeGUI
             this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 17;
             // 
+            // videoOutput
+            // 
+            this.videoOutput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.videoOutput.Filename = "";
+            this.videoOutput.Filter = "AVI Synth Scripts|*.avs";
+            this.videoOutput.FilterIndex = 0;
+            this.videoOutput.FolderMode = false;
+            this.videoOutput.Location = new System.Drawing.Point(96, 17);
+            this.videoOutput.Name = "videoOutput";
+            this.videoOutput.ReadOnly = true;
+            this.videoOutput.SaveMode = true;
+            this.videoOutput.Size = new System.Drawing.Size(348, 26);
+            this.videoOutput.TabIndex = 7;
+            this.videoOutput.Title = null;
+            // 
+            // input
+            // 
+            this.input.AllowDrop = true;
+            this.input.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.input.Filename = "";
+            this.input.Filter = resources.GetString("input.Filter");
+            this.input.FilterIndex = 6;
+            this.input.FolderMode = false;
+            this.input.Location = new System.Drawing.Point(77, 15);
+            this.input.Name = "input";
+            this.input.ReadOnly = true;
+            this.input.SaveMode = false;
+            this.input.Size = new System.Drawing.Size(367, 26);
+            this.input.TabIndex = 1;
+            this.input.Title = "Select a source file";
+            this.input.FileSelected += new MeGUI.FileBarEventHandler(this.input_FileSelected);
+            // 
+            // avsProfile
+            // 
+            this.avsProfile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.avsProfile.Location = new System.Drawing.Point(96, 147);
+            this.avsProfile.Name = "avsProfile";
+            this.avsProfile.ProfileSet = "AviSynth";
+            this.avsProfile.Size = new System.Drawing.Size(348, 22);
+            this.avsProfile.TabIndex = 22;
+            this.avsProfile.SelectedProfileChanged += new System.EventHandler(this.ProfileChanged);
+            // 
+            // arChooser
+            // 
+            this.arChooser.CustomDARs = new MeGUI.core.util.Dar[0];
+            this.arChooser.HasLater = false;
+            this.arChooser.Location = new System.Drawing.Point(96, 76);
+            this.arChooser.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.arChooser.MinimumSize = new System.Drawing.Size(64, 29);
+            this.arChooser.Name = "arChooser";
+            this.arChooser.SelectedIndex = 0;
+            this.arChooser.Size = new System.Drawing.Size(214, 29);
+            this.arChooser.TabIndex = 21;
+            this.arChooser.SelectionChanged += new MeGUI.StringChanged(this.arChooser_SelectionChanged);
+            // 
             // AviSynthWindow
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
@@ -1526,7 +1554,11 @@ namespace MeGUI
                     newScript += "\r\nTextSub(\"" + SubtitlesPath.Text + "\"" + ", " + charset + ")\r\n";
                 }
                 else
+                {
+                    if (File.Exists(Path.GetDirectoryName(SubtitlesPath.Text)+Path.GetFileNameWithoutExtension(SubtitlesPath.Text) + "-backup.idx"))
+                        SubtitlesPath.Text = Path.GetDirectoryName(SubtitlesPath.Text)+Path.GetFileNameWithoutExtension(SubtitlesPath.Text) + "-backup.idx";
                     newScript += "\r\nVobSub(\"" + SubtitlesPath.Text + "\")\r\n";
+                }
             }
             return newScript;
 		}
@@ -2399,10 +2431,20 @@ namespace MeGUI
             {
                 if (this.SubtitlesPath.Text != openSubsDialog.FileName)
                 {
-                    string ext = Path.GetExtension(openSubsDialog.FileName).ToString().ToLower();
                     this.SubtitlesPath.Text = openSubsDialog.FileName;
-                    if (ext == ".idx")
+                    if (this.SubtitlesPath.Text.ToLower().EndsWith(".idx"))
+                    {
                         cbCharset.Enabled = false;
+                        lbLang.Enabled = true;
+                        cbLang.Enabled = true;
+                        List<SubtitleInfo> subTracks;
+                        idxReader.readFileProperties(this.SubtitlesPath.Text, out subTracks);
+                        foreach (SubtitleInfo strack in subTracks)
+                        {
+                            cbLang.Items.Add(LanguageSelectionContainer.Short2FullLanguageName(strack.Name));
+                        }
+                        cbLang.SelectedIndex = idxReader.defaultLangIdx(this.SubtitlesPath.Text);
+                    }
                     MessageBox.Show("Subtitles successfully added to the script...", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else MessageBox.Show("The subtitles you chosen was already added...", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -2443,9 +2485,74 @@ namespace MeGUI
             return c;
         }
 
+        private void overrideDefaultLngIndex(string idxFile, int index)
+        {
+            StringBuilder result = new StringBuilder();
+
+            if (File.Exists(idxFile))
+            {
+                FileStream inputFile = new FileStream(idxFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                FileStream outputFile = new FileStream(Path.Combine(Path.GetDirectoryName(idxFile) ,Path.GetFileNameWithoutExtension(idxFile)+"-backup.idx"),  FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
+               // StreamWriter wr = new StreamWriter(outputFile);
+
+                try
+                {
+                   /* using (StreamReader sr = new StreamReader(inputFile))
+                    {
+                        string line = sr.ReadLine();
+                        string newLine = string.Empty;
+                        while (line != null)
+                        {
+                            line = sr.ReadLine();
+                            if (line != null)
+                            {
+                                if (line.StartsWith("langidx:"))
+                                {
+                                    newLine = newLine.Replace(line, "langidx: " + Convert.ToInt32(index));
+                                    result.Append(newLine);
+                                }
+                            }
+                        }
+                    }*/
+
+                    TextReader reader = new StreamReader(inputFile);
+                    TextWriter writer = new StreamWriter(outputFile);
+                    for (; ; )
+                    {
+                        string s = reader.ReadLine();
+                        if (s == null)
+                            break;
+                        if (s.StartsWith("langidx:"))
+                            s = s.Replace(s, "langidx: " + Convert.ToInt32(index));
+                        writer.WriteLine(s);
+                    }
+                    writer.Flush();
+                    writer.Close();
+                    reader.Close();
+                    
+                }
+                catch (Exception i)
+                {
+                    MessageBox.Show("The following error ocurred when parsing the idx file " + idxFile + "\r\n" + i.Message, "Error parsing idx file", MessageBoxButtons.OK);
+                }
+            }
+        }
+
         private void cbCharset_SelectedIndexChanged(object sender, EventArgs e)
         {
             this.showScript();
+        }
+
+        private void cbLang_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //overrideDefaultLngIndex(this.SubtitlesPath.Text, cbLang.SelectedIndex);
+        }
+
+        private void cbLang_Leave(object sender, EventArgs e)
+        {
+            overrideDefaultLngIndex(this.SubtitlesPath.Text, cbLang.SelectedIndex);
+ //           if (File.Exists(SubtitlesPath.Text+".backup"))
+   //             File.Move(SubtitlesPath.Text+".backup", SubtitlesPath.Text);
         }
     }
     public delegate void OpenScriptCallback(string avisynthScript);

@@ -13,4 +13,4 @@ What are the main differences within the megui trunk ?
    - DivX264 encoder.
    - Zones refactoring.
    - M2TS muxer.
-
+   - Read Chapters from Disks.

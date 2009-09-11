@@ -49,7 +49,7 @@ namespace MeGUI
             fileInfo.Name, fileType));
       }
 
-      Debug.WriteLine(string.Format("\tFileType: {0}", fileType));
+  //    Debug.WriteLine(string.Format("\tFileType: {0}", fileType));
 
       List<Clip> chapterClips = GetClips(data);
       pgc.Duration = new TimeSpan((long)(chapterClips.Sum(c => c.Length) * (double)TimeSpan.TicksPerSecond));
@@ -93,7 +93,7 @@ namespace MeGUI
           chapters.Add(new Chapter()
           {
               Name = "Chapter " + (chapterIndex + 1).ToString("D2"),//string.Empty,
-            Time = new TimeSpan((long)(relativeSeconds * (double)TimeSpan.TicksPerSecond))
+              Time = new TimeSpan((long)(relativeSeconds * (double)TimeSpan.TicksPerSecond))
           });
         }
         chapterOffset += 14;
@@ -135,7 +135,7 @@ namespace MeGUI
       int streamFileOffset = 6;
       for (int streamFileIndex = 0; streamFileIndex < streamFileCount; streamFileIndex++)
       {
-        byte condition = (byte)(playlistData[streamFileOffset + 12] & 0xF);
+          byte condition = (byte)(playlistData[streamFileOffset + 12] & 0xF);
 
         ulong timeIn =
             ((ulong)playlistData[streamFileOffset + 14] << 24) +
