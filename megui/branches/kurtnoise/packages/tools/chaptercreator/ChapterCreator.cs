@@ -237,7 +237,6 @@ namespace MeGUI
             // 
             // showVideoButton
             // 
-            this.showVideoButton.AutoSize = true;
             this.showVideoButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.showVideoButton.Enabled = false;
             this.showVideoButton.Location = new System.Drawing.Point(392, 111);
@@ -501,12 +500,19 @@ namespace MeGUI
 			if (this.saveFileDialog.ShowDialog() == DialogResult.OK)
 			{
                 string ext = Path.GetExtension(saveFileDialog.FileName).ToLower();
-                if (ext == ".qpf")
-                    pgc.SaveQpfile(saveFileDialog.FileName);
-                else if (ext == ".xml")
-                    pgc.SaveXml(saveFileDialog.FileName);
+                if (Drives.ableToWriteOnThisDrive(Path.GetPathRoot(saveFileDialog.FileName)))
+                {
+                    if (ext == ".qpf")
+                        pgc.SaveQpfile(saveFileDialog.FileName);
+                    else if (ext == ".xml")
+                        pgc.SaveXml(saveFileDialog.FileName);
+                    else
+                        pgc.SaveText(saveFileDialog.FileName);
+                }
                 else
-                    pgc.SaveText(saveFileDialog.FileName);
+                    MessageBox.Show("MeGUI cannot write on the disc " + Path.GetPathRoot(saveFileDialog.FileName) + "\n" +
+                "Please, select another output path to save your project...", "Configuration Incomplete", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
 			}
 
             if (this.closeOnQueue.Checked)
