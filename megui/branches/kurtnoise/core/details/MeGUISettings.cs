@@ -36,7 +36,7 @@ namespace MeGUI
         private string faacPath, lamePath, neroAacEncPath, mencoderPath,  mp4boxPath, mkvmergePath, 
                        encAacPlusPath, ffmpegPath, besplitPath, yadifPath, aftenPath, x264Path, 
                        dgIndexPath, xvidEncrawPath, aviMuxGUIPath, oggEnc2Path, encAudXPath, dgavcIndexPath, dgvc1IndexPath,
-                       dgmpgIndexPath, eac3toPath, tsmuxerPath, divxavcPath,
+                       dgmpgIndexPath, eac3toPath, tsmuxerPath, divxavcPath, flacPath,
                        defaultLanguage1, defaultLanguage2, afterEncodingCommand, videoExtension, audioExtension,
                        httpproxyaddress, httpproxyport, httpproxyuid, httpproxypwd, defaultOutputDir;
         private bool recalculateMainMovieBitrate, autoForceFilm, autoStartQueue, enableMP3inMP4, autoOpenScript,
@@ -57,7 +57,7 @@ namespace MeGUI
 		{
             autoscroll = true;
             autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/stable/", "http://megui.xvidvideo.ru/auto/stable/" },
-                new string[] { "Development", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" } };
+                new string[] { "Development", "http://kurtnoise.free.fr/MeGUI", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" } };
             acceptableFPSError = 0.01M;
             autoUpdateServerSubList = 0;
             maxServersToTry = 5;
@@ -121,6 +121,7 @@ namespace MeGUI
             alwaysbackupfiles = true;
             forcerawavcextension = false;
             divxavcPath = "DivX264.exe";
+            flacPath = "flac.exe";
         }
         #region properties
         public string YadifPath
@@ -315,8 +316,15 @@ namespace MeGUI
         {
             get { return neroAacEncPath; }
             set { neroAacEncPath = value; }
-        }		
-	    
+        }
+        /// <summary>
+        /// filename and full path of the flac executable
+        /// </summary>
+        public string FlacPath
+        {
+            get { return flacPath; }
+            set { flacPath = value; }
+        }
 	    /// <summary>
 		/// filename and full path of the mkvemerge executable
 		/// </summary>

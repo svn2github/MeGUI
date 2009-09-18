@@ -591,6 +591,13 @@
     </Compile>
     <Compile Include="packages\audio\AudioJob.cs" />
     <Compile Include="packages\audio\AudioEncoderInterface.cs" />
+    <Compile Include="packages\audio\flac\FlacSettings.cs" />
+    <Compile Include="packages\audio\flac\FlacConfigurationPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="packages\audio\flac\FlacConfigurationPanel.Designer.cs">
+      <DependentUpon>FlacConfigurationPanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="packages\audio\lame\lameConfigurationPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -975,6 +982,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="packages\audio\AudioConfigurationPanel.resx">
       <DependentUpon>AudioConfigurationPanel.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="packages\audio\flac\FlacConfigurationPanel.resx">
+      <DependentUpon>FlacConfigurationPanel.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="packages\audio\lame\lameConfigurationPanel.resx">

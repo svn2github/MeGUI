@@ -47,7 +47,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 ((j as AudioJob).Settings is WinAmpAACSettings) ||
                 ((j as AudioJob).Settings is OggVorbisSettings) ||
                 ((j as AudioJob).Settings is NeroAACSettings) ||
-                ((j as AudioJob).Settings is AftenSettings)))
+                ((j as AudioJob).Settings is AftenSettings) ||
+                ((j as AudioJob).Settings is FlacSettings)))
                 return new AviSynthAudioEncoder(mf.Settings);
             return null;
         }
@@ -741,6 +742,15 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                     case BitrateManagementMode.VBR: _encoderCommandLine = "-readtoeof 1 -q " + n.Quality + " - \"{0}\""; break;
                 }
             }
+
+            if (audioJob.Settings is FlacSettings)
+            {
+                _mustSendWavHeaderToEncoderStdIn = true;
+                FlacSettings n = audioJob.Settings as FlacSettings;
+                _encoderExecutablePath = this._settings.FlacPath;
+                _encoderCommandLine = "-" + n.CompressionLevel + " - -o \"{0}\"";
+            }
+
             if (audioJob.Settings is WinAmpAACSettings)
             {
                 _mustSendWavHeaderToEncoderStdIn = false;

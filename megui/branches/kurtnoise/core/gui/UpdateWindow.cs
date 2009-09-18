@@ -451,6 +451,8 @@ namespace MeGUI
                             return meGUISettings.DgavcIndexPath;
                         case ("tsmuxer"):
                             return meGUISettings.TSMuxerPath;
+                        case ("flac"):
+                            return meGUISettings.FlacPath;
                         default:
                             return null;
                     }
@@ -506,6 +508,9 @@ namespace MeGUI
                             return;
                         case ("tsmuxer"):
                             meGUISettings.TSMuxerPath = value;
+                            return;
+                        case ("flac"):
+                            meGUISettings.FlacPath = value;
                             return;
                     }
                 }

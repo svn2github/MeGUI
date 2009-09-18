@@ -11,6 +11,7 @@ What are the main differences within the megui trunk ?
 
 -> Added:
    - DivX264 encoder.
+   - Flac encoder.
    - Zones refactoring.
    - M2TS muxer.
    - Read Chapters from Disks.

@@ -331,7 +331,9 @@ namespace MeGUI
                 string major = versions[0].ToString();
                 string minor = versions[1].ToString();
                 string build = versions[2].ToString();
-                string revision = versions[3].ToString();
+                string revision = string.Empty;
+                if (versions.Length > 3)
+                    revision = versions[3].ToString();
 
                 switch (major)
                 {
@@ -429,7 +431,10 @@ namespace MeGUI
                         break;
                 }
 
-                dnvf += " (" + major + "." + minor + "." + build + "." + revision + ")";
+                if (string.IsNullOrEmpty(revision))
+                    dnvf += " (" + major + "." + minor + "." + build + ")";
+                else
+                    dnvf += " (" + major + "." + minor + "." + build + "." + revision + ")";
             }
 
             return dnvf;

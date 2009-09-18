@@ -72,6 +72,7 @@ namespace MeGUI
         public static readonly AudioCodec THD    = new AudioCodec("THD");
         public static readonly AudioCodec DTSHD  = new AudioCodec("DTSHD");
         public static readonly AudioCodec DTSMA  = new AudioCodec("DTSMA");
+        public static readonly AudioCodec LOSSLESS = new AudioCodec("LOSSLESS");
     }
     public class SubtitleCodec : ICodec, IIDable
     {
@@ -159,6 +160,7 @@ namespace MeGUI
         public static readonly AudioEncoderType NAAC   = new AudioEncoderType("NAAC", AudioCodec.AAC);
         public static readonly AudioEncoderType VORBIS = new AudioEncoderType("VORBIS", AudioCodec.VORBIS);
         public static readonly AudioEncoderType AFTEN  = new AudioEncoderType("AFTEN", AudioCodec.AC3);
+        public static readonly AudioEncoderType FLAC = new AudioEncoderType("FLAC", AudioCodec.LOSSLESS);
     }
     #endregion
     
@@ -183,6 +185,7 @@ namespace MeGUI
                 AudioCodecs.Register(AudioCodec.AAC) &&
                 AudioCodecs.Register(AudioCodec.AC3) &&
                 AudioCodecs.Register(AudioCodec.DTS) &&
+                AudioCodecs.Register(AudioCodec.LOSSLESS) &&
                 AudioCodecs.Register(AudioCodec.MP2) &&
                 AudioCodecs.Register(AudioCodec.MP3) &&
                 AudioCodecs.Register(AudioCodec.VORBIS) &&
@@ -205,7 +208,8 @@ namespace MeGUI
                 AudioEncoderTypes.Register(AudioEncoderType.NAAC)   &&
                 AudioEncoderTypes.Register(AudioEncoderType.VORBIS) &&
                 AudioEncoderTypes.Register(AudioEncoderType.WAAC)   &&
-                AudioEncoderTypes.Register(AudioEncoderType.AFTEN)))
+                AudioEncoderTypes.Register(AudioEncoderType.AFTEN)  &&
+                AudioEncoderTypes.Register(AudioEncoderType.FLAC)))
                 throw new Exception("Failed to register a standard audio encoder type");
                 
         }
@@ -269,6 +273,7 @@ namespace MeGUI
         public static readonly AudioType THD    = new AudioType("THD", "TrueHD Files", "thd", null, AudioCodec.THD);
         public static readonly AudioType DTSHD  = new AudioType("DTSHD", "DTS-HD High Resolution Files", "dtshd", null, AudioCodec.DTSHD);
         public static readonly AudioType DTSMA  = new AudioType("DTSMA", "DTS Master Audio Files", "dtsma", null, AudioCodec.DTSMA);
+        public static readonly AudioType FLAC = new AudioType("FLAC", "Flac Files", "flac", null, AudioCodec.LOSSLESS);
     }
     public class SubtitleType : OutputType
     {
@@ -350,7 +355,8 @@ namespace MeGUI
                 AudioTypes.Register(AudioType.DTSHD)  &&
                 AudioTypes.Register(AudioType.DTSMA)  &&
                 AudioTypes.Register(AudioType.EAC3)   &&
-                AudioTypes.Register(AudioType.THD)))
+                AudioTypes.Register(AudioType.THD)    &&
+                AudioTypes.Register(AudioType.FLAC)))
                 throw new Exception("Failed to register an audio type");
             if (!(
                 SubtitleTypes.Register(SubtitleType.ASS)    &&

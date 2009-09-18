@@ -61,6 +61,7 @@ namespace MeGUI
             SafeRegister<NeroAACSettings, MeGUI.packages.audio.naac.neroConfigurationPanel>("Audio");
             SafeRegister<OggVorbisSettings, MeGUI.packages.audio.vorbis.OggVorbisConfigurationPanel>("Audio");
             SafeRegister<WinAmpAACSettings, MeGUI.packages.audio.waac.WinAmpAACConfigurationPanel>("Audio");
+            SafeRegister<FlacSettings, MeGUI.packages.audio.flac.FlacConfigurationPanel>("Audio");
             
             SafeRegister<OneClickSettings, OneClickConfigPanel>();
             SafeRegister<AviSynthSettings, AviSynthProfileConfigPanel>();

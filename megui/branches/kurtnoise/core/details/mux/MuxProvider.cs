@@ -1072,6 +1072,7 @@ namespace MeGUI
             RegisterEncoder(new LameMP3EncodingProvider());
             RegisterEncoder(new VorbisEncodingProvider());
             RegisterEncoder(new AftenEncodingProvider());
+            RegisterEncoder(new FlacEncodingProvider());
         }
     }
     #endregion
@@ -1194,6 +1195,17 @@ namespace MeGUI
             supportedCodecs.Add(AudioCodec.AC3);
             supportedTypes.Add(AudioType.AC3);
             supportedEncoderTypes.Add(AudioEncoderType.AFTEN);
+        }
+    }
+
+    public class FlacEncodingProvider : AudioEncodingProvider
+    {
+        public FlacEncodingProvider()
+            : base()
+        {
+            supportedCodecs.Add(AudioCodec.LOSSLESS);
+            supportedTypes.Add(AudioType.FLAC);
+            supportedEncoderTypes.Add(AudioEncoderType.FLAC);
         }
     }
     #endregion

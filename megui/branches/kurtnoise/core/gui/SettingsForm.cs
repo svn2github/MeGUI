@@ -124,16 +124,16 @@ namespace MeGUI
         private Label mp4boxPathLabel;
         private Label mkvmergePathLabel;
         private Label avimuxguiPathLabel;
-        private TextBox textBox6;
+        private TextBox tbEncAacPlus;
         private Label label9;
         private Button button6;
-        private TextBox textBox4;
+        private TextBox tbOggEnc;
         private Label label7;
         private Button button4;
-        private TextBox textBox3;
+        private TextBox tbLame;
         private Label label3;
         private Button button3;
-        private TextBox textBox2;
+        private TextBox tbNeroAacEnc;
         private Label label2;
         private Button button2;
         private CheckBox keep2ndPassOutput;
@@ -184,6 +184,9 @@ namespace MeGUI
         private GroupBox gbDefaultOutput;
         private Button clearDefaultOutputDir;
         private FileBar defaultOutputDir;
+        private TextBox tbFlac;
+        private Label label4;
+        private Button selectFlacExecutableButton;
 
 		/// <summary>
 		/// Required designer variable.
@@ -315,16 +318,16 @@ namespace MeGUI
             this.tbAften = new System.Windows.Forms.TextBox();
             this.lbAften = new System.Windows.Forms.Label();
             this.selectAftenExecutableButton = new System.Windows.Forms.Button();
-            this.textBox6 = new System.Windows.Forms.TextBox();
+            this.tbEncAacPlus = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.button6 = new System.Windows.Forms.Button();
-            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.tbOggEnc = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.button4 = new System.Windows.Forms.Button();
-            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.tbLame = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.button3 = new System.Windows.Forms.Button();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.tbNeroAacEnc = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
             this.tabPage6 = new System.Windows.Forms.TabPage();
@@ -371,6 +374,9 @@ namespace MeGUI
             this.audioExtLabel = new System.Windows.Forms.Label();
             this.videoExtLabel = new System.Windows.Forms.Label();
             this.autoEncodeDefaultsButton = new System.Windows.Forms.Button();
+            this.tbFlac = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.selectFlacExecutableButton = new System.Windows.Forms.Button();
             groupBox1 = new System.Windows.Forms.GroupBox();
             groupBox1.SuspendLayout();
             this.otherGroupBox.SuspendLayout();
@@ -1338,19 +1344,22 @@ namespace MeGUI
             // 
             // tabPage5
             // 
+            this.tabPage5.Controls.Add(this.tbFlac);
+            this.tabPage5.Controls.Add(this.label4);
+            this.tabPage5.Controls.Add(this.selectFlacExecutableButton);
             this.tabPage5.Controls.Add(this.tbAften);
             this.tabPage5.Controls.Add(this.lbAften);
             this.tabPage5.Controls.Add(this.selectAftenExecutableButton);
-            this.tabPage5.Controls.Add(this.textBox6);
+            this.tabPage5.Controls.Add(this.tbEncAacPlus);
             this.tabPage5.Controls.Add(this.label9);
             this.tabPage5.Controls.Add(this.button6);
-            this.tabPage5.Controls.Add(this.textBox4);
+            this.tabPage5.Controls.Add(this.tbOggEnc);
             this.tabPage5.Controls.Add(this.label7);
             this.tabPage5.Controls.Add(this.button4);
-            this.tabPage5.Controls.Add(this.textBox3);
+            this.tabPage5.Controls.Add(this.tbLame);
             this.tabPage5.Controls.Add(this.label3);
             this.tabPage5.Controls.Add(this.button3);
-            this.tabPage5.Controls.Add(this.textBox2);
+            this.tabPage5.Controls.Add(this.tbNeroAacEnc);
             this.tabPage5.Controls.Add(this.label2);
             this.tabPage5.Controls.Add(this.button2);
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
@@ -1387,14 +1396,14 @@ namespace MeGUI
             this.selectAftenExecutableButton.Text = "...";
             this.selectAftenExecutableButton.Click += new System.EventHandler(this.selectAftenExecutableButton_Click);
             // 
-            // textBox6
+            // tbEncAacPlus
             // 
-            this.textBox6.Location = new System.Drawing.Point(91, 60);
-            this.textBox6.Name = "textBox6";
-            this.textBox6.ReadOnly = true;
-            this.textBox6.Size = new System.Drawing.Size(322, 21);
-            this.textBox6.TabIndex = 13;
-            this.textBox6.Text = "enc_aacplus.exe";
+            this.tbEncAacPlus.Location = new System.Drawing.Point(91, 60);
+            this.tbEncAacPlus.Name = "tbEncAacPlus";
+            this.tbEncAacPlus.ReadOnly = true;
+            this.tbEncAacPlus.Size = new System.Drawing.Size(322, 21);
+            this.tbEncAacPlus.TabIndex = 13;
+            this.tbEncAacPlus.Text = "enc_aacplus.exe";
             // 
             // label9
             // 
@@ -1413,14 +1422,14 @@ namespace MeGUI
             this.button6.Text = "...";
             this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
-            // textBox4
+            // tbOggEnc
             // 
-            this.textBox4.Location = new System.Drawing.Point(91, 114);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.ReadOnly = true;
-            this.textBox4.Size = new System.Drawing.Size(322, 21);
-            this.textBox4.TabIndex = 22;
-            this.textBox4.Text = "oggenc2.exe";
+            this.tbOggEnc.Location = new System.Drawing.Point(91, 114);
+            this.tbOggEnc.Name = "tbOggEnc";
+            this.tbOggEnc.ReadOnly = true;
+            this.tbOggEnc.Size = new System.Drawing.Size(322, 21);
+            this.tbOggEnc.TabIndex = 22;
+            this.tbOggEnc.Text = "oggenc2.exe";
             // 
             // label7
             // 
@@ -1439,14 +1448,14 @@ namespace MeGUI
             this.button4.Text = "...";
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
-            // textBox3
+            // tbLame
             // 
-            this.textBox3.Location = new System.Drawing.Point(91, 33);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.ReadOnly = true;
-            this.textBox3.Size = new System.Drawing.Size(322, 21);
-            this.textBox3.TabIndex = 7;
-            this.textBox3.Text = "lame.exe";
+            this.tbLame.Location = new System.Drawing.Point(91, 33);
+            this.tbLame.Name = "tbLame";
+            this.tbLame.ReadOnly = true;
+            this.tbLame.Size = new System.Drawing.Size(322, 21);
+            this.tbLame.TabIndex = 7;
+            this.tbLame.Text = "lame.exe";
             // 
             // label3
             // 
@@ -1465,14 +1474,14 @@ namespace MeGUI
             this.button3.Text = "...";
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
-            // textBox2
+            // tbNeroAacEnc
             // 
-            this.textBox2.Location = new System.Drawing.Point(91, 6);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.ReadOnly = true;
-            this.textBox2.Size = new System.Drawing.Size(322, 21);
-            this.textBox2.TabIndex = 4;
-            this.textBox2.Text = "neroAacEnc.exe";
+            this.tbNeroAacEnc.Location = new System.Drawing.Point(91, 6);
+            this.tbNeroAacEnc.Name = "tbNeroAacEnc";
+            this.tbNeroAacEnc.ReadOnly = true;
+            this.tbNeroAacEnc.Size = new System.Drawing.Size(322, 21);
+            this.tbNeroAacEnc.TabIndex = 4;
+            this.tbNeroAacEnc.Text = "neroAacEnc.exe";
             // 
             // label2
             // 
@@ -1918,6 +1927,32 @@ namespace MeGUI
             this.autoEncodeDefaultsButton.Text = "Configure Defaults";
             this.autoEncodeDefaultsButton.UseVisualStyleBackColor = true;
             // 
+            // tbFlac
+            // 
+            this.tbFlac.Location = new System.Drawing.Point(91, 141);
+            this.tbFlac.Name = "tbFlac";
+            this.tbFlac.ReadOnly = true;
+            this.tbFlac.Size = new System.Drawing.Size(322, 21);
+            this.tbFlac.TabIndex = 29;
+            this.tbFlac.Text = "flac.exe";
+            // 
+            // label4
+            // 
+            this.label4.Location = new System.Drawing.Point(5, 145);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(80, 13);
+            this.label4.TabIndex = 28;
+            this.label4.Text = "flac";
+            // 
+            // selectFlacExecutableButton
+            // 
+            this.selectFlacExecutableButton.Location = new System.Drawing.Point(419, 140);
+            this.selectFlacExecutableButton.Name = "selectFlacExecutableButton";
+            this.selectFlacExecutableButton.Size = new System.Drawing.Size(24, 23);
+            this.selectFlacExecutableButton.TabIndex = 30;
+            this.selectFlacExecutableButton.Text = "...";
+            this.selectFlacExecutableButton.Click += new System.EventHandler(this.selectFlacExecutableButton_Click);
+            // 
             // SettingsForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
@@ -2046,7 +2081,7 @@ namespace MeGUI
         {
             if (selectExe("neroAacEnc"))
             {
-                textBox2.Text = openExecutableDialog.FileName;
+                tbNeroAacEnc.Text = openExecutableDialog.FileName;
             }
         }
 
@@ -2054,7 +2089,7 @@ namespace MeGUI
         {
             if (selectExe("lame"))
             {
-                textBox3.Text = openExecutableDialog.FileName;
+                tbLame.Text = openExecutableDialog.FileName;
             }
         }
 		private void selectX264ExecutableButton_Click(object sender, System.EventArgs e)
@@ -2083,7 +2118,7 @@ namespace MeGUI
         {
             if (selectExe("oggenc2"))
             {
-                textBox4.Text = openExecutableDialog.FileName;
+                tbOggEnc.Text = openExecutableDialog.FileName;
             }
         }
 
@@ -2091,7 +2126,7 @@ namespace MeGUI
         {
             if (selectExe("enc_aacPlus"))
             {
-                textBox6.Text = openExecutableDialog.FileName;
+                tbEncAacPlus.Text = openExecutableDialog.FileName;
             }
 
         }
@@ -2182,6 +2217,14 @@ namespace MeGUI
             }
         }
 
+        private void selectFlacExecutableButton_Click(object sender, EventArgs e)
+        {
+            if (selectExe("flac"))
+            {
+                tbFlac.Text = openExecutableDialog.FileName;
+            }
+        }
+
         private void runCommand_CheckedChanged(object sender, EventArgs e)
         {
             command.Enabled = runCommand.Checked;
@@ -2251,8 +2294,8 @@ namespace MeGUI
                 settings.AcceptableAspectErrorPercent = (int)acceptableAspectError.Value;
 				settings.MencoderPath = mencoderPath.Text;
                 settings.SourceDetectorSettings = sdSettings;
-                settings.NeroAacEncPath = textBox2.Text;
-                settings.LamePath = textBox3.Text;
+                settings.NeroAacEncPath = tbNeroAacEnc.Text;
+                settings.LamePath = tbLame.Text;
 				settings.Mp4boxPath = mp4boxPath.Text;
                 settings.AviMuxGUIPath = aviMuxGUIPath.Text;
 				settings.MkvmergePath = mkvmergePath.Text;
@@ -2284,8 +2327,8 @@ namespace MeGUI
 				settings.Keep2of3passOutput = keep2ndPassOutput.Checked;
 				settings.OverwriteStats = keep2ndPassLogFile.Checked;
 				settings.NbPasses = (int)nbPasses.Value;
-                settings.OggEnc2Path = textBox4.Text;
-                settings.EncAacPlusPath = textBox6.Text;
+                settings.OggEnc2Path = tbOggEnc.Text;
+                settings.EncAacPlusPath = tbEncAacPlus.Text;
                 settings.AftenPath = tbAften.Text;
                 settings.AedSettings = this.autoEncodeDefaults;
                 settings.AlwaysOnTop = chAlwaysOnTop.Checked;
@@ -2304,6 +2347,7 @@ namespace MeGUI
                 settings.AlwaysBackUpFiles = backupfiles.Checked;
                 settings.ForceRawAVCExtension = forcerawavcuse.Checked;
                 settings.DivXAVCPath = DivXAVCPath.Text;
+                settings.FlacPath = tbFlac.Text;
 				return settings;
 			}
 			set
@@ -2317,8 +2361,8 @@ namespace MeGUI
                 useAutoUpdateCheckbox.Checked = settings.AutoUpdate;
                 acceptableAspectError.Value = (decimal)settings.AcceptableAspectErrorPercent;
 				mencoderPath.Text = settings.MencoderPath;      
-                textBox2.Text = settings.NeroAacEncPath;
-                textBox3.Text = settings.LamePath;
+                tbNeroAacEnc.Text = settings.NeroAacEncPath;
+                tbLame.Text = settings.LamePath;
                 textBox8.Text = settings.BeSplitPath;
                 sdSettings = settings.SourceDetectorSettings;
                 chkboxUseAdvancedTooltips.Checked = settings.UseAdvancedTooltips;
@@ -2352,8 +2396,8 @@ namespace MeGUI
 				keep2ndPassOutput.Checked = settings.Keep2of3passOutput;
 				keep2ndPassLogFile.Checked = settings.OverwriteStats;
 				nbPasses.Value = (decimal)settings.NbPasses;
-                textBox4.Text = settings.OggEnc2Path;
-                textBox6.Text = settings.EncAacPlusPath;
+                tbOggEnc.Text = settings.OggEnc2Path;
+                tbEncAacPlus.Text = settings.EncAacPlusPath;
                 tbAften.Text = settings.AftenPath;
                 this.autoEncodeDefaults = settings.AedSettings;
                 chAlwaysOnTop.Checked = settings.AlwaysOnTop;
@@ -2372,6 +2416,7 @@ namespace MeGUI
                 backupfiles.Checked = settings.AlwaysBackUpFiles;
                 forcerawavcuse.Checked = settings.ForceRawAVCExtension;
                 DivXAVCPath.Text = settings.DivXAVCPath;
+                tbFlac.Text = settings.FlacPath;
 			}
 		}
 		#endregion
