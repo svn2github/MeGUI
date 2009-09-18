@@ -14,3 +14,4 @@ What are the main differences within the megui trunk ?
    - Zones refactoring.
    - M2TS muxer.
    - Read Chapters from Disks.
+   - Redesign Audio Config Panel.

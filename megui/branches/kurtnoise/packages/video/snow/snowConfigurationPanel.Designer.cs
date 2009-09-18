@@ -28,6 +28,7 @@ namespace MeGUI.packages.video.snow
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(snowConfigurationPanel));
             this.logfile = new System.Windows.Forms.TextBox();
             this.logfileOpenButton = new System.Windows.Forms.Button();
             this.logfileLabel = new System.Windows.Forms.Label();
@@ -59,6 +60,8 @@ namespace MeGUI.packages.video.snow
             this.snowBitrate = new System.Windows.Forms.TextBox();
             this.snowBitrateLabel = new System.Windows.Forms.Label();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
+            this.gradientPanel1 = new MeGUI.GradientPanel();
+            this.label2 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.mainTabPage.SuspendLayout();
             this.snowMotionEstimationGroupbox.SuspendLayout();
@@ -67,6 +70,7 @@ namespace MeGUI.packages.video.snow
             ((System.ComponentModel.ISupportInitialize)(this.snowCreditsQuantizer)).BeginInit();
             this.snowCodecGeneralGroupbox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.snowQuantizer)).BeginInit();
+            this.gradientPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -419,8 +423,8 @@ namespace MeGUI.packages.video.snow
             this.snowBitrate.Size = new System.Drawing.Size(40, 20);
             this.snowBitrate.TabIndex = 5;
             this.snowBitrate.Text = "700";
-            this.snowBitrate.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textField_KeyPress);
             this.snowBitrate.TextChanged += new System.EventHandler(this.updateEvent);
+            this.snowBitrate.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textField_KeyPress);
             // 
             // snowBitrateLabel
             // 
@@ -430,12 +434,41 @@ namespace MeGUI.packages.video.snow
             this.snowBitrateLabel.TabIndex = 4;
             this.snowBitrateLabel.Text = "Bitrate";
             // 
+            // gradientPanel1
+            // 
+            this.gradientPanel1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("gradientPanel1.BackgroundImage")));
+            this.gradientPanel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.gradientPanel1.Controls.Add(this.label2);
+            this.gradientPanel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.gradientPanel1.Location = new System.Drawing.Point(0, 0);
+            this.gradientPanel1.Name = "gradientPanel1";
+            this.gradientPanel1.PageEndColor = System.Drawing.Color.Empty;
+            this.gradientPanel1.PageStartColor = System.Drawing.Color.SlateGray;
+            this.gradientPanel1.Size = new System.Drawing.Size(446, 90);
+            this.gradientPanel1.TabIndex = 43;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.BackColor = System.Drawing.Color.Transparent;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.Color.White;
+            this.label2.Location = new System.Drawing.Point(23, 34);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(207, 17);
+            this.label2.TabIndex = 0;
+            this.label2.Text = "Adjust your Settings here...";
+            // 
             // snowConfigurationPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.gradientPanel1);
             this.Name = "snowConfigurationPanel";
             this.Size = new System.Drawing.Size(446, 424);
+            this.Controls.SetChildIndex(this.tabControl1, 0);
+      //      this.Controls.SetChildIndex(this.commandline, 0);
+            this.Controls.SetChildIndex(this.gradientPanel1, 0);
             this.tabControl1.ResumeLayout(false);
             this.mainTabPage.ResumeLayout(false);
             this.mainTabPage.PerformLayout();
@@ -446,6 +479,8 @@ namespace MeGUI.packages.video.snow
             this.snowCodecGeneralGroupbox.ResumeLayout(false);
             this.snowCodecGeneralGroupbox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.snowQuantizer)).EndInit();
+            this.gradientPanel1.ResumeLayout(false);
+            this.gradientPanel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -484,5 +519,7 @@ namespace MeGUI.packages.video.snow
         private System.Windows.Forms.TextBox snowBitrate;
         private System.Windows.Forms.Label snowBitrateLabel;
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
+        private GradientPanel gradientPanel1;
+        private System.Windows.Forms.Label label2;
     }
 }

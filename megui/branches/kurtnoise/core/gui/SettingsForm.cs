@@ -124,7 +124,6 @@ namespace MeGUI
         private Label mp4boxPathLabel;
         private Label mkvmergePathLabel;
         private Label avimuxguiPathLabel;
-        private CheckBox checkBox1;
         private TextBox textBox6;
         private Label label9;
         private Button button6;
@@ -264,6 +263,7 @@ namespace MeGUI
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.gbDefaultOutput = new System.Windows.Forms.GroupBox();
+            this.defaultOutputDir = new MeGUI.FileBar();
             this.clearDefaultOutputDir = new System.Windows.Forms.Button();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -315,7 +315,6 @@ namespace MeGUI
             this.tbAften = new System.Windows.Forms.TextBox();
             this.lbAften = new System.Windows.Forms.Label();
             this.selectAftenExecutableButton = new System.Windows.Forms.Button();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.textBox6 = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.button6 = new System.Windows.Forms.Button();
@@ -372,7 +371,6 @@ namespace MeGUI
             this.audioExtLabel = new System.Windows.Forms.Label();
             this.videoExtLabel = new System.Windows.Forms.Label();
             this.autoEncodeDefaultsButton = new System.Windows.Forms.Button();
-            this.defaultOutputDir = new MeGUI.FileBar();
             groupBox1 = new System.Windows.Forms.GroupBox();
             groupBox1.SuspendLayout();
             this.otherGroupBox.SuspendLayout();
@@ -819,6 +817,22 @@ namespace MeGUI
             this.gbDefaultOutput.TabStop = false;
             this.gbDefaultOutput.Text = "Default Output Directory";
             // 
+            // defaultOutputDir
+            // 
+            this.defaultOutputDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.defaultOutputDir.Filename = "";
+            this.defaultOutputDir.Filter = null;
+            this.defaultOutputDir.FilterIndex = 0;
+            this.defaultOutputDir.FolderMode = true;
+            this.defaultOutputDir.Location = new System.Drawing.Point(6, 20);
+            this.defaultOutputDir.Name = "defaultOutputDir";
+            this.defaultOutputDir.ReadOnly = true;
+            this.defaultOutputDir.SaveMode = false;
+            this.defaultOutputDir.Size = new System.Drawing.Size(417, 26);
+            this.defaultOutputDir.TabIndex = 42;
+            this.defaultOutputDir.Title = null;
+            // 
             // clearDefaultOutputDir
             // 
             this.clearDefaultOutputDir.Location = new System.Drawing.Point(429, 21);
@@ -954,6 +968,8 @@ namespace MeGUI
             // cbAddTimePos
             // 
             this.cbAddTimePos.AutoSize = true;
+            this.cbAddTimePos.Checked = true;
+            this.cbAddTimePos.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbAddTimePos.Location = new System.Drawing.Point(8, 40);
             this.cbAddTimePos.Name = "cbAddTimePos";
             this.cbAddTimePos.Size = new System.Drawing.Size(110, 17);
@@ -1325,7 +1341,6 @@ namespace MeGUI
             this.tabPage5.Controls.Add(this.tbAften);
             this.tabPage5.Controls.Add(this.lbAften);
             this.tabPage5.Controls.Add(this.selectAftenExecutableButton);
-            this.tabPage5.Controls.Add(this.checkBox1);
             this.tabPage5.Controls.Add(this.textBox6);
             this.tabPage5.Controls.Add(this.label9);
             this.tabPage5.Controls.Add(this.button6);
@@ -1371,16 +1386,6 @@ namespace MeGUI
             this.selectAftenExecutableButton.TabIndex = 27;
             this.selectAftenExecutableButton.Text = "...";
             this.selectAftenExecutableButton.Click += new System.EventHandler(this.selectAftenExecutableButton_Click);
-            // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(91, 141);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(177, 17);
-            this.checkBox1.TabIndex = 24;
-            this.checkBox1.Text = "I\'m using OggEnc2 v2.8 or later";
-            this.checkBox1.UseVisualStyleBackColor = true;
             // 
             // textBox6
             // 
@@ -1913,22 +1918,6 @@ namespace MeGUI
             this.autoEncodeDefaultsButton.Text = "Configure Defaults";
             this.autoEncodeDefaultsButton.UseVisualStyleBackColor = true;
             // 
-            // defaultOutputDir
-            // 
-            this.defaultOutputDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.defaultOutputDir.Filename = "";
-            this.defaultOutputDir.Filter = null;
-            this.defaultOutputDir.FilterIndex = 0;
-            this.defaultOutputDir.FolderMode = true;
-            this.defaultOutputDir.Location = new System.Drawing.Point(6, 20);
-            this.defaultOutputDir.Name = "defaultOutputDir";
-            this.defaultOutputDir.ReadOnly = true;
-            this.defaultOutputDir.SaveMode = false;
-            this.defaultOutputDir.Size = new System.Drawing.Size(417, 26);
-            this.defaultOutputDir.TabIndex = 42;
-            this.defaultOutputDir.Title = null;
-            // 
             // SettingsForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
@@ -2297,7 +2286,6 @@ namespace MeGUI
 				settings.NbPasses = (int)nbPasses.Value;
                 settings.OggEnc2Path = textBox4.Text;
                 settings.EncAacPlusPath = textBox6.Text;
-                settings.FreshOggEnc2 = checkBox1.Checked;
                 settings.AftenPath = tbAften.Text;
                 settings.AedSettings = this.autoEncodeDefaults;
                 settings.AlwaysOnTop = chAlwaysOnTop.Checked;
@@ -2366,7 +2354,6 @@ namespace MeGUI
 				nbPasses.Value = (decimal)settings.NbPasses;
                 textBox4.Text = settings.OggEnc2Path;
                 textBox6.Text = settings.EncAacPlusPath;
-                checkBox1.Checked = settings.FreshOggEnc2;
                 tbAften.Text = settings.AftenPath;
                 this.autoEncodeDefaults = settings.AedSettings;
                 chAlwaysOnTop.Checked = settings.AlwaysOnTop;

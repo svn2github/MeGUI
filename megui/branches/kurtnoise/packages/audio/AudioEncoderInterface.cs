@@ -735,7 +735,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 _mustSendWavHeaderToEncoderStdIn = true;
                 AftenSettings n = audioJob.Settings as AftenSettings;
                 _encoderExecutablePath = this._settings.AftenPath;
-                _encoderCommandLine = "-readtoeof 1 -b " + n.Bitrate + " - \"{0}\"";
+                switch (n.BitrateMode)
+                {
+                    case BitrateManagementMode.CBR: _encoderCommandLine = "-readtoeof 1 -b " + n.Bitrate + " - \"{0}\""; break;
+                    case BitrateManagementMode.VBR: _encoderCommandLine = "-readtoeof 1 -q " + n.Quality + " - \"{0}\""; break;
+                }
             }
             if (audioJob.Settings is WinAmpAACSettings)
             {
@@ -779,7 +783,19 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 _mustSendWavHeaderToEncoderStdIn = true;
                 OggVorbisSettings n = audioJob.Settings as OggVorbisSettings;
                 _encoderExecutablePath = this._settings.OggEnc2Path;
-                _encoderCommandLine = "-Q --ignorelength --quality " + n.Quality.ToString(System.Globalization.CultureInfo.InvariantCulture) + " -o \"{0}\" -";
+                StringBuilder sb = new StringBuilder("--ignorelength ");
+                switch (n.BitrateMode)
+                {
+                    case BitrateManagementMode.VBR :
+                        sb.Append(string.Format("-q {0}", n.Quality.ToString(System.Globalization.CultureInfo.InvariantCulture)));
+                        break;
+                    case BitrateManagementMode.ABR :
+                        sb.Append(string.Format("--managed -b {0}", n.Bitrate));
+                        break;
+                }
+     
+                sb.Append(" -o \"{0}\" -");
+                _encoderCommandLine = sb.ToString();
             }
             if (audioJob.Settings is NeroAACSettings)
             {
@@ -828,7 +844,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 switch (m.BitrateMode)
                 {
                     case BitrateManagementMode.VBR:
-                        _encoderCommandLine = "-V" + (100 - m.Quality) / 10 + " - \"{0}\"";
+                        _encoderCommandLine = "-V" + (10 - m.Quality) + " - \"{0}\"";
                         break;
                     case BitrateManagementMode.CBR:
                         _encoderCommandLine = "-b " + m.Bitrate + " --cbr -h - \"{0}\"";

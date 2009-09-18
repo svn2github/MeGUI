@@ -32,7 +32,7 @@ namespace MeGUI
 		public MP3Settings()
             : base(ID, AudioCodec.MP3, AudioEncoderType.LAME, 128)
 		{
-			quality = 50;
+			quality = 8;
 		}
 		/// <summary>
 		/// gets / sets the quality for vbr mode

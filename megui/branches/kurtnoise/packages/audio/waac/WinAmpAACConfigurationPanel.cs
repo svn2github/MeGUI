@@ -33,9 +33,8 @@ namespace MeGUI.packages.audio.waac
         public WinAmpAACConfigurationPanel():base()
         {
             InitializeComponent();
-            comboBox1.Items.AddRange(EnumProxy.CreateArray(WinAmpAACSettings.SupportedProfiles));
-            comboBox2.Items.AddRange(EnumProxy.CreateArray(typeof(WinAmpAACSettings.AacStereoMode)));
-            vBitrate_ValueChanged(null, null);
+            cbProfile.Items.AddRange(EnumProxy.CreateArray(WinAmpAACSettings.SupportedProfiles));
+            cbChannelMode.Items.AddRange(EnumProxy.CreateArray(typeof(WinAmpAACSettings.AacStereoMode)));
         }
         #region properties
         /// <summary>
@@ -46,32 +45,26 @@ namespace MeGUI.packages.audio.waac
             get
             {
                 WinAmpAACSettings nas = new WinAmpAACSettings();
-                nas.Mpeg2AAC = checkBox2.Checked;
-                nas.Profile = (AacProfile)(comboBox1.SelectedItem as EnumProxy).RealValue;
-                nas.StereoMode = (WinAmpAACSettings.AacStereoMode)(comboBox2.SelectedItem as EnumProxy).RealValue;
-                nas.Bitrate = vBitrate.Value;
+                nas.Mpeg2AAC = chmpeg2.Checked;
+                nas.Profile = (AacProfile)(cbProfile.SelectedItem as EnumProxy).RealValue;
+                nas.StereoMode = (WinAmpAACSettings.AacStereoMode)(cbChannelMode.SelectedItem as EnumProxy).RealValue;
+                nas.Bitrate = tbBitrate.Value;
                 return nas;
             }
             set
             {
                 WinAmpAACSettings nas = value as WinAmpAACSettings;
-                checkBox2.Checked = nas.Mpeg2AAC;
-                comboBox1.SelectedItem = EnumProxy.Create(nas.Profile);
-                comboBox2.SelectedItem = EnumProxy.Create(nas.StereoMode);
-                vBitrate.Value = Math.Max(Math.Min(nas.Bitrate, vBitrate.Maximum), vBitrate.Minimum);
+                chmpeg2.Checked = nas.Mpeg2AAC;
+                cbProfile.SelectedItem = EnumProxy.Create(nas.Profile);
+                cbChannelMode.SelectedItem = EnumProxy.Create(nas.StereoMode);
+                tbBitrate.Value = Math.Max(Math.Min(nas.Bitrate, tbBitrate.Maximum), tbBitrate.Minimum);
+
+                tbBitrate_Scroll(null, null);
             }
         }
         #endregion
 
-        private void vBitrate_ValueChanged(object sender, EventArgs e)
-        {
-            label3.Text = "CBR @ " + vBitrate.Value + " kbps";
-        }
-
-
-
         #region Editable<WinAmpAACSettings> Members
-
         WinAmpAACSettings Editable<WinAmpAACSettings>.Settings
         {
             get
@@ -83,8 +76,31 @@ namespace MeGUI.packages.audio.waac
                 Settings = value;
             }
         }
-
         #endregion
+
+        private void tbBitrate_Scroll(object sender, EventArgs e)
+        {
+            gbBitrate.Text = String.Format("Bitrate ({0} kbps)", tbBitrate.Value); 
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            try
+            {
+                VisitLink();
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Unable to open link that was clicked.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private void VisitLink()
+        {
+            //Call the Process.Start method to open the default browser 
+            //with a URL:
+            System.Diagnostics.Process.Start("http://www.winamp.com");
+        }
     }
 }
 

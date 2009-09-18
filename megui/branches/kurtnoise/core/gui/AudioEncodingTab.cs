@@ -145,9 +145,12 @@ namespace MeGUI.core.gui
 
         private void audioContainer_SelectedIndexChanged(object sender, EventArgs e)
         {
-            AudioType currentType = (AudioType)audioContainer.SelectedItem;
-            audioOutput.Filter = currentType.OutputFilterString;
-            AudioOutput = Path.ChangeExtension(AudioOutput, currentType.Extension);
+             if (!string.IsNullOrEmpty(audioInput.Filename))
+            {
+             AudioType currentType = (AudioType)audioContainer.SelectedItem;
+             audioOutput.Filter = currentType.OutputFilterString;
+             AudioOutput = Path.ChangeExtension(AudioOutput, currentType.Extension);
+            }
         }
 
         private void deleteAudioButton_Click(object sender, EventArgs e)
@@ -235,6 +238,13 @@ namespace MeGUI.core.gui
                 return;
 
             lastCodec = AudCodecSettings.EncoderType;
+            if (AudCodecSettings.Codec.ID.Equals("ALL"))
+            {
+                audioContainer.Items.Clear();
+                audioContainer.Items.Add(AudCodecSettings.CustomExtension.ToString());
+                audioContainer.SelectedIndex = 0;
+            }
+            else
             Util.ChangeItemsKeepingSelectedSame(audioContainer, AudioEncoderProvider.GetSupportedOutput(lastCodec));
         }
 

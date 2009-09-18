@@ -30,10 +30,11 @@ namespace MeGUI.packages.audio.aften
 {
     public partial class AftenConfigurationPanel : MeGUI.core.details.audio.AudioConfigurationPanel, Editable<AftenSettings>
     {
-       public AftenConfigurationPanel():base()
+        private MainForm mainform = MainForm.Instance;    
+
+        public AftenConfigurationPanel():base()
         {
             InitializeComponent();
-            comboBox1.Items.AddRange(AftenSettings.SupportedBitrates);
         }
 
         #region properties
@@ -45,13 +46,30 @@ namespace MeGUI.packages.audio.aften
             get
             {
                 AftenSettings nas = new AftenSettings();
-                nas.Bitrate = (int)comboBox1.SelectedItem;
+                if (rbBitrate.Checked)
+                {
+                    nas.BitrateMode = BitrateManagementMode.CBR;
+                    nas.Bitrate = this.tbBitrate.Value;
+                }
+                else
+                {
+                    nas.BitrateMode = BitrateManagementMode.VBR;
+                    nas.Quality = this.tbQuality.Value;
+                } 
                 return nas;
             }
             set
             {
                 AftenSettings nas = value as AftenSettings;
-                comboBox1.SelectedItem = nas.Bitrate;
+                switch (nas.BitrateMode)
+                {
+                    case BitrateManagementMode.VBR: rbQuality.Checked = true; break;
+                    case BitrateManagementMode.CBR: rbBitrate.Checked = true; break;
+                }
+                tbBitrate.Value = Math.Max(Math.Min(nas.Bitrate, tbBitrate.Maximum), tbBitrate.Minimum);
+                tbQuality.Value = (int)(nas.Quality);
+
+                target_CheckedChanged(null, null);
             }
         }
         #endregion
@@ -71,6 +89,53 @@ namespace MeGUI.packages.audio.aften
         }
 
         #endregion
+
+        private void tbBitrate_Scroll(object sender, EventArgs e)
+        {
+            gbBitrate.Text = String.Format("Bitrate ({0} kbps)", tbBitrate.Value); 
+        }
+
+        private void tbQuality_Scroll(object sender, EventArgs e)
+        {
+            gbQuality.Text = String.Format("Quality (Q = {0})", tbQuality.Value);
+        }
+
+        private void target_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rbBitrate.Checked)
+            {
+                gbQuality.Enabled = false;
+                gbBitrate.Enabled = true;
+            }
+            else
+            {
+                gbBitrate.Enabled = false;
+                gbQuality.Enabled = true;
+            }
+
+            tbBitrate_Scroll(null, null);
+            tbQuality_Scroll(null, null);
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            try
+            {
+                VisitLink();
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Unable to open link that was clicked.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private void VisitLink()
+        {
+            //Call the Process.Start method to open the default browser 
+            //with a URL:
+            System.Diagnostics.Process.Start("http://aften.sourceforge.net");
+        }
+
     }
 }
 

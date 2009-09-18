@@ -29,11 +29,11 @@ namespace MeGUI
     {
         [EnumTitle("Automatic")]
         Auto,
-        [EnumTitle("HE-AAC+PS")]
+        [EnumTitle("HE-AAC v2 (HE+PS)")]
         PS,
         [EnumTitle("HE-AAC")]
         HE,
-        [EnumTitle("AAC-LC")]
+        [EnumTitle("LC-AAC")]
         LC
     }
 
@@ -45,7 +45,6 @@ namespace MeGUI
 		{
             Quality = 0.5M;
             Profile = AacProfile.Auto;
-            CreateHintTrack = false;
 		}
 
         private AacProfile profile;
@@ -61,14 +60,5 @@ namespace MeGUI
             get { return quality; }
             set { quality = value; }
         }
-
-        private bool createHintTrack;
-        public bool CreateHintTrack
-        {
-            get { return createHintTrack; }
-            set { createHintTrack = value; }
-        }
-
-
 	}
 }

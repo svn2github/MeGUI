@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DivXAVCConfigurationPanel));
             this.divxavcGeneralOptionsGroupBox = new System.Windows.Forms.GroupBox();
             this.divxavcTurbo = new System.Windows.Forms.CheckBox();
             this.logfile = new System.Windows.Forms.TextBox();
@@ -54,6 +55,10 @@
             this.lbAQO = new System.Windows.Forms.Label();
             this.divxavcGOPLength = new System.Windows.Forms.NumericUpDown();
             this.lbGOPLength = new System.Windows.Forms.Label();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.gradientPanel1 = new MeGUI.GradientPanel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.tabControl1.SuspendLayout();
             this.mainTabPage.SuspendLayout();
             this.divxavcGeneralOptionsGroupBox.SuspendLayout();
@@ -64,16 +69,19 @@
             ((System.ComponentModel.ISupportInitialize)(this.divxavcMaxRefFrames)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.divxavcAQO)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.divxavcGOPLength)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.gradientPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
             // 
-            this.tabControl1.Size = new System.Drawing.Size(396, 306);
+            this.tabControl1.Size = new System.Drawing.Size(396, 392);
             this.tabControl1.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight;
             // 
             // commandline
             // 
-            this.commandline.Location = new System.Drawing.Point(4, 312);
+            this.commandline.Location = new System.Drawing.Point(4, 398);
             this.commandline.Size = new System.Drawing.Size(389, 86);
             this.commandline.Text = "program ";
             // 
@@ -81,7 +89,7 @@
             // 
             this.mainTabPage.Controls.Add(this.divxavcMoreOptions);
             this.mainTabPage.Controls.Add(this.divxavcGeneralOptionsGroupBox);
-            this.mainTabPage.Size = new System.Drawing.Size(388, 280);
+            this.mainTabPage.Size = new System.Drawing.Size(388, 366);
             // 
             // divxavcGeneralOptionsGroupBox
             // 
@@ -407,12 +415,63 @@
             this.lbGOPLength.TabIndex = 0;
             this.lbGOPLength.Text = "GOP Length :";
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(292, 13);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(83, 52);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.pictureBox1.TabIndex = 2;
+            this.pictureBox1.TabStop = false;
+            // 
+            // gradientPanel1
+            // 
+            this.gradientPanel1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("gradientPanel1.BackgroundImage")));
+            this.gradientPanel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.gradientPanel1.Controls.Add(this.pictureBox2);
+            this.gradientPanel1.Controls.Add(this.label1);
+            this.gradientPanel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.gradientPanel1.Location = new System.Drawing.Point(0, 0);
+            this.gradientPanel1.Name = "gradientPanel1";
+            this.gradientPanel1.PageEndColor = System.Drawing.Color.Empty;
+            this.gradientPanel1.PageStartColor = System.Drawing.Color.SlateGray;
+            this.gradientPanel1.Size = new System.Drawing.Size(399, 90);
+            this.gradientPanel1.TabIndex = 43;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.BackColor = System.Drawing.Color.Transparent;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.Color.White;
+            this.label1.Location = new System.Drawing.Point(23, 34);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(207, 17);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Adjust your Settings here...";
+            // 
+            // pictureBox2
+            // 
+            this.pictureBox2.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
+            this.pictureBox2.Location = new System.Drawing.Point(268, 19);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(100, 50);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox2.TabIndex = 1;
+            this.pictureBox2.TabStop = false;
+            // 
             // DivXAVCConfigurationPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.gradientPanel1);
             this.Name = "DivXAVCConfigurationPanel";
-            this.Size = new System.Drawing.Size(399, 401);
+            this.Size = new System.Drawing.Size(399, 487);
+            this.Controls.SetChildIndex(this.tabControl1, 0);
+          //  this.Controls.SetChildIndex(this.commandline, 0);
+            this.Controls.SetChildIndex(this.gradientPanel1, 0);
             this.tabControl1.ResumeLayout(false);
             this.mainTabPage.ResumeLayout(false);
             this.divxavcGeneralOptionsGroupBox.ResumeLayout(false);
@@ -425,6 +484,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.divxavcMaxRefFrames)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.divxavcAQO)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.divxavcGOPLength)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.gradientPanel1.ResumeLayout(false);
+            this.gradientPanel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -458,6 +521,10 @@
         private System.Windows.Forms.Label divxavcThreadsLabel;
         private System.Windows.Forms.NumericUpDown nbThreads;
         private System.Windows.Forms.CheckBox divxavcTurbo;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        private GradientPanel gradientPanel1;
+        private System.Windows.Forms.PictureBox pictureBox2;
+        private System.Windows.Forms.Label label1;
 
 
     }

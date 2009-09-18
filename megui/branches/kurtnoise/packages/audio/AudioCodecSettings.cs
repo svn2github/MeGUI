@@ -77,6 +77,10 @@ namespace MeGUI
         private bool applyDRC;
         private AudioCodec audioCodec;
         private AudioEncoderType audioEncoderType;
+        private string encoderPath;
+        private string extension;
+        private string command;
+
 
         [XmlIgnore()]
         public AudioCodec Codec
@@ -113,6 +117,9 @@ namespace MeGUI
             applyDRC = false;
             sampleRateType = 0;
             normalize = 100;
+            encoderPath = "";
+            extension = "";
+            command = "";
 		}
 
 	    public bool ForceDecodingViaDirectShow
@@ -158,6 +165,24 @@ namespace MeGUI
         {
             get { return normalize; }
             set { normalize = value; }
+        }
+
+        public string EncoderPath
+        {
+            get { return encoderPath; }
+            set { encoderPath = value; }
+        }
+
+        public string CustomExtension
+        {
+            get { return extension; }
+            set { extension = value; }
+        }
+
+        public string CustomCommand
+        {
+            get { return command; }
+            set { command = value; }
         }
 
         object ICloneable.Clone()

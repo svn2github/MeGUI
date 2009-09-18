@@ -328,6 +328,9 @@ namespace MeGUI.packages.video.xvid
                 this.xvidVHQ.SelectedIndex = 1;
             if (cqmComboBox1.SelectedIndex == -1)
                 cqmComboBox1.SelectedIndex = 0;
+
+            //
+            chAdvancedSettings_CheckedChanged(null, null);
         }
 
         /// <summary>
@@ -513,6 +516,24 @@ namespace MeGUI.packages.video.xvid
         private void xvidVbvPeakRate_TextChanged(object sender, EventArgs e)
         {
             genericUpdate();
+        }
+
+        private void chAdvancedSettings_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chAdvancedSettings.Checked)
+            {
+                if (!tabControl1.TabPages.Contains(advancedTabPage))
+                    tabControl1.TabPages.Add(advancedTabPage);
+                if (!tabControl1.TabPages.Contains(tabPage1))
+                    tabControl1.TabPages.Add(tabPage1);
+            }
+            else
+            {
+                if (tabControl1.TabPages.Contains(advancedTabPage))
+                    tabControl1.TabPages.Remove(advancedTabPage);
+                if (tabControl1.TabPages.Contains(tabPage1))
+                    tabControl1.TabPages.Remove(tabPage1);
+            }
         }
     }
 }
