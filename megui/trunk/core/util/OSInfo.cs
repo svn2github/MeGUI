@@ -284,39 +284,28 @@ namespace MeGUI
         public static string FormatDotNetVersion()
         {
             string fv = "unknown";
-            string componentsKeyName = "SOFTWARE\\Microsoft\\Active Setup\\Installed Components";
+            string componentsKeyName = "SOFTWARE\\Microsoft\\NET Framework Setup\\NDP\\";
             
             // Find out in the registry anything under:
-            //    HKLM\SOFTWARE\Microsoft\Active Setup\Installed Components & ".NET Framework" in the name
+            // HKLM\SOFTWARE\Microsoft\NET Framework Setup\NDP & ".NET Framework" in the name
 
             using (Microsoft.Win32.RegistryKey componentsKey = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(componentsKeyName))
             {
                 try
-                {
+                {                       
                     string[] instComps = componentsKey.GetSubKeyNames();
-
+                    ArrayList versions = new ArrayList();
+                    
                     foreach (string instComp in instComps)
                     {
                         Microsoft.Win32.RegistryKey key = componentsKey.OpenSubKey(instComp);
-                        string friendlyName = (string)key.GetValue(null); // Gets the (Default) value from this key
-                        if (friendlyName != null && friendlyName.IndexOf(".NET Framework") >= 0)
-                        {
-                            // let's try to get any version information available
-                            string version = (string)key.GetValue("Version");
-                            string[] versions = version.Split(',');
-                            string major = versions[0].ToString();
-
-                            if (version != null)
-                            {
-                                // grab the version formated
-                                fv = DotNetVersionFormated(version);
-
-                                // break the loop to keep the most up to date
-                                if ((major == "4") || (major == "3") || (major == "2"))
-                                    break;
-                            }
-                        }
+                        string version = (string)key.GetValue("Version");
+                        versions.Add(version);                                                  
                     }
+
+                    IEnumerator etr = versions.GetEnumerator();
+                    while (etr.MoveNext())
+                        fv = etr.Current + "";
                 }
                 catch
                 {
@@ -332,13 +321,13 @@ namespace MeGUI
         /// </summary>
         /// <returns>A string containing the dotNet Framework</returns>
         /// 
-        private static string DotNetVersionFormated(string dotNetVersion)
+        public static string DotNetVersionFormated(string dotNetVersion)
         {
             string dnvf = "unknown";
 
             if (dotNetVersion != "unknown")
             {
-                string[] versions = dotNetVersion.Split(',');
+                string[] versions = dotNetVersion.Split('.');
                 string major = versions[0].ToString();
                 string minor = versions[1].ToString();
                 string build = versions[2].ToString();
@@ -378,9 +367,13 @@ namespace MeGUI
                         {
                             switch (revision)
                             {
-                                case "1433": dnvf = "2.0 SP1"; break;
-                                case "2407": dnvf = "2.0 SP2"; break;
-                                case "4926": dnvf = "2.0 SP3"; break;
+                                case "1433":
+                                case "1434": dnvf = "2.0 SP1"; break;
+                                case "2407": 
+                                case "3053":
+                                case "3074":
+                                case "4016":
+                                case "4927": dnvf = "2.0 SP2"; break;
                                 default: dnvf = "2.0"; break;
                             }
                         }
@@ -393,9 +386,15 @@ namespace MeGUI
                                     {
                                         switch (revision)
                                         {
-                                            case "26": // Vista
-                                            case "30": dnvf = "3.0"; break;
-                                            default: dnvf = "3.0 SP1"; break;
+                                            case "648":  dnvf = "3.0 SP1"; break;
+                                            case "1453":
+                                            case "2123":
+                                            case "4000":
+                                            case "4037":
+                                            case "4902": // Se7en
+                                            case "4926": // Se7en
+                                                         dnvf = "3.0 SP2"; break;
+                                            default: dnvf = "3.0"; break;
                                         }
                                     }
                                     break;
@@ -403,6 +402,7 @@ namespace MeGUI
                                     {
                                         switch (revision)
                                         {
+                                            case "4926": // Se7en
                                             case "1": dnvf = "3.5 SP1"; break;
                                             default: dnvf = "3.5"; break;
                                         }
