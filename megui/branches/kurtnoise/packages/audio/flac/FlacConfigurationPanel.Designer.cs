@@ -36,10 +36,10 @@ namespace MeGUI.packages.audio.flac
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.label3 = new System.Windows.Forms.Label();
             this.gbQuality = new System.Windows.Forms.GroupBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             this.tbQuality = new System.Windows.Forms.TrackBar();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
             this.tabPage1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.gradientPanel1.SuspendLayout();
@@ -110,10 +110,10 @@ namespace MeGUI.packages.audio.flac
             // 
             this.pictureBox2.BackColor = System.Drawing.Color.Transparent;
             this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
-            this.pictureBox2.Location = new System.Drawing.Point(290, 10);
+            this.pictureBox2.Location = new System.Drawing.Point(330, 19);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(87, 66);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox2.Size = new System.Drawing.Size(48, 48);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureBox2.TabIndex = 1;
             this.pictureBox2.TabStop = false;
             // 
@@ -141,6 +141,24 @@ namespace MeGUI.packages.audio.flac
             this.gbQuality.TabStop = false;
             this.gbQuality.Text = "Compression Level";
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(246, 56);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(128, 13);
+            this.label5.TabIndex = 2;
+            this.label5.Text = "Smallest file, slow encode";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(10, 56);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(120, 13);
+            this.label4.TabIndex = 1;
+            this.label4.Text = "Biggest file, fast encode";
+            // 
             // tbQuality
             // 
             this.tbQuality.Location = new System.Drawing.Point(6, 24);
@@ -162,24 +180,6 @@ namespace MeGUI.packages.audio.flac
             this.linkLabel1.TabStop = true;
             this.linkLabel1.Text = "FLAC Official Website";
             this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(10, 56);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(120, 13);
-            this.label4.TabIndex = 1;
-            this.label4.Text = "Biggest file, fast encode";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(251, 56);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(128, 13);
-            this.label5.TabIndex = 2;
-            this.label5.Text = "Smallest file, slow encode";
             // 
             // FlacConfigurationPanel
             // 
