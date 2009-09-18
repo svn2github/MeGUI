@@ -1196,6 +1196,5 @@ namespace MeGUI
             supportedEncoderTypes.Add(AudioEncoderType.AFTEN);
         }
     }
-
     #endregion
 }

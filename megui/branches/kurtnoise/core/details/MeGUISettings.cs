@@ -41,7 +41,7 @@ namespace MeGUI
                        httpproxyaddress, httpproxyport, httpproxyuid, httpproxypwd, defaultOutputDir;
         private bool recalculateMainMovieBitrate, autoForceFilm, autoStartQueue, enableMP3inMP4, autoOpenScript,
                      overwriteStats, keep2of3passOutput, deleteCompletedJobs, deleteIntermediateFiles,
-                     deleteAbortedOutput, openProgressWindow, useadvancedtooltips, freshOggEnc2, autoscroll, 
+                     deleteAbortedOutput, openProgressWindow, useadvancedtooltips, autoscroll, 
                      alwaysOnTop, safeProfileAlteration, autoUpdate, usehttpproxy, addTimePosition, alwaysbackupfiles,
                      forcerawavcextension;
         private ulong audioSamplesPerUpdate;
@@ -102,7 +102,6 @@ namespace MeGUI
 			deleteIntermediateFiles = true;
 			deleteAbortedOutput = true;
 			openProgressWindow = true;
-            freshOggEnc2 = true;
             videoExtension = "";
             audioExtension = "";
             safeProfileAlteration = false;
@@ -113,7 +112,7 @@ namespace MeGUI
             httpproxyuid = "";
             httpproxypwd = "";
             defaultOutputDir = "";
-            addTimePosition = false;
+            addTimePosition = true;
             dgavcIndexPath = "dgavcindex.exe";
             dgvc1IndexPath = "dgvc1index.exe";
             dgmpgIndexPath = "dgmpgindex.exe";
@@ -553,16 +552,6 @@ namespace MeGUI
 			get {return autoForceFilm;}
 			set {autoForceFilm = value;}
 		}
-
-        /// <summary>
-        /// true if oggenc2 is v2.8 or later
-        /// </summary>
-        public bool FreshOggEnc2
-        {
-            get { return freshOggEnc2; }
-            set { freshOggEnc2 = value; }
-        }
-
 		/// <summary>
 		/// gets / sets whether pressing Queue should automatically start encoding
 		/// </summary>
