@@ -29,8 +29,8 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyTitle("MeGUI")]
 [assembly: AssemblyDescription("GUI frontend for video encoding")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyProduct("MeGUI")]
-[assembly: AssemblyCompany("www.doom9.net")]
+[assembly: AssemblyProduct("MeGUI - kbr -")]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyCopyright("Licensed under the GPL")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]		
@@ -46,7 +46,7 @@ using System.Runtime.CompilerServices;
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
 
-[assembly: AssemblyVersion("0.3.1.1056")]
+[assembly: AssemblyVersion("0.1.0.0919")]
 
 //
 // In order to sign your assembly you must specify a key to use. Refer to the 

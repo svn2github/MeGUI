@@ -71,11 +71,11 @@ namespace MeGUI
 
     public enum NvDeinterlacerType
     {
-        [EnumTitle("No Deinterlacing", ", deinterlace=0)")]
+        [EnumTitle("No Deinterlacing", ", deinterlace=0")]
         nvDeInterlacerNone = 0,
-        [EnumTitle("Single Rate Deinterlacing", ", deinterlace=1)")]
+        [EnumTitle("Single Rate Deinterlacing", ", deinterlace=1")]
         nvDeInterlacerSingle,
-        [EnumTitle("Bobbing", ", deinterlace=2)")]
+        [EnumTitle("Bobbing", ", deinterlace=2")]
         nvDeInterlacerDouble
     }
 
@@ -294,7 +294,7 @@ namespace MeGUI
             {
                 EnumProxy p = EnumProxy.Create(type);
                 if (p.Tag != null)
-                    nvDeInterlacerLine = string.Format(p.Tag + " # Source");
+                    nvDeInterlacerLine = p.Tag.ToString();
             }
             return nvDeInterlacerLine;
         }

@@ -144,6 +144,7 @@ namespace MeGUI
         private CheckBox dss2;
         private Label label8;
         private ComboBox cbCharset;
+        private CheckBox nvResize;
 
 		/// <summary>
 		/// Required designer variable.
@@ -285,12 +286,8 @@ namespace MeGUI
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.optionsTab = new System.Windows.Forms.TabPage();
             this.gbOutput = new System.Windows.Forms.GroupBox();
-            this.videoOutput = new MeGUI.FileBar();
             this.label7 = new System.Windows.Forms.Label();
             this.videoGroupBox = new System.Windows.Forms.GroupBox();
-            this.input = new MeGUI.FileBar();
-            this.avsProfile = new MeGUI.core.gui.ConfigableProfilesControl();
-            this.arChooser = new MeGUI.core.gui.ARChooser();
             this.reopenOriginal = new System.Windows.Forms.Button();
             this.mod16Box = new System.Windows.Forms.ComboBox();
             this.signalAR = new System.Windows.Forms.CheckBox();
@@ -312,6 +309,7 @@ namespace MeGUI
             this.flipVertical = new System.Windows.Forms.CheckBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.dgOptions = new System.Windows.Forms.GroupBox();
+            this.nvResize = new System.Windows.Forms.CheckBox();
             this.cbNvDeInt = new System.Windows.Forms.ComboBox();
             this.nvDeInt = new System.Windows.Forms.CheckBox();
             this.deinterlacingGroupBox = new System.Windows.Forms.GroupBox();
@@ -347,6 +345,10 @@ namespace MeGUI
             this.saveButton = new System.Windows.Forms.Button();
             this.previewAvsButton = new System.Windows.Forms.Button();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
+            this.videoOutput = new MeGUI.FileBar();
+            this.input = new MeGUI.FileBar();
+            this.avsProfile = new MeGUI.core.gui.ConfigableProfilesControl();
+            this.arChooser = new MeGUI.core.gui.ARChooser();
             label2 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
             label4 = new System.Windows.Forms.Label();
@@ -633,7 +635,7 @@ namespace MeGUI
             this.optionsTab.Name = "optionsTab";
             this.optionsTab.Size = new System.Drawing.Size(455, 433);
             this.optionsTab.TabIndex = 0;
-            this.optionsTab.Text = "Options";
+            this.optionsTab.Text = "I/O";
             this.optionsTab.UseVisualStyleBackColor = true;
             // 
             // gbOutput
@@ -644,26 +646,10 @@ namespace MeGUI
             this.gbOutput.Controls.Add(this.label7);
             this.gbOutput.Location = new System.Drawing.Point(3, 360);
             this.gbOutput.Name = "gbOutput";
-            this.gbOutput.Size = new System.Drawing.Size(450, 49);
+            this.gbOutput.Size = new System.Drawing.Size(450, 55);
             this.gbOutput.TabIndex = 13;
             this.gbOutput.TabStop = false;
             this.gbOutput.Text = "Output";
-            // 
-            // videoOutput
-            // 
-            this.videoOutput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.videoOutput.Filename = "";
-            this.videoOutput.Filter = "AVI Synth Scripts|*.avs";
-            this.videoOutput.FilterIndex = 0;
-            this.videoOutput.FolderMode = false;
-            this.videoOutput.Location = new System.Drawing.Point(96, 17);
-            this.videoOutput.Name = "videoOutput";
-            this.videoOutput.ReadOnly = true;
-            this.videoOutput.SaveMode = true;
-            this.videoOutput.Size = new System.Drawing.Size(348, 26);
-            this.videoOutput.TabIndex = 7;
-            this.videoOutput.Title = null;
             // 
             // label7
             // 
@@ -694,53 +680,11 @@ namespace MeGUI
             this.videoGroupBox.TabStop = false;
             this.videoGroupBox.Text = "Input";
             // 
-            // input
-            // 
-            this.input.AllowDrop = true;
-            this.input.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.input.Filename = "";
-            this.input.Filter = resources.GetString("input.Filter");
-            this.input.FilterIndex = 6;
-            this.input.FolderMode = false;
-            this.input.Location = new System.Drawing.Point(77, 15);
-            this.input.Name = "input";
-            this.input.ReadOnly = true;
-            this.input.SaveMode = false;
-            this.input.Size = new System.Drawing.Size(367, 26);
-            this.input.TabIndex = 1;
-            this.input.Title = "Select a source file";
-            this.input.FileSelected += new MeGUI.FileBarEventHandler(this.input_FileSelected);
-            // 
-            // avsProfile
-            // 
-            this.avsProfile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.avsProfile.Location = new System.Drawing.Point(96, 147);
-            this.avsProfile.Name = "avsProfile";
-            this.avsProfile.ProfileSet = "AviSynth";
-            this.avsProfile.Size = new System.Drawing.Size(348, 22);
-            this.avsProfile.TabIndex = 22;
-            this.avsProfile.SelectedProfileChanged += new System.EventHandler(this.ProfileChanged);
-            // 
-            // arChooser
-            // 
-            this.arChooser.CustomDARs = new MeGUI.core.util.Dar[0];
-            this.arChooser.HasLater = false;
-            this.arChooser.Location = new System.Drawing.Point(96, 76);
-            this.arChooser.MaximumSize = new System.Drawing.Size(1000, 29);
-            this.arChooser.MinimumSize = new System.Drawing.Size(64, 29);
-            this.arChooser.Name = "arChooser";
-            this.arChooser.SelectedIndex = 0;
-            this.arChooser.Size = new System.Drawing.Size(214, 29);
-            this.arChooser.TabIndex = 21;
-            this.arChooser.SelectionChanged += new MeGUI.StringChanged(this.arChooser_SelectionChanged);
-            // 
             // reopenOriginal
             // 
             this.reopenOriginal.AutoSize = true;
             this.reopenOriginal.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.reopenOriginal.Location = new System.Drawing.Point(96, 47);
+            this.reopenOriginal.Location = new System.Drawing.Point(77, 47);
             this.reopenOriginal.Name = "reopenOriginal";
             this.reopenOriginal.Size = new System.Drawing.Size(157, 23);
             this.reopenOriginal.TabIndex = 20;
@@ -967,6 +911,7 @@ namespace MeGUI
             // 
             this.dgOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgOptions.Controls.Add(this.nvResize);
             this.dgOptions.Controls.Add(this.cbNvDeInt);
             this.dgOptions.Controls.Add(this.nvDeInt);
             this.dgOptions.Location = new System.Drawing.Point(6, 3);
@@ -974,6 +919,17 @@ namespace MeGUI
             this.dgOptions.Size = new System.Drawing.Size(426, 80);
             this.dgOptions.TabIndex = 14;
             this.dgOptions.TabStop = false;
+            // 
+            // nvResize
+            // 
+            this.nvResize.AutoSize = true;
+            this.nvResize.Location = new System.Drawing.Point(10, 52);
+            this.nvResize.Name = "nvResize";
+            this.nvResize.Size = new System.Drawing.Size(93, 17);
+            this.nvResize.TabIndex = 2;
+            this.nvResize.Text = "Nvidia Resizer";
+            this.nvResize.UseVisualStyleBackColor = true;
+            this.nvResize.CheckedChanged += new System.EventHandler(this.nvResize_CheckedChanged);
             // 
             // cbNvDeInt
             // 
@@ -1246,7 +1202,7 @@ namespace MeGUI
             this.editTab.Name = "editTab";
             this.editTab.Size = new System.Drawing.Size(455, 433);
             this.editTab.TabIndex = 1;
-            this.editTab.Text = "Edit";
+            this.editTab.Text = "Script";
             this.editTab.UseVisualStyleBackColor = true;
             // 
             // openDLLButton
@@ -1372,6 +1328,64 @@ namespace MeGUI
             this.helpButton1.Name = "helpButton1";
             this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 17;
+            // 
+            // videoOutput
+            // 
+            this.videoOutput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.videoOutput.Filename = "";
+            this.videoOutput.Filter = "AVI Synth Scripts|*.avs";
+            this.videoOutput.FilterIndex = 0;
+            this.videoOutput.FolderMode = false;
+            this.videoOutput.Location = new System.Drawing.Point(96, 17);
+            this.videoOutput.Name = "videoOutput";
+            this.videoOutput.ReadOnly = true;
+            this.videoOutput.SaveMode = true;
+            this.videoOutput.Size = new System.Drawing.Size(348, 26);
+            this.videoOutput.TabIndex = 7;
+            this.videoOutput.Title = null;
+            // 
+            // input
+            // 
+            this.input.AllowDrop = true;
+            this.input.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.input.Filename = "";
+            this.input.Filter = resources.GetString("input.Filter");
+            this.input.FilterIndex = 6;
+            this.input.FolderMode = false;
+            this.input.Location = new System.Drawing.Point(77, 15);
+            this.input.Name = "input";
+            this.input.ReadOnly = true;
+            this.input.SaveMode = false;
+            this.input.Size = new System.Drawing.Size(367, 26);
+            this.input.TabIndex = 1;
+            this.input.Title = "Select a source file";
+            this.input.FileSelected += new MeGUI.FileBarEventHandler(this.input_FileSelected);
+            // 
+            // avsProfile
+            // 
+            this.avsProfile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.avsProfile.Location = new System.Drawing.Point(96, 147);
+            this.avsProfile.Name = "avsProfile";
+            this.avsProfile.ProfileSet = "AviSynth";
+            this.avsProfile.Size = new System.Drawing.Size(348, 22);
+            this.avsProfile.TabIndex = 22;
+            this.avsProfile.SelectedProfileChanged += new System.EventHandler(this.ProfileChanged);
+            // 
+            // arChooser
+            // 
+            this.arChooser.CustomDARs = new MeGUI.core.util.Dar[0];
+            this.arChooser.HasLater = false;
+            this.arChooser.Location = new System.Drawing.Point(96, 76);
+            this.arChooser.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.arChooser.MinimumSize = new System.Drawing.Size(64, 29);
+            this.arChooser.Name = "arChooser";
+            this.arChooser.SelectedIndex = 0;
+            this.arChooser.Size = new System.Drawing.Size(214, 29);
+            this.arChooser.TabIndex = 21;
+            this.arChooser.SelectionChanged += new MeGUI.StringChanged(this.arChooser_SelectionChanged);
             // 
             // AviSynthWindow
             // 
@@ -1504,12 +1518,15 @@ namespace MeGUI
             {
                 if (nvDeInt.Checked)
                      inputLine += ScriptServer.GetNvDeInterlacerLine(nvDeInt.Checked, (NvDeinterlacerType)(cbNvDeInt.SelectedItem as EnumProxy).RealValue);
-                else inputLine += ")";
+                if (nvResize.Checked)
+                    inputLine += ", resize_w=" + horizontalResolution.Value.ToString() + ", resize_h=" + verticalResolution.Value.ToString();                
+                inputLine += ")";
             }
             if (deinterlace.Checked && deinterlaceType.SelectedItem is DeinterlaceFilter)
                 deinterlaceLines = ((DeinterlaceFilter)deinterlaceType.SelectedItem).Script;
             cropLine = ScriptServer.GetCropLine(crop.Checked, Cropping);
-            resizeLine = ScriptServer.GetResizeLine(resize.Checked, (int)horizontalResolution.Value, (int)verticalResolution.Value, (ResizeFilterType)(resizeFilterType.SelectedItem as EnumProxy).RealValue);
+            if (!nvResize.Checked)
+                resizeLine = ScriptServer.GetResizeLine(resize.Checked, (int)horizontalResolution.Value, (int)verticalResolution.Value, (ResizeFilterType)(resizeFilterType.SelectedItem as EnumProxy).RealValue);
             denoiseLines = ScriptServer.GetDenoiseLines(noiseFilter.Checked, (DenoiseFilterType)(noiseFilterType.SelectedItem as EnumProxy).RealValue);
 
             string newScript = ScriptServer.CreateScriptFromTemplate(GetProfileSettings().Template, inputLine, cropLine, resizeLine, denoiseLines, deinterlaceLines);
@@ -1651,6 +1668,8 @@ namespace MeGUI
                     this.cbNvDeInt.Enabled = false;
                     this.nvDeInt.Enabled = false;
                     this.nvDeInt.Checked = false;
+                    this.nvResize.Enabled = false;                    
+                    this.nvResize.Checked = false;
                     this.dss2.Enabled = false;
                     this.tabSources.SelectedTab = tabPage1;
                     break;
@@ -1667,6 +1686,8 @@ namespace MeGUI
                     this.cbNvDeInt.Enabled = false;
                     this.nvDeInt.Enabled = false;
                     this.nvDeInt.Checked = false;
+                    this.nvResize.Enabled = false;
+                    this.nvResize.Checked = false;
                     this.tabSources.SelectedTab = tabPage1;
                     break;
                 case PossibleSources.directShow:
@@ -1680,6 +1701,8 @@ namespace MeGUI
                     this.cbNvDeInt.Enabled = false;
                     this.nvDeInt.Enabled = false;
                     this.nvDeInt.Checked = false;
+                    this.nvResize.Enabled = false;
+                    this.nvResize.Checked = false;
                     this.tabSources.SelectedTab = tabPage2;
                     break;
                 case PossibleSources.dga:
@@ -1696,6 +1719,8 @@ namespace MeGUI
                     this.cbNvDeInt.Enabled = false;
                     this.nvDeInt.Enabled = true;
                     this.nvDeInt.Checked = false;
+                    this.nvResize.Enabled = true;
+                    this.nvResize.Checked = false;
                     this.cbNvDeInt.SelectedIndex = 0;
                     this.tabSources.SelectedTab = tabPage3;
                     this.showScript();
@@ -1724,7 +1749,10 @@ namespace MeGUI
             {
                 if (MessageBox.Show("You cannot use this option with the " + Path.GetFileName(input) + " file. It's not compatible...",
                     "Information", MessageBoxButtons.OK, MessageBoxIcon.Information) == DialogResult.OK)
+                {
                     this.nvDeInt.Checked = false;
+                    this.nvResize.Checked = false;
+                }
             }
         }
 
@@ -2444,6 +2472,11 @@ namespace MeGUI
         }
 
         private void cbCharset_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.showScript();
+        }
+
+        private void nvResize_CheckedChanged(object sender, EventArgs e)
         {
             this.showScript();
         }
