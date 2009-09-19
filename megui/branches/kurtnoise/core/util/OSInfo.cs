@@ -254,10 +254,28 @@ namespace MeGUI
                                                             }
                                                     } break;
                                                 }
-                                            case 1:
+                                            case 1: // Se7en
                                                 {
-                                                    osName = "Windows Seven";
-                                                    break;
+                                                    uint edition = PRODUCT_UNDEFINED;
+                                                    if (GetProductInfo(osVersionInfo.dwMajorVersion,
+                                                                       osVersionInfo.dwMinorVersion,
+                                                                       osVersionInfo.wServicePackMajor,
+                                                                       osVersionInfo.wServicePackMinor,
+                                                                       out edition))
+                                                    {
+                                                        switch (edition)
+                                                        {
+                                                            case PRODUCT_ULTIMATE: osName = "Windows Seven Ultimate Edition"; break;
+                                                            case PRODUCT_HOME_BASIC:
+                                                            case PRODUCT_HOME_BASIC_N: osName = "Windows Seven Home Basic Edition"; break;
+                                                            case PRODUCT_HOME_PREMIUM: osName = "Windows Seven Premium Edition"; break;
+                                                            case PRODUCT_ENTREPRISE: osName = "Windows Seven Entreprise Edition"; break;
+                                                            case PRODUCT_BUSINESS:
+                                                            case PRODUCT_BUSINESS_N: osName = "Windows Seven Professional Edition"; break;
+                                                            case PRODUCT_STARTER: osName = "Windows Seven Starter Edition"; break;
+                                                            default: osName = "Windows Seven"; break;
+                                                        }
+                                                    } break;
                                                 }
                                         }
                                         break;
