@@ -47,8 +47,8 @@ namespace MeGUI.packages.tools.besplitter
 
         public string generateJoinCommandline(string tempFilename)
         {
-            return string.Format("-core ( -input \"{0}\" -prefix \"{1}\" -type {2} -join )",
-                tempFilename, Output, Path.GetExtension(Output).Substring(1));
+            return string.Format("-core ( -input \"{0}\" -prefix \"{1}\" -type lst -join )",
+                tempFilename, Output);
         }
 
         public AudioJoinJob() { }
