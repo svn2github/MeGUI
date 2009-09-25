@@ -595,10 +595,12 @@ namespace MeGUI
                                     MessageBoxIcon.Information) == DialogResult.Yes)
                 {
                     mainF.DialogManager.FindAndKillProcess("CUVIDSERVER");
+                    Application.DoEvents();
                     System.Threading.Thread.Sleep(500); // needed otherwise CUVIDServer doesn't restart...:-/
+                    Application.DoEvents();
                     mainF.DialogManager.runCUVIDServer();
                 }
-                else return false;
+                else return true;
             }
             else mainF.DialogManager.runCUVIDServer();
 
