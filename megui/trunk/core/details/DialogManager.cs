@@ -177,10 +177,9 @@ namespace MeGUI
             if (mainForm.Settings.DialogSettings.AskAboutYV12)
             {
                 bool askAgain;
-                bool bResult = askAbout(string.Format("Your AviSynth clip is is the wrong colorspace, {0}.\r\n" +
-                    "The colorspace should by YV12. Do you want me to add ConvertToYV12() to the end of your script?",
-                    colorspace),
-                    "Incorrect Colorspace", MessageBoxIcon.Warning, out askAgain);
+                bool bResult = askAbout("The colorspace of your clip is not in YV12...\r\n" +
+                                        "Do you want me to add ConvertToYV12() to the end of your script ?",
+                                        "Incorrect Colorspace", MessageBoxIcon.Warning, out askAgain);
 
                 mainForm.Settings.DialogSettings.AskAboutYV12 = askAgain;
                 mainForm.Settings.DialogSettings.AddConvertToYV12 = bResult;
