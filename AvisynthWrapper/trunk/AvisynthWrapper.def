@@ -8,6 +8,7 @@ EXPORTS
 ;	avs_getlasterror
 ;	avs_eval
 	dimzon_avs_init
+	dimzon_avs_init_2
 	dimzon_avs_destroy
 	dimzon_avs_getlasterror
 	dimzon_avs_getvframe
