@@ -644,8 +644,8 @@ namespace MeGUI
         {
             if (rbFromFile.Checked)
             {
-                openFileDialog.Filter = "IFO Files (*.ifo)|*.ifo|MPLS Files (*.mpls)|*.mpls|Text Files (*.txt)|*.txt|All Files supported (*.ifo,*.mpls,*.txt)|*.ifo;*.mpls;*.txt";
-                openFileDialog.FilterIndex = 4;
+                openFileDialog.Filter = "IFO Files (*.ifo)|*.ifo|Blu-ray MPLS Playlist Files (*.mpls)|*.mpls|Text Files (*.txt)|*.txt|HD-DVD Xml Playlist Files (*.xpl)|*.xpl|All Files supported (*.ifo,*.mpls,*.txt,*.xpl)|*.ifo;*.mpls;*.txt;*.xpl";
+                openFileDialog.FilterIndex = 5;
 
                 if (this.openFileDialog.ShowDialog() == DialogResult.OK)
                 {
@@ -661,6 +661,13 @@ namespace MeGUI
                     else if (input.Text.ToLower().EndsWith("mpls"))
                     {
                         ChapterExtractor ex = new MplsExtractor();
+                        pgc = ex.GetStreams(input.Text)[0];
+                        FreshChapterView();
+                        updateTimeLine();
+                    }
+                    else if (input.Text.ToLower().EndsWith("xpl"))
+                    {
+                        ChapterExtractor ex = new XplExtractor();
                         pgc = ex.GetStreams(input.Text)[0];
                         FreshChapterView();
                         updateTimeLine();
@@ -687,7 +694,9 @@ namespace MeGUI
                         {
                             ChapterExtractor ex =
                               Directory.Exists(Path.Combine(input.Text, "VIDEO_TS")) ?
-                              new DvdExtractor() as ChapterExtractor :
+                              new DvdExtractor() as ChapterExtractor : 
+                              Directory.Exists(Path.Combine(d.SelectedPath, "ADV_OBJ")) ?
+                              new HddvdExtractor() as ChapterExtractor :
                               Directory.Exists(Path.Combine(Path.Combine(input.Text, "BDMV"), "PLAYLIST")) ?
                               new BlurayExtractor() as ChapterExtractor :
                               null;

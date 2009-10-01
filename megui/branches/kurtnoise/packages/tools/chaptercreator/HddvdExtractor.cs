@@ -23,7 +23,7 @@ namespace MeGUI
 
     public override List<ChapterInfo> GetStreams(string location)
     {
-      List<ChapterInfo> pgcs = new List<ChapterInfo>();
+      List<ChapterInfo> xpls = new List<ChapterInfo>();
       string path = Path.Combine(location, "ADV_OBJ");
       if (!Directory.Exists(path))
         throw new FileNotFoundException("Could not find ADV_OBJ folder on HD-DVD disc.");
@@ -34,12 +34,14 @@ namespace MeGUI
 
       foreach (string file in Directory.GetFiles(path, "*.xpl"))
       {
-        pgcs.Add(ex.GetStreams(file)[0]);
+          ChapterInfo pl = ex.GetStreams(file)[0];
+          pl.SourceName = Path.GetFileName(file);
+          xpls.Add(pl);
       }
 
-      pgcs = pgcs.OrderByDescending(p => p.Duration).ToList();
+      xpls = xpls.OrderByDescending(p => p.Duration).ToList();
       OnExtractionComplete();
-      return pgcs;
+      return xpls;
     }
   }
 }

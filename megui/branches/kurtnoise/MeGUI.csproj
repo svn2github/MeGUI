@@ -227,6 +227,9 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="core\details\JobControl.resx">
@@ -701,9 +704,11 @@
     <Compile Include="packages\tools\chaptercreator\frmStreamSelect.designer.cs">
       <DependentUpon>frmStreamSelect.cs</DependentUpon>
     </Compile>
+    <Compile Include="packages\tools\chaptercreator\HddvdExtractor.cs" />
     <Compile Include="packages\tools\chaptercreator\IfoExtractor.cs" />
     <Compile Include="packages\tools\chaptercreator\MplsExtractor.cs" />
     <Compile Include="packages\tools\chaptercreator\TextExtractor.cs" />
+    <Compile Include="packages\tools\chaptercreator\XplExtractor.cs" />
     <Compile Include="packages\tools\cqmeditor\QuantizerMatrixDialog.cs">
       <SubType>Form</SubType>
     </Compile>
