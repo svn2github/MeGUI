@@ -1393,15 +1393,10 @@ namespace MeGUI
         private void MeGUI_Load(object sender, EventArgs e)
         {
             RegisterForm(this);
-            DriveInfo[] allDrives = DriveInfo.GetDrives();
-            
-            LogItem i = Log.Info("Versions");
-            i.LogValue("MeGUI kbr Version ", Application.ProductVersion);
-            i.LogValue("OS ", string.Format("{0}{1} ({2}.{3}.{4}.{5})", OSInfo.GetOSName(), OSInfo.GetOSServicePack(), OSInfo.OSMajorVersion, OSInfo.OSMinorVersion, OSInfo.OSRevisionVersion, OSInfo.OSBuildVersion));
-            i.LogValue("Latest .Net Framework installed ", string.Format("{0}", OSInfo.DotNetVersionFormated(OSInfo.FormatDotNetVersion())));
+         //   DriveInfo[] allDrives = DriveInfo.GetDrives();
 
-            i = Log.Info("Hardware");
-            i.LogValue("CPU ", string.Format("{0}", OSInfo.GetMOStuff("Win32_Processor")));
+           // i = Log.Info("Hardware");
+           // i.LogValue("CPU ", string.Format("{0}", OSInfo.GetMOStuff("Win32_Processor")));
             /*
                         foreach (DriveInfo d in allDrives)   //OSInfo.GetMOStuff("Win32_OperatingSystem")
                         {
@@ -1977,7 +1972,13 @@ namespace MeGUI
             this.Location = MeGUI.Properties.Settings.Default.MainFormLocation;
             this.WindowState = MeGUI.Properties.Settings.Default.MainFormWindowState;
 
-            if (MeGUISettings.AvisynthPluginsPath == null)
+            LogItem i = Log.Info("Versions");
+            i.LogValue("MeGUI kbr Version ", Application.ProductVersion);
+            i.LogValue("OS ", string.Format("{0}{1} ({2}.{3}.{4}.{5})", OSInfo.GetOSName(), OSInfo.GetOSServicePack(), OSInfo.OSMajorVersion, OSInfo.OSMinorVersion, OSInfo.OSRevisionVersion, OSInfo.OSBuildVersion));
+            i.LogValue("Latest .Net Framework installed ", string.Format("{0}", OSInfo.DotNetVersionFormated(OSInfo.FormatDotNetVersion())));
+
+
+            if (string.IsNullOrEmpty(MeGUISettings.AvisynthPluginsPath))
             {
                 if (AskToDownloadAvisynth() == true)
                     System.Diagnostics.Process.Start("http://www.avisynth.org");
@@ -1991,6 +1992,9 @@ namespace MeGUI
                     updateCheck.IsBackground = true;
                     updateCheck.Start();
                 }
+
+                string avisynthversion = VideoUtil.getAvisynthVersion();
+                i.LogValue("Avisynth Version ", avisynthversion.Replace(", ", ".").ToString());
             }
         }
 

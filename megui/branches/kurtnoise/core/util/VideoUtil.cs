@@ -1218,6 +1218,17 @@ namespace MeGUI
             else
                 return allSmallFilters.ToString().TrimEnd('|');
         }
+
+        public static string getAvisynthVersion()
+        {
+            string systempath = Environment.GetFolderPath(Environment.SpecialFolder.System);
+            if (File.Exists(systempath + "\\avisynth.dll"))
+            {
+                FileVersionInfo FileProperties = FileVersionInfo.GetVersionInfo(systempath + "\\avisynth.dll");
+                return FileProperties.FileVersion;
+            }
+            else return string.Empty;
+        }
     }
 	#region helper structs
 	/// <summary>
