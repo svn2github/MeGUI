@@ -1221,7 +1221,12 @@ namespace MeGUI
 
         public static string getAvisynthVersion()
         {
+#if x86
             string systempath = Environment.GetFolderPath(Environment.SpecialFolder.System);
+#else
+            // we assume here that avisynth has been installed from the x86 installer
+            string systempath = Environment.GetFolderPath(Environment.SpecialFolder.System).Substring(0,11) + "\\SysWOW64";
+#endif
             if (File.Exists(systempath + "\\avisynth.dll"))
             {
                 FileVersionInfo FileProperties = FileVersionInfo.GetVersionInfo(systempath + "\\avisynth.dll");

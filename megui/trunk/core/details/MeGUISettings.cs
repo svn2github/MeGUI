@@ -463,7 +463,11 @@ namespace MeGUI
             {
                 try
                 {
+#if x86
                     Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\HaaliMkx");
+#else
+                    Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Wow6432Node\HaaliMkx");
+#endif
                     if (key == null)
                         return null;
                     else
@@ -485,7 +489,11 @@ namespace MeGUI
             {
                 try
                 {
+#if x86
                     Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\AviSynth");
+#else
+                    Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Wow6432Node\AviSynth");
+#endif
                     if (key == null)
                         return null;
                     else
@@ -504,7 +512,11 @@ namespace MeGUI
                     throw new ArgumentException("Directory " + value + " does not exists");
                 try
                 {
+#if x86
                     Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\AviSynth", true);
+#else
+                    Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Wow6432Node\AviSynth", true);
+#endif
                     key.SetValue("plugindir2_5", value);
                 }
                 catch

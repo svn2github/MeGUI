@@ -57,7 +57,7 @@ namespace MeGUI
 
         [DllImport("kernel32.dll", SetLastError = true, CallingConvention = CallingConvention.Winapi)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool IsWow64Process([In] IntPtr hProcess, [Out] out bool wow64Process);
+        public static extern bool IsWow64Process([In] IntPtr hProcess, [Out] out bool lpSystemInfo);
 
         #region Private Constants
         private const int VER_NT_WORKSTATION = 1;
@@ -284,13 +284,16 @@ namespace MeGUI
                         }
                 }
             }
-
+#if x86
             if (x64Detection)
             {
                 if (isWow64())
                      osName += " x64";
                 else osName += " x86";
             }
+#else
+            osName += " x64";
+#endif
             return osName;
         }
 
