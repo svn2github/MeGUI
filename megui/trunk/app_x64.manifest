@@ -1,13 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
-  <assemblyIdentity processorArchitecture="x64" type="win32" name="MeGUI" version="0.3.0.1008" />
-  <description>MeGUI</description>
+<asmv1:assembly manifestVersion="1.0" xmlns="urn:schemas-microsoft-com:asm.v1" xmlns:asmv1="urn:schemas-microsoft-com:asm.v1" xmlns:asmv2="urn:schemas-microsoft-com:asm.v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <assemblyIdentity version="1.0.0.0" name="MyApplication.app"/>
   <trustInfo xmlns="urn:schemas-microsoft-com:asm.v2">
     <security>
-      <applicationRequestMinimum>
-        <PermissionSet class="System.Security.PermissionSet" version="1" Unrestricted="true" ID="Custom" SameSite="site" />
-        <defaultAssemblyRequest permissionSetReference="Custom" />
-      </applicationRequestMinimum>
       <requestedPrivileges xmlns="urn:schemas-microsoft-com:asm.v3">
         <!-- UAC Manifest Options
             If you want to change the Windows User Account Control level replace the 
@@ -24,9 +19,4 @@
       </requestedPrivileges>
     </security>
   </trustInfo>
-  <dependency>
-    <dependentAssembly>
-      <assemblyIdentity type="win32" name="Microsoft.Windows.Common-Controls" version="6.0.0.0" publicKeyToken="6595b64144ccf1df" language="*" processorArchitecture="x64" />
-    </dependentAssembly>
-  </dependency>
-</assembly>
+</asmv1:assembly>
