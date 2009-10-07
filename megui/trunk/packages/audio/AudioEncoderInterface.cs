@@ -764,10 +764,16 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 WinAmpAACSettings n = audioJob.Settings as WinAmpAACSettings;
                 _encoderExecutablePath = this._settings.EncAacPlusPath;
                 script.Append("32==Audiobits(last)?ConvertAudioTo16bit(last):last" + Environment.NewLine);  // winamp aac encoder doesn't support 32bits streams
-                StringBuilder sb = new StringBuilder("- \"{0}\" --rawpcm {1} {3} {2} --cbr ");
-                sb.Append(n.Bitrate * 1000);
+                StringBuilder sb = new StringBuilder("- \"{0}\" --rawpcm {1} {3} {2}");
+
+                sb.Append(" --cbr " + n.Bitrate * 1000);
+
                 if (n.Mpeg2AAC)
                     sb.Append(" --mpeg2aac");
+
+                if (audioJob.Output.EndsWith(".m4a") || audioJob.Output.EndsWith(".mp4"))
+                    sb.Append(" --mp4");
+
                 switch (n.Profile)
                 {
                     case AacProfile.PS:

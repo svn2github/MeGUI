@@ -1149,6 +1149,8 @@ namespace MeGUI
         {
             supportedCodecs.Add(AudioCodec.AAC);
             supportedTypes.Add(AudioType.RAWAAC);
+            supportedTypes.Add(AudioType.M4A);
+            supportedTypes.Add(AudioType.MP4AAC);
             supportedEncoderTypes.Add(AudioEncoderType.WAAC);
         }
     }
