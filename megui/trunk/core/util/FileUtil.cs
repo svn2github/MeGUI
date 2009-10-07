@@ -241,5 +241,36 @@ namespace MeGUI.core.util
 
             return false;
         }
+
+        /// <summary>
+        /// Copy File
+        /// </summary>
+        /// <param name"sourcePath">Path of the Source file</param>
+        /// <param name"targetPath">Path of the Target File</param>
+        /// <param name"targetName">Name of the Target file</param>
+        /// <param name="overwrite"></param>
+        public static void CopyFile(string sourcePath, string targetPath, string targetName, bool overwrite)
+        {
+            if (Directory.Exists(sourcePath))
+            {
+                string[] files =Directory.GetFiles(sourcePath);
+
+                foreach (string s in files)
+                {
+                    // Use static Path methods to extract only the file name from the path.
+                    string fileName = Path.GetFileName(s);
+                    if (fileName == targetName)
+                    {
+                        string destFile = Path.Combine(targetPath, fileName);
+                        File.Copy(s, destFile, overwrite);
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine("Source path does not exist!");
+            }
+
+        }
     }
 }
