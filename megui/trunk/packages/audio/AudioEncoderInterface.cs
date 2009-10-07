@@ -386,19 +386,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 }
                 else
                 {
-                    // Better Errors Exception for Audio Encoders
-                    string encoder_path = Path.GetDirectoryName(_encoderExecutablePath);
-
                     _log.LogValue("An error occurred", e, ImageType.Error);
-
-                    if (audioJob.Settings is WinAmpAACSettings)
-                    {
-                        if (File.Exists(Path.Combine(encoder_path, "enc_aacplus.dll")) == false)
-                            _log.Error("enc_aacplus.dll not found in the path...");
-                        if (File.Exists(Environment.SystemDirectory + @"\nscrt.dll") == false)
-                            _log.Error("nscrt.dll must be in your Windows System directory...");
-                    }
-
                     su.HasError = true;
                     raiseEvent();
                 }
@@ -763,6 +751,17 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 _mustSendWavHeaderToEncoderStdIn = false;
                 WinAmpAACSettings n = audioJob.Settings as WinAmpAACSettings;
                 _encoderExecutablePath = this._settings.EncAacPlusPath;
+
+                // Better Errors Exception for Audio Encoders
+                string encoder_path = Path.GetDirectoryName(_encoderExecutablePath);
+
+                if (!File.Exists(Path.Combine(encoder_path, "enc_aacplus.dll")))
+                    FileUtil.CopyFile(MeGUISettings.WinampPath+"\\Plugins", encoder_path, "enc_aacplus.dll", true);
+                if (!File.Exists(Path.Combine(encoder_path, "nscrt.dll")))
+                    FileUtil.CopyFile(MeGUISettings.WinampPath, encoder_path, "nscrt.dll", true);
+                if (!File.Exists(Path.Combine(encoder_path, "libmp4v2.dll")))
+                    FileUtil.CopyFile(MeGUISettings.WinampPath, encoder_path, "libmp4v2.dll", true);
+
                 script.Append("32==Audiobits(last)?ConvertAudioTo16bit(last):last" + Environment.NewLine);  // winamp aac encoder doesn't support 32bits streams
                 StringBuilder sb = new StringBuilder("- \"{0}\" --rawpcm {1} {3} {2}");
 
