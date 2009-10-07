@@ -57,7 +57,7 @@ namespace MeGUI
 		{
             autoscroll = true;
             autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/stable/", "http://megui.xvidvideo.ru/auto/stable/" },
-                new string[] { "Development", "http://kurtnoise.free.fr/MeGUI", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" } };
+                new string[] { "Development", "http://kurtnoise.free.fr/MeGUI/" } };
             acceptableFPSError = 0.01M;
             autoUpdateServerSubList = 0;
             maxServersToTry = 5;
@@ -449,6 +449,28 @@ namespace MeGUI
         }
 
         /// <summary>
+        /// Winamp Path
+        /// </summary>
+        public static string WinampPath
+        {
+            get
+            {
+                try
+                {
+                    Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\winamp.exe");
+                    if (key == null)
+                        return null;
+                    else
+                        return (string)key.GetValue("Path");
+                }
+                catch
+                {
+                    return null;
+                }
+            }
+        }
+
+        /// <summary>
         /// Haali Media Splitter Path
         /// </summary>
         public static string HaaliMSPath
@@ -457,7 +479,11 @@ namespace MeGUI
             {
                 try
                 {
+#if x86
                     Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\HaaliMkx");
+#else
+                    Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Wow6432Node\HaaliMkx");
+#endif
                     if (key == null)
                         return null;
                     else
@@ -479,7 +505,11 @@ namespace MeGUI
             {
                 try
                 {
+#if x86
                     Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\AviSynth");
+#else
+                    Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Wow6432Node\AviSynth");
+#endif
                     if (key == null)
                         return null;
                     else
@@ -498,7 +528,11 @@ namespace MeGUI
                     throw new ArgumentException("Directory " + value + " does not exists");
                 try
                 {
+#if x86
                     Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\AviSynth", true);
+#else
+                    Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Wow6432Node\AviSynth", true);
+#endif
                     key.SetValue("plugindir2_5", value);
                 }
                 catch
@@ -517,7 +551,11 @@ namespace MeGUI
             {
                 try
                 {
+#if x86
                     Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\MeGUI");
+#else
+                    Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Wow6432Node\MeGUI");
+#endif
                     if (key == null)
                         return null;
                     else
@@ -534,7 +572,11 @@ namespace MeGUI
                     throw new ArgumentException("Path must be absolute");
                 try
                 {
+#if x86
                     Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine.CreateSubKey(@"SOFTWARE\MeGUI");
+#else
+                    Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine.CreateSubKey(@"SOFTWARE\Wow6432Node\MeGUI");
+#endif
                     key.SetValue("update_cache", value);
                 }
                 catch

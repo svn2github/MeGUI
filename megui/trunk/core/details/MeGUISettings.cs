@@ -433,6 +433,28 @@ namespace MeGUI
         }
 
         /// <summary>
+        /// Winamp Path
+        /// </summary>
+        public static string WinampPath
+        {
+            get
+            {
+                try
+                {
+                    Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\winamp.exe");
+                    if (key == null)
+                        return null;
+                    else
+                        return (string)key.GetValue("Path");
+                }
+                catch
+                {
+                    return null;
+                }
+            }
+        }
+
+        /// <summary>
         /// Haali Media Splitter Path
         /// </summary>
         public static string HaaliMSPath
