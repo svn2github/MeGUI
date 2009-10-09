@@ -758,10 +758,12 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 script.Append("32==Audiobits(last)?ConvertAudioTo16bit(last):last" + Environment.NewLine);  // winamp aac encoder doesn't support 32bits streams
                 StringBuilder sb = new StringBuilder("- \"{0}\" --rawpcm {1} {3} {2}");
 
-                sb.Append(" --cbr " + n.Bitrate * 1000);
-                
+                sb.Append(" --br " + n.Bitrate * 1000);
+
                 if (n.Mpeg2AAC)
                     sb.Append(" --mpeg2aac");
+                else
+                    sb.Append(" --mpeg4aac");
 
                 if (audioJob.Output.EndsWith(".m4a") || audioJob.Output.EndsWith(".mp4"))
                     sb.Append(" --mp4");
@@ -769,12 +771,16 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 switch (n.Profile)
                 {
                     case AacProfile.PS:
+                        sb.Append(" --ps");
                         break;
                     case AacProfile.HE:
-                        sb.Append(" --nops");
+                        sb.Append(" --he");
                         break;
                     case AacProfile.LC:
                         sb.Append(" --lc");
+                        break;
+                    case AacProfile.HIGH:
+                        sb.Append(" --high");
                         break;
                 }
                 switch (n.StereoMode)

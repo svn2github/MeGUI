@@ -49,7 +49,7 @@ namespace MeGUI.packages.audio.naac
 			// Required for Windows Form Designer support
 			//
 			InitializeComponent();
-            comboBox1.Items.AddRange(EnumProxy.CreateArray(typeof(AacProfile)));
+            comboBox1.Items.AddRange(EnumProxy.CreateArray(NeroAACSettings.SupportedProfiles));
             rbtnABR_CheckedChanged(null, null);
             vBitrate_ValueChanged(null, null);
 		}

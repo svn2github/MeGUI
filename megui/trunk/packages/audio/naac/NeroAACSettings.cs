@@ -34,12 +34,17 @@ namespace MeGUI
         [EnumTitle("HE-AAC")]
         HE,
         [EnumTitle("AAC-LC")]
-        LC
+        LC,
+        [EnumTitle("High")]
+        HIGH
     }
 
     public class NeroAACSettings : AudioCodecSettings
 	{
         public static readonly string ID = "Nero AAC";
+
+        public static readonly AacProfile[] SupportedProfiles = new AacProfile[] { AacProfile.Auto, AacProfile.PS, AacProfile.HE, AacProfile.LC };
+
 		public NeroAACSettings() 
             : base(ID, AudioCodec.AAC, AudioEncoderType.NAAC, 0, BitrateManagementMode.VBR)
 		{

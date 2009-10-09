@@ -34,7 +34,7 @@ namespace MeGUI
             Dual
         }
 
-        public static readonly AacProfile[] SupportedProfiles = new AacProfile[] { AacProfile.PS, AacProfile.HE, AacProfile.LC };
+        public static readonly AacProfile[] SupportedProfiles = new AacProfile[] { AacProfile.PS, AacProfile.HE, AacProfile.LC, AacProfile.HIGH };
 
         public WinAmpAACSettings()
             : base(ID, AudioCodec.AAC, AudioEncoderType.WAAC, 48)
