@@ -68,7 +68,7 @@ namespace MeGUI
         private int motionSearchPrecision, vhqMode, minPQuant, maxPQuant, minBQuant, maxBQuant, bQuantRatio, bQuantOffset,
                     keyFrameBoost, keyframeThreshold, keyframeReduction, overflowControlStrength,
                     maxOverflowImprovement, maxOverflowDegradation, highBitrateDegradation, lowBitrateImprovement, reactionDelayFactor, averagingPeriod,
-                    rateControlBuffer, frameDropRatio, xvidProfile, vbvBuffer, vbvMaxRate, vbvPeakRate;
+                    rateControlBuffer, frameDropRatio, xvidProfile, vbvBuffer, vbvMaxRate, vbvPeakRate, hvsMasking;
         private bool packedBitstream, gmc, chromaMotion, closedGOP, vhqForBframes, adaptiveQuant, interlaced, bottomFieldFirst, lumiMasking;
         private decimal bframeThreshold, quantizer;
         private string customQuantizerMatrix;
@@ -130,6 +130,7 @@ namespace MeGUI
             vbvPeakRate = 0;
             base.MaxNumberOfPasses = 2;
             FourCCs = FourCCsForMPEG4ASP;
+            hvsMasking = 0;
         }
         #region properties
         /// I believe we really does'nt need to create this array @ per-instance basis
@@ -341,6 +342,11 @@ namespace MeGUI
             get { return customQuantizerMatrix; }
             set { customQuantizerMatrix = value; }
         }
+        public int HVSMasking
+        {
+            get { return hvsMasking; }
+            set { hvsMasking = value; }
+        }
         #endregion
 
         /// <summary>
@@ -404,7 +410,8 @@ namespace MeGUI
                this.VbvBuffer != otherSettings.VbvBuffer ||
                this.VbvMaxRate != otherSettings.VbvMaxRate ||
                this.VbvPeakRate != otherSettings.VbvPeakRate ||
-               this.VHQMode != otherSettings.VHQMode
+               this.VHQMode != otherSettings.VHQMode ||
+               this.HVSMasking != otherSettings.HVSMasking
                )
                 return true;
             else

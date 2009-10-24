@@ -53,6 +53,8 @@ namespace MeGUI.packages.video.xvid
             this.fourCCLabel = new System.Windows.Forms.Label();
             this.fourCC = new System.Windows.Forms.ComboBox();
             this.xvidCodecToolsGroupBox = new System.Windows.Forms.GroupBox();
+            this.HVSMasking = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.cqmComboBox1 = new MeGUI.core.gui.FileSCBox();
             this.xvidUseVHQForBframes = new System.Windows.Forms.CheckBox();
             this.xvidUseVHQForBframesLabel = new System.Windows.Forms.Label();
@@ -463,6 +465,8 @@ namespace MeGUI.packages.video.xvid
             // 
             // xvidCodecToolsGroupBox
             // 
+            this.xvidCodecToolsGroupBox.Controls.Add(this.HVSMasking);
+            this.xvidCodecToolsGroupBox.Controls.Add(this.label1);
             this.xvidCodecToolsGroupBox.Controls.Add(this.cqmComboBox1);
             this.xvidCodecToolsGroupBox.Controls.Add(this.xvidUseVHQForBframes);
             this.xvidCodecToolsGroupBox.Controls.Add(this.xvidUseVHQForBframesLabel);
@@ -479,17 +483,40 @@ namespace MeGUI.packages.video.xvid
             this.xvidCodecToolsGroupBox.Controls.Add(this.xvidQPelLabel);
             this.xvidCodecToolsGroupBox.Controls.Add(this.xvidVHQ);
             this.xvidCodecToolsGroupBox.Controls.Add(this.xvidVHQLabel);
-            this.xvidCodecToolsGroupBox.Location = new System.Drawing.Point(0, 182);
+            this.xvidCodecToolsGroupBox.Location = new System.Drawing.Point(0, 136);
             this.xvidCodecToolsGroupBox.Name = "xvidCodecToolsGroupBox";
-            this.xvidCodecToolsGroupBox.Size = new System.Drawing.Size(320, 244);
+            this.xvidCodecToolsGroupBox.Size = new System.Drawing.Size(320, 290);
             this.xvidCodecToolsGroupBox.TabIndex = 23;
             this.xvidCodecToolsGroupBox.TabStop = false;
             this.xvidCodecToolsGroupBox.Text = "Tools";
             // 
+            // HVSMasking
+            // 
+            this.HVSMasking.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.HVSMasking.FormattingEnabled = true;
+            this.HVSMasking.Items.AddRange(new object[] {
+            "None",
+            "Lumi",
+            "Variance"});
+            this.HVSMasking.Location = new System.Drawing.Point(192, 184);
+            this.HVSMasking.Name = "HVSMasking";
+            this.HVSMasking.Size = new System.Drawing.Size(121, 21);
+            this.HVSMasking.TabIndex = 18;
+            this.HVSMasking.SelectedIndexChanged += new System.EventHandler(this.updateEvent);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(9, 187);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(72, 13);
+            this.label1.TabIndex = 17;
+            this.label1.Text = "HVS Masking";
+            // 
             // cqmComboBox1
             // 
             this.cqmComboBox1.Filter = "";
-            this.cqmComboBox1.Location = new System.Drawing.Point(10, 209);
+            this.cqmComboBox1.Location = new System.Drawing.Point(10, 241);
             this.cqmComboBox1.MaximumSize = new System.Drawing.Size(1000, 29);
             this.cqmComboBox1.MinimumSize = new System.Drawing.Size(64, 29);
             this.cqmComboBox1.Name = "cqmComboBox1";
@@ -535,7 +562,7 @@ namespace MeGUI.packages.video.xvid
             // 
             // xvidQuantTypeLabel
             // 
-            this.xvidQuantTypeLabel.Location = new System.Drawing.Point(8, 190);
+            this.xvidQuantTypeLabel.Location = new System.Drawing.Point(8, 222);
             this.xvidQuantTypeLabel.Name = "xvidQuantTypeLabel";
             this.xvidQuantTypeLabel.Size = new System.Drawing.Size(100, 16);
             this.xvidQuantTypeLabel.TabIndex = 12;
@@ -644,7 +671,7 @@ namespace MeGUI.packages.video.xvid
             this.xvidGeneralOptionsGroupBox.Controls.Add(this.xvidModeLabel);
             this.xvidGeneralOptionsGroupBox.Location = new System.Drawing.Point(0, 3);
             this.xvidGeneralOptionsGroupBox.Name = "xvidGeneralOptionsGroupBox";
-            this.xvidGeneralOptionsGroupBox.Size = new System.Drawing.Size(320, 176);
+            this.xvidGeneralOptionsGroupBox.Size = new System.Drawing.Size(320, 127);
             this.xvidGeneralOptionsGroupBox.TabIndex = 22;
             this.xvidGeneralOptionsGroupBox.TabStop = false;
             this.xvidGeneralOptionsGroupBox.Text = "General";
@@ -1433,6 +1460,7 @@ namespace MeGUI.packages.video.xvid
             ((System.ComponentModel.ISupportInitialize)(this.xvidNbBFrames)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nbThreads)).EndInit();
             this.xvidCodecToolsGroupBox.ResumeLayout(false);
+            this.xvidCodecToolsGroupBox.PerformLayout();
             this.xvidGeneralOptionsGroupBox.ResumeLayout(false);
             this.xvidGeneralOptionsGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.xvidBitrateQuantizer)).EndInit();
@@ -1582,5 +1610,7 @@ namespace MeGUI.packages.video.xvid
         private System.Windows.Forms.Label xvidVbvPeakRateLabel;
         private System.Windows.Forms.Label xvidVbvMaxRateLabel;
         private System.Windows.Forms.Label xvidVbvBufferLabel;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ComboBox HVSMasking;
     }
 }

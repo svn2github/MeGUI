@@ -145,6 +145,8 @@ namespace MeGUI.packages.video.xvid
             this.fourCC = new System.Windows.Forms.ComboBox();
             this.chAdvancedSettings = new System.Windows.Forms.CheckBox();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
+            this.label2 = new System.Windows.Forms.Label();
+            this.HVSMasking = new System.Windows.Forms.ComboBox();
             this.tabControl1.SuspendLayout();
             this.mainTabPage.SuspendLayout();
             this.xvidGeneralOptionsGroupBox.SuspendLayout();
@@ -1259,6 +1261,8 @@ namespace MeGUI.packages.video.xvid
             // 
             // xvidCodecToolsGroupBox
             // 
+            this.xvidCodecToolsGroupBox.Controls.Add(this.HVSMasking);
+            this.xvidCodecToolsGroupBox.Controls.Add(this.label2);
             this.xvidCodecToolsGroupBox.Controls.Add(this.cqmComboBox1);
             this.xvidCodecToolsGroupBox.Controls.Add(this.xvidUseVHQForBframes);
             this.xvidCodecToolsGroupBox.Controls.Add(this.xvidUseVHQForBframesLabel);
@@ -1277,7 +1281,7 @@ namespace MeGUI.packages.video.xvid
             this.xvidCodecToolsGroupBox.Controls.Add(this.xvidVHQLabel);
             this.xvidCodecToolsGroupBox.Location = new System.Drawing.Point(6, 17);
             this.xvidCodecToolsGroupBox.Name = "xvidCodecToolsGroupBox";
-            this.xvidCodecToolsGroupBox.Size = new System.Drawing.Size(320, 244);
+            this.xvidCodecToolsGroupBox.Size = new System.Drawing.Size(320, 275);
             this.xvidCodecToolsGroupBox.TabIndex = 24;
             this.xvidCodecToolsGroupBox.TabStop = false;
             this.xvidCodecToolsGroupBox.Text = "Tools";
@@ -1285,7 +1289,7 @@ namespace MeGUI.packages.video.xvid
             // cqmComboBox1
             // 
             this.cqmComboBox1.Filter = "";
-            this.cqmComboBox1.Location = new System.Drawing.Point(10, 209);
+            this.cqmComboBox1.Location = new System.Drawing.Point(10, 240);
             this.cqmComboBox1.MaximumSize = new System.Drawing.Size(1000, 29);
             this.cqmComboBox1.MinimumSize = new System.Drawing.Size(64, 29);
             this.cqmComboBox1.Name = "cqmComboBox1";
@@ -1328,7 +1332,7 @@ namespace MeGUI.packages.video.xvid
             // 
             // xvidQuantTypeLabel
             // 
-            this.xvidQuantTypeLabel.Location = new System.Drawing.Point(8, 190);
+            this.xvidQuantTypeLabel.Location = new System.Drawing.Point(8, 221);
             this.xvidQuantTypeLabel.Name = "xvidQuantTypeLabel";
             this.xvidQuantTypeLabel.Size = new System.Drawing.Size(100, 16);
             this.xvidQuantTypeLabel.TabIndex = 12;
@@ -1491,6 +1495,29 @@ namespace MeGUI.packages.video.xvid
             this.helpButton1.Size = new System.Drawing.Size(39, 23);
             this.helpButton1.TabIndex = 48;
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(11, 188);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(72, 13);
+            this.label2.TabIndex = 17;
+            this.label2.Text = "HVS Masking";
+            // 
+            // HVSMasking
+            // 
+            this.HVSMasking.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.HVSMasking.FormattingEnabled = true;
+            this.HVSMasking.Items.AddRange(new object[] {
+            "None",
+            "Lumi",
+            "Variance"});
+            this.HVSMasking.Location = new System.Drawing.Point(192, 185);
+            this.HVSMasking.Name = "HVSMasking";
+            this.HVSMasking.Size = new System.Drawing.Size(120, 21);
+            this.HVSMasking.TabIndex = 18;
+            this.HVSMasking.SelectedIndexChanged += new System.EventHandler(this.updateEvent);
+            // 
             // xvidConfigurationPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1547,6 +1574,7 @@ namespace MeGUI.packages.video.xvid
             this.xvidOtherGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.xvidNbBFrames)).EndInit();
             this.xvidCodecToolsGroupBox.ResumeLayout(false);
+            this.xvidCodecToolsGroupBox.PerformLayout();
             this.gbASPProfiles.ResumeLayout(false);
             this.gbFourCC.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -1672,5 +1700,7 @@ namespace MeGUI.packages.video.xvid
         private System.Windows.Forms.ComboBox fourCC;
         private System.Windows.Forms.CheckBox chAdvancedSettings;
         private MeGUI.core.gui.HelpButton helpButton1;
+        private System.Windows.Forms.ComboBox HVSMasking;
+        private System.Windows.Forms.Label label2;
     }
 }

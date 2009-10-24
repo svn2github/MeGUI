@@ -95,10 +95,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "XviDEncoder");
                     break;
                 case 3: // 2 pass second pass
                 case 4: // automated twopass
-                    if (xs.XvidProfile == 0)
-                        sb.Append("-pass2 " + "\"" + xs.Logfile + "\" -bitrate " + xs.BitrateQuantizer + " "); // add logfile
-                    else
-                        sb.Append("-altpass2 " + "\"" + xs.Logfile + "\" -bitrate " + xs.BitrateQuantizer + " "); // add logfile
+                    sb.Append("-pass2 " + "\"" + xs.Logfile + "\" -bitrate " + xs.BitrateQuantizer + " "); // add logfile
                     break;
             }
             if (xs.EncodingMode <= 1) // 1 pass modes
@@ -179,10 +176,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "XviDEncoder");
                 sb.Append("-qtype 1 ");
             else if (xs.QuantizerMatrix != xvidSettings.H263Matrix && !string.IsNullOrEmpty(xs.QuantizerMatrix))
                 sb.Append("-qmatrix \"" + xs.QuantizerMatrix + "\" ");
-            if (xs.ClosedGOP)
-                sb.Append("-closed_gop ");
-            if (xs.AdaptiveQuant)
-                sb.Append("-lumimasking ");
             if (xs.Interlaced)
             {
                 sb.Append("-interlaced ");
@@ -191,8 +184,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "XviDEncoder");
                 else
                     sb.Append("2 ");
             }
-            if (xs.LumiMasking)
-                sb.Append("-lumimasking ");
+            if (xs.HVSMasking != 0)
+                sb.Append("-masking " + xs.HVSMasking + " ");
             if (!xs.Trellis)
                 sb.Append("-notrellis ");
             if (!xs.ChromaMotion)

@@ -328,6 +328,8 @@ namespace MeGUI.packages.video.xvid
                 this.xvidVHQ.SelectedIndex = 1;
             if (cqmComboBox1.SelectedIndex == -1)
                 cqmComboBox1.SelectedIndex = 0;
+            if (HVSMasking.SelectedIndex == -1)
+                HVSMasking.SelectedIndex = 0;
         }
 
         /// <summary>
@@ -411,6 +413,7 @@ namespace MeGUI.packages.video.xvid
                 xs.QuantizerMatrix = cqmComboBox1.SelectedText;
                 xs.CustomEncoderOptions = customCommandlineOptions.Text;
                 xs.Logfile = this.logfile.Text;
+                xs.HVSMasking = HVSMasking.SelectedIndex;
                 return xs;
             }
             set
@@ -467,6 +470,7 @@ namespace MeGUI.packages.video.xvid
                 cqmComboBox1.SelectedObject = xs.QuantizerMatrix;
                 customCommandlineOptions.Text = xs.CustomEncoderOptions;
                 this.logfile.Text = xs.Logfile;
+                HVSMasking.SelectedIndex = xs.HVSMasking;
             }
         }
         #endregion
