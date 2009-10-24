@@ -57,8 +57,8 @@
             this.lbGOPLength = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.gradientPanel1 = new MeGUI.GradientPanel();
-            this.label1 = new System.Windows.Forms.Label();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.mainTabPage.SuspendLayout();
             this.divxavcGeneralOptionsGroupBox.SuspendLayout();
@@ -74,16 +74,16 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
             // 
+            // commandline
+            // 
+            this.commandline.Location = new System.Drawing.Point(0, 490);
+            this.commandline.Size = new System.Drawing.Size(399, 86);
+            this.commandline.Text = "program ";
+            // 
             // tabControl1
             // 
             this.tabControl1.Size = new System.Drawing.Size(396, 392);
             this.tabControl1.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight;
-            // 
-            // commandline
-            // 
-            this.commandline.Location = new System.Drawing.Point(4, 398);
-            this.commandline.Size = new System.Drawing.Size(389, 86);
-            this.commandline.Text = "program ";
             // 
             // mainTabPage
             // 
@@ -439,6 +439,17 @@
             this.gradientPanel1.Size = new System.Drawing.Size(399, 90);
             this.gradientPanel1.TabIndex = 43;
             // 
+            // pictureBox2
+            // 
+            this.pictureBox2.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
+            this.pictureBox2.Location = new System.Drawing.Point(268, 19);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(100, 50);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox2.TabIndex = 1;
+            this.pictureBox2.TabStop = false;
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -451,26 +462,15 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Adjust your Settings here...";
             // 
-            // pictureBox2
-            // 
-            this.pictureBox2.BackColor = System.Drawing.Color.Transparent;
-            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
-            this.pictureBox2.Location = new System.Drawing.Point(268, 19);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(100, 50);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox2.TabIndex = 1;
-            this.pictureBox2.TabStop = false;
-            // 
             // DivXAVCConfigurationPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.gradientPanel1);
             this.Name = "DivXAVCConfigurationPanel";
-            this.Size = new System.Drawing.Size(399, 487);
+            this.Size = new System.Drawing.Size(399, 576);
+            this.Controls.SetChildIndex(this.commandline, 0);
             this.Controls.SetChildIndex(this.tabControl1, 0);
-          //  this.Controls.SetChildIndex(this.commandline, 0);
             this.Controls.SetChildIndex(this.gradientPanel1, 0);
             this.tabControl1.ResumeLayout(false);
             this.mainTabPage.ResumeLayout(false);

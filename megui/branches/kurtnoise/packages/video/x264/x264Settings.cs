@@ -58,12 +58,12 @@ namespace MeGUI
         int NewadaptiveBFrames, nbRefFrames, alphaDeblock, betaDeblock, subPelRefinement, maxQuantDelta, tempQuantBlur, 
 			bframePredictionMode, vbvBufferSize, vbvMaxBitrate, meType, meRange, minGOPSize, macroBlockOptions,
             quantizerMatrixType, profile, x264Trellis, level, noiseReduction, deadZoneInter, deadZoneIntra, AQMode, preset, 
-            tune, lookahead, slicesnb, maxSliceSyzeBytes, maxSliceSyzeMBs;
+            tune, lookahead, slicesnb, maxSliceSyzeBytes, maxSliceSyzeMBs, bFramePyramid;
 		decimal ipFactor, pbFactor, chromaQPOffset, vbvInitialBuffer, bitrateVariance, quantCompression, 
 			tempComplexityBlur, tempQuanBlurCC, scdSensitivity, bframeBias, quantizerCrf, AQStrength, psyRDO, psyTrellis;
 		bool deblock, cabac, p4x4mv, p8x8mv, b8x8mv, i4x4mv, i8x8mv, weightedBPrediction, encodeInterlaced,
-			bFramePyramid, chromaME, adaptiveDCT, lossless, mixedRefs, noFastPSkip, psnrCalc, noDctDecimate, ssimCalc, useQPFile, 
-            FullRange, advSet, noMBTree, threadInput, noPsy, scenecut;
+			chromaME, adaptiveDCT, lossless, noMixedRefs, noFastPSkip, psnrCalc, noDctDecimate, ssimCalc, useQPFile, 
+            FullRange, advSet, noMBTree, threadInput, noPsy, scenecut, constrainedIntra;
 		string quantizerMatrix, qpfile;
 		#region constructor
         /// <summary>
@@ -81,7 +81,7 @@ namespace MeGUI
 			BitrateQuantizer = 23;
 			KeyframeInterval = 250;
 			nbRefFrames = 3;
-			mixedRefs = true;
+			noMixedRefs = false;
 			NbBframes = 3;
 			Turbo = false;
 			deblock = true;
@@ -90,7 +90,7 @@ namespace MeGUI
 			cabac = true;
 			weightedBPrediction = true;
 			NewadaptiveBFrames = 1;
-			bFramePyramid = false;
+			bFramePyramid = 0;
 			subPelRefinement = 6;
 			psyRDO = new decimal(1.0);
             psyTrellis = new decimal(0.0);
@@ -108,8 +108,8 @@ namespace MeGUI
 			ipFactor = new decimal(1.4);
 			pbFactor = new decimal(1.3);
 			chromaQPOffset = new decimal(0.0);
-			vbvBufferSize = -1;
-			vbvMaxBitrate = -1;
+			vbvBufferSize = 0;
+			vbvMaxBitrate = 0;
 			vbvInitialBuffer = new decimal(0.9);
 			bitrateVariance = 1;
 			quantCompression = new decimal(0.6);
@@ -146,6 +146,7 @@ namespace MeGUI
             slicesnb = 0;
             maxSliceSyzeBytes = 0;
             maxSliceSyzeMBs = 0;
+            constrainedIntra = false;
 		}
 		#endregion
 		#region properties
@@ -172,143 +173,143 @@ namespace MeGUI
         }
 		public bool NoFastPSkip
 		{
-			get {return noFastPSkip;}
-			set {noFastPSkip = value;}
+			get { return noFastPSkip; }
+			set { noFastPSkip = value; }
 		}
 		public int NoiseReduction
         {
             get { return noiseReduction; }
             set { noiseReduction = value; }
         }
-        public bool MixedRefs
+        public bool NoMixedRefs
 		{
-			get {return mixedRefs;}
-			set {mixedRefs = value;}
+			get { return noMixedRefs; }
+			set { noMixedRefs = value; }
 		}
 		public int X264Trellis
 		{
-			get {return x264Trellis;}
-			set {x264Trellis = value;}
+			get { return x264Trellis; }
+			set { x264Trellis = value; }
 		}
 		public int NbRefFrames
 		{
-			get {return nbRefFrames;}
-			set {nbRefFrames = value;}
+			get { return nbRefFrames; }
+			set { nbRefFrames = value; }
 		}
 		public int AlphaDeblock
 		{
-			get {return alphaDeblock;}
-			set {alphaDeblock = value;}
+			get { return alphaDeblock; }
+			set { alphaDeblock = value; }
 		}
 		public int BetaDeblock
 		{
-			get {return betaDeblock;}
-			set {betaDeblock = value;}
+			get { return betaDeblock; }
+			set { betaDeblock = value; }
 		}
 		public int SubPelRefinement
 		{
-			get {return subPelRefinement;}
-			set {subPelRefinement = value;}
+			get { return subPelRefinement; }
+			set { subPelRefinement = value; }
 		}
 		public int MaxQuantDelta
 		{
-			get {return maxQuantDelta;}
-			set {maxQuantDelta = value;}
+			get { return maxQuantDelta; }
+			set { maxQuantDelta = value; }
 		}
 		public int TempQuantBlur
 		{
-			get {return tempQuantBlur;}
-			set {tempQuantBlur = value;}
+			get { return tempQuantBlur; }
+			set { tempQuantBlur = value; }
 		}
 		public int BframePredictionMode
 		{
-			get {return bframePredictionMode;}
-			set {bframePredictionMode = value;}
+			get { return bframePredictionMode; }
+			set { bframePredictionMode = value; }
 		}
 		public int VBVBufferSize
 		{
-			get {return vbvBufferSize;}
-			set {vbvBufferSize = value;}
+			get { return vbvBufferSize; }
+			set { vbvBufferSize = value; }
 		}
 		public int VBVMaxBitrate
 		{
-			get {return vbvMaxBitrate;}
-			set {vbvMaxBitrate = value;}
+			get { return vbvMaxBitrate; }
+			set { vbvMaxBitrate = value; }
 		}
 		public int METype
 		{
-			get {return meType;}
-			set {meType = value;}
+			get { return meType; }
+			set { meType = value; }
 		}
 		public int MERange
 		{
-			get {return meRange;}
-			set {meRange = value;}
+			get { return meRange; }
+			set { meRange = value; }
 		}
 		public int MinGOPSize
 		{
-			get {return minGOPSize;}
-			set {minGOPSize = value;}
+			get { return minGOPSize; }
+			set { minGOPSize = value; }
 		}
 		public int Profile
 		{
-			get {return profile;}
-			set {profile = value;}
+			get { return profile; }
+			set { profile = value; }
 		}
 		public int Level
 		{
-			get {return level;}
-			set {level = value;}
+			get { return level; }
+			set { level = value; }
 		}
 		public decimal IPFactor
 		{
-			get {return ipFactor;}
-			set {ipFactor = value;}
+			get { return ipFactor; }
+			set { ipFactor = value; }
 		}
 		public decimal PBFactor
 		{
-			get {return pbFactor;}
-			set {pbFactor = value;}
+			get { return pbFactor; }
+			set { pbFactor = value; }
 		}
 		public decimal ChromaQPOffset
 		{
-			get {return chromaQPOffset;}
-			set {chromaQPOffset = value;}
+			get { return chromaQPOffset; }
+			set { chromaQPOffset = value; }
 		}
 		public decimal VBVInitialBuffer
 		{
-			get {return vbvInitialBuffer;}
-			set {vbvInitialBuffer = value;}
+			get { return vbvInitialBuffer; }
+			set { vbvInitialBuffer = value; }
 		}
 		public decimal BitrateVariance
 		{
-			get {return bitrateVariance;}
-			set {bitrateVariance = value;}
+			get { return bitrateVariance; }
+			set { bitrateVariance = value; }
 		}
 		public decimal QuantCompression
 		{
-			get {return quantCompression;}
-			set {quantCompression = value;}
+			get { return quantCompression; }
+			set { quantCompression = value; }
 		}
 		public decimal TempComplexityBlur
 		{
-			get {return tempComplexityBlur;}
-			set {tempComplexityBlur = value;}
+			get { return tempComplexityBlur; }
+			set { tempComplexityBlur = value; }
 		}
 		public decimal TempQuanBlurCC
 		{
-			get {return tempQuanBlurCC;}
-			set {tempQuanBlurCC = value;}
+			get { return tempQuanBlurCC; }
+			set { tempQuanBlurCC = value; }
 		}
 		public decimal SCDSensitivity
 		{
-			get {return scdSensitivity;}
-			set {scdSensitivity = value;}
+			get { return scdSensitivity; }
+			set { scdSensitivity = value; }
 		}
 		public decimal BframeBias
 		{
-			get {return bframeBias;}
-			set {bframeBias = value;}
+			get { return bframeBias; }
+			set { bframeBias = value; }
 		}
         public decimal PsyRDO
         {
@@ -322,13 +323,13 @@ namespace MeGUI
         }
 		public bool Deblock
 		{
-			get {return deblock;}
-			set {deblock = value;}
+			get { return deblock; }
+			set { deblock = value; }
 		}
 		public bool Cabac
 		{
-			get {return cabac;}
-			set {cabac = value;}
+			get { return cabac; }
+			set { cabac = value; }
 		}
         public bool UseQPFile
         {
@@ -337,23 +338,23 @@ namespace MeGUI
         }
 		public bool WeightedBPrediction
 		{
-			get {return weightedBPrediction;}
-			set {weightedBPrediction = value;}
+			get { return weightedBPrediction; }
+			set { weightedBPrediction = value; }
 		}
 		public int NewAdaptiveBFrames
 		{
-			get {return NewadaptiveBFrames;}
-			set {NewadaptiveBFrames = value;}
+			get { return NewadaptiveBFrames; }
+			set { NewadaptiveBFrames = value; }
 		}
-		public bool BFramePyramid
+		public int BFramePyramid
 		{
-			get {return bFramePyramid;}
-			set {bFramePyramid = value;}
+			get { return bFramePyramid; }
+			set { bFramePyramid = value; }
 		}
         public bool ChromaME
 		{
-			get {return chromaME;}
-			set {chromaME = value;}
+			get { return chromaME; }
+			set { chromaME = value; }
 		}
         public int MacroBlockOptions
         {
@@ -362,33 +363,33 @@ namespace MeGUI
         }
         public bool P8x8mv
 		{
-			get {return p8x8mv;}
-			set {p8x8mv = value;}
+			get { return p8x8mv; }
+			set { p8x8mv = value; }
 		}
 		public bool B8x8mv
 		{
-			get {return b8x8mv;}
-			set {b8x8mv = value;}
+			get { return b8x8mv; }
+			set { b8x8mv = value; }
 		}
 		public bool I4x4mv
 		{
-			get {return i4x4mv;}
-			set {i4x4mv = value;}
+			get { return i4x4mv; }
+			set { i4x4mv = value; }
 		}
 		public bool I8x8mv
 		{
-			get {return i8x8mv;}
-			set {i8x8mv = value;}
+			get { return i8x8mv; }
+			set { i8x8mv = value; }
 		}
 		public bool P4x4mv
 		{
-			get {return p4x4mv;}
-			set {p4x4mv = value;}
+			get { return p4x4mv; }
+			set { p4x4mv = value; }
 		}
 		public bool AdaptiveDCT
 		{
-			get {return adaptiveDCT;}
-			set {adaptiveDCT = value;}
+			get { return adaptiveDCT; }
+			set { adaptiveDCT = value; }
 		}
         public bool SSIMCalculation
         {
@@ -397,18 +398,18 @@ namespace MeGUI
         }
 		public bool Lossless
 		{
-			get {return lossless;}
-			set {lossless = value;}
+			get { return lossless; }
+			set { lossless = value; }
 		}
 		public string QuantizerMatrix
 		{
-			get {return quantizerMatrix;}
-			set {quantizerMatrix = value;}
+			get { return quantizerMatrix; }
+			set { quantizerMatrix = value; }
 		}
 		public int QuantizerMatrixType
 		{
-			get {return quantizerMatrixType;}
-			set {quantizerMatrixType = value;}
+			get { return quantizerMatrixType; }
+			set { quantizerMatrixType = value; }
 		}
         public int DeadZoneInter
         {
@@ -495,6 +496,11 @@ namespace MeGUI
             get { return maxSliceSyzeMBs; }
             set { maxSliceSyzeMBs = value; }
         }
+        public bool ConstrainedIntra
+        {
+            get { return constrainedIntra; }
+            set { constrainedIntra = value; }
+        }
         #endregion
         public override bool UsesSAR
         {
@@ -546,7 +552,7 @@ namespace MeGUI
                 this.METype != otherSettings.METype ||
                 this.MinGOPSize != otherSettings.MinGOPSize ||
                 this.MinQuantizer != otherSettings.MinQuantizer ||
-                this.MixedRefs != otherSettings.MixedRefs ||
+                this.NoMixedRefs != otherSettings.NoMixedRefs ||
                 this.NbBframes != otherSettings.NbBframes ||
                 this.NbRefFrames != otherSettings.NbRefFrames ||
                 this.noiseReduction != otherSettings.noiseReduction ||
@@ -586,7 +592,8 @@ namespace MeGUI
                 this.Scenecut != otherSettings.Scenecut ||
                 this.SlicesNb != otherSettings.SlicesNb ||
                 this.MaxSliceSyzeBytes != otherSettings.MaxSliceSyzeBytes ||
-                this.MaxSliceSyzeMBs != otherSettings.MaxSliceSyzeMBs
+                this.MaxSliceSyzeMBs != otherSettings.MaxSliceSyzeMBs ||
+                this.ConstrainedIntra != otherSettings.ConstrainedIntra
                 )
                 return true;
             else
@@ -601,7 +608,7 @@ namespace MeGUI
                     Cabac = false;
                     NbBframes = 0;
                     NewAdaptiveBFrames = 0;
-                    BFramePyramid = false;
+                    BFramePyramid = 0;
                     I8x8mv = false;
                     AdaptiveDCT = false;
                     BframeBias = 0;
@@ -632,17 +639,15 @@ namespace MeGUI
                 P8x8mv = false;
                 B8x8mv = false;
                 AdaptiveDCT = false;
-                MixedRefs = false;
+                NoMixedRefs = false;
                 Trellis = false;
                 NoFastPSkip = false;
                 WeightedBPrediction = false;
             }
             if (Profile != 2) // lossless requires High Profile
                 Lossless = false;
-            if (NbRefFrames <= 1) // mixed references require at least two reference frames
-                MixedRefs = false;
             if (NbBframes < 2) // pyramid requires at least two b-frames
-                BFramePyramid = false;
+                BFramePyramid = 0;
             if (NbBframes == 0)
             {
                 NewAdaptiveBFrames = 0;

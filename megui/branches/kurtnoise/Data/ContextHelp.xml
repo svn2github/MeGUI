@@ -61,10 +61,11 @@ the likelihood, without violating the "Maximum B-frames" setting.</Advanced>
 		<b-pyramid name="B-frame Pyramid">
 			<Advanced>
 Allows B-frames to be used as references for other B-frames, increasing compression efficiency
-when 2 or more B-frames are used.</Advanced>
+when 2 or more B-frames are used. 3 modes available : None = Disabled, Strict = Strictly Hierarchical Pyramid,
+Normal = Non-Strict (not Blu-ray compatible)</Advanced>
 			<Basic>Keep some B-frames as references</Basic>
-			<Recommended>Enabled</Recommended>
-			<Default>Disabled</Default>
+			<Recommended>None</Recommended>
+			<Default>None</Default>
 		</b-pyramid>
 		<!--WARNING DOUBLE NEGATIVE-->
 		<no-cabac name="Encode CABAC">
@@ -344,7 +345,7 @@ Larger values may increase efficiency but will increase encoding time.</Advanced
 			<Advanced>
 Controls the decision quality of motion estimation. Lower values will make faster and less
 accurate decisions. Higher values will improve quality but will slow encoding speed.</Advanced>
-			<Basic>Sub Pixel motion estimation and mode decision quality: 1=fast, 10=best.</Basic>
+			<Basic>Sub Pixel motion estimation and mode decision quality: 0=fast, 10=best.</Basic>
 			<Recommended>7</Recommended>
 			<Default>7</Default>
 		</subme>

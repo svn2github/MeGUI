@@ -189,8 +189,8 @@ namespace MeGUI.packages.video.xvid
             // 
             // commandline
             // 
-            this.commandline.Location = new System.Drawing.Point(3, 236);
-            this.commandline.Size = new System.Drawing.Size(486, 59);
+            this.commandline.Location = new System.Drawing.Point(0, 432);
+            this.commandline.Size = new System.Drawing.Size(503, 59);
             this.commandline.Text = " ";
             // 
             // tabControl1
@@ -213,13 +213,6 @@ namespace MeGUI.packages.video.xvid
             this.mainTabPage.Controls.Add(this.xvidGeneralOptionsGroupBox);
             this.mainTabPage.Controls.Add(this.gbASPProfiles);
             this.mainTabPage.Size = new System.Drawing.Size(492, 298);
-            this.mainTabPage.Controls.SetChildIndex(this.gbASPProfiles, 0);
-            this.mainTabPage.Controls.SetChildIndex(this.xvidGeneralOptionsGroupBox, 0);
-            this.mainTabPage.Controls.SetChildIndex(this.gbFourCC, 0);
-            this.mainTabPage.Controls.SetChildIndex(this.chAdvancedSettings, 0);
-            this.mainTabPage.Controls.SetChildIndex(this.gbThreads, 0);
-            this.mainTabPage.Controls.SetChildIndex(this.helpButton1, 0);
-            this.mainTabPage.Controls.SetChildIndex(this.commandline, 0);
             // 
             // xvidGeneralOptionsGroupBox
             // 
@@ -1504,7 +1497,8 @@ namespace MeGUI.packages.video.xvid
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.gradientPanel1);
             this.Name = "xvidConfigurationPanel";
-            this.Size = new System.Drawing.Size(503, 432);
+            this.Size = new System.Drawing.Size(503, 491);
+            this.Controls.SetChildIndex(this.commandline, 0);
             this.Controls.SetChildIndex(this.tabControl1, 0);
             this.Controls.SetChildIndex(this.gradientPanel1, 0);
             this.tabControl1.ResumeLayout(false);
@@ -1556,6 +1550,7 @@ namespace MeGUI.packages.video.xvid
             this.gbASPProfiles.ResumeLayout(false);
             this.gbFourCC.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
