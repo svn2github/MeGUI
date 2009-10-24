@@ -1,6 +1,7 @@
 These are sources from a development branch.
 I decided to backup my own stuff.
 Some new bugs may appear.
+This build requires .Net Framework 3.5 or higher.
 
 What are the main differences within the megui trunk ?
 
@@ -16,3 +17,4 @@ What are the main differences within the megui trunk ?
    - M2TS muxer.
    - Read Chapters from Disks.
    - Redesign Audio Config Panel.
+   - Redesign Video Config Panel.
