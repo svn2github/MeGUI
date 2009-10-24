@@ -40,6 +40,7 @@ namespace MeGUI.core.gui
             this.avisynthScript = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.extraSetupPage = new System.Windows.Forms.TabPage();
+            this.dss2 = new System.Windows.Forms.CheckBox();
             this.mod16Box = new System.Windows.Forms.ComboBox();
             this.signalAR = new System.Windows.Forms.CheckBox();
             this.mpegOptGroupBox = new System.Windows.Forms.GroupBox();
@@ -50,7 +51,6 @@ namespace MeGUI.core.gui
             this.resize = new System.Windows.Forms.CheckBox();
             this.noiseFilter = new System.Windows.Forms.CheckBox();
             this.resizeFilterType = new System.Windows.Forms.ComboBox();
-            this.dss2 = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.templatePage.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
@@ -209,6 +209,17 @@ namespace MeGUI.core.gui
             this.extraSetupPage.TabIndex = 1;
             this.extraSetupPage.Text = "Extra Setup";
             // 
+            // dss2
+            // 
+            this.dss2.AutoSize = true;
+            this.dss2.Enabled = false;
+            this.dss2.Location = new System.Drawing.Point(13, 218);
+            this.dss2.Name = "dss2";
+            this.dss2.Size = new System.Drawing.Size(201, 17);
+            this.dss2.TabIndex = 22;
+            this.dss2.Text = "Prefer DSS2 over DirectShowSource";
+            this.dss2.UseVisualStyleBackColor = true;
+            // 
             // mod16Box
             // 
             this.mod16Box.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -241,7 +252,7 @@ namespace MeGUI.core.gui
             this.mpegOptGroupBox.Controls.Add(this.mpeg2Deblocking);
             this.mpegOptGroupBox.Location = new System.Drawing.Point(8, 98);
             this.mpegOptGroupBox.Name = "mpegOptGroupBox";
-            this.mpegOptGroupBox.Size = new System.Drawing.Size(197, 79);
+            this.mpegOptGroupBox.Size = new System.Drawing.Size(383, 68);
             this.mpegOptGroupBox.TabIndex = 12;
             this.mpegOptGroupBox.TabStop = false;
             this.mpegOptGroupBox.Text = "Mpeg Options";
@@ -270,7 +281,7 @@ namespace MeGUI.core.gui
             this.filtersGroupbox.Controls.Add(this.resizeFilterType);
             this.filtersGroupbox.Location = new System.Drawing.Point(8, 8);
             this.filtersGroupbox.Name = "filtersGroupbox";
-            this.filtersGroupbox.Size = new System.Drawing.Size(400, 84);
+            this.filtersGroupbox.Size = new System.Drawing.Size(383, 84);
             this.filtersGroupbox.TabIndex = 1;
             this.filtersGroupbox.TabStop = false;
             this.filtersGroupbox.Text = "Filters";
@@ -315,17 +326,6 @@ namespace MeGUI.core.gui
             this.resizeFilterType.Name = "resizeFilterType";
             this.resizeFilterType.Size = new System.Drawing.Size(121, 21);
             this.resizeFilterType.TabIndex = 1;
-            // 
-            // dss2
-            // 
-            this.dss2.AutoSize = true;
-            this.dss2.Enabled = false;
-            this.dss2.Location = new System.Drawing.Point(13, 218);
-            this.dss2.Name = "dss2";
-            this.dss2.Size = new System.Drawing.Size(201, 17);
-            this.dss2.TabIndex = 22;
-            this.dss2.Text = "Prefer DSS2 over DirectShowSource";
-            this.dss2.UseVisualStyleBackColor = true;
             // 
             // AviSynthProfileConfigPanel
             // 

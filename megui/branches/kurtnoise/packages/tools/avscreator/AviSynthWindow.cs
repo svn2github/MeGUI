@@ -1622,6 +1622,12 @@ namespace MeGUI
 				    player.Close();
 				this.Close();
                 OpenScript(fileName);
+                if (chAudioInputStreams.Checked)
+                {
+                    // to autoload the script in the Audio Tab
+                    string audioScript = Path.ChangeExtension(fileName, "_audio.avs");
+                    mainForm.Audio.openAudioFile(audioScript);
+                }
             }
 		}
 		#endregion
@@ -1778,6 +1784,15 @@ namespace MeGUI
 				using (StreamWriter sw = new StreamWriter(path, false, Encoding.Default))
                 {
 				    sw.Write(VideoScript.Text);
+                    if (chAudioInputStreams.Checked)
+                    {
+                        string audioAvsScript = Path.ChangeExtension(path, "_audio.avs");
+                        using (StreamWriter sw2 = new StreamWriter(audioAvsScript, false, Encoding.Default))
+                        {
+                            sw2.Write(AudioScript.Text);
+                            sw2.Close();
+                        }
+                    }
 				    sw.Close();
                 }
 			}
@@ -2736,8 +2751,6 @@ namespace MeGUI
         private void cbLang_Leave(object sender, EventArgs e)
         {
             overrideDefaultLngIndex(this.SubtitlesPath.Text, cbLang.SelectedIndex);
- //           if (File.Exists(SubtitlesPath.Text+".backup"))
-   //             File.Move(SubtitlesPath.Text+".backup", SubtitlesPath.Text);
         }
 
         private void chAudioInputStreams_Click(object sender, EventArgs e)

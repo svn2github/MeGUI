@@ -68,7 +68,7 @@ namespace MeGUI
         }
         #endregion
 
-        public static readonly string ScratchPadName = "*scratchpad*";
+        public static readonly string ScratchPadName = "*default*";
 
         string path;
         private List<ProfileType> profileTypes = new List<ProfileType>();
