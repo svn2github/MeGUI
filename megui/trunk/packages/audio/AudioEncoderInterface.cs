@@ -772,9 +772,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 else
                     sb.Append(" --mpeg4aac");
 
-                if (audioJob.Output.EndsWith(".m4a") || audioJob.Output.EndsWith(".mp4"))
-                    sb.Append(" --mp4");
-
                 switch (n.Profile)
                 {
                     case AacProfile.PS:
