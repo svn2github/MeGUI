@@ -1981,12 +1981,20 @@ namespace MeGUI
                 MessageBox.Show("The .Net Framework you have is not fully compatible with all tools provided in this build.\n"+
                                 "To be up-to-date, upgrade to the version 3.5 at least...", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
+            string avisynthversion = string.Empty;
+            bool PropExists = false;
+            VideoUtil.getAvisynthVersion(out avisynthversion, out PropExists);
+            
             if (string.IsNullOrEmpty(MeGUISettings.AvisynthPluginsPath))
             {
-                if (AskToDownloadAvisynth() == true)
-                    System.Diagnostics.Process.Start("http://www.avisynth.org");
+                if (!PropExists)
+                {
+                    if (AskToDownloadAvisynth() == true)
+                        System.Diagnostics.Process.Start("http://www.avisynth.org");
+                }
             }
-            else
+            
+            if (PropExists)
             { // launch the updater only if avisynth is found to avoid installation issues
                 if (settings.AutoUpdate)
                 {
@@ -1996,8 +2004,8 @@ namespace MeGUI
                     updateCheck.Start();
                 }
 
-                string avisynthversion = VideoUtil.getAvisynthVersion();
-                i.LogValue("Avisynth Version ", avisynthversion.Replace(", ", ".").ToString());
+                if (!string.IsNullOrEmpty(avisynthversion))
+                    i.LogValue("Avisynth Version ", avisynthversion.Replace(", ", ".").ToString());
             }
         }
 

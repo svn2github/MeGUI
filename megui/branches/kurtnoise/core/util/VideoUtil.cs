@@ -1219,20 +1219,40 @@ namespace MeGUI
                 return allSmallFilters.ToString().TrimEnd('|');
         }
 
-        public static string getAvisynthVersion()
+        public static void getAvisynthVersion(out string FileVersion, out bool PropExists)
         {
-#if x86
             string systempath = Environment.GetFolderPath(Environment.SpecialFolder.System);
-#else
-            // we assume here that avisynth has been installed from the x86 installer
-            string systempath = Environment.GetFolderPath(Environment.SpecialFolder.System).Substring(0,11) + "\\SysWOW64";
-#endif
+
             if (File.Exists(systempath + "\\avisynth.dll"))
             {
                 FileVersionInfo FileProperties = FileVersionInfo.GetVersionInfo(systempath + "\\avisynth.dll");
-                return FileProperties.FileVersion;
+                FileVersion = FileProperties.FileVersion;
+                PropExists = true;
             }
-            else return string.Empty;
+            else
+            {
+                // on x64, try the SysWOW64 folder
+                string syswow64path = Environment.GetFolderPath(Environment.SpecialFolder.System).Substring(0, 11) + "\\SysWOW64";
+                if (Directory.Exists(syswow64path))
+                {
+                    if (File.Exists(syswow64path + "\\avisynth.dll"))
+                    {
+                        FileVersionInfo FileProperties = FileVersionInfo.GetVersionInfo(syswow64path + "\\avisynth.dll");
+                        FileVersion = FileProperties.FileVersion;
+                        PropExists = true;
+                    }
+                    else
+                    {
+                        FileVersion = string.Empty;
+                        PropExists = false;
+                    }
+                }
+                else
+                {
+                    FileVersion = string.Empty;
+                    PropExists = false;
+                }
+            }
         }
     }
 	#region helper structs

@@ -2019,12 +2019,20 @@ namespace MeGUI
             i.LogValue("OS ", string.Format("{0}{1} ({2}.{3}.{4}.{5})", OSInfo.GetOSName(), OSInfo.GetOSServicePack(), OSInfo.OSMajorVersion, OSInfo.OSMinorVersion, OSInfo.OSRevisionVersion, OSInfo.OSBuildVersion));
             i.LogValue("Latest .Net Framework installed ", string.Format("{0}", OSInfo.DotNetVersionFormated(OSInfo.FormatDotNetVersion())));
 
+            string avisynthversion = string.Empty;
+            bool PropExists = false;
+            VideoUtil.getAvisynthVersion(out avisynthversion, out PropExists);
+            
             if (MeGUISettings.AvisynthPluginsPath == null)
             {
-                if (AskToDownloadAvisynth() == true)
-                    System.Diagnostics.Process.Start("http://www.avisynth.org");
+                if (!PropExists)
+                {
+                    if (AskToDownloadAvisynth() == true)
+                        System.Diagnostics.Process.Start("http://www.avisynth.org");
+                }
             }
-            else
+            
+            if (PropExists)
             { // launch the updater only if avisynth is found to avoid installation issues
                 if (settings.AutoUpdate)
                 {
@@ -2034,8 +2042,8 @@ namespace MeGUI
                     updateCheck.Start();
                 }
 
-                string avisynthversion = VideoUtil.getAvisynthVersion();
-                i.LogValue("Avisynth Version ", avisynthversion.Replace(", ", ".").ToString());
+                if (!string.IsNullOrEmpty(avisynthversion))
+                    i.LogValue("Avisynth Version ", avisynthversion.Replace(", ", ".").ToString());
             }
         }
 
