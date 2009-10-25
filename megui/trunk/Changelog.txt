@@ -1,3 +1,24 @@
+0.3.1.1057
+    - (kurtnoise) rebuild getAvisynthVersion function.
+    - (kurtnoise) remove aac extension from the winamp AAC codec.
+    - (kurtnoise) update the xvid config panel.
+    - (kurtnoise) update the x264 config panel.
+    - (kurtnoise) update MediaInfo library and its wrapper to the latest release (0.7.23)
+    - (kurtnoise) [MeGUISettings] add Winamp folder detection.
+    - (kurtnoise) [AudioEncoderInterface] copy missing libs from Winamp folder to the encAACPlus encoder directory if they aren't found.
+    - (kurtnoise) [FileUtil] add CopyFile(string sourcePath, string targetPath, string targetName, bool overwrite)
+    - (kurtnoise) Enable mp4 output for the Winamp AAC Encoder. Requires the last enc_aacPlus package.
+    - (kurtnoise) add Avisynth File Version to the log. 
+    - (kurtnoise) [VideoUtil] runCUVIDServer() : fix a wrong return when users decide to click on the No Button.
+    - (kurtnoise) [DialogManager] fix a typo. 
+    - (kurtnoise) [AudioJoinJob] fix wrong type list for the command line generation.
+    - (kurtnoise) [AVSCreator] add Nvidia resizer feature.
+    - (kurtnoise) [OSInfo] add Windows Seven editions names.
+    - (kurtnoise) [OSInfo] .Net Framework detection more accurate.
+    - (kurtnoise) [ChapterCreator] add reading infos from disks. Feature request #2847468
+    - (kurtnoise) [JobUtil] remove mbtree stats file after the process if it's detected.
+
+
 0.3.1.1056
     - (kurtnoise) [ChapterCreator] - add EditionUID & ChapterUID in the output xml Matroska format.
 
