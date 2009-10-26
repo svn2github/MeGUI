@@ -252,10 +252,18 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                     if (xs.NewAdaptiveBFrames != 1)
                     {
                         display = false;
-                        if (xs.x264Preset > 4 && xs.NewAdaptiveBFrames == 0)
-                            display = true;
+                        if (xs.x264Preset > 4)
+                        {
+                            if (xs.NewAdaptiveBFrames == 0)
+                                display = true;
+                        }
+                        else
+                        {
+                            if (xs.NewAdaptiveBFrames != 1)
+                                display = true;
+                        }
                         if (display)
-                           sb.Append("--b-adapt " + xs.NewAdaptiveBFrames + " ");
+                            sb.Append("--b-adapt " + xs.NewAdaptiveBFrames + " ");
                     }
 
                     if (xs.NbBframes > 1)
@@ -300,6 +308,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                         case 1: if (xs.NbRefFrames != 1) display = true; break;
                         case 2:
                         case 3: if (xs.NbRefFrames != 2) display = true; break;
+                        case 4: if (xs.NbRefFrames != 3) display = true; break;
                         case 5: if (xs.NbRefFrames != 5) display = true; break;
                         case 6: if (xs.NbRefFrames != 8) display = true; break;
                         case 7:

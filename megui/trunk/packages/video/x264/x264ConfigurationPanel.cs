@@ -747,8 +747,8 @@ namespace MeGUI.packages.video.x264
                     {
                         if (x264METype.SelectedIndex != 2)
                             x264METype.SelectedIndex = 2;
-                        if (x264SubpelRefinement.SelectedIndex != 10)
-                            x264SubpelRefinement.SelectedIndex = 10;
+                        if (x264SubpelRefinement.SelectedIndex != 9)
+                            x264SubpelRefinement.SelectedIndex = 9;
                         if (this.x264NumberOfRefFrames.Value != 8)
                             this.x264NumberOfRefFrames.Value = 8;
                         if (x264NewAdaptiveBframes.SelectedIndex != 2)
@@ -819,8 +819,8 @@ namespace MeGUI.packages.video.x264
                     {
                         if (x264METype.SelectedIndex != 4)
                             x264METype.SelectedIndex = 4;
-                        if (x264SubpelRefinement.SelectedIndex != 9)
-                            x264SubpelRefinement.SelectedIndex = 9;
+                        if (x264SubpelRefinement.SelectedIndex != 10)
+                            x264SubpelRefinement.SelectedIndex = 10;
                         if (this.x264MERange.Value != 24)
                             this.x264MERange.Value = 24;
                         if (this.x264NumberOfRefFrames.Value != 16)
