@@ -711,7 +711,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             }
 
             // put Normalize() after downmix cases >> http://forum.doom9.org/showthread.php?p=1166117#post1166117
-            if (audioJob.Settings.AutoGain || _downMixModeNb > 0)
+            if (audioJob.Settings.AutoGain)
             {
                 if (audioJob.Settings.Normalize != 100)
                      script.AppendFormat("Normalize(" + (audioJob.Settings.Normalize / 100.0).ToString(new CultureInfo("en-us")) + "){0}", Environment.NewLine);
