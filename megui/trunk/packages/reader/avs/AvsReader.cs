@@ -116,6 +116,7 @@ namespace MeGUI
 
         private void cleanup()
         {
+            System.Threading.Thread.Sleep(100);
             if (this.clip != null)
             {
                 (this.clip as IDisposable).Dispose();
