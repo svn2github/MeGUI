@@ -102,6 +102,7 @@ namespace MeGUI.core.util
             if (Directory.Exists(p)) return new DirectoryInfo(p);
             if (string.IsNullOrEmpty(p)) throw new IOException("Can't create directory");
             ensureDirectoryExists(Path.GetDirectoryName(p));
+            System.Threading.Thread.Sleep(100);
             return Directory.CreateDirectory(p);
         }
         /// <summary>
