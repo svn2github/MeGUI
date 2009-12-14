@@ -345,119 +345,136 @@ namespace MeGUI
         public static string DotNetVersionFormated(string dotNetVersion)
         {
             string dnvf = "unknown";
+            string major = string.Empty;
+            string minor = string.Empty;
+            string build = string.Empty;
+            string revision = string.Empty;
 
-            if (dotNetVersion != "unknown")
+            try
             {
-                string[] versions = dotNetVersion.Split('.');
-                string major = versions[0].ToString();
-                string minor = versions[1].ToString();
-                string build = versions[2].ToString();
-                string revision = string.Empty;
-                if (versions.Length > 3)
-                    revision = versions[3].ToString();
-
-                switch (major)
+                if (dotNetVersion != "unknown")
                 {
-                    case "1":
-                        {
-                            switch (minor)
+                    string[] versions = dotNetVersion.Split('.');
+
+                    if (versions.Length >= 1)
+                        major = versions[0].ToString();
+                    if (versions.Length > 1)
+                        minor = versions[1].ToString();
+                    if (versions.Length > 2)
+                        build = versions[2].ToString();
+                    if (versions.Length > 3)
+                        revision = versions[3].ToString();
+
+                    switch (major)
+                    {
+                        case "1":
                             {
-                                case "0":
-                                    {
-                                        switch (revision)
+                                switch (minor)
+                                {
+                                    case "0":
                                         {
-                                            case "209": dnvf = "1.0 SP1"; break;
-                                            case "288": dnvf = "1.0 SP2"; break;
-                                            case "6018": dnvf = "1.0 SP3"; break;
-                                            default: dnvf = "1.0"; break;
+                                            switch (revision)
+                                            {
+                                                case "209": dnvf = "1.0 SP1"; break;
+                                                case "288": dnvf = "1.0 SP2"; break;
+                                                case "6018": dnvf = "1.0 SP3"; break;
+                                                default: dnvf = "1.0"; break;
+                                            }
                                         }
-                                    }
-                                    break;
-                                case "1":
-                                    {
-                                        switch (revision)
+                                        break;
+                                    case "1":
                                         {
-                                            case "2032":
-                                            case "2300": dnvf = "1.1 SP1"; break;
-                                            default: dnvf = "1.1"; break;
+                                            switch (revision)
+                                            {
+                                                case "2032":
+                                                case "2300": dnvf = "1.1 SP1"; break;
+                                                default: dnvf = "1.1"; break;
+                                            }
                                         }
-                                    }
-                                    break;
+                                        break;
+                                    default: dnvf = "1.x"; break;
+                                }
+                                break;
+                            }
+                        case "2":
+                            {
+                                switch (revision)
+                                {
+                                    case "1433":
+                                    case "1434": dnvf = "2.0 SP1"; break;
+                                    case "2407":
+                                    case "3053":
+                                    case "3074":
+                                    case "4016":
+                                    case "4927": dnvf = "2.0 SP2"; break;
+                                    default: dnvf = "2.0"; break;
+                                }
                             }
                             break;
-                        }
-                    case "2":
-                        {
-                            switch (revision)
+                        case "3":
                             {
-                                case "1433":
-                                case "1434": dnvf = "2.0 SP1"; break;
-                                case "2407": 
-                                case "3053":
-                                case "3074":
-                                case "4016":
-                                case "4927": dnvf = "2.0 SP2"; break;
-                                default: dnvf = "2.0"; break;
+                                switch (minor)
+                                {
+                                    case "0":
+                                        {
+                                            switch (revision)
+                                            {
+                                                case "648": dnvf = "3.0 SP1"; break;
+                                                case "1453":
+                                                case "2123":
+                                                case "4000":
+                                                case "4037":
+                                                case "4902": // Se7en
+                                                case "4926": // Se7en
+                                                    dnvf = "3.0 SP2"; break;
+                                                default: dnvf = "3.0"; break;
+                                            }
+                                        }
+                                        break;
+                                    case "5":
+                                        {
+                                            switch (revision)
+                                            {
+                                                case "4926": // Se7en
+                                                case "1": dnvf = "3.5 SP1"; break;
+                                                default: dnvf = "3.5"; break;
+                                            }
+                                        }
+                                        break;
+                                    default: dnvf = "3.x"; break;
+                                }
                             }
-                        }
-                        break;
-                    case "3":
-                        {
-                            switch (minor)
+                            break;
+                        case "4":
                             {
-                                case "0":
-                                    {
-                                        switch (revision)
+                                switch (minor)
+                                {
+                                    case "0":
                                         {
-                                            case "648":  dnvf = "3.0 SP1"; break;
-                                            case "1453":
-                                            case "2123":
-                                            case "4000":
-                                            case "4037":
-                                            case "4902": // Se7en
-                                            case "4926": // Se7en
-                                                         dnvf = "3.0 SP2"; break;
-                                            default: dnvf = "3.0"; break;
+                                            switch (build)
+                                            {
+                                                case "20506": dnvf = "4.0 Beta 1"; break;
+                                                default: dnvf = "4.0"; break;
+                                            }
                                         }
-                                    }
-                                    break;
-                                case "5":
-                                    {
-                                        switch (revision)
-                                        {
-                                            case "4926": // Se7en
-                                            case "1": dnvf = "3.5 SP1"; break;
-                                            default: dnvf = "3.5"; break;
-                                        }
-                                    }
-                                    break;
+                                        break;
+                                    default: dnvf = "4.x"; break;
+                                }
                             }
-                        }
-                        break;
-                    case "4":
-                        {
-                            switch (minor)
-                            {
-                                case "0":
-                                    {
-                                        switch (build)
-                                        {
-                                            case "20506": dnvf = "4.0 Beta 1"; break;
-                                            default: dnvf = "4.0"; break;
-                                        }
-                                    }
-                                    break;
-                            }
-                        }
-                        break;
+                            break;
+                        default: dnvf = major + ".x"; break;
+                    }
+
+                    if (string.IsNullOrEmpty(revision))
+                        dnvf += " (" + major + "." + minor + "." + build + ")";
+                    else
+                        dnvf += " (" + major + "." + minor + "." + build + "." + revision + ")";
                 }
-
-                if (string.IsNullOrEmpty(revision))
-                    dnvf += " (" + major + "." + minor + "." + build + ")";
-                else
-                    dnvf += " (" + major + "." + minor + "." + build + "." + revision + ")";
             }
-
+            catch
+            {
+                dnvf = "unknown: " + dotNetVersion;
+            }
             return dnvf;
         }
 
