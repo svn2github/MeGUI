@@ -243,7 +243,7 @@ namespace MeGUI
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(516, 501);
+            this.tabControl1.Size = new System.Drawing.Size(516, 499);
             this.tabControl1.TabIndex = 0;
             // 
             // inputTab
@@ -253,7 +253,7 @@ namespace MeGUI
             this.inputTab.Controls.Add(this.splitContainer1);
             this.inputTab.Location = new System.Drawing.Point(4, 22);
             this.inputTab.Name = "inputTab";
-            this.inputTab.Size = new System.Drawing.Size(508, 475);
+            this.inputTab.Size = new System.Drawing.Size(508, 473);
             this.inputTab.TabIndex = 0;
             this.inputTab.Text = "Input";
             this.inputTab.UseVisualStyleBackColor = true;
@@ -273,19 +273,20 @@ namespace MeGUI
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.audioEncodingComponent1);
-            this.splitContainer2.Size = new System.Drawing.Size(508, 443);
-            this.splitContainer2.SplitterDistance = 169;
+            this.splitContainer2.Size = new System.Drawing.Size(508, 441);
+            this.splitContainer2.SplitterDistance = 168;
             this.splitContainer2.TabIndex = 4;
             // 
             // videoEncodingComponent1
             // 
             this.videoEncodingComponent1.BackColor = System.Drawing.SystemColors.Control;
             this.videoEncodingComponent1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.videoEncodingComponent1.FileType = "";
             this.videoEncodingComponent1.Location = new System.Drawing.Point(0, 0);
             this.videoEncodingComponent1.MinimumSize = new System.Drawing.Size(500, 168);
             this.videoEncodingComponent1.Name = "videoEncodingComponent1";
             this.videoEncodingComponent1.PrerenderJob = false;
-            this.videoEncodingComponent1.Size = new System.Drawing.Size(508, 169);
+            this.videoEncodingComponent1.Size = new System.Drawing.Size(508, 168);
             this.videoEncodingComponent1.TabIndex = 0;
             this.videoEncodingComponent1.VideoInput = "";
             this.videoEncodingComponent1.VideoOutput = "";
@@ -298,14 +299,14 @@ namespace MeGUI
             this.audioEncodingComponent1.Location = new System.Drawing.Point(0, 0);
             this.audioEncodingComponent1.MinimumSize = new System.Drawing.Size(400, 192);
             this.audioEncodingComponent1.Name = "audioEncodingComponent1";
-            this.audioEncodingComponent1.Size = new System.Drawing.Size(508, 270);
+            this.audioEncodingComponent1.Size = new System.Drawing.Size(508, 269);
             this.audioEncodingComponent1.TabIndex = 1;
             // 
             // splitContainer1
             // 
             this.splitContainer1.BackColor = System.Drawing.SystemColors.Control;
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 443);
+            this.splitContainer1.Location = new System.Drawing.Point(0, 441);
             this.splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
@@ -400,7 +401,7 @@ namespace MeGUI
             this.tabPage2.Controls.Add(this.jobControl1);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Size = new System.Drawing.Size(508, 475);
+            this.tabPage2.Size = new System.Drawing.Size(508, 473);
             this.tabPage2.TabIndex = 12;
             this.tabPage2.Text = "Queue";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -411,7 +412,7 @@ namespace MeGUI
             this.jobControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.jobControl1.Location = new System.Drawing.Point(0, 0);
             this.jobControl1.Name = "jobControl1";
-            this.jobControl1.Size = new System.Drawing.Size(508, 475);
+            this.jobControl1.Size = new System.Drawing.Size(508, 473);
             this.jobControl1.TabIndex = 0;
             // 
             // logTab
@@ -419,7 +420,7 @@ namespace MeGUI
             this.logTab.Controls.Add(this.logTree1);
             this.logTab.Location = new System.Drawing.Point(4, 22);
             this.logTab.Name = "logTab";
-            this.logTab.Size = new System.Drawing.Size(508, 475);
+            this.logTab.Size = new System.Drawing.Size(508, 473);
             this.logTab.TabIndex = 13;
             this.logTab.Text = "Log";
             this.logTab.UseVisualStyleBackColor = true;
@@ -429,7 +430,7 @@ namespace MeGUI
             this.logTree1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.logTree1.Location = new System.Drawing.Point(0, 0);
             this.logTree1.Name = "logTree1";
-            this.logTree1.Size = new System.Drawing.Size(508, 475);
+            this.logTree1.Size = new System.Drawing.Size(508, 473);
             this.logTree1.TabIndex = 0;
             // 
             // mnuMuxers
@@ -765,7 +766,7 @@ namespace MeGUI
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(516, 501);
+            this.ClientSize = new System.Drawing.Size(516, 499);
             this.Controls.Add(this.tabControl1);
             this.DataBindings.Add(new System.Windows.Forms.Binding("Location", global::MeGUI.Properties.Settings.Default, "MainFormLocation", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -845,6 +846,7 @@ namespace MeGUI
             this.TitleText = Application.ProductName + " " + Application.ProductVersion;
             setGUIInfo();
             Jobs.showAfterEncodingStatus(Settings);
+            this.videoEncodingComponent1.FileType = MainForm.Instance.Settings.MainFileFormat;
         }
 
         #region GUI properties
@@ -1558,6 +1560,11 @@ namespace MeGUI
         private MeGUISettings settings = new MeGUISettings();
         private ProfileManager profileManager;
 
+        //public MeGUISettings Settings
+        //{
+        //    get { return settings; }
+        //}
+
         public MuxProvider MuxProvider
         {
             get { return muxProvider; }
@@ -1778,6 +1785,37 @@ namespace MeGUI
         [STAThread]
         static void Main(string[] args)
         {
+            // Parse for the need to run the program elevated
+            Boolean bRunElevated = false, bForceAdmin = false;
+            foreach (string strParam in args)
+            {
+                if (strParam.Equals("-elevate"))
+                    bRunElevated = true;
+                else if (strParam.Equals("-forceadmin"))
+                    bForceAdmin = true;
+            }
+
+            // Check if the program can write to the program and avisynth plugin dir
+            if (FileUtil.IsDirWriteable(Path.GetDirectoryName(Application.ExecutablePath)) == false)
+                bForceAdmin = true;
+
+            // If needed run as elevated process
+            if (bForceAdmin && !bRunElevated)
+            {
+                try
+                {
+                    Process p = new Process();
+                    p.StartInfo.FileName = Application.ExecutablePath;
+                    p.StartInfo.Arguments = "-elevate";
+                    p.StartInfo.Verb = "runas";
+                    p.Start();
+                    return;
+                }
+                catch
+                {
+                }
+            }
+
             System.Windows.Forms.Application.EnableVisualStyles();
             if (!mySingleInstanceMutex.WaitOne(0, false))
             {
@@ -1801,9 +1839,15 @@ namespace MeGUI
 
         static void HandleUnhandledException(Exception e)
         {
+            LogItem i = MainForm.Instance.Log.Error("Unhandled error");
+            i.LogValue("Exception message", e.Message);
+            i.LogValue("Stacktrace", e.StackTrace);
+            i.LogValue("Inner exception", e.InnerException);
+            foreach (DictionaryEntry info in e.Data)
+                i.LogValue(info.Key.ToString(), info.Value);
+
             MessageBox.Show("MeGUI encountered a fatal error and may not be able to proceed. Reason: " + e.Message
-                + " Source of exception: " + e.Source + " stacktrace: " + e.StackTrace, "Fatal error",
-                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                , "Fatal error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         static void Application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
@@ -1834,8 +1878,9 @@ namespace MeGUI
                 pstart.Arguments += "--app ";
             pstart.Arguments += "\"" + Application.ExecutablePath + "\"";
 
-            pstart.CreateNoWindow = true;
-            pstart.UseShellExecute = false;
+            //pstart.CreateNoWindow = true;
+            //pstart.UseShellExecute = false;
+            proc.StartInfo.Verb = "runas";
             proc.StartInfo = pstart;
             try
             {
@@ -2022,14 +2067,11 @@ namespace MeGUI
             string avisynthversion = string.Empty;
             bool PropExists = false;
             VideoUtil.getAvisynthVersion(out avisynthversion, out PropExists);
-            
-            if (MeGUISettings.AvisynthPluginsPath == null)
+
+            if (!PropExists)
             {
-                if (!PropExists)
-                {
-                    if (AskToDownloadAvisynth() == true)
-                        System.Diagnostics.Process.Start("http://www.avisynth.org");
-                }
+                if (AskToDownloadAvisynth() == true)
+                    System.Diagnostics.Process.Start("http://www.avisynth.org");
             }
             
             if (PropExists)
