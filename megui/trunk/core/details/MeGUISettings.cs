@@ -33,11 +33,12 @@ namespace MeGUI
     {
         #region variables
         private string[][] autoUpdateServerLists;
-        private string faacPath, lamePath, neroAacEncPath, mencoderPath,  mp4boxPath, mkvmergePath, 
-                       encAacPlusPath, ffmpegPath, besplitPath, yadifPath, aftenPath, x264Path, 
+        private string faacPath, lamePath, neroAacEncPath, mencoderPath,  mp4boxPath, mkvmergePath, strMainAudioFormat,
+                       encAacPlusPath, ffmpegPath, besplitPath, yadifPath, aftenPath, x264Path, strMainFileFormat,
                        dgIndexPath, xvidEncrawPath, aviMuxGUIPath, oggEnc2Path, encAudXPath, dgavcIndexPath, dgvc1IndexPath,
-                       dgmpgIndexPath, eac3toPath, tsmuxerPath,
+                       dgmpgIndexPath, eac3toPath, tsmuxerPath, meguiupdatecache, avisynthpluginspath,
                        defaultLanguage1, defaultLanguage2, afterEncodingCommand, videoExtension, audioExtension,
+                       strLastDestinationPath, strLastSourcePath,
                        httpproxyaddress, httpproxyport, httpproxyuid, httpproxypwd, defaultOutputDir;
         private bool recalculateMainMovieBitrate, autoForceFilm, autoStartQueue, enableMP3inMP4, autoOpenScript,
                      overwriteStats, keep2of3passOutput, deleteCompletedJobs, deleteIntermediateFiles,
@@ -52,14 +53,19 @@ namespace MeGUI
         private AutoEncodeDefaultsSettings aedSettings;
         private DialogSettings dialogSettings;
         private ProcessPriority defaultPriority;
+        private string strMeGUIPath;
+
         #endregion
         public MeGUISettings()
 		{
+            strMeGUIPath = System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath);
             autoscroll = true;
-            autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/stable/", "http://megui.xvidvideo.ru/auto/stable/" },
-                new string[] { "Development", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" } };
+            autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/stable/"},
+                new string[] { "Development", "http://www.constructd.com/megui/" } };
+            //autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/stable/", "http://megui.xvidvideo.ru/auto/stable/" },
+            //    new string[] { "Development", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" } };
             acceptableFPSError = 0.01M;
-            autoUpdateServerSubList = 0;
+            autoUpdateServerSubList = 1;
             maxServersToTry = 5;
             dialogSettings = new DialogSettings();
             sdSettings = new SourceDetectorSettings();
@@ -67,23 +73,23 @@ namespace MeGUI
             autoUpdate = true;
             useadvancedtooltips = true;
             audioSamplesPerUpdate = 100000;
-            aviMuxGUIPath = "avimux_gui.exe";
+            aviMuxGUIPath = getDownloadPath(@"tools\avimux_gui\avimux_gui.exe");
             besplitPath = "besplit.exe";
-            faacPath = "faac.exe";
-            mencoderPath = "mencoder.exe";
-			mp4boxPath = "mp4box.exe";
-			mkvmergePath = "mkvmerge.exe";
-			x264Path = "x264.exe";
-            dgIndexPath = "dgindex.exe";
-            xvidEncrawPath = "xvid_encraw.exe";
-            lamePath = "lame.exe";
+            faacPath = getDownloadPath(@"tools\faac\faac.exe");
+            mencoderPath = getDownloadPath(@"tools\mencoder\mencoder.exe");
+			mp4boxPath = getDownloadPath(@"tools\mp4box\mp4box.exe");
+			mkvmergePath = getDownloadPath(@"tools\mkvmerge\mkvmerge.exe");
+            x264Path = getDownloadPath(@"tools\x264\x264.exe");
+            dgIndexPath = getDownloadPath(@"tools\dgindex\dgindex.exe");
+            xvidEncrawPath = getDownloadPath(@"tools\xvid_encraw\xvid_encraw.exe");
+            lamePath = getDownloadPath(@"tools\lame\lame.exe");
             neroAacEncPath = "neroAacEnc.exe";
-            oggEnc2Path = "oggenc2.exe";
-            encAudXPath = "enc_AudX_CLI.exe";
-            encAacPlusPath = "enc_aacPlus.exe";
-            ffmpegPath = "ffmpeg.exe";
-            aftenPath = "aften.exe";
-            yadifPath = "yadif.dll";
+            oggEnc2Path = getDownloadPath(@"tools\oggenc\oggenc2.exe");
+            encAudXPath = getDownloadPath(@"tools\encaudxcli\enc_AudX_CLI.exe");
+            encAacPlusPath = getDownloadPath(@"tools\enc_aacplus\enc_aacPlus.exe");
+            ffmpegPath = getDownloadPath(@"tools\ffmpeg\ffmpeg.exe");
+            aftenPath = getDownloadPath(@"tools\aften\aften.exe");
+            yadifPath = getDownloadPath(@"tools\yadif\yadif.dll");
             recalculateMainMovieBitrate = false;
 			autoForceFilm = true;
 			autoStartQueue = false;
@@ -114,25 +120,49 @@ namespace MeGUI
             httpproxypwd = "";
             defaultOutputDir = "";
             addTimePosition = false;
-            dgavcIndexPath = "dgavcindex.exe";
+            dgavcIndexPath = getDownloadPath(@"tools\dgavcindex\dgavcindex.exe");
             dgvc1IndexPath = "dgvc1index.exe";
             dgmpgIndexPath = "dgmpgindex.exe";
-            eac3toPath = "eac3to.exe";
-            tsmuxerPath = "tsmuxer.exe";
+            eac3toPath = getDownloadPath(@"tools\eac3to\eac3to.exe");
+            tsmuxerPath = getDownloadPath(@"tools\tsmuxer\tsmuxer.exe");
             alwaysbackupfiles = true;
             forcerawavcextension = false;
+            meguiupdatecache = System.IO.Path.Combine(strMeGUIPath, "update_cache");
+            avisynthpluginspath = System.IO.Path.Combine(strMeGUIPath, @"tools\avisynth_plugin");
+            strMainFileFormat = "";
+            strMainAudioFormat = "";
+            strLastSourcePath = "";
+            strLastDestinationPath = "";
         }
+
+        private string getDownloadPath(string strPath)
+        {
+            strPath = System.IO.Path.Combine(strMeGUIPath, @strPath);
+            return strPath;
+        }
+
         #region properties
         public string YadifPath
         {
             get { return yadifPath; }
-            set { yadifPath = value; }
         }
 
         public ulong AudioSamplesPerUpdate
         {
             get { return audioSamplesPerUpdate; }
             set { audioSamplesPerUpdate = value; }
+        }
+
+        public string LastSourcePath
+        {
+            get { return strLastSourcePath; }
+            set { strLastSourcePath = value; }
+        }
+
+        public string LastDestinationPath
+        {
+            get { return strLastDestinationPath; }
+            set { strLastDestinationPath = value; }
         }
 
         /// <summary>
@@ -255,7 +285,6 @@ namespace MeGUI
         public string FFMpegPath
         {
             get { return ffmpegPath; }
-            set { ffmpegPath = value; }
         }
         
         /// <summary>
@@ -264,7 +293,6 @@ namespace MeGUI
         public string EncAacPlusPath
         {
             get { return encAacPlusPath; }
-            set { encAacPlusPath = value; }
         }
 
         /// <summary>
@@ -273,7 +301,6 @@ namespace MeGUI
         public string EncAudXPath
         {
             get { return encAudXPath; }
-            set { encAudXPath = value; }
         }
 
         /// <summary>
@@ -282,7 +309,6 @@ namespace MeGUI
         public string OggEnc2Path
         {
             get { return oggEnc2Path; }
-            set { oggEnc2Path = value; }
         }
 		/// <summary>
 		/// filename and full path of the mencoder executable
@@ -290,7 +316,6 @@ namespace MeGUI
 		public string MencoderPath
 		{
 			get {return mencoderPath;}
-			set {mencoderPath = value;}
 		}
         /// <summary>
         /// filename and full path of the faac executable
@@ -298,7 +323,6 @@ namespace MeGUI
         public string FaacPath
         {
             get { return faacPath; }
-            set { faacPath = value; }
         }
         /// <summary>
         /// filename and full path of the faac executable
@@ -306,7 +330,6 @@ namespace MeGUI
         public string LamePath
         {
             get { return lamePath; }
-            set { lamePath = value; }
         }
         /// <summary>
         /// filename and full path of the faac executable
@@ -323,7 +346,6 @@ namespace MeGUI
 		public string MkvmergePath
 		{
 			get {return mkvmergePath;}
-			set {mkvmergePath = value;}
 		}
 
         /// <summary>
@@ -332,7 +354,6 @@ namespace MeGUI
 		public string Mp4boxPath
 		{
 			get {return mp4boxPath;}
-			set {mp4boxPath = value;}
 		}
 		/// <summary>
 		/// filename and full path of the x264 executable
@@ -340,7 +361,6 @@ namespace MeGUI
 		public string X264Path
 		{
 			get {return x264Path;}
-			set {x264Path = value;}
 		}
 		/// <summary>
 		/// filename and full path of the dgindex executable
@@ -348,7 +368,6 @@ namespace MeGUI
 		public string DgIndexPath
 		{
 			get {return dgIndexPath;}
-			set {dgIndexPath = value;}
 		}
         /// <summary>
         /// filename and full path of the xvid_encraw executable
@@ -356,7 +375,6 @@ namespace MeGUI
         public string XviDEncrawPath
         {
             get { return xvidEncrawPath; }
-            set { xvidEncrawPath = value; }
         }
         /// <summary>
         /// gets / sets the path of the avimuxgui executable
@@ -364,7 +382,6 @@ namespace MeGUI
         public string AviMuxGUIPath
         {
             get { return aviMuxGUIPath; }
-            set { aviMuxGUIPath = value; }
         }
         /// <summary>
         /// filename and full path of the aften executable
@@ -372,7 +389,6 @@ namespace MeGUI
         public string AftenPath
         {
             get { return aftenPath; }
-            set { aftenPath = value; }
         }	
         /// <summary>
         /// filename and full path of the dgavcindex executable
@@ -380,7 +396,6 @@ namespace MeGUI
         public string DgavcIndexPath
         {
             get { return dgavcIndexPath; }
-            set { dgavcIndexPath = value; }
         }
         /// <summary>
         /// filename and full path of the dgvc1index executable
@@ -404,7 +419,6 @@ namespace MeGUI
         public string EAC3toPath
         {
             get { return eac3toPath; }
-            set { eac3toPath = value; }
         }
         /// <summary>
         /// filename and full path of the tsmuxer executable
@@ -412,7 +426,6 @@ namespace MeGUI
         public string TSMuxerPath
         {
             get { return tsmuxerPath; }
-            set { tsmuxerPath = value; }
         }
         ///<summary>
         /// gets / sets whether megui backup files from updater or not
@@ -483,93 +496,17 @@ namespace MeGUI
         /// <summary>
         /// folder containing the avisynth plugins
         /// </summary>
-        public static string AvisynthPluginsPath
+        public string AvisynthPluginsPath
         {
-            get
-            {
-                try
-                {
-                    Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\AviSynth");
-
-                    if (key == null)
-                        key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Wow6432Node\AviSynth");
-
-                    if (key == null)
-                        return null;
-                    else
-                        return (string)key.GetValue("plugindir2_5");
-                }
-                catch
-                {
-                    return null;
-                }
-            }
-            set 
-            {
-                if(!System.IO.Path.IsPathRooted(value))
-                    throw new ArgumentException("Path must be absolute");
-                if(!System.IO.Directory.Exists(value))
-                    throw new ArgumentException("Directory " + value + " does not exists");
-                try
-                {
-                    Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\AviSynth", true);
-
-                    if (key == null)
-                        key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Wow6432Node\AviSynth", true);
-
-                    if (key != null)
-                        key.SetValue("plugindir2_5", value);
-                }
-                catch
-                {
-                    // Swallow the error
-                }
-            }
+            get { return avisynthpluginspath; }
         }
 
         /// <summary>
         /// folder containing local copies of update files
         /// </summary>
-        public static string MeGUIUpdateCache
+        public string MeGUIUpdateCache
         {
-            get
-            {
-                try
-                {
-                    Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\MeGUI");
-                    
-                    if (key == null)
-                        key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Wow6432Node\MeGUI");
-
-                    if (key == null)
-                        return null;
-                    else
-                        return (string)key.GetValue("update_cache");
-                }
-                catch
-                {
-                    return null;
-                }
-            }
-            set
-            {
-                if (!System.IO.Path.IsPathRooted(value))
-                    throw new ArgumentException("Path must be absolute");
-                try
-                {
-                    Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine.CreateSubKey(@"SOFTWARE\MeGUI");
-                    
-                    if (key == null)
-                        key = Microsoft.Win32.Registry.LocalMachine.CreateSubKey(@"SOFTWARE\Wow6432Node\MeGUI");
-                    
-                    if (key != null)
-                        key.SetValue("update_cache", value);
-                }
-                catch
-                {
-                    // Swallow the error
-                }
-            }
+            get { return meguiupdatecache; }
         }
 
         /// <summary>
@@ -787,6 +724,19 @@ namespace MeGUI
             get { return httpproxypwd; }
             set { httpproxypwd = value; }
         }
+
+        public string MainAudioFormat
+        {
+            get { return strMainAudioFormat; }
+            set { strMainAudioFormat = value; }
+        }
+
+        public string MainFileFormat
+        {
+            get { return strMainFileFormat; }
+            set { strMainFileFormat = value; }
+        }
+
         #endregion
     }
     public enum AfterEncoding { DoNothing = 0, Shutdown = 1, RunCommand = 2 }
