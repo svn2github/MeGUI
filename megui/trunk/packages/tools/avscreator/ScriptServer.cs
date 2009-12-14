@@ -196,10 +196,10 @@ namespace MeGUI
             bool flag = false;
             string dgdecodenv = string.Empty;
             Counter = 0;
-            
-            if (!string.IsNullOrEmpty(MeGUISettings.AvisynthPluginsPath))
+
+            if (!string.IsNullOrEmpty(MainForm.Instance.Settings.AvisynthPluginsPath))
             {
-                dgdecodenv = MeGUISettings.AvisynthPluginsPath + "\\DGDecodeNV.dll";
+                dgdecodenv = MainForm.Instance.Settings.AvisynthPluginsPath + "\\DGDecodeNV.dll";
                 if (File.Exists(dgdecodenv))
                 {
                     flag = true;

@@ -312,11 +312,11 @@ namespace MeGUI
 
             public override ErrorState Install(Stream fileData)
             {
-                try 
+                try
                 {
                     mainForm.importProfiles(fileData);
                 }
-                catch (IOException)
+                catch
                 {
                     return ErrorState.CouldNotInstall;
                 }
@@ -332,14 +332,14 @@ namespace MeGUI
         {
             private AviSynthFile()
             {
-                this.SaveFolder = MeGUISettings.AvisynthPluginsPath;
+                this.SaveFolder = MainForm.Instance.Settings.AvisynthPluginsPath;
             }
             public AviSynthFile(string treeviewid, string name)
             {
                 this.Name = name;
                 this.AllowUpdate = true;
                 this.treeViewID = treeviewid;
-                this.SaveFolder = MeGUISettings.AvisynthPluginsPath;
+                this.SaveFolder = MainForm.Instance.Settings.AvisynthPluginsPath;
             }
 
             public override ErrorState Upgrade()
@@ -465,63 +465,13 @@ namespace MeGUI
                 {
                     switch (this.Name)
                     {
-                        case ("oggenc2"):
-                            meGUISettings.OggEnc2Path = value;
-                            return;
-                        case ("dgindex"):
-                            meGUISettings.DgIndexPath = value;
-                            break;
-                        case ("faac"):
-                            meGUISettings.FaacPath = value;
-                            break;
-                        case ("lame"):
-                            meGUISettings.LamePath = value;
-                            break;
-                        case ("mencoder"):
-                            meGUISettings.MencoderPath = value;
-                            break;
-                        case ("mkvmerge"):
-                            meGUISettings.MkvmergePath = value;
-                            break;
-                        case ("mp4box"):
-                            meGUISettings.Mp4boxPath = value;
-                            break;
                         case ("neroaacenc"):
                             meGUISettings.NeroAacEncPath = value;
                             break;
-                        case ("avimux_gui"):
-                            meGUISettings.AviMuxGUIPath = value;
+                        case ("besplit"):
+                            meGUISettings.NeroAacEncPath = value;
                             break;
-                        case ("x264"):
-                            meGUISettings.X264Path = value;
-                            break;
-                        case ("xvid_encraw"):
-                            meGUISettings.XviDEncrawPath = value;
-                            break;
-                        case ("ffmpeg"):
-                            meGUISettings.FFMpegPath = value;
-                            return;
-                        case ("encaudxcli"):
-                            meGUISettings.EncAudXPath = value;
-                            return;
-                        case ("enc_aacplus"):
-                            meGUISettings.EncAacPlusPath = value;
-                            return;
-                        case ("yadif"):
-                            meGUISettings.YadifPath = value;
-                            return;
-                        case ("aften"):
-                            meGUISettings.AftenPath = value;
-                            return;
-                        case ("eac3to"):
-                            meGUISettings.EAC3toPath = value;
-                            return;
-                        case ("dgavcindex"):
-                            meGUISettings.DgavcIndexPath = value;
-                            return;
-                        case ("tsmuxer"):
-                            meGUISettings.TSMuxerPath = value;
-                            return;
+
                     }
                 }
             }
@@ -1178,7 +1128,7 @@ namespace MeGUI
         }
         private void btnUpdate_Click(object sender, EventArgs e)
         {
-            if (MeGUISettings.AvisynthPluginsPath == "")
+            if (MainForm.Instance.Settings.AvisynthPluginsPath == "")
             {
                 MessageBox.Show("Error: Avisynth plugins path is not set (check if you have Avisynth installed and ensure to set the path to plugins in the settings).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 btnUpdate.Enabled = false;

@@ -35,7 +35,7 @@ namespace MeGUI
     {
         public static void flushOldCachedFilesAsync(List<string> urls)
         {
-            string updateCache = MeGUISettings.MeGUIUpdateCache;
+            string updateCache = MainForm.Instance.Settings.MeGUIUpdateCache;
             if (string.IsNullOrEmpty(updateCache)
                 || !Directory.Exists(updateCache))
                 return;
@@ -60,24 +60,7 @@ namespace MeGUI
 
         private static void ensureSensibleCacheFolderExists()
         {
-            if (string.IsNullOrEmpty(MeGUISettings.MeGUIUpdateCache))
-                setSensibleCacheFolder();
-
-            try
-            {
-                FileUtil.ensureDirectoryExists(MeGUISettings.MeGUIUpdateCache);
-            }
-            catch (IOException)
-            {
-                setSensibleCacheFolder();
-                FileUtil.ensureDirectoryExists(MeGUISettings.MeGUIUpdateCache);
-            }
-        }
-
-
-        private static void setSensibleCacheFolder()
-        {
-            MeGUISettings.MeGUIUpdateCache = Path.Combine(MainForm.Instance.MeGUIPath, "update_cache");
+            FileUtil.ensureDirectoryExists(MainForm.Instance.Settings.MeGUIUpdateCache);
         }
 
         public static UpdateWindow.ErrorState DownloadFile(string url, Uri serverAddress,
@@ -85,7 +68,7 @@ namespace MeGUI
         {
             ensureSensibleCacheFolderExists();
             UpdateWindow.ErrorState er = UpdateWindow.ErrorState.Successful;
-            string updateCache = MeGUISettings.MeGUIUpdateCache;
+            string updateCache = MainForm.Instance.Settings.MeGUIUpdateCache;
 
             string localFilename = Path.Combine(updateCache, url);
             FileInfo finfo = new FileInfo(localFilename);
@@ -137,7 +120,7 @@ namespace MeGUI
 
         public static void FlushFile(string p)
         {
-            string localFilename = Path.Combine(MeGUISettings.MeGUIUpdateCache, p);
+            string localFilename = Path.Combine(MainForm.Instance.Settings.MeGUIUpdateCache, p);
             try
             {
                 File.Delete(localFilename);
