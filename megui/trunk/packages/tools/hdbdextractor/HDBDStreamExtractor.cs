@@ -930,8 +930,21 @@ namespace MeGUI.packages.tools.hdbdextractor
                                 WriteToLog(ex.StackTrace);
                             }
                         }
-                        else ((Feature)FeatureDataGridView.SelectedRows[0].DataBoundItem).Streams.Add(Stream.Parse(data));
-
+                        else
+                        {
+                            try
+                            {
+                                if (FeatureDataGridView.SelectedRows.Count == 0)
+                                    FeatureDataGridView.Rows[0].Selected = true;
+                                ((Feature)FeatureDataGridView.SelectedRows[0].DataBoundItem).Streams.Add(Stream.Parse(data));
+                            }
+                            catch (Exception ex)
+                            {
+                                WriteToLog(ex.Message);
+                                WriteToLog(ex.Source);
+                                WriteToLog(ex.StackTrace);
+                            }
+                        }
                         return;
                     }
 
@@ -1114,13 +1127,15 @@ namespace MeGUI.packages.tools.hdbdextractor
 
             if (FolderSelection.Checked)
             {
-                folderBrowserDialog1.SelectedPath = string.Empty;
+                folderBrowserDialog1.SelectedPath = MainForm.Instance.Settings.LastSourcePath;
                 folderBrowserDialog1.Description = "Choose an input directory";
                 folderBrowserDialog1.ShowNewFolderButton = false;
                 dr = folderBrowserDialog1.ShowDialog();
                 if (folderBrowserDialog1.SelectedPath.EndsWith(":\\"))
                      myinput = folderBrowserDialog1.SelectedPath;
                 else myinput = folderBrowserDialog1.SelectedPath + System.IO.Path.DirectorySeparatorChar;
+                if (dr == DialogResult.OK)
+                    MainForm.Instance.Settings.LastSourcePath = myinput;
             }
             else
             {
@@ -1145,30 +1160,36 @@ namespace MeGUI.packages.tools.hdbdextractor
                     FolderOutputTextBox.Text = projectPath;
                 else
                 {
-
-                    if (idx > 0) // seamless branching
-                        FolderOutputTextBox.Text = FolderInputTextBox.Text.Substring(0, (FolderInputTextBox.Text.LastIndexOf("\\") - FolderInputTextBox.Text.LastIndexOf("+")));
-                    else FolderOutputTextBox.Text = FolderInputTextBox.Text.Substring(0, FolderInputTextBox.Text.LastIndexOf("\\") + 1);
+                    if (string.IsNullOrEmpty(FolderOutputTextBox.Text))
+                    {
+                        if (idx > 0) // seamless branching
+                            FolderOutputTextBox.Text = FolderInputTextBox.Text.Substring(0, (FolderInputTextBox.Text.LastIndexOf("\\") - FolderInputTextBox.Text.LastIndexOf("+")));
+                        else
+                            FolderOutputTextBox.Text = FolderInputTextBox.Text.Substring(0, FolderInputTextBox.Text.LastIndexOf("\\") + 1);
+                    }
                 }
-
                 if ((settings.EAC3toPath == "") || (settings.EAC3toPath == "eac3to.exe"))
                 {
                     MessageBox.Show("Select a correct EAC3to Path first in the MeGUI Settings to avoid issues...", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
-                else FeatureButton_Click(null, null);
+                else
+                    FeatureButton_Click(null, null);
             }
         }
 
         private void FolderOutputSourceButton_Click(object sender, EventArgs e)
         {
-            folderBrowserDialog1.SelectedPath = string.Empty;
+            folderBrowserDialog1.SelectedPath = MainForm.Instance.Settings.LastDestinationPath;
             folderBrowserDialog1.Description = "Choose an output directory";
             folderBrowserDialog1.ShowNewFolderButton = true;
             DialogResult dr = folderBrowserDialog1.ShowDialog();
 
             if (dr == DialogResult.OK)
+            {
                 FolderOutputTextBox.Text = folderBrowserDialog1.SelectedPath;
+                MainForm.Instance.Settings.LastDestinationPath = folderBrowserDialog1.SelectedPath;
+            }
         }
 
         private void FeatureButton_Click(object sender, EventArgs e)
