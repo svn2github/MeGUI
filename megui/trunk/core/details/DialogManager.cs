@@ -191,20 +191,22 @@ namespace MeGUI
         public void runCUVIDServer()
         {
             string filePath = string.Empty;
-            if (mainForm.Settings.DgavcIndexPath != "" && Path.GetFileName(mainForm.Settings.DgavcIndexPath).ToLower().ToString() == "dgavcindexnv.exe")
-                filePath = Path.GetDirectoryName(mainForm.Settings.DgavcIndexPath);
+            if (MainForm.Instance.Settings.DgavcIndexPath != "" && Path.GetFileName(MainForm.Instance.Settings.DgavcIndexPath).ToLower().ToString() == "dgavcindexnv.exe")
+                filePath = Path.GetDirectoryName(MainForm.Instance.Settings.DgavcIndexPath);
 
             if (string.IsNullOrEmpty(filePath))
             {
-                if (mainForm.Settings.DgmpgIndexPath != "" && Path.GetFileName(mainForm.Settings.DgmpgIndexPath).ToLower().ToString() == "dgmpgindexnv.exe")
-                    filePath = Path.GetDirectoryName(mainForm.Settings.DgmpgIndexPath);
+                if (MainForm.Instance.Settings.DgmpgIndexPath != "" && Path.GetFileName(MainForm.Instance.Settings.DgmpgIndexPath).ToLower().ToString() == "dgmpgindexnv.exe")
+                    filePath = Path.GetDirectoryName(MainForm.Instance.Settings.DgmpgIndexPath);
 
-                else if (mainForm.Settings.Dgvc1IndexPath != "" && Path.GetFileName(mainForm.Settings.Dgvc1IndexPath).ToLower().ToString() == "dgvc1indexnv.exe")
-                    filePath = Path.GetDirectoryName(mainForm.Settings.Dgvc1IndexPath);
+                else if (MainForm.Instance.Settings.Dgvc1IndexPath != "" && Path.GetFileName(MainForm.Instance.Settings.Dgvc1IndexPath).ToLower().ToString() == "dgvc1indexnv.exe")
+                    filePath = Path.GetDirectoryName(MainForm.Instance.Settings.Dgvc1IndexPath);
             }
 
-            if (!string.IsNullOrEmpty(filePath)) System.Diagnostics.Process.Start(Path.Combine(filePath, "CUVIDServer.exe"));
-            else MessageBox.Show("Cannot run CUVID Server executable...\nAre you sure is it installed ?", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            if (!string.IsNullOrEmpty(filePath)) 
+                System.Diagnostics.Process.Start(Path.Combine(filePath, "CUVIDServer.exe"));
+            else 
+                MessageBox.Show("Cannot run CUVID Server executable...\nAre you sure is it installed ?", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         public bool FindProcess(string name)
