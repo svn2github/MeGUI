@@ -1,3 +1,56 @@
+0.3.1.1058 dev
+    - (zathor) [MeGUISettings] update_cache location and avisynth plugin location can not be changed anymore
+    - (zathor) [x264Settings] changed the default *scratchpad* settings to x264 default (preset and some other settings have been wrong) 
+    - (zathor) [x264ConfigurationPanel] changed b-frames value in preset slower
+    - (zathor) [x264ConfigurationPanel] subme 10 instead of 9 will force trellis 2 and aq-mode > 0
+    - (zathor) [x264ConfigurationPanel] removed dependency between mb-tree and aq-mode
+    - (zathor) [x264Encoder] fixed aq-mode command line generation (aq-mode 0 has never been appended)
+    - (zathor) [x264Encoder] fixed aq-mode in all presets
+    - (zathor) [DialogManager] minor change to the CUVIDServer call
+    - (zathor) [MeGUISettings] + [SettingsForm] all automatically installed tool paths cannot be changed anymore
+    - (zathor) [AvsReader] workaround for DGMultiSource added. Patch by neuron2
+    - (zathor) [ProfileManager] save the profiles during closing of MeGUI even if the profile folder could not be deleted
+    
+0.3.1.1058
+    - (zathor) [x264Config] add support for weighted P prediction. Requires x264 revision 1327 or higher.
+    - (zathor) [x264Config] fix issues with weighted B prediction
+    - (zathor) [x264Config] fix an issue where custom profile settings may be lost
+    - (zathor) [x264Config] very minor cosmetic changes
+    - (zathor) removed the default UAC elevation prompt. Instead the program will only be elevated if the app dir is not writeable
+    - (zathor) [Util] + [FileUtil] incompatible xml files (e.g. profiles) will be moved to a backup dir
+    - (zathor) fixed the problem of the incompatible x264 profiles. As a result the old B-Pyramid setting will be disabled
+    - (zathor) [OSInfo] fixed a problem with the .NET detection
+    - (zathor) [MuxStreamControl] preselect language if the filename contains the language name
+    - (zathor) [x264Config] fixed a few input validation problems
+    - (zathor) [ProgressWindow] added the Windows 7 taskbar progress feature
+    - (zathor) [x264Config] the advanced settings will be applied to the command line independent of the advanced settings checkbox
+    - (zathor) [x264Config] a few profile settings could not be loaded
+    - (zathor) [x264Config] extended input handling
+    - (zathor) updatecopier.exe will be called elevated
+    - (zathor) [x264Config] disable cabac and mbtree checkbox if setting disabled in profile or preset
+    - (zathor) [x264Config] custom command line settings will replace all settings in generated command line
+    - (zathor) [HDBDStreamExtractor] fixed a crash bug
+    - (zathor) [HDBDStreamExtractor] input and output path will be preselected
+    - (zathor) [BitrateCalculator] added experimental M2TS support
+    - (zathor) [MeGUISettings] changed the default auto update server list to development
+    - (zathor) [MeGUISettings] the update_cache location has been changed to a sub dir of the program dir
+    - (zathor) [MeGUISettings] the avisynth plugin location has been changed to a sub dir of the program\tools dir
+    - (zathor) [AviSynthWindow] + [AvisynthWrapper] LoadPlugin will be called for every automatically installed DLL in the megui avisynth plugin dir
+    - (zathor) [x264Config] changed the order the settings will be applied initially
+    - (zathor) [MeGUISettings] removed the http://megui.org/auto/ update server
+    - (zathor) [VideoEncodingComponent] + [MeGUISettings] added file format saving
+    - (zathor) [x264ConfigurationPanel] Turbo mode can be changed in automated 2 or 3 pass
+    - (zathor) [MeGUISettings] changed the development server to http://www.constructd.com/megui
+    - (zathor) [x264Encoder] changed the --rc-lookahead command line creation
+    - (zathor) [x264ConfigurationPanel] updated the input handling 
+    - (zathor) [AudioEncodingComponent] + [MeGUISettings] added audio format saving
+    - (zathor) [MainForm] changed the unhandled error handler. The details will be only written to the log
+    - (zathor) [ProfileConfigurationWindow] icon added
+    - (zathor) [ProfileConfigurationWindow] every closing of the form will check if there has been something changed
+    - (zathor) [x264ConfigurationPanel] added nal-hrd and aud checkbox (required for bluray; patched x264 is required for nal-hrd)
+    - (zathor) [ContextHelp.xml] added and changed a few entries
+    - (zathor) update MediaInfo library and its wrapper to the latest release (0.7.25)
+    
 0.3.1.1057
     - (kurtnoise) rebuild getAvisynthVersion function.
     - (kurtnoise) remove aac extension from the winamp AAC codec.
@@ -21,7 +74,6 @@
 
 0.3.1.1056
     - (kurtnoise) [ChapterCreator] - add EditionUID & ChapterUID in the output xml Matroska format.
-
                                    - enable chapterName_TextChanged event which was removed previously.
     - (kurtnoise) [ChapterCreator] add Matroska Chapters xml file as output format.
     - (kurtnoise) [ChapterCreator] fix issue #2845174.
