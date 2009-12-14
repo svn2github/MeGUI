@@ -142,6 +142,7 @@ namespace MeGUI.core.gui
             this.cancelButton.Size = new System.Drawing.Size(48, 23);
             this.cancelButton.TabIndex = 47;
             this.cancelButton.Text = "Cancel";
+            this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
             // 
             // okButton
             // 
@@ -162,6 +163,7 @@ namespace MeGUI.core.gui
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.presetsGroupbox);
             this.Name = "ProfileConfigurationWindow";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ProfileConfigurationWindow_FormClosing);
             this.presetsGroupbox.ResumeLayout(false);
             this.ResumeLayout(false);
 
