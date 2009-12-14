@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{12D5215B-0254-4616-A53C-C8B7B6A2C8E9}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -474,6 +474,7 @@
     </Compile>
     <Compile Include="core\gui\Profiles.cs">
     </Compile>
+    <Compile Include="core\gui\ProgressTaskbar.cs" />
     <Compile Include="core\gui\ProgressWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -933,6 +934,10 @@
     <EmbeddedResource Include="core\gui\NumberChooser.resx">
       <SubType>Designer</SubType>
       <DependentUpon>NumberChooser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="core\gui\ProfileConfigurationWindow.resx">
+      <DependentUpon>ProfileConfigurationWindow.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="core\gui\ProfileExporter.resx">
       <SubType>Designer</SubType>
