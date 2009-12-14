@@ -1303,6 +1303,7 @@ namespace MeGUI
             this.avisynthScript.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.avisynthScript.Size = new System.Drawing.Size(439, 356);
             this.avisynthScript.TabIndex = 0;
+            this.avisynthScript.TextChanged += new System.EventHandler(this.checkDLLs);
             // 
             // saveAvisynthScriptDialog
             // 
@@ -1451,7 +1452,7 @@ namespace MeGUI
 		}
 		private void openDLLButton_Click(object sender, System.EventArgs e)
 		{
-            this.openFilterDialog.InitialDirectory = MeGUISettings.AvisynthPluginsPath;
+            this.openFilterDialog.InitialDirectory = MainForm.Instance.Settings.AvisynthPluginsPath;
 			if (this.openFilterDialog.ShowDialog() == DialogResult.OK)
 			{
 				dllPath.Text = openFilterDialog.FileName;
@@ -2066,6 +2067,42 @@ namespace MeGUI
         {
             this.showScript();
         }
+        void checkDLLs(object sender, EventArgs e)
+        {
+            if (!avisynthScript.Text.Contains("#Import required DLLs"))
+            {
+                string strDLLLine = "";
+                strDLLLine += getLoadDLLLine("ColorMatrix.dll");
+                strDLLLine += getLoadDLLLine("Convolution3DYV12.dll");
+                strDLLLine += getLoadDLLLine("Decomb.dll");
+                strDLLLine += getLoadDLLLine("DGAVCDecode.dll");
+                strDLLLine += getLoadDLLLine("DGDecode.dll");
+                strDLLLine += getLoadDLLLine("EEDI2.dll");
+                strDLLLine += getLoadDLLLine("FluxSmooth.dll");
+                strDLLLine += getLoadDLLLine("LeakKernelDeint.dll");
+                strDLLLine += getLoadDLLLine("NicAudio.dll");
+                //strDLLLine += getLoadDLLLine("SimpleResize.dll");
+                strDLLLine += getLoadDLLLine("TDeint.dll");
+                strDLLLine += getLoadDLLLine("TIVTC.dll");
+                strDLLLine += getLoadDLLLine("TomsMoComp.dll");
+                strDLLLine += getLoadDLLLine("UnDot.dll");
+                strDLLLine += getLoadDLLLine("VSFilter.dll");
+
+                if (!String.IsNullOrEmpty(strDLLLine))
+                    avisynthScript.Text = "#Import required DLLs\r\n" + strDLLLine + "\r\n" + avisynthScript.Text;
+            }
+        }
+
+        private string getLoadDLLLine(string strDLLName)
+        {
+            string strLine = "";
+
+            if (File.Exists(Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, strDLLName)))
+                    strLine = "LoadPlugin(\"" + Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, strDLLName) + "\")\r\n";
+
+            return strLine;
+        }
+
 		#endregion
 		#region comboboxes
 		private void resizeFilterType_SelectedIndexChanged(object sender, System.EventArgs e)

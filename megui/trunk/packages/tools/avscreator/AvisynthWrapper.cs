@@ -96,7 +96,7 @@ namespace MeGUI
 
         public AviSynthClip ParseScript(string script, AviSynthColorspace forceColorspace)
         {
-            return new AviSynthClip("Eval", script, forceColorspace, this);
+            return new AviSynthClip("Eval", addPluginDLLs(script), forceColorspace, this);
         }
 
 
@@ -107,7 +107,45 @@ namespace MeGUI
 
 		public AviSynthClip ParseScript(string script)
 		{
-            return ParseScript(script, AviSynthColorspace.RGB24);
+            return ParseScript(addPluginDLLs(script), AviSynthColorspace.RGB24);
+        }
+
+        private string addPluginDLLs(string script)
+        {
+            if (!script.Contains("#Import required DLLs"))
+            {
+                string strDLLLine = "";
+                strDLLLine += getLoadDLLLine("ColorMatrix.dll");
+                strDLLLine += getLoadDLLLine("Convolution3DYV12.dll");
+                strDLLLine += getLoadDLLLine("Decomb.dll");
+                strDLLLine += getLoadDLLLine("DGAVCDecode.dll");
+                strDLLLine += getLoadDLLLine("DGDecode.dll");
+                strDLLLine += getLoadDLLLine("EEDI2.dll");
+                strDLLLine += getLoadDLLLine("FluxSmooth.dll");
+                strDLLLine += getLoadDLLLine("LeakKernelDeint.dll");
+                strDLLLine += getLoadDLLLine("NicAudio.dll");
+                //strDLLLine += getLoadDLLLine("SimpleResize.dll");
+                strDLLLine += getLoadDLLLine("TDeint.dll");
+                strDLLLine += getLoadDLLLine("TIVTC.dll");
+                strDLLLine += getLoadDLLLine("TomsMoComp.dll");
+                strDLLLine += getLoadDLLLine("UnDot.dll");
+                strDLLLine += getLoadDLLLine("VSFilter.dll");
+
+                if (!String.IsNullOrEmpty(strDLLLine))
+                    script = "#Import required DLLs\r\n" + strDLLLine + "\r\n" + script;
+            }
+
+            return script;
+        }
+
+        private string getLoadDLLLine(string strDLLName)
+        {
+            string strLine = "";
+
+            if (System.IO.File.Exists(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, strDLLName)))
+                strLine = "LoadPlugin(\"" + System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, strDLLName) + "\")\r\n";
+
+            return strLine;
         }
 		
 
