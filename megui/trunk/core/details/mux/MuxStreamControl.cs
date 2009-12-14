@@ -115,6 +115,15 @@ namespace MeGUI.core.details.mux
         private void input_FileSelected(FileBar sender, FileBarEventArgs args)
         {
             audioDelay.Value = PrettyFormatting.getDelayAndCheck(input.Filename) ?? 0;
+
+            foreach (KeyValuePair<string,string> strLanguage in LanguageSelectionContainer.Languages)
+            {
+                if (input.Filename.ToLower().Contains(strLanguage.Key.ToLower()))
+                {
+                    SetLanguage(strLanguage.Key);
+                    break;
+                }
+            }
             raiseEvent();
         }
     }
