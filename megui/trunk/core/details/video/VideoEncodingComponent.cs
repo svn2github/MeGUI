@@ -61,6 +61,17 @@ namespace MeGUI
                 return info;
             }
         }
+        public string FileType
+        {
+            get
+            {
+                return fileType.Text; ;
+            }
+            set
+            {
+                fileType.Text = value;
+            }
+        }
         #endregion
         #region generic handlers: filetype, profiles and codec. Also, encoder provider
 
@@ -174,10 +185,15 @@ namespace MeGUI
             mainForm.JobUtil.AddVideoJobs(info.VideoInput, info.VideoOutput, this.CurrentSettings.Clone(),
                 info.IntroEndFrame, info.CreditsStartFrame, info.DAR, PrerenderJob, true, info.Zones);
         }
+        private bool bInitialStart = true;
         private void fileType_SelectedIndexChanged(object sender, EventArgs e)
         {
             videoOutput.Filter = CurrentVideoOutputType.OutputFilterString;
             this.VideoOutput = Path.ChangeExtension(this.VideoOutput, CurrentVideoOutputType.Extension);
+            if (!bInitialStart)
+                MainForm.Instance.Settings.MainFileFormat = fileType.Text;
+            else
+                bInitialStart = false;
         }
         /// <summary>
         /// enables / disables output fields depending on the codec configuration

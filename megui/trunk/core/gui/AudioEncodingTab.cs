@@ -48,6 +48,12 @@ namespace MeGUI.core.gui
             set { queueAudioButton.Text = value; }
         }
 
+        public string AudioContainer
+        {
+            get { return audioContainer.Text; }
+            set { audioContainer.Text = value; }
+        }
+
         public AudioEncoderProvider AudioEncoderProvider
         {
             get { return audioEncoderProvider; }
@@ -143,11 +149,16 @@ namespace MeGUI.core.gui
             if (!string.IsNullOrEmpty(audioInput.Filename)) openAudioFile(audioInput.Filename);
         }
 
+        private bool bInitialStart = true;
         private void audioContainer_SelectedIndexChanged(object sender, EventArgs e)
         {
             AudioType currentType = (AudioType)audioContainer.SelectedItem;
             audioOutput.Filter = currentType.OutputFilterString;
             AudioOutput = Path.ChangeExtension(AudioOutput, currentType.Extension);
+            if (!bInitialStart)
+                MainForm.Instance.Settings.MainAudioFormat = audioContainer.Text;
+            else
+                bInitialStart = false;
         }
 
         private void deleteAudioButton_Click(object sender, EventArgs e)
