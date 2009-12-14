@@ -171,10 +171,9 @@ namespace MeGUI
             {
                 FileUtil.DeleteDirectoryIfExists(GetSaveFolder(path), true);
             }
-            catch (IOException e)
+            catch (Exception ex)
             {
-                MessageBox.Show("There was an error clearing the profiles folder before deletion: " + e.Message, "Error saving profiles", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                MessageBox.Show("There was an error clearing the profiles folder before deletion: " + ex.Message, "Error saving profiles", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             foreach (Profile p in profiles)
