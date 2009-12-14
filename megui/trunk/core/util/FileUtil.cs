@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Windows.Forms;
 
 using ICSharpCode.SharpZipLib.Zip;
 
@@ -270,7 +271,66 @@ namespace MeGUI.core.util
             {
                 Console.WriteLine("Source path does not exist!");
             }
+        }
 
+        /// <summary>
+        /// Backup File
+        /// </summary>
+        /// <param name"sourcePath">Path of the Source file</param>
+        /// <param name="overwrite"></param>
+        public static void BackupFile(string sourcePath, bool overwrite)
+        {
+            try
+            {
+                if (File.Exists(sourcePath))
+                {
+                    String targetPath = sourcePath.Replace(System.Windows.Forms.Application.StartupPath, System.Windows.Forms.Application.StartupPath + @"\backup");
+                    if (File.Exists(targetPath))
+                        File.Delete(targetPath);
+
+                    FileUtil.ensureDirectoryExists(Path.GetDirectoryName(targetPath));
+
+                    File.Move(sourcePath,targetPath);
+                }
+            } catch (Exception ex)
+            {
+                MessageBox.Show("Error while moving file: \n" + sourcePath + "\n" + ex.Message, "Error moving file", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>
+        /// Checks if a directory is writable
+        /// </summary>
+        /// <param name"strPath">Path of the Source file</param>
+        public static bool IsDirWriteable(string strPath)
+        {
+            try
+            {
+                // Does the root directory exists
+                if (!Directory.Exists(strPath))
+                    return false;
+
+                // Create a new file name
+                string newFileName = System.IO.Path.GetRandomFileName();
+
+                // Combine the new file name with the path
+                string newPath = System.IO.Path.Combine(strPath, newFileName);
+
+                // Create & delete the file
+                if (!System.IO.File.Exists(newPath))
+                {
+                    System.IO.FileStream fs = System.IO.File.Create(newPath);
+                    fs.Close();
+                    System.IO.File.Delete(newPath);
+                    return true; 
+                }
+
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

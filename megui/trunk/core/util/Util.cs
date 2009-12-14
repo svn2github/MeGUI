@@ -144,12 +144,9 @@ namespace MeGUI.core.util
                     }
                     catch (Exception e)
                     {
-                        DialogResult r = MessageBox.Show("File '" + path + "' could not be loaded. Delete?", "Error loading Job", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
-                        if (r == DialogResult.Yes)
-                        {
-                            try { s.Close(); File.Delete(path); }
-                            catch (Exception) { }
-                        }
+                        s.Close();
+                        MessageBox.Show("File '" + path + "' could not be loaded!\n\nIt will be moved to the backup directory.", "Error loading File", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        FileUtil.BackupFile(path, true);
                         Console.Write(e.Message);
                         return null;
                     }
@@ -180,12 +177,9 @@ namespace MeGUI.core.util
                     }
                     catch (Exception e)
                     {
-                        DialogResult r = MessageBox.Show("File '" + path + "' could not be loaded. Delete?", "Error loading Job", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
-                        if (r == DialogResult.Yes)
-                        {
-                            try { s.Close(); File.Delete(path); }
-                            catch (Exception) { }
-                        }
+                        s.Close();
+                        MessageBox.Show("File '" + path + "' could not be loaded!\n\nIt will be moved to the backup directory.", "Error loading File", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        FileUtil.BackupFile(path, true);
                         Console.Write(e.Message);
                         return null;
                     }
