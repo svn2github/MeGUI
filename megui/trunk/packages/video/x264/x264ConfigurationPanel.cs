@@ -609,6 +609,8 @@ namespace MeGUI.packages.video.x264
                             this.x264WeightedBPrediction.Checked = true;
                         if (this.x264WeightedPPrediction.SelectedIndex != 0)
                             this.x264WeightedPPrediction.SelectedIndex = 0;
+                        if (cbAQMode.SelectedIndex == 0)
+                            cbAQMode.SelectedIndex = 1;
                     }
                     break;
                 case 2: // Faster
@@ -651,6 +653,8 @@ namespace MeGUI.packages.video.x264
                             this.x264WeightedBPrediction.Checked = true;
                         if (this.x264WeightedPPrediction.SelectedIndex != 1)
                             this.x264WeightedPPrediction.SelectedIndex = 1;
+                        if (cbAQMode.SelectedIndex == 0)
+                            cbAQMode.SelectedIndex = 1;
                     }
                     break;
                 case 3: // Fast
@@ -693,6 +697,8 @@ namespace MeGUI.packages.video.x264
                             this.x264WeightedBPrediction.Checked = true;
                         if (this.x264WeightedPPrediction.SelectedIndex != 2)
                             this.x264WeightedPPrediction.SelectedIndex = 2;
+                        if (cbAQMode.SelectedIndex == 0)
+                            cbAQMode.SelectedIndex = 1;
                     }
                     break;
                 case 4: // Medium
@@ -735,6 +741,8 @@ namespace MeGUI.packages.video.x264
                             this.x264WeightedBPrediction.Checked = true;
                         if (this.x264WeightedPPrediction.SelectedIndex != 2)
                             this.x264WeightedPPrediction.SelectedIndex = 2;
+                        if (cbAQMode.SelectedIndex == 0)
+                            cbAQMode.SelectedIndex = 1;
                     }
                     break;
                 case 5: // Slow
@@ -777,6 +785,8 @@ namespace MeGUI.packages.video.x264
                             this.x264WeightedBPrediction.Checked = true;
                         if (this.x264WeightedPPrediction.SelectedIndex != 2)
                             this.x264WeightedPPrediction.SelectedIndex = 2;
+                        if (cbAQMode.SelectedIndex == 0)
+                            cbAQMode.SelectedIndex = 1;
                     }
                     break;
                 case 6: // Slower
@@ -819,6 +829,8 @@ namespace MeGUI.packages.video.x264
                             this.x264WeightedBPrediction.Checked = true;
                         if (this.x264WeightedPPrediction.SelectedIndex != 2)
                             this.x264WeightedPPrediction.SelectedIndex = 2;
+                        if (cbAQMode.SelectedIndex == 0)
+                            cbAQMode.SelectedIndex = 1;
                     }
                     break;
                 case 7: // Very Slow
@@ -861,6 +873,8 @@ namespace MeGUI.packages.video.x264
                             this.x264WeightedBPrediction.Checked = true;
                         if (this.x264WeightedPPrediction.SelectedIndex != 2)
                             this.x264WeightedPPrediction.SelectedIndex = 2;
+                        if (cbAQMode.SelectedIndex == 0)
+                            cbAQMode.SelectedIndex = 1;
                     }
                     break;
                 case 8: // Placebo
@@ -903,6 +917,8 @@ namespace MeGUI.packages.video.x264
                             this.x264WeightedBPrediction.Checked = true;
                         if (this.x264WeightedPPrediction.SelectedIndex != 2)
                             this.x264WeightedPPrediction.SelectedIndex = 2;
+                        if (cbAQMode.SelectedIndex == 0)
+                            cbAQMode.SelectedIndex = 1;
                     }
                     break;
                 default:
