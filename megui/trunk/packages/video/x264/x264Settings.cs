@@ -57,13 +57,13 @@ namespace MeGUI
         }
         int NewadaptiveBFrames, nbRefFrames, alphaDeblock, betaDeblock, subPelRefinement, maxQuantDelta, tempQuantBlur, 
 			bframePredictionMode, vbvBufferSize, vbvMaxBitrate, meType, meRange, minGOPSize, macroBlockOptions,
-            quantizerMatrixType, profile, x264Trellis, level, noiseReduction, deadZoneInter, deadZoneIntra, AQMode, preset, 
-            tune, lookahead, slicesnb, maxSliceSyzeBytes, maxSliceSyzeMBs, bFramePyramid;
+            quantizerMatrixType, x264Trellis, noiseReduction, deadZoneInter, deadZoneIntra, AQMode, profile, level,
+            lookahead, slicesnb, maxSliceSyzeBytes, maxSliceSyzeMBs, bFramePyramid, weightedPPrediction, preset, tune;
 		decimal ipFactor, pbFactor, chromaQPOffset, vbvInitialBuffer, bitrateVariance, quantCompression, 
 			tempComplexityBlur, tempQuanBlurCC, scdSensitivity, bframeBias, quantizerCrf, AQStrength, psyRDO, psyTrellis;
 		bool deblock, cabac, p4x4mv, p8x8mv, b8x8mv, i4x4mv, i8x8mv, weightedBPrediction, encodeInterlaced,
 			chromaME, adaptiveDCT, lossless, noMixedRefs, noFastPSkip, psnrCalc, noDctDecimate, ssimCalc, useQPFile, 
-            FullRange, advSet, noMBTree, threadInput, noPsy, scenecut;
+            FullRange, advSet, noMBTree, threadInput, noPsy, scenecut, x264Nalhrd, x264Aud;
 		string quantizerMatrix, qpfile;
 		#region constructor
         /// <summary>
@@ -71,6 +71,8 @@ namespace MeGUI
 		/// </summary>
 		public x264Settings():base(ID, VideoEncoderType.X264)
 		{
+            preset = 4;
+            tune = 0;
             deadZoneInter = 21;
             deadZoneIntra = 11;
             encodeInterlaced = false;
@@ -89,9 +91,10 @@ namespace MeGUI
 			betaDeblock = 0;
 			cabac = true;
 			weightedBPrediction = true;
+            weightedPPrediction = 2;
 			NewadaptiveBFrames = 1;
 			bFramePyramid = 0;
-			subPelRefinement = 6;
+			subPelRefinement = 7;
 			psyRDO = new decimal(1.0);
             psyTrellis = new decimal(0.0);
             macroBlockOptions = 3;
@@ -125,30 +128,40 @@ namespace MeGUI
 			adaptiveDCT = true;
 			quantizerMatrix = "";
 			quantizerMatrixType = 0; // none
-			profile = 3; // Autoguess. High if using default options.
 			lossless = false;
 			x264Trellis = 1;
-			level = 15;
             base.MaxNumberOfPasses = 3;
             AQMode = 1;
             AQStrength = new decimal(1.0);
             useQPFile = false;
             qpfile = "";
             FullRange = false;
-            preset = 3;
-            tune = 0;
             advSet = false;
             lookahead = 40;
-            noMBTree = false;
+            noMBTree = true;
             threadInput = true;
             noPsy = false;
             scenecut = true;
             slicesnb = 0;
             maxSliceSyzeBytes = 0;
             maxSliceSyzeMBs = 0;
+            x264Nalhrd = false;
+            x264Aud = false;
+            profile = 3; // Autoguess. High if using default options.
+            level = 15;
 		}
 		#endregion
 		#region properties
+        public int x264Preset
+        {
+            get { return preset; }
+            set { preset = value; }
+        }
+        public int x264Tuning
+        {
+            get { return tune; }
+            set { tune = value; }
+        }
         public decimal QuantizerCRF
         {
             get { return quantizerCrf; }
@@ -250,16 +263,6 @@ namespace MeGUI
 			get { return minGOPSize; }
 			set { minGOPSize = value; }
 		}
-		public int Profile
-		{
-			get { return profile; }
-			set { profile = value; }
-		}
-		public int Level
-		{
-			get { return level; }
-			set { level = value; }
-		}
 		public decimal IPFactor
 		{
 			get { return ipFactor; }
@@ -340,12 +343,17 @@ namespace MeGUI
 			get { return weightedBPrediction; }
 			set { weightedBPrediction = value; }
 		}
+        public int WeightedPPrediction
+        {
+            get { return weightedPPrediction; }
+            set { weightedPPrediction = value; }
+        }
 		public int NewAdaptiveBFrames
 		{
 			get { return NewadaptiveBFrames; }
 			set { NewadaptiveBFrames = value; }
 		}
-		public int BFramePyramid
+		public int x264BFramePyramid
 		{
 			get { return bFramePyramid; }
 			set { bFramePyramid = value; }
@@ -440,16 +448,6 @@ namespace MeGUI
             get { return FullRange; }
             set { FullRange = value; }
         }
-        public int x264Preset
-        {
-            get { return preset; }
-            set { preset = value; }
-        }
-        public int x264Tuning
-        {
-            get { return tune; }
-            set { tune = value; }
-        }
         public bool x264AdvancedSettings
         {
             get { return advSet; }
@@ -480,6 +478,16 @@ namespace MeGUI
             get { return scenecut; }
             set { scenecut = value; }
         }
+        public bool X264Nalhrd
+        {
+            get { return x264Nalhrd; }
+            set { x264Nalhrd = value; }
+        }
+        public bool X264Aud
+        {
+            get { return x264Aud; }
+            set { x264Aud = value; }
+        }
         public int SlicesNb
         {
             get { return slicesnb; }
@@ -494,6 +502,16 @@ namespace MeGUI
         {
             get { return maxSliceSyzeMBs; }
             set { maxSliceSyzeMBs = value; }
+        }
+        public int Profile
+        {
+            get { return profile; }
+            set { profile = value; }
+        }
+        public int Level
+        {
+            get { return level; }
+            set { level = value; }
         }
         #endregion
         public override bool UsesSAR
@@ -524,7 +542,7 @@ namespace MeGUI
                 this.BetaDeblock != otherSettings.BetaDeblock ||
                 this.BframeBias != otherSettings.BframeBias ||
                 this.BframePredictionMode != otherSettings.BframePredictionMode ||
-                this.BFramePyramid != otherSettings.BFramePyramid ||
+                this.x264BFramePyramid != otherSettings.x264BFramePyramid ||
                 this.BitrateVariance != otherSettings.BitrateVariance ||
                 this.PsyRDO != otherSettings.PsyRDO ||
                 this.PsyTrellis != otherSettings.PsyTrellis ||
@@ -570,6 +588,7 @@ namespace MeGUI
                 this.VBVInitialBuffer != otherSettings.VBVInitialBuffer ||
                 this.VBVMaxBitrate != otherSettings.VBVMaxBitrate ||
                 this.WeightedBPrediction != otherSettings.WeightedBPrediction ||
+                this.WeightedPPrediction != otherSettings.WeightedPPrediction ||
                 this.X264Trellis != otherSettings.X264Trellis ||
                 this.AQmode != otherSettings.AQmode ||
                 this.AQstrength != otherSettings.AQstrength ||
@@ -585,6 +604,8 @@ namespace MeGUI
                 this.NoPsy != otherSettings.NoPsy ||
                 this.Scenecut != otherSettings.Scenecut ||
                 this.SlicesNb != otherSettings.SlicesNb ||
+                this.X264Nalhrd != otherSettings.X264Nalhrd ||
+                this.X264Aud != otherSettings.X264Aud ||
                 this.MaxSliceSyzeBytes != otherSettings.MaxSliceSyzeBytes ||
                 this.MaxSliceSyzeMBs != otherSettings.MaxSliceSyzeMBs
                 )
@@ -601,7 +622,7 @@ namespace MeGUI
                     Cabac = false;
                     NbBframes = 0;
                     NewAdaptiveBFrames = 0;
-                    BFramePyramid = 0;
+                    x264BFramePyramid = 0;
                     I8x8mv = false;
                     AdaptiveDCT = false;
                     BframeBias = 0;
@@ -609,14 +630,17 @@ namespace MeGUI
                     QuantizerMatrixType = 0; // no matrix
                     QuantizerMatrix = "";
                     Lossless = false;
+                    WeightedPPrediction = 0;
                     break;
                 case 1:
                     I8x8mv = false;
                     AdaptiveDCT = false;
                     QuantizerMatrixType = 0; // no matrix
                     QuantizerMatrix = "";
+                    WeightedPPrediction = 0;
                     break;
                 case 2:
+                    WeightedPPrediction = 1;
                     break;
             }
             if (EncodingMode != 2 && EncodingMode != 5)
@@ -640,7 +664,7 @@ namespace MeGUI
             if (Profile != 2) // lossless requires High Profile
                 Lossless = false;
             if (NbBframes < 2) // pyramid requires at least two b-frames
-                BFramePyramid = 0;
+                x264BFramePyramid = 0;
             if (NbBframes == 0)
             {
                 NewAdaptiveBFrames = 0;

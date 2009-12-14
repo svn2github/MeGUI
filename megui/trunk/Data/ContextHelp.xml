@@ -64,8 +64,8 @@ Allows B-frames to be used as references for other B-frames, increasing compress
 when 2 or more B-frames are used. 3 modes available : None = Disabled, Strict = Strictly Hierarchical Pyramid,
 Normal = Non-Strict (not Blu-ray compatible)</Advanced>
 			<Basic>Keep some B-frames as references</Basic>
-			<Recommended>None</Recommended>
-			<Default>None</Default>
+			<Recommended>disabled</Recommended>
+			<Default>disabled</Default>
 		</b-pyramid>
 		<!--WARNING DOUBLE NEGATIVE-->
 		<no-cabac name="Encode CABAC">
@@ -255,8 +255,8 @@ Note: 2 pass encoding will take up to twice as long.</Advanced>
 This file holds information generated about each frame, which is then used to make
 more informed choices on the finial pass.</Advanced>
 			<Basic>Filename for multipass statistics</Basic>
-			<Recommended>x264_2pass.log</Recommended>
-			<Default>x264_2pass.log</Default>
+			<Recommended>x264_2pass.stats</Recommended>
+			<Default>x264_2pass.stats</Default>
 		</stats>
 		<qcomp name="Quantizer Curve Compression">
 			<Advanced>
@@ -323,6 +323,14 @@ Enables 'brightness' weighting of B-frames which improves fades and colour gradi
 			<Recommended>Enabled</Recommended>
 			<Default>Enabled</Default>
 		</weightb>
+    <weightp name="B-frame Weighted Prediction">
+      <Advanced>
+        Enables use of explicit weighted prediction to improve compression in P-frames. Higher modes are slower.
+      </Advanced>
+      <Basic>Weighted prediction for P-frames</Basic>
+      <Recommended>2</Recommended>
+      <Default>2</Default>
+    </weightp>
 		<me name="Motion Estimation Mode">
 			<Advanced>
 Controls the method used to search for motion vectors. Diamond search radius 1 (fastest),
@@ -640,11 +648,30 @@ Debugging option used to understand what is happening on a frame by frame basis.
 		</visualize>
 		<aud name="Access Unit Delimiters">
 			<Advanced>
-Used for compatibility when using AVC in some transport streams (inc MPEG-2 TS).</Advanced>
+Use access unit delimiters
+      </Advanced>
 			<Basic>Use access unit delimiters</Basic>
-			<Recommended>Disabled</Recommended>
+			<Recommended>Disabled, unless encoding for Blu-ray, in which case set this option</Recommended>
 			<Default>Disabled</Default>
 		</aud>
+    <nalhrd name="nal-hrd">
+      <Advanced>
+Add NAL HRD parameters to the output stream; used for HD-DVD and Blu-ray compliancy. 
+Depends on vbv-bufsize and vbv-maxrate to be set to be active. 
+If enabled a patched x264.exe is needed!
+      </Advanced>
+      <Basic>Use nal-hrd</Basic>
+      <Recommended>Disabled, unless encoding for Blu-ray, in which case set this option</Recommended>
+      <Default>Disabled</Default>
+    </nalhrd>
+    <customcommandline name="Custom command line">
+      <Advanced>
+The parameters specified in the custom command line will overwrite the parameters specified in the GUI.
+      </Advanced>
+      <Basic>Custom command line parameters</Basic>
+      <Recommended>Empty, unless some parameters have to be forced</Recommended>
+      <Default>Empty</Default>
+    </customcommandline>
     <aqmode name="AQ Mode">
       <Advanced>
 This option controls how AQ distributes bits. Mode 0 disables the feature whereas 
