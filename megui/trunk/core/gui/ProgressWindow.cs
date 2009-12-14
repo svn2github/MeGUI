@@ -64,6 +64,7 @@ namespace MeGUI
         private StatusStrip statusStrip1;
         private ToolStripStatusLabel statusLabel;
         private MeGUI.core.gui.HelpButton helpButton1;
+        private ITaskbarList3 taskbarProgress;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -80,6 +81,9 @@ namespace MeGUI
 			//
 			InitializeComponent();
 			isUserClosing = true;
+            if ((Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor >= 1) 
+                || Environment.OSVersion.Version.Major > 6)
+                taskbarProgress = (ITaskbarList3)new ProgressTaskbar();
 		}
 		/// <summary>
 		/// handles the onclosing event
@@ -438,6 +442,10 @@ namespace MeGUI
                 statusLabel.Text = su.Status ?? "";
 
                 progress.Value = su.PercentageDone;
+
+                if ((Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor >= 1)
+                    || Environment.OSVersion.Version.Major > 6)
+                    taskbarProgress.SetProgressValue(this.Handle, Convert.ToUInt64(su.PercentageDone), 100);
             }
             catch (Exception) { }
         }
