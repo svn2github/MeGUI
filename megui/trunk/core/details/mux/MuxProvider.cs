@@ -129,11 +129,11 @@ namespace MeGUI
                 List<ContainerType> outputTypes = muxerInterface.GetSupportedContainers();
                 foreach (ContainerType type in outputTypes)
                 {
-                    if (type.ID != "M2TS") // M2TS not available for the Bitrate Calculator yet
-                    {
+                    //if (type.ID != "M2TS") // M2TS not available for the Bitrate Calculator yet
+                    //{
                         if (!supportedContainers.Contains(type))
                             supportedContainers.Add(type);
-                    }
+                    //}
                 }
             }
             return supportedContainers;

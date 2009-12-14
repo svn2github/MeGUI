@@ -70,7 +70,7 @@ namespace MeGUI
                 AudioOverhead += getAudioOverhead(container, s.AType, nbOfSeconds, nbOfFrames);
             }
 
-            ExtraSize = (!string.IsNullOrEmpty(extra)) ? FileSize.Parse(extra) : FileSize.Empty; 
+            ExtraSize = (!string.IsNullOrEmpty(extra)) ? FileSize.Parse(extra) : FileSize.Empty;     
         }
 
         public FileSize VideoOverhead;
@@ -80,12 +80,20 @@ namespace MeGUI
 
         private decimal nbOfSeconds;
 
-        public Tuple<ulong, FileSize> getBitrateAndVideoSize(FileSize desiredSize)
+        public Tuple<ulong, FileSize> getBitrateAndVideoSize(FileSize desiredSize, ContainerType container)
         {
             try
             {
+                if (container == ContainerType.M2TS)
+                {
+                    desiredSize = desiredSize * 100 / 106;
+                    AudioSize = AudioSize * 106 / 100;
+                    ExtraSize = ExtraSize * 2;
+                }
+
                 FileSize videoSize = desiredSize - VideoOverhead - AudioOverhead - AudioSize - ExtraSize;
                 ulong sizeInBits = videoSize.Bytes * 8;
+                
                 return new Tuple<ulong, FileSize>((ulong)(sizeInBits / (nbOfSeconds * 1000)), videoSize);
             }
             catch (OverflowException e)
@@ -94,12 +102,18 @@ namespace MeGUI
             }
         }
 
-        public Tuple<FileSize, FileSize> getFileAndVideoSize(ulong bitrateKBits)
+        public Tuple<FileSize, FileSize> getFileAndVideoSize(ulong bitrateKBits, ContainerType container)
         {
 
             decimal bytesPerSecond = bitrateKBits * 1000 / 8;
 
             FileSize videoSize = new FileSize(Unit.B, (nbOfSeconds * bytesPerSecond));
+            if (container == ContainerType.M2TS)
+            {
+                videoSize = videoSize * 106 / 100;
+                AudioSize = AudioSize * 106 / 100;
+                ExtraSize = ExtraSize * 2;
+            }
 
             return new Tuple<FileSize, FileSize>(videoSize + VideoOverhead + AudioOverhead + AudioSize + ExtraSize, videoSize);
         }
@@ -112,6 +126,8 @@ namespace MeGUI
                 return FileSize.Empty;
             else if (container == ContainerType.MKV)
                 return new FileSize(Unit.B, getMKVAudioOverhead(type, 48000, (double)nbSeconds));
+            else if (container == ContainerType.M2TS)
+                return new FileSize(Unit.B, getM2TSAudioOverhead(type, 48000, (double)nbSeconds));
             else if (container == ContainerType.AVI)
                 return new FileSize(Unit.B, getAviAudioOverhead(type) * nbOfFrames);
 
@@ -135,6 +151,10 @@ namespace MeGUI
                     nbBframes * mkvBframeOverhead + 
                     nbofSeconds * 12 / 2 // this line for 12 bytes per cluster overhoad
                     ));
+            }
+            else if (container == ContainerType.M2TS)
+            {
+                return new FileSize(Unit.B, 0);
             }
             else if (container == ContainerType.AVI)
             {
@@ -180,6 +200,22 @@ namespace MeGUI
         }
 
         /// <summary>
+        /// gets the overhead a given audio type will incurr in the m2ts container
+        /// given its length and sampling rate
+        /// </summary>
+        /// <param name="AudioType">type of the audio track</param>
+        /// <param name="samplingRate">sampling rate of the audio track</param>
+        /// <param name="length">length of the audio track</param>
+        /// <returns>overhead this audio track will incurr</returns>
+        public static int getM2TSAudioOverhead(AudioType audioType, int samplingRate, double length)
+        {
+            if (audioType == null)
+                return 0;
+            
+            return 0;
+        }
+
+        /// <summary>
         /// gets the avi container overhead for the given audio type and bitrate mode
         /// bitrate mode only needs to be taken into account for MP3 but it's there for all cases nontheless
         /// </summary>
@@ -210,7 +246,7 @@ namespace MeGUI
         {
             BitrateCalculator c = new BitrateCalculator(vCodec, p, containerType, audioStreams, nbOfFrames, framerate, extra);
             FileSize a, b;
-            c.getFileAndVideoSize((ulong)bitrate).get(out a, out b);
+            c.getFileAndVideoSize((ulong)bitrate, containerType).get(out a, out b);
             vidSize = (int)b.KB;
             return (long)a.KB;
         }
@@ -220,7 +256,7 @@ namespace MeGUI
             BitrateCalculator c = new BitrateCalculator(vCodec, p, containerType, audioStreams, numberOfFrames, framerate, extra);
             FileSize b;
             ulong a;
-            c.getBitrateAndVideoSize(new FileSize(Unit.B, muxedSizeBytes)).get(out a, out b);
+            c.getBitrateAndVideoSize(new FileSize(Unit.B, muxedSizeBytes), containerType).get(out a, out b);
             videoSizeKBs = b.KB;
             return (int)a;
         }
