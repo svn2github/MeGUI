@@ -376,7 +376,7 @@ namespace MeGUI.packages.video.x264
             this.x264BitrateQuantizer.Name = "x264BitrateQuantizer";
             this.x264BitrateQuantizer.Size = new System.Drawing.Size(55, 20);
             this.x264BitrateQuantizer.TabIndex = 5;
-            this.x264BitrateQuantizer.TextChanged += new System.EventHandler(this.updateEvent);
+            this.x264BitrateQuantizer.ValueChanged += new System.EventHandler(this.updateEvent);
             // 
             // logfile
             // 
@@ -502,7 +502,7 @@ namespace MeGUI.packages.video.x264
             this.maxSliceSizeMB.Name = "maxSliceSizeMB";
             this.maxSliceSizeMB.Size = new System.Drawing.Size(85, 20);
             this.maxSliceSizeMB.TabIndex = 5;
-            this.maxSliceSizeMB.TextChanged += new System.EventHandler(this.updateEvent);
+            this.maxSliceSizeMB.ValueChanged += new System.EventHandler(this.updateEvent);
             // 
             // label11
             // 
@@ -524,7 +524,7 @@ namespace MeGUI.packages.video.x264
             this.maxSliceSizeBytes.Name = "maxSliceSizeBytes";
             this.maxSliceSizeBytes.Size = new System.Drawing.Size(85, 20);
             this.maxSliceSizeBytes.TabIndex = 3;
-            this.maxSliceSizeBytes.TextChanged += new System.EventHandler(this.updateEvent);
+            this.maxSliceSizeBytes.ValueChanged += new System.EventHandler(this.updateEvent);
             // 
             // label10
             // 
@@ -541,7 +541,7 @@ namespace MeGUI.packages.video.x264
             this.slicesnb.Name = "slicesnb";
             this.slicesnb.Size = new System.Drawing.Size(85, 20);
             this.slicesnb.TabIndex = 1;
-            this.slicesnb.TextChanged += new System.EventHandler(this.updateEvent);
+            this.slicesnb.ValueChanged += new System.EventHandler(this.updateEvent);
             // 
             // label9
             // 
@@ -576,9 +576,9 @@ namespace MeGUI.packages.video.x264
             this.lblWeightedP.AutoSize = true;
             this.lblWeightedP.Location = new System.Drawing.Point(9, 89);
             this.lblWeightedP.Name = "lblWeightedP";
-            this.lblWeightedP.Size = new System.Drawing.Size(143, 13);
+            this.lblWeightedP.Size = new System.Drawing.Size(142, 13);
             this.lblWeightedP.TabIndex = 22;
-            this.lblWeightedP.Text = "Weighted Prediction for P-Fr.";
+            this.lblWeightedP.Text = "P-frame Weighted Prediction";
             this.lblWeightedP.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // x264WeightedPPrediction
@@ -639,7 +639,7 @@ namespace MeGUI.packages.video.x264
             0,
             0,
             0});
-            this.x264NumberOfRefFrames.TextChanged += new System.EventHandler(this.updateEvent);
+            this.x264NumberOfRefFrames.ValueChanged += new System.EventHandler(this.updateEvent);
             // 
             // label6
             // 
@@ -668,7 +668,7 @@ namespace MeGUI.packages.video.x264
             0,
             0,
             0});
-            this.x264SCDSensitivity.TextChanged += new System.EventHandler(this.updateEvent);
+            this.x264SCDSensitivity.ValueChanged += new System.EventHandler(this.updateEvent);
             // 
             // interlaced
             // 
@@ -745,7 +745,7 @@ namespace MeGUI.packages.video.x264
             this.x264BframeBias.Name = "x264BframeBias";
             this.x264BframeBias.Size = new System.Drawing.Size(85, 20);
             this.x264BframeBias.TabIndex = 16;
-            this.x264BframeBias.TextChanged += new System.EventHandler(this.updateEvent);
+            this.x264BframeBias.ValueChanged += new System.EventHandler(this.updateEvent);
             // 
             // x264BframeBiasLabel
             // 
@@ -805,7 +805,7 @@ namespace MeGUI.packages.video.x264
             0,
             0,
             0});
-            this.x264NumberOfBFrames.TextChanged += new System.EventHandler(this.updateEvent);
+            this.x264NumberOfBFrames.ValueChanged += new System.EventHandler(this.updateEvent);
             // 
             // gbH264Features
             // 
@@ -853,7 +853,7 @@ namespace MeGUI.packages.video.x264
             this.x264BetaDeblock.Name = "x264BetaDeblock";
             this.x264BetaDeblock.Size = new System.Drawing.Size(51, 20);
             this.x264BetaDeblock.TabIndex = 4;
-            this.x264BetaDeblock.TextChanged += new System.EventHandler(this.updateEvent);
+            this.x264BetaDeblock.ValueChanged += new System.EventHandler(this.updateEvent);
             // 
             // x264AlphaDeblock
             // 
@@ -872,7 +872,7 @@ namespace MeGUI.packages.video.x264
             this.x264AlphaDeblock.Name = "x264AlphaDeblock";
             this.x264AlphaDeblock.Size = new System.Drawing.Size(51, 20);
             this.x264AlphaDeblock.TabIndex = 2;
-            this.x264AlphaDeblock.TextChanged += new System.EventHandler(this.updateEvent);
+            this.x264AlphaDeblock.ValueChanged += new System.EventHandler(this.updateEvent);
             // 
             // x264DeblockActive
             // 
@@ -953,7 +953,7 @@ namespace MeGUI.packages.video.x264
             0,
             0,
             0});
-            this.x264KeyframeInterval.TextChanged += new System.EventHandler(this.updateEvent);
+            this.x264KeyframeInterval.ValueChanged += new System.EventHandler(this.updateEvent);
             // 
             // x264MinGOPSize
             // 
@@ -967,7 +967,7 @@ namespace MeGUI.packages.video.x264
             0,
             0,
             0});
-            this.x264MinGOPSize.TextChanged += new System.EventHandler(this.updateEvent);
+            this.x264MinGOPSize.ValueChanged += new System.EventHandler(this.updateEvent);
             // 
             // x264MinGOPSizeLabel
             // 
@@ -1059,7 +1059,7 @@ namespace MeGUI.packages.video.x264
             0,
             0,
             0});
-            this.lookahead.TextChanged += new System.EventHandler(this.updateEvent);
+            this.lookahead.ValueChanged += new System.EventHandler(this.updateEvent);
             // 
             // x264RateTolLabel
             // 
@@ -1094,7 +1094,7 @@ namespace MeGUI.packages.video.x264
             0,
             0,
             65536});
-            this.x264VBVInitialBuffer.TextChanged += new System.EventHandler(this.updateEvent);
+            this.x264VBVInitialBuffer.ValueChanged += new System.EventHandler(this.updateEvent);
             // 
             // x264VBVInitialBufferLabel
             // 
@@ -1119,7 +1119,7 @@ namespace MeGUI.packages.video.x264
             this.x264VBVMaxRate.Name = "x264VBVMaxRate";
             this.x264VBVMaxRate.Size = new System.Drawing.Size(55, 20);
             this.x264VBVMaxRate.TabIndex = 3;
-            this.x264VBVMaxRate.TextChanged += new System.EventHandler(this.updateEvent);
+            this.x264VBVMaxRate.ValueChanged += new System.EventHandler(this.updateEvent);
             // 
             // x264TempQuantBlur
             // 
@@ -1143,7 +1143,7 @@ namespace MeGUI.packages.video.x264
             0,
             0,
             65536});
-            this.x264TempQuantBlur.TextChanged += new System.EventHandler(this.updateEvent);
+            this.x264TempQuantBlur.ValueChanged += new System.EventHandler(this.updateEvent);
             // 
             // x264TempFrameComplexityBlur
             // 
@@ -1161,7 +1161,7 @@ namespace MeGUI.packages.video.x264
             0,
             0,
             0});
-            this.x264TempFrameComplexityBlur.TextChanged += new System.EventHandler(this.updateEvent);
+            this.x264TempFrameComplexityBlur.ValueChanged += new System.EventHandler(this.updateEvent);
             // 
             // x264QuantizerCompression
             // 
@@ -1185,7 +1185,7 @@ namespace MeGUI.packages.video.x264
             0,
             0,
             65536});
-            this.x264QuantizerCompression.TextChanged += new System.EventHandler(this.updateEvent);
+            this.x264QuantizerCompression.ValueChanged += new System.EventHandler(this.updateEvent);
             // 
             // x264VBVBufferSize
             // 
@@ -1199,7 +1199,7 @@ namespace MeGUI.packages.video.x264
             this.x264VBVBufferSize.Name = "x264VBVBufferSize";
             this.x264VBVBufferSize.Size = new System.Drawing.Size(55, 20);
             this.x264VBVBufferSize.TabIndex = 1;
-            this.x264VBVBufferSize.TextChanged += new System.EventHandler(this.updateEvent);
+            this.x264VBVBufferSize.ValueChanged += new System.EventHandler(this.updateEvent);
             // 
             // x264TempQuantBlurLabel
             // 
@@ -1279,7 +1279,7 @@ namespace MeGUI.packages.video.x264
             0,
             0,
             65536});
-            this.x264RateTol.TextChanged += new System.EventHandler(this.updateEvent);
+            this.x264RateTol.ValueChanged += new System.EventHandler(this.updateEvent);
             // 
             // gbAQ
             // 
@@ -1318,7 +1318,7 @@ namespace MeGUI.packages.video.x264
             0,
             0,
             65536});
-            this.numAQStrength.TextChanged += new System.EventHandler(this.updateEvent);
+            this.numAQStrength.ValueChanged += new System.EventHandler(this.updateEvent);
             // 
             // lbAQStrength
             // 
@@ -1417,7 +1417,7 @@ namespace MeGUI.packages.video.x264
             0,
             0,
             0});
-            this.deadzoneIntra.TextChanged += new System.EventHandler(this.updateEvent);
+            this.deadzoneIntra.ValueChanged += new System.EventHandler(this.updateEvent);
             // 
             // deadzoneInter
             // 
@@ -1431,7 +1431,7 @@ namespace MeGUI.packages.video.x264
             0,
             0,
             0});
-            this.deadzoneInter.TextChanged += new System.EventHandler(this.updateEvent);
+            this.deadzoneInter.ValueChanged += new System.EventHandler(this.updateEvent);
             // 
             // lbx264DeadZones
             // 
@@ -1471,7 +1471,7 @@ namespace MeGUI.packages.video.x264
             0,
             0,
             65536});
-            this.x264PBFrameFactor.TextChanged += new System.EventHandler(this.updateEvent);
+            this.x264PBFrameFactor.ValueChanged += new System.EventHandler(this.updateEvent);
             // 
             // x264IPFrameFactor
             // 
@@ -1501,7 +1501,7 @@ namespace MeGUI.packages.video.x264
             0,
             0,
             65536});
-            this.x264IPFrameFactor.TextChanged += new System.EventHandler(this.updateEvent);
+            this.x264IPFrameFactor.ValueChanged += new System.EventHandler(this.updateEvent);
             // 
             // lbQuantizersRatio
             // 
@@ -1535,7 +1535,7 @@ namespace MeGUI.packages.video.x264
             0,
             0,
             0});
-            this.x264CreditsQuantizer.TextChanged += new System.EventHandler(this.updateEvent);
+            this.x264CreditsQuantizer.ValueChanged += new System.EventHandler(this.updateEvent);
             // 
             // x264CreditsQuantizerLabel
             // 
@@ -1564,7 +1564,7 @@ namespace MeGUI.packages.video.x264
             this.x264ChromaQPOffset.Name = "x264ChromaQPOffset";
             this.x264ChromaQPOffset.Size = new System.Drawing.Size(48, 20);
             this.x264ChromaQPOffset.TabIndex = 13;
-            this.x264ChromaQPOffset.TextChanged += new System.EventHandler(this.updateEvent);
+            this.x264ChromaQPOffset.ValueChanged += new System.EventHandler(this.updateEvent);
             // 
             // x264ChromaQPOffsetLabel
             // 
@@ -1598,7 +1598,7 @@ namespace MeGUI.packages.video.x264
             0,
             0,
             0});
-            this.x264MaxQuantDelta.TextChanged += new System.EventHandler(this.updateEvent);
+            this.x264MaxQuantDelta.ValueChanged += new System.EventHandler(this.updateEvent);
             // 
             // x264MaximumQuantizer
             // 
@@ -1622,7 +1622,7 @@ namespace MeGUI.packages.video.x264
             0,
             0,
             0});
-            this.x264MaximumQuantizer.TextChanged += new System.EventHandler(this.updateEvent);
+            this.x264MaximumQuantizer.ValueChanged += new System.EventHandler(this.updateEvent);
             // 
             // x264MinimimQuantizer
             // 
@@ -1646,7 +1646,7 @@ namespace MeGUI.packages.video.x264
             0,
             0,
             0});
-            this.x264MinimimQuantizer.TextChanged += new System.EventHandler(this.updateEvent);
+            this.x264MinimimQuantizer.ValueChanged += new System.EventHandler(this.updateEvent);
             // 
             // x264MinimimQuantizerLabel
             // 
@@ -1869,7 +1869,7 @@ namespace MeGUI.packages.video.x264
             this.NoiseReduction.Name = "NoiseReduction";
             this.NoiseReduction.Size = new System.Drawing.Size(44, 20);
             this.NoiseReduction.TabIndex = 17;
-            this.NoiseReduction.TextChanged += new System.EventHandler(this.updateEvent);
+            this.NoiseReduction.ValueChanged += new System.EventHandler(this.updateEvent);
             // 
             // NoiseReductionLabel
             // 
@@ -1947,7 +1947,7 @@ namespace MeGUI.packages.video.x264
             this.PsyTrellis.Name = "PsyTrellis";
             this.PsyTrellis.Size = new System.Drawing.Size(45, 20);
             this.PsyTrellis.TabIndex = 10;
-            this.PsyTrellis.TextChanged += new System.EventHandler(this.updateEvent);
+            this.PsyTrellis.ValueChanged += new System.EventHandler(this.updateEvent);
             // 
             // label5
             // 
@@ -1980,7 +1980,7 @@ namespace MeGUI.packages.video.x264
             0,
             0,
             65536});
-            this.PsyRD.TextChanged += new System.EventHandler(this.updateEvent);
+            this.PsyRD.ValueChanged += new System.EventHandler(this.updateEvent);
             // 
             // noDCTDecimateOption
             // 
@@ -2253,7 +2253,7 @@ namespace MeGUI.packages.video.x264
             0,
             0,
             0});
-            this.x264MERange.TextChanged += new System.EventHandler(this.updateEvent);
+            this.x264MERange.ValueChanged += new System.EventHandler(this.updateEvent);
             // 
             // pictureBox1
             // 
@@ -2329,6 +2329,7 @@ namespace MeGUI.packages.video.x264
             this.x264NbThreads.Name = "x264NbThreads";
             this.x264NbThreads.Size = new System.Drawing.Size(56, 20);
             this.x264NbThreads.TabIndex = 12;
+            this.x264NbThreads.ValueChanged += new System.EventHandler(this.updateEvent);
             // 
             // PsyTrellisLabel
             // 

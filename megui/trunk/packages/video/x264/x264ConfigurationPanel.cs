@@ -611,6 +611,8 @@ namespace MeGUI.packages.video.x264
                             this.x264WeightedPPrediction.SelectedIndex = 0;
                         if (cbAQMode.SelectedIndex == 0)
                             cbAQMode.SelectedIndex = 1;
+                        if (!adaptiveDCT.Checked)
+                            adaptiveDCT.Checked = true;
                     }
                     break;
                 case 2: // Faster
@@ -655,6 +657,8 @@ namespace MeGUI.packages.video.x264
                             this.x264WeightedPPrediction.SelectedIndex = 1;
                         if (cbAQMode.SelectedIndex == 0)
                             cbAQMode.SelectedIndex = 1;
+                        if (adaptiveDCT.Checked)
+                            adaptiveDCT.Checked = false;
                     }
                     break;
                 case 3: // Fast
@@ -699,6 +703,8 @@ namespace MeGUI.packages.video.x264
                             this.x264WeightedPPrediction.SelectedIndex = 2;
                         if (cbAQMode.SelectedIndex == 0)
                             cbAQMode.SelectedIndex = 1;
+                        if (adaptiveDCT.Checked)
+                            adaptiveDCT.Checked = false;
                     }
                     break;
                 case 4: // Medium
@@ -743,6 +749,8 @@ namespace MeGUI.packages.video.x264
                             this.x264WeightedPPrediction.SelectedIndex = 2;
                         if (cbAQMode.SelectedIndex == 0)
                             cbAQMode.SelectedIndex = 1;
+                        if (adaptiveDCT.Checked)
+                            adaptiveDCT.Checked = false;
                     }
                     break;
                 case 5: // Slow
@@ -787,6 +795,8 @@ namespace MeGUI.packages.video.x264
                             this.x264WeightedPPrediction.SelectedIndex = 2;
                         if (cbAQMode.SelectedIndex == 0)
                             cbAQMode.SelectedIndex = 1;
+                        if (adaptiveDCT.Checked)
+                            adaptiveDCT.Checked = false;
                     }
                     break;
                 case 6: // Slower
@@ -831,6 +841,8 @@ namespace MeGUI.packages.video.x264
                             this.x264WeightedPPrediction.SelectedIndex = 2;
                         if (cbAQMode.SelectedIndex == 0)
                             cbAQMode.SelectedIndex = 1;
+                        if (adaptiveDCT.Checked)
+                            adaptiveDCT.Checked = false;
                     }
                     break;
                 case 7: // Very Slow
@@ -875,6 +887,8 @@ namespace MeGUI.packages.video.x264
                             this.x264WeightedPPrediction.SelectedIndex = 2;
                         if (cbAQMode.SelectedIndex == 0)
                             cbAQMode.SelectedIndex = 1;
+                        if (adaptiveDCT.Checked)
+                            adaptiveDCT.Checked = false;
                     }
                     break;
                 case 8: // Placebo
@@ -919,6 +933,8 @@ namespace MeGUI.packages.video.x264
                             this.x264WeightedPPrediction.SelectedIndex = 2;
                         if (cbAQMode.SelectedIndex == 0)
                             cbAQMode.SelectedIndex = 1;
+                        if (adaptiveDCT.Checked)
+                            adaptiveDCT.Checked = false;
                     }
                     break;
                 default:
@@ -1636,11 +1652,6 @@ namespace MeGUI.packages.video.x264
                     x264LosslessMode.Enabled = false;
                     break;
                 case 1: // main profile, disable i8x8
-                    if (!cabac.Enabled)
-                    {
-                        cabac.Enabled = true;
-                        cabac.Checked = true;
-                    }
                     if (!x264NumberOfBFrames.Enabled)
                     {
                         x264NumberOfBFrames.Enabled = true;
@@ -1653,11 +1664,6 @@ namespace MeGUI.packages.video.x264
                     x264LosslessMode.Enabled = false;
                     break;
                 case 2: // high profile, enable everything
-                    if (!cabac.Enabled)
-                    {
-                        cabac.Enabled = true;
-                        cabac.Checked = true;
-                    }
                     if (!x264NumberOfBFrames.Enabled)
                     {
                         x264NumberOfBFrames.Enabled = true;
@@ -1674,11 +1680,6 @@ namespace MeGUI.packages.video.x264
                     quantizerMatrixGroupbox.Enabled = true;
                     break;
                 default: // Autoguess
-                    if (!cabac.Enabled)
-                    {
-                        cabac.Enabled = true;
-                        cabac.Checked = true;
-                    }
                     if (!x264NumberOfBFrames.Enabled)
                     {
                         x264NumberOfBFrames.Enabled = true;
@@ -1984,7 +1985,7 @@ namespace MeGUI.packages.video.x264
             x264ChromaMe.Checked = true;
             this.x264MERange.Value = 16;
             this.x264METype.SelectedIndex = 1;                 
-            this.x264SubpelRefinement.SelectedIndex = 6;
+            this.x264SubpelRefinement.SelectedIndex = 7;
             this.x264BframePredictionMode.SelectedIndex = 1;
             this.trellis.SelectedIndex = 1;
             this.PsyRD.Value = 1.0M;
