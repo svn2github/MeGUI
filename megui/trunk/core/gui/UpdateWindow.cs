@@ -91,6 +91,69 @@ namespace MeGUI
                 }
             }
 
+            public bool isAvailable()
+            {
+                ArrayList arrPath = new ArrayList();
+                switch (this.name)
+                {
+                    case "base": arrPath.Add(System.Windows.Forms.Application.ExecutablePath); break;
+                    case "x264": arrPath.Add(MainForm.Instance.Settings.X264Path); break;
+                    case "mencoder": arrPath.Add(MainForm.Instance.Settings.MencoderPath); break;
+                    case "dgindex": arrPath.Add(MainForm.Instance.Settings.DgIndexPath); break;
+                    case "dgavcindex": arrPath.Add(MainForm.Instance.Settings.DgavcIndexPath); break;
+                    case "mp4box": arrPath.Add(MainForm.Instance.Settings.Mp4boxPath); break;
+                    case "avimux_gui": arrPath.Add(MainForm.Instance.Settings.AviMuxGUIPath); break;
+                    case "tsmuxer": arrPath.Add(MainForm.Instance.Settings.TSMuxerPath); break;
+                    case "xvid_encraw": arrPath.Add(MainForm.Instance.Settings.XviDEncrawPath); break;
+                    case "faac": arrPath.Add(MainForm.Instance.Settings.FaacPath); break;
+                    case "mkvmerge": arrPath.Add(MainForm.Instance.Settings.MkvmergePath); break;
+                    case "ffmpeg": arrPath.Add(MainForm.Instance.Settings.FFMpegPath); break;
+                    case "oggenc2": arrPath.Add(MainForm.Instance.Settings.OggEnc2Path); break;
+                    case "yadif": arrPath.Add(MainForm.Instance.Settings.YadifPath); break;
+                    case "enc_aacplus": arrPath.Add(MainForm.Instance.Settings.EncAacPlusPath); break;
+                    case "lame": arrPath.Add(MainForm.Instance.Settings.LamePath); break;
+                    case "encaudxcli": arrPath.Add(MainForm.Instance.Settings.EncAudXPath); break;
+                    case "aften": arrPath.Add(MainForm.Instance.Settings.AftenPath); break;
+                    case "eac3to": arrPath.Add(MainForm.Instance.Settings.EAC3toPath); break;
+                    case "libs":
+                        {
+                            string strMeGUIPath = System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath);
+                            arrPath.Add((System.IO.Path.Combine(strMeGUIPath, @"ICSharpCode.SharpZipLib.dll")));
+                            arrPath.Add((System.IO.Path.Combine(strMeGUIPath, @"MessageBoxExLib.dll")));
+                            arrPath.Add((System.IO.Path.Combine(strMeGUIPath, @"LinqBridge.dll")));
+                            arrPath.Add((System.IO.Path.Combine(strMeGUIPath, @"MediaInfoWrapper.dll")));
+                            arrPath.Add((System.IO.Path.Combine(strMeGUIPath, @"MediaInfo.dll")));
+                            break;
+                        }
+                    case "data": arrPath.Add(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), @"Data\ContextHelp.xml")); break;
+                    case "avswrapper": arrPath.Add((System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), @"AvisynthWrapper.dll"))); break;
+                    case "updatecopier": arrPath.Add((System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), @"updatecopier.exe"))); break;
+                    case "convolution3dyv12": arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"Convolution3DYV12.dll")); break;
+                    case "undot": arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"UnDot.dll")); break;
+                    case "fluxsmooth": arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"FluxSmooth.dll")); break;
+                    case "eedi2": arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"EEDI2.dll")); break;
+                    case "decomb": arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"Decomb.dll")); break;
+                    case "leakkerneldeint": arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"LeakKernelDeint.dll")); break;
+                    case "tomsmocomp": arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"TomsMoComp.dll")); break;
+                    case "tdeint": arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"TDeint.dll")); break;
+                    case "tivtc": arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"TIVTC.dll")); break;
+                    case "dgdecode": arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"DGDecode.dll")); break;
+                    case "dgavcdecode": arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"DGAVCDecode.dll")); break;
+                    case "simpleresize": arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"SimpleResize.dll")); break;
+                    case "colormatrix": arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"ColorMatrix.dll")); break;
+                    case "vsfilter": arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"VSFilter.dll")); break;
+                    case "nicaudio": arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"NicAudio.dll")); break;
+                }
+
+                foreach (string strPath in arrPath)
+                {
+                    if (String.IsNullOrEmpty(strPath))
+                        return false;
+                    if (File.Exists(strPath) == false)
+                        return false;
+                }
+                return true;
+            }
 
             public ListViewItem CreateListViewItem()
             {
@@ -171,6 +234,8 @@ namespace MeGUI
                 get
                 {
                     if (currentVersion == null)
+                        currentVersion = new Version();
+                    else if (this.isAvailable() == false)
                         currentVersion = new Version();
                     return currentVersion;
                 }

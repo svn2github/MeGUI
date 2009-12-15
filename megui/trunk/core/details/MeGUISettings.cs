@@ -61,7 +61,7 @@ namespace MeGUI
             strMeGUIPath = System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath);
             autoscroll = true;
             autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/stable/"},
-                new string[] { "Development", "http://www.constructd.com/megui/" } };
+                new string[] { "Development", "http://megui.org/auto/" } };
             //autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/stable/", "http://megui.xvidvideo.ru/auto/stable/" },
             //    new string[] { "Development", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" } };
             acceptableFPSError = 0.01M;
@@ -84,7 +84,7 @@ namespace MeGUI
             xvidEncrawPath = getDownloadPath(@"tools\xvid_encraw\xvid_encraw.exe");
             lamePath = getDownloadPath(@"tools\lame\lame.exe");
             neroAacEncPath = "neroAacEnc.exe";
-            oggEnc2Path = getDownloadPath(@"tools\oggenc\oggenc2.exe");
+            oggEnc2Path = getDownloadPath(@"tools\oggenc2\oggenc2.exe");
             encAudXPath = getDownloadPath(@"tools\encaudxcli\enc_AudX_CLI.exe");
             encAacPlusPath = getDownloadPath(@"tools\enc_aacplus\enc_aacPlus.exe");
             ffmpegPath = getDownloadPath(@"tools\ffmpeg\ffmpeg.exe");
