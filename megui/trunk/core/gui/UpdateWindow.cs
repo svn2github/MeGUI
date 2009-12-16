@@ -395,6 +395,11 @@ namespace MeGUI
         }
         public class AviSynthFile : iUpgradeable
         {
+            public override void init()
+            {
+                base.init();
+                this.SaveFolder = MainForm.Instance.Settings.AvisynthPluginsPath;
+            }
             private AviSynthFile()
             {
                 this.SaveFolder = MainForm.Instance.Settings.AvisynthPluginsPath;
@@ -440,6 +445,12 @@ namespace MeGUI
                 {
                     base.CurrentVersion = value;
                 }
+            }
+
+            public override void init()
+            {
+                base.init();
+                this.SaveFolder = System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath);
             }
 
 
