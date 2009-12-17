@@ -65,7 +65,7 @@ namespace MeGUI
             //autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/stable/", "http://megui.xvidvideo.ru/auto/stable/" },
             //    new string[] { "Development", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" } };
             acceptableFPSError = 0.01M;
-            autoUpdateServerSubList = 1;
+            autoUpdateServerSubList = 0;
             maxServersToTry = 5;
             dialogSettings = new DialogSettings();
             sdSettings = new SourceDetectorSettings();
