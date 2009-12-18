@@ -74,7 +74,7 @@ namespace MeGUI
         private const int PRODUCT_ULTIMATE = 0x00000001;
         private const int PRODUCT_HOME_BASIC = 0x00000002;
         private const int PRODUCT_HOME_PREMIUM = 0x00000003;
-        private const int PRODUCT_ENTREPRISE = 0x00000004;
+        private const int PRODUCT_ENTERPRISE = 0x00000004;
         private const int PRODUCT_HOME_BASIC_N = 0x00000005;
         private const int PRODUCT_BUSINESS = 0x00000006;
         private const int PRODUCT_BUSINESS_N = 0x00000010;
@@ -201,7 +201,7 @@ namespace MeGUI
                                                     if ((osVersionInfo.wSuiteMask & VER_SUITE_DATACENTER) == VER_SUITE_DATACENTER)
                                                          osName = "Windows Server 2003 DataCenter Edition";
                                                     else if ((osVersionInfo.wSuiteMask & VER_SUITE_ENTERPRISE) == VER_SUITE_ENTERPRISE)
-                                                         osName = "Windows Server 2003 Entreprise Edition";
+                                                         osName = "Windows Server 2003 Enterprise Edition";
                                                     else if ((osVersionInfo.wSuiteMask & VER_SUITE_BLADE) == VER_SUITE_BLADE)
                                                          osName = "Windows Server 2003 Web Edition";
                                                     else osName = "Windows Server 2003 Standard Edition";
@@ -234,7 +234,7 @@ namespace MeGUI
                                                                         case PRODUCT_HOME_BASIC:
                                                                         case PRODUCT_HOME_BASIC_N: osName = "Windows Vista Home Basic Edition"; break;
                                                                         case PRODUCT_HOME_PREMIUM: osName = "Windows Vista Premium Edition";    break;
-                                                                        case PRODUCT_ENTREPRISE:   osName = "Windows Vista Entreprise Edition"; break;
+                                                                        case PRODUCT_ENTERPRISE:   osName = "Windows Vista Enterprise Edition"; break;
                                                                         case PRODUCT_BUSINESS:
                                                                         case PRODUCT_BUSINESS_N:   osName = "Windows Vista Business Edition";   break;
                                                                         case PRODUCT_STARTER:      osName = "Windows Vista Starter Edition";    break;
@@ -269,7 +269,7 @@ namespace MeGUI
                                                             case PRODUCT_HOME_BASIC:
                                                             case PRODUCT_HOME_BASIC_N: osName = "Windows Seven Home Basic Edition"; break;
                                                             case PRODUCT_HOME_PREMIUM: osName = "Windows Seven Premium Edition"; break;
-                                                            case PRODUCT_ENTREPRISE: osName = "Windows Seven Entreprise Edition"; break;
+                                                            case PRODUCT_ENTERPRISE: osName = "Windows Seven Enterprise Edition"; break;
                                                             case PRODUCT_BUSINESS:
                                                             case PRODUCT_BUSINESS_N: osName = "Windows Seven Professional Edition"; break;
                                                             case PRODUCT_STARTER: osName = "Windows Seven Starter Edition"; break;
@@ -284,16 +284,15 @@ namespace MeGUI
                         }
                 }
             }
-#if x86
+
             if (x64Detection)
             {
                 if (isWow64())
-                     osName += " x64";
-                else osName += " x86";
+                    osName += " x64";
+                else
+                    osName += " x86";
             }
-#else
-            osName += " x64";
-#endif
+
             return osName;
         }
 
