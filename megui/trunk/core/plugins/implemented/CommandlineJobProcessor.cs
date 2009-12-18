@@ -189,6 +189,7 @@ namespace MeGUI
                     mre.Set(); // if it's paused, then unpause
                     su.WasAborted = true;
                     proc.Kill();
+                    proc.WaitForExit(10000);
                     return;
                 }
                 catch (Exception e)
