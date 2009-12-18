@@ -97,7 +97,17 @@ namespace MeGUI
                 switch (this.name)
                 {
                     case "base": arrPath.Add(System.Windows.Forms.Application.ExecutablePath); break;
-                    case "x264": arrPath.Add(MainForm.Instance.Settings.X264Path); break;
+                    case "x264":
+                        {
+                            arrPath.Add(MainForm.Instance.Settings.X264Path); 
+                            if (OSInfo.isWow64())
+                            {
+                                string x264x64Path =  System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.X264Path);
+                                arrPath.Add(System.IO.Path.Combine(x264x64Path, "avs4x264.exe"));
+                                arrPath.Add(System.IO.Path.Combine(x264x64Path, "x264_64.exe"));
+                            }
+                            break;
+                        }
                     case "mencoder": arrPath.Add(MainForm.Instance.Settings.MencoderPath); break;
                     case "dgindex": arrPath.Add(MainForm.Instance.Settings.DgIndexPath); break;
                     case "dgavcindex": arrPath.Add(MainForm.Instance.Settings.DgavcIndexPath); break;
