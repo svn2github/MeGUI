@@ -1662,6 +1662,7 @@ namespace MeGUI.packages.video.x264
                     quantizerMatrixGroupbox.Enabled = false;
                     x264LosslessMode.Checked = false;
                     x264LosslessMode.Enabled = false;
+                    cabac.Enabled = true;
                     break;
                 case 2: // high profile, enable everything
                     if (!x264NumberOfBFrames.Enabled)
@@ -1678,6 +1679,7 @@ namespace MeGUI.packages.video.x264
                     x264LosslessMode.Checked = false;
                     x264LosslessMode.Enabled = false;
                     quantizerMatrixGroupbox.Enabled = true;
+                    cabac.Enabled = true;
                     break;
                 default: // Autoguess
                     if (!x264NumberOfBFrames.Enabled)
@@ -1709,6 +1711,7 @@ namespace MeGUI.packages.video.x264
                         x264BitrateQuantizer.Enabled = true;
                     }
                     quantizerMatrixGroupbox.Enabled = true;
+                    cabac.Enabled = true;
                     break;
             }
             #endregion
