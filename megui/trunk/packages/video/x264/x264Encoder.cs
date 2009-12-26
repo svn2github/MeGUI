@@ -47,9 +47,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             executable = encoderPath;
             if (OSInfo.isWow64())
             {
-                string avs4x264Path =  System.IO.Path.Combine(System.IO.Path.GetDirectoryName(encoderPath), "avs4x264.exe");
-                if (System.IO.File.Exists(avs4x264Path))
-                    executable = avs4x264Path;
+                string vfw4x264Path =  System.IO.Path.Combine(System.IO.Path.GetDirectoryName(encoderPath), "vfw4x264.exe");
+                if (System.IO.File.Exists(vfw4x264Path))
+                    executable = vfw4x264Path;
             }
         }
 
