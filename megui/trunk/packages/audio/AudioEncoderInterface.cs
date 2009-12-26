@@ -523,6 +523,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                     case ".ac3":
                     case ".ddp":
                     case ".eac3":
+                        script.AppendFormat("LoadPlugin(\"{0}\"){1}", Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "NicAudio.dll"), Environment.NewLine);
                         script.AppendFormat("NicAc3Source(\"{0}\"", audioJob.Input);
                         if (audioJob.Settings.ApplyDRC)
                             script.AppendFormat(", DRC=1){0}", Environment.NewLine);
@@ -540,6 +541,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                     case ".dtshd":
                     case ".dtsma":
                     case ".dts":
+                        script.AppendFormat("LoadPlugin(\"{0}\"){1}", Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "NicAudio.dll"), Environment.NewLine);
                         script.AppendFormat("NicDtsSource(\"{0}\"", audioJob.Input);
                         if (audioJob.Settings.ApplyDRC)
                             script.AppendFormat(", DRC=1){0}", Environment.NewLine);
@@ -550,6 +552,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                     case ".mpg":
                     case ".mp2":
                     case ".mp3":
+                        script.AppendFormat("LoadPlugin(\"{0}\"){1}", Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "NicAudio.dll"), Environment.NewLine);
                         script.AppendFormat("NicMPG123Source(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
                         audioJob.FilesToDelete.Add(audioJob.Input + ".d2a");
                         break;
@@ -564,7 +567,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                                 case 0x0001:         // PCM Format Int
                                     r.ReadBytes(22);   // 22 + 22 = 44
                                     UInt32 DtsHeader = r.ReadUInt32(); // read a LE int_32
-
+                                    script.AppendFormat("LoadPlugin(\"{0}\"){1}", Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "NicAudio.dll"), Environment.NewLine);
                                     if (DtsHeader == 0xE8001FFF)
                                     {
                                         script.AppendFormat("NicDtsSource(\"{0}\"", audioJob.Input);
@@ -578,12 +581,15 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                                     break;
                                 case 0x0003:         // IEEE Float
                                 case 0xFFFE:         // WAVE_FORMAT_EXTENSIBLE header
+                                    script.AppendFormat("LoadPlugin(\"{0}\"){1}", Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "NicAudio.dll"), Environment.NewLine);
                                     script.AppendFormat("RaWavSource(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
                                     break;
                                 case 0x0055:         // MPEG Layer 3
+                                    script.AppendFormat("LoadPlugin(\"{0}\"){1}", Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "NicAudio.dll"), Environment.NewLine);
                                     script.AppendFormat("NicMPG123Source(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
                                     break;
                                 case 0x2000:         // AC3
+                                    script.AppendFormat("LoadPlugin(\"{0}\"){1}", Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "NicAudio.dll"), Environment.NewLine);
                                     script.AppendFormat("NicAc3Source(\"{0}\"", audioJob.Input);
                                     if (audioJob.Settings.ApplyDRC)
                                         script.AppendFormat(", DRC=1){0}", Environment.NewLine);
@@ -607,6 +613,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                     case ".au":
                     case ".caf":
                     case ".bwf":
+                        script.AppendFormat("LoadPlugin(\"{0}\"){1}", Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "NicAudio.dll"), Environment.NewLine);
                         script.AppendFormat("RaWavSource(\"{0}\", 2){1}", audioJob.Input, Environment.NewLine);
                         break;
                     default:
