@@ -582,29 +582,28 @@ namespace MeGUI
         }
 
         /// <summary>
-        /// Manage CUVIDServer from DGxxxNV tools package
+        /// Manage CUVIDServer from DGIndexNV tools package
         /// </summary>
         public static bool manageCUVIDServer()
         {
-            MainForm mainF = MainForm.Instance;
-            if (mainF.DialogManager.FindProcess("CUVIDSERVER"))
-            {
-                if (MessageBox.Show("MeGUI has detected that CUVIDServer is already running...\nAre you sure you want to stop the current process and load your file ?",
-                                    "Information",
-                                    MessageBoxButtons.YesNo,
-                                    MessageBoxIcon.Information) == DialogResult.Yes)
-                {
-                    mainF.DialogManager.FindAndKillProcess("CUVIDSERVER");
-                    Application.DoEvents();
-                    System.Threading.Thread.Sleep(500); // needed otherwise CUVIDServer doesn't restart...:-/
-                    Application.DoEvents();
-                    mainF.DialogManager.runCUVIDServer();
-                }
-                else return true;
-            }
-            else mainF.DialogManager.runCUVIDServer();
-
+            MainForm.Instance.DialogManager.runCUVIDServer();
             return true;
+        }
+
+        public static bool findDGSource(string FileName)
+        {
+            using (StreamReader sr = new StreamReader(FileName))
+            {
+                string line = string.Empty;
+                while ((line = sr.ReadLine()) != null)
+                {
+                    if (line.ToLower().Contains("dgsource"))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
 		#endregion

@@ -35,6 +35,7 @@ namespace MeGUI
     public class DialogManager
     {
         private MainForm mainForm;
+        private bool bCUVIDServerStarted = false;
 
         public DialogManager(MainForm mainForm)
         {
@@ -148,7 +149,7 @@ namespace MeGUI
                 bool bResult = askAbout("Do you want to open this with the One Click\r\n" +
                     "Encoder (automated, easy to use) or the D2V\r\n" +
                     "Creator (manual, advanced)?", "Please choose your weapon", 
-                    "One Click Encoder", "D2V Creator", MessageBoxIcon.Question, out askAgain);
+                    "One Click Encoder", "DG Creator", MessageBoxIcon.Question, out askAgain);
 
                 mainForm.Settings.DialogSettings.AskAboutVOBs = askAgain;
                 mainForm.Settings.DialogSettings.UseOneClick = bResult;
@@ -190,23 +191,27 @@ namespace MeGUI
 
         public void runCUVIDServer()
         {
+            if (MainForm.Instance.Settings.UseCUVIDserver == false || FindProcess("CUVIDServer"))
+                return;
+
             string filePath = string.Empty;
-            if (MainForm.Instance.Settings.DgavcIndexPath != "" && Path.GetFileName(MainForm.Instance.Settings.DgavcIndexPath).ToLower().ToString() == "dgavcindexnv.exe")
-                filePath = Path.GetDirectoryName(MainForm.Instance.Settings.DgavcIndexPath);
 
-            if (string.IsNullOrEmpty(filePath))
+            if (MainForm.Instance.Settings.DgnvIndexPath != "" && Path.GetFileName(MainForm.Instance.Settings.DgnvIndexPath).ToLower().ToString() == "dgindexnv.exe")
+                filePath = Path.GetDirectoryName(MainForm.Instance.Settings.DgnvIndexPath);
+
+            if (!string.IsNullOrEmpty(filePath) && File.Exists(Path.Combine(filePath, "CUVIDServer.exe")))
             {
-                if (MainForm.Instance.Settings.DgmpgIndexPath != "" && Path.GetFileName(MainForm.Instance.Settings.DgmpgIndexPath).ToLower().ToString() == "dgmpgindexnv.exe")
-                    filePath = Path.GetDirectoryName(MainForm.Instance.Settings.DgmpgIndexPath);
-
-                else if (MainForm.Instance.Settings.Dgvc1IndexPath != "" && Path.GetFileName(MainForm.Instance.Settings.Dgvc1IndexPath).ToLower().ToString() == "dgvc1indexnv.exe")
-                    filePath = Path.GetDirectoryName(MainForm.Instance.Settings.Dgvc1IndexPath);
-            }
-
-            if (!string.IsNullOrEmpty(filePath)) 
                 System.Diagnostics.Process.Start(Path.Combine(filePath, "CUVIDServer.exe"));
-            else 
+                bCUVIDServerStarted = true;
+            }
+            else
                 MessageBox.Show("Cannot run CUVID Server executable...\nAre you sure is it installed ?", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        public void stopCUVIDServer()
+        {
+            if (bCUVIDServerStarted)
+                FindAndKillProcess("CUVIDServer");
         }
 
         public bool FindProcess(string name)
@@ -223,7 +228,7 @@ namespace MeGUI
                 //add the .exe to the name you provide, i.e: NOTEPAD,
                 //not NOTEPAD.EXE or false is always returned even if
                 //notepad is running
-                if (myProcess.ProcessName.ToUpper().ToString() == name)
+                if (myProcess.ProcessName.ToUpper().ToString() == name.ToUpper())
                     return true;
             }
             //process not found, return false
@@ -244,7 +249,7 @@ namespace MeGUI
                 //add the .exe to the name you provide, i.e: NOTEPAD,
                 //not NOTEPAD.EXE or false is always returned even if
                 //notepad is running
-                if (myProcess.ProcessName.ToUpper().ToString() == name)
+                if (myProcess.ProcessName.ToUpper().ToString() == name.ToUpper())
                 {
                     //since we found the proccess we now need to use the
                     //Kill Method to kill the process. Remember, if you have

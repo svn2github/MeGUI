@@ -119,7 +119,7 @@ namespace MeGUI
         {
             if (!string.IsNullOrEmpty(videoInput.Filename))
             {
-                if (findDGSource(videoInput.Filename))
+                if (VideoUtil.findDGSource(videoInput.Filename))
                 {
                     if (VideoUtil.manageCUVIDServer())
                         openVideoFile(videoInput.Filename);
@@ -283,23 +283,6 @@ namespace MeGUI
                 return true;
             else
                 return false;
-        }
-        public bool findDGSource(string FileName)
-        {
-            
-            using (StreamReader sr = new StreamReader(FileName))
-            {
-                string line = string.Empty;
-                while ((line = sr.ReadLine()) != null)
-                {
-                    if (line.ToLower().Contains("dgsource"))
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
         }
 
         #endregion
