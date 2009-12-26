@@ -155,7 +155,7 @@ SET OPTION STDIDX AUTO");
 
             /// the script is now created; let's write it to a temp file
             string filename = Path.GetTempFileName();
-            using (StreamWriter output = new StreamWriter(File.OpenWrite(filename)))
+            using (StreamWriter output = new StreamWriter(File.OpenWrite(filename), System.Text.Encoding.UTF8))
             {
                 output.Write(script.ToString());
             }
