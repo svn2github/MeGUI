@@ -661,8 +661,7 @@
     </Compile>
     <Compile Include="packages\reader\d2v\d2vReader.cs" />
     <Compile Include="packages\reader\dga\dgaReader.cs" />
-    <Compile Include="packages\reader\dgm\dgmReader.cs" />
-    <Compile Include="packages\reader\dgv\dgvReader.cs" />
+    <Compile Include="packages\reader\dgi\dgiReader.cs" />
     <Compile Include="packages\reader\dvddecrypter\DVDD_File.cs" />
     <Compile Include="packages\reader\mediainfo\MediaInfoFile.cs" />
     <Compile Include="packages\reader\video\VideoReader.cs" />
@@ -738,34 +737,14 @@
       <DependentUpon>Cutter.cs</DependentUpon>
     </Compile>
     <Compile Include="packages\tools\d2vcreator\DGIndexer.cs" />
+    <Compile Include="packages\tools\d2vcreator\DGNVIndexer.cs" />
+    <Compile Include="packages\tools\d2vcreator\DGNVIndexJob.cs" />
     <Compile Include="packages\tools\d2vcreator\IndexJob.cs" />
     <Compile Include="packages\tools\d2vcreator\VobinputWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="packages\tools\dgacreator\DGAIndexJob.cs" />
-    <Compile Include="packages\tools\dgacreator\DGAinputWindow.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="packages\tools\dgacreator\DGAinputWindow.Designer.cs">
-      <DependentUpon>DGAinputWindow.cs</DependentUpon>
-    </Compile>
-    <Compile Include="packages\tools\dgacreator\DGAVCIndexer.cs" />
-    <Compile Include="packages\tools\dgmcreator\DGMIndexJob.cs" />
-    <Compile Include="packages\tools\dgmcreator\DGMinputWindow.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="packages\tools\dgmcreator\DGMinputWindow.Designer.cs">
-      <DependentUpon>DGMinputWindow.cs</DependentUpon>
-    </Compile>
-    <Compile Include="packages\tools\dgmcreator\DGMPGIndexer.cs" />
-    <Compile Include="packages\tools\dgvcreator\DGVC1Indexer.cs" />
-    <Compile Include="packages\tools\dgvcreator\DGVIndexJob.cs" />
-    <Compile Include="packages\tools\dgvcreator\DGVinputWindow.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="packages\tools\dgvcreator\DGVinputWindow.Designer.cs">
-      <DependentUpon>DGVinputWindow.cs</DependentUpon>
-    </Compile>
+    <Compile Include="packages\tools\d2vcreator\DGAIndexJob.cs" />
+    <Compile Include="packages\tools\d2vcreator\DGAVCIndexer.cs" />
     <Compile Include="packages\tools\hdbdextractor\CustomDataGridView.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -1076,18 +1055,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="packages\tools\d2vcreator\VobinputWindow.resx">
       <DependentUpon>VobinputWindow.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="packages\tools\dgacreator\DGAinputWindow.resx">
-      <DependentUpon>DGAinputWindow.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="packages\tools\dgmcreator\DGMinputWindow.resx">
-      <DependentUpon>DGMinputWindow.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="packages\tools\dgvcreator\DGVinputWindow.resx">
-      <DependentUpon>DGVinputWindow.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="packages\tools\hdbdextractor\HDBDStreamExtractor.resx">

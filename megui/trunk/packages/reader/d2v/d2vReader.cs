@@ -92,12 +92,14 @@ namespace MeGUI
         public d2vFile(string fileName)
 		{
 			this.fileName = fileName;
-            reader = AvsFile.ParseScript("DGDecode_Mpeg2Source(\"" + this.fileName + "\")");
+            string strPath = Path.GetDirectoryName(MainForm.Instance.Settings.DgIndexPath);
+            string strDLL = Path.Combine(strPath, "DGDecode.dll");
+            reader = AvsFile.ParseScript("LoadPlugin(\"" + strDLL + "\")\r\nDGDecode_Mpeg2Source(\"" + this.fileName + "\")");
             this.readFileProperties();
         }
 		/// <summary>
 		/// reads the d2v file, which is essentially a text file
-		/// the first few lines contain the video properties in plain text and the 
+         //the first few lines contain the video properties in plain text and the 
 		/// last line contains the film percentage
 		/// this method reads all this information and stores it internally, then 
 		/// closes the d2v file again

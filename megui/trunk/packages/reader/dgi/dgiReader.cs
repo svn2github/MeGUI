@@ -28,20 +28,20 @@ using MeGUI.core.util;
 
 namespace MeGUI
 {
-    public class dgaFileFactory : IMediaFileFactory
+    public class dgiFileFactory : IMediaFileFactory
     {
 
         #region IMediaFileFactory Members
 
         public IMediaFile Open(string file)
         {
-            return new dgaFile(file);
+            return new dgiFile(file);
         }
 
         public int HandleLevel(string file)
         {
-            if (file.ToLower().EndsWith(".dga"))
-                return 11;
+            if (file.ToLower().EndsWith(".dgi"))
+                return 12;
             return -1;
         }
 
@@ -51,42 +51,50 @@ namespace MeGUI
 
         public string ID
         {
-            get { return "dga"; }
+            get { return "dgi"; }
         }
 
         #endregion
     }
 
-/// <summary>
-	/// Summary description for dgaReader.
-	/// </summary>
-    public class dgaFile : IMediaFile
+    /// <summary>
+    /// Summary description for dgiReader.
+    /// </summary>
+    public class dgiFile : IMediaFile
     {
         private AvsFile reader;
         private string fileName;
         private MediaFileInfo info;
 
         /// <summary>
-        /// initializes the dga reader
+        /// initializes the dgi reader
         /// </summary>
-        /// <param name="fileName">the DGAVCIndex project file that this reader will process</param>
-        public dgaFile(string fileName)
+        /// <param name="fileName">the DGNVIndex project file that this reader will process</param>
+        public dgiFile(string fileName)
         {
             this.fileName = fileName;
-            string strPath = Path.GetDirectoryName(MainForm.Instance.Settings.DgavcIndexPath);
-            string strDLL = Path.Combine(strPath, "DGAVCDecode.dll");
-            reader = AvsFile.ParseScript("LoadPlugin(\"" + strDLL + "\")\r\nAVCSource(\"" + this.fileName + "\")");
+            string strPath = Path.GetDirectoryName(MainForm.Instance.Settings.DgnvIndexPath);
+            if (MainForm.Instance.Settings.UseCUVIDserver == true)
+            {
+                string strDLL = Path.Combine(strPath, "DGDecodeNV.dll");
+                reader = AvsFile.ParseScript("LoadPlugin(\"" + strDLL + "\")\r\nDGSource(\"" + this.fileName + "\")");
+            }
+            else
+            {
+                string strDLL = Path.Combine(strPath, "DGMultiDecodeNV.dll");
+                reader = AvsFile.ParseScript("LoadPlugin(\"" + strDLL + "\")\r\nDGMultiSource(\"" + this.fileName + "\")");
+            }
             this.readFileProperties();
         }
 
         /// <summary>
-        /// reads the dga file, which is essentially a text file
+        /// reads the dgi file, which is essentially a text file
         /// </summary>
         private void readFileProperties()
         {
             info = reader.Info.Clone();
             Dar dar = new Dar(reader.Info.Width, reader.Info.Height);
- 
+
             info.DAR = dar;
         }
         #region properties
@@ -130,3 +138,4 @@ namespace MeGUI
         #endregion
     }
 }
+
