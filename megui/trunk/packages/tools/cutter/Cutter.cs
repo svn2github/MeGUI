@@ -280,6 +280,9 @@ namespace MeGUI.packages.tools.cutter
             d.Title = "Select the input video";
             if (d.ShowDialog() != DialogResult.OK) return;
 
+            if (VideoUtil.findDGSource(d.FileName))
+                VideoUtil.manageCUVIDServer();
+
             (new Cutter(info, d.FileName)).Show();
         }
 

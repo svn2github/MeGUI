@@ -125,11 +125,7 @@ namespace MeGUI
         private Button OneClickEncButton;
         private Button HelpButton;
         private SplitContainer splitContainer2;
-        private MenuItem mnudgIndexers;
         private MenuItem mnutoolsD2VCreator;
-        private MenuItem mnutoolsdgaCreator;
-        private MenuItem mnutoolsdgmCreator;
-        private MenuItem mnutoolsdgvCreator;
         private List<Form> formsToReopen = new List<Form>();
 
         public bool IsHiddenMode { get { return trayIcon.Visible; } }
@@ -197,11 +193,7 @@ namespace MeGUI
             this.menuItem3 = new System.Windows.Forms.MenuItem();
             this.viewSummary = new System.Windows.Forms.MenuItem();
             this.mnuTools = new System.Windows.Forms.MenuItem();
-            this.mnudgIndexers = new System.Windows.Forms.MenuItem();
             this.mnutoolsD2VCreator = new System.Windows.Forms.MenuItem();
-            this.mnutoolsdgaCreator = new System.Windows.Forms.MenuItem();
-            this.mnutoolsdgmCreator = new System.Windows.Forms.MenuItem();
-            this.mnutoolsdgvCreator = new System.Windows.Forms.MenuItem();
             this.mnuOptions = new System.Windows.Forms.MenuItem();
             this.mnuOptionsSettings = new System.Windows.Forms.MenuItem();
             this.mnuHelp = new System.Windows.Forms.MenuItem();
@@ -613,47 +605,16 @@ namespace MeGUI
             this.mnuTools.Index = 3;
             this.mnuTools.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.mnuMuxers,
-            this.mnudgIndexers});
+            this.mnutoolsD2VCreator});
             this.mnuTools.Shortcut = System.Windows.Forms.Shortcut.CtrlT;
             this.mnuTools.Text = "&Tools";
             // 
-            // mnudgIndexers
-            // 
-            this.mnudgIndexers.Index = 1;
-            this.mnudgIndexers.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.mnutoolsD2VCreator,
-            this.mnutoolsdgaCreator,
-            this.mnutoolsdgmCreator,
-            this.mnutoolsdgvCreator});
-            this.mnudgIndexers.Text = "DG Indexer";
-            // 
             // mnutoolsD2VCreator
             // 
-            this.mnutoolsD2VCreator.Index = 0;
+            this.mnutoolsD2VCreator.Index = 1;
             this.mnutoolsD2VCreator.Shortcut = System.Windows.Forms.Shortcut.CtrlF2;
-            this.mnutoolsD2VCreator.Text = "D2V Creator";
+            this.mnutoolsD2VCreator.Text = "DG Creator";
             this.mnutoolsD2VCreator.Click += new System.EventHandler(this.menuItem5_Click);
-            // 
-            // mnutoolsdgaCreator
-            // 
-            this.mnutoolsdgaCreator.Index = 1;
-            this.mnutoolsdgaCreator.Shortcut = System.Windows.Forms.Shortcut.CtrlF3;
-            this.mnutoolsdgaCreator.Text = "DGA Creator";
-            this.mnutoolsdgaCreator.Click += new System.EventHandler(this.mnutoolsdgaCreator_Click);
-            // 
-            // mnutoolsdgmCreator
-            // 
-            this.mnutoolsdgmCreator.Index = 2;
-            this.mnutoolsdgmCreator.Shortcut = System.Windows.Forms.Shortcut.CtrlF4;
-            this.mnutoolsdgmCreator.Text = "DGM Creator";
-            this.mnutoolsdgmCreator.Click += new System.EventHandler(this.mnutoolsdgmCreator_Click);
-            // 
-            // mnutoolsdgvCreator
-            // 
-            this.mnutoolsdgvCreator.Index = 3;
-            this.mnutoolsdgvCreator.Shortcut = System.Windows.Forms.Shortcut.CtrlF5;
-            this.mnutoolsdgvCreator.Text = "DGV Creator";
-            this.mnutoolsdgvCreator.Click += new System.EventHandler(this.mnutoolsdgvCreator_Click);
             // 
             // mnuOptions
             // 
@@ -1021,11 +982,6 @@ namespace MeGUI
                     try
                     {
                         this.settings = (MeGUISettings)ser.Deserialize(s);
-
-                        // modify PATH so that n00bs don't complain because they forgot to put dgdecode.dll in the MeGUI dir
-                        string pathEnv = Environment.GetEnvironmentVariable("PATH");
-                        pathEnv = Path.GetDirectoryName(settings.DgIndexPath) + ";" + pathEnv;
-                        Environment.SetEnvironmentVariable("PATH", pathEnv);
                     }
                     catch (Exception e)
                     {
@@ -1342,7 +1298,6 @@ namespace MeGUI
                 case ".pva":
                 case ".vro":
                     return FileType.DGINDEX;
-
                 case ".zip":
                     return FileType.ZIPPED_PROFILES;
 
@@ -1409,7 +1364,7 @@ namespace MeGUI
             Util.ThreadSafeRun(this, delegate
             {
                 ProfileImporter importer = new ProfileImporter(this, data);
-                importer.ShowDialog();
+                importer.Show();
             });
         }
 
@@ -1631,23 +1586,18 @@ namespace MeGUI
                 mnuMuxers.MenuItems.Add(newMenuItem);
                 newMenuItem.Click += new System.EventHandler(this.mnuMuxer_Click);
             }
-            mnudgIndexers.MenuItems.Clear();
-            mnudgIndexers.MenuItems.Add(mnutoolsD2VCreator);
-            mnudgIndexers.MenuItems.Add(mnutoolsdgaCreator);
-            mnudgIndexers.MenuItems.Add(mnutoolsdgmCreator);
-            mnudgIndexers.MenuItems.Add(mnutoolsdgvCreator);
             
             // Fill the tools menu
             mnuTools.MenuItems.Clear();
             List<MenuItem> toolsItems = new List<MenuItem>();
             List<Shortcut> usedShortcuts = new List<Shortcut>();
+            toolsItems.Add(mnutoolsD2VCreator);
             toolsItems.Add(mnuMuxers);
-            toolsItems.Add(mnudgIndexers);
             usedShortcuts.Add(mnuMuxers.Shortcut);
             
             foreach (ITool tool in PackageSystem.Tools.Values)
             {
-                if (tool.Name != "D2V Creator")
+                if (tool.Name != "DG Creator")
                 {
                     MenuItem newMenuItem = new MenuItem();
                     newMenuItem.Text = tool.Name;
@@ -1737,8 +1687,7 @@ namespace MeGUI
             PackageSystem.JobProcessors.Register(AviSynthProcessor.Factory);
             PackageSystem.JobProcessors.Register(DGIndexer.Factory);
             PackageSystem.JobProcessors.Register(DGAVCIndexer.Factory);
-            PackageSystem.JobProcessors.Register(DGVC1Indexer.Factory);
-            PackageSystem.JobProcessors.Register(DGMPGIndexer.Factory);
+            PackageSystem.JobProcessors.Register(DGNVIndexer.Factory);
             PackageSystem.JobProcessors.Register(VobSubIndexer.Factory);
             PackageSystem.JobProcessors.Register(Joiner.Factory);
             PackageSystem.JobProcessors.Register(MeGUI.packages.tools.besplitter.Splitter.Factory);
@@ -1763,15 +1712,13 @@ namespace MeGUI
             PackageSystem.MediaFileTypes.Register(new AvsFileFactory());
             PackageSystem.MediaFileTypes.Register(new d2vFileFactory());
             PackageSystem.MediaFileTypes.Register(new dgaFileFactory());
-            PackageSystem.MediaFileTypes.Register(new dgvFileFactory());
-            PackageSystem.MediaFileTypes.Register(new dgmFileFactory());
+            PackageSystem.MediaFileTypes.Register(new dgiFileFactory());
             PackageSystem.MediaFileTypes.Register(new MediaInfoFileFactory());
             PackageSystem.JobPreProcessors.Register(BitrateCalculatorPreProcessor.CalculationProcessor);
             PackageSystem.JobPostProcessors.Register(OneClickPostProcessor.PostProcessor);
             PackageSystem.JobPostProcessors.Register(IndexJobPostProcessor.PostProcessor);
             PackageSystem.JobPostProcessors.Register(dgavcIndexJobPostProcessor.PostProcessor);
-            PackageSystem.JobPostProcessors.Register(dgvc1IndexJobPostProcessor.PostProcessor);
-            PackageSystem.JobPostProcessors.Register(dgmpgIndexJobPostProcessor.PostProcessor);
+            PackageSystem.JobPostProcessors.Register(dgnvIndexJobPostProcessor.PostProcessor);
             PackageSystem.JobPostProcessors.Register(CleanupJobRunner.DeleteIntermediateFilesPostProcessor);
             PackageSystem.JobConfigurers.Register(MuxWindow.Configurer);
             PackageSystem.JobConfigurers.Register(AudioEncodingWindow.Configurer);
@@ -1817,11 +1764,13 @@ namespace MeGUI
             }
 
             System.Windows.Forms.Application.EnableVisualStyles();
+#if !DEBUG
             if (!mySingleInstanceMutex.WaitOne(0, false))
             {
                 if (DialogResult.Yes != MessageBox.Show("Running MeGUI instance detected!\n\rThere's not really much point in running multiple copies of MeGUI, and it can cause problems.\n\rDo You still want to run yet another MeGUI instance?", "Running MeGUI instance detected", MessageBoxButtons.YesNo, MessageBoxIcon.Warning))
                     return;
             }
+#endif
             Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
             CommandlineParser parser = new CommandlineParser();
@@ -2012,7 +1961,7 @@ namespace MeGUI
                 delegate(System.Drawing.Size s) { MeGUI.Properties.Settings.Default.MainFormSize = s; },
                 delegate(FormWindowState s) { MeGUI.Properties.Settings.Default.MainFormWindowState = s; });
 
-            DialogManager.FindAndKillProcess("CUVIDSERVER"); // close CUVIDServer from DGxxxNV tools if is running
+            DialogManager.stopCUVIDServer(); // close CUVIDServer from DGxxxNV tools if it is running
         }
         private void mnuForum_Click(object sender, EventArgs e)
         {
@@ -2112,24 +2061,6 @@ namespace MeGUI
         {
             VobinputWindow d2vc = new VobinputWindow(this);
             d2vc.ShowDialog();
-        }
-
-        private void mnutoolsdgaCreator_Click(object sender, EventArgs e)
-        {
-            DGAinputWindow dgac = new DGAinputWindow(this);
-            dgac.ShowDialog();
-        }
-
-        private void mnutoolsdgvCreator_Click(object sender, EventArgs e)
-        {
-            DGVinputWindow dgvc = new DGVinputWindow(this);
-            dgvc.ShowDialog();
-        }
-
-        private void mnutoolsdgmCreator_Click(object sender, EventArgs e)
-        {
-            DGMinputWindow dgmc = new DGMinputWindow(this);
-            dgmc.ShowDialog();
         }
     }
     public class CommandlineUpgradeData

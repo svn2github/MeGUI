@@ -35,16 +35,16 @@ namespace MeGUI
         private string[][] autoUpdateServerLists;
         private string faacPath, lamePath, neroAacEncPath, mencoderPath,  mp4boxPath, mkvmergePath, strMainAudioFormat,
                        encAacPlusPath, ffmpegPath, besplitPath, yadifPath, aftenPath, x264Path, strMainFileFormat,
-                       dgIndexPath, xvidEncrawPath, aviMuxGUIPath, oggEnc2Path, encAudXPath, dgavcIndexPath, dgvc1IndexPath,
-                       dgmpgIndexPath, eac3toPath, tsmuxerPath, meguiupdatecache, avisynthpluginspath,
+                       dgIndexPath, xvidEncrawPath, aviMuxGUIPath, oggEnc2Path, encAudXPath, dgavcIndexPath,
+                       eac3toPath, tsmuxerPath, meguiupdatecache, avisynthpluginspath,
                        defaultLanguage1, defaultLanguage2, afterEncodingCommand, videoExtension, audioExtension,
-                       strLastDestinationPath, strLastSourcePath,
+                       strLastDestinationPath, strLastSourcePath, dgnvIndexPath,
                        httpproxyaddress, httpproxyport, httpproxyuid, httpproxypwd, defaultOutputDir;
         private bool recalculateMainMovieBitrate, autoForceFilm, autoStartQueue, enableMP3inMP4, autoOpenScript,
                      overwriteStats, keep2of3passOutput, deleteCompletedJobs, deleteIntermediateFiles,
                      deleteAbortedOutput, openProgressWindow, useadvancedtooltips, freshOggEnc2, autoscroll, 
                      alwaysOnTop, safeProfileAlteration, autoUpdate, usehttpproxy, addTimePosition, alwaysbackupfiles,
-                     forcerawavcextension;
+                     forcerawavcextension, bUseCUVIDserver;
         private ulong audioSamplesPerUpdate;
         private AfterEncoding afterEncoding;
         private decimal forceFilmThreshold, acceptableFPSError;
@@ -60,10 +60,10 @@ namespace MeGUI
 		{
             strMeGUIPath = System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath);
             autoscroll = true;
-            autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/stable/"},
-                new string[] { "Development", "http://megui.org/auto/" } };
-            //autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/stable/", "http://megui.xvidvideo.ru/auto/stable/" },
-            //    new string[] { "Development", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" } };
+            //autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/stable/"},
+            //    new string[] { "Development", "http://megui.org/auto/" } };
+            autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/stable/", "http://megui.xvidvideo.ru/auto/stable/" },
+                new string[] { "Development", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" } };
             acceptableFPSError = 0.01M;
             autoUpdateServerSubList = 0;
             maxServersToTry = 5;
@@ -121,8 +121,7 @@ namespace MeGUI
             defaultOutputDir = "";
             addTimePosition = false;
             dgavcIndexPath = getDownloadPath(@"tools\dgavcindex\dgavcindex.exe");
-            dgvc1IndexPath = "dgvc1index.exe";
-            dgmpgIndexPath = "dgmpgindex.exe";
+            dgnvIndexPath = getDownloadPath(@"tools\dgindexnv\dgindexnv.exe");
             eac3toPath = getDownloadPath(@"tools\eac3to\eac3to.exe");
             tsmuxerPath = getDownloadPath(@"tools\tsmuxer\tsmuxer.exe");
             alwaysbackupfiles = true;
@@ -133,6 +132,7 @@ namespace MeGUI
             strMainAudioFormat = "";
             strLastSourcePath = "";
             strLastDestinationPath = "";
+            bUseCUVIDserver = true;
         }
 
         private string getDownloadPath(string strPath)
@@ -172,6 +172,15 @@ namespace MeGUI
         {
             get { return autoscroll; }
             set { autoscroll = value; }
+        }
+
+        /// <summary>
+        /// Gets / sets whether the log should be autoscrolled
+        /// </summary>
+        public bool UseCUVIDserver
+        {
+            get { return bUseCUVIDserver; }
+            set { bUseCUVIDserver = value; }
         }
 
         public bool SafeProfileAlteration
@@ -398,20 +407,11 @@ namespace MeGUI
             get { return dgavcIndexPath; }
         }
         /// <summary>
-        /// filename and full path of the dgvc1index executable
-        /// </summary>
-        public string Dgvc1IndexPath
-        {
-            get { return dgvc1IndexPath; }
-            set { dgvc1IndexPath = value; }
-        }
-        /// <summary>
         /// filename and full path of the dgmpgindex executable
         /// </summary>
-        public string DgmpgIndexPath
+        public string DgnvIndexPath
         {
-            get { return dgmpgIndexPath; }
-            set { dgmpgIndexPath = value; }
+            get { return dgnvIndexPath; }
         }
         /// <summary>
         /// filename and full path of the eac3to executable
