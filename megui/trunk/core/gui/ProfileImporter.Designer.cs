@@ -89,6 +89,7 @@ namespace MeGUI.core.gui
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ProfileImporter";
             this.Text = "Preset Importer";
+            this.TopMost = false;
             this.Shown += new System.EventHandler(this.ProfileImporter_Shown);
             this.Controls.SetChildIndex(this.profileList, 0);
             this.Controls.SetChildIndex(this.label1, 0);
