@@ -139,8 +139,7 @@ namespace MeGUI
             bool colormatrix, bool mpeg2deblock, bool flipVertical, double fps, bool dss2)
         {
             string inputLine = "#input";
-            int c;
-            string dgdecodenv = DGDecodeNVdllPath(out c);
+            string strDLLPath = "";
 
             switch (sourceType)
             {
@@ -148,29 +147,34 @@ namespace MeGUI
                     inputLine = "Import(\"" + input + "\")";
                     break;
                 case PossibleSources.d2v:
-                    inputLine = "DGDecode_mpeg2source(\"" + input + "\"";
+                    strDLLPath = Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.DgIndexPath), "DGDecode.dll");
+                    inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nDGDecode_mpeg2source(\"" + input + "\"";
                     if (mpeg2deblock)
                         inputLine += ", cpu=4";
                     if (colormatrix)
                         inputLine += ", info=3";
                     inputLine += ")";
                     if (colormatrix)
-                        inputLine += string.Format("\r\nColorMatrix(hints=true{0}, threads=0)", interlaced ? ", interlaced=true" : "");
+                        inputLine += string.Format("\r\nLoadPlugin(\"" + Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "ColorMatrix.dll") + "\")\r\nColorMatrix(hints=true{0}, threads=0)", interlaced ? ", interlaced=true" : "");
                     break;
                 case PossibleSources.dga:
-                case PossibleSources.dgm:
-                case PossibleSources.dgv:
+                    strDLLPath = Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.DgavcIndexPath), "DGAVCDecode.dll");
+                    inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nAVCSource(\"" + input + "\")"; 
+                    break;
+                case PossibleSources.dgi:
+                    if (MainForm.Instance.Settings.UseCUVIDserver == true)
                     {
-                        switch (c)
-                        {
-                            case 1: inputLine = "DGSource(\"" + input + "\""; break;
-                            case 2: inputLine = "LoadPlugin(\"" + dgdecodenv + "\")\r\nDGSource(\"" + input + "\""; break;
-                            default: inputLine = "AVCSource(\"" + input + "\""; break;
-                        }
+                        strDLLPath = Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.DgnvIndexPath), "DGDecodeNV.dll");
+                        inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nDGSource(\"" + input + "\"";
+                    }
+                    else
+                    {
+                        strDLLPath = Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.DgnvIndexPath), "DGMultiDecodeNV.dll");
+                        inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nDGMultiSource(\"" + input + "\"";
                     }
                     break;
                 case PossibleSources.vdr:
-                        inputLine = "AVISource(\"" + input + "\", audio=false)";
+                    inputLine = "AVISource(\"" + input + "\", audio=false)";
                     break;
                 case PossibleSources.directShow:
                     if (input.ToLower().EndsWith(".avi"))
@@ -189,62 +193,6 @@ namespace MeGUI
                     break;
             }
             return inputLine;
-        }
-
-        public static string DGDecodeNVdllPath(out int Counter)
-        {
-            bool flag = false;
-            string dgdecodenv = string.Empty;
-            Counter = 0;
-
-            if (!string.IsNullOrEmpty(MainForm.Instance.Settings.AvisynthPluginsPath))
-            {
-                dgdecodenv = MainForm.Instance.Settings.AvisynthPluginsPath + "\\DGDecodeNV.dll";
-                if (File.Exists(dgdecodenv))
-                {
-                    flag = true;
-                    Counter = 1;
-                }
-            }
-            
-            if (!flag) // check somewhere else
-            {
-                mainForm = MainForm.Instance;
-                if (!string.IsNullOrEmpty(mainForm.Settings.DgavcIndexPath))
-                {
-                    dgdecodenv = Path.GetDirectoryName(mainForm.Settings.DgavcIndexPath) + "\\DGDecodeNV.dll";
-                    if (File.Exists(dgdecodenv))
-                    {
-                        flag = true;
-                        Counter = 2;
-                    }
-                }
-                if (!string.IsNullOrEmpty(mainForm.Settings.DgmpgIndexPath) && (!flag))
-                {
-                    dgdecodenv = Path.GetDirectoryName(mainForm.Settings.DgmpgIndexPath) + "\\DGDecodeNV.dll";
-                    if (File.Exists(dgdecodenv))
-                    {
-                        flag = true;
-                        Counter = 2;
-                    }
-                }
-                if (!string.IsNullOrEmpty(mainForm.Settings.Dgvc1IndexPath) && (!flag))
-                {
-                    dgdecodenv = Path.GetDirectoryName(mainForm.Settings.Dgvc1IndexPath) + "\\DGDecodeNV.dll";
-                    if (File.Exists(dgdecodenv))
-                    {
-                        flag = true;
-                        Counter = 2;
-                    }
-                }
-
-                if (Path.GetFileName(mainForm.Settings.DgavcIndexPath.ToLower().ToString()) == "dgavcindex.exe")
-                {
-                    flag = false;
-                    Counter = 0;
-                }
-            }
-            return dgdecodenv;
         }
 
         public static string GetCropLine(bool crop, CropValues cropValues)
@@ -276,11 +224,20 @@ namespace MeGUI
         public static string GetDenoiseLines(bool denoise, DenoiseFilterType type)
         {
             string denoiseLines = "#denoise";
+            string strPath = "";
             if (denoise)
             {
                 EnumProxy p = EnumProxy.Create(type);
                 if (p.Tag != null)
-                    denoiseLines = string.Format(p.Tag + " # " + p);
+                {
+                    if (p.Tag.ToString().ToLower().Contains("undot"))
+                        strPath = "LoadPlugin(\"" + Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "UnDot.dll") + "\")\r\n";
+                    else if (p.Tag.ToString().ToLower().Contains("fluxsmoothst"))
+                        strPath = "LoadPlugin(\"" + Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "FluxSmooth.dll") + "\")\r\n";
+                    else if (p.Tag.ToString().ToLower().Contains("convolution3d"))
+                        strPath = "LoadPlugin(\"" + Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "Convolution3DYV12.dll") + "\")\r\n";
+                    denoiseLines = string.Format(strPath + p.Tag + " # " + p);
+                }
                 else
                     denoiseLines = "#denoise - " + p;
             }
@@ -382,14 +339,16 @@ namespace MeGUI
         {
             filters.Add(new DeinterlaceFilter(
                 "LeakKernelDeint",
-                string.Format("LeakKernelDeint(order={0},sharp=true)", Order(order))));
+                string.Format("LoadPlugin(\"{0}\"){1}LeakKernelDeint(order={2},sharp=true)", Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "LeakKernelDeint.dll"), Environment.NewLine, Order(order))));
         }
 
         public static void AddTDeint(FieldOrder order, List<DeinterlaceFilter> filters, bool processAll, bool eedi2, bool bob)
         {
             StringBuilder script = new StringBuilder();
+            script.Append("LoadPlugin(\"" + Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "TDeint.dll") + "\")\r\n");
             if (eedi2)
             {
+                script.Append("LoadPlugin(\"" + Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "EEDI2.dll") + "\")\r\n");
                 script.Append("edeintted = last.");
                 if (order == FieldOrder.TFF)
                     script.Append("AssumeTFF().");
@@ -422,6 +381,7 @@ namespace MeGUI
                 name = "FieldDeinterlace (no blend)";
 
             StringBuilder script = new StringBuilder();
+            script.Append("LoadPlugin(\"" + Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "Decomb.dll") + "\")\r\n");
             if (order == FieldOrder.TFF)
                 script.Append("AssumeTFF().");
             else if (order == FieldOrder.BFF)
@@ -448,7 +408,7 @@ namespace MeGUI
         {
             filters.Add(new DeinterlaceFilter(
                 "TomsMoComp",
-                string.Format("TomsMoComp({0},5,1)", Order(order))));
+                string.Format("LoadPlugin(\"{0}\"){1}TomsMoComp({2},5,1)", Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "TomsMoComp.dll"), Environment.NewLine, Order(order))));
         }
 
         public static void Portionize(List<DeinterlaceFilter> filters, string trimLine)
@@ -471,8 +431,11 @@ namespace MeGUI
             FieldOrder fieldOrder, List<DeinterlaceFilter> filters)
         {
             StringBuilder script = new StringBuilder();
+            script.Append("LoadPlugin(\"" + Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "TIVTC.dll") + "\")\r\n");
             if (advancedDeinterlacing)
             {
+                script.Append("LoadPlugin(\"" + Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "EEDI2.dll") + "\")\r\n");
+                script.Append("LoadPlugin(\"" + Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "TDeint.dll") + "\")\r\n");
                 script.Append("edeintted = ");
                 if (fieldOrder == FieldOrder.TFF)
                     script.Append("AssumeTFF().");
@@ -519,6 +482,7 @@ namespace MeGUI
             List<DeinterlaceFilter> filters)
         {
             StringBuilder script = new StringBuilder();
+            script.Append("LoadPlugin(\"" + Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "Decomb.dll") + "\")\r\n");
             if (order == FieldOrder.TFF)
                 script.Append("AssumeTFF().");
             else if (order == FieldOrder.BFF)
@@ -549,13 +513,14 @@ namespace MeGUI
         {
             filters.Add(new DeinterlaceFilter(
                 "Tritical Decimate",
-                string.Format("TDecimate(cycleR={0})", decimateM)));
+                string.Format("LoadPlugin(\"{0}\"){1}TDecimate(cycleR={2})", Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "TIVTC.dll"), Environment.NewLine, decimateM)));
         }
         #endregion
         #region analysis scripting
         private const string DetectionScript =
 @"{0} #original script
 {1} #trimming
+{5} #LoadPlugin
 global unused_ = blankclip(pixel_type=""yv12"", length=10).TFM()
 file=""{2}""
 global sep=""-""
@@ -591,7 +556,7 @@ SelectRangeEvery({3},{4},0)
         public static string getScript(int scriptType, string originalScript, string trimLine, string logFileName, int selectEvery, int selectLength)
         {
             if (scriptType == 0) // detection
-                return string.Format(DetectionScript, originalScript, trimLine, logFileName, selectEvery, selectLength);
+                return string.Format(DetectionScript, originalScript, trimLine, logFileName, selectEvery, selectLength, "LoadPlugin(\"" + Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "TIVTC.dll") + "\")");
             else if (scriptType == 1) // field order
                 return string.Format(FieldOrderScript, originalScript, trimLine, logFileName, selectEvery, selectLength);
             else

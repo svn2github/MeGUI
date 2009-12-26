@@ -1303,7 +1303,6 @@ namespace MeGUI
             this.avisynthScript.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.avisynthScript.Size = new System.Drawing.Size(439, 356);
             this.avisynthScript.TabIndex = 0;
-            this.avisynthScript.TextChanged += new System.EventHandler(this.checkDLLs);
             // 
             // saveAvisynthScriptDialog
             // 
@@ -1539,6 +1538,7 @@ namespace MeGUI
 
             if (this.SubtitlesPath.Text != "")
             {
+                newScript += "\r\nLoadPlugin(\"" + Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "VSFilter.dll") + "\")";
                 if (cbCharset.Enabled)
                 {
                     string charset = CharsetValue();
@@ -1588,20 +1588,10 @@ namespace MeGUI
                     break;
                 case ".dga":
                     sourceType = PossibleSources.dga;                    
-                    if (Path.GetFileName(mainForm.Settings.DgavcIndexPath.ToLower().ToString()) == "dgavcindexnv.exe")
-                    {
-                        if (VideoUtil.manageCUVIDServer())
-                            openVideo(videoInput);                        
-                    }
-                    else openVideo(videoInput);
+                    openVideo(videoInput);
                     break;
-                case ".dgm":
-                    sourceType = PossibleSources.dgm;
-                    if (VideoUtil.manageCUVIDServer())
-                        openVideo(videoInput); 
-                    break;
-                case ".dgv":
-                    sourceType = PossibleSources.dgv;
+                case ".dgi":
+                    sourceType = PossibleSources.dgi;
                     if (VideoUtil.manageCUVIDServer())
                         openVideo(videoInput); 
                     break;
@@ -1661,6 +1651,7 @@ namespace MeGUI
             switch (this.sourceType)
             {            
                 case PossibleSources.d2v:
+                case PossibleSources.dga:
                 case PossibleSources.mpeg2:
                     this.mpeg2Deblocking.Enabled = true;
                     this.colourCorrect.Enabled = true;
@@ -1707,9 +1698,7 @@ namespace MeGUI
                     this.nvResize.Checked = false;
                     this.tabSources.SelectedTab = tabPage2;
                     break;
-                case PossibleSources.dga:
-                case PossibleSources.dgm:
-                case PossibleSources.dgv:
+                case PossibleSources.dgi:
                     this.mpeg2Deblocking.Checked = false;
                     this.mpeg2Deblocking.Enabled = false;
                     this.colourCorrect.Enabled = false;
@@ -1742,9 +1731,11 @@ namespace MeGUI
                 string line = sr.ReadLine();
                 switch (this.sourceType)
                 {
-                    case PossibleSources.dga: if (line.Contains("DGAVCIndexFileNV")) flag = true; break;
-                    case PossibleSources.dgm: if (line.Contains("DGMPGIndexFileNV")) flag = true; break;
-                    case PossibleSources.dgv: if (line.Contains("DGVC1IndexFileNV")) flag = true; break; 
+                    case PossibleSources.dgi:
+                        if (line.Contains("DGMPGIndexFileNV4")) flag = true;
+                        if (line.Contains("DGAVCIndexFileNV4")) flag = true;
+                        if (line.Contains("DGVC1IndexFileNV4")) flag = true; 
+                        break; 
                 }
             }
             if (!flag)
@@ -2066,41 +2057,6 @@ namespace MeGUI
         void checkedChanged(object sender, EventArgs e)
         {
             this.showScript();
-        }
-        void checkDLLs(object sender, EventArgs e)
-        {
-            if (!avisynthScript.Text.Contains("#Import required DLLs"))
-            {
-                string strDLLLine = "";
-                strDLLLine += getLoadDLLLine("ColorMatrix.dll");
-                strDLLLine += getLoadDLLLine("Convolution3DYV12.dll");
-                strDLLLine += getLoadDLLLine("Decomb.dll");
-                strDLLLine += getLoadDLLLine("DGAVCDecode.dll");
-                strDLLLine += getLoadDLLLine("DGDecode.dll");
-                strDLLLine += getLoadDLLLine("EEDI2.dll");
-                strDLLLine += getLoadDLLLine("FluxSmooth.dll");
-                strDLLLine += getLoadDLLLine("LeakKernelDeint.dll");
-                strDLLLine += getLoadDLLLine("NicAudio.dll");
-                //strDLLLine += getLoadDLLLine("SimpleResize.dll");
-                strDLLLine += getLoadDLLLine("TDeint.dll");
-                strDLLLine += getLoadDLLLine("TIVTC.dll");
-                strDLLLine += getLoadDLLLine("TomsMoComp.dll");
-                strDLLLine += getLoadDLLLine("UnDot.dll");
-                strDLLLine += getLoadDLLLine("VSFilter.dll");
-
-                if (!String.IsNullOrEmpty(strDLLLine))
-                    avisynthScript.Text = "#Import required DLLs\r\n" + strDLLLine + "\r\n" + avisynthScript.Text;
-            }
-        }
-
-        private string getLoadDLLLine(string strDLLName)
-        {
-            string strLine = "";
-
-            if (File.Exists(Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, strDLLName)))
-                    strLine = "LoadPlugin(\"" + Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, strDLLName) + "\")\r\n";
-
-            return strLine;
         }
 
 		#endregion
@@ -2520,7 +2476,7 @@ namespace MeGUI
         }
     }
     public delegate void OpenScriptCallback(string avisynthScript);
-    public enum PossibleSources { d2v, dga, dgm, dgv, mpeg2, vdr, directShow, avs };
+    public enum PossibleSources { d2v, dga, dgi, mpeg2, vdr, directShow, avs };
     public enum mod16Method : int { none = -1, resize = 0, overcrop, nonMod16, mod4Horizontal, undercrop };
 
     public class AviSynthWindowTool : MeGUI.core.plugins.interfaces.ITool
