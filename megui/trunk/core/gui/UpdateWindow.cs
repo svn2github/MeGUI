@@ -94,6 +94,8 @@ namespace MeGUI
             public bool isAvailable()
             {
                 ArrayList arrPath = new ArrayList();
+                string strPath;
+
                 switch (this.name)
                 {
                     case "base": arrPath.Add(System.Windows.Forms.Application.ExecutablePath); break;
@@ -102,15 +104,31 @@ namespace MeGUI
                             arrPath.Add(MainForm.Instance.Settings.X264Path); 
                             if (OSInfo.isWow64())
                             {
-                                string x264x64Path =  System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.X264Path);
-                                arrPath.Add(System.IO.Path.Combine(x264x64Path, "avs4x264.exe"));
-                                arrPath.Add(System.IO.Path.Combine(x264x64Path, "x264_64.exe"));
+                                strPath =  System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.X264Path);
+                                arrPath.Add(System.IO.Path.Combine(strPath, "vfw4x264.exe"));
+                                arrPath.Add(System.IO.Path.Combine(strPath, "avs4x264.exe"));
+                                arrPath.Add(System.IO.Path.Combine(strPath, "x264_64.exe"));
                             }
                             break;
                         }
                     case "mencoder": arrPath.Add(MainForm.Instance.Settings.MencoderPath); break;
-                    case "dgindex": arrPath.Add(MainForm.Instance.Settings.DgIndexPath); break;
-                    case "dgavcindex": arrPath.Add(MainForm.Instance.Settings.DgavcIndexPath); break;
+                    case "dgindex": 
+                        arrPath.Add(MainForm.Instance.Settings.DgIndexPath);
+                        strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.DgIndexPath);
+                        arrPath.Add(System.IO.Path.Combine(strPath, "DGDecode.dll"));
+                        break;
+                    case "dgavcindex": 
+                        arrPath.Add(MainForm.Instance.Settings.DgavcIndexPath);
+                        strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.DgavcIndexPath);
+                        arrPath.Add(System.IO.Path.Combine(strPath, "DGAVCDecode.dll")); 
+                        break;
+                    case "dgindexnv":
+                        arrPath.Add(MainForm.Instance.Settings.DgnvIndexPath);
+                        strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.DgnvIndexPath);
+                        arrPath.Add(System.IO.Path.Combine(strPath, "CUVIDServer.exe"));
+                        arrPath.Add(System.IO.Path.Combine(strPath, "DGDecodeNV.dll"));
+                        arrPath.Add(System.IO.Path.Combine(strPath, "DGMultiDecodeNV.dll"));
+                        break;
                     case "mp4box": arrPath.Add(MainForm.Instance.Settings.Mp4boxPath); break;
                     case "avimux_gui": arrPath.Add(MainForm.Instance.Settings.AviMuxGUIPath); break;
                     case "tsmuxer": arrPath.Add(MainForm.Instance.Settings.TSMuxerPath); break;
@@ -147,19 +165,17 @@ namespace MeGUI
                     case "tomsmocomp": arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"TomsMoComp.dll")); break;
                     case "tdeint": arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"TDeint.dll")); break;
                     case "tivtc": arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"TIVTC.dll")); break;
-                    case "dgdecode": arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"DGDecode.dll")); break;
-                    case "dgavcdecode": arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"DGAVCDecode.dll")); break;
-                    case "simpleresize": arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"SimpleResize.dll")); break;
+                    //case "simpleresize": arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"SimpleResize.dll")); break;
                     case "colormatrix": arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"ColorMatrix.dll")); break;
                     case "vsfilter": arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"VSFilter.dll")); break;
                     case "nicaudio": arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"NicAudio.dll")); break;
                 }
 
-                foreach (string strPath in arrPath)
+                foreach (string strTempPath in arrPath)
                 {
-                    if (String.IsNullOrEmpty(strPath))
+                    if (String.IsNullOrEmpty(strTempPath))
                         return false;
-                    if (File.Exists(strPath) == false)
+                    if (File.Exists(strTempPath) == false)
                         return false;
                 }
                 return true;
@@ -541,6 +557,8 @@ namespace MeGUI
                             return meGUISettings.EAC3toPath;
                         case ("dgavcindex"):
                             return meGUISettings.DgavcIndexPath;
+                        case ("dgindexnv"):
+                            return meGUISettings.DgnvIndexPath;
                         case ("tsmuxer"):
                             return meGUISettings.TSMuxerPath;
                         default:
@@ -555,7 +573,7 @@ namespace MeGUI
                             meGUISettings.NeroAacEncPath = value;
                             break;
                         case ("besplit"):
-                            meGUISettings.NeroAacEncPath = value;
+                            meGUISettings.BeSplitPath = value;
                             break;
 
                     }
@@ -1009,11 +1027,48 @@ namespace MeGUI
                     d(node, null, node.Name);
                 }
             }
+            RemoveOldFiles();
             if (NumUpdatableFiles() > 1)
                  AddTextToLog(string.Format("There are {0} files that can be updated.", NumUpdatableFiles()));
             else AddTextToLog(string.Format("There is {0} file that can be updated.", NumUpdatableFiles()));
             webUpdate.Set();
         }
+
+        private void RemoveOldFiles()
+        {
+            iUpgradeable iFileToRemove = null;
+            XmlNodeList xnList = upgradeXml.SelectNodes("/UpdateableFiles");
+            do
+            {
+                iFileToRemove = null;
+                foreach (iUpgradeable iFile in upgradeData)
+                {
+                    if (FindFileInUpdateXML(xnList, iFile.Name) == false)
+                    {
+                        iFileToRemove = iFile;
+                        break;
+                    }
+                }
+                upgradeData.Remove(iFileToRemove);
+            } while (iFileToRemove != null);
+        }
+
+        private bool FindFileInUpdateXML(XmlNodeList xnList, string strFile)
+        { 
+            foreach (XmlNode l1 in xnList)
+            {
+                if (l1.Attributes["type"].Value.Equals("file"))
+                {
+                    if (l1.Name.Equals(strFile))
+                        return true;
+                    continue;
+                }
+                if (FindFileInUpdateXML(l1.ChildNodes, strFile) == true)
+                    return true;
+            }
+            return false;
+        }
+
         /// <summary>
         /// Parses the upgrade XML file to create both the TreeView and populate the
         /// upgradeData array. It's a recursive algorithm, so it needs to be passed
