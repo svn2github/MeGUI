@@ -272,7 +272,7 @@ namespace MeGUI.packages.video.x264
                             this.x264NumberOfBFrames.Value += 2;
                         else if (this.x264NumberOfBFrames.Value < 3)
                             this.x264NumberOfBFrames.Value = 5;
-                        if (this.x264NumberOfRefFrames.Value > 1 && this.x264NumberOfRefFrames.Value < 16)
+                        if (this.x264NumberOfRefFrames.Value > 1 && this.x264NumberOfRefFrames.Value < 9)
                             this.x264NumberOfRefFrames.Value *= 2;
                         else if (this.x264NumberOfRefFrames.Value > 8)
                             this.x264NumberOfRefFrames.Value = this.x264NumberOfRefFrames.Value;
