@@ -1,3 +1,23 @@
+0.3.1.1060
+    - (zathor) [OSInfo] changed x64 detection, fixed a few typos
+    - (zathor) [x264Encoder] + [UpdateWindows] added support for x64 x264
+    - (zathor) [CommandlineJobProcessor] wait for aborted process to be closed before trying to delete the output file
+    - (zathor) [x264ConfigurationPanel] changed subme default value according to the x264 specs
+    - (zathor) merged the DG Indexer, added DGIndexNV support and removed the 3 old NV indexer
+    - (zathor) [SettingsForm] added the ability to deselect the usage of the CUVIDServer
+    - (zathor) [DialogManager] CUVIDServer will be started if necessary and only closed if started by MeGUI
+    - (zathor) [UpdateWindow] if a file is not longer available it will not be selected for download
+    - (zathor) added DGIndexNV download package, moved the location of the DGAVCDecode.dll to the DGAVCIndex package
+    - (zathor) [DG Creator] if DGIndexNV is licensed it will be preselected - otherwise it will be disabled
+    - (zathor) [ScriptServer] LoadPlugin will be called automatically for the different indexer types
+    - (zathor) [x264ConfigurationPanel] enable cabac checkbox if avc profile != baseline
+    - (zathor) only the needed avisynth plugins will be automatically loaded
+    - (zathor) [DGIndexer] DGIndex always honor pulldown flags. Patch by Alanoll (#2898220)
+    - (zathor) [SettingsForm] removed the unnecessary program paths
+    - (zathor) [ProfileImporter] preset importer is not modal anymore (bug #2838614)
+    - (zathor) update MediaInfo library and its wrapper to the latest release (0.7.26)
+    - (zathor) [AMGMuxer] Avi-MUX Gui job files will be saved as UTF-8
+
 0.3.1.1059
     - (zathor) [MeGUISettings] update_cache location and avisynth plugin location cannot be changed anymore
     - (zathor) [x264Settings] changed the default *scratchpad* settings to x264 default (preset and some other settings have been wrong) 
