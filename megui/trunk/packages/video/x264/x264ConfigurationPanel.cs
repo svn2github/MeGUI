@@ -531,8 +531,8 @@ namespace MeGUI.packages.video.x264
                             cbAQMode.SelectedIndex = 0;
                         if (trellis.SelectedIndex != 0)
                             trellis.SelectedIndex = 0;
-                        if (x264BframePredictionMode.SelectedIndex != 0)
-                            x264BframePredictionMode.SelectedIndex = 0;
+                        if (x264BframePredictionMode.SelectedIndex != 1)
+                            x264BframePredictionMode.SelectedIndex = 1;
                         if (scenecut.Checked)
                             scenecut.Checked = false;
                         if (x264DeblockActive.Checked)
@@ -1893,8 +1893,6 @@ namespace MeGUI.packages.video.x264
                 case 7: lbPreset.Text = "Very Slow"; break;
                 case 8: lbPreset.Text = "Placebo"; break;
             }
-            lbPreset.Enabled = (this.tbx264Presets.Value != 4);
-            btPresetSettings.Enabled = (this.tbx264Presets.Value != 4);
             if (sender != null) // workaround so that the first loaded profile will not be overwritten
                 doPresetsAdjustments();
             genericUpdate();
@@ -2018,8 +2016,8 @@ namespace MeGUI.packages.video.x264
 
         private void btPresetSettings_Click(object sender, EventArgs e)
         {
-            if (tbx264Presets.Value != 4)
-                doPresetsAdjustments();
+            doPresetsAdjustments();
+            doTuningsAdjustments();
         }
 
         private void x264Tunes_SelectedIndexChanged(object sender, EventArgs e)
