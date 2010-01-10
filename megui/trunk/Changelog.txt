@@ -1,3 +1,18 @@
+0.3.1.1061
+    - (zathor) [x264Encoder] updated the command line generation
+    - (zathor) [x264ConfigurationPanel] button "preset settings" also reloads the tuning settings
+    - (zathor) [DGIndexer] added percentage output to the progress window
+    - (zathor) [DGNVIndexer] + [DGAVCIndexer] prepared for reading the stdout so that the percentage can be read as soon as it is supported by the tools
+    - (zathor) [HDBDStreamExtractor] added mkv as file input source
+    - (zathor) [HDBDStreamExtractor] for audio stream types the first stream output type will be preselected
+    - (zathor) [MeGUISettings] + [SettingsForm] + [MP4BoxMuxer] added temporary folder selection for mp4 muxer
+    - (zathor) [SettingsForm] cosmetics
+    - (zathor) [ProfileImporter] importer could not be closed with import/cancel buttons
+    - (zathor) [AviSynthWindow] "source is anime" button will also be recognized if selected before analysis
+    - (zathor) added force film and DAR detection for DGIndexNV
+    - (zathor) added support for new DGIndexNV (requires build 2001 or higher)
+    - (zathor) update MediaInfo library and its wrapper to the latest release (0.7.27)
+
 0.3.1.1060
     - (zathor) [OSInfo] changed x64 detection, fixed a few typos
     - (zathor) [x264Encoder] + [UpdateWindows] added support for x64 x264
