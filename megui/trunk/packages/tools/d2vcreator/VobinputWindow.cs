@@ -566,8 +566,9 @@ namespace MeGUI
             if (AudioTracks.Items.Count < 1)
             {
                 int unused;
+                Dar? unused2;
                 List<AudioTrackInfo> audioTracks; 
-                vUtil.getSourceMediaInfo(fileName, out audioTracks, out unused);
+                vUtil.getSourceMediaInfo(fileName, out audioTracks, out unused, out unused2);
                 foreach (AudioTrackInfo atrack in audioTracks)
                     AudioTracks.Items.Add(atrack);
             }

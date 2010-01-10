@@ -172,6 +172,11 @@ namespace MeGUI
                         strDLLPath = Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.DgnvIndexPath), "DGMultiDecodeNV.dll");
                         inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nDGMultiSource(\"" + input + "\"";
                     }
+                    if (MainForm.Instance.Settings.AutoForceFilm &&
+                        MainForm.Instance.Settings.ForceFilmThreshold <= (decimal)dgiFile.GetFilmPercent(input))
+                        inputLine += ",fieldop=1";
+                    else
+                        inputLine += ",fieldop=0";
                     break;
                 case PossibleSources.vdr:
                     inputLine = "AVISource(\"" + input + "\", audio=false)";

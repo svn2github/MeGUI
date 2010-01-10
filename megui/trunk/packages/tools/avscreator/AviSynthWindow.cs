@@ -1732,9 +1732,9 @@ namespace MeGUI
                 switch (this.sourceType)
                 {
                     case PossibleSources.dgi:
-                        if (line.Contains("DGMPGIndexFileNV4")) flag = true;
-                        if (line.Contains("DGAVCIndexFileNV4")) flag = true;
-                        if (line.Contains("DGVC1IndexFileNV4")) flag = true; 
+                        if (line.Contains("DGMPGIndexFileNV")) flag = true;
+                        if (line.Contains("DGAVCIndexFileNV")) flag = true;
+                        if (line.Contains("DGVC1IndexFileNV")) flag = true; 
                         break; 
                 }
             }

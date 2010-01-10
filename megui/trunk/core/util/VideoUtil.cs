@@ -201,20 +201,49 @@ namespace MeGUI
 			}
 		}
 
+        /// <summary>
         /// gets information about a video source using MediaInfo
         /// </summary>
         /// <param name="infoFile">the info file to be analyzed</param>
         /// <param name="audioTracks">the audio tracks found</param>
         /// <param name="maxHorizontalResolution">the width of the video</param>
-        public void getSourceMediaInfo(string fileName, out List<AudioTrackInfo> audioTracks, out int maxHorizontalResolution)
+        public void getSourceMediaInfo(string fileName, out List<AudioTrackInfo> audioTracks, out int maxHorizontalResolution, out Dar? dar)
         {
             MediaInfo info;
             audioTracks = new List<AudioTrackInfo>();
             maxHorizontalResolution = 5000;
+            dar = Dar.A1x1;
             try
             {
                 info = new MediaInfo(fileName);
                 maxHorizontalResolution = Int32.Parse(info.Video[0].Width);
+
+                if (info.Video[0].Width == "720" && (info.Video[0].Height == "576" || info.Video[0].Height == "480"))
+                {
+                    if (info.Video[0].Height == "576")
+                    {
+                        if (info.Video[0].AspectRatioString.Equals("16:9"))
+                            dar = Dar.ITU16x9PAL;
+                        else if (info.Video[0].AspectRatioString.Equals("4:3"))
+                            dar = Dar.ITU4x3PAL;
+                        else
+                            dar = new Dar(ulong.Parse(info.Video[0].Width), ulong.Parse(info.Video[0].Height));
+                    }
+                    else
+                    {
+                        if (info.Video[0].AspectRatioString.Equals("16:9"))
+                            dar = Dar.ITU16x9NTSC;
+                        else if (info.Video[0].AspectRatioString.Equals("4:3"))
+                            dar = Dar.ITU4x3NTSC;
+                        else
+                            dar = new Dar(ulong.Parse(info.Video[0].Width), ulong.Parse(info.Video[0].Height));
+                    }
+                }
+                else
+                {
+                    dar = new Dar(ulong.Parse(info.Video[0].Width), ulong.Parse(info.Video[0].Height));
+                }
+
                 for (int counter = 0; counter < info.Audio.Count; counter++)
                 {
                     MediaInfoWrapper.AudioTrack atrack = info.Audio[counter];
@@ -627,8 +656,8 @@ namespace MeGUI
 			ar = null;
             maxHorizontalResolution = 5000;
 
-            getSourceMediaInfo(fileName, out audioTracks, out maxHorizontalResolution);
-            
+            getSourceMediaInfo(fileName, out audioTracks, out maxHorizontalResolution, out ar);
+            ar = null; // muss noch weg!
             if ((audioTracks.Count > 0) || (subtitles.Count > 0))
                 putDummyTracks = false;
 

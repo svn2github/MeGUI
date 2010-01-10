@@ -23,6 +23,7 @@ using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Xml.Serialization;
+using System.Text.RegularExpressions;
 
 using MeGUI.core.util;
 
@@ -73,18 +74,45 @@ namespace MeGUI
         public dgiFile(string fileName)
         {
             this.fileName = fileName;
+
+            string strScript = "";
             string strPath = Path.GetDirectoryName(MainForm.Instance.Settings.DgnvIndexPath);
             if (MainForm.Instance.Settings.UseCUVIDserver == true)
             {
                 string strDLL = Path.Combine(strPath, "DGDecodeNV.dll");
-                reader = AvsFile.ParseScript("LoadPlugin(\"" + strDLL + "\")\r\nDGSource(\"" + this.fileName + "\")");
+                strScript = "LoadPlugin(\"" + strDLL + "\")\r\nDGSource(\"" + this.fileName + "\"";
             }
             else
             {
                 string strDLL = Path.Combine(strPath, "DGMultiDecodeNV.dll");
-                reader = AvsFile.ParseScript("LoadPlugin(\"" + strDLL + "\")\r\nDGMultiSource(\"" + this.fileName + "\")");
+                strScript = "LoadPlugin(\"" + strDLL + "\")\r\nDGMultiSource(\"" + this.fileName + "\"";
             }
+            if (MainForm.Instance.Settings.AutoForceFilm &&
+                        MainForm.Instance.Settings.ForceFilmThreshold <= (decimal)dgiFile.GetFilmPercent(this.fileName))
+                strScript += ",fieldop=1)";
+            else
+                strScript += ",fieldop=0)";
+
+            reader = AvsFile.ParseScript(strScript);
+
             this.readFileProperties();
+        }
+
+        private static readonly Regex r =
+            new Regex("[0-9.]+(?=% FILM)");
+
+        public static double GetFilmPercent(string file)
+        {
+            double filmPercentage = -1.0;
+            using (StreamReader sr = new StreamReader(file))
+            {
+                string line = sr.ReadLine();
+                while ((line = sr.ReadLine()) != null)
+                    if (r.IsMatch(line))
+                        filmPercentage = double.Parse(r.Match(line).Value,
+                            System.Globalization.CultureInfo.InvariantCulture);
+            }
+            return filmPercentage;
         }
 
         /// <summary>
@@ -93,8 +121,34 @@ namespace MeGUI
         private void readFileProperties()
         {
             info = reader.Info.Clone();
-            Dar dar = new Dar(reader.Info.Width, reader.Info.Height);
-
+            Dar dar = Dar.A1x1;
+            using (StreamReader sr = new StreamReader(fileName))
+            {
+                string line = null;
+                int iLineCount = 0;
+                while ((line = sr.ReadLine()) != null)
+                {
+                    if (iLineCount == 3)
+                    {
+                        string strSourceFile = line.Substring(0, line.LastIndexOf(" "));
+                        if (File.Exists(strSourceFile))
+                        {
+                            int unused2;
+                            System.Collections.Generic.List<AudioTrackInfo> unused1;
+                            Dar? dar1;
+                            VideoUtil vUtil = new VideoUtil(MainForm.Instance);
+                            vUtil.getSourceMediaInfo(strSourceFile, out unused1, out unused2, out dar1);
+                            dar = (Dar)dar1;
+                        }
+                        else
+                        {
+                            dar = new Dar(reader.Info.Width, reader.Info.Height);
+                        }
+                        break;
+                    }
+                    iLineCount++;
+                }
+            }
             info.DAR = dar;
         }
         #region properties
