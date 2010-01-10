@@ -48,6 +48,7 @@ namespace MeGUI.core.gui
             cancelButton.TabIndex = 2;
             cancelButton.Text = "Cancel";
             cancelButton.UseVisualStyleBackColor = true;
+            cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
             // 
             // profileList
             // 

@@ -103,6 +103,8 @@ namespace MeGUI.core.gui
                 mainForm.Profiles.AddAll(ps.ToArray(), mainForm.DialogManager);
 
                 DialogResult = DialogResult.OK;
+
+                this.Close();
             });
         }
 

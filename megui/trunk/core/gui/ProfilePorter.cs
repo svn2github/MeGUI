@@ -124,5 +124,10 @@ namespace MeGUI.core.gui
             return Path.Combine("extra", p);
         }
 
+        private void cancelButton_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
     }
 }
