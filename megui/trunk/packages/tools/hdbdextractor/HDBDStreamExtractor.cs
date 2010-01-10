@@ -594,7 +594,7 @@ namespace MeGUI.packages.tools.hdbdextractor
             // openFileDialog1
             // 
             this.openFileDialog1.Filter = "E-VOB Files (.*evo,*.vob)|*.evo;*.vob|Transport Streams Files (*.m2t*,*.mts,*.ts)" +
-                "|*.m2t*;*.ts|All Files supported (*.*)|*.evo;*.vob;*.m2t*;*.mts;*.ts";
+                "|*.m2t*;*.ts|Matroska Files (.*mkv)|*.mkv|All Files supported (*.*)|*.evo;*.vob;*.m2t*;*.mts;*.ts;*.mkv";
             this.openFileDialog1.FilterIndex = 3;
             this.openFileDialog1.Multiselect = true;
             // 
@@ -1239,6 +1239,7 @@ namespace MeGUI.packages.tools.hdbdextractor
                 Stream s = row.DataBoundItem as Stream;
                 DataGridViewComboBoxCell comboBox = row.Cells["StreamExtractAsComboBox"] as DataGridViewComboBoxCell;
                 DataGridViewTextBoxCell tbLang = row.Cells["languageDataGridViewTextBoxColumn"] as DataGridViewTextBoxCell;
+                comboBox.Items.Clear();
                 comboBox.Items.AddRange(s.ExtractTypes);
 
                 switch (s.Type)
@@ -1263,6 +1264,9 @@ namespace MeGUI.packages.tools.hdbdextractor
                         break;
                     case eac3to.StreamType.Video:
                         comboBox.Value = "MKV";
+                        break;
+                    case eac3to.StreamType.Audio:
+                        comboBox.Value = comboBox.Items[0];
                         break;
                 }
 
@@ -1393,9 +1397,9 @@ namespace MeGUI.packages.tools.hdbdextractor
                         throw new ApplicationException(string.Format("Specify an extraction type for stream:\r\n\n\t{0}: {1}", stream.Number, stream.Name));
 
                     if (FolderSelection.Checked)
-                    sb.Append(string.Format("{0}:\"{1}\" {2} ", stream.Number,
-                        System.IO.Path.Combine(FolderOutputTextBox.Text, string.Format("F{0}_T{1}_{2} - {3}.{4}", ((Feature)FeatureDataGridView.SelectedRows[0].DataBoundItem).Number, stream.Number, Extensions.GetStringValue(stream.Type), row.Cells["languageDataGridViewTextBoxColumn"].Value, (row.Cells["StreamExtractAsComboBox"].Value).ToString().ToLower())),
-                        row.Cells["StreamAddOptionsTextBox"].Value).Trim());
+                        sb.Append(string.Format("{0}:\"{1}\" {2} ", stream.Number,
+                            System.IO.Path.Combine(FolderOutputTextBox.Text, string.Format("F{0}_T{1}_{2} - {3}.{4}", ((Feature)FeatureDataGridView.SelectedRows[0].DataBoundItem).Number, stream.Number, Extensions.GetStringValue(stream.Type), row.Cells["languageDataGridViewTextBoxColumn"].Value, (row.Cells["StreamExtractAsComboBox"].Value).ToString().ToLower())),
+                            row.Cells["StreamAddOptionsTextBox"].Value).Trim());
                     else
                         sb.Append(string.Format("{0}:\"{1}\" {2} ", stream.Number,
                             System.IO.Path.Combine(FolderOutputTextBox.Text, string.Format("T{0}_{1} - {2}.{3}", stream.Number, Extensions.GetStringValue(stream.Type), row.Cells["languageDataGridViewTextBoxColumn"].Value, (row.Cells["StreamExtractAsComboBox"].Value).ToString().ToLower())),
