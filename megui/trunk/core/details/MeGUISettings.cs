@@ -38,7 +38,7 @@ namespace MeGUI
                        dgIndexPath, xvidEncrawPath, aviMuxGUIPath, oggEnc2Path, encAudXPath, dgavcIndexPath,
                        eac3toPath, tsmuxerPath, meguiupdatecache, avisynthpluginspath,
                        defaultLanguage1, defaultLanguage2, afterEncodingCommand, videoExtension, audioExtension,
-                       strLastDestinationPath, strLastSourcePath, dgnvIndexPath,
+                       strLastDestinationPath, strLastSourcePath, dgnvIndexPath, tempDirMP4,
                        httpproxyaddress, httpproxyport, httpproxyuid, httpproxypwd, defaultOutputDir;
         private bool recalculateMainMovieBitrate, autoForceFilm, autoStartQueue, enableMP3inMP4, autoOpenScript,
                      overwriteStats, keep2of3passOutput, deleteCompletedJobs, deleteIntermediateFiles,
@@ -119,6 +119,7 @@ namespace MeGUI
             httpproxyuid = "";
             httpproxypwd = "";
             defaultOutputDir = "";
+            tempDirMP4 = "";
             addTimePosition = false;
             dgavcIndexPath = getDownloadPath(@"tools\dgavcindex\dgavcindex.exe");
             dgnvIndexPath = getDownloadPath(@"tools\dgindexnv\dgindexnv.exe");
@@ -278,7 +279,14 @@ namespace MeGUI
             get { return defaultOutputDir; }
             set { defaultOutputDir = value; }
         }
-
+        /// <summary>
+        /// gets / sets the temp directory for MP4 Muxer
+        /// </summary>
+        public string TempDirMP4
+        {
+            get { return tempDirMP4; }
+            set { tempDirMP4 = value; }
+        }
         /// <summary>
         /// path of besplit.exe
         /// </summary>
