@@ -22,6 +22,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
+
+using MeGUI.core.util;
 
 namespace MeGUI
 {
@@ -36,9 +39,24 @@ namespace MeGUI
             return null;
         }
 
+        private string lastLine;
+
         public DGNVIndexer(string executableName)
         {
             executable = executableName;
+        }
+
+        public override void ProcessLine(string line, StreamType stream)
+        {
+            if (Regex.IsMatch(line, "^[0-9]{1,3}$", RegexOptions.Compiled))
+            {
+                su.PercentageDoneExact = Int32.Parse(line);
+                su.Status = "Creating DGI...";
+            }
+            else
+                base.ProcessLine(line, stream);
+
+            lastLine = line;
         }
 
         protected override string Commandline
