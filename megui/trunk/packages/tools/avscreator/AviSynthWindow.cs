@@ -2274,6 +2274,7 @@ namespace MeGUI
             {
                 try
                 {
+                    info.isAnime = deintIsAnime.Checked;
                     Invoke(new MethodInvoker(delegate
                     {
                         deintProgressBar.Enabled = false;
