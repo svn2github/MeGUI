@@ -357,13 +357,13 @@ accurate decisions. Higher values will improve quality but will slow encoding sp
 			<Recommended>7</Recommended>
 			<Default>7</Default>
 		</subme>
-		<mixed-refs name="Mixed References">
+		<mixed-refs name="No Mixed References">
 			<Advanced>
-Allows each 8x8 or 16x8 partition in a macroblock to independently select a reference frame,
-as opposed to only one reference frame per macroblock.</Advanced>
-			<Basic>Decide references on a per partition basis</Basic>
-			<Recommended>Enabled</Recommended>
-			<Default>Enabled</Default>
+        Mixed refs will select refs on a per-8x8 partition, rather than per-macroblock basis. This improves quality when using multiple reference frames, albeit at some speed cost. Setting this option will disable it.
+      </Advanced>
+			<Basic>Disable decision of references on a per partition basis</Basic>
+			<Recommended>Disabled</Recommended>
+			<Default>Disabled</Default>
 		</mixed-refs>
 		<!--WARNING DOUBLE NEGATIVE-->
 		<no-chroma-me name="Chroma Motion Estimation">
