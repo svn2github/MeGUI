@@ -1,3 +1,6 @@
+0.3.2.0
+    - (zathor) no changes beside build number
+
 0.3.1.1061
     - (zathor) [x264Encoder] updated the command line generation
     - (zathor) [x264ConfigurationPanel] button "preset settings" also reloads the tuning settings
