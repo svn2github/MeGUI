@@ -87,15 +87,18 @@ namespace MeGUI
         /// </summary>
         /// <returns>a boolean</returns>
         public static bool isWow64()
-        {           
-             Process p = Process.GetCurrentProcess();
-             IntPtr handle = p.Handle;
-             bool isWow64;
-             bool success = IsWow64Process(handle, out isWow64);
-             if ((!success) && (IntPtr.Size != 8))
-                 throw new Exception();
-             else
-                 return isWow64;
+        {
+            if (Environment.OSVersion.Version.Major == 5 && Environment.OSVersion.Version.Minor == 0)
+                return false;   // windows 2000
+
+            Process p = Process.GetCurrentProcess();
+            IntPtr handle = p.Handle;
+            bool isWow64;
+            bool success = IsWow64Process(handle, out isWow64);
+            if ((!success) && (IntPtr.Size != 8))
+                throw new Exception();
+            else
+                return isWow64;
         }
 
         /// <summary>
