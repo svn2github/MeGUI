@@ -805,6 +805,8 @@ namespace MeGUI
             this.trayIcon.Icon = new Icon(myAssembly.GetManifestResourceStream(name + "App.ico"));
             this.Icon = trayIcon.Icon;
             this.TitleText = Application.ProductName + " " + Application.ProductVersion;
+            if (MainForm.Instance.Settings.AutoUpdate == true && MainForm.Instance.Settings.AutoUpdateServerSubList == 1)
+                this.TitleText += " DEVELOPMENT UPDATE SERVER";
             setGUIInfo();
             Jobs.showAfterEncodingStatus(Settings);
             this.videoEncodingComponent1.FileType = MainForm.Instance.Settings.MainFileFormat;
