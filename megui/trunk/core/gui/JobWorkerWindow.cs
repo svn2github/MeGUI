@@ -504,7 +504,7 @@ namespace MeGUI.core.gui
             foreach (TaggedJob j in localJobs.Values)
                 if (j.Status != JobStatus.DONE)
                     return false;
-            UserRequestShutDown();
+            ShutDown();
             return true;
         }
 
