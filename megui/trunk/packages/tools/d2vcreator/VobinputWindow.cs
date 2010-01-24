@@ -162,8 +162,8 @@ namespace MeGUI
                 }
                 case DGIndexType.DGA:
                 {
-                    this.Text = "MeGUI - D2V/DGA Project Creator";
-                    this.input.Filter = "All DGIndex / DGAVCIndex supported files|*.264;*.h264;*.avc;*.vob;*.mpg;*.mpeg;*.m2t*;*.m1v;*.m2v;*.m2p;*.mpv;*.tp;*.ts;*.trp;*.pva;*.vro";
+                    this.Text = "MeGUI - D2V Project Creator";
+                    this.input.Filter = "All DGIndex / DGAVCIndex supported files|*.264;*.h264;*.avc;*.vob;*.mpg;*.mpeg;*.m2t*;*.m1v;*.m2v;*.m2p;*.mts;*.mpv;*.tp;*.ts;*.trp;*.pva;*.vro";
                     this.saveProjectDialog.Filter = "DGAVCIndex project files|*.dga";
                     this.projectNameLabel.Text = "dga Project Output";
                     DGIndexerUsed = DGIndexType.DGA;
@@ -171,8 +171,8 @@ namespace MeGUI
                 }
                 case DGIndexType.D2V:
                 {
-                    this.Text = "MeGUI - D2V/DGA Project Creator";
-                    this.input.Filter = "All DGIndex / DGAVCIndex supported files|*.264;*.h264;*.avc;*.vob;*.mpg;*.mpeg;*.m2t*;*.m1v;*.m2v;*.m2p;*.mpv;*.tp;*.ts;*.trp;*.pva;*.vro";
+                    this.Text = "MeGUI - DGA Project Creator";
+                    this.input.Filter = "All DGIndex / DGAVCIndex supported files|*.264;*.h264;*.avc;*.vob;*.mpg;*.mpeg;*.m2t*;*.m1v;*.m2v;*.m2p;*.mts;*.mpv;*.tp;*.ts;*.trp;*.pva;*.vro";
                     this.saveProjectDialog.Filter = "DGIndex project files|*.d2v";
                     this.projectNameLabel.Text = "d2v Project Output";
                     DGIndexerUsed = DGIndexType.D2V;
@@ -181,7 +181,7 @@ namespace MeGUI
                 case DGIndexType.D2VorDGA:
                 {
                     this.Text = "MeGUI - D2V/DGA Project Creator";
-                    this.input.Filter = "All DGIndex / DGAVCIndex supported files|*.264;*.h264;*.avc;*.vob;*.mpg;*.mpeg;*.m2t*;*.m1v;*.m2v;*.m2p;*.mpv;*.tp;*.ts;*.trp;*.pva;*.vro";
+                    this.input.Filter = "All DGIndex / DGAVCIndex supported files|*.264;*.h264;*.avc;*.vob;*.mpg;*.mpeg;*.m2t*;*.m1v;*.m2v;*.m2p;*.mts;*.mpv;*.tp;*.ts;*.trp;*.pva;*.vro";
                     this.saveProjectDialog.Filter = "DGIndex project files|*.d2v";
                     this.projectNameLabel.Text = "d2v/dga Project Output";
                     DGIndexerUsed = DGIndexType.D2VorDGA;
@@ -586,12 +586,7 @@ namespace MeGUI
                     AudioTracks.Enabled = false;
                     demuxTracks.Enabled = false;
                 }
-            }
-            else
-            {
-                MessageBox.Show("MeGUI cannot find audio track information. Audio Tracks selection will be disabled.", "Warning",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }       
+            }      
 		}
 		/// <summary>
 		/// creates a dgindex project
