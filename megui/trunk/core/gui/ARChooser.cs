@@ -44,6 +44,8 @@ namespace MeGUI.core.gui
                 new Named<Dar>("ITU 4:3 PAL (1.367521)", Dar.ITU4x3PAL),
                 new Named<Dar>("ITU 16:9 NTSC (1.822784)", Dar.ITU16x9NTSC),
                 new Named<Dar>("ITU 4:3 NTSC (1.367088)", Dar.ITU4x3NTSC),
+                new Named<Dar>("4:3 (1.333333)", Dar.STATIC4x3),
+                new Named<Dar>("16:9 (1.777778)", Dar.STATIC16x9),
                 new Named<Dar>("1:1", Dar.A1x1) };
 
         public ARChooser()
