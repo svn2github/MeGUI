@@ -59,5 +59,17 @@ namespace MeGUI.core.gui
                 return null;
             }
         }
+
+        private void text_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == 13)
+            {
+                btnOk_Click(null, null);
+            }
+            else if (e.KeyChar == 27)
+            {
+                btnCancel_Click(null, null);
+            }
+        }
     }
 }
