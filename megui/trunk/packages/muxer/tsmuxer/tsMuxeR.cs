@@ -128,7 +128,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "TSMuxer");
                 if (settings.SplitSize.HasValue)
                     sw.Write(" --split-size " + settings.SplitSize.Value.MB + "MB");
 
-                if (settings.DeviceType != "Standard")
+                if (!string.IsNullOrEmpty(settings.DeviceType) && settings.DeviceType != "Standard")
                 {
                     switch (settings.DeviceType)
                     {

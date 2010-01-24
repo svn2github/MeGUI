@@ -342,7 +342,7 @@ namespace MeGUI
                 if (tempSupportedOutputTypes.Count > 0 && !ignoreRestrictions)
                 {
                     string message = string.Format(
-                    "No container type could be found that matches the list of acceptable types" +
+                    "No container type could be found that matches the list of acceptable types " +
                     "in your chosen one click profile. {0}" +
                     "Your restrictions are now being ignored.", Environment.NewLine);
                     MessageBox.Show(message, "Filetype restrictions too restrictive", MessageBoxButtons.OK, MessageBoxIcon.Warning);
