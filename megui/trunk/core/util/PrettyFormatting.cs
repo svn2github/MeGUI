@@ -36,7 +36,7 @@ namespace MeGUI.core.util
             int count = 0;
             while (!string.IsNullOrEmpty(Path.GetDirectoryName(fileName)) && count < 3)
             {
-                string temp = Path.GetFileNameWithoutExtension(fileName).ToLower();
+                string temp = Path.GetFileNameWithoutExtension(fileName);
                 // Fix to only assume extracted DVD source in fileName starts with video_/vts_/audio_
                 if (!temp.StartsWith("vts_") && !temp.StartsWith("video_") && !temp.StartsWith("audio_"))
                 {
