@@ -147,11 +147,12 @@ new JobProcessorFactory(new ProcessorFactory(init), "TSMuxer");
 
                 if (!string.IsNullOrEmpty(settings.VideoInput))
                 {
-                    if (settings.VideoInput.ToLower().EndsWith(".264") ||
-                        settings.VideoInput.ToLower().EndsWith(".h264"))
+                    if (VideoUtil.detecAVCStreamFromFile(settings.VideoInput) == true)
                     {
                         vcodecID = "V_MPEG4/ISO/AVC";
                         extra = " insertSEI, contSPS";
+                        if (settings.VideoInput.ToLower().EndsWith(".mp4"))
+                            extra += " , track=1";
                     }
                     else if (settings.VideoInput.ToLower().EndsWith(".m2v"))
                         vcodecID = "V_MPEG2";
@@ -163,11 +164,12 @@ new JobProcessorFactory(new ProcessorFactory(init), "TSMuxer");
 
                 if (!string.IsNullOrEmpty(settings.MuxedInput))
                 {
-                    if (settings.MuxedInput.ToLower().EndsWith(".264") |
-                        settings.MuxedInput.ToLower().EndsWith(".h264"))
+                    if (VideoUtil.detecAVCStreamFromFile(settings.VideoInput) == true)
                     {
                         vcodecID = "V_MPEG4/ISO/AVC";
                         extra = " insertSEI, contSPS";
+                        if (settings.VideoInput.ToLower().EndsWith(".mp4"))
+                            extra += " , track=1";
                     }
                     else if (settings.MuxedInput.ToLower().EndsWith(".m2v"))
                         vcodecID = "V_MPEG2";
