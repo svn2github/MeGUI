@@ -145,8 +145,17 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                         if (heaac_flag > 0)
                             sb.Append(" --aac-is-sbr 0:1");
                     }
-                     if (!string.IsNullOrEmpty(stream.language))
-                        sb.Append(" --language " + trackID + ":" + stream.language);
+                    if (!string.IsNullOrEmpty(stream.language))
+                    {
+                        foreach (KeyValuePair<string, string> strLanguage in LanguageSelectionContainer.Languages)
+                        {
+                            if (stream.language.ToLower().Equals(strLanguage.Key.ToLower()))
+                            {
+                                sb.Append(" --language " + trackID + ":" + strLanguage.Value);
+                                break;
+                            }
+                        }
+                    }
                     if (!string.IsNullOrEmpty(stream.name))
                         sb.Append(" --track-name \"" + trackID + ":" + stream.name + "\"");
                     if (stream.delay != 0)
@@ -167,7 +176,16 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                             if (nt > 0)
                             {
                                 if (!string.IsNullOrEmpty(stream.language))
-                                     sb.Append(" --language " + strack.Index.ToString() + ":" + stream.language);
+                                {
+                                    foreach (KeyValuePair<string, string> strLanguage in LanguageSelectionContainer.Languages)
+                                    {
+                                        if (stream.language.ToLower().Equals(strLanguage.Key.ToLower()))
+                                        {
+                                            sb.Append(" --language " + strack.Index.ToString() + ":" + strLanguage.Value);
+                                            break;
+                                        }
+                                    }
+                                }
                                 else sb.Append(" --language " + strack.Index.ToString() + ":" + stream.name);
                                 if (!string.IsNullOrEmpty(stream.name))
                                     sb.Append(" --track-name \"" + strack.Index.ToString() + ":" + stream.name + "\"");
@@ -175,7 +193,16 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                             else
                             {
                                 if (!string.IsNullOrEmpty(stream.language))
-                                     sb.Append(" --language " + "0:" + stream.language);
+                                {
+                                    foreach (KeyValuePair<string, string> strLanguage in LanguageSelectionContainer.Languages)
+                                    {
+                                        if (stream.language.ToLower().Equals(strLanguage.Key.ToLower()))
+                                        {
+                                            sb.Append(" --language " + "0:" + strLanguage.Value);
+                                            break;
+                                        }
+                                    }
+                                }  
                                 else sb.Append(" --language " + "0:" + strack.Name);
                                 if (!string.IsNullOrEmpty(stream.name))
                                     sb.Append(" --track-name \"" + "0:" + stream.name + "\"");
@@ -195,7 +222,16 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                     else
                     {
                         if (!string.IsNullOrEmpty(stream.language))
-                             sb.Append(" --language " + trackID + ":" + stream.language);
+                        {
+                            foreach (KeyValuePair<string, string> strLanguage in LanguageSelectionContainer.Languages)
+                            {
+                                if (stream.language.ToLower().Equals(strLanguage.Key.ToLower()))
+                                {
+                                    sb.Append(" --language " + trackID + ":" + strLanguage.Value);
+                                    break;
+                                }
+                            }
+                        }
                         if (!string.IsNullOrEmpty(stream.name))
                              sb.Append(" --track-name \"" + trackID + ":" + stream.name + "\"");
                         sb.Append(" -s 0 -D -A \"" + stream.path + "\"");
