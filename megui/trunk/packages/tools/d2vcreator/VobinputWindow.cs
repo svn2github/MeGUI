@@ -577,9 +577,17 @@ namespace MeGUI
             {
                 if (DGIndexerUsed == DGIndexType.D2V)
                 {
-                    demuxTracks.Checked = true;
-                    AudioTracks.Enabled = true;
-                    demuxTracks.Enabled = true;
+                    if (VideoUtil.detectProgramStreamFromFile(fileName) == true)
+                    {
+                        demuxTracks.Checked = true;
+                        demuxTracks.Enabled = true;
+                        AudioTracks.Enabled = true;
+                    }
+                    else
+                    {
+                        AudioTracks.Enabled = false;
+                    }
+                    
                 }
                 else
                 {

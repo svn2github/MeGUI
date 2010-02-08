@@ -463,6 +463,29 @@ namespace MeGUI
             return vc1S;
         }
 
+        /// detect program stream from a file using MediaInfo
+        /// </summary>
+        /// <param name="infoFile">the file to be analyzed</param>
+        /// <returns>Program stream found whether or not</returns>
+        public static bool detectProgramStreamFromFile(string fileName)
+        {
+            MediaInfo info;
+            bool avcS = false;
+            try
+            {
+                info = new MediaInfo(fileName);
+                MediaInfoWrapper.GeneralTrack gtrack = info.General[0];
+                string format = gtrack.Format;
+                if (format == "MPEG-PS")
+                    avcS = true;
+            }
+            catch (Exception i)
+            {
+                MessageBox.Show("The following error ocurred when trying to get Media info for file " + fileName + "\r\n" + i.Message, "Error parsing mediainfo data", MessageBoxButtons.OK);
+            }
+            return avcS;
+        }
+
         /// gets ID from audio stream using MediaInfo
         /// </summary>
         /// <param name="infoFile">the file to be analyzed</param>
