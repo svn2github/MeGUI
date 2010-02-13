@@ -731,6 +731,17 @@ namespace MeGUI
 		{
             return (int)projectedBitrate.Value;
 		}
+        /// <summary>
+        /// gets the bitrate mode
+        /// </summary>
+        /// <returns></returns>
+        public int getEncodingMode()
+        {
+            if (fileSizeRadio.Checked == false)
+                return 0;   // ABR
+            else
+                return 4;   // Automated 2-pass
+        }
 		#endregion
 		#region audio
         private void audio_SelectedIndexChanged(object sender, System.EventArgs e)
@@ -1202,10 +1213,11 @@ namespace MeGUI
                     return;
 
                 VideoCodecSettings settings = info.Video.CurrentSettings;
-                if (settings.EncodingMode == 1 || settings.EncodingMode == 9)
-                {
+                int iEncodingMode = calc.getEncodingMode();
+                if (iEncodingMode == 0 && settings.EncodingMode != 0)   // ABR
                     settings.EncodingMode = 0;
-                }
+                else if (iEncodingMode == 4 && settings.EncodingMode != 4 && settings.EncodingMode != 8)    // 2-pass (default) or 3-pass
+                    settings.EncodingMode = 4;
                 settings.BitrateQuantizer = calc.getBitrate();
             }
         }
