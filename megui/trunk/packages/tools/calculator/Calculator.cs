@@ -126,6 +126,7 @@ namespace MeGUI
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Calculator));
             this.videoGroupbox = new System.Windows.Forms.GroupBox();
+            this.fpsChooser = new MeGUI.core.gui.FPSChooser();
             this.nbFrames = new System.Windows.Forms.NumericUpDown();
             this.totalSeconds = new System.Windows.Forms.NumericUpDown();
             this.bframes = new System.Windows.Forms.CheckBox();
@@ -144,6 +145,7 @@ namespace MeGUI
             this.containerGroupbox = new System.Windows.Forms.GroupBox();
             this.containerFormat = new System.Windows.Forms.ComboBox();
             this.sizeGroupbox = new System.Windows.Forms.GroupBox();
+            this.targetSize = new MeGUI.core.gui.TargetSizeSCBox();
             this.fileSizeRadio = new System.Windows.Forms.RadioButton();
             this.averageBitrateRadio = new System.Windows.Forms.RadioButton();
             this.AverageBitrateLabel = new System.Windows.Forms.Label();
@@ -155,16 +157,14 @@ namespace MeGUI
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.audio = new System.Windows.Forms.TabControl();
             this.audioPage1 = new System.Windows.Forms.TabPage();
+            this.audioTrackSizeTab1 = new MeGUI.packages.tools.calculator.AudioTrackSizeTab();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addTrackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.removeTrackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gbExtra = new System.Windows.Forms.GroupBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.extraFileSize = new System.Windows.Forms.TextBox();
-            this.audioTrackSizeTab1 = new MeGUI.packages.tools.calculator.AudioTrackSizeTab();
+            this.label1 = new System.Windows.Forms.Label();
             this.extrainput = new MeGUI.FileBar();
-            this.targetSize = new MeGUI.core.gui.TargetSizeSCBox();
-            this.fpsChooser = new MeGUI.core.gui.FPSChooser();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.videoGroupbox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nbFrames)).BeginInit();
@@ -204,6 +204,18 @@ namespace MeGUI
             this.videoGroupbox.TabIndex = 0;
             this.videoGroupbox.TabStop = false;
             this.videoGroupbox.Text = "Video";
+            // 
+            // fpsChooser
+            // 
+            this.fpsChooser.Location = new System.Drawing.Point(185, 73);
+            this.fpsChooser.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.fpsChooser.MinimumSize = new System.Drawing.Size(64, 29);
+            this.fpsChooser.Name = "fpsChooser";
+            this.fpsChooser.NullString = null;
+            this.fpsChooser.SelectedIndex = 0;
+            this.fpsChooser.Size = new System.Drawing.Size(129, 29);
+            this.fpsChooser.TabIndex = 13;
+            this.fpsChooser.SelectionChanged += new MeGUI.StringChanged(this.fpsChooser_SelectionChanged);
             // 
             // nbFrames
             // 
@@ -332,6 +344,7 @@ namespace MeGUI
             // applyButton
             // 
             this.applyButton.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.applyButton.Enabled = false;
             this.applyButton.Location = new System.Drawing.Point(466, 385);
             this.applyButton.Name = "applyButton";
             this.applyButton.Size = new System.Drawing.Size(48, 23);
@@ -388,6 +401,19 @@ namespace MeGUI
             this.sizeGroupbox.TabIndex = 3;
             this.sizeGroupbox.TabStop = false;
             this.sizeGroupbox.Text = "Total Size";
+            // 
+            // targetSize
+            // 
+            this.targetSize.CustomSizes = new MeGUI.core.util.FileSize[0];
+            this.targetSize.Location = new System.Drawing.Point(18, 46);
+            this.targetSize.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.targetSize.MinimumSize = new System.Drawing.Size(64, 29);
+            this.targetSize.Name = "targetSize";
+            this.targetSize.NullString = "Not calculated";
+            this.targetSize.SelectedIndex = 0;
+            this.targetSize.Size = new System.Drawing.Size(208, 29);
+            this.targetSize.TabIndex = 1;
+            this.targetSize.SelectionChanged += new MeGUI.StringChanged(this.targetSize_SelectionChanged);
             // 
             // fileSizeRadio
             // 
@@ -492,6 +518,17 @@ namespace MeGUI
             this.audioPage1.Text = "Audio 1";
             this.audioPage1.UseVisualStyleBackColor = true;
             // 
+            // audioTrackSizeTab1
+            // 
+            this.audioTrackSizeTab1.AllowDrop = true;
+            this.audioTrackSizeTab1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.audioTrackSizeTab1.Location = new System.Drawing.Point(3, 3);
+            this.audioTrackSizeTab1.Name = "audioTrackSizeTab1";
+            this.audioTrackSizeTab1.PlayLength = ((long)(0));
+            this.audioTrackSizeTab1.Size = new System.Drawing.Size(302, 116);
+            this.audioTrackSizeTab1.TabIndex = 0;
+            this.audioTrackSizeTab1.SomethingChanged += new System.EventHandler(this.audioTrackSizeTab1_SomethingChanged);
+            // 
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -527,15 +564,6 @@ namespace MeGUI
             this.gbExtra.TabStop = false;
             this.gbExtra.Text = "Extra";
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(9, 63);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(30, 13);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Size:";
-            // 
             // extraFileSize
             // 
             this.extraFileSize.Location = new System.Drawing.Point(44, 60);
@@ -544,16 +572,14 @@ namespace MeGUI
             this.extraFileSize.Size = new System.Drawing.Size(182, 21);
             this.extraFileSize.TabIndex = 2;
             // 
-            // audioTrackSizeTab1
+            // label1
             // 
-            this.audioTrackSizeTab1.AllowDrop = true;
-            this.audioTrackSizeTab1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.audioTrackSizeTab1.Location = new System.Drawing.Point(3, 3);
-            this.audioTrackSizeTab1.Name = "audioTrackSizeTab1";
-            this.audioTrackSizeTab1.PlayLength = ((long)(0));
-            this.audioTrackSizeTab1.Size = new System.Drawing.Size(302, 116);
-            this.audioTrackSizeTab1.TabIndex = 0;
-            this.audioTrackSizeTab1.SomethingChanged += new System.EventHandler(this.audioTrackSizeTab1_SomethingChanged);
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(9, 63);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(30, 13);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Size:";
             // 
             // extrainput
             // 
@@ -569,30 +595,6 @@ namespace MeGUI
             this.extrainput.TabIndex = 0;
             this.extrainput.Title = null;
             this.extrainput.FileSelected += new MeGUI.FileBarEventHandler(this.extrainput_FileSelected);
-            // 
-            // targetSize
-            // 
-            this.targetSize.Location = new System.Drawing.Point(18, 46);
-            this.targetSize.MaximumSize = new System.Drawing.Size(1000, 29);
-            this.targetSize.MinimumSize = new System.Drawing.Size(64, 29);
-            this.targetSize.Name = "targetSize";
-            this.targetSize.NullString = "Not calculated";
-            this.targetSize.SelectedIndex = 0;
-            this.targetSize.Size = new System.Drawing.Size(208, 29);
-            this.targetSize.TabIndex = 1;
-            this.targetSize.SelectionChanged += new MeGUI.StringChanged(this.targetSize_SelectionChanged);
-            // 
-            // fpsChooser
-            // 
-            this.fpsChooser.Location = new System.Drawing.Point(185, 73);
-            this.fpsChooser.MaximumSize = new System.Drawing.Size(1000, 29);
-            this.fpsChooser.MinimumSize = new System.Drawing.Size(64, 29);
-            this.fpsChooser.Name = "fpsChooser";
-            this.fpsChooser.NullString = null;
-            this.fpsChooser.SelectedIndex = 0;
-            this.fpsChooser.Size = new System.Drawing.Size(129, 29);
-            this.fpsChooser.TabIndex = 13;
-            this.fpsChooser.SelectionChanged += new MeGUI.StringChanged(this.fpsChooser_SelectionChanged);
             // 
             // helpButton1
             // 
@@ -825,6 +827,11 @@ namespace MeGUI
                         || !averageBitrateRadio.Checked)
                         updateBitrateSize();
                     
+                    if (projectedBitrate.Value > 0)
+                        applyButton.Enabled = true;
+                    else
+                        applyButton.Enabled = false;
+
                     this.isUpdating = false;
                 }
             }
@@ -1214,10 +1221,13 @@ namespace MeGUI
 
                 VideoCodecSettings settings = info.Video.CurrentSettings;
                 int iEncodingMode = calc.getEncodingMode();
-                if (iEncodingMode == 0 && settings.EncodingMode != 0)   // ABR
-                    settings.EncodingMode = 0;
-                else if (iEncodingMode == 4 && settings.EncodingMode != 4 && settings.EncodingMode != 8)    // 2-pass (default) or 3-pass
-                    settings.EncodingMode = 4;
+                if (settings.EncodingMode == 1 || settings.EncodingMode == 9)
+                {
+                    if (iEncodingMode == 0)
+                        settings.EncodingMode = 0;  // ABR
+                    else
+                        settings.EncodingMode = 4;  // Automated 2-pass
+                }
                 settings.BitrateQuantizer = calc.getBitrate();
             }
         }
