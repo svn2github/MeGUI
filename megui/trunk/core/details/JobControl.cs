@@ -516,6 +516,9 @@ namespace MeGUI.core.details
         #region adding jobs to queue
         public void addJobsWithDependencies(JobChain c)
         {
+            if (c == null)
+                return;
+
             foreach (TaggedJob j in c.Jobs)
                 addJob(j);
             saveJobs();
