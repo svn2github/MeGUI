@@ -149,6 +149,11 @@ namespace MeGUI
                             arrPath.Add((System.IO.Path.Combine(strMeGUIPath, @"ICSharpCode.SharpZipLib.dll")));
                             arrPath.Add((System.IO.Path.Combine(strMeGUIPath, @"MessageBoxExLib.dll")));
                             arrPath.Add((System.IO.Path.Combine(strMeGUIPath, @"LinqBridge.dll")));
+                            break;
+                        }
+                    case "mediainfo":
+                        {
+                            string strMeGUIPath = System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath);
                             arrPath.Add((System.IO.Path.Combine(strMeGUIPath, @"MediaInfoWrapper.dll")));
                             arrPath.Add((System.IO.Path.Combine(strMeGUIPath, @"MediaInfo.dll")));
                             break;
