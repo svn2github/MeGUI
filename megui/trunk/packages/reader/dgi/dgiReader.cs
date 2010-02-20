@@ -104,6 +104,10 @@ namespace MeGUI
         public static double GetFilmPercent(string file)
         {
             double filmPercentage = -1.0;
+
+            if (String.IsNullOrEmpty(file))
+                return filmPercentage;
+
             using (StreamReader sr = new StreamReader(file))
             {
                 string line = sr.ReadLine();
