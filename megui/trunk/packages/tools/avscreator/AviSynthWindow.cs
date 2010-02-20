@@ -2043,6 +2043,7 @@ namespace MeGUI
                 this.suggestResolution.Checked = true;
                 if (mod16Box.SelectedIndex == -1)
                     mod16Box.SelectedIndex = 0;
+                mod16Box_SelectedIndexChanged(null, null);
                 suggestResolution_CheckedChanged(null, null);
             }
             else
@@ -2319,7 +2320,10 @@ namespace MeGUI
             {
                 this.horizontalResolution.Enabled = true;
                 this.verticalResolution.Enabled = !suggestResolution.Checked;
-                this.suggestResolution.Enabled = true;
+                if (Mod16Method == mod16Method.resize)
+                    this.suggestResolution.Enabled = false;
+                else
+                    this.suggestResolution.Enabled = true;
             }
             else
             {
