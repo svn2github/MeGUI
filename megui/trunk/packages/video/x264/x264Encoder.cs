@@ -329,7 +329,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             if (xs.Scenecut)
             {
                 if (!xs.CustomEncoderOptions.Contains("--scenecut "))
-                    if (xs.SCDSensitivity != 40M && (xs.SCDSensitivity != 0M && xs.x264Preset == 0))
+                    if ((xs.SCDSensitivity != 40M && xs.x264Preset != 0) || (xs.SCDSensitivity != 0M && xs.x264Preset == 0))
                         sb.Append("--scenecut " + xs.SCDSensitivity.ToString(ci) + " ");
             }
             else
