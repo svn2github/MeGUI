@@ -168,10 +168,18 @@ namespace MeGUI.core.util
         private string ToString(int level)
         {
             StringBuilder res = new StringBuilder();
-            res.AppendFormat("{0}[{1}] {2}{3}", dashes(level), Type, Text, Environment.NewLine);
 
-            foreach (LogItem i in SubEvents)
-                res.Append(i.ToString(level + 1));
+            try
+            {
+                res.AppendFormat("{0}[{1}] {2}{3}", dashes(level), Type, Text, Environment.NewLine);
+
+                foreach (LogItem i in SubEvents)
+                    res.Append(i.ToString(level + 1));
+            }
+            catch (Exception e)
+            {
+                Console.Write(e.Message);
+            }
 
             return res.ToString();
         }
