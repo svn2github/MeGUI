@@ -313,7 +313,7 @@ namespace MeGUI
             string line = instream.ReadLine();
             while (line != null)
             {
-                if (count != 0) //Scene change -> ignore
+                if (count != 0 && line.IndexOf("-1.#IND00") == -1) //Scene change or unexptected value -> ignore
                 {
                     string[] contents = line.Split(new char[] { '-' });
                     try
@@ -326,10 +326,9 @@ namespace MeGUI
                         error = true;
                         errorMessage = "Unexpected value in file " + filename + "\r\n" +
                             "This error should not have occurred. Please report it on \r\n" +
-                            "post it on http://forum.doom9.org/showthread.php?t=105160 or " +
-                            "http://sourceforge.net/projects/megui with the file named above.";
+                            "post it on http://sourceforge.net/projects/megui with the file named above.";
                         errorMessage += "\r\nMore debugging info:\r\n" +
-                            "Line contents: " + "\r\n";
+                            "Line contents: " + line + "\r\n";
                         finishProcessing();
                         return;
                     }
