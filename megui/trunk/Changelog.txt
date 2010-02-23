@@ -1,3 +1,30 @@
+0.3.4.0
+    - (zathor) [JobControl] error handling added. Bug #2279852
+    - (zathor) [x264Encoder] corrected scenecut handling. Bug #2942446
+    - (zathor) [LogItem] error handling added. Bug #2947565 + #2925500
+    - (zathor) update MediaInfo library and its wrapper to the latest release (0.7.28)
+    - (zahtor) [UpdateWindow] moved the MediaInfo files to a separate download package
+    - (zathor) [Calculator] encoding mode will only be changed if profile encoding mode is const. quality or const. quantizer. Bug #2952574
+    - (zathor) [dgiReader] enhanced error handling
+    - (zathor) [SourceDetector] enhanced error handling in analyseFF. Bug #2810830
+    - (zathor) [Calculator] settings can only be applied if bitrate > 0. Bug #2812840
+    - (zathor) [AviSynthWindow] enabling clever anamorphic encoding applies immediately the selected settings. Bug #2827053 + #2879253
+    - (zathor) [Calculator] Targeting "File Size" in the bitrate calculator defaults to automated 2-pass mode. Feature request #2951153  
+    - (zathor) [AudioEncodingTab] "_new" will be appended to the file name if input and output are the same. Bug #2531321
+    - (zathor) [MuxProvider] + [tsMuxeR] added mp4 support to the video input types. Feature request #2945805
+    - (zathor) [PrettyFormatting] Input and output filename spelling match in OneClick. Feature request #2938926
+    - (zathor) [MkvMergeMuxer] ISO639-2-Code will be used for the language during muxing. Bug #2944894
+    - (zathor) [VobinputWindow] + [VideoUtil] Disabled "Select Audio Tracks" if dgindex is used and the stream is no program stream. Bug #2941323
+    - (zathor) [HDBDStreamExtractor] changed default file input type
+    - (zathor) [InputBox] set initial focus to text box. Feature request #2938589
+    - (zathor) [InputBox] if text box has focus pressing "enter" will call the ok event and "escape" the cancel event
+    - (zathor) [tsMuxeR] fix final m2ts file creating in OneClick. Bug #2936118
+    - (zathor) [VobinputWindow] added mts as supported file extensions
+    - (zathor) [MainForm] added information to the main window title if auto update is activated and the development server is used 
+    - (zathor) [VobinputWindow] Removed warning if no audio can be found. Feature request #2847468
+    - (zathor) [JobWorkerWindow] Temporary worker will be closed automatically. Feature request #2928875
+    - (zathor) [DAR] + [ARChooser] added 4:3 and 16:9 DAR
+
 0.3.3.0
     - (zathor) [OSInfo] Fix crash if OS is Windows 2000
 
