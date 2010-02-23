@@ -793,7 +793,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
 
             if (!xs.CustomEncoderOptions.Contains("--nal-hrd"))
                 if (xs.X264Nalhrd)
-                    sb.Append("--nal-hrd ");
+                    sb.Append("--nal-hrd vbr ");
 
             #endregion
 
