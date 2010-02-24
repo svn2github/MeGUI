@@ -1531,26 +1531,24 @@ namespace MeGUI
                                     Directory.CreateDirectory(filename);
                                 continue;
                             }
-                            // create the output writer to save the file onto the harddisc
+                            if (mainForm.Settings.AlwaysBackUpFiles)
+                            {
+                                ErrorState result = manageBackups(filename, file.Name, file.NeedsRestartedCopying);
+                                if (result != ErrorState.Successful)
+                                    return result;
+                            }
                             string oldFileName = null;
                             if (file.NeedsRestartedCopying)
                             {
                                 oldFileName = filename;
                                 filename += ".tempcopy";
                             }
-                            else
-                            {
-                                if (mainForm.Settings.AlwaysBackUpFiles)
-                                {
-                                    ErrorState result = manageBackups(filename, file.Name);
-                                    if (result != ErrorState.Successful)
-                                        return result;
-                                }
-                            }
+                            // create the output writer to save the file onto the harddisc
                             using (Stream outputWriter = new FileStream(filename, FileMode.Create))
                             {
                                 FileUtil.copyData(zip, outputWriter);
                             }
+                            File.SetLastWriteTimeUtc(filename, zipentry.DateTime);
                             if (file.NeedsRestartedCopying)
                             {
                                 mainForm.AddFileToReplace(file.Name, filename, oldFileName, file.GetLatestVersion().FileVersion);
@@ -1571,17 +1569,17 @@ namespace MeGUI
             }
             else
             {
+                if (mainForm.Settings.AlwaysBackUpFiles)
+                {
+                    ErrorState result = manageBackups(filename, file.Name, file.NeedsRestartedCopying);
+                    if (result != ErrorState.Successful)
+                        return result;
+                }
                 string oldFileName = null;
                 if (file.NeedsRestartedCopying)
                 {
                     oldFileName = filename;
                     filename = filename + ".tempcopy";
-                }
-                else
-                {
-                    ErrorState result = manageBackups(filename, file.Name);
-                    if (result != ErrorState.Successful)
-                        return result;
                 }
                 try
                 {
@@ -1608,7 +1606,7 @@ namespace MeGUI
             return ErrorState.Successful;
         }
 
-        private ErrorState manageBackups(string savePath, string name)
+        private ErrorState manageBackups(string savePath, string name, bool bCopyFile)
         {
             try
             {
@@ -1623,7 +1621,12 @@ namespace MeGUI
             try
             {
                 if (File.Exists(savePath))
-                    File.Move(savePath, (savePath + ".backup"));
+                {
+                    if (bCopyFile == false)
+                        File.Move(savePath, (savePath + ".backup"));
+                    else
+                        File.Copy(savePath, (savePath + ".backup"));
+                }
             }
             catch
             {
