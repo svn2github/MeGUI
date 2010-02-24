@@ -1448,6 +1448,7 @@ namespace MeGUI
             openVideoSource(input.Filename);
             if (chAutoPreview.Checked == true)
                 previewButton_Click(sender, args);
+            signalAR_Checkedchanged(null, null);
 		}
 		private void openDLLButton_Click(object sender, System.EventArgs e)
 		{
