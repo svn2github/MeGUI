@@ -176,7 +176,7 @@ namespace MeGUI
         {
             if (audioType == null)
                 return 0;
-            int nbSamples = (int)((double)samplingRate * length);
+            Int64 nbSamples = Convert.ToInt64((double)samplingRate * length);
             int headerSize = mkvAudioTrackHeaderSize;
             int samplesPerBlock = 0;
             if (audioType == AudioType.MP4AAC || audioType == AudioType.M4A || audioType == AudioType.RAWAAC)
