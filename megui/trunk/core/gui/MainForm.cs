@@ -1367,6 +1367,11 @@ namespace MeGUI
             {
                 ProfileImporter importer = new ProfileImporter(this, data);
                 importer.Show();
+                while (importer.Visible == true)    // wait until the profiles have been imported
+                {
+                    Application.DoEvents();
+                    System.Threading.Thread.Sleep(500);
+                }
             });
         }
 
