@@ -307,7 +307,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                     switch (xs.x264BFramePyramid) // pyramid needs a minimum of 2 b frames
                     {
                         case 1: sb.Append("--b-pyramid strict "); break;
-                        case 2: sb.Append("--b-pyramid normal "); break;
+                        case 0: sb.Append("--b-pyramid none "); break;
                     }
                 }
 
