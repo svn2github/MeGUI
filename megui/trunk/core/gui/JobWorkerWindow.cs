@@ -489,7 +489,10 @@ namespace MeGUI.core.gui
                     mainForm.Log.LogValue("Error trying to update status while a job is running", e, ImageType.Warning);
                 }
 
-                progress = su.PercentageDoneExact ?? 0;
+                if (su.PercentageDoneExact > 100)
+                    progress = 100;
+                else
+                    progress = su.PercentageDoneExact ?? 0;
                 updateProgress();
             }
         }
