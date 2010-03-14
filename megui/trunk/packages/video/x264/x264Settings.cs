@@ -62,7 +62,7 @@ namespace MeGUI
 		decimal ipFactor, pbFactor, chromaQPOffset, vbvInitialBuffer, bitrateVariance, quantCompression, 
 			tempComplexityBlur, tempQuanBlurCC, scdSensitivity, bframeBias, quantizerCrf, AQStrength, psyRDO, psyTrellis;
 		bool deblock, cabac, p4x4mv, p8x8mv, b8x8mv, i4x4mv, i8x8mv, weightedBPrediction, encodeInterlaced,
-			chromaME, adaptiveDCT, lossless, noMixedRefs, noFastPSkip, psnrCalc, noDctDecimate, ssimCalc, useQPFile, 
+			chromaME, adaptiveDCT, noMixedRefs, noFastPSkip, psnrCalc, noDctDecimate, ssimCalc, useQPFile, 
             FullRange, advSet, noMBTree, threadInput, noPsy, scenecut, x264Nalhrd, x264Aud;
 		string quantizerMatrix, qpfile;
 		#region constructor
@@ -85,7 +85,7 @@ namespace MeGUI
 			nbRefFrames = 3;
 			noMixedRefs = false;
 			NbBframes = 3;
-			Turbo = false;
+			Turbo = true;
 			deblock = true;
 			alphaDeblock = 0;
 			betaDeblock = 0;
@@ -128,7 +128,6 @@ namespace MeGUI
 			adaptiveDCT = true;
 			quantizerMatrix = "";
 			quantizerMatrixType = 0; // none
-			lossless = false;
 			x264Trellis = 1;
             base.MaxNumberOfPasses = 3;
             AQMode = 1;
@@ -403,11 +402,6 @@ namespace MeGUI
             get { return ssimCalc; }
             set { ssimCalc = value; }
         }
-		public bool Lossless
-		{
-			get { return lossless; }
-			set { lossless = value; }
-		}
 		public string QuantizerMatrix
 		{
 			get { return quantizerMatrix; }
@@ -557,7 +551,6 @@ namespace MeGUI
                 this.IPFactor != otherSettings.IPFactor ||
                 this.KeyframeInterval != otherSettings.KeyframeInterval ||
                 this.Level != otherSettings.Level ||
-                this.Lossless != otherSettings.Lossless ||
                 this.MaxQuantDelta != otherSettings.MaxQuantDelta ||
                 this.MaxQuantizer != otherSettings.MaxQuantizer ||
                 this.MERange != otherSettings.MERange ||
@@ -629,7 +622,6 @@ namespace MeGUI
                     BframePredictionMode = 1; // default
                     QuantizerMatrixType = 0; // no matrix
                     QuantizerMatrix = "";
-                    Lossless = false;
                     WeightedPPrediction = 0;
                     break;
                 case 1:
@@ -645,24 +637,6 @@ namespace MeGUI
             }
             if (EncodingMode != 2 && EncodingMode != 5)
                 Turbo = false;
-            if (Turbo)
-            {
-                NbRefFrames = 1;
-                SubPelRefinement = 1;
-                METype = 0; // diamond search
-                I4x4mv = false;
-                P4x4mv = false;
-                I8x8mv = false;
-                P8x8mv = false;
-                B8x8mv = false;
-                AdaptiveDCT = false;
-                NoMixedRefs = false;
-                Trellis = false;
-                NoFastPSkip = false;
-                WeightedBPrediction = false;
-            }
-            if (Profile != 2) // lossless requires High Profile
-                Lossless = false;
             if (NbBframes < 2) // pyramid requires at least two b-frames
                 x264BFramePyramid = 0;
             if (NbBframes == 0)
@@ -674,11 +648,6 @@ namespace MeGUI
                 X264Trellis = 0;
             if (!P8x8mv) // p8x8 requires p4x4
                 P4x4mv = false;
-            if (Lossless) // This needs CQ 0
-            {
-                EncodingMode = 1;
-                BitrateQuantizer = 0;
-            }
         }
 	}
 }

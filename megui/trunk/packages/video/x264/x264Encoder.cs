@@ -89,24 +89,23 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             /// x264 Main Tab Settings
             ///</summary>
             // AVC Profiles
-            if (!xs.CustomEncoderOptions.Contains("--profile"))
+            if (!xs.CustomEncoderOptions.Contains("--profile "))
             {
                 switch (xs.Profile)
                 {
                     case 0: sb.Append("--profile baseline "); break;
                     case 1: sb.Append("--profile main "); break;
-                    case 2: sb.Append("--profile high "); break;
-                    default: break; // Autoguess                    
+                    case 2: break; // --profile high is the default value
                 }
             }
 
             // AVC Levels
-            if (!xs.CustomEncoderOptions.Contains("--level"))
+            if (!xs.CustomEncoderOptions.Contains("--level "))
                 if (xs.Level != 15) // unrestricted
                     sb.Append("--level " + AVCLevels.getCLILevelNames()[xs.Level] + " ");
 
             // x264 Presets
-            if (!xs.CustomEncoderOptions.Contains("--preset"))
+            if (!xs.CustomEncoderOptions.Contains("--preset "))
             {
                 switch (xs.x264Preset)
                 {
@@ -147,13 +146,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                 case 1: // CQ
                     if (!xs.CustomEncoderOptions.Contains("--qp "))
                     {
-                        if (xs.Lossless)
-                            sb.Append("--qp 0 ");
-                        else
-                        {
-                            qp = (int)xs.QuantizerCRF;
-                            sb.Append("--qp " + qp.ToString(ci) + " ");
-                        }
+                        qp = (int)xs.QuantizerCRF;
+                        sb.Append("--qp " + qp.ToString(ci) + " ");
                     }
                     break;
                 case 2: // 2 pass first pass
@@ -180,26 +174,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                     break;
             } 
 
-            // Turbo
-/*            if (xs.Turbo)
-            {
-                xs.NbRefFrames = 1;
-                xs.SubPelRefinement = 1; // Q-Pel 2 iterations
-                xs.METype = 0; // diamond search
-                xs.I4x4mv = false;
-                xs.P4x4mv = false;
-                xs.I8x8mv = false;
-                xs.P8x8mv = false;
-                xs.B8x8mv = false;
-                xs.AdaptiveDCT = false;
-               // xs.MixedRefs = false;
-               // xs.X264Trellis = 0; // disable trellis
-              //  xs.NoFastPSkip = false;
-            }
-*/
             // Slow 1st Pass
             if (!xs.CustomEncoderOptions.Contains("--slow-firstpass"))
-                if ((!xs.Turbo) &&
+                if ((!xs.Turbo) && xs.x264Preset < 8 &&
                    ((xs.EncodingMode == 2) || // 2 pass first pass
                     (xs.EncodingMode == 4) || // automated twopass
                     (xs.EncodingMode == 5) || // 3 pass first pass
@@ -208,7 +185,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
 
             // Threads
             if (!xs.CustomEncoderOptions.Contains("--thread-input"))
-                if (xs.ThreadInput)
+                if (xs.ThreadInput && xs.NbThreads == 1)
                     sb.Append("--thread-input ");
             if (!xs.CustomEncoderOptions.Contains("--threads"))
                 if (xs.NbThreads > 0)

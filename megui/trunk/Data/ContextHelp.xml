@@ -67,6 +67,21 @@ Normal = Non-Strict (not Blu-ray compatible)</Advanced>
 			<Recommended>normal</Recommended>
 			<Default>normal</Default>
 		</b-pyramid>
+    <slow-firstpass name="Fast first pass">
+      <Advanced>
+        With the advent of the Preset system in r1177, using --pass 1 applies the following settings at the end of parsing the command line:
+        * ref 1
+        * no-8x8dct
+        * partitions i4x4 (if originally enabled, else none)
+        * me dia
+        * subme MIN( 2, subme )
+        * trellis 0
+        This feature is automatically disabled with preset placebo. To otherwise disable the feature, uncheck this option.
+      </Advanced>
+      <Basic>Fast first pass</Basic>
+      <Recommended>enabled</Recommended>
+      <Default>enabled</Default>
+    </slow-firstpass>
 		<!--WARNING DOUBLE NEGATIVE-->
 		<no-cabac name="Encode CABAC">
 			<Advanced>
@@ -614,13 +629,6 @@ Prevents SSIM calculations that are reported on completion.</Advanced>
       <Recommended>Disabled</Recommended>
       <Default>Disabled</Default>
     </ssim>
-    <losslessmode name="Lossless Mode">
-      <Advanced>
-Set QP to 0 to activate the lossless Mode.</Advanced>
-      <Basic>Enable the lossless Mode</Basic>
-      <Recommended>Disabled</Recommended>
-      <Default>Disabled</Default>
-    </losslessmode>
 		<quiet name="Quiet Mode">
 			<Advanced></Advanced>
 			<Basic>Enable Quiet Mode (do not display output information).</Basic>
