@@ -33,7 +33,7 @@ namespace MeGUI
 
     abstract class CommandlineMuxer : CommandlineJobProcessor<MuxJob>
     {
-        void setProjectedFileSize()
+        protected virtual void setProjectedFileSize()
         {
             su.ProjectedFileSize = FileSize.Empty;
             su.ProjectedFileSize += (FileSize.Of2(job.Settings.VideoInput) ?? FileSize.Empty);

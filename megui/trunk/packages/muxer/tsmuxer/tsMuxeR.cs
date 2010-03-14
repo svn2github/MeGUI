@@ -24,9 +24,12 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
 
 using MeGUI.core.details;
 using MeGUI.core.util;
+
+using MediaInfoWrapper;
 
 namespace MeGUI
 {
@@ -65,12 +68,28 @@ new JobProcessorFactory(new ProcessorFactory(init), "TSMuxer");
         #endregion
 
 
+        protected override void setProjectedFileSize()
+        {
+        }
+
         protected override string Commandline
         {
             get
             {
                 return " \"" + metaFile + "\"" + " \"" + job.Output + "\"";
             }
+        }
+
+        public override void ProcessLine(string line, StreamType stream)
+        {
+            if (Regex.IsMatch(line, @"^[0-9]{1,3}\.[0-9]{1}%", RegexOptions.Compiled))
+            {
+                su.PercentageDoneExact = getPercentage(line);
+            }
+            else
+                base.ProcessLine(line, stream);
+
+            lastLine = line;
         }
         
         /// <summary>
@@ -82,10 +101,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "TSMuxer");
         {
             try
             {
-                int percentageStart = 0;
-                int percentageEnd = line.IndexOf(".");
-                string frameNumber = line.Substring(percentageStart, percentageEnd - percentageStart).Trim();
-                return Int32.Parse(frameNumber);
+                string[] strPercentage = line.Split('%')[0].Split('.');
+                return Convert.ToDecimal(strPercentage[0]) + Convert.ToDecimal(strPercentage[1]) / 10;
             }
             catch (Exception e)
             {
@@ -93,6 +110,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "TSMuxer");
                 return null;
             }
         }
+
         /// <summary>
         /// determines if a read line is empty
         /// </summary>
@@ -206,7 +224,16 @@ new JobProcessorFactory(new ProcessorFactory(init), "TSMuxer");
                        sw.Write(", timeshift={0}ms", stream.delay);
 
                     if (!string.IsNullOrEmpty(stream.language))
-                       sw.Write(", lang=" + stream.language);
+                    {
+                        foreach (KeyValuePair<string, string> strLanguage in LanguageSelectionContainer.Languages)
+                        {
+                            if (stream.language.ToLower().Equals(strLanguage.Key.ToLower()))
+                            {
+                                sw.Write(", lang=" + strLanguage.Value);
+                                break;
+                            }
+                        }
+                    }
                 }
 
                 foreach (object o in settings.SubtitleStreams)
@@ -224,8 +251,23 @@ new JobProcessorFactory(new ProcessorFactory(init), "TSMuxer");
                     if (stream.delay != 0)
                         sw.Write(", timeshift={0}ms", stream.delay);
 
+                    if (stream.path.ToLower().EndsWith(".srt"))
+                    {
+                        MediaInfo info = new MediaInfo(settings.VideoInput);
+                        sw.Write(", video-width={0}, video-height={1}, fps={2}", info.Video[0].Width, info.Video[0].Height, settings.Framerate.Value.ToString(ci));
+                    }
+
                     if (!string.IsNullOrEmpty(stream.language))
-                        sw.Write(", lang=" + stream.language);
+                    {
+                        foreach (KeyValuePair<string, string> strLanguage in LanguageSelectionContainer.Languages)
+                        {
+                            if (stream.language.ToLower().Equals(strLanguage.Key.ToLower()))
+                            {
+                                sw.Write(", lang=" + strLanguage.Value);
+                                break;
+                            }
+                        }
+                    }
                 }                
 
                 job.FilesToDelete.Add(metaFile);
