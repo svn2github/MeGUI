@@ -273,6 +273,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             try
             {
                 _log.LogEvent("Encode thread started");
+                raiseEvent("Preprocessing...   ***PLEASE WAIT***");
                 using (AviSynthScriptEnvironment env = new AviSynthScriptEnvironment())
                 {
                     _log.LogEvent("Avisynth script environment opened");
@@ -306,7 +307,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
 
                                 _sampleRate = a.AudioSampleRate;
 
-                                raiseEvent("Preprocessing...   ***PLEASE WAIT***");
                                 bool hasStartedEncoding = false;
 
                                 GCHandle h = GCHandle.Alloc(frameBuffer, GCHandleType.Pinned);
