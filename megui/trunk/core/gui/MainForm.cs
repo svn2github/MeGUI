@@ -1829,14 +1829,23 @@ namespace MeGUI
                 }
             }
             if (restart)
-                pstart.Arguments += "--restart ";
+                pstart.Arguments += "--restart";
             else
-                pstart.Arguments += "--app ";
-            pstart.Arguments += "\"" + Application.ExecutablePath + "\"";
+                pstart.Arguments += "--no-restart";
 
-            //pstart.CreateNoWindow = true;
-            //pstart.UseShellExecute = false;
-            proc.StartInfo.Verb = "runas";
+            // Check if the program can write to the program dir
+            if (FileUtil.IsDirWriteable(Path.GetDirectoryName(Application.ExecutablePath)) == true)
+            {
+                pstart.CreateNoWindow = true;
+                pstart.UseShellExecute = false;
+            }
+            else
+            {
+                // Need admin permissions
+                proc.StartInfo.Verb = "runas";
+                pstart.UseShellExecute = true;
+            }
+
             proc.StartInfo = pstart;
             try
             {
