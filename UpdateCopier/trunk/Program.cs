@@ -28,42 +28,29 @@ namespace UpdateCopier
 
         static void Main(string[] args)
         {
+            string appName = null;
+            appName = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "megui.exe");
+            if (!File.Exists(appName))
+            {
+                MessageBox.Show(appName + " not found. \nNo files will be updated.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             StringBuilder commandline = new StringBuilder();
 
             Dictionary<string, CommandlineUpgradeData> filesToCopy = new Dictionary<string,CommandlineUpgradeData>();
             List<string> filesToInstall = new List<string>();
-            bool restart = false;
-            string appName = null;
+            bool bRestart = false;
             string lastComponentName = null;
             for (int i = 0; i < args.Length; i += 1)
             {
                 if (args[i] == "--restart")
                 {
-                    if (args.Length > i + 1)
-                    {
-                        appName = args[i + 1];
-                        restart = true;
-                        i++;
-                    }
-                    else
-                    {
-                        showCommandlineErrorMessage(args);
-                        return;
-                    }
+                    bRestart = true;
                 }
-                else if (args[i] == "--app")
+                else if (args[i] == "--no-restart")
                 {
-                    if (args.Length > i + 1)
-                    {
-                        appName = args[i + 1];
-                        restart = false;
-                        i++;
-                    }
-                    else
-                    {
-                        showCommandlineErrorMessage(args);
-                        return;
-                    }
+                    bRestart = false;
                 }
                 else if (args[i] == "--component")
                 {
@@ -74,19 +61,6 @@ namespace UpdateCopier
                         filesToCopy.Add(args[i+1], data);
                         lastComponentName = args[i+1];
                         i += 2;
-                    }
-                    else
-                    {
-                        showCommandlineErrorMessage(args);
-                        return;
-                    }
-                }
-                else if (args[i] == "--then-install")
-                {
-                    if (args.Length > i + 1)
-                    {
-                        filesToInstall.Add(args[i + 1]);
-                        i++;
                     }
                     else
                     {
@@ -137,7 +111,7 @@ namespace UpdateCopier
                 else
                     commandline.AppendFormat(@"--upgrade-failed ""{0}"" ", file);
             }
-            if (!restart)
+            if (!bRestart)
                 commandline.Append("--dont-start");
 
             foreach (string file in filesToInstall)
