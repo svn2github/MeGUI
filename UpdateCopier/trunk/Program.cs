@@ -30,11 +30,11 @@ namespace UpdateCopier
         {
             string appName = null;
             appName = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "megui.exe");
-            if (!File.Exists(appName))
-            {
-                MessageBox.Show(appName + " not found. \nNo files will be updated.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
+            //if (!File.Exists(appName))
+            //{
+            //    MessageBox.Show(appName + " not found. \nNo files will be updated.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //    return;
+            //}
 
             StringBuilder commandline = new StringBuilder();
 
@@ -47,10 +47,12 @@ namespace UpdateCopier
                 if (args[i] == "--restart")
                 {
                     bRestart = true;
+                    i++;
                 }
                 else if (args[i] == "--no-restart")
                 {
                     bRestart = false;
+                    i++;
                 }
                 else if (args[i] == "--component")
                 {
