@@ -37,7 +37,7 @@ namespace MeGUI
     {
         #region variables
         protected TJob job;
-        DateTime startTime;
+        protected DateTime startTime;
         protected bool isProcessing = false;
         protected Process proc = new Process(); // the encoder process
         protected string executable; // path and filename of the commandline encoder to be used

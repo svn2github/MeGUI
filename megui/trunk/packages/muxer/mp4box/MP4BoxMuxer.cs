@@ -164,13 +164,37 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                 case LineType.importing:
                     su.PercentageDoneExact = getPercentage(line);
                     if (trackNumber == 1) // video
-                        su.Status = "Importing Video Track...";
+                    {
+                        if (String.IsNullOrEmpty(su.Status) || !su.Status.Equals("Importing Video Track..."))
+                        {
+                            su.Status = "Importing Video Track...";
+                            startTime = DateTime.Now;
+                        }
+                    }
                     else if (trackNumber == 2 && numberOfAudioTracks > 0) // first audio track
-                        su.Status = "Importing Audio Track 1...";
+                    {
+                        if (String.IsNullOrEmpty(su.Status) || !su.Status.Equals("Importing Audio Track 1..."))
+                        {
+                            su.Status = "Importing Audio Track 1...";
+                            startTime = DateTime.Now;
+                        }
+                    }
                     else if (trackNumber == 3 && numberOfAudioTracks > 1) // second audio track
-                        su.Status = "Importing Audio Track 2...";
+                    {
+                        if (String.IsNullOrEmpty(su.Status) || !su.Status.Equals("Importing Audio Track 2..."))
+                        {
+                            su.Status = "Importing Audio Track 2...";
+                            startTime = DateTime.Now;
+                        }
+                    }
                     else
-                        su.Status = "Importing Tracks...";
+                    {
+                        if (String.IsNullOrEmpty(su.Status) || !su.Status.Equals("Importing Tracks..."))
+                        {
+                            su.Status = "Importing Tracks...";
+                            startTime = DateTime.Now;
+                        }
+                    }
                     break;
 
                 case LineType.splitting:
@@ -180,7 +204,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
 
                 case LineType.writing:
                     su.PercentageDoneExact = getPercentage(line);
-                    su.Status = "Writing...";
+                    if (String.IsNullOrEmpty(su.Status) || !su.Status.Equals("Writing..."))
+                    {
+                        su.Status = "Writing...";
+                        startTime = DateTime.Now;
+                    }
                     break;
 
                 case LineType.other:
