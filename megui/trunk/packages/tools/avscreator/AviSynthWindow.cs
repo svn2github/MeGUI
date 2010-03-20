@@ -1575,54 +1575,62 @@ namespace MeGUI
                 projectPath = Path.GetDirectoryName(videoInput);
             videoOutput.Filename = Path.Combine(projectPath, Path.ChangeExtension(fileNameNoPath, ".avs"));
             
-            string ext = Path.GetExtension(videoInput).ToLower();
-            switch (ext)
+            if (File.Exists(videoInput + ".ffindex"))
             {
-                case ".avs":
-                    sourceType = PossibleSources.avs;
-                    videoOutput.Filename = Path.Combine(projectPath, Path.ChangeExtension(fileNameNoPath, "_new.avs")); // to avoid overwritten
-                    openAVSScript(videoInput);
-                    break;           
-                case ".d2v":
-                    sourceType = PossibleSources.d2v;
-                    openVideo(videoInput);
-                    break;
-                case ".dga":
-                    sourceType = PossibleSources.dga;                    
-                    openVideo(videoInput);
-                    break;
-                case ".dgi":
-                    sourceType = PossibleSources.dgi;
-                    if (VideoUtil.manageCUVIDServer())
-                        openVideo(videoInput); 
-                    break;
-                case ".ffindex":
-                    sourceType = PossibleSources.ffindex;
-                    openVideo(videoInput);
-                    break;
-                case ".mpeg": // include case variants 
-                case ".mpg":
-                case ".m2v":
-                case ".m2p":
-                case ".mpv":
-                case ".ts":
-                case ".tp":
-                case ".vob":
-                    sourceType = PossibleSources.mpeg2;
-                    if (gotoD2vCreator(videoInput) == DialogResult.Cancel )
-                    {
+                sourceType = PossibleSources.ffindex;
+                openVideo(videoInput + ".ffindex");
+            }
+            else
+            {
+                string ext = Path.GetExtension(videoInput).ToLower();
+                switch (ext)
+                {
+                    case ".avs":
+                        sourceType = PossibleSources.avs;
+                        videoOutput.Filename = Path.Combine(projectPath, Path.ChangeExtension(fileNameNoPath, "_new.avs")); // to avoid overwritten
+                        openAVSScript(videoInput);
+                        break;           
+                    case ".d2v":
+                        sourceType = PossibleSources.d2v;
+                        openVideo(videoInput);
+                        break;
+                    case ".dga":
+                        sourceType = PossibleSources.dga;                    
+                        openVideo(videoInput);
+                        break;
+                    case ".dgi":
+                        sourceType = PossibleSources.dgi;
+                        if (VideoUtil.manageCUVIDServer())
+                            openVideo(videoInput); 
+                        break;
+                    case ".ffindex":
+                        sourceType = PossibleSources.ffindex;
+                        openVideo(videoInput);
+                        break;
+                    case ".mpeg": // include case variants 
+                    case ".mpg":
+                    case ".m2v":
+                    case ".m2p":
+                    case ".mpv":
+                    case ".ts":
+                    case ".tp":
+                    case ".vob":
+                        sourceType = PossibleSources.mpeg2;
+                        if (gotoD2vCreator(videoInput) == DialogResult.Cancel )
+                        {
+                            sourceType = PossibleSources.directShow;
+                            openDirectShow(videoInput);
+                        }
+                        break;
+                    case ".vdr":
+                        sourceType = PossibleSources.vdr;
+                        openVDubFrameServer(videoInput);
+                        break;
+                    default:
                         sourceType = PossibleSources.directShow;
                         openDirectShow(videoInput);
-                    }
-                    break;
-                case ".vdr":
-                    sourceType = PossibleSources.vdr;
-                    openVDubFrameServer(videoInput);
-                    break;
-                default:
-                    sourceType = PossibleSources.directShow;
-                    openDirectShow(videoInput);
-                    break;
+                        break;
+                }
             }
             setSourceInterface();
         }
