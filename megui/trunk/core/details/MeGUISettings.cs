@@ -81,7 +81,7 @@ namespace MeGUI
 			mkvmergePath = getDownloadPath(@"tools\mkvmerge\mkvmerge.exe");
             x264Path = getDownloadPath(@"tools\x264\x264.exe");
             dgIndexPath = getDownloadPath(@"tools\dgindex\dgindex.exe");
-            ffmsIndexPath = getDownloadPath(@"tools\ffms2\ffmsindex.exe");
+            ffmsIndexPath = getDownloadPath(@"tools\ffms\ffmsindex.exe");
             xvidEncrawPath = getDownloadPath(@"tools\xvid_encraw\xvid_encraw.exe");
             lamePath = getDownloadPath(@"tools\lame\lame.exe");
             neroAacEncPath = "neroAacEnc.exe";
