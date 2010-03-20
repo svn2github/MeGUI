@@ -36,7 +36,7 @@ namespace MeGUI
         private string faacPath, lamePath, neroAacEncPath, mencoderPath,  mp4boxPath, mkvmergePath, strMainAudioFormat,
                        encAacPlusPath, ffmpegPath, besplitPath, yadifPath, aftenPath, x264Path, strMainFileFormat,
                        dgIndexPath, xvidEncrawPath, aviMuxGUIPath, oggEnc2Path, encAudXPath, dgavcIndexPath,
-                       eac3toPath, tsmuxerPath, meguiupdatecache, avisynthpluginspath,
+                       eac3toPath, tsmuxerPath, meguiupdatecache, avisynthpluginspath, ffmsIndexPath,
                        defaultLanguage1, defaultLanguage2, afterEncodingCommand, videoExtension, audioExtension,
                        strLastDestinationPath, strLastSourcePath, dgnvIndexPath, tempDirMP4,
                        httpproxyaddress, httpproxyport, httpproxyuid, httpproxypwd, defaultOutputDir;
@@ -81,6 +81,7 @@ namespace MeGUI
 			mkvmergePath = getDownloadPath(@"tools\mkvmerge\mkvmerge.exe");
             x264Path = getDownloadPath(@"tools\x264\x264.exe");
             dgIndexPath = getDownloadPath(@"tools\dgindex\dgindex.exe");
+            ffmsIndexPath = getDownloadPath(@"tools\ffms2\ffmsindex.exe");
             xvidEncrawPath = getDownloadPath(@"tools\xvid_encraw\xvid_encraw.exe");
             lamePath = getDownloadPath(@"tools\lame\lame.exe");
             neroAacEncPath = "neroAacEnc.exe";
@@ -386,6 +387,13 @@ namespace MeGUI
 		{
 			get {return dgIndexPath;}
 		}
+        /// <summary>
+        /// filename and full path of the ffmsindex executable
+        /// </summary>
+        public string FFMSIndexPath
+        {
+            get { return ffmsIndexPath; }
+        }
         /// <summary>
         /// filename and full path of the xvid_encraw executable
         /// </summary>

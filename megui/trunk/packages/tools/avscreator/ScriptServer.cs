@@ -161,6 +161,13 @@ namespace MeGUI
                     strDLLPath = Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.DgavcIndexPath), "DGAVCDecode.dll");
                     inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nAVCSource(\"" + input + "\")"; 
                     break;
+                case PossibleSources.ffindex:
+                    strDLLPath = Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.FFMSIndexPath), "ffms2.dll");
+                    if (input.ToLower().EndsWith(".ffindex"))
+                        inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + input.Substring(0, input.Length - 8) + "\")";
+                    else
+                        inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + input + "\")";
+                    break;
                 case PossibleSources.dgi:
                     if (MainForm.Instance.Settings.UseCUVIDserver == true)
                     {

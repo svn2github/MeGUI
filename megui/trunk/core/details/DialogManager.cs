@@ -147,9 +147,9 @@ namespace MeGUI
             {
                 bool askAgain;
                 bool bResult = askAbout("Do you want to open this with the One Click\r\n" +
-                    "Encoder (automated, easy to use) or the D2V\r\n" +
-                    "Creator (manual, advanced)?", "Please choose your weapon", 
-                    "One Click Encoder", "DG Creator", MessageBoxIcon.Question, out askAgain);
+                    "Encoder (automated, easy to use) or the File\r\n" +
+                    "Indexer (manual, advanced)?", "Please choose your weapon", 
+                    "One Click Encoder", "File Indexer", MessageBoxIcon.Question, out askAgain);
 
                 mainForm.Settings.DialogSettings.AskAboutVOBs = askAgain;
                 mainForm.Settings.DialogSettings.UseOneClick = bResult;

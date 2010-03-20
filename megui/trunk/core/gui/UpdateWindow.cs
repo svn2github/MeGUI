@@ -129,6 +129,11 @@ namespace MeGUI
                         arrPath.Add(System.IO.Path.Combine(strPath, "DGDecodeNV.dll"));
                         arrPath.Add(System.IO.Path.Combine(strPath, "DGMultiDecodeNV.dll"));
                         break;
+                    case "ffms":
+                        arrPath.Add(MainForm.Instance.Settings.FFMSIndexPath);
+                        strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.FFMSIndexPath);
+                        arrPath.Add(System.IO.Path.Combine(strPath, "ffms2.dll"));
+                        break;
                     case "mp4box": arrPath.Add(MainForm.Instance.Settings.Mp4boxPath); break;
                     case "avimux_gui": arrPath.Add(MainForm.Instance.Settings.AviMuxGUIPath); break;
                     case "tsmuxer": arrPath.Add(MainForm.Instance.Settings.TSMuxerPath); break;
@@ -564,6 +569,8 @@ namespace MeGUI
                             return meGUISettings.DgavcIndexPath;
                         case ("dgindexnv"):
                             return meGUISettings.DgnvIndexPath;
+                        case ("ffms"):
+                            return meGUISettings.FFMSIndexPath;
                         case ("tsmuxer"):
                             return meGUISettings.TSMuxerPath;
                         default:

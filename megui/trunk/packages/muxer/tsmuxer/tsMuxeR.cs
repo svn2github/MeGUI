@@ -45,14 +45,13 @@ new JobProcessorFactory(new ProcessorFactory(init), "TSMuxer");
             return null;
         }
 
-        private int numberOfAudioTracks, numberOfSubtitleTracks, trackNumber;
+        private int numberOfAudioTracks, numberOfSubtitleTracks;
         private string metaFile = null;
         private string lastLine;
 
         public tsMuxeR(string executablePath)
         {
             this.executable = executablePath;
-            trackNumber = 0;
             lastLine = "";
         }
         #region setup/start overrides

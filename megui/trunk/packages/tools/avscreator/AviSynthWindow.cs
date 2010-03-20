@@ -1596,6 +1596,10 @@ namespace MeGUI
                     if (VideoUtil.manageCUVIDServer())
                         openVideo(videoInput); 
                     break;
+                case ".ffindex":
+                    sourceType = PossibleSources.ffindex;
+                    openVideo(videoInput);
+                    break;
                 case ".mpeg": // include case variants 
                 case ".mpg":
                 case ".m2v":
@@ -1677,6 +1681,21 @@ namespace MeGUI
                     this.flipVertical.Checked = false;
                     this.dss2.Enabled = false;
                     this.fpsBox.Enabled = false;
+                    this.cbNvDeInt.Enabled = false;
+                    this.nvDeInt.Enabled = false;
+                    this.nvDeInt.Checked = false;
+                    this.nvResize.Enabled = false;
+                    this.nvResize.Checked = false;
+                    this.tabSources.SelectedTab = tabPage1;
+                    break;
+                case PossibleSources.ffindex:
+                    this.mpeg2Deblocking.Checked = false;
+                    this.mpeg2Deblocking.Enabled = false;
+                    this.colourCorrect.Enabled = false;
+                    this.colourCorrect.Checked = false;
+                    this.dss2.Enabled = false;
+                    this.fpsBox.Enabled = false;
+                    this.flipVertical.Enabled = true;
                     this.cbNvDeInt.Enabled = false;
                     this.nvDeInt.Enabled = false;
                     this.nvDeInt.Checked = false;
@@ -1870,7 +1889,7 @@ namespace MeGUI
             }
         }
         /// <summary>
-        ///  call the d2v creator which will pass a queued job back to the main form
+        ///  call the file indexer which will pass a queued job back to the main form
         /// </summary>
         /// <param name="fileName"></param>
         private DialogResult gotoD2vCreator(string fileName)
@@ -2482,7 +2501,7 @@ namespace MeGUI
         }
     }
     public delegate void OpenScriptCallback(string avisynthScript);
-    public enum PossibleSources { d2v, dga, dgi, mpeg2, vdr, directShow, avs };
+    public enum PossibleSources { d2v, dga, dgi, mpeg2, vdr, directShow, avs, ffindex };
     public enum mod16Method : int { none = -1, resize = 0, overcrop, nonMod16, mod4Horizontal, undercrop };
 
     public class AviSynthWindowTool : MeGUI.core.plugins.interfaces.ITool

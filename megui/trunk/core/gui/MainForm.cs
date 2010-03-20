@@ -45,7 +45,7 @@ namespace MeGUI
     public delegate void UpdateGUIStatusCallback(StatusUpdate su); // catches the UpdateGUI events fired from the encoder
     public enum FileType
     {
-        VIDEOINPUT, AUDIOINPUT, DGINDEX, OTHERVIDEO, ZIPPED_PROFILES, NONE
+        VIDEOINPUT, AUDIOINPUT, DGINDEX, FFMSINDEX, OTHERVIDEO, ZIPPED_PROFILES, NONE
     };
     public enum ProcessingStatus
     {
@@ -613,7 +613,7 @@ namespace MeGUI
             // 
             this.mnutoolsD2VCreator.Index = 1;
             this.mnutoolsD2VCreator.Shortcut = System.Windows.Forms.Shortcut.CtrlF2;
-            this.mnutoolsD2VCreator.Text = "DG Creator";
+            this.mnutoolsD2VCreator.Text = "File Indexer";
             this.mnutoolsD2VCreator.Click += new System.EventHandler(this.menuItem5_Click);
             // 
             // mnuOptions
@@ -1300,6 +1300,8 @@ namespace MeGUI
                 case ".pva":
                 case ".vro":
                     return FileType.DGINDEX;
+                case ".mkv":
+                    return FileType.FFMSINDEX;
                 case ".zip":
                     return FileType.ZIPPED_PROFILES;
 
@@ -1317,11 +1319,12 @@ namespace MeGUI
                 case FileType.AUDIOINPUT:
                     audioEncodingComponent1.openAudioFile(file);
                     break;
-
                 case FileType.DGINDEX:
                     openDGIndexFile(file);
                     break;
-
+                case FileType.FFMSINDEX:
+                    openDGIndexFile(file);
+                    break;
                 case FileType.OTHERVIDEO:
                     openOtherVideoFile(file);
                     audioEncodingComponent1.openAudioFile(file); // for Non-MPEG OneClick fudge
@@ -1604,7 +1607,7 @@ namespace MeGUI
             
             foreach (ITool tool in PackageSystem.Tools.Values)
             {
-                if (tool.Name != "DG Creator")
+                if (tool.Name != "File Indexer")
                 {
                     MenuItem newMenuItem = new MenuItem();
                     newMenuItem.Text = tool.Name;
@@ -1695,6 +1698,7 @@ namespace MeGUI
             PackageSystem.JobProcessors.Register(DGIndexer.Factory);
             PackageSystem.JobProcessors.Register(DGAVCIndexer.Factory);
             PackageSystem.JobProcessors.Register(DGNVIndexer.Factory);
+            PackageSystem.JobProcessors.Register(FFMSIndexer.Factory);
             PackageSystem.JobProcessors.Register(VobSubIndexer.Factory);
             PackageSystem.JobProcessors.Register(Joiner.Factory);
             PackageSystem.JobProcessors.Register(MeGUI.packages.tools.besplitter.Splitter.Factory);
@@ -1720,12 +1724,14 @@ namespace MeGUI
             PackageSystem.MediaFileTypes.Register(new d2vFileFactory());
             PackageSystem.MediaFileTypes.Register(new dgaFileFactory());
             PackageSystem.MediaFileTypes.Register(new dgiFileFactory());
+            PackageSystem.MediaFileTypes.Register(new ffmsFileFactory());
             PackageSystem.MediaFileTypes.Register(new MediaInfoFileFactory());
             PackageSystem.JobPreProcessors.Register(BitrateCalculatorPreProcessor.CalculationProcessor);
             PackageSystem.JobPostProcessors.Register(OneClickPostProcessor.PostProcessor);
             PackageSystem.JobPostProcessors.Register(IndexJobPostProcessor.PostProcessor);
             PackageSystem.JobPostProcessors.Register(dgavcIndexJobPostProcessor.PostProcessor);
             PackageSystem.JobPostProcessors.Register(dgnvIndexJobPostProcessor.PostProcessor);
+            PackageSystem.JobPostProcessors.Register(ffmsIndexJobPostProcessor.PostProcessor);
             PackageSystem.JobPostProcessors.Register(CleanupJobRunner.DeleteIntermediateFilesPostProcessor);
             PackageSystem.JobConfigurers.Register(MuxWindow.Configurer);
             PackageSystem.JobConfigurers.Register(AudioEncodingWindow.Configurer);

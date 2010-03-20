@@ -42,11 +42,11 @@ namespace MeGUI
 		#region variables
         private IndexJob lastJob = null;
 
-        private enum DGIndexType
+        private enum IndexType
         {
-            D2V, DGA, DGI, D2VorDGA
+            D2V, DGA, DGI, D2VorDGA, FFMS
         };
-        private DGIndexType DGIndexerUsed = DGIndexType.DGI;
+        private IndexType IndexerUsed = IndexType.DGI;
 
         private bool dialogMode = false; // $%£%$^>*"%$%%$#{"!!! Affects the public behaviour!
 		private bool configured = false;
@@ -55,7 +55,7 @@ namespace MeGUI
 		private VideoUtil vUtil;
 		private JobUtil jobUtil;
 
-		private System.Windows.Forms.GroupBox groupBox3;
+		private System.Windows.Forms.GroupBox gbAudio;
         private System.Windows.Forms.GroupBox gbOutput;
 		private System.Windows.Forms.Label inputLabel;
 		private System.Windows.Forms.TextBox projectName;
@@ -76,7 +76,7 @@ namespace MeGUI
         private GroupBox groupBox1;
         private RadioButton btnDGI;
         private RadioButton btnDGA;
-        private Label label1;
+        private RadioButton btnFFMS;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -144,11 +144,11 @@ namespace MeGUI
             checkIndexIO();
         }
 
-        private void changeDGIndexer(DGIndexType dgType)
+        private void changeIndexer(IndexType dgType)
         {
             switch (dgType)
             {
-                case DGIndexType.DGI:
+                case IndexType.DGI:
                 {
                     this.Text = "MeGUI - DGI Project Creator";
                     this.saveProjectDialog.Filter = "DGIndexNV project files|*.dgi";
@@ -157,34 +157,89 @@ namespace MeGUI
                     if (this.demuxTracks.Checked)
                         this.demuxAll.Checked = true;
                     this.demuxTracks.Enabled = false;
-                    DGIndexerUsed = DGIndexType.DGI;
+                    this.gbOutput.Enabled = true;
+                    this.gbAudio.Enabled = true;
+                    IndexerUsed = IndexType.DGI;
+                    if (!String.IsNullOrEmpty(this.input.Filename))
+                    {
+                        string projectPath = "";
+                        string fileNameNoPath = Path.GetFileName(this.input.Filename);
+                        if (string.IsNullOrEmpty(projectPath = mainForm.Settings.DefaultOutputDir))
+                            projectPath = Path.GetDirectoryName(this.input.Filename);
+                        projectName.Text = Path.Combine(projectPath, Path.ChangeExtension(fileNameNoPath, ".dgi"));
+                    }
                     break;
                 }
-                case DGIndexType.DGA:
+                case IndexType.DGA:
                 {
                     this.Text = "MeGUI - D2V Project Creator";
                     this.input.Filter = "All DGIndex / DGAVCIndex supported files|*.264;*.h264;*.avc;*.vob;*.mpg;*.mpeg;*.m2t*;*.m1v;*.m2v;*.m2p;*.mts;*.mpv;*.tp;*.ts;*.trp;*.pva;*.vro";
                     this.saveProjectDialog.Filter = "DGAVCIndex project files|*.dga";
                     this.projectNameLabel.Text = "dga Project Output";
-                    DGIndexerUsed = DGIndexType.DGA;
+                    this.gbOutput.Enabled = true;
+                    this.gbAudio.Enabled = true;
+                    IndexerUsed = IndexType.DGA;
+                    if (!String.IsNullOrEmpty(this.input.Filename))
+                    {
+                        string projectPath = "";
+                        string fileNameNoPath = Path.GetFileName(this.input.Filename);
+                        if (string.IsNullOrEmpty(projectPath = mainForm.Settings.DefaultOutputDir))
+                            projectPath = Path.GetDirectoryName(this.input.Filename);
+                        projectName.Text = Path.Combine(projectPath, Path.ChangeExtension(fileNameNoPath, ".dga"));
+                    }
                     break;
                 }
-                case DGIndexType.D2V:
+                case IndexType.D2V:
                 {
                     this.Text = "MeGUI - DGA Project Creator";
                     this.input.Filter = "All DGIndex / DGAVCIndex supported files|*.264;*.h264;*.avc;*.vob;*.mpg;*.mpeg;*.m2t*;*.m1v;*.m2v;*.m2p;*.mts;*.mpv;*.tp;*.ts;*.trp;*.pva;*.vro";
                     this.saveProjectDialog.Filter = "DGIndex project files|*.d2v";
                     this.projectNameLabel.Text = "d2v Project Output";
-                    DGIndexerUsed = DGIndexType.D2V;
+                    this.gbOutput.Enabled = true;
+                    this.gbAudio.Enabled = true;
+                    IndexerUsed = IndexType.D2V;
+                    if (!String.IsNullOrEmpty(this.input.Filename))
+                    {
+                        string projectPath = "";
+                        string fileNameNoPath = Path.GetFileName(this.input.Filename);
+                        if (string.IsNullOrEmpty(projectPath = mainForm.Settings.DefaultOutputDir))
+                            projectPath = Path.GetDirectoryName(this.input.Filename);
+                        projectName.Text = Path.Combine(projectPath, Path.ChangeExtension(fileNameNoPath, ".d2v"));
+                    }
                     break;
                 }
-                case DGIndexType.D2VorDGA:
+                case IndexType.D2VorDGA:
                 {
                     this.Text = "MeGUI - D2V/DGA Project Creator";
                     this.input.Filter = "All DGIndex / DGAVCIndex supported files|*.264;*.h264;*.avc;*.vob;*.mpg;*.mpeg;*.m2t*;*.m1v;*.m2v;*.m2p;*.mts;*.mpv;*.tp;*.ts;*.trp;*.pva;*.vro";
-                    this.saveProjectDialog.Filter = "DGIndex project files|*.d2v";
+                    this.saveProjectDialog.Filter = "DGIndex project files|*.d2v|DGAVCIndex project files|*.dga";
                     this.projectNameLabel.Text = "d2v/dga Project Output";
-                    DGIndexerUsed = DGIndexType.D2VorDGA;
+                    this.gbOutput.Enabled = true;
+                    this.gbAudio.Enabled = true;
+                    IndexerUsed = IndexType.D2VorDGA;
+                    if (!String.IsNullOrEmpty(this.input.Filename))
+                    {
+                        string projectPath = "";
+                        string fileNameNoPath = Path.GetFileName(this.input.Filename);
+                        if (string.IsNullOrEmpty(projectPath = mainForm.Settings.DefaultOutputDir))
+                            projectPath = Path.GetDirectoryName(this.input.Filename);
+                        projectName.Text = Path.Combine(projectPath, Path.ChangeExtension(fileNameNoPath, ".d2v"));
+                    }
+                    break;
+                }
+                case IndexType.FFMS:
+                {
+                    this.Text = "MeGUI - FFMS Indexer";
+                    this.input.Filter = "All FFMS Indexer supported files|*.mkv;*.avi;*.mp4;*.flv";
+                    this.saveProjectDialog.Filter = "FFMSIndex project files|*.ffindex";
+                    this.projectNameLabel.Text = "ffindex Output";
+                    this.gbOutput.Enabled = false;
+                    this.gbAudio.Enabled = false;
+                    this.demuxNoAudiotracks.Checked = true;
+                    this.demuxVideo.Checked = false;
+                    if (!String.IsNullOrEmpty(this.input.Filename))
+                        this.projectName.Text = this.input.Filename + ".ffindex";
+                    IndexerUsed = IndexType.FFMS;
                     break;
                 }
             }         
@@ -228,7 +283,7 @@ namespace MeGUI
             this.inputLabel = new System.Windows.Forms.Label();
             this.queueButton = new System.Windows.Forms.Button();
             this.loadOnComplete = new System.Windows.Forms.CheckBox();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.gbAudio = new System.Windows.Forms.GroupBox();
             this.demuxAll = new System.Windows.Forms.RadioButton();
             this.AudioTracks = new System.Windows.Forms.CheckedListBox();
             this.demuxNoAudiotracks = new System.Windows.Forms.RadioButton();
@@ -241,12 +296,12 @@ namespace MeGUI
             this.saveProjectDialog = new System.Windows.Forms.SaveFileDialog();
             this.closeOnQueue = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.btnFFMS = new System.Windows.Forms.RadioButton();
             this.btnDGA = new System.Windows.Forms.RadioButton();
             this.btnDGI = new System.Windows.Forms.RadioButton();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.gbInput.SuspendLayout();
-            this.groupBox3.SuspendLayout();
+            this.gbAudio.SuspendLayout();
             this.gbOutput.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -307,18 +362,18 @@ namespace MeGUI
             this.loadOnComplete.TabIndex = 11;
             this.loadOnComplete.Text = "On completion load files";
             // 
-            // groupBox3
+            // gbAudio
             // 
-            this.groupBox3.Controls.Add(this.demuxAll);
-            this.groupBox3.Controls.Add(this.AudioTracks);
-            this.groupBox3.Controls.Add(this.demuxNoAudiotracks);
-            this.groupBox3.Controls.Add(this.demuxTracks);
-            this.groupBox3.Location = new System.Drawing.Point(10, 106);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(424, 185);
-            this.groupBox3.TabIndex = 8;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = " Audio ";
+            this.gbAudio.Controls.Add(this.demuxAll);
+            this.gbAudio.Controls.Add(this.AudioTracks);
+            this.gbAudio.Controls.Add(this.demuxNoAudiotracks);
+            this.gbAudio.Controls.Add(this.demuxTracks);
+            this.gbAudio.Location = new System.Drawing.Point(10, 106);
+            this.gbAudio.Name = "gbAudio";
+            this.gbAudio.Size = new System.Drawing.Size(424, 185);
+            this.gbAudio.TabIndex = 8;
+            this.gbAudio.TabStop = false;
+            this.gbAudio.Text = " Audio ";
             // 
             // demuxAll
             // 
@@ -427,7 +482,7 @@ namespace MeGUI
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Controls.Add(this.btnFFMS);
             this.groupBox1.Controls.Add(this.btnDGA);
             this.groupBox1.Controls.Add(this.btnDGI);
             this.groupBox1.Location = new System.Drawing.Point(10, 6);
@@ -435,21 +490,24 @@ namespace MeGUI
             this.groupBox1.Size = new System.Drawing.Size(424, 38);
             this.groupBox1.TabIndex = 15;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = " Indexer ";
+            this.groupBox1.Text = " File Indexer ";
             // 
-            // label1
+            // btnFFMS
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(16, 16);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(94, 13);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Select DG Indexer";
+            this.btnFFMS.AutoSize = true;
+            this.btnFFMS.Location = new System.Drawing.Point(275, 15);
+            this.btnFFMS.Name = "btnFFMS";
+            this.btnFFMS.Size = new System.Drawing.Size(79, 17);
+            this.btnFFMS.TabIndex = 2;
+            this.btnFFMS.TabStop = true;
+            this.btnFFMS.Text = "FFMSIndex";
+            this.btnFFMS.UseVisualStyleBackColor = true;
+            this.btnFFMS.CheckedChanged += new System.EventHandler(this.btnFFMS_CheckedChanged);
             // 
             // btnDGA
             // 
             this.btnDGA.AutoSize = true;
-            this.btnDGA.Location = new System.Drawing.Point(142, 16);
+            this.btnDGA.Location = new System.Drawing.Point(16, 16);
             this.btnDGA.Name = "btnDGA";
             this.btnDGA.Size = new System.Drawing.Size(139, 17);
             this.btnDGA.TabIndex = 1;
@@ -461,7 +519,7 @@ namespace MeGUI
             // btnDGI
             // 
             this.btnDGI.AutoSize = true;
-            this.btnDGI.Location = new System.Drawing.Point(326, 16);
+            this.btnDGI.Location = new System.Drawing.Point(161, 16);
             this.btnDGI.Name = "btnDGI";
             this.btnDGI.Size = new System.Drawing.Size(80, 17);
             this.btnDGI.TabIndex = 0;
@@ -472,7 +530,7 @@ namespace MeGUI
             // 
             // helpButton1
             // 
-            this.helpButton1.ArticleName = "D2v creator window";
+            this.helpButton1.ArticleName = "File Indexer window";
             this.helpButton1.AutoSize = true;
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.helpButton1.Location = new System.Drawing.Point(13, 372);
@@ -490,7 +548,7 @@ namespace MeGUI
             this.Controls.Add(this.gbOutput);
             this.Controls.Add(this.loadOnComplete);
             this.Controls.Add(this.queueButton);
-            this.Controls.Add(this.groupBox3);
+            this.Controls.Add(this.gbAudio);
             this.Controls.Add(this.gbInput);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -498,7 +556,7 @@ namespace MeGUI
             this.Name = "VobinputWindow";
             this.Text = "MeGUI - D2V Project Creator";
             this.gbInput.ResumeLayout(false);
-            this.groupBox3.ResumeLayout(false);
+            this.gbAudio.ResumeLayout(false);
             this.gbOutput.ResumeLayout(false);
             this.gbOutput.PerformLayout();
             this.groupBox1.ResumeLayout(false);
@@ -542,24 +600,27 @@ namespace MeGUI
             if (string.IsNullOrEmpty(projectPath = mainForm.Settings.DefaultOutputDir))
                 projectPath = Path.GetDirectoryName(fileName);
 
-            if (strVideoFormat.Equals("vc1") && DGIndexerUsed != DGIndexType.DGI)
+            if (strVideoFormat.Equals("vc1") && IndexerUsed == IndexType.D2VorDGA)
             {
-                MessageBox.Show("VC-1 is only supported by DGIndexNV", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("VC-1 is only supported by DGIndexNV or FFMSIndexer", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            if (DGIndexerUsed == DGIndexType.DGI)
+            if (IndexerUsed == IndexType.DGI || IndexerUsed == IndexType.FFMS)
             {
-                projectName.Text = Path.Combine(projectPath, Path.ChangeExtension(fileNameNoPath, ".dgi"));
+                if (IndexerUsed == IndexType.FFMS)
+                    projectName.Text = fileName + ".ffindex";
+                else
+                    projectName.Text = Path.Combine(projectPath, Path.ChangeExtension(fileNameNoPath, ".dgi"));
             }
             else if (strVideoFormat.Equals("avc"))
             {
-                changeDGIndexer(DGIndexType.DGA);
+                changeIndexer(IndexType.DGA);
                 projectName.Text = Path.Combine(projectPath, Path.ChangeExtension(fileNameNoPath, ".dga"));
             }
             else
             {
-                changeDGIndexer(DGIndexType.D2V);
+                changeIndexer(IndexType.D2V);
                 projectName.Text = Path.Combine(projectPath, Path.ChangeExtension(fileNameNoPath, ".d2v"));
             }
 
@@ -575,7 +636,7 @@ namespace MeGUI
 
             if (AudioTracks.Items.Count > 0)
             {
-                if (DGIndexerUsed == DGIndexType.D2V)
+                if (IndexerUsed == IndexType.D2V)
                 {
                     if (VideoUtil.detectProgramStreamFromFile(fileName) == true)
                     {
@@ -609,9 +670,9 @@ namespace MeGUI
                 {
                     if (!dialogMode)
                     {
-                        switch (DGIndexerUsed)
+                        switch (IndexerUsed)
                         {
-                            case DGIndexType.D2V:
+                            case IndexType.D2V:
                             {
                                 IndexJob job = generateIndexJob();
                                 lastJob = job;
@@ -620,7 +681,7 @@ namespace MeGUI
                                     this.Close();
                                 break;
                             }
-                            case DGIndexType.DGI:
+                            case IndexType.DGI:
                             {
                                 DGNVIndexJob job = generateDGNVIndexJob();
                                 //lastJob = job;
@@ -629,9 +690,18 @@ namespace MeGUI
                                     this.Close();
                                 break;
                             }
-                            case DGIndexType.DGA:
+                            case IndexType.DGA:
                             {
                                 DGAIndexJob job = generateDGAIndexJob();
+                                //lastJob = job;
+                                mainForm.Jobs.addJobsToQueue(job);
+                                if (this.closeOnQueue.Checked)
+                                    this.Close();
+                                break;
+                            }
+                            case IndexType.FFMS:
+                            {
+                                FFMSIndexJob job = generateFFMSIndexJob();
                                 //lastJob = job;
                                 mainForm.Jobs.addJobsToQueue(job);
                                 if (this.closeOnQueue.Checked)
@@ -713,6 +783,10 @@ namespace MeGUI
 
             return new DGAIndexJob(this.input.Filename, this.projectName.Text, demuxType, audioTracks, null, loadOnComplete.Checked, demuxVideo.Checked);
         }
+        private FFMSIndexJob generateFFMSIndexJob()
+        {
+            return new FFMSIndexJob(this.input.Filename, loadOnComplete.Checked);
+        }
 		#endregion
 		#region properties
 		/// <summary>
@@ -744,12 +818,17 @@ namespace MeGUI
 
         private void btnDGA_CheckedChanged(object sender, EventArgs e)
         {
-            changeDGIndexer(DGIndexType.D2VorDGA);
+            changeIndexer(IndexType.D2VorDGA);
         }
 
         private void btnDGI_CheckedChanged(object sender, EventArgs e)
         {
-            changeDGIndexer(DGIndexType.DGI);
+            changeIndexer(IndexType.DGI);
+        }
+
+        private void btnFFMS_CheckedChanged(object sender, EventArgs e)
+        {
+            changeIndexer(IndexType.FFMS);
         }
     }
 
@@ -760,7 +839,7 @@ namespace MeGUI
 
         public string Name
         {
-            get { return "DG Creator"; }
+            get { return "File Indexer"; }
         }
 
         public void Run(MainForm info)
@@ -888,6 +967,34 @@ namespace MeGUI
                             mainForm.Audio.openAudioFile(files);
                         }));
                 }
+                // if the above needed delegation for openAudioFile this needs it for openVideoFile?
+                // It seems to fix the problem of ASW dissapearing as soon as it appears on a system (Vista X64)
+                Util.ThreadSafeRun(mainForm, new MethodInvoker(
+                    delegate
+                    {
+                        AviSynthWindow asw = new AviSynthWindow(mainForm, job.Output);
+                        asw.OpenScript += new OpenScriptCallback(mainForm.Video.openVideoFile);
+                        asw.Show();
+                    }));
+            }
+
+            return null;
+        }
+    }
+
+    public class ffmsIndexJobPostProcessor
+    {
+        public static JobPostProcessor PostProcessor = new JobPostProcessor(postprocess, "FFMS_postprocessor");
+        private static LogItem postprocess(MainForm mainForm, Job ajob)
+        {
+            if (!(ajob is FFMSIndexJob)) return null;
+            FFMSIndexJob job = (FFMSIndexJob)ajob;
+
+            StringBuilder logBuilder = new StringBuilder();
+            //VideoUtil vUtil = new VideoUtil(mainForm);
+
+            if (job.LoadSources)
+            {
                 // if the above needed delegation for openAudioFile this needs it for openVideoFile?
                 // It seems to fix the problem of ASW dissapearing as soon as it appears on a system (Vista X64)
                 Util.ThreadSafeRun(mainForm, new MethodInvoker(
