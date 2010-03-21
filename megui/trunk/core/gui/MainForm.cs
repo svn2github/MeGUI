@@ -792,6 +792,16 @@ namespace MeGUI
 
         public MainForm()
         {
+            System.Reflection.Assembly a = System.Reflection.Assembly.GetExecutingAssembly();
+            Version appVersion = a.GetName().Version;
+            string appVersionString = appVersion.ToString();
+
+            if (Properties.Settings.Default.ApplicationVersion != appVersion.ToString())
+            {
+                Properties.Settings.Default.Upgrade();
+                Properties.Settings.Default.ApplicationVersion = appVersionString;
+            }
+
             Instance = this;
             constructMeGUIInfo();
             InitializeComponent();
@@ -1373,7 +1383,7 @@ namespace MeGUI
                 while (importer.Visible == true)    // wait until the profiles have been imported
                 {
                     Application.DoEvents();
-                    System.Threading.Thread.Sleep(500);
+                    System.Threading.Thread.Sleep(1000);
                 }
             });
         }
@@ -1434,13 +1444,33 @@ namespace MeGUI
 
         private void beginUpdateCheck()
         {
+            string strLocalUpdateXML = Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), "upgrade.xml");
+
             UpdateWindow update = new UpdateWindow(this, this.Settings);
             update.GetUpdateData(true);
             if (update.HasUpdatableFiles()) // If there are updated files, display the window
             {
-                if (MessageBox.Show("There are updated files available. Do you wish to update to the latest versions?",
-                    "Updates Available", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                    update.ShowDialog();
+                if (File.Exists(strLocalUpdateXML))
+                {
+                    update.Visible = true;
+                    update.StartAutoUpdate();
+                    while (update.Visible == true)
+                    {
+                        Application.DoEvents();
+                        System.Threading.Thread.Sleep(1000);
+                    }
+                }
+                else
+                {
+                    if (MessageBox.Show("There are updated files available. Do you wish to update to the latest versions?",
+                        "Updates Available", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                        update.ShowDialog();
+                }
+            }
+            else
+            {
+                if (File.Exists(strLocalUpdateXML))
+                    File.Delete(strLocalUpdateXML);
             }
         }
 
