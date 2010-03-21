@@ -60,8 +60,6 @@ namespace MeGUI
 		{
             strMeGUIPath = System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath);
             autoscroll = true;
-            //autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/stable/"},
-            //    new string[] { "Development", "http://megui.org/auto/" } };
             autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/stable/", "http://megui.xvidvideo.ru/auto/stable/" },
                 new string[] { "Development", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" } };
             acceptableFPSError = 0.01M;
