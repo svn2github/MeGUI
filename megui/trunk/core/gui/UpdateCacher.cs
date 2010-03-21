@@ -26,6 +26,8 @@ using System.Net;
 using System.Text;
 using System.Threading;
 
+using ICSharpCode.SharpZipLib.Zip;
+
 using MeGUI.core.util;
 
 
@@ -81,9 +83,64 @@ namespace MeGUI
                 catch (IOException) { }
             }
             else if (File.Exists(localFilename))
-                goto gotLocalFile;
+            {
+                // check the zip file
+                if (localFilename.ToLower().EndsWith(".zip"))
+                {
+                    try
+                    {
+                        ZipFile zipFile = new ZipFile(localFilename);
+                        if (zipFile.TestArchive(true) == false)
+                        {
+                            try
+                            {
+                                finfo.Delete();
+                            }
+                            catch (IOException) { }
+                        }
+                        else
+                        {
+                            goto gotLocalFile;
+                        }
+                    }
+                    catch
+                    {
+                        try
+                        {
+                            finfo.Delete();
+                        }
+                        catch (IOException) { }
+                    }
+                }
+                else
+                {
+                    goto gotLocalFile;
+                }
+            }
 
             WebClient wc = new WebClient();
+
+            // check for proxy authentication...
+            if (MainForm.Instance.Settings.UseHttpProxy == true)
+            {
+                WebProxy wprox = null;
+                ICredentials icred = null;
+
+                if (MainForm.Instance.Settings.HttpProxyUid != null)
+                {
+                    icred = new NetworkCredential(MainForm.Instance.Settings.HttpProxyUid, MainForm.Instance.Settings.HttpProxyPwd);
+                }
+
+                wprox = new WebProxy(MainForm.Instance.Settings.HttpProxyAddress + ":" + MainForm.Instance.Settings.HttpProxyPort, true, null, icred);
+
+                WebRequest.DefaultWebProxy = wprox;
+                wc.Proxy = wprox;
+            }
+            else
+            {
+                wc.Proxy = null;
+            }
+
             ManualResetEvent mre = new ManualResetEvent(false);
             wc.DownloadFileCompleted += delegate(object sender, AsyncCompletedEventArgs e)
             {
@@ -99,12 +156,6 @@ namespace MeGUI
             mre.WaitOne();
 
         gotLocalFile:
-            try
-            {
-                File.SetLastWriteTime(localFilename, DateTime.Now);
-            }
-            catch (IOException) { }
-
             try
             {
                 str = File.OpenRead(localFilename);

@@ -31,8 +31,6 @@ using System.Xml;
 using System.Xml.Serialization;
 
 using ICSharpCode.SharpZipLib.Zip;
-using ICSharpCode.SharpZipLib.GZip;
-using ICSharpCode.SharpZipLib.BZip2;
 
 using MeGUI.core.util;
 
@@ -942,43 +940,64 @@ namespace MeGUI
         /// This method is called to retrieve the update data from the webserver
         /// and then set the relevant information to the grid.
         /// </summary>
-        private ErrorState GetUpdateXML()
+        private ErrorState GetUpdateXML(bool bUseLocalXMLFile)
         {
             if (upgradeXml != null) // the update file has already been downloaded and processed
                 return ErrorState.Successful;
 
-            WebClient serverClient = new WebClient();
-
-            // check for proxy authentication...
-            if (meGUISettings.UseHttpProxy == true) {
-
-                WebProxy wprox = null;
-                ICredentials icred = null;
-
-                if (meGUISettings.HttpProxyUid != null) {
-                    icred = new NetworkCredential(meGUISettings.HttpProxyUid, meGUISettings.HttpProxyPwd);
-                }
-
-                wprox = new WebProxy(meGUISettings.HttpProxyAddress + ":" + meGUISettings.HttpProxyPort, true, null, icred);
-
-                WebRequest.DefaultWebProxy = wprox;
-                serverClient.Proxy = wprox;
-            }
-
-            upgradeXml = new XmlDocument();
             string data = null;
+            upgradeXml = new XmlDocument();
 
-            try
+            if (bUseLocalXMLFile)
             {
-                AddTextToLog("Retrieving update file from server...");
-                data = serverClient.DownloadString(ServerAddress + "upgrade.xml?offCache=" + System.Guid.NewGuid().ToString("N"));
-                AddTextToLog("File downloaded successfully...");
+                string strLocalUpdateXML = Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), "upgrade.xml");
+                if (File.Exists(strLocalUpdateXML))
+                {
+                    AddTextToLog("Retrieving local update file...");
+                    StreamReader sr = new StreamReader(strLocalUpdateXML);
+                    data = sr.ReadToEnd();
+                    sr.Close();
+                    AddTextToLog("File opened successfully...");
+                }
             }
-            catch
+            else
             {
-                AddTextToLog("Error: Couldn't connect to server.");
-                upgradeXml = null;
-                return ErrorState.ServerNotAvailable;
+                WebClient serverClient = new WebClient();
+
+                // check for proxy authentication...
+                if (meGUISettings.UseHttpProxy == true)
+                {
+
+                    WebProxy wprox = null;
+                    ICredentials icred = null;
+
+                    if (meGUISettings.HttpProxyUid != null)
+                    {
+                        icred = new NetworkCredential(meGUISettings.HttpProxyUid, meGUISettings.HttpProxyPwd);
+                    }
+
+                    wprox = new WebProxy(meGUISettings.HttpProxyAddress + ":" + meGUISettings.HttpProxyPort, true, null, icred);
+
+                    WebRequest.DefaultWebProxy = wprox;
+                    serverClient.Proxy = wprox;
+                }
+                else
+                {
+                    serverClient.Proxy = null;
+                }
+                
+                try
+                {
+                    AddTextToLog("Retrieving update file from server...");
+                    data = serverClient.DownloadString(ServerAddress + "upgrade.xml?offCache=" + System.Guid.NewGuid().ToString("N"));
+                    AddTextToLog("File downloaded successfully...");
+                }
+                catch
+                {
+                    AddTextToLog("Error: Couldn't connect to server.");
+                    upgradeXml = null;
+                    return ErrorState.ServerNotAvailable;
+                }
             }
 
             try
@@ -989,7 +1008,7 @@ namespace MeGUI
             }
             catch
             {
-                AddTextToLog("Error: Invalid XML file on server. Aborting.");
+                AddTextToLog("Error: Invalid XML file. Aborting.");
                 upgradeXml = null;
                 return ErrorState.InvalidXML;
             }
@@ -1012,16 +1031,25 @@ namespace MeGUI
                     break;
                 ServerAddress = serverName;
                 AddTextToLog("Trying server: " + serverName);
-                value = GetUpdateXML();
+                value = GetUpdateXML(false);
                 if (value == ErrorState.Successful)
                     break;
             }
-            
+
+            string strLocalUpdateXML = Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), "upgrade.xml");
             if (value != ErrorState.Successful)
             {
                 AddTextToLog("Error: Could not download XML file");
-                return;
+                value = GetUpdateXML(true);
+                if (value != ErrorState.Successful)
+                    return;
             }
+            else
+            {
+                if (File.Exists(strLocalUpdateXML))
+                    File.Delete(strLocalUpdateXML);
+            }
+
             // I'd prefer the main thread to parse the upgradeXML as opposed to using this
             // "downloading" thread but i didn't know a better way of doing it other than
             // using a delegate like this.
@@ -1279,6 +1307,10 @@ namespace MeGUI
                 }
             }
         }
+        public void StartAutoUpdate()
+        {
+            btnUpdate_Click(null, null);
+        }
         private void btnUpdate_Click(object sender, EventArgs e)
         {
             if (MainForm.Instance.Settings.AvisynthPluginsPath == "")
@@ -1487,7 +1519,7 @@ namespace MeGUI
 
         /// <summary>
         /// This function takes in the byte array containing a downloaded file
-        /// and the iUpgradeable file and saves the new file to the disk, it also upzips
+        /// and the iUpgradeable file and saves the new file to the disk, it also unzips
         /// the file if necessary.
         /// </summary>
         /// <param name="file"></param>
@@ -1525,10 +1557,17 @@ namespace MeGUI
             {
                 try
                 {
+                    ZipFile zipFile = new ZipFile(Path.Combine(MainForm.Instance.Settings.MeGUIUpdateCache, Path.GetFileName(file.GetLatestVersion().Url)));
+                    if (zipFile.TestArchive(true) == false)
+                    {
+                        AddTextToLog("Error: Could not unzip " + file.Name + ". Deleting file. Please run updater again...");
+                        UpdateCacher.FlushFile(file.GetLatestVersion().Url);
+                        return ErrorState.CouldNotUnzip;
+                    }
+
                     using (ZipInputStream zip = new ZipInputStream(data))
                     {
                         ZipEntry zipentry;
-
                         while ((zipentry = zip.GetNextEntry()) != null)
                         {
                             filename = Path.Combine(filepath, zipentry.Name);
