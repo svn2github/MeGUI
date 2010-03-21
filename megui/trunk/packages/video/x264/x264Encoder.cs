@@ -485,7 +485,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             if (!xs.NoMBTree)
             {
                 if (!xs.CustomEncoderOptions.Contains("--no-mbtree"))
-                    if (xs.x264Preset > 3)
+                    if (xs.x264Preset > 2)
                         sb.Append("--no-mbtree ");
             }
 
