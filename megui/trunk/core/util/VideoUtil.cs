@@ -841,7 +841,7 @@ namespace MeGUI
                 {
                     if (avi.Clip.OriginalColorspace != AviSynthColorspace.YV12)
                     {
-                        if (tryToFix)
+                        if (tryToFix && !isConvertedToYV12(avsFile))
                         {
                             bool convert = mainForm.DialogManager.addConvertToYV12(avi.Clip.OriginalColorspace.ToString());
                             if (convert)
@@ -890,8 +890,7 @@ namespace MeGUI
             try
             {
                 StreamWriter avsOut = new StreamWriter(file, true);
-                avsOut.WriteLine();
-                avsOut.WriteLine("ConvertToYV12()");
+                avsOut.Write("\r\nConvertToYV12()");
                 avsOut.Close();
             }
             catch (IOException)
@@ -899,6 +898,30 @@ namespace MeGUI
                 return false; 
             }
             return true;
+        }
+
+        private bool isConvertedToYV12(string file)
+        {
+            try
+            {
+                String strLastLine = "", line = "";
+                using (StreamReader reader = new StreamReader(file))
+                {
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        if (!String.IsNullOrEmpty(line))
+                            strLastLine = line;
+                    }
+                }
+                if (strLastLine.ToLower().Equals("converttoyv12()"))
+                    return true;
+                else
+                    return false;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         delegate VideoCodecSettings CurrentSettingsDelegate();
