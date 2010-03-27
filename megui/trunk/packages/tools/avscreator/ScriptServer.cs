@@ -164,9 +164,9 @@ namespace MeGUI
                 case PossibleSources.ffindex:
                     strDLLPath = Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.FFMSIndexPath), "ffms2.dll");
                     if (input.ToLower().EndsWith(".ffindex"))
-                        inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + input.Substring(0, input.Length - 8) + "\")";
+                        inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + input.Substring(0, input.Length - 8) + "\",colorspace=\"YV12\")";
                     else
-                        inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + input + "\")";
+                        inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + input + "\",colorspace=\"YV12\")";
                     break;
                 case PossibleSources.dgi:
                     if (MainForm.Instance.Settings.UseCUVIDserver == true)
