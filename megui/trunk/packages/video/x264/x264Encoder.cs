@@ -107,17 +107,18 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             // x264 Presets
             if (!xs.CustomEncoderOptions.Contains("--preset "))
             {
-                switch (xs.x264Preset)
+                switch (xs.x264PresetLevel)
                 {
-                    case 0: sb.Append("--preset ultrafast "); break;
-                    case 1: sb.Append("--preset veryfast "); break;
-                    case 2: sb.Append("--preset faster "); break;
-                    case 3: sb.Append("--preset fast "); break;
-                    // case 4: sb.Append("--preset medium "); break;
-                    case 5: sb.Append("--preset slow "); break;
-                    case 6: sb.Append("--preset slower "); break;
-                    case 7: sb.Append("--preset veryslow "); break;
-                    case 8: sb.Append("--preset placebo "); break;
+                    case x264Settings.x264PresetLevelModes.ultrafast: sb.Append("--preset ultrafast "); break;
+                    case x264Settings.x264PresetLevelModes.superfast: sb.Append("--preset superfast "); break;
+                    case x264Settings.x264PresetLevelModes.veryfast: sb.Append("--preset veryfast "); break;
+                    case x264Settings.x264PresetLevelModes.faster: sb.Append("--preset faster "); break;
+                    case x264Settings.x264PresetLevelModes.fast: sb.Append("--preset fast "); break;
+                    //case x264Settings.x264PresetLevelModes.medium: sb.Append("--preset medium "); break; // default value
+                    case x264Settings.x264PresetLevelModes.slow: sb.Append("--preset slow "); break;
+                    case x264Settings.x264PresetLevelModes.slower: sb.Append("--preset slower "); break;
+                    case x264Settings.x264PresetLevelModes.veryslow: sb.Append("--preset veryslow "); break;
+                    case x264Settings.x264PresetLevelModes.placebo: sb.Append("--preset placebo "); break;
                 }
             }
 
@@ -176,7 +177,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
 
             // Slow 1st Pass
             if (!xs.CustomEncoderOptions.Contains("--slow-firstpass"))
-                if ((!xs.Turbo) && xs.x264Preset < 8 &&
+                if ((!xs.Turbo) && xs.x264PresetLevel < x264Settings.x264PresetLevelModes.placebo &&
                    ((xs.EncodingMode == 2) || // 2 pass first pass
                     (xs.EncodingMode == 4) || // automated twopass
                     (xs.EncodingMode == 5) || // 3 pass first pass
@@ -218,7 +219,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             else
             {
                 if (!xs.CustomEncoderOptions.Contains("--no-deblock"))
-                    if (xs.x264Preset != 0 || (xs.x264Tuning != 0 && xs.x264Tuning != 6)) 
+                    if (xs.x264PresetLevel != x264Settings.x264PresetLevelModes.ultrafast || (xs.x264Tuning != 0 && xs.x264Tuning != 6)) 
                         sb.Append("--no-deblock ");
             }
 
@@ -226,7 +227,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             {
                 if (!xs.Cabac)
                 {
-                    if (xs.Profile > 0 && (xs.x264Preset != 0 || (xs.x264Tuning != 0 && xs.x264Tuning != 6)))
+                    if (xs.Profile > 0 && (xs.x264PresetLevel != x264Settings.x264PresetLevelModes.ultrafast || (xs.x264Tuning != 0 && xs.x264Tuning != 6)))
                         sb.Append("--no-cabac ");
                 }
             }
@@ -243,11 +244,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             if (xs.Profile > 0 && !xs.CustomEncoderOptions.Contains("--bframes"))  // baseline profile always uses 0 bframes
             {
                 int iDefaultSettings = 3;
-                switch (xs.x264Preset)
+                switch (xs.x264PresetLevel)
                 {
-                    case 0: iDefaultSettings = 0; break;
-                    case 7: iDefaultSettings = 8; break;
-                    case 8: iDefaultSettings = 16; break;
+                    case x264Settings.x264PresetLevelModes.ultrafast:   iDefaultSettings = 0; break;
+                    case x264Settings.x264PresetLevelModes.veryslow:    iDefaultSettings = 8; break;
+                    case x264Settings.x264PresetLevelModes.placebo:     iDefaultSettings = 16; break;
                 }
                 if (xs.x264Tuning == 2) // animation
                     iDefaultSettings += 2;
@@ -260,12 +261,12 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                 if (!xs.CustomEncoderOptions.Contains("-b-adapt"))
                 {
                     display = false;
-                    if (xs.x264Preset > 4)
+                    if (xs.x264PresetLevel > x264Settings.x264PresetLevelModes.medium)
                     {
                         if (xs.NewAdaptiveBFrames != 2)
                             display = true;
                     }
-                    else if (xs.x264Preset > 0)
+                    else if (xs.x264PresetLevel > x264Settings.x264PresetLevelModes.ultrafast)
                     {
                         if (xs.NewAdaptiveBFrames != 1)
                             display = true;
@@ -289,7 +290,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                 }
 
                 if (!xs.CustomEncoderOptions.Contains("--no-weightb"))
-                    if (!xs.WeightedBPrediction && xs.x264Tuning != 6 && xs.x264Preset != 0)
+                    if (!xs.WeightedBPrediction && xs.x264Tuning != 6 && xs.x264PresetLevel != x264Settings.x264PresetLevelModes.ultrafast)
                         sb.Append("--no-weightb ");                    
             }
 
@@ -306,13 +307,14 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             if (xs.Scenecut)
             {
                 if (!xs.CustomEncoderOptions.Contains("--scenecut "))
-                    if ((xs.SCDSensitivity != 40M && xs.x264Preset != 0) || (xs.SCDSensitivity != 0M && xs.x264Preset == 0))
+                    if ((xs.SCDSensitivity != 40M && xs.x264PresetLevel != x264Settings.x264PresetLevelModes.ultrafast) ||
+                        (xs.SCDSensitivity != 0M && xs.x264PresetLevel == x264Settings.x264PresetLevelModes.ultrafast))
                         sb.Append("--scenecut " + xs.SCDSensitivity.ToString(ci) + " ");
             }
             else
             {
                 if (!xs.CustomEncoderOptions.Contains("--no-scenecut"))
-                    if (xs.x264Preset != 0)
+                    if (xs.x264PresetLevel != x264Settings.x264PresetLevelModes.ultrafast)
                         sb.Append("--no-scenecut ");
             }
 
@@ -320,17 +322,18 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             if (!xs.CustomEncoderOptions.Contains("--ref "))
             {
                 int iDefaultSettings = 0;
-                switch (xs.x264Preset)
+                switch (xs.x264PresetLevel)
                 {
-                    case 0:
-                    case 1: iDefaultSettings = 1; break;
-                    case 2:
-                    case 3: iDefaultSettings = 2; break;
-                    case 4: iDefaultSettings = 3; break;
-                    case 5: iDefaultSettings = 5; break;
-                    case 6: iDefaultSettings = 8; break;
-                    case 7:
-                    case 8: iDefaultSettings = 16; break;
+                    case x264Settings.x264PresetLevelModes.ultrafast:
+                    case x264Settings.x264PresetLevelModes.superfast:
+                    case x264Settings.x264PresetLevelModes.veryfast:    iDefaultSettings = 1; break;
+                    case x264Settings.x264PresetLevelModes.faster:
+                    case x264Settings.x264PresetLevelModes.fast:        iDefaultSettings = 2; break;
+                    case x264Settings.x264PresetLevelModes.medium:      iDefaultSettings = 3; break;
+                    case x264Settings.x264PresetLevelModes.slow:        iDefaultSettings = 5; break;
+                    case x264Settings.x264PresetLevelModes.slower:      iDefaultSettings = 8; break;
+                    case x264Settings.x264PresetLevelModes.veryslow:
+                    case x264Settings.x264PresetLevelModes.placebo:     iDefaultSettings = 16; break;
                 }
                 if ((xs.x264Tuning == 2 || xs.x264Tuning == 7) && iDefaultSettings > 1)
                     iDefaultSettings = iDefaultSettings * 2;
@@ -343,11 +346,12 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             if (!xs.CustomEncoderOptions.Contains("--weightp "))
             {
                 display = false;
-                switch (xs.x264Preset)
+                switch (xs.x264PresetLevel)
                 {
-                    case 0:
-                    case 1: if (xs.WeightedPPrediction != 0) display = true; break;
-                    case 2: if (xs.WeightedPPrediction != 1) display = true; break;
+                    case x264Settings.x264PresetLevelModes.ultrafast:
+                    case x264Settings.x264PresetLevelModes.superfast:
+                    case x264Settings.x264PresetLevelModes.veryfast: if (xs.WeightedPPrediction != 0) display = true; break;
+                    case x264Settings.x264PresetLevelModes.faster: if (xs.WeightedPPrediction != 1) display = true; break;
                     default: if (xs.WeightedPPrediction != 2) display = true; break;
                 }
                 if (xs.x264Tuning == 6 && xs.WeightedPPrediction != 0)
@@ -375,43 +379,45 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             /// x264 Rate Control Tab Settings
             /// </summary>
 
+
+            if (!xs.CustomEncoderOptions.Contains("--qpmin "))
+                if (xs.MinQuantizer != 10)
+                    sb.Append("--qpmin " + xs.MinQuantizer + " ");
+            if (!xs.CustomEncoderOptions.Contains("--qpmax "))
+                if (xs.MaxQuantizer != 51)
+                    sb.Append("--qpmax " + xs.MaxQuantizer + " ");
+            if (!xs.CustomEncoderOptions.Contains("--qpstep "))
+                if (xs.MaxQuantDelta != 4)
+                    sb.Append("--qpstep " + xs.MaxQuantDelta + " ");
+
+            if (xs.IPFactor != 1.4M)
+            {
+                display = true;
+                if (xs.x264Tuning == 3 && xs.IPFactor == 1.1M)
+                    display = false;
+
+                if (!xs.CustomEncoderOptions.Contains("--ipratio "))
+                    if (display)
+                        sb.Append("--ipratio " + xs.IPFactor.ToString(ci) + " ");
+            }
+
+            if (xs.PBFactor != 1.3M) 
+            {
+                display = true;
+                if (xs.x264Tuning == 3 && xs.PBFactor == 1.1M)
+                    display = false;
+
+                if (!xs.CustomEncoderOptions.Contains("--pbratio "))
+                    if (display)
+                        sb.Append("--pbratio " + xs.PBFactor.ToString(ci) + " ");
+            }
+
+            if (!xs.CustomEncoderOptions.Contains("--chroma-qp-offset "))
+                if (xs.ChromaQPOffset != 0.0M)
+                    sb.Append("--chroma-qp-offset " + xs.ChromaQPOffset.ToString(ci) + " ");
+
             if (xs.EncodingMode != 1) // doesn't apply to CQ mode
             {
-                if (!xs.CustomEncoderOptions.Contains("--qpmin "))
-                    if (xs.MinQuantizer != 10)
-                        sb.Append("--qpmin " + xs.MinQuantizer + " ");
-                if (!xs.CustomEncoderOptions.Contains("--qpmax "))
-                    if (xs.MaxQuantizer != 51)
-                        sb.Append("--qpmax " + xs.MaxQuantizer + " ");
-                if (!xs.CustomEncoderOptions.Contains("--qpstep "))
-                    if (xs.MaxQuantDelta != 4)
-                        sb.Append("--qpstep " + xs.MaxQuantDelta + " ");
-
-                if (xs.IPFactor != 1.4M)
-                {
-                    display = true;
-                    if (xs.x264Tuning == 3 && xs.IPFactor == 1.1M)
-                        display = false;
-
-                    if (!xs.CustomEncoderOptions.Contains("--ipratio "))
-                        if (display)
-                            sb.Append("--ipratio " + xs.IPFactor.ToString(ci) + " ");
-                }
-
-                if (xs.PBFactor != 1.3M) 
-                {
-                    display = true;
-                    if (xs.x264Tuning == 3 && xs.PBFactor == 1.1M)
-                        display = false;
-
-                    if (!xs.CustomEncoderOptions.Contains("--pbratio "))
-                        if (display)
-                            sb.Append("--pbratio " + xs.PBFactor.ToString(ci) + " ");
-                }
-
-                if (!xs.CustomEncoderOptions.Contains("--chroma-qp-offset "))
-                    if (xs.ChromaQPOffset != 0.0M)
-                        sb.Append("--chroma-qp-offset " + xs.ChromaQPOffset.ToString(ci) + " ");
                 if (!xs.CustomEncoderOptions.Contains("--vbv-bufsize "))
                     if (xs.VBVBufferSize > 0)
                         sb.Append("--vbv-bufsize " + xs.VBVBufferSize + " ");
@@ -464,60 +470,63 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                     sb.Append("--deadzone-intra " + xs.DeadZoneIntra + " ");
             }
 
-            // RC Lookahead
-            if (!xs.CustomEncoderOptions.Contains("--rc-lookahead "))
-            {
-                display = false;
-                switch (xs.x264Preset)
-                {
-                    case 3: if (xs.Lookahead != 30) display = true; break;
-                    case 4: if (xs.Lookahead != 40) display = true; break;
-                    case 5: if (xs.Lookahead != 50) display = true; break;
-                    case 6:
-                    case 7:
-                    case 8: if (xs.Lookahead != 60) display = true; break;
-                }
-                if (display)
-                    sb.Append("--rc-lookahead " + xs.Lookahead + " ");
-            }
-
             // Disable Macroblok Tree
             if (!xs.NoMBTree)
             {
                 if (!xs.CustomEncoderOptions.Contains("--no-mbtree"))
-                    if (xs.x264Preset > 2)
+                    if (xs.x264PresetLevel > x264Settings.x264PresetLevelModes.veryfast)
                         sb.Append("--no-mbtree ");
+
+                // RC Lookahead
+                if (!xs.CustomEncoderOptions.Contains("--rc-lookahead "))
+                {
+                    display = false;
+                    switch (xs.x264PresetLevel)
+                    {
+                        case x264Settings.x264PresetLevelModes.faster:  if (xs.Lookahead != 30) display = true; break;
+                        case x264Settings.x264PresetLevelModes.medium:  if (xs.Lookahead != 40) display = true; break;
+                        case x264Settings.x264PresetLevelModes.slow:    if (xs.Lookahead != 50) display = true; break;
+                        case x264Settings.x264PresetLevelModes.slower:
+                        case x264Settings.x264PresetLevelModes.veryslow:
+                        case x264Settings.x264PresetLevelModes.placebo: if (xs.Lookahead != 60) display = true; break;
+                    }
+                    if (display)
+                        sb.Append("--rc-lookahead " + xs.Lookahead + " ");
+                }
             }
 
             // AQ-Mode
-            if (xs.AQmode > 0)
+            if (xs.EncodingMode != (int)VideoCodecSettings.Mode.CQ)
             {
-                if (!xs.CustomEncoderOptions.Contains("--aq-mode "))
+                if (xs.AQmode > 0)
                 {
-                    display = true;
-                    if ((xs.x264Tuning != 5 && xs.AQmode == 1) || (xs.x264Tuning == 5 && xs.AQmode == 2))
-                        display = false;
-                    if (display)
-                        sb.Append("--aq-mode " + xs.AQmode.ToString() + " ");
-                }
+                    if (!xs.CustomEncoderOptions.Contains("--aq-mode "))
+                    {
+                        display = true;
+                        if ((xs.x264Tuning != 5 && xs.AQmode == 1) || (xs.x264Tuning == 5 && xs.AQmode == 2))
+                            display = false;
+                        if (display)
+                            sb.Append("--aq-mode " + xs.AQmode.ToString() + " ");
+                    }
 
-                display = false;
-                switch (xs.x264Tuning)
-                {
-                    case 2: if (xs.AQstrength != 0.6M) display = true; break;
-                    case 3: if (xs.AQstrength != 0.5M) display = true; break;
-                    case 7: if (xs.AQstrength != 1.3M) display = true; break;
-                    default: if (xs.AQstrength != 1.0M) display = true; break;
+                    display = false;
+                    switch (xs.x264Tuning)
+                    {
+                        case 2: if (xs.AQstrength != 0.6M) display = true; break;
+                        case 3: if (xs.AQstrength != 0.5M) display = true; break;
+                        case 7: if (xs.AQstrength != 1.3M) display = true; break;
+                        default: if (xs.AQstrength != 1.0M) display = true; break;
+                    }
+                    if (!xs.CustomEncoderOptions.Contains("--aq-strength "))
+                        if (display)
+                            sb.Append("--aq-strength " + xs.AQstrength.ToString(ci) + " ");
                 }
-                if (!xs.CustomEncoderOptions.Contains("--aq-strength "))
-                    if (display)
-                        sb.Append("--aq-strength " + xs.AQstrength.ToString(ci) + " ");
-            }
-            else
-            {
-                if (!xs.CustomEncoderOptions.Contains("--aq-mode "))
-                    if (xs.x264Preset != 0 && xs.x264Tuning != 4)
-                        sb.Append("--aq-mode 0 ");
+                else
+                {
+                    if (!xs.CustomEncoderOptions.Contains("--aq-mode "))
+                        if (xs.x264PresetLevel != x264Settings.x264PresetLevelModes.ultrafast && xs.x264Tuning != 4)
+                            sb.Append("--aq-mode 0 ");
+                }
             }
 
             // custom matrices 
@@ -545,7 +554,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             // Motion Estimation Range
             if (!xs.CustomEncoderOptions.Contains("--merange "))   
             {
-                if ((xs.x264Preset < 7 && xs.MERange != 16) || (xs.x264Preset > 6 && xs.MERange != 24))
+                if ((xs.x264PresetLevel <= x264Settings.x264PresetLevelModes.slower && xs.MERange != 16) ||
+                    (xs.x264PresetLevel >= x264Settings.x264PresetLevelModes.veryslow && xs.MERange != 24))
                     sb.Append("--merange " + xs.MERange + " ");
             }
 
@@ -553,17 +563,18 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             if (!xs.CustomEncoderOptions.Contains("--me "))
             {
                 display = false;
-                switch (xs.x264Preset)
+                switch (xs.x264PresetLevel)
                 {
-                    case 0:
-                    case 1: if (xs.METype != 0) display = true; break;
-                    case 2:
-                    case 3:
-                    case 4: if (xs.METype != 1) display = true; break;
-                    case 5:
-                    case 6:
-                    case 7: if (xs.METype != 2) display = true; break;
-                    case 8: if (xs.METype != 4) display = true; break;
+                    case x264Settings.x264PresetLevelModes.ultrafast:
+                    case x264Settings.x264PresetLevelModes.superfast:   if (xs.METype != 0) display = true; break;
+                    case x264Settings.x264PresetLevelModes.veryfast: 
+                    case x264Settings.x264PresetLevelModes.faster:
+                    case x264Settings.x264PresetLevelModes.fast:
+                    case x264Settings.x264PresetLevelModes.medium:      if (xs.METype != 1) display = true; break;
+                    case x264Settings.x264PresetLevelModes.slow: 
+                    case x264Settings.x264PresetLevelModes.slower:
+                    case x264Settings.x264PresetLevelModes.veryslow:    if (xs.METype != 2) display = true; break;
+                    case x264Settings.x264PresetLevelModes.placebo:     if (xs.METype != 4) display = true; break;
                 }
 
                 if (display)
@@ -583,7 +594,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             if (!xs.CustomEncoderOptions.Contains("--direct "))
             {
                 display = false;
-                if (xs.x264Preset > 4)
+                if (xs.x264PresetLevel > x264Settings.x264PresetLevelModes.medium)
                 {
                     if (xs.BframePredictionMode != 3)
                         display = true;
@@ -612,16 +623,18 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             if (!xs.CustomEncoderOptions.Contains("--subme "))
             {
                 display = false;
-                switch (xs.x264Preset)
+                switch (xs.x264PresetLevel)
                 {
-                    case 0: if (xs.SubPelRefinement != 0) display = true; break;
-                    case 1: if (xs.SubPelRefinement != 1) display = true; break;
-                    case 2: if (xs.SubPelRefinement != 4) display = true; break;
-                    case 3: if (xs.SubPelRefinement != 6) display = true; break;
-                    case 4: if (xs.SubPelRefinement != 7) display = true; break;
-                    case 5: if (xs.SubPelRefinement != 8) display = true; break;
-                    case 6: if (xs.SubPelRefinement != 9) display = true; break;
-                    default: if (xs.SubPelRefinement != 10) display = true; break;
+                    case x264Settings.x264PresetLevelModes.ultrafast:   if (xs.SubPelRefinement != 0) display = true; break;
+                    case x264Settings.x264PresetLevelModes.superfast:   if (xs.SubPelRefinement != 1) display = true; break;
+                    case x264Settings.x264PresetLevelModes.veryfast:    if (xs.SubPelRefinement != 2) display = true; break;
+                    case x264Settings.x264PresetLevelModes.faster:      if (xs.SubPelRefinement != 4) display = true; break;
+                    case x264Settings.x264PresetLevelModes.fast:        if (xs.SubPelRefinement != 6) display = true; break;
+                    case x264Settings.x264PresetLevelModes.medium:      if (xs.SubPelRefinement != 7) display = true; break;
+                    case x264Settings.x264PresetLevelModes.slow:        if (xs.SubPelRefinement != 8) display = true; break;
+                    case x264Settings.x264PresetLevelModes.slower:      if (xs.SubPelRefinement != 9) display = true; break;
+                    case x264Settings.x264PresetLevelModes.veryslow:    if (xs.SubPelRefinement != 10) display = true; break;
+                    case x264Settings.x264PresetLevelModes.placebo:     if (xs.SubPelRefinement != 10) display = true; break;
                 }
                 if (display)
                     sb.Append("--subme " + (xs.SubPelRefinement) + " ");
@@ -636,15 +649,16 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                 bool bExpectedI8x8mv = true;
                 bool bExpectedP4x4mv = true;
 
-                switch (xs.x264Preset) 
+                switch (xs.x264PresetLevel) 
                 {
-                    case 0: bExpectedP8x8mv = false; bExpectedB8x8mv = false; bExpectedI4x4mv = false; 
+                    case x264Settings.x264PresetLevelModes.ultrafast: bExpectedP8x8mv = false; bExpectedB8x8mv = false; bExpectedI4x4mv = false; 
                             bExpectedI8x8mv = false; bExpectedP4x4mv = false; break;
-                    case 1: bExpectedP8x8mv = false; bExpectedB8x8mv = false; bExpectedP4x4mv = false; break;
-                    case 2:
-                    case 3:
-                    case 4:
-                    case 5: bExpectedP4x4mv = false; break;
+                    case x264Settings.x264PresetLevelModes.superfast: bExpectedP8x8mv = false; bExpectedB8x8mv = false; bExpectedP4x4mv = false; break;
+                    case x264Settings.x264PresetLevelModes.veryfast:
+                    case x264Settings.x264PresetLevelModes.faster:
+                    case x264Settings.x264PresetLevelModes.fast:
+                    case x264Settings.x264PresetLevelModes.medium:
+                    case x264Settings.x264PresetLevelModes.slow: bExpectedP4x4mv = false; break;
                 }
                 if (xs.x264Tuning == 7 && bExpectedP8x8mv)
                     bExpectedP4x4mv = true;
@@ -684,24 +698,25 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
 
             if (!xs.CustomEncoderOptions.Contains("--no-8x8dct"))
                 if (!xs.AdaptiveDCT)
-                    if (xs.Profile > 0 && xs.x264Preset > 0)
+                    if (xs.Profile > 0 && xs.x264PresetLevel > x264Settings.x264PresetLevelModes.ultrafast)
                         sb.Append("--no-8x8dct ");
 
             // Trellis
             if (!xs.CustomEncoderOptions.Contains("--trellis ") && xs.Cabac)
             {
                 display = false;
-                switch (xs.x264Preset)
+                switch (xs.x264PresetLevel)
                 {
-                    case 0:
-                    case 1: if (xs.X264Trellis != 0) display = true; break;
-                    case 2: 
-                    case 3:
-                    case 4:
-                    case 5: if (xs.X264Trellis != 1) display = true; break;
-                    case 6:
-                    case 7: 
-                    case 8: if (xs.X264Trellis != 2) display = true; break;
+                    case x264Settings.x264PresetLevelModes.ultrafast: 
+                    case x264Settings.x264PresetLevelModes.superfast:
+                    case x264Settings.x264PresetLevelModes.veryfast:    if (xs.X264Trellis != 0) display = true; break;
+                    case x264Settings.x264PresetLevelModes.faster: 
+                    case x264Settings.x264PresetLevelModes.fast: 
+                    case x264Settings.x264PresetLevelModes.medium:
+                    case x264Settings.x264PresetLevelModes.slow:        if (xs.X264Trellis != 1) display = true; break;
+                    case x264Settings.x264PresetLevelModes.slower: 
+                    case x264Settings.x264PresetLevelModes.veryslow:
+                    case x264Settings.x264PresetLevelModes.placebo:     if (xs.X264Trellis != 2) display = true; break;
                 }
                 if (display)
                     sb.Append("--trellis " + xs.X264Trellis + " ");
@@ -747,7 +762,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
 
             if (!xs.CustomEncoderOptions.Contains("--no-mixed-refs"))
                 if (xs.NoMixedRefs)
-                    if (xs.x264Preset > 2)
+                    if (xs.x264PresetLevel >= x264Settings.x264PresetLevelModes.fast)
                         sb.Append("--no-mixed-refs ");
 
             if (!xs.CustomEncoderOptions.Contains("--no-dct-decimate"))
@@ -757,7 +772,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
 
             if (!xs.CustomEncoderOptions.Contains("--no-fast-pskip"))
                 if (xs.NoFastPSkip)
-                    if (xs.x264Preset != 8)
+                    if (xs.x264PresetLevel != x264Settings.x264PresetLevelModes.placebo)
                         sb.Append("--no-fast-pskip ");
 
             if (!xs.CustomEncoderOptions.Contains("--no-psy"))

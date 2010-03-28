@@ -1694,7 +1694,7 @@ namespace MeGUI.packages.video.x264
             this.tbx264Presets.AutoSize = false;
             this.tbx264Presets.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.tbx264Presets.Location = new System.Drawing.Point(12, 36);
-            this.tbx264Presets.Maximum = 8;
+            this.tbx264Presets.Maximum = 9;
             this.tbx264Presets.Name = "tbx264Presets";
             this.tbx264Presets.Size = new System.Drawing.Size(467, 30);
             this.tbx264Presets.TabIndex = 0;
@@ -1702,7 +1702,7 @@ namespace MeGUI.packages.video.x264
             this.tooltipHelp.SetToolTip(this.tbx264Presets, "Change options to trade off compression efficiency and quality.\nIf you specify a " +
                     "preset, the changes it makes will be applied before\nall other parameters are app" +
                     "lied.");
-            this.tbx264Presets.Value = 4;
+            this.tbx264Presets.Value = 5;
             this.tbx264Presets.ValueChanged += new System.EventHandler(this.tbx264Presets_Scroll);
             this.tbx264Presets.Scroll += new System.EventHandler(this.tbx264Presets_Scroll);
             // 

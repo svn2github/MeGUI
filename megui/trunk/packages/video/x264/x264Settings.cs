@@ -31,6 +31,20 @@ namespace MeGUI
 	{
         public static string ID = "x264";
 
+        public enum x264PresetLevelModes : int 
+        { 
+            ultrafast = 0,
+            superfast = 1,
+            veryfast = 2,
+            faster = 3,
+            fast = 4,
+            medium = 5,
+            slow = 6,
+            slower = 7,
+            veryslow = 8,
+            placebo = 9
+        }
+
         public override void setAdjustedNbThreads(int nbThreads)
         {
             base.setAdjustedNbThreads(0);
@@ -58,20 +72,21 @@ namespace MeGUI
         int NewadaptiveBFrames, nbRefFrames, alphaDeblock, betaDeblock, subPelRefinement, maxQuantDelta, tempQuantBlur, 
 			bframePredictionMode, vbvBufferSize, vbvMaxBitrate, meType, meRange, minGOPSize, macroBlockOptions,
             quantizerMatrixType, x264Trellis, noiseReduction, deadZoneInter, deadZoneIntra, AQMode, profile, level,
-            lookahead, slicesnb, maxSliceSyzeBytes, maxSliceSyzeMBs, bFramePyramid, weightedPPrediction, preset, tune;
+            lookahead, slicesnb, maxSliceSyzeBytes, maxSliceSyzeMBs, bFramePyramid, weightedPPrediction, tune;
 		decimal ipFactor, pbFactor, chromaQPOffset, vbvInitialBuffer, bitrateVariance, quantCompression, 
 			tempComplexityBlur, tempQuanBlurCC, scdSensitivity, bframeBias, quantizerCrf, AQStrength, psyRDO, psyTrellis;
 		bool deblock, cabac, p4x4mv, p8x8mv, b8x8mv, i4x4mv, i8x8mv, weightedBPrediction, encodeInterlaced,
 			chromaME, adaptiveDCT, noMixedRefs, noFastPSkip, psnrCalc, noDctDecimate, ssimCalc, useQPFile, 
             FullRange, advSet, noMBTree, threadInput, noPsy, scenecut, x264Nalhrd, x264Aud;
 		string quantizerMatrix, qpfile;
+        x264PresetLevelModes preset;
 		#region constructor
         /// <summary>
 		/// default constructor, initializes codec default values
 		/// </summary>
 		public x264Settings():base(ID, VideoEncoderType.X264)
 		{
-            preset = 4;
+            preset = x264PresetLevelModes.medium;
             tune = 0;
             deadZoneInter = 21;
             deadZoneIntra = 11;
@@ -151,7 +166,20 @@ namespace MeGUI
 		}
 		#endregion
 		#region properties
-        public int x264Preset
+        public int x264Preset // Deprecated since 0.3.4.9, delete block after 0.3.6
+        {
+            get { return 99; }
+            set
+            {
+                if (value == 99)
+                    return;
+                // needs to be assigned to the new preset system (+superfast)
+                if (value > 0)
+                    value++;
+                preset = (x264PresetLevelModes)value;
+            }
+        }
+        public x264PresetLevelModes x264PresetLevel
         {
             get { return preset; }
             set { preset = value; }
@@ -588,7 +616,7 @@ namespace MeGUI
                 this.UseQPFile != otherSettings.UseQPFile ||
                 this.fullRange != otherSettings.fullRange ||
                 this.MacroBlockOptions != otherSettings.MacroBlockOptions ||
-                this.x264Preset != otherSettings.x264Preset ||
+                this.x264PresetLevel != otherSettings.x264PresetLevel ||
                 this.x264Tuning != otherSettings.x264Tuning ||
                 this.x264AdvancedSettings != otherSettings.x264AdvancedSettings ||
                 this.Lookahead != otherSettings.Lookahead ||
@@ -625,6 +653,7 @@ namespace MeGUI
                     WeightedPPrediction = 0;
                     break;
                 case 1:
+                    x264BFramePyramid = 2;
                     I8x8mv = false;
                     AdaptiveDCT = false;
                     QuantizerMatrixType = 0; // no matrix
@@ -632,13 +661,12 @@ namespace MeGUI
                     WeightedPPrediction = 0;
                     break;
                 case 2:
+                    x264BFramePyramid = 2;
                     WeightedPPrediction = 1;
                     break;
             }
             if (EncodingMode != 2 && EncodingMode != 5)
                 Turbo = false;
-            if (NbBframes < 2) // pyramid requires at least two b-frames
-                x264BFramePyramid = 0;
             if (NbBframes == 0)
             {
                 NewAdaptiveBFrames = 0;
