@@ -857,10 +857,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             #endregion
 
             #region output
-            // recommended by the specs
-            if (!xs.CustomEncoderOptions.Contains("--aud"))
-                if (output.EndsWith(".264"))
-                    sb.Append("--aud ");  
             
             //add the rest of the commandline regarding the output
             if (xs.EncodingMode == 2 || xs.EncodingMode == 5)
