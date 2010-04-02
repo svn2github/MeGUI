@@ -220,6 +220,9 @@ namespace MeGUI
         public string verifyVideoSettings()
         {
             // test for valid input filename
+            if (String.IsNullOrEmpty(this.VideoInput))
+                return "Please specify a video input file";
+
             string fileErr = MainForm.verifyInputFile(this.VideoInput);
             if (fileErr != null)
             {
