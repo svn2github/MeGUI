@@ -182,7 +182,7 @@ namespace MeGUI
             KeepInputResolution = false;
 			OutputResolution = 640;
             SplitSize = null;
-            ContainerCandidates = new string[0];
+            ContainerCandidates = new string[] {"MKV"};
 		}
 
         #region GenericSettings Members
