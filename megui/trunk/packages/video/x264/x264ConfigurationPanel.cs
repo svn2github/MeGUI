@@ -1479,7 +1479,10 @@ namespace MeGUI.packages.video.x264
                     x264VBVMaxRate.Text = xs.VBVMaxBitrate.ToString();
                 }
                 else
+                {
                     x264VBVBufferSize.Text = "0";
+                    x264VBVMaxRate.Text = "0";
+                }
                 x264VBVInitialBuffer.Value = xs.VBVInitialBuffer;
                 x264RateTol.Value = xs.BitrateVariance;
                 x264QuantizerCompression.Value = xs.QuantCompression;
