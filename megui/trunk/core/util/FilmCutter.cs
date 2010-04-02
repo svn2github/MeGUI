@@ -61,10 +61,10 @@ namespace MeGUI.core.util
     }
     public enum TransitionStyle
     {
-        [EnumTitle("Fade (recommended)")]
-        FADE,
         [EnumTitle("No transition")]
         NO_TRANSITION,
+        [EnumTitle("Fade")]
+        FADE,
         [EnumTitle("Dissolve")]
         DISSOLVE
     }
@@ -253,15 +253,15 @@ namespace MeGUI.core.util
             if (first && last) return p;
             if (isAudio)
             {
-                if (!first && !last) return string.Format("FadeIO(FadeIO0({0}, 0, AudioRate(__just_audio)), 0, AudioRate(__just_audio))", p);
-                if (first) return string.Format("FadeOut(FadeOut0({0}, 0, AudioRate(__just_audio)), 0, AudioRate(__just_audio))", p);
-                if (last) return string.Format("FadeIn(FadeIn0({0}, 0, AudioRate(__just_audio)), 0, AudioRate(__just_audio))", p);
+                if (!first && !last) return string.Format("FadeIO(FadeIO0({0}, 10, AudioRate(__just_audio)), 10, AudioRate(__just_audio))", p);
+                if (first) return string.Format("FadeOut(FadeOut0({0}, 10, AudioRate(__just_audio)), 10, AudioRate(__just_audio))", p);
+                if (last) return string.Format("FadeIn(FadeIn0({0}, 10, AudioRate(__just_audio)), 10, AudioRate(__just_audio))", p);
             }
             else
             {
-                if (!first && !last) return string.Format("FadeIO({0}, 0, AudioRate(__film))", p);
-                if (first) return string.Format("FadeOut({0}, 0, AudioRate(__film))", p);
-                if (last) return string.Format("FadeIn({0}, 0, AudioRate(__film))", p);
+                if (!first && !last) return string.Format("FadeIO({0}, 10, AudioRate(__film))", p);
+                if (first) return string.Format("FadeOut({0}, 10, AudioRate(__film))", p);
+                if (last) return string.Format("FadeIn({0}, 10, AudioRate(__film))", p);
             }
             Debug.Assert(false);
             return null;
