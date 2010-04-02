@@ -863,53 +863,67 @@ namespace MeGUI
             }
             else customDAR = AR.Value.ar;
 
-            // Minimise upsizing
-            int sourceHorizontalResolution = (int)d2v.Info.Width - final.right - final.left;
-            if (autoCrop)
-                sourceHorizontalResolution = (int)d2v.Info.Width;
-
-            if (horizontalResolution > sourceHorizontalResolution)
+            if (keepInputResolution)
             {
-                if (avsSettings.Mod16Method == mod16Method.resize)
-                    while (horizontalResolution > sourceHorizontalResolution + 16)
-                        horizontalResolution -= 16;
-                else
-                    horizontalResolution = sourceHorizontalResolution;
+                horizontalResolution = (int)d2v.Info.Width;
+                final = new CropValues();
+            }
+            else
+            {
+                // Minimise upsizing
+                int sourceHorizontalResolution = (int)d2v.Info.Width - final.right - final.left;
+                if (autoCrop)
+                    sourceHorizontalResolution = (int)d2v.Info.Width;
+
+                if (horizontalResolution > sourceHorizontalResolution)
+                {
+                    if (avsSettings.Mod16Method == mod16Method.resize)
+                        while (horizontalResolution > sourceHorizontalResolution + 16)
+                            horizontalResolution -= 16;
+                    else
+                        horizontalResolution = sourceHorizontalResolution;
+                }
             }
 
             //Suggest a resolution (taken from AvisynthWindow.suggestResolution_CheckedChanged)
             int scriptVerticalResolution = Resolution.suggestResolution(d2v.Info.Height, d2v.Info.Width, (double)customDAR,
                 final, horizontalResolution, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out dar);
 
+            if (keepInputResolution)
+                scriptVerticalResolution = (int)d2v.Info.Height;
+
             log.LogValue("Output resolution", horizontalResolution + "x" + scriptVerticalResolution);
 
-            if (settings != null && settings is x264Settings) // verify that the video corresponds to the chosen avc level, if not, change the resolution until it does fit
+            if (!keepInputResolution)
             {
-                x264Settings xs = (x264Settings)settings;
-                if (xs.Level != 15)
+                if (settings != null && settings is x264Settings) // verify that the video corresponds to the chosen avc level, if not, change the resolution until it does fit
                 {
-                    AVCLevels al = new AVCLevels();
-                    log.LogValue("AVC level", al.getLevels()[xs.Level]);
-
-                    int compliantLevel = 15;
-                    while (!this.al.validateAVCLevel(horizontalResolution, scriptVerticalResolution, d2v.Info.FPS, xs, out compliantLevel))
-                    { // resolution not profile compliant, reduce horizontal resolution by 16, get the new vertical resolution and try again
-                        string levelName = al.getLevels()[xs.Level];
-                        horizontalResolution -= 16;
-                        scriptVerticalResolution = Resolution.suggestResolution(d2v.Info.Height, d2v.Info.Width, (double)customDAR,
-                            final, horizontalResolution, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out dar);
-                    }
-                    log.LogValue("Resolution adjusted for AVC Level", horizontalResolution + "x" + scriptVerticalResolution);
-                }
-                if (useChaptersMarks)
-                {
-                    qpfile = job.PostprocessingProperties.ChapterFile;
-                    if ((Path.GetExtension(qpfile).ToLower()) == ".txt")
-                        qpfile = VideoUtil.convertChaptersTextFileTox264QPFile(job.PostprocessingProperties.ChapterFile, d2v.Info.FPS);
-                    if (File.Exists(qpfile))
+                    x264Settings xs = (x264Settings)settings;
+                    if (xs.Level != 15)
                     {
-                        xs.UseQPFile = true;
-                        xs.QPFile = qpfile;
+                        AVCLevels al = new AVCLevels();
+                        log.LogValue("AVC level", al.getLevels()[xs.Level]);
+
+                        int compliantLevel = 15;
+                        while (!this.al.validateAVCLevel(horizontalResolution, scriptVerticalResolution, d2v.Info.FPS, xs, out compliantLevel))
+                        { // resolution not profile compliant, reduce horizontal resolution by 16, get the new vertical resolution and try again
+                            string levelName = al.getLevels()[xs.Level];
+                            horizontalResolution -= 16;
+                            scriptVerticalResolution = Resolution.suggestResolution(d2v.Info.Height, d2v.Info.Width, (double)customDAR,
+                                final, horizontalResolution, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out dar);
+                        }
+                        log.LogValue("Resolution adjusted for AVC Level", horizontalResolution + "x" + scriptVerticalResolution);
+                    }
+                    if (useChaptersMarks)
+                    {
+                        qpfile = job.PostprocessingProperties.ChapterFile;
+                        if ((Path.GetExtension(qpfile).ToLower()) == ".txt")
+                            qpfile = VideoUtil.convertChaptersTextFileTox264QPFile(job.PostprocessingProperties.ChapterFile, d2v.Info.FPS);
+                        if (File.Exists(qpfile))
+                        {
+                            xs.UseQPFile = true;
+                            xs.QPFile = qpfile;
+                        }
                     }
                 }
             }
@@ -943,13 +957,19 @@ namespace MeGUI
 
             if (autoCrop)
                  cropLine = ScriptServer.GetCropLine(true, final);
-            else cropLine = ScriptServer.GetCropLine(false, final);
+            else 
+                cropLine = ScriptServer.GetCropLine(false, final);
+
             denoiseLines = ScriptServer.GetDenoiseLines(avsSettings.Denoise, (DenoiseFilterType)avsSettings.DenoiseMethod);
 
             if (keepInputResolution == false)
-            resizeLine = ScriptServer.GetResizeLine(!signalAR || avsSettings.Mod16Method == mod16Method.resize, horizontalResolution, scriptVerticalResolution, (ResizeFilterType)avsSettings.ResizeMethod);
+                resizeLine = ScriptServer.GetResizeLine(!signalAR || avsSettings.Mod16Method == mod16Method.resize, horizontalResolution, scriptVerticalResolution, (ResizeFilterType)avsSettings.ResizeMethod);
 
             string newScript = ScriptServer.CreateScriptFromTemplate(avsSettings.Template, inputLine, cropLine, resizeLine, denoiseLines, deinterlaceLines);
+            
+            if (keepInputResolution)
+                dar = d2v.Info.DAR;
+            
             if (dar.HasValue)
                 newScript = string.Format("global MeGUI_darx = {0}\r\nglobal MeGUI_dary = {1}\r\n{2}", dar.Value.X, dar.Value.Y, newScript);
 
