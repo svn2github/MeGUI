@@ -29,13 +29,13 @@ namespace MeGUI.core.util
     [TypeConverter(typeof(DarConverter))]
     public struct Dar
     {
-        public static readonly Dar ITU16x9PAL = new Dar(1.823361M);
-        public static readonly Dar ITU4x3PAL = new Dar(1.367521M);
-        public static readonly Dar ITU16x9NTSC = new Dar(1.822784M);
-        public static readonly Dar ITU4x3NTSC = new Dar(1.367088M);
-        public static readonly Dar STATIC4x3 = new Dar(1.333333M);
-        public static readonly Dar STATIC16x9 = new Dar(1.777778M);
-        public static readonly Dar A1x1 = new Dar(1M);
+        public static readonly Dar ITU16x9PAL = new Dar(640, 351); // 720/576 * 512/351
+        public static readonly Dar ITU4x3PAL = new Dar(160, 117); // 720/576 * 128/117
+        public static readonly Dar ITU16x9NTSC = new Dar(8640, 4739); // 720/480 * 5760/4739
+        public static readonly Dar ITU4x3NTSC = new Dar(6480, 4739); // 720/480 * 4320/4739
+        public static readonly Dar STATIC4x3 = new Dar(4, 3);
+        public static readonly Dar STATIC16x9 = new Dar(16, 9);
+        public static readonly Dar A1x1 = new Dar(1, 1);
 
         public decimal ar;
 
