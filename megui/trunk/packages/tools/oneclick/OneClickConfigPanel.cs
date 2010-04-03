@@ -150,11 +150,16 @@ namespace MeGUI.packages.tools.oneclick
             {
                 horizontalResolution.Enabled = false;
                 autoCrop.Checked = false;
+                autoCrop.Enabled = false;
+                signalAR.Enabled = false;
+                signalAR.Checked = false;
             }
             else
             {
                 horizontalResolution.Enabled = true;
                 autoCrop.Checked = true;
+                autoCrop.Enabled = true;
+                signalAR.Enabled = true;
             }
         }
 
