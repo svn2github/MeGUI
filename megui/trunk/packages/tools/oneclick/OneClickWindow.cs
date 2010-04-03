@@ -610,11 +610,16 @@ namespace MeGUI
             {
                 horizontalResolution.Enabled = false;
                 autoCrop.Checked = false;
+                autoCrop.Enabled = false;
+                signalAR.Enabled = false;
+                signalAR.Checked = false;
             }
             else
             {
                 horizontalResolution.Enabled = true;
                 autoCrop.Checked = true;
+                autoCrop.Enabled = true;
+                signalAR.Enabled = true;
             }
         }
     }
@@ -812,7 +817,10 @@ namespace MeGUI
             bool signalAR, LogItem log, AviSynthSettings avsSettings, bool autoDeint,
             VideoCodecSettings settings, out Dar? dar, bool autoCrop, bool keepInputResolution, bool useChaptersMarks)
         {
-            dar = null; 
+            dar = null;
+            CropValues final = new CropValues();
+            Dar customDAR;
+
             IMediaFile d2v = new d2vFile(path);
             IVideoReader reader = d2v.GetVideoReader();
             if (reader.FrameCount < 1)
@@ -821,52 +829,54 @@ namespace MeGUI
                 return "";
             }
 
-            //Autocrop
-            CropValues final = Autocrop.autocrop(reader);
-
-            if (signalAR)
+            if (!keepInputResolution)
             {
-                if (avsSettings.Mod16Method == mod16Method.overcrop)
-                    ScriptServer.overcrop(ref final);
-                else if (avsSettings.Mod16Method == mod16Method.mod4Horizontal)
-                    ScriptServer.cropMod4Horizontal(ref final);
-                else if (avsSettings.Mod16Method == mod16Method.undercrop)
-                    ScriptServer.undercrop(ref final);
-            }
+                //Autocrop
+                final = Autocrop.autocrop(reader);
 
-            bool error = (final.left == -1);
-            if (autoCrop)
-            {
-                if (!error)
-                    log.LogValue("Autocrop values", final);
-                else
+                if (signalAR)
                 {
-                    log.Error("Autocrop failed, aborting now");
-                    return "";
+                    if (avsSettings.Mod16Method == mod16Method.overcrop)
+                        ScriptServer.overcrop(ref final);
+                    else if (avsSettings.Mod16Method == mod16Method.mod4Horizontal)
+                        ScriptServer.cropMod4Horizontal(ref final);
+                    else if (avsSettings.Mod16Method == mod16Method.undercrop)
+                        ScriptServer.undercrop(ref final);
+                }
+
+                if (autoCrop)
+                {
+                    bool error = (final.left == -1);
+                    if (!error)
+                        log.LogValue("Autocrop values", final);
+                    else
+                    {
+                        log.Error("Autocrop failed, aborting now");
+                        return "";
+                    }
                 }
             }
-
-            decimal customDAR;
 
             log.LogValue("Auto-detect aspect ratio now", AR == null);
             //Check if AR needs to be autodetected now
             if (AR == null) // it does
             {
-                customDAR = d2v.Info.DAR.ar;
-                if (customDAR > 0)
+                customDAR = d2v.Info.DAR;
+                if (customDAR.ar > 0)
                     log.LogValue("Aspect ratio", customDAR);
                 else
                 {
-                    customDAR = Dar.ITU16x9PAL.ar;
+                    customDAR = Dar.ITU16x9PAL;
                     log.Warn(string.Format("No aspect ratio found, defaulting to {0}.", customDAR));
                 }
             }
-            else customDAR = AR.Value.ar;
+            else 
+                customDAR = AR.Value;
 
             if (keepInputResolution)
             {
                 horizontalResolution = (int)d2v.Info.Width;
-                final = new CropValues();
+                dar = customDAR;
             }
             else
             {
@@ -886,16 +896,17 @@ namespace MeGUI
             }
 
             //Suggest a resolution (taken from AvisynthWindow.suggestResolution_CheckedChanged)
-            int scriptVerticalResolution = Resolution.suggestResolution(d2v.Info.Height, d2v.Info.Width, (double)customDAR,
-                final, horizontalResolution, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out dar);
-
+            int scriptVerticalResolution = 0;
             if (keepInputResolution)
-                scriptVerticalResolution = (int)d2v.Info.Height;
-
-            log.LogValue("Output resolution", horizontalResolution + "x" + scriptVerticalResolution);
-
-            if (!keepInputResolution)
             {
+                scriptVerticalResolution = (int)d2v.Info.Height;
+                log.LogValue("Output resolution", horizontalResolution + "x" + scriptVerticalResolution);
+            }
+            else
+            {
+                scriptVerticalResolution = Resolution.suggestResolution(d2v.Info.Height, d2v.Info.Width, (double)customDAR.ar,
+                final, horizontalResolution, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out dar);
+                log.LogValue("Output resolution", horizontalResolution + "x" + scriptVerticalResolution);
                 if (settings != null && settings is x264Settings) // verify that the video corresponds to the chosen avc level, if not, change the resolution until it does fit
                 {
                     x264Settings xs = (x264Settings)settings;
@@ -909,7 +920,7 @@ namespace MeGUI
                         { // resolution not profile compliant, reduce horizontal resolution by 16, get the new vertical resolution and try again
                             string levelName = al.getLevels()[xs.Level];
                             horizontalResolution -= 16;
-                            scriptVerticalResolution = Resolution.suggestResolution(d2v.Info.Height, d2v.Info.Width, (double)customDAR,
+                            scriptVerticalResolution = Resolution.suggestResolution(d2v.Info.Height, d2v.Info.Width, (double)customDAR.ar,
                                 final, horizontalResolution, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out dar);
                         }
                         log.LogValue("Resolution adjusted for AVC Level", horizontalResolution + "x" + scriptVerticalResolution);
@@ -956,20 +967,17 @@ namespace MeGUI
             inputLine = ScriptServer.GetInputLine(path, interlaced, PossibleSources.d2v, avsSettings.ColourCorrect, avsSettings.MPEG2Deblock, false, 0, false);
 
             if (autoCrop)
-                 cropLine = ScriptServer.GetCropLine(true, final);
+                cropLine = ScriptServer.GetCropLine(true, final);
             else 
                 cropLine = ScriptServer.GetCropLine(false, final);
 
             denoiseLines = ScriptServer.GetDenoiseLines(avsSettings.Denoise, (DenoiseFilterType)avsSettings.DenoiseMethod);
 
-            if (keepInputResolution == false)
+            if (!keepInputResolution)
                 resizeLine = ScriptServer.GetResizeLine(!signalAR || avsSettings.Mod16Method == mod16Method.resize, horizontalResolution, scriptVerticalResolution, (ResizeFilterType)avsSettings.ResizeMethod);
 
             string newScript = ScriptServer.CreateScriptFromTemplate(avsSettings.Template, inputLine, cropLine, resizeLine, denoiseLines, deinterlaceLines);
-            
-            if (keepInputResolution)
-                dar = d2v.Info.DAR;
-            
+                        
             if (dar.HasValue)
                 newScript = string.Format("global MeGUI_darx = {0}\r\nglobal MeGUI_dary = {1}\r\n{2}", dar.Value.X, dar.Value.Y, newScript);
 
