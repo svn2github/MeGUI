@@ -180,7 +180,7 @@ namespace MeGUI
 			SignalAR = false;
             AutoCrop = true;
             KeepInputResolution = false;
-			OutputResolution = 640;
+			OutputResolution = 720;
             SplitSize = null;
             ContainerCandidates = new string[] {"MKV"};
 		}
