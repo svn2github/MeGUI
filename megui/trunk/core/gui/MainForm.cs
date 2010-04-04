@@ -799,6 +799,7 @@ namespace MeGUI
             if (Properties.Settings.Default.ApplicationVersion != appVersion.ToString())
             {
                 Properties.Settings.Default.Upgrade();
+                CustomUserSettings.Default.Upgrade();
                 Properties.Settings.Default.ApplicationVersion = appVersionString;
             }
 

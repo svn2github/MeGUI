@@ -109,18 +109,6 @@ namespace MeGUI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("60")]
-        public int OwnerWidth {
-            get {
-                return ((int)(this["OwnerWidth"]));
-            }
-            set {
-                this["OwnerWidth"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("139")]
         public int UpdateWindowVerticalSplitterDistance {
             get {

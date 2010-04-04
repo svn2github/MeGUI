@@ -305,6 +305,18 @@ namespace MeGUI.core.gui
             PauseResumeMode = PauseResumeMode.Disabled;
             
             settings = new JobQueueSettings(this, Name);
+
+            // Attemp a settings upgrade in case of a new build
+            System.Reflection.Assembly a = System.Reflection.Assembly.GetExecutingAssembly();
+            Version appVersion = a.GetName().Version;
+            string appVersionString = appVersion.ToString();
+            if (settings.ApplicationVersion != appVersion.ToString())
+            {
+                settings.Upgrade();
+                settings.ApplicationVersion = appVersionString;
+                settings.Save();
+            }
+
             this.LoadComponentSettings();
             this.Disposed += delegate(object _, EventArgs __) {
                 SaveComponentSettings();
@@ -1003,6 +1015,20 @@ namespace MeGUI.core.gui
             set
             {
                 this["FPSColumnWidth"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ApplicationVersion
+        {
+            get
+            {
+                return ((string)(this["ApplicationVersion"]));
+            }
+            set
+            {
+                this["ApplicationVersion"] = value;
             }
         }
     }

@@ -196,7 +196,6 @@ namespace MeGUI.core.gui
             // ownerHeader
             // 
             this.ownerHeader.Text = "Owner";
-            this.ownerHeader.Width = global::MeGUI.Properties.Settings.Default.OwnerWidth;
             // 
             // queueContextMenu
             // 
