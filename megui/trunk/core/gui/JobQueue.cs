@@ -767,13 +767,20 @@ namespace MeGUI.core.gui
 
         private void queueListView_KeyDown(object sender, KeyEventArgs e)
         {
+            if (e.Control && e.KeyCode.Equals(Keys.A))
+            {
+                foreach (ListViewItem item in this.queueListView.Items)
+                    item.Selected = true;
+                return;
+            }
+
             switch (e.KeyCode)
             {
                 case Keys.Delete: deleteJobButton_Click(sender, e); break;
-                case Keys.Up: if (upButton.Enabled) upButton_Click(sender, e); break;
-                case Keys.Down: if (downButton.Enabled) downButton_Click(sender, e); break;
+                case Keys.Up: if (upButton.Enabled && e.Shift) upButton_Click(sender, e); break;
+                case Keys.Down: if (downButton.Enabled && e.Shift) downButton_Click(sender, e); break;
                 case Keys.Escape:
-                case Keys.Enter: startStopButton_Click(sender, e); break;               
+                case Keys.Enter: startStopButton_Click(sender, e); break;
             }
         }
 
