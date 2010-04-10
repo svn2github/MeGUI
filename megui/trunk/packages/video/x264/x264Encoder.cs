@@ -54,7 +54,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             }
 #endif
 #if x64
-            string x264Path = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(encoderPath), "x264_64exe");
+            string x264Path = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(encoderPath), "x264_64.exe");
             if (System.IO.File.Exists(x264Path))
                 executable = x264Path;
 #endif
