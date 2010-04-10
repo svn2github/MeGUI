@@ -163,10 +163,18 @@ namespace MeGUI
                     break;
                 case PossibleSources.ffindex:
                     strDLLPath = Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.FFMSIndexPath), "ffms2.dll");
+#if x86
                     if (input.ToLower().EndsWith(".ffindex"))
                         inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + input.Substring(0, input.Length - 8) + "\",colorspace=\"YV12\")";
                     else
                         inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + input + "\",colorspace=\"YV12\")";
+#endif
+#if x64
+                    if (input.ToLower().EndsWith(".ffindex"))
+                        inputLine = "LoadCPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + input.Substring(0, input.Length - 8) + "\",colorspace=\"YV12\")";
+                    else
+                        inputLine = "LoadCPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + input + "\",colorspace=\"YV12\")";
+#endif
                     break;
                 case PossibleSources.dgi:
                     if (MainForm.Instance.Settings.UseCUVIDserver == true)
@@ -198,7 +206,7 @@ namespace MeGUI
                         if (dss2)
                             inputLine = "LoadPlugin(\"" + MeGUISettings.HaaliMSPath + "\\avss.dll" + "\")\r\ndss2(\"" + input + "\"" + ((fps > 0) ? ", fps=" + fps.ToString("F3", new CultureInfo("en-us")) : string.Empty) + ")";
                         else
-                        inputLine = "DirectShowSource(\"" + input + "\"" + ((fps > 0) ? ", fps=" + fps.ToString("F3", new CultureInfo("en-us")) : string.Empty) + ", audio=false, convertfps=true)";
+                            inputLine = "DirectShowSource(\"" + input + "\"" + ((fps > 0) ? ", fps=" + fps.ToString("F3", new CultureInfo("en-us")) : string.Empty) + ", audio=false, convertfps=true)";
                         if (flipVertical)
                             inputLine = inputLine + "\r\nFlipVertical()";
                     }

@@ -287,15 +287,18 @@ namespace MeGUI
                         }
                 }
             }
-
+#if x64
+            osName += " x64";
+#endif
+#if x86
             if (x64Detection)
             {
-                if (isWow64())
-                    osName += " x64";
-                else
+                if (!isWow64())
                     osName += " x86";
+                else
+                    osName += " x64";
             }
-
+#endif
             return osName;
         }
 

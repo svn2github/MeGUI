@@ -55,7 +55,6 @@ namespace MeGUI
 		private System.Windows.Forms.ColumnHeader nameColumn;
 		private System.Windows.Forms.Label startTimeLabel;
 		private System.Windows.Forms.Label chapterNameLabel;
-		private System.Windows.Forms.Button loadButton;
 		private System.Windows.Forms.Button saveButton;
 		private System.Windows.Forms.TextBox startTime;
 		private System.Windows.Forms.TextBox chapterName;

@@ -74,7 +74,6 @@ namespace MeGUI
 
         #endregion
 
-        private System.Windows.Forms.Label label1;
         private FileBar muxedInput;
     }
 }

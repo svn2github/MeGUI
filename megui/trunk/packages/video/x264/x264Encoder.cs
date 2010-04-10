@@ -45,12 +45,19 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             : base()
         {
             executable = encoderPath;
+#if x86
             if (OSInfo.isWow64())
             {
                 string vfw4x264Path =  System.IO.Path.Combine(System.IO.Path.GetDirectoryName(encoderPath), "vfw4x264.exe");
                 if (System.IO.File.Exists(vfw4x264Path))
                     executable = vfw4x264Path;
             }
+#endif
+#if x64
+            string x264Path = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(encoderPath), "x264_64exe");
+            if (System.IO.File.Exists(x264Path))
+                executable = x264Path;
+#endif
         }
 
         public override string GetFrameString(string line, StreamType stream)

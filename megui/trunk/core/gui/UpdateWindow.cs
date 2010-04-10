@@ -99,14 +99,19 @@ namespace MeGUI
                     case "base": arrPath.Add(System.Windows.Forms.Application.ExecutablePath); break;
                     case "x264":
                         {
-                            arrPath.Add(MainForm.Instance.Settings.X264Path); 
+                            arrPath.Add(MainForm.Instance.Settings.X264Path);
+                            strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.X264Path);
+#if x86
                             if (OSInfo.isWow64())
-                            {
-                                strPath =  System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.X264Path);
+                            { 
                                 arrPath.Add(System.IO.Path.Combine(strPath, "vfw4x264.exe"));
                                 arrPath.Add(System.IO.Path.Combine(strPath, "avs4x264.exe"));
                                 arrPath.Add(System.IO.Path.Combine(strPath, "x264_64.exe"));
                             }
+#endif
+#if x64
+                            arrPath.Add(System.IO.Path.Combine(strPath, "x264_64.exe"));
+#endif
                             break;
                         }
                     case "mencoder": arrPath.Add(MainForm.Instance.Settings.MencoderPath); break;
@@ -950,7 +955,12 @@ namespace MeGUI
 
             if (bUseLocalXMLFile)
             {
+#if x86
                 string strLocalUpdateXML = Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), "upgrade.xml");
+#endif
+#if x64
+                string strLocalUpdateXML = Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), "upgrade_x64.xml");
+#endif
                 if (File.Exists(strLocalUpdateXML))
                 {
                     AddTextToLog("Retrieving local update file...");
@@ -989,7 +999,12 @@ namespace MeGUI
                 try
                 {
                     AddTextToLog("Retrieving update file from server...");
+#if x86
                     data = serverClient.DownloadString(ServerAddress + "upgrade.xml?offCache=" + System.Guid.NewGuid().ToString("N"));
+#endif
+#if x64
+                    data = serverClient.DownloadString(ServerAddress + "upgrade_x64.xml?offCache=" + System.Guid.NewGuid().ToString("N"));
+#endif
                     AddTextToLog("File downloaded successfully...");
                 }
                 catch
@@ -1036,7 +1051,6 @@ namespace MeGUI
                     break;
             }
 
-            string strLocalUpdateXML = Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), "upgrade.xml");
             if (value != ErrorState.Successful)
             {
                 AddTextToLog("Error: Could not download XML file");
@@ -1046,6 +1060,12 @@ namespace MeGUI
             }
             else
             {
+#if x86
+                string strLocalUpdateXML = Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), "upgrade.xml");
+#endif
+#if x64
+                string strLocalUpdateXML = Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), "upgrade_x64.xml");
+#endif
                 if (File.Exists(strLocalUpdateXML))
                     File.Delete(strLocalUpdateXML);
             }

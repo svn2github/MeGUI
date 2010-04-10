@@ -123,7 +123,7 @@ namespace MeGUI
         private Button autoEncodeButton;
         private Button resetButton;
         private Button OneClickEncButton;
-        private Button HelpButton;
+        private Button helpButton1;
         private SplitContainer splitContainer2;
         private MenuItem mnutoolsD2VCreator;
         private List<Form> formsToReopen = new List<Form>();
@@ -159,7 +159,7 @@ namespace MeGUI
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.resetButton = new System.Windows.Forms.Button();
-            this.HelpButton = new System.Windows.Forms.Button();
+            this.helpButton1 = new System.Windows.Forms.Button();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
             this.autoEncodeButton = new System.Windows.Forms.Button();
             this.OneClickEncButton = new System.Windows.Forms.Button();
@@ -316,7 +316,7 @@ namespace MeGUI
             // 
             this.flowLayoutPanel1.BackColor = System.Drawing.SystemColors.Control;
             this.flowLayoutPanel1.Controls.Add(this.resetButton);
-            this.flowLayoutPanel1.Controls.Add(this.HelpButton);
+            this.flowLayoutPanel1.Controls.Add(this.helpButton1);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
@@ -336,17 +336,17 @@ namespace MeGUI
             this.resetButton.Text = "Reset";
             this.resetButton.Click += new System.EventHandler(this.resetButton_Click);
             // 
-            // HelpButton
+            // helpButton1
             // 
-            this.HelpButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.HelpButton.AutoSize = true;
-            this.HelpButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.HelpButton.Location = new System.Drawing.Point(54, 3);
-            this.HelpButton.Name = "HelpButton";
-            this.HelpButton.Size = new System.Drawing.Size(38, 23);
-            this.HelpButton.TabIndex = 5;
-            this.HelpButton.Text = "Help";
-            this.HelpButton.Click += new System.EventHandler(this.HelpButton_Click);
+            this.helpButton1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.helpButton1.AutoSize = true;
+            this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.helpButton1.Location = new System.Drawing.Point(54, 3);
+            this.helpButton1.Name = "helpButton1";
+            this.helpButton1.Size = new System.Drawing.Size(38, 23);
+            this.helpButton1.TabIndex = 5;
+            this.helpButton1.Text = "Help";
+            this.helpButton1.Click += new System.EventHandler(this.HelpButton_Click);
             // 
             // flowLayoutPanel2
             // 
@@ -816,6 +816,9 @@ namespace MeGUI
             this.trayIcon.Icon = new Icon(myAssembly.GetManifestResourceStream(name + "App.ico"));
             this.Icon = trayIcon.Icon;
             this.TitleText = Application.ProductName + " " + Application.ProductVersion;
+#if x64
+            this.TitleText += " x64";
+#endif
             if (MainForm.Instance.Settings.AutoUpdate == true && MainForm.Instance.Settings.AutoUpdateServerSubList == 1)
                 this.TitleText += " DEVELOPMENT UPDATE SERVER";
             setGUIInfo();
@@ -1445,8 +1448,12 @@ namespace MeGUI
 
         private void beginUpdateCheck()
         {
+#if x86
             string strLocalUpdateXML = Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), "upgrade.xml");
-
+#endif
+#if x64
+            string strLocalUpdateXML = Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), "upgrade_x64.xml");
+#endif
             UpdateWindow update = new UpdateWindow(this, this.Settings);
             update.GetUpdateData(true);
             if (update.HasUpdatableFiles()) // If there are updated files, display the window
@@ -2062,7 +2069,12 @@ namespace MeGUI
             this.WindowState = MeGUI.Properties.Settings.Default.MainFormWindowState;
 
             LogItem i = Log.Info("Versions");
+#if x86
             i.LogValue("MeGUI Version ", Application.ProductVersion);
+#endif
+#if x64
+            i.LogValue("MeGUI Version ", Application.ProductVersion + " x64");
+#endif
             i.LogValue("OS ", string.Format("{0}{1} ({2}.{3}.{4}.{5})", OSInfo.GetOSName(), OSInfo.GetOSServicePack(), OSInfo.OSMajorVersion, OSInfo.OSMinorVersion, OSInfo.OSRevisionVersion, OSInfo.OSBuildVersion));
             i.LogValue("Latest .Net Framework installed ", string.Format("{0}", OSInfo.DotNetVersionFormated(OSInfo.FormatDotNetVersion())));
 

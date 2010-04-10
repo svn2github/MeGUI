@@ -84,7 +84,12 @@ namespace MeGUI
             this.fileName = fileName.Substring(0, fileName.Length - 8);
             string strPath = Path.GetDirectoryName(MainForm.Instance.Settings.FFMSIndexPath);
             string strDLL = Path.Combine(strPath, "ffms2.dll");
+#if x86
             strScript = "LoadPlugin(\"" + strDLL + "\")\r\nFFVideoSource(\"" + this.fileName + "\",colorspace=\"YV12\")";
+#endif
+#if x64
+            strScript = "LoadCPlugin(\"" + strDLL + "\")\r\nFFVideoSource(\"" + this.fileName + "\",colorspace=\"YV12\")";
+#endif
             reader = AvsFile.ParseScript(strScript);
             info = reader.Info.Clone();
         }
