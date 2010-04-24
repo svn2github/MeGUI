@@ -732,7 +732,7 @@ namespace MeGUI.packages.tools.hdbdextractor
                     case ResultState.ExtractCompleted:
                         if (FileSelection.Checked)
                              compiler.StartInfo.Arguments = string.Format("\"{0}\" {1}", args.inputPath, args.args + " -progressnumbers");
-                        else compiler.StartInfo.Arguments = string.Format("\"{0}\" {1}) {2}", args.inputPath, args.featureNumber, args.args + " -progressnumbers");
+                        else compiler.StartInfo.Arguments = string.Format("\"{0}\" {1}) {2}", args.inputPath, args.featureNumber, args.args + "-progressnumbers");
                         break;
                 }
 
@@ -1405,6 +1405,8 @@ namespace MeGUI.packages.tools.hdbdextractor
                             System.IO.Path.Combine(FolderOutputTextBox.Text, string.Format("T{0}_{1} - {2}.{3}", stream.Number, Extensions.GetStringValue(stream.Type), row.Cells["languageDataGridViewTextBoxColumn"].Value, (row.Cells["StreamExtractAsComboBox"].Value).ToString().ToLower())),
                             row.Cells["StreamAddOptionsTextBox"].Value).Trim());
 
+                    if (row.Cells["StreamExtractAsComboBox"].Value.Equals(AudioCodec.DTS.ID))
+                        sb.Append(" -core");
 
                     sb.Append(" ");
                 }
