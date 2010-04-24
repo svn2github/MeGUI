@@ -24,7 +24,7 @@
       <Value Profile="(Default)">0, 0</Value>
     </Setting>
     <Setting Name="UpdateWindowVerticalSplitterDistance" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">139</Value>
+      <Value Profile="(Default)">147</Value>
     </Setting>
     <Setting Name="UpdateWindowHorizontalSplitterDistance" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">220</Value>
@@ -33,7 +33,7 @@
       <Value Profile="(Default)">0, 0</Value>
     </Setting>
     <Setting Name="UpdateWindowSize" Type="System.Drawing.Size" Scope="User">
-      <Value Profile="(Default)">639, 375</Value>
+      <Value Profile="(Default)">679, 375</Value>
     </Setting>
     <Setting Name="UpdateColumnWidth" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">50</Value>
@@ -73,6 +73,9 @@
     </Setting>
     <Setting Name="ApplicationVersion" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="UpdatePlatformColumnWidth" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">40</Value>
     </Setting>
   </Settings>
 </SettingsFile>

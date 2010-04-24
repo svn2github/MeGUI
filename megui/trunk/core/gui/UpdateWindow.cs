@@ -100,17 +100,14 @@ namespace MeGUI
                     case "x264":
                         {
                             arrPath.Add(MainForm.Instance.Settings.X264Path);
-                            strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.X264Path);
 #if x86
+                            strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.X264Path);
                             if (OSInfo.isWow64())
                             { 
                                 arrPath.Add(System.IO.Path.Combine(strPath, "vfw4x264.exe"));
                                 arrPath.Add(System.IO.Path.Combine(strPath, "avs4x264.exe"));
                                 arrPath.Add(System.IO.Path.Combine(strPath, "x264_64.exe"));
                             }
-#endif
-#if x64
-                            arrPath.Add(System.IO.Path.Combine(strPath, "x264_64.exe"));
 #endif
                             break;
                         }
@@ -200,6 +197,7 @@ namespace MeGUI
                 ListViewItem.ListViewSubItem name = new ListViewItem.ListViewSubItem();
                 ListViewItem.ListViewSubItem existingVersion = new ListViewItem.ListViewSubItem();
                 ListViewItem.ListViewSubItem latestVersion = new ListViewItem.ListViewSubItem();
+                ListViewItem.ListViewSubItem platform = new ListViewItem.ListViewSubItem();
                 ListViewItem.ListViewSubItem status = new ListViewItem.ListViewSubItem();
 
                 myitem.Name = this.Name;
@@ -207,6 +205,7 @@ namespace MeGUI
                 name.Name = "Name";
                 existingVersion.Name = "Existing Version";
                 latestVersion.Name = "Latest Version";
+                platform.Name = "Platform";
                 status.Name = "Status";
 
                 name.Text = this.Name;
@@ -238,9 +237,12 @@ namespace MeGUI
                         status.Text = "Update Ignored";
                 }
 
+                platform.Text = this.Platform.ToString();
+
                 myitem.SubItems.Add(name);
                 myitem.SubItems.Add(existingVersion);
                 myitem.SubItems.Add(latestVersion);
+                myitem.SubItems.Add(platform);
                 myitem.SubItems.Add(status);
                 return myitem;
             }
@@ -307,6 +309,20 @@ namespace MeGUI
             {
                 get { return this.name; }
                 set { this.name = value; }
+            }
+
+            public enum PlatformModes : int
+            {
+                any = 0,
+                x86 = 1,
+                x64 = 2
+            }
+
+            private PlatformModes platform;
+            public PlatformModes Platform
+            {
+                get { return this.platform; }
+                set { this.platform = value; }
             }
 
             internal string treeViewID;
@@ -1175,6 +1191,18 @@ namespace MeGUI
             iUpgradeable file = null;
             Version availableFile = null;
             bool fileAlreadyAdded = false;
+
+            try
+            {
+#if x86
+                if (node.Attributes["platform"].Value.Equals("x64"))
+#endif
+#if x64
+                if (node.Attributes["platform"].Value.Equals("x86"))
+#endif
+                    return;
+            }
+            catch (Exception) { }
             
             if ((file = upgradeData.FindByName(node.Name)) == null) // If this file isn't already in
             {                                                       // the upgradeData list.
@@ -1211,6 +1239,16 @@ namespace MeGUI
                     file.NeedsRestartedCopying = true;
                 else
                     file.NeedsRestartedCopying = false;
+            }
+            catch (Exception) { }
+
+            file.Platform = iUpgradeable.PlatformModes.any;
+            try
+            {
+                if (node.Attributes["platform"].Value.Equals("x86"))
+                    file.Platform = iUpgradeable.PlatformModes.x86;
+                else if (node.Attributes["platform"].Value.Equals("x64"))
+                    file.Platform = iUpgradeable.PlatformModes.x64;
             }
             catch (Exception) { }
             

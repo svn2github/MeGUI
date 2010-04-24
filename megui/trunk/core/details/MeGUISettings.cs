@@ -77,7 +77,12 @@ namespace MeGUI
             mencoderPath = getDownloadPath(@"tools\mencoder\mencoder.exe");
 			mp4boxPath = getDownloadPath(@"tools\mp4box\mp4box.exe");
 			mkvmergePath = getDownloadPath(@"tools\mkvmerge\mkvmerge.exe");
+#if x64
+            x264Path = getDownloadPath(@"tools\x264\x264_64.exe");
+#endif
+#if x86
             x264Path = getDownloadPath(@"tools\x264\x264.exe");
+#endif
             dgIndexPath = getDownloadPath(@"tools\dgindex\dgindex.exe");
             ffmsIndexPath = getDownloadPath(@"tools\ffms\ffmsindex.exe");
             xvidEncrawPath = getDownloadPath(@"tools\xvid_encraw\xvid_encraw.exe");

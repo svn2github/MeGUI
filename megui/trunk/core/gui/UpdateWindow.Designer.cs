@@ -45,11 +45,12 @@ namespace MeGUI
             this.treeView = new System.Windows.Forms.TreeView();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.listViewDetails = new System.Windows.Forms.ListView();
-            this.colUpdate = new System.Windows.Forms.ColumnHeader();
-            this.colName = new System.Windows.Forms.ColumnHeader();
-            this.colExistingVersion = new System.Windows.Forms.ColumnHeader();
-            this.colLatestVersion = new System.Windows.Forms.ColumnHeader();
-            this.colStatus = new System.Windows.Forms.ColumnHeader();
+            this.colUpdate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colExistingVersion = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colLatestVersion = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colPlatform = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colStatus = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.txtBoxLog = new System.Windows.Forms.TextBox();
             this.statusToolStrip.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -64,7 +65,7 @@ namespace MeGUI
             // btnUpdate
             // 
             this.btnUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnUpdate.Location = new System.Drawing.Point(474, 30);
+            this.btnUpdate.Location = new System.Drawing.Point(514, 30);
             this.btnUpdate.Name = "btnUpdate";
             this.btnUpdate.Size = new System.Drawing.Size(75, 23);
             this.btnUpdate.TabIndex = 3;
@@ -77,7 +78,7 @@ namespace MeGUI
             this.btnAbort.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnAbort.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnAbort.Enabled = false;
-            this.btnAbort.Location = new System.Drawing.Point(555, 30);
+            this.btnAbort.Location = new System.Drawing.Point(595, 30);
             this.btnAbort.Name = "btnAbort";
             this.btnAbort.Size = new System.Drawing.Size(72, 23);
             this.btnAbort.TabIndex = 4;
@@ -90,7 +91,7 @@ namespace MeGUI
             this.progressBar.Dock = System.Windows.Forms.DockStyle.Top;
             this.progressBar.Location = new System.Drawing.Point(0, 0);
             this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(639, 23);
+            this.progressBar.Size = new System.Drawing.Size(679, 23);
             this.progressBar.TabIndex = 7;
             // 
             // statusToolStrip
@@ -141,7 +142,7 @@ namespace MeGUI
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel1.Location = new System.Drawing.Point(0, 310);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(639, 65);
+            this.panel1.Size = new System.Drawing.Size(679, 65);
             this.panel1.TabIndex = 12;
             // 
             // helpButton1
@@ -151,7 +152,7 @@ namespace MeGUI
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.helpButton1.Location = new System.Drawing.Point(12, 30);
             this.helpButton1.Name = "helpButton1";
-            this.helpButton1.Size = new System.Drawing.Size(51, 23);
+            this.helpButton1.Size = new System.Drawing.Size(39, 23);
             this.helpButton1.TabIndex = 8;
             // 
             // splitContainer1
@@ -168,7 +169,7 @@ namespace MeGUI
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
-            this.splitContainer1.Size = new System.Drawing.Size(639, 310);
+            this.splitContainer1.Size = new System.Drawing.Size(679, 310);
             this.splitContainer1.SplitterDistance = global::MeGUI.Properties.Settings.Default.UpdateWindowVerticalSplitterDistance;
             this.splitContainer1.TabIndex = 11;
             // 
@@ -178,7 +179,7 @@ namespace MeGUI
             this.treeView.HideSelection = false;
             this.treeView.Location = new System.Drawing.Point(0, 0);
             this.treeView.Name = "treeView";
-            this.treeView.Size = new System.Drawing.Size(139, 310);
+            this.treeView.Size = new System.Drawing.Size(147, 310);
             this.treeView.TabIndex = 10;
             this.treeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView_AfterSelect);
             // 
@@ -197,7 +198,7 @@ namespace MeGUI
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.txtBoxLog);
-            this.splitContainer2.Size = new System.Drawing.Size(496, 310);
+            this.splitContainer2.Size = new System.Drawing.Size(528, 310);
             this.splitContainer2.SplitterDistance = global::MeGUI.Properties.Settings.Default.UpdateWindowHorizontalSplitterDistance;
             this.splitContainer2.TabIndex = 0;
             // 
@@ -209,18 +210,19 @@ namespace MeGUI
             this.colName,
             this.colExistingVersion,
             this.colLatestVersion,
+            this.colPlatform,
             this.colStatus});
             this.listViewDetails.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listViewDetails.FullRowSelect = true;
             this.listViewDetails.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listViewDetails.Location = new System.Drawing.Point(0, 0);
             this.listViewDetails.Name = "listViewDetails";
-            this.listViewDetails.Size = new System.Drawing.Size(496, 220);
+            this.listViewDetails.Size = new System.Drawing.Size(528, 220);
             this.listViewDetails.TabIndex = 6;
             this.listViewDetails.UseCompatibleStateImageBehavior = false;
             this.listViewDetails.View = System.Windows.Forms.View.Details;
-            this.listViewDetails.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listViewDetails_MouseClick);
             this.listViewDetails.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.listViewDetails_ItemCheck);
+            this.listViewDetails.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listViewDetails_MouseClick);
             // 
             // colUpdate
             // 
@@ -243,6 +245,11 @@ namespace MeGUI
             this.colLatestVersion.Text = "Latest Version";
             this.colLatestVersion.Width = global::MeGUI.Properties.Settings.Default.UpdateLatestVersionColumnWidth;
             // 
+            // colPlatform
+            // 
+            this.colPlatform.Text = "Platform";
+            this.colPlatform.Width = global::MeGUI.Properties.Settings.Default.UpdatePlatformColumnWidth;
+            // 
             // colStatus
             // 
             this.colStatus.Text = "Status";
@@ -255,7 +262,7 @@ namespace MeGUI
             this.txtBoxLog.Multiline = true;
             this.txtBoxLog.Name = "txtBoxLog";
             this.txtBoxLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtBoxLog.Size = new System.Drawing.Size(496, 86);
+            this.txtBoxLog.Size = new System.Drawing.Size(528, 86);
             this.txtBoxLog.TabIndex = 9;
             // 
             // UpdateWindow
@@ -276,8 +283,8 @@ namespace MeGUI
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "MeGUI - Updater";
             this.WindowState = global::MeGUI.Properties.Settings.Default.UpdateWindowState;
-            this.Load += new System.EventHandler(this.UpdateWindow_Load);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.UpdateWindow_FormClosing);
+            this.Load += new System.EventHandler(this.UpdateWindow_Load);
             this.statusToolStrip.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
@@ -314,5 +321,6 @@ namespace MeGUI
         private System.Windows.Forms.Panel panel1;
         private MeGUI.core.gui.HelpButton helpButton1;
         private System.Windows.Forms.ToolStripMenuItem reinstallToolStripMenuItem;
+        private System.Windows.Forms.ColumnHeader colPlatform;
     }
 }

@@ -109,7 +109,7 @@ namespace MeGUI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("139")]
+        [global::System.Configuration.DefaultSettingValueAttribute("147")]
         public int UpdateWindowVerticalSplitterDistance {
             get {
                 return ((int)(this["UpdateWindowVerticalSplitterDistance"]));
@@ -145,7 +145,7 @@ namespace MeGUI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("639, 375")]
+        [global::System.Configuration.DefaultSettingValueAttribute("679, 375")]
         public global::System.Drawing.Size UpdateWindowSize {
             get {
                 return ((global::System.Drawing.Size)(this["UpdateWindowSize"]));
@@ -308,6 +308,18 @@ namespace MeGUI.Properties {
             }
             set {
                 this["ApplicationVersion"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("40")]
+        public int UpdatePlatformColumnWidth {
+            get {
+                return ((int)(this["UpdatePlatformColumnWidth"]));
+            }
+            set {
+                this["UpdatePlatformColumnWidth"] = value;
             }
         }
     }
