@@ -108,7 +108,7 @@ namespace MeGUI
 			weightedBPrediction = true;
             weightedPPrediction = 2;
 			NewadaptiveBFrames = 1;
-			bFramePyramid = 0;
+			bFramePyramid = 2;
 			subPelRefinement = 7;
 			psyRDO = new decimal(1.0);
             psyTrellis = new decimal(0.0);
