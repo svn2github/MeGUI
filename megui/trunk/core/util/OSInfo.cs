@@ -326,7 +326,22 @@ namespace MeGUI
                     {
                         Microsoft.Win32.RegistryKey key = componentsKey.OpenSubKey(instComp);
                         string version = (string)key.GetValue("Version");
-                        versions.Add(version);                                                  
+
+                        if (!String.IsNullOrEmpty(version))
+                        {
+                            versions.Add(version);
+                        }
+                        else
+                        {
+                            foreach (string strRegKey in key.GetSubKeyNames())
+                            {
+                                Microsoft.Win32.RegistryKey strKey = key.OpenSubKey(strRegKey);
+                                string strVersion = (string)strKey.GetValue("Version");
+                                if (!String.IsNullOrEmpty(strVersion)) 
+                                    versions.Add(strVersion);
+                            }
+                        }
+                          
                     }
 
                     IEnumerator etr = versions.GetEnumerator();
@@ -458,7 +473,6 @@ namespace MeGUI
                                         {
                                             switch (build)
                                             {
-                                                case "20506": dnvf = "4.0 Beta 1"; break;
                                                 default: dnvf = "4.0"; break;
                                             }
                                         }
