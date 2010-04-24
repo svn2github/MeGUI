@@ -483,16 +483,19 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                 if (!xs.CustomEncoderOptions.Contains("--no-mbtree"))
                     if (xs.x264PresetLevel > x264Settings.x264PresetLevelModes.veryfast)
                         sb.Append("--no-mbtree ");
-
+            }
+            else
+            {
                 // RC Lookahead
                 if (!xs.CustomEncoderOptions.Contains("--rc-lookahead "))
                 {
                     display = false;
                     switch (xs.x264PresetLevel)
                     {
-                        case x264Settings.x264PresetLevelModes.faster:  if (xs.Lookahead != 30) display = true; break;
-                        case x264Settings.x264PresetLevelModes.medium:  if (xs.Lookahead != 40) display = true; break;
-                        case x264Settings.x264PresetLevelModes.slow:    if (xs.Lookahead != 50) display = true; break;
+                        case x264Settings.x264PresetLevelModes.faster: if (xs.Lookahead != 20) display = true; break;
+                        case x264Settings.x264PresetLevelModes.fast: if (xs.Lookahead != 30) display = true; break;
+                        case x264Settings.x264PresetLevelModes.medium: if (xs.Lookahead != 40) display = true; break;
+                        case x264Settings.x264PresetLevelModes.slow: if (xs.Lookahead != 50) display = true; break;
                         case x264Settings.x264PresetLevelModes.slower:
                         case x264Settings.x264PresetLevelModes.veryslow:
                         case x264Settings.x264PresetLevelModes.placebo: if (xs.Lookahead != 60) display = true; break;
