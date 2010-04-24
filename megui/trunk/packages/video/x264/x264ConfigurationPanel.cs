@@ -1535,6 +1535,8 @@ namespace MeGUI.packages.video.x264
         }
         private void logfileOpenButton_Click(object sender, System.EventArgs e)
         {
+            saveFileDialog.Filter = "x264 2pass stats files (*.stats)|*.stats";
+            saveFileDialog.FilterIndex = 1;
             if (this.saveFileDialog.ShowDialog() == DialogResult.OK)
             {
                 this.logfile.Text = saveFileDialog.FileName;
@@ -1837,6 +1839,7 @@ namespace MeGUI.packages.video.x264
         {
             openFileDialog.Filter = "x264 QP Files (*.qpf, *.txt)|*.qpf;*.txt";
             openFileDialog.FilterIndex = 1;
+            openFileDialog.FileName = "";
             if (this.openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 this.qpfile.Text = openFileDialog.FileName;

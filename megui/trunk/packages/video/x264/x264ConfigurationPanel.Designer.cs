@@ -1703,8 +1703,8 @@ namespace MeGUI.packages.video.x264
                     "preset, the changes it makes will be applied before\nall other parameters are app" +
                     "lied.");
             this.tbx264Presets.Value = 5;
-            this.tbx264Presets.ValueChanged += new System.EventHandler(this.tbx264Presets_Scroll);
             this.tbx264Presets.Scroll += new System.EventHandler(this.tbx264Presets_Scroll);
+            this.tbx264Presets.ValueChanged += new System.EventHandler(this.tbx264Presets_Scroll);
             // 
             // gbTunes
             // 
@@ -2468,6 +2468,7 @@ namespace MeGUI.packages.video.x264
             this.logfileOpenButton.Size = new System.Drawing.Size(26, 23);
             this.logfileOpenButton.TabIndex = 30;
             this.logfileOpenButton.Text = "...";
+            this.logfileOpenButton.Click += new System.EventHandler(this.logfileOpenButton_Click);
             // 
             // qpfileOpenButton
             // 
@@ -2490,7 +2491,7 @@ namespace MeGUI.packages.video.x264
             this.qpfile.ReadOnly = true;
             this.qpfile.Size = new System.Drawing.Size(323, 20);
             this.qpfile.TabIndex = 26;
-            this.qpfile.Text = ".qp";
+            this.qpfile.Text = ".qpf";
             // 
             // useQPFile
             // 
