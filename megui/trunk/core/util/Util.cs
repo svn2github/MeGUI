@@ -85,20 +85,6 @@ namespace MeGUI.core.util
             CatchAndTellUser<Exception>(action);
         }
 
-        public static void SetSize(Form f, Size s, FormWindowState state)
-        {
-            f.WindowState = state;
-            if (f.WindowState == FormWindowState.Normal)
-                f.ClientSize = s;
-        }
-
-        public static void SaveSize(Form f, Setter<Size> size, Setter<FormWindowState> state)
-        {
-            size(f.ClientSize);
-            state(f.WindowState);
-        }
-
-
         public static void ThreadSafeRun(Control c, MethodInvoker m)
         {
             if (c != null && c.InvokeRequired)

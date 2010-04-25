@@ -205,17 +205,17 @@ namespace MeGUI.core.gui
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(565, 498);
+            this.ClientSize = global::MeGUI.Properties.Settings.Default.JobWorkerSize;
             this.Controls.Add(groupBox1);
             this.Controls.Add(this.flowLayoutPanel2);
             this.Controls.Add(this.menuStrip1);
+            this.DataBindings.Add(new System.Windows.Forms.Binding("ClientSize", global::MeGUI.Properties.Settings.Default, "JobWorkerSize", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.DataBindings.Add(new System.Windows.Forms.Binding("WindowState", global::MeGUI.Properties.Settings.Default, "JobWorkerWindowState", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "JobWorker";
             this.Padding = new System.Windows.Forms.Padding(4);
             this.Text = "Job Worker Window";
             this.WindowState = global::MeGUI.Properties.Settings.Default.JobWorkerWindowState;
-            this.ClientSizeChanged += new System.EventHandler(this.JobWorker_ClientSizeChanged);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.JobWorker_FormClosed);
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();

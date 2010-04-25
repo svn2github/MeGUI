@@ -207,7 +207,6 @@ namespace MeGUI.core.gui
         {
             mainForm = mf;
             InitializeComponent();
-            Util.SetSize(this, MeGUI.Properties.Settings.Default.JobWorkerSize, MeGUI.Properties.Settings.Default.JobWorkerWindowState);
             jobQueue1.SetStartStopButtonsTogether();
             jobQueue1.RequestJobDeleted = new RequestJobDeleted(GUIDeleteJob);
             jobQueue1.AddMenuItem("Return to main job queue", null, delegate(List<TaggedJob> jobs)
@@ -831,14 +830,6 @@ namespace MeGUI.core.gui
 
         private void JobWorker_FormClosed(object sender, FormClosedEventArgs e)
         {
-        }
-
-        private void JobWorker_ClientSizeChanged(object sender, EventArgs e)
-        {
-            Util.SaveSize(this,
-                delegate(System.Drawing.Size s) { MeGUI.Properties.Settings.Default.JobWorkerSize = s; },
-                delegate(FormWindowState s) { MeGUI.Properties.Settings.Default.JobWorkerWindowState = s; });
-
         }
     }
 
