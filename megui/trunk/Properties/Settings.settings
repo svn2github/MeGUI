@@ -9,7 +9,7 @@
       <Value Profile="(Default)">0, 0</Value>
     </Setting>
     <Setting Name="MainFormSize" Type="System.Drawing.Size" Scope="User">
-      <Value Profile="(Default)">466, 376</Value>
+      <Value Profile="(Default)">524, 537</Value>
     </Setting>
     <Setting Name="WorkerSummarySize" Type="System.Drawing.Size" Scope="User">
       <Value Profile="(Default)">352, 198</Value>

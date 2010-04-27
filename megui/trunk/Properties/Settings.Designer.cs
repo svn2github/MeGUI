@@ -49,7 +49,7 @@ namespace MeGUI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("466, 376")]
+        [global::System.Configuration.DefaultSettingValueAttribute("524, 537")]
         public global::System.Drawing.Size MainFormSize {
             get {
                 return ((global::System.Drawing.Size)(this["MainFormSize"]));
