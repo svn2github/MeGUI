@@ -79,7 +79,6 @@ namespace MeGUI
 			if (job.Settings.EncodingMode == 4) // automated 2 pass, change type to 2 pass 2nd pass
 			{
 				job.Settings.EncodingMode = 3;
-				job.Settings.Turbo = false;
 			}
 			else if (job.Settings.EncodingMode == 8) // automated 3 pass, change type to 3 pass first pass
 			{
@@ -87,7 +86,6 @@ namespace MeGUI
 					job.Settings.EncodingMode = 7;
 				else
 					job.Settings.EncodingMode = 3; // 2 pass 2nd pass.. doesn't overwrite the stats file
-				job.Settings.Turbo = false;
 			}
 
             if (!skipVideoCheck)
@@ -279,7 +277,7 @@ namespace MeGUI
 		/// <returns>an Array of VideoJobs in the order they are to be encoded</returns>
 		public JobChain prepareVideoJob(string movieInput, string movieOutput, VideoCodecSettings settings, Dar? dar, bool prerender, bool checkVideo, Zone[] zones)
 		{
-			bool twoPasses = false, turbo = settings.Turbo, threePasses = false;
+			bool twoPasses = false, threePasses = false;
 			if (settings.EncodingMode == 4) // automated twopass
 				twoPasses = true;
 			else if (settings.EncodingMode == 8) // automated threepass
@@ -348,14 +346,12 @@ namespace MeGUI
                     firstpass = cloneJob(job);
 					firstpass.Output = ""; // the first pass has no output
 					firstpass.Settings.EncodingMode = 2;
-					firstpass.Settings.Turbo = turbo;
                     firstpass.DAR = dar;
 					if (threePasses)
 					{
 						firstpass.Settings.EncodingMode = 5; // change to 3 pass 3rd pass just for show
 						middlepass = cloneJob(job);
 						middlepass.Settings.EncodingMode = 6; // 3 pass 2nd pass
-						middlepass.Settings.Turbo = false;
                         if (mainForm.Settings.Keep2of3passOutput) // give the 2nd pass a new name
                         {
                             middlepass.Output = Path.Combine(Path.GetDirectoryName(job.Output), Path.GetFileNameWithoutExtension(job.Output)

@@ -69,7 +69,7 @@ namespace MeGUI
                     keyFrameBoost, keyframeThreshold, keyframeReduction, overflowControlStrength,
                     maxOverflowImprovement, maxOverflowDegradation, highBitrateDegradation, lowBitrateImprovement, reactionDelayFactor, averagingPeriod,
                     rateControlBuffer, frameDropRatio, xvidProfile, vbvBuffer, vbvMaxRate, vbvPeakRate, hvsMasking;
-        private bool packedBitstream, gmc, chromaMotion, closedGOP, vhqForBframes, adaptiveQuant, interlaced, bottomFieldFirst, lumiMasking;
+        private bool packedBitstream, gmc, chromaMotion, closedGOP, vhqForBframes, adaptiveQuant, interlaced, bottomFieldFirst, lumiMasking, turbo;
         private decimal bframeThreshold, quantizer;
         private string customQuantizerMatrix;
         public override bool UsesSAR
@@ -146,7 +146,11 @@ namespace MeGUI
             get { return quantizer; }
             set { quantizer = value; }
         }
-
+        public bool Turbo
+        {
+            get { return turbo; }
+            set { turbo = value; }
+        }
         public int MotionSearchPrecision
         {
             get { return motionSearchPrecision; }

@@ -77,8 +77,8 @@ namespace MeGUI
 			tempComplexityBlur, tempQuanBlurCC, scdSensitivity, bframeBias, quantizerCrf, AQStrength, psyRDO, psyTrellis;
 		bool deblock, cabac, p4x4mv, p8x8mv, b8x8mv, i4x4mv, i8x8mv, weightedBPrediction, encodeInterlaced,
 			chromaME, adaptiveDCT, noMixedRefs, noFastPSkip, psnrCalc, noDctDecimate, ssimCalc, useQPFile, 
-            FullRange, advSet, noMBTree, threadInput, noPsy, scenecut, x264Nalhrd, x264Aud;
-		string quantizerMatrix, qpfile;
+            FullRange, advSet, noMBTree, threadInput, noPsy, scenecut, x264Nalhrd, x264Aud, x264SlowFirstpass;
+		string quantizerMatrix, qpfile, turbo;
         x264PresetLevelModes preset;
 		#region constructor
         /// <summary>
@@ -100,7 +100,6 @@ namespace MeGUI
 			nbRefFrames = 3;
 			noMixedRefs = false;
 			NbBframes = 3;
-			Turbo = true;
 			deblock = true;
 			alphaDeblock = 0;
 			betaDeblock = 0;
@@ -163,10 +162,13 @@ namespace MeGUI
             x264Aud = false;
             profile = 3; // Autoguess. High if using default options.
             level = 15;
+            x264SlowFirstpass = false;
 		}
 		#endregion
 		#region properties
-        public int x264Preset // Deprecated since 0.3.4.9, delete block after 0.3.6
+
+#warning Deprecated since 0.3.4.9, delete block after 0.3.6
+        public int x264Preset
         {
             get { return 99; }
             set
@@ -177,6 +179,20 @@ namespace MeGUI
                 if (value > 0)
                     value++;
                 preset = (x264PresetLevelModes)value;
+            }
+        }
+#warning Deprecated since 0.3.4.14, delete block after 0.3.6
+        public string Turbo
+        {
+            get { return "migrated"; }
+            set 
+            {
+                if (value.Equals("migrated"))
+                    return;
+                if (value.Equals("false"))
+                    x264SlowFirstpass = true;
+                if (value.Equals("true"))
+                    x264SlowFirstpass = false;
             }
         }
         public x264PresetLevelModes x264PresetLevel
@@ -510,6 +526,11 @@ namespace MeGUI
             get { return x264Aud; }
             set { x264Aud = value; }
         }
+        public bool X264SlowFirstpass
+        {
+            get { return x264SlowFirstpass; }
+            set { x264SlowFirstpass = value; }
+        }
         public int SlicesNb
         {
             get { return slicesnb; }
@@ -603,7 +624,7 @@ namespace MeGUI
                 this.TempQuanBlurCC != otherSettings.TempQuanBlurCC ||
                 this.TempQuantBlur != otherSettings.TempQuantBlur ||
                 this.Trellis != otherSettings.Trellis ||
-                this.Turbo != otherSettings.Turbo ||
+                this.x264SlowFirstpass != otherSettings.x264SlowFirstpass ||
                 this.V4MV != otherSettings.V4MV ||
                 this.VBVBufferSize != otherSettings.VBVBufferSize ||
                 this.VBVInitialBuffer != otherSettings.VBVInitialBuffer ||
@@ -666,7 +687,7 @@ namespace MeGUI
                     break;
             }
             if (EncodingMode != 2 && EncodingMode != 5)
-                Turbo = false;
+                x264SlowFirstpass = false;
             if (NbBframes == 0)
             {
                 NewAdaptiveBFrames = 0;

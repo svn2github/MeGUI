@@ -1128,20 +1128,20 @@ namespace MeGUI.packages.video.x264
             else
                 setNonQPOptionsEnabled(false);
 
-            x264Turbo.Enabled = false;
+            x264SlowFirstpass.Enabled = false;
             x264RateTol.Enabled = true;
             x264RateTolLabel.Enabled = true;
             switch (x264EncodingMode.SelectedIndex)
             {
                 case (int)VideoCodecSettings.Mode.CBR: //Actually, ABR
-                    x264Turbo.Enabled = false;
+                    x264SlowFirstpass.Enabled = false;
                     x264RateTol.Enabled = true;
                     x264RateTolLabel.Enabled = true;
                     logfileOpenButton.Enabled = false;
                     break;
 
                 case (int)VideoCodecSettings.Mode.CQ:
-                    x264Turbo.Enabled = false;
+                    x264SlowFirstpass.Enabled = false;
                     x264RateTol.Enabled = false;
                     x264RateTolLabel.Enabled = false;
                     logfileOpenButton.Enabled = false;
@@ -1149,7 +1149,7 @@ namespace MeGUI.packages.video.x264
 
                 case (int)VideoCodecSettings.Mode.twopass1:
                 case (int)VideoCodecSettings.Mode.threepass1:
-                    x264Turbo.Enabled = true;
+                    x264SlowFirstpass.Enabled = true;
                     x264RateTol.Enabled = true;
                     x264RateTolLabel.Enabled = true;
                     logfileOpenButton.Enabled = true;
@@ -1158,20 +1158,20 @@ namespace MeGUI.packages.video.x264
                 case (int)VideoCodecSettings.Mode.twopass2:
                 case (int)VideoCodecSettings.Mode.threepass2:
                 case (int)VideoCodecSettings.Mode.threepass3:
-                    x264Turbo.Enabled = false;
+                    x264SlowFirstpass.Enabled = false;
                     x264RateTol.Enabled = true;
                     x264RateTolLabel.Enabled = true;
                     logfileOpenButton.Enabled = true;
                     break;
                 case (int)VideoCodecSettings.Mode.twopassAutomated:
                 case (int)VideoCodecSettings.Mode.threepassAutomated:
-                    x264Turbo.Enabled = true;
+                    x264SlowFirstpass.Enabled = true;
                     x264RateTol.Enabled = true;
                     x264RateTolLabel.Enabled = true;
                     logfileOpenButton.Enabled = true;
                     break;
                 case (int)VideoCodecSettings.Mode.quality:
-                    x264Turbo.Enabled = false;
+                    x264SlowFirstpass.Enabled = false;
                     logfileOpenButton.Enabled = false;
                     x264RateTol.Enabled = false;
                     x264RateTolLabel.Enabled = false;
@@ -1329,7 +1329,7 @@ namespace MeGUI.packages.video.x264
                 xs.SSIMCalculation = this.ssim.Checked;
                 xs.PSNRCalculation = this.psnr.Checked;
                 xs.NoFastPSkip = noFastPSkip.Checked;
-                xs.Turbo = this.x264Turbo.Checked;
+                xs.X264SlowFirstpass = this.x264SlowFirstpass.Checked;
                 xs.NoMixedRefs = x264MixedReferences.Checked;
                 xs.EncodingMode = x264EncodingMode.SelectedIndex;
                 xs.BitrateQuantizer = (int)x264BitrateQuantizer.Value;
@@ -1431,7 +1431,7 @@ namespace MeGUI.packages.video.x264
                 this.x264NumberOfBFrames.Value = xs.NbBframes;
                 noFastPSkip.Checked = xs.NoFastPSkip;
                 this.x264SubpelRefinement.SelectedIndex = xs.SubPelRefinement;
-                x264Turbo.Checked = xs.Turbo;
+                x264SlowFirstpass.Checked = xs.X264SlowFirstpass;
                 x264BitrateQuantizer.Value = (isBitrateMode(xs.EncodingMode) || xs.QuantizerCRF == 0) ? xs.BitrateQuantizer : xs.QuantizerCRF;
                 x264KeyframeInterval.Text = xs.KeyframeInterval.ToString() ;
                 x264NewAdaptiveBframes.SelectedIndex = xs.NewAdaptiveBFrames;
@@ -1614,7 +1614,7 @@ namespace MeGUI.packages.video.x264
             tooltipHelp.SetToolTip(x264PBFrameFactor, SelectHelpText("pbratio"));
             tooltipHelp.SetToolTip(x264ChromaQPOffset, SelectHelpText("chroma-qp-offset"));
             tooltipHelp.SetToolTip(cbBPyramid, SelectHelpText("b-pyramid"));
-            tooltipHelp.SetToolTip(x264Turbo, SelectHelpText("slow-firstpass"));
+            tooltipHelp.SetToolTip(x264SlowFirstpass, SelectHelpText("slow-firstpass"));
             tooltipHelp.SetToolTip(customCommandlineOptions, SelectHelpText("customcommandline"));
 
             /*************************/
@@ -1667,7 +1667,7 @@ namespace MeGUI.packages.video.x264
         #region GUI State adjustment
         private void x264DialogTriStateAdjustment()
         {
-            bool turboOptions = this.x264Turbo.Checked &&
+            bool turboOptions = this.x264SlowFirstpass.Checked &&
                 (this.x264EncodingMode.SelectedIndex == (int)VideoCodecSettings.Mode.threepass1 ||
                  this.x264EncodingMode.SelectedIndex == (int)VideoCodecSettings.Mode.twopass1);
 
@@ -1902,7 +1902,7 @@ namespace MeGUI.packages.video.x264
             this.tbx264Presets.Value = 5;
             this.avcProfile.SelectedIndex = 2; 
             this.avcLevel.SelectedIndex = 15;
-            x264Turbo.Checked = true;
+            x264SlowFirstpass.Checked = true;
             advancedSettings.Checked = false;
             this.x264BitrateQuantizer.Value = 23;
             this.threadin.Checked = true;
@@ -1981,6 +1981,7 @@ namespace MeGUI.packages.video.x264
             psnr.Checked = false;
             ssim.Checked = false;
             x264FullRange.Checked = false;
+            x264SlowFirstpass.Checked = false;
 
             // to update presets label
             tbx264Presets_Scroll(null, null);

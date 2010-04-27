@@ -179,7 +179,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
 
             // Slow 1st Pass
             if (!xs.CustomEncoderOptions.Contains("--slow-firstpass"))
-                if ((!xs.Turbo) && xs.x264PresetLevel < x264Settings.x264PresetLevelModes.placebo &&
+                if ((xs.X264SlowFirstpass) && xs.x264PresetLevel < x264Settings.x264PresetLevelModes.placebo &&
                    ((xs.EncodingMode == 2) || // 2 pass first pass
                     (xs.EncodingMode == 4) || // automated twopass
                     (xs.EncodingMode == 5) || // 3 pass first pass

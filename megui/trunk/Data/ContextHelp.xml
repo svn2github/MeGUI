@@ -67,7 +67,7 @@ Normal = Non-Strict (not Blu-ray compatible)</Advanced>
 			<Recommended>normal</Recommended>
 			<Default>normal</Default>
 		</b-pyramid>
-    <slow-firstpass name="Fast first pass">
+    <slow-firstpass name="Slow first pass">
       <Advanced>
         With the advent of the Preset system in r1177, using --pass 1 applies the following settings at the end of parsing the command line:
         * ref 1
@@ -78,9 +78,9 @@ Normal = Non-Strict (not Blu-ray compatible)</Advanced>
         * trellis 0
         This feature is automatically disabled with preset placebo. To otherwise disable the feature, uncheck this option.
       </Advanced>
-      <Basic>Fast first pass</Basic>
-      <Recommended>enabled</Recommended>
-      <Default>enabled</Default>
+      <Basic>Slow first pass</Basic>
+      <Recommended>disabled</Recommended>
+      <Default>disabled</Default>
     </slow-firstpass>
 		<!--WARNING DOUBLE NEGATIVE-->
 		<no-cabac name="Encode CABAC">

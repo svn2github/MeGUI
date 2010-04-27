@@ -36,7 +36,7 @@ namespace MeGUI.packages.video.x264
             this.x264CodecGeneralGroupbox = new System.Windows.Forms.GroupBox();
             this.x264BitrateQuantizer = new System.Windows.Forms.NumericUpDown();
             this.x264EncodingMode = new System.Windows.Forms.ComboBox();
-            this.x264Turbo = new System.Windows.Forms.CheckBox();
+            this.x264SlowFirstpass = new System.Windows.Forms.CheckBox();
             this.x264BitrateQuantizerLabel = new System.Windows.Forms.Label();
             this.FrameTypeTabPage = new System.Windows.Forms.TabPage();
             this.gbSlicing = new System.Windows.Forms.GroupBox();
@@ -348,7 +348,7 @@ namespace MeGUI.packages.video.x264
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.x264CodecGeneralGroupbox.Controls.Add(this.x264BitrateQuantizer);
             this.x264CodecGeneralGroupbox.Controls.Add(this.x264EncodingMode);
-            this.x264CodecGeneralGroupbox.Controls.Add(this.x264Turbo);
+            this.x264CodecGeneralGroupbox.Controls.Add(this.x264SlowFirstpass);
             this.x264CodecGeneralGroupbox.Controls.Add(this.x264BitrateQuantizerLabel);
             this.x264CodecGeneralGroupbox.Location = new System.Drawing.Point(6, 6);
             this.x264CodecGeneralGroupbox.Name = "x264CodecGeneralGroupbox";
@@ -392,16 +392,16 @@ namespace MeGUI.packages.video.x264
             this.x264EncodingMode.TabIndex = 2;
             this.x264EncodingMode.SelectedIndexChanged += new System.EventHandler(this.updateEvent);
             // 
-            // x264Turbo
+            // x264SlowFirstpass
             // 
-            this.x264Turbo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.x264Turbo.AutoSize = true;
-            this.x264Turbo.Location = new System.Drawing.Point(29, 20);
-            this.x264Turbo.Name = "x264Turbo";
-            this.x264Turbo.Size = new System.Drawing.Size(90, 17);
-            this.x264Turbo.TabIndex = 1;
-            this.x264Turbo.Text = "Fast first pass";
-            this.x264Turbo.CheckedChanged += new System.EventHandler(this.updateEvent);
+            this.x264SlowFirstpass.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.x264SlowFirstpass.AutoSize = true;
+            this.x264SlowFirstpass.Location = new System.Drawing.Point(26, 20);
+            this.x264SlowFirstpass.Name = "x264SlowFirstpass";
+            this.x264SlowFirstpass.Size = new System.Drawing.Size(93, 17);
+            this.x264SlowFirstpass.TabIndex = 1;
+            this.x264SlowFirstpass.Text = "Slow first pass";
+            this.x264SlowFirstpass.CheckedChanged += new System.EventHandler(this.updateEvent);
             // 
             // x264BitrateQuantizerLabel
             // 
@@ -2222,9 +2222,9 @@ namespace MeGUI.packages.video.x264
             this.advancedSettings.AutoSize = true;
             this.advancedSettings.Location = new System.Drawing.Point(21, 364);
             this.advancedSettings.Name = "advancedSettings";
-            this.advancedSettings.Size = new System.Drawing.Size(116, 17);
+            this.advancedSettings.Size = new System.Drawing.Size(146, 17);
             this.advancedSettings.TabIndex = 16;
-            this.advancedSettings.Text = "Advanced Settings";
+            this.advancedSettings.Text = "Show Advanced Settings";
             this.advancedSettings.UseVisualStyleBackColor = true;
             this.advancedSettings.CheckedChanged += new System.EventHandler(this.advancedSettings_CheckedChanged);
             // 
@@ -2630,7 +2630,7 @@ namespace MeGUI.packages.video.x264
         private System.Windows.Forms.ComboBox avcProfile;
         private System.Windows.Forms.GroupBox x264CodecGeneralGroupbox;
         private System.Windows.Forms.ComboBox x264EncodingMode;
-        private System.Windows.Forms.CheckBox x264Turbo;
+        private System.Windows.Forms.CheckBox x264SlowFirstpass;
         private System.Windows.Forms.Label x264BitrateQuantizerLabel;
         private System.Windows.Forms.TabPage FrameTypeTabPage;
         private System.Windows.Forms.TabPage RCTabPage;

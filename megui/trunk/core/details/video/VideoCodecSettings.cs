@@ -117,11 +117,6 @@ namespace MeGUI
 			get { return maxQuantizer; }
 			set { maxQuantizer = value; }
 		}
-		public bool Turbo
-		{
-			get { return turbo; }
-			set { turbo = value; }
-		}
 		public bool V4MV
 		{
 			get { return v4mv; }
