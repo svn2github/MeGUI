@@ -497,17 +497,12 @@ namespace MeGUI.core.details
         private string getFreeJobName()
         {
             int jobNr = 1;
+            string name = "";
             while (true)
             {
-                string name = "job" + jobNr;
-                bool found = false;
-                foreach (string jobName in allJobs.Keys)
-                    if (jobName.StartsWith(name))
-                    {
-                        found = true;
-                        break;
-                    }
-                if (!found) return name;
+                name = "job" + jobNr;
+                if (!allJobs.ContainsKey(name))
+                    return name;
                 jobNr++;
             }
         }
