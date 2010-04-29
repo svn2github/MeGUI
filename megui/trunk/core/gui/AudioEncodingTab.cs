@@ -155,8 +155,9 @@ namespace MeGUI.core.gui
             AudioType currentType = (AudioType)audioContainer.SelectedItem;
             audioOutput.Filter = currentType.OutputFilterString;
             AudioOutput = Path.ChangeExtension(AudioOutput, currentType.Extension);
-            if (!String.IsNullOrEmpty(audioInput.Filename) && audioInput.Filename.Equals(audioOutput.Filename))
-                AudioOutput = Path.Combine(Path.GetDirectoryName(AudioOutput), Path.GetFileNameWithoutExtension(AudioOutput) + "_new." + currentType.Extension);
+            if (!String.IsNullOrEmpty(audioInput.Filename))
+                if (audioInput.Filename.Equals(audioOutput.Filename) || File.Exists(AudioOutput))
+                    AudioOutput = Path.Combine(Path.GetDirectoryName(AudioOutput), Path.GetFileNameWithoutExtension(AudioOutput) + "_new." + currentType.Extension);
             if (!bInitialStart)
                 MainForm.Instance.Settings.MainAudioFormat = audioContainer.Text;
             else
