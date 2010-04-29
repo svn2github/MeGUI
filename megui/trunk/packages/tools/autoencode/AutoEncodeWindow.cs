@@ -87,12 +87,6 @@ namespace MeGUI
         {
             this.vInfo = vInfo;
             mainForm.Log.Add(log);
-            if (videoStream.Settings.EncodingMode == 1 || videoStream.Settings.EncodingMode == 9) // CQ and CRF -- no bitrate possible
-            {
-                averageBitrateRadio.Enabled = false;
-                FileSizeRadio.Enabled = false;
-                noTargetRadio.Checked = true;
-            }
             this.videoStream = videoStream;
             this.audioStreams = audioStreams;
             this.prerender = prerender;
@@ -143,7 +137,7 @@ namespace MeGUI
             this.muxedOutput.Filename = Path.ChangeExtension(muxedName, (this.container.SelectedItem as ContainerType).Extension);
 
             splitting.Value = mainForm.Settings.AedSettings.SplitSize;
-            if (mainForm.Settings.AedSettings.FileSizeMode && FileSizeRadio.Enabled)
+            if (mainForm.Settings.AedSettings.FileSizeMode)
             {
                 FileSizeRadio.Checked = true;
                 targetSize.Value = mainForm.Settings.AedSettings.FileSize;
@@ -197,6 +191,7 @@ namespace MeGUI
             this.videoSize = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.projectedBitrateKBits = new System.Windows.Forms.TextBox();
+            this.targetSize = new MeGUI.core.gui.TargetSizeSCBox();
             this.noTargetRadio = new System.Windows.Forms.RadioButton();
             this.averageBitrateRadio = new System.Windows.Forms.RadioButton();
             this.FileSizeRadio = new System.Windows.Forms.RadioButton();
@@ -205,16 +200,15 @@ namespace MeGUI
             this.OutputGroupBox = new System.Windows.Forms.GroupBox();
             this.device = new System.Windows.Forms.ComboBox();
             this.DeviceLabel = new System.Windows.Forms.Label();
+            this.splitting = new MeGUI.core.gui.TargetSizeSCBox();
             this.container = new System.Windows.Forms.ComboBox();
             this.containerLabel = new System.Windows.Forms.Label();
             this.muxedOutputLabel = new System.Windows.Forms.Label();
+            this.muxedOutput = new MeGUI.FileBar();
             this.cancelButton = new System.Windows.Forms.Button();
             this.addSubsNChapters = new System.Windows.Forms.CheckBox();
             this.defaultToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
-            this.splitting = new MeGUI.core.gui.TargetSizeSCBox();
-            this.muxedOutput = new MeGUI.FileBar();
-            this.targetSize = new MeGUI.core.gui.TargetSizeSCBox();
             label1 = new System.Windows.Forms.Label();
             this.AutomaticEncodingGroup.SuspendLayout();
             this.OutputGroupBox.SuspendLayout();
@@ -272,6 +266,19 @@ namespace MeGUI
             this.projectedBitrateKBits.TabIndex = 9;
             this.projectedBitrateKBits.TextChanged += new System.EventHandler(this.projectedBitrate_TextChanged);
             this.projectedBitrateKBits.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textField_KeyPress);
+            // 
+            // targetSize
+            // 
+            this.targetSize.CustomSizes = new MeGUI.core.util.FileSize[0];
+            this.targetSize.Location = new System.Drawing.Point(116, 15);
+            this.targetSize.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.targetSize.MinimumSize = new System.Drawing.Size(64, 29);
+            this.targetSize.Name = "targetSize";
+            this.targetSize.NullString = "Not calculated";
+            this.targetSize.SelectedIndex = 0;
+            this.targetSize.Size = new System.Drawing.Size(208, 29);
+            this.targetSize.TabIndex = 25;
+            this.targetSize.SelectionChanged += new MeGUI.StringChanged(this.targetSize_SelectionChanged);
             // 
             // noTargetRadio
             // 
@@ -366,6 +373,18 @@ namespace MeGUI
             this.DeviceLabel.TabIndex = 37;
             this.DeviceLabel.Text = "Device";
             // 
+            // splitting
+            // 
+            this.splitting.CustomSizes = new MeGUI.core.util.FileSize[0];
+            this.splitting.Location = new System.Drawing.Point(243, 16);
+            this.splitting.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.splitting.MinimumSize = new System.Drawing.Size(64, 29);
+            this.splitting.Name = "splitting";
+            this.splitting.NullString = "No splitting";
+            this.splitting.SelectedIndex = 0;
+            this.splitting.Size = new System.Drawing.Size(208, 29);
+            this.splitting.TabIndex = 26;
+            // 
             // container
             // 
             this.container.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -393,6 +412,20 @@ namespace MeGUI
             this.muxedOutputLabel.Size = new System.Drawing.Size(82, 13);
             this.muxedOutputLabel.TabIndex = 23;
             this.muxedOutputLabel.Text = "Name of output";
+            // 
+            // muxedOutput
+            // 
+            this.muxedOutput.Filename = "";
+            this.muxedOutput.Filter = null;
+            this.muxedOutput.FilterIndex = 0;
+            this.muxedOutput.FolderMode = false;
+            this.muxedOutput.Location = new System.Drawing.Point(97, 74);
+            this.muxedOutput.Name = "muxedOutput";
+            this.muxedOutput.ReadOnly = false;
+            this.muxedOutput.SaveMode = true;
+            this.muxedOutput.Size = new System.Drawing.Size(352, 26);
+            this.muxedOutput.TabIndex = 36;
+            this.muxedOutput.Title = null;
             // 
             // cancelButton
             // 
@@ -428,44 +461,6 @@ namespace MeGUI
             this.helpButton1.Name = "helpButton1";
             this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 21;
-            // 
-            // splitting
-            // 
-            this.splitting.CustomSizes = new MeGUI.core.util.FileSize[0];
-            this.splitting.Location = new System.Drawing.Point(243, 16);
-            this.splitting.MaximumSize = new System.Drawing.Size(1000, 29);
-            this.splitting.MinimumSize = new System.Drawing.Size(64, 29);
-            this.splitting.Name = "splitting";
-            this.splitting.NullString = "No splitting";
-            this.splitting.SelectedIndex = 0;
-            this.splitting.Size = new System.Drawing.Size(208, 29);
-            this.splitting.TabIndex = 26;
-            // 
-            // muxedOutput
-            // 
-            this.muxedOutput.Filename = "";
-            this.muxedOutput.Filter = null;
-            this.muxedOutput.FilterIndex = 0;
-            this.muxedOutput.FolderMode = false;
-            this.muxedOutput.Location = new System.Drawing.Point(97, 74);
-            this.muxedOutput.Name = "muxedOutput";
-            this.muxedOutput.ReadOnly = false;
-            this.muxedOutput.SaveMode = true;
-            this.muxedOutput.Size = new System.Drawing.Size(352, 26);
-            this.muxedOutput.TabIndex = 36;
-            this.muxedOutput.Title = null;
-            // 
-            // targetSize
-            // 
-            this.targetSize.Location = new System.Drawing.Point(116, 15);
-            this.targetSize.MaximumSize = new System.Drawing.Size(1000, 29);
-            this.targetSize.MinimumSize = new System.Drawing.Size(64, 29);
-            this.targetSize.Name = "targetSize";
-            this.targetSize.NullString = "Not calculated";
-            this.targetSize.SelectedIndex = 0;
-            this.targetSize.Size = new System.Drawing.Size(208, 29);
-            this.targetSize.TabIndex = 25;
-            this.targetSize.SelectionChanged += new MeGUI.StringChanged(this.targetSize_SelectionChanged);
             // 
             // AutoEncodeWindow
             // 
