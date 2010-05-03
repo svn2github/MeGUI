@@ -56,16 +56,10 @@
     <Setting Name="ChangelogSize" Type="System.Drawing.Size" Scope="User">
       <Value Profile="(Default)">572, 492</Value>
     </Setting>
-    <Setting Name="MainFormWindowState" Type="System.Windows.Forms.FormWindowState" Scope="User">
-      <Value Profile="(Default)">Normal</Value>
-    </Setting>
     <Setting Name="JobWorkerWindowState" Type="System.Windows.Forms.FormWindowState" Scope="User">
       <Value Profile="(Default)">Normal</Value>
     </Setting>
     <Setting Name="UpdateWindowState" Type="System.Windows.Forms.FormWindowState" Scope="User">
-      <Value Profile="(Default)">Normal</Value>
-    </Setting>
-    <Setting Name="ChangelogWindowState" Type="System.Windows.Forms.FormWindowState" Scope="User">
       <Value Profile="(Default)">Normal</Value>
     </Setting>
     <Setting Name="WorkerSummaryWindowState" Type="System.Windows.Forms.FormWindowState" Scope="User">

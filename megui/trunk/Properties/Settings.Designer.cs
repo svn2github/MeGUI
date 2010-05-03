@@ -242,18 +242,6 @@ namespace MeGUI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Normal")]
-        public global::System.Windows.Forms.FormWindowState MainFormWindowState {
-            get {
-                return ((global::System.Windows.Forms.FormWindowState)(this["MainFormWindowState"]));
-            }
-            set {
-                this["MainFormWindowState"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Normal")]
         public global::System.Windows.Forms.FormWindowState JobWorkerWindowState {
             get {
                 return ((global::System.Windows.Forms.FormWindowState)(this["JobWorkerWindowState"]));
@@ -272,18 +260,6 @@ namespace MeGUI.Properties {
             }
             set {
                 this["UpdateWindowState"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Normal")]
-        public global::System.Windows.Forms.FormWindowState ChangelogWindowState {
-            get {
-                return ((global::System.Windows.Forms.FormWindowState)(this["ChangelogWindowState"]));
-            }
-            set {
-                this["ChangelogWindowState"] = value;
             }
         }
         
