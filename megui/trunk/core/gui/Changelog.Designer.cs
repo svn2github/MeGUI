@@ -41,7 +41,7 @@ namespace MeGUI
             this.txtChangelog.Name = "txtChangelog";
             this.txtChangelog.ReadOnly = true;
             this.txtChangelog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtChangelog.Size = new System.Drawing.Size(572, 492);
+            this.txtChangelog.Size = new System.Drawing.Size(589, 340);
             this.txtChangelog.TabIndex = 1;
             this.txtChangelog.WordWrap = false;
             // 
@@ -49,12 +49,10 @@ namespace MeGUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = global::MeGUI.Properties.Settings.Default.ChangelogSize;
+            this.ClientSize = new System.Drawing.Size(589, 340);
             this.Controls.Add(this.txtChangelog);
-            this.DataBindings.Add(new System.Windows.Forms.Binding("Location", global::MeGUI.Properties.Settings.Default, "ChangelogLocation", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.DataBindings.Add(new System.Windows.Forms.Binding("ClientSize", global::MeGUI.Properties.Settings.Default, "ChangelogSize", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Location = global::MeGUI.Properties.Settings.Default.ChangelogLocation;
             this.Name = "Changelog";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "MeGUI - Changelog";
@@ -62,7 +60,6 @@ namespace MeGUI
             this.Resize += new System.EventHandler(this.Changelog_Resize);
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
 
         #endregion
