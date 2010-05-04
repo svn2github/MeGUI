@@ -217,30 +217,6 @@ namespace MeGUI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0, 0")]
-        public global::System.Drawing.Point ChangelogLocation {
-            get {
-                return ((global::System.Drawing.Point)(this["ChangelogLocation"]));
-            }
-            set {
-                this["ChangelogLocation"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("572, 492")]
-        public global::System.Drawing.Size ChangelogSize {
-            get {
-                return ((global::System.Drawing.Size)(this["ChangelogSize"]));
-            }
-            set {
-                this["ChangelogSize"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Normal")]
         public global::System.Windows.Forms.FormWindowState JobWorkerWindowState {
             get {

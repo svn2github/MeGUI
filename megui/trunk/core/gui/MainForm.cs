@@ -393,7 +393,7 @@ namespace MeGUI
             this.tabPage2.Controls.Add(this.jobControl1);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Size = new System.Drawing.Size(500, 452);
+            this.tabPage2.Size = new System.Drawing.Size(500, 473);
             this.tabPage2.TabIndex = 12;
             this.tabPage2.Text = "Queue";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -412,7 +412,7 @@ namespace MeGUI
             this.logTab.Controls.Add(this.logTree1);
             this.logTab.Location = new System.Drawing.Point(4, 22);
             this.logTab.Name = "logTab";
-            this.logTab.Size = new System.Drawing.Size(500, 452);
+            this.logTab.Size = new System.Drawing.Size(500, 473);
             this.logTab.TabIndex = 13;
             this.logTab.Text = "Log";
             this.logTab.UseVisualStyleBackColor = true;
@@ -730,16 +730,15 @@ namespace MeGUI
             this.ClientSize = new System.Drawing.Size(508, 499);
             this.Controls.Add(this.tabControl1);
             this.DataBindings.Add(new System.Windows.Forms.Binding("Size", global::MeGUI.Properties.Settings.Default, "MainFormSize", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.DataBindings.Add(new System.Windows.Forms.Binding("Location", global::MeGUI.Properties.Settings.Default, "MainFormLocation", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Location = global::MeGUI.Properties.Settings.Default.MainFormLocation;
             this.Menu = this.mainMenu1;
             this.MinimumSize = new System.Drawing.Size(524, 537);
             this.Name = "MainForm";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
             this.Load += new System.EventHandler(this.MeGUI_Load);
             this.Shown += new System.EventHandler(this.MainForm_Shown);
+            this.Move += new System.EventHandler(this.MainForm_Move);
             this.tabControl1.ResumeLayout(false);
             this.inputTab.ResumeLayout(false);
             this.splitContainer2.Panel1.ResumeLayout(false);
@@ -2017,7 +2016,7 @@ namespace MeGUI
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            DialogManager.stopCUVIDServer(); // close CUVIDServer from DGxxxNV tools if it is running
+            DialogManager.stopCUVIDServer(); // close CUVIDServer from DGIndexNV tools if it is running
         }
         private void mnuForum_Click(object sender, EventArgs e)
         {
@@ -2118,6 +2117,15 @@ namespace MeGUI
         {
             VobinputWindow d2vc = new VobinputWindow(this);
             d2vc.ShowDialog();
+        }
+
+        private void MainForm_Move(object sender, EventArgs e)
+        {
+            if (this.WindowState != FormWindowState.Minimized && this.Visible == true)
+            {
+                global::MeGUI.Properties.Settings.Default.MainFormLocation = this.Location;
+                global::MeGUI.Properties.Settings.Default.Save();
+            }
         }
     }
     public class CommandlineUpgradeData
