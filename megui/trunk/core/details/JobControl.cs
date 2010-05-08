@@ -780,14 +780,7 @@ namespace MeGUI.core.details
         internal void ShutDown(JobWorker w)
         {
             workers.Remove(w.Name);
-            try
-            {
-                if (w.Visible) w.Close();
-            }
-            catch
-            {
-                
-            }
+            if (w.Visible) Util.ThreadSafeRun(w, delegate { w.Close(); });
             summary.Remove(w.Name);
         }
 

@@ -394,7 +394,7 @@ namespace MeGUI.core.gui
                 if (retval == JobStartInfo.COULDNT_START)
                     MessageBox.Show("Couldn't start processing. Please consult the log for more details", "Processing failed", MessageBoxButtons.OK);
                 else if (retval == JobStartInfo.NO_JOBS_WAITING)
-                    MessageBox.Show("No jobs are waiting or can be processed at the moment.\r\nOnly one audio job can run at a time and there may be some dependencies\r\nwhich may to be fulfilled first", "No jobs waiting", MessageBoxButtons.OK);
+                    MessageBox.Show("No jobs are waiting or can be processed at the moment.\r\nOnly one audio job can run at a time and there may be\r\nsome dependencies which have to be fulfilled first.", "No jobs waiting", MessageBoxButtons.OK);
             }
         }
 
@@ -500,7 +500,7 @@ namespace MeGUI.core.gui
                     refreshAll();
 
                     if (bIsAudioJob)
-                        mainForm.Jobs.StartIdleWorkers();
+                        Util.ThreadSafeRun(mainForm.Jobs, delegate { mainForm.Jobs.StartIdleWorkers(); });
                 }));
                 t.IsBackground = true;
                 t.Start();
