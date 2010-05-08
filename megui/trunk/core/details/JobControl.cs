@@ -26,6 +26,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 
@@ -41,6 +42,7 @@ namespace MeGUI.core.details
         private MainForm mainForm;
         private WorkerSummary summary;
         private AfterEncoding currentAfterEncoding;
+        private Semaphore resourceLock;
 
         #region public interface: process windows, start/stop/abort
         public void ShowAllProcessWindows()
@@ -48,7 +50,6 @@ namespace MeGUI.core.details
             foreach (JobWorker w in workers.Values)
                 if (w.IsProgressWindowAvailable) w.ShowProcessWindow();
         }
-
 
         public void HideAllProcessWindows()
         {
@@ -90,6 +91,13 @@ namespace MeGUI.core.details
             addSendToTemporaryWorkerMenuItem();
             jobQueue.RequestJobDeleted = new RequestJobDeleted(this.DeleteJob);
             summary = new WorkerSummary(this);
+            resourceLock = new Semaphore(1, 1);
+        }
+
+        public Semaphore ResourceLock
+        {
+            get { return resourceLock; }
+            set { resourceLock = value; }
         }
 
         private void addSendToTemporaryWorkerMenuItem()
@@ -114,6 +122,7 @@ namespace MeGUI.core.details
                     }
                     this.refresh();
                     w.Mode = JobWorkerMode.CloseOnLocalListCompleted;
+                    w.IsTemporaryWorker = true;
                     w.StartEncoding(true);
                 }));
         }
@@ -194,6 +203,15 @@ namespace MeGUI.core.details
             {
                 foreach (JobWorker w in workers.Values)
                     if (w.IsEncoding) return true;
+                return false;
+            }
+        }
+        public bool IsAnyWorkerEncodingAudio
+        {
+            get
+            {
+                foreach (JobWorker w in workers.Values)
+                    if (w.IsEncodingAudio) return true;
                 return false;
             }
         }
@@ -321,6 +339,13 @@ namespace MeGUI.core.details
             summary.RefreshInfo();
         }
 
+        public void StartIdleWorkers()
+        {
+            foreach (JobWorker w in workers.Values)
+                if (w.Status == JobWorkerStatus.Idle)
+                    w.StartEncoding(false);
+        }
+
         #region saving / loading jobs
         internal List<string> toStringList(IEnumerable<TaggedJob> jobList)
         {
@@ -375,13 +400,16 @@ namespace MeGUI.core.details
             foreach (Pair<string, List<string>> p in s.workersAndTheirJobLists)
             {
                 JobWorkerMode mode = JobWorkerMode.RequestNewJobs;
+                bool bIsTemporaryWorker = false;
                 if (p.fst.StartsWith("Temporary worker "))
                 {
                     if (p.snd.Count == 0) continue;
                     mode = JobWorkerMode.CloseOnLocalListCompleted;
+                    bIsTemporaryWorker = true;
                 }
                 JobWorker w = NewWorker(p.fst, false);
                 w.Mode = mode;
+                w.IsTemporaryWorker = bIsTemporaryWorker;
                 IEnumerable<TaggedJob> list = toJobList(p.snd);
                 foreach (TaggedJob j in list)
                     w.AddJob(j);
@@ -538,9 +566,11 @@ namespace MeGUI.core.details
 
         private void addJob(TaggedJob job)
         {
+            mainForm.Jobs.ResourceLock.WaitOne();
             job.Name = getFreeJobName();
             allJobs[job.Name] = job;
             jobQueue.enqueueJob(job);
+            mainForm.Jobs.ResourceLock.Release();
         }
         #endregion
 
@@ -595,7 +625,8 @@ namespace MeGUI.core.details
                 {
                     if (job.Status == JobStatus.WAITING &&
                         job.OwningWorker == null &&
-                        areDependenciesMet(job))
+                        areDependenciesMet(job) &&
+                        (!IsAnyWorkerEncodingAudio || !job.Job.EncodingMode.Equals("audio")))
                         return job;
                 }
                 return null;
@@ -707,7 +738,7 @@ namespace MeGUI.core.details
         void WorkerFinishedJobs(object sender, EventArgs e)
         {
             foreach (JobWorker w in workers.Values)
-                if (w.Status != JobWorkerStatus.Idle)
+                if (w.IsEncoding)
                     return;
 
             mainForm.runAfterEncodingCommands();
@@ -749,7 +780,14 @@ namespace MeGUI.core.details
         internal void ShutDown(JobWorker w)
         {
             workers.Remove(w.Name);
-            if (w.Visible) w.Close();
+            try
+            {
+                if (w.Visible) w.Close();
+            }
+            catch
+            {
+                
+            }
             summary.Remove(w.Name);
         }
 
