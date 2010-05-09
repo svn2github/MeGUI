@@ -58,7 +58,7 @@ namespace MeGUI
         public enum Mode : int { CBR = 0, CQ, twopass1, twopass2, twopassAutomated, threepass1, threepass2, threepass3, threepassAutomated, quality };
         int encodingMode, bitrateQuantizer, keyframeInterval, nbBframes, minQuantizer, maxQuantizer, fourCC,
             maxNumberOfPasses, nbThreads;
-		bool turbo, v4mv, qpel, trellis;
+		bool v4mv, qpel, trellis;
 		decimal creditsQuantizer;
 		private string logfile, customEncoderOptions, videoName;
         private string[] fourCCs;

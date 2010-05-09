@@ -78,7 +78,7 @@ namespace MeGUI
 		bool deblock, cabac, p4x4mv, p8x8mv, b8x8mv, i4x4mv, i8x8mv, weightedBPrediction, encodeInterlaced,
 			chromaME, adaptiveDCT, noMixedRefs, noFastPSkip, psnrCalc, noDctDecimate, ssimCalc, useQPFile, 
             FullRange, advSet, noMBTree, threadInput, noPsy, scenecut, x264Nalhrd, x264Aud, x264SlowFirstpass;
-		string quantizerMatrix, qpfile, turbo;
+		string quantizerMatrix, qpfile;
         x264PresetLevelModes preset;
 		#region constructor
         /// <summary>
