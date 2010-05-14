@@ -61,8 +61,8 @@ private string _ChannelMode;
 private string _SamplingRate;
 private string _SamplingRateString;
 private string _SamplingCount;
-private string _Resolution;
-private string _ResolutionString;
+private string _BitDepth;
+private string _BitDepthString;
 private string _CompressionRatio;
 private string _Delay;
 private string _DelayString;
@@ -915,34 +915,34 @@ public string SamplingCount
 }
 
 
-///<summary> Resolution in bits (8, 16, 20, 24) </summary>
-public string Resolution
+///<summary> BitDepth in bits (8, 16, 20, 24) </summary>
+public string BitDepth
 {
     get
     {
-        if (String.IsNullOrEmpty(this._Resolution))
-            this._Resolution="";
-        return _Resolution;
+        if (String.IsNullOrEmpty(this._BitDepth))
+            this._BitDepth="";
+        return _BitDepth;
     }
     set
     {
-        this._Resolution=value;
+        this._BitDepth=value;
     }
 }
 
 
-///<summary> Resolution in bits (8, 16, 20, 24) formated as string </summary>
-public string ResolutionString
+///<summary> BitDepth in bits (8, 16, 20, 24) formated as string </summary>
+public string BitDepthString
 {
     get
     {
-        if (String.IsNullOrEmpty(this._ResolutionString))
-            this._ResolutionString = "";
-        return _ResolutionString;
+        if (String.IsNullOrEmpty(this._BitDepthString))
+            this._BitDepthString = "";
+        return _BitDepthString;
     }
     set
     {
-        this._ResolutionString = value;
+        this._BitDepthString = value;
     }
 }
 

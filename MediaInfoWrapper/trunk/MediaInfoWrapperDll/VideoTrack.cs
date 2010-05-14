@@ -31,7 +31,7 @@ namespace MediaInfoWrapper
         private string _FrameRate;
         private string _FrameRateString;
         private string _FrameCount;
-        private string _Resolution;
+        private string _BitDepth;
         private string _BitsPixelFrame;
         private string _Delay;
         private string _Duration;
@@ -62,6 +62,8 @@ namespace MediaInfoWrapper
         private string _FormatSettingsRefFrames;
         private string _FormatSettingsRefFramesString;
         private string _FormatSettingsPulldown;
+        private string _ScanType;
+        private string _ScanTypeString;
 
         ///<summary> Count of objects available in this stream </summary>
         public string Count
@@ -474,17 +476,17 @@ namespace MediaInfoWrapper
 
 
         ///<summary> example for MP3 : 16 bits </summary>
-        public string Resolution
+        public string BitDepth
         {
             get
             {
-                if (String.IsNullOrEmpty(this._Resolution))
-                    this._Resolution = "";
-                return _Resolution;
+                if (String.IsNullOrEmpty(this._BitDepth))
+                    this._BitDepth = "";
+                return _BitDepth;
             }
             set
             {
-                this._Resolution = value;
+                this._BitDepth = value;
             }
         }
 
@@ -943,6 +945,36 @@ namespace MediaInfoWrapper
             set
             {
                 this._FormatSettingsPulldown = value;
+            }
+        }
+
+        ///<summary> ScanType Info </summary>
+        public string ScanType
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(this._ScanType))
+                    this._ScanType = "";
+                return _ScanType;
+            }
+            set
+            {
+                this._ScanType = value;
+            }
+        }
+
+        ///<summary> ScanType Info (string format)</summary>
+        public string ScanTypeString
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(this._ScanTypeString))
+                    this._ScanTypeString = "";
+                return _ScanTypeString;
+            }
+            set
+            {
+                this._ScanTypeString = value;
             }
         }
     }
