@@ -471,7 +471,7 @@ namespace MeGUI
                     dpp.DeviceOutputType = devicetype.Text;
                     dpp.UseChaptersMarks = usechaptersmarks.Checked;
                     dpp.VideoSettings = VideoSettings.Clone();
-                    IndexJob job = new IndexJob(input.Filename, d2vName, 1, audioTracks, dpp, false, false);
+                    D2VIndexJob job = new D2VIndexJob(input.Filename, d2vName, 1, audioTracks, dpp, false, false);
                     mainForm.Jobs.addJobsToQueue(job);
                     if (this.openOnQueue.Checked)
                     {
@@ -662,9 +662,9 @@ namespace MeGUI
         #region postprocessor
         private static LogItem postprocess(MainForm mainForm, Job job)
         {
-            if (!(job is IndexJob))
+            if (!(job is D2VIndexJob))
                 return null;
-            IndexJob ijob = (IndexJob)job;
+            D2VIndexJob ijob = (D2VIndexJob)job;
             if (ijob.PostprocessingProperties == null)
                 return null;
             OneClickPostProcessor p = new OneClickPostProcessor(mainForm, ijob);
@@ -677,7 +677,7 @@ namespace MeGUI
         Dictionary<int, string> audioFiles;
         private JobUtil jobUtil;
         private VideoUtil vUtil;
-        private IndexJob job;
+        private D2VIndexJob job;
         private AVCLevels al = new AVCLevels();
         private bool finished = false;
         private bool interlaced = false;
@@ -685,7 +685,7 @@ namespace MeGUI
         private LogItem log = new LogItem("OneClick postprocessor", ImageType.Information);
         string qpfile = string.Empty;
         
-        public OneClickPostProcessor(MainForm mainForm, IndexJob ijob)
+        public OneClickPostProcessor(MainForm mainForm, D2VIndexJob ijob)
         {
             this.job = ijob;
             this.mainForm = mainForm;

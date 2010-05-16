@@ -195,7 +195,7 @@ namespace MeGUI
 					}
 					catch (IOException i)
 					{
-						Trace.WriteLine("IO Exception when closing StreamReader in VobInputWindow: " + i.Message);
+						Trace.WriteLine("IO Exception when closing StreamReader in FileIndexerWindow: " + i.Message);
 					}
 				}
 			}
@@ -254,7 +254,7 @@ namespace MeGUI
                     if (info.General[0].Format == "CDXA/MPEG-PS")
                         // MediaInfo doesn't give TrackID for VCD, specs indicate only MP1L2 is supported
                         ati.TrackID = (0xC0 + counter);
-                    else if (atrack.ID != "0")
+                    else if (atrack.ID != "0" && atrack.ID != "")
                         ati.TrackID = Int32.Parse(atrack.ID);
                     else
                         // MediaInfo failed to get ID try guessing based on codec
@@ -349,6 +349,7 @@ namespace MeGUI
             }            
         }
 
+        /// <summary>
         /// gets Timeline from Chapters Text file (formally as Ogg Format)
         /// </summary>
         /// <param name="fileName">the file read</param>
@@ -375,6 +376,7 @@ namespace MeGUI
             return chap;
         }
 
+        /// <summary>
         /// gets ID from a first video stream using MediaInfo
         /// </summary>
         /// <param name="infoFile">the file to be analyzed</param>
@@ -399,16 +401,102 @@ namespace MeGUI
             return TrackID;
         }
 
-        public static string detectVideoStreamType(string fileName)
+        /// <summary>
+        /// gets Video Codec and Container Format using MediaInfo
+        /// </summary>
+        /// <param name="strFileName">the file to be analyzed</param>
+        /// <param name="strVideoCodec">the Video Codec</param>
+        /// <param name="strContainerFormat">the Container Format</param>
+        /// <param name="audioTracks">the audio tracks</param>
+        /// <returns>true if successful</returns>
+        public static bool getMediaInformation(string strFileName, out string strVideoCodec, out string strVideoScanType, out string strContainerFormat, out List<AudioTrackInfo> audioTracks)
         {
-            string vst;
-            if (detecAVCStreamFromFile(fileName))
-                vst = "avc";
-            else if (detecVC1StreamFromFile(fileName))
-                vst = "vc1";
-            else
-                vst = "mpeg2";
-            return vst;
+            MediaInfo info;
+    
+            strVideoCodec = "";
+            strVideoScanType = "";
+            strContainerFormat = "";
+            audioTracks = new List<AudioTrackInfo>();
+
+            try
+            {
+                info = new MediaInfo(strFileName);
+                if (info.Video.Count > 0)
+                {
+                    MediaInfoWrapper.VideoTrack vtrack = info.Video[0];
+                    strVideoCodec = vtrack.CodecString;
+                    strVideoScanType = vtrack.ScanTypeString;
+                }
+                MediaInfoWrapper.GeneralTrack gtrack = info.General[0];
+                strContainerFormat = gtrack.Format;
+                
+                for (int counter = 0; counter < info.Audio.Count; counter++)
+                {
+                    MediaInfoWrapper.AudioTrack atrack = info.Audio[counter];
+                    AudioTrackInfo ati = new AudioTrackInfo();
+                    // DGIndex expects audio index not ID for TS
+                    ati.ContainerType = info.General[0].Format;
+                    ati.Index = counter;
+                    if (info.General[0].Format == "CDXA/MPEG-PS")
+                        // MediaInfo doesn't give TrackID for VCD, specs indicate only MP1L2 is supported
+                        ati.TrackID = (0xC0 + counter);
+                    else if (atrack.ID != "0" && atrack.ID != "")
+                        ati.TrackID = Int32.Parse(atrack.ID);
+                    else
+                        // MediaInfo failed to get ID try guessing based on codec
+                        switch (atrack.Format.Substring(0, 3))
+                        {
+                            case "AC3": ati.TrackID = (0x80 + counter); break;
+                            case "PCM": ati.TrackID = (0xA0 + counter); break;
+                            case "MPE": // MPEG-1 Layer 1/2/3
+                            case "MPA": ati.TrackID = (0xC0 + counter); break;
+                            case "DTS": ati.TrackID = (0x88 + counter); break;
+                        }
+                    if (atrack.FormatProfile != "") // some tunings to have a more useful info instead of a typical audio Format
+                    {
+                        switch (atrack.FormatProfile)
+                        {
+                            case "Dolby Digital": ati.Type = "AC-3"; break;
+                            case "HRA": ati.Type = "DTS-HD High Resolution"; break;
+                            case "Layer 1": ati.Type = "MPA"; break;
+                            case "Layer 2": ati.Type = "MP2"; break;
+                            case "Layer 3": ati.Type = "MP3"; break;
+                            case "LC": ati.Type = "AAC"; break;
+                            case "MA": ati.Type = "DTS-HD Master Audio"; break;
+                            case "TrueHD": ati.Type = "TrueHD"; break;
+                        }
+                    }
+                    else ati.Type = atrack.Format;
+                    ati.NbChannels = atrack.ChannelsString;
+                    ati.SamplingRate = atrack.SamplingRateString;
+                    if (atrack.LanguageString == "") // to retrieve Language 
+                    {
+                        if (Path.GetExtension(strFileName.ToLower()) == ".vob")
+                        {
+                            string ifoFile;
+                            string fileNameNoPath = Path.GetFileName(strFileName);
+
+                            // Languages are not present in VOB, so we check the main IFO
+                            if (fileNameNoPath.Substring(0, 4) == "VTS_")
+                                ifoFile = strFileName.Substring(0, strFileName.LastIndexOf("_")) + "_0.IFO";
+                            else ifoFile = Path.ChangeExtension(strFileName, ".IFO");
+
+                            if (File.Exists(ifoFile))
+                                atrack.LanguageString = IFOparser.getAudioLanguage(ifoFile, counter);
+                        }
+                    }
+                    ati.TrackInfo = new TrackInfo(atrack.LanguageString, null);
+                    audioTracks.Add(ati);
+                }
+
+                info.Dispose();
+                return true;
+            }
+            catch (Exception i)
+            {
+                MessageBox.Show("The following error ocurred when trying to get Media info for file " + strFileName + "\r\n" + i.Message, "Error parsing mediainfo data", MessageBoxButtons.OK);
+                return false;
+            }
         }
 
         /// detect AVC stream from a file using MediaInfo
@@ -429,55 +517,6 @@ namespace MeGUI
                     if (format == "AVC")
                         avcS = true;
                 }
-            }
-            catch (Exception i)
-            {
-                MessageBox.Show("The following error ocurred when trying to get Media info for file " + fileName + "\r\n" + i.Message, "Error parsing mediainfo data", MessageBoxButtons.OK);
-            }
-            return avcS;
-        }
-
-        /// detect VC-1 stream from a file using MediaInfo
-        /// </summary>
-        /// <param name="infoFile">the file to be analyzed</param>
-        /// <returns>VC-1 stream found whether or not</returns>
-        public static bool detecVC1StreamFromFile(string fileName)
-        {
-            MediaInfo info;
-            bool vc1S = false;
-            try
-            {
-                info = new MediaInfo(fileName);
-                if (info.Video.Count > 0)
-                {
-                    MediaInfoWrapper.VideoTrack vtrack = info.Video[0];
-                    string format = vtrack.Format;
-                    if (format == "VC-1")
-                        vc1S = true;
-                }
-            }
-            catch (Exception i)
-            {
-                MessageBox.Show("The following error ocurred when trying to get Media info for file " + fileName + "\r\n" + i.Message, "Error parsing mediainfo data", MessageBoxButtons.OK);
-            }
-            return vc1S;
-        }
-
-        /// detect program stream from a file using MediaInfo
-        /// </summary>
-        /// <param name="infoFile">the file to be analyzed</param>
-        /// <returns>Program stream found whether or not</returns>
-        public static bool detectProgramStreamFromFile(string fileName)
-        {
-            MediaInfo info;
-            bool avcS = false;
-            try
-            {
-                info = new MediaInfo(fileName);
-                MediaInfoWrapper.GeneralTrack gtrack = info.General[0];
-                string format = gtrack.Format;
-                if (format == "MPEG-PS")
-                    avcS = true;
             }
             catch (Exception i)
             {

@@ -87,10 +87,10 @@ namespace MeGUI
     /// in the TaggedJob class.
 	/// </summary>
 	[XmlInclude(typeof(VideoJob)), XmlInclude(typeof(AudioJob)), XmlInclude(typeof(MuxJob)), 
-	XmlInclude (typeof(MuxStream)), XmlInclude(typeof(IndexJob)), XmlInclude(typeof(AviSynthJob)), 
+	XmlInclude (typeof(MuxStream)), XmlInclude(typeof(D2VIndexJob)), XmlInclude(typeof(AviSynthJob)), 
     XmlInclude(typeof(SubtitleIndexJob)), XmlInclude(typeof(AudioSplitJob)), XmlInclude(typeof(AudioJoinJob)),
     XmlInclude(typeof(CleanupJob)), XmlInclude(typeof(DGAIndexJob)), XmlInclude(typeof(FFMSIndexJob)),
-    XmlInclude(typeof(DGNVIndexJob)), XmlInclude(typeof(HDStreamsExJob))]
+    XmlInclude(typeof(DGIIndexJob)), XmlInclude(typeof(HDStreamsExJob))]
 	public abstract class Job
 	{
         #region important details

@@ -30,7 +30,7 @@ using MeGUI.core.util;
 
 namespace MeGUI
 {
-    public class DGIndexer : CommandlineJobProcessor<IndexJob>
+    public class D2VIndexer : CommandlineJobProcessor<D2VIndexJob>
     {
         private static readonly Regex DGPercent =
             new Regex(@"\[(?<num>[0-9]*)%\]",
@@ -39,17 +39,17 @@ namespace MeGUI
         private static readonly TimeSpan TwoSeconds = new TimeSpan(0, 0, 2);
 
         public static readonly JobProcessorFactory Factory =
-            new JobProcessorFactory(new ProcessorFactory(init), "DGIndexer");
+            new JobProcessorFactory(new ProcessorFactory(init), "D2VIndexer");
 
         private static IJobProcessor init(MainForm mf, Job j)
         {
-            if (j is IndexJob) return new DGIndexer(mf.Settings.DgIndexPath);
+            if (j is D2VIndexJob) return new D2VIndexer(mf.Settings.DgIndexPath);
             return null;
         }
 
         private string lastLine;
 
-        public DGIndexer(string executableName)
+        public D2VIndexer(string executableName)
         {
             executable = executableName;
         }

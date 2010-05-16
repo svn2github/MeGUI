@@ -28,20 +28,20 @@ using MeGUI.core.util;
 
 namespace MeGUI
 {
-    public class DGNVIndexer : CommandlineJobProcessor<DGNVIndexJob>
+    public class DGAIndexer : CommandlineJobProcessor<DGAIndexJob>
     {
-        public static readonly JobProcessorFactory Factory =
-                    new JobProcessorFactory(new ProcessorFactory(init), "DGNVIndexer");
+public static readonly JobProcessorFactory Factory =
+            new JobProcessorFactory(new ProcessorFactory(init), "DGAIndexer");
 
         private static IJobProcessor init(MainForm mf, Job j)
         {
-            if (j is DGNVIndexJob) return new DGNVIndexer(mf.Settings.DgnvIndexPath);
+            if (j is DGAIndexJob) return new DGAIndexer(mf.Settings.DgavcIndexPath);
             return null;
         }
 
         private string lastLine;
 
-        public DGNVIndexer(string executableName)
+        public DGAIndexer(string executableName)
         {
             executable = executableName;
         }
@@ -51,7 +51,7 @@ namespace MeGUI
             if (Regex.IsMatch(line, "^[0-9]{1,3}$", RegexOptions.Compiled))
             {
                 su.PercentageDoneExact = Int32.Parse(line);
-                su.Status = "Creating DGI...";
+                su.Status = "Creating DGA...";
             }
             else
                 base.ProcessLine(line, stream);
@@ -65,7 +65,7 @@ namespace MeGUI
             {
                 StringBuilder sb = new StringBuilder();
                 if (job.DemuxVideo)
-                    sb.Append("-i \"" + job.Input + "\" -od \"" + job.Output + "\" -e -h");
+                     sb.Append("-i \"" + job.Input + "\" -od \"" + job.Output + "\" -e -h");
                 else sb.Append("-i \"" + job.Input + "\" -o \"" + job.Output + "\" -e -h");
                 if (job.DemuxMode == 2)
                     sb.Append(" -a"); // demux everything

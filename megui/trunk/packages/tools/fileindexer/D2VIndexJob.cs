@@ -1,4 +1,4 @@
-﻿// ****************************************************************************
+// ****************************************************************************
 // 
 // Copyright (C) 2005-2009  Doom9 & al
 // 
@@ -23,24 +23,26 @@ using System.Collections.Generic;
 
 namespace MeGUI
 {
-    public class DGNVIndexJob : Job
-    {
-        private bool loadSources;
+	/// <summary>
+	/// Summary description for D2VIndexJob.
+	/// </summary>
+	public class D2VIndexJob : Job
+	{
+		private bool loadSources;
         private bool demuxVideo;
-        private int demuxMode;
+		private int demuxMode;
         private List<AudioTrackInfo> audioTracks;
-        private DGIndexPostprocessingProperties postprocessingProperties;
-
-        public DGNVIndexJob()
-            : base()
-        {
-            loadSources = false;
+		private DGIndexPostprocessingProperties postprocessingProperties;
+		
+		public D2VIndexJob():base()
+		{
+			loadSources = false;
             demuxVideo = false;
-            demuxMode = 0;
+			demuxMode = 0;
             audioTracks = new List<AudioTrackInfo>();
-        }
+		}
 
-        public DGNVIndexJob(string input, string output, int demuxType, List<AudioTrackInfo> audioTracks,
+        public D2VIndexJob(string input, string output, int demuxType, List<AudioTrackInfo> audioTracks,
             DGIndexPostprocessingProperties properties, bool loadSources, bool demuxVideo)
         {
             Input = input;
@@ -52,33 +54,33 @@ namespace MeGUI
             DemuxVideo = demuxVideo;
         }
 
+		/// <summary>
+		/// gets / sets whether the audio and video files should be loaded after indexing
+		/// </summary>
+		public bool LoadSources
+		{
+			get {return loadSources;}
+			set {loadSources = value;}
+		}
         /// <summary>
-        /// gets / sets whether the video is extracted
+        /// gets / sets whether the video stream should be extracted
         /// </summary>
         public bool DemuxVideo
         {
             get { return demuxVideo; }
             set { demuxVideo = value; }
         }
-        /// <summary>
-        /// gets / sets whether the audio and video files should be loaded after indexing
-        /// </summary>
-        public bool LoadSources
-        {
-            get { return loadSources; }
-            set { loadSources = value; }
-        }
-        /// <summary>
-        /// gets / sets the demux mode
-        /// 0 = no audio demux
-        /// 1 = demux selected audio track
-        /// 2 = demux all audio tracks
-        /// </summary>
-        public int DemuxMode
-        {
-            get { return demuxMode; }
-            set { demuxMode = value; }
-        }
+    	/// <summary>
+		/// gets / sets the demux mode
+		/// 0 = no audio demux
+		/// 1 = demux selected audio track
+		/// 2 = demux all audio tracks
+		/// </summary>
+		public int DemuxMode
+		{
+			get {return demuxMode;}
+			set {demuxMode = value;}
+		}
 
         public List<AudioTrackInfo> AudioTracks
         {
@@ -86,18 +88,18 @@ namespace MeGUI
             set { audioTracks = value; }
         }
 
-        /// <summary>
-        /// gets / sets the postprocessing properties
-        /// if this is not set, we're just dealing with a regular demuxing job
-        /// if it is defined, we're dealing with an index job in one click mode
-        /// and all the postprocessing that has to be done prior to audio encoding
-        /// is defined in this property
-        /// </summary>
-        public DGIndexPostprocessingProperties PostprocessingProperties
-        {
-            get { return postprocessingProperties; }
-            set { postprocessingProperties = value; }
-        }
+		/// <summary>
+		/// gets / sets the postprocessing properties
+		/// if this is not set, we're just dealing with a regular demuxing job
+		/// if it is defined, we're dealing with an index job in one click mode
+		/// and all the postprocessing that has to be done prior to audio encoding
+		/// is defined in this property
+		/// </summary>
+		public DGIndexPostprocessingProperties PostprocessingProperties
+		{
+			get {return postprocessingProperties;}
+			set {postprocessingProperties = value;}
+		}
 
         public override string CodecString
         {

@@ -1275,7 +1275,7 @@ namespace MeGUI
         }
         public void openD2VCreatorFile(string fileName)
         {
-            VobinputWindow mpegInput = new VobinputWindow(this);
+            FileIndexerWindow mpegInput = new FileIndexerWindow(this);
             mpegInput.setConfig(fileName, null, 2, true, true, true, false);
             mpegInput.ShowDialog();
         }
@@ -1732,9 +1732,9 @@ namespace MeGUI
             PackageSystem.JobProcessors.Register(CleanupJobRunner.Factory);
 
             PackageSystem.JobProcessors.Register(AviSynthProcessor.Factory);
-            PackageSystem.JobProcessors.Register(DGIndexer.Factory);
-            PackageSystem.JobProcessors.Register(DGAVCIndexer.Factory);
-            PackageSystem.JobProcessors.Register(DGNVIndexer.Factory);
+            PackageSystem.JobProcessors.Register(D2VIndexer.Factory);
+            PackageSystem.JobProcessors.Register(DGAIndexer.Factory);
+            PackageSystem.JobProcessors.Register(DGIIndexer.Factory);
             PackageSystem.JobProcessors.Register(FFMSIndexer.Factory);
             PackageSystem.JobProcessors.Register(VobSubIndexer.Factory);
             PackageSystem.JobProcessors.Register(Joiner.Factory);
@@ -1765,9 +1765,9 @@ namespace MeGUI
             PackageSystem.MediaFileTypes.Register(new MediaInfoFileFactory());
             PackageSystem.JobPreProcessors.Register(BitrateCalculatorPreProcessor.CalculationProcessor);
             PackageSystem.JobPostProcessors.Register(OneClickPostProcessor.PostProcessor);
-            PackageSystem.JobPostProcessors.Register(IndexJobPostProcessor.PostProcessor);
-            PackageSystem.JobPostProcessors.Register(dgavcIndexJobPostProcessor.PostProcessor);
-            PackageSystem.JobPostProcessors.Register(dgnvIndexJobPostProcessor.PostProcessor);
+            PackageSystem.JobPostProcessors.Register(d2vIndexJobPostProcessor.PostProcessor);
+            PackageSystem.JobPostProcessors.Register(dgaIndexJobPostProcessor.PostProcessor);
+            PackageSystem.JobPostProcessors.Register(dgiIndexJobPostProcessor.PostProcessor);
             PackageSystem.JobPostProcessors.Register(ffmsIndexJobPostProcessor.PostProcessor);
             PackageSystem.JobPostProcessors.Register(CleanupJobRunner.DeleteIntermediateFilesPostProcessor);
             PackageSystem.JobConfigurers.Register(MuxWindow.Configurer);
@@ -2115,7 +2115,7 @@ namespace MeGUI
 
         private void menuItem5_Click(object sender, EventArgs e)
         {
-            VobinputWindow d2vc = new VobinputWindow(this);
+            FileIndexerWindow d2vc = new FileIndexerWindow(this);
             d2vc.ShowDialog();
         }
 
