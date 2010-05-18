@@ -181,11 +181,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "TSMuxer");
 
                 if (!string.IsNullOrEmpty(settings.MuxedInput))
                 {
-                    if (VideoUtil.detecAVCStreamFromFile(settings.VideoInput) == true)
+                    if (VideoUtil.detecAVCStreamFromFile(settings.MuxedInput) == true)
                     {
                         vcodecID = "V_MPEG4/ISO/AVC";
                         extra = " insertSEI, contSPS";
-                        if (settings.VideoInput.ToLower().EndsWith(".mp4"))
+                        if (settings.MuxedInput.ToLower().EndsWith(".mp4"))
                             extra += " , track=1";
                     }
                     else if (settings.MuxedInput.ToLower().EndsWith(".m2v"))
