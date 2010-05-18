@@ -1,9 +1,106 @@
+0.3.4.14
+    - (zathor) changed the way windowstate, location and size are saved and applied for MainForm, JobWorker, Changelog and WorkerSummary
+    - (zathor) [x264Config] changed "Fast first pass" to "Slow first pass"
+    - (zathor) [ProfileConfigurationWindow] + [Calculator] + [Changelog] changed style to FixedToolWindow (no resize, no minimize)
+    - (zathor) [Calculator] settings can be applied if bitrate > 0
+    - (zathor) [JobControl] enhanced the adding of new jobs
+    - (zathor) [AudioEncodingTab] "_new" will be appended to the file name if the output file already exists
+    - (zathor) [AutoEncodeWindow] if targeting file size or bitrate the encoding mode of the video profile will be switched temporarily to automated 2/3pass
+    - (zathor) [JobControl] + [JobWorkerWindow] fixed a problem with several workers running the same job
+    - (zathor) [JobControl] + [JobWorkerWindow] only one audio encoding at a time. Bug #2996413
+    - (zathor) [FileBar] set focus to the open dialogue
+    - (zathor) [VideoCodecSettings] + [x264Settings] removed unnecessary variables
+    - (zathor) renamed VobInputWindow to FileIndexerWindow, renamed several of the indexer classes
+    - (zathor) [FileIndexerWindow] display of source media information added
+    - (zathor) [FileIndexerWindow] based upon the source media the recommended indexer will be preselected
+
+0.3.4.13
+    - (zathor) [HDBDStreamExtractor] DTS output type option for DTS-MA or DTS-HR extracts only the core DTS track. Feature Request #2695340
+    - (zathor) [x264Encoder] fixed rc-lookahead. Bug #2991069
+    - (zathor) [OSInfo] improved .NET 4.0 detection. Bug #2988751
+    - (zathor) [x264Settings] changed the default b-pyramid value to normal
+    - (zathor) [x264Config] fixed the log file button
+    - (zathor) [UpdateWindow] added platform type
+    - (zathor) [UpdateWindow] only the platform matching updates will be downloaded
+    - (zathor) if the x64 MeGUI build is used only x64_64.exe is referenced 
+
+0.3.4.12
+    - (zathor) [OneClickConfigPanel] "Keep Input Resolution" disables "Signal AR"
+    - (zathor) [JobQueue] CTRL+A selects all queue items. Feature request #2981335
+    - (zathor) [JobQueue] SHIFT+UP or DOWN to move an queue item, UP or DOWN to navigate in the list
+    - (zathor) user.config settings will also be migrated for queue settings and custom AR, file size and FPS
+
+0.3.4.11
+    - (zathor) [DAR] + [ARChooser] enhanced ITU values
+    - (zathor) [OneClickSettings] changed the default output resolution to 720
+    - (zathor) [OneClickWindow] custom AR can be applied if "Keep Input Resolution" is selected
+    - (zathor) [OneClickWindow] "Keep Input Resolution" disables "Signal AR"
+
+0.3.4.10
+    - (zathor) [x264Encoder] --aud will only be appended if selected in the configuration dialog. Bug #2979294
+    - (zathor) [OneClickSettings] the MKV container is enabled by default
+    - (zathor) [x264ConfigurationPanel] fixed wrong vbvmaxrate value after profile switching
+    - (zathor) [OneClickWindow] fixed "Keep Input Resolution" behavior
+    - (zathor) [VideoEncodingComponent] improved error handling
+    - (zathor) [FilmCutter] changed default transition type in AVS Cutter to "No transition". Fade transition will blend in/out 10 frames. Bug #2913546
+
+0.3.4.9
+    - (zathor) x264 - some CQP mode adjustments
+    - (zathor) x264 - added superfast preset support (requires x264 revision 1509 or higher)
+
+0.3.4.8
+    - (zathor) [ffmsReader] + [ScriptServer] FFVideoSource defaults to the YV12 colorspace
+    - (zathor) [VideoUtil] improved the ConvertToYV12() handling
+
+0.3.4.7
+    - (zathor) [UpdateCacher] + [UpdateWindow] + [MainForm] added offline install capability
+    - (zathor) [UpdateCacher] + [UpdateWindow] zip files will be verified before extracting
+    - (zathor) [UpdateCacher] improved proxy support
+    - (zathor) user.config will be migrated to new version if possible
+    - (zathor) [x264Encoder] mbtree can be disabled while fast preset is active
+
+0.3.4.6
+    - (zathor) [AviSynthWindow] FFVideoSource will be used automatically if a corresponding ffindex file exists
+    - (zathor) [MeGUISettings] fixed ffms file not found problem
+
+0.3.4.5
+    - (zathor) [MainForm] renamed "DG Creator" to "File Indexer"
+    - (zathor) added FFMS (FFmpegSource2) to the file indexer
+
+0.3.4.4
+    - (zathor) [MP4BoxMuxer] + [CommandlineJobProcessor] changed the way the remaining time is estimated. Bug #2124705
+    - (zathor) [MainForm] updatecopier.exe will only be elevated if necessary
+    - (zathor) simplified updatecopier.exe
+
+0.3.4.3
+    - (zathor) [HDStreamExtractorIndexer] improved mpls parsing
+    - (zathor) [BitrateCalculator] fixed overflow for very long video durations
+    - (zathor) update MediaInfo library and its wrapper to the latest release (0.7.29)
+    - (zathor) [MainForm] suspend the update process until the profiles have been imported
+    - (zathor) [x264Encoder] + [x264ConfigurationPanel] changed the default b-pyramid value to normal (requires x264 revision 1455 or higher)
+    - (zathor) [JobWorkerWindow] enhanced error handling
+    - (zathor) [AudioEncoderInterface] earlier preprocessing status update
+    - (zathor) [tsMuxeR] ISO639-2-Code will be used for the language during muxing
+    - (zathor) [tsMuxeR] fixed muxing of srt files. Bug #2958514
+    - (zathor) [x264] removed the lossless checkbox, changed turbo to "fast first pass", changed thread-input, cosmetics
+    - (zathor) [tsMuxeR] + [CommandlineMuxer] changed the way the projected filesize is estimated
+
+0.3.4.2
+    - (zathor) [AviSynthProfileConfigPanel] if clever anamorphic encoding is enabled the dropdown box will be also enabled
+    - (zathor) [AviSynthWindow] openning a file also triggers the clever anamorphic encoding event. Bug #2957647
+    - (zathor) [UpdateWindow] set file changed time of extracted files
+    - (zathor) [UpdateWindow] files which need a reboot will also be backuped if selected
+    - (zathor) update ICSharpCode.SharpZipLib.dll
+
+0.3.4.1
+    - (zathor) [x264Encoder] added support for new x264 nal-hrd switches (requires x264 revision 1442 or higher)
+
 0.3.4.0
     - (zathor) [JobControl] error handling added. Bug #2279852
     - (zathor) [x264Encoder] corrected scenecut handling. Bug #2942446
     - (zathor) [LogItem] error handling added. Bug #2947565 + #2925500
     - (zathor) update MediaInfo library and its wrapper to the latest release (0.7.28)
-    - (zahtor) [UpdateWindow] moved the MediaInfo files to a separate download package
+    - (zathor) [UpdateWindow] moved the MediaInfo files to a separate download package
     - (zathor) [Calculator] encoding mode will only be changed if profile encoding mode is const. quality or const. quantizer. Bug #2952574
     - (zathor) [dgiReader] enhanced error handling
     - (zathor) [SourceDetector] enhanced error handling in analyseFF. Bug #2810830
@@ -175,10 +272,8 @@
 
 0.3.1.1053
     - (kurtnoise) [x264 Config] * add presets/tunings/mb-tree/rc-lookahead/no-psy options. Requires x264 revision 1206 or higher.
-
                                 * redesign config panel in 4 tabs (Main, the default one + Frame-type + Rate-Control + Analysis + Misc)
-                  
-              * clean up the code for better reading. 
+                                * clean up the code for better reading. 
     - (kurtnoise) Fix some changes in batch files. Patch by XhmikosR (#2832669)
     - (kurtnoise) [x264Config] remove AQ Mode restriction from x264 settings.
     - (kurtnoise) [VideoEncodingComponent] add findDGSource() function and use it during input file loading to check whether or not CUVIDServer must be run. 
@@ -199,7 +294,6 @@
     - (kurtnoise) [x264Config] fix x264 scratchpad default settings.
     - (kurtnoise) [x264Config] few improvements in the partitions command line construction.
     - (kurtnoise) [x264Encoder] add AQ mode 2. requires x264 r1184 or higher.
-
 
 0.3.1.1051
     - (kurtnoise) Update MediaInfo library and its wrapper to the latest release (0.7.19)
