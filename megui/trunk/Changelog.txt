@@ -5,7 +5,7 @@
     - (zathor) [Calculator] settings can be applied if bitrate > 0
     - (zathor) [JobControl] enhanced the adding of new jobs
     - (zathor) [AudioEncodingTab] "_new" will be appended to the file name if the output file already exists
-    - (zathor) [AutoEncodeWindow] if targeting file size or bitrate the encoding mode of the video profile will be switched temporarily to automated 2/3pass
+    - (zathor) If targeting file size in AutoEncode or One-Click the encoding mode of the selected video profile will be switched temporarily to automated 2/3pass
     - (zathor) [JobControl] + [JobWorkerWindow] fixed a problem with several workers running the same job
     - (zathor) [JobControl] + [JobWorkerWindow] only one audio encoding at a time. Bug #2996413
     - (zathor) [FileBar] set focus to the open dialogue
@@ -14,8 +14,9 @@
     - (zathor) [FileIndexerWindow] display of source media information added
     - (zathor) [FileIndexerWindow] based upon the source media the recommended indexer will be preselected
     - (zathor) [tsMuxeR] fixed failed muxing in rare cases
-    - (zathor) [BitrateCalculator] Add BPP and Quality Estimate calculation support w/ complexity slider. Patch by JarrettV (#2999751)
-    - (zathor) [BitrateCalculator] Improved audio and unlimited extra calculation support. Patch by JarrettV (#2999751)
+    - (zathor) [BitrateCalculator] add BPP and Quality Estimate calculation support w/ complexity slider. Patch by JarrettV (#2999751)
+    - (zathor) [BitrateCalculator] improved audio and unlimited extra calculation support. Patch by JarrettV (#2999751)
+    - (zathor) [BitrateCaluclator] the encoding mode of the selected video profile will be switched to automated 2/3pass if necessary
 
 0.3.4.13
     - (zathor) [HDBDStreamExtractor] DTS output type option for DTS-MA or DTS-HR extracts only the core DTS track. Feature Request #2695340
@@ -77,7 +78,7 @@
 
 0.3.4.3
     - (zathor) [HDStreamExtractorIndexer] improved mpls parsing
-    - (zathor) [BitrateCalculator] fixed overflow for very long video durations
+    - (zathor) [BitrateCalculator] fixed overflow in case of very long video durations
     - (zathor) update MediaInfo library and its wrapper to the latest release (0.7.29)
     - (zathor) [MainForm] suspend the update process until the profiles have been imported
     - (zathor) [x264Encoder] + [x264ConfigurationPanel] changed the default b-pyramid value to normal (requires x264 revision 1455 or higher)

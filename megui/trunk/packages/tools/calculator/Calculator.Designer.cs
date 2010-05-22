@@ -103,6 +103,7 @@ namespace MeGUI
             this.label8 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.videoCodec = new System.Windows.Forms.ComboBox();
+            this.fpsChooser = new MeGUI.core.gui.FPSChooser();
             this.nbFrames = new System.Windows.Forms.NumericUpDown();
             this.bframes = new System.Windows.Forms.CheckBox();
             this.nbFramesLabel = new System.Windows.Forms.Label();
@@ -126,6 +127,7 @@ namespace MeGUI
             this.bppRadio = new System.Windows.Forms.RadioButton();
             this.bpp = new System.Windows.Forms.NumericUpDown();
             this.videoSize = new System.Windows.Forms.TextBox();
+            this.targetSize = new MeGUI.core.gui.TargetSizeSCBox();
             this.projectedBitrate = new System.Windows.Forms.NumericUpDown();
             this.fileSizeRadio = new System.Windows.Forms.RadioButton();
             this.AverageBitrateLabel = new System.Windows.Forms.Label();
@@ -141,8 +143,6 @@ namespace MeGUI
             this.audioExtraFlow = new System.Windows.Forms.FlowLayoutPanel();
             this.addToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.fpsChooser = new MeGUI.core.gui.FPSChooser();
-            this.targetSize = new MeGUI.core.gui.TargetSizeSCBox();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.videoGroupbox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.height)).BeginInit();
@@ -308,6 +308,18 @@ namespace MeGUI
             this.videoCodec.Size = new System.Drawing.Size(103, 21);
             this.videoCodec.TabIndex = 7;
             this.videoCodec.SelectedIndexChanged += new System.EventHandler(this.audio_SelectedIndexChanged);
+            // 
+            // fpsChooser
+            // 
+            this.fpsChooser.Location = new System.Drawing.Point(243, 40);
+            this.fpsChooser.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.fpsChooser.MinimumSize = new System.Drawing.Size(64, 29);
+            this.fpsChooser.Name = "fpsChooser";
+            this.fpsChooser.NullString = null;
+            this.fpsChooser.SelectedIndex = 0;
+            this.fpsChooser.Size = new System.Drawing.Size(98, 29);
+            this.fpsChooser.TabIndex = 4;
+            this.fpsChooser.SelectionChanged += new MeGUI.StringChanged(this.fpsChooser_SelectionChanged);
             // 
             // nbFrames
             // 
@@ -498,8 +510,8 @@ namespace MeGUI
             // 
             // containerFormat
             // 
-            this.containerFormat.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.containerFormat.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.containerFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.containerFormat.FormattingEnabled = true;
             this.containerFormat.ItemHeight = 13;
@@ -602,6 +614,22 @@ namespace MeGUI
             this.videoSize.Size = new System.Drawing.Size(62, 21);
             this.videoSize.TabIndex = 15;
             this.videoSize.TabStop = false;
+            // 
+            // targetSize
+            // 
+            this.targetSize.CustomSizes = new MeGUI.core.util.FileSize[0];
+            this.targetSize.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.targetSize.Location = new System.Drawing.Point(19, 180);
+            this.targetSize.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.targetSize.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.targetSize.MinimumSize = new System.Drawing.Size(64, 29);
+            this.targetSize.Name = "targetSize";
+            this.targetSize.NullString = "Not calculated";
+            this.targetSize.SelectedIndex = 0;
+            this.targetSize.Size = new System.Drawing.Size(173, 29);
+            this.targetSize.TabIndex = 18;
+            this.targetSize.TabStop = false;
+            this.targetSize.SelectionChanged += new MeGUI.StringChanged(this.targetSize_SelectionChanged);
             // 
             // projectedBitrate
             // 
@@ -728,9 +756,9 @@ namespace MeGUI
             // 
             // audioExtraFlow
             // 
-            this.audioExtraFlow.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.audioExtraFlow.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.audioExtraFlow.AutoScroll = true;
             this.audioExtraFlow.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.audioExtraFlow.Location = new System.Drawing.Point(3, 18);
@@ -743,34 +771,6 @@ namespace MeGUI
             // 
             this.addToolTip.AutomaticDelay = 300;
             this.addToolTip.ToolTipTitle = "Add";
-            // 
-            // fpsChooser
-            // 
-            this.fpsChooser.Location = new System.Drawing.Point(243, 40);
-            this.fpsChooser.MaximumSize = new System.Drawing.Size(1000, 29);
-            this.fpsChooser.MinimumSize = new System.Drawing.Size(64, 29);
-            this.fpsChooser.Name = "fpsChooser";
-            this.fpsChooser.NullString = null;
-            this.fpsChooser.SelectedIndex = 0;
-            this.fpsChooser.Size = new System.Drawing.Size(98, 29);
-            this.fpsChooser.TabIndex = 4;
-            this.fpsChooser.SelectionChanged += new MeGUI.StringChanged(this.fpsChooser_SelectionChanged);
-            // 
-            // targetSize
-            // 
-            this.targetSize.CustomSizes = new MeGUI.core.util.FileSize[0];
-            this.targetSize.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.targetSize.Location = new System.Drawing.Point(19, 180);
-            this.targetSize.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.targetSize.MaximumSize = new System.Drawing.Size(1000, 29);
-            this.targetSize.MinimumSize = new System.Drawing.Size(64, 29);
-            this.targetSize.Name = "targetSize";
-            this.targetSize.NullString = "Not calculated";
-            this.targetSize.SelectedIndex = 0;
-            this.targetSize.Size = new System.Drawing.Size(173, 29);
-            this.targetSize.TabIndex = 18;
-            this.targetSize.TabStop = false;
-            this.targetSize.SelectionChanged += new MeGUI.StringChanged(this.targetSize_SelectionChanged);
             // 
             // helpButton1
             // 

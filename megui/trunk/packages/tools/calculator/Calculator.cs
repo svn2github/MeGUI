@@ -132,11 +132,6 @@ namespace MeGUI
             get { return (int)projectedBitrate.Value; }
         }
 
-        public int EncodingMode
-        {
-            get { return fileSizeRadio.Checked ? 4 /* 2pass */ : 0 /* ABR */; }
-        }
-
         #region Event Handlers
 
         private void audio_SelectedIndexChanged(object sender, System.EventArgs e)
@@ -638,18 +633,23 @@ namespace MeGUI
                 if (info.Video.CurrentSettings.EncoderType != calc.SelectedVCodec)
                     return;
 
-                dr = MessageBox.Show("Copy calculated bitrate into video settings?", "Save calculated bitrate?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (dr != DialogResult.Yes)
-                    return;
-
                 VideoCodecSettings settings = info.Video.CurrentSettings;
-                int iEncodingMode = calc.EncodingMode;
+
                 if (settings.EncodingMode == 1 || settings.EncodingMode == 9)
                 {
-                    if (iEncodingMode == 0)
-                        settings.EncodingMode = 0;  // ABR
+                    dr = MessageBox.Show("Copy calculated bitrate into current video settings and change encoding mode to automated " + info.Settings.NbPasses + "-pass?", "Save calculated bitrate?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (dr != DialogResult.Yes)
+                        return;
+                    if (info.Settings.NbPasses == 3)
+                        settings.EncodingMode = 8;  // Automated 3-pass
                     else
                         settings.EncodingMode = 4;  // Automated 2-pass
+                }
+                else
+                {
+                    dr = MessageBox.Show("Copy calculated bitrate into current video settings?", "Save calculated bitrate?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (dr != DialogResult.Yes)
+                        return;
                 }
                 settings.BitrateQuantizer = calc.VideoBitrate;
             }
