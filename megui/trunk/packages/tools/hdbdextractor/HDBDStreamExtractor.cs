@@ -1168,9 +1168,9 @@ namespace MeGUI.packages.tools.hdbdextractor
                             FolderOutputTextBox.Text = FolderInputTextBox.Text.Substring(0, FolderInputTextBox.Text.LastIndexOf("\\") + 1);
                     }
                 }
-                if ((settings.EAC3toPath == "") || (settings.EAC3toPath == "eac3to.exe"))
+                if (!System.IO.File.Exists(settings.EAC3toPath))
                 {
-                    MessageBox.Show("Select a correct EAC3to Path first in the MeGUI Settings to avoid issues...", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("EAC3to not found. Please use the updater.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
                 else

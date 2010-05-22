@@ -13,7 +13,9 @@
     - (zathor) renamed VobInputWindow to FileIndexerWindow, renamed several of the indexer classes
     - (zathor) [FileIndexerWindow] display of source media information added
     - (zathor) [FileIndexerWindow] based upon the source media the recommended indexer will be preselected
-    - (zathor) [tsMuxeR] muxing failed in rare cases if source was an AVC file
+    - (zathor) [tsMuxeR] fixed failed muxing in rare cases
+    - (zathor) [BitrateCalculator] Add BPP and Quality Estimate calculation support w/ complexity slider. Patch by JarrettV (#2999751)
+    - (zathor) [BitrateCalculator] Improved audio and unlimited extra calculation support. Patch by JarrettV (#2999751)
 
 0.3.4.13
     - (zathor) [HDBDStreamExtractor] DTS output type option for DTS-MA or DTS-HR extracts only the core DTS track. Feature Request #2695340

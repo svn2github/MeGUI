@@ -33,7 +33,7 @@ namespace MeGUI
     {
         #region variables
         private string[][] autoUpdateServerLists;
-        private string faacPath, lamePath, neroAacEncPath, mencoderPath,  mp4boxPath, mkvmergePath, strMainAudioFormat,
+        private string faacPath, lamePath, neroAacEncPath, mencoderPath, mp4boxPath, mkvmergePath, strMainAudioFormat,
                        encAacPlusPath, ffmpegPath, besplitPath, yadifPath, aftenPath, x264Path, strMainFileFormat,
                        dgIndexPath, xvidEncrawPath, aviMuxGUIPath, oggEnc2Path, encAudXPath, dgavcIndexPath,
                        eac3toPath, tsmuxerPath, meguiupdatecache, avisynthpluginspath, ffmsIndexPath,
@@ -48,7 +48,7 @@ namespace MeGUI
         private ulong audioSamplesPerUpdate;
         private AfterEncoding afterEncoding;
         private decimal forceFilmThreshold, acceptableFPSError;
-		private int nbPasses, acceptableAspectError, maxServersToTry, autoUpdateServerSubList;
+        private int nbPasses, acceptableAspectError, maxServersToTry, autoUpdateServerSubList, minComplexity, maxComplexity;
         private SourceDetectorSettings sdSettings;
         private AutoEncodeDefaultsSettings aedSettings;
         private DialogSettings dialogSettings;
@@ -138,6 +138,8 @@ namespace MeGUI
             strLastSourcePath = "";
             strLastDestinationPath = "";
             bUseCUVIDserver = true;
+            minComplexity = 72;
+            maxComplexity = 78;
         }
 
         private string getDownloadPath(string strPath)
@@ -754,6 +756,18 @@ namespace MeGUI
         {
             get { return strMainFileFormat; }
             set { strMainFileFormat = value; }
+        }
+
+        public int MinComplexity
+        {
+            get { return minComplexity; }
+            set { minComplexity = value; }
+        }
+
+        public int MaxComplexity
+        {
+            get { return maxComplexity; }
+            set { maxComplexity = value; }
         }
 
         #endregion

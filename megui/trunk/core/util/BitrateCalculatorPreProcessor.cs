@@ -25,6 +25,7 @@ using System.Text;
 using System.Xml.Serialization;
 
 using MeGUI.core.details;
+using MeGUI.packages.tools.calculator;
 
 namespace MeGUI.core.util
 {
@@ -61,25 +62,25 @@ namespace MeGUI.core.util
             ulong framecount;
             JobUtil.getInputProperties(out framecount, out framerate, job.Input);
 
-            int bitrateKBits;
-            ulong videoSizeKB = 0;
+            CalcData data = new CalcData((long)framecount, (decimal)framerate, b.Container, job.Settings.Codec, 
+                job.Settings.NbBframes > 0, audioStreams.ToArray());
+            data.TotalSize = b.DesiredSize;
 
             try
             {
-                bitrateKBits = BitrateCalculator.CalculateBitrateKBits(job.Settings.Codec, job.Settings.NbBframes > 0, b.Container,
-                audioStreams.ToArray(), b.DesiredSize.Bytes, framecount, framerate, out videoSizeKB, string.Empty);
+                data.CalcByTotalSize();
             }
-            catch (CalculationException e)
+            catch (Exception e)
             {
                 log.LogValue("Calculation failed", e, ImageType.Error);
                 return log;
             }
 
-            log.LogValue("Desired size after subtracting audio", videoSizeKB + "KBs");
-            log.LogValue("Calculated desired bitrate", bitrateKBits + "kbit/s");
+            log.LogValue("Desired size after subtracting audio", data.VideoSize.KBExact + "KBs");
+            log.LogValue("Calculated desired bitrate", data.VideoBitrate + "kbit/s");
 
             foreach (TaggedJob t in b.VideoJobs)
-                ((VideoJob)t.Job).Settings.BitrateQuantizer = bitrateKBits;
+                ((VideoJob)t.Job).Settings.BitrateQuantizer = (int)data.VideoBitrate;
 
             return log;
         }

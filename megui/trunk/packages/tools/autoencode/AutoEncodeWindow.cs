@@ -30,6 +30,7 @@ using System.Windows.Forms;
 using MeGUI.core.details;
 using MeGUI.core.plugins.interfaces;
 using MeGUI.core.util;
+using MeGUI.packages.tools.calculator;
 
 namespace MeGUI
 {
@@ -553,28 +554,25 @@ namespace MeGUI
         {
             try
             {
-                ulong desiredSizeBytes;
-                checked { desiredSizeBytes = targetSize.Value.Value.Bytes; }
-                ulong videoSize;
+                CalcData data = GetCalcData();
+                data.TotalSize = new FileSize(targetSize.Value.Value.Bytes);
+                data.CalcByTotalSize();
 
-                int bitrateKbits = BitrateCalculator.CalculateBitrateKBits(videoStream.Settings.Codec,
-                    (videoStream.Settings.NbBframes > 0),
-                    ((ContainerType)container.SelectedItem),
-                    getAudioStreamsForBitrate(),
-                    desiredSizeBytes,
-                    videoStream.NumberOfFrames,
-                    (double)videoStream.Framerate,
-                    out videoSize,
-                    string.Empty);
-
-                this.videoSize.Text = new FileSize(Unit.KB, videoSize).ToString();
-                this.projectedBitrateKBits.Text = bitrateKbits.ToString();
+                this.videoSize.Text = data.VideoSize.ToString();
+                this.projectedBitrateKBits.Text = data.VideoBitrate.ToString();
             }
             catch (Exception)
             {
                 this.projectedBitrateKBits.Text = "";
                 videoSize.Text = "";
             }
+        }
+
+        private CalcData GetCalcData()
+        {
+            CalcData data = new CalcData((long)videoStream.NumberOfFrames, videoStream.Framerate, (ContainerType)container.SelectedItem,
+                videoStream.Settings.Codec, videoStream.Settings.NbBframes > 0, getAudioStreamsForBitrate());
+            return data;
         }
 
         private AudioBitrateCalculationStream[] getAudioStreamsForBitrate()
@@ -592,20 +590,11 @@ namespace MeGUI
 		{
 			try
             {
-                int desiredBitrate = Int32.Parse(this.projectedBitrateKBits.Text);
-                long outputSize = 0;
-                int rawVideoSize = 0;
-                outputSize = BitrateCalculator.CalculateFileSizeKB(videoStream.Settings.Codec,
-                    (videoStream.Settings.NbBframes > 0),
-                    ((ContainerType)container.SelectedItem),
-                    getAudioStreamsForBitrate(),
-                    desiredBitrate,
-                    videoStream.NumberOfFrames,
-                    (double)videoStream.Framerate,
-                    out rawVideoSize,
-                    string.Empty) / 1024L ;
-                this.videoSize.Text = new FileSize(Unit.KB, rawVideoSize).ToString();
-                this.targetSize.Value = new FileSize(Unit.MB, outputSize);
+                CalcData data = GetCalcData();
+                data.VideoBitrate = Int32.Parse(this.projectedBitrateKBits.Text);
+                data.CalcByVideoSize();
+                this.videoSize.Text = data.VideoSize.ToString();
+                this.targetSize.Value = new FileSize(Unit.MB, data.TotalSize.MBExact);
             }
             catch (Exception)
             {
