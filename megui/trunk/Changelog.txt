@@ -17,6 +17,7 @@
     - (zathor) [BitrateCalculator] add BPP and Quality Estimate calculation support w/ complexity slider. Patch by JarrettV (#2999751)
     - (zathor) [BitrateCalculator] improved audio and unlimited extra calculation support. Patch by JarrettV (#2999751)
     - (zathor) [BitrateCaluclator] the encoding mode of the selected video profile will be switched to automated 2/3pass if necessary
+    - (zathor) [x264ConfigurationPanel] simplified the main page, improved the tooltip help
 
 0.3.4.13
     - (zathor) [HDBDStreamExtractor] DTS output type option for DTS-MA or DTS-HR extracts only the core DTS track. Feature Request #2695340

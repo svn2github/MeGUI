@@ -29,14 +29,10 @@ namespace MeGUI.packages.video.x264
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(x264ConfigurationPanel));
-            this.avcLevelGroupbox = new System.Windows.Forms.GroupBox();
-            this.avcLevel = new System.Windows.Forms.ComboBox();
-            this.avcProfileGroupbox = new System.Windows.Forms.GroupBox();
-            this.avcProfile = new System.Windows.Forms.ComboBox();
             this.x264CodecGeneralGroupbox = new System.Windows.Forms.GroupBox();
+            this.cbTarget = new System.Windows.Forms.ComboBox();
             this.x264BitrateQuantizer = new System.Windows.Forms.NumericUpDown();
             this.x264EncodingMode = new System.Windows.Forms.ComboBox();
-            this.x264SlowFirstpass = new System.Windows.Forms.CheckBox();
             this.x264BitrateQuantizerLabel = new System.Windows.Forms.Label();
             this.FrameTypeTabPage = new System.Windows.Forms.TabPage();
             this.gbSlicing = new System.Windows.Forms.GroupBox();
@@ -124,7 +120,6 @@ namespace MeGUI.packages.video.x264
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
-            this.linkx264website = new System.Windows.Forms.LinkLabel();
             this.gbPresets = new System.Windows.Forms.GroupBox();
             this.lbPreset = new System.Windows.Forms.Label();
             this.tbx264Presets = new System.Windows.Forms.TrackBar();
@@ -173,6 +168,11 @@ namespace MeGUI.packages.video.x264
             this.x264NumberOfRefFramesLabel = new System.Windows.Forms.Label();
             this.trellisLabel = new System.Windows.Forms.Label();
             this.MiscTabPage = new System.Windows.Forms.TabPage();
+            this.x264SlowFirstpass = new System.Windows.Forms.CheckBox();
+            this.avcProfileGroupbox = new System.Windows.Forms.GroupBox();
+            this.avcProfile = new System.Windows.Forms.ComboBox();
+            this.avcLevelGroupbox = new System.Windows.Forms.GroupBox();
+            this.avcLevel = new System.Windows.Forms.ComboBox();
             this.gbThreads = new System.Windows.Forms.GroupBox();
             this.threadin = new System.Windows.Forms.CheckBox();
             this.x264NbThreadsLabel = new System.Windows.Forms.Label();
@@ -194,10 +194,9 @@ namespace MeGUI.packages.video.x264
             this.useQPFile = new System.Windows.Forms.CheckBox();
             this.gbx264CustomCmd = new System.Windows.Forms.GroupBox();
             this.customCommandlineOptions = new System.Windows.Forms.TextBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.tabControl1.SuspendLayout();
             this.mainTabPage.SuspendLayout();
-            this.avcLevelGroupbox.SuspendLayout();
-            this.avcProfileGroupbox.SuspendLayout();
             this.x264CodecGeneralGroupbox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.x264BitrateQuantizer)).BeginInit();
             this.FrameTypeTabPage.SuspendLayout();
@@ -254,6 +253,8 @@ namespace MeGUI.packages.video.x264
             ((System.ComponentModel.ISupportInitialize)(this.x264MERange)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.MiscTabPage.SuspendLayout();
+            this.avcProfileGroupbox.SuspendLayout();
+            this.avcLevelGroupbox.SuspendLayout();
             this.gbThreads.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.x264NbThreads)).BeginInit();
             this.gbAdjust.SuspendLayout();
@@ -261,6 +262,7 @@ namespace MeGUI.packages.video.x264
             this.gbVUI.SuspendLayout();
             this.gbQPFile.SuspendLayout();
             this.gbx264CustomCmd.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -291,76 +293,42 @@ namespace MeGUI.packages.video.x264
             this.mainTabPage.Controls.Add(this.pictureBox1);
             this.mainTabPage.Controls.Add(this.gbTunes);
             this.mainTabPage.Controls.Add(this.gbPresets);
-            this.mainTabPage.Controls.Add(this.linkx264website);
             this.mainTabPage.Controls.Add(this.helpButton1);
-            this.mainTabPage.Controls.Add(this.avcLevelGroupbox);
-            this.mainTabPage.Controls.Add(this.avcProfileGroupbox);
             this.mainTabPage.Controls.Add(this.x264CodecGeneralGroupbox);
             this.mainTabPage.Size = new System.Drawing.Size(502, 403);
-            // 
-            // avcLevelGroupbox
-            // 
-            this.avcLevelGroupbox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.avcLevelGroupbox.Controls.Add(this.avcLevel);
-            this.avcLevelGroupbox.Location = new System.Drawing.Point(322, 60);
-            this.avcLevelGroupbox.Name = "avcLevelGroupbox";
-            this.avcLevelGroupbox.Size = new System.Drawing.Size(175, 48);
-            this.avcLevelGroupbox.TabIndex = 4;
-            this.avcLevelGroupbox.TabStop = false;
-            this.avcLevelGroupbox.Text = "AVC Level";
-            // 
-            // avcLevel
-            // 
-            this.avcLevel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.avcLevel.Location = new System.Drawing.Point(10, 16);
-            this.avcLevel.Name = "avcLevel";
-            this.avcLevel.Size = new System.Drawing.Size(157, 21);
-            this.avcLevel.TabIndex = 0;
-            this.avcLevel.SelectedIndexChanged += new System.EventHandler(this.updateEvent);
-            // 
-            // avcProfileGroupbox
-            // 
-            this.avcProfileGroupbox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.avcProfileGroupbox.Controls.Add(this.avcProfile);
-            this.avcProfileGroupbox.Location = new System.Drawing.Point(322, 6);
-            this.avcProfileGroupbox.Name = "avcProfileGroupbox";
-            this.avcProfileGroupbox.Size = new System.Drawing.Size(175, 48);
-            this.avcProfileGroupbox.TabIndex = 3;
-            this.avcProfileGroupbox.TabStop = false;
-            this.avcProfileGroupbox.Text = "AVC Profiles";
-            // 
-            // avcProfile
-            // 
-            this.avcProfile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.avcProfile.Items.AddRange(new object[] {
-            "Baseline Profile",
-            "Main Profile",
-            "High Profile"});
-            this.avcProfile.Location = new System.Drawing.Point(10, 16);
-            this.avcProfile.Name = "avcProfile";
-            this.avcProfile.Size = new System.Drawing.Size(157, 21);
-            this.avcProfile.TabIndex = 0;
-            this.avcProfile.SelectedIndexChanged += new System.EventHandler(this.updateEvent);
             // 
             // x264CodecGeneralGroupbox
             // 
             this.x264CodecGeneralGroupbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.x264CodecGeneralGroupbox.Controls.Add(this.cbTarget);
             this.x264CodecGeneralGroupbox.Controls.Add(this.x264BitrateQuantizer);
             this.x264CodecGeneralGroupbox.Controls.Add(this.x264EncodingMode);
-            this.x264CodecGeneralGroupbox.Controls.Add(this.x264SlowFirstpass);
             this.x264CodecGeneralGroupbox.Controls.Add(this.x264BitrateQuantizerLabel);
-            this.x264CodecGeneralGroupbox.Location = new System.Drawing.Point(6, 6);
+            this.x264CodecGeneralGroupbox.Location = new System.Drawing.Point(6, 98);
             this.x264CodecGeneralGroupbox.Name = "x264CodecGeneralGroupbox";
-            this.x264CodecGeneralGroupbox.Size = new System.Drawing.Size(310, 102);
+            this.x264CodecGeneralGroupbox.Size = new System.Drawing.Size(310, 48);
             this.x264CodecGeneralGroupbox.TabIndex = 0;
             this.x264CodecGeneralGroupbox.TabStop = false;
-            this.x264CodecGeneralGroupbox.Text = "Modes";
+            this.x264CodecGeneralGroupbox.Text = " Modes ";
+            // 
+            // cbTarget
+            // 
+            this.cbTarget.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbTarget.FormattingEnabled = true;
+            this.cbTarget.Items.AddRange(new object[] {
+            "Targeting file size",
+            "Targeting quality"});
+            this.cbTarget.Location = new System.Drawing.Point(15, 18);
+            this.cbTarget.Name = "cbTarget";
+            this.cbTarget.Size = new System.Drawing.Size(121, 21);
+            this.cbTarget.TabIndex = 18;
+            this.cbTarget.SelectionChangeCommitted += new System.EventHandler(this.cbTarget_SelectionChangeCommitted);
             // 
             // x264BitrateQuantizer
             // 
             this.x264BitrateQuantizer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.x264BitrateQuantizer.Location = new System.Drawing.Point(249, 54);
+            this.x264BitrateQuantizer.Location = new System.Drawing.Point(249, 19);
             this.x264BitrateQuantizer.Maximum = new decimal(new int[] {
             100000,
             0,
@@ -386,27 +354,16 @@ namespace MeGUI.packages.video.x264
             "3pass - 3rd pass",
             "Automated 3pass",
             "Const. Quality"});
-            this.x264EncodingMode.Location = new System.Drawing.Point(183, 16);
+            this.x264EncodingMode.Location = new System.Drawing.Point(15, 18);
             this.x264EncodingMode.Name = "x264EncodingMode";
             this.x264EncodingMode.Size = new System.Drawing.Size(121, 21);
             this.x264EncodingMode.TabIndex = 2;
             this.x264EncodingMode.SelectedIndexChanged += new System.EventHandler(this.updateEvent);
             // 
-            // x264SlowFirstpass
-            // 
-            this.x264SlowFirstpass.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.x264SlowFirstpass.AutoSize = true;
-            this.x264SlowFirstpass.Location = new System.Drawing.Point(26, 20);
-            this.x264SlowFirstpass.Name = "x264SlowFirstpass";
-            this.x264SlowFirstpass.Size = new System.Drawing.Size(93, 17);
-            this.x264SlowFirstpass.TabIndex = 1;
-            this.x264SlowFirstpass.Text = "Slow first pass";
-            this.x264SlowFirstpass.CheckedChanged += new System.EventHandler(this.updateEvent);
-            // 
             // x264BitrateQuantizerLabel
             // 
             this.x264BitrateQuantizerLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.x264BitrateQuantizerLabel.Location = new System.Drawing.Point(180, 51);
+            this.x264BitrateQuantizerLabel.Location = new System.Drawing.Point(182, 17);
             this.x264BitrateQuantizerLabel.Margin = new System.Windows.Forms.Padding(3);
             this.x264BitrateQuantizerLabel.Name = "x264BitrateQuantizerLabel";
             this.x264BitrateQuantizerLabel.Padding = new System.Windows.Forms.Padding(3);
@@ -1648,19 +1605,6 @@ namespace MeGUI.packages.video.x264
             this.helpButton1.Size = new System.Drawing.Size(39, 23);
             this.helpButton1.TabIndex = 10;
             // 
-            // linkx264website
-            // 
-            this.linkx264website.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.linkx264website.AutoSize = true;
-            this.linkx264website.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkx264website.Location = new System.Drawing.Point(184, 332);
-            this.linkx264website.Name = "linkx264website";
-            this.linkx264website.Size = new System.Drawing.Size(107, 13);
-            this.linkx264website.TabIndex = 12;
-            this.linkx264website.TabStop = true;
-            this.linkx264website.Text = "Official x264 Website";
-            this.linkx264website.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkx264website_LinkClicked);
-            // 
             // gbPresets
             // 
             this.gbPresets.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
@@ -1668,7 +1612,7 @@ namespace MeGUI.packages.video.x264
             this.gbPresets.BackColor = System.Drawing.Color.Transparent;
             this.gbPresets.Controls.Add(this.lbPreset);
             this.gbPresets.Controls.Add(this.tbx264Presets);
-            this.gbPresets.Location = new System.Drawing.Point(6, 168);
+            this.gbPresets.Location = new System.Drawing.Point(3, 152);
             this.gbPresets.Name = "gbPresets";
             this.gbPresets.Size = new System.Drawing.Size(491, 80);
             this.gbPresets.TabIndex = 13;
@@ -1679,7 +1623,6 @@ namespace MeGUI.packages.video.x264
             // 
             this.lbPreset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lbPreset.AutoSize = true;
-            this.lbPreset.Enabled = false;
             this.lbPreset.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbPreset.Location = new System.Drawing.Point(226, 20);
             this.lbPreset.Name = "lbPreset";
@@ -1699,9 +1642,6 @@ namespace MeGUI.packages.video.x264
             this.tbx264Presets.Size = new System.Drawing.Size(467, 30);
             this.tbx264Presets.TabIndex = 0;
             this.tbx264Presets.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
-            this.tooltipHelp.SetToolTip(this.tbx264Presets, "Change options to trade off compression efficiency and quality.\nIf you specify a " +
-                    "preset, the changes it makes will be applied before\nall other parameters are app" +
-                    "lied.");
             this.tbx264Presets.Value = 5;
             this.tbx264Presets.Scroll += new System.EventHandler(this.tbx264Presets_Scroll);
             this.tbx264Presets.ValueChanged += new System.EventHandler(this.tbx264Presets_Scroll);
@@ -1710,12 +1650,12 @@ namespace MeGUI.packages.video.x264
             // 
             this.gbTunes.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.gbTunes.Controls.Add(this.x264Tunes);
-            this.gbTunes.Location = new System.Drawing.Point(322, 114);
+            this.gbTunes.Location = new System.Drawing.Point(322, 98);
             this.gbTunes.Name = "gbTunes";
-            this.gbTunes.Size = new System.Drawing.Size(175, 48);
+            this.gbTunes.Size = new System.Drawing.Size(172, 48);
             this.gbTunes.TabIndex = 14;
             this.gbTunes.TabStop = false;
-            this.gbTunes.Text = "Tunings";
+            this.gbTunes.Text = " Tunings ";
             // 
             // x264Tunes
             // 
@@ -2210,12 +2150,13 @@ namespace MeGUI.packages.video.x264
             this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
             this.pictureBox1.InitialImage = null;
-            this.pictureBox1.Location = new System.Drawing.Point(150, 268);
+            this.pictureBox1.Location = new System.Drawing.Point(6, 20);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(186, 61);
+            this.pictureBox1.Size = new System.Drawing.Size(488, 72);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 15;
             this.pictureBox1.TabStop = false;
+            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
             // advancedSettings
             // 
@@ -2272,6 +2213,9 @@ namespace MeGUI.packages.video.x264
             // 
             // MiscTabPage
             // 
+            this.MiscTabPage.Controls.Add(this.groupBox1);
+            this.MiscTabPage.Controls.Add(this.avcProfileGroupbox);
+            this.MiscTabPage.Controls.Add(this.avcLevelGroupbox);
             this.MiscTabPage.Controls.Add(this.gbThreads);
             this.MiscTabPage.Controls.Add(this.gbAdjust);
             this.MiscTabPage.Controls.Add(this.gbInOut);
@@ -2286,6 +2230,58 @@ namespace MeGUI.packages.video.x264
             this.MiscTabPage.Text = "Misc";
             this.MiscTabPage.UseVisualStyleBackColor = true;
             // 
+            // x264SlowFirstpass
+            // 
+            this.x264SlowFirstpass.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.x264SlowFirstpass.AutoSize = true;
+            this.x264SlowFirstpass.Location = new System.Drawing.Point(12, 15);
+            this.x264SlowFirstpass.Name = "x264SlowFirstpass";
+            this.x264SlowFirstpass.Size = new System.Drawing.Size(93, 17);
+            this.x264SlowFirstpass.TabIndex = 37;
+            this.x264SlowFirstpass.Text = "Slow first pass";
+            // 
+            // avcProfileGroupbox
+            // 
+            this.avcProfileGroupbox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.avcProfileGroupbox.Controls.Add(this.avcProfile);
+            this.avcProfileGroupbox.Location = new System.Drawing.Point(321, 233);
+            this.avcProfileGroupbox.Name = "avcProfileGroupbox";
+            this.avcProfileGroupbox.Size = new System.Drawing.Size(175, 48);
+            this.avcProfileGroupbox.TabIndex = 36;
+            this.avcProfileGroupbox.TabStop = false;
+            this.avcProfileGroupbox.Text = "AVC Profiles";
+            // 
+            // avcProfile
+            // 
+            this.avcProfile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.avcProfile.Items.AddRange(new object[] {
+            "Baseline Profile",
+            "Main Profile",
+            "High Profile"});
+            this.avcProfile.Location = new System.Drawing.Point(10, 16);
+            this.avcProfile.Name = "avcProfile";
+            this.avcProfile.Size = new System.Drawing.Size(157, 21);
+            this.avcProfile.TabIndex = 0;
+            // 
+            // avcLevelGroupbox
+            // 
+            this.avcLevelGroupbox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.avcLevelGroupbox.Controls.Add(this.avcLevel);
+            this.avcLevelGroupbox.Location = new System.Drawing.Point(321, 179);
+            this.avcLevelGroupbox.Name = "avcLevelGroupbox";
+            this.avcLevelGroupbox.Size = new System.Drawing.Size(175, 48);
+            this.avcLevelGroupbox.TabIndex = 35;
+            this.avcLevelGroupbox.TabStop = false;
+            this.avcLevelGroupbox.Text = "AVC Level";
+            // 
+            // avcLevel
+            // 
+            this.avcLevel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.avcLevel.Location = new System.Drawing.Point(10, 16);
+            this.avcLevel.Name = "avcLevel";
+            this.avcLevel.Size = new System.Drawing.Size(157, 21);
+            this.avcLevel.TabIndex = 0;
+            // 
             // gbThreads
             // 
             this.gbThreads.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
@@ -2293,9 +2289,9 @@ namespace MeGUI.packages.video.x264
             this.gbThreads.Controls.Add(this.threadin);
             this.gbThreads.Controls.Add(this.x264NbThreadsLabel);
             this.gbThreads.Controls.Add(this.x264NbThreads);
-            this.gbThreads.Location = new System.Drawing.Point(3, 267);
+            this.gbThreads.Location = new System.Drawing.Point(6, 287);
             this.gbThreads.Name = "gbThreads";
-            this.gbThreads.Size = new System.Drawing.Size(316, 48);
+            this.gbThreads.Size = new System.Drawing.Size(259, 48);
             this.gbThreads.TabIndex = 34;
             this.gbThreads.TabStop = false;
             this.gbThreads.Text = "Threads";
@@ -2305,7 +2301,7 @@ namespace MeGUI.packages.video.x264
             this.threadin.AutoSize = true;
             this.threadin.Checked = true;
             this.threadin.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.threadin.Location = new System.Drawing.Point(12, 18);
+            this.threadin.Location = new System.Drawing.Point(12, 22);
             this.threadin.Name = "threadin";
             this.threadin.Size = new System.Drawing.Size(87, 17);
             this.threadin.TabIndex = 13;
@@ -2315,18 +2311,19 @@ namespace MeGUI.packages.video.x264
             // x264NbThreadsLabel
             // 
             this.x264NbThreadsLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.x264NbThreadsLabel.Location = new System.Drawing.Point(147, 18);
+            this.x264NbThreadsLabel.AutoSize = true;
+            this.x264NbThreadsLabel.Location = new System.Drawing.Point(92, 21);
             this.x264NbThreadsLabel.Margin = new System.Windows.Forms.Padding(3);
             this.x264NbThreadsLabel.Name = "x264NbThreadsLabel";
             this.x264NbThreadsLabel.Padding = new System.Windows.Forms.Padding(3);
-            this.x264NbThreadsLabel.Size = new System.Drawing.Size(101, 19);
+            this.x264NbThreadsLabel.Size = new System.Drawing.Size(95, 19);
             this.x264NbThreadsLabel.TabIndex = 11;
-            this.x264NbThreadsLabel.Text = "Threads (0 = Auto)";
+            this.x264NbThreadsLabel.Text = "Threads (0=Auto)";
             this.x264NbThreadsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // x264NbThreads
             // 
-            this.x264NbThreads.Location = new System.Drawing.Point(252, 18);
+            this.x264NbThreads.Location = new System.Drawing.Point(193, 19);
             this.x264NbThreads.Maximum = new decimal(new int[] {
             16,
             0,
@@ -2340,9 +2337,9 @@ namespace MeGUI.packages.video.x264
             // 
             this.gbAdjust.Controls.Add(this.btPresetSettings);
             this.gbAdjust.Controls.Add(this.dSettings);
-            this.gbAdjust.Location = new System.Drawing.Point(271, 179);
+            this.gbAdjust.Location = new System.Drawing.Point(271, 287);
             this.gbAdjust.Name = "gbAdjust";
-            this.gbAdjust.Size = new System.Drawing.Size(225, 82);
+            this.gbAdjust.Size = new System.Drawing.Size(225, 86);
             this.gbAdjust.TabIndex = 33;
             this.gbAdjust.TabStop = false;
             this.gbAdjust.Text = "Adjustments";
@@ -2375,7 +2372,7 @@ namespace MeGUI.packages.video.x264
             this.gbInOut.Controls.Add(this.psnr);
             this.gbInOut.Location = new System.Drawing.Point(119, 179);
             this.gbInOut.Name = "gbInOut";
-            this.gbInOut.Size = new System.Drawing.Size(146, 82);
+            this.gbInOut.Size = new System.Drawing.Size(196, 102);
             this.gbInOut.TabIndex = 32;
             this.gbInOut.TabStop = false;
             this.gbInOut.Text = "Input/Output";
@@ -2407,7 +2404,7 @@ namespace MeGUI.packages.video.x264
             this.gbVUI.Controls.Add(this.x264FullRange);
             this.gbVUI.Location = new System.Drawing.Point(6, 179);
             this.gbVUI.Name = "gbVUI";
-            this.gbVUI.Size = new System.Drawing.Size(107, 82);
+            this.gbVUI.Size = new System.Drawing.Size(107, 102);
             this.gbVUI.TabIndex = 31;
             this.gbVUI.TabStop = false;
             this.gbVUI.Text = "V.U.I";
@@ -2526,6 +2523,15 @@ namespace MeGUI.packages.video.x264
             this.customCommandlineOptions.TabIndex = 0;
             this.customCommandlineOptions.TextChanged += new System.EventHandler(this.updateEvent);
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.x264SlowFirstpass);
+            this.groupBox1.Location = new System.Drawing.Point(6, 335);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(259, 38);
+            this.groupBox1.TabIndex = 38;
+            this.groupBox1.TabStop = false;
+            // 
             // x264ConfigurationPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2535,10 +2541,7 @@ namespace MeGUI.packages.video.x264
             this.tabControl1.ResumeLayout(false);
             this.mainTabPage.ResumeLayout(false);
             this.mainTabPage.PerformLayout();
-            this.avcLevelGroupbox.ResumeLayout(false);
-            this.avcProfileGroupbox.ResumeLayout(false);
             this.x264CodecGeneralGroupbox.ResumeLayout(false);
-            this.x264CodecGeneralGroupbox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.x264BitrateQuantizer)).EndInit();
             this.FrameTypeTabPage.ResumeLayout(false);
             this.gbSlicing.ResumeLayout(false);
@@ -2607,6 +2610,8 @@ namespace MeGUI.packages.video.x264
             ((System.ComponentModel.ISupportInitialize)(this.x264MERange)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.MiscTabPage.ResumeLayout(false);
+            this.avcProfileGroupbox.ResumeLayout(false);
+            this.avcLevelGroupbox.ResumeLayout(false);
             this.gbThreads.ResumeLayout(false);
             this.gbThreads.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.x264NbThreads)).EndInit();
@@ -2617,6 +2622,8 @@ namespace MeGUI.packages.video.x264
             this.gbQPFile.PerformLayout();
             this.gbx264CustomCmd.ResumeLayout(false);
             this.gbx264CustomCmd.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2624,13 +2631,8 @@ namespace MeGUI.packages.video.x264
 
         #endregion
 
-        private System.Windows.Forms.GroupBox avcLevelGroupbox;
-        private System.Windows.Forms.ComboBox avcLevel;
-        private System.Windows.Forms.GroupBox avcProfileGroupbox;
-        private System.Windows.Forms.ComboBox avcProfile;
         private System.Windows.Forms.GroupBox x264CodecGeneralGroupbox;
         private System.Windows.Forms.ComboBox x264EncodingMode;
-        private System.Windows.Forms.CheckBox x264SlowFirstpass;
         private System.Windows.Forms.Label x264BitrateQuantizerLabel;
         private System.Windows.Forms.TabPage FrameTypeTabPage;
         private System.Windows.Forms.TabPage RCTabPage;
@@ -2668,7 +2670,6 @@ namespace MeGUI.packages.video.x264
         private System.Windows.Forms.ComboBox cbAQMode;
         private System.Windows.Forms.Label lbAQMode;
         private MeGUI.core.gui.HelpButton helpButton1;
-        private System.Windows.Forms.LinkLabel linkx264website;
         private System.Windows.Forms.GroupBox gbPresets;
         private System.Windows.Forms.TrackBar tbx264Presets;
         private System.Windows.Forms.Label lbPreset;
@@ -2789,5 +2790,12 @@ namespace MeGUI.packages.video.x264
         private System.Windows.Forms.TextBox logfile;
         private System.Windows.Forms.Label logfileLabel;
         private System.Windows.Forms.Button logfileOpenButton;
+        private System.Windows.Forms.GroupBox avcProfileGroupbox;
+        private System.Windows.Forms.ComboBox avcProfile;
+        private System.Windows.Forms.GroupBox avcLevelGroupbox;
+        private System.Windows.Forms.ComboBox avcLevel;
+        private System.Windows.Forms.ComboBox cbTarget;
+        private System.Windows.Forms.CheckBox x264SlowFirstpass;
+        private System.Windows.Forms.GroupBox groupBox1;
     }
 }

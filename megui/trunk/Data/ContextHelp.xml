@@ -135,40 +135,47 @@ heavier deblocking, you should increase the threshold so that more data is deblo
 		<!--Rate control options:-->
 		<qp name="Constant Quantizer">
 			<Advanced>
-In Constant Quantizer mode, each frame is encoded with the same mathematical quality
-(or quantizer) as every other frame, regardless of the bit rate required to do so, applying
-a constant mathematical quality to the entire video sequence. Lower values indicate lower
-compression (higher quality). There is no way to predict file size in this mode. Note: Values
-under 15 are only useful for archival/reproduction quality and values over 40 show considerable
-loss in quality.</Advanced>
-			<Basic>Encode in Constant Quality mode (0 = lossless) regardless of bit rate. Note: This mode only requires 1 pass.</Basic>
+Set x264 to encode in Constant Quantizer mode. The number you give here specifies the P-frame quantizer.
+The quantizer used for I- and B-frames is derived from ipratio and pbratio. 
+CQ mode targets a certain quantizer, which means final filesize is not known 
+(although it can be reasonably accurately estimated with some methods). A setting of 0 will produce lossless output.
+qp produces larger files than crf for the same visual quality. qp mode also disables adaptive quantization,
+since by definition 'constant quantizer' implies no adaptive quantization.
+      </Advanced>
+			<Basic>Encode in Constant Quality mode (0 = lossless) regardless of bit rate. 
+      Note: This mode only requires 1 pass.</Basic>
 			<Recommended>21 to 28</Recommended>
 			<Default>23</Default>
 		</qp>
 		<bitrate name="Average Bit Rate">
 			<Advanced>
-In Average (Variable) Bit Rate mode (VBR), each frame is encoded at the lowest possible
-quantizer (best quality) while maintaining the average bit rate specified over time. File size
-can be predicted in this mode. Note: Other VBV settings determine the level of change in
-local bit rate used to compensate for changing scene complexity.</Advanced>
+Encode the video in target bitrate mode. x264 will attempt to encode the video to target the given bitrate 
+as the final average. The parameter given is the bitrate in kilobits/sec. (8bits = 1byte and so on). 
+This setting is usually used in conjunction with pass for two-pass encoding. Target bitrate mode means 
+the final filesize is known, but the final quality is not (although it's possible to estimate with a reasonable
+degree of accuracy). It is generally not recommended to use bitrate mode without 2pass encoding.
+      </Advanced>
 			<Basic>Sets the average bit rate that the file is to be encoded in. Note: this mode performs best in 2 passes.</Basic>
 			<Recommended>N/A</Recommended>
 			<Default>N/A</Default>
 		</bitrate>
-		<crf name="Quality Based VBR">
+		<crf name="Constant Ratefactor">
 			<Advanced>
-In Constant Quality Based VBR mode, each frame is encoded with almost the same mathematical
-quality (or quantizer) as every other frame, taking motion (rate control) into account. This mode
-improves visual quality by encoding high motion scenes with slightly higher compression (lower
-quality) and  low motion scenes with slightly lower compression (higher quality). While the quantizer
-(mathematical quality) may fluctuate over time, less bits are spent on scenes where high speed fine
-detail would be invisible, and more bits are spent in scenes where more static fine detail is more visible.
-This applies a constant visual quality to the entire video sequence. Lower values indicate lower
-compression (higher quality). There is no way to predict file size in this mode. Note: Values under
-15 are only useful for archival/reproduction quality and values over 40 show considerable loss in
-quality. This mode is only tuned for qcomp=0.6.</Advanced>
-			<Basic>Encode in Quality Based Variable Bit Rate mode, regardless of bit rate. Note: This mode can perform best in 2 passes.</Basic>
-			<Recommended>21 to 28</Recommended>
+CRF targets a certain 'quality'. The idea is for crf n to give the same perceptual quality as qp n, 
+just in a smaller space. It is not extremely exact, but reasonably close (and will average out to be 
+accurate over a large number of videos). The arbitrary unit of measure for crf values is the "ratefactor".
+CRF achieves this by reducing the quality of 'less important' frames. In this context, 'less important' means
+frames in complex or high-motion scenes, where quality is either more expensive (in terms of bits) 
+or less visible, will have their quantizer increased. The bits saved in frames like these are redistributed 
+to frames where they will be more effective. CRF will take less time than a 2pass bitrate encode, 
+because the 'first pass' from a 2pass encode was skipped. On the other hand, it's impossible to predict 
+the bitrate a CRF encode will come out to (without actually performing the encode or a portion of it). 
+It's up to you to decide which rate-control mode is better for your circumstances.
+      </Advanced>
+			<Basic>Encode in Quality Based Variable Bit Rate mode, regardless of bit rate.</Basic>
+			<Recommended>The range 18-26 is probably where you will want to look at. If you need absolutely perfect quality 
+      you could go down to 16, but it's probably not worth it. Around 19-21.5 is where a rip will look very good. 
+      Higher resolution encoding can generally get away with higher crf values.</Recommended>
 			<Default>23</Default>
 		</crf>
 		<qpmin name="Minimum Quantizer">
@@ -715,18 +722,6 @@ targeting specific classes of applications:
       <Recommended>High Profile</Recommended>
       <Default>High Profile</Default>
     </profile>
-    <presets name="x264 Presets">
-      <Advanded>
-        Change options to trade off compression efficiency and quality. 
-        If you specify a preset, the changes it makes will be applied 
-        before all other parameters are applied.
-      </Advanded>
-      <Basic>
-        Specify an internal Preset.
-      </Basic>
-      <Recommended></Recommended>
-      <Default>Medium</Default>
-    </presets>
     <tunes name="x264 Tunings">
       <Advanced>
         Tune options to further optimise them for your input content. 
@@ -739,6 +734,32 @@ targeting specific classes of applications:
       <Recommended></Recommended>
       <Default>none</Default>
     </tunes>
+    <presets name="x264 Presets">
+      <Advanced>
+        Change options to trade off compression efficiency and quality.
+        If you specify a preset, the changes it makes will be applied
+        before all other parameters are applied.
+        Faster presets will shorten the encoding time while
+        - lowering the quality in bitrate mode or
+        - increasing the file size in Constant Quantizer or Constant Ratefactor mode
+      </Advanced>
+      <Basic>
+        Specify an internal preset.
+      </Basic>
+      <Recommended></Recommended>
+      <Default>Medium</Default>
+    </presets>
+    <targetmode name="Target mode">
+      <Advanced>
+        If you need to reach a specific file size select "Targeting file size".
+        If not it is recommended to select "Targeting quality".
+      </Advanced>
+      <Basic>
+        Specify an encoding mode.
+      </Basic>
+      <Recommended></Recommended>
+      <Default></Default>
+    </targetmode>
 	</Codec>
 	<Codec name="Xvid">
 		<setting1 name="setting1">

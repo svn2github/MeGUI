@@ -1090,6 +1090,9 @@ namespace MeGUI.packages.video.x264
                 x264BitrateQuantizer.Minimum = 0;
                 x264BitrateQuantizer.DecimalPlaces = 0;
                 x264BitrateQuantizer.Increment = 10;
+
+                cbTarget.Text = "Targeting file size";
+                tooltipHelp.SetToolTip(x264BitrateQuantizer, SelectHelpText("bitrate"));
             }
             else
             {
@@ -1101,10 +1104,13 @@ namespace MeGUI.packages.video.x264
                 {
                     this.x264BitrateQuantizerLabel.Text = "Quantizer";
                     this.gbAQ.Enabled = false;
+                    tooltipHelp.SetToolTip(x264BitrateQuantizer, SelectHelpText("qp"));
                 }
                 if (x264EncodingMode.SelectedIndex == (int)VideoCodecSettings.Mode.quality)
                 {
                     this.x264BitrateQuantizerLabel.Text = "Quality";
+                    cbTarget.Text = "Targeting quality";
+                    tooltipHelp.SetToolTip(x264BitrateQuantizer, SelectHelpText("crf"));
                 }
               
                 x264BitrateQuantizer.Maximum = 64;
@@ -1662,6 +1668,9 @@ namespace MeGUI.packages.video.x264
             tooltipHelp.SetToolTip(x264aud, SelectHelpText("aud"));
             tooltipHelp.SetToolTip(x264hrd, SelectHelpText("nalhrd"));
 
+            tooltipHelp.SetToolTip(cbTarget, SelectHelpText("targetmode"));
+            tooltipHelp.SetToolTip(tbx264Presets, SelectHelpText("presets"));
+
         }
         #endregion
         #region GUI State adjustment
@@ -1803,21 +1812,21 @@ namespace MeGUI.packages.video.x264
 
         private void linkx264website_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
+
+        }
+
+        private void VisitLink()
+        {
             try
             {
-                VisitLink();
+                //Call the Process.Start method to open the default browser 
+                //with a URL:
+                System.Diagnostics.Process.Start("http://www.videolan.org/developers/x264.html");
             }
             catch (Exception)
             {
                 MessageBox.Show("Unable to open link that was clicked.");
             }
-        }
-
-        private void VisitLink()
-        {
-            //Call the Process.Start method to open the default browser 
-            //with a URL:
-            System.Diagnostics.Process.Start("http://www.videolan.org/developers/x264.html");
         }
 
         private void cbAQMode_SelectedIndexChanged(object sender, EventArgs e)
@@ -1879,6 +1888,8 @@ namespace MeGUI.packages.video.x264
                     tabControl1.TabPages.Add(AnalysisTabPage);
                 if (!tabControl1.TabPages.Contains(MiscTabPage))
                     tabControl1.TabPages.Add(MiscTabPage);
+                x264EncodingMode.Visible = true;
+                cbTarget.Visible = false;
             }
             else
             {
@@ -1890,6 +1901,8 @@ namespace MeGUI.packages.video.x264
                     tabControl1.TabPages.Remove(AnalysisTabPage);
                 if (tabControl1.TabPages.Contains(MiscTabPage))
                     tabControl1.TabPages.Remove(MiscTabPage);
+                x264EncodingMode.Visible = false;
+                cbTarget.Visible = true;
             }
             genericUpdate();
         }
@@ -1997,6 +2010,26 @@ namespace MeGUI.packages.video.x264
         {
             doTuningsAdjustments();
             genericUpdate();
+        }
+
+        private void cbTarget_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            if (cbTarget.SelectedIndex == 0)
+            {
+                if (MainForm.Instance.Settings.NbPasses == 3)
+                    x264EncodingMode.SelectedIndex = 8;
+                else
+                    x264EncodingMode.SelectedIndex = 4;
+            }
+            else
+            {
+                x264EncodingMode.SelectedIndex = 9;
+            }
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+            VisitLink();
         }
     }
 }
