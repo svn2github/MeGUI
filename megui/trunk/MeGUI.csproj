@@ -180,8 +180,6 @@
     <Content Include="lib_x86\MediaInfo.dll" Condition=" '$(Platform)' == 'x86' ">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Compile Include="core\details\0_2_6_1017_jobloader\Job.cs" />
-    <Compile Include="core\details\0_2_6_x_profileloader\Loader.cs" />
     <Compile Include="core\details\CleanupJob.cs" />
     <Compile Include="core\details\CodecManager.cs" />
     <Compile Include="core\details\CommandlineParser.cs" />

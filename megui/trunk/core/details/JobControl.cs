@@ -29,6 +29,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using System.Xml.Serialization;
+using System.Text.RegularExpressions;
 
 using MeGUI.core.util;
 using MeGUI.core.gui;
@@ -429,8 +430,9 @@ namespace MeGUI.core.details
             foreach (FileInfo fi in files)
             {
                 string fileName = fi.FullName;
+                updateJobFile(fileName);
                 TaggedJob job = loadJob(fileName);
-                if (job != null)
+                if (job != null && job.Name != null)
                 {
                     if (allJobs.ContainsKey(job.Name))
                         MessageBox.Show("A job named " + job.Name + " is already in the queue.\nThe job defined in " + fileName + "\nwill be discarded", "Duplicate job name detected",
@@ -449,6 +451,37 @@ namespace MeGUI.core.details
                 job.EnabledJobs = toJobList(job.EnabledJobNames);
             }
             loadJobLists();
+        }
+
+        /// <summary>
+        /// dirty workaround!
+        /// </summary>
+#warning delete block after 0.3.6
+        private void updateJobFile(string strFileName)
+        {
+            bool bFound = false;
+
+            StreamReader reader = new StreamReader(strFileName);
+            string content = reader.ReadToEnd();
+            reader.Close();
+
+            if (Regex.IsMatch(content, "<Job xsi:type=\"IndexJob\">"))
+            {
+                bFound = true;
+                content = Regex.Replace(content, "<Job xsi:type=\"IndexJob\">", "<Job xsi:type=\"D2VIndexJob\">");
+            }
+            else if (Regex.IsMatch(content, "<Job xsi:type=\"DGNVIndexJob\">"))
+            {
+                bFound = true;
+                content = Regex.Replace(content, "<Job xsi:type=\"DGNVIndexJob\">", "<Job xsi:type=\"DGIIndexJob\">");
+            }
+
+            if (!bFound)
+                return;
+
+            StreamWriter writer = new StreamWriter(strFileName);
+            writer.Write(content);
+            writer.Close();
         }
 
         internal List<TaggedJob> toJobList(IEnumerable<string> list)
@@ -496,10 +529,6 @@ namespace MeGUI.core.details
                 {
                     ser = new XmlSerializer(typeof(TaggedJob));
                     return (TaggedJob)ser.Deserialize(s);
-                }
-                catch (InvalidOperationException)
-                {
-                    return MeGUI.core.details._0_2_6_1017_jobloader.Loader.loadJob(name);
                 }
                 catch (Exception e)
                 {

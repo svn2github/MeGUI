@@ -1,5 +1,7 @@
 0.3.4.15
     - (zathor) DGIndexNV will use DGMultiSource instead of DGSource as default setting
+    - (zathor) [JobControl] fixed a crash if an unknown job type is used
+    - (zathor) [JobControl] old D2V and DGI jobs will be updated
 
 0.3.4.14
     - (zathor) changed the way windowstate, location and size are saved and applied for MainForm, JobWorker, Changelog and WorkerSummary

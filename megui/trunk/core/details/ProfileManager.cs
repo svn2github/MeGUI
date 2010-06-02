@@ -28,7 +28,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
-using MeGUI.core.details._0_2_6_x_profileloader;
 using MeGUI.core.gui;
 using MeGUI.core.plugins.interfaces;
 using MeGUI.core.util;
@@ -248,7 +247,7 @@ namespace MeGUI
         {
             if (Directory.Exists(Path.Combine(path, "profiles")))
             {
-                setAllProfiles(Loader.TryLoadProfiles(path));
+                //setAllProfiles(Loader.TryLoadProfiles(path));
                 FileUtil.DeleteDirectoryIfExists(Path.Combine(path, "profiles"), true);
                 return;
             }
@@ -262,8 +261,8 @@ namespace MeGUI
         public static List<Profile> ReadAllProfiles(string path)
         {
             ProfileManager p = new ProfileManager(path);
-            if (Directory.Exists(Path.Combine(path, "profiles")))
-                return Loader.TryLoadProfiles(path);
+            //if (Directory.Exists(Path.Combine(path, "profiles")))
+            //    return Loader.TryLoadProfiles(path);
 
             List<Profile> ps = new List<Profile>();
 
