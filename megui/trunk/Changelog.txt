@@ -2,9 +2,9 @@
     - (zathor) DGIndexNV will use DGMultiSource instead of DGSource as default setting
     - (zathor) [JobControl] fixed a crash if an unknown job type is used
     - (zathor) [JobControl] old D2V and DGI jobs will be updated
-    - (zathor) [BitrateCalculator] Add 1½ DVD target size and adjust others to safe values. Patch by JarrettV (#2999751)
-    - (zathor) [BitrateCalculator] Fix calculation accuracy by total file size and by BPP to account for constant video overhead. Patch by JarrettV (#2999751)
-    - (zathor) [BitrateCalculator] Simplify audio bitrate inspection to assume bitrate from video duration and audio file size. Patch by JarrettV (#2999751)
+    - (zathor) [BitrateCalculator] add 1½ DVD target size and adjust others to safe values. Patch by JarrettV (#2999751)
+    - (zathor) [BitrateCalculator] fix calculation accuracy by total file size and by BPP to account for constant video overhead. Patch by JarrettV (#2999751)
+    - (zathor) [BitrateCalculator] simplify audio bitrate inspection to assume bitrate from video duration and audio file size. Patch by JarrettV (#2999751)
 
 0.3.4.14
     - (zathor) changed the way windowstate, location and size are saved and applied for MainForm, JobWorker, Changelog and WorkerSummary
