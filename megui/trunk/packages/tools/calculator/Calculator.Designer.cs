@@ -656,7 +656,7 @@ namespace MeGUI
             // 
             this.fileSizeRadio.Checked = true;
             this.fileSizeRadio.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.fileSizeRadio.Location = new System.Drawing.Point(16, 159);
+            this.fileSizeRadio.Location = new System.Drawing.Point(16, 161);
             this.fileSizeRadio.Name = "fileSizeRadio";
             this.fileSizeRadio.Size = new System.Drawing.Size(132, 20);
             this.fileSizeRadio.TabIndex = 18;

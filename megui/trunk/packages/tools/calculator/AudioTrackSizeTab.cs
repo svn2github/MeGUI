@@ -96,27 +96,28 @@ namespace MeGUI.packages.tools.calculator
             FileSize f = FileSize.Of2(file) ?? FileSize.Empty;
             //size.CertainValue = f;
             size.Text = f.ToString();
+            audio1Bitrate.Value = (length > 0) ? (long)(f.Bytes * 8) / 1000L / length : 0;
             name.Text = System.IO.Path.GetFileName(file);
 
             AudioType aud2Type = VideoUtil.guessAudioType(file);
             if (audio1Type.Items.Contains(aud2Type))
                 audio1Type.SelectedItem = aud2Type;
 
-            MediaInfo info;
-            try
-            {
-                info = new MediaInfo(file);
-                MediaInfoWrapper.AudioTrack atrack = info.Audio[0];
-                // this.length = atrack.Duration
-                //if (atrack.Format == "DTS" && (atrack.BitRate == "768000" || atrack.BitRate == "1536000"))
-                {
-                    audio1Bitrate.Value = (Convert.ToInt32(atrack.BitRate) / 1000);
-                }
-            }
-            catch (Exception i)
-            {
-                MessageBox.Show("The following error ocurred when trying to get Media info for file " + file + "\r\n" + i.Message, "Error parsing mediainfo data", MessageBoxButtons.OK);                
-            }
+            //MediaInfo info;
+            //try
+            //{
+            //    info = new MediaInfo(file);
+            //    MediaInfoWrapper.AudioTrack atrack = info.Audio[0];
+            //    //this.length = atrack.Duration
+            //    if (atrack.Format == "DTS" && (atrack.BitRate == "768000" || atrack.BitRate == "1536000"))
+            //    {
+            //        audio1Bitrate.Value = (Convert.ToInt32(atrack.BitRate) / 1000);
+            //    }
+            //}
+            //catch (Exception i)
+            //{
+            //    MessageBox.Show("The following error ocurred when trying to get Media info for file " + file + "\r\n" + i.Message, "Error parsing mediainfo data", MessageBoxButtons.OK);                
+            //}
 
         }
 

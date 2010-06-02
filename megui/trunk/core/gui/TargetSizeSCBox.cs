@@ -30,21 +30,22 @@ using MeGUI.core.util;
 namespace MeGUI.core.gui
 {
     public class TargetSizeSCBox : StandardAndCustomComboBox
-    {   
+    {
         public static readonly Named<FileSize>[] PredefinedFilesizes = new Named<FileSize>[] {
-            new Named<FileSize>("1/4 CD (175MB)", new FileSize(Unit.MB, 175)),
-            new Named<FileSize>("1/2 CD (350MB)", new FileSize(Unit.MB, 350)),
-            new Named<FileSize>("1 CD   (700MB)", new FileSize(Unit.MB, 700)),
-            new Named<FileSize>("2 CDs (1400MB)", new FileSize(Unit.MB, 1400)),
-            new Named<FileSize>("3 CDs (2100MB)", new FileSize(Unit.MB, 2100)),
-            new Named<FileSize>("1/3 DVD (1493MB)", new FileSize(Unit.MB, 1493)),
-            new Named<FileSize>("1/4 DVD (1120MB)", new FileSize(Unit.MB, 1120)),
-            new Named<FileSize>("1/5 DVD (896MB)", new FileSize(Unit.MB, 896)),
-            new Named<FileSize>("1 DVD (4482MB)", new FileSize(Unit.MB, 4482)),
-            new Named<FileSize>("1 DVD-9 (8152MB)", new FileSize(Unit.MB, 8152)),
-            new Named<FileSize>("1 BD-5 (4482MB)", new FileSize(Unit.MB, 4482)),
-            new Named<FileSize>("1 BD-9 (8152MB)", new FileSize(Unit.MB, 8152)),
-            new Named<FileSize>("1 BD (23450MB)", new FileSize(Unit.MB, 23450)) };
+            new Named<FileSize>("1/4 CD  (175MB)", new FileSize(Unit.MB, 175)),
+            new Named<FileSize>("1/2 CD  (350MB)", new FileSize(Unit.MB, 350)),
+            new Named<FileSize>("CD  (700MB)", new FileSize(Unit.MB, 700)),
+            new Named<FileSize>("2 CDs  (1400MB)", new FileSize(Unit.MB, 1400)),
+            new Named<FileSize>("3 CDs  (2100MB)", new FileSize(Unit.MB, 2100)),
+            new Named<FileSize>("1/5 DVD  (896MB)", new FileSize(Unit.MB, 896)),
+            new Named<FileSize>("1/4 DVD  (1120MB)", new FileSize(Unit.MB, 1120)),
+            new Named<FileSize>("1/3 DVD  (1492MB)", new FileSize(Unit.MB, 1492)),
+            new Named<FileSize>("1/2 DVD  (2240MB)", new FileSize(Unit.MB, 2240)),
+            new Named<FileSize>("DVD or BD-5  (4480MB)", new FileSize(Unit.MB, 4480)),
+            new Named<FileSize>("1½ DVD  (6720MB)", new FileSize(Unit.MB, 6720)),
+            new Named<FileSize>("DVD-DL or BD-9 (8145MB)", new FileSize(Unit.MB, 8145)),
+            new Named<FileSize>("BD  (23450MB)", new FileSize(Unit.MB, 23450)),
+            new Named<FileSize>("BD-DL  (46900MB)", new FileSize(Unit.MB, 46900)) };
 
         protected override void Dispose(bool disposing)
         {

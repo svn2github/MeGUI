@@ -92,7 +92,7 @@ namespace MeGUI.packages.tools.calculator
             CalcAudioOverheadAndSize();
             CalcExtraOverhead();
             CalcQualityCodecModifier();
-            VideoSize = new FileSize((ulong)((float)TotalSize.Bytes / VideoOverheadRatio)) - AudioMuxSize - ExtraMuxSize;
+            VideoSize = new FileSize((ulong)((float)TotalSize.Bytes / VideoOverheadRatio)) - AudioMuxSize - ExtraMuxSize - VideoOverhead;
             CalcBitsPerPixel();
             CalcQualityEstimate();
         }
@@ -114,8 +114,8 @@ namespace MeGUI.packages.tools.calculator
             CalcAudioOverheadAndSize();
             CalcExtraOverhead();
             CalcQualityCodecModifier();
-            VideoSize = new FileSize((ulong)(
-                BitsPerPixel / 8F * (float)(FrameSize.Width * FrameSize.Height) * Frames / VideoOverheadRatio));
+            VideoSize = new FileSize((ulong)((
+                BitsPerPixel / 8F * (float)(FrameSize.Width * FrameSize.Height) * Frames / VideoOverheadRatio)) - VideoOverhead.Bytes);
             TotalSize = VideoMuxSize + AudioMuxSize + ExtraMuxSize;
             CalcQualityEstimate();
         }
@@ -148,7 +148,7 @@ namespace MeGUI.packages.tools.calculator
             // read the values into the dictionary
             foreach (string mod in qualityCodecModifierValues.Split(','))
             {
-                qualityCodecModifiers.Add(mod.Split('=')[0], float.Parse(mod.Split('=')[1]));
+                qualityCodecModifiers.Add(mod.Split('=')[0], float.Parse(mod.Split('=')[1], System.Globalization.CultureInfo.InvariantCulture));
             }
 
             // use values when found in dictionary, otherwise default to no-modification
