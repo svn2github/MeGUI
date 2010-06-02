@@ -1,3 +1,6 @@
+0.3.4.15
+    - (zathor) DGIndexNV will use DGMultiSource instead of DGSource as default setting
+
 0.3.4.14
     - (zathor) changed the way windowstate, location and size are saved and applied for MainForm, JobWorker, Changelog and WorkerSummary
     - (zathor) [x264Config] changed "Fast first pass" to "Slow first pass"

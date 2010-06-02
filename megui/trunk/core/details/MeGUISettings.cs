@@ -137,7 +137,7 @@ namespace MeGUI
             strMainAudioFormat = "";
             strLastSourcePath = "";
             strLastDestinationPath = "";
-            bUseCUVIDserver = true;
+            bUseCUVIDserver = false;
             minComplexity = 72;
             maxComplexity = 78;
         }

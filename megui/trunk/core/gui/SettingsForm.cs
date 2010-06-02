@@ -1156,8 +1156,6 @@ namespace MeGUI
             // btnCUVIDServer
             // 
             this.btnCUVIDServer.AutoSize = true;
-            this.btnCUVIDServer.Checked = true;
-            this.btnCUVIDServer.CheckState = System.Windows.Forms.CheckState.Checked;
             this.btnCUVIDServer.Location = new System.Drawing.Point(239, 49);
             this.btnCUVIDServer.Name = "btnCUVIDServer";
             this.btnCUVIDServer.Size = new System.Drawing.Size(110, 17);
@@ -1555,16 +1553,6 @@ namespace MeGUI
                         MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
-            }
-        }
-
-        private void btnCUVIDServer_CheckedChanged(object sender, EventArgs e)
-        {
-            if (!btnCUVIDServer.Checked && MainForm.Instance.Settings.UseCUVIDserver == true)
-            {
-                DialogResult dResult = MessageBox.Show("Disabling CUVIDServer may crash MeGUI", "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
-                if (dResult == DialogResult.Cancel)
-                    btnCUVIDServer.Checked = true;
             }
         }
 
