@@ -7,7 +7,7 @@ REM make dist with everything
 MD Dist\BigDist >NUL 2>&1
 ECHO:Copying files...
 
-COPY Bin\x86\Release\AvisynthWrapper.dll Dist\BigDist /V /Y >NUL >NUL
+COPY Bin\x86\Release\AvisynthWrapper.dll Dist\BigDist /V /Y >NUL
 COPY Changelog.txt Dist\BigDist /V /Y >NUL
 COPY gpl.txt Dist\BigDist /V /Y >NUL
 COPY lib\ICSharpCode.SharpZipLib.dll Dist\BigDist /V /Y >NUL

@@ -1,9 +1,9 @@
 @ECHO OFF
 TITLE Compiling MeGUI...
-CD megui\trunk
+PUSHD megui\trunk
 START /B /WAIT compile-msbuild.bat
+POPD
 
-CD ..\..
 REM Detect if we are running on 64bit WIN and use Wow6432Node, set the path
 REM of NSIS accordingly and compile installer
 IF "%PROGRAMFILES(x86)%zzz"=="zzz" (SET "U_=HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall"
@@ -30,9 +30,12 @@ IF DEFINED NSISPath (ECHO:Compiling installer...&&(
 ECHO.
 ECHO.
 PAUSE
+EXIT
 
 :Sub
 SET NSISPath=%*
+GOTO :EOF
 
 :Sub2
 SET NSISVer=%*
+GOTO :EOF
