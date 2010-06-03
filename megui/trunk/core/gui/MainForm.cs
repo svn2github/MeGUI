@@ -2124,6 +2124,7 @@ namespace MeGUI
         {
             if (this.WindowState != FormWindowState.Minimized && this.Visible == true)
             {
+                global::MeGUI.Properties.Settings.Default.MainFormSize = this.Size;
                 global::MeGUI.Properties.Settings.Default.MainFormLocation = this.Location;
                 global::MeGUI.Properties.Settings.Default.Save();
             }

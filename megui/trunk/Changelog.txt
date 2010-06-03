@@ -1,3 +1,6 @@
+0.3.4.16
+    - (zathor) [MainForm] fixed window size will be reset if window is minimized
+
 0.3.4.15
     - (zathor) DGIndexNV will use DGMultiSource instead of DGSource as default setting
     - (zathor) [JobControl] fixed a crash if an unknown job type is used
