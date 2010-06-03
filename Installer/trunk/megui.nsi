@@ -1,8 +1,8 @@
 !define NAME "MeGUI"
 !define OUTFILE "megui-setup.exe"
-!define PRODUCT_VERSION "0.3.4.13"
+!define PRODUCT_VERSION "0.3.4.15"
 !define PRODUCT_WEB_SITE "www.doom9.net"
-!define APPNAMEANDVERSION "MeGUI 0.3.4.13"
+!define APPNAMEANDVERSION "MeGUI 0.3.4.15"
 !define INPUT_PATH "..\..\megui\trunk\dist\BigDist\"
 !define FILE1 "AvisynthWrapper.dll"
 !define FILE2 "Changelog.txt"
@@ -14,7 +14,7 @@
 !define FILE8 "MediaInfo.dll"
 !define FILE9 "MediaInfoWrapper.dll"
 !define FILE10 "LinqBridge.dll"
-!define HELP "Data\*.xml"
+!define HELP "data\*.xml"
 !define UNINST_NAME "megui-uninstall.exe"
 !define MUI_ICON megui.ico
 !define MUI_UNICON uninstall.ico
@@ -130,7 +130,7 @@ Section "MeGUI";
 	CreateDirectory $INSTDIR\tools
 	CreateDirectory $INSTDIR\logs
 	
-        SetOutPath "$INSTDIR\Data\"
+        SetOutPath "$INSTDIR\data\"
         File "${INPUT_PATH}..\${HELP}"
 
 

@@ -1,6 +1,6 @@
 @ECHO OFF
-"%WINDIR%\Microsoft.NET\Framework\v3.5\MSBuild.exe" MeGUI.csproj^
- /t:Rebuild /p:Configuration=Release /p:Platform="x86" /v:minimal
+"%WINDIR%\Microsoft.NET\Framework\v3.5\MSBuild.exe" MeGUI_2008.csproj^
+ /t:Rebuild /p:Configuration="Release" /p:Platform="x86" /v:minimal
 
 ECHO.
 REM make dist with everything
