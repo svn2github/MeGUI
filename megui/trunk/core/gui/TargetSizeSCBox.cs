@@ -49,7 +49,7 @@ namespace MeGUI.core.gui
 
         protected override void Dispose(bool disposing)
         {
-            CustomUserSettings.Default.CustomSizes = CustomSizes;
+            MainForm.Instance.Settings.CustomFileSizes = CustomSizes;
             base.Dispose(disposing);
         }
 
@@ -85,7 +85,7 @@ namespace MeGUI.core.gui
         public TargetSizeSCBox() : base("Clear user-selected sizes...", "Select size...")
         {
             base.Getter = new Getter<object>(getter);
-            CustomSizes = CustomUserSettings.Default.CustomSizes;
+            CustomSizes = MainForm.Instance.Settings.CustomFileSizes;
         }
 
         private void fillStandard()

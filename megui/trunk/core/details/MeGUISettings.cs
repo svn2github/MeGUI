@@ -57,6 +57,7 @@ namespace MeGUI
         private ProcessPriority defaultPriority;
         private System.Drawing.Point mainFormLocation;
         private System.Drawing.Size mainFormSize, jobWorkerSize;
+        private FileSize[] customFileSizes;
 
         #endregion
         public MeGUISettings()
@@ -246,6 +247,12 @@ namespace MeGUI
         {
             get { return fpsColumnWidth; }
             set { fpsColumnWidth = value; }
+        }
+
+        public FileSize[] CustomFileSizes
+        {
+            get { return customFileSizes; }
+            set { customFileSizes = value; }
         }
 
         public ulong AudioSamplesPerUpdate

@@ -58,20 +58,6 @@ namespace MeGUI.core.util
         }
 
         [UserScopedSetting]
-        public FileSize[] CustomSizes
-        {
-            get
-            {
-                return (FileSize[])this["CustomSizes"];
-            }
-            set
-            {
-                this["CustomSizes"] = value;
-            }
-        }
-
-
-        [UserScopedSetting]
         public FPS[] CustomFPSs
         {
             get
