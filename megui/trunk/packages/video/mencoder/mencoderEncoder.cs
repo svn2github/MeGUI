@@ -36,15 +36,18 @@ new JobProcessorFactory(new ProcessorFactory(init), "MencoderEncoder");
         private static IJobProcessor init(MainForm mf, Job j)
         {
             if (j is VideoJob &&
-                ((j as VideoJob).Settings is snowSettings || (j as VideoJob).Settings is hfyuSettings))
-                return new mencoderEncoder(mf.Settings.MencoderPath);
+                (j as VideoJob).Settings is snowSettings)
+                    return new mencoderEncoder(mf.Settings.MencoderPath);
+            if (j is VideoJob &&
+                (j as VideoJob).Settings is hfyuSettings)
+                    return new mencoderEncoder(mf.Settings.FFMpegPath);
             return null;
         }
 
         public mencoderEncoder(string encoderPath)
             : base()
         {
-            executable = encoderPath;
+                executable = encoderPath;
         }
 
         #region commandline generation
@@ -79,9 +82,10 @@ new JobProcessorFactory(new ProcessorFactory(init), "MencoderEncoder");
         private string genHfyuCommandline()
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append("\"" + job.Input + "\" -o \"" + job.Output + "\" ");
-            sb.Append("-of avi -forceidx "); // Make sure we don't get problems with filesizes > 2GB
-            sb.Append("-ovc lavc -nosound -lavcopts vcodec=ffvhuff:vstrict=-2:pred=2:context=1");
+            sb.Append("-i \"" + job.Input + "\" -vcodec ffvhuff -context 1 -vstrict -1 -an \"" + job.Output + "\" ");
+            //sb.Append("\"" + job.Input + "\" -o \"" + job.Output + "\" ");
+            //sb.Append("-of avi -forceidx "); // Make sure we don't get problems with filesizes > 2GB
+            //sb.Append("-ovc lavc -nosound -lavcopts vcodec=ffvhuff:vstrict=-2:pred=2:context=1");
             return sb.ToString();
         }
 
