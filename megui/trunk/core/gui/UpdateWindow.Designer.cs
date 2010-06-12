@@ -157,7 +157,6 @@ namespace MeGUI
             // 
             // splitContainer1
             // 
-            this.splitContainer1.DataBindings.Add(new System.Windows.Forms.Binding("SplitterDistance", global::MeGUI.Properties.Settings.Default, "UpdateWindowVerticalSplitterDistance", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer1.Location = new System.Drawing.Point(0, 0);
             this.splitContainer1.Name = "splitContainer1";
@@ -170,7 +169,7 @@ namespace MeGUI
             // 
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
             this.splitContainer1.Size = new System.Drawing.Size(679, 310);
-            this.splitContainer1.SplitterDistance = global::MeGUI.Properties.Settings.Default.UpdateWindowVerticalSplitterDistance;
+            this.splitContainer1.SplitterDistance = 147;
             this.splitContainer1.TabIndex = 11;
             // 
             // treeView
@@ -185,7 +184,6 @@ namespace MeGUI
             // 
             // splitContainer2
             // 
-            this.splitContainer2.DataBindings.Add(new System.Windows.Forms.Binding("SplitterDistance", global::MeGUI.Properties.Settings.Default, "UpdateWindowHorizontalSplitterDistance", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer2.Location = new System.Drawing.Point(0, 0);
             this.splitContainer2.Name = "splitContainer2";
@@ -199,7 +197,7 @@ namespace MeGUI
             // 
             this.splitContainer2.Panel2.Controls.Add(this.txtBoxLog);
             this.splitContainer2.Size = new System.Drawing.Size(528, 310);
-            this.splitContainer2.SplitterDistance = global::MeGUI.Properties.Settings.Default.UpdateWindowHorizontalSplitterDistance;
+            this.splitContainer2.SplitterDistance = 220;
             this.splitContainer2.TabIndex = 0;
             // 
             // listViewDetails
@@ -228,32 +226,32 @@ namespace MeGUI
             // 
             this.colUpdate.Text = "Update";
             this.colUpdate.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.colUpdate.Width = global::MeGUI.Properties.Settings.Default.UpdateColumnWidth;
+            this.colUpdate.Width = 50;
             // 
             // colName
             // 
             this.colName.Text = "Name";
-            this.colName.Width = global::MeGUI.Properties.Settings.Default.UpdateNameColumnWidth;
+            this.colName.Width = 100;
             // 
             // colExistingVersion
             // 
             this.colExistingVersion.Text = "Existing Version";
-            this.colExistingVersion.Width = global::MeGUI.Properties.Settings.Default.UpdateExistingVersionColumnWidth;
+            this.colExistingVersion.Width = 100;
             // 
             // colLatestVersion
             // 
             this.colLatestVersion.Text = "Latest Version";
-            this.colLatestVersion.Width = global::MeGUI.Properties.Settings.Default.UpdateLatestVersionColumnWidth;
+            this.colLatestVersion.Width = 100;
             // 
             // colPlatform
             // 
             this.colPlatform.Text = "Platform";
-            this.colPlatform.Width = global::MeGUI.Properties.Settings.Default.UpdatePlatformColumnWidth;
+            this.colPlatform.Width = 40;
             // 
             // colStatus
             // 
             this.colStatus.Text = "Status";
-            this.colStatus.Width = global::MeGUI.Properties.Settings.Default.UpdateStatusColumnWidth;
+            this.colStatus.Width = 135;
             // 
             // txtBoxLog
             // 
@@ -269,20 +267,15 @@ namespace MeGUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = global::MeGUI.Properties.Settings.Default.UpdateWindowSize;
+            this.ClientSize = new System.Drawing.Size(679,375);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.panel1);
-            this.DataBindings.Add(new System.Windows.Forms.Binding("Location", global::MeGUI.Properties.Settings.Default, "UpdateWindowLocation", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.DataBindings.Add(new System.Windows.Forms.Binding("ClientSize", global::MeGUI.Properties.Settings.Default, "UpdateWindowSize", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.DataBindings.Add(new System.Windows.Forms.Binding("WindowState", global::MeGUI.Properties.Settings.Default, "UpdateWindowState", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Location = global::MeGUI.Properties.Settings.Default.UpdateWindowLocation;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "UpdateWindow";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "MeGUI - Updater";
-            this.WindowState = global::MeGUI.Properties.Settings.Default.UpdateWindowState;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.UpdateWindow_FormClosing);
             this.Load += new System.EventHandler(this.UpdateWindow_Load);
             this.statusToolStrip.ResumeLayout(false);

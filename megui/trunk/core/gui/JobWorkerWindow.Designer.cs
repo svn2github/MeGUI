@@ -71,8 +71,6 @@ namespace MeGUI.core.gui
             this.jobQueue1.Name = "jobQueue1";
             this.jobQueue1.Padding = new System.Windows.Forms.Padding(2);
             this.jobQueue1.PauseResumeMode = MeGUI.core.gui.PauseResumeMode.Disabled;
-            this.jobQueue1.SaveSettings = true;
-            this.jobQueue1.SettingsKey = "JobQueue";
             this.jobQueue1.Size = new System.Drawing.Size(551, 392);
             this.jobQueue1.StartStopMode = MeGUI.core.gui.StartStopMode.Start;
             this.jobQueue1.TabIndex = 0;
@@ -205,21 +203,17 @@ namespace MeGUI.core.gui
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = global::MeGUI.Properties.Settings.Default.JobWorkerSize;
+            this.ClientSize = mainForm.Settings.JobWorkerSize;
             this.Controls.Add(groupBox1);
             this.Controls.Add(this.flowLayoutPanel2);
             this.Controls.Add(this.menuStrip1);
-            this.DataBindings.Add(new System.Windows.Forms.Binding("ClientSize", global::MeGUI.Properties.Settings.Default, "JobWorkerSize", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.DataBindings.Add(new System.Windows.Forms.Binding("WindowState", global::MeGUI.Properties.Settings.Default, "JobWorkerWindowState", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "JobWorker";
             this.Padding = new System.Windows.Forms.Padding(4);
             this.Text = "Job Worker Window";
-            this.WindowState = global::MeGUI.Properties.Settings.Default.JobWorkerWindowState;
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.JobWorker_FormClosed);
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
-            ((System.Configuration.IPersistComponentSettings)(this.jobQueue1)).LoadComponentSettings();
             this.panel1.ResumeLayout(false);
             this.flowLayoutPanel2.ResumeLayout(false);
             this.flowLayoutPanel2.PerformLayout();
@@ -227,7 +221,6 @@ namespace MeGUI.core.gui
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
 
         #endregion

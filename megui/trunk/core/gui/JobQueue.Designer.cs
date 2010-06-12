@@ -32,19 +32,19 @@ namespace MeGUI.core.gui
             System.Windows.Forms.Button abortButton;
             System.Windows.Forms.Button loadJobButton;
             System.Windows.Forms.Button button9;
-            this.jobColumHeader = new System.Windows.Forms.ColumnHeader();
-            this.inputColumnHeader = new System.Windows.Forms.ColumnHeader();
-            this.outputColumnHeader = new System.Windows.Forms.ColumnHeader();
-            this.codecHeader = new System.Windows.Forms.ColumnHeader();
-            this.modeHeader = new System.Windows.Forms.ColumnHeader();
-            this.statusColumn = new System.Windows.Forms.ColumnHeader();
-            this.startColumn = new System.Windows.Forms.ColumnHeader();
-            this.endColumn = new System.Windows.Forms.ColumnHeader();
-            this.fpsColumn = new System.Windows.Forms.ColumnHeader();
+            this.jobColumHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.inputColumnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.outputColumnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.codecHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.modeHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.statusColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.startColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.endColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.fpsColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.upButton = new System.Windows.Forms.Button();
             this.downButton = new System.Windows.Forms.Button();
             this.queueListView = new System.Windows.Forms.ListView();
-            this.ownerHeader = new System.Windows.Forms.ColumnHeader();
+            this.ownerHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.queueContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.DeleteMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.StatusMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -188,9 +188,10 @@ namespace MeGUI.core.gui
             this.queueListView.TabIndex = 0;
             this.queueListView.UseCompatibleStateImageBehavior = false;
             this.queueListView.View = System.Windows.Forms.View.Details;
+            this.queueListView.ColumnWidthChanged += new System.Windows.Forms.ColumnWidthChangedEventHandler(this.queueListView_ColumnWidthChanged);
+            this.queueListView.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.queueListView_ItemSelectionChanged);
             this.queueListView.VisibleChanged += new System.EventHandler(this.queueListView_VisibleChanged);
             this.queueListView.DoubleClick += new System.EventHandler(this.queueListView_DoubleClick);
-            this.queueListView.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.queueListView_ItemSelectionChanged);
             this.queueListView.KeyDown += new System.Windows.Forms.KeyEventHandler(this.queueListView_KeyDown);
             // 
             // ownerHeader

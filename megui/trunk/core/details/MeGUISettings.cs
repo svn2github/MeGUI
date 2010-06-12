@@ -39,7 +39,7 @@ namespace MeGUI
                        eac3toPath, tsmuxerPath, meguiupdatecache, avisynthpluginspath, ffmsIndexPath,
                        defaultLanguage1, defaultLanguage2, afterEncodingCommand, videoExtension, audioExtension,
                        strLastDestinationPath, strLastSourcePath, dgnvIndexPath, tempDirMP4,
-                       httpproxyaddress, httpproxyport, httpproxyuid, httpproxypwd, defaultOutputDir;
+                       httpproxyaddress, httpproxyport, httpproxyuid, httpproxypwd, defaultOutputDir, strMeGUIPath;
         private bool recalculateMainMovieBitrate, autoForceFilm, autoStartQueue, enableMP3inMP4, autoOpenScript,
                      overwriteStats, keep2of3passOutput, deleteCompletedJobs, deleteIntermediateFiles,
                      deleteAbortedOutput, openProgressWindow, useadvancedtooltips, freshOggEnc2, autoscroll, 
@@ -48,12 +48,15 @@ namespace MeGUI
         private ulong audioSamplesPerUpdate;
         private AfterEncoding afterEncoding;
         private decimal forceFilmThreshold, acceptableFPSError;
-        private int nbPasses, acceptableAspectError, maxServersToTry, autoUpdateServerSubList, minComplexity, maxComplexity;
+        private int nbPasses, acceptableAspectError, maxServersToTry, autoUpdateServerSubList, minComplexity,
+                    maxComplexity, jobColumnWidth, inputColumnWidth, outputColumnWidth, codecColumnWidth,
+                    modeColumnWidth, statusColumnWidth, ownerColumnWidth, startColumnWidth, endColumnWidth, fpsColumnWidth;
         private SourceDetectorSettings sdSettings;
         private AutoEncodeDefaultsSettings aedSettings;
         private DialogSettings dialogSettings;
         private ProcessPriority defaultPriority;
-        private string strMeGUIPath;
+        private System.Drawing.Point mainFormLocation;
+        private System.Drawing.Size mainFormSize, jobWorkerSize;
 
         #endregion
         public MeGUISettings()
@@ -140,6 +143,19 @@ namespace MeGUI
             bUseCUVIDserver = false;
             minComplexity = 72;
             maxComplexity = 78;
+            mainFormLocation = new System.Drawing.Point(0, 0);
+            mainFormSize = new System.Drawing.Size(524, 558);
+            jobWorkerSize = new System.Drawing.Size(565, 498);
+            jobColumnWidth = 40;
+            inputColumnWidth = 89;
+            outputColumnWidth = 89;
+            codecColumnWidth = 43;
+            ModeColumnWidth = 75;
+            statusColumnWidth = 51;
+            ownerColumnWidth = 60;
+            startColumnWidth = 55;
+            endColumnWidth = 55;
+            fpsColumnWidth = 35;
         }
 
         private string getDownloadPath(string strPath)
@@ -152,6 +168,84 @@ namespace MeGUI
         public string YadifPath
         {
             get { return yadifPath; }
+        }
+
+        public System.Drawing.Point MainFormLocation
+        {
+            get { return mainFormLocation; }
+            set { mainFormLocation = value; }
+        }
+
+        public System.Drawing.Size MainFormSize
+        {
+            get { return mainFormSize; }
+            set { mainFormSize = value; }
+        }
+
+        public System.Drawing.Size JobWorkerSize
+        {
+            get { return jobWorkerSize; }
+            set { jobWorkerSize = value; }
+        }
+
+        public int JobColumnWidth
+        {
+            get { return jobColumnWidth; }
+            set { jobColumnWidth = value; }
+        }
+
+        public int InputColumnWidth
+        {
+            get { return inputColumnWidth; }
+            set { inputColumnWidth = value; }
+        }
+
+        public int OutputColumnWidth
+        {
+            get { return outputColumnWidth; }
+            set { outputColumnWidth = value; }
+        }
+
+        public int CodecColumnWidth
+        {
+            get { return codecColumnWidth; }
+            set { codecColumnWidth = value; }
+        }
+
+        public int ModeColumnWidth
+        {
+            get { return modeColumnWidth; }
+            set { modeColumnWidth = value; }
+        }
+
+        public int StatusColumnWidth
+        {
+            get { return statusColumnWidth; }
+            set { statusColumnWidth = value; }
+        }
+
+        public int OwnerColumnWidth
+        {
+            get { return ownerColumnWidth; }
+            set { ownerColumnWidth = value; }
+        }
+
+        public int StartColumnWidth
+        {
+            get { return startColumnWidth; }
+            set { startColumnWidth = value; }
+        }
+
+        public int EndColumnWidth
+        {
+            get { return endColumnWidth; }
+            set { endColumnWidth = value; }
+        }
+
+        public int FPSColumnWidth
+        {
+            get { return fpsColumnWidth; }
+            set { fpsColumnWidth = value; }
         }
 
         public ulong AudioSamplesPerUpdate

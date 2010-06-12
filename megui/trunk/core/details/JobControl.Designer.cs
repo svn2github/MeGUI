@@ -103,8 +103,6 @@ namespace MeGUI.core.details
             this.jobQueue.Location = new System.Drawing.Point(0, 0);
             this.jobQueue.Name = "jobQueue";
             this.jobQueue.PauseResumeMode = MeGUI.core.gui.PauseResumeMode.Disabled;
-            this.jobQueue.SaveSettings = true;
-            this.jobQueue.SettingsKey = "JobQueue";
             this.jobQueue.Size = new System.Drawing.Size(553, 521);
             this.jobQueue.StartStopMode = MeGUI.core.gui.StartStopMode.Start;
             this.jobQueue.TabIndex = 0;
@@ -133,7 +131,6 @@ namespace MeGUI.core.details
             this.Size = new System.Drawing.Size(553, 550);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
-            ((System.Configuration.IPersistComponentSettings)(this.jobQueue)).LoadComponentSettings();
             this.ResumeLayout(false);
             this.PerformLayout();
 

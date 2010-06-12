@@ -729,17 +729,16 @@ namespace MeGUI
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(508, 499);
             this.Controls.Add(this.tabControl1);
-            this.DataBindings.Add(new System.Windows.Forms.Binding("Size", global::MeGUI.Properties.Settings.Default, "MainFormSize", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.DataBindings.Add(new System.Windows.Forms.Binding("Location", global::MeGUI.Properties.Settings.Default, "MainFormLocation", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Location = global::MeGUI.Properties.Settings.Default.MainFormLocation;
             this.Menu = this.mainMenu1;
             this.MinimumSize = new System.Drawing.Size(524, 537);
             this.Name = "MainForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
             this.Load += new System.EventHandler(this.MeGUI_Load);
             this.Shown += new System.EventHandler(this.MainForm_Shown);
             this.Move += new System.EventHandler(this.MainForm_Move);
+            this.Resize += new System.EventHandler(this.MainForm_Resize);
             this.tabControl1.ResumeLayout(false);
             this.inputTab.ResumeLayout(false);
             this.splitContainer2.Panel1.ResumeLayout(false);
@@ -793,17 +792,6 @@ namespace MeGUI
 
         public MainForm()
         {
-            System.Reflection.Assembly a = System.Reflection.Assembly.GetExecutingAssembly();
-            Version appVersion = a.GetName().Version;
-            string appVersionString = appVersion.ToString();
-
-            if (Properties.Settings.Default.ApplicationVersion != appVersion.ToString())
-            {
-                Properties.Settings.Default.Upgrade();
-                CustomUserSettings.Default.Upgrade();
-                Properties.Settings.Default.ApplicationVersion = appVersionString;
-            }
-
             Instance = this;
             constructMeGUIInfo();
             InitializeComponent();
@@ -824,6 +812,9 @@ namespace MeGUI
             setGUIInfo();
             Jobs.showAfterEncodingStatus(Settings);
             this.videoEncodingComponent1.FileType = MainForm.Instance.Settings.MainFileFormat;
+
+            this.Location = settings.MainFormLocation;
+            this.Size = settings.MainFormSize;
         }
 
         #region GUI properties
@@ -2123,11 +2114,13 @@ namespace MeGUI
         private void MainForm_Move(object sender, EventArgs e)
         {
             if (this.WindowState != FormWindowState.Minimized && this.Visible == true)
-            {
-                global::MeGUI.Properties.Settings.Default.MainFormSize = this.Size;
-                global::MeGUI.Properties.Settings.Default.MainFormLocation = this.Location;
-                global::MeGUI.Properties.Settings.Default.Save();
-            }
+                settings.MainFormLocation = this.Location;
+        }
+
+        private void MainForm_Resize(object sender, EventArgs e)
+        {
+            if (this.WindowState != FormWindowState.Minimized && this.Visible == true)
+                settings.MainFormSize = this.Size;
         }
     }
     public class CommandlineUpgradeData
