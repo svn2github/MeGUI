@@ -1509,7 +1509,6 @@ namespace MeGUI
         void Application_ApplicationExit(object sender, EventArgs e)
         {
             MeGUI.Properties.Settings.Default.Save();
-            MeGUI.core.util.CustomUserSettings.Default.Save();
         }
 
         private void saveApplicationSettings()

@@ -1,7 +1,7 @@
 0.3.4.16
     - (zathor) [MainForm] fixed window size will be reset if window is minimized
-    - (zathor) moved GUI settings from user.config into settings.xml
-    - (zathor) moved CustomFileSize, CustomFPSs and CustomDARs settings from user.config into settings.xml
+    - (zathor) moved CustomFileSize, CustomFPSs, CustomDARs and GUI settings from user.config into settings.xml
+    - (zathor) user.config is no longer created / updated therefore MeGUI itself should not write outside of the application directory
 
 0.3.4.15
     - (zathor) DGIndexNV will use DGMultiSource instead of DGSource as default setting
