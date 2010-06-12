@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 
 using MeGUI.core.util;
+using MeGUI.core.gui;
 
 namespace MeGUI
 {
@@ -58,6 +59,7 @@ namespace MeGUI
         private System.Drawing.Point mainFormLocation;
         private System.Drawing.Size mainFormSize, jobWorkerSize;
         private FileSize[] customFileSizes;
+        private FPS[] customFPSs;
 
         #endregion
         public MeGUISettings()
@@ -253,6 +255,12 @@ namespace MeGUI
         {
             get { return customFileSizes; }
             set { customFileSizes = value; }
+        }
+
+        public FPS[] CustomFPSs
+        {
+            get { return customFPSs; }
+            set { customFPSs = value; }
         }
 
         public ulong AudioSamplesPerUpdate

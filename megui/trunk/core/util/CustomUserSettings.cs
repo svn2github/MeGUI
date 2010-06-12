@@ -56,18 +56,5 @@ namespace MeGUI.core.util
                 object o = this["CustomDARs"];
             }
         }
-
-        [UserScopedSetting]
-        public FPS[] CustomFPSs
-        {
-            get
-            {
-                return (FPS[])this["CustomFPSs"];
-            }
-            set
-            {
-                this["CustomFPSs"] = value;
-            }
-        }
     }
 }

@@ -54,12 +54,12 @@ namespace MeGUI.core.gui
                     return null;
             };
             StandardItems = Framerates;
-            CustomFPSs = CustomUserSettings.Default.CustomFPSs;
+            CustomFPSs = MainForm.Instance.Settings.CustomFPSs;
         }
 
         protected override void Dispose(bool disposing)
         {
-            CustomUserSettings.Default.CustomFPSs = CustomFPSs;
+            MainForm.Instance.Settings.CustomFPSs = CustomFPSs;
             base.Dispose(disposing);
         }
 
@@ -128,7 +128,7 @@ namespace MeGUI.core.gui
     }
 
     [TypeConverter(typeof(FPSConverter))]
-    internal struct FPS
+    public struct FPS
     {
         internal FPS(decimal v)
         {
