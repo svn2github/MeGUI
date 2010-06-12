@@ -1339,15 +1339,13 @@ namespace MeGUI
 
             string systempath = Environment.GetFolderPath(Environment.SpecialFolder.System);
 
-#if x86
             if (File.Exists(systempath + "\\avisynth.dll"))
             {
-#endif
                 FileVersionInfo FileProperties = FileVersionInfo.GetVersionInfo(systempath + "\\avisynth.dll");
                 FileVersion = FileProperties.FileVersion;
                 PropExists = true;
-#if x86
             }
+#if x86
             else
             {
                 // on x64, try the SysWOW64 folder
