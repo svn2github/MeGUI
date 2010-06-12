@@ -1,7 +1,10 @@
+0.3.4.17
+    - (zathor) [VideoUtil] + [MainForm] fixed the detection of AviSynth for MeGUI x64
+
 0.3.4.16
     - (zathor) [MainForm] fixed window size will be reset if window is minimized
     - (zathor) moved CustomFileSize, CustomFPSs, CustomDARs and GUI settings from user.config into settings.xml
-    - (zathor) user.config is no longer created / updated. Therefore MeGUI itself does not write outside of the application directory
+    - (zathor) user.config is no longer created / updated. Therefore MeGUI itself does not write anymore outside of the application directory
     - (zathor) [mencoderEncoder] switched mencoder to ffmpeg as pre-rendering engine in order to support x64
 
 0.3.4.15

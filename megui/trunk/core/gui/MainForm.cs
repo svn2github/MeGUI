@@ -2067,7 +2067,12 @@ namespace MeGUI
             if (!PropExists)
             {
                 if (AskToDownloadAvisynth() == true)
+#if x86
                     System.Diagnostics.Process.Start("http://www.avisynth.org");
+#endif
+#if x64
+                    System.Diagnostics.Process.Start("http://forum.doom9.org/showthread.php?t=152800");
+#endif
             }
             
             if (PropExists)

@@ -1334,13 +1334,19 @@ namespace MeGUI
 
         public static void getAvisynthVersion(out string FileVersion, out bool PropExists)
         {
+            FileVersion = string.Empty;
+            PropExists = false;
+
             string systempath = Environment.GetFolderPath(Environment.SpecialFolder.System);
 
+#if x86
             if (File.Exists(systempath + "\\avisynth.dll"))
             {
+#endif
                 FileVersionInfo FileProperties = FileVersionInfo.GetVersionInfo(systempath + "\\avisynth.dll");
                 FileVersion = FileProperties.FileVersion;
                 PropExists = true;
+#if x86
             }
             else
             {
@@ -1354,18 +1360,9 @@ namespace MeGUI
                         FileVersion = FileProperties.FileVersion;
                         PropExists = true;
                     }
-                    else
-                    {
-                        FileVersion = string.Empty;
-                        PropExists = false;
-                    }
-                }
-                else
-                {
-                    FileVersion = string.Empty;
-                    PropExists = false;
                 }
             }
+#endif
         }
     }
 	#region helper structs
