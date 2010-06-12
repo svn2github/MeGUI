@@ -60,6 +60,7 @@ namespace MeGUI
         private System.Drawing.Size mainFormSize, jobWorkerSize;
         private FileSize[] customFileSizes;
         private FPS[] customFPSs;
+        private Dar[] customDARs;
 
         #endregion
         public MeGUISettings()
@@ -261,6 +262,12 @@ namespace MeGUI
         {
             get { return customFPSs; }
             set { customFPSs = value; }
+        }
+
+        public Dar[] CustomDARs
+        {
+            get { return customDARs; }
+            set { customDARs = value; }
         }
 
         public ulong AudioSamplesPerUpdate

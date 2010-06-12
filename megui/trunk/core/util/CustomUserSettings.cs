@@ -42,19 +42,19 @@ namespace MeGUI.core.util
             }
         }
 
-        [UserScopedSetting]
-        public Dar[] CustomDARs
-        {
-            get
-            {
-                object o = this["CustomDARs"];
-                return (Dar[])this["CustomDARs"];
-            }
-            set
-            {
-                this["CustomDARs"] = value; // new ArrayConverter<Named<Dar>, DarConverter>().ToString(value);
-                object o = this["CustomDARs"];
-            }
-        }
+        //[UserScopedSetting]
+        //public Dar[] CustomDARs
+        //{
+        //    get
+        //    {
+        //        object o = this["CustomDARs"];
+        //        return (Dar[])this["CustomDARs"];
+        //    }
+        //    set
+        //    {
+        //        this["CustomDARs"] = value; // new ArrayConverter<Named<Dar>, DarConverter>().ToString(value);
+        //        object o = this["CustomDARs"];
+        //    }
+        //}
     }
 }

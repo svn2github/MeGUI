@@ -33,7 +33,7 @@ namespace MeGUI.core.gui
 
         protected override void Dispose(bool disposing)
         {
-            CustomUserSettings.Default.CustomDARs = CustomDARs;
+            MainForm.Instance.Settings.CustomDARs = CustomDARs;
             base.Dispose(disposing);
         }
 
@@ -63,7 +63,7 @@ namespace MeGUI.core.gui
             };
 
             HasLater = true;
-            CustomDARs = CustomUserSettings.Default.CustomDARs;
+            CustomDARs = MainForm.Instance.Settings.CustomDARs;
         }
 
         bool hasLater;
