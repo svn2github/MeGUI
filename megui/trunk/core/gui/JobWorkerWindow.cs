@@ -388,7 +388,7 @@ namespace MeGUI.core.gui
         public void StartEncoding(bool showMessageBoxes)
         {
             status = JobWorkerStatus.Idle;
-            JobStartInfo retval = startNextJobInQueue();
+            JobStartInfo retval = startNextJobInQueue();            
             if (showMessageBoxes)
             {
                 if (retval == JobStartInfo.COULDNT_START)
@@ -430,6 +430,7 @@ namespace MeGUI.core.gui
         {
             if (su.IsComplete)
             {
+                MeGUI.core.util.WindowUtil.AllowSystemPowerdown();
                 // so we don't lock up the GUI, we start a new thread
                 Thread t = new Thread(new ThreadStart(delegate
                 {
@@ -465,6 +466,7 @@ namespace MeGUI.core.gui
                     { }
                     else if (job.Status == JobStatus.ABORTED)
                     {
+                        MeGUI.core.util.WindowUtil.AllowSystemPowerdown();
                         log.LogEvent("Current job was aborted");
                         if (status == JobWorkerStatus.Stopping)
                             status = JobWorkerStatus.Stopped;
@@ -473,6 +475,7 @@ namespace MeGUI.core.gui
                     }
                     else if (status == JobWorkerStatus.Stopping)
                     {
+                        MeGUI.core.util.WindowUtil.AllowSystemPowerdown();
                         log.LogEvent("Queue mode stopped");
                         status = JobWorkerStatus.Stopped;
                     }
@@ -481,13 +484,16 @@ namespace MeGUI.core.gui
                         switch (startNextJobInQueue())
                         {
                             case JobStartInfo.JOB_STARTED:
+                                MeGUI.core.util.WindowUtil.PreventSystemPowerdown();
                                 break;
 
                             case JobStartInfo.COULDNT_START:
+                                MeGUI.core.util.WindowUtil.AllowSystemPowerdown();
                                 status = JobWorkerStatus.Idle;
                                 break;
 
                             case JobStartInfo.NO_JOBS_WAITING:
+                                MeGUI.core.util.WindowUtil.AllowSystemPowerdown();
                                 status = JobWorkerStatus.Idle;
                                 new Thread(delegate ()
                                 {
@@ -561,6 +567,8 @@ namespace MeGUI.core.gui
                 log.Expand();
 
                 status = JobWorkerStatus.Running;
+                MeGUI.core.util.WindowUtil.PreventSystemPowerdown();
+
                 //Check to see if output file already exists before encoding.
                 if (File.Exists(job.Job.Output) && !mainForm.DialogManager.overwriteJobOutput(job.Job.Output))
                     throw new JobStartException("File exists and the user doesn't want to overwrite", ExceptionType.UserSkip);
