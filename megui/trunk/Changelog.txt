@@ -1,5 +1,6 @@
 0.3.4.17
     - (zathor) [VideoUtil] + [MainForm] fixed the detection of AviSynth for MeGUI x64
+    - (zathor) [MkvMergeMuxer] removed --no-clusters-in-meta-seek because of the change in MkvToolNix 4.0.0
 
 0.3.4.16
     - (zathor) [MainForm] fixed window size will be reset if window is minimized

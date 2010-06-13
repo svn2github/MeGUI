@@ -243,8 +243,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                 if (settings.SplitSize.HasValue)
                     sb.Append(" --split " + (settings.SplitSize.Value.MB) + "M");
 
-                sb.Append(" --no-clusters-in-meta-seek"); // ensures lower overhead
-
                 return sb.ToString();
             }
         }
