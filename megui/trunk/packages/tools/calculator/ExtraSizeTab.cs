@@ -37,8 +37,6 @@ namespace MeGUI.packages.tools.calculator
     {
         public event EventHandler SomethingChanged;
 
-        private bool updating = false;
-
         public ExtraSizeTab()
         {
             InitializeComponent();
