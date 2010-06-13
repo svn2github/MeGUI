@@ -784,6 +784,9 @@ namespace MeGUI.core.gui
 
         public void LoadComponentSettings()
         {
+            if (MainForm.Instance == null) // Designer fix
+                return;
+
             jobColumHeader.Width = MainForm.Instance.Settings.JobColumnWidth;
             inputColumnHeader.Width = MainForm.Instance.Settings.InputColumnWidth;
             outputColumnHeader.Width = MainForm.Instance.Settings.OutputColumnWidth;
@@ -798,6 +801,9 @@ namespace MeGUI.core.gui
 
         public void SaveComponentSettings()
         {
+            if (MainForm.Instance == null) // Designer fix
+                return;
+
             MainForm.Instance.Settings.JobColumnWidth = jobColumHeader.Width;
             MainForm.Instance.Settings.InputColumnWidth = inputColumnHeader.Width;
             MainForm.Instance.Settings.OutputColumnWidth = outputColumnHeader.Width;

@@ -404,7 +404,7 @@ namespace MeGUI
             this.jobControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.jobControl1.Location = new System.Drawing.Point(0, 0);
             this.jobControl1.Name = "jobControl1";
-            this.jobControl1.Size = new System.Drawing.Size(192, 74);
+            this.jobControl1.Size = new System.Drawing.Size(500, 473);
             this.jobControl1.TabIndex = 0;
             // 
             // logTab
