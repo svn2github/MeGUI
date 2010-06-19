@@ -70,7 +70,10 @@ namespace MeGUI
             autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/stable/", "http://megui.xvidvideo.ru/auto/stable/" },
                 new string[] { "Development", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" } };
             acceptableFPSError = 0.01M;
-            autoUpdateServerSubList = 0;
+            if (System.Windows.Forms.Application.ProductVersion.EndsWith(".0"))
+                autoUpdateServerSubList = 0;
+            else
+                autoUpdateServerSubList = 1;
             maxServersToTry = 5;
             dialogSettings = new DialogSettings();
             sdSettings = new SourceDetectorSettings();
