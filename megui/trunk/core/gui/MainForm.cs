@@ -1378,7 +1378,7 @@ namespace MeGUI
                 while (importer.Visible == true)    // wait until the profiles have been imported
                 {
                     Application.DoEvents();
-                    System.Threading.Thread.Sleep(1000);
+                    System.Threading.Thread.Sleep(200);
                 }
             });
         }
@@ -1456,7 +1456,7 @@ namespace MeGUI
                     while (update.Visible == true)
                     {
                         Application.DoEvents();
-                        System.Threading.Thread.Sleep(1000);
+                        System.Threading.Thread.Sleep(200);
                     }
                 }
                 else
