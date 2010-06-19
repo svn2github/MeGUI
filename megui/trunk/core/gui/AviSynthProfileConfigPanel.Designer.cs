@@ -40,6 +40,7 @@ namespace MeGUI.core.gui
             this.avisynthScript = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.extraSetupPage = new System.Windows.Forms.TabPage();
+            this.dss2 = new System.Windows.Forms.CheckBox();
             this.mod16Box = new System.Windows.Forms.ComboBox();
             this.signalAR = new System.Windows.Forms.CheckBox();
             this.mpegOptGroupBox = new System.Windows.Forms.GroupBox();
@@ -50,7 +51,6 @@ namespace MeGUI.core.gui
             this.resize = new System.Windows.Forms.CheckBox();
             this.noiseFilter = new System.Windows.Forms.CheckBox();
             this.resizeFilterType = new System.Windows.Forms.ComboBox();
-            this.dss2 = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.templatePage.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
@@ -179,12 +179,14 @@ namespace MeGUI.core.gui
             this.avisynthScript.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.avisynthScript.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.avisynthScript.Location = new System.Drawing.Point(3, 32);
             this.avisynthScript.Multiline = true;
             this.avisynthScript.Name = "avisynthScript";
-            this.avisynthScript.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.avisynthScript.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.avisynthScript.Size = new System.Drawing.Size(388, 312);
             this.avisynthScript.TabIndex = 46;
+            this.avisynthScript.WordWrap = false;
             // 
             // label1
             // 
@@ -208,6 +210,17 @@ namespace MeGUI.core.gui
             this.extraSetupPage.Size = new System.Drawing.Size(394, 379);
             this.extraSetupPage.TabIndex = 1;
             this.extraSetupPage.Text = "Extra Setup";
+            // 
+            // dss2
+            // 
+            this.dss2.AutoSize = true;
+            this.dss2.Enabled = false;
+            this.dss2.Location = new System.Drawing.Point(13, 218);
+            this.dss2.Name = "dss2";
+            this.dss2.Size = new System.Drawing.Size(201, 17);
+            this.dss2.TabIndex = 22;
+            this.dss2.Text = "Prefer DSS2 over DirectShowSource";
+            this.dss2.UseVisualStyleBackColor = true;
             // 
             // mod16Box
             // 
@@ -315,17 +328,6 @@ namespace MeGUI.core.gui
             this.resizeFilterType.Name = "resizeFilterType";
             this.resizeFilterType.Size = new System.Drawing.Size(121, 21);
             this.resizeFilterType.TabIndex = 1;
-            // 
-            // dss2
-            // 
-            this.dss2.AutoSize = true;
-            this.dss2.Enabled = false;
-            this.dss2.Location = new System.Drawing.Point(13, 218);
-            this.dss2.Name = "dss2";
-            this.dss2.Size = new System.Drawing.Size(201, 17);
-            this.dss2.TabIndex = 22;
-            this.dss2.Text = "Prefer DSS2 over DirectShowSource";
-            this.dss2.UseVisualStyleBackColor = true;
             // 
             // AviSynthProfileConfigPanel
             // 
