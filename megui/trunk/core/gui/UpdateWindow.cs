@@ -1652,7 +1652,7 @@ namespace MeGUI
                             {
                                 FileUtil.copyData(zip, outputWriter);
                             }
-                            File.SetLastWriteTimeUtc(filename, zipentry.DateTime);
+                            File.SetLastWriteTime(filename, zipentry.DateTime);
                             if (file.NeedsRestartedCopying)
                             {
                                 mainForm.AddFileToReplace(file.Name, filename, oldFileName, file.GetLatestVersion().FileVersion);
