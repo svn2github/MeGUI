@@ -1,9 +1,14 @@
+0.3.4.18
+    - (zathor) [UpdateWindow] set last modified time
+    - (zathor) [AviSynthWindow] + [AviSynthProfileConfigPanel] changed font to Courier New
+    - (zathor) [MeGUISettings] defaults to development update server if development build is used
+    - (zathor) [mencoderEncoder] switched ffmpeg to mencoder as pre-rendering engine for x86
+
 0.3.4.17
     - (zathor) [VideoUtil] + [MainForm] fixed the detection of AviSynth for MeGUI x64
     - (zathor) [MkvMergeMuxer] removed --no-clusters-in-meta-seek because of the change in MkvToolNix 4.0.0
-    - (zathor) [WindowUtil] + [JobWorkerWindow] forces the system to be in the working state by resetting the system idle timer while a job is running
-
-
+    - (zathor) [WindowUtil] + [JobWorkerWindow] prevent standby while a job is running
+    
 0.3.4.16
     - (zathor) [MainForm] fixed window size will be reset if window is minimized
     - (zathor) moved CustomFileSize, CustomFPSs, CustomDARs and GUI settings from user.config into settings.xml
