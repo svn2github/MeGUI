@@ -168,6 +168,7 @@ namespace MeGUI.packages.video.x264
             this.x264NumberOfRefFramesLabel = new System.Windows.Forms.Label();
             this.trellisLabel = new System.Windows.Forms.Label();
             this.MiscTabPage = new System.Windows.Forms.TabPage();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.x264SlowFirstpass = new System.Windows.Forms.CheckBox();
             this.avcProfileGroupbox = new System.Windows.Forms.GroupBox();
             this.avcProfile = new System.Windows.Forms.ComboBox();
@@ -194,7 +195,6 @@ namespace MeGUI.packages.video.x264
             this.useQPFile = new System.Windows.Forms.CheckBox();
             this.gbx264CustomCmd = new System.Windows.Forms.GroupBox();
             this.customCommandlineOptions = new System.Windows.Forms.TextBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.tabControl1.SuspendLayout();
             this.mainTabPage.SuspendLayout();
             this.x264CodecGeneralGroupbox.SuspendLayout();
@@ -253,6 +253,7 @@ namespace MeGUI.packages.video.x264
             ((System.ComponentModel.ISupportInitialize)(this.x264MERange)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.MiscTabPage.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.avcProfileGroupbox.SuspendLayout();
             this.avcLevelGroupbox.SuspendLayout();
             this.gbThreads.SuspendLayout();
@@ -262,7 +263,6 @@ namespace MeGUI.packages.video.x264
             this.gbVUI.SuspendLayout();
             this.gbQPFile.SuspendLayout();
             this.gbx264CustomCmd.SuspendLayout();
-            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -1624,7 +1624,7 @@ namespace MeGUI.packages.video.x264
             this.lbPreset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lbPreset.AutoSize = true;
             this.lbPreset.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbPreset.Location = new System.Drawing.Point(226, 20);
+            this.lbPreset.Location = new System.Drawing.Point(226, 17);
             this.lbPreset.Name = "lbPreset";
             this.lbPreset.Size = new System.Drawing.Size(44, 13);
             this.lbPreset.TabIndex = 1;
@@ -2230,6 +2230,15 @@ namespace MeGUI.packages.video.x264
             this.MiscTabPage.Text = "Misc";
             this.MiscTabPage.UseVisualStyleBackColor = true;
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.x264SlowFirstpass);
+            this.groupBox1.Location = new System.Drawing.Point(6, 335);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(259, 38);
+            this.groupBox1.TabIndex = 38;
+            this.groupBox1.TabStop = false;
+            // 
             // x264SlowFirstpass
             // 
             this.x264SlowFirstpass.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -2523,15 +2532,6 @@ namespace MeGUI.packages.video.x264
             this.customCommandlineOptions.TabIndex = 0;
             this.customCommandlineOptions.TextChanged += new System.EventHandler(this.updateEvent);
             // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.x264SlowFirstpass);
-            this.groupBox1.Location = new System.Drawing.Point(6, 335);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(259, 38);
-            this.groupBox1.TabIndex = 38;
-            this.groupBox1.TabStop = false;
-            // 
             // x264ConfigurationPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2610,6 +2610,8 @@ namespace MeGUI.packages.video.x264
             ((System.ComponentModel.ISupportInitialize)(this.x264MERange)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.MiscTabPage.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.avcProfileGroupbox.ResumeLayout(false);
             this.avcLevelGroupbox.ResumeLayout(false);
             this.gbThreads.ResumeLayout(false);
@@ -2622,8 +2624,6 @@ namespace MeGUI.packages.video.x264
             this.gbQPFile.PerformLayout();
             this.gbx264CustomCmd.ResumeLayout(false);
             this.gbx264CustomCmd.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
