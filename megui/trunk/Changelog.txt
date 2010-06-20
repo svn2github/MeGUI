@@ -1,129 +1,137 @@
-0.3.4.18
-    - (zathor) [UpdateWindow] set last modified time
-    - (zathor) [AviSynthWindow] + [AviSynthProfileConfigPanel] changed font to Courier New
-    - (zathor) [MeGUISettings] defaults to development update server if development build is used
-    - (zathor) [mencoderEncoder] switched ffmpeg to mencoder as pre-rendering engine for x86
+0.3.5.0
+  Main changes:
+  - simplified x264 profiles and the main x264 configuration page. Only the 
+    target/playback device of the encoding will be selected with the profile.
+    The encoding mode and quality will be selected automatically or manually.
+  - if targeting file size in AutoEncode or One-Click the encoding mode of the
+    selected video profile will be switched temporarily to automated 2/3pass
+    The AutoEncode defaults can be changed in the settings
+  - if applying a bitrate in the bitrate calculator the encoding mode of the 
+    selected video profile will be switched on request permanently 
+    to automated 2/3pass
+  - only one concurrent audio encoding is allowed
+  - renamed "DG Creator" to "File Indexer" and improved the File Indexer
+  - added FFMS (FFmpegSource2) to the File Indexer
+  - improved Bitrate Calculator. Patch by JarrettV (#2999751)
 
-0.3.4.17
-    - (zathor) [VideoUtil] + [MainForm] fixed the detection of AviSynth for MeGUI x64
-    - (zathor) [MkvMergeMuxer] removed --no-clusters-in-meta-seek because of the change in MkvToolNix 4.0.0
-    - (zathor) [WindowUtil] + [JobWorkerWindow] prevent standby while a job is running
-    
-0.3.4.16
-    - (zathor) [MainForm] fixed window size will be reset if window is minimized
-    - (zathor) moved CustomFileSize, CustomFPSs, CustomDARs and GUI settings from user.config into settings.xml
-    - (zathor) user.config is no longer created / updated. Therefore MeGUI itself does not write anymore outside of the application directory
-    - (zathor) [mencoderEncoder] switched mencoder to ffmpeg as pre-rendering engine in order to support x64
-
-0.3.4.15
-    - (zathor) DGIndexNV will use DGMultiSource instead of DGSource as default setting
-    - (zathor) [JobControl] fixed a crash if an unknown job type is used
-    - (zathor) [JobControl] old D2V and DGI jobs will be updated
-    - (zathor) [BitrateCalculator] add 1½ DVD target size and adjust others to safe values. Patch by JarrettV (#2999751)
-    - (zathor) [BitrateCalculator] fix calculation accuracy by total file size and by BPP to account for constant video overhead. Patch by JarrettV (#2999751)
-    - (zathor) [BitrateCalculator] simplify audio bitrate inspection to assume bitrate from video duration and audio file size. Patch by JarrettV (#2999751)
-
-0.3.4.14
-    - (zathor) changed the way windowstate, location and size are saved and applied for MainForm, JobWorker, Changelog and WorkerSummary
-    - (zathor) [x264Config] changed "Fast first pass" to "Slow first pass"
-    - (zathor) [ProfileConfigurationWindow] + [Calculator] + [Changelog] changed style to FixedToolWindow (no resize, no minimize)
-    - (zathor) [Calculator] settings can be applied if bitrate > 0
-    - (zathor) [JobControl] enhanced the adding of new jobs
-    - (zathor) [AudioEncodingTab] "_new" will be appended to the file name if the output file already exists
-    - (zathor) If targeting file size in AutoEncode or One-Click the encoding mode of the selected video profile will be switched temporarily to automated 2/3pass
-    - (zathor) [JobControl] + [JobWorkerWindow] fixed a problem with several workers running the same job
-    - (zathor) [JobControl] + [JobWorkerWindow] only one audio encoding at a time. Bug #2996413
-    - (zathor) [FileBar] set focus to the open dialogue
-    - (zathor) [VideoCodecSettings] + [x264Settings] removed unnecessary variables
-    - (zathor) renamed VobInputWindow to FileIndexerWindow, renamed several of the indexer classes
-    - (zathor) [FileIndexerWindow] display of source media information added
-    - (zathor) [FileIndexerWindow] based upon the source media the recommended indexer will be preselected
-    - (zathor) [tsMuxeR] fixed failed muxing in rare cases
-    - (zathor) [BitrateCalculator] add BPP and Quality Estimate calculation support w/ complexity slider. Patch by JarrettV (#2999751)
-    - (zathor) [BitrateCalculator] improved audio and unlimited extra calculation support. Patch by JarrettV (#2999751)
-    - (zathor) [BitrateCaluclator] the encoding mode of the selected video profile will be switched to automated 2/3pass if necessary
-    - (zathor) [x264ConfigurationPanel] simplified the main page, improved the tooltip help
-
-0.3.4.13
-    - (zathor) [HDBDStreamExtractor] DTS output type option for DTS-MA or DTS-HR extracts only the core DTS track. Feature Request #2695340
-    - (zathor) [x264Encoder] fixed rc-lookahead. Bug #2991069
-    - (zathor) [OSInfo] improved .NET 4.0 detection. Bug #2988751
-    - (zathor) [x264Settings] changed the default b-pyramid value to normal
-    - (zathor) [x264Config] fixed the log file button
-    - (zathor) [UpdateWindow] added platform type
-    - (zathor) [UpdateWindow] only the platform matching updates will be downloaded
-    - (zathor) if the x64 MeGUI build is used only x64_64.exe is referenced 
-
-0.3.4.12
-    - (zathor) [OneClickConfigPanel] "Keep Input Resolution" disables "Signal AR"
-    - (zathor) [JobQueue] CTRL+A selects all queue items. Feature request #2981335
-    - (zathor) [JobQueue] SHIFT+UP or DOWN to move an queue item, UP or DOWN to navigate in the list
-    - (zathor) user.config settings will also be migrated for queue settings and custom AR, file size and FPS
-
-0.3.4.11
-    - (zathor) [DAR] + [ARChooser] enhanced ITU values
-    - (zathor) [OneClickSettings] changed the default output resolution to 720
-    - (zathor) [OneClickWindow] custom AR can be applied if "Keep Input Resolution" is selected
-    - (zathor) [OneClickWindow] "Keep Input Resolution" disables "Signal AR"
-
-0.3.4.10
-    - (zathor) [x264Encoder] --aud will only be appended if selected in the configuration dialog. Bug #2979294
-    - (zathor) [OneClickSettings] the MKV container is enabled by default
-    - (zathor) [x264ConfigurationPanel] fixed wrong vbvmaxrate value after profile switching
-    - (zathor) [OneClickWindow] fixed "Keep Input Resolution" behavior
-    - (zathor) [VideoEncodingComponent] improved error handling
-    - (zathor) [FilmCutter] changed default transition type in AVS Cutter to "No transition". Fade transition will blend in/out 10 frames. Bug #2913546
-
-0.3.4.9
-    - (zathor) x264 - some CQP mode adjustments
-    - (zathor) x264 - added superfast preset support (requires x264 revision 1509 or higher)
-
-0.3.4.8
-    - (zathor) [ffmsReader] + [ScriptServer] FFVideoSource defaults to the YV12 colorspace
-    - (zathor) [VideoUtil] improved the ConvertToYV12() handling
-
-0.3.4.7
-    - (zathor) [UpdateCacher] + [UpdateWindow] + [MainForm] added offline install capability
-    - (zathor) [UpdateCacher] + [UpdateWindow] zip files will be verified before extracting
-    - (zathor) [UpdateCacher] improved proxy support
-    - (zathor) user.config will be migrated to new version if possible
-    - (zathor) [x264Encoder] mbtree can be disabled while fast preset is active
-
-0.3.4.6
-    - (zathor) [AviSynthWindow] FFVideoSource will be used automatically if a corresponding ffindex file exists
-    - (zathor) [MeGUISettings] fixed ffms file not found problem
-
-0.3.4.5
-    - (zathor) [MainForm] renamed "DG Creator" to "File Indexer"
-    - (zathor) added FFMS (FFmpegSource2) to the file indexer
-
-0.3.4.4
-    - (zathor) [MP4BoxMuxer] + [CommandlineJobProcessor] changed the way the remaining time is estimated. Bug #2124705
-    - (zathor) [MainForm] updatecopier.exe will only be elevated if necessary
-    - (zathor) simplified updatecopier.exe
-
-0.3.4.3
-    - (zathor) [HDStreamExtractorIndexer] improved mpls parsing
-    - (zathor) [BitrateCalculator] fixed overflow in case of very long video durations
-    - (zathor) update MediaInfo library and its wrapper to the latest release (0.7.29)
-    - (zathor) [MainForm] suspend the update process until the profiles have been imported
-    - (zathor) [x264Encoder] + [x264ConfigurationPanel] changed the default b-pyramid value to normal (requires x264 revision 1455 or higher)
-    - (zathor) [JobWorkerWindow] enhanced error handling
-    - (zathor) [AudioEncoderInterface] earlier preprocessing status update
-    - (zathor) [tsMuxeR] ISO639-2-Code will be used for the language during muxing
-    - (zathor) [tsMuxeR] fixed muxing of srt files. Bug #2958514
-    - (zathor) [x264] removed the lossless checkbox, changed turbo to "fast first pass", changed thread-input, cosmetics
-    - (zathor) [tsMuxeR] + [CommandlineMuxer] changed the way the projected filesize is estimated
-
-0.3.4.2
-    - (zathor) [AviSynthProfileConfigPanel] if clever anamorphic encoding is enabled the dropdown box will be also enabled
-    - (zathor) [AviSynthWindow] openning a file also triggers the clever anamorphic encoding event. Bug #2957647
-    - (zathor) [UpdateWindow] set file changed time of extracted files
-    - (zathor) [UpdateWindow] files which need a reboot will also be backuped if selected
-    - (zathor) update ICSharpCode.SharpZipLib.dll
-
-0.3.4.1
-    - (zathor) [x264Encoder] added support for new x264 nal-hrd switches (requires x264 revision 1442 or higher)
+  Other changes:
+  - [AviSynthWindow] + [AviSynthProfileConfigPanel] + [Changelog] 
+    changed font to Courier New
+  - [MeGUISettings] defaults to development update server 
+    if development build is used
+  - [VideoUtil] + [MainForm] fixed the detection of AviSynth for MeGUI x64
+  - [MkvMergeMuxer] removed --no-clusters-in-meta-seek because of the change 
+    in MkvToolNix 4.0.0
+  - [WindowUtil] + [JobWorkerWindow] prevent standby while a job is running. 
+    Feature request #2976205
+  - [MainForm] fixed window size will be reset if window is minimized
+  - moved CustomFileSize, CustomFPSs, CustomDARs and GUI settings from 
+    user.config into settings.xml
+  - user.config is no longer created / updated. Therefore MeGUI itself does not
+    write anymore outside of the application directory
+  - DGIndexNV will use DGMultiSource instead of DGSource as default setting
+  - [mencoderEncoder] switched mencoder to ffmpeg as pre-rendering engine in 
+    MeGUI x64 in order to support x64
+  - [JobControl] fixed a crash if an unknown job type is used
+  - [JobControl] old D2V and DGI jobs will be updated
+  - [BitrateCalculator] add 1 1/2 DVD target size and adjust others to safe 
+    values. Patch by JarrettV (#2999751)
+  - [BitrateCalculator] fix calculation accuracy by total file size and by BPP 
+    to account for constant video overhead. Patch by JarrettV (#2999751)
+  - [BitrateCalculator] simplify audio bitrate inspection to assume bitrate from 
+    video duration and audio file size. Patch by JarrettV (#2999751)
+  - changed the way windowstate, location and size are saved and applied for 
+    MainForm, JobWorker, Changelog and WorkerSummary
+  - [x264Config] changed "Fast first pass" to "Slow first pass"
+  - [ProfileConfigurationWindow] + [Calculator] + [Changelog] changed style to 
+    FixedToolWindow (no resize, no minimize)
+  - [Calculator] settings can only be applied if bitrate > 0
+  - [JobControl] enhanced the adding of new jobs
+  - [AudioEncodingTab] "_new" will be appended to the file name if the output 
+    file already exists
+  - [JobControl] + [JobWorkerWindow] fixed a problem with several workers 
+    running the same job
+  - [JobControl] + [JobWorkerWindow] only one audio encoding at a time. 
+    Bug #2996413
+  - [FileBar] set focus to the open dialogue
+  - renamed VobInputWindow to FileIndexerWindow, renamed several of 
+    the indexer classes
+  - [FileIndexerWindow] display of source media information added
+  - [FileIndexerWindow] based upon the source media the recommended indexer 
+    will be preselected
+  - [tsMuxeR] fixed failed muxing in rare cases
+  - [BitrateCalculator] add BPP and Quality Estimate calculation support with
+    complexity slider. Patch by JarrettV (#2999751)
+  - [BitrateCalculator] improved audio and unlimited extra calculation support.
+    Patch by JarrettV (#2999751)
+  - [BitrateCaluclator] the encoding mode of the selected video profile will be 
+    switched to automated 2/3pass if necessary
+  - [x264ConfigurationPanel] simplified the main page, improved the tooltip help
+  - [HDBDStreamExtractor] DTS output type option for DTS-MA or DTS-HR extracts 
+    only the core DTS track. Feature Request #2695340
+  - [x264Encoder] fixed rc-lookahead. Bug #2991069
+  - [OSInfo] improved .NET 4.0 detection. Bug #2988751
+  - [x264Settings] changed the default b-pyramid value to normal
+  - [x264Config] fixed the log file button
+  - [UpdateWindow] added platform type
+  - [UpdateWindow] only the platform matching updates will be downloaded
+  - if the x64 MeGUI build is used only x64_64.exe is referenced 
+  - [OneClickConfigPanel] "Keep Input Resolution" disables "Signal AR"
+  - [JobQueue] CTRL+A selects all queue items. Feature request #2981335
+  - [JobQueue] SHIFT+UP or DOWN to move an queue item, UP or DOWN to navigate
+    in the list
+  - [DAR] + [ARChooser] enhanced ITU values
+  - [OneClickSettings] changed the default output resolution to 720
+  - [OneClickWindow] custom AR can be applied if "Keep Input Resolution"
+    is selected
+  - [OneClickWindow] "Keep Input Resolution" disables "Signal AR"
+  - [x264Encoder] --aud will only be appended if selected in the configuration 
+    dialog. Bug #2979294
+  - [OneClickSettings] the MKV container is enabled by default
+  - [x264ConfigurationPanel] fixed wrong vbvmaxrate value after 
+    profile switching
+  - [OneClickWindow] fixed "Keep Input Resolution" behavior
+  - [VideoEncodingComponent] improved error handling
+  - [FilmCutter] changed default transition type in AVS Cutter to "No transition"
+    Fade transition will blend in/out 10 frames. Bug #2913546
+  - x264 - some CQP mode adjustments
+  - x264 - added superfast preset support (requires x264 revision 1509 or higher)
+  - [ffmsReader] + [ScriptServer] FFVideoSource defaults to the YV12 colorspace
+  - [VideoUtil] improved the ConvertToYV12() handling
+  - [UpdateCacher] + [UpdateWindow] + [MainForm] 
+    added offline install capability
+  - [UpdateCacher] + [UpdateWindow] zip files will be verified before extracting
+  - [UpdateCacher] improved proxy support
+  - user.config will be migrated to new version if possible
+  - [x264Encoder] mbtree can be disabled while fast preset is active
+  - [AviSynthWindow] FFVideoSource will be used automatically if a corresponding 
+    findex file exists
+  - [MeGUISettings] fixed ffms file not found problem
+  - [MP4BoxMuxer] + [CommandlineJobProcessor] changed the way the remaining time
+    is estimated. Bug #2124705
+  - [MainForm] updatecopier.exe will only be elevated if necessary
+  - simplified updatecopier.exe
+  - [HDStreamExtractorIndexer] improved mpls parsing
+  - [BitrateCalculator] fixed overflow in case of very long video durations
+  - [MainForm] suspend the update process until the profiles have been imported
+  - [x264Encoder] + [x264ConfigurationPanel] changed the default b-pyramid value 
+    to normal (requires x264 revision 1455 or higher)
+  - [JobWorkerWindow] enhanced error handling
+  - [AudioEncoderInterface] earlier preprocessing status update
+  - [tsMuxeR] ISO639-2-Code will be used for the language during muxing
+  - [tsMuxeR] fixed muxing of srt files. Bug #2958514
+  - [x264] removed the lossless checkbox, changed turbo to "fast first pass", 
+    changed thread-input, cosmetics
+  - [tsMuxeR] + [CommandlineMuxer] changed the way the projected filesize is estimated
+  - [AviSynthProfileConfigPanel] if clever anamorphic encoding is enabled the 
+    dropdown box will be also enabled
+  - [AviSynthWindow] openning a file also triggers the clever anamorphic 
+    encoding event. Bug #2957647
+  - [UpdateWindow] set last modified time to extracted files
+  - [UpdateWindow] files which need a reboot will also be saved if selected
+  - update ICSharpCode.SharpZipLib.dll
+  - [x264Encoder] added support for new x264 nal-hrd switches 
+    (requires x264 revision 1442 or higher)
 
 0.3.4.0
     - (zathor) [JobControl] error handling added. Bug #2279852
