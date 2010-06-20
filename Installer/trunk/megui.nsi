@@ -1,21 +1,8 @@
 !define NAME "MeGUI"
-!define OUTFILE "megui-setup.exe"
+!define OUTFILE "megui-setup-x86.exe"
 !define PRODUCT_VERSION "0.3.4.15"
 !define PRODUCT_WEB_SITE "www.doom9.net"
-!define APPNAMEANDVERSION "MeGUI 0.3.4.15"
-!define INPUT_PATH "..\..\megui\trunk\dist\BigDist\"
-!define FILE1 "AvisynthWrapper.dll"
-!define FILE2 "Changelog.txt"
-!define FILE3 "gpl.txt"
-!define FILE4 "ICSharpCode.SharpZipLib.dll"
-!define FILE5 "megui.exe"
-!define FILE6 "MessageBoxExLib.dll"
-!define FILE7 "megui.ico"
-!define FILE8 "MediaInfo.dll"
-!define FILE9 "MediaInfoWrapper.dll"
-!define FILE10 "LinqBridge.dll"
-!define HELP "data\*.xml"
-!define UNINST_NAME "megui-uninstall.exe"
+!define INPUT_PATH "..\..\megui\trunk\bin\x86\Release"
 !define MUI_ICON megui.ico
 !define MUI_UNICON uninstall.ico
 !define MUI_HEADERIMAGE
@@ -29,7 +16,7 @@
 ; NOTE: this .NSI script is designed for NSIS v2.07+
 ; ---------------------------------------------------------------------------
 
-Name "${APPNAMEANDVERSION}"
+Name "MeGUI ${PRODUCT_VERSION}"
 OutFile "${OUTFILE}"
 SetCompressor /FINAL /SOLID lzma
 
@@ -42,8 +29,8 @@ ShowUnInstDetails nevershow ; (can be show to have them shown, or nevershow to d
 SetDateSave off ; (can be on to have files restored to their orginal date)
 
 !insertmacro MUI_PAGE_WELCOME
-!insertmacro MUI_PAGE_LICENSE "${INPUT_PATH}\${FILE3}"
-!insertmacro MUI_PAGE_COMPONENTS
+!insertmacro MUI_PAGE_LICENSE "${INPUT_PATH}\gpl.txt"
+#!insertmacro MUI_PAGE_COMPONENTS
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_INSTFILES
 !insertmacro MUI_PAGE_FINISH
@@ -107,48 +94,44 @@ SetDateSave off ; (can be on to have files restored to their orginal date)
 
 ; ---------------------------------------------------------------------------
 
-InstallDir $PROGRAMFILES\megui
+InstallDir "$PROGRAMFILES\megui"
 
 Section "MeGUI";
 
-	SetOutPath $INSTDIR
-        RMDir /r $SMPROGRAMS\megui
+	SetOutPath "$INSTDIR"
+	RMDir /r "$SMPROGRAMS\megui"
 
-        SetOverwrite on
-	File "${INPUT_PATH}${FILE1}"
-	File "${INPUT_PATH}${FILE2}"
-	File "${INPUT_PATH}${FILE3}"
-	File "${INPUT_PATH}${FILE4}"
-	File "${INPUT_PATH}${FILE5}"
-	File "${INPUT_PATH}${FILE6}"
-	File "${FILE7}"
-	File "${INPUT_PATH}${FILE8}"
-	File "${INPUT_PATH}${FILE9}"
-	File "${INPUT_PATH}${FILE10}"
-        
-	CreateDirectory $INSTDIR\update_cache
-	CreateDirectory $INSTDIR\tools
-	CreateDirectory $INSTDIR\logs
-	
-        SetOutPath "$INSTDIR\data\"
-        File "${INPUT_PATH}..\${HELP}"
+	SetOverwrite on
+	File "${INPUT_PATH}\AvisynthWrapper.dll"
+	File "${INPUT_PATH}\Changelog.txt"
+	File "${INPUT_PATH}\gpl.txt"
+	File "${INPUT_PATH}\ICSharpCode.SharpZipLib.dll"
+	File "${INPUT_PATH}\megui.exe"
+	File "${INPUT_PATH}\MessageBoxExLib.dll"
+	File "${INPUT_PATH}\LinqBridge.dll"
 
+	CreateDirectory "$INSTDIR\update_cache"
+	CreateDirectory "$INSTDIR\tools"
+	CreateDirectory "$INSTDIR\logs"
+
+	SetOutPath "$INSTDIR\data\"
+	File "${INPUT_PATH}\data\ContextHelp.xml"
 
 	CreateDirectory "$SMPROGRAMS\${NAME}\"
-	CreateShortcut  "$SMPROGRAMS\${NAME}\Changelog.lnk" $INSTDIR\${FILE2}
-	CreateShortcut  "$SMPROGRAMS\${NAME}\GPL.lnk" $INSTDIR\${FILE3}
-	CreateShortcut  "$SMPROGRAMS\${NAME}\MeGUI Modern Media Encoder.lnk" $INSTDIR\${FILE5} "" $INSTDIR\megui.ico
-	CreateShortcut  "$SMPROGRAMS\${NAME}\Tools.lnk" $INSTDIR\tools
-	CreateShortcut  "$SMPROGRAMS\${NAME}\Log Files.lnk" $INSTDIR\logs
-	CreateShortcut  "$SMPROGRAMS\${NAME}\Auto-Update cache.lnk" $INSTDIR\update_cache
-	CreateShortcut  "$SMPROGRAMS\${NAME}\Uninstall MeGUI.lnk" $INSTDIR\megui-uninstall.exe
+	CreateShortcut  "$SMPROGRAMS\${NAME}\Changelog.lnk" "$INSTDIR\Changelog.txt"
+	CreateShortcut  "$SMPROGRAMS\${NAME}\GPL.lnk" "$INSTDIR\gpl.txt"
+	CreateShortcut  "$SMPROGRAMS\${NAME}\MeGUI Modern Media Encoder.lnk" "$INSTDIR\megui.exe" "" "$INSTDIR\megui.exe"
+	CreateShortcut  "$SMPROGRAMS\${NAME}\Tools.lnk" "$INSTDIR\tools"
+	CreateShortcut  "$SMPROGRAMS\${NAME}\Log Files.lnk" "$INSTDIR\logs"
+	CreateShortcut  "$SMPROGRAMS\${NAME}\Auto-Update cache.lnk" "$INSTDIR\update_cache"
+	CreateShortcut  "$SMPROGRAMS\${NAME}\Uninstall MeGUI.lnk" "$INSTDIR\megui-uninstall.exe"
 
 
 	; sets update_cache registry entry
 	WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\MeGUI" "update_cache" "$INSTDIR\update_cache"
 
 	WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "DisplayName" "${NAME} (remove only)"
-	WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "UninstallString" '"$INSTDIR\${UNINST_NAME}"'
+	WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "UninstallString" '"$INSTDIR\megui-uninstall.exe"'
 	WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "DisplayIcon" "$INSTDIR\megui.exe"
 	WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "DisplayVersion" "${PRODUCT_VERSION}"
 	WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "URLInfoAbout" "${PRODUCT_WEB_SITE}"
@@ -156,48 +139,45 @@ Section "MeGUI";
 
 	; delete old registry entry when updating
 	DeleteRegKey HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\MeGUI modern media encoder"
-       
-        ; write out uninstaller
-	WriteUninstaller "$INSTDIR\${UNINST_NAME}"
+
+    ; write out uninstaller
+	WriteUninstaller "$INSTDIR\megui-uninstall.exe"
 
 SectionEnd ; end of default section
 
 
-  
-
 ; ---------------------------------------------------------------------------
-
 ; begin uninstall settings/section
 UninstallText "This will uninstall ${NAME} from your system"
 
 Section Uninstall
-	
+
 	; add delete commands to delete whatever files/registry keys/etc you installed here.
-	Delete /REBOOTOK "$INSTDIR\${FILE1}"
-	Delete /REBOOTOK "$INSTDIR\${FILE2}"
-	Delete /REBOOTOK "$INSTDIR\${FILE3}"
-	Delete /REBOOTOK "$INSTDIR\${FILE4}"
-	Delete /REBOOTOK "$INSTDIR\${FILE5}"
-	Delete /REBOOTOK "$INSTDIR\${FILE6}"
-	Delete /REBOOTOK "$INSTDIR\${FILE7}"
-	Delete /REBOOTOK "$INSTDIR\${FILE8}"
-	Delete /REBOOTOK "$INSTDIR\${FILE9}"
-	Delete /REBOOTOK "$INSTDIR\${FILE10}"        
-	Delete "$INSTDIR\${UNINST_NAME}"
+	Delete /REBOOTOK "$INSTDIR\AvisynthWrapper.dll"
+	Delete /REBOOTOK "$INSTDIR\Changelog.txt"
+	Delete /REBOOTOK "$INSTDIR\gpl.txt"
+	Delete /REBOOTOK "$INSTDIR\ICSharpCode.SharpZipLib.dll"
+	Delete /REBOOTOK "$INSTDIR\megui.exe"
+	Delete /REBOOTOK "$INSTDIR\MessageBoxExLib.dll"
+	Delete /REBOOTOK "$INSTDIR\megui.ico"
+	Delete /REBOOTOK "$INSTDIR\MediaInfo.dll"
+	Delete /REBOOTOK "$INSTDIR\MediaInfoWrapper.dll"
+	Delete /REBOOTOK "$INSTDIR\LinqBridge.dll"        
+	Delete "$INSTDIR\megui-uninstall.exe"
 
 	DeleteRegKey HKEY_LOCAL_MACHINE "SOFTWARE\MeGUI"
-        DeleteRegKey HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}"
+	DeleteRegKey HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}"
 
-        RMDIR /r "$LOCALAPPDATA\${PRODUCT_WEB_SITE}"
-        Delete /REBOOTOK "$SMPROGRAMS\${NAME}\Changelog.lnk"
-        Delete /REBOOTOK "$SMPROGRAMS\${NAME}\GPL.lnk"
-        Delete /REBOOTOK "$SMPROGRAMS\${NAME}\MeGUI Modern Media Encoder.lnk"
-        Delete /REBOOTOK "$SMPROGRAMS\${NAME}\Tools.lnk"
-        Delete /REBOOTOK "$SMPROGRAMS\${NAME}\Log Files.lnk"
-        Delete /REBOOTOK "$SMPROGRAMS\${NAME}\Auto-Update cache.lnk"
-        Delete /REBOOTOK "$SMPROGRAMS\${NAME}\Uninstall MeGUI.lnk"
-        RMDIR "$SMPROGRAMS\${NAME}"
-        RMDIR /r "$INSTDIR"
+	RMDIR /r "$LOCALAPPDATA\${PRODUCT_WEB_SITE}"
+	Delete /REBOOTOK "$SMPROGRAMS\${NAME}\Changelog.lnk"
+	Delete /REBOOTOK "$SMPROGRAMS\${NAME}\GPL.lnk"
+	Delete /REBOOTOK "$SMPROGRAMS\${NAME}\MeGUI Modern Media Encoder.lnk"
+	Delete /REBOOTOK "$SMPROGRAMS\${NAME}\Tools.lnk"
+	Delete /REBOOTOK "$SMPROGRAMS\${NAME}\Log Files.lnk"
+	Delete /REBOOTOK "$SMPROGRAMS\${NAME}\Auto-Update cache.lnk"
+	Delete /REBOOTOK "$SMPROGRAMS\${NAME}\Uninstall MeGUI.lnk"
+	RMDIR "$SMPROGRAMS\${NAME}"
+	RMDIR /r "$INSTDIR"
 
 SectionEnd ; end of uninstall section
 
