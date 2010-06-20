@@ -1,6 +1,6 @@
 @ECHO OFF
 TITLE Compiling MeGUI...
-PUSHD megui\trunk
+PUSHD "megui\trunk"
 START /B /WAIT compile-msbuild.bat
 POPD
 
@@ -12,30 +12,21 @@ SET "U_=HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall"
 )
 
 SET "K_=NSIS"
-SET "M_=NSIS is NOT installed! Installer won't be built!"
 FOR /f "delims=" %%a IN (
 	'REG QUERY "%U_%\%K_%" /v "InstallLocation"2^>Nul^|FIND "REG_"') DO (
 	SET "NSISPath=%%a"&Call :Sub %%NSISPath:*Z=%%)
 
-FOR /f "delims=" %%a IN (
-	'REG QUERY "%U_%\%K_%" /v "DisplayVersion"2^>Nul^|FIND "REG_"') DO (
-	SET "NSISVer=%%a"&Call :Sub2 %%NSISVer:*Z=%%)
+ECHO.
+IF DEFINED NSISPath (
+ECHO:Compiling installer...
+"%NSISPath%\makensis.exe" /V2 "Installer\trunk\megui.nsi"
+"%NSISPath%\makensis.exe" /V2 "Installer\trunk\megui_x64.nsi"
+)
 
-ECHO.
-IF DEFINED NSISPath (ECHO:Compiling installer...&&(
-	"%NSISPath%\makensis.exe" /V2 "Installer\trunk\megui.nsi")&&(
-	ECHO.&&ECHO:Installer compiled with NSIS v%NSISVer% successfully!)
-) ELSE (ECHO:%M_%)
-
-ECHO.
-ECHO.
+ECHO. && ECHO.
 PAUSE
-EXIT
+EXIT /B
 
 :Sub
 SET NSISPath=%*
-GOTO :EOF
-
-:Sub2
-SET NSISVer=%*
 GOTO :EOF

@@ -1,10 +1,10 @@
 !include "version.nsi"
 
 !define NAME "MeGUI"
-!define OUTFILE "megui-setup-x86.exe"
-!define PRODUCT_VERSION "${MEGUI_VERSION}"
+!define OUTFILE "megui-setup-x64.exe"
+!define PRODUCT_VERSION "0.3.4.18"
 !define PRODUCT_WEB_SITE "www.doom9.net"
-!define INPUT_PATH "..\..\megui\trunk\bin\x86\Release"
+!define INPUT_PATH "..\..\megui\trunk\bin\x64\Release"
 !define MUI_ICON "..\..\megui\trunk\app.ico"
 !define MUI_UNICON uninstall.ico
 !define MUI_HEADERIMAGE
@@ -13,6 +13,7 @@
 !include "MUI.nsh"
 !include "Sections.nsh"
 !include "LogicLib.nsh"
+!include "x64.nsh"
 
 ; ---------------------------------------------------------------------------
 ; NOTE: this .NSI script is designed for NSIS v2.07+
@@ -104,9 +105,20 @@ SetDateSave off ; (can be on to have files restored to their orginal date)
 
 ; ---------------------------------------------------------------------------
 
-InstallDir "$PROGRAMFILES\megui"
+InstallDir "$PROGRAMFILES64\megui"
+
+Function .onInit
+${If} ${RunningX64}
+	SetRegView 64
+${Else}
+	MessageBox MB_OK|MB_ICONSTOP 'You are trying to install the 64-bit version of ${NAME} on 32-bit Windows.$\r$\nPlease download and use the 32-bit version instead.$\r$\nClick OK to quit Setup.'
+	Quit
+${EndIf}
+  !insertmacro MUI_LANGDLL_DISPLAY
+FunctionEnd
 
 Section "MeGUI";
+SetRegView 64
 
 	SetOutPath "$INSTDIR"
 	RMDir /r "$SMPROGRAMS\megui"
@@ -136,10 +148,11 @@ Section "MeGUI";
 	CreateShortcut  "$SMPROGRAMS\${NAME}\Auto-Update cache.lnk" "$INSTDIR\update_cache"
 	CreateShortcut  "$SMPROGRAMS\${NAME}\Uninstall MeGUI.lnk" "$INSTDIR\megui-uninstall.exe"
 
+
 	; sets update_cache registry entry
 	WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\MeGUI" "update_cache" "$INSTDIR\update_cache"
 
-	WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "DisplayName" "${NAME} (remove only)"
+	WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "DisplayName" "${NAME} x64 (remove only)"
 	WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "UninstallString" '"$INSTDIR\megui-uninstall.exe"'
 	WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "DisplayIcon" "$INSTDIR\megui.exe"
 	WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "DisplayVersion" "${MEGUI_VERSION}"
@@ -160,7 +173,7 @@ SectionEnd ; end of default section
 UninstallText "This will uninstall ${NAME} from your system"
 
 Section Uninstall
-
+SetRegView 64
 	; add delete commands to delete whatever files/registry keys/etc you installed here.
 	Delete /REBOOTOK "$INSTDIR\AvisynthWrapper.dll"
 	Delete /REBOOTOK "$INSTDIR\Changelog.txt"
