@@ -14,9 +14,6 @@
 !include "Sections.nsh"
 !include "LogicLib.nsh"
 
-; ---------------------------------------------------------------------------
-; NOTE: this .NSI script is designed for NSIS v2.07+
-; ---------------------------------------------------------------------------
 
 Name "MeGUI ${MEGUI_VERSION}"
 OutFile "${OUTFILE}"
@@ -32,7 +29,6 @@ SetDateSave off ; (can be on to have files restored to their orginal date)
 
 !insertmacro MUI_PAGE_WELCOME
 !insertmacro MUI_PAGE_LICENSE "${INPUT_PATH}\gpl.txt"
-#!insertmacro MUI_PAGE_COMPONENTS
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_INSTFILES
 !insertmacro MUI_PAGE_FINISH
@@ -198,7 +194,3 @@ Function un.onUninstSuccess
 			"A file couldn't be deleted. It will be deleted at next reboot."
 	NoReboot:
 FunctionEnd
-
-; ---------------------------------------------------------------------------
-; eof
-; ---------------------------------------------------------------------------
