@@ -35,7 +35,7 @@ namespace MeGUI
             // txtChangelog
             // 
             this.txtChangelog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtChangelog.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtChangelog.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtChangelog.Location = new System.Drawing.Point(0, 0);
             this.txtChangelog.Multiline = true;
             this.txtChangelog.Name = "txtChangelog";
@@ -60,6 +60,7 @@ namespace MeGUI
             this.Resize += new System.EventHandler(this.Changelog_Resize);
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
 
         #endregion
