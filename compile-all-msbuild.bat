@@ -18,9 +18,15 @@ FOR /f "delims=" %%a IN (
 
 ECHO.
 IF DEFINED NSISPath (
-ECHO:Compiling installer...
-"%NSISPath%\makensis.exe" /V2 "Installer\trunk\megui.nsi"
-"%NSISPath%\makensis.exe" /V2 "Installer\trunk\megui_x64.nsi"
+  ECHO:Compiling installer...
+  "%NSISPath%\makensis.exe" /V2 "Installer\trunk\megui.nsi"
+  "%NSISPath%\makensis.exe" /V2 "Installer\trunk\megui_x64.nsi"
+  IF EXIST "Installer\trunk\FullPackage" (
+    "%NSISPath%\makensis.exe" /V2 "Installer\trunk\megui_full.nsi"
+  )
+  IF EXIST "Installer\trunk\FullPackage_x64" (
+    "%NSISPath%\makensis.exe" /V2 "Installer\trunk\megui_x64_full.nsi"
+  )
 )
 
 ECHO. && ECHO.

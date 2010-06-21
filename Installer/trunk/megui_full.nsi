@@ -1,7 +1,7 @@
 !include "version.nsi"
 
 !define NAME "MeGUI"
-!define OUTFILE "MeGUI_${MeGUI_VERSION}_x86_Installer_OnlinePackage.exe"
+!define OUTFILE "MeGUI_${MeGUI_VERSION}_x86_Installer_OfflinePackage.exe"
 !define PRODUCT_VERSION "${MeGUI_VERSION}"
 !define INPUT_PATH "..\..\MeGUI\trunk\bin\x86\Release"
 !define MUI_ICON "..\..\MeGUI\trunk\app.ico"
@@ -55,7 +55,10 @@ Section "MeGUI";
 	File "${INPUT_PATH}\MeGUI.exe"
 	File "${INPUT_PATH}\MessageBoxExLib.dll"
 	File "${INPUT_PATH}\LinqBridge.dll"
-
+	
+	File "FullPackage\upgrade.xml"
+	File /r "FullPackage\*.zip"
+	
 	SetOutPath "$INSTDIR\data\"
 	File "${INPUT_PATH}\data\ContextHelp.xml"
 

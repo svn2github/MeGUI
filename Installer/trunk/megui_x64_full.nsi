@@ -1,9 +1,9 @@
 !include "version.nsi"
 
 !define NAME "MeGUI"
-!define OUTFILE "MeGUI_${MeGUI_VERSION}_x86_Installer_OnlinePackage.exe"
+!define OUTFILE "MeGUI_${MeGUI_VERSION}_x64_Installer_OfflinePackage.exe"
 !define PRODUCT_VERSION "${MeGUI_VERSION}"
-!define INPUT_PATH "..\..\MeGUI\trunk\bin\x86\Release"
+!define INPUT_PATH "..\..\MeGUI\trunk\bin\x64\Release"
 !define MUI_ICON "..\..\MeGUI\trunk\app.ico"
 !define MUI_UNICON uninstall.ico
 !define MUI_HEADERIMAGE
@@ -12,6 +12,7 @@
 !include "MUI.nsh"
 !include "Sections.nsh"
 !include "LogicLib.nsh"
+!include "x64.nsh"
 
 
 Name "MeGUI ${MeGUI_VERSION}"
@@ -41,9 +42,20 @@ SetDateSave off ; (can be on to have files restored to their orginal date)
 
 ; ---------------------------------------------------------------------------
 
-InstallDir "$PROGRAMFILES\MeGUI"
+InstallDir "$PROGRAMFILES64\MeGUI"
+
+Function .onInit
+${If} ${RunningX64}
+	SetRegView 64
+${Else}
+	MessageBox MB_OK|MB_ICONSTOP 'You are trying to install the 64-bit version of ${NAME} on 32-bit Windows.$\r$\nPlease download and use the 32-bit version instead.$\r$\nClick OK to quit Setup.'
+	Quit
+${EndIf}
+  !insertmacro MUI_LANGDLL_DISPLAY
+FunctionEnd
 
 Section "MeGUI";
+SetRegView 64
 
 	SetOutPath "$INSTDIR"
 	RMDir /r "$SMPROGRAMS\MeGUI"
@@ -55,6 +67,9 @@ Section "MeGUI";
 	File "${INPUT_PATH}\MeGUI.exe"
 	File "${INPUT_PATH}\MessageBoxExLib.dll"
 	File "${INPUT_PATH}\LinqBridge.dll"
+	
+	File "FullPackage_x64\upgrade_x64.xml"
+	File /r "FullPackage_x64\*.zip"
 
 	SetOutPath "$INSTDIR\data\"
 	File "${INPUT_PATH}\data\ContextHelp.xml"
@@ -65,7 +80,7 @@ Section "MeGUI";
 	CreateShortcut  "$SMPROGRAMS\${NAME}\Uninstall MeGUI.lnk" "$INSTDIR\MeGUI-uninstall.exe"
 
 
-	WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "DisplayName" "${NAME} (remove only)"
+	WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "DisplayName" "${NAME} x64 (remove only)"
 	WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "UninstallString" '"$INSTDIR\MeGUI-uninstall.exe"'
 	WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "DisplayIcon" "$INSTDIR\MeGUI.exe"
 	WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "DisplayVersion" "${MeGUI_VERSION}"
@@ -86,7 +101,8 @@ SectionEnd ; end of default section
 UninstallText "This will uninstall ${NAME} from your system"
 
 Section Uninstall
-
+	SetRegView 64
+	
 	; add delete commands to delete whatever files/registry keys/etc you installed here.
 	MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "Do you want to remove all files?" IDYES deleteall
 	
@@ -105,8 +121,8 @@ Section Uninstall
 	Delete "$INSTDIR\MeGUI-uninstall.exe"
 	Delete /REBOOTOK "$INSTDIR\MessageBoxExLib.dll"
 	Delete /REBOOTOK "$INSTDIR\settings.xml" 
-	Delete /REBOOTOK "$INSTDIR\updatecopier.exe" 
-	Delete /REBOOTOK "$INSTDIR\upgrade.xml" 
+	Delete /REBOOTOK "$INSTDIR\updatecopier.exe"
+	Delete /REBOOTOK "$INSTDIR\upgrade_x64.xml"
 	RMDIR /r "$INSTDIR\data"
 	RMDIR /r "$INSTDIR\extra"
 	RMDIR /r "$INSTDIR\tools"

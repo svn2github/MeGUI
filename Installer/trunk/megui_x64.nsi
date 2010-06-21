@@ -1,14 +1,13 @@
 !include "version.nsi"
 
 !define NAME "MeGUI"
-!define OUTFILE "megui-setup-x64.exe"
-!define PRODUCT_VERSION "${MEGUI_VERSION}"
-!define PRODUCT_WEB_SITE "www.doom9.net"
-!define INPUT_PATH "..\..\megui\trunk\bin\x64\Release"
-!define MUI_ICON "..\..\megui\trunk\app.ico"
+!define OUTFILE "MeGUI_${MeGUI_VERSION}_x64_Installer_OnlinePackage.exe"
+!define PRODUCT_VERSION "${MeGUI_VERSION}"
+!define INPUT_PATH "..\..\MeGUI\trunk\bin\x64\Release"
+!define MUI_ICON "..\..\MeGUI\trunk\app.ico"
 !define MUI_UNICON uninstall.ico
 !define MUI_HEADERIMAGE
-!define MUI_HEADERIMAGE_BITMAP megui.bmp
+!define MUI_HEADERIMAGE_BITMAP MeGUI.bmp
 !define MUI_COMPONENTSPAGE_SMALLDESC
 !include "MUI.nsh"
 !include "Sections.nsh"
@@ -16,7 +15,7 @@
 !include "x64.nsh"
 
 
-Name "MeGUI ${MEGUI_VERSION}"
+Name "MeGUI ${MeGUI_VERSION}"
 OutFile "${OUTFILE}"
 SetCompressor /FINAL /SOLID lzma
 
@@ -40,68 +39,10 @@ SetDateSave off ; (can be on to have files restored to their orginal date)
 !insertmacro MUI_UNPAGE_FINISH
 
 !insertmacro MUI_LANGUAGE "English"
-!insertmacro MUI_LANGUAGE "Afrikaans"
-!insertmacro MUI_LANGUAGE "Albanian"
-!insertmacro MUI_LANGUAGE "Arabic"
-!insertmacro MUI_LANGUAGE "Basque"
-!insertmacro MUI_LANGUAGE "Belarusian"
-!insertmacro MUI_LANGUAGE "Bosnian"
-!insertmacro MUI_LANGUAGE "Breton"
-!insertmacro MUI_LANGUAGE "Bulgarian"
-!insertmacro MUI_LANGUAGE "Catalan"
-!insertmacro MUI_LANGUAGE "Croatian"
-!insertmacro MUI_LANGUAGE "Czech"
-!insertmacro MUI_LANGUAGE "Danish"
-!insertmacro MUI_LANGUAGE "Dutch"
-!insertmacro MUI_LANGUAGE "Esperanto"
-!insertmacro MUI_LANGUAGE "Estonian"
-!insertmacro MUI_LANGUAGE "Farsi"
-!insertmacro MUI_LANGUAGE "Finnish"
-!insertmacro MUI_LANGUAGE "French"
-!insertmacro MUI_LANGUAGE "Galician"
-!insertmacro MUI_LANGUAGE "German"
-!insertmacro MUI_LANGUAGE "Greek"
-!insertmacro MUI_LANGUAGE "Hebrew"
-!insertmacro MUI_LANGUAGE "Hungarian"
-!insertmacro MUI_LANGUAGE "Icelandic"
-!insertmacro MUI_LANGUAGE "Indonesian"
-!insertmacro MUI_LANGUAGE "Irish"
-!insertmacro MUI_LANGUAGE "Italian"
-!insertmacro MUI_LANGUAGE "Japanese"
-!insertmacro MUI_LANGUAGE "Korean"
-!insertmacro MUI_LANGUAGE "Kurdish"
-!insertmacro MUI_LANGUAGE "Latvian"
-!insertmacro MUI_LANGUAGE "Lithuanian"
-!insertmacro MUI_LANGUAGE "Luxembourgish"
-!insertmacro MUI_LANGUAGE "Macedonian"
-!insertmacro MUI_LANGUAGE "Malay"
-!insertmacro MUI_LANGUAGE "Mongolian"
-!insertmacro MUI_LANGUAGE "Norwegian"
-!insertmacro MUI_LANGUAGE "NorwegianNynorsk"
-!insertmacro MUI_LANGUAGE "Polish"
-!insertmacro MUI_LANGUAGE "Portuguese"
-!insertmacro MUI_LANGUAGE "PortugueseBR"
-!insertmacro MUI_LANGUAGE "Romanian"
-!insertmacro MUI_LANGUAGE "Russian"
-!insertmacro MUI_LANGUAGE "Serbian"
-!insertmacro MUI_LANGUAGE "SerbianLatin"
-!insertmacro MUI_LANGUAGE "SimpChinese"
-!insertmacro MUI_LANGUAGE "Slovak"
-!insertmacro MUI_LANGUAGE "Slovenian"
-!insertmacro MUI_LANGUAGE "Spanish"
-!insertmacro MUI_LANGUAGE "SpanishInternational"
-!insertmacro MUI_LANGUAGE "Swedish"
-!insertmacro MUI_LANGUAGE "Thai"
-!insertmacro MUI_LANGUAGE "TradChinese"
-!insertmacro MUI_LANGUAGE "Turkish"
-!insertmacro MUI_LANGUAGE "Ukrainian"
-!insertmacro MUI_LANGUAGE "Uzbek"
-!insertmacro MUI_LANGUAGE "Vietnamese"
-!insertmacro MUI_LANGUAGE "Welsh"
 
 ; ---------------------------------------------------------------------------
 
-InstallDir "$PROGRAMFILES64\megui"
+InstallDir "$PROGRAMFILES64\MeGUI"
 
 Function .onInit
 ${If} ${RunningX64}
@@ -117,49 +58,37 @@ Section "MeGUI";
 SetRegView 64
 
 	SetOutPath "$INSTDIR"
-	RMDir /r "$SMPROGRAMS\megui"
+	RMDir /r "$SMPROGRAMS\MeGUI"
 
 	SetOverwrite on
-	File "${INPUT_PATH}\AvisynthWrapper.dll"
 	File "${INPUT_PATH}\Changelog.txt"
 	File "${INPUT_PATH}\gpl.txt"
 	File "${INPUT_PATH}\ICSharpCode.SharpZipLib.dll"
-	File "${INPUT_PATH}\megui.exe"
+	File "${INPUT_PATH}\MeGUI.exe"
 	File "${INPUT_PATH}\MessageBoxExLib.dll"
 	File "${INPUT_PATH}\LinqBridge.dll"
-
-	CreateDirectory "$INSTDIR\update_cache"
-	CreateDirectory "$INSTDIR\tools"
-	CreateDirectory "$INSTDIR\logs"
 
 	SetOutPath "$INSTDIR\data\"
 	File "${INPUT_PATH}\data\ContextHelp.xml"
 
 	CreateDirectory "$SMPROGRAMS\${NAME}\"
 	CreateShortcut  "$SMPROGRAMS\${NAME}\Changelog.lnk" "$INSTDIR\Changelog.txt"
-	CreateShortcut  "$SMPROGRAMS\${NAME}\GPL.lnk" "$INSTDIR\gpl.txt"
-	CreateShortcut  "$SMPROGRAMS\${NAME}\MeGUI Modern Media Encoder.lnk" "$INSTDIR\megui.exe" "" "$INSTDIR\megui.exe"
-	CreateShortcut  "$SMPROGRAMS\${NAME}\Tools.lnk" "$INSTDIR\tools"
-	CreateShortcut  "$SMPROGRAMS\${NAME}\Log Files.lnk" "$INSTDIR\logs"
-	CreateShortcut  "$SMPROGRAMS\${NAME}\Auto-Update cache.lnk" "$INSTDIR\update_cache"
-	CreateShortcut  "$SMPROGRAMS\${NAME}\Uninstall MeGUI.lnk" "$INSTDIR\megui-uninstall.exe"
+	CreateShortcut  "$SMPROGRAMS\${NAME}\MeGUI Modern Media Encoder.lnk" "$INSTDIR\MeGUI.exe"
+	CreateShortcut  "$SMPROGRAMS\${NAME}\Uninstall MeGUI.lnk" "$INSTDIR\MeGUI-uninstall.exe"
 
-
-	; sets update_cache registry entry
-	WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\MeGUI" "update_cache" "$INSTDIR\update_cache"
 
 	WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "DisplayName" "${NAME} x64 (remove only)"
-	WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "UninstallString" '"$INSTDIR\megui-uninstall.exe"'
-	WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "DisplayIcon" "$INSTDIR\megui.exe"
-	WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "DisplayVersion" "${MEGUI_VERSION}"
-	WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "URLInfoAbout" "${PRODUCT_WEB_SITE}"
+	WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "UninstallString" '"$INSTDIR\MeGUI-uninstall.exe"'
+	WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "DisplayIcon" "$INSTDIR\MeGUI.exe"
+	WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "DisplayVersion" "${MeGUI_VERSION}"
+	WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "URLInfoAbout" "www.doom9.net"
 	WriteRegStr HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "Publisher" "MeGUI Team"
 
 	; delete old registry entry when updating
 	DeleteRegKey HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\MeGUI modern media encoder"
 
 	; write out uninstaller
-	WriteUninstaller "$INSTDIR\megui-uninstall.exe"
+	WriteUninstaller "$INSTDIR\MeGUI-uninstall.exe"
 
 SectionEnd ; end of default section
 
@@ -169,33 +98,44 @@ SectionEnd ; end of default section
 UninstallText "This will uninstall ${NAME} from your system"
 
 Section Uninstall
-SetRegView 64
+	SetRegView 64
+	
 	; add delete commands to delete whatever files/registry keys/etc you installed here.
+	MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "Do you want to remove all files?" IDYES deleteall
+	
+	Delete /REBOOTOK "$INSTDIR\AutoUpdate.xml"
 	Delete /REBOOTOK "$INSTDIR\AvisynthWrapper.dll"
 	Delete /REBOOTOK "$INSTDIR\Changelog.txt"
 	Delete /REBOOTOK "$INSTDIR\gpl.txt"
+	Delete /REBOOTOK "$INSTDIR\HdBrStreamExtractor.txt"
 	Delete /REBOOTOK "$INSTDIR\ICSharpCode.SharpZipLib.dll"
-	Delete /REBOOTOK "$INSTDIR\megui.exe"
-	Delete /REBOOTOK "$INSTDIR\MessageBoxExLib.dll"
-	Delete /REBOOTOK "$INSTDIR\megui.ico"
+	Delete /REBOOTOK "$INSTDIR\joblists.xml"
+	Delete /REBOOTOK "$INSTDIR\LinqBridge.dll"	
 	Delete /REBOOTOK "$INSTDIR\MediaInfo.dll"
 	Delete /REBOOTOK "$INSTDIR\MediaInfoWrapper.dll"
-	Delete /REBOOTOK "$INSTDIR\LinqBridge.dll"
-	Delete "$INSTDIR\megui-uninstall.exe"
+	Delete /REBOOTOK "$INSTDIR\MeGUI.exe"
+	Delete /REBOOTOK "$INSTDIR\MeGUI.ico"
+	Delete "$INSTDIR\MeGUI-uninstall.exe"
+	Delete /REBOOTOK "$INSTDIR\MessageBoxExLib.dll"
+	Delete /REBOOTOK "$INSTDIR\settings.xml" 
+	Delete /REBOOTOK "$INSTDIR\updatecopier.exe"
+	Delete /REBOOTOK "$INSTDIR\upgrade_x64.xml"
+	RMDIR /r "$INSTDIR\data"
+	RMDIR /r "$INSTDIR\extra"
+	RMDIR /r "$INSTDIR\tools"
+	RMDIR /r "$INSTDIR\update_cache"
+	goto final
+		
+	deleteall:
+		RMDIR /r "$INSTDIR"
+		goto final
 
-	DeleteRegKey HKEY_LOCAL_MACHINE "SOFTWARE\MeGUI"
-	DeleteRegKey HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}"
+	final:
+		DeleteRegKey HKEY_LOCAL_MACHINE "SOFTWARE\MeGUI"
+		DeleteRegKey HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}"
 
-	RMDIR /r "$LOCALAPPDATA\${PRODUCT_WEB_SITE}"
-	Delete /REBOOTOK "$SMPROGRAMS\${NAME}\Changelog.lnk"
-	Delete /REBOOTOK "$SMPROGRAMS\${NAME}\GPL.lnk"
-	Delete /REBOOTOK "$SMPROGRAMS\${NAME}\MeGUI Modern Media Encoder.lnk"
-	Delete /REBOOTOK "$SMPROGRAMS\${NAME}\Tools.lnk"
-	Delete /REBOOTOK "$SMPROGRAMS\${NAME}\Log Files.lnk"
-	Delete /REBOOTOK "$SMPROGRAMS\${NAME}\Auto-Update cache.lnk"
-	Delete /REBOOTOK "$SMPROGRAMS\${NAME}\Uninstall MeGUI.lnk"
-	RMDIR "$SMPROGRAMS\${NAME}"
-	RMDIR /r "$INSTDIR"
+		RMDIR /r "$LOCALAPPDATA\www.doom9.net"
+		RMDIR /r "$SMPROGRAMS\${NAME}"
 
 SectionEnd ; end of uninstall section
 
