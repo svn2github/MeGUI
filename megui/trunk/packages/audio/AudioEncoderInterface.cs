@@ -557,7 +557,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                         audioJob.FilesToDelete.Add(audioJob.Input + ".d2a");
                         break;
                     case ".wav":
-                        BinaryReader r = new BinaryReader(File.Open(audioJob.Input, FileMode.Open));
+                        BinaryReader r = new BinaryReader(File.Open(audioJob.Input, FileMode.Open, FileAccess.Read));
 
                         try {
                             r.ReadBytes(20);
