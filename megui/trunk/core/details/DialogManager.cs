@@ -35,7 +35,7 @@ namespace MeGUI
     public class DialogManager
     {
         private MainForm mainForm;
-        private bool bCUVIDServerStarted = false;
+        private Process CUVIDServerProcess = null;
 
         public DialogManager(MainForm mainForm)
         {
@@ -191,7 +191,7 @@ namespace MeGUI
 
         public void runCUVIDServer()
         {
-            if (MainForm.Instance.Settings.UseCUVIDserver == false || FindProcess("CUVIDServer"))
+            if (FindProcess("CUVIDServer"))
                 return;
 
             string filePath = string.Empty;
@@ -201,8 +201,7 @@ namespace MeGUI
 
             if (!string.IsNullOrEmpty(filePath) && File.Exists(Path.Combine(filePath, "CUVIDServer.exe")))
             {
-                System.Diagnostics.Process.Start(Path.Combine(filePath, "CUVIDServer.exe"));
-                bCUVIDServerStarted = true;
+                CUVIDServerProcess = System.Diagnostics.Process.Start(Path.Combine(filePath, "CUVIDServer.exe"));
             }
             else
                 MessageBox.Show("Cannot run CUVID Server executable...\nAre you sure is it installed ?", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -210,8 +209,8 @@ namespace MeGUI
 
         public void stopCUVIDServer()
         {
-            if (bCUVIDServerStarted)
-                FindAndKillProcess("CUVIDServer");
+            if (CUVIDServerProcess != null && CUVIDServerProcess.HasExited == false)
+                CUVIDServerProcess.Kill();
         }
 
         public bool FindProcess(string name)
@@ -234,37 +233,5 @@ namespace MeGUI
             //process not found, return false
             return false;
         }
-
-        public bool FindAndKillProcess(string name)
-        {
-            Process[] processlist = Process.GetProcesses();
-            //here we're going to get a list of all running processes on
-            //the computer
-            foreach (Process myProcess in processlist)
-            {
-                //now we're going to see if any of the running processes
-                //match the currently running processes by using the StartsWith Method,
-                //this prevents us from incluing the .EXE for the process we're looking for.
-                //. Be sure to not
-                //add the .exe to the name you provide, i.e: NOTEPAD,
-                //not NOTEPAD.EXE or false is always returned even if
-                //notepad is running
-                if (myProcess.ProcessName.ToUpper().ToString() == name.ToUpper())
-                {
-                    //since we found the proccess we now need to use the
-                    //Kill Method to kill the process. Remember, if you have
-                    //the process running more than once, say IE open 4
-                    //times the loop thr way it is now will close all 4,
-                    //if you want it to just close the first one it finds
-                    //then add a return; after the Kill
-                    myProcess.Kill();
-                    //process killed, return true
-                    return true;
-                }
-            }
-            //process not found, return false
-            return false;
-        }
-
     }
 }

@@ -683,15 +683,16 @@ namespace MeGUI
 
         public static bool findDGSource(string FileName)
         {
+            int iPosDGSource = 0;
             using (StreamReader sr = new StreamReader(FileName))
             {
                 string line = string.Empty;
                 while ((line = sr.ReadLine()) != null)
                 {
-                    if (line.ToLower().Contains("dgsource"))
-                    {
-                        return true;
-                    }
+                    iPosDGSource = line.ToLower().IndexOf("dgsource");
+                    if (iPosDGSource >= 0)
+                        if (line.ToLower().IndexOf("#") < 0 || line.ToLower().IndexOf("#") > iPosDGSource)
+                            return true;
                 }
             }
             return false;
