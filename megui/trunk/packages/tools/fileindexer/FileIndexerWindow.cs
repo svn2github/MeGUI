@@ -168,7 +168,6 @@ namespace MeGUI
             {
                 case IndexType.DGI:
                 {
-                    this.Text = "MeGUI - DGI Project Creator";
                     this.saveProjectDialog.Filter = "DGIndexNV project files|*.dgi";
                     if (this.demuxTracks.Checked)
                         this.demuxAll.Checked = true;
@@ -181,7 +180,6 @@ namespace MeGUI
                 }
                 case IndexType.DGA:
                 {
-                    this.Text = "MeGUI - D2V Project Creator";
                     this.saveProjectDialog.Filter = "DGAVCIndex project files|*.dga";
                     this.gbOutput.Enabled = true;
                     this.gbAudio.Enabled = true;
@@ -194,7 +192,6 @@ namespace MeGUI
                 }
                 case IndexType.D2V:
                 {
-                    this.Text = "MeGUI - DGA Project Creator";
                     this.saveProjectDialog.Filter = "DGIndex project files|*.d2v";
                     this.demuxTracks.Enabled = true;
                     this.gbOutput.Enabled = true;
@@ -205,7 +202,6 @@ namespace MeGUI
                 }
                 case IndexType.FFMS:
                 {
-                    this.Text = "MeGUI - FFMS Indexer";
                     this.saveProjectDialog.Filter = "FFMSIndex project files|*.ffindex";
                     this.gbOutput.Enabled = false;
                     this.gbAudio.Enabled = false;
@@ -613,7 +609,7 @@ namespace MeGUI
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "FileIndexerWindow";
-            this.Text = "MeGUI";
+            this.Text = "MeGUI - File Indexer";
             this.gbInput.ResumeLayout(false);
             this.gbAudio.ResumeLayout(false);
             this.gbOutput.ResumeLayout(false);
