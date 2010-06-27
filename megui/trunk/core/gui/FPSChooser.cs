@@ -54,12 +54,14 @@ namespace MeGUI.core.gui
                     return null;
             };
             StandardItems = Framerates;
-            CustomFPSs = MainForm.Instance.Settings.CustomFPSs;
+            if (MainForm.Instance != null) // form designer fix
+                CustomFPSs = MainForm.Instance.Settings.CustomFPSs;
         }
 
         protected override void Dispose(bool disposing)
         {
-            MainForm.Instance.Settings.CustomFPSs = CustomFPSs;
+            if (MainForm.Instance != null) // form designer fix
+                MainForm.Instance.Settings.CustomFPSs = CustomFPSs;
             base.Dispose(disposing);
         }
 
