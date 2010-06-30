@@ -668,6 +668,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                 if (xs.x264Tuning == 7 && bExpectedP8x8mv)
                     bExpectedP4x4mv = true;
 
+                if (xs.Profile < 2)
+                    bExpectedI8x8mv = false;
+
                 if (bExpectedP8x8mv != xs.P8x8mv || bExpectedB8x8mv != xs.B8x8mv 
                     || bExpectedI4x4mv != xs.I4x4mv || bExpectedI8x8mv != xs.I8x8mv 
                     || bExpectedP4x4mv != xs.P4x4mv)
@@ -703,7 +706,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
 
             if (!xs.CustomEncoderOptions.Contains("--no-8x8dct"))
                 if (!xs.AdaptiveDCT)
-                    if (xs.Profile > 0 && xs.x264PresetLevel > x264Settings.x264PresetLevelModes.ultrafast)
+                    if (xs.Profile > 1 && xs.x264PresetLevel > x264Settings.x264PresetLevelModes.ultrafast)
                         sb.Append("--no-8x8dct ");
 
             // Trellis

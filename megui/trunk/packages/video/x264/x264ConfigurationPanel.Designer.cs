@@ -2313,6 +2313,7 @@ namespace MeGUI.packages.video.x264
             this.threadin.Checked = true;
             this.threadin.CheckState = System.Windows.Forms.CheckState.Checked;
             this.threadin.Location = new System.Drawing.Point(12, 22);
+            this.threadin.Margin = new System.Windows.Forms.Padding(0);
             this.threadin.Name = "threadin";
             this.threadin.Size = new System.Drawing.Size(87, 17);
             this.threadin.TabIndex = 13;
@@ -2324,8 +2325,8 @@ namespace MeGUI.packages.video.x264
             // 
             this.x264NbThreadsLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.x264NbThreadsLabel.AutoSize = true;
-            this.x264NbThreadsLabel.Location = new System.Drawing.Point(92, 21);
-            this.x264NbThreadsLabel.Margin = new System.Windows.Forms.Padding(3);
+            this.x264NbThreadsLabel.Location = new System.Drawing.Point(114, 18);
+            this.x264NbThreadsLabel.Margin = new System.Windows.Forms.Padding(0);
             this.x264NbThreadsLabel.Name = "x264NbThreadsLabel";
             this.x264NbThreadsLabel.Padding = new System.Windows.Forms.Padding(3);
             this.x264NbThreadsLabel.Size = new System.Drawing.Size(95, 19);
@@ -2335,14 +2336,14 @@ namespace MeGUI.packages.video.x264
             // 
             // x264NbThreads
             // 
-            this.x264NbThreads.Location = new System.Drawing.Point(193, 19);
+            this.x264NbThreads.Location = new System.Drawing.Point(212, 19);
             this.x264NbThreads.Maximum = new decimal(new int[] {
             16,
             0,
             0,
             0});
             this.x264NbThreads.Name = "x264NbThreads";
-            this.x264NbThreads.Size = new System.Drawing.Size(56, 20);
+            this.x264NbThreads.Size = new System.Drawing.Size(37, 20);
             this.x264NbThreads.TabIndex = 12;
             this.x264NbThreads.ValueChanged += new System.EventHandler(this.updateEvent);
             // 

@@ -1,8 +1,17 @@
+0.3.5.1
+  - (zathor) [FileIndexerWindow] changed caption. Feature request #3019279
+  - (zathor) [AudioEncoderInterface] fixed crash if input wav file is locked. Bug #3021693
+  - (zathor) [VideoUtil] + [DialogManager] CUVIDServer will be started if needed. Bug #3011113
+  - (zathor) [x264ConfigurationPanel] changed preset defaults (requires x264 revision 1658 or higher)
+  - (zathor) [x264ConfigurationPanel] added the missing update events to some settings
+  - (zathor) [x264ConfigurationPanel] enhanced command line generting for main/baseline profile
+
 0.3.5.0
   Main changes:
   - simplified x264 profiles and the main x264 configuration page. Only the 
-    target/playback device of the encoding will be selected with the profile.
-    The encoding mode and quality will be selected automatically or manually.
+    target/playback device of the encoding will be selected with the default
+    profile. The encoding mode and quality will be selected automatically or
+    can be defined manually.
   - if targeting file size in AutoEncode or One-Click the encoding mode of the
     selected video profile will be switched temporarily to automated 2/3pass
     The AutoEncode defaults can be changed in the settings
