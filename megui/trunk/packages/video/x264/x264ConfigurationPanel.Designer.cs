@@ -2271,6 +2271,7 @@ namespace MeGUI.packages.video.x264
             this.avcProfile.Name = "avcProfile";
             this.avcProfile.Size = new System.Drawing.Size(157, 21);
             this.avcProfile.TabIndex = 0;
+            this.avcProfile.SelectedIndexChanged += new System.EventHandler(this.updateEvent);
             // 
             // avcLevelGroupbox
             // 
@@ -2290,6 +2291,7 @@ namespace MeGUI.packages.video.x264
             this.avcLevel.Name = "avcLevel";
             this.avcLevel.Size = new System.Drawing.Size(157, 21);
             this.avcLevel.TabIndex = 0;
+            this.avcLevel.SelectedIndexChanged += new System.EventHandler(this.updateEvent);
             // 
             // gbThreads
             // 
@@ -2316,6 +2318,7 @@ namespace MeGUI.packages.video.x264
             this.threadin.TabIndex = 13;
             this.threadin.Text = "Thread-Input";
             this.threadin.UseVisualStyleBackColor = true;
+            this.threadin.CheckedChanged += new System.EventHandler(this.updateEvent);
             // 
             // x264NbThreadsLabel
             // 
@@ -2341,6 +2344,7 @@ namespace MeGUI.packages.video.x264
             this.x264NbThreads.Name = "x264NbThreads";
             this.x264NbThreads.Size = new System.Drawing.Size(56, 20);
             this.x264NbThreads.TabIndex = 12;
+            this.x264NbThreads.ValueChanged += new System.EventHandler(this.updateEvent);
             // 
             // gbAdjust
             // 

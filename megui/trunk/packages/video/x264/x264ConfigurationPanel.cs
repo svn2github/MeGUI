@@ -549,8 +549,8 @@ namespace MeGUI.packages.video.x264
                         mbtree.Enabled = false;
                         if (noFastPSkip.Checked)
                             noFastPSkip.Checked = false;
-                        if (this.lookahead.Value != 40)
-                            this.lookahead.Value = 40;
+                        if (this.lookahead.Value != 0)
+                            this.lookahead.Value = 0;
                         if (x264NewAdaptiveBframes.SelectedIndex != 0)
                             x264NewAdaptiveBframes.SelectedIndex = 0;
                         if (this.x264WeightedBPrediction.Checked)
@@ -601,8 +601,8 @@ namespace MeGUI.packages.video.x264
                             this.x264MERange.Value = 16;
                         if (noFastPSkip.Checked)
                             noFastPSkip.Checked = false;
-                        if (this.lookahead.Value != 40)
-                            this.lookahead.Value = 40;
+                        if (this.lookahead.Value != 0)
+                            this.lookahead.Value = 0;
                         if (x264NewAdaptiveBframes.SelectedIndex != 1)
                             x264NewAdaptiveBframes.SelectedIndex = 1;
                         if (!this.x264WeightedBPrediction.Checked)
@@ -629,9 +629,9 @@ namespace MeGUI.packages.video.x264
                             x264MixedReferences.Checked = true;
                         if (trellis.SelectedIndex != 0)
                             trellis.SelectedIndex = 0;
-                        if (mbtree.Checked)
-                            mbtree.Checked = false;
-                        mbtree.Enabled = false;
+                        if (!mbtree.Checked)
+                            mbtree.Checked = true;
+                        mbtree.Enabled = true;
                         if (x264BframePredictionMode.SelectedIndex != 1)
                             x264BframePredictionMode.SelectedIndex = 1;
                         if (this.x264NumberOfBFrames.Value != 3)
@@ -647,8 +647,8 @@ namespace MeGUI.packages.video.x264
                             this.x264MERange.Value = 16;
                         if (noFastPSkip.Checked)
                             noFastPSkip.Checked = false;
-                        if (this.lookahead.Value != 40)
-                            this.lookahead.Value = 40;
+                        if (this.lookahead.Value != 10)
+                            this.lookahead.Value = 10;
                         if (x264NewAdaptiveBframes.SelectedIndex != 1)
                             x264NewAdaptiveBframes.SelectedIndex = 1;
                         if (!this.x264WeightedBPrediction.Checked)
