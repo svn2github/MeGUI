@@ -1917,7 +1917,7 @@ namespace MeGUI.packages.video.x264
             this.avcLevel.SelectedIndex = 15;
             x264SlowFirstpass.Checked = true;
             advancedSettings.Checked = false;
-            this.x264BitrateQuantizer.Value = 23;
+            this.x264BitrateQuantizer.Value = 20;
             this.threadin.Checked = true;
             this.x264NbThreads.Value = 0;
 

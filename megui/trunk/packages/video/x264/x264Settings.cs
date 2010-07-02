@@ -95,7 +95,7 @@ namespace MeGUI
             ssimCalc = false;
             psnrCalc = false;
 			EncodingMode = 9;
-			BitrateQuantizer = 23;
+			BitrateQuantizer = 20;
 			KeyframeInterval = 250;
 			nbRefFrames = 3;
 			noMixedRefs = false;
