@@ -2248,6 +2248,7 @@ namespace MeGUI.packages.video.x264
             this.x264SlowFirstpass.Size = new System.Drawing.Size(93, 17);
             this.x264SlowFirstpass.TabIndex = 37;
             this.x264SlowFirstpass.Text = "Slow first pass";
+            this.x264SlowFirstpass.CheckedChanged += new System.EventHandler(this.updateEvent);
             // 
             // avcProfileGroupbox
             // 
