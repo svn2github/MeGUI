@@ -7,6 +7,8 @@
   - (zathor) [x264ConfigurationPanel] enhanced command line generating for main/baseline profile
   - (zathor) [FileIndexer] disabled MKV indexing with DGAVCDec. Bug #3024329
   - (zathor) [FileIndexer] DGIndexNV is only available if license.txt is found
+  - (zathor) [MuxProvider] added support for SUP suptitles in MKV (requires MkvToolNix 4.1.0 or higher)
+  - (zathor) [VideoCodecSettings] update custom command line if neccessary (e.g. --nal-hrd -> --nal-hrd vbr)
 
 0.3.5.0
   Main changes:

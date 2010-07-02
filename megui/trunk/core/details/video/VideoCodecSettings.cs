@@ -167,7 +167,26 @@ namespace MeGUI
 		/// </summary>
 		public string CustomEncoderOptions
 		{
-			get { return customEncoderOptions; }
+			get 
+            {
+                if (EncoderType.ID.ToLower().Equals("x264"))
+                {
+                    // update custom command line if necessary
+                    String strNewCommandLine = "", strNewCommand = "";
+                    foreach (String strCommand in System.Text.RegularExpressions.Regex.Split(customEncoderOptions, "--"))
+                    {
+                        if (strCommand.Trim().ToLower().Equals("nal-hrd"))
+                            strNewCommand = "nal-hrd vbr";
+                        else
+                            strNewCommand = strCommand.Trim();
+                        if (!String.IsNullOrEmpty(strNewCommand))
+                            strNewCommandLine += " --" + strNewCommand;
+                    }
+                    return strNewCommandLine.Trim();
+                }
+                else
+                    return customEncoderOptions;
+            }
 			set { customEncoderOptions = value; }
 		}
 		/// <summary>
