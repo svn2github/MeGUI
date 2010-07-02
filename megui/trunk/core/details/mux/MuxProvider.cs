@@ -504,6 +504,7 @@ namespace MeGUI
             supportedSubtitleTypes.Add(SubtitleType.VOBSUB);
             supportedSubtitleTypes.Add(SubtitleType.SSA);
             supportedSubtitleTypes.Add(SubtitleType.ASS);
+            supportedSubtitleTypes.Add(SubtitleType.BDSUP);
             supportedChapterTypes.Add(ChapterType.OGG_TXT);
             supportedChapterTypes.Add(ChapterType.MKV_XML);
             supportedContainers.Add(ContainerType.MKV);
