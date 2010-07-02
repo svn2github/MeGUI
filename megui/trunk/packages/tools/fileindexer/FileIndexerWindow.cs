@@ -683,12 +683,25 @@ namespace MeGUI
                     }
                     else
                     {
-                        btnDGA.Enabled = true;
-                        btnDGI.Enabled = true;
-                        if (bDGIAvailable)
-                            changeIndexer(IndexType.DGI);
+                        if (!strContainerFormat.ToUpper().Equals("MATROSKA"))
+                        {
+                            btnDGA.Enabled = true;
+                            if (!bDGIAvailable)
+                                changeIndexer(IndexType.DGA);
+                        }
                         else
-                            changeIndexer(IndexType.DGA);
+                        {
+                            btnDGA.Enabled = false;
+                        }
+                        if (bDGIAvailable)
+                        {
+                            btnDGI.Enabled = true;
+                            changeIndexer(IndexType.DGI);
+                        }
+                        else
+                        {
+                            btnDGI.Enabled = true;
+                        }
                     }
                     break;
                 }
@@ -696,24 +709,34 @@ namespace MeGUI
                 {
                     btnD2V.Enabled = false;
                     btnDGA.Enabled = false;
-                    btnDGI.Enabled = true;
                     btnFFMS.Enabled = true;
                     if (bDGIAvailable)
+                    {
+                        btnDGI.Enabled = true;
                         changeIndexer(IndexType.DGI);
+                    }
                     else
+                    {
+                        btnDGI.Enabled = false;
                         changeIndexer(IndexType.FFMS);
+                    }
                     break;
                 }
                 case "MPEG-2 VIDEO":
                 {
                     btnD2V.Enabled = true;
                     btnDGA.Enabled = false;
-                    btnDGI.Enabled = true;
                     btnFFMS.Enabled = true;
                     if (bDGIAvailable)
+                    {
+                        btnDGI.Enabled = true;
                         changeIndexer(IndexType.DGI);
+                    }
                     else
+                    {
+                        btnDGI.Enabled = false;
                         changeIndexer(IndexType.D2V);
+                    }
                     break;
                 }
                 case "MPEG-1 VIDEO":
@@ -739,7 +762,10 @@ namespace MeGUI
                     {
                         btnD2V.Enabled = true;
                         btnDGA.Enabled = true;
-                        btnDGI.Enabled = true;
+                        if (bDGIAvailable)
+                            btnDGI.Enabled = true;
+                        else
+                            btnDGI.Enabled = false;
                         btnFFMS.Enabled = true;
                         changeIndexer(IndexType.FFMS);
                     }

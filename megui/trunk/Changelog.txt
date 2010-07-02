@@ -4,7 +4,9 @@
   - (zathor) [VideoUtil] + [DialogManager] CUVIDServer will be started if needed. Bug #3011113
   - (zathor) [x264ConfigurationPanel] changed preset defaults (requires x264 revision 1658 or higher)
   - (zathor) [x264ConfigurationPanel] added the missing update events to some settings
-  - (zathor) [x264ConfigurationPanel] enhanced command line generting for main/baseline profile
+  - (zathor) [x264ConfigurationPanel] enhanced command line generating for main/baseline profile
+  - (zathor) [FileIndexer] disabled MKV indexing with DGAVCDec. Bug #3024329
+  - (zathor) [FileIndexer] DGIndexNV is only available if license.txt is found
 
 0.3.5.0
   Main changes:
