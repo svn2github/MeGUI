@@ -44,16 +44,6 @@ SetDateSave off ; (can be on to have files restored to their orginal date)
 
 InstallDir "$PROGRAMFILES64\MeGUI"
 
-Function .onInit
-${If} ${RunningX64}
-	SetRegView 64
-${Else}
-	MessageBox MB_OK|MB_ICONSTOP 'You are trying to install the 64-bit version of ${NAME} on 32-bit Windows.$\r$\nPlease download and use the 32-bit version instead.$\r$\nClick OK to quit Setup.'
-	Quit
-${EndIf}
-  !insertmacro MUI_LANGDLL_DISPLAY
-FunctionEnd
-
 Section "MeGUI";
 SetRegView 64
 
@@ -76,6 +66,7 @@ SetRegView 64
 
 	CreateDirectory "$SMPROGRAMS\${NAME}\"
 	CreateShortcut  "$SMPROGRAMS\${NAME}\Changelog.lnk" "$INSTDIR\Changelog.txt"
+	CreateShortcut  "$SMPROGRAMS\${NAME}\Log Files.lnk" "$INSTDIR\logs"
 	CreateShortcut  "$SMPROGRAMS\${NAME}\MeGUI Modern Media Encoder.lnk" "$INSTDIR\MeGUI.exe"
 	CreateShortcut  "$SMPROGRAMS\${NAME}\Uninstall MeGUI.lnk" "$INSTDIR\MeGUI-uninstall.exe"
 
@@ -143,6 +134,32 @@ Section Uninstall
 SectionEnd ; end of uninstall section
 
 ; ---------------------------------------------------------------------------
+
+Function .onInit
+${If} ${RunningX64}
+	SetRegView 64
+${Else}
+	MessageBox MB_OK|MB_ICONSTOP 'You are trying to install the 64-bit version of ${NAME} on 32-bit Windows.$\r$\nPlease download and use the 32-bit version instead.$\r$\nClick OK to quit Setup.'
+	Quit
+${EndIf}
+  !insertmacro MUI_LANGDLL_DISPLAY
+
+System::Call 'kernel32::OpenMutex(i 0x100000, b 0, t "MeGUI_D9D0C224154B489784998BF97B9C9414") i .R0'
+IntCmp $R0 0 notRunning
+	System::Call 'kernel32::CloseHandle(i $R0)'
+	MessageBox MB_OK|MB_ICONEXCLAMATION "MeGUI is running. Please close it first." /SD IDOK
+	Abort
+notRunning:
+FunctionEnd
+
+Function un.onInit
+System::Call 'kernel32::OpenMutex(i 0x100000, b 0, t "MeGUI_D9D0C224154B489784998BF97B9C9414") i .R0'
+IntCmp $R0 0 notRunning
+	System::Call 'kernel32::CloseHandle(i $R0)'
+	MessageBox MB_OK|MB_ICONEXCLAMATION "MeGUI is running. Please close it first." /SD IDOK
+	Abort
+notRunning:
+FunctionEnd
 
 Function un.onUninstSuccess
 	IfRebootFlag 0 NoReboot

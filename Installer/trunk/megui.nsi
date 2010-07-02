@@ -1,7 +1,7 @@
 !include "version.nsi"
 
 !define NAME "MeGUI"
-!define OUTFILE "MeGUI_${MeGUI_VERSION}_x86_Installer_OnlinePackage.exe"
+!define OUTFILE "MeGUI-setup-x86.exe"
 !define PRODUCT_VERSION "${MeGUI_VERSION}"
 !define INPUT_PATH "..\..\MeGUI\trunk\bin\x86\Release"
 !define MUI_ICON "..\..\MeGUI\trunk\app.ico"
@@ -61,6 +61,7 @@ Section "MeGUI";
 
 	CreateDirectory "$SMPROGRAMS\${NAME}\"
 	CreateShortcut  "$SMPROGRAMS\${NAME}\Changelog.lnk" "$INSTDIR\Changelog.txt"
+	CreateShortcut  "$SMPROGRAMS\${NAME}\Log Files.lnk" "$INSTDIR\logs"
 	CreateShortcut  "$SMPROGRAMS\${NAME}\MeGUI Modern Media Encoder.lnk" "$INSTDIR\MeGUI.exe"
 	CreateShortcut  "$SMPROGRAMS\${NAME}\Uninstall MeGUI.lnk" "$INSTDIR\MeGUI-uninstall.exe"
 
@@ -96,7 +97,6 @@ Section Uninstall
 	Delete /REBOOTOK "$INSTDIR\gpl.txt"
 	Delete /REBOOTOK "$INSTDIR\HdBrStreamExtractor.txt"
 	Delete /REBOOTOK "$INSTDIR\ICSharpCode.SharpZipLib.dll"
-	Delete /REBOOTOK "$INSTDIR\joblists.xml"
 	Delete /REBOOTOK "$INSTDIR\LinqBridge.dll"	
 	Delete /REBOOTOK "$INSTDIR\MediaInfo.dll"
 	Delete /REBOOTOK "$INSTDIR\MediaInfoWrapper.dll"
@@ -104,7 +104,6 @@ Section Uninstall
 	Delete /REBOOTOK "$INSTDIR\MeGUI.ico"
 	Delete "$INSTDIR\MeGUI-uninstall.exe"
 	Delete /REBOOTOK "$INSTDIR\MessageBoxExLib.dll"
-	Delete /REBOOTOK "$INSTDIR\settings.xml" 
 	Delete /REBOOTOK "$INSTDIR\updatecopier.exe" 
 	Delete /REBOOTOK "$INSTDIR\upgrade.xml" 
 	RMDIR /r "$INSTDIR\data"
@@ -121,12 +120,37 @@ Section Uninstall
 		DeleteRegKey HKEY_LOCAL_MACHINE "SOFTWARE\MeGUI"
 		DeleteRegKey HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}"
 
-		RMDIR /r "$LOCALAPPDATA\www.doom9.net"
-		RMDIR /r "$SMPROGRAMS\${NAME}"
+	RMDIR /r "$LOCALAPPDATA\www.doom9.net"
+	Delete /REBOOTOK "$SMPROGRAMS\${NAME}\Changelog.lnk"
+	Delete /REBOOTOK "$SMPROGRAMS\${NAME}\GPL.lnk"
+	Delete /REBOOTOK "$SMPROGRAMS\${NAME}\MeGUI Modern Media Encoder.lnk"
+	Delete /REBOOTOK "$SMPROGRAMS\${NAME}\Tools.lnk"
+	Delete /REBOOTOK "$SMPROGRAMS\${NAME}\Log Files.lnk"
+	Delete /REBOOTOK "$SMPROGRAMS\${NAME}\Auto-Update cache.lnk"
+	Delete /REBOOTOK "$SMPROGRAMS\${NAME}\Uninstall MeGUI.lnk"
+	RMDIR "$SMPROGRAMS\${NAME}"
 
 SectionEnd ; end of uninstall section
 
 ; ---------------------------------------------------------------------------
+
+Function .onInit
+System::Call 'kernel32::OpenMutex(i 0x100000, b 0, t "MeGUI_D9D0C224154B489784998BF97B9C9414") i .R0'
+IntCmp $R0 0 notRunning
+	System::Call 'kernel32::CloseHandle(i $R0)'
+	MessageBox MB_OK|MB_ICONEXCLAMATION "MeGUI is running. Please close it first." /SD IDOK
+	Abort
+notRunning:
+FunctionEnd
+
+Function un.onInit
+System::Call 'kernel32::OpenMutex(i 0x100000, b 0, t "MeGUI_D9D0C224154B489784998BF97B9C9414") i .R0'
+IntCmp $R0 0 notRunning
+	System::Call 'kernel32::CloseHandle(i $R0)'
+	MessageBox MB_OK|MB_ICONEXCLAMATION "MeGUI is running. Please close it first." /SD IDOK
+	Abort
+notRunning:
+FunctionEnd
 
 Function un.onUninstSuccess
 	IfRebootFlag 0 NoReboot
