@@ -246,6 +246,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             if (!xs.CustomEncoderOptions.Contains("--min-keyint"))
                 if (xs.MinGOPSize != 25)
                     sb.Append("--min-keyint " + xs.MinGOPSize + " ");
+
+            if (!xs.CustomEncoderOptions.Contains("--open-gop"))
             switch (xs.OpenGop)
             {
                 case 1: sb.Append("--open-gop normal "); break;
@@ -802,8 +804,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                     sb.Append("--aud ");
 
             if (!xs.CustomEncoderOptions.Contains("--nal-hrd"))
-                if (xs.X264Nalhrd)
-                    sb.Append("--nal-hrd vbr ");
+                switch (xs.X264Nalhrd)
+                {
+                    case 1: sb.Append("--nal-hrd vbr "); break;
+                    case 2: sb.Append("--nal-hrd cbr "); break;
+                }
 
             #endregion
 

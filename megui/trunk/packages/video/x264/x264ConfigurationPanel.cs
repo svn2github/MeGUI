@@ -1413,7 +1413,7 @@ namespace MeGUI.packages.video.x264
                 xs.MaxSliceSyzeMBs = (int)this.maxSliceSizeMB.Value;
                 xs.x264BFramePyramid = this.cbBPyramid.SelectedIndex;
                 xs.X264Aud = x264aud.Checked;
-                xs.X264Nalhrd = x264hrd.Checked;
+                xs.X264Nalhrd = (int)x264hrd.SelectedIndex;
                 return xs;
             }
             set
@@ -1525,7 +1525,7 @@ namespace MeGUI.packages.video.x264
                 x264WeightedBPrediction.Checked = xs.WeightedBPrediction;
                 x264WeightedPPrediction.SelectedIndex = xs.WeightedPPrediction;
                 x264aud.Checked = xs.X264Aud;
-                x264hrd.Checked = xs.X264Nalhrd;
+                x264hrd.SelectedIndex = xs.X264Nalhrd;
                 updating = false;
                 genericUpdate();
             }
@@ -1988,7 +1988,7 @@ namespace MeGUI.packages.video.x264
             x264P8x8mv.Checked = true;
             x264B8x8mv.Checked = true;
             this.NoiseReduction.Text = "0";
-            this.x264hrd.Checked = false;
+            this.x264hrd.SelectedIndex = 0;
             this.x264aud.Checked = false;
 
             // Misc Tab

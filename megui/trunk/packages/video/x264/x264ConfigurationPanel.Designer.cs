@@ -69,6 +69,7 @@ namespace MeGUI.packages.video.x264
             this.x264BetaDeblockLabel = new System.Windows.Forms.Label();
             this.x264AlphaDeblockLabel = new System.Windows.Forms.Label();
             this.gbGOPSize = new System.Windows.Forms.GroupBox();
+            this.x264OpenGop = new System.Windows.Forms.ComboBox();
             this.x264OpenGopLabel = new System.Windows.Forms.Label();
             this.x264KeyframeIntervalLabel = new System.Windows.Forms.Label();
             this.x264KeyframeInterval = new System.Windows.Forms.NumericUpDown();
@@ -128,7 +129,8 @@ namespace MeGUI.packages.video.x264
             this.x264Tunes = new System.Windows.Forms.ComboBox();
             this.AnalysisTabPage = new System.Windows.Forms.TabPage();
             this.x264Bluray = new System.Windows.Forms.GroupBox();
-            this.x264hrd = new System.Windows.Forms.CheckBox();
+            this.x264hrdLabel = new System.Windows.Forms.Label();
+            this.x264hrd = new System.Windows.Forms.ComboBox();
             this.x264aud = new System.Windows.Forms.CheckBox();
             this.x264QuantOptionsGroupbox = new System.Windows.Forms.GroupBox();
             this.NoiseReduction = new System.Windows.Forms.NumericUpDown();
@@ -196,7 +198,6 @@ namespace MeGUI.packages.video.x264
             this.useQPFile = new System.Windows.Forms.CheckBox();
             this.gbx264CustomCmd = new System.Windows.Forms.GroupBox();
             this.customCommandlineOptions = new System.Windows.Forms.TextBox();
-            this.x264OpenGop = new System.Windows.Forms.ComboBox();
             this.tabControl1.SuspendLayout();
             this.mainTabPage.SuspendLayout();
             this.x264CodecGeneralGroupbox.SuspendLayout();
@@ -834,6 +835,21 @@ namespace MeGUI.packages.video.x264
             this.gbGOPSize.TabIndex = 1;
             this.gbGOPSize.TabStop = false;
             this.gbGOPSize.Text = "GOP Size";
+            // 
+            // x264OpenGop
+            // 
+            this.x264OpenGop.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.x264OpenGop.DropDownWidth = 83;
+            this.x264OpenGop.FormattingEnabled = true;
+            this.x264OpenGop.Items.AddRange(new object[] {
+            "None",
+            "Normal",
+            "Blu-Ray"});
+            this.x264OpenGop.Location = new System.Drawing.Point(162, 70);
+            this.x264OpenGop.Name = "x264OpenGop";
+            this.x264OpenGop.Size = new System.Drawing.Size(83, 21);
+            this.x264OpenGop.TabIndex = 5;
+            this.x264OpenGop.SelectedIndexChanged += new System.EventHandler(this.updateEvent);
             // 
             // x264OpenGopLabel
             // 
@@ -1712,6 +1728,7 @@ namespace MeGUI.packages.video.x264
             // 
             // x264Bluray
             // 
+            this.x264Bluray.Controls.Add(this.x264hrdLabel);
             this.x264Bluray.Controls.Add(this.x264hrd);
             this.x264Bluray.Controls.Add(this.x264aud);
             this.x264Bluray.Location = new System.Drawing.Point(296, 135);
@@ -1721,16 +1738,34 @@ namespace MeGUI.packages.video.x264
             this.x264Bluray.TabStop = false;
             this.x264Bluray.Text = " Blu-Ray ";
             // 
+            // x264hrdLabel
+            // 
+            this.x264hrdLabel.AutoSize = true;
+            this.x264hrdLabel.Location = new System.Drawing.Point(6, 53);
+            this.x264hrdLabel.Name = "x264hrdLabel";
+            this.x264hrdLabel.Padding = new System.Windows.Forms.Padding(3);
+            this.x264hrdLabel.Size = new System.Drawing.Size(58, 19);
+            this.x264hrdLabel.TabIndex = 2;
+            this.x264hrdLabel.Text = "HRD Info";
+            this.x264hrdLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // x264hrd
             // 
-            this.x264hrd.AutoSize = true;
-            this.x264hrd.Location = new System.Drawing.Point(9, 51);
+            this.x264hrd.AutoCompleteCustomSource.AddRange(new string[] {
+            "None",
+            "VBR",
+            "CBR"});
+            this.x264hrd.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.x264hrd.FormattingEnabled = true;
+            this.x264hrd.Items.AddRange(new object[] {
+            "None",
+            "VBR",
+            "CBR"});
+            this.x264hrd.Location = new System.Drawing.Point(112, 53);
             this.x264hrd.Name = "x264hrd";
-            this.x264hrd.Size = new System.Drawing.Size(151, 17);
+            this.x264hrd.Size = new System.Drawing.Size(65, 21);
             this.x264hrd.TabIndex = 1;
-            this.x264hrd.Text = "Add NAL HRD parameters";
-            this.x264hrd.UseVisualStyleBackColor = true;
-            this.x264hrd.CheckedChanged += new System.EventHandler(this.updateEvent);
+            this.x264hrd.SelectedIndexChanged += new System.EventHandler(this.updateEvent);
             // 
             // x264aud
             // 
@@ -2405,9 +2440,9 @@ namespace MeGUI.packages.video.x264
             // 
             this.gbInOut.Controls.Add(this.ssim);
             this.gbInOut.Controls.Add(this.psnr);
-            this.gbInOut.Location = new System.Drawing.Point(119, 179);
+            this.gbInOut.Location = new System.Drawing.Point(167, 179);
             this.gbInOut.Name = "gbInOut";
-            this.gbInOut.Size = new System.Drawing.Size(196, 102);
+            this.gbInOut.Size = new System.Drawing.Size(148, 102);
             this.gbInOut.TabIndex = 32;
             this.gbInOut.TabStop = false;
             this.gbInOut.Text = "Input/Output";
@@ -2439,7 +2474,7 @@ namespace MeGUI.packages.video.x264
             this.gbVUI.Controls.Add(this.x264FullRange);
             this.gbVUI.Location = new System.Drawing.Point(6, 179);
             this.gbVUI.Name = "gbVUI";
-            this.gbVUI.Size = new System.Drawing.Size(107, 102);
+            this.gbVUI.Size = new System.Drawing.Size(155, 102);
             this.gbVUI.TabIndex = 31;
             this.gbVUI.TabStop = false;
             this.gbVUI.Text = "V.U.I";
@@ -2557,21 +2592,6 @@ namespace MeGUI.packages.video.x264
             this.customCommandlineOptions.Size = new System.Drawing.Size(464, 34);
             this.customCommandlineOptions.TabIndex = 0;
             this.customCommandlineOptions.TextChanged += new System.EventHandler(this.updateEvent);
-            // 
-            // x264OpenGop
-            // 
-            this.x264OpenGop.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.x264OpenGop.DropDownWidth = 83;
-            this.x264OpenGop.FormattingEnabled = true;
-            this.x264OpenGop.Items.AddRange(new object[] {
-            "None",
-            "Normal",
-            "Blu-Ray"});
-            this.x264OpenGop.Location = new System.Drawing.Point(162, 70);
-            this.x264OpenGop.Name = "x264OpenGop";
-            this.x264OpenGop.Size = new System.Drawing.Size(83, 21);
-            this.x264OpenGop.TabIndex = 5;
-            this.x264OpenGop.SelectedIndexChanged += new System.EventHandler(this.updateEvent);
             // 
             // x264ConfigurationPanel
             // 
@@ -2822,7 +2842,6 @@ namespace MeGUI.packages.video.x264
         private System.Windows.Forms.ComboBox x264WeightedPPrediction;
         private System.Windows.Forms.Label lblWeightedP;
         private System.Windows.Forms.GroupBox x264Bluray;
-        private System.Windows.Forms.CheckBox x264hrd;
         private System.Windows.Forms.CheckBox x264aud;
         private System.Windows.Forms.GroupBox gbThreads;
         private System.Windows.Forms.CheckBox threadin;
@@ -2840,5 +2859,7 @@ namespace MeGUI.packages.video.x264
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label x264OpenGopLabel;
         private System.Windows.Forms.ComboBox x264OpenGop;
+        private System.Windows.Forms.Label x264hrdLabel;
+        private System.Windows.Forms.ComboBox x264hrd;
     }
 }

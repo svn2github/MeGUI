@@ -69,15 +69,15 @@ namespace MeGUI
                 return list.ToArray();
             }
         }
-        int NewadaptiveBFrames, nbRefFrames, alphaDeblock, betaDeblock, subPelRefinement, maxQuantDelta, tempQuantBlur, 
-			bframePredictionMode, vbvBufferSize, vbvMaxBitrate, meType, meRange, minGOPSize, macroBlockOptions,
+        int NewadaptiveBFrames, nbRefFrames, alphaDeblock, betaDeblock, subPelRefinement, maxQuantDelta, tempQuantBlur,
+            bframePredictionMode, vbvBufferSize, vbvMaxBitrate, meType, meRange, minGOPSize, macroBlockOptions,
             quantizerMatrixType, x264Trellis, noiseReduction, deadZoneInter, deadZoneIntra, AQMode, profile, level,
-            lookahead, slicesnb, maxSliceSyzeBytes, maxSliceSyzeMBs, bFramePyramid, weightedPPrediction, tune, openGop;
+            lookahead, slicesnb, maxSliceSyzeBytes, maxSliceSyzeMBs, bFramePyramid, weightedPPrediction, tune, openGop, x264Nalhrd;
 		decimal ipFactor, pbFactor, chromaQPOffset, vbvInitialBuffer, bitrateVariance, quantCompression, 
 			tempComplexityBlur, tempQuanBlurCC, scdSensitivity, bframeBias, quantizerCrf, AQStrength, psyRDO, psyTrellis;
 		bool deblock, cabac, p4x4mv, p8x8mv, b8x8mv, i4x4mv, i8x8mv, weightedBPrediction, encodeInterlaced,
 			chromaME, adaptiveDCT, noMixedRefs, noFastPSkip, psnrCalc, noDctDecimate, ssimCalc, useQPFile, 
-            FullRange, advSet, noMBTree, threadInput, noPsy, scenecut, x264Nalhrd, x264Aud, x264SlowFirstpass;
+            FullRange, advSet, noMBTree, threadInput, noPsy, scenecut, x264Aud, x264SlowFirstpass;
 		string quantizerMatrix, qpfile;
         x264PresetLevelModes preset;
 		#region constructor
@@ -158,7 +158,7 @@ namespace MeGUI
             slicesnb = 0;
             maxSliceSyzeBytes = 0;
             maxSliceSyzeMBs = 0;
-            x264Nalhrd = false;
+            x264Nalhrd = 0;
             x264Aud = false;
             profile = 3; // Autoguess. High if using default options.
             level = 15;
@@ -522,7 +522,7 @@ namespace MeGUI
             get { return scenecut; }
             set { scenecut = value; }
         }
-        public bool X264Nalhrd
+        public int X264Nalhrd
         {
             get { return x264Nalhrd; }
             set { x264Nalhrd = value; }
