@@ -1395,6 +1395,7 @@ namespace MeGUI.packages.video.x264
                 xs.NoiseReduction = (int)NoiseReduction.Value;
                 xs.AQmode = (int)cbAQMode.SelectedIndex;
                 xs.AQstrength = numAQStrength.Value;
+                xs.OpenGop = (int)x264OpenGop.SelectedIndex;
                 xs.UseQPFile = useQPFile.Checked;
                 xs.QPFile = this.qpfile.Text;
                 xs.fullRange = this.x264FullRange.Checked;
@@ -1506,6 +1507,7 @@ namespace MeGUI.packages.video.x264
                 cqmComboBox1.SelectedObject = xs.QuantizerMatrix;
                 psnr.Checked = xs.PSNRCalculation;
                 cbAQMode.SelectedIndex = xs.AQmode;
+                x264OpenGop.SelectedIndex = xs.OpenGop;
                 x264FullRange.Checked = xs.fullRange;
                 numAQStrength.Value = xs.AQstrength;
                 NoiseReduction.Text = xs.NoiseReduction.ToString();

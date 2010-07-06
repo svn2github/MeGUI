@@ -72,7 +72,7 @@ namespace MeGUI
         int NewadaptiveBFrames, nbRefFrames, alphaDeblock, betaDeblock, subPelRefinement, maxQuantDelta, tempQuantBlur, 
 			bframePredictionMode, vbvBufferSize, vbvMaxBitrate, meType, meRange, minGOPSize, macroBlockOptions,
             quantizerMatrixType, x264Trellis, noiseReduction, deadZoneInter, deadZoneIntra, AQMode, profile, level,
-            lookahead, slicesnb, maxSliceSyzeBytes, maxSliceSyzeMBs, bFramePyramid, weightedPPrediction, tune;
+            lookahead, slicesnb, maxSliceSyzeBytes, maxSliceSyzeMBs, bFramePyramid, weightedPPrediction, tune, openGop;
 		decimal ipFactor, pbFactor, chromaQPOffset, vbvInitialBuffer, bitrateVariance, quantCompression, 
 			tempComplexityBlur, tempQuanBlurCC, scdSensitivity, bframeBias, quantizerCrf, AQStrength, psyRDO, psyTrellis;
 		bool deblock, cabac, p4x4mv, p8x8mv, b8x8mv, i4x4mv, i8x8mv, weightedBPrediction, encodeInterlaced,
@@ -163,6 +163,7 @@ namespace MeGUI
             profile = 3; // Autoguess. High if using default options.
             level = 15;
             x264SlowFirstpass = false;
+            openGop = 0;
 		}
 		#endregion
 		#region properties
@@ -466,6 +467,11 @@ namespace MeGUI
             get { return deadZoneIntra; }
             set { deadZoneIntra = value; }
         }
+        public int OpenGop
+        {
+            get { return openGop; }
+            set { openGop = value; }
+        }
         public int AQmode
         {
             get { return AQMode; }
@@ -648,6 +654,7 @@ namespace MeGUI
                 this.SlicesNb != otherSettings.SlicesNb ||
                 this.X264Nalhrd != otherSettings.X264Nalhrd ||
                 this.X264Aud != otherSettings.X264Aud ||
+                this.openGop != otherSettings.openGop ||
                 this.MaxSliceSyzeBytes != otherSettings.MaxSliceSyzeBytes ||
                 this.MaxSliceSyzeMBs != otherSettings.MaxSliceSyzeMBs
                 )

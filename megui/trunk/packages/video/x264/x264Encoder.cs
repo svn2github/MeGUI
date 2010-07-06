@@ -246,6 +246,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             if (!xs.CustomEncoderOptions.Contains("--min-keyint"))
                 if (xs.MinGOPSize != 25)
                     sb.Append("--min-keyint " + xs.MinGOPSize + " ");
+            switch (xs.OpenGop)
+            {
+                case 1: sb.Append("--open-gop normal "); break;
+                case 2: sb.Append("--open-gop bluray "); break;
+            }
 
             // B-Frames
             if (xs.Profile > 0 && !xs.CustomEncoderOptions.Contains("--bframes"))  // baseline profile always uses 0 bframes
