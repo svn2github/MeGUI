@@ -493,6 +493,7 @@ namespace MeGUI.packages.video.xvid
             // HVSMasking
             // 
             this.HVSMasking.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.HVSMasking.Enabled = false;
             this.HVSMasking.FormattingEnabled = true;
             this.HVSMasking.Items.AddRange(new object[] {
             "None",
@@ -507,6 +508,7 @@ namespace MeGUI.packages.video.xvid
             // label1
             // 
             this.label1.AutoSize = true;
+            this.label1.Enabled = false;
             this.label1.Location = new System.Drawing.Point(9, 187);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(72, 13);
