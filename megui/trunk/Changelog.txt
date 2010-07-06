@@ -1,3 +1,11 @@
+0.3.5.2
+  - (Sharktooth) [x264Encoder] Added nal-hrd complete support and fixed a missing check in the previous commit
+  - (Sharktooth) [x264Encoder] Added open-gop support (requires x264 rev. 1662+)
+  - (Sharktooth) [x264ConfigurationPanel] Cosmetics and fixes to possible keyint and minkeyint minimum values.
+  - (Sharktooth) [x264Encoder] Added support for "-keyint infinite" option
+  - (Sharktooth) [xviDEncoder] The Adaptive Quant option now enables VAQ. Commented out the HVS masking command line generation.
+  - (Sharktooth) [xvidConfigurationPanel] Disabled the HVS masking controls since the current encoder doesn't support them yet.
+
 0.3.5.1
   - (zathor) [FileIndexerWindow] changed caption. Feature request #3019279
   - (zathor) [AudioEncoderInterface] fixed crash if input wav file is locked. Bug #3021693
