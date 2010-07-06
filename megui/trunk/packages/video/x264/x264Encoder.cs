@@ -237,7 +237,12 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             // GOP Size
             if (!xs.CustomEncoderOptions.Contains("--keyint"))
                 if (xs.KeyframeInterval != 250) // gop size of 250 is default
-                    sb.Append("--keyint " + xs.KeyframeInterval + " ");
+                {
+                    if (xs.KeyframeInterval == 0)
+                        sb.Append("--keyint infinite ");
+                    else
+                        sb.Append("--keyint " + xs.KeyframeInterval + " ");
+                }
             if (!xs.CustomEncoderOptions.Contains("--min-keyint"))
                 if (xs.MinGOPSize != 25)
                     sb.Append("--min-keyint " + xs.MinGOPSize + " ");

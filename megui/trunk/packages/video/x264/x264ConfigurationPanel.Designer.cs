@@ -837,9 +837,9 @@ namespace MeGUI.packages.video.x264
             this.x264KeyframeIntervalLabel.Location = new System.Drawing.Point(5, 18);
             this.x264KeyframeIntervalLabel.Name = "x264KeyframeIntervalLabel";
             this.x264KeyframeIntervalLabel.Padding = new System.Windows.Forms.Padding(3);
-            this.x264KeyframeIntervalLabel.Size = new System.Drawing.Size(106, 19);
+            this.x264KeyframeIntervalLabel.Size = new System.Drawing.Size(164, 19);
             this.x264KeyframeIntervalLabel.TabIndex = 0;
-            this.x264KeyframeIntervalLabel.Text = "Maximum GOP Size";
+            this.x264KeyframeIntervalLabel.Text = "Maximum GOP Size (0 = Infinite)";
             this.x264KeyframeIntervalLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // x264KeyframeInterval
@@ -855,7 +855,7 @@ namespace MeGUI.packages.video.x264
             this.x264KeyframeInterval.Size = new System.Drawing.Size(48, 20);
             this.x264KeyframeInterval.TabIndex = 1;
             this.x264KeyframeInterval.Value = new decimal(new int[] {
-            100,
+            250,
             0,
             0,
             0});
@@ -865,6 +865,11 @@ namespace MeGUI.packages.video.x264
             // 
             this.x264MinGOPSize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.x264MinGOPSize.Location = new System.Drawing.Point(197, 42);
+            this.x264MinGOPSize.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             this.x264MinGOPSize.Name = "x264MinGOPSize";
             this.x264MinGOPSize.Size = new System.Drawing.Size(48, 20);
             this.x264MinGOPSize.TabIndex = 3;
