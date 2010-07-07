@@ -804,7 +804,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                     sb.Append("--aud ");
 
             if (!xs.CustomEncoderOptions.Contains("--nal-hrd"))
-                switch (xs.X264Nalhrd)
+                switch (xs.Nalhrd)
                 {
                     case 1: sb.Append("--nal-hrd vbr "); break;
                     case 2: sb.Append("--nal-hrd cbr "); break;

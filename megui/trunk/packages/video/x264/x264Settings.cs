@@ -196,6 +196,26 @@ namespace MeGUI
                     x264SlowFirstpass = false;
             }
         }
+#warning Deprecated since 0.3.5.3, delete block after 0.3.7
+        public string X264Nalhrd
+        {
+            get { return "migrated"; }
+            set
+            {
+                if (value.Equals("migrated"))
+                    return;
+                if (value.Equals("false"))
+                    x264Nalhrd = 0;
+                if (value.Equals("true"))
+                    x264Nalhrd = 1;
+                if (value.Equals("0"))
+                    x264Nalhrd = 0;
+                if (value.Equals("1"))
+                    x264Nalhrd = 1;
+                if (value.Equals("2"))
+                    x264Nalhrd = 2;
+            }
+        }
         public x264PresetLevelModes x264PresetLevel
         {
             get { return preset; }
@@ -522,7 +542,7 @@ namespace MeGUI
             get { return scenecut; }
             set { scenecut = value; }
         }
-        public int X264Nalhrd
+        public int Nalhrd
         {
             get { return x264Nalhrd; }
             set { x264Nalhrd = value; }
@@ -652,7 +672,7 @@ namespace MeGUI
                 this.NoPsy != otherSettings.NoPsy ||
                 this.Scenecut != otherSettings.Scenecut ||
                 this.SlicesNb != otherSettings.SlicesNb ||
-                this.X264Nalhrd != otherSettings.X264Nalhrd ||
+                this.Nalhrd != otherSettings.Nalhrd ||
                 this.X264Aud != otherSettings.X264Aud ||
                 this.openGop != otherSettings.openGop ||
                 this.MaxSliceSyzeBytes != otherSettings.MaxSliceSyzeBytes ||
