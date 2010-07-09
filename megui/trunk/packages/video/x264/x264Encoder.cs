@@ -810,6 +810,10 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                     case 2: sb.Append("--nal-hrd cbr "); break;
                 }
 
+            if (!xs.CustomEncoderOptions.Contains("--fake-interlaced"))
+                if (xs.FakeInterlaced && !xs.EncodeInterlaced)
+                    sb.Append("--fake-interlaced ");
+
             #endregion
 
             #region misc tab
@@ -838,6 +842,10 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             if (!xs.CustomEncoderOptions.Contains("--fullrange on"))    
                 if (xs.fullRange)
                     sb.Append("--fullrange on ");
+
+            if (!xs.CustomEncoderOptions.Contains("--pic-struct"))
+                if (xs.PicStruct)
+                    sb.Append("--pic-struct ");
 
             if (!xs.CustomEncoderOptions.Equals("")) // add custom encoder options
                 sb.Append(xs.CustomEncoderOptions + " ");

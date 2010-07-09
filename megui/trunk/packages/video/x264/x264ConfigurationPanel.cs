@@ -59,6 +59,7 @@ namespace MeGUI.packages.video.x264
         {
             x264AlphaDeblock.Enabled = x264DeblockActive.Checked;
             x264BetaDeblock.Enabled = x264DeblockActive.Checked;
+            fakeInterlaced.Enabled = !interlaced.Checked;
         }
         #endregion
         #region dropdowns
@@ -1396,6 +1397,8 @@ namespace MeGUI.packages.video.x264
                 xs.AQmode = (int)cbAQMode.SelectedIndex;
                 xs.AQstrength = numAQStrength.Value;
                 xs.OpenGop = (int)x264OpenGop.SelectedIndex;
+                xs.PicStruct = picStruct.Checked;
+                xs.FakeInterlaced = fakeInterlaced.Checked;
                 xs.UseQPFile = useQPFile.Checked;
                 xs.QPFile = this.qpfile.Text;
                 xs.fullRange = this.x264FullRange.Checked;
@@ -1508,6 +1511,8 @@ namespace MeGUI.packages.video.x264
                 psnr.Checked = xs.PSNRCalculation;
                 cbAQMode.SelectedIndex = xs.AQmode;
                 x264OpenGop.SelectedIndex = xs.OpenGop;
+                picStruct.Checked = xs.PicStruct;
+                picStruct.Checked = xs.FakeInterlaced;
                 x264FullRange.Checked = xs.fullRange;
                 numAQStrength.Value = xs.AQstrength;
                 NoiseReduction.Text = xs.NoiseReduction.ToString();

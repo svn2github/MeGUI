@@ -188,6 +188,7 @@ namespace MeGUI.packages.video.x264
             this.ssim = new System.Windows.Forms.CheckBox();
             this.psnr = new System.Windows.Forms.CheckBox();
             this.gbVUI = new System.Windows.Forms.GroupBox();
+            this.picStruct = new System.Windows.Forms.CheckBox();
             this.x264FullRange = new System.Windows.Forms.CheckBox();
             this.gbQPFile = new System.Windows.Forms.GroupBox();
             this.logfile = new System.Windows.Forms.TextBox();
@@ -198,6 +199,7 @@ namespace MeGUI.packages.video.x264
             this.useQPFile = new System.Windows.Forms.CheckBox();
             this.gbx264CustomCmd = new System.Windows.Forms.GroupBox();
             this.customCommandlineOptions = new System.Windows.Forms.TextBox();
+            this.fakeInterlaced = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.mainTabPage.SuspendLayout();
             this.x264CodecGeneralGroupbox.SuspendLayout();
@@ -1728,12 +1730,13 @@ namespace MeGUI.packages.video.x264
             // 
             // x264Bluray
             // 
+            this.x264Bluray.Controls.Add(this.fakeInterlaced);
             this.x264Bluray.Controls.Add(this.x264hrdLabel);
             this.x264Bluray.Controls.Add(this.x264hrd);
             this.x264Bluray.Controls.Add(this.x264aud);
             this.x264Bluray.Location = new System.Drawing.Point(296, 135);
             this.x264Bluray.Name = "x264Bluray";
-            this.x264Bluray.Size = new System.Drawing.Size(200, 86);
+            this.x264Bluray.Size = new System.Drawing.Size(200, 134);
             this.x264Bluray.TabIndex = 29;
             this.x264Bluray.TabStop = false;
             this.x264Bluray.Text = " Blu-Ray ";
@@ -1772,9 +1775,9 @@ namespace MeGUI.packages.video.x264
             this.x264aud.AutoSize = true;
             this.x264aud.Location = new System.Drawing.Point(9, 28);
             this.x264aud.Name = "x264aud";
-            this.x264aud.Size = new System.Drawing.Size(148, 17);
+            this.x264aud.Size = new System.Drawing.Size(153, 17);
             this.x264aud.TabIndex = 0;
-            this.x264aud.Text = "Use access unit delimiters";
+            this.x264aud.Text = "Use Access Unit Delimiters";
             this.x264aud.UseVisualStyleBackColor = true;
             this.x264aud.CheckedChanged += new System.EventHandler(this.updateEvent);
             // 
@@ -2471,6 +2474,7 @@ namespace MeGUI.packages.video.x264
             // 
             // gbVUI
             // 
+            this.gbVUI.Controls.Add(this.picStruct);
             this.gbVUI.Controls.Add(this.x264FullRange);
             this.gbVUI.Location = new System.Drawing.Point(6, 179);
             this.gbVUI.Name = "gbVUI";
@@ -2479,12 +2483,23 @@ namespace MeGUI.packages.video.x264
             this.gbVUI.TabStop = false;
             this.gbVUI.Text = "V.U.I";
             // 
+            // picStruct
+            // 
+            this.picStruct.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.picStruct.Location = new System.Drawing.Point(12, 48);
+            this.picStruct.Name = "picStruct";
+            this.picStruct.Size = new System.Drawing.Size(125, 24);
+            this.picStruct.TabIndex = 28;
+            this.picStruct.Text = "Force pic_struct";
+            this.picStruct.UseVisualStyleBackColor = true;
+            this.picStruct.CheckedChanged += new System.EventHandler(this.updateEvent);
+            // 
             // x264FullRange
             // 
             this.x264FullRange.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.x264FullRange.Location = new System.Drawing.Point(12, 19);
+            this.x264FullRange.Location = new System.Drawing.Point(12, 20);
             this.x264FullRange.Name = "x264FullRange";
-            this.x264FullRange.Size = new System.Drawing.Size(79, 24);
+            this.x264FullRange.Size = new System.Drawing.Size(125, 24);
             this.x264FullRange.TabIndex = 27;
             this.x264FullRange.Text = "Full Range";
             this.x264FullRange.UseVisualStyleBackColor = true;
@@ -2592,6 +2607,17 @@ namespace MeGUI.packages.video.x264
             this.customCommandlineOptions.Size = new System.Drawing.Size(464, 34);
             this.customCommandlineOptions.TabIndex = 0;
             this.customCommandlineOptions.TextChanged += new System.EventHandler(this.updateEvent);
+            // 
+            // fakeInterlaced
+            // 
+            this.fakeInterlaced.AutoSize = true;
+            this.fakeInterlaced.Location = new System.Drawing.Point(9, 85);
+            this.fakeInterlaced.Name = "fakeInterlaced";
+            this.fakeInterlaced.Size = new System.Drawing.Size(100, 17);
+            this.fakeInterlaced.TabIndex = 3;
+            this.fakeInterlaced.Text = "Fake Interlaced";
+            this.fakeInterlaced.UseVisualStyleBackColor = true;
+            this.fakeInterlaced.CheckedChanged += new System.EventHandler(this.updateEvent);
             // 
             // x264ConfigurationPanel
             // 
@@ -2861,5 +2887,7 @@ namespace MeGUI.packages.video.x264
         private System.Windows.Forms.ComboBox x264OpenGop;
         private System.Windows.Forms.Label x264hrdLabel;
         private System.Windows.Forms.ComboBox x264hrd;
+        private System.Windows.Forms.CheckBox picStruct;
+        private System.Windows.Forms.CheckBox fakeInterlaced;
     }
 }

@@ -77,7 +77,7 @@ namespace MeGUI
 			tempComplexityBlur, tempQuanBlurCC, scdSensitivity, bframeBias, quantizerCrf, AQStrength, psyRDO, psyTrellis;
 		bool deblock, cabac, p4x4mv, p8x8mv, b8x8mv, i4x4mv, i8x8mv, weightedBPrediction, encodeInterlaced,
 			chromaME, adaptiveDCT, noMixedRefs, noFastPSkip, psnrCalc, noDctDecimate, ssimCalc, useQPFile, 
-            FullRange, advSet, noMBTree, threadInput, noPsy, scenecut, x264Aud, x264SlowFirstpass;
+            FullRange, advSet, noMBTree, threadInput, noPsy, scenecut, x264Aud, x264SlowFirstpass, picStruct, fakeInterlaced;
 		string quantizerMatrix, qpfile;
         x264PresetLevelModes preset;
 		#region constructor
@@ -164,6 +164,8 @@ namespace MeGUI
             level = 15;
             x264SlowFirstpass = false;
             openGop = 0;
+            picStruct = false;
+            fakeInterlaced = false;
 		}
 		#endregion
 		#region properties
@@ -557,6 +559,16 @@ namespace MeGUI
             get { return x264SlowFirstpass; }
             set { x264SlowFirstpass = value; }
         }
+        public bool PicStruct
+        {
+            get { return picStruct; }
+            set { picStruct = value; }
+        }
+        public bool FakeInterlaced
+        {
+            get { return fakeInterlaced; }
+            set { fakeInterlaced = value; }
+        }
         public int SlicesNb
         {
             get { return slicesnb; }
@@ -675,6 +687,8 @@ namespace MeGUI
                 this.Nalhrd != otherSettings.Nalhrd ||
                 this.X264Aud != otherSettings.X264Aud ||
                 this.openGop != otherSettings.openGop ||
+                this.picStruct != otherSettings.picStruct ||
+                this.fakeInterlaced != otherSettings.fakeInterlaced ||
                 this.MaxSliceSyzeBytes != otherSettings.MaxSliceSyzeBytes ||
                 this.MaxSliceSyzeMBs != otherSettings.MaxSliceSyzeMBs
                 )
