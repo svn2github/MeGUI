@@ -148,6 +148,7 @@ namespace MeGUI.packages.video.x264
                     x264I8x8mv.Checked = false;
                 }
             }
+            genericUpdate();
         }
         private void doTrellisAdjustments()
         {

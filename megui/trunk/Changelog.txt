@@ -1,4 +1,5 @@
 0.3.5.3
+  - (sharktooth) [x264ConfigurationPanel] Trigger GenericUpdate() on macroblockOptions.SelectIndex change to keep coherency between macroblock options checkboxes and commandline generation
   - (sharktooth) [x264] Added --pic-struct support
   - (sharktooth) [x264] Added --fake-interlaced support
   - (zathor) [x264] old nal-hrd profile values will be migrated
