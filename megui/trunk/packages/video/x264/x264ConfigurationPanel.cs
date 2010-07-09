@@ -1513,7 +1513,7 @@ namespace MeGUI.packages.video.x264
                 cbAQMode.SelectedIndex = xs.AQmode;
                 x264OpenGop.SelectedIndex = xs.OpenGop;
                 picStruct.Checked = xs.PicStruct;
-                picStruct.Checked = xs.FakeInterlaced;
+                fakeInterlaced.Checked = xs.FakeInterlaced;
                 x264FullRange.Checked = xs.fullRange;
                 numAQStrength.Value = xs.AQstrength;
                 NoiseReduction.Text = xs.NoiseReduction.ToString();
