@@ -191,6 +191,9 @@ namespace MeGUI
 
         public void runCUVIDServer()
         {
+            if (!MainForm.Instance.Settings.UseCUVIDserver)
+                return;
+            
             if (FindProcess("CUVIDServer"))
                 return;
 
