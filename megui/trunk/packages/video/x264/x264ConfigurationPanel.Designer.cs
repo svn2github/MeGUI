@@ -2588,6 +2588,7 @@ namespace MeGUI.packages.video.x264
             // 
             this.avcProfileGroupbox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.avcProfileGroupbox.Controls.Add(this.avcProfile);
+            this.avcProfileGroupbox.Enabled = false;
             this.avcProfileGroupbox.Location = new System.Drawing.Point(322, 152);
             this.avcProfileGroupbox.Name = "avcProfileGroupbox";
             this.avcProfileGroupbox.Size = new System.Drawing.Size(172, 48);
@@ -2612,6 +2613,7 @@ namespace MeGUI.packages.video.x264
             // 
             this.avcLevelGroupbox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.avcLevelGroupbox.Controls.Add(this.avcLevel);
+            this.avcLevelGroupbox.Enabled = false;
             this.avcLevelGroupbox.Location = new System.Drawing.Point(322, 206);
             this.avcLevelGroupbox.Name = "avcLevelGroupbox";
             this.avcLevelGroupbox.Size = new System.Drawing.Size(172, 48);

@@ -1898,6 +1898,8 @@ namespace MeGUI.packages.video.x264
                     tabControl1.TabPages.Add(MiscTabPage);
                 x264EncodingMode.Visible = true;
                 cbTarget.Visible = false;
+                avcProfileGroupbox.Enabled = true;
+                avcLevelGroupbox.Enabled = true;
             }
             else
             {
@@ -1911,6 +1913,8 @@ namespace MeGUI.packages.video.x264
                     tabControl1.TabPages.Remove(MiscTabPage);
                 x264EncodingMode.Visible = false;
                 cbTarget.Visible = true;
+                avcProfileGroupbox.Enabled = false;
+                avcLevelGroupbox.Enabled = false;
             }
             genericUpdate();
         }
