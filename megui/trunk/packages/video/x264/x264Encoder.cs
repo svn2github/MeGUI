@@ -816,7 +816,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
 
             if (!xs.CustomEncoderOptions.Contains("--non-deterministic"))
                 if (xs.NonDeterministic)
-                    sb.Append("--non-deterministic ");
+                    sb.Append("--non-deterministic ");            
             #endregion
 
             #region misc tab
@@ -849,6 +849,45 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             if (!xs.CustomEncoderOptions.Contains("--pic-struct"))
                 if (xs.PicStruct)
                     sb.Append("--pic-struct ");
+
+            if (!xs.CustomEncoderOptions.Contains("--colorprim"))
+                switch (xs.ColorPrim)
+                {
+                    case 0: break;
+                    case 1: sb.Append("--colorprim bt709 "); break;
+                    case 2: sb.Append("--colorprim bt470m "); break;
+                    case 3: sb.Append("--colorprim bt470bg "); break;
+                    case 4: sb.Append("--colorprim smpte170m "); break;
+                    case 5: sb.Append("--colorprim smpte240m "); break;
+                    case 6: sb.Append("--colorprim film "); break;
+                }
+
+            if (!xs.CustomEncoderOptions.Contains("--transfer"))
+                switch (xs.Transfer)
+                {
+                    case 0: break;
+                    case 1: sb.Append("--transfer bt709 "); break;
+                    case 2: sb.Append("--transfer bt470m "); break;
+                    case 3: sb.Append("--transfer bt470bg "); break;
+                    case 4: sb.Append("--transfer linear "); break;
+                    case 5: sb.Append("--transfer log100 "); break;
+                    case 6: sb.Append("--transfer log316 "); break;
+                    case 7: sb.Append("--transfer smpte170m "); break;
+                    case 8: sb.Append("--transfer smpte240m "); break;
+                }
+            
+            if (!xs.CustomEncoderOptions.Contains("--colormatrix"))
+                switch (xs.ColorMatrix)
+                {
+                    case 0: break;
+                    case 1: sb.Append("--colormatrix bt709 "); break;
+                    case 2: sb.Append("--colormatrix fcc "); break;
+                    case 3: sb.Append("--colormatrix bt470bg "); break;
+                    case 4: sb.Append("--colormatrix smpte170m "); break;
+                    case 5: sb.Append("--colormatrix smpte240m "); break;
+                    case 6: sb.Append("--colormatrix GBR "); break;
+                    case 7: sb.Append("--colormatrix YCgCo "); break;
+                }
 
             if (!xs.CustomEncoderOptions.Equals("")) // add custom encoder options
                 sb.Append(xs.CustomEncoderOptions + " ");

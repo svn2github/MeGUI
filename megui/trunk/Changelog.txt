@@ -1,4 +1,5 @@
 0.3.5.5
+  - (sharktooth) [x264ConfigurationPanel] Added --colorprim, --transfer and --colormatrix options
   - (sharktooth) [x264ConfigurationPanel] Added --non-deterministic support plus some cosmetic changes
 
 0.3.5.4

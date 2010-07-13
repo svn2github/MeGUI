@@ -1398,6 +1398,9 @@ namespace MeGUI.packages.video.x264
                 xs.AQmode = (int)cbAQMode.SelectedIndex;
                 xs.AQstrength = numAQStrength.Value;
                 xs.OpenGop = (int)x264OpenGop.SelectedIndex;
+                xs.ColorPrim = (int)colorPrim.SelectedIndex;
+                xs.Transfer = (int)transfer.SelectedIndex;
+                xs.ColorMatrix = (int)colorMatrix.SelectedIndex;
                 xs.PicStruct = picStruct.Checked;
                 xs.FakeInterlaced = fakeInterlaced.Checked;
                 xs.NonDeterministic = nonDeterministic.Checked;
@@ -1513,6 +1516,9 @@ namespace MeGUI.packages.video.x264
                 psnr.Checked = xs.PSNRCalculation;
                 cbAQMode.SelectedIndex = xs.AQmode;
                 x264OpenGop.SelectedIndex = xs.OpenGop;
+                colorPrim.SelectedIndex = xs.ColorPrim;
+                transfer.SelectedIndex = xs.Transfer;
+                colorMatrix.SelectedIndex = xs.ColorMatrix;
                 picStruct.Checked = xs.PicStruct;
                 fakeInterlaced.Checked = xs.FakeInterlaced;
                 nonDeterministic.Checked = xs.NonDeterministic;

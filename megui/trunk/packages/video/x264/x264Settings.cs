@@ -72,7 +72,7 @@ namespace MeGUI
         int NewadaptiveBFrames, nbRefFrames, alphaDeblock, betaDeblock, subPelRefinement, maxQuantDelta, tempQuantBlur,
             bframePredictionMode, vbvBufferSize, vbvMaxBitrate, meType, meRange, minGOPSize, macroBlockOptions,
             quantizerMatrixType, x264Trellis, noiseReduction, deadZoneInter, deadZoneIntra, AQMode, profile, level,
-            lookahead, slicesnb, maxSliceSyzeBytes, maxSliceSyzeMBs, bFramePyramid, weightedPPrediction, tune, openGop, x264Nalhrd;
+            lookahead, slicesnb, maxSliceSyzeBytes, maxSliceSyzeMBs, bFramePyramid, weightedPPrediction, tune, openGop, x264Nalhrd, colorMatrix, transfer, colorPrim;
 		decimal ipFactor, pbFactor, chromaQPOffset, vbvInitialBuffer, bitrateVariance, quantCompression, 
 			tempComplexityBlur, tempQuanBlurCC, scdSensitivity, bframeBias, quantizerCrf, AQStrength, psyRDO, psyTrellis;
 		bool deblock, cabac, p4x4mv, p8x8mv, b8x8mv, i4x4mv, i8x8mv, weightedBPrediction, encodeInterlaced,
@@ -159,6 +159,9 @@ namespace MeGUI
             maxSliceSyzeBytes = 0;
             maxSliceSyzeMBs = 0;
             x264Nalhrd = 0;
+            colorMatrix = 0;
+            transfer = 0;
+            colorPrim = 0;
             x264Aud = false;
             profile = 3; // Autoguess. High if using default options.
             level = 15;
@@ -494,6 +497,21 @@ namespace MeGUI
         {
             get { return openGop; }
             set { openGop = value; }
+        }
+        public int ColorMatrix
+        {
+            get { return colorMatrix; }
+            set { colorMatrix = value; }
+        }
+        public int ColorPrim
+        {
+            get { return colorPrim; }
+            set { colorPrim = value; }
+        }
+        public int Transfer
+        {
+            get { return transfer; }
+            set { transfer = value; }
         }
         public int AQmode
         {
