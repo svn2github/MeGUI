@@ -1400,6 +1400,7 @@ namespace MeGUI.packages.video.x264
                 xs.OpenGop = (int)x264OpenGop.SelectedIndex;
                 xs.PicStruct = picStruct.Checked;
                 xs.FakeInterlaced = fakeInterlaced.Checked;
+                xs.NonDeterministic = nonDeterministic.Checked;
                 xs.UseQPFile = useQPFile.Checked;
                 xs.QPFile = this.qpfile.Text;
                 xs.fullRange = this.x264FullRange.Checked;
@@ -1514,6 +1515,7 @@ namespace MeGUI.packages.video.x264
                 x264OpenGop.SelectedIndex = xs.OpenGop;
                 picStruct.Checked = xs.PicStruct;
                 fakeInterlaced.Checked = xs.FakeInterlaced;
+                nonDeterministic.Checked = xs.NonDeterministic;
                 x264FullRange.Checked = xs.fullRange;
                 numAQStrength.Value = xs.AQstrength;
                 NoiseReduction.Text = xs.NoiseReduction.ToString();

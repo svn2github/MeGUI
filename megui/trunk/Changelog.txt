@@ -1,3 +1,6 @@
+0.3.5.5
+  - (sharktooth) [x264ConfigurationPanel] Added --non-deterministic support plus some cosmetic changes
+
 0.3.5.4
   - (sharktooth) [x264ConfigurationPanel] AVCProfile and AVCLevel groupboxes Enable status now depends on the Show Advanced Settings status
   - (sharktooth) [x264ConfigurationPanel] Moved Profile and Level to the main tab and made some more space for more VUI options

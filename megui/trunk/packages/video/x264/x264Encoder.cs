@@ -814,6 +814,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                 if (xs.FakeInterlaced && !xs.EncodeInterlaced)
                     sb.Append("--fake-interlaced ");
 
+            if (!xs.CustomEncoderOptions.Contains("--non-deterministic"))
+                if (xs.NonDeterministic)
+                    sb.Append("--non-deterministic ");
             #endregion
 
             #region misc tab
