@@ -72,7 +72,8 @@ namespace MeGUI
         int NewadaptiveBFrames, nbRefFrames, alphaDeblock, betaDeblock, subPelRefinement, maxQuantDelta, tempQuantBlur,
             bframePredictionMode, vbvBufferSize, vbvMaxBitrate, meType, meRange, minGOPSize, macroBlockOptions,
             quantizerMatrixType, x264Trellis, noiseReduction, deadZoneInter, deadZoneIntra, AQMode, profile, level,
-            lookahead, slicesnb, maxSliceSyzeBytes, maxSliceSyzeMBs, bFramePyramid, weightedPPrediction, tune, openGop, x264Nalhrd, colorMatrix, transfer, colorPrim;
+            lookahead, slicesnb, maxSliceSyzeBytes, maxSliceSyzeMBs, bFramePyramid, weightedPPrediction, tune, openGop, x264Nalhrd,
+            colorMatrix, transfer, colorPrim, x264PullDown;
 		decimal ipFactor, pbFactor, chromaQPOffset, vbvInitialBuffer, bitrateVariance, quantCompression, 
 			tempComplexityBlur, tempQuanBlurCC, scdSensitivity, bframeBias, quantizerCrf, AQStrength, psyRDO, psyTrellis;
 		bool deblock, cabac, p4x4mv, p8x8mv, b8x8mv, i4x4mv, i8x8mv, weightedBPrediction, encodeInterlaced,
@@ -159,6 +160,7 @@ namespace MeGUI
             maxSliceSyzeBytes = 0;
             maxSliceSyzeMBs = 0;
             x264Nalhrd = 0;
+            x264PullDown = 0;
             colorMatrix = 0;
             transfer = 0;
             colorPrim = 0;
@@ -498,6 +500,11 @@ namespace MeGUI
             get { return openGop; }
             set { openGop = value; }
         }
+        public int X264PullDown
+        {
+            get { return x264PullDown; }
+            set { x264PullDown = value; }
+        }
         public int ColorMatrix
         {
             get { return colorMatrix; }
@@ -697,7 +704,7 @@ namespace MeGUI
                 this.AQmode != otherSettings.AQmode ||
                 this.AQstrength != otherSettings.AQstrength ||
                 this.UseQPFile != otherSettings.UseQPFile ||
-                this.fullRange != otherSettings.fullRange ||
+                this.FullRange != otherSettings.FullRange ||
                 this.MacroBlockOptions != otherSettings.MacroBlockOptions ||
                 this.x264PresetLevel != otherSettings.x264PresetLevel ||
                 this.x264Tuning != otherSettings.x264Tuning ||
@@ -710,10 +717,14 @@ namespace MeGUI
                 this.SlicesNb != otherSettings.SlicesNb ||
                 this.Nalhrd != otherSettings.Nalhrd ||
                 this.X264Aud != otherSettings.X264Aud ||
-                this.openGop != otherSettings.openGop ||
-                this.picStruct != otherSettings.picStruct ||
-                this.fakeInterlaced != otherSettings.fakeInterlaced ||
-                this.nonDeterministic != otherSettings.nonDeterministic ||
+                this.OpenGop != otherSettings.OpenGop ||
+                this.X264PullDown != otherSettings.X264PullDown ||
+                this.ColorMatrix != otherSettings.ColorMatrix ||
+                this.Transfer != otherSettings.Transfer ||
+                this.ColorPrim != otherSettings.ColorPrim ||
+                this.PicStruct != otherSettings.PicStruct ||
+                this.FakeInterlaced != otherSettings.FakeInterlaced ||
+                this.NonDeterministic != otherSettings.NonDeterministic ||
                 this.MaxSliceSyzeBytes != otherSettings.MaxSliceSyzeBytes ||
                 this.MaxSliceSyzeMBs != otherSettings.MaxSliceSyzeMBs
                 )

@@ -43,6 +43,8 @@ namespace MeGUI.packages.video.x264
             this.slicesnb = new System.Windows.Forms.NumericUpDown();
             this.label9 = new System.Windows.Forms.Label();
             this.gbFTOther = new System.Windows.Forms.GroupBox();
+            this.x264PullDown = new System.Windows.Forms.ComboBox();
+            this.pullDownLabel = new System.Windows.Forms.Label();
             this.lblWeightedP = new System.Windows.Forms.Label();
             this.x264WeightedPPrediction = new System.Windows.Forms.ComboBox();
             this.lbExtraIFframes = new System.Windows.Forms.Label();
@@ -173,11 +175,11 @@ namespace MeGUI.packages.video.x264
             this.trellisLabel = new System.Windows.Forms.Label();
             this.MiscTabPage = new System.Windows.Forms.TabPage();
             this.gbOther = new System.Windows.Forms.GroupBox();
+            this.x264NbThreads = new System.Windows.Forms.NumericUpDown();
             this.nonDeterministic = new System.Windows.Forms.CheckBox();
             this.x264SlowFirstpass = new System.Windows.Forms.CheckBox();
             this.threadin = new System.Windows.Forms.CheckBox();
             this.x264NbThreadsLabel = new System.Windows.Forms.Label();
-            this.x264NbThreads = new System.Windows.Forms.NumericUpDown();
             this.gbAdjust = new System.Windows.Forms.GroupBox();
             this.btPresetSettings = new System.Windows.Forms.Button();
             this.dSettings = new System.Windows.Forms.Button();
@@ -474,6 +476,8 @@ namespace MeGUI.packages.video.x264
             // 
             this.gbFTOther.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbFTOther.Controls.Add(this.x264PullDown);
+            this.gbFTOther.Controls.Add(this.pullDownLabel);
             this.gbFTOther.Controls.Add(this.lblWeightedP);
             this.gbFTOther.Controls.Add(this.x264WeightedPPrediction);
             this.gbFTOther.Controls.Add(this.lbExtraIFframes);
@@ -482,17 +486,44 @@ namespace MeGUI.packages.video.x264
             this.gbFTOther.Controls.Add(this.label6);
             this.gbFTOther.Controls.Add(this.x264SCDSensitivity);
             this.gbFTOther.Controls.Add(this.interlaced);
-            this.gbFTOther.Location = new System.Drawing.Point(259, 217);
+            this.gbFTOther.Location = new System.Drawing.Point(259, 193);
             this.gbFTOther.Name = "gbFTOther";
-            this.gbFTOther.Size = new System.Drawing.Size(240, 183);
+            this.gbFTOther.Size = new System.Drawing.Size(240, 207);
             this.gbFTOther.TabIndex = 13;
             this.gbFTOther.TabStop = false;
             this.gbFTOther.Text = "Other";
             // 
+            // x264PullDown
+            // 
+            this.x264PullDown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.x264PullDown.FormattingEnabled = true;
+            this.x264PullDown.Items.AddRange(new object[] {
+            "none",
+            "22",
+            "32",
+            "64",
+            "double",
+            "triple",
+            "euro"});
+            this.x264PullDown.Location = new System.Drawing.Point(167, 173);
+            this.x264PullDown.Name = "x264PullDown";
+            this.x264PullDown.Size = new System.Drawing.Size(65, 21);
+            this.x264PullDown.TabIndex = 24;
+            this.x264PullDown.SelectedIndexChanged += new System.EventHandler(this.updateEvent);
+            // 
+            // pullDownLabel
+            // 
+            this.pullDownLabel.AutoSize = true;
+            this.pullDownLabel.Location = new System.Drawing.Point(9, 176);
+            this.pullDownLabel.Name = "pullDownLabel";
+            this.pullDownLabel.Size = new System.Drawing.Size(50, 13);
+            this.pullDownLabel.TabIndex = 23;
+            this.pullDownLabel.Text = "Pulldown";
+            // 
             // lblWeightedP
             // 
             this.lblWeightedP.AutoSize = true;
-            this.lblWeightedP.Location = new System.Drawing.Point(9, 89);
+            this.lblWeightedP.Location = new System.Drawing.Point(9, 86);
             this.lblWeightedP.Name = "lblWeightedP";
             this.lblWeightedP.Size = new System.Drawing.Size(142, 13);
             this.lblWeightedP.TabIndex = 22;
@@ -507,7 +538,7 @@ namespace MeGUI.packages.video.x264
             "Disabled",
             "Blind",
             "Smart"});
-            this.x264WeightedPPrediction.Location = new System.Drawing.Point(167, 84);
+            this.x264WeightedPPrediction.Location = new System.Drawing.Point(167, 81);
             this.x264WeightedPPrediction.Name = "x264WeightedPPrediction";
             this.x264WeightedPPrediction.Size = new System.Drawing.Size(65, 21);
             this.x264WeightedPPrediction.TabIndex = 21;
@@ -527,7 +558,7 @@ namespace MeGUI.packages.video.x264
             // 
             this.scenecut.Checked = true;
             this.scenecut.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.scenecut.Location = new System.Drawing.Point(12, 149);
+            this.scenecut.Location = new System.Drawing.Point(12, 143);
             this.scenecut.Name = "scenecut";
             this.scenecut.Size = new System.Drawing.Size(163, 24);
             this.scenecut.TabIndex = 19;
@@ -590,7 +621,7 @@ namespace MeGUI.packages.video.x264
             // 
             // interlaced
             // 
-            this.interlaced.Location = new System.Drawing.Point(12, 119);
+            this.interlaced.Location = new System.Drawing.Point(12, 113);
             this.interlaced.Name = "interlaced";
             this.interlaced.Size = new System.Drawing.Size(157, 24);
             this.interlaced.TabIndex = 11;
@@ -612,7 +643,7 @@ namespace MeGUI.packages.video.x264
             this.x264GeneralBFramesgGroupbox.Controls.Add(this.x264NumberOfBFrames);
             this.x264GeneralBFramesgGroupbox.Location = new System.Drawing.Point(259, 3);
             this.x264GeneralBFramesgGroupbox.Name = "x264GeneralBFramesgGroupbox";
-            this.x264GeneralBFramesgGroupbox.Size = new System.Drawing.Size(240, 208);
+            this.x264GeneralBFramesgGroupbox.Size = new System.Drawing.Size(240, 184);
             this.x264GeneralBFramesgGroupbox.TabIndex = 7;
             this.x264GeneralBFramesgGroupbox.TabStop = false;
             this.x264GeneralBFramesgGroupbox.Text = "B-Frames";
@@ -2319,6 +2350,19 @@ namespace MeGUI.packages.video.x264
             this.gbOther.TabStop = false;
             this.gbOther.Text = "Other";
             // 
+            // x264NbThreads
+            // 
+            this.x264NbThreads.Location = new System.Drawing.Point(113, 21);
+            this.x264NbThreads.Maximum = new decimal(new int[] {
+            16,
+            0,
+            0,
+            0});
+            this.x264NbThreads.Name = "x264NbThreads";
+            this.x264NbThreads.Size = new System.Drawing.Size(37, 20);
+            this.x264NbThreads.TabIndex = 12;
+            this.x264NbThreads.ValueChanged += new System.EventHandler(this.updateEvent);
+            // 
             // nonDeterministic
             // 
             this.nonDeterministic.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -2364,19 +2408,6 @@ namespace MeGUI.packages.video.x264
             this.x264NbThreadsLabel.TabIndex = 11;
             this.x264NbThreadsLabel.Text = "Threads (0=Auto)";
             this.x264NbThreadsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // x264NbThreads
-            // 
-            this.x264NbThreads.Location = new System.Drawing.Point(113, 21);
-            this.x264NbThreads.Maximum = new decimal(new int[] {
-            16,
-            0,
-            0,
-            0});
-            this.x264NbThreads.Name = "x264NbThreads";
-            this.x264NbThreads.Size = new System.Drawing.Size(37, 20);
-            this.x264NbThreads.TabIndex = 12;
-            this.x264NbThreads.ValueChanged += new System.EventHandler(this.updateEvent);
             // 
             // gbAdjust
             // 
@@ -2989,5 +3020,7 @@ namespace MeGUI.packages.video.x264
         private System.Windows.Forms.ComboBox colorMatrix;
         private System.Windows.Forms.ComboBox transfer;
         private System.Windows.Forms.ComboBox colorPrim;
+        private System.Windows.Forms.Label pullDownLabel;
+        private System.Windows.Forms.ComboBox x264PullDown;
     }
 }

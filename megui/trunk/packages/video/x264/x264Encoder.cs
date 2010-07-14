@@ -376,6 +376,19 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                     sb.Append("--weightp " + xs.WeightedPPrediction + " ");
             }
 
+            // PullDown
+            if (!xs.CustomEncoderOptions.Contains("--pulldown"))
+                switch (xs.X264PullDown)
+                {
+                    case 0: break;
+                    case 1: sb.Append("--pulldown 22 "); break;
+                    case 2: sb.Append("--pulldown 32 "); break;
+                    case 3: sb.Append("--pulldown 64 "); break;
+                    case 4: sb.Append("--pulldown double "); break;
+                    case 5: sb.Append("--pulldown triple "); break;
+                    case 6: sb.Append("--pulldown euro "); break;
+                }
+
             // Slicing
             if (!xs.CustomEncoderOptions.Contains("--slices "))
                 if (xs.SlicesNb != 0)

@@ -1,14 +1,15 @@
 0.3.5.5
-  - (sharktooth) [x264ConfigurationPanel] Added --colorprim, --transfer and --colormatrix options
-  - (sharktooth) [x264ConfigurationPanel] Added --non-deterministic support plus some cosmetic changes
+  - (sharktooth) [x264] Added --pulldown option plus some various fixes
+  - (sharktooth) [x264] Added --colorprim, --transfer and --colormatrix options
+  - (sharktooth) [x264] Added --non-deterministic support plus some cosmetic changes
 
 0.3.5.4
-  - (sharktooth) [x264ConfigurationPanel] AVCProfile and AVCLevel groupboxes Enable status now depends on the Show Advanced Settings status
-  - (sharktooth) [x264ConfigurationPanel] Moved Profile and Level to the main tab and made some more space for more VUI options
+  - (sharktooth) [x264] AVCProfile and AVCLevel groupboxes Enable status now depends on the Show Advanced Settings status
+  - (sharktooth) [x264] Moved Profile and Level to the main tab and made some more space for more VUI options
   - (sharktooth) [DialogManager] Check the "Use CUVID Server" option status before launching CUVID server
 
 0.3.5.3
-  - (sharktooth) [x264ConfigurationPanel] Trigger GenericUpdate() on macroblockOptions.SelectIndex change to keep coherency between macroblock options checkboxes and commandline generation
+  - (sharktooth) [x264ConfigurationPanel] Trigger GenericUpdate() after executing checks on macroblockOptions.SelectIndex change to keep coherency between macroblock options checkboxes and commandline generation
   - (sharktooth) [x264] Added --pic-struct support
   - (sharktooth) [x264] Added --fake-interlaced support
   - (zathor) [x264] old nal-hrd profile values will be migrated
