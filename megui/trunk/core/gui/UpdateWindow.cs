@@ -125,9 +125,7 @@ namespace MeGUI
                     case "dgindexnv":
                         arrPath.Add(MainForm.Instance.Settings.DgnvIndexPath);
                         strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.DgnvIndexPath);
-                        arrPath.Add(System.IO.Path.Combine(strPath, "CUVIDServer.exe"));
                         arrPath.Add(System.IO.Path.Combine(strPath, "DGDecodeNV.dll"));
-                        arrPath.Add(System.IO.Path.Combine(strPath, "DGMultiDecodeNV.dll"));
                         break;
                     case "ffms":
                         arrPath.Add(MainForm.Instance.Settings.FFMSIndexPath);

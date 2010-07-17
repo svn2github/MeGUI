@@ -45,7 +45,7 @@ namespace MeGUI
                      overwriteStats, keep2of3passOutput, deleteCompletedJobs, deleteIntermediateFiles,
                      deleteAbortedOutput, openProgressWindow, useadvancedtooltips, freshOggEnc2, autoscroll, 
                      alwaysOnTop, safeProfileAlteration, autoUpdate, usehttpproxy, addTimePosition, alwaysbackupfiles,
-                     forcerawavcextension, bUseCUVIDserver;
+                     forcerawavcextension;
         private ulong audioSamplesPerUpdate;
         private AfterEncoding afterEncoding;
         private decimal forceFilmThreshold, acceptableFPSError;
@@ -147,7 +147,6 @@ namespace MeGUI
             strMainAudioFormat = "";
             strLastSourcePath = "";
             strLastDestinationPath = "";
-            bUseCUVIDserver = false;
             minComplexity = 72;
             maxComplexity = 78;
             mainFormLocation = new System.Drawing.Point(0, 0);
@@ -298,15 +297,6 @@ namespace MeGUI
         {
             get { return autoscroll; }
             set { autoscroll = value; }
-        }
-
-        /// <summary>
-        /// Gets / sets whether the log should be autoscrolled
-        /// </summary>
-        public bool UseCUVIDserver
-        {
-            get { return bUseCUVIDserver; }
-            set { bUseCUVIDserver = value; }
         }
 
         public bool SafeProfileAlteration

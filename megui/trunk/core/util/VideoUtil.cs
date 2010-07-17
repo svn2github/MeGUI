@@ -672,33 +672,7 @@ namespace MeGUI
             return deviceList;
         }
 
-        /// <summary>
-        /// Manage CUVIDServer from DGIndexNV tools package
-        /// </summary>
-        public static bool manageCUVIDServer()
-        {
-            MainForm.Instance.DialogManager.runCUVIDServer();
-            return true;
-        }
-
-        public static bool findDGSource(string FileName)
-        {
-            int iPosDGSource = 0;
-            using (StreamReader sr = new StreamReader(FileName))
-            {
-                string line = string.Empty;
-                while ((line = sr.ReadLine()) != null)
-                {
-                    iPosDGSource = line.ToLower().IndexOf("dgsource");
-                    if (iPosDGSource >= 0)
-                        if (line.ToLower().IndexOf("#") < 0 || line.ToLower().IndexOf("#") > iPosDGSource)
-                            return true;
-                }
-            }
-            return false;
-        }
-
-		#endregion
+ 		#endregion
 		#region dgindex preprocessing
 		/// <summary>
 		/// opens a video source and fills out the track selector dropdowns

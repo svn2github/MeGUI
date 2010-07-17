@@ -734,7 +734,6 @@ namespace MeGUI
             this.MinimumSize = new System.Drawing.Size(524, 537);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
             this.Load += new System.EventHandler(this.MeGUI_Load);
             this.Shown += new System.EventHandler(this.MainForm_Shown);
             this.Move += new System.EventHandler(this.MainForm_Move);
@@ -2005,10 +2004,6 @@ namespace MeGUI
             Jobs.HideAllProcessWindows();
         }
 
-        private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            DialogManager.stopCUVIDServer(); // close CUVIDServer from DGIndexNV tools if it is running
-        }
         private void mnuForum_Click(object sender, EventArgs e)
         {
             System.Diagnostics.Process.Start("http://forum.doom9.org/forumdisplay.php?f=78");

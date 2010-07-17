@@ -113,7 +113,6 @@ namespace MeGUI
         private Label besplit;
         private Button button8;
         private GroupBox vobGroupBox;
-        private CheckBox btnCUVIDServer;
         private ComboBox defaultLanguage2;
         private Label defaultAudioTrack2Label;
         private ComboBox defaultLanguage1;
@@ -244,7 +243,6 @@ namespace MeGUI
             this.textBox8 = new System.Windows.Forms.TextBox();
             this.button8 = new System.Windows.Forms.Button();
             this.vobGroupBox = new System.Windows.Forms.GroupBox();
-            this.btnCUVIDServer = new System.Windows.Forms.CheckBox();
             this.defaultLanguage2 = new System.Windows.Forms.ComboBox();
             this.defaultAudioTrack2Label = new System.Windows.Forms.Label();
             this.defaultLanguage1 = new System.Windows.Forms.ComboBox();
@@ -1138,7 +1136,6 @@ namespace MeGUI
             // 
             // vobGroupBox
             // 
-            this.vobGroupBox.Controls.Add(this.btnCUVIDServer);
             this.vobGroupBox.Controls.Add(this.defaultLanguage2);
             this.vobGroupBox.Controls.Add(this.defaultAudioTrack2Label);
             this.vobGroupBox.Controls.Add(this.defaultLanguage1);
@@ -1152,16 +1149,6 @@ namespace MeGUI
             this.vobGroupBox.TabIndex = 29;
             this.vobGroupBox.TabStop = false;
             this.vobGroupBox.Text = " DGIndex ";
-            // 
-            // btnCUVIDServer
-            // 
-            this.btnCUVIDServer.AutoSize = true;
-            this.btnCUVIDServer.Location = new System.Drawing.Point(239, 49);
-            this.btnCUVIDServer.Name = "btnCUVIDServer";
-            this.btnCUVIDServer.Size = new System.Drawing.Size(110, 17);
-            this.btnCUVIDServer.TabIndex = 39;
-            this.btnCUVIDServer.Text = "Use CUVIDServer";
-            this.btnCUVIDServer.UseVisualStyleBackColor = true;
             // 
             // defaultLanguage2
             // 
@@ -1313,7 +1300,6 @@ namespace MeGUI
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.vobGroupBox.ResumeLayout(false);
-            this.vobGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.forceFilmPercentage)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -1463,7 +1449,6 @@ namespace MeGUI
                 settings.AddTimePosition = cbAddTimePos.Checked;
                 settings.AlwaysBackUpFiles = backupfiles.Checked;
                 settings.ForceRawAVCExtension = forcerawavcuse.Checked;
-                settings.UseCUVIDserver = btnCUVIDServer.Checked;
 				return settings;
 			}
 			set
@@ -1516,7 +1501,6 @@ namespace MeGUI
                 cbAddTimePos.Checked = settings.AddTimePosition;
                 backupfiles.Checked = settings.AlwaysBackUpFiles;
                 forcerawavcuse.Checked = settings.ForceRawAVCExtension;
-                btnCUVIDServer.Checked = settings.UseCUVIDserver;
 			}
 		}
 		#endregion

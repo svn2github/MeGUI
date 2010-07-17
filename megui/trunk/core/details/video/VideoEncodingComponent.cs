@@ -118,15 +118,7 @@ namespace MeGUI
         private void videoInput_FileSelected(FileBar sender, FileBarEventArgs args)
         {
             if (!string.IsNullOrEmpty(videoInput.Filename))
-            {
-                if (VideoUtil.findDGSource(videoInput.Filename))
-                {
-                    if (VideoUtil.manageCUVIDServer())
-                        openVideoFile(videoInput.Filename);
-                }
-                else
-                    openVideoFile(videoInput.Filename);
-            }
+                openVideoFile(videoInput.Filename);
             editZonesButton.Enabled = !string.IsNullOrEmpty(videoInput.Filename);
         }
 

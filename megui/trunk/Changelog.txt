@@ -1,3 +1,7 @@
+0.3.5.6
+  - (zathor) removed CUVIDServer handling (requires at least DGIndexNV 2020)
+  - (zathor) changed DGMultiSource() to DGSource() and DGMultiDecodeNV.dll to DGDecodeNV.dll (requires at least DGIndexNV 2021)
+
 0.3.5.5
   - (sharktooth) [x264] Added --pulldown option plus some various fixes
   - (sharktooth) [x264] Added --colorprim, --transfer and --colormatrix options

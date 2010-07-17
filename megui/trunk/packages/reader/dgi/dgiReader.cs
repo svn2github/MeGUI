@@ -77,16 +77,7 @@ namespace MeGUI
 
             string strScript = "";
             string strPath = Path.GetDirectoryName(MainForm.Instance.Settings.DgnvIndexPath);
-            if (MainForm.Instance.Settings.UseCUVIDserver == true)
-            {
-                string strDLL = Path.Combine(strPath, "DGDecodeNV.dll");
-                strScript = "LoadPlugin(\"" + strDLL + "\")\r\nDGSource(\"" + this.fileName + "\"";
-            }
-            else
-            {
-                string strDLL = Path.Combine(strPath, "DGMultiDecodeNV.dll");
-                strScript = "LoadPlugin(\"" + strDLL + "\")\r\nDGMultiSource(\"" + this.fileName + "\"";
-            }
+            strScript = "LoadPlugin(\"" + Path.Combine(strPath, "DGDecodeNV.dll") + "\")\r\nDGSource(\"" + this.fileName + "\"";
             if (MainForm.Instance.Settings.AutoForceFilm &&
                         MainForm.Instance.Settings.ForceFilmThreshold <= (decimal)dgiFile.GetFilmPercent(this.fileName))
                 strScript += ",fieldop=1)";

@@ -177,16 +177,8 @@ namespace MeGUI
 #endif
                     break;
                 case PossibleSources.dgi:
-                    if (MainForm.Instance.Settings.UseCUVIDserver == true)
-                    {
-                        strDLLPath = Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.DgnvIndexPath), "DGDecodeNV.dll");
-                        inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nDGSource(\"" + input + "\"";
-                    }
-                    else
-                    {
-                        strDLLPath = Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.DgnvIndexPath), "DGMultiDecodeNV.dll");
-                        inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nDGMultiSource(\"" + input + "\"";
-                    }
+                    strDLLPath = Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.DgnvIndexPath), "DGDecodeNV.dll");
+                    inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nDGSource(\"" + input + "\"";
                     if (MainForm.Instance.Settings.AutoForceFilm &&
                         MainForm.Instance.Settings.ForceFilmThreshold <= (decimal)dgiFile.GetFilmPercent(input))
                         inputLine += ",fieldop=1";

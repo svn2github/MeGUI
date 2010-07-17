@@ -1601,8 +1601,7 @@ namespace MeGUI
                         break;
                     case ".dgi":
                         sourceType = PossibleSources.dgi;
-                        if (VideoUtil.manageCUVIDServer())
-                            openVideo(videoInput); 
+                        openVideo(videoInput); 
                         break;
                     case ".ffindex":
                         sourceType = PossibleSources.ffindex;

@@ -35,7 +35,6 @@ namespace MeGUI
     public class DialogManager
     {
         private MainForm mainForm;
-        private Process CUVIDServerProcess = null;
 
         public DialogManager(MainForm mainForm)
         {
@@ -187,54 +186,6 @@ namespace MeGUI
                 return bResult;
             }
             return mainForm.Settings.DialogSettings.AddConvertToYV12;
-        }
-
-        public void runCUVIDServer()
-        {
-            if (!MainForm.Instance.Settings.UseCUVIDserver)
-                return;
-            
-            if (FindProcess("CUVIDServer"))
-                return;
-
-            string filePath = string.Empty;
-
-            if (MainForm.Instance.Settings.DgnvIndexPath != "" && Path.GetFileName(MainForm.Instance.Settings.DgnvIndexPath).ToLower().ToString() == "dgindexnv.exe")
-                filePath = Path.GetDirectoryName(MainForm.Instance.Settings.DgnvIndexPath);
-
-            if (!string.IsNullOrEmpty(filePath) && File.Exists(Path.Combine(filePath, "CUVIDServer.exe")))
-            {
-                CUVIDServerProcess = System.Diagnostics.Process.Start(Path.Combine(filePath, "CUVIDServer.exe"));
-            }
-            else
-                MessageBox.Show("Cannot run CUVID Server executable...\nAre you sure is it installed ?", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        }
-
-        public void stopCUVIDServer()
-        {
-            if (CUVIDServerProcess != null && CUVIDServerProcess.HasExited == false)
-                CUVIDServerProcess.Kill();
-        }
-
-        public bool FindProcess(string name)
-        {
-            Process[] processlist = Process.GetProcesses();
-            //here we're going to get a list of all running processes on
-            //the computer
-            foreach (Process myProcess in processlist)
-            {
-                //now we're going to see if any of the running processes
-                //match the currently running processes by using the StartsWith Method,
-                //this prevents us from incluing the .EXE for the process we're looking for.
-                //. Be sure to not
-                //add the .exe to the name you provide, i.e: NOTEPAD,
-                //not NOTEPAD.EXE or false is always returned even if
-                //notepad is running
-                if (myProcess.ProcessName.ToUpper().ToString() == name.ToUpper())
-                    return true;
-            }
-            //process not found, return false
-            return false;
         }
     }
 }
