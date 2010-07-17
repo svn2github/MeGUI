@@ -855,6 +855,18 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                 if (xs.SSIMCalculation)
                     sb.Append("--ssim ");
 
+            if (!xs.CustomEncoderOptions.Contains("--sar"))
+                switch (xs.SampleAR)
+                {
+                    case 0: break;
+                    case 1: sb.Append("--sar 1:1 "); break;
+                    case 2: sb.Append("--sar 4:3 "); break;
+                    case 3: sb.Append("--sar 10:11 "); break;
+                    case 4: sb.Append("--sar 12:11 "); break;
+                    case 5: sb.Append("--sar 16:11 "); break;
+                    case 6: sb.Append("--sar 40:33 "); break;
+                }
+
             if (!xs.CustomEncoderOptions.Contains("--fullrange on"))    
                 if (xs.fullRange)
                     sb.Append("--fullrange on ");

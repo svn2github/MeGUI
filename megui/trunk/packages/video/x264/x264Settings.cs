@@ -73,7 +73,7 @@ namespace MeGUI
             bframePredictionMode, vbvBufferSize, vbvMaxBitrate, meType, meRange, minGOPSize, macroBlockOptions,
             quantizerMatrixType, x264Trellis, noiseReduction, deadZoneInter, deadZoneIntra, AQMode, profile, level,
             lookahead, slicesnb, maxSliceSyzeBytes, maxSliceSyzeMBs, bFramePyramid, weightedPPrediction, tune, openGop, x264Nalhrd,
-            colorMatrix, transfer, colorPrim, x264PullDown;
+            colorMatrix, transfer, colorPrim, x264PullDown, sampleAR;
 		decimal ipFactor, pbFactor, chromaQPOffset, vbvInitialBuffer, bitrateVariance, quantCompression, 
 			tempComplexityBlur, tempQuanBlurCC, scdSensitivity, bframeBias, quantizerCrf, AQStrength, psyRDO, psyTrellis;
 		bool deblock, cabac, p4x4mv, p8x8mv, b8x8mv, i4x4mv, i8x8mv, weightedBPrediction, encodeInterlaced,
@@ -161,6 +161,7 @@ namespace MeGUI
             maxSliceSyzeMBs = 0;
             x264Nalhrd = 0;
             x264PullDown = 0;
+            sampleAR = 0;
             colorMatrix = 0;
             transfer = 0;
             colorPrim = 0;
@@ -505,6 +506,11 @@ namespace MeGUI
             get { return x264PullDown; }
             set { x264PullDown = value; }
         }
+        public int SampleAR
+        {
+            get { return sampleAR; }
+            set { sampleAR = value; }
+        }
         public int ColorMatrix
         {
             get { return colorMatrix; }
@@ -719,6 +725,7 @@ namespace MeGUI
                 this.X264Aud != otherSettings.X264Aud ||
                 this.OpenGop != otherSettings.OpenGop ||
                 this.X264PullDown != otherSettings.X264PullDown ||
+                this.SampleAR != otherSettings.SampleAR ||
                 this.ColorMatrix != otherSettings.ColorMatrix ||
                 this.Transfer != otherSettings.Transfer ||
                 this.ColorPrim != otherSettings.ColorPrim ||

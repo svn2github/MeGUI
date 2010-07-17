@@ -184,6 +184,8 @@ namespace MeGUI.packages.video.x264
             this.btPresetSettings = new System.Windows.Forms.Button();
             this.dSettings = new System.Windows.Forms.Button();
             this.gbInOut = new System.Windows.Forms.GroupBox();
+            this.sampleAR = new System.Windows.Forms.ComboBox();
+            this.sampleARLabel = new System.Windows.Forms.Label();
             this.ssim = new System.Windows.Forms.CheckBox();
             this.psnr = new System.Windows.Forms.CheckBox();
             this.gbVUI = new System.Windows.Forms.GroupBox();
@@ -2345,7 +2347,7 @@ namespace MeGUI.packages.video.x264
             this.gbOther.Controls.Add(this.x264NbThreadsLabel);
             this.gbOther.Location = new System.Drawing.Point(6, 311);
             this.gbOther.Name = "gbOther";
-            this.gbOther.Size = new System.Drawing.Size(336, 86);
+            this.gbOther.Size = new System.Drawing.Size(317, 86);
             this.gbOther.TabIndex = 34;
             this.gbOther.TabStop = false;
             this.gbOther.Text = "Other";
@@ -2377,7 +2379,7 @@ namespace MeGUI.packages.video.x264
             // 
             this.x264SlowFirstpass.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.x264SlowFirstpass.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.x264SlowFirstpass.Location = new System.Drawing.Point(205, 47);
+            this.x264SlowFirstpass.Location = new System.Drawing.Point(184, 48);
             this.x264SlowFirstpass.Name = "x264SlowFirstpass";
             this.x264SlowFirstpass.Size = new System.Drawing.Size(125, 24);
             this.x264SlowFirstpass.TabIndex = 37;
@@ -2389,7 +2391,7 @@ namespace MeGUI.packages.video.x264
             this.threadin.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.threadin.Checked = true;
             this.threadin.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.threadin.Location = new System.Drawing.Point(205, 18);
+            this.threadin.Location = new System.Drawing.Point(184, 18);
             this.threadin.Margin = new System.Windows.Forms.Padding(0);
             this.threadin.Name = "threadin";
             this.threadin.Size = new System.Drawing.Size(125, 24);
@@ -2413,9 +2415,9 @@ namespace MeGUI.packages.video.x264
             // 
             this.gbAdjust.Controls.Add(this.btPresetSettings);
             this.gbAdjust.Controls.Add(this.dSettings);
-            this.gbAdjust.Location = new System.Drawing.Point(348, 311);
+            this.gbAdjust.Location = new System.Drawing.Point(329, 311);
             this.gbAdjust.Name = "gbAdjust";
-            this.gbAdjust.Size = new System.Drawing.Size(148, 86);
+            this.gbAdjust.Size = new System.Drawing.Size(167, 86);
             this.gbAdjust.TabIndex = 33;
             this.gbAdjust.TabStop = false;
             this.gbAdjust.Text = "Adjustments";
@@ -2424,7 +2426,7 @@ namespace MeGUI.packages.video.x264
             // 
             this.btPresetSettings.Location = new System.Drawing.Point(6, 48);
             this.btPresetSettings.Name = "btPresetSettings";
-            this.btPresetSettings.Size = new System.Drawing.Size(136, 23);
+            this.btPresetSettings.Size = new System.Drawing.Size(150, 23);
             this.btPresetSettings.TabIndex = 37;
             this.btPresetSettings.Text = "Preset Settings";
             this.tooltipHelp.SetToolTip(this.btPresetSettings, "Adjust x264 settings according to the preset chosen.");
@@ -2435,7 +2437,7 @@ namespace MeGUI.packages.video.x264
             // 
             this.dSettings.Location = new System.Drawing.Point(6, 19);
             this.dSettings.Name = "dSettings";
-            this.dSettings.Size = new System.Drawing.Size(136, 23);
+            this.dSettings.Size = new System.Drawing.Size(150, 23);
             this.dSettings.TabIndex = 35;
             this.dSettings.Text = "Default Settings";
             this.tooltipHelp.SetToolTip(this.dSettings, "Restore x264 default Settings.");
@@ -2444,14 +2446,45 @@ namespace MeGUI.packages.video.x264
             // 
             // gbInOut
             // 
+            this.gbInOut.Controls.Add(this.sampleAR);
+            this.gbInOut.Controls.Add(this.sampleARLabel);
             this.gbInOut.Controls.Add(this.ssim);
             this.gbInOut.Controls.Add(this.psnr);
-            this.gbInOut.Location = new System.Drawing.Point(348, 179);
+            this.gbInOut.Location = new System.Drawing.Point(329, 179);
             this.gbInOut.Name = "gbInOut";
-            this.gbInOut.Size = new System.Drawing.Size(148, 126);
+            this.gbInOut.Size = new System.Drawing.Size(167, 126);
             this.gbInOut.TabIndex = 32;
             this.gbInOut.TabStop = false;
             this.gbInOut.Text = "Input/Output";
+            // 
+            // sampleAR
+            // 
+            this.sampleAR.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.sampleAR.FormattingEnabled = true;
+            this.sampleAR.Items.AddRange(new object[] {
+            "Default",
+            "1:1",
+            "4:3",
+            "10:11",
+            "12:11",
+            "16:11",
+            "40:33"});
+            this.sampleAR.Location = new System.Drawing.Point(86, 75);
+            this.sampleAR.Name = "sampleAR";
+            this.sampleAR.Size = new System.Drawing.Size(70, 21);
+            this.sampleAR.TabIndex = 33;
+            this.sampleAR.SelectedIndexChanged += new System.EventHandler(this.updateEvent);
+            // 
+            // sampleARLabel
+            // 
+            this.sampleARLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.sampleARLabel.Location = new System.Drawing.Point(9, 75);
+            this.sampleARLabel.Margin = new System.Windows.Forms.Padding(3);
+            this.sampleARLabel.Name = "sampleARLabel";
+            this.sampleARLabel.Size = new System.Drawing.Size(125, 24);
+            this.sampleARLabel.TabIndex = 32;
+            this.sampleARLabel.Text = "Force SAR";
+            this.sampleARLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // ssim
             // 
@@ -2459,7 +2492,7 @@ namespace MeGUI.packages.video.x264
             this.ssim.Location = new System.Drawing.Point(6, 49);
             this.ssim.Name = "ssim";
             this.ssim.Padding = new System.Windows.Forms.Padding(3);
-            this.ssim.Size = new System.Drawing.Size(127, 23);
+            this.ssim.Size = new System.Drawing.Size(150, 23);
             this.ssim.TabIndex = 31;
             this.ssim.Text = "SSIM calculation";
             this.ssim.CheckedChanged += new System.EventHandler(this.updateEvent);
@@ -2470,7 +2503,7 @@ namespace MeGUI.packages.video.x264
             this.psnr.Location = new System.Drawing.Point(6, 20);
             this.psnr.Name = "psnr";
             this.psnr.Padding = new System.Windows.Forms.Padding(3);
-            this.psnr.Size = new System.Drawing.Size(127, 23);
+            this.psnr.Size = new System.Drawing.Size(150, 23);
             this.psnr.TabIndex = 30;
             this.psnr.Text = "PSNR calculation";
             this.psnr.CheckedChanged += new System.EventHandler(this.updateEvent);
@@ -2487,7 +2520,7 @@ namespace MeGUI.packages.video.x264
             this.gbVUI.Controls.Add(this.x264FullRange);
             this.gbVUI.Location = new System.Drawing.Point(6, 179);
             this.gbVUI.Name = "gbVUI";
-            this.gbVUI.Size = new System.Drawing.Size(336, 126);
+            this.gbVUI.Size = new System.Drawing.Size(317, 126);
             this.gbVUI.TabIndex = 31;
             this.gbVUI.TabStop = false;
             this.gbVUI.Text = "V.U.I";
@@ -2495,7 +2528,7 @@ namespace MeGUI.packages.video.x264
             // colorMatrixLabel
             // 
             this.colorMatrixLabel.AutoSize = true;
-            this.colorMatrixLabel.Location = new System.Drawing.Point(164, 78);
+            this.colorMatrixLabel.Location = new System.Drawing.Point(153, 78);
             this.colorMatrixLabel.Name = "colorMatrixLabel";
             this.colorMatrixLabel.Size = new System.Drawing.Size(62, 13);
             this.colorMatrixLabel.TabIndex = 44;
@@ -2504,7 +2537,7 @@ namespace MeGUI.packages.video.x264
             // transferLabel
             // 
             this.transferLabel.AutoSize = true;
-            this.transferLabel.Location = new System.Drawing.Point(164, 51);
+            this.transferLabel.Location = new System.Drawing.Point(153, 51);
             this.transferLabel.Name = "transferLabel";
             this.transferLabel.Size = new System.Drawing.Size(46, 13);
             this.transferLabel.TabIndex = 43;
@@ -2513,7 +2546,7 @@ namespace MeGUI.packages.video.x264
             // colorPrimLabel
             // 
             this.colorPrimLabel.AutoSize = true;
-            this.colorPrimLabel.Location = new System.Drawing.Point(164, 24);
+            this.colorPrimLabel.Location = new System.Drawing.Point(153, 24);
             this.colorPrimLabel.Name = "colorPrimLabel";
             this.colorPrimLabel.Size = new System.Drawing.Size(76, 13);
             this.colorPrimLabel.TabIndex = 42;
@@ -2532,9 +2565,9 @@ namespace MeGUI.packages.video.x264
             "smpte240m",
             "GBR",
             "YCgCo"});
-            this.colorMatrix.Location = new System.Drawing.Point(250, 75);
+            this.colorMatrix.Location = new System.Drawing.Point(239, 75);
             this.colorMatrix.Name = "colorMatrix";
-            this.colorMatrix.Size = new System.Drawing.Size(80, 21);
+            this.colorMatrix.Size = new System.Drawing.Size(70, 21);
             this.colorMatrix.TabIndex = 41;
             this.colorMatrix.SelectedIndexChanged += new System.EventHandler(this.updateEvent);
             // 
@@ -2552,9 +2585,9 @@ namespace MeGUI.packages.video.x264
             "log316",
             "smpte170m",
             "smpte240m"});
-            this.transfer.Location = new System.Drawing.Point(250, 48);
+            this.transfer.Location = new System.Drawing.Point(239, 48);
             this.transfer.Name = "transfer";
-            this.transfer.Size = new System.Drawing.Size(80, 21);
+            this.transfer.Size = new System.Drawing.Size(70, 21);
             this.transfer.TabIndex = 40;
             this.transfer.SelectedIndexChanged += new System.EventHandler(this.updateEvent);
             // 
@@ -2570,9 +2603,9 @@ namespace MeGUI.packages.video.x264
             "smpte170m",
             "smpte240m",
             "film"});
-            this.colorPrim.Location = new System.Drawing.Point(250, 21);
+            this.colorPrim.Location = new System.Drawing.Point(239, 21);
             this.colorPrim.Name = "colorPrim";
-            this.colorPrim.Size = new System.Drawing.Size(80, 21);
+            this.colorPrim.Size = new System.Drawing.Size(70, 21);
             this.colorPrim.TabIndex = 39;
             this.colorPrim.SelectedIndexChanged += new System.EventHandler(this.updateEvent);
             // 
@@ -3022,5 +3055,7 @@ namespace MeGUI.packages.video.x264
         private System.Windows.Forms.ComboBox colorPrim;
         private System.Windows.Forms.Label pullDownLabel;
         private System.Windows.Forms.ComboBox x264PullDown;
+        private System.Windows.Forms.ComboBox sampleAR;
+        private System.Windows.Forms.Label sampleARLabel;
     }
 }

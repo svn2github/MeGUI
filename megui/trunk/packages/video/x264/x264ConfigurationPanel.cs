@@ -1402,6 +1402,7 @@ namespace MeGUI.packages.video.x264
                 xs.Transfer = (int)transfer.SelectedIndex;
                 xs.ColorMatrix = (int)colorMatrix.SelectedIndex;
                 xs.X264PullDown = (int)x264PullDown.SelectedIndex;
+                xs.SampleAR = (int)sampleAR.SelectedIndex;
                 xs.PicStruct = picStruct.Checked;
                 xs.FakeInterlaced = fakeInterlaced.Checked;
                 xs.NonDeterministic = nonDeterministic.Checked;
@@ -1521,6 +1522,7 @@ namespace MeGUI.packages.video.x264
                 transfer.SelectedIndex = xs.Transfer;
                 colorMatrix.SelectedIndex = xs.ColorMatrix;
                 x264PullDown.SelectedIndex = xs.X264PullDown;
+                sampleAR.SelectedIndex = xs.SampleAR;
                 picStruct.Checked = xs.PicStruct;
                 fakeInterlaced.Checked = xs.FakeInterlaced;
                 nonDeterministic.Checked = xs.NonDeterministic;
