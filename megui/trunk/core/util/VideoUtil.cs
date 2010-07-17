@@ -853,7 +853,7 @@ namespace MeGUI
             {
                 using (AvsFile avi = AvsFile.OpenScriptFile(avsFile))
                 {
-                    if (avi.Clip.OriginalColorspace != AviSynthColorspace.YV12)
+                    if (avi.Clip.OriginalColorspace != AviSynthColorspace.YV12 && avi.Clip.OriginalColorspace != AviSynthColorspace.I420)
                     {
                         if (tryToFix && !isConvertedToYV12(avsFile))
                         {
