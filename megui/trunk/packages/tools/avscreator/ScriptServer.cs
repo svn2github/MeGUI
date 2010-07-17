@@ -165,15 +165,15 @@ namespace MeGUI
                     strDLLPath = Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.FFMSIndexPath), "ffms2.dll");
 #if x86
                     if (input.ToLower().EndsWith(".ffindex"))
-                        inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + input.Substring(0, input.Length - 8) + "\",colorspace=\"YV12\")";
+                        inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + input.Substring(0, input.Length - 8) + "\")";
                     else
-                        inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + input + "\",colorspace=\"YV12\")";
+                        inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + input + "\")";
 #endif
 #if x64
                     if (input.ToLower().EndsWith(".ffindex"))
-                        inputLine = "LoadCPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + input.Substring(0, input.Length - 8) + "\",colorspace=\"YV12\")";
+                        inputLine = "LoadCPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + input.Substring(0, input.Length - 8) + "\")";
                     else
-                        inputLine = "LoadCPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + input + "\",colorspace=\"YV12\")";
+                        inputLine = "LoadCPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + input + "\")";
 #endif
                     break;
                 case PossibleSources.dgi:
