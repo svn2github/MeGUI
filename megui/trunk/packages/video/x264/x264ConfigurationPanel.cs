@@ -1190,9 +1190,9 @@ namespace MeGUI.packages.video.x264
             if (isBitrateMode(lastEncodingMode) != isBitrateMode(x264EncodingMode.SelectedIndex))
             {
                 if (isBitrateMode(x264EncodingMode.SelectedIndex))
-                    this.x264BitrateQuantizer.Value = 700;
+                    this.x264BitrateQuantizer.Value = 1000;
                 else
-                    this.x264BitrateQuantizer.Value = 23;
+                    this.x264BitrateQuantizer.Value = 20;
             }
 
             // Lookahead
