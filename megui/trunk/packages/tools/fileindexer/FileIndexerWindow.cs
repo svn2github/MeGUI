@@ -692,6 +692,8 @@ namespace MeGUI
                         else
                         {
                             btnDGA.Enabled = false;
+                            if (!bDGIAvailable)
+                                changeIndexer(IndexType.FFMS);
                         }
                         if (bDGIAvailable)
                         {
@@ -700,7 +702,7 @@ namespace MeGUI
                         }
                         else
                         {
-                            btnDGI.Enabled = true;
+                            btnDGI.Enabled = false;
                         }
                     }
                     break;
@@ -772,12 +774,6 @@ namespace MeGUI
                     break;
                 }
             }
-
-            setOutputFileName();
-            recommendSettings();
-
-            if (!bDGIAvailable)
-                btnDGI.Enabled = false; 
 		}
 
         /// <summary>

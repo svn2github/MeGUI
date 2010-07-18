@@ -1,3 +1,6 @@
+0.3.5.7
+  - (zathor) [FileIndexer] improved handling if DGIndexNV is not available
+
 0.3.5.6
   - (zathor) removed CUVIDServer handling (requires at least DGIndexNV 2020)
   - (zathor) changed DGMultiSource() to DGSource() and DGMultiDecodeNV.dll to DGDecodeNV.dll (requires at least DGIndexNV 2021)
