@@ -109,6 +109,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                         sb.Append(" --track-name \"" + trackID + ":" + settings.VideoName + "\"");
                     if (settings.Framerate.HasValue)
                         sb.Append(" --default-duration " + trackID + ":" + PrettyFormatting.ReplaceFPSValue(settings.Framerate.Value.ToString()) + "fps");
+                    sb.Append(" \"--compression\" \"" + trackID + ":none\"");
                     sb.Append(" -d " + trackID + " -A -S \"" + settings.VideoInput + "\"");                    
                 }
                 
@@ -125,6 +126,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                         sb.Append(" --track-name \"" + trackID + ":" + settings.VideoName + "\"");
                     if (settings.Framerate.HasValue)
                         sb.Append(" --default-duration " + trackID + ":" + PrettyFormatting.ReplaceFPSValue(settings.Framerate.Value.ToString()) + "fps");
+                    sb.Append(" \"--compression\" \"" + trackID + ":none\"");
                     sb.Append(" -d " + trackID + " -A -S \"" + settings.MuxedInput + "\""); 
                 }
 
@@ -160,6 +162,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                         sb.Append(" --track-name \"" + trackID + ":" + stream.name + "\"");
                     if (stream.delay != 0)
                         sb.AppendFormat(" --sync {0}:{1}ms", trackID, stream.delay);
+                    sb.Append(" \"--compression\" \"" + trackID + ":none\"");
                     sb.Append(" -a " + trackID + " -D -S \"" + stream.path + "\"");
                 }
 
@@ -217,6 +220,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                             else sb.Append("0");
                             ++nb;
                         }
+                        sb.Append(" \"--compression\" \"" + trackID + ":none\"");
                         sb.Append(" -D -A \"" + stream.path + "\"");
                     }
                     else
@@ -234,6 +238,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                         }
                         if (!string.IsNullOrEmpty(stream.name))
                              sb.Append(" --track-name \"" + trackID + ":" + stream.name + "\"");
+                        sb.Append(" \"--compression\" \"" + trackID + ":none\"");
                         sb.Append(" -s 0 -D -A \"" + stream.path + "\"");
                     }
                 }
