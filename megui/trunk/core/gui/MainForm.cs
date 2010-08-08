@@ -404,7 +404,7 @@ namespace MeGUI
             this.jobControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.jobControl1.Location = new System.Drawing.Point(0, 0);
             this.jobControl1.Name = "jobControl1";
-            this.jobControl1.Size = new System.Drawing.Size(500, 473);
+            this.jobControl1.Size = new System.Drawing.Size(192, 74);
             this.jobControl1.TabIndex = 0;
             // 
             // logTab
@@ -1114,13 +1114,14 @@ namespace MeGUI
         #region menu actions
         private void mnuFileOpen_Click(object sender, EventArgs e)
         {
-            openFileDialog.Filter = "AviSynth Scripts (*.avs)|*.avs|" +
-                "Audio Files (*.ac3, *.mp2, *.mpa, *.wav)|*.ac3;*.mp2;*.mpa;*.wav|" +
+            openFileDialog.Filter =
+                "All supported encodable files|" +
+                "*.avs;*.ac3;*.dts;*.mp2;*.mpa;*.wav;*.vob;*.mpg;*.mpeg;*.m2t*;*.m2v;*.mpv;*.tp;*.ts;*.trp;*.pva;*.vro;*.d2v;*.avi;*.mp4;*.mkv;*.rmvb|" +
+                "AviSynth Scripts (*.avs)|*.avs|" +
+                "Audio Files (*.ac3, *.dts, *.mp2, *.mpa, *.wav)|*.ac3;*.dts;*.mp2;*.mpa;*.wav|" +
                 "MPEG-2 Files (*.vob, *.mpg, *.mpeg, *.m2t*, *.m2v, *.mpv, *.tp, *.ts, *.trp, *.pva, *.vro)|" +
                 "*.vob;*.mpg;*.mpeg;*.m2t*;*.m2v;*.mpv;*.tp;*.ts;*.trp;*.pva;*.vro|" +
-                "Other Video Files (*.d2v, *.avi, *.mp4, *.mkv, *.rmvb)|*.d2v;*.avi;*.mp4;*.mkv;*.rmvb|" +
-                "All supported encodable files|" +
-                "*.avs;*.ac3;*.mp2;*.mpa;*.wav;*.vob;*.mpg;*.mpeg;*.m2t*;*.m2v;*.mpv;*.tp;*.ts;*.trp;*.pva;*.vro;*.d2v;*.avi;*.mp4;*.mkv;*.rmvb|" +
+                "Other Video Files (*.d2v, *.avi, *.flv, *.mp4, *.mkv, *.rmvb)|*.d2v;*.avi;*.flv;*.mp4;*.mkv;*.rmvb|" +
                 "All files|*.*";
             openFileDialog.Title = "Select your input file";
             if (openFileDialog.ShowDialog() == DialogResult.OK)
@@ -1304,7 +1305,10 @@ namespace MeGUI
                 case ".pva":
                 case ".vro":
                     return FileType.DGINDEX;
+                case ".avi":
+                case ".flv":
                 case ".mkv":
+                case ".mp4":
                     return FileType.FFMSINDEX;
                 case ".zip":
                     return FileType.ZIPPED_PROFILES;
@@ -1327,7 +1331,7 @@ namespace MeGUI
                     openDGIndexFile(file);
                     break;
                 case FileType.FFMSINDEX:
-                    openDGIndexFile(file);
+                    openD2VCreatorFile(file);
                     break;
                 case FileType.OTHERVIDEO:
                     openOtherVideoFile(file);
