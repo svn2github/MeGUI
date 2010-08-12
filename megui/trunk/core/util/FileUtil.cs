@@ -285,7 +285,11 @@ namespace MeGUI.core.util
             {
                 if (File.Exists(sourcePath))
                 {
-                    String targetPath = sourcePath.Replace(System.Windows.Forms.Application.StartupPath, System.Windows.Forms.Application.StartupPath + @"\backup");
+                    String targetPath;
+                    if (sourcePath.Contains(System.Windows.Forms.Application.StartupPath))
+                        targetPath = sourcePath.Replace(System.Windows.Forms.Application.StartupPath, System.Windows.Forms.Application.StartupPath + @"\backup");
+                    else
+                        targetPath = System.Windows.Forms.Application.StartupPath + @"\backup\" + (new FileInfo(sourcePath)).Name;
                     if (File.Exists(targetPath))
                         File.Delete(targetPath);
 
