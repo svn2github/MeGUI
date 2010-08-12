@@ -253,12 +253,12 @@ namespace MeGUI
             }
 
             foreach (ProfileType t in profileTypes)
-                t.Profiles = readAllProfiles(t);
+                t.Profiles = readAllProfiles(t, false);
 
             loadSelectedProfiles();
         }
 
-        public static List<Profile> ReadAllProfiles(string path)
+        public static List<Profile> ReadAllProfiles(string path, bool bSilentError)
         {
             ProfileManager p = new ProfileManager(path);
             //if (Directory.Exists(Path.Combine(path, "profiles")))
@@ -267,12 +267,12 @@ namespace MeGUI
             List<Profile> ps = new List<Profile>();
 
             foreach (ProfileType t in p.profileTypes)
-                ps.AddRange(p.readAllProfiles(t));
+                ps.AddRange(p.readAllProfiles(t, bSilentError));
 
             return ps;
         }
 
-        private List<Profile> readAllProfiles(ProfileType type)
+        private List<Profile> readAllProfiles(ProfileType type, bool bSilentError)
         {
             string profilePath = Path.Combine(GetSaveFolder(path), type.ID);
             DirectoryInfo di = FileUtil.ensureDirectoryExists(profilePath);
@@ -281,7 +281,7 @@ namespace MeGUI
             return Util.RemoveDuds(new List<FileInfo>(files).ConvertAll<Profile>(
                 delegate(FileInfo fi)
                 {
-                    return (Profile)Util.XmlDeserialize(fi.FullName, type.GenericProfileType);
+                    return (Profile)Util.XmlDeserialize(fi.FullName, type.GenericProfileType, bSilentError);
                 }));
         }
 

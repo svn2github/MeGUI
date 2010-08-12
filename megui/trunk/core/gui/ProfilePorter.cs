@@ -126,6 +126,7 @@ namespace MeGUI.core.gui
 
         private void cancelButton_Click(object sender, EventArgs e)
         {
+            MainForm.Instance.ImportProfileSuccessful = true;
             this.Close();
         }
 

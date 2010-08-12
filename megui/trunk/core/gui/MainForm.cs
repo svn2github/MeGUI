@@ -1346,7 +1346,7 @@ namespace MeGUI
 
         private void importProfiles(string file)
         {
-            new ProfileImporter(this, file).ShowDialog();
+            new ProfileImporter(this, file, false).ShowDialog();
         }
         #endregion
         #region Drag 'n' Drop
@@ -1376,7 +1376,9 @@ namespace MeGUI
         {
             Util.ThreadSafeRun(this, delegate
             {
-                ProfileImporter importer = new ProfileImporter(this, data);
+                ProfileImporter importer = new ProfileImporter(this, data, true);
+                if (importer.ErrorDuringInit())
+                    return;
                 importer.Show();
                 while (importer.Visible == true)    // wait until the profiles have been imported
                 {
@@ -1386,11 +1388,18 @@ namespace MeGUI
             });
         }
 
+        private bool bImportProfileSuccessful = false;
+        public bool ImportProfileSuccessful
+        {
+            get { return bImportProfileSuccessful; }
+            set { bImportProfileSuccessful = value; }
+        }
+
         private void mnuFileImport_Click(object sender, EventArgs e)
         {
             try
             {
-                new ProfileImporter(this).ShowDialog();
+                new ProfileImporter(this, false).ShowDialog();
             }
             catch (CancelledException) { }
         }

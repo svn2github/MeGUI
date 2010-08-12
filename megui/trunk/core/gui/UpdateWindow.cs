@@ -433,12 +433,16 @@ namespace MeGUI
                 try
                 {
                     mainForm.importProfiles(fileData);
+                    if (mainForm.ImportProfileSuccessful == true)
+                        return ErrorState.Successful;
+                    else
+                        return ErrorState.CouldNotInstall;
                 }
                 catch
                 {
                     return ErrorState.CouldNotInstall;
                 }
-                return ErrorState.Successful;
+                
             }
 
             public override ErrorState Upgrade()

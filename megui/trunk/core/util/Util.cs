@@ -141,15 +141,15 @@ namespace MeGUI.core.util
             else return new T();
         }
 
-        public static object XmlDeserialize(string path, Type t)
+        public static object XmlDeserialize(string path, Type t, bool bSilentError)
         {
             MethodInfo ms = (MethodInfo)Array.Find(typeof(Util).GetMember("XmlDeserialize"),
                 delegate(MemberInfo m) { return (m is MethodInfo) && (m as MethodInfo).IsGenericMethod; });
             ms = ms.MakeGenericMethod(t);
-            return ms.Invoke(null, new object[] { path });
+            return ms.Invoke(null, new object[] { path, bSilentError });
         }
 
-        public static T XmlDeserialize<T>(string path)
+        public static T XmlDeserialize<T>(string path, bool bSilentError)
             where T : class
         {
             XmlSerializer ser = new XmlSerializer(typeof(T));
@@ -164,8 +164,11 @@ namespace MeGUI.core.util
                     catch (Exception e)
                     {
                         s.Close();
-                        MessageBox.Show("File '" + path + "' could not be loaded!\n\nIt will be moved to the backup directory.", "Error loading File", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        FileUtil.BackupFile(path, true);
+                        if (!bSilentError)
+                        {
+                            MessageBox.Show("File '" + path + "' could not be loaded!\n\nIt will be moved to the backup directory.", "Error loading File", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            FileUtil.BackupFile(path, true);
+                        }
                         Console.Write(e.Message);
                         return null;
                     }
