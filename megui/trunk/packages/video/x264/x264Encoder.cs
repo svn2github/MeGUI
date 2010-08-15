@@ -244,7 +244,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                         sb.Append("--keyint " + xs.KeyframeInterval + " ");
                 }
             if (!xs.CustomEncoderOptions.Contains("--min-keyint"))
-                if (xs.MinGOPSize != 25)
+                if (xs.MinGOPSize != xs.KeyframeInterval / 10)
                     sb.Append("--min-keyint " + xs.MinGOPSize + " ");
 
             if (!xs.CustomEncoderOptions.Contains("--open-gop"))
