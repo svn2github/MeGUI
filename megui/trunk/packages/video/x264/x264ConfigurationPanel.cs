@@ -1789,17 +1789,6 @@ namespace MeGUI.packages.video.x264
             else
                 this.x264MixedReferences.Enabled = false;
 
-            if (!this.cabac.Checked) // trellis requires CABAC
-            {
-                this.trellis.Enabled = false;
-                this.trellisLabel.Enabled = false;
-                this.trellis.SelectedIndex = 0;
-            }
-            else
-            {
-                this.trellis.Enabled = true;
-                this.trellisLabel.Enabled = true;
-            }
             if (this.x264SubpelRefinement.SelectedIndex > 4)
             {
                 this.PsyRD.Enabled = true;

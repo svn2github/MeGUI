@@ -735,7 +735,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                         sb.Append("--no-8x8dct ");
 
             // Trellis
-            if (!xs.CustomEncoderOptions.Contains("--trellis ") && xs.Cabac)
+            if (!xs.CustomEncoderOptions.Contains("--trellis "))
             {
                 display = false;
                 switch (xs.x264PresetLevel)
