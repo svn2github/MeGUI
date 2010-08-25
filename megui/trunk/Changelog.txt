@@ -1,4 +1,5 @@
 0.3.5.9
+  - (sharktooth) [x264] Added 2 new "Force SAR" options
   - (sharktooth) [x264] Enabled Trellis with no-cabac option (requires x264 rev 1703+)
 
 0.3.5.8

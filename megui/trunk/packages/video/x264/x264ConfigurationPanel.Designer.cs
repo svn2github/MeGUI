@@ -2465,9 +2465,11 @@ namespace MeGUI.packages.video.x264
             "Default",
             "1:1",
             "4:3",
+            "8:9",
             "10:11",
             "12:11",
             "16:11",
+            "32:27",
             "40:33"});
             this.sampleAR.Location = new System.Drawing.Point(86, 75);
             this.sampleAR.Name = "sampleAR";
