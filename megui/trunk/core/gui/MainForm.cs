@@ -1473,7 +1473,7 @@ namespace MeGUI
                 }
                 else
                 {
-                    if (MessageBox.Show("There are updated files available that may be necessary to MeGUI to work correctly. Some of them are binary files subject to patents, so they could be in violation of your local law if you live in US, Japan and some countries in Europe. MeGUI will let you choose what files to update but please check your local laws about patents before proceding. By clicking on the 'Yes' button you declare you have read this warning. Do you wish to proceed reviewing the updates?",
+                    if (MessageBox.Show("There are updated files available that may be necessary to MeGUI to work correctly. Some of them are binary files subject to patents, so they could be in violation of your local laws if you live in US, Japan and some countries in Europe. MeGUI will let you choose what files to update but please check your local laws about patents before proceding. By clicking on the 'Yes' button you declare you have read this warning. Do you wish to proceed reviewing the updates?",
                         "Updates Available", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                         update.ShowDialog();
                 }
