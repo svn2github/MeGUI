@@ -2,6 +2,7 @@
   - (sharktooth) [MainForm.cs] Added a big fat warning about patents and binary files when megui finds updates
   - (sharktooth) [x264] Added 2 new "Force SAR" options
   - (sharktooth) [x264] Enabled Trellis with no-cabac option (requires x264 rev 1703+)
+  - (zathor) fixed saving of custom FPS and file sizes
 
 0.3.5.8
   - (zathor) enhanced error handling of the profile import. an unsuccessful 

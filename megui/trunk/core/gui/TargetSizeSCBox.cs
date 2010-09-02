@@ -124,6 +124,8 @@ namespace MeGUI.core.gui
             }
             set
             {
+                if (value == null || value.Length == 0)
+                    return;
                 CustomItems = Util.CastAll<FileSize, object>(value);
             }
         }

@@ -88,8 +88,16 @@ namespace MeGUI.core.gui
 
         private FPS[] CustomFPSs
         {
-            get { return Util.CastAll<FPS>(CustomItems); }
-            set { CustomItems = Util.CastAll<FPS, object>(value); }
+            get 
+            { 
+                return Util.CastAll<FPS>(CustomItems); 
+            }
+            set 
+            {
+                if (value == null || value.Length == 0)
+                    return;
+                CustomItems = Util.CastAll<FPS, object>(value); 
+            }
         }
 
 
@@ -101,7 +109,7 @@ namespace MeGUI.core.gui
             {
                 if (SelectedObject.Equals(NullString))
                     return null;
-                return ((FPS)SelectedObject).val;
+                return ((FPS)SelectedObject).fps;
             }
             set
             {
@@ -132,16 +140,16 @@ namespace MeGUI.core.gui
     [TypeConverter(typeof(FPSConverter))]
     public struct FPS
     {
-        internal FPS(decimal v)
+        public FPS(decimal v)
         {
-            val = v;
+            fps = v;
         }
 
-        internal decimal val;
+        public decimal fps;
 
         public override string ToString()
         {
-            return val.ToString();
+            return fps.ToString();
         }
 
         public static FPS Parse(string s)
@@ -152,8 +160,8 @@ namespace MeGUI.core.gui
         public override bool Equals(object obj)
         {
             if (!(obj is FPS)) return false;
-            decimal other = ((FPS)obj).val;
-            return (Math.Abs(val - other) < MainForm.Instance.Settings.AcceptableFPSError);
+            decimal other = ((FPS)obj).fps;
+            return (Math.Abs(fps - other) < MainForm.Instance.Settings.AcceptableFPSError);
         }
 
         public override int GetHashCode()
