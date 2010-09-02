@@ -40,6 +40,7 @@ namespace MeGUI
         }
 
         private string lastLine;
+        private bool bSecondPass;
 
         public HDStreamExtractorIndexer(string executablePath)
         {
@@ -80,7 +81,22 @@ namespace MeGUI
             if (line.StartsWith("process: ")) //status update
             {
                 su.PercentageDoneExact = getPercentage(line);
-                su.Status = "Extracting Tracks...";
+                if (bSecondPass)
+                    su.Status = "Fixing audio gaps/overlaps...";
+                else
+                    su.Status = "Extracting Tracks...";
+            }
+            else if (line.StartsWith("analyze: "))
+            {
+                su.PercentageDoneExact = getPercentage(line);
+                su.Status = "Analyzing...";
+            }
+            else if (line.ToLower().Contains("2nd"))
+            {
+                startTime = DateTime.Now;
+                su.TimeElapsed = TimeSpan.Zero;
+                bSecondPass = true;
+                su.Status = "Fixing audio gaps/overlaps...";
             }
             else if (line.ToLower().Contains("error"))
             {
@@ -88,17 +104,9 @@ namespace MeGUI
                 su.HasError = true;
             }
             else if (line.ToLower().Contains("warning") ||
-                     line.ToLower().Contains("doesn"))
+                     line.ToLower().Contains("doesn") ||
+                     (su.PercentageDoneExact > 0 && su.PercentageDoneExact < 100))
                 log.LogValue("A warning occurred", line, ImageType.Warning);
-            else if (line.StartsWith("analyze: "))
-            {
-                su.PercentageDoneExact = getPercentage(line);
-                su.Status = "Analyze...";
-            }
-            else if (line.ToLower().Contains("2nd"))
-            {
-                su.Status = "Starting 2nd pass to fix audio gaps/overlaps...";
-            }
             else
                 base.ProcessLine(line, stream);
             
