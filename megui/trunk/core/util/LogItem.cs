@@ -104,7 +104,7 @@ namespace MeGUI.core.util
 
         public LogItem LogValue(string name, object value)
         {
-            return LogValue(name, value, ImageType.NoImage);
+            return LogValue(name, value, ImageType.Information);
         }
 
         public LogItem LogValue(string name, object value, ImageType im)
