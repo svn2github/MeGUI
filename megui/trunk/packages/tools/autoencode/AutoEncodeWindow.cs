@@ -687,7 +687,7 @@ namespace MeGUI
                 if (addSubsNChapters.Checked)
 				{
                     AdaptiveMuxWindow amw = new AdaptiveMuxWindow(mainForm);
-                    amw.setMinimizedMode(videoOutput, videoStream.Settings.EncoderType, jobUtil.getFramerate(videoInput), audio,
+                    amw.setMinimizedMode(videoOutput, "", videoStream.Settings.EncoderType, jobUtil.getFramerate(videoInput), audio,
                         muxTypes, muxedOutput, splitSize, cot);
                     if (amw.ShowDialog() == DialogResult.OK)
                         amw.getAdditionalStreams(out audio, out subtitles, out chapters, out muxedOutput, out cot);

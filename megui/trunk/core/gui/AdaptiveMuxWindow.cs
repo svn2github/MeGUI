@@ -249,10 +249,10 @@ namespace MeGUI
         /// <param name="audioStreams">the audio streams whose languages have to be assigned</param>
         /// <param name="output">the output file</param>
         /// <param name="splitSize">the output split size</param>
-        public void setMinimizedMode(string videoInput, VideoEncoderType videoType, double framerate, MuxStream[] audioStreams, AudioEncoderType[] audioTypes, string output,
+        public void setMinimizedMode(string videoInput, string videoName, VideoEncoderType videoType, double framerate, MuxStream[] audioStreams, AudioEncoderType[] audioTypes, string output,
             FileSize? splitSize, ContainerType cft)
         {
-            base.setConfig(videoInput, (decimal)framerate, audioStreams, new MuxStream[0], null, output, splitSize, null, null);
+            base.setConfig(videoInput, videoName, (decimal)framerate, audioStreams, new MuxStream[0], null, output, splitSize, null, null);
 
             minimizedMode = true;
             knownVideoType = videoType;

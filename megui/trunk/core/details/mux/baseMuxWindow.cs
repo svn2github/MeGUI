@@ -144,11 +144,12 @@ namespace MeGUI
         /// <param name="subtitleStreams">the subtitle streams</param>
         /// <param name="output">name of the output</param>
         /// <param name="splitSize">split size of the output</param>
-        public void setConfig(string videoInput, decimal? framerate, MuxStream[] audioStreams, MuxStream[] subtitleStreams, string chapterFile, string output, FileSize? splitSize, Dar? dar, string deviceType)
+        public void setConfig(string videoInput, string videoName, decimal? framerate, MuxStream[] audioStreams, MuxStream[] subtitleStreams, string chapterFile, string output, FileSize? splitSize, Dar? dar, string deviceType)
         {
             this.dar = dar;
             vInput.Filename = videoInput;
             fps.Value = framerate;
+            this.videoName.Text = videoName;
             
             int index = 0;
             foreach (MuxStream stream in audioStreams)

@@ -116,17 +116,17 @@ namespace MeGUI
             get { return generateMuxJob(); }
             set
             {
-                setConfig(value.Settings.VideoInput, value.Settings.MuxedInput, value.Settings.Framerate,
+                setConfig(value.Settings.VideoInput, value.Settings.VideoName, value.Settings.MuxedInput, value.Settings.Framerate,
                     value.Settings.AudioStreams.ToArray(), value.Settings.SubtitleStreams.ToArray(),
                     value.Settings.ChapterFile, value.Settings.MuxedOutput, value.Settings.SplitSize,
                     value.Settings.DAR, value.Settings.DeviceType);
             }
         }
 
-        private void setConfig(string videoInput, string muxedInput, decimal? framerate, MuxStream[] audioStreams,
+        private void setConfig(string videoInput, string videoName, string muxedInput, decimal? framerate, MuxStream[] audioStreams,
             MuxStream[] subtitleStreams, string chapterFile, string output, FileSize? splitSize, Dar? dar, string deviceType)
         {
-            base.setConfig(videoInput, framerate, audioStreams, subtitleStreams, chapterFile, output, splitSize, dar, deviceType);
+            base.setConfig(videoInput, videoName, framerate, audioStreams, subtitleStreams, chapterFile, output, splitSize, dar, deviceType);
             this.muxedInput.Filename = muxedInput;
             this.checkIO();
         }

@@ -62,7 +62,7 @@ namespace MeGUI.core.details.mux
 
                 input.Filename = value.path;
                 if (!string.IsNullOrEmpty(value.language))
-                    subtitleLanguage.SelectedValue = value.language;
+                    subtitleLanguage.Text = value.language;
                 subName.Text = value.name;
                 audioDelay.Value = value.delay;
             }
