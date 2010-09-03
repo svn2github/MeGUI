@@ -258,6 +258,7 @@ namespace MeGUI.core.gui
             this.LoadMenuItem.Size = new System.Drawing.Size(149, 22);
             this.LoadMenuItem.Text = "&Load";
             this.LoadMenuItem.ToolTipText = "Load into MeGUI";
+            this.LoadMenuItem.Click += new System.EventHandler(this.loadJobButton_Click);
             // 
             // flowLayoutPanel1
             // 
