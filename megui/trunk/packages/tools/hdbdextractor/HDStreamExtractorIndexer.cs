@@ -102,11 +102,15 @@ namespace MeGUI
             {
                 log.LogValue("An error occurred", line, ImageType.Error);
                 su.HasError = true;
+                base.ProcessLine(line, stream);
             }
             else if (line.ToLower().Contains("warning") ||
                      line.ToLower().Contains("doesn") ||
                      (su.PercentageDoneExact > 0 && su.PercentageDoneExact < 100))
+            {
                 log.LogValue("A warning occurred", line, ImageType.Warning);
+                base.ProcessLine(line, stream);
+            }
             else
                 base.ProcessLine(line, stream);
             
