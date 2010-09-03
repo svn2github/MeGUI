@@ -480,20 +480,38 @@ namespace MeGUI.core.gui
         #region load/update
         private void loadJobButton_Click(object sender, EventArgs e)
         {
+            bool bJobCanBeLoaded = false;
+
             if (queueListView.SelectedItems.Count != 1)
+            {
+                if (queueListView.SelectedItems.Count < 1)
+                    MessageBox.Show("Please select a job.", "Cannot load job", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                else
+                    MessageBox.Show("Please select one job only.", "Cannot load job", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
+            }
 
             TaggedJob job = jobs[queueListView.SelectedItems[0].Text];
 
-            if (job.Status != JobStatus.WAITING)
+            if (job.Status != JobStatus.WAITING && job.Status != JobStatus.POSTPONED)
+            {
+                MessageBox.Show("Only waiting or postponed jobs can be processed.\r\nYour selected job has the status: " + job.Status.ToString().ToLower(), "Cannot load job", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
+            }
 
             foreach (IDable<ReconfigureJob> i in MainForm.Instance.PackageSystem.JobConfigurers.Values)
             {
                 Job j = i.Data(job.Job);
                 if (j != null)
+                {
+                    bJobCanBeLoaded = true;
                     job.Job = j;
+                }
             }
+
+            if (!bJobCanBeLoaded)
+                MessageBox.Show("This kind of job cannot be loaded.", "Cannot load job", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
         }
         #endregion
 
