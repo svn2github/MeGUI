@@ -9,6 +9,7 @@
   - (zathor) [JobQueue] fixed load context menu option. Bug #3024349
   - (zathor) [MuxWindow] language and video name will be visible during load. Bug #3024349
   - (zathor) [JobQueue] enhanced load handling
+  - (zathor) [MeGUISettings] + [UpdateWindow] + [VobSubIndexer] added vobsub.dll
 
 0.3.5.8
   - (zathor) enhanced error handling of the profile import. an unsuccessful 

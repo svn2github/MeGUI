@@ -37,7 +37,7 @@ namespace MeGUI
         private string faacPath, lamePath, neroAacEncPath, mencoderPath, mp4boxPath, mkvmergePath, strMainAudioFormat,
                        encAacPlusPath, ffmpegPath, besplitPath, yadifPath, aftenPath, x264Path, strMainFileFormat,
                        dgIndexPath, xvidEncrawPath, aviMuxGUIPath, oggEnc2Path, encAudXPath, dgavcIndexPath,
-                       eac3toPath, tsmuxerPath, meguiupdatecache, avisynthpluginspath, ffmsIndexPath,
+                       eac3toPath, tsmuxerPath, meguiupdatecache, avisynthpluginspath, ffmsIndexPath, vobSubPath,
                        defaultLanguage1, defaultLanguage2, afterEncodingCommand, videoExtension, audioExtension,
                        strLastDestinationPath, strLastSourcePath, dgnvIndexPath, tempDirMP4,
                        httpproxyaddress, httpproxyport, httpproxyuid, httpproxypwd, defaultOutputDir, strMeGUIPath;
@@ -104,6 +104,7 @@ namespace MeGUI
             ffmpegPath = getDownloadPath(@"tools\ffmpeg\ffmpeg.exe");
             aftenPath = getDownloadPath(@"tools\aften\aften.exe");
             yadifPath = getDownloadPath(@"tools\yadif\yadif.dll");
+            vobSubPath = getDownloadPath(@"tools\vobsub\vobsub.dll");
             recalculateMainMovieBitrate = false;
 			autoForceFilm = true;
 			autoStartQueue = false;
@@ -417,6 +418,14 @@ namespace MeGUI
         public string FFMpegPath
         {
             get { return ffmpegPath; }
+        }
+
+        /// <summary>
+        /// filename and full path of the vobsub dll
+        /// </summary>
+        public string VobSubPath
+        {
+            get { return vobSubPath; }
         }
         
         /// <summary>

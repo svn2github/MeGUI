@@ -177,6 +177,7 @@ namespace MeGUI
                     case "colormatrix": arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"ColorMatrix.dll")); break;
                     case "vsfilter": arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"VSFilter.dll")); break;
                     case "nicaudio": arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"NicAudio.dll")); break;
+                    case "vobsub": arrPath.Add(MainForm.Instance.Settings.VobSubPath); break;
                 }
 
                 foreach (string strTempPath in arrPath)
@@ -582,6 +583,8 @@ namespace MeGUI
                             return meGUISettings.OggEnc2Path;
                         case ("yadif"):
                             return meGUISettings.YadifPath;
+                        case ("vobsub"):
+                            return meGUISettings.VobSubPath;
                         case ("aften"):
                             return meGUISettings.AftenPath;
                         case ("eac3to"):

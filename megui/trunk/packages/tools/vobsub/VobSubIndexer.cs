@@ -45,7 +45,7 @@ namespace MeGUI
         {
             get
             {
-                return "vobsub.dll,Configure " + configFile;
+                return "\"" + MainForm.Instance.Settings.VobSubPath + "\",Configure " + configFile;
             }
         }
 
