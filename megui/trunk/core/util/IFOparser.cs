@@ -20,7 +20,7 @@
    
 
 using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
@@ -428,11 +428,12 @@ namespace MeGUI.core.util
         /// </summary>
         /// <param name="fileName">name of the IFO file</param>
         /// <returns>several infos as String</returns>       
-        public static string[] GetSubtitlesStreamsInfos(string FileName)
+        public static string[] GetSubtitlesStreamsInfos(string FileName, int iPGC, bool bGetAllStreams)
         {
-            byte[] buff = new byte[2];
+            byte[] buff = new byte[4];
             byte s = 0;
             string[] subdesc = new string[s];
+            string[] substreams = new string[s];
 
             try
             {
@@ -444,7 +445,7 @@ namespace MeGUI.core.util
                 sr.Seek(0x255, SeekOrigin.Begin);
 
                 s = br.ReadByte();
-                if (s > 32)
+                if (s > 32 || bGetAllStreams)
                     s = 32; // force the max #. According to the specs 32 is the max value for subtitles streams.
 
                 subdesc = new string[s];
@@ -456,9 +457,16 @@ namespace MeGUI.core.util
                 {
                     // Presence (1 bit), Coding Mode (1bit), Short Language Code (2bits), Language Extension (1bit), Sub Picture Caption Type (1bit)
                     br.Read(buff, 0, 2);
-                    string ShortLangCode = String.Format("{0}{1}", (char)buff[0], (char)buff[1]);
 
-                    subdesc[i] = "[" + String.Format("{0:00}", i) + "]  - " + LanguageSelectionContainer.Short2FullLanguageName(ShortLangCode);
+                    if (buff[0] == 0 && buff[1] == 0)
+                    {
+                        subdesc[i] = "unknown";
+                    }
+                    else
+                    {
+                        string ShortLangCode = String.Format("{0}{1}", (char)buff[0], (char)buff[1]);
+                        subdesc[i] = LanguageSelectionContainer.Short2FullLanguageName(ShortLangCode);
+                    }
 
                     // Go to Code Extension
                     sr.Seek(1, SeekOrigin.Current);
@@ -484,12 +492,68 @@ namespace MeGUI.core.util
                     // go to the next sub stream
                     sr.Seek(2, SeekOrigin.Current);
                 }
+
+                // find the PGC starting address of the requested PGC number
+                sr.Seek(0x1000 + 0x0C + (iPGC - 1) * 0x08, SeekOrigin.Begin);
+                br.Read(buff, 0, 4);
+
+                // go to the starting address of the requested PGC number
+                sr.Seek(0x1000 + buff[3] + buff[2] * 256 + buff[1] * 256 ^ 2 + buff[0] * 256 ^ 3, SeekOrigin.Begin);
+
+                // go to the subtitle starting address
+                sr.Seek(0x1B, SeekOrigin.Current);
+
+                substreams = new string[32];
+                for (int i = 0; i < 32; i++)
+                {
+                    if (i >= subdesc.Length)
+                        break;
+
+                    br.Read(buff, 0, 4);
+
+                    if (buff[0] == 0)
+                        continue;
+
+                    // match the stream number with the stream ID
+                    if (buff[1] == buff[2])
+                    {
+                        if (String.IsNullOrEmpty(substreams[buff[1]]))
+                            substreams[buff[1]] = "[" + String.Format("{0:00}", buff[1]) + "]  - " + subdesc[i];
+                    }
+                    else
+                    {
+                        if (String.IsNullOrEmpty(substreams[buff[1]]))
+                            substreams[buff[1]] = "[" + String.Format("{0:00}", buff[1]) + "]  - " + subdesc[i] + " wide";
+                        if (String.IsNullOrEmpty(substreams[buff[2]]))
+                            substreams[buff[2]] = "[" + String.Format("{0:00}", buff[2]) + "]  - " + subdesc[i] + " letterbox";
+                    }
+                }
+
+                if (bGetAllStreams)
+                {
+                    for (int i = 0; i < 32; i++)
+                    {
+                        substreams[i] = "[" + String.Format("{0:00}", i) + "]  - not detected";
+                    }
+                }
+                else
+                {
+                    ArrayList arrList = new ArrayList();
+                    foreach (string strItem in substreams)
+                        if (!String.IsNullOrEmpty(strItem))
+                            arrList.Add(strItem);
+                    substreams = new string[arrList.Count];
+                    for (int i = 0; i < arrList.Count; i++)
+                        substreams[i] = arrList[i].ToString();
+                }
+
+                fs.Close();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString());
             }
-           return subdesc;
+            return substreams;
         }
 
         /// <summary>
@@ -715,6 +779,7 @@ namespace MeGUI.core.util
             sr.Seek(2048 * buf + 0x1, SeekOrigin.Begin);			// Move to beginning of PGC
             long VTS_PGCITI_start_position = sr.Position - 1;
             byte nPGCs = br.ReadByte();									// Number of PGCs
+            fs.Close();
 
             return nPGCs;
         }
