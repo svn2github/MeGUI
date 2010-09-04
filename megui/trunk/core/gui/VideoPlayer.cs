@@ -1187,6 +1187,7 @@ namespace MeGUI
         private void goToFrameButton_Click(object sender, EventArgs e)
         {
             decimal val;
+            this.TopMost = false;
             if (NumberChooser.ShowDialog("Enter a frame number:", "Go to frame",
                 0, positionSlider.Minimum, positionSlider.Maximum, positionSlider.Value, out val)
                 == DialogResult.OK)
@@ -1194,6 +1195,7 @@ namespace MeGUI
                 positionSlider.Value = (int)val;
                 positionSlider_Scroll(null, null);
             }
+            this.TopMost = mainForm.Settings.AlwaysOnTop;
         }
 
         private void arChooser_SelectionChanged(object sender, string val)
