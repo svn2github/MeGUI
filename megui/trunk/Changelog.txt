@@ -13,6 +13,7 @@
   - (zathor) [VobSubIndexWindow] some cosmetics including option to override detection
   - (zathor) [IFOparser] fixed detection of subtitle streams. Bug #2773128
   - (zathor) [VideoPlayer] fixed "go to frame" button. Bug #2860093
+  - (zathor) [HDStreamExtractor] fixed extraction of some features. Bug #3037750
 
 0.3.5.8
   - (zathor) enhanced error handling of the profile import. an unsuccessful 

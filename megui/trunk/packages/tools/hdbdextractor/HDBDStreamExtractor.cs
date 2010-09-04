@@ -43,7 +43,6 @@ namespace MeGUI.packages.tools.hdbdextractor
         private HDStreamsExJob lastJob = null;
         private int inputType = 1;
         string dummyInput = "";
-        bool seamless = false;
 
         #region Windows Form Designer generated code
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
@@ -1321,9 +1320,9 @@ namespace MeGUI.packages.tools.hdbdextractor
                 return;
             }
 
-            if ((settings.EAC3toPath == "") || (settings.EAC3toPath == "eac3to.exe"))
+            if (!System.IO.File.Exists(settings.EAC3toPath))
             {
-                MessageBox.Show("Select a correct EAC3to Path first in the MeGUI Settings to avoid issues...", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("EAC3to not found. Please use the updater.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -1333,12 +1332,7 @@ namespace MeGUI.packages.tools.hdbdextractor
             args.eac3toPath = eac3toPath;
             args.inputPath = FolderInputTextBox.Text;
             if (FolderSelection.Checked)
-            {
-                if (seamless)
-                    args.featureNumber = "1"; // force the feature number
-                else
-                    args.featureNumber = ((Feature)FeatureDataGridView.SelectedRows[0].DataBoundItem).Number.ToString();
-            }
+                args.featureNumber = ((Feature)FeatureDataGridView.SelectedRows[0].DataBoundItem).Number.ToString();
             args.workingFolder = string.IsNullOrEmpty(FolderOutputTextBox.Text) ? FolderOutputTextBox.Text : System.IO.Path.GetDirectoryName(args.eac3toPath);
             args.resultState = ResultState.ExtractCompleted;
 
@@ -1351,15 +1345,6 @@ namespace MeGUI.packages.tools.hdbdextractor
                 MessageBox.Show(ex.Message, "Stream Extract", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
                 return;
             }
-
-/*
-            InitBackgroundWorker();
-            backgroundWorker.ReportProgress(0, "Extracting streams");
-            WriteToLog("Extracting streams");
-            QueueButton.Enabled = false;
-            Cursor = Cursors.WaitCursor;
-
-            backgroundWorker.RunWorkerAsync(args);*/
 
             // Load to MeGUI job queue
             if (FolderSelection.Checked)
@@ -1505,7 +1490,6 @@ namespace MeGUI.packages.tools.hdbdextractor
 
                             if (des.Contains("+")) // seamless branching
                             {
-                                seamless = true;
                                 if (args.inputPath.ToUpper().Contains("BDMV\\STREAM"))
                                      dummyInput = args.inputPath.Substring(0, args.inputPath.IndexOf("BDMV")) + "BDMV\\PLAYLIST\\" + feature.Description.Substring(0, feature.Description.IndexOf(","));
                                 else
