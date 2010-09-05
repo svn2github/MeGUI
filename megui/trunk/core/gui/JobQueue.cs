@@ -444,6 +444,25 @@ namespace MeGUI.core.gui
         }
 
         /// <summary>
+        /// Tells if the current selection can be edited.
+        /// Checks:
+        ///     if one job actually selected
+        ///     whether the selected job is waiting or postponed
+        /// </summary>
+        /// <returns></returns>
+        private bool isSelectionEditable()
+        {
+            if (queueListView.SelectedItems.Count != 1)
+                return false;
+
+            TaggedJob job = jobs[queueListView.SelectedItems[0].Text];
+            if (job.Status != JobStatus.WAITING && job.Status != JobStatus.POSTPONED)
+                return false;
+
+            return true;
+        }
+
+        /// <summary>
         /// Tells if the given list of indices is consecutive; if so, sets min and 
         /// max to the min and max indices
         /// </summary>
@@ -473,44 +492,36 @@ namespace MeGUI.core.gui
         {
             upButton.Enabled = isSelectionMovable(Direction.Up);
             downButton.Enabled = isSelectionMovable(Direction.Down);
+
+            editJobButton.Enabled = isSelectionEditable();
         }
 
         #endregion
 
         #region load/update
-        private void loadJobButton_Click(object sender, EventArgs e)
+        private void editJobButton_Click(object sender, EventArgs e)
         {
-            bool bJobCanBeLoaded = false;
+            bool bJobCanBeEdited = false;
 
             if (queueListView.SelectedItems.Count != 1)
-            {
-                if (queueListView.SelectedItems.Count < 1)
-                    MessageBox.Show("Please select a job.", "Cannot load job", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                else
-                    MessageBox.Show("Please select one job only.", "Cannot load job", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
-            }
 
             TaggedJob job = jobs[queueListView.SelectedItems[0].Text];
-
             if (job.Status != JobStatus.WAITING && job.Status != JobStatus.POSTPONED)
-            {
-                MessageBox.Show("Only waiting or postponed jobs can be processed.\r\nYour selected job has the status: " + job.Status.ToString().ToLower(), "Cannot load job", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
-            }
 
             foreach (IDable<ReconfigureJob> i in MainForm.Instance.PackageSystem.JobConfigurers.Values)
             {
                 Job j = i.Data(job.Job);
                 if (j != null)
                 {
-                    bJobCanBeLoaded = true;
+                    bJobCanBeEdited = true;
                     job.Job = j;
                 }
             }
 
-            if (!bJobCanBeLoaded)
-                MessageBox.Show("This kind of job cannot be loaded.", "Cannot load job", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            if (!bJobCanBeEdited)
+                MessageBox.Show("This kind of job cannot be edited.", "Cannot edit job", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
         }
         #endregion
@@ -647,8 +658,8 @@ namespace MeGUI.core.gui
             AbortMenuItem.Enabled = AllJobsHaveStatus(JobStatus.PROCESSING) || AllJobsHaveStatus(JobStatus.ABORTED);
             AbortMenuItem.Checked = AllJobsHaveStatus(JobStatus.ABORTED);
 
-            LoadMenuItem.Enabled = this.queueListView.SelectedItems.Count == 1;
-            LoadMenuItem.Checked = false;
+            EditMenuItem.Enabled = isSelectionEditable();
+            EditMenuItem.Checked = false;
 
             bool canModifySelectedJobs = !AnyJobsHaveStatus(JobStatus.PROCESSING) && this.queueListView.SelectedItems.Count > 0;
             DeleteMenuItem.Enabled = PostponedMenuItem.Enabled = WaitingMenuItem.Enabled = canModifySelectedJobs;

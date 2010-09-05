@@ -30,8 +30,7 @@ namespace MeGUI.core.gui
         {
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.Button abortButton;
-            System.Windows.Forms.Button loadJobButton;
-            System.Windows.Forms.Button button9;
+            System.Windows.Forms.Button deleteButton;
             this.jobColumHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.inputColumnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.outputColumnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -51,14 +50,14 @@ namespace MeGUI.core.gui
             this.PostponedMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.WaitingMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.AbortMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.LoadMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.EditMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.startStopButton = new System.Windows.Forms.Button();
             this.stopButton = new System.Windows.Forms.Button();
             this.pauseButton = new System.Windows.Forms.Button();
+            this.editJobButton = new System.Windows.Forms.Button();
             abortButton = new System.Windows.Forms.Button();
-            loadJobButton = new System.Windows.Forms.Button();
-            button9 = new System.Windows.Forms.Button();
+            deleteButton = new System.Windows.Forms.Button();
             this.queueContextMenu.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
@@ -76,30 +75,17 @@ namespace MeGUI.core.gui
             abortButton.UseVisualStyleBackColor = true;
             abortButton.Click += new System.EventHandler(this.abortButton_Click);
             // 
-            // loadJobButton
+            // deleteButton
             // 
-            loadJobButton.AutoSize = true;
-            loadJobButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            loadJobButton.Location = new System.Drawing.Point(179, 3);
-            loadJobButton.Margin = new System.Windows.Forms.Padding(7, 3, 3, 3);
-            loadJobButton.Name = "loadJobButton";
-            loadJobButton.Size = new System.Drawing.Size(41, 23);
-            loadJobButton.TabIndex = 4;
-            loadJobButton.Text = "Load";
-            loadJobButton.UseVisualStyleBackColor = true;
-            loadJobButton.Click += new System.EventHandler(this.loadJobButton_Click);
-            // 
-            // button9
-            // 
-            button9.AutoSize = true;
-            button9.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            button9.Location = new System.Drawing.Point(322, 3);
-            button9.Name = "button9";
-            button9.Size = new System.Drawing.Size(48, 23);
-            button9.TabIndex = 8;
-            button9.Text = "Delete";
-            button9.UseVisualStyleBackColor = true;
-            button9.Click += new System.EventHandler(this.deleteJobButton_Click);
+            deleteButton.AutoSize = true;
+            deleteButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            deleteButton.Location = new System.Drawing.Point(316, 3);
+            deleteButton.Name = "deleteButton";
+            deleteButton.Size = new System.Drawing.Size(48, 23);
+            deleteButton.TabIndex = 8;
+            deleteButton.Text = "Delete";
+            deleteButton.UseVisualStyleBackColor = true;
+            deleteButton.Click += new System.EventHandler(this.deleteJobButton_Click);
             // 
             // jobColumHeader
             // 
@@ -142,7 +128,7 @@ namespace MeGUI.core.gui
             this.upButton.AutoSize = true;
             this.upButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.upButton.Enabled = false;
-            this.upButton.Location = new System.Drawing.Point(230, 3);
+            this.upButton.Location = new System.Drawing.Point(224, 3);
             this.upButton.Margin = new System.Windows.Forms.Padding(7, 3, 3, 3);
             this.upButton.Name = "upButton";
             this.upButton.Size = new System.Drawing.Size(31, 23);
@@ -156,7 +142,7 @@ namespace MeGUI.core.gui
             this.downButton.AutoSize = true;
             this.downButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.downButton.Enabled = false;
-            this.downButton.Location = new System.Drawing.Point(267, 3);
+            this.downButton.Location = new System.Drawing.Point(261, 3);
             this.downButton.Margin = new System.Windows.Forms.Padding(3, 3, 7, 3);
             this.downButton.Name = "downButton";
             this.downButton.Size = new System.Drawing.Size(45, 23);
@@ -204,16 +190,16 @@ namespace MeGUI.core.gui
             this.DeleteMenuItem,
             this.StatusMenuItem,
             this.AbortMenuItem,
-            this.LoadMenuItem});
+            this.EditMenuItem});
             this.queueContextMenu.Name = "queueContextMenu";
-            this.queueContextMenu.Size = new System.Drawing.Size(150, 92);
+            this.queueContextMenu.Size = new System.Drawing.Size(153, 114);
             this.queueContextMenu.Opened += new System.EventHandler(this.queueContextMenu_Opened);
             // 
             // DeleteMenuItem
             // 
             this.DeleteMenuItem.Name = "DeleteMenuItem";
             this.DeleteMenuItem.ShortcutKeyDisplayString = "";
-            this.DeleteMenuItem.Size = new System.Drawing.Size(149, 22);
+            this.DeleteMenuItem.Size = new System.Drawing.Size(152, 22);
             this.DeleteMenuItem.Text = "&Delete";
             this.DeleteMenuItem.ToolTipText = "Delete this job";
             this.DeleteMenuItem.Click += new System.EventHandler(this.deleteJobButton_Click);
@@ -224,7 +210,7 @@ namespace MeGUI.core.gui
             this.PostponedMenuItem,
             this.WaitingMenuItem});
             this.StatusMenuItem.Name = "StatusMenuItem";
-            this.StatusMenuItem.Size = new System.Drawing.Size(149, 22);
+            this.StatusMenuItem.Size = new System.Drawing.Size(152, 22);
             this.StatusMenuItem.Text = "&Change status";
             // 
             // PostponedMenuItem
@@ -245,20 +231,20 @@ namespace MeGUI.core.gui
             // 
             this.AbortMenuItem.Name = "AbortMenuItem";
             this.AbortMenuItem.ShortcutKeyDisplayString = "";
-            this.AbortMenuItem.Size = new System.Drawing.Size(149, 22);
+            this.AbortMenuItem.Size = new System.Drawing.Size(152, 22);
             this.AbortMenuItem.Text = "&Abort";
             this.AbortMenuItem.ToolTipText = "Abort this job";
             this.AbortMenuItem.Click += new System.EventHandler(this.AbortMenuItem_Click);
             // 
-            // LoadMenuItem
+            // EditMenuItem
             // 
-            this.LoadMenuItem.Enabled = false;
-            this.LoadMenuItem.Name = "LoadMenuItem";
-            this.LoadMenuItem.ShortcutKeyDisplayString = "";
-            this.LoadMenuItem.Size = new System.Drawing.Size(149, 22);
-            this.LoadMenuItem.Text = "&Load";
-            this.LoadMenuItem.ToolTipText = "Load into MeGUI";
-            this.LoadMenuItem.Click += new System.EventHandler(this.loadJobButton_Click);
+            this.EditMenuItem.Enabled = false;
+            this.EditMenuItem.Name = "EditMenuItem";
+            this.EditMenuItem.ShortcutKeyDisplayString = "";
+            this.EditMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.EditMenuItem.Text = "&Edit";
+            this.EditMenuItem.ToolTipText = "Edit job\r\nOnly possible if only one job is selected which is waiting or postponed";
+            this.EditMenuItem.Click += new System.EventHandler(this.editJobButton_Click);
             // 
             // flowLayoutPanel1
             // 
@@ -268,10 +254,10 @@ namespace MeGUI.core.gui
             this.flowLayoutPanel1.Controls.Add(this.stopButton);
             this.flowLayoutPanel1.Controls.Add(this.pauseButton);
             this.flowLayoutPanel1.Controls.Add(abortButton);
-            this.flowLayoutPanel1.Controls.Add(loadJobButton);
+            this.flowLayoutPanel1.Controls.Add(this.editJobButton);
             this.flowLayoutPanel1.Controls.Add(this.upButton);
             this.flowLayoutPanel1.Controls.Add(this.downButton);
-            this.flowLayoutPanel1.Controls.Add(button9);
+            this.flowLayoutPanel1.Controls.Add(deleteButton);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 513);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
@@ -311,6 +297,20 @@ namespace MeGUI.core.gui
             this.pauseButton.UseVisualStyleBackColor = true;
             this.pauseButton.Click += new System.EventHandler(this.pauseButton_Click);
             // 
+            // editJobButton
+            // 
+            this.editJobButton.AutoSize = true;
+            this.editJobButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.editJobButton.Enabled = false;
+            this.editJobButton.Location = new System.Drawing.Point(179, 3);
+            this.editJobButton.Margin = new System.Windows.Forms.Padding(7, 3, 3, 3);
+            this.editJobButton.Name = "editJobButton";
+            this.editJobButton.Size = new System.Drawing.Size(35, 23);
+            this.editJobButton.TabIndex = 4;
+            this.editJobButton.Text = "Edit";
+            this.editJobButton.UseVisualStyleBackColor = true;
+            this.editJobButton.Click += new System.EventHandler(this.editJobButton_Click);
+            // 
             // JobQueue
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -342,7 +342,7 @@ namespace MeGUI.core.gui
         private System.Windows.Forms.ToolStripMenuItem PostponedMenuItem;
         private System.Windows.Forms.ToolStripMenuItem WaitingMenuItem;
         private System.Windows.Forms.ToolStripMenuItem AbortMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem LoadMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem EditMenuItem;
         private System.Windows.Forms.Button stopButton;
         private System.Windows.Forms.ColumnHeader ownerHeader;
         private System.Windows.Forms.ColumnHeader jobColumHeader;
@@ -354,5 +354,6 @@ namespace MeGUI.core.gui
         private System.Windows.Forms.ColumnHeader startColumn;
         private System.Windows.Forms.ColumnHeader endColumn;
         private System.Windows.Forms.ColumnHeader fpsColumn;
+        private System.Windows.Forms.Button editJobButton;
     }
 }
