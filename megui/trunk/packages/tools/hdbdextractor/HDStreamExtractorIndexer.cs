@@ -106,7 +106,8 @@ namespace MeGUI
             }
             else if (line.ToLower().Contains("warning") ||
                      line.ToLower().Contains("doesn") ||
-                     (su.PercentageDoneExact > 0 && su.PercentageDoneExact < 100))
+                     (su.PercentageDoneExact > 0 && su.PercentageDoneExact < 100 &&
+                      !line.ToLower().Contains("creating file ")))
             {
                 log.LogValue("A warning occurred", line, ImageType.Warning);
                 base.ProcessLine(line, stream);
