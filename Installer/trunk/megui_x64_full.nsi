@@ -9,6 +9,8 @@
 !define MUI_HEADERIMAGE
 !define MUI_HEADERIMAGE_BITMAP MeGUI.bmp
 !define MUI_COMPONENTSPAGE_SMALLDESC
+!define MUI_FINISHPAGE_RUN_NOTCHECKED
+!define MUI_FINISHPAGE_RUN "$INSTDIR\MeGUI.exe"
 !include "MUI.nsh"
 !include "Sections.nsh"
 !include "LogicLib.nsh"
@@ -39,6 +41,15 @@ SetDateSave off ; (can be on to have files restored to their orginal date)
 !insertmacro MUI_UNPAGE_FINISH
 
 !insertmacro MUI_LANGUAGE "English"
+
+VIProductVersion "${MeGUI_VERSION}"
+VIAddVersionKey "CompanyName" "MeGUI Team"
+VIAddVersionKey "ProductName" "MeGUI" 
+VIAddVersionKey "ProductVersion" "${MeGUI_VERSION}"
+VIAddVersionKey "FileDescription" "MeGUI installer"
+VIAddVersionKey "FileVersion" "${MeGUI_VERSION}"
+VIAddVersionKey "LegalCopyright" "MeGUI Team"
+BrandingText " "
 
 ; ---------------------------------------------------------------------------
 
@@ -144,7 +155,7 @@ ${Else}
 ${EndIf}
   !insertmacro MUI_LANGDLL_DISPLAY
 
-System::Call 'kernel32::OpenMutex(i 0x100000, b 0, t "MeGUI_D9D0C224154B489784998BF97B9C9414") i .R0'
+System::Call 'kernel32::OpenMutex(i 0x100000, b 0, t "MeGUI_mutex") i .R0'
 IntCmp $R0 0 notRunning
 	System::Call 'kernel32::CloseHandle(i $R0)'
 	MessageBox MB_OK|MB_ICONEXCLAMATION "MeGUI is running. Please close it first." /SD IDOK
@@ -153,7 +164,7 @@ notRunning:
 FunctionEnd
 
 Function un.onInit
-System::Call 'kernel32::OpenMutex(i 0x100000, b 0, t "MeGUI_D9D0C224154B489784998BF97B9C9414") i .R0'
+System::Call 'kernel32::OpenMutex(i 0x100000, b 0, t "MeGUI_mutex") i .R0'
 IntCmp $R0 0 notRunning
 	System::Call 'kernel32::CloseHandle(i $R0)'
 	MessageBox MB_OK|MB_ICONEXCLAMATION "MeGUI is running. Please close it first." /SD IDOK

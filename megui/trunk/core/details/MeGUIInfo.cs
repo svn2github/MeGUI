@@ -137,7 +137,7 @@ namespace MeGUI.core.details
             }
         }
 
-        private static Mutex mySingleInstanceMutex = new Mutex(true, "MeGUI_D9D0C224154B489784998BF97B9C9414");
+        private static Mutex mySingleInstanceMutex = new Mutex(true, "MeGUI_mutex");
 
         /// <summary>
         /// The main entry point for the application.
