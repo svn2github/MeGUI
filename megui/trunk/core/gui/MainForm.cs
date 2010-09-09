@@ -45,7 +45,7 @@ namespace MeGUI
     public delegate void UpdateGUIStatusCallback(StatusUpdate su); // catches the UpdateGUI events fired from the encoder
     public enum FileType
     {
-        VIDEOINPUT, AUDIOINPUT, DGINDEX, FFMSINDEX, OTHERVIDEO, ZIPPED_PROFILES, NONE
+        VIDEOINPUT, AUDIOINPUT, DGINDEX, INDEXABLEVIDEO, OTHERVIDEO, ZIPPED_PROFILES, NONE
     };
     public enum ProcessingStatus
     {
@@ -1294,28 +1294,17 @@ namespace MeGUI
                 case ".eac3":
                 case ".ddp":
                    return FileType.AUDIOINPUT;
-                case ".vob":
-                case ".mpg":
-                case ".mpeg":
-                case ".m2v":
-                case ".mpv":
-                case ".tp":
-                case ".ts":
-                case ".trp":
-                case ".pva":
-                case ".vro":
-                    return FileType.DGINDEX;
-                case ".avi":
-                case ".flv":
-                case ".mkv":
-                case ".mp4":
-                    return FileType.FFMSINDEX;
                 case ".zip":
                     return FileType.ZIPPED_PROFILES;
-
-                default:
-                    return FileType.OTHERVIDEO;
             }
+
+            MediaInfoFile iFile = new MediaInfoFile(fileName);
+            if (iFile.isD2VIndexable())
+                return FileType.DGINDEX;
+            else if (iFile.isFFMSIndexable() || iFile.isDGIIndexable() || iFile.isDGAIndexable())
+                return FileType.INDEXABLEVIDEO;
+            else
+                return FileType.OTHERVIDEO;
         }
         public void openFile(string file)
         {
@@ -1330,14 +1319,13 @@ namespace MeGUI
                 case FileType.DGINDEX:
                     openDGIndexFile(file);
                     break;
-                case FileType.FFMSINDEX:
+                case FileType.INDEXABLEVIDEO:
                     openD2VCreatorFile(file);
                     break;
                 case FileType.OTHERVIDEO:
                     openOtherVideoFile(file);
                     audioEncodingComponent1.openAudioFile(file); // for Non-MPEG OneClick fudge
                     break;
-
                 case FileType.ZIPPED_PROFILES:
                     importProfiles(file);
                     break;

@@ -15,6 +15,8 @@
   - (zathor) [VideoPlayer] fixed "go to frame" button. Bug #2860093
   - (zathor) [HDStreamExtractor] fixed extraction of some features. Bug #3037750
   - (zathor) [JobQueue] renamed "load" to "edit"
+  - (zathor) [FileIndexer] enhanced supported file type detection
+  - (zathor) [OneClickWindow] + [MainForm]. Only supported files can be used in OneClick. Bug #3032668
 
 0.3.5.8
   - (zathor) enhanced error handling of the profile import. an unsuccessful 

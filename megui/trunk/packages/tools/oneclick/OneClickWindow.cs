@@ -224,6 +224,14 @@ namespace MeGUI
         
         public void openInput(string fileName)
         {
+            MediaInfoFile iFile = new MediaInfoFile(fileName);
+            if (!iFile.isD2VIndexable())
+            {
+                input.Filename = "";
+                MessageBox.Show("This file cannot be used in OneClick mode.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             input.Filename = fileName;
             Dar? ar;
             int maxHorizontalResolution;
