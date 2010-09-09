@@ -13,9 +13,9 @@
   - (zathor) [VobSubIndexWindow] some cosmetics including option to override detection
   - (zathor) [IFOparser] fixed detection of subtitle streams. Bug #2773128
   - (zathor) [VideoPlayer] fixed "go to frame" button. Bug #2860093
-  - (zathor) [HDStreamExtractor] fixed extraction of some features. Bug #3037750
+  - (zathor) [HDStreamExtractor] some features could not be extracted. Bug #3037750
   - (zathor) [JobQueue] renamed "load" to "edit"
-  - (zathor) [FileIndexer] enhanced supported file type detection
+  - (zathor) [FileIndexer] changed supported file type detection
   - (zathor) [OneClickWindow] + [MainForm]. Only supported files can be used in OneClick. Bug #3032668
 
 0.3.5.8
