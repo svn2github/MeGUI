@@ -38,7 +38,7 @@ namespace MeGUI
 		#region variables
         private D2VIndexJob lastJob = null;
         
-        private enum IndexType
+        public enum IndexType
         {
             D2V, DGA, DGI, FFMS
         };
@@ -101,7 +101,7 @@ namespace MeGUI
 			if (demuxType == 0)
 				demuxNoAudiotracks.Checked = true;
 			else
-				demuxTracks.Checked = true;
+				demuxAll.Checked = true;
 			this.loadOnComplete.Checked = loadOnComplete;
             if (updateMode)
             {
@@ -117,7 +117,6 @@ namespace MeGUI
                 this.Controls.Remove(this.closeOnQueue);
             }
             this.closeOnQueue.Checked = closeOnQueue;
-
 		}
 		
 		public FileIndexerWindow(MainForm mainForm)
@@ -639,28 +638,29 @@ namespace MeGUI
 			checkIndexIO();
 		}
 		private void openVideo(string fileName)
-		{           
-            if (!VideoUtil.getMediaInformation(fileName, out strVideoCodec, out strVideoScanType, out strContainerFormat, out audioTracks))
-                return;
+		{
+            MediaInfoFile iFile = new MediaInfoFile(fileName);
+
+            strVideoCodec = iFile.VideoCodecString;
+            strVideoScanType = iFile.VideoScanType;
+            strContainerFormat = iFile.ContainerFileTypeString;
+            audioTracks = iFile.AudioTracks;
 
             if (String.IsNullOrEmpty(strVideoCodec))
-                txtCodecInformation.Text = "unknown";
+                txtCodecInformation.Text = " unknown";
             else
-                txtCodecInformation.Text = strVideoCodec;
+                txtCodecInformation.Text = " " + strVideoCodec;
             if (String.IsNullOrEmpty(strContainerFormat))
-                txtContainerInformation.Text = "unknown";
+                txtContainerInformation.Text = " unknown";
             else
-                txtContainerInformation.Text = strContainerFormat;
+                txtContainerInformation.Text = " " + strContainerFormat;
             if (String.IsNullOrEmpty(strVideoScanType))
-                txtScanTypeInformation.Text = "unknown";
+                txtScanTypeInformation.Text = " unknown";
             else
-                txtScanTypeInformation.Text = strVideoScanType;
+                txtScanTypeInformation.Text = " " + strVideoScanType;
 
 			if (input.Filename != fileName)
                 input.Filename = fileName;
-
-            gbIndexer.Enabled = true;
-            gbFileInformation.Enabled = true;
 
             AudioTracks.Items.Clear();
             if (AudioTracks.Items.Count < 1)
@@ -669,110 +669,23 @@ namespace MeGUI
                     AudioTracks.Items.Add(atrack);
             }
 
-            switch (strVideoCodec.ToUpper())
+            btnD2V.Enabled = iFile.isD2VIndexable();
+            btnDGA.Enabled = iFile.isDGAIndexable();
+            btnDGI.Enabled = iFile.isDGIIndexable();
+            btnFFMS.Enabled = iFile.isFFMSIndexable();
+
+            IndexType newType;
+            if (iFile.recommendIndexer(out newType))
             {
-                case "AVC":
-                {
-                    btnD2V.Enabled = false;
-                    btnFFMS.Enabled = true;
-                    if (strContainerFormat.ToUpper().Equals("FLASH VIDEO") || strContainerFormat.ToUpper().Equals("MPEG-4"))
-                    {
-                        btnDGA.Enabled = false;
-                        btnDGI.Enabled = false;
-                        changeIndexer(IndexType.FFMS);
-                    }
-                    else
-                    {
-                        if (!strContainerFormat.ToUpper().Equals("MATROSKA"))
-                        {
-                            btnDGA.Enabled = true;
-                            if (!bDGIAvailable)
-                                changeIndexer(IndexType.DGA);
-                        }
-                        else
-                        {
-                            btnDGA.Enabled = false;
-                            if (!bDGIAvailable)
-                                changeIndexer(IndexType.FFMS);
-                        }
-                        if (bDGIAvailable)
-                        {
-                            btnDGI.Enabled = true;
-                            changeIndexer(IndexType.DGI);
-                        }
-                        else
-                        {
-                            btnDGI.Enabled = false;
-                        }
-                    }
-                    break;
-                }
-                case "VC-1":
-                {
-                    btnD2V.Enabled = false;
-                    btnDGA.Enabled = false;
-                    btnFFMS.Enabled = true;
-                    if (bDGIAvailable)
-                    {
-                        btnDGI.Enabled = true;
-                        changeIndexer(IndexType.DGI);
-                    }
-                    else
-                    {
-                        btnDGI.Enabled = false;
-                        changeIndexer(IndexType.FFMS);
-                    }
-                    break;
-                }
-                case "MPEG-2 VIDEO":
-                {
-                    btnD2V.Enabled = true;
-                    btnDGA.Enabled = false;
-                    btnFFMS.Enabled = true;
-                    if (bDGIAvailable)
-                    {
-                        btnDGI.Enabled = true;
-                        changeIndexer(IndexType.DGI);
-                    }
-                    else
-                    {
-                        btnDGI.Enabled = false;
-                        changeIndexer(IndexType.D2V);
-                    }
-                    break;
-                }
-                case "MPEG-1 VIDEO":
-                {
-                    btnD2V.Enabled = true;
-                    btnDGA.Enabled = false;
-                    btnDGI.Enabled = false;
-                    btnFFMS.Enabled = true;
-                    changeIndexer(IndexType.D2V);
-                    break;
-                }
-                default:
-                {
-                    if (strContainerFormat.ToUpper().Equals("AVI") || strContainerFormat.ToUpper().Equals("FLASH VIDEO"))
-                    {
-                        btnD2V.Enabled = false;
-                        btnDGA.Enabled = false;
-                        btnDGI.Enabled = false;
-                        btnFFMS.Enabled = true;
-                        changeIndexer(IndexType.FFMS);
-                    }
-                    else
-                    {
-                        btnD2V.Enabled = true;
-                        btnDGA.Enabled = true;
-                        if (bDGIAvailable)
-                            btnDGI.Enabled = true;
-                        else
-                            btnDGI.Enabled = false;
-                        btnFFMS.Enabled = true;
-                        changeIndexer(IndexType.FFMS);
-                    }
-                    break;
-                }
+                changeIndexer(newType);
+                gbIndexer.Enabled = gbFileInformation.Enabled = gbAudio.Enabled = gbOutput.Enabled = true;
+            }
+            else
+            {
+                gbIndexer.Enabled = gbFileInformation.Enabled = gbAudio.Enabled = gbOutput.Enabled = false;
+                btnFFMS.Checked = btnD2V.Checked = btnDGA.Checked = btnDGI.Checked = false;
+                output.Text = "";
+                demuxNoAudiotracks.Checked = true;
             }
 		}
 
@@ -795,7 +708,6 @@ namespace MeGUI
                     {
                         AudioTracks.Enabled = false;
                     }
-
                 }
                 else
                 {
@@ -811,19 +723,12 @@ namespace MeGUI
 
             if (IndexerUsed == IndexType.FFMS)
             {
-                if (strVideoCodec.ToUpper().Equals("VC-1"))
+                if (!strContainerFormat.ToUpper().Equals("MATROSKA") &&
+                    !strContainerFormat.ToUpper().Equals("AVI") &&
+                    !strContainerFormat.ToUpper().Equals("MPEG-4") &&
+                    !strContainerFormat.ToUpper().Equals("FLASH VIDEO"))
                 {
-                    if (!strVideoScanType.ToUpper().Equals("PROGRESSIVE"))
-                        MessageBox.Show("Interlaced VC-1 is not supported by FFMS2", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    if (!strContainerFormat.ToUpper().Equals("MATROSKA"))
-                        MessageBox.Show("Please use a MKV container to index VC-1 files", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-                else if (!strContainerFormat.ToUpper().Equals("MATROSKA") &&
-                         !strContainerFormat.ToUpper().Equals("AVI") &&
-                         !strContainerFormat.ToUpper().Equals("MPEG-4") &&
-                         !strContainerFormat.ToUpper().Equals("FLASH VIDEO"))
-                {
-                    MessageBox.Show("Please use a MKV, AVI, MP4 or FLV container to index files with the FFMS2 indexer", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("It is recommended to use a MKV, AVI, MP4 or FLV container to index files with the FFMS2 indexer", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
         }
