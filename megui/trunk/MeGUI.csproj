@@ -660,6 +660,7 @@
     <Compile Include="packages\tools\cutter\Cutter.Designer.cs">
       <DependentUpon>Cutter.cs</DependentUpon>
     </Compile>
+    <Compile Include="packages\tools\fileindexer\DGIndexJob.cs" />
     <Compile Include="packages\tools\fileindexer\FFMSIndexJob.cs" />
     <Compile Include="packages\tools\fileindexer\FFMSIndexer.cs" />
     <Compile Include="packages\tools\fileindexer\D2VIndexer.cs" />

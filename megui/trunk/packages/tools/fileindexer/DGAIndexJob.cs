@@ -23,20 +23,10 @@ using System.Collections.Generic;
 
 namespace MeGUI
 {
-    public class DGAIndexJob : Job
+    public class DGAIndexJob : DGIndexJob
     {
-		private bool loadSources;
-        private bool demuxVideo;
-		private int demuxMode;
-        private List<AudioTrackInfo> audioTracks;
-		private DGIndexPostprocessingProperties postprocessingProperties;
-		
 		public DGAIndexJob():base()
 		{
-			loadSources = false;
-            demuxVideo = false;
-			demuxMode = 0;
-            audioTracks = new List<AudioTrackInfo>();
 		}
 
         public DGAIndexJob(string input, string output, int demuxType, List<AudioTrackInfo> audioTracks,
@@ -45,58 +35,11 @@ namespace MeGUI
             Input = input;
             Output = output;
             DemuxMode = demuxType;
-            this.audioTracks = audioTracks;
+            AudioTracks = audioTracks;
             PostprocessingProperties = properties;
             LoadSources = loadSources;
             DemuxVideo = demuxVideo;
         }
-
-        /// <summary>
-        /// gets / sets whether video stream is extracted
-        /// </summary>
-        public bool DemuxVideo
-        {
-            get { return demuxVideo; }
-            set { demuxVideo = value; }
-        }
-		/// <summary>
-		/// gets / sets whether the audio and video files should be loaded after indexing
-		/// </summary>
-		public bool LoadSources
-		{
-			get {return loadSources;}
-			set {loadSources = value;}
-		}
-    	/// <summary>
-		/// gets / sets the demux mode
-		/// 0 = no audio demux
-		/// 1 = demux selected audio track
-		/// 2 = demux all audio tracks
-		/// </summary>
-		public int DemuxMode
-		{
-			get {return demuxMode;}
-			set {demuxMode = value;}
-		}
-
-        public List<AudioTrackInfo> AudioTracks
-        {
-            get { return audioTracks; }
-            set { audioTracks = value; }
-        }
-
-		/// <summary>
-		/// gets / sets the postprocessing properties
-		/// if this is not set, we're just dealing with a regular demuxing job
-		/// if it is defined, we're dealing with an index job in one click mode
-		/// and all the postprocessing that has to be done prior to audio encoding
-		/// is defined in this property
-		/// </summary>
-		public DGIndexPostprocessingProperties PostprocessingProperties
-		{
-			get {return postprocessingProperties;}
-			set {postprocessingProperties = value;}
-		}
 
         public override string CodecString
         {
