@@ -126,6 +126,7 @@ namespace MeGUI
         private GroupBox groupBox3;
         private GroupBox groupBox5;
         private GroupBox groupBox6;
+        private CheckBox cbAutoLoadDG;
 
 		/// <summary>
 		/// Required designer variable.
@@ -243,6 +244,7 @@ namespace MeGUI
             this.textBox8 = new System.Windows.Forms.TextBox();
             this.button8 = new System.Windows.Forms.Button();
             this.vobGroupBox = new System.Windows.Forms.GroupBox();
+            this.cbAutoLoadDG = new System.Windows.Forms.CheckBox();
             this.defaultLanguage2 = new System.Windows.Forms.ComboBox();
             this.defaultAudioTrack2Label = new System.Windows.Forms.Label();
             this.defaultLanguage1 = new System.Windows.Forms.ComboBox();
@@ -1136,6 +1138,7 @@ namespace MeGUI
             // 
             // vobGroupBox
             // 
+            this.vobGroupBox.Controls.Add(this.cbAutoLoadDG);
             this.vobGroupBox.Controls.Add(this.defaultLanguage2);
             this.vobGroupBox.Controls.Add(this.defaultAudioTrack2Label);
             this.vobGroupBox.Controls.Add(this.defaultLanguage1);
@@ -1148,7 +1151,17 @@ namespace MeGUI
             this.vobGroupBox.Size = new System.Drawing.Size(467, 77);
             this.vobGroupBox.TabIndex = 29;
             this.vobGroupBox.TabStop = false;
-            this.vobGroupBox.Text = " DGIndex ";
+            this.vobGroupBox.Text = " DGIndex Tools";
+            // 
+            // cbAutoLoadDG
+            // 
+            this.cbAutoLoadDG.AutoSize = true;
+            this.cbAutoLoadDG.Location = new System.Drawing.Point(239, 50);
+            this.cbAutoLoadDG.Name = "cbAutoLoadDG";
+            this.cbAutoLoadDG.Size = new System.Drawing.Size(179, 17);
+            this.cbAutoLoadDG.TabIndex = 7;
+            this.cbAutoLoadDG.Text = "autoload VOB files incrementally";
+            this.cbAutoLoadDG.UseVisualStyleBackColor = true;
             // 
             // defaultLanguage2
             // 
@@ -1300,6 +1313,7 @@ namespace MeGUI
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.vobGroupBox.ResumeLayout(false);
+            this.vobGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.forceFilmPercentage)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -1418,6 +1432,7 @@ namespace MeGUI
 				settings.DefaultLanguage1 = defaultLanguage1.Text;
 				settings.DefaultLanguage2 = defaultLanguage2.Text;
 				settings.AutoForceFilm = autoForceFilm.Checked;
+                settings.AutoLoadDG = cbAutoLoadDG.Checked;
 				settings.ForceFilmThreshold = forceFilmPercentage.Value;
 				settings.DefaultPriority = (ProcessPriority)priority.SelectedIndex;
 				settings.AutoStartQueue = this.autostartQueue.Checked;
@@ -1473,6 +1488,7 @@ namespace MeGUI
 				if (index != -1)
 					defaultLanguage2.SelectedIndex = index;
 				autoForceFilm.Checked = settings.AutoForceFilm;
+                cbAutoLoadDG.Checked = settings.AutoLoadDG;
 				forceFilmPercentage.Value = settings.ForceFilmThreshold;
 				priority.SelectedIndex = (int)settings.DefaultPriority;
 				autostartQueue.Checked = settings.AutoStartQueue;

@@ -1,3 +1,7 @@
+0.3.5.10
+  - (zathor) [Settings] added option for DGIndex(NV) to autoload VOB files
+             incrementally. Default is enabled. Feature request #2955909
+
 0.3.5.9
   - (sharktooth) [MainForm.cs] Added a big fat warning about patents and binary files when megui finds updates
   - (sharktooth) [x264] Added 2 new "Force SAR" options

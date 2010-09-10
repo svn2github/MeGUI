@@ -45,7 +45,7 @@ namespace MeGUI
                      overwriteStats, keep2of3passOutput, deleteCompletedJobs, deleteIntermediateFiles,
                      deleteAbortedOutput, openProgressWindow, useadvancedtooltips, freshOggEnc2, autoscroll, 
                      alwaysOnTop, safeProfileAlteration, autoUpdate, usehttpproxy, addTimePosition, alwaysbackupfiles,
-                     forcerawavcextension;
+                     forcerawavcextension, bAutoLoadDG;
         private ulong audioSamplesPerUpdate;
         private AfterEncoding afterEncoding;
         private decimal forceFilmThreshold, acceptableFPSError;
@@ -107,6 +107,7 @@ namespace MeGUI
             vobSubPath = getDownloadPath(@"tools\vobsub\vobsub.dll");
             recalculateMainMovieBitrate = false;
 			autoForceFilm = true;
+            bAutoLoadDG = true;
 			autoStartQueue = false;
 			forceFilmThreshold = new decimal(95);
 			defaultLanguage1 = "";
@@ -664,7 +665,14 @@ namespace MeGUI
 			get {return autoForceFilm;}
 			set {autoForceFilm = value;}
 		}
-
+        /// <summary>
+        /// should the file autoloaded incrementally if VOB
+        /// </summary>
+        public bool AutoLoadDG
+        {
+            get { return bAutoLoadDG; }
+            set { bAutoLoadDG = value; }
+        }
         /// <summary>
         /// true if oggenc2 is v2.8 or later
         /// </summary>

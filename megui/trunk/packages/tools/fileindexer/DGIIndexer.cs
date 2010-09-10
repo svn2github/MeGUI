@@ -64,9 +64,28 @@ namespace MeGUI
             get
             {
                 StringBuilder sb = new StringBuilder();
+                sb.Append("-i \"" + job.Input + "\"");
+                if (MainForm.Instance.Settings.AutoLoadDG && Path.GetExtension(job.Input).ToLower().Equals(".vob"))
+                {
+                    string strFile = Path.GetFileNameWithoutExtension(job.Input);
+                    int iNumber = 0;
+                    if (int.TryParse(strFile.Substring(strFile.Length - 1), out iNumber))
+                    {
+                        while (++iNumber < 10)
+                        {
+                            string strNewFile = "";
+                            strNewFile = Path.Combine(Path.GetDirectoryName(job.Input), strFile.Substring(0, strFile.Length - 1) + iNumber.ToString() + ".vob");
+                            if (File.Exists(strNewFile))
+                                sb.Append(",\"" + strNewFile + "\"");
+                            else
+                                break;
+                        }
+                    }
+                }
                 if (job.DemuxVideo)
-                    sb.Append("-i \"" + job.Input + "\" -od \"" + job.Output + "\" -e -h");
-                else sb.Append("-i \"" + job.Input + "\" -o \"" + job.Output + "\" -e -h");
+                    sb.Append(" -od \"" + job.Output + "\" -e -h");
+                else 
+                    sb.Append(" -o \"" + job.Output + "\" -e -h");
                 if (job.DemuxMode == 2)
                     sb.Append(" -a"); // demux everything
                 return sb.ToString();
