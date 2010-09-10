@@ -1,4 +1,6 @@
 0.3.5.10
+  - (sharktooth) [x264] Added 64:45 SAR option
+  - (sharktooth) [MainForm.cs] Typo
   - (zathor) [Settings] added option for DGIndex(NV) to autoload VOB files
              incrementally. Default value is enabled. Feature request #2955909
   - (zathor) [Settings] added option to close MeGUI after encoding.
