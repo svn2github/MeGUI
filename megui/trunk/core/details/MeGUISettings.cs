@@ -340,10 +340,10 @@ namespace MeGUI
             get { return autoUpdateServerLists; }
             set { autoUpdateServerLists = value; }
         }
-            /// <summary>
-            /// What to do after all encodes are finished
-            /// </summary>
-            public AfterEncoding AfterEncoding
+        /// <summary>
+        /// What to do after all encodes are finished
+        /// </summary>
+        public AfterEncoding AfterEncoding
         {
             get { return afterEncoding; }
             set { afterEncoding = value; }
@@ -898,5 +898,5 @@ namespace MeGUI
 
         #endregion
     }
-    public enum AfterEncoding { DoNothing = 0, Shutdown = 1, RunCommand = 2 }
+    public enum AfterEncoding { DoNothing = 0, Shutdown = 1, RunCommand = 2, CloseMeGUI = 3 }
 }

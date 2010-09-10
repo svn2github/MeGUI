@@ -1052,7 +1052,12 @@ namespace MeGUI
 
                 }
             }
-            else
+            else if (Jobs.CurrentAfterEncoding == AfterEncoding.CloseMeGUI)
+            {
+                this.CloseSilent();
+                Application.Exit();
+            }
+            else if (Jobs.CurrentAfterEncoding == AfterEncoding.RunCommand && !String.IsNullOrEmpty(settings.AfterEncodingCommand))
             {
                 string filename = MeGUIPath + @"\after_encoding.bat";
                 try

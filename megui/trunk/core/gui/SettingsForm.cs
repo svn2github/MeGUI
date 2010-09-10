@@ -127,6 +127,7 @@ namespace MeGUI
         private GroupBox groupBox5;
         private GroupBox groupBox6;
         private CheckBox cbAutoLoadDG;
+        private RadioButton rbCloseMeGUI;
 
 		/// <summary>
 		/// Required designer variable.
@@ -197,7 +198,6 @@ namespace MeGUI
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.gbDefaultOutput = new System.Windows.Forms.GroupBox();
             this.clearDefaultOutputDir = new System.Windows.Forms.Button();
-            this.defaultOutputDir = new MeGUI.FileBar();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.txt_httpproxyport = new System.Windows.Forms.TextBox();
@@ -238,7 +238,6 @@ namespace MeGUI
             this.label2 = new System.Windows.Forms.Label();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.btnClearMP4TempDirectory = new System.Windows.Forms.Button();
-            this.tempDirMP4 = new MeGUI.FileBar();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.besplit = new System.Windows.Forms.Label();
             this.textBox8 = new System.Windows.Forms.TextBox();
@@ -255,7 +254,10 @@ namespace MeGUI
             this.audioExtLabel = new System.Windows.Forms.Label();
             this.videoExtLabel = new System.Windows.Forms.Label();
             this.autoEncodeDefaultsButton = new System.Windows.Forms.Button();
+            this.rbCloseMeGUI = new System.Windows.Forms.RadioButton();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
+            this.defaultOutputDir = new MeGUI.FileBar();
+            this.tempDirMP4 = new MeGUI.FileBar();
             groupBox1 = new System.Windows.Forms.GroupBox();
             groupBox1.SuspendLayout();
             this.otherGroupBox.SuspendLayout();
@@ -284,6 +286,7 @@ namespace MeGUI
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(this.rbCloseMeGUI);
             groupBox1.Controls.Add(this.command);
             groupBox1.Controls.Add(this.runCommand);
             groupBox1.Controls.Add(this.shutdown);
@@ -298,7 +301,7 @@ namespace MeGUI
             // command
             // 
             this.command.Enabled = false;
-            this.command.Location = new System.Drawing.Point(10, 89);
+            this.command.Location = new System.Drawing.Point(10, 75);
             this.command.Name = "command";
             this.command.Size = new System.Drawing.Size(197, 21);
             this.command.TabIndex = 3;
@@ -306,7 +309,7 @@ namespace MeGUI
             // runCommand
             // 
             this.runCommand.AutoSize = true;
-            this.runCommand.Location = new System.Drawing.Point(11, 66);
+            this.runCommand.Location = new System.Drawing.Point(11, 47);
             this.runCommand.Name = "runCommand";
             this.runCommand.Size = new System.Drawing.Size(96, 17);
             this.runCommand.TabIndex = 2;
@@ -317,7 +320,7 @@ namespace MeGUI
             // shutdown
             // 
             this.shutdown.AutoSize = true;
-            this.shutdown.Location = new System.Drawing.Point(11, 43);
+            this.shutdown.Location = new System.Drawing.Point(123, 21);
             this.shutdown.Name = "shutdown";
             this.shutdown.Size = new System.Drawing.Size(73, 17);
             this.shutdown.TabIndex = 1;
@@ -628,22 +631,6 @@ namespace MeGUI
             this.clearDefaultOutputDir.TabIndex = 41;
             this.clearDefaultOutputDir.Text = "x";
             this.clearDefaultOutputDir.Click += new System.EventHandler(this.clearDefaultOutputDir_Click);
-            // 
-            // defaultOutputDir
-            // 
-            this.defaultOutputDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.defaultOutputDir.Filename = "";
-            this.defaultOutputDir.Filter = null;
-            this.defaultOutputDir.FilterIndex = 0;
-            this.defaultOutputDir.FolderMode = true;
-            this.defaultOutputDir.Location = new System.Drawing.Point(12, 29);
-            this.defaultOutputDir.Name = "defaultOutputDir";
-            this.defaultOutputDir.ReadOnly = true;
-            this.defaultOutputDir.SaveMode = false;
-            this.defaultOutputDir.Size = new System.Drawing.Size(417, 26);
-            this.defaultOutputDir.TabIndex = 40;
-            this.defaultOutputDir.Title = null;
             // 
             // tabPage3
             // 
@@ -1082,22 +1069,6 @@ namespace MeGUI
             this.btnClearMP4TempDirectory.Text = "x";
             this.btnClearMP4TempDirectory.Click += new System.EventHandler(this.btnClearMP4TempDirectory_Click);
             // 
-            // tempDirMP4
-            // 
-            this.tempDirMP4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.tempDirMP4.Filename = "";
-            this.tempDirMP4.Filter = null;
-            this.tempDirMP4.FilterIndex = 0;
-            this.tempDirMP4.FolderMode = true;
-            this.tempDirMP4.Location = new System.Drawing.Point(7, 33);
-            this.tempDirMP4.Name = "tempDirMP4";
-            this.tempDirMP4.ReadOnly = true;
-            this.tempDirMP4.SaveMode = false;
-            this.tempDirMP4.Size = new System.Drawing.Size(424, 26);
-            this.tempDirMP4.TabIndex = 41;
-            this.tempDirMP4.Title = null;
-            // 
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.besplit);
@@ -1254,6 +1225,17 @@ namespace MeGUI
             this.autoEncodeDefaultsButton.Text = "Configure Defaults";
             this.autoEncodeDefaultsButton.UseVisualStyleBackColor = true;
             // 
+            // rbCloseMeGUI
+            // 
+            this.rbCloseMeGUI.AutoSize = true;
+            this.rbCloseMeGUI.Location = new System.Drawing.Point(123, 47);
+            this.rbCloseMeGUI.Name = "rbCloseMeGUI";
+            this.rbCloseMeGUI.Size = new System.Drawing.Size(84, 17);
+            this.rbCloseMeGUI.TabIndex = 4;
+            this.rbCloseMeGUI.TabStop = true;
+            this.rbCloseMeGUI.Text = "close MeGUI";
+            this.rbCloseMeGUI.UseVisualStyleBackColor = true;
+            // 
             // helpButton1
             // 
             this.helpButton1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -1264,6 +1246,38 @@ namespace MeGUI
             this.helpButton1.Name = "helpButton1";
             this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 1;
+            // 
+            // defaultOutputDir
+            // 
+            this.defaultOutputDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.defaultOutputDir.Filename = "";
+            this.defaultOutputDir.Filter = null;
+            this.defaultOutputDir.FilterIndex = 0;
+            this.defaultOutputDir.FolderMode = true;
+            this.defaultOutputDir.Location = new System.Drawing.Point(12, 29);
+            this.defaultOutputDir.Name = "defaultOutputDir";
+            this.defaultOutputDir.ReadOnly = true;
+            this.defaultOutputDir.SaveMode = false;
+            this.defaultOutputDir.Size = new System.Drawing.Size(417, 26);
+            this.defaultOutputDir.TabIndex = 40;
+            this.defaultOutputDir.Title = null;
+            // 
+            // tempDirMP4
+            // 
+            this.tempDirMP4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.tempDirMP4.Filename = "";
+            this.tempDirMP4.Filter = null;
+            this.tempDirMP4.FilterIndex = 0;
+            this.tempDirMP4.FolderMode = true;
+            this.tempDirMP4.Location = new System.Drawing.Point(7, 33);
+            this.tempDirMP4.Name = "tempDirMP4";
+            this.tempDirMP4.ReadOnly = true;
+            this.tempDirMP4.SaveMode = false;
+            this.tempDirMP4.Size = new System.Drawing.Size(424, 26);
+            this.tempDirMP4.TabIndex = 41;
+            this.tempDirMP4.Title = null;
             // 
             // SettingsForm
             // 
@@ -1436,8 +1450,12 @@ namespace MeGUI
 				settings.ForceFilmThreshold = forceFilmPercentage.Value;
 				settings.DefaultPriority = (ProcessPriority)priority.SelectedIndex;
 				settings.AutoStartQueue = this.autostartQueue.Checked;
-                if (donothing.Checked) settings.AfterEncoding = AfterEncoding.DoNothing;
-                else if (shutdown.Checked) settings.AfterEncoding = AfterEncoding.Shutdown;
+                if (donothing.Checked)
+                    settings.AfterEncoding = AfterEncoding.DoNothing;
+                else if (shutdown.Checked)
+                    settings.AfterEncoding = AfterEncoding.Shutdown;
+                else if (rbCloseMeGUI.Checked)
+                    settings.AfterEncoding = AfterEncoding.CloseMeGUI;
                 else
                 {
                     settings.AfterEncoding = AfterEncoding.RunCommand;
@@ -1495,6 +1513,7 @@ namespace MeGUI
                 donothing.Checked = settings.AfterEncoding == AfterEncoding.DoNothing;
                 shutdown.Checked = settings.AfterEncoding == AfterEncoding.Shutdown;
                 runCommand.Checked = settings.AfterEncoding == AfterEncoding.RunCommand;
+                rbCloseMeGUI.Checked = settings.AfterEncoding == AfterEncoding.CloseMeGUI;
                 command.Text = settings.AfterEncodingCommand;
 				deleteCompletedJobs.Checked = settings.DeleteCompletedJobs;
                 openScript.Checked = settings.AutoOpenScript;

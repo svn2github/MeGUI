@@ -612,7 +612,10 @@ namespace MeGUI.core.details
         {
             currentAfterEncoding = Settings.AfterEncoding;
             cbAfterEncoding.SelectedIndex = (int) currentAfterEncoding;
-            cbAfterEncoding.Items[2] = "Run '" + Settings.AfterEncodingCommand + "'";
+            if (String.IsNullOrEmpty(Settings.AfterEncodingCommand))
+                cbAfterEncoding.Items[2] = "Run command (command not specified!)";
+            else
+                cbAfterEncoding.Items[2] = "Run '" + Settings.AfterEncodingCommand + "'";
         }
 
 
