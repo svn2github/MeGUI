@@ -1,7 +1,10 @@
 0.3.5.10
   - (zathor) [Settings] added option for DGIndex(NV) to autoload VOB files
-             incrementally. Default is enabled. Feature request #2955909
-  - (zathor) [Settings] added option to close MeGUI after encoding. Feature request #2954099
+             incrementally. Default value is enabled. Feature request #2955909
+  - (zathor) [Settings] added option to close MeGUI after encoding.
+             Default value is still "Do nothing". Feature request #2954099
+  - (zathor) [Settings] added option start the queue at program start.
+             Default value is disbaled. Feature request #1908749
 
 0.3.5.9
   - (sharktooth) [MainForm.cs] Added a big fat warning about patents and binary files when megui finds updates

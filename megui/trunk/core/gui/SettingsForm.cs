@@ -128,6 +128,7 @@ namespace MeGUI
         private GroupBox groupBox6;
         private CheckBox cbAutoLoadDG;
         private RadioButton rbCloseMeGUI;
+        private CheckBox cbAutoStartQueueStartup;
 
 		/// <summary>
 		/// Required designer variable.
@@ -255,6 +256,7 @@ namespace MeGUI
             this.videoExtLabel = new System.Windows.Forms.Label();
             this.autoEncodeDefaultsButton = new System.Windows.Forms.Button();
             this.rbCloseMeGUI = new System.Windows.Forms.RadioButton();
+            this.cbAutoStartQueueStartup = new System.Windows.Forms.CheckBox();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.defaultOutputDir = new MeGUI.FileBar();
             this.tempDirMP4 = new MeGUI.FileBar();
@@ -361,6 +363,7 @@ namespace MeGUI
             // 
             // otherGroupBox
             // 
+            this.otherGroupBox.Controls.Add(this.cbAutoStartQueueStartup);
             this.otherGroupBox.Controls.Add(this.forcerawavcuse);
             this.otherGroupBox.Controls.Add(this.audiosamplesperupdate);
             this.otherGroupBox.Controls.Add(this.label6);
@@ -381,10 +384,11 @@ namespace MeGUI
             this.otherGroupBox.Controls.Add(this.priorityLabel);
             this.otherGroupBox.Location = new System.Drawing.Point(2, 6);
             this.otherGroupBox.Name = "otherGroupBox";
-            this.otherGroupBox.Size = new System.Drawing.Size(467, 293);
+            this.otherGroupBox.Size = new System.Drawing.Size(467, 274);
             this.otherGroupBox.TabIndex = 1;
             this.otherGroupBox.TabStop = false;
-            this.otherGroupBox.Text = "Other";
+            this.otherGroupBox.Tag = "";
+            this.otherGroupBox.Text = "main settings ";
             // 
             // forcerawavcuse
             // 
@@ -489,7 +493,7 @@ namespace MeGUI
             // 
             // resetDialogs
             // 
-            this.resetDialogs.Location = new System.Drawing.Point(13, 236);
+            this.resetDialogs.Location = new System.Drawing.Point(13, 230);
             this.resetDialogs.Name = "resetDialogs";
             this.resetDialogs.Size = new System.Drawing.Size(149, 23);
             this.resetDialogs.TabIndex = 16;
@@ -499,7 +503,7 @@ namespace MeGUI
             // 
             // configSourceDetector
             // 
-            this.configSourceDetector.Location = new System.Drawing.Point(298, 236);
+            this.configSourceDetector.Location = new System.Drawing.Point(298, 230);
             this.configSourceDetector.Name = "configSourceDetector";
             this.configSourceDetector.Size = new System.Drawing.Size(154, 23);
             this.configSourceDetector.TabIndex = 17;
@@ -1236,6 +1240,16 @@ namespace MeGUI
             this.rbCloseMeGUI.Text = "close MeGUI";
             this.rbCloseMeGUI.UseVisualStyleBackColor = true;
             // 
+            // cbAutoStartQueueStartup
+            // 
+            this.cbAutoStartQueueStartup.AutoSize = true;
+            this.cbAutoStartQueueStartup.Location = new System.Drawing.Point(13, 207);
+            this.cbAutoStartQueueStartup.Name = "cbAutoStartQueueStartup";
+            this.cbAutoStartQueueStartup.Size = new System.Drawing.Size(203, 17);
+            this.cbAutoStartQueueStartup.TabIndex = 19;
+            this.cbAutoStartQueueStartup.Text = "Process queue on application startup";
+            this.cbAutoStartQueueStartup.UseVisualStyleBackColor = true;
+            // 
             // helpButton1
             // 
             this.helpButton1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -1450,6 +1464,7 @@ namespace MeGUI
 				settings.ForceFilmThreshold = forceFilmPercentage.Value;
 				settings.DefaultPriority = (ProcessPriority)priority.SelectedIndex;
 				settings.AutoStartQueue = this.autostartQueue.Checked;
+                settings.AutoStartQueueStartup = this.cbAutoStartQueueStartup.Checked;
                 if (donothing.Checked)
                     settings.AfterEncoding = AfterEncoding.DoNothing;
                 else if (shutdown.Checked)
@@ -1510,6 +1525,7 @@ namespace MeGUI
 				forceFilmPercentage.Value = settings.ForceFilmThreshold;
 				priority.SelectedIndex = (int)settings.DefaultPriority;
 				autostartQueue.Checked = settings.AutoStartQueue;
+                cbAutoStartQueueStartup.Checked = settings.AutoStartQueueStartup;
                 donothing.Checked = settings.AfterEncoding == AfterEncoding.DoNothing;
                 shutdown.Checked = settings.AfterEncoding == AfterEncoding.Shutdown;
                 runCommand.Checked = settings.AfterEncoding == AfterEncoding.RunCommand;

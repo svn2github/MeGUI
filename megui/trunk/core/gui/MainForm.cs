@@ -2089,6 +2089,9 @@ namespace MeGUI
                 if (!string.IsNullOrEmpty(avisynthversion))
                     i.LogValue("Avisynth Version ", avisynthversion.Replace(", ", ".").ToString());
             }
+
+            if (settings.AutoStartQueueStartup)
+                jobControl1.StartAll(false);
         }
 
         private bool AskToDownloadAvisynth()
