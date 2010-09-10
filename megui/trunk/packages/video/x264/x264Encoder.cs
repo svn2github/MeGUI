@@ -867,6 +867,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                     case 6: sb.Append("--sar 16:11 "); break;
                     case 7: sb.Append("--sar 32:27 "); break;
                     case 8: sb.Append("--sar 40:33 "); break;
+                    case 9: sb.Append("--sar 64:45 "); break;
                 }
 
             if (!xs.CustomEncoderOptions.Contains("--fullrange on"))    

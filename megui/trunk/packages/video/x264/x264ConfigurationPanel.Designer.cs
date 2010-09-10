@@ -2470,7 +2470,8 @@ namespace MeGUI.packages.video.x264
             "12:11",
             "16:11",
             "32:27",
-            "40:33"});
+            "40:33",
+            "64:45"});
             this.sampleAR.Location = new System.Drawing.Point(86, 75);
             this.sampleAR.Name = "sampleAR";
             this.sampleAR.Size = new System.Drawing.Size(70, 21);
