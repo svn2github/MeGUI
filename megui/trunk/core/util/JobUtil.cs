@@ -277,6 +277,10 @@ namespace MeGUI
 		/// <returns>an Array of VideoJobs in the order they are to be encoded</returns>
 		public JobChain prepareVideoJob(string movieInput, string movieOutput, VideoCodecSettings settings, Dar? dar, bool prerender, bool checkVideo, Zone[] zones)
 		{
+            //Check to see if output file already exists before creating the job.
+            if (File.Exists(movieOutput) && !mainForm.DialogManager.overwriteJobOutput(movieOutput))
+                return null;
+
 			bool twoPasses = false, threePasses = false;
 			if (settings.EncodingMode == 4) // automated twopass
 				twoPasses = true;
