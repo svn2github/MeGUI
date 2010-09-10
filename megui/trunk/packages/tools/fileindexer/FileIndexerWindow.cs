@@ -43,7 +43,6 @@ namespace MeGUI
             D2V, DGA, DGI, FFMS
         };
         private IndexType IndexerUsed = IndexType.D2V;
-        private bool bDGIAvailable = false;
 
         private string strVideoCodec = "";
         private string strVideoScanType = "";
@@ -150,14 +149,11 @@ namespace MeGUI
             {
                 input.Filter = "All DGAVCIndex supported files|*.264;*.h264;*.avc;*.m2t*;*.m2ts;*.mts;*.tp;*.ts;*.trp|All DGIndex supported files|*.vob;*.mpg;*.mpeg;*.m1v;*.m2v;*.mpv;*.tp;*.ts;*.trp;*.m2t;*.m2ts;*.pva;*.vro|All DGIndexNV supported files|*.264;*.h264;*.avc;*.m2v;*.mpv;*.vc1;*.mkv;*.vob;*.mpg;*.mpeg;*.m2t;*.m2ts;*.mts;*.tp;*.ts;*.trp|All FFMS Indexer supported files|*.mkv;*.avi;*.mp4;*.flv;*.wmv;*.ogm;*.vob;*.mpg;*.m2ts;*.ts|All supported files|*.mkv;*.avi;*.mp4;*.flv;*.wmv;*.ogm;*.264;*.h264;*.avc;*.m2t*;*.m2ts;*.mts;*.tp;*.ts;*.trp;*.vob;*.mpg;*.mpeg;*.m1v;*.m2v;*.mpv;*.pva;*.vro;*.vc1|All files|*.*";
                 input.FilterIndex = 5;
-                bDGIAvailable = true;
             }
             else
             {
                 input.Filter = "All DGAVCIndex supported files|*.264;*.h264;*.avc;*.m2t*;*.m2ts;*.mts;*.tp;*.ts;*.trp|All DGIndex supported files|*.vob;*.mpg;*.mpeg;*.m1v;*.m2v;*.mpv;*.tp;*.ts;*.trp;*.m2t;*.m2ts;*.pva;*.vro|All FFMS Indexer supported files|*.mkv;*.avi;*.mp4;*.flv;*.wmv;*.ogm;*.vob;*.mpg;*.m2ts;*.ts|All supported files|*.mkv;*.avi;*.mp4;*.flv;*.wmv;*.ogm;*.264;*.h264;*.avc;*.m2t*;*.m2ts;*.mts;*.tp;*.ts;*.trp;*.vob;*.mpg;*.mpeg;*.m1v;*.m2v;*.mpv;*.pva;*.vro|All files|*.*";
                 input.FilterIndex = 4;
-                bDGIAvailable = false;
-                btnDGI.Enabled = false;
             }
         }
 
@@ -675,7 +671,7 @@ namespace MeGUI
             btnFFMS.Enabled = iFile.isFFMSIndexable();
 
             IndexType newType;
-            if (iFile.recommendIndexer(out newType))
+            if (iFile.recommendIndexer(out newType, false))
             {
                 changeIndexer(newType);
                 gbIndexer.Enabled = gbFileInformation.Enabled = gbAudio.Enabled = gbOutput.Enabled = true;

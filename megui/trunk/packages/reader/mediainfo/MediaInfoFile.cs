@@ -509,8 +509,9 @@ namespace MeGUI
 
         /// <summary>gets the recommended indexer</summary>
         /// <param name="oType">the recommended indexer</param>
+        /// <param name="bDGIndexerOnly">true if only DGIndexer should be used</param>
         /// <returns>true if a indexer can be recommended, false if no indexer is available</returns>
-        public bool recommendIndexer(out FileIndexerWindow.IndexType oType)
+        public bool recommendIndexer(out FileIndexerWindow.IndexType oType, bool bDGIndexerOnly)
         {
             if (isDGIIndexable())
                 oType = FileIndexerWindow.IndexType.DGI;
@@ -518,7 +519,7 @@ namespace MeGUI
                 oType = FileIndexerWindow.IndexType.DGA;
             else if (isD2VIndexable())
                 oType = FileIndexerWindow.IndexType.D2V;
-            else if (isFFMSIndexable())
+            else if (isFFMSIndexable() && !bDGIndexerOnly)
                 oType = FileIndexerWindow.IndexType.FFMS;
             else
             {
