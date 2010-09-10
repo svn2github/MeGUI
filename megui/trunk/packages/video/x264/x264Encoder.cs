@@ -947,7 +947,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             #endregion
 
             #region input
-            if (!xs.CustomEncoderOptions.Contains("--sar "))
+            if (!xs.CustomEncoderOptions.Contains("--sar ") && xs.SampleAR == 0)
             {
                 if (d.HasValue)
                 {
