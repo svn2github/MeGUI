@@ -39,6 +39,7 @@ namespace MeGUI
             PostprocessingProperties = properties;
             LoadSources = loadSources;
             DemuxVideo = demuxVideo;
+            FilesToDelete.Add(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(input), System.IO.Path.GetFileNameWithoutExtension(input) + ".log"));
         }
 
         public override string CodecString
