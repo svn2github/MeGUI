@@ -9,6 +9,7 @@
              Default value is disabled. Feature request #1908749
   - (zathor) [JobUtil] display overwrite confirmation dialog for the output file
              during initial job creation if it is necessary. Feature request #3022005
+  - (zathor) [OneClickEncoder] added support for DGIndexNV and DGAVCIndex
 
 0.3.5.9
   - (sharktooth) [MainForm.cs] Added a big fat warning about patents and binary files when megui finds updates

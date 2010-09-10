@@ -45,6 +45,7 @@ namespace MeGUI
         List<FileSCBox> audioTrack;
         List<Label> trackLabel;
         List<AudioConfigControl> audioConfigControl;
+        FileIndexerWindow.IndexType oIndexerToUse;
 
         #region profiles
         void ProfileChanged(object sender, EventArgs e)
@@ -158,6 +159,18 @@ namespace MeGUI
             }
 
             showAdvancedOptions_CheckedChanged(null, null);
+
+            if (File.Exists(MainForm.Instance.Settings.DgnvIndexPath) &&
+                File.Exists(Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.DgnvIndexPath), "license.txt")))
+            {
+                input.Filter = "All DGAVCIndex supported files|*.264;*.h264;*.avc;*.m2t*;*.m2ts;*.mts;*.tp;*.ts;*.trp|All DGIndex supported files|*.vob;*.mpg;*.mpeg;*.m1v;*.m2v;*.mpv;*.tp;*.ts;*.trp;*.m2t;*.m2ts;*.pva;*.vro|All DGIndexNV supported files|*.264;*.h264;*.avc;*.m2v;*.mpv;*.vc1;*.mkv;*.vob;*.mpg;*.mpeg;*.m2t;*.m2ts;*.mts;*.tp;*.ts;*.trp|All supported files|*.mkv;*.264;*.h264;*.avc;*.m2t*;*.m2ts;*.mts;*.tp;*.ts;*.trp;*.vob;*.mpg;*.mpeg;*.m1v;*.m2v;*.mpv;*.pva;*.vro;*.vc1|All files|*.*";
+                input.FilterIndex = 4;
+            }
+            else
+            {
+                input.Filter = "All DGAVCIndex supported files|*.264;*.h264;*.avc;*.m2t*;*.m2ts;*.mts;*.tp;*.ts;*.trp|All DGIndex supported files|*.vob;*.mpg;*.mpeg;*.m1v;*.m2v;*.mpv;*.tp;*.ts;*.trp;*.m2t;*.m2ts;*.pva;*.vro|All supported files|*.mkv;*.264;*.h264;*.avc;*.m2t*;*.m2ts;*.mts;*.tp;*.ts;*.trp;*.vob;*.mpg;*.mpeg;*.m1v;*.m2v;*.mpv;*.pva;*.vro|All files|*.*";
+                input.FilterIndex = 3;
+            }
         }
         #endregion
 
@@ -225,7 +238,7 @@ namespace MeGUI
         public void openInput(string fileName)
         {
             MediaInfoFile iFile = new MediaInfoFile(fileName);
-            if (!iFile.isD2VIndexable())
+            if (!iFile.recommendIndexer(out oIndexerToUse, true))
             {
                 input.Filename = "";
                 MessageBox.Show("This file cannot be used in OneClick mode.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -233,12 +246,10 @@ namespace MeGUI
             }
 
             input.Filename = fileName;
-            Dar? ar;
-            int maxHorizontalResolution;
-            List<AudioTrackInfo> audioTracks;
-            List<SubtitleInfo> subtitles;
-            vUtil.openVideoSource(fileName, out audioTracks, out subtitles, out ar, out maxHorizontalResolution);
-
+            Dar? ar = null;
+            int maxHorizontalResolution = int.Parse(iFile.Info.Width.ToString());
+            List<AudioTrackInfo> audioTracks = iFile.AudioTracks;
+            
             List<object> trackNames = new List<object>();
             trackNames.Add("None");
             foreach (object o in audioTracks)
@@ -457,9 +468,7 @@ namespace MeGUI
                         else
                             aJobs.Add(new AudioJob(aInput, null, null, audioConfigControl[i].Settings, delay));
                     }
-
-                    string d2vName = Path.Combine(workingDirectory.Filename, workingName.Text + ".d2v");
-
+    
                     DGIndexPostprocessingProperties dpp = new DGIndexPostprocessingProperties();
                     dpp.DAR = ar.Value;
                     dpp.DirectMuxAudio = muxOnlyAudio.ToArray();
@@ -479,8 +488,24 @@ namespace MeGUI
                     dpp.DeviceOutputType = devicetype.Text;
                     dpp.UseChaptersMarks = usechaptersmarks.Checked;
                     dpp.VideoSettings = VideoSettings.Clone();
-                    D2VIndexJob job = new D2VIndexJob(input.Filename, d2vName, 1, audioTracks, dpp, false, false);
-                    mainForm.Jobs.addJobsToQueue(job);
+                    if (oIndexerToUse == FileIndexerWindow.IndexType.D2V)
+                    {
+                        string d2vName = Path.Combine(workingDirectory.Filename, workingName.Text + ".d2v");
+                        D2VIndexJob job = new D2VIndexJob(input.Filename, d2vName, 1, audioTracks, dpp, false, false);
+                        mainForm.Jobs.addJobsToQueue(job);
+                    }
+                    else if (oIndexerToUse == FileIndexerWindow.IndexType.DGA)
+                    {
+                        string d2vName = Path.Combine(workingDirectory.Filename, workingName.Text + ".dga");
+                        DGAIndexJob job = new DGAIndexJob(input.Filename, d2vName, 2, audioTracks, dpp, false, false);
+                        mainForm.Jobs.addJobsToQueue(job);
+                    }
+                    else if (oIndexerToUse == FileIndexerWindow.IndexType.DGI)
+                    {
+                        string d2vName = Path.Combine(workingDirectory.Filename, workingName.Text + ".dgi");
+                        DGIIndexJob job = new DGIIndexJob(input.Filename, d2vName, 2, audioTracks, dpp, false, false);
+                        mainForm.Jobs.addJobsToQueue(job);
+                    }
                     if (this.openOnQueue.Checked)
                     {
                         if (!string.IsNullOrEmpty(this.chapterFile.Filename))
@@ -670,13 +695,16 @@ namespace MeGUI
         #region postprocessor
         private static LogItem postprocess(MainForm mainForm, Job job)
         {
-            if (!(job is D2VIndexJob))
+            if (job is DGIndexJob)
+            {
+                DGIndexJob ijob = (DGIndexJob)job;
+                if (ijob.PostprocessingProperties == null)
+                    return null;
+                OneClickPostProcessor p = new OneClickPostProcessor(mainForm, ijob);
+                return p.postprocess();
+            }
+            else
                 return null;
-            D2VIndexJob ijob = (D2VIndexJob)job;
-            if (ijob.PostprocessingProperties == null)
-                return null;
-            OneClickPostProcessor p = new OneClickPostProcessor(mainForm, ijob);
-            return p.postprocess();
         }
         public static JobPostProcessor PostProcessor = new JobPostProcessor(postprocess, "OneClick_postprocessor");
 
@@ -685,7 +713,7 @@ namespace MeGUI
         Dictionary<int, string> audioFiles;
         private JobUtil jobUtil;
         private VideoUtil vUtil;
-        private D2VIndexJob job;
+        private DGIndexJob job;
         private AVCLevels al = new AVCLevels();
         private bool finished = false;
         private bool interlaced = false;
@@ -693,7 +721,7 @@ namespace MeGUI
         private LogItem log = new LogItem("OneClick postprocessor", ImageType.Information);
         string qpfile = string.Empty;
         
-        public OneClickPostProcessor(MainForm mainForm, D2VIndexJob ijob)
+        public OneClickPostProcessor(MainForm mainForm, DGIndexJob ijob)
         {
             this.job = ijob;
             this.mainForm = mainForm;
@@ -703,7 +731,8 @@ namespace MeGUI
 
         public LogItem postprocess()
         {
-            audioFiles = vUtil.getAllDemuxedAudio(job.AudioTracks, job.Output, 8);
+            List<string>arrAudioFilesDelete;
+            audioFiles = vUtil.getAllDemuxedAudio(job.AudioTracks, out arrAudioFilesDelete, job.Output, 8);
 
             fillInAudioInformation();
 
@@ -741,6 +770,10 @@ namespace MeGUI
             intermediateFiles.AddRange(audioFiles.Values);
             if (!string.IsNullOrEmpty(qpfile))
                 intermediateFiles.Add(qpfile);
+            foreach (string file in arrAudioFilesDelete)
+                intermediateFiles.Add(file);
+            if (File.Exists(Path.Combine(Path.GetDirectoryName(job.Input), Path.GetFileNameWithoutExtension(job.Input) + ".log")))
+                intermediateFiles.Add(Path.Combine(Path.GetDirectoryName(job.Input), Path.GetFileNameWithoutExtension(job.Input) + ".log"));
 
             if (!string.IsNullOrEmpty(videoInput))
             {
@@ -770,7 +803,7 @@ namespace MeGUI
             foreach (AudioJob a in job.PostprocessingProperties.AudioJobs)
             {
                 a.Input = convertTrackNumberToFile(a.Input, ref a.Delay);
-                if (string.IsNullOrEmpty(a.Output))
+                if (String.IsNullOrEmpty(a.Output) && !String.IsNullOrEmpty(a.Input))
                     a.Output = FileUtil.AddToFileName(a.Input, "_audio");
             }
         }
@@ -828,9 +861,31 @@ namespace MeGUI
             dar = null;
             CropValues final = new CropValues();
             Dar customDAR;
+            IMediaFile d2v = null;
+            IVideoReader reader;
+            PossibleSources oPossibleSource;
 
-            IMediaFile d2v = new d2vFile(path);
-            IVideoReader reader = d2v.GetVideoReader();
+            if (job is DGIIndexJob)
+            {
+                d2v = new dgiFile(path);
+                oPossibleSource = PossibleSources.dgi;
+            }
+            else if (job is D2VIndexJob)
+            {
+                d2v = new d2vFile(path);
+                oPossibleSource = PossibleSources.d2v;
+            }
+            else if (job is DGAIndexJob)
+            {
+                d2v = new dgaFile(path);
+                oPossibleSource = PossibleSources.dga;
+            }
+            else
+            {
+                log.Error("This project cannot be opened!");
+                return "";
+            }
+            reader = d2v.GetVideoReader();
             if (reader.FrameCount < 1)
             {
                 log.Error("DGDecode reported 0 frames in this file. This is a fatal error. Please recreate the DGIndex project");
@@ -954,8 +1009,10 @@ namespace MeGUI
             string cropLine = "#crop";
             string resizeLine = "#resize";
 
-            inputLine = ScriptServer.GetInputLine(path, false, PossibleSources.d2v,
+            inputLine = ScriptServer.GetInputLine(path, false, oPossibleSource,
                 false, false, false, 0, false);
+            if (!inputLine.EndsWith(")"))
+                inputLine += ")";
 
             log.LogValue("Automatic deinterlacing", autoDeint);
             if (autoDeint)
@@ -972,7 +1029,9 @@ namespace MeGUI
                 log.LogValue("Deinterlacing used", deinterlaceLines);
             }
 
-            inputLine = ScriptServer.GetInputLine(path, interlaced, PossibleSources.d2v, avsSettings.ColourCorrect, avsSettings.MPEG2Deblock, false, 0, false);
+            inputLine = ScriptServer.GetInputLine(path, interlaced, oPossibleSource, avsSettings.ColourCorrect, avsSettings.MPEG2Deblock, false, 0, false);
+            if (!inputLine.EndsWith(")"))
+                inputLine += ")";
 
             if (autoCrop)
                 cropLine = ScriptServer.GetCropLine(true, final);

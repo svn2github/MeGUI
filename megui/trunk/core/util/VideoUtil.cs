@@ -21,7 +21,6 @@
 using Utils.MessageBoxExLib;
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -575,47 +574,6 @@ namespace MeGUI
         }
 
  		#endregion
-		#region dgindex preprocessing
-		/// <summary>
-		/// opens a video source and fills out the track selector dropdowns
-		/// </summary>
-		/// <param name="fileName">the video input file</param>
-		/// <param name="track1">combobox for audio track selection</param>
-		/// <param name="track2">combobox for audio track selection</param>
-		/// <param name="ar">aspect ratio of the video</param>
-		/// <param name="trackIDs">an arraylist that will contain the track IDs of the source if found</param>
-		/// <returns>true if a source info file has been found, false if not</returns>
-        public bool openVideoSource(string fileName, out List<AudioTrackInfo> audioTracks, out List<SubtitleInfo> subtitles, 
-            out Dar? ar, out int maxHorizontalResolution)
-		{
-            audioTracks = new List<AudioTrackInfo>();
-            subtitles = new List<SubtitleInfo>();
-            string infoFile = VideoUtil.getInfoFileName(fileName);
-			bool putDummyTracks = true; // indicates whether audio tracks have been found or not
-			ar = null;
-            maxHorizontalResolution = 5000;
-
-            getSourceMediaInfo(fileName, out audioTracks, out maxHorizontalResolution, out ar);
-            ar = null; // muss noch weg!
-            if ((audioTracks.Count > 0) || (subtitles.Count > 0))
-                putDummyTracks = false;
-
-			if (putDummyTracks)
-			{                
-                for (int i = 1; i <= 8; i++)
-                {
-                    audioTracks.Add(new AudioTrackInfo("Track " + i, "", "", i));
-                }
-
-                subtitles.Clear();
-                for (int i = 1; i <= 32; i++)
-                {
-                     subtitles.Add(new SubtitleInfo("Track " + i, i));
-                }
-			}
-			return putDummyTracks;
-		}
-		#endregion
 		#region dgindex postprocessing
 		/// <summary>
 		/// gets all demuxed audio files from a given dgindex project
@@ -625,14 +583,25 @@ namespace MeGUI
 		/// <param name="projectName">the name of the dgindex project</param>
 		/// <param name="cutoff">maximum number of results to be returned</param>
 		/// <returns>an array of string of filenames</returns>
-        public Dictionary<int, string> getAllDemuxedAudio(List<AudioTrackInfo> audioTracks, string projectName, int cutoff)
+        public Dictionary<int, string> getAllDemuxedAudio(List<AudioTrackInfo> audioTracks, out List<string> arrDeleteFiles, string projectName, int cutoff)
         {
 		    Dictionary<int, string> audioFiles = new Dictionary<int, string>();
+            arrDeleteFiles = new List<string>();
+            string strTrackName;
+            string[] files;
+
+            if (audioTracks.Count == 0)
+                return audioFiles;
+
+            if (audioTracks[0].ContainerType.ToLower().Equals("matroska"))
+                strTrackName = " [";
+            else
+                strTrackName = audioTracks[0].ContainerType == "MPEG-TS" ? " PID " : " T";
             for (int counter = 0; counter < audioTracks.Count; counter++)
             {
-                string trackNumber = audioTracks[counter].ContainerType == "MPEG-TS" ? " PID " : " T";
-                trackNumber += audioTracks[counter].TrackIDx + "*";
-                string [] files = Directory.GetFiles(Path.GetDirectoryName(projectName),
+                string trackNumber;
+                trackNumber = strTrackName + audioTracks[counter].TrackIDx + "*";
+                files = Directory.GetFiles(Path.GetDirectoryName(projectName),
 				        Path.GetFileNameWithoutExtension(projectName) + trackNumber);
                 foreach (string file in files)
                 {
@@ -650,6 +619,25 @@ namespace MeGUI
 					}
 				}
 			}
+
+            // Find files which can be deleted
+            files = Directory.GetFiles(Path.GetDirectoryName(projectName),
+                        Path.GetFileNameWithoutExtension(projectName) + strTrackName + "*");
+            foreach (string file in files)
+            {
+                if (file.EndsWith(".ac3") ||
+                     file.EndsWith(".mp3") ||
+                     file.EndsWith(".mp2") ||
+                     file.EndsWith(".mp1") ||
+                     file.EndsWith(".mpa") ||
+                     file.EndsWith(".dts") ||
+                     file.EndsWith(".wav") ||
+                     file.EndsWith(".aac")) // It is the right track
+                {
+                    if (!audioFiles.ContainsValue(file))
+                        arrDeleteFiles.Add(file);
+                }
+            }
             return audioFiles;
 		}
 

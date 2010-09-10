@@ -45,7 +45,7 @@ namespace MeGUI
     public delegate void UpdateGUIStatusCallback(StatusUpdate su); // catches the UpdateGUI events fired from the encoder
     public enum FileType
     {
-        VIDEOINPUT, AUDIOINPUT, DGINDEX, INDEXABLEVIDEO, OTHERVIDEO, ZIPPED_PROFILES, NONE
+        VIDEOINPUT, AUDIOINPUT, FFMSINDEXABLE, INDEXABLEVIDEO, OTHERVIDEO, ZIPPED_PROFILES, NONE
     };
     public enum ProcessingStatus
     {
@@ -1304,10 +1304,10 @@ namespace MeGUI
             }
 
             MediaInfoFile iFile = new MediaInfoFile(fileName);
-            if (iFile.isD2VIndexable())
-                return FileType.DGINDEX;
-            else if (iFile.isFFMSIndexable() || iFile.isDGIIndexable() || iFile.isDGAIndexable())
+            if (iFile.isD2VIndexable() || iFile.isDGIIndexable() || iFile.isDGAIndexable())
                 return FileType.INDEXABLEVIDEO;
+            else if (iFile.isFFMSIndexable())
+                return FileType.FFMSINDEXABLE;
             else
                 return FileType.OTHERVIDEO;
         }
@@ -1321,10 +1321,10 @@ namespace MeGUI
                 case FileType.AUDIOINPUT:
                     audioEncodingComponent1.openAudioFile(file);
                     break;
-                case FileType.DGINDEX:
+                case FileType.INDEXABLEVIDEO:
                     openDGIndexFile(file);
                     break;
-                case FileType.INDEXABLEVIDEO:
+                case FileType.FFMSINDEXABLE:
                     openD2VCreatorFile(file);
                     break;
                 case FileType.OTHERVIDEO:
