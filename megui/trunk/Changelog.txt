@@ -2,6 +2,8 @@
   - (zathor) [x264] fixed more than one --sar in the command line. Bug #3038722
   - (zathor) [MuxWindow] added a unique title to every mux window. Feature request #2937578
   - (zathor) [MuxWindow] added a shortcut to every mux window. Feature request #1868046
+  - (zathor) [VideoUtil] fixed a problem if two identical audio sources
+             are beeing used in OneClick
 
 0.3.5.10
   - (sharktooth) [x264] Added 64:45 SAR option

@@ -614,7 +614,8 @@ namespace MeGUI
                          file.EndsWith(".wav") ||
                          file.EndsWith(".aac")) // It is the right track
 					{
-                        audioFiles.Add(audioTracks[counter].TrackID, file);
+                        if (!audioFiles.ContainsValue(file))
+                            audioFiles.Add(audioTracks[counter].TrackID, file);
                         break;
 					}
 				}
