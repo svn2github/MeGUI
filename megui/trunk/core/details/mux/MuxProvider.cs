@@ -469,6 +469,7 @@ namespace MeGUI
             base.type = MuxerType.MP4BOX;
             maxFilesOfType = new int[] { 1, -1, -1, 1, 1};
             name = "MP4 Muxer";
+            shortcut = System.Windows.Forms.Shortcut.Ctrl5;
         }
 
         public override IJobProcessor GetMuxer(MeGUISettings settings)
@@ -514,6 +515,7 @@ namespace MeGUI
             maxFilesOfType = new int[] { -1, -1, -1, 1, 0};
             base.type = MuxerType.MKVMERGE;
             name = "MKV muxer";
+            shortcut = System.Windows.Forms.Shortcut.Ctrl4;
         }
 
         public override IJobProcessor GetMuxer(MeGUISettings settings)
@@ -547,6 +549,7 @@ namespace MeGUI
             maxFilesOfType = new int[] { 1, -1, -1, 0, 0};
             base.type = MuxerType.AVIMUXGUI;
             name = "AVI Muxer";
+            shortcut = System.Windows.Forms.Shortcut.Ctrl2;
         }
 
         public override IJobProcessor GetMuxer(MeGUISettings settings)
@@ -586,6 +589,7 @@ namespace MeGUI
             base.type = MuxerType.TSMUXER;
             maxFilesOfType = new int[] { 1, -1, -1, 1, 1};
             name = "M2TS Muxer";
+            shortcut = System.Windows.Forms.Shortcut.Ctrl3;
         }
  
         public override IJobProcessor GetMuxer(MeGUISettings settings)
@@ -612,6 +616,7 @@ namespace MeGUI
         protected string videoInputFilter, audioInputFilter, subtitleInputFilter;
         protected int[] maxFilesOfType;
         protected string name;
+        protected System.Windows.Forms.Shortcut shortcut;
         protected string id;
         protected MuxerType type;
         public MuxerProvider(string id)
@@ -671,6 +676,11 @@ namespace MeGUI
         public MuxerType MuxerType
         {
             get { return type; }
+        }
+
+        public System.Windows.Forms.Shortcut Shortcut
+        {
+            get { return shortcut; }
         }
 
         public List<VideoType> GetSupportedVideoTypes()

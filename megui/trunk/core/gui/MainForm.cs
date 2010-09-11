@@ -1617,6 +1617,7 @@ namespace MeGUI
         {
             // Fill the muxing menu
             mnuMuxers.MenuItems.Clear();
+            mnuToolsAdaptiveMuxer.Shortcut = Shortcut.Ctrl1;
             mnuMuxers.MenuItems.Add(mnuToolsAdaptiveMuxer);
             int index = 1;
             foreach (IMuxing muxer in PackageSystem.MuxerProviders.Values)
@@ -1625,6 +1626,7 @@ namespace MeGUI
                 newMenuItem.Text = muxer.Name;
                 newMenuItem.Tag = muxer;
                 newMenuItem.Index = index;
+                newMenuItem.Shortcut = muxer.Shortcut;
                 index++;
                 mnuMuxers.MenuItems.Add(newMenuItem);
                 newMenuItem.Click += new System.EventHandler(this.mnuMuxer_Click);

@@ -74,6 +74,7 @@ namespace MeGUI
         string GetMuxedInputFilter();
         string GetDeviceInputFilter();
         string Name { get;}
+        System.Windows.Forms.Shortcut Shortcut { get; }
         List<ContainerType> GetContainersInCommon(IMuxing iMuxing);
     }
     public interface IEncoding<TCodec, TType, TEncoderType>
