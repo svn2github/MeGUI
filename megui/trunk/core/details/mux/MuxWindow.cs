@@ -78,6 +78,8 @@ namespace MeGUI
             subtitleTracks[0].Filter = muxer.GetSubtitleInputFilter();
             vInput.Filter = muxer.GetVideoInputFilter();
             chapters.Filter = muxer.GetChapterInputFilter();
+
+            this.Text = "MeGUI - " + muxer.Name;
         }
 
         protected virtual MuxJob generateMuxJob()
