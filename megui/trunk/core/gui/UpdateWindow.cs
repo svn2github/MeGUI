@@ -852,7 +852,6 @@ namespace MeGUI
             this.mainForm = mainForm;
             this.upgradeData = new iUpgradeableCollection(32); // To avoid unnecessary resizing, start at 32.
             meGUISettings = savedSettings; // Load up the MeGUI settings so i can access filepaths
-
             this.serverList = shuffled(mainForm.Settings.AutoUpdateServerLists[mainForm.Settings.AutoUpdateServerSubList]);
             if (serverList.Length == 0)
             {
@@ -860,6 +859,18 @@ namespace MeGUI
                 return;
             }
             LoadSettings();
+        }
+
+        /// <summary>
+        /// Constructor for Updatewindow.
+        /// </summary>
+        /// <param name="savedSettings">Current MeGUI settings</param>
+        public UpdateWindow(MainForm mainForm, MeGUISettings savedSettings, bool bSilent)
+        {
+            InitializeComponent();
+            this.mainForm = mainForm;
+            this.upgradeData = new iUpgradeableCollection(32); // To avoid unnecessary resizing, start at 32.
+            meGUISettings = savedSettings; // Load up the MeGUI settings so i can access filepaths
         }
 
         private string[] shuffled(string[] serverList)
@@ -966,10 +977,14 @@ namespace MeGUI
         /// This method is called to retrieve the update data from the webserver
         /// and then set the relevant information to the grid.
         /// </summary>
-        private ErrorState GetUpdateXML(bool bUseLocalXMLFile)
+        public ErrorState GetUpdateXML(bool bUseLocalXMLFile, string strServerAddress)
         {
             if (upgradeXml != null) // the update file has already been downloaded and processed
                 return ErrorState.Successful;
+
+            // checks if there is a special server to check
+            if (!String.IsNullOrEmpty(strServerAddress))
+                ServerAddress = strServerAddress;
 
             string data = null;
             upgradeXml = new XmlDocument();
@@ -1059,15 +1074,11 @@ namespace MeGUI
         {
             isOrHasDownloadedUpgradeData = true;
             ErrorState value = ErrorState.ServerNotAvailable;
-            int count = 0;
             foreach (string serverName in serverList)
             {
-                count++;
-                if (count > mainForm.Settings.MaxServersToTry)
-                    break;
                 ServerAddress = serverName;
                 AddTextToLog("Trying server: " + serverName);
-                value = GetUpdateXML(false);
+                value = GetUpdateXML(false, null);
                 if (value == ErrorState.Successful)
                     break;
             }
@@ -1075,7 +1086,7 @@ namespace MeGUI
             if (value != ErrorState.Successful)
             {
                 AddTextToLog("Error: Could not download XML file");
-                value = GetUpdateXML(true);
+                value = GetUpdateXML(true, null);
                 if (value != ErrorState.Successful)
                     return;
             }

@@ -4,6 +4,9 @@
   - (zathor) [MuxWindow] added a shortcut to every mux window. Feature request #1868046
   - (zathor) [VideoUtil] fixed a problem if two identical audio sources
              are beeing used in OneClick
+  - (zathor) [AutoUpdateServerConfigWindow] new servers will be checked during add
+  - (zathor) [Settings] hard wired the stable & development update servers.
+             custom servers can be added if required
 
 0.3.5.10
   - (sharktooth) [x264] Added 64:45 SAR option

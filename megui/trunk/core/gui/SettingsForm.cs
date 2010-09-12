@@ -76,8 +76,6 @@ namespace MeGUI
         private RadioButton shutdown;
         private RadioButton donothing;
         private Button configureServersButton;
-        private Label label14;
-        private NumericUpDown maxServersToTry;
         private NumericUpDown acceptableFPSError;
         private Label label15;
         private NumericUpDown audiosamplesperupdate;
@@ -129,6 +127,7 @@ namespace MeGUI
         private CheckBox cbAutoLoadDG;
         private RadioButton rbCloseMeGUI;
         private CheckBox cbAutoStartQueueStartup;
+        private ComboBox cbAutoUpdateServerSubList;
 
 		/// <summary>
 		/// Required designer variable.
@@ -168,6 +167,7 @@ namespace MeGUI
 		{
             System.Windows.Forms.GroupBox groupBox1;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsForm));
+            this.rbCloseMeGUI = new System.Windows.Forms.RadioButton();
             this.command = new System.Windows.Forms.TextBox();
             this.runCommand = new System.Windows.Forms.RadioButton();
             this.shutdown = new System.Windows.Forms.RadioButton();
@@ -175,6 +175,7 @@ namespace MeGUI
             this.saveButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.otherGroupBox = new System.Windows.Forms.GroupBox();
+            this.cbAutoStartQueueStartup = new System.Windows.Forms.CheckBox();
             this.forcerawavcuse = new System.Windows.Forms.CheckBox();
             this.audiosamplesperupdate = new System.Windows.Forms.NumericUpDown();
             this.label6 = new System.Windows.Forms.Label();
@@ -215,8 +216,6 @@ namespace MeGUI
             this.chAlwaysOnTop = new System.Windows.Forms.CheckBox();
             this.autoUpdateGroupBox = new System.Windows.Forms.GroupBox();
             this.backupfiles = new System.Windows.Forms.CheckBox();
-            this.label14 = new System.Windows.Forms.Label();
-            this.maxServersToTry = new System.Windows.Forms.NumericUpDown();
             this.configureServersButton = new System.Windows.Forms.Button();
             this.useAutoUpdateCheckbox = new System.Windows.Forms.CheckBox();
             this.outputExtensions = new System.Windows.Forms.GroupBox();
@@ -255,8 +254,7 @@ namespace MeGUI
             this.audioExtLabel = new System.Windows.Forms.Label();
             this.videoExtLabel = new System.Windows.Forms.Label();
             this.autoEncodeDefaultsButton = new System.Windows.Forms.Button();
-            this.rbCloseMeGUI = new System.Windows.Forms.RadioButton();
-            this.cbAutoStartQueueStartup = new System.Windows.Forms.CheckBox();
+            this.cbAutoUpdateServerSubList = new System.Windows.Forms.ComboBox();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.defaultOutputDir = new MeGUI.FileBar();
             this.tempDirMP4 = new MeGUI.FileBar();
@@ -273,7 +271,6 @@ namespace MeGUI
             this.groupBox2.SuspendLayout();
             this.gbVideoPreview.SuspendLayout();
             this.autoUpdateGroupBox.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.maxServersToTry)).BeginInit();
             this.outputExtensions.SuspendLayout();
             this.autoModeGroupbox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nbPasses)).BeginInit();
@@ -299,6 +296,17 @@ namespace MeGUI
             groupBox1.TabIndex = 2;
             groupBox1.TabStop = false;
             groupBox1.Text = "After encoding";
+            // 
+            // rbCloseMeGUI
+            // 
+            this.rbCloseMeGUI.AutoSize = true;
+            this.rbCloseMeGUI.Location = new System.Drawing.Point(123, 47);
+            this.rbCloseMeGUI.Name = "rbCloseMeGUI";
+            this.rbCloseMeGUI.Size = new System.Drawing.Size(84, 17);
+            this.rbCloseMeGUI.TabIndex = 4;
+            this.rbCloseMeGUI.TabStop = true;
+            this.rbCloseMeGUI.Text = "close MeGUI";
+            this.rbCloseMeGUI.UseVisualStyleBackColor = true;
             // 
             // command
             // 
@@ -389,6 +397,16 @@ namespace MeGUI
             this.otherGroupBox.TabStop = false;
             this.otherGroupBox.Tag = "";
             this.otherGroupBox.Text = "main settings ";
+            // 
+            // cbAutoStartQueueStartup
+            // 
+            this.cbAutoStartQueueStartup.AutoSize = true;
+            this.cbAutoStartQueueStartup.Location = new System.Drawing.Point(13, 207);
+            this.cbAutoStartQueueStartup.Name = "cbAutoStartQueueStartup";
+            this.cbAutoStartQueueStartup.Size = new System.Drawing.Size(203, 17);
+            this.cbAutoStartQueueStartup.TabIndex = 19;
+            this.cbAutoStartQueueStartup.Text = "Process queue on application startup";
+            this.cbAutoStartQueueStartup.UseVisualStyleBackColor = true;
             // 
             // forcerawavcuse
             // 
@@ -662,9 +680,9 @@ namespace MeGUI
             this.groupBox2.Controls.Add(this.label19);
             this.groupBox2.Controls.Add(this.label18);
             this.groupBox2.Controls.Add(this.cbx_usehttpproxy);
-            this.groupBox2.Location = new System.Drawing.Point(227, 187);
+            this.groupBox2.Location = new System.Drawing.Point(227, 230);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(240, 191);
+            this.groupBox2.Size = new System.Drawing.Size(240, 148);
             this.groupBox2.TabIndex = 5;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Auto Update Http Proxy:";
@@ -782,14 +800,13 @@ namespace MeGUI
             // 
             // autoUpdateGroupBox
             // 
+            this.autoUpdateGroupBox.Controls.Add(this.cbAutoUpdateServerSubList);
             this.autoUpdateGroupBox.Controls.Add(this.backupfiles);
-            this.autoUpdateGroupBox.Controls.Add(this.label14);
-            this.autoUpdateGroupBox.Controls.Add(this.maxServersToTry);
             this.autoUpdateGroupBox.Controls.Add(this.configureServersButton);
             this.autoUpdateGroupBox.Controls.Add(this.useAutoUpdateCheckbox);
             this.autoUpdateGroupBox.Location = new System.Drawing.Point(227, 82);
             this.autoUpdateGroupBox.Name = "autoUpdateGroupBox";
-            this.autoUpdateGroupBox.Size = new System.Drawing.Size(240, 99);
+            this.autoUpdateGroupBox.Size = new System.Drawing.Size(240, 142);
             this.autoUpdateGroupBox.TabIndex = 3;
             this.autoUpdateGroupBox.TabStop = false;
             this.autoUpdateGroupBox.Text = "Auto Update";
@@ -799,7 +816,7 @@ namespace MeGUI
             this.backupfiles.AutoSize = true;
             this.backupfiles.Checked = true;
             this.backupfiles.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.backupfiles.Location = new System.Drawing.Point(9, 76);
+            this.backupfiles.Location = new System.Drawing.Point(9, 103);
             this.backupfiles.Name = "backupfiles";
             this.backupfiles.Size = new System.Drawing.Size(187, 17);
             this.backupfiles.TabIndex = 4;
@@ -807,37 +824,11 @@ namespace MeGUI
             this.backupfiles.UseVisualStyleBackColor = true;
             this.backupfiles.CheckedChanged += new System.EventHandler(this.backupfiles_CheckedChanged);
             // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(6, 53);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(152, 13);
-            this.label14.TabIndex = 2;
-            this.label14.Text = "Max number of servers to try:";
-            // 
-            // maxServersToTry
-            // 
-            this.maxServersToTry.Location = new System.Drawing.Point(190, 51);
-            this.maxServersToTry.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.maxServersToTry.Name = "maxServersToTry";
-            this.maxServersToTry.Size = new System.Drawing.Size(44, 21);
-            this.maxServersToTry.TabIndex = 3;
-            this.maxServersToTry.Value = new decimal(new int[] {
-            5,
-            0,
-            0,
-            0});
-            // 
             // configureServersButton
             // 
             this.configureServersButton.AutoSize = true;
             this.configureServersButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.configureServersButton.Location = new System.Drawing.Point(119, 18);
+            this.configureServersButton.Location = new System.Drawing.Point(9, 74);
             this.configureServersButton.Name = "configureServersButton";
             this.configureServersButton.Size = new System.Drawing.Size(115, 23);
             this.configureServersButton.TabIndex = 1;
@@ -1229,26 +1220,18 @@ namespace MeGUI
             this.autoEncodeDefaultsButton.Text = "Configure Defaults";
             this.autoEncodeDefaultsButton.UseVisualStyleBackColor = true;
             // 
-            // rbCloseMeGUI
+            // cbAutoUpdateServerSubList
             // 
-            this.rbCloseMeGUI.AutoSize = true;
-            this.rbCloseMeGUI.Location = new System.Drawing.Point(123, 47);
-            this.rbCloseMeGUI.Name = "rbCloseMeGUI";
-            this.rbCloseMeGUI.Size = new System.Drawing.Size(84, 17);
-            this.rbCloseMeGUI.TabIndex = 4;
-            this.rbCloseMeGUI.TabStop = true;
-            this.rbCloseMeGUI.Text = "close MeGUI";
-            this.rbCloseMeGUI.UseVisualStyleBackColor = true;
-            // 
-            // cbAutoStartQueueStartup
-            // 
-            this.cbAutoStartQueueStartup.AutoSize = true;
-            this.cbAutoStartQueueStartup.Location = new System.Drawing.Point(13, 207);
-            this.cbAutoStartQueueStartup.Name = "cbAutoStartQueueStartup";
-            this.cbAutoStartQueueStartup.Size = new System.Drawing.Size(203, 17);
-            this.cbAutoStartQueueStartup.TabIndex = 19;
-            this.cbAutoStartQueueStartup.Text = "Process queue on application startup";
-            this.cbAutoStartQueueStartup.UseVisualStyleBackColor = true;
+            this.cbAutoUpdateServerSubList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbAutoUpdateServerSubList.FormattingEnabled = true;
+            this.cbAutoUpdateServerSubList.Items.AddRange(new object[] {
+            "Use stable update server",
+            "Use development update server",
+            "Use custom update server"});
+            this.cbAutoUpdateServerSubList.Location = new System.Drawing.Point(9, 47);
+            this.cbAutoUpdateServerSubList.Name = "cbAutoUpdateServerSubList";
+            this.cbAutoUpdateServerSubList.Size = new System.Drawing.Size(176, 21);
+            this.cbAutoUpdateServerSubList.TabIndex = 5;
             // 
             // helpButton1
             // 
@@ -1326,7 +1309,6 @@ namespace MeGUI
             this.gbVideoPreview.PerformLayout();
             this.autoUpdateGroupBox.ResumeLayout(false);
             this.autoUpdateGroupBox.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.maxServersToTry)).EndInit();
             this.outputExtensions.ResumeLayout(false);
             this.outputExtensions.PerformLayout();
             this.autoModeGroupbox.ResumeLayout(false);
@@ -1417,12 +1399,9 @@ namespace MeGUI
             using (MeGUI.core.gui.AutoUpdateServerConfigWindow w = new MeGUI.core.gui.AutoUpdateServerConfigWindow())
             {
                 w.ServerList = internalSettings.AutoUpdateServerLists;
-                w.ServerListIndex = internalSettings.AutoUpdateServerSubList;
+                w.ServerListIndex = cbAutoUpdateServerSubList.SelectedIndex;
                 if (w.ShowDialog() == DialogResult.OK)
-                {
                     internalSettings.AutoUpdateServerLists = w.ServerList;
-                    internalSettings.AutoUpdateServerSubList = w.ServerListIndex;
-                }
             }
         }
 
@@ -1448,7 +1427,6 @@ namespace MeGUI
                 MeGUISettings settings = internalSettings;
                 settings.AudioSamplesPerUpdate = (ulong)audiosamplesperupdate.Value;
                 settings.AcceptableFPSError = acceptableFPSError.Value; 
-                settings.MaxServersToTry = (int)maxServersToTry.Value;
                 settings.AutoUpdate = useAutoUpdateCheckbox.Checked;
                 settings.AcceptableAspectErrorPercent = (int)acceptableAspectError.Value;
                 settings.SourceDetectorSettings = sdSettings;
@@ -1497,6 +1475,7 @@ namespace MeGUI
                 settings.AddTimePosition = cbAddTimePos.Checked;
                 settings.AlwaysBackUpFiles = backupfiles.Checked;
                 settings.ForceRawAVCExtension = forcerawavcuse.Checked;
+                settings.AutoUpdateServerSubList = cbAutoUpdateServerSubList.SelectedIndex;
 				return settings;
 			}
 			set
@@ -1505,7 +1484,6 @@ namespace MeGUI
                 MeGUISettings settings = value;
                 audiosamplesperupdate.Value = settings.AudioSamplesPerUpdate;
                 acceptableFPSError.Value = settings.AcceptableFPSError;
-                maxServersToTry.Value = settings.MaxServersToTry;
                 useAutoUpdateCheckbox.Checked = settings.AutoUpdate;
                 acceptableAspectError.Value = (decimal)settings.AcceptableAspectErrorPercent;
                 textBox2.Text = settings.NeroAacEncPath;
@@ -1552,6 +1530,7 @@ namespace MeGUI
                 cbAddTimePos.Checked = settings.AddTimePosition;
                 backupfiles.Checked = settings.AlwaysBackUpFiles;
                 forcerawavcuse.Checked = settings.ForceRawAVCExtension;
+                cbAutoUpdateServerSubList.SelectedIndex = settings.AutoUpdateServerSubList;
 			}
 		}
 		#endregion

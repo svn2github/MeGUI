@@ -42,14 +42,14 @@ namespace MeGUI
                        strLastDestinationPath, strLastSourcePath, dgnvIndexPath, tempDirMP4,
                        httpproxyaddress, httpproxyport, httpproxyuid, httpproxypwd, defaultOutputDir, strMeGUIPath;
         private bool recalculateMainMovieBitrate, autoForceFilm, autoStartQueue, enableMP3inMP4, autoOpenScript,
-                     overwriteStats, keep2of3passOutput, deleteCompletedJobs, deleteIntermediateFiles,
+                     overwriteStats, keep2of3passOutput, autoUpdate, deleteCompletedJobs, deleteIntermediateFiles,
                      deleteAbortedOutput, openProgressWindow, useadvancedtooltips, freshOggEnc2, autoscroll, 
-                     alwaysOnTop, safeProfileAlteration, autoUpdate, usehttpproxy, addTimePosition, alwaysbackupfiles,
+                     alwaysOnTop, safeProfileAlteration, usehttpproxy, addTimePosition, alwaysbackupfiles,
                      forcerawavcextension, bAutoLoadDG, bAutoStartQueueStartup;
         private ulong audioSamplesPerUpdate;
         private AfterEncoding afterEncoding;
         private decimal forceFilmThreshold, acceptableFPSError;
-        private int nbPasses, acceptableAspectError, maxServersToTry, autoUpdateServerSubList, minComplexity,
+        private int nbPasses, acceptableAspectError, autoUpdateServerSubList, minComplexity,
                     maxComplexity, jobColumnWidth, inputColumnWidth, outputColumnWidth, codecColumnWidth,
                     modeColumnWidth, statusColumnWidth, ownerColumnWidth, startColumnWidth, endColumnWidth, fpsColumnWidth;
         private SourceDetectorSettings sdSettings;
@@ -68,17 +68,16 @@ namespace MeGUI
             strMeGUIPath = System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath);
             autoscroll = true;
             autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/stable/", "http://megui.xvidvideo.ru/auto/stable/" },
-                new string[] { "Development", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" } };
+                new string[] { "Development", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" }, new string[] { "Custom"}};
             acceptableFPSError = 0.01M;
             if (System.Windows.Forms.Application.ProductVersion.EndsWith(".0"))
                 autoUpdateServerSubList = 0;
             else
                 autoUpdateServerSubList = 1;
-            maxServersToTry = 5;
+            autoUpdate = true;
             dialogSettings = new DialogSettings();
             sdSettings = new SourceDetectorSettings();
             AedSettings = new AutoEncodeDefaultsSettings();
-            autoUpdate = true;
             useadvancedtooltips = true;
             audioSamplesPerUpdate = 100000;
             aviMuxGUIPath = getDownloadPath(@"tools\avimux_gui\avimux_gui.exe");
@@ -316,15 +315,6 @@ namespace MeGUI
             get { return acceptableFPSError; }
             set { acceptableFPSError = value; }
         }
-
-        /// <summary>
-        /// Maximum servers that auto update should try before aborting.
-        /// </summary>
-        public int MaxServersToTry
-        {
-            get { return maxServersToTry; }
-            set { maxServersToTry = value; }
-        }
         /// <summary>
         /// Which sublist to look in for the update servers
         /// </summary>
@@ -338,7 +328,20 @@ namespace MeGUI
         /// </summary>
         public string[][] AutoUpdateServerLists
         {
-            get { return autoUpdateServerLists; }
+            get 
+            {
+                if (autoUpdateServerLists.Length > 2)
+                {
+                    autoUpdateServerLists[0] = new string[] { "Stable", "http://megui.org/auto/stable/", "http://megui.xvidvideo.ru/auto/stable/" };
+                    autoUpdateServerLists[1] = new string[] { "Development", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" };
+                }
+                else
+                {
+                    autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/stable/", "http://megui.xvidvideo.ru/auto/stable/" },
+                                                             new string[] { "Development", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" }, new string[] { "Custom"}};
+                }
+                return autoUpdateServerLists; 
+            }
             set { autoUpdateServerLists = value; }
         }
         /// <summary>
@@ -819,13 +822,11 @@ namespace MeGUI
             get { return autoUpdate; }
             set { autoUpdate = value; }
         }
-
         public DialogSettings DialogSettings
         {
             get { return dialogSettings; }
             set { dialogSettings = value; }
         }
-
         public SourceDetectorSettings SourceDetectorSettings
         {
             get { return sdSettings; }
