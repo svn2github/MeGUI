@@ -71,6 +71,8 @@ namespace MeGUI
         private string totalTime;
         private string currentTime;
         private MainForm mainForm = MainForm.Instance;
+        private string strFileName; // the video file name
+        private bool bInlineAVS;
 
 		private System.Windows.Forms.Button playButton;
 		private System.Windows.Forms.Button nextFrameButton;
@@ -96,6 +98,7 @@ namespace MeGUI
         private VideoPlayerControl videoPreview;
         private Button zoomInButton;
         private Button zoomOutButton;
+        private Button btnReloadVideo;
 		private System.ComponentModel.IContainer components;
 		#endregion
 		#region constructor
@@ -155,6 +158,8 @@ namespace MeGUI
 		public bool loadVideo(MainForm mainForm, string path, PREVIEWTYPE type, bool hasAR, bool inlineAvs, int startFrame)
 		{
             videoPreview.UnloadVideo();
+            bInlineAVS = inlineAvs;
+            strFileName = path;
 
             lock (this)
             {
@@ -167,12 +172,14 @@ namespace MeGUI
                 if (inlineAvs)
                 {
                     file = AvsFile.ParseScript(path);
+                    btnReloadVideo.Enabled = false;
                 }
                 else
                 {
                     file = mainForm.MediaFileFactory.Open(path);
                     if (file == null && !(file.Info.HasVideo && file.CanReadVideo))
                         throw new ArgumentException("The video stream cannot be opened");
+                    btnReloadVideo.Enabled = true;
                 }
                 reader = file.GetVideoReader();
             }
@@ -215,6 +222,73 @@ namespace MeGUI
 			}
 			return false;
 		}
+
+        /// <summary>
+        /// reloads the video, sets up the proper window size and enables / disables the GUI buttons depending on the
+        /// preview type set
+        /// </summary>
+        /// <returns>true if the video could be opened, false if not</returns>
+        public bool reloadVideo()
+        {
+            videoPreview.UnloadVideo();
+
+            lock (this)
+            {
+                if (file != null)
+                    file.Dispose();
+            }
+
+            try
+            {
+                if (bInlineAVS)
+                {
+                    file = AvsFile.ParseScript(strFileName);
+                }
+                else
+                {
+                    file = mainForm.MediaFileFactory.Open(strFileName);
+                    if (file == null && !(file.Info.HasVideo && file.CanReadVideo))
+                        throw new ArgumentException("The video stream cannot be opened");
+                }
+                reader = file.GetVideoReader();
+            }
+            catch (AviSynthException e)
+            {
+                MessageBox.Show("AviSynth script error:\r\n" + e.Message, "AviSynth error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            catch (ArgumentException e)
+            {
+                MessageBox.Show("AviSynth script error:\r\n" + e.Message, "AviSynth error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            catch (Exception e)
+            {
+#warning fix up this error message to be more correct
+
+                MessageBox.Show("The file " + strFileName + " cannot be opened.\r\n Please make sure it's a valid AviSynth script and that AviSynth is "
+                    + " properly installed.\r\nYou can check the validity of your script and AviSynth installation by opening the file in your favorite media player.\r\n"
+                    + " If that works, try opening the video in VirtualDub(Mod) as well. If the former works and the latter doesn't, install a YV12 codec.\r\n"
+                    + "Error message for your reference: " + e.Message,
+                    "Cannot open video input", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                return false;
+            }
+
+            if (reader != null && reader.FrameCount > 0)
+            {
+                this.positionSlider.Minimum = 0;
+                this.positionSlider.Maximum = reader.FrameCount - 1;
+                this.positionSlider.TickFrequency = this.positionSlider.Maximum / 20;
+                this.videoWindowWidth = (int)file.Info.Width;
+                this.videoWindowHeight = (int)file.Info.Height;
+                zoomWidth = (int)file.Info.Width;
+                doInitialAdjustment();
+                adjustSize();
+                videoPreview.LoadVideo(reader, file.Info.FPS, positionSlider.Value >= 0 && positionSlider.Value <= reader.FrameCount ? positionSlider.Value : reader.FrameCount / 2);
+                return true;
+            }
+            return false;
+        }
 		/// <summary>
 		/// disables intro and credits setting
 		/// </summary>
@@ -387,6 +461,7 @@ namespace MeGUI
             this.zoneEndButton = new System.Windows.Forms.Button();
             this.chapterButton = new System.Windows.Forms.Button();
             this.defaultToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.btnReloadVideo = new System.Windows.Forms.Button();
             this.arChooser = new MeGUI.core.gui.ARChooser();
             this.videoPreview = new MeGUI.core.gui.VideoPlayerControl();
             goToFrameButton = new System.Windows.Forms.Button();
@@ -460,7 +535,7 @@ namespace MeGUI
             this.positionSlider.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.positionSlider.AutoSize = false;
             this.positionSlider.LargeChange = 1000;
-            this.positionSlider.Location = new System.Drawing.Point(46, 259);
+            this.positionSlider.Location = new System.Drawing.Point(76, 259);
             this.positionSlider.Minimum = -1;
             this.positionSlider.Name = "positionSlider";
             this.positionSlider.Size = new System.Drawing.Size(280, 45);
@@ -536,6 +611,7 @@ namespace MeGUI
             // buttonPanel
             // 
             this.buttonPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.buttonPanel.Controls.Add(this.btnReloadVideo);
             this.buttonPanel.Controls.Add(this.zoomOutButton);
             this.buttonPanel.Controls.Add(this.zoomInButton);
             this.buttonPanel.Controls.Add(this.arChooser);
@@ -555,7 +631,7 @@ namespace MeGUI
             this.buttonPanel.Controls.Add(this.chapterButton);
             this.buttonPanel.Location = new System.Drawing.Point(14, 310);
             this.buttonPanel.Name = "buttonPanel";
-            this.buttonPanel.Size = new System.Drawing.Size(333, 80);
+            this.buttonPanel.Size = new System.Drawing.Size(395, 80);
             this.buttonPanel.TabIndex = 8;
             // 
             // zoomOutButton
@@ -581,7 +657,7 @@ namespace MeGUI
             // showPAR
             // 
             this.showPAR.AutoSize = true;
-            this.showPAR.Location = new System.Drawing.Point(236, 54);
+            this.showPAR.Location = new System.Drawing.Point(222, 54);
             this.showPAR.Name = "showPAR";
             this.showPAR.Size = new System.Drawing.Size(76, 17);
             this.showPAR.TabIndex = 2;
@@ -649,6 +725,18 @@ namespace MeGUI
             this.defaultToolTip.SetToolTip(this.chapterButton, "Sets the end frame of a new zone");
             this.chapterButton.Click += new System.EventHandler(this.chapterButton_Click);
             // 
+            // btnReloadVideo
+            // 
+            this.btnReloadVideo.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnReloadVideo.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.btnReloadVideo.Location = new System.Drawing.Point(288, 8);
+            this.btnReloadVideo.Name = "btnReloadVideo";
+            this.btnReloadVideo.Size = new System.Drawing.Size(72, 19);
+            this.btnReloadVideo.TabIndex = 16;
+            this.btnReloadVideo.Text = "Reload Video";
+            this.defaultToolTip.SetToolTip(this.btnReloadVideo, "Set the frame where the credits start");
+            this.btnReloadVideo.Click += new System.EventHandler(this.btnReloadVideo_Click);
+            // 
             // arChooser
             // 
             this.arChooser.CustomDARs = new MeGUI.core.util.Dar[0];
@@ -679,7 +767,7 @@ namespace MeGUI
             // VideoPlayer
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
-            this.ClientSize = new System.Drawing.Size(360, 392);
+            this.ClientSize = new System.Drawing.Size(421, 392);
             this.Controls.Add(this.buttonPanel);
             this.Controls.Add(this.previewGroupbox);
             this.Controls.Add(this.positionSlider);
@@ -1060,6 +1148,12 @@ namespace MeGUI
         {
             positionSlider.Value = videoPreview.Position;
             setTitleText();
+        }
+
+        private void btnReloadVideo_Click(object sender, EventArgs e)
+        {
+            reloadVideo();
+            positionSlider.Focus();
         }
 	}
 }
