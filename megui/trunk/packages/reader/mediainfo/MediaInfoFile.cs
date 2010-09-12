@@ -397,8 +397,7 @@ namespace MeGUI
                 return false;
 
             // check if the indexer and the license file is available
-            if (!File.Exists(MainForm.Instance.Settings.DgnvIndexPath) ||
-                !File.Exists(Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.DgnvIndexPath), "license.txt")))
+            if (!VideoUtil.isDGIIndexerAvailable())
                 return false;
 
             // only AVC, VC1 and MPEG2 are supported
