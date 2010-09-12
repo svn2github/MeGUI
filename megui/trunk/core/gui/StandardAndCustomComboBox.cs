@@ -71,7 +71,10 @@ namespace MeGUI.core.gui
                 {
                     object o = Getter();
                     if (o != null)
+                    {
+                        AddCustomItem(o);
                         SelectedObject = o;
+                    }
                 }));
         }
 
@@ -190,6 +193,8 @@ namespace MeGUI.core.gui
             }
             set
             {
+                oTemporaryItem.Tag = null;
+
                 if (value == null)
                     return;
 
@@ -204,8 +209,8 @@ namespace MeGUI.core.gui
                         return;
                     }
                 }
-                AddCustomItem(value);
-                SelectedObject = value;
+                oTemporaryItem.Tag = value;
+                SelectedItem = null;
             }
         }
 
@@ -216,7 +221,10 @@ namespace MeGUI.core.gui
             get
             {
                 if (SelectedItem == null) SelectedIndex = 0;
-                return (SCItem)SelectedItem.Tag;
+                if (oTemporaryItem.Tag != null && SelectedItem == null)
+                    return oTemporaryItem;
+                else
+                    return (SCItem)SelectedItem.Tag;
             }
         }
 
