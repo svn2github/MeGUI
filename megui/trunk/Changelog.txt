@@ -1,5 +1,8 @@
 0.3.5.12
   - (zathor) [FileIndexer] disable DGIndexNV in a RDP session
+  - (zathor) [VidePlayerControl] added new control to speed up 
+             video navigation. Patch by aKzenT (#1902576)
+  - (zathor) [VidePlayer] some cosmetics
 
 0.3.5.11
   - (zathor) [x264] fixed more than one --sar in the command line. Bug #3038722

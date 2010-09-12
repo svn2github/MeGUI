@@ -44,7 +44,6 @@ namespace MeGUI
 	public class VideoPlayer : System.Windows.Forms.Form
 	{
 		#region variable declaration
-		private System.Windows.Forms.PictureBox videoPreview;
 		private System.Windows.Forms.GroupBox previewGroupbox;
 		private System.Windows.Forms.TrackBar positionSlider;
 
@@ -55,13 +54,10 @@ namespace MeGUI
 		private IMediaFile file;
         private IVideoReader reader;
         private bool hasAR = false;
-		private int millisecondsPerFrame; // delay in between displaying two frames
-		private int currentPosition, creditsStartFrame = -1, introEndFrame = -1;
+        private int creditsStartFrame = -1, introEndFrame = -1;
 		private int zoneStart = -1, zoneEnd = -1; // zone start and end frames
-		private bool isRunning; // whether the player is running and whether the input is an avisynth script
-		private int right, top, left, bottom; // cropping values
 		private const int formWidthDelta = 48; // width delta of the form versus the size of the picturebox (reference)
-		private int formHeightDelta = 176; // height delta of the form versus the size of the picturebox (the reference for the gui size)
+		private int formHeightDelta = 192; // height delta of the form versus the size of the picturebox (the reference for the gui size)
 		private const int previewGrouboxWidthDelta = 6; // width delta of the preview groupbox versus the picturebox
 		private const int previewGroupboxHeightDelta = 18; // height delta of the preview groupbox versus the picturebox
 		private const int positionSliderWidthDelta = 16; // size of the slider versus the preview picturebox
@@ -97,6 +93,7 @@ namespace MeGUI
         private Button originalSizeButton;
         private CheckBox showPAR;
         private ARChooser arChooser;
+        private VideoPlayerControl videoPreview;
         private Button zoomInButton;
         private Button zoomOutButton;
 		private System.ComponentModel.IContainer components;
@@ -107,7 +104,6 @@ namespace MeGUI
 			InitializeComponent();
             sizeLock = false;
             this.Resize += new EventHandler(formResized);
-            right = top = left = bottom = 0;
 		}
 
         public bool AllowClose
@@ -158,12 +154,12 @@ namespace MeGUI
 		/// <returns>true if the video could be opened, false if not</returns>
 		public bool loadVideo(MainForm mainForm, string path, PREVIEWTYPE type, bool hasAR, bool inlineAvs, int startFrame)
 		{
+            videoPreview.UnloadVideo();
+
             lock (this)
             {
                 if (file != null)
                     file.Dispose();
-                if (videoPreview.Image != null)
-                    videoPreview.Image.Dispose(); // get rid of previous bitmap
             }
 
             try
@@ -206,7 +202,6 @@ namespace MeGUI
 			{
                 this.positionSlider.Minimum = 0;
 				this.positionSlider.Maximum = reader.FrameCount - 1;
-				this.positionSlider.Value = startFrame >= 0 ? startFrame : reader.FrameCount / 2;
                 this.positionSlider.TickFrequency = this.positionSlider.Maximum / 20;
                 this.viewerType = type;
                 this.hasAR = hasAR;
@@ -215,10 +210,7 @@ namespace MeGUI
                 zoomWidth = (int)file.Info.Width;
                 doInitialAdjustment();
                 adjustSize();
-				positionSlider_Scroll(null, null); // makes the image visible
-                this.Text = "Current position: " + this.positionSlider.Value + "/" + this.positionSlider.Maximum;
-				isRunning = false;
-                millisecondsPerFrame = (int)(1000 / file.Info.FPS);                
+                videoPreview.LoadVideo(reader, file.Info.FPS, startFrame >= 0 ? startFrame : reader.FrameCount / 2);
 				return true;
 			}
 			return false;
@@ -327,24 +319,6 @@ namespace MeGUI
                 }
             }
         }
-        /// <summary>
-        /// Resizes the video frame
-        /// http://www.peterprovost.org/archive/2003/05/29/516.aspx
-        /// </summary>
-        /// <param name="b"></param>
-        /// <param name="nWidth"></param>
-        /// <param name="nHeight"></param>
-        /// <returns>A resized bitmap (needs disposal)</returns>
-        private Bitmap resizeBitmap(Bitmap b, int nWidth, int nHeight)
-        {
-            Bitmap result = new Bitmap(nWidth, nHeight);
-            using (Graphics g = Graphics.FromImage((Image)result))
-            {
-                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Bilinear;
-                g.DrawImage(b, 0, 0, nWidth, nHeight);
-            }
-            return result;
-        }
         #endregion
         #region destructor
         /// <summary>
@@ -389,7 +363,6 @@ namespace MeGUI
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.Button goToFrameButton;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(VideoPlayer));
-            this.videoPreview = new System.Windows.Forms.PictureBox();
             this.contextMenu1 = new System.Windows.Forms.ContextMenu();
             this.mnuIntroEnd = new System.Windows.Forms.MenuItem();
             this.mnuCreditsStart = new System.Windows.Forms.MenuItem();
@@ -406,7 +379,6 @@ namespace MeGUI
             this.buttonPanel = new System.Windows.Forms.Panel();
             this.zoomOutButton = new System.Windows.Forms.Button();
             this.zoomInButton = new System.Windows.Forms.Button();
-            this.arChooser = new MeGUI.core.gui.ARChooser();
             this.showPAR = new System.Windows.Forms.CheckBox();
             this.originalSizeButton = new System.Windows.Forms.Button();
             this.introEndButton = new System.Windows.Forms.Button();
@@ -415,8 +387,9 @@ namespace MeGUI
             this.zoneEndButton = new System.Windows.Forms.Button();
             this.chapterButton = new System.Windows.Forms.Button();
             this.defaultToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.arChooser = new MeGUI.core.gui.ARChooser();
+            this.videoPreview = new MeGUI.core.gui.VideoPlayerControl();
             goToFrameButton = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.videoPreview)).BeginInit();
             this.previewGroupbox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.positionSlider)).BeginInit();
             this.buttonPanel.SuspendLayout();
@@ -430,15 +403,6 @@ namespace MeGUI
             goToFrameButton.TabIndex = 9;
             goToFrameButton.Text = "Go to frame";
             goToFrameButton.Click += new System.EventHandler(this.goToFrameButton_Click);
-            // 
-            // videoPreview
-            // 
-            this.videoPreview.ContextMenu = this.contextMenu1;
-            this.videoPreview.Location = new System.Drawing.Point(3, 17);
-            this.videoPreview.Name = "videoPreview";
-            this.videoPreview.Size = new System.Drawing.Size(274, 164);
-            this.videoPreview.TabIndex = 0;
-            this.videoPreview.TabStop = false;
             // 
             // contextMenu1
             // 
@@ -614,19 +578,6 @@ namespace MeGUI
             this.zoomInButton.UseVisualStyleBackColor = true;
             this.zoomInButton.Click += new System.EventHandler(this.zoomInButton_Click);
             // 
-            // arChooser
-            // 
-            this.arChooser.CustomDARs = new MeGUI.core.util.Dar[0];
-            this.arChooser.HasLater = false;
-            this.arChooser.Location = new System.Drawing.Point(8, 48);
-            this.arChooser.MaximumSize = new System.Drawing.Size(1000, 29);
-            this.arChooser.MinimumSize = new System.Drawing.Size(64, 29);
-            this.arChooser.Name = "arChooser";
-            this.arChooser.SelectedIndex = 0;
-            this.arChooser.Size = new System.Drawing.Size(208, 29);
-            this.arChooser.TabIndex = 15;
-            this.arChooser.SelectionChanged += new MeGUI.StringChanged(this.arChooser_SelectionChanged);
-            // 
             // showPAR
             // 
             this.showPAR.AutoSize = true;
@@ -698,6 +649,33 @@ namespace MeGUI
             this.defaultToolTip.SetToolTip(this.chapterButton, "Sets the end frame of a new zone");
             this.chapterButton.Click += new System.EventHandler(this.chapterButton_Click);
             // 
+            // arChooser
+            // 
+            this.arChooser.CustomDARs = new MeGUI.core.util.Dar[0];
+            this.arChooser.HasLater = false;
+            this.arChooser.Location = new System.Drawing.Point(8, 48);
+            this.arChooser.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.arChooser.MinimumSize = new System.Drawing.Size(64, 29);
+            this.arChooser.Name = "arChooser";
+            this.arChooser.SelectedIndex = 0;
+            this.arChooser.Size = new System.Drawing.Size(208, 29);
+            this.arChooser.TabIndex = 15;
+            this.arChooser.SelectionChanged += new MeGUI.StringChanged(this.arChooser_SelectionChanged);
+            // 
+            // videoPreview
+            // 
+            this.videoPreview.CropMargin = new System.Windows.Forms.Padding(0);
+            this.videoPreview.DisplayActualFramerate = false;
+            this.videoPreview.EnsureCorrectPlaybackSpeed = false;
+            this.videoPreview.Framerate = 25D;
+            this.videoPreview.Location = new System.Drawing.Point(3, 14);
+            this.videoPreview.Name = "videoPreview";
+            this.videoPreview.Position = 0;
+            this.videoPreview.Size = new System.Drawing.Size(274, 164);
+            this.videoPreview.SpeedUp = 1D;
+            this.videoPreview.TabIndex = 9;
+            this.videoPreview.PositionChanged += new System.EventHandler(this.videoPreview_PositionChanged);
+            // 
             // VideoPlayer
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
@@ -710,10 +688,8 @@ namespace MeGUI
             this.MaximumSize = new System.Drawing.Size(1920, 1600);
             this.MinimumSize = new System.Drawing.Size(368, 416);
             this.Name = "VideoPlayer";
-            this.ShowIcon = false;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.Text = "VideoPlayer";
-            ((System.ComponentModel.ISupportInitialize)(this.videoPreview)).EndInit();
             this.previewGroupbox.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.positionSlider)).EndInit();
             this.buttonPanel.ResumeLayout(false);
@@ -724,24 +700,14 @@ namespace MeGUI
 		#endregion
 		#region position changes
 		/// <summary>
-		/// handles changes in the slider position
-		/// updates the currentPosition indicator (this is used by the playback, as the playback thread cannot access
-		/// the slider.value in a non GUI context), then reads the appropriate image and displays it
-		/// finally, the video position is updated in the window's title
+        /// Sets the Position property on the videoPreview Control via gotoFrame to render the new frame.
+        /// The PositionChanged-EventHandler then updates the window's title
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		private void positionSlider_Scroll(object sender, System.EventArgs e)
 		{
-			this.currentPosition = positionSlider.Value;
-			Bitmap b = reader.ReadFrameBitmap(currentPosition);
-			if (this.left > 0 || this.top > 0 || this.right > 0 || this.bottom > 0) // only crop when necessary
-				cropImage(ref b);
-            if (this.videoPreview.Image != null)
-                this.videoPreview.Image.Dispose(); // get rid of previous bitmap
-			this.videoPreview.Image = resizeBitmap(b, this.videoWindowWidth,this.videoWindowHeight);
-            b.Dispose ();
-			setTitleText();
+            CurrentFrame = positionSlider.Value;
 		}
 		/// <summary>
 		/// sets the text in the title bar in function of the position, credits and zone settings
@@ -752,19 +718,13 @@ namespace MeGUI
             currentTime = Util.converFrameNumberToTimecode(this.positionSlider.Value, file.Info.FPS);
             if (this.zoneStart > -1 || this.zoneEnd > -1)
             {
-                this.Text = "Pos: " + positionSlider.Value + "/" + positionSlider.Maximum + " Zone start: ";
-                if (zoneStart > -1)
-                    this.Text += zoneStart;
-                else
-                    this.Text += "?";
-                this.Text += " end: ";
-                if (zoneEnd > -1)
-                    this.Text += zoneEnd;
-                else
-                    this.Text += "?";
+                this.Text = "Pos: " + CurrentFrame + "/" + FrameCount;
+                
+                this.Text += " Zone start: " + (zoneStart > -1 ? zoneStart.ToString() : "?");
+                this.Text += " end: " + (zoneEnd > -1 ? zoneEnd.ToString() : "?");
             }
             else
-                this.Text = "Current position: " + this.positionSlider.Value + "/" + this.positionSlider.Maximum;
+                this.Text = "Current position: " + CurrentFrame + "/" + FrameCount;
             if (this.introEndFrame > -1)
 				this.Text += " Intro end: " + this.introEndFrame;
 			if (this.creditsStartFrame > -1)
@@ -787,68 +747,7 @@ namespace MeGUI
 		/// <param name="bottom">number of pixels to crop from the bottom</param>
 		public void crop(int left, int top, int right, int bottom)
 		{
-			this.left = left;
-			this.top = top;
-			this.right = right;
-			this.bottom = bottom;
-			positionSlider_Scroll(null, null);
-		}
-		/// <summary>
-		/// crops the image given as a reference by the values that were previously transmitted
-		/// </summary>
-		/// <param name="b">the image to where the cropping has to be applied</param>
-		private unsafe void cropImage(ref Bitmap b)
-		{
-			BitmapData image = b.LockBits(new Rectangle(0, 0, b.Width, b.Height), ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
-			byte* pointer = (byte*)image.Scan0.ToPointer();
-			byte* pixel;
-			int stride = image.Stride;
-			byte white = (byte) Color.White.R;
-	
-			pixel = pointer;
-			int width = b.Width;
-			int height = b.Height;
-			int width3 = 3 * width;
-			int left3 = 3 * left;
-			int right3 = 3 * right;
-
-			int lineGap = stride - width3;
-			int centerJump = width3 - left3 - right3;
-			for (int j = 0; j < top; j++) 
-			{
-				for (int i = 0; i < width3; i++) 
-				{
-					*pixel = white;
-					pixel++;
-				}
-				pixel += lineGap;
-			}
-			int heightb = height - bottom;
-			for (int j = top; j < heightb; j++)
-			{
-				for (int i = 0; i < left3; i++) 
-				{
-					*pixel = white;
-					pixel++;
-				}
-				pixel += centerJump;
-				for (int i = 0; i < right3; i++) 
-				{
-					*pixel = white;
-					pixel++;
-				}
-				pixel += lineGap;
-			}
-			for (int j = b.Height-bottom; j < height; j++)
-			{
-				for (int i = 0; i < width3; i++)
-				{
-					*pixel = white;
-					pixel++;
-				}
-				pixel += lineGap;
-			}
-			b.UnlockBits(image);
+            videoPreview.CropMargin = new Padding(left, top, right, bottom);
 		}
 		#endregion
 		#region player
@@ -862,84 +761,34 @@ namespace MeGUI
 		{
 			if (this.playButton.Text.Equals("Play"))
 			{
-				this.isRunning = true;
 				this.playButton.Text = "Stop";
-				new Thread(new ThreadStart(this.playVideo)).Start();
+                videoPreview.Play();
 			}
 			else
 			{
-				this.isRunning = false;
 				this.playButton.Text = "Play";
+                videoPreview.Stop();
 			}
 		}
-		/// <summary>
-		/// updates the frame in the picturebox and sets the slider to the position defined in currentPosition
-		/// then calls the eventhandler for the slider so that its position is updated
-		/// </summary>
-		private void updateGUI()
-		{
-			this.positionSlider.Value = this.currentPosition;
-			positionSlider_Scroll(null, null);
-		}
-		/// <summary>
-		/// plays the video
-		/// calls updateGUI in the GUI thread context, then goes for sleep for approximately the time a frame should be displayed
-		/// this is repeated until isRunning is set to false, which can happen either by pressing the stop button, or
-		/// if we have reached the end of the video
-		/// </summary>
-		private void playVideo()
-		{
-			while (isRunning)
-			{
-				try
-				{
-					if (this.currentPosition + 1 < reader.FrameCount)
-						currentPosition++;
-					else
-						isRunning = false;
-					this.videoPreview.Invoke(new SimpleDelegate(updateGUI));
-					Thread.Sleep(this.millisecondsPerFrame);
-				}
-				catch (Exception e)
-				{
-					Console.Write(e.Message);
-				}
-			}
-		}
-
-        private void safeChangePosition(int frameChange)
-        {
-            int newFrameNumber = this.currentPosition + frameChange;
-            if (newFrameNumber >= 0 && newFrameNumber < reader.FrameCount)
-            {
-                currentPosition = newFrameNumber;
-            }
-            else
-            {
-                if (frameChange > 0) currentPosition = reader.FrameCount - 1;
-                else currentPosition = 0;
-            }
-            updateGUI();
-        }
-
+        
 		private void previousFrameButton_Click(object sender, System.EventArgs e)
 		{
-            safeChangePosition(-1);
+            videoPreview.OffsetPosition(-1);
 		}
 
 		private void nextFrameButton_Click(object sender, System.EventArgs e)
 		{
-            safeChangePosition(1);
+            videoPreview.OffsetPosition(1);
 		}
 
 		private void fwdButton_Click(object sender, System.EventArgs e)
 		{
-            safeChangePosition(-25);
+            videoPreview.OffsetPosition(-25);
 		}
 
 		private void ffButton_Click(object sender, System.EventArgs e)
 		{
-            safeChangePosition(25);
+            videoPreview.OffsetPosition(25);
         }
 		#endregion
 		#region credits / intro
@@ -951,7 +800,7 @@ namespace MeGUI
 		private void creditsStartButton_Click(object sender, System.EventArgs e)
 		{
 			if (IntroCreditsFrameSet != null)
-				IntroCreditsFrameSet(this.currentPosition, true);
+                IntroCreditsFrameSet(CurrentFrame, true);
 		}
 		/// <summary>
 		/// fires an event indicating that the intro end position has been set
@@ -961,13 +810,13 @@ namespace MeGUI
 		private void introEndButton_Click(object sender, System.EventArgs e)
 		{
 			if (IntroCreditsFrameSet != null)
-				IntroCreditsFrameSet(this.currentPosition, false);
+                IntroCreditsFrameSet(CurrentFrame, false);
 		}
 		#endregion
 		#region zones
 		private void zoneEndButton_Click(object sender, System.EventArgs e)
 		{
-			int pos = (int)positionSlider.Value;
+            int pos = CurrentFrame;
 			if (creditsStartFrame > -1 && pos >= creditsStartFrame)
 			{
 				MessageBox.Show("Zone end intersects with credits zone\nPlease adjust zone end or credits zone", "Zone interesection detected", 
@@ -975,14 +824,13 @@ namespace MeGUI
 			}
 			else
 			{
-				zoneEnd = pos;
-				setTitleText();
+                ZoneEnd = pos;
 			}
 		}
 
 		private void zoneStartButton_Click(object sender, System.EventArgs e)
 		{
-			int pos = (int)positionSlider.Value;
+            int pos = CurrentFrame;
 			if (pos > this.introEndFrame) // else we have an intersection with the credits which is not allowed
 			{
 				if (this.creditsStartFrame > -1 && pos >= creditsStartFrame) // zone starts inside credits zone, not allowed
@@ -992,8 +840,7 @@ namespace MeGUI
 				}
 				else
 				{
-					this.zoneStart = positionSlider.Value;
-					setTitleText();	
+                    ZoneStart = pos;
 				}
 			}
 			else
@@ -1008,8 +855,8 @@ namespace MeGUI
 				if (zoneEnd > zoneStart)
 				{
 					ZoneSet(this.zoneStart, this.zoneEnd);
-					this.zoneStart = -1;
-					this.zoneEnd = -1;
+                    zoneStart = -1;
+                    zoneEnd = -1;
 					setTitleText();
 				}
 				else
@@ -1020,15 +867,14 @@ namespace MeGUI
 		{
 			if (ChapterSet != null)
 			{
-				ChapterSet(positionSlider.Value);
+                ChapterSet(CurrentFrame);
 			}
 		}
 		#endregion
 		#region context menu
 		private void mnuIntroEnd_Click(object sender, System.EventArgs e)
 		{
-			this.positionSlider.Value = this.introEndFrame;
-			positionSlider_Scroll(null, null);
+            CurrentFrame = introEndFrame;
 
 		}
 
@@ -1040,14 +886,12 @@ namespace MeGUI
 
 		private void mnuZoneStart_Click(object sender, System.EventArgs e)
 		{
-			this.positionSlider.Value = this.zoneStart;
-			positionSlider_Scroll(null, null);
+             CurrentFrame = creditsStartFrame;
 		}
 
 		private void mnuZoneEnd_Click(object sender, System.EventArgs e)
 		{
-			this.positionSlider.Value = this.zoneEnd;
-			positionSlider_Scroll(null, null);
+            CurrentFrame = zoneEnd;
 		}
 		private void contextMenu1_Popup(object sender, System.EventArgs e)
 		{
@@ -1125,7 +969,8 @@ namespace MeGUI
 			set 
 			{
 				zoneStart = value;
-				positionSlider_Scroll(null, null);
+                //positionSlider_Scroll(null, null);
+                setTitleText();
 			}
 		}
 		/// <summary>
@@ -1152,16 +997,13 @@ namespace MeGUI
 		/// </summary>
 		public int CurrentFrame
 		{
-			get {return positionSlider.Value;}
-			set 
-			{
-				if (value <= positionSlider.Maximum && value >= positionSlider.Minimum)
-				{
-					positionSlider.Value = value;
-					positionSlider_Scroll(null, null); // makes the image visible
-				}
-			}
+            get { return videoPreview.Position; }
+            set { videoPreview.Position = value; }
 		}
+        public int FrameCount
+        {
+            get { return videoPreview.FrameCount; }
+        }
 		#endregion
 
         private void resize(int targetWidth, bool PAR)
@@ -1176,7 +1018,6 @@ namespace MeGUI
             sizeLock = true;
             adjustSize();
             sizeLock = false;
-            positionSlider_Scroll(null, null);
         }
 
         private void showPAR_CheckedChanged(object sender, EventArgs e)
@@ -1206,13 +1047,19 @@ namespace MeGUI
         private void nextFrameButton_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Right)
-                safeChangePosition(1);
+                videoPreview.OffsetPosition(1);
         }
 
         private void previousFrameButton_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Right)
-                safeChangePosition(-1);
+                videoPreview.OffsetPosition(-1);
+        }
+
+        private void videoPreview_PositionChanged(object sender, EventArgs e)
+        {
+            positionSlider.Value = videoPreview.Position;
+            setTitleText();
         }
 	}
 }
