@@ -443,6 +443,7 @@ namespace MeGUI
             this.mnuZoneStart = new System.Windows.Forms.MenuItem();
             this.mnuZoneEnd = new System.Windows.Forms.MenuItem();
             this.previewGroupbox = new System.Windows.Forms.GroupBox();
+            this.videoPreview = new MeGUI.core.gui.VideoPlayerControl();
             this.positionSlider = new System.Windows.Forms.TrackBar();
             this.playButton = new System.Windows.Forms.Button();
             this.nextFrameButton = new System.Windows.Forms.Button();
@@ -451,8 +452,10 @@ namespace MeGUI
             this.fwdButton = new System.Windows.Forms.Button();
             this.creditsStartButton = new System.Windows.Forms.Button();
             this.buttonPanel = new System.Windows.Forms.Panel();
+            this.btnReloadVideo = new System.Windows.Forms.Button();
             this.zoomOutButton = new System.Windows.Forms.Button();
             this.zoomInButton = new System.Windows.Forms.Button();
+            this.arChooser = new MeGUI.core.gui.ARChooser();
             this.showPAR = new System.Windows.Forms.CheckBox();
             this.originalSizeButton = new System.Windows.Forms.Button();
             this.introEndButton = new System.Windows.Forms.Button();
@@ -461,9 +464,6 @@ namespace MeGUI
             this.zoneEndButton = new System.Windows.Forms.Button();
             this.chapterButton = new System.Windows.Forms.Button();
             this.defaultToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.btnReloadVideo = new System.Windows.Forms.Button();
-            this.arChooser = new MeGUI.core.gui.ARChooser();
-            this.videoPreview = new MeGUI.core.gui.VideoPlayerControl();
             goToFrameButton = new System.Windows.Forms.Button();
             this.previewGroupbox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.positionSlider)).BeginInit();
@@ -529,6 +529,20 @@ namespace MeGUI
             this.previewGroupbox.TabIndex = 1;
             this.previewGroupbox.TabStop = false;
             this.previewGroupbox.Text = "Video Preview";
+            // 
+            // videoPreview
+            // 
+            this.videoPreview.CropMargin = new System.Windows.Forms.Padding(0);
+            this.videoPreview.DisplayActualFramerate = false;
+            this.videoPreview.EnsureCorrectPlaybackSpeed = false;
+            this.videoPreview.Framerate = 25D;
+            this.videoPreview.Location = new System.Drawing.Point(3, 14);
+            this.videoPreview.Name = "videoPreview";
+            this.videoPreview.Position = 0;
+            this.videoPreview.Size = new System.Drawing.Size(274, 164);
+            this.videoPreview.SpeedUp = 1D;
+            this.videoPreview.TabIndex = 9;
+            this.videoPreview.PositionChanged += new System.EventHandler(this.videoPreview_PositionChanged);
             // 
             // positionSlider
             // 
@@ -634,6 +648,18 @@ namespace MeGUI
             this.buttonPanel.Size = new System.Drawing.Size(395, 80);
             this.buttonPanel.TabIndex = 8;
             // 
+            // btnReloadVideo
+            // 
+            this.btnReloadVideo.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnReloadVideo.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.btnReloadVideo.Location = new System.Drawing.Point(288, 8);
+            this.btnReloadVideo.Name = "btnReloadVideo";
+            this.btnReloadVideo.Size = new System.Drawing.Size(72, 19);
+            this.btnReloadVideo.TabIndex = 16;
+            this.btnReloadVideo.Text = "Reload Video";
+            this.defaultToolTip.SetToolTip(this.btnReloadVideo, "Set the frame where the credits start");
+            this.btnReloadVideo.Click += new System.EventHandler(this.btnReloadVideo_Click);
+            // 
             // zoomOutButton
             // 
             this.zoomOutButton.Location = new System.Drawing.Point(52, 30);
@@ -653,6 +679,19 @@ namespace MeGUI
             this.zoomInButton.Text = "+";
             this.zoomInButton.UseVisualStyleBackColor = true;
             this.zoomInButton.Click += new System.EventHandler(this.zoomInButton_Click);
+            // 
+            // arChooser
+            // 
+            this.arChooser.CustomDARs = new MeGUI.core.util.Dar[0];
+            this.arChooser.HasLater = false;
+            this.arChooser.Location = new System.Drawing.Point(8, 48);
+            this.arChooser.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.arChooser.MinimumSize = new System.Drawing.Size(64, 29);
+            this.arChooser.Name = "arChooser";
+            this.arChooser.SelectedIndex = 0;
+            this.arChooser.Size = new System.Drawing.Size(208, 29);
+            this.arChooser.TabIndex = 15;
+            this.arChooser.SelectionChanged += new MeGUI.StringChanged(this.arChooser_SelectionChanged);
             // 
             // showPAR
             // 
@@ -724,45 +763,6 @@ namespace MeGUI
             this.chapterButton.Text = "Set Chapter";
             this.defaultToolTip.SetToolTip(this.chapterButton, "Sets the end frame of a new zone");
             this.chapterButton.Click += new System.EventHandler(this.chapterButton_Click);
-            // 
-            // btnReloadVideo
-            // 
-            this.btnReloadVideo.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnReloadVideo.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.btnReloadVideo.Location = new System.Drawing.Point(288, 8);
-            this.btnReloadVideo.Name = "btnReloadVideo";
-            this.btnReloadVideo.Size = new System.Drawing.Size(72, 19);
-            this.btnReloadVideo.TabIndex = 16;
-            this.btnReloadVideo.Text = "Reload Video";
-            this.defaultToolTip.SetToolTip(this.btnReloadVideo, "Set the frame where the credits start");
-            this.btnReloadVideo.Click += new System.EventHandler(this.btnReloadVideo_Click);
-            // 
-            // arChooser
-            // 
-            this.arChooser.CustomDARs = new MeGUI.core.util.Dar[0];
-            this.arChooser.HasLater = false;
-            this.arChooser.Location = new System.Drawing.Point(8, 48);
-            this.arChooser.MaximumSize = new System.Drawing.Size(1000, 29);
-            this.arChooser.MinimumSize = new System.Drawing.Size(64, 29);
-            this.arChooser.Name = "arChooser";
-            this.arChooser.SelectedIndex = 0;
-            this.arChooser.Size = new System.Drawing.Size(208, 29);
-            this.arChooser.TabIndex = 15;
-            this.arChooser.SelectionChanged += new MeGUI.StringChanged(this.arChooser_SelectionChanged);
-            // 
-            // videoPreview
-            // 
-            this.videoPreview.CropMargin = new System.Windows.Forms.Padding(0);
-            this.videoPreview.DisplayActualFramerate = false;
-            this.videoPreview.EnsureCorrectPlaybackSpeed = false;
-            this.videoPreview.Framerate = 25D;
-            this.videoPreview.Location = new System.Drawing.Point(3, 14);
-            this.videoPreview.Name = "videoPreview";
-            this.videoPreview.Position = 0;
-            this.videoPreview.Size = new System.Drawing.Size(274, 164);
-            this.videoPreview.SpeedUp = 1D;
-            this.videoPreview.TabIndex = 9;
-            this.videoPreview.PositionChanged += new System.EventHandler(this.videoPreview_PositionChanged);
             // 
             // VideoPlayer
             // 
@@ -1152,6 +1152,11 @@ namespace MeGUI
 
         private void btnReloadVideo_Click(object sender, EventArgs e)
         {
+            if (playButton.Text.Equals("Stop"))
+            {
+				this.playButton.Text = "Play";
+                videoPreview.Stop();
+			}
             reloadVideo();
             positionSlider.Focus();
         }

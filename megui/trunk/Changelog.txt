@@ -1,3 +1,6 @@
+0.3.5.13
+  - (sharktooth) [VideoPlayer] added a check to stop the player before reloading the video
+
 0.3.5.12
   - (zathor) [FileIndexer] disable DGIndexNV in a RDP session
   - (zathor) [VidePlayerControl] added new control to speed up 
