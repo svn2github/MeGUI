@@ -1,4 +1,5 @@
 0.3.5.13
+  - (sharktooth) [x264Encoder] Fixed Psy-RD settings commandline generation with certain tunings
   - (sharktooth) [VideoPlayer] added a check to stop the player before reloading the video
 
 0.3.5.12

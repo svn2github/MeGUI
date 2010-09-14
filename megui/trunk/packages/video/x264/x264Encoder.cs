@@ -762,10 +762,30 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                     display = false;
                     switch (xs.x264Tuning)
                     {
-                        case 1: if ((xs.PsyRDO != 1.0M) && (xs.PsyTrellis != 0.15M)) display = true; break;
-                        case 2: if ((xs.PsyRDO != 0.4M) && (xs.PsyTrellis != 0.0M)) display = true; break;
-                        case 3: if ((xs.PsyRDO != 1.0M) && (xs.PsyTrellis != 0.25M)) display = true; break;
-                        case 7: if ((xs.PsyRDO != 1.0M) && (xs.PsyTrellis != 0.2M)) display = true; break;
+                        case 1:
+                            {
+                                if ((xs.PsyRDO != 1.0M) && (xs.PsyTrellis != 0.15M)) display = true;
+                                else if (xs.PsyRDO != 1.0M) sb.Append("--psy-rd " + xs.PsyRDO.ToString(ci) + ":" + 0.15M + " ");
+                                else if (xs.PsyTrellis != 0.15M) sb.Append("--psy-rd " + 1.0M + ":" + xs.PsyTrellis.ToString(ci) + " ");
+                            }  break;
+                        case 2:
+                            {
+                                if ((xs.PsyRDO != 0.4M) && (xs.PsyTrellis != 0.0M)) display = true;
+                                else if (xs.PsyRDO != 0.4M) sb.Append("--psy-rd " + xs.PsyRDO.ToString(ci) + ":" + 0.0M + " ");
+                                else if (xs.PsyTrellis != 0.0M) sb.Append("--psy-rd " + 0.4M + ":" + xs.PsyTrellis.ToString(ci) + " ");
+                            } break;
+                        case 3:
+                            {
+                                if ((xs.PsyRDO != 1.0M) && (xs.PsyTrellis != 0.25M)) display = true;
+                                else if (xs.PsyRDO != 1.0M) sb.Append("--psy-rd " + xs.PsyRDO.ToString(ci) + ":" + 0.25M + " ");
+                                else if (xs.PsyTrellis != 0.25M) sb.Append("--psy-rd " + 1.0M + ":" + xs.PsyTrellis.ToString(ci) + " ");
+                            } break;
+                        case 7:
+                            {
+                                if ((xs.PsyRDO != 1.0M) && (xs.PsyTrellis != 0.2M)) display = true;
+                                else if (xs.PsyRDO != 1.0M) sb.Append("--psy-rd " + xs.PsyRDO.ToString(ci) + ":" + 0.2M + " ");
+                                else if (xs.PsyTrellis != 0.2M) sb.Append("--psy-rd " + 1.0M + ":" + xs.PsyTrellis.ToString(ci) + " ");
+                            } break;
                         default: if ((xs.PsyRDO != 1.0M) || (xs.PsyTrellis != 0.0M)) display = true; break;
                     }
 
