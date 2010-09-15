@@ -204,11 +204,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             if (xs.Deblock)
             {
                 display = false;
-
                 switch (xs.x264Tuning)
                 {
-                    case 1:
-                    case 7: if (xs.AlphaDeblock != -1 || xs.BetaDeblock != -1) display = true; break;
+                    case 1: if (xs.AlphaDeblock != -1 || xs.BetaDeblock != -1) display = true; break;
                     case 2: if (xs.AlphaDeblock != 1 || xs.BetaDeblock != 1) display = true; break;
                     case 3: if (xs.AlphaDeblock != -2 || xs.BetaDeblock != -2) display = true; break;
                     default: if (xs.AlphaDeblock != 0 || xs.BetaDeblock != 0) display = true; break;
@@ -482,7 +480,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             if (!xs.CustomEncoderOptions.Contains("--deadzone-inter "))
             {
                 display = true;
-                if ((xs.x264Tuning != 3 && xs.DeadZoneInter == 21) || (xs.x264Tuning == 3 && xs.DeadZoneInter == 6))
+                if ((xs.x264Tuning != 3 && xs.DeadZoneInter == 21 && xs.DeadZoneIntra == 11) || (xs.x264Tuning == 3 && xs.DeadZoneInter == 6 && xs.DeadZoneIntra == 6))
                     display = false;
                 if (display)
                     sb.Append("--deadzone-inter " + xs.DeadZoneInter + " ");

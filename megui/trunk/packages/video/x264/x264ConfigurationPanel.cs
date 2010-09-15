@@ -160,6 +160,11 @@ namespace MeGUI.packages.video.x264
                 deadzoneIntra.Value = 11;
                 deadzoneInter.Value = 21;
             }
+            if (x264Tunes.SelectedIndex == 3 && trellis.SelectedIndex != 0)
+            {
+                deadzoneInter.Value = 6;
+                deadzoneIntra.Value = 6;
+            }
         }
 
         private void doSubmeAdjustments()
@@ -1806,9 +1811,14 @@ namespace MeGUI.packages.video.x264
             }
             else
             {
-                this.PsyTrellis.Value = 0;
                 this.PsyTrellis.Enabled = false;
                 this.PsyTrellisLabel.Enabled = false;
+                switch (x264Tunes.SelectedIndex)
+                {
+                    case 1: this.PsyTrellis.Value = 0.15M; break;
+                    case 3: this.PsyTrellis.Value = 0.25M; break;
+                    default: this.PsyTrellis.Value = 0; break;
+                }
             }
             #endregion
         }
