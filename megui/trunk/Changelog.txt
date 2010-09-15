@@ -1,6 +1,8 @@
 0.3.5.13
   - (sharktooth) [x264Encoder] Fixed Psy-RD settings commandline generation with certain tunings
   - (sharktooth) [VideoPlayer] added a check to stop the player before reloading the video
+  - (zathor) [Queue] if a worker tries to start an audio job while another
+             audio job is already running the worker will be postponed.
 
 0.3.5.12
   - (zathor) [FileIndexer] disable DGIndexNV in a RDP session
