@@ -219,7 +219,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             else
             {
                 if (!xs.CustomEncoderOptions.Contains("--no-deblock"))
-                    if (xs.x264PresetLevel != x264Settings.x264PresetLevelModes.ultrafast || (xs.x264Tuning != 0 && xs.x264Tuning != 6)) 
+                    if (xs.x264PresetLevel != x264Settings.x264PresetLevelModes.ultrafast && xs.x264Tuning != 6) 
                         sb.Append("--no-deblock ");
             }
 
@@ -227,7 +227,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             {
                 if (!xs.Cabac)
                 {
-                    if (xs.Profile > 0 && (xs.x264PresetLevel != x264Settings.x264PresetLevelModes.ultrafast || (xs.x264Tuning != 0 && xs.x264Tuning != 6)))
+                    if (xs.Profile > 0 && (xs.x264PresetLevel != x264Settings.x264PresetLevelModes.ultrafast && xs.x264Tuning != 6))
                         sb.Append("--no-cabac ");
                 }
             }
@@ -367,10 +367,10 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                     default: if (xs.WeightedPPrediction != 2) display = true; break;
                 }
                 if (xs.x264Tuning == 6 && xs.WeightedPPrediction != 0)
-                    display = true;
+                    sb.Append("--weightp " + xs.WeightedPPrediction + " ");
                 if (xs.Profile == 0)
                     display = false;
-                if (display)
+                if (display && xs.x264Tuning != 6)
                     sb.Append("--weightp " + xs.WeightedPPrediction + " ");
             }
 
