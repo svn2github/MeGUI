@@ -127,6 +127,8 @@ namespace MeGUI
         private SplitContainer splitContainer2;
         private MenuItem mnutoolsD2VCreator;
         private List<Form> formsToReopen = new List<Form>();
+        private ITaskbarList3 taskbarItem;
+        private Icon taskbarIcon;
 
         public bool IsHiddenMode { get { return trayIcon.Visible; } }
 
@@ -2094,6 +2096,26 @@ namespace MeGUI
 
             if (settings.AutoStartQueueStartup)
                 jobControl1.StartAll(false);
+
+            if ((Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor >= 1)
+                || Environment.OSVersion.Version.Major > 6)
+                taskbarItem = (ITaskbarList3)new ProgressTaskbar();
+        }
+
+        public void setOverlayIcon(Icon oIcon)
+        {
+            if ((Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor == 0)
+                || Environment.OSVersion.Version.Major < 6)
+                return;
+
+            if (taskbarIcon != null && oIcon.Handle == taskbarIcon.Handle)
+                return;
+
+            if (oIcon == System.Drawing.SystemIcons.Warning && taskbarIcon == System.Drawing.SystemIcons.Error)
+                return;
+
+            taskbarItem.SetOverlayIcon(this.Handle, oIcon.Handle, null);
+            taskbarIcon = oIcon;
         }
 
         private bool AskToDownloadAvisynth()

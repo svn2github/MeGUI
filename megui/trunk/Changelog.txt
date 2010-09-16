@@ -3,6 +3,7 @@
   - (sharktooth) [VideoPlayer] added a check to stop the player before reloading the video
   - (zathor) [Queue] if a worker tries to start an audio job while another
              audio job is already running the worker will be postponed.
+  - (zathor) added overlay icon if a warning or error event has been logged (Windows 7 only)
 
 0.3.5.12
   - (zathor) [FileIndexer] disable DGIndexNV in a RDP session

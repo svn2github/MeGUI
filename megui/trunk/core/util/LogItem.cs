@@ -87,6 +87,10 @@ namespace MeGUI.core.util
         {
             this.text = name;
             this.type = type;
+            if (type == ImageType.Warning)
+                MainForm.Instance.setOverlayIcon(System.Drawing.SystemIcons.Warning);
+            else if (type == ImageType.Error)
+                MainForm.Instance.setOverlayIcon(System.Drawing.SystemIcons.Error);
         }
 
         public LogItem Add(LogItem logItem)
@@ -338,13 +342,13 @@ namespace MeGUI.core.util
         {
             Exception e = (Exception)o;
 
-            LogItem l = new LogItem(message, i);
-            l.LogValue("Exception message", e.Message);
-            l.LogValue("Stacktrace", e.StackTrace);
-            l.LogValue("Inner exception", e.InnerException);
+            LogItem l = new LogItem(message, ImageType.Error);
+            l.LogValue("Exception message", e.Message, ImageType.Error);
+            l.LogValue("Stacktrace", e.StackTrace, ImageType.Error);
+            l.LogValue("Inner exception", e.InnerException, ImageType.Error);
 
             foreach (DictionaryEntry info in e.Data)
-                l.LogValue(info.Key.ToString(), info.Value);
+                l.LogValue(info.Key.ToString(), info.Value, ImageType.Error);
 
             return l;
         }
