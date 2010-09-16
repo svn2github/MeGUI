@@ -639,7 +639,7 @@ namespace MeGUI.core.gui
             }
             catch (JobStartException e)
             {
-                mainForm.Log.LogValue("Error starting job", e);
+                log.LogValue("Error starting job", e);
                 if (e.type == ExceptionType.Error)
                     job.Status = JobStatus.ERROR;
                 else // ExceptionType.UserSkip
