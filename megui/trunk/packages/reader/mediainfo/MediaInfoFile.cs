@@ -528,6 +528,30 @@ namespace MeGUI
             return true;
         }
 
+        /// <summary>checks if the file can be demuxed with eac3to</summary>
+        /// <returns>true if demuxable, false if not</returns>
+        public bool isEac3toDemuxable()
+        {
+            // check if the file is a video file
+            if (!bHasVideo)
+                return false;
+
+            // check if the indexer is available
+            if (!File.Exists(MainForm.Instance.Settings.EAC3toPath))
+                return false;
+
+            // only the following container formats are supported
+            // EVO is missing / not confirmed
+            if (_strContainer.ToUpper().Equals("MATROSKA") ||
+                _strContainer.ToUpper().Equals("MPEG-TS") ||
+                (_strContainer.ToUpper().Equals("MPEG-PS") && Path.GetExtension(file).ToLower().Equals(".vob")) ||
+                _strContainer.ToUpper().Equals("EVO") ||
+                _strContainer.ToUpper().Equals("BDAV"))
+                return true;
+
+            return false;
+        }
+
         private static int? easyParseInt(string value)
         {
             try
