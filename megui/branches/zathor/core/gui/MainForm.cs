@@ -785,9 +785,25 @@ namespace MeGUI
         /// <param name="e"></param>
         private void mnuChangelog_Click(object sender, EventArgs e)
         {
-            using (Changelog cl = new Changelog())
+            string strChangeLog = Path.Combine(Application.StartupPath, "changelog.txt");
+
+            if (File.Exists(strChangeLog))
             {
-                cl.ShowDialog();
+                try
+                {
+                    Process oProcess = new Process();
+                    oProcess.StartInfo.FileName = strChangeLog;
+                    oProcess.StartInfo.UseShellExecute = true;
+                    oProcess.Start();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(strChangeLog + " cannot be opened:\r\n" + ex.Message, "Process error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                MessageBox.Show(strChangeLog + " not found", "Changelog not found", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
