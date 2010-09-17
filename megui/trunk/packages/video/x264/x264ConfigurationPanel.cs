@@ -1703,10 +1703,15 @@ namespace MeGUI.packages.video.x264
                         x264NumberOfBFrames.Enabled = true;
                         x264NumberOfBFrames.Value = 3;
                         x264NumberOfBFramesLabel.Enabled = true;
+                        x264WeightedBPrediction.Checked = true;
                     }
                     cqmComboBox1.SelectedIndex = 0;
                     quantizerMatrixGroupbox.Enabled = false;
-                    if (x264Tunes.SelectedIndex != 6) cabac.Enabled = true;
+                    if (x264Tunes.SelectedIndex != 6)
+                    {
+                        cabac.Enabled = true;
+                        cabac.Checked = true;
+                    }
                     break;
                 case 2: // high profile, enable everything
                     if (!x264NumberOfBFrames.Enabled)
@@ -1714,6 +1719,7 @@ namespace MeGUI.packages.video.x264
                         x264NumberOfBFrames.Enabled = true;
                         x264NumberOfBFrames.Value = 3;
                         x264NumberOfBFramesLabel.Enabled = true;
+                        x264WeightedBPrediction.Checked = true;
                     }
                     if (!adaptiveDCT.Enabled)
                     {
@@ -1721,7 +1727,11 @@ namespace MeGUI.packages.video.x264
                         adaptiveDCT.Checked = true;
                     }
                     quantizerMatrixGroupbox.Enabled = true;
-                    if (x264Tunes.SelectedIndex != 6) cabac.Enabled = true;
+                    if (x264Tunes.SelectedIndex != 6)
+                    {
+                        cabac.Enabled = true;
+                        cabac.Checked = true;
+                    }
                     break;
             }
             #endregion
