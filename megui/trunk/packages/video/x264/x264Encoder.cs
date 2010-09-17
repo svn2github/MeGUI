@@ -135,7 +135,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                     case 4: sb.Append("--tune psnr "); break;
                     case 5: sb.Append("--tune ssim "); break;
                     case 6: sb.Append("--tune fastdecode "); break;
-                    case 7: sb.Append("--tune touhou "); break;
                     default: break; // default
                 }
             }
@@ -347,7 +346,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                     case x264Settings.x264PresetLevelModes.veryslow:
                     case x264Settings.x264PresetLevelModes.placebo:     iDefaultSettings = 16; break;
                 }
-                if ((xs.x264Tuning == 2 || xs.x264Tuning == 7) && iDefaultSettings > 1)
+                if (xs.x264Tuning == 2 && iDefaultSettings > 1)
                     iDefaultSettings = iDefaultSettings * 2;
 
                 if (iDefaultSettings != xs.NbRefFrames)

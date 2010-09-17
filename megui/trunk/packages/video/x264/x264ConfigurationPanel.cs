@@ -492,52 +492,6 @@ namespace MeGUI.packages.video.x264
                             nopsy.Checked = false;
                     }
                     break;
-                case 7: // touhou
-                    {
-                        if (this.x264AlphaDeblock.Value != -1)
-                            this.x264AlphaDeblock.Value = -1;
-                        if (this.x264BetaDeblock.Value != -1)
-                            this.x264BetaDeblock.Value = -1;
-                        if (this.PsyTrellis.Value != 0.2M)
-                            this.PsyTrellis.Value = 0.2M;
-                        if (this.numAQStrength.Value != 1.3M)
-                            this.numAQStrength.Value = 1.3M;
-                        if (this.x264NumberOfRefFrames.Value > 1 && this.x264NumberOfRefFrames.Value < 9)
-                            this.x264NumberOfRefFrames.Value *= 2;
-                        else if (this.x264NumberOfRefFrames.Value > 8)
-                            this.x264NumberOfRefFrames.Value = this.x264NumberOfRefFrames.Value;
-                        else this.x264NumberOfRefFrames.Value = 1;
-
-                        if (this.PsyRD.Value != 1.0M)
-                            this.PsyRD.Value = 1.0M;
-                        if (this.numAQStrength.Value != 1.0M)
-                            this.numAQStrength.Value = 1.0M;
-                        if (this.x264NumberOfBFrames.Value != 3)
-                            this.x264NumberOfBFrames.Value = 3;
-                        if (this.x264IPFrameFactor.Value != 1.4M)
-                            this.x264IPFrameFactor.Value = 1.4M;
-                        if (this.x264PBFrameFactor.Value != 1.3M)
-                            this.x264PBFrameFactor.Value = 1.3M;
-                        if (this.deadzoneInter.Value != 21)
-                            this.deadzoneInter.Value = 21;
-                        if (this.deadzoneIntra.Value != 11)
-                            this.deadzoneIntra.Value = 11;
-                        if (this.x264QuantizerCompression.Value != 0.6M)
-                            this.x264QuantizerCompression.Value = 0.6M;
-                        if (noDCTDecimateOption.Checked)
-                            noDCTDecimateOption.Checked = false;
-                        if (!x264DeblockActive.Checked)
-                            x264DeblockActive.Checked = true;
-                        if (!cabac.Checked)
-                            cabac.Checked = true;
-                        if (!x264WeightedBPrediction.Checked)
-                            x264WeightedBPrediction.Checked = true;
-                        if (nopsy.Checked)
-                            nopsy.Checked = false;
-                        if (this.x264WeightedPPrediction.SelectedIndex != 2)
-                            this.x264WeightedPPrediction.SelectedIndex = 2;
-                    }
-                    break;
             }
         }
 
