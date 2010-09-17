@@ -160,6 +160,11 @@ namespace MeGUI.packages.video.x264
                 deadzoneIntra.Value = 11;
                 deadzoneInter.Value = 21;
             }
+            if (x264Tunes.SelectedIndex == 3 && trellis.SelectedIndex != 0)
+            {
+                deadzoneInter.Value = 6;
+                deadzoneIntra.Value = 6;
+            }
         }
 
         private void doSubmeAdjustments()
@@ -217,6 +222,8 @@ namespace MeGUI.packages.video.x264
                             x264WeightedBPrediction.Checked = true;
                         if (trellis.SelectedIndex != 1)
                             trellis.SelectedIndex = 1;
+                        if (this.x264WeightedPPrediction.SelectedIndex != 2)
+                            this.x264WeightedPPrediction.SelectedIndex = 2;
                     }
                     break;
                 case 1: // film
@@ -258,6 +265,10 @@ namespace MeGUI.packages.video.x264
                             cabac.Checked = true;
                         if (!x264WeightedBPrediction.Checked)
                             x264WeightedBPrediction.Checked = true;
+                        if (this.x264WeightedPPrediction.SelectedIndex != 2)
+                            this.x264WeightedPPrediction.SelectedIndex = 2;
+                        if (nopsy.Checked)
+                            nopsy.Checked = false;
                     }
                     break;
                 case 2: // animation
@@ -304,6 +315,10 @@ namespace MeGUI.packages.video.x264
                             cabac.Checked = true;
                         if (!x264WeightedBPrediction.Checked)
                             x264WeightedBPrediction.Checked = true;
+                        if (this.x264WeightedPPrediction.SelectedIndex != 2)
+                            this.x264WeightedPPrediction.SelectedIndex = 2;
+                        if (nopsy.Checked)
+                            nopsy.Checked = false;
                     }
                     break;
                 case 3: // grain
@@ -345,6 +360,10 @@ namespace MeGUI.packages.video.x264
                             cabac.Checked = true;
                         if (!x264WeightedBPrediction.Checked)
                             x264WeightedBPrediction.Checked = true;
+                        if (this.x264WeightedPPrediction.SelectedIndex != 2)
+                            this.x264WeightedPPrediction.SelectedIndex = 2;
+                        if (nopsy.Checked)
+                            nopsy.Checked = false;
                     }
                     break;
                 case 4: // psnr
@@ -386,6 +405,8 @@ namespace MeGUI.packages.video.x264
                             cabac.Checked = true;
                         if (!x264WeightedBPrediction.Checked)
                             x264WeightedBPrediction.Checked = true;
+                        if (nopsy.Checked)
+                            nopsy.Checked = true;
                     }
                     break;
                 case 5: // ssim
@@ -427,6 +448,10 @@ namespace MeGUI.packages.video.x264
                             cabac.Checked = true;
                         if (!x264WeightedBPrediction.Checked)
                             x264WeightedBPrediction.Checked = true;
+                        if (this.x264WeightedPPrediction.SelectedIndex != 2)
+                            this.x264WeightedPPrediction.SelectedIndex = 2;
+                        if (nopsy.Checked)
+                            nopsy.Checked = true;
                     }
                     break;
                 case 6: // fastdecode
@@ -435,6 +460,7 @@ namespace MeGUI.packages.video.x264
                             x264DeblockActive.Checked = false;
                         if (cabac.Checked)
                             cabac.Checked = false;
+                        cabac.Enabled = false;
                         if (x264WeightedBPrediction.Checked)
                             x264WeightedBPrediction.Checked = false;
 
@@ -456,54 +482,12 @@ namespace MeGUI.packages.video.x264
                             this.deadzoneInter.Value = 21;
                         if (this.deadzoneIntra.Value != 11)
                             this.deadzoneIntra.Value = 11;
+                        if (this.x264WeightedPPrediction.SelectedIndex != 0)
+                            this.x264WeightedPPrediction.SelectedIndex = 0;
                         if (this.x264QuantizerCompression.Value != 0.6M)
                             this.x264QuantizerCompression.Value = 0.6M;
                         if (noDCTDecimateOption.Checked)
                             noDCTDecimateOption.Checked = false;
-                        if (nopsy.Checked)
-                            nopsy.Checked = false;
-                    }
-                    break;
-                case 7: // touhou
-                    {
-                        if (this.x264AlphaDeblock.Value != -1)
-                            this.x264AlphaDeblock.Value = -1;
-                        if (this.x264BetaDeblock.Value != -1)
-                            this.x264BetaDeblock.Value = -1;
-                        if (this.PsyTrellis.Value != 0.2M)
-                            this.PsyTrellis.Value = 0.2M;
-                        if (this.numAQStrength.Value != 1.3M)
-                            this.numAQStrength.Value = 1.3M;
-                        if (this.x264NumberOfRefFrames.Value > 1 && this.x264NumberOfRefFrames.Value < 9)
-                            this.x264NumberOfRefFrames.Value *= 2;
-                        else if (this.x264NumberOfRefFrames.Value > 8)
-                            this.x264NumberOfRefFrames.Value = this.x264NumberOfRefFrames.Value;
-                        else this.x264NumberOfRefFrames.Value = 1;
-
-                        if (this.PsyRD.Value != 1.0M)
-                            this.PsyRD.Value = 1.0M;
-                        if (this.numAQStrength.Value != 1.0M)
-                            this.numAQStrength.Value = 1.0M;
-                        if (this.x264NumberOfBFrames.Value != 3)
-                            this.x264NumberOfBFrames.Value = 3;
-                        if (this.x264IPFrameFactor.Value != 1.4M)
-                            this.x264IPFrameFactor.Value = 1.4M;
-                        if (this.x264PBFrameFactor.Value != 1.3M)
-                            this.x264PBFrameFactor.Value = 1.3M;
-                        if (this.deadzoneInter.Value != 21)
-                            this.deadzoneInter.Value = 21;
-                        if (this.deadzoneIntra.Value != 11)
-                            this.deadzoneIntra.Value = 11;
-                        if (this.x264QuantizerCompression.Value != 0.6M)
-                            this.x264QuantizerCompression.Value = 0.6M;
-                        if (noDCTDecimateOption.Checked)
-                            noDCTDecimateOption.Checked = false;
-                        if (!x264DeblockActive.Checked)
-                            x264DeblockActive.Checked = true;
-                        if (!cabac.Checked)
-                            cabac.Checked = true;
-                        if (!x264WeightedBPrediction.Checked)
-                            x264WeightedBPrediction.Checked = true;
                         if (nopsy.Checked)
                             nopsy.Checked = false;
                     }
@@ -541,7 +525,7 @@ namespace MeGUI.packages.video.x264
                             x264DeblockActive.Checked = false;
                         if (cabac.Checked)
                             cabac.Checked = false;
-                        cabac.Enabled = false;
+                        if (x264Tunes.SelectedIndex != 6) cabac.Enabled = false;
                         if (adaptiveDCT.Checked)
                             adaptiveDCT.Checked = false;
                         if (!x264MixedReferences.Checked)
@@ -594,7 +578,7 @@ namespace MeGUI.packages.video.x264
                             this.x264NumberOfBFrames.Value = 3;
                         if (!cabac.Checked)
                             cabac.Checked = true;
-                        cabac.Enabled = true;
+                        if (x264Tunes.SelectedIndex != 6) cabac.Enabled = true;
                         if (!x264DeblockActive.Checked)
                             x264DeblockActive.Checked = true;
                         if (!scenecut.Checked)
@@ -640,7 +624,7 @@ namespace MeGUI.packages.video.x264
                             this.x264NumberOfBFrames.Value = 3;
                         if (!cabac.Checked)
                             cabac.Checked = true;
-                        cabac.Enabled = true;
+                        if (x264Tunes.SelectedIndex != 6) cabac.Enabled = true;
                         if (!x264DeblockActive.Checked)
                              x264DeblockActive.Checked = true;
                         if (!scenecut.Checked)
@@ -686,7 +670,7 @@ namespace MeGUI.packages.video.x264
                             this.x264NumberOfBFrames.Value = 3;
                         if (!cabac.Checked)
                             cabac.Checked = true;
-                        cabac.Enabled = true;
+                        if (x264Tunes.SelectedIndex != 6) cabac.Enabled = true;
                         if (!x264DeblockActive.Checked)
                              x264DeblockActive.Checked = true;
                         if (!scenecut.Checked)
@@ -734,7 +718,7 @@ namespace MeGUI.packages.video.x264
                             this.x264NumberOfBFrames.Value = 3;
                         if (!cabac.Checked)
                             cabac.Checked = true;
-                        cabac.Enabled = true;
+                        if (x264Tunes.SelectedIndex != 6) cabac.Enabled = true;
                         if (!x264DeblockActive.Checked)
                              x264DeblockActive.Checked = true;
                         if (!scenecut.Checked)
@@ -782,7 +766,7 @@ namespace MeGUI.packages.video.x264
                             this.x264NumberOfBFrames.Value = 3;
                         if (!cabac.Checked)
                             cabac.Checked = true;
-                        cabac.Enabled = true;
+                        if (x264Tunes.SelectedIndex != 6) cabac.Enabled = true;
                         if (!x264DeblockActive.Checked)
                             x264DeblockActive.Checked = true;
                         if (!scenecut.Checked)
@@ -828,7 +812,7 @@ namespace MeGUI.packages.video.x264
                             this.x264NumberOfBFrames.Value = 3;
                         if (!cabac.Checked)
                             cabac.Checked = true;
-                        cabac.Enabled = true;
+                        if (x264Tunes.SelectedIndex != 6) cabac.Enabled = true;
                         if (!x264DeblockActive.Checked)
                              x264DeblockActive.Checked = true;
                         if (!scenecut.Checked)
@@ -874,7 +858,7 @@ namespace MeGUI.packages.video.x264
                             this.x264NumberOfBFrames.Value = 3;
                         if (!cabac.Checked)
                             cabac.Checked = true;
-                        cabac.Enabled = true;
+                        if (x264Tunes.SelectedIndex != 6) cabac.Enabled = true;
                         if (!x264DeblockActive.Checked)
                              x264DeblockActive.Checked = true;
                         if (!scenecut.Checked)
@@ -922,7 +906,7 @@ namespace MeGUI.packages.video.x264
                         mbtree.Enabled = true;
                         if (!cabac.Checked)
                             cabac.Checked = true;
-                        cabac.Enabled = true;
+                        if (x264Tunes.SelectedIndex != 6) cabac.Enabled = true;
                         if (!x264DeblockActive.Checked)
                              x264DeblockActive.Checked = true;
                         if (!scenecut.Checked)
@@ -970,7 +954,7 @@ namespace MeGUI.packages.video.x264
                         mbtree.Enabled = true;
                         if (!cabac.Checked)
                             cabac.Checked = true;
-                        cabac.Enabled = true;
+                        if (x264Tunes.SelectedIndex != 6) cabac.Enabled = true;
                         if (!x264DeblockActive.Checked)
                              x264DeblockActive.Checked = true;
                         if (!scenecut.Checked)
@@ -1719,10 +1703,15 @@ namespace MeGUI.packages.video.x264
                         x264NumberOfBFrames.Enabled = true;
                         x264NumberOfBFrames.Value = 3;
                         x264NumberOfBFramesLabel.Enabled = true;
+                        x264WeightedBPrediction.Checked = true;
                     }
                     cqmComboBox1.SelectedIndex = 0;
                     quantizerMatrixGroupbox.Enabled = false;
-                    cabac.Enabled = true;
+                    if (x264Tunes.SelectedIndex != 6)
+                    {
+                        cabac.Enabled = true;
+                        cabac.Checked = true;
+                    }
                     break;
                 case 2: // high profile, enable everything
                     if (!x264NumberOfBFrames.Enabled)
@@ -1730,6 +1719,7 @@ namespace MeGUI.packages.video.x264
                         x264NumberOfBFrames.Enabled = true;
                         x264NumberOfBFrames.Value = 3;
                         x264NumberOfBFramesLabel.Enabled = true;
+                        x264WeightedBPrediction.Checked = true;
                     }
                     if (!adaptiveDCT.Enabled)
                     {
@@ -1737,7 +1727,11 @@ namespace MeGUI.packages.video.x264
                         adaptiveDCT.Checked = true;
                     }
                     quantizerMatrixGroupbox.Enabled = true;
-                    cabac.Enabled = true;
+                    if (x264Tunes.SelectedIndex != 6)
+                    {
+                        cabac.Enabled = true;
+                        cabac.Checked = true;
+                    }
                     break;
             }
             #endregion
@@ -1806,9 +1800,14 @@ namespace MeGUI.packages.video.x264
             }
             else
             {
-                this.PsyTrellis.Value = 0;
                 this.PsyTrellis.Enabled = false;
                 this.PsyTrellisLabel.Enabled = false;
+                switch (x264Tunes.SelectedIndex)
+                {
+                    case 1: this.PsyTrellis.Value = 0.15M; break;
+                    case 3: this.PsyTrellis.Value = 0.25M; break;
+                    default: this.PsyTrellis.Value = 0; break;
+                }
             }
             #endregion
         }

@@ -1746,8 +1746,7 @@ namespace MeGUI.packages.video.x264
             "Grain",
             "PSNR",
             "SSIM",
-            "Fast Decode",
-            "Touhou"});
+            "Fast Decode"});
             this.x264Tunes.Location = new System.Drawing.Point(10, 16);
             this.x264Tunes.Name = "x264Tunes";
             this.x264Tunes.Size = new System.Drawing.Size(157, 21);

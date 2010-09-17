@@ -68,13 +68,14 @@ namespace MeGUI.core.gui
     /// its local list and then close, without requesting any more jobs from
     /// the JobControl.
     /// 
-    /// A Worker must always be in one of four states: Idle, Running, Stopping, Stopped.
+    /// A Worker must always be in one of five states: Idle, Running, Stopping, Stopped, Postponed.
     /// Idle means that no jobs are currently being processed. Running means
     /// that a job is being processed, and further jobs will continue to be
     /// processed until either there are no more jobs or the worker is closed.
     /// Stopping means that a job is currently being processed, but after this
     /// job is completed, no further jobs will be started. Stopped means that no new
-    /// will be proccessed automatically.
+    /// will be processed automatically. Postponed means that because of another running
+    /// job in another worker this worker is stopped temporarily.
     /// 
     /// 
     /// 
@@ -148,6 +149,8 @@ namespace MeGUI.core.gui
                     return "idle";
                 if (status == JobWorkerStatus.Stopped)
                     return "stopped";
+                if (status == JobWorkerStatus.Postponed)
+                    return "postponed (another worker is processing an audio job)";
                 string _status = "running"; 
                 if (currentJob != null)
                     _status += string.Format(" {0} ({1:P2})", currentJob.Name, progress/100M);
@@ -330,6 +333,11 @@ namespace MeGUI.core.gui
                     jobQueue1.PauseResumeMode = PauseResumeMode.Disabled;
                     break;
 
+                case JobWorkerStatus.Postponed:
+                    jobQueue1.StartStopMode = StartStopMode.Start;
+                    jobQueue1.PauseResumeMode = PauseResumeMode.Disabled;
+                    break;
+
                 case JobWorkerStatus.Stopped:
                     jobQueue1.StartStopMode = StartStopMode.Start;
                     jobQueue1.PauseResumeMode = PauseResumeMode.Disabled;
@@ -489,12 +497,14 @@ namespace MeGUI.core.gui
 
                             case JobStartInfo.COULDNT_START:
                                 MeGUI.core.util.WindowUtil.AllowSystemPowerdown();
-                                status = JobWorkerStatus.Idle;
+                                if (status != JobWorkerStatus.Postponed) 
+                                    status = JobWorkerStatus.Idle;
                                 break;
 
                             case JobStartInfo.NO_JOBS_WAITING:
                                 MeGUI.core.util.WindowUtil.AllowSystemPowerdown();
-                                status = JobWorkerStatus.Idle;
+                                if (status != JobWorkerStatus.Postponed)
+                                    status = JobWorkerStatus.Idle;
                                 new Thread(delegate ()
                                 {
                                     WorkerFinishedJobs(this, EventArgs.Empty);
@@ -506,7 +516,7 @@ namespace MeGUI.core.gui
                     refreshAll();
 
                     if (bIsAudioJob)
-                        Util.ThreadSafeRun(mainForm.Jobs, delegate { mainForm.Jobs.StartIdleWorkers(); });
+                        Util.ThreadSafeRun(mainForm.Jobs, delegate { mainForm.Jobs.StartPostponedWorkers(); });
                 }));
                 t.IsBackground = true;
                 t.Start();
@@ -629,7 +639,7 @@ namespace MeGUI.core.gui
             }
             catch (JobStartException e)
             {
-                mainForm.Log.LogValue("Error starting job", e);
+                log.LogValue("Error starting job", e);
                 if (e.type == ExceptionType.Error)
                     job.Status = JobStatus.ERROR;
                 else // ExceptionType.UserSkip
@@ -648,8 +658,7 @@ namespace MeGUI.core.gui
         {
             foreach (TaggedJob j in jobQueue1.JobList)
                 if (j.Status == JobStatus.WAITING && mainForm.Jobs.areDependenciesMet(j))
-                    if (!mainForm.Jobs.IsAnyWorkerEncodingAudio || !j.Job.EncodingMode.Equals("audio"))
-                        return j;
+                    return j;
             if (mode == JobWorkerMode.RequestNewJobs)
                 return mainForm.Jobs.getJobToProcess();
             else
@@ -671,6 +680,14 @@ namespace MeGUI.core.gui
 
             while (job != null)
             {
+                if (job.Job.EncodingMode.Equals("audio") && mainForm.Jobs.IsAnyWorkerEncodingAudio)
+                {
+                    // another audio encoding is already in process. postpone the worker
+                    status = JobWorkerStatus.Postponed;
+                    mainForm.Jobs.ResourceLock.Release();
+                    return JobStartInfo.NO_JOBS_WAITING;
+                }
+
                 if (startEncoding(job)) // successful
                 {
                     mainForm.Jobs.ResourceLock.Release();
@@ -836,7 +853,7 @@ namespace MeGUI.core.gui
                 SetRunning();
             else
             {
-                Debug.Assert(Status == JobWorkerStatus.Idle);
+                Debug.Assert(Status == JobWorkerStatus.Idle || Status == JobWorkerStatus.Postponed);
                 StartEncoding(true);
             }
         }
@@ -896,7 +913,7 @@ namespace MeGUI.core.gui
 
     public enum PauseState { NotEncoding, Encoding, Paused }
     public enum JobWorkerMode { RequestNewJobs, CloseOnLocalListCompleted }
-    public enum JobWorkerStatus { Idle, Running, Stopping, Stopped }
+    public enum JobWorkerStatus { Idle, Running, Stopping, Stopped, Postponed }
     public enum JobsOnQueue { Delete, ReturnToMainQueue }
     public enum IdleReason { FinishedQueue, Stopped, Aborted }
     

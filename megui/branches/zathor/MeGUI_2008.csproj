@@ -242,7 +242,6 @@
       <DependentUpon>JobControl.cs</DependentUpon>
     </Compile>
     <Compile Include="core\details\MediaFileFactory.cs" />
-    <Compile Include="core\details\MeGUIInfo.cs" />
     <Compile Include="core\details\MeGUISettings.cs" />
     <Compile Include="core\details\mux\baseMuxWindow.cs">
       <SubType>Form</SubType>

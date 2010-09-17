@@ -135,7 +135,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                     case 4: sb.Append("--tune psnr "); break;
                     case 5: sb.Append("--tune ssim "); break;
                     case 6: sb.Append("--tune fastdecode "); break;
-                    case 7: sb.Append("--tune touhou "); break;
                     default: break; // default
                 }
             }
@@ -204,11 +203,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             if (xs.Deblock)
             {
                 display = false;
-
                 switch (xs.x264Tuning)
                 {
-                    case 1:
-                    case 7: if (xs.AlphaDeblock != -1 || xs.BetaDeblock != -1) display = true; break;
+                    case 1: if (xs.AlphaDeblock != -1 || xs.BetaDeblock != -1) display = true; break;
                     case 2: if (xs.AlphaDeblock != 1 || xs.BetaDeblock != 1) display = true; break;
                     case 3: if (xs.AlphaDeblock != -2 || xs.BetaDeblock != -2) display = true; break;
                     default: if (xs.AlphaDeblock != 0 || xs.BetaDeblock != 0) display = true; break;
@@ -221,7 +218,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             else
             {
                 if (!xs.CustomEncoderOptions.Contains("--no-deblock"))
-                    if (xs.x264PresetLevel != x264Settings.x264PresetLevelModes.ultrafast || (xs.x264Tuning != 0 && xs.x264Tuning != 6)) 
+                    if (xs.x264PresetLevel != x264Settings.x264PresetLevelModes.ultrafast && xs.x264Tuning != 6) 
                         sb.Append("--no-deblock ");
             }
 
@@ -229,7 +226,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             {
                 if (!xs.Cabac)
                 {
-                    if (xs.Profile > 0 && (xs.x264PresetLevel != x264Settings.x264PresetLevelModes.ultrafast || (xs.x264Tuning != 0 && xs.x264Tuning != 6)))
+                    if (xs.Profile > 0 && (xs.x264PresetLevel != x264Settings.x264PresetLevelModes.ultrafast && xs.x264Tuning != 6))
                         sb.Append("--no-cabac ");
                 }
             }
@@ -349,7 +346,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                     case x264Settings.x264PresetLevelModes.veryslow:
                     case x264Settings.x264PresetLevelModes.placebo:     iDefaultSettings = 16; break;
                 }
-                if ((xs.x264Tuning == 2 || xs.x264Tuning == 7) && iDefaultSettings > 1)
+                if (xs.x264Tuning == 2 && iDefaultSettings > 1)
                     iDefaultSettings = iDefaultSettings * 2;
 
                 if (iDefaultSettings != xs.NbRefFrames)
@@ -369,10 +366,10 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                     default: if (xs.WeightedPPrediction != 2) display = true; break;
                 }
                 if (xs.x264Tuning == 6 && xs.WeightedPPrediction != 0)
-                    display = true;
+                    sb.Append("--weightp " + xs.WeightedPPrediction + " ");
                 if (xs.Profile == 0)
                     display = false;
-                if (display)
+                if (display && xs.x264Tuning != 6)
                     sb.Append("--weightp " + xs.WeightedPPrediction + " ");
             }
 
@@ -482,7 +479,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             if (!xs.CustomEncoderOptions.Contains("--deadzone-inter "))
             {
                 display = true;
-                if ((xs.x264Tuning != 3 && xs.DeadZoneInter == 21) || (xs.x264Tuning == 3 && xs.DeadZoneInter == 6))
+                if ((xs.x264Tuning != 3 && xs.DeadZoneInter == 21 && xs.DeadZoneIntra == 11) || (xs.x264Tuning == 3 && xs.DeadZoneInter == 6 && xs.DeadZoneIntra == 6))
                     display = false;
                 if (display)
                     sb.Append("--deadzone-inter " + xs.DeadZoneInter + " ");
@@ -762,10 +759,30 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                     display = false;
                     switch (xs.x264Tuning)
                     {
-                        case 1: if ((xs.PsyRDO != 1.0M) && (xs.PsyTrellis != 0.15M)) display = true; break;
-                        case 2: if ((xs.PsyRDO != 0.4M) && (xs.PsyTrellis != 0.0M)) display = true; break;
-                        case 3: if ((xs.PsyRDO != 1.0M) && (xs.PsyTrellis != 0.25M)) display = true; break;
-                        case 7: if ((xs.PsyRDO != 1.0M) && (xs.PsyTrellis != 0.2M)) display = true; break;
+                        case 1:
+                            {
+                                if ((xs.PsyRDO != 1.0M) && (xs.PsyTrellis != 0.15M)) display = true;
+                                else if (xs.PsyRDO != 1.0M) sb.Append("--psy-rd " + xs.PsyRDO.ToString(ci) + ":" + 0.15M + " ");
+                                else if (xs.PsyTrellis != 0.15M) sb.Append("--psy-rd " + 1.0M + ":" + xs.PsyTrellis.ToString(ci) + " ");
+                            }  break;
+                        case 2:
+                            {
+                                if ((xs.PsyRDO != 0.4M) && (xs.PsyTrellis != 0.0M)) display = true;
+                                else if (xs.PsyRDO != 0.4M) sb.Append("--psy-rd " + xs.PsyRDO.ToString(ci) + ":" + 0.0M + " ");
+                                else if (xs.PsyTrellis != 0.0M) sb.Append("--psy-rd " + 0.4M + ":" + xs.PsyTrellis.ToString(ci) + " ");
+                            } break;
+                        case 3:
+                            {
+                                if ((xs.PsyRDO != 1.0M) && (xs.PsyTrellis != 0.25M)) display = true;
+                                else if (xs.PsyRDO != 1.0M) sb.Append("--psy-rd " + xs.PsyRDO.ToString(ci) + ":" + 0.25M + " ");
+                                else if (xs.PsyTrellis != 0.25M) sb.Append("--psy-rd " + 1.0M + ":" + xs.PsyTrellis.ToString(ci) + " ");
+                            } break;
+                        case 7:
+                            {
+                                if ((xs.PsyRDO != 1.0M) && (xs.PsyTrellis != 0.2M)) display = true;
+                                else if (xs.PsyRDO != 1.0M) sb.Append("--psy-rd " + xs.PsyRDO.ToString(ci) + ":" + 0.2M + " ");
+                                else if (xs.PsyTrellis != 0.2M) sb.Append("--psy-rd " + 1.0M + ":" + xs.PsyTrellis.ToString(ci) + " ");
+                            } break;
                         default: if ((xs.PsyRDO != 1.0M) || (xs.PsyTrellis != 0.0M)) display = true; break;
                     }
 

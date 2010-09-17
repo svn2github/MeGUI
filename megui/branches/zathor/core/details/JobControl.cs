@@ -340,10 +340,10 @@ namespace MeGUI.core.details
             summary.RefreshInfo();
         }
 
-        public void StartIdleWorkers()
+        public void StartPostponedWorkers()
         {
             foreach (JobWorker w in workers.Values)
-                if (w.Status == JobWorkerStatus.Idle)
+                if (w.Status == JobWorkerStatus.Postponed)
                     w.StartEncoding(false);
         }
 
@@ -657,8 +657,8 @@ namespace MeGUI.core.details
                 {
                     if (job.Status == JobStatus.WAITING &&
                         job.OwningWorker == null &&
-                        areDependenciesMet(job) &&
-                        (!IsAnyWorkerEncodingAudio || !job.Job.EncodingMode.Equals("audio")))
+                        areDependenciesMet(job))
+                        //(!IsAnyWorkerEncodingAudio || !job.Job.EncodingMode.Equals("audio")))
                         return job;
                 }
                 return null;
@@ -769,6 +769,8 @@ namespace MeGUI.core.details
 
         void WorkerFinishedJobs(object sender, EventArgs e)
         {
+            mainForm.Jobs.StartPostponedWorkers();
+
             foreach (JobWorker w in workers.Values)
                 if (w.IsEncoding)
                     return;
