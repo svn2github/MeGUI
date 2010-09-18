@@ -1,7 +1,7 @@
 0.3.5.13
   - (sharktooth) [x264Encoder] Removed unnecessary/wrong code
   - (sharktooth) [x264] Fixed commandline generation when switching between AVC profiles
-  - (sharktooth) [x264] Removed touhout tuning option
+  - (sharktooth) [x264] Removed touhou tuning option
   - (sharktooth) [x264] Fix commandline generation with tunings
   - (sharktooth) [x264] Fixed Psy-RD settings commandline generation with certain tunings
   - (sharktooth) [VideoPlayer] added a check to stop the player before reloading the video
