@@ -32,6 +32,7 @@ namespace MeGUI.core.gui
         public FileSCBox() : base("Clear user-selected files...", "Select file...")
         {
             base.Getter = new Getter<object>(getter);
+            base.bSaveEveryItem = true;
         }
 
         OpenFileDialog ofd = new OpenFileDialog();
