@@ -1,3 +1,7 @@
+0.3.5.14
+- (zathor) fixed AR chooser displaying always 16:9 PAL 
+           e.g. in VideoPlayer or AVS Script Creator
+
 0.3.5.13
   - (sharktooth) [x264Encoder] Removed unnecessary/wrong code
   - (sharktooth) [x264] Fixed commandline generation when switching between AVC profiles

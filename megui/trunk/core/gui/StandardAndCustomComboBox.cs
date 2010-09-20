@@ -220,11 +220,12 @@ namespace MeGUI.core.gui
         {
             get
             {
-                if (SelectedItem == null) SelectedIndex = 0;
                 if (oTemporaryItem.Tag != null && SelectedItem == null)
                     return oTemporaryItem;
-                else
-                    return (SCItem)SelectedItem.Tag;
+
+                if (SelectedItem == null) 
+                    SelectedIndex = 0;
+                return (SCItem)SelectedItem.Tag;
             }
         }
 
