@@ -1,7 +1,9 @@
+0.3.5.15
+  - (zathor) fixed status overlay icon not showing up
+
 0.3.5.14
-- (zathor) fixed AR chooser displaying always 16:9 PAL 
-           e.g. in VideoPlayer or AVS Script Creator
-- (zathor) fixed saving of custom quantizer matrices in x264/xvid profiles. Bug #3070834
+  - (zathor) fixed AR chooser displaying always 16:9 PAL e.g. in VideoPlayer or AVS Script Creator
+  - (zathor) fixed saving of custom quantizer matrices in x264/xvid profiles. Bug #3070834
 
 0.3.5.13
   - (sharktooth) [x264Encoder] Removed unnecessary/wrong code

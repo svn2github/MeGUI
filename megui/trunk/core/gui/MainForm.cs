@@ -2130,7 +2130,7 @@ namespace MeGUI
             if (oIcon == System.Drawing.SystemIcons.Warning && taskbarIcon == System.Drawing.SystemIcons.Error)
                 return;
 
-            taskbarItem.SetOverlayIcon(this.Handle, oIcon.Handle, null);
+            Util.ThreadSafeRun(this, delegate { taskbarItem.SetOverlayIcon(this.Handle, oIcon.Handle, null); });
             taskbarIcon = oIcon;
         }
 
