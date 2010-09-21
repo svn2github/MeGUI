@@ -1,5 +1,6 @@
 0.3.5.15
   - (zathor) fixed status overlay icon not showing up
+  - (zathor) [VideoPlayer] fixed playing last frame
 
 0.3.5.14
   - (zathor) fixed AR chooser displaying always 16:9 PAL e.g. in VideoPlayer or AVS Script Creator
