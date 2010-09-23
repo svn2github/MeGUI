@@ -1707,7 +1707,7 @@ namespace MeGUI.packages.video.x264
                     }
                     cqmComboBox1.SelectedIndex = 0;
                     quantizerMatrixGroupbox.Enabled = false;
-                    if (x264Tunes.SelectedIndex != 6)
+                    if (x264Tunes.SelectedIndex != 6 && !cabac.Enabled)
                     {
                         cabac.Enabled = true;
                         cabac.Checked = true;
@@ -1727,7 +1727,7 @@ namespace MeGUI.packages.video.x264
                         adaptiveDCT.Checked = true;
                     }
                     quantizerMatrixGroupbox.Enabled = true;
-                    if (x264Tunes.SelectedIndex != 6)
+                    if (x264Tunes.SelectedIndex != 6 && !cabac.Enabled)
                     {
                         cabac.Enabled = true;
                         cabac.Checked = true;
