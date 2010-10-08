@@ -2,7 +2,8 @@
   - (kurtnoise) add FLAC files support in the Matroska Muxer
   - (sharktooth) [x264] fixed unselectable CABAC option in Main and High profiles
   - (sharktooth) added new application and uninstaller icons
-  - (zathor) [MP4Muxer] fixed temp directory handling
+  - (zathor) [MP4 Muxer] fixed temp directory handling
+  - (zathor) [MKV Muxer] enhanced error handling
 
 0.3.5.15
   - (zathor) fixed status overlay icon not showing up

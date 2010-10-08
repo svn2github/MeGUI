@@ -71,7 +71,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
 
         protected override bool checkExitCode
         {
-            get { return false; }
+            get { return true; }
         }
 
         public override void ProcessLine(string line, StreamType stream)

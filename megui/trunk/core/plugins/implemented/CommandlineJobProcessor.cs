@@ -116,8 +116,14 @@ namespace MeGUI
             mre.Set();  // Make sure nothing is waiting for pause to stop
             stdoutDone.WaitOne(); // wait for stdout to finish processing
             stderrDone.WaitOne(); // wait for stderr to finish processing
-            if (checkExitCode && proc.ExitCode != 0) // check the exitcode because x264.exe sometimes exits with error but without
-                su.HasError = true; // any commandline indication as to why
+
+            // check the exitcode because x264.exe sometimes exits with error but without
+            // any commandline indication as to why
+            if (checkExitCode && proc.ExitCode != 0) 
+            {
+                su.HasError = true;
+                log.Error("Process exits with error code: " + proc.ExitCode);
+            }
 
             log.LogValue("Standard output stream", stdoutBuilder);
             log.LogValue("Standard error stream", stderrBuilder);
