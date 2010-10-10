@@ -121,8 +121,15 @@ namespace MeGUI
             // any commandline indication as to why
             if (checkExitCode && proc.ExitCode != 0) 
             {
-                su.HasError = true;
-                log.Error("Process exits with error code: " + proc.ExitCode);
+                if (!su.WasAborted)
+                {
+                    su.HasError = true;
+                    log.LogEvent("Process exits with error code: " + proc.ExitCode, ImageType.Error);
+                }
+                else
+                {
+                    log.LogEvent("Process exits with error code: " + proc.ExitCode);
+                }
             }
 
             log.LogValue("Standard output stream", stdoutBuilder);
