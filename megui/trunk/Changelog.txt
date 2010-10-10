@@ -4,6 +4,7 @@
   - (sharktooth) added new application and uninstaller icons
   - (zathor) [MP4 Muxer] fixed temp directory handling
   - (zathor) [MKV Muxer] enhanced error handling
+  - (zathor) [Log] added a context menu item to remove the overlay icon in case of an error
 
 0.3.5.15
   - (zathor) fixed status overlay icon not showing up

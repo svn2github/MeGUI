@@ -45,6 +45,7 @@ namespace MeGUI.core.gui
             this.collapseLog = new System.Windows.Forms.ToolStripMenuItem();
             this.collapseBranch = new System.Windows.Forms.ToolStripMenuItem();
             this.saveDialog = new System.Windows.Forms.SaveFileDialog();
+            this.resetOverlayIcon = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -63,9 +64,11 @@ namespace MeGUI.core.gui
             this.editTextToolStripMenuItem,
             this.saveToolStripMenuItem,
             this.expandAllSubitemsToolStripMenuItem,
-            this.collapseAllSubitemsToolStripMenuItem});
+            this.collapseAllSubitemsToolStripMenuItem,
+            this.resetOverlayIcon});
             this.contextMenu.Name = "contextMenuStrip1";
-            this.contextMenu.Size = new System.Drawing.Size(186, 92);
+            this.contextMenu.Size = new System.Drawing.Size(200, 136);
+            this.contextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenu_Opening);
             // 
             // editTextToolStripMenuItem
             // 
@@ -173,6 +176,14 @@ namespace MeGUI.core.gui
             this.saveDialog.FilterIndex = 0;
             this.saveDialog.Title = "Select output file";
             // 
+            // resetOverlayIcon
+            // 
+            this.resetOverlayIcon.Name = "resetOverlayIcon";
+            this.resetOverlayIcon.Size = new System.Drawing.Size(199, 22);
+            this.resetOverlayIcon.Text = "Reset Overlay Error Icon";
+            this.resetOverlayIcon.ToolTipText = "Removes the applied error or warning icon from the taskbar";
+            this.resetOverlayIcon.Click += new System.EventHandler(this.resetOverlayIcon_Click);
+            // 
             // LogTree
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -204,5 +215,6 @@ namespace MeGUI.core.gui
         private System.Windows.Forms.ToolStripMenuItem collapseAllSubitemsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem collapseLog;
         private System.Windows.Forms.ToolStripMenuItem collapseBranch;
+        private System.Windows.Forms.ToolStripMenuItem resetOverlayIcon;
     }
 }

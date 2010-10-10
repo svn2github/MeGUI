@@ -131,6 +131,7 @@ namespace MeGUI
         private Icon taskbarIcon;
 
         public bool IsHiddenMode { get { return trayIcon.Visible; } }
+        public bool IsOverlayIconActive { get { return taskbarIcon != null; } }
 
         public void RegisterForm(Form f)
         {
@@ -2123,6 +2124,14 @@ namespace MeGUI
             if ((Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor == 0)
                 || Environment.OSVersion.Version.Major < 6)
                 return;
+
+            if (oIcon == null)
+            {
+                // remove the overlay icon
+                Util.ThreadSafeRun(this, delegate { taskbarItem.SetOverlayIcon(this.Handle, IntPtr.Zero, null); });
+                taskbarIcon = null;
+                return;
+            }
 
             if (taskbarIcon != null && oIcon.Handle == taskbarIcon.Handle)
                 return;
