@@ -503,7 +503,7 @@ namespace MeGUI
 		/// <param name="projectName">the name of the dgindex project</param>
 		/// <param name="cutoff">maximum number of results to be returned</param>
 		/// <returns>an array of string of filenames</returns>
-        public Dictionary<int, string> getAllDemuxedAudio(List<AudioTrackInfo> audioTracks, out List<string> arrDeleteFiles, string projectName, int cutoff)
+        public Dictionary<int, string> getAllDemuxedAudio(List<AudioTrackInfo> audioTracks, out List<string> arrDeleteFiles, string projectName, LogItem log)
         {
 		    Dictionary<int, string> audioFiles = new Dictionary<int, string>();
             arrDeleteFiles = new List<string>();
@@ -515,14 +515,21 @@ namespace MeGUI
 
             if (audioTracks[0].ContainerType.ToLower().Equals("matroska"))
                 strTrackName = " [";
+            else if (audioTracks[0].ContainerType == "MPEG-TS" || audioTracks[0].ContainerType == "BDAV")
+                strTrackName = " PID ";
             else
-                strTrackName = audioTracks[0].ContainerType == "MPEG-TS" ? " PID " : " T";
+                strTrackName = " T";
+
             for (int counter = 0; counter < audioTracks.Count; counter++)
             {
-                string trackNumber;
-                trackNumber = strTrackName + audioTracks[counter].TrackIDx + "*";
-                files = Directory.GetFiles(Path.GetDirectoryName(projectName),
-				        Path.GetFileNameWithoutExtension(projectName) + trackNumber);
+                bool bFound = false;
+                string trackFile = strTrackName + audioTracks[counter].TrackIDx + "*";
+                if (Path.GetExtension(projectName).ToLower().Equals(".dga"))
+                    trackFile = Path.GetFileName(projectName) + trackFile;
+                else
+                    trackFile = Path.GetFileNameWithoutExtension(projectName) + trackFile;
+                    
+                files = Directory.GetFiles(Path.GetDirectoryName(projectName), trackFile);
                 foreach (string file in files)
                 {
                     if ( file.EndsWith(".ac3") ||
@@ -534,11 +541,14 @@ namespace MeGUI
                          file.EndsWith(".wav") ||
                          file.EndsWith(".aac")) // It is the right track
 					{
+                        bFound = true;
                         if (!audioFiles.ContainsValue(file))
                             audioFiles.Add(audioTracks[counter].TrackID, file);
                         break;
 					}
 				}
+                if (!bFound && log != null)
+                    log.LogEvent("File not found: " + Path.Combine(Path.GetDirectoryName(projectName), trackFile), ImageType.Error);
 			}
 
             // Find files which can be deleted

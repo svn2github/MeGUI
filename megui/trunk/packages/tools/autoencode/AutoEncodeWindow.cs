@@ -533,7 +533,7 @@ namespace MeGUI
 		/// <param name="muxable">muxable Audio Streams with the path filled out and a blank language</param>
         private void separateEncodableAndMuxableAudioStreams(out AudioJob[] encodable, out MuxStream[] muxable, out AudioEncoderType[] muxTypes)
 		{
-			encodable = this.getConfiguredAudioJobs(); // discards improperly configured ones
+			encodable = AudioUtil.getConfiguredAudioJobs(audioStreams.ToArray()); // discards improperly configured ones
 			// the rest of the job is all encodeable
 			muxable = new MuxStream[encodable.Length];
             muxTypes = new AudioEncoderType[encodable.Length];
@@ -627,26 +627,6 @@ namespace MeGUI
             }
         }
 		#endregion
-
-		/// <summary>
-		/// returns all audio streams that can be encoded or muxed
-		/// </summary>
-		/// <returns></returns>
-        private AudioJob[] getConfiguredAudioJobs()
-		{
-            List<AudioJob> list = new List<AudioJob>();
-            foreach (AudioJob stream in audioStreams)
-			{
-                if (String.IsNullOrEmpty(stream.Input))
-                {
-                    // no audio is ok, just skip
-                    break;
-                }
-                list.Add(stream);
-
-			}
-            return list.ToArray();
-		}
 		#endregion
 		#region button events
 		/// <summary>

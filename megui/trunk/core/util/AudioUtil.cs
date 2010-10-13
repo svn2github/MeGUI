@@ -128,6 +128,26 @@ namespace MeGUI
             }
             return flag;
         }
+
+        /// <summary>
+        /// returns all audio streams that can be encoded or muxed
+        /// </summary>
+        /// <returns></returns>
+        public static AudioJob[] getConfiguredAudioJobs(AudioJob[] audioStreams)
+        {
+            List<AudioJob> list = new List<AudioJob>();
+            foreach (AudioJob stream in audioStreams)
+            {
+                if (String.IsNullOrEmpty(stream.Input))
+                {
+                    // no audio is ok, just skip
+                    break;
+                }
+                list.Add(stream);
+
+            }
+            return list.ToArray();
+        }
     }
 
     public class AudioTrackInfo
