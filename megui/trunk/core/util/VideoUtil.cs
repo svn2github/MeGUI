@@ -552,8 +552,12 @@ namespace MeGUI
 			}
 
             // Find files which can be deleted
-            files = Directory.GetFiles(Path.GetDirectoryName(projectName),
-                        Path.GetFileNameWithoutExtension(projectName) + strTrackName + "*");
+            if (Path.GetExtension(projectName).ToLower().Equals(".dga"))
+                strTrackName = Path.GetFileName(projectName) + strTrackName;
+            else
+                strTrackName = Path.GetFileNameWithoutExtension(projectName) + strTrackName;
+
+            files = Directory.GetFiles(Path.GetDirectoryName(projectName), strTrackName + "*");
             foreach (string file in files)
             {
                 if (file.EndsWith(".ac3") ||
