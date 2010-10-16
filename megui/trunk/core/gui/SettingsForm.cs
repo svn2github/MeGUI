@@ -128,6 +128,7 @@ namespace MeGUI
         private RadioButton rbCloseMeGUI;
         private CheckBox cbAutoStartQueueStartup;
         private ComboBox cbAutoUpdateServerSubList;
+        private CheckBox chkAlwaysMux;
 
 		/// <summary>
 		/// Required designer variable.
@@ -215,6 +216,7 @@ namespace MeGUI
             this.cbAddTimePos = new System.Windows.Forms.CheckBox();
             this.chAlwaysOnTop = new System.Windows.Forms.CheckBox();
             this.autoUpdateGroupBox = new System.Windows.Forms.GroupBox();
+            this.cbAutoUpdateServerSubList = new System.Windows.Forms.ComboBox();
             this.backupfiles = new System.Windows.Forms.CheckBox();
             this.configureServersButton = new System.Windows.Forms.Button();
             this.useAutoUpdateCheckbox = new System.Windows.Forms.CheckBox();
@@ -254,10 +256,10 @@ namespace MeGUI
             this.audioExtLabel = new System.Windows.Forms.Label();
             this.videoExtLabel = new System.Windows.Forms.Label();
             this.autoEncodeDefaultsButton = new System.Windows.Forms.Button();
-            this.cbAutoUpdateServerSubList = new System.Windows.Forms.ComboBox();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.defaultOutputDir = new MeGUI.FileBar();
             this.tempDirMP4 = new MeGUI.FileBar();
+            this.chkAlwaysMux = new System.Windows.Forms.CheckBox();
             groupBox1 = new System.Windows.Forms.GroupBox();
             groupBox1.SuspendLayout();
             this.otherGroupBox.SuspendLayout();
@@ -680,9 +682,9 @@ namespace MeGUI
             this.groupBox2.Controls.Add(this.label19);
             this.groupBox2.Controls.Add(this.label18);
             this.groupBox2.Controls.Add(this.cbx_usehttpproxy);
-            this.groupBox2.Location = new System.Drawing.Point(227, 230);
+            this.groupBox2.Location = new System.Drawing.Point(227, 234);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(240, 148);
+            this.groupBox2.Size = new System.Drawing.Size(240, 144);
             this.groupBox2.TabIndex = 5;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Auto Update Http Proxy:";
@@ -804,12 +806,25 @@ namespace MeGUI
             this.autoUpdateGroupBox.Controls.Add(this.backupfiles);
             this.autoUpdateGroupBox.Controls.Add(this.configureServersButton);
             this.autoUpdateGroupBox.Controls.Add(this.useAutoUpdateCheckbox);
-            this.autoUpdateGroupBox.Location = new System.Drawing.Point(227, 82);
+            this.autoUpdateGroupBox.Location = new System.Drawing.Point(227, 104);
             this.autoUpdateGroupBox.Name = "autoUpdateGroupBox";
-            this.autoUpdateGroupBox.Size = new System.Drawing.Size(240, 142);
+            this.autoUpdateGroupBox.Size = new System.Drawing.Size(240, 124);
             this.autoUpdateGroupBox.TabIndex = 3;
             this.autoUpdateGroupBox.TabStop = false;
             this.autoUpdateGroupBox.Text = "Auto Update";
+            // 
+            // cbAutoUpdateServerSubList
+            // 
+            this.cbAutoUpdateServerSubList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbAutoUpdateServerSubList.FormattingEnabled = true;
+            this.cbAutoUpdateServerSubList.Items.AddRange(new object[] {
+            "Use stable update server",
+            "Use development update server",
+            "Use custom update server"});
+            this.cbAutoUpdateServerSubList.Location = new System.Drawing.Point(9, 47);
+            this.cbAutoUpdateServerSubList.Name = "cbAutoUpdateServerSubList";
+            this.cbAutoUpdateServerSubList.Size = new System.Drawing.Size(176, 21);
+            this.cbAutoUpdateServerSubList.TabIndex = 5;
             // 
             // backupfiles
             // 
@@ -852,9 +867,9 @@ namespace MeGUI
             this.outputExtensions.Controls.Add(this.label11);
             this.outputExtensions.Controls.Add(this.label12);
             this.outputExtensions.Controls.Add(this.audioExtension);
-            this.outputExtensions.Location = new System.Drawing.Point(3, 82);
+            this.outputExtensions.Location = new System.Drawing.Point(3, 104);
             this.outputExtensions.Name = "outputExtensions";
-            this.outputExtensions.Size = new System.Drawing.Size(218, 99);
+            this.outputExtensions.Size = new System.Drawing.Size(218, 77);
             this.outputExtensions.TabIndex = 1;
             this.outputExtensions.TabStop = false;
             this.outputExtensions.Text = "Optional output extensions";
@@ -893,6 +908,7 @@ namespace MeGUI
             // 
             // autoModeGroupbox
             // 
+            this.autoModeGroupbox.Controls.Add(this.chkAlwaysMux);
             this.autoModeGroupbox.Controls.Add(this.configAutoEncodeDefaults);
             this.autoModeGroupbox.Controls.Add(this.keep2ndPassLogFile);
             this.autoModeGroupbox.Controls.Add(this.keep2ndPassOutput);
@@ -900,7 +916,7 @@ namespace MeGUI
             this.autoModeGroupbox.Controls.Add(this.nbPasses);
             this.autoModeGroupbox.Location = new System.Drawing.Point(4, 3);
             this.autoModeGroupbox.Name = "autoModeGroupbox";
-            this.autoModeGroupbox.Size = new System.Drawing.Size(463, 73);
+            this.autoModeGroupbox.Size = new System.Drawing.Size(463, 95);
             this.autoModeGroupbox.TabIndex = 0;
             this.autoModeGroupbox.TabStop = false;
             this.autoModeGroupbox.Text = "Automated Encoding";
@@ -1220,19 +1236,6 @@ namespace MeGUI
             this.autoEncodeDefaultsButton.Text = "Configure Defaults";
             this.autoEncodeDefaultsButton.UseVisualStyleBackColor = true;
             // 
-            // cbAutoUpdateServerSubList
-            // 
-            this.cbAutoUpdateServerSubList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbAutoUpdateServerSubList.FormattingEnabled = true;
-            this.cbAutoUpdateServerSubList.Items.AddRange(new object[] {
-            "Use stable update server",
-            "Use development update server",
-            "Use custom update server"});
-            this.cbAutoUpdateServerSubList.Location = new System.Drawing.Point(9, 47);
-            this.cbAutoUpdateServerSubList.Name = "cbAutoUpdateServerSubList";
-            this.cbAutoUpdateServerSubList.Size = new System.Drawing.Size(176, 21);
-            this.cbAutoUpdateServerSubList.TabIndex = 5;
-            // 
             // helpButton1
             // 
             this.helpButton1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -1275,6 +1278,18 @@ namespace MeGUI
             this.tempDirMP4.Size = new System.Drawing.Size(424, 26);
             this.tempDirMP4.TabIndex = 41;
             this.tempDirMP4.Title = null;
+            // 
+            // chkAlwaysMux
+            // 
+            this.chkAlwaysMux.AutoSize = true;
+            this.chkAlwaysMux.Checked = true;
+            this.chkAlwaysMux.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkAlwaysMux.Location = new System.Drawing.Point(232, 70);
+            this.chkAlwaysMux.Name = "chkAlwaysMux";
+            this.chkAlwaysMux.Size = new System.Drawing.Size(158, 17);
+            this.chkAlwaysMux.TabIndex = 21;
+            this.chkAlwaysMux.Text = "Always mux video encoding";
+            this.chkAlwaysMux.UseVisualStyleBackColor = true;
             // 
             // SettingsForm
             // 
@@ -1443,6 +1458,7 @@ namespace MeGUI
 				settings.DefaultPriority = (ProcessPriority)priority.SelectedIndex;
 				settings.AutoStartQueue = this.autostartQueue.Checked;
                 settings.AutoStartQueueStartup = this.cbAutoStartQueueStartup.Checked;
+                settings.AlwaysMux = this.chkAlwaysMux.Checked;
                 if (donothing.Checked)
                     settings.AfterEncoding = AfterEncoding.DoNothing;
                 else if (shutdown.Checked)
@@ -1504,6 +1520,7 @@ namespace MeGUI
 				priority.SelectedIndex = (int)settings.DefaultPriority;
 				autostartQueue.Checked = settings.AutoStartQueue;
                 cbAutoStartQueueStartup.Checked = settings.AutoStartQueueStartup;
+                chkAlwaysMux.Checked = settings.AlwaysMux;
                 donothing.Checked = settings.AfterEncoding == AfterEncoding.DoNothing;
                 shutdown.Checked = settings.AfterEncoding == AfterEncoding.Shutdown;
                 runCommand.Checked = settings.AfterEncoding == AfterEncoding.RunCommand;
