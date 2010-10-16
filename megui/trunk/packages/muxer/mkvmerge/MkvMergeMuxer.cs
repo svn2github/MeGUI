@@ -169,11 +169,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                 foreach (object o in settings.SubtitleStreams)
                 {
                     MuxStream stream = (MuxStream)o;
-                    List<SubtitleInfo> subTracks;
-                    idxReader.readFileProperties(stream.path, out subTracks);
                     trackID = 0; int nb = 0; int nt = 0;
                     if (stream.path.ToLower().EndsWith(".idx"))
                     {
+                        List<SubtitleInfo> subTracks;
+                        idxReader.readFileProperties(stream.path, out subTracks);
                         foreach (SubtitleInfo strack in subTracks)
                         {
                             if (nt > 0)
