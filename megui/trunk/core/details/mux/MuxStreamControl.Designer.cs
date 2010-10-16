@@ -38,6 +38,7 @@ namespace MeGUI.core.details.mux
             this.audioDelay = new System.Windows.Forms.NumericUpDown();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.input = new MeGUI.FileBar();
+            this.chkDefaultStream = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.audioDelay)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
@@ -146,6 +147,7 @@ namespace MeGUI.core.details.mux
             this.tableLayoutPanel1.Controls.Add(this.SubNamelabel, 2, 1);
             this.tableLayoutPanel1.Controls.Add(this.subtitleLanguage, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.subtitleLanguageLabel, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.chkDefaultStream, 3, 2);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -171,6 +173,18 @@ namespace MeGUI.core.details.mux
             this.input.TabIndex = 41;
             this.input.Title = null;
             this.input.FileSelected += new MeGUI.FileBarEventHandler(this.input_FileSelected);
+            // 
+            // chkDefaultStream
+            // 
+            this.chkDefaultStream.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.chkDefaultStream.AutoSize = true;
+            this.chkDefaultStream.Location = new System.Drawing.Point(256, 65);
+            this.chkDefaultStream.Name = "chkDefaultStream";
+            this.chkDefaultStream.Size = new System.Drawing.Size(92, 17);
+            this.chkDefaultStream.TabIndex = 44;
+            this.chkDefaultStream.Text = "default stream";
+            this.chkDefaultStream.UseVisualStyleBackColor = true;
+            this.chkDefaultStream.Visible = false;
             // 
             // MuxStreamControl
             // 
@@ -198,5 +212,6 @@ namespace MeGUI.core.details.mux
         protected System.Windows.Forms.Label delayLabel;
         protected System.Windows.Forms.NumericUpDown audioDelay;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        public System.Windows.Forms.CheckBox chkDefaultStream;
     }
 }

@@ -49,7 +49,7 @@ namespace MeGUI.core.details.mux
                 string language = null;
                 if (subtitleLanguage.Text != null && LanguageSelectionContainer.Languages.ContainsKey(subtitleLanguage.Text))
                     language = LanguageSelectionContainer.Languages[subtitleLanguage.Text];
-                return new MuxStream(input.Filename, subtitleLanguage.Text, subName.Text, (int)audioDelay.Value);
+                return new MuxStream(input.Filename, subtitleLanguage.Text, subName.Text, (int)audioDelay.Value, chkDefaultStream.Checked);
             }
 
             set
@@ -65,22 +65,44 @@ namespace MeGUI.core.details.mux
                     subtitleLanguage.Text = value.language;
                 subName.Text = value.name;
                 audioDelay.Value = value.delay;
+                chkDefaultStream.Checked = value.bDefaultTrack;
             }
         }
 
-        private bool showDelay;
-        public bool ShowDelay
+        private bool showAudioOptions;
+        public bool ShowAudioOptions
         {
             set
             {
-                showDelay = value;
+                showAudioOptions = value;
                 delayLabel.Visible = value;
                 audioDelay.Visible = value;
                 if (!value) audioDelay.Value = 0;
             }
             get
             {
-                return showDelay;
+                return showAudioOptions;
+            }
+        }
+
+        private bool showDefaultSubtitleStream;
+        public bool ShowDefaultSubtitleStream
+        {
+            set
+            {
+                if (showAudioOptions)
+                {
+                    showDefaultSubtitleStream = chkDefaultStream.Visible = chkDefaultStream.Checked = false;
+                    return;
+                }
+                showDefaultSubtitleStream = value;
+                chkDefaultStream.Visible = value;
+                if (!value) 
+                    chkDefaultStream.Checked = false;
+            }
+            get
+            {
+                return showDefaultSubtitleStream;
             }
         }
 

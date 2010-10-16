@@ -464,7 +464,7 @@ namespace MeGUI
                             aInput = audioTrack[i].SelectedText;
 
                         if (audioConfigControl[i].DontEncode)
-                            muxOnlyAudio.Add(new MuxStream(aInput, info, delay));
+                            muxOnlyAudio.Add(new MuxStream(aInput, info, delay, false));
                         else
                             aJobs.Add(new AudioJob(aInput, null, null, audioConfigControl[i].Settings, delay));
                     }

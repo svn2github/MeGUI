@@ -192,6 +192,10 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                                 else sb.Append(" --language " + strack.Index.ToString() + ":" + stream.name);
                                 if (!string.IsNullOrEmpty(stream.name))
                                     sb.Append(" --track-name \"" + strack.Index.ToString() + ":" + stream.name + "\"");
+                                if (stream.bDefaultTrack)
+                                    sb.Append(" --default-track " + strack.Index.ToString() + ":yes");
+                                else
+                                    sb.Append(" --default-track " + strack.Index.ToString() + ":no");
                             }
                             else
                             {
@@ -209,6 +213,10 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                                 else sb.Append(" --language " + "0:" + strack.Name);
                                 if (!string.IsNullOrEmpty(stream.name))
                                     sb.Append(" --track-name \"" + "0:" + stream.name + "\"");
+                                if (stream.bDefaultTrack)
+                                    sb.Append(" --default-track " + "0:yes");
+                                else
+                                    sb.Append(" --default-track " + "0:no");
                             }
                             ++nt;
                         }
@@ -220,7 +228,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                             else sb.Append("0");
                             ++nb;
                         }
-                        sb.Append(" \"--compression\" \"" + trackID + ":none\"");
                         sb.Append(" -D -A \"" + stream.path + "\"");
                     }
                     else
@@ -238,7 +245,10 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                         }
                         if (!string.IsNullOrEmpty(stream.name))
                              sb.Append(" --track-name \"" + trackID + ":" + stream.name + "\"");
-                        sb.Append(" \"--compression\" \"" + trackID + ":none\"");
+                        if (stream.bDefaultTrack)
+                            sb.Append(" --default-track \"" + trackID + ":yes\"");
+                        else
+                            sb.Append(" --default-track \"" + trackID + ":no\"");
                         sb.Append(" -s 0 -D -A \"" + stream.path + "\"");
                     }
                 }
