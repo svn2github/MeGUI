@@ -98,7 +98,7 @@ namespace MeGUI
             if (path.Count == 0)
             {
                 return (initialInputTypes.Count == 0 || 
-                    (initialInputTypes.Count == 1 && !alwaysMux &&
+                    (initialInputTypes.Count == 1 && !alwaysMux && !MainForm.Instance.Settings.AlwaysMux &&
                     (initialInputTypes[0].outputType.ContainerType == this.targetType)) );
             }
             else

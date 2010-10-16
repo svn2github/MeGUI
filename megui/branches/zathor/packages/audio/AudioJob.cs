@@ -58,7 +58,7 @@ namespace MeGUI
 
         public MuxStream ToMuxStream()
         {
-            return new MuxStream(Output, TrackInfo, 0); 
+            return new MuxStream(Output, TrackInfo, 0, false); 
             // no delay correction is required since the audio job will fix the delay
         }
 

@@ -50,6 +50,7 @@ namespace MeGUI.core.gui
         private NiceComboBoxNormalItem clearItem;
         int numStandardItems, numCustomItems;
         protected Getter<object> Getter;
+        protected bool bSaveEveryItem;
 
         public StandardAndCustomComboBox() : base() { }
 
@@ -209,8 +210,16 @@ namespace MeGUI.core.gui
                         return;
                     }
                 }
-                oTemporaryItem.Tag = value;
-                SelectedItem = null;
+                if (bSaveEveryItem)
+                {
+                    AddCustomItem(value);
+                    SelectedObject = value;
+                }
+                else
+                {
+                    oTemporaryItem.Tag = value;
+                    SelectedItem = null;
+                }
             }
         }
 
@@ -220,11 +229,12 @@ namespace MeGUI.core.gui
         {
             get
             {
-                if (SelectedItem == null) SelectedIndex = 0;
                 if (oTemporaryItem.Tag != null && SelectedItem == null)
                     return oTemporaryItem;
-                else
-                    return (SCItem)SelectedItem.Tag;
+
+                if (SelectedItem == null) 
+                    SelectedIndex = 0;
+                return (SCItem)SelectedItem.Tag;
             }
         }
 

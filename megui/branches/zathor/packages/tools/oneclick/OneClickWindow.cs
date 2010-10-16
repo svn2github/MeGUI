@@ -464,7 +464,7 @@ namespace MeGUI
                             aInput = audioTrack[i].SelectedText;
 
                         if (audioConfigControl[i].DontEncode)
-                            muxOnlyAudio.Add(new MuxStream(aInput, info, delay));
+                            muxOnlyAudio.Add(new MuxStream(aInput, info, delay, false));
                         else
                             aJobs.Add(new AudioJob(aInput, null, null, audioConfigControl[i].Settings, delay));
                     }
@@ -491,7 +491,7 @@ namespace MeGUI
                     if (oIndexerToUse == FileIndexerWindow.IndexType.D2V)
                     {
                         string d2vName = Path.Combine(workingDirectory.Filename, workingName.Text + ".d2v");
-                        D2VIndexJob job = new D2VIndexJob(input.Filename, d2vName, 1, audioTracks, dpp, false, false);
+                        D2VIndexJob job = new D2VIndexJob(input.Filename, d2vName, 2, audioTracks, dpp, false, false);
                         mainForm.Jobs.addJobsToQueue(job);
                     }
                     else if (oIndexerToUse == FileIndexerWindow.IndexType.DGA)
@@ -732,9 +732,11 @@ namespace MeGUI
         public LogItem postprocess()
         {
             List<string>arrAudioFilesDelete;
-            audioFiles = vUtil.getAllDemuxedAudio(job.AudioTracks, out arrAudioFilesDelete, job.Output, 8);
+            audioFiles = vUtil.getAllDemuxedAudio(job.AudioTracks, out arrAudioFilesDelete, job.Output, log);
 
             fillInAudioInformation();
+
+            job.PostprocessingProperties.AudioJobs = AudioUtil.getConfiguredAudioJobs(job.PostprocessingProperties.AudioJobs);
 
             log.LogValue("Desired size", job.PostprocessingProperties.OutputSize);
             log.LogValue("Split size", job.PostprocessingProperties.Splitting);

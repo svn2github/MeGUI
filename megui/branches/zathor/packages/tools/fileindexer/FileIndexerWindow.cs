@@ -981,7 +981,7 @@ namespace MeGUI
             StringBuilder logBuilder = new StringBuilder();
             VideoUtil vUtil = new VideoUtil(mainForm);
             List<string> arrFilesToDelete = new List<string>();
-            Dictionary<int, string> audioFiles = vUtil.getAllDemuxedAudio(job.AudioTracks, out arrFilesToDelete, job.Output, 8);
+            Dictionary<int, string> audioFiles = vUtil.getAllDemuxedAudio(job.AudioTracks, out arrFilesToDelete, job.Output, null);
             if (job.LoadSources)
             {
                 if (job.DemuxMode != 0 && audioFiles.Count > 0)
@@ -1021,7 +1021,7 @@ namespace MeGUI
             StringBuilder logBuilder = new StringBuilder();
             VideoUtil vUtil = new VideoUtil(mainForm);
             List<string> arrFilesToDelete = new List<string>();
-            Dictionary<int, string> audioFiles = vUtil.getAllDemuxedAudio(job.AudioTracks, out arrFilesToDelete, job.Output, 8);
+            Dictionary<int, string> audioFiles = vUtil.getAllDemuxedAudio(job.AudioTracks, out arrFilesToDelete, job.Output, null);
             if (job.LoadSources)
             {
                 if (job.DemuxMode != 0 && audioFiles.Count > 0)
@@ -1061,7 +1061,7 @@ namespace MeGUI
             StringBuilder logBuilder = new StringBuilder();
             VideoUtil vUtil = new VideoUtil(mainForm);
             List<string> arrFilesToDelete = new List<string>();
-            Dictionary<int, string> audioFiles = vUtil.getAllDemuxedAudio(job.AudioTracks, out arrFilesToDelete, job.Output, 8);
+            Dictionary<int, string> audioFiles = vUtil.getAllDemuxedAudio(job.AudioTracks, out arrFilesToDelete, job.Output, null);
             if (job.LoadSources)
             {
                 if (job.DemuxMode != 0 && audioFiles.Count > 0)

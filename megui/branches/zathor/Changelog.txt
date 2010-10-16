@@ -1,5 +1,25 @@
-0.x
-  - (zathor) 
+0.3.5.17
+  - (zathor) [OneClick] some dga demuxed audio files were not deleted during cleanup
+  - (zathor) [MKV Muxer] changed default track flag of subtitles to no. Feature request #3086194
+  - (zathor) [MKV Muxer] added option to set the default subtitle track
+  - (zathor) [MKV Muxer] added option to set a subtitle delay. Feature request #3088742
+  - (zathor) [AutoEncode] added option to always mux the video encoding (enabled by default). Feature request #3082125
+
+0.3.5.16
+  - (kurtnoise) add FLAC files support in the Matroska Muxer
+  - (sharktooth) [x264] fixed unselectable CABAC option in Main and High profiles
+  - (zathor) [MP4 Muxer] fixed temp directory handling
+  - (zathor) [MKV Muxer] enhanced error handling
+  - (zathor) [Log] added a context menu item to remove the overlay icon in case of an error
+  - (zathor) [OneClick] fixed detection of some demuxed audio files. Bug #3085510
+
+0.3.5.15
+  - (zathor) fixed status overlay icon not showing up
+  - (zathor) [VideoPlayer] fixed playing last frame. Bug #3072660
+
+0.3.5.14
+  - (zathor) fixed AR chooser displaying always 16:9 PAL e.g. in VideoPlayer or AVS Script Creator
+  - (zathor) fixed saving of custom quantizer matrices in x264/xvid profiles. Bug #3070834
 
 0.3.5.13
   - (sharktooth) [x264Encoder] Removed unnecessary/wrong code
@@ -8,15 +28,13 @@
   - (sharktooth) [x264] Fix commandline generation with tunings
   - (sharktooth) [x264] Fixed Psy-RD settings commandline generation with certain tunings
   - (sharktooth) [VideoPlayer] added a check to stop the player before reloading the video
-  - (zathor) [Queue] if a worker tries to start an audio job while another
-             audio job is already running the worker will be postponed.
+  - (zathor) [Queue] if a worker tries to start an audio job while another audio job is already running the worker will be postponed.
   - (zathor) added overlay icon if a warning or error event has been logged (Windows 7 only)
   - (zathor) removed the embedded changelog. instead the changelog.txt will be opened
 
 0.3.5.12
   - (zathor) [FileIndexer] disable DGIndexNV in a RDP session
-  - (zathor) [VidePlayerControl] added new control to speed up 
-             video navigation. Patch by aKzenT (#1902576)
+  - (zathor) [VidePlayerControl] added new control to speed up video navigation. Patch by aKzenT (#1902576)
   - (zathor) [VidePlayer] some cosmetics
   - (zathor) [VidePlayer] added option to reload the video. Feature request #3003709
 
@@ -24,25 +42,18 @@
   - (zathor) [x264] fixed more than one --sar in the command line. Bug #3038722
   - (zathor) [MuxWindow] added a unique title to every mux window. Feature request #2937578
   - (zathor) [MuxWindow] added a shortcut to every mux window. Feature request #1868046
-  - (zathor) [VideoUtil] fixed a problem if two identical audio sources
-             are beeing used in OneClick
+  - (zathor) [VideoUtil] fixed a problem if two identical audio sources are beeing used in OneClick
   - (zathor) [AutoUpdateServerConfigWindow] new servers will be checked during add
-  - (zathor) [Settings] hard-wired the stable & development update servers.
-             custom servers can be added if required
-  - (zathor) fixed custom FPS, AR and file size saving so that
-             only manually added values will be saved permanently. Bug #3064654
+  - (zathor) [Settings] hard-wired the stable & development update servers. custom servers can be added if required
+  - (zathor) fixed custom FPS, AR and file size saving so that only manually added values will be saved permanently. Bug #3064654
 
 0.3.5.10
   - (sharktooth) [x264] Added 64:45 SAR option
   - (sharktooth) [MainForm.cs] Typo
-  - (zathor) [Settings] added option for DGIndex(NV) to autoload VOB files
-             incrementally. Default value is enabled. Feature request #2955909
-  - (zathor) [Settings] added option to close MeGUI after encoding.
-             Default value is still "Do nothing". Feature request #2954099
-  - (zathor) [Settings] added option start the queue at program start.
-             Default value is disabled. Feature request #1908749
-  - (zathor) [JobUtil] display overwrite confirmation dialog for the output file
-             during initial job creation if it is necessary. Feature request #3022005
+  - (zathor) [Settings] added option for DGIndex(NV) to autoload VOB files incrementally. Default value is enabled. Feature request #2955909
+  - (zathor) [Settings] added option to close MeGUI after encoding. Default value is still "Do nothing". Feature request #2954099
+  - (zathor) [Settings] added option start the queue at program start. Default value is disabled. Feature request #1908749
+  - (zathor) [JobUtil] display overwrite confirmation dialog for the output file during initial job creation if it is necessary. Feature request #3022005
   - (zathor) [OneClickEncoder] added support for DGIndexNV and DGAVCIndex
 
 0.3.5.9
@@ -66,8 +77,7 @@
   - (zathor) [OneClickWindow] + [MainForm]. Only supported files can be used in OneClick. Bug #3032668
 
 0.3.5.8
-  - (zathor) enhanced error handling of the profile import. an unsuccessful 
-             or interrupted profile update will be marked as still missing.
+  - (zathor) enhanced error handling of the profile import. an unsuccessful or interrupted profile update will be marked as still missing.
   - (zathor) [x264Encoder] --min-keyint will not be applied if the default value is used
 
 0.3.5.7

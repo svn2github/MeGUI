@@ -49,7 +49,7 @@ namespace MeGUI.core.details.mux
                 string language = null;
                 if (subtitleLanguage.Text != null && LanguageSelectionContainer.Languages.ContainsKey(subtitleLanguage.Text))
                     language = LanguageSelectionContainer.Languages[subtitleLanguage.Text];
-                return new MuxStream(input.Filename, subtitleLanguage.Text, subName.Text, (int)audioDelay.Value);
+                return new MuxStream(input.Filename, subtitleLanguage.Text, subName.Text, (int)audioDelay.Value, chkDefaultStream.Checked);
             }
 
             set
@@ -65,6 +65,7 @@ namespace MeGUI.core.details.mux
                     subtitleLanguage.Text = value.language;
                 subName.Text = value.name;
                 audioDelay.Value = value.delay;
+                chkDefaultStream.Checked = value.bDefaultTrack;
             }
         }
 
@@ -81,6 +82,22 @@ namespace MeGUI.core.details.mux
             get
             {
                 return showDelay;
+            }
+        }
+
+        private bool showDefaultSubtitleStream;
+        public bool ShowDefaultSubtitleStream
+        {
+            set
+            {
+                showDefaultSubtitleStream = value;
+                chkDefaultStream.Visible = value;
+                if (!value) 
+                    chkDefaultStream.Checked = false;
+            }
+            get
+            {
+                return showDefaultSubtitleStream;
             }
         }
 

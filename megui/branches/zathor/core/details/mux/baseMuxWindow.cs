@@ -272,7 +272,7 @@ namespace MeGUI
             // 
             // muxButton
             // 
-            this.muxButton.Location = new System.Drawing.Point(296, 531);
+            this.muxButton.Location = new System.Drawing.Point(296, 568);
             this.muxButton.Margin = new System.Windows.Forms.Padding(12, 9, 12, 9);
             this.muxButton.Name = "muxButton";
             this.muxButton.Size = new System.Drawing.Size(56, 23);
@@ -282,7 +282,6 @@ namespace MeGUI
             // 
             // videoGroupbox
             // 
-            this.videoGroupbox.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.videoGroupbox.AutoSize = true;
             this.tableLayoutPanel1.SetColumnSpan(this.videoGroupbox, 3);
             this.videoGroupbox.Controls.Add(this.tableLayoutPanel2);
@@ -390,7 +389,7 @@ namespace MeGUI
             this.tableLayoutPanel1.SetColumnSpan(this.chaptersGroupbox, 3);
             this.chaptersGroupbox.Controls.Add(this.tableLayoutPanel3);
             this.chaptersGroupbox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.chaptersGroupbox.Location = new System.Drawing.Point(3, 324);
+            this.chaptersGroupbox.Location = new System.Drawing.Point(3, 361);
             this.chaptersGroupbox.Name = "chaptersGroupbox";
             this.chaptersGroupbox.Size = new System.Drawing.Size(438, 48);
             this.chaptersGroupbox.TabIndex = 3;
@@ -444,7 +443,7 @@ namespace MeGUI
             this.tableLayoutPanel1.SetColumnSpan(this.outputGroupbox, 3);
             this.outputGroupbox.Controls.Add(this.tableLayoutPanel4);
             this.outputGroupbox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.outputGroupbox.Location = new System.Drawing.Point(3, 378);
+            this.outputGroupbox.Location = new System.Drawing.Point(3, 415);
             this.outputGroupbox.Name = "outputGroupbox";
             this.outputGroupbox.Size = new System.Drawing.Size(438, 141);
             this.outputGroupbox.TabIndex = 4;
@@ -571,7 +570,7 @@ namespace MeGUI
             // cancelButton
             // 
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(376, 531);
+            this.cancelButton.Location = new System.Drawing.Point(376, 568);
             this.cancelButton.Margin = new System.Windows.Forms.Padding(12, 9, 12, 9);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(56, 23);
@@ -586,7 +585,7 @@ namespace MeGUI
             this.audioPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.audioPanel.Location = new System.Drawing.Point(3, 99);
             this.audioPanel.Name = "audioPanel";
-            this.audioPanel.Size = new System.Drawing.Size(438, 115);
+            this.audioPanel.Size = new System.Drawing.Size(438, 125);
             this.audioPanel.TabIndex = 1;
             // 
             // audioMenu
@@ -619,7 +618,7 @@ namespace MeGUI
             this.audio.Location = new System.Drawing.Point(0, 0);
             this.audio.Name = "audio";
             this.audio.SelectedIndex = 0;
-            this.audio.Size = new System.Drawing.Size(438, 115);
+            this.audio.Size = new System.Drawing.Size(438, 125);
             this.audio.TabIndex = 0;
             // 
             // audioPage1
@@ -628,7 +627,7 @@ namespace MeGUI
             this.audioPage1.Location = new System.Drawing.Point(4, 22);
             this.audioPage1.Name = "audioPage1";
             this.audioPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.audioPage1.Size = new System.Drawing.Size(430, 89);
+            this.audioPage1.Size = new System.Drawing.Size(430, 99);
             this.audioPage1.TabIndex = 0;
             this.audioPage1.Text = "Audio 1";
             this.audioPage1.UseVisualStyleBackColor = true;
@@ -640,7 +639,8 @@ namespace MeGUI
             this.muxStreamControl2.Location = new System.Drawing.Point(3, 3);
             this.muxStreamControl2.Name = "muxStreamControl2";
             this.muxStreamControl2.ShowDelay = true;
-            this.muxStreamControl2.Size = new System.Drawing.Size(424, 83);
+            this.muxStreamControl2.ShowDefaultSubtitleStream = false;
+            this.muxStreamControl2.Size = new System.Drawing.Size(424, 93);
             this.muxStreamControl2.TabIndex = 0;
             this.muxStreamControl2.FileUpdated += new System.EventHandler(this.muxStreamControl2_FileUpdated);
             // 
@@ -673,9 +673,9 @@ namespace MeGUI
             this.subtitlePanel.ContextMenuStrip = this.subtitleMenu;
             this.subtitlePanel.Controls.Add(this.subtitles);
             this.subtitlePanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.subtitlePanel.Location = new System.Drawing.Point(3, 220);
+            this.subtitlePanel.Location = new System.Drawing.Point(3, 230);
             this.subtitlePanel.Name = "subtitlePanel";
-            this.subtitlePanel.Size = new System.Drawing.Size(438, 98);
+            this.subtitlePanel.Size = new System.Drawing.Size(438, 125);
             this.subtitlePanel.TabIndex = 2;
             // 
             // subtitles
@@ -685,7 +685,7 @@ namespace MeGUI
             this.subtitles.Location = new System.Drawing.Point(0, 0);
             this.subtitles.Name = "subtitles";
             this.subtitles.SelectedIndex = 0;
-            this.subtitles.Size = new System.Drawing.Size(438, 98);
+            this.subtitles.Size = new System.Drawing.Size(438, 125);
             this.subtitles.TabIndex = 0;
             // 
             // subPage1
@@ -694,7 +694,7 @@ namespace MeGUI
             this.subPage1.Location = new System.Drawing.Point(4, 22);
             this.subPage1.Name = "subPage1";
             this.subPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.subPage1.Size = new System.Drawing.Size(430, 72);
+            this.subPage1.Size = new System.Drawing.Size(430, 99);
             this.subPage1.TabIndex = 0;
             this.subPage1.Text = "Subtitle 1";
             this.subPage1.UseVisualStyleBackColor = true;
@@ -706,7 +706,8 @@ namespace MeGUI
             this.muxStreamControl1.Location = new System.Drawing.Point(3, 3);
             this.muxStreamControl1.Name = "muxStreamControl1";
             this.muxStreamControl1.ShowDelay = false;
-            this.muxStreamControl1.Size = new System.Drawing.Size(424, 66);
+            this.muxStreamControl1.ShowDefaultSubtitleStream = false;
+            this.muxStreamControl1.Size = new System.Drawing.Size(424, 93);
             this.muxStreamControl1.TabIndex = 0;
             this.muxStreamControl1.FileUpdated += new System.EventHandler(this.muxStreamControl1_FileUpdated);
             // 
@@ -718,13 +719,13 @@ namespace MeGUI
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel1.Controls.Add(this.helpButton1, 0, 5);
-            this.tableLayoutPanel1.Controls.Add(this.videoGroupbox, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.audioPanel, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.subtitlePanel, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.cancelButton, 2, 5);
             this.tableLayoutPanel1.Controls.Add(this.chaptersGroupbox, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.muxButton, 1, 5);
             this.tableLayoutPanel1.Controls.Add(this.outputGroupbox, 0, 4);
+            this.tableLayoutPanel1.Controls.Add(this.videoGroupbox, 0, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -735,7 +736,7 @@ namespace MeGUI
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(444, 558);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(444, 577);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // helpButton1
@@ -743,7 +744,7 @@ namespace MeGUI
             this.helpButton1.ArticleName = "Manual mux window";
             this.helpButton1.AutoSize = true;
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.helpButton1.Location = new System.Drawing.Point(3, 525);
+            this.helpButton1.Location = new System.Drawing.Point(3, 562);
             this.helpButton1.Name = "helpButton1";
             this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 8;
@@ -752,7 +753,7 @@ namespace MeGUI
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(444, 558);
+            this.ClientSize = new System.Drawing.Size(444, 577);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -760,7 +761,6 @@ namespace MeGUI
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "baseMuxWindow";
-            this.ShowInTaskbar = false;
             this.Text = "Mux";
             this.videoGroupbox.ResumeLayout(false);
             this.videoGroupbox.PerformLayout();
@@ -813,6 +813,18 @@ namespace MeGUI
             }
             else
                 muxButton.DialogResult = DialogResult.OK;
+        }
+
+        protected void chkDefaultStream_CheckedChanged(object sender, EventArgs e)
+        {
+            if (((CheckBox)sender).Checked == false)
+                return;
+
+            foreach (MuxStreamControl oTrack in subtitleTracks)
+            {
+                if (sender != oTrack.chkDefaultStream && oTrack.chkDefaultStream.Checked == true)
+                    oTrack.chkDefaultStream.Checked = false;
+            }
         }
 
         private void splitSize_KeyPress(object sender, System.Windows.Forms.KeyPressEventArgs e)
@@ -957,6 +969,8 @@ namespace MeGUI
             a.Dock = subtitleTracks[0].Dock;
             a.Padding = subtitleTracks[0].Padding;
             a.ShowDelay = subtitleTracks[0].ShowDelay;
+            a.ShowDefaultSubtitleStream = subtitleTracks[0].ShowDefaultSubtitleStream;
+            a.chkDefaultStream.CheckedChanged += new System.EventHandler(this.chkDefaultStream_CheckedChanged);
             a.Filter = subtitleTracks[0].Filter;
             a.FileUpdated += muxStreamControl1_FileUpdated;
 

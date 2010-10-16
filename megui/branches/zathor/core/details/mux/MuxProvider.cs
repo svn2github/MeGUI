@@ -499,6 +499,7 @@ namespace MeGUI
             supportedAudioTypes.Add(AudioType.AC3);
             supportedAudioTypes.Add(AudioType.DTS);
             supportedAudioTypes.Add(AudioType.EAC3);
+            supportedAudioTypes.Add(AudioType.FLAC);
             supportsAnyInputtableAudioCodec = true;
             supportsAnyInputtableVideoCodec = true;
             supportedSubtitleTypes.Add(SubtitleType.SUBRIP);

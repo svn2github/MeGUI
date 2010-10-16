@@ -513,6 +513,7 @@
     <Compile Include="core\plugins\interfaces\Job.cs" />
     <Compile Include="core\plugins\interfaces\JobProcessorManager.cs" />
     <Compile Include="core\plugins\interfaces\Profile.cs" />
+    <Compile Include="core\util\AudioUtil.cs" />
     <Compile Include="core\util\Autocrop.cs" />
     <Compile Include="core\util\BitrateCalculatorPreProcessor.cs" />
     <Compile Include="core\util\DAR.cs" />

@@ -806,13 +806,13 @@ namespace MeGUI
             currentTime = Util.converFrameNumberToTimecode(this.positionSlider.Value, file.Info.FPS);
             if (this.zoneStart > -1 || this.zoneEnd > -1)
             {
-                this.Text = "Pos: " + CurrentFrame + "/" + FrameCount;
+                this.Text = "Pos: " + CurrentFrame + "/" + (FrameCount - 1);
                 
                 this.Text += " Zone start: " + (zoneStart > -1 ? zoneStart.ToString() : "?");
                 this.Text += " end: " + (zoneEnd > -1 ? zoneEnd.ToString() : "?");
             }
             else
-                this.Text = "Current position: " + CurrentFrame + "/" + FrameCount;
+                this.Text = "Current position: " + CurrentFrame + "/" + (FrameCount - 1);
             if (this.introEndFrame > -1)
 				this.Text += " Intro end: " + this.introEndFrame;
 			if (this.creditsStartFrame > -1)

@@ -54,6 +54,7 @@ namespace MeGUI
             cbContainer.Visible = true;
             lbContainer.Visible = true;
 
+            subtitleTracks[0].chkDefaultStream.CheckedChanged += new System.EventHandler(base.chkDefaultStream_CheckedChanged);
             this.cbContainer.SelectedIndexChanged += new System.EventHandler(this.cbContainer_SelectedIndexChanged);
         }
 
@@ -75,6 +76,14 @@ namespace MeGUI
                 output.Filter = (cbContainer.SelectedItem as ContainerType).OutputFilterString;
             else
                 output.Filter = "";
+
+            foreach (MuxStreamControl oStream in subtitleTracks)
+            {
+                if ((this.cbContainer.SelectedItem as ContainerType).Extension.Equals("mkv"))
+                    oStream.ShowDefaultSubtitleStream = oStream.ShowDelay = true;
+                else
+                    oStream.ShowDefaultSubtitleStream = oStream.ShowDelay = false;
+            }
         }
 
         private void getTypes(out AudioEncoderType[] aCodec, out MuxableType[] audioTypes, out MuxableType[] subtitleTypes)

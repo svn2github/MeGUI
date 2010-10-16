@@ -71,7 +71,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
 
         protected override bool checkExitCode
         {
-            get { return false; }
+            get { return true; }
         }
 
         public override void ProcessLine(string line, StreamType stream)
@@ -136,15 +136,15 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                     trackID = 0; int heaac_flag = 0; 
                     if (stream.path.ToLower().EndsWith(".mp4") || stream.path.ToLower().EndsWith(".m4a"))
                     {
-                        trackID = VideoUtil.getIDFromAudioStream(stream.path);
-                        heaac_flag = VideoUtil.getSBRFlagFromAACStream(stream.path);
-                        if (heaac_flag > 0)
+                        trackID = AudioUtil.getIDFromAudioStream(stream.path);
+                        heaac_flag = AudioUtil.getFlagFromAACStream(stream.path);
+                        if (heaac_flag == 1)
                             sb.Append(" --aac-is-sbr "+ trackID + ":1");
                     }
                     if (stream.path.ToLower().EndsWith(".aac"))
                     {
-                        heaac_flag = VideoUtil.getSBRFlagFromAACStream(stream.path);
-                        if (heaac_flag > 0)
+                        heaac_flag = AudioUtil.getFlagFromAACStream(stream.path);
+                        if (heaac_flag == 1)
                             sb.Append(" --aac-is-sbr 0:1");
                     }
                     if (!string.IsNullOrEmpty(stream.language))
@@ -192,6 +192,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                                 else sb.Append(" --language " + strack.Index.ToString() + ":" + stream.name);
                                 if (!string.IsNullOrEmpty(stream.name))
                                     sb.Append(" --track-name \"" + strack.Index.ToString() + ":" + stream.name + "\"");
+                                if (stream.delay != 0)
+                                    sb.AppendFormat(" --sync {0}:{1}ms", strack.Index.ToString(), stream.delay);
+                                sb.Append(" --default-track " + strack.Index.ToString() + ":no");
                             }
                             else
                             {
@@ -209,6 +212,12 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                                 else sb.Append(" --language " + "0:" + strack.Name);
                                 if (!string.IsNullOrEmpty(stream.name))
                                     sb.Append(" --track-name \"" + "0:" + stream.name + "\"");
+                                if (stream.delay != 0)
+                                    sb.AppendFormat(" --sync {0}:{1}ms", "0", stream.delay);
+                                if (stream.bDefaultTrack)
+                                    sb.Append(" --default-track " + "0:yes");
+                                else
+                                    sb.Append(" --default-track " + "0:no");
                             }
                             ++nt;
                         }
@@ -220,7 +229,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                             else sb.Append("0");
                             ++nb;
                         }
-                        sb.Append(" \"--compression\" \"" + trackID + ":none\"");
                         sb.Append(" -D -A \"" + stream.path + "\"");
                     }
                     else
@@ -238,7 +246,12 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                         }
                         if (!string.IsNullOrEmpty(stream.name))
                              sb.Append(" --track-name \"" + trackID + ":" + stream.name + "\"");
-                        sb.Append(" \"--compression\" \"" + trackID + ":none\"");
+                        if (stream.delay != 0)
+                            sb.AppendFormat(" --sync {0}:{1}ms", trackID, stream.delay);
+                        if (stream.bDefaultTrack)
+                            sb.Append(" --default-track \"" + trackID + ":yes\"");
+                        else
+                            sb.Append(" --default-track \"" + trackID + ":no\"");
                         sb.Append(" -s 0 -D -A \"" + stream.path + "\"");
                     }
                 }

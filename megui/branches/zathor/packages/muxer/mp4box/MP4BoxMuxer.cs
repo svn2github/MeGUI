@@ -272,17 +272,25 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                     sb.Append(" -add \"" + stream.path);
                     if (stream.path.ToLower().EndsWith(".mp4") || stream.path.ToLower().EndsWith(".m4a"))
                     {
-                        int trackID = VideoUtil.getIDFromAudioStream(stream.path);
+                        int trackID = AudioUtil.getIDFromAudioStream(stream.path);
                         sb.Append("#trackID=" + trackID);
-                        int heaac_flag = VideoUtil.getSBRFlagFromAACStream(stream.path);
-                        if (heaac_flag > 0)
-                            sb.Append(":sbr");
+                        int heaac_flag = AudioUtil.getFlagFromAACStream(stream.path);
+                        switch (heaac_flag)
+                        {
+                            case 1: sb.Append(":sbr"); break;
+                            case 2: sb.Append(":ps"); break;
+                            default: sb.Append(""); break;
+                        }
                     }
                     if (stream.path.ToLower().EndsWith(".aac"))
                     {
-                        int heaac_flag = VideoUtil.getSBRFlagFromAACStream(stream.path);
-                        if (heaac_flag > 0)
-                            sb.Append(":sbr");
+                        int heaac_flag = AudioUtil.getFlagFromAACStream(stream.path);
+                        switch (heaac_flag)
+                        {
+                            case 1: sb.Append(":sbr"); break;
+                            case 2: sb.Append(":ps"); break;
+                            default: sb.Append(""); break;
+                        }
                     }
                     if (!string.IsNullOrEmpty(stream.language))
                         sb.Append(":lang=" + stream.language);
@@ -321,21 +329,10 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                 }
 
                 // tmp directory
-                // due to a bug from MP4Box, we need to test the path delimiter number
                 if (!String.IsNullOrEmpty(MainForm.Instance.Settings.TempDirMP4) && Directory.Exists(MainForm.Instance.Settings.TempDirMP4))
-                {
-                    if (Util.CountStrings(MainForm.Instance.Settings.TempDirMP4, '\\') > 1)
-                        sb.AppendFormat(" -tmp \"{0}\"", MainForm.Instance.Settings.TempDirMP4);
-                    else
-                        sb.AppendFormat(" -tmp {0}", MainForm.Instance.Settings.TempDirMP4);
-                }
+                    sb.AppendFormat(" -tmp \"{0}\"", MainForm.Instance.Settings.TempDirMP4);
                 else
-                {
-                    if (Util.CountStrings(settings.MuxedOutput, '\\') > 1)
-                        sb.AppendFormat(" -tmp \"{0}\"", Path.GetDirectoryName(settings.MuxedOutput));
-                    else
-                        sb.AppendFormat(" -tmp {0}", Path.GetDirectoryName(settings.MuxedOutput));
-                }
+                    sb.AppendFormat(" -tmp \"{0}\"", Path.GetDirectoryName(settings.MuxedOutput));
                 // force to create a new output file
                 sb.Append(" -new \"" + settings.MuxedOutput + "\"");
                 return sb.ToString();

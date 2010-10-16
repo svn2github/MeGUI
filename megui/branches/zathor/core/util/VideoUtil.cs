@@ -426,31 +426,6 @@ namespace MeGUI
             return avcS;
         }
 
-        /// gets ID from audio stream using MediaInfo
-        /// </summary>
-        /// <param name="infoFile">the file to be analyzed</param>
-        /// <param name="count">the counter</param>
-        /// <returns>the audio track ID found</returns>
-        public static int getIDFromAudioStream(string fileName)
-        {
-            MediaInfo info;
-            int TrackID = 0;
-            try
-            {
-                info = new MediaInfo(fileName);
-                if (info.Audio.Count > 0)
-                {
-                    MediaInfoWrapper.AudioTrack atrack = info.Audio[0];
-                    TrackID = Int32.Parse(atrack.ID);
-                }
-            }
-            catch (Exception i)
-            {
-                MessageBox.Show("The following error ocurred when trying to get Media info for file " + fileName + "\r\n" + i.Message, "Error parsing mediainfo data", MessageBoxButtons.OK);
-            }
-            return TrackID;
-        }
-
         public static int getIDFromSubStream(string fileName)
         {
             MediaInfo info;
@@ -471,62 +446,7 @@ namespace MeGUI
             return TrackID;
         }
 
-        /// <summary>
-        /// gets Audio Streams Number from input file using MediaInfo
-        /// </summary>
-        /// <param name="fileName">input</param>
-        /// <returns>nb of audio streams found</returns>
-        public static int getAudioStreamsNb(string fileName)
-        {
-            MediaInfo info;
-            int nb = 0;
-            try
-            {
-                info = new MediaInfo(fileName);
-                nb = info.Audio.Count;
-            }
-            catch (Exception i)
-            {
-                MessageBox.Show("The following error ocurred when trying to get Media info for file " + fileName + "\r\n" + i.Message, "Error parsing mediainfo data", MessageBoxButtons.OK);
-            }
-            return nb;
-        }
-
-        /// gets SBR flag from AAC streams using MediaInfo
-        /// </summary>
-        /// <param name="infoFile">the file to be analyzed</param>
-        /// <param name="count">the counter</param>
-        /// <returns>the flag found</returns>
-        public static int getSBRFlagFromAACStream(string fileName)
-        {
-            MediaInfo info;
-            int flag = 0;
-            try
-            {
-                info = new MediaInfo(fileName);
-                if (info.Audio.Count > 0)
-                {
-                    MediaInfoWrapper.AudioTrack atrack = info.Audio[0];
-                    if (atrack.Format == "AAC")
-                    {
-                        if (atrack.FormatSettingsSBR == "Yes")
-                             flag = 1;
-                        if (atrack.SamplingRate == "24000")
-                        {
-                            if ((atrack.Channels == "2") || (atrack.Channels == "1")) // workaround for raw aac
-                                flag = 1;
-                        }
-                    }
-                }
-            }
-            catch (Exception i)
-            {
-                MessageBox.Show("The following error ocurred when trying to get Media info for file " + fileName + "\r\n" + i.Message, "Error parsing mediainfo data", MessageBoxButtons.OK);
-            }
-            return flag;
-        }
-
-
+ 
         /// <summary>
         /// gets basic information about a video source based on its DGindex generated log file
         /// </summary>
@@ -583,7 +503,7 @@ namespace MeGUI
 		/// <param name="projectName">the name of the dgindex project</param>
 		/// <param name="cutoff">maximum number of results to be returned</param>
 		/// <returns>an array of string of filenames</returns>
-        public Dictionary<int, string> getAllDemuxedAudio(List<AudioTrackInfo> audioTracks, out List<string> arrDeleteFiles, string projectName, int cutoff)
+        public Dictionary<int, string> getAllDemuxedAudio(List<AudioTrackInfo> audioTracks, out List<string> arrDeleteFiles, string projectName, LogItem log)
         {
 		    Dictionary<int, string> audioFiles = new Dictionary<int, string>();
             arrDeleteFiles = new List<string>();
@@ -595,14 +515,21 @@ namespace MeGUI
 
             if (audioTracks[0].ContainerType.ToLower().Equals("matroska"))
                 strTrackName = " [";
+            else if (audioTracks[0].ContainerType == "MPEG-TS" || audioTracks[0].ContainerType == "BDAV")
+                strTrackName = " PID ";
             else
-                strTrackName = audioTracks[0].ContainerType == "MPEG-TS" ? " PID " : " T";
+                strTrackName = " T";
+
             for (int counter = 0; counter < audioTracks.Count; counter++)
             {
-                string trackNumber;
-                trackNumber = strTrackName + audioTracks[counter].TrackIDx + "*";
-                files = Directory.GetFiles(Path.GetDirectoryName(projectName),
-				        Path.GetFileNameWithoutExtension(projectName) + trackNumber);
+                bool bFound = false;
+                string trackFile = strTrackName + audioTracks[counter].TrackIDx + "*";
+                if (Path.GetExtension(projectName).ToLower().Equals(".dga"))
+                    trackFile = Path.GetFileName(projectName) + trackFile;
+                else
+                    trackFile = Path.GetFileNameWithoutExtension(projectName) + trackFile;
+                    
+                files = Directory.GetFiles(Path.GetDirectoryName(projectName), trackFile);
                 foreach (string file in files)
                 {
                     if ( file.EndsWith(".ac3") ||
@@ -614,16 +541,23 @@ namespace MeGUI
                          file.EndsWith(".wav") ||
                          file.EndsWith(".aac")) // It is the right track
 					{
+                        bFound = true;
                         if (!audioFiles.ContainsValue(file))
                             audioFiles.Add(audioTracks[counter].TrackID, file);
                         break;
 					}
 				}
+                if (!bFound && log != null)
+                    log.LogEvent("File not found: " + Path.Combine(Path.GetDirectoryName(projectName), trackFile), ImageType.Error);
 			}
 
             // Find files which can be deleted
-            files = Directory.GetFiles(Path.GetDirectoryName(projectName),
-                        Path.GetFileNameWithoutExtension(projectName) + strTrackName + "*");
+            if (Path.GetExtension(projectName).ToLower().Equals(".dga"))
+                strTrackName = Path.GetFileName(projectName) + strTrackName;
+            else
+                strTrackName = Path.GetFileNameWithoutExtension(projectName) + strTrackName;
+
+            files = Directory.GetFiles(Path.GetDirectoryName(projectName), strTrackName + "*");
             foreach (string file in files)
             {
                 if (file.EndsWith(".ac3") ||
@@ -1260,102 +1194,7 @@ namespace MeGUI
             return (CropValues)this.MemberwiseClone();
         }
 	}
-    public class AudioTrackInfo
-    {
-        private string nbChannels, type, samplingRate, containerType, description;
-        private int index, trackID;
-        public AudioTrackInfo() :this(null, null, null, 0)
-        {
-        }
-        public AudioTrackInfo(string language, string nbChannels, string type, int trackID)
-        {
-            TrackInfo = new TrackInfo(language, null);
-            this.nbChannels = nbChannels;
-            this.type = type;
-            this.trackID = trackID;
-        }
 
-        public string Language
-        {
-            get
-            {
-                if (TrackInfo == null) return null;
-                return TrackInfo.Language;
-            }
-            set
-            {
-                if (TrackInfo == null)
-                    TrackInfo = new TrackInfo();
-                TrackInfo.Language = value;
-            }
-        }
-
-        public TrackInfo TrackInfo;
-        public string TrackIDx
-        {
-            get { return containerType == "MPEG-TS" ? trackID.ToString("x3") : trackID.ToString("x"); }
-            set { trackID = Int32.Parse(value, System.Globalization.NumberStyles.HexNumber); }
-        }
-        public int TrackID
-        {
-            get { return trackID; }
-            set { trackID = value; }
-        }
-        public string DgIndexID
-        {
-            get { return containerType == "MPEG-TS" ? index.ToString() : TrackIDx; }
-        }
-        public string ContainerType
-        {
-            get { return containerType; }
-            set { containerType = value; }
-        }
-        public int Index
-        {
-            get { return index; }
-            set { index = value; }
-        }
-        public string Description
-        {
-            get { return description; }
-            set { description = value; }
-        }
-        public string Type
-        {
-            get { return type; }
-            set { type = value; }
-        }
-
-        public string NbChannels
-        {
-            get { return nbChannels; }
-            set { nbChannels = value; }
-        }
-
-        public string SamplingRate
-        {
-            get { return samplingRate; }
-            set { samplingRate = value; }
-        }
-
-        public override string ToString()
-        {
-            string fullString = "[" + TrackIDx + "] - " + this.type;
-            if (!string.IsNullOrEmpty(nbChannels))
-            {
-                fullString += " - " + this.nbChannels;
-            }
-            if (!string.IsNullOrEmpty(samplingRate))
-            {
-                fullString += " / " + samplingRate;
-            }
-            if (!string.IsNullOrEmpty(TrackInfo.Language))
-            {
-                fullString += " / " + TrackInfo.Language;
-            }
-            return fullString.Trim();
-        }
-    }
     public class SubtitleInfo
     {
         private string name;

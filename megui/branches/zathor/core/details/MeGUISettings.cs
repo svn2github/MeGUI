@@ -45,7 +45,7 @@ namespace MeGUI
                      overwriteStats, keep2of3passOutput, autoUpdate, deleteCompletedJobs, deleteIntermediateFiles,
                      deleteAbortedOutput, openProgressWindow, useadvancedtooltips, freshOggEnc2, autoscroll, 
                      alwaysOnTop, safeProfileAlteration, usehttpproxy, addTimePosition, alwaysbackupfiles,
-                     forcerawavcextension, bAutoLoadDG, bAutoStartQueueStartup;
+                     forcerawavcextension, bAutoLoadDG, bAutoStartQueueStartup, bAlwaysMux;
         private ulong audioSamplesPerUpdate;
         private AfterEncoding afterEncoding;
         private decimal forceFilmThreshold, acceptableFPSError;
@@ -108,6 +108,7 @@ namespace MeGUI
 			autoForceFilm = true;
             bAutoLoadDG = true;
 			autoStartQueue = false;
+            bAlwaysMux = true;
             bAutoStartQueueStartup = false;
 			forceFilmThreshold = new decimal(95);
 			defaultLanguage1 = "";
@@ -693,6 +694,14 @@ namespace MeGUI
             get { return bAutoStartQueueStartup; }
             set { bAutoStartQueueStartup = value; }
 		}
+        /// <summary>
+        /// gets / sets whether pressing Queue should automatically start encoding at startup
+        /// </summary>
+        public bool AlwaysMux
+        {
+            get { return bAlwaysMux; }
+            set { bAlwaysMux = value; }
+        }
 		/// <summary>
 		/// gets / sets whether pressing Queue should automatically start encoding
 		/// </summary>

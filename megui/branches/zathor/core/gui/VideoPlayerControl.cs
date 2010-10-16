@@ -51,7 +51,7 @@ namespace MeGUI.core.gui
 
         private bool setPositionInternal(int value)
         {
-            int max = FrameCount;
+            int max = FrameCount - 1;
 
             //Prevent setting the position out of range
             if (value < 0)
