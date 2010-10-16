@@ -69,19 +69,19 @@ namespace MeGUI.core.details.mux
             }
         }
 
-        private bool showAudioOptions;
-        public bool ShowAudioOptions
+        private bool showDelay;
+        public bool ShowDelay
         {
             set
             {
-                showAudioOptions = value;
+                showDelay = value;
                 delayLabel.Visible = value;
                 audioDelay.Visible = value;
                 if (!value) audioDelay.Value = 0;
             }
             get
             {
-                return showAudioOptions;
+                return showDelay;
             }
         }
 
@@ -90,11 +90,6 @@ namespace MeGUI.core.details.mux
         {
             set
             {
-                if (showAudioOptions)
-                {
-                    showDefaultSubtitleStream = chkDefaultStream.Visible = chkDefaultStream.Checked = false;
-                    return;
-                }
                 showDefaultSubtitleStream = value;
                 chkDefaultStream.Visible = value;
                 if (!value) 

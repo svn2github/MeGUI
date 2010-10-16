@@ -80,9 +80,9 @@ namespace MeGUI
             foreach (MuxStreamControl oStream in subtitleTracks)
             {
                 if ((this.cbContainer.SelectedItem as ContainerType).Extension.Equals("mkv"))
-                    oStream.ShowDefaultSubtitleStream = true;
+                    oStream.ShowDefaultSubtitleStream = oStream.ShowDelay = true;
                 else
-                    oStream.ShowDefaultSubtitleStream = false;
+                    oStream.ShowDefaultSubtitleStream = oStream.ShowDelay = false;
             }
         }
 

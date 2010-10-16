@@ -70,6 +70,7 @@ namespace MeGUI
             else if (this.muxer.MuxerType == MuxerType.MKVMERGE)
             {
                 subtitleTracks[0].ShowDefaultSubtitleStream = true;
+                subtitleTracks[0].ShowDelay = true;
                 subtitleTracks[0].chkDefaultStream.CheckedChanged += new System.EventHandler(base.chkDefaultStream_CheckedChanged);
             }
             if (muxer.GetSupportedChapterTypes().Count == 0)

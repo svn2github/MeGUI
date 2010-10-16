@@ -638,7 +638,7 @@ namespace MeGUI
             this.muxStreamControl2.Filter = null;
             this.muxStreamControl2.Location = new System.Drawing.Point(3, 3);
             this.muxStreamControl2.Name = "muxStreamControl2";
-            this.muxStreamControl2.ShowAudioOptions = true;
+            this.muxStreamControl2.ShowDelay = true;
             this.muxStreamControl2.ShowDefaultSubtitleStream = false;
             this.muxStreamControl2.Size = new System.Drawing.Size(424, 93);
             this.muxStreamControl2.TabIndex = 0;
@@ -705,7 +705,7 @@ namespace MeGUI
             this.muxStreamControl1.Filter = null;
             this.muxStreamControl1.Location = new System.Drawing.Point(3, 3);
             this.muxStreamControl1.Name = "muxStreamControl1";
-            this.muxStreamControl1.ShowAudioOptions = false;
+            this.muxStreamControl1.ShowDelay = false;
             this.muxStreamControl1.ShowDefaultSubtitleStream = false;
             this.muxStreamControl1.Size = new System.Drawing.Size(424, 93);
             this.muxStreamControl1.TabIndex = 0;
@@ -934,7 +934,7 @@ namespace MeGUI
             MuxStreamControl a = new MuxStreamControl();
             a.Dock = audioTracks[0].Dock;
             a.Padding = audioTracks[0].Padding;
-            a.ShowAudioOptions = audioTracks[0].ShowAudioOptions;
+            a.ShowDelay = audioTracks[0].ShowDelay;
             a.Filter = audioTracks[0].Filter;
             a.FileUpdated += muxStreamControl2_FileUpdated;
 
@@ -968,7 +968,7 @@ namespace MeGUI
             MuxStreamControl a = new MuxStreamControl();
             a.Dock = subtitleTracks[0].Dock;
             a.Padding = subtitleTracks[0].Padding;
-            a.ShowAudioOptions = subtitleTracks[0].ShowAudioOptions;
+            a.ShowDelay = subtitleTracks[0].ShowDelay;
             a.ShowDefaultSubtitleStream = subtitleTracks[0].ShowDefaultSubtitleStream;
             a.chkDefaultStream.CheckedChanged += new System.EventHandler(this.chkDefaultStream_CheckedChanged);
             a.Filter = subtitleTracks[0].Filter;

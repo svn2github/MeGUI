@@ -192,6 +192,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                                 else sb.Append(" --language " + strack.Index.ToString() + ":" + stream.name);
                                 if (!string.IsNullOrEmpty(stream.name))
                                     sb.Append(" --track-name \"" + strack.Index.ToString() + ":" + stream.name + "\"");
+                                if (stream.delay != 0)
+                                    sb.AppendFormat(" --sync {0}:{1}ms", strack.Index.ToString(), stream.delay);
                                 sb.Append(" --default-track " + strack.Index.ToString() + ":no");
                             }
                             else
@@ -210,6 +212,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                                 else sb.Append(" --language " + "0:" + strack.Name);
                                 if (!string.IsNullOrEmpty(stream.name))
                                     sb.Append(" --track-name \"" + "0:" + stream.name + "\"");
+                                if (stream.delay != 0)
+                                    sb.AppendFormat(" --sync {0}:{1}ms", "0", stream.delay);
                                 if (stream.bDefaultTrack)
                                     sb.Append(" --default-track " + "0:yes");
                                 else
@@ -242,6 +246,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                         }
                         if (!string.IsNullOrEmpty(stream.name))
                              sb.Append(" --track-name \"" + trackID + ":" + stream.name + "\"");
+                        if (stream.delay != 0)
+                            sb.AppendFormat(" --sync {0}:{1}ms", trackID, stream.delay);
                         if (stream.bDefaultTrack)
                             sb.Append(" --default-track \"" + trackID + ":yes\"");
                         else
