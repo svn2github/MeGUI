@@ -192,10 +192,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                                 else sb.Append(" --language " + strack.Index.ToString() + ":" + stream.name);
                                 if (!string.IsNullOrEmpty(stream.name))
                                     sb.Append(" --track-name \"" + strack.Index.ToString() + ":" + stream.name + "\"");
-                                if (stream.bDefaultTrack)
-                                    sb.Append(" --default-track " + strack.Index.ToString() + ":yes");
-                                else
-                                    sb.Append(" --default-track " + strack.Index.ToString() + ":no");
+                                sb.Append(" --default-track " + strack.Index.ToString() + ":no");
                             }
                             else
                             {
