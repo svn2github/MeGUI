@@ -1,6 +1,7 @@
 0.3.5.18
   - (zathor) [OneClick] fixed "and open next" checkbox which did not always open the file dialogue. Bug #3089165
   - (zathor) [MKV Muxer] fixed rare "error parsing idx file" message
+  - (zathor) [MKV Muxer] "default stream" checkbox is enabled by default for the first subtitle stream
 
 0.3.5.17
   - (zathor) [OneClick] some dga demuxed audio files were not deleted during cleanup

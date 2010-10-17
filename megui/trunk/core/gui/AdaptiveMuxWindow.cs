@@ -84,6 +84,9 @@ namespace MeGUI
                 else
                     oStream.ShowDefaultSubtitleStream = oStream.ShowDelay = false;
             }
+
+            if ((this.cbContainer.SelectedItem as ContainerType).Extension.Equals("mkv"))
+                subtitleTracks[0].chkDefaultStream.Checked = true;
         }
 
         private void getTypes(out AudioEncoderType[] aCodec, out MuxableType[] audioTypes, out MuxableType[] subtitleTypes)
