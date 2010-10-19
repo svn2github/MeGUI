@@ -160,6 +160,14 @@ namespace MeGUI
                     break;
                 }
             }
+            foreach (object o in device.Items) // I know this is ugly, but using the DeviceOutputType doesn't work unless we're switching to manual serialization
+            {
+                if (o.ToString().Equals(mainForm.Settings.AedSettings.DeviceOutputType))
+                {
+                    device.SelectedItem = o;
+                    break;
+                }
+            }
             return true;
         }
 

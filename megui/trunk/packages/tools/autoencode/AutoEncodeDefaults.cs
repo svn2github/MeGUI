@@ -61,6 +61,7 @@ namespace MeGUI
                 }
                 defaults.NoTargetSizeMode = noTargetRadio.Checked;
                 defaults.Container = container.SelectedItem.ToString();
+                defaults.DeviceOutputType = device.SelectedItem.ToString();
                 return defaults;
             }
             set
@@ -79,6 +80,16 @@ namespace MeGUI
                     if (o.ToString().Equals(defaults.Container))
                     {
                         container.SelectedItem = o;
+                        break;
+                    }
+                }
+                this.device.Items.AddRange(MainForm.Instance.MuxProvider.GetSupportedDevices().ToArray());
+                this.device.SelectedIndex = 0;
+                foreach (object o in device.Items) // I know this is ugly, but using the DeviceOutputType doesn't work unless we're switching to manual serialization
+                {
+                    if (o.ToString().Equals(defaults.DeviceOutputType))
+                    {
+                        device.SelectedItem = o;
                         break;
                     }
                 }
@@ -107,6 +118,14 @@ namespace MeGUI
         {
             if (!char.IsDigit(e.KeyChar) && (int)Keys.Back != (int)e.KeyChar)
                 e.Handled = true;
+        }
+
+        private void container_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (this.container.Text != "MP4")
+                this.device.Enabled = false;
+            else
+                this.device.Enabled = true;
         }
     }
 }
