@@ -126,7 +126,7 @@ namespace MeGUI.packages.tools.besplitter
             // 
             // helpButton1
             // 
-            this.helpButton1.ArticleName = "Audio cutter";
+            this.helpButton1.ArticleName = "Audio Cutter";
             this.helpButton1.AutoSize = true;
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.helpButton1.Location = new System.Drawing.Point(12, 156);

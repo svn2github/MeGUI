@@ -266,7 +266,7 @@ namespace MeGUI.packages.tools.cutter
             // 
             // helpButton1
             // 
-            this.helpButton1.ArticleName = "Avs cutter";
+            this.helpButton1.ArticleName = "Avs Cutter";
             this.helpButton1.AutoSize = true;
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.helpButton1.Location = new System.Drawing.Point(75, 8);

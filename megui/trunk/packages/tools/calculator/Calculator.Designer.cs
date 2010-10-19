@@ -775,7 +775,7 @@ namespace MeGUI
             // helpButton1
             // 
             this.helpButton1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.helpButton1.ArticleName = "Bitrate calculator";
+            this.helpButton1.ArticleName = "Bitrate Calculator";
             this.helpButton1.Location = new System.Drawing.Point(22, 319);
             this.helpButton1.Name = "helpButton1";
             this.helpButton1.Size = new System.Drawing.Size(78, 23);
