@@ -1556,7 +1556,7 @@ namespace MeGUI
         {
             if (!backupfiles.Checked)
             {
-                string meguiToolsFolder = Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf('\\')) + "\\tools\\";
+                string meguiToolsFolder = Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf('\\'));
                 string meguiAvisynthFolder = MainForm.Instance.Settings.AvisynthPluginsPath + "\\";
                 if (Directory.Exists(meguiToolsFolder))
                 {
