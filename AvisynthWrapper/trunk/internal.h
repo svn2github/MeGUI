@@ -35,10 +35,10 @@
 
 typedef unsigned long	Pixel;
 typedef unsigned long	Pixel32;
-typedef unsigned char Pixel8;
+typedef unsigned char	Pixel8;
 typedef long			PixCoord;
-typedef	long			PixDim;
-typedef	long			PixOffset;
+typedef long			PixDim;
+typedef long			PixOffset;
 
 #pragma hdrstop
 
@@ -48,10 +48,10 @@ typedef	long			PixOffset;
   #define _RPT2(a,b,c,d) ((void)0)
   #define _RPT3(a,b,c,d,e) ((void)0)
   #define _RPT4(a,b,c,d,e,f) ((void)0)
-  
+
   #define _ASSERTE(x) assert(x)
   #include <assert.h>
-#else  
+#else
   #include <crtdbg.h>
 #endif
 
@@ -77,7 +77,7 @@ PClip new_Splice(PClip _child1, PClip _child2, bool realign_sound, IScriptEnviro
 PClip new_SeparateFields(PClip _child, IScriptEnvironment* env);
 PClip new_AssumeFrameBased(PClip _child);
 
-void BitBlt(BYTE* dstp, int dst_pitch, const BYTE* srcp, 
+void BitBlt(BYTE* dstp, int dst_pitch, const BYTE* srcp,
             int src_pitch, int row_size, int height);
 
 long GetCPUFlags();
@@ -87,12 +87,14 @@ class _PixelClip {
   enum { buffer=320 };
   BYTE clip[256+buffer*2];
 public:
-  _PixelClip() {  
+  _PixelClip() {
     memset(clip, 0, buffer);
     for (int i=0; i<256; ++i) clip[i+buffer] = (unsigned char) i;
     memset(clip+buffer+256, 255, buffer);
   }
-  BYTE operator()(int i) { return clip[i+buffer]; }
+  BYTE operator()(int i) {
+    return clip[i+buffer];
+  }
 };
 
 extern _PixelClip PixelClip;
@@ -112,16 +114,13 @@ static __inline void Relink(ListNode* newprev, ListNode* me, ListNode* newnext) 
 
 /*** Inline helper methods ***/
 
-
 static __inline BYTE ScaledPixelClip(int i) {
   return PixelClip((i+32768) >> 16);
 }
 
-
-static __inline bool IsClose(int a, int b, unsigned threshold) 
-  { return (unsigned(a-b+threshold) <= threshold*2); }
-
-
-
+static __inline bool IsClose(int a, int b, unsigned threshold)
+{
+  return (unsigned(a-b+threshold) <= threshold*2);
+}
 
 #endif  // __Internal_H__

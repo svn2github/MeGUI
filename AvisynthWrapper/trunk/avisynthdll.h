@@ -21,7 +21,7 @@
 
 typedef struct AVSDLLVideoInfo {
 	// Video
- 	int width;
+	int width;
 	int height;
 	int raten;
 	int rated;

@@ -31,16 +31,16 @@ typedef struct tagSafeStruct
 	AVSValue* res;
 	PClip clp;
 	HMODULE dll;
-}SafeStruct;
+} SafeStruct;
 
 extern "C" {
-__declspec(dllexport) int __stdcall dimzon_avs_init(SafeStruct** ppstr, char *func ,char *arg, AVSDLLVideoInfo *vi, int* originalPixelType, int* originalSampleType, char *cs);
-__declspec(dllexport) int __stdcall dimzon_avs_init_2(SafeStruct** ppstr, char *func ,char *arg, AVSDLLVideoInfo *vi, int* originalPixelType, int* originalSampleType, char *cs);
-__declspec(dllexport) int __stdcall dimzon_avs_destroy(SafeStruct** ppstr);
-__declspec(dllexport) int __stdcall dimzon_avs_getlasterror(SafeStruct* pstr, char *str,int len);
-__declspec(dllexport) int __stdcall dimzon_avs_getvframe(SafeStruct* pstr, void *buf, int stride, int frm );
-__declspec(dllexport) int __stdcall dimzon_avs_getaframe(SafeStruct* pstr, void *buf, __int64 start, __int64 count);
-__declspec(dllexport) int __stdcall dimzon_avs_getintvariable(SafeStruct* pstr, const char* name , int* result);
+	__declspec(dllexport) int __stdcall dimzon_avs_init(SafeStruct** ppstr, char *func ,char *arg, AVSDLLVideoInfo *vi, int* originalPixelType, int* originalSampleType, char *cs);
+	__declspec(dllexport) int __stdcall dimzon_avs_init_2(SafeStruct** ppstr, char *func ,char *arg, AVSDLLVideoInfo *vi, int* originalPixelType, int* originalSampleType, char *cs);
+	__declspec(dllexport) int __stdcall dimzon_avs_destroy(SafeStruct** ppstr);
+	__declspec(dllexport) int __stdcall dimzon_avs_getlasterror(SafeStruct* pstr, char *str,int len);
+	__declspec(dllexport) int __stdcall dimzon_avs_getvframe(SafeStruct* pstr, void *buf, int stride, int frm );
+	__declspec(dllexport) int __stdcall dimzon_avs_getaframe(SafeStruct* pstr, void *buf, __int64 start, __int64 count);
+	__declspec(dllexport) int __stdcall dimzon_avs_getintvariable(SafeStruct* pstr, const char* name , int* result);
 }
 
 
@@ -99,18 +99,18 @@ int __stdcall dimzon_avs_getaframe(SafeStruct* pstr, void *buf, __int64 start, _
 
 int __stdcall dimzon_avs_getvframe(SafeStruct* pstr, void *buf, int stride, int frm )
 {
-    try
+	try
 	{
 		PVideoFrame f = pstr->clp->GetFrame(frm, pstr->env);
 		if(buf && stride)
 		{
 			pstr->env->BitBlt((BYTE*)buf, stride, f->GetReadPtr(), f->GetPitch(),
-				f->GetRowSize(), f->GetHeight());
+							  f->GetRowSize(), f->GetHeight());
 		}
 		pstr->err[0] = 0;
 		return 0;
-    }
-    catch(AvisynthError err)
+	}
+	catch(AvisynthError err)
 	{
 		strncpy_s(pstr->err, ERRMSG_LEN, err.msg, _TRUNCATE);
 		return -1;
@@ -161,7 +161,7 @@ int __stdcall dimzon_avs_destroy(SafeStruct** ppstr)
 
 	free(pstr);
 	*ppstr = NULL;
-		return 0;
+	return 0;
 }
 
 int __stdcall dimzon_avs_init(SafeStruct** ppstr, char *func ,char *arg, AVSDLLVideoInfo *vi, int* originalPixelType, int* originalSampleType, char *cs)
