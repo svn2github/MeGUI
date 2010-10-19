@@ -1,3 +1,6 @@
+0.3.5.19
+  - (zathor) [Adaptive Muxer] resized window so that the buttons at the bottom are visible again. Bug #3090155
+
 0.3.5.18
   - (zathor) [OneClick] fixed "and open next" checkbox which did not always open the file dialogue. Bug #3089165
   - (zathor) [MKV Muxer] fixed rare "error parsing idx file" message

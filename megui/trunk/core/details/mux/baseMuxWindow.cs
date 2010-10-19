@@ -638,8 +638,8 @@ namespace MeGUI
             this.muxStreamControl2.Filter = null;
             this.muxStreamControl2.Location = new System.Drawing.Point(3, 3);
             this.muxStreamControl2.Name = "muxStreamControl2";
-            this.muxStreamControl2.ShowDelay = true;
             this.muxStreamControl2.ShowDefaultSubtitleStream = false;
+            this.muxStreamControl2.ShowDelay = true;
             this.muxStreamControl2.Size = new System.Drawing.Size(424, 93);
             this.muxStreamControl2.TabIndex = 0;
             this.muxStreamControl2.FileUpdated += new System.EventHandler(this.muxStreamControl2_FileUpdated);
@@ -705,8 +705,8 @@ namespace MeGUI
             this.muxStreamControl1.Filter = null;
             this.muxStreamControl1.Location = new System.Drawing.Point(3, 3);
             this.muxStreamControl1.Name = "muxStreamControl1";
-            this.muxStreamControl1.ShowDelay = false;
             this.muxStreamControl1.ShowDefaultSubtitleStream = false;
+            this.muxStreamControl1.ShowDelay = false;
             this.muxStreamControl1.Size = new System.Drawing.Size(424, 93);
             this.muxStreamControl1.TabIndex = 0;
             this.muxStreamControl1.FileUpdated += new System.EventHandler(this.muxStreamControl1_FileUpdated);
@@ -736,7 +736,7 @@ namespace MeGUI
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(444, 577);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(444, 597);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // helpButton1
@@ -753,7 +753,7 @@ namespace MeGUI
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(444, 577);
+            this.ClientSize = new System.Drawing.Size(444, 597);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
