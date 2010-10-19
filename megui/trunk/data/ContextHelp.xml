@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ContextHelp version="0.7" Author="Kurtnoise" LastUpdated="2009-08-09">
+<ContextHelp version="0.7" Author="Kurtnoise, Zathor et all" LastUpdated="2010-05-22">
 	<Codec name="x264">
 		<!--Frame type options:-->
 		<keyint name="Maximum Key Frame Interval">
@@ -67,21 +67,21 @@ Normal = Non-Strict (not Blu-ray compatible)</Advanced>
 			<Recommended>normal</Recommended>
 			<Default>normal</Default>
 		</b-pyramid>
-    <slow-firstpass name="Slow first pass">
-      <Advanced>
-        With the advent of the Preset system in r1177, using --pass 1 applies the following settings at the end of parsing the command line:
-        * ref 1
-        * no-8x8dct
-        * partitions i4x4 (if originally enabled, else none)
-        * me dia
-        * subme MIN( 2, subme )
-        * trellis 0
-        This feature is automatically disabled with preset placebo. To otherwise disable the feature, uncheck this option.
-      </Advanced>
-      <Basic>Slow first pass</Basic>
-      <Recommended>disabled</Recommended>
-      <Default>disabled</Default>
-    </slow-firstpass>
+	<slow-firstpass name="Slow first pass">
+		<Advanced>
+		With the advent of the Preset system in r1177, using --pass 1 applies the following settings at the end of parsing the command line:
+		* ref 1
+		* no-8x8dct
+		* partitions i4x4 (if originally enabled, else none)
+		* me dia
+		* subme MIN( 2, subme )
+		* trellis 0
+		This feature is automatically disabled with preset placebo. To otherwise disable the feature, uncheck this option.
+		</Advanced>
+		<Basic>Slow first pass</Basic>
+		<Recommended>disabled</Recommended>
+		<Default>disabled</Default>
+	</slow-firstpass>
 		<!--WARNING DOUBLE NEGATIVE-->
 		<no-cabac name="Encode CABAC">
 			<Advanced>
@@ -141,9 +141,9 @@ CQ mode targets a certain quantizer, which means final filesize is not known
 (although it can be reasonably accurately estimated with some methods). A setting of 0 will produce lossless output.
 qp produces larger files than crf for the same visual quality. qp mode also disables adaptive quantization,
 since by definition 'constant quantizer' implies no adaptive quantization.
-      </Advanced>
+		</Advanced>
 			<Basic>Encode in Constant Quality mode (0 = lossless) regardless of bit rate. 
-      Note: This mode only requires 1 pass.</Basic>
+		Note: This mode only requires 1 pass.</Basic>
 			<Recommended>21 to 28</Recommended>
 			<Default>23</Default>
 		</qp>
@@ -154,7 +154,7 @@ as the final average. The parameter given is the bitrate in kilobits/sec. (8bits
 This setting is usually used in conjunction with pass for two-pass encoding. Target bitrate mode means 
 the final filesize is known, but the final quality is not (although it's possible to estimate with a reasonable
 degree of accuracy). It is generally not recommended to use bitrate mode without 2pass encoding.
-      </Advanced>
+		</Advanced>
 			<Basic>Sets the average bit rate that the file is to be encoded in. Note: this mode performs best in 2 passes.</Basic>
 			<Recommended>N/A</Recommended>
 			<Default>N/A</Default>
@@ -171,11 +171,11 @@ to frames where they will be more effective. CRF will take less time than a 2pas
 because the 'first pass' from a 2pass encode was skipped. On the other hand, it's impossible to predict 
 the bitrate a CRF encode will come out to (without actually performing the encode or a portion of it). 
 It's up to you to decide which rate-control mode is better for your circumstances.
-      </Advanced>
+		</Advanced>
 			<Basic>Encode in Quality Based Variable Bit Rate mode, regardless of bit rate.</Basic>
 			<Recommended>The range 18-26 is probably where you will want to look at. If you need absolutely perfect quality 
-      you could go down to 16, but it's probably not worth it. Around 19-21.5 is where a rip will look very good. 
-      Higher resolution encoding can generally get away with higher crf values.</Recommended>
+		you could go down to 16, but it's probably not worth it. Around 19-21.5 is where a rip will look very good. 
+		Higher resolution encoding can generally get away with higher crf values.</Recommended>
 			<Default>23</Default>
 		</crf>
 		<qpmin name="Minimum Quantizer">
@@ -266,7 +266,7 @@ can be increased by removing some colour detail.</Advanced>
 		<pass name="Multipass Mode">
 			<Advanced>
 Multiple passes allow the codec to make more informed choices when deciding how
-to compress each frame in  regards to the quality and complexity of the entire clip.
+to compress each frame in regards to the quality and complexity of the entire clip.
 Note: 2 pass encoding will take up to twice as long.</Advanced>
 			<Basic>Enable multipass rate control for Average Bit Rate or Quality based VBR modes.</Basic>
 			<Recommended>Enabled</Recommended>
@@ -345,14 +345,14 @@ Enables 'brightness' weighting of B-frames which improves fades and colour gradi
 			<Recommended>Enabled</Recommended>
 			<Default>Enabled</Default>
 		</weightb>
-    <weightp name="B-frame Weighted Prediction">
-      <Advanced>
-        Enables use of explicit weighted prediction to improve compression in P-frames. Higher modes are slower.
-      </Advanced>
-      <Basic>Weighted prediction for P-frames</Basic>
-      <Recommended>2</Recommended>
-      <Default>2</Default>
-    </weightp>
+	<weightp name="B-frame Weighted Prediction">
+		<Advanced>
+		Enables use of explicit weighted prediction to improve compression in P-frames. Higher modes are slower.
+		</Advanced>
+		<Basic>Weighted prediction for P-frames</Basic>
+		<Recommended>2</Recommended>
+		<Default>2</Default>
+	</weightp>
 		<me name="Motion Estimation Mode">
 			<Advanced>
 Controls the method used to search for motion vectors. Diamond search radius 1 (fastest),
@@ -381,8 +381,8 @@ accurate decisions. Higher values will improve quality but will slow encoding sp
 		</subme>
 		<mixed-refs name="No Mixed References">
 			<Advanced>
-        Mixed refs will select refs on a per-8x8 partition, rather than per-macroblock basis. This improves quality when using multiple reference frames, albeit at some speed cost. Setting this option will disable it.
-      </Advanced>
+		Mixed refs will select refs on a per-8x8 partition, rather than per-macroblock basis. This improves quality when using multiple reference frames, albeit at some speed cost. Setting this option will disable it.
+		</Advanced>
 			<Basic>Disable decision of references on a per partition basis</Basic>
 			<Recommended>Disabled</Recommended>
 			<Default>Disabled</Default>
@@ -399,47 +399,47 @@ Enables Motion Estimation to take colour components of the video into account wh
 		<i8x8dct name="Adaptive 8x8 DCT">
 			<Advanced>
 Enables the intelligent adaptive use of 8x8 transforms in I-frames. Requires I8X8 checked.
-      </Advanced>
+		</Advanced>
 			<Basic>Adaptive spatial transform size</Basic>
 			<Recommended>Enabled</Recommended>
 			<Default>Enabled</Default>
 		</i8x8dct>
-    <i4x4mv name="4x4 sub-partitions for I-Frames">
-      <Advanced>
+	<i4x4mv name="4x4 sub-partitions for I-Frames">
+		<Advanced>
 Enables the use of 4x4 sub-partitions in predicted macroblocks, for I-frames.</Advanced>
-      <Basic>4x4 sub-partitions for I-Frames</Basic>
-      <Recommended>Enabled</Recommended>
-      <Default>Disabled</Default>
-    </i4x4mv>
-    <p4x4mv name="4x4 sub-partitions for P-Frames">
-      <Advanced>
+		<Basic>4x4 sub-partitions for I-Frames</Basic>
+		<Recommended>Enabled</Recommended>
+		<Default>Disabled</Default>
+	</i4x4mv>
+	<p4x4mv name="4x4 sub-partitions for P-Frames">
+		<Advanced>
 Enables the use of 4x4 sub-partitions in predicted macroblocks, for P-frames. 
 Improves compression by about 0.5%, at the cost of encoding speed. Requires P8X8 enabled.</Advanced>
-      <Basic>4x4 sub-partitions for P-Frames</Basic>
-      <Recommended>Disabled</Recommended>
-      <Default>Disabled</Default>
-    </p4x4mv>
-    <p8x8mv name="8x8 sub-partitions for P-Frames">
-      <Advanced>
+		<Basic>4x4 sub-partitions for P-Frames</Basic>
+		<Recommended>Disabled</Recommended>
+		<Default>Disabled</Default>
+	</p4x4mv>
+	<p8x8mv name="8x8 sub-partitions for P-Frames">
+		<Advanced>
 Enables the use of 8x8 sub-partitions in predicted macroblocks, for P-frames.</Advanced>
-      <Basic>8x8 sub-partitions for P-Frames</Basic>
-      <Recommended>Enabled</Recommended>
-      <Default>Disabled</Default>
-    </p8x8mv>
-    <b8x8mv name="8x8 sub-partitions for B-Frames">
-      <Advanced>
+		<Basic>8x8 sub-partitions for P-Frames</Basic>
+		<Recommended>Enabled</Recommended>
+		<Default>Disabled</Default>
+	</p8x8mv>
+	<b8x8mv name="8x8 sub-partitions for B-Frames">
+		<Advanced>
 Enables the use of 8x8 sub-partitions in predicted macroblocks, for B-frames.</Advanced>
-      <Basic>8x8 sub-partitions for B-Frames</Basic>
-      <Recommended>Enabled</Recommended>
-      <Default>Disabled</Default>
-    </b8x8mv>
-    <i8x8mv name="8x8 sub-partitions for I-Frames">
-      <Advanced>
+		<Basic>8x8 sub-partitions for B-Frames</Basic>
+		<Recommended>Enabled</Recommended>
+		<Default>Disabled</Default>
+	</b8x8mv>
+	<i8x8mv name="8x8 sub-partitions for I-Frames">
+		<Advanced>
 Enables the use of 8x8 sub-partitions in predicted macroblocks, for I-frames.</Advanced>
-      <Basic>8x8 sub-partitions for I-Frames</Basic>
-      <Recommended>Enabled</Recommended>
-      <Default>Disabled</Default>
-    </i8x8mv>
+		<Basic>8x8 sub-partitions for I-Frames</Basic>
+		<Recommended>Enabled</Recommended>
+		<Default>Disabled</Default>
+	</i8x8mv>
 		<trellis name="Trellis Quantization">
 			<Advanced>
 Performs Trellis quantization to increase efficiency. On Macroblock provides a
@@ -466,34 +466,34 @@ Your mileage may vary.
 			<Recommended>0.0</Recommended>
 			<Default>0.0</Default>
 		</psytrellis>
-    <mbtree name="MB-Tree Rate Control">
-      <Advanced>
-        It tracks the propagation of information from future blocks to past blocks across motion vectors.
-        It could be described as localizing qcomp to act on individual blocks instead of whole scenes.
-        Thus instead of lowering quality in high-complexity scenes (like x264 currently does), it'll only
-        lower quality on the complex part of the scene, while for example a static background
-        will remain high-quality.
-        It also has many other more subtle effects, some potentially negative, most probably not.
-      </Advanced>  
-      <Basic>
+	<mbtree name="MB-Tree Rate Control">
+		<Advanced>
+		It tracks the propagation of information from future blocks to past blocks across motion vectors.
+		It could be described as localizing qcomp to act on individual blocks instead of whole scenes.
+		Thus instead of lowering quality in high-complexity scenes (like x264 currently does), it'll only
+		lower quality on the complex part of the scene, while for example a static background
+		will remain high-quality.
+		It also has many other more subtle effects, some potentially negative, most probably not.
+		</Advanced>
+		<Basic>
 This helps at all bitrates, but can even help at phenomenally low bitrates where 
 the video would otherwise fall apart completely...
-      </Basic>
-      <Recommended>Enabled</Recommended>
-      <Default>Enabled</Default>
-    </mbtree>
-    <lookahead name="RC-Lookahead">
-      <Advanced>
-        Sets the number of frames to use for mb-tree ratecontrol. 
-        Increasing the frame count generates better results but it's also slower. 
-        Maximum value is 250 or keyint, whichever is smaller.
-      </Advanced>
-      <Basic>
-        Number of frames for frametype lookahead.
-      </Basic>
-      <Recommended>40-50</Recommended>
-      <Default>40</Default>
-    </lookahead>
+		</Basic>
+		<Recommended>Enabled</Recommended>
+		<Default>Enabled</Default>
+	</mbtree>
+	<lookahead name="RC-Lookahead">
+		<Advanced>
+		Sets the number of frames to use for mb-tree ratecontrol. 
+		Increasing the frame count generates better results but it's also slower. 
+		Maximum value is 250 or keyint, whichever is smaller.
+		</Advanced>
+		<Basic>
+		Number of frames for frametype lookahead.
+		</Basic>
+		<Recommended>40-50</Recommended>
+		<Default>40</Default>
+	</lookahead>
 		<!--WARNING DOUBLE NEGATIVE-->
 		<no-fast-pskip name="Fast P-frame Skip Detection">
 			<Advanced>
@@ -552,22 +552,22 @@ Stores the size of non-square pixels in the video stream for use during playback
 			<Default>1:1</Default>
 		</sar>
 		<!-- Not Documented:
-      overscan <string>     Specify crop overscan setting ["undef"]
-                                  - undef, show, crop
-      videoformat <string>  Specify video format ["undef"]
-                                  - component, pal, ntsc, secam, mac, undef
-      fullrange <string>    Specify full range samples setting ["off"]
-                                  - off, on
-      colorprim <string>    Specify color primaries ["undef"]
-                                  - undef, bt709, bt470m, bt470bg
-                                    smpte170m, smpte240m, film
-      transfer <string>     Specify transfer characteristics ["undef"]
-                                  - undef, bt709, bt470m, bt470bg, linear,
-                                    log100, log316, smpte170m, smpte240m
-      colormatrix <string>  Specify color matrix setting ["undef"]
-                                  - undef, bt709, fcc, bt470bg
-                                    smpte170m, smpte240m, GBR, YCgCo
-      chromaloc <integer>   Specify chroma sample location (0 to 5) [0]
+		overscan <string>		Specify crop overscan setting ["undef"]
+									- undef, show, crop
+		videoformat <string>	Specify video format ["undef"]
+									- component, pal, ntsc, secam, mac, undef
+		fullrange <string>		Specify full range samples setting ["off"]
+									- off, on
+		colorprim <string>		Specify color primaries ["undef"]
+									- undef, bt709, bt470m, bt470bg
+									smpte170m, smpte240m, film
+		transfer <string>		Specify transfer characteristics ["undef"]
+									- undef, bt709, bt470m, bt470bg, linear,
+									log100, log316, smpte170m, smpte240m
+		colormatrix <string>	Specify color matrix setting ["undef"]
+									- undef, bt709, fcc, bt470bg
+									smpte170m, smpte240m, GBR, YCgCo
+		chromaloc <integer>		Specify chroma sample location (0 to 5) [0]
 -->
 		<!--Video Usability options:-->
 		<level name="AVC Complexity Level">
@@ -579,7 +579,7 @@ Stores the size of non-square pixels in the video stream for use during playback
 		<fps name="Frame Rate">
 			<Advanced>
 This can be used to change the frame rate of the video during encoding
-(or specify the frame rate for a source  that does not detect correctly).</Advanced>
+(or specify the frame rate for a source that does not detect correctly).</Advanced>
 			<Basic>Specify frame rate</Basic>
 			<Recommended>Automatic</Recommended>
 			<Default>Automatic</Default>
@@ -629,13 +629,13 @@ Prevents PSNR calculations that are reported on completion.</Advanced>
 			<Recommended>Disabled</Recommended>
 			<Default>Disabled</Default>
 		</psnr>
-    <ssim name="SSIM Computation">
-      <Advanced>
+	<ssim name="SSIM Computation">
+		<Advanced>
 Prevents SSIM calculations that are reported on completion.</Advanced>
-      <Basic>Enable SSIM computation</Basic>
-      <Recommended>Disabled</Recommended>
-      <Default>Disabled</Default>
-    </ssim>
+		<Basic>Enable SSIM computation</Basic>
+		<Recommended>Disabled</Recommended>
+		<Default>Disabled</Default>
+	</ssim>
 		<quiet name="Quiet Mode">
 			<Advanced></Advanced>
 			<Basic>Enable Quiet Mode (do not display output information).</Basic>
@@ -664,102 +664,102 @@ Debugging option used to understand what is happening on a frame by frame basis.
 		<aud name="Access Unit Delimiters">
 			<Advanced>
 Use access unit delimiters
-      </Advanced>
+		</Advanced>
 			<Basic>Use access unit delimiters</Basic>
 			<Recommended>Disabled, unless encoding for Blu-ray, in which case set this option</Recommended>
 			<Default>Disabled</Default>
 		</aud>
-    <nalhrd name="nal-hrd">
-      <Advanced>
+	<nalhrd name="nal-hrd">
+		<Advanced>
 Add NAL HRD parameters to the output stream; used for HD-DVD and Blu-ray compliancy. 
 Depends on vbv-bufsize and vbv-maxrate to be set to be active. 
 If enabled a patched x264.exe is needed!
-      </Advanced>
-      <Basic>Use nal-hrd</Basic>
-      <Recommended>Disabled, unless encoding for Blu-ray, in which case set this option</Recommended>
-      <Default>Disabled</Default>
-    </nalhrd>
-    <customcommandline name="Custom command line">
-      <Advanced>
+		</Advanced>
+		<Basic>Use nal-hrd</Basic>
+		<Recommended>Disabled, unless encoding for Blu-ray, in which case set this option</Recommended>
+		<Default>Disabled</Default>
+	</nalhrd>
+	<customcommandline name="Custom command line">
+		<Advanced>
 The parameters specified in the custom command line will overwrite the parameters specified in the GUI.
-      </Advanced>
-      <Basic>Custom command line parameters</Basic>
-      <Recommended>Empty, unless some parameters have to be forced</Recommended>
-      <Default>Empty</Default>
-    </customcommandline>
-    <aqmode name="AQ Mode">
-      <Advanced>
+		</Advanced>
+		<Basic>Custom command line parameters</Basic>
+		<Recommended>Empty, unless some parameters have to be forced</Recommended>
+		<Default>Empty</Default>
+	</customcommandline>
+	<aqmode name="AQ Mode">
+		<Advanced>
 This option controls how AQ distributes bits. Mode 0 disables the feature whereas 
 Mode 1 enables Variance AQ (complexity mask) and Mode 2 enables Auto-Variance AQ (still experimental)</Advanced>
-      <Basic>The Mode of the Adaptive Quantizers - 0 =  Disabled / 1 = Variance AQ / 2 = Auto-Variance AQ</Basic>
-      <Recommended>1</Recommended>
-      <Default>1</Default>
-    </aqmode>
-    <aqstrength name="AQ Strength">
-      <Advanced>
+		<Basic>The Mode of the Adaptive Quantizers - 0 = Disabled / 1 = Variance AQ / 2 = Auto-Variance AQ</Basic>
+		<Recommended>1</Recommended>
+		<Default>1</Default>
+	</aqmode>
+	<aqstrength name="AQ Strength">
+		<Advanced>
 Reduces blocking and blurring in flat and textured areas. To have a weak AQ choose 0.5
-and a strong one 1.5  as value.</Advanced>
-      <Basic>Strength of the Adaptive Quantizers</Basic>
-      <Recommended>1.0</Recommended>
-      <Default>1.0</Default>
-    </aqstrength>
-    <profile name="AVC Profiles">
-      <Advanced>
+and a strong one 1.5 as value.</Advanced>
+		<Basic>Strength of the Adaptive Quantizers</Basic>
+		<Recommended>1.0</Recommended>
+		<Default>1.0</Default>
+	</aqstrength>
+	<profile name="AVC Profiles">
+		<Advanced>
 The H.264 standard includes the following sets of capabilities, which are referred to as profiles,
 targeting specific classes of applications:
-    - Baseline Profile (BP): Primarily for lower-cost applications with limited computing resources,
-      this profile is used widely in videoconferencing and mobile applications.
-    - Main Profile (MP): Originally intended as the mainstream consumer profile for broadcast and
-      storage applications, the importance of this profile faded when the High profile was 
-      developed for those applications.
-    - Extended Profile (XP): Intended as the streaming video profile, this profile has relatively high
-      compression capability and some extra tricks for robustness to data losses and server stream switching.
-    - High Profile (HiP): The primary profile for broadcast and disc storage applications, particularly
-      for high-definition television applications (this is the profile adopted into HD DVD and Blu-ray Disc,
-      for example).
-      </Advanced>
-      <Basic>Choose your AVC Profile.</Basic>
-      <Recommended>High Profile</Recommended>
-      <Default>High Profile</Default>
-    </profile>
-    <tunes name="x264 Tunings">
-      <Advanced>
-        Tune options to further optimise them for your input content. 
-        If you specify a tuning, the changes will be applied after 
-        a preset but before all other parameters.
-      </Advanced>
-      <Basic>
-        Specify an internal tuning.
-      </Basic>
-      <Recommended></Recommended>
-      <Default>none</Default>
-    </tunes>
-    <presets name="x264 Presets">
-      <Advanced>
-        Change options to trade off compression efficiency and quality.
-        If you specify a preset, the changes it makes will be applied
-        before all other parameters are applied.
-        Faster presets will shorten the encoding time while
-        - lowering the quality in bitrate mode or
-        - increasing the file size in Constant Quantizer or Constant Ratefactor mode
-      </Advanced>
-      <Basic>
-        Specify an internal preset.
-      </Basic>
-      <Recommended></Recommended>
-      <Default>Medium</Default>
-    </presets>
-    <targetmode name="Target mode">
-      <Advanced>
-        If you need to reach a specific file size select "Targeting file size".
-        If not it is recommended to select "Targeting quality".
-      </Advanced>
-      <Basic>
-        Specify an encoding mode.
-      </Basic>
-      <Recommended></Recommended>
-      <Default></Default>
-    </targetmode>
+	- Baseline Profile (BP): Primarily for lower-cost applications with limited computing resources,
+		this profile is used widely in videoconferencing and mobile applications.
+	- Main Profile (MP): Originally intended as the mainstream consumer profile for broadcast and
+		storage applications, the importance of this profile faded when the High profile was 
+		developed for those applications.
+	- Extended Profile (XP): Intended as the streaming video profile, this profile has relatively high
+		compression capability and some extra tricks for robustness to data losses and server stream switching.
+	- High Profile (HiP): The primary profile for broadcast and disc storage applications, particularly
+		for high-definition television applications (this is the profile adopted into HD DVD and Blu-ray Disc,
+		for example).
+		</Advanced>
+		<Basic>Choose your AVC Profile.</Basic>
+		<Recommended>High Profile</Recommended>
+		<Default>High Profile</Default>
+	</profile>
+	<tunes name="x264 Tunings">
+		<Advanced>
+		Tune options to further optimise them for your input content. 
+		If you specify a tuning, the changes will be applied after 
+		a preset but before all other parameters.
+		</Advanced>
+		<Basic>
+		Specify an internal tuning.
+		</Basic>
+		<Recommended></Recommended>
+		<Default>none</Default>
+	</tunes>
+	<presets name="x264 Presets">
+		<Advanced>
+		Change options to trade off compression efficiency and quality.
+		If you specify a preset, the changes it makes will be applied
+		before all other parameters are applied.
+		Faster presets will shorten the encoding time while
+		- lowering the quality in bitrate mode or
+		- increasing the file size in Constant Quantizer or Constant Ratefactor mode
+		</Advanced>
+		<Basic>
+		Specify an internal preset.
+		</Basic>
+		<Recommended></Recommended>
+		<Default>Medium</Default>
+	</presets>
+	<targetmode name="Target mode">
+		<Advanced>
+		If you need to reach a specific file size select "Targeting file size".
+		If not it is recommended to select "Targeting quality".
+		</Advanced>
+		<Basic>
+		Specify an encoding mode.
+		</Basic>
+		<Recommended></Recommended>
+		<Default></Default>
+	</targetmode>
 	</Codec>
 	<Codec name="Xvid">
 		<setting1 name="setting1">
@@ -769,14 +769,14 @@ targeting specific classes of applications:
 			<Default>Disabled</Default>
 		</setting1>
 	</Codec>
-  <Form name="PresetImporter">
-    <presetList name="info">
-      <Basic>To import all presets in once, right click on this list and select all...</Basic>
-    </presetList>
-  </Form>
-  <Form name="PresetExporter">
-    <presetList name="info">
-      <Basic>To export all presets in once, right click on this list and select all...</Basic>
-    </presetList>
-  </Form>
+	<Form name="PresetImporter">
+	<presetList name="info">
+		<Basic>To import all presets in once, right click on this list and select all...</Basic>
+	</presetList>
+	</Form>
+	<Form name="PresetExporter">
+	<presetList name="info">
+		<Basic>To export all presets in once, right click on this list and select all...</Basic>
+	</presetList>
+	</Form>
 </ContextHelp>
