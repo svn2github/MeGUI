@@ -106,7 +106,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                     else trackID = 0;
                     sb.Append(" --engage keep_bitstream_ar_info"); // assuming that SAR info is already in the stream...
                     if (!string.IsNullOrEmpty(settings.VideoName))
-                        sb.Append(" --track-name \"" + trackID + ":" + settings.VideoName + "\"");
+                        sb.Append(" --track-name \"" + trackID + ":" + settings.VideoName.Replace("\"","\\\"") + "\"");
                     if (settings.Framerate.HasValue)
                         sb.Append(" --default-duration " + trackID + ":" + PrettyFormatting.ReplaceFPSValue(settings.Framerate.Value.ToString()) + "fps");
                     sb.Append(" \"--compression\" \"" + trackID + ":none\"");
@@ -123,7 +123,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                     else
                         sb.Append(" --engage keep_bitstream_ar_info");
                     if (!string.IsNullOrEmpty(settings.VideoName))
-                        sb.Append(" --track-name \"" + trackID + ":" + settings.VideoName + "\"");
+                        sb.Append(" --track-name \"" + trackID + ":" + settings.VideoName.Replace("\"", "\\\"") + "\"");
                     if (settings.Framerate.HasValue)
                         sb.Append(" --default-duration " + trackID + ":" + PrettyFormatting.ReplaceFPSValue(settings.Framerate.Value.ToString()) + "fps");
                     sb.Append(" \"--compression\" \"" + trackID + ":none\"");
@@ -159,7 +159,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                         }
                     }
                     if (!string.IsNullOrEmpty(stream.name))
-                        sb.Append(" --track-name \"" + trackID + ":" + stream.name + "\"");
+                        sb.Append(" --track-name \"" + trackID + ":" + stream.name.Replace("\"", "\\\"") + "\"");
                     if (stream.delay != 0)
                         sb.AppendFormat(" --sync {0}:{1}ms", trackID, stream.delay);
                     sb.Append(" \"--compression\" \"" + trackID + ":none\"");
@@ -191,7 +191,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                                 }
                                 else sb.Append(" --language " + strack.Index.ToString() + ":" + stream.name);
                                 if (!string.IsNullOrEmpty(stream.name))
-                                    sb.Append(" --track-name \"" + strack.Index.ToString() + ":" + stream.name + "\"");
+                                    sb.Append(" --track-name \"" + strack.Index.ToString() + ":" + stream.name.Replace("\"", "\\\"") + "\"");
                                 if (stream.delay != 0)
                                     sb.AppendFormat(" --sync {0}:{1}ms", strack.Index.ToString(), stream.delay);
                                 sb.Append(" --default-track " + strack.Index.ToString() + ":no");
@@ -211,7 +211,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                                 }  
                                 else sb.Append(" --language " + "0:" + strack.Name);
                                 if (!string.IsNullOrEmpty(stream.name))
-                                    sb.Append(" --track-name \"" + "0:" + stream.name + "\"");
+                                    sb.Append(" --track-name \"" + "0:" + stream.name.Replace("\"", "\\\"") + "\"");
                                 if (stream.delay != 0)
                                     sb.AppendFormat(" --sync {0}:{1}ms", "0", stream.delay);
                                 if (stream.bDefaultTrack)
@@ -245,7 +245,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                             }
                         }
                         if (!string.IsNullOrEmpty(stream.name))
-                             sb.Append(" --track-name \"" + trackID + ":" + stream.name + "\"");
+                            sb.Append(" --track-name \"" + trackID + ":" + stream.name.Replace("\"", "\\\"") + "\"");
                         if (stream.delay != 0)
                             sb.AppendFormat(" --sync {0}:{1}ms", trackID, stream.delay);
                         if (stream.bDefaultTrack)
