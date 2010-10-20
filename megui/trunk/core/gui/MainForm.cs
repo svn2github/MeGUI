@@ -1194,14 +1194,8 @@ namespace MeGUI
         {
             if ((!(sender is System.Windows.Forms.MenuItem)) || (!((sender as MenuItem).Tag is IMuxing)))
                 return;
-            using (MuxWindow mw = new MuxWindow((IMuxing)((sender as MenuItem).Tag),this))
-            {
-                if (mw.ShowDialog() == DialogResult.OK)
-                {
-                    MuxJob job = mw.Job;
-                    Jobs.addJobsToQueue(job);
-                }
-            }
+            MuxWindow mw = new MuxWindow((IMuxing)((sender as MenuItem).Tag), this);
+            mw.Show();
         }
 
         private void mnuView_Popup(object sender, System.EventArgs e)
@@ -1293,7 +1287,7 @@ namespace MeGUI
         {
             FileIndexerWindow mpegInput = new FileIndexerWindow(this);
             mpegInput.setConfig(fileName, null, 2, true, true, true, false);
-            mpegInput.ShowDialog();
+            mpegInput.Show();
         }
         private FileType getFileType(string fileName)
         {
@@ -2165,7 +2159,7 @@ namespace MeGUI
         private void menuItem5_Click(object sender, EventArgs e)
         {
             FileIndexerWindow d2vc = new FileIndexerWindow(this);
-            d2vc.ShowDialog();
+            d2vc.Show();
         }
 
         private void MainForm_Move(object sender, EventArgs e)

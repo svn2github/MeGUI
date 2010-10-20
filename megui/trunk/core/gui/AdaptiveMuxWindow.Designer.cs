@@ -67,6 +67,5 @@ namespace MeGUI
         #endregion
 
         private System.Windows.Forms.ComboBox containerFormat;
-        private System.Windows.Forms.Label label1;
     }
 }

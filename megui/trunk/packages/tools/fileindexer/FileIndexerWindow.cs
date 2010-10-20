@@ -599,9 +599,10 @@ namespace MeGUI
             this.Controls.Add(this.queueButton);
             this.Controls.Add(this.gbAudio);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "FileIndexerWindow";
             this.Text = "MeGUI - File Indexer";
             this.gbInput.ResumeLayout(false);

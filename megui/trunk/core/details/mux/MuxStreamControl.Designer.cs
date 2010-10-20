@@ -209,10 +209,10 @@ namespace MeGUI.core.details.mux
         protected System.Windows.Forms.ComboBox subtitleLanguage;
         protected System.Windows.Forms.Label subtitleLanguageLabel;
         protected System.Windows.Forms.Label subtitleInputLabel;
-        private FileBar input;
         protected System.Windows.Forms.Label delayLabel;
         protected System.Windows.Forms.NumericUpDown audioDelay;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         public System.Windows.Forms.CheckBox chkDefaultStream;
+        public FileBar input;
     }
 }
