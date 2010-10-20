@@ -45,7 +45,7 @@ namespace MeGUI
                      overwriteStats, keep2of3passOutput, autoUpdate, deleteCompletedJobs, deleteIntermediateFiles,
                      deleteAbortedOutput, openProgressWindow, useadvancedtooltips, freshOggEnc2, autoscroll, 
                      alwaysOnTop, safeProfileAlteration, usehttpproxy, addTimePosition, alwaysbackupfiles,
-                     forcerawavcextension, bAutoLoadDG, bAutoStartQueueStartup, bAlwaysMux;
+                     forcerawavcextension, bAutoLoadDG, bAutoStartQueueStartup, bAlwaysMuxMKV;
         private ulong audioSamplesPerUpdate;
         private AfterEncoding afterEncoding;
         private decimal forceFilmThreshold, acceptableFPSError;
@@ -108,7 +108,7 @@ namespace MeGUI
 			autoForceFilm = true;
             bAutoLoadDG = true;
 			autoStartQueue = false;
-            bAlwaysMux = true;
+            bAlwaysMuxMKV = true;
             bAutoStartQueueStartup = false;
 			forceFilmThreshold = new decimal(95);
 			defaultLanguage1 = "";
@@ -695,12 +695,12 @@ namespace MeGUI
             set { bAutoStartQueueStartup = value; }
 		}
         /// <summary>
-        /// gets / sets whether pressing Queue should automatically start encoding at startup
+        /// gets / sets whether MKV files should always be muxed with mkvmerge even if x264 can output it directly
         /// </summary>
-        public bool AlwaysMux
+        public bool AlwaysMuxMKV
         {
-            get { return bAlwaysMux; }
-            set { bAlwaysMux = value; }
+            get { return bAlwaysMuxMKV; }
+            set { bAlwaysMuxMKV = value; }
         }
 		/// <summary>
 		/// gets / sets whether pressing Queue should automatically start encoding

@@ -7,6 +7,7 @@
   - (zathor) [AutoEncode] added saving of the default mp4 device type to the "Configure AutoEncode defaults" in the settings
   - (zathor) [MKV Muxer] added support for quotes in the track names. Bug #3090689
   - (zathor) [Queue] the connection job <--> worker is going to be restored/repaired during startup if lost/wrong. Bug #3090054
+  - (zathor) [AutoEncode] the "always mux the video encoding" setting applies now only to mkv container. also renamed the option and added a tooltip
 
 0.3.5.18
   - (zathor) [OneClick] fixed "and open next" checkbox which did not always open the file dialogue. Bug #3089165

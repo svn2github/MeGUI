@@ -24,6 +24,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
+using System.Text;
+using System.Xml;
 using System.Windows.Forms;
 
 namespace MeGUI
@@ -128,13 +130,11 @@ namespace MeGUI
         private RadioButton rbCloseMeGUI;
         private CheckBox cbAutoStartQueueStartup;
         private ComboBox cbAutoUpdateServerSubList;
-        private CheckBox chkAlwaysMux;
-
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.Container components = null;
+        private CheckBox chkAlwaysMuxMKV;
 		#endregion
+        private ToolTip toolTipHelp;
+        private IContainer components;
+        private XmlDocument ContextHelp = new XmlDocument();
 		#region start / stop
 		public SettingsForm()
 		{
@@ -143,7 +143,50 @@ namespace MeGUI
             defaultLanguage2.DataSource = defaultLanguage1.DataSource = keys;
             defaultLanguage2.BindingContext = new BindingContext();
             defaultLanguage1.BindingContext = new BindingContext();
+            SetToolTips();
 		}
+
+        /// <summary>
+        /// Sets any required tooltips
+        /// </summary>
+        private void SetToolTips()
+        {
+            try
+            {
+                string p = System.IO.Path.Combine(Application.StartupPath, "Data");
+                p = System.IO.Path.Combine(p, "ContextHelp.xml");             
+                ContextHelp.Load(p);
+            }
+            catch
+            {
+                MessageBox.Show("The ContextHelp.xml file could not be found. Please check in the 'Data' directory to see if it exists. Help tooltips will not be available.", "File Not Found", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            toolTipHelp.SetToolTip(chkAlwaysMuxMKV, SelectHelpText("alwaysmuxmkv"));
+        }
+
+        /// <summary>
+        /// Gets the help text
+        /// </summary>
+        private string SelectHelpText(string node)
+        {
+            StringBuilder HelpText = new StringBuilder(64);
+
+            string xpath = "/ContextHelp/Form[@name='SettingsForm']/" + node;
+            XmlNodeList nl = ContextHelp.SelectNodes(xpath); // Return the details for the specified node
+
+            if (nl.Count == 1) // if it finds the required HelpText, count should be 1
+            {
+                HelpText.Append(nl[0].Attributes["name"].Value);
+                HelpText.AppendLine();
+                HelpText.AppendLine(nl[0]["Basic"].InnerText);
+            }
+            else // If count isn't 1, then theres no valid data.
+                HelpText.Append("Error: No data available");
+
+            return (HelpText.ToString());
+        }
+
 		/// <summary>
 		/// Clean up any resources being used.
 		/// </summary>
@@ -166,6 +209,7 @@ namespace MeGUI
 		/// </summary>
 		private void InitializeComponent()
 		{
+            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.GroupBox groupBox1;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsForm));
             this.rbCloseMeGUI = new System.Windows.Forms.RadioButton();
@@ -226,6 +270,7 @@ namespace MeGUI
             this.label12 = new System.Windows.Forms.Label();
             this.audioExtension = new System.Windows.Forms.TextBox();
             this.autoModeGroupbox = new System.Windows.Forms.GroupBox();
+            this.chkAlwaysMuxMKV = new System.Windows.Forms.CheckBox();
             this.configAutoEncodeDefaults = new System.Windows.Forms.Button();
             this.keep2ndPassLogFile = new System.Windows.Forms.CheckBox();
             this.keep2ndPassOutput = new System.Windows.Forms.CheckBox();
@@ -256,10 +301,10 @@ namespace MeGUI
             this.audioExtLabel = new System.Windows.Forms.Label();
             this.videoExtLabel = new System.Windows.Forms.Label();
             this.autoEncodeDefaultsButton = new System.Windows.Forms.Button();
+            this.toolTipHelp = new System.Windows.Forms.ToolTip(this.components);
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.defaultOutputDir = new MeGUI.FileBar();
             this.tempDirMP4 = new MeGUI.FileBar();
-            this.chkAlwaysMux = new System.Windows.Forms.CheckBox();
             groupBox1 = new System.Windows.Forms.GroupBox();
             groupBox1.SuspendLayout();
             this.otherGroupBox.SuspendLayout();
@@ -908,7 +953,7 @@ namespace MeGUI
             // 
             // autoModeGroupbox
             // 
-            this.autoModeGroupbox.Controls.Add(this.chkAlwaysMux);
+            this.autoModeGroupbox.Controls.Add(this.chkAlwaysMuxMKV);
             this.autoModeGroupbox.Controls.Add(this.configAutoEncodeDefaults);
             this.autoModeGroupbox.Controls.Add(this.keep2ndPassLogFile);
             this.autoModeGroupbox.Controls.Add(this.keep2ndPassOutput);
@@ -920,6 +965,18 @@ namespace MeGUI
             this.autoModeGroupbox.TabIndex = 0;
             this.autoModeGroupbox.TabStop = false;
             this.autoModeGroupbox.Text = "Automated Encoding";
+            // 
+            // chkAlwaysMuxMKV
+            // 
+            this.chkAlwaysMuxMKV.AutoSize = true;
+            this.chkAlwaysMuxMKV.Checked = true;
+            this.chkAlwaysMuxMKV.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkAlwaysMuxMKV.Location = new System.Drawing.Point(232, 70);
+            this.chkAlwaysMuxMKV.Name = "chkAlwaysMuxMKV";
+            this.chkAlwaysMuxMKV.Size = new System.Drawing.Size(226, 17);
+            this.chkAlwaysMuxMKV.TabIndex = 21;
+            this.chkAlwaysMuxMKV.Text = "Always mux mkv encoding with mkvmerge";
+            this.chkAlwaysMuxMKV.UseVisualStyleBackColor = true;
             // 
             // configAutoEncodeDefaults
             // 
@@ -1236,6 +1293,14 @@ namespace MeGUI
             this.autoEncodeDefaultsButton.Text = "Configure Defaults";
             this.autoEncodeDefaultsButton.UseVisualStyleBackColor = true;
             // 
+            // toolTipHelp
+            // 
+            this.toolTipHelp.AutoPopDelay = 30000;
+            this.toolTipHelp.InitialDelay = 500;
+            this.toolTipHelp.IsBalloon = true;
+            this.toolTipHelp.ReshowDelay = 100;
+            this.toolTipHelp.ShowAlways = true;
+            // 
             // helpButton1
             // 
             this.helpButton1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -1278,18 +1343,6 @@ namespace MeGUI
             this.tempDirMP4.Size = new System.Drawing.Size(424, 26);
             this.tempDirMP4.TabIndex = 41;
             this.tempDirMP4.Title = null;
-            // 
-            // chkAlwaysMux
-            // 
-            this.chkAlwaysMux.AutoSize = true;
-            this.chkAlwaysMux.Checked = true;
-            this.chkAlwaysMux.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkAlwaysMux.Location = new System.Drawing.Point(232, 70);
-            this.chkAlwaysMux.Name = "chkAlwaysMux";
-            this.chkAlwaysMux.Size = new System.Drawing.Size(158, 17);
-            this.chkAlwaysMux.TabIndex = 21;
-            this.chkAlwaysMux.Text = "Always mux video encoding";
-            this.chkAlwaysMux.UseVisualStyleBackColor = true;
             // 
             // SettingsForm
             // 
@@ -1458,7 +1511,7 @@ namespace MeGUI
 				settings.DefaultPriority = (ProcessPriority)priority.SelectedIndex;
 				settings.AutoStartQueue = this.autostartQueue.Checked;
                 settings.AutoStartQueueStartup = this.cbAutoStartQueueStartup.Checked;
-                settings.AlwaysMux = this.chkAlwaysMux.Checked;
+                settings.AlwaysMuxMKV = this.chkAlwaysMuxMKV.Checked;
                 if (donothing.Checked)
                     settings.AfterEncoding = AfterEncoding.DoNothing;
                 else if (shutdown.Checked)
@@ -1520,7 +1573,7 @@ namespace MeGUI
 				priority.SelectedIndex = (int)settings.DefaultPriority;
 				autostartQueue.Checked = settings.AutoStartQueue;
                 cbAutoStartQueueStartup.Checked = settings.AutoStartQueueStartup;
-                chkAlwaysMux.Checked = settings.AlwaysMux;
+                chkAlwaysMuxMKV.Checked = settings.AlwaysMuxMKV;
                 donothing.Checked = settings.AfterEncoding == AfterEncoding.DoNothing;
                 shutdown.Checked = settings.AfterEncoding == AfterEncoding.Shutdown;
                 runCommand.Checked = settings.AfterEncoding == AfterEncoding.RunCommand;

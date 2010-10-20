@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ContextHelp version="0.7" Author="Kurtnoise, Zathor et all" LastUpdated="2010-05-22">
+<ContextHelp version="0.7" Author="Kurtnoise, Zathor et all" LastUpdated="2010-10-20">
 	<Codec name="x264">
 		<!--Frame type options:-->
 		<keyint name="Maximum Key Frame Interval">
@@ -779,4 +779,13 @@ targeting specific classes of applications:
 		<Basic>To export all presets in once, right click on this list and select all...</Basic>
 	</presetList>
 	</Form>
+  <Form name="SettingsForm">
+    <alwaysmuxmkv name="Alway mux mkv video encoding with mkvmerge">
+      <Basic>
+If no additional streams are to mux this setting defines if the x264 encoder will output
+the encoding directly in the mkv container format (non/slow seekable) or if it will be
+muxed with mkvmerge.
+      </Basic>
+    </alwaysmuxmkv>
+  </Form>
 </ContextHelp>
