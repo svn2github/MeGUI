@@ -1,5 +1,6 @@
 0.3.5.20
   - (zathor) [Muxer] changed the automatically adding of empty tracks a little bit
+  - (zathor) [AudioEncodingWindow] some cosmetics
 
 0.3.5.20
   - (zathor) [FileIndexer] + [Muxer] dialogues are not modal anymore; some cosmetics
