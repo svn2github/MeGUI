@@ -817,7 +817,7 @@ namespace MeGUI
         {
             foreach (MuxStreamControl oTrack in subtitleTracks)
             {
-                if (oTrack.input.Filename == null)
+                if (String.IsNullOrEmpty(oTrack.input.Filename))
                     return;
             }
             SubtitleAddTrack();
@@ -826,7 +826,7 @@ namespace MeGUI
         {
             foreach (MuxStreamControl oTrack in audioTracks)
             {
-                if (oTrack.input.Filename == null)
+                if (String.IsNullOrEmpty(oTrack.input.Filename))
                     return;
             }
             AudioAddTrack();

@@ -1,4 +1,7 @@
 0.3.5.20
+  - (zathor) [Muxer] changed the automatically adding of empty tracks a little bit
+
+0.3.5.20
   - (zathor) [FileIndexer] + [Muxer] dialogues are not modal anymore; some cosmetics
   - (zathor) [Muxer] removed cancel button; added reset button to the video section; selecting an audio or subtitle file will automatically add a new emtpy track tab (saving two clicks)
   - (zathor) [Muxer] added option to queue several jobs without closing the mux window. Feature request #2038358
