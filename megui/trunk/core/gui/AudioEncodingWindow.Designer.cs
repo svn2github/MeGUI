@@ -28,12 +28,14 @@ namespace MeGUI.core.gui
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AudioEncodingWindow));
             this.audioEncodingTab1 = new MeGUI.core.gui.AudioEncodingTab();
             this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // audioEncodingTab1
             // 
+            this.audioEncodingTab1.AudioContainer = "";
             this.audioEncodingTab1.Dock = System.Windows.Forms.DockStyle.Top;
             this.audioEncodingTab1.Location = new System.Drawing.Point(0, 0);
             this.audioEncodingTab1.Name = "audioEncodingTab1";
@@ -58,9 +60,10 @@ namespace MeGUI.core.gui
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(429, 180);
+            this.ClientSize = new System.Drawing.Size(429, 176);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.audioEncodingTab1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximumSize = new System.Drawing.Size(1000, 214);
             this.MinimumSize = new System.Drawing.Size(437, 214);
             this.Name = "AudioEncodingWindow";

@@ -28,6 +28,7 @@ namespace MeGUI.packages.tools.besplitter
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Besplitter));
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -71,6 +72,7 @@ namespace MeGUI.packages.tools.besplitter
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.input.Filename = "";
             this.input.Filter = "";
+            this.input.FilterIndex = 0;
             this.input.FolderMode = false;
             this.input.Location = new System.Drawing.Point(12, 25);
             this.input.Name = "input";
@@ -87,6 +89,7 @@ namespace MeGUI.packages.tools.besplitter
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.cuts.Filename = "";
             this.cuts.Filter = "MeGUI cutlist files (*.clt)|*.clt";
+            this.cuts.FilterIndex = 0;
             this.cuts.FolderMode = false;
             this.cuts.Location = new System.Drawing.Point(12, 70);
             this.cuts.Name = "cuts";
@@ -102,6 +105,7 @@ namespace MeGUI.packages.tools.besplitter
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.output.Filename = "";
             this.output.Filter = null;
+            this.output.FilterIndex = 0;
             this.output.FolderMode = false;
             this.output.Location = new System.Drawing.Point(12, 115);
             this.output.Name = "output";
@@ -147,6 +151,7 @@ namespace MeGUI.packages.tools.besplitter
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Besplitter";
             this.Text = "MeGUI - Audio Cutter";
             this.ResumeLayout(false);

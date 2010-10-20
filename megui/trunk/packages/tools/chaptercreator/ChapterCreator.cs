@@ -117,8 +117,8 @@ namespace MeGUI
             this.chapterName = new System.Windows.Forms.TextBox();
             this.chapterNameLabel = new System.Windows.Forms.Label();
             this.chapterListView = new System.Windows.Forms.ListView();
-            this.timecodeColumn = new System.Windows.Forms.ColumnHeader();
-            this.nameColumn = new System.Windows.Forms.ColumnHeader();
+            this.timecodeColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.nameColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.startTime = new System.Windows.Forms.TextBox();
             this.startTimeLabel = new System.Windows.Forms.Label();
             this.addZoneButton = new System.Windows.Forms.Button();
@@ -269,7 +269,7 @@ namespace MeGUI
             this.saveFileDialog.Filter = "x264 qp Files (.qpf)|*.qpf|Chapter Files (*.txt)|*.txt|Matroska Chapters files (*" +
                 ".xml)|*.xml|All supported Files (*.qpf;*.txt;*.xml)|*.qpf;*.txt;*.xml";
             this.saveFileDialog.FilterIndex = 4;
-            //
+            // 
             // gbInput
             // 
             this.gbInput.Controls.Add(this.btInput);
@@ -339,7 +339,7 @@ namespace MeGUI
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.helpButton1.Location = new System.Drawing.Point(12, 428);
             this.helpButton1.Name = "helpButton1";
-            this.helpButton1.Size = new System.Drawing.Size(55, 23);
+            this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 42;
             // 
             // closeOnQueue
@@ -367,7 +367,6 @@ namespace MeGUI
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "ChapterCreator";
-            this.ShowInTaskbar = false;
             this.Text = "MeGUI - Chapter Creator";
             this.Load += new System.EventHandler(this.ChapterCreator_Load);
             this.chaptersGroupbox.ResumeLayout(false);
@@ -376,6 +375,7 @@ namespace MeGUI
             this.gbInput.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
+
 		}
 		#endregion
 		#region helper methods

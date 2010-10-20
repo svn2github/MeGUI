@@ -59,7 +59,7 @@ namespace MeGUI.core.gui
             groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             groupBox1.Location = new System.Drawing.Point(4, 28);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new System.Drawing.Size(557, 437);
+            groupBox1.Size = new System.Drawing.Size(276, 201);
             groupBox1.TabIndex = 33;
             groupBox1.TabStop = false;
             groupBox1.Text = "Worker-Local Queue";
@@ -71,11 +71,11 @@ namespace MeGUI.core.gui
             this.jobQueue1.Name = "jobQueue1";
             this.jobQueue1.Padding = new System.Windows.Forms.Padding(2);
             this.jobQueue1.PauseResumeMode = MeGUI.core.gui.PauseResumeMode.Disabled;
-            this.jobQueue1.Size = new System.Drawing.Size(551, 392);
+            this.jobQueue1.Size = new System.Drawing.Size(270, 156);
             this.jobQueue1.StartStopMode = MeGUI.core.gui.StartStopMode.Start;
             this.jobQueue1.TabIndex = 0;
-            this.jobQueue1.StartClicked += new System.EventHandler(this.jobQueue1_StartClicked);
             this.jobQueue1.AbortClicked += new System.EventHandler(this.jobQueue1_AbortClicked);
+            this.jobQueue1.StartClicked += new System.EventHandler(this.jobQueue1_StartClicked);
             this.jobQueue1.StopClicked += new System.EventHandler(this.jobQueue1_StopClicked);
             // 
             // panel1
@@ -84,9 +84,9 @@ namespace MeGUI.core.gui
             this.panel1.Controls.Add(this.progressLabel);
             this.panel1.Controls.Add(this.jobProgress);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(3, 408);
+            this.panel1.Location = new System.Drawing.Point(3, 172);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(551, 26);
+            this.panel1.Size = new System.Drawing.Size(270, 26);
             this.panel1.TabIndex = 2;
             // 
             // progressLabel
@@ -109,7 +109,7 @@ namespace MeGUI.core.gui
             this.jobProgress.Location = new System.Drawing.Point(58, 3);
             this.jobProgress.Margin = new System.Windows.Forms.Padding(0);
             this.jobProgress.Name = "jobProgress";
-            this.jobProgress.Size = new System.Drawing.Size(493, 23);
+            this.jobProgress.Size = new System.Drawing.Size(212, 23);
             this.jobProgress.TabIndex = 30;
             // 
             // helpButton1
@@ -119,7 +119,7 @@ namespace MeGUI.core.gui
             helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             helpButton1.Location = new System.Drawing.Point(3, 3);
             helpButton1.Name = "helpButton1";
-            helpButton1.Size = new System.Drawing.Size(48, 23);
+            helpButton1.Size = new System.Drawing.Size(39, 23);
             helpButton1.TabIndex = 36;
             // 
             // flowLayoutPanel2
@@ -128,9 +128,9 @@ namespace MeGUI.core.gui
             this.flowLayoutPanel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.flowLayoutPanel2.Controls.Add(helpButton1);
             this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.flowLayoutPanel2.Location = new System.Drawing.Point(4, 465);
+            this.flowLayoutPanel2.Location = new System.Drawing.Point(4, 229);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-            this.flowLayoutPanel2.Size = new System.Drawing.Size(557, 29);
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(276, 29);
             this.flowLayoutPanel2.TabIndex = 36;
             // 
             // menuStrip1
@@ -140,7 +140,7 @@ namespace MeGUI.core.gui
             this.progressWindowToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(4, 4);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(557, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(276, 24);
             this.menuStrip1.TabIndex = 37;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -203,7 +203,7 @@ namespace MeGUI.core.gui
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = mainForm.Settings.JobWorkerSize;
+            this.ClientSize = new System.Drawing.Size(284, 262);
             this.Controls.Add(groupBox1);
             this.Controls.Add(this.flowLayoutPanel2);
             this.Controls.Add(this.menuStrip1);
@@ -221,6 +221,7 @@ namespace MeGUI.core.gui
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
 
         #endregion

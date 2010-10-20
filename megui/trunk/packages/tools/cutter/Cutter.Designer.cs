@@ -28,6 +28,7 @@ namespace MeGUI.packages.tools.cutter
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Cutter));
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.addZoneButton = new System.Windows.Forms.Button();
             this.clearZonesButton = new System.Windows.Forms.Button();
@@ -49,8 +50,8 @@ namespace MeGUI.packages.tools.cutter
             this.avsScript = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.sections = new System.Windows.Forms.ListView();
-            this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
-            this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.flowLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.startFrame)).BeginInit();
@@ -269,9 +270,9 @@ namespace MeGUI.packages.tools.cutter
             this.helpButton1.ArticleName = "Avs Cutter";
             this.helpButton1.AutoSize = true;
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.helpButton1.Location = new System.Drawing.Point(75, 8);
+            this.helpButton1.Location = new System.Drawing.Point(80, 8);
             this.helpButton1.Name = "helpButton1";
-            this.helpButton1.Size = new System.Drawing.Size(44, 23);
+            this.helpButton1.Size = new System.Drawing.Size(39, 23);
             this.helpButton1.TabIndex = 3;
             // 
             // avsScript
@@ -331,6 +332,7 @@ namespace MeGUI.packages.tools.cutter
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.flowLayoutPanel2);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Cutter";
             this.Text = "MeGUI - AVS Cutter";
             this.flowLayoutPanel1.ResumeLayout(false);
