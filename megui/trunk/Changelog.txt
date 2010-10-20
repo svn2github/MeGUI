@@ -1,3 +1,6 @@
+0.3.5.22
+  - (zathor) added MeGUI icon to several tools part 2. Feature request #3090902
+
 0.3.5.21
   - (zathor) [AudioEncodingWindow] some cosmetics
   - (zathor) [Muxer] fixed duplicate jobs after editing a mux job
