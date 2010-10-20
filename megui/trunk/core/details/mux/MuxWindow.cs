@@ -118,10 +118,17 @@ namespace MeGUI
             }
             else
             {
-                MuxJob job = this.Job;
-                mainForm.Jobs.addJobsToQueue(job);
-                if (chkCloseOnQueue.Checked)
+                if (this.muxButton.Text.Equals("Update"))
+                {
                     this.Close();
+                }
+                else
+                {
+                    MuxJob job = this.Job;
+                    mainForm.Jobs.addJobsToQueue(job);
+                    if (chkCloseOnQueue.Checked)
+                        this.Close();
+                }
             }
         }
 
