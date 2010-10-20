@@ -1,7 +1,7 @@
 0.3.5.21
-  - (zathor) [Muxer] changed the automatically adding of empty tracks a little bit
   - (zathor) [AudioEncodingWindow] some cosmetics
   - (zathor) [Muxer] fixed duplicate jobs after editing a mux job
+  - (zathor) [Muxer] tweaked the automatically adding of empty tracks
 
 0.3.5.20
   - (zathor) [FileIndexer] + [Muxer] dialogues are not modal anymore; some cosmetics
