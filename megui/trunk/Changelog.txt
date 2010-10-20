@@ -6,6 +6,7 @@
   - (zathor) [Adaptive Muxer] resized window so that the buttons at the bottom are visible again. Bug #3090155
   - (zathor) [AutoEncode] added saving of the default mp4 device type to the "Configure AutoEncode defaults" in the settings
   - (zathor) [MKV Muxer] added support for quotes in the stream names. Bug #3090689
+  - (zathor) [Queue] the connection job <--> worker is going to be restored/repaired during startup if lost/wrong. Bug #3090054
 
 0.3.5.18
   - (zathor) [OneClick] fixed "and open next" checkbox which did not always open the file dialogue. Bug #3089165

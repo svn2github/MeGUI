@@ -411,9 +411,24 @@ namespace MeGUI.core.details
                 JobWorker w = NewWorker(p.fst, false);
                 w.Mode = mode;
                 w.IsTemporaryWorker = bIsTemporaryWorker;
+
+                // check if there are any unassigned jobs which belongs to this worker
+                foreach (TaggedJob oJob in allJobs.Values)
+                {
+                    if (w.Name.Equals(oJob.OwningWorker) && !p.snd.Contains(oJob.Name))
+                        p.snd.Add(oJob.Name);
+                }
+
                 IEnumerable<TaggedJob> list = toJobList(p.snd);
                 foreach (TaggedJob j in list)
                     w.AddJob(j);
+            }
+
+            // check if there are any assigned jobs which have no existing worker
+            foreach (TaggedJob oJob in allJobs.Values)
+            {
+                if (oJob.OwningWorker != null && !workers.ContainsKey(oJob.OwningWorker))
+                    oJob.OwningWorker = null;
             }
         }
 
