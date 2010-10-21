@@ -89,6 +89,7 @@
             this.ClientSize = new System.Drawing.Size(321, 446);
             this.Controls.Add(this.zonesControl1);
             this.Controls.Add(this.flowLayoutPanel1);
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ZonesWindow";
             this.Text = "ZonesWindow";

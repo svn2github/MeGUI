@@ -67,9 +67,9 @@ namespace MeGUI.core.gui
             // 
             this.addServerButton.AutoSize = true;
             this.addServerButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.addServerButton.Location = new System.Drawing.Point(86, 3);
+            this.addServerButton.Location = new System.Drawing.Point(87, 3);
             this.addServerButton.Name = "addServerButton";
-            this.addServerButton.Size = new System.Drawing.Size(45, 23);
+            this.addServerButton.Size = new System.Drawing.Size(48, 23);
             this.addServerButton.TabIndex = 0;
             this.addServerButton.Text = "Add...";
             this.addServerButton.UseVisualStyleBackColor = true;
@@ -79,9 +79,9 @@ namespace MeGUI.core.gui
             // 
             this.removeSelectedServersButton.AutoSize = true;
             this.removeSelectedServersButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.removeSelectedServersButton.Location = new System.Drawing.Point(137, 3);
+            this.removeSelectedServersButton.Location = new System.Drawing.Point(141, 3);
             this.removeSelectedServersButton.Name = "removeSelectedServersButton";
-            this.removeSelectedServersButton.Size = new System.Drawing.Size(100, 23);
+            this.removeSelectedServersButton.Size = new System.Drawing.Size(99, 23);
             this.removeSelectedServersButton.TabIndex = 1;
             this.removeSelectedServersButton.Text = "Remove selected";
             this.removeSelectedServersButton.UseVisualStyleBackColor = true;
@@ -108,9 +108,9 @@ namespace MeGUI.core.gui
             this.cancelButton.AutoSize = true;
             this.cancelButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(326, 3);
+            this.cancelButton.Location = new System.Drawing.Point(327, 3);
             this.cancelButton.Name = "cancelButton";
-            this.cancelButton.Size = new System.Drawing.Size(50, 23);
+            this.cancelButton.Size = new System.Drawing.Size(49, 23);
             this.cancelButton.TabIndex = 1;
             this.cancelButton.Text = "Cancel";
             this.cancelButton.UseVisualStyleBackColor = true;
@@ -120,9 +120,9 @@ namespace MeGUI.core.gui
             this.okButton.AutoSize = true;
             this.okButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.okButton.Location = new System.Drawing.Point(288, 3);
+            this.okButton.Location = new System.Drawing.Point(290, 3);
             this.okButton.Name = "okButton";
-            this.okButton.Size = new System.Drawing.Size(32, 23);
+            this.okButton.Size = new System.Drawing.Size(31, 23);
             this.okButton.TabIndex = 0;
             this.okButton.Text = "OK";
             this.okButton.UseVisualStyleBackColor = true;
@@ -132,9 +132,9 @@ namespace MeGUI.core.gui
             this.helpButton1.ArticleName = "AutoUpdate";
             this.helpButton1.AutoSize = true;
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.helpButton1.Location = new System.Drawing.Point(243, 3);
+            this.helpButton1.Location = new System.Drawing.Point(246, 3);
             this.helpButton1.Name = "helpButton1";
-            this.helpButton1.Size = new System.Drawing.Size(39, 23);
+            this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 2;
             // 
             // flowLayoutPanel3
@@ -178,6 +178,7 @@ namespace MeGUI.core.gui
             this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.flowLayoutPanel2);
             this.Controls.Add(this.flowLayoutPanel3);
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "AutoUpdateServerConfigWindow";
             this.Text = "AutoUpdateServerConfigWindow";

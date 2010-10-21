@@ -46,7 +46,7 @@ namespace MeGUI.core.gui
             54,
             0});
             this.number.Name = "number";
-            this.number.Size = new System.Drawing.Size(226, 20);
+            this.number.Size = new System.Drawing.Size(226, 21);
             this.number.TabIndex = 0;
             this.number.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.number_KeyPress);
             // 
@@ -69,9 +69,9 @@ namespace MeGUI.core.gui
             this.okButton.AutoSize = true;
             this.okButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.okButton.Location = new System.Drawing.Point(236, 88);
+            this.okButton.Location = new System.Drawing.Point(237, 88);
             this.okButton.Name = "okButton";
-            this.okButton.Size = new System.Drawing.Size(32, 23);
+            this.okButton.Size = new System.Drawing.Size(31, 23);
             this.okButton.TabIndex = 2;
             this.okButton.Text = "OK";
             this.okButton.UseVisualStyleBackColor = true;
@@ -82,9 +82,9 @@ namespace MeGUI.core.gui
             this.cancelButton.AutoSize = true;
             this.cancelButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(274, 88);
+            this.cancelButton.Location = new System.Drawing.Point(275, 88);
             this.cancelButton.Name = "cancelButton";
-            this.cancelButton.Size = new System.Drawing.Size(50, 23);
+            this.cancelButton.Size = new System.Drawing.Size(49, 23);
             this.cancelButton.TabIndex = 3;
             this.cancelButton.Text = "Cancel";
             this.cancelButton.UseVisualStyleBackColor = true;
@@ -94,7 +94,7 @@ namespace MeGUI.core.gui
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(12, 19);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(78, 13);
+            this.label1.Size = new System.Drawing.Size(81, 13);
             this.label1.TabIndex = 6;
             this.label1.Text = "Enter a filesize:";
             // 
@@ -108,6 +108,7 @@ namespace MeGUI.core.gui
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.number);
             this.Controls.Add(this.units);
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;

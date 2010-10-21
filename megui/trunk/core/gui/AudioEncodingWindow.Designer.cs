@@ -39,9 +39,9 @@ namespace MeGUI.core.gui
             this.button1.AutoSize = true;
             this.button1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.button1.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button1.Location = new System.Drawing.Point(312, 143);
+            this.button1.Location = new System.Drawing.Point(313, 143);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(50, 23);
+            this.button1.Size = new System.Drawing.Size(49, 23);
             this.button1.TabIndex = 1;
             this.button1.Text = "Cancel";
             this.button1.UseVisualStyleBackColor = true;
@@ -63,6 +63,7 @@ namespace MeGUI.core.gui
             this.ClientSize = new System.Drawing.Size(429, 176);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.audioEncodingTab1);
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximumSize = new System.Drawing.Size(1000, 214);
             this.MinimumSize = new System.Drawing.Size(437, 214);

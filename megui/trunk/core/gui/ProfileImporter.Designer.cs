@@ -40,13 +40,13 @@ namespace MeGUI.core.gui
             // label1
             // 
             this.label1.Location = new System.Drawing.Point(12, 7);
-            this.label1.Size = new System.Drawing.Size(135, 13);
+            this.label1.Size = new System.Drawing.Size(140, 13);
             this.label1.Text = "Select the presets to import";
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(269, 323);
-            this.button2.Size = new System.Drawing.Size(46, 23);
+            this.button2.Location = new System.Drawing.Point(266, 323);
+            this.button2.Size = new System.Drawing.Size(49, 23);
             this.button2.Text = "Import";
             this.button2.Click += new System.EventHandler(this.import_Click);
             // 
@@ -86,6 +86,7 @@ namespace MeGUI.core.gui
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.ClientSize = new System.Drawing.Size(383, 358);
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ProfileImporter";
             this.Text = "Preset Importer";

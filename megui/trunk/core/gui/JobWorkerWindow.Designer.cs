@@ -67,11 +67,11 @@ namespace MeGUI.core.gui
             // jobQueue1
             // 
             this.jobQueue1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.jobQueue1.Location = new System.Drawing.Point(3, 16);
+            this.jobQueue1.Location = new System.Drawing.Point(3, 17);
             this.jobQueue1.Name = "jobQueue1";
             this.jobQueue1.Padding = new System.Windows.Forms.Padding(2);
             this.jobQueue1.PauseResumeMode = MeGUI.core.gui.PauseResumeMode.Disabled;
-            this.jobQueue1.Size = new System.Drawing.Size(270, 156);
+            this.jobQueue1.Size = new System.Drawing.Size(270, 155);
             this.jobQueue1.StartStopMode = MeGUI.core.gui.StartStopMode.Start;
             this.jobQueue1.TabIndex = 0;
             this.jobQueue1.AbortClicked += new System.EventHandler(this.jobQueue1_AbortClicked);
@@ -119,7 +119,7 @@ namespace MeGUI.core.gui
             helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             helpButton1.Location = new System.Drawing.Point(3, 3);
             helpButton1.Name = "helpButton1";
-            helpButton1.Size = new System.Drawing.Size(39, 23);
+            helpButton1.Size = new System.Drawing.Size(38, 23);
             helpButton1.TabIndex = 36;
             // 
             // flowLayoutPanel2
@@ -207,6 +207,7 @@ namespace MeGUI.core.gui
             this.Controls.Add(groupBox1);
             this.Controls.Add(this.flowLayoutPanel2);
             this.Controls.Add(this.menuStrip1);
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "JobWorker";
             this.Padding = new System.Windows.Forms.Padding(4);
