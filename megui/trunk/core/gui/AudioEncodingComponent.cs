@@ -119,6 +119,9 @@ namespace MeGUI
 
         internal void openAudioFile(params string[] files)
         {
+            tabs.Clear();
+            tabControl1.TabPages.Clear();
+
             for (int i = 0; i < files.Length; ++i)
             {
                 Debug.Assert(i <= tabs.Count);

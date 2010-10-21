@@ -1,5 +1,6 @@
 0.3.5.22
-  - (zathor) added MeGUI icon to several tools #2 and adjusted the font of several windows. Feature request #3090902
+  - (zathor) added MeGUI icon to some tools (part #2) and adjusted the font of several windows. Feature request #3090902
+  - (zathor) [File Indexer] the demuxed audio tracks will replace all existing audio track tabs in the main input tab if "on completion load files" is selected
 
 0.3.5.21
   - (zathor) [AudioEncodingWindow] some cosmetics
