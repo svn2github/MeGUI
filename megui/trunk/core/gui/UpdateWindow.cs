@@ -1381,25 +1381,13 @@ namespace MeGUI
                 }
             }
         }
-        public void StartAutoUpdate()
-        {
-            btnUpdate_Click(null, null);
-        }
         private void btnUpdate_Click(object sender, EventArgs e)
         {
-            if (MainForm.Instance.Settings.AvisynthPluginsPath == "")
-            {
-                MessageBox.Show("Error: Avisynth plugins path is not set (check if you have Avisynth installed and ensure to set the path to plugins in the settings).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                btnUpdate.Enabled = false;
-            }
-            else
-            {
-                btnUpdate.Enabled = false;
-                btnAbort.Enabled = true;
-                updateThread = new Thread(new ThreadStart(BeginUpdate));
-                updateThread.IsBackground = true;
-                updateThread.Start();
-            }
+            btnUpdate.Enabled = false;
+            btnAbort.Enabled = true;
+            updateThread = new Thread(new ThreadStart(BeginUpdate));
+            updateThread.IsBackground = true;
+            updateThread.Start();
         }
         #endregion
         #region updating

@@ -1389,7 +1389,7 @@ namespace MeGUI
                 while (importer.Visible == true)    // wait until the profiles have been imported
                 {
                     Application.DoEvents();
-                    System.Threading.Thread.Sleep(200);
+                    System.Threading.Thread.Sleep(100);
                 }
             });
         }
@@ -1457,35 +1457,22 @@ namespace MeGUI
 
         private void beginUpdateCheck()
         {
-#if x86
-            string strLocalUpdateXML = Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), "upgrade.xml");
-#endif
-#if x64
-            string strLocalUpdateXML = Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), "upgrade_x64.xml");
-#endif
             UpdateWindow update = new UpdateWindow(this, this.Settings);
             update.GetUpdateData(true);
             if (update.HasUpdatableFiles()) // If there are updated files, display the window
             {
-                if (File.Exists(strLocalUpdateXML))
-                {
-                    update.Visible = true;
-                    update.StartAutoUpdate();
-                    while (update.Visible == true)
-                    {
-                        Application.DoEvents();
-                        System.Threading.Thread.Sleep(200);
-                    }
-                }
-                else
-                {
-                    if (MessageBox.Show("There are updated files available that may be necessary to MeGUI to work correctly. Some of them are binary files subject to patents, so they could be in violation of your local laws if you live in US, Japan and some countries in Europe. MeGUI will let you choose what files to update but please check your local laws about patents before proceeding. By clicking on the 'Yes' button you declare you have read this warning. Do you wish to proceed reviewing the updates?",
+                if (MessageBox.Show("There are updated files available that may be necessary to MeGUI to work correctly. Some of them are binary files subject to patents, so they could be in violation of your local laws if you live in US, Japan and some countries in Europe. MeGUI will let you choose what files to update but please check your local laws about patents before proceeding. By clicking on the 'Yes' button you declare you have read this warning. Do you wish to proceed reviewing the updates?",
                         "Updates Available", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                        update.ShowDialog();
-                }
+                    update.ShowDialog();
             }
             else
             {
+#if x86
+                string strLocalUpdateXML = Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), "upgrade.xml");
+#endif
+#if x64
+                string strLocalUpdateXML = Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), "upgrade_x64.xml");
+#endif
                 if (File.Exists(strLocalUpdateXML))
                     File.Delete(strLocalUpdateXML);
             }
@@ -2077,11 +2064,13 @@ namespace MeGUI
             i.LogValue("Latest .Net Framework installed ", string.Format("{0}", OSInfo.DotNetVersionFormated(OSInfo.FormatDotNetVersion())));
 
             string avisynthversion = string.Empty;
+            string avisynthdate = string.Empty;
             bool PropExists = false;
-            VideoUtil.getAvisynthVersion(out avisynthversion, out PropExists);
+            VideoUtil.getAvisynthVersion(out avisynthversion, out avisynthdate, out PropExists);
 
-            if (!PropExists)
+            if (!PropExists || string.IsNullOrEmpty(avisynthversion))
             {
+                i.LogValue("Avisynth Version ", "not installed");
                 if (AskToDownloadAvisynth() == true)
 #if x86
                     System.Diagnostics.Process.Start("http://www.avisynth.org");
@@ -2090,19 +2079,17 @@ namespace MeGUI
                     System.Diagnostics.Process.Start("http://forum.doom9.org/showthread.php?t=152800");
 #endif
             }
-            
-            if (PropExists)
-            { // launch the updater only if avisynth is found to avoid installation issues
-                if (settings.AutoUpdate)
-                {
-                    // Need a seperate thread to run the updater to stop internet lookups from freezing the app.
-                    Thread updateCheck = new Thread(new ThreadStart(beginUpdateCheck));
-                    updateCheck.IsBackground = true;
-                    updateCheck.Start();
-                }
+            else 
+            {
+                i.LogValue("Avisynth Version ", avisynthversion.Replace(", ", ".").ToString() + " (" + avisynthdate + ")");
+            }
 
-                if (!string.IsNullOrEmpty(avisynthversion))
-                    i.LogValue("Avisynth Version ", avisynthversion.Replace(", ", ".").ToString());
+            if (settings.AutoUpdate)
+            {
+                // Need a seperate thread to run the updater to stop internet lookups from freezing the app.
+                Thread updateCheck = new Thread(new ThreadStart(beginUpdateCheck));
+                updateCheck.IsBackground = true;
+                updateCheck.Start();
             }
 
             if (settings.AutoStartQueueStartup)

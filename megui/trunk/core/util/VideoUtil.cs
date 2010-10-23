@@ -1132,9 +1132,10 @@ namespace MeGUI
                 return allSmallFilters.ToString().TrimEnd('|');
         }
 
-        public static void getAvisynthVersion(out string FileVersion, out bool PropExists)
+        public static void getAvisynthVersion(out string FileVersion, out string FileDate, out bool PropExists)
         {
             FileVersion = string.Empty;
+            FileDate = string.Empty;
             PropExists = false;
 
             string systempath = Environment.GetFolderPath(Environment.SpecialFolder.System);
@@ -1143,6 +1144,7 @@ namespace MeGUI
             {
                 FileVersionInfo FileProperties = FileVersionInfo.GetVersionInfo(systempath + "\\avisynth.dll");
                 FileVersion = FileProperties.FileVersion;
+                FileDate = File.GetLastWriteTimeUtc(systempath + "\\avisynth.dll").ToString();
                 PropExists = true;
             }
 #if x86
@@ -1156,6 +1158,7 @@ namespace MeGUI
                     {
                         FileVersionInfo FileProperties = FileVersionInfo.GetVersionInfo(syswow64path + "\\avisynth.dll");
                         FileVersion = FileProperties.FileVersion;
+                        FileDate = File.GetLastWriteTimeUtc(syswow64path + "\\avisynth.dll").ToString();
                         PropExists = true;
                     }
                 }
