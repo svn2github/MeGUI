@@ -2068,7 +2068,7 @@ namespace MeGUI
             bool PropExists = false;
             VideoUtil.getAvisynthVersion(out avisynthversion, out avisynthdate, out PropExists);
 
-            if (!PropExists || string.IsNullOrEmpty(avisynthversion))
+            if (!PropExists)
             {
                 i.LogValue("Avisynth Version ", "not installed");
                 if (AskToDownloadAvisynth() == true)
@@ -2079,10 +2079,10 @@ namespace MeGUI
                     System.Diagnostics.Process.Start("http://forum.doom9.org/showthread.php?t=152800");
 #endif
             }
-            else 
-            {
+            else if (string.IsNullOrEmpty(avisynthversion))
+                i.LogValue("Avisynth Version ", avisynthdate);
+            else
                 i.LogValue("Avisynth Version ", avisynthversion.Replace(", ", ".").ToString() + " (" + avisynthdate + ")");
-            }
 
             if (settings.AutoUpdate)
             {
