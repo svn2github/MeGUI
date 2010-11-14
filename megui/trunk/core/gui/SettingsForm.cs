@@ -134,6 +134,7 @@ namespace MeGUI
 		#endregion
         private ToolTip toolTipHelp;
         private IContainer components;
+        private CheckBox chkEnable64bitX264;
         private XmlDocument ContextHelp = new XmlDocument();
 		#region start / stop
 		public SettingsForm()
@@ -144,7 +145,16 @@ namespace MeGUI
             defaultLanguage2.BindingContext = new BindingContext();
             defaultLanguage1.BindingContext = new BindingContext();
             SetToolTips();
-		}
+#if x86
+            if (!OSInfo.isWow64())
+                chkEnable64bitX264.Enabled = chkEnable64bitX264.Checked = false;
+#endif
+#if x64
+            chkEnable64bitX264.Enabled = false;
+            chkEnable64bitX264.Checked = true;
+            chkEnable64bitX264.Visible = false;
+#endif
+        }
 
         /// <summary>
         /// Sets any required tooltips
@@ -245,6 +255,7 @@ namespace MeGUI
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.gbDefaultOutput = new System.Windows.Forms.GroupBox();
             this.clearDefaultOutputDir = new System.Windows.Forms.Button();
+            this.defaultOutputDir = new MeGUI.FileBar();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.txt_httpproxyport = new System.Windows.Forms.TextBox();
@@ -285,6 +296,7 @@ namespace MeGUI
             this.label2 = new System.Windows.Forms.Label();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.btnClearMP4TempDirectory = new System.Windows.Forms.Button();
+            this.tempDirMP4 = new MeGUI.FileBar();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.besplit = new System.Windows.Forms.Label();
             this.textBox8 = new System.Windows.Forms.TextBox();
@@ -303,8 +315,7 @@ namespace MeGUI
             this.autoEncodeDefaultsButton = new System.Windows.Forms.Button();
             this.toolTipHelp = new System.Windows.Forms.ToolTip(this.components);
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
-            this.defaultOutputDir = new MeGUI.FileBar();
-            this.tempDirMP4 = new MeGUI.FileBar();
+            this.chkEnable64bitX264 = new System.Windows.Forms.CheckBox();
             groupBox1 = new System.Windows.Forms.GroupBox();
             groupBox1.SuspendLayout();
             this.otherGroupBox.SuspendLayout();
@@ -701,6 +712,22 @@ namespace MeGUI
             this.clearDefaultOutputDir.Text = "x";
             this.clearDefaultOutputDir.Click += new System.EventHandler(this.clearDefaultOutputDir_Click);
             // 
+            // defaultOutputDir
+            // 
+            this.defaultOutputDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.defaultOutputDir.Filename = "";
+            this.defaultOutputDir.Filter = null;
+            this.defaultOutputDir.FilterIndex = 0;
+            this.defaultOutputDir.FolderMode = true;
+            this.defaultOutputDir.Location = new System.Drawing.Point(12, 29);
+            this.defaultOutputDir.Name = "defaultOutputDir";
+            this.defaultOutputDir.ReadOnly = true;
+            this.defaultOutputDir.SaveMode = false;
+            this.defaultOutputDir.Size = new System.Drawing.Size(417, 26);
+            this.defaultOutputDir.TabIndex = 40;
+            this.defaultOutputDir.Title = null;
+            // 
             // tabPage3
             // 
             this.tabPage3.Controls.Add(this.groupBox2);
@@ -1061,6 +1088,7 @@ namespace MeGUI
             // 
             // groupBox6
             // 
+            this.groupBox6.Controls.Add(this.chkEnable64bitX264);
             this.groupBox6.Controls.Add(this.checkBox1);
             this.groupBox6.Location = new System.Drawing.Point(4, 311);
             this.groupBox6.Name = "groupBox6";
@@ -1136,6 +1164,22 @@ namespace MeGUI
             this.btnClearMP4TempDirectory.TabIndex = 42;
             this.btnClearMP4TempDirectory.Text = "x";
             this.btnClearMP4TempDirectory.Click += new System.EventHandler(this.btnClearMP4TempDirectory_Click);
+            // 
+            // tempDirMP4
+            // 
+            this.tempDirMP4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.tempDirMP4.Filename = "";
+            this.tempDirMP4.Filter = null;
+            this.tempDirMP4.FilterIndex = 0;
+            this.tempDirMP4.FolderMode = true;
+            this.tempDirMP4.Location = new System.Drawing.Point(7, 33);
+            this.tempDirMP4.Name = "tempDirMP4";
+            this.tempDirMP4.ReadOnly = true;
+            this.tempDirMP4.SaveMode = false;
+            this.tempDirMP4.Size = new System.Drawing.Size(424, 26);
+            this.tempDirMP4.TabIndex = 41;
+            this.tempDirMP4.Title = null;
             // 
             // groupBox3
             // 
@@ -1312,37 +1356,15 @@ namespace MeGUI
             this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 1;
             // 
-            // defaultOutputDir
+            // chkEnable64bitX264
             // 
-            this.defaultOutputDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.defaultOutputDir.Filename = "";
-            this.defaultOutputDir.Filter = null;
-            this.defaultOutputDir.FilterIndex = 0;
-            this.defaultOutputDir.FolderMode = true;
-            this.defaultOutputDir.Location = new System.Drawing.Point(12, 29);
-            this.defaultOutputDir.Name = "defaultOutputDir";
-            this.defaultOutputDir.ReadOnly = true;
-            this.defaultOutputDir.SaveMode = false;
-            this.defaultOutputDir.Size = new System.Drawing.Size(417, 26);
-            this.defaultOutputDir.TabIndex = 40;
-            this.defaultOutputDir.Title = null;
-            // 
-            // tempDirMP4
-            // 
-            this.tempDirMP4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.tempDirMP4.Filename = "";
-            this.tempDirMP4.Filter = null;
-            this.tempDirMP4.FilterIndex = 0;
-            this.tempDirMP4.FolderMode = true;
-            this.tempDirMP4.Location = new System.Drawing.Point(7, 33);
-            this.tempDirMP4.Name = "tempDirMP4";
-            this.tempDirMP4.ReadOnly = true;
-            this.tempDirMP4.SaveMode = false;
-            this.tempDirMP4.Size = new System.Drawing.Size(424, 26);
-            this.tempDirMP4.TabIndex = 41;
-            this.tempDirMP4.Title = null;
+            this.chkEnable64bitX264.AutoSize = true;
+            this.chkEnable64bitX264.Location = new System.Drawing.Point(239, 31);
+            this.chkEnable64bitX264.Name = "chkEnable64bitX264";
+            this.chkEnable64bitX264.Size = new System.Drawing.Size(157, 17);
+            this.chkEnable64bitX264.TabIndex = 28;
+            this.chkEnable64bitX264.Text = "Enable 64 bit mode of x264";
+            this.chkEnable64bitX264.UseVisualStyleBackColor = true;
             // 
             // SettingsForm
             // 
@@ -1545,6 +1567,7 @@ namespace MeGUI
                 settings.AlwaysBackUpFiles = backupfiles.Checked;
                 settings.ForceRawAVCExtension = forcerawavcuse.Checked;
                 settings.AutoUpdateServerSubList = cbAutoUpdateServerSubList.SelectedIndex;
+                settings.Use64bitX264 = chkEnable64bitX264.Checked;
 				return settings;
 			}
 			set
@@ -1601,6 +1624,7 @@ namespace MeGUI
                 backupfiles.Checked = settings.AlwaysBackUpFiles;
                 forcerawavcuse.Checked = settings.ForceRawAVCExtension;
                 cbAutoUpdateServerSubList.SelectedIndex = settings.AutoUpdateServerSubList;
+                chkEnable64bitX264.Checked = settings.Use64bitX264;
 			}
 		}
 		#endregion

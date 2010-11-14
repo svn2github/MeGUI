@@ -46,7 +46,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
         {
             executable = encoderPath;
 #if x86
-            if (OSInfo.isWow64())
+            if (OSInfo.isWow64() && MainForm.Instance.Settings.Use64bitX264)
             {
                 string vfw4x264Path =  System.IO.Path.Combine(System.IO.Path.GetDirectoryName(encoderPath), "vfw4x264.exe");
                 if (System.IO.File.Exists(vfw4x264Path))
@@ -952,6 +952,15 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
         {
             get {
                 return genCommandline(job.Input, job.Output, job.DAR, hres, vres, job.Settings as x264Settings, job.Zones);
+            }
+        }
+
+        protected override void doExitConfig()
+        {
+            if (proc.ExitCode != 0 && !su.WasAborted && OSInfo.isWow64() && MainForm.Instance.Settings.Use64bitX264)
+            {
+                MainForm.Instance.Settings.Use64bitX264 = false;
+                log.LogEvent("The 64 bit mode of x264 has been disabled", ImageType.Error);
             }
         }
     }
