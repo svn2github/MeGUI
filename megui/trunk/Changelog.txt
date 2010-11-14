@@ -1,3 +1,6 @@
+0.3.5.25
+  - (zathor) [MKVMuxer] changed log output language to English
+
 0.3.5.24
   - (zathor) removed "AviSynth is not installed" message if the avisynth.dll does not have a version number 
 
