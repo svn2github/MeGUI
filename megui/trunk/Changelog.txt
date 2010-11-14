@@ -1,3 +1,6 @@
+0.3.5.26
+  - (zathor) [Audio Downmix] enhanced avisynth script in order to cover more input channel configurations. Patch by tebasuna51
+
 0.3.5.25
   - (zathor) [MKVMuxer] changed log output language to English
   - (zathor) [x264] added option to disable the 64 bit mode of x264
