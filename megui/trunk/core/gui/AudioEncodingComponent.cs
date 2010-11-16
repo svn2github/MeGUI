@@ -63,7 +63,10 @@ namespace MeGUI
             tabs.Add(a);
             a.AudioContainer = MainForm.Instance.Settings.MainAudioFormat;
             a.Dock = System.Windows.Forms.DockStyle.Fill;
-            a.QueueJob = tabs[0].QueueJob;
+            a.QueueJob = delegate(AudioJob aJob)
+            {
+                MainForm.Instance.Jobs.addJobsToQueue(aJob);
+            };
 
             TabPage p = new TabPage("Track " + tabs.Count);
             tabControl1.TabPages.Add(p);
