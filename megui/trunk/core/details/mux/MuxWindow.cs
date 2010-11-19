@@ -128,6 +128,8 @@ namespace MeGUI
                     mainForm.Jobs.addJobsToQueue(job);
                     if (chkCloseOnQueue.Checked)
                         this.Close();
+                    else
+                        output.Filename = String.Empty;
                 }
             }
         }
