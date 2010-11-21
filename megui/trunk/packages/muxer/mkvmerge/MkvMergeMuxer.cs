@@ -164,7 +164,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                         sb.AppendFormat(" --sync {0}:{1}ms", trackID, stream.delay);
                     sb.Append(" \"--compression\" \"" + trackID + ":none\"");
                     sb.Append(" -a " + trackID + " -D -S \"" + stream.path + "\"");
-                    sb.Append(" --ui-language en");
                 }
 
                 foreach (object o in settings.SubtitleStreams)
@@ -261,6 +260,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
 
                 if (settings.SplitSize.HasValue)
                     sb.Append(" --split " + (settings.SplitSize.Value.MB) + "M");
+
+                sb.Append(" --ui-language en");
 
                 return sb.ToString();
             }
