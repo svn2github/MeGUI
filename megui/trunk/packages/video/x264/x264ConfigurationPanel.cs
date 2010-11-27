@@ -593,8 +593,8 @@ namespace MeGUI.packages.video.x264
                             x264NewAdaptiveBframes.SelectedIndex = 1;
                         if (!this.x264WeightedBPrediction.Checked)
                             this.x264WeightedBPrediction.Checked = true;
-                        if (this.x264WeightedPPrediction.SelectedIndex != 0)
-                            this.x264WeightedPPrediction.SelectedIndex = 0;
+                        if (this.x264WeightedPPrediction.SelectedIndex != 1)
+                            this.x264WeightedPPrediction.SelectedIndex = 1;
                         if (cbAQMode.SelectedIndex == 0)
                             cbAQMode.SelectedIndex = 1;
                         if (!adaptiveDCT.Checked)
@@ -639,8 +639,8 @@ namespace MeGUI.packages.video.x264
                             x264NewAdaptiveBframes.SelectedIndex = 1;
                         if (!this.x264WeightedBPrediction.Checked)
                             this.x264WeightedBPrediction.Checked = true;
-                        if (this.x264WeightedPPrediction.SelectedIndex != 0)
-                            this.x264WeightedPPrediction.SelectedIndex = 0;
+                        if (this.x264WeightedPPrediction.SelectedIndex != 1)
+                            this.x264WeightedPPrediction.SelectedIndex = 1;
                         if (cbAQMode.SelectedIndex == 0)
                             cbAQMode.SelectedIndex = 1;
                         if (!adaptiveDCT.Checked)
