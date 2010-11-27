@@ -77,7 +77,7 @@ namespace MeGUI
         /// <summary>
         /// compiles final bitrate statistics
         /// </summary>
-        private void compileFinalStats()
+        protected void compileFinalStats()
         {
             try
             {

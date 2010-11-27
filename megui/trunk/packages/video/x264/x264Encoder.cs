@@ -962,6 +962,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                 MainForm.Instance.Settings.Use64bitX264 = false;
                 log.LogEvent("The 64 bit mode of x264 has been disabled", ImageType.Error);
             }
+
+            if (!su.HasError && !su.WasAborted)
+                compileFinalStats();
         }
     }
 }
