@@ -672,24 +672,107 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                     script.AppendFormat("ConvertToMono(){0}", Environment.NewLine); _downMixModeNb = 1;
                     break;
                 case ChannelMode.DPLDownmix:
-                    script.Append(@"6<=Audiochannels(last)?c6_dpl(ConvertAudioToFloat(last)):last" + Environment.NewLine);
-                    script.Append(@"5==Audiochannels(last)?c5_dpl(ConvertAudioToFloat(last)):last" + Environment.NewLine); 
-                    script.Append(@"4==Audiochannels(last)?c4_dpl(ConvertAudioToFloat(last)):last" + Environment.NewLine); 
-                    script.Append(@"3==Audiochannels(last)?c3_dpl(ConvertAudioToFloat(last)):last" + Environment.NewLine); 
-                    _downMixModeNb = 2;
-                    break;
                 case ChannelMode.DPLIIDownmix:
-                    script.Append(@"6<=Audiochannels(last)?c6_dpl2(ConvertAudioToFloat(last)):last" + Environment.NewLine);
-                    script.Append(@"5==Audiochannels(last)?c5_dpl2(ConvertAudioToFloat(last)):last" + Environment.NewLine);
-                    script.Append(@"4==Audiochannels(last)?c4_dpl2(ConvertAudioToFloat(last)):last" + Environment.NewLine);
-                    script.Append(@"3==Audiochannels(last)?c3_dpl2(ConvertAudioToFloat(last)):last" + Environment.NewLine); 
-                    _downMixModeNb = 3;
-                    break;
                 case ChannelMode.StereoDownmix:
-                    script.Append(@"6<=Audiochannels(last)?c6_stereo(ConvertAudioToFloat(last)):last" + Environment.NewLine);
-                    script.Append(@"5==Audiochannels(last)?c5_stereo(ConvertAudioToFloat(last)):last" + Environment.NewLine); 
-                    script.Append(@"4==Audiochannels(last)?c4_stereo(ConvertAudioToFloat(last)):last" + Environment.NewLine); 
-                    script.Append(@"3==Audiochannels(last)?c3_stereo(ConvertAudioToFloat(last)):last" + Environment.NewLine); 
+                    MediaInfoFile info = new MediaInfoFile(audioJob.Input);
+                    if (info.AudioTracks.Count > 0)
+                    {
+                        script.Append(@"# detected channels: " + info.AudioTracks[0].NbChannels + Environment.NewLine);
+                        script.Append(@"# detected channel positions: " + info.AudioTracks[0].ChannelPositions + Environment.NewLine);
+                        switch (info.AudioTracks[0].ChannelPositions)
+                        {
+                            case "3/0/0":
+                            case "2/0/0.1": script.Append(@"c3_stereo(ConvertAudioToFloat(last))" + Environment.NewLine); break;
+                            case "2/1/0":
+                            case "2/0/1":   if (audioJob.Settings.DownmixMode == ChannelMode.StereoDownmix)
+                                                script.Append(@"c3_stereo(ConvertAudioToFloat(last))" + Environment.NewLine); 
+                                            else
+                                                script.Append(@"c3_dpl(ConvertAudioToFloat(last))" + Environment.NewLine); 
+                                            break;
+                            case "2/2/0":
+                            case "2/0/2":   if (audioJob.Settings.DownmixMode == ChannelMode.StereoDownmix) 
+                                                script.Append(@"c4_stereo(ConvertAudioToFloat(last))" + Environment.NewLine);
+                                            else if (audioJob.Settings.DownmixMode == ChannelMode.DPLDownmix)
+                                                script.Append(@"c4_dpl(ConvertAudioToFloat(last))" + Environment.NewLine);
+                                            else
+                                                script.Append(@"c4_dpl2(ConvertAudioToFloat(last))" + Environment.NewLine); 
+                                            break;
+                            case "2/1/0.1":
+                            case "2/0/1.1": if (audioJob.Settings.DownmixMode == ChannelMode.StereoDownmix)
+                                                script.Append(@"c42_stereo(ConvertAudioToFloat(last))" + Environment.NewLine);
+                                            else
+                                                 script.Append(@"c42_dpl(ConvertAudioToFloat(last))" + Environment.NewLine);
+                                            break;
+                            case "3/0/0.1": if (audioJob.Settings.DownmixMode == ChannelMode.StereoDownmix)
+                                                script.Append(@"c42_stereo(ConvertAudioToFloat(last))" + Environment.NewLine);
+                                            else
+                                                script.Append(@"c3_stereo(ConvertAudioToFloat(last))" + Environment.NewLine);
+                                            break;
+
+                            case "3/1/0":
+                            case "3/0/1":   if (audioJob.Settings.DownmixMode == ChannelMode.StereoDownmix)
+                                                script.Append(@"c42_stereo(ConvertAudioToFloat(last))" + Environment.NewLine);
+                                            else
+                                                script.Append(@"c43_dpl(ConvertAudioToFloat(last))" + Environment.NewLine);
+                                            break;
+                            case "3/2/0":
+                            case "3/0/2":   if (audioJob.Settings.DownmixMode == ChannelMode.StereoDownmix)
+                                                script.Append(@"c5_stereo(ConvertAudioToFloat(last))" + Environment.NewLine);
+                                            else if (audioJob.Settings.DownmixMode == ChannelMode.DPLDownmix)
+                                                script.Append(@"c5_dpl(ConvertAudioToFloat(last))" + Environment.NewLine);
+                                            else
+                                                script.Append(@"c5_dlp2(ConvertAudioToFloat(last))" + Environment.NewLine); 
+                                            break;
+                            case "2/2/0.1":
+                            case "2/0/2.1": if (audioJob.Settings.DownmixMode == ChannelMode.StereoDownmix)
+                                                script.Append(@"c5_stereo(ConvertAudioToFloat(last))" + Environment.NewLine);
+                                            else if (audioJob.Settings.DownmixMode == ChannelMode.DPLDownmix)
+                                                script.Append(@"c52_dpl(ConvertAudioToFloat(last))" + Environment.NewLine);
+                                            else
+                                                script.Append(@"c52_dlp2(ConvertAudioToFloat(last))" + Environment.NewLine);
+                                            break;
+                            case "3/1/0.1":
+                            case "3/0/1.1": if (audioJob.Settings.DownmixMode == ChannelMode.StereoDownmix)
+                                                script.Append(@"c52_stereo(ConvertAudioToFloat(last))" + Environment.NewLine);
+                                            else
+                                                script.Append(@"c53_dpl(ConvertAudioToFloat(last))" + Environment.NewLine);
+                                            break;
+                            case "3/2/0.1":
+                            case "3/0/2.1": if (audioJob.Settings.DownmixMode == ChannelMode.StereoDownmix)
+                                                script.Append(@"c6_stereo(ConvertAudioToFloat(last))" + Environment.NewLine);
+                                            else if (audioJob.Settings.DownmixMode == ChannelMode.DPLDownmix)
+                                                script.Append(@"c6_dpl(ConvertAudioToFloat(last))" + Environment.NewLine);
+                                            else
+                                                script.Append(@"c6_dpl2(ConvertAudioToFloat(last))" + Environment.NewLine);
+                                            break;
+                            default:        if (audioJob.Settings.DownmixMode == ChannelMode.StereoDownmix)
+                                            {
+                                                script.Append(@"6<=Audiochannels(last)?c6_stereo(ConvertAudioToFloat(last)):last" + Environment.NewLine);
+                                                script.Append(@"5==Audiochannels(last)?c5_stereo(ConvertAudioToFloat(last)):last" + Environment.NewLine);
+                                                script.Append(@"4==Audiochannels(last)?c4_stereo(ConvertAudioToFloat(last)):last" + Environment.NewLine);
+                                                script.Append(@"3==Audiochannels(last)?c3_stereo(ConvertAudioToFloat(last)):last" + Environment.NewLine);
+                                            }
+                                            else if (audioJob.Settings.DownmixMode == ChannelMode.DPLDownmix)
+                                            {
+                                                script.Append(@"6<=Audiochannels(last)?c6_dpl(ConvertAudioToFloat(last)):last" + Environment.NewLine);
+                                                script.Append(@"5==Audiochannels(last)?c5_dpl(ConvertAudioToFloat(last)):last" + Environment.NewLine);
+                                                script.Append(@"4==Audiochannels(last)?c4_dpl(ConvertAudioToFloat(last)):last" + Environment.NewLine);
+                                                script.Append(@"3==Audiochannels(last)?c3_dpl(ConvertAudioToFloat(last)):last" + Environment.NewLine);
+                                            }
+                                            else
+                                            {
+                                                script.Append(@"6<=Audiochannels(last)?c6_dpl2(ConvertAudioToFloat(last)):last" + Environment.NewLine);
+                                                script.Append(@"5==Audiochannels(last)?c5_dpl2(ConvertAudioToFloat(last)):last" + Environment.NewLine);
+                                                script.Append(@"4==Audiochannels(last)?c4_dpl2(ConvertAudioToFloat(last)):last" + Environment.NewLine);
+                                                script.Append(@"3==Audiochannels(last)?c3_dpl2(ConvertAudioToFloat(last)):last" + Environment.NewLine);
+                                            }
+                                            break;
+                        }
+                    }
+                    else
+                    {
+                        log.LogEvent("no audio file detected: " + audioJob.Input, ImageType.Error);
+                    }
                     _downMixModeNb = 4;
                     break;
                 case ChannelMode.Upmix:
@@ -933,19 +1016,24 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 case ChannelMode.ConvertToMono:
                     break;
                 case ChannelMode.DPLDownmix:
+                case ChannelMode.DPLIIDownmix:
+                case ChannelMode.StereoDownmix:
                     script.AppendLine(@"
 # 5.1 Channels L,R,C,LFE,SL,SR -> Dolby ProLogic
 function c6_dpl(clip a) 
   {
-     flr = GetChannel(a, 1, 2)
-     fcc = GetChannel(a, 3, 3)
-     sl  = GetChannel(a, 5)
-     sr  = GetChannel(a, 6)
-     lrc = MixAudio(flr, fcc, 0.3205, 0.2265)
-     bl  = MixAudio(sl, sr, 0.2265, 0.2265)
-     br  = Amplify(bl, -1.0)
-     slr = MergeChannels(bl, br)
-     return MixAudio(lrc, slr, 1.0, 1.0)
+     fl = GetChannel(a, 1)
+     fr = GetChannel(a, 2)
+     c = GetChannel(a, 3)
+     sl = GetChannel(a, 5)
+     sr = GetChannel(a, 6)
+     ssr = MixAudio(sl, sr, 0.2222, 0.2222)
+     ssl = Amplify(ssr, -1.0)
+     fl_c = MixAudio(fl, c, 0.3254, 0.2301)
+     fr_c = MixAudio(fr, c, 0.3254, 0.2301)
+     l = MixAudio(ssl, fl_c, 1.0, 1.0)
+     r = MixAudio(ssr, fr_c, 1.0, 1.0)
+     return MergeChannels(l, r)
   }
 # 5 Channels L,R,C,SL,SR -> Dolby ProLogic
 # also L,R,LFE,SL,SR then mix dpl+LFE
@@ -981,22 +1069,22 @@ function c3_dpl(clip a)
      sr  = Amplify(sl, -1.0)
      slr = MergeChannels(sl, sr)
      return MixAudio(flr, slr, 0.5858, 0.4142)
-  }");
-                    break;
-                case ChannelMode.DPLIIDownmix:
-                    script.AppendLine(@"
+  }
 # 5.1 Channels L,R,C,LFE,SL,SR -> Dolby ProLogic II
 function c6_dpl2(clip a) 
   {
-     flr = GetChannel(a, 1, 2)
-     fcc = GetChannel(a, 3, 3)
-     sl  = GetChannel(a, 5)
-     sr  = GetChannel(a, 6)
-     lrc = MixAudio(flr, fcc, 0.3254, 0.2301)
-     bl  = MixAudio(sl, sr, 0.2818, 0.1627)
-     br  = MixAudio(sl, sr, -0.1627, -0.2818)
-     slr = MergeChannels(bl, br)
-     return MixAudio(lrc, slr, 1.0, 1.0)
+     fl = GetChannel(a, 1)
+     fr = GetChannel(a, 2)
+     c = GetChannel(a, 3)
+     sl = GetChannel(a, 5)
+     sr = GetChannel(a, 6)
+     ssl = MixAudio(sl, sr, 0.2818, 0.1627).Amplify(-1.0)
+     fl_c = MixAudio(fl, c, 0.3254, 0.2301)
+     ssr = MixAudio(sl, sr, 0.1627, 0.2818)
+     fr_c = MixAudio(fr, c, 0.3254, 0.2301)
+     l = MixAudio(ssl, fl_c, 1.0, 1.0)
+     r = MixAudio(ssr, fr_c, 1.0, 1.0)
+     return MergeChannels(l, r)
   }
 # 5 Channels L,R,C,SL,SR -> Dolby ProLogic II
 # also L,R,LFE,SL,SR then mix dpl2+LFE
@@ -1032,20 +1120,22 @@ function c3_dpl2(clip a)
      sr  = Amplify(sl, -1.0)
      slr = MergeChannels(sl, sr)
      return MixAudio(flr, slr, 0.5858, 0.4142)
-  }");
-                    break;
-                case ChannelMode.StereoDownmix:
-                    script.AppendLine(@"
+  }
 # 5.1 Channels L,R,C,LFE,SL,SR -> stereo + LFE
 function c6_stereo(clip a) 
   {
-     flr = GetChannel(a, 1, 2)
-     fcc = GetChannel(a, 3, 3)
-     lfe = GetChannel(a, 4, 4)
-     slr = GetChannel(a, 5, 6)
-     lrc = MixAudio(flr, fcc, 0.2929, 0.2071)
-     lrc = MixAudio(lrc, lfe, 1.0, 0.2071)
-     return MixAudio(lrc, slr, 1.0, 0.2929)
+     fl = GetChannel(a, 1)
+     fr = GetChannel(a, 2)
+     c = GetChannel(a, 3)
+     lfe = GetChannel(a, 4)
+     sl = GetChannel(a, 5)
+     sr = GetChannel(a, 6)
+     l_sl = MixAudio(fl, sl, 0.2929, 0.2929)
+     c_lfe = MixAudio(lfe, c, 0.2071, 0.2071)
+     r_sr = MixAudio(fr, sr, 0.2929, 0.2929)
+     l = MixAudio(l_sl, c_lfe, 1.0, 1.0)
+     r = MixAudio(r_sr, c_lfe, 1.0, 1.0)
+     return MergeChannels(l, r)
   }
 # 5 Channels L,R,C,SL,SR -> Stereo
 # also L,R,LFE,SL,SR
@@ -1070,6 +1160,79 @@ function c3_stereo(clip a)
      flr = GetChannel(a, 1, 2)
      fcc = GetChannel(a, 3, 3)
      return MixAudio(flr, fcc, 0.5858, 0.4142)
+  }
+# 4 Channels L,R,C,LFE or L,R,S,LFE or L,R,C,S -> Stereo
+function c42_stereo(clip a)
+  {
+     flr = GetChannel(a, 1, 2)
+     fcc = GetChannel(a, 3, 3)
+     lfe = GetChannel(a, 4, 4)
+     clf = MixAudio(fcc, lfe, 0.2929, 0.2929)
+     return MixAudio(flr, clf, 0.4142, 1.0)
+  }
+# 5 Channels L,R,C,LFE,S -> Stereo
+function c52_stereo(clip a)
+  {
+     flr = GetChannel(a, 1, 2)
+     fcc = GetChannel(a, 3, 3)
+     lfe = GetChannel(a, 4, 4)
+     slr = GetChannel(a, 5, 5)
+     lrc = MixAudio(flr, fcc, 0.3204, 0.2265)
+     lfs = MixAudio(lfe, slr, 0.2265, 0.2265)
+     return MixAudio(lrc, lfs, 1.0, 1.0)
+  }
+# 4 Channels L,R,LFE,S  -> Dolby ProLogic
+function c42_dpl(clip a)
+  {
+     flr = GetChannel(a, 1, 2)
+     sl  = GetChannel(a, 4)
+     sr  = Amplify(sl, -1.0)
+     slr = MergeChannels(sl, sr)
+     return MixAudio(flr, slr, 0.5858, 0.4142)
+  }
+# 4 Channels L,R,C,S -> Dolby ProLogic
+function c43_dpl(clip a)
+  {
+     flr = GetChannel(a, 1, 2)
+     fcc = GetChannel(a, 3, 3)
+     bl  = GetChannel(a, 4)
+     br  = Amplify(bl, -1.0)
+     slr = MergeChannels(bl, br)
+     flc = MixAudio(flr, fcc, 0.4142, 0.2929)
+     return MixAudio(flc, slr, 1.0, 0.2929)
+  }
+# 5 Channels L,R,LFE,SL,SR -> Dolby ProLogic
+function c52_dpl(clip a)
+  {
+     flr = GetChannel(a, 1, 2)
+     sl  = GetChannel(a, 4)
+     sr  = GetChannel(a, 5)
+     bl  = MixAudio(sl, sr, 0.2929, 0.2929)
+     br  = Amplify(bl, -1.0)
+     slr = MergeChannels(bl, br)
+     return MixAudio(flr, slr, 0.4142, 1.0)
+  }
+# 5 Channels L,R,C,LFE,S -> Dolby ProLogic
+function c53_dpl(clip a)
+  {
+     flr = GetChannel(a, 1, 2)
+     fcc = GetChannel(a, 3, 3)
+     bl  = GetChannel(a, 5)
+     br  = Amplify(bl, -1.0)
+     slr = MergeChannels(bl, br)
+     flc = MixAudio(flr, fcc, 0.4142, 0.2929)
+     return MixAudio(flc, slr, 1.0, 0.2929)
+  }
+# 5 Channels L,R,LFE,SL,SR -> Dolby ProLogic II
+function c52_dpl2(clip a)
+  {
+     flr = GetChannel(a, 1, 2)
+     sl  = GetChannel(a, 4)
+     sr  = GetChannel(a, 5)
+     bl  = MixAudio(sl, sr, 0.3714, 0.2144)
+     br  = MixAudio(sl, sr, -0.2144, -0.3714)
+     slr = MergeChannels(bl, br)
+     return MixAudio(flr, slr, 0.4142, 1.0)
   }");
                     break;
                 case ChannelMode.Upmix:
