@@ -509,6 +509,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                     display = false;
                     switch (xs.x264PresetLevel)
                     {
+                        case x264Settings.x264PresetLevelModes.ultrafast:
+                        case x264Settings.x264PresetLevelModes.superfast: if (xs.Lookahead != 0) display = true; break;
+                        case x264Settings.x264PresetLevelModes.veryfast: if (xs.Lookahead != 10) display = true; break;
                         case x264Settings.x264PresetLevelModes.faster: if (xs.Lookahead != 20) display = true; break;
                         case x264Settings.x264PresetLevelModes.fast: if (xs.Lookahead != 30) display = true; break;
                         case x264Settings.x264PresetLevelModes.medium: if (xs.Lookahead != 40) display = true; break;
