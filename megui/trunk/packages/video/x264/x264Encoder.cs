@@ -405,7 +405,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
 
 
             if (!xs.CustomEncoderOptions.Contains("--qpmin "))
-                if (xs.MinQuantizer != 10)
+                if (xs.MinQuantizer != 0)
                     sb.Append("--qpmin " + xs.MinQuantizer + " ");
             if (!xs.CustomEncoderOptions.Contains("--qpmax "))
                 if (xs.MaxQuantizer != 51)
