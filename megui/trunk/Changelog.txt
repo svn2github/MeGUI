@@ -1,11 +1,12 @@
 0.3.5.27
-  - (zathor) [File Indexer] after "on completion load files" no audio encoding could be queued. bug #3110119
+  - (zathor) [File Indexer] after "on completion load files" no audio encoding could be queued. Bug #3110119
   - (zathor) [Muxer] if the mux window is not closed after queueing the output file name will be cleared
-  - (zathor) [x264] add missing "final statistics" log entry
+  - (zathor) [x264] added missing "final statistics" log entry
   - (zathor) [x264] extended quality mode to include 0 as a valid crf/qp GUI value
   - (zathor) [x264] fixed command line generation for --rc-lookahead with ultrafast/superfast/veryfast presets
-  - (zathor) [x264] fixed command line generation for --weightp with superfast/veryfast presets
+  - (zathor) [x264] changed command line generation for --weightp with superfast/veryfast presets
   - (zathor) [x264] changed default value of --qpmin to 0 (requires x264 rev 1795+)
+  - (zathor) [Audio Downmix] enhanced avisynth script. Patch by tebasuna51
 
 0.3.5.26
   - (zathor) [Audio Downmix] enhanced avisynth script in order to cover more input channel configurations. Patch by tebasuna51
