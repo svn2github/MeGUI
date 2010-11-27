@@ -4,6 +4,7 @@
   - (zathor) [x264] add missing "final statistics" log entry
   - (zathor) [x264] extended quality mode to include 0 as a valid crf/qp GUI value
   - (zathor) [x264] fixed command line generation for --rc-lookahead with ultrafast/superfast/veryfast presets
+  - (zathor) [x264] fixed command line generation for --weightp with superfast/veryfast presets
 
 0.3.5.26
   - (zathor) [Audio Downmix] enhanced avisynth script in order to cover more input channel configurations. Patch by tebasuna51
