@@ -1102,7 +1102,7 @@ namespace MeGUI.packages.video.x264
                 x264BitrateQuantizer.Maximum = 64;
                 if (x264EncodingMode.SelectedIndex == (int)VideoCodecSettings.Mode.quality) // crf
                 {
-                    x264BitrateQuantizer.Minimum = 0.1M;
+                    x264BitrateQuantizer.Minimum = 0.0M;
                     x264BitrateQuantizer.DecimalPlaces = 1;
                     x264BitrateQuantizer.Increment = 0.1M;
                 }

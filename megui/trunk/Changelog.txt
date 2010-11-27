@@ -2,6 +2,7 @@
   - (zathor) [File Indexer] after "on completion load files" no audio encoding could be queued. bug #3110119
   - (zathor) [Muxer] if the mux window is not closed after queueing the output file name will be cleared
   - (zathor) [x264] add missing "final statistics" log entry
+  - (zathor) [x264] extended quality mode to include 0 as a valid crf/qp GUI value
 
 0.3.5.26
   - (zathor) [Audio Downmix] enhanced avisynth script in order to cover more input channel configurations. Patch by tebasuna51
