@@ -340,6 +340,7 @@ namespace MeGUI
                 }
                 else ati.Type = atrack.Format;
                 ati.NbChannels = atrack.ChannelsString;
+                ati.ChannelPositions = atrack.ChannelPositionsString2;
                 ati.SamplingRate = atrack.SamplingRateString;
                 if (atrack.LanguageString == "") // to retrieve Language 
                 {

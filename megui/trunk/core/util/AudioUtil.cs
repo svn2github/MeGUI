@@ -152,7 +152,7 @@ namespace MeGUI
 
     public class AudioTrackInfo
     {
-        private string nbChannels, type, samplingRate, containerType, description;
+        private string nbChannels, type, samplingRate, containerType, description, channelPositions;
         private int index, trackID;
         public AudioTrackInfo()
             : this(null, null, null, 0)
@@ -221,6 +221,12 @@ namespace MeGUI
         {
             get { return nbChannels; }
             set { nbChannels = value; }
+        }
+
+        public string ChannelPositions
+        {
+            get { return channelPositions; }
+            set { channelPositions = value; }
         }
 
         public string SamplingRate
