@@ -773,7 +773,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                     {
                         log.LogEvent("no audio file detected: " + audioJob.Input, ImageType.Error);
                     }
-                    _downMixModeNb = 4;
                     break;
                 case ChannelMode.Upmix:
                     createTemporallyEqFiles(tmp);
