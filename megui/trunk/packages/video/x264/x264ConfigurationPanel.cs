@@ -1955,7 +1955,7 @@ namespace MeGUI.packages.video.x264
             this.cbBPyramid.SelectedIndex = 2;
 
             // Rate Control Tab
-            this.x264MinimimQuantizer.Value = 10;
+            this.x264MinimimQuantizer.Value = 0;
             this.x264MaximumQuantizer.Value = 51;
             this.x264MaxQuantDelta.Value = 4;
             this.x264IPFrameFactor.Value = 1.4M;

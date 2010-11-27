@@ -1618,7 +1618,7 @@ namespace MeGUI.packages.video.x264
             0,
             0});
             this.x264MinimimQuantizer.Minimum = new decimal(new int[] {
-            1,
+            0,
             0,
             0,
             0});
@@ -1626,7 +1626,7 @@ namespace MeGUI.packages.video.x264
             this.x264MinimimQuantizer.Size = new System.Drawing.Size(48, 20);
             this.x264MinimimQuantizer.TabIndex = 1;
             this.x264MinimimQuantizer.Value = new decimal(new int[] {
-            10,
+            0,
             0,
             0,
             0});
