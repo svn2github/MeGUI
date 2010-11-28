@@ -34,7 +34,7 @@ namespace MeGUI
         public MP2Settings()
             : base(ID, AudioCodec.MP2, AudioEncoderType.FFMP2, 128)
         {
-
+            base.DownmixMode = ChannelMode.StereoDownmix;
         }
 
         public override BitrateManagementMode BitrateMode

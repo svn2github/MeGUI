@@ -33,6 +33,7 @@ namespace MeGUI
             : base(ID, AudioCodec.MP3, AudioEncoderType.LAME, 128)
 		{
 			quality = 50;
+            base.DownmixMode = ChannelMode.StereoDownmix;
 		}
 		/// <summary>
 		/// gets / sets the quality for vbr mode
