@@ -1,3 +1,6 @@
+0.3.5.29
+  - (zathor) [Audio Downmix] enhanced avisynth script part II. Patch by tebasuna51
+
 0.3.5.28
   - (zathor) [audio encoder] if the encoder only supports 2 channels then "keep original channels" will be removed and the default is "downmix multichannel to stereo"
 
