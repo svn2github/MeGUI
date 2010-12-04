@@ -509,7 +509,8 @@ namespace MeGUI
                     if (this.openOnQueue.Checked)
                     {
                         if (!string.IsNullOrEmpty(this.chapterFile.Filename))
-                            this.chapterFile.Filename = string.Empty; // clean up  
+                            this.chapterFile.Filename = string.Empty; // clean up
+                        tabControl1.SelectedTab = tabControl1.TabPages[0];
                         input.PerformClick();
                     }
                     else

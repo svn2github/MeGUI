@@ -63,7 +63,10 @@ namespace MeGUI
             tabs.Add(a);
             a.AudioContainer = MainForm.Instance.Settings.MainAudioFormat;
             a.Dock = System.Windows.Forms.DockStyle.Fill;
-            a.QueueJob = tabs[0].QueueJob;
+            a.QueueJob = delegate(AudioJob aJob)
+            {
+                MainForm.Instance.Jobs.addJobsToQueue(aJob);
+            };
 
             TabPage p = new TabPage("Track " + tabs.Count);
             tabControl1.TabPages.Add(p);
@@ -119,6 +122,9 @@ namespace MeGUI
 
         internal void openAudioFile(params string[] files)
         {
+            tabs.Clear();
+            tabControl1.TabPages.Clear();
+
             for (int i = 0; i < files.Length; ++i)
             {
                 Debug.Assert(i <= tabs.Count);

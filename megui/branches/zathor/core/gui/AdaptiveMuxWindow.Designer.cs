@@ -41,7 +41,6 @@ namespace MeGUI
             this.containerFormat.Name = "containerFormat";
             this.containerFormat.Size = new System.Drawing.Size(141, 21);
             this.containerFormat.TabIndex = 1;
-            //this.cbContainer.SelectedIndexChanged += new System.EventHandler(this.cbContainer_SelectedIndexChanged);
             // 
             // label1
             // 
@@ -56,7 +55,7 @@ namespace MeGUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(444, 559);
+            this.ClientSize = new System.Drawing.Size(444, 597);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "AdaptiveMuxWindow";
             this.Text = "MeGUI - Adaptive Muxer";

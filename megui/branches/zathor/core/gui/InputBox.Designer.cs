@@ -59,7 +59,7 @@ namespace MeGUI.core.gui
             // 
             this.text.Location = new System.Drawing.Point(12, 93);
             this.text.Name = "text";
-            this.text.Size = new System.Drawing.Size(326, 20);
+            this.text.Size = new System.Drawing.Size(326, 21);
             this.text.TabIndex = 0;
             this.text.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.text_KeyPress);
             // 
@@ -81,6 +81,7 @@ namespace MeGUI.core.gui
             this.Controls.Add(this.text);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOk);
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "InputBox";
             this.Text = "InputBox";

@@ -45,7 +45,7 @@ namespace MeGUI
                      overwriteStats, keep2of3passOutput, autoUpdate, deleteCompletedJobs, deleteIntermediateFiles,
                      deleteAbortedOutput, openProgressWindow, useadvancedtooltips, freshOggEnc2, autoscroll, 
                      alwaysOnTop, safeProfileAlteration, usehttpproxy, addTimePosition, alwaysbackupfiles,
-                     forcerawavcextension, bAutoLoadDG, bAutoStartQueueStartup, bAlwaysMux;
+                     forcerawavcextension, bAutoLoadDG, bAutoStartQueueStartup, bAlwaysMuxMKV, b64bitX264;
         private ulong audioSamplesPerUpdate;
         private AfterEncoding afterEncoding;
         private decimal forceFilmThreshold, acceptableFPSError;
@@ -88,9 +88,13 @@ namespace MeGUI
 			mkvmergePath = getDownloadPath(@"tools\mkvmerge\mkvmerge.exe");
 #if x64
             x264Path = getDownloadPath(@"tools\x264\x264_64.exe");
+            b64bitX264 = true;
+
 #endif
 #if x86
             x264Path = getDownloadPath(@"tools\x264\x264.exe");
+            if (OSInfo.isWow64())
+                b64bitX264 = true;
 #endif
             dgIndexPath = getDownloadPath(@"tools\dgindex\dgindex.exe");
             ffmsIndexPath = getDownloadPath(@"tools\ffms\ffmsindex.exe");
@@ -108,7 +112,7 @@ namespace MeGUI
 			autoForceFilm = true;
             bAutoLoadDG = true;
 			autoStartQueue = false;
-            bAlwaysMux = true;
+            bAlwaysMuxMKV = true;
             bAutoStartQueueStartup = false;
 			forceFilmThreshold = new decimal(95);
 			defaultLanguage1 = "";
@@ -376,6 +380,14 @@ namespace MeGUI
         {
             get { return useadvancedtooltips; }
             set { useadvancedtooltips = value; }
+        }
+        /// <summary>
+        /// bool to decide whether to use 64bit x264
+        /// </summary>
+        public bool Use64bitX264
+        {
+            get { return b64bitX264; }
+            set { b64bitX264 = value; }
         }
         ///<summary>
         /// gets / sets whether megui puts the Video Preview Form "Alwyas on Top" or not
@@ -695,12 +707,12 @@ namespace MeGUI
             set { bAutoStartQueueStartup = value; }
 		}
         /// <summary>
-        /// gets / sets whether pressing Queue should automatically start encoding at startup
+        /// gets / sets whether MKV files should always be muxed with mkvmerge even if x264 can output it directly
         /// </summary>
-        public bool AlwaysMux
+        public bool AlwaysMuxMKV
         {
-            get { return bAlwaysMux; }
-            set { bAlwaysMux = value; }
+            get { return bAlwaysMuxMKV; }
+            set { bAlwaysMuxMKV = value; }
         }
 		/// <summary>
 		/// gets / sets whether pressing Queue should automatically start encoding

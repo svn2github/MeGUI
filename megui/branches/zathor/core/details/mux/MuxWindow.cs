@@ -72,6 +72,7 @@ namespace MeGUI
                 subtitleTracks[0].ShowDefaultSubtitleStream = true;
                 subtitleTracks[0].ShowDelay = true;
                 subtitleTracks[0].chkDefaultStream.CheckedChanged += new System.EventHandler(base.chkDefaultStream_CheckedChanged);
+                subtitleTracks[0].chkDefaultStream.Checked = true;
             }
             if (muxer.GetSupportedChapterTypes().Count == 0)
                 chaptersGroupbox.Enabled = false;
@@ -85,7 +86,52 @@ namespace MeGUI
             vInput.Filter = muxer.GetVideoInputFilter();
             chapters.Filter = muxer.GetChapterInputFilter();
 
+            base.muxButton.Click += new System.EventHandler(this.muxButton_Click);
+
             this.Text = "MeGUI - " + muxer.Name;
+        }
+
+        protected virtual void muxButton_Click(object sender, System.EventArgs e)
+        {
+            if (muxButton.DialogResult != DialogResult.OK)
+            {
+                if (string.IsNullOrEmpty(vInput.Filename))
+                {
+                    MessageBox.Show("You must configure a video input file", "Missing input", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    return;
+                }
+                else if (string.IsNullOrEmpty(output.Filename))
+                {
+                    MessageBox.Show("You must configure an output file", "Missing input", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    return;
+                }
+                else if (MainForm.verifyOutputFile(output.Filename) != null)
+                {
+                    MessageBox.Show("Invalid output file", "Invalid output", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                else if (!fps.Value.HasValue)
+                {
+                    MessageBox.Show("You must select a framerate", "Missing input", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    return;
+                }
+            }
+            else
+            {
+                if (this.muxButton.Text.Equals("Update"))
+                {
+                    this.Close();
+                }
+                else
+                {
+                    MuxJob job = this.Job;
+                    mainForm.Jobs.addJobsToQueue(job);
+                    if (chkCloseOnQueue.Checked)
+                        this.Close();
+                    else
+                        output.Filename = String.Empty;
+                }
+            }
         }
 
         protected virtual MuxJob generateMuxJob()

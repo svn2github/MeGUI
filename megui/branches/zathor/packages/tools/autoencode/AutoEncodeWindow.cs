@@ -160,6 +160,14 @@ namespace MeGUI
                     break;
                 }
             }
+            foreach (object o in device.Items) // I know this is ugly, but using the DeviceOutputType doesn't work unless we're switching to manual serialization
+            {
+                if (o.ToString().Equals(mainForm.Settings.AedSettings.DeviceOutputType))
+                {
+                    device.SelectedItem = o;
+                    break;
+                }
+            }
             return true;
         }
 
@@ -188,6 +196,7 @@ namespace MeGUI
 		{
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.Label label1;
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AutoEncodeWindow));
             this.AutomaticEncodingGroup = new System.Windows.Forms.GroupBox();
             this.videoSize = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -455,7 +464,7 @@ namespace MeGUI
             // helpButton1
             // 
             this.helpButton1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.helpButton1.ArticleName = "AutoEncode window";
+            this.helpButton1.ArticleName = "AutoEncode";
             this.helpButton1.AutoSize = true;
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.helpButton1.Location = new System.Drawing.Point(10, 228);
@@ -475,10 +484,10 @@ namespace MeGUI
             this.Controls.Add(this.queueButton);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "AutoEncodeWindow";
-            this.ShowInTaskbar = false;
             this.Text = "MeGUI - Automatic Encoding";
             this.AutomaticEncodingGroup.ResumeLayout(false);
             this.AutomaticEncodingGroup.PerformLayout();

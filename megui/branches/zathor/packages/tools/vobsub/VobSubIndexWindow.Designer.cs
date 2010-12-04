@@ -195,7 +195,7 @@ namespace MeGUI
             // 
             // helpButton1
             // 
-            this.helpButton1.ArticleName = "Vobsub indexer window";
+            this.helpButton1.ArticleName = "Tools/VobSubber";
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.helpButton1.Location = new System.Drawing.Point(7, 364);
             this.helpButton1.Name = "helpButton1";

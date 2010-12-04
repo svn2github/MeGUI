@@ -245,13 +245,6 @@ namespace MeGUI
 
         public void LoadProfiles()
         {
-            if (Directory.Exists(Path.Combine(path, "profiles")))
-            {
-                //setAllProfiles(Loader.TryLoadProfiles(path));
-                FileUtil.DeleteDirectoryIfExists(Path.Combine(path, "profiles"), true);
-                return;
-            }
-
             foreach (ProfileType t in profileTypes)
                 t.Profiles = readAllProfiles(t, false);
 

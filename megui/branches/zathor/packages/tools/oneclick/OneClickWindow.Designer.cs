@@ -120,7 +120,7 @@ namespace MeGUI
             trackTabPage2.Location = new System.Drawing.Point(4, 22);
             trackTabPage2.Name = "trackTabPage2";
             trackTabPage2.Padding = new System.Windows.Forms.Padding(3);
-            trackTabPage2.Size = new System.Drawing.Size(172, 94);
+            trackTabPage2.Size = new System.Drawing.Size(433, 94);
             trackTabPage2.TabIndex = 1;
             trackTabPage2.Text = "Audio track 2";
             trackTabPage2.UseVisualStyleBackColor = true;
@@ -130,7 +130,7 @@ namespace MeGUI
             this.audio2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.audio2.Location = new System.Drawing.Point(3, 3);
             this.audio2.Name = "audio2";
-            this.audio2.Size = new System.Drawing.Size(166, 88);
+            this.audio2.Size = new System.Drawing.Size(427, 88);
             this.audio2.TabIndex = 0;
             this.audio2.SomethingChanged += new System.EventHandler(this.audio1_SomethingChanged);
             // 
@@ -139,7 +139,7 @@ namespace MeGUI
             label1.AutoSize = true;
             label1.Location = new System.Drawing.Point(19, 247);
             label1.Name = "label1";
-            label1.Size = new System.Drawing.Size(47, 13);
+            label1.Size = new System.Drawing.Size(49, 13);
             label1.TabIndex = 37;
             label1.Text = "Splitting:";
             // 
@@ -149,7 +149,7 @@ namespace MeGUI
             this.trackTabPage1.Location = new System.Drawing.Point(4, 22);
             this.trackTabPage1.Name = "trackTabPage1";
             this.trackTabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.trackTabPage1.Size = new System.Drawing.Size(433, 94);
+            this.trackTabPage1.Size = new System.Drawing.Size(433, 93);
             this.trackTabPage1.TabIndex = 0;
             this.trackTabPage1.Text = "Audio track 1";
             this.trackTabPage1.UseVisualStyleBackColor = true;
@@ -159,7 +159,7 @@ namespace MeGUI
             this.audio1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.audio1.Location = new System.Drawing.Point(3, 3);
             this.audio1.Name = "audio1";
-            this.audio1.Size = new System.Drawing.Size(427, 88);
+            this.audio1.Size = new System.Drawing.Size(427, 87);
             this.audio1.TabIndex = 0;
             this.audio1.SomethingChanged += new System.EventHandler(this.audio1_SomethingChanged);
             // 
@@ -202,7 +202,7 @@ namespace MeGUI
             this.keepInputResolution.AutoSize = true;
             this.keepInputResolution.Location = new System.Drawing.Point(123, 42);
             this.keepInputResolution.Name = "keepInputResolution";
-            this.keepInputResolution.Size = new System.Drawing.Size(242, 17);
+            this.keepInputResolution.Size = new System.Drawing.Size(246, 17);
             this.keepInputResolution.TabIndex = 25;
             this.keepInputResolution.Text = "Keep Input Resolution (disable Crop && Resize)";
             this.keepInputResolution.UseVisualStyleBackColor = true;
@@ -215,7 +215,7 @@ namespace MeGUI
             this.autoCrop.CheckState = System.Windows.Forms.CheckState.Checked;
             this.autoCrop.Location = new System.Drawing.Point(191, 19);
             this.autoCrop.Name = "autoCrop";
-            this.autoCrop.Size = new System.Drawing.Size(70, 17);
+            this.autoCrop.Size = new System.Drawing.Size(72, 17);
             this.autoCrop.TabIndex = 24;
             this.autoCrop.Text = "AutoCrop";
             this.autoCrop.UseVisualStyleBackColor = true;
@@ -247,7 +247,7 @@ namespace MeGUI
             this.autoDeint.AutoSize = true;
             this.autoDeint.Location = new System.Drawing.Point(123, 112);
             this.autoDeint.Name = "autoDeint";
-            this.autoDeint.Size = new System.Drawing.Size(138, 17);
+            this.autoDeint.Size = new System.Drawing.Size(139, 17);
             this.autoDeint.TabIndex = 20;
             this.autoDeint.Text = "Automatic Deinterlacing";
             this.autoDeint.UseVisualStyleBackColor = true;
@@ -288,7 +288,7 @@ namespace MeGUI
             0,
             0});
             this.horizontalResolution.Name = "horizontalResolution";
-            this.horizontalResolution.Size = new System.Drawing.Size(64, 20);
+            this.horizontalResolution.Size = new System.Drawing.Size(64, 21);
             this.horizontalResolution.TabIndex = 0;
             this.horizontalResolution.Value = new decimal(new int[] {
             640,
@@ -301,7 +301,7 @@ namespace MeGUI
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(14, 93);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(78, 13);
+            this.label2.Size = new System.Drawing.Size(82, 13);
             this.label2.TabIndex = 4;
             this.label2.Text = "Avisynth profile";
             // 
@@ -384,7 +384,7 @@ namespace MeGUI
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.workingName.Location = new System.Drawing.Point(120, 64);
             this.workingName.Name = "workingName";
-            this.workingName.Size = new System.Drawing.Size(324, 20);
+            this.workingName.Size = new System.Drawing.Size(324, 21);
             this.workingName.TabIndex = 30;
             this.workingName.TextChanged += new System.EventHandler(this.workingName_TextChanged);
             // 
@@ -590,9 +590,9 @@ namespace MeGUI
             this.panel1.Controls.Add(this.audioTrack2);
             this.panel1.Controls.Add(this.track1Label);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(3, 16);
+            this.panel1.Location = new System.Drawing.Point(3, 17);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(431, 79);
+            this.panel1.Size = new System.Drawing.Size(431, 78);
             this.panel1.TabIndex = 21;
             // 
             // audioTrack1
@@ -614,7 +614,7 @@ namespace MeGUI
             this.track2Label.AutoSize = true;
             this.track2Label.Location = new System.Drawing.Point(13, 41);
             this.track2Label.Name = "track2Label";
-            this.track2Label.Size = new System.Drawing.Size(44, 13);
+            this.track2Label.Size = new System.Drawing.Size(42, 13);
             this.track2Label.TabIndex = 16;
             this.track2Label.Text = "Track 2";
             // 
@@ -637,7 +637,7 @@ namespace MeGUI
             this.track1Label.AutoSize = true;
             this.track1Label.Location = new System.Drawing.Point(13, 11);
             this.track1Label.Name = "track1Label";
-            this.track1Label.Size = new System.Drawing.Size(44, 13);
+            this.track1Label.Size = new System.Drawing.Size(42, 13);
             this.track1Label.TabIndex = 15;
             this.track1Label.Text = "Track 1";
             // 
@@ -685,7 +685,7 @@ namespace MeGUI
             this.deviceLabel.AutoSize = true;
             this.deviceLabel.Location = new System.Drawing.Point(15, 256);
             this.deviceLabel.Name = "deviceLabel";
-            this.deviceLabel.Size = new System.Drawing.Size(68, 13);
+            this.deviceLabel.Size = new System.Drawing.Size(66, 13);
             this.deviceLabel.TabIndex = 39;
             this.deviceLabel.Text = "Device Type";
             // 
@@ -694,7 +694,7 @@ namespace MeGUI
             this.containerFormatLabel.AutoSize = true;
             this.containerFormatLabel.Location = new System.Drawing.Point(15, 228);
             this.containerFormatLabel.Name = "containerFormatLabel";
-            this.containerFormatLabel.Size = new System.Drawing.Size(87, 13);
+            this.containerFormatLabel.Size = new System.Drawing.Size(91, 13);
             this.containerFormatLabel.TabIndex = 38;
             this.containerFormatLabel.Text = "Container Format";
             // 
@@ -724,10 +724,10 @@ namespace MeGUI
             this.tabControl2.Controls.Add(this.trackTabPage1);
             this.tabControl2.Controls.Add(trackTabPage2);
             this.tabControl2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl2.Location = new System.Drawing.Point(3, 16);
+            this.tabControl2.Location = new System.Drawing.Point(3, 17);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
-            this.tabControl2.Size = new System.Drawing.Size(441, 120);
+            this.tabControl2.Size = new System.Drawing.Size(441, 119);
             this.tabControl2.TabIndex = 32;
             // 
             // videoGroupBox
@@ -749,7 +749,7 @@ namespace MeGUI
             this.usechaptersmarks.AutoSize = true;
             this.usechaptersmarks.Location = new System.Drawing.Point(168, 47);
             this.usechaptersmarks.Name = "usechaptersmarks";
-            this.usechaptersmarks.Size = new System.Drawing.Size(229, 17);
+            this.usechaptersmarks.Size = new System.Drawing.Size(234, 17);
             this.usechaptersmarks.TabIndex = 39;
             this.usechaptersmarks.Text = "Force using Key-Frames for chapters marks";
             this.usechaptersmarks.UseVisualStyleBackColor = true;
@@ -776,9 +776,9 @@ namespace MeGUI
             // 
             this.addPrerenderJob.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.addPrerenderJob.AutoSize = true;
-            this.addPrerenderJob.Location = new System.Drawing.Point(15, 47);
+            this.addPrerenderJob.Location = new System.Drawing.Point(10, 47);
             this.addPrerenderJob.Name = "addPrerenderJob";
-            this.addPrerenderJob.Size = new System.Drawing.Size(127, 17);
+            this.addPrerenderJob.Size = new System.Drawing.Size(132, 17);
             this.addPrerenderJob.TabIndex = 16;
             this.addPrerenderJob.Text = "Add pre-rendering job";
             this.addPrerenderJob.UseVisualStyleBackColor = true;
@@ -794,7 +794,7 @@ namespace MeGUI
             this.showAdvancedOptions.AutoSize = true;
             this.showAdvancedOptions.Location = new System.Drawing.Point(74, 317);
             this.showAdvancedOptions.Name = "showAdvancedOptions";
-            this.showAdvancedOptions.Size = new System.Drawing.Size(144, 17);
+            this.showAdvancedOptions.Size = new System.Drawing.Size(143, 17);
             this.showAdvancedOptions.TabIndex = 31;
             this.showAdvancedOptions.Text = "Show Advanced Options";
             this.showAdvancedOptions.UseVisualStyleBackColor = true;
@@ -822,12 +822,12 @@ namespace MeGUI
             // helpButton1
             // 
             this.helpButton1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.helpButton1.ArticleName = "One click encoder";
+            this.helpButton1.ArticleName = "One Click Encoder";
             this.helpButton1.AutoSize = true;
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.helpButton1.Location = new System.Drawing.Point(12, 311);
             this.helpButton1.Name = "helpButton1";
-            this.helpButton1.Size = new System.Drawing.Size(39, 23);
+            this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 32;
             // 
             // OneClickWindow
@@ -840,6 +840,7 @@ namespace MeGUI
             this.Controls.Add(this.showAdvancedOptions);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.goButton);
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "OneClickWindow";
             this.Text = "MeGUI - One Click Encoder";

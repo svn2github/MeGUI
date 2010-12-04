@@ -46,7 +46,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
         {
             executable = encoderPath;
 #if x86
-            if (OSInfo.isWow64())
+            if (OSInfo.isWow64() && MainForm.Instance.Settings.Use64bitX264)
             {
                 string vfw4x264Path =  System.IO.Path.Combine(System.IO.Path.GetDirectoryName(encoderPath), "vfw4x264.exe");
                 if (System.IO.File.Exists(vfw4x264Path))
@@ -359,9 +359,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                 display = false;
                 switch (xs.x264PresetLevel)
                 {
-                    case x264Settings.x264PresetLevelModes.ultrafast:
+                    case x264Settings.x264PresetLevelModes.ultrafast: if (xs.WeightedPPrediction != 0) display = true; break;
                     case x264Settings.x264PresetLevelModes.superfast:
-                    case x264Settings.x264PresetLevelModes.veryfast: if (xs.WeightedPPrediction != 0) display = true; break;
+                    case x264Settings.x264PresetLevelModes.veryfast: 
                     case x264Settings.x264PresetLevelModes.faster: if (xs.WeightedPPrediction != 1) display = true; break;
                     default: if (xs.WeightedPPrediction != 2) display = true; break;
                 }
@@ -405,7 +405,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
 
 
             if (!xs.CustomEncoderOptions.Contains("--qpmin "))
-                if (xs.MinQuantizer != 10)
+                if (xs.MinQuantizer != 0)
                     sb.Append("--qpmin " + xs.MinQuantizer + " ");
             if (!xs.CustomEncoderOptions.Contains("--qpmax "))
                 if (xs.MaxQuantizer != 51)
@@ -509,6 +509,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                     display = false;
                     switch (xs.x264PresetLevel)
                     {
+                        case x264Settings.x264PresetLevelModes.ultrafast:
+                        case x264Settings.x264PresetLevelModes.superfast: if (xs.Lookahead != 0) display = true; break;
+                        case x264Settings.x264PresetLevelModes.veryfast: if (xs.Lookahead != 10) display = true; break;
                         case x264Settings.x264PresetLevelModes.faster: if (xs.Lookahead != 20) display = true; break;
                         case x264Settings.x264PresetLevelModes.fast: if (xs.Lookahead != 30) display = true; break;
                         case x264Settings.x264PresetLevelModes.medium: if (xs.Lookahead != 40) display = true; break;
@@ -953,6 +956,18 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             get {
                 return genCommandline(job.Input, job.Output, job.DAR, hres, vres, job.Settings as x264Settings, job.Zones);
             }
+        }
+
+        protected override void doExitConfig()
+        {
+            if (proc.ExitCode != 0 && !su.WasAborted && OSInfo.isWow64() && MainForm.Instance.Settings.Use64bitX264)
+            {
+                MainForm.Instance.Settings.Use64bitX264 = false;
+                log.LogEvent("The 64 bit mode of x264 has been disabled", ImageType.Error);
+            }
+
+            if (!su.HasError && !su.WasAborted)
+                compileFinalStats();
         }
     }
 }

@@ -179,6 +179,7 @@ namespace MeGUI
 		/// </summary>
 		private void InitializeComponent()
 		{
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(QuantizerMatrixDialog));
             this.predefinedMatrixLabel = new System.Windows.Forms.Label();
             this.predefinedMatrix = new System.Windows.Forms.ComboBox();
             this.mat1x1 = new System.Windows.Forms.TextBox();
@@ -1049,6 +1050,7 @@ namespace MeGUI
             this.Controls.Add(this.saveMatrixButton);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "QuantizerMatrixDialog";
             this.Text = "MeGUI - Quantizer Matrix Editor";

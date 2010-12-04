@@ -119,7 +119,7 @@ namespace MeGUI
 			p4x4mv = false;
 			i4x4mv = true;
 			i8x8mv = false;
-			MinQuantizer = 10;
+			MinQuantizer = 0;
 			MaxQuantizer = 51;
 			maxQuantDelta = 4;
 			CreditsQuantizer = new decimal(40);

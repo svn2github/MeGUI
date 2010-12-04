@@ -43,9 +43,9 @@ namespace MeGUI.core.gui
             button1.AutoSize = true;
             button1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             button1.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            button1.Location = new System.Drawing.Point(288, 78);
+            button1.Location = new System.Drawing.Point(289, 78);
             button1.Name = "button1";
-            button1.Size = new System.Drawing.Size(50, 23);
+            button1.Size = new System.Drawing.Size(49, 23);
             button1.TabIndex = 0;
             button1.Text = "Cancel";
             button1.UseVisualStyleBackColor = true;
@@ -56,9 +56,9 @@ namespace MeGUI.core.gui
             this.button2.AutoSize = true;
             this.button2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.button2.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.button2.Location = new System.Drawing.Point(250, 78);
+            this.button2.Location = new System.Drawing.Point(251, 78);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(32, 23);
+            this.button2.Size = new System.Drawing.Size(31, 23);
             this.button2.TabIndex = 1;
             this.button2.Text = "OK";
             this.button2.UseVisualStyleBackColor = true;
@@ -78,7 +78,7 @@ namespace MeGUI.core.gui
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.numericUpDown1.Location = new System.Drawing.Point(12, 43);
             this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(326, 20);
+            this.numericUpDown1.Size = new System.Drawing.Size(326, 21);
             this.numericUpDown1.TabIndex = 3;
             // 
             // NumberChooser
@@ -91,6 +91,7 @@ namespace MeGUI.core.gui
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button2);
             this.Controls.Add(button1);
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "NumberChooser";

@@ -164,6 +164,7 @@ namespace MeGUI.core.details.mux
             this.tableLayoutPanel1.SetColumnSpan(this.input, 4);
             this.input.Filename = "";
             this.input.Filter = null;
+            this.input.FilterIndex = 0;
             this.input.FolderMode = false;
             this.input.Location = new System.Drawing.Point(64, 3);
             this.input.Name = "input";
@@ -180,9 +181,9 @@ namespace MeGUI.core.details.mux
             this.chkDefaultStream.AutoSize = true;
             this.chkDefaultStream.Location = new System.Drawing.Point(256, 65);
             this.chkDefaultStream.Name = "chkDefaultStream";
-            this.chkDefaultStream.Size = new System.Drawing.Size(92, 17);
+            this.chkDefaultStream.Size = new System.Drawing.Size(85, 17);
             this.chkDefaultStream.TabIndex = 44;
-            this.chkDefaultStream.Text = "default stream";
+            this.chkDefaultStream.Text = "default track";
             this.chkDefaultStream.UseVisualStyleBackColor = true;
             this.chkDefaultStream.Visible = false;
             // 
@@ -208,10 +209,10 @@ namespace MeGUI.core.details.mux
         protected System.Windows.Forms.ComboBox subtitleLanguage;
         protected System.Windows.Forms.Label subtitleLanguageLabel;
         protected System.Windows.Forms.Label subtitleInputLabel;
-        private FileBar input;
         protected System.Windows.Forms.Label delayLabel;
         protected System.Windows.Forms.NumericUpDown audioDelay;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         public System.Windows.Forms.CheckBox chkDefaultStream;
+        public FileBar input;
     }
 }

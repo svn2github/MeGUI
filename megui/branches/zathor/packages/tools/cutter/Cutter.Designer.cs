@@ -28,6 +28,7 @@ namespace MeGUI.packages.tools.cutter
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Cutter));
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.addZoneButton = new System.Windows.Forms.Button();
             this.clearZonesButton = new System.Windows.Forms.Button();
@@ -49,8 +50,8 @@ namespace MeGUI.packages.tools.cutter
             this.avsScript = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.sections = new System.Windows.Forms.ListView();
-            this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
-            this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.flowLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.startFrame)).BeginInit();
@@ -93,7 +94,7 @@ namespace MeGUI.packages.tools.cutter
             this.clearZonesButton.Enabled = false;
             this.clearZonesButton.Location = new System.Drawing.Point(50, 8);
             this.clearZonesButton.Name = "clearZonesButton";
-            this.clearZonesButton.Size = new System.Drawing.Size(41, 23);
+            this.clearZonesButton.Size = new System.Drawing.Size(42, 23);
             this.clearZonesButton.TabIndex = 14;
             this.clearZonesButton.Text = "Clear";
             this.clearZonesButton.Click += new System.EventHandler(this.clearZonesButton_Click);
@@ -103,7 +104,7 @@ namespace MeGUI.packages.tools.cutter
             this.updateZoneButton.AutoSize = true;
             this.updateZoneButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.updateZoneButton.Enabled = false;
-            this.updateZoneButton.Location = new System.Drawing.Point(97, 8);
+            this.updateZoneButton.Location = new System.Drawing.Point(98, 8);
             this.updateZoneButton.Name = "updateZoneButton";
             this.updateZoneButton.Size = new System.Drawing.Size(52, 23);
             this.updateZoneButton.TabIndex = 17;
@@ -115,9 +116,9 @@ namespace MeGUI.packages.tools.cutter
             this.removeZoneButton.AutoSize = true;
             this.removeZoneButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.removeZoneButton.Enabled = false;
-            this.removeZoneButton.Location = new System.Drawing.Point(155, 8);
+            this.removeZoneButton.Location = new System.Drawing.Point(156, 8);
             this.removeZoneButton.Name = "removeZoneButton";
-            this.removeZoneButton.Size = new System.Drawing.Size(57, 23);
+            this.removeZoneButton.Size = new System.Drawing.Size(56, 23);
             this.removeZoneButton.TabIndex = 15;
             this.removeZoneButton.Text = "Remove";
             this.removeZoneButton.Click += new System.EventHandler(this.removeZoneButton_Click);
@@ -128,7 +129,7 @@ namespace MeGUI.packages.tools.cutter
             this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label1.Location = new System.Drawing.Point(218, 5);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(77, 29);
+            this.label1.Size = new System.Drawing.Size(80, 29);
             this.label1.TabIndex = 18;
             this.label1.Text = "Transition style";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -137,7 +138,7 @@ namespace MeGUI.packages.tools.cutter
             // 
             this.transitionStyle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.transitionStyle.FormattingEnabled = true;
-            this.transitionStyle.Location = new System.Drawing.Point(301, 8);
+            this.transitionStyle.Location = new System.Drawing.Point(304, 8);
             this.transitionStyle.Name = "transitionStyle";
             this.transitionStyle.Size = new System.Drawing.Size(141, 21);
             this.transitionStyle.TabIndex = 19;
@@ -149,7 +150,7 @@ namespace MeGUI.packages.tools.cutter
             this.startFrameLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.startFrameLabel.Location = new System.Drawing.Point(8, 5);
             this.startFrameLabel.Name = "startFrameLabel";
-            this.startFrameLabel.Size = new System.Drawing.Size(61, 26);
+            this.startFrameLabel.Size = new System.Drawing.Size(64, 27);
             this.startFrameLabel.TabIndex = 10;
             this.startFrameLabel.Text = "Start Frame";
             this.startFrameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -158,9 +159,9 @@ namespace MeGUI.packages.tools.cutter
             // 
             this.endFrameLabel.AutoSize = true;
             this.endFrameLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.endFrameLabel.Location = new System.Drawing.Point(8, 31);
+            this.endFrameLabel.Location = new System.Drawing.Point(8, 32);
             this.endFrameLabel.Name = "endFrameLabel";
-            this.endFrameLabel.Size = new System.Drawing.Size(61, 26);
+            this.endFrameLabel.Size = new System.Drawing.Size(64, 27);
             this.endFrameLabel.TabIndex = 12;
             this.endFrameLabel.Text = "End Frame";
             this.endFrameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -176,29 +177,29 @@ namespace MeGUI.packages.tools.cutter
             this.tableLayoutPanel1.Controls.Add(this.startFrame, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.endFrame, 1, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 292);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 290);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.Padding = new System.Windows.Forms.Padding(5);
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(476, 62);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(476, 64);
             this.tableLayoutPanel1.TabIndex = 14;
             // 
             // startFrame
             // 
             this.startFrame.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.startFrame.Location = new System.Drawing.Point(75, 8);
+            this.startFrame.Location = new System.Drawing.Point(78, 8);
             this.startFrame.Name = "startFrame";
-            this.startFrame.Size = new System.Drawing.Size(393, 20);
+            this.startFrame.Size = new System.Drawing.Size(393, 21);
             this.startFrame.TabIndex = 13;
             // 
             // endFrame
             // 
             this.endFrame.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.endFrame.Location = new System.Drawing.Point(75, 34);
+            this.endFrame.Location = new System.Drawing.Point(78, 35);
             this.endFrame.Name = "endFrame";
-            this.endFrame.Size = new System.Drawing.Size(393, 20);
+            this.endFrame.Size = new System.Drawing.Size(393, 21);
             this.endFrame.TabIndex = 14;
             // 
             // flowLayoutPanel2
@@ -256,9 +257,9 @@ namespace MeGUI.packages.tools.cutter
             // 
             this.addCutsToScript.AutoSize = true;
             this.addCutsToScript.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.addCutsToScript.Location = new System.Drawing.Point(125, 8);
+            this.addCutsToScript.Location = new System.Drawing.Point(123, 8);
             this.addCutsToScript.Name = "addCutsToScript";
-            this.addCutsToScript.Size = new System.Drawing.Size(99, 23);
+            this.addCutsToScript.Size = new System.Drawing.Size(101, 23);
             this.addCutsToScript.TabIndex = 2;
             this.addCutsToScript.Text = "Add cuts to script";
             this.addCutsToScript.UseVisualStyleBackColor = true;
@@ -266,12 +267,12 @@ namespace MeGUI.packages.tools.cutter
             // 
             // helpButton1
             // 
-            this.helpButton1.ArticleName = "Avs cutter";
+            this.helpButton1.ArticleName = "Avs Cutter";
             this.helpButton1.AutoSize = true;
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.helpButton1.Location = new System.Drawing.Point(75, 8);
+            this.helpButton1.Location = new System.Drawing.Point(79, 8);
             this.helpButton1.Name = "helpButton1";
-            this.helpButton1.Size = new System.Drawing.Size(44, 23);
+            this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 3;
             // 
             // avsScript
@@ -291,7 +292,7 @@ namespace MeGUI.packages.tools.cutter
             this.groupBox1.Location = new System.Drawing.Point(0, 21);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(5);
-            this.groupBox1.Size = new System.Drawing.Size(476, 271);
+            this.groupBox1.Size = new System.Drawing.Size(476, 269);
             this.groupBox1.TabIndex = 18;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Included sections";
@@ -303,9 +304,9 @@ namespace MeGUI.packages.tools.cutter
             this.columnHeader2});
             this.sections.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sections.FullRowSelect = true;
-            this.sections.Location = new System.Drawing.Point(5, 18);
+            this.sections.Location = new System.Drawing.Point(5, 19);
             this.sections.Name = "sections";
-            this.sections.Size = new System.Drawing.Size(466, 248);
+            this.sections.Size = new System.Drawing.Size(466, 245);
             this.sections.TabIndex = 17;
             this.sections.UseCompatibleStateImageBehavior = false;
             this.sections.View = System.Windows.Forms.View.Details;
@@ -331,6 +332,8 @@ namespace MeGUI.packages.tools.cutter
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.flowLayoutPanel2);
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Cutter";
             this.Text = "MeGUI - AVS Cutter";
             this.flowLayoutPanel1.ResumeLayout(false);

@@ -710,6 +710,7 @@ namespace MeGUI.core.gui
             TaggedJob job = currentJob;
             job.Status = JobStatus.ABORTED;
             job.End = DateTime.Now;
+            long iCounter = 0;
             
             LogItem i = new LogItem("Deleting aborted output");
 
@@ -718,15 +719,25 @@ namespace MeGUI.core.gui
             if (mainForm.Settings.DeleteAbortedOutput)
             {
                 i.LogValue("File to delete", job.Job.Output);
-                try
+                while (File.Exists(job.Job.Output) && iCounter < 10)
                 {
-                    File.Delete(job.Job.Output);
+                    try
+                    {
+                        File.Delete(job.Job.Output);
+                    }
+                    catch (Exception e)
+                    {
+                        if (++iCounter == 5)
+                            i.LogValue("Error deleting file", e, ImageType.Warning);
+                        else
+                        {
+                            i.LogEvent("Error deleting file - trying again", ImageType.Information);
+                            System.Threading.Thread.Sleep(1000);
+                        }
+                    }
+                }
+                if (!File.Exists(job.Job.Output))
                     i.LogEvent("File deleted");
-                }
-                catch (Exception e)
-                {
-                    i.LogValue("Error deleting file", e, ImageType.Warning);
-                }
             }
             log.Add(i);
         }

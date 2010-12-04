@@ -42,9 +42,9 @@ namespace MeGUI.core.gui
             cancelButton.AutoSize = true;
             cancelButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            cancelButton.Location = new System.Drawing.Point(321, 323);
+            cancelButton.Location = new System.Drawing.Point(322, 323);
             cancelButton.Name = "cancelButton";
-            cancelButton.Size = new System.Drawing.Size(50, 23);
+            cancelButton.Size = new System.Drawing.Size(49, 23);
             cancelButton.TabIndex = 2;
             cancelButton.Text = "Cancel";
             cancelButton.UseVisualStyleBackColor = true;
@@ -68,7 +68,7 @@ namespace MeGUI.core.gui
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(12, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(169, 13);
+            this.label1.Size = new System.Drawing.Size(176, 13);
             this.label1.TabIndex = 1;
             this.label1.Text = "Select the presets to import/export";
             // 
@@ -77,9 +77,9 @@ namespace MeGUI.core.gui
             this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button2.AutoSize = true;
             this.button2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.button2.Location = new System.Drawing.Point(216, 323);
+            this.button2.Location = new System.Drawing.Point(206, 323);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(99, 23);
+            this.button2.Size = new System.Drawing.Size(109, 23);
             this.button2.TabIndex = 2;
             this.button2.Text = "Import.../Export...";
             this.button2.UseVisualStyleBackColor = true;
@@ -93,6 +93,7 @@ namespace MeGUI.core.gui
             this.Controls.Add(cancelButton);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.profileList);
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ProfilePorter";
             this.Text = "Presets Importer/Exporter";

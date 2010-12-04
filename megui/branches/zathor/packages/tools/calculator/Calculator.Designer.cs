@@ -775,7 +775,7 @@ namespace MeGUI
             // helpButton1
             // 
             this.helpButton1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.helpButton1.ArticleName = "Bitrate calculator";
+            this.helpButton1.ArticleName = "Bitrate Calculator";
             this.helpButton1.Location = new System.Drawing.Point(22, 319);
             this.helpButton1.Name = "helpButton1";
             this.helpButton1.Size = new System.Drawing.Size(78, 23);
@@ -794,9 +794,10 @@ namespace MeGUI
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.applyButton);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "Calculator";
             this.Text = "MeGUI - Bitrate Calculator";
             this.videoGroupbox.ResumeLayout(false);

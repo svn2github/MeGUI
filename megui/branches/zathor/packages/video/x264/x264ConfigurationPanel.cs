@@ -593,8 +593,8 @@ namespace MeGUI.packages.video.x264
                             x264NewAdaptiveBframes.SelectedIndex = 1;
                         if (!this.x264WeightedBPrediction.Checked)
                             this.x264WeightedBPrediction.Checked = true;
-                        if (this.x264WeightedPPrediction.SelectedIndex != 0)
-                            this.x264WeightedPPrediction.SelectedIndex = 0;
+                        if (this.x264WeightedPPrediction.SelectedIndex != 1)
+                            this.x264WeightedPPrediction.SelectedIndex = 1;
                         if (cbAQMode.SelectedIndex == 0)
                             cbAQMode.SelectedIndex = 1;
                         if (!adaptiveDCT.Checked)
@@ -639,8 +639,8 @@ namespace MeGUI.packages.video.x264
                             x264NewAdaptiveBframes.SelectedIndex = 1;
                         if (!this.x264WeightedBPrediction.Checked)
                             this.x264WeightedBPrediction.Checked = true;
-                        if (this.x264WeightedPPrediction.SelectedIndex != 0)
-                            this.x264WeightedPPrediction.SelectedIndex = 0;
+                        if (this.x264WeightedPPrediction.SelectedIndex != 1)
+                            this.x264WeightedPPrediction.SelectedIndex = 1;
                         if (cbAQMode.SelectedIndex == 0)
                             cbAQMode.SelectedIndex = 1;
                         if (!adaptiveDCT.Checked)
@@ -1102,7 +1102,7 @@ namespace MeGUI.packages.video.x264
                 x264BitrateQuantizer.Maximum = 64;
                 if (x264EncodingMode.SelectedIndex == (int)VideoCodecSettings.Mode.quality) // crf
                 {
-                    x264BitrateQuantizer.Minimum = 0.1M;
+                    x264BitrateQuantizer.Minimum = 0.0M;
                     x264BitrateQuantizer.DecimalPlaces = 1;
                     x264BitrateQuantizer.Increment = 0.1M;
                 }
@@ -1955,7 +1955,7 @@ namespace MeGUI.packages.video.x264
             this.cbBPyramid.SelectedIndex = 2;
 
             // Rate Control Tab
-            this.x264MinimimQuantizer.Value = 10;
+            this.x264MinimimQuantizer.Value = 0;
             this.x264MaximumQuantizer.Value = 51;
             this.x264MaxQuantDelta.Value = 4;
             this.x264IPFrameFactor.Value = 1.4M;

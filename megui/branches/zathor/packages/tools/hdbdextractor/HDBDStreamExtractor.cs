@@ -216,7 +216,7 @@ namespace MeGUI.packages.tools.hdbdextractor
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.FolderInputTextBox.Location = new System.Drawing.Point(6, 19);
             this.FolderInputTextBox.Name = "FolderInputTextBox";
-            this.FolderInputTextBox.Size = new System.Drawing.Size(514, 20);
+            this.FolderInputTextBox.Size = new System.Drawing.Size(514, 21);
             this.FolderInputTextBox.TabIndex = 0;
             // 
             // HelpButton2
@@ -226,7 +226,7 @@ namespace MeGUI.packages.tools.hdbdextractor
             this.HelpButton2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.HelpButton2.Location = new System.Drawing.Point(12, 425);
             this.HelpButton2.Name = "HelpButton2";
-            this.HelpButton2.Size = new System.Drawing.Size(39, 23);
+            this.HelpButton2.Size = new System.Drawing.Size(38, 23);
             this.HelpButton2.TabIndex = 8;
             this.HelpButton2.Text = "Help";
             this.HelpButton2.UseVisualStyleBackColor = true;
@@ -275,7 +275,7 @@ namespace MeGUI.packages.tools.hdbdextractor
             this.FileSelection.AutoSize = true;
             this.FileSelection.Location = new System.Drawing.Point(170, 46);
             this.FileSelection.Name = "FileSelection";
-            this.FileSelection.Size = new System.Drawing.Size(115, 17);
+            this.FileSelection.Size = new System.Drawing.Size(116, 17);
             this.FileSelection.TabIndex = 14;
             this.FileSelection.TabStop = true;
             this.FileSelection.Text = "Select File as Input";
@@ -287,7 +287,7 @@ namespace MeGUI.packages.tools.hdbdextractor
             this.FolderSelection.Checked = true;
             this.FolderSelection.Location = new System.Drawing.Point(18, 46);
             this.FolderSelection.Name = "FolderSelection";
-            this.FolderSelection.Size = new System.Drawing.Size(128, 17);
+            this.FolderSelection.Size = new System.Drawing.Size(130, 17);
             this.FolderSelection.TabIndex = 13;
             this.FolderSelection.TabStop = true;
             this.FolderSelection.Text = "Select Folder as Input";
@@ -298,9 +298,9 @@ namespace MeGUI.packages.tools.hdbdextractor
             this.FolderInputSourceButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.FolderInputSourceButton.AutoSize = true;
             this.FolderInputSourceButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.FolderInputSourceButton.Location = new System.Drawing.Point(526, 16);
+            this.FolderInputSourceButton.Location = new System.Drawing.Point(523, 16);
             this.FolderInputSourceButton.Name = "FolderInputSourceButton";
-            this.FolderInputSourceButton.Size = new System.Drawing.Size(26, 23);
+            this.FolderInputSourceButton.Size = new System.Drawing.Size(29, 23);
             this.FolderInputSourceButton.TabIndex = 12;
             this.FolderInputSourceButton.Text = "...";
             this.FolderInputSourceButton.UseVisualStyleBackColor = true;
@@ -347,18 +347,18 @@ namespace MeGUI.packages.tools.hdbdextractor
             this.FeatureDurationDataGridViewTextBoxColumn});
             this.FeatureDataGridView.DataSource = this.FeatureBindingSource;
             this.FeatureDataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.FeatureDataGridView.Location = new System.Drawing.Point(3, 16);
+            this.FeatureDataGridView.Location = new System.Drawing.Point(3, 17);
             this.FeatureDataGridView.MultiSelect = false;
             this.FeatureDataGridView.Name = "FeatureDataGridView";
             this.FeatureDataGridView.RowHeadersVisible = false;
             this.FeatureDataGridView.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.FeatureDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.FeatureDataGridView.ShowEditingIcon = false;
-            this.FeatureDataGridView.Size = new System.Drawing.Size(552, 91);
+            this.FeatureDataGridView.Size = new System.Drawing.Size(552, 90);
             this.FeatureDataGridView.TabIndex = 13;
-            this.FeatureDataGridView.RowLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.FeatureDataGridView_RowLeave);
-            this.FeatureDataGridView.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.FeatureDataGridView_DataBindingComplete);
             this.FeatureDataGridView.DataSourceChanged += new System.EventHandler(this.FeatureDataGridView_DataSourceChanged);
+            this.FeatureDataGridView.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.FeatureDataGridView_DataBindingComplete);
+            this.FeatureDataGridView.RowLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.FeatureDataGridView_RowLeave);
             // 
             // FeatureNumberDataGridViewTextBoxColumn1
             // 
@@ -455,14 +455,14 @@ namespace MeGUI.packages.tools.hdbdextractor
             this.languageDataGridViewTextBoxColumn});
             this.StreamDataGridView.DataSource = this.StreamsBindingSource;
             this.StreamDataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.StreamDataGridView.Location = new System.Drawing.Point(3, 16);
+            this.StreamDataGridView.Location = new System.Drawing.Point(3, 17);
             this.StreamDataGridView.MultiSelect = false;
             this.StreamDataGridView.Name = "StreamDataGridView";
             this.StreamDataGridView.RowHeadersVisible = false;
             this.StreamDataGridView.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.StreamDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.StreamDataGridView.ShowEditingIcon = false;
-            this.StreamDataGridView.Size = new System.Drawing.Size(552, 150);
+            this.StreamDataGridView.Size = new System.Drawing.Size(552, 149);
             this.StreamDataGridView.TabIndex = 7;
             this.StreamDataGridView.DataSourceChanged += new System.EventHandler(this.StreamDataGridView_DataSourceChanged);
             // 
@@ -573,9 +573,9 @@ namespace MeGUI.packages.tools.hdbdextractor
             this.FolderOutputSourceButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.FolderOutputSourceButton.AutoSize = true;
             this.FolderOutputSourceButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.FolderOutputSourceButton.Location = new System.Drawing.Point(526, 17);
+            this.FolderOutputSourceButton.Location = new System.Drawing.Point(523, 17);
             this.FolderOutputSourceButton.Name = "FolderOutputSourceButton";
-            this.FolderOutputSourceButton.Size = new System.Drawing.Size(26, 23);
+            this.FolderOutputSourceButton.Size = new System.Drawing.Size(29, 23);
             this.FolderOutputSourceButton.TabIndex = 13;
             this.FolderOutputSourceButton.Text = "...";
             this.FolderOutputSourceButton.UseVisualStyleBackColor = true;
@@ -587,13 +587,14 @@ namespace MeGUI.packages.tools.hdbdextractor
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.FolderOutputTextBox.Location = new System.Drawing.Point(6, 19);
             this.FolderOutputTextBox.Name = "FolderOutputTextBox";
-            this.FolderOutputTextBox.Size = new System.Drawing.Size(514, 20);
+            this.FolderOutputTextBox.Size = new System.Drawing.Size(514, 21);
             this.FolderOutputTextBox.TabIndex = 1;
             // 
             // openFileDialog1
             // 
             this.openFileDialog1.Filter = "E-VOB Files (.*evo,*.vob)|*.evo;*.vob|Transport Streams Files (*.m2t*,*.mts,*.ts)" +
-                "|*.m2t*;*.ts|Matroska Files (.*mkv)|*.mkv|All Files supported (*.*)|*.evo;*.vob;*.m2t*;*.mts;*.ts;*.mkv";
+                "|*.m2t*;*.ts|Matroska Files (.*mkv)|*.mkv|All Files supported (*.*)|*.evo;*.vob;" +
+                "*.m2t*;*.mts;*.ts;*.mkv";
             this.openFileDialog1.FilterIndex = 4;
             this.openFileDialog1.Multiselect = true;
             // 
@@ -640,6 +641,7 @@ namespace MeGUI.packages.tools.hdbdextractor
             this.Controls.Add(this.HelpButton2);
             this.Controls.Add(this.StatusStrip);
             this.Controls.Add(this.LogTextBox);
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "HdBdStreamExtractor";

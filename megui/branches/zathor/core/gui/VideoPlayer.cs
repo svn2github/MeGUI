@@ -341,7 +341,6 @@ namespace MeGUI
                     buttonPanel.Controls.Remove(creditsStartButton);
                     buttonPanel.Controls.Remove(introEndButton);
                     buttonPanel.Controls.Remove(chapterButton);
-                    formHeightDelta += formHeightZonesDelta;
                     break;
                 case PREVIEWTYPE.CREDITS:
                     buttonPanel.Controls.Remove(zoneStartButton);
