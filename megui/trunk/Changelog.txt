@@ -1,3 +1,6 @@
+0.3.5.30
+  - (zathor) [Update] enhanced update detection so that it is possible to downgrade a tool
+
 0.3.5.29
   - (zathor) [Audio Downmix] enhanced avisynth script part II. Patch by tebasuna51
 

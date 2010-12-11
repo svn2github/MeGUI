@@ -633,6 +633,7 @@ namespace MeGUI
             }
             private string fileVersion;
             private string url;
+            private DateTime uploadDate;
 
             public string FileVersion
             {
@@ -643,6 +644,17 @@ namespace MeGUI
             {
                 get { return url; }
                 set { url = value; }
+            }
+            public DateTime UploadDate
+            {
+                get 
+                { 
+                    if (uploadDate == new DateTime()) // If uploadDate is not available set it to a fixed date (date of the implementation so that no files will be downloaded twice)
+                        return DateTime.Parse("2010-12-10", new System.Globalization.CultureInfo("en-us"), System.Globalization.DateTimeStyles.None);
+                    else
+                        return uploadDate; 
+                }
+                set { uploadDate = value; }
             }
 
             /// <summary>
@@ -659,6 +671,16 @@ namespace MeGUI
                     return -1;
                 else if (version2 == null)
                     return 1;
+                else if (version1.uploadDate != new DateTime() && version2.uploadDate != new DateTime())
+                {
+                    if (version1.uploadDate > version2.uploadDate)
+                        return 1;
+                    else if (version1.uploadDate < version2.uploadDate)
+                        return -1;
+                    else
+                        return 0;
+                }
+                    
                 return CompareVersionNumber(version1.FileVersion, version2.FileVersion);
             }
 
@@ -1277,9 +1299,19 @@ namespace MeGUI
             foreach (XmlNode filenode in node.ChildNodes) // each filenode contains the upgrade url and version
             {
                 availableFile = new Version();
-
-                availableFile.FileVersion = filenode.Attributes["version"].Value;
                 availableFile.Url = filenode.FirstChild.Value;
+
+                foreach (XmlAttribute oAttribute in filenode.Attributes)
+                {
+                    if (oAttribute.Name.Equals("version"))
+                        availableFile.FileVersion = filenode.Attributes["version"].Value;
+                    else if (oAttribute.Name.Equals("date"))
+                    {
+                        DateTime oDate = new DateTime();
+                        DateTime.TryParse(filenode.Attributes["date"].Value, new System.Globalization.CultureInfo("en-us"), System.Globalization.DateTimeStyles.None, out oDate);
+                        availableFile.UploadDate = oDate;
+                    }
+                }
 
                 file.AvailableVersions.Add(availableFile);
             }
