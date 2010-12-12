@@ -89,7 +89,12 @@ namespace MeGUI
                 LangCode = string.Empty
             };
 		}
-
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            if (player != null)
+                player.Close();
+            base.OnClosing(e);
+        }
 		/// <summary>
 		/// Clean up any resources being used.
 		/// </summary>

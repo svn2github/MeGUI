@@ -1,6 +1,7 @@
 0.3.5.31
   - (zathor) [ChapterCreator] removed error popup if more than one chapter is added within the preview window. Bug #3135824
   - (zathor) [ChapterCreator] add only a new chapter item in preview mode if no chapter item is selected. fixed the chapter number for this item. Bug #3135824
+  - (zathor) [ChapterCreator] preview window will be closed together with the chapter creator window
   - (zathor) [VideoPlayer] time code enabled by default
 
 0.3.5.30
