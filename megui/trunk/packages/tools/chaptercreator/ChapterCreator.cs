@@ -449,8 +449,9 @@ namespace MeGUI
 
 		private void clearZonesButton_Click(object sender, System.EventArgs e)
 		{
-			this.chapterListView.Items.Clear();
-			this.chapters = new Chapter[0];
+            pgc.Chapters.Clear();
+            FreshChapterView();
+            intIndex = 0;
 		}
 
 		private void chapterListView_SelectedIndexChanged(object sender, System.EventArgs e)
