@@ -689,7 +689,8 @@ namespace MeGUI
             if (chapterListView.Items.Count < 9)
                  chapterName.Text = "Chapter 0" + Convert.ToString(chapterListView.Items.Count+1);
             else chapterName.Text = "Chapter " + Convert.ToString(chapterListView.Items.Count+1);
-            addZoneButton_Click(null, null);
+            if (chapterListView.SelectedIndices.Count == 0)
+                addZoneButton_Click(null, null);
 		}
 
         private void ChapterCreator_Load(object sender, EventArgs e)
