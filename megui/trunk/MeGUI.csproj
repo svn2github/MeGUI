@@ -535,6 +535,13 @@
       <DependentUpon>MP2ConfigurationPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="packages\audio\ffmp2\MP2Settings.cs" />
+    <Compile Include="packages\audio\flac\FlacConfigurationPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="packages\audio\flac\FlacConfigurationPanel.Designer.cs">
+      <DependentUpon>FlacConfigurationPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="packages\audio\flac\FlacSettings.cs" />
     <Compile Include="packages\audio\lame\lameConfigurationPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -923,6 +930,10 @@
     <EmbeddedResource Include="packages\audio\ffmp2\MP2ConfigurationPanel.resx">
       <SubType>Designer</SubType>
       <DependentUpon>MP2ConfigurationPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="packages\audio\flac\FlacConfigurationPanel.resx">
+      <DependentUpon>FlacConfigurationPanel.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="packages\audio\lame\lameConfigurationPanel.resx">
       <SubType>Designer</SubType>

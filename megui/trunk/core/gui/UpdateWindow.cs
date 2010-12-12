@@ -145,6 +145,7 @@ namespace MeGUI
                     case "lame": arrPath.Add(MainForm.Instance.Settings.LamePath); break;
                     case "encaudxcli": arrPath.Add(MainForm.Instance.Settings.EncAudXPath); break;
                     case "aften": arrPath.Add(MainForm.Instance.Settings.AftenPath); break;
+                    case "flac": arrPath.Add(MainForm.Instance.Settings.FlacPath); break;
                     case "eac3to": arrPath.Add(MainForm.Instance.Settings.EAC3toPath); break;
                     case "libs":
                         {
@@ -587,6 +588,8 @@ namespace MeGUI
                             return meGUISettings.VobSubPath;
                         case ("aften"):
                             return meGUISettings.AftenPath;
+                        case ("flac"):
+                            return meGUISettings.FlacPath;
                         case ("eac3to"):
                             return meGUISettings.EAC3toPath;
                         case ("dgavcindex"):

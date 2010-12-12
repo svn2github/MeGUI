@@ -51,6 +51,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 ((j as AudioJob).Settings is OggVorbisSettings) ||
                 ((j as AudioJob).Settings is FaacSettings) ||
                 ((j as AudioJob).Settings is NeroAACSettings) ||
+                ((j as AudioJob).Settings is FlacSettings) ||
                 ((j as AudioJob).Settings is AftenSettings)))
                 return new AviSynthAudioEncoder(mf.Settings);
             return null;
@@ -830,6 +831,14 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 AftenSettings n = audioJob.Settings as AftenSettings;
                 _encoderExecutablePath = this._settings.AftenPath;
                 _encoderCommandLine = "-readtoeof 1 -b " + n.Bitrate + " - \"{0}\"";
+            }
+            if (audioJob.Settings is FlacSettings)
+            {
+                script.Append("AudioBits(last)>24?ConvertAudioTo16bit(last):last " + Environment.NewLine); // flac encoder doesn't support 32bits streams
+                _mustSendWavHeaderToEncoderStdIn = true;
+                FlacSettings n = audioJob.Settings as FlacSettings;
+                _encoderExecutablePath = this._settings.FlacPath;
+                _encoderCommandLine = "--channel-map=none -" + n.CompressionLevel + " - -o \"{0}\""; 
             }
             if (audioJob.Settings is AC3Settings)
             {

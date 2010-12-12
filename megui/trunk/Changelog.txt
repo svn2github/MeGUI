@@ -4,6 +4,7 @@
   - (zathor) [ChapterCreator] preview window will be closed together with the chapter creator window
   - (zathor) [ChapterCreator] fixed clear button. Bug #3135824
   - (zathor) [VideoPlayer] time code enabled by default
+  - (kurtnoise + zathor) added flac encoding
 
 0.3.5.30
   - (zathor) [Update] enhanced update detection so that it is possible to downgrade a tool

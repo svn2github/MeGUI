@@ -39,7 +39,7 @@ namespace MeGUI
                        dgIndexPath, xvidEncrawPath, aviMuxGUIPath, oggEnc2Path, encAudXPath, dgavcIndexPath,
                        eac3toPath, tsmuxerPath, meguiupdatecache, avisynthpluginspath, ffmsIndexPath, vobSubPath,
                        defaultLanguage1, defaultLanguage2, afterEncodingCommand, videoExtension, audioExtension,
-                       strLastDestinationPath, strLastSourcePath, dgnvIndexPath, tempDirMP4,
+                       strLastDestinationPath, strLastSourcePath, dgnvIndexPath, tempDirMP4, flacPath,
                        httpproxyaddress, httpproxyport, httpproxyuid, httpproxypwd, defaultOutputDir, strMeGUIPath;
         private bool recalculateMainMovieBitrate, autoForceFilm, autoStartQueue, enableMP3inMP4, autoOpenScript,
                      overwriteStats, keep2of3passOutput, autoUpdate, deleteCompletedJobs, deleteIntermediateFiles,
@@ -106,6 +106,7 @@ namespace MeGUI
             encAacPlusPath = getDownloadPath(@"tools\enc_aacplus\enc_aacPlus.exe");
             ffmpegPath = getDownloadPath(@"tools\ffmpeg\ffmpeg.exe");
             aftenPath = getDownloadPath(@"tools\aften\aften.exe");
+            flacPath = getDownloadPath(@"tools\flac\flac.exe");
             yadifPath = getDownloadPath(@"tools\yadif\yadif.dll");
             vobSubPath = getDownloadPath(@"tools\vobsub\vobsub.dll");
             recalculateMainMovieBitrate = false;
@@ -555,7 +556,14 @@ namespace MeGUI
         public string AftenPath
         {
             get { return aftenPath; }
-        }	
+        }
+        /// <summary>
+        /// filename and full path of the flac executable
+        /// </summary>
+        public string FlacPath
+        {
+            get { return flacPath; }
+        }
         /// <summary>
         /// filename and full path of the dgavcindex executable
         /// </summary>

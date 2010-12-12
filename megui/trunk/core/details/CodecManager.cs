@@ -163,6 +163,7 @@ namespace MeGUI
         public static readonly AudioEncoderType FFAC3  = new AudioEncoderType("FFAC3", AudioCodec.AC3);
         public static readonly AudioEncoderType FFMP2  = new AudioEncoderType("FFMP2", AudioCodec.MP2);
         public static readonly AudioEncoderType AFTEN  = new AudioEncoderType("AFTEN", AudioCodec.AC3);
+        public static readonly AudioEncoderType FLAC   = new AudioEncoderType("FLAC", AudioCodec.FLAC);
     }
     #endregion
     
@@ -213,6 +214,7 @@ namespace MeGUI
                 AudioEncoderTypes.Register(AudioEncoderType.NAAC)   &&
                 AudioEncoderTypes.Register(AudioEncoderType.VORBIS) &&
                 AudioEncoderTypes.Register(AudioEncoderType.WAAC)   &&
+                AudioEncoderTypes.Register(AudioEncoderType.FLAC)   &&
                 AudioEncoderTypes.Register(AudioEncoderType.AFTEN)))
                 throw new Exception("Failed to register a standard audio encoder type");
                 
