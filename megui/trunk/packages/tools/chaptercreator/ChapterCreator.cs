@@ -434,6 +434,7 @@ namespace MeGUI
 		private void removeZoneButton_Click(object sender, System.EventArgs e)
 		{
             if (chapterListView.Items.Count < 1 || pgc.Chapters.Count < 1) return;
+            if (chapterListView.SelectedIndices.Count == 0) return;
             intIndex = chapterListView.SelectedIndices[0];
             pgc.Chapters.Remove(pgc.Chapters[intIndex]);
             if (intIndex != 0) intIndex--;
@@ -688,7 +689,7 @@ namespace MeGUI
             if (chapterListView.Items.Count < 9)
                  chapterName.Text = "Chapter 0" + Convert.ToString(chapterListView.Items.Count+1);
             else chapterName.Text = "Chapter " + Convert.ToString(chapterListView.Items.Count+1);
-			addZoneButton_Click(null, null);
+            addZoneButton_Click(null, null);
 		}
 
         private void ChapterCreator_Load(object sender, EventArgs e)
@@ -704,6 +705,8 @@ namespace MeGUI
         {
             try
             {
+                if (chapterListView.SelectedIndices.Count == 0)
+                    return;
                 intIndex = chapterListView.SelectedIndices[0];
                 pgc.Chapters[intIndex] = new Chapter()
                 {
