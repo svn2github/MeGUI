@@ -141,7 +141,7 @@ namespace MeGUI
             httpproxypwd = "";
             defaultOutputDir = "";
             tempDirMP4 = "";
-            addTimePosition = false;
+            addTimePosition = true;
             dgavcIndexPath = getDownloadPath(@"tools\dgavcindex\dgavcindex.exe");
             dgnvIndexPath = getDownloadPath(@"tools\dgindexnv\dgindexnv.exe");
             eac3toPath = getDownloadPath(@"tools\eac3to\eac3to.exe");
