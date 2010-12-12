@@ -685,10 +685,14 @@ namespace MeGUI
 
 		private void player_ChapterSet(int frameNumber)
 		{
+            string strChapter;
             startTime.Text = Util.converFrameNumberToTimecode(frameNumber, player.Framerate);
-            if (chapterListView.Items.Count < 9)
-                 chapterName.Text = "Chapter 0" + Convert.ToString(chapterListView.Items.Count+1);
-            else chapterName.Text = "Chapter " + Convert.ToString(chapterListView.Items.Count+1);
+            if (chapterListView.SelectedIndices.Count == 0)
+                strChapter = "Chapter " + (chapterListView.Items.Count + 1).ToString("00");
+            else
+                strChapter = "Chapter " + (chapterListView.SelectedIndices[0] + 1).ToString("00");            
+            if (!chapterName.Text.Equals(strChapter))
+                chapterName.Text = strChapter;
             if (chapterListView.SelectedIndices.Count == 0)
                 addZoneButton_Click(null, null);
 		}
