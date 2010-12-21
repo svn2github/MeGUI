@@ -860,7 +860,6 @@ namespace MeGUI
             this.mainForm = mainForm;
             this.upgradeData = new iUpgradeableCollection(32); // To avoid unnecessary resizing, start at 32.
             meGUISettings = savedSettings; // Load up the MeGUI settings so i can access filepaths
-            treeView.Width = 50;
         }
 
         private string[] shuffled(string[] serverList)
