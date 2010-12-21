@@ -49,6 +49,8 @@ namespace MeGUI
             this.colName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colExistingVersion = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colLatestVersion = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colExistingDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.calLatestDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colPlatform = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colStatus = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.txtBoxLog = new System.Windows.Forms.TextBox();
@@ -208,6 +210,8 @@ namespace MeGUI
             this.colName,
             this.colExistingVersion,
             this.colLatestVersion,
+            this.colExistingDate,
+            this.calLatestDate,
             this.colPlatform,
             this.colStatus});
             this.listViewDetails.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -242,6 +246,16 @@ namespace MeGUI
             // 
             this.colLatestVersion.Text = "Latest Version";
             this.colLatestVersion.Width = 100;
+            // 
+            // colExistingDate
+            // 
+            this.colExistingDate.Text = "Existing Date";
+            this.colExistingDate.Width = 70;
+            // 
+            // calLatestDate
+            // 
+            this.calLatestDate.Text = "Latest Date";
+            this.calLatestDate.Width = 70;
             // 
             // colPlatform
             // 
@@ -316,5 +330,7 @@ namespace MeGUI
         private MeGUI.core.gui.HelpButton helpButton1;
         private System.Windows.Forms.ToolStripMenuItem reinstallToolStripMenuItem;
         private System.Windows.Forms.ColumnHeader colPlatform;
+        private System.Windows.Forms.ColumnHeader colExistingDate;
+        private System.Windows.Forms.ColumnHeader calLatestDate;
     }
 }

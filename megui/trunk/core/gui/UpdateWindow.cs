@@ -197,6 +197,8 @@ namespace MeGUI
                 ListViewItem.ListViewSubItem name = new ListViewItem.ListViewSubItem();
                 ListViewItem.ListViewSubItem existingVersion = new ListViewItem.ListViewSubItem();
                 ListViewItem.ListViewSubItem latestVersion = new ListViewItem.ListViewSubItem();
+                ListViewItem.ListViewSubItem existingDate = new ListViewItem.ListViewSubItem();
+                ListViewItem.ListViewSubItem latestDate = new ListViewItem.ListViewSubItem();
                 ListViewItem.ListViewSubItem platform = new ListViewItem.ListViewSubItem();
                 ListViewItem.ListViewSubItem status = new ListViewItem.ListViewSubItem();
 
@@ -205,19 +207,35 @@ namespace MeGUI
                 name.Name = "Name";
                 existingVersion.Name = "Existing Version";
                 latestVersion.Name = "Latest Version";
+                existingDate.Name = "Existing Date";
+                latestDate.Name = "Latest Date";
                 platform.Name = "Platform";
                 status.Name = "Status";
 
                 name.Text = this.Name;
 
-                Version v = GetLatestVersion(); 
+                Version v = GetLatestVersion();
                 if (v != null)
+                {
                     latestVersion.Text = v.FileVersion;
+                    latestDate.Text = v.UploadDate.ToShortDateString();
+                }
+                else
+                {
+                    latestVersion.Text = "unknown";
+                    latestDate.Text = "unknown";
+                }
 
                 if (this.CurrentVersion != null)
+                {
                     existingVersion.Text = this.CurrentVersion.FileVersion;
+                    existingDate.Text = this.CurrentVersion.UploadDate.ToShortDateString();
+                }
                 else
+                {
                     existingVersion.Text = "N/A";
+                    existingDate.Text = "N/A";
+                }
 
                 if (!HasAvailableVersions)
                 {
@@ -242,6 +260,8 @@ namespace MeGUI
                 myitem.SubItems.Add(name);
                 myitem.SubItems.Add(existingVersion);
                 myitem.SubItems.Add(latestVersion);
+                myitem.SubItems.Add(existingDate);
+                myitem.SubItems.Add(latestDate);
                 myitem.SubItems.Add(platform);
                 myitem.SubItems.Add(status);
                 return myitem;
@@ -497,6 +517,9 @@ namespace MeGUI
                     if (Name == "core")
                     {
                         base.CurrentVersion.FileVersion = Application.ProductVersion;
+
+                        FileInfo fi = new FileInfo(System.Windows.Forms.Application.ExecutablePath);
+                        base.CurrentVersion.UploadDate = fi.LastWriteTime;
                     }
                     return base.CurrentVersion;
                 }
@@ -650,23 +673,17 @@ namespace MeGUI
             }
             public DateTime UploadDate
             {
-                get 
-                { 
-                    if (uploadDate == new DateTime()) // If uploadDate is not available set it to a fixed date (date of the implementation so that no files will be downloaded twice)
-                        return DateTime.Parse("2010-12-10", new System.Globalization.CultureInfo("en-us"), System.Globalization.DateTimeStyles.None);
-                    else
-                        return uploadDate; 
-                }
+                get { return uploadDate;  }
                 set { uploadDate = value; }
             }
 
             /// <summary>
-            /// Helper method to parse a version numbers. Takes in a string and returns the numerical
-            /// equivilent of it.
+            /// Helper method to check if a newer upload date is available
             /// </summary>
-            /// <param name="str_version">The string containing the version number</param>
-            /// <returns>a double indicating the version number</returns>
-            private int CompareVersionNumber(Version version1, Version version2)
+            /// <param name="version1">The first version to compare</param>
+            /// <param name="version2">The second version to compare</param>
+            /// <returns>1 if version1 has a newer upload date</returns>
+            private int CompareUploadDate(Version version1, Version version2)
             {
                 if (version1 == null && version2 == null)
                     return 0;
@@ -683,69 +700,16 @@ namespace MeGUI
                     else
                         return 0;
                 }
-                    
-                return CompareVersionNumber(version1.FileVersion, version2.FileVersion);
-            }
 
-            private int CompareVersionNumber(string version1, string version2)
-            {
-                if (string.IsNullOrEmpty(version1) && string.IsNullOrEmpty(version2))
-                    return 0;
-                else if (string.IsNullOrEmpty(version1))
-                    return -1;
-                else if (string.IsNullOrEmpty(version2))
-                    return 1;
-
-                List<char> v1 = new List<char>(version1.ToCharArray());
-                List<char> v2 = new List<char>(version2.ToCharArray());
-                int start1 = 0;
-                int start2 = 0;
-                int end1 = 0;
-                int end2 = 0;
-
-                while (true)
-                {
-                    // Here we find the start and end indexes of the next number in the version string.
-                    start1 = v1.FindIndex(end1, delegate(char c) { return char.IsDigit(c); });
-                    end1 = v1.FindIndex(Math.Max(0, start1), delegate(char c) { return !char.IsDigit(c); });
-
-                    start2 = v2.FindIndex(end2, delegate(char c) { return char.IsDigit(c); });
-                    end2 = v2.FindIndex(Math.Max(0, start2), delegate(char c) { return !char.IsDigit(c); });
-
-                    // If one of versions has run out of valid numbers, we have nothing left to compare
-                    if ((start1 == -1 && start2 == -1) )
-                        return 0;
-                    if ((start1 == -1 && start2 != -1))
-                        return -1;
-                    if ((start1 != -1 && start2 == -1))
-                        return 1;
-
-                    // Generally we parse (end - start) digits into an integer. When we reach the
-                    // end of the string we parse (string.Length - start) digits
-                    int count1 = (end1 != -1 ? end1 : version1.Length) - start1;
-                    int count2 = (end2 != -1 ? end2 : version2.Length) - start2;
-
-                    int result = int.Parse(version1.Substring(start1, count1)) - int.Parse(version2.Substring(start2, count2));
-                    if (result != 0)
-                        return result;
-
-                    // If one of the strings has reached the end, we bail out
-                    if ((end1 == -1 && end2 == -1))
-                        return 0;
-                    if ((end1 == -1 && end2 != -1))
-                        return -1;
-                    if ((end1 != -1 && end2 == -1))
-                        return 1;
-                }
+                return 1;
             }
 
             #region IComparable<Version> Members
 
             public int CompareTo(Version other)
             {
-                return CompareVersionNumber(this, other);
+                return CompareUploadDate(this, other);
             }
-
 
             #endregion
         }
@@ -896,6 +860,7 @@ namespace MeGUI
             this.mainForm = mainForm;
             this.upgradeData = new iUpgradeableCollection(32); // To avoid unnecessary resizing, start at 32.
             meGUISettings = savedSettings; // Load up the MeGUI settings so i can access filepaths
+            treeView.Width = 50;
         }
 
         private string[] shuffled(string[] serverList)
@@ -1694,7 +1659,7 @@ namespace MeGUI
                             File.SetLastWriteTime(filename, zipentry.DateTime);
                             if (file.NeedsRestartedCopying)
                             {
-                                mainForm.AddFileToReplace(file.Name, filename, oldFileName, file.GetLatestVersion().FileVersion);
+                                mainForm.AddFileToReplace(file.Name, filename, oldFileName, file.GetLatestVersion().UploadDate.ToString(new System.Globalization.CultureInfo("en-us")));
                                 needsRestart = true;
                             }
                         }
@@ -1732,7 +1697,8 @@ namespace MeGUI
                         //filename, data);
                         if (file.NeedsRestartedCopying)
                         {
-                            mainForm.AddFileToReplace(file.Name, filename, oldFileName, file.GetLatestVersion().FileVersion);
+                            mainForm.AddFileToReplace(file.Name, filename, oldFileName, file.GetLatestVersion().UploadDate.ToString(new System.Globalization.CultureInfo("en-us")));
+                            file.CurrentVersion.FileVersion = file.GetLatestVersion().FileVersion;
                             needsRestart = true;
                         }
                         else
@@ -1802,12 +1768,16 @@ namespace MeGUI
             return numUpdateableFiles;
         }
 
-        public void UpdateVersionNumber(string name, string version)
+        public void UpdateUploadDate(string name, string strDate)
         {
             iUpgradeable up = upgradeData.FindByName(name);
             if (up == null)
                 return;
-            up.CurrentVersion.FileVersion = version;
+
+            DateTime oDate;
+            bool bReady = DateTime.TryParse(strDate, new System.Globalization.CultureInfo("en-us"), System.Globalization.DateTimeStyles.None, out oDate);
+            if (bReady)
+                up.CurrentVersion.UploadDate = oDate;
         }
 
         private void checkToolStripMenuItem_Click(object sender, EventArgs e)

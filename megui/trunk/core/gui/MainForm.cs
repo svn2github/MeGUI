@@ -1484,12 +1484,12 @@ namespace MeGUI
             update.ShowDialog();
         }
 
-        internal void AddFileToReplace(string iUpgradeableName, string tempFilename, string filename, string newVersion)
+        internal void AddFileToReplace(string iUpgradeableName, string tempFilename, string filename, string newUploadDate)
         {
             CommandlineUpgradeData data = new CommandlineUpgradeData();
             data.filename.Add(filename);
             data.tempFilename.Add(tempFilename);
-            data.newVersion = newVersion;
+            data.newUploadDate = newUploadDate;
             if (filesToReplace.ContainsKey(iUpgradeableName))
             {
                 filesToReplace[iUpgradeableName].tempFilename.Add(tempFilename);
@@ -1580,7 +1580,7 @@ namespace MeGUI
             {
                 UpdateWindow update = new UpdateWindow(this, Settings);
                 foreach (string file in parser.upgradeData.Keys)
-                    update.UpdateVersionNumber(file, parser.upgradeData[file]);
+                    update.UpdateUploadDate(file, parser.upgradeData[file]);
                 update.SaveSettings();
             }
         }
@@ -1861,7 +1861,7 @@ namespace MeGUI
             pstart.FileName = Path.Combine(Application.StartupPath, "updatecopier.exe");
             foreach (string file in filesToReplace.Keys)
             {
-                pstart.Arguments += string.Format("--component \"{0}\" \"{1}\" ", file, filesToReplace[file].newVersion);
+                pstart.Arguments += string.Format("--component \"{0}\" \"{1}\" ", file, filesToReplace[file].newUploadDate);
                 for (int i = 0; i < filesToReplace[file].filename.Count; i++)
                 {
                     pstart.Arguments += string.Format("\"{0}\" \"{1}\" ",
@@ -2165,7 +2165,7 @@ namespace MeGUI
     {
         public List<string> filename = new List<string>();
         public List<string> tempFilename = new List<string>();
-        public string newVersion;
+        public string newUploadDate;
     }
 }
         #endregion
