@@ -70,6 +70,13 @@ namespace MeGUI.core.util
             get { return text; }
         }
 
+        private int iLevel = 0;
+        public int Level
+        {
+            get { return iLevel;  }
+            set { iLevel = value; }
+        }
+
         public ImageType Type
         {
             get { return type; }
@@ -95,6 +102,8 @@ namespace MeGUI.core.util
 
         public LogItem Add(LogItem logItem)
         {
+            logItem.Level = iLevel + 1;
+            logItem.WriteLogEntry();
             subEvents.Add(logItem);
             if (SubItemAdded != null)
                 SubItemAdded(this, new EventArgs<LogItem>(logItem));
@@ -186,6 +195,21 @@ namespace MeGUI.core.util
             }
 
             return res.ToString();
+        }
+
+        private void WriteLogEntry()
+        {
+            StringBuilder res = new StringBuilder();
+
+            try
+            {
+                res.AppendFormat("{0}[{1}] {2}{3}", dashes(iLevel), Type, Text, Environment.NewLine);
+                System.IO.File.AppendAllText(MainForm.Instance.LogFile, res.ToString());
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Error writing log file",MessageBoxButtons.OK,MessageBoxIcon.Error);
+            }
         }
 
         private static string dashes(int number)

@@ -129,9 +129,11 @@ namespace MeGUI
         private List<Form> formsToReopen = new List<Form>();
         private ITaskbarList3 taskbarItem;
         private Icon taskbarIcon;
+        private string strLogFile;
 
         public bool IsHiddenMode { get { return trayIcon.Visible; } }
         public bool IsOverlayIconActive { get { return taskbarIcon != null; } }
+        public string LogFile { get { return strLogFile; } }
 
         public void RegisterForm(Form f)
         {
@@ -1110,10 +1112,7 @@ namespace MeGUI
             string text = Log.ToString();
             try
             {
-                string logDirectory = path + @"\logs";
-                FileUtil.ensureDirectoryExists(logDirectory);
-                string fileName = logDirectory + @"\logfile-" + DateTime.Now.ToString("yy'-'MM'-'dd'_'HH'-'mm'-'ss") + ".log";
-                File.WriteAllText(fileName, text);
+                File.WriteAllText(strLogFile, text);
             }
             catch (Exception e)
             {
@@ -1426,33 +1425,6 @@ namespace MeGUI
         private void MeGUI_Load(object sender, EventArgs e)
         {
             RegisterForm(this);
-            //DriveInfo[] allDrives = DriveInfo.GetDrives();      
-
-            //i = Log.Info("Hardware");
-            //i.LogValue("CPU ", string.Format("{0}", OSInfo.GetMOStuff("Win32_Processor")));
-            /*
-                        foreach (DriveInfo d in allDrives)   //OSInfo.GetMOStuff("Win32_OperatingSystem")
-                        {
-                            if ((d.DriveType == DriveType.Fixed) && (d.DriveFormat != null)) 
-                            {
-                                try
-                                {
-                                    long freespace = long.Parse(d.AvailableFreeSpace.ToString()) / 1073741824;
-                                    long totalsize = long.Parse(d.TotalSize.ToString()) / 1073741824;
-
-                                    if (d.VolumeLabel.ToString() == "")
-                                        d.VolumeLabel = "Local Disk";
-
-                                    i.LogValue("HDD ", string.Format("{0} ({1})  -  {2} Go free of {3} Go", d.VolumeLabel, d.Name, Convert.ToString(freespace), Convert.ToString(totalsize)));
-                                }
-                                catch (Exception)
-                                {
-                                    MessageBox.Show("MeGUI cannot access to the disk " + d.Name);
-                                }
-                            }
-                        }
-            */
-            //Log.LogValue("Settings", Settings, ImageType.Information);
         }
 
         private void beginUpdateCheck()
@@ -2052,7 +2024,11 @@ namespace MeGUI
         }
 
         private void MainForm_Shown(object sender, EventArgs e)
-        {            
+        {
+            string strMeGUILogPath = System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath) + @"\logs";
+            FileUtil.ensureDirectoryExists(strMeGUILogPath);
+            strLogFile = strMeGUILogPath + @"\logfile-" + DateTime.Now.ToString("yy'-'MM'-'dd'_'HH'-'mm'-'ss") + ".log";
+
             LogItem i = Log.Info("Versions");
 #if x86
             i.LogValue("MeGUI Version ", Application.ProductVersion);
