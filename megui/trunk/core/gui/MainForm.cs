@@ -2025,9 +2025,18 @@ namespace MeGUI
 
         private void MainForm_Shown(object sender, EventArgs e)
         {
+            // Log File Handling
             string strMeGUILogPath = System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath) + @"\logs";
             FileUtil.ensureDirectoryExists(strMeGUILogPath);
             strLogFile = strMeGUILogPath + @"\logfile-" + DateTime.Now.ToString("yy'-'MM'-'dd'_'HH'-'mm'-'ss") + ".log";
+            try
+            {
+                File.WriteAllText(strLogFile, "Preliminary log file only. During closing of MeGUI the well formed log file will be written.\r\n\r\n");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message,"Log File Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 
             LogItem i = Log.Info("Versions");
 #if x86

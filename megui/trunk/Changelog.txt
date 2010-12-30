@@ -2,7 +2,7 @@
   - (zathor) [MP4 Muxer] fixed tmp directory handling. Bug #3129545
   - (zathor) [Update] enhanced update detection part II. Some tools may need to be reapplied.
   - (zathor) [Update] added the update date to the update window
-  - (zathor) [Log] log entries will be written not only during closing of MeGUI
+  - (zathor) [Log] added preliminary log file writing. the well formed file will be written during closing.
 
 0.3.5.31
   - (zathor) [ChapterCreator] removed error popup if more than one chapter is added within the preview window. Bug #3135824
