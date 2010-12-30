@@ -53,6 +53,7 @@ namespace MeGUI
         public bool needsRestart = false;
         private bool isOrHasDownloadedUpgradeData = false;
         private string ServerAddress;
+        private LogItem oLog;
 
         #region Classes
 
@@ -839,6 +840,7 @@ namespace MeGUI
         {
             InitializeComponent();
             this.mainForm = mainForm;
+            oLog = mainForm.Log.Info("Update detection");
             this.upgradeData = new iUpgradeableCollection(32); // To avoid unnecessary resizing, start at 32.
             meGUISettings = savedSettings; // Load up the MeGUI settings so i can access filepaths
             this.serverList = shuffled(mainForm.Settings.AutoUpdateServerLists[mainForm.Settings.AutoUpdateServerSubList]);
@@ -858,6 +860,7 @@ namespace MeGUI
         {
             InitializeComponent();
             this.mainForm = mainForm;
+            oLog = mainForm.Log.Info("Update detection");
             this.upgradeData = new iUpgradeableCollection(32); // To avoid unnecessary resizing, start at 32.
             meGUISettings = savedSettings; // Load up the MeGUI settings so i can access filepaths
         }
@@ -988,10 +991,12 @@ namespace MeGUI
 #endif
                 if (File.Exists(strLocalUpdateXML))
                 {
+                    oLog.LogEvent("Retrieving local update file", ImageType.Information);
                     AddTextToLog("Retrieving local update file...");
                     StreamReader sr = new StreamReader(strLocalUpdateXML);
                     data = sr.ReadToEnd();
                     sr.Close();
+                    oLog.LogEvent("File opened successfully", ImageType.Information);
                     AddTextToLog("File opened successfully...");
                 }
             }
@@ -1023,6 +1028,7 @@ namespace MeGUI
                 
                 try
                 {
+                    oLog.LogEvent("Retrieving update file from server", ImageType.Information);
                     AddTextToLog("Retrieving update file from server...");
 #if x86
                     data = serverClient.DownloadString(ServerAddress + "upgrade.xml?offCache=" + System.Guid.NewGuid().ToString("N"));
@@ -1030,10 +1036,12 @@ namespace MeGUI
 #if x64
                     data = serverClient.DownloadString(ServerAddress + "upgrade_x64.xml?offCache=" + System.Guid.NewGuid().ToString("N"));
 #endif
+                    oLog.LogEvent("File downloaded successfully", ImageType.Information);
                     AddTextToLog("File downloaded successfully...");
                 }
                 catch
                 {
+                    oLog.LogEvent("Could not connect to server", ImageType.Error);
                     AddTextToLog("Error: Couldn't connect to server.");
                     upgradeXml = null;
                     return ErrorState.ServerNotAvailable;
@@ -1042,17 +1050,20 @@ namespace MeGUI
 
             try
             {
+                oLog.LogEvent("Loading update data", ImageType.Information);
                 AddTextToLog("Loading update data...");
                 upgradeXml.LoadXml(data);
+                oLog.LogEvent("Update data loaded successfully", ImageType.Information);
                 AddTextToLog("Update data loaded successfully...");
             }
             catch
             {
+                oLog.LogEvent("Invalid XML file. Aborting", ImageType.Error);
                 AddTextToLog("Error: Invalid XML file. Aborting.");
                 upgradeXml = null;
                 return ErrorState.InvalidXML;
             }
-            
+            oLog.LogEvent("Finished parsing update file", ImageType.Information);
             AddTextToLog("Finished parsing update file...");
             return ErrorState.Successful;
         }
@@ -1066,6 +1077,7 @@ namespace MeGUI
             foreach (string serverName in serverList)
             {
                 ServerAddress = serverName;
+                oLog.LogEvent("Trying server: " + serverName, ImageType.Information);
                 AddTextToLog("Trying server: " + serverName);
                 value = GetUpdateXML(false, null);
                 if (value == ErrorState.Successful)
@@ -1074,6 +1086,7 @@ namespace MeGUI
 
             if (value != ErrorState.Successful)
             {
+                oLog.LogEvent("Could not download XML file", ImageType.Error);
                 AddTextToLog("Error: Could not download XML file");
                 value = GetUpdateXML(true, null);
                 if (value != ErrorState.Successful)
@@ -1110,8 +1123,15 @@ namespace MeGUI
             }
             RemoveOldFiles();
             if (NumUpdatableFiles() > 1)
-                 AddTextToLog(string.Format("There are {0} files that can be updated.", NumUpdatableFiles()));
-            else AddTextToLog(string.Format("There is {0} file that can be updated.", NumUpdatableFiles()));
+            {
+                oLog.LogEvent(string.Format("There are {0} files that can be updated.", NumUpdatableFiles()), ImageType.Information);
+                AddTextToLog(string.Format("There are {0} files that can be updated.", NumUpdatableFiles()));
+            }
+            else
+            {
+                oLog.LogEvent(string.Format("There is {0} file that can be updated.", NumUpdatableFiles()), ImageType.Information);
+                AddTextToLog(string.Format("There is {0} file that can be updated.", NumUpdatableFiles()));
+            }
             webUpdate.Set();
         }
 
@@ -1422,12 +1442,13 @@ namespace MeGUI
                 {
                     if (!continueUpdate)
                     {
+                        oLog.LogEvent("Update aborted by user", ImageType.Information);
                         AddTextToLog("Update aborted by user.");
                         return /* false*/;
                     }
 
-                    AddTextToLog(string.Format("Updating {0}. File {1}/{2}.",
-                        file.Name, currentFile, updateableFileCount));
+                    oLog.LogEvent(string.Format("Updating {0}. File {1}/{2}.", file.Name, currentFile, updateableFileCount), ImageType.Information);
+                    AddTextToLog(string.Format("Updating {0}. File {1}/{2}.", file.Name, currentFile, updateableFileCount));
 
                     Stream str;
 
@@ -1470,8 +1491,12 @@ namespace MeGUI
                     if (file.InstallPriority > indexOfRestart)
                     {
                         if (firstTime)
+                        {
+                            oLog.LogEvent("The following files could not be updated, since they depend on another component which will only be installed when MeGUI restarts. Please run the updater later", ImageType.Information);
                             AddTextToLog(string.Format("The following files could not be updated, since they depend on another component which will only be installed when MeGUI restarts. Please run the updater later.{0}", Environment.NewLine));
+                        }
                         firstTime = false;
+                        oLog.LogEvent(file.Name, ImageType.Information);
                         AddTextToLog(file.Name + Environment.NewLine);
                     }
                 }
@@ -1480,6 +1505,11 @@ namespace MeGUI
 
             SetProgressBar(0, 1, 1); //make sure progress bar is at 100%.
 
+            oLog.LogEvent("Update completed", ImageType.Information);
+            if (succeededFiles.Count > 0)
+                oLog.LogEvent("Files which have been sucessfully updated: " + succeededFiles.Count, ImageType.Information);
+            if (failedFiles.Count > 0)
+                oLog.LogEvent("Files which have been not sucessfully updated: " + succeededFiles.Count, ImageType.Error);
             if (failedFiles.Count > 0)
             {
                 if (failedFiles.Count > 1)
@@ -1574,6 +1604,7 @@ namespace MeGUI
                 return ErrorState.Successful;
             }
 
+            oLog.LogEvent(string.Format("Could not install module '{0}'.", file.Name), ImageType.Error);
             AddTextToLog(string.Format("Could not install module '{0}'.", file.Name));
             return state;
         }
@@ -1595,6 +1626,7 @@ namespace MeGUI
                 filepath = Path.GetDirectoryName(file.SavePath);
             else
             {
+                oLog.LogEvent("The path to save " + file.Name + " to is invalid.", ImageType.Error);
                 AddTextToLog("Error: The path to save " + file.Name + " to is invalid.");
                 return ErrorState.CouldNotSaveNewFile;
             }
@@ -1610,6 +1642,7 @@ namespace MeGUI
             }
             catch (IOException)
             {
+                oLog.LogEvent(string.Format("Could not create directory {0}.", filepath), ImageType.Error);
                 AddTextToLog(string.Format("Error: Could not create directory {0}.", filepath));
                 return ErrorState.CouldNotSaveNewFile;
             }
@@ -1621,6 +1654,7 @@ namespace MeGUI
                     ZipFile zipFile = new ZipFile(Path.Combine(MainForm.Instance.Settings.MeGUIUpdateCache, Path.GetFileName(file.GetLatestVersion().Url)));
                     if (zipFile.TestArchive(true) == false)
                     {
+                        oLog.LogEvent("Could not unzip " + file.Name + ". Deleting file. Please run updater again.", ImageType.Error);
                         AddTextToLog("Error: Could not unzip " + file.Name + ". Deleting file. Please run updater again...");
                         UpdateCacher.FlushFile(file.GetLatestVersion().Url);
                         return ErrorState.CouldNotUnzip;
@@ -1669,6 +1703,7 @@ namespace MeGUI
                 }
                 catch
                 {
+                    oLog.LogEvent("Could not unzip " + file.Name + ". Deleting file. Please run updater again.", ImageType.Error);
                     AddTextToLog("Error: Could not unzip " + file.Name + ". Deleting file. Please run updater again...");
                     UpdateCacher.FlushFile(file.GetLatestVersion().Url);
                     return ErrorState.CouldNotUnzip;
@@ -1707,6 +1742,7 @@ namespace MeGUI
                 }
                 catch
                 {
+                    oLog.LogEvent("Latest version of " + file.Name + " could not be saved to disk. Check there is enough free space.", ImageType.Error);
                     AddTextToLog("Error: Latest version of " + file.Name + " could not be saved to disk. Check there is enough free space.");
                     return ErrorState.CouldNotSaveNewFile;
                 }
@@ -1723,6 +1759,7 @@ namespace MeGUI
             }
             catch
             {
+                oLog.LogEvent("Outdated backup version of " + name + " could not be deleted. Check if it is in use.", ImageType.Error);
                 AddTextToLog("Error: Outdated backup version of " + name + " could not be deleted. Check if it is in use.");
                 return ErrorState.CouldNotRemoveBackup;
             }
@@ -1738,6 +1775,7 @@ namespace MeGUI
             }
             catch
             {
+                oLog.LogEvent("Old version of " + name + " could not be backed up correctly. Restart MeGUI and try again.", ImageType.Error);
                 AddTextToLog("Error: Old version of " + name + " could not be backed up correctly. Restart MeGUI and try again.");
                 return ErrorState.CouldNotRenameExistingFile;
             }
