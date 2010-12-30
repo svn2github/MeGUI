@@ -105,6 +105,7 @@ namespace MeGUI
                 base.ProcessLine(line, stream);
             }
             else if (line.ToLower().Contains("warning") ||
+                     line.ToLower().Contains("without making use of the gap/overlap information") ||
                      line.ToLower().Contains("doesn") ||
                      (su.PercentageDoneExact > 0 && su.PercentageDoneExact < 100 &&
                       !line.ToLower().Contains("creating file ")))

@@ -1,3 +1,4 @@
+1885 [HD Streams Extractor] added a warning if a gaps file is created
 1884 (zathor) [Update] fixed problem with applying core update
   
 1883
