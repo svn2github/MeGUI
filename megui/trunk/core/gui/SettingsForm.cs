@@ -106,12 +106,9 @@ namespace MeGUI
         private CheckBox forcerawavcuse;
         private TabPage tabPage2;
         private TextBox textBox2;
-        private TextBox textBox8;
         private CheckBox checkBox1;
         private Label label2;
         private Button button2;
-        private Label besplit;
-        private Button button8;
         private GroupBox vobGroupBox;
         private ComboBox defaultLanguage2;
         private Label defaultAudioTrack2Label;
@@ -123,7 +120,6 @@ namespace MeGUI
         private GroupBox groupBox4;
         private Button btnClearMP4TempDirectory;
         private FileBar tempDirMP4;
-        private GroupBox groupBox3;
         private GroupBox groupBox5;
         private GroupBox groupBox6;
         private CheckBox cbAutoLoadDG;
@@ -289,6 +285,7 @@ namespace MeGUI
             this.nbPasses = new System.Windows.Forms.NumericUpDown();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.chkEnable64bitX264 = new System.Windows.Forms.CheckBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
@@ -297,10 +294,6 @@ namespace MeGUI
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.btnClearMP4TempDirectory = new System.Windows.Forms.Button();
             this.tempDirMP4 = new MeGUI.FileBar();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.besplit = new System.Windows.Forms.Label();
-            this.textBox8 = new System.Windows.Forms.TextBox();
-            this.button8 = new System.Windows.Forms.Button();
             this.vobGroupBox = new System.Windows.Forms.GroupBox();
             this.cbAutoLoadDG = new System.Windows.Forms.CheckBox();
             this.defaultLanguage2 = new System.Windows.Forms.ComboBox();
@@ -315,7 +308,6 @@ namespace MeGUI
             this.autoEncodeDefaultsButton = new System.Windows.Forms.Button();
             this.toolTipHelp = new System.Windows.Forms.ToolTip(this.components);
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
-            this.chkEnable64bitX264 = new System.Windows.Forms.CheckBox();
             groupBox1 = new System.Windows.Forms.GroupBox();
             groupBox1.SuspendLayout();
             this.otherGroupBox.SuspendLayout();
@@ -336,7 +328,6 @@ namespace MeGUI
             this.groupBox6.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox4.SuspendLayout();
-            this.groupBox3.SuspendLayout();
             this.vobGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.forceFilmPercentage)).BeginInit();
             this.SuspendLayout();
@@ -1076,7 +1067,6 @@ namespace MeGUI
             this.tabPage2.Controls.Add(this.groupBox6);
             this.tabPage2.Controls.Add(this.groupBox5);
             this.tabPage2.Controls.Add(this.groupBox4);
-            this.tabPage2.Controls.Add(this.groupBox3);
             this.tabPage2.Controls.Add(this.vobGroupBox);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
@@ -1096,6 +1086,16 @@ namespace MeGUI
             this.groupBox6.TabIndex = 33;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = " Misc ";
+            // 
+            // chkEnable64bitX264
+            // 
+            this.chkEnable64bitX264.AutoSize = true;
+            this.chkEnable64bitX264.Location = new System.Drawing.Point(239, 31);
+            this.chkEnable64bitX264.Name = "chkEnable64bitX264";
+            this.chkEnable64bitX264.Size = new System.Drawing.Size(157, 17);
+            this.chkEnable64bitX264.TabIndex = 28;
+            this.chkEnable64bitX264.Text = "Enable 64 bit mode of x264";
+            this.chkEnable64bitX264.UseVisualStyleBackColor = true;
             // 
             // checkBox1
             // 
@@ -1180,44 +1180,6 @@ namespace MeGUI
             this.tempDirMP4.Size = new System.Drawing.Size(424, 26);
             this.tempDirMP4.TabIndex = 41;
             this.tempDirMP4.Title = null;
-            // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add(this.besplit);
-            this.groupBox3.Controls.Add(this.textBox8);
-            this.groupBox3.Controls.Add(this.button8);
-            this.groupBox3.Location = new System.Drawing.Point(4, 85);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(467, 54);
-            this.groupBox3.TabIndex = 30;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = " BeSplit ";
-            // 
-            // besplit
-            // 
-            this.besplit.Location = new System.Drawing.Point(8, 23);
-            this.besplit.Name = "besplit";
-            this.besplit.Size = new System.Drawing.Size(68, 13);
-            this.besplit.TabIndex = 21;
-            this.besplit.Text = "BeSplit";
-            // 
-            // textBox8
-            // 
-            this.textBox8.Location = new System.Drawing.Point(84, 20);
-            this.textBox8.Name = "textBox8";
-            this.textBox8.ReadOnly = true;
-            this.textBox8.Size = new System.Drawing.Size(315, 21);
-            this.textBox8.TabIndex = 22;
-            this.textBox8.Text = "besplit.exe";
-            // 
-            // button8
-            // 
-            this.button8.Location = new System.Drawing.Point(405, 20);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(24, 23);
-            this.button8.TabIndex = 23;
-            this.button8.Text = "...";
-            this.button8.Click += new System.EventHandler(this.button8_Click);
             // 
             // vobGroupBox
             // 
@@ -1356,16 +1318,6 @@ namespace MeGUI
             this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 1;
             // 
-            // chkEnable64bitX264
-            // 
-            this.chkEnable64bitX264.AutoSize = true;
-            this.chkEnable64bitX264.Location = new System.Drawing.Point(239, 31);
-            this.chkEnable64bitX264.Name = "chkEnable64bitX264";
-            this.chkEnable64bitX264.Size = new System.Drawing.Size(157, 17);
-            this.chkEnable64bitX264.TabIndex = 28;
-            this.chkEnable64bitX264.Text = "Enable 64 bit mode of x264";
-            this.chkEnable64bitX264.UseVisualStyleBackColor = true;
-            // 
             // SettingsForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
@@ -1410,8 +1362,6 @@ namespace MeGUI
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
             this.groupBox4.ResumeLayout(false);
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
             this.vobGroupBox.ResumeLayout(false);
             this.vobGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.forceFilmPercentage)).EndInit();
@@ -1450,13 +1400,6 @@ namespace MeGUI
             MessageBox.Show(this, "Successfully reset all dialogs", "Success", MessageBoxButtons.OK, MessageBoxIcon.None);
         }
 
-        private void button8_Click(object sender, EventArgs e)
-        {
-            if (selectExe("besplit"))
-            {
-                textBox8.Text = openExecutableDialog.FileName;
-            }
-        }
         private void runCommand_CheckedChanged(object sender, EventArgs e)
         {
             command.Enabled = runCommand.Checked;
@@ -1524,7 +1467,6 @@ namespace MeGUI
                 settings.VideoExtension = videoExtension.Text;
                 settings.AudioExtension = audioExtension.Text;
                 settings.UseAdvancedTooltips = chkboxUseAdvancedTooltips.Checked;
-                settings.BeSplitPath = textBox8.Text;
 				settings.DefaultLanguage1 = defaultLanguage1.Text;
 				settings.DefaultLanguage2 = defaultLanguage2.Text;
 				settings.AutoForceFilm = autoForceFilm.Checked;
@@ -1579,7 +1521,6 @@ namespace MeGUI
                 useAutoUpdateCheckbox.Checked = settings.AutoUpdate;
                 acceptableAspectError.Value = (decimal)settings.AcceptableAspectErrorPercent;
                 textBox2.Text = settings.NeroAacEncPath;
-                textBox8.Text = settings.BeSplitPath;
                 sdSettings = settings.SourceDetectorSettings;
                 chkboxUseAdvancedTooltips.Checked = settings.UseAdvancedTooltips;
                 videoExtension.Text = settings.VideoExtension;

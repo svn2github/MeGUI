@@ -1,4 +1,4 @@
-0.3.5.32
+1882
   - (zathor) [MP4 Muxer] fixed tmp directory handling. Bug #3129545
   - (zathor) [Update] changed update detection. Some/all downloads may need to be reapplied once.
   - (zathor) [Update] added the update date to the update window
@@ -7,6 +7,7 @@
   - (zathor) [Update] added update log entries also to the main log
   - (zathor) [Audio Cutter] fixed problem with some non 7bit ASCII path/file names. Bug #3144278
   - (zathor) changed version numbers to the svn build number
+  - (zathor) added besplit
 
 0.3.5.31
   - (zathor) [ChapterCreator] removed error popup if more than one chapter is added within the preview window. Bug #3135824

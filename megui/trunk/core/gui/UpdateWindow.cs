@@ -180,6 +180,7 @@ namespace MeGUI
                     case "vsfilter": arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"VSFilter.dll")); break;
                     case "nicaudio": arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"NicAudio.dll")); break;
                     case "vobsub": arrPath.Add(MainForm.Instance.Settings.VobSubPath); break;
+                    case "besplit": arrPath.Add(MainForm.Instance.Settings.BeSplitPath); break;
                 }
 
                 foreach (string strTempPath in arrPath)
@@ -610,6 +611,8 @@ namespace MeGUI
                             return meGUISettings.YadifPath;
                         case ("vobsub"):
                             return meGUISettings.VobSubPath;
+                        case ("besplit"):
+                            return meGUISettings.BeSplitPath;
                         case ("aften"):
                             return meGUISettings.AftenPath;
                         case ("flac"):
@@ -635,10 +638,6 @@ namespace MeGUI
                         case ("neroaacenc"):
                             meGUISettings.NeroAacEncPath = value;
                             break;
-                        case ("besplit"):
-                            meGUISettings.BeSplitPath = value;
-                            break;
-
                     }
                 }
             }
@@ -1452,10 +1451,13 @@ namespace MeGUI
 
                     Stream str;
 
-                    if ((result = UpdateCacher.DownloadFile(file.GetLatestVersion().Url, new Uri(ServerAddress),
-                        out str, wc_DownloadProgressChanged)) 
-                        != ErrorState.Successful)
+                    result = UpdateCacher.DownloadFile(file.GetLatestVersion().Url, new Uri(ServerAddress), out str, wc_DownloadProgressChanged);
+                    if (result != ErrorState.Successful)
+                    {
                         failedFiles.Add(file);
+                        oLog.LogEvent(string.Format("Failed to download file {0} with error: {1}.", file.Name, result), ImageType.Error);
+                        AddTextToLog(string.Format("Failed to download file {0} with error: {1}.", file.Name, result));
+                    }
                     else
                     {
                         try
@@ -1467,7 +1469,11 @@ namespace MeGUI
                                 state = SaveNewFile(file, str);
 
                             if (state != ErrorState.Successful)
+                            {
                                 failedFiles.Add(file);
+                                oLog.LogEvent(string.Format("Failed to install file {0} with error: {1}.", file.Name, result), ImageType.Error);
+                                AddTextToLog(string.Format("Failed to install file {0} with error: {1}.", file.Name, result));
+                            }
                             else
                             {
                                 succeededFiles.Add(file);

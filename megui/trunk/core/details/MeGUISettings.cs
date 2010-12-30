@@ -106,6 +106,7 @@ namespace MeGUI
             flacPath = getDownloadPath(@"tools\flac\flac.exe");
             yadifPath = getDownloadPath(@"tools\yadif\yadif.dll");
             vobSubPath = getDownloadPath(@"tools\vobsub\vobsub.dll");
+            besplitPath = getDownloadPath(@"tools\besplit\besplit.exe");
             recalculateMainMovieBitrate = false;
 			autoForceFilm = true;
             bAutoLoadDG = true;
@@ -425,7 +426,6 @@ namespace MeGUI
         public string BeSplitPath
         {
             get { return besplitPath; }
-            set { besplitPath = value; }
         }
 
         /// <summary>
