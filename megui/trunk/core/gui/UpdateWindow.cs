@@ -521,7 +521,7 @@ namespace MeGUI
                         base.CurrentVersion.FileVersion = new System.Version(Application.ProductVersion).Build.ToString();
 
                         FileInfo fi = new FileInfo(System.Windows.Forms.Application.ExecutablePath);
-                        base.CurrentVersion.UploadDate = fi.LastWriteTime;
+                        base.CurrentVersion.UploadDate = fi.LastWriteTimeUtc.Date.AddMinutes(Math.Floor(fi.LastWriteTimeUtc.TimeOfDay.TotalMinutes));
                     }
                     return base.CurrentVersion;
                 }
