@@ -1,6 +1,6 @@
 0.3.5.32
   - (zathor) [MP4 Muxer] fixed tmp directory handling. Bug #3129545
-  - (zathor) [Update] changed update detection part II. Some/all downloads may need to be reapplied.
+  - (zathor) [Update] changed update detection. Some/all downloads may need to be reapplied once.
   - (zathor) [Update] added the update date to the update window
   - (zathor) [Log] added preliminary log file writing. the well formed file will be written during closing.
   - (zathor) fixed main window height saving

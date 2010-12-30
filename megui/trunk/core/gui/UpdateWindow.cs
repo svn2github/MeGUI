@@ -75,7 +75,7 @@ namespace MeGUI
             {
                 Version latest = new Version();
                 foreach (Version v in this.availableVersions)
-                    if (v.CompareTo(latest) > 0)
+                    if (v.CompareTo(latest) != 0)
                         latest = v;
 
                 return latest;
@@ -86,7 +86,7 @@ namespace MeGUI
                 get
                 {
                     Version latest = GetLatestVersion();
-                    return latest != null && (latest.CompareTo(currentVersion) > 0);
+                    return latest != null && (latest.CompareTo(currentVersion) != 0);
                 }
             }
 
@@ -1302,7 +1302,7 @@ namespace MeGUI
 
                 file.AvailableVersions.Add(availableFile);
             }
-            if (file.GetLatestVersion().CompareTo(file.CurrentVersion) > 0 && file.AllowUpdate)
+            if (file.GetLatestVersion().CompareTo(file.CurrentVersion) != 0 && file.AllowUpdate)
                 file.DownloadChecked = true;
 
             if (!fileAlreadyAdded)
@@ -1385,7 +1385,7 @@ namespace MeGUI
                         item.SubItems["Status"].Text = "Update Available";
                         item.Checked = true;
                     }
-                    else if (latest.CompareTo(file.CurrentVersion) > 0)
+                    else if (latest.CompareTo(file.CurrentVersion) != 0)
                     {
                         item.SubItems["Status"].Text = "Update Available";
                         item.Checked = true;
@@ -1693,6 +1693,7 @@ namespace MeGUI
                             if (file.NeedsRestartedCopying)
                             {
                                 mainForm.AddFileToReplace(file.Name, filename, oldFileName, file.GetLatestVersion().UploadDate.ToString(new System.Globalization.CultureInfo("en-us")));
+                                file.CurrentVersion.FileVersion = file.GetLatestVersion().FileVersion;
                                 needsRestart = true;
                             }
                         }
@@ -1799,7 +1800,7 @@ namespace MeGUI
             foreach (iUpgradeable upgradeable in upgradeData)
             {
                 if (upgradeable.AllowUpdate && 
-                    upgradeable.GetLatestVersion().CompareTo(upgradeable.CurrentVersion)> 0)
+                    upgradeable.GetLatestVersion().CompareTo(upgradeable.CurrentVersion) != 0)
                     numUpdateableFiles++;
             }
             return numUpdateableFiles;
