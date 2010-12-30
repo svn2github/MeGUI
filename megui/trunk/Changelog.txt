@@ -1,5 +1,6 @@
+1886 [Update] removed core file date check
 1885 [HD Streams Extractor] added a warning if a gaps file is created
-1884 (zathor) [Update] fixed problem with applying core update
+1884 [Update] fixed problem with applying core update
   
 1883
   - (zathor) [MP4 Muxer] fixed tmp directory handling. Bug #3129545
