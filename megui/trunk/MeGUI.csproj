@@ -1078,8 +1078,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
+    <PreBuildEvent>cmd /c "SubWCRev $(ProjectDir) $(ProjectDir)AssemblyInfo.template $(ProjectDir)AssemblyInfo.cs&amp;&amp;exit 0"
+</PreBuildEvent>
     <PostBuildEvent>MOVE /Y "$(TargetDir)lib_$(PlatformName)\*.*" "$(TargetDir)"
 RD /S /Q "$(TargetDir)lib_$(PlatformName)"</PostBuildEvent>
   </PropertyGroup>

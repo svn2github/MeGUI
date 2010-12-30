@@ -812,6 +812,19 @@ namespace MeGUI
 
         public MainForm()
         {
+            // Log File Handling
+            string strMeGUILogPath = System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath) + @"\logs";
+            FileUtil.ensureDirectoryExists(strMeGUILogPath);
+            strLogFile = strMeGUILogPath + @"\logfile-" + DateTime.Now.ToString("yy'-'MM'-'dd'_'HH'-'mm'-'ss") + ".log";
+            try
+            {
+                File.WriteAllText(strLogFile, "Preliminary log file only. During closing of MeGUI the well formed log file will be written.\r\n\r\n");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Log File Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
             Instance = this;
             constructMeGUIInfo();
             InitializeComponent();
@@ -827,6 +840,7 @@ namespace MeGUI
 #if x64
             this.TitleText += " x64";
 #endif
+            this.TitleText += " (svn)";
             if (MainForm.Instance.Settings.AutoUpdate == true && MainForm.Instance.Settings.AutoUpdateServerSubList == 1)
                 this.TitleText += " DEVELOPMENT UPDATE SERVER";
             setGUIInfo();
@@ -2025,25 +2039,12 @@ namespace MeGUI
 
         private void MainForm_Shown(object sender, EventArgs e)
         {
-            // Log File Handling
-            string strMeGUILogPath = System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath) + @"\logs";
-            FileUtil.ensureDirectoryExists(strMeGUILogPath);
-            strLogFile = strMeGUILogPath + @"\logfile-" + DateTime.Now.ToString("yy'-'MM'-'dd'_'HH'-'mm'-'ss") + ".log";
-            try
-            {
-                File.WriteAllText(strLogFile, "Preliminary log file only. During closing of MeGUI the well formed log file will be written.\r\n\r\n");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message,"Log File Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
             LogItem i = Log.Info("Versions");
 #if x86
-            i.LogValue("MeGUI Version ", Application.ProductVersion);
+            i.LogValue("MeGUI Version ", Application.ProductVersion + " (svn)");
 #endif
 #if x64
-            i.LogValue("MeGUI Version ", Application.ProductVersion + " x64");
+            i.LogValue("MeGUI Version ", Application.ProductVersion + " x64 (svn)");
 #endif
             i.LogValue("OS ", string.Format("{0}{1} ({2}.{3}.{4}.{5})", OSInfo.GetOSName(), OSInfo.GetOSServicePack(), OSInfo.OSMajorVersion, OSInfo.OSMinorVersion, OSInfo.OSRevisionVersion, OSInfo.OSBuildVersion));
             i.LogValue("Latest .Net Framework installed ", string.Format("{0}", OSInfo.DotNetVersionFormated(OSInfo.FormatDotNetVersion())));
