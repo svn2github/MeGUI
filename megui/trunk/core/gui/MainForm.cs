@@ -834,7 +834,7 @@ namespace MeGUI
             this.videoEncodingComponent1.FileType = MainForm.Instance.Settings.MainFileFormat;
 
             this.Location = settings.MainFormLocation;
-            this.Size = settings.MainFormSize;
+            this.ClientSize = settings.MainFormSize;
         }
 
         #region GUI properties
@@ -2143,7 +2143,7 @@ namespace MeGUI
         private void MainForm_Resize(object sender, EventArgs e)
         {
             if (this.WindowState != FormWindowState.Minimized && this.Visible == true)
-                settings.MainFormSize = this.Size;
+                settings.MainFormSize = this.ClientSize;
         }
     }
     public class CommandlineUpgradeData
