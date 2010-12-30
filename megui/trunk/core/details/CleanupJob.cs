@@ -91,6 +91,8 @@ namespace MeGUI.core.details
             {
                 try
                 {
+                    if (!File.Exists(file))
+                        continue;
                     File.Delete(file);
                     i.LogEvent("Successfully deleted " + file);
                 }

@@ -50,18 +50,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "BeSplit_Joiner");
             get { return false; }
         }
 
-        protected override void doExitConfig()
-        {
-            base.doExitConfig();
-            try
-            {
-                if (File.Exists(tmpfile))
-                    File.Delete(tmpfile);
-            }
-            catch (IOException) { }
-
-        }
-
         protected override string Commandline
         {
             get
@@ -76,9 +64,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "BeSplit_Joiner");
             FileSize totalSize = FileSize.Empty;
             try
             {
-                // now create the temporary file
-                tmpfile = Path.GetTempFileName();
-                using (StreamWriter w = new StreamWriter(File.OpenWrite(tmpfile)))
+                // now create the temporary list
+                tmpfile = Path.Combine(Path.GetDirectoryName(job.Output), Path.GetRandomFileName());
+                using (StreamWriter w = new StreamWriter(File.OpenWrite(tmpfile), Encoding.Default))
                 {
                     foreach (string file in job.InputFiles)
                     {

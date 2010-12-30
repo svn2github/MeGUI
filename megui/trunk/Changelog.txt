@@ -5,6 +5,7 @@
   - (zathor) [Log] added preliminary log file writing. the well formed file will be written during closing.
   - (zathor) fixed main window height saving
   - (zathor) [Update] added update log entries also to the main log
+  - (zathor) [Audio Cutter] fixed problem with some non 7bit ASCII path/file names. Bug #3144278
 
 0.3.5.31
   - (zathor) [ChapterCreator] removed error popup if more than one chapter is added within the preview window. Bug #3135824
