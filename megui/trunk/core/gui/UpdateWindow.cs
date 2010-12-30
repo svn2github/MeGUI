@@ -518,7 +518,7 @@ namespace MeGUI
                 {
                     if (Name == "core")
                     {
-                        base.CurrentVersion.FileVersion = Application.ProductVersion;
+                        base.CurrentVersion.FileVersion = new System.Version(Application.ProductVersion).Build.ToString();
 
                         FileInfo fi = new FileInfo(System.Windows.Forms.Application.ExecutablePath);
                         base.CurrentVersion.UploadDate = fi.LastWriteTime;

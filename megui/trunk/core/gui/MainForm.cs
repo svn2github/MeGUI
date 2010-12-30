@@ -836,7 +836,7 @@ namespace MeGUI
             string[] resources = myAssembly.GetManifestResourceNames();
             this.trayIcon.Icon = new Icon(myAssembly.GetManifestResourceStream(name + "App.ico"));
             this.Icon = trayIcon.Icon;
-            this.TitleText = Application.ProductName + " " + Application.ProductVersion;
+            this.TitleText = Application.ProductName + " " + new System.Version(Application.ProductVersion).Build;
 #if x64
             this.TitleText += " x64";
 #endif
@@ -2041,7 +2041,7 @@ namespace MeGUI
         {
             LogItem i = Log.Info("Versions");
 #if x86
-            i.LogValue("MeGUI Version ", Application.ProductVersion + " (svn)");
+            i.LogValue("MeGUI Version ", new System.Version(Application.ProductVersion).Build + " (svn)");
 #endif
 #if x64
             i.LogValue("MeGUI Version ", Application.ProductVersion + " x64 (svn)");

@@ -1,4 +1,4 @@
-1882
+1883
   - (zathor) [MP4 Muxer] fixed tmp directory handling. Bug #3129545
   - (zathor) [Update] changed update detection. Some/all downloads may need to be reapplied once.
   - (zathor) [Update] added the update date to the update window
