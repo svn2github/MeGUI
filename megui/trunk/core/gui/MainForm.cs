@@ -130,10 +130,12 @@ namespace MeGUI
         private ITaskbarList3 taskbarItem;
         private Icon taskbarIcon;
         private string strLogFile;
+        private Semaphore logLock;
 
         public bool IsHiddenMode { get { return trayIcon.Visible; } }
         public bool IsOverlayIconActive { get { return taskbarIcon != null; } }
         public string LogFile { get { return strLogFile; } }
+        public Semaphore LogLock { get { return logLock; } set { logLock = value; } }
 
         public void RegisterForm(Form f)
         {
@@ -427,7 +429,7 @@ namespace MeGUI
             this.logTree1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.logTree1.Location = new System.Drawing.Point(0, 0);
             this.logTree1.Name = "logTree1";
-            this.logTree1.Size = new System.Drawing.Size(192, 74);
+            this.logTree1.Size = new System.Drawing.Size(500, 473);
             this.logTree1.TabIndex = 0;
             // 
             // mnuMuxers
@@ -816,15 +818,17 @@ namespace MeGUI
             string strMeGUILogPath = System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath) + @"\logs";
             FileUtil.ensureDirectoryExists(strMeGUILogPath);
             strLogFile = strMeGUILogPath + @"\logfile-" + DateTime.Now.ToString("yy'-'MM'-'dd'_'HH'-'mm'-'ss") + ".log";
+            logLock = new Semaphore(1, 1);
             try
             {
+                logLock.WaitOne();
                 File.WriteAllText(strLogFile, "Preliminary log file only. During closing of MeGUI the well formed log file will be written.\r\n\r\n");
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Log File Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
+            logLock.Release();
             Instance = this;
             constructMeGUIInfo();
             InitializeComponent();
@@ -1126,11 +1130,16 @@ namespace MeGUI
             string text = Log.ToString();
             try
             {
+                logLock.WaitOne();
                 File.WriteAllText(strLogFile, text);
             }
             catch (Exception e)
             {
                 Console.Write(e.Message);
+            }
+            finally
+            {
+                logLock.Release();
             }
         }
         private void exitMeGUIToolStripMenuItem_Click(object sender, EventArgs e)

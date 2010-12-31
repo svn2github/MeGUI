@@ -203,12 +203,17 @@ namespace MeGUI.core.util
 
             try
             {
+                MainForm.Instance.LogLock.WaitOne();
                 res.AppendFormat("{0}[{1}] {2}{3}", dashes(iLevel), Type, Text, Environment.NewLine);
                 System.IO.File.AppendAllText(MainForm.Instance.LogFile, res.ToString());
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message, "Error writing log file",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                MessageBox.Show(e.Message, "Error writing log file", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                MainForm.Instance.LogLock.Release();
             }
         }
 
