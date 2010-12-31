@@ -1,3 +1,4 @@
+1889 [OneClick] the source type detection will not anymore open a blocking popup in case of an error. instead the error message will be written into the log. Feature request #3148688
 1888 [AVS Cutter] fixed async audio with fades. Bug #2945637
 1887 [Log] fixed missing log entries in the preliminary log file
 1886 [Update] removed core file date check
