@@ -253,15 +253,15 @@ namespace MeGUI.core.util
             if (first && last) return p;
             if (isAudio)
             {
-                if (!first && !last) return string.Format("FadeIO(FadeIO0({0}, 10, AudioRate(__just_audio)), 10, AudioRate(__just_audio))", p);
-                if (first) return string.Format("FadeOut(FadeOut0({0}, 10, AudioRate(__just_audio)), 10, AudioRate(__just_audio))", p);
-                if (last) return string.Format("FadeIn(FadeIn0({0}, 10, AudioRate(__just_audio)), 10, AudioRate(__just_audio))", p);
+                if (!first && !last) return string.Format("FadeIO0(FadeIO0({0}, 10, AudioRate(__just_audio)), 10, AudioRate(__just_audio))", p);
+                if (first) return string.Format("FadeOut0(FadeOut0({0}, 10, AudioRate(__just_audio)), 10, AudioRate(__just_audio))", p);
+                if (last) return string.Format("FadeIn0(FadeIn0({0}, 10, AudioRate(__just_audio)), 10, AudioRate(__just_audio))", p);
             }
             else
             {
-                if (!first && !last) return string.Format("FadeIO({0}, 10, AudioRate(__film))", p);
-                if (first) return string.Format("FadeOut({0}, 10, AudioRate(__film))", p);
-                if (last) return string.Format("FadeIn({0}, 10, AudioRate(__film))", p);
+                if (!first && !last) return string.Format("FadeIO0({0}, 10, AudioRate(__film))", p);
+                if (first) return string.Format("FadeOut0({0}, 10, AudioRate(__film))", p);
+                if (last) return string.Format("FadeIn0({0}, 10, AudioRate(__film))", p);
             }
             Debug.Assert(false);
             return null;

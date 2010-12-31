@@ -1,3 +1,4 @@
+1888 [AVS Cutter] fixed async audio with fades. Bug #2945637
 1887 [Log] fixed missing log entries in the preliminary log file
 1886 [Update] removed core file date check
 1885 [HD Streams Extractor] added a warning if a gaps file is created
