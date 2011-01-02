@@ -220,6 +220,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "MencoderEncoder");
                 int frameNumberEnd = line.IndexOf("f");
                 return line.Substring(frameNumberStart, frameNumberEnd - frameNumberStart).Trim();
             }
+            else if (line.StartsWith("frame=")) // status update for ffmpeg
+            {
+                int frameNumberEnd = line.IndexOf("f", 6);
+                return line.Substring(6, frameNumberEnd - 6).Trim();
+            }
             return null;
         }
         public override string GetErrorString(string line, StreamType stream)
