@@ -1,6 +1,9 @@
-1893 [Job] improved deleting files handling after a job has been aborted
-1891 [pre-rendering job] added full status update to the progress window if using MeGUI x64
-1890 [pre-rendering job] changed AVISource to FFVideoSource and added the corresponding FFIndex job
+1894 [pre-rendering job] changed encoder to ffmpeg for MeGUI x86 
+     [pre-rendering job] fixed problem if the output file already exists. Bug #3018152
+1893 [Job] improved deleting of files after a job has been aborted
+1891 [pre-rendering job] added full status update to the progress window if using MeGUI x64. Bug #3018150
+1890 [pre-rendering job] changed AVISource to FFVideoSource 
+     [pre-rendering job] added the corresponding FFIndex job
 1889 [OneClick] the source type detection will not anymore open a blocking popup in case of an error. instead the error message will be written into the log. Feature request #3148688
 1888 [AVS Cutter] fixed async audio with fades. Bug #2945637
 1887 [Log] fixed missing log entries in the preliminary log file

@@ -40,12 +40,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MencoderEncoder");
                     return new mencoderEncoder(mf.Settings.MencoderPath);
             if (j is VideoJob &&
                 (j as VideoJob).Settings is hfyuSettings)
-#if x64
                     return new mencoderEncoder(mf.Settings.FFMpegPath);
-#endif
-#if x86
-                    return new mencoderEncoder(mf.Settings.MencoderPath);
-#endif
             return null;
         }
 
@@ -87,14 +82,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MencoderEncoder");
         private string genHfyuCommandline()
         {
             StringBuilder sb = new StringBuilder();
-#if x64
-            sb.Append("-i \"" + job.Input + "\" -vcodec ffvhuff -context 1 -vstrict -1 -an \"" + job.Output + "\" ");
-#endif
-#if x86
-            sb.Append("\"" + job.Input + "\" -o \"" + job.Output + "\" ");
-            sb.Append("-of avi -forceidx "); // Make sure we don't get problems with filesizes > 2GB
-            sb.Append("-ovc lavc -nosound -lavcopts vcodec=ffvhuff:vstrict=-2:pred=2:context=1");
-#endif
+            sb.Append("-y -i \"" + job.Input + "\" -vcodec ffvhuff -context 1 -vstrict -2 -pred 2 -an \"" + job.Output + "\" ");
             return sb.ToString();
         }
 
