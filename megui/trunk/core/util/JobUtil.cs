@@ -288,6 +288,7 @@ namespace MeGUI
 				threePasses = true;
 
             VideoJob prerenderJob = null;
+            FFMSIndexJob indexJob = null;
             string hfyuFile = null;
             string inputAVS = movieInput;
             if (prerender)
@@ -312,13 +313,20 @@ namespace MeGUI
                 try
                 {
                     StreamWriter hfyuWrapper = new StreamWriter(inputAVS, false, Encoding.Default);
-                    hfyuWrapper.WriteLine("AviSource(\"" + hfyuFile + "\")");
+                    String strDLLPath = Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.FFMSIndexPath), "ffms2.dll");
+#if x86
+                    hfyuWrapper.WriteLine("LoadPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + hfyuFile + "\")");
+#endif
+#if x64
+                    hfyuWrapper.WriteLine("LoadCPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + hfyuFile + "\")");
+#endif
                     hfyuWrapper.Close();
                 }
                 catch (IOException)
                 {
                     return null;
                 }
+                indexJob = new FFMSIndexJob(hfyuFile, false);
                 prerenderJob = this.generateVideoJob(movieInput, hfyuFile, new hfyuSettings(), dar, zones);
                 if (prerenderJob == null)
                     return null;
@@ -369,10 +377,14 @@ namespace MeGUI
                 {
                     job.FilesToDelete.Add(hfyuFile);
                     job.FilesToDelete.Add(inputAVS);
+                    job.FilesToDelete.Add(hfyuFile + ".ffindex");
                 }
-                List<VideoJob> jobList = new List<VideoJob>();
+                List<Job> jobList = new List<Job>();
                 if (prerenderJob != null)
+                {
                     jobList.Add(prerenderJob);
+                    jobList.Add(indexJob);
+                }
                 if (firstpass != null)
                     jobList.Add(firstpass);
                 if (middlepass != null) // we have a middle pass
