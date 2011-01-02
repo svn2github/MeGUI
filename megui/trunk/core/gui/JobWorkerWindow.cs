@@ -719,7 +719,7 @@ namespace MeGUI.core.gui
             if (mainForm.Settings.DeleteAbortedOutput)
             {
                 i.LogValue("File to delete", job.Job.Output);
-                while (File.Exists(job.Job.Output) && iCounter < 10)
+                while (File.Exists(job.Job.Output))
                 {
                     try
                     {
@@ -727,8 +727,11 @@ namespace MeGUI.core.gui
                     }
                     catch (Exception e)
                     {
-                        if (++iCounter == 5)
+                        if (++iCounter >= 10)
+                        {
                             i.LogValue("Error deleting file", e, ImageType.Warning);
+                            break;
+                        }
                         else
                         {
                             i.LogEvent("Error deleting file - trying again", ImageType.Information);
