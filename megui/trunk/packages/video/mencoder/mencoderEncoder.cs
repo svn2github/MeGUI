@@ -37,7 +37,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MencoderEncoder");
         {
             if (j is VideoJob &&
                 (j as VideoJob).Settings is snowSettings)
-                    return new mencoderEncoder(mf.Settings.MencoderPath);
+                return new mencoderEncoder(mf.Settings.FFMpegPath);
             if (j is VideoJob &&
                 (j as VideoJob).Settings is hfyuSettings)
                     return new mencoderEncoder(mf.Settings.FFMpegPath);
@@ -63,22 +63,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "MencoderEncoder");
             }
         }
 
-        private static int getVideoOutputType(string path)
-        {
-            if (path != null)
-            {
-                string extension = Path.GetExtension(path).ToLower();
-                if (extension.Equals(".avi"))
-                    return 0;
-                if (extension.Equals(".raw") || extension.Equals(".264") || extension.Equals(".m4v"))
-                    return 1;
-                if (extension.Equals(".mp4"))
-                    return 2;
-            }
-            return -1;
-        }
-
-
         private string genHfyuCommandline()
         {
             StringBuilder sb = new StringBuilder();
@@ -90,51 +74,51 @@ new JobProcessorFactory(new ProcessorFactory(init), "MencoderEncoder");
         {
             StringBuilder sb = new StringBuilder();
             CultureInfo ci = new CultureInfo("en-us");
-            sb.Append("\"" + input + "\" -ovc lavc -nosound ");
+            sb.Append("-y -an -i \"" + input + "\" ");
             switch (ss.EncodingMode)
             {
                 case 0: // CBR
-                    sb.Append("-lavcopts vcodec=snow:vbitrate=" + ss.BitrateQuantizer + ":"); // add bitrate
+                    sb.Append(" -vcodec snow -b " + ss.BitrateQuantizer + "k"); // add bitrate
                     break;
                 case 1: // CQ
-                    sb.Append("-lavcopts vcodec=snow:vqscale=" + ss.Quantizer + ":");
+                    sb.Append(" -vcodec snow -qscale " + ss.Quantizer);
                     break;
                 case 2: // 2 pass first pass
-                    sb.Append("-o NUL: -passlogfile " + "\"" + ss.Logfile + "\" "); // add logfile
-                    sb.Append("-lavcopts vcodec=snow:vpass=1:vqscale=5:"); // workaround for corrupted first passes
+                    sb.Append(" -passlogfile " + "\"" + ss.Logfile + "\""); // add logfile
+                    sb.Append(" -vcodec snow -pass 1 -qscale 5 "); // workaround for corrupted first passes
                     break;
                 case 3: // 2 pass second pass
                 case 4: // automated twopass
-                    sb.Append(" -passlogfile " + "\"" + ss.Logfile + "\" "); // add logfile
-                    sb.Append("-lavcopts vcodec=snow:vpass=2:vbitrate=" + ss.BitrateQuantizer + ":"); // add pass & bitrate
+                    sb.Append(" -passlogfile " + "\"" + ss.Logfile + "\""); // add logfile
+                    sb.Append(" -vcodec snow -pass 2 -b " + ss.BitrateQuantizer + "k"); // add pass & bitrate
                     break;
                 case 5:
-                    sb.Append("-o NUL: -passlogfile " + "\"" + ss.Logfile + "\" "); // add logfile
-                    sb.Append("-lavcopts vcodec=snow:vpass=1:vqscale=5:"); // workaround for corrupted first passes
+                    sb.Append(" -passlogfile " + "\"" + ss.Logfile + "\""); // add logfile
+                    sb.Append(" -vcodec snow -pass 1 -qscale 5 "); // workaround for corrupted first passes
                     break;
                 case 6:
-                    sb.Append(" -passlogfile " + "\"" + ss.Logfile + "\" "); // add logfile
-                    sb.Append("-lavcopts vcodec=snow:vpass=3:vbitrate=" + ss.BitrateQuantizer + ":"); // add pass & bitrate
+                    sb.Append(" -passlogfile " + "\"" + ss.Logfile + "\""); // add logfile
+                    sb.Append(" -vcodec snow -pass 3 -b " + ss.BitrateQuantizer + "k"); // add pass & bitrate
                     break;
                 case 7:
-                    sb.Append(" -passlogfile " + "\"" + ss.Logfile + "\" "); // add logfile
-                    sb.Append("-lavcopts vcodec=snow:vpass=3:vbitrate=" + ss.BitrateQuantizer + ":"); // add pass & bitrate
+                    sb.Append(" -passlogfile " + "\"" + ss.Logfile + "\""); // add logfile
+                    sb.Append(" -vcodec snow -pass 3 -b " + ss.BitrateQuantizer + "k"); // add pass & bitrate
                     break;
             }
             if (ss.PredictionMode != 0)
-                sb.Append("pred=" + ss.PredictionMode + ":");
+                sb.Append(" -pred " + ss.PredictionMode);
             switch (ss.MECompFullpel)
             {
                 case 0:
                     break;
                 case 1:
-                    sb.Append("cmp=1:");
+                    sb.Append(" -cmp 1");
                     break;
                 case 2:
-                    sb.Append("cmp=11:");
+                    sb.Append(" -cmp 11");
                     break;
                 case 3:
-                    sb.Append("cmp=12:");
+                    sb.Append(" -cmp 12");
                     break;
             }
             switch (ss.MECompHpel)
@@ -142,13 +126,13 @@ new JobProcessorFactory(new ProcessorFactory(init), "MencoderEncoder");
                 case 0:
                     break;
                 case 1:
-                    sb.Append("subcmp=1:");
+                    sb.Append(" -subcmp 1");
                     break;
                 case 2:
-                    sb.Append("subcmp=11:");
+                    sb.Append(" -subcmp 11");
                     break;
                 case 3:
-                    sb.Append("subcmp=12:");
+                    sb.Append(" -subcmp 12");
                     break;
             }
             switch (ss.MBComp)
@@ -156,25 +140,25 @@ new JobProcessorFactory(new ProcessorFactory(init), "MencoderEncoder");
                 case 0:
                     break;
                 case 1:
-                    sb.Append("mbcmp=1:");
+                    sb.Append(" -mbcmp 1");
                     break;
                 case 2:
-                    sb.Append("mbcmp=11:");
+                    sb.Append(" -mbcmp 11");
                     break;
                 case 3:
-                    sb.Append("mbcmp=12:");
+                    sb.Append(" -mbcmp 12");
                     break;
             }
             if (ss.QPel) // default is unchecked
-                sb.Append("qpel:");
+                sb.Append(" -qpel");
             if (ss.V4MV) // default is unchecked
-                sb.Append("v4mv:");
+                sb.Append(" -v4mv");
             if (ss.NbMotionPredictors != 0)
-                sb.Append("last_pred=" + ss.NbMotionPredictors.ToString(ci) + ":");
-            sb.Append("vstrict=-2:");
+                sb.Append(" -last_pred " + ss.NbMotionPredictors.ToString(ci));
+            sb.Append(" -vstrict -2");
             if (zones != null && zones.Length > 0 && ss.CreditsQuantizer >= new decimal(1))
             {
-                sb.Append("-vrc_override=");
+                sb.Append(" -vrc_override ");
                 foreach (Zone zone in zones)
                 {
                     if (zone.mode == ZONEMODE.Quantizer)
@@ -183,19 +167,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "MencoderEncoder");
                         sb.Append(zone.startFrame + "," + zone.endFrame + ",-" + zone.modifier + "/");
                 }
                 sb.Remove(sb.Length - 1, 1); // remove trailing /(zone separator)
-                sb.Append(":");
             }
-            if (sb.ToString().EndsWith(":")) // remove the last :
-                sb.Remove(sb.Length - 1, 1);
-            if (ss.EncodingMode != 2)
-            {
-                sb.Append(" -o \"" + output + "\" -of "); // rest of mencoder options
-                int outputType = getVideoOutputType(output);
-                if (outputType == 0) // AVI
-                    sb.Append("avi -ffourcc " + ss.FourCCs[ss.FourCC] + " ");
-                if (outputType >= 1) // RAW
-                    sb.Append("rawvideo ");
-            }
+            if (ss.EncodingMode == 2 || ss.EncodingMode == 5)
+                sb.Append(" -f rawvideo NUL"); // rest of mencoder options
+            else
+                sb.Append(" \"" + output + "\""); // rest of mencoder options
             return sb.ToString();
         }
         #endregion
