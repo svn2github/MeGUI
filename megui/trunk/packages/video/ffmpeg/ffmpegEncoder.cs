@@ -28,23 +28,20 @@ using MeGUI.core.util;
 
 namespace MeGUI
 {
-    class mencoderEncoder : CommandlineVideoEncoder
+    class ffmpegEncoder : CommandlineVideoEncoder
     {
         public static readonly JobProcessorFactory Factory =
-new JobProcessorFactory(new ProcessorFactory(init), "MencoderEncoder");
+new JobProcessorFactory(new ProcessorFactory(init), "FFmpegEncoder");
 
         private static IJobProcessor init(MainForm mf, Job j)
         {
             if (j is VideoJob &&
-                (j as VideoJob).Settings is snowSettings)
-                return new mencoderEncoder(mf.Settings.FFMpegPath);
-            if (j is VideoJob &&
-                (j as VideoJob).Settings is hfyuSettings)
-                    return new mencoderEncoder(mf.Settings.FFMpegPath);
+                ((j as VideoJob).Settings is snowSettings || (j as VideoJob).Settings is hfyuSettings))
+                return new ffmpegEncoder(mf.Settings.FFMpegPath);
             return null;
         }
 
-        public mencoderEncoder(string encoderPath)
+        public ffmpegEncoder(string encoderPath)
             : base()
         {
                 executable = encoderPath;
@@ -169,9 +166,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "MencoderEncoder");
                 sb.Remove(sb.Length - 1, 1); // remove trailing /(zone separator)
             }
             if (ss.EncodingMode == 2 || ss.EncodingMode == 5)
-                sb.Append(" -f rawvideo NUL"); // rest of mencoder options
+                sb.Append(" -f rawvideo NUL"); // rest of ffmpeg options
             else
-                sb.Append(" \"" + output + "\""); // rest of mencoder options
+                sb.Append(" \"" + output + "\""); // rest of ffmpeg options
             return sb.ToString();
         }
         #endregion
@@ -193,7 +190,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MencoderEncoder");
         }
         public override string GetErrorString(string line, StreamType stream)
         {
-            if (line.IndexOf("error") != -1 || line.IndexOf("not an MEncoder option") != -1)
+            if (line.IndexOf("error") != -1)
                 return line;
             return null;
         }

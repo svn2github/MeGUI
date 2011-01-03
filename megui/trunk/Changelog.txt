@@ -1,5 +1,6 @@
-1895 [Snow] changed encoder to ffmpeg
-1894 [pre-rendering job] changed encoder to ffmpeg for MeGUI x86
+1896 removed mencoder
+1895 [Snow] replaced mencoder with ffmpeg
+1894 [pre-rendering job] replaced mencoder with ffmpeg for MeGUI x86
      [pre-rendering job] fixed problem if the output file already exists. Bug #3018152
 1893 [Job] improved deleting of files after a job has been aborted
 1891 [pre-rendering job] added full status update to the progress window if using MeGUI x64. Bug #3018150

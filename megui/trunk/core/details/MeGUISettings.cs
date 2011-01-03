@@ -34,7 +34,7 @@ namespace MeGUI
     {
         #region variables
         private string[][] autoUpdateServerLists;
-        private string faacPath, lamePath, neroAacEncPath, mencoderPath, mp4boxPath, mkvmergePath, strMainAudioFormat,
+        private string faacPath, lamePath, neroAacEncPath, mp4boxPath, mkvmergePath, strMainAudioFormat,
                        encAacPlusPath, ffmpegPath, besplitPath, yadifPath, aftenPath, x264Path, strMainFileFormat,
                        dgIndexPath, xvidEncrawPath, aviMuxGUIPath, oggEnc2Path, encAudXPath, dgavcIndexPath,
                        eac3toPath, tsmuxerPath, meguiupdatecache, avisynthpluginspath, ffmsIndexPath, vobSubPath,
@@ -80,7 +80,6 @@ namespace MeGUI
             aviMuxGUIPath = getDownloadPath(@"tools\avimux_gui\avimux_gui.exe");
             besplitPath = "besplit.exe";
             faacPath = getDownloadPath(@"tools\faac\faac.exe");
-            mencoderPath = getDownloadPath(@"tools\mencoder\mencoder.exe");
 			mp4boxPath = getDownloadPath(@"tools\mp4box\mp4box.exe");
 			mkvmergePath = getDownloadPath(@"tools\mkvmerge\mkvmerge.exe");
 #if x64
@@ -467,13 +466,6 @@ namespace MeGUI
         {
             get { return oggEnc2Path; }
         }
-		/// <summary>
-		/// filename and full path of the mencoder executable
-		/// </summary>
-		public string MencoderPath
-		{
-			get {return mencoderPath;}
-		}
         /// <summary>
         /// filename and full path of the faac executable
         /// </summary>

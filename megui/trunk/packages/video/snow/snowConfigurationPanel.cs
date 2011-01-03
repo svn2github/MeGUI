@@ -98,7 +98,7 @@ namespace MeGUI.packages.video.snow
         #region codec-specific overload functions
         protected override string getCommandline()
         {
-            return mencoderEncoder.genSnowCommandline("input", "output", (snowSettings)Settings, null);
+            return ffmpegEncoder.genSnowCommandline("input", "output", (snowSettings)Settings, null);
         }
 
         /// <summary>

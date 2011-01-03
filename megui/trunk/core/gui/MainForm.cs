@@ -1714,7 +1714,7 @@ namespace MeGUI
         {
             PackageSystem.JobProcessors.Register(AviSynthAudioEncoder.Factory);
 
-            PackageSystem.JobProcessors.Register(mencoderEncoder.Factory);
+            PackageSystem.JobProcessors.Register(ffmpegEncoder.Factory);
             PackageSystem.JobProcessors.Register(x264Encoder.Factory);
             PackageSystem.JobProcessors.Register(XviDEncoder.Factory);
 

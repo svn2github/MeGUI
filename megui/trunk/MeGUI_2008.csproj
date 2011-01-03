@@ -779,7 +779,7 @@
       <DependentUpon>VobSubIndexWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="packages\video\huffyuv\hfyuSettings.cs" />
-    <Compile Include="packages\video\mencoder\mencoderEncoder.cs" />
+    <Compile Include="packages\video\ffmpeg\ffmpegEncoder.cs" />
     <Compile Include="packages\video\snow\snowConfigurationPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>

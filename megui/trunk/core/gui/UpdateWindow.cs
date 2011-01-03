@@ -112,7 +112,6 @@ namespace MeGUI
 #endif
                             break;
                         }
-                    case "mencoder": arrPath.Add(MainForm.Instance.Settings.MencoderPath); break;
                     case "dgindex": 
                         arrPath.Add(MainForm.Instance.Settings.DgIndexPath);
                         strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.DgIndexPath);
@@ -582,8 +581,6 @@ namespace MeGUI
                             return meGUISettings.DgIndexPath;
                         case ("faac"):
                             return meGUISettings.FaacPath;
-                        case ("mencoder"):
-                            return meGUISettings.MencoderPath;
                         case ("mkvmerge"):
                             return meGUISettings.MkvmergePath;
                         case ("lame"):
