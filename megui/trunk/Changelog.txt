@@ -1,3 +1,4 @@
+1898 improved M2TS bitrate calculation. Patch by Selur
 1897 [AutoEncode] cosmetic bitrate rounding
 1896 removed mencoder
 1895 [Snow] replaced mencoder with ffmpeg

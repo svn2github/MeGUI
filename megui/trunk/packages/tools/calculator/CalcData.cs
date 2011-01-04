@@ -184,9 +184,30 @@ namespace MeGUI.packages.tools.calculator
             }
             else if (ContainerType == ContainerType.M2TS)
             {
-                // for m2ts, video overhead is a ratio (rather than constant)
-                VideoOverheadRatio = 106F / 100F;
+                VideoOverhead = new FileSize(Unit.B, GetM2tsVideoOverhead(AudioStreams.Length));
             }
+        }
+
+        /// <summary>
+        /// gets the video overhead in the m2ts container
+        /// </summary>
+        /// <param name="iAudioStreamCount">audio stream count</param>
+        /// <returns>overhead this video track will incurr</returns>
+        private long GetM2tsVideoOverhead(int iAudioStreamCount)
+        {
+            long videoOverhead = 0;
+            long videoSize = (long)VideoBitrate * (long)TotalSeconds; //videoOverhead+generalOverhead+rawVideo
+            if (iAudioStreamCount == 0)
+            {
+                videoOverhead = Frames * 263 + 9412;
+            }
+            videoSize -= videoOverhead;
+            int packageSize = 192;
+            int packageFill = 184; //of 192
+            long packageCount = videoSize / packageSize + 1;
+            long packageOverhead = packageCount * (packageSize - packageFill);
+            videoOverhead += packageOverhead;
+            return videoOverhead;
         }
 
         private void CalcAudioOverheadAndSize()
@@ -195,9 +216,6 @@ namespace MeGUI.packages.tools.calculator
             AudioSize = FileSize.Empty;
             AudioOverhead = FileSize.Empty;
 
-            if (ContainerType == ContainerType.M2TS)
-                AudioOverheadRatio = 106F / 100F;
-
             foreach (var audio in AudioStreams)
             {
                 AudioSize += (audio.Size ?? FileSize.Empty);
@@ -205,7 +223,7 @@ namespace MeGUI.packages.tools.calculator
                 if (ContainerType == ContainerType.MKV)
                     AudioOverhead += new FileSize(Unit.B, GetMkvAudioOverhead(audio.AType, 48000, (double)TotalSeconds));
                 else if (ContainerType == ContainerType.M2TS)
-                    AudioOverhead +=  new FileSize(Unit.B, GetM2tsAudioOverhead(audio.AType, 48000, (double)TotalSeconds));
+                    AudioOverhead += new FileSize(Unit.B, GetM2tsAudioOverhead(audio.AType, Frames, (double)TotalSeconds, audio.Size.Value.Bytes, true));
                 else if (ContainerType == ContainerType.AVI)
                     AudioOverhead +=  new FileSize(Unit.B, GetAviAudioOverhead(audio.AType) * Frames);
             }
@@ -256,18 +274,28 @@ namespace MeGUI.packages.tools.calculator
 
         /// <summary>
         /// gets the overhead a given audio type will incurr in the m2ts container
-        /// given its length and sampling rate
         /// </summary>
         /// <param name="AudioType">type of the audio track</param>
-        /// <param name="samplingRate">sampling rate of the audio track</param>
+        /// <param name="lFrames">frames of the video track</param>
         /// <param name="length">length of the audio track</param>
+        /// <param name="lFileSize">size of the audio track</param>
+        /// <param name="bVideoHandling">true if video will also be muxed</param>
         /// <returns>overhead this audio track will incurr</returns>
-        private static int GetM2tsAudioOverhead(AudioType audioType, int samplingRate, double length)
+        private static int GetM2tsAudioOverhead(AudioType audioType, long lFrames, double length, ulong lFileSize, bool bVideohandling)
         {
-            if (audioType == null)
-                return 0;
-            // TODO: ??
-            return 0;
+            int blocksize = 80;
+            if (audioType == AudioType.AC3 || audioType == AudioType.THD || audioType == AudioType.DTS
+             || audioType == AudioType.DTSHD || audioType == AudioType.DTSMA || audioType == AudioType.PCM)
+            {
+                blocksize = 907;
+            }
+            int audioOverhead = (int)((2 * blocksize) / 180.0 * 8.0 + 17.0 + 0.5) * ((int)(lFileSize * 1.0 / (blocksize * 1.0) + 0.5));
+            if (bVideohandling)
+            {
+                double audiobitrate = lFileSize / length;
+                audioOverhead += (int)lFrames * (262 + ((int)audiobitrate / 184 + 1)) + 9412;
+            }
+            return audioOverhead;
         }
 
         /// <summary>
