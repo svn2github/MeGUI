@@ -568,7 +568,7 @@ namespace MeGUI
                 data.CalcByTotalSize();
 
                 this.videoSize.Text = data.VideoSize.ToString();
-                this.projectedBitrateKBits.Text = data.VideoBitrate.ToString();
+                this.projectedBitrateKBits.Text = ((int)data.VideoBitrate).ToString();
             }
             catch (Exception)
             {

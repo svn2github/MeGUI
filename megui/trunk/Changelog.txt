@@ -1,3 +1,4 @@
+1897 [AutoEncode] cosmetic bitrate rounding
 1896 removed mencoder
 1895 [Snow] replaced mencoder with ffmpeg
 1894 [pre-rendering job] replaced mencoder with ffmpeg for MeGUI x86

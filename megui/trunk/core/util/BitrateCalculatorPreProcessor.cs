@@ -76,8 +76,8 @@ namespace MeGUI.core.util
                 return log;
             }
 
-            log.LogValue("Desired size after subtracting audio", data.VideoSize.KBExact + "KBs");
-            log.LogValue("Calculated desired bitrate", data.VideoBitrate + "kbit/s");
+            log.LogValue("Desired size after subtracting audio", Math.Floor(data.VideoSize.KBExact) + " KBs");
+            log.LogValue("Calculated desired bitrate", (int)data.VideoBitrate + " kbit/s");
 
             foreach (TaggedJob t in b.VideoJobs)
                 ((VideoJob)t.Job).Settings.BitrateQuantizer = (int)data.VideoBitrate;
