@@ -30,14 +30,18 @@ namespace UpdateCopier
         {
             string appName = null;
             appName = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "megui.exe");
-            //if (!File.Exists(appName))
-            //{
-            //    MessageBox.Show(appName + " not found. \nNo files will be updated.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //    return;
-            //}
+            bool bDebug = false;
+#if DEBUG
+            bDebug = true;
+#endif
+            if (!File.Exists(appName) && !bDebug)
+            {
+                MessageBox.Show(appName + " not found. \nNo files will be updated.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
 
             StringBuilder commandline = new StringBuilder();
-
+            List<Exception> errorsEncountered = new List<Exception>();
             Dictionary<string, CommandlineUpgradeData> filesToCopy = new Dictionary<string,CommandlineUpgradeData>();
             List<string> filesToInstall = new List<string>();
             bool bRestart = false;
@@ -59,7 +63,7 @@ namespace UpdateCopier
                     if (args.Length > i + 2)
                     {
                         CommandlineUpgradeData data = new CommandlineUpgradeData();
-                        data.newVersion = args[i + 2];
+                        data.newVersion = args[i+2];
                         filesToCopy.Add(args[i+1], data);
                         lastComponentName = args[i+1];
                         i += 2;
@@ -74,8 +78,28 @@ namespace UpdateCopier
                 {
                     if (args.Length > i + 1 && lastComponentName != null)
                     {
-                        filesToCopy[lastComponentName].filename.Add(args[i]);
-                        filesToCopy[lastComponentName].tempFilename.Add(args[i + 1]);
+                        if (Path.GetExtension(args[i]).ToLower().Equals(".zip") ||
+                            Path.GetExtension(args[i]).ToLower().Equals(".7z"))
+                        {
+                            if (filesToCopy.ContainsKey(lastComponentName))
+                                filesToCopy.Remove(lastComponentName);
+                            try
+                            {
+                                if (File.Exists(args[i]))
+                                    File.Delete(args[i]);
+                                if (File.Exists(args[i + 1]))
+                                    File.Delete(args[i + 1]);
+                            }
+                            catch (Exception e)
+                            {
+                                errorsEncountered.Add(e);
+                            }
+                        }
+                        else if (filesToCopy.ContainsKey(lastComponentName))
+                        {
+                            filesToCopy[lastComponentName].filename.Add(args[i]);
+                            filesToCopy[lastComponentName].tempFilename.Add(args[i+1]);
+                        }
                         i++;
                     }
                     else
@@ -87,7 +111,6 @@ namespace UpdateCopier
             }
 
             Thread.Sleep(2000);
-            List<Exception> errorsEncountered = new List<Exception>();
             foreach (string file in filesToCopy.Keys)
             {
                 bool succeeded = true;
@@ -95,8 +118,11 @@ namespace UpdateCopier
                 {
                     try
                     {
-                        File.Delete(filesToCopy[file].filename[i]);
-                        File.Move(filesToCopy[file].tempFilename[i], filesToCopy[file].filename[i]);
+                        if (File.Exists(filesToCopy[file].tempFilename[i]))
+                        {
+                            File.Delete(filesToCopy[file].filename[i]);
+                            File.Move(filesToCopy[file].tempFilename[i], filesToCopy[file].filename[i]);
+                        }
                     }
                     catch (IOException)
                     {
