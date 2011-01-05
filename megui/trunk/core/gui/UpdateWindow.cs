@@ -155,13 +155,8 @@ namespace MeGUI
                             arrPath.Add((System.IO.Path.Combine(strMeGUIPath, @"LinqBridge.dll")));
                             break;
                         }
-                    case "mediainfo":
-                        {
-                            string strMeGUIPath = System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath);
-                            arrPath.Add((System.IO.Path.Combine(strMeGUIPath, @"MediaInfoWrapper.dll")));
-                            arrPath.Add((System.IO.Path.Combine(strMeGUIPath, @"MediaInfo.dll")));
-                            break;
-                        }
+                    case "mediainfo": arrPath.Add(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), @"MediaInfo.dll")); break;
+                    case "mediainfowrapper": arrPath.Add(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), @"MediaInfoWrapper.dll")); break;
                     case "sevenzip": arrPath.Add(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), @"7z.dll")); break;
                     case "sevenzipsharp": arrPath.Add(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), @"SevenZipSharp.dll")); break;
                     case "data": arrPath.Add(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), @"Data\ContextHelp.xml")); break;
@@ -176,7 +171,6 @@ namespace MeGUI
                     case "tomsmocomp": arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"TomsMoComp.dll")); break;
                     case "tdeint": arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"TDeint.dll")); break;
                     case "tivtc": arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"TIVTC.dll")); break;
-                    //case "simpleresize": arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"SimpleResize.dll")); break;
                     case "colormatrix": arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"ColorMatrix.dll")); break;
                     case "vsfilter": arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"VSFilter.dll")); break;
                     case "nicaudio": arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"NicAudio.dll")); break;

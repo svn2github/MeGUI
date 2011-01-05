@@ -1,3 +1,4 @@
+1900 [Update] moved MediaInfoWrapper.dll from the MediaInfo package to a dedicated download package
 1899 [Update] added 7-Zip support
      [Update] enhanced log entries
 1898 improved M2TS bitrate calculation. Patch by Selur
