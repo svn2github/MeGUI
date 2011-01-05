@@ -623,7 +623,7 @@ namespace MeGUI.core.gui
                 }
                 catch (JobRunException e)
                 {
-                    throw new JobStartException("starting encoder failed with error '" + e.Message + "'", ExceptionType.Error);
+                    throw new JobStartException("starting job failed with error '" + e.Message + "'", ExceptionType.Error);
                 }
 
                 if (job.Job.EncodingMode.Equals("ext"))
@@ -639,9 +639,20 @@ namespace MeGUI.core.gui
             }
             catch (JobStartException e)
             {
+                this.HideProcessWindow();
                 log.LogValue("Error starting job", e);
                 if (e.type == ExceptionType.Error)
+                {
                     job.Status = JobStatus.ERROR;
+                    if (MainForm.Instance.Settings.AutoUpdate)
+                    {
+                        log.LogEvent("Start update detection in order to resolve the error.", ImageType.Warning);
+                        // Need a seperate thread to run the updater to stop internet lookups from freezing the app.
+                        Thread updateCheck = new Thread(new ThreadStart(MainForm.Instance.beginUpdateCheck));
+                        updateCheck.IsBackground = true;
+                        updateCheck.Start();
+                    }
+                }
                 else // ExceptionType.UserSkip
                     job.Status = JobStatus.SKIP;
                 currentProcessor = null;

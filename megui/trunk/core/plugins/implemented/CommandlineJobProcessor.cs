@@ -189,6 +189,15 @@ namespace MeGUI
             }
             catch (Exception e)
             {
+                try
+                {
+                    File.Delete(executable);
+                    log.LogEvent("Because of an error the file " + executable + " has been deleted.", ImageType.Warning);
+                }
+                catch (IOException)
+                {
+                    log.LogEvent("Could not delete file " + executable, ImageType.Error);
+                }
                 throw new JobRunException(e);
             }
         }

@@ -1450,7 +1450,7 @@ namespace MeGUI
             RegisterForm(this);
         }
 
-        private void beginUpdateCheck()
+        public void beginUpdateCheck()
         {
             UpdateWindow update = new UpdateWindow(this, this.Settings);
             update.GetUpdateData(true);
