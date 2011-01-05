@@ -111,6 +111,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\MessageBoxExLib.dll</HintPath>
     </Reference>
+    <Reference Include="SevenZipSharp">
+      <HintPath>lib\SevenZipSharp.dll</HintPath>
+    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -165,7 +168,13 @@
     <Content Include="gpl.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="lib_x64\7z.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="lib_x64\AvisynthWrapper.dll" Condition=" '$(Platform)' == 'x64' ">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="lib_x86\7z.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="lib_x86\AvisynthWrapper.dll" Condition=" '$(Platform)' == 'x86' ">

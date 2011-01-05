@@ -27,6 +27,7 @@ using System.Text;
 using System.Threading;
 
 using ICSharpCode.SharpZipLib.Zip;
+using SevenZip;
 
 using MeGUI.core.util;
 
@@ -66,24 +67,23 @@ namespace MeGUI
         }
 
         public static UpdateWindow.ErrorState DownloadFile(string url, Uri serverAddress,
-            out Stream str, DownloadProgressChangedEventHandler wc_DownloadProgressChanged)
+            out Stream str, DownloadProgressChangedEventHandler wc_DownloadProgressChanged, UpdateWindow oUpdate)
         {
             ensureSensibleCacheFolderExists();
             UpdateWindow.ErrorState er = UpdateWindow.ErrorState.Successful;
             string updateCache = MainForm.Instance.Settings.MeGUIUpdateCache;
 
             string localFilename = Path.Combine(updateCache, url);
-            FileInfo finfo = new FileInfo(localFilename);
-            if (File.Exists(localFilename) && (finfo.Length == 0))
+
+            if (File.Exists(localFilename))
             {
-                try
+                FileInfo finfo = new FileInfo(localFilename);
+                if (finfo.Length == 0)
                 {
-                    finfo.Delete();
+                    oUpdate.AddTextToLog(localFilename + " is empty. Deleting file.", ImageType.Information);
+                    UpdateCacher.FlushFile(localFilename, oUpdate);
                 }
-                catch (IOException) { }
-            }
-            else if (File.Exists(localFilename))
-            {
+
                 // check the zip file
                 if (localFilename.ToLower().EndsWith(".zip"))
                 {
@@ -92,24 +92,35 @@ namespace MeGUI
                         ZipFile zipFile = new ZipFile(localFilename);
                         if (zipFile.TestArchive(true) == false)
                         {
-                            try
-                            {
-                                finfo.Delete();
-                            }
-                            catch (IOException) { }
+                            oUpdate.AddTextToLog("Could not unzip " + localFilename + ". Deleting file.", ImageType.Information);
+                            UpdateCacher.FlushFile(localFilename, oUpdate);
                         }
                         else
-                        {
                             goto gotLocalFile;
-                        }
                     }
                     catch
                     {
-                        try
+                        oUpdate.AddTextToLog("Could not unzip " + localFilename + ". Deleting file.", ImageType.Error);
+                        UpdateCacher.FlushFile(localFilename, oUpdate);
+                    }
+                }
+                else if (localFilename.ToLower().EndsWith(".7z")) // check the 7-zip file
+                {
+                    try
+                    {
+                        SevenZipExtractor oArchive = new SevenZipExtractor(localFilename);
+                        if (oArchive.Check() == false)
                         {
-                            finfo.Delete();
+                            oUpdate.AddTextToLog("Could not extract " + localFilename + ". Deleting file.", ImageType.Information);
+                            UpdateCacher.FlushFile(localFilename, oUpdate);
                         }
-                        catch (IOException) { }
+                        else
+                            goto gotLocalFile;
+                    }
+                    catch
+                    {
+                        oUpdate.AddTextToLog("Could not extract " + localFilename + ". Deleting file.", ImageType.Error);
+                        UpdateCacher.FlushFile(localFilename, oUpdate);
                     }
                 }
                 else
@@ -169,14 +180,17 @@ namespace MeGUI
             return er;
         }
 
-        public static void FlushFile(string p)
+        public static void FlushFile(string p, UpdateWindow oUpdate)
         {
             string localFilename = Path.Combine(MainForm.Instance.Settings.MeGUIUpdateCache, p);
             try
             {
                 File.Delete(localFilename);
             }
-            catch (IOException) { }
+            catch (IOException) 
+            {
+                oUpdate.AddTextToLog("Could not delete file " + localFilename, ImageType.Error);
+            }
         }
     }
 }
