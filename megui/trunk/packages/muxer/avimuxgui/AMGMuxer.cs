@@ -51,6 +51,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AMGMuxer");
         protected override void checkJobIO()
         {
             script_filename = writeScript(job);
+            job.FilesToDelete.Add(script_filename);
             
             base.checkJobIO();
         }
@@ -154,22 +155,12 @@ SET OPTION STDIDX AUTO");
             script.AppendFormat("START {0}{1}", settings.MuxedOutput, Environment.NewLine);            
 
             /// the script is now created; let's write it to a temp file
-            string filename = Path.GetTempFileName();
+            string filename = Path.ChangeExtension(job.Output, ".mux");
             using (StreamWriter output = new StreamWriter(File.OpenWrite(filename), System.Text.Encoding.UTF8))
             {
                 output.Write(script.ToString());
             }
             return filename;
-        }
-
-        protected override void doExitConfig()
-        {
-            try
-            {
-                File.Delete(script_filename);
-            }
-            catch (IOException) { }
-            base.doExitConfig();
         }
 
         #endregion

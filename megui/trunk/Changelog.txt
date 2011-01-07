@@ -1,3 +1,4 @@
+1904 [AVI Muxer] the script file will only be deleted if "delete intermediate files" is selected
 1903 [Job] if the executable cannot be started the file will be deleted and an update detection will be triggered
 1900 [Update] moved MediaInfoWrapper.dll from the MediaInfo package to a dedicated download package
 1899 [Update] added 7-Zip support
