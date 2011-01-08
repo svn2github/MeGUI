@@ -782,5 +782,53 @@ namespace MeGUI
             if (!P8x8mv) // p8x8 requires p4x4
                 P4x4mv = false;
         }
+
+        public static int GetDefaultNumberOfRefFrames(x264PresetLevelModes oPresetLevel, int oTuningMode)
+        {
+            int iDefaultSetting = 0;
+            switch (oPresetLevel)
+            {
+                case x264Settings.x264PresetLevelModes.ultrafast:
+                case x264Settings.x264PresetLevelModes.superfast:
+                case x264Settings.x264PresetLevelModes.veryfast: iDefaultSetting = 1; break;
+                case x264Settings.x264PresetLevelModes.faster:
+                case x264Settings.x264PresetLevelModes.fast: iDefaultSetting = 2; break;
+                case x264Settings.x264PresetLevelModes.medium: iDefaultSetting = 3; break;
+                case x264Settings.x264PresetLevelModes.slow: iDefaultSetting = 5; break;
+                case x264Settings.x264PresetLevelModes.slower: iDefaultSetting = 8; break;
+                case x264Settings.x264PresetLevelModes.veryslow:
+                case x264Settings.x264PresetLevelModes.placebo: iDefaultSetting = 16; break;
+            }
+            if (oTuningMode == 2 && iDefaultSetting > 1) // animation
+                iDefaultSetting *= 2;
+            if (iDefaultSetting > 16)
+                iDefaultSetting = 16;
+            return iDefaultSetting;
+        }
+
+        public static int GetDefaultNumberOfBFrames(x264PresetLevelModes oPresetLevel, int oTuningMode, int oAVCProfile)
+        {
+            int iDefaultSetting = 0;
+            if (oAVCProfile == 0) // baseline
+                return iDefaultSetting;
+            switch (oPresetLevel)
+            {
+                case x264Settings.x264PresetLevelModes.ultrafast: iDefaultSetting = 0; break;
+                case x264Settings.x264PresetLevelModes.superfast:
+                case x264Settings.x264PresetLevelModes.veryfast:
+                case x264Settings.x264PresetLevelModes.faster:
+                case x264Settings.x264PresetLevelModes.fast:
+                case x264Settings.x264PresetLevelModes.medium:
+                case x264Settings.x264PresetLevelModes.slow:
+                case x264Settings.x264PresetLevelModes.slower: iDefaultSetting = 3; break;
+                case x264Settings.x264PresetLevelModes.veryslow: iDefaultSetting = 8; break;
+                case x264Settings.x264PresetLevelModes.placebo: iDefaultSetting = 16; break;
+            }
+            if (oTuningMode == 2) // animation
+                iDefaultSetting += 2;
+            if (iDefaultSetting > 16)
+                iDefaultSetting = 16;
+            return iDefaultSetting;
+        }
 	}
 }

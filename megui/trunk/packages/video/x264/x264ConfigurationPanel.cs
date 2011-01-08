@@ -180,6 +180,10 @@ namespace MeGUI.packages.video.x264
 
         private void doTuningsAdjustments()
         {
+            if (this.x264NumberOfRefFrames.Value != x264Settings.GetDefaultNumberOfRefFrames((x264Settings.x264PresetLevelModes)tbx264Presets.Value, x264Tunes.SelectedIndex))
+                this.x264NumberOfRefFrames.Value = x264Settings.GetDefaultNumberOfRefFrames((x264Settings.x264PresetLevelModes)tbx264Presets.Value, x264Tunes.SelectedIndex);
+            if (this.x264NumberOfBFrames.Value != x264Settings.GetDefaultNumberOfBFrames((x264Settings.x264PresetLevelModes)tbx264Presets.Value, x264Tunes.SelectedIndex, avcLevel.SelectedIndex))
+                this.x264NumberOfBFrames.Value = x264Settings.GetDefaultNumberOfBFrames((x264Settings.x264PresetLevelModes)tbx264Presets.Value, x264Tunes.SelectedIndex, avcLevel.SelectedIndex);
             switch (x264Tunes.SelectedIndex)
             {
                 case 0: // default
@@ -196,10 +200,6 @@ namespace MeGUI.packages.video.x264
                             this.numAQStrength.Value = 1.0M;
                         if (this.cbAQMode.SelectedIndex != 1)
                             this.cbAQMode.SelectedIndex = 1;
-                        if (this.x264NumberOfBFrames.Value != 3)
-                            this.x264NumberOfBFrames.Value = 3;
-                        if (this.x264NumberOfRefFrames.Value != 3)
-                            this.x264NumberOfRefFrames.Value = 3;
                         if (this.x264IPFrameFactor.Value != 1.4M)
                             this.x264IPFrameFactor.Value = 1.4M;
                         if (this.x264PBFrameFactor.Value != 1.3M)
@@ -234,17 +234,12 @@ namespace MeGUI.packages.video.x264
                             this.x264BetaDeblock.Value = -1;
                         if (this.PsyTrellis.Value != 0.15M)
                             this.PsyTrellis.Value = 0.15M;
-
                         if (this.PsyRD.Value != 1.0M)
                             this.PsyRD.Value = 1.0M;
                         if (this.numAQStrength.Value != 1.0M)
                             this.numAQStrength.Value = 1.0M;
                         if (this.cbAQMode.SelectedIndex != 1)
                             this.cbAQMode.SelectedIndex = 1;
-                        if (this.x264NumberOfBFrames.Value != 3)
-                            this.x264NumberOfBFrames.Value = 3;
-                        if (this.x264NumberOfRefFrames.Value != 3)
-                            this.x264NumberOfRefFrames.Value = 3;
                         if (this.x264IPFrameFactor.Value != 1.4M)
                             this.x264IPFrameFactor.Value = 1.4M;
                         if (this.x264PBFrameFactor.Value != 1.3M)
@@ -281,16 +276,6 @@ namespace MeGUI.packages.video.x264
                             this.PsyRD.Value = 0.4M;
                         if (this.numAQStrength.Value != 0.6M)
                             this.numAQStrength.Value = 0.6M;
-                        if (this.x264NumberOfBFrames.Value > 2 && this.x264NumberOfBFrames.Value < 15)
-                            this.x264NumberOfBFrames.Value += 2;
-                        else if (this.x264NumberOfBFrames.Value < 3)
-                            this.x264NumberOfBFrames.Value = 5;
-                        if (this.x264NumberOfRefFrames.Value > 1 && this.x264NumberOfRefFrames.Value < 9)
-                            this.x264NumberOfRefFrames.Value *= 2;
-                        else if (this.x264NumberOfRefFrames.Value > 8)
-                            this.x264NumberOfRefFrames.Value = this.x264NumberOfRefFrames.Value;
-                        else this.x264NumberOfRefFrames.Value = 1;
-
                         if (this.PsyTrellis.Value != 0.0M)
                             this.PsyTrellis.Value = 0.0M;
                         if (this.cbAQMode.SelectedIndex != 1)
@@ -343,15 +328,10 @@ namespace MeGUI.packages.video.x264
                             this.x264QuantizerCompression.Value = 0.8M;
                         if (!noDCTDecimateOption.Checked)
                             noDCTDecimateOption.Checked = true;
-
                         if (this.PsyRD.Value != 1.0M)
                            this.PsyRD.Value = 1.0M;
                         if (this.cbAQMode.SelectedIndex != 1)
                             this.cbAQMode.SelectedIndex = 1;
-                        if (this.x264NumberOfBFrames.Value != 3)
-                            this.x264NumberOfBFrames.Value = 3;
-                        if (this.x264NumberOfRefFrames.Value != 3)
-                            this.x264NumberOfRefFrames.Value = 3;
                         if (nopsy.Checked)
                             nopsy.Checked = false;
                         if (!x264DeblockActive.Checked)
@@ -372,7 +352,6 @@ namespace MeGUI.packages.video.x264
                             cbAQMode.SelectedIndex = 0;
                         if (!this.nopsy.Checked)
                             this.nopsy.Checked = true;
-
                         if (this.x264AlphaDeblock.Value != 0)
                             this.x264AlphaDeblock.Value = 0;
                         if (this.x264BetaDeblock.Value != 0)
@@ -383,10 +362,6 @@ namespace MeGUI.packages.video.x264
                             this.PsyRD.Value = 1.0M;
                         if (this.numAQStrength.Value != 1.0M)
                             this.numAQStrength.Value = 1.0M;
-                        if (this.x264NumberOfBFrames.Value != 3)
-                            this.x264NumberOfBFrames.Value = 3;
-                        if (this.x264NumberOfRefFrames.Value != 3)
-                            this.x264NumberOfRefFrames.Value = 3;
                         if (this.x264IPFrameFactor.Value != 1.4M)
                             this.x264IPFrameFactor.Value = 1.4M;
                         if (this.x264PBFrameFactor.Value != 1.3M)
@@ -415,7 +390,6 @@ namespace MeGUI.packages.video.x264
                             cbAQMode.SelectedIndex = 2;
                         if (!this.nopsy.Checked)
                             this.nopsy.Checked = true;
-
                         if (this.x264AlphaDeblock.Value != 0)
                             this.x264AlphaDeblock.Value = 0;
                         if (this.x264BetaDeblock.Value != 0)
@@ -426,10 +400,6 @@ namespace MeGUI.packages.video.x264
                             this.PsyRD.Value = 1.0M;
                         if (this.numAQStrength.Value != 1.0M)
                             this.numAQStrength.Value = 1.0M;
-                        if (this.x264NumberOfBFrames.Value != 3)
-                            this.x264NumberOfBFrames.Value = 3;
-                        if (this.x264NumberOfRefFrames.Value != 3)
-                            this.x264NumberOfRefFrames.Value = 3;
                         if (this.x264IPFrameFactor.Value != 1.4M)
                             this.x264IPFrameFactor.Value = 1.4M;
                         if (this.x264PBFrameFactor.Value != 1.3M)
@@ -463,17 +433,12 @@ namespace MeGUI.packages.video.x264
                         cabac.Enabled = false;
                         if (x264WeightedBPrediction.Checked)
                             x264WeightedBPrediction.Checked = false;
-
                         if (this.PsyTrellis.Value != 0.0M)
                             this.PsyTrellis.Value = 0.0M;
                         if (this.PsyRD.Value != 1.0M)
                             this.PsyRD.Value = 1.0M;
                         if (this.numAQStrength.Value != 1.0M)
                             this.numAQStrength.Value = 1.0M;
-                        if (this.x264NumberOfBFrames.Value != 3)
-                            this.x264NumberOfBFrames.Value = 3;
-                        if (this.x264NumberOfRefFrames.Value != 3)
-                            this.x264NumberOfRefFrames.Value = 3;
                         if (this.x264IPFrameFactor.Value != 1.4M)
                             this.x264IPFrameFactor.Value = 1.4M;
                         if (this.x264PBFrameFactor.Value != 1.3M)
@@ -497,16 +462,16 @@ namespace MeGUI.packages.video.x264
 
         private void doPresetsAdjustments()
         {
+            if (this.x264NumberOfRefFrames.Value != x264Settings.GetDefaultNumberOfRefFrames((x264Settings.x264PresetLevelModes)tbx264Presets.Value, x264Tunes.SelectedIndex))
+                this.x264NumberOfRefFrames.Value = x264Settings.GetDefaultNumberOfRefFrames((x264Settings.x264PresetLevelModes)tbx264Presets.Value, x264Tunes.SelectedIndex);
+            if (this.x264NumberOfBFrames.Value != x264Settings.GetDefaultNumberOfBFrames((x264Settings.x264PresetLevelModes)tbx264Presets.Value, x264Tunes.SelectedIndex, avcLevel.SelectedIndex))
+                this.x264NumberOfBFrames.Value = x264Settings.GetDefaultNumberOfBFrames((x264Settings.x264PresetLevelModes)tbx264Presets.Value, x264Tunes.SelectedIndex, avcLevel.SelectedIndex);
             switch (tbx264Presets.Value)
             {
                 case 0: // Ultra Fast
                     {
-                        if (this.x264NumberOfRefFrames.Value != 1)
-                            this.x264NumberOfRefFrames.Value = 1;
                         if (this.x264MERange.Value != 16) 
                             this.x264MERange.Value = 16;
-                        if (this.x264NumberOfBFrames.Value != 0)
-                            this.x264NumberOfBFrames.Value = 0;
                         if (macroblockOptions.SelectedIndex != 1)
                             macroblockOptions.SelectedIndex = 1;
                         if (x264SubpelRefinement.SelectedIndex != 0)
@@ -563,8 +528,6 @@ namespace MeGUI.packages.video.x264
                             x264METype.SelectedIndex = 0;
                         if (x264SubpelRefinement.SelectedIndex != 1)
                             x264SubpelRefinement.SelectedIndex = 1;
-                        if (this.x264NumberOfRefFrames.Value != 1)
-                            this.x264NumberOfRefFrames.Value = 1;
                         if (!x264MixedReferences.Checked)
                             x264MixedReferences.Checked = true;
                         if (trellis.SelectedIndex != 0)
@@ -574,8 +537,6 @@ namespace MeGUI.packages.video.x264
                         mbtree.Enabled = false;
                         if (x264BframePredictionMode.SelectedIndex != 1)
                             x264BframePredictionMode.SelectedIndex = 1;
-                        if (this.x264NumberOfBFrames.Value != 3)
-                            this.x264NumberOfBFrames.Value = 3;
                         if (!cabac.Checked)
                             cabac.Checked = true;
                         if (x264Tunes.SelectedIndex != 6) cabac.Enabled = true;
@@ -609,8 +570,6 @@ namespace MeGUI.packages.video.x264
                             x264METype.SelectedIndex = 1;
                         if (x264SubpelRefinement.SelectedIndex != 2)
                             x264SubpelRefinement.SelectedIndex = 2;
-                        if (this.x264NumberOfRefFrames.Value != 1)
-                            this.x264NumberOfRefFrames.Value = 1;
                         if (!x264MixedReferences.Checked)
                             x264MixedReferences.Checked = true;
                         if (trellis.SelectedIndex != 0)
@@ -620,8 +579,6 @@ namespace MeGUI.packages.video.x264
                         mbtree.Enabled = true;
                         if (x264BframePredictionMode.SelectedIndex != 1)
                             x264BframePredictionMode.SelectedIndex = 1;
-                        if (this.x264NumberOfBFrames.Value != 3)
-                            this.x264NumberOfBFrames.Value = 3;
                         if (!cabac.Checked)
                             cabac.Checked = true;
                         if (x264Tunes.SelectedIndex != 6) cabac.Enabled = true;
@@ -649,8 +606,6 @@ namespace MeGUI.packages.video.x264
                     break;
                 case 3: // Faster
                     {
-                        if (this.x264NumberOfRefFrames.Value != 2)
-                            this.x264NumberOfRefFrames.Value = 2;
                         if (x264SubpelRefinement.SelectedIndex != 4)
                             x264SubpelRefinement.SelectedIndex = 4;
                         if (!mbtree.Checked)
@@ -666,8 +621,6 @@ namespace MeGUI.packages.video.x264
                             macroblockOptions.SelectedIndex = 3;
                         if (x264BframePredictionMode.SelectedIndex != 1)
                             x264BframePredictionMode.SelectedIndex = 1;
-                        if (this.x264NumberOfBFrames.Value != 3)
-                            this.x264NumberOfBFrames.Value = 3;
                         if (!cabac.Checked)
                             cabac.Checked = true;
                         if (x264Tunes.SelectedIndex != 6) cabac.Enabled = true;
@@ -695,8 +648,6 @@ namespace MeGUI.packages.video.x264
                     break;
                 case 4: // Fast
                     {
-                        if (this.x264NumberOfRefFrames.Value != 2)
-                            this.x264NumberOfRefFrames.Value = 2;
                         if (x264SubpelRefinement.SelectedIndex != 6)
                             x264SubpelRefinement.SelectedIndex = 6;
                         if (this.lookahead.Value != 30)
@@ -714,8 +665,6 @@ namespace MeGUI.packages.video.x264
                             macroblockOptions.SelectedIndex = 3;
                         if (x264BframePredictionMode.SelectedIndex != 1)
                             x264BframePredictionMode.SelectedIndex = 1;
-                        if (this.x264NumberOfBFrames.Value != 3)
-                            this.x264NumberOfBFrames.Value = 3;
                         if (!cabac.Checked)
                             cabac.Checked = true;
                         if (x264Tunes.SelectedIndex != 6) cabac.Enabled = true;
@@ -745,8 +694,6 @@ namespace MeGUI.packages.video.x264
                             x264METype.SelectedIndex = 1;
                         if (x264SubpelRefinement.SelectedIndex != 7)
                             x264SubpelRefinement.SelectedIndex = 7;
-                        if (this.x264NumberOfRefFrames.Value != 3)
-                            this.x264NumberOfRefFrames.Value = 3;
                         if (x264NewAdaptiveBframes.SelectedIndex != 1)
                             x264NewAdaptiveBframes.SelectedIndex = 1;
                         if (x264BframePredictionMode.SelectedIndex != 1)
@@ -762,8 +709,6 @@ namespace MeGUI.packages.video.x264
                         mbtree.Enabled = true;
                         if (macroblockOptions.SelectedIndex != 3)
                             macroblockOptions.SelectedIndex = 3;
-                        if (this.x264NumberOfBFrames.Value != 3)
-                            this.x264NumberOfBFrames.Value = 3;
                         if (!cabac.Checked)
                             cabac.Checked = true;
                         if (x264Tunes.SelectedIndex != 6) cabac.Enabled = true;
@@ -791,8 +736,6 @@ namespace MeGUI.packages.video.x264
                             x264METype.SelectedIndex = 2;
                         if (x264SubpelRefinement.SelectedIndex != 8)
                             x264SubpelRefinement.SelectedIndex = 8;
-                        if (this.x264NumberOfRefFrames.Value != 5)
-                            this.x264NumberOfRefFrames.Value = 5;
                         if (x264NewAdaptiveBframes.SelectedIndex != 2)
                             x264NewAdaptiveBframes.SelectedIndex = 2;
                         if (x264BframePredictionMode.SelectedIndex != 3)
@@ -808,8 +751,6 @@ namespace MeGUI.packages.video.x264
                         mbtree.Enabled = true;
                         if (macroblockOptions.SelectedIndex != 3)
                             macroblockOptions.SelectedIndex = 3;
-                        if (this.x264NumberOfBFrames.Value != 3)
-                            this.x264NumberOfBFrames.Value = 3;
                         if (!cabac.Checked)
                             cabac.Checked = true;
                         if (x264Tunes.SelectedIndex != 6) cabac.Enabled = true;
@@ -837,8 +778,6 @@ namespace MeGUI.packages.video.x264
                             x264METype.SelectedIndex = 2;
                         if (x264SubpelRefinement.SelectedIndex != 9)
                             x264SubpelRefinement.SelectedIndex = 9;
-                        if (this.x264NumberOfRefFrames.Value != 8)
-                            this.x264NumberOfRefFrames.Value = 8;
                         if (x264NewAdaptiveBframes.SelectedIndex != 2)
                             x264NewAdaptiveBframes.SelectedIndex = 2;
                         if (trellis.SelectedIndex != 2)
@@ -854,8 +793,6 @@ namespace MeGUI.packages.video.x264
                         if (!mbtree.Checked)
                             mbtree.Checked = true;
                         mbtree.Enabled = true;
-                        if (this.x264NumberOfBFrames.Value != 3)
-                            this.x264NumberOfBFrames.Value = 3;
                         if (!cabac.Checked)
                             cabac.Checked = true;
                         if (x264Tunes.SelectedIndex != 6) cabac.Enabled = true;
@@ -885,8 +822,6 @@ namespace MeGUI.packages.video.x264
                             x264SubpelRefinement.SelectedIndex = 10;
                         if (this.x264MERange.Value != 24)
                             this.x264MERange.Value = 24; 
-                        if (this.x264NumberOfRefFrames.Value != 16)
-                            this.x264NumberOfRefFrames.Value = 16;
                         if (x264NewAdaptiveBframes.SelectedIndex != 2)
                             x264NewAdaptiveBframes.SelectedIndex = 2;
                         if (x264BframePredictionMode.SelectedIndex != 3)
@@ -895,8 +830,6 @@ namespace MeGUI.packages.video.x264
                             macroblockOptions.SelectedIndex = 0;
                         if (trellis.SelectedIndex != 2)
                             trellis.SelectedIndex = 2;
-                        if (this.x264NumberOfBFrames.Value != 8)
-                            this.x264NumberOfBFrames.Value = 8;
                         if (this.lookahead.Value != 60)
                             this.lookahead.Value = 60;
                         if (x264MixedReferences.Checked)
@@ -931,8 +864,6 @@ namespace MeGUI.packages.video.x264
                             x264SubpelRefinement.SelectedIndex = 10;
                         if (this.x264MERange.Value != 24)
                             this.x264MERange.Value = 24;
-                        if (this.x264NumberOfRefFrames.Value != 16)
-                            this.x264NumberOfRefFrames.Value = 16;
                         if (x264NewAdaptiveBframes.SelectedIndex != 2)
                             x264NewAdaptiveBframes.SelectedIndex = 2;
                         if (x264BframePredictionMode.SelectedIndex != 3)
@@ -943,8 +874,6 @@ namespace MeGUI.packages.video.x264
                             noFastPSkip.Checked = true;
                         if (trellis.SelectedIndex != 2)
                             trellis.SelectedIndex = 2;
-                        if (this.x264NumberOfBFrames.Value != 16)
-                            this.x264NumberOfBFrames.Value = 16;
                         if (this.lookahead.Value != 60)
                             this.lookahead.Value = 60;
                         if (x264MixedReferences.Checked)
