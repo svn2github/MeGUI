@@ -1617,19 +1617,9 @@ namespace MeGUI.packages.video.x264
             0,
             0,
             0});
-            this.x264MinimimQuantizer.Minimum = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
             this.x264MinimimQuantizer.Name = "x264MinimimQuantizer";
             this.x264MinimimQuantizer.Size = new System.Drawing.Size(48, 20);
             this.x264MinimimQuantizer.TabIndex = 1;
-            this.x264MinimimQuantizer.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
             this.x264MinimimQuantizer.ValueChanged += new System.EventHandler(this.updateEvent);
             // 
             // x264MinimimQuantizerLabel
@@ -2567,9 +2557,9 @@ namespace MeGUI.packages.video.x264
             "smpte240m",
             "GBR",
             "YCgCo"});
-            this.colorMatrix.Location = new System.Drawing.Point(239, 75);
+            this.colorMatrix.Location = new System.Drawing.Point(235, 75);
             this.colorMatrix.Name = "colorMatrix";
-            this.colorMatrix.Size = new System.Drawing.Size(70, 21);
+            this.colorMatrix.Size = new System.Drawing.Size(74, 21);
             this.colorMatrix.TabIndex = 41;
             this.colorMatrix.SelectedIndexChanged += new System.EventHandler(this.updateEvent);
             // 
@@ -2587,9 +2577,9 @@ namespace MeGUI.packages.video.x264
             "log316",
             "smpte170m",
             "smpte240m"});
-            this.transfer.Location = new System.Drawing.Point(239, 48);
+            this.transfer.Location = new System.Drawing.Point(235, 48);
             this.transfer.Name = "transfer";
-            this.transfer.Size = new System.Drawing.Size(70, 21);
+            this.transfer.Size = new System.Drawing.Size(74, 21);
             this.transfer.TabIndex = 40;
             this.transfer.SelectedIndexChanged += new System.EventHandler(this.updateEvent);
             // 
@@ -2605,9 +2595,9 @@ namespace MeGUI.packages.video.x264
             "smpte170m",
             "smpte240m",
             "film"});
-            this.colorPrim.Location = new System.Drawing.Point(239, 21);
+            this.colorPrim.Location = new System.Drawing.Point(235, 21);
             this.colorPrim.Name = "colorPrim";
-            this.colorPrim.Size = new System.Drawing.Size(70, 21);
+            this.colorPrim.Size = new System.Drawing.Size(74, 21);
             this.colorPrim.TabIndex = 39;
             this.colorPrim.SelectedIndexChanged += new System.EventHandler(this.updateEvent);
             // 

@@ -710,6 +710,7 @@ namespace MeGUI
                 this.AQmode != otherSettings.AQmode ||
                 this.AQstrength != otherSettings.AQstrength ||
                 this.UseQPFile != otherSettings.UseQPFile ||
+                this.QPFile != otherSettings.QPFile ||
                 this.FullRange != otherSettings.FullRange ||
                 this.MacroBlockOptions != otherSettings.MacroBlockOptions ||
                 this.x264PresetLevel != otherSettings.x264PresetLevel ||

@@ -1322,7 +1322,6 @@ namespace MeGUI.packages.video.x264
                 xs.UseQPFile = useQPFile.Checked;
                 xs.QPFile = this.qpfile.Text;
                 xs.fullRange = this.x264FullRange.Checked;
-                //xs.x264Preset = this.tbx264Presets.Value;
                 xs.x264PresetLevel = (x264Settings.x264PresetLevelModes)this.tbx264Presets.Value;
                 xs.x264Tuning = x264Tunes.SelectedIndex;
                 xs.x264AdvancedSettings = advancedSettings.Checked;
@@ -1457,6 +1456,8 @@ namespace MeGUI.packages.video.x264
                 x264WeightedPPrediction.SelectedIndex = xs.WeightedPPrediction;
                 x264aud.Checked = xs.X264Aud;
                 x264hrd.SelectedIndex = xs.Nalhrd;
+                useQPFile.Checked = xs.UseQPFile;
+                this.qpfile.Text = xs.QPFile;
                 updating = false;
                 genericUpdate();
             }
