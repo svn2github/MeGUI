@@ -1053,7 +1053,7 @@ namespace MeGUI
                             chap.timecode = tc;
                             int chapTime = Util.getTimeCode(chap.timecode);
                             int frameNumber = Util.convertTimecodeToFrameNumber(chapTime, framerate);
-                            sw.WriteLine(frameNumber.ToString() + " I -1");
+                            sw.WriteLine(frameNumber.ToString() + " K");
                         }
                     }
 

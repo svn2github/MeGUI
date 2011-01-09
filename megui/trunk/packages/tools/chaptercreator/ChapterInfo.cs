@@ -74,7 +74,7 @@ namespace MeGUI
       List<string> lines = new List<string>();
       foreach (Chapter c in Chapters)
       {
-        lines.Add(string.Format("{0} I -1", (long)Math.Round(c.Time.TotalSeconds * FramesPerSecond)));
+        lines.Add(string.Format("{0} K", (long)Math.Round(c.Time.TotalSeconds * FramesPerSecond)));
       }
       File.WriteAllLines(filename, lines.ToArray());
     }

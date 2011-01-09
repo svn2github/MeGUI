@@ -1,3 +1,4 @@
+1907 [OneClick] + [Chapter Creator] replaced "I -1" in the saved qpfile for x264 with "K"
 1906 [x264] fixed qpfile settings handling
 1905 [x264] fixed ref and bframes handling when using tunings (especially animation)
 1904 [AVI Muxer] the script file will only be deleted if "delete intermediate files" is selected
