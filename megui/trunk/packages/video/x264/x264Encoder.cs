@@ -330,20 +330,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             // WeightedPPrediction
             if (!xs.CustomEncoderOptions.Contains("--weightp "))
             {
-                display = false;
-                switch (xs.x264PresetLevel)
-                {
-                    case x264Settings.x264PresetLevelModes.ultrafast: if (xs.WeightedPPrediction != 0) display = true; break;
-                    case x264Settings.x264PresetLevelModes.superfast:
-                    case x264Settings.x264PresetLevelModes.veryfast:
-                    case x264Settings.x264PresetLevelModes.faster: if (xs.WeightedPPrediction != 1) display = true; break;
-                    default: if (xs.WeightedPPrediction != 2) display = true; break;
-                }
-                if (xs.x264Tuning == 6 && xs.WeightedPPrediction != 0)
-                    sb.Append("--weightp " + xs.WeightedPPrediction + " ");
-                if (xs.Profile == 0)
-                    display = false;
-                if (display && xs.x264Tuning != 6)
+                if (xs.WeightedPPrediction != x264Settings.GetDefaultNumberOfWeightp(xs.x264PresetLevel, xs.x264Tuning, xs.Profile))
                     sb.Append("--weightp " + xs.WeightedPPrediction + " ");
             }
 
@@ -502,17 +489,14 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             // AQ-Mode
             if (xs.EncodingMode != (int)VideoCodecSettings.Mode.CQ)
             {
+                if (!xs.CustomEncoderOptions.Contains("--aq-mode "))
+                {
+                    if (xs.AQmode != x264Settings.GetDefaultAQMode(xs.x264PresetLevel, xs.x264Tuning))
+                        sb.Append("--aq-mode " + xs.AQmode.ToString() + " ");
+                }
+
                 if (xs.AQmode > 0)
                 {
-                    if (!xs.CustomEncoderOptions.Contains("--aq-mode "))
-                    {
-                        display = true;
-                        if ((xs.x264Tuning != 5 && xs.AQmode == 1) || (xs.x264Tuning == 5 && xs.AQmode == 2))
-                            display = false;
-                        if (display)
-                            sb.Append("--aq-mode " + xs.AQmode.ToString() + " ");
-                    }
-
                     display = false;
                     switch (xs.x264Tuning)
                     {
@@ -524,12 +508,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                     if (!xs.CustomEncoderOptions.Contains("--aq-strength "))
                         if (display)
                             sb.Append("--aq-strength " + xs.AQstrength.ToString(ci) + " ");
-                }
-                else
-                {
-                    if (!xs.CustomEncoderOptions.Contains("--aq-mode "))
-                        if (xs.x264PresetLevel != x264Settings.x264PresetLevelModes.ultrafast && xs.x264Tuning != 4)
-                            sb.Append("--aq-mode 0 ");
                 }
             }
 

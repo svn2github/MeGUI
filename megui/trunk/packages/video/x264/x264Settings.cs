@@ -831,5 +831,40 @@ namespace MeGUI
                 iDefaultSetting = 16;
             return iDefaultSetting;
         }
+
+        public static int GetDefaultNumberOfWeightp(x264PresetLevelModes oPresetLevel, int oTuningMode, int oAVCProfile)
+        {
+            if (oAVCProfile == 0) // baseline
+                return 0;
+            if (oTuningMode == 6) // Fast Decode
+                return 0;
+
+            int iDefaultSetting = 0;
+            switch (oPresetLevel)
+            {
+                case x264Settings.x264PresetLevelModes.ultrafast:   iDefaultSetting = 0; break;
+                case x264Settings.x264PresetLevelModes.superfast:   
+                case x264Settings.x264PresetLevelModes.veryfast:
+                case x264Settings.x264PresetLevelModes.faster:
+                case x264Settings.x264PresetLevelModes.fast:        iDefaultSetting = 1; break;
+                case x264Settings.x264PresetLevelModes.medium:
+                case x264Settings.x264PresetLevelModes.slow:
+                case x264Settings.x264PresetLevelModes.slower: 
+                case x264Settings.x264PresetLevelModes.veryslow: 
+                case x264Settings.x264PresetLevelModes.placebo:     iDefaultSetting = 2; break;
+            }
+            return iDefaultSetting;
+        }
+
+        public static int GetDefaultAQMode(x264PresetLevelModes oPresetLevel, int oTuningMode)
+        {
+            if (oTuningMode == 5) // SSIM
+                return 2;
+
+            if (oTuningMode == 4 || oPresetLevel == x264Settings.x264PresetLevelModes.ultrafast) // PSNR
+                return 0;
+
+            return 1;
+        }
 	}
 }
