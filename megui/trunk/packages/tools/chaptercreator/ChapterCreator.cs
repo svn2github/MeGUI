@@ -271,7 +271,7 @@ namespace MeGUI
             // saveFileDialog
             // 
             this.saveFileDialog.DefaultExt = "txt";
-            this.saveFileDialog.Filter = "x264 qp Files (.qpf)|*.qpf|Chapter Files (*.txt)|*.txt|Matroska Chapters files (*" +
+            this.saveFileDialog.Filter = "x264 qp Files (*.qpf)|*.qpf|Chapter Files (*.txt)|*.txt|Matroska Chapters files (*" +
                 ".xml)|*.xml|All supported Files (*.qpf;*.txt;*.xml)|*.qpf;*.txt;*.xml";
             this.saveFileDialog.FilterIndex = 4;
             // 

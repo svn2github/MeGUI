@@ -515,7 +515,7 @@ namespace MeGUI
             supportedContainerInputTypes.Add(ContainerType.MKV);
             maxFilesOfType = new int[] { -1, -1, -1, 1, 0};
             base.type = MuxerType.MKVMERGE;
-            name = "MKV muxer";
+            name = "MKV Muxer";
             shortcut = System.Windows.Forms.Shortcut.Ctrl4;
         }
 
