@@ -36,7 +36,7 @@ namespace MeGUI
 {
     class UpdateCacher
     {
-        public static void flushOldCachedFilesAsync(List<string> urls)
+        public static void flushOldCachedFilesAsync(List<string> urls, UpdateWindow oUpdate)
         {
             string updateCache = MainForm.Instance.Settings.MeGUIUpdateCache;
             if (string.IsNullOrEmpty(updateCache)
@@ -56,7 +56,10 @@ namespace MeGUI
                 if (urls.IndexOf(f.Name.ToLower()) < 0)
                 {
                     if (DateTime.Now - f.LastWriteTime > new TimeSpan(7, 0, 0, 0, 0))
+                    {
                         f.Delete();
+                        oUpdate.AddTextToLog("Deleted cache file " + f.Name, ImageType.Information);
+                    }
                 }
             }
         }

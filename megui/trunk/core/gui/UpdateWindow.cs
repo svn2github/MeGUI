@@ -178,11 +178,14 @@ namespace MeGUI
                     case "besplit": arrPath.Add(MainForm.Instance.Settings.BeSplitPath); break;
                 }
 
-                foreach (string strTempPath in arrPath)
+                foreach (string strAppPath in arrPath)
                 {
-                    if (String.IsNullOrEmpty(strTempPath))
+                    if (String.IsNullOrEmpty(strAppPath))
                         return false;
-                    if (File.Exists(strTempPath) == false)
+                    if (File.Exists(strAppPath) == false)
+                        return false;
+                    FileInfo fInfo = new FileInfo(strAppPath);
+                    if (fInfo.Length == 0)
                         return false;
                 }
                 return true;
@@ -1491,7 +1494,7 @@ namespace MeGUI
             {
                 files.Add(u.GetLatestVersion().Url);
             }
-            UpdateCacher.flushOldCachedFilesAsync(files);
+            UpdateCacher.flushOldCachedFilesAsync(files, this);
 
             if (needsRestart)
             {
