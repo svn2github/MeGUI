@@ -1,7 +1,7 @@
+1913 [One-Click] chapters will not be added if output container is AVI
 1912 [One-Click] fixed handling of video input files without audio track. Bug #3159523
 
 Changelog 0.3.5.0 --> 1911
-Full changelog: http://megui.svn.sourceforge.net/viewvc/megui/megui/trunk/Changelog_full.txt
 
 Main changes:
 [Update] enhanced update detection. As a result all downloads need to be reapplied once!
@@ -170,3 +170,5 @@ Other changes:
 added MeGUI icon to several tools and adjusted the font of several windows. Feature request #3090902
 fixed custom FPS, AR and file size saving so that only manually added values will be saved permanently. Bug #3064654
 update ContextHelp.xml file. Patch by XhmikosR (#3079390)
+
+Full changelog: http://megui.svn.sourceforge.net/viewvc/megui/megui/trunk/Changelog_full.txt

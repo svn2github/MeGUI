@@ -782,6 +782,10 @@ namespace MeGUI
             {
                 //Create empty subtitles for muxing (subtitles not supported in one click mode)
                 MuxStream[] subtitles = new MuxStream[0];
+
+                if (job.PostprocessingProperties.Container == ContainerType.AVI)
+                    job.PostprocessingProperties.ChapterFile = null;
+
                 JobChain c = vUtil.GenerateJobSeries(myVideo, muxedOutput, job.PostprocessingProperties.AudioJobs, subtitles,
                     job.PostprocessingProperties.ChapterFile, job.PostprocessingProperties.OutputSize,
                     job.PostprocessingProperties.Splitting, job.PostprocessingProperties.Container,

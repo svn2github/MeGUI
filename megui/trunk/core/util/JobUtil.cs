@@ -146,7 +146,6 @@ namespace MeGUI
 
                 MuxJob mjob = new MuxJob();
 
-
                 if (previousOutput != null)
                 {
                     mjob.Settings.MuxedInput = previousOutput;
