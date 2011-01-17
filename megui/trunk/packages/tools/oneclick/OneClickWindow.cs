@@ -275,7 +275,7 @@ namespace MeGUI
             }
 
             // If nothing matches DefaultLanguage select 1st track
-            if (audioTrack1.SelectedIndex == 0)
+            if (audioTrack1.SelectedIndex == 0 && audioTracks.Count > 0)
             {
                 audioTrack1.SelectedObject = audioTracks[0];
             }

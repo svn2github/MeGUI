@@ -1,3 +1,5 @@
+1912 [One-Click] fixed handling of video input files without audio track. Bug #3159523
+
 Changelog 0.3.5.0 --> 1911
 Full changelog: http://megui.svn.sourceforge.net/viewvc/megui/megui/trunk/Changelog_full.txt
 
@@ -13,7 +15,7 @@ Main changes:
 [Update] removed mencoder because pre-rendering job and snow are using now ffmpeg
 improved M2TS bitrate calculation. Patch by Selur
 [Audio Downmix] enhanced avisynth script in order to cover more input channel configurations. Patch by tebasuna51
-changed version numbers to refelect the svn build numbers
+changed version numbers to reflect the svn build numbers
 
 Other changes:
 [Adaptive Muxer] resized window so that the buttons at the bottom are visible again. Bug #3090155
@@ -65,7 +67,7 @@ Other changes:
 [MKV Muxer] added option to set a subtitle delay. Feature request #3088742
 [MKV Muxer] added option to set the default subtitle track
 [MKV Muxer] added support for quotes in the track names. Bug #3090689
-[MKV Muxer] added support for SUP suptitles in MKV (requires MkvToolNix 4.1.0 or higher)
+[MKV Muxer] added support for SUP subtitles in MKV (requires MkvToolNix 4.1.0 or higher)
 [MKV Muxer] changed default track flag of subtitles to no. Feature request #3086194
 [MKV Muxer] changed log output language to English
 [MKV Muxer] enhanced error handling
@@ -77,13 +79,13 @@ Other changes:
 [Muxer] added a unique title to every mux window. Feature request #2937578
 [Muxer] added option to queue several jobs without closing the mux window. Feature request #2038358
 [Muxer] fixed duplicate jobs after editing a mux job
-[Muxer] if the mux window is not closed after queueing the output file name will be cleared
+[Muxer] if the mux window is not closed after queuing the output file name will be cleared
 [Muxer] language and video name will be visible during load. Bug #3024349
-[Muxer] removed cancel button; added reset button to the video section; selecting an audio or subtitle file will automatically add a new emtpy track tab (saving two clicks)
+[Muxer] removed cancel button; added reset button to the video section; selecting an audio or subtitle file will automatically add a new empty track tab (saving two clicks)
 [Muxer] tweaked the automatically adding of empty tracks
 [OneClick] + [Chapter Creator] replaced "I -1" in the saved qpfile for x264 with "K"
 [One-Click] fixed "and open next" checkbox which did not always open the file dialogue. Bug #3089165
-[One-Click] fixed a problem if two identical audio sources are beeing used
+[One-Click] fixed a problem if two identical audio sources are being used
 [One-Click] fixed detection of some demuxed audio files. Bug #3085510
 [One-Click] removed the blocking popup in case of an error during source type detection. instead the error message will be written into the log. Feature request #3148688
 [One-Click] some dga demuxed audio files were not deleted during cleanup
@@ -114,13 +116,13 @@ Other changes:
 [Update] enhanced update detection so that it is possible to downgrade a tool
 [Update] moved MediaInfoWrapper.dll from the MediaInfo package to a dedicated download package
 [Video Player] + [AVS Creator] fixed AR chooser displaying always 16:9 PAL e.g. in VideoPlayer or AVS Script Creator
-[VideoCodecSettings] update custom command line if neccessary (e.g. --nal-hrd -> --nal-hrd vbr)
+[VideoCodecSettings] update custom command line if necessary (e.g. --nal-hrd -> --nal-hrd vbr)
 [VideoPlayer] added option to reload the video. Feature request #3003709
 [VideoPlayer] fixed "go to frame" button. Bug #2860093
 [VideoPlayer] fixed playing last frame. Bug #3072660
 [VideoPlayer] some cosmetics
 [VideoPlayer] time code enabled by default
-[VideoUtil] I420 is accepted as avisynth output colorspace
+[VideoUtil] I420 is accepted as avisynth output color space
 [VobSubber] fixed detection of subtitle streams. Bug #2773128
 [VobSubber] some cosmetics including option to override detection
 [x264] + [Xvid] fixed saving of custom quantizer matrices in x264/xvid profiles. Bug #3070834
@@ -138,7 +140,7 @@ Other changes:
 [x264] added --sar option to force SAR for BD or other devices compatibility
 [x264] added support for "-keyint infinite" option
 [x264] added the missing update events to some settings
-[x264] AVCProfile and AVCLevel groupboxes Enable status now depends on the Show Advanced Settings status
+[x264] AVCProfile and AVCLevel group boxes Enable status now depends on the Show Advanced Settings status
 [x264] changed command line generation for --weightp with superfast/veryfast presets
 [x264] changed default value of --qpmin to 0 (requires x264 rev 1795+)
 [x264] changed preset defaults (requires x264 revision 1658 or higher)
@@ -146,15 +148,15 @@ Other changes:
 [x264] enabled Trellis with no-cabac option (requires x264 rev 1703+)
 [x264] enhanced command line generating for main/baseline profile
 [x264] extended quality mode to include 0 as a valid crf/qp GUI value
-[x264] fixed commandline generation with tunings
+[x264] fixed command line generation with tunings
 [x264] fixed default CRF value when changing from bitrate mode to CRF. Adjusted default bitrate to 1000
 [x264] fixed command line generation for --rc-lookahead with ultrafast/superfast/veryfast presets
-[x264] fixed commandline generation when switching between AVC profiles
+[x264] fixed command line generation when switching between AVC profiles
 [x264] fixed more than one --sar in the command line. Bug #3038722
-[x264] fixed Psy-RD settings commandline generation with certain tunings
+[x264] fixed Psy-RD settings command line generation with certain tunings
 [x264] fixed qpfile settings handling
 [x264] fixed ref and bframes handling when using tunings (especially animation)
-[x264] fixed unselectable CABAC option in Main and High profiles
+[x264] fixed not selectable CABAC option in Main and High profiles
 [x264] improved preset and tuning handling
 [x264] in case of a problem with the 64 bit mode of x264 it will be disabled (and not automatically enabled again)
 [x264] --min-keyint will not be applied if the default value is used
@@ -162,9 +164,9 @@ Other changes:
 [x264] old nal-hrd profile values will be migrated
 [x264] removed touhou tuning option
 [x264] removed unnecessary/wrong code
-[x264] keep coherency between macroblock options checkboxes and commandline generation
+[x264] keep coherency between macroblock options checkboxes and command line generation
 [Xvid] disabled the HVS masking controls since the current encoder doesn't support them yet.
-[Xvid] the Adaptive Quant option now enables VAQ. Commented out the HVS masking command line generation.
+[Xvid] the Adaptive Quant option now enables VAQ and commented out the HVS masking command line generation.
 added MeGUI icon to several tools and adjusted the font of several windows. Feature request #3090902
 fixed custom FPS, AR and file size saving so that only manually added values will be saved permanently. Bug #3064654
 update ContextHelp.xml file. Patch by XhmikosR (#3079390)
