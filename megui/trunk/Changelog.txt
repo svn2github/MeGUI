@@ -1,3 +1,4 @@
+1914 [One-Click] fixed handling of video input files with short file names (less than 6 characters including extension). Bug #3160645
 1913 [One-Click] chapters will not be added if output container is AVI
 1912 [One-Click] fixed handling of video input files without audio track. Bug #3159523
 

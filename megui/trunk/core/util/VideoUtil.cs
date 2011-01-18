@@ -98,9 +98,13 @@ namespace MeGUI
 		/// <returns>full name of the chapter file or an empty string if no file was found</returns>
 		public static string getChapterFile(string fileName)
 		{
+            string vts;
 			string path = Path.GetDirectoryName(fileName);
-			string name = Path.GetFileName(fileName);
-			string vts = name.Substring(0, 6);
+			string name = Path.GetFileNameWithoutExtension(fileName);
+            if (name.Length > 6)
+                vts = name.Substring(0, 6);
+            else
+                vts = name;
 			string chapterFile = "";
             string[] files = Directory.GetFiles(path, vts + "*Chapter Information*");
 			foreach (string file in files)
