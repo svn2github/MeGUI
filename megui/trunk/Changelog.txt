@@ -1,3 +1,7 @@
+1915 [VideoPlayer] changed zoom and size behavior
+                   fixed starting preview size so that it will always match the screen resolution. Bug #3159086
+                   changed seek bar and buttons behavior. Feature request #3003726
+                   try to ensure playback speed during playback
 1914 [One-Click] fixed handling of video input files with short file names (less than 6 characters including extension). Bug #3160645
 1913 [One-Click] chapters will not be added if output container is AVI
 1912 [One-Click] fixed handling of video input files without audio track. Bug #3159523
