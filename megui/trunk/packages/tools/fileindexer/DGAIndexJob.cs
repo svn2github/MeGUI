@@ -23,7 +23,7 @@ using System.Collections.Generic;
 
 namespace MeGUI
 {
-    public class DGAIndexJob : DGIndexJob
+    public class DGAIndexJob : IndexJob
     {
 		public DGAIndexJob():base()
 		{

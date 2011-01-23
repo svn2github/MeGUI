@@ -69,9 +69,40 @@ namespace MeGUI
             get
             {
                 StringBuilder sb = new StringBuilder();
+                if (job.DemuxMode > 0)
+                    sb.Append("-t -1 ");
                 sb.Append("-f \"" + job.Input + "\"");
                 return sb.ToString();
             }
+        }
+
+        protected override void doExitConfig()
+        {
+            if (job.DemuxMode > 0)
+            {
+                foreach (AudioTrackInfo oAudioTrack in job.AudioTracks)
+                {
+                    string strAudioAVSFile;
+                    strAudioAVSFile = job.Input + "_track_" + (oAudioTrack.Index + 1) + "_" + oAudioTrack.Language.ToLower() + ".avs";
+                    try
+                    {
+                        StreamWriter oAVSWriter = new StreamWriter(strAudioAVSFile, false, Encoding.Default);
+                        String strDLLPath = Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.FFMSIndexPath), "ffms2.dll");
+#if x86
+                        oAVSWriter.WriteLine("LoadPlugin(\"" + strDLLPath + "\")\r\nFFAudioSource(\"" + job.Input + "\", " + (oAudioTrack.Index + 1) + ")");
+#endif
+#if x64
+                        oAVSWriter.WriteLine("LoadCPlugin(\"" + strDLLPath + "\")\r\nFFAudioSource(\"" + job.Input + "\", " + (oAudioTrack.Index + 1) + ")");
+#endif
+                        oAVSWriter.Close();
+                    }
+                    catch (IOException ex)
+                    {
+                        log.LogValue("Error creating audio AVS file", ex);
+                    }
+                }
+            }
+            base.doExitConfig();
         }
     }
 }

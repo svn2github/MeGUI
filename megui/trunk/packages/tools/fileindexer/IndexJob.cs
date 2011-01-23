@@ -24,9 +24,9 @@ using System.Collections.Generic;
 namespace MeGUI
 {
 	/// <summary>
-	/// Summary description for DGIndexJob.
+	/// Summary description for IndexJob.
 	/// </summary>
-	public class DGIndexJob : Job
+	public class IndexJob : Job
 	{
 		private bool loadSources;
         private bool demuxVideo;
@@ -34,7 +34,7 @@ namespace MeGUI
         private List<AudioTrackInfo> audioTracks;
 		private DGIndexPostprocessingProperties postprocessingProperties;
 		
-		public DGIndexJob():base()
+		public IndexJob():base()
 		{
 			loadSources = false;
             demuxVideo = false;

@@ -166,8 +166,9 @@ namespace MeGUI
                     if (this.demuxTracks.Checked)
                         this.demuxAll.Checked = true;
                     this.demuxTracks.Enabled = false;
-                    this.gbOutput.Enabled = true;
                     this.gbAudio.Enabled = true;
+                    this.gbOutput.Enabled = true;
+                    this.demuxVideo.Enabled = true;
                     IndexerUsed = IndexType.DGI;
                     btnDGI.Checked = true;
                     break;
@@ -180,6 +181,7 @@ namespace MeGUI
                     if (this.demuxTracks.Checked)
                         this.demuxAll.Checked = true;
                     this.demuxTracks.Enabled = false;
+                    this.demuxVideo.Enabled = true;
                     IndexerUsed = IndexType.DGA;
                     btnDGA.Checked = true;
                     break;
@@ -190,6 +192,7 @@ namespace MeGUI
                     this.demuxTracks.Enabled = true;
                     this.gbOutput.Enabled = true;
                     this.gbAudio.Enabled = true;
+                    this.demuxVideo.Enabled = true;
                     IndexerUsed = IndexType.D2V;
                     btnD2V.Checked = true;
                     break;
@@ -198,9 +201,12 @@ namespace MeGUI
                 {
                     this.saveProjectDialog.Filter = "FFMSIndex project files|*.ffindex";
                     this.gbOutput.Enabled = false;
-                    this.gbAudio.Enabled = false;
-                    this.demuxNoAudiotracks.Checked = true;
+                    this.gbAudio.Enabled = true;
+                    if (this.demuxTracks.Checked)
+                        this.demuxAll.Checked = true;
+                    this.demuxTracks.Enabled = true;
                     this.demuxVideo.Checked = false;
+                    this.demuxVideo.Enabled = false;
                     IndexerUsed = IndexType.FFMS;
                     btnFFMS.Checked = true;
                     break;
@@ -208,6 +214,8 @@ namespace MeGUI
             }
             setOutputFileName();
             recommendSettings();
+            if (!demuxTracks.Checked)
+                rbtracks_CheckedChanged(null, null);
         }
 
 		/// <summary>
@@ -342,6 +350,7 @@ namespace MeGUI
             // 
             // demuxAll
             // 
+            this.demuxAll.Checked = true;
             this.demuxAll.Location = new System.Drawing.Point(304, 20);
             this.demuxAll.Name = "demuxAll";
             this.demuxAll.Size = new System.Drawing.Size(106, 17);
@@ -363,12 +372,10 @@ namespace MeGUI
             // 
             // demuxNoAudiotracks
             // 
-            this.demuxNoAudiotracks.Checked = true;
             this.demuxNoAudiotracks.Location = new System.Drawing.Point(19, 16);
             this.demuxNoAudiotracks.Name = "demuxNoAudiotracks";
             this.demuxNoAudiotracks.Size = new System.Drawing.Size(120, 24);
             this.demuxNoAudiotracks.TabIndex = 13;
-            this.demuxNoAudiotracks.TabStop = true;
             this.demuxNoAudiotracks.Text = "No Audio demux";
             this.demuxNoAudiotracks.CheckedChanged += new System.EventHandler(this.rbtracks_CheckedChanged);
             // 
@@ -696,26 +703,22 @@ namespace MeGUI
                 {
                     if (strContainerFormat.Equals("MPEG-PS"))
                     {
-                        demuxTracks.Checked = true;
                         demuxTracks.Enabled = true;
-                        AudioTracks.Enabled = true;
                     }
                     else
                     {
-                        AudioTracks.Enabled = false;
+                        if (demuxTracks.Checked)
+                            demuxAll.Checked = true;
+                        demuxTracks.Enabled = false;
                     }
-                }
-                else
-                {
-                    AudioTracks.Enabled = false;
-                    demuxTracks.Enabled = false;
                 }
             }
             else
             {
-                AudioTracks.Enabled = false;
                 demuxNoAudiotracks.Checked = true;
+                demuxTracks.Enabled = false;
             }
+            AudioTracks.Enabled = demuxTracks.Checked;
 
             if (IndexerUsed == IndexType.FFMS)
             {
@@ -774,7 +777,7 @@ namespace MeGUI
                         {
                             case IndexType.D2V:
                             {
-                                D2VIndexJob job = generateIndexJob();
+                                D2VIndexJob job = generateD2VIndexJob();
                                 lastJob = job;
                                 mainForm.Jobs.addJobsToQueue(job);
                                 if (this.closeOnQueue.Checked)
@@ -829,7 +832,7 @@ namespace MeGUI
 			else
                 queueButton.DialogResult = DialogResult.None;
 		}
-		private D2VIndexJob generateIndexJob()
+        private D2VIndexJob generateD2VIndexJob()
 		{
 			int demuxType = 0;
 			if (demuxTracks.Checked)
@@ -885,7 +888,21 @@ namespace MeGUI
         }
         private FFMSIndexJob generateFFMSIndexJob()
         {
-            return new FFMSIndexJob(this.input.Filename, loadOnComplete.Checked);
+            int demuxType = 0;
+            if (demuxTracks.Checked)
+                demuxType = 1;
+            else if (demuxNoAudiotracks.Checked)
+                demuxType = 0;
+            else
+                demuxType = 2;
+
+            List<AudioTrackInfo> audioTracks = new List<AudioTrackInfo>();
+            foreach (AudioTrackInfo ati in AudioTracks.CheckedItems)
+            {
+                audioTracks.Add(ati);
+            }
+
+            return new FFMSIndexJob(this.input.Filename, demuxType, audioTracks, null, loadOnComplete.Checked);
         }
 		#endregion
 		#region properties
@@ -894,7 +911,7 @@ namespace MeGUI
 		/// </summary>
 		public D2VIndexJob Job
 		{
-			get {return generateIndexJob();}
+            get { return generateD2VIndexJob(); }
 		}
         
         public D2VIndexJob LastJob
@@ -1099,10 +1116,21 @@ namespace MeGUI
             FFMSIndexJob job = (FFMSIndexJob)ajob;
 
             StringBuilder logBuilder = new StringBuilder();
-            //VideoUtil vUtil = new VideoUtil(mainForm);
-
+            VideoUtil vUtil = new VideoUtil(mainForm);
+            List<string> arrFilesToDelete = new List<string>();
+            Dictionary<int, string> audioFiles = vUtil.getAllDemuxedAudio(job.AudioTracks, out arrFilesToDelete, job.Output, null);
             if (job.LoadSources)
             {
+                if (job.DemuxMode != 0 && audioFiles.Count > 0)
+                {
+                    string[] files = new string[audioFiles.Values.Count];
+                    audioFiles.Values.CopyTo(files, 0);
+                    Util.ThreadSafeRun(mainForm, new MethodInvoker(
+                        delegate
+                        {
+                            mainForm.Audio.openAudioFile(files);
+                        }));
+                }
                 // if the above needed delegation for openAudioFile this needs it for openVideoFile?
                 // It seems to fix the problem of ASW dissapearing as soon as it appears on a system (Vista X64)
                 Util.ThreadSafeRun(mainForm, new MethodInvoker(

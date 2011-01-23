@@ -1,3 +1,5 @@
+1916 [FileIndexer] added demux option to the audio tracks when using FFMSIndex
+                   these audio tracks will be added to the main input tab if "on completion load files" is selected. Feature request #3158957
 1915 [VideoPlayer] changed zoom and size behavior
                    fixed starting preview size so that it will always match the screen resolution. Bug #3159086
                    changed seek bar and buttons behavior. Feature request #3003726

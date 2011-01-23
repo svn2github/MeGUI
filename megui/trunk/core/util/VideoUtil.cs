@@ -530,6 +530,8 @@ namespace MeGUI
                 string trackFile = strTrackName + audioTracks[counter].TrackIDx + "*";
                 if (Path.GetExtension(projectName).ToLower().Equals(".dga"))
                     trackFile = Path.GetFileName(projectName) + trackFile;
+                else if (Path.GetExtension(projectName).ToLower().Equals(".ffindex"))
+                    trackFile = Path.GetFileNameWithoutExtension(projectName) + "_track_" + (audioTracks[counter].Index + 1) + "_*.avs";
                 else
                     trackFile = Path.GetFileNameWithoutExtension(projectName) + trackFile;
                     
@@ -543,6 +545,7 @@ namespace MeGUI
                          file.EndsWith(".mpa") ||
                          file.EndsWith(".dts") ||
                          file.EndsWith(".wav") ||
+                         file.EndsWith(".avs") ||
                          file.EndsWith(".aac")) // It is the right track
 					{
                         bFound = true;
@@ -571,6 +574,7 @@ namespace MeGUI
                      file.EndsWith(".mpa") ||
                      file.EndsWith(".dts") ||
                      file.EndsWith(".wav") ||
+                     file.EndsWith(".avs") ||
                      file.EndsWith(".aac")) // It is the right track
                 {
                     if (!audioFiles.ContainsValue(file))

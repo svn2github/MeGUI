@@ -724,7 +724,7 @@
     <Compile Include="packages\tools\cutter\Cutter.Designer.cs">
       <DependentUpon>Cutter.cs</DependentUpon>
     </Compile>
-	<Compile Include="packages\tools\fileindexer\DGIndexJob.cs" />
+	<Compile Include="packages\tools\fileindexer\IndexJob.cs" />
     <Compile Include="packages\tools\fileindexer\D2VIndexer.cs" />
     <Compile Include="packages\tools\fileindexer\D2VIndexJob.cs" />
     <Compile Include="packages\tools\fileindexer\DGAIndexer.cs" />

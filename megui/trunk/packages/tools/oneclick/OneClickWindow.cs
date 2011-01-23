@@ -696,9 +696,9 @@ namespace MeGUI
         #region postprocessor
         private static LogItem postprocess(MainForm mainForm, Job job)
         {
-            if (job is DGIndexJob)
+            if (job is IndexJob)
             {
-                DGIndexJob ijob = (DGIndexJob)job;
+                IndexJob ijob = (IndexJob)job;
                 if (ijob.PostprocessingProperties == null)
                     return null;
                 OneClickPostProcessor p = new OneClickPostProcessor(mainForm, ijob);
@@ -714,7 +714,7 @@ namespace MeGUI
         Dictionary<int, string> audioFiles;
         private JobUtil jobUtil;
         private VideoUtil vUtil;
-        private DGIndexJob job;
+        private IndexJob job;
         private AVCLevels al = new AVCLevels();
         private bool finished = false;
         private bool interlaced = false;
@@ -722,7 +722,7 @@ namespace MeGUI
         private LogItem log = new LogItem("OneClick postprocessor", ImageType.Information);
         string qpfile = string.Empty;
         
-        public OneClickPostProcessor(MainForm mainForm, DGIndexJob ijob)
+        public OneClickPostProcessor(MainForm mainForm, IndexJob ijob)
         {
             this.job = ijob;
             this.mainForm = mainForm;

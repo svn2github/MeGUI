@@ -26,7 +26,7 @@ namespace MeGUI
 	/// <summary>
 	/// Summary description for D2VIndexJob.
 	/// </summary>
-	public class D2VIndexJob : DGIndexJob
+	public class D2VIndexJob : IndexJob
 	{	
 		public D2VIndexJob():base()
 		{

@@ -23,32 +23,25 @@ using System.Collections.Generic;
 
 namespace MeGUI
 {
-    public class FFMSIndexJob : Job
+    public class FFMSIndexJob : IndexJob
     {
-        private bool loadSources;
-
         public FFMSIndexJob()
             : base()
         {
-            loadSources = false;
         }
 
-        public FFMSIndexJob(string input, bool loadSources)
+        public FFMSIndexJob(string input, int demuxType, List<AudioTrackInfo> audioTracks, DGIndexPostprocessingProperties properties, bool loadSources) : base()
         {
             Input = input;
             LoadSources = loadSources;
             Output = input + ".ffindex";
-        }
 
-        /// <summary>
-        /// gets / sets whether the audio and video files should be loaded after indexing
-        /// </summary>
-        public bool LoadSources
-        {
-            get { return loadSources; }
-            set { loadSources = value; }
+            DemuxMode = demuxType;
+            AudioTracks = audioTracks;
+            PostprocessingProperties = properties;
+            DemuxVideo = false;
         }
-        
+       
         public override string CodecString
         {
             get { return ""; }

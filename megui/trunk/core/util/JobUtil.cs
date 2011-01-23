@@ -325,7 +325,7 @@ namespace MeGUI
                 {
                     return null;
                 }
-                indexJob = new FFMSIndexJob(hfyuFile, false);
+                indexJob = new FFMSIndexJob(hfyuFile, 0, null, null, false);
                 prerenderJob = this.generateVideoJob(movieInput, hfyuFile, new hfyuSettings(), dar, zones);
                 if (prerenderJob == null)
                     return null;
