@@ -425,10 +425,13 @@ namespace MeGUI
             }
             SuspendLayout();
             sizeLock = true;
-            this.Size = new Size(this.videoWindowWidth, this.videoWindowHeight + formHeightDelta);
+            if (this.videoWindowWidth < buttonPanel.Size.Width)
+                this.Size = new Size(buttonPanel.Size.Width, this.videoWindowHeight + formHeightDelta);
+            else
+                this.Size = new Size(this.videoWindowWidth, this.videoWindowHeight + formHeightDelta);
             sizeLock = false;
 			this.videoPreview.Size = new Size(this.videoWindowWidth, this.videoWindowHeight);
-            this.positionSlider.Size = new Size(videoPreview.Size.Width - 2 * defaultSpacing, positionSlider.Size.Height);
+            this.positionSlider.Size = new Size(videoPreview.Size.Width, positionSlider.Size.Height);
             this.positionSlider.Location = new Point(0, videoPreview.Size.Height);
             this.buttonPanel.Location = new Point(0, positionSlider.Location.Y + positionSlider.Size.Height);
             ResumeLayout();
@@ -819,7 +822,6 @@ namespace MeGUI
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(368, 416);
             this.Name = "VideoPlayer";
             this.Text = "VideoPlayer";
             this.Shown += new System.EventHandler(this.VideoPlayer_Shown);
