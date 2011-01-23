@@ -48,7 +48,21 @@ namespace MeGUI
         protected override void checkJobIO()
         {
             base.checkJobIO();
+            if (File.Exists(job.Input) && Path.GetExtension(job.Input).ToLower().Equals(".avs"))
+            {
+                string strAVSFile = String.Empty;
+                try
+                {
+                    StreamReader sr = new StreamReader(job.Input);
+                    strAVSFile = sr.ReadToEnd();
+                    sr.Close();
+                }
+                catch (Exception)
+                {
 
+                }
+                log.LogValue("Avisynth input script", strAVSFile);
+            }
             su.Status = "Encoding video...";
             getInputProperties(job);
         }

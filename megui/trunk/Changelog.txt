@@ -1,3 +1,4 @@
+1920 [Log] the content of an avs input file will be added to the log
 1919 [VideoPlayer] some sizing adjustments
 1918 [One-Click] added the FFMSIndexer so that e.g. most AVI and MKV files are now supported.
                  if the FFMSIndexer is used the audio track must be encoded and cannot be muxed only.
