@@ -78,7 +78,7 @@ namespace MeGUI
 
         protected override void doExitConfig()
         {
-            if (job.DemuxMode > 0)
+            if (job.DemuxMode > 0 && !su.HasError && !su.WasAborted)
             {
                 foreach (AudioTrackInfo oAudioTrack in job.AudioTracks)
                 {
