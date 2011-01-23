@@ -1,3 +1,4 @@
+1921 [pre-rendering job] fixed a crash problem introtruced 1916
 1920 [Log] the content of an avs input file will be added to the log
 1919 [VideoPlayer] some sizing adjustments
 1918 [One-Click] added the FFMSIndexer so that e.g. most AVI and MKV files are now supported.
@@ -12,6 +13,7 @@
 1914 [One-Click] fixed handling of video input files with short file names (less than 6 characters including extension). Bug #3160645
 1913 [One-Click] chapters will not be added if output container is AVI
 1912 [One-Click] fixed handling of video input files without audio track. Bug #3159523
+
 
 Changelog 0.3.5.0 --> 1911
 

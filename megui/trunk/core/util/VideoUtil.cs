@@ -514,7 +514,7 @@ namespace MeGUI
             string strTrackName;
             string[] files;
 
-            if (audioTracks.Count == 0)
+            if (audioTracks == null || audioTracks.Count == 0)
                 return audioFiles;
 
             if (audioTracks[0].ContainerType.ToLower().Equals("matroska"))

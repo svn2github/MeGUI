@@ -58,7 +58,7 @@ namespace MeGUI
                     if (DateTime.Now - f.LastWriteTime > new TimeSpan(7, 0, 0, 0, 0))
                     {
                         f.Delete();
-                        oUpdate.AddTextToLog("Deleted cache file " + f.Name, ImageType.Information);
+                        oUpdate.AddTextToLog("Deleted cached file " + f.Name, ImageType.Information);
                     }
                 }
             }

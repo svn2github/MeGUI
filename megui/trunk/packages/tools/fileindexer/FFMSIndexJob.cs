@@ -37,7 +37,10 @@ namespace MeGUI
             Output = input + ".ffindex";
 
             DemuxMode = demuxType;
-            AudioTracks = audioTracks;
+            if (audioTracks == null)
+                AudioTracks = new List<AudioTrackInfo>();
+            else
+                AudioTracks = audioTracks;
             PostprocessingProperties = properties;
             DemuxVideo = false;
         }
