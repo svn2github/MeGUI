@@ -1,3 +1,5 @@
+1918 [One-Click] added the FFMSIndexer so that e.g. most AVI and MKV files are now supported.
+                 if the FFMSIndexer is used the audio track must be encoded and cannot be muxed only.
 1917 [FFMSIndexer] audio avs files will only be created if the indexing was successfull
 1916 [FileIndexer] added demux option to the audio tracks when using FFMSIndex
                    these audio tracks will be added to the main input tab if "on completion load files" is selected. Feature request #3158957

@@ -45,7 +45,7 @@ namespace MeGUI
     public delegate void UpdateGUIStatusCallback(StatusUpdate su); // catches the UpdateGUI events fired from the encoder
     public enum FileType
     {
-        VIDEOINPUT, AUDIOINPUT, FFMSINDEXABLE, INDEXABLEVIDEO, OTHERVIDEO, ZIPPED_PROFILES, NONE
+        VIDEOINPUT, AUDIOINPUT, INDEXABLEVIDEO, OTHERVIDEO, ZIPPED_PROFILES, NONE
     };
     public enum ProcessingStatus
     {
@@ -429,7 +429,7 @@ namespace MeGUI
             this.logTree1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.logTree1.Location = new System.Drawing.Point(0, 0);
             this.logTree1.Name = "logTree1";
-            this.logTree1.Size = new System.Drawing.Size(500, 473);
+            this.logTree1.Size = new System.Drawing.Size(192, 74);
             this.logTree1.TabIndex = 0;
             // 
             // mnuMuxers
@@ -1339,10 +1339,8 @@ namespace MeGUI
             }
 
             MediaInfoFile iFile = new MediaInfoFile(fileName);
-            if (iFile.isD2VIndexable() || iFile.isDGIIndexable() || iFile.isDGAIndexable())
+            if (iFile.isD2VIndexable() || iFile.isDGIIndexable() || iFile.isDGAIndexable() || iFile.isFFMSIndexable())
                 return FileType.INDEXABLEVIDEO;
-            else if (iFile.isFFMSIndexable())
-                return FileType.FFMSINDEXABLE;
             else
                 return FileType.OTHERVIDEO;
         }
@@ -1358,9 +1356,6 @@ namespace MeGUI
                     break;
                 case FileType.INDEXABLEVIDEO:
                     openDGIndexFile(file);
-                    break;
-                case FileType.FFMSINDEXABLE:
-                    openD2VCreatorFile(file);
                     break;
                 case FileType.OTHERVIDEO:
                     openOtherVideoFile(file);

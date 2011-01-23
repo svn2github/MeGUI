@@ -160,16 +160,15 @@ namespace MeGUI
 
             showAdvancedOptions_CheckedChanged(null, null);
 
-            if (File.Exists(MainForm.Instance.Settings.DgnvIndexPath) &&
-                File.Exists(Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.DgnvIndexPath), "license.txt")))
+            if (VideoUtil.isDGIIndexerAvailable())
             {
-                input.Filter = "All DGAVCIndex supported files|*.264;*.h264;*.avc;*.m2t*;*.m2ts;*.mts;*.tp;*.ts;*.trp|All DGIndex supported files|*.vob;*.mpg;*.mpeg;*.m1v;*.m2v;*.mpv;*.tp;*.ts;*.trp;*.m2t;*.m2ts;*.pva;*.vro|All DGIndexNV supported files|*.264;*.h264;*.avc;*.m2v;*.mpv;*.vc1;*.mkv;*.vob;*.mpg;*.mpeg;*.m2t;*.m2ts;*.mts;*.tp;*.ts;*.trp|All supported files|*.mkv;*.264;*.h264;*.avc;*.m2t*;*.m2ts;*.mts;*.tp;*.ts;*.trp;*.vob;*.mpg;*.mpeg;*.m1v;*.m2v;*.mpv;*.pva;*.vro;*.vc1|All files|*.*";
-                input.FilterIndex = 4;
+                input.Filter = "All DGAVCIndex supported files|*.264;*.h264;*.avc;*.m2t*;*.m2ts;*.mts;*.tp;*.ts;*.trp|All DGIndex supported files|*.vob;*.mpg;*.mpeg;*.m1v;*.m2v;*.mpv;*.tp;*.ts;*.trp;*.m2t;*.m2ts;*.pva;*.vro|All DGIndexNV supported files|*.264;*.h264;*.avc;*.m2v;*.mpv;*.vc1;*.mkv;*.vob;*.mpg;*.mpeg;*.m2t;*.m2ts;*.mts;*.tp;*.ts;*.trp|All FFMS Indexer supported files|*.mkv;*.avi;*.mp4;*.flv;*.wmv;*.ogm;*.vob;*.mpg;*.m2ts;*.ts|All supported files|*.mkv;*.avi;*.mp4;*.flv;*.wmv;*.ogm;*.264;*.h264;*.avc;*.m2t*;*.m2ts;*.mts;*.tp;*.ts;*.trp;*.vob;*.mpg;*.mpeg;*.m1v;*.m2v;*.mpv;*.pva;*.vro;*.vc1|All files|*.*";
+                input.FilterIndex = 5;
             }
             else
             {
-                input.Filter = "All DGAVCIndex supported files|*.264;*.h264;*.avc;*.m2t*;*.m2ts;*.mts;*.tp;*.ts;*.trp|All DGIndex supported files|*.vob;*.mpg;*.mpeg;*.m1v;*.m2v;*.mpv;*.tp;*.ts;*.trp;*.m2t;*.m2ts;*.pva;*.vro|All supported files|*.mkv;*.264;*.h264;*.avc;*.m2t*;*.m2ts;*.mts;*.tp;*.ts;*.trp;*.vob;*.mpg;*.mpeg;*.m1v;*.m2v;*.mpv;*.pva;*.vro|All files|*.*";
-                input.FilterIndex = 3;
+                input.Filter = "All DGAVCIndex supported files|*.264;*.h264;*.avc;*.m2t*;*.m2ts;*.mts;*.tp;*.ts;*.trp|All DGIndex supported files|*.vob;*.mpg;*.mpeg;*.m1v;*.m2v;*.mpv;*.tp;*.ts;*.trp;*.m2t;*.m2ts;*.pva;*.vro|All FFMS Indexer supported files|*.mkv;*.avi;*.mp4;*.flv;*.wmv;*.ogm;*.vob;*.mpg;*.m2ts;*.ts|All supported files|*.mkv;*.avi;*.mp4;*.flv;*.wmv;*.ogm;*.264;*.h264;*.avc;*.m2t*;*.m2ts;*.mts;*.tp;*.ts;*.trp;*.vob;*.mpg;*.mpeg;*.m1v;*.m2v;*.mpv;*.pva;*.vro|All files|*.*";
+                input.FilterIndex = 4;
             }
         }
         #endregion
@@ -238,7 +237,7 @@ namespace MeGUI
         public void openInput(string fileName)
         {
             MediaInfoFile iFile = new MediaInfoFile(fileName);
-            if (!iFile.recommendIndexer(out oIndexerToUse, true))
+            if (!iFile.recommendIndexer(out oIndexerToUse, false))
             {
                 input.Filename = "";
                 MessageBox.Show("This file cannot be used in OneClick mode.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -406,7 +405,8 @@ namespace MeGUI
                 ignoreRestrictions = false;
 
                 foreach (AudioConfigControl a in audioConfigControl)
-                    a.DontEncode = settings.DontEncodeAudio;
+                    if (a.IsDontEncodePossible() == true)
+                        a.DontEncode = settings.DontEncodeAudio;
                 
                 // bools
                 signalAR.Checked = settings.SignalAR;
@@ -419,7 +419,8 @@ namespace MeGUI
 
                 splitting.Value = settings.SplitSize;
                 optionalTargetSizeBox1.Value = settings.Filesize;
-                horizontalResolution.Value = settings.OutputResolution;
+                if (settings.OutputResolution <= horizontalResolution.Maximum)
+                    horizontalResolution.Value = settings.OutputResolution;
 
                 // device type
                 devicetype.Text = settings.DeviceOutputType;
@@ -504,6 +505,11 @@ namespace MeGUI
                     {
                         string d2vName = Path.Combine(workingDirectory.Filename, workingName.Text + ".dgi");
                         DGIIndexJob job = new DGIIndexJob(input.Filename, d2vName, 2, audioTracks, dpp, false, false);
+                        mainForm.Jobs.addJobsToQueue(job);
+                    }
+                    else if (oIndexerToUse == FileIndexerWindow.IndexType.FFMS)
+                    {
+                        FFMSIndexJob job = new FFMSIndexJob(input.Filename, 2, audioTracks, dpp, false);
                         mainForm.Jobs.addJobsToQueue(job);
                     }
                     if (this.openOnQueue.Checked)
@@ -616,6 +622,10 @@ namespace MeGUI
             if (!track.SelectedSCItem.IsStandard)
                 audioConfigControl[i].openAudioFile((string)track.SelectedObject);
             audioConfigControl[i].DelayEnabled = !track.SelectedSCItem.IsStandard;
+            if (oIndexerToUse == FileIndexerWindow.IndexType.FFMS && track.SelectedSCItem.IsStandard)
+                audioConfigControl[i].DisableDontEncode(true);
+            else
+                audioConfigControl[i].DisableDontEncode(false);
         }
         
         private void audio1_SomethingChanged(object sender, EventArgs e)
@@ -886,6 +896,11 @@ namespace MeGUI
             {
                 d2v = new dgaFile(path);
                 oPossibleSource = PossibleSources.dga;
+            }
+            else if (job is FFMSIndexJob)
+            {
+                d2v = new ffmsFile(path);
+                oPossibleSource = PossibleSources.ffindex;
             }
             else
             {

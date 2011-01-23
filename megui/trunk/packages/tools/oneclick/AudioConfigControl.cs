@@ -110,6 +110,23 @@ namespace MeGUI.packages.tools.oneclick
             }
         }
 
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public void DisableDontEncode(bool bDisable)
+        {
+            if (bDisable)
+                dontEncodeAudio.Checked = dontEncodeAudio.Enabled = false;
+            else
+                dontEncodeAudio.Enabled = true;
+        }
+
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public bool IsDontEncodePossible()
+        {
+            return dontEncodeAudio.Enabled;
+        }
+
         public void SelectProfileNameOrWarn(string fqname)
         {
             audioProfile.SetProfileNameOrWarn(fqname);
