@@ -988,6 +988,7 @@ namespace MeGUI
 			if (this.playButton.Text.Equals("Play"))
 			{
 				this.playButton.Text = "Stop";
+                videoPreview.EnsureCorrectPlaybackSpeed = mainForm.Settings.EnsureCorrectPlaybackSpeed;
                 videoPreview.Play();
 			}
 			else

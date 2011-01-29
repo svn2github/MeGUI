@@ -131,6 +131,7 @@ namespace MeGUI
         private ToolTip toolTipHelp;
         private IContainer components;
         private CheckBox chkEnable64bitX264;
+        private CheckBox chkEnsureCorrectPlaybackSpeed;
         private XmlDocument ContextHelp = new XmlDocument();
 		#region start / stop
 		public SettingsForm()
@@ -308,6 +309,7 @@ namespace MeGUI
             this.autoEncodeDefaultsButton = new System.Windows.Forms.Button();
             this.toolTipHelp = new System.Windows.Forms.ToolTip(this.components);
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
+            this.chkEnsureCorrectPlaybackSpeed = new System.Windows.Forms.CheckBox();
             groupBox1 = new System.Windows.Forms.GroupBox();
             groupBox1.SuspendLayout();
             this.otherGroupBox.SuspendLayout();
@@ -341,7 +343,7 @@ namespace MeGUI
             groupBox1.Controls.Add(this.donothing);
             groupBox1.Location = new System.Drawing.Point(4, 187);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new System.Drawing.Size(217, 117);
+            groupBox1.Size = new System.Drawing.Size(217, 95);
             groupBox1.TabIndex = 2;
             groupBox1.TabStop = false;
             groupBox1.Text = "After encoding";
@@ -349,7 +351,7 @@ namespace MeGUI
             // rbCloseMeGUI
             // 
             this.rbCloseMeGUI.AutoSize = true;
-            this.rbCloseMeGUI.Location = new System.Drawing.Point(123, 47);
+            this.rbCloseMeGUI.Location = new System.Drawing.Point(123, 43);
             this.rbCloseMeGUI.Name = "rbCloseMeGUI";
             this.rbCloseMeGUI.Size = new System.Drawing.Size(84, 17);
             this.rbCloseMeGUI.TabIndex = 4;
@@ -360,7 +362,7 @@ namespace MeGUI
             // command
             // 
             this.command.Enabled = false;
-            this.command.Location = new System.Drawing.Point(10, 75);
+            this.command.Location = new System.Drawing.Point(10, 64);
             this.command.Name = "command";
             this.command.Size = new System.Drawing.Size(197, 21);
             this.command.TabIndex = 3;
@@ -368,7 +370,7 @@ namespace MeGUI
             // runCommand
             // 
             this.runCommand.AutoSize = true;
-            this.runCommand.Location = new System.Drawing.Point(11, 47);
+            this.runCommand.Location = new System.Drawing.Point(11, 43);
             this.runCommand.Name = "runCommand";
             this.runCommand.Size = new System.Drawing.Size(96, 17);
             this.runCommand.TabIndex = 2;
@@ -834,11 +836,12 @@ namespace MeGUI
             // 
             // gbVideoPreview
             // 
+            this.gbVideoPreview.Controls.Add(this.chkEnsureCorrectPlaybackSpeed);
             this.gbVideoPreview.Controls.Add(this.cbAddTimePos);
             this.gbVideoPreview.Controls.Add(this.chAlwaysOnTop);
-            this.gbVideoPreview.Location = new System.Drawing.Point(4, 309);
+            this.gbVideoPreview.Location = new System.Drawing.Point(4, 288);
             this.gbVideoPreview.Name = "gbVideoPreview";
-            this.gbVideoPreview.Size = new System.Drawing.Size(217, 69);
+            this.gbVideoPreview.Size = new System.Drawing.Size(217, 90);
             this.gbVideoPreview.TabIndex = 4;
             this.gbVideoPreview.TabStop = false;
             this.gbVideoPreview.Text = "Video Preview";
@@ -1000,7 +1003,7 @@ namespace MeGUI
             // 
             this.configAutoEncodeDefaults.AutoSize = true;
             this.configAutoEncodeDefaults.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.configAutoEncodeDefaults.Location = new System.Drawing.Point(11, 43);
+            this.configAutoEncodeDefaults.Location = new System.Drawing.Point(14, 47);
             this.configAutoEncodeDefaults.Name = "configAutoEncodeDefaults";
             this.configAutoEncodeDefaults.Size = new System.Drawing.Size(179, 23);
             this.configAutoEncodeDefaults.TabIndex = 5;
@@ -1017,7 +1020,7 @@ namespace MeGUI
             this.keep2ndPassLogFile.Name = "keep2ndPassLogFile";
             this.keep2ndPassLogFile.Size = new System.Drawing.Size(176, 17);
             this.keep2ndPassLogFile.TabIndex = 4;
-            this.keep2ndPassLogFile.Text = "Overwrite Stats File in 3rd Pass";
+            this.keep2ndPassLogFile.Text = "Overwrite Stats File in 3rd pass";
             this.keep2ndPassLogFile.UseVisualStyleBackColor = true;
             // 
             // keep2ndPassOutput
@@ -1318,6 +1321,16 @@ namespace MeGUI
             this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 1;
             // 
+            // chkEnsureCorrectPlaybackSpeed
+            // 
+            this.chkEnsureCorrectPlaybackSpeed.AutoSize = true;
+            this.chkEnsureCorrectPlaybackSpeed.Location = new System.Drawing.Point(8, 63);
+            this.chkEnsureCorrectPlaybackSpeed.Name = "chkEnsureCorrectPlaybackSpeed";
+            this.chkEnsureCorrectPlaybackSpeed.Size = new System.Drawing.Size(173, 17);
+            this.chkEnsureCorrectPlaybackSpeed.TabIndex = 2;
+            this.chkEnsureCorrectPlaybackSpeed.Text = "Ensure correct playback speed";
+            this.chkEnsureCorrectPlaybackSpeed.UseVisualStyleBackColor = true;
+            // 
             // SettingsForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
@@ -1471,6 +1484,7 @@ namespace MeGUI
 				settings.DefaultLanguage2 = defaultLanguage2.Text;
 				settings.AutoForceFilm = autoForceFilm.Checked;
                 settings.AutoLoadDG = cbAutoLoadDG.Checked;
+                settings.EnsureCorrectPlaybackSpeed = chkEnsureCorrectPlaybackSpeed.Checked;
 				settings.ForceFilmThreshold = forceFilmPercentage.Value;
 				settings.DefaultPriority = (ProcessPriority)priority.SelectedIndex;
 				settings.AutoStartQueue = this.autostartQueue.Checked;
@@ -1525,6 +1539,7 @@ namespace MeGUI
                 chkboxUseAdvancedTooltips.Checked = settings.UseAdvancedTooltips;
                 videoExtension.Text = settings.VideoExtension;
                 audioExtension.Text = settings.AudioExtension;
+                chkEnsureCorrectPlaybackSpeed.Checked = settings.EnsureCorrectPlaybackSpeed;
 				int index = this.defaultLanguage1.Items.IndexOf(settings.DefaultLanguage1);
 				if (index != -1)
 					defaultLanguage1.SelectedIndex = index;

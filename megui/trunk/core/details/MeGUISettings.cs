@@ -45,7 +45,7 @@ namespace MeGUI
                      overwriteStats, keep2of3passOutput, autoUpdate, deleteCompletedJobs, deleteIntermediateFiles,
                      deleteAbortedOutput, openProgressWindow, useadvancedtooltips, freshOggEnc2, autoscroll, 
                      alwaysOnTop, safeProfileAlteration, usehttpproxy, addTimePosition, alwaysbackupfiles,
-                     forcerawavcextension, bAutoLoadDG, bAutoStartQueueStartup, bAlwaysMuxMKV, b64bitX264;
+                     forcerawavcextension, bAutoLoadDG, bAutoStartQueueStartup, bAlwaysMuxMKV, b64bitX264, bEnsureCorrectPlaybackSpeed;
         private ulong audioSamplesPerUpdate;
         private AfterEncoding afterEncoding;
         private decimal forceFilmThreshold, acceptableFPSError;
@@ -167,6 +167,7 @@ namespace MeGUI
             startColumnWidth = 55;
             endColumnWidth = 55;
             fpsColumnWidth = 35;
+            bEnsureCorrectPlaybackSpeed = false;
         }
 
         private string getDownloadPath(string strPath)
@@ -302,6 +303,15 @@ namespace MeGUI
         {
             get { return autoscroll; }
             set { autoscroll = value; }
+        }
+
+        /// <summary>
+        /// Gets / sets whether the playback speed in video preview should match the fps
+        /// </summary>
+        public bool EnsureCorrectPlaybackSpeed
+        {
+            get { return bEnsureCorrectPlaybackSpeed; }
+            set { bEnsureCorrectPlaybackSpeed = value; }
         }
 
         public bool SafeProfileAlteration
