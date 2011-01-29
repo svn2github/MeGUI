@@ -1,3 +1,4 @@
+1923 [AVS Script Creator] new video player will be started with previewing the middle of the video
 1922 [Update] deprecated update cache files will be deleted 60 days after they have been downloaded
 1921 [pre-rendering job] fixed a problem introduced in 1916
 1920 [Log] the content of an avs input file will be added to the log
