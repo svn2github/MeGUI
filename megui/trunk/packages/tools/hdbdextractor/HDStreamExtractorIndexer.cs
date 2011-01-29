@@ -76,6 +76,11 @@ namespace MeGUI
             }
         }
 
+        protected override void checkJobIO()
+        {
+            // do nothing
+        }
+
         public override void ProcessLine(string line, StreamType stream)
         {
             if (line.StartsWith("process: ")) //status update

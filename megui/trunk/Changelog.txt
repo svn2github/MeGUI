@@ -1,3 +1,4 @@
+1927 [HD Streams Extractor] fixed processing of joined input files. Bug #3164153
 1926 [FFMSIndexer] improved audio track number detection. Bug #3165894
 1925 [Settings] added option to ensure correct playback speed while playing the video preview (defaults to disabled) 
 1924 [VideoPlayer] fixed invisible video pixels at the right (7) and bottom (1). Bug #3164635
