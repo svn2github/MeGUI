@@ -55,7 +55,7 @@ namespace MeGUI
             {
                 if (urls.IndexOf(f.Name.ToLower()) < 0)
                 {
-                    if (DateTime.Now - f.LastWriteTime > new TimeSpan(7, 0, 0, 0, 0))
+                    if (DateTime.Now - f.LastWriteTime > new TimeSpan(60, 0, 0, 0, 0))
                     {
                         f.Delete();
                         oUpdate.AddTextToLog("Deleted cached file " + f.Name, ImageType.Information);
