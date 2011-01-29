@@ -1,3 +1,6 @@
+1924 [VideoPlayer] fixed invisible video pixels at the right (7) and bottom (1). Bug #3164635
+                   added 1:1 video preview. Feature request #3164305
+                   some adjustments
 1923 [AVS Script Creator] new video player will be started with previewing the middle of the video
 1922 [Update] deprecated update cache files will be deleted 60 days after they have been downloaded
 1921 [pre-rendering job] fixed a problem introduced in 1916
