@@ -78,28 +78,49 @@ namespace MeGUI
 
         protected override void doExitConfig()
         {
-            if (job.DemuxMode > 0 && !su.HasError && !su.WasAborted)
+            if (job.DemuxMode > 0 && !su.HasError && !su.WasAborted && job.AudioTracks.Count > 0)
             {
-                foreach (AudioTrackInfo oAudioTrack in job.AudioTracks)
+                int iTracksFound = 0;
+                int iCurrentAudioTrack = -1;
+                for (int iCurrentTrack = 0; iCurrentTrack <= 29; iCurrentTrack++) // hard limit to max. 30 tracks
                 {
-                    string strAudioAVSFile;
-                    strAudioAVSFile = job.Input + "_track_" + (oAudioTrack.Index + 1) + "_" + oAudioTrack.Language.ToLower() + ".avs";
-                    try
-                    {
-                        StreamWriter oAVSWriter = new StreamWriter(strAudioAVSFile, false, Encoding.Default);
-                        String strDLLPath = Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.FFMSIndexPath), "ffms2.dll");
+                    StringBuilder strAVSScript = new StringBuilder();
+                    String strDLLPath = Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.FFMSIndexPath), "ffms2.dll");
 #if x86
-                        oAVSWriter.WriteLine("LoadPlugin(\"" + strDLLPath + "\")\r\nFFAudioSource(\"" + job.Input + "\", " + (oAudioTrack.Index + 1) + ")");
+                    strAVSScript.AppendLine("LoadPlugin(\"" + strDLLPath + "\")");
 #endif
 #if x64
-                        oAVSWriter.WriteLine("LoadCPlugin(\"" + strDLLPath + "\")\r\nFFAudioSource(\"" + job.Input + "\", " + (oAudioTrack.Index + 1) + ")");
+                    strAVSScript.AppendLine("LoadCPlugin(\"" + strDLLPath + "\")");
 #endif
-                        oAVSWriter.Close();
-                    }
-                    catch (IOException ex)
+                    strAVSScript.Append("FFAudioSource(\"" + job.Input + "\", " + iCurrentTrack + ")");
+
+                    // is this an audio track?
+                    if (AudioUtil.AVSScriptHasAudio(strAVSScript.ToString()) == false)
+                        continue;
+                    iCurrentAudioTrack++;
+
+                    foreach (AudioTrackInfo oAudioTrack in job.AudioTracks)
                     {
-                        log.LogValue("Error creating audio AVS file", ex);
+                        if (oAudioTrack.Index != iCurrentAudioTrack)
+                            continue;
+
+                        // write avs file
+                        string strAudioAVSFile;
+                        strAudioAVSFile = job.Input + "_track_" + iCurrentTrack + "_" + oAudioTrack.Language.ToLower() + ".avs";
+                        try
+                        {
+                            StreamWriter oAVSWriter = new StreamWriter(strAudioAVSFile, false, Encoding.Default);
+                            oAVSWriter.Write(strAVSScript);
+                            oAVSWriter.Close();
+                        }
+                        catch (IOException ex)
+                        {
+                            log.LogValue("Error creating audio AVS file", ex);
+                        }
+                        break;
                     }
+                    if (++iTracksFound == job.AudioTracks.Count)
+                        break;
                 }
             }
             base.doExitConfig();

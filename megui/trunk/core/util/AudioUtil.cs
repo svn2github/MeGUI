@@ -148,6 +148,22 @@ namespace MeGUI
             }
             return list.ToArray();
         }
+
+        public static bool AVSScriptHasAudio(String strAVSScript)
+        {
+            try
+            {
+                using (AviSynthScriptEnvironment env = new AviSynthScriptEnvironment())
+                    using (AviSynthClip a = env.ParseScript(strAVSScript))
+                        if (a.ChannelsCount == 0)
+                            return false;
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 
     public class AudioTrackInfo
