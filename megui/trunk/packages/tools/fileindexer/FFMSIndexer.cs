@@ -106,7 +106,7 @@ namespace MeGUI
 
                         // write avs file
                         string strAudioAVSFile;
-                        strAudioAVSFile = job.Input + "_track_" + iCurrentTrack + "_" + oAudioTrack.Language.ToLower() + ".avs";
+                        strAudioAVSFile = job.Input + "_track_" + (oAudioTrack.Index + 1) + "_" + oAudioTrack.Language.ToLower() + ".avs";
                         try
                         {
                             StreamWriter oAVSWriter = new StreamWriter(strAudioAVSFile, false, Encoding.Default);

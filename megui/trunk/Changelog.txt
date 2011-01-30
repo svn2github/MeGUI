@@ -1,3 +1,4 @@
+1928 [FFMSIndexer] fixed auto-load of audio tracks to the main input tab for some files. Bug #3165894
 1927 [HD Streams Extractor] fixed processing of joined input files. Bug #3164153
 1926 [FFMSIndexer] improved audio track number detection. Bug #3165894
 1925 [Settings] added option to ensure correct playback speed while playing the video preview (defaults to disabled) 
