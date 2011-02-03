@@ -783,7 +783,7 @@ namespace MeGUI
 
         #region new stuff
         public JobChain GenerateJobSeries(VideoStream video, string muxedOutput, AudioJob[] audioStreams,
-            MuxStream[] subtitles, string chapters, FileSize? desiredSize, FileSize? splitSize, ContainerType container, bool prerender, MuxStream[] muxOnlyAudio, LogItem log, string deviceType)
+            MuxStream[] subtitles, string chapters, FileSize? desiredSize, FileSize? splitSize, ContainerType container, bool prerender, MuxStream[] muxOnlyAudio, LogItem log, string deviceType, Zone[] zones)
         {
             if (desiredSize.HasValue)
             {
@@ -801,7 +801,7 @@ namespace MeGUI
             log.Add(eliminatedDuplicateFilenames(ref videoOutput, ref muxedOutput, audioStreams));
             video.Output = videoOutput;
 
-            JobChain vjobs = jobUtil.prepareVideoJob(video.Input, video.Output, video.Settings, video.DAR, prerender, true, null);
+            JobChain vjobs = jobUtil.prepareVideoJob(video.Input, video.Output, video.Settings, video.DAR, prerender, true, zones);
 
             if (vjobs == null) return null;
             /* Here, we guess the types of the files based on extension.
