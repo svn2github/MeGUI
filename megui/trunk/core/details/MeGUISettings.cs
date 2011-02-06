@@ -43,7 +43,7 @@ namespace MeGUI
                        httpproxyaddress, httpproxyport, httpproxyuid, httpproxypwd, defaultOutputDir, strMeGUIPath;
         private bool recalculateMainMovieBitrate, autoForceFilm, autoStartQueue, enableMP3inMP4, autoOpenScript,
                      overwriteStats, keep2of3passOutput, autoUpdate, deleteCompletedJobs, deleteIntermediateFiles,
-                     deleteAbortedOutput, openProgressWindow, useadvancedtooltips, freshOggEnc2, autoscroll, 
+                     deleteAbortedOutput, openProgressWindow, useadvancedtooltips, autoSelectHDStreams, autoscroll, 
                      alwaysOnTop, safeProfileAlteration, usehttpproxy, addTimePosition, alwaysbackupfiles,
                      forcerawavcextension, bAutoLoadDG, bAutoStartQueueStartup, bAlwaysMuxMKV, b64bitX264, bEnsureCorrectPlaybackSpeed;
         private ulong audioSamplesPerUpdate;
@@ -126,8 +126,8 @@ namespace MeGUI
 			nbPasses = 2;
 			deleteIntermediateFiles = true;
 			deleteAbortedOutput = true;
+            autoSelectHDStreams = true;
 			openProgressWindow = true;
-            freshOggEnc2 = true;
             videoExtension = "";
             audioExtension = "";
             safeProfileAlteration = false;
@@ -698,12 +698,12 @@ namespace MeGUI
             set { bAutoLoadDG = value; }
         }
         /// <summary>
-        /// true if oggenc2 is v2.8 or later
+        /// true if HD Streams Extractor should automatically select tracks
         /// </summary>
-        public bool FreshOggEnc2
+        public bool AutoSelectHDStreams
         {
-            get { return freshOggEnc2; }
-            set { freshOggEnc2 = value; }
+            get { return autoSelectHDStreams; }
+            set { autoSelectHDStreams = value; }
         }
         /// <summary>
 		/// gets / sets whether pressing Queue should automatically start encoding at startup

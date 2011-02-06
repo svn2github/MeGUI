@@ -275,7 +275,7 @@ namespace MeGUI.packages.tools.hdbdextractor
             this.FileSelection.AutoSize = true;
             this.FileSelection.Location = new System.Drawing.Point(170, 46);
             this.FileSelection.Name = "FileSelection";
-            this.FileSelection.Size = new System.Drawing.Size(116, 17);
+            this.FileSelection.Size = new System.Drawing.Size(115, 17);
             this.FileSelection.TabIndex = 14;
             this.FileSelection.TabStop = true;
             this.FileSelection.Text = "Select File as Input";
@@ -287,7 +287,7 @@ namespace MeGUI.packages.tools.hdbdextractor
             this.FolderSelection.Checked = true;
             this.FolderSelection.Location = new System.Drawing.Point(18, 46);
             this.FolderSelection.Name = "FolderSelection";
-            this.FolderSelection.Size = new System.Drawing.Size(130, 17);
+            this.FolderSelection.Size = new System.Drawing.Size(128, 17);
             this.FolderSelection.TabIndex = 13;
             this.FolderSelection.TabStop = true;
             this.FolderSelection.Text = "Select Folder as Input";
@@ -298,9 +298,9 @@ namespace MeGUI.packages.tools.hdbdextractor
             this.FolderInputSourceButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.FolderInputSourceButton.AutoSize = true;
             this.FolderInputSourceButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.FolderInputSourceButton.Location = new System.Drawing.Point(523, 16);
+            this.FolderInputSourceButton.Location = new System.Drawing.Point(526, 16);
             this.FolderInputSourceButton.Name = "FolderInputSourceButton";
-            this.FolderInputSourceButton.Size = new System.Drawing.Size(29, 23);
+            this.FolderInputSourceButton.Size = new System.Drawing.Size(26, 23);
             this.FolderInputSourceButton.TabIndex = 12;
             this.FolderInputSourceButton.Text = "...";
             this.FolderInputSourceButton.UseVisualStyleBackColor = true;
@@ -573,9 +573,9 @@ namespace MeGUI.packages.tools.hdbdextractor
             this.FolderOutputSourceButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.FolderOutputSourceButton.AutoSize = true;
             this.FolderOutputSourceButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.FolderOutputSourceButton.Location = new System.Drawing.Point(523, 17);
+            this.FolderOutputSourceButton.Location = new System.Drawing.Point(526, 17);
             this.FolderOutputSourceButton.Name = "FolderOutputSourceButton";
-            this.FolderOutputSourceButton.Size = new System.Drawing.Size(29, 23);
+            this.FolderOutputSourceButton.Size = new System.Drawing.Size(26, 23);
             this.FolderOutputSourceButton.TabIndex = 13;
             this.FolderOutputSourceButton.Text = "...";
             this.FolderOutputSourceButton.UseVisualStyleBackColor = true;
@@ -817,8 +817,10 @@ namespace MeGUI.packages.tools.hdbdextractor
                         break;
                     case ResultState.StreamCompleted:
                         if (FileSelection.Checked)
-                             StreamDataGridView.DataSource = streams;
-                        else StreamDataGridView.DataSource = ((eac3to.Feature)FeatureDataGridView.SelectedRows[0].DataBoundItem).Streams;
+                            StreamDataGridView.DataSource = streams;
+                        else 
+                            StreamDataGridView.DataSource = ((eac3to.Feature)FeatureDataGridView.SelectedRows[0].DataBoundItem).Streams;
+                        SelectTracks();
                         FeatureButton.Enabled = true;
                         break;
                     case ResultState.ExtractCompleted:
@@ -1520,6 +1522,7 @@ namespace MeGUI.packages.tools.hdbdextractor
                     else // use already collected streams
                     {
                         StreamDataGridView.DataSource = feature.Streams;
+                        SelectTracks();
                     }
                 }
             }
@@ -1558,6 +1561,32 @@ namespace MeGUI.packages.tools.hdbdextractor
             }
         }
         #endregion
+
+        private void SelectTracks()
+        {
+            if (!MainForm.Instance.Settings.AutoSelectHDStreams)
+                return;
+
+            bool bVideoSelected = false;
+            foreach (DataGridViewRow row in StreamDataGridView.Rows)
+            {
+                DataGridViewCheckBoxCell extractStream = row.Cells["StreamExtractCheckBox"] as DataGridViewCheckBoxCell;
+                if (row.Cells["StreamTypeTextBox"].Value.ToString().Equals("Chapter"))
+                {
+                    extractStream.Value = 1;
+                }
+                else if (!bVideoSelected && row.Cells["StreamTypeTextBox"].Value.ToString().Equals("Video"))
+                {
+                    extractStream.Value = 1;
+                    bVideoSelected = true;
+                }
+                else if (row.Cells["languageDataGridViewTextBoxColumn"].Value.ToString().ToLower().Equals(MainForm.Instance.Settings.DefaultLanguage1.ToLower()) ||
+                    row.Cells["languageDataGridViewTextBoxColumn"].Value.ToString().ToLower().Equals(MainForm.Instance.Settings.DefaultLanguage2.ToLower()))
+                {
+                    extractStream.Value = 1;
+                }
+            }
+        }
     }
 
     public class HdBdExtractorTool : ITool

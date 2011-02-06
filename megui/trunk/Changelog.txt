@@ -1,3 +1,7 @@
+1934 [HD Streams Extractor] the default tracks will be pre-selected based upon the selected languages in the settings
+     [Settings] added option to disable the pre-selecting of tracks in the HD Streams Extractor
+     [Settings] removed unnecessary OggEnc2 checkbox
+     [Settings] some cosmetics
 1933 [One-Click] enhanced automatic de-interlacing logging
 1932 [FFMSIndexer] fixed ignoring audio downmix mode
 1931 [One-Click] improved default language pre-selection
