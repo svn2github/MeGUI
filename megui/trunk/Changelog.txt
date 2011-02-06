@@ -1,3 +1,4 @@
+1932 [FFMSIndexer] fixed ignoring audio downmix mode
 1931 [One-Click] improved default language preselection
 1930 [x264] changed default value of --qpmax to 69 (requires x264 rev 1881+)
 1929 [AutoEncode] zone handling added so that Intro and Credit selection in the video preview window will be respected

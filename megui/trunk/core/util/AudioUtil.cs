@@ -69,28 +69,6 @@ namespace MeGUI
             return TrackID;
         }
 
-
-        /// <summary>
-        /// gets Audio Streams Number from input file using MediaInfo
-        /// </summary>
-        /// <param name="fileName">input</param>
-        /// <returns>nb of audio streams found</returns>
-        public static int getAudioStreamsNb(string fileName)
-        {
-            MediaInfo info;
-            int nb = 0;
-            try
-            {
-                info = new MediaInfo(fileName);
-                nb = info.Audio.Count;
-            }
-            catch (Exception i)
-            {
-                MessageBox.Show("The following error ocurred when trying to get Media info for file " + fileName + "\r\n" + i.Message, "Error parsing mediainfo data", MessageBoxButtons.OK);
-            }
-            return nb;
-        }
-
         /// gets SBR/PS flag from AAC streams using MediaInfo
         /// </summary>
         /// <param name="infoFile">the file to be analyzed</param>
@@ -162,6 +140,47 @@ namespace MeGUI
             catch
             {
                 return false;
+            }
+        }
+
+        public static bool AVSFileHasAudio(String strAVSScript)
+        {
+            try
+            {
+                using (AviSynthScriptEnvironment env = new AviSynthScriptEnvironment())
+                using (AviSynthClip a = env.OpenScriptFile(strAVSScript))
+                    if (a.ChannelsCount == 0)
+                        return false;
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public static string getChannelPositionsFromAVSFile(String strAVSFile)
+        {
+            string strChannelPositions = String.Empty;
+            
+            try
+            {
+                string line;
+                StreamReader file = new StreamReader(strAVSFile);
+                while ((line = file.ReadLine()) != null)
+                {
+                    if (line.IndexOf(@"# detected channel positions: ") == 0)
+                    {
+                        strChannelPositions = line.Substring(30);
+                        break;
+                    }
+                }
+                file.Close();
+                return strChannelPositions;
+            }
+            catch
+            {
+                return strChannelPositions;
             }
         }
     }

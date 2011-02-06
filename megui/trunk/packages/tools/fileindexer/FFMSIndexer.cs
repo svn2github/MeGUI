@@ -92,7 +92,7 @@ namespace MeGUI
 #if x64
                     strAVSScript.AppendLine("LoadCPlugin(\"" + strDLLPath + "\")");
 #endif
-                    strAVSScript.Append("FFAudioSource(\"" + job.Input + "\", " + iCurrentTrack + ")");
+                    strAVSScript.AppendLine("FFAudioSource(\"" + job.Input + "\", " + iCurrentTrack + ")");
 
                     // is this an audio track?
                     if (AudioUtil.AVSScriptHasAudio(strAVSScript.ToString()) == false)
@@ -109,6 +109,8 @@ namespace MeGUI
                         strAudioAVSFile = job.Input + "_track_" + (oAudioTrack.Index + 1) + "_" + oAudioTrack.Language.ToLower() + ".avs";
                         try
                         {
+                            strAVSScript.AppendLine(@"# detected channels: " + oAudioTrack.NbChannels);
+                            strAVSScript.Append(@"# detected channel positions: " + oAudioTrack.ChannelPositions);
                             StreamWriter oAVSWriter = new StreamWriter(strAudioAVSFile, false, Encoding.Default);
                             oAVSWriter.Write(strAVSScript);
                             oAVSWriter.Close();
