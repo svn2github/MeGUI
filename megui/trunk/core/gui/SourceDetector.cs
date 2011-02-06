@@ -45,6 +45,7 @@ namespace MeGUI
         public int decimateM;
         public bool majorityFilm;
         public bool isAnime;
+        public string analysisResult;
     }
 
     public enum SourceType
@@ -561,7 +562,7 @@ namespace MeGUI
             int[] array = new int[] { numInt, numProg, numTC };
             Array.Sort(array);
 
-            analysis = string.Format("For your reference:\r\nProgressive sections: {0}\r\nInterlaced sections: {1}\r\nPartially Static Sections: {2}\r\nFilm Sections: {3}\r\n", numProg, numInt, numUseless, numTC);
+            analysis = string.Format("Progressive sections: {0}\r\nInterlaced sections: {1}\r\nPartially Static Sections: {2}\r\nFilm Sections: {3}\r\n", numProg, numInt, numUseless, numTC);
 
             if (numInt + numProg + numTC < settings.MinimumUsefulSections)
             {
@@ -725,7 +726,7 @@ namespace MeGUI
             info.decimateM = decimateM;
             info.fieldOrder = fieldOrder;
             info.majorityFilm = majorityFilm;
-           
+            info.analysisResult = analysis;
 
             finishedAnalysis(info, false, null);
 
