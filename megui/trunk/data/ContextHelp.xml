@@ -191,8 +191,8 @@ compression, wasting bits. Note: This is disregarded in Constant Quality or Qual
 Enforces a maximum Quantizer. Prevents the codec from outputting frames with too much compression,
 causing reduced quality. Note: This is disregarded in Constant Quality or Quality Based VBR modes.</Advanced>
 			<Basic>Set maximum Quantizer factor.</Basic>
-			<Recommended>51</Recommended>
-			<Default>51</Default>
+			<Recommended>69</Recommended>
+			<Default>69</Default>
 		</qpmax>
 		<qpstep name="Maximum Quantizer Steps">
 			<Advanced>

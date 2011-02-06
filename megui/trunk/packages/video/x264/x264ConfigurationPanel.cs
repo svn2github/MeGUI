@@ -1822,7 +1822,7 @@ namespace MeGUI.packages.video.x264
 
             // Rate Control Tab
             this.x264MinimimQuantizer.Value = 0;
-            this.x264MaximumQuantizer.Value = 51;
+            this.x264MaximumQuantizer.Value = 69;
             this.x264MaxQuantDelta.Value = 4;
             this.x264IPFrameFactor.Value = 1.4M;
             this.x264PBFrameFactor.Value = 1.3M;

@@ -120,7 +120,7 @@ namespace MeGUI
 			i4x4mv = true;
 			i8x8mv = false;
 			MinQuantizer = 0;
-			MaxQuantizer = 51;
+			MaxQuantizer = 69;
 			maxQuantDelta = 4;
 			CreditsQuantizer = new decimal(40);
 			ipFactor = new decimal(1.4);

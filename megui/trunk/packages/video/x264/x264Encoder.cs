@@ -369,7 +369,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                 if (xs.MinQuantizer != 0)
                     sb.Append("--qpmin " + xs.MinQuantizer + " ");
             if (!xs.CustomEncoderOptions.Contains("--qpmax "))
-                if (xs.MaxQuantizer != 51)
+                if (xs.MaxQuantizer != 69)
                     sb.Append("--qpmax " + xs.MaxQuantizer + " ");
             if (!xs.CustomEncoderOptions.Contains("--qpstep "))
                 if (xs.MaxQuantDelta != 4)
