@@ -1,3 +1,4 @@
+1931 [One-Click] improved default language preselection
 1930 [x264] changed default value of --qpmax to 69 (requires x264 rev 1881+)
 1929 [AutoEncode] zone handling added so that Intro and Credit selection in the video preview window will be respected
 1928 [FFMSIndexer] fixed auto-load of audio tracks to the main input tab for some files. Bug #3165894

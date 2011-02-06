@@ -257,19 +257,27 @@ namespace MeGUI
             foreach (FileSCBox b in audioTrack)
                 b.StandardItems = trackNames.ToArray();
 
+            // select primary language
             foreach (AudioTrackInfo ati in audioTracks)
             {
                 if (ati.Language.ToLower().Equals(mainForm.Settings.DefaultLanguage1.ToLower()) &&
                     audioTrack1.SelectedIndex == 0)
                 {
                     audioTrack1.SelectedObject = ati;
-                    continue;
+                    break;
                 }
-                if (ati.Language.ToLower().Equals(mainForm.Settings.DefaultLanguage2.ToLower()) &&
-                    audioTrack2.SelectedIndex == 0)
+            }
+
+            // select secondary language
+            foreach (AudioTrackInfo ati in audioTracks)
+            {
+                if (ati.Language.ToLower().Equals(mainForm.Settings.DefaultLanguage2.ToLower()))
                 {
-                    audioTrack2.SelectedObject = ati;
-                    continue;
+                    if (audioTrack1.SelectedIndex == 0)
+                        audioTrack1.SelectedObject = ati;
+                    else if (audioTrack2.SelectedIndex == 0)
+                        audioTrack2.SelectedObject = ati;
+                    break;
                 }
             }
 
