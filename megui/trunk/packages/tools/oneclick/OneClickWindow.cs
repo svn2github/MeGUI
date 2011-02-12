@@ -269,15 +269,18 @@ namespace MeGUI
             }
 
             // select secondary language
-            foreach (AudioTrackInfo ati in audioTracks)
+            if (mainForm.Settings.DefaultLanguage1 != mainForm.Settings.DefaultLanguage2)
             {
-                if (ati.Language.ToLower().Equals(mainForm.Settings.DefaultLanguage2.ToLower()))
+                foreach (AudioTrackInfo ati in audioTracks)
                 {
-                    if (audioTrack1.SelectedIndex == 0)
-                        audioTrack1.SelectedObject = ati;
-                    else if (audioTrack2.SelectedIndex == 0)
-                        audioTrack2.SelectedObject = ati;
-                    break;
+                    if (ati.Language.ToLower().Equals(mainForm.Settings.DefaultLanguage2.ToLower()))
+                    {
+                        if (audioTrack1.SelectedIndex == 0)
+                            audioTrack1.SelectedObject = ati;
+                        else if (audioTrack2.SelectedIndex == 0)
+                            audioTrack2.SelectedObject = ati;
+                        break;
+                    }
                 }
             }
 
