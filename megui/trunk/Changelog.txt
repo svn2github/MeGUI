@@ -1,7 +1,8 @@
+1939 [Settings] added buttons to clear the default output directory and the path to neroaacenc
 1938 [One-Click] fixed language pre-selection if the default languages are not different. Bug #3178016
 1937 [XviD] enhanced overflow handling in the settings dialogue
 1936 audio encoding job can be added without existing input file
-1935 AssumeFPS() will be added to DirectShow(), DSS2() and FFVideoSource() scripts
+1935 AssumeFPS() added to DirectShow(), DSS2() and FFVideoSource() scripts
 1934 [HD Streams Extractor] the default tracks will be pre-selected based upon the selected languages in the settings
      [Settings] added option to disable the pre-selecting of tracks in the HD Streams Extractor
      [Settings] removed unnecessary OggEnc2 checkbox

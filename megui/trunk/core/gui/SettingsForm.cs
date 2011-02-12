@@ -130,6 +130,8 @@ namespace MeGUI
         private ComboBox defaultLanguage2;
         private ComboBox defaultLanguage1;
         private CheckBox chkSelectHDTracks;
+        private Button btnClearOutputDirecoty;
+        private Button button1;
         private XmlDocument ContextHelp = new XmlDocument();
 		#region start / stop
 		public SettingsForm()
@@ -248,8 +250,12 @@ namespace MeGUI
             this.openFolderDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.defaultLanguage2 = new System.Windows.Forms.ComboBox();
+            this.defaultLanguage1 = new System.Windows.Forms.ComboBox();
             this.gbDefaultOutput = new System.Windows.Forms.GroupBox();
             this.clearDefaultOutputDir = new System.Windows.Forms.Button();
+            this.defaultOutputDir = new MeGUI.FileBar();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.txt_httpproxyport = new System.Windows.Forms.TextBox();
@@ -284,12 +290,14 @@ namespace MeGUI
             this.nbPasses = new System.Windows.Forms.NumericUpDown();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.chkSelectHDTracks = new System.Windows.Forms.CheckBox();
             this.chkEnable64bitX264 = new System.Windows.Forms.CheckBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.button2 = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.btnClearMP4TempDirectory = new System.Windows.Forms.Button();
+            this.tempDirMP4 = new MeGUI.FileBar();
             this.vobGroupBox = new System.Windows.Forms.GroupBox();
             this.cbAutoLoadDG = new System.Windows.Forms.CheckBox();
             this.percentLabel = new System.Windows.Forms.Label();
@@ -299,13 +307,9 @@ namespace MeGUI
             this.videoExtLabel = new System.Windows.Forms.Label();
             this.autoEncodeDefaultsButton = new System.Windows.Forms.Button();
             this.toolTipHelp = new System.Windows.Forms.ToolTip(this.components);
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.defaultLanguage1 = new System.Windows.Forms.ComboBox();
-            this.defaultLanguage2 = new System.Windows.Forms.ComboBox();
-            this.chkSelectHDTracks = new System.Windows.Forms.CheckBox();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
-            this.defaultOutputDir = new MeGUI.FileBar();
-            this.tempDirMP4 = new MeGUI.FileBar();
+            this.button1 = new System.Windows.Forms.Button();
+            this.btnClearOutputDirecoty = new System.Windows.Forms.Button();
             groupBox1 = new System.Windows.Forms.GroupBox();
             groupBox1.SuspendLayout();
             this.otherGroupBox.SuspendLayout();
@@ -314,6 +318,7 @@ namespace MeGUI
             ((System.ComponentModel.ISupportInitialize)(this.acceptableAspectError)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.gbDefaultOutput.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -328,7 +333,6 @@ namespace MeGUI
             this.groupBox4.SuspendLayout();
             this.vobGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.forceFilmPercentage)).BeginInit();
-            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -683,8 +687,36 @@ namespace MeGUI
             this.tabPage1.Text = "Main";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.defaultLanguage2);
+            this.groupBox3.Controls.Add(this.defaultLanguage1);
+            this.groupBox3.Location = new System.Drawing.Point(2, 287);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(200, 92);
+            this.groupBox3.TabIndex = 8;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = " Default Languages ";
+            // 
+            // defaultLanguage2
+            // 
+            this.defaultLanguage2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.defaultLanguage2.Location = new System.Drawing.Point(13, 56);
+            this.defaultLanguage2.Name = "defaultLanguage2";
+            this.defaultLanguage2.Size = new System.Drawing.Size(104, 21);
+            this.defaultLanguage2.TabIndex = 7;
+            // 
+            // defaultLanguage1
+            // 
+            this.defaultLanguage1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.defaultLanguage1.Location = new System.Drawing.Point(13, 29);
+            this.defaultLanguage1.Name = "defaultLanguage1";
+            this.defaultLanguage1.Size = new System.Drawing.Size(104, 21);
+            this.defaultLanguage1.TabIndex = 2;
+            // 
             // gbDefaultOutput
             // 
+            this.gbDefaultOutput.Controls.Add(this.btnClearOutputDirecoty);
             this.gbDefaultOutput.Controls.Add(this.clearDefaultOutputDir);
             this.gbDefaultOutput.Controls.Add(this.defaultOutputDir);
             this.gbDefaultOutput.Location = new System.Drawing.Point(208, 287);
@@ -702,6 +734,22 @@ namespace MeGUI
             this.clearDefaultOutputDir.TabIndex = 41;
             this.clearDefaultOutputDir.Text = "x";
             this.clearDefaultOutputDir.Click += new System.EventHandler(this.clearDefaultOutputDir_Click);
+            // 
+            // defaultOutputDir
+            // 
+            this.defaultOutputDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.defaultOutputDir.Filename = "";
+            this.defaultOutputDir.Filter = null;
+            this.defaultOutputDir.FilterIndex = 0;
+            this.defaultOutputDir.FolderMode = true;
+            this.defaultOutputDir.Location = new System.Drawing.Point(12, 29);
+            this.defaultOutputDir.Name = "defaultOutputDir";
+            this.defaultOutputDir.ReadOnly = true;
+            this.defaultOutputDir.SaveMode = false;
+            this.defaultOutputDir.Size = new System.Drawing.Size(211, 26);
+            this.defaultOutputDir.TabIndex = 40;
+            this.defaultOutputDir.Title = null;
             // 
             // tabPage3
             // 
@@ -1082,6 +1130,18 @@ namespace MeGUI
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = " Misc ";
             // 
+            // chkSelectHDTracks
+            // 
+            this.chkSelectHDTracks.AutoSize = true;
+            this.chkSelectHDTracks.Checked = true;
+            this.chkSelectHDTracks.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkSelectHDTracks.Location = new System.Drawing.Point(225, 31);
+            this.chkSelectHDTracks.Name = "chkSelectHDTracks";
+            this.chkSelectHDTracks.Size = new System.Drawing.Size(234, 17);
+            this.chkSelectHDTracks.TabIndex = 29;
+            this.chkSelectHDTracks.Text = "HD Streams Extractor: select default tracks";
+            this.chkSelectHDTracks.UseVisualStyleBackColor = true;
+            // 
             // chkEnable64bitX264
             // 
             this.chkEnable64bitX264.AutoSize = true;
@@ -1096,6 +1156,7 @@ namespace MeGUI
             // 
             // groupBox5
             // 
+            this.groupBox5.Controls.Add(this.button1);
             this.groupBox5.Controls.Add(this.textBox2);
             this.groupBox5.Controls.Add(this.button2);
             this.groupBox5.Location = new System.Drawing.Point(4, 6);
@@ -1142,6 +1203,22 @@ namespace MeGUI
             this.btnClearMP4TempDirectory.TabIndex = 42;
             this.btnClearMP4TempDirectory.Text = "x";
             this.btnClearMP4TempDirectory.Click += new System.EventHandler(this.btnClearMP4TempDirectory_Click);
+            // 
+            // tempDirMP4
+            // 
+            this.tempDirMP4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.tempDirMP4.Filename = "";
+            this.tempDirMP4.Filter = null;
+            this.tempDirMP4.FilterIndex = 0;
+            this.tempDirMP4.FolderMode = true;
+            this.tempDirMP4.Location = new System.Drawing.Point(13, 33);
+            this.tempDirMP4.Name = "tempDirMP4";
+            this.tempDirMP4.ReadOnly = true;
+            this.tempDirMP4.SaveMode = false;
+            this.tempDirMP4.Size = new System.Drawing.Size(418, 26);
+            this.tempDirMP4.TabIndex = 41;
+            this.tempDirMP4.Title = null;
             // 
             // vobGroupBox
             // 
@@ -1231,45 +1308,6 @@ namespace MeGUI
             this.toolTipHelp.ReshowDelay = 100;
             this.toolTipHelp.ShowAlways = true;
             // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add(this.defaultLanguage2);
-            this.groupBox3.Controls.Add(this.defaultLanguage1);
-            this.groupBox3.Location = new System.Drawing.Point(2, 287);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(200, 92);
-            this.groupBox3.TabIndex = 8;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = " Default Languages ";
-            // 
-            // defaultLanguage1
-            // 
-            this.defaultLanguage1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.defaultLanguage1.Location = new System.Drawing.Point(13, 29);
-            this.defaultLanguage1.Name = "defaultLanguage1";
-            this.defaultLanguage1.Size = new System.Drawing.Size(104, 21);
-            this.defaultLanguage1.TabIndex = 2;
-            // 
-            // defaultLanguage2
-            // 
-            this.defaultLanguage2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.defaultLanguage2.Location = new System.Drawing.Point(13, 56);
-            this.defaultLanguage2.Name = "defaultLanguage2";
-            this.defaultLanguage2.Size = new System.Drawing.Size(104, 21);
-            this.defaultLanguage2.TabIndex = 7;
-            // 
-            // chkSelectHDTracks
-            // 
-            this.chkSelectHDTracks.AutoSize = true;
-            this.chkSelectHDTracks.Checked = true;
-            this.chkSelectHDTracks.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkSelectHDTracks.Location = new System.Drawing.Point(225, 31);
-            this.chkSelectHDTracks.Name = "chkSelectHDTracks";
-            this.chkSelectHDTracks.Size = new System.Drawing.Size(234, 17);
-            this.chkSelectHDTracks.TabIndex = 29;
-            this.chkSelectHDTracks.Text = "HD Streams Extractor: select default tracks";
-            this.chkSelectHDTracks.UseVisualStyleBackColor = true;
-            // 
             // helpButton1
             // 
             this.helpButton1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -1281,37 +1319,23 @@ namespace MeGUI
             this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 1;
             // 
-            // defaultOutputDir
+            // button1
             // 
-            this.defaultOutputDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.defaultOutputDir.Filename = "";
-            this.defaultOutputDir.Filter = null;
-            this.defaultOutputDir.FilterIndex = 0;
-            this.defaultOutputDir.FolderMode = true;
-            this.defaultOutputDir.Location = new System.Drawing.Point(12, 29);
-            this.defaultOutputDir.Name = "defaultOutputDir";
-            this.defaultOutputDir.ReadOnly = true;
-            this.defaultOutputDir.SaveMode = false;
-            this.defaultOutputDir.Size = new System.Drawing.Size(211, 26);
-            this.defaultOutputDir.TabIndex = 40;
-            this.defaultOutputDir.Title = null;
+            this.button1.Location = new System.Drawing.Point(437, 28);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(24, 26);
+            this.button1.TabIndex = 43;
+            this.button1.Text = "x";
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // tempDirMP4
+            // btnClearOutputDirecoty
             // 
-            this.tempDirMP4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.tempDirMP4.Filename = "";
-            this.tempDirMP4.Filter = null;
-            this.tempDirMP4.FilterIndex = 0;
-            this.tempDirMP4.FolderMode = true;
-            this.tempDirMP4.Location = new System.Drawing.Point(13, 33);
-            this.tempDirMP4.Name = "tempDirMP4";
-            this.tempDirMP4.ReadOnly = true;
-            this.tempDirMP4.SaveMode = false;
-            this.tempDirMP4.Size = new System.Drawing.Size(418, 26);
-            this.tempDirMP4.TabIndex = 41;
-            this.tempDirMP4.Title = null;
+            this.btnClearOutputDirecoty.Location = new System.Drawing.Point(229, 29);
+            this.btnClearOutputDirecoty.Name = "btnClearOutputDirecoty";
+            this.btnClearOutputDirecoty.Size = new System.Drawing.Size(24, 26);
+            this.btnClearOutputDirecoty.TabIndex = 43;
+            this.btnClearOutputDirecoty.Text = "x";
+            this.btnClearOutputDirecoty.Click += new System.EventHandler(this.btnClearOutputDirecoty_Click);
             // 
             // SettingsForm
             // 
@@ -1338,6 +1362,7 @@ namespace MeGUI
             ((System.ComponentModel.ISupportInitialize)(this.acceptableAspectError)).EndInit();
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
             this.gbDefaultOutput.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
@@ -1360,7 +1385,6 @@ namespace MeGUI
             this.vobGroupBox.ResumeLayout(false);
             this.vobGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.forceFilmPercentage)).EndInit();
-            this.groupBox3.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1604,6 +1628,16 @@ namespace MeGUI
         private void btnClearMP4TempDirectory_Click(object sender, EventArgs e)
         {
             tempDirMP4.Filename = "";
+        }
+
+        private void btnClearOutputDirecoty_Click(object sender, EventArgs e)
+        {
+            defaultOutputDir.Filename = "";
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            textBox2.Text = "neroAacEnc.exe";
         }
 	}
 }
