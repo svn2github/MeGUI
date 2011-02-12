@@ -2048,7 +2048,7 @@ namespace MeGUI
             i.LogValue("MeGUI Version ", new System.Version(Application.ProductVersion).Build + " (svn)");
 #endif
 #if x64
-            i.LogValue("MeGUI Version ", Application.ProductVersion + " x64 (svn)");
+            i.LogValue("MeGUI Version ", new System.Version(Application.ProductVersion).Build + " x64 (svn)");
 #endif
             i.LogValue("OS ", string.Format("{0}{1} ({2}.{3}.{4}.{5})", OSInfo.GetOSName(), OSInfo.GetOSServicePack(), OSInfo.OSMajorVersion, OSInfo.OSMinorVersion, OSInfo.OSRevisionVersion, OSInfo.OSBuildVersion));
             i.LogValue("Latest .Net Framework installed ", string.Format("{0}", OSInfo.DotNetVersionFormated(OSInfo.FormatDotNetVersion())));

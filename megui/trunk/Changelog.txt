@@ -1,4 +1,5 @@
-1939 [Settings] added buttons to clear the default output directory and the path to neroaacenc
+1940 [Log] changed version number syntax for MeGUI x64
+1939 [Settings] added buttons to clear the default output directory and the path to neroaacenc. Feature request #3177293
 1938 [One-Click] fixed language pre-selection if the default languages are not different. Bug #3178016
 1937 [XviD] enhanced overflow handling in the settings dialogue
 1936 audio encoding job can be added without existing input file
