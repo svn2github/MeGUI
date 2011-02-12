@@ -484,6 +484,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
 
         internal void Start()
         {
+            Util.ensureExists(audioJob.Input);
             _encoderThread = new Thread(new ThreadStart(this.encode));
             _encoderThread.Priority = ThreadPriority.BelowNormal;
             _encoderThread.Start();
@@ -507,14 +508,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
 
             this.su = su;
 
-
             //let's create avisynth script
             StringBuilder script = new StringBuilder();
 
             string id = _uniqueId;
             string tmp = Path.Combine(Path.GetTempPath(), id);
-            FileInfo fi = new FileInfo(audioJob.Input);
-            long size = fi.Length;
 
             bool directShow = audioJob.Settings.ForceDecodingViaDirectShow;
             if (!directShow)
