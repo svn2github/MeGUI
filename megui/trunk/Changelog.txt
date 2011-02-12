@@ -1,3 +1,4 @@
+1942 [VideoPlayer] fixed invisible right border on some OS (at least XP). Bug #3177073
 1941 [XviD] replaced -lumimasking with -masking (requires xvid 1.3). Feature request #3139141
      [XviD] disabled direct mkv ouput
 1940 [Log] changed version number syntax for MeGUI x64

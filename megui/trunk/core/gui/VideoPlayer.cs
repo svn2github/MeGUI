@@ -368,8 +368,8 @@ namespace MeGUI
         {
             int iOldZoomMaxWidth = zoomMaxWidth;
             Size oSizeScreen = Screen.GetWorkingArea(this).Size;
-            int iScreenHeight = oSizeScreen.Height - SystemInformation.FrameBorderSize.Height;
-            int iScreenWidth = oSizeScreen.Width - SystemInformation.FrameBorderSize.Width;
+            int iScreenHeight = oSizeScreen.Height - 2 * SystemInformation.FixedFrameBorderSize.Height;
+            int iScreenWidth = oSizeScreen.Width - 2 * SystemInformation.FixedFrameBorderSize.Width;
 
             // does the video fit into the screen?
             if ((int)file.Info.Height + formHeightDelta > iScreenHeight ||
@@ -465,39 +465,38 @@ namespace MeGUI
             sizeLock = true;
             if (this.videoWindowWidth < buttonPanelMinWidth)
             {
-                this.Size = new Size(buttonPanelMinWidth + SystemInformation.FrameBorderSize.Width, this.videoWindowHeight + formHeightDelta);  
+                this.Size = new Size(buttonPanelMinWidth + 2 * SystemInformation.FixedFrameBorderSize.Width, this.videoWindowHeight + formHeightDelta);  
             }
             else if (bOriginalSize)
             {
                 Size oSizeScreen = Screen.GetWorkingArea(this).Size;
-                int iScreenHeight = oSizeScreen.Height - SystemInformation.FrameBorderSize.Height;
-                int iScreenWidth = oSizeScreen.Width - SystemInformation.FrameBorderSize.Width;
+                int iScreenHeight = oSizeScreen.Height - 2 * SystemInformation.FixedFrameBorderSize.Height;
+                int iScreenWidth = oSizeScreen.Width - 2 * SystemInformation.FixedFrameBorderSize.Width;
 
                 int iMainHeight = videoWindowHeight + formHeightDelta;
                 if (iMainHeight >= iScreenHeight)
                     iMainHeight = iScreenHeight;
 
-                int iMainWidth = videoWindowWidth + SystemInformation.FrameBorderSize.Width;
+                int iMainWidth = videoWindowWidth + 2 * SystemInformation.FixedFrameBorderSize.Width;
                 if (iMainWidth >= iScreenWidth)
                     iMainWidth = iScreenWidth;
 
-                //int height = (int)Math.Round((decimal)this.zoomMaxWidth / d.ar);
                 this.Size = new Size(iMainWidth, iMainHeight);   
             }
             else
             {
-                this.Size = new Size(this.videoWindowWidth + SystemInformation.FrameBorderSize.Width, this.videoWindowHeight + formHeightDelta);
+                this.Size = new Size(this.videoWindowWidth + 2 * SystemInformation.FixedFrameBorderSize.Width + 2, this.videoWindowHeight + formHeightDelta);
             }
 
             // resize videoPanel
-            this.videoPanel.Size = new Size(this.Size.Width - SystemInformation.FrameBorderSize.Width + 2, this.Size.Height - formHeightDelta + 2);
+            this.videoPanel.Size = new Size(this.Size.Width - 2 * SystemInformation.FixedFrameBorderSize.Width, this.Size.Height - formHeightDelta + 2);
             sizeLock = false;
 
             // resize videoPreview
             this.videoPreview.Size = new Size(this.videoWindowWidth, this.videoWindowHeight);
 
             // resize buttonPanel
-            this.buttonPanel.Size = new Size(this.Size.Width - SystemInformation.FrameBorderSize.Width, buttonPanel.Height);
+            this.buttonPanel.Size = new Size(this.Size.Width - 2 * SystemInformation.FixedFrameBorderSize.Width, buttonPanel.Height);
             this.buttonPanel.Location = new Point(1, videoPanel.Location.Y + videoPanel.Size.Height);
             ResumeLayout();
         }
@@ -1307,8 +1306,8 @@ namespace MeGUI
         private void VideoPlayer_Shown(object sender, EventArgs e)
         {
             Size oSizeScreen = Screen.GetWorkingArea(this).Size;
-            int iScreenHeight = oSizeScreen.Height - SystemInformation.FrameBorderSize.Height;
-            int iScreenWidth = oSizeScreen.Width - SystemInformation.FrameBorderSize.Width;
+            int iScreenHeight = oSizeScreen.Height - 2 * SystemInformation.FixedFrameBorderSize.Height;
+            int iScreenWidth = oSizeScreen.Width - 2 * SystemInformation.FixedFrameBorderSize.Width;
             if (this.Size.Height >= iScreenHeight)
                 this.Location = new Point(this.Location.X, 5);
             if (this.Size.Width >= iScreenWidth)
