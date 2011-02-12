@@ -165,15 +165,15 @@ namespace MeGUI
                     strDLLPath = Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.FFMSIndexPath), "ffms2.dll");
 #if x86
                     if (input.ToLower().EndsWith(".ffindex"))
-                        inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + input.Substring(0, input.Length - 8) + "\")";
+                        inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + input.Substring(0, input.Length - 8) + "\")" + VideoUtil.getAssumeFPS(fps, input);
                     else
-                        inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + input + "\")";
+                        inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + input + "\")" + VideoUtil.getAssumeFPS(fps, input);
 #endif
 #if x64
                     if (input.ToLower().EndsWith(".ffindex"))
-                        inputLine = "LoadCPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + input.Substring(0, input.Length - 8) + "\")";
+                        inputLine = "LoadCPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + input.Substring(0, input.Length - 8) + "\")" + VideoUtil.getAssumeFPS(fps, input);
                     else
-                        inputLine = "LoadCPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + input + "\")";
+                        inputLine = "LoadCPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + input + "\")" + VideoUtil.getAssumeFPS(fps, input);
 #endif
                     break;
                 case PossibleSources.dgi:
@@ -186,19 +186,19 @@ namespace MeGUI
                         inputLine += ",fieldop=0";
                     break;
                 case PossibleSources.vdr:
-                    inputLine = "AVISource(\"" + input + "\", audio=false)";
+                    inputLine = "AVISource(\"" + input + "\", audio=false)" + VideoUtil.getAssumeFPS(fps, input);
                     break;
                 case PossibleSources.directShow:
                     if (input.ToLower().EndsWith(".avi"))
                     {
-                        inputLine = "AVISource(\"" + input + "\", audio=false)";
+                        inputLine = "AVISource(\"" + input + "\", audio=false)" + VideoUtil.getAssumeFPS(fps, input);
                     }
                     else
                     {
                         if (dss2)
-                            inputLine = "LoadPlugin(\"" + MeGUISettings.HaaliMSPath + "\\avss.dll" + "\")\r\ndss2(\"" + input + "\"" + ((fps > 0) ? ", fps=" + fps.ToString("F3", new CultureInfo("en-us")) : string.Empty) + ")";
+                            inputLine = "LoadPlugin(\"" + MeGUISettings.HaaliMSPath + "\\avss.dll" + "\")\r\ndss2(\"" + input + "\"" + ((fps > 0) ? ", fps=" + fps.ToString("F3", new CultureInfo("en-us")) : string.Empty) + ")" + VideoUtil.getAssumeFPS(fps, input);
                         else
-                            inputLine = "DirectShowSource(\"" + input + "\"" + ((fps > 0) ? ", fps=" + fps.ToString("F3", new CultureInfo("en-us")) : string.Empty) + ", audio=false, convertfps=true)";
+                            inputLine = "DirectShowSource(\"" + input + "\"" + ((fps > 0) ? ", fps=" + fps.ToString("F3", new CultureInfo("en-us")) : string.Empty) + ", audio=false, convertfps=true)" + VideoUtil.getAssumeFPS(fps, input);
                         if (flipVertical)
                             inputLine = inputLine + "\r\nFlipVertical()";
                     }

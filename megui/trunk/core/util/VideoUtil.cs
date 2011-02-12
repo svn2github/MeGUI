@@ -54,44 +54,8 @@ namespace MeGUI
         }
 
 		#region finding source information
-		/// <summary>
-		/// gets the dvd decrypter generated stream information file
-		/// </summary>
-		/// <param name="fileName">name of the first vob to be loaded</param>
-		/// <returns>full name of the info file or an empty string if no file was found</returns>
-		public static string getInfoFileName(string fileName)
-		{
-			int pgc = 1;
-			string path = Path.GetDirectoryName(fileName);
-			string name = Path.GetFileName(fileName);
-			string vts = name.Substring(0, 6);
-			string infoFile = "";
-			string[] files = Directory.GetFiles(path, vts + "*.txt");
-			foreach (string file in files)
-			{
-				if (file.IndexOf("Stream Information") != -1) // we found our file
-				{
-                    int index = file.IndexOf("_PGC_");
-                    if (index != -1) // PGC number is in the filename
-                    {
-                        string pgcString = file.Substring(index + 5, 2);
-                        try
-                        {
-                            pgc = Int32.Parse(pgcString);
-                        }
-                        catch (Exception)
-                        {
-                        }
-                    }
-					infoFile = file;
-					break;
-				}
-			}
-            // pgc is parsed, but unused. Might be useful later
-            return infoFile;
-		}
-
-		/// <summary>
+		
+        /// <summary>
 		/// gets the dvd decrypter generated chapter file
 		/// </summary>
 		/// <param name="fileName">name of the first vob to be loaded</param>
@@ -117,93 +81,7 @@ namespace MeGUI
 			}
 			return chapterFile;
 		}
-		/// <summary>
-		/// gets information about a video source based on its DVD Decrypter generated info file
-		/// </summary>
-		/// <param name="infoFile">the info file to be analyzed</param>
-		/// <param name="audioTracks">the audio tracks found</param>
-		/// <param name="aspectRatio">the aspect ratio of the video</param>
-        public void getSourceInfo(string infoFile, out List<AudioTrackInfo> audioTracks, out List<SubtitleInfo> subtitles,
-			out Dar? aspectRatio, out int maxHorizontalResolution)
-		{
-			StreamReader sr = null;
-            audioTracks = new List<AudioTrackInfo>();
-            subtitles = new List<SubtitleInfo>();
-            aspectRatio = null;
-            maxHorizontalResolution = 5000;
-			try
-			{
-				sr = new StreamReader(infoFile, System.Text.Encoding.Default);
-                string line = ""; int LineCount = 0;
-				while ((line = sr.ReadLine()) != null)
-				{
-					if (line.IndexOf("Video") != -1)
-					{
-						char[] separator = {'/'};
-						string[] split = line.Split(separator, 1000);
-                        string resolution = split[1];
-                        resolution = resolution.Substring(1, resolution.IndexOf('x')-1);
-                        maxHorizontalResolution = Int32.Parse(resolution);
-						string ar = split[2].Substring(1, split[2].Length - 2);
-
-                        aspectRatio = Dar.A1x1;
-                        if (split[1].Contains("PAL"))
-                        {
-                            if (ar.Equals("16:9"))
-                                aspectRatio = Dar.ITU16x9PAL;
-                            else if (ar.Equals("4:3"))
-                                aspectRatio = Dar.ITU4x3PAL;
-                        }
-                        else if (split[1].Contains("NTSC"))
-                        {
-                            if (ar.Equals("16:9"))
-                                aspectRatio = Dar.ITU16x9NTSC;
-                            else if (ar.Equals("4:3"))
-                                aspectRatio = Dar.ITU4x3NTSC;
-                        }
-					}
-					else if (line.IndexOf("Audio") != -1)
-					{
-						char[] separator = {'/'};
-						string[] split = line.Split(separator, 1000); 
-						AudioTrackInfo ati = new AudioTrackInfo();
-						ati.Type = split[0].Substring(split[0].LastIndexOf("-") + 1).Trim();
-						ati.NbChannels = split[1].Trim();
-                        ati.TrackInfo = new TrackInfo(split[4].Trim(), null);
-                        audioTracks.Add(ati);
-					}
-                    else if (line.IndexOf("Subtitle") != -1)
-                    {
-                        char[] separator = { '-' };
-                        string[] split = line.Split(separator, 1000);
-                        string language = split[2].Trim();
-                        SubtitleInfo si = new SubtitleInfo(language, LineCount);
-                        LineCount++; // must be there coz vobsub index begins to zero...                        
-                        subtitles.Add(si);
-                    }
-				}
-			}
-			catch (Exception i)
-			{
-				MessageBox.Show("The following error ocurred when parsing the info file " + infoFile + "\r\n" + i.Message, "Error parsing info file", MessageBoxButtons.OK);
-                audioTracks.Clear();
-			}
-			finally
-			{
-				if (sr != null)
-				{
-					try 
-					{
-						sr.Close();
-					}
-					catch (IOException i)
-					{
-						Trace.WriteLine("IO Exception when closing StreamReader in FileIndexerWindow: " + i.Message);
-					}
-				}
-			}
-		}
-
+		
         /// <summary>
         /// gets information about a video source using MediaInfo
         /// </summary>
@@ -430,61 +308,6 @@ namespace MeGUI
             return avcS;
         }
 
-        public static int getIDFromSubStream(string fileName)
-        {
-            MediaInfo info;
-            int TrackID = 0;
-            try
-            {
-                info = new MediaInfo(fileName);
-                if (info.Text.Count > 0)
-                {
-                    MediaInfoWrapper.TextTrack strack = info.Text[0];
-                    TrackID = Int32.Parse(strack.ID);
-                }
-            }
-            catch (Exception i)
-            {
-                MessageBox.Show("The following error ocurred when trying to get Media info for file " + fileName + "\r\n" + i.Message, "Error parsing mediainfo data", MessageBoxButtons.OK);
-            }
-            return TrackID;
-        }
-
- 
-        /// <summary>
-        /// gets basic information about a video source based on its DGindex generated log file
-        /// </summary>
-        /// <param name="logFile">the log file to be analyzed</param>
-        /// <param name="audioTrackIDs">the audio tracks IDs found</param>
-        public void getDGindexLogInfo(string logFile, out List<AudioTrackInfo> audioTrackIDs)
-        {
-            StreamReader sr = null;
-            audioTrackIDs = new List<AudioTrackInfo>();
-            try
-            {
-                sr = new StreamReader(logFile, System.Text.Encoding.Default);
-                string line = "";
-                while ((line = sr.ReadLine()) != null)
-                {
-                    if (line.IndexOf("Audio Stream") != -1)
-                    {
-                        char[] separator = { ':' };
-                        string[] split = line.Split(separator, 1000);
-                        AudioTrackInfo ati = new AudioTrackInfo();
-                        ati.TrackIDx = split[1];
-                        ati.Type = split[2].Trim().Substring(0, 3);
-                        audioTrackIDs.Add(ati);
-                    }
-                }
-            }
-            catch
-                (Exception i)
-            {
-                MessageBox.Show("The following error ocurred when parsing the log file " + logFile + "\r\n" + i.Message, "Error parsing log file", MessageBoxButtons.OK);
-                audioTrackIDs.Clear();
-            }
-        }
-
         public static List<string> setDeviceTypes(string outputFormat)
         {
             List<string> deviceList = new List<string>();
@@ -498,6 +321,7 @@ namespace MeGUI
         }
 
  		#endregion
+
 		#region dgindex postprocessing
 		/// <summary>
 		/// gets all demuxed audio files from a given dgindex project
@@ -607,6 +431,7 @@ namespace MeGUI
         }
 
 		#endregion
+
 		#region automated job generation
 		/// <summary>
 		/// ensures that video and audio don't have the same filenames which would lead to severe problems
@@ -1088,33 +913,6 @@ namespace MeGUI
             return qpfile;
         }
 
-        public static string GetNameForNth(int n)
-        {
-            switch (n)
-            {
-                case 0:
-                    return "zeroth";
-                case 1:
-                    return "first";
-                case 2:
-                    return "second";
-                case 3:
-                    return "third";
-                case 4:
-                    return "fourth";
-                case 5:
-                    return "fifth";
-            }
-            string number = n.ToString();
-            if (number.EndsWith("1"))
-                return number + "st";
-            if (number.EndsWith("2"))
-                return number + "nd";
-            if (number.EndsWith("3"))
-                return number + "rd";
-            return number + "th";
-        }
-
         public static string GenerateCombinedFilter(OutputFileType[] types)
         {
             StringBuilder initialFilterName = new StringBuilder();
@@ -1189,6 +987,36 @@ namespace MeGUI
                 return false;
 
             return true;
+        }
+
+        public static string getAssumeFPS(double fps, string strInput)
+        {
+            if (fps <= 0)
+            {
+                if (strInput.ToLower().EndsWith(".ffindex"))
+                    strInput = strInput.Substring(0, strInput.Length - 8);
+                MediaInfoFile oInfo = new MediaInfoFile(strInput);
+                if (oInfo.Info.HasVideo && oInfo.Info.FPS > 0)
+                    fps = oInfo.Info.FPS;
+                else
+                    return String.Empty;
+            }
+
+            string strAssumeFPS = ".AssumeFPS(";
+            string strFPS = Math.Round(fps, 3).ToString("F3", System.Globalization.CultureInfo.InvariantCulture);
+            switch (strFPS)
+            {
+                case "23.976": strAssumeFPS += "24000,1001"; break;
+                case "29.970": strAssumeFPS += "30000,1001"; break;
+                case "59.940": strAssumeFPS += "60000,1001"; break;
+                case "119.880": strAssumeFPS += "120000,1001"; break;
+                case "24.000": strAssumeFPS += "24,1"; break;
+                case "25.000": strAssumeFPS += "25,1"; break;
+                case "50.000": strAssumeFPS += "50,1"; break;
+                case "100.000": strAssumeFPS += "100,1"; break;
+                default: strAssumeFPS += strFPS; break;
+            }
+            return strAssumeFPS + ")";
         }
     }
 	#region helper structs
