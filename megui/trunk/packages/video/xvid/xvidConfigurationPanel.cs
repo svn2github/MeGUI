@@ -146,12 +146,6 @@ namespace MeGUI.packages.video.xvid
                     this.xvidOverflowControlStrength.Minimum = 0;
                     this.xvidMaxOverflowDegradation.Minimum = 0;
                     this.xvidMaxOverflowImprovement.Minimum = 0;
-                    if ((this.xvidOverflowControlStrength.Value == 10) & (this.xvidMaxOverflowDegradation.Value == 10) & (this.xvidMaxOverflowImprovement.Value == 10))
-                    {
-                        this.xvidOverflowControlStrength.Value = 5;
-                        this.xvidMaxOverflowDegradation.Value = 5;
-                        this.xvidMaxOverflowImprovement.Value = 5;
-                    }
                     this.xvidInterlaced.Enabled = true;
                     this.xvidVbvBuffer.Enabled = false;
                     this.xvidVbvMaxRate.Enabled = false;

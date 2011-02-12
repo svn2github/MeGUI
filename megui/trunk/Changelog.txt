@@ -1,3 +1,4 @@
+1937 [XviD] enhanced overflow handling in the settings dialogue
 1936 audio encoding job can be added without existing input file
 1935 AssumeFPS() will be added to DirectShow(), DSS2() and FFVideoSource() scripts
 1934 [HD Streams Extractor] the default tracks will be pre-selected based upon the selected languages in the settings
