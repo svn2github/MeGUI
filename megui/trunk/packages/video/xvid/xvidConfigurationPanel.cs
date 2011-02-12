@@ -384,7 +384,6 @@ namespace MeGUI.packages.video.xvid
                 xs.MaxBQuant = (int)xvidMaxBQuant.Value;
                 xs.CreditsQuantizer = (int)xvidCreditsQuantizer.Value;
                 xs.Trellis = xvidTrellisQuant.Checked;
-                xs.AdaptiveQuant = xvidAdaptiveQuant.Checked;
                 xs.BQuantRatio = (int)xvidBframeQuantRatio.Value;
                 xs.BQuantOffset = (int)xvidBframeQuantOffset.Value;
                 xs.KeyFrameBoost = (int)xvidIframeBoost.Value;
@@ -442,7 +441,6 @@ namespace MeGUI.packages.video.xvid
                 xvidMaxBQuant.Value = xs.MaxBQuant;
                 xvidCreditsQuantizer.Value = xs.CreditsQuantizer;
                 xvidTrellisQuant.Checked = xs.Trellis;
-                xvidAdaptiveQuant.Checked = xs.AdaptiveQuant;
                 xvidBframeQuantRatio.Value = xs.BQuantRatio;
                 xvidBframeQuantOffset.Value = xs.BQuantOffset;
                 xvidIframeBoost.Value = xs.KeyFrameBoost;

@@ -49,7 +49,6 @@ namespace MeGUI.packages.video.xvid
             this.nbThreads = new System.Windows.Forms.NumericUpDown();
             this.xvidInterlaced = new System.Windows.Forms.CheckBox();
             this.xvidTrellisQuant = new System.Windows.Forms.CheckBox();
-            this.xvidAdaptiveQuant = new System.Windows.Forms.CheckBox();
             this.fourCCLabel = new System.Windows.Forms.Label();
             this.fourCC = new System.Windows.Forms.ComboBox();
             this.xvidCodecToolsGroupBox = new System.Windows.Forms.GroupBox();
@@ -217,7 +216,6 @@ namespace MeGUI.packages.video.xvid
             this.xvidOtherGroupBox.Controls.Add(this.nbThreads);
             this.xvidOtherGroupBox.Controls.Add(this.xvidInterlaced);
             this.xvidOtherGroupBox.Controls.Add(this.xvidTrellisQuant);
-            this.xvidOtherGroupBox.Controls.Add(this.xvidAdaptiveQuant);
             this.xvidOtherGroupBox.Controls.Add(this.fourCCLabel);
             this.xvidOtherGroupBox.Controls.Add(this.fourCC);
             this.xvidOtherGroupBox.Location = new System.Drawing.Point(326, 3);
@@ -432,15 +430,6 @@ namespace MeGUI.packages.video.xvid
             this.xvidTrellisQuant.Text = "Trellis Quant";
             this.xvidTrellisQuant.CheckedChanged += new System.EventHandler(this.updateEvent);
             // 
-            // xvidAdaptiveQuant
-            // 
-            this.xvidAdaptiveQuant.Location = new System.Drawing.Point(11, 40);
-            this.xvidAdaptiveQuant.Name = "xvidAdaptiveQuant";
-            this.xvidAdaptiveQuant.Size = new System.Drawing.Size(136, 24);
-            this.xvidAdaptiveQuant.TabIndex = 1;
-            this.xvidAdaptiveQuant.Text = "Adaptive Quantization";
-            this.xvidAdaptiveQuant.CheckedChanged += new System.EventHandler(this.updateEvent);
-            // 
             // fourCCLabel
             // 
             this.fourCCLabel.Location = new System.Drawing.Point(8, 199);
@@ -493,7 +482,6 @@ namespace MeGUI.packages.video.xvid
             // HVSMasking
             // 
             this.HVSMasking.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.HVSMasking.Enabled = false;
             this.HVSMasking.FormattingEnabled = true;
             this.HVSMasking.Items.AddRange(new object[] {
             "None",
@@ -508,7 +496,6 @@ namespace MeGUI.packages.video.xvid
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Enabled = false;
             this.label1.Location = new System.Drawing.Point(9, 187);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(72, 13);
@@ -1505,7 +1492,6 @@ namespace MeGUI.packages.video.xvid
         private System.Windows.Forms.GroupBox xvidOtherGroupBox;
         private System.Windows.Forms.CheckBox xvidInterlaced;
         private System.Windows.Forms.CheckBox xvidTrellisQuant;
-        private System.Windows.Forms.CheckBox xvidAdaptiveQuant;
         private System.Windows.Forms.Label fourCCLabel;
         private System.Windows.Forms.ComboBox fourCC;
         private System.Windows.Forms.GroupBox xvidCodecToolsGroupBox;

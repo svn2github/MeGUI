@@ -69,7 +69,7 @@ namespace MeGUI
                     keyFrameBoost, keyframeThreshold, keyframeReduction, overflowControlStrength,
                     maxOverflowImprovement, maxOverflowDegradation, highBitrateDegradation, lowBitrateImprovement, reactionDelayFactor, averagingPeriod,
                     rateControlBuffer, frameDropRatio, xvidProfile, vbvBuffer, vbvMaxRate, vbvPeakRate, hvsMasking;
-        private bool packedBitstream, gmc, chromaMotion, closedGOP, vhqForBframes, adaptiveQuant, interlaced, bottomFieldFirst, lumiMasking, turbo;
+        private bool packedBitstream, gmc, chromaMotion, closedGOP, vhqForBframes, interlaced, bottomFieldFirst, turbo;
         private decimal bframeThreshold, quantizer;
         private string customQuantizerMatrix;
         public override bool UsesSAR
@@ -117,10 +117,8 @@ namespace MeGUI
             chromaMotion = true;
             closedGOP = true;
             Trellis = true;
-            adaptiveQuant = false;
             bframeThreshold = new decimal(0);
             interlaced = false;
-            lumiMasking = false;
             frameDropRatio = 0;
             bottomFieldFirst = true;
             customQuantizerMatrix = "";
@@ -130,7 +128,7 @@ namespace MeGUI
             vbvPeakRate = 0;
             base.MaxNumberOfPasses = 2;
             FourCCs = FourCCsForMPEG4ASP;
-            hvsMasking = 0;
+            hvsMasking = 1;
         }
         #region properties
         /// I believe we really does'nt need to create this array @ per-instance basis
@@ -305,10 +303,19 @@ namespace MeGUI
             get { return vhqForBframes; }
             set { vhqForBframes = value; }
         }
-        public bool AdaptiveQuant
+#warning deprecated since 1941
+        public string AdaptiveQuant
         {
-            get { return adaptiveQuant; }
-            set { adaptiveQuant = value; }
+            get { return "migrated"; }
+            set
+            {
+                if (value.Equals("migrated"))
+                    return;
+                if (value.Equals("false"))
+                    hvsMasking = 0;
+                else if (value.Equals("true"))
+                    hvsMasking = 1;
+            }
         }
         public bool Interlaced
         {
@@ -324,14 +331,6 @@ namespace MeGUI
         {
             get { return bottomFieldFirst; }
             set { bottomFieldFirst = value; }
-        }
-        /// <summary>
-        /// gets / sets if lumi masking is used
-        /// </summary>
-        public bool LumiMasking
-        {
-            get { return lumiMasking; }
-            set { lumiMasking = value; }
         }
         public decimal BframeThreshold
         {

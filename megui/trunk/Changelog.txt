@@ -1,3 +1,5 @@
+1941 [XviD] replaced -lumimasking with -masking (requires xvid 1.3). Feature request #3139141
+     [XviD] disabled direct mkv ouput
 1940 [Log] changed version number syntax for MeGUI x64
 1939 [Settings] added buttons to clear the default output directory and the path to neroaacenc. Feature request #3177293
 1938 [One-Click] fixed language pre-selection if the default languages are not different. Bug #3178016

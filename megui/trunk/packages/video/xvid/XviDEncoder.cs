@@ -184,11 +184,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "XviDEncoder");
                 else
                     sb.Append("2 ");
             }
-            // actual Xvid Encoder doesn't support masking selection yet. however -lumimasking activates variance adaptive quantization
-            // if (xs.HVSMasking != 0)
-            //    sb.Append("-masking " + xs.HVSMasking + " ");
-            if (xs.AdaptiveQuant)
-                sb.Append("-lumimasking ");
+            if (xs.HVSMasking != 0)
+                sb.Append("-masking " + xs.HVSMasking + " ");
             if (!xs.Trellis)
                 sb.Append("-notrellis ");
             if (!xs.ChromaMotion)
