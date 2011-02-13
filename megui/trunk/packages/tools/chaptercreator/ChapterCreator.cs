@@ -627,11 +627,14 @@ namespace MeGUI
 						if (creditsStartFrame > 0)
 							player.CreditsStart = this.creditsStartFrame;
 						player.Show();
+                        this.TopMost = player.TopMost = true;
+                        if (!mainForm.Settings.AlwaysOnTop)
+                            this.TopMost = player.TopMost = false;
 					}
 					else
 						return;
 				}
-				if (chapterListView.SelectedItems.Count == 1) // a zone has been selected, show that zone
+                if (chapterListView.SelectedItems.Count == 1 && chapterListView.SelectedItems[0].Tag != null) // a zone has been selected, show that zone
 				{
 					Chapter chap = (Chapter)chapterListView.SelectedItems[0].Tag;
 					int time = Util.getTimeCode(chap.timecode);

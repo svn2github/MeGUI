@@ -132,20 +132,7 @@ namespace MeGUI
 		/// <returns>true if the video could be opened, false if not</returns>
         public bool loadVideo(MainForm mainForm, string path, PREVIEWTYPE type, bool hasAR)
         {
-            return loadVideo(mainForm, path, type, hasAR, false, -1);
-        }
-
-		/// <summary>
-		/// loads the video, sets up the proper window size and enables / disables the GUI buttons depending on the
-		/// preview type set
-		/// </summary>
-		/// <param name="path">path of the video file to be loaded</param>
-		/// <param name="type">type of window</param>
-        /// <param name="inlineAvs">true if path contain not filename but avsynth script to be parsed</param>
-		/// <returns>true if the video could be opened, false if not</returns>
-        public bool loadVideo(MainForm mainForm, string path, PREVIEWTYPE type, bool hasAR, bool inlineAvs)
-        {
-            return loadVideo(mainForm, path, type, hasAR, inlineAvs, -1);
+            return loadVideo(mainForm, path, type, hasAR, false, -1, false);
         }
 
         /// <summary>
@@ -157,11 +144,12 @@ namespace MeGUI
         /// <param name="inlineAvs">true if path contain not filename but avsynth script to be parsed</param>
         /// <param name="startFrame">Select a specific frame to start off with or -1 for middle of video</param>
 		/// <returns>true if the video could be opened, false if not</returns>
-		public bool loadVideo(MainForm mainForm, string path, PREVIEWTYPE type, bool hasAR, bool inlineAvs, int startFrame)
+        public bool loadVideo(MainForm mainForm, string path, PREVIEWTYPE type, bool hasAR, bool inlineAvs, int startFrame, bool originalSize)
 		{
             videoPreview.UnloadVideo();
             bInlineAVS = inlineAvs;
             strFileName = path;
+            bOriginalSize = originalSize;
 
             lock (this)
             {
@@ -305,7 +293,6 @@ namespace MeGUI
         {
             bOriginalSize = true;
             zoomWidth = (int)file.Info.Width;
-            //SetMaxZoomWidth();
             zoomFactor = (int)((double)zoomWidth / zoomMaxWidth * 100.0);
             resize(zoomWidth, showPAR.Checked);
         }
@@ -415,7 +402,10 @@ namespace MeGUI
             }
 
             if (iOldZoomMaxWidth == 0 || zoomMaxWidth < zoomWidth)
-                btnFitScreen_Click(null, null);
+                if (!bOriginalSize)
+                    btnFitScreen_Click(null, null);
+                else
+                    originalSizeButton_Click(null, null);
         }
         private void doInitialAdjustment()
         {
@@ -463,40 +453,33 @@ namespace MeGUI
             
             // resize main window
             sizeLock = true;
-            if (this.videoWindowWidth < buttonPanelMinWidth)
-            {
-                this.Size = new Size(buttonPanelMinWidth + 2 * SystemInformation.FixedFrameBorderSize.Width, this.videoWindowHeight + formHeightDelta);  
-            }
-            else if (bOriginalSize)
+            int iMainHeight = this.videoWindowHeight + formHeightDelta;
+            int iMainWidth = this.videoWindowWidth + 2 * SystemInformation.FixedFrameBorderSize.Width + 2;
+            if (bOriginalSize)
             {
                 Size oSizeScreen = Screen.GetWorkingArea(this).Size;
                 int iScreenHeight = oSizeScreen.Height - 2 * SystemInformation.FixedFrameBorderSize.Height;
                 int iScreenWidth = oSizeScreen.Width - 2 * SystemInformation.FixedFrameBorderSize.Width;
 
-                int iMainHeight = videoWindowHeight + formHeightDelta;
                 if (iMainHeight >= iScreenHeight)
                     iMainHeight = iScreenHeight;
 
-                int iMainWidth = videoWindowWidth + 2 * SystemInformation.FixedFrameBorderSize.Width;
                 if (iMainWidth >= iScreenWidth)
                     iMainWidth = iScreenWidth;
-
-                this.Size = new Size(iMainWidth, iMainHeight);   
             }
-            else
-            {
-                this.Size = new Size(this.videoWindowWidth + 2 * SystemInformation.FixedFrameBorderSize.Width + 2, this.videoWindowHeight + formHeightDelta);
-            }
+            if (iMainWidth - 2 * SystemInformation.FixedFrameBorderSize.Width - 2 < buttonPanelMinWidth)
+                iMainWidth = buttonPanelMinWidth + 2 * SystemInformation.FixedFrameBorderSize.Width;
+            this.Size = new Size(iMainWidth, iMainHeight);
 
             // resize videoPanel
-            this.videoPanel.Size = new Size(this.Size.Width - 2 * SystemInformation.FixedFrameBorderSize.Width, this.Size.Height - formHeightDelta + 2);
+            this.videoPanel.Size = new Size(iMainWidth - 2 * SystemInformation.FixedFrameBorderSize.Width, iMainHeight - formHeightDelta + 2);
             sizeLock = false;
 
             // resize videoPreview
             this.videoPreview.Size = new Size(this.videoWindowWidth, this.videoWindowHeight);
 
             // resize buttonPanel
-            this.buttonPanel.Size = new Size(this.Size.Width - 2 * SystemInformation.FixedFrameBorderSize.Width, buttonPanel.Height);
+            this.buttonPanel.Size = new Size(iMainWidth - 2 * SystemInformation.FixedFrameBorderSize.Width, buttonPanel.Height);
             this.buttonPanel.Location = new Point(1, videoPanel.Location.Y + videoPanel.Size.Height);
             ResumeLayout();
         }
@@ -576,6 +559,7 @@ namespace MeGUI
             this.btnReloadVideo = new System.Windows.Forms.Button();
             this.zoomOutButton = new System.Windows.Forms.Button();
             this.zoomInButton = new System.Windows.Forms.Button();
+            this.arChooser = new MeGUI.core.gui.ARChooser();
             this.showPAR = new System.Windows.Forms.CheckBox();
             this.originalSizeButton = new System.Windows.Forms.Button();
             this.introEndButton = new System.Windows.Forms.Button();
@@ -586,7 +570,6 @@ namespace MeGUI
             this.defaultToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.videoPanel = new System.Windows.Forms.Panel();
             this.videoPreview = new MeGUI.core.gui.VideoPlayerControl();
-            this.arChooser = new MeGUI.core.gui.ARChooser();
             goToFrameButton = new System.Windows.Forms.Button();
             this.buttonPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.positionSlider)).BeginInit();
@@ -792,6 +775,19 @@ namespace MeGUI
             this.zoomInButton.UseVisualStyleBackColor = true;
             this.zoomInButton.Click += new System.EventHandler(this.zoomInButton_Click);
             // 
+            // arChooser
+            // 
+            this.arChooser.CustomDARs = new MeGUI.core.util.Dar[0];
+            this.arChooser.HasLater = false;
+            this.arChooser.Location = new System.Drawing.Point(241, 45);
+            this.arChooser.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.arChooser.MinimumSize = new System.Drawing.Size(64, 29);
+            this.arChooser.Name = "arChooser";
+            this.arChooser.SelectedIndex = 0;
+            this.arChooser.Size = new System.Drawing.Size(170, 29);
+            this.arChooser.TabIndex = 11;
+            this.arChooser.SelectionChanged += new MeGUI.StringChanged(this.arChooser_SelectionChanged);
+            // 
             // showPAR
             // 
             this.showPAR.AutoSize = true;
@@ -889,19 +885,6 @@ namespace MeGUI
             this.videoPreview.TabIndex = 11;
             this.videoPreview.PositionChanged += new System.EventHandler(this.videoPreview_PositionChanged);
             // 
-            // arChooser
-            // 
-            this.arChooser.CustomDARs = new MeGUI.core.util.Dar[0];
-            this.arChooser.HasLater = false;
-            this.arChooser.Location = new System.Drawing.Point(241, 45);
-            this.arChooser.MaximumSize = new System.Drawing.Size(1000, 29);
-            this.arChooser.MinimumSize = new System.Drawing.Size(64, 29);
-            this.arChooser.Name = "arChooser";
-            this.arChooser.SelectedIndex = 0;
-            this.arChooser.Size = new System.Drawing.Size(170, 29);
-            this.arChooser.TabIndex = 11;
-            this.arChooser.SelectionChanged += new MeGUI.StringChanged(this.arChooser_SelectionChanged);
-            // 
             // VideoPlayer
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
@@ -972,6 +955,27 @@ namespace MeGUI
 		/// <param name="bottom">number of pixels to crop from the bottom</param>
 		public void crop(int left, int top, int right, int bottom)
 		{
+            if (videoPreview.CropMargin.Left != left)
+            {
+                videoPanel.HorizontalScroll.Value = videoPanel.HorizontalScroll.Minimum;
+                videoPanel.HorizontalScroll.Value = videoPanel.HorizontalScroll.Minimum;
+            }
+            else if (videoPreview.CropMargin.Right != right)
+            {
+                videoPanel.HorizontalScroll.Value = videoPanel.HorizontalScroll.Maximum;
+                videoPanel.HorizontalScroll.Value = videoPanel.HorizontalScroll.Maximum;
+            }
+            if (videoPreview.CropMargin.Top != top)
+            {
+                videoPanel.VerticalScroll.Value = videoPanel.VerticalScroll.Minimum;
+                videoPanel.VerticalScroll.Value = videoPanel.VerticalScroll.Minimum;
+            }
+            else if (videoPreview.CropMargin.Bottom != bottom)
+            {
+                videoPanel.VerticalScroll.Value = videoPanel.VerticalScroll.Maximum;
+                videoPanel.VerticalScroll.Value = videoPanel.VerticalScroll.Maximum;
+            }
+            
             videoPreview.CropMargin = new Padding(left, top, right, bottom);
 		}
 		#endregion
@@ -1257,6 +1261,7 @@ namespace MeGUI
         private void goToFrameButton_Click(object sender, EventArgs e)
         {
             decimal val;
+            bool bTopMost = this.TopMost;
             this.TopMost = false;
             if (NumberChooser.ShowDialog("Enter a frame number:", "Go to frame",
                 0, positionSlider.Minimum, positionSlider.Maximum, positionSlider.Value, out val)
@@ -1265,7 +1270,7 @@ namespace MeGUI
                 positionSlider.Value = (int)val;
                 positionSlider_Scroll(null, null);
             }
-            this.TopMost = mainForm.Settings.AlwaysOnTop;
+            this.TopMost = bTopMost;
         }
 
         private void arChooser_SelectionChanged(object sender, string val)

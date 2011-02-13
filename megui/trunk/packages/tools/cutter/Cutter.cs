@@ -64,6 +64,9 @@ namespace MeGUI.packages.tools.cutter
             player.AllowClose = false;
             player.ZoneSet += new ZoneSetCallback(player_ZoneSet);
             player.Show();
+            this.TopMost = player.TopMost = true;
+            if (!mainForm.Settings.AlwaysOnTop)
+                this.TopMost = player.TopMost = false;
         }
 
         /// <summary>

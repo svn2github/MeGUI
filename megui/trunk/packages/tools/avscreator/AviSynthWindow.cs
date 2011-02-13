@@ -1471,7 +1471,7 @@ namespace MeGUI
             if (player == null || player.IsDisposed) 
                 player = new VideoPlayer();
 
-            bool videoLoaded = player.loadVideo(mainForm, avisynthScript.Text, PREVIEWTYPE.REGULAR, false, true, player.CurrentFrame);
+            bool videoLoaded = player.loadVideo(mainForm, avisynthScript.Text, PREVIEWTYPE.REGULAR, false, true, player.CurrentFrame, true);
 			if (videoLoaded)
 			{
 				player.disableIntroAndCredits();
@@ -1479,6 +1479,9 @@ namespace MeGUI
                 isPreviewMode = true;
                 sendCropValues();
 				player.Show();
+                this.TopMost = player.TopMost = true;
+                if (!mainForm.Settings.AlwaysOnTop)
+                    this.TopMost = player.TopMost = false;
 			}
 		}
 		private void saveButton_Click(object sender, System.EventArgs e)
@@ -1933,12 +1936,14 @@ namespace MeGUI
             else
                 iCurrentFrame = player.CurrentFrame;
             this.isPreviewMode = false;
-            if (player.loadVideo(mainForm, originalScript, PREVIEWTYPE.REGULAR, false, originalInlineAvs, iCurrentFrame))
+            if (player.loadVideo(mainForm, originalScript, PREVIEWTYPE.REGULAR, false, originalInlineAvs, iCurrentFrame, true))
             {
                 player.Show();
                 reader = player.Reader;
                 sendCropValues();
-                if (mainForm.Settings.AlwaysOnTop) player.TopMost = true;
+                this.TopMost = player.TopMost = true;
+                if (!mainForm.Settings.AlwaysOnTop)
+                    this.TopMost = player.TopMost = false;
                 return true;
             }
             else
