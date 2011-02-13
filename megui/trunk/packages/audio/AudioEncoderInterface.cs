@@ -218,6 +218,13 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             raiseEvent();
         }
 
+        private void updateTime()
+        {
+            su.TimeElapsed = DateTime.Now - _start;
+            su.FillValues();
+            raiseEvent();
+        }
+
         private void raiseEvent(string s)
         {
             su.Status = s;
@@ -312,26 +319,36 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
 
                                 GCHandle h = GCHandle.Alloc(frameBuffer, GCHandleType.Pinned);
                                 IntPtr address = h.AddrOfPinnedObject();
+                                Thread t = new Thread(new ThreadStart(delegate
+                                {
+                                    while (true)
+                                    {
+                                        updateTime();
+                                        Thread.Sleep(1000);
+                                    }
+                                }));
+                                t.Start();
                                 try
                                 {
                                     su.ClipLength = TimeSpan.FromSeconds((double)a.SamplesCount / (double)_sampleRate);
                                     while (frameSample < a.SamplesCount)
                                     {
                                         _mre.WaitOne();
-                                        
+
                                         if (_encoderProcess != null)
                                             if (_encoderProcess.HasExited)
                                                 throw new ApplicationException("Abnormal encoder termination " + _encoderProcess.ExitCode.ToString());
                                         int nHowMany = Math.Min((int)(a.SamplesCount - frameSample), MAX_SAMPLES_PER_ONCE);
+
                                         a.ReadAudio(address, frameSample, nHowMany);
                                         
                                         _mre.WaitOne();
                                         if (!hasStartedEncoding)
                                         {
+                                            t.Abort();
                                             raiseEvent("Encoding audio...");
                                             hasStartedEncoding = true;
                                         }
-
 
                                         target.Write(frameBuffer, 0, nHowMany * a.ChannelsCount * a.BytesPerSample);
                                         target.Flush();
@@ -347,6 +364,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                                 finally
                                 {
                                     h.Free();
+                                    t.Abort();
                                 }
                                 setProgress(1M);
 

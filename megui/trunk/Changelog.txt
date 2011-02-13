@@ -1,4 +1,5 @@
-1945 [VideoPlayer] while resizing/opening the window will be moved in the visible area of the desktop
+1946 [Audio Jobs] update elapsed time while preprocessing
+1945 [VideoPlayer] while resizing/opening the window is moved to the visible area of the desktop
 1944 [One-Click] audio language names added to the output file
 1943 [AVS Script Creator] VideoPlayer preview starts in 1:1 mode
      [AVS Script Creator] while cropping VideoPlayer preview moves to the cropping border
@@ -8,7 +9,7 @@
      [Chapter Creator] + [AVS Cutter] VideoPlayer preview respect the "always on top" setting
 1942 [VideoPlayer] fixed invisible right border in some OS (at least XP). Bug #3177073
 1941 [XviD] replaced -lumimasking with -masking (requires xvid 1.3). Feature request #3139141
-     [XviD] disabled direct mkv ouput
+     [XviD] disabled direct mkv output
 1940 [Log] changed version number syntax for MeGUI x64
 1939 [Settings] added buttons to clear the default output directory and the path to neroaacenc. Feature request #3177293
 1938 [One-Click] fixed language pre-selection if the default languages are not different. Bug #3178016
