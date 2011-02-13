@@ -1,3 +1,4 @@
+1945 [VideoPlayer] while resizing/opening the window will be moved in the visible area of the desktop
 1944 [One-Click] audio language names added to the output file
 1943 [AVS Script Creator] VideoPlayer preview starts in 1:1 mode
      [AVS Script Creator] while cropping VideoPlayer preview moves to the cropping border

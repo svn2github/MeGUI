@@ -879,7 +879,7 @@ namespace MeGUI
             this.videoPreview.Location = new System.Drawing.Point(1, 1);
             this.videoPreview.Margin = new System.Windows.Forms.Padding(0);
             this.videoPreview.Name = "videoPreview";
-            this.videoPreview.Position = -1;
+            this.videoPreview.Position = 0;
             this.videoPreview.Size = new System.Drawing.Size(274, 164);
             this.videoPreview.SpeedUp = 1D;
             this.videoPreview.TabIndex = 11;
@@ -1313,10 +1313,20 @@ namespace MeGUI
             Size oSizeScreen = Screen.GetWorkingArea(this).Size;
             int iScreenHeight = oSizeScreen.Height - 2 * SystemInformation.FixedFrameBorderSize.Height;
             int iScreenWidth = oSizeScreen.Width - 2 * SystemInformation.FixedFrameBorderSize.Width;
+            
             if (this.Size.Height >= iScreenHeight)
                 this.Location = new Point(this.Location.X, 5);
+            else if (this.Location.Y <= 0)
+                this.Location = new Point(this.Location.X, 5);
+            else if (this.Location.Y + this.Size.Height > iScreenHeight)
+                this.Location = new Point(this.Location.X, iScreenHeight - this.Size.Height);
+
             if (this.Size.Width >= iScreenWidth)
                 this.Location = new Point(3, this.Location.Y);
+            else if (this.Location.X <= 0)
+                this.Location = new Point(3, this.Location.Y);
+            else if (this.Location.X + this.Size.Width > iScreenWidth)
+                this.Location = new Point(iScreenWidth - this.Size.Width, this.Location.Y);
         }
 	}
 }
