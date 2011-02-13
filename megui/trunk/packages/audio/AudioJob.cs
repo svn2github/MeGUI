@@ -35,15 +35,17 @@ namespace MeGUI
         public string CutFile;
 		public AudioCodecSettings Settings;
         public int Delay;
+        public string Language;
 
-        public AudioJob() : this(null, null, null, null, 0) { }
+        public AudioJob() : this(null, null, null, null, 0, null) { }
 
-        public AudioJob(string input, string output, string cutfile, AudioCodecSettings settings, int delay)
+        public AudioJob(string input, string output, string cutfile, AudioCodecSettings settings, int delay, string strLanguage)
             :base(input, output)
         {
             CutFile = cutfile;
             Settings = settings;
             Delay = delay;
+            Language = strLanguage;
         }
 
         public long SizeBytes;
@@ -58,6 +60,13 @@ namespace MeGUI
 
         public MuxStream ToMuxStream()
         {
+            if (!String.IsNullOrEmpty(Language))
+            {
+                if (TrackInfo == null)
+                    TrackInfo = new TrackInfo(Language, null);
+                else
+                    TrackInfo.Language = Language;
+            }
             return new MuxStream(Output, TrackInfo, 0, false); 
             // no delay correction is required since the audio job will fix the delay
         }

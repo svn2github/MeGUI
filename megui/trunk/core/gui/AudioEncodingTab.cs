@@ -191,7 +191,7 @@ namespace MeGUI.core.gui
                     return null;
 
                 return new AudioJob(this.AudioInput, this.AudioOutput, this.cuts.Filename,
-                    this.AudCodecSettings, (int)delay.Value);
+                    this.AudCodecSettings, (int)delay.Value, null);
             }
             set
             {

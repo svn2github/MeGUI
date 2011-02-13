@@ -463,6 +463,7 @@ namespace MeGUI
                             continue;
 
                         string aInput;
+                        string strLanguage = null;
                         TrackInfo info = null;
                         int delay = audioConfigControl[i].Delay;
                         if (audioTrack[i].SelectedSCItem.IsStandard)
@@ -471,6 +472,7 @@ namespace MeGUI
                             audioTracks.Add(a);
                             aInput = "::" + a.TrackID + "::";
                             info = a.TrackInfo;
+                            strLanguage = a.Language;
                         }
                         else
                             aInput = audioTrack[i].SelectedText;
@@ -478,7 +480,7 @@ namespace MeGUI
                         if (audioConfigControl[i].DontEncode)
                             muxOnlyAudio.Add(new MuxStream(aInput, info, delay, false));
                         else
-                            aJobs.Add(new AudioJob(aInput, null, null, audioConfigControl[i].Settings, delay));
+                            aJobs.Add(new AudioJob(aInput, null, null, audioConfigControl[i].Settings, delay, strLanguage));
                     }
     
                     DGIndexPostprocessingProperties dpp = new DGIndexPostprocessingProperties();

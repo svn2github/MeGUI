@@ -650,7 +650,6 @@ namespace MeGUI
                 allInputAudioTypes.Add(stream.ToMuxableType());
             }
 
-
             List<MuxableType> allInputSubtitleTypes = new List<MuxableType>();
             foreach (MuxStream muxStream in subtitles)
                 if (VideoUtil.guessSubtitleType(muxStream.path) != null)
