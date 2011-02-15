@@ -523,7 +523,6 @@ namespace MeGUI
             this.gbFileInformation.Controls.Add(this.lblScanType);
             this.gbFileInformation.Controls.Add(this.lblCodec);
             this.gbFileInformation.Controls.Add(this.lblContainer);
-            this.gbFileInformation.Enabled = false;
             this.gbFileInformation.Location = new System.Drawing.Point(12, 62);
             this.gbFileInformation.Name = "gbFileInformation";
             this.gbFileInformation.Size = new System.Drawing.Size(424, 67);
@@ -558,7 +557,7 @@ namespace MeGUI
             // lblScanType
             // 
             this.lblScanType.AutoSize = true;
-            this.lblScanType.Location = new System.Drawing.Point(150, 18);
+            this.lblScanType.Location = new System.Drawing.Point(152, 18);
             this.lblScanType.Name = "lblScanType";
             this.lblScanType.Size = new System.Drawing.Size(57, 13);
             this.lblScanType.TabIndex = 2;
@@ -567,7 +566,8 @@ namespace MeGUI
             // lblCodec
             // 
             this.lblCodec.AutoSize = true;
-            this.lblCodec.Location = new System.Drawing.Point(12, 18);
+            this.lblCodec.Location = new System.Drawing.Point(11, 18);
+            this.lblCodec.Margin = new System.Windows.Forms.Padding(0);
             this.lblCodec.Name = "lblCodec";
             this.lblCodec.Size = new System.Drawing.Size(37, 13);
             this.lblCodec.TabIndex = 1;
@@ -576,7 +576,7 @@ namespace MeGUI
             // lblContainer
             // 
             this.lblContainer.AutoSize = true;
-            this.lblContainer.Location = new System.Drawing.Point(297, 18);
+            this.lblContainer.Location = new System.Drawing.Point(301, 18);
             this.lblContainer.Name = "lblContainer";
             this.lblContainer.Size = new System.Drawing.Size(54, 13);
             this.lblContainer.TabIndex = 0;
@@ -680,12 +680,12 @@ namespace MeGUI
             IndexType newType;
             if (iFile.recommendIndexer(out newType, false))
             {
+                gbIndexer.Enabled = gbAudio.Enabled = gbOutput.Enabled = true;
                 changeIndexer(newType);
-                gbIndexer.Enabled = gbFileInformation.Enabled = gbAudio.Enabled = gbOutput.Enabled = true;
             }
             else
             {
-                gbIndexer.Enabled = gbFileInformation.Enabled = gbAudio.Enabled = gbOutput.Enabled = false;
+                gbIndexer.Enabled = gbAudio.Enabled = gbOutput.Enabled = false;
                 btnFFMS.Checked = btnD2V.Checked = btnDGA.Checked = btnDGI.Checked = false;
                 output.Text = "";
                 demuxNoAudiotracks.Checked = true;
