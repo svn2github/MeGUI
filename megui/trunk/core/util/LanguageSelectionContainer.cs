@@ -97,7 +97,7 @@ namespace MeGUI
             addLanguage("Chinese", "chi");
             addLanguage("Chinese (Alt)", "zho");
             addLanguage("Corsican", "cos");
-            addLanguage("Croatian", "scr");
+            addLanguage("Croatian", "hrv");
             addLanguage("Czech", "cze");
             addLanguage("Danish", "dan");
             addLanguage("Dutch", "dut");            
@@ -131,9 +131,9 @@ namespace MeGUI
             addLanguage("Persian", "per");
             addLanguage("Polish", "pol");
             addLanguage("Portuguese", "por");
-            addLanguage("Romanian", "ron");
+            addLanguage("Romanian", "rum");
             addLanguage("Russian", "rus");
-            addLanguage("Serbian", "scc");
+            addLanguage("Serbian", "srp");
             addLanguage("Slovak", "slk");
             addLanguage("Slovenian", "slv");
             addLanguage("Spanish", "spa");
