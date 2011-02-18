@@ -806,6 +806,11 @@ namespace MeGUI.core.gui
 
         internal void UserRequestedAbort()
         {
+            if (currentJob.Status == JobStatus.ABORTED)
+            {
+                MessageBox.Show("Job already aborting. Please wait.", "Abort in progress", MessageBoxButtons.OK);
+                return;
+            }
             DialogResult r = MessageBox.Show("Do you really want to abort?", "Really abort?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (r == DialogResult.Yes)
                 Abort();

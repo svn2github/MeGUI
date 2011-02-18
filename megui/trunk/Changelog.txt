@@ -1,3 +1,4 @@
+1953 [Job] enhanced message in case a job is already aborted
 1952 [FFMSIndexer] enhanced progress window in case that the index file already exists
 1951 [MKV Muxer] problem with chapter information in audio files fixed
 1950 [One-Click] a new job will be added after the indexing job to show the progress of the preprocessing
