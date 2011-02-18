@@ -32,15 +32,13 @@ namespace MeGUI
 		{
 		}
 
-        public D2VIndexJob(string input, string output, int demuxType, List<AudioTrackInfo> audioTracks,
-            DGIndexPostprocessingProperties properties, bool loadSources, bool demuxVideo)
+        public D2VIndexJob(string input, string output, int demuxType, List<AudioTrackInfo> audioTracks, bool loadSources, bool demuxVideo)
             : base()
         {
             Input = input;
             Output = output;
             DemuxMode = demuxType;
             AudioTracks = audioTracks;
-            PostprocessingProperties = properties;
             LoadSources = loadSources;
             DemuxVideo = demuxVideo;
             FilesToDelete.Add(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(input), System.IO.Path.GetFileNameWithoutExtension(input) + ".log"));

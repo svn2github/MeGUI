@@ -632,6 +632,8 @@ namespace MeGUI.core.gui
                     log.LogEvent("Muxing started");
                 else if (job.Job.EncodingMode.Equals("idx"))
                     log.LogEvent("Indexing started");
+                else if (job.Job.EncodingMode.Equals("oneclick"))
+                    log.LogEvent("OneClick processing started");
                 else
                     log.LogEvent("Encoding started");
                 refreshAll();

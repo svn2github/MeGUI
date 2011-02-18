@@ -32,7 +32,6 @@ namespace MeGUI
         private bool demuxVideo;
 		private int demuxMode;
         private List<AudioTrackInfo> audioTracks;
-		private DGIndexPostprocessingProperties postprocessingProperties;
 		
 		public IndexJob():base()
 		{
@@ -75,19 +74,6 @@ namespace MeGUI
             get { return audioTracks; }
             set { audioTracks = value; }
         }
-
-		/// <summary>
-		/// gets / sets the postprocessing properties
-		/// if this is not set, we're just dealing with a regular demuxing job
-		/// if it is defined, we're dealing with an index job in one click mode
-		/// and all the postprocessing that has to be done prior to audio encoding
-		/// is defined in this property
-		/// </summary>
-		public DGIndexPostprocessingProperties PostprocessingProperties
-		{
-			get {return postprocessingProperties;}
-			set {postprocessingProperties = value;}
-		}
 
         public override string CodecString
         {

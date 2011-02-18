@@ -1717,6 +1717,8 @@ namespace MeGUI
             PackageSystem.JobProcessors.Register(MP4BoxMuxer.Factory);
             PackageSystem.JobProcessors.Register(AMGMuxer.Factory);
             PackageSystem.JobProcessors.Register(tsMuxeR.Factory);
+
+            PackageSystem.JobProcessors.Register(OneClickPostProcessing.Factory);
             PackageSystem.JobProcessors.Register(CleanupJobRunner.Factory);
 
             PackageSystem.JobProcessors.Register(AviSynthProcessor.Factory);
@@ -1752,7 +1754,6 @@ namespace MeGUI
             PackageSystem.MediaFileTypes.Register(new ffmsFileFactory());
             PackageSystem.MediaFileTypes.Register(new MediaInfoFileFactory());
             PackageSystem.JobPreProcessors.Register(BitrateCalculatorPreProcessor.CalculationProcessor);
-            PackageSystem.JobPostProcessors.Register(OneClickPostProcessor.PostProcessor);
             PackageSystem.JobPostProcessors.Register(d2vIndexJobPostProcessor.PostProcessor);
             PackageSystem.JobPostProcessors.Register(dgaIndexJobPostProcessor.PostProcessor);
             PackageSystem.JobPostProcessors.Register(dgiIndexJobPostProcessor.PostProcessor);

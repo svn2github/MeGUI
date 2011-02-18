@@ -848,7 +848,7 @@ namespace MeGUI
                 audioTracks.Add(ati);
             }
 
-            return new D2VIndexJob(this.input.Filename, this.output.Text, demuxType, audioTracks, null, loadOnComplete.Checked, demuxVideo.Checked);
+            return new D2VIndexJob(this.input.Filename, this.output.Text, demuxType, audioTracks, loadOnComplete.Checked, demuxVideo.Checked);
 		}
         private DGIIndexJob generateDGNVIndexJob()
         {
@@ -866,7 +866,7 @@ namespace MeGUI
                 audioTracks.Add(ati);
             }
 
-            return new DGIIndexJob(this.input.Filename, this.output.Text, demuxType, audioTracks, null, loadOnComplete.Checked, demuxVideo.Checked);
+            return new DGIIndexJob(this.input.Filename, this.output.Text, demuxType, audioTracks, loadOnComplete.Checked, demuxVideo.Checked);
         }
         private DGAIndexJob generateDGAIndexJob()
         {
@@ -884,7 +884,7 @@ namespace MeGUI
                 audioTracks.Add(ati);
             }
 
-            return new DGAIndexJob(this.input.Filename, this.output.Text, demuxType, audioTracks, null, loadOnComplete.Checked, demuxVideo.Checked);
+            return new DGAIndexJob(this.input.Filename, this.output.Text, demuxType, audioTracks, loadOnComplete.Checked, demuxVideo.Checked);
         }
         private FFMSIndexJob generateFFMSIndexJob()
         {
@@ -902,7 +902,7 @@ namespace MeGUI
                 audioTracks.Add(ati);
             }
 
-            return new FFMSIndexJob(this.input.Filename, demuxType, audioTracks, null, loadOnComplete.Checked);
+            return new FFMSIndexJob(this.input.Filename, demuxType, audioTracks, loadOnComplete.Checked);
         }
 		#endregion
 		#region properties
@@ -994,7 +994,6 @@ namespace MeGUI
         {
             if (!(ajob is D2VIndexJob)) return null;
             D2VIndexJob job = (D2VIndexJob)ajob;
-            if (job.PostprocessingProperties != null) return null;
 
             StringBuilder logBuilder = new StringBuilder();
             VideoUtil vUtil = new VideoUtil(mainForm);
@@ -1034,7 +1033,6 @@ namespace MeGUI
         {
             if (!(ajob is DGIIndexJob)) return null;
             DGIIndexJob job = (DGIIndexJob)ajob;
-            if (job.PostprocessingProperties != null) return null;
 
             StringBuilder logBuilder = new StringBuilder();
             VideoUtil vUtil = new VideoUtil(mainForm);
@@ -1074,7 +1072,6 @@ namespace MeGUI
         {
             if (!(ajob is DGAIndexJob)) return null;
             DGAIndexJob job = (DGAIndexJob)ajob;
-            if (job.PostprocessingProperties != null) return null;
 
             StringBuilder logBuilder = new StringBuilder();
             VideoUtil vUtil = new VideoUtil(mainForm);

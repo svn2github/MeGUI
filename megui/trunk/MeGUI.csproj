@@ -716,13 +716,15 @@
     <Compile Include="packages\tools\oneclick\AudioConfigControl.Designer.cs">
       <DependentUpon>AudioConfigControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="packages\tools\oneclick\DGIndexPostprocessingProperties.cs" />
+    <Compile Include="packages\tools\oneclick\OneClickPostprocessingProperties.cs" />
     <Compile Include="packages\tools\oneclick\OneClickConfigPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="packages\tools\oneclick\OneClickConfigPanel.Designer.cs">
       <DependentUpon>OneClickConfigPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="packages\tools\oneclick\OneClickPostProcessing.cs" />
+    <Compile Include="packages\tools\oneclick\OneClickPostProcessingJob.cs" />
     <Compile Include="packages\tools\oneclick\OneClickSettings.cs" />
     <Compile Include="packages\tools\oneclick\OneClickWindow.cs">
       <SubType>Form</SubType>

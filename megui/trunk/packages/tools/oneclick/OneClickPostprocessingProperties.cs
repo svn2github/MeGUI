@@ -27,9 +27,9 @@ using MeGUI.core.util;
 namespace MeGUI
 {
 	/// <summary>
-	/// Summary description for DGIndexPostprocessingProperties.
+	/// Summary description for OneClickPostprocessingProperties.
 	/// </summary>
-	public class DGIndexPostprocessingProperties
+	public class OneClickPostprocessingProperties
 	{
 		private bool autoDeriveAR, signalAR, autoDeint, autoCrop, keepInputResolution, prerenderJob, useChapterMarks;
 		private int horizontalOutputResolution;
@@ -42,7 +42,7 @@ namespace MeGUI
 		private double customAR;
 		private string chapterFile, finalOutput, aviSynthScript, deviceType;
 
-		public DGIndexPostprocessingProperties()
+		public OneClickPostprocessingProperties()
 		{
 			autoDeriveAR = false;
 			signalAR = false;

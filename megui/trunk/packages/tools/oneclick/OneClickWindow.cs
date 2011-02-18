@@ -483,7 +483,7 @@ namespace MeGUI
                             aJobs.Add(new AudioJob(aInput, null, null, audioConfigControl[i].Settings, delay, strLanguage));
                     }
     
-                    DGIndexPostprocessingProperties dpp = new DGIndexPostprocessingProperties();
+                    OneClickPostprocessingProperties dpp = new OneClickPostprocessingProperties();
                     dpp.DAR = ar.Value;
                     dpp.DirectMuxAudio = muxOnlyAudio.ToArray();
                     dpp.AudioJobs = aJobs.ToArray();
@@ -505,25 +505,33 @@ namespace MeGUI
                     if (oIndexerToUse == FileIndexerWindow.IndexType.D2V)
                     {
                         string d2vName = Path.Combine(workingDirectory.Filename, workingName.Text + ".d2v");
-                        D2VIndexJob job = new D2VIndexJob(input.Filename, d2vName, 2, audioTracks, dpp, false, false);
-                        mainForm.Jobs.addJobsToQueue(job);
+                        D2VIndexJob job = new D2VIndexJob(input.Filename, d2vName, 2, audioTracks, false, false);
+                        OneClickPostProcessingJob ocJob = new OneClickPostProcessingJob(input.Filename, d2vName, dpp, audioTracks, FileIndexerWindow.IndexType.D2V);
+                        JobChain c = new SequentialChain(new SequentialChain(job), new SequentialChain(ocJob));
+                        mainForm.Jobs.addJobsWithDependencies(c);
                     }
                     else if (oIndexerToUse == FileIndexerWindow.IndexType.DGA)
                     {
                         string d2vName = Path.Combine(workingDirectory.Filename, workingName.Text + ".dga");
-                        DGAIndexJob job = new DGAIndexJob(input.Filename, d2vName, 2, audioTracks, dpp, false, false);
-                        mainForm.Jobs.addJobsToQueue(job);
+                        DGAIndexJob job = new DGAIndexJob(input.Filename, d2vName, 2, audioTracks, false, false);
+                        OneClickPostProcessingJob ocJob = new OneClickPostProcessingJob(input.Filename, d2vName, dpp, audioTracks, FileIndexerWindow.IndexType.DGA);
+                        JobChain c = new SequentialChain(new SequentialChain(job), new SequentialChain(ocJob));
+                        mainForm.Jobs.addJobsWithDependencies(c);
                     }
                     else if (oIndexerToUse == FileIndexerWindow.IndexType.DGI)
                     {
                         string d2vName = Path.Combine(workingDirectory.Filename, workingName.Text + ".dgi");
-                        DGIIndexJob job = new DGIIndexJob(input.Filename, d2vName, 2, audioTracks, dpp, false, false);
-                        mainForm.Jobs.addJobsToQueue(job);
+                        DGIIndexJob job = new DGIIndexJob(input.Filename, d2vName, 2, audioTracks, false, false);
+                        OneClickPostProcessingJob ocJob = new OneClickPostProcessingJob(input.Filename, d2vName, dpp, audioTracks, FileIndexerWindow.IndexType.DGI);
+                        JobChain c = new SequentialChain(new SequentialChain(job), new SequentialChain(ocJob));
+                        mainForm.Jobs.addJobsWithDependencies(c);
                     }
                     else if (oIndexerToUse == FileIndexerWindow.IndexType.FFMS)
                     {
-                        FFMSIndexJob job = new FFMSIndexJob(input.Filename, 2, audioTracks, dpp, false);
-                        mainForm.Jobs.addJobsToQueue(job);
+                        FFMSIndexJob job = new FFMSIndexJob(input.Filename, 2, audioTracks, false);
+                        OneClickPostProcessingJob ocJob = new OneClickPostProcessingJob(input.Filename, input.Filename + ".ffindex", dpp, audioTracks, FileIndexerWindow.IndexType.FFMS);
+                        JobChain c = new SequentialChain(new SequentialChain(job), new SequentialChain(ocJob));
+                        mainForm.Jobs.addJobsWithDependencies(c);
                     }
                     if (this.openOnQueue.Checked)
                     {
@@ -713,421 +721,5 @@ namespace MeGUI
 
         #endregion
 
-    }
-    public class OneClickPostProcessor
-    {
-        #region postprocessor
-        private static LogItem postprocess(MainForm mainForm, Job job)
-        {
-            if (job is IndexJob)
-            {
-                IndexJob ijob = (IndexJob)job;
-                if (ijob.PostprocessingProperties == null)
-                    return null;
-                OneClickPostProcessor p = new OneClickPostProcessor(mainForm, ijob);
-                return p.postprocess();
-            }
-            else
-                return null;
-        }
-        public static JobPostProcessor PostProcessor = new JobPostProcessor(postprocess, "OneClick_postprocessor");
-
-        #endregion
-        private MainForm mainForm;
-        Dictionary<int, string> audioFiles;
-        private JobUtil jobUtil;
-        private VideoUtil vUtil;
-        private IndexJob job;
-        private AVCLevels al = new AVCLevels();
-        private bool finished = false;
-        private bool interlaced = false;
-        private DeinterlaceFilter[] filters;
-        private LogItem log = new LogItem("OneClick postprocessor", ImageType.Information);
-        string qpfile = string.Empty;
-        
-        public OneClickPostProcessor(MainForm mainForm, IndexJob ijob)
-        {
-            this.job = ijob;
-            this.mainForm = mainForm;
-            this.jobUtil = mainForm.JobUtil;
-            this.vUtil = new VideoUtil(mainForm);
-        }
-
-        public LogItem postprocess()
-        {
-            List<string>arrAudioFilesDelete;
-            audioFiles = vUtil.getAllDemuxedAudio(job.AudioTracks, out arrAudioFilesDelete, job.Output, log);
-
-            fillInAudioInformation();
-
-            job.PostprocessingProperties.AudioJobs = AudioUtil.getConfiguredAudioJobs(job.PostprocessingProperties.AudioJobs);
-
-            log.LogValue("Desired size", job.PostprocessingProperties.OutputSize);
-            log.LogValue("Split size", job.PostprocessingProperties.Splitting);
-
-            VideoCodecSettings videoSettings = job.PostprocessingProperties.VideoSettings;
-
-            string videoOutput = Path.Combine(Path.GetDirectoryName(job.Output),
-                Path.GetFileNameWithoutExtension(job.Output) + "_Video");
-            string muxedOutput = job.PostprocessingProperties.FinalOutput;
-
-            //Open the video
-            Dar? dar;
-            string videoInput = openVideo(job.Output, job.PostprocessingProperties.DAR, 
-                job.PostprocessingProperties.HorizontalOutputResolution, job.PostprocessingProperties.SignalAR, log,
-                job.PostprocessingProperties.AvsSettings, job.PostprocessingProperties.AutoDeinterlace, videoSettings, out dar,
-                job.PostprocessingProperties.AutoCrop, job.PostprocessingProperties.KeepInputResolution,
-                job.PostprocessingProperties.UseChaptersMarks);
-
-            VideoStream myVideo = new VideoStream();
-            ulong length;
-            double framerate;        
-            JobUtil.getInputProperties(out length, out framerate, videoInput);
-            myVideo.Input = videoInput;
-            myVideo.Output = videoOutput;
-            myVideo.NumberOfFrames = length;
-            myVideo.Framerate = (decimal)framerate;
-            myVideo.DAR = dar;
-            myVideo.VideoType = new MuxableType((new VideoEncoderProvider().GetSupportedOutput(videoSettings.EncoderType))[0], videoSettings.Codec);
-            myVideo.Settings = videoSettings;
-            List<string> intermediateFiles = new List<string>();
-            intermediateFiles.Add(videoInput);
-            intermediateFiles.Add(job.Output);
-            intermediateFiles.AddRange(audioFiles.Values);
-            if (!string.IsNullOrEmpty(qpfile))
-                intermediateFiles.Add(qpfile);
-            foreach (string file in arrAudioFilesDelete)
-                intermediateFiles.Add(file);
-            if (File.Exists(Path.Combine(Path.GetDirectoryName(job.Input), Path.GetFileNameWithoutExtension(job.Input) + ".log")))
-                intermediateFiles.Add(Path.Combine(Path.GetDirectoryName(job.Input), Path.GetFileNameWithoutExtension(job.Input) + ".log"));
-
-            if (!string.IsNullOrEmpty(videoInput))
-            {
-                //Create empty subtitles for muxing (subtitles not supported in one click mode)
-                MuxStream[] subtitles = new MuxStream[0];
-
-                if (job.PostprocessingProperties.Container == ContainerType.AVI)
-                    job.PostprocessingProperties.ChapterFile = null;
-
-                JobChain c = vUtil.GenerateJobSeries(myVideo, muxedOutput, job.PostprocessingProperties.AudioJobs, subtitles,
-                    job.PostprocessingProperties.ChapterFile, job.PostprocessingProperties.OutputSize,
-                    job.PostprocessingProperties.Splitting, job.PostprocessingProperties.Container,
-                    job.PostprocessingProperties.PrerenderJob, job.PostprocessingProperties.DirectMuxAudio, log, job.PostprocessingProperties.DeviceOutputType, null);
-                if (c == null)
-                {
-                    log.Warn("Job creation aborted");
-                    return log;
-                }
-
-                c = CleanupJob.AddAfter(c, intermediateFiles);
-                mainForm.Jobs.addJobsWithDependencies(c);
-            }
-            return log;
-        }
-
-        private void fillInAudioInformation()
-        {
-            foreach (MuxStream m in job.PostprocessingProperties.DirectMuxAudio)
-                m.path = convertTrackNumberToFile(m.path, ref m.delay);
-
-            foreach (AudioJob a in job.PostprocessingProperties.AudioJobs)
-            {
-                a.Input = convertTrackNumberToFile(a.Input, ref a.Delay);
-                if (String.IsNullOrEmpty(a.Output) && !String.IsNullOrEmpty(a.Input))
-                    a.Output = FileUtil.AddToFileName(a.Input, "_audio");
-            }
-        }
-
-        /// <summary>
-        /// if input is a track number (of the form, "::&lt;number&gt;::")
-        /// then it returns the file path of that track number. Otherwise,
-        /// it returns the string only
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        private string convertTrackNumberToFile(string input, ref int delay)
-        {
-            if (input.StartsWith("::") && input.EndsWith("::") && input.Length > 4)
-            {
-                string sub = input.Substring(2, input.Length - 4);
-                try
-                {
-                    int t = int.Parse(sub);
-                    string s = audioFiles[t];
-                    delay = PrettyFormatting.getDelay(s) ?? 0;
-                    return s;
-                }
-                catch (Exception)
-                {
-                    log.Warn(string.Format("Couldn't find audio file for track {0}. Skipping track.", input));
-                    return null;
-                }
-            }
-
-            return input;
-        }
-        /// <summary>
-        /// opens a dgindex script
-        /// if the file can be properly opened, auto-cropping is performed, then depending on the AR settings
-        /// the proper resolution for automatic resizing, taking into account the derived cropping values
-        /// is calculated, and finally the avisynth script is written and its name returned
-        /// </summary>
-        /// <param name="path">dgindex script</param>
-        /// <param name="aspectRatio">aspect ratio selection to be used</param>
-        /// <param name="customDAR">custom display aspect ratio for this source</param>
-        /// <param name="horizontalResolution">desired horizontal resolution of the output</param>
-        /// <param name="settings">the codec settings (used only for x264)</param>
-        /// <param name="sarX">pixel aspect ratio X</param>
-        /// <param name="sarY">pixel aspect ratio Y</param>
-        /// <param name="height">the final height of the video</param>
-        /// <param name="signalAR">whether or not ar signalling is to be used for the output 
-        /// (depending on this parameter, resizing changes to match the source AR)</param>
-        /// <param name="autoCrop">whether or not autoCrop is used for the input</param>
-        /// <returns>the name of the AviSynth script created, empty of there was an error</returns>
-        private string openVideo(string path, Dar? AR, int horizontalResolution,
-            bool signalAR, LogItem log, AviSynthSettings avsSettings, bool autoDeint,
-            VideoCodecSettings settings, out Dar? dar, bool autoCrop, bool keepInputResolution, bool useChaptersMarks)
-        {
-            dar = null;
-            CropValues final = new CropValues();
-            Dar customDAR;
-            IMediaFile d2v = null;
-            IVideoReader reader;
-            PossibleSources oPossibleSource;
-
-            if (job is DGIIndexJob)
-            {
-                d2v = new dgiFile(path);
-                oPossibleSource = PossibleSources.dgi;
-            }
-            else if (job is D2VIndexJob)
-            {
-                d2v = new d2vFile(path);
-                oPossibleSource = PossibleSources.d2v;
-            }
-            else if (job is DGAIndexJob)
-            {
-                d2v = new dgaFile(path);
-                oPossibleSource = PossibleSources.dga;
-            }
-            else if (job is FFMSIndexJob)
-            {
-                d2v = new ffmsFile(path);
-                oPossibleSource = PossibleSources.ffindex;
-            }
-            else
-            {
-                log.Error("This project cannot be opened!");
-                return "";
-            }
-            reader = d2v.GetVideoReader();
-            if (reader.FrameCount < 1)
-            {
-                log.Error("DGDecode reported 0 frames in this file. This is a fatal error. Please recreate the DGIndex project");
-                return "";
-            }
-
-            if (!keepInputResolution)
-            {
-                //Autocrop
-                final = Autocrop.autocrop(reader);
-
-                if (signalAR)
-                {
-                    if (avsSettings.Mod16Method == mod16Method.overcrop)
-                        ScriptServer.overcrop(ref final);
-                    else if (avsSettings.Mod16Method == mod16Method.mod4Horizontal)
-                        ScriptServer.cropMod4Horizontal(ref final);
-                    else if (avsSettings.Mod16Method == mod16Method.undercrop)
-                        ScriptServer.undercrop(ref final);
-                }
-
-                if (autoCrop)
-                {
-                    bool error = (final.left == -1);
-                    if (!error)
-                        log.LogValue("Autocrop values", final);
-                    else
-                    {
-                        log.Error("Autocrop failed, aborting now");
-                        return "";
-                    }
-                }
-            }
-
-            log.LogValue("Auto-detect aspect ratio now", AR == null);
-            //Check if AR needs to be autodetected now
-            if (AR == null) // it does
-            {
-                customDAR = d2v.Info.DAR;
-                if (customDAR.ar > 0)
-                    log.LogValue("Aspect ratio", customDAR);
-                else
-                {
-                    customDAR = Dar.ITU16x9PAL;
-                    log.Warn(string.Format("No aspect ratio found, defaulting to {0}.", customDAR));
-                }
-            }
-            else 
-                customDAR = AR.Value;
-
-            if (keepInputResolution)
-            {
-                horizontalResolution = (int)d2v.Info.Width;
-                dar = customDAR;
-            }
-            else
-            {
-                // Minimise upsizing
-                int sourceHorizontalResolution = (int)d2v.Info.Width - final.right - final.left;
-                if (autoCrop)
-                    sourceHorizontalResolution = (int)d2v.Info.Width;
-
-                if (horizontalResolution > sourceHorizontalResolution)
-                {
-                    if (avsSettings.Mod16Method == mod16Method.resize)
-                        while (horizontalResolution > sourceHorizontalResolution + 16)
-                            horizontalResolution -= 16;
-                    else
-                        horizontalResolution = sourceHorizontalResolution;
-                }
-            }
-
-            //Suggest a resolution (taken from AvisynthWindow.suggestResolution_CheckedChanged)
-            int scriptVerticalResolution = 0;
-            if (keepInputResolution)
-            {
-                scriptVerticalResolution = (int)d2v.Info.Height;
-                log.LogValue("Output resolution", horizontalResolution + "x" + scriptVerticalResolution);
-            }
-            else
-            {
-                scriptVerticalResolution = Resolution.suggestResolution(d2v.Info.Height, d2v.Info.Width, (double)customDAR.ar,
-                final, horizontalResolution, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out dar);
-                log.LogValue("Output resolution", horizontalResolution + "x" + scriptVerticalResolution);
-                if (settings != null && settings is x264Settings) // verify that the video corresponds to the chosen avc level, if not, change the resolution until it does fit
-                {
-                    x264Settings xs = (x264Settings)settings;
-                    if (xs.Level != 15)
-                    {
-                        AVCLevels al = new AVCLevels();
-                        log.LogValue("AVC level", al.getLevels()[xs.Level]);
-
-                        int compliantLevel = 15;
-                        while (!this.al.validateAVCLevel(horizontalResolution, scriptVerticalResolution, d2v.Info.FPS, xs, out compliantLevel))
-                        { // resolution not profile compliant, reduce horizontal resolution by 16, get the new vertical resolution and try again
-                            string levelName = al.getLevels()[xs.Level];
-                            horizontalResolution -= 16;
-                            scriptVerticalResolution = Resolution.suggestResolution(d2v.Info.Height, d2v.Info.Width, (double)customDAR.ar,
-                                final, horizontalResolution, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out dar);
-                        }
-                        log.LogValue("Resolution adjusted for AVC Level", horizontalResolution + "x" + scriptVerticalResolution);
-                    }
-                    if (useChaptersMarks)
-                    {
-                        qpfile = job.PostprocessingProperties.ChapterFile;
-                        if ((Path.GetExtension(qpfile).ToLower()) == ".txt")
-                            qpfile = VideoUtil.convertChaptersTextFileTox264QPFile(job.PostprocessingProperties.ChapterFile, d2v.Info.FPS);
-                        if (File.Exists(qpfile))
-                        {
-                            xs.UseQPFile = true;
-                            xs.QPFile = qpfile;
-                        }
-                    }
-                }
-            }
-
-            //Generate the avs script based on the template
-            string inputLine = "#input";
-            string deinterlaceLines = "#deinterlace";
-            string denoiseLines = "#denoise";
-            string cropLine = "#crop";
-            string resizeLine = "#resize";
-
-            inputLine = ScriptServer.GetInputLine(path, false, oPossibleSource,
-                false, false, false, 0, false);
-            if (!inputLine.EndsWith(")"))
-                inputLine += ")";
-
-            log.LogValue("Automatic deinterlacing", autoDeint);
-            if (autoDeint)
-            {
-                string d2vPath = path;
-                SourceDetector sd = new SourceDetector(inputLine, d2vPath, false,
-                    mainForm.Settings.SourceDetectorSettings,
-                    new UpdateSourceDetectionStatus(analyseUpdate),
-                    new FinishedAnalysis(finishedAnalysis));
-                finished = false;
-                sd.analyse();
-                waitTillAnalyseFinished();
-                deinterlaceLines = filters[0].Script;
-                log.LogValue("Deinterlacing used", deinterlaceLines);
-            }
-
-            inputLine = ScriptServer.GetInputLine(path, interlaced, oPossibleSource, avsSettings.ColourCorrect, avsSettings.MPEG2Deblock, false, 0, false);
-            if (!inputLine.EndsWith(")"))
-                inputLine += ")";
-
-            if (autoCrop)
-                cropLine = ScriptServer.GetCropLine(true, final);
-            else 
-                cropLine = ScriptServer.GetCropLine(false, final);
-
-            denoiseLines = ScriptServer.GetDenoiseLines(avsSettings.Denoise, (DenoiseFilterType)avsSettings.DenoiseMethod);
-
-            if (!keepInputResolution)
-                resizeLine = ScriptServer.GetResizeLine(!signalAR || avsSettings.Mod16Method == mod16Method.resize, horizontalResolution, scriptVerticalResolution, (ResizeFilterType)avsSettings.ResizeMethod);
-
-            string newScript = ScriptServer.CreateScriptFromTemplate(avsSettings.Template, inputLine, cropLine, resizeLine, denoiseLines, deinterlaceLines);
-                        
-            if (dar.HasValue)
-                newScript = string.Format("global MeGUI_darx = {0}\r\nglobal MeGUI_dary = {1}\r\n{2}", dar.Value.X, dar.Value.Y, newScript);
-
-            log.LogValue("Generated Avisynth script", newScript);
-            try
-            {
-                StreamWriter sw = new StreamWriter(Path.ChangeExtension(path, ".avs"),false, System.Text.Encoding.Default);
-                sw.Write(newScript);
-                sw.Close();
-            }
-            catch (IOException i)
-            {
-                log.LogValue("Error saving AviSynth script", i, ImageType.Error);
-                return "";
-            }
-            return Path.ChangeExtension(path, ".avs");
-        }
-        
-        public void finishedAnalysis(SourceInfo info, bool error, string errorMessage)
-        {
-            LogItem oSourceLog = log.LogValue("Source detection", info.analysisResult);
-            if (error)
-            {
-                oSourceLog.LogEvent("Source detection failed: " + errorMessage, ImageType.Error);
-                filters = new DeinterlaceFilter[] {
-                    new DeinterlaceFilter("Error", "#An error occurred in source detection. Doing no processing")};
-            }
-            else if (info.sourceType == SourceType.NOT_ENOUGH_SECTIONS)
-            {
-                oSourceLog.LogEvent("Source detection failed: Could not find enough useful sections to determine source type for " + job.Input, ImageType.Error);
-                filters = new DeinterlaceFilter[] {
-                    new DeinterlaceFilter("Error", "#Not enough useful sections for source detection. Doing no processing")};
-            }
-            else
-                this.filters = ScriptServer.GetDeinterlacers(info).ToArray();
-            interlaced = (info.sourceType != SourceType.PROGRESSIVE);
-            finished = true;
-        }
-
-        public void analyseUpdate(int amountDone, int total)
-        { /*Do nothing*/ }
-
-        private void waitTillAnalyseFinished()
-        {
-            while (!finished)
-            {
-                Thread.Sleep(500);
-            }
-        }
     }
 }

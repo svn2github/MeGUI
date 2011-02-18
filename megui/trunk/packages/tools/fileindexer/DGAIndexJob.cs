@@ -29,14 +29,12 @@ namespace MeGUI
 		{
 		}
 
-        public DGAIndexJob(string input, string output, int demuxType, List<AudioTrackInfo> audioTracks,
-            DGIndexPostprocessingProperties properties, bool loadSources, bool demuxVideo)
+        public DGAIndexJob(string input, string output, int demuxType, List<AudioTrackInfo> audioTracks, bool loadSources, bool demuxVideo)
         {
             Input = input;
             Output = output;
             DemuxMode = demuxType;
             AudioTracks = audioTracks;
-            PostprocessingProperties = properties;
             LoadSources = loadSources;
             DemuxVideo = demuxVideo;
             FilesToDelete.Add(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(input), System.IO.Path.GetFileNameWithoutExtension(input) + ".log"));

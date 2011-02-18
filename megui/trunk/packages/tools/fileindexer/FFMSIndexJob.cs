@@ -30,7 +30,7 @@ namespace MeGUI
         {
         }
 
-        public FFMSIndexJob(string input, int demuxType, List<AudioTrackInfo> audioTracks, DGIndexPostprocessingProperties properties, bool loadSources) : base()
+        public FFMSIndexJob(string input, int demuxType, List<AudioTrackInfo> audioTracks, bool loadSources) : base()
         {
             Input = input;
             LoadSources = loadSources;
@@ -41,7 +41,6 @@ namespace MeGUI
                 AudioTracks = new List<AudioTrackInfo>();
             else
                 AudioTracks = audioTracks;
-            PostprocessingProperties = properties;
             DemuxVideo = false;
         }
        
