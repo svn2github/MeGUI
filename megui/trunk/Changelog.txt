@@ -1,3 +1,5 @@
+1949 [Audio Encoder] if AAC is detected FFAudioSource() will be used
+     [Audio Encoder] downmix will be ignored if there are not more than 2 audio channels
 1948 changed ISO 639-2 language codes for Croatian, Romanian and Serbian
 1947 [File Indexer] fixed selecting of settings after initial opening. Bug #3182423
 1946 [Audio Jobs] update elapsed time while preprocessing

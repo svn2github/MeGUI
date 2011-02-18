@@ -183,6 +183,31 @@ namespace MeGUI
                 return strChannelPositions;
             }
         }
+
+        public static int getChannelCountFromAVSFile(String strAVSFile)
+        {
+            int iChannelCount = 0;
+
+            try
+            {
+                string line;
+                StreamReader file = new StreamReader(strAVSFile);
+                while ((line = file.ReadLine()) != null)
+                {
+                    if (line.IndexOf(@"# detected channels: ") == 0)
+                    {
+                        int.TryParse(line.Substring(21).Split(' ')[0], out iChannelCount);
+                        break;
+                    }
+                }
+                file.Close();
+                return iChannelCount;
+            }
+            catch
+            {
+                return iChannelCount;
+            }
+        }
     }
 
     public class AudioTrackInfo
