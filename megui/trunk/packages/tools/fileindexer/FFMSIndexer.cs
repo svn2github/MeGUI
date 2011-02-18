@@ -76,6 +76,19 @@ namespace MeGUI
             }
         }
 
+        protected override void checkJobIO()
+        {
+            try
+            {
+                if (File.Exists(job.Output))
+                    File.Delete(job.Output);
+            }
+            finally
+            {
+                base.checkJobIO();
+            }
+        }
+
         protected override void doExitConfig()
         {
             if (job.DemuxMode > 0 && !su.HasError && !su.WasAborted && job.AudioTracks.Count > 0)
