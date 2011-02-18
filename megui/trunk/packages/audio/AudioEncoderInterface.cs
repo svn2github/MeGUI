@@ -535,20 +535,24 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             bool directShow = audioJob.Settings.ForceDecodingViaDirectShow;
             if (!directShow)
             {
+                bool bFound = false;
                 MediaInfoFile info = new MediaInfoFile(audioJob.Input);
-                if (info.AudioTracks.Count > 0 && info.AudioTracks[0].Type.ToUpper().Equals("AAC"))
+                if (info.AudioTracks.Count > 0)
                 {
-
+                    if (info.AudioTracks[0].Type != null && info.AudioTracks[0].Type.ToUpper().Equals("AAC"))
+                    {
 #if x86
-                    script.AppendFormat("LoadPlugin(\"{0}\"){1}", Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.FFMSIndexPath), "ffms2.dll"), Environment.NewLine);
+                        script.AppendFormat("LoadPlugin(\"{0}\"){1}", Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.FFMSIndexPath), "ffms2.dll"), Environment.NewLine);
 #endif
 #if x64
-                    script.AppendFormat("LoadCPlugin(\"{0}\"){1}", Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.FFMSIndexPath), "ffms2.dll"), Environment.NewLine);
+                        script.AppendFormat("LoadCPlugin(\"{0}\"){1}", Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.FFMSIndexPath), "ffms2.dll"), Environment.NewLine);
 #endif
-                    script.AppendFormat("FFAudioSource(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
-                    audioJob.FilesToDelete.Add(audioJob.Input + ".ffindex");
+                        script.AppendFormat("FFAudioSource(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
+                        audioJob.FilesToDelete.Add(audioJob.Input + ".ffindex");
+                        bFound = true;
+                    }
                 }
-                else
+                if (!bFound)
                 {
                     switch (Path.GetExtension(audioJob.Input).ToLower())
                     {
