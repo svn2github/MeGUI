@@ -534,7 +534,13 @@ namespace MeGUI
         }
 
         public void analyseUpdate(int amountDone, int total)
-        { /*Do nothing*/ }
+        {
+            try
+            {
+                setProgress((decimal)amountDone / (decimal)total);
+            }
+            catch (Exception) { } // If we get any errors, just ignore -- it's only a cosmetic thing.
+        }
 
         private void waitTillAnalyseFinished()
             {
