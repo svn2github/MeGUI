@@ -1,3 +1,4 @@
+1951 [MKV Muxer] problem with chapter information in audio files fixed
 1950 [One-Click] a new job will be added after the indexing job to show the progress of the preprocessing
 1949 [Audio Encoder] if AAC is detected FFAudioSource() will be used
      [Audio Encoder] downmix will be ignored if there are not more than 2 audio channels
