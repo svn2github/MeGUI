@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2011  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -86,6 +86,11 @@ namespace MeGUI
                 get
                 {
                     Version latest = GetLatestVersion();
+                    if (this.name == "neroaacenc")
+                    {
+                        if (currentVersion.FileVersion != null && currentVersion.FileVersion.Equals(latest.FileVersion))
+                            latest.UploadDate = currentVersion.UploadDate;
+                    }
                     return latest != null && (latest.CompareTo(currentVersion) != 0);
                 }
             }
@@ -176,6 +181,18 @@ namespace MeGUI
                     case "nicaudio": arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"NicAudio.dll")); break;
                     case "vobsub": arrPath.Add(MainForm.Instance.Settings.VobSubPath); break;
                     case "besplit": arrPath.Add(MainForm.Instance.Settings.BeSplitPath); break;
+                    case "neroaacenc":
+                        {
+                            arrPath.Add(MainForm.Instance.Settings.NeroAacEncPath);
+                            if (File.Exists(MainForm.Instance.Settings.NeroAacEncPath))
+                            {
+                                System.Diagnostics.FileVersionInfo finfo = System.Diagnostics.FileVersionInfo.GetVersionInfo(MainForm.Instance.Settings.NeroAacEncPath);
+                                FileInfo fi = new FileInfo(MainForm.Instance.Settings.NeroAacEncPath);
+                                this.currentVersion.FileVersion = finfo.FileMajorPart + "." + finfo.FileMinorPart + "." + finfo.FileBuildPart + "." + finfo.FilePrivatePart;
+                                this.currentVersion.UploadDate = fi.LastWriteTimeUtc;
+                            }
+                            break;
+                        }
                 }
 
                 foreach (string strAppPath in arrPath)
@@ -1427,36 +1444,49 @@ namespace MeGUI
 
                     AddTextToLog(string.Format("Updating {0}. File {1}/{2}.", file.Name, currentFile, updateableFileCount), ImageType.Information);
 
-                    Stream str;
-
-                    result = UpdateCacher.DownloadFile(file.GetLatestVersion().Url, new Uri(ServerAddress), out str, wc_DownloadProgressChanged, this);
-                    if (result != ErrorState.Successful)
+                    if (file.GetLatestVersion().Url.StartsWith("http://"))
                     {
-                        failedFiles.Add(file);
-                        AddTextToLog(string.Format("Failed to download file {0} with error: {1}.", file.Name, result), ImageType.Error);
+                        if (MessageBox.Show("MeGUI cannot find " + file.Name + " on your system or it is outdated.\nDo you would like to download it now? Afterwards it is required to unpack the file and set the path to the " + file.Name + ".exe in the settings.\n", "File not found",
+                                     MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
+                        {
+                            System.Diagnostics.Process.Start(file.GetLatestVersion().Url);
+                            succeededFiles.Add(file);
+                        }
+                        else
+                            failedFiles.Add(file); 
                     }
                     else
                     {
-                        try
+                        Stream str;
+                        result = UpdateCacher.DownloadFile(file.GetLatestVersion().Url, new Uri(ServerAddress), out str, wc_DownloadProgressChanged, this);
+                        if (result != ErrorState.Successful)
                         {
-                            ErrorState state;
-                            if (file.NeedsInstalling)
-                                state = Install(file, str);
-                            else
-                                state = SaveNewFile(file, str);
-
-                            if (state != ErrorState.Successful)
-                            {
-                                failedFiles.Add(file);
-                                AddTextToLog(string.Format("Failed to install file {0} with error: {1}.", file.Name, result), ImageType.Error);
-                            }
-                            else
-                            {
-                                succeededFiles.Add(file);
-                                file.DownloadChecked = false;
-                            }
+                            failedFiles.Add(file);
+                            AddTextToLog(string.Format("Failed to download file {0} with error: {1}.", file.Name, result), ImageType.Error);
                         }
-                        finally { str.Close(); }
+                        else
+                        {
+                            try
+                            {
+                                ErrorState state;
+                                if (file.NeedsInstalling)
+                                    state = Install(file, str);
+                                else
+                                    state = SaveNewFile(file, str);
+
+                                if (state != ErrorState.Successful)
+                                {
+                                    failedFiles.Add(file);
+                                    AddTextToLog(string.Format("Failed to install file {0} with error: {1}.", file.Name, result), ImageType.Error);
+                                }
+                                else
+                                {
+                                    succeededFiles.Add(file);
+                                    file.DownloadChecked = false;
+                                }
+                            }
+                            finally { str.Close(); }
+                        }
                     }
                     currentFile++;
                 }
@@ -1785,6 +1815,11 @@ namespace MeGUI
             int numUpdateableFiles = 0;
             foreach (iUpgradeable upgradeable in upgradeData)
             {
+                if (upgradeable.Name == "neroaacenc")
+                {
+                    if (upgradeable.CurrentVersion.FileVersion != null && upgradeable.CurrentVersion.FileVersion.Equals(upgradeable.GetLatestVersion().FileVersion))
+                        upgradeable.GetLatestVersion().UploadDate = upgradeable.CurrentVersion.UploadDate;
+                }
                 if (upgradeable.AllowUpdate && 
                     upgradeable.GetLatestVersion().CompareTo(upgradeable.CurrentVersion) != 0)
                     numUpdateableFiles++;

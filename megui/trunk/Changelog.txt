@@ -1,3 +1,4 @@
+1956 [Update] added update check for the Nero AAC encoder
 1955 [One-Click] added status of the source detection to the progress window
 1954 [Audio Encoder] fixed audio detection crash
 1953 [Job] enhanced message in case a job is already aborted
