@@ -1,3 +1,5 @@
+1965 [Update] fixed a problem with the Nero AAC encoder update detection
+     [Update] fixed a crash
 1964 [Update] default window size changed
 1963 [Update] removed treeview on the left side so that the update data itself is better visible
 1962 [Update] only the files which need an update are shown. if no file needs an update all files are shown.

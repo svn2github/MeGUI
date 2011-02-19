@@ -41,6 +41,7 @@ namespace MeGUI
             this.reinstallToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
             this.chkShowAllFiles = new System.Windows.Forms.CheckBox();
+            this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.listViewDetails = new System.Windows.Forms.ListView();
@@ -53,7 +54,6 @@ namespace MeGUI
             this.colPlatform = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colStatus = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.txtBoxLog = new System.Windows.Forms.TextBox();
-            this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.statusToolStrip.SuspendLayout();
             this.panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -157,6 +157,16 @@ namespace MeGUI
             this.chkShowAllFiles.Text = "Show all files";
             this.chkShowAllFiles.UseVisualStyleBackColor = true;
             this.chkShowAllFiles.CheckedChanged += new System.EventHandler(this.chkShowAllFiles_CheckedChanged);
+            // 
+            // helpButton1
+            // 
+            this.helpButton1.ArticleName = "Update";
+            this.helpButton1.AutoSize = true;
+            this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.helpButton1.Location = new System.Drawing.Point(12, 30);
+            this.helpButton1.Name = "helpButton1";
+            this.helpButton1.Size = new System.Drawing.Size(38, 23);
+            this.helpButton1.TabIndex = 8;
             // 
             // splitContainer1
             // 
@@ -264,16 +274,6 @@ namespace MeGUI
             this.txtBoxLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.txtBoxLog.Size = new System.Drawing.Size(710, 151);
             this.txtBoxLog.TabIndex = 9;
-            // 
-            // helpButton1
-            // 
-            this.helpButton1.ArticleName = "Update";
-            this.helpButton1.AutoSize = true;
-            this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.helpButton1.Location = new System.Drawing.Point(12, 30);
-            this.helpButton1.Name = "helpButton1";
-            this.helpButton1.Size = new System.Drawing.Size(38, 23);
-            this.helpButton1.TabIndex = 8;
             // 
             // UpdateWindow
             // 

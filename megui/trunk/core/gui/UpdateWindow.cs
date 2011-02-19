@@ -1118,7 +1118,11 @@ namespace MeGUI
                 AddTextToLog("There is 1 file which can be updated.", ImageType.Information);
             else
                 AddTextToLog("All files are up to date", ImageType.Information);
-            chkShowAllFiles.Checked = iUpdatesCount == 0;
+
+            if (chkShowAllFiles.InvokeRequired)
+                chkShowAllFiles.Invoke(new MethodInvoker(delegate { chkShowAllFiles.Checked = iUpdatesCount == 0; }));
+            else
+                chkShowAllFiles.Checked = iUpdatesCount == 0;
 
             webUpdate.Set();
         }
@@ -1289,7 +1293,7 @@ namespace MeGUI
 
                 file.AvailableVersions.Add(availableFile);
             }
-            if (file.GetLatestVersion().CompareTo(file.CurrentVersion) != 0 && file.AllowUpdate)
+            if (file.GetLatestVersion().CompareTo(file.CurrentVersion) != 0 && file.AllowUpdate && file.HasAvailableVersions)
                 file.DownloadChecked = true;
 
             if (!fileAlreadyAdded)
@@ -1544,7 +1548,6 @@ namespace MeGUI
         /// </summary>
         private void BeginUpdate()
         {
-
             // Sort the files to download according to their install priority
             SortedDictionary<uint, List<iUpgradeable>> groups = new SortedDictionary<uint, List<iUpgradeable>>();
             foreach (iUpgradeable file in upgradeData)
