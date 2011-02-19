@@ -1,3 +1,4 @@
+1966 [Worker] corrected wiki link. Patch by XhmikosR (#3186982)
 1965 [Update] fixed a problem with the Nero AAC encoder update detection
      [Update] fixed a crash
 1964 [Update] default window size changed
