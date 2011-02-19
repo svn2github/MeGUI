@@ -40,6 +40,7 @@ namespace MeGUI
             this.uncheckToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reinstallToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.chkShowAllFiles = new System.Windows.Forms.CheckBox();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.treeView = new System.Windows.Forms.TreeView();
@@ -137,6 +138,7 @@ namespace MeGUI
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.chkShowAllFiles);
             this.panel1.Controls.Add(this.helpButton1);
             this.panel1.Controls.Add(this.progressBar);
             this.panel1.Controls.Add(this.btnUpdate);
@@ -146,6 +148,17 @@ namespace MeGUI
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(679, 65);
             this.panel1.TabIndex = 12;
+            // 
+            // chkShowAllFiles
+            // 
+            this.chkShowAllFiles.AutoSize = true;
+            this.chkShowAllFiles.Location = new System.Drawing.Point(421, 34);
+            this.chkShowAllFiles.Name = "chkShowAllFiles";
+            this.chkShowAllFiles.Size = new System.Drawing.Size(87, 17);
+            this.chkShowAllFiles.TabIndex = 9;
+            this.chkShowAllFiles.Text = "Show all files";
+            this.chkShowAllFiles.UseVisualStyleBackColor = true;
+            this.chkShowAllFiles.CheckedChanged += new System.EventHandler(this.chkShowAllFiles_CheckedChanged);
             // 
             // helpButton1
             // 
@@ -182,7 +195,6 @@ namespace MeGUI
             this.treeView.Name = "treeView";
             this.treeView.Size = new System.Drawing.Size(147, 310);
             this.treeView.TabIndex = 10;
-            this.treeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView_AfterSelect);
             // 
             // splitContainer2
             // 
@@ -332,5 +344,6 @@ namespace MeGUI
         private System.Windows.Forms.ColumnHeader colPlatform;
         private System.Windows.Forms.ColumnHeader colExistingDate;
         private System.Windows.Forms.ColumnHeader calLatestDate;
+        private System.Windows.Forms.CheckBox chkShowAllFiles;
     }
 }

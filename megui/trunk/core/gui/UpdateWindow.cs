@@ -905,10 +905,7 @@ namespace MeGUI
             GetUpdateData(false);
 
             if (VistaStuff.IsVistaOrNot)
-            {
-                VistaStuff.SetWindowTheme(treeView.Handle, "explorer", null);
                 VistaStuff.SetWindowTheme(listViewDetails.Handle, "explorer", null);
-            }
         }
         #endregion
         #region load and save
@@ -964,27 +961,12 @@ namespace MeGUI
         {
             if (!isOrHasDownloadedUpgradeData)
             {
-                if (treeView.InvokeRequired)
-                {
-                    treeView.Invoke(new MethodInvoker(delegate
-                    {
-                        treeView.Nodes.Clear(); // just in case, remove all nodes
-                        treeView.Nodes.Add("UpdateableFiles", "UpdateableFiles");
-                        treeView.SelectedNode = treeView.Nodes["UpdateableFiles"];
-                    }));
-                }
-                else
-                {
-                    treeView.Nodes.Clear(); // just in case, remove all nodes
-                    treeView.Nodes.Add("UpdateableFiles", "UpdateableFiles");
-                    treeView.SelectedNode = treeView.Nodes["UpdateableFiles"];
-                }
-
                 Thread CreateTreeview = new Thread(new ThreadStart(ProcessUpdateXML));
                 CreateTreeview.IsBackground = true;
                 CreateTreeview.Start();
                 if (wait)
                     webUpdate.WaitOne();
+                DisplayItems(chkShowAllFiles.Checked);
             }
         }
         /// <summary>
@@ -1128,12 +1110,16 @@ namespace MeGUI
                 }
             }
             RemoveOldFiles();
-            if (NumUpdatableFiles() > 1)
-                AddTextToLog(string.Format("There are {0} files that can be updated.", NumUpdatableFiles()), ImageType.Information);
-            else if (NumUpdatableFiles() == 1)
-                AddTextToLog("There is 1 file that can be updated.", ImageType.Information);
+
+            int iUpdatesCount = NumUpdatableFiles();
+            if (iUpdatesCount > 1)
+                AddTextToLog(string.Format("There are {0} files which can be updated.", iUpdatesCount), ImageType.Information);
+            else if (iUpdatesCount == 1)
+                AddTextToLog("There is 1 file which can be updated.", ImageType.Information);
             else
                 AddTextToLog("All files are up to date", ImageType.Information);
+            chkShowAllFiles.Checked = iUpdatesCount == 0;
+
             webUpdate.Set();
         }
 
@@ -1181,8 +1167,6 @@ namespace MeGUI
         /// <param name="currentNode">The node that the function should work on</param>
         private void ParseUpgradeXml(XmlNode currentNode, XmlNode groupNode, string path)
         {
-            TreeNode selectednode = treeView.SelectedNode;
-
             foreach (XmlNode childnode in currentNode.ChildNodes)
             {
                 if (childnode.Attributes["type"].Value.Equals("file"))
@@ -1198,14 +1182,11 @@ namespace MeGUI
                 catch (Exception) { }
     
                 string newPath = path + "." + childnode.Name;
-                treeView.SelectedNode = selectednode.Nodes.Add(newPath, displayName);
-
                 if (childnode.Attributes["type"].Value.Equals("tree"))
                     ParseUpgradeXml(childnode, childnode, newPath);
                 else if (childnode.Attributes["type"].Value.Equals("subtree"))
                     ParseUpgradeXml(childnode, groupNode, newPath);
             }
-            treeView.SelectedNode = selectednode;
         }
         /// <summary>
         /// Once a "file" is found in the upgrade XML file, the files node is passed
@@ -1316,17 +1297,18 @@ namespace MeGUI
         }
         #endregion
         #region GUI
-        private void treeView_AfterSelect(object sender, TreeViewEventArgs e)
-        {
-            DisplayItems(e.Node.Name);
-        }
-        private void DisplayItems(string selectednode)
+        private void DisplayItems(bool bShowAllFiles)
         {
             ClearListview(this.listViewDetails);
 
             foreach (iUpgradeable file in upgradeData)
             {
-                if (file.treeViewID.StartsWith(selectednode))
+                if (!bShowAllFiles)
+                {
+                    if (file.HasAvailableVersions)
+                        AddToListview(file.CreateListViewItem());
+                }
+                else
                 {
                     AddToListview(file.CreateListViewItem());
                 }
@@ -1547,7 +1529,7 @@ namespace MeGUI
                     return/* true*/;
                 }
             }
-            treeView.Invoke(new MethodInvoker(delegate { DisplayItems(treeView.SelectedNode.Name); }));
+            listViewDetails.Invoke(new MethodInvoker(delegate { DisplayItems(chkShowAllFiles.Checked); }));
             Invoke(new MethodInvoker(delegate
             {
                 btnAbort.Enabled = false;
@@ -1877,6 +1859,11 @@ namespace MeGUI
             updateThread.Abort();
             btnUpdate.Enabled = true;
             btnAbort.Enabled = false;
+        }
+
+        private void chkShowAllFiles_CheckedChanged(object sender, EventArgs e)
+        {
+            DisplayItems(chkShowAllFiles.Checked);
         }
     }
     public class UpdateOptions : MeGUI.core.plugins.interfaces.IOption
