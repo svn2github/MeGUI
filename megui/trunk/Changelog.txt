@@ -1,3 +1,4 @@
+1961 [AVS Cutter] update start/end frame when a section is clicked. Feature request #1660341
 1960 [Main Window] initial starting window opens in the visible area taking the taskbar into account. Feature request #2821392
      [VideoPlayer] taking taskbar into account, too
 1959 [Main Window] disabled maximize button. Feature request #2727670

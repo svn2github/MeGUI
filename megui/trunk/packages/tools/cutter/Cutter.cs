@@ -265,6 +265,14 @@ namespace MeGUI.packages.tools.cutter
             
         }
 
+        private void sections_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (sections.SelectedItems.Count != 1)
+                return;
+
+            startFrame.Value = ((CutSection)sections.SelectedItems[0].Tag).startFrame;
+            endFrame.Value = ((CutSection)sections.SelectedItems[0].Tag).endFrame;
+        }
     }
 
     public class CutterTool : MeGUI.core.plugins.interfaces.ITool

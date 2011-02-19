@@ -311,6 +311,7 @@ namespace MeGUI.packages.tools.cutter
             this.sections.UseCompatibleStateImageBehavior = false;
             this.sections.View = System.Windows.Forms.View.Details;
             this.sections.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.sections_ItemSelectionChanged);
+            this.sections.SelectedIndexChanged += new System.EventHandler(this.sections_SelectedIndexChanged);
             // 
             // columnHeader1
             // 
