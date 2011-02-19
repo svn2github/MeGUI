@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2011  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -1311,20 +1311,21 @@ namespace MeGUI
         private void VideoPlayer_Shown(object sender, EventArgs e)
         {
             Size oSizeScreen = Screen.GetWorkingArea(this).Size;
+            Point oLocation = Screen.GetWorkingArea(this).Location;
             int iScreenHeight = oSizeScreen.Height - 2 * SystemInformation.FixedFrameBorderSize.Height;
             int iScreenWidth = oSizeScreen.Width - 2 * SystemInformation.FixedFrameBorderSize.Width;
             
             if (this.Size.Height >= iScreenHeight)
-                this.Location = new Point(this.Location.X, 5);
-            else if (this.Location.Y <= 0)
-                this.Location = new Point(this.Location.X, 5);
+                this.Location = new Point(this.Location.X, oLocation.Y + 5);
+            else if (this.Location.Y <= oLocation.Y)
+                this.Location = new Point(this.Location.X, oLocation.Y + 5);
             else if (this.Location.Y + this.Size.Height > iScreenHeight)
                 this.Location = new Point(this.Location.X, iScreenHeight - this.Size.Height);
 
             if (this.Size.Width >= iScreenWidth)
-                this.Location = new Point(3, this.Location.Y);
-            else if (this.Location.X <= 0)
-                this.Location = new Point(3, this.Location.Y);
+                this.Location = new Point(oLocation.X + 3, this.Location.Y);
+            else if (this.Location.X <= oLocation.X)
+                this.Location = new Point(oLocation.X + 3, this.Location.Y);
             else if (this.Location.X + this.Size.Width > iScreenWidth)
                 this.Location = new Point(iScreenWidth - this.Size.Width, this.Location.Y);
         }

@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2011  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -852,8 +852,27 @@ namespace MeGUI
             Jobs.showAfterEncodingStatus(Settings);
             this.videoEncodingComponent1.FileType = MainForm.Instance.Settings.MainFileFormat;
 
-            this.Location = settings.MainFormLocation;
             this.ClientSize = settings.MainFormSize;
+            this.Location = settings.MainFormLocation;
+
+            Size oSizeScreen = Screen.GetWorkingArea(this).Size;
+            Point oLocation = Screen.GetWorkingArea(this).Location;
+            int iScreenHeight = oSizeScreen.Height - 2 * SystemInformation.FixedFrameBorderSize.Height;
+            int iScreenWidth = oSizeScreen.Width - 2 * SystemInformation.FixedFrameBorderSize.Width;
+
+            if (this.Size.Height >= iScreenHeight)
+                this.Location = new Point(this.Location.X, oLocation.Y);
+            else if (this.Location.Y <= oLocation.Y)
+                this.Location = new Point(this.Location.X, oLocation.Y);
+            else if (this.Location.Y + this.Size.Height > iScreenHeight)
+                this.Location = new Point(this.Location.X, iScreenHeight - this.Size.Height);
+
+            if (this.Size.Width >= iScreenWidth)
+                this.Location = new Point(oLocation.X, this.Location.Y);
+            else if (this.Location.X <= oLocation.X)
+                this.Location = new Point(oLocation.X, this.Location.Y);
+            else if (this.Location.X + this.Size.Width > iScreenWidth)
+                this.Location = new Point(iScreenWidth - this.Size.Width, this.Location.Y);
         }
 
         #region GUI properties
