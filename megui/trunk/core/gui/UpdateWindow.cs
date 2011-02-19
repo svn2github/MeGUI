@@ -1159,9 +1159,9 @@ namespace MeGUI
         }
 
         /// <summary>
-        /// Parses the upgrade XML file to create both the TreeView and populate the
-        /// upgradeData array. It's a recursive algorithm, so it needs to be passed
-        /// the root node off the upgrade XML to start off, and it will then recurse
+        /// Parses the upgrade XML file to populate the upgradeData array. 
+        /// It's a recursive algorithm, so it needs to be passed the root node
+        /// off the upgrade XML to start off, and it will then recurse
         /// through all the nodes in the file.
         /// </summary>
         /// <param name="currentNode">The node that the function should work on</param>
