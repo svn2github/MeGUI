@@ -66,7 +66,7 @@ namespace MeGUI
             // btnUpdate
             // 
             this.btnUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnUpdate.Location = new System.Drawing.Point(528, 30);
+            this.btnUpdate.Location = new System.Drawing.Point(545, 30);
             this.btnUpdate.Name = "btnUpdate";
             this.btnUpdate.Size = new System.Drawing.Size(75, 23);
             this.btnUpdate.TabIndex = 3;
@@ -79,7 +79,7 @@ namespace MeGUI
             this.btnAbort.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnAbort.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnAbort.Enabled = false;
-            this.btnAbort.Location = new System.Drawing.Point(609, 30);
+            this.btnAbort.Location = new System.Drawing.Point(626, 30);
             this.btnAbort.Name = "btnAbort";
             this.btnAbort.Size = new System.Drawing.Size(72, 23);
             this.btnAbort.TabIndex = 4;
@@ -92,7 +92,7 @@ namespace MeGUI
             this.progressBar.Dock = System.Windows.Forms.DockStyle.Top;
             this.progressBar.Location = new System.Drawing.Point(0, 0);
             this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(693, 23);
+            this.progressBar.Size = new System.Drawing.Size(710, 23);
             this.progressBar.TabIndex = 7;
             // 
             // statusToolStrip
@@ -144,7 +144,7 @@ namespace MeGUI
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel1.Location = new System.Drawing.Point(0, 310);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(693, 65);
+            this.panel1.Size = new System.Drawing.Size(710, 65);
             this.panel1.TabIndex = 12;
             // 
             // chkShowAllFiles
@@ -168,7 +168,7 @@ namespace MeGUI
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
-            this.splitContainer1.Size = new System.Drawing.Size(693, 375);
+            this.splitContainer1.Size = new System.Drawing.Size(710, 375);
             this.splitContainer1.SplitterDistance = 147;
             this.splitContainer1.TabIndex = 11;
             // 
@@ -186,7 +186,7 @@ namespace MeGUI
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.txtBoxLog);
-            this.splitContainer2.Size = new System.Drawing.Size(693, 375);
+            this.splitContainer2.Size = new System.Drawing.Size(710, 375);
             this.splitContainer2.SplitterDistance = 220;
             this.splitContainer2.TabIndex = 0;
             // 
@@ -207,7 +207,7 @@ namespace MeGUI
             this.listViewDetails.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listViewDetails.Location = new System.Drawing.Point(0, 0);
             this.listViewDetails.Name = "listViewDetails";
-            this.listViewDetails.Size = new System.Drawing.Size(693, 220);
+            this.listViewDetails.Size = new System.Drawing.Size(710, 220);
             this.listViewDetails.TabIndex = 6;
             this.listViewDetails.UseCompatibleStateImageBehavior = false;
             this.listViewDetails.View = System.Windows.Forms.View.Details;
@@ -262,7 +262,7 @@ namespace MeGUI
             this.txtBoxLog.Multiline = true;
             this.txtBoxLog.Name = "txtBoxLog";
             this.txtBoxLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtBoxLog.Size = new System.Drawing.Size(693, 151);
+            this.txtBoxLog.Size = new System.Drawing.Size(710, 151);
             this.txtBoxLog.TabIndex = 9;
             // 
             // helpButton1
@@ -279,7 +279,7 @@ namespace MeGUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(693, 375);
+            this.ClientSize = new System.Drawing.Size(710, 375);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.splitContainer1);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
