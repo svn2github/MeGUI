@@ -672,6 +672,7 @@ namespace MeGUI
             private string fileVersion;
             private string url;
             private DateTime uploadDate;
+            private string web;
 
             public string FileVersion
             {
@@ -687,6 +688,11 @@ namespace MeGUI
             {
                 get { return uploadDate;  }
                 set { uploadDate = value; }
+            }
+            public string Web
+            {
+                get { return web; }
+                set { web = value; }
             }
 
             /// <summary>
@@ -1294,6 +1300,10 @@ namespace MeGUI
                         DateTime.TryParse(filenode.Attributes["date"].Value, new System.Globalization.CultureInfo("en-us"), System.Globalization.DateTimeStyles.None, out oDate);
                         availableFile.UploadDate = oDate;
                     }
+                    else if (oAttribute.Name.Equals("url"))
+                    {
+                        availableFile.Web = filenode.Attributes["url"].Value;
+                    }
                 }
 
                 file.AvailableVersions.Add(availableFile);
@@ -1444,12 +1454,12 @@ namespace MeGUI
 
                     AddTextToLog(string.Format("Updating {0}. File {1}/{2}.", file.Name, currentFile, updateableFileCount), ImageType.Information);
 
-                    if (file.GetLatestVersion().Url.StartsWith("http://"))
+                    if (!String.IsNullOrEmpty(file.GetLatestVersion().Web))
                     {
                         if (MessageBox.Show("MeGUI cannot find " + file.Name + " on your system or it is outdated.\nDo you would like to download it now? Afterwards it is required to unpack the file and set the path to the " + file.Name + ".exe in the settings.\n", "File not found",
                                      MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
                         {
-                            System.Diagnostics.Process.Start(file.GetLatestVersion().Url);
+                            System.Diagnostics.Process.Start(file.GetLatestVersion().Web);
                             succeededFiles.Add(file);
                         }
                         else
