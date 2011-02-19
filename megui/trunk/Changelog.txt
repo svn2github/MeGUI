@@ -1,3 +1,4 @@
+1959 [Main Window] disabled maximize button. Feature request #2727670
 1958 [Audio Encoder] encoding job can be added regardless of the input file status
 1957 [Update] added update check for the Nero AAC encoder part II
 1956 [Update] added update check for the Nero AAC encoder
