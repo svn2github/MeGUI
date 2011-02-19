@@ -278,10 +278,18 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
 
         private void encode()
         {
+            string fileErr = MainForm.verifyInputFile(this.audioJob.Input);
+            if (fileErr != null)
+            {
+                _log.LogEvent("Problem with audio input file: " + fileErr, ImageType.Error);
+                su.HasError = su.IsComplete = true;
+                raiseEvent();
+                return;
+            }
+
             Thread t = null;
             try
             {
-                _log.LogEvent("Encode thread started");
                 raiseEvent("Preprocessing...   ***PLEASE WAIT***");
                 _start = DateTime.Now;
                 t = new Thread(new ThreadStart(delegate

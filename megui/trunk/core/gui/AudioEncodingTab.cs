@@ -114,13 +114,7 @@ namespace MeGUI.core.gui
             if (stream == null)
                 return "Audio input, audio output, and audio settings must all be configured";
 
-            string fileErr = MainForm.verifyInputFile(this.AudioInput);
-            if (fileErr != null)
-            {
-                return "Problem with audio input filename:\n" + fileErr;
-            }
-
-            fileErr = MainForm.verifyOutputFile(this.AudioOutput);
+            string fileErr = MainForm.verifyOutputFile(this.AudioOutput);
             if (fileErr != null)
             {
                 return "Problem with audio output filename:\n" + fileErr;

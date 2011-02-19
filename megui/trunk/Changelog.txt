@@ -1,3 +1,4 @@
+1958 [Audio Encoder] encoding job can be added regardless of the input file status
 1957 [Update] added update check for the Nero AAC encoder part II
 1956 [Update] added update check for the Nero AAC encoder
 1955 [One-Click] added status of the source detection to the progress window
