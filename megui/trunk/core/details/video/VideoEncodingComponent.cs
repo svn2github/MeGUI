@@ -270,6 +270,9 @@ namespace MeGUI
             this.VideoOutput = Path.Combine(filePath, fileNameNoExtension) + mainForm.Settings.VideoExtension + ".extension";
             this.VideoOutput = Path.ChangeExtension(this.VideoOutput, this.CurrentVideoOutputType.Extension);
             updateIOConfig();
+
+            if (AudioUtil.AVSFileHasAudio(fileName))
+                mainForm.Audio.openAudioFile(fileName);
         }
         private bool isFirstPass()
         {

@@ -147,6 +147,8 @@ namespace MeGUI
         {
             try
             {
+                if (!Path.GetExtension(strAVSScript).ToLower().Equals(".avs"))
+                    return false;
                 using (AviSynthScriptEnvironment env = new AviSynthScriptEnvironment())
                 using (AviSynthClip a = env.OpenScriptFile(strAVSScript))
                     if (a.ChannelsCount == 0)
