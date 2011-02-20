@@ -30,7 +30,6 @@ namespace MeGUI.core.details.mux
         {
             this.subName = new System.Windows.Forms.TextBox();
             this.SubNamelabel = new System.Windows.Forms.Label();
-            this.removeSubtitleTrack = new System.Windows.Forms.Button();
             this.subtitleLanguage = new System.Windows.Forms.ComboBox();
             this.subtitleLanguageLabel = new System.Windows.Forms.Label();
             this.subtitleInputLabel = new System.Windows.Forms.Label();
@@ -39,46 +38,38 @@ namespace MeGUI.core.details.mux
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.input = new MeGUI.FileBar();
             this.chkDefaultStream = new System.Windows.Forms.CheckBox();
+            this.chkForceStream = new System.Windows.Forms.CheckBox();
+            this.removeSubtitleTrack = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.audioDelay)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // subName
             // 
-            this.subName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.subName.Location = new System.Drawing.Point(256, 33);
+            this.tableLayoutPanel1.SetColumnSpan(this.subName, 2);
+            this.subName.Location = new System.Drawing.Point(232, 32);
             this.subName.MaxLength = 100;
             this.subName.Name = "subName";
-            this.subName.Size = new System.Drawing.Size(145, 20);
+            this.subName.Size = new System.Drawing.Size(168, 20);
             this.subName.TabIndex = 40;
             // 
             // SubNamelabel
             // 
             this.SubNamelabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.SubNamelabel.AutoSize = true;
-            this.SubNamelabel.Location = new System.Drawing.Point(215, 37);
+            this.SubNamelabel.Location = new System.Drawing.Point(191, 36);
             this.SubNamelabel.Name = "SubNamelabel";
             this.SubNamelabel.Size = new System.Drawing.Size(35, 13);
             this.SubNamelabel.TabIndex = 39;
             this.SubNamelabel.Text = "Name";
             // 
-            // removeSubtitleTrack
-            // 
-            this.removeSubtitleTrack.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.removeSubtitleTrack.Location = new System.Drawing.Point(407, 32);
-            this.removeSubtitleTrack.Name = "removeSubtitleTrack";
-            this.removeSubtitleTrack.Size = new System.Drawing.Size(24, 23);
-            this.removeSubtitleTrack.TabIndex = 38;
-            this.removeSubtitleTrack.Text = "X";
-            this.removeSubtitleTrack.Click += new System.EventHandler(this.removeSubtitleTrack_Click);
-            // 
             // subtitleLanguage
             // 
             this.subtitleLanguage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.subtitleLanguage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.subtitleLanguage.Location = new System.Drawing.Point(64, 33);
+            this.subtitleLanguage.Location = new System.Drawing.Point(64, 32);
             this.subtitleLanguage.Name = "subtitleLanguage";
-            this.subtitleLanguage.Size = new System.Drawing.Size(145, 21);
+            this.subtitleLanguage.Size = new System.Drawing.Size(121, 21);
             this.subtitleLanguage.Sorted = true;
             this.subtitleLanguage.TabIndex = 37;
             // 
@@ -86,7 +77,7 @@ namespace MeGUI.core.details.mux
             // 
             this.subtitleLanguageLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.subtitleLanguageLabel.AutoSize = true;
-            this.subtitleLanguageLabel.Location = new System.Drawing.Point(3, 37);
+            this.subtitleLanguageLabel.Location = new System.Drawing.Point(3, 36);
             this.subtitleLanguageLabel.Name = "subtitleLanguageLabel";
             this.subtitleLanguageLabel.Size = new System.Drawing.Size(55, 13);
             this.subtitleLanguageLabel.TabIndex = 36;
@@ -106,7 +97,7 @@ namespace MeGUI.core.details.mux
             // 
             this.delayLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.delayLabel.AutoSize = true;
-            this.delayLabel.Location = new System.Drawing.Point(3, 67);
+            this.delayLabel.Location = new System.Drawing.Point(3, 66);
             this.delayLabel.Name = "delayLabel";
             this.delayLabel.Size = new System.Drawing.Size(55, 13);
             this.delayLabel.TabIndex = 43;
@@ -115,7 +106,7 @@ namespace MeGUI.core.details.mux
             // audioDelay
             // 
             this.audioDelay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.audioDelay.Location = new System.Drawing.Point(64, 64);
+            this.audioDelay.Location = new System.Drawing.Point(64, 63);
             this.audioDelay.Maximum = new decimal(new int[] {
             2147483647,
             0,
@@ -127,18 +118,18 @@ namespace MeGUI.core.details.mux
             0,
             -2147483648});
             this.audioDelay.Name = "audioDelay";
-            this.audioDelay.Size = new System.Drawing.Size(145, 20);
+            this.audioDelay.Size = new System.Drawing.Size(121, 20);
             this.audioDelay.TabIndex = 42;
             // 
             // tableLayoutPanel1
             // 
-            this.tableLayoutPanel1.ColumnCount = 5;
+            this.tableLayoutPanel1.ColumnCount = 6;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.Controls.Add(this.removeSubtitleTrack, 4, 1);
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel1.Controls.Add(this.input, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.delayLabel, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.subtitleInputLabel, 0, 0);
@@ -148,6 +139,8 @@ namespace MeGUI.core.details.mux
             this.tableLayoutPanel1.Controls.Add(this.subtitleLanguage, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.subtitleLanguageLabel, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.chkDefaultStream, 3, 2);
+            this.tableLayoutPanel1.Controls.Add(this.chkForceStream, 4, 2);
+            this.tableLayoutPanel1.Controls.Add(this.removeSubtitleTrack, 5, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -160,8 +153,7 @@ namespace MeGUI.core.details.mux
             // 
             // input
             // 
-            this.input.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableLayoutPanel1.SetColumnSpan(this.input, 4);
+            this.tableLayoutPanel1.SetColumnSpan(this.input, 5);
             this.input.Filename = "";
             this.input.Filter = null;
             this.input.FilterIndex = 0;
@@ -170,7 +162,7 @@ namespace MeGUI.core.details.mux
             this.input.Name = "input";
             this.input.ReadOnly = true;
             this.input.SaveMode = false;
-            this.input.Size = new System.Drawing.Size(367, 23);
+            this.input.Size = new System.Drawing.Size(365, 23);
             this.input.TabIndex = 41;
             this.input.Title = null;
             this.input.FileSelected += new MeGUI.FileBarEventHandler(this.input_FileSelected);
@@ -179,13 +171,35 @@ namespace MeGUI.core.details.mux
             // 
             this.chkDefaultStream.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.chkDefaultStream.AutoSize = true;
-            this.chkDefaultStream.Location = new System.Drawing.Point(256, 65);
+            this.chkDefaultStream.Location = new System.Drawing.Point(232, 64);
             this.chkDefaultStream.Name = "chkDefaultStream";
             this.chkDefaultStream.Size = new System.Drawing.Size(85, 17);
             this.chkDefaultStream.TabIndex = 44;
             this.chkDefaultStream.Text = "default track";
             this.chkDefaultStream.UseVisualStyleBackColor = true;
             this.chkDefaultStream.Visible = false;
+            // 
+            // chkForceStream
+            // 
+            this.chkForceStream.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.chkForceStream.AutoSize = true;
+            this.chkForceStream.Location = new System.Drawing.Point(323, 64);
+            this.chkForceStream.Name = "chkForceStream";
+            this.chkForceStream.Size = new System.Drawing.Size(77, 17);
+            this.chkForceStream.TabIndex = 45;
+            this.chkForceStream.Text = "force track";
+            this.chkForceStream.UseVisualStyleBackColor = true;
+            this.chkForceStream.Visible = false;
+            // 
+            // removeSubtitleTrack
+            // 
+            this.removeSubtitleTrack.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.removeSubtitleTrack.Location = new System.Drawing.Point(407, 31);
+            this.removeSubtitleTrack.Margin = new System.Windows.Forms.Padding(0);
+            this.removeSubtitleTrack.Name = "removeSubtitleTrack";
+            this.removeSubtitleTrack.Size = new System.Drawing.Size(22, 23);
+            this.removeSubtitleTrack.TabIndex = 46;
+            this.removeSubtitleTrack.Text = "X";
             // 
             // MuxStreamControl
             // 
@@ -205,7 +219,6 @@ namespace MeGUI.core.details.mux
 
         protected System.Windows.Forms.TextBox subName;
         protected System.Windows.Forms.Label SubNamelabel;
-        protected System.Windows.Forms.Button removeSubtitleTrack;
         protected System.Windows.Forms.ComboBox subtitleLanguage;
         protected System.Windows.Forms.Label subtitleLanguageLabel;
         protected System.Windows.Forms.Label subtitleInputLabel;
@@ -214,5 +227,7 @@ namespace MeGUI.core.details.mux
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         public System.Windows.Forms.CheckBox chkDefaultStream;
         public FileBar input;
+        public System.Windows.Forms.CheckBox chkForceStream;
+        protected System.Windows.Forms.Button removeSubtitleTrack;
     }
 }

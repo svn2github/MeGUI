@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2011  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -49,7 +49,7 @@ namespace MeGUI.core.details.mux
                 string language = null;
                 if (subtitleLanguage.Text != null && LanguageSelectionContainer.Languages.ContainsKey(subtitleLanguage.Text))
                     language = LanguageSelectionContainer.Languages[subtitleLanguage.Text];
-                return new MuxStream(input.Filename, subtitleLanguage.Text, subName.Text, (int)audioDelay.Value, chkDefaultStream.Checked);
+                return new MuxStream(input.Filename, subtitleLanguage.Text, subName.Text, (int)audioDelay.Value, chkDefaultStream.Checked, chkForceStream.Checked);
             }
 
             set
@@ -66,6 +66,7 @@ namespace MeGUI.core.details.mux
                 subName.Text = value.name;
                 audioDelay.Value = value.delay;
                 chkDefaultStream.Checked = value.bDefaultTrack;
+                chkForceStream.Checked = value.bForceTrack;
             }
         }
 
@@ -98,6 +99,22 @@ namespace MeGUI.core.details.mux
             get
             {
                 return showDefaultSubtitleStream;
+            }
+        }
+
+        private bool showForceSubtitleStream;
+        public bool ShowForceSubtitleStream
+        {
+            set
+            {
+                showForceSubtitleStream = value;
+                chkForceStream.Visible = value;
+                if (!value)
+                    chkForceStream.Checked = false;
+            }
+            get
+            {
+                return showForceSubtitleStream;
             }
         }
 

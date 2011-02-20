@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2011  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -73,6 +73,7 @@ namespace MeGUI
                 subtitleTracks[0].ShowDelay = true;
                 subtitleTracks[0].chkDefaultStream.CheckedChanged += new System.EventHandler(base.chkDefaultStream_CheckedChanged);
                 subtitleTracks[0].chkDefaultStream.Checked = true;
+                subtitleTracks[0].ShowForceSubtitleStream = true;
             }
             if (muxer.GetSupportedChapterTypes().Count == 0)
                 chaptersGroupbox.Enabled = false;

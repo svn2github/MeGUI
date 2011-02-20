@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2011  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -478,7 +478,7 @@ namespace MeGUI
                             aInput = audioTrack[i].SelectedText;
 
                         if (audioConfigControl[i].DontEncode)
-                            muxOnlyAudio.Add(new MuxStream(aInput, info, delay, false));
+                            muxOnlyAudio.Add(new MuxStream(aInput, info, delay, false, false));
                         else
                             aJobs.Add(new AudioJob(aInput, null, null, audioConfigControl[i].Settings, delay, strLanguage));
                     }

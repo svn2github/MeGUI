@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2011  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -67,7 +67,7 @@ namespace MeGUI
                 else
                     TrackInfo.Language = Language;
             }
-            return new MuxStream(Output, TrackInfo, 0, false); 
+            return new MuxStream(Output, TrackInfo, 0, false, false); 
             // no delay correction is required since the audio job will fix the delay
         }
 

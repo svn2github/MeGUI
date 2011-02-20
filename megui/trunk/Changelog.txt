@@ -1,3 +1,4 @@
+1968 [MKV Muxer] added forced track flag for subtitles
 1967 [Update] save/restore size, location and column locations. Feature request #3079391
 1966 [Worker] corrected wiki link. Patch by XhmikosR (#3186982)
 1965 [Update] fixed a problem with the Nero AAC encoder update detection

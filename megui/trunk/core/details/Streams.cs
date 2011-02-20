@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2011  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -46,20 +46,22 @@ namespace MeGUI.core.details
         public TrackInfo TrackInfo;
         public int delay;
         public bool bDefaultTrack;
+        public bool bForceTrack;
 
-        public MuxStream(string path, TrackInfo info, int delay, bool bDefaultTrack)
+        public MuxStream(string path, TrackInfo info, int delay, bool bDefaultTrack, bool bForceTrack)
         {
             this.path = path;
             TrackInfo = info;
             this.delay = delay;
             this.bDefaultTrack = bDefaultTrack;
+            this.bForceTrack = bForceTrack;
         }
 
-        public MuxStream(string path, string language, string name, int delay, bool bDefaultTrack)
+        public MuxStream(string path, string language, string name, int delay, bool bDefaultTrack, bool bForceTrack)
             :
-            this(path, new TrackInfo(language, name), delay, bDefaultTrack) { }
+            this(path, new TrackInfo(language, name), delay, bDefaultTrack, bForceTrack) { }
 
-        public MuxStream() : this(null, new TrackInfo(), 0, false) { }
+        public MuxStream() : this(null, new TrackInfo(), 0, false, false) { }
 
         public string language
         {

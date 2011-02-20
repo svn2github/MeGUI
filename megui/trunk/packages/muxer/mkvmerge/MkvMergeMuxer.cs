@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2011  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -195,6 +195,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                                 if (stream.delay != 0)
                                     sb.AppendFormat(" --sync {0}:{1}ms", strack.Index.ToString(), stream.delay);
                                 sb.Append(" --default-track " + strack.Index.ToString() + ":no");
+                                sb.Append(" --forced-track " + strack.Index.ToString() + ":no");
                             }
                             else
                             {
@@ -218,6 +219,10 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                                     sb.Append(" --default-track " + "0:yes");
                                 else
                                     sb.Append(" --default-track " + "0:no");
+                                if (stream.bForceTrack)
+                                    sb.Append(" --forced-track 0:yes");
+                                else
+                                    sb.Append(" -forced-track 0:no");
                             }
                             ++nt;
                         }
@@ -252,6 +257,10 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                             sb.Append(" --default-track \"" + trackID + ":yes\"");
                         else
                             sb.Append(" --default-track \"" + trackID + ":no\"");
+                        if (stream.bForceTrack)
+                            sb.Append(" --forced-track \"" + trackID + ":yes\"");
+                        else
+                            sb.Append(" --forced-track \"" + trackID + ":no\"");
                         sb.Append(" -s 0 -D -A \"" + stream.path + "\"");
                     }
                 }

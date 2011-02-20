@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2011  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -80,9 +80,9 @@ namespace MeGUI
             foreach (MuxStreamControl oStream in subtitleTracks)
             {
                 if ((this.cbContainer.SelectedItem as ContainerType).Extension.Equals("mkv"))
-                    oStream.ShowDefaultSubtitleStream = oStream.ShowDelay = true;
+                    oStream.ShowDefaultSubtitleStream = oStream.ShowForceSubtitleStream = oStream.ShowDelay = true;
                 else
-                    oStream.ShowDefaultSubtitleStream = oStream.ShowDelay = false;
+                    oStream.ShowDefaultSubtitleStream = oStream.ShowForceSubtitleStream = oStream.ShowDelay = false;
             }
 
             if ((this.cbContainer.SelectedItem as ContainerType).Extension.Equals("mkv"))
