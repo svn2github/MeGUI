@@ -256,20 +256,25 @@ namespace MeGUI
 
                 if (!HasAvailableVersions)
                 {
-                    status.Text = "No Update Available";
+                    if (this.DownloadChecked)
+                        status.Text = "Reinstalling";
+                    else
+                        status.Text = "No Update Available";
                 }
                 else
                 {
                     if (this.AllowUpdate)
-                    {
                         status.Text = "Update Available";
-                        if (this.DownloadChecked)
-                            myitem.Checked = true;
-                        else
-                            myitem.Checked = false;
-                    }
                     else
                         status.Text = "Update Ignored";
+                }
+
+                if (this.AllowUpdate)
+                {
+                    if (this.DownloadChecked)
+                        myitem.Checked = true;
+                    else
+                        myitem.Checked = false;
                 }
 
                 platform.Text = this.Platform.ToString();
@@ -864,6 +869,7 @@ namespace MeGUI
         {
             InitializeComponent();
             this.mainForm = mainForm;
+            LoadComponentSettings();
             this.upgradeData = new iUpgradeableCollection(32); // To avoid unnecessary resizing, start at 32.
             meGUISettings = savedSettings; // Load up the MeGUI settings so i can access filepaths
             this.serverList = shuffled(mainForm.Settings.AutoUpdateServerLists[mainForm.Settings.AutoUpdateServerSubList]);
@@ -883,8 +889,38 @@ namespace MeGUI
         {
             InitializeComponent();
             this.mainForm = mainForm;
+            LoadComponentSettings();
             this.upgradeData = new iUpgradeableCollection(32); // To avoid unnecessary resizing, start at 32.
             meGUISettings = savedSettings; // Load up the MeGUI settings so i can access filepaths
+        }
+
+        private void LoadComponentSettings()
+        {
+            // Restore Size/Position of the window
+            this.ClientSize = mainForm.Settings.UpdateFormSize;
+            this.Location = mainForm.Settings.UpdateFormLocation;
+            this.splitContainer2.SplitterDistance = mainForm.Settings.UpdateFormSplitter;
+
+            colUpdate.Width = mainForm.Settings.UpdateFormUpdateColumnWidth;
+            colName.Width = mainForm.Settings.UpdateFormNameColumnWidth;
+            colExistingVersion.Width = mainForm.Settings.UpdateFormLocalVersionColumnWidth;
+            colLatestVersion.Width = mainForm.Settings.UpdateFormServerVersionColumnWidth;
+            colExistingDate.Width = mainForm.Settings.UpdateFormLocalDateColumnWidth;
+            colLatestDate.Width = mainForm.Settings.UpdateFormServerDateColumnWidth;
+            colPlatform.Width = mainForm.Settings.UpdateFormPlatformColumnWidth;
+            colStatus.Width = mainForm.Settings.UpdateFormStatusColumnWidth;
+        }
+
+        private void SaveComponentSettings()
+        {
+            mainForm.Settings.UpdateFormUpdateColumnWidth = colUpdate.Width;
+            mainForm.Settings.UpdateFormNameColumnWidth = colName.Width;
+            mainForm.Settings.UpdateFormLocalVersionColumnWidth = colExistingVersion.Width;
+            mainForm.Settings.UpdateFormServerVersionColumnWidth = colLatestVersion.Width;
+            mainForm.Settings.UpdateFormLocalDateColumnWidth = colExistingDate.Width;
+            mainForm.Settings.UpdateFormServerDateColumnWidth = colLatestDate.Width;
+            mainForm.Settings.UpdateFormPlatformColumnWidth = colPlatform.Width;
+            mainForm.Settings.UpdateFormStatusColumnWidth = colStatus.Width;
         }
 
         private string[] shuffled(string[] serverList)
@@ -902,6 +938,26 @@ namespace MeGUI
 
         private void UpdateWindow_Load(object sender, EventArgs e)
         {
+            // Move window in the visible area of the screen if neccessary
+            Size oSizeScreen = Screen.GetWorkingArea(this).Size;
+            Point oLocation = Screen.GetWorkingArea(this).Location;
+            int iScreenHeight = oSizeScreen.Height - 2 * SystemInformation.FixedFrameBorderSize.Height;
+            int iScreenWidth = oSizeScreen.Width - 2 * SystemInformation.FixedFrameBorderSize.Width;
+
+            if (this.Size.Height >= iScreenHeight)
+                this.Location = new Point(this.Location.X, oLocation.Y);
+            else if (this.Location.Y <= oLocation.Y)
+                this.Location = new Point(this.Location.X, oLocation.Y);
+            else if (this.Location.Y + this.Size.Height > iScreenHeight)
+                this.Location = new Point(this.Location.X, iScreenHeight - this.Size.Height);
+
+            if (this.Size.Width >= iScreenWidth)
+                this.Location = new Point(oLocation.X, this.Location.Y);
+            else if (this.Location.X <= oLocation.X)
+                this.Location = new Point(oLocation.X, this.Location.Y);
+            else if (this.Location.X + this.Size.Width > iScreenWidth)
+                this.Location = new Point(iScreenWidth - this.Size.Width, this.Location.Y);
+       
             GetUpdateData(false);
 
             if (VistaStuff.IsVistaOrNot)
@@ -1309,7 +1365,7 @@ namespace MeGUI
             {
                 if (!bShowAllFiles)
                 {
-                    if (file.HasAvailableVersions)
+                    if (file.HasAvailableVersions || file.DownloadChecked)
                         AddToListview(file.CreateListViewItem());
                 }
                 else
@@ -1325,7 +1381,6 @@ namespace MeGUI
             if (itm.SubItems["Status"].Text.Equals("No Update Available")
                 || itm.SubItems["Status"].Text.Equals("Update Ignored"))
                 e.NewValue = CheckState.Unchecked;
-
 
             iUpgradeable file = upgradeData.FindByName(itm.Name);
             if (e.NewValue == CheckState.Checked)
@@ -1867,6 +1922,29 @@ namespace MeGUI
         private void chkShowAllFiles_CheckedChanged(object sender, EventArgs e)
         {
             DisplayItems(chkShowAllFiles.Checked);
+        }
+
+        private void UpdateWindow_Move(object sender, EventArgs e)
+        {
+            if (this.WindowState != FormWindowState.Minimized && this.Visible == true)
+                mainForm.Settings.UpdateFormLocation = this.Location;
+        }
+
+        private void UpdateWindow_Resize(object sender, EventArgs e)
+        {
+            if (this.WindowState != FormWindowState.Minimized && this.Visible == true)
+                mainForm.Settings.UpdateFormSize = this.ClientSize;
+        }
+
+        private void splitContainer2_SplitterMoved(object sender, SplitterEventArgs e)
+        {
+            if (this.WindowState != FormWindowState.Minimized && this.Visible == true)
+                mainForm.Settings.UpdateFormSplitter = this.splitContainer2.SplitterDistance;
+        }
+
+        private void listViewDetails_ColumnWidthChanged(object sender, ColumnWidthChangedEventArgs e)
+        {
+            SaveComponentSettings();
         }
     }
     public class UpdateOptions : MeGUI.core.plugins.interfaces.IOption

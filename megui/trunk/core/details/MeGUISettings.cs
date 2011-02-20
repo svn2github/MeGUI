@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2011  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 
 using MeGUI.core.util;
 using MeGUI.core.gui;
@@ -49,15 +50,18 @@ namespace MeGUI
         private ulong audioSamplesPerUpdate;
         private AfterEncoding afterEncoding;
         private decimal forceFilmThreshold, acceptableFPSError;
-        private int nbPasses, acceptableAspectError, autoUpdateServerSubList, minComplexity,
+        private int nbPasses, acceptableAspectError, autoUpdateServerSubList, minComplexity, updateFormSplitter,
                     maxComplexity, jobColumnWidth, inputColumnWidth, outputColumnWidth, codecColumnWidth,
-                    modeColumnWidth, statusColumnWidth, ownerColumnWidth, startColumnWidth, endColumnWidth, fpsColumnWidth;
+                    modeColumnWidth, statusColumnWidth, ownerColumnWidth, startColumnWidth, endColumnWidth, fpsColumnWidth,
+                    updateFormUpdateColumnWidth, updateFormNameColumnWidth, updateFormLocalVersionColumnWidth, 
+                    updateFormServerVersionColumnWidth, updateFormLocalDateColumnWidth, updateFormServerDateColumnWidth, 
+                    updateFormPlatformColumnWidth, updateFormStatusColumnWidth;
         private SourceDetectorSettings sdSettings;
         private AutoEncodeDefaultsSettings aedSettings;
         private DialogSettings dialogSettings;
         private ProcessPriority defaultPriority;
-        private System.Drawing.Point mainFormLocation;
-        private System.Drawing.Size mainFormSize, jobWorkerSize;
+        private Point mainFormLocation, updateFormLocation;
+        private Size mainFormSize, updateFormSize, jobWorkerSize;
         private FileSize[] customFileSizes;
         private FPS[] customFPSs;
         private Dar[] customDARs;
@@ -154,9 +158,20 @@ namespace MeGUI
             strLastDestinationPath = "";
             minComplexity = 72;
             maxComplexity = 78;
-            mainFormLocation = new System.Drawing.Point(0, 0);
-            mainFormSize = new System.Drawing.Size(524, 558);
-            jobWorkerSize = new System.Drawing.Size(565, 498);
+            mainFormLocation = new Point(0, 0);
+            mainFormSize = new Size(524, 558);
+            updateFormLocation = new Point(0, 0);
+            updateFormSize = new Size(710, 313);
+            updateFormSplitter = 180;
+            updateFormUpdateColumnWidth = 47;
+            updateFormNameColumnWidth = 105;
+            updateFormLocalVersionColumnWidth = 117; 
+            updateFormServerVersionColumnWidth = 117;
+            updateFormLocalDateColumnWidth = 70;
+            updateFormServerDateColumnWidth = 70;
+            updateFormPlatformColumnWidth = 52;
+            updateFormStatusColumnWidth = 111;
+            jobWorkerSize = new Size(565, 498);
             jobColumnWidth = 40;
             inputColumnWidth = 89;
             outputColumnWidth = 89;
@@ -182,19 +197,85 @@ namespace MeGUI
             get { return yadifPath; }
         }
 
-        public System.Drawing.Point MainFormLocation
+        public Point MainFormLocation
         {
             get { return mainFormLocation; }
             set { mainFormLocation = value; }
         }
 
-        public System.Drawing.Size MainFormSize
+        public Size MainFormSize
         {
             get { return mainFormSize; }
             set { mainFormSize = value; }
         }
 
-        public System.Drawing.Size JobWorkerSize
+        public Point UpdateFormLocation
+        {
+            get { return updateFormLocation; }
+            set { updateFormLocation = value; }
+        }
+
+        public Size UpdateFormSize
+        {
+            get { return updateFormSize; }
+            set { updateFormSize = value; }
+        }
+
+        public int UpdateFormSplitter
+        {
+            get { return updateFormSplitter; }
+            set { updateFormSplitter = value; }
+        }
+
+        public int UpdateFormUpdateColumnWidth
+        {
+            get { return updateFormUpdateColumnWidth; }
+            set { updateFormUpdateColumnWidth = value; }
+        }
+
+        public int UpdateFormNameColumnWidth
+        {
+            get { return updateFormNameColumnWidth; }
+            set { updateFormNameColumnWidth = value; }
+        }
+
+        public int UpdateFormLocalVersionColumnWidth
+        {
+            get { return updateFormLocalVersionColumnWidth; }
+            set { updateFormLocalVersionColumnWidth = value; }
+        }
+
+        public int UpdateFormServerVersionColumnWidth
+        {
+            get { return updateFormServerVersionColumnWidth; }
+            set { updateFormServerVersionColumnWidth = value; }
+        }
+
+        public int UpdateFormLocalDateColumnWidth
+        {
+            get { return updateFormLocalDateColumnWidth; }
+            set { updateFormLocalDateColumnWidth = value; }
+        }
+                
+        public int UpdateFormServerDateColumnWidth
+        {
+            get { return updateFormServerDateColumnWidth; }
+            set { updateFormServerDateColumnWidth = value; }
+        }
+
+        public int UpdateFormPlatformColumnWidth
+        {
+            get { return updateFormPlatformColumnWidth; }
+            set { updateFormPlatformColumnWidth = value; }
+        }
+
+        public int UpdateFormStatusColumnWidth
+        {
+            get { return updateFormStatusColumnWidth; }
+            set { updateFormStatusColumnWidth = value; }
+        }
+
+        public Size JobWorkerSize
         {
             get { return jobWorkerSize; }
             set { jobWorkerSize = value; }

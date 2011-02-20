@@ -50,7 +50,7 @@ namespace MeGUI
             this.colExistingVersion = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colLatestVersion = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colExistingDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.calLatestDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colLatestDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colPlatform = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colStatus = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.txtBoxLog = new System.Windows.Forms.TextBox();
@@ -199,6 +199,7 @@ namespace MeGUI
             this.splitContainer2.Size = new System.Drawing.Size(710, 375);
             this.splitContainer2.SplitterDistance = 220;
             this.splitContainer2.TabIndex = 0;
+            this.splitContainer2.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitContainer2_SplitterMoved);
             // 
             // listViewDetails
             // 
@@ -209,7 +210,7 @@ namespace MeGUI
             this.colExistingVersion,
             this.colLatestVersion,
             this.colExistingDate,
-            this.calLatestDate,
+            this.colLatestDate,
             this.colPlatform,
             this.colStatus});
             this.listViewDetails.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -221,6 +222,7 @@ namespace MeGUI
             this.listViewDetails.TabIndex = 6;
             this.listViewDetails.UseCompatibleStateImageBehavior = false;
             this.listViewDetails.View = System.Windows.Forms.View.Details;
+            this.listViewDetails.ColumnWidthChanged += new System.Windows.Forms.ColumnWidthChangedEventHandler(this.listViewDetails_ColumnWidthChanged);
             this.listViewDetails.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.listViewDetails_ItemCheck);
             this.listViewDetails.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listViewDetails_MouseClick);
             // 
@@ -250,10 +252,10 @@ namespace MeGUI
             this.colExistingDate.Text = "Local Date";
             this.colExistingDate.Width = 70;
             // 
-            // calLatestDate
+            // colLatestDate
             // 
-            this.calLatestDate.Text = "Server Date";
-            this.calLatestDate.Width = 70;
+            this.colLatestDate.Text = "Server Date";
+            this.colLatestDate.Width = 70;
             // 
             // colPlatform
             // 
@@ -287,10 +289,12 @@ namespace MeGUI
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "UpdateWindow";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "MeGUI - Updater";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.UpdateWindow_FormClosing);
             this.Load += new System.EventHandler(this.UpdateWindow_Load);
+            this.Move += new System.EventHandler(this.UpdateWindow_Move);
+            this.Resize += new System.EventHandler(this.UpdateWindow_Resize);
             this.statusToolStrip.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
@@ -327,7 +331,7 @@ namespace MeGUI
         private System.Windows.Forms.ToolStripMenuItem reinstallToolStripMenuItem;
         private System.Windows.Forms.ColumnHeader colPlatform;
         private System.Windows.Forms.ColumnHeader colExistingDate;
-        private System.Windows.Forms.ColumnHeader calLatestDate;
+        private System.Windows.Forms.ColumnHeader colLatestDate;
         private System.Windows.Forms.CheckBox chkShowAllFiles;
     }
 }
