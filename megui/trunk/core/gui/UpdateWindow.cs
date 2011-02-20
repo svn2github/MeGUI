@@ -1175,10 +1175,18 @@ namespace MeGUI
             else
                 AddTextToLog("All files are up to date", ImageType.Information);
 
+            bool bChecked = chkShowAllFiles.Checked;
             if (chkShowAllFiles.InvokeRequired)
                 chkShowAllFiles.Invoke(new MethodInvoker(delegate { chkShowAllFiles.Checked = iUpdatesCount == 0; }));
             else
                 chkShowAllFiles.Checked = iUpdatesCount == 0;
+            if (chkShowAllFiles.Checked == bChecked)
+            {
+                if (chkShowAllFiles.InvokeRequired)
+                    chkShowAllFiles.Invoke(new MethodInvoker(delegate { DisplayItems(chkShowAllFiles.Checked); }));
+                else
+                    DisplayItems(chkShowAllFiles.Checked);   
+            }
 
             webUpdate.Set();
         }
@@ -1945,6 +1953,11 @@ namespace MeGUI
         private void listViewDetails_ColumnWidthChanged(object sender, ColumnWidthChangedEventArgs e)
         {
             SaveComponentSettings();
+        }
+
+        private void splitContainer1_SizeChanged(object sender, EventArgs e)
+        {
+            this.splitContainer1.SplitterDistance = this.splitContainer1.Size.Height - 65;
         }
     }
     public class UpdateOptions : MeGUI.core.plugins.interfaces.IOption
