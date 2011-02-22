@@ -405,6 +405,7 @@ namespace MeGUI
 			job.Input = oldJob.Input;
 			job.Output = oldJob.Output;
             job.Settings = oldJob.Settings.Clone();
+            job.Zones = oldJob.Zones;
             return job;
 		}
 		#endregion

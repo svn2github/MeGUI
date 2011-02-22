@@ -1,3 +1,4 @@
+1973 [Video Encoding] fixed not applying zones to first pass. Bug #3188275
 1972 [MKV Muxer] fixed non-forced idx subtitle handling
      [MKV Muxer] cosmetics 
 1971 [OneClick] corrected output width if autocrop is disabled
