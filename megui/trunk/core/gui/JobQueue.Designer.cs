@@ -101,7 +101,7 @@ namespace MeGUI.core.gui
             // 
             // codecHeader
             // 
-            this.codecHeader.Text = "Codec";
+            this.codecHeader.Text = "Encoder";
             // 
             // modeHeader
             // 
@@ -243,7 +243,8 @@ namespace MeGUI.core.gui
             this.EditMenuItem.ShortcutKeyDisplayString = "";
             this.EditMenuItem.Size = new System.Drawing.Size(152, 22);
             this.EditMenuItem.Text = "&Edit";
-            this.EditMenuItem.ToolTipText = "Edit job\r\nOnly possible if only one job is selected which is waiting or postponed";
+            this.EditMenuItem.ToolTipText = "Edit job\r\nOnly possible if only one job is selected which is waiting or postponed" +
+                "";
             this.EditMenuItem.Click += new System.EventHandler(this.editJobButton_Click);
             // 
             // flowLayoutPanel1
