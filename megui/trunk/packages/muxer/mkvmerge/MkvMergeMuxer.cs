@@ -222,7 +222,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                                 if (stream.bForceTrack)
                                     sb.Append(" --forced-track 0:yes");
                                 else
-                                    sb.Append(" -forced-track 0:no");
+                                    sb.Append(" --forced-track 0:no");
                             }
                             ++nt;
                         }
