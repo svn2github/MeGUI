@@ -66,7 +66,7 @@ namespace MeGUI
 
         internal void Start()
         {
-            //Util.ensureExists(processingJob.Input);
+            Util.ensureExists(job.Input);
             _processThread = new Thread(new ThreadStart(this.StartPostProcessing));
             _processThread.Priority = ThreadPriority.BelowNormal;
             _processThread.Start();
@@ -76,11 +76,6 @@ namespace MeGUI
         {
             _processThread.Abort();
             _processThread = null;
-        }
-
-        private void deleteOutputFile()
-        {
-            //safeDelete(processingJob.Output);
         }
 
         private static void safeDelete(string filePath)
@@ -214,7 +209,6 @@ namespace MeGUI
             catch (Exception e)
             {
                 t.Abort();
-                deleteOutputFile();
                 if (e is ThreadAbortException)
                 {
                     _log.LogEvent("Aborting...");
@@ -339,7 +333,7 @@ namespace MeGUI
                 return "";
             }
 
-            if (!keepInputResolution)
+            if (!keepInputResolution && autoCrop)
             {
                 //Autocrop
                 final = Autocrop.autocrop(reader);
@@ -354,16 +348,13 @@ namespace MeGUI
                         ScriptServer.undercrop(ref final);
                 }
 
-                if (autoCrop)
+                bool error = (final.left == -1);
+                if (!error)
+                    _log.LogValue("Autocrop values", final);
+                else
                 {
-                    bool error = (final.left == -1);
-                    if (!error)
-                        _log.LogValue("Autocrop values", final);
-                    else
-                    {
-                        _log.Error("Autocrop failed, aborting now");
-                        return "";
-                    }
+                    _log.Error("Autocrop failed, aborting now");
+                    return "";
                 }
             }
 

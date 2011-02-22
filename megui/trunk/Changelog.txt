@@ -1,3 +1,4 @@
+1971 [OneClick] corrected output width if autocrop is disabled
 1970 [Update] some adjustements
 1969 [Main Window] if video input avs file has also audio included add this file as audio track, too. Feature request #2918470
 1968 [MKV Muxer] added forced track flag for subtitles
