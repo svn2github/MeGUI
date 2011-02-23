@@ -408,24 +408,9 @@ namespace MeGUI
                 scriptVerticalResolution = Resolution.suggestResolution(d2v.Info.Height, d2v.Info.Width, (double)customDAR.ar,
                 final, horizontalResolution, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out dar);
                 _log.LogValue("Output resolution", horizontalResolution + "x" + scriptVerticalResolution);
-                if (settings != null && settings is x264Settings) // verify that the video corresponds to the chosen avc level, if not, change the resolution until it does fit
+                if (settings != null && settings is x264Settings)
                 {
                     x264Settings xs = (x264Settings)settings;
-                    if (xs.Level != 15)
-                    {
-                        AVCLevels al = new AVCLevels();
-                        _log.LogValue("AVC level", al.getLevels()[xs.Level]);
-
-                        int compliantLevel = 15;
-                        while (!this.al.validateAVCLevel(horizontalResolution, scriptVerticalResolution, d2v.Info.FPS, xs, out compliantLevel))
-                        { // resolution not profile compliant, reduce horizontal resolution by 16, get the new vertical resolution and try again
-                            string levelName = al.getLevels()[xs.Level];
-                            horizontalResolution -= 16;
-                            scriptVerticalResolution = Resolution.suggestResolution(d2v.Info.Height, d2v.Info.Width, (double)customDAR.ar,
-                                final, horizontalResolution, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out dar);
-                        }
-                        _log.LogValue("Resolution adjusted for AVC Level", horizontalResolution + "x" + scriptVerticalResolution);
-                    }
                     if (useChaptersMarks)
                     {
                         qpfile = job.PostprocessingProperties.ChapterFile;
