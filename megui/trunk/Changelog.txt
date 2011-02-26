@@ -1,3 +1,4 @@
+1977 [XviD] added threads = 0 for automatic detection
 1976 [XviD] custom commandline values have precedence
      [XviD] if possible -par x:y will be replaced with -par z
 1975 [OneClick] removed resolution adjustement for AVC level enforcement

@@ -129,6 +129,7 @@ namespace MeGUI
             base.MaxNumberOfPasses = 2;
             FourCCs = FourCCsForMPEG4ASP;
             hvsMasking = 1;
+            NbThreads = 0;
         }
         #region properties
         /// I believe we really does'nt need to create this array @ per-instance basis

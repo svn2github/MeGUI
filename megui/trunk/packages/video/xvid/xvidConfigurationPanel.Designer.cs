@@ -397,19 +397,9 @@ namespace MeGUI.packages.video.xvid
             // nbThreads
             // 
             this.nbThreads.Location = new System.Drawing.Point(84, 170);
-            this.nbThreads.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
             this.nbThreads.Name = "nbThreads";
             this.nbThreads.Size = new System.Drawing.Size(72, 20);
             this.nbThreads.TabIndex = 5;
-            this.nbThreads.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
             this.nbThreads.ValueChanged += new System.EventHandler(this.updateEvent);
             // 
             // xvidInterlaced

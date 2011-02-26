@@ -244,7 +244,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "XviDEncoder");
                 else
                     sb.Append("-par " + s.X + ":" + s.Y + " ");
             }
-            if (!xs.CustomEncoderOptions.Contains("-threads "))
+            if (!xs.CustomEncoderOptions.Contains("-threads ") && xs.NbThreads > 0)
                 sb.Append("-threads " + xs.NbThreads + " ");
             if (zones != null && zones.Length > 0 && xs.CreditsQuantizer >= new decimal(1)
                 && xs.EncodingMode != 1) // only for non CQ mode at the moment
