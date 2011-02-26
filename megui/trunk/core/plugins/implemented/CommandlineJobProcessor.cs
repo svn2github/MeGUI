@@ -315,7 +315,8 @@ namespace MeGUI
                 }
                 catch (Exception e)
                 {
-                    ProcessLine("Exception in readStdErr: " + e.Message, str);
+                    log.LogValue("Exception in readStream", e, ImageType.Error);
+                    ProcessLine("Exception in readStream. Line cannot be processed", str);
                 }
                 rEvent.Set();
             }

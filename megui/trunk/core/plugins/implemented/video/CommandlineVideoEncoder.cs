@@ -134,7 +134,10 @@ namespace MeGUI
             {
                 int currentFrameNumber;
                 if (int.TryParse(frameString, out currentFrameNumber))
-                    this.currentFrameNumber = (ulong)currentFrameNumber;
+                    if (currentFrameNumber < 0)
+                        this.currentFrameNumber = 0;
+                    else
+                        this.currentFrameNumber = (ulong)currentFrameNumber;
             }
             if (!string.IsNullOrEmpty(errorString))
             {
