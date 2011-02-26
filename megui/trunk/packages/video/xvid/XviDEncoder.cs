@@ -100,83 +100,94 @@ new JobProcessorFactory(new ProcessorFactory(init), "XviDEncoder");
             }
             if (xs.EncodingMode <= 1) // 1 pass modes
             {
-                if (xs.ReactionDelayFactor != 16)
+                if (!xs.CustomEncoderOptions.Contains("-reaction ") && xs.ReactionDelayFactor != 16)
                     sb.Append("-reaction " + xs.ReactionDelayFactor + " ");
-                if (xs.AveragingPeriod != 100)
+                if (!xs.CustomEncoderOptions.Contains("-averaging ") && xs.AveragingPeriod != 100)
                     sb.Append("-averaging " + xs.AveragingPeriod + " ");
-                if (xs.RateControlBuffer != 100)
+                if (!xs.CustomEncoderOptions.Contains("-smoother ") && xs.RateControlBuffer != 100)
                     sb.Append("-smoother " + xs.RateControlBuffer + " ");
             }
             else // two pass modes
             {
-                if (xs.KeyFrameBoost != 10)
+                if (!xs.CustomEncoderOptions.Contains("-kboost ") && xs.KeyFrameBoost != 10)
                     sb.Append("-kboost " + xs.KeyFrameBoost + " ");
-                if (xs.KeyframeThreshold != 1)
+                if (!xs.CustomEncoderOptions.Contains("-kthresh ") && xs.KeyframeThreshold != 1)
                     sb.Append("-kthresh " + xs.KeyframeThreshold + " ");
-                if (xs.KeyframeReduction != 20)
+                if (!xs.CustomEncoderOptions.Contains("-kreduction ") && xs.KeyframeReduction != 20)
                     sb.Append("-kreduction " + xs.KeyframeReduction + " ");
-                if (xs.OverflowControlStrength != 5)
+                if (!xs.CustomEncoderOptions.Contains("-ostrength ") && xs.OverflowControlStrength != 5)
                     sb.Append("-ostrength " + xs.OverflowControlStrength + " ");
-                if (xs.MaxOverflowImprovement != 5)
+                if (!xs.CustomEncoderOptions.Contains("-oimprove ") && xs.MaxOverflowImprovement != 5)
                     sb.Append("-oimprove " + xs.MaxOverflowImprovement + " ");
-                if (xs.MaxOverflowDegradation != 5)
+                if (!xs.CustomEncoderOptions.Contains("-odegrade ") && xs.MaxOverflowDegradation != 5)
                     sb.Append("-odegrade " + xs.MaxOverflowDegradation + " ");
-                if (xs.HighBitrateDegradation != 0)
+                if (!xs.CustomEncoderOptions.Contains("-chigh ") && xs.HighBitrateDegradation != 0)
                     sb.Append("-chigh " + xs.HighBitrateDegradation + " ");
-                if (xs.LowBitrateImprovement != 0)
+                if (!xs.CustomEncoderOptions.Contains("-clow ") && xs.LowBitrateImprovement != 0)
                     sb.Append("-clow " + xs.LowBitrateImprovement + " ");
-                sb.Append("-overhead 0 ");
                 if (xs.XvidProfile != 0)
                 {
+                    int ivbvmax = 0, ivbvsize = 0, ivbvpeak = 0;
                     switch (xs.XvidProfile)
                     {
-                        case 0:
-                            break;
                         case 1:
-                            sb.Append("-vbvmax 4854000 -vbvsize 3145728 -vbvpeak 2359296 ");
+                            ivbvmax = 4854000;
+                            ivbvsize = 3145728;
+                            ivbvpeak = 2359296;
                             break;
                         case 2:
-                            sb.Append("-vbvmax 9708400 -vbvsize 6291456 -vbvpeak 4718592 ");
+                            ivbvmax = 9708400;
+                            ivbvsize = 6291456;
+                            ivbvpeak = 4718592;
                             break;
                         case 3:
-                            sb.Append("-vbvmax 20000000 -vbvsize 16000000 -vbvpeak 12000000 ");
+                            ivbvmax = 20000000;
+                            ivbvsize = 16000000;
+                            ivbvpeak = 12000000;
                             break;
                         case 4:
-                            sb.Append("-vbvmax 200000 -vbvsize 262144 -vbvpeak 196608 ");
+                            ivbvmax = 200000;
+                            ivbvsize = 262144;
+                            ivbvpeak = 196608;
                             break;
                         case 5:
-                            sb.Append("-vbvmax 600000 -vbvsize 655360 -vbvpeak 491520 ");
+                            ivbvmax = 600000;
+                            ivbvsize = 655360;
+                            ivbvpeak = 491520;
                             break;
                         case 6:
-                            if (xs.VbvBuffer != 0)
-                                sb.Append("-vbvsize " + xs.VbvBuffer + " ");
-                            if (xs.VbvMaxRate != 0)
-                                sb.Append("-vbvmax " + xs.VbvMaxRate + " ");
-                            if (xs.VbvPeakRate != 0)
-                                sb.Append("-vbvpeak " + xs.VbvPeakRate + " ");
+                            ivbvmax = xs.VbvMaxRate;
+                            ivbvsize = xs.VbvBuffer;
+                            ivbvpeak = xs.VbvPeakRate;
                             break;
                     }
+                    if (!xs.CustomEncoderOptions.Contains("-vbvsize ") && ivbvsize != 0)
+                        sb.Append("-vbvsize " + ivbvsize + " ");
+                    if (!xs.CustomEncoderOptions.Contains("-vbvmax ") && ivbvmax != 0)
+                        sb.Append("-vbvmax " + ivbvmax + " ");
+                    if (!xs.CustomEncoderOptions.Contains("-vbvpeak ") && ivbvpeak != 0)
+                        sb.Append("-vbvpeak " + ivbvpeak + " ");
                 }
             }
-            if (xs.Turbo)
+            if (!xs.CustomEncoderOptions.Contains("-turbo") && xs.Turbo)
                 sb.Append("-turbo ");
-            if (xs.KeyframeInterval != 300)
+            if (!xs.CustomEncoderOptions.Contains("-max_key_interval ") && xs.KeyframeInterval != 300)
                 sb.Append("-max_key_interval " + xs.KeyframeInterval + " ");
-            if (!xs.PackedBitstream) // default is on in encraw
+            if (!xs.CustomEncoderOptions.Contains("-nopacked") && !xs.PackedBitstream) // default is on in encraw
                 sb.Append("-nopacked ");
-            if (xs.MotionSearchPrecision != 6)
+            if (!xs.CustomEncoderOptions.Contains("-quality ") && xs.MotionSearchPrecision != 6)
                 sb.Append("-quality " + xs.MotionSearchPrecision + " ");
-            if (xs.VHQMode != 1)
+            if (!xs.CustomEncoderOptions.Contains("-vhqmode ") && xs.VHQMode != 1)
                 sb.Append("-vhqmode " + xs.VHQMode + " ");
-            if (xs.QPel)
+            if (!xs.CustomEncoderOptions.Contains("-qpel ") && xs.QPel)
                 sb.Append("-qpel ");
-            if (xs.GMC)
+            if (!xs.CustomEncoderOptions.Contains("-gmc ") && xs.GMC)
                 sb.Append("-gmc ");
-            if (xs.QuantizerMatrix == xvidSettings.MPEGMatrix)
+            if (!xs.CustomEncoderOptions.Contains("-qtype ") && xs.QuantizerMatrix == xvidSettings.MPEGMatrix)
                 sb.Append("-qtype 1 ");
-            else if (xs.QuantizerMatrix != xvidSettings.H263Matrix && !string.IsNullOrEmpty(xs.QuantizerMatrix))
+            else if (!xs.CustomEncoderOptions.Contains("-qmatrix ") && xs.QuantizerMatrix != xvidSettings.H263Matrix && !string.IsNullOrEmpty(xs.QuantizerMatrix))
                 sb.Append("-qmatrix \"" + xs.QuantizerMatrix + "\" ");
-            if (xs.Interlaced)
+            if (!xs.CustomEncoderOptions.Contains("-interlaced ") && xs.Interlaced)
             {
                 sb.Append("-interlaced ");
                 if (xs.BottomFieldFirst)
@@ -184,45 +195,57 @@ new JobProcessorFactory(new ProcessorFactory(init), "XviDEncoder");
                 else
                     sb.Append("2 ");
             }
-            if (xs.HVSMasking != 0)
+            if (!xs.CustomEncoderOptions.Contains("-masking ") && xs.HVSMasking != 0)
                 sb.Append("-masking " + xs.HVSMasking + " ");
-            if (!xs.Trellis)
+            if (!xs.CustomEncoderOptions.Contains("-notrellis") && !xs.Trellis)
                 sb.Append("-notrellis ");
-            if (!xs.ChromaMotion)
+            if (!xs.CustomEncoderOptions.Contains("-nochromame") && !xs.ChromaMotion)
                 sb.Append("-nochromame ");
-            if (xs.MinQuantizer != 2)
+            if (!xs.CustomEncoderOptions.Contains("-imin ") && xs.MinQuantizer != 2)
                 sb.Append("-imin " + xs.MinQuantizer + " ");
-            if (xs.MaxQuantizer != 31)
+            if (!xs.CustomEncoderOptions.Contains("-imax ") && xs.MaxQuantizer != 31)
                 sb.Append("-imax " + xs.MaxQuantizer + " ");
-            if (xs.MinPQuant != 2)
+            if (!xs.CustomEncoderOptions.Contains("-pmin ") && xs.MinPQuant != 2)
                 sb.Append("-pmin " + xs.MinPQuant + " ");
-            if (xs.MaxPQuant != 31)
+            if (!xs.CustomEncoderOptions.Contains("-pmax ") && xs.MaxPQuant != 31)
                 sb.Append("-pmax " + xs.MaxPQuant + " ");
-            if (!xs.ClosedGOP)
+            if (!xs.CustomEncoderOptions.Contains("-noclosed_gop") && !xs.ClosedGOP)
                 sb.Append("-noclosed_gop ");
-            if (xs.FrameDropRatio != 0)
+            if (!xs.CustomEncoderOptions.Contains("-drop ") && xs.FrameDropRatio != 0)
                 sb.Append("-drop " + xs.FrameDropRatio + " ");
-
-            if (xs.NbBframes != 2) sb.Append("-max_bframes " + xs.NbBframes + " ");
+            if (!xs.CustomEncoderOptions.Contains("-max_bframes ") && xs.NbBframes != 2) 
+                sb.Append("-max_bframes " + xs.NbBframes + " ");
             if (xs.NbBframes > 0)
             {
-                if (xs.VHQForBframes)
+                if (!xs.CustomEncoderOptions.Contains("-bvhq ") && xs.VHQForBframes)
                     sb.Append("-bvhq ");
-                if (xs.BQuantRatio != 150)
+                if (!xs.CustomEncoderOptions.Contains("-bquant_ratio ") && xs.BQuantRatio != 150)
                     sb.Append("-bquant_ratio " + xs.BQuantRatio + " ");
-                if (xs.BQuantOffset != 100)
+                if (!xs.CustomEncoderOptions.Contains("-bquant_offset ") && xs.BQuantOffset != 100)
                     sb.Append("-bquant_offset " + xs.BQuantOffset + " ");
-                if (xs.MinBQuant != 2)
+                if (!xs.CustomEncoderOptions.Contains("-bmin ") && xs.MinBQuant != 2)
                     sb.Append("-bmin " + xs.MinBQuant + " ");
-                if (xs.MaxBQuant != 31)
+                if (!xs.CustomEncoderOptions.Contains("-bmax ") && xs.MaxBQuant != 31)
                     sb.Append("-bmax " + xs.MaxBQuant + " ");
             }
-            if (d.HasValue) // custom PAR mode
+            if (!xs.CustomEncoderOptions.Contains("-par ") && d.HasValue) // custom PAR mode
             {
                 Sar s = d.Value.ToSar(hres, vres);
-                sb.Append("-par " + s.X + ":" + s.Y + " ");
+                if (s.X == 1 && s.Y == 1)
+                    sb.Append("-par 1 ");
+                else if (s.X == 12 && s.Y == 11)
+                    sb.Append("-par 2 ");
+                else if (s.X == 10 && s.Y == 11)
+                    sb.Append("-par 3 ");
+                else if (s.X == 16 && s.Y == 11)
+                    sb.Append("-par 4 ");
+                else if (s.X == 40 && s.Y == 33)
+                    sb.Append("-par 5 ");
+                else
+                    sb.Append("-par " + s.X + ":" + s.Y + " ");
             }
-            sb.Append("-threads " + xs.NbThreads + " ");
+            if (!xs.CustomEncoderOptions.Contains("-threads "))
+                sb.Append("-threads " + xs.NbThreads + " ");
             if (zones != null && zones.Length > 0 && xs.CreditsQuantizer >= new decimal(1)
                 && xs.EncodingMode != 1) // only for non CQ mode at the moment
             {
@@ -248,7 +271,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "XviDEncoder");
                 else
                     sb.Append(" -o \"" + output + "\"");
             }
-            if (!xs.CustomEncoderOptions.Equals("")) // add custom encoder options
+            if (!String.IsNullOrEmpty(xs.CustomEncoderOptions.Trim())) // add custom encoder options
                 sb.Append(" " + xs.CustomEncoderOptions);
             return sb.ToString();
         }
