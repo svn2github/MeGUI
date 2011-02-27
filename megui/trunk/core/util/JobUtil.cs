@@ -314,14 +314,14 @@ namespace MeGUI
                     StreamWriter hfyuWrapper = new StreamWriter(inputAVS, false, Encoding.Default);
                     String strDLLPath = Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.FFMSIndexPath), "ffms2.dll");
 #if x86
-                    hfyuWrapper.WriteLine("LoadPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + hfyuFile + "\")" + VideoUtil.getAssumeFPS(0, hfyuFile));
+                    hfyuWrapper.WriteLine("LoadPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + hfyuFile + "\")" + VideoUtil.getAssumeFPS(0, movieInput));
 #endif
 #if x64
-                    hfyuWrapper.WriteLine("LoadCPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + hfyuFile + "\")" + VideoUtil.getAssumeFPS(0, hfyuFile));
+                    hfyuWrapper.WriteLine("LoadCPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + hfyuFile + "\")" + VideoUtil.getAssumeFPS(0, movieInput));
 #endif
                     hfyuWrapper.Close();
                 }
-                catch (IOException)
+                catch (Exception ex)
                 {
                     return null;
                 }

@@ -150,9 +150,9 @@ namespace MeGUI
                 if (!Path.GetExtension(strAVSScript).ToLower().Equals(".avs"))
                     return false;
                 using (AviSynthScriptEnvironment env = new AviSynthScriptEnvironment())
-                using (AviSynthClip a = env.OpenScriptFile(strAVSScript))
-                    if (a.ChannelsCount == 0)
-                        return false;
+                    using (AviSynthClip a = env.OpenScriptFile(strAVSScript))
+                        if (a.ChannelsCount == 0)
+                            return false;
                 return true;
             }
             catch

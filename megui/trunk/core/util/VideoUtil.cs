@@ -993,13 +993,24 @@ namespace MeGUI
         {
             if (fps <= 0)
             {
+                if (!File.Exists(strInput))
+                    return String.Empty;
                 if (strInput.ToLower().EndsWith(".ffindex"))
                     strInput = strInput.Substring(0, strInput.Length - 8);
-                MediaInfoFile oInfo = new MediaInfoFile(strInput);
-                if (oInfo.Info.HasVideo && oInfo.Info.FPS > 0)
-                    fps = oInfo.Info.FPS;
+                if (Path.GetExtension(strInput).ToLower().Equals(".avs"))
+                {
+                    fps = GetFPSFromAVSFile(strInput);
+                    if (fps <= 0)
+                        return String.Empty;
+                }
                 else
-                    return String.Empty;
+                {
+                    MediaInfoFile oInfo = new MediaInfoFile(strInput);
+                    if (oInfo.Info.HasVideo && oInfo.Info.FPS > 0)
+                        fps = oInfo.Info.FPS;
+                    else
+                        return String.Empty;
+                }
             }
 
             string strAssumeFPS = ".AssumeFPS(";
@@ -1017,6 +1028,26 @@ namespace MeGUI
                 default: strAssumeFPS += strFPS; break;
             }
             return strAssumeFPS + ")";
+        }
+
+        public static double GetFPSFromAVSFile(String strAVSScript)
+        {
+            try
+            {
+                if (!Path.GetExtension(strAVSScript).ToLower().Equals(".avs"))
+                    return 0;
+                using (AviSynthScriptEnvironment env = new AviSynthScriptEnvironment())
+                {
+                    using (AviSynthClip a = env.OpenScriptFile(strAVSScript))
+                        if (a.HasVideo)
+                            return (double)a.raten / (double)a.rated;
+                }
+                return 0;
+            }
+            catch
+            {
+                return 0;
+            }
         }
     }
 	#region helper structs

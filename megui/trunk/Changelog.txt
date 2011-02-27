@@ -1,3 +1,4 @@
+1980 [pre-rendering job] fixed a problem introduced in 1935
 1979 [M2TS Muxer] added Blu-ray and AVCHD device output types. Feature request #1982670
      [AVI Muxer] added PC device output type which is unrestricted and corresponds to the old standard setting. 
                  the new standard output type is now enhanced for standalone devices so that e.g. opendml is disabled and splitting enforced. #1951705
