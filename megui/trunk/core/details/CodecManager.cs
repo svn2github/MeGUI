@@ -306,8 +306,9 @@ namespace MeGUI
         public static readonly DeviceType IPHONE = new DeviceType("iPhone", "iPhone", "iPhone", ContainerType.MP4);
         public static readonly DeviceType ISMA = new DeviceType("ISMA", "ISMA", "ISMA", ContainerType.MP4);
         public static readonly DeviceType PSP = new DeviceType("PSP", "PSP", "PSP", ContainerType.MP4);
-    //    public static readonly DeviceType BD = new DeviceType("Blu-ray", "Blu-ray", "Blu-ray", ContainerType.M2TS);
-    //    public static readonly DeviceType AVCHD = new DeviceType("AVCHD", "AVCHD", "AVCHD", ContainerType.M2TS);
+        public static readonly DeviceType BD = new DeviceType("Blu-ray", "Blu-ray", "Blu-ray", ContainerType.M2TS);
+        public static readonly DeviceType AVCHD = new DeviceType("AVCHD", "AVCHD", "AVCHD", ContainerType.M2TS);
+        public static readonly DeviceType PC = new DeviceType("PC", "PC", "PC", ContainerType.AVI);
     }
     public class ContainerType : OutputFileType
     {
@@ -382,8 +383,9 @@ namespace MeGUI
                 ChapterTypes.Register(ChapterType.MKV_XML)))
 		        throw new Exception("Failed to register a chapter type");
             if (!(
-            //    DeviceTypes.Register(DeviceType.AVCHD) &&
-            //    DeviceTypes.Register(DeviceType.BD) &&
+                DeviceTypes.Register(DeviceType.AVCHD) &&
+                DeviceTypes.Register(DeviceType.BD) &&
+                DeviceTypes.Register(DeviceType.PC) &&
                 DeviceTypes.Register(DeviceType.IPOD) &&
                 DeviceTypes.Register(DeviceType.PSP) &&
                 DeviceTypes.Register(DeviceType.IPHONE) &&

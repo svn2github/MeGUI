@@ -54,10 +54,8 @@ namespace MeGUI
                 return m;
         }
 
-        private IMuxing muxer;
-
         public MuxWindow(IMuxing muxer, MainForm mainForm)
-            : base(mainForm)
+            : base(mainForm, muxer)
         {
             InitializeComponent();
             this.muxer = muxer;
@@ -90,6 +88,19 @@ namespace MeGUI
             base.muxButton.Click += new System.EventHandler(this.muxButton_Click);
 
             this.Text = "MeGUI - " + muxer.Name;
+
+            cbType.Items.Clear();
+            cbType.Items.Add("Standard");
+            cbType.Items.AddRange(muxer.GetSupportedDeviceTypes().ToArray());
+            this.cbType.SelectedIndex = 0;
+            foreach (object o in cbType.Items) // I know this is ugly, but using the DeviceOutputType doesn't work unless we're switching to manual serialization
+            {
+                if (o.ToString().Equals(mainForm.Settings.AedSettings.DeviceOutputType))
+                {
+                    cbType.SelectedItem = o;
+                    break;
+                }
+            }
         }
 
         protected virtual void muxButton_Click(object sender, System.EventArgs e)

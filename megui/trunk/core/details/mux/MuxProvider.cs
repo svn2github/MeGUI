@@ -129,17 +129,14 @@ namespace MeGUI
                 List<ContainerType> outputTypes = muxerInterface.GetSupportedContainers();
                 foreach (ContainerType type in outputTypes)
                 {
-                    //if (type.ID != "M2TS") // M2TS not available for the Bitrate Calculator yet
-                    //{
-                        if (!supportedContainers.Contains(type))
-                            supportedContainers.Add(type);
-                    //}
+                    if (!supportedContainers.Contains(type))
+                        supportedContainers.Add(type);
                 }
             }
             return supportedContainers;
         }
 
-        public List<DeviceType> GetSupportedDevices()
+        public List<DeviceType> GetSupportedDevices(ContainerType oType)
         {
             List<DeviceType> supportedDevices = new List<DeviceType>();
             foreach (IMuxing muxerInterface in mainForm.PackageSystem.MuxerProviders.Values)
@@ -147,12 +144,14 @@ namespace MeGUI
                 List<DeviceType> outputTypes = muxerInterface.GetSupportedDeviceTypes();
                 foreach (DeviceType type in outputTypes)
                 {
-                    if (!supportedDevices.Contains(type))
-                        supportedDevices.Add(type);
+                    if (type.ContainerType == oType)
+                        if (!supportedDevices.Contains(type))
+                            supportedDevices.Add(type);
                 }
             }
             return supportedDevices;
         }
+
         /// <summary>
         /// gets all the containers that can be supported given the video and a list of audio types
         /// this is used to limit the container dropdown in the autoencode window
@@ -374,8 +373,7 @@ namespace MeGUI
         {
             if (currentMuxPath.IsCompleted())
                 return currentMuxPath;
-
-            
+        
             List<MuxableType> handledInputTypes;
             List<MuxableType> unhandledInputTypes;
             List<MuxPath> allMuxPaths = new List<MuxPath>();
@@ -539,7 +537,8 @@ namespace MeGUI
             supportedAudioTypes.Add(AudioType.MP2);
             supportedAudioTypes.Add(AudioType.RAWAAC);
             supportsAnyInputtableAudioCodec = true;
-            
+
+            supportedDeviceTypes.Add(DeviceType.PC);
             
             supportedSubtitleTypes.Add(SubtitleType.SUBRIP);
             
@@ -547,7 +546,7 @@ namespace MeGUI
 
             supportedContainerInputTypes.Add(ContainerType.AVI);
             
-            maxFilesOfType = new int[] { 1, -1, -1, 0, 0};
+            maxFilesOfType = new int[] { 1, -1, -1, 0, 1};
             base.type = MuxerType.AVIMUXGUI;
             name = "AVI Muxer";
             shortcut = System.Windows.Forms.Shortcut.Ctrl2;
@@ -578,13 +577,13 @@ namespace MeGUI
             supportedAudioCodecs.Add(AudioCodec.DTS);
             supportedSubtitleTypes.Add(SubtitleType.SUBRIP);
             supportedSubtitleTypes.Add(SubtitleType.BDSUP);
-            //supportedChapterTypes.Add(ChapterType.OGG_TXT);
+            supportedChapterTypes.Add(ChapterType.OGG_TXT);
             supportedContainers.Add(ContainerType.M2TS);
             supportedContainerInputTypes.Add(ContainerType.MKV);
             supportedContainerInputTypes.Add(ContainerType.MP4);
             supportedContainerInputTypes.Add(ContainerType.M2TS);
-           // supportedDeviceTypes.Add(DeviceType.AVCHD);
-           // supportedDeviceTypes.Add(DeviceType.BD);
+            supportedDeviceTypes.Add(DeviceType.AVCHD);
+            supportedDeviceTypes.Add(DeviceType.BD);
             supportsAnyInputtableAudioCodec = true;
             supportsAnyInputtableVideoCodec = true;
             base.type = MuxerType.TSMUXER;

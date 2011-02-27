@@ -42,7 +42,7 @@ namespace MeGUI
         private AudioEncoderType[] knownAudioTypes;
 
         public AdaptiveMuxWindow(MainForm mainForm)
-            : base(mainForm)
+            : base(mainForm, null)
         {
             InitializeComponent();
             jobUtil = new JobUtil(mainForm);
@@ -51,6 +51,7 @@ namespace MeGUI
             audioTracks[0].Filter = VideoUtil.GenerateCombinedFilter(ContainerManager.AudioTypes.ValuesArray);
             subtitleTracks[0].Filter = VideoUtil.GenerateCombinedFilter(ContainerManager.SubtitleTypes.ValuesArray);
             vInput.Filter = VideoUtil.GenerateCombinedFilter(ContainerManager.VideoTypes.ValuesArray);
+            chapters.Filter = VideoUtil.GenerateCombinedFilter(ContainerManager.ChapterTypes.ValuesArray);
             cbContainer.Visible = true;
             lbContainer.Visible = true;
 
@@ -136,9 +137,29 @@ namespace MeGUI
 
         private void updateDeviceTypes()
         {
-            if (this.cbContainer.Text != "MP4")
+            if (this.cbContainer.Text == "MKV")
                 this.cbType.Enabled = false;
-            else this.cbType.Enabled = true;
+            else 
+                this.cbType.Enabled = true;
+
+            List<DeviceType> supportedOutputDeviceTypes = this.muxProvider.GetSupportedDevices((ContainerType)cbContainer.SelectedItem);
+            this.cbType.Items.Clear();
+            this.cbType.Items.Add("Standard");
+            this.cbType.Items.AddRange(supportedOutputDeviceTypes.ToArray());
+
+            if (cbContainer.SelectedItem.ToString().Equals(mainForm.Settings.AedSettings.Container))
+            {
+                foreach (object o in cbType.Items) // I know this is ugly, but using the DeviceOutputType doesn't work unless we're switching to manual serialization
+                {
+                    if (o.ToString().Equals(mainForm.Settings.AedSettings.DeviceOutputType))
+                    {
+                        cbType.SelectedItem = o;
+                        break;
+                    }
+                }
+            }
+            else
+                this.cbType.SelectedIndex = 0;
         }
 
         private void updatePossibleContainers()

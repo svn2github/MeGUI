@@ -313,6 +313,7 @@ namespace MeGUI
             List<string> deviceList = new List<string>();
             switch (outputFormat)
             {
+                case ".avi": deviceList.AddRange(new string[] { "PC" }); break;
                 case ".mp4": deviceList.AddRange(new string[] { "iPhone", "iPod", "ISMA", "PSP" }); break;
                 case ".m2ts": deviceList.AddRange(new string[] { "AVCHD", "Blu-ray" }); break;
             }

@@ -120,7 +120,7 @@ namespace MeGUI
             trackTabPage2.Location = new System.Drawing.Point(4, 22);
             trackTabPage2.Name = "trackTabPage2";
             trackTabPage2.Padding = new System.Windows.Forms.Padding(3);
-            trackTabPage2.Size = new System.Drawing.Size(433, 94);
+            trackTabPage2.Size = new System.Drawing.Size(172, 94);
             trackTabPage2.TabIndex = 1;
             trackTabPage2.Text = "Audio track 2";
             trackTabPage2.UseVisualStyleBackColor = true;
@@ -202,7 +202,7 @@ namespace MeGUI
             this.keepInputResolution.AutoSize = true;
             this.keepInputResolution.Location = new System.Drawing.Point(123, 42);
             this.keepInputResolution.Name = "keepInputResolution";
-            this.keepInputResolution.Size = new System.Drawing.Size(246, 17);
+            this.keepInputResolution.Size = new System.Drawing.Size(242, 17);
             this.keepInputResolution.TabIndex = 25;
             this.keepInputResolution.Text = "Keep Input Resolution (disable Crop && Resize)";
             this.keepInputResolution.UseVisualStyleBackColor = true;
@@ -215,7 +215,7 @@ namespace MeGUI
             this.autoCrop.CheckState = System.Windows.Forms.CheckState.Checked;
             this.autoCrop.Location = new System.Drawing.Point(191, 19);
             this.autoCrop.Name = "autoCrop";
-            this.autoCrop.Size = new System.Drawing.Size(72, 17);
+            this.autoCrop.Size = new System.Drawing.Size(70, 17);
             this.autoCrop.TabIndex = 24;
             this.autoCrop.Text = "AutoCrop";
             this.autoCrop.UseVisualStyleBackColor = true;
@@ -247,7 +247,7 @@ namespace MeGUI
             this.autoDeint.AutoSize = true;
             this.autoDeint.Location = new System.Drawing.Point(123, 112);
             this.autoDeint.Name = "autoDeint";
-            this.autoDeint.Size = new System.Drawing.Size(139, 17);
+            this.autoDeint.Size = new System.Drawing.Size(138, 17);
             this.autoDeint.TabIndex = 20;
             this.autoDeint.Text = "Automatic Deinterlacing";
             this.autoDeint.UseVisualStyleBackColor = true;
@@ -705,7 +705,7 @@ namespace MeGUI
             this.containerFormat.Name = "containerFormat";
             this.containerFormat.Size = new System.Drawing.Size(127, 21);
             this.containerFormat.TabIndex = 37;
-            this.containerFormat.SelectedIndexChanged += new System.EventHandler(this.containerFormat_SelectedIndexChanged_1);
+            this.containerFormat.SelectedIndexChanged += new System.EventHandler(this.containerFormat_SelectedIndexChanged);
             // 
             // groupBox1
             // 

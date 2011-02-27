@@ -141,10 +141,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "TSMuxer");
                 string vcodecID = "";
                 string extra = "";
 
-                sw.Write("MUXOPT --no-pcr-on-video-pid --new-audio-pes --vbr --vbv-len=500"); // mux options
-                if (settings.SplitSize.HasValue)
-                    sw.Write(" --split-size " + settings.SplitSize.Value.MB + "MB");
-
+                sw.Write("MUXOPT --no-pcr-on-video-pid --new-audio-pes"); // mux options
                 if (!string.IsNullOrEmpty(settings.DeviceType) && settings.DeviceType != "Standard")
                 {
                     switch (settings.DeviceType)
@@ -159,9 +156,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "TSMuxer");
                         sw.Write(" --custom-chapters" + chapterTimeLine);
                     }
 
-                    job.Output = Path.ChangeExtension(job.Output, ""); // remove m2ts file extension - use folder name only with this mode
+                    job.Output = Path.GetDirectoryName(job.Output) + "\\" + Path.GetFileNameWithoutExtension(job.Output); // remove m2ts file extension - use folder name only with this mode
                 }
-
+                sw.Write(" --vbr --vbv-len=500"); // mux options
+                if (settings.SplitSize.HasValue)
+                    sw.Write(" --split-size " + settings.SplitSize.Value.MB + "MB");
                 if (!string.IsNullOrEmpty(settings.VideoInput))
                 {
                     if (VideoUtil.detecAVCStreamFromFile(settings.VideoInput) == true)
@@ -268,8 +267,23 @@ new JobProcessorFactory(new ProcessorFactory(init), "TSMuxer");
                         }
                     }
                 }                
+            }
 
-                job.FilesToDelete.Add(metaFile);
+            job.FilesToDelete.Add(metaFile);
+            if (File.Exists(metaFile))
+            {
+                string strMuxFile = String.Empty;
+                try
+                {
+                    StreamReader sr = new StreamReader(metaFile);
+                    strMuxFile = sr.ReadToEnd();
+                    sr.Close();
+                }
+                catch (Exception)
+                {
+
+                }
+                log.LogValue("mux script", strMuxFile);
             }
         }
     }

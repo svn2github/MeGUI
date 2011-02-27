@@ -124,11 +124,11 @@ namespace MeGUI
             this.container.Items.AddRange(supportedOutputTypes.ToArray());
             this.container.SelectedIndex = 0;
 
-            List<DeviceType> supportedOutputDeviceTypes = this.muxProvider.GetSupportedDevices();
+            List<DeviceType> supportedOutputDeviceTypes = this.muxProvider.GetSupportedDevices((ContainerType)container.SelectedItem);
             this.device.Items.AddRange(supportedOutputDeviceTypes.ToArray());
             this.device.SelectedIndex = 0;
 
-            if (this.container.Text != "MP4")
+            if (this.container.Text == "MKV")
                 this.device.Enabled = false;
             else
                 this.device.Enabled = true;
@@ -510,9 +510,30 @@ namespace MeGUI
             this.muxedOutput.Filter = cot.OutputFilterString;
             if (!String.IsNullOrEmpty (muxedOutput.Filename))
             {
-                if (this.container.Text != "MP4")
+                if (this.container.Text == "MKV")
                     this.device.Enabled = false;
-                else this.device.Enabled = true;
+                else 
+                    this.device.Enabled = true;
+
+                List<DeviceType> supportedOutputDeviceTypes = this.muxProvider.GetSupportedDevices(cot);
+                this.device.Items.Clear();
+                this.device.Items.Add("Standard");
+                this.device.Items.AddRange(supportedOutputDeviceTypes.ToArray());
+
+                if (container.SelectedItem.ToString().Equals(mainForm.Settings.AedSettings.Container))
+                {
+                    foreach (object o in device.Items) // I know this is ugly, but using the DeviceOutputType doesn't work unless we're switching to manual serialization
+                    {
+                        if (o.ToString().Equals(mainForm.Settings.AedSettings.DeviceOutputType))
+                        {
+                            device.SelectedItem = o;
+                            break;
+                        }
+                    }
+                }
+                else
+                    this.device.SelectedIndex = 0;
+
                 this.muxedOutput.Filename = Path.ChangeExtension(muxedOutput.Filename, (this.container.SelectedItem as ContainerType).Extension);
             }
         }

@@ -1,4 +1,9 @@
-1978 [VideoEncoder] enhanced cli reader
+1979 [M2TS Muxer] added Blu-ray and AVCHD device output types. Feature request #1982670
+     [AVI Muxer] added PC device output type which is unrestricted and corresponds to the old standard setting. 
+                 the new standard output type is now enhanced for standalone devices so that e.g. opendml is disabled and splitting enforced. #1951705
+     [Muxer] + [OneClick] the default device type used also for autoencode will be preselected. Feature request #2812862
+     [AVI Muxer] + [M2TS Muxer] added mux script file content to the log
+1978 [VideoEncoder] enhanced command line parser
 1977 [XviD] added threads = 0 for automatic detection
 1976 [XviD] custom commandline values have precedence
      [XviD] if possible -par x:y will be replaced with -par z

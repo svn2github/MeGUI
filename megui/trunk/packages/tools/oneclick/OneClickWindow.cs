@@ -154,9 +154,21 @@ namespace MeGUI
             if (devicetype.Items.Count == 0)
             {
                 devicetype.Items.Add("Standard");
-                devicetype.Items.AddRange(muxProvider.GetSupportedDevices().ToArray());
-                this.devicetype.SelectedIndex = 0;
+                devicetype.Items.AddRange(muxProvider.GetSupportedDevices((ContainerType)this.containerFormat.SelectedItem).ToArray());
             }
+            if (containerFormat.SelectedItem.ToString().Equals(mainForm.Settings.AedSettings.Container))
+            {
+                foreach (object o in devicetype.Items) // I know this is ugly, but using the DeviceOutputType doesn't work unless we're switching to manual serialization
+                {
+                    if (o.ToString().Equals(mainForm.Settings.AedSettings.DeviceOutputType))
+                    {
+                        devicetype.SelectedItem = o;
+                        break;
+                    }
+                }
+            }
+            else
+                this.devicetype.SelectedIndex = 0;
 
             showAdvancedOptions_CheckedChanged(null, null);
 
@@ -191,12 +203,31 @@ namespace MeGUI
                     tabControl1.TabPages.Remove(encoderConfigTab);
             }
         }
-        private void containerFormat_SelectedIndexChanged_1(object sender, EventArgs e)
+        private void containerFormat_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (this.containerFormat.Text != "MP4")
+            if (this.containerFormat.Text == "MKV")
                 this.devicetype.Enabled = false;
-            else this.devicetype.Enabled = true;
+            else 
+                this.devicetype.Enabled = true;
             updateFilename();
+
+            //add device types
+            devicetype.Items.Clear();
+            devicetype.Items.Add("Standard");
+            devicetype.Items.AddRange(muxProvider.GetSupportedDevices((ContainerType)this.containerFormat.SelectedItem).ToArray());
+            if (containerFormat.SelectedItem.ToString().Equals(mainForm.Settings.AedSettings.Container))
+            {
+                foreach (object o in devicetype.Items) // I know this is ugly, but using the DeviceOutputType doesn't work unless we're switching to manual serialization
+                {
+                    if (o.ToString().Equals(mainForm.Settings.AedSettings.DeviceOutputType))
+                    {
+                        devicetype.SelectedItem = o;
+                        break;
+                    }
+                }
+            }
+            else
+                this.devicetype.SelectedIndex = 0;
         }
 
         private void updateFilename()
@@ -438,7 +469,7 @@ namespace MeGUI
 
                 // Clean up after those settings were set
                 updatePossibleContainers();
-                containerFormat_SelectedIndexChanged_1(null, null);
+                containerFormat_SelectedIndexChanged(null, null);
             }
         }
 

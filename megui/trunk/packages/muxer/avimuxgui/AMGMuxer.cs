@@ -125,11 +125,14 @@ new JobProcessorFactory(new ProcessorFactory(init), "AMGMuxer");
 
             // split size
             script.AppendLine("SET OUTPUT OPTIONS");
-            if (settings.SplitSize.HasValue)
+            if (settings.SplitSize.HasValue || String.IsNullOrEmpty(settings.DeviceType) || settings.DeviceType == "Standard")
             {
                 script.AppendLine("SET OPTION NUMBERING ON");
                 script.AppendLine("SET OPTION MAXFILESIZE ON");
-                script.AppendFormat("SET OPTION MAXFILESIZE {0}{1}", ((MeGUI.core.util.FileSize)settings.SplitSize).MB, Environment.NewLine);
+                if ((String.IsNullOrEmpty(settings.DeviceType) || settings.DeviceType == "Standard") && ((MeGUI.core.util.FileSize)settings.SplitSize).MB > 2044)
+                    script.AppendFormat("SET OPTION MAXFILESIZE {0}{1}", 2044, Environment.NewLine);
+                else
+                    script.AppendFormat("SET OPTION MAXFILESIZE {0}{1}", ((MeGUI.core.util.FileSize)settings.SplitSize).MB, Environment.NewLine);
             }
             else
             {
@@ -150,7 +153,28 @@ SET OPTION ALL AUDIO 1
 SET OPTION CLOSEAPP 1
 SET OPTION DONEDLG 0
 SET OPTION OVERWRITEDLG 0
-SET OPTION STDIDX AUTO");
+SET OPTION PRELOAD 200");
+
+            if (String.IsNullOrEmpty(settings.DeviceType) || settings.DeviceType == "Standard")
+            {
+                script.AppendLine(
+@"SET OPTION OPENDML 0
+SET OPTION RECLISTS 0
+SET OPTION AVI ADDJUNKBEFOREHEADERS 0
+SET OPTION AUDIO INTERLEAVE 4 FR");
+            }
+            else
+            {
+                script.AppendLine(
+@"SET OPTION OPENDML 1
+SET OPTION RECLISTS 1
+SET OPTION AUDIO INTERLEAVE 100 KB
+SET OPTION AVI RIFFAVISIZE 1
+SET OPTION AVI ADDJUNKBEFOREHEADERS 1
+SET OPTION AVI HAALIMODE 0
+SET OPTION STDIDX 10000 FRAMES
+SET OPTION LEGACY 1");
+            }
 
             script.AppendFormat("START {0}{1}", settings.MuxedOutput, Environment.NewLine);            
 
@@ -160,6 +184,7 @@ SET OPTION STDIDX AUTO");
             {
                 output.Write(script.ToString());
             }
+            log.LogValue("mux script", script);
             return filename;
         }
 
