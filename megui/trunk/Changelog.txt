@@ -1,3 +1,4 @@
+1981 changed ISO 639-2 language codes to ISO 639-2/T. Feature request #2811678
 1980 [pre-rendering job] fixed a problem introduced in 1935
 1979 [M2TS Muxer] added Blu-ray and AVCHD device output types. Feature request #1982670
      [AVI Muxer] added PC device output type which is unrestricted and corresponds to the old standard setting. 
