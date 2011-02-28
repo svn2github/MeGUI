@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2011  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -129,7 +129,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AMGMuxer");
             {
                 script.AppendLine("SET OPTION NUMBERING ON");
                 script.AppendLine("SET OPTION MAXFILESIZE ON");
-                if ((String.IsNullOrEmpty(settings.DeviceType) || settings.DeviceType == "Standard") && ((MeGUI.core.util.FileSize)settings.SplitSize).MB > 2044)
+                if ((String.IsNullOrEmpty(settings.DeviceType) || settings.DeviceType == "Standard") && (!settings.SplitSize.HasValue || ((MeGUI.core.util.FileSize)settings.SplitSize).MB > 2044))
                     script.AppendFormat("SET OPTION MAXFILESIZE {0}{1}", 2044, Environment.NewLine);
                 else
                     script.AppendFormat("SET OPTION MAXFILESIZE {0}{1}", ((MeGUI.core.util.FileSize)settings.SplitSize).MB, Environment.NewLine);
