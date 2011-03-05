@@ -195,8 +195,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "XviDEncoder");
                 else
                     sb.Append("2 ");
             }
-            if (!xs.CustomEncoderOptions.Contains("-masking ") && xs.HVSMasking != 0)
-                sb.Append("-masking " + xs.HVSMasking + " ");
+            if (!xs.CustomEncoderOptions.Contains("-lumimasking") && xs.HVSMasking != 0)
+                sb.Append("-lumimasking ");
             if (!xs.CustomEncoderOptions.Contains("-notrellis") && !xs.Trellis)
                 sb.Append("-notrellis ");
             if (!xs.CustomEncoderOptions.Contains("-nochromame") && !xs.ChromaMotion)
@@ -265,11 +265,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "XviDEncoder");
             {
                 string extension = Path.GetExtension(output).ToLower();
                 if (extension.Equals(".mkv"))
-                    sb.Append(" -mkv \"" + output + "\"");
+                    sb.Append("-mkv \"" + output + "\"");
                 else if (extension.Equals(".avi"))
-                    sb.Append(" -avi \"" + output + "\"");
+                    sb.Append("-avi \"" + output + "\"");
                 else
-                    sb.Append(" -o \"" + output + "\"");
+                    sb.Append("-o \"" + output + "\"");
             }
             if (!String.IsNullOrEmpty(xs.CustomEncoderOptions.Trim())) // add custom encoder options
                 sb.Append(" " + xs.CustomEncoderOptions);

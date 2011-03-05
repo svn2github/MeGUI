@@ -348,7 +348,12 @@ namespace MeGUI
         }
         public int HVSMasking
         {
-            get { return hvsMasking; }
+            get 
+            {
+                if (hvsMasking > 1)
+                    hvsMasking = 1;
+                return hvsMasking; 
+            }
             set { hvsMasking = value; }
         }
         #endregion

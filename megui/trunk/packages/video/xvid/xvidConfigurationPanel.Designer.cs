@@ -475,8 +475,7 @@ namespace MeGUI.packages.video.xvid
             this.HVSMasking.FormattingEnabled = true;
             this.HVSMasking.Items.AddRange(new object[] {
             "None",
-            "Lumi",
-            "Variance"});
+            "Lumi"});
             this.HVSMasking.Location = new System.Drawing.Point(192, 184);
             this.HVSMasking.Name = "HVSMasking";
             this.HVSMasking.Size = new System.Drawing.Size(121, 21);

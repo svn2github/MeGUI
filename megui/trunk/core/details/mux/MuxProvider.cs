@@ -1098,7 +1098,7 @@ namespace MeGUI
         {
             supportedCodecs.Add(VideoCodec.ASP);
             supportedTypes.Add(VideoType.AVI);
-            //supportedTypes.Add(VideoType.MKV);
+            supportedTypes.Add(VideoType.MKV);
             supportedTypes.Add(VideoType.RAWASP);
             supportedEncoderTypes.Add(VideoEncoderType.XVID);
         }
