@@ -1,3 +1,4 @@
+1983 [Main Window] cosmetic adjustments
 1982 [AVI Muxer] fixed a crash problem introduced in 1979
 1981 changed ISO 639-2 language codes to ISO 639-2/T. Feature request #2811678
 1980 [pre-rendering job] fixed a problem introduced in 1935

@@ -162,12 +162,12 @@ namespace MeGUI
             // 
             // videoProfile
             // 
-            this.videoProfile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel1.SetColumnSpan(this.videoProfile, 3);
+            this.videoProfile.Dock = System.Windows.Forms.DockStyle.Fill;
             this.videoProfile.Location = new System.Drawing.Point(136, 61);
             this.videoProfile.Name = "videoProfile";
             this.videoProfile.ProfileSet = "Video";
-            this.videoProfile.Size = new System.Drawing.Size(345, 22);
+            this.videoProfile.Size = new System.Drawing.Size(345, 23);
             this.videoProfile.TabIndex = 12;
             this.videoProfile.SelectedProfileChanged += new System.EventHandler(this.videoProfile_SelectedProfileChanged);
             // 
@@ -184,8 +184,8 @@ namespace MeGUI
             // videoInput
             // 
             this.videoInput.AllowDrop = true;
-            this.videoInput.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel1.SetColumnSpan(this.videoInput, 3);
+            this.videoInput.Dock = System.Windows.Forms.DockStyle.Fill;
             this.videoInput.Filename = "";
             this.videoInput.Filter = "AviSynth files (*.avs)|*.avs|All files (*.*)|*.*";
             this.videoInput.FilterIndex = 0;
@@ -201,8 +201,8 @@ namespace MeGUI
             // 
             // videoOutput
             // 
-            this.videoOutput.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel1.SetColumnSpan(this.videoOutput, 3);
+            this.videoOutput.Dock = System.Windows.Forms.DockStyle.Fill;
             this.videoOutput.Filename = "";
             this.videoOutput.Filter = null;
             this.videoOutput.FilterIndex = 0;

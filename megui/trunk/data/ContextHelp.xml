@@ -183,8 +183,8 @@ It's up to you to decide which rate-control mode is better for your circumstance
 Enforces a minimum Quantizer. Prevents the codec from outputting frames with too little
 compression, wasting bits. Note: This is disregarded in Constant Quality or Quality Based VBR modes.</Advanced>
 			<Basic>Set minimum Quantizer factor.</Basic>
-			<Recommended>10</Recommended>
-			<Default>10</Default>
+			<Recommended>0</Recommended>
+			<Default>0</Default>
 		</qpmin>
 		<qpmax name="Maximum Quantizer">
 			<Advanced>
