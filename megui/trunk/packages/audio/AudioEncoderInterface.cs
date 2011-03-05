@@ -557,7 +557,17 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
 #endif
                         script.AppendFormat("FFAudioSource(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
                         audioJob.FilesToDelete.Add(audioJob.Input + ".ffindex");
-                        bFound = true;
+                        log.LogEvent("Trying to open the file with FFAudioSource()", ImageType.Information);
+                        if (AudioUtil.AVSScriptHasAudio(script.ToString()))
+                        {
+                            bFound = true;
+                            log.LogEvent("Successfully opened the file with FFAudioSource()", ImageType.Information);
+                        }
+                        else
+                        {
+                            script = new StringBuilder();
+                            log.LogEvent("Failed opening the file with FFAudioSource()", ImageType.Information);
+                        }
                     }
                 }
                 if (!bFound)
