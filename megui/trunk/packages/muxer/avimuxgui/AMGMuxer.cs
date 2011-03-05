@@ -129,8 +129,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "AMGMuxer");
             {
                 script.AppendLine("SET OPTION NUMBERING ON");
                 script.AppendLine("SET OPTION MAXFILESIZE ON");
-                if ((String.IsNullOrEmpty(settings.DeviceType) || settings.DeviceType == "Standard") && (!settings.SplitSize.HasValue || ((MeGUI.core.util.FileSize)settings.SplitSize).MB > 2044))
-                    script.AppendFormat("SET OPTION MAXFILESIZE {0}{1}", 2044, Environment.NewLine);
+                if ((String.IsNullOrEmpty(settings.DeviceType) || settings.DeviceType == "Standard") && (!settings.SplitSize.HasValue || ((MeGUI.core.util.FileSize)settings.SplitSize).MB > 2000))
+                    script.AppendFormat("SET OPTION MAXFILESIZE {0}{1}", 2000, Environment.NewLine);
                 else
                     script.AppendFormat("SET OPTION MAXFILESIZE {0}{1}", ((MeGUI.core.util.FileSize)settings.SplitSize).MB, Environment.NewLine);
             }

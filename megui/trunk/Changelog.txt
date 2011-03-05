@@ -1,3 +1,4 @@
+1984 [AVI Muxer] changed default splitting size if opendml is disabled to 2000MB
 1983 [Main Window] cosmetic adjustments
 1982 [AVI Muxer] fixed a crash problem introduced in 1979
 1981 changed ISO 639-2 language codes to ISO 639-2/T. Feature request #2811678
