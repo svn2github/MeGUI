@@ -1,3 +1,4 @@
+1988 [x264] cosmetic adjustment. Bug #3201244
 1987 [Queue] disabled job status changing while job is being processed. Feature request #3201255
 1986 [Audio Encoder] fall back to DirectShowSource() if FFAudioSource() cannot be used for AAC
 1985 [XviD] reverted the changes in 1941 as XviD 1.3 cannot create AVI files > 2GB

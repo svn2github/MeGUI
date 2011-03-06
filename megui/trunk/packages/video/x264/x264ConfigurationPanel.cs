@@ -985,9 +985,6 @@ namespace MeGUI.packages.video.x264
             else
                 setNonQPOptionsEnabled(false);
 
-            x264SlowFirstpass.Enabled = false;
-            x264RateTol.Enabled = true;
-            x264RateTolLabel.Enabled = true;
             switch (x264EncodingMode.SelectedIndex)
             {
                 case (int)VideoCodecSettings.Mode.CBR: //Actually, ABR
