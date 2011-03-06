@@ -254,6 +254,7 @@ namespace MeGUI
             this.defaultLanguage2 = new System.Windows.Forms.ComboBox();
             this.defaultLanguage1 = new System.Windows.Forms.ComboBox();
             this.gbDefaultOutput = new System.Windows.Forms.GroupBox();
+            this.btnClearOutputDirecoty = new System.Windows.Forms.Button();
             this.clearDefaultOutputDir = new System.Windows.Forms.Button();
             this.defaultOutputDir = new MeGUI.FileBar();
             this.tabPage3 = new System.Windows.Forms.TabPage();
@@ -293,6 +294,7 @@ namespace MeGUI
             this.chkSelectHDTracks = new System.Windows.Forms.CheckBox();
             this.chkEnable64bitX264 = new System.Windows.Forms.CheckBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.button2 = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
@@ -308,8 +310,6 @@ namespace MeGUI
             this.autoEncodeDefaultsButton = new System.Windows.Forms.Button();
             this.toolTipHelp = new System.Windows.Forms.ToolTip(this.components);
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
-            this.button1 = new System.Windows.Forms.Button();
-            this.btnClearOutputDirecoty = new System.Windows.Forms.Button();
             groupBox1 = new System.Windows.Forms.GroupBox();
             groupBox1.SuspendLayout();
             this.otherGroupBox.SuspendLayout();
@@ -725,6 +725,15 @@ namespace MeGUI
             this.gbDefaultOutput.TabIndex = 7;
             this.gbDefaultOutput.TabStop = false;
             this.gbDefaultOutput.Text = "Default Output Directory";
+            // 
+            // btnClearOutputDirecoty
+            // 
+            this.btnClearOutputDirecoty.Location = new System.Drawing.Point(229, 29);
+            this.btnClearOutputDirecoty.Name = "btnClearOutputDirecoty";
+            this.btnClearOutputDirecoty.Size = new System.Drawing.Size(24, 26);
+            this.btnClearOutputDirecoty.TabIndex = 43;
+            this.btnClearOutputDirecoty.Text = "x";
+            this.btnClearOutputDirecoty.Click += new System.EventHandler(this.btnClearOutputDirecoty_Click);
             // 
             // clearDefaultOutputDir
             // 
@@ -1166,6 +1175,15 @@ namespace MeGUI
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = " NeroAacEnc Location ";
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(437, 28);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(24, 26);
+            this.button1.TabIndex = 43;
+            this.button1.Text = "x";
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // textBox2
             // 
             this.textBox2.Location = new System.Drawing.Point(13, 30);
@@ -1219,6 +1237,7 @@ namespace MeGUI
             this.tempDirMP4.Size = new System.Drawing.Size(418, 26);
             this.tempDirMP4.TabIndex = 41;
             this.tempDirMP4.Title = null;
+            this.tempDirMP4.FileSelected += new MeGUI.FileBarEventHandler(this.tempDirMP4_FileSelected);
             // 
             // vobGroupBox
             // 
@@ -1318,24 +1337,6 @@ namespace MeGUI
             this.helpButton1.Name = "helpButton1";
             this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 1;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(437, 28);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(24, 26);
-            this.button1.TabIndex = 43;
-            this.button1.Text = "x";
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // btnClearOutputDirecoty
-            // 
-            this.btnClearOutputDirecoty.Location = new System.Drawing.Point(229, 29);
-            this.btnClearOutputDirecoty.Name = "btnClearOutputDirecoty";
-            this.btnClearOutputDirecoty.Size = new System.Drawing.Size(24, 26);
-            this.btnClearOutputDirecoty.TabIndex = 43;
-            this.btnClearOutputDirecoty.Text = "x";
-            this.btnClearOutputDirecoty.Click += new System.EventHandler(this.btnClearOutputDirecoty_Click);
             // 
             // SettingsForm
             // 
@@ -1638,6 +1639,16 @@ namespace MeGUI
         private void button1_Click(object sender, EventArgs e)
         {
             textBox2.Text = "neroAacEnc.exe";
+        }
+
+        private void tempDirMP4_FileSelected(FileBar sender, FileBarEventArgs args)
+        {
+            if (System.IO.Path.GetPathRoot(tempDirMP4.Filename).Equals(tempDirMP4.Filename, StringComparison.CurrentCultureIgnoreCase))
+            {
+                // mp4box has in some builds problems if the tmp directory is in the root of a drive
+                MessageBox.Show("A root folder cannot be selected!", "Wrong path", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                tempDirMP4.Filename = String.Empty;
+            }
         }
 	}
 }

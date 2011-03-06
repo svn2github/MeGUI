@@ -1,3 +1,4 @@
+1989 [MP4 Muxer] a root folder cannot be selected/used as temp folder
 1988 [x264] cosmetic adjustment. Bug #3201244
 1987 [Queue] disabled job status changing while job is being processed. Feature request #3201255
 1986 [Audio Encoder] fall back to DirectShowSource() if FFAudioSource() cannot be used for AAC

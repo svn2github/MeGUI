@@ -331,7 +331,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                 // tmp directory
                 if (!String.IsNullOrEmpty(MainForm.Instance.Settings.TempDirMP4) && Directory.Exists(MainForm.Instance.Settings.TempDirMP4))
                     sb.AppendFormat(" -tmp \"{0}\"", MainForm.Instance.Settings.TempDirMP4.Replace("\\","\\\\"));
-                else
+                else if (!Path.GetPathRoot(settings.MuxedOutput).Equals(settings.MuxedOutput, StringComparison.CurrentCultureIgnoreCase))
                     sb.AppendFormat(" -tmp \"{0}\"", Path.GetDirectoryName(settings.MuxedOutput).Replace("\\", "\\\\"));
                 // force to create a new output file
                 sb.Append(" -new \"" + settings.MuxedOutput + "\"");

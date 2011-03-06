@@ -507,7 +507,12 @@ namespace MeGUI
         /// </summary>
         public string TempDirMP4
         {
-            get { return tempDirMP4; }
+            get 
+            {
+                if (String.IsNullOrEmpty(tempDirMP4) || System.IO.Path.GetPathRoot(tempDirMP4).Equals(tempDirMP4, StringComparison.CurrentCultureIgnoreCase))
+                    return String.Empty;
+                return tempDirMP4;
+            }
             set { tempDirMP4 = value; }
         }
         /// <summary>
