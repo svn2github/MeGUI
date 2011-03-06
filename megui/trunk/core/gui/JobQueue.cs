@@ -577,6 +577,8 @@ namespace MeGUI.core.gui
             {
                 int position = this.queueListView.SelectedItems[0].Index;
                 TaggedJob job = jobs[this.queueListView.SelectedItems[0].Text];
+                if (job.Status == JobStatus.PROCESSING) // job is being processed -> do nothing
+                    return;
                 if (job.Status == JobStatus.WAITING) // waiting -> postponed
                     job.Status = JobStatus.POSTPONED;
                 else
