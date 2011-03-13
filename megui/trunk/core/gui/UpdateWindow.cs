@@ -146,7 +146,6 @@ namespace MeGUI
                     case "ffmpeg": arrPath.Add(MainForm.Instance.Settings.FFMpegPath); break;
                     case "oggenc2": arrPath.Add(MainForm.Instance.Settings.OggEnc2Path); break;
                     case "yadif": arrPath.Add(MainForm.Instance.Settings.YadifPath); break;
-                    case "enc_aacplus": arrPath.Add(MainForm.Instance.Settings.EncAacPlusPath); break;
                     case "lame": arrPath.Add(MainForm.Instance.Settings.LamePath); break;
                     case "aften": arrPath.Add(MainForm.Instance.Settings.AftenPath); break;
                     case "flac": arrPath.Add(MainForm.Instance.Settings.FlacPath); break;
@@ -617,8 +616,6 @@ namespace MeGUI
                             return meGUISettings.XviDEncrawPath;
                         case ("ffmpeg"):
                             return meGUISettings.FFMpegPath;
-                        case ("enc_aacplus"):
-                            return meGUISettings.EncAacPlusPath;
                         case ("oggenc2"):
                             return meGUISettings.OggEnc2Path;
                         case ("yadif"):

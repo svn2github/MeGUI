@@ -566,13 +566,6 @@
       <DependentUpon>OggVorbisConfigurationPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="packages\audio\vorbis\OggVorbisSettings.cs" />
-    <Compile Include="packages\audio\waac\WinAmpAACConfigurationPanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="packages\audio\waac\WinAmpAACConfigurationPanel.Designer.cs">
-      <DependentUpon>WinAmpAACConfigurationPanel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="packages\audio\waac\WinAmpAACSettings.cs" />
     <Compile Include="packages\muxer\avimuxgui\AMGMuxer.cs" />
     <Compile Include="packages\muxer\mkvmerge\MkvMergeMuxer.cs" />
     <Compile Include="packages\muxer\mp4box\MP4BoxMuxer.cs" />
@@ -938,10 +931,6 @@
     <EmbeddedResource Include="packages\audio\vorbis\OggVorbisConfigurationPanel.resx">
       <SubType>Designer</SubType>
       <DependentUpon>OggVorbisConfigurationPanel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="packages\audio\waac\WinAmpAACConfigurationPanel.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>WinAmpAACConfigurationPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="packages\tools\autoencode\AutoEncodeDefaults.resx">
       <DependentUpon>AutoEncodeDefaults.cs</DependentUpon>

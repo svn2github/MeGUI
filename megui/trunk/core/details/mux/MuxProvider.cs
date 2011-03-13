@@ -1077,7 +1077,6 @@ namespace MeGUI
         public AudioEncoderProvider()
             : base()
         {
-            RegisterEncoder(new WinAmpAACEncodingProvider());
             RegisterEncoder(new NeroAACEncodingProvider());
             RegisterEncoder(new LameMP3EncodingProvider());
             RegisterEncoder(new FAACEncodingProvider());
@@ -1125,18 +1124,6 @@ namespace MeGUI
     }
     #endregion
     #region audio encoding providers
-    public class WinAmpAACEncodingProvider : AudioEncodingProvider
-    {
-        public WinAmpAACEncodingProvider()
-            : base()
-        {
-            supportedCodecs.Add(AudioCodec.AAC);
-            supportedTypes.Add(AudioType.M4A);
-            supportedTypes.Add(AudioType.MP4AAC);
-            supportedEncoderTypes.Add(AudioEncoderType.WAAC);
-        }
-    }
-
     public class NeroAACEncodingProvider : AudioEncodingProvider
     {
         public NeroAACEncodingProvider()

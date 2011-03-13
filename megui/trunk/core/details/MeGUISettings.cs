@@ -36,7 +36,7 @@ namespace MeGUI
         #region variables
         private string[][] autoUpdateServerLists;
         private string faacPath, lamePath, neroAacEncPath, mp4boxPath, mkvmergePath, strMainAudioFormat,
-                       encAacPlusPath, ffmpegPath, besplitPath, yadifPath, aftenPath, x264Path, strMainFileFormat,
+                       ffmpegPath, besplitPath, yadifPath, aftenPath, x264Path, strMainFileFormat,
                        dgIndexPath, xvidEncrawPath, aviMuxGUIPath, oggEnc2Path, dgavcIndexPath,
                        eac3toPath, tsmuxerPath, meguiupdatecache, avisynthpluginspath, ffmsIndexPath, vobSubPath,
                        defaultLanguage1, defaultLanguage2, afterEncodingCommand, videoExtension, audioExtension,
@@ -102,7 +102,6 @@ namespace MeGUI
             lamePath = getDownloadPath(@"tools\lame\lame.exe");
             neroAacEncPath = "neroAacEnc.exe";
             oggEnc2Path = getDownloadPath(@"tools\oggenc2\oggenc2.exe");
-            encAacPlusPath = getDownloadPath(@"tools\enc_aacplus\enc_aacPlus.exe");
             ffmpegPath = getDownloadPath(@"tools\ffmpeg\ffmpeg.exe");
             aftenPath = getDownloadPath(@"tools\aften\aften.exe");
             flacPath = getDownloadPath(@"tools\flac\flac.exe");
@@ -539,14 +538,6 @@ namespace MeGUI
         }
         
         /// <summary>
-        /// filename and full path of the enc_aacPlus executable
-        /// </summary>
-        public string EncAacPlusPath
-        {
-            get { return encAacPlusPath; }
-        }
-
-        /// <summary>
         /// filename and full path of the oggenc2 executable
         /// </summary>
         public string OggEnc2Path
@@ -684,28 +675,6 @@ namespace MeGUI
         {
             get { return forcerawavcextension; }
             set { forcerawavcextension = value; }
-        }
-
-        /// <summary>
-        /// Winamp Path
-        /// </summary>
-        public static string WinampPath
-        {
-            get
-            {
-                try
-                {
-                    Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\winamp.exe");
-                    if (key == null)
-                        return null;
-                    else
-                        return (string)key.GetValue("Path");
-                }
-                catch
-                {
-                    return null;
-                }
-            }
         }
 
         /// <summary>

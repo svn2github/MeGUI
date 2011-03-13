@@ -153,7 +153,6 @@ namespace MeGUI
             this.codec = codec;
         }
         public static readonly AudioEncoderType LAME   = new AudioEncoderType("LAME", AudioCodec.MP3);
-        public static readonly AudioEncoderType WAAC   = new AudioEncoderType("WAAC", AudioCodec.AAC);
         public static readonly AudioEncoderType NAAC   = new AudioEncoderType("NAAC", AudioCodec.AAC);
         public static readonly AudioEncoderType FAAC   = new AudioEncoderType("FAAC", AudioCodec.AAC);
         public static readonly AudioEncoderType VORBIS = new AudioEncoderType("VORBIS", AudioCodec.VORBIS);
@@ -207,7 +206,6 @@ namespace MeGUI
                 AudioEncoderTypes.Register(AudioEncoderType.LAME)   &&
                 AudioEncoderTypes.Register(AudioEncoderType.NAAC)   &&
                 AudioEncoderTypes.Register(AudioEncoderType.VORBIS) &&
-                AudioEncoderTypes.Register(AudioEncoderType.WAAC)   &&
                 AudioEncoderTypes.Register(AudioEncoderType.FLAC)   &&
                 AudioEncoderTypes.Register(AudioEncoderType.AFTEN)))
                 throw new Exception("Failed to register a standard audio encoder type");
