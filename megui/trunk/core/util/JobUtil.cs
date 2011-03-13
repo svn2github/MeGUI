@@ -321,7 +321,7 @@ namespace MeGUI
 #endif
                     hfyuWrapper.Close();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     return null;
                 }

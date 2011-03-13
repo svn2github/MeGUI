@@ -65,7 +65,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
         private bool _mustSendWavHeaderToEncoderStdIn;
 
         private int _sampleRate;
-        private int _downMixModeNb;
 
         private System.Threading.ManualResetEvent _mre = new System.Threading.ManualResetEvent(true); // lock used to pause encoding
         private Thread _encoderThread = null;
@@ -725,10 +724,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             switch (audioJob.Settings.DownmixMode)
             {
                 case ChannelMode.KeepOriginal:
-                    _downMixModeNb = 0;
                     break;
                 case ChannelMode.ConvertToMono:
-                    script.AppendFormat("ConvertToMono(){0}", Environment.NewLine); _downMixModeNb = 1;
+                    script.AppendFormat("ConvertToMono(){0}", Environment.NewLine);
                     break;
                 case ChannelMode.DPLDownmix:
                 case ChannelMode.DPLIIDownmix:
@@ -869,13 +867,13 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                     break;
                 case ChannelMode.Upmix:
                     createTemporallyEqFiles(tmp);
-                    script.Append("2==Audiochannels(last)?x_upmix" + id + @"(last):last" + Environment.NewLine); _downMixModeNb = 5;
+                    script.Append("2==Audiochannels(last)?x_upmix" + id + @"(last):last" + Environment.NewLine);
                     break;
                 case ChannelMode.UpmixUsingSoxEq:
-                    script.Append("2==Audiochannels(last)?x_upmixR" + id + @"(last):last" + Environment.NewLine); _downMixModeNb = 6;
+                    script.Append("2==Audiochannels(last)?x_upmixR" + id + @"(last):last" + Environment.NewLine);
                     break;
                 case ChannelMode.UpmixWithCenterChannelDialog:
-                    script.Append("2==Audiochannels(last)?x_upmixC" + id + @"(last):last" + Environment.NewLine); _downMixModeNb = 7;
+                    script.Append("2==Audiochannels(last)?x_upmixC" + id + @"(last):last" + Environment.NewLine);
                     break;
             }
 
