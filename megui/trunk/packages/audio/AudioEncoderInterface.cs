@@ -47,7 +47,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 ((j as AudioJob).Settings is MP2Settings) ||
                 ((j as AudioJob).Settings is AC3Settings) ||
                 ((j as AudioJob).Settings is WinAmpAACSettings) ||
-                ((j as AudioJob).Settings is AudXSettings) ||
                 ((j as AudioJob).Settings is OggVorbisSettings) ||
                 ((j as AudioJob).Settings is FaacSettings) ||
                 ((j as AudioJob).Settings is NeroAACSettings) ||
@@ -1002,16 +1001,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 _encoderCommandLine = sb.ToString();
             }
 
-            if (audioJob.Settings is AudXSettings)
-            {
-                script.Append("ResampleAudio(last,48000)" + Environment.NewLine);
-                script.Append("32==Audiobits(last)?ConvertAudioTo16bit(last):last" + Environment.NewLine);  // audX encoder doesn't support 32bits streams
-                script.Append("6==Audiochannels(last)?last:GetChannel(last,1,1,1,1,1,1)" + Environment.NewLine);
-                _mustSendWavHeaderToEncoderStdIn = false;
-                AudXSettings n = audioJob.Settings as AudXSettings;
-                _encoderExecutablePath = this._settings.EncAudXPath;
-                _encoderCommandLine = "- \"{0}\" --q " + ((int)n.Quality) + " --raw {1}";
-            }
             if (audioJob.Settings is OggVorbisSettings)
             {
                 // http://forum.doom9.org/showthread.php?p=831098#post831098

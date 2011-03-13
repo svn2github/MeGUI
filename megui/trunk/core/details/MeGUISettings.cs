@@ -37,7 +37,7 @@ namespace MeGUI
         private string[][] autoUpdateServerLists;
         private string faacPath, lamePath, neroAacEncPath, mp4boxPath, mkvmergePath, strMainAudioFormat,
                        encAacPlusPath, ffmpegPath, besplitPath, yadifPath, aftenPath, x264Path, strMainFileFormat,
-                       dgIndexPath, xvidEncrawPath, aviMuxGUIPath, oggEnc2Path, encAudXPath, dgavcIndexPath,
+                       dgIndexPath, xvidEncrawPath, aviMuxGUIPath, oggEnc2Path, dgavcIndexPath,
                        eac3toPath, tsmuxerPath, meguiupdatecache, avisynthpluginspath, ffmsIndexPath, vobSubPath,
                        defaultLanguage1, defaultLanguage2, afterEncodingCommand, videoExtension, audioExtension,
                        strLastDestinationPath, strLastSourcePath, dgnvIndexPath, tempDirMP4, flacPath,
@@ -102,7 +102,6 @@ namespace MeGUI
             lamePath = getDownloadPath(@"tools\lame\lame.exe");
             neroAacEncPath = "neroAacEnc.exe";
             oggEnc2Path = getDownloadPath(@"tools\oggenc2\oggenc2.exe");
-            encAudXPath = getDownloadPath(@"tools\encaudxcli\enc_AudX_CLI.exe");
             encAacPlusPath = getDownloadPath(@"tools\enc_aacplus\enc_aacPlus.exe");
             ffmpegPath = getDownloadPath(@"tools\ffmpeg\ffmpeg.exe");
             aftenPath = getDownloadPath(@"tools\aften\aften.exe");
@@ -545,14 +544,6 @@ namespace MeGUI
         public string EncAacPlusPath
         {
             get { return encAacPlusPath; }
-        }
-
-        /// <summary>
-        /// filename and full path of the enc_AudX_CLI executable
-        /// </summary>
-        public string EncAudXPath
-        {
-            get { return encAudXPath; }
         }
 
         /// <summary>

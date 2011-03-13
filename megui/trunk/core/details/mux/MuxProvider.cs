@@ -1080,7 +1080,6 @@ namespace MeGUI
             RegisterEncoder(new WinAmpAACEncodingProvider());
             RegisterEncoder(new NeroAACEncodingProvider());
             RegisterEncoder(new LameMP3EncodingProvider());
-            RegisterEncoder(new AudXEncodingProvider());
             RegisterEncoder(new FAACEncodingProvider());
             RegisterEncoder(new VorbisEncodingProvider());
             RegisterEncoder(new AC3EncodingProvider());
@@ -1158,17 +1157,6 @@ namespace MeGUI
             supportedCodecs.Add(AudioCodec.MP3);
             supportedTypes.Add(AudioType.MP3);
             supportedEncoderTypes.Add(AudioEncoderType.LAME);
-        }
-    }
-
-    public class AudXEncodingProvider : AudioEncodingProvider
-    {
-        public AudXEncodingProvider()
-            : base()
-        {
-            supportedCodecs.Add(AudioCodec.MP3);
-            supportedTypes.Add(AudioType.MP3);
-            supportedEncoderTypes.Add(AudioEncoderType.AUDX);
         }
     }
 

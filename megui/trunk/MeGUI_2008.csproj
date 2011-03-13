@@ -565,12 +565,6 @@
       <DependentUpon>AudioConfigurationPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="packages\audio\AudioJob.cs" />
-    <Compile Include="packages\audio\audx\AudXConfigurationPanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="packages\audio\audx\AudXConfigurationPanel.Designer.cs">
-      <DependentUpon>AudXConfigurationPanel.cs</DependentUpon>
-    </Compile>
     <Compile Include="packages\audio\AudioEncoderInterface.cs" />
     <Compile Include="packages\audio\faac\faacConfigurationPanel.cs">
       <SubType>UserControl</SubType>
@@ -628,7 +622,6 @@
       <DependentUpon>WinAmpAACConfigurationPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="packages\audio\waac\WinAmpAACSettings.cs" />
-    <Compile Include="packages\audio\audx\AudXSettings.cs" />
     <Compile Include="packages\muxer\avimuxgui\AMGMuxer.cs" />
     <Compile Include="packages\muxer\mkvmerge\MkvMergeMuxer.cs" />
     <Compile Include="packages\muxer\mp4box\MP4BoxMuxer.cs" />
@@ -966,10 +959,6 @@
     <EmbeddedResource Include="packages\audio\AudioConfigurationPanel.resx">
       <DependentUpon>AudioConfigurationPanel.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="packages\audio\audx\AudXConfigurationPanel.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>AudXConfigurationPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="packages\audio\faac\faacConfigurationPanel.resx">
       <SubType>Designer</SubType>
