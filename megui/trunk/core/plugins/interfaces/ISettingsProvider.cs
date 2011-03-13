@@ -27,7 +27,6 @@ using MeGUI.core.details.video;
 using MeGUI.core.plugins.interfaces;
 using MeGUI.core.util;
 using MeGUI.packages.video.x264;
-using MeGUI.packages.video.snow;
 using MeGUI.packages.video.xvid;
 using MeGUI.packages.audio.naac;
 using MeGUI.packages.audio.audx;

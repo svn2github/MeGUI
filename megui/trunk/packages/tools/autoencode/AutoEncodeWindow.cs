@@ -661,7 +661,7 @@ namespace MeGUI
 		#region button events
 		/// <summary>
 		/// handles the go button for automated encoding
-		/// checks if we're in automated 2 pass video mode and that we're not using the snow codec
+		/// checks if we're in automated 2 pass video mode
 		/// then the video and audio configuration is checked, and if it checks out
 		/// the audio job, video jobs and muxing job are generated, audio and video job are linked
 		/// and encoding is started

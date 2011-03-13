@@ -44,7 +44,6 @@ namespace MeGUI
         }
         public static readonly VideoCodec ASP   = new VideoCodec("ASP");
         public static readonly VideoCodec AVC   = new VideoCodec("AVC");
-        public static readonly VideoCodec SNOW  = new VideoCodec("SNOW");
         public static readonly VideoCodec HFYU  = new VideoCodec("HFYU");
         public static readonly VideoCodec VC1   = new VideoCodec("VC1");
         public static readonly VideoCodec MPEG2 = new VideoCodec("MPEG2");
@@ -130,7 +129,6 @@ namespace MeGUI
         }
         public static readonly VideoEncoderType XVID = new VideoEncoderType("Xvid", VideoCodec.ASP);
         public static readonly VideoEncoderType X264 = new VideoEncoderType("x264", VideoCodec.AVC);
-        public static readonly VideoEncoderType SNOW = new VideoEncoderType("Snow", VideoCodec.SNOW);
         public static readonly VideoEncoderType HFYU = new VideoEncoderType("Huffyuv", VideoCodec.HFYU);
     }
     public class AudioEncoderType : IEncoderType, IIDable
@@ -180,7 +178,6 @@ namespace MeGUI
                 VideoCodecs.Register(VideoCodec.ASP)  &&
                 VideoCodecs.Register(VideoCodec.AVC)  &&
                 VideoCodecs.Register(VideoCodec.HFYU) &&
-                VideoCodecs.Register(VideoCodec.SNOW) &&
                 VideoCodecs.Register(VideoCodec.MPEG2) &&
                 VideoCodecs.Register(VideoCodec.VC1)))
                 throw new Exception("Failed to register a standard video codec");
@@ -201,7 +198,6 @@ namespace MeGUI
                 throw new Exception("Failed to register a standard audio codec");
             if (!(
                 VideoEncoderTypes.Register(VideoEncoderType.HFYU) &&
-                VideoEncoderTypes.Register(VideoEncoderType.SNOW) &&
                 VideoEncoderTypes.Register(VideoEncoderType.X264) &&
                 VideoEncoderTypes.Register(VideoEncoderType.XVID)))
                 throw new Exception("Failed to register a standard video encoder type");
@@ -241,8 +237,8 @@ namespace MeGUI
         public static readonly VideoType RAWASP  = new VideoType("RAWASP", "RAW MPEG-4 ASP Files", "m4v", null, VideoCodec.ASP);
         public static readonly VideoType RAWAVC  = new VideoType("RAWAVC", "RAW MPEG-4 AVC Files", "264", null, VideoCodec.AVC);
         public static readonly VideoType RAWAVC2 = new VideoType("RAWAVC", "RAW MPEG-4 AVC Files", "h264", null, VideoCodec.AVC);
-        public static readonly VideoType MKV     = new VideoType("MKV", "Matroska Files", "mkv", ContainerType.MKV, new VideoCodec[] { VideoCodec.ASP, VideoCodec.AVC, VideoCodec.SNOW, VideoCodec.HFYU, VideoCodec.MPEG2, VideoCodec.VC1});
-        public static readonly VideoType AVI     = new VideoType("AVI", "AVI Files", "avi", ContainerType.AVI, new VideoCodec[] { VideoCodec.ASP, VideoCodec.AVC, VideoCodec.HFYU, VideoCodec.SNOW });
+        public static readonly VideoType MKV     = new VideoType("MKV", "Matroska Files", "mkv", ContainerType.MKV, new VideoCodec[] { VideoCodec.ASP, VideoCodec.AVC, VideoCodec.HFYU, VideoCodec.MPEG2, VideoCodec.VC1});
+        public static readonly VideoType AVI     = new VideoType("AVI", "AVI Files", "avi", ContainerType.AVI, new VideoCodec[] { VideoCodec.ASP, VideoCodec.AVC, VideoCodec.HFYU });
         public static readonly VideoType MPEG2   = new VideoType("MPEG2", "MPEG-2 Files", "m2v", null, VideoCodec.MPEG2);
         public static readonly VideoType VC1     = new VideoType("VC1", "VC-1 Files", "vc1", null, VideoCodec.VC1);
         public static readonly VideoType M2TS    = new VideoType("M2TS", "M2TS Files", "m2ts", ContainerType.M2TS, new VideoCodec[] { VideoCodec.AVC, VideoCodec.MPEG2, VideoCodec.VC1 });

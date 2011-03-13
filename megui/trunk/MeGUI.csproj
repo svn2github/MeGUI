@@ -742,13 +742,6 @@
     </Compile>
     <Compile Include="packages\video\huffyuv\hfyuSettings.cs" />
     <Compile Include="packages\video\ffmpeg\ffmpegEncoder.cs" />
-    <Compile Include="packages\video\snow\snowConfigurationPanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="packages\video\snow\snowConfigurationPanel.Designer.cs">
-      <DependentUpon>snowConfigurationPanel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="packages\video\snow\snowSettings.cs" />
     <Compile Include="packages\video\x264\x264ConfigurationPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1028,10 +1021,6 @@
       <DependentUpon>VobSubIndexWindow.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="packages\video\snow\snowConfigurationPanel.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>snowConfigurationPanel.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="packages\video\x264\x264ConfigurationPanel.resx">
       <SubType>Designer</SubType>
       <DependentUpon>x264ConfigurationPanel.cs</DependentUpon>
@@ -1086,7 +1075,10 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="packages\demuxer\eac3to\" />
+    <Folder Include="packages\demuxer\mkvextract\" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>cmd /c "SubWCRev $(ProjectDir) $(ProjectDir)AssemblyInfo.template $(ProjectDir)AssemblyInfo.cs&amp;&amp;exit 0"

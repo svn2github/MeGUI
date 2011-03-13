@@ -1,3 +1,4 @@
+1991 [Snow] removed snow encoder
 1990 [MainForm] cosmetic change
 
 Changelog 1911 --> 1989

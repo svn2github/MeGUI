@@ -314,8 +314,7 @@ namespace MeGUI
 
 		/// <summary>
 		/// handles codec selection change
-		/// if snow is checked, the container must be avi and mp4 has to be disabled
-		/// the choice is not limited for any other codec
+		/// the choice is not limited for any codec
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>

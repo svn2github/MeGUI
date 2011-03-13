@@ -1068,7 +1068,6 @@ namespace MeGUI
         public VideoEncoderProvider()
             : base()
         {
-            this.RegisterEncoder(new SnowEncoderProvider());
             this.RegisterEncoder(new X264EncoderProvider());
             this.RegisterEncoder(new XviDEncoderProvider());
         }
@@ -1123,21 +1122,6 @@ namespace MeGUI
         public override IJobProcessor CreateEncoder(MeGUISettings settings)
         {
             return new x264Encoder(settings.X264Path);
-        }
-    }
-
-    public class SnowEncoderProvider : EncodingProvider<VideoCodec, VideoType, VideoEncoderType>
-    {
-        public SnowEncoderProvider()
-        {
-            supportedCodecs.Add(VideoCodec.SNOW);
-            supportedTypes.Add(VideoType.AVI);
-            supportedEncoderTypes.Add(VideoEncoderType.SNOW);
-        }
-
-        public override IJobProcessor CreateEncoder(MeGUISettings settings)
-        {
-            return new ffmpegEncoder(settings.FFMpegPath);
         }
     }
     #endregion

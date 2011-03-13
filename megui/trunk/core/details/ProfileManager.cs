@@ -55,7 +55,6 @@ namespace MeGUI
             profileGroups.Add(new ProfileGroup(typeof(VideoCodecSettings), "Video"));
             SafeRegister<x264Settings, x264ConfigurationPanel>("Video");
             SafeRegister<xvidSettings, MeGUI.packages.video.xvid.xvidConfigurationPanel>("Video");
-            SafeRegister<snowSettings, MeGUI.packages.video.snow.snowConfigurationPanel>("Video");
             profileGroups.Add(new ProfileGroup(typeof(AudioCodecSettings), "Audio"));
             SafeRegister<AftenSettings, MeGUI.packages.audio.aften.AftenConfigurationPanel>("Audio");
             SafeRegister<AudXSettings, MeGUI.packages.audio.audx.AudXConfigurationPanel>("Audio");

@@ -647,7 +647,6 @@ namespace MeGUI
             knownVideoDescriptions.Add("h.264", VideoCodec.AVC);
             knownVideoDescriptions.Add("huffman", VideoCodec.HFYU);
             knownVideoDescriptions.Add("ffvh", VideoCodec.HFYU);
-            knownVideoDescriptions.Add("snow", VideoCodec.SNOW);
             knownVideoDescriptions.Add("mpeg-4v", VideoCodec.ASP);
             knownVideoDescriptions.Add("vc-1", VideoCodec.VC1);
 
