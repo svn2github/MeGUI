@@ -122,7 +122,7 @@ namespace MeGUI.core.util
 
         public LogItem LogValue(string name, object value, ImageType im)
         {
-            return Add(AutomatedLogger.LogValue(name, value, im));
+            return Add(AutomatedLogger.LogValue(string.Format("[{0:G}] {1}", DateTime.Now, name), value, im));
         }
 
         public LogItem LogEvent(string eventName)
