@@ -93,6 +93,7 @@ namespace MeGUI
             this.goButton = new System.Windows.Forms.Button();
             this.openOnQueue = new System.Windows.Forms.CheckBox();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
+            this.chkKeepVideoTrack = new System.Windows.Forms.CheckBox();
             trackTabPage2 = new System.Windows.Forms.TabPage();
             label1 = new System.Windows.Forms.Label();
             trackTabPage2.SuspendLayout();
@@ -120,7 +121,7 @@ namespace MeGUI
             trackTabPage2.Location = new System.Drawing.Point(4, 22);
             trackTabPage2.Name = "trackTabPage2";
             trackTabPage2.Padding = new System.Windows.Forms.Padding(3);
-            trackTabPage2.Size = new System.Drawing.Size(172, 94);
+            trackTabPage2.Size = new System.Drawing.Size(433, 94);
             trackTabPage2.TabIndex = 1;
             trackTabPage2.Text = "Audio track 2";
             trackTabPage2.UseVisualStyleBackColor = true;
@@ -149,7 +150,7 @@ namespace MeGUI
             this.trackTabPage1.Location = new System.Drawing.Point(4, 22);
             this.trackTabPage1.Name = "trackTabPage1";
             this.trackTabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.trackTabPage1.Size = new System.Drawing.Size(433, 93);
+            this.trackTabPage1.Size = new System.Drawing.Size(433, 94);
             this.trackTabPage1.TabIndex = 0;
             this.trackTabPage1.Text = "Audio track 1";
             this.trackTabPage1.UseVisualStyleBackColor = true;
@@ -159,7 +160,7 @@ namespace MeGUI
             this.audio1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.audio1.Location = new System.Drawing.Point(3, 3);
             this.audio1.Name = "audio1";
-            this.audio1.Size = new System.Drawing.Size(427, 87);
+            this.audio1.Size = new System.Drawing.Size(427, 88);
             this.audio1.TabIndex = 0;
             this.audio1.SomethingChanged += new System.EventHandler(this.audio1_SomethingChanged);
             // 
@@ -230,8 +231,8 @@ namespace MeGUI
             // 
             // ar
             // 
-            this.ar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.ar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.ar.CustomDARs = new MeGUI.core.util.Dar[0];
             this.ar.HasLater = true;
             this.ar.Location = new System.Drawing.Point(119, 61);
@@ -331,8 +332,8 @@ namespace MeGUI
             // 
             // chapterFile
             // 
-            this.chapterFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.chapterFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.chapterFile.Filename = "";
             this.chapterFile.Filter = "Chapter files (*.txt)|*.txt";
             this.chapterFile.FilterIndex = 0;
@@ -347,8 +348,8 @@ namespace MeGUI
             // 
             // workingDirectory
             // 
-            this.workingDirectory.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.workingDirectory.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.workingDirectory.Filename = "";
             this.workingDirectory.Filter = null;
             this.workingDirectory.FilterIndex = 0;
@@ -380,8 +381,8 @@ namespace MeGUI
             // 
             // workingName
             // 
-            this.workingName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.workingName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.workingName.Location = new System.Drawing.Point(120, 64);
             this.workingName.Name = "workingName";
             this.workingName.Size = new System.Drawing.Size(324, 21);
@@ -398,8 +399,8 @@ namespace MeGUI
             // 
             // splitting
             // 
-            this.splitting.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.splitting.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.splitting.AutoSize = true;
             this.splitting.CustomSizes = new MeGUI.core.util.FileSize[0];
             this.splitting.Location = new System.Drawing.Point(118, 239);
@@ -426,8 +427,8 @@ namespace MeGUI
             // 
             // IOGroupbox
             // 
-            this.IOGroupbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.IOGroupbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.IOGroupbox.Controls.Add(this.output);
             this.IOGroupbox.Controls.Add(this.input);
             this.IOGroupbox.Controls.Add(this.outputLabel);
@@ -441,8 +442,8 @@ namespace MeGUI
             // 
             // output
             // 
-            this.output.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.output.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.output.Filename = "";
             this.output.Filter = "MP4 Files|*.mp4";
             this.output.FilterIndex = 0;
@@ -459,8 +460,8 @@ namespace MeGUI
             // input
             // 
             this.input.AllowDrop = true;
-            this.input.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.input.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.input.Filename = "";
             this.input.Filter = resources.GetString("input.Filter");
             this.input.FilterIndex = 4;
@@ -492,8 +493,8 @@ namespace MeGUI
             // 
             // targetGroupBox
             // 
-            this.targetGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.targetGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.targetGroupBox.Controls.Add(this.oneclickProfile);
             this.targetGroupBox.Controls.Add(this.optionalTargetSizeBox1);
             this.targetGroupBox.Controls.Add(this.label3);
@@ -516,8 +517,8 @@ namespace MeGUI
             // 
             // optionalTargetSizeBox1
             // 
-            this.optionalTargetSizeBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.optionalTargetSizeBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.optionalTargetSizeBox1.CustomSizes = new MeGUI.core.util.FileSize[0];
             this.optionalTargetSizeBox1.Location = new System.Drawing.Point(125, 43);
             this.optionalTargetSizeBox1.MaximumSize = new System.Drawing.Size(1000, 29);
@@ -547,9 +548,9 @@ namespace MeGUI
             // 
             // audioGroupbox
             // 
-            this.audioGroupbox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.audioGroupbox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.audioGroupbox.ContextMenuStrip = this.contextMenuStrip1;
             this.audioGroupbox.Controls.Add(this.panel1);
             this.audioGroupbox.Location = new System.Drawing.Point(8, 88);
@@ -597,8 +598,8 @@ namespace MeGUI
             // 
             // audioTrack1
             // 
-            this.audioTrack1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.audioTrack1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.audioTrack1.Filter = "All files (*.*)|*.*";
             this.audioTrack1.Location = new System.Drawing.Point(120, 3);
             this.audioTrack1.MaximumSize = new System.Drawing.Size(1000, 29);
@@ -620,8 +621,8 @@ namespace MeGUI
             // 
             // audioTrack2
             // 
-            this.audioTrack2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.audioTrack2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.audioTrack2.Filter = "All files (*.*)|*.*";
             this.audioTrack2.Location = new System.Drawing.Point(120, 38);
             this.audioTrack2.MaximumSize = new System.Drawing.Size(1000, 29);
@@ -643,9 +644,9 @@ namespace MeGUI
             // 
             // tabControl1
             // 
-            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.encoderConfigTab);
@@ -675,15 +676,15 @@ namespace MeGUI
             // 
             this.devicetype.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.devicetype.FormattingEnabled = true;
-            this.devicetype.Location = new System.Drawing.Point(124, 251);
+            this.devicetype.Location = new System.Drawing.Point(327, 240);
             this.devicetype.Name = "devicetype";
-            this.devicetype.Size = new System.Drawing.Size(127, 21);
+            this.devicetype.Size = new System.Drawing.Size(95, 21);
             this.devicetype.TabIndex = 40;
             // 
             // deviceLabel
             // 
             this.deviceLabel.AutoSize = true;
-            this.deviceLabel.Location = new System.Drawing.Point(15, 256);
+            this.deviceLabel.Location = new System.Drawing.Point(255, 243);
             this.deviceLabel.Name = "deviceLabel";
             this.deviceLabel.Size = new System.Drawing.Size(66, 13);
             this.deviceLabel.TabIndex = 39;
@@ -692,7 +693,7 @@ namespace MeGUI
             // containerFormatLabel
             // 
             this.containerFormatLabel.AutoSize = true;
-            this.containerFormatLabel.Location = new System.Drawing.Point(15, 228);
+            this.containerFormatLabel.Location = new System.Drawing.Point(7, 243);
             this.containerFormatLabel.Name = "containerFormatLabel";
             this.containerFormatLabel.Size = new System.Drawing.Size(91, 13);
             this.containerFormatLabel.TabIndex = 38;
@@ -701,9 +702,9 @@ namespace MeGUI
             // containerFormat
             // 
             this.containerFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.containerFormat.Location = new System.Drawing.Point(124, 225);
+            this.containerFormat.Location = new System.Drawing.Point(103, 240);
             this.containerFormat.Name = "containerFormat";
-            this.containerFormat.Size = new System.Drawing.Size(127, 21);
+            this.containerFormat.Size = new System.Drawing.Size(95, 21);
             this.containerFormat.TabIndex = 37;
             this.containerFormat.SelectedIndexChanged += new System.EventHandler(this.containerFormat_SelectedIndexChanged);
             // 
@@ -714,7 +715,7 @@ namespace MeGUI
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox1.Location = new System.Drawing.Point(3, 80);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(447, 139);
+            this.groupBox1.Size = new System.Drawing.Size(447, 140);
             this.groupBox1.TabIndex = 35;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Audio";
@@ -727,11 +728,12 @@ namespace MeGUI
             this.tabControl2.Location = new System.Drawing.Point(3, 17);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
-            this.tabControl2.Size = new System.Drawing.Size(441, 119);
+            this.tabControl2.Size = new System.Drawing.Size(441, 120);
             this.tabControl2.TabIndex = 32;
             // 
             // videoGroupBox
             // 
+            this.videoGroupBox.Controls.Add(this.chkKeepVideoTrack);
             this.videoGroupBox.Controls.Add(this.usechaptersmarks);
             this.videoGroupBox.Controls.Add(this.label4);
             this.videoGroupBox.Controls.Add(this.videoProfile);
@@ -757,7 +759,7 @@ namespace MeGUI
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 24);
+            this.label4.Location = new System.Drawing.Point(7, 24);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(66, 13);
             this.label4.TabIndex = 38;
@@ -765,10 +767,10 @@ namespace MeGUI
             // 
             // videoProfile
             // 
-            this.videoProfile.Location = new System.Drawing.Point(121, 19);
+            this.videoProfile.Location = new System.Drawing.Point(79, 19);
             this.videoProfile.Name = "videoProfile";
             this.videoProfile.ProfileSet = "Video";
-            this.videoProfile.Size = new System.Drawing.Size(319, 22);
+            this.videoProfile.Size = new System.Drawing.Size(199, 22);
             this.videoProfile.TabIndex = 17;
             this.videoProfile.SelectedProfileChanged += new System.EventHandler(this.ProfileChanged);
             // 
@@ -786,7 +788,7 @@ namespace MeGUI
             // openFileDialog
             // 
             this.openFileDialog.Filter = "IFO Files|*.ifo|VOB Files (*.vob)|*.vob|MPEG-1/2 Program Streams (*.mpg)|*.mpg|Tr" +
-                "ansport Streams (*.ts)|*.ts";
+    "ansport Streams (*.ts)|*.ts";
             // 
             // showAdvancedOptions
             // 
@@ -830,6 +832,16 @@ namespace MeGUI
             this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 32;
             // 
+            // chkKeepVideoTrack
+            // 
+            this.chkKeepVideoTrack.AutoSize = true;
+            this.chkKeepVideoTrack.Location = new System.Drawing.Point(303, 23);
+            this.chkKeepVideoTrack.Name = "chkKeepVideoTrack";
+            this.chkKeepVideoTrack.Size = new System.Drawing.Size(114, 17);
+            this.chkKeepVideoTrack.TabIndex = 40;
+            this.chkKeepVideoTrack.Text = "Keep original track";
+            this.chkKeepVideoTrack.UseVisualStyleBackColor = true;
+            // 
             // OneClickWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -842,6 +854,7 @@ namespace MeGUI
             this.Controls.Add(this.goButton);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "OneClickWindow";
             this.Text = "MeGUI - One Click Encoder";
             trackTabPage2.ResumeLayout(false);
@@ -936,5 +949,6 @@ namespace MeGUI
         private System.Windows.Forms.ComboBox devicetype;
         private System.Windows.Forms.Label deviceLabel;
         private System.Windows.Forms.CheckBox usechaptersmarks;
+        private System.Windows.Forms.CheckBox chkKeepVideoTrack;
     }
 }

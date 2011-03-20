@@ -107,7 +107,7 @@ namespace MeGUI
             addLanguage("Français", "fra");
             addLanguage("French", "fre");
             addLanguage("Georgian", "kat");
-            addLanguage("German", "deu");
+            addLanguage("German", "ger");
             addLanguage("Greek", "ell");
             addLanguage("Hebrew", "heb");
             addLanguage("Hindi", "hin");

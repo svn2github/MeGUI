@@ -46,6 +46,7 @@ namespace MeGUI
         List<Label> trackLabel;
         List<AudioConfigControl> audioConfigControl;
         FileIndexerWindow.IndexType oIndexerToUse;
+        LogItem _oLog;
 
         #region profiles
         void ProfileChanged(object sender, EventArgs e)
@@ -115,6 +116,7 @@ namespace MeGUI
         private VideoUtil vUtil;
         private MainForm mainForm;
         private MuxProvider muxProvider;
+        private MkvInfo oMkvInfo;
         
         /// <summary>
         /// whether the user has selected an output filename
@@ -275,10 +277,28 @@ namespace MeGUI
                 return;
             }
 
+            if (_oLog == null)
+                _oLog = mainForm.Log.Info("OneClick");
+
+            // if the input container is MKV get the MkvInfo
+            if (iFile.ContainerFileTypeString.ToUpper().Equals("MATROSKA"))
+                oMkvInfo = new MkvInfo(input.Filename, ref _oLog);
+            else
+                oMkvInfo = null;
+
             input.Filename = fileName;
             Dar? ar = null;
             int maxHorizontalResolution = int.Parse(iFile.Info.Width.ToString());
-            List<AudioTrackInfo> audioTracks = iFile.AudioTracks;
+            
+            List<AudioTrackInfo> audioTracks = new List<AudioTrackInfo>();
+            if (oMkvInfo != null)
+            {
+                foreach (MkvInfoTrack oTrack in oMkvInfo.Track)
+                    if (oTrack.Type == MkvInfoTrackType.Audio)
+                        audioTracks.Add(oTrack.AudioTrackInfo);
+            }
+            else
+                audioTracks = iFile.AudioTracks;
             
             List<object> trackNames = new List<object>();
             trackNames.Add("None");
@@ -323,16 +343,14 @@ namespace MeGUI
   
             horizontalResolution.Maximum = maxHorizontalResolution;
             
-            string chapterFile = VideoUtil.getChapterFile(fileName);
-            if (File.Exists(chapterFile))
-                this.chapterFile.Filename = chapterFile;
-            if (string.IsNullOrEmpty(this.chapterFile.Filename))
+            // Detect Chapters
+            if (oMkvInfo != null && oMkvInfo.HasChapters)
+                this.chapterFile.Filename = "<internal MKV chapters>";
+            else if (Path.GetExtension(input.Filename).ToLower().Equals(".vob"))
+                this.chapterFile.Filename = "<internal VOB chapters>";
+            else
             {
-                bool useqpFile = false;
-                if (usechaptersmarks.Checked && usechaptersmarks.Enabled)
-                    useqpFile = true;
-                VideoUtil.getChaptersFromIFO(fileName, useqpFile);
-                chapterFile = VideoUtil.getChapterFile(fileName);
+                string chapterFile = VideoUtil.getChapterFile(fileName);
                 if (File.Exists(chapterFile))
                     this.chapterFile.Filename = chapterFile;
             }
@@ -513,14 +531,13 @@ namespace MeGUI
                         else
                             aJobs.Add(new AudioJob(aInput, null, null, audioConfigControl[i].Settings, delay, strLanguage));
                     }
-    
+
                     OneClickPostprocessingProperties dpp = new OneClickPostprocessingProperties();
                     dpp.DAR = ar.Value;
                     dpp.DirectMuxAudio = muxOnlyAudio.ToArray();
                     dpp.AudioJobs = aJobs.ToArray();
                     dpp.AutoDeinterlace = autoDeint.Checked;
                     dpp.AvsSettings = (AviSynthSettings)avsProfile.SelectedProfile.BaseSettings;
-                    dpp.ChapterFile = chapterFile.Filename;
                     dpp.Container = (ContainerType)containerFormat.SelectedItem;
                     dpp.FinalOutput = output.Filename;
                     dpp.HorizontalOutputResolution = (int)horizontalResolution.Value;
@@ -533,6 +550,29 @@ namespace MeGUI
                     dpp.DeviceOutputType = devicetype.Text;
                     dpp.UseChaptersMarks = usechaptersmarks.Checked;
                     dpp.VideoSettings = VideoSettings.Clone();
+
+                    // chapter handling
+                    if (!File.Exists(chapterFile.Filename))
+                    {
+                        if (oMkvInfo != null && oMkvInfo.HasChapters)
+                        {
+                            string strChapterFile = Path.GetDirectoryName(output.Filename) + "\\" + Path.GetFileNameWithoutExtension(output.Filename) + " - Chapter Information.txt";
+                            if (oMkvInfo.extractChapters(strChapterFile))
+                            {
+                                chapterFile.Filename = strChapterFile;
+                                dpp.FilesToDelete.Add(strChapterFile);
+                            }
+                        }
+                        else if (Path.GetExtension(input.Filename).ToLower().Equals(".vob"))
+                        {
+                            chapterFile.Filename = VideoUtil.getChaptersFromIFO(input.Filename, false);
+                            dpp.FilesToDelete.Add(chapterFile.Filename);
+                        }
+                    }
+                    if (!File.Exists(chapterFile.Filename))
+                        chapterFile.Filename = "";
+                    dpp.ChapterFile = chapterFile.Filename;
+
                     if (oIndexerToUse == FileIndexerWindow.IndexType.D2V)
                     {
                         string d2vName = Path.Combine(workingDirectory.Filename, workingName.Text + ".d2v");
@@ -552,16 +592,79 @@ namespace MeGUI
                     else if (oIndexerToUse == FileIndexerWindow.IndexType.DGI)
                     {
                         string d2vName = Path.Combine(workingDirectory.Filename, workingName.Text + ".dgi");
-                        DGIIndexJob job = new DGIIndexJob(input.Filename, d2vName, 2, audioTracks, false, false);
                         OneClickPostProcessingJob ocJob = new OneClickPostProcessingJob(input.Filename, d2vName, dpp, audioTracks, FileIndexerWindow.IndexType.DGI);
-                        JobChain c = new SequentialChain(new SequentialChain(job), new SequentialChain(ocJob));
+
+                        DGIIndexJob job;
+                        JobChain c;
+                        if (oMkvInfo != null)
+                        {
+                            job = new DGIIndexJob(input.Filename, d2vName, 0, null, false, false);
+
+                            List<MkvInfoTrack> oExtractTrack = new List<MkvInfoTrack>();
+                            foreach (AudioTrackInfo oStream in audioTracks)
+                            {
+                                foreach (MkvInfoTrack oTrack in oMkvInfo.Track)
+                                {
+                                    if (oTrack.TrackNumber == oStream.TrackID)
+                                    {
+                                        oExtractTrack.Add(oTrack);
+                                        dpp.MkvAudioFiles.Add(oTrack);
+                                    }
+                                }
+                            }
+                            if (oExtractTrack.Count > 0)
+                            {
+                                MkvExtractJob extractJob = new MkvExtractJob(input.Filename, Path.GetDirectoryName(dpp.FinalOutput), oExtractTrack);
+                                c = new SequentialChain(new SequentialChain(job), new SequentialChain(extractJob), new SequentialChain(ocJob));
+                            }
+                            else
+                            {
+                                c = new SequentialChain(new SequentialChain(job), new SequentialChain(ocJob));
+                            }
+                        }
+                        else
+                        {
+                            job = new DGIIndexJob(input.Filename, d2vName, 2, audioTracks, false, false);
+                            c = new SequentialChain(new SequentialChain(job), new SequentialChain(ocJob));
+                        }
                         mainForm.Jobs.addJobsWithDependencies(c);
                     }
                     else if (oIndexerToUse == FileIndexerWindow.IndexType.FFMS)
                     {
-                        FFMSIndexJob job = new FFMSIndexJob(input.Filename, 2, audioTracks, false);
+                        JobChain c;
+                        FFMSIndexJob job;
                         OneClickPostProcessingJob ocJob = new OneClickPostProcessingJob(input.Filename, input.Filename + ".ffindex", dpp, audioTracks, FileIndexerWindow.IndexType.FFMS);
-                        JobChain c = new SequentialChain(new SequentialChain(job), new SequentialChain(ocJob));
+                        if (oMkvInfo != null)
+                        {
+                            job = new FFMSIndexJob(input.Filename, 0, null, false);
+
+                            List<MkvInfoTrack> oExtractTrack = new List<MkvInfoTrack>();
+                            foreach (AudioTrackInfo oStream in audioTracks)
+                            {                             
+                                foreach (MkvInfoTrack oTrack in oMkvInfo.Track)
+                                {
+                                    if (oTrack.TrackNumber == oStream.TrackID)
+                                    {
+                                        oExtractTrack.Add(oTrack);
+                                        dpp.MkvAudioFiles.Add(oTrack);
+                                    }
+                                }
+                            }
+                            if (oExtractTrack.Count > 0)
+                            {
+                                MkvExtractJob extractJob = new MkvExtractJob(input.Filename, Path.GetDirectoryName(dpp.FinalOutput), oExtractTrack);
+                                c = new SequentialChain(new SequentialChain(job), new SequentialChain(extractJob), new SequentialChain(ocJob));
+                            }
+                            else
+                            {
+                                c = new SequentialChain(new SequentialChain(job), new SequentialChain(ocJob));
+                            }
+                        }
+                        else
+                        {
+                            job = new FFMSIndexJob(input.Filename, 2, audioTracks, false);
+                            c = new SequentialChain(new SequentialChain(job), new SequentialChain(ocJob));
+                        }
                         mainForm.Jobs.addJobsWithDependencies(c);
                     }
                     if (this.openOnQueue.Checked)
@@ -674,7 +777,7 @@ namespace MeGUI
             if (!track.SelectedSCItem.IsStandard)
                 audioConfigControl[i].openAudioFile((string)track.SelectedObject);
             audioConfigControl[i].DelayEnabled = !track.SelectedSCItem.IsStandard;
-            if (oIndexerToUse == FileIndexerWindow.IndexType.FFMS && track.SelectedSCItem.IsStandard)
+            if (oIndexerToUse == FileIndexerWindow.IndexType.FFMS && track.SelectedSCItem.IsStandard && oMkvInfo == null)
                 audioConfigControl[i].DisableDontEncode(true);
             else
                 audioConfigControl[i].DisableDontEncode(false);

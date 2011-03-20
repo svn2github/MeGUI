@@ -138,8 +138,18 @@ namespace MeGUI
                 }));
                 t.Start();
 
-                List<string> arrAudioFilesDelete;
-                audioFiles = vUtil.getAllDemuxedAudio(job.AudioTracks, out arrAudioFilesDelete, job.IndexFile, _log);
+                List<string> arrAudioFilesDelete = new List<string>();
+                audioFiles = new Dictionary<int, string>();
+                if (job.PostprocessingProperties.MkvAudioFiles.Count > 0)
+                {
+                    foreach (MkvInfoTrack oTrack in job.PostprocessingProperties.MkvAudioFiles)
+                    {
+                        audioFiles.Add(oTrack.TrackNumber, Path.GetDirectoryName(job.PostprocessingProperties.FinalOutput) + "\\" + oTrack.FileName);
+                        arrAudioFilesDelete.Add(Path.GetDirectoryName(job.PostprocessingProperties.FinalOutput) + "\\" + oTrack.FileName);
+                    }
+                }
+                else
+                    audioFiles = vUtil.getAllDemuxedAudio(job.AudioTracks, out arrAudioFilesDelete, job.IndexFile, _log);
 
                 fillInAudioInformation();
 
@@ -183,6 +193,8 @@ namespace MeGUI
                     intermediateFiles.Add(file);
                 if (File.Exists(Path.Combine(Path.GetDirectoryName(job.Input), Path.GetFileNameWithoutExtension(job.Input) + "._log")))
                     intermediateFiles.Add(Path.Combine(Path.GetDirectoryName(job.Input), Path.GetFileNameWithoutExtension(job.Input) + "._log"));
+                foreach (string file in job.PostprocessingProperties.FilesToDelete)
+                    intermediateFiles.Add(file);
 
                 if (!string.IsNullOrEmpty(videoInput))
                 {
@@ -399,29 +411,23 @@ namespace MeGUI
             //Suggest a resolution (taken from AvisynthWindow.suggestResolution_CheckedChanged)
             int scriptVerticalResolution = 0;
             if (keepInputResolution)
-            {
                 scriptVerticalResolution = (int)d2v.Info.Height;
-                _log.LogValue("Output resolution", horizontalResolution + "x" + scriptVerticalResolution);
-            }
             else
-            {
                 scriptVerticalResolution = Resolution.suggestResolution(d2v.Info.Height, d2v.Info.Width, (double)customDAR.ar,
-                final, horizontalResolution, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out dar);
-                _log.LogValue("Output resolution", horizontalResolution + "x" + scriptVerticalResolution);
-                if (settings != null && settings is x264Settings)
+                    final, horizontalResolution, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out dar);
+            _log.LogValue("Output resolution", horizontalResolution + "x" + scriptVerticalResolution);
+
+            // create qpf file if necessary
+            if (useChaptersMarks && settings != null && settings is x264Settings)
+            {
+                x264Settings xs = (x264Settings)settings;
+                qpfile = job.PostprocessingProperties.ChapterFile;
+                if ((Path.GetExtension(qpfile).ToLower()) == ".txt")
+                    qpfile = VideoUtil.convertChaptersTextFileTox264QPFile(job.PostprocessingProperties.ChapterFile, d2v.Info.FPS);
+                if (File.Exists(qpfile))
                 {
-                    x264Settings xs = (x264Settings)settings;
-                    if (useChaptersMarks)
-                    {
-                        qpfile = job.PostprocessingProperties.ChapterFile;
-                        if ((Path.GetExtension(qpfile).ToLower()) == ".txt")
-                            qpfile = VideoUtil.convertChaptersTextFileTox264QPFile(job.PostprocessingProperties.ChapterFile, d2v.Info.FPS);
-                        if (File.Exists(qpfile))
-                        {
-                            xs.UseQPFile = true;
-                            xs.QPFile = qpfile;
-                        }
-                    }
+                    xs.UseQPFile = true;
+                    xs.QPFile = qpfile;
                 }
             }
 

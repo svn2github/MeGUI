@@ -1,3 +1,8 @@
+1996 [MKV Demuxer] added mkvextract as mkv demuxer
+     [Update] added mkvextract.exe and mkvinfo.exe to the file checks
+     [One-Click] if the source is a MKV file the chapters will be extracted and reapplied to the output
+     [One-Click] enhanced chapter and qpf file handling
+     [One-Click] if the source is a MKV file the audio files can be demuxed if using FFMS indexer
 1995 [MKV Muxer] added --aac-is-sbr in any case for AAC files in order to avoid a warning message
 1994 [Log] added timestamp to some log items
 1993 [Winamp] removed winamp encoder

@@ -1743,6 +1743,7 @@ namespace MeGUI
             PackageSystem.JobProcessors.Register(AMGMuxer.Factory);
             PackageSystem.JobProcessors.Register(tsMuxeR.Factory);
 
+            PackageSystem.JobProcessors.Register(MkvExtract.Factory);
             PackageSystem.JobProcessors.Register(OneClickPostProcessing.Factory);
             PackageSystem.JobProcessors.Register(CleanupJobRunner.Factory);
 

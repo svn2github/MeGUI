@@ -142,7 +142,10 @@ namespace MeGUI
                     case "tsmuxer": arrPath.Add(MainForm.Instance.Settings.TSMuxerPath); break;
                     case "xvid_encraw": arrPath.Add(MainForm.Instance.Settings.XviDEncrawPath); break;
                     case "faac": arrPath.Add(MainForm.Instance.Settings.FaacPath); break;
-                    case "mkvmerge": arrPath.Add(MainForm.Instance.Settings.MkvmergePath); break;
+                    case "mkvmerge":
+                        arrPath.Add(MainForm.Instance.Settings.MkvmergePath);
+                        arrPath.Add(MainForm.Instance.Settings.MkvExtractPath);
+                        arrPath.Add(MainForm.Instance.Settings.MkvInfoPath); break;
                     case "ffmpeg": arrPath.Add(MainForm.Instance.Settings.FFMpegPath); break;
                     case "oggenc2": arrPath.Add(MainForm.Instance.Settings.OggEnc2Path); break;
                     case "yadif": arrPath.Add(MainForm.Instance.Settings.YadifPath); break;

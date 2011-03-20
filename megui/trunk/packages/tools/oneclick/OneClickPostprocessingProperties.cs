@@ -19,6 +19,7 @@
 // ****************************************************************************
 
 using System;
+using System.Collections.Generic;
 using System.Xml.Serialization;
 
 using MeGUI.core.details;
@@ -41,6 +42,8 @@ namespace MeGUI
         private AviSynthSettings avsSettings;
 		private double customAR;
 		private string chapterFile, finalOutput, aviSynthScript, deviceType;
+        private List<string> filesToDelete;
+        private List<MkvInfoTrack> _mkvInfoTrack;
 
 		public OneClickPostprocessingProperties()
 		{
@@ -58,6 +61,8 @@ namespace MeGUI
             prerenderJob = false;
             deviceType = null;
             useChapterMarks = false;
+            filesToDelete = new List<string>();
+            _mkvInfoTrack = new List<MkvInfoTrack>();
 		}
 
         public AudioJob[] AudioJobs;
@@ -223,6 +228,18 @@ namespace MeGUI
         {
             get { return useChapterMarks; }
             set { useChapterMarks = value; }
+        }
+
+        public List<string> FilesToDelete
+        {
+            get { return filesToDelete; }
+            set { filesToDelete = value; }
+        }
+
+        public List<MkvInfoTrack> MkvAudioFiles
+        {
+            get { return _mkvInfoTrack; }
+            set { _mkvInfoTrack = value; }
         }
 	}
 }

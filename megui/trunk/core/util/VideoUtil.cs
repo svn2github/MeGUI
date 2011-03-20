@@ -197,7 +197,8 @@ namespace MeGUI
         /// gets chapters from IFO file and save them as Ogg Text File
         /// </summary>
         /// <param name="fileName"></param>
-        public static void getChaptersFromIFO(string fileName, bool qpfile)
+        /// <returns>chapter file name</returns>
+        public static String getChaptersFromIFO(string fileName, bool qpfile)
         {
             if (Path.GetExtension(fileName.ToLower()) == ".vob")
             {
@@ -207,7 +208,8 @@ namespace MeGUI
                 // we check the main IFO
                 if (fileNameNoPath.Substring(0, 4) == "VTS_")
                     ifoFile = fileName.Substring(0, fileName.LastIndexOf("_")) + "_0.IFO";
-                else ifoFile = Path.ChangeExtension(fileName, ".IFO");
+                else 
+                    ifoFile = Path.ChangeExtension(fileName, ".IFO");
 
                 if (File.Exists(ifoFile))
                 {
@@ -220,14 +222,15 @@ namespace MeGUI
                             pgc.SaveQpfile(Path.GetDirectoryName(ifoFile) + "\\" + fileNameNoPath.Substring(0, 6) + " - Chapter Information.qpf");
 
                         // save always this format - some users want it for the mux
-                        pgc.SaveText(Path.GetDirectoryName(ifoFile) + "\\" + fileNameNoPath.Substring(0, 6) + " - Chapter Information - OGG.txt");
+                        pgc.SaveText(Path.GetDirectoryName(ifoFile) + "\\" + fileNameNoPath.Substring(0, 6) + " - Chapter Information.txt");
+                        return Path.GetDirectoryName(ifoFile) + "\\" + fileNameNoPath.Substring(0, 6) + " - Chapter Information.txt";
                     }
                     else
                         MessageBox.Show("MeGUI cannot write on the disc " + Path.GetPathRoot(ifoFile) + " \n" +
                                         "Please, select another output path to save the chapters file...", "Configuration Incomplete", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
                 }
-            }            
+            }
+            return null;
         }
 
         /// <summary>
@@ -370,6 +373,9 @@ namespace MeGUI
                          file.EndsWith(".mpa") ||
                          file.EndsWith(".dts") ||
                          file.EndsWith(".wav") ||
+                         file.EndsWith(".ogg") ||
+                         file.EndsWith(".flac") ||
+                         file.EndsWith(".ra") ||
                          file.EndsWith(".avs") ||
                          file.EndsWith(".aac")) // It is the right track
 					{

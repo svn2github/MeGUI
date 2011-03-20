@@ -122,10 +122,14 @@ namespace MeGUI
                 dialog.Filter = filter;
                 dialog.FilterIndex = filterIndex;
                 dialog.Title = title;
-                if (!string.IsNullOrEmpty (Filename))
+                if (!string.IsNullOrEmpty(Filename))
                 {
-                    dialog.InitialDirectory = Path.GetDirectoryName (Filename);
-                    dialog.FileName = Path.GetFileName (Filename);
+                    try
+                    {
+                        dialog.InitialDirectory = Path.GetDirectoryName(Filename);
+                        dialog.FileName = Path.GetFileName(Filename);
+                    }
+                    catch { }
                 }
                 if (dialog.ShowDialog() == DialogResult.OK)
                     setFilename(dialog.FileName);

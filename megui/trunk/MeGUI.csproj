@@ -566,6 +566,10 @@
       <DependentUpon>OggVorbisConfigurationPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="packages\audio\vorbis\OggVorbisSettings.cs" />
+    <Compile Include="packages\demuxer\mkvextract\MkvExtract.cs" />
+    <Compile Include="packages\demuxer\mkvextract\MkvExtractJob.cs" />
+    <Compile Include="packages\demuxer\mkvextract\MkvInfo.cs" />
+    <Compile Include="packages\demuxer\mkvextract\MkvInfoTrack.cs" />
     <Compile Include="packages\muxer\avimuxgui\AMGMuxer.cs" />
     <Compile Include="packages\muxer\mkvmerge\MkvMergeMuxer.cs" />
     <Compile Include="packages\muxer\mp4box\MP4BoxMuxer.cs" />
@@ -1055,7 +1059,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="packages\demuxer\eac3to\" />
-    <Folder Include="packages\demuxer\mkvextract\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
