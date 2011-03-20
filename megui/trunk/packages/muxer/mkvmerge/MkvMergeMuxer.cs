@@ -140,12 +140,16 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                         heaac_flag = AudioUtil.getFlagFromAACStream(stream.path);
                         if (heaac_flag == 1)
                             sb.Append(" --aac-is-sbr "+ trackID + ":1");
+                        else if (heaac_flag == 0)
+                            sb.Append(" --aac-is-sbr " + trackID + ":0");
                     }
-                    if (stream.path.ToLower().EndsWith(".aac"))
+                    else if (stream.path.ToLower().EndsWith(".aac"))
                     {
                         heaac_flag = AudioUtil.getFlagFromAACStream(stream.path);
                         if (heaac_flag == 1)
                             sb.Append(" --aac-is-sbr 0:1");
+                        else if (heaac_flag == 0)
+                            sb.Append(" --aac-is-sbr 0");
                     }
                     if (!string.IsNullOrEmpty(stream.language))
                     {

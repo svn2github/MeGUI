@@ -77,7 +77,7 @@ namespace MeGUI
         public static int getFlagFromAACStream(string fileName)
         {
             MediaInfo info;
-            int flag = 0;
+            int flag = -1;
             try
             {
                 info = new MediaInfo(fileName);
@@ -86,6 +86,7 @@ namespace MeGUI
                     MediaInfoWrapper.AudioTrack atrack = info.Audio[0];
                     if (atrack.Format == "AAC")
                     {
+                        flag = 0;
                         if (atrack.FormatSettingsSBR == "Yes")
                         {
                             if (atrack.FormatSettingsPS == "Yes")

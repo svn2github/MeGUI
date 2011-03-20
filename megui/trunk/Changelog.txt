@@ -1,3 +1,4 @@
+1995 [MKV Muxer] added --aac-is-sbr in any case for AAC files in order to avoid a warning message
 1994 [Log] added timestamp to some log items
 1993 [Winamp] removed winamp encoder
 1992 [AudX] removed audx encoder
