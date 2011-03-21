@@ -83,6 +83,8 @@ namespace MeGUI
                         break;
                     }
                 }
+                this.device.Items.Clear();
+                this.device.Items.Add("Standard");
                 this.device.Items.AddRange(MainForm.Instance.MuxProvider.GetSupportedDevices((ContainerType)container.SelectedItem).ToArray());
                 this.device.SelectedIndex = 0;
                 foreach (object o in device.Items) // I know this is ugly, but using the DeviceOutputType doesn't work unless we're switching to manual serialization

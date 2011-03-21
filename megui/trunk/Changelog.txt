@@ -1,3 +1,4 @@
+1997 [AutoEncode] fixed duplicate device type entries
 1996 [MKV Demuxer] added mkvextract as mkv demuxer
      [Update] added mkvextract.exe and mkvinfo.exe to the file checks
      [One-Click] if the source is a MKV file the chapters will be extracted and reapplied to the output
