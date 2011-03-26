@@ -703,6 +703,14 @@ and a strong one 1.5 as value.</Advanced>
 		<Recommended>1.0</Recommended>
 		<Default>1.0</Default>
 	</aqstrength>
+	<creditsquant name="Credits Quantizer">
+		<Advanced>
+Applies this constant quantizer to the selected zones
+		</Advanced>
+		<Basic>Quantizer for Zones</Basic>
+		<Recommended></Recommended>
+		<Default>40</Default>
+	</creditsquant>
 	<profile name="AVC Profiles">
 		<Advanced>
 The H.264 standard includes the following sets of capabilities, which are referred to as profiles,

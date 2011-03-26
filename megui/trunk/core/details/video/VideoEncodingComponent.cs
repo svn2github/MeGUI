@@ -119,7 +119,6 @@ namespace MeGUI
         {
             if (!string.IsNullOrEmpty(videoInput.Filename))
                 openVideoFile(videoInput.Filename);
-            editZonesButton.Enabled = !string.IsNullOrEmpty(videoInput.Filename);
         }
 
         private void videoOutput_FileSelected(FileBar sender, FileBarEventArgs args)
@@ -394,7 +393,6 @@ namespace MeGUI
             this.VideoInput = "";
             this.VideoOutput = "";
             info.CreditsStartFrame = 0;
-            editZonesButton.Enabled = false;
             info.Zones = null;
         }
         #endregion
@@ -424,6 +422,12 @@ namespace MeGUI
 
         private void editZonesButton_Click(object sender, EventArgs e)
         {
+            if (String.IsNullOrEmpty(videoInput.Filename))
+            {
+                MessageBox.Show("Load an avisynth script first...", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
             ClosePlayer();
             ZonesWindow zw = new ZonesWindow(mainForm, VideoInput);
             zw.Zones = Info.Zones;

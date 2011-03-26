@@ -79,7 +79,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             return null;
         }
 
-        public static string genCommandline(string input, string output, Dar? d, int hres, int vres, x264Settings xs, Zone[] zones)
+        public static string genCommandline(string input, string output, Dar? d, int hres, int vres, x264Settings xs, Zone[] zones, LogItem log)
         {
             int qp;
             bool display = false;
@@ -856,26 +856,38 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             #endregion
 
             #region zones
-            if (zones != null && zones.Length > 0 && xs.CreditsQuantizer >= 1.0M)
+            if (zones != null && zones.Length > 0)
             {
-                sb.Append("--zones ");
+                StringBuilder sbZones = new StringBuilder();
                 foreach (Zone zone in zones)
                 {
-                    sb.Append(zone.startFrame + "," + zone.endFrame + ",");
+                    if (zone.startFrame >= zone.endFrame)
+                    {
+                        if (log != null)
+                            log.LogEvent("invalid zone ignored: start=" + zone.startFrame + " end=" + zone.endFrame, ImageType.Warning);
+                        continue;
+                    }
+
+                    sbZones.Append(zone.startFrame + "," + zone.endFrame + ",");
                     if (zone.mode == ZONEMODE.Quantizer)
                     {
-                        sb.Append("q=");
-                        sb.Append(zone.modifier + "/");
+                        sbZones.Append("q=");
+                        sbZones.Append(zone.modifier + "/");
                     }
                     if (zone.mode == ZONEMODE.Weight)
                     {
-                        sb.Append("b=");
+                        sbZones.Append("b=");
                         double mod = (double)zone.modifier / 100.0;
-                        sb.Append(mod.ToString(ci) + "/");
+                        sbZones.Append(mod.ToString(ci) + "/");
                     }
                 }
-                sb.Remove(sb.Length - 1, 1);
-                sb.Append(" ");
+                if (sbZones.Length > 0)
+                {
+                    sbZones.Remove(sbZones.Length - 1, 1);
+                    sb.Append("--zones ");
+                    sb.Append(sbZones);
+                    sb.Append(" ");
+                }
             }
             #endregion
 
@@ -906,7 +918,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
         protected override string Commandline
         {
             get {
-                return genCommandline(job.Input, job.Output, job.DAR, hres, vres, job.Settings as x264Settings, job.Zones);
+                return genCommandline(job.Input, job.Output, job.DAR, hres, vres, job.Settings as x264Settings, job.Zones, base.log);
             }
         }
 

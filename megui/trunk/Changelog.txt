@@ -1,3 +1,5 @@
+1998 [x264] invalid zones will be ignored. Bug #3233068
+     [Main Window] zones button is always enabled. Bug #3243634
 1997 [AutoEncode] fixed duplicate device type entries
 1996 [MKV Demuxer] added mkvextract as mkv demuxer
      [Update] added mkvextract.exe and mkvinfo.exe to the file checks
