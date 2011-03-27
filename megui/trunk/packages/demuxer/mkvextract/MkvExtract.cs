@@ -102,7 +102,7 @@ namespace MeGUI
                     if (oTrack.Type != MkvInfoTrackType.Audio && oTrack.Type != MkvInfoTrackType.Subtitle)
                         continue;
 
-                    sb.Append(" " + oTrack.TrackNumber + ":\"" + job.OutputPath + "\\" + oTrack.FileName + "\"");
+                    sb.Append(" " + oTrack.TrackID + ":\"" + job.OutputPath + "\\" + oTrack.FileName + "\"");
                 }
 
                 return sb.ToString();

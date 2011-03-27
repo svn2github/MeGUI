@@ -84,6 +84,7 @@ namespace MeGUI
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.videoGroupBox = new System.Windows.Forms.GroupBox();
+            this.chkKeepVideoTrack = new System.Windows.Forms.CheckBox();
             this.usechaptersmarks = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
             this.videoProfile = new MeGUI.core.gui.ConfigableProfilesControl();
@@ -93,7 +94,6 @@ namespace MeGUI
             this.goButton = new System.Windows.Forms.Button();
             this.openOnQueue = new System.Windows.Forms.CheckBox();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
-            this.chkKeepVideoTrack = new System.Windows.Forms.CheckBox();
             trackTabPage2 = new System.Windows.Forms.TabPage();
             label1 = new System.Windows.Forms.Label();
             trackTabPage2.SuspendLayout();
@@ -121,7 +121,7 @@ namespace MeGUI
             trackTabPage2.Location = new System.Drawing.Point(4, 22);
             trackTabPage2.Name = "trackTabPage2";
             trackTabPage2.Padding = new System.Windows.Forms.Padding(3);
-            trackTabPage2.Size = new System.Drawing.Size(433, 94);
+            trackTabPage2.Size = new System.Drawing.Size(172, 95);
             trackTabPage2.TabIndex = 1;
             trackTabPage2.Text = "Audio track 2";
             trackTabPage2.UseVisualStyleBackColor = true;
@@ -746,10 +746,21 @@ namespace MeGUI
             this.videoGroupBox.TabStop = false;
             this.videoGroupBox.Text = "Video Settings";
             // 
+            // chkKeepVideoTrack
+            // 
+            this.chkKeepVideoTrack.AutoSize = true;
+            this.chkKeepVideoTrack.Location = new System.Drawing.Point(303, 23);
+            this.chkKeepVideoTrack.Name = "chkKeepVideoTrack";
+            this.chkKeepVideoTrack.Size = new System.Drawing.Size(114, 17);
+            this.chkKeepVideoTrack.TabIndex = 40;
+            this.chkKeepVideoTrack.Text = "Keep original track";
+            this.chkKeepVideoTrack.UseVisualStyleBackColor = true;
+            this.chkKeepVideoTrack.CheckedChanged += new System.EventHandler(this.chkKeepVideoTrack_CheckedChanged);
+            // 
             // usechaptersmarks
             // 
             this.usechaptersmarks.AutoSize = true;
-            this.usechaptersmarks.Location = new System.Drawing.Point(168, 47);
+            this.usechaptersmarks.Location = new System.Drawing.Point(183, 47);
             this.usechaptersmarks.Name = "usechaptersmarks";
             this.usechaptersmarks.Size = new System.Drawing.Size(234, 17);
             this.usechaptersmarks.TabIndex = 39;
@@ -831,16 +842,6 @@ namespace MeGUI
             this.helpButton1.Name = "helpButton1";
             this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 32;
-            // 
-            // chkKeepVideoTrack
-            // 
-            this.chkKeepVideoTrack.AutoSize = true;
-            this.chkKeepVideoTrack.Location = new System.Drawing.Point(303, 23);
-            this.chkKeepVideoTrack.Name = "chkKeepVideoTrack";
-            this.chkKeepVideoTrack.Size = new System.Drawing.Size(114, 17);
-            this.chkKeepVideoTrack.TabIndex = 40;
-            this.chkKeepVideoTrack.Text = "Keep original track";
-            this.chkKeepVideoTrack.UseVisualStyleBackColor = true;
             // 
             // OneClickWindow
             // 

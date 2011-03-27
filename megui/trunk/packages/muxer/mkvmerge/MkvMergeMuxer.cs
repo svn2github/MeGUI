@@ -110,7 +110,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                     if (settings.Framerate.HasValue)
                         sb.Append(" --default-duration " + trackID + ":" + PrettyFormatting.ReplaceFPSValue(settings.Framerate.Value.ToString()) + "fps");
                     sb.Append(" \"--compression\" \"" + trackID + ":none\"");
-                    sb.Append(" -d " + trackID + " -A -S \"" + settings.VideoInput + "\"");                    
+                    sb.Append(" -d " + trackID + " --no-chapters -A -S \"" + settings.VideoInput + "\"");                    
                 }
                 
                 if (!string.IsNullOrEmpty(settings.MuxedInput))
@@ -174,7 +174,26 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                 {
                     MuxStream stream = (MuxStream)o;
                     trackID = 0; int nb = 0; int nt = 0;
-                    if (stream.path.ToLower().EndsWith(".idx"))
+                    if (stream.MuxOnlyInfo != null)
+                    {
+                        trackID = stream.MuxOnlyInfo.TrackID;
+                        if (!string.IsNullOrEmpty(stream.MuxOnlyInfo.Language))
+                            sb.Append(" --language " + trackID + ":" + stream.MuxOnlyInfo.Language);
+                        if (!string.IsNullOrEmpty(stream.MuxOnlyInfo.Name))
+                            sb.Append(" --track-name \"" + trackID + ":" + stream.MuxOnlyInfo.Name.Replace("\"", "\\\"") + "\"");
+                        if (stream.delay != 0)
+                            sb.AppendFormat(" --sync {0}:{1}ms", trackID, stream.delay);
+                        if (stream.MuxOnlyInfo.DefaultTrack)
+                            sb.Append(" --default-track \"" + trackID + ":yes\"");
+                        else
+                            sb.Append(" --default-track \"" + trackID + ":no\"");
+                        if (stream.MuxOnlyInfo.ForcedTrack)
+                            sb.Append(" --forced-track \"" + trackID + ":yes\"");
+                        else
+                            sb.Append(" --forced-track \"" + trackID + ":no\"");
+                        sb.Append(" -s " + trackID + " -D -A -T --no-global-tags --no-chapters \"" + stream.MuxOnlyInfo.InputFile + "\"");
+                    }
+                    else if (stream.path.ToLower().EndsWith(".idx"))
                     {
                         List<SubtitleInfo> subTracks;
                         idxReader.readFileProperties(stream.path, out subTracks);
@@ -213,7 +232,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                                             break;
                                         }
                                     }
-                                }  
+                                }
                                 else sb.Append(" --language " + "0:" + strack.Name);
                                 if (!string.IsNullOrEmpty(stream.name))
                                     sb.Append(" --track-name \"" + "0:" + stream.name.Replace("\"", "\\\"") + "\"");
@@ -234,7 +253,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                         foreach (SubtitleInfo strack in subTracks)
                         {
                             if (nb > 0)
-                                 sb.Append("," + strack.Index.ToString());
+                                sb.Append("," + strack.Index.ToString());
                             else sb.Append("0");
                             ++nb;
                         }

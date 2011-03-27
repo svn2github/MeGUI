@@ -67,7 +67,7 @@ namespace MeGUI
                 else
                     TrackInfo.Language = Language;
             }
-            return new MuxStream(Output, TrackInfo, 0, false, false); 
+            return new MuxStream(Output, TrackInfo, 0, false, false, null); 
             // no delay correction is required since the audio job will fix the delay
         }
 

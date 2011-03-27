@@ -32,9 +32,6 @@ namespace MeGUI.packages.tools.oneclick
             this.otherGroupBox = new System.Windows.Forms.GroupBox();
             this.keepInputResolution = new System.Windows.Forms.CheckBox();
             this.autoCrop = new System.Windows.Forms.CheckBox();
-            this.avsProfile = new MeGUI.core.gui.ConfigableProfilesControl();
-            this.splitSize = new MeGUI.core.gui.TargetSizeSCBox();
-            this.fileSize = new MeGUI.core.gui.TargetSizeSCBox();
             this.preprocessVideo = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
             this.filesizeLabel = new System.Windows.Forms.Label();
@@ -45,8 +42,6 @@ namespace MeGUI.packages.tools.oneclick
             this.extraGroupbox = new System.Windows.Forms.GroupBox();
             this.usechaptersmarks = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.audioProfile = new MeGUI.core.gui.ConfigableProfilesControl();
-            this.videoProfile = new MeGUI.core.gui.ConfigableProfilesControl();
             this.audioProfileLabel = new System.Windows.Forms.Label();
             this.dontEncodeAudio = new System.Windows.Forms.CheckBox();
             this.videoCodecLabel = new System.Windows.Forms.Label();
@@ -55,6 +50,12 @@ namespace MeGUI.packages.tools.oneclick
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.avsProfile = new MeGUI.core.gui.ConfigableProfilesControl();
+            this.splitSize = new MeGUI.core.gui.TargetSizeSCBox();
+            this.fileSize = new MeGUI.core.gui.TargetSizeSCBox();
+            this.audioProfile = new MeGUI.core.gui.ConfigableProfilesControl();
+            this.videoProfile = new MeGUI.core.gui.ConfigableProfilesControl();
+            this.chkDontEncodeVideo = new System.Windows.Forms.CheckBox();
             label3 = new System.Windows.Forms.Label();
             this.otherGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.horizontalResolution)).BeginInit();
@@ -99,7 +100,7 @@ namespace MeGUI.packages.tools.oneclick
             // keepInputResolution
             // 
             this.keepInputResolution.AutoSize = true;
-            this.keepInputResolution.Location = new System.Drawing.Point(60, 103);
+            this.keepInputResolution.Location = new System.Drawing.Point(110, 104);
             this.keepInputResolution.Name = "keepInputResolution";
             this.keepInputResolution.Size = new System.Drawing.Size(242, 17);
             this.keepInputResolution.TabIndex = 42;
@@ -118,38 +119,6 @@ namespace MeGUI.packages.tools.oneclick
             this.autoCrop.TabIndex = 41;
             this.autoCrop.Text = "AutoCrop";
             this.autoCrop.UseVisualStyleBackColor = true;
-            // 
-            // avsProfile
-            // 
-            this.avsProfile.Location = new System.Drawing.Point(109, 123);
-            this.avsProfile.Name = "avsProfile";
-            this.avsProfile.ProfileSet = "AviSynth";
-            this.avsProfile.Size = new System.Drawing.Size(298, 22);
-            this.avsProfile.TabIndex = 39;
-            // 
-            // splitSize
-            // 
-            this.splitSize.CustomSizes = new MeGUI.core.util.FileSize[0];
-            this.splitSize.Location = new System.Drawing.Point(110, 45);
-            this.splitSize.MaximumSize = new System.Drawing.Size(1000, 29);
-            this.splitSize.MinimumSize = new System.Drawing.Size(64, 29);
-            this.splitSize.Name = "splitSize";
-            this.splitSize.NullString = "Dont split";
-            this.splitSize.SelectedIndex = 0;
-            this.splitSize.Size = new System.Drawing.Size(208, 29);
-            this.splitSize.TabIndex = 38;
-            // 
-            // fileSize
-            // 
-            this.fileSize.CustomSizes = new MeGUI.core.util.FileSize[0];
-            this.fileSize.Location = new System.Drawing.Point(110, 19);
-            this.fileSize.MaximumSize = new System.Drawing.Size(1000, 29);
-            this.fileSize.MinimumSize = new System.Drawing.Size(64, 29);
-            this.fileSize.Name = "fileSize";
-            this.fileSize.NullString = "Don\'t care";
-            this.fileSize.SelectedIndex = 0;
-            this.fileSize.Size = new System.Drawing.Size(208, 29);
-            this.fileSize.TabIndex = 38;
             // 
             // preprocessVideo
             // 
@@ -233,6 +202,7 @@ namespace MeGUI.packages.tools.oneclick
             // 
             // extraGroupbox
             // 
+            this.extraGroupbox.Controls.Add(this.chkDontEncodeVideo);
             this.extraGroupbox.Controls.Add(this.usechaptersmarks);
             this.extraGroupbox.Controls.Add(this.label1);
             this.extraGroupbox.Controls.Add(this.audioProfile);
@@ -251,7 +221,7 @@ namespace MeGUI.packages.tools.oneclick
             // usechaptersmarks
             // 
             this.usechaptersmarks.AutoSize = true;
-            this.usechaptersmarks.Location = new System.Drawing.Point(168, 77);
+            this.usechaptersmarks.Location = new System.Drawing.Point(89, 47);
             this.usechaptersmarks.Name = "usechaptersmarks";
             this.usechaptersmarks.Size = new System.Drawing.Size(229, 17);
             this.usechaptersmarks.TabIndex = 40;
@@ -260,34 +230,18 @@ namespace MeGUI.packages.tools.oneclick
             // 
             // label1
             // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.Location = new System.Drawing.Point(16, 110);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(396, 31);
             this.label1.TabIndex = 29;
             this.label1.Text = "Note: unless changed in the One Click Window, these audio settings will be used f" +
-                "or all selected tracks.";
-            // 
-            // audioProfile
-            // 
-            this.audioProfile.Location = new System.Drawing.Point(123, 47);
-            this.audioProfile.Name = "audioProfile";
-            this.audioProfile.ProfileSet = "Audio";
-            this.audioProfile.Size = new System.Drawing.Size(285, 22);
-            this.audioProfile.TabIndex = 39;
-            // 
-            // videoProfile
-            // 
-            this.videoProfile.Location = new System.Drawing.Point(123, 19);
-            this.videoProfile.Name = "videoProfile";
-            this.videoProfile.ProfileSet = "Video";
-            this.videoProfile.Size = new System.Drawing.Size(285, 22);
-            this.videoProfile.TabIndex = 39;
+    "or all selected tracks.";
             // 
             // audioProfileLabel
             // 
-            this.audioProfileLabel.Location = new System.Drawing.Point(16, 52);
+            this.audioProfileLabel.Location = new System.Drawing.Point(5, 86);
             this.audioProfileLabel.Name = "audioProfileLabel";
             this.audioProfileLabel.Size = new System.Drawing.Size(100, 13);
             this.audioProfileLabel.TabIndex = 27;
@@ -297,7 +251,7 @@ namespace MeGUI.packages.tools.oneclick
             // 
             this.dontEncodeAudio.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.dontEncodeAudio.AutoSize = true;
-            this.dontEncodeAudio.Location = new System.Drawing.Point(28, 77);
+            this.dontEncodeAudio.Location = new System.Drawing.Point(292, 85);
             this.dontEncodeAudio.Name = "dontEncodeAudio";
             this.dontEncodeAudio.Size = new System.Drawing.Size(119, 17);
             this.dontEncodeAudio.TabIndex = 25;
@@ -306,7 +260,7 @@ namespace MeGUI.packages.tools.oneclick
             // 
             // videoCodecLabel
             // 
-            this.videoCodecLabel.Location = new System.Drawing.Point(16, 19);
+            this.videoCodecLabel.Location = new System.Drawing.Point(6, 23);
             this.videoCodecLabel.Name = "videoCodecLabel";
             this.videoCodecLabel.Size = new System.Drawing.Size(90, 13);
             this.videoCodecLabel.TabIndex = 17;
@@ -327,7 +281,7 @@ namespace MeGUI.packages.tools.oneclick
             this.containerTypeList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.containerTypeList.Location = new System.Drawing.Point(3, 59);
             this.containerTypeList.Name = "containerTypeList";
-            this.containerTypeList.Size = new System.Drawing.Size(419, 259);
+            this.containerTypeList.Size = new System.Drawing.Size(419, 268);
             this.containerTypeList.TabIndex = 0;
             // 
             // tabControl1
@@ -364,6 +318,65 @@ namespace MeGUI.packages.tools.oneclick
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Container type";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // avsProfile
+            // 
+            this.avsProfile.Location = new System.Drawing.Point(109, 123);
+            this.avsProfile.Name = "avsProfile";
+            this.avsProfile.ProfileSet = "AviSynth";
+            this.avsProfile.Size = new System.Drawing.Size(298, 22);
+            this.avsProfile.TabIndex = 39;
+            // 
+            // splitSize
+            // 
+            this.splitSize.CustomSizes = new MeGUI.core.util.FileSize[0];
+            this.splitSize.Location = new System.Drawing.Point(110, 45);
+            this.splitSize.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.splitSize.MinimumSize = new System.Drawing.Size(64, 29);
+            this.splitSize.Name = "splitSize";
+            this.splitSize.NullString = "Dont split";
+            this.splitSize.SelectedIndex = 0;
+            this.splitSize.Size = new System.Drawing.Size(208, 29);
+            this.splitSize.TabIndex = 38;
+            // 
+            // fileSize
+            // 
+            this.fileSize.CustomSizes = new MeGUI.core.util.FileSize[0];
+            this.fileSize.Location = new System.Drawing.Point(110, 19);
+            this.fileSize.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.fileSize.MinimumSize = new System.Drawing.Size(64, 29);
+            this.fileSize.Name = "fileSize";
+            this.fileSize.NullString = "Don\'t care";
+            this.fileSize.SelectedIndex = 0;
+            this.fileSize.Size = new System.Drawing.Size(208, 29);
+            this.fileSize.TabIndex = 38;
+            // 
+            // audioProfile
+            // 
+            this.audioProfile.Location = new System.Drawing.Point(88, 82);
+            this.audioProfile.Name = "audioProfile";
+            this.audioProfile.ProfileSet = "Audio";
+            this.audioProfile.Size = new System.Drawing.Size(199, 22);
+            this.audioProfile.TabIndex = 39;
+            // 
+            // videoProfile
+            // 
+            this.videoProfile.Location = new System.Drawing.Point(88, 19);
+            this.videoProfile.Name = "videoProfile";
+            this.videoProfile.ProfileSet = "Video";
+            this.videoProfile.Size = new System.Drawing.Size(199, 22);
+            this.videoProfile.TabIndex = 39;
+            // 
+            // chkDontEncodeVideo
+            // 
+            this.chkDontEncodeVideo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkDontEncodeVideo.AutoSize = true;
+            this.chkDontEncodeVideo.Location = new System.Drawing.Point(292, 23);
+            this.chkDontEncodeVideo.Name = "chkDontEncodeVideo";
+            this.chkDontEncodeVideo.Size = new System.Drawing.Size(119, 17);
+            this.chkDontEncodeVideo.TabIndex = 41;
+            this.chkDontEncodeVideo.Text = "Don\'t encode video";
+            this.chkDontEncodeVideo.CheckedChanged += new System.EventHandler(this.chkDontEncodeVideo_CheckedChanged);
             // 
             // OneClickConfigPanel
             // 
@@ -412,5 +425,6 @@ namespace MeGUI.packages.tools.oneclick
         private System.Windows.Forms.CheckBox autoCrop;
         private System.Windows.Forms.CheckBox keepInputResolution;
         private System.Windows.Forms.CheckBox usechaptersmarks;
+        private System.Windows.Forms.CheckBox chkDontEncodeVideo;
     }
 }

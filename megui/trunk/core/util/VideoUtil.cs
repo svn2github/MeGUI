@@ -451,7 +451,8 @@ namespace MeGUI
 		public LogItem eliminatedDuplicateFilenames(ref string videoOutput, ref string muxedOutput, AudioJob[] aStreams)
 		{
             LogItem log = new LogItem("Eliminating duplicate filenames");
-            videoOutput = Path.GetFullPath(videoOutput);
+            if (!String.IsNullOrEmpty(videoOutput))
+                videoOutput = Path.GetFullPath(videoOutput);
             muxedOutput = Path.GetFullPath(muxedOutput);
 
             log.LogValue("Video output file", videoOutput);
@@ -615,9 +616,11 @@ namespace MeGUI
 
         #region new stuff
         public JobChain GenerateJobSeries(VideoStream video, string muxedOutput, AudioJob[] audioStreams,
-            MuxStream[] subtitles, string chapters, FileSize? desiredSize, FileSize? splitSize, ContainerType container, bool prerender, MuxStream[] muxOnlyAudio, LogItem log, string deviceType, Zone[] zones)
+            MuxStream[] subtitles, string chapters, FileSize? desiredSize, FileSize? splitSize, 
+            ContainerType container, bool prerender, MuxStream[] muxOnlyAudio, LogItem log, string deviceType, 
+            Zone[] zones, MkvInfoTrack videoTrackToMux)
         {
-            if (desiredSize.HasValue)
+            if (desiredSize.HasValue && videoTrackToMux == null)
             {
                 if (video.Settings.EncodingMode != 4 && video.Settings.EncodingMode != 8) // no automated 2/3 pass
                 {
@@ -631,11 +634,17 @@ namespace MeGUI
             fixFileNameExtensions(video, audioStreams, container);
             string videoOutput = video.Output;
             log.Add(eliminatedDuplicateFilenames(ref videoOutput, ref muxedOutput, audioStreams));
-            video.Output = videoOutput;
-
-            JobChain vjobs = jobUtil.prepareVideoJob(video.Input, video.Output, video.Settings, video.DAR, prerender, true, zones);
-
-            if (vjobs == null) return null;
+            
+            JobChain vjobs = null;
+            if (videoTrackToMux != null)
+                video.Output = videoTrackToMux.InputFile;
+            else
+            {
+                video.Output = videoOutput;
+                vjobs = jobUtil.prepareVideoJob(video.Input, video.Output, video.Settings, video.DAR, prerender, true, zones);
+                if (vjobs == null) return null;
+            }
+            
             /* Here, we guess the types of the files based on extension.
              * This is guaranteed to work with MeGUI-encoded files, because
              * the extension will always be recognised. For non-MeGUI files,
@@ -679,13 +688,14 @@ namespace MeGUI
             }
 
             List<string> inputsToDelete = new List<string>();
-            inputsToDelete.Add(video.Output);
+            if (videoTrackToMux == null)
+                inputsToDelete.Add(video.Output);
             inputsToDelete.AddRange(Array.ConvertAll<AudioJob, string>(audioStreams, delegate(AudioJob a) { return a.Output; }));
 
-            JobChain muxJobs = this.jobUtil.GenerateMuxJobs(video, video.Framerate, allAudioToMux.ToArray(), allInputAudioTypes.ToArray(),
+            JobChain muxJobs = jobUtil.GenerateMuxJobs(video, video.Framerate, allAudioToMux.ToArray(), allInputAudioTypes.ToArray(),
                 subtitles, allInputSubtitleTypes.ToArray(), chapters, chapterInputType, container, muxedOutput, splitSize, inputsToDelete, deviceType, deviceOutputType);
 
-            if (desiredSize.HasValue)
+            if (desiredSize.HasValue && videoTrackToMux == null)
             {
                 BitrateCalculationInfo b = new BitrateCalculationInfo();
                 
@@ -700,8 +710,10 @@ namespace MeGUI
                 ((VideoJob)vjobs.Jobs[0].Job).BitrateCalculationInfo = b;
             }
 
-            return 
-                new SequentialChain(
+            if (videoTrackToMux != null)
+                return new SequentialChain(new ParallelChain((Job[])audioStreams), new SequentialChain(muxJobs));
+            else
+                return new SequentialChain(
                     new ParallelChain((Job[])audioStreams),
                     new SequentialChain(vjobs),
                     new SequentialChain(muxJobs));
@@ -714,7 +726,11 @@ namespace MeGUI
             {
                 audioCodecs[i] = audioStreams[i].Settings.EncoderType;
             }
-            MuxPath path = mainForm.MuxProvider.GetMuxPath(video.Settings.EncoderType, audioCodecs, container);
+            MuxPath path;
+            if (video.Settings == null)
+                path = mainForm.MuxProvider.GetMuxPath(VideoEncoderType.X264, audioCodecs, container);
+            else
+                path = mainForm.MuxProvider.GetMuxPath(video.Settings.EncoderType, audioCodecs, container);
             if (path == null)
                 return;
             List<AudioType> audioTypes = new List<AudioType>();

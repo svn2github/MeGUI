@@ -47,21 +47,23 @@ namespace MeGUI.core.details
         public int delay;
         public bool bDefaultTrack;
         public bool bForceTrack;
+        public MkvInfoTrack MuxOnlyInfo;
 
-        public MuxStream(string path, TrackInfo info, int delay, bool bDefaultTrack, bool bForceTrack)
+        public MuxStream(string path, TrackInfo info, int delay, bool bDefaultTrack, bool bForceTrack, MkvInfoTrack MuxOnlyInfo)
         {
             this.path = path;
             TrackInfo = info;
             this.delay = delay;
             this.bDefaultTrack = bDefaultTrack;
             this.bForceTrack = bForceTrack;
+            this.MuxOnlyInfo = MuxOnlyInfo;
         }
 
         public MuxStream(string path, string language, string name, int delay, bool bDefaultTrack, bool bForceTrack)
             :
-            this(path, new TrackInfo(language, name), delay, bDefaultTrack, bForceTrack) { }
+            this(path, new TrackInfo(language, name), delay, bDefaultTrack, bForceTrack, null) { }
 
-        public MuxStream() : this(null, new TrackInfo(), 0, false, false) { }
+        public MuxStream() : this(null, new TrackInfo(), 0, false, false, null) { }
 
         public string language
         {

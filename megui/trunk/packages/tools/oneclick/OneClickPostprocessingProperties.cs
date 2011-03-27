@@ -43,7 +43,9 @@ namespace MeGUI
 		private double customAR;
 		private string chapterFile, finalOutput, aviSynthScript, deviceType;
         private List<string> filesToDelete;
-        private List<MkvInfoTrack> _mkvInfoTrack;
+        private List<MkvInfoTrack> _mkvAudioTrack;
+        private List<MkvInfoTrack> _subtitleTrack;
+        private MkvInfoTrack _videoTrackToMux;
 
 		public OneClickPostprocessingProperties()
 		{
@@ -53,7 +55,7 @@ namespace MeGUI
             keepInputResolution = false;
             ar = null;
             avsSettings = new AviSynthSettings();
-			horizontalOutputResolution = 640;
+			horizontalOutputResolution = 720;
 			customAR = 1.0;
 			container = MeGUI.ContainerType.MKV;
             outputSize = null;
@@ -62,7 +64,9 @@ namespace MeGUI
             deviceType = null;
             useChapterMarks = false;
             filesToDelete = new List<string>();
-            _mkvInfoTrack = new List<MkvInfoTrack>();
+            _mkvAudioTrack = new List<MkvInfoTrack>();
+            _subtitleTrack = new List<MkvInfoTrack>();
+            _videoTrackToMux = null;
 		}
 
         public AudioJob[] AudioJobs;
@@ -236,10 +240,25 @@ namespace MeGUI
             set { filesToDelete = value; }
         }
 
-        public List<MkvInfoTrack> MkvAudioFiles
+        public List<MkvInfoTrack> MkvAudioTracks
         {
-            get { return _mkvInfoTrack; }
-            set { _mkvInfoTrack = value; }
+            get { return _mkvAudioTrack; }
+            set { _mkvAudioTrack = value; }
+        }
+
+        public List<MkvInfoTrack> SubtitleTracks
+        {
+            get { return _subtitleTrack; }
+            set { _subtitleTrack = value; }
+        }
+
+        /// <summary>
+        /// gets / sets the video track for mux only
+        /// </summary>
+        public MkvInfoTrack VideoTrackToMux
+        {
+            get { return _videoTrackToMux; }
+            set { _videoTrackToMux = value; }
         }
 	}
 }

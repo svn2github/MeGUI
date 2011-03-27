@@ -140,11 +140,11 @@ namespace MeGUI
 
                 List<string> arrAudioFilesDelete = new List<string>();
                 audioFiles = new Dictionary<int, string>();
-                if (job.PostprocessingProperties.MkvAudioFiles.Count > 0)
+                if (job.PostprocessingProperties.MkvAudioTracks.Count > 0)
                 {
-                    foreach (MkvInfoTrack oTrack in job.PostprocessingProperties.MkvAudioFiles)
+                    foreach (MkvInfoTrack oTrack in job.PostprocessingProperties.MkvAudioTracks)
                     {
-                        audioFiles.Add(oTrack.TrackNumber, Path.GetDirectoryName(job.PostprocessingProperties.FinalOutput) + "\\" + oTrack.FileName);
+                        audioFiles.Add(oTrack.TrackID, Path.GetDirectoryName(job.PostprocessingProperties.FinalOutput) + "\\" + oTrack.FileName);
                         arrAudioFilesDelete.Add(Path.GetDirectoryName(job.PostprocessingProperties.FinalOutput) + "\\" + oTrack.FileName);
                     }
                 }
@@ -158,31 +158,40 @@ namespace MeGUI
                 _log.LogEvent("Desired size: " + job.PostprocessingProperties.OutputSize);
                 _log.LogEvent("Split size: " + job.PostprocessingProperties.Splitting);
 
-                VideoCodecSettings videoSettings = job.PostprocessingProperties.VideoSettings;
-
-                string videoOutput = Path.Combine(Path.GetDirectoryName(job.IndexFile),
-                    Path.GetFileNameWithoutExtension(job.IndexFile) + "_Video");
-                string muxedOutput = job.PostprocessingProperties.FinalOutput;
-
-                //Open the video
-                Dar? dar;
-                string videoInput = openVideo(job.IndexFile, job.PostprocessingProperties.DAR,
-                    job.PostprocessingProperties.HorizontalOutputResolution, job.PostprocessingProperties.SignalAR, _log,
-                    job.PostprocessingProperties.AvsSettings, job.PostprocessingProperties.AutoDeinterlace, videoSettings, out dar,
-                    job.PostprocessingProperties.AutoCrop, job.PostprocessingProperties.KeepInputResolution,
-                    job.PostprocessingProperties.UseChaptersMarks);
-
+                string videoInput = String.Empty;
                 VideoStream myVideo = new VideoStream();
-                ulong length;
-                double framerate;
-                JobUtil.getInputProperties(out length, out framerate, videoInput);
-                myVideo.Input = videoInput;
-                myVideo.Output = videoOutput;
-                myVideo.NumberOfFrames = length;
-                myVideo.Framerate = (decimal)framerate;
-                myVideo.DAR = dar;
-                myVideo.VideoType = new MuxableType((new VideoEncoderProvider().GetSupportedOutput(videoSettings.EncoderType))[0], videoSettings.Codec);
-                myVideo.Settings = videoSettings;
+
+                VideoCodecSettings videoSettings = job.PostprocessingProperties.VideoSettings;
+                if (job.PostprocessingProperties.VideoTrackToMux == null)
+                {
+                    //Open the video
+                    Dar? dar;
+                    videoInput = openVideo(job.IndexFile, job.PostprocessingProperties.DAR,
+                        job.PostprocessingProperties.HorizontalOutputResolution, job.PostprocessingProperties.SignalAR, _log,
+                        job.PostprocessingProperties.AvsSettings, job.PostprocessingProperties.AutoDeinterlace, videoSettings, out dar,
+                        job.PostprocessingProperties.AutoCrop, job.PostprocessingProperties.KeepInputResolution,
+                        job.PostprocessingProperties.UseChaptersMarks);
+
+                    ulong length;
+                    double framerate;
+                    JobUtil.getInputProperties(out length, out framerate, videoInput);
+                    myVideo.Input = videoInput;
+                    myVideo.Output = Path.Combine(Path.GetDirectoryName(job.IndexFile),
+                        Path.GetFileNameWithoutExtension(job.IndexFile) + "_Video");
+                    myVideo.NumberOfFrames = length;
+                    myVideo.Framerate = (decimal)framerate;
+                    myVideo.DAR = dar;
+                    myVideo.VideoType = new MuxableType((new VideoEncoderProvider().GetSupportedOutput(videoSettings.EncoderType))[0], videoSettings.Codec);
+                    myVideo.Settings = videoSettings;
+                }
+                else
+                {
+                    myVideo.Output = job.PostprocessingProperties.VideoTrackToMux.FileName;
+                    myVideo.Framerate = job.PostprocessingProperties.VideoTrackToMux.FPS;
+                    videoSettings.VideoName = job.PostprocessingProperties.VideoTrackToMux.Name;
+                    myVideo.Settings = videoSettings;
+                }
+
                 List<string> intermediateFiles = new List<string>();
                 intermediateFiles.Add(videoInput);
                 intermediateFiles.Add(job.IndexFile);
@@ -196,18 +205,33 @@ namespace MeGUI
                 foreach (string file in job.PostprocessingProperties.FilesToDelete)
                     intermediateFiles.Add(file);
 
-                if (!string.IsNullOrEmpty(videoInput))
+                if (!string.IsNullOrEmpty(videoInput) || job.PostprocessingProperties.VideoTrackToMux != null)
                 {
-                    //Create empty subtitles for muxing (subtitles not supported in one click mode)
-                    MuxStream[] subtitles = new MuxStream[0];
+                    MuxStream[] subtitles;
+                    if (job.PostprocessingProperties.SubtitleTracks.Count == 0)
+                    {
+                        //Create empty subtitles for muxing
+                        subtitles = new MuxStream[0];
+                    }
+                    else
+                    {
+                        subtitles = new MuxStream[job.PostprocessingProperties.SubtitleTracks.Count];
+                        int i = 0;
+                        foreach (MkvInfoTrack oTrack in job.PostprocessingProperties.SubtitleTracks)
+                        {
+                            subtitles[i] = new MuxStream(oTrack.FileName, new TrackInfo(oTrack.Language, oTrack.Name), 0, oTrack.DefaultTrack, oTrack.ForcedTrack, oTrack);
+                            i++;
+                        }
+                    }
 
                     if (job.PostprocessingProperties.Container == ContainerType.AVI)
                         job.PostprocessingProperties.ChapterFile = null;
 
-                    JobChain c = vUtil.GenerateJobSeries(myVideo, muxedOutput, job.PostprocessingProperties.AudioJobs, subtitles,
-                        job.PostprocessingProperties.ChapterFile, job.PostprocessingProperties.OutputSize,
+                    JobChain c = vUtil.GenerateJobSeries(myVideo, job.PostprocessingProperties.FinalOutput, job.PostprocessingProperties.AudioJobs, 
+                        subtitles, job.PostprocessingProperties.ChapterFile, job.PostprocessingProperties.OutputSize,
                         job.PostprocessingProperties.Splitting, job.PostprocessingProperties.Container,
-                        job.PostprocessingProperties.PrerenderJob, job.PostprocessingProperties.DirectMuxAudio, _log, job.PostprocessingProperties.DeviceOutputType, null);
+                        job.PostprocessingProperties.PrerenderJob, job.PostprocessingProperties.DirectMuxAudio,
+                        _log, job.PostprocessingProperties.DeviceOutputType, null, job.PostprocessingProperties.VideoTrackToMux);
                     if (c == null)
                     {
                         _log.Warn("Job creation aborted");

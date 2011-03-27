@@ -156,14 +156,14 @@ namespace MeGUI
                 if (strLine.StartsWith("+") || strLine.StartsWith(" +"))
                 {
                     // new track start?
-                    if (oTempTrack.TrackNumber != -1)
+                    if (oTempTrack.TrackID != -1)
                         _oTracks.Add(oTempTrack);
                     oTempTrack = new MkvInfoTrack(_strFile);
                 }
                 
                 if (strLine.StartsWith("  + Track number: "))
                 {
-                    oTempTrack.TrackNumber = Int32.Parse(strLine.Substring(18));
+                    oTempTrack.TrackID = Int32.Parse(strLine.Substring(18));
                 }
                 else if (strLine.StartsWith("  + Track type: "))
                 {
@@ -201,6 +201,17 @@ namespace MeGUI
                 else if (strLine.Equals("+ Chapters"))
                 {
                     _bHasChapters = true;
+                }
+                else if (strLine.StartsWith("  + Default duration: "))
+                {
+                    if (oTempTrack.Type != MkvInfoTrackType.Video)
+                        continue;
+
+                    String[] fps = strLine.Split(' ');
+                    if (fps.Length < 7)
+                        continue;
+
+                    oTempTrack.FPS = decimal.Parse(fps[6].Substring(1), new System.Globalization.CultureInfo("en-us"));
                 }
             }
         }

@@ -85,6 +85,7 @@ namespace MeGUI.packages.tools.oneclick
                 val.AvsProfileName = avsProfile.SelectedProfile.FQName;
                 val.ContainerCandidates = ContainerCandidates;
                 val.DontEncodeAudio = dontEncodeAudio.Checked;
+                val.DontEncodeVideo = chkDontEncodeVideo.Checked;
                 val.Filesize = fileSize.Value;
                 val.OutputResolution = (long)horizontalResolution.Value;
                 val.PrerenderVideo = preprocessVideo.Checked;
@@ -103,6 +104,7 @@ namespace MeGUI.packages.tools.oneclick
                 avsProfile.SetProfileNameOrWarn(value.AvsProfileName);
                 ContainerCandidates = value.ContainerCandidates; 
                 dontEncodeAudio.Checked = value.DontEncodeAudio;
+                chkDontEncodeVideo.Checked = value.DontEncodeVideo;
                 fileSize.Value = value.Filesize;
                 horizontalResolution.Value = value.OutputResolution;
                 preprocessVideo.Checked = value.PrerenderVideo;
@@ -116,11 +118,6 @@ namespace MeGUI.packages.tools.oneclick
         }
 
         #endregion
-
-        private void dontEncodeAudio_CheckedChanged(object sender, EventArgs e)
-        {
-            audioProfile.Enabled = !dontEncodeAudio.Checked;
-        }
 
         private string[] ContainerCandidates
         {
@@ -168,10 +165,21 @@ namespace MeGUI.packages.tools.oneclick
             if (Settings.VideoProfileName.StartsWith("x264"))
                 usechaptersmarks.Enabled = true;
             else
-            {
                 usechaptersmarks.Enabled = false;
-                usechaptersmarks.Checked = usechaptersmarks.Enabled;
-            }
+        }
+
+        private void chkDontEncodeVideo_CheckedChanged(object sender, EventArgs e)
+        {
+            videoProfile.Enabled = !chkDontEncodeVideo.Checked;
+            if (Settings.VideoProfileName.StartsWith("x264") && videoProfile.Enabled)
+                usechaptersmarks.Enabled = true;
+            else
+                usechaptersmarks.Enabled = false;
+        }
+
+        private void dontEncodeAudio_CheckedChanged(object sender, EventArgs e)
+        {
+            audioProfile.Enabled = !dontEncodeAudio.Checked;
         }
     }
 }

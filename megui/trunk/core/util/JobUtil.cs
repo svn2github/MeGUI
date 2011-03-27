@@ -118,9 +118,10 @@ namespace MeGUI
             }
         }
 
-        public JobChain GenerateMuxJobs(VideoStream video, decimal? framerate, MuxStream[] audioStreamsArray, MuxableType[] audioTypes,
-            MuxStream[] subtitleStreamsArray, MuxableType[] subTypes,
-            string chapterFile, MuxableType chapterInputType, ContainerType container, string output, FileSize? splitSize, List<string> inputsToDelete, string deviceType, MuxableType deviceOutputType)
+        public JobChain GenerateMuxJobs(VideoStream video, decimal? framerate, MuxStream[] audioStreamsArray, 
+            MuxableType[] audioTypes, MuxStream[] subtitleStreamsArray, MuxableType[] subTypes,
+            string chapterFile, MuxableType chapterInputType, ContainerType container, string output, 
+            FileSize? splitSize, List<string> inputsToDelete, string deviceType, MuxableType deviceOutputType)
         {
             Debug.Assert(splitSize == null || splitSize.Value != FileSize.Empty);
 
@@ -152,12 +153,15 @@ namespace MeGUI
                     filesToDeleteThisJob.Add(previousOutput);
                 }
 
+                if (video.Settings != null)
+                {
+                    mjob.NbOfBFrames = video.Settings.NbBframes;
+                    mjob.Codec = video.Settings.Codec.ToString();
+                    mjob.Settings.VideoName = video.Settings.VideoName;
+                }
                 mjob.NbOfFrames = video.NumberOfFrames;
-                mjob.NbOfBFrames = video.Settings.NbBframes;
-                mjob.Codec = video.Settings.Codec.ToString();
                 string fpsFormated = String.Format("{0:##.###}", framerate); // this formating is required for mkvmerge at least to avoid fps rounding error
                 mjob.Settings.Framerate = Convert.ToDecimal(fpsFormated); 
-                mjob.Settings.VideoName = video.Settings.VideoName;
 
                 string tempOutputName = Path.Combine(Path.GetDirectoryName(output),
                     Path.GetFileNameWithoutExtension(output) + tempNumber + ".");

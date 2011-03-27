@@ -84,6 +84,13 @@ namespace MeGUI
             set { dontEncodeAudio = value; }
         }
 
+        private bool dontEncodeVideo;
+        public bool DontEncodeVideo
+        {
+            get { return dontEncodeVideo; }
+            set { dontEncodeVideo = value; }
+        }
+
         private bool signalAR;
         public bool SignalAR
         {
@@ -177,6 +184,7 @@ namespace MeGUI
             AutomaticDeinterlacing = true;
             PrerenderVideo = false;
 			DontEncodeAudio = false;
+            DontEncodeVideo = false;
 			SignalAR = false;
             AutoCrop = true;
             KeepInputResolution = false;

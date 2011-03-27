@@ -467,6 +467,8 @@ namespace MeGUI
                 foreach (AudioConfigControl a in audioConfigControl)
                     if (a.IsDontEncodePossible() == true)
                         a.DontEncode = settings.DontEncodeAudio;
+
+                chkKeepVideoTrack.Checked = settings.DontEncodeVideo;
                 
                 // bools
                 signalAR.Checked = settings.SignalAR;
@@ -527,7 +529,7 @@ namespace MeGUI
                             aInput = audioTrack[i].SelectedText;
 
                         if (audioConfigControl[i].DontEncode)
-                            muxOnlyAudio.Add(new MuxStream(aInput, info, delay, false, false));
+                            muxOnlyAudio.Add(new MuxStream(aInput, info, delay, false, false, null));
                         else
                             aJobs.Add(new AudioJob(aInput, null, null, audioConfigControl[i].Settings, delay, strLanguage));
                     }
@@ -551,6 +553,22 @@ namespace MeGUI
                     dpp.UseChaptersMarks = usechaptersmarks.Checked;
                     dpp.VideoSettings = VideoSettings.Clone();
 
+                    // Video mux handling
+                    if (chkKeepVideoTrack.Checked && dpp.Container == ContainerType.MKV)
+                    {
+                        if (oMkvInfo != null)
+                        {
+                            foreach (MkvInfoTrack oTrack in oMkvInfo.Track)
+                            {
+                                if (oTrack.Type == MkvInfoTrackType.Video)
+                                {
+                                    dpp.VideoTrackToMux = oTrack;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    
                     // chapter handling
                     if (!File.Exists(chapterFile.Filename))
                     {
@@ -573,6 +591,17 @@ namespace MeGUI
                         chapterFile.Filename = "";
                     dpp.ChapterFile = chapterFile.Filename;
 
+                    // subtitle handling
+                    if (oMkvInfo != null && dpp.Container == ContainerType.MKV)
+                    {
+                        foreach (MkvInfoTrack oTrack in oMkvInfo.Track)
+                        {
+                            if (oTrack.Type == MkvInfoTrackType.Subtitle)
+                                dpp.SubtitleTracks.Add(oTrack);
+                        }
+                    }
+
+                    // create jobs
                     if (oIndexerToUse == FileIndexerWindow.IndexType.D2V)
                     {
                         string d2vName = Path.Combine(workingDirectory.Filename, workingName.Text + ".d2v");
@@ -605,21 +634,27 @@ namespace MeGUI
                             {
                                 foreach (MkvInfoTrack oTrack in oMkvInfo.Track)
                                 {
-                                    if (oTrack.TrackNumber == oStream.TrackID)
+                                    if (oTrack.TrackID == oStream.TrackID)
                                     {
                                         oExtractTrack.Add(oTrack);
-                                        dpp.MkvAudioFiles.Add(oTrack);
+                                        dpp.MkvAudioTracks.Add(oTrack);
                                     }
                                 }
                             }
                             if (oExtractTrack.Count > 0)
                             {
                                 MkvExtractJob extractJob = new MkvExtractJob(input.Filename, Path.GetDirectoryName(dpp.FinalOutput), oExtractTrack);
-                                c = new SequentialChain(new SequentialChain(job), new SequentialChain(extractJob), new SequentialChain(ocJob));
+                                if (chkKeepVideoTrack.Checked && dpp.Container == ContainerType.MKV)
+                                    c = new SequentialChain(new SequentialChain(extractJob), new SequentialChain(ocJob));
+                                else
+                                    c = new SequentialChain(new SequentialChain(job), new SequentialChain(extractJob), new SequentialChain(ocJob));
                             }
                             else
                             {
-                                c = new SequentialChain(new SequentialChain(job), new SequentialChain(ocJob));
+                                if (chkKeepVideoTrack.Checked && dpp.Container == ContainerType.MKV)
+                                    c = new SequentialChain(new SequentialChain(ocJob));
+                                else
+                                    c = new SequentialChain(new SequentialChain(job), new SequentialChain(ocJob));
                             }
                         }
                         else
@@ -643,21 +678,27 @@ namespace MeGUI
                             {                             
                                 foreach (MkvInfoTrack oTrack in oMkvInfo.Track)
                                 {
-                                    if (oTrack.TrackNumber == oStream.TrackID)
+                                    if (oTrack.TrackID == oStream.TrackID)
                                     {
                                         oExtractTrack.Add(oTrack);
-                                        dpp.MkvAudioFiles.Add(oTrack);
+                                        dpp.MkvAudioTracks.Add(oTrack);
                                     }
                                 }
                             }
                             if (oExtractTrack.Count > 0)
                             {
                                 MkvExtractJob extractJob = new MkvExtractJob(input.Filename, Path.GetDirectoryName(dpp.FinalOutput), oExtractTrack);
-                                c = new SequentialChain(new SequentialChain(job), new SequentialChain(extractJob), new SequentialChain(ocJob));
+                                if (chkKeepVideoTrack.Checked && dpp.Container == ContainerType.MKV)
+                                    c = new SequentialChain(new SequentialChain(extractJob), new SequentialChain(ocJob));
+                                else
+                                    c = new SequentialChain(new SequentialChain(job), new SequentialChain(extractJob), new SequentialChain(ocJob));
                             }
                             else
                             {
-                                c = new SequentialChain(new SequentialChain(job), new SequentialChain(ocJob));
+                                if (chkKeepVideoTrack.Checked && dpp.Container == ContainerType.MKV)
+                                    c = new SequentialChain(new SequentialChain(ocJob));
+                                else
+                                    c = new SequentialChain(new SequentialChain(job), new SequentialChain(ocJob));
                             }
                         }
                         else
@@ -820,6 +861,11 @@ namespace MeGUI
                 autoCrop.Enabled = true;
                 signalAR.Enabled = true;
             }
+        }
+
+        private void chkKeepVideoTrack_CheckedChanged(object sender, EventArgs e)
+        {
+            videoProfile.Enabled = usechaptersmarks.Enabled = addPrerenderJob.Enabled = !chkKeepVideoTrack.Checked;
         }
     }
     public class OneClickTool : MeGUI.core.plugins.interfaces.ITool

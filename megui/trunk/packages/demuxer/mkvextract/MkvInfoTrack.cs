@@ -36,9 +36,10 @@ namespace MeGUI
     public class MkvInfoTrack
     {
         private MkvInfoTrackType _type;
-        private int _iTrackNumber;
+        private int _iTrackID;
         private String _strCodecID, _strLanguage, _strInputFile, _strName, _strAudioChannels;
         private bool _bDefault, _bForced;
+        private decimal _fps;
 
         public MkvInfoTrack() : this(null) { }
 
@@ -46,25 +47,31 @@ namespace MeGUI
         {
             this._strInputFile = strInputFile;
             this._type = MkvInfoTrackType.Unknown;
-            this._iTrackNumber = -1;
+            this._iTrackID = -1;
             this._strCodecID = String.Empty;
             this._strLanguage = String.Empty;
             this._bDefault = true;
             this._bForced = false;
             this._strName = String.Empty;
             this._strAudioChannels = String.Empty;
+            this._fps = -1;
         }
 
         public MkvInfoTrackType Type
         {
             get { return _type; }
-            set { _type = value; }
+            set 
+            { 
+                _type = value;
+                if (_type != MkvInfoTrackType.Video && _type != MkvInfoTrackType.Unknown && String.IsNullOrEmpty(_strLanguage))
+                    _strLanguage = "eng";
+            }
         }
 
-        public int TrackNumber
+        public int TrackID
         {
-            get { return _iTrackNumber; }
-            set { _iTrackNumber = value; }
+            get { return _iTrackID; }
+            set { _iTrackID = value; }
         }
 
         public String CodecID
@@ -107,6 +114,12 @@ namespace MeGUI
         {
             get { return _bForced; }
             set { _bForced = value; }
+        }
+
+        public decimal FPS
+        {
+            get { return _fps; }
+            set { _fps = value; }
         }
 
         [XmlIgnore()]
@@ -152,7 +165,7 @@ namespace MeGUI
                 if (String.IsNullOrEmpty(strExtension))
                     return null;
 
-                return Path.GetFileNameWithoutExtension(_strInputFile) + " - [" + _iTrackNumber + "] " + LanguageSelectionContainer.lookupISOCode(_strLanguage) + "." + strExtension;
+                return Path.GetFileNameWithoutExtension(_strInputFile) + " - [" + _iTrackID + "] " + LanguageSelectionContainer.lookupISOCode(_strLanguage) + "." + strExtension;
             }
         }
 
@@ -164,7 +177,7 @@ namespace MeGUI
                 if (_type != MkvInfoTrackType.Audio)
                     return null;
 
-                AudioTrackInfo oAudioTrack = new AudioTrackInfo(LanguageSelectionContainer.lookupISOCode(_strLanguage), _strAudioChannels, _strCodecID.Split('/')[0].Substring(2), _iTrackNumber);
+                AudioTrackInfo oAudioTrack = new AudioTrackInfo(LanguageSelectionContainer.lookupISOCode(_strLanguage), _strAudioChannels, _strCodecID.Split('/')[0].Substring(2), _iTrackID);
                 oAudioTrack.ContainerType = "MATROSKA";
                 oAudioTrack.TrackInfo.Name = _strName;
 
