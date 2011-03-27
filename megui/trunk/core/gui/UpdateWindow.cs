@@ -368,6 +368,13 @@ namespace MeGUI
                 set { this.platform = value; }
             }
 
+            private int requiredBuild;
+            public int RequiredBuild
+            {
+                get { return requiredBuild; }
+                set { requiredBuild = value; }
+            }
+
             internal string treeViewID;
             public string TreeViewID
             {
@@ -1324,6 +1331,13 @@ namespace MeGUI
                     file.Platform = iUpgradeable.PlatformModes.x64;
             }
             catch (Exception) { }
+
+            file.RequiredBuild = 0;
+            try
+            {
+                file.RequiredBuild = Int32.Parse(node.Attributes["requiredbuild"].Value);
+            }
+            catch (Exception) { }
             
             try
             {
@@ -1533,7 +1547,7 @@ namespace MeGUI
                                 if (state != ErrorState.Successful)
                                 {
                                     failedFiles.Add(file);
-                                    AddTextToLog(string.Format("Failed to install file {0} with error: {1}.", file.Name, result), ImageType.Error);
+                                    AddTextToLog(string.Format("Failed to install file {0} with error: {1}.", file.Name, state), ImageType.Error);
                                 }
                                 else
                                 {
@@ -1565,7 +1579,6 @@ namespace MeGUI
                     }
                 }
             }
-
 
             SetProgressBar(0, 1, 1); //make sure progress bar is at 100%.
 
@@ -1625,6 +1638,11 @@ namespace MeGUI
 
         private ErrorState Install(iUpgradeable file, Stream fileData)
         {
+            if (file.RequiredBuild > 0 && new System.Version(Application.ProductVersion).Build < file.RequiredBuild)
+            {
+                AddTextToLog(string.Format("Could not install module '{0}' as at least MeGUI build {1} is required.", file.Name, file.RequiredBuild), ImageType.Information);
+                return ErrorState.CouldNotInstall;
+            }
             ErrorState state = file.Install(fileData);
             if (state == ErrorState.Successful)
             {
