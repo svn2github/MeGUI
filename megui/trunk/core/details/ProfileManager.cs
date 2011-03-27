@@ -211,6 +211,9 @@ namespace MeGUI
         {
             string file = Path.Combine(GetSaveFolder(path), "SelectedProfiles.xml");
             if (!File.Exists(file)) return;
+
+            deleteDeprecatedEntries(file);
+
             using (Stream s = File.OpenRead(file))
             {
                 try
@@ -241,6 +244,54 @@ namespace MeGUI
             }
         }
 
+#warning delete block after the next stable (current 1989)
+        private void deleteDeprecatedEntries(String strFile)
+        {
+            String line; 
+            StringBuilder sbNewFile = new StringBuilder();
+            int counter = 0, iBlock = 0;
+            List<int> arrDeprecated = new List<int>();
+
+            StreamReader file = new StreamReader(strFile);
+            while ((line = file.ReadLine()) != null)
+            {
+                if (line.Equals("  <ArrayOfString>"))
+                {
+                    iBlock++;
+                    counter = 0;
+                }
+                counter++;
+
+                if (iBlock == 1 && (line.Equals("    <string>Snow</string>") || line.Equals("    <string>Aud-X MP3</string>") || line.Equals("    <string>Winamp AAC</string>")))
+                    arrDeprecated.Add(counter);
+                else if (iBlock == 4 && (line.Equals("    <string>Snow</string>") || line.Equals("    <string>Aud-X MP3</string>") || line.Equals("    <string>Winamp AAC</string>")))
+                {
+                    if (line.Contains("Snow"))
+                        sbNewFile.AppendLine("    <string>x264</string>");
+                    else
+                        sbNewFile.AppendLine("    <string>Aften AC-3</string>");
+                }
+                else if (iBlock == 2)
+                {
+                    bool bDelete = false;
+                    foreach (int i in arrDeprecated)
+                    {
+                        if (i == counter)
+                            bDelete = true;
+                    }
+                    if (!bDelete)
+                        sbNewFile.AppendLine(line);
+                }
+                else
+                    sbNewFile.AppendLine(line);
+            }
+            file.Close();
+
+            StreamWriter newfile = new StreamWriter(strFile);
+            newfile.Write(sbNewFile);
+            newfile.Close();
+        }
+
         public void LoadProfiles()
         {
             foreach (ProfileType t in profileTypes)
@@ -252,8 +303,6 @@ namespace MeGUI
         public static List<Profile> ReadAllProfiles(string path, bool bSilentError)
         {
             ProfileManager p = new ProfileManager(path);
-            //if (Directory.Exists(Path.Combine(path, "profiles")))
-            //    return Loader.TryLoadProfiles(path);
 
             List<Profile> ps = new List<Profile>();
 
