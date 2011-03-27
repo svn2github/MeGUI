@@ -74,13 +74,16 @@ namespace MeGUI
         public override void ProcessLine(string line, StreamType stream)
         {
             if (line.StartsWith("Progress: ")) //status update
+            {
                 su.PercentageDoneExact = getPercentage(line);
-            else if (line.StartsWith("Error: "))
+                su.Status = "Extracting Tracks...";
+            }
+            else if (line.ToLower().Contains("error"))
             {
                 log.LogValue("An error occurred", line, ImageType.Error);
                 su.HasError = true;
             }
-            else if (line.StartsWith("Warning: "))
+            else if (line.ToLower().Contains("warning"))
                 log.LogValue("A warning occurred", line, ImageType.Warning);
             else
                 base.ProcessLine(line, stream);

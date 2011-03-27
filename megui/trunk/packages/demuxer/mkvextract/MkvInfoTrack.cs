@@ -159,7 +159,7 @@ namespace MeGUI
                             strExtension = "srt";
                         break;
                     case "S_VOBSUB": strExtension = "idx"; break;
-                    case "S_HDMV/PGS": strExtension = "sup"; break;
+                    case "S_HDMV": strExtension = "sup"; break;
                 }
 
                 if (String.IsNullOrEmpty(strExtension))

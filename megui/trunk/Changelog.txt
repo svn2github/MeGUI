@@ -1,3 +1,5 @@
+2001 [MKV Demuxer] added status information to progress window
+     [One-Click] fixed handling of PGS subtitles
 2000 [One-Click] if the source is a MKV file and target container is MKV the subtitles will be copied
      [One-Click] if the source is a MKV file and target container is MKV the video track can be copied
                  added therefore a "Keep original track" checkbox for the video in the settings

@@ -767,6 +767,9 @@ namespace MeGUI
 
         public static SubtitleType guessSubtitleType(string p)
         {
+            if (String.IsNullOrEmpty(p))
+                return null;
+
             foreach (SubtitleType type in ContainerManager.SubtitleTypes.Values)
             {
                 if (Path.GetExtension(p.ToLower()) == "." + type.Extension)
