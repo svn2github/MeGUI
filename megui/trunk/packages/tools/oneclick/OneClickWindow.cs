@@ -49,18 +49,6 @@ namespace MeGUI
         LogItem _oLog;
 
         #region profiles
-        void ProfileChanged(object sender, EventArgs e)
-        {
-            if (VideoSettings.EncoderType.ID == "x264")
-                usechaptersmarks.Enabled = true;
-            else
-            {
-                usechaptersmarks.Enabled = false;
-                usechaptersmarks.Checked = usechaptersmarks.Enabled;
-            }            
-            updatePossibleContainers();
-        }
-
         #region OneClick profiles
         private void initOneClickHandler()
         {
@@ -468,7 +456,7 @@ namespace MeGUI
                     if (a.IsDontEncodePossible() == true)
                         a.DontEncode = settings.DontEncodeAudio;
 
-                chkKeepVideoTrack.Checked = settings.DontEncodeVideo;
+                chkDontEncodeVideo.Checked = settings.DontEncodeVideo;
                 
                 // bools
                 signalAR.Checked = settings.SignalAR;
@@ -480,7 +468,7 @@ namespace MeGUI
                     usechaptersmarks.Checked = settings.UseChaptersMarks;
 
                 splitting.Value = settings.SplitSize;
-                optionalTargetSizeBox1.Value = settings.Filesize;
+                fileSize.Value = settings.Filesize;
                 if (settings.OutputResolution <= horizontalResolution.Maximum)
                     horizontalResolution.Value = settings.OutputResolution;
 
@@ -503,7 +491,7 @@ namespace MeGUI
                     && !string.IsNullOrEmpty(input.Filename)
                     && !string.IsNullOrEmpty(workingName.Text))
                 {
-                    FileSize? desiredSize = optionalTargetSizeBox1.Value;
+                    FileSize? desiredSize = fileSize.Value;
 
                     List<AudioJob> aJobs = new List<AudioJob>();
                     List<MuxStream> muxOnlyAudio = new List<MuxStream>();
@@ -538,23 +526,43 @@ namespace MeGUI
                     dpp.DAR = ar.Value;
                     dpp.DirectMuxAudio = muxOnlyAudio.ToArray();
                     dpp.AudioJobs = aJobs.ToArray();
-                    dpp.AutoDeinterlace = autoDeint.Checked;
                     dpp.AvsSettings = (AviSynthSettings)avsProfile.SelectedProfile.BaseSettings;
                     dpp.Container = (ContainerType)containerFormat.SelectedItem;
                     dpp.FinalOutput = output.Filename;
-                    dpp.HorizontalOutputResolution = (int)horizontalResolution.Value;
-                    dpp.OutputSize = desiredSize;
-                    dpp.SignalAR = signalAR.Checked;
-                    dpp.AutoCrop = autoCrop.Checked;
-                    dpp.KeepInputResolution = keepInputResolution.Checked;
-                    dpp.PrerenderJob = addPrerenderJob.Checked;
-                    dpp.Splitting = splitting.Value;
                     dpp.DeviceOutputType = devicetype.Text;
-                    dpp.UseChaptersMarks = usechaptersmarks.Checked;
                     dpp.VideoSettings = VideoSettings.Clone();
+                    dpp.Splitting = splitting.Value;
+
+                    if (chkDontEncodeVideo.Checked)
+                    {
+                        dpp.SignalAR = dpp.AutoCrop = dpp.AutoDeinterlace = false;
+                        dpp.KeepInputResolution = dpp.PrerenderJob = dpp.UseChaptersMarks = false;
+                        dpp.OutputSize = FileSize.Empty;
+                        dpp.HorizontalOutputResolution = 0;
+                    }
+                    else
+                    {
+                        dpp.KeepInputResolution = keepInputResolution.Checked;
+                        
+                        if (keepInputResolution.Checked)
+                        {
+                            dpp.SignalAR = dpp.AutoCrop = false;
+                            dpp.HorizontalOutputResolution = 0;
+                        }
+                        else
+                        {
+                            dpp.SignalAR = signalAR.Checked;
+                            dpp.AutoCrop = autoCrop.Checked;
+                            dpp.HorizontalOutputResolution = (int)horizontalResolution.Value;
+                        }
+                        dpp.AutoDeinterlace = autoDeint.Checked;
+                        dpp.PrerenderJob = addPrerenderJob.Checked;
+                        dpp.OutputSize = desiredSize;
+                        dpp.UseChaptersMarks = usechaptersmarks.Checked;
+                    }
 
                     // Video mux handling
-                    if (chkKeepVideoTrack.Checked && dpp.Container == ContainerType.MKV)
+                    if (chkDontEncodeVideo.Checked && dpp.Container == ContainerType.MKV)
                     {
                         if (oMkvInfo != null)
                         {
@@ -644,14 +652,14 @@ namespace MeGUI
                             if (oExtractTrack.Count > 0)
                             {
                                 MkvExtractJob extractJob = new MkvExtractJob(input.Filename, Path.GetDirectoryName(dpp.FinalOutput), oExtractTrack);
-                                if (chkKeepVideoTrack.Checked && dpp.Container == ContainerType.MKV)
+                                if (chkDontEncodeVideo.Checked && dpp.Container == ContainerType.MKV)
                                     c = new SequentialChain(new SequentialChain(extractJob), new SequentialChain(ocJob));
                                 else
                                     c = new SequentialChain(new SequentialChain(job), new SequentialChain(extractJob), new SequentialChain(ocJob));
                             }
                             else
                             {
-                                if (chkKeepVideoTrack.Checked && dpp.Container == ContainerType.MKV)
+                                if (chkDontEncodeVideo.Checked && dpp.Container == ContainerType.MKV)
                                     c = new SequentialChain(new SequentialChain(ocJob));
                                 else
                                     c = new SequentialChain(new SequentialChain(job), new SequentialChain(ocJob));
@@ -688,14 +696,14 @@ namespace MeGUI
                             if (oExtractTrack.Count > 0)
                             {
                                 MkvExtractJob extractJob = new MkvExtractJob(input.Filename, Path.GetDirectoryName(dpp.FinalOutput), oExtractTrack);
-                                if (chkKeepVideoTrack.Checked && dpp.Container == ContainerType.MKV)
+                                if (chkDontEncodeVideo.Checked && dpp.Container == ContainerType.MKV)
                                     c = new SequentialChain(new SequentialChain(extractJob), new SequentialChain(ocJob));
                                 else
                                     c = new SequentialChain(new SequentialChain(job), new SequentialChain(extractJob), new SequentialChain(ocJob));
                             }
                             else
                             {
-                                if (chkKeepVideoTrack.Checked && dpp.Container == ContainerType.MKV)
+                                if (chkDontEncodeVideo.Checked && dpp.Container == ContainerType.MKV)
                                     c = new SequentialChain(new SequentialChain(ocJob));
                                 else
                                     c = new SequentialChain(new SequentialChain(job), new SequentialChain(ocJob));
@@ -844,28 +852,44 @@ namespace MeGUI
             RemoveTrack();
         }
 
+        void ProfileChanged(object sender, EventArgs e)
+        {
+            if (videoProfile.SelectedProfile.FQName.StartsWith("x264") && !chkDontEncodeVideo.Checked)
+                usechaptersmarks.Enabled = true;
+            else
+                usechaptersmarks.Enabled = false;
+            updatePossibleContainers();
+        }
+
         private void keepInputResolution_CheckedChanged(object sender, EventArgs e)
         {
             if (keepInputResolution.Checked)
+                horizontalResolution.Enabled = autoCrop.Enabled = signalAR.Enabled = ar.Enabled = false;
+            else
+                horizontalResolution.Enabled = autoCrop.Enabled = signalAR.Enabled = ar.Enabled = true;
+        }
+
+        private void chkDontEncodeVideo_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkDontEncodeVideo.Checked)
             {
-                horizontalResolution.Enabled = false;
-                autoCrop.Checked = false;
-                autoCrop.Enabled = false;
-                signalAR.Enabled = false;
-                signalAR.Checked = false;
+                horizontalResolution.Enabled = autoCrop.Enabled = signalAR.Enabled = videoProfile.Enabled = false;
+                usechaptersmarks.Enabled = keepInputResolution.Enabled = addPrerenderJob.Enabled = false;
+                autoDeint.Enabled = fileSize.Enabled = avsProfile.Enabled = ar.Enabled = false;
             }
             else
             {
-                horizontalResolution.Enabled = true;
-                autoCrop.Checked = true;
-                autoCrop.Enabled = true;
-                signalAR.Enabled = true;
+                videoProfile.Enabled = keepInputResolution.Enabled = addPrerenderJob.Enabled = true;
+                autoDeint.Enabled = fileSize.Enabled = avsProfile.Enabled = true;
+                if (videoProfile.SelectedProfile.FQName.StartsWith("x264"))
+                    usechaptersmarks.Enabled = true;
+                else
+                    usechaptersmarks.Enabled = false;
+                if (keepInputResolution.Checked)
+                    horizontalResolution.Enabled = autoCrop.Enabled = signalAR.Enabled = ar.Enabled = false;
+                else
+                    horizontalResolution.Enabled = autoCrop.Enabled = signalAR.Enabled = ar.Enabled = true;
             }
-        }
-
-        private void chkKeepVideoTrack_CheckedChanged(object sender, EventArgs e)
-        {
-            videoProfile.Enabled = usechaptersmarks.Enabled = addPrerenderJob.Enabled = !chkKeepVideoTrack.Checked;
         }
     }
     public class OneClickTool : MeGUI.core.plugins.interfaces.ITool

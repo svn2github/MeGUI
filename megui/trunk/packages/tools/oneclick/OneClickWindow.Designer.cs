@@ -63,7 +63,7 @@ namespace MeGUI
             this.inputLabel = new System.Windows.Forms.Label();
             this.targetGroupBox = new System.Windows.Forms.GroupBox();
             this.oneclickProfile = new MeGUI.core.gui.ConfigableProfilesControl();
-            this.optionalTargetSizeBox1 = new MeGUI.core.gui.TargetSizeSCBox();
+            this.fileSize = new MeGUI.core.gui.TargetSizeSCBox();
             this.label3 = new System.Windows.Forms.Label();
             this.filesizeLabel = new System.Windows.Forms.Label();
             this.audioGroupbox = new System.Windows.Forms.GroupBox();
@@ -84,7 +84,7 @@ namespace MeGUI
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.videoGroupBox = new System.Windows.Forms.GroupBox();
-            this.chkKeepVideoTrack = new System.Windows.Forms.CheckBox();
+            this.chkDontEncodeVideo = new System.Windows.Forms.CheckBox();
             this.usechaptersmarks = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
             this.videoProfile = new MeGUI.core.gui.ConfigableProfilesControl();
@@ -496,7 +496,7 @@ namespace MeGUI
             this.targetGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.targetGroupBox.Controls.Add(this.oneclickProfile);
-            this.targetGroupBox.Controls.Add(this.optionalTargetSizeBox1);
+            this.targetGroupBox.Controls.Add(this.fileSize);
             this.targetGroupBox.Controls.Add(this.label3);
             this.targetGroupBox.Controls.Add(this.filesizeLabel);
             this.targetGroupBox.Location = new System.Drawing.Point(8, 191);
@@ -515,19 +515,19 @@ namespace MeGUI
             this.oneclickProfile.TabIndex = 25;
             this.oneclickProfile.SelectedProfileChanged += new System.EventHandler(this.OneClickProfileChanged);
             // 
-            // optionalTargetSizeBox1
+            // fileSize
             // 
-            this.optionalTargetSizeBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.fileSize.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.optionalTargetSizeBox1.CustomSizes = new MeGUI.core.util.FileSize[0];
-            this.optionalTargetSizeBox1.Location = new System.Drawing.Point(125, 43);
-            this.optionalTargetSizeBox1.MaximumSize = new System.Drawing.Size(1000, 29);
-            this.optionalTargetSizeBox1.MinimumSize = new System.Drawing.Size(64, 29);
-            this.optionalTargetSizeBox1.Name = "optionalTargetSizeBox1";
-            this.optionalTargetSizeBox1.NullString = "Don\'t Care";
-            this.optionalTargetSizeBox1.SelectedIndex = 0;
-            this.optionalTargetSizeBox1.Size = new System.Drawing.Size(298, 29);
-            this.optionalTargetSizeBox1.TabIndex = 24;
+            this.fileSize.CustomSizes = new MeGUI.core.util.FileSize[0];
+            this.fileSize.Location = new System.Drawing.Point(125, 43);
+            this.fileSize.MaximumSize = new System.Drawing.Size(1000, 29);
+            this.fileSize.MinimumSize = new System.Drawing.Size(64, 29);
+            this.fileSize.Name = "fileSize";
+            this.fileSize.NullString = "Don\'t Care";
+            this.fileSize.SelectedIndex = 0;
+            this.fileSize.Size = new System.Drawing.Size(298, 29);
+            this.fileSize.TabIndex = 24;
             // 
             // label3
             // 
@@ -733,7 +733,7 @@ namespace MeGUI
             // 
             // videoGroupBox
             // 
-            this.videoGroupBox.Controls.Add(this.chkKeepVideoTrack);
+            this.videoGroupBox.Controls.Add(this.chkDontEncodeVideo);
             this.videoGroupBox.Controls.Add(this.usechaptersmarks);
             this.videoGroupBox.Controls.Add(this.label4);
             this.videoGroupBox.Controls.Add(this.videoProfile);
@@ -746,16 +746,16 @@ namespace MeGUI
             this.videoGroupBox.TabStop = false;
             this.videoGroupBox.Text = "Video Settings";
             // 
-            // chkKeepVideoTrack
+            // chkDontEncodeVideo
             // 
-            this.chkKeepVideoTrack.AutoSize = true;
-            this.chkKeepVideoTrack.Location = new System.Drawing.Point(303, 23);
-            this.chkKeepVideoTrack.Name = "chkKeepVideoTrack";
-            this.chkKeepVideoTrack.Size = new System.Drawing.Size(114, 17);
-            this.chkKeepVideoTrack.TabIndex = 40;
-            this.chkKeepVideoTrack.Text = "Keep original track";
-            this.chkKeepVideoTrack.UseVisualStyleBackColor = true;
-            this.chkKeepVideoTrack.CheckedChanged += new System.EventHandler(this.chkKeepVideoTrack_CheckedChanged);
+            this.chkDontEncodeVideo.AutoSize = true;
+            this.chkDontEncodeVideo.Location = new System.Drawing.Point(303, 23);
+            this.chkDontEncodeVideo.Name = "chkDontEncodeVideo";
+            this.chkDontEncodeVideo.Size = new System.Drawing.Size(114, 17);
+            this.chkDontEncodeVideo.TabIndex = 40;
+            this.chkDontEncodeVideo.Text = "Keep original track";
+            this.chkDontEncodeVideo.UseVisualStyleBackColor = true;
+            this.chkDontEncodeVideo.CheckedChanged += new System.EventHandler(this.chkDontEncodeVideo_CheckedChanged);
             // 
             // usechaptersmarks
             // 
@@ -783,7 +783,6 @@ namespace MeGUI
             this.videoProfile.ProfileSet = "Video";
             this.videoProfile.Size = new System.Drawing.Size(199, 22);
             this.videoProfile.TabIndex = 17;
-            this.videoProfile.SelectedProfileChanged += new System.EventHandler(this.ProfileChanged);
             // 
             // addPrerenderJob
             // 
@@ -927,7 +926,7 @@ namespace MeGUI
         private MeGUI.packages.tools.oneclick.AudioConfigControl audio2;
         private MeGUI.core.gui.FileSCBox audioTrack2;
         private MeGUI.core.gui.FileSCBox audioTrack1;
-        private MeGUI.core.gui.TargetSizeSCBox optionalTargetSizeBox1;
+        private MeGUI.core.gui.TargetSizeSCBox fileSize;
         private MeGUI.core.gui.ARChooser ar;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.TabPage trackTabPage1;
@@ -950,6 +949,6 @@ namespace MeGUI
         private System.Windows.Forms.ComboBox devicetype;
         private System.Windows.Forms.Label deviceLabel;
         private System.Windows.Forms.CheckBox usechaptersmarks;
-        private System.Windows.Forms.CheckBox chkKeepVideoTrack;
+        private System.Windows.Forms.CheckBox chkDontEncodeVideo;
     }
 }

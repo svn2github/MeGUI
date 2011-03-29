@@ -144,25 +144,14 @@ namespace MeGUI.packages.tools.oneclick
         private void keepInputResolution_CheckedChanged(object sender, EventArgs e)
         {
             if (keepInputResolution.Checked)
-            {
-                horizontalResolution.Enabled = false;
-                autoCrop.Checked = false;
-                autoCrop.Enabled = false;
-                signalAR.Enabled = false;
-                signalAR.Checked = false;
-            }
+                horizontalResolution.Enabled = autoCrop.Enabled = signalAR.Enabled = false;
             else
-            {
-                horizontalResolution.Enabled = true;
-                autoCrop.Checked = true;
-                autoCrop.Enabled = true;
-                signalAR.Enabled = true;
-            }
+                horizontalResolution.Enabled = autoCrop.Enabled = signalAR.Enabled = true;
         }
 
         private void videoProfile_SelectedProfileChanged(object sender, EventArgs e)
         {
-            if (Settings.VideoProfileName.StartsWith("x264"))
+            if (videoProfile.SelectedProfile.FQName.StartsWith("x264") && !chkDontEncodeVideo.Checked)
                 usechaptersmarks.Enabled = true;
             else
                 usechaptersmarks.Enabled = false;
@@ -170,11 +159,25 @@ namespace MeGUI.packages.tools.oneclick
 
         private void chkDontEncodeVideo_CheckedChanged(object sender, EventArgs e)
         {
-            videoProfile.Enabled = !chkDontEncodeVideo.Checked;
-            if (Settings.VideoProfileName.StartsWith("x264") && videoProfile.Enabled)
-                usechaptersmarks.Enabled = true;
+            if (chkDontEncodeVideo.Checked)
+            {
+                horizontalResolution.Enabled = autoCrop.Enabled = signalAR.Enabled = videoProfile.Enabled = false;
+                usechaptersmarks.Enabled = keepInputResolution.Enabled = preprocessVideo.Enabled = false;
+                autoDeint.Enabled = fileSize.Enabled = avsProfile.Enabled = false;
+            }
             else
-                usechaptersmarks.Enabled = false;
+            {
+                videoProfile.Enabled = keepInputResolution.Enabled = preprocessVideo.Enabled = true;
+                autoDeint.Enabled = fileSize.Enabled = avsProfile.Enabled = true;
+                if (videoProfile.SelectedProfile.FQName.StartsWith("x264"))
+                    usechaptersmarks.Enabled = true;
+                else
+                    usechaptersmarks.Enabled = false;
+                if (keepInputResolution.Checked)
+                    horizontalResolution.Enabled = autoCrop.Enabled = signalAR.Enabled = false;
+                else
+                    horizontalResolution.Enabled = autoCrop.Enabled = signalAR.Enabled = true;
+            }
         }
 
         private void dontEncodeAudio_CheckedChanged(object sender, EventArgs e)

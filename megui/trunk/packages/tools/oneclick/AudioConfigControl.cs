@@ -56,8 +56,7 @@ namespace MeGUI.packages.tools.oneclick
 
         private void dontEncodeAudio_CheckedChanged(object sender, EventArgs e)
         {
-            bool aChecked = dontEncodeAudio.Checked;
-            audioProfile.Enabled = !aChecked;
+            audioProfile.Enabled = !dontEncodeAudio.Checked;
             raiseEvent();
         }
 

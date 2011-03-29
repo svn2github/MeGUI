@@ -40,6 +40,7 @@ namespace MeGUI.packages.tools.oneclick
             this.horizontalResolution = new System.Windows.Forms.NumericUpDown();
             this.outputResolutionLabel = new System.Windows.Forms.Label();
             this.extraGroupbox = new System.Windows.Forms.GroupBox();
+            this.chkDontEncodeVideo = new System.Windows.Forms.CheckBox();
             this.usechaptersmarks = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.audioProfileLabel = new System.Windows.Forms.Label();
@@ -55,7 +56,6 @@ namespace MeGUI.packages.tools.oneclick
             this.fileSize = new MeGUI.core.gui.TargetSizeSCBox();
             this.audioProfile = new MeGUI.core.gui.ConfigableProfilesControl();
             this.videoProfile = new MeGUI.core.gui.ConfigableProfilesControl();
-            this.chkDontEncodeVideo = new System.Windows.Forms.CheckBox();
             label3 = new System.Windows.Forms.Label();
             this.otherGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.horizontalResolution)).BeginInit();
@@ -123,11 +123,11 @@ namespace MeGUI.packages.tools.oneclick
             // preprocessVideo
             // 
             this.preprocessVideo.AutoSize = true;
-            this.preprocessVideo.Location = new System.Drawing.Point(60, 152);
+            this.preprocessVideo.Location = new System.Drawing.Point(110, 152);
             this.preprocessVideo.Name = "preprocessVideo";
-            this.preprocessVideo.Size = new System.Drawing.Size(179, 17);
+            this.preprocessVideo.Size = new System.Drawing.Size(101, 17);
             this.preprocessVideo.TabIndex = 37;
-            this.preprocessVideo.Text = "Prerender video (for slow scripts)";
+            this.preprocessVideo.Text = "Prerender video";
             this.preprocessVideo.UseVisualStyleBackColor = true;
             // 
             // label2
@@ -159,11 +159,13 @@ namespace MeGUI.packages.tools.oneclick
             // 
             // signalAR
             // 
-            this.signalAR.Location = new System.Drawing.Point(274, 77);
+            this.signalAR.AutoSize = true;
+            this.signalAR.Location = new System.Drawing.Point(273, 81);
             this.signalAR.Name = "signalAR";
-            this.signalAR.Size = new System.Drawing.Size(76, 24);
+            this.signalAR.Size = new System.Drawing.Size(73, 17);
             this.signalAR.TabIndex = 32;
             this.signalAR.Text = "Signal AR";
+            this.signalAR.UseVisualStyleBackColor = true;
             // 
             // horizontalResolution
             // 
@@ -217,6 +219,17 @@ namespace MeGUI.packages.tools.oneclick
             this.extraGroupbox.TabIndex = 39;
             this.extraGroupbox.TabStop = false;
             this.extraGroupbox.Text = "Encoding Setup";
+            // 
+            // chkDontEncodeVideo
+            // 
+            this.chkDontEncodeVideo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkDontEncodeVideo.AutoSize = true;
+            this.chkDontEncodeVideo.Location = new System.Drawing.Point(292, 23);
+            this.chkDontEncodeVideo.Name = "chkDontEncodeVideo";
+            this.chkDontEncodeVideo.Size = new System.Drawing.Size(119, 17);
+            this.chkDontEncodeVideo.TabIndex = 41;
+            this.chkDontEncodeVideo.Text = "Don\'t encode video";
+            this.chkDontEncodeVideo.CheckedChanged += new System.EventHandler(this.chkDontEncodeVideo_CheckedChanged);
             // 
             // usechaptersmarks
             // 
@@ -366,17 +379,6 @@ namespace MeGUI.packages.tools.oneclick
             this.videoProfile.ProfileSet = "Video";
             this.videoProfile.Size = new System.Drawing.Size(199, 22);
             this.videoProfile.TabIndex = 39;
-            // 
-            // chkDontEncodeVideo
-            // 
-            this.chkDontEncodeVideo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkDontEncodeVideo.AutoSize = true;
-            this.chkDontEncodeVideo.Location = new System.Drawing.Point(292, 23);
-            this.chkDontEncodeVideo.Name = "chkDontEncodeVideo";
-            this.chkDontEncodeVideo.Size = new System.Drawing.Size(119, 17);
-            this.chkDontEncodeVideo.TabIndex = 41;
-            this.chkDontEncodeVideo.Text = "Don\'t encode video";
-            this.chkDontEncodeVideo.CheckedChanged += new System.EventHandler(this.chkDontEncodeVideo_CheckedChanged);
             // 
             // OneClickConfigPanel
             // 
