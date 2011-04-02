@@ -97,7 +97,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             _tempFiles.Add(filePath);
         }
 
-
         private void deleteTempFiles()
         {
             foreach (string filePath in _tempFiles)
@@ -227,7 +226,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             su.Status = s;
             raiseEvent();
         }
-
 
         internal AviSynthAudioEncoder(MeGUISettings settings)
         {
@@ -504,7 +502,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             target.Write(BitConverter.GetBytes(useFaadTrick ? (FAAD_MAGIC_VALUE - WAV_HEADER_SIZE) : (uint)a.AudioSizeInBytes), 0, 4);
         }
 
-
         internal void Start()
         {
             Util.ensureExists(audioJob.Input);
@@ -517,6 +514,188 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
         {
             _encoderThread.Abort();
             _encoderThread = null;
+        }
+
+        private bool OpenSourceWithFFAudioSource(out StringBuilder sbOpen)
+        {
+            sbOpen = new StringBuilder();
+#if x86
+            sbOpen.AppendFormat("LoadPlugin(\"{0}\"){1}", Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.FFMSIndexPath), "ffms2.dll"), Environment.NewLine);
+#endif
+#if x64
+            script.AppendFormat("LoadCPlugin(\"{0}\"){1}", Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.FFMSIndexPath), "ffms2.dll"), Environment.NewLine);
+#endif
+            sbOpen.AppendFormat("FFAudioSource(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
+            _log.LogEvent("Trying to open the file with FFAudioSource()", ImageType.Information);
+            string strErrorText = String.Empty;
+            if (AudioUtil.AVSScriptHasAudio(sbOpen.ToString(), out strErrorText))
+            {
+                _log.LogEvent("Successfully opened the file with FFAudioSource()", ImageType.Information);
+                audioJob.FilesToDelete.Add(audioJob.Input + ".ffindex");
+                return true;
+            }
+            sbOpen = new StringBuilder();
+            FileUtil.DeleteFile(audioJob.Input + ".ffindex");
+            if (String.IsNullOrEmpty(strErrorText))
+                _log.LogEvent("Failed opening the file with FFAudioSource()", ImageType.Information);
+            else
+                _log.LogEvent("Failed opening the file with FFAudioSource(). " + strErrorText, ImageType.Information);
+            return false;
+        }
+
+        private bool OpenSourceWithDirectShow(out StringBuilder sbOpen)
+        {
+            sbOpen = new StringBuilder();
+
+            try
+            {
+                MediaInfo info = new MediaInfo(audioJob.Input);
+                if (info.Audio.Count > 0)
+                {
+                    if (info.Video.Count > 0)
+                        sbOpen.AppendFormat("DirectShowSource(\"{0}\", video=false){1}", audioJob.Input, Environment.NewLine);
+                    else 
+                        sbOpen.AppendFormat("DirectShowSource(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
+                    sbOpen.AppendFormat("EnsureVBRMP3Sync(){0}", Environment.NewLine);
+                }
+            }
+            catch {}
+
+            string strErrorText = String.Empty;
+            _log.LogEvent("Trying to open the file with DirectShowSource()", ImageType.Information);
+            if (sbOpen.Length > 0 && AudioUtil.AVSScriptHasAudio(sbOpen.ToString(), out strErrorText))
+            {
+                _log.LogEvent("Successfully opened the file with DirectShowSource()", ImageType.Information);
+                return true;
+            }
+            sbOpen = new StringBuilder();
+            if (String.IsNullOrEmpty(strErrorText))
+                _log.LogEvent("Failed opening the file with DirectShowSource()", ImageType.Information);
+            else
+                _log.LogEvent("Failed opening the file with DirectShowSource(). " + strErrorText, ImageType.Information);
+            return false;
+        }
+
+        private bool OpenSourceWithNicAudio(out StringBuilder sbOpen)
+        {
+            sbOpen = new StringBuilder();
+            switch (Path.GetExtension(audioJob.Input).ToLower())
+            {
+                case ".ac3":
+                case ".ddp":
+                case ".eac3":
+                    sbOpen.AppendFormat("LoadPlugin(\"{0}\"){1}", Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "NicAudio.dll"), Environment.NewLine);
+                    sbOpen.AppendFormat("NicAc3Source(\"{0}\"", audioJob.Input);
+                    if (audioJob.Settings.ApplyDRC)
+                        sbOpen.AppendFormat(", DRC=1){0}", Environment.NewLine);
+                    else
+                        sbOpen.AppendFormat("){0}", Environment.NewLine);
+                    break;
+                case ".avi":
+                    sbOpen.AppendFormat("AVISource(\"{0}\", audio=true){1}", audioJob.Input, Environment.NewLine);
+                    sbOpen.AppendFormat("EnsureVBRMP3Sync(){0}", Environment.NewLine);
+                    sbOpen.AppendFormat("Trim(0,0){0}", Environment.NewLine); // to match audio length
+                    break;
+                case ".avs":
+                    sbOpen.AppendFormat("Import(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
+                    break;
+                case ".dtshd":
+                case ".dtsma":
+                case ".dts":
+                    sbOpen.AppendFormat("LoadPlugin(\"{0}\"){1}", Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "NicAudio.dll"), Environment.NewLine);
+                    sbOpen.AppendFormat("NicDtsSource(\"{0}\"", audioJob.Input);
+                    if (audioJob.Settings.ApplyDRC)
+                        sbOpen.AppendFormat(", DRC=1){0}", Environment.NewLine);
+                    else
+                        sbOpen.AppendFormat("){0}", Environment.NewLine);
+                    break;
+                case ".mpa":
+                case ".mpg":
+                case ".mp2":
+                case ".mp3":
+                    sbOpen.AppendFormat("LoadPlugin(\"{0}\"){1}", Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "NicAudio.dll"), Environment.NewLine);
+                    sbOpen.AppendFormat("NicMPG123Source(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
+                    audioJob.FilesToDelete.Add(audioJob.Input + ".d2a");
+                    break;
+                case ".wav":
+                    BinaryReader r = new BinaryReader(File.Open(audioJob.Input, FileMode.Open, FileAccess.Read));
+
+                    try
+                    {
+                        r.ReadBytes(20);
+                        UInt16 AudioFormat = r.ReadUInt16();  // read a LE int_16, offset 20 + 2 = 22
+
+                        switch (AudioFormat)
+                        {
+                            case 0x0001:         // PCM Format Int
+                                r.ReadBytes(22);   // 22 + 22 = 44
+                                UInt32 DtsHeader = r.ReadUInt32(); // read a LE int_32
+                                sbOpen.AppendFormat("LoadPlugin(\"{0}\"){1}", Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "NicAudio.dll"), Environment.NewLine);
+                                if (DtsHeader == 0xE8001FFF)
+                                {
+                                    sbOpen.AppendFormat("NicDtsSource(\"{0}\"", audioJob.Input);
+                                    if (audioJob.Settings.ApplyDRC)
+                                        sbOpen.AppendFormat(", DRC=1){0}", Environment.NewLine);
+                                    else
+                                        sbOpen.AppendFormat("){0}", Environment.NewLine);
+                                }
+                                else
+                                    sbOpen.AppendFormat("RaWavSource(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
+                                break;
+                            case 0x0003:         // IEEE Float
+                            case 0xFFFE:         // WAVE_FORMAT_EXTENSIBLE header
+                                sbOpen.AppendFormat("LoadPlugin(\"{0}\"){1}", Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "NicAudio.dll"), Environment.NewLine);
+                                sbOpen.AppendFormat("RaWavSource(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
+                                break;
+                            case 0x0055:         // MPEG Layer 3
+                                sbOpen.AppendFormat("LoadPlugin(\"{0}\"){1}", Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "NicAudio.dll"), Environment.NewLine);
+                                sbOpen.AppendFormat("NicMPG123Source(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
+                                break;
+                            case 0x2000:         // AC3
+                                sbOpen.AppendFormat("LoadPlugin(\"{0}\"){1}", Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "NicAudio.dll"), Environment.NewLine);
+                                sbOpen.AppendFormat("NicAc3Source(\"{0}\"", audioJob.Input);
+                                if (audioJob.Settings.ApplyDRC)
+                                    sbOpen.AppendFormat(", DRC=1){0}", Environment.NewLine);
+                                else
+                                    sbOpen.AppendFormat("){0}", Environment.NewLine);
+                                break;
+                            default:
+                                sbOpen.AppendFormat("WavSource(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
+                                break;
+                        }
+                    }
+                    catch (EndOfStreamException e)
+                    {
+                        Console.WriteLine("{0}, wavfile can't be read.", e.GetType().Name);
+                    }
+                    finally
+                    {
+                        r.Close();
+                    }
+                    break;
+                case ".w64":
+                case ".aif":
+                case ".au":
+                case ".caf":
+                case ".bwf":
+                    sbOpen.AppendFormat("LoadPlugin(\"{0}\"){1}", Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "NicAudio.dll"), Environment.NewLine);
+                    sbOpen.AppendFormat("RaWavSource(\"{0}\", 2){1}", audioJob.Input, Environment.NewLine);
+                    break;
+            }
+
+            _log.LogEvent("Trying to open the file with NicAudio", ImageType.Information);
+            string strErrorText = String.Empty;
+            if (sbOpen.Length > 0 && AudioUtil.AVSScriptHasAudio(sbOpen.ToString(), out strErrorText))
+            {
+                _log.LogEvent("Successfully opened the file with NicAudio", ImageType.Information);
+                return true;
+            }
+            sbOpen = new StringBuilder();
+            if (String.IsNullOrEmpty(strErrorText))
+                _log.LogEvent("Failed opening the file with NicAudio()", ImageType.Information);
+            else
+                _log.LogEvent("Failed opening the file with NicAudio(). " + strErrorText, ImageType.Information);
+            return false;
         }
 
         #endregion
@@ -537,166 +716,38 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             string id = _uniqueId;
             string tmp = Path.Combine(Path.GetTempPath(), id);
 
-            bool directShow = audioJob.Settings.ForceDecodingViaDirectShow;
-            if (!directShow)
+            bool bFound = false;
+            if (audioJob.Settings.PreferredDecoder == AudioDecodingEngine.NicAudio)
             {
-                bool bFound = false;
-                MediaInfoFile info = new MediaInfoFile(audioJob.Input);
-                if (info.AudioTracks.Count > 0)
-                {
-                    if (info.AudioTracks[0].Type != null && info.AudioTracks[0].Type.ToUpper().Equals("AAC"))
-                    {
-#if x86
-                        script.AppendFormat("LoadPlugin(\"{0}\"){1}", Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.FFMSIndexPath), "ffms2.dll"), Environment.NewLine);
-#endif
-#if x64
-                        script.AppendFormat("LoadCPlugin(\"{0}\"){1}", Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.FFMSIndexPath), "ffms2.dll"), Environment.NewLine);
-#endif
-                        script.AppendFormat("FFAudioSource(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
-                        audioJob.FilesToDelete.Add(audioJob.Input + ".ffindex");
-                        log.LogEvent("Trying to open the file with FFAudioSource()", ImageType.Information);
-                        if (AudioUtil.AVSScriptHasAudio(script.ToString()))
-                        {
-                            bFound = true;
-                            log.LogEvent("Successfully opened the file with FFAudioSource()", ImageType.Information);
-                        }
-                        else
-                        {
-                            script = new StringBuilder();
-                            log.LogEvent("Failed opening the file with FFAudioSource()", ImageType.Information);
-                        }
-                    }
-                }
+                bFound = OpenSourceWithNicAudio(out script);
                 if (!bFound)
-                {
-                    switch (Path.GetExtension(audioJob.Input).ToLower())
-                    {
-                        case ".ac3":
-                        case ".ddp":
-                        case ".eac3":
-                            script.AppendFormat("LoadPlugin(\"{0}\"){1}", Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "NicAudio.dll"), Environment.NewLine);
-                            script.AppendFormat("NicAc3Source(\"{0}\"", audioJob.Input);
-                            if (audioJob.Settings.ApplyDRC)
-                                script.AppendFormat(", DRC=1){0}", Environment.NewLine);
-                            else
-                                script.AppendFormat("){0}", Environment.NewLine);
-                            break;
-                        case ".avi":
-                            script.AppendFormat("AVISource(\"{0}\", audio=true){1}", audioJob.Input, Environment.NewLine);
-                            script.AppendFormat("EnsureVBRMP3Sync(){0}", Environment.NewLine);
-                            script.AppendFormat("Trim(0,0){0}", Environment.NewLine); // to match audio length
-                            break;
-                        case ".avs":
-                            script.AppendFormat("Import(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
-                            break;
-                        case ".dtshd":
-                        case ".dtsma":
-                        case ".dts":
-                            script.AppendFormat("LoadPlugin(\"{0}\"){1}", Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "NicAudio.dll"), Environment.NewLine);
-                            script.AppendFormat("NicDtsSource(\"{0}\"", audioJob.Input);
-                            if (audioJob.Settings.ApplyDRC)
-                                script.AppendFormat(", DRC=1){0}", Environment.NewLine);
-                            else
-                                script.AppendFormat("){0}", Environment.NewLine);
-                            break;
-                        case ".mpa":
-                        case ".mpg":
-                        case ".mp2":
-                        case ".mp3":
-                            script.AppendFormat("LoadPlugin(\"{0}\"){1}", Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "NicAudio.dll"), Environment.NewLine);
-                            script.AppendFormat("NicMPG123Source(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
-                            audioJob.FilesToDelete.Add(audioJob.Input + ".d2a");
-                            break;
-                        case ".wav":
-                            BinaryReader r = new BinaryReader(File.Open(audioJob.Input, FileMode.Open, FileAccess.Read));
-
-                            try
-                            {
-                                r.ReadBytes(20);
-                                UInt16 AudioFormat = r.ReadUInt16();  // read a LE int_16, offset 20 + 2 = 22
-
-                                switch (AudioFormat)
-                                {
-                                    case 0x0001:         // PCM Format Int
-                                        r.ReadBytes(22);   // 22 + 22 = 44
-                                        UInt32 DtsHeader = r.ReadUInt32(); // read a LE int_32
-                                        script.AppendFormat("LoadPlugin(\"{0}\"){1}", Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "NicAudio.dll"), Environment.NewLine);
-                                        if (DtsHeader == 0xE8001FFF)
-                                        {
-                                            script.AppendFormat("NicDtsSource(\"{0}\"", audioJob.Input);
-                                            if (audioJob.Settings.ApplyDRC)
-                                                script.AppendFormat(", DRC=1){0}", Environment.NewLine);
-                                            else
-                                                script.AppendFormat("){0}", Environment.NewLine);
-                                        }
-                                        else
-                                            script.AppendFormat("RaWavSource(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
-                                        break;
-                                    case 0x0003:         // IEEE Float
-                                    case 0xFFFE:         // WAVE_FORMAT_EXTENSIBLE header
-                                        script.AppendFormat("LoadPlugin(\"{0}\"){1}", Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "NicAudio.dll"), Environment.NewLine);
-                                        script.AppendFormat("RaWavSource(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
-                                        break;
-                                    case 0x0055:         // MPEG Layer 3
-                                        script.AppendFormat("LoadPlugin(\"{0}\"){1}", Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "NicAudio.dll"), Environment.NewLine);
-                                        script.AppendFormat("NicMPG123Source(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
-                                        break;
-                                    case 0x2000:         // AC3
-                                        script.AppendFormat("LoadPlugin(\"{0}\"){1}", Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "NicAudio.dll"), Environment.NewLine);
-                                        script.AppendFormat("NicAc3Source(\"{0}\"", audioJob.Input);
-                                        if (audioJob.Settings.ApplyDRC)
-                                            script.AppendFormat(", DRC=1){0}", Environment.NewLine);
-                                        else
-                                            script.AppendFormat("){0}", Environment.NewLine);
-                                        break;
-                                    default:
-                                        script.AppendFormat("WavSource(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
-                                        break;
-                                }
-                            }
-                            catch (EndOfStreamException e)
-                            {
-                                Console.WriteLine("{0}, wavfile can't be read.", e.GetType().Name);
-                            }
-                            finally
-                            {
-                                r.Close();
-                            }
-                            break;
-                        case ".w64":
-                        case ".aif":
-                        case ".au":
-                        case ".caf":
-                        case ".bwf":
-                            script.AppendFormat("LoadPlugin(\"{0}\"){1}", Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "NicAudio.dll"), Environment.NewLine);
-                            script.AppendFormat("RaWavSource(\"{0}\", 2){1}", audioJob.Input, Environment.NewLine);
-                            break;
-                        default:
-                            directShow = true;
-                            break;
-                    }
-                }
+                    bFound = OpenSourceWithFFAudioSource(out script);
+                if (!bFound)
+                    bFound = OpenSourceWithDirectShow(out script);
             }
-            if (directShow)
+            else if (audioJob.Settings.PreferredDecoder == AudioDecodingEngine.FFAudioSource)
             {
-                try
-                {
-                    MediaInfo info = new MediaInfo(audioJob.Input);
-                    if (info.Audio.Count > 0)
-                    {
-                        if (info.Video.Count > 0)
-                             script.AppendFormat("DirectShowSource(\"{0}\", video=false){1}", audioJob.Input, Environment.NewLine);
-                        else script.AppendFormat("DirectShowSource(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
-                        script.AppendFormat("EnsureVBRMP3Sync(){0}", Environment.NewLine);
-                    }
-                }
-                catch (Exception)
-                {
-                    deleteTempFiles();
-                    throw new JobRunException("Broken input file, " + audioJob.Input + ", can't continue.");
-                } 
-            } 
-            
+                bFound = OpenSourceWithFFAudioSource(out script);
+                if (!bFound)
+                    bFound = OpenSourceWithNicAudio(out script);
+                if (!bFound)
+                    bFound = OpenSourceWithDirectShow(out script);
+            }
+            else
+            {
+                bFound = OpenSourceWithDirectShow(out script);
+                if (!bFound)
+                    bFound = OpenSourceWithNicAudio(out script);
+                if (!bFound)
+                    bFound = OpenSourceWithFFAudioSource(out script);
+            }
+
+            if (!bFound)
+            {
+                deleteTempFiles();
+                throw new JobRunException("Input file cannot be opened: " + audioJob.Input);
+            }
+
             if (audioJob.Delay != 0)
                 script.AppendFormat("DelayAudio({0}.0/1000.0){1}", audioJob.Delay, Environment.NewLine);
 

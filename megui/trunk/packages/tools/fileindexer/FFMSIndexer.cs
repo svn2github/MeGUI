@@ -108,7 +108,8 @@ namespace MeGUI
                     strAVSScript.AppendLine("FFAudioSource(\"" + job.Input + "\", " + iCurrentTrack + ")");
 
                     // is this an audio track?
-                    if (AudioUtil.AVSScriptHasAudio(strAVSScript.ToString()) == false)
+                    string strErrorText;
+                    if (AudioUtil.AVSScriptHasAudio(strAVSScript.ToString(), out strErrorText) == false)
                         continue;
                     iCurrentAudioTrack++;
 

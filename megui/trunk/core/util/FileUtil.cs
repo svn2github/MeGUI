@@ -46,6 +46,19 @@ namespace MeGUI.core.util
             }
         }
 
+        public static bool DeleteFile(string strFile)
+        {
+            try
+            {
+                File.Delete(strFile);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         public static void CreateZipFile(string path, string filename)
         {
             using (ZipOutputStream outputFile = new ZipOutputStream(File.OpenWrite(filename)))

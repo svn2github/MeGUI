@@ -50,7 +50,13 @@ namespace MeGUI
         [EnumTitle("Upmix 2 to 5.1 with center channel dialog")]
         UpmixWithCenterChannelDialog
 	};
- 
+    public enum AudioDecodingEngine
+    {
+        NicAudio,
+        FFAudioSource,
+        DirectShow
+    };
+     
     [
         XmlInclude(typeof(MP2Settings)),
         XmlInclude(typeof(AC3Settings)), 
@@ -76,10 +82,10 @@ namespace MeGUI
         public int delay;
 		public bool delayEnabled;
         private bool autoGain;
-        private bool forceDirectShow;
         private bool applyDRC;
         private AudioCodec audioCodec;
         private AudioEncoderType audioEncoderType;
+        private AudioDecodingEngine preferredDecoder;
 
         [XmlIgnore()]
         public AudioCodec Codec
@@ -112,18 +118,42 @@ namespace MeGUI
 			delay = 0;
 			delayEnabled = false;
 			autoGain = true;
-            forceDirectShow = false;
             applyDRC = false;
             sampleRateType = 0;
             normalize = 100;
+            preferredDecoder = AudioDecodingEngine.NicAudio;
 		}
 
-	    public bool ForceDecodingViaDirectShow
-	    {
-            get { return forceDirectShow; }
-            set { forceDirectShow = value; }
-	    }
-	    
+#warning Deprecated since 2004; delete after next stable release
+        public string ForceDecodingViaDirectShow
+        {
+            get { return "migrated"; }
+            set
+            {
+                if (value.Equals("migrated"))
+                    return;
+                if (value.Equals("true"))
+                    preferredDecoder = AudioDecodingEngine.DirectShow;
+            }
+        }
+        [XmlIgnore()]
+        public AudioDecodingEngine PreferredDecoder
+        {
+            get { return preferredDecoder; }
+            set { preferredDecoder = value; }
+        }
+        // for profile import/export in case the enum changes
+        public string PreferredDecoderString
+        {
+            get { return preferredDecoder.ToString(); }
+            set 
+            {
+                if (value.Equals("FFAudioSource"))
+                    preferredDecoder = AudioDecodingEngine.FFAudioSource;
+                else if (value.Equals("DirectShow"))
+                    preferredDecoder = AudioDecodingEngine.DirectShow;
+            }
+        }
 		public ChannelMode DownmixMode
 		{
 			get { return downmixMode; }

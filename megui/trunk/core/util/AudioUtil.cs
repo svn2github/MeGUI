@@ -128,18 +128,20 @@ namespace MeGUI
             return list.ToArray();
         }
 
-        public static bool AVSScriptHasAudio(String strAVSScript)
+        public static bool AVSScriptHasAudio(String strAVSScript, out string strErrorText)
         {
             try
             {
+                strErrorText = String.Empty;
                 using (AviSynthScriptEnvironment env = new AviSynthScriptEnvironment())
                     using (AviSynthClip a = env.ParseScript(strAVSScript))
                         if (a.ChannelsCount == 0)
                             return false;
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
+                strErrorText = ex.Message;
                 return false;
             }
         }
