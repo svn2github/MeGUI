@@ -59,7 +59,7 @@ namespace MeGUI.packages.video.x264
         {
             x264AlphaDeblock.Enabled = x264DeblockActive.Checked;
             x264BetaDeblock.Enabled = x264DeblockActive.Checked;
-            fakeInterlaced.Enabled = !interlaced.Checked;
+            fakeInterlaced.Enabled = cbInterlaceMode.SelectedIndex == 0;
         }
         #endregion
         #region dropdowns
@@ -1178,7 +1178,7 @@ namespace MeGUI.packages.video.x264
                 x264Settings xs = new x264Settings();
                 xs.DeadZoneInter = (int)deadzoneInter.Value;
                 xs.DeadZoneIntra = (int)deadzoneIntra.Value;
-                xs.EncodeInterlaced = interlaced.Checked;
+                xs.InterlacedMode = (x264Settings.x264InterlacedModes)this.cbInterlaceMode.SelectedIndex;
                 xs.NoDCTDecimate = this.noDCTDecimateOption.Checked;
                 xs.SSIMCalculation = this.ssim.Checked;
                 xs.PSNRCalculation = this.psnr.Checked;
@@ -1279,7 +1279,7 @@ namespace MeGUI.packages.video.x264
                 x264Tunes.SelectedIndex = xs.x264Tuning;
                 deadzoneInter.Value = xs.DeadZoneInter;
                 deadzoneIntra.Value = xs.DeadZoneIntra;
-                interlaced.Checked = xs.EncodeInterlaced;
+                cbInterlaceMode.SelectedIndex = (int)xs.InterlacedMode;
                 noDCTDecimateOption.Checked = xs.NoDCTDecimate;
                 ssim.Checked = xs.SSIMCalculation;
                 if (xs.Profile > 2)
@@ -1488,7 +1488,9 @@ namespace MeGUI.packages.video.x264
             tooltipHelp.SetToolTip(x264ChromaQPOffset, SelectHelpText("chroma-qp-offset"));
             tooltipHelp.SetToolTip(cbBPyramid, SelectHelpText("b-pyramid"));
             tooltipHelp.SetToolTip(x264SlowFirstpass, SelectHelpText("slow-firstpass"));
-            tooltipHelp.SetToolTip(customCommandlineOptions, SelectHelpText("customcommandline"));
+            tooltipHelp.SetToolTip(cbInterlaceMode, SelectHelpText("interlaced"));
+            tooltipHelp.SetToolTip(x264PullDown, SelectHelpText("pulldown"));
+            tooltipHelp.SetToolTip(scenecut, SelectHelpText("noscenecut"));
 
             /*************************/
             /* Rate Control Tooltips */
@@ -1519,6 +1521,7 @@ namespace MeGUI.packages.video.x264
             tooltipHelp.SetToolTip(psnr, SelectHelpText("psnr"));
             tooltipHelp.SetToolTip(ssim, SelectHelpText("ssim"));                       
             tooltipHelp.SetToolTip(cqmComboBox1, SelectHelpText("cqm"));
+            tooltipHelp.SetToolTip(customCommandlineOptions, SelectHelpText("customcommandline"));
 
             /*************************/
             /* Analysis Tooltips */
@@ -1806,7 +1809,7 @@ namespace MeGUI.packages.video.x264
             this.x264NumberOfBFrames.Value = 3;
             this.x264BframeBias.Value = 0;
             this.x264NewAdaptiveBframes.SelectedIndex = 1;
-            interlaced.Checked = false;
+            cbInterlaceMode.SelectedIndex = (int)x264Settings.x264InterlacedModes.progressive;
             scenecut.Checked = true;
             this.x264NumberOfRefFrames.Value = 3;
             this.x264SCDSensitivity.Value = 40;

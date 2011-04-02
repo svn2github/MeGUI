@@ -302,9 +302,13 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                     sb.Append("--b-bias " + xs.BframeBias.ToString(ci) + " ");
 
             // Other
-            if (!xs.CustomEncoderOptions.Contains("--interlaced"))
-                if (xs.EncodeInterlaced)
-                    sb.Append("--interlaced ");
+            if (!xs.CustomEncoderOptions.Contains("--tff"))
+                if (xs.InterlacedMode == x264Settings.x264InterlacedModes.tff)
+                    sb.Append("--tff ");
+
+            if (!xs.CustomEncoderOptions.Contains("--bff"))
+                if (xs.InterlacedMode == x264Settings.x264InterlacedModes.bff)
+                    sb.Append("--bff ");
 
             if (xs.Scenecut)
             {
@@ -757,7 +761,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                 }
 
             if (!xs.CustomEncoderOptions.Contains("--fake-interlaced"))
-                if (xs.FakeInterlaced && !xs.EncodeInterlaced)
+                if (xs.FakeInterlaced && xs.InterlacedMode == x264Settings.x264InterlacedModes.progressive)
                     sb.Append("--fake-interlaced ");
 
             if (!xs.CustomEncoderOptions.Contains("--non-deterministic"))
@@ -808,7 +812,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                     sb.Append("--fullrange on ");
 
             if (!xs.CustomEncoderOptions.Contains("--pic-struct"))
-                if (xs.PicStruct)
+                if (xs.PicStruct && xs.InterlacedMode == x264Settings.x264InterlacedModes.progressive && xs.X264PullDown == 0)
                     sb.Append("--pic-struct ");
 
             if (!xs.CustomEncoderOptions.Contains("--colorprim"))

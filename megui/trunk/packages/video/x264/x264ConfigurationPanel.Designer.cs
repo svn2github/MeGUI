@@ -43,6 +43,8 @@ namespace MeGUI.packages.video.x264
             this.slicesnb = new System.Windows.Forms.NumericUpDown();
             this.label9 = new System.Windows.Forms.Label();
             this.gbFTOther = new System.Windows.Forms.GroupBox();
+            this.cbInterlaceMode = new System.Windows.Forms.ComboBox();
+            this.lblInterlacedMode = new System.Windows.Forms.Label();
             this.x264PullDown = new System.Windows.Forms.ComboBox();
             this.pullDownLabel = new System.Windows.Forms.Label();
             this.lblWeightedP = new System.Windows.Forms.Label();
@@ -52,7 +54,6 @@ namespace MeGUI.packages.video.x264
             this.x264NumberOfRefFrames = new System.Windows.Forms.NumericUpDown();
             this.label6 = new System.Windows.Forms.Label();
             this.x264SCDSensitivity = new System.Windows.Forms.NumericUpDown();
-            this.interlaced = new System.Windows.Forms.CheckBox();
             this.x264GeneralBFramesgGroupbox = new System.Windows.Forms.GroupBox();
             this.label12 = new System.Windows.Forms.Label();
             this.cbBPyramid = new System.Windows.Forms.ComboBox();
@@ -315,8 +316,8 @@ namespace MeGUI.packages.video.x264
             // 
             // x264CodecGeneralGroupbox
             // 
-            this.x264CodecGeneralGroupbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.x264CodecGeneralGroupbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.x264CodecGeneralGroupbox.Controls.Add(this.cbTarget);
             this.x264CodecGeneralGroupbox.Controls.Add(this.x264BitrateQuantizer);
             this.x264CodecGeneralGroupbox.Controls.Add(this.x264EncodingMode);
@@ -476,8 +477,10 @@ namespace MeGUI.packages.video.x264
             // 
             // gbFTOther
             // 
-            this.gbFTOther.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbFTOther.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbFTOther.Controls.Add(this.cbInterlaceMode);
+            this.gbFTOther.Controls.Add(this.lblInterlacedMode);
             this.gbFTOther.Controls.Add(this.x264PullDown);
             this.gbFTOther.Controls.Add(this.pullDownLabel);
             this.gbFTOther.Controls.Add(this.lblWeightedP);
@@ -487,13 +490,36 @@ namespace MeGUI.packages.video.x264
             this.gbFTOther.Controls.Add(this.x264NumberOfRefFrames);
             this.gbFTOther.Controls.Add(this.label6);
             this.gbFTOther.Controls.Add(this.x264SCDSensitivity);
-            this.gbFTOther.Controls.Add(this.interlaced);
             this.gbFTOther.Location = new System.Drawing.Point(259, 193);
             this.gbFTOther.Name = "gbFTOther";
             this.gbFTOther.Size = new System.Drawing.Size(240, 207);
             this.gbFTOther.TabIndex = 13;
             this.gbFTOther.TabStop = false;
             this.gbFTOther.Text = "Other";
+            // 
+            // cbInterlaceMode
+            // 
+            this.cbInterlaceMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbInterlaceMode.FormattingEnabled = true;
+            this.cbInterlaceMode.Items.AddRange(new object[] {
+            "none",
+            "TFF",
+            "BFF"});
+            this.cbInterlaceMode.Location = new System.Drawing.Point(167, 113);
+            this.cbInterlaceMode.Name = "cbInterlaceMode";
+            this.cbInterlaceMode.Size = new System.Drawing.Size(65, 21);
+            this.cbInterlaceMode.TabIndex = 26;
+            this.cbInterlaceMode.SelectedIndexChanged += new System.EventHandler(this.updateEvent);
+            // 
+            // lblInterlacedMode
+            // 
+            this.lblInterlacedMode.AutoSize = true;
+            this.lblInterlacedMode.Location = new System.Drawing.Point(9, 116);
+            this.lblInterlacedMode.Name = "lblInterlacedMode";
+            this.lblInterlacedMode.Size = new System.Drawing.Size(84, 13);
+            this.lblInterlacedMode.TabIndex = 25;
+            this.lblInterlacedMode.Text = "Interlaced Mode";
+            this.lblInterlacedMode.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // x264PullDown
             // 
@@ -507,7 +533,7 @@ namespace MeGUI.packages.video.x264
             "double",
             "triple",
             "euro"});
-            this.x264PullDown.Location = new System.Drawing.Point(167, 173);
+            this.x264PullDown.Location = new System.Drawing.Point(167, 147);
             this.x264PullDown.Name = "x264PullDown";
             this.x264PullDown.Size = new System.Drawing.Size(65, 21);
             this.x264PullDown.TabIndex = 24;
@@ -516,7 +542,7 @@ namespace MeGUI.packages.video.x264
             // pullDownLabel
             // 
             this.pullDownLabel.AutoSize = true;
-            this.pullDownLabel.Location = new System.Drawing.Point(9, 176);
+            this.pullDownLabel.Location = new System.Drawing.Point(9, 150);
             this.pullDownLabel.Name = "pullDownLabel";
             this.pullDownLabel.Size = new System.Drawing.Size(50, 13);
             this.pullDownLabel.TabIndex = 23;
@@ -560,7 +586,7 @@ namespace MeGUI.packages.video.x264
             // 
             this.scenecut.Checked = true;
             this.scenecut.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.scenecut.Location = new System.Drawing.Point(12, 143);
+            this.scenecut.Location = new System.Drawing.Point(12, 174);
             this.scenecut.Name = "scenecut";
             this.scenecut.Size = new System.Drawing.Size(163, 24);
             this.scenecut.TabIndex = 19;
@@ -620,16 +646,6 @@ namespace MeGUI.packages.video.x264
             0,
             0});
             this.x264SCDSensitivity.ValueChanged += new System.EventHandler(this.updateEvent);
-            // 
-            // interlaced
-            // 
-            this.interlaced.Location = new System.Drawing.Point(12, 113);
-            this.interlaced.Name = "interlaced";
-            this.interlaced.Size = new System.Drawing.Size(157, 24);
-            this.interlaced.TabIndex = 11;
-            this.interlaced.Text = "Encode interlaced";
-            this.interlaced.UseVisualStyleBackColor = true;
-            this.interlaced.CheckedChanged += new System.EventHandler(this.updateEvent);
             // 
             // x264GeneralBFramesgGroupbox
             // 
@@ -760,8 +776,8 @@ namespace MeGUI.packages.video.x264
             // 
             // gbH264Features
             // 
-            this.gbH264Features.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbH264Features.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.gbH264Features.Controls.Add(this.cabac);
             this.gbH264Features.Controls.Add(this.x264BetaDeblock);
             this.gbH264Features.Controls.Add(this.x264AlphaDeblock);
@@ -863,8 +879,8 @@ namespace MeGUI.packages.video.x264
             // 
             // gbGOPSize
             // 
-            this.gbGOPSize.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbGOPSize.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.gbGOPSize.Controls.Add(this.x264OpenGop);
             this.gbGOPSize.Controls.Add(this.x264OpenGopLabel);
             this.gbGOPSize.Controls.Add(this.x264KeyframeIntervalLabel);
@@ -979,8 +995,8 @@ namespace MeGUI.packages.video.x264
             // 
             // x264RCGroupbox
             // 
-            this.x264RCGroupbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.x264RCGroupbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.x264RCGroupbox.Controls.Add(this.mbtree);
             this.x264RCGroupbox.Controls.Add(this.label8);
             this.x264RCGroupbox.Controls.Add(this.lookahead);
@@ -1352,8 +1368,8 @@ namespace MeGUI.packages.video.x264
             // 
             // cqmComboBox1
             // 
-            this.cqmComboBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.cqmComboBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.cqmComboBox1.Filter = "Quantizer matrix files (*.cfg)|*.cfg|All Files (*.*)|*.*";
             this.cqmComboBox1.Location = new System.Drawing.Point(12, 19);
             this.cqmComboBox1.MaximumSize = new System.Drawing.Size(1000, 29);
@@ -1366,8 +1382,8 @@ namespace MeGUI.packages.video.x264
             // 
             // x264QuantizerGroupBox
             // 
-            this.x264QuantizerGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.x264QuantizerGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.x264QuantizerGroupBox.Controls.Add(this.deadzoneIntra);
             this.x264QuantizerGroupBox.Controls.Add(this.deadzoneInter);
             this.x264QuantizerGroupBox.Controls.Add(this.lbx264DeadZones);
@@ -1663,8 +1679,8 @@ namespace MeGUI.packages.video.x264
             // 
             // helpButton1
             // 
-            this.helpButton1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.helpButton1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.helpButton1.ArticleName = "Video Encoder Configuration/x264";
             this.helpButton1.AutoSize = true;
             this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
@@ -1675,8 +1691,8 @@ namespace MeGUI.packages.video.x264
             // 
             // gbPresets
             // 
-            this.gbPresets.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbPresets.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.gbPresets.BackColor = System.Drawing.Color.Transparent;
             this.gbPresets.Controls.Add(this.lbPreset);
             this.gbPresets.Controls.Add(this.tbx264Presets);
@@ -1700,8 +1716,8 @@ namespace MeGUI.packages.video.x264
             // 
             // tbx264Presets
             // 
-            this.tbx264Presets.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbx264Presets.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tbx264Presets.AutoSize = false;
             this.tbx264Presets.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.tbx264Presets.Location = new System.Drawing.Point(12, 50);
@@ -2167,8 +2183,8 @@ namespace MeGUI.packages.video.x264
             // 
             // x264ChromaMe
             // 
-            this.x264ChromaMe.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.x264ChromaMe.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.x264ChromaMe.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.x264ChromaMe.Checked = true;
             this.x264ChromaMe.CheckState = System.Windows.Forms.CheckState.Checked;
@@ -2327,8 +2343,8 @@ namespace MeGUI.packages.video.x264
             // 
             // gbOther
             // 
-            this.gbOther.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbOther.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.gbOther.Controls.Add(this.x264NbThreads);
             this.gbOther.Controls.Add(this.nonDeterministic);
             this.gbOther.Controls.Add(this.x264SlowFirstpass);
@@ -2641,8 +2657,8 @@ namespace MeGUI.packages.video.x264
             // 
             // logfile
             // 
-            this.logfile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.logfile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.logfile.Location = new System.Drawing.Point(113, 21);
             this.logfile.Name = "logfile";
             this.logfile.ReadOnly = true;
@@ -2683,8 +2699,8 @@ namespace MeGUI.packages.video.x264
             // 
             // qpfile
             // 
-            this.qpfile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.qpfile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.qpfile.Enabled = false;
             this.qpfile.Location = new System.Drawing.Point(113, 59);
             this.qpfile.Name = "qpfile";
@@ -2716,8 +2732,8 @@ namespace MeGUI.packages.video.x264
             // 
             // customCommandlineOptions
             // 
-            this.customCommandlineOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.customCommandlineOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.customCommandlineOptions.Location = new System.Drawing.Point(15, 19);
             this.customCommandlineOptions.Multiline = true;
             this.customCommandlineOptions.Name = "customCommandlineOptions";
@@ -2937,7 +2953,6 @@ namespace MeGUI.packages.video.x264
         private System.Windows.Forms.NumericUpDown x264SCDSensitivity;
         private System.Windows.Forms.NumericUpDown NoiseReduction;
         private System.Windows.Forms.Label NoiseReductionLabel;
-        private System.Windows.Forms.CheckBox interlaced;
         private System.Windows.Forms.CheckBox scenecut;
         private System.Windows.Forms.Label lbExtraIFframes;
         private System.Windows.Forms.CheckBox x264WeightedBPrediction;
@@ -3049,5 +3064,7 @@ namespace MeGUI.packages.video.x264
         private System.Windows.Forms.ComboBox x264PullDown;
         private System.Windows.Forms.ComboBox sampleAR;
         private System.Windows.Forms.Label sampleARLabel;
+        private System.Windows.Forms.ComboBox cbInterlaceMode;
+        private System.Windows.Forms.Label lblInterlacedMode;
     }
 }

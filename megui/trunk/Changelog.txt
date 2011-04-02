@@ -1,3 +1,4 @@
+2005 [x264] added interlaced modes tff and bff
 2004 [Audio Encoder] added option to choose the preferred decoder (default order: NicAudio, FFAudioSource, DirectShow)
                      in case the preferred decoder cannot decode the input file the others will try to decode the file
 2003 [One-Click] some profile adjustments

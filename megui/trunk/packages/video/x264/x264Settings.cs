@@ -45,6 +45,13 @@ namespace MeGUI
             placebo = 9
         }
 
+        public enum x264InterlacedModes : int
+        {
+            progressive = 0,
+            tff = 1,
+            bff = 2
+        }
+
         public override void setAdjustedNbThreads(int nbThreads)
         {
             base.setAdjustedNbThreads(0);
@@ -76,11 +83,12 @@ namespace MeGUI
             colorMatrix, transfer, colorPrim, x264PullDown, sampleAR;
 		decimal ipFactor, pbFactor, chromaQPOffset, vbvInitialBuffer, bitrateVariance, quantCompression, 
 			tempComplexityBlur, tempQuanBlurCC, scdSensitivity, bframeBias, quantizerCrf, AQStrength, psyRDO, psyTrellis;
-		bool deblock, cabac, p4x4mv, p8x8mv, b8x8mv, i4x4mv, i8x8mv, weightedBPrediction, encodeInterlaced,
+		bool deblock, cabac, p4x4mv, p8x8mv, b8x8mv, i4x4mv, i8x8mv, weightedBPrediction,
 			chromaME, adaptiveDCT, noMixedRefs, noFastPSkip, psnrCalc, noDctDecimate, ssimCalc, useQPFile, 
             FullRange, advSet, noMBTree, threadInput, noPsy, scenecut, x264Aud, x264SlowFirstpass, picStruct, fakeInterlaced, nonDeterministic;
 		string quantizerMatrix, qpfile;
         x264PresetLevelModes preset;
+        x264InterlacedModes interlacedMode;
 		#region constructor
         /// <summary>
 		/// default constructor, initializes codec default values
@@ -91,7 +99,6 @@ namespace MeGUI
             tune = 0;
             deadZoneInter = 21;
             deadZoneIntra = 11;
-            encodeInterlaced = false;
 			noFastPSkip = false;
             ssimCalc = false;
             psnrCalc = false;
@@ -173,6 +180,7 @@ namespace MeGUI
             picStruct = false;
             fakeInterlaced = false;
             nonDeterministic = false;
+            interlacedMode = x264InterlacedModes.progressive;
 		}
 		#endregion
 		#region properties
@@ -240,10 +248,10 @@ namespace MeGUI
             get { return quantizerCrf; }
             set { quantizerCrf = value; }
         }
-        public bool EncodeInterlaced
+        public x264InterlacedModes InterlacedMode
         {
-            get { return encodeInterlaced; }
-            set { encodeInterlaced = value; }
+            get { return interlacedMode; }
+            set { interlacedMode = value; }
         }
         public bool NoDCTDecimate
         {
