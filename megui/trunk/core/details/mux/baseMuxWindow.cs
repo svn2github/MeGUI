@@ -306,7 +306,7 @@ namespace MeGUI
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 48.99329F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 51.00671F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 45F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel2.Controls.Add(this.videoInputLabel, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.videoName, 3, 1);
             this.tableLayoutPanel2.Controls.Add(this.fps, 1, 1);
@@ -336,10 +336,10 @@ namespace MeGUI
             // videoName
             // 
             this.videoName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.videoName.Location = new System.Drawing.Point(244, 42);
+            this.videoName.Location = new System.Drawing.Point(249, 42);
             this.videoName.MaxLength = 100;
             this.videoName.Name = "videoName";
-            this.videoName.Size = new System.Drawing.Size(139, 21);
+            this.videoName.Size = new System.Drawing.Size(144, 21);
             this.videoName.TabIndex = 5;
             // 
             // fps
@@ -351,7 +351,7 @@ namespace MeGUI
             this.fps.Name = "fps";
             this.fps.NullString = "Not set";
             this.fps.SelectedIndex = 0;
-            this.fps.Size = new System.Drawing.Size(133, 29);
+            this.fps.Size = new System.Drawing.Size(138, 29);
             this.fps.TabIndex = 3;
             this.fps.SelectionChanged += new MeGUI.StringChanged(this.fps_SelectionChanged);
             // 
@@ -359,7 +359,7 @@ namespace MeGUI
             // 
             this.videoNameLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.videoNameLabel.AutoSize = true;
-            this.videoNameLabel.Location = new System.Drawing.Point(207, 46);
+            this.videoNameLabel.Location = new System.Drawing.Point(212, 46);
             this.videoNameLabel.Margin = new System.Windows.Forms.Padding(0);
             this.videoNameLabel.Name = "videoNameLabel";
             this.videoNameLabel.Size = new System.Drawing.Size(34, 13);
@@ -397,7 +397,7 @@ namespace MeGUI
             // removeVideoTrack
             // 
             this.removeVideoTrack.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.removeVideoTrack.Location = new System.Drawing.Point(397, 41);
+            this.removeVideoTrack.Location = new System.Drawing.Point(402, 41);
             this.removeVideoTrack.Name = "removeVideoTrack";
             this.removeVideoTrack.Size = new System.Drawing.Size(24, 23);
             this.removeVideoTrack.TabIndex = 39;
@@ -761,13 +761,13 @@ namespace MeGUI
             this.helpButton1.Location = new System.Drawing.Point(12, 568);
             this.helpButton1.Margin = new System.Windows.Forms.Padding(12, 9, 12, 9);
             this.helpButton1.Name = "helpButton1";
-            this.helpButton1.Size = new System.Drawing.Size(37, 23);
+            this.helpButton1.Size = new System.Drawing.Size(35, 23);
             this.helpButton1.TabIndex = 8;
             // 
             // chkCloseOnQueue
             // 
-            this.chkCloseOnQueue.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)));
+            this.chkCloseOnQueue.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.chkCloseOnQueue.AutoSize = true;
             this.chkCloseOnQueue.Checked = true;
             this.chkCloseOnQueue.CheckState = System.Windows.Forms.CheckState.Checked;

@@ -346,6 +346,7 @@ namespace MeGUI
                 AudioTypes.Register(AudioType.AC3)    &&
                 AudioTypes.Register(AudioType.MP3)    &&
                 AudioTypes.Register(AudioType.DTS)    &&
+                AudioTypes.Register(AudioType.WAV)    &&
                 AudioTypes.Register(AudioType.MP2)    &&
                 AudioTypes.Register(AudioType.MP4AAC) &&
                 AudioTypes.Register(AudioType.M4A)    &&
