@@ -644,17 +644,7 @@ namespace MeGUI.core.gui
                 this.HideProcessWindow();
                 log.LogValue("Error starting job", e);
                 if (e.type == ExceptionType.Error)
-                {
                     job.Status = JobStatus.ERROR;
-                    if (MainForm.Instance.Settings.AutoUpdate)
-                    {
-                        log.LogEvent("Start update detection in order to resolve the error.", ImageType.Warning);
-                        // Need a seperate thread to run the updater to stop internet lookups from freezing the app.
-                        Thread updateCheck = new Thread(new ThreadStart(MainForm.Instance.beginUpdateCheck));
-                        updateCheck.IsBackground = true;
-                        updateCheck.Start();
-                    }
-                }
                 else // ExceptionType.UserSkip
                     job.Status = JobStatus.SKIP;
                 currentProcessor = null;
@@ -850,8 +840,14 @@ namespace MeGUI.core.gui
 
         private void shutDownWhenFinishedLocalQueueToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            shutDownWhenFinishedLocalQueueToolStripMenuItem.Checked = !shutDownWhenFinishedLocalQueueToolStripMenuItem.Checked;
             if (shutDownWhenFinishedLocalQueueToolStripMenuItem.Checked)
-                mode = JobWorkerMode.CloseOnLocalListCompleted;
+            {
+                if (localJobs.Count == 0 && status == JobWorkerStatus.Idle)
+                    UserRequestShutDown();
+                else
+                    mode = JobWorkerMode.CloseOnLocalListCompleted;
+            }
             else
                 mode = JobWorkerMode.RequestNewJobs;
         }

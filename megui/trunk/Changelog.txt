@@ -1,3 +1,5 @@
+2008 [Worker] fixed "shut down worker when finished local queue"
+              some cosmetics
 2007 [Nero AAC Encoder] fixed cosmetic problem with wrong bitrate values in the configuration dialog. Bug #3286672
 2006 [MKV Muxer] added support for wav input files. Feature request #3253221
 2005 [x264] added option for interlaced modes --tff and --bff. --interlaced has been removed. Bug #3204337
