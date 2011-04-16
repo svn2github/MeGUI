@@ -1,13 +1,15 @@
-2006 [MKV Muxer] added support for wav input files
-2005 [x264] aded option for interlaced modes --tff and --bff. --interlaced has been removed. Bug #3204337
-2004 [Audio Encoder] added option to choose the preferred decoder (default order: NicAudio, FFAudioSource, DirectShow)
-                     in case the preferred decoder cannot decode the input file the others will try to decode the file
+2007 [Nero AAC Encoder] fixed cosmetic problem with wrong bitrate values in the configuration dialog. Bug #3286672
+2006 [MKV Muxer] added support for wav input files. Feature request #3253221
+2005 [x264] added option for interlaced modes --tff and --bff. --interlaced has been removed. Bug #3204337
+2004 [Audio Encoder] added option to choose the preferred decoder. Feature request #3053195
+                     in case the preferred decoder cannot decode the input file the others will be tried, too
+                     default order: NicAudio, FFAudioSource, DirectShow
 2003 [One-Click] some profile adjustments
 2002 [Update] added build number check so that profiles can only be installed using the correct build
 2001 [MKV Demuxer] added status information to progress window
      [One-Click] fixed handling of PGS subtitles
 2000 [One-Click] if the source is a MKV file and target container is MKV the subtitles will be copied
-     [One-Click] if the source is a MKV file and target container is MKV the video track can be copied
+     [One-Click] if the source is a MKV file and target container is MKV the video track can be copied. Feature request #3024414
                  added therefore a "Keep original track" checkbox for the video in the settings
 1999 [profiles] during startup deprecated profiles will be removed
 1998 [x264] invalid zones will be ignored. Bug #3233068

@@ -91,14 +91,13 @@ namespace MeGUI.packages.audio.naac
             // 
             // besweetOptionsGroupbox
             // 
-            this.besweetOptionsGroupbox.Location = new System.Drawing.Point(5, 3);
-            this.besweetOptionsGroupbox.Size = new System.Drawing.Size(366, 149);
+            this.besweetOptionsGroupbox.Size = new System.Drawing.Size(378, 149);
             this.besweetOptionsGroupbox.TabIndex = 0;
             // 
             // vQuality
             // 
-            this.vQuality.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.vQuality.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.vQuality.Location = new System.Drawing.Point(3, 133);
             this.vQuality.Maximum = 100;
             this.vQuality.Name = "vQuality";
@@ -110,8 +109,8 @@ namespace MeGUI.packages.audio.naac
             // 
             // rbtnVBR
             // 
-            this.rbtnVBR.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.rbtnVBR.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.rbtnVBR.Location = new System.Drawing.Point(13, 115);
             this.rbtnVBR.Name = "rbtnVBR";
             this.rbtnVBR.Size = new System.Drawing.Size(239, 24);
@@ -121,8 +120,8 @@ namespace MeGUI.packages.audio.naac
             // 
             // vBitrate
             // 
-            this.vBitrate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.vBitrate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.vBitrate.Location = new System.Drawing.Point(3, 64);
             this.vBitrate.Maximum = 640;
             this.vBitrate.Minimum = 16;
@@ -203,11 +202,11 @@ namespace MeGUI.packages.audio.naac
 			set
 			{
                 NeroAACSettings nas = (NeroAACSettings)value;
+                vBitrate.Value = Math.Max(Math.Min(nas.Bitrate, vBitrate.Maximum), vBitrate.Minimum);
+                vQuality.Value = (int)(nas.Quality * (Decimal)vQuality.Maximum);
                 rbtnABR.Checked = nas.BitrateMode == BitrateManagementMode.ABR;
                 rbtnCBR.Checked = nas.BitrateMode == BitrateManagementMode.CBR;
                 rbtnVBR.Checked = nas.BitrateMode == BitrateManagementMode.VBR;
-                vBitrate.Value = Math.Max(Math.Min(nas.Bitrate, vBitrate.Maximum), vBitrate.Minimum);
-                vQuality.Value = (int)(nas.Quality * (Decimal)vQuality.Maximum);
                 comboBox1.SelectedItem = EnumProxy.Create(nas.Profile);
 			}
 		}
@@ -221,16 +220,25 @@ namespace MeGUI.packages.audio.naac
 
         private void vBitrate_ValueChanged(object sender, EventArgs e)
         {
-            if (rbtnABR.Checked)
+            if (rbtnVBR.Checked)
+            {
+                rbtnABR.Text = "Adaptive Bitrate";
+                rbtnCBR.Text = "Constant Bitrate";
+                Decimal q = ((Decimal)vQuality.Value) / vQuality.Maximum;
+                rbtnVBR.Text = String.Format("Variable Bitrate (Q={0}) ", q);
+            }
+            else if (rbtnABR.Checked)
             {
                 rbtnABR.Text = String.Format("Adaptive Bitrate @ {0} kbit/s", vBitrate.Value);
+                rbtnCBR.Text = "Constant Bitrate";
+                rbtnVBR.Text = "Variable Bitrate";
             }
             else
             {
+                rbtnABR.Text = "Adaptive Bitrate";
                 rbtnCBR.Text = String.Format("Constant Bitrate @ {0} kbit/s", vBitrate.Value);
+                rbtnVBR.Text = "Variable Bitrate";
             }
-            Decimal q = ((Decimal)vQuality.Value) / vQuality.Maximum;
-            rbtnVBR.Text = String.Format("Variable Bitrate (Q={0}) ", q);
         }
 
         #region Editable<NeroAACSettings> Members
