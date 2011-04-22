@@ -1,107 +1,38 @@
-2008 [Worker] fixed "shut down worker when finished local queue"
-              some cosmetics
-2007 [Nero AAC Encoder] fixed cosmetic problem with wrong bitrate values in the configuration dialog. Bug #3286672
-2006 [MKV Muxer] added support for wav input files. Feature request #3253221
-2005 [x264] added option for interlaced modes --tff and --bff. --interlaced has been removed. Bug #3204337
-2004 [Audio Encoder] added option to choose the preferred decoder. Feature request #3053195
-                     in case the preferred decoder cannot decode the input file the others will be tried, too
-                     default order: NicAudio, FFAudioSource, DirectShow
-2003 [One-Click] some profile adjustments
-2002 [Update] added build number check so that profiles can only be installed using the correct build
-2001 [MKV Demuxer] added status information to progress window
-     [One-Click] fixed handling of PGS subtitles
-2000 [One-Click] if the source is a MKV file and target container is MKV the subtitles will be copied
-     [One-Click] if the source is a MKV file and target container is MKV the video track can be copied. Feature request #3024414
-                 added therefore a "Keep original track" checkbox for the video in the settings
-1999 [profiles] during startup deprecated profiles will be removed
-1998 [x264] invalid zones will be ignored. Bug #3233068
-     [Main Window] zones button is always enabled. Bug #3243634
-1997 [AutoEncode] fixed duplicate device type entries
-1996 [MKV Demuxer] added mkvextract as mkv demuxer
-     [Update] added mkvextract.exe and mkvinfo.exe to the file checks
-     [One-Click] if the source is a MKV file the chapters will be extracted and reapplied to the output
-     [One-Click] enhanced chapter and qpf file handling
-     [One-Click] if the source is a MKV file the audio files can be demuxed if using FFMS indexer
-1995 [MKV Muxer] added --aac-is-sbr in any case for AAC files in order to avoid a warning message
-1994 [Log] added timestamp to some log items
-1993 [Winamp] removed winamp encoder
-1992 [AudX] removed audx encoder
-1991 [Snow] removed snow encoder
-1990 [MainForm] cosmetic change
+2009 [MediaInfo] adjustment for recent mediainfo builds
 
-Changelog 1911 --> 1989
+Changelog 1989 --> 2008
 
 Main changes:
-[One-Click] added the FFMSIndexer so that e.g. most AVI and MKV files are now supported.
-            if the FFMSIndexer is used the audio track must be encoded and cannot be muxed only.
-[VideoPlayer] starting preview size will match the screen resolution. Added also an option for 1:1 preview mode.
-[FileIndexer] added demux option to the audio tracks when using FFMSIndex
-              these audio tracks will be added to the main input tab if "on completion load files" is selected. Feature request #3158957
-[M2TS Muxer] added Blu-ray and AVCHD device output types. Feature request #1982670
-[AVI Muxer] added PC device output type which is unrestricted and corresponds to the old standard settings. 
-            the new standard output type is now enhanced for standalone devices so that e.g. opendml is disabled and splitting enforced. Feature request #1951705
-[Update] added update check for Nero AAC encoder
+[One-Click]     if the source is a MKV file:
+                - the audio files can be demuxed if using FFMS indexer
+                - and target container is MKV the video track can be copied. Feature request #3024414
+                  added therefore a "Keep original track" checkbox for the video in the settings
+			    - and target container is MKV the subtitles will be copied
+                - the chapters will be extracted and reapplied to the output
+[Audio Encoder] added option to choose the preferred audio decoder. Feature request #3053195
+                in case the preferred audio decoder cannot decode the input file the others will be tried, too
+                default order: NicAudio, FFAudioSource, DirectShow
+[Encoder]       removed audx, snow and winamp encoder
 
 Other changes:
-[Audio Encoder] downmix will be ignored if there are not more than 2 audio channels
-[Audio Encoder] if AAC is detected FFAudioSource() will be used if possible
-[Audio Jobs] audio encoding job can be added without existing input file
-[Audio Jobs] update elapsed time while preprocessing
-[AutoEncode] zone handling added so that Intro and Credit selection in the video preview window will be respected
-[AVI Muxer] + [M2TS Muxer] added mux script file content to the log
-[AVS Cutter] update start/end frame when a section is clicked. Feature request #1660341
-[AVS Script Creator] new video player will be started with previewing the middle of the video in 1:1 mode
-[AVS Script Creator] while cropping VideoPlayer preview moves to the cropping border
-[Chapter Creator] + [AVS Cutter] VideoPlayer preview respects the "always on top" setting
-[FFMSIndexer] enhanced progress window in case that the index file already exists
-[File Indexer] fixed selecting of settings after initial opening. Bug #3182423
-[HD Streams Extractor] fixed processing of joined input files. Bug #3164153
-[HD Streams Extractor] the default tracks will be pre-selected based upon the selected default languages in the settings
-[Job] enhanced message in case a job is already aborted
-[JobQueue] renamed column "codec" to "encoder"
-[Log] changed version number syntax for MeGUI x64
-[Log] the content of an avs input file will be added to the log
-[Main Window] cosmetic adjustments
-[Main Window] disabled maximize button. Feature request #2727670
-[Main Window] if video input avs file has also audio included add this file as audio track, too. Feature request #2918470
-[Main Window] initial starting window opens in the visible area taking the taskbar into account. Feature request #2821392
-[MKV Muxer] added forced track flag for subtitles
-[MKV Muxer] cosmetics 
-[MKV Muxer] fixed problem with chapter information in audio files
-[MP4 Muxer] a root folder cannot be selected/used as temp folder
-[Muxer] + [OneClick] the default device type used also for autoencode will be preselected. Feature request #2812862
-[Muxer] changed ISO 639-2 language codes to ISO 639-2/T. Feature request #2811678
-[One-Click] a new job will be added after the indexing job to show the progress of the preprocessing. Feature request #1717535
-[One-Click] audio language names added to the output file
-[One-Click] chapters will not be added if output container is AVI
-[One-Click] corrected output height if autocrop is disabled
-[One-Click] enhanced automatic de-interlacing logging
-[One-Click] fixed handling of video input files with short file names (less than 6 characters including extension). Bug #3160645
-[One-Click] fixed handling of video input files without audio track. Bug #3159523
-[One-Click] improved default language pre-selection
-[One-Click] removed resolution adjustment for AVC level enforcement
-[Queue] disabled job status changing while job is being processed. Feature request #3201255
-[Settings] added buttons to clear the default output directory and the path to neroaacenc. Feature request #3177293
-[Settings] added option to disable the pre-selecting of tracks in the HD Streams Extractor
-[Settings] added option to ensure correct playback speed while playing the video preview (defaults to disabled) 
-[Settings] removed unnecessary OggEnc2 checkbox
-[Settings] some cosmetics
-[Update] deprecated update cache files will be deleted 60 days after they have been downloaded
-[Update] only the files which need an update are shown. if no file needs an update all files are shown.
-[Update] removed treeview on the left side so that the update data itself is better visible
-[Update] save/restore size, location and column locations. Feature request #3079391
-[Video Encoder] enhanced command line parser
-[Video Encoder] fixed not applying zones in first pass. Bug #3188275
-[VideoPlayer] start window in top of other windows (excluding calling window)
-[VideoPlayer] while resizing/opening the window is moved to the visible area of the desktop
-[Worker] corrected wiki link. Patch by XhmikosR (#3186982)
-[x264] changed default value of --qpmax to 69 (requires x264 rev 1881+)
-[x264] cosmetic adjustment. Bug #3201244
-[XviD] added threads = 0 for automatic detection
-[XviD] custom command line values have precedence
-[XviD] enhanced overflow handling in the settings dialogue
-[XviD] if possible -par x:y will be replaced with -par z
-AssumeFPS() added to DirectShow(), DSS2() and FFVideoSource() scripts
+[AutoEncode] fixed duplicate device type entries
+[Log] added timestamp to some log items
+[Main Window] zones button is always enabled. Bug #3243634
+[MainForm] cosmetic change
+[MKV Demuxer] added mkvextract as mkv demuxer
+[MKV Demuxer] added status information to progress window
+[MKV Muxer] added --aac-is-sbr in any case for AAC files in order to avoid a warning message
+[MKV Muxer] added support for wav input files. Feature request #3253221
+[Nero AAC Encoder] fixed cosmetic problem with wrong bitrate values in the configuration dialog. Bug #3286672
+[One-Click] enhanced chapter and qpf file handling
+[One-Click] some profile adjustments
+[profiles] during startup deprecated profiles will be removed
+[Update] added build number check so that profiles can only be installed using the correct build
+[Update] added mkvextract.exe and mkvinfo.exe to the file checks
+[Worker] fixed "shut down worker when finished local queue"
+[Worker] some cosmetics
+[x264] added option for interlaced modes --tff and --bff. --interlaced has been removed. Bug #3204337
+[x264] invalid zones will be ignored. Bug #3233068
 
 Full changelog: 
 http://megui.svn.sourceforge.net/viewvc/megui/megui/trunk/Changelog_full.txt
