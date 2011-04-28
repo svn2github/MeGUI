@@ -201,7 +201,7 @@ namespace MeGUI
                 {
                     this.saveProjectDialog.Filter = "FFMSIndex project files|*.ffindex";
                     this.gbOutput.Enabled = false;
-                    this.gbAudio.Enabled = true;
+                    this.gbAudio.Enabled = false;
                     if (this.demuxTracks.Checked)
                         this.demuxAll.Checked = true;
                     this.demuxTracks.Enabled = true;
