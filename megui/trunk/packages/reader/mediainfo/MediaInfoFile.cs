@@ -333,12 +333,14 @@ namespace MeGUI
                     switch (atrack.FormatProfile)
                     {
                         case "Dolby Digital": ati.Type = "AC-3"; break;
+                        case "HRA / Core":
                         case "HRA": ati.Type = "DTS-HD High Resolution"; break;
                         case "Layer 1": ati.Type = "MPA"; break;
                         case "Layer 2": ati.Type = "MP2"; break;
                         case "Layer 3": ati.Type = "MP3"; break;
                         case "LC": ati.Type = "AAC"; break;
-                        case "MA": ati.Type = "DTS-HD Master Audio"; break;
+                        case "MA":
+                        case "MA / Core": ati.Type = "DTS-HD Master Audio"; break;
                         case "TrueHD": ati.Type = "TrueHD"; break;
                     }
                 }
