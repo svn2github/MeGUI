@@ -160,7 +160,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "TSMuxer");
                 }
                 sw.Write(" --vbr --vbv-len=500"); // mux options
                 if (settings.SplitSize.HasValue)
-                    sw.Write(" --split-size " + settings.SplitSize.Value.MB + "MB");
+                    sw.Write(" --split-size=" + settings.SplitSize.Value.MB + "MB");
                 if (!string.IsNullOrEmpty(settings.VideoInput))
                 {
                     if (VideoUtil.detecAVCStreamFromFile(settings.VideoInput) == true)
@@ -171,7 +171,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "TSMuxer");
                             extra += " , track=1";
                     }
                     else if (settings.VideoInput.ToLower().EndsWith(".m2v"))
-                        vcodecID = "V_MPEG2";
+                        vcodecID = "V_MPEG-2";
                     else vcodecID = "V_MS/VFW/WVC1";
                     sw.Write("\n" + vcodecID + ", ");
 
@@ -188,7 +188,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "TSMuxer");
                             extra += " , track=1";
                     }
                     else if (settings.MuxedInput.ToLower().EndsWith(".m2v"))
-                        vcodecID = "V_MPEG2";
+                        vcodecID = "V_MPEG-2";
                     else vcodecID = "V_MS/VFW/WVC1";
                     sw.Write(vcodecID + ", ");
 

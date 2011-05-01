@@ -1,3 +1,6 @@
+2013 [M2TS Muxer] fixed splitting option. Bug #3294210
+                  fixed m2v input handling
+2011 [MediaInfo] introduce "Core" alias for DTSHD/DTSMA
 2009 [MediaInfo] adjustment for recent mediainfo builds
 
 Changelog 1989 --> 2008
