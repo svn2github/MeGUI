@@ -997,8 +997,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             } 
             if (audioJob.Settings is OggVorbisSettings)
             {
-                // http://forum.doom9.org/showthread.php?p=831098#post831098
-                script.Append("6==Audiochannels(last)?GetChannel(last,1,3,2,5,6,4):last" + Environment.NewLine);
                 _mustSendWavHeaderToEncoderStdIn = true;
                 OggVorbisSettings n = audioJob.Settings as OggVorbisSettings;
                 _encoderExecutablePath = this._settings.OggEnc2Path;

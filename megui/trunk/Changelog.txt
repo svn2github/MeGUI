@@ -1,3 +1,4 @@
+2014 [OggVorbis] removed channel remapping as it is not needed anymore
 2013 [M2TS Muxer] fixed splitting option. Bug #3294210
                   fixed m2v input handling
 2011 [MediaInfo] introduce "Core" alias for DTSHD/DTSMA
