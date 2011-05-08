@@ -1,3 +1,4 @@
+2017 [File Indexer] added MKV audio demuxer for FFMS
 2016 [Update] enable 2010 only for debug builds
 2015 [x264] added --bluray-compat option (requires x264 rev 1935+)
      [x264] changed --open-gop handling (requires x264 rev 1935+)

@@ -25,6 +25,7 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
+using MeGUI.core.details;
 using MeGUI.core.util;
 
 namespace MeGUI
@@ -37,6 +38,7 @@ namespace MeGUI
 	{ 
 		#region variables
         private D2VIndexJob lastJob = null;
+        private LogItem _oLog;
         
         public enum IndexType
         {
@@ -48,6 +50,7 @@ namespace MeGUI
         private string strVideoScanType = "";
         private string strContainerFormat = "";
         private List<AudioTrackInfo> audioTracks = new List<AudioTrackInfo>();
+        private MkvInfo oMkvInfo = null;
 
         private bool dialogMode = false; // $%£%$^>*"%$%%$#{"!!! Affects the public behaviour!
 		private bool configured = false;
@@ -167,10 +170,13 @@ namespace MeGUI
                         this.demuxAll.Checked = true;
                     this.demuxTracks.Enabled = false;
                     this.gbAudio.Enabled = true;
+                    this.gbAudio.Text = " Audio Demux ";
                     this.gbOutput.Enabled = true;
                     this.demuxVideo.Enabled = true;
                     IndexerUsed = IndexType.DGI;
                     btnDGI.Checked = true;
+                    if (txtContainerInformation.Text.Trim().ToUpper().Equals("MATROSKA"))
+                        generateAudioList();
                     break;
                 }
                 case IndexType.DGA:
@@ -178,6 +184,7 @@ namespace MeGUI
                     this.saveProjectDialog.Filter = "DGAVCIndex project files|*.dga";
                     this.gbOutput.Enabled = true;
                     this.gbAudio.Enabled = true;
+                    this.gbAudio.Text = " Audio Demux ";
                     if (this.demuxTracks.Checked)
                         this.demuxAll.Checked = true;
                     this.demuxTracks.Enabled = false;
@@ -191,6 +198,7 @@ namespace MeGUI
                     this.saveProjectDialog.Filter = "DGIndex project files|*.d2v";
                     this.demuxTracks.Enabled = true;
                     this.gbOutput.Enabled = true;
+                    this.gbAudio.Text = " Audio Demux ";
                     this.gbAudio.Enabled = true;
                     this.demuxVideo.Enabled = true;
                     IndexerUsed = IndexType.D2V;
@@ -201,7 +209,7 @@ namespace MeGUI
                 {
                     this.saveProjectDialog.Filter = "FFMSIndex project files|*.ffindex";
                     this.gbOutput.Enabled = false;
-                    this.gbAudio.Enabled = false;
+                    this.gbAudio.Enabled = true;
                     if (this.demuxTracks.Checked)
                         this.demuxAll.Checked = true;
                     this.demuxTracks.Enabled = true;
@@ -209,6 +217,13 @@ namespace MeGUI
                     this.demuxVideo.Enabled = false;
                     IndexerUsed = IndexType.FFMS;
                     btnFFMS.Checked = true;
+                    if (txtContainerInformation.Text.Trim().ToUpper().Equals("MATROSKA"))
+                    {
+                        generateAudioList();
+                        this.gbAudio.Text = " Audio Demux ";
+                    }
+                    else
+                        this.gbAudio.Text = " Audio Encoding ";
                     break;
                 }
             }
@@ -242,7 +257,6 @@ namespace MeGUI
 		{
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FileIndexerWindow));
             this.gbInput = new System.Windows.Forms.GroupBox();
-            this.input = new MeGUI.FileBar();
             this.inputLabel = new System.Windows.Forms.Label();
             this.queueButton = new System.Windows.Forms.Button();
             this.loadOnComplete = new System.Windows.Forms.CheckBox();
@@ -271,6 +285,7 @@ namespace MeGUI
             this.lblCodec = new System.Windows.Forms.Label();
             this.lblContainer = new System.Windows.Forms.Label();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
+            this.input = new MeGUI.FileBar();
             this.gbInput.SuspendLayout();
             this.gbAudio.SuspendLayout();
             this.gbOutput.SuspendLayout();
@@ -288,24 +303,6 @@ namespace MeGUI
             this.gbInput.TabIndex = 0;
             this.gbInput.TabStop = false;
             this.gbInput.Text = " Input ";
-            // 
-            // input
-            // 
-            this.input.AllowDrop = true;
-            this.input.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.input.Filename = "";
-            this.input.Filter = "";
-            this.input.FilterIndex = 0;
-            this.input.FolderMode = false;
-            this.input.Location = new System.Drawing.Point(77, 10);
-            this.input.Name = "input";
-            this.input.ReadOnly = true;
-            this.input.SaveMode = false;
-            this.input.Size = new System.Drawing.Size(329, 34);
-            this.input.TabIndex = 4;
-            this.input.Title = null;
-            this.input.FileSelected += new MeGUI.FileBarEventHandler(this.input_FileSelected);
             // 
             // inputLabel
             // 
@@ -346,17 +343,18 @@ namespace MeGUI
             this.gbAudio.Size = new System.Drawing.Size(424, 125);
             this.gbAudio.TabIndex = 8;
             this.gbAudio.TabStop = false;
-            this.gbAudio.Text = " Audio ";
+            this.gbAudio.Text = " Audio Demux ";
             // 
             // demuxAll
             // 
+            this.demuxAll.AutoSize = true;
             this.demuxAll.Checked = true;
             this.demuxAll.Location = new System.Drawing.Point(304, 20);
             this.demuxAll.Name = "demuxAll";
-            this.demuxAll.Size = new System.Drawing.Size(106, 17);
+            this.demuxAll.Size = new System.Drawing.Size(100, 17);
             this.demuxAll.TabIndex = 15;
             this.demuxAll.TabStop = true;
-            this.demuxAll.Text = "Demux All Tracks";
+            this.demuxAll.Text = "All Audio Tracks";
             this.demuxAll.UseVisualStyleBackColor = true;
             this.demuxAll.CheckedChanged += new System.EventHandler(this.rbtracks_CheckedChanged);
             // 
@@ -376,7 +374,7 @@ namespace MeGUI
             this.demuxNoAudiotracks.Name = "demuxNoAudiotracks";
             this.demuxNoAudiotracks.Size = new System.Drawing.Size(120, 24);
             this.demuxNoAudiotracks.TabIndex = 13;
-            this.demuxNoAudiotracks.Text = "No Audio demux";
+            this.demuxNoAudiotracks.Text = "No Audio";
             this.demuxNoAudiotracks.CheckedChanged += new System.EventHandler(this.rbtracks_CheckedChanged);
             // 
             // demuxTracks
@@ -592,6 +590,24 @@ namespace MeGUI
             this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 14;
             // 
+            // input
+            // 
+            this.input.AllowDrop = true;
+            this.input.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.input.Filename = "";
+            this.input.Filter = "";
+            this.input.FilterIndex = 0;
+            this.input.FolderMode = false;
+            this.input.Location = new System.Drawing.Point(77, 10);
+            this.input.Name = "input";
+            this.input.ReadOnly = true;
+            this.input.SaveMode = false;
+            this.input.Size = new System.Drawing.Size(329, 34);
+            this.input.TabIndex = 4;
+            this.input.Title = null;
+            this.input.FileSelected += new MeGUI.FileBarEventHandler(this.input_FileSelected);
+            // 
             // FileIndexerWindow
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
@@ -614,6 +630,7 @@ namespace MeGUI
             this.Text = "MeGUI - File Indexer";
             this.gbInput.ResumeLayout(false);
             this.gbAudio.ResumeLayout(false);
+            this.gbAudio.PerformLayout();
             this.gbOutput.ResumeLayout(false);
             this.gbOutput.PerformLayout();
             this.gbIndexer.ResumeLayout(false);
@@ -665,12 +682,16 @@ namespace MeGUI
 			if (input.Filename != fileName)
                 input.Filename = fileName;
 
-            AudioTracks.Items.Clear();
-            if (AudioTracks.Items.Count < 1)
+            // if the input container is MKV get the MkvInfo
+            oMkvInfo = null;
+            if (txtContainerInformation.Text.Trim().ToUpper().Equals("MATROSKA"))
             {
-                foreach (AudioTrackInfo atrack in audioTracks)
-                    AudioTracks.Items.Add(atrack);
+                if (_oLog == null)
+                    _oLog = mainForm.Log.Info("FileIndexer");
+                oMkvInfo = new MkvInfo(input.Filename, ref _oLog);
             }
+
+            generateAudioList();
 
             btnD2V.Enabled = iFile.isD2VIndexable();
             btnDGA.Enabled = iFile.isDGAIndexable();
@@ -691,6 +712,20 @@ namespace MeGUI
                 demuxNoAudiotracks.Checked = true;
             }
 		}
+
+        private void generateAudioList()
+        {
+            AudioTracks.Items.Clear();
+            if (oMkvInfo != null && IndexerUsed == IndexType.FFMS)
+            {
+                foreach (MkvInfoTrack oTrack in oMkvInfo.Track)
+                    if (oTrack.Type == MkvInfoTrackType.Audio)
+                        AudioTracks.Items.Add(oTrack.AudioTrackInfo);
+            }
+            else
+                foreach (AudioTrackInfo atrack in audioTracks)
+                    AudioTracks.Items.Add(atrack);
+        }
 
         /// <summary>
 		/// recommend input settings based upon the input file
@@ -805,8 +840,21 @@ namespace MeGUI
                             case IndexType.FFMS:
                             {
                                 FFMSIndexJob job = generateFFMSIndexJob();
-                                //lastJob = job;
-                                mainForm.Jobs.addJobsToQueue(job);
+                                if (oMkvInfo != null && job.DemuxMode > 0)
+                                {
+                                    List<MkvInfoTrack> oExtractTrack = new List<MkvInfoTrack>();
+                                    foreach (AudioTrackInfo oStream in job.AudioTracks)
+                                        foreach (MkvInfoTrack oTrack in oMkvInfo.Track)
+                                            if (oTrack.TrackID == oStream.TrackID)
+                                                oExtractTrack.Add(oTrack);
+                                    job.AudioTracksDemux = oExtractTrack;
+                                    job.AudioTracks = new List<AudioTrackInfo>();
+                                    MkvExtractJob extractJob = new MkvExtractJob(input.Filename, Path.GetDirectoryName(this.input.Filename), oExtractTrack);
+                                    JobChain c = new SequentialChain(new SequentialChain(extractJob), new SequentialChain(job));
+                                    mainForm.Jobs.addJobsWithDependencies(c);
+                                }
+                                else
+                                    mainForm.Jobs.addJobsToQueue(job);
                                 if (this.closeOnQueue.Checked)
                                     this.Close();
                                 break;
@@ -998,7 +1046,7 @@ namespace MeGUI
             StringBuilder logBuilder = new StringBuilder();
             VideoUtil vUtil = new VideoUtil(mainForm);
             List<string> arrFilesToDelete = new List<string>();
-            Dictionary<int, string> audioFiles = vUtil.getAllDemuxedAudio(job.AudioTracks, out arrFilesToDelete, job.Output, null);
+            Dictionary<int, string> audioFiles = vUtil.getAllDemuxedAudio(job.AudioTracks, new List<MkvInfoTrack>(), out arrFilesToDelete, job.Output, null);
             if (job.LoadSources)
             {
                 if (job.DemuxMode != 0 && audioFiles.Count > 0)
@@ -1037,7 +1085,7 @@ namespace MeGUI
             StringBuilder logBuilder = new StringBuilder();
             VideoUtil vUtil = new VideoUtil(mainForm);
             List<string> arrFilesToDelete = new List<string>();
-            Dictionary<int, string> audioFiles = vUtil.getAllDemuxedAudio(job.AudioTracks, out arrFilesToDelete, job.Output, null);
+            Dictionary<int, string> audioFiles = vUtil.getAllDemuxedAudio(job.AudioTracks, new List<MkvInfoTrack>(), out arrFilesToDelete, job.Output, null);
             if (job.LoadSources)
             {
                 if (job.DemuxMode != 0 && audioFiles.Count > 0)
@@ -1076,7 +1124,7 @@ namespace MeGUI
             StringBuilder logBuilder = new StringBuilder();
             VideoUtil vUtil = new VideoUtil(mainForm);
             List<string> arrFilesToDelete = new List<string>();
-            Dictionary<int, string> audioFiles = vUtil.getAllDemuxedAudio(job.AudioTracks, out arrFilesToDelete, job.Output, null);
+            Dictionary<int, string> audioFiles = vUtil.getAllDemuxedAudio(job.AudioTracks, new List<MkvInfoTrack>(), out arrFilesToDelete, job.Output, null);
             if (job.LoadSources)
             {
                 if (job.DemuxMode != 0 && audioFiles.Count > 0)
@@ -1115,10 +1163,10 @@ namespace MeGUI
             StringBuilder logBuilder = new StringBuilder();
             VideoUtil vUtil = new VideoUtil(mainForm);
             List<string> arrFilesToDelete = new List<string>();
-            Dictionary<int, string> audioFiles = vUtil.getAllDemuxedAudio(job.AudioTracks, out arrFilesToDelete, job.Output, null);
+            Dictionary<int, string> audioFiles = vUtil.getAllDemuxedAudio(job.AudioTracks, job.AudioTracksDemux, out arrFilesToDelete, job.Output, null);
             if (job.LoadSources)
             {
-                if (job.DemuxMode != 0 && audioFiles.Count > 0)
+                if (job.DemuxMode != 0)
                 {
                     string[] files = new string[audioFiles.Values.Count];
                     audioFiles.Values.CopyTo(files, 0);

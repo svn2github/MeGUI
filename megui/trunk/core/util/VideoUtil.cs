@@ -333,85 +333,103 @@ namespace MeGUI
 		/// </summary>
         /// <param name="audioTrackIDs">list of audio TrackIDs</param>
 		/// <param name="projectName">the name of the dgindex project</param>
-		/// <param name="cutoff">maximum number of results to be returned</param>
 		/// <returns>an array of string of filenames</returns>
-        public Dictionary<int, string> getAllDemuxedAudio(List<AudioTrackInfo> audioTracks, out List<string> arrDeleteFiles, string projectName, LogItem log)
+        public Dictionary<int, string> getAllDemuxedAudio(List<AudioTrackInfo> audioTracks, List<MkvInfoTrack> audioTracksDemux, out List<string> arrDeleteFiles, string projectName, LogItem log)
         {
 		    Dictionary<int, string> audioFiles = new Dictionary<int, string>();
             arrDeleteFiles = new List<string>();
             string strTrackName;
             string[] files;
 
-            if (audioTracks == null || audioTracks.Count == 0)
+            if ((audioTracks == null || audioTracks.Count == 0) && (audioTracksDemux == null || audioTracksDemux.Count == 0))
                 return audioFiles;
 
-            if (audioTracks[0].ContainerType.ToLower().Equals("matroska"))
-                strTrackName = " [";
-            else if (audioTracks[0].ContainerType == "MPEG-TS" || audioTracks[0].ContainerType == "BDAV")
-                strTrackName = " PID ";
-            else
-                strTrackName = " T";
-
-            for (int counter = 0; counter < audioTracks.Count; counter++)
+            if (audioTracks != null && audioTracks.Count > 0)
             {
-                bool bFound = false;
-                string trackFile = strTrackName + audioTracks[counter].TrackIDx + "*";
-                if (Path.GetExtension(projectName).ToLower().Equals(".dga"))
-                    trackFile = Path.GetFileName(projectName) + trackFile;
-                else if (Path.GetExtension(projectName).ToLower().Equals(".ffindex"))
-                    trackFile = Path.GetFileNameWithoutExtension(projectName) + "_track_" + (audioTracks[counter].Index + 1) + "_*.avs";
+                if (audioTracks[0].ContainerType.ToLower().Equals("matroska"))
+                    strTrackName = " [";
+                else if (audioTracks[0].ContainerType == "MPEG-TS" || audioTracks[0].ContainerType == "BDAV")
+                    strTrackName = " PID ";
                 else
-                    trackFile = Path.GetFileNameWithoutExtension(projectName) + trackFile;
-                    
-                files = Directory.GetFiles(Path.GetDirectoryName(projectName), trackFile);
+                    strTrackName = " T";
+
+                for (int counter = 0; counter < audioTracks.Count; counter++)
+                {
+                    bool bFound = false;
+                    string trackFile = strTrackName + audioTracks[counter].TrackIDx + "*";
+                    if (Path.GetExtension(projectName).ToLower().Equals(".dga"))
+                        trackFile = Path.GetFileName(projectName) + trackFile;
+                    else if (Path.GetExtension(projectName).ToLower().Equals(".ffindex"))
+                        trackFile = Path.GetFileNameWithoutExtension(projectName) + "_track_" + (audioTracks[counter].Index + 1) + "_*.avs";
+                    else
+                        trackFile = Path.GetFileNameWithoutExtension(projectName) + trackFile;
+
+                    files = Directory.GetFiles(Path.GetDirectoryName(projectName), trackFile);
+                    foreach (string file in files)
+                    {
+                        if (file.EndsWith(".ac3") ||
+                             file.EndsWith(".mp3") ||
+                             file.EndsWith(".mp2") ||
+                             file.EndsWith(".mp1") ||
+                             file.EndsWith(".mpa") ||
+                             file.EndsWith(".dts") ||
+                             file.EndsWith(".wav") ||
+                             file.EndsWith(".ogg") ||
+                             file.EndsWith(".flac") ||
+                             file.EndsWith(".ra") ||
+                             file.EndsWith(".avs") ||
+                             file.EndsWith(".aac")) // It is the right track
+                        {
+                            bFound = true;
+                            if (!audioFiles.ContainsValue(file))
+                                audioFiles.Add(audioTracks[counter].TrackID, file);
+                            break;
+                        }
+                    }
+                    if (!bFound && log != null)
+                        log.LogEvent("File not found: " + Path.Combine(Path.GetDirectoryName(projectName), trackFile), ImageType.Error);
+                }
+
+                // Find files which can be deleted
+                if (Path.GetExtension(projectName).ToLower().Equals(".dga"))
+                    strTrackName = Path.GetFileName(projectName) + strTrackName;
+                else
+                    strTrackName = Path.GetFileNameWithoutExtension(projectName) + strTrackName;
+
+                files = Directory.GetFiles(Path.GetDirectoryName(projectName), strTrackName + "*");
                 foreach (string file in files)
                 {
-                    if ( file.EndsWith(".ac3") ||
+                    if (file.EndsWith(".ac3") ||
                          file.EndsWith(".mp3") ||
                          file.EndsWith(".mp2") ||
                          file.EndsWith(".mp1") ||
                          file.EndsWith(".mpa") ||
                          file.EndsWith(".dts") ||
                          file.EndsWith(".wav") ||
-                         file.EndsWith(".ogg") ||
-                         file.EndsWith(".flac") ||
-                         file.EndsWith(".ra") ||
                          file.EndsWith(".avs") ||
                          file.EndsWith(".aac")) // It is the right track
-					{
-                        bFound = true;
+                    {
                         if (!audioFiles.ContainsValue(file))
-                            audioFiles.Add(audioTracks[counter].TrackID, file);
-                        break;
-					}
-				}
-                if (!bFound && log != null)
-                    log.LogEvent("File not found: " + Path.Combine(Path.GetDirectoryName(projectName), trackFile), ImageType.Error);
-			}
-
-            // Find files which can be deleted
-            if (Path.GetExtension(projectName).ToLower().Equals(".dga"))
-                strTrackName = Path.GetFileName(projectName) + strTrackName;
-            else
-                strTrackName = Path.GetFileNameWithoutExtension(projectName) + strTrackName;
-
-            files = Directory.GetFiles(Path.GetDirectoryName(projectName), strTrackName + "*");
-            foreach (string file in files)
-            {
-                if (file.EndsWith(".ac3") ||
-                     file.EndsWith(".mp3") ||
-                     file.EndsWith(".mp2") ||
-                     file.EndsWith(".mp1") ||
-                     file.EndsWith(".mpa") ||
-                     file.EndsWith(".dts") ||
-                     file.EndsWith(".wav") ||
-                     file.EndsWith(".avs") ||
-                     file.EndsWith(".aac")) // It is the right track
-                {
-                    if (!audioFiles.ContainsValue(file))
-                        arrDeleteFiles.Add(file);
+                            arrDeleteFiles.Add(file);
+                    }
                 }
             }
+
+            foreach (MkvInfoTrack oTrack in audioTracksDemux)
+            {
+                bool bFound = false;
+                string trackFile = Path.GetDirectoryName(projectName) + "\\" + oTrack.FileName;
+                if (File.Exists(trackFile))
+                {
+                    bFound = true;
+                    if (!audioFiles.ContainsValue(trackFile))
+                        audioFiles.Add(oTrack.TrackID, trackFile);
+                    continue;
+                }
+                if (!bFound && log != null)
+                    log.LogEvent("File not found: " + trackFile, ImageType.Error);
+            }
+
             return audioFiles;
 		}
 

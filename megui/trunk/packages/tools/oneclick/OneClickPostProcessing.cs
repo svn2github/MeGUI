@@ -149,7 +149,7 @@ namespace MeGUI
                     }
                 }
                 else
-                    audioFiles = vUtil.getAllDemuxedAudio(job.AudioTracks, out arrAudioFilesDelete, job.IndexFile, _log);
+                    audioFiles = vUtil.getAllDemuxedAudio(job.AudioTracks, new List<MkvInfoTrack>(), out arrAudioFilesDelete, job.IndexFile, _log);
 
                 fillInAudioInformation();
 

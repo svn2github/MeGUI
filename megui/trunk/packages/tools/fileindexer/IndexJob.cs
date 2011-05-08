@@ -32,6 +32,7 @@ namespace MeGUI
         private bool demuxVideo;
 		private int demuxMode;
         private List<AudioTrackInfo> audioTracks;
+        private List<MkvInfoTrack> audioTracksDemux;
 		
 		public IndexJob():base()
 		{
@@ -39,6 +40,7 @@ namespace MeGUI
             demuxVideo = false;
 			demuxMode = 0;
             audioTracks = new List<AudioTrackInfo>();
+            audioTracksDemux = new List<MkvInfoTrack>();
 		}
 
 		/// <summary>
@@ -73,6 +75,12 @@ namespace MeGUI
         {
             get { return audioTracks; }
             set { audioTracks = value; }
+        }
+
+        public List<MkvInfoTrack> AudioTracksDemux
+        {
+            get { return audioTracksDemux; }
+            set { audioTracksDemux = value; }
         }
 
         public override string CodecString
