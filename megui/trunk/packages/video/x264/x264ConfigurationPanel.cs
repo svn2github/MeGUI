@@ -116,7 +116,16 @@ namespace MeGUI.packages.video.x264
             else if (updateDevice == true)
                 x264VBVMaxRate.Value = 0;
 
-            // Blu-Ray
+            // --b-pyramid
+            if (oTargetDevice.BPyramid > -1)
+            {
+                if (oTargetDevice.BPyramid != cbBPyramid.SelectedIndex)
+                    cbBPyramid.SelectedIndex = oTargetDevice.BPyramid;
+            }
+            else if (updateDevice == true)
+                cbBPyramid.SelectedIndex = 1;
+
+            // Blu-ray
             if (oTargetDevice.BluRay)
             {
                 chkBlurayCompat.Checked = true;

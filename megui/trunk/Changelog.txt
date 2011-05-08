@@ -1,3 +1,4 @@
+2020 [x264] enforce "--p-pyramid none" for the PSP device
 2019 [Lame] changed encoding modes to reflect valid values
             Warning: review custom lame presets as there is no full update path
 2018 [x264] enhanced help
@@ -6,9 +7,9 @@
 2016 [Update] enable 2010 only for debug builds
 2015 [x264] added --bluray-compat option (requires x264 rev 1935+)
      [x264] changed --open-gop handling (requires x264 rev 1935+)
-	 [x264] added target playback device option
-			this option restricts or enforces x264 parameters if necessary
-	 [x264] several adjustments
+     [x264] added target playback device option
+            this option restricts or enforces x264 parameters if necessary
+     [x264] several adjustments
 2014 [OggVorbis] removed channel remapping as it is not needed anymore
 2013 [M2TS Muxer] fixed splitting option. Bug #3294210
                   fixed m2v input handling

@@ -31,14 +31,17 @@ namespace MeGUI.packages.video.x264
         private x264Settings _xs;
         private LogItem _log;
         private x264Device _device;
+        private string strDevice;
         
         public x264SettingsHandler(x264Settings xs, LogItem log)
 		{
             _xs = xs;
             _log = log;
             _device = xs.TargetDevice;
-            if (_log != null)
-                _log.LogEvent("Selected device: " + xs.TargetDevice);
+            strDevice = "[" + xs.TargetDevice + "]: ";
+
+            if (_log != null && xs.TargetDevice.ID != 0)
+                _log.LogEvent(strDevice + "special device selected");
         }
 
         /// <summary>
@@ -64,7 +67,7 @@ namespace MeGUI.packages.video.x264
                         if (_xs.InterlacedMode != x264Settings.x264InterlacedModes.progressive)
                         {
                             _xs.InterlacedMode = x264Settings.x264InterlacedModes.progressive;
-                            _log.LogEvent("The selected device does not support interlaced encoding of " + fps_n + "/" + fps_d + " fps. changing interlaced mode to progressive.", ImageType.Warning);
+                            _log.LogEvent(strDevice + "does not support interlaced encoding of " + fps_n + "/" + fps_d + " fps. changing interlaced mode to progressive.", ImageType.Warning);
                         }
                         _xs.FakeInterlaced = _xs.PicStruct = false;
                     }
@@ -81,11 +84,11 @@ namespace MeGUI.packages.video.x264
                         if (_xs.InterlacedMode == x264Settings.x264InterlacedModes.progressive)
                         {
                             _xs.InterlacedMode = x264Settings.x264InterlacedModes.tff;
-                            _log.LogEvent("The selected device does not support progressive encoding of " + fps_n + "/" + fps_d + " fps. changing interlaced mode to tff.", ImageType.Warning);
+                            _log.LogEvent(strDevice + "does not support progressive encoding of " + fps_n + "/" + fps_d + " fps. changing interlaced mode to tff.", ImageType.Warning);
                         }
                     }
                     else
-                        _log.LogEvent("The selected device does not support " + fps_n + "/" + fps_d + " fps with a resolution of " + hres + "x" + vres + ". Supported are 24000/1001, 24/1, 25/1, 30000/1001 and 30/1.", ImageType.Error);
+                        _log.LogEvent(strDevice + "does not support " + fps_n + "/" + fps_d + " fps with a resolution of " + hres + "x" + vres + ". Supported are 24000/1001, 24/1, 25/1, 30000/1001 and 30/1.", ImageType.Error);
                     
                     _xs.ColorPrim = _xs.Transfer = _xs.ColorMatrix = 1;
                     _xs.SampleAR = 1;
@@ -96,7 +99,7 @@ namespace MeGUI.packages.video.x264
                     if (_xs.InterlacedMode != x264Settings.x264InterlacedModes.progressive)
                     {
                         _xs.InterlacedMode = x264Settings.x264InterlacedModes.progressive;
-                        _log.LogEvent("The selected device does not support interlaced encoding of " + hres + "x" + vres + ". changing interlaced mode to progressive.", ImageType.Warning);
+                        _log.LogEvent(strDevice + "does not support interlaced encoding of " + hres + "x" + vres + ". changing interlaced mode to progressive.", ImageType.Warning);
                     }
                     _xs.FakeInterlaced = _xs.PicStruct = false;
                     _xs.X264PullDown = 0;
@@ -107,11 +110,11 @@ namespace MeGUI.packages.video.x264
                         if (_xs.X264PullDown != 4)
                         {
                             _xs.X264PullDown = 4;
-                            _log.LogEvent("Changing --pulldown to double as the selected device requires it for encoding of " + hres + "x" + vres + " with " + fps_n + "/" + fps_d + " fps.", ImageType.Warning);
+                            _log.LogEvent(strDevice + "changing --pulldown to double as it is required for encoding of " + hres + "x" + vres + " with " + fps_n + "/" + fps_d + " fps.", ImageType.Warning);
                         }
                     }
                     else if (!fps.Equals("24000/1001") && !fps.Equals("24/1") && !fps.Equals("50/1") && !fps.Equals("60000/1001"))
-                        _log.LogEvent("The selected device does not support " + fps_n + "/" + fps_d + " fps with a resolution of " + hres + "x" + vres + ". Supported are 24000/1001, 24/1, 25/1, 30000/1001, 50/1 and 60000/1001.", ImageType.Error);
+                        _log.LogEvent(strDevice + "does not support " + fps_n + "/" + fps_d + " fps with a resolution of " + hres + "x" + vres + ". Supported are 24000/1001, 24/1, 25/1, 30000/1001, 50/1 and 60000/1001.", ImageType.Error);
                     
                     _xs.ColorPrim = _xs.Transfer = _xs.ColorMatrix = 1;
                     _xs.SampleAR = 1;
@@ -130,12 +133,12 @@ namespace MeGUI.packages.video.x264
                         if (_xs.SampleAR != 5 && _xs.SampleAR != 6)
                         {
                             _xs.SampleAR = 5;
-                            _log.LogEvent("Assume --sar 16:11 as only 16:11 or 12:11 are supported with a resolution of " + hres + "x" + vres + ".", ImageType.Warning);
+                            _log.LogEvent(strDevice + "assume --sar 16:11 as only 16:11 or 12:11 are supported with a resolution of " + hres + "x" + vres + ".", ImageType.Warning);
                         }
 
                     }
                     else
-                        _log.LogEvent("The selected device does not support " + fps_n + "/" + fps_d + " fps with a resolution of " + hres + "x" + vres + ". Supported is 25/1.", ImageType.Error);
+                        _log.LogEvent(strDevice + "does not support " + fps_n + "/" + fps_d + " fps with a resolution of " + hres + "x" + vres + ". Supported is 25/1.", ImageType.Error);
                     _xs.ColorPrim = _xs.Transfer = _xs.ColorMatrix = 3;
                     _xs.X264PullDown = 0;
                 }
@@ -144,7 +147,7 @@ namespace MeGUI.packages.video.x264
                     if (_xs.SampleAR != 8 && _xs.SampleAR != 4)
                     {
                         _xs.SampleAR = 8;
-                        _log.LogEvent("Assume --sar 40:33 as only 40:33 or 10:11 are supported with a resolution of " + hres + "x" + vres + ".", ImageType.Warning);
+                        _log.LogEvent(strDevice + "assume --sar 40:33 as only 40:33 or 10:11 are supported with a resolution of " + hres + "x" + vres + ".", ImageType.Warning);
                     }
 
                     string fps = fps_n + "/" + fps_d;
@@ -155,7 +158,7 @@ namespace MeGUI.packages.video.x264
                         if (_xs.InterlacedMode == x264Settings.x264InterlacedModes.progressive)
                         {
                             _xs.InterlacedMode = x264Settings.x264InterlacedModes.tff;
-                            _log.LogEvent("The selected device does not support progressive encoding of " + fps_n + "/" + fps_d + " fps. changing interlaced mode to tff.", ImageType.Warning);
+                            _log.LogEvent(strDevice + "does not support progressive encoding of " + fps_n + "/" + fps_d + " fps. changing interlaced mode to tff.", ImageType.Warning);
                         }
                     }
                     else if (fps.Equals("24000/1001"))
@@ -163,30 +166,30 @@ namespace MeGUI.packages.video.x264
                         if (_xs.X264PullDown != 2)
                         {
                             _xs.X264PullDown = 2;
-                            _log.LogEvent("Changing --pulldown to 32 as the selected device requires it for encoding of " + hres + "x" + vres + " with " + fps_n + "/" + fps_d + " fps.", ImageType.Warning);
+                            _log.LogEvent(strDevice + "changing --pulldown to 32 as it is required for encoding of " + hres + "x" + vres + " with " + fps_n + "/" + fps_d + " fps.", ImageType.Warning);
                         }
                         if (_xs.InterlacedMode != x264Settings.x264InterlacedModes.progressive)
                         {
                             _xs.InterlacedMode = x264Settings.x264InterlacedModes.progressive;
-                            _log.LogEvent("The selected device does not support interlaced encoding of " + hres + "x" + vres + ". changing interlaced mode to progressive.", ImageType.Warning);
+                            _log.LogEvent(strDevice + "does not support interlaced encoding of " + hres + "x" + vres + ". changing interlaced mode to progressive.", ImageType.Warning);
                         }
                     }
                     else
-                        _log.LogEvent("The selected device does not support " + fps_n + "/" + fps_d + " fps with a resolution of " + hres + "x" + vres + ". Supported are 30000/1001 and 24000/1001.", ImageType.Error);
+                        _log.LogEvent(strDevice + "does not support " + fps_n + "/" + fps_d + " fps with a resolution of " + hres + "x" + vres + ". Supported are 30000/1001 and 24000/1001.", ImageType.Error);
                     _xs.ColorPrim = _xs.ColorMatrix = 4;
                     _xs.Transfer = 7;
                 }
                 else
                 {
-                    _log.LogEvent("The selected device does not support a resolution of " + hres + "x" + vres + ". Supported are 1920x1080, 1280x720, 720x576 and 720x480.", ImageType.Error);
+                    _log.LogEvent(strDevice + "does not support a resolution of " + hres + "x" + vres + ". Supported are 1920x1080, 1280x720, 720x576 and 720x480.", ImageType.Error);
                 }
             }
             else
             {
                 if (_device.Width > 0 && hres > _device.Width)
-                    _log.LogEvent("The selected device does not support a resolution width of " + hres + ". The maximum value is " + _device.Width, ImageType.Error);
+                    _log.LogEvent(strDevice + "does not support a resolution width of " + hres + ". The maximum value is " + _device.Width, ImageType.Error);
                 if (_device.Height > 0 && vres > _device.Height)
-                    _log.LogEvent("The selected device does not support a resolution height of " + vres + ". The maximum value is " + _device.Height, ImageType.Error);
+                    _log.LogEvent(strDevice + "does not support a resolution height of " + vres + ". The maximum value is " + _device.Height, ImageType.Error);
             }
         }
 
@@ -207,7 +210,7 @@ namespace MeGUI.packages.video.x264
 
             if (_device.VBVBufsize > -1 && (_xs.VBVBufferSize > _device.VBVBufsize || _xs.VBVBufferSize == 0))
             {
-                _log.LogEvent("Changing --vbv-bufsize to " + _device.VBVBufsize + " as the selected device does not support a higher value");
+                _log.LogEvent(strDevice + "changing --vbv-bufsize to " + _device.VBVBufsize);
                 _xs.VBVBufferSize = _device.VBVBufsize;
             }
 
@@ -231,7 +234,7 @@ namespace MeGUI.packages.video.x264
 
             if (_device.VBVMaxrate > -1 && (_xs.VBVMaxBitrate > _device.VBVMaxrate || _xs.VBVMaxBitrate == 0))
             {
-                _log.LogEvent("Changing --vbv-bufsize to " + _device.VBVMaxrate + " as the selected device does not support a higher value");
+                _log.LogEvent(strDevice + "changing --vbv-bufsize to " + _device.VBVMaxrate);
                 _xs.VBVMaxBitrate = _device.VBVMaxrate;
             }
 
@@ -399,11 +402,11 @@ namespace MeGUI.packages.video.x264
             if (_device.Profile > -1 &&_xs.Profile > _device.Profile)
             {
                 if (_device.Profile == 0)
-                    _log.LogEvent("Changing --profile to baseline as the selected device does not support a higher profile");
+                    _log.LogEvent(strDevice + "changing --profile to baseline");
                 else if (_device.Profile == 1)
-                    _log.LogEvent("Changing --profile to main as the selected device does not support a higher profile");
+                    _log.LogEvent(strDevice + "changing --profile to main");
                 else
-                    _log.LogEvent("Changing --profile to high");
+                    _log.LogEvent(strDevice + "changing --profile to high");
                 _xs.Profile = _device.Profile;
             }
 
@@ -430,7 +433,7 @@ namespace MeGUI.packages.video.x264
 
             if (_device.BluRay && _xs.Nalhrd < 1)
             {
-                _log.LogEvent("Changing --nal-hrd to vbr as the selected device requires it");
+                _log.LogEvent(strDevice + "changing --nal-hrd to vbr");
                 _xs.Nalhrd = 1;
             }
 
@@ -474,7 +477,7 @@ namespace MeGUI.packages.video.x264
 
             if (_device.Level > -1 && _xs.Level > _device.Level)
             {
-                _log.LogEvent("Changing --level to " + AVCLevels.getCLILevelNames()[_device.Level] + " as the selected device does not support a higher level");
+                _log.LogEvent(strDevice + "changing --level to " + AVCLevels.getCLILevelNames()[_device.Level]);
                 _xs.Profile = _device.Profile;
             }
 
@@ -506,7 +509,7 @@ namespace MeGUI.packages.video.x264
             int fps = (int)Math.Round((decimal)fps_n / fps_d, 0);
             if (_device.MaxGOP > -1 && _xs.KeyframeInterval > fps * _device.MaxGOP)
             {
-                _log.LogEvent("Changing --key-int to " + (fps * _device.MaxGOP) + " as the selected device does not support a higher value");
+                _log.LogEvent(strDevice + "changing --key-int to " + (fps * _device.MaxGOP));
                 _xs.KeyframeInterval = fps * _device.MaxGOP;
             }
 
@@ -551,7 +554,7 @@ namespace MeGUI.packages.video.x264
 
             if (_device.BluRay && _xs.WeightedPPrediction > 1)
             {
-                _log.LogEvent("Changing --weightp to 1 as the selected device does not support a higher value");
+                _log.LogEvent(strDevice + "changing --weightp to 1");
                 _xs.WeightedPPrediction = 1;
             }
 
@@ -573,7 +576,7 @@ namespace MeGUI.packages.video.x264
 
             if (_device.BluRay && _xs.BlurayCompat == false)
             {
-                _log.LogEvent("Enabling --bluray-compat as the selected device requires it");
+                _log.LogEvent(strDevice + "enabling --bluray-compat");
                 _xs.BlurayCompat = true;
             }
 
@@ -633,7 +636,7 @@ namespace MeGUI.packages.video.x264
 
             if (_device.BluRay && _xs.X264Aud == false)
             {
-                _log.LogEvent("Enabling --aud as the selected device requires it");
+                _log.LogEvent(strDevice + "enabling --aud");
                 _xs.X264Aud = true;
             }
 
@@ -657,7 +660,7 @@ namespace MeGUI.packages.video.x264
 
             if (_device.BFrames > -1 && _xs.NbBframes > _device.BFrames)
             {
-                _log.LogEvent("Changing --bframes to " + _device.BFrames + " as the selected device does not support a higher value");
+                _log.LogEvent(strDevice + "changing --bframes to " + _device.BFrames);
                 _xs.NbBframes = _device.BFrames;
             }
 
@@ -684,8 +687,19 @@ namespace MeGUI.packages.video.x264
 
             if (_device.BluRay && _xs.x264BFramePyramid > 1)
             {
-                _log.LogEvent("Changing --b-pyramid to strict as the selected device does not support normal");
+                _log.LogEvent(strDevice + "changing --b-pyramid to strict");
                 _xs.x264BFramePyramid = 1;
+            }
+
+            if (_device.BPyramid > -1 && _xs.x264BFramePyramid != _device.BPyramid)
+            {
+                string strMode = "normal";
+                if (_device.BPyramid == 0)
+                    strMode = "none";
+                else if (_device.BPyramid == 1)
+                    strMode = "strict";
+                _log.LogEvent(strDevice + "changing --b-pyramid to " + strMode);
+                _xs.x264BFramePyramid = _device.BPyramid;
             }
 
             return _xs.x264BFramePyramid;
@@ -708,7 +722,7 @@ namespace MeGUI.packages.video.x264
 
             if (_device.BluRay && _xs.SlicesNb != 4)
             {
-                _log.LogEvent("Changing --slices to 4 as the selected device requires it");
+                _log.LogEvent(strDevice + "changing --slices to 4");
                 _xs.SlicesNb = 4;
             }
 
@@ -734,14 +748,14 @@ namespace MeGUI.packages.video.x264
 
             if (_device.ReferenceFrames > -1 && _xs.NbRefFrames > _device.ReferenceFrames)
             {
-                _log.LogEvent("Changing --ref to " + _device.ReferenceFrames + " as the selected device does not support a higher value");
+                _log.LogEvent(strDevice + "changing --ref to " + _device.ReferenceFrames);
                 _xs.NbRefFrames = _device.ReferenceFrames;
             }
 
             int iMaxRefForLevel = getMaxRefForLevel(_xs.Level, hRes, vRes);
             if (iMaxRefForLevel > -1 && iMaxRefForLevel < _xs.NbRefFrames)
             {
-                _log.LogEvent("Changing --ref to " + iMaxRefForLevel + " as the selected level does not support a higher value");
+                _log.LogEvent(strDevice + "changing --ref to " + iMaxRefForLevel);
                 _xs.NbRefFrames = iMaxRefForLevel;
             }
 
