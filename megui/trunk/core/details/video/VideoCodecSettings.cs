@@ -177,6 +177,12 @@ namespace MeGUI
                     {
                         if (strCommand.Trim().ToLower().Equals("nal-hrd"))
                             strNewCommand = "nal-hrd vbr";
+                        else if (strCommand.Trim().ToLower().Equals("open-gop none"))
+                            strNewCommand = String.Empty;
+                        else if (strCommand.Trim().ToLower().Equals("open-gop normal"))
+                            strNewCommand = "open-gop";
+                        else if (strCommand.Trim().ToLower().Equals("open-gop bluray"))
+                            strNewCommand = "open-gop --bluray-compat";
                         else
                             strNewCommand = strCommand.Trim();
                         if (!String.IsNullOrEmpty(strNewCommand))

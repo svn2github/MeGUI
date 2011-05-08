@@ -159,12 +159,15 @@ namespace MeGUI
         public Dar DAR;
         public ulong FrameCount;
         public double FPS;
+        public int FPS_N;  // online needed for AVS file check
+        public int FPS_D;  // online needed for AVS file check
         public bool HasAudio;
 
         public MediaFileInfo(bool hasVideo, 
             ulong width, ulong height,
             Dar dar, ulong frameCount,
-            double fps, bool hasAudio)
+            double fps, int fps_n,
+            int fps_d, bool hasAudio)
         {
             HasVideo = hasVideo;
             Width = width;
@@ -172,6 +175,8 @@ namespace MeGUI
             DAR = dar;
             FrameCount = frameCount;
             FPS = fps;
+            FPS_N = fps_n;
+            FPS_D = fps_d;
             HasAudio = hasAudio;
         }
 

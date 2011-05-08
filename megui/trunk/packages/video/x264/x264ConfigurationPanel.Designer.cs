@@ -72,8 +72,7 @@ namespace MeGUI.packages.video.x264
             this.x264BetaDeblockLabel = new System.Windows.Forms.Label();
             this.x264AlphaDeblockLabel = new System.Windows.Forms.Label();
             this.gbGOPSize = new System.Windows.Forms.GroupBox();
-            this.x264OpenGop = new System.Windows.Forms.ComboBox();
-            this.x264OpenGopLabel = new System.Windows.Forms.Label();
+            this.chkOpenGop = new System.Windows.Forms.CheckBox();
             this.x264KeyframeIntervalLabel = new System.Windows.Forms.Label();
             this.x264KeyframeInterval = new System.Windows.Forms.NumericUpDown();
             this.x264MinGOPSize = new System.Windows.Forms.NumericUpDown();
@@ -132,6 +131,7 @@ namespace MeGUI.packages.video.x264
             this.x264Tunes = new System.Windows.Forms.ComboBox();
             this.AnalysisTabPage = new System.Windows.Forms.TabPage();
             this.x264Bluray = new System.Windows.Forms.GroupBox();
+            this.chkBlurayCompat = new System.Windows.Forms.CheckBox();
             this.fakeInterlaced = new System.Windows.Forms.CheckBox();
             this.x264hrdLabel = new System.Windows.Forms.Label();
             this.x264hrd = new System.Windows.Forms.ComboBox();
@@ -211,6 +211,8 @@ namespace MeGUI.packages.video.x264
             this.avcProfileGroupbox = new System.Windows.Forms.GroupBox();
             this.avcProfile = new System.Windows.Forms.ComboBox();
             this.avcLevelGroupbox = new System.Windows.Forms.GroupBox();
+            this.deviceGroupbox = new System.Windows.Forms.GroupBox();
+            this.targetDevice = new System.Windows.Forms.ComboBox();
             this.tabControl1.SuspendLayout();
             this.mainTabPage.SuspendLayout();
             this.x264CodecGeneralGroupbox.SuspendLayout();
@@ -278,6 +280,7 @@ namespace MeGUI.packages.video.x264
             this.gbx264CustomCmd.SuspendLayout();
             this.avcProfileGroupbox.SuspendLayout();
             this.avcLevelGroupbox.SuspendLayout();
+            this.deviceGroupbox.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -304,6 +307,7 @@ namespace MeGUI.packages.video.x264
             // 
             // mainTabPage
             // 
+            this.mainTabPage.Controls.Add(this.deviceGroupbox);
             this.mainTabPage.Controls.Add(this.avcProfileGroupbox);
             this.mainTabPage.Controls.Add(this.avcLevelGroupbox);
             this.mainTabPage.Controls.Add(this.advancedSettings);
@@ -327,7 +331,7 @@ namespace MeGUI.packages.video.x264
             this.x264CodecGeneralGroupbox.Size = new System.Drawing.Size(310, 48);
             this.x264CodecGeneralGroupbox.TabIndex = 0;
             this.x264CodecGeneralGroupbox.TabStop = false;
-            this.x264CodecGeneralGroupbox.Text = " Modes ";
+            this.x264CodecGeneralGroupbox.Text = " Encoding Mode ";
             // 
             // cbTarget
             // 
@@ -417,11 +421,11 @@ namespace MeGUI.packages.video.x264
             this.gbSlicing.Size = new System.Drawing.Size(250, 146);
             this.gbSlicing.TabIndex = 14;
             this.gbSlicing.TabStop = false;
-            this.gbSlicing.Text = "Slicing";
+            this.gbSlicing.Text = " Slicing ";
             // 
             // maxSliceSizeMB
             // 
-            this.maxSliceSizeMB.Location = new System.Drawing.Point(159, 84);
+            this.maxSliceSizeMB.Location = new System.Drawing.Point(159, 79);
             this.maxSliceSizeMB.Name = "maxSliceSizeMB";
             this.maxSliceSizeMB.Size = new System.Drawing.Size(85, 20);
             this.maxSliceSizeMB.TabIndex = 5;
@@ -430,7 +434,7 @@ namespace MeGUI.packages.video.x264
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(14, 86);
+            this.label11.Location = new System.Drawing.Point(14, 81);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(87, 13);
             this.label11.TabIndex = 4;
@@ -469,7 +473,7 @@ namespace MeGUI.packages.video.x264
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(14, 23);
+            this.label9.Location = new System.Drawing.Point(14, 25);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(108, 13);
             this.label9.TabIndex = 0;
@@ -495,7 +499,7 @@ namespace MeGUI.packages.video.x264
             this.gbFTOther.Size = new System.Drawing.Size(240, 207);
             this.gbFTOther.TabIndex = 13;
             this.gbFTOther.TabStop = false;
-            this.gbFTOther.Text = "Other";
+            this.gbFTOther.Text = " Other ";
             // 
             // cbInterlaceMode
             // 
@@ -505,7 +509,7 @@ namespace MeGUI.packages.video.x264
             "none",
             "TFF",
             "BFF"});
-            this.cbInterlaceMode.Location = new System.Drawing.Point(167, 113);
+            this.cbInterlaceMode.Location = new System.Drawing.Point(167, 108);
             this.cbInterlaceMode.Name = "cbInterlaceMode";
             this.cbInterlaceMode.Size = new System.Drawing.Size(65, 21);
             this.cbInterlaceMode.TabIndex = 26;
@@ -514,7 +518,7 @@ namespace MeGUI.packages.video.x264
             // lblInterlacedMode
             // 
             this.lblInterlacedMode.AutoSize = true;
-            this.lblInterlacedMode.Location = new System.Drawing.Point(9, 116);
+            this.lblInterlacedMode.Location = new System.Drawing.Point(9, 111);
             this.lblInterlacedMode.Name = "lblInterlacedMode";
             this.lblInterlacedMode.Size = new System.Drawing.Size(84, 13);
             this.lblInterlacedMode.TabIndex = 25;
@@ -533,7 +537,7 @@ namespace MeGUI.packages.video.x264
             "double",
             "triple",
             "euro"});
-            this.x264PullDown.Location = new System.Drawing.Point(167, 147);
+            this.x264PullDown.Location = new System.Drawing.Point(167, 134);
             this.x264PullDown.Name = "x264PullDown";
             this.x264PullDown.Size = new System.Drawing.Size(65, 21);
             this.x264PullDown.TabIndex = 24;
@@ -542,7 +546,7 @@ namespace MeGUI.packages.video.x264
             // pullDownLabel
             // 
             this.pullDownLabel.AutoSize = true;
-            this.pullDownLabel.Location = new System.Drawing.Point(9, 150);
+            this.pullDownLabel.Location = new System.Drawing.Point(9, 137);
             this.pullDownLabel.Name = "pullDownLabel";
             this.pullDownLabel.Size = new System.Drawing.Size(50, 13);
             this.pullDownLabel.TabIndex = 23;
@@ -551,7 +555,7 @@ namespace MeGUI.packages.video.x264
             // lblWeightedP
             // 
             this.lblWeightedP.AutoSize = true;
-            this.lblWeightedP.Location = new System.Drawing.Point(9, 86);
+            this.lblWeightedP.Location = new System.Drawing.Point(9, 84);
             this.lblWeightedP.Name = "lblWeightedP";
             this.lblWeightedP.Size = new System.Drawing.Size(142, 13);
             this.lblWeightedP.TabIndex = 22;
@@ -586,7 +590,7 @@ namespace MeGUI.packages.video.x264
             // 
             this.scenecut.Checked = true;
             this.scenecut.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.scenecut.Location = new System.Drawing.Point(12, 174);
+            this.scenecut.Location = new System.Drawing.Point(12, 161);
             this.scenecut.Name = "scenecut";
             this.scenecut.Size = new System.Drawing.Size(163, 24);
             this.scenecut.TabIndex = 19;
@@ -664,7 +668,7 @@ namespace MeGUI.packages.video.x264
             this.x264GeneralBFramesgGroupbox.Size = new System.Drawing.Size(240, 184);
             this.x264GeneralBFramesgGroupbox.TabIndex = 7;
             this.x264GeneralBFramesgGroupbox.TabStop = false;
-            this.x264GeneralBFramesgGroupbox.Text = "B-Frames";
+            this.x264GeneralBFramesgGroupbox.Text = " B-Frames ";
             // 
             // label12
             // 
@@ -789,13 +793,13 @@ namespace MeGUI.packages.video.x264
             this.gbH264Features.Size = new System.Drawing.Size(250, 132);
             this.gbH264Features.TabIndex = 4;
             this.gbH264Features.TabStop = false;
-            this.gbH264Features.Text = "H.264 Features";
+            this.gbH264Features.Text = " H.264 Features ";
             // 
             // cabac
             // 
             this.cabac.Checked = true;
             this.cabac.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cabac.Location = new System.Drawing.Point(11, 90);
+            this.cabac.Location = new System.Drawing.Point(17, 93);
             this.cabac.Name = "cabac";
             this.cabac.Padding = new System.Windows.Forms.Padding(3);
             this.cabac.Size = new System.Drawing.Size(162, 23);
@@ -845,7 +849,7 @@ namespace MeGUI.packages.video.x264
             // 
             this.x264DeblockActive.Checked = true;
             this.x264DeblockActive.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.x264DeblockActive.Location = new System.Drawing.Point(11, 15);
+            this.x264DeblockActive.Location = new System.Drawing.Point(17, 19);
             this.x264DeblockActive.Name = "x264DeblockActive";
             this.x264DeblockActive.Padding = new System.Windows.Forms.Padding(3);
             this.x264DeblockActive.Size = new System.Drawing.Size(156, 23);
@@ -856,11 +860,9 @@ namespace MeGUI.packages.video.x264
             // x264BetaDeblockLabel
             // 
             this.x264BetaDeblockLabel.AutoSize = true;
-            this.x264BetaDeblockLabel.Location = new System.Drawing.Point(6, 65);
-            this.x264BetaDeblockLabel.Margin = new System.Windows.Forms.Padding(3);
+            this.x264BetaDeblockLabel.Location = new System.Drawing.Point(14, 68);
             this.x264BetaDeblockLabel.Name = "x264BetaDeblockLabel";
-            this.x264BetaDeblockLabel.Padding = new System.Windows.Forms.Padding(3);
-            this.x264BetaDeblockLabel.Size = new System.Drawing.Size(117, 19);
+            this.x264BetaDeblockLabel.Size = new System.Drawing.Size(111, 13);
             this.x264BetaDeblockLabel.TabIndex = 3;
             this.x264BetaDeblockLabel.Text = "Deblocking Threshold";
             this.x264BetaDeblockLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -868,11 +870,9 @@ namespace MeGUI.packages.video.x264
             // x264AlphaDeblockLabel
             // 
             this.x264AlphaDeblockLabel.AutoSize = true;
-            this.x264AlphaDeblockLabel.Location = new System.Drawing.Point(6, 42);
-            this.x264AlphaDeblockLabel.Margin = new System.Windows.Forms.Padding(3);
+            this.x264AlphaDeblockLabel.Location = new System.Drawing.Point(14, 45);
             this.x264AlphaDeblockLabel.Name = "x264AlphaDeblockLabel";
-            this.x264AlphaDeblockLabel.Padding = new System.Windows.Forms.Padding(3);
-            this.x264AlphaDeblockLabel.Size = new System.Drawing.Size(110, 19);
+            this.x264AlphaDeblockLabel.Size = new System.Drawing.Size(104, 13);
             this.x264AlphaDeblockLabel.TabIndex = 1;
             this.x264AlphaDeblockLabel.Text = "Deblocking Strength";
             this.x264AlphaDeblockLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -881,8 +881,7 @@ namespace MeGUI.packages.video.x264
             // 
             this.gbGOPSize.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.gbGOPSize.Controls.Add(this.x264OpenGop);
-            this.gbGOPSize.Controls.Add(this.x264OpenGopLabel);
+            this.gbGOPSize.Controls.Add(this.chkOpenGop);
             this.gbGOPSize.Controls.Add(this.x264KeyframeIntervalLabel);
             this.gbGOPSize.Controls.Add(this.x264KeyframeInterval);
             this.gbGOPSize.Controls.Add(this.x264MinGOPSize);
@@ -892,41 +891,25 @@ namespace MeGUI.packages.video.x264
             this.gbGOPSize.Size = new System.Drawing.Size(251, 116);
             this.gbGOPSize.TabIndex = 1;
             this.gbGOPSize.TabStop = false;
-            this.gbGOPSize.Text = "GOP Size";
+            this.gbGOPSize.Text = " GOP Size ";
             // 
-            // x264OpenGop
+            // chkOpenGop
             // 
-            this.x264OpenGop.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.x264OpenGop.DropDownWidth = 83;
-            this.x264OpenGop.FormattingEnabled = true;
-            this.x264OpenGop.Items.AddRange(new object[] {
-            "None",
-            "Normal",
-            "Blu-Ray"});
-            this.x264OpenGop.Location = new System.Drawing.Point(162, 70);
-            this.x264OpenGop.Name = "x264OpenGop";
-            this.x264OpenGop.Size = new System.Drawing.Size(83, 21);
-            this.x264OpenGop.TabIndex = 5;
-            this.x264OpenGop.SelectedIndexChanged += new System.EventHandler(this.updateEvent);
-            // 
-            // x264OpenGopLabel
-            // 
-            this.x264OpenGopLabel.AutoSize = true;
-            this.x264OpenGopLabel.Location = new System.Drawing.Point(5, 70);
-            this.x264OpenGopLabel.Name = "x264OpenGopLabel";
-            this.x264OpenGopLabel.Padding = new System.Windows.Forms.Padding(3);
-            this.x264OpenGopLabel.Size = new System.Drawing.Size(65, 19);
-            this.x264OpenGopLabel.TabIndex = 4;
-            this.x264OpenGopLabel.Text = "Open GOP";
-            this.x264OpenGopLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.chkOpenGop.AutoSize = true;
+            this.chkOpenGop.Location = new System.Drawing.Point(18, 75);
+            this.chkOpenGop.Name = "chkOpenGop";
+            this.chkOpenGop.Size = new System.Drawing.Size(78, 17);
+            this.chkOpenGop.TabIndex = 5;
+            this.chkOpenGop.Text = "Open GOP";
+            this.chkOpenGop.UseVisualStyleBackColor = true;
+            this.chkOpenGop.CheckedChanged += new System.EventHandler(this.updateEvent);
             // 
             // x264KeyframeIntervalLabel
             // 
             this.x264KeyframeIntervalLabel.AutoSize = true;
-            this.x264KeyframeIntervalLabel.Location = new System.Drawing.Point(5, 18);
+            this.x264KeyframeIntervalLabel.Location = new System.Drawing.Point(15, 21);
             this.x264KeyframeIntervalLabel.Name = "x264KeyframeIntervalLabel";
-            this.x264KeyframeIntervalLabel.Padding = new System.Windows.Forms.Padding(3);
-            this.x264KeyframeIntervalLabel.Size = new System.Drawing.Size(164, 19);
+            this.x264KeyframeIntervalLabel.Size = new System.Drawing.Size(158, 13);
             this.x264KeyframeIntervalLabel.TabIndex = 0;
             this.x264KeyframeIntervalLabel.Text = "Maximum GOP Size (0 = Infinite)";
             this.x264KeyframeIntervalLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -972,10 +955,9 @@ namespace MeGUI.packages.video.x264
             // x264MinGOPSizeLabel
             // 
             this.x264MinGOPSizeLabel.AutoSize = true;
-            this.x264MinGOPSizeLabel.Location = new System.Drawing.Point(5, 43);
+            this.x264MinGOPSizeLabel.Location = new System.Drawing.Point(15, 44);
             this.x264MinGOPSizeLabel.Name = "x264MinGOPSizeLabel";
-            this.x264MinGOPSizeLabel.Padding = new System.Windows.Forms.Padding(3);
-            this.x264MinGOPSizeLabel.Size = new System.Drawing.Size(103, 19);
+            this.x264MinGOPSizeLabel.Size = new System.Drawing.Size(97, 13);
             this.x264MinGOPSizeLabel.TabIndex = 2;
             this.x264MinGOPSizeLabel.Text = "Minimum GOP Size";
             this.x264MinGOPSizeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1701,7 +1683,7 @@ namespace MeGUI.packages.video.x264
             this.gbPresets.Size = new System.Drawing.Size(310, 102);
             this.gbPresets.TabIndex = 13;
             this.gbPresets.TabStop = false;
-            this.gbPresets.Text = " Presets ";
+            this.gbPresets.Text = " Preset ";
             // 
             // lbPreset
             // 
@@ -1739,7 +1721,7 @@ namespace MeGUI.packages.video.x264
             this.gbTunes.Size = new System.Drawing.Size(172, 48);
             this.gbTunes.TabIndex = 14;
             this.gbTunes.TabStop = false;
-            this.gbTunes.Text = " Tunings ";
+            this.gbTunes.Text = " Tuning ";
             // 
             // x264Tunes
             // 
@@ -1775,6 +1757,7 @@ namespace MeGUI.packages.video.x264
             // 
             // x264Bluray
             // 
+            this.x264Bluray.Controls.Add(this.chkBlurayCompat);
             this.x264Bluray.Controls.Add(this.fakeInterlaced);
             this.x264Bluray.Controls.Add(this.x264hrdLabel);
             this.x264Bluray.Controls.Add(this.x264hrd);
@@ -1786,10 +1769,21 @@ namespace MeGUI.packages.video.x264
             this.x264Bluray.TabStop = false;
             this.x264Bluray.Text = " Blu-Ray ";
             // 
+            // chkBlurayCompat
+            // 
+            this.chkBlurayCompat.AutoSize = true;
+            this.chkBlurayCompat.Location = new System.Drawing.Point(9, 98);
+            this.chkBlurayCompat.Name = "chkBlurayCompat";
+            this.chkBlurayCompat.Size = new System.Drawing.Size(159, 17);
+            this.chkBlurayCompat.TabIndex = 4;
+            this.chkBlurayCompat.Text = "Enable Blu-Ray compatibility";
+            this.chkBlurayCompat.UseVisualStyleBackColor = true;
+            this.chkBlurayCompat.CheckedChanged += new System.EventHandler(this.updateEvent);
+            // 
             // fakeInterlaced
             // 
             this.fakeInterlaced.AutoSize = true;
-            this.fakeInterlaced.Location = new System.Drawing.Point(9, 85);
+            this.fakeInterlaced.Location = new System.Drawing.Point(9, 75);
             this.fakeInterlaced.Name = "fakeInterlaced";
             this.fakeInterlaced.Size = new System.Drawing.Size(100, 17);
             this.fakeInterlaced.TabIndex = 3;
@@ -1800,10 +1794,9 @@ namespace MeGUI.packages.video.x264
             // x264hrdLabel
             // 
             this.x264hrdLabel.AutoSize = true;
-            this.x264hrdLabel.Location = new System.Drawing.Point(6, 53);
+            this.x264hrdLabel.Location = new System.Drawing.Point(6, 29);
             this.x264hrdLabel.Name = "x264hrdLabel";
-            this.x264hrdLabel.Padding = new System.Windows.Forms.Padding(3);
-            this.x264hrdLabel.Size = new System.Drawing.Size(58, 19);
+            this.x264hrdLabel.Size = new System.Drawing.Size(52, 13);
             this.x264hrdLabel.TabIndex = 2;
             this.x264hrdLabel.Text = "HRD Info";
             this.x264hrdLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1820,16 +1813,16 @@ namespace MeGUI.packages.video.x264
             "None",
             "VBR",
             "CBR"});
-            this.x264hrd.Location = new System.Drawing.Point(112, 53);
+            this.x264hrd.Location = new System.Drawing.Point(66, 26);
             this.x264hrd.Name = "x264hrd";
-            this.x264hrd.Size = new System.Drawing.Size(65, 21);
+            this.x264hrd.Size = new System.Drawing.Size(111, 21);
             this.x264hrd.TabIndex = 1;
             this.x264hrd.SelectedIndexChanged += new System.EventHandler(this.updateEvent);
             // 
             // x264aud
             // 
             this.x264aud.AutoSize = true;
-            this.x264aud.Location = new System.Drawing.Point(9, 28);
+            this.x264aud.Location = new System.Drawing.Point(9, 52);
             this.x264aud.Name = "x264aud";
             this.x264aud.Size = new System.Drawing.Size(153, 17);
             this.x264aud.TabIndex = 0;
@@ -1876,7 +1869,6 @@ namespace MeGUI.packages.video.x264
             // 
             // NoiseReductionLabel
             // 
-            this.NoiseReductionLabel.AutoSize = true;
             this.NoiseReductionLabel.Location = new System.Drawing.Point(16, 241);
             this.NoiseReductionLabel.Name = "NoiseReductionLabel";
             this.NoiseReductionLabel.Size = new System.Drawing.Size(86, 13);
@@ -1921,7 +1913,6 @@ namespace MeGUI.packages.video.x264
             // 
             // x264BframePredictionModeLabel
             // 
-            this.x264BframePredictionModeLabel.AutoSize = true;
             this.x264BframePredictionModeLabel.Location = new System.Drawing.Point(16, 29);
             this.x264BframePredictionModeLabel.Name = "x264BframePredictionModeLabel";
             this.x264BframePredictionModeLabel.Size = new System.Drawing.Size(102, 13);
@@ -1931,7 +1922,6 @@ namespace MeGUI.packages.video.x264
             // 
             // label4
             // 
-            this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(16, 116);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(97, 13);
@@ -1954,7 +1944,6 @@ namespace MeGUI.packages.video.x264
             // 
             // label5
             // 
-            this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(16, 90);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(86, 13);
@@ -2020,7 +2009,6 @@ namespace MeGUI.packages.video.x264
             // 
             // label7
             // 
-            this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(16, 56);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(34, 13);
@@ -2760,7 +2748,7 @@ namespace MeGUI.packages.video.x264
             this.avcProfileGroupbox.Size = new System.Drawing.Size(172, 48);
             this.avcProfileGroupbox.TabIndex = 38;
             this.avcProfileGroupbox.TabStop = false;
-            this.avcProfileGroupbox.Text = "AVC Profiles";
+            this.avcProfileGroupbox.Text = " AVC Profile ";
             // 
             // avcProfile
             // 
@@ -2773,7 +2761,7 @@ namespace MeGUI.packages.video.x264
             this.avcProfile.Name = "avcProfile";
             this.avcProfile.Size = new System.Drawing.Size(157, 21);
             this.avcProfile.TabIndex = 0;
-            this.avcProfile.SelectedIndexChanged += new System.EventHandler(this.updateEvent);
+            this.avcProfile.SelectedIndexChanged += new System.EventHandler(this.avcProfile_SelectedIndexChanged);
             // 
             // avcLevelGroupbox
             // 
@@ -2785,7 +2773,26 @@ namespace MeGUI.packages.video.x264
             this.avcLevelGroupbox.Size = new System.Drawing.Size(172, 48);
             this.avcLevelGroupbox.TabIndex = 37;
             this.avcLevelGroupbox.TabStop = false;
-            this.avcLevelGroupbox.Text = "AVC Level";
+            this.avcLevelGroupbox.Text = " AVC Level ";
+            // 
+            // deviceGroupbox
+            // 
+            this.deviceGroupbox.Controls.Add(this.targetDevice);
+            this.deviceGroupbox.Location = new System.Drawing.Point(322, 260);
+            this.deviceGroupbox.Name = "deviceGroupbox";
+            this.deviceGroupbox.Size = new System.Drawing.Size(172, 48);
+            this.deviceGroupbox.TabIndex = 39;
+            this.deviceGroupbox.TabStop = false;
+            this.deviceGroupbox.Text = " Target Playback Device ";
+            // 
+            // targetDevice
+            // 
+            this.targetDevice.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.targetDevice.Location = new System.Drawing.Point(10, 19);
+            this.targetDevice.Name = "targetDevice";
+            this.targetDevice.Size = new System.Drawing.Size(157, 21);
+            this.targetDevice.TabIndex = 1;
+            this.targetDevice.SelectedIndexChanged += new System.EventHandler(this.targetDevice_SelectedIndexChanged);
             // 
             // x264ConfigurationPanel
             // 
@@ -2854,7 +2861,6 @@ namespace MeGUI.packages.video.x264
             this.x264Bluray.ResumeLayout(false);
             this.x264Bluray.PerformLayout();
             this.x264QuantOptionsGroupbox.ResumeLayout(false);
-            this.x264QuantOptionsGroupbox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NoiseReduction)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PsyTrellis)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PsyRD)).EndInit();
@@ -2877,6 +2883,7 @@ namespace MeGUI.packages.video.x264
             this.gbx264CustomCmd.PerformLayout();
             this.avcProfileGroupbox.ResumeLayout(false);
             this.avcLevelGroupbox.ResumeLayout(false);
+            this.deviceGroupbox.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -3043,8 +3050,6 @@ namespace MeGUI.packages.video.x264
         private System.Windows.Forms.Button logfileOpenButton;
         private System.Windows.Forms.ComboBox cbTarget;
         private System.Windows.Forms.CheckBox x264SlowFirstpass;
-        private System.Windows.Forms.Label x264OpenGopLabel;
-        private System.Windows.Forms.ComboBox x264OpenGop;
         private System.Windows.Forms.Label x264hrdLabel;
         private System.Windows.Forms.ComboBox x264hrd;
         private System.Windows.Forms.CheckBox picStruct;
@@ -3066,5 +3071,9 @@ namespace MeGUI.packages.video.x264
         private System.Windows.Forms.Label sampleARLabel;
         private System.Windows.Forms.ComboBox cbInterlaceMode;
         private System.Windows.Forms.Label lblInterlacedMode;
+        private System.Windows.Forms.GroupBox deviceGroupbox;
+        private System.Windows.Forms.ComboBox targetDevice;
+        private System.Windows.Forms.CheckBox chkBlurayCompat;
+        private System.Windows.Forms.CheckBox chkOpenGop;
     }
 }

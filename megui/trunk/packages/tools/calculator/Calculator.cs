@@ -621,7 +621,7 @@ namespace MeGUI
                 Dar dar = new Dar();
 
                 if (!string.IsNullOrEmpty(info.Video.VideoInput))
-                    JobUtil.getAllInputProperties(out nbFrames, out framerate, out hRes, out vRes, out dar, info.Video.VideoInput);
+                    JobUtil.GetAllInputProperties(out nbFrames, out framerate, out hRes, out vRes, out dar, info.Video.VideoInput);
 
                 calc.SetDefaults(nbFrames, framerate, hRes, vRes, info.Video.CurrentSettings, info.Audio.AudioStreams);
 

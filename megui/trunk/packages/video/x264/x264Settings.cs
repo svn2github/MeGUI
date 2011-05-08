@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 
 namespace MeGUI
 {
@@ -79,22 +80,25 @@ namespace MeGUI
         int NewadaptiveBFrames, nbRefFrames, alphaDeblock, betaDeblock, subPelRefinement, maxQuantDelta, tempQuantBlur,
             bframePredictionMode, vbvBufferSize, vbvMaxBitrate, meType, meRange, minGOPSize, macroBlockOptions,
             quantizerMatrixType, x264Trellis, noiseReduction, deadZoneInter, deadZoneIntra, AQMode, profile, level,
-            lookahead, slicesnb, maxSliceSyzeBytes, maxSliceSyzeMBs, bFramePyramid, weightedPPrediction, tune, openGop, x264Nalhrd,
+            lookahead, slicesnb, maxSliceSyzeBytes, maxSliceSyzeMBs, bFramePyramid, weightedPPrediction, tune, x264Nalhrd,
             colorMatrix, transfer, colorPrim, x264PullDown, sampleAR;
 		decimal ipFactor, pbFactor, chromaQPOffset, vbvInitialBuffer, bitrateVariance, quantCompression, 
 			tempComplexityBlur, tempQuanBlurCC, scdSensitivity, bframeBias, quantizerCrf, AQStrength, psyRDO, psyTrellis;
-		bool deblock, cabac, p4x4mv, p8x8mv, b8x8mv, i4x4mv, i8x8mv, weightedBPrediction,
+		bool deblock, cabac, p4x4mv, p8x8mv, b8x8mv, i4x4mv, i8x8mv, weightedBPrediction, blurayCompat,
 			chromaME, adaptiveDCT, noMixedRefs, noFastPSkip, psnrCalc, noDctDecimate, ssimCalc, useQPFile, 
             FullRange, advSet, noMBTree, threadInput, noPsy, scenecut, x264Aud, x264SlowFirstpass, picStruct, fakeInterlaced, nonDeterministic;
-		string quantizerMatrix, qpfile;
+		string quantizerMatrix, qpfile, openGop;
         x264PresetLevelModes preset;
         x264InterlacedModes interlacedMode;
+        x264Device targetDevice;
+        List<x264Device> x264DeviceList;
 		#region constructor
         /// <summary>
 		/// default constructor, initializes codec default values
 		/// </summary>
 		public x264Settings():base(ID, VideoEncoderType.X264)
 		{
+            x264DeviceList = x264Device.CreateDeviceList();
             preset = x264PresetLevelModes.medium;
             tune = 0;
             deadZoneInter = 21;
@@ -176,63 +180,16 @@ namespace MeGUI
             profile = 3; // Autoguess. High if using default options.
             level = 15;
             x264SlowFirstpass = false;
-            openGop = 0;
+            openGop = "False";
             picStruct = false;
             fakeInterlaced = false;
             nonDeterministic = false;
             interlacedMode = x264InterlacedModes.progressive;
+            targetDevice = x264DeviceList[0];
+            blurayCompat = false;
 		}
 		#endregion
 		#region properties
-
-#warning Deprecated since 0.3.4.9, delete block after 0.3.6
-        public int x264Preset
-        {
-            get { return 99; }
-            set
-            {
-                if (value == 99)
-                    return;
-                // needs to be assigned to the new preset system (+superfast)
-                if (value > 0)
-                    value++;
-                preset = (x264PresetLevelModes)value;
-            }
-        }
-#warning Deprecated since 0.3.4.14, delete block after 0.3.6
-        public string Turbo
-        {
-            get { return "migrated"; }
-            set 
-            {
-                if (value.Equals("migrated"))
-                    return;
-                if (value.Equals("false"))
-                    x264SlowFirstpass = true;
-                if (value.Equals("true"))
-                    x264SlowFirstpass = false;
-            }
-        }
-#warning Deprecated since 0.3.5.3, delete block after 0.3.7
-        public string X264Nalhrd
-        {
-            get { return "migrated"; }
-            set
-            {
-                if (value.Equals("migrated"))
-                    return;
-                if (value.Equals("false"))
-                    x264Nalhrd = 0;
-                if (value.Equals("true"))
-                    x264Nalhrd = 1;
-                if (value.Equals("0"))
-                    x264Nalhrd = 0;
-                if (value.Equals("1"))
-                    x264Nalhrd = 1;
-                if (value.Equals("2"))
-                    x264Nalhrd = 2;
-            }
-        }
         public x264PresetLevelModes x264PresetLevel
         {
             get { return preset; }
@@ -252,6 +209,46 @@ namespace MeGUI
         {
             get { return interlacedMode; }
             set { interlacedMode = value; }
+        }
+        [XmlIgnore()]
+        [MeGUI.core.plugins.interfaces.PropertyEqualityIgnoreAttribute()]
+        public x264Device TargetDevice
+        {
+            get { return targetDevice; }
+            set { targetDevice = value; }
+        }
+        // for profile import/export in case the enum changes
+        public string TargetDeviceXML
+        {
+            get { return targetDevice.ID.ToString(); }
+            set
+            {
+                // only support one device at the moment
+                targetDevice = x264DeviceList[0];
+                foreach (x264Device oDevice in x264DeviceList)
+                    if (oDevice.ID.ToString().Equals(value.Split(',')[0], StringComparison.CurrentCultureIgnoreCase))
+                        targetDevice = oDevice;
+            }
+        }
+        [XmlIgnore()]
+        public bool BlurayCompat
+        {
+            get { return blurayCompat; }
+            set { blurayCompat = value; }
+        }
+        /// <summary>
+        /// Only for XML export/import. For all other purposes use BlurayCompat()
+        /// </summary>
+        public string BlurayCompatXML
+        {
+            get { return blurayCompat.ToString(); }
+            set
+            {
+                if (value.Equals("True", StringComparison.CurrentCultureIgnoreCase))
+                    blurayCompat = true;
+                else
+                    blurayCompat = false;
+            }
         }
         public bool NoDCTDecimate
         {
@@ -504,10 +501,36 @@ namespace MeGUI
             get { return deadZoneIntra; }
             set { deadZoneIntra = value; }
         }
-        public int OpenGop
+        /// <summary>
+        /// Only for XML export/import. For all other purposes use OpenGopValue()
+        /// </summary>
+        public string OpenGop
         {
             get { return openGop; }
-            set { openGop = value; }
+            set 
+            { 
+                if (value.Equals("True", StringComparison.CurrentCultureIgnoreCase) || value.Equals("1"))
+                    openGop = "True";
+                else if (value.Equals("2"))
+                {
+                    openGop = "True";
+                    blurayCompat = true;
+                }
+                else
+                    openGop = "False";
+            }
+        }
+        [XmlIgnore()]
+        public bool OpenGopValue
+        {
+            get 
+            {
+                if (openGop.Equals("True", StringComparison.CurrentCultureIgnoreCase))
+                    return true;
+                else
+                    return false;
+            }
+            set { openGop = value.ToString(); }
         }
         public int X264PullDown
         {
@@ -554,6 +577,7 @@ namespace MeGUI
             get { return FullRange; }
             set { FullRange = value; }
         }
+        [MeGUI.core.plugins.interfaces.PropertyEqualityIgnoreAttribute()]
         public bool x264AdvancedSettings
         {
             get { return advSet; }
@@ -742,6 +766,9 @@ namespace MeGUI
                 this.FakeInterlaced != otherSettings.FakeInterlaced ||
                 this.NonDeterministic != otherSettings.NonDeterministic ||
                 this.MaxSliceSyzeBytes != otherSettings.MaxSliceSyzeBytes ||
+                this.InterlacedMode != otherSettings.InterlacedMode ||
+                this.TargetDevice.ID != otherSettings.TargetDevice.ID ||
+                this.BlurayCompat != otherSettings.BlurayCompat ||
                 this.MaxSliceSyzeMBs != otherSettings.MaxSliceSyzeMBs
                 )
                 return true;
@@ -792,10 +819,15 @@ namespace MeGUI
                 P4x4mv = false;
         }
 
-        public static int GetDefaultNumberOfRefFrames(x264PresetLevelModes oPresetLevel, int oTuningMode)
+        public static int GetDefaultNumberOfRefFrames(x264PresetLevelModes oPreset, int oTuningMode, x264Device oDevice)
         {
-            int iDefaultSetting = 0;
-            switch (oPresetLevel)
+            return GetDefaultNumberOfRefFrames(oPreset, oTuningMode, oDevice, -1, -1, -1);
+        }
+
+        public static int GetDefaultNumberOfRefFrames(x264PresetLevelModes oPreset, int oTuningMode, x264Device oDevice, int iLevel, int hRes, int vRes)
+        {
+            int iDefaultSetting = 1;
+            switch (oPreset)
             {
                 case x264Settings.x264PresetLevelModes.ultrafast:
                 case x264Settings.x264PresetLevelModes.superfast:
@@ -812,10 +844,18 @@ namespace MeGUI
                 iDefaultSetting *= 2;
             if (iDefaultSetting > 16)
                 iDefaultSetting = 16;
+            if (oDevice != null && oDevice.ReferenceFrames > -1)
+                iDefaultSetting = Math.Min(oDevice.ReferenceFrames, iDefaultSetting);
+            if (iLevel > -1 && hRes > 0 && vRes > 0)
+            {
+                int iMaxRefForLevel = MeGUI.packages.video.x264.x264SettingsHandler.getMaxRefForLevel(iLevel, hRes, vRes);
+                if (iMaxRefForLevel > -1 && iMaxRefForLevel < iDefaultSetting)
+                    iDefaultSetting = iMaxRefForLevel;
+            }
             return iDefaultSetting;
         }
 
-        public static int GetDefaultNumberOfBFrames(x264PresetLevelModes oPresetLevel, int oTuningMode, int oAVCProfile)
+        public static int GetDefaultNumberOfBFrames(x264PresetLevelModes oPresetLevel, int oTuningMode, int oAVCProfile, x264Device oDevice)
         {
             int iDefaultSetting = 0;
             if (oAVCProfile == 0) // baseline
@@ -837,10 +877,13 @@ namespace MeGUI
                 iDefaultSetting += 2;
             if (iDefaultSetting > 16)
                 iDefaultSetting = 16;
-            return iDefaultSetting;
+            if (oDevice != null && oDevice.BFrames > -1)
+                return Math.Min(oDevice.BFrames, iDefaultSetting);
+            else
+                return iDefaultSetting;
         }
 
-        public static int GetDefaultNumberOfWeightp(x264PresetLevelModes oPresetLevel, int oTuningMode, int oAVCProfile)
+        public static int GetDefaultNumberOfWeightp(x264PresetLevelModes oPresetLevel, int oTuningMode, int oAVCProfile, bool bBlurayCompat)
         {
             if (oAVCProfile == 0) // baseline
                 return 0;
@@ -861,7 +904,10 @@ namespace MeGUI
                 case x264Settings.x264PresetLevelModes.veryslow: 
                 case x264Settings.x264PresetLevelModes.placebo:     iDefaultSetting = 2; break;
             }
-            return iDefaultSetting;
+            if (bBlurayCompat)
+                return Math.Min(iDefaultSetting, 1);
+            else
+                return iDefaultSetting;
         }
 
         public static int GetDefaultAQMode(x264PresetLevelModes oPresetLevel, int oTuningMode)

@@ -182,6 +182,7 @@
     </Content>
     <Content Include="data\ContextHelp.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="lib_x64\MediaInfo.dll" Condition=" '$(Platform)' == 'x64' ">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -738,6 +739,8 @@
     <Compile Include="packages\video\x264\x264ConfigurationPanel.Designer.cs">
       <DependentUpon>x264ConfigurationPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="packages\video\x264\x264Device.cs" />
+    <Compile Include="packages\video\x264\x264SettingsHandler.cs" />
     <Compile Include="packages\video\x264\x264Encoder.cs" />
     <Compile Include="packages\video\x264\x264Settings.cs" />
     <Compile Include="packages\video\xvid\xvidConfigurationPanel.cs">

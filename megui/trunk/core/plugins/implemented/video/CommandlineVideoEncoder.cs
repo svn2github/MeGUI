@@ -38,6 +38,7 @@ namespace MeGUI
         ulong numberOfFrames;
         ulong? currentFrameNumber;
         protected int hres = 0, vres = 0;
+        protected int fps_n = 0, fps_d = 0;
         Dar? dar;
         protected bool usesSAR = false;
         #endregion
@@ -77,7 +78,7 @@ namespace MeGUI
         {
             double fps;
             Dar d;
-            JobUtil.GetAllInputProperties( out numberOfFrames, out fps, out hres, out vres,out d, job.Input);
+            JobUtil.GetAllInputProperties(out numberOfFrames, out fps, out fps_n, out fps_d, out hres, out vres, out d, job.Input);
             dar = job.DAR;
             su.NbFramesTotal = numberOfFrames;
             su.ClipLength = TimeSpan.FromSeconds((double)numberOfFrames / fps);

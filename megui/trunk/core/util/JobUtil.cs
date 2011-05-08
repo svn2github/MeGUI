@@ -436,13 +436,20 @@ namespace MeGUI
 		/// <returns>true if the input file could be opened, false if not</returns>
 		public static bool getInputProperties(out ulong nbOfFrames, out double framerate, string video)
 		{
-            int d1, d2;
+            int d1, d2, d3, d4;
             Dar d;
-            return getAllInputProperties(out nbOfFrames, out framerate, out d1, out d2, out d, video);
+            return GetAllInputProperties(out nbOfFrames, out framerate, out d1, out d2, out d3, out d4, out d, video);
 		}
-
-        public static void GetAllInputProperties(out ulong nbOfFrames, out double framerate, out int hRes, 
-			out int vRes, out Dar dar, string video)
+        /// <summary>
+        /// gets the number of frames, framerate, horizontal and vertical resolution from a video source
+        /// </summary>
+        /// <param name="nbOfFrames">the number of frames</param>
+        /// <param name="framerate">the framerate</param>
+        /// <param name="hRes">the horizontal resolution</param>
+        /// <param name="vRes">the vertical resolution</param>
+        /// <param name="video">the video whose properties are to be read</param>
+        /// <returns>whether the source could be opened or not</returns>
+        public static bool GetAllInputProperties(out ulong nbOfFrames, out double framerate, out int framerate_n, out int framerate_d, out int hRes, out int vRes, out Dar dar, string video)
 		{
             nbOfFrames = 0;
             hRes = vRes = 0;
@@ -453,21 +460,22 @@ namespace MeGUI
                 {
                     checked { nbOfFrames = (ulong)avi.Info.FrameCount; }
                     framerate = avi.Info.FPS;
+                    framerate_n = avi.Info.FPS_N;
+                    framerate_d = avi.Info.FPS_D;
                     hRes = (int)avi.Info.Width;
                     vRes = (int)avi.Info.Height;
                     dar = avi.Info.DAR;
                 }
+                return true;
 			}
 			catch (Exception e)
 			{
                 throw new JobRunException("The file " + video + " cannot be opened.\r\n"
                      + "Error message for your reference: " + e.Message, e);
             }
-			
 		}
 
-
-		/// <summary>
+  		/// <summary>
 		/// gets the number of frames, framerate, horizontal and vertical resolution from a video source
 		/// </summary>
 		/// <param name="nbOfFrames">the number of frames</param>
@@ -476,24 +484,10 @@ namespace MeGUI
 		/// <param name="vRes">the vertical resolution</param>
 		/// <param name="video">the video whose properties are to be read</param>
 		/// <returns>whether the source could be opened or not</returns>
-		public static bool getAllInputProperties(out ulong nbOfFrames, out double framerate, out int hRes, 
-			out int vRes, out Dar dar, string video)
+		public static bool GetAllInputProperties(out ulong nbOfFrames, out double framerate, out int hRes, out int vRes, out Dar dar, string video)
 		{
-            try
-            {
-                GetAllInputProperties(out nbOfFrames, out framerate, out hRes, out vRes, out dar, video);
-                return true;
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message,
-                        "Cannot open video input", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                nbOfFrames = 0;
-                hRes = vRes = 0;
-                framerate = 0;
-                dar = Dar.ITU16x9PAL;
-                return false;
-            }
+            int fn, fd;
+            return GetAllInputProperties(out nbOfFrames, out framerate, out fn, out fd, out hRes, out vRes, out dar, video);
 		}
 
         /// <summary>
@@ -514,7 +508,7 @@ namespace MeGUI
             ulong nbFrames;
 			double framerate;
 			compliantLevel = -1;
-			if (getAllInputProperties(out nbFrames, out framerate, out hRes, out vRes, out d, source))
+			if (GetAllInputProperties(out nbFrames, out framerate, out hRes, out vRes, out d, source))
 			{
 				return this.al.validateAVCLevel(hRes, vRes, framerate, settings, out compliantLevel);
 			}

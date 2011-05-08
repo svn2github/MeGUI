@@ -314,7 +314,7 @@ namespace MeGUI
                     // MediaInfo doesn't give TrackID for VCD, specs indicate only MP1L2 is supported
                     ati.TrackID = (0xC0 + counter);
                 else if (atrack.ID != "0" && atrack.ID != "" &&
-                         (Int32.TryParse(atrack.ID, out iID) ||
+                         (Int32.TryParse(atrack.ID, out iID) || 
                          (atrack.ID.Contains("-") && Int32.TryParse(atrack.ID.Split('-')[1], out iID))))
                     ati.TrackID = iID;
                 else
@@ -384,12 +384,12 @@ namespace MeGUI
                         vCodec = getVideoCodec(track.Format); // sometimes codec info is not available, check the format then...
                     vType = getVideoType(vCodec, cType, file);
                     Dar dar = new Dar((decimal?)easyParseDouble(track.AspectRatio), width, height);
-                    this.info = new MediaFileInfo(bHasVideo, width, height, dar, frameCount, fps, aCodecs.Length > 0);
+                    this.info = new MediaFileInfo(bHasVideo, width, height, dar, frameCount, fps, 0, 1, aCodecs.Length > 0);
                 }
             }
             else
             {
-                this.info = new MediaFileInfo(false, 0, 0, Dar.A1x1, 0, 0, aCodecs.Length > 0);
+                this.info = new MediaFileInfo(false, 0, 0, Dar.A1x1, 0, 0, 0, 1, aCodecs.Length > 0);
             }
         }
 

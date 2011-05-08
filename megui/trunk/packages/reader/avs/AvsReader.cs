@@ -104,6 +104,7 @@ namespace MeGUI
                               width, height),
                               (ulong)clip.num_frames,
                               ((double)clip.raten) / ((double)clip.rated),
+                              clip.raten, clip.rated,
                               (clip.SamplesCount != 0));
                 }
             }

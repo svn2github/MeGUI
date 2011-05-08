@@ -79,32 +79,37 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             return null;
         }
 
-        public static string genCommandline(string input, string output, Dar? d, int hres, int vres, x264Settings xs, Zone[] zones, LogItem log)
+        public static string genCommandline(string input, string output, Dar? d, int hres, int vres, int fps_n, int fps_d, x264Settings xs, Zone[] zones, LogItem log)
         {
             int qp;
             bool display = false;
             StringBuilder sb = new StringBuilder();
             CultureInfo ci = new CultureInfo("en-us");
+            MeGUI.packages.video.x264.x264SettingsHandler oSettingsHandler = new packages.video.x264.x264SettingsHandler(xs, log);
 
             #region main tab
             ///<summary>
             /// x264 Main Tab Settings
             ///</summary>
+            
             // AVC Profiles
-            if (!xs.CustomEncoderOptions.Contains("--profile "))
+            xs.Profile = oSettingsHandler.getProfile();
+            switch (xs.Profile)
             {
-                switch (xs.Profile)
-                {
-                    case 0: sb.Append("--profile baseline "); break;
-                    case 1: sb.Append("--profile main "); break;
-                    case 2: break; // --profile high is the default value
-                }
+                case 0: sb.Append("--profile baseline "); break;
+                case 1: sb.Append("--profile main "); break;
+                case 2: break; // --profile high is the default value
             }
 
             // AVC Levels
-            if (!xs.CustomEncoderOptions.Contains("--level "))
-                if (xs.Level != 15) // unrestricted
-                    sb.Append("--level " + AVCLevels.getCLILevelNames()[xs.Level] + " ");
+            xs.Level = oSettingsHandler.getLevel();
+            if (xs.Level != 15) // unrestricted
+                sb.Append("--level " + AVCLevels.getCLILevelNames()[xs.Level] + " ");
+
+            // --bluray-compat
+            xs.BlurayCompat = oSettingsHandler.getBlurayCompat();
+            if (xs.BlurayCompat)
+                sb.Append("--bluray-compat ");
 
             // x264 Presets
             if (!xs.CustomEncoderOptions.Contains("--preset "))
@@ -125,7 +130,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             }
 
             // x264 Tunings
-            if (!xs.CustomEncoderOptions.Contains("--tune"))
+            if (!xs.CustomEncoderOptions.Contains("--tune "))
             {
                 switch (xs.x264Tuning)
                 {
@@ -143,7 +148,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             switch (xs.EncodingMode)
             {
                 case 0: // ABR
-                    if (!xs.CustomEncoderOptions.Contains("--bitrate")) sb.Append("--bitrate " + xs.BitrateQuantizer + " ");
+                    if (!xs.CustomEncoderOptions.Contains("--bitrate ")) 
+                        sb.Append("--bitrate " + xs.BitrateQuantizer + " ");
                     break;
                 case 1: // CQ
                     if (!xs.CustomEncoderOptions.Contains("--qp "))
@@ -170,7 +176,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                     sb.Append("--pass 3 --bitrate " + xs.BitrateQuantizer + " --stats " + "\"" + xs.Logfile + "\" ");
                     break;
                 case 9: // constant quality
-                    if (!xs.CustomEncoderOptions.Contains("--crf"))
+                    if (!xs.CustomEncoderOptions.Contains("--crf "))
                         if (xs.QuantizerCRF != 23)
                             sb.Append("--crf " + xs.QuantizerCRF.ToString(ci) + " ");
                     break;
@@ -189,7 +195,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             if (!xs.CustomEncoderOptions.Contains("--thread-input"))
                 if (xs.ThreadInput && xs.NbThreads == 1)
                     sb.Append("--thread-input ");
-            if (!xs.CustomEncoderOptions.Contains("--threads"))
+            if (!xs.CustomEncoderOptions.Contains("--threads "))
                 if (xs.NbThreads > 0)
                     sb.Append("--threads " + xs.NbThreads + " ");
             #endregion
@@ -222,41 +228,36 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                         sb.Append("--no-deblock ");
             }
 
-            if (!xs.CustomEncoderOptions.Contains("--no-cabac"))
+            if (xs.Profile > 0 && !xs.CustomEncoderOptions.Contains("--no-cabac"))
             {
                 if (!xs.Cabac)
                 {
-                    if (xs.Profile > 0 && (xs.x264PresetLevel != x264Settings.x264PresetLevelModes.ultrafast && xs.x264Tuning != 6))
+                    if (xs.x264PresetLevel != x264Settings.x264PresetLevelModes.ultrafast && xs.x264Tuning != 6)
                         sb.Append("--no-cabac ");
                 }
             }
 
             // GOP Size
-            if (!xs.CustomEncoderOptions.Contains("--keyint"))
-                if (xs.KeyframeInterval != 250) // gop size of 250 is default
-                {
-                    if (xs.KeyframeInterval == 0)
-                        sb.Append("--keyint infinite ");
-                    else
-                        sb.Append("--keyint " + xs.KeyframeInterval + " ");
-                }
-            if (!xs.CustomEncoderOptions.Contains("--min-keyint"))
-                if (xs.MinGOPSize != xs.KeyframeInterval / 10)
-                    sb.Append("--min-keyint " + xs.MinGOPSize + " ");
-
-            if (!xs.CustomEncoderOptions.Contains("--open-gop"))
-            switch (xs.OpenGop)
+            xs.KeyframeInterval = oSettingsHandler.getKeyInt(fps_n, fps_d);
+            if (xs.KeyframeInterval != 250) // gop size of 250 is default
             {
-                case 1: sb.Append("--open-gop normal "); break;
-                case 2: sb.Append("--open-gop bluray "); break;
+                if (xs.KeyframeInterval == 0)
+                    sb.Append("--keyint infinite ");
+                else
+                    sb.Append("--keyint " + xs.KeyframeInterval + " ");
             }
+
+            xs.MinGOPSize = oSettingsHandler.getMinKeyint();
+            if (xs.MinGOPSize != xs.KeyframeInterval / 10)
+                sb.Append("--min-keyint " + xs.MinGOPSize + " ");
+
+            if (!xs.CustomEncoderOptions.Contains("--open-gop") && (xs.OpenGopValue || xs.BlurayCompat))
+                sb.Append("--open-gop ");
 
             // B-Frames
-            if (xs.Profile > 0 && !xs.CustomEncoderOptions.Contains("--bframes"))  // baseline profile always uses 0 bframes
-            {
-                if (xs.NbBframes != x264Settings.GetDefaultNumberOfBFrames(xs.x264PresetLevel, xs.x264Tuning, xs.Profile))
-                    sb.Append("--bframes " + xs.NbBframes + " ");
-            }
+            xs.NbBframes = oSettingsHandler.getBFrames();
+            if (xs.Profile > 0 && xs.NbBframes != x264Settings.GetDefaultNumberOfBFrames(xs.x264PresetLevel, xs.x264Tuning, xs.Profile, null))
+                sb.Append("--bframes " + xs.NbBframes + " ");
 
             if (xs.NbBframes > 0)
             {
@@ -282,7 +283,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                         sb.Append("--b-adapt " + xs.NewAdaptiveBFrames + " ");
                 }
 
-                if (xs.NbBframes > 1 && !xs.CustomEncoderOptions.Contains("--b-pyramid"))
+                xs.x264BFramePyramid = oSettingsHandler.getBPyramid();
+                if (xs.NbBframes > 1 && ((xs.x264BFramePyramid != 2 && !xs.BlurayCompat) || (xs.x264BFramePyramid != 1 && xs.BlurayCompat)))
                 {
                     switch (xs.x264BFramePyramid) // pyramid needs a minimum of 2 b frames
                     {
@@ -302,14 +304,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                     sb.Append("--b-bias " + xs.BframeBias.ToString(ci) + " ");
 
             // Other
-            if (!xs.CustomEncoderOptions.Contains("--tff"))
-                if (xs.InterlacedMode == x264Settings.x264InterlacedModes.tff)
-                    sb.Append("--tff ");
-
-            if (!xs.CustomEncoderOptions.Contains("--bff"))
-                if (xs.InterlacedMode == x264Settings.x264InterlacedModes.bff)
-                    sb.Append("--bff ");
-
             if (xs.Scenecut)
             {
                 if (!xs.CustomEncoderOptions.Contains("--scenecut "))
@@ -325,36 +319,19 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             }
 
             // reference frames
-            if (!xs.CustomEncoderOptions.Contains("--ref "))
-            {
-                if (x264Settings.GetDefaultNumberOfRefFrames(xs.x264PresetLevel, xs.x264Tuning) != xs.NbRefFrames)
-                    sb.Append("--ref " + xs.NbRefFrames + " ");
-            }
+            int iRefFrames = oSettingsHandler.getRefFrames(hres, vres);
+            if (iRefFrames != x264Settings.GetDefaultNumberOfRefFrames(xs.x264PresetLevel, xs.x264Tuning, null, xs.Level, hres, vres))
+                sb.Append("--ref " + iRefFrames + " ");
 
             // WeightedPPrediction
-            if (!xs.CustomEncoderOptions.Contains("--weightp "))
-            {
-                if (xs.WeightedPPrediction != x264Settings.GetDefaultNumberOfWeightp(xs.x264PresetLevel, xs.x264Tuning, xs.Profile))
-                    sb.Append("--weightp " + xs.WeightedPPrediction + " ");
-            }
-
-            // PullDown
-            if (!xs.CustomEncoderOptions.Contains("--pulldown"))
-                switch (xs.X264PullDown)
-                {
-                    case 0: break;
-                    case 1: sb.Append("--pulldown 22 "); break;
-                    case 2: sb.Append("--pulldown 32 "); break;
-                    case 3: sb.Append("--pulldown 64 "); break;
-                    case 4: sb.Append("--pulldown double "); break;
-                    case 5: sb.Append("--pulldown triple "); break;
-                    case 6: sb.Append("--pulldown euro "); break;
-                }
+            xs.WeightedPPrediction = oSettingsHandler.getWeightp();
+            if (xs.WeightedPPrediction != x264Settings.GetDefaultNumberOfWeightp(xs.x264PresetLevel, xs.x264Tuning, xs.Profile, xs.BlurayCompat))
+                sb.Append("--weightp " + xs.WeightedPPrediction + " ");
 
             // Slicing
-            if (!xs.CustomEncoderOptions.Contains("--slices "))
-                if (xs.SlicesNb != 0)
-                    sb.Append("--slices " + xs.SlicesNb + " ");
+            xs.SlicesNb = oSettingsHandler.getSlices();
+            if (xs.SlicesNb != 0)
+                sb.Append("--slices " + xs.SlicesNb + " ");
             if (!xs.CustomEncoderOptions.Contains("--slice-max-size "))
                 if (xs.MaxSliceSyzeBytes != 0)
                     sb.Append("--slice-max-size " + xs.MaxSliceSyzeBytes + " ");
@@ -407,12 +384,12 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
 
             if (xs.EncodingMode != 1) // doesn't apply to CQ mode
             {
-                if (!xs.CustomEncoderOptions.Contains("--vbv-bufsize "))
-                    if (xs.VBVBufferSize > 0)
-                        sb.Append("--vbv-bufsize " + xs.VBVBufferSize + " ");
-                if (!xs.CustomEncoderOptions.Contains("--vbv-maxrate "))
-                    if (xs.VBVMaxBitrate > 0)
-                        sb.Append("--vbv-maxrate " + xs.VBVMaxBitrate + " ");
+                xs.VBVBufferSize = oSettingsHandler.getVBVBufsize();
+                if (xs.VBVBufferSize > 0)
+                    sb.Append("--vbv-bufsize " + xs.VBVBufferSize + " ");
+                xs.VBVMaxBitrate = oSettingsHandler.getVBVMaxrate();
+                if (xs.VBVMaxBitrate > 0)
+                    sb.Append("--vbv-maxrate " + xs.VBVMaxBitrate + " ");
                 if (!xs.CustomEncoderOptions.Contains("--vbv-init "))
                     if (xs.VBVInitialBuffer != 0.9M)
                         sb.Append("--vbv-init " + xs.VBVInitialBuffer.ToString(ci) + " ");
@@ -516,7 +493,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             }
 
             // custom matrices 
-            if (xs.QuantizerMatrixType > 0)
+            if (xs.Profile > 1 && xs.QuantizerMatrixType > 0)
             {
                 switch (xs.QuantizerMatrixType)
                 {
@@ -685,9 +662,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                 }
             }
 
-            if (!xs.CustomEncoderOptions.Contains("--no-8x8dct"))
+            if (xs.Profile > 1  && !xs.CustomEncoderOptions.Contains("--no-8x8dct"))
                 if (!xs.AdaptiveDCT)
-                    if (xs.Profile > 1 && xs.x264PresetLevel > x264Settings.x264PresetLevelModes.ultrafast)
+                    if (xs.x264PresetLevel > x264Settings.x264PresetLevelModes.ultrafast)
                         sb.Append("--no-8x8dct ");
 
             // Trellis
@@ -749,20 +726,16 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                 if (xs.NoPsy && (xs.x264Tuning != 4 && xs.x264Tuning != 5))
                     sb.Append("--no-psy ");
 
-            if (!xs.CustomEncoderOptions.Contains("--aud"))
-                if (xs.X264Aud)
-                    sb.Append("--aud ");
+            xs.X264Aud = oSettingsHandler.getAud();
+            if (xs.X264Aud && !xs.BlurayCompat)
+                sb.Append("--aud ");
 
-            if (!xs.CustomEncoderOptions.Contains("--nal-hrd"))
-                switch (xs.Nalhrd)
-                {
-                    case 1: sb.Append("--nal-hrd vbr "); break;
-                    case 2: sb.Append("--nal-hrd cbr "); break;
-                }
-
-            if (!xs.CustomEncoderOptions.Contains("--fake-interlaced"))
-                if (xs.FakeInterlaced && xs.InterlacedMode == x264Settings.x264InterlacedModes.progressive)
-                    sb.Append("--fake-interlaced ");
+            xs.Nalhrd = oSettingsHandler.getNalHrd();
+            switch (xs.Nalhrd)
+            {
+                case 1: if (!xs.BlurayCompat) sb.Append("--nal-hrd vbr "); break;
+                case 2: sb.Append("--nal-hrd cbr "); break;
+            }
 
             if (!xs.CustomEncoderOptions.Contains("--non-deterministic"))
                 if (xs.NonDeterministic)
@@ -792,70 +765,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                 if (xs.SSIMCalculation)
                     sb.Append("--ssim ");
 
-            if (!xs.CustomEncoderOptions.Contains("--sar"))
-                switch (xs.SampleAR)
-                {
-                    case 0: break;
-                    case 1: sb.Append("--sar 1:1 "); break;
-                    case 2: sb.Append("--sar 4:3 "); break;
-                    case 3: sb.Append("--sar 8:9 "); break;
-                    case 4: sb.Append("--sar 10:11 "); break;
-                    case 5: sb.Append("--sar 12:11 "); break;
-                    case 6: sb.Append("--sar 16:11 "); break;
-                    case 7: sb.Append("--sar 32:27 "); break;
-                    case 8: sb.Append("--sar 40:33 "); break;
-                    case 9: sb.Append("--sar 64:45 "); break;
-                }
-
             if (!xs.CustomEncoderOptions.Contains("--fullrange on"))    
                 if (xs.fullRange)
                     sb.Append("--fullrange on ");
-
-            if (!xs.CustomEncoderOptions.Contains("--pic-struct"))
-                if (xs.PicStruct && xs.InterlacedMode == x264Settings.x264InterlacedModes.progressive && xs.X264PullDown == 0)
-                    sb.Append("--pic-struct ");
-
-            if (!xs.CustomEncoderOptions.Contains("--colorprim"))
-                switch (xs.ColorPrim)
-                {
-                    case 0: break;
-                    case 1: sb.Append("--colorprim bt709 "); break;
-                    case 2: sb.Append("--colorprim bt470m "); break;
-                    case 3: sb.Append("--colorprim bt470bg "); break;
-                    case 4: sb.Append("--colorprim smpte170m "); break;
-                    case 5: sb.Append("--colorprim smpte240m "); break;
-                    case 6: sb.Append("--colorprim film "); break;
-                }
-
-            if (!xs.CustomEncoderOptions.Contains("--transfer"))
-                switch (xs.Transfer)
-                {
-                    case 0: break;
-                    case 1: sb.Append("--transfer bt709 "); break;
-                    case 2: sb.Append("--transfer bt470m "); break;
-                    case 3: sb.Append("--transfer bt470bg "); break;
-                    case 4: sb.Append("--transfer linear "); break;
-                    case 5: sb.Append("--transfer log100 "); break;
-                    case 6: sb.Append("--transfer log316 "); break;
-                    case 7: sb.Append("--transfer smpte170m "); break;
-                    case 8: sb.Append("--transfer smpte240m "); break;
-                }
-            
-            if (!xs.CustomEncoderOptions.Contains("--colormatrix"))
-                switch (xs.ColorMatrix)
-                {
-                    case 0: break;
-                    case 1: sb.Append("--colormatrix bt709 "); break;
-                    case 2: sb.Append("--colormatrix fcc "); break;
-                    case 3: sb.Append("--colormatrix bt470bg "); break;
-                    case 4: sb.Append("--colormatrix smpte170m "); break;
-                    case 5: sb.Append("--colormatrix smpte240m "); break;
-                    case 6: sb.Append("--colormatrix GBR "); break;
-                    case 7: sb.Append("--colormatrix YCgCo "); break;
-                }
-
-            if (!xs.CustomEncoderOptions.Equals("")) // add custom encoder options
-                sb.Append(xs.CustomEncoderOptions + " ");
 
             #endregion
 
@@ -895,25 +807,119 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             }
             #endregion
 
-            #region input
-            if (!xs.CustomEncoderOptions.Contains("--sar ") && xs.SampleAR == 0)
-            {
-                if (d.HasValue)
-                {
-                    Sar s = d.Value.ToSar(hres, vres);
-                    sb.Append("--sar " + s.X + ":" + s.Y + " ");
-                }
-            }
-            #endregion
+            #region input / ouput / custom
 
-            #region output
+            // Call twice as they may be changed during CheckInputFile()
+            string CustomSarValue;
+            xs.SampleAR = oSettingsHandler.getSar(d, hres, vres, out CustomSarValue);
+            xs.ColorPrim = oSettingsHandler.getColorprim();
+            xs.Transfer = oSettingsHandler.getTransfer();
+            xs.ColorMatrix = oSettingsHandler.getColorMatrix();
+            xs.InterlacedMode = oSettingsHandler.getInterlacedMode();
+            xs.FakeInterlaced = oSettingsHandler.getFakeInterlaced();
+            xs.PicStruct = oSettingsHandler.getPicStruct();
+            xs.X264PullDown = oSettingsHandler.getPulldown();
+
+            oSettingsHandler.CheckInputFile(hres, vres, fps_n, fps_d);
+
+            xs.InterlacedMode = oSettingsHandler.getInterlacedMode();
+            switch (xs.InterlacedMode)
+            {
+                case x264Settings.x264InterlacedModes.bff: sb.Append("--bff "); break;
+                case x264Settings.x264InterlacedModes.tff: sb.Append("--tff "); break;
+            }
+
+            xs.FakeInterlaced = oSettingsHandler.getFakeInterlaced();
+            if (xs.FakeInterlaced && xs.InterlacedMode == x264Settings.x264InterlacedModes.progressive)
+                sb.Append("--fake-interlaced ");
+
+            xs.PicStruct = oSettingsHandler.getPicStruct();
+            if (xs.PicStruct && xs.InterlacedMode == x264Settings.x264InterlacedModes.progressive && xs.X264PullDown == 0)
+                sb.Append("--pic-struct ");
+
+            xs.ColorPrim = oSettingsHandler.getColorprim();
+            switch (xs.ColorPrim)
+            {
+                case 0: break;
+                case 1: sb.Append("--colorprim bt709 "); break;
+                case 2: sb.Append("--colorprim bt470m "); break;
+                case 3: sb.Append("--colorprim bt470bg "); break;
+                case 4: sb.Append("--colorprim smpte170m "); break;
+                case 5: sb.Append("--colorprim smpte240m "); break;
+                case 6: sb.Append("--colorprim film "); break;
+            }
+
+            xs.Transfer = oSettingsHandler.getTransfer();
+            switch (xs.Transfer)
+            {
+                case 0: break;
+                case 1: sb.Append("--transfer bt709 "); break;
+                case 2: sb.Append("--transfer bt470m "); break;
+                case 3: sb.Append("--transfer bt470bg "); break;
+                case 4: sb.Append("--transfer linear "); break;
+                case 5: sb.Append("--transfer log100 "); break;
+                case 6: sb.Append("--transfer log316 "); break;
+                case 7: sb.Append("--transfer smpte170m "); break;
+                case 8: sb.Append("--transfer smpte240m "); break;
+            }
+
+            xs.ColorMatrix = oSettingsHandler.getColorMatrix();
+            switch (xs.ColorMatrix)
+            {
+                case 0: break;
+                case 1: sb.Append("--colormatrix bt709 "); break;
+                case 2: sb.Append("--colormatrix fcc "); break;
+                case 3: sb.Append("--colormatrix bt470bg "); break;
+                case 4: sb.Append("--colormatrix smpte170m "); break;
+                case 5: sb.Append("--colormatrix smpte240m "); break;
+                case 6: sb.Append("--colormatrix GBR "); break;
+                case 7: sb.Append("--colormatrix YCgCo "); break;
+            }
+
+            xs.X264PullDown = oSettingsHandler.getPulldown();
+            switch (xs.X264PullDown)
+            {
+                case 0: break;
+                case 1: sb.Append("--pulldown 22 "); break;
+                case 2: sb.Append("--pulldown 32 "); break;
+                case 3: sb.Append("--pulldown 64 "); break;
+                case 4: sb.Append("--pulldown double "); break;
+                case 5: sb.Append("--pulldown triple "); break;
+                case 6: sb.Append("--pulldown euro "); break;
+            }
+
+            xs.CustomEncoderOptions = oSettingsHandler.getCustomCommandLine();
+            if (!String.IsNullOrEmpty(xs.CustomEncoderOptions)) // add custom encoder options
+                sb.Append(xs.CustomEncoderOptions + " ");
+
+            string strTemp;
+            xs.SampleAR = oSettingsHandler.getSar(d, hres, vres, out strTemp);
+            switch (xs.SampleAR)
+            {
+                case 0:
+                    {
+                        if (!String.IsNullOrEmpty(CustomSarValue))
+                            sb.Append("--sar " + CustomSarValue + " ");
+                        break;
+                    }
+                case 1: sb.Append("--sar 1:1 "); break;
+                case 2: sb.Append("--sar 4:3 "); break;
+                case 3: sb.Append("--sar 8:9 "); break;
+                case 4: sb.Append("--sar 10:11 "); break;
+                case 5: sb.Append("--sar 12:11 "); break;
+                case 6: sb.Append("--sar 16:11 "); break;
+                case 7: sb.Append("--sar 32:27 "); break;
+                case 8: sb.Append("--sar 40:33 "); break;
+                case 9: sb.Append("--sar 64:45 "); break;
+            }
             
             //add the rest of the commandline regarding the output
             if (xs.EncodingMode == 2 || xs.EncodingMode == 5)
                 sb.Append("--output NUL ");
-            else
+            else if (!String.IsNullOrEmpty(output))
                 sb.Append("--output " + "\"" + output + "\" ");
-            sb.Append("\"" + input + "\" ");
+            if (!String.IsNullOrEmpty(input))
+                sb.Append("\"" + input + "\" ");
             #endregion
 
             return sb.ToString();
@@ -922,7 +928,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
         protected override string Commandline
         {
             get {
-                return genCommandline(job.Input, job.Output, job.DAR, hres, vres, job.Settings as x264Settings, job.Zones, base.log);
+                return genCommandline(job.Input, job.Output, job.DAR, hres, vres, fps_n, fps_d, job.Settings as x264Settings, job.Zones, base.log);
             }
         }
 
