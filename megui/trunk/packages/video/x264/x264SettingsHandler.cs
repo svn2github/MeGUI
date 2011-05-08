@@ -37,6 +37,8 @@ namespace MeGUI.packages.video.x264
             _xs = xs;
             _log = log;
             _device = xs.TargetDevice;
+            if (_log != null)
+                _log.LogEvent("Selected device: " + xs.TargetDevice);
         }
 
         /// <summary>
@@ -62,7 +64,7 @@ namespace MeGUI.packages.video.x264
                         if (_xs.InterlacedMode != x264Settings.x264InterlacedModes.progressive)
                         {
                             _xs.InterlacedMode = x264Settings.x264InterlacedModes.progressive;
-                            _log.LogEvent("The selected device " + _device + " does not support interlaced encoding of " + fps_n + "/" + fps_d + " fps. changing interlaced mode to progressive.", ImageType.Warning);
+                            _log.LogEvent("The selected device does not support interlaced encoding of " + fps_n + "/" + fps_d + " fps. changing interlaced mode to progressive.", ImageType.Warning);
                         }
                         _xs.FakeInterlaced = _xs.PicStruct = false;
                     }
@@ -79,11 +81,11 @@ namespace MeGUI.packages.video.x264
                         if (_xs.InterlacedMode == x264Settings.x264InterlacedModes.progressive)
                         {
                             _xs.InterlacedMode = x264Settings.x264InterlacedModes.tff;
-                            _log.LogEvent("The selected device " + _device + " does not support progressive encoding of " + fps_n + "/" + fps_d + " fps. changing interlaced mode to tff.", ImageType.Warning);
+                            _log.LogEvent("The selected device does not support progressive encoding of " + fps_n + "/" + fps_d + " fps. changing interlaced mode to tff.", ImageType.Warning);
                         }
                     }
                     else
-                        _log.LogEvent("The selected device " + _device + " does not support " + fps_n + "/" + fps_d + " fps with a resolution of " + hres + "x" + vres + ". Supported are 24000/1001, 24/1, 25/1, 30000/1001 and 30/1.", ImageType.Error);
+                        _log.LogEvent("The selected device does not support " + fps_n + "/" + fps_d + " fps with a resolution of " + hres + "x" + vres + ". Supported are 24000/1001, 24/1, 25/1, 30000/1001 and 30/1.", ImageType.Error);
                     
                     _xs.ColorPrim = _xs.Transfer = _xs.ColorMatrix = 1;
                     _xs.SampleAR = 1;
@@ -94,7 +96,7 @@ namespace MeGUI.packages.video.x264
                     if (_xs.InterlacedMode != x264Settings.x264InterlacedModes.progressive)
                     {
                         _xs.InterlacedMode = x264Settings.x264InterlacedModes.progressive;
-                        _log.LogEvent("The selected device " + _device + " does not support interlaced encoding of " + hres + "x" + vres + ". changing interlaced mode to progressive.", ImageType.Warning);
+                        _log.LogEvent("The selected device does not support interlaced encoding of " + hres + "x" + vres + ". changing interlaced mode to progressive.", ImageType.Warning);
                     }
                     _xs.FakeInterlaced = _xs.PicStruct = false;
                     _xs.X264PullDown = 0;
@@ -109,7 +111,7 @@ namespace MeGUI.packages.video.x264
                         }
                     }
                     else if (!fps.Equals("24000/1001") && !fps.Equals("24/1") && !fps.Equals("50/1") && !fps.Equals("60000/1001"))
-                        _log.LogEvent("The selected device " + _device + " does not support " + fps_n + "/" + fps_d + " fps with a resolution of " + hres + "x" + vres + ". Supported are 24000/1001, 24/1, 25/1, 30000/1001, 50/1 and 60000/1001.", ImageType.Error);
+                        _log.LogEvent("The selected device does not support " + fps_n + "/" + fps_d + " fps with a resolution of " + hres + "x" + vres + ". Supported are 24000/1001, 24/1, 25/1, 30000/1001, 50/1 and 60000/1001.", ImageType.Error);
                     
                     _xs.ColorPrim = _xs.Transfer = _xs.ColorMatrix = 1;
                     _xs.SampleAR = 1;
@@ -133,7 +135,7 @@ namespace MeGUI.packages.video.x264
 
                     }
                     else
-                        _log.LogEvent("The selected device " + _device + " does not support " + fps_n + "/" + fps_d + " fps with a resolution of " + hres + "x" + vres + ". Supported is 25/1.", ImageType.Error);
+                        _log.LogEvent("The selected device does not support " + fps_n + "/" + fps_d + " fps with a resolution of " + hres + "x" + vres + ". Supported is 25/1.", ImageType.Error);
                     _xs.ColorPrim = _xs.Transfer = _xs.ColorMatrix = 3;
                     _xs.X264PullDown = 0;
                 }
@@ -153,7 +155,7 @@ namespace MeGUI.packages.video.x264
                         if (_xs.InterlacedMode == x264Settings.x264InterlacedModes.progressive)
                         {
                             _xs.InterlacedMode = x264Settings.x264InterlacedModes.tff;
-                            _log.LogEvent("The selected device " + _device + " does not support progressive encoding of " + fps_n + "/" + fps_d + " fps. changing interlaced mode to tff.", ImageType.Warning);
+                            _log.LogEvent("The selected device does not support progressive encoding of " + fps_n + "/" + fps_d + " fps. changing interlaced mode to tff.", ImageType.Warning);
                         }
                     }
                     else if (fps.Equals("24000/1001"))
@@ -166,25 +168,25 @@ namespace MeGUI.packages.video.x264
                         if (_xs.InterlacedMode != x264Settings.x264InterlacedModes.progressive)
                         {
                             _xs.InterlacedMode = x264Settings.x264InterlacedModes.progressive;
-                            _log.LogEvent("The selected device " + _device + " does not support interlaced encoding of " + hres + "x" + vres + ". changing interlaced mode to progressive.", ImageType.Warning);
+                            _log.LogEvent("The selected device does not support interlaced encoding of " + hres + "x" + vres + ". changing interlaced mode to progressive.", ImageType.Warning);
                         }
                     }
                     else
-                        _log.LogEvent("The selected device " + _device + " does not support " + fps_n + "/" + fps_d + " fps with a resolution of " + hres + "x" + vres + ". Supported are 30000/1001 and 24000/1001.", ImageType.Error);
+                        _log.LogEvent("The selected device does not support " + fps_n + "/" + fps_d + " fps with a resolution of " + hres + "x" + vres + ". Supported are 30000/1001 and 24000/1001.", ImageType.Error);
                     _xs.ColorPrim = _xs.ColorMatrix = 4;
                     _xs.Transfer = 7;
                 }
                 else
                 {
-                    _log.LogEvent("The selected device " + _device + " does not support a resolution of " + hres + "x" + vres + ". Supported are 1920x1080, 1280x720, 720x576 and 720x480.", ImageType.Error);
+                    _log.LogEvent("The selected device does not support a resolution of " + hres + "x" + vres + ". Supported are 1920x1080, 1280x720, 720x576 and 720x480.", ImageType.Error);
                 }
             }
             else
             {
-                if (hres > _device.Width)
-                    _log.LogEvent("The selected device " + _device + " does not support a resolution width of " + hres + ". The maximum value is " + _device.Width, ImageType.Error);
-                if (vres > _device.Height)
-                    _log.LogEvent("The selected device " + _device + " does not support a resolution height of " + vres + ". The maximum value is " + _device.Height, ImageType.Error);
+                if (_device.Width > 0 && hres > _device.Width)
+                    _log.LogEvent("The selected device does not support a resolution width of " + hres + ". The maximum value is " + _device.Width, ImageType.Error);
+                if (_device.Height > 0 && vres > _device.Height)
+                    _log.LogEvent("The selected device does not support a resolution height of " + vres + ". The maximum value is " + _device.Height, ImageType.Error);
             }
         }
 

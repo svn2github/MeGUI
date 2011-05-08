@@ -1557,7 +1557,7 @@ namespace MeGUI.packages.video.x264
                 HelpText.AppendLine("Recommended : " + nl[0]["Recommended"].InnerText);
             }
             else // If count isn't 1, then theres no valid data.
-                HelpText.Append("Error: No data available");
+                HelpText.Append("No help available");
 
             return (HelpText.ToString());
         }

@@ -577,7 +577,6 @@ namespace MeGUI
             get { return FullRange; }
             set { FullRange = value; }
         }
-        [MeGUI.core.plugins.interfaces.PropertyEqualityIgnoreAttribute()]
         public bool x264AdvancedSettings
         {
             get { return advSet; }

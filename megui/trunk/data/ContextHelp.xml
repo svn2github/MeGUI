@@ -1,7 +1,51 @@
 <?xml version="1.0"?>
 <ContextHelp version="0.7" Author="Kurtnoise, Zathor et all" LastUpdated="2010-10-20">
 	<Codec name="x264">
-		<!--Frame type options:-->
+		<slicesnb name="Slices">
+			<Advanced>
+Sets the number of slices per frame, and forces rectangular slices.
+(Overridden by either --slice-max-size or --slice-max-mbs if they are set.)
+If you are encoding for Blu-ray, set this to four. 
+Otherwise, don't use this unless you know you need to. </Advanced>
+			<Basic>Slices</Basic>
+			<Recommended>0 (4 for Blu-ray)</Recommended>
+			<Default>0</Default>
+		</slicesnb>
+		<maxSliceSizeBytes name="--slice-max-size">
+			<Advanced>
+Limit the size of each slice in bytes</Advanced>
+			<Basic>--slice-max-size</Basic>
+			<Recommended>0</Recommended>
+			<Default>0</Default>
+		</maxSliceSizeBytes>
+		<maxSliceSizeMB name="--slice-max-mbs">
+			<Advanced>
+Limit the size of each slice in macroblocks</Advanced>
+			<Basic>--slice-max-size</Basic>
+			<Recommended>0</Recommended>
+			<Default>0</Default>
+		</maxSliceSizeMB>
+		<opengop name="Open GOPs">
+			<Advanced>
+Use recovery points to close GOPs. Only available with b-frames.</Advanced>
+			<Basic>Open GOPs</Basic>
+			<Recommended>disabled</Recommended>
+			<Default>disabled</Default>
+		</opengop>
+		<encodingmode name="Encoding Mode">
+			<Advanced>
+Defines the desired encoding mode.</Advanced>
+			<Basic>Encoding Mode</Basic>
+			<Recommended>Const. Quality</Recommended>
+			<Default>Const. Quality</Default>
+		</encodingmode>
+		<device name="Target Playback Device">
+			<Advanced>
+Defines the desired playback device. Based upon the setting some parameters are enforced/restricted.</Advanced>
+			<Basic>Target Playback Device</Basic>
+			<Recommended>Your desired playback device</Recommended>
+			<Default>Default</Default>
+		</device>
 		<keyint name="Maximum Key Frame Interval">
 			<Advanced>
 Defines the maximum size of a Group of Pictures. A frame in a GOP cannot reference
@@ -732,9 +776,9 @@ targeting specific classes of applications:
 	</profile>
 	<tunes name="x264 Tunings">
 		<Advanced>
-		Tune options to further optimise them for your input content. 
-		If you specify a tuning, the changes will be applied after 
-		a preset but before all other parameters.
+Tune options to further optimise them for your input content. 
+If you specify a tuning, the changes will be applied after 
+a preset but before all other parameters.
 		</Advanced>
 		<Basic>
 		Specify an internal tuning.

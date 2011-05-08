@@ -1774,9 +1774,9 @@ namespace MeGUI.packages.video.x264
             this.chkBlurayCompat.AutoSize = true;
             this.chkBlurayCompat.Location = new System.Drawing.Point(9, 98);
             this.chkBlurayCompat.Name = "chkBlurayCompat";
-            this.chkBlurayCompat.Size = new System.Drawing.Size(159, 17);
+            this.chkBlurayCompat.Size = new System.Drawing.Size(154, 17);
             this.chkBlurayCompat.TabIndex = 4;
-            this.chkBlurayCompat.Text = "Enable Blu-Ray compatibility";
+            this.chkBlurayCompat.Text = "Enable Blu-ray compatibility";
             this.chkBlurayCompat.UseVisualStyleBackColor = true;
             this.chkBlurayCompat.CheckedChanged += new System.EventHandler(this.updateEvent);
             // 
