@@ -46,15 +46,10 @@ namespace MeGUI.packages.audio.faac
             this.encoderGroupBox.Size = new System.Drawing.Size(380, 85);
             this.encoderGroupBox.Text = "AAC Options";
             // 
-            // besweetOptionsGroupbox
-            // 
-            this.besweetOptionsGroupbox.Location = new System.Drawing.Point(5, 3);
-            this.besweetOptionsGroupbox.Size = new System.Drawing.Size(380, 149);
-            // 
             // vbrQuality
             // 
-            this.vbrQuality.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.vbrQuality.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.vbrQuality.Increment = new decimal(new int[] {
             10,
             0,
@@ -90,8 +85,8 @@ namespace MeGUI.packages.audio.faac
             // 
             // cbrBitrate
             // 
-            this.cbrBitrate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbrBitrate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.cbrBitrate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbrBitrate.Location = new System.Drawing.Point(107, 19);
             this.cbrBitrate.Name = "cbrBitrate";

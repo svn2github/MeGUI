@@ -33,9 +33,9 @@ namespace MeGUI.packages.audio.lame
         public lameConfigurationPanel():base()
         {
             InitializeComponent();
-            this.encodingMode.Items.Add(BitrateManagementMode.CBR);
-            this.encodingMode.Items.Add(BitrateManagementMode.VBR);
-            this.encodingMode.Items.Add(BitrateManagementMode.ABR);
+            cbrBitrate.DataSource = MP3Settings.SupportedBitrates;
+            cbrBitrate.BindingContext = new BindingContext();
+            cbrBitrate.SelectedItem = 128;
         }
 		#region properties
         protected override bool IsMultichanelSupported
@@ -53,15 +53,22 @@ namespace MeGUI.packages.audio.lame
 	        get
 	        {
                 MP3Settings ms = new MP3Settings();
-                ms.BitrateMode = (BitrateManagementMode)encodingMode.SelectedItem;
+                if (vbrMode.Checked)
+                    ms.BitrateMode = BitrateManagementMode.VBR;
+                if (abrMode.Checked)
+                    ms.BitrateMode = BitrateManagementMode.ABR;
+                else
+                    ms.BitrateMode = BitrateManagementMode.CBR;
                 switch (ms.BitrateMode)
                 {
                     case BitrateManagementMode.CBR:
+                        ms.Bitrate = (int)cbrBitrate.SelectedItem;
+                        break;
                     case BitrateManagementMode.ABR:
-                        ms.Bitrate = (int)this.bitrate.Value;
+                        ms.Bitrate = (int)abrValue.Value;
                         break;
                     case BitrateManagementMode.VBR:
-                        ms.Quality = (int)this.quality.Value;
+                        ms.Quality = (int)vbrValue.Value;
                         break;
                 }
                 return ms;
@@ -69,10 +76,19 @@ namespace MeGUI.packages.audio.lame
 	        set
 	        {
                 MP3Settings ms = value as MP3Settings;
-                encodingMode.SelectedItem = ms.BitrateMode;
-                bitrate.Value = ms.Bitrate;
-                quality.Value = ms.Quality;
-                encodingMode_SelectedIndexChanged(null, null);	            
+                if (ms.BitrateMode == BitrateManagementMode.ABR)
+                    abrMode.Checked = true;
+                else if (ms.BitrateMode == BitrateManagementMode.VBR)
+                    vbrMode.Checked = true;
+                else
+                    cbrMode.Checked = true;
+                cbrBitrate.SelectedItem = ms.Bitrate;
+                if (ms.AbrBitrate < 8 || ms.AbrBitrate > 320)
+                    abrValue.Value = 128;
+                else
+                    abrValue.Value = ms.AbrBitrate;
+                vbrValue.Value = ms.Quality;
+                //encodingMode_SelectedIndexChanged(null, null);	            
 	        }
 	    }
 		#endregion
@@ -87,25 +103,6 @@ namespace MeGUI.packages.audio.lame
 			if (! char.IsDigit(e.KeyChar) && (int)Keys.Back != (int)e.KeyChar)
 				e.Handled = true;
 		}
-		#endregion
-		#region updown controls
-		private void encodingMode_SelectedIndexChanged(object sender, System.EventArgs e)
-		{
-			if (encodingMode.SelectedIndex >= 0) // else it's bogus
-			{
-                if ((BitrateManagementMode)encodingMode.SelectedItem != BitrateManagementMode.VBR) // cbr or abr
-				{
-					bitrate.Enabled = true;
-					quality.Enabled = false;
-				}
-				else // vbr
-				{
-					bitrate.Enabled = false;
-					quality.Enabled = true;
-				}
-			}
-		}
-
 		#endregion
 
         #region Editable<MP3Settings> Members
@@ -123,6 +120,24 @@ namespace MeGUI.packages.audio.lame
         }
 
         #endregion
+
+        private void cbrMode_CheckedChanged(object sender, EventArgs e)
+        {
+            cbrBitrate.Enabled = true;
+            vbrValue.Enabled = abrValue.Enabled = false;
+        }
+
+        private void abrMode_CheckedChanged(object sender, EventArgs e)
+        {
+            abrValue.Enabled = true;
+            vbrValue.Enabled = cbrBitrate.Enabled = false;
+        }
+
+        private void vbrMode_CheckedChanged(object sender, EventArgs e)
+        {
+            vbrValue.Enabled = true;
+            abrValue.Enabled = cbrBitrate.Enabled = false;
+        }
     }
 }
 

@@ -28,140 +28,145 @@ namespace MeGUI.packages.audio.lame
         /// </summary>
         private void InitializeComponent()
         {
-            this.qualityLabel = new System.Windows.Forms.Label();
-            this.quality = new System.Windows.Forms.NumericUpDown();
-            this.bitrateLabel = new System.Windows.Forms.Label();
-            this.encodingModeLabel = new System.Windows.Forms.Label();
-            this.encodingMode = new System.Windows.Forms.ComboBox();
-            this.bitrate = new System.Windows.Forms.NumericUpDown();
+            this.cbrMode = new System.Windows.Forms.RadioButton();
+            this.abrMode = new System.Windows.Forms.RadioButton();
+            this.vbrMode = new System.Windows.Forms.RadioButton();
+            this.vbrValue = new System.Windows.Forms.NumericUpDown();
+            this.abrValue = new System.Windows.Forms.NumericUpDown();
+            this.cbrBitrate = new System.Windows.Forms.ComboBox();
             this.encoderGroupBox.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.quality)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bitrate)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.vbrValue)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.abrValue)).BeginInit();
             this.SuspendLayout();
             // 
             // encoderGroupBox
             // 
-            this.encoderGroupBox.Controls.Add(this.qualityLabel);
-            this.encoderGroupBox.Controls.Add(this.quality);
-            this.encoderGroupBox.Controls.Add(this.bitrateLabel);
-            this.encoderGroupBox.Controls.Add(this.encodingModeLabel);
-            this.encoderGroupBox.Controls.Add(this.encodingMode);
-            this.encoderGroupBox.Controls.Add(this.bitrate);
+            this.encoderGroupBox.Controls.Add(this.cbrBitrate);
+            this.encoderGroupBox.Controls.Add(this.abrValue);
+            this.encoderGroupBox.Controls.Add(this.vbrValue);
+            this.encoderGroupBox.Controls.Add(this.vbrMode);
+            this.encoderGroupBox.Controls.Add(this.abrMode);
+            this.encoderGroupBox.Controls.Add(this.cbrMode);
             this.encoderGroupBox.Location = new System.Drawing.Point(5, 158);
-            this.encoderGroupBox.Size = new System.Drawing.Size(382, 92);
+            this.encoderGroupBox.Size = new System.Drawing.Size(382, 104);
+            this.encoderGroupBox.Text = " Lame MP3 Encoding Mode ";
             // 
-            // besweetOptionsGroupbox
+            // cbrMode
             // 
-            this.besweetOptionsGroupbox.Location = new System.Drawing.Point(5, 3);
-            this.besweetOptionsGroupbox.Size = new System.Drawing.Size(382, 149);
+            this.cbrMode.AutoSize = true;
+            this.cbrMode.Location = new System.Drawing.Point(6, 19);
+            this.cbrMode.Name = "cbrMode";
+            this.cbrMode.Size = new System.Drawing.Size(47, 17);
+            this.cbrMode.TabIndex = 0;
+            this.cbrMode.TabStop = true;
+            this.cbrMode.Text = "CBR";
+            this.cbrMode.UseVisualStyleBackColor = true;
+            this.cbrMode.CheckedChanged += new System.EventHandler(this.cbrMode_CheckedChanged);
             // 
-            // qualityLabel
+            // abrMode
             // 
-            this.qualityLabel.Location = new System.Drawing.Point(8, 64);
-            this.qualityLabel.Name = "qualityLabel";
-            this.qualityLabel.Size = new System.Drawing.Size(100, 18);
-            this.qualityLabel.TabIndex = 11;
-            this.qualityLabel.Text = "Quality";
+            this.abrMode.AutoSize = true;
+            this.abrMode.Location = new System.Drawing.Point(6, 45);
+            this.abrMode.Name = "abrMode";
+            this.abrMode.Size = new System.Drawing.Size(47, 17);
+            this.abrMode.TabIndex = 1;
+            this.abrMode.TabStop = true;
+            this.abrMode.Text = "ABR";
+            this.abrMode.UseVisualStyleBackColor = true;
+            this.abrMode.CheckedChanged += new System.EventHandler(this.abrMode_CheckedChanged);
             // 
-            // quality
+            // vbrMode
             // 
-            this.quality.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.quality.Increment = new decimal(new int[] {
-            10,
+            this.vbrMode.AutoSize = true;
+            this.vbrMode.Location = new System.Drawing.Point(6, 71);
+            this.vbrMode.Name = "vbrMode";
+            this.vbrMode.Size = new System.Drawing.Size(47, 17);
+            this.vbrMode.TabIndex = 2;
+            this.vbrMode.TabStop = true;
+            this.vbrMode.Text = "VBR";
+            this.vbrMode.UseVisualStyleBackColor = true;
+            this.vbrMode.CheckedChanged += new System.EventHandler(this.vbrMode_CheckedChanged);
+            // 
+            // vbrValue
+            // 
+            this.vbrValue.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.vbrValue.Location = new System.Drawing.Point(112, 71);
+            this.vbrValue.Maximum = new decimal(new int[] {
+            9,
             0,
             0,
             0});
-            this.quality.Location = new System.Drawing.Point(322, 61);
-            this.quality.Minimum = new decimal(new int[] {
-            10,
+            this.vbrValue.Name = "vbrValue";
+            this.vbrValue.Size = new System.Drawing.Size(264, 20);
+            this.vbrValue.TabIndex = 8;
+            this.vbrValue.Value = new decimal(new int[] {
+            4,
             0,
             0,
             0});
-            this.quality.Name = "quality";
-            this.quality.Size = new System.Drawing.Size(48, 20);
-            this.quality.TabIndex = 10;
-            this.quality.Value = new decimal(new int[] {
-            50,
+            // 
+            // abrValue
+            // 
+            this.abrValue.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.abrValue.Increment = new decimal(new int[] {
+            16,
             0,
             0,
             0});
-            this.quality.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textField_KeyPress);
-            // 
-            // bitrateLabel
-            // 
-            this.bitrateLabel.Location = new System.Drawing.Point(8, 40);
-            this.bitrateLabel.Name = "bitrateLabel";
-            this.bitrateLabel.Size = new System.Drawing.Size(100, 23);
-            this.bitrateLabel.TabIndex = 9;
-            this.bitrateLabel.Text = "Bitrate";
-            // 
-            // encodingModeLabel
-            // 
-            this.encodingModeLabel.Location = new System.Drawing.Point(8, 16);
-            this.encodingModeLabel.Name = "encodingModeLabel";
-            this.encodingModeLabel.Size = new System.Drawing.Size(100, 23);
-            this.encodingModeLabel.TabIndex = 8;
-            this.encodingModeLabel.Text = "Encoding Mode";
-            // 
-            // encodingMode
-            // 
-            this.encodingMode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.encodingMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.encodingMode.Location = new System.Drawing.Point(250, 13);
-            this.encodingMode.Name = "encodingMode";
-            this.encodingMode.Size = new System.Drawing.Size(121, 21);
-            this.encodingMode.TabIndex = 7;
-            this.encodingMode.SelectedIndexChanged += new System.EventHandler(this.encodingMode_SelectedIndexChanged);
-            // 
-            // bitrate
-            // 
-            this.bitrate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bitrate.Increment = new decimal(new int[] {
-            8,
-            0,
-            0,
-            0});
-            this.bitrate.Location = new System.Drawing.Point(322, 37);
-            this.bitrate.Maximum = new decimal(new int[] {
+            this.abrValue.Location = new System.Drawing.Point(112, 45);
+            this.abrValue.Maximum = new decimal(new int[] {
             320,
             0,
             0,
             0});
-            this.bitrate.Minimum = new decimal(new int[] {
+            this.abrValue.Minimum = new decimal(new int[] {
             8,
             0,
             0,
             0});
-            this.bitrate.Name = "bitrate";
-            this.bitrate.Size = new System.Drawing.Size(48, 20);
-            this.bitrate.TabIndex = 6;
-            this.bitrate.Value = new decimal(new int[] {
+            this.abrValue.Name = "abrValue";
+            this.abrValue.Size = new System.Drawing.Size(264, 20);
+            this.abrValue.TabIndex = 9;
+            this.abrValue.Value = new decimal(new int[] {
             128,
             0,
             0,
             0});
-            this.bitrate.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textField_KeyPress);
+            // 
+            // cbrBitrate
+            // 
+            this.cbrBitrate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbrBitrate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbrBitrate.Location = new System.Drawing.Point(112, 18);
+            this.cbrBitrate.Name = "cbrBitrate";
+            this.cbrBitrate.Size = new System.Drawing.Size(264, 21);
+            this.cbrBitrate.TabIndex = 10;
             // 
             // lameConfigurationPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.Name = "lameConfigurationPanel";
-            this.Size = new System.Drawing.Size(394, 253);
+            this.Size = new System.Drawing.Size(394, 265);
             this.encoderGroupBox.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.quality)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bitrate)).EndInit();
+            this.encoderGroupBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.vbrValue)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.abrValue)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Label qualityLabel;
-        private System.Windows.Forms.NumericUpDown quality;
-        private System.Windows.Forms.Label bitrateLabel;
-        private System.Windows.Forms.Label encodingModeLabel;
-        private System.Windows.Forms.ComboBox encodingMode;
-        private System.Windows.Forms.NumericUpDown bitrate;
+        private System.Windows.Forms.RadioButton vbrMode;
+        private System.Windows.Forms.RadioButton abrMode;
+        private System.Windows.Forms.RadioButton cbrMode;
+        private System.Windows.Forms.NumericUpDown abrValue;
+        private System.Windows.Forms.NumericUpDown vbrValue;
+        private System.Windows.Forms.ComboBox cbrBitrate;
+
 
     }
 }
