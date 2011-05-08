@@ -266,6 +266,7 @@ namespace MeGUI
                 {
                     if (this.AllowUpdate)
                     {
+#if DEBUG
                         if (this.Name.Equals("core"))
                         {
                             if ((Int32.Parse(existingVersion.Text)) > (Int32.Parse(latestVersion.Text)))
@@ -273,7 +274,9 @@ namespace MeGUI
                             else
                                 status.Text = "Update Available";
                         }
-                        else status.Text = "Update Available";
+                        else
+#endif
+                        status.Text = "Update Available";
                     }
                     else
                         status.Text = "Update Ignored";

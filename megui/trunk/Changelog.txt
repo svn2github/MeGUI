@@ -1,3 +1,4 @@
+2016 [Update] enable 2010 only for debug builds
 2015 [x264] added --bluray-compat option (requires x264 rev 1935+)
      [x264] changed --open-gop handling (requires x264 rev 1935+)
 	 [x264] added target playback device option
@@ -8,7 +9,7 @@
                   fixed m2v input handling
 2012 [File Indexer] disable Audio group box when FFMS is used because this indexer cannot extract audio streams
 2011 [MediaInfo] introduce "Core" alias for DTSHD/DTSMA
-2010 [Update] don't raise an update if the existing Version number is higher than the latest Version
+2010 [Update] don't raise an update if the existing version number is higher than the latest version
 2009 [MediaInfo] adjustment for recent mediainfo builds
 
 Changelog 1989 --> 2008
