@@ -1,3 +1,4 @@
+2021 [Lame] fixed VBR/ABR profile saving. Bug #3299459
 2020 [x264] enforce "--p-pyramid none" for the PSP device
 2019 [Lame] changed encoding modes to reflect valid values
             Warning: review custom lame presets as there is no full update path

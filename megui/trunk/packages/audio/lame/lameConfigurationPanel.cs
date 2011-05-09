@@ -55,7 +55,7 @@ namespace MeGUI.packages.audio.lame
                 MP3Settings ms = new MP3Settings();
                 if (vbrMode.Checked)
                     ms.BitrateMode = BitrateManagementMode.VBR;
-                if (abrMode.Checked)
+                else if (abrMode.Checked)
                     ms.BitrateMode = BitrateManagementMode.ABR;
                 else
                     ms.BitrateMode = BitrateManagementMode.CBR;
@@ -65,7 +65,7 @@ namespace MeGUI.packages.audio.lame
                         ms.Bitrate = (int)cbrBitrate.SelectedItem;
                         break;
                     case BitrateManagementMode.ABR:
-                        ms.Bitrate = (int)abrValue.Value;
+                        ms.AbrBitrate = (int)abrValue.Value;
                         break;
                     case BitrateManagementMode.VBR:
                         ms.Quality = (int)vbrValue.Value;
@@ -87,8 +87,7 @@ namespace MeGUI.packages.audio.lame
                     abrValue.Value = 128;
                 else
                     abrValue.Value = ms.AbrBitrate;
-                vbrValue.Value = ms.Quality;
-                //encodingMode_SelectedIndexChanged(null, null);	            
+                vbrValue.Value = ms.Quality;	            
 	        }
 	    }
 		#endregion
