@@ -244,7 +244,7 @@ namespace MeGUI.core.gui
             this.EditMenuItem.Size = new System.Drawing.Size(152, 22);
             this.EditMenuItem.Text = "&Edit";
             this.EditMenuItem.ToolTipText = "Edit job\r\nOnly possible if only one job is selected which is waiting or postponed" +
-                "";
+    "";
             this.EditMenuItem.Click += new System.EventHandler(this.editJobButton_Click);
             // 
             // flowLayoutPanel1
@@ -296,6 +296,7 @@ namespace MeGUI.core.gui
             this.pauseButton.Size = new System.Drawing.Size(24, 23);
             this.pauseButton.TabIndex = 2;
             this.pauseButton.UseVisualStyleBackColor = true;
+            this.pauseButton.Visible = false;
             this.pauseButton.Click += new System.EventHandler(this.pauseButton_Click);
             // 
             // editJobButton
