@@ -811,7 +811,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
 
             // Call twice as they may be changed during CheckInputFile()
             string CustomSarValue;
-            xs.SampleAR = oSettingsHandler.getSar(d, hres, vres, out CustomSarValue);
+            xs.SampleAR = oSettingsHandler.getSar(d, hres, vres, out CustomSarValue, String.Empty);
             xs.ColorPrim = oSettingsHandler.getColorprim();
             xs.Transfer = oSettingsHandler.getTransfer();
             xs.ColorMatrix = oSettingsHandler.getColorMatrix();
@@ -893,7 +893,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                 sb.Append(xs.CustomEncoderOptions + " ");
 
             string strTemp;
-            xs.SampleAR = oSettingsHandler.getSar(d, hres, vres, out strTemp);
+            xs.SampleAR = oSettingsHandler.getSar(d, hres, vres, out strTemp, CustomSarValue);
             switch (xs.SampleAR)
             {
                 case 0:

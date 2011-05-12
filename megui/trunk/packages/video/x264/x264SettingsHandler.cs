@@ -41,7 +41,7 @@ namespace MeGUI.packages.video.x264
             strDevice = "[" + xs.TargetDevice + "]: ";
 
             if (_log != null && xs.TargetDevice.ID != 0)
-                _log.LogEvent(strDevice + "special device selected");
+                _log.LogEvent(strDevice + "target device selected");
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace MeGUI.packages.video.x264
                         }
                     }
                     else
-                        _log.LogEvent(strDevice + "does not support " + fps_n + "/" + fps_d + " fps with a resolution of " + hres + "x" + vres + ". Supported are 24000/1001, 24/1, 25/1, 30000/1001 and 30/1.", ImageType.Error);
+                        _log.LogEvent(strDevice + "does not support " + fps_n + "/" + fps_d + " fps with a resolution of " + hres + "x" + vres + ". Supported are 24000/1001, 24/1, 25/1, 30000/1001 and 30/1.", ImageType.Warning);
                     
                     _xs.ColorPrim = _xs.Transfer = _xs.ColorMatrix = 1;
                     _xs.SampleAR = 1;
@@ -114,7 +114,7 @@ namespace MeGUI.packages.video.x264
                         }
                     }
                     else if (!fps.Equals("24000/1001") && !fps.Equals("24/1") && !fps.Equals("50/1") && !fps.Equals("60000/1001"))
-                        _log.LogEvent(strDevice + "does not support " + fps_n + "/" + fps_d + " fps with a resolution of " + hres + "x" + vres + ". Supported are 24000/1001, 24/1, 25/1, 30000/1001, 50/1 and 60000/1001.", ImageType.Error);
+                        _log.LogEvent(strDevice + "does not support " + fps_n + "/" + fps_d + " fps with a resolution of " + hres + "x" + vres + ". Supported are 24000/1001, 24/1, 25/1, 30000/1001, 50/1 and 60000/1001.", ImageType.Warning);
                     
                     _xs.ColorPrim = _xs.Transfer = _xs.ColorMatrix = 1;
                     _xs.SampleAR = 1;
@@ -138,7 +138,7 @@ namespace MeGUI.packages.video.x264
 
                     }
                     else
-                        _log.LogEvent(strDevice + "does not support " + fps_n + "/" + fps_d + " fps with a resolution of " + hres + "x" + vres + ". Supported is 25/1.", ImageType.Error);
+                        _log.LogEvent(strDevice + "does not support " + fps_n + "/" + fps_d + " fps with a resolution of " + hres + "x" + vres + ". Supported is 25/1.", ImageType.Warning);
                     _xs.ColorPrim = _xs.Transfer = _xs.ColorMatrix = 3;
                     _xs.X264PullDown = 0;
                 }
@@ -175,21 +175,21 @@ namespace MeGUI.packages.video.x264
                         }
                     }
                     else
-                        _log.LogEvent(strDevice + "does not support " + fps_n + "/" + fps_d + " fps with a resolution of " + hres + "x" + vres + ". Supported are 30000/1001 and 24000/1001.", ImageType.Error);
+                        _log.LogEvent(strDevice + "does not support " + fps_n + "/" + fps_d + " fps with a resolution of " + hres + "x" + vres + ". Supported are 30000/1001 and 24000/1001.", ImageType.Warning);
                     _xs.ColorPrim = _xs.ColorMatrix = 4;
                     _xs.Transfer = 7;
                 }
                 else
                 {
-                    _log.LogEvent(strDevice + "does not support a resolution of " + hres + "x" + vres + ". Supported are 1920x1080, 1280x720, 720x576 and 720x480.", ImageType.Error);
+                    _log.LogEvent(strDevice + "does not support a resolution of " + hres + "x" + vres + ". Supported are 1920x1080, 1280x720, 720x576 and 720x480.", ImageType.Warning);
                 }
             }
             else
             {
                 if (_device.Width > 0 && hres > _device.Width)
-                    _log.LogEvent(strDevice + "does not support a resolution width of " + hres + ". The maximum value is " + _device.Width, ImageType.Error);
+                    _log.LogEvent(strDevice + "does not support a resolution width of " + hres + ". The maximum value is " + _device.Width, ImageType.Warning);
                 if (_device.Height > 0 && vres > _device.Height)
-                    _log.LogEvent(strDevice + "does not support a resolution height of " + vres + ". The maximum value is " + _device.Height, ImageType.Error);
+                    _log.LogEvent(strDevice + "does not support a resolution height of " + vres + ". The maximum value is " + _device.Height, ImageType.Warning);
             }
         }
 
@@ -245,11 +245,11 @@ namespace MeGUI.packages.video.x264
         /// Calculates --sar value
         /// </summary>
         /// <returns>the --sar value</returns>
-        public int getSar(Dar? d, int hRes, int vRes, out string CustomSarValue)
+        public int getSar(Dar? d, int hRes, int vRes, out string CustomSarValue, string CustomSarValueInput)
         {
             string strCustomValue;
             CustomSarValue = String.Empty;
-            if (extractCustomCommand("sar", out strCustomValue))
+            if (String.IsNullOrEmpty(CustomSarValueInput) && extractCustomCommand("sar", out strCustomValue))
             {
                 switch (strCustomValue.ToLower())
                 {
@@ -268,7 +268,8 @@ namespace MeGUI.packages.video.x264
                 }
             }
 
-            if (d.HasValue && _xs.SampleAR == 0)
+            if (d.HasValue && _xs.SampleAR == 0 && 
+                String.IsNullOrEmpty(CustomSarValue) && String.IsNullOrEmpty(CustomSarValueInput))
             {
                 Sar s = d.Value.ToSar(hRes, vRes);
                 switch (s.X + ":" + s.Y)
@@ -846,7 +847,7 @@ namespace MeGUI.packages.video.x264
             {
                 if (strCommand.Trim().ToLower().StartsWith(strCommandToExtract.ToLower()))
                 {
-                    strCommandValue = strCommand.Trim().Substring(strCommandToExtract.Length);
+                    strCommandValue = strCommand.Substring(strCommandToExtract.Length).Trim();
                     bFound = true;
                 }
                 else
