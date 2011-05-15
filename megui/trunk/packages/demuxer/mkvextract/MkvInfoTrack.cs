@@ -135,6 +135,7 @@ namespace MeGUI
                 switch (strCodec[0])
                 {
                     case "A_AC3": strExtension = "ac3"; break;
+                    case "A_TRUEHD": strExtension = "thd"; break;
                     case "A_MPEG":
                         if (strCodec.Length > 0 && strCodec[1].Equals("L3"))
                             strExtension = "mp3";
@@ -160,6 +161,7 @@ namespace MeGUI
                         break;
                     case "S_VOBSUB": strExtension = "idx"; break;
                     case "S_HDMV": strExtension = "sup"; break;
+                    default: strExtension = strCodec[0] + ".unknown"; break;
                 }
 
                 if (String.IsNullOrEmpty(strExtension))

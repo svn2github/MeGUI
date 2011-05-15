@@ -1,3 +1,4 @@
+2024 [MKV Muxer] added TrueHD + DTS-HD/MA as supported audio input formats
 2023 [x264] fixed applying of custom sar values. Bug #3300094
 2022 [Job Queue] hide the pause button as it has no function. Bug #3296037
 2021 [Lame] fixed VBR/ABR profile saving. Bug #3299459
