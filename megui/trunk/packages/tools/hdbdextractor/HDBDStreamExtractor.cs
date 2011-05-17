@@ -171,9 +171,9 @@ namespace MeGUI.packages.tools.hdbdextractor
             // 
             // LogTextBox
             // 
-            this.LogTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.LogTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.LogTextBox.Location = new System.Drawing.Point(12, 425);
             this.LogTextBox.Multiline = true;
             this.LogTextBox.Name = "LogTextBox";
@@ -212,8 +212,8 @@ namespace MeGUI.packages.tools.hdbdextractor
             // 
             // FolderInputTextBox
             // 
-            this.FolderInputTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.FolderInputTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.FolderInputTextBox.Location = new System.Drawing.Point(6, 19);
             this.FolderInputTextBox.Name = "FolderInputTextBox";
             this.FolderInputTextBox.Size = new System.Drawing.Size(514, 21);
@@ -257,8 +257,8 @@ namespace MeGUI.packages.tools.hdbdextractor
             // 
             // InputGroupBox
             // 
-            this.InputGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.InputGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.InputGroupBox.Controls.Add(this.FileSelection);
             this.InputGroupBox.Controls.Add(this.FolderSelection);
             this.InputGroupBox.Controls.Add(this.FolderInputSourceButton);
@@ -320,8 +320,8 @@ namespace MeGUI.packages.tools.hdbdextractor
             // 
             // FeatureGroupBox
             // 
-            this.FeatureGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.FeatureGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.FeatureGroupBox.Controls.Add(this.FeatureDataGridView);
             this.FeatureGroupBox.Location = new System.Drawing.Point(12, 134);
             this.FeatureGroupBox.Name = "FeatureGroupBox";
@@ -420,8 +420,8 @@ namespace MeGUI.packages.tools.hdbdextractor
             // 
             // StreamGroupBox
             // 
-            this.StreamGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.StreamGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.StreamGroupBox.Controls.Add(this.StreamDataGridView);
             this.StreamGroupBox.Location = new System.Drawing.Point(12, 250);
             this.StreamGroupBox.Name = "StreamGroupBox";
@@ -557,8 +557,8 @@ namespace MeGUI.packages.tools.hdbdextractor
             // 
             // OutputGroupBox
             // 
-            this.OutputGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.OutputGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.OutputGroupBox.Controls.Add(this.FolderOutputSourceButton);
             this.OutputGroupBox.Controls.Add(this.FolderOutputTextBox);
             this.OutputGroupBox.Location = new System.Drawing.Point(10, 83);
@@ -583,8 +583,8 @@ namespace MeGUI.packages.tools.hdbdextractor
             // 
             // FolderOutputTextBox
             // 
-            this.FolderOutputTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.FolderOutputTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.FolderOutputTextBox.Location = new System.Drawing.Point(6, 19);
             this.FolderOutputTextBox.Name = "FolderOutputTextBox";
             this.FolderOutputTextBox.Size = new System.Drawing.Size(514, 21);
@@ -593,8 +593,8 @@ namespace MeGUI.packages.tools.hdbdextractor
             // openFileDialog1
             // 
             this.openFileDialog1.Filter = "E-VOB Files (.*evo,*.vob)|*.evo;*.vob|Transport Streams Files (*.m2t*,*.mts,*.ts)" +
-                "|*.m2t*;*.ts|Matroska Files (.*mkv)|*.mkv|All Files supported (*.*)|*.evo;*.vob;" +
-                "*.m2t*;*.mts;*.ts;*.mkv";
+    "|*.m2t*;*.ts|Matroska Files (.*mkv)|*.mkv|All Files supported (*.*)|*.evo;*.vob;" +
+    "*.m2t*;*.mts;*.ts;*.mkv";
             this.openFileDialog1.FilterIndex = 4;
             this.openFileDialog1.Multiselect = true;
             // 
@@ -616,6 +616,7 @@ namespace MeGUI.packages.tools.hdbdextractor
             // 
             // closeOnQueue
             // 
+            this.closeOnQueue.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.closeOnQueue.Checked = true;
             this.closeOnQueue.CheckState = System.Windows.Forms.CheckState.Checked;
             this.closeOnQueue.Location = new System.Drawing.Point(336, 425);
