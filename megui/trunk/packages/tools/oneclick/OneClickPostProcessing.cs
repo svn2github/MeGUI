@@ -520,22 +520,27 @@ namespace MeGUI
 
         public void finishedAnalysis(SourceInfo info, bool error, string errorMessage)
         {
-            LogItem oSourceLog = _log.LogValue("Source detection", info.analysisResult);
-            if (error)
+            if (error || info == null)
             {
+                LogItem oSourceLog = _log.LogEvent("Source detection");
                 oSourceLog.LogEvent("Source detection failed: " + errorMessage, ImageType.Error);
                 filters = new DeinterlaceFilter[] {
                 new DeinterlaceFilter("Error", "#An error occurred in source detection. Doing no processing")};
-            }
-            else if (info.sourceType == SourceType.NOT_ENOUGH_SECTIONS)
-            {
-                oSourceLog.LogEvent("Source detection failed: Could not find enough useful sections to determine source type for " + job.Input, ImageType.Error);
-                filters = new DeinterlaceFilter[] {
-                new DeinterlaceFilter("Error", "#Not enough useful sections for source detection. Doing no processing")};
+                interlaced = false;
             }
             else
-                this.filters = ScriptServer.GetDeinterlacers(info).ToArray();
-            interlaced = (info.sourceType != SourceType.PROGRESSIVE);
+            {
+                LogItem oSourceLog = _log.LogValue("Source detection", info.analysisResult);
+                if (info.sourceType == SourceType.NOT_ENOUGH_SECTIONS)
+                {
+                    oSourceLog.LogEvent("Source detection failed: Could not find enough useful sections to determine source type for " + job.Input, ImageType.Error);
+                    filters = new DeinterlaceFilter[] {
+                new DeinterlaceFilter("Error", "#Not enough useful sections for source detection. Doing no processing")};
+                }
+                else
+                    this.filters = ScriptServer.GetDeinterlacers(info).ToArray();
+                interlaced = (info.sourceType != SourceType.PROGRESSIVE);
+            }
             finished = true;
         }
 

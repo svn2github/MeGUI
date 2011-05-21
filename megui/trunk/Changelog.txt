@@ -1,3 +1,4 @@
+2026 [OneClick] changed handling of failed automatic deinterlacing process
 2025 [HD Streams Extractor] cosmetic adjustment. Bug #3303116
 2024 [MKV Muxer] added TrueHD + DTS-HD/MA as supported audio input formats
 2023 [x264] fixed applying of custom sar values. Bug #3300094
@@ -56,6 +57,10 @@ Other changes:
 [Worker] some cosmetics
 [x264] added option for interlaced modes --tff and --bff. --interlaced has been removed. Bug #3204337
 [x264] invalid zones will be ignored. Bug #3233068
+
+Known Problems:
+- Unicode is not supported
+- M2TS bitrate calculator does not calculate correct values if audio is not AC3 only
 
 Full changelog: 
 http://megui.svn.sourceforge.net/viewvc/megui/megui/trunk/Changelog_full.txt
