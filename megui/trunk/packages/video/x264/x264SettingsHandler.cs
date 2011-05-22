@@ -283,6 +283,7 @@ namespace MeGUI.packages.video.x264
                     case "32:27": _xs.SampleAR = 7; break;
                     case "40:33": _xs.SampleAR = 8; break;
                     case "64:45": _xs.SampleAR = 9; break;
+                    default: CustomSarValue = s.X + ":" + s.Y; break;
                 }
             }
 
