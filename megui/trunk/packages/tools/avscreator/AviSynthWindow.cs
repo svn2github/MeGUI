@@ -409,8 +409,8 @@ namespace MeGUI
             // 
             // label5
             // 
-            label5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            label5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             label5.AutoSize = true;
             label5.Location = new System.Drawing.Point(342, 50);
             label5.Name = "label5";
@@ -420,8 +420,8 @@ namespace MeGUI
             // 
             // resNCropGroupbox
             // 
-            this.resNCropGroupbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.resNCropGroupbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.resNCropGroupbox.Controls.Add(this.chAutoPreview);
             this.resNCropGroupbox.Controls.Add(this.resize);
             this.resNCropGroupbox.Controls.Add(this.suggestResolution);
@@ -640,8 +640,8 @@ namespace MeGUI
             // 
             // gbOutput
             // 
-            this.gbOutput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbOutput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.gbOutput.Controls.Add(this.videoOutput);
             this.gbOutput.Controls.Add(this.label7);
             this.gbOutput.Location = new System.Drawing.Point(3, 360);
@@ -653,8 +653,8 @@ namespace MeGUI
             // 
             // videoOutput
             // 
-            this.videoOutput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.videoOutput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.videoOutput.Filename = "";
             this.videoOutput.Filter = "AVI Synth Scripts|*.avs";
             this.videoOutput.FilterIndex = 0;
@@ -677,8 +677,8 @@ namespace MeGUI
             // 
             // videoGroupBox
             // 
-            this.videoGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.videoGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.videoGroupBox.Controls.Add(this.input);
             this.videoGroupBox.Controls.Add(this.avsProfile);
             this.videoGroupBox.Controls.Add(this.arChooser);
@@ -699,8 +699,8 @@ namespace MeGUI
             // input
             // 
             this.input.AllowDrop = true;
-            this.input.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.input.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.input.Filename = "";
             this.input.Filter = resources.GetString("input.Filter");
             this.input.FilterIndex = 6;
@@ -716,8 +716,8 @@ namespace MeGUI
             // 
             // avsProfile
             // 
-            this.avsProfile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.avsProfile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.avsProfile.Location = new System.Drawing.Point(96, 147);
             this.avsProfile.Name = "avsProfile";
             this.avsProfile.ProfileSet = "AviSynth";
@@ -845,8 +845,8 @@ namespace MeGUI
             // 
             // mpegOptGroupBox
             // 
-            this.mpegOptGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.mpegOptGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.mpegOptGroupBox.Controls.Add(this.colourCorrect);
             this.mpegOptGroupBox.Controls.Add(this.mpeg2Deblocking);
             this.mpegOptGroupBox.Enabled = false;
@@ -887,8 +887,8 @@ namespace MeGUI
             // 
             // aviOptGroupBox
             // 
-            this.aviOptGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.aviOptGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.aviOptGroupBox.Controls.Add(this.dss2);
             this.aviOptGroupBox.Controls.Add(this.fpsBox);
             this.aviOptGroupBox.Controls.Add(this.fpsLabel);
@@ -913,8 +913,8 @@ namespace MeGUI
             // 
             // fpsBox
             // 
-            this.fpsBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.fpsBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.fpsBox.DecimalPlaces = 3;
             this.fpsBox.Location = new System.Drawing.Point(40, 43);
             this.fpsBox.Maximum = new decimal(new int[] {
@@ -967,8 +967,8 @@ namespace MeGUI
             // 
             // dgOptions
             // 
-            this.dgOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.dgOptions.Controls.Add(this.nvResize);
             this.dgOptions.Controls.Add(this.cbNvDeInt);
             this.dgOptions.Controls.Add(this.nvDeInt);
@@ -992,8 +992,8 @@ namespace MeGUI
             // 
             // cbNvDeInt
             // 
-            this.cbNvDeInt.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbNvDeInt.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.cbNvDeInt.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbNvDeInt.Enabled = false;
             this.cbNvDeInt.FormattingEnabled = true;
@@ -1017,8 +1017,8 @@ namespace MeGUI
             // 
             // deinterlacingGroupBox
             // 
-            this.deinterlacingGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.deinterlacingGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.deinterlacingGroupBox.Controls.Add(label5);
             this.deinterlacingGroupBox.Controls.Add(this.deintM);
             this.deinterlacingGroupBox.Controls.Add(this.deintFieldOrder);
@@ -1040,8 +1040,8 @@ namespace MeGUI
             // 
             // deintM
             // 
-            this.deintM.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.deintM.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.deintM.Location = new System.Drawing.Point(367, 47);
             this.deintM.Name = "deintM";
             this.deintM.Size = new System.Drawing.Size(76, 21);
@@ -1050,8 +1050,8 @@ namespace MeGUI
             // 
             // deintFieldOrder
             // 
-            this.deintFieldOrder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.deintFieldOrder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.deintFieldOrder.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.deintFieldOrder.FormattingEnabled = true;
             this.deintFieldOrder.Location = new System.Drawing.Point(97, 76);
@@ -1062,8 +1062,8 @@ namespace MeGUI
             // 
             // deintSourceType
             // 
-            this.deintSourceType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.deintSourceType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.deintSourceType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.deintSourceType.FormattingEnabled = true;
             this.deintSourceType.Location = new System.Drawing.Point(97, 47);
@@ -1085,8 +1085,8 @@ namespace MeGUI
             // 
             // analyseButton
             // 
-            this.analyseButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.analyseButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.analyseButton.Location = new System.Drawing.Point(345, 17);
             this.analyseButton.Name = "analyseButton";
             this.analyseButton.Size = new System.Drawing.Size(98, 23);
@@ -1106,8 +1106,8 @@ namespace MeGUI
             // 
             // deinterlaceType
             // 
-            this.deinterlaceType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.deinterlaceType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.deinterlaceType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.deinterlaceType.Enabled = false;
             this.deinterlaceType.Items.AddRange(new object[] {
@@ -1123,8 +1123,8 @@ namespace MeGUI
             // 
             // filtersGroupbox
             // 
-            this.filtersGroupbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.filtersGroupbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.filtersGroupbox.Controls.Add(this.cbCharset);
             this.filtersGroupbox.Controls.Add(this.label8);
             this.filtersGroupbox.Controls.Add(this.openSubtitlesButton);
@@ -1212,8 +1212,8 @@ namespace MeGUI
             // 
             // noiseFilterType
             // 
-            this.noiseFilterType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.noiseFilterType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.noiseFilterType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.noiseFilterType.Enabled = false;
             this.noiseFilterType.Location = new System.Drawing.Point(97, 44);
@@ -1233,8 +1233,8 @@ namespace MeGUI
             // 
             // resizeFilterType
             // 
-            this.resizeFilterType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.resizeFilterType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.resizeFilterType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.resizeFilterType.Location = new System.Drawing.Point(97, 17);
             this.resizeFilterType.Name = "resizeFilterType";
@@ -1276,8 +1276,8 @@ namespace MeGUI
             // 
             // dllPath
             // 
-            this.dllPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.dllPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.dllPath.Location = new System.Drawing.Point(65, 399);
             this.dllPath.Name = "dllPath";
             this.dllPath.ReadOnly = true;
@@ -1295,8 +1295,8 @@ namespace MeGUI
             // 
             // avisynthScript
             // 
-            this.avisynthScript.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.avisynthScript.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.avisynthScript.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.avisynthScript.Location = new System.Drawing.Point(8, 15);
             this.avisynthScript.Multiline = true;
@@ -1579,62 +1579,75 @@ namespace MeGUI
                 projectPath = Path.GetDirectoryName(videoInput);
             videoOutput.Filename = Path.Combine(projectPath, Path.ChangeExtension(fileNameNoPath, ".avs"));
             
-            if (File.Exists(videoInput + ".ffindex"))
+            string ext = Path.GetExtension(videoInput).ToLower();
+            switch (ext)
             {
-                sourceType = PossibleSources.ffindex;
-                openVideo(videoInput + ".ffindex");
-            }
-            else
-            {
-                string ext = Path.GetExtension(videoInput).ToLower();
-                switch (ext)
-                {
-                    case ".avs":
-                        sourceType = PossibleSources.avs;
-                        videoOutput.Filename = Path.Combine(projectPath, Path.ChangeExtension(fileNameNoPath, "_new.avs")); // to avoid overwritten
-                        openAVSScript(videoInput);
-                        break;           
-                    case ".d2v":
-                        sourceType = PossibleSources.d2v;
-                        openVideo(videoInput);
-                        break;
-                    case ".dga":
-                        sourceType = PossibleSources.dga;                    
-                        openVideo(videoInput);
-                        break;
-                    case ".dgi":
-                        sourceType = PossibleSources.dgi;
-                        openVideo(videoInput); 
-                        break;
-                    case ".ffindex":
+                case ".avs":
+                    sourceType = PossibleSources.avs;
+                    videoOutput.Filename = Path.Combine(projectPath, Path.ChangeExtension(fileNameNoPath, "_new.avs")); // to avoid overwritten
+                    openAVSScript(videoInput);
+                    break;           
+                case ".d2v":
+                    sourceType = PossibleSources.d2v;
+                    openVideo(videoInput);
+                    break;
+                case ".dga":
+                    sourceType = PossibleSources.dga;                    
+                    openVideo(videoInput);
+                    break;
+                case ".dgi":
+                    sourceType = PossibleSources.dgi;
+                    openVideo(videoInput); 
+                    break;
+                case ".ffindex":
+                    sourceType = PossibleSources.ffindex;
+                    openVideo(videoInput);
+                    break;
+                case ".vdr":
+                    sourceType = PossibleSources.vdr;
+                    openVDubFrameServer(videoInput);
+                    break;
+                default:
+                    if (File.Exists(videoInput + ".ffindex"))
+                    {
                         sourceType = PossibleSources.ffindex;
-                        openVideo(videoInput);
-                        break;
-                    case ".mpeg": // include case variants 
-                    case ".mpg":
-                    case ".m2v":
-                    case ".m2p":
-                    case ".mpv":
-                    case ".ts":
-                    case ".tp":
-                    case ".vob":
-                        sourceType = PossibleSources.mpeg2;
-                        if (gotoD2vCreator(videoInput) == DialogResult.Cancel )
+                        openVideo(videoInput + ".ffindex");
+                    }
+                    else
+                    {
+                        MediaInfoFile iFile = new MediaInfoFile(videoInput);
+                        if (iFile.isD2VIndexable() || iFile.isDGIIndexable() || iFile.isDGAIndexable() || iFile.isFFMSIndexable())
+                        {
+                            int iResult = mainForm.DialogManager.AVSCreatorOpen();
+                            switch (iResult)
+                            {
+                                case 0:
+                                    OneClickWindow ocmt = new OneClickWindow(mainForm);
+                                    ocmt.openInput(videoInput);
+                                    ocmt.Show();
+                                    this.Close();
+                                    break;
+                                case 1:
+                                    FileIndexerWindow fileIndexer = new FileIndexerWindow(mainForm);
+                                    fileIndexer.setConfig(videoInput, null, 2, true, true, true, false);
+                                    fileIndexer.Show();
+                                    this.Close();
+                                    break;
+                                default:
+                                    sourceType = PossibleSources.directShow;
+                                    openDirectShow(videoInput);
+                                    break;
+                            }
+                        }
+                        else
                         {
                             sourceType = PossibleSources.directShow;
                             openDirectShow(videoInput);
                         }
-                        break;
-                    case ".vdr":
-                        sourceType = PossibleSources.vdr;
-                        openVDubFrameServer(videoInput);
-                        break;
-                    default:
-                        sourceType = PossibleSources.directShow;
-                        openDirectShow(videoInput);
-                        break;
-                }
+                    }
+                    break;
             }
+
             setSourceInterface();
         }
 		/// <summary>
@@ -1900,16 +1913,6 @@ namespace MeGUI
                 openVideo("Import(\"" + fileName + "\")\r\n", fileName, true);
             }
         }
-        /// <summary>
-        ///  call the file indexer which will pass a queued job back to the main form
-        /// </summary>
-        /// <param name="fileName"></param>
-        private DialogResult gotoD2vCreator(string fileName)
-        {
-            return MessageBox.Show("You can't open such files with the AviSynth Script Creator. You'll have to index it first with a DG indexer, and open the created project file here.",
-                "Can't open files", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
-        }
-
         private void enableControls(bool enable)
         {
             foreach (Control ctrl in this.controlsToDisable)

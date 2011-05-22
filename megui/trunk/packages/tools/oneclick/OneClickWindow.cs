@@ -114,7 +114,7 @@ namespace MeGUI
         #endregion
         
         #region init
-        public OneClickWindow(MainForm mainForm, JobUtil jobUtil, VideoEncoderProvider vProv, AudioEncoderProvider aProv)
+        public OneClickWindow(MainForm mainForm)
         {
             this.mainForm = mainForm;
             vUtil = new VideoUtil(mainForm);
@@ -904,8 +904,7 @@ namespace MeGUI
 
         public void Run(MainForm info)
         {
-            OneClickWindow ocmt = new OneClickWindow(info, info.JobUtil, info.Video.VideoEncoderProvider,
-                new AudioEncoderProvider());
+            OneClickWindow ocmt = new OneClickWindow(info);
             ocmt.Show();
         }
 

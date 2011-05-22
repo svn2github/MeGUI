@@ -1,4 +1,5 @@
-2027 [x264] fixed applying of "Clever (TM) anamorphic encoding" DAR values
+2028 [AVS Script Creator] added a selection box if opening an indexable file directly
+2027 [x264] fixed applying of "Clever (TM) anamorphic encoding" DAR values. Bug #3302642
 2026 [OneClick] changed handling of failed automatic deinterlacing process
 2025 [HD Streams Extractor] cosmetic adjustment. Bug #3303116
 2024 [MKV Muxer] added TrueHD + DTS-HD/MA as supported audio input formats

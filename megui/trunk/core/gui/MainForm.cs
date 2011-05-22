@@ -1326,7 +1326,7 @@ namespace MeGUI
         }
         public void openOneClickFile(string fileName)
         {
-            OneClickWindow ocmt = new OneClickWindow(this, jobUtil, videoEncodingComponent1.VideoEncoderProvider, new AudioEncoderProvider());
+            OneClickWindow ocmt = new OneClickWindow(this);
             ocmt.openInput(fileName);
             ocmt.ShowDialog();
         }

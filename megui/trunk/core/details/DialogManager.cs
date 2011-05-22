@@ -108,6 +108,31 @@ namespace MeGUI
             return (sResult.Equals("true"));
         }
 
+        /// <summary>
+        /// Shows a custom dialog built on the MessageBoxEx system
+        /// </summary>
+        /// <param name="text">The text to display</param>
+        /// <param name="caption">The window title to display</param>
+        /// <param name="button1Text">The text on the first button</param>
+        /// <param name="button2Text">The text on the second button</param>
+        /// <param name="button2Text">The text on the third button</param>
+        /// <param name="icon">The icon to display</param>
+        /// <returns>0, 1 or 2 depending on the button pressed</returns>
+        private int askAbout3(string text, string caption, string button1Text, string button2Text,
+            string button3Text, MessageBoxIcon icon)
+        {
+            MessageBoxEx msgBox = createMessageBox(text, caption, icon);
+
+            msgBox.AddButton(button1Text, "0");
+            msgBox.AddButton(button2Text, "1");
+            msgBox.AddButton(button3Text, "2");
+
+            msgBox.AllowSaveResponse = false;
+
+            string sResult = msgBox.Show();
+            return Int32.Parse(sResult);
+        }
+
         public bool overwriteJobOutput(string outputname)
         {
             if (mainForm.Settings.DialogSettings.AskAboutOverwriteJobOutput)
@@ -139,7 +164,6 @@ namespace MeGUI
             return mainForm.Settings.DialogSettings.DuplicateResponse;
         }
          
-
         public bool useOneClick()
         {
             if (mainForm.Settings.DialogSettings.AskAboutVOBs)
@@ -155,6 +179,17 @@ namespace MeGUI
                 return bResult;
             }
             return mainForm.Settings.DialogSettings.UseOneClick;
+        }
+
+        public int AVSCreatorOpen()
+        {
+            int iResult = askAbout3("Do you want to open this file with\r\n" +
+                "- One Click Encoder (full automated, easy to use) or\r\n" +
+                "- File Indexer (manual, advanced) or \r\n" +
+                "- DirectShowSource (manual, expert, may cause problems)?", "Please choose your prefered way to open this file",
+                "One Click Encoder", "File Indexer", "DirectShowSource", MessageBoxIcon.Question);
+
+            return iResult;
         }
 
         public bool createJobs(string error)
