@@ -56,7 +56,7 @@ namespace MeGUI.packages.tools.oneclick
 
         private void dontEncodeAudio_CheckedChanged(object sender, EventArgs e)
         {
-            audioProfile.Enabled = !dontEncodeAudio.Checked;
+            audioProfile.Enabled = !cbAudioEncoding.SelectedText.Equals("never");
             raiseEvent();
         }
 
@@ -97,15 +97,15 @@ namespace MeGUI.packages.tools.oneclick
 
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public bool DontEncode
+        public AudioEncodingMode AudioEncodingMode
         {
             get
             {
-                return dontEncodeAudio.Checked;
+                return (AudioEncodingMode)cbAudioEncoding.SelectedIndex;
             }
             set
             {
-                dontEncodeAudio.Checked = value;
+                cbAudioEncoding.SelectedIndex = (int)value;
             }
         }
 
@@ -114,16 +114,19 @@ namespace MeGUI.packages.tools.oneclick
         public void DisableDontEncode(bool bDisable)
         {
             if (bDisable)
-                dontEncodeAudio.Checked = dontEncodeAudio.Enabled = false;
+            {
+                cbAudioEncoding.SelectedItem = AudioEncodingMode.Always;
+                cbAudioEncoding.Enabled = false;
+            }
             else
-                dontEncodeAudio.Enabled = true;
+                cbAudioEncoding.Enabled = true;
         }
 
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool IsDontEncodePossible()
         {
-            return dontEncodeAudio.Enabled;
+            return cbAudioEncoding.Enabled;
         }
 
         public void SelectProfileNameOrWarn(string fqname)

@@ -84,7 +84,7 @@ namespace MeGUI.packages.tools.oneclick
                 val.AutomaticDeinterlacing = autoDeint.Checked;
                 val.AvsProfileName = avsProfile.SelectedProfile.FQName;
                 val.ContainerCandidates = ContainerCandidates;
-                val.DontEncodeAudio = dontEncodeAudio.Checked;
+                val.AudioEncodingMode = (AudioEncodingMode)cbAudioEncoding.SelectedIndex;
                 val.DontEncodeVideo = chkDontEncodeVideo.Checked;
                 val.Filesize = fileSize.Value;
                 val.OutputResolution = (long)horizontalResolution.Value;
@@ -102,8 +102,8 @@ namespace MeGUI.packages.tools.oneclick
                 audioProfile.SetProfileNameOrWarn(value.AudioProfileName);
                 autoDeint.Checked = value.AutomaticDeinterlacing;
                 avsProfile.SetProfileNameOrWarn(value.AvsProfileName);
-                ContainerCandidates = value.ContainerCandidates; 
-                dontEncodeAudio.Checked = value.DontEncodeAudio;
+                ContainerCandidates = value.ContainerCandidates;
+                cbAudioEncoding.SelectedIndex = (int)value.AudioEncodingMode;
                 chkDontEncodeVideo.Checked = value.DontEncodeVideo;
                 fileSize.Value = value.Filesize;
                 horizontalResolution.Value = value.OutputResolution;
@@ -182,7 +182,7 @@ namespace MeGUI.packages.tools.oneclick
 
         private void dontEncodeAudio_CheckedChanged(object sender, EventArgs e)
         {
-            audioProfile.Enabled = !dontEncodeAudio.Checked;
+            audioProfile.Enabled = !cbAudioEncoding.SelectedText.Equals("never");
         }
     }
 }

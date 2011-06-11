@@ -370,10 +370,9 @@ namespace MeGUI
                 if (audioTrack[i].SelectedIndex == 0) // "None"
                     continue;
 
-                if (audioConfigControl[i].Settings != null && !audioConfigControl[i].DontEncode)
+                if (audioConfigControl[i].Settings != null && audioConfigControl[i].AudioEncodingMode !=  AudioEncodingMode.Never)
                     audioCodecs.Add(audioConfigControl[i].Settings.EncoderType);
-
-                else if (audioConfigControl[i].DontEncode)
+                else if (audioConfigControl[i].AudioEncodingMode == AudioEncodingMode.Never)
                 {
                     string typeString;
 
@@ -454,7 +453,7 @@ namespace MeGUI
 
                 foreach (AudioConfigControl a in audioConfigControl)
                     if (a.IsDontEncodePossible() == true)
-                        a.DontEncode = settings.DontEncodeAudio;
+                        a.AudioEncodingMode = settings.AudioEncodingMode;
 
                 chkDontEncodeVideo.Checked = settings.DontEncodeVideo;
                 
@@ -503,6 +502,7 @@ namespace MeGUI
 
                         string aInput;
                         string strLanguage = null;
+                        string strAudioCodec = null;
                         TrackInfo info = null;
                         int delay = audioConfigControl[i].Delay;
                         if (audioTrack[i].SelectedSCItem.IsStandard)
@@ -512,11 +512,20 @@ namespace MeGUI
                             aInput = "::" + a.TrackID + "::";
                             info = a.TrackInfo;
                             strLanguage = a.Language;
+                            strAudioCodec = a.Type;
                         }
                         else
+                        {
                             aInput = audioTrack[i].SelectedText;
+                            MediaInfoFile oInfo = new MediaInfoFile(aInput);
+                            strAudioCodec = oInfo.AudioTracks[0].Type;
+                            info = oInfo.AudioTracks[0].TrackInfo;
+                            strLanguage = oInfo.AudioTracks[0].Language;
+                        }
 
-                        if (audioConfigControl[i].DontEncode)
+                        if (audioConfigControl[i].AudioEncodingMode == AudioEncodingMode.Never ||
+                            (audioConfigControl[i].AudioEncodingMode == AudioEncodingMode.IfCodecDoesNotMatch &&
+                            audioConfigControl[i].Settings.EncoderType.ACodec.ID.Equals(strAudioCodec, StringComparison.InvariantCultureIgnoreCase)))
                             muxOnlyAudio.Add(new MuxStream(aInput, info, delay, false, false, null));
                         else
                             aJobs.Add(new AudioJob(aInput, null, null, audioConfigControl[i].Settings, delay, strLanguage));

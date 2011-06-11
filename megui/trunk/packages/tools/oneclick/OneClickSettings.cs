@@ -20,12 +20,20 @@
 
 using System;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 
 using MeGUI.core.plugins.interfaces;
 using MeGUI.core.util;
 
 namespace MeGUI
 {
+    public enum AudioEncodingMode
+    {
+        Always,
+        IfCodecDoesNotMatch,
+        Never
+    };
+
 	/// <summary>
 	/// Summary description for OneClickDefaults.
 	/// </summary>
@@ -77,11 +85,40 @@ namespace MeGUI
             set { prerenderVideo = value; }
         }
 
-        private bool dontEncodeAudio;
-        public bool DontEncodeAudio
+#warning Deprecated since 2031; delete after next stable release
+        public string DontEncodeAudio
         {
-            get { return dontEncodeAudio; }
-            set { dontEncodeAudio = value; }
+            get { return "migrated"; }
+            set
+            {
+                if (value.Equals("migrated"))
+                    return;
+                if (value.Equals("true"))
+                    audioEncodingMode = AudioEncodingMode.Never;
+            }
+        }
+
+        private AudioEncodingMode audioEncodingMode;
+        [XmlIgnore()]
+        public AudioEncodingMode AudioEncodingMode
+        {
+            get { return audioEncodingMode; }
+            set { audioEncodingMode = value; }
+        }
+
+        // for profile import/export in case the enum changes
+        public string AudioEncodingModeString
+        {
+            get { return audioEncodingMode.ToString(); }
+            set
+            {
+                if (value.Equals("Never"))
+                    audioEncodingMode = AudioEncodingMode.Never;
+                else if (value.Equals("IfCodecDoesNotMatch"))
+                    audioEncodingMode = AudioEncodingMode.IfCodecDoesNotMatch;
+                else
+                    audioEncodingMode = AudioEncodingMode.Always;
+            }
         }
 
         private bool dontEncodeVideo;
@@ -183,7 +220,7 @@ namespace MeGUI
             AvsProfileName = "";
             AutomaticDeinterlacing = true;
             PrerenderVideo = false;
-			DontEncodeAudio = false;
+            AudioEncodingMode = MeGUI.AudioEncodingMode.Always;
             DontEncodeVideo = false;
 			SignalAR = false;
             AutoCrop = true;

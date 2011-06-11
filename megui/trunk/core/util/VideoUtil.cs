@@ -141,6 +141,7 @@ namespace MeGUI
                         // MediaInfo failed to get ID try guessing based on codec
                         switch (atrack.Format.Substring(0,3))
                         {
+                            case "AC-":
                             case "AC3": ati.TrackID = (0x80 + counter); break;
                             case "PCM": ati.TrackID = (0xA0 + counter); break;
                             case "MPE": // MPEG-1 Layer 1/2/3
@@ -150,14 +151,16 @@ namespace MeGUI
                     if (atrack.FormatProfile != "") // some tunings to have a more useful info instead of a typical audio Format
                     {
                         switch (atrack.FormatProfile)
-                        {   
+                        {
                             case "Dolby Digital": ati.Type = "AC-3"; break;
+                            case "HRA / Core":
                             case "HRA": ati.Type = "DTS-HD High Resolution"; break;
                             case "Layer 1": ati.Type = "MPA"; break;
                             case "Layer 2": ati.Type = "MP2"; break;
                             case "Layer 3": ati.Type = "MP3"; break;
                             case "LC": ati.Type = "AAC"; break;
-                            case "MA": ati.Type = "DTS-HD Master Audio"; break;
+                            case "MA":
+                            case "MA / Core": ati.Type = "DTS-HD Master Audio"; break;
                             case "TrueHD": ati.Type = "TrueHD"; break;
                         }
                     }
