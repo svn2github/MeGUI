@@ -495,7 +495,7 @@ namespace MeGUI.packages.video.x264
         public int getKeyInt(int fps_n, int fps_d)
         {
             string strCustomValue;
-            extractCustomCommand("key-int", out strCustomValue);
+            extractCustomCommand("keyint", out strCustomValue);
             if (strCustomValue.ToLower().Equals("infinite"))
                 _xs.KeyframeInterval = 0;
             else
@@ -511,7 +511,7 @@ namespace MeGUI.packages.video.x264
             int fps = (int)Math.Round((decimal)fps_n / fps_d, 0);
             if (_device.MaxGOP > -1 && _xs.KeyframeInterval > fps * _device.MaxGOP)
             {
-                _log.LogEvent(strDevice + "changing --key-int to " + (fps * _device.MaxGOP));
+                _log.LogEvent(strDevice + "changing --keyint to " + (fps * _device.MaxGOP));
                 _xs.KeyframeInterval = fps * _device.MaxGOP;
             }
 
