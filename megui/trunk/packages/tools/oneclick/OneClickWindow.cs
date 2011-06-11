@@ -258,7 +258,7 @@ namespace MeGUI
         public void openInput(string fileName)
         {
             MediaInfoFile iFile = new MediaInfoFile(fileName);
-            if (!iFile.recommendIndexer(out oIndexerToUse, false))
+            if (!iFile.recommendIndexer(out oIndexerToUse))
             {
                 input.Filename = "";
                 MessageBox.Show("This file cannot be used in OneClick mode.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);

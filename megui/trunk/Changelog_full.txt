@@ -1,3 +1,30 @@
+2028 [AVS Script Creator] added a selection box if opening an indexable file directly
+2027 [x264] fixed applying of "Clever (TM) anamorphic encoding" DAR values. Bug #3302642
+2026 [OneClick] changed handling of failed automatic deinterlacing process
+2025 [HD Streams Extractor] cosmetic adjustment. Bug #3303116
+2024 [MKV Muxer] added TrueHD + DTS-HD/MA as supported audio input formats
+2023 [x264] fixed applying of custom sar values. Bug #3300094
+2022 [Job Queue] hide the pause button as it has no function. Bug #3296037
+2021 [Lame] fixed VBR/ABR profile saving. Bug #3299459
+2020 [x264] enforce "--p-pyramid none" for the PSP device
+2019 [Lame] changed encoding modes to reflect valid values
+            Warning: review custom lame presets as there is no full update path
+2018 [x264] enhanced help
+     [x264] small fixes/improvements
+2017 [File Indexer] added MKV audio demuxer for FFMS
+2016 [Update] enable 2010 only for debug builds
+2015 [x264] added --bluray-compat option (requires x264 rev 1935+)
+     [x264] changed --open-gop handling (requires x264 rev 1935+)
+     [x264] added target playback device option
+            this option restricts or enforces x264 parameters if necessary
+     [x264] several adjustments
+2014 [OggVorbis] removed channel remapping as it is not needed anymore
+2013 [M2TS Muxer] fixed splitting option. Bug #3294210
+                  fixed m2v input handling
+2012 [File Indexer] disable Audio group box when FFMS is used because this indexer cannot extract audio streams
+2011 [MediaInfo] introduce "Core" alias for DTSHD/DTSMA
+2010 [Update] don't raise an update if the existing version number is higher than the latest version
+2009 [MediaInfo] adjustment for recent mediainfo builds
 2008 [Worker] fixed "shut down worker when finished local queue"
               some cosmetics
 2007 [Nero AAC Encoder] fixed cosmetic problem with wrong bitrate values in the configuration dialog. Bug #3286672
