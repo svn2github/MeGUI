@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2011  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ namespace MeGUI
 		private double customAR;
 		private string chapterFile, finalOutput, aviSynthScript, deviceType;
         private List<string> filesToDelete;
-        private List<MkvInfoTrack> _mkvAudioTrack;
+        private List<OneClickAudioTrack> _audioTracks;
         private List<MkvInfoTrack> _subtitleTrack;
         private MkvInfoTrack _videoTrackToMux;
 
@@ -64,13 +64,10 @@ namespace MeGUI
             deviceType = null;
             useChapterMarks = false;
             filesToDelete = new List<string>();
-            _mkvAudioTrack = new List<MkvInfoTrack>();
+            _audioTracks = new List<OneClickAudioTrack>();
             _subtitleTrack = new List<MkvInfoTrack>();
             _videoTrackToMux = null;
 		}
-
-        public AudioJob[] AudioJobs;
-        public MuxStream[] DirectMuxAudio;
 
         public bool AutoDeinterlace
         {
@@ -240,10 +237,10 @@ namespace MeGUI
             set { filesToDelete = value; }
         }
 
-        public List<MkvInfoTrack> MkvAudioTracks
+        public List<OneClickAudioTrack> AudioTracks
         {
-            get { return _mkvAudioTrack; }
-            set { _mkvAudioTrack = value; }
+            get { return _audioTracks; }
+            set { _audioTracks = value; }
         }
 
         public List<MkvInfoTrack> SubtitleTracks

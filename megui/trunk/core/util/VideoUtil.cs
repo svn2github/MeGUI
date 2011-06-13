@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2011  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -639,7 +639,7 @@ namespace MeGUI
         public JobChain GenerateJobSeries(VideoStream video, string muxedOutput, AudioJob[] audioStreams,
             MuxStream[] subtitles, string chapters, FileSize? desiredSize, FileSize? splitSize, 
             ContainerType container, bool prerender, MuxStream[] muxOnlyAudio, LogItem log, string deviceType, 
-            Zone[] zones, MkvInfoTrack videoTrackToMux)
+            Zone[] zones, MkvInfoTrack videoTrackToMux, OneClickAudioTrack[] audioTracks)
         {
             if (desiredSize.HasValue && videoTrackToMux == null)
             {
@@ -672,19 +672,22 @@ namespace MeGUI
              * we can only ever hope.*/
             List<MuxStream> allAudioToMux = new List<MuxStream>();
             List<MuxableType> allInputAudioTypes = new List<MuxableType>();
-            foreach (MuxStream muxStream in muxOnlyAudio)
-            {
-                if (VideoUtil.guessAudioMuxableType(muxStream.path, true) != null)
-                {
-                    allInputAudioTypes.Add(VideoUtil.guessAudioMuxableType(muxStream.path, true));
-                    allAudioToMux.Add(muxStream);
-                }
-            }
 
-            foreach (AudioJob stream in audioStreams)
+            foreach (OneClickAudioTrack ocAudioTrack in audioTracks)
             {
-                allAudioToMux.Add(stream.ToMuxStream());
-                allInputAudioTypes.Add(stream.ToMuxableType());
+                if (ocAudioTrack.DirectMuxAudio != null)
+                {
+                    if (VideoUtil.guessAudioMuxableType(ocAudioTrack.DirectMuxAudio.path, true) != null)
+                    {
+                        allInputAudioTypes.Add(VideoUtil.guessAudioMuxableType(ocAudioTrack.DirectMuxAudio.path, true));
+                        allAudioToMux.Add(ocAudioTrack.DirectMuxAudio);
+                    }
+                }
+                if (ocAudioTrack.AudioJob != null)
+                {
+                    allAudioToMux.Add(ocAudioTrack.AudioJob.ToMuxStream());
+                    allInputAudioTypes.Add(ocAudioTrack.AudioJob.ToMuxableType());
+                }
             }
 
             List<MuxableType> allInputSubtitleTypes = new List<MuxableType>();

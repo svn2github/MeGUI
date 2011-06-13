@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2011  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -140,20 +140,30 @@ namespace MeGUI
 
                 List<string> arrAudioFilesDelete = new List<string>();
                 audioFiles = new Dictionary<int, string>();
-                if (job.PostprocessingProperties.MkvAudioTracks.Count > 0)
+                List<AudioTrackInfo> arrAudioTracks = new List<AudioTrackInfo>();
+                List<AudioJob> arrAudioJobs = new List<AudioJob>();
+                List<MuxStream> arrMuxStreams = new List<MuxStream>();
+ 
+                foreach (OneClickAudioTrack oAudioTrack in job.PostprocessingProperties.AudioTracks)
                 {
-                    foreach (MkvInfoTrack oTrack in job.PostprocessingProperties.MkvAudioTracks)
+                    if (oAudioTrack.MkvAudioTrack != null)
                     {
-                        audioFiles.Add(oTrack.TrackID, Path.GetDirectoryName(job.PostprocessingProperties.FinalOutput) + "\\" + oTrack.FileName);
-                        arrAudioFilesDelete.Add(Path.GetDirectoryName(job.PostprocessingProperties.FinalOutput) + "\\" + oTrack.FileName);
+                        audioFiles.Add(oAudioTrack.MkvAudioTrack.TrackID, Path.GetDirectoryName(job.PostprocessingProperties.FinalOutput) + "\\" + oAudioTrack.MkvAudioTrack.FileName);
+                        arrAudioFilesDelete.Add(Path.GetDirectoryName(job.PostprocessingProperties.FinalOutput) + "\\" + oAudioTrack.MkvAudioTrack.FileName);
                     }
+                    else if (oAudioTrack.AudioTrackInfo != null)
+                        arrAudioTracks.Add(oAudioTrack.AudioTrackInfo);
+                    if (oAudioTrack.AudioJob != null)
+                        arrAudioJobs.Add(oAudioTrack.AudioJob);
+                    if (oAudioTrack.DirectMuxAudio != null)
+                        arrMuxStreams.Add(oAudioTrack.DirectMuxAudio);
                 }
-                else
-                    audioFiles = vUtil.getAllDemuxedAudio(job.AudioTracks, new List<MkvInfoTrack>(), out arrAudioFilesDelete, job.IndexFile, _log);
+                if (audioFiles.Count == 0)
+                    audioFiles = vUtil.getAllDemuxedAudio(arrAudioTracks, new List<MkvInfoTrack>(), out arrAudioFilesDelete, job.IndexFile, _log);
 
-                fillInAudioInformation();
+                fillInAudioInformation(arrAudioJobs, arrMuxStreams);
 
-                job.PostprocessingProperties.AudioJobs = AudioUtil.getConfiguredAudioJobs(job.PostprocessingProperties.AudioJobs);
+                //job.PostprocessingProperties.AudioJobs = AudioUtil.getConfiguredAudioJobs(job.PostprocessingProperties.AudioJobs);
 
                 _log.LogEvent("Desired size: " + job.PostprocessingProperties.OutputSize);
                 _log.LogEvent("Split size: " + job.PostprocessingProperties.Splitting);
@@ -227,11 +237,11 @@ namespace MeGUI
                     if (job.PostprocessingProperties.Container == ContainerType.AVI)
                         job.PostprocessingProperties.ChapterFile = null;
 
-                    JobChain c = vUtil.GenerateJobSeries(myVideo, job.PostprocessingProperties.FinalOutput, job.PostprocessingProperties.AudioJobs, 
+                    JobChain c = vUtil.GenerateJobSeries(myVideo, job.PostprocessingProperties.FinalOutput, arrAudioJobs.ToArray(), 
                         subtitles, job.PostprocessingProperties.ChapterFile, job.PostprocessingProperties.OutputSize,
                         job.PostprocessingProperties.Splitting, job.PostprocessingProperties.Container,
-                        job.PostprocessingProperties.PrerenderJob, job.PostprocessingProperties.DirectMuxAudio,
-                        _log, job.PostprocessingProperties.DeviceOutputType, null, job.PostprocessingProperties.VideoTrackToMux);
+                        job.PostprocessingProperties.PrerenderJob, arrMuxStreams.ToArray(),
+                        _log, job.PostprocessingProperties.DeviceOutputType, null, job.PostprocessingProperties.VideoTrackToMux, job.PostprocessingProperties.AudioTracks.ToArray());
                     if (c == null)
                     {
                         _log.Warn("Job creation aborted");
@@ -266,12 +276,12 @@ namespace MeGUI
             raiseEvent();
         }
 
-        private void fillInAudioInformation()
+        private void fillInAudioInformation(List<AudioJob> arrAudioJobs, List<MuxStream> arrMuxStreams)
         {
-            foreach (MuxStream m in job.PostprocessingProperties.DirectMuxAudio)
+            foreach (MuxStream m in arrMuxStreams)
                 m.path = convertTrackNumberToFile(m.path, ref m.delay);
 
-            foreach (AudioJob a in job.PostprocessingProperties.AudioJobs)
+            foreach (AudioJob a in arrAudioJobs)
             {
                 a.Input = convertTrackNumberToFile(a.Input, ref a.Delay);
                 if (String.IsNullOrEmpty(a.Output) && !String.IsNullOrEmpty(a.Input))

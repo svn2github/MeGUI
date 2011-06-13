@@ -707,6 +707,7 @@
     <Compile Include="packages\tools\oneclick\AudioConfigControl.Designer.cs">
       <DependentUpon>AudioConfigControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="packages\tools\oneclick\OneClickAudioTrack.cs" />
     <Compile Include="packages\tools\oneclick\OneClickPostprocessingProperties.cs" />
     <Compile Include="packages\tools\oneclick\OneClickConfigPanel.cs">
       <SubType>UserControl</SubType>

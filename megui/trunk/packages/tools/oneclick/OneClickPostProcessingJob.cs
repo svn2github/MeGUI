@@ -30,16 +30,14 @@ namespace MeGUI
     public class OneClickPostProcessingJob : Job
     {
         private OneClickPostprocessingProperties postprocessingProperties;
-        private List<AudioTrackInfo> audioTracks;
         private FileIndexerWindow.IndexType indexType;
         private string strIndexFile;
 
-        public OneClickPostProcessingJob() : this(null, null, null, null, FileIndexerWindow.IndexType.D2V) { }
+        public OneClickPostProcessingJob() : this(null, null, null, FileIndexerWindow.IndexType.D2V) { }
 
-        public OneClickPostProcessingJob(string input, string strIndexFile, OneClickPostprocessingProperties postprocessingProperties, List<AudioTrackInfo> audioTracks, FileIndexerWindow.IndexType oType) : base(input, null)
+        public OneClickPostProcessingJob(string input, string strIndexFile, OneClickPostprocessingProperties postprocessingProperties, FileIndexerWindow.IndexType oType) : base(input, null)
         {
             this.postprocessingProperties = postprocessingProperties;
-            this.audioTracks = audioTracks;
             this.indexType = oType;
             this.strIndexFile = strIndexFile;
         }
@@ -63,12 +61,6 @@ namespace MeGUI
         {
             get { return postprocessingProperties; }
             set { postprocessingProperties = value; }
-        }
-
-        public List<AudioTrackInfo> AudioTracks
-        {
-            get { return audioTracks; }
-            set { audioTracks = value; }
         }
 
         public FileIndexerWindow.IndexType IndexerUsed

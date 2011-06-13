@@ -492,9 +492,8 @@ namespace MeGUI
                 {
                     FileSize? desiredSize = fileSize.Value;
 
-                    List<AudioJob> aJobs = new List<AudioJob>();
-                    List<MuxStream> muxOnlyAudio = new List<MuxStream>();
                     List<AudioTrackInfo> audioTracks = new List<AudioTrackInfo>();
+                    List<OneClickAudioTrack> ocAudioTracks = new List<OneClickAudioTrack>();
                     for (int i = 0; i < audioConfigControl.Count; ++i)
                     {
                         if (audioTrack[i].SelectedIndex == 0) // "None"
@@ -504,15 +503,28 @@ namespace MeGUI
                         string strLanguage = null;
                         string strAudioCodec = null;
                         TrackInfo info = null;
+                        MkvInfoTrack oMkvInfoTrack = null;
+                        AudioTrackInfo oAudioTrackInfo = null; 
                         int delay = audioConfigControl[i].Delay;
                         if (audioTrack[i].SelectedSCItem.IsStandard)
                         {
-                            AudioTrackInfo a = (AudioTrackInfo)audioTrack[i].SelectedObject;
-                            audioTracks.Add(a);
-                            aInput = "::" + a.TrackID + "::";
-                            info = a.TrackInfo;
-                            strLanguage = a.Language;
-                            strAudioCodec = a.Type;
+                            oAudioTrackInfo = (AudioTrackInfo)audioTrack[i].SelectedObject;
+                            audioTracks.Add(oAudioTrackInfo);
+                            aInput = "::" + oAudioTrackInfo.TrackID + "::";
+                            info = oAudioTrackInfo.TrackInfo;
+                            strLanguage = oAudioTrackInfo.Language;
+                            strAudioCodec = oAudioTrackInfo.Type;
+                            if (oMkvInfo != null && (oIndexerToUse == FileIndexerWindow.IndexType.FFMS || oIndexerToUse == FileIndexerWindow.IndexType.DGI))
+                            {
+                                foreach (MkvInfoTrack oTrack in oMkvInfo.Track)
+                                {
+                                    if (oTrack.TrackID == oAudioTrackInfo.TrackID)
+                                    {
+                                        oMkvInfoTrack = oTrack;
+                                        break;
+                                    }
+                                }
+                            }
                         }
                         else
                         {
@@ -526,15 +538,14 @@ namespace MeGUI
                         if (audioConfigControl[i].AudioEncodingMode == AudioEncodingMode.Never ||
                             (audioConfigControl[i].AudioEncodingMode == AudioEncodingMode.IfCodecDoesNotMatch &&
                             audioConfigControl[i].Settings.EncoderType.ACodec.ID.Equals(strAudioCodec, StringComparison.InvariantCultureIgnoreCase)))
-                            muxOnlyAudio.Add(new MuxStream(aInput, info, delay, false, false, null));
+                            ocAudioTracks.Add(new OneClickAudioTrack(null, new MuxStream(aInput, info, delay, false, false, null), oAudioTrackInfo, oMkvInfoTrack));
                         else
-                            aJobs.Add(new AudioJob(aInput, null, null, audioConfigControl[i].Settings, delay, strLanguage));
+                            ocAudioTracks.Add(new OneClickAudioTrack(new AudioJob(aInput, null, null, audioConfigControl[i].Settings, delay, strLanguage), null, oAudioTrackInfo, oMkvInfoTrack));
                     }
 
                     OneClickPostprocessingProperties dpp = new OneClickPostprocessingProperties();
                     dpp.DAR = ar.Value;
-                    dpp.DirectMuxAudio = muxOnlyAudio.ToArray();
-                    dpp.AudioJobs = aJobs.ToArray();
+                    dpp.AudioTracks = ocAudioTracks;
                     dpp.AvsSettings = (AviSynthSettings)avsProfile.SelectedProfile.BaseSettings;
                     dpp.Container = (ContainerType)containerFormat.SelectedItem;
                     dpp.FinalOutput = output.Filename;
@@ -623,7 +634,7 @@ namespace MeGUI
                     {
                         string d2vName = Path.Combine(workingDirectory.Filename, workingName.Text + ".d2v");
                         D2VIndexJob job = new D2VIndexJob(input.Filename, d2vName, 2, audioTracks, false, false);
-                        OneClickPostProcessingJob ocJob = new OneClickPostProcessingJob(input.Filename, d2vName, dpp, audioTracks, FileIndexerWindow.IndexType.D2V);
+                        OneClickPostProcessingJob ocJob = new OneClickPostProcessingJob(input.Filename, d2vName, dpp, FileIndexerWindow.IndexType.D2V);
                         JobChain c = new SequentialChain(new SequentialChain(job), new SequentialChain(ocJob));
                         mainForm.Jobs.addJobsWithDependencies(c);
                     }
@@ -631,14 +642,14 @@ namespace MeGUI
                     {
                         string d2vName = Path.Combine(workingDirectory.Filename, workingName.Text + ".dga");
                         DGAIndexJob job = new DGAIndexJob(input.Filename, d2vName, 2, audioTracks, false, false);
-                        OneClickPostProcessingJob ocJob = new OneClickPostProcessingJob(input.Filename, d2vName, dpp, audioTracks, FileIndexerWindow.IndexType.DGA);
+                        OneClickPostProcessingJob ocJob = new OneClickPostProcessingJob(input.Filename, d2vName, dpp, FileIndexerWindow.IndexType.DGA);
                         JobChain c = new SequentialChain(new SequentialChain(job), new SequentialChain(ocJob));
                         mainForm.Jobs.addJobsWithDependencies(c);
                     }
                     else if (oIndexerToUse == FileIndexerWindow.IndexType.DGI)
                     {
                         string d2vName = Path.Combine(workingDirectory.Filename, workingName.Text + ".dgi");
-                        OneClickPostProcessingJob ocJob = new OneClickPostProcessingJob(input.Filename, d2vName, dpp, audioTracks, FileIndexerWindow.IndexType.DGI);
+                        OneClickPostProcessingJob ocJob = new OneClickPostProcessingJob(input.Filename, d2vName, dpp, FileIndexerWindow.IndexType.DGI);
 
                         DGIIndexJob job;
                         JobChain c;
@@ -654,7 +665,7 @@ namespace MeGUI
                                     if (oTrack.TrackID == oStream.TrackID)
                                     {
                                         oExtractTrack.Add(oTrack);
-                                        dpp.MkvAudioTracks.Add(oTrack);
+                                        break;
                                     }
                                 }
                             }
@@ -685,7 +696,7 @@ namespace MeGUI
                     {
                         JobChain c;
                         FFMSIndexJob job;
-                        OneClickPostProcessingJob ocJob = new OneClickPostProcessingJob(input.Filename, input.Filename + ".ffindex", dpp, audioTracks, FileIndexerWindow.IndexType.FFMS);
+                        OneClickPostProcessingJob ocJob = new OneClickPostProcessingJob(input.Filename, input.Filename + ".ffindex", dpp, FileIndexerWindow.IndexType.FFMS);
                         if (oMkvInfo != null)
                         {
                             job = new FFMSIndexJob(input.Filename, 0, null, false);
@@ -698,7 +709,7 @@ namespace MeGUI
                                     if (oTrack.TrackID == oStream.TrackID)
                                     {
                                         oExtractTrack.Add(oTrack);
-                                        dpp.MkvAudioTracks.Add(oTrack);
+                                        break;
                                     }
                                 }
                             }
