@@ -1,3 +1,4 @@
+2034 [AutoEncode] fixed AutoEncode
 2033 [OneClick] fixed editing of mkv mux jobs
 2032 [OneClick] preserve audio track order
 2031 [OneClick] added option to mux the audio source file only if the codec is the same as requested

@@ -673,20 +673,23 @@ namespace MeGUI
             List<MuxStream> allAudioToMux = new List<MuxStream>();
             List<MuxableType> allInputAudioTypes = new List<MuxableType>();
 
-            foreach (OneClickAudioTrack ocAudioTrack in audioTracks)
+            if (audioTracks != null)
             {
-                if (ocAudioTrack.DirectMuxAudio != null)
+                foreach (OneClickAudioTrack ocAudioTrack in audioTracks)
                 {
-                    if (VideoUtil.guessAudioMuxableType(ocAudioTrack.DirectMuxAudio.path, true) != null)
+                    if (ocAudioTrack.DirectMuxAudio != null)
                     {
-                        allInputAudioTypes.Add(VideoUtil.guessAudioMuxableType(ocAudioTrack.DirectMuxAudio.path, true));
-                        allAudioToMux.Add(ocAudioTrack.DirectMuxAudio);
+                        if (VideoUtil.guessAudioMuxableType(ocAudioTrack.DirectMuxAudio.path, true) != null)
+                        {
+                            allInputAudioTypes.Add(VideoUtil.guessAudioMuxableType(ocAudioTrack.DirectMuxAudio.path, true));
+                            allAudioToMux.Add(ocAudioTrack.DirectMuxAudio);
+                        }
                     }
-                }
-                if (ocAudioTrack.AudioJob != null)
-                {
-                    allAudioToMux.Add(ocAudioTrack.AudioJob.ToMuxStream());
-                    allInputAudioTypes.Add(ocAudioTrack.AudioJob.ToMuxableType());
+                    if (ocAudioTrack.AudioJob != null)
+                    {
+                        allAudioToMux.Add(ocAudioTrack.AudioJob.ToMuxStream());
+                        allInputAudioTypes.Add(ocAudioTrack.AudioJob.ToMuxableType());
+                    }
                 }
             }
 
