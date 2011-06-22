@@ -42,42 +42,36 @@ namespace MeGUI.core.details
 
     public class MuxStream
     {
+        private string _language;
+        private string _name;
         public string path;
-        public TrackInfo TrackInfo;
         public int delay;
         public bool bDefaultTrack;
         public bool bForceTrack;
         public MkvInfoTrack MuxOnlyInfo;
 
-        public MuxStream(string path, TrackInfo info, int delay, bool bDefaultTrack, bool bForceTrack, MkvInfoTrack MuxOnlyInfo)
+        public MuxStream(string path, string language, string name, int delay, bool bDefaultTrack, bool bForceTrack, MkvInfoTrack MuxOnlyInfo)
         {
+            this._language = language;
+            this._name = name;
             this.path = path;
-            TrackInfo = info;
             this.delay = delay;
             this.bDefaultTrack = bDefaultTrack;
             this.bForceTrack = bForceTrack;
             this.MuxOnlyInfo = MuxOnlyInfo;
         }
 
-        public MuxStream(string path, string language, string name, int delay, bool bDefaultTrack, bool bForceTrack)
-            :
-            this(path, new TrackInfo(language, name), delay, bDefaultTrack, bForceTrack, null) { }
-
-        public MuxStream() : this(null, new TrackInfo(), 0, false, false, null) { }
+        public MuxStream() : this(null, null, null, 0, false, false, null) { }
 
         public string language
         {
             get
             {
-                if (TrackInfo == null)
-                    return null;
-                return TrackInfo.Language;
+                return _language;
             }
             set
             {
-                if (TrackInfo == null)
-                    TrackInfo = new TrackInfo();
-                TrackInfo.Language = value;
+                _language = value;
             }
         }
 
@@ -85,15 +79,11 @@ namespace MeGUI.core.details
         {
             get
             {
-                if (TrackInfo == null)
-                    return null;
-                return TrackInfo.Name;
+                return _name;
             }
             set
             {
-                if (TrackInfo == null)
-                    TrackInfo = new TrackInfo();
-                TrackInfo.Name = value;
+                _name = value;
             }
         }
     }

@@ -50,9 +50,6 @@ namespace MeGUI
 
         public long SizeBytes;
 
-        public TrackInfo TrackInfo;
-
-
         public MuxableType ToMuxableType()
         {
             return new MuxableType(Type, Settings.Codec);
@@ -60,14 +57,7 @@ namespace MeGUI
 
         public MuxStream ToMuxStream()
         {
-            if (!String.IsNullOrEmpty(Language))
-            {
-                if (TrackInfo == null)
-                    TrackInfo = new TrackInfo(Language, null);
-                else
-                    TrackInfo.Language = Language;
-            }
-            return new MuxStream(Output, TrackInfo, 0, false, false, null); 
+            return new MuxStream(Output, Language, null, 0, false, false, null); 
             // no delay correction is required since the audio job will fix the delay
         }
 

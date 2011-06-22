@@ -229,7 +229,7 @@ namespace MeGUI
                         int i = 0;
                         foreach (MkvInfoTrack oTrack in job.PostprocessingProperties.SubtitleTracks)
                         {
-                            subtitles[i] = new MuxStream(oTrack.FileName, new TrackInfo(oTrack.Language, oTrack.Name), 0, oTrack.DefaultTrack, oTrack.ForcedTrack, oTrack);
+                            subtitles[i] = new MuxStream(oTrack.FileName, oTrack.Language, oTrack.Name, 0, oTrack.DefaultTrack, oTrack.ForcedTrack, oTrack);
                             i++;
                         }
                     }

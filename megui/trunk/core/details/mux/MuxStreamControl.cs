@@ -38,6 +38,7 @@ namespace MeGUI.core.details.mux
             subtitleLanguage.Items.AddRange(new List<string>(LanguageSelectionContainer.Languages.Keys).ToArray());
         }
 
+        private MkvInfoTrack _mkvInfoTrack;
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public MuxStream Stream
         {
@@ -46,10 +47,7 @@ namespace MeGUI.core.details.mux
                 if (string.IsNullOrEmpty(input.Filename))
                     return null;
 
-                string language = null;
-                if (subtitleLanguage.Text != null && LanguageSelectionContainer.Languages.ContainsKey(subtitleLanguage.Text))
-                    language = LanguageSelectionContainer.Languages[subtitleLanguage.Text];
-                return new MuxStream(input.Filename, subtitleLanguage.Text, subName.Text, (int)audioDelay.Value, chkDefaultStream.Checked, chkForceStream.Checked);
+                return new MuxStream(input.Filename, subtitleLanguage.Text, subName.Text, (int)audioDelay.Value, chkDefaultStream.Checked, chkForceStream.Checked, _mkvInfoTrack);
             }
 
             set
@@ -62,11 +60,17 @@ namespace MeGUI.core.details.mux
 
                 input.Filename = value.path;
                 if (!string.IsNullOrEmpty(value.language))
-                    subtitleLanguage.Text = value.language;
+                {
+                    if (LanguageSelectionContainer.Languages.ContainsValue(value.language))
+                        subtitleLanguage.Text = LanguageSelectionContainer.lookupISOCode(value.language);
+                    else
+                        subtitleLanguage.Text = value.language;
+                }
                 subName.Text = value.name;
                 audioDelay.Value = value.delay;
                 chkDefaultStream.Checked = value.bDefaultTrack;
                 chkForceStream.Checked = value.bForceTrack;
+                _mkvInfoTrack = value.MuxOnlyInfo;
             }
         }
 
