@@ -675,6 +675,7 @@ namespace MeGUI
 
             if (audioTracks != null)
             {
+                // OneClick mode
                 foreach (OneClickAudioTrack ocAudioTrack in audioTracks)
                 {
                     if (ocAudioTrack.DirectMuxAudio != null)
@@ -689,6 +690,24 @@ namespace MeGUI
                     {
                         allAudioToMux.Add(ocAudioTrack.AudioJob.ToMuxStream());
                         allInputAudioTypes.Add(ocAudioTrack.AudioJob.ToMuxableType());
+                    }
+                }
+            }
+            else
+            {
+                // AutoEncode mode
+                foreach (AudioJob stream in audioStreams)
+                {
+                    allAudioToMux.Add(stream.ToMuxStream());
+                    allInputAudioTypes.Add(stream.ToMuxableType());
+                }
+
+                foreach (MuxStream muxStream in muxOnlyAudio)
+                {
+                    if (VideoUtil.guessAudioMuxableType(muxStream.path, true) != null)
+                    {
+                        allInputAudioTypes.Add(VideoUtil.guessAudioMuxableType(muxStream.path, true));
+                        allAudioToMux.Add(muxStream);
                     }
                 }
             }

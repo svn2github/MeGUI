@@ -1,3 +1,5 @@
+2035 [AudoEncode] fixed audio muxing
+     [x264] cosmetics
 2034 [AutoEncode] fixed AutoEncode
 2033 [OneClick] fixed editing of mkv mux jobs
 2032 [OneClick] preserve audio track order
