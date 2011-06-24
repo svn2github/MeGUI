@@ -169,7 +169,7 @@ namespace MeGUI
             xmlchap.WriteStartElement("ChapterAtom");
             xmlchap.WriteStartElement("ChapterDisplay");
             xmlchap.WriteElementString("ChapterString", c.Name);
-            xmlchap.WriteElementString("ChapterLanguage", LangCode == null ? "und" : LangCode);
+            xmlchap.WriteElementString("ChapterLanguage", String.IsNullOrEmpty(LangCode) ? "und" : LangCode);
             xmlchap.WriteEndElement();
             xmlchap.WriteElementString("ChapterUID", Convert.ToString(rndb.Next(1, Int32.MaxValue)));
             if (c.Time.ToString().Length == 8)

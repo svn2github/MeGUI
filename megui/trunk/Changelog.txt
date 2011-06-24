@@ -1,3 +1,4 @@
+2036 [Chapter Creator] fixed language tag creation
 2035 [AudoEncode] fixed audio muxing
      [x264] cosmetics
 2034 [AutoEncode] fixed AutoEncode

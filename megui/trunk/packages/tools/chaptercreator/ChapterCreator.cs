@@ -591,7 +591,7 @@ namespace MeGUI
                                 {
                                     pgc = frm.ProgramChain;
                                     if (pgc.FramesPerSecond == 0) pgc.FramesPerSecond = 25.0;
-                                    if (pgc.LangCode == null) pgc.LangCode = "und";
+                                    if (String.IsNullOrEmpty(pgc.LangCode)) pgc.LangCode = "und";
                                 }
                             }
                             FreshChapterView();
