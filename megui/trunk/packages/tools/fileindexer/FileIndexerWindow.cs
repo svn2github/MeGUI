@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2011  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -127,6 +127,7 @@ namespace MeGUI
 			this.mainForm = mainForm;
 			this.vUtil = new VideoUtil(mainForm);
 			this.jobUtil = new JobUtil(mainForm);
+            _oLog = mainForm.Log.Info("FileIndexer");
             CheckDGIIndexer();
 		}
 
@@ -659,7 +660,7 @@ namespace MeGUI
 		}
 		private void openVideo(string fileName)
 		{
-            MediaInfoFile iFile = new MediaInfoFile(fileName);
+            MediaInfoFile iFile = new MediaInfoFile(fileName, ref _oLog);
 
             strVideoCodec = iFile.VideoCodecString;
             strVideoScanType = iFile.VideoScanType;
@@ -685,11 +686,7 @@ namespace MeGUI
             // if the input container is MKV get the MkvInfo
             oMkvInfo = null;
             if (txtContainerInformation.Text.Trim().ToUpper().Equals("MATROSKA"))
-            {
-                if (_oLog == null)
-                    _oLog = mainForm.Log.Info("FileIndexer");
                 oMkvInfo = new MkvInfo(input.Filename, ref _oLog);
-            }
 
             generateAudioList();
 

@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2011  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -43,71 +43,6 @@ namespace MeGUI
     /// </summary>
     public class AudioUtil
     {
-
-        /// gets ID from audio stream using MediaInfo
-        /// </summary>
-        /// <param name="infoFile">the file to be analyzed</param>
-        /// <param name="count">the counter</param>
-        /// <returns>the audio track ID found</returns>
-        public static int getIDFromAudioStream(string fileName)
-        {
-            MediaInfo info;
-            int TrackID = 0;
-            try
-            {
-                info = new MediaInfo(fileName);
-                if (info.Audio.Count > 0)
-                {
-                    MediaInfoWrapper.AudioTrack atrack = info.Audio[0];
-                    TrackID = Int32.Parse(atrack.ID);
-                }
-            }
-            catch (Exception i)
-            {
-                MessageBox.Show("The following error ocurred when trying to get Media info for file " + fileName + "\r\n" + i.Message, "Error parsing mediainfo data", MessageBoxButtons.OK);
-            }
-            return TrackID;
-        }
-
-        /// gets SBR/PS flag from AAC streams using MediaInfo
-        /// </summary>
-        /// <param name="infoFile">the file to be analyzed</param>
-        /// <param name="count">the counter</param>
-        /// <returns>the flag found</returns>
-        public static int getFlagFromAACStream(string fileName)
-        {
-            MediaInfo info;
-            int flag = -1;
-            try
-            {
-                info = new MediaInfo(fileName);
-                if (info.Audio.Count > 0)
-                {
-                    MediaInfoWrapper.AudioTrack atrack = info.Audio[0];
-                    if (atrack.Format == "AAC")
-                    {
-                        flag = 0;
-                        if (atrack.FormatSettingsSBR == "Yes")
-                        {
-                            if (atrack.FormatSettingsPS == "Yes")
-                                 flag = 2;
-                            else flag = 1;
-                        }
-                        if (atrack.SamplingRate == "24000")
-                        {
-                            if ((atrack.Channels == "2") || (atrack.Channels == "1")) // workaround for raw aac
-                                flag = 1;
-                        }
-                    }
-                }
-            }
-            catch (Exception i)
-            {
-                MessageBox.Show("The following error occurred when trying to get Media info for file " + fileName + "\r\n" + i.Message, "Error parsing mediainfo data", MessageBoxButtons.OK);
-            }
-            return flag;
-        }
-
         /// <summary>
         /// returns all audio streams that can be encoded or muxed
         /// </summary>
@@ -218,7 +153,7 @@ namespace MeGUI
     public class AudioTrackInfo
     {
         private string nbChannels, type, samplingRate, containerType, description, channelPositions;
-        private int index, trackID;
+        private int index, trackID, aacFlag;
         public AudioTrackInfo()
             : this(null, null, null, 0)
         {
@@ -229,6 +164,7 @@ namespace MeGUI
             this.nbChannels = nbChannels;
             this.type = type;
             this.trackID = trackID;
+            aacFlag = -1;
         }
 
         public string Language
@@ -298,6 +234,12 @@ namespace MeGUI
         {
             get { return samplingRate; }
             set { samplingRate = value; }
+        }
+
+        public int AACFlag
+        {
+            get { return aacFlag; }
+            set { aacFlag = value; }
         }
 
         public override string ToString()

@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2011  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -940,8 +940,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                 log.LogEvent("The 64 bit mode of x264 has been disabled", ImageType.Error);
             }
 
-            if (!su.HasError && !su.WasAborted)
-                compileFinalStats();
+            base.doExitConfig();
         }
     }
 }

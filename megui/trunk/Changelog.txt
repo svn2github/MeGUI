@@ -1,3 +1,5 @@
+2037 mediainfo enhancements
+     mediainfo details are written into the log for most files/jobs
 2036 [Chapter Creator] fixed language tag creation
 2035 [AudoEncode] fixed audio muxing
      [x264] cosmetics

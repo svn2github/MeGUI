@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2011  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -232,12 +232,16 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                 CultureInfo ci = new CultureInfo("en-us");
                 StringBuilder sb = new StringBuilder();
 
+                MediaInfoFile oVideoInfo = null;
                 if (!string.IsNullOrEmpty(settings.VideoInput))
                 {
+                    oVideoInfo = new MediaInfoFile(settings.VideoInput, ref log);
                     sb.Append("-add \"" + settings.VideoInput);
-                    if (settings.VideoInput.ToLower().EndsWith(".mp4"))
+                    if (oVideoInfo.ContainerFileType == ContainerType.MP4)
                     {
-                        int trackID = VideoUtil.getIDFromFirstVideoStream(settings.VideoInput);
+                        int trackID = 0;
+                        if (oVideoInfo.HasVideo)
+                            trackID = oVideoInfo.FirstVideoTrackID;
                         sb.Append("#trackID=" + trackID);
                     }
                     if (settings.Framerate.HasValue)
@@ -249,12 +253,15 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                         sb.Append(":name=" + settings.VideoName);
                     sb.Append("\"");
                 }
-                if (!string.IsNullOrEmpty(settings.MuxedInput))
+                else if (!string.IsNullOrEmpty(settings.MuxedInput))
                 {
+                    oVideoInfo = new MediaInfoFile(settings.VideoInput, ref log);
                     sb.Append(" -add \"" + settings.MuxedInput);
-                    if (settings.MuxedInput.ToLower().EndsWith(".mp4"))
+                    if (oVideoInfo.ContainerFileType == ContainerType.MP4)
                     {
-                        int trackID = VideoUtil.getIDFromFirstVideoStream(settings.MuxedInput);
+                        int trackID = 0;
+                        if (oVideoInfo.HasVideo)
+                            trackID = oVideoInfo.FirstVideoTrackID;
                         sb.Append("#trackID=" + trackID);
                     }
                     if (settings.Framerate.HasValue)
@@ -269,12 +276,25 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                 foreach (object o in settings.AudioStreams)
                 {
                     MuxStream stream = (MuxStream)o;
-                    sb.Append(" -add \"" + stream.path);
-                    if (stream.path.ToLower().EndsWith(".mp4") || stream.path.ToLower().EndsWith(".m4a"))
+                    MediaInfoFile oInfo = new MediaInfoFile(stream.path, ref log);
+
+                    if (!oInfo.HasAudio)
                     {
-                        int trackID = AudioUtil.getIDFromAudioStream(stream.path);
+                        log.Error("No audio track found: " + stream.path);
+                        continue;
+                    }
+
+                    sb.Append(" -add \"" + stream.path);
+                    if (oInfo.ContainerFileType == ContainerType.MP4)
+                    {
+                        int trackID = 0;
+                        int heaac_flag = -1;
+                        if (oInfo.AudioTracks.Count > 0)
+                        {
+                            trackID = oInfo.AudioTracks[0].TrackID;
+                            heaac_flag = oInfo.AudioTracks[0].AACFlag;
+                        }
                         sb.Append("#trackID=" + trackID);
-                        int heaac_flag = AudioUtil.getFlagFromAACStream(stream.path);
                         switch (heaac_flag)
                         {
                             case 1: sb.Append(":sbr"); break;
@@ -282,9 +302,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                             default: sb.Append(""); break;
                         }
                     }
-                    if (stream.path.ToLower().EndsWith(".aac"))
+                    else if (oInfo.ACodecs[0] == AudioCodec.AAC)
                     {
-                        int heaac_flag = AudioUtil.getFlagFromAACStream(stream.path);
+                        int heaac_flag = -1;
+                        if (oInfo.AudioTracks.Count > 0)
+                            heaac_flag = oInfo.AudioTracks[0].AACFlag;
                         switch (heaac_flag)
                         {
                             case 1: sb.Append(":sbr"); break;

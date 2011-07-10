@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2011  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -92,7 +92,15 @@ namespace MeGUI
         }
 
         protected virtual void doExitConfig()
-        { }
+        {
+            if (su.HasError || su.WasAborted)
+                return;
+
+            if (!String.IsNullOrEmpty(job.Output) && File.Exists(job.Output))
+            {
+                MediaInfoFile oInfo = new MediaInfoFile(job.Output, ref log);
+            }
+        }
 
         // returns true if the exit code yields a meaningful answer
         protected virtual bool checkExitCode

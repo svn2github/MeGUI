@@ -99,11 +99,18 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                 
                 sb.Append("-o \"" + settings.MuxedOutput + "\"");
 
+                MediaInfoFile oVideoInfo = null; 
                 if (!string.IsNullOrEmpty(settings.VideoInput))
                 {
-                    if (settings.VideoInput.ToLower().EndsWith(".mp4") || settings.VideoInput.ToLower().EndsWith(".mkv"))
-                         trackID = VideoUtil.getIDFromFirstVideoStream(settings.VideoInput);
-                    else trackID = 0;
+                    oVideoInfo = new MediaInfoFile(settings.VideoInput, ref log);
+                    if (oVideoInfo.ContainerFileType == ContainerType.MP4 || oVideoInfo.ContainerFileType == ContainerType.MKV)
+                    {
+                        trackID = 0;
+                        if (oVideoInfo.HasVideo)
+                            trackID = oVideoInfo.FirstVideoTrackID;
+                    }
+                    else
+                        trackID = 0;
                     sb.Append(" --engage keep_bitstream_ar_info"); // assuming that SAR info is already in the stream...
                     if (!string.IsNullOrEmpty(settings.VideoName))
                         sb.Append(" --track-name \"" + trackID + ":" + settings.VideoName.Replace("\"","\\\"") + "\"");
@@ -112,12 +119,17 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                     sb.Append(" \"--compression\" \"" + trackID + ":none\"");
                     sb.Append(" -d " + trackID + " --no-chapters -A -S \"" + settings.VideoInput + "\"");                    
                 }
-                
-                if (!string.IsNullOrEmpty(settings.MuxedInput))
+                else if(!string.IsNullOrEmpty(settings.MuxedInput))
                 {
-                    if (settings.MuxedInput.ToLower().EndsWith(".mp4") || settings.MuxedInput.ToLower().EndsWith(".mkv"))
-                         trackID = VideoUtil.getIDFromFirstVideoStream(settings.MuxedInput);
-                    else trackID = 0;
+                    oVideoInfo = new MediaInfoFile(settings.MuxedInput, ref log);
+                    if (oVideoInfo.ContainerFileType == ContainerType.MP4 || oVideoInfo.ContainerFileType == ContainerType.MKV)
+                    {
+                        trackID = 0;
+                        if (oVideoInfo.HasVideo)
+                            trackID = oVideoInfo.FirstVideoTrackID;
+                    }
+                    else 
+                        trackID = 0;
                     if (settings.DAR.HasValue)
                         sb.Append(" --aspect-ratio " + trackID + ":" + settings.DAR.Value.X + "/" + settings.DAR.Value.Y);
                     else
@@ -133,19 +145,34 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                 foreach (object o in settings.AudioStreams)
                 {
                     MuxStream stream = (MuxStream)o;
-                    trackID = 0; int heaac_flag = 0; 
-                    if (stream.path.ToLower().EndsWith(".mp4") || stream.path.ToLower().EndsWith(".m4a"))
+                    MediaInfoFile oInfo = new MediaInfoFile(stream.path, ref log);
+
+                    if (!oInfo.HasAudio)
                     {
-                        trackID = AudioUtil.getIDFromAudioStream(stream.path);
-                        heaac_flag = AudioUtil.getFlagFromAACStream(stream.path);
+                        log.Error("No audio track found: " + stream.path);
+                        continue;
+                    }
+
+                    trackID = 0; int heaac_flag = 0;
+                    if (oInfo.ContainerFileType == ContainerType.MP4)
+                    {
+                        trackID = 0;
+                        heaac_flag = -1;
+                        if (oInfo.AudioTracks.Count > 0)
+                        {
+                            trackID = oInfo.AudioTracks[0].TrackID;
+                            heaac_flag = oInfo.AudioTracks[0].AACFlag;
+                        }
                         if (heaac_flag == 1)
                             sb.Append(" --aac-is-sbr "+ trackID + ":1");
                         else if (heaac_flag == 0)
                             sb.Append(" --aac-is-sbr " + trackID + ":0");
                     }
-                    else if (stream.path.ToLower().EndsWith(".aac"))
+                    else if (oInfo.ACodecs[0] == AudioCodec.AAC)
                     {
-                        heaac_flag = AudioUtil.getFlagFromAACStream(stream.path);
+                        heaac_flag = -1;
+                        if (oInfo.AudioTracks.Count > 0)
+                            heaac_flag = oInfo.AudioTracks[0].AACFlag;
                         if (heaac_flag == 1)
                             sb.Append(" --aac-is-sbr 0:1");
                         else if (heaac_flag == 0)

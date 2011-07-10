@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2011  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -200,7 +200,17 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
         private void raiseEvent()
         {
             if (su.IsComplete = (su.IsComplete || su.WasAborted || su.HasError))
+            {
                 createLog();
+
+                if (su.HasError || su.WasAborted)
+                    return;
+
+                if (!String.IsNullOrEmpty(audioJob.Output) && File.Exists(audioJob.Output))
+                {
+                    MediaInfoFile oInfo = new MediaInfoFile(audioJob.Output, ref _log);
+                }
+            }
             if (StatusUpdate != null)
                 StatusUpdate(su);
         }
@@ -543,16 +553,15 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             return false;
         }
 
-        private bool OpenSourceWithDirectShow(out StringBuilder sbOpen)
+        private bool OpenSourceWithDirectShow(out StringBuilder sbOpen, MediaInfoFile oInfo)
         {
             sbOpen = new StringBuilder();
 
             try
             {
-                MediaInfo info = new MediaInfo(audioJob.Input);
-                if (info.Audio.Count > 0)
+                if (oInfo.HasAudio)
                 {
-                    if (info.Video.Count > 0)
+                    if (oInfo.HasVideo)
                         sbOpen.AppendFormat("DirectShowSource(\"{0}\", video=false){1}", audioJob.Input, Environment.NewLine);
                     else 
                         sbOpen.AppendFormat("DirectShowSource(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
@@ -716,6 +725,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             string id = _uniqueId;
             string tmp = Path.Combine(Path.GetTempPath(), id);
 
+            MediaInfoFile oInfo = new MediaInfoFile(audioJob.Input, ref log);
+
             bool bFound = false;
             if (audioJob.Settings.PreferredDecoder == AudioDecodingEngine.NicAudio)
             {
@@ -723,7 +734,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 if (!bFound)
                     bFound = OpenSourceWithFFAudioSource(out script);
                 if (!bFound)
-                    bFound = OpenSourceWithDirectShow(out script);
+                    bFound = OpenSourceWithDirectShow(out script, oInfo);
             }
             else if (audioJob.Settings.PreferredDecoder == AudioDecodingEngine.FFAudioSource)
             {
@@ -731,11 +742,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 if (!bFound)
                     bFound = OpenSourceWithNicAudio(out script);
                 if (!bFound)
-                    bFound = OpenSourceWithDirectShow(out script);
+                    bFound = OpenSourceWithDirectShow(out script, oInfo);
             }
             else
             {
-                bFound = OpenSourceWithDirectShow(out script);
+                bFound = OpenSourceWithDirectShow(out script, oInfo);
                 if (!bFound)
                     bFound = OpenSourceWithNicAudio(out script);
                 if (!bFound)
@@ -805,17 +816,16 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                     }
                     else
                     {
-                        MediaInfoFile info = new MediaInfoFile(audioJob.Input);
-                        if (info.AudioTracks.Count == 0)
+                        if (!oInfo.HasAudio)
                         {
                             log.LogEvent("no audio file detected: " + audioJob.Input, ImageType.Error);
                             break;
                         }
-                        strChannelPositions = info.AudioTracks[0].ChannelPositions;
-                        script.Append(@"# detected channels: " + info.AudioTracks[0].NbChannels + Environment.NewLine);
-                        script.Append(@"# detected channel positions: " + info.AudioTracks[0].ChannelPositions + Environment.NewLine);
+                        strChannelPositions = oInfo.AudioTracks[0].ChannelPositions;
+                        script.Append(@"# detected channels: " + oInfo.AudioTracks[0].NbChannels + Environment.NewLine);
+                        script.Append(@"# detected channel positions: " + oInfo.AudioTracks[0].ChannelPositions + Environment.NewLine);
                         int iChannelCount = 0;
-                        int.TryParse(info.AudioTracks[0].NbChannels.Split(' ')[0], out iChannelCount);
+                        int.TryParse(oInfo.AudioTracks[0].NbChannels.Split(' ')[0], out iChannelCount);
                         if (iChannelCount <= 2)
                         {
                             log.LogEvent("ignoring downmix as there are only " + iChannelCount + " channels", ImageType.Information);

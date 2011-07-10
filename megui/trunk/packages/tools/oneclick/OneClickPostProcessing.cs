@@ -506,7 +506,12 @@ namespace MeGUI
             denoiseLines = ScriptServer.GetDenoiseLines(avsSettings.Denoise, (DenoiseFilterType)avsSettings.DenoiseMethod);
 
             if (!keepInputResolution)
-                resizeLine = ScriptServer.GetResizeLine(!signalAR || avsSettings.Mod16Method == mod16Method.resize, horizontalResolution, scriptVerticalResolution, (ResizeFilterType)avsSettings.ResizeMethod);
+            {
+                if (horizontalResolution <= 0 || scriptVerticalResolution <= 0)
+                    _log.Error("Error in detection of output resolution: " + horizontalResolution + "x" + scriptVerticalResolution);
+                else
+                    resizeLine = ScriptServer.GetResizeLine(!signalAR || avsSettings.Mod16Method == mod16Method.resize, horizontalResolution, scriptVerticalResolution, (ResizeFilterType)avsSettings.ResizeMethod);
+            }
 
             string newScript = ScriptServer.CreateScriptFromTemplate(avsSettings.Template, inputLine, cropLine, resizeLine, denoiseLines, deinterlaceLines);
 

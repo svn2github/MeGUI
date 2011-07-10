@@ -257,16 +257,16 @@ namespace MeGUI
         
         public void openInput(string fileName)
         {
-            MediaInfoFile iFile = new MediaInfoFile(fileName);
+            if (_oLog == null)
+                _oLog = mainForm.Log.Info("OneClick");
+
+            MediaInfoFile iFile = new MediaInfoFile(fileName, ref _oLog);
             if (!iFile.recommendIndexer(out oIndexerToUse))
             {
                 input.Filename = "";
                 MessageBox.Show("This file cannot be used in OneClick mode.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-
-            if (_oLog == null)
-                _oLog = mainForm.Log.Info("OneClick");
 
             // if the input container is MKV get the MkvInfo
             if (iFile.ContainerFileTypeString.ToUpper().Equals("MATROSKA"))
@@ -529,7 +529,7 @@ namespace MeGUI
                         else
                         {
                             aInput = audioTrack[i].SelectedText;
-                            MediaInfoFile oInfo = new MediaInfoFile(aInput);
+                            MediaInfoFile oInfo = new MediaInfoFile(aInput, ref _oLog);
                             strAudioCodec = oInfo.AudioTracks[0].Type;
                             info = oInfo.AudioTracks[0].TrackInfo;
                             strLanguage = oInfo.AudioTracks[0].Language;

@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2011  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -128,12 +128,8 @@ namespace MeGUI
                         string strSourceFile = line.Substring(0, line.LastIndexOf(" "));
                         if (File.Exists(strSourceFile))
                         {
-                            int unused2;
-                            System.Collections.Generic.List<AudioTrackInfo> unused1;
-                            Dar? dar1;
-                            VideoUtil vUtil = new VideoUtil(MainForm.Instance);
-                            vUtil.getSourceMediaInfo(strSourceFile, out unused1, out unused2, out dar1);
-                            dar = (Dar)dar1;
+                            MediaInfoFile oInfo = new MediaInfoFile(strSourceFile);
+                            dar = oInfo.Info.DAR;
                         }
                         else
                         {
