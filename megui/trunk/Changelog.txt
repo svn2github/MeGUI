@@ -1,3 +1,4 @@
+2038 [Video Player] fixed video preview window for some avs scripts (e.g. using ImageSource)
 2037 mediainfo enhancements
      mediainfo details are written into the log for most files/jobs
 2036 [Chapter Creator] fixed language tag creation
