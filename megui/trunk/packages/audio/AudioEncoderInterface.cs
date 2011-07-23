@@ -1081,7 +1081,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                         _encoderCommandLine = "-b " + m.Bitrate + " --cbr -h - \"{0}\"";
                         break;
                     case BitrateManagementMode.ABR:
-                        _encoderCommandLine = "--abr " + m.Bitrate + " -h - \"{0}\"";
+                        _encoderCommandLine = "--abr " + m.AbrBitrate + " -h - \"{0}\"";
                         break;
                 }
             }
