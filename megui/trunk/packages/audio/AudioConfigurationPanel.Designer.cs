@@ -196,7 +196,9 @@ namespace MeGUI.core.details.audio
             "Change to 44100 Hz",
             "Change to 48000 Hz",
             "Speed-up (23.976 to 25)",
-            "Slow-down (25 to 23.976)"});
+            "Slow-down (25 to 23.976)",
+            "Speed-up (24 to 25)",
+            "Slow-down (25 to 24)"});
             this.cbSampleRate.Location = new System.Drawing.Point(126, 55);
             this.cbSampleRate.Name = "cbSampleRate";
             this.cbSampleRate.Size = new System.Drawing.Size(259, 21);

@@ -962,6 +962,12 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 case 7:
                     script.Append("SSRC((AudioRate()*1001+480)/960).AssumeSampleRate(AudioRate())" + Environment.NewLine);
                     break;
+                case 8:
+                    script.Append("AssumeSampleRate((AudioRate()*25)/24).SSRC(AudioRate())" + Environment.NewLine);
+                    break;
+                case 9:
+                    script.Append("SSRC((AudioRate()*25)/24).AssumeSampleRate(AudioRate())" + Environment.NewLine);
+                    break;
             }
 
             // put Normalize() after downmix cases >> http://forum.doom9.org/showthread.php?p=1166117#post1166117

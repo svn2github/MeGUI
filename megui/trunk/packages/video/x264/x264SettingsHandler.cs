@@ -118,7 +118,6 @@ namespace MeGUI.packages.video.x264
                     
                     _xs.ColorPrim = _xs.Transfer = _xs.ColorMatrix = 1;
                     _xs.SampleAR = 1;
-                    
                 }
                 else if (hres == 720 && vres == 576)
                 {
