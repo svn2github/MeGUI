@@ -132,6 +132,8 @@ namespace MeGUI
         private CheckBox chkSelectHDTracks;
         private Button btnClearOutputDirecoty;
         private Button button1;
+        private NumericUpDown ffmsThreads;
+        private Label lblffmsThreads;
         private XmlDocument ContextHelp = new XmlDocument();
 		#region start / stop
 		public SettingsForm()
@@ -151,6 +153,7 @@ namespace MeGUI
             chkEnable64bitX264.Checked = true;
             chkEnable64bitX264.Visible = false;
 #endif
+            ffmsThreads.Maximum = System.Environment.ProcessorCount;
         }
 
         /// <summary>
@@ -170,6 +173,7 @@ namespace MeGUI
                 return;
             }
             toolTipHelp.SetToolTip(chkAlwaysMuxMKV, SelectHelpText("alwaysmuxmkv"));
+            toolTipHelp.SetToolTip(ffmsThreads, SelectHelpText("ffmsthreads"));
         }
 
         /// <summary>
@@ -291,6 +295,8 @@ namespace MeGUI
             this.nbPasses = new System.Windows.Forms.NumericUpDown();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.lblffmsThreads = new System.Windows.Forms.Label();
+            this.ffmsThreads = new System.Windows.Forms.NumericUpDown();
             this.chkSelectHDTracks = new System.Windows.Forms.CheckBox();
             this.chkEnable64bitX264 = new System.Windows.Forms.CheckBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
@@ -329,6 +335,7 @@ namespace MeGUI
             ((System.ComponentModel.ISupportInitialize)(this.nbPasses)).BeginInit();
             this.tabPage2.SuspendLayout();
             this.groupBox6.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ffmsThreads)).BeginInit();
             this.groupBox5.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.vobGroupBox.SuspendLayout();
@@ -746,8 +753,8 @@ namespace MeGUI
             // 
             // defaultOutputDir
             // 
-            this.defaultOutputDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.defaultOutputDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.defaultOutputDir.Filename = "";
             this.defaultOutputDir.Filter = null;
             this.defaultOutputDir.FilterIndex = 0;
@@ -1130,14 +1137,47 @@ namespace MeGUI
             // 
             // groupBox6
             // 
+            this.groupBox6.Controls.Add(this.lblffmsThreads);
+            this.groupBox6.Controls.Add(this.ffmsThreads);
             this.groupBox6.Controls.Add(this.chkSelectHDTracks);
             this.groupBox6.Controls.Add(this.chkEnable64bitX264);
-            this.groupBox6.Location = new System.Drawing.Point(4, 251);
+            this.groupBox6.Location = new System.Drawing.Point(4, 230);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(467, 130);
+            this.groupBox6.Size = new System.Drawing.Size(467, 151);
             this.groupBox6.TabIndex = 33;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = " Misc ";
+            // 
+            // lblffmsThreads
+            // 
+            this.lblffmsThreads.AutoSize = true;
+            this.lblffmsThreads.Location = new System.Drawing.Point(10, 32);
+            this.lblffmsThreads.Name = "lblffmsThreads";
+            this.lblffmsThreads.Size = new System.Drawing.Size(106, 13);
+            this.lblffmsThreads.TabIndex = 31;
+            this.lblffmsThreads.Text = "FFMS Thread Count:";
+            // 
+            // ffmsThreads
+            // 
+            this.ffmsThreads.Location = new System.Drawing.Point(122, 30);
+            this.ffmsThreads.Maximum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.ffmsThreads.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
+            this.ffmsThreads.Name = "ffmsThreads";
+            this.ffmsThreads.Size = new System.Drawing.Size(38, 21);
+            this.ffmsThreads.TabIndex = 30;
+            this.ffmsThreads.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
             // chkSelectHDTracks
             // 
@@ -1156,7 +1196,7 @@ namespace MeGUI
             this.chkEnable64bitX264.AutoSize = true;
             this.chkEnable64bitX264.Checked = true;
             this.chkEnable64bitX264.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkEnable64bitX264.Location = new System.Drawing.Point(13, 31);
+            this.chkEnable64bitX264.Location = new System.Drawing.Point(225, 54);
             this.chkEnable64bitX264.Name = "chkEnable64bitX264";
             this.chkEnable64bitX264.Size = new System.Drawing.Size(148, 17);
             this.chkEnable64bitX264.TabIndex = 28;
@@ -1206,7 +1246,7 @@ namespace MeGUI
             // 
             this.groupBox4.Controls.Add(this.btnClearMP4TempDirectory);
             this.groupBox4.Controls.Add(this.tempDirMP4);
-            this.groupBox4.Location = new System.Drawing.Point(4, 168);
+            this.groupBox4.Location = new System.Drawing.Point(5, 147);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(467, 77);
             this.groupBox4.TabIndex = 31;
@@ -1224,8 +1264,8 @@ namespace MeGUI
             // 
             // tempDirMP4
             // 
-            this.tempDirMP4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.tempDirMP4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tempDirMP4.Filename = "";
             this.tempDirMP4.Filter = null;
             this.tempDirMP4.FilterIndex = 0;
@@ -1247,7 +1287,7 @@ namespace MeGUI
             this.vobGroupBox.Controls.Add(this.autoForceFilm);
             this.vobGroupBox.Location = new System.Drawing.Point(4, 85);
             this.vobGroupBox.Name = "vobGroupBox";
-            this.vobGroupBox.Size = new System.Drawing.Size(467, 77);
+            this.vobGroupBox.Size = new System.Drawing.Size(467, 56);
             this.vobGroupBox.TabIndex = 29;
             this.vobGroupBox.TabStop = false;
             this.vobGroupBox.Text = " DGIndex Tools";
@@ -1380,6 +1420,7 @@ namespace MeGUI
             this.tabPage2.ResumeLayout(false);
             this.groupBox6.ResumeLayout(false);
             this.groupBox6.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ffmsThreads)).EndInit();
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
             this.groupBox4.ResumeLayout(false);
@@ -1532,6 +1573,7 @@ namespace MeGUI
                 settings.ForceRawAVCExtension = forcerawavcuse.Checked;
                 settings.AutoUpdateServerSubList = cbAutoUpdateServerSubList.SelectedIndex;
                 settings.Use64bitX264 = chkEnable64bitX264.Checked;
+                settings.FFMSThreads = Decimal.ToInt32(ffmsThreads.Value);
 				return settings;
 			}
 			set
@@ -1589,6 +1631,10 @@ namespace MeGUI
                 forcerawavcuse.Checked = settings.ForceRawAVCExtension;
                 cbAutoUpdateServerSubList.SelectedIndex = settings.AutoUpdateServerSubList;
                 chkEnable64bitX264.Checked = settings.Use64bitX264;
+                if (ffmsThreads.Maximum < settings.FFMSThreads)
+                    ffmsThreads.Value = ffmsThreads.Maximum;
+                else
+                    ffmsThreads.Value = settings.FFMSThreads;
 			}
 		}
 		#endregion

@@ -56,7 +56,7 @@ namespace MeGUI
                     modeColumnWidth, statusColumnWidth, ownerColumnWidth, startColumnWidth, endColumnWidth, fpsColumnWidth,
                     updateFormUpdateColumnWidth, updateFormNameColumnWidth, updateFormLocalVersionColumnWidth, 
                     updateFormServerVersionColumnWidth, updateFormLocalDateColumnWidth, updateFormServerDateColumnWidth, 
-                    updateFormPlatformColumnWidth, updateFormStatusColumnWidth;
+                    updateFormPlatformColumnWidth, updateFormStatusColumnWidth, ffmsThreads;
         private SourceDetectorSettings sdSettings;
         private AutoEncodeDefaultsSettings aedSettings;
         private DialogSettings dialogSettings;
@@ -184,6 +184,7 @@ namespace MeGUI
             endColumnWidth = 55;
             fpsColumnWidth = 35;
             bEnsureCorrectPlaybackSpeed = false;
+            ffmsThreads = 1;
         }
 
         private string getDownloadPath(string strPath)
@@ -996,6 +997,12 @@ namespace MeGUI
         {
             get { return maxComplexity; }
             set { maxComplexity = value; }
+        }
+
+        public int FFMSThreads
+        {
+            get { return ffmsThreads; }
+            set { ffmsThreads = value; }
         }
 
         #endregion

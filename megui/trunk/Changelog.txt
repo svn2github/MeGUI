@@ -1,3 +1,5 @@
+2039 [FFMSIndexer] added option to select the number of decoding threads. default and recommended value is 1
+                   changed LoadCPlugin to LoadPlugi for the x64 plugin (requires ffms r507+)
 2038 [Video Player] fixed video preview window for some avs scripts (e.g. using ImageSource)
 2037 mediainfo enhancements
      mediainfo details are written into the log for most files/jobs

@@ -163,18 +163,10 @@ namespace MeGUI
                     break;
                 case PossibleSources.ffindex:
                     strDLLPath = Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.FFMSIndexPath), "ffms2.dll");
-#if x86
                     if (input.ToLower().EndsWith(".ffindex"))
-                        inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + input.Substring(0, input.Length - 8) + "\")" + VideoUtil.getAssumeFPS(fps, input);
+                        inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + input.Substring(0, input.Length - 8) + "\"" + (MainForm.Instance.Settings.FFMSThreads > 0 ? ", threads=" + MainForm.Instance.Settings.FFMSThreads : String.Empty) + ")" + VideoUtil.getAssumeFPS(fps, input);
                     else
-                        inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + input + "\")" + VideoUtil.getAssumeFPS(fps, input);
-#endif
-#if x64
-                    if (input.ToLower().EndsWith(".ffindex"))
-                        inputLine = "LoadCPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + input.Substring(0, input.Length - 8) + "\")" + VideoUtil.getAssumeFPS(fps, input);
-                    else
-                        inputLine = "LoadCPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + input + "\")" + VideoUtil.getAssumeFPS(fps, input);
-#endif
+                        inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + input + "\"" + (MainForm.Instance.Settings.FFMSThreads > 0 ? ", threads=" + MainForm.Instance.Settings.FFMSThreads : String.Empty) + ")" + VideoUtil.getAssumeFPS(fps, input);
                     break;
                 case PossibleSources.dgi:
                     strDLLPath = Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.DgnvIndexPath), "DGDecodeNV.dll");

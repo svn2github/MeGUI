@@ -839,5 +839,13 @@ the encoding directly in the mkv container format (non/slow seekable) or if it w
 muxed with mkvmerge.
       </Basic>
     </alwaysmuxmkv>
+	<ffmsthreads name="FFMS thread count">
+      <Basic>
+The number of decoding threads to request from ffms. Setting it to less than or equal to zero 
+means it defaults to the number of logical CPU's reported by Windows. 
+Note that a value not equal to 1 may lead to crashes.
+Recommended Value: 1
+      </Basic>
+    </ffmsthreads>
   </Form>
 </ContextHelp>
