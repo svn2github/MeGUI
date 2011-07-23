@@ -152,7 +152,7 @@ namespace MeGUI
                     {
                         if (analyseUpdate != null)
                         {
-                            while (running)
+                            while (running && continueWorking)
                             {
                                 analyseUpdate(i, frameCount);
                                 Thread.Sleep(500);
@@ -172,8 +172,7 @@ namespace MeGUI
             catch (Exception ex)
             {
                 error = true;
-                errorMessage = "Error opening analysis script " + ex.Message + "\r\n" +
-                    "Check to make sure you have TIVTC.dll in your AviSynth plugins directory.\r\n" + ex.Message;
+                errorMessage = "Error opening analysis script:\r\n" + ex.Message;
                 finishProcessing();
             }
         }
@@ -222,8 +221,6 @@ namespace MeGUI
             }
 
             string logFileName = getLogFileName((scriptType == 1) ? "ff_interlace-" + Guid.NewGuid().ToString("N") + ".log" : "interlace-" + Guid.NewGuid().ToString("N") + ".log");
-
-
 
             if (File.Exists(logFileName))
                 File.Delete(logFileName);

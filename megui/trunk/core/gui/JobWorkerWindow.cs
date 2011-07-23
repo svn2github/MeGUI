@@ -465,7 +465,7 @@ namespace MeGUI.core.gui
                     log.LogEvent("Job completed");
                     log.Collapse();
 
-                    if (!jobFailed  && mainForm.Settings.DeleteCompletedJobs)
+                    if (!jobFailed && mainForm.Settings.DeleteCompletedJobs)
                         mainForm.Jobs.RemoveCompletedJob(job);
                     else
                         mainForm.Jobs.saveJob(job, mainForm.MeGUIPath);     //AAA: save state more often
@@ -600,6 +600,11 @@ namespace MeGUI.core.gui
                 catch (JobRunException e)
                 {
                     throw new JobStartException("Calling setup of processor failed with error '" + e.Message + "'", ExceptionType.Error);
+                }
+
+                if (currentProcessor == null)
+                {
+                    throw new JobStartException("starting job failed", ExceptionType.Error);
                 }
 
                 // Do JobControl setup

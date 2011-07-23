@@ -2305,10 +2305,16 @@ namespace MeGUI
         public void finishedAnalysis(SourceInfo info, bool error, string errorMessage)
         {
             if (error)
+            {
+                detector.stop();
                 Invoke(new MethodInvoker(delegate
                 {
                     MessageBox.Show(this, errorMessage, "Error in analysis", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    deintStatusLabel.Text = "Analysis failed!";
+                    analyseButton.Text = "Analyse";
+                    this.deintProgressBar.Value = 0;
                 }));
+            }
             else
             {
                 try

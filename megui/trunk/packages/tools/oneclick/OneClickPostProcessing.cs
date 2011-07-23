@@ -489,6 +489,7 @@ namespace MeGUI
                 finished = false;
                 sd.analyse();
                 waitTillAnalyseFinished();
+                sd.stop();
                 deinterlaceLines = filters[0].Script;
                 _log.LogValue("Deinterlacing used", deinterlaceLines);
             }
@@ -569,12 +570,12 @@ namespace MeGUI
         }
 
         private void waitTillAnalyseFinished()
+        {
+            while (!finished)
             {
-                while (!finished)
-                {
-                    Thread.Sleep(500);
-                }
+                Thread.Sleep(500);
             }
+        }
 
         #endregion
 
