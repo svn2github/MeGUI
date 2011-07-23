@@ -99,12 +99,7 @@ namespace MeGUI
                 {
                     StringBuilder strAVSScript = new StringBuilder();
                     String strDLLPath = Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.FFMSIndexPath), "ffms2.dll");
-#if x86
                     strAVSScript.AppendLine("LoadPlugin(\"" + strDLLPath + "\")");
-#endif
-#if x64
-                    strAVSScript.AppendLine("LoadCPlugin(\"" + strDLLPath + "\")");
-#endif
                     strAVSScript.AppendLine("FFAudioSource(\"" + job.Input + "\", " + iCurrentTrack + ")");
 
                     // is this an audio track?

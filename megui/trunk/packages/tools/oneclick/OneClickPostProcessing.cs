@@ -165,8 +165,12 @@ namespace MeGUI
 
                 //job.PostprocessingProperties.AudioJobs = AudioUtil.getConfiguredAudioJobs(job.PostprocessingProperties.AudioJobs);
 
-                _log.LogEvent("Desired size: " + job.PostprocessingProperties.OutputSize);
+                if (job.PostprocessingProperties.VideoTrackToMux != null)
+                    _log.LogEvent("Don't encode video: True");
+                else
+                    _log.LogEvent("Desired size: " + job.PostprocessingProperties.OutputSize);
                 _log.LogEvent("Split size: " + job.PostprocessingProperties.Splitting);
+                
 
                 string videoInput = String.Empty;
                 VideoStream myVideo = new VideoStream();

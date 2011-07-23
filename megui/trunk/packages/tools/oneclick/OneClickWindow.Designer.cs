@@ -751,9 +751,9 @@ namespace MeGUI
             this.chkDontEncodeVideo.AutoSize = true;
             this.chkDontEncodeVideo.Location = new System.Drawing.Point(303, 23);
             this.chkDontEncodeVideo.Name = "chkDontEncodeVideo";
-            this.chkDontEncodeVideo.Size = new System.Drawing.Size(114, 17);
+            this.chkDontEncodeVideo.Size = new System.Drawing.Size(118, 17);
             this.chkDontEncodeVideo.TabIndex = 40;
-            this.chkDontEncodeVideo.Text = "Keep original track";
+            this.chkDontEncodeVideo.Text = "Don\'t encode video";
             this.chkDontEncodeVideo.UseVisualStyleBackColor = true;
             this.chkDontEncodeVideo.CheckedChanged += new System.EventHandler(this.chkDontEncodeVideo_CheckedChanged);
             // 

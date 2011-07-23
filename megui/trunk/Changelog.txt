@@ -1,3 +1,4 @@
+2042 [OneClick] enhanced error handling
 2041 [Audio Encoder] added 24 <--> 25 conversions
 2040 [Source Detector] enhanced error handling
 2039 [FFMSIndexer] added option to select the number of decoding threads. default and recommended value is 1

@@ -529,12 +529,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
         private bool OpenSourceWithFFAudioSource(out StringBuilder sbOpen)
         {
             sbOpen = new StringBuilder();
-#if x86
             sbOpen.AppendFormat("LoadPlugin(\"{0}\"){1}", Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.FFMSIndexPath), "ffms2.dll"), Environment.NewLine);
-#endif
-#if x64
-            sbOpen.AppendFormat("LoadCPlugin(\"{0}\"){1}", Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.FFMSIndexPath), "ffms2.dll"), Environment.NewLine);
-#endif
             sbOpen.AppendFormat("FFAudioSource(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
             _log.LogEvent("Trying to open the file with FFAudioSource()", ImageType.Information);
             string strErrorText = String.Empty;

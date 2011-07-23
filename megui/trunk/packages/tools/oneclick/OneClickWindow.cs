@@ -557,8 +557,8 @@ namespace MeGUI
                     {
                         dpp.SignalAR = dpp.AutoCrop = dpp.AutoDeinterlace = false;
                         dpp.KeepInputResolution = dpp.PrerenderJob = dpp.UseChaptersMarks = false;
-                        dpp.OutputSize = FileSize.Empty;
-                        dpp.HorizontalOutputResolution = 0;
+                        dpp.OutputSize = null;
+                        dpp.HorizontalOutputResolution = Decimal.ToInt32(horizontalResolution.Maximum);
                     }
                     else
                     {
@@ -582,19 +582,26 @@ namespace MeGUI
                     }
 
                     // Video mux handling
-                    if (chkDontEncodeVideo.Checked && dpp.Container == ContainerType.MKV)
+                    if (chkDontEncodeVideo.Checked)
                     {
-                        if (oMkvInfo != null)
+                        if (dpp.Container == ContainerType.MKV)
                         {
-                            foreach (MkvInfoTrack oTrack in oMkvInfo.Track)
+                            if (oMkvInfo != null)
                             {
-                                if (oTrack.Type == MkvInfoTrackType.Video)
+                                foreach (MkvInfoTrack oTrack in oMkvInfo.Track)
                                 {
-                                    dpp.VideoTrackToMux = oTrack;
-                                    break;
+                                    if (oTrack.Type == MkvInfoTrackType.Video)
+                                    {
+                                        dpp.VideoTrackToMux = oTrack;
+                                        break;
+                                    }
                                 }
                             }
+                            else
+                                _oLog.LogEvent("\"Don't encode video\" has been disabled as at the moment only the source container MKV is supported"); 
                         }
+                        else
+                            _oLog.LogEvent("\"Don't encode video\" has been disabled as at the moment only the target container MKV is supported");
                     }
                     
                     // chapter handling
