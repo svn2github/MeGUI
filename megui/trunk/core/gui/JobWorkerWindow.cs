@@ -377,7 +377,6 @@ namespace MeGUI.core.gui
             try
             {
                 currentProcessor.stop();
-                HideProcessWindow();
             }
             catch (JobRunException er)
             {

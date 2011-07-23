@@ -1,3 +1,4 @@
+2043 [Flac] enhanced output handling if file already exists
 2042 [OneClick] enhanced error handling
 2041 [Audio Encoder] added 24 <--> 25 conversions
 2040 [Source Detector] enhanced error handling

@@ -203,12 +203,12 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             {
                 createLog();
 
-                if (su.HasError || su.WasAborted)
-                    return;
-
-                if (!String.IsNullOrEmpty(audioJob.Output) && File.Exists(audioJob.Output))
+                if (!su.HasError && !su.WasAborted)
                 {
-                    MediaInfoFile oInfo = new MediaInfoFile(audioJob.Output, ref _log);
+                    if (!String.IsNullOrEmpty(audioJob.Output) && File.Exists(audioJob.Output))
+                    {
+                        MediaInfoFile oInfo = new MediaInfoFile(audioJob.Output, ref _log);
+                    }
                 }
             }
             if (StatusUpdate != null)
@@ -987,7 +987,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 _mustSendWavHeaderToEncoderStdIn = true;
                 FlacSettings n = audioJob.Settings as FlacSettings;
                 _encoderExecutablePath = this._settings.FlacPath;
-                _encoderCommandLine = "--channel-map=none -" + n.CompressionLevel + " - -o \"{0}\""; 
+                _encoderCommandLine = "-f --channel-map=none -" + n.CompressionLevel + " - -o \"{0}\""; 
             }
             if (audioJob.Settings is AC3Settings)
             {
