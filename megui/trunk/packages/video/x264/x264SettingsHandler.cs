@@ -52,17 +52,18 @@ namespace MeGUI.packages.video.x264
         /// <param name="fps_n">fps numerator</param>
         /// <param name="fps_d">fps denominator</param>
         /// <returns>whether the source could be opened or not</returns>
-        public void CheckInputFile(int hres, int vres, int fps_n, int fps_d)
+        public void CheckInputFile(Dar? d, int hres, int vres, int fps_n, int fps_d)
         {
             if (_log == null)
                 return;
 
             if (_device.BluRay == true)
             {
-                if (hres == 1920 && vres == 1080)
+                if ((hres == 1920 || hres == 1440) && vres == 1080)
                 {
                     string fps = fps_n + "/" + fps_d;
-                    if (fps.Equals("24000/1001") || fps.Equals("24/1"))
+                    Double dfps = Double.Parse(fps_n.ToString()) / fps_d;
+                    if (fps.Equals("24000/1001") || dfps == 24)
                     {
                         if (_xs.InterlacedMode != x264Settings.x264InterlacedModes.progressive)
                         {
@@ -71,14 +72,14 @@ namespace MeGUI.packages.video.x264
                         }
                         _xs.FakeInterlaced = _xs.PicStruct = false;
                     }
-                    else if (fps.Equals("25/1") || fps.Equals("30000/1001"))
+                    else if (dfps == 25 || fps.Equals("30000/1001"))
                     {
                         if (_xs.InterlacedMode == x264Settings.x264InterlacedModes.progressive)
                             _xs.FakeInterlaced = _xs.PicStruct = true;
                         else
                             _xs.FakeInterlaced = _xs.PicStruct = false;
                     }
-                    else if (fps.Equals("30/1"))
+                    else if (dfps == 30)
                     {
                         _xs.FakeInterlaced = _xs.PicStruct = false;
                         if (_xs.InterlacedMode == x264Settings.x264InterlacedModes.progressive)
@@ -91,7 +92,10 @@ namespace MeGUI.packages.video.x264
                         _log.LogEvent(strDevice + "does not support " + fps_n + "/" + fps_d + " fps with a resolution of " + hres + "x" + vres + ". Supported are 24000/1001, 24/1, 25/1, 30000/1001 and 30/1.", ImageType.Warning);
                     
                     _xs.ColorPrim = _xs.Transfer = _xs.ColorMatrix = 1;
-                    _xs.SampleAR = 1;
+                    if (hres == 1440)
+                        _xs.SampleAR = 2;
+                    else
+                        _xs.SampleAR = 1;
                     _xs.X264PullDown = 0;
                 }
                 else if (hres == 1280 && vres == 720)
@@ -105,7 +109,8 @@ namespace MeGUI.packages.video.x264
                     _xs.X264PullDown = 0;
 
                     string fps = fps_n + "/" + fps_d;
-                    if (fps.Equals("25/1") || fps.Equals("30000/1001"))
+                    Double dfps = Double.Parse(fps_n.ToString()) / fps_d;
+                    if (dfps == 25 || fps.Equals("30000/1001"))
                     {
                         if (_xs.X264PullDown != 4)
                         {
@@ -113,7 +118,7 @@ namespace MeGUI.packages.video.x264
                             _log.LogEvent(strDevice + "changing --pulldown to double as it is required for encoding of " + hres + "x" + vres + " with " + fps_n + "/" + fps_d + " fps.", ImageType.Warning);
                         }
                     }
-                    else if (!fps.Equals("24000/1001") && !fps.Equals("24/1") && !fps.Equals("50/1") && !fps.Equals("60000/1001"))
+                    else if (!fps.Equals("24000/1001") && dfps != 24 && dfps != 50 && !fps.Equals("60000/1001"))
                         _log.LogEvent(strDevice + "does not support " + fps_n + "/" + fps_d + " fps with a resolution of " + hres + "x" + vres + ". Supported are 24000/1001, 24/1, 25/1, 30000/1001, 50/1 and 60000/1001.", ImageType.Warning);
                     
                     _xs.ColorPrim = _xs.Transfer = _xs.ColorMatrix = 1;
@@ -121,8 +126,8 @@ namespace MeGUI.packages.video.x264
                 }
                 else if (hres == 720 && vres == 576)
                 {
-                    string fps = fps_n + "/" + fps_d;
-                    if (fps.Equals("25/1"))
+                    Double dfps = Double.Parse(fps_n.ToString()) / fps_d;
+                    if (dfps == 25)
                     {
                         if (_xs.InterlacedMode == x264Settings.x264InterlacedModes.progressive)
                             _xs.FakeInterlaced = _xs.PicStruct = true;
@@ -131,10 +136,38 @@ namespace MeGUI.packages.video.x264
 
                         if (_xs.SampleAR != 5 && _xs.SampleAR != 6)
                         {
-                            _xs.SampleAR = 5;
-                            _log.LogEvent(strDevice + "assume --sar 16:11 as only 16:11 or 12:11 are supported with a resolution of " + hres + "x" + vres + ".", ImageType.Warning);
+                            if (!d.HasValue)
+                            {
+                                _xs.SampleAR = 6;
+                                _log.LogEvent(strDevice + "assume --sar 12:11 as only 16:11 or 12:11 are supported with a resolution of " + hres + "x" + vres + ".", ImageType.Warning);
+                            }
+                            else
+                            {
+                                Sar s = d.Value.ToSar(hres, vres);
+                                Double dDiff16 = 16.0 / 11 - Double.Parse(s.X.ToString()) / s.Y;
+                                Double dDiff4 = 12.0 / 11 - Double.Parse(s.X.ToString()) / s.Y;
+                                if (dDiff16 <= 0)
+                                {
+                                    _xs.SampleAR = 5;
+                                    _log.LogEvent(strDevice + "assume --sar 16:11 as only 16:11 or 12:11 are supported with a resolution of " + hres + "x" + vres + ".", ImageType.Warning);
+                                }
+                                else if (dDiff4 >= 0)
+                                {
+                                    _xs.SampleAR = 6;
+                                    _log.LogEvent(strDevice + "assume --sar 12:11 as only 16:11 or 12:11 are supported with a resolution of " + hres + "x" + vres + ".", ImageType.Warning);
+                                }
+                                else if (Math.Min(dDiff16, -dDiff4) == dDiff16)
+                                {
+                                    _xs.SampleAR = 5;
+                                    _log.LogEvent(strDevice + "assume --sar 16:11 as only 16:11 or 12:11 are supported with a resolution of " + hres + "x" + vres + ".", ImageType.Warning);
+                                }
+                                else
+                                {
+                                    _xs.SampleAR = 6;
+                                    _log.LogEvent(strDevice + "assume --sar 12:11 as only 16:11 or 12:11 are supported with a resolution of " + hres + "x" + vres + ".", ImageType.Warning);
+                                }
+                            }
                         }
-
                     }
                     else
                         _log.LogEvent(strDevice + "does not support " + fps_n + "/" + fps_d + " fps with a resolution of " + hres + "x" + vres + ". Supported is 25/1.", ImageType.Warning);
@@ -147,6 +180,41 @@ namespace MeGUI.packages.video.x264
                     {
                         _xs.SampleAR = 8;
                         _log.LogEvent(strDevice + "assume --sar 40:33 as only 40:33 or 10:11 are supported with a resolution of " + hres + "x" + vres + ".", ImageType.Warning);
+                    }
+
+                    if (_xs.SampleAR != 8 && _xs.SampleAR != 4)
+                    {
+                        if (!d.HasValue)
+                        {
+                            _xs.SampleAR = 4;
+                            _log.LogEvent(strDevice + "assume --sar 10:11 as only 40:33 or 10:11 are supported with a resolution of " + hres + "x" + vres + ".", ImageType.Warning);
+                        }
+                        else
+                        {
+                            Sar s = d.Value.ToSar(hres, vres);
+                            Double dDiff16 = 16.0 / 11 - Double.Parse(s.X.ToString()) / s.Y;
+                            Double dDiff4 = 12.0 / 11 - Double.Parse(s.X.ToString()) / s.Y;
+                            if (dDiff16 <= 0)
+                            {
+                                _xs.SampleAR = 8;
+                                _log.LogEvent(strDevice + "assume --sar 40:33 as only 40:33 or 10:11 are supported with a resolution of " + hres + "x" + vres + ".", ImageType.Warning);
+                            }
+                            else if (dDiff4 >= 0)
+                            {
+                                _xs.SampleAR = 4;
+                                _log.LogEvent(strDevice + "assume --sar 10:11 as only 40:33 or 10:11 are supported with a resolution of " + hres + "x" + vres + ".", ImageType.Warning);
+                            }
+                            else if (Math.Min(dDiff16, -dDiff4) == dDiff16)
+                            {
+                                _xs.SampleAR = 8;
+                                _log.LogEvent(strDevice + "assume --sar 40:33 as only 40:33 or 10:11 are supported with a resolution of " + hres + "x" + vres + ".", ImageType.Warning);
+                            }
+                            else
+                            {
+                                _xs.SampleAR = 4;
+                                _log.LogEvent(strDevice + "assume --sar 10:11 as only 40:33 or 10:11 are supported with a resolution of " + hres + "x" + vres + ".", ImageType.Warning);
+                            }
+                        }
                     }
 
                     string fps = fps_n + "/" + fps_d;
@@ -180,7 +248,7 @@ namespace MeGUI.packages.video.x264
                 }
                 else
                 {
-                    _log.LogEvent(strDevice + "does not support a resolution of " + hres + "x" + vres + ". Supported are 1920x1080, 1280x720, 720x576 and 720x480.", ImageType.Warning);
+                    _log.LogEvent(strDevice + "does not support a resolution of " + hres + "x" + vres + ". Supported are 1920x1080, 1440x1080, 1280x720, 720x576 and 720x480.", ImageType.Warning);
                 }
             }
             else

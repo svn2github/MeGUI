@@ -820,7 +820,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             xs.PicStruct = oSettingsHandler.getPicStruct();
             xs.X264PullDown = oSettingsHandler.getPulldown();
 
-            oSettingsHandler.CheckInputFile(hres, vres, fps_n, fps_d);
+            oSettingsHandler.CheckInputFile(d, hres, vres, fps_n, fps_d);
 
             xs.InterlacedMode = oSettingsHandler.getInterlacedMode();
             switch (xs.InterlacedMode)
