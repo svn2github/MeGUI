@@ -597,7 +597,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                     case x264Settings.x264PresetLevelModes.slow:        if (xs.SubPelRefinement != 8) display = true; break;
                     case x264Settings.x264PresetLevelModes.slower:      if (xs.SubPelRefinement != 9) display = true; break;
                     case x264Settings.x264PresetLevelModes.veryslow:    if (xs.SubPelRefinement != 10) display = true; break;
-                    case x264Settings.x264PresetLevelModes.placebo:     if (xs.SubPelRefinement != 10) display = true; break;
+                    case x264Settings.x264PresetLevelModes.placebo:     if (xs.SubPelRefinement != 11) display = true; break;
                 }
                 if (display)
                     sb.Append("--subme " + (xs.SubPelRefinement) + " ");

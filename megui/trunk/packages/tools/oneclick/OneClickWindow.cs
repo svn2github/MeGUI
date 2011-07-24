@@ -482,6 +482,13 @@ namespace MeGUI
 
         private void goButton_Click(object sender, EventArgs e)
         {
+            if (String.IsNullOrEmpty(output.Filename) || !File.Exists(input.Filename))
+            {
+                MessageBox.Show("Please select input and output file!",
+                        "Incomplete configuration", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                return;
+            }
+
             if (Drives.ableToWriteOnThisDrive(Path.GetPathRoot(output.Filename)) || // check whether the output path is read-only
                 Drives.ableToWriteOnThisDrive(Path.GetPathRoot(workingName.Text)))
             {
@@ -553,34 +560,6 @@ namespace MeGUI
                     dpp.VideoSettings = VideoSettings.Clone();
                     dpp.Splitting = splitting.Value;
 
-                    if (chkDontEncodeVideo.Checked)
-                    {
-                        dpp.SignalAR = dpp.AutoCrop = dpp.AutoDeinterlace = false;
-                        dpp.KeepInputResolution = dpp.PrerenderJob = dpp.UseChaptersMarks = false;
-                        dpp.OutputSize = null;
-                        dpp.HorizontalOutputResolution = Decimal.ToInt32(horizontalResolution.Maximum);
-                    }
-                    else
-                    {
-                        dpp.KeepInputResolution = keepInputResolution.Checked;
-                        
-                        if (keepInputResolution.Checked)
-                        {
-                            dpp.SignalAR = dpp.AutoCrop = false;
-                            dpp.HorizontalOutputResolution = 0;
-                        }
-                        else
-                        {
-                            dpp.SignalAR = signalAR.Checked;
-                            dpp.AutoCrop = autoCrop.Checked;
-                            dpp.HorizontalOutputResolution = (int)horizontalResolution.Value;
-                        }
-                        dpp.AutoDeinterlace = autoDeint.Checked;
-                        dpp.PrerenderJob = addPrerenderJob.Checked;
-                        dpp.OutputSize = desiredSize;
-                        dpp.UseChaptersMarks = usechaptersmarks.Checked;
-                    }
-
                     // Video mux handling
                     if (chkDontEncodeVideo.Checked)
                     {
@@ -598,10 +577,37 @@ namespace MeGUI
                                 }
                             }
                             else
-                                _oLog.LogEvent("\"Don't encode video\" has been disabled as at the moment only the source container MKV is supported"); 
+                                _oLog.LogEvent("\"Don't encode video\" has been disabled as at the moment only the source container MKV is supported");
                         }
                         else
                             _oLog.LogEvent("\"Don't encode video\" has been disabled as at the moment only the target container MKV is supported");
+                    }
+
+                    if (dpp.VideoTrackToMux == null)
+                    {
+                        dpp.AutoDeinterlace = autoDeint.Checked;
+                        dpp.KeepInputResolution = keepInputResolution.Checked;
+                        dpp.OutputSize = desiredSize;
+                        dpp.PrerenderJob = addPrerenderJob.Checked;
+                        dpp.UseChaptersMarks = usechaptersmarks.Checked;
+                    }
+                    else
+                    {
+                        dpp.AutoDeinterlace = dpp.PrerenderJob = dpp.UseChaptersMarks = false;
+                        dpp.KeepInputResolution = dpp.PrerenderJob = dpp.UseChaptersMarks = false;
+                        dpp.OutputSize = null;
+                    }
+
+                    if (keepInputResolution.Checked || dpp.VideoTrackToMux != null)
+                    {
+                        dpp.SignalAR = dpp.AutoCrop = false;
+                        dpp.HorizontalOutputResolution = 0;
+                    }
+                    else
+                    {
+                        dpp.SignalAR = signalAR.Checked;
+                        dpp.AutoCrop = autoCrop.Checked;
+                        dpp.HorizontalOutputResolution = (int)horizontalResolution.Value;
                     }
                     
                     // chapter handling

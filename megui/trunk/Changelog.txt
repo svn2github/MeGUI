@@ -1,3 +1,4 @@
+2045 [x264] added --subme 11 (requires x264 revision 2037+)
 2044 [Lame] fixed always applying bitrate 128 in ABR mode
 2043 [Flac] enhanced output handling if file already exists
 2042 [OneClick] enhanced error handling
