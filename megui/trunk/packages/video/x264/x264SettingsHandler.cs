@@ -115,7 +115,7 @@ namespace MeGUI.packages.video.x264
                         if (_xs.X264PullDown != 4)
                         {
                             _xs.X264PullDown = 4;
-                            _log.LogEvent(strDevice + "changing --pulldown to double as it is required for encoding of " + hres + "x" + vres + " with " + fps_n + "/" + fps_d + " fps.", ImageType.Warning);
+                            _log.LogEvent(strDevice + "changing --pulldown to double as it is required for encoding of " + hres + "x" + vres + " with " + fps_n + "/" + fps_d + " fps.", ImageType.Information);
                         }
                     }
                     else if (!fps.Equals("24000/1001") && dfps != 24 && dfps != 50 && !fps.Equals("60000/1001"))

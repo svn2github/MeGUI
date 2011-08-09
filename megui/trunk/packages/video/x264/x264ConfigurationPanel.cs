@@ -1155,10 +1155,6 @@ namespace MeGUI.packages.video.x264
                     this.x264BitrateQuantizer.Value = 20;
             }
 
-            // Lookahead
-            if (Convert.ToInt32(x264KeyframeInterval.Value) > 250)
-                lookahead.Maximum = (int)x264KeyframeInterval.Value;
-
             // No Scenecut
             x264SCDSensitivity.Enabled = scenecut.Checked;
 
@@ -1823,11 +1819,6 @@ namespace MeGUI.packages.video.x264
         private void cqmComboBox1_SelectionChanged(object sender, string val)
         {
             genericUpdate();
-        }
-
-        private void linkx264website_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-
         }
 
         private void VisitLink()
