@@ -1302,19 +1302,19 @@ namespace MeGUI.packages.tools.hdbdextractor
         {
             if (string.IsNullOrEmpty(FolderOutputTextBox.Text))
             {
-                MessageBox.Show("Configure output target folder prior to enqueueing job.", "Enqueue Job", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
+                MessageBox.Show("Configure output target folder prior to queueing job.", "Queue Job", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
                 return;
             }
 
             if (StreamDataGridView.Rows.Count == 0)
             {
-                MessageBox.Show("Retrieve streams prior to enqueueing job.", "Enqueue Job", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
+                MessageBox.Show("Retrieve streams prior to queueing job.", "Queue Job", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
                 return;
             }
 
             if (!IsStreamCheckedForExtract())
             {
-                MessageBox.Show("Select stream(s) to extract prior to enqueueing job.", "Enqueue Job", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
+                MessageBox.Show("Select stream(s) to extract prior to queueing job.", "Queue Job", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
                 return;
             }
 

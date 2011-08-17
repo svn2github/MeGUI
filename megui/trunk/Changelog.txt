@@ -1,3 +1,4 @@
+2048 fixed spelling. Bug #3390630
 2047 [x264] fixed --rc-lookahead max value. if --keyint > 250 the lookahead max value was wrong.
 2046 [x264] blu-ray device: added 1440x1080 as supported resolution
             blu-ray device: enhanced --sar detection

@@ -161,11 +161,11 @@ namespace MeGUI.core.gui
             }
         }
 
-        internal void enqueueJob(TaggedJob j)
+        internal void queueJob(TaggedJob j)
         {
             if (InvokeRequired)
             {
-                Invoke(new MethodInvoker(delegate { enqueueJob(j); }));
+                Invoke(new MethodInvoker(delegate { queueJob(j); }));
                 return;
             }
 

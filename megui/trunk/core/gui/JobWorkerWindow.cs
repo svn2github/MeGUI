@@ -901,7 +901,7 @@ namespace MeGUI.core.gui
         internal void AddJob(TaggedJob j)
         {
             j.OwningWorker = this.Name;
-            jobQueue1.enqueueJob(j);
+            jobQueue1.queueJob(j);
             localJobs[j.Name] = j;
         }
 

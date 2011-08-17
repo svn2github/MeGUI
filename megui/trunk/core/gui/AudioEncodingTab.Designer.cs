@@ -89,7 +89,7 @@ namespace MeGUI.core.gui
             this.queueAudioButton.Name = "queueAudioButton";
             this.queueAudioButton.Size = new System.Drawing.Size(60, 23);
             this.queueAudioButton.TabIndex = 27;
-            this.queueAudioButton.Text = "Enqueue";
+            this.queueAudioButton.Text = "Queue";
             this.queueAudioButton.Click += new System.EventHandler(this.queueAudioButton_Click);
             // 
             // audioInputLabel

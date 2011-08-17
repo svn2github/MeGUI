@@ -136,7 +136,7 @@ namespace MeGUI.core.details
             workers[j.OwningWorker].RemoveJobFromQueue(j);
             j.OwningWorker = null;
             if (!jobQueue.HasJob(j))
-                jobQueue.enqueueJob(j);
+                jobQueue.queueJob(j);
             refresh();
         }
 
@@ -613,7 +613,7 @@ namespace MeGUI.core.details
             mainForm.Jobs.ResourceLock.WaitOne();
             job.Name = getFreeJobName();
             allJobs[job.Name] = job;
-            jobQueue.enqueueJob(job);
+            jobQueue.queueJob(job);
             mainForm.Jobs.ResourceLock.Release();
         }
         #endregion

@@ -76,7 +76,7 @@ namespace MeGUI
             this.queueVideoButton.Name = "queueVideoButton";
             this.queueVideoButton.Size = new System.Drawing.Size(61, 23);
             this.queueVideoButton.TabIndex = 11;
-            this.queueVideoButton.Text = "Enqueue";
+            this.queueVideoButton.Text = "Queue";
             this.queueVideoButton.Click += new System.EventHandler(this.queueVideoButton_Click);
             // 
             // addAnalysisPass
