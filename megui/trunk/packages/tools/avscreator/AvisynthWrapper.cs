@@ -26,7 +26,6 @@ using System.Text;
 
 namespace MeGUI
 {
-
     public enum AviSynthColorspace:int
     {
         Unknown = 0,
@@ -40,8 +39,6 @@ namespace MeGUI
 
 	public class AviSynthException:ApplicationException
 	{
-
-
 		public AviSynthException(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 		}
@@ -427,19 +424,38 @@ namespace MeGUI
 
         public AviSynthClip(string func, string arg , AviSynthColorspace forceColorspace, AviSynthScriptEnvironment env)
 		{
-
 			_vi = new AVSDLLVideoInfo();
             _avs =  new IntPtr(0);
             _colorSpace = AviSynthColorspace.Unknown;
             _sampleType = AudioSampleType.Unknown;
-            if(0!=dimzon_avs_init_2(ref _avs, func, arg, ref _vi, ref _colorSpace, ref _sampleType, forceColorspace.ToString()))
+            bool bOpenSuccess = false;
+
+            MainForm.Instance.AvsLock++;
+
+            Thread t = new Thread(new ThreadStart(delegate
+            {
+                System.Windows.Forms.Application.UseWaitCursor = true;
+                if (0 == dimzon_avs_init_2(ref _avs, func, arg, ref _vi, ref _colorSpace, ref _sampleType, forceColorspace.ToString()))
+                    bOpenSuccess = true;
+                MainForm.Instance.AvsLock--;
+                if (MainForm.Instance.AvsLock == 0)
+                    System.Windows.Forms.Application.UseWaitCursor = false;
+            }));
+            t.Start();
+
+            while (t.ThreadState == ThreadState.Running)
+            {
+                System.Windows.Forms.Application.DoEvents();
+                Thread.Sleep(100);
+            }
+
+            if (bOpenSuccess == false)
             {
                 string err = getLastError();
                 cleanup(false);
                 throw new AviSynthException(err);
             }
 		}
-
 
 		private void cleanup(bool disposing)
 		{

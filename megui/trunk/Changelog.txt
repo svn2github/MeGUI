@@ -1,5 +1,6 @@
+2049 open avisynth script handling improved
 2048 fixed spelling. Bug #3390630
-2047 [x264] fixed --rc-lookahead max value. if --keyint > 250 the lookahead max value was wrong.
+2047 [x264] fixed maximum --rc-lookahead value. a value > 250 was possible in rare situations. Bug #3383262
 2046 [x264] blu-ray device: added 1440x1080 as supported resolution
             blu-ray device: enhanced --sar detection
 2045 [x264] added --subme 11 (requires x264 revision 2037+)

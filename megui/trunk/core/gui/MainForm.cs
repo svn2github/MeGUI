@@ -131,11 +131,13 @@ namespace MeGUI
         private Icon taskbarIcon;
         private string strLogFile;
         private Semaphore logLock;
+        private int avsLock;
 
         public bool IsHiddenMode { get { return trayIcon.Visible; } }
         public bool IsOverlayIconActive { get { return taskbarIcon != null; } }
         public string LogFile { get { return strLogFile; } }
         public Semaphore LogLock { get { return logLock; } set { logLock = value; } }
+        public int AvsLock { get { return avsLock; } set { avsLock = value; } }
 
         public void RegisterForm(Form f)
         {
@@ -824,6 +826,7 @@ namespace MeGUI
             FileUtil.ensureDirectoryExists(strMeGUILogPath);
             strLogFile = strMeGUILogPath + @"\logfile-" + DateTime.Now.ToString("yy'-'MM'-'dd'_'HH'-'mm'-'ss") + ".log";
             logLock = new Semaphore(1, 1);
+            avsLock = 0;
             try
             {
                 logLock.WaitOne();
