@@ -1,3 +1,4 @@
+2050 [Update] added check so that files can only be installed using the correct MeGUI build
 2049 open avisynth script handling improved
 2048 fixed spelling. Bug #3390630
 2047 [x264] fixed maximum --rc-lookahead value. a value > 250 was possible in rare situations. Bug #3383262

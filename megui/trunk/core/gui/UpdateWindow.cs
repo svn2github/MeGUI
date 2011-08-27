@@ -1675,6 +1675,12 @@ namespace MeGUI
         /// <returns></returns>
         private ErrorState SaveNewFile(iUpgradeable file, Stream data)
         {
+            if (file.RequiredBuild > 0 && new System.Version(Application.ProductVersion).Build < file.RequiredBuild)
+            {
+                AddTextToLog(string.Format("Could not install module '{0}' as at least MeGUI build {1} is required.", file.Name, file.RequiredBuild), ImageType.Information);
+                return ErrorState.CouldNotSaveNewFile;
+            }
+
             string filepath = null, filename = null;
             if (file.SaveFolder != null)
                 filepath = file.SaveFolder;
