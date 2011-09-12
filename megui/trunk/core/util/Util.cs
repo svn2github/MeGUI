@@ -203,15 +203,18 @@ namespace MeGUI.core.util
         }
 
         /// <summary>
-        /// Formats the decimal according to what looks nice in MeGUI (ensures consistency
-        /// and not too many decimal places)
+        /// Formats the decimal according to what looks nice in MeGUI 
+        /// (ensures consistency and not too many decimal places)
         /// </summary>
         /// <param name="d"></param>
         /// <returns></returns>
-        public static string ToString(decimal? d)
+        public static string ToString(decimal? d, bool bNoDecimalPlaces)
         {
             if (!d.HasValue) return null;
-            return d.Value.ToString("#####.##");
+            if (bNoDecimalPlaces)
+                return d.Value.ToString("0");
+            else
+                return d.Value.ToString("0.00");
         }
 
         public static string ToStringOrNull<T>(T t)

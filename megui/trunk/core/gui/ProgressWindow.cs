@@ -417,8 +417,8 @@ namespace MeGUI
                     " / " + (Util.ToString(su.ClipLength) ?? "---");
 
                 // Current frame
-                currentVideoFrame.Text = (Util.ToString(su.NbFramesDone) ?? "---") +
-                    " / " + (Util.ToString(su.NbFramesTotal) ?? "---");
+                currentVideoFrame.Text = (Util.ToString(su.NbFramesDone, true) ?? "---") +
+                    " / " + (Util.ToString(su.NbFramesTotal, true) ?? "---");
 
                 // Data
                 videoData.Text = (su.CurrentFileSize.HasValue ? su.CurrentFileSize.Value.ToString() : "---") +
@@ -438,7 +438,7 @@ namespace MeGUI
                 // go back to the old function ;-)
                 totalTime.Text = getTimeString(su.TimeElapsed, su.PercentageDoneExact ?? 0M);
 
-                this.Text = "Status: " + (su.PercentageDoneExact ?? 0M).ToString("##.##") + " %";
+                this.Text = "Status: " + (su.PercentageDoneExact ?? 0M).ToString("0.00") + " %";
                 statusLabel.Text = su.Status ?? "";
 
                 progress.Value = su.PercentageDone;

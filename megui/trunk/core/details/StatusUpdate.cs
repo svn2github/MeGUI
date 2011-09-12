@@ -314,14 +314,14 @@ namespace MeGUI
                 // FPS
                 if (_frame.HasValue && timeElapsed.TotalSeconds > 0)
                     processingspeed =
-                        Util.ToString((decimal)_frame.Value / (decimal)timeElapsed.TotalSeconds) + " FPS";
+                        Util.ToString((decimal)_frame.Value / (decimal)timeElapsed.TotalSeconds, false) + " FPS";
                 // Other processing speeds
                 else if (_currentTime.HasValue && timeElapsed.Ticks > 0)
                     processingspeed =
-                        Util.ToString((decimal)_currentTime.Value.Ticks / (decimal)timeElapsed.Ticks) + "x realtime";
+                        Util.ToString((decimal)_currentTime.Value.Ticks / (decimal)timeElapsed.Ticks, false) + "x realtime";
                 else if (fraction.HasValue && _totalTime.HasValue && timeElapsed.Ticks > 0)
                     processingspeed =
-                        Util.ToString((decimal)_totalTime.Value.Ticks * fraction.Value / (decimal)timeElapsed.Ticks) + "x realtime";
+                        Util.ToString((decimal)_totalTime.Value.Ticks * fraction.Value / (decimal)timeElapsed.Ticks, false) + "x realtime";
 
 
                 // Processing time

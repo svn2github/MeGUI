@@ -1,3 +1,28 @@
+2050 [Update] added check so that files can only be installed using the correct MeGUI build
+2049 open avisynth script handling improved
+2048 fixed spelling. Bug #3390630
+2047 [x264] fixed maximum --rc-lookahead value. a value > 250 was possible in rare situations. Bug #3383262
+2046 [x264] blu-ray device: added 1440x1080 as supported resolution
+            blu-ray device: enhanced --sar detection
+2045 [x264] added --subme 11 (requires x264 revision 2037+)
+2044 [Lame] fixed always applying bitrate 128 in ABR mode
+2043 [Flac] enhanced output handling if file already exists
+2042 [OneClick] enhanced error handling
+2041 [Audio Encoder] added 24 <--> 25 conversions
+2040 [Source Detector] enhanced error handling
+2039 [FFMSIndexer] added option to select the number of decoding threads. default and recommended value is 1
+                   changed LoadCPlugin to LoadPlugi for the x64 plugin (requires ffms r507+)
+2038 [Video Player] fixed video preview window for some avs scripts (e.g. using ImageSource)
+2037 mediainfo enhancements
+     mediainfo details are written into the log for most files/jobs
+2036 [Chapter Creator] fixed language tag creation
+2035 [AudoEncode] fixed audio muxing
+     [x264] cosmetics
+2034 [AutoEncode] fixed AutoEncode
+2033 [OneClick] fixed editing of mkv mux jobs
+2032 [OneClick] preserve audio track order
+2031 [OneClick] added option to mux the audio source file only if the codec is the same as requested
+2029 [x264] --keyint will not be applied twice if specified in the custom command line
 2028 [AVS Script Creator] added a selection box if opening an indexable file directly
 2027 [x264] fixed applying of "Clever (TM) anamorphic encoding" DAR values. Bug #3302642
 2026 [OneClick] changed handling of failed automatic deinterlacing process
