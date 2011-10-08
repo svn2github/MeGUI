@@ -192,6 +192,7 @@ namespace MeGUI.core.details.mux
             this.chkForceStream.Text = "forced track";
             this.chkForceStream.UseVisualStyleBackColor = true;
             this.chkForceStream.Visible = false;
+            this.chkForceStream.CheckedChanged += new System.EventHandler(this.chkForceStream_CheckedChanged);
             // 
             // removeSubtitleTrack
             // 

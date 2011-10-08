@@ -42,7 +42,7 @@ namespace MeGUI
                        defaultLanguage1, defaultLanguage2, afterEncodingCommand, videoExtension, audioExtension,
                        strLastDestinationPath, strLastSourcePath, dgnvIndexPath, tempDirMP4, flacPath,
                        httpproxyaddress, httpproxyport, httpproxyuid, httpproxypwd, defaultOutputDir, strMeGUIPath,
-                       mkvInfoPath, mkvExtractPath;
+                       mkvInfoPath, mkvExtractPath, appendToForcedStreams;
         private bool recalculateMainMovieBitrate, autoForceFilm, autoStartQueue, enableMP3inMP4, autoOpenScript,
                      overwriteStats, keep2of3passOutput, autoUpdate, deleteCompletedJobs, deleteIntermediateFiles,
                      deleteAbortedOutput, openProgressWindow, useadvancedtooltips, autoSelectHDStreams, autoscroll, 
@@ -185,6 +185,7 @@ namespace MeGUI
             fpsColumnWidth = 35;
             bEnsureCorrectPlaybackSpeed = false;
             ffmsThreads = 1;
+            appendToForcedStreams = "";
         }
 
         private string getDownloadPath(string strPath)
@@ -973,6 +974,15 @@ namespace MeGUI
         {
             get { return httpproxypwd; }
             set { httpproxypwd = value; }
+        }
+
+        /// <summary>
+        /// gets / sets the text to append to forced streams
+        /// </summary>
+        public string AppendToForcedStreams
+        {
+            get { return appendToForcedStreams; }
+            set { appendToForcedStreams = value; }
         }
 
         public string MainAudioFormat

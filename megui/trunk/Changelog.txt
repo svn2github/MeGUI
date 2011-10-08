@@ -1,3 +1,4 @@
+2053 [Settings] added option to append a text to forced track names
 2052 [Lame] fixed applying bitrate in ABR mode 
 2051 [progress window] changed number formatting
 

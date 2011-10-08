@@ -134,6 +134,8 @@ namespace MeGUI
         private Button button1;
         private NumericUpDown ffmsThreads;
         private Label lblffmsThreads;
+        private Label lblForcedName;
+        private TextBox txtForcedName;
         private XmlDocument ContextHelp = new XmlDocument();
 		#region start / stop
 		public SettingsForm()
@@ -316,6 +318,8 @@ namespace MeGUI
             this.autoEncodeDefaultsButton = new System.Windows.Forms.Button();
             this.toolTipHelp = new System.Windows.Forms.ToolTip(this.components);
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
+            this.txtForcedName = new System.Windows.Forms.TextBox();
+            this.lblForcedName = new System.Windows.Forms.Label();
             groupBox1 = new System.Windows.Forms.GroupBox();
             groupBox1.SuspendLayout();
             this.otherGroupBox.SuspendLayout();
@@ -1137,6 +1141,8 @@ namespace MeGUI
             // 
             // groupBox6
             // 
+            this.groupBox6.Controls.Add(this.lblForcedName);
+            this.groupBox6.Controls.Add(this.txtForcedName);
             this.groupBox6.Controls.Add(this.lblffmsThreads);
             this.groupBox6.Controls.Add(this.ffmsThreads);
             this.groupBox6.Controls.Add(this.chkSelectHDTracks);
@@ -1378,6 +1384,22 @@ namespace MeGUI
             this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 1;
             // 
+            // txtForcedName
+            // 
+            this.txtForcedName.Location = new System.Drawing.Point(225, 78);
+            this.txtForcedName.Name = "txtForcedName";
+            this.txtForcedName.Size = new System.Drawing.Size(234, 21);
+            this.txtForcedName.TabIndex = 32;
+            // 
+            // lblForcedName
+            // 
+            this.lblForcedName.AutoSize = true;
+            this.lblForcedName.Location = new System.Drawing.Point(11, 81);
+            this.lblForcedName.Name = "lblForcedName";
+            this.lblForcedName.Size = new System.Drawing.Size(163, 13);
+            this.lblForcedName.TabIndex = 33;
+            this.lblForcedName.Text = "add text to forced track names: ";
+            // 
             // SettingsForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
@@ -1574,6 +1596,7 @@ namespace MeGUI
                 settings.AutoUpdateServerSubList = cbAutoUpdateServerSubList.SelectedIndex;
                 settings.Use64bitX264 = chkEnable64bitX264.Checked;
                 settings.FFMSThreads = Decimal.ToInt32(ffmsThreads.Value);
+                settings.AppendToForcedStreams = txtForcedName.Text;
 				return settings;
 			}
 			set
@@ -1631,6 +1654,7 @@ namespace MeGUI
                 forcerawavcuse.Checked = settings.ForceRawAVCExtension;
                 cbAutoUpdateServerSubList.SelectedIndex = settings.AutoUpdateServerSubList;
                 chkEnable64bitX264.Checked = settings.Use64bitX264;
+                txtForcedName.Text = settings.AppendToForcedStreams;
                 if (ffmsThreads.Maximum < settings.FFMSThreads)
                     ffmsThreads.Value = ffmsThreads.Maximum;
                 else
