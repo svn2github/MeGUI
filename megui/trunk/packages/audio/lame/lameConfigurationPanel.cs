@@ -59,18 +59,9 @@ namespace MeGUI.packages.audio.lame
                     ms.BitrateMode = BitrateManagementMode.ABR;
                 else
                     ms.BitrateMode = BitrateManagementMode.CBR;
-                switch (ms.BitrateMode)
-                {
-                    case BitrateManagementMode.CBR:
-                        ms.Bitrate = (int)cbrBitrate.SelectedItem;
-                        break;
-                    case BitrateManagementMode.ABR:
-                        ms.AbrBitrate = (int)abrValue.Value;
-                        break;
-                    case BitrateManagementMode.VBR:
-                        ms.Quality = (int)vbrValue.Value;
-                        break;
-                }
+                ms.Bitrate = (int)cbrBitrate.SelectedItem;
+                ms.AbrBitrate = (int)abrValue.Value;
+                ms.Quality = (int)vbrValue.Value;
                 return ms;
 	        }
 	        set
