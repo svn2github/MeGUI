@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2011  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -80,7 +80,8 @@ namespace MeGUI.core.util
             log.LogValue("Calculated desired bitrate", (int)data.VideoBitrate + " kbit/s");
 
             foreach (TaggedJob t in b.VideoJobs)
-                ((VideoJob)t.Job).Settings.BitrateQuantizer = (int)data.VideoBitrate;
+                if (t.Job is VideoJob)
+                    ((VideoJob)t.Job).Settings.BitrateQuantizer = (int)data.VideoBitrate;
 
             return log;
         }
