@@ -1,3 +1,4 @@
+2055 [AVS Script Creator] fixed opening the wrong video preview
 2054 [pre-rendering job] fixed file size targeting with AutoEncode and OneClick
 2053 [Settings] added option to append a text to forced track names
 2052 [Lame] fixed applying bitrate in ABR mode 

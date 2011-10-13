@@ -206,6 +206,9 @@ namespace MeGUI
             this.resizeFilterType.SelectedIndexChanged += new System.EventHandler(this.resizeFilterType_SelectedIndexChanged);
             this.cbNvDeInt.SelectedIndexChanged += new System.EventHandler(this.cbNvDeInt_SelectedIndexChanged);
 
+            this.originalScript = String.Empty;
+            this.isPreviewMode = false;
+
 			player = null;
 			this.crop.Checked = false;
 			this.cropLeft.Value = 0;
