@@ -1,3 +1,4 @@
+2057 [Adaptive Muxer] fixed long delay when adding more than 4 tracks. Bug #3404061
 2056 [VideoPlayer] fixed handling of non default DPI values
 2055 [AVS Script Creator] fixed opening the wrong video preview in some rare circumstances
 2054 [pre-rendering job] fixed file size targeting with AutoEncode and OneClick

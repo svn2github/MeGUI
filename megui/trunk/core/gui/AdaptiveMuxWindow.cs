@@ -191,10 +191,26 @@ namespace MeGUI
             getTypes(out audioCodecs, out audioTypes, out subTypes);
 
             List<MuxableType> allTypes = new List<MuxableType>();
+            List<MuxableType> tempTypes = new List<MuxableType>();
+            tempTypes.AddRange(audioTypes);
+            tempTypes.AddRange(subTypes);
+
             if (videoType != null)
                 allTypes.Add(videoType);
-            allTypes.AddRange(audioTypes);
-            allTypes.AddRange(subTypes);
+            foreach (MuxableType oType in tempTypes)
+            {
+                bool bFound = false;
+                foreach (MuxableType oAllType in allTypes)
+                {
+                    if (oType.ToString().Equals(oAllType.ToString()))
+                    {
+                        bFound = true;
+                        break;
+                    }
+                }
+                if (!bFound)
+                    allTypes.Add(oType);
+            }
 
             List<ContainerType> supportedOutputTypes;
 
