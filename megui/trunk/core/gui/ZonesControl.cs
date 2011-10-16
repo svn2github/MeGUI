@@ -268,6 +268,7 @@ namespace MeGUI
                         if (creditsStartFrame > 0)
                             player.CreditsStart = this.creditsStartFrame;
                         player.Show();
+                        player.SetScreenSize();
                     }
                     else
                         return;

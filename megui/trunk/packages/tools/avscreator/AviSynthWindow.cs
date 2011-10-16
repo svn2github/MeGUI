@@ -1481,7 +1481,8 @@ namespace MeGUI
                 reader = player.Reader;
                 isPreviewMode = true;
                 sendCropValues();
-				player.Show();
+                player.Show();
+                player.SetScreenSize();
                 this.TopMost = player.TopMost = true;
                 if (!mainForm.Settings.AlwaysOnTop)
                     this.TopMost = player.TopMost = false;
@@ -1944,9 +1945,10 @@ namespace MeGUI
             this.isPreviewMode = false;
             if (player.loadVideo(mainForm, originalScript, PREVIEWTYPE.REGULAR, false, originalInlineAvs, iCurrentFrame, true))
             {
-                player.Show();
                 reader = player.Reader;
                 sendCropValues();
+                player.Show();
+                player.SetScreenSize();
                 this.TopMost = player.TopMost = true;
                 if (!mainForm.Settings.AlwaysOnTop)
                     this.TopMost = player.TopMost = false;

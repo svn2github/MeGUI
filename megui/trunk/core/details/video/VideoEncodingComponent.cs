@@ -142,11 +142,10 @@ namespace MeGUI
             {
                 info.DAR = info.DAR ?? player.File.Info.DAR;
                 player.DAR = info.DAR;
-
-
                 player.IntroCreditsFrameSet += new IntroCreditsFrameSetCallback(player_IntroCreditsFrameSet);
                 player.Closed += new EventHandler(player_Closed);
                 player.Show();
+                player.SetScreenSize();
                 if (mainForm.Settings.AlwaysOnTop) player.TopMost = true;
             }
         }

@@ -626,7 +626,8 @@ namespace MeGUI
 							player.IntroEnd = this.introEndFrame;
 						if (creditsStartFrame > 0)
 							player.CreditsStart = this.creditsStartFrame;
-						player.Show();
+                        player.Show();
+                        player.SetScreenSize();
                         this.TopMost = player.TopMost = true;
                         if (!mainForm.Settings.AlwaysOnTop)
                             this.TopMost = player.TopMost = false;

@@ -64,7 +64,7 @@ namespace MeGUI
         private int zoomMaxWidth; // max width so that it can be seen completly on the screen
         private int zoomFactor; // relation between zoomWidth and zoomMaxWidth (0-100%)
         private int zoomFactorStepSize = 15; // during zoom in/out this step size wil be used
-        private int buttonPanelMinWidth = 500;
+        private int buttonPanelMinWidth;
         private bool bOriginalSize;
         private string totalTime;
         private string currentTime;
@@ -106,9 +106,22 @@ namespace MeGUI
 		public VideoPlayer()
 		{
 			InitializeComponent();
-            sizeLock = false;
             this.Resize += new EventHandler(formResized);
-            formHeightDelta = buttonPanel.Size.Height + 4 * defaultSpacing;
+
+            decimal dpiX = 96, dpiY = 96;
+            using (Graphics graphics = this.CreateGraphics())
+            {
+                dpiX = (decimal)graphics.DpiX;
+                dpiY = (decimal)graphics.DpiY;
+            }
+            dpiX /= 96;
+            dpiY /= 96;
+
+            formHeightDelta = (int)((buttonPanel.Size.Height + 4 * defaultSpacing) * dpiY);
+            buttonPanelMinWidth = (int)((showPAR.Location.X + showPAR.Size.Width) * dpiX);
+            zoomFactor = 100;
+            setZoomButtons();
+            sizeLock = false;
 		}
 
         public bool AllowClose
@@ -289,12 +302,23 @@ namespace MeGUI
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void originalSizeButton_Click(object sender, EventArgs e)
+        private void originalSizeButton_Click(object sender, EventArgs e)
         {
             bOriginalSize = true;
             zoomWidth = (int)file.Info.Width;
             zoomFactor = (int)((double)zoomWidth / zoomMaxWidth * 100.0);
+            setZoomButtons();
             resize(zoomWidth, showPAR.Checked);
+        }
+        /// <summary>
+        /// Reset the video preview to fit the input stream
+        /// </summary>
+        public void SetScreenSize()
+        {
+            if (bOriginalSize)
+                originalSizeButton_Click(null, null);
+            else
+                btnFitScreen_Click(null, null);
         }
         /// <summary>
         /// Reset the video preview to fit the input stream
@@ -306,8 +330,33 @@ namespace MeGUI
             bOriginalSize = false;
             zoomWidth = zoomMaxWidth;
             zoomFactor = 100;
+            setZoomButtons();
             SetMaxZoomWidth();
             resize(zoomWidth, showPAR.Checked);
+        }
+        private void setZoomButtons()
+        {
+            if (zoomFactor >= 100)
+            {
+                zoomInButton.Enabled = false;
+                zoomOutButton.Enabled = true;
+            }
+            else if (zoomFactor - zoomFactorStepSize > zoomFactorStepSize)
+            {
+                zoomInButton.Enabled = true;
+
+                int iZoomWidth = (int)(zoomMaxWidth * (zoomFactor - zoomFactorStepSize) / 100);
+                if (buttonPanel.Location.X + buttonPanelMinWidth < iZoomWidth)
+                    zoomOutButton.Enabled = true;
+                else
+                    zoomOutButton.Enabled = false;
+            }
+            else
+            {
+                zoomInButton.Enabled = true;
+                zoomOutButton.Enabled = false;
+            }
+
         }
         private void zoomInButton_Click(object sender, EventArgs e)
         {
@@ -319,6 +368,7 @@ namespace MeGUI
                 zoomFactor += zoomFactorStepSize;
                 if (zoomFactor > 100)
                     zoomFactor = 100;
+                setZoomButtons();
                 zoomWidth = (int)(zoomMaxWidth * zoomFactor / 100);
                 resize(zoomWidth, showPAR.Checked);
             }
@@ -346,6 +396,7 @@ namespace MeGUI
                 }
                 else
                     zoomFactor += zoomFactorStepSize;
+                setZoomButtons();
             }
         }
         /// <summary>
@@ -353,7 +404,6 @@ namespace MeGUI
         /// </summary>
         private void SetMaxZoomWidth()
         {
-            int iOldZoomMaxWidth = zoomMaxWidth;
             Size oSizeScreen = Screen.GetWorkingArea(this).Size;
             int iScreenHeight = oSizeScreen.Height - 2 * SystemInformation.FixedFrameBorderSize.Height;
             int iScreenWidth = oSizeScreen.Width - 2 * SystemInformation.FixedFrameBorderSize.Width;
@@ -401,7 +451,7 @@ namespace MeGUI
                 videoWindowHeight = (int)height;
             }
 
-            if (iOldZoomMaxWidth == 0 || zoomMaxWidth < zoomWidth)
+            if (zoomMaxWidth < zoomWidth)
                 if (!bOriginalSize)
                     btnFitScreen_Click(null, null);
                 else
@@ -734,7 +784,7 @@ namespace MeGUI
             // 
             // btnFitScreen
             // 
-            this.btnFitScreen.Location = new System.Drawing.Point(188, 49);
+            this.btnFitScreen.Location = new System.Drawing.Point(189, 49);
             this.btnFitScreen.Name = "btnFitScreen";
             this.btnFitScreen.Size = new System.Drawing.Size(26, 19);
             this.btnFitScreen.TabIndex = 9;
@@ -755,7 +805,7 @@ namespace MeGUI
             // 
             // zoomOutButton
             // 
-            this.zoomOutButton.Location = new System.Drawing.Point(214, 49);
+            this.zoomOutButton.Location = new System.Drawing.Point(215, 49);
             this.zoomOutButton.Name = "zoomOutButton";
             this.zoomOutButton.Size = new System.Drawing.Size(17, 19);
             this.zoomOutButton.TabIndex = 10;
@@ -879,7 +929,7 @@ namespace MeGUI
             this.videoPreview.Location = new System.Drawing.Point(1, 1);
             this.videoPreview.Margin = new System.Windows.Forms.Padding(0);
             this.videoPreview.Name = "videoPreview";
-            this.videoPreview.Position = 0;
+            this.videoPreview.Position = -1;
             this.videoPreview.Size = new System.Drawing.Size(274, 164);
             this.videoPreview.SpeedUp = 1D;
             this.videoPreview.TabIndex = 11;
