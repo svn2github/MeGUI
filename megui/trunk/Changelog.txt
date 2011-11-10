@@ -1,9 +1,10 @@
+2058 [MKV Muxer] improved idx subtitle handling
 2057 [Adaptive Muxer] fixed long delay when adding more than 4 tracks. Bug #3404061
 2056 [VideoPlayer] fixed handling of non default DPI values
 2055 [AVS Script Creator] fixed opening the wrong video preview in some rare circumstances
 2054 [pre-rendering job] fixed file size targeting with AutoEncode and OneClick
 2053 [Settings] added option to append a text to forced track names
-2052 [Lame] fixed applying bitrate in ABR mode 
+2052 [Lame] fixed applying bitrate in ABR mode
 2051 [progress window] changed number formatting
 
 Changelog 2028 --> 2050
@@ -61,40 +62,6 @@ Other changes:
 [x264] enhanced help
 [x264] several adjustments
 
-
-Changelog 1989 --> 2008
-
-Main changes:
-[One-Click]     if the source is a MKV file:
-                - the audio files can be demuxed if using FFMS indexer
-                - and target container is MKV the video track can be copied. Feature request #3024414
-                  added therefore a "Keep original track" checkbox for the video in the settings
-			    - and target container is MKV the subtitles will be copied
-                - the chapters will be extracted and reapplied to the output
-[Audio Encoder] added option to choose the preferred audio decoder. Feature request #3053195
-                in case the preferred audio decoder cannot decode the input file the others will be tried, too
-                default order: NicAudio, FFAudioSource, DirectShow
-[Encoder]       removed audx, snow and winamp encoder
-
-Other changes:
-[AutoEncode] fixed duplicate device type entries
-[Log] added timestamp to some log items
-[Main Window] zones button is always enabled. Bug #3243634
-[MainForm] cosmetic change
-[MKV Demuxer] added mkvextract as mkv demuxer
-[MKV Demuxer] added status information to progress window
-[MKV Muxer] added --aac-is-sbr in any case for AAC files in order to avoid a warning message
-[MKV Muxer] added support for wav input files. Feature request #3253221
-[Nero AAC Encoder] fixed cosmetic problem with wrong bitrate values in the configuration dialog. Bug #3286672
-[One-Click] enhanced chapter and qpf file handling
-[One-Click] some profile adjustments
-[profiles] during startup deprecated profiles will be removed
-[Update] added build number check so that profiles can only be installed using the correct build
-[Update] added mkvextract.exe and mkvinfo.exe to the file checks
-[Worker] fixed "shut down worker when finished local queue"
-[Worker] some cosmetics
-[x264] added option for interlaced modes --tff and --bff. --interlaced has been removed. Bug #3204337
-[x264] invalid zones will be ignored. Bug #3233068
 
 Known Problems:
 - Unicode is not supported

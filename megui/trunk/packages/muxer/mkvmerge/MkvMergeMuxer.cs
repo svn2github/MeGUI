@@ -200,7 +200,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                 foreach (object o in settings.SubtitleStreams)
                 {
                     MuxStream stream = (MuxStream)o;
-                    trackID = 0; int nb = 0; int nt = 0;
+                    trackID = 0;
                     if (stream.MuxOnlyInfo != null)
                     {
                         trackID = stream.MuxOnlyInfo.TrackID;
@@ -226,63 +226,44 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                         idxReader.readFileProperties(stream.path, out subTracks);
                         foreach (SubtitleInfo strack in subTracks)
                         {
-                            if (nt > 0)
-                            {
-                                if (!string.IsNullOrEmpty(stream.language))
+                            foreach (KeyValuePair<string, string> strLanguage in LanguageSelectionContainer.Languages)
+                            {  
+                                if (trackID == 0 && !string.IsNullOrEmpty(stream.language) 
+                                    && stream.language.ToLower().Equals(strLanguage.Key.ToLower()))
                                 {
-                                    foreach (KeyValuePair<string, string> strLanguage in LanguageSelectionContainer.Languages)
-                                    {
-                                        if (stream.language.ToLower().Equals(strLanguage.Key.ToLower()))
-                                        {
-                                            sb.Append(" --language " + strack.Index.ToString() + ":" + strLanguage.Value);
-                                            break;
-                                        }
-                                    }
+                                    sb.Append(" --language " + trackID + ":" + strLanguage.Value);
+                                    break;
                                 }
-                                else sb.Append(" --language " + strack.Index.ToString() + ":" + stream.name);
-                                if (!string.IsNullOrEmpty(stream.name))
-                                    sb.Append(" --track-name \"" + strack.Index.ToString() + ":" + stream.name.Replace("\"", "\\\"") + "\"");
-                                if (stream.delay != 0)
-                                    sb.AppendFormat(" --sync {0}:{1}ms", strack.Index.ToString(), stream.delay);
-                                sb.Append(" --default-track " + strack.Index.ToString() + ":no");
-                                sb.Append(" --forced-track " + strack.Index.ToString() + ":no");
+                                else if (((trackID == 0 && string.IsNullOrEmpty(stream.language)) || trackID > 0) 
+                                    && LanguageSelectionContainer.Short2FullLanguageName(strack.Name).ToLower().Equals(strLanguage.Key.ToLower()))
+                                {
+                                    sb.Append(" --language " + trackID + ":" + strLanguage.Value);
+                                    break;
+                                }
                             }
+                            if (!string.IsNullOrEmpty(stream.name))
+                                sb.Append(" --track-name \"" + trackID + ":" + stream.name.Replace("\"", "\\\"") + "\"");
+                            if (stream.delay != 0)
+                                sb.AppendFormat(" --sync {0}:{1}ms", trackID, stream.delay);
+                            if (stream.bDefaultTrack && trackID == 0)
+                                sb.Append(" --default-track 0:yes");
                             else
-                            {
-                                if (!string.IsNullOrEmpty(stream.language))
-                                {
-                                    foreach (KeyValuePair<string, string> strLanguage in LanguageSelectionContainer.Languages)
-                                    {
-                                        if (stream.language.ToLower().Equals(strLanguage.Key.ToLower()))
-                                        {
-                                            sb.Append(" --language " + "0:" + strLanguage.Value);
-                                            break;
-                                        }
-                                    }
-                                }
-                                else sb.Append(" --language " + "0:" + strack.Name);
-                                if (!string.IsNullOrEmpty(stream.name))
-                                    sb.Append(" --track-name \"" + "0:" + stream.name.Replace("\"", "\\\"") + "\"");
-                                if (stream.delay != 0)
-                                    sb.AppendFormat(" --sync {0}:{1}ms", "0", stream.delay);
-                                if (stream.bDefaultTrack)
-                                    sb.Append(" --default-track " + "0:yes");
-                                else
-                                    sb.Append(" --default-track " + "0:no");
-                                if (stream.bForceTrack)
-                                    sb.Append(" --forced-track 0:yes");
-                                else
-                                    sb.Append(" --forced-track 0:no");
-                            }
-                            ++nt;
+                                sb.Append(" --default-track " + trackID + ":no");
+                            if (stream.bForceTrack)
+                                sb.Append(" --forced-track " + trackID + ":yes");
+                            else
+                                sb.Append(" --forced-track " + trackID + ":no");
+                            ++trackID;
                         }
+                        trackID = 0;
                         sb.Append(" -s ");
                         foreach (SubtitleInfo strack in subTracks)
                         {
-                            if (nb > 0)
-                                sb.Append("," + strack.Index.ToString());
-                            else sb.Append("0");
-                            ++nb;
+                            if (trackID > 0)
+                                sb.Append("," + trackID);
+                            else 
+                                sb.Append("0");
+                            ++trackID;
                         }
                         sb.Append(" -D -A \"" + stream.path + "\"");
                     }
