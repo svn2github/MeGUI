@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2011  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -181,14 +181,31 @@ namespace MeGUI
             return mainForm.Settings.DialogSettings.UseOneClick;
         }
 
-        public int AVSCreatorOpen()
+        public int AVSCreatorOpen(string videoInput)
         {
-            int iResult = askAbout3("Do you want to open this file with\r\n" +
-                "- One Click Encoder (full automated, easy to use) or\r\n" +
-                "- File Indexer (manual, advanced) or \r\n" +
-                "- DirectShowSource (manual, expert, may cause problems)?", "Please choose your prefered way to open this file",
-                "One Click Encoder", "File Indexer", "DirectShowSource", MessageBoxIcon.Question);
+            int iResult = -1;
+            MediaInfoFile iFile = new MediaInfoFile(videoInput);
+            FileIndexerWindow.IndexType oIndexer;
 
+            if (!iFile.recommendIndexer(out oIndexer))
+                return iResult;
+
+            if (iFile.ContainerFileTypeString.ToUpper().Equals("AVI"))
+            {
+                iResult = askAbout3("Do you want to open this file with\r\n" +
+                    "- One Click Encoder (full automated, easy to use) or\r\n" +
+                    "- File Indexer (manual, advanced) or \r\n" +
+                    "- AviSource (manual, expert, may cause problems)?", "Please choose your prefered way to open this file",
+                    "One Click Encoder", "File Indexer", "AviSource", MessageBoxIcon.Question);
+            }
+            else
+            {
+                iResult = askAbout3("Do you want to open this file with\r\n" +
+                    "- One Click Encoder (full automated, easy to use) or\r\n" +
+                    "- File Indexer (manual, advanced) or \r\n" +
+                    "- DirectShowSource (manual, expert, may cause problems)?", "Please choose your prefered way to open this file",
+                    "One Click Encoder", "File Indexer", "DirectShowSource", MessageBoxIcon.Question);
+            }
             return iResult;
         }
 

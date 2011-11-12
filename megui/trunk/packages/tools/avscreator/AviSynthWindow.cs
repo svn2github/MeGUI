@@ -1619,34 +1619,25 @@ namespace MeGUI
                     }
                     else
                     {
-                        MediaInfoFile iFile = new MediaInfoFile(videoInput);
-                        if (iFile.isD2VIndexable() || iFile.isDGIIndexable() || iFile.isDGAIndexable() || iFile.isFFMSIndexable())
+                        int iResult = mainForm.DialogManager.AVSCreatorOpen(videoInput);
+                        switch (iResult)
                         {
-                            int iResult = mainForm.DialogManager.AVSCreatorOpen();
-                            switch (iResult)
-                            {
-                                case 0:
-                                    OneClickWindow ocmt = new OneClickWindow(mainForm);
-                                    ocmt.openInput(videoInput);
-                                    ocmt.Show();
-                                    this.Close();
-                                    break;
-                                case 1:
-                                    FileIndexerWindow fileIndexer = new FileIndexerWindow(mainForm);
-                                    fileIndexer.setConfig(videoInput, null, 2, true, true, true, false);
-                                    fileIndexer.Show();
-                                    this.Close();
-                                    break;
-                                default:
-                                    sourceType = PossibleSources.directShow;
-                                    openDirectShow(videoInput);
-                                    break;
-                            }
-                        }
-                        else
-                        {
-                            sourceType = PossibleSources.directShow;
-                            openDirectShow(videoInput);
+                            case 0:
+                                OneClickWindow ocmt = new OneClickWindow(mainForm);
+                                ocmt.openInput(videoInput);
+                                ocmt.Show();
+                                this.Close();
+                                break;
+                            case 1:
+                                FileIndexerWindow fileIndexer = new FileIndexerWindow(mainForm);
+                                fileIndexer.setConfig(videoInput, null, 2, true, true, true, false);
+                                fileIndexer.Show();
+                                this.Close();
+                                break;
+                            default:
+                                sourceType = PossibleSources.directShow;
+                                openDirectShow(videoInput);
+                                break;
                         }
                     }
                     break;
