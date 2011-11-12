@@ -84,7 +84,6 @@ namespace MeGUI
         private MenuItem mnuFileImport;
         private MenuItem mnuFileExport;
         private MenuItem mnuToolsAdaptiveMuxer;
-        #endregion
         private AudioEncodingComponent audioEncodingComponent1;
         private VideoEncodingComponent videoEncodingComponent1;
         private TabPage tabPage2;
@@ -132,12 +131,17 @@ namespace MeGUI
         private string strLogFile;
         private Semaphore logLock;
         private int avsLock;
+        private LogItem _oneClickLog;
+        private LogItem _updateLog;
 
         public bool IsHiddenMode { get { return trayIcon.Visible; } }
         public bool IsOverlayIconActive { get { return taskbarIcon != null; } }
         public string LogFile { get { return strLogFile; } }
         public Semaphore LogLock { get { return logLock; } set { logLock = value; } }
         public int AvsLock { get { return avsLock; } set { avsLock = value; } }
+        public LogItem OneClickLog { get { return _oneClickLog; } set { _oneClickLog = value; } }
+        public LogItem UpdateLog { get { return _updateLog; } set { _updateLog = value; } }
+        #endregion
 
         public void RegisterForm(Form f)
         {

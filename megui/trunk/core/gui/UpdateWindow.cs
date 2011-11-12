@@ -805,7 +805,10 @@ namespace MeGUI
         public void AddTextToLog(string text, ImageType oLogType)
         {
             if (oLog == null)
+            {
                 oLog = mainForm.Log.Info("Update detection");
+                mainForm.UpdateLog = oLog;
+            }
             oLog.LogEvent(text, oLogType);
 
             if (oLogType == ImageType.Warning || oLogType == ImageType.Error)
@@ -885,6 +888,7 @@ namespace MeGUI
         {
             InitializeComponent();
             this.mainForm = mainForm;
+            this.oLog = mainForm.UpdateLog;
             LoadComponentSettings();
             this.upgradeData = new iUpgradeableCollection(32); // To avoid unnecessary resizing, start at 32.
             meGUISettings = savedSettings; // Load up the MeGUI settings so i can access filepaths
@@ -905,6 +909,7 @@ namespace MeGUI
         {
             InitializeComponent();
             this.mainForm = mainForm;
+            this.oLog = mainForm.UpdateLog;
             LoadComponentSettings();
             this.upgradeData = new iUpgradeableCollection(32); // To avoid unnecessary resizing, start at 32.
             meGUISettings = savedSettings; // Load up the MeGUI settings so i can access filepaths

@@ -117,6 +117,7 @@ namespace MeGUI
         public OneClickWindow(MainForm mainForm)
         {
             this.mainForm = mainForm;
+            this._oLog = mainForm.OneClickLog;
             vUtil = new VideoUtil(mainForm);
             this.muxProvider = mainForm.MuxProvider;
             acceptableContainerTypes = muxProvider.GetSupportedContainers().ToArray();
@@ -258,7 +259,10 @@ namespace MeGUI
         public void openInput(string fileName)
         {
             if (_oLog == null)
+            {
                 _oLog = mainForm.Log.Info("OneClick");
+                mainForm.OneClickLog = _oLog;
+            }
 
             MediaInfoFile iFile = new MediaInfoFile(fileName, ref _oLog);
             if (!iFile.recommendIndexer(out oIndexerToUse))

@@ -1,3 +1,4 @@
+2059 [OneClick] + [Update] log categories will not be created anymore if already available
 2058 [MKV Muxer] improved idx subtitle handling
 2057 [Adaptive Muxer] fixed long delay when adding more than 4 tracks. Bug #3404061
 2056 [VideoPlayer] fixed handling of non default DPI values
