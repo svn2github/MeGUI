@@ -138,32 +138,33 @@ namespace MeGUI.packages.video.x264
                         {
                             if (!d.HasValue)
                             {
-                                _xs.SampleAR = 6;
+                                _xs.SampleAR = 5;
                                 _log.LogEvent(strDevice + "assume --sar 12:11 as only 16:11 or 12:11 are supported with a resolution of " + hres + "x" + vres + ".", ImageType.Warning);
                             }
                             else
                             {
                                 Sar s = d.Value.ToSar(hres, vres);
+                                _log.LogEvent(strDevice + "detected --sar "+ s.X + ":" + s.Y, ImageType.Information);
                                 Double dDiff16 = 16.0 / 11 - Double.Parse(s.X.ToString()) / s.Y;
                                 Double dDiff4 = 12.0 / 11 - Double.Parse(s.X.ToString()) / s.Y;
                                 if (dDiff16 <= 0)
                                 {
-                                    _xs.SampleAR = 5;
+                                    _xs.SampleAR = 6;
                                     _log.LogEvent(strDevice + "assume --sar 16:11 as only 16:11 or 12:11 are supported with a resolution of " + hres + "x" + vres + ".", ImageType.Warning);
                                 }
                                 else if (dDiff4 >= 0)
                                 {
-                                    _xs.SampleAR = 6;
+                                    _xs.SampleAR = 5;
                                     _log.LogEvent(strDevice + "assume --sar 12:11 as only 16:11 or 12:11 are supported with a resolution of " + hres + "x" + vres + ".", ImageType.Warning);
                                 }
                                 else if (Math.Min(dDiff16, -dDiff4) == dDiff16)
                                 {
-                                    _xs.SampleAR = 5;
+                                    _xs.SampleAR = 6;
                                     _log.LogEvent(strDevice + "assume --sar 16:11 as only 16:11 or 12:11 are supported with a resolution of " + hres + "x" + vres + ".", ImageType.Warning);
                                 }
                                 else
                                 {
-                                    _xs.SampleAR = 6;
+                                    _xs.SampleAR = 5;
                                     _log.LogEvent(strDevice + "assume --sar 12:11 as only 16:11 or 12:11 are supported with a resolution of " + hres + "x" + vres + ".", ImageType.Warning);
                                 }
                             }
@@ -192,6 +193,7 @@ namespace MeGUI.packages.video.x264
                         else
                         {
                             Sar s = d.Value.ToSar(hres, vres);
+                            _log.LogEvent(strDevice + "detected --sar " + s.X + ":" + s.Y, ImageType.Information);
                             Double dDiff16 = 16.0 / 11 - Double.Parse(s.X.ToString()) / s.Y;
                             Double dDiff4 = 12.0 / 11 - Double.Parse(s.X.ToString()) / s.Y;
                             if (dDiff16 <= 0)
