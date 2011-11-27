@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2011  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace MeGUI
 {
@@ -41,7 +42,9 @@ namespace MeGUI
             AudioTracks = audioTracks;
             LoadSources = loadSources;
             DemuxVideo = demuxVideo;
-            FilesToDelete.Add(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(input), System.IO.Path.GetFileNameWithoutExtension(input) + ".log"));
+            FilesToDelete.Add(Path.Combine(Path.GetDirectoryName(input), Path.GetFileNameWithoutExtension(input) + ".log"));
+            FilesToDelete.Add(output + ".bad");
+            FilesToDelete.Add(Path.ChangeExtension(output,".fix.txt"));
         }
 
         public override string CodecString
