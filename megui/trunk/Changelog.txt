@@ -1,3 +1,4 @@
+2062 [VobSubber] cosmetics
 2061 [x264] fixed wrong --sar values when using BluRay Target Device with 720x576
 2060 [AVS Script Creator] enhanced selection box if opening an indexable file directly
 2059 [OneClick] + [Update] log categories will not be created anymore if already available

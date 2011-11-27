@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 // 
-// Copyright (C) 2009  Kurtnoise (kurtnoise@free.fr)
+// Copyright (C) 2009-2011  Kurtnoise (kurtnoise@free.fr)
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -243,16 +243,16 @@ namespace MeGUI.core.util
                     switch (buff[0] & 0x0F)
                     {
                         // from http://dvd.sourceforge.net/dvdinfo/sprm.html
-                        case 1: subdesc[i] += " (Caption/Normal Size Char)"; break;
-                        case 2: subdesc[i] += " (Caption/Large Size Char)"; break;
-                        case 3: subdesc[i] += " (Caption For Children)"; break;
-                        case 5: subdesc[i] += " (Closed Caption/Normal Size Char)"; break;
-                        case 6: subdesc[i] += " (Closed Caption/Large Size Char)"; break;
-                        case 7: subdesc[i] += " (Closed Caption For Children)"; break;
-                        case 9: subdesc[i] += " (Forced Caption)"; break;
-                        case 13: subdesc[i] += " (Director Comments/Normal Size Char)"; break;
-                        case 14: subdesc[i] += " (Director Comments/Large Size Char)"; break;
-                        case 15: subdesc[i] += " (Director Comments for Children)"; break;
+                        case 1: subdesc[i] += " - (Caption/Normal Size Char)"; break;
+                        case 2: subdesc[i] += " - (Caption/Large Size Char)"; break;
+                        case 3: subdesc[i] += " - (Caption For Children)"; break;
+                        case 5: subdesc[i] += " - (Closed Caption/Normal Size Char)"; break;
+                        case 6: subdesc[i] += " - (Closed Caption/Large Size Char)"; break;
+                        case 7: subdesc[i] += " - (Closed Caption For Children)"; break;
+                        case 9: subdesc[i] += " - (Forced Caption)"; break;
+                        case 13: subdesc[i] += " - (Director Comments/Normal Size Char)"; break;
+                        case 14: subdesc[i] += " - (Director Comments/Large Size Char)"; break;
+                        case 15: subdesc[i] += " - (Director Comments for Children)"; break;
                     }
 
                     if (buff[0] == 0) buff[0] = 1;
@@ -286,14 +286,14 @@ namespace MeGUI.core.util
                     if (buff[1] == buff[2])
                     {
                         if (String.IsNullOrEmpty(substreams[buff[1]]))
-                            substreams[buff[1]] = "[" + String.Format("{0:00}", buff[1]) + "]  - " + subdesc[i];
+                            substreams[buff[1]] = "[" + String.Format("{0:00}", buff[1]) + "] - " + subdesc[i];
                     }
                     else
                     {
                         if (String.IsNullOrEmpty(substreams[buff[1]]))
-                            substreams[buff[1]] = "[" + String.Format("{0:00}", buff[1]) + "]  - " + subdesc[i] + " wide";
+                            substreams[buff[1]] = "[" + String.Format("{0:00}", buff[1]) + "] - " + subdesc[i] + " wide";
                         if (String.IsNullOrEmpty(substreams[buff[2]]))
-                            substreams[buff[2]] = "[" + String.Format("{0:00}", buff[2]) + "]  - " + subdesc[i] + " letterbox";
+                            substreams[buff[2]] = "[" + String.Format("{0:00}", buff[2]) + "] - " + subdesc[i] + " letterbox";
                     }
                 }
 
@@ -301,7 +301,7 @@ namespace MeGUI.core.util
                 {
                     for (int i = 0; i < 32; i++)
                     {
-                        substreams[i] = "[" + String.Format("{0:00}", i) + "]  - not detected";
+                        substreams[i] = "[" + String.Format("{0:00}", i) + "] - not detected";
                     }
                 }
                 else
