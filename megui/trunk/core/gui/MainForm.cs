@@ -919,11 +919,8 @@ namespace MeGUI
         {
             if (jobControl1.IsAnyWorkerEncoding)
             {
-                DialogResult dr = MessageBox.Show("Are you sure you want to quit?", "Job in progress", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-                if (dr == DialogResult.No)
-                    e.Cancel = true; // abort closing
-                else
-                    jobControl1.AbortAll();
+                e.Cancel = true; // abort closing
+                MessageBox.Show("Please close running jobs before you close MeGUI.", "Job in progress", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
             if (!e.Cancel)
             {

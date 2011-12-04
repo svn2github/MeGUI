@@ -1,3 +1,4 @@
+2064 [MainForm] MeGUI can only be closed if there are no running jobs
 2063 [D2V Indexer] .bad and .fix.txt files will also be deleted in cleanup step
 2062 [VobSubber] cosmetics
 2061 [x264] fixed wrong --sar values when using BluRay Target Device with 720x576

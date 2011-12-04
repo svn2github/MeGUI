@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2011  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -184,14 +184,14 @@ namespace MeGUI.core.gui
 
         public void SetStopping()
         {
-            Debug.Assert(status == JobWorkerStatus.Running);
-            status = JobWorkerStatus.Stopping;
+            if (status == JobWorkerStatus.Running)
+                status = JobWorkerStatus.Stopping;
         }
 
         public void SetRunning()
         {
-            Debug.Assert(status == JobWorkerStatus.Stopping);
-            status = JobWorkerStatus.Running;
+            if (status == JobWorkerStatus.Stopping)
+                status = JobWorkerStatus.Running;
         }
 
         private string name;
@@ -893,8 +893,8 @@ namespace MeGUI.core.gui
 
         private void jobQueue1_StopClicked(object sender, EventArgs e)
         {
-            Debug.Assert(Status == JobWorkerStatus.Running);
-            SetStopping();
+            if (Status == JobWorkerStatus.Running)
+                SetStopping();
         }
 
 
