@@ -47,7 +47,17 @@ namespace MeGUI.core.details.mux
                 if (string.IsNullOrEmpty(input.Filename))
                     return null;
 
-                return new MuxStream(input.Filename, subtitleLanguage.Text, subName.Text, (int)audioDelay.Value, chkDefaultStream.Checked, chkForceStream.Checked, _mkvInfoTrack);
+                int iDelay = 0;
+                if (showDelay)
+                    iDelay = (int)audioDelay.Value;
+                bool bDefault = false;
+                if (showDefaultSubtitleStream)
+                    bDefault = chkDefaultStream.Checked;
+                bool bForce = false;
+                if (showForceSubtitleStream)
+                    bForce = chkForceStream.Checked;
+
+                return new MuxStream(input.Filename, subtitleLanguage.Text, subName.Text, iDelay, bDefault, bForce, _mkvInfoTrack);
             }
 
             set
@@ -82,7 +92,6 @@ namespace MeGUI.core.details.mux
                 showDelay = value;
                 delayLabel.Visible = value;
                 audioDelay.Visible = value;
-                if (!value) audioDelay.Value = 0;
             }
             get
             {
@@ -97,8 +106,6 @@ namespace MeGUI.core.details.mux
             {
                 showDefaultSubtitleStream = value;
                 chkDefaultStream.Visible = value;
-                if (!value) 
-                    chkDefaultStream.Checked = false;
             }
             get
             {
@@ -113,8 +120,6 @@ namespace MeGUI.core.details.mux
             {
                 showForceSubtitleStream = value;
                 chkForceStream.Visible = value;
-                if (!value)
-                    chkForceStream.Checked = false;
             }
             get
             {
