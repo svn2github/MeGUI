@@ -765,9 +765,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                 if (xs.SSIMCalculation)
                     sb.Append("--ssim ");
 
-            if (!xs.CustomEncoderOptions.Contains("--fullrange on"))    
-                if (xs.fullRange)
-                    sb.Append("--fullrange on ");
+            if (!xs.CustomEncoderOptions.Contains("--range "))    
+                if (!xs.Range.Equals("auto"))
+                    sb.Append("--range " + xs.Range + " ");
 
             #endregion
 

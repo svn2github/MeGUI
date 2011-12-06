@@ -195,6 +195,8 @@ namespace MeGUI.packages.video.x264
             this.ssim = new System.Windows.Forms.CheckBox();
             this.psnr = new System.Windows.Forms.CheckBox();
             this.gbVUI = new System.Windows.Forms.GroupBox();
+            this.label18 = new System.Windows.Forms.Label();
+            this.x264Range = new System.Windows.Forms.ComboBox();
             this.colorMatrixLabel = new System.Windows.Forms.Label();
             this.transferLabel = new System.Windows.Forms.Label();
             this.colorPrimLabel = new System.Windows.Forms.Label();
@@ -202,7 +204,6 @@ namespace MeGUI.packages.video.x264
             this.transfer = new System.Windows.Forms.ComboBox();
             this.colorPrim = new System.Windows.Forms.ComboBox();
             this.picStruct = new System.Windows.Forms.CheckBox();
-            this.x264FullRange = new System.Windows.Forms.CheckBox();
             this.gbQPFile = new System.Windows.Forms.GroupBox();
             this.logfile = new System.Windows.Forms.TextBox();
             this.logfileLabel = new System.Windows.Forms.Label();
@@ -2552,6 +2553,8 @@ namespace MeGUI.packages.video.x264
             // 
             // gbVUI
             // 
+            this.gbVUI.Controls.Add(this.label18);
+            this.gbVUI.Controls.Add(this.x264Range);
             this.gbVUI.Controls.Add(this.colorMatrixLabel);
             this.gbVUI.Controls.Add(this.transferLabel);
             this.gbVUI.Controls.Add(this.colorPrimLabel);
@@ -2559,13 +2562,35 @@ namespace MeGUI.packages.video.x264
             this.gbVUI.Controls.Add(this.transfer);
             this.gbVUI.Controls.Add(this.colorPrim);
             this.gbVUI.Controls.Add(this.picStruct);
-            this.gbVUI.Controls.Add(this.x264FullRange);
             this.gbVUI.Location = new System.Drawing.Point(6, 179);
             this.gbVUI.Name = "gbVUI";
             this.gbVUI.Size = new System.Drawing.Size(317, 126);
             this.gbVUI.TabIndex = 31;
             this.gbVUI.TabStop = false;
             this.gbVUI.Text = "V.U.I";
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(12, 24);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(39, 13);
+            this.label18.TabIndex = 46;
+            this.label18.Text = "Range";
+            // 
+            // x264Range
+            // 
+            this.x264Range.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.x264Range.FormattingEnabled = true;
+            this.x264Range.Items.AddRange(new object[] {
+            "auto",
+            "tv",
+            "pc"});
+            this.x264Range.Location = new System.Drawing.Point(63, 20);
+            this.x264Range.Name = "x264Range";
+            this.x264Range.Size = new System.Drawing.Size(74, 21);
+            this.x264Range.TabIndex = 45;
+            this.x264Range.SelectedIndexChanged += new System.EventHandler(this.updateEvent);
             // 
             // colorMatrixLabel
             // 
@@ -2661,17 +2686,6 @@ namespace MeGUI.packages.video.x264
             this.picStruct.Text = "Force pic_struct";
             this.picStruct.UseVisualStyleBackColor = true;
             this.picStruct.CheckedChanged += new System.EventHandler(this.updateEvent);
-            // 
-            // x264FullRange
-            // 
-            this.x264FullRange.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.x264FullRange.Location = new System.Drawing.Point(12, 18);
-            this.x264FullRange.Name = "x264FullRange";
-            this.x264FullRange.Size = new System.Drawing.Size(125, 24);
-            this.x264FullRange.TabIndex = 27;
-            this.x264FullRange.Text = "Full Range";
-            this.x264FullRange.UseVisualStyleBackColor = true;
-            this.x264FullRange.CheckedChanged += new System.EventHandler(this.updateEvent);
             // 
             // gbQPFile
             // 
@@ -3070,7 +3084,6 @@ namespace MeGUI.packages.video.x264
         private System.Windows.Forms.CheckBox ssim;
         private System.Windows.Forms.CheckBox psnr;
         private System.Windows.Forms.GroupBox gbVUI;
-        private System.Windows.Forms.CheckBox x264FullRange;
         private System.Windows.Forms.CheckBox x264MixedReferences;
         private System.Windows.Forms.GroupBox gbSlicing;
         private System.Windows.Forms.NumericUpDown slicesnb;
@@ -3127,5 +3140,7 @@ namespace MeGUI.packages.video.x264
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.ComboBox x264Range;
     }
 }

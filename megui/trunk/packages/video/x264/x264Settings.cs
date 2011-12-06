@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2011  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -87,7 +87,7 @@ namespace MeGUI
 		bool deblock, cabac, p4x4mv, p8x8mv, b8x8mv, i4x4mv, i8x8mv, weightedBPrediction, blurayCompat,
 			chromaME, adaptiveDCT, noMixedRefs, noFastPSkip, psnrCalc, noDctDecimate, ssimCalc, useQPFile, 
             FullRange, advSet, noMBTree, threadInput, noPsy, scenecut, x264Aud, x264SlowFirstpass, picStruct, fakeInterlaced, nonDeterministic;
-		string quantizerMatrix, qpfile, openGop;
+		string quantizerMatrix, qpfile, openGop, range;
         x264PresetLevelModes preset;
         x264InterlacedModes interlacedMode;
         x264Device targetDevice;
@@ -161,6 +161,7 @@ namespace MeGUI
             useQPFile = false;
             qpfile = "";
             FullRange = false;
+            range = "auto";
             advSet = false;
             lookahead = 40;
             noMBTree = true;
@@ -572,10 +573,28 @@ namespace MeGUI
             get { return qpfile; }
             set { qpfile = value; }
         }
-        public bool fullRange
+#warning Deprecated since 2066; delete after next stable release
+        public string fullRange
         {
-            get { return FullRange; }
-            set { FullRange = value; }
+            get { return "migrated"; }
+            set
+            {
+                if (value.Equals("migrated"))
+                    return;
+                if (value.Equals("true"))
+                    range = "pc";
+            }
+        }
+        public string Range
+        {
+            get 
+            {
+                if (!range.Equals("pc") && !range.Equals("tv"))
+                    return "auto";
+                else
+                    return range; 
+            }
+            set { range = value; }
         }
         public bool x264AdvancedSettings
         {
@@ -743,6 +762,7 @@ namespace MeGUI
                 this.UseQPFile != otherSettings.UseQPFile ||
                 this.QPFile != otherSettings.QPFile ||
                 this.FullRange != otherSettings.FullRange ||
+                this.Range != otherSettings.Range ||
                 this.MacroBlockOptions != otherSettings.MacroBlockOptions ||
                 this.x264PresetLevel != otherSettings.x264PresetLevel ||
                 this.x264Tuning != otherSettings.x264Tuning ||

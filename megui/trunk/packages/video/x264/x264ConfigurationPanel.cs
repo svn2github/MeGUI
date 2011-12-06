@@ -1365,7 +1365,7 @@ namespace MeGUI.packages.video.x264
                 xs.NonDeterministic = nonDeterministic.Checked;
                 xs.UseQPFile = useQPFile.Checked;
                 xs.QPFile = this.qpfile.Text;
-                xs.fullRange = this.x264FullRange.Checked;
+                xs.Range = this.x264Range.SelectedItem.ToString();
                 xs.x264PresetLevel = (x264Settings.x264PresetLevelModes)this.tbx264Presets.Value;
                 xs.x264Tuning = x264Tunes.SelectedIndex;
                 xs.x264AdvancedSettings = advancedSettings.Checked;
@@ -1495,7 +1495,7 @@ namespace MeGUI.packages.video.x264
                 picStruct.Checked = xs.PicStruct;
                 fakeInterlaced.Checked = xs.FakeInterlaced;
                 nonDeterministic.Checked = xs.NonDeterministic;
-                x264FullRange.Checked = xs.fullRange;
+                x264Range.SelectedItem = xs.Range;
                 numAQStrength.Value = xs.AQstrength;
                 NoiseReduction.Text = xs.NoiseReduction.ToString();
                 advancedSettings.Checked = xs.x264AdvancedSettings;
@@ -1671,7 +1671,7 @@ namespace MeGUI.packages.video.x264
             tooltipHelp.SetToolTip(qpfile, SelectHelpText("qpf"));
             tooltipHelp.SetToolTip(useQPFile, SelectHelpText("qpf"));
             tooltipHelp.SetToolTip(sampleAR, SelectHelpText("sampleAR"));
-            tooltipHelp.SetToolTip(x264FullRange, SelectHelpText("x264FullRange"));
+            tooltipHelp.SetToolTip(x264Range, SelectHelpText("x264Range"));
             tooltipHelp.SetToolTip(picStruct, SelectHelpText("picStruct"));
             tooltipHelp.SetToolTip(colorPrim, SelectHelpText("colorPrim"));
             tooltipHelp.SetToolTip(colorMatrix, SelectHelpText("colorMatrix"));
@@ -2006,7 +2006,7 @@ namespace MeGUI.packages.video.x264
             this.psnr.Checked = false;
             this.ssim.Checked = false;
             this.sampleAR.SelectedIndex = 0;
-            this.x264FullRange.Checked = false;
+            this.x264Range.SelectedIndex = 0;
             this.picStruct.Checked = false;
             this.colorPrim.SelectedIndex = 0;
             this.transfer.SelectedIndex = 0;
