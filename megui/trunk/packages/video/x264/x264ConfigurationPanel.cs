@@ -155,26 +155,28 @@ namespace MeGUI.packages.video.x264
             // BFrames
             if (oTargetDevice.BFrames > -1)
             {
+                if (x264NumberOfBFrames.Value > oTargetDevice.BFrames)
+                    x264NumberOfBFrames.Value = oTargetDevice.BFrames;
+            }
+            if (updateDevice == true)
+            {
                 int iDefaultBFrames = x264Settings.GetDefaultNumberOfBFrames((x264Settings.x264PresetLevelModes)tbx264Presets.Value, x264Tunes.SelectedIndex, avcProfile.SelectedIndex, oTargetDevice);
-                if (x264NumberOfBFrames.Value > iDefaultBFrames)
-                    x264NumberOfBFrames.Value = iDefaultBFrames;
-                else if (updateDevice == true && x264NumberOfBFrames.Value < iDefaultBFrames)
+                if (x264NumberOfBFrames.Value != iDefaultBFrames)
                     x264NumberOfBFrames.Value = iDefaultBFrames;
             }
-            else if (updateDevice == true)
-                x264NumberOfBFrames.Value = x264Settings.GetDefaultNumberOfBFrames((x264Settings.x264PresetLevelModes)tbx264Presets.Value, x264Tunes.SelectedIndex, avcProfile.SelectedIndex, oTargetDevice);
 
             // Reference Frames
             if (oTargetDevice.ReferenceFrames > -1)
             {
+                if (x264NumberOfRefFrames.Value > oTargetDevice.ReferenceFrames)
+                    x264NumberOfRefFrames.Value = oTargetDevice.ReferenceFrames;
+            }
+            if (updateDevice == true)
+            {
                 int iDefaultRFrames = x264Settings.GetDefaultNumberOfRefFrames((x264Settings.x264PresetLevelModes)tbx264Presets.Value, x264Tunes.SelectedIndex, oTargetDevice);
-                if (x264NumberOfRefFrames.Value > iDefaultRFrames)
-                    x264NumberOfRefFrames.Value = iDefaultRFrames;
-                else if (updateDevice == true && x264NumberOfRefFrames.Value < iDefaultRFrames)
+                if (x264NumberOfRefFrames.Value != iDefaultRFrames)
                     x264NumberOfRefFrames.Value = iDefaultRFrames;
             }
-            else if (updateDevice == true)
-                x264NumberOfRefFrames.Value = x264Settings.GetDefaultNumberOfRefFrames((x264Settings.x264PresetLevelModes)tbx264Presets.Value, x264Tunes.SelectedIndex, oTargetDevice);
 
         }
         private void doMacroBlockAdjustments()

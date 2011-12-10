@@ -1,3 +1,4 @@
+2067 [x264] fixed (increased) maximum value of --ref and --bframes when using target playback devices
 2066 [x264] replaced --fullrange with --range (requires x264 revision 2119+)
 2065 [Adaptive Muxer] fixed handling of delay value and default/forced track. Bug #3443721
 2064 [MainForm] MeGUI can only be closed if there are no running jobs
