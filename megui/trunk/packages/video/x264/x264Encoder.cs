@@ -61,7 +61,10 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             {
                 int frameNumberStart = line.IndexOf("]", 4) + 2;
                 int frameNumberEnd = line.IndexOf("/");
-                return line.Substring(frameNumberStart, frameNumberEnd - frameNumberStart).Trim();
+                if (frameNumberStart > 0 && frameNumberEnd > 0 && frameNumberEnd > frameNumberStart)
+                    return line.Substring(frameNumberStart, frameNumberEnd - frameNumberStart).Trim();
+                else
+                    return null;
             }
             return null;
         }
