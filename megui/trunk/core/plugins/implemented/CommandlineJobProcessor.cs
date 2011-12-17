@@ -51,6 +51,7 @@ namespace MeGUI
         protected Thread readFromStdErrThread;
         protected Thread readFromStdOutThread;
         protected List<string> tempFiles = new List<string>();
+        protected bool bRunSecondTime = false;
 
         #endregion
 
@@ -142,9 +143,20 @@ namespace MeGUI
 
             log.LogValue("Standard output stream", stdoutBuilder);
             log.LogValue("Standard error stream", stderrBuilder);
-            su.IsComplete = true;
-            doExitConfig();
-            StatusUpdate(su);
+
+            if (bRunSecondTime)
+            {
+                stdoutBuilder = new StringBuilder();
+                stderrBuilder = new StringBuilder();
+                bRunSecondTime = false;
+                start();
+            }
+            else
+            {
+                su.IsComplete = true;
+                doExitConfig();
+                StatusUpdate(su);
+            }
         }
 
         #region IVideoEncoder overridden Members

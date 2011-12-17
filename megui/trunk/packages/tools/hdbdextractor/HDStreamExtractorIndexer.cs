@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2011  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -107,6 +107,12 @@ namespace MeGUI
             {
                 log.LogValue("An error occurred", line, ImageType.Error);
                 su.HasError = true;
+                base.ProcessLine(line, stream);
+            }
+            else if (line.ToLower().Contains("without making use of the gap/overlap information"))
+            {
+                log.LogEvent("Job will be executed a second time to make use of the gap/overlap information");
+                base.bRunSecondTime = true;
                 base.ProcessLine(line, stream);
             }
             else if (line.ToLower().Contains("warning") ||
