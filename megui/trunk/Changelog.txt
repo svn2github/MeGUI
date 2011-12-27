@@ -1,4 +1,5 @@
-2069 [HD Streams Extractor] automatically execute the job a second time if a gaps file is created
+2070 [MKV Muxer] adjusted muxer to the recent mkvmerge changes (requires mkvmerge revision 5.2.0+)
+2069 [HD Streams Extractor] automatically execute the job a second time if a gaps file is detected
 2068 [x264] fixed "--range pc"
 2067 [x264] fixed (increased) maximum value of --ref and --bframes when using target playback devices
 2066 [x264] replaced --fullrange with --range (requires x264 revision 2119+)

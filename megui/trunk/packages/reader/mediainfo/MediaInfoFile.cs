@@ -212,6 +212,7 @@ namespace MeGUI
         private AudioCodec[] aCodecs;
         private AudioType aType;
         private List<AudioTrackInfo> _arrAudioTracks = new List<AudioTrackInfo>();
+        private List<int> _arrSubtitleTracks = new List<int>();
         private VideoType vType;
         private ContainerType cType;
         private string _strContainer = "";
@@ -411,6 +412,13 @@ namespace MeGUI
                     _arrAudioTracks.Add(ati);
                 }
 
+                foreach (TextTrack oTextTrack in info.Text)
+                {
+                    int trackID = -1;
+                    Int32.TryParse(oTextTrack.ID, out trackID);
+                    _arrSubtitleTracks.Add(trackID);
+                }
+                    
                 // video detection
                 bHasVideo = (info.Video.Count > 0);
                 if (bHasVideo)
@@ -579,6 +587,48 @@ namespace MeGUI
         }
 
         #region methods
+
+        /// <summary>gets the first video track ID for muxing with mkvmerge</summary>
+        /// <returns>trackID or 0</returns>
+        public int GetFirstVideoTrackID()
+        {
+            // check if the file is a video file
+            if (!HasVideo)
+                return 0;
+
+            int iCount = 0;
+            if (_trackID > 0)
+                iCount = _trackID - 1;
+            return iCount;
+        }
+
+        /// <summary>gets the first audio track ID for muxing with mkvmerge</summary>
+        /// <returns>trackID or 0</returns>
+        public int GetFirstAudioTrackID()
+        {
+            // check if the file is a audio file
+            if (!HasAudio)
+                return 0;
+
+            int iCount = 0;
+            if (_arrAudioTracks[0].TrackID > 0)
+                iCount = _arrAudioTracks[0].TrackID - 1;
+            return iCount;
+        }
+
+        /// <summary>gets the first subtitle track ID for muxing with mkvmerge</summary>
+        /// <returns>trackID or 0</returns>
+        public int GetFirstSubtitleTrackID()
+        {
+            // check if the file is a subtitle file
+            if (_arrSubtitleTracks.Count == 0)
+                return 0;
+
+            int iCount = 0;
+            if (_arrSubtitleTracks[0] > 0)
+                iCount = _arrSubtitleTracks[0] - 1;
+            return iCount;
+        }
 
         /// <summary>checks if the file is indexable by DGIndexNV</summary>
         /// <returns>true if indexable, false if not</returns>
