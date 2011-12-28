@@ -182,7 +182,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Count of streams of that kind available </summary>
         public string StreamCount
         {
@@ -197,7 +196,6 @@ namespace MediaInfoWrapper
                 this._StreamCount = value;
             }
         }
-
 
         ///<summary> Stream name </summary>
         public string StreamKind
@@ -214,7 +212,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> When multiple streams, number of the stream </summary>
         public string StreamKindID
         {
@@ -229,7 +226,6 @@ namespace MediaInfoWrapper
                 this._StreamKindID = value;
             }
         }
-
 
         ///<summary> Last   Inform   call </summary>
         public string Inform
@@ -246,7 +242,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> A ID for this stream in this file </summary>
         public string ID
         {
@@ -261,7 +256,6 @@ namespace MediaInfoWrapper
                 this._ID = value;
             }
         }
-
 
         ///<summary> A unique ID for this stream, should be copied with stream copy </summary>
         public string UniqueID
@@ -278,7 +272,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Count of video streams </summary>
         public string GeneralCount
         {
@@ -293,7 +286,6 @@ namespace MediaInfoWrapper
                 this._GeneralCount = value;
             }
         }
-
 
         ///<summary> Count of video streams </summary>
         public string VideoCount
@@ -310,7 +302,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Count of audio streams </summary>
         public string AudioCount
         {
@@ -325,7 +316,6 @@ namespace MediaInfoWrapper
                 this._AudioCount = value;
             }
         }
-
 
         ///<summary> Count of text streams </summary>
         public string TextCount
@@ -342,7 +332,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Count of chapters streams </summary>
         public string ChaptersCount
         {
@@ -357,7 +346,6 @@ namespace MediaInfoWrapper
                 this._ChaptersCount = value;
             }
         }
-
 
         ///<summary> Count of image streams </summary>
         public string ImageCount
@@ -374,7 +362,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Complete name (Folder+Name+Extension) </summary>
         public string CompleteName
         {
@@ -389,7 +376,6 @@ namespace MediaInfoWrapper
                 this._CompleteName = value;
             }
         }
-
 
         ///<summary> Folder name only </summary>
         public string FolderName
@@ -406,7 +392,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> File name only </summary>
         public string FileName
         {
@@ -421,7 +406,6 @@ namespace MediaInfoWrapper
                 this._FileName = value;
             }
         }
-
 
         ///<summary> File extension only </summary>
         public string FileExtension
@@ -438,7 +422,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> File size in bytes </summary>
         public string FileSize
         {
@@ -453,7 +436,6 @@ namespace MediaInfoWrapper
                 this._FileSize = value;
             }
         }
-
 
         ///<summary> File size (with measure) </summary>
         public string FileSizeString
@@ -470,7 +452,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> File size (with measure, 1 digit mini) </summary>
         public string FileSizeString1
         {
@@ -485,7 +466,6 @@ namespace MediaInfoWrapper
                 this._FileSizeString1 = value;
             }
         }
-
 
         ///<summary> File size (with measure, 2 digit mini) </summary>
         public string FileSizeString2
@@ -502,7 +482,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> File size (with measure, 3 digit mini) </summary>
         public string FileSizeString3
         {
@@ -517,7 +496,6 @@ namespace MediaInfoWrapper
                 this._FileSizeString3 = value;
             }
         }
-
 
         ///<summary> File size (with measure, 4 digit mini) </summary>
         public string FileSizeString4
@@ -534,7 +512,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Format (short name) </summary>
         public string Format
         {
@@ -549,7 +526,6 @@ namespace MediaInfoWrapper
                 this._Format = value;
             }
         }
-
 
         ///<summary> Format (full name) </summary>
         public string FormatString
@@ -566,7 +542,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> More information about this format </summary>
         public string FormatInfo
         {
@@ -581,7 +556,6 @@ namespace MediaInfoWrapper
                 this._FormatInfo = value;
             }
         }
-
 
         ///<summary> Url about this format </summary>
         public string FormatUrl
@@ -598,7 +572,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Known extensions of format </summary>
         public string FormatExtensions
         {
@@ -613,7 +586,6 @@ namespace MediaInfoWrapper
                 this._FormatExtensions = value;
             }
         }
-
 
         ///<summary> BitRate of all streams </summary>
         public string OveralBitRate
@@ -630,7 +602,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> BitRate of all streams (with measure) </summary>
         public string OveralBitRateString
         {
@@ -645,7 +616,6 @@ namespace MediaInfoWrapper
                 this._OveralBitRateString = value;
             }
         }
-
 
         ///<summary> Play time of the file </summary>
         public string PlayTime
@@ -662,7 +632,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Play time in format : XXx YYy only, YYy omited if zero </summary>
         public string PlayTimeString
         {
@@ -677,7 +646,6 @@ namespace MediaInfoWrapper
                 this._PlayTimeString = value;
             }
         }
-
 
         ///<summary> Play time in format : HHh MMmn SSs MMMms, XX omited if zero </summary>
         public string PlayTimeString1
@@ -694,7 +662,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Play time in format : XXx YYy only, YYy omited if zero </summary>
         public string PlayTimeString2
         {
@@ -709,7 +676,6 @@ namespace MediaInfoWrapper
                 this._PlayTimeString2 = value;
             }
         }
-
 
         ///<summary> Play time in format : HH:MM:SS.MMM </summary>
         public string PlayTimeString3
@@ -726,7 +692,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> (Generic)Title of file </summary>
         public string Title
         {
@@ -741,7 +706,6 @@ namespace MediaInfoWrapper
                 this._Title = value;
             }
         }
-
 
         ///<summary> (Generic)More info about the title of file </summary>
         public string TitleMore
@@ -758,7 +722,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Level=8. Eg : Starwars, Stargate, U2 </summary>
         public string Domain
         {
@@ -773,7 +736,6 @@ namespace MediaInfoWrapper
                 this._Domain = value;
             }
         }
-
 
         ///<summary> Level=7. Name of the collection. Eg : Starwars movies, Stargate movie, Stargate SG-1, Stargate Atlantis </summary>
         public string Collection
@@ -790,7 +752,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Total count of seasons </summary>
         public string CollectionTotalParts
         {
@@ -805,7 +766,6 @@ namespace MediaInfoWrapper
                 this._CollectionTotalParts = value;
             }
         }
-
 
         ///<summary> Level=6. Name of the season. Eg : Strawars first Trilogy, Season 1 </summary>
         public string Season
@@ -822,7 +782,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Level=5. Name of the movie. Eg : Starwars, a new hope </summary>
         public string Movie
         {
@@ -837,7 +796,6 @@ namespace MediaInfoWrapper
                 this._Movie = value;
             }
         }
-
 
         ///<summary> More information about this movie </summary>
         public string MovieMore
@@ -854,7 +812,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Level=5. Name of album. Eg : The joshua tree </summary>
         public string Album
         {
@@ -869,7 +826,6 @@ namespace MediaInfoWrapper
                 this._Album = value;
             }
         }
-
 
         ///<summary> Total number of track or parts (depend if there is a part) </summary>
         public string AlbumTotalParts
@@ -886,7 +842,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Sort order </summary>
         public string AlbumSort
         {
@@ -901,7 +856,6 @@ namespace MediaInfoWrapper
                 this._AlbumSort = value;
             }
         }
-
 
         ///<summary> Level=5. Name of the comic. </summary>
         public string Comic
@@ -918,7 +872,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Total number of pages in the comic </summary>
         public string ComicTotalParts
         {
@@ -933,7 +886,6 @@ namespace MediaInfoWrapper
                 this._ComicTotalParts = value;
             }
         }
-
 
         ///<summary> Level=4. Name of the part. Eg : CD1, CD2 </summary>
         public string Part
@@ -950,7 +902,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Total count of track or episode </summary>
         public string PartTotalParts
         {
@@ -965,7 +916,6 @@ namespace MediaInfoWrapper
                 this._PartTotalParts = value;
             }
         }
-
 
         ///<summary> Part number </summary>
         public string PartPosition
@@ -982,7 +932,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Level=3. Name of the track. Eg : track1, track 2 </summary>
         public string Track
         {
@@ -997,7 +946,6 @@ namespace MediaInfoWrapper
                 this._Track = value;
             }
         }
-
 
         ///<summary> Track number or episode number... </summary>
         public string TrackPosition
@@ -1014,7 +962,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> More information about this track (subtitle) </summary>
         public string TrackMore
         {
@@ -1029,7 +976,6 @@ namespace MediaInfoWrapper
                 this._TrackMore = value;
             }
         }
-
 
         ///<summary> Sort order </summary>
         public string TrackSort
@@ -1046,7 +992,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Level=3. Name of the chapter. </summary>
         public string Chapter
         {
@@ -1061,7 +1006,6 @@ namespace MediaInfoWrapper
                 this._Chapter = value;
             }
         }
-
 
         ///<summary> Level=2, Name of the subtrack. </summary>
         public string SubTrack
@@ -1078,7 +1022,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Original name of album, serie... </summary>
         public string OriginalAlbum
         {
@@ -1093,7 +1036,6 @@ namespace MediaInfoWrapper
                 this._OriginalAlbum = value;
             }
         }
-
 
         ///<summary> Original name of the movie </summary>
         public string OriginalMovie
@@ -1110,7 +1052,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Name of the part in the original support </summary>
         public string OriginalPart
         {
@@ -1125,7 +1066,6 @@ namespace MediaInfoWrapper
                 this._OriginalPart = value;
             }
         }
-
 
         ///<summary> Original name of the track in the original support </summary>
         public string OriginalTrack
@@ -1142,7 +1082,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> (Generic)Performer of the file </summary>
         public string Author
         {
@@ -1157,7 +1096,6 @@ namespace MediaInfoWrapper
                 this._Author = value;
             }
         }
-
 
         ///<summary> Duplicate of Performer </summary>
         public string Artist
@@ -1174,7 +1112,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Sort order </summary>
         public string PerformerSort
         {
@@ -1189,7 +1126,6 @@ namespace MediaInfoWrapper
                 this._PerformerSort = value;
             }
         }
-
 
         ///<summary> Original artist(s)_performer(s). </summary>
         public string OriginalPerformer
@@ -1206,7 +1142,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Band_orchestra_accompaniment_musician. </summary>
         public string Accompaniment
         {
@@ -1221,7 +1156,6 @@ namespace MediaInfoWrapper
                 this._Accompaniment = value;
             }
         }
-
 
         ///<summary> Name of the character an actor or actress plays in this movie. </summary>
         public string MusicianInstrument
@@ -1238,7 +1172,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Name of the original composer. </summary>
         public string Composer
         {
@@ -1253,7 +1186,6 @@ namespace MediaInfoWrapper
                 this._Composer = value;
             }
         }
-
 
         ///<summary> Nationality of the main composer of the item, mostly for classical music. </summary>
         public string ComposerNationality
@@ -1270,7 +1202,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> The person who arranged the piece. e.g. Ravel. </summary>
         public string Arranger
         {
@@ -1285,7 +1216,6 @@ namespace MediaInfoWrapper
                 this._Arranger = value;
             }
         }
-
 
         ///<summary> The person who wrote the lyrics for a musical item. </summary>
         public string Lyricist
@@ -1302,7 +1232,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Original lyricist(s)_text writer(s). </summary>
         public string OriginalLyricist
         {
@@ -1317,7 +1246,6 @@ namespace MediaInfoWrapper
                 this._OriginalLyricist = value;
             }
         }
-
 
         ///<summary> The artist(s) who performed the work. In classical music this would be the conductor, orchestra, soloists. </summary>
         public string Conductor
@@ -1334,7 +1262,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Real name of actor or actress playing a role in the movie. </summary>
         public string Actor
         {
@@ -1349,7 +1276,6 @@ namespace MediaInfoWrapper
                 this._Actor = value;
             }
         }
-
 
         ///<summary> Name of the character an actor or actress plays in this movie. </summary>
         public string ActorCharacter
@@ -1366,7 +1292,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> The author of the story or script. </summary>
         public string WrittenBy
         {
@@ -1381,7 +1306,6 @@ namespace MediaInfoWrapper
                 this._WrittenBy = value;
             }
         }
-
 
         ///<summary> The author of the screenplay or scenario (used for movies and TV shows). </summary>
         public string ScreenplayBy
@@ -1398,7 +1322,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Name of the director. </summary>
         public string Director
         {
@@ -1413,7 +1336,6 @@ namespace MediaInfoWrapper
                 this._Director = value;
             }
         }
-
 
         ///<summary> Name of the assistant director. </summary>
         public string AssistantDirector
@@ -1430,7 +1352,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> The name of the director of photography, also known as cinematographer. </summary>
         public string DirectorOfPhotography
         {
@@ -1445,7 +1366,6 @@ namespace MediaInfoWrapper
                 this._DirectorOfPhotography = value;
             }
         }
-
 
         ///<summary> The person who oversees the artists and craftspeople who build the sets. </summary>
         public string ArtDirector
@@ -1462,7 +1382,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Editor name </summary>
         public string EditedBy
         {
@@ -1477,7 +1396,6 @@ namespace MediaInfoWrapper
                 this._EditedBy = value;
             }
         }
-
 
         ///<summary> Name of the producer of the movie. </summary>
         public string Producer
@@ -1494,7 +1412,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> The name of a co-producer. </summary>
         public string CoProducer
         {
@@ -1509,7 +1426,6 @@ namespace MediaInfoWrapper
                 this._CoProducer = value;
             }
         }
-
 
         ///<summary> The name of an executive producer. </summary>
         public string ExecutiveProducer
@@ -1526,7 +1442,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Artist responsible for designing the overall visual appearance of a movie. </summary>
         public string ProductionDesigner
         {
@@ -1541,7 +1456,6 @@ namespace MediaInfoWrapper
                 this._ProductionDesigner = value;
             }
         }
-
 
         ///<summary> The name of the costume designer. </summary>
         public string CostumeDesigner
@@ -1558,7 +1472,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> The name of the choregrapher. </summary>
         public string Choregrapher
         {
@@ -1573,7 +1486,6 @@ namespace MediaInfoWrapper
                 this._Choregrapher = value;
             }
         }
-
 
         ///<summary> The name of the sound engineer or sound recordist. </summary>
         public string SoundEngineer
@@ -1590,7 +1502,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> The engineer who mastered the content for a physical medium or for digital distribution. </summary>
         public string MasteredBy
         {
@@ -1605,7 +1516,6 @@ namespace MediaInfoWrapper
                 this._MasteredBy = value;
             }
         }
-
 
         ///<summary> Interpreted, remixed, or otherwise modified by. </summary>
         public string RemixedBy
@@ -1622,7 +1532,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary>   </summary>
         public string ProductionStudio
         {
@@ -1637,7 +1546,6 @@ namespace MediaInfoWrapper
                 this._ProductionStudio = value;
             }
         }
-
 
         ///<summary> Name of the organization producing the track (i.e. the  record label ). </summary>
         public string Publisher
@@ -1654,7 +1562,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Publishers official webpage. </summary>
         public string PublisherURL
         {
@@ -1669,7 +1576,6 @@ namespace MediaInfoWrapper
                 this._PublisherURL = value;
             }
         }
-
 
         ///<summary>   </summary>
         public string DistributedBy
@@ -1686,7 +1592,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Name of the person or organisation that encoded_ripped the audio file. </summary>
         public string EncodedBy
         {
@@ -1701,7 +1606,6 @@ namespace MediaInfoWrapper
                 this._EncodedBy = value;
             }
         }
-
 
         ///<summary> A very general tag for everyone else that wants to be listed. </summary>
         public string ThanksTo
@@ -1718,7 +1622,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Technician. Identifies the technician who digitized the subject file. For example, Smith, John. </summary>
         public string Technician
         {
@@ -1733,7 +1636,6 @@ namespace MediaInfoWrapper
                 this._Technician = value;
             }
         }
-
 
         ///<summary> Commissioned. Lists the name of the person or organization that commissioned the subject of the file. e.g. Pope Julian II. </summary>
         public string CommissionedBy
@@ -1750,7 +1652,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Source. Identifies the name of the person or organization who supplied the original subject of the file. For example, Trey Research. </summary>
         public string EncodedOriginalDistributedBy
         {
@@ -1765,7 +1666,6 @@ namespace MediaInfoWrapper
                 this._EncodedOriginalDistributedBy = value;
             }
         }
-
 
         ///<summary> Contains the name of the internet radio station from which the audio is streamed. </summary>
         public string RadioStation
@@ -1782,7 +1682,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Contains the name of the owner of the internet radio station from which the audio is streamed. </summary>
         public string RadioStationOwner
         {
@@ -1797,7 +1696,6 @@ namespace MediaInfoWrapper
                 this._RadioStationOwner = value;
             }
         }
-
 
         ///<summary> Official internet radio station homepage. </summary>
         public string RadioStationURL
@@ -1814,7 +1712,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> The type of the item. e.g. Documentary, Feature Film, Cartoon, Music Video, Music, Sound FX, etc. </summary>
         public string ContentType
         {
@@ -1829,7 +1726,6 @@ namespace MediaInfoWrapper
                 this._ContentType = value;
             }
         }
-
 
         ///<summary> Describes the topic of the file, such as Aerial view of Seattle.. </summary>
         public string Subject
@@ -1846,7 +1742,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> A description of the story line of the item. </summary>
         public string Synopsys
         {
@@ -1861,7 +1756,6 @@ namespace MediaInfoWrapper
                 this._Synopsys = value;
             }
         }
-
 
         ///<summary> A plot outline or a summary of the story. </summary>
         public string Summary
@@ -1878,7 +1772,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> A short description of the contents, such as Two birds flying. </summary>
         public string Description
         {
@@ -1893,7 +1786,6 @@ namespace MediaInfoWrapper
                 this._Description = value;
             }
         }
-
 
         ///<summary> Keywords to the item separated by a comma, used for searching. </summary>
         public string Keywords
@@ -1910,7 +1802,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Describes the period that the piece is from or about. e.g. Renaissance. </summary>
         public string Period
         {
@@ -1925,7 +1816,6 @@ namespace MediaInfoWrapper
                 this._Period = value;
             }
         }
-
 
         ///<summary> Depending on the country it s the format of the rating of a movie (P, R, X in the USA, an age in other countries or a URI defining a logo). </summary>
         public string LawRating
@@ -1942,7 +1832,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> The ICRA rating. (Previously RSACi) </summary>
         public string IRCA
         {
@@ -1957,7 +1846,6 @@ namespace MediaInfoWrapper
                 this._IRCA = value;
             }
         }
-
 
         ///<summary> Language(s) of the item in the bibliographic ISO-639-2 form. </summary>
         public string Language
@@ -1974,7 +1862,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Medium. Describes the original subject of the file, such as, computer image, drawing, lithograph, and so forth. Not necessarily the same as ISRF. </summary>
         public string Medium
         {
@@ -1989,7 +1876,6 @@ namespace MediaInfoWrapper
                 this._Medium = value;
             }
         }
-
 
         ///<summary> Product. Specifies the name of the title the file was originally intended for, such as Encyclopedia of Pacific Northwest Geography. </summary>
         public string Product
@@ -2006,7 +1892,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Country </summary>
         public string Country
         {
@@ -2021,7 +1906,6 @@ namespace MediaInfoWrapper
                 this._Country = value;
             }
         }
-
 
         ///<summary> The time that the composition of the music_script began. </summary>
         public string WrittenDate
@@ -2038,7 +1922,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> The time that the recording began. </summary>
         public string RecordedDate
         {
@@ -2053,7 +1936,6 @@ namespace MediaInfoWrapper
                 this._RecordedDate = value;
             }
         }
-
 
         ///<summary> The time that the item was originaly released. </summary>
         public string ReleasedDate
@@ -2070,7 +1952,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> The time that the item was tranfered to a digitalmedium. </summary>
         public string MasteredDate
         {
@@ -2085,7 +1966,6 @@ namespace MediaInfoWrapper
                 this._MasteredDate = value;
             }
         }
-
 
         ///<summary> The time that the encoding of this item was completed began. </summary>
         public string EncodedDate
@@ -2102,7 +1982,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> The time that the tags were done for this item. </summary>
         public string TaggedDate
         {
@@ -2117,7 +1996,6 @@ namespace MediaInfoWrapper
                 this._TaggedDate = value;
             }
         }
-
 
         ///<summary> Contains a timestamp describing when the original recording of the audio was released. </summary>
         public string OriginalReleasedDate
@@ -2134,7 +2012,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Contains a timestamp describing when the original recording of the audio was recorded. </summary>
         public string OriginalRecordedDate
         {
@@ -2149,7 +2026,6 @@ namespace MediaInfoWrapper
                 this._OriginalRecordedDate = value;
             }
         }
-
 
         ///<summary> Location that the item was originaly designed_written. Information should be stored in the following format: country code, state_province, city where the coutry code is the same 2 octets as in Internet domains, or possibly ISO-3166. e.g. US, Texas, Austin or US, , Austin. </summary>
         public string WrittenLocation
@@ -2166,7 +2042,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Location where track was recorded. (See COMPOSITION_LOCATION for format) </summary>
         public string RecordedLocation
         {
@@ -2181,7 +2056,6 @@ namespace MediaInfoWrapper
                 this._RecordedLocation = value;
             }
         }
-
 
         ///<summary> Archival Location. Indicates where the subject of the file is archived. </summary>
         public string ArchivalLocation
@@ -2198,7 +2072,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> The main genre of the audio or video. e.g. classical, ambient-house, synthpop, sci-fi, drama, etc. </summary>
         public string Genre
         {
@@ -2213,7 +2086,6 @@ namespace MediaInfoWrapper
                 this._Genre = value;
             }
         }
-
 
         ///<summary> Intended to reflect the mood of the item with a few keywords, e.g. Romantic, Sad, Uplifting, etc. </summary>
         public string Mood
@@ -2230,7 +2102,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Any comment related to the content. </summary>
         public string Comment
         {
@@ -2245,7 +2116,6 @@ namespace MediaInfoWrapper
                 this._Comment = value;
             }
         }
-
 
         ///<summary> A numeric value defining how much a person likes the song_movie. The number is between 0 and 5 with decimal values possible (e.g. 2.7), 5(.0) being the highest possible rating. </summary>
         public string Rating
@@ -2262,7 +2132,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Software. Identifies the name of the software package used to create the file, such as Microsoft WaveEdit. </summary>
         public string EncodedApplication
         {
@@ -2277,7 +2146,6 @@ namespace MediaInfoWrapper
                 this._EncodedApplication = value;
             }
         }
-
 
         ///<summary> The software or hardware used to encode this item. e.g. LAME or XviD </summary>
         public string EncodedLibrary
@@ -2294,7 +2162,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> A list of the settings used for encoding this item. No specific format. </summary>
         public string EncodedLibrarySettings
         {
@@ -2309,7 +2176,6 @@ namespace MediaInfoWrapper
                 this._EncodedLibrarySettings = value;
             }
         }
-
 
         ///<summary> Identifies the original recording media form from which the material originated, such as CD, cassette, LP, radio broadcast, slide, paper, etc. </summary>
         public string EncodedOriginal
@@ -2326,7 +2192,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Official audio source webpage. e.g. a movie. </summary>
         public string EncodedOriginalUrl
         {
@@ -2341,7 +2206,6 @@ namespace MediaInfoWrapper
                 this._EncodedOriginalUrl = value;
             }
         }
-
 
         ///<summary> Copyright attribution. </summary>
         public string Copyright
@@ -2358,7 +2222,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> The copyright information as per the productioncopyright holder. </summary>
         public string ProducerCopyright
         {
@@ -2373,7 +2236,6 @@ namespace MediaInfoWrapper
                 this._ProducerCopyright = value;
             }
         }
-
 
         ///<summary> License information, e.g., All Rights Reserved,Any Use Permitted. </summary>
         public string TermsOfUse
@@ -2390,7 +2252,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Copyright_legal information. </summary>
         public string CopyrightUrl
         {
@@ -2405,7 +2266,6 @@ namespace MediaInfoWrapper
                 this._CopyrightUrl = value;
             }
         }
-
 
         ///<summary> International Standard Recording Code, excluding the ISRC prefix and including hyphens. </summary>
         public string ISRC
@@ -2422,7 +2282,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> This is a binary dump of the TOC of the CDROM that this item was taken from. </summary>
         public string MSDI
         {
@@ -2437,7 +2296,6 @@ namespace MediaInfoWrapper
                 this._MSDI = value;
             }
         }
-
 
         ///<summary> International Standard Book Number. </summary>
         public string ISBN
@@ -2454,7 +2312,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> EAN-13 (13-digit European Article Numbering) or UPC-A (12-digit Universal Product Code) bar code identifier. </summary>
         public string BarCode
         {
@@ -2469,7 +2326,6 @@ namespace MediaInfoWrapper
                 this._BarCode = value;
             }
         }
-
 
         ///<summary> Library of Congress Control Number. </summary>
         public string LCCN
@@ -2486,7 +2342,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> A label-specific catalogue number used to identify the release. e.g. TIC 01. </summary>
         public string CatalogNumber
         {
@@ -2501,7 +2356,6 @@ namespace MediaInfoWrapper
                 this._CatalogNumber = value;
             }
         }
-
 
         ///<summary> A 4-digit or 5-digit number to identify the record label, typically printed as (LC) xxxx or (LC) 0xxxx on CDs medias or covers, with only the number being stored. </summary>
         public string LabelCode
@@ -2518,7 +2372,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Is there a cover </summary>
         public string Cover
         {
@@ -2533,7 +2386,6 @@ namespace MediaInfoWrapper
                 this._Cover = value;
             }
         }
-
 
         ///<summary> Cover, in binary format encoded BASE64 </summary>
         public string CoverDatas
@@ -2550,7 +2402,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Average number of beats per minute </summary>
         public string BPM
         {
@@ -2565,7 +2416,6 @@ namespace MediaInfoWrapper
                 this._BPM = value;
             }
         }
-
 
         ///<summary> Video Codecs separated by _ </summary>
         public string VideoCodecList
@@ -2582,7 +2432,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Video languages separated by _ </summary>
         public string VideoLanguageList
         {
@@ -2597,7 +2446,6 @@ namespace MediaInfoWrapper
                 this._VideoLanguageList = value;
             }
         }
-
 
         ///<summary> Audio Codecs separated by _ </summary>
         public string AudioCodecList
@@ -2614,7 +2462,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Audio languages separated by _ </summary>
         public string AudioLanguageList
         {
@@ -2629,7 +2476,6 @@ namespace MediaInfoWrapper
                 this._AudioLanguageList = value;
             }
         }
-
 
         ///<summary> Text Codecs separated by _ </summary>
         public string TextCodecList
@@ -2646,7 +2492,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Text languages separated by _ </summary>
         public string TextLanguageList
         {
@@ -2661,7 +2506,6 @@ namespace MediaInfoWrapper
                 this._TextLanguageList = value;
             }
         }
-
 
         ///<summary> Chapters Codecs separated by _ </summary>
         public string ChaptersCodecList
@@ -2678,7 +2522,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Chapters languages separated by _ </summary>
         public string ChaptersLanguageList
         {
@@ -2693,7 +2536,6 @@ namespace MediaInfoWrapper
                 this._ChaptersLanguageList = value;
             }
         }
-
 
         ///<summary> Image Codecs separated by _ </summary>
         public string ImageCodecList
@@ -2710,7 +2552,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Image languages separated by _ </summary>
         public string ImageLanguageList
         {
@@ -2726,7 +2567,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Other tags not known... </summary>
         public string Other
         {
@@ -2741,8 +2581,5 @@ namespace MediaInfoWrapper
                 this._Other = value;
             }
         }
-
-
-
     }
 }

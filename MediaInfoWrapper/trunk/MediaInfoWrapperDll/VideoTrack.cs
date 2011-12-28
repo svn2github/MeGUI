@@ -64,6 +64,10 @@ namespace MediaInfoWrapper
         private string _FormatSettingsPulldown;
         private string _ScanType;
         private string _ScanTypeString;
+        private string _Default;
+        private string _DefaultString;
+        private string _Forced;
+        private string _ForcedString;
 
         ///<summary> Count of objects available in this stream </summary>
         public string Count
@@ -80,7 +84,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Count of streams of that kind available </summary>
         public string StreamCount
         {
@@ -95,7 +98,6 @@ namespace MediaInfoWrapper
                 this._StreamCount = value;
             }
         }
-
 
         ///<summary> Stream name </summary>
         public string StreamKind
@@ -112,7 +114,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> When multiple streams, number of the stream </summary>
         public string StreamKindID
         {
@@ -127,7 +128,6 @@ namespace MediaInfoWrapper
                 this._StreamKindID = value;
             }
         }
-
 
         ///<summary> Last   Inform   call </summary>
         public string Inform
@@ -144,7 +144,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> A ID for this stream in this file </summary>
         public string ID
         {
@@ -159,7 +158,6 @@ namespace MediaInfoWrapper
                 this._ID = value;
             }
         }
-
 
         ///<summary> A unique ID for this stream, should be copied with stream copy </summary>
         public string UniqueID
@@ -176,7 +174,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Name of the track </summary>
         public string Title
         {
@@ -191,7 +188,6 @@ namespace MediaInfoWrapper
                 this._Title = value;
             }
         }
-
 
         ///<summary> Codec used </summary>
         public string Codec
@@ -298,7 +294,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Bit rate (with measurement) </summary>
         public string BitRateString
         {
@@ -313,7 +308,6 @@ namespace MediaInfoWrapper
                 this._BitRateString = value;
             }
         }
-
 
         ///<summary> Bit rate mode (VBR, CBR) </summary>
         public string BitRateMode
@@ -330,7 +324,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Software used to create the file </summary>
         public string EncodedLibrary
         {
@@ -345,7 +338,6 @@ namespace MediaInfoWrapper
                 this._EncodedLibrary = value;
             }
         }
-
 
         ///<summary> Parameters used by the software </summary>
         public string EncodedLibrarySettings
@@ -362,7 +354,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Width </summary>
         public string Width
         {
@@ -377,7 +368,6 @@ namespace MediaInfoWrapper
                 this._Width = value;
             }
         }
-
 
         ///<summary> Height </summary>
         public string Height
@@ -394,7 +384,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Aspect ratio </summary>
         public string AspectRatio
         {
@@ -409,7 +398,6 @@ namespace MediaInfoWrapper
                 this._AspectRatio = value;
             }
         }
-
 
         ///<summary> Aspect ratio </summary>
         public string AspectRatioString
@@ -426,7 +414,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Frame rate </summary>
         public string FrameRate
         {
@@ -441,7 +428,6 @@ namespace MediaInfoWrapper
                 this._FrameRate = value;
             }
         }
-
 
         ///<summary> Frame rate </summary>
         public string FrameRateString
@@ -458,7 +444,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Frame count </summary>
         public string FrameCount
         {
@@ -473,7 +458,6 @@ namespace MediaInfoWrapper
                 this._FrameCount = value;
             }
         }
-
 
         ///<summary> example for MP3 : 16 bits </summary>
         public string BitDepth
@@ -490,7 +474,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> bits_(Pixel Frame) (like Gordian Knot) </summary>
         public string BitsPixelFrame
         {
@@ -505,7 +488,6 @@ namespace MediaInfoWrapper
                 this._BitsPixelFrame = value;
             }
         }
-
 
         ///<summary> Delay fixed in the stream (relative) IN MS </summary>
         public string Delay
@@ -522,7 +504,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Duration of the stream </summary>
         public string Duration
         {
@@ -537,7 +518,6 @@ namespace MediaInfoWrapper
                 this._Duration = value;
             }
         }
-
 
         ///<summary> Duration (formated) </summary>
         public string DurationString
@@ -554,7 +534,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Duration in format : HHh MMmn SSs MMMms, XX omited if zero </summary>
         public string DurationString1
         {
@@ -569,7 +548,6 @@ namespace MediaInfoWrapper
                 this._DurationString1 = value;
             }
         }
-
 
         ///<summary> Duration in format : XXx YYy only, YYy omited if zero </summary>
         public string DurationString2
@@ -586,7 +564,6 @@ namespace MediaInfoWrapper
             }
         }
 
-
         ///<summary> Duration in format : HH:MM:SS.MMM </summary>
         public string DurationString3
         {
@@ -601,7 +578,6 @@ namespace MediaInfoWrapper
                 this._DurationString3 = value;
             }
         }
-
 
         ///<summary> Language (2 letters) </summary>
         public string Language
@@ -975,6 +951,66 @@ namespace MediaInfoWrapper
             set
             {
                 this._ScanTypeString = value;
+            }
+        }
+
+        ///<summary> Default Info </summary>
+        public string Default
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(this._Default))
+                    this._Default = "";
+                return _Default;
+            }
+            set
+            {
+                this._Default = value;
+            }
+        }
+
+        ///<summary> Default Info (string format)</summary>
+        public string DefaultString
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(this._DefaultString))
+                    this._DefaultString = "";
+                return _DefaultString;
+            }
+            set
+            {
+                this._DefaultString = value;
+            }
+        }
+
+        ///<summary> Forced Info </summary>
+        public string Forced
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(this._Forced))
+                    this._Forced = "";
+                return _Forced;
+            }
+            set
+            {
+                this._Forced = value;
+            }
+        }
+
+        ///<summary> Forced Info (string format)</summary>
+        public string ForcedString
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(this._ForcedString))
+                    this._ForcedString = "";
+                return _ForcedString;
+            }
+            set
+            {
+                this._ForcedString = value;
             }
         }
     }
