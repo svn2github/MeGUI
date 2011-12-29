@@ -95,17 +95,22 @@ namespace MeGUI
 
                 checked
                 {
-                    ulong width = (ulong)clip.VideoWidth;
-                    ulong height = (ulong)clip.VideoHeight;
-                    info = new MediaFileInfo(
-                        clip.HasVideo, width, height,
-                        new Dar(clip.GetIntVariable("MeGUI_darx", -1),
-                              clip.GetIntVariable("MeGUI_dary", -1),
-                              width, height),
-                              (ulong)clip.num_frames,
-                              ((double)clip.raten) / ((double)clip.rated),
-                              clip.raten, clip.rated,
-                              (clip.SamplesCount != 0));
+                    if (clip.HasVideo)
+                    {
+                        ulong width = (ulong)clip.VideoWidth;
+                        ulong height = (ulong)clip.VideoHeight;
+                        info = new MediaFileInfo(
+                            clip.HasVideo, width, height,
+                            new Dar(clip.GetIntVariable("MeGUI_darx", -1),
+                                  clip.GetIntVariable("MeGUI_dary", -1),
+                                  width, height),
+                                  (ulong)clip.num_frames,
+                                  ((double)clip.raten) / ((double)clip.rated),
+                                  clip.raten, clip.rated,
+                                  (clip.SamplesCount != 0));
+                    }
+                    else
+                        info = new MediaFileInfo(false, 0, 0, Dar.A1x1, (ulong)clip.SamplesCount, (double)clip.AudioSampleRate, 0, 0, (clip.SamplesCount != 0));
                 }
             }
             catch (Exception)

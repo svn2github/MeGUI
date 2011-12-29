@@ -1,3 +1,4 @@
+2072 [Audio Encoder] added handling of channel count mismatch
 2071 [MediaInfo] added default/forced track info to the MediaInfo wrapper (requires mediainfo revision 0.7.51+)
 2070 [MKV Muxer] adjusted muxer to the recent mkvmerge changes (requires mkvmerge revision 5.2.0+)
 2069 [HD Streams Extractor] automatically execute the job a second time if a gaps file is detected

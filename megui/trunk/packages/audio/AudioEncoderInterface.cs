@@ -787,6 +787,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 case ChannelMode.DPLIIDownmix:
                 case ChannelMode.StereoDownmix:
                     string strChannelPositions;
+                    int iChannelCount = 0;
                     if (Path.GetExtension(audioJob.Input).ToLower().Equals(".avs"))
                     {
                         if (!AudioUtil.AVSFileHasAudio(audioJob.Input))
@@ -794,12 +795,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                             log.LogEvent("avs file has no audio: " + audioJob.Input, ImageType.Error);
                             break;
                         }
-                        int iChannelCount = AudioUtil.getChannelCountFromAVSFile(audioJob.Input);
-                        if (iChannelCount <= 2)
-                        {
-                            log.LogEvent("ignoring downmix as there are only " + iChannelCount + " channels", ImageType.Information);
-                            break;
-                        }
+                        iChannelCount = AudioUtil.getChannelCountFromAVSFile(audioJob.Input);
                         script.Append(@"# detected channels: " + iChannelCount + " channels" + Environment.NewLine);
                         strChannelPositions = AudioUtil.getChannelPositionsFromAVSFile(audioJob.Input);
                         if (String.IsNullOrEmpty(strChannelPositions))
@@ -819,13 +815,23 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                         strChannelPositions = oInfo.AudioTracks[0].ChannelPositions;
                         script.Append(@"# detected channels: " + oInfo.AudioTracks[0].NbChannels + Environment.NewLine);
                         script.Append(@"# detected channel positions: " + oInfo.AudioTracks[0].ChannelPositions + Environment.NewLine);
-                        int iChannelCount = 0;
                         int.TryParse(oInfo.AudioTracks[0].NbChannels.Split(' ')[0], out iChannelCount);
-                        if (iChannelCount <= 2)
-                        {
-                            log.LogEvent("ignoring downmix as there are only " + iChannelCount + " channels", ImageType.Information);
-                            break;
-                        }
+                    }
+
+                    if (iChannelCount <= 2)
+                    {
+                        log.LogEvent("ignoring downmix as there are only " + iChannelCount + " channels", ImageType.Information);
+                        break;
+                    }
+
+                    int iAVSChannelCount = 0;
+                    using (AvsFile avi = AvsFile.ParseScript(script.ToString()))
+                        iAVSChannelCount = avi.Clip.ChannelsCount;
+
+                    if (iAVSChannelCount != iChannelCount)
+                    {
+                        log.LogEvent("channel count mismatch! ignoring downmix as the input file is reporting " + iChannelCount + " channels and the AviSynth script is reporting " + iAVSChannelCount + " channels", ImageType.Warning);
+                        break;
                     }
                     
                     switch (strChannelPositions)
