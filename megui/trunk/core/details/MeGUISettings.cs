@@ -46,7 +46,7 @@ namespace MeGUI
         private bool recalculateMainMovieBitrate, autoForceFilm, autoStartQueue, enableMP3inMP4, autoOpenScript,
                      overwriteStats, keep2of3passOutput, autoUpdate, deleteCompletedJobs, deleteIntermediateFiles,
                      deleteAbortedOutput, openProgressWindow, useadvancedtooltips, autoSelectHDStreams, autoscroll, 
-                     alwaysOnTop, safeProfileAlteration, usehttpproxy, addTimePosition, alwaysbackupfiles,
+                     alwaysOnTop, safeProfileAlteration, usehttpproxy, addTimePosition, alwaysbackupfiles, bUseITU,
                      forcerawavcextension, bAutoLoadDG, bAutoStartQueueStartup, bAlwaysMuxMKV, b64bitX264, bEnsureCorrectPlaybackSpeed;
         private ulong audioSamplesPerUpdate;
         private AfterEncoding afterEncoding;
@@ -186,6 +186,7 @@ namespace MeGUI
             bEnsureCorrectPlaybackSpeed = false;
             ffmsThreads = 1;
             appendToForcedStreams = "";
+            bUseITU = true;
         }
 
         private string getDownloadPath(string strPath)
@@ -1013,6 +1014,12 @@ namespace MeGUI
         {
             get { return ffmsThreads; }
             set { ffmsThreads = value; }
+        }
+
+        public bool UseITUValues
+        {
+            get { return bUseITU; }
+            set { bUseITU = value; }
         }
 
         #endregion

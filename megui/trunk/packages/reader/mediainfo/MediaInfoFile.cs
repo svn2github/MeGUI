@@ -438,17 +438,22 @@ namespace MeGUI
                         if (vCodec == null)
                             vCodec = getVideoCodec(track.Format); // sometimes codec info is not available, check the format then...
                         vType = getVideoType(vCodec, cType, file);
-                        Dar dar = Dar.A1x1;
+                        Dar? dar = null;
                         if (width == 720 && (height == 576 || height == 480))
                         {
-                            if (height == 576)
+                            if (!MainForm.Instance.Settings.UseITUValues)
+                            {
+                                if (track.AspectRatioString.Equals("16:9"))
+                                    dar = Dar.STATIC16x9;
+                                else if (track.AspectRatioString.Equals("4:3"))
+                                    dar = Dar.STATIC4x3; 
+                            }
+                            else if (height == 576)
                             {
                                 if (track.AspectRatioString.Equals("16:9"))
                                     dar = Dar.ITU16x9PAL;
                                 else if (track.AspectRatioString.Equals("4:3"))
                                     dar = Dar.ITU4x3PAL;
-                                else
-                                    dar = new Dar((decimal?)easyParseDouble(track.AspectRatio), width, height);
                             }
                             else
                             {
@@ -456,15 +461,13 @@ namespace MeGUI
                                     dar = Dar.ITU16x9NTSC;
                                 else if (info.Video[0].AspectRatioString.Equals("4:3"))
                                     dar = Dar.ITU4x3NTSC;
-                                else
-                                    dar = new Dar((decimal?)easyParseDouble(track.AspectRatio), width, height);
                             }
                         }
-                        else
+                        if (dar == null)
                         {
                             dar = new Dar((decimal?)easyParseDouble(track.AspectRatio), width, height);
                         }
-                        this._MediaFileInfo = new MediaFileInfo(bHasVideo, width, height, dar, frameCount, fps, 0, 1, aCodecs.Length > 0);
+                        this._MediaFileInfo = new MediaFileInfo(bHasVideo, width, height, (Dar)dar, frameCount, fps, 0, 1, aCodecs.Length > 0);
                     }
                 }
                 else

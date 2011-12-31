@@ -417,7 +417,10 @@ namespace MeGUI
                     _log.LogValue("Aspect ratio", customDAR);
                 else
                 {
-                    customDAR = Dar.ITU16x9PAL;
+                    if (MainForm.Instance.Settings.UseITUValues)
+                        customDAR = Dar.ITU16x9PAL;
+                    else
+                        customDAR = Dar.STATIC16x9;
                     _log.Warn(string.Format("No aspect ratio found, defaulting to {0}.", customDAR));
                 }
             }

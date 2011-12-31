@@ -1,3 +1,4 @@
+2073 [Settings] added option to select if ITU Aspect Ratio should be used by default (enabled by default). Feature request #3057378
 2072 [Audio Encoder] added handling of channel count mismatch
 2071 [MediaInfo] added default/forced track info to the MediaInfo wrapper (requires mediainfo revision 0.7.51+)
 2070 [MKV Muxer] adjusted muxer to the recent mkvmerge changes (requires mkvmerge revision 5.2.0+)

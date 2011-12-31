@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2011  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -136,6 +136,7 @@ namespace MeGUI
         private Label lblffmsThreads;
         private Label lblForcedName;
         private TextBox txtForcedName;
+        private CheckBox cbUseITUValues;
         private XmlDocument ContextHelp = new XmlDocument();
 		#region start / stop
 		public SettingsForm()
@@ -176,6 +177,7 @@ namespace MeGUI
             }
             toolTipHelp.SetToolTip(chkAlwaysMuxMKV, SelectHelpText("alwaysmuxmkv"));
             toolTipHelp.SetToolTip(ffmsThreads, SelectHelpText("ffmsthreads"));
+            toolTipHelp.SetToolTip(cbUseITUValues, SelectHelpText("useituvalues"));
         }
 
         /// <summary>
@@ -233,6 +235,7 @@ namespace MeGUI
             this.saveButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.otherGroupBox = new System.Windows.Forms.GroupBox();
+            this.cbUseITUValues = new System.Windows.Forms.CheckBox();
             this.cbAutoStartQueueStartup = new System.Windows.Forms.CheckBox();
             this.forcerawavcuse = new System.Windows.Forms.CheckBox();
             this.audiosamplesperupdate = new System.Windows.Forms.NumericUpDown();
@@ -262,7 +265,6 @@ namespace MeGUI
             this.gbDefaultOutput = new System.Windows.Forms.GroupBox();
             this.btnClearOutputDirecoty = new System.Windows.Forms.Button();
             this.clearDefaultOutputDir = new System.Windows.Forms.Button();
-            this.defaultOutputDir = new MeGUI.FileBar();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.txt_httpproxyport = new System.Windows.Forms.TextBox();
@@ -297,6 +299,8 @@ namespace MeGUI
             this.nbPasses = new System.Windows.Forms.NumericUpDown();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.lblForcedName = new System.Windows.Forms.Label();
+            this.txtForcedName = new System.Windows.Forms.TextBox();
             this.lblffmsThreads = new System.Windows.Forms.Label();
             this.ffmsThreads = new System.Windows.Forms.NumericUpDown();
             this.chkSelectHDTracks = new System.Windows.Forms.CheckBox();
@@ -307,7 +311,6 @@ namespace MeGUI
             this.button2 = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.btnClearMP4TempDirectory = new System.Windows.Forms.Button();
-            this.tempDirMP4 = new MeGUI.FileBar();
             this.vobGroupBox = new System.Windows.Forms.GroupBox();
             this.cbAutoLoadDG = new System.Windows.Forms.CheckBox();
             this.percentLabel = new System.Windows.Forms.Label();
@@ -318,8 +321,8 @@ namespace MeGUI
             this.autoEncodeDefaultsButton = new System.Windows.Forms.Button();
             this.toolTipHelp = new System.Windows.Forms.ToolTip(this.components);
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
-            this.txtForcedName = new System.Windows.Forms.TextBox();
-            this.lblForcedName = new System.Windows.Forms.Label();
+            this.defaultOutputDir = new MeGUI.FileBar();
+            this.tempDirMP4 = new MeGUI.FileBar();
             groupBox1 = new System.Windows.Forms.GroupBox();
             groupBox1.SuspendLayout();
             this.otherGroupBox.SuspendLayout();
@@ -434,6 +437,7 @@ namespace MeGUI
             // 
             // otherGroupBox
             // 
+            this.otherGroupBox.Controls.Add(this.cbUseITUValues);
             this.otherGroupBox.Controls.Add(this.cbAutoStartQueueStartup);
             this.otherGroupBox.Controls.Add(this.forcerawavcuse);
             this.otherGroupBox.Controls.Add(this.audiosamplesperupdate);
@@ -460,6 +464,16 @@ namespace MeGUI
             this.otherGroupBox.TabStop = false;
             this.otherGroupBox.Tag = "";
             this.otherGroupBox.Text = "Main Settings ";
+            // 
+            // cbUseITUValues
+            // 
+            this.cbUseITUValues.Checked = true;
+            this.cbUseITUValues.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbUseITUValues.Location = new System.Drawing.Point(300, 207);
+            this.cbUseITUValues.Name = "cbUseITUValues";
+            this.cbUseITUValues.Size = new System.Drawing.Size(144, 17);
+            this.cbUseITUValues.TabIndex = 20;
+            this.cbUseITUValues.Text = "Use ITU Aspect Ratio";
             // 
             // cbAutoStartQueueStartup
             // 
@@ -754,22 +768,6 @@ namespace MeGUI
             this.clearDefaultOutputDir.TabIndex = 41;
             this.clearDefaultOutputDir.Text = "x";
             this.clearDefaultOutputDir.Click += new System.EventHandler(this.clearDefaultOutputDir_Click);
-            // 
-            // defaultOutputDir
-            // 
-            this.defaultOutputDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.defaultOutputDir.Filename = "";
-            this.defaultOutputDir.Filter = null;
-            this.defaultOutputDir.FilterIndex = 0;
-            this.defaultOutputDir.FolderMode = true;
-            this.defaultOutputDir.Location = new System.Drawing.Point(12, 29);
-            this.defaultOutputDir.Name = "defaultOutputDir";
-            this.defaultOutputDir.ReadOnly = true;
-            this.defaultOutputDir.SaveMode = false;
-            this.defaultOutputDir.Size = new System.Drawing.Size(211, 26);
-            this.defaultOutputDir.TabIndex = 40;
-            this.defaultOutputDir.Title = null;
             // 
             // tabPage3
             // 
@@ -1154,6 +1152,22 @@ namespace MeGUI
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = " Misc ";
             // 
+            // lblForcedName
+            // 
+            this.lblForcedName.AutoSize = true;
+            this.lblForcedName.Location = new System.Drawing.Point(11, 81);
+            this.lblForcedName.Name = "lblForcedName";
+            this.lblForcedName.Size = new System.Drawing.Size(163, 13);
+            this.lblForcedName.TabIndex = 33;
+            this.lblForcedName.Text = "add text to forced track names: ";
+            // 
+            // txtForcedName
+            // 
+            this.txtForcedName.Location = new System.Drawing.Point(225, 78);
+            this.txtForcedName.Name = "txtForcedName";
+            this.txtForcedName.Size = new System.Drawing.Size(234, 21);
+            this.txtForcedName.TabIndex = 32;
+            // 
             // lblffmsThreads
             // 
             this.lblffmsThreads.AutoSize = true;
@@ -1268,23 +1282,6 @@ namespace MeGUI
             this.btnClearMP4TempDirectory.Text = "x";
             this.btnClearMP4TempDirectory.Click += new System.EventHandler(this.btnClearMP4TempDirectory_Click);
             // 
-            // tempDirMP4
-            // 
-            this.tempDirMP4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tempDirMP4.Filename = "";
-            this.tempDirMP4.Filter = null;
-            this.tempDirMP4.FilterIndex = 0;
-            this.tempDirMP4.FolderMode = true;
-            this.tempDirMP4.Location = new System.Drawing.Point(13, 33);
-            this.tempDirMP4.Name = "tempDirMP4";
-            this.tempDirMP4.ReadOnly = true;
-            this.tempDirMP4.SaveMode = false;
-            this.tempDirMP4.Size = new System.Drawing.Size(418, 26);
-            this.tempDirMP4.TabIndex = 41;
-            this.tempDirMP4.Title = null;
-            this.tempDirMP4.FileSelected += new MeGUI.FileBarEventHandler(this.tempDirMP4_FileSelected);
-            // 
             // vobGroupBox
             // 
             this.vobGroupBox.Controls.Add(this.cbAutoLoadDG);
@@ -1384,21 +1381,38 @@ namespace MeGUI
             this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 1;
             // 
-            // txtForcedName
+            // defaultOutputDir
             // 
-            this.txtForcedName.Location = new System.Drawing.Point(225, 78);
-            this.txtForcedName.Name = "txtForcedName";
-            this.txtForcedName.Size = new System.Drawing.Size(234, 21);
-            this.txtForcedName.TabIndex = 32;
+            this.defaultOutputDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.defaultOutputDir.Filename = "";
+            this.defaultOutputDir.Filter = null;
+            this.defaultOutputDir.FilterIndex = 0;
+            this.defaultOutputDir.FolderMode = true;
+            this.defaultOutputDir.Location = new System.Drawing.Point(12, 29);
+            this.defaultOutputDir.Name = "defaultOutputDir";
+            this.defaultOutputDir.ReadOnly = true;
+            this.defaultOutputDir.SaveMode = false;
+            this.defaultOutputDir.Size = new System.Drawing.Size(211, 26);
+            this.defaultOutputDir.TabIndex = 40;
+            this.defaultOutputDir.Title = null;
             // 
-            // lblForcedName
+            // tempDirMP4
             // 
-            this.lblForcedName.AutoSize = true;
-            this.lblForcedName.Location = new System.Drawing.Point(11, 81);
-            this.lblForcedName.Name = "lblForcedName";
-            this.lblForcedName.Size = new System.Drawing.Size(163, 13);
-            this.lblForcedName.TabIndex = 33;
-            this.lblForcedName.Text = "add text to forced track names: ";
+            this.tempDirMP4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tempDirMP4.Filename = "";
+            this.tempDirMP4.Filter = null;
+            this.tempDirMP4.FilterIndex = 0;
+            this.tempDirMP4.FolderMode = true;
+            this.tempDirMP4.Location = new System.Drawing.Point(13, 33);
+            this.tempDirMP4.Name = "tempDirMP4";
+            this.tempDirMP4.ReadOnly = true;
+            this.tempDirMP4.SaveMode = false;
+            this.tempDirMP4.Size = new System.Drawing.Size(418, 26);
+            this.tempDirMP4.TabIndex = 41;
+            this.tempDirMP4.Title = null;
+            this.tempDirMP4.FileSelected += new MeGUI.FileBarEventHandler(this.tempDirMP4_FileSelected);
             // 
             // SettingsForm
             // 
@@ -1597,6 +1611,7 @@ namespace MeGUI
                 settings.Use64bitX264 = chkEnable64bitX264.Checked;
                 settings.FFMSThreads = Decimal.ToInt32(ffmsThreads.Value);
                 settings.AppendToForcedStreams = txtForcedName.Text;
+                settings.UseITUValues = cbUseITUValues.Checked;
 				return settings;
 			}
 			set
@@ -1659,6 +1674,7 @@ namespace MeGUI
                     ffmsThreads.Value = ffmsThreads.Maximum;
                 else
                     ffmsThreads.Value = settings.FFMSThreads;
+                cbUseITUValues.Checked = settings.UseITUValues;
 			}
 		}
 		#endregion

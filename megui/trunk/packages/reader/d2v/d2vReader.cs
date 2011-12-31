@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2011  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -34,7 +34,6 @@ namespace MeGUI
     {
 
         #region IMediaFileFactory Members
-
         public IMediaFile Open(string file)
         {
             return new d2vFile(file);
@@ -46,23 +45,27 @@ namespace MeGUI
                 return 10;
             return -1;
         }
-
         #endregion
 
         #region IIDable Members
-
         public string ID
         {
             get { return "d2v"; }
         }
-
         #endregion
     }
-	/// <summary>
+	
+    /// <summary>
 	/// Summary description for d2vReader.
 	/// </summary>
 	public class d2vFile : IMediaFile
 	{
+        private AvsFile reader;
+        private string fileName;
+        private int fieldOperation;
+        private MediaFileInfo info;
+        private double filmPercentage;
+
         private static readonly System.Text.RegularExpressions.Regex r =
             new System.Text.RegularExpressions.Regex("(?<=FINISHED +)[0-9.]+(?=% FILM)");
 
@@ -79,12 +82,7 @@ namespace MeGUI
             }
             return filmPercentage;
         }
-        
-        private AvsFile reader;
-		private string fileName;
-		private int fieldOperation;
-        private MediaFileInfo info;
-		private double filmPercentage;
+
 		/// <summary>
 		/// initializes the d2v reader
 		/// </summary>
@@ -97,6 +95,7 @@ namespace MeGUI
             reader = AvsFile.ParseScript("LoadPlugin(\"" + strDLL + "\")\r\nDGDecode_Mpeg2Source(\"" + this.fileName + "\")");
             this.readFileProperties();
         }
+
 		/// <summary>
 		/// reads the d2v file, which is essentially a text file
          //the first few lines contain the video properties in plain text and the 
@@ -107,7 +106,7 @@ namespace MeGUI
 		private void readFileProperties()
 		{
             info = reader.Info.Clone();
-            Dar dar = Dar.A1x1;
+            Dar? dar = null;
             using (StreamReader sr = new StreamReader(fileName))
             {
 				string line = sr.ReadLine();
@@ -117,14 +116,21 @@ namespace MeGUI
 					{
 						string ar = line.Substring(13);
 
-                        if (reader.Info.Width == 720 && reader.Info.Height == 480)
+                        if (!MainForm.Instance.Settings.UseITUValues)
                         {
                             if (ar.Equals("16:9"))
-                                dar = Dar.ITU16x9NTSC;
+                                dar = Dar.STATIC16x9;
                             else if (ar.Equals("4:3"))
+                                dar = Dar.STATIC4x3;
+                        }
+                        else if (reader.Info.Width == 720 && reader.Info.Height == 480)
+                        {
+                            if (ar.StartsWith("16:9"))
+                                dar = Dar.ITU16x9NTSC;
+                            else if (ar.StartsWith("4:3"))
                                 dar = Dar.ITU4x3NTSC;
                         }
-                        else
+                        else if (reader.Info.Width == 720 && reader.Info.Height == 576)
                         {
                             if (ar.StartsWith("16:9"))
                                 dar = Dar.ITU16x9PAL;
@@ -145,15 +151,16 @@ namespace MeGUI
 					}
 				}
 			}
-            info.DAR = dar;
-
-
+            if (dar != null)
+                info.DAR = (Dar)dar;
 		}
+
 		#region properties
         public MediaFileInfo Info
         {
             get { return info; }
         }
+
 		/// <summary>
 		/// returns the percentage of film of this source
 		/// </summary>
@@ -161,6 +168,7 @@ namespace MeGUI
 		{
 			get {return this.filmPercentage;}
 		}
+
 		/// <summary>
 		/// returns the field operation performed on this source
 		/// </summary>
@@ -171,7 +179,6 @@ namespace MeGUI
 		#endregion
 
         #region IMediaFile Members
-
         public bool CanReadVideo
         {
             get { return reader.CanReadVideo; }
@@ -191,16 +198,13 @@ namespace MeGUI
         {
             throw new Exception("The method or operation is not implemented.");
         }
-
         #endregion
 
         #region IDisposable Members
-
         public void Dispose()
         {
             reader.Dispose();
         }
-
         #endregion
     }
 }
