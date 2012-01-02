@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2011  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -85,9 +85,25 @@ namespace MeGUI
         private void readFileProperties()
         {
             info = reader.Info.Clone();
-            Dar dar = new Dar(reader.Info.Width, reader.Info.Height);
- 
-            info.DAR = dar;
+            using (StreamReader sr = new StreamReader(fileName))
+            {
+                int iLineCount = 0;
+                string line = null;
+                while ((line = sr.ReadLine()) != null)
+                {
+                    iLineCount++;
+                    if (iLineCount == 3)
+                    {
+                        string strSourceFile = line;
+                        if (File.Exists(strSourceFile))
+                        {
+                            MediaInfoFile oInfo = new MediaInfoFile(strSourceFile);
+                            info.DAR = oInfo.Info.DAR;
+                        }
+                        break;
+                    }
+                }
+            }
         }
         #region properties
         public MediaFileInfo Info

@@ -368,7 +368,7 @@ namespace MeGUI
             }
             else if (job.IndexerUsed == FileIndexerWindow.IndexType.FFMS)
             {
-                d2v = new ffmsFile(path);
+                d2v = new ffmsFile(path, null);
                 oPossibleSource = PossibleSources.ffindex;
             }
             else

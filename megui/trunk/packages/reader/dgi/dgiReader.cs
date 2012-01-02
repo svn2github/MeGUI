@@ -116,7 +116,6 @@ namespace MeGUI
         private void readFileProperties()
         {
             info = reader.Info.Clone();
-            Dar dar = Dar.A1x1;
             using (StreamReader sr = new StreamReader(fileName))
             {
                 string line = null;
@@ -129,18 +128,13 @@ namespace MeGUI
                         if (File.Exists(strSourceFile))
                         {
                             MediaInfoFile oInfo = new MediaInfoFile(strSourceFile);
-                            dar = oInfo.Info.DAR;
-                        }
-                        else
-                        {
-                            dar = new Dar(reader.Info.Width, reader.Info.Height);
+                            info.DAR = oInfo.Info.DAR;
                         }
                         break;
                     }
                     iLineCount++;
                 }
             }
-            info.DAR = dar;
         }
         #region properties
         public MediaFileInfo Info

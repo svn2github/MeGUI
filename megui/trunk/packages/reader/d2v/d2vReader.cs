@@ -98,7 +98,7 @@ namespace MeGUI
 
 		/// <summary>
 		/// reads the d2v file, which is essentially a text file
-         //the first few lines contain the video properties in plain text and the 
+        /// the first few lines contain the video properties in plain text and the 
 		/// last line contains the film percentage
 		/// this method reads all this information and stores it internally, then 
 		/// closes the d2v file again
@@ -106,36 +106,20 @@ namespace MeGUI
 		private void readFileProperties()
 		{
             info = reader.Info.Clone();
-            Dar? dar = null;
             using (StreamReader sr = new StreamReader(fileName))
             {
-				string line = sr.ReadLine();
+                int iLineCount = 0;
+				string line = null;
 				while ((line = sr.ReadLine()) != null)
 				{
-					if (line.IndexOf("Aspect_Ratio") != -1) // this is the aspect ratio line
-					{
-						string ar = line.Substring(13);
-
-                        if (!MainForm.Instance.Settings.UseITUValues)
+                    iLineCount++;
+                    if (iLineCount == 3)
+                    {
+                        string strSourceFile = line;
+                        if (File.Exists(strSourceFile))
                         {
-                            if (ar.Equals("16:9"))
-                                dar = Dar.STATIC16x9;
-                            else if (ar.Equals("4:3"))
-                                dar = Dar.STATIC4x3;
-                        }
-                        else if (reader.Info.Width == 720 && reader.Info.Height == 480)
-                        {
-                            if (ar.StartsWith("16:9"))
-                                dar = Dar.ITU16x9NTSC;
-                            else if (ar.StartsWith("4:3"))
-                                dar = Dar.ITU4x3NTSC;
-                        }
-                        else if (reader.Info.Width == 720 && reader.Info.Height == 576)
-                        {
-                            if (ar.StartsWith("16:9"))
-                                dar = Dar.ITU16x9PAL;
-                            else if (ar.StartsWith("4:3"))  //AAA: I got 4:3,625 from DGIndex
-                                dar = Dar.ITU4x3PAL;
+                            MediaInfoFile oInfo = new MediaInfoFile(strSourceFile);
+                            info.DAR = oInfo.Info.DAR;
                         }
                     }
 					if (line.IndexOf("Field_Operation") != -1)
@@ -143,7 +127,7 @@ namespace MeGUI
 						string fieldOp = line.Substring(16, 1);
 						this.fieldOperation = Int32.Parse(fieldOp);
 					}
-					if (line.IndexOf("FINISHED") != -1 && line.IndexOf("FILM") != -1) // dgindex now reports VIDEO % if it's > 50%
+					else if (line.IndexOf("FINISHED") != -1 && line.IndexOf("FILM") != -1) // dgindex now reports VIDEO % if it's > 50%
 					{
 						int end = line.IndexOf("%");
 						string percentage = line.Substring(10, end - 10);
@@ -151,8 +135,6 @@ namespace MeGUI
 					}
 				}
 			}
-            if (dar != null)
-                info.DAR = (Dar)dar;
 		}
 
 		#region properties
