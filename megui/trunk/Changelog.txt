@@ -1,3 +1,5 @@
+2076 [Video Player] fixed a crash when using non seekable scripts
+                    in order to display such scripts the default start position is now the beginning 
 2075 [AVS Script Creator] improve input DAR detection when using no index files
 2074 [AVS Script Creator] + [OneClick] improve input DAR detection when using index files
 2073 [Settings] added option to select if ITU Aspect Ratio should be used by default (enabled by default). Feature request #3057378

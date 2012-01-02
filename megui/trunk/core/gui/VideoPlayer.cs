@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2011  Doom9 & al
+// Copyright (C) 2005-2012  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -218,7 +218,8 @@ namespace MeGUI
                 zoomMaxWidth = 0;
                 SetMaxZoomWidth();
                 doInitialAdjustment();
-                videoPreview.LoadVideo(reader, file.Info.FPS, startFrame >= 0 ? startFrame : reader.FrameCount / 2);
+                videoPreview.LoadVideo(reader, file.Info.FPS, startFrame >= 0 ? startFrame : 0);
+                setTitleText();
 				return true;
 			}
 			return false;
@@ -282,7 +283,8 @@ namespace MeGUI
                 this.positionSlider.TickFrequency = this.positionSlider.Maximum / 20;
                 SetMaxZoomWidth();
                 doInitialAdjustment();
-                videoPreview.LoadVideo(reader, file.Info.FPS, positionSlider.Value >= 0 && positionSlider.Value <= reader.FrameCount ? positionSlider.Value : reader.FrameCount / 2);
+                videoPreview.LoadVideo(reader, file.Info.FPS, positionSlider.Value >= 0 && positionSlider.Value <= reader.FrameCount ? positionSlider.Value : 0);
+                setTitleText();
                 return true;
             }
             return false;

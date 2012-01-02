@@ -1,3 +1,23 @@
+// ****************************************************************************
+// 
+// Copyright (C) 2005-2012  Doom9 & al
+// 
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 2 of the License, or
+// (at your option) any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+// 
+// ****************************************************************************
+
 using System;
 using System.Drawing;
 using System.Threading;
@@ -60,7 +80,8 @@ namespace MeGUI.core.gui
                 value = max;
 
             //position unchanged
-            if (position == value) return false;
+            if (position == value) 
+                return false;
 
             position = value;
 
@@ -199,8 +220,10 @@ namespace MeGUI.core.gui
                 //playback speed is correct, but frames may be dropped if computer is too slow
                 if (EnsureCorrectPlaybackSpeed)
                 {
-                    if (!OffsetPosition(1, false)) Stop();
-                    else InvokeOnPositionChanged();
+                    if (!OffsetPosition(1, false)) 
+                        Stop();
+                    else 
+                        InvokeOnPositionChanged();
 
                     UpdateVideo();
                 }
@@ -246,21 +269,31 @@ namespace MeGUI.core.gui
 
                 if (WaitHandle.WaitAny(new WaitHandle[] { nextFrameEvent, renderEvent }) == 0)
                 {
-                    if (!OffsetPosition(1, false)) Stop();
-                    else InvokeOnPositionChanged();
+                    if (!OffsetPosition(1, false)) 
+                        Stop();
+                    else 
+                        InvokeOnPositionChanged();
                 }
 
                 Bitmap finalBitmap;
-
                 int pos = position;
-                using (Bitmap b = getFrame(pos))
+
+                try
                 {
-                    if(b == null) continue;
+                    using (Bitmap b = getFrame(pos))
+                    {
+                        if (b == null) continue;
 
-                    //if (cropMargin != Padding.Empty) // only crop when necessary            
-                    //    cropImage(b);
+                        //if (cropMargin != Padding.Empty) // only crop when necessary            
+                        //    cropImage(b);
 
-                    finalBitmap = resizeBitmap(b, videoPreview.Width, videoPreview.Height);
+                        finalBitmap = resizeBitmap(b, videoPreview.Width, videoPreview.Height);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Video Player Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    break;
                 }
                 
                 using(videoPreview.Image) // get rid of previous bitmap
@@ -281,8 +314,8 @@ namespace MeGUI.core.gui
             try
             {
                 IVideoReader reader = VideoReader;
-                if (reader == null) return null;
-
+                if (reader == null) 
+                    return null;
                 return reader.ReadFrameBitmap(pos);
             }
             finally
@@ -323,12 +356,12 @@ namespace MeGUI.core.gui
         #region LoadVideo
         public void LoadVideo(IVideoReader reader)
         {
-            LoadVideo(reader, 25, reader.FrameCount / 2);
+            LoadVideo(reader, 25, 0);
         }
 
         public void LoadVideo(IVideoReader reader, double fps)
         {
-            LoadVideo(reader, fps, reader.FrameCount / 2);
+            LoadVideo(reader, fps, 0);
         }
 
         public void LoadVideo(IVideoReader reader, double fps, int startPosition)
@@ -516,7 +549,7 @@ namespace MeGUI.core.gui
         {
             Stop();
             playTimer.Dispose();
-            if(renderThread != null)
+            if (renderThread != null)
             {
                 renderThread.Abort();
                 renderThread.Join();
