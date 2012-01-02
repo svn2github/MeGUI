@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2011  Doom9 & al
+// Copyright (C) 2005-2012  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -296,6 +296,38 @@ namespace MeGUI
 
             try
             {
+                // if an index file is used extract the real file name
+                if (Path.GetExtension(file).ToLower().Equals(".d2v") ||
+                    Path.GetExtension(file).ToLower().Equals(".dga") ||
+                    Path.GetExtension(file).ToLower().Equals(".dgi"))
+                {
+                    using (StreamReader sr = new StreamReader(file))
+                    {
+                        string line = null;
+                        int iLineCount = 0;
+                        while ((line = sr.ReadLine()) != null)
+                        {
+                            iLineCount++;
+                            if (iLineCount == 3 && !Path.GetExtension(file).ToLower().Equals(".dgi"))
+                            {
+                                string strSourceFile = line;
+                                if (Path.GetExtension(file).ToLower().Equals(".dgi"))
+                                    strSourceFile = line.Substring(0, line.LastIndexOf(" "));
+                                if (File.Exists(strSourceFile))
+                                    _file = file = strSourceFile;
+                                break;
+                            }
+                            else if (iLineCount == 4)
+                            {
+                                string strSourceFile = line.Substring(0, line.LastIndexOf(" "));
+                                if (File.Exists(strSourceFile))
+                                    _file = file = strSourceFile;
+                                break;
+                            }
+                        }
+                    }
+                }
+
                 MediaInfo info = new MediaInfo(file);
 
                 if (oLog != null)

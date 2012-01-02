@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -1605,7 +1605,7 @@ namespace MeGUI
                     break;
                 case ".ffindex":
                     sourceType = PossibleSources.ffindex;
-                    openVideo(videoInput);
+                    openVideo(videoInput.Substring(0, videoInput.Length - 8));
                     break;
                 case ".vdr":
                     sourceType = PossibleSources.vdr;
@@ -1615,7 +1615,7 @@ namespace MeGUI
                     if (File.Exists(videoInput + ".ffindex"))
                     {
                         sourceType = PossibleSources.ffindex;
-                        openVideo(videoInput + ".ffindex");
+                        openVideo(videoInput);
                     }
                     else
                     {
@@ -1954,14 +1954,14 @@ namespace MeGUI
         }
 
 		/// <summary>
-		/// opens a given DGIndex script
+		/// opens a given script
 		/// </summary>
-		/// <param name="videoInput">the DGIndex script to be opened</param>
-		private void openVideo(string videoInput, string textBoxName, bool inlineAvs)
+		/// <param name="videoInput">the script to be opened</param>
+		private void openVideo(string videoInputScript, string strSourceFileName, bool inlineAvs)
 		{
 			this.crop.Checked = false;
             this.input.Filename = "";
-            this.originalScript = videoInput;
+            this.originalScript = videoInputScript;
             this.originalInlineAvs = inlineAvs;
             if (player != null)
                 player.Dispose();
@@ -1969,7 +1969,7 @@ namespace MeGUI
             enableControls(videoLoaded);
 			if (videoLoaded)
 			{
-                this.input.Filename = textBoxName;
+                this.input.Filename = strSourceFileName;
                 file = player.File;
                 reader = player.Reader;
                 this.fpsBox.Value = (decimal)file.Info.FPS;
@@ -1981,7 +1981,13 @@ namespace MeGUI
                 verticalResolution.Maximum = file.Info.Height;
                 horizontalResolution.Value = file.Info.Width;
                 verticalResolution.Value = file.Info.Height;
-                arChooser.Value = file.Info.DAR;
+                if (File.Exists(strSourceFileName))
+                {
+                    MediaInfoFile oInfo = new MediaInfoFile(strSourceFileName);
+                    arChooser.Value = oInfo.Info.DAR;
+                }
+                else
+                    arChooser.Value = file.Info.DAR;
 
                 cropLeft.Maximum = cropRight.Maximum = file.Info.Width / 2;
                 cropTop.Maximum = cropBottom.Maximum = file.Info.Height / 2;
@@ -2157,7 +2163,8 @@ namespace MeGUI
 		/// <param name="e"></param>
         private void suggestResolution_CheckedChanged(object sender, System.EventArgs e)
         {
-            if (file == null) return;
+            if (file == null) 
+                return;
 
             try
             {

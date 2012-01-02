@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 // 
-// Copyright (C) 2005-2011  Doom9 & al
+// Copyright (C) 2005-2012  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -93,9 +93,9 @@ namespace MeGUI
             strScript = "LoadPlugin(\"" + strDLL + "\")\r\nFFVideoSource(\"" + this.fileName + "\"" + (!string.IsNullOrEmpty(indexFile) ? ", cachefile=\"" + indexFile + "\"" : String.Empty) + (MainForm.Instance.Settings.FFMSThreads > 0 ? ", threads=" + MainForm.Instance.Settings.FFMSThreads : String.Empty) + ")" + VideoUtil.getAssumeFPS(0, this.fileName);
             reader = AvsFile.ParseScript(strScript);
             info = reader.Info.Clone();
-            if (File.Exists(fileName))
+            if (File.Exists(this.fileName))
             {
-                MediaInfoFile oInfo = new MediaInfoFile(fileName);
+                MediaInfoFile oInfo = new MediaInfoFile(this.fileName);
                 info.DAR = oInfo.Info.DAR;
             }
         }
