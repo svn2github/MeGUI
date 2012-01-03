@@ -1,3 +1,4 @@
+2077 [Progress Window] lower also I/O and memory priority when priority below normal (requires Windows Vista or newer). Feature request #3468249
 2076 [Video Player] fixed a crash when using non seekable scripts
                     in order to display such scripts the default start position is now the beginning 
 2075 [AVS Script Creator] improve input DAR detection when using no index files

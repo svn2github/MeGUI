@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2011  Doom9 & al
+// Copyright (C) 2005-2012  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -474,11 +474,15 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 // Take priority from Avisynth thread rather than default in settings
                 // just in case user has managed to change job setting before getting here.
                 if (_encoderThread.Priority == ThreadPriority.Lowest)
-                    _encoderProcess.PriorityClass = ProcessPriorityClass.Idle;
+                    this.changePriority(ProcessPriority.IDLE);
+                else if (_encoderThread.Priority == ThreadPriority.BelowNormal)
+                    this.changePriority(ProcessPriority.BELOW_NORMAL);
                 else if (_encoderThread.Priority == ThreadPriority.Normal)
-                    _encoderProcess.PriorityClass = ProcessPriorityClass.Normal;
+                    this.changePriority(ProcessPriority.NORMAL);
                 else if (_encoderThread.Priority == ThreadPriority.AboveNormal)
-                    _encoderProcess.PriorityClass = ProcessPriorityClass.High;
+                    this.changePriority(ProcessPriority.ABOVE_NORMAL);
+                else if (_encoderThread.Priority == ThreadPriority.Highest)
+                    this.changePriority(ProcessPriority.HIGH);
 
                 _readFromStdOutThread = new Thread(new ThreadStart(readStdOut));
                 _readFromStdErrThread = new Thread(new ThreadStart(readStdErr));
@@ -516,7 +520,16 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
         {
             Util.ensureExists(audioJob.Input);
             _encoderThread = new Thread(new ThreadStart(this.encode));
-            _encoderThread.Priority = ThreadPriority.BelowNormal;
+            if (MainForm.Instance.Settings.DefaultPriority == ProcessPriority.HIGH)
+                _encoderThread.Priority = ThreadPriority.Highest;
+            else if (MainForm.Instance.Settings.DefaultPriority == ProcessPriority.ABOVE_NORMAL)
+                _encoderThread.Priority = ThreadPriority.AboveNormal;
+            if (MainForm.Instance.Settings.DefaultPriority == ProcessPriority.NORMAL)
+                _encoderThread.Priority = ThreadPriority.Normal;
+            if (MainForm.Instance.Settings.DefaultPriority == ProcessPriority.BELOW_NORMAL)
+                _encoderThread.Priority = ThreadPriority.BelowNormal;
+            else
+                _encoderThread.Priority = ThreadPriority.Lowest;
             _encoderThread.Start();
         }
 
@@ -1456,22 +1469,28 @@ function x_upmixC" + id + @"(clip stereo)
 					{
 					    case ProcessPriority.IDLE:
 							_encoderThread.Priority = ThreadPriority.Lowest;
+                            _encoderProcess.PriorityClass = ProcessPriorityClass.Idle;
 							break;
 						case ProcessPriority.BELOW_NORMAL:
 							_encoderThread.Priority = ThreadPriority.BelowNormal;
+                            _encoderProcess.PriorityClass = ProcessPriorityClass.BelowNormal;
 							break;
 						case ProcessPriority.NORMAL:
 							_encoderThread.Priority = ThreadPriority.Normal;
+                            _encoderProcess.PriorityClass = ProcessPriorityClass.Normal;
 							break;
 						case ProcessPriority.ABOVE_NORMAL:
 							_encoderThread.Priority = ThreadPriority.AboveNormal;
+                            _encoderProcess.PriorityClass = ProcessPriorityClass.AboveNormal;
 							break;
 						case ProcessPriority.HIGH:
 							_encoderThread.Priority = ThreadPriority.Highest;
+                            _encoderProcess.PriorityClass = ProcessPriorityClass.High;
 							break;
 				    }
-                  return;
-               }
+                    VistaStuff.SetProcessPriority(_encoderProcess.Handle, _encoderProcess.PriorityClass);
+                    return;
+                }
                 catch (Exception e) // process could not be running anymore
                 {
                     throw new JobRunException(e);

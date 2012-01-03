@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2011  Doom9 & al
+// Copyright (C) 2005-2012  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -301,6 +301,7 @@ namespace MeGUI
 						    	proc.PriorityClass = ProcessPriorityClass.RealTime;
 								break;
 					}
+                    VistaStuff.SetProcessPriority(proc.Handle, proc.PriorityClass);
 				    return;
                 }
                 catch (Exception e) // process could not be running anymore
