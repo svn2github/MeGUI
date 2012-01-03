@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -56,7 +56,6 @@ namespace MeGUI
 		{
 		}
 	}
-
 
 	public enum AudioSampleType:int
 	{
@@ -401,7 +400,6 @@ namespace MeGUI
 		{
             if (0 != dimzon_avs_getaframe(_avs, addr, offset, count))
 				throw new AviSynthException(getLastError());
-			
 		}
 
 		public void ReadAudio(byte buffer, long offset, int count)
@@ -431,23 +429,31 @@ namespace MeGUI
             _sampleType = AudioSampleType.Unknown;
             bool bOpenSuccess = false;
 
-            MainForm.Instance.AvsLock++;
-
-            Thread t = new Thread(new ThreadStart(delegate
+            if (MainForm.Instance.Settings.OpenAVSInThreadDuringSession)
             {
-                System.Windows.Forms.Application.UseWaitCursor = true;
+                MainForm.Instance.AvsLock++;
+
+                Thread t = new Thread(new ThreadStart(delegate
+                {
+                    System.Windows.Forms.Application.UseWaitCursor = true;
+                    if (0 == dimzon_avs_init_2(ref _avs, func, arg, ref _vi, ref _colorSpace, ref _sampleType, forceColorspace.ToString()))
+                        bOpenSuccess = true;
+                    MainForm.Instance.AvsLock--;
+                    if (MainForm.Instance.AvsLock == 0)
+                        System.Windows.Forms.Application.UseWaitCursor = false;
+                }));
+                t.Start();
+
+                while (t.ThreadState == ThreadState.Running)
+                {
+                    System.Windows.Forms.Application.DoEvents();
+                    Thread.Sleep(100);
+                }
+            }
+            else
+            {
                 if (0 == dimzon_avs_init_2(ref _avs, func, arg, ref _vi, ref _colorSpace, ref _sampleType, forceColorspace.ToString()))
                     bOpenSuccess = true;
-                MainForm.Instance.AvsLock--;
-                if (MainForm.Instance.AvsLock == 0)
-                    System.Windows.Forms.Application.UseWaitCursor = false;
-            }));
-            t.Start();
-
-            while (t.ThreadState == ThreadState.Running)
-            {
-                System.Windows.Forms.Application.DoEvents();
-                Thread.Sleep(100);
             }
 
             if (bOpenSuccess == false)

@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2011  Doom9 & al
+// Copyright (C) 2005-2012  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -137,6 +137,7 @@ namespace MeGUI
         private Label lblForcedName;
         private TextBox txtForcedName;
         private CheckBox cbUseITUValues;
+        private CheckBox cbOpenAVSinThread;
         private XmlDocument ContextHelp = new XmlDocument();
 		#region start / stop
 		public SettingsForm()
@@ -320,6 +321,7 @@ namespace MeGUI
             this.videoExtLabel = new System.Windows.Forms.Label();
             this.autoEncodeDefaultsButton = new System.Windows.Forms.Button();
             this.toolTipHelp = new System.Windows.Forms.ToolTip(this.components);
+            this.cbOpenAVSinThread = new System.Windows.Forms.CheckBox();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
             this.defaultOutputDir = new MeGUI.FileBar();
             this.tempDirMP4 = new MeGUI.FileBar();
@@ -437,6 +439,7 @@ namespace MeGUI
             // 
             // otherGroupBox
             // 
+            this.otherGroupBox.Controls.Add(this.cbOpenAVSinThread);
             this.otherGroupBox.Controls.Add(this.cbUseITUValues);
             this.otherGroupBox.Controls.Add(this.cbAutoStartQueueStartup);
             this.otherGroupBox.Controls.Add(this.forcerawavcuse);
@@ -1370,6 +1373,16 @@ namespace MeGUI
             this.toolTipHelp.ReshowDelay = 100;
             this.toolTipHelp.ShowAlways = true;
             // 
+            // cbOpenAVSinThread
+            // 
+            this.cbOpenAVSinThread.Checked = true;
+            this.cbOpenAVSinThread.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbOpenAVSinThread.Location = new System.Drawing.Point(300, 92);
+            this.cbOpenAVSinThread.Name = "cbOpenAVSinThread";
+            this.cbOpenAVSinThread.Size = new System.Drawing.Size(144, 17);
+            this.cbOpenAVSinThread.TabIndex = 21;
+            this.cbOpenAVSinThread.Text = "Improved AVS opening";
+            // 
             // helpButton1
             // 
             this.helpButton1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -1572,6 +1585,7 @@ namespace MeGUI
                 settings.EnsureCorrectPlaybackSpeed = chkEnsureCorrectPlaybackSpeed.Checked;
 				settings.ForceFilmThreshold = forceFilmPercentage.Value;
 				settings.DefaultPriority = (ProcessPriority)priority.SelectedIndex;
+                settings.OpenAVSInThread = cbOpenAVSinThread.Checked;
 				settings.AutoStartQueue = this.autostartQueue.Checked;
                 settings.AutoStartQueueStartup = this.cbAutoStartQueueStartup.Checked;
                 settings.AlwaysMuxMKV = this.chkAlwaysMuxMKV.Checked;
@@ -1638,6 +1652,9 @@ namespace MeGUI
                 cbAutoLoadDG.Checked = settings.AutoLoadDG;
 				forceFilmPercentage.Value = settings.ForceFilmThreshold;
 				priority.SelectedIndex = (int)settings.DefaultPriority;
+                cbOpenAVSinThread.Checked = settings.OpenAVSInThread;
+                if (settings.OpenAVSInThread && !settings.OpenAVSInThreadDuringSession)
+                    cbOpenAVSinThread.CheckState = CheckState.Indeterminate;
 				autostartQueue.Checked = settings.AutoStartQueue;
                 cbAutoStartQueueStartup.Checked = settings.AutoStartQueueStartup;
                 chkAlwaysMuxMKV.Checked = settings.AlwaysMuxMKV;

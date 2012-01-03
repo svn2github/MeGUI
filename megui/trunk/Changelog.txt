@@ -1,3 +1,5 @@
+2080 [AVS] if an AVS script cannot be opened the old method to open such files is used during the session. 
+           the option can be completly disabled in the settings ("Improved AVS opening", enabled by default). Bug #3437874
 2079 [MKV Demuxer] adjusted demuxer to the recent mkvextract changes (requires mkvmerge revision 5.2.1+)
 2078 [Progress Window] changed priority will be kept during the whole application session. Feature request #3445179
 2077 [Progress Window] lower also I/O and memory priority when priority below normal (requires Windows Vista or newer). Feature request #3468249

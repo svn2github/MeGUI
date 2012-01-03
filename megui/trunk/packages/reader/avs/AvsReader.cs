@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
+using System.Windows.Forms;
 
 using MeGUI.core.util;
 
@@ -215,6 +216,16 @@ namespace MeGUI
                     }
                     bmp.RotateFlip(RotateFlipType.Rotate180FlipX);
                     return bmp;
+                }
+                catch (System.Runtime.InteropServices.SEHException)
+                {
+                    bmp.Dispose();
+                    if (MainForm.Instance.Settings.OpenAVSInThreadDuringSession)
+                    {
+                        MainForm.Instance.Settings.OpenAVSInThreadDuringSession = false;
+                        MessageBox.Show("External AviSynth Error. As a result during this session the option \"Improved AVS opening\" in the settings is now disabled. Please disable it there completly if necessary.", "AviSynth Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    throw;
                 }
                 catch (Exception)
                 {

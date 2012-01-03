@@ -48,7 +48,8 @@ namespace MeGUI
                      overwriteStats, keep2of3passOutput, autoUpdate, deleteCompletedJobs, deleteIntermediateFiles,
                      deleteAbortedOutput, openProgressWindow, useadvancedtooltips, autoSelectHDStreams, autoscroll, 
                      alwaysOnTop, safeProfileAlteration, usehttpproxy, addTimePosition, alwaysbackupfiles, bUseITU,
-                     forcerawavcextension, bAutoLoadDG, bAutoStartQueueStartup, bAlwaysMuxMKV, b64bitX264, bEnsureCorrectPlaybackSpeed;
+                     forcerawavcextension, bAutoLoadDG, bAutoStartQueueStartup, bAlwaysMuxMKV, b64bitX264,
+                     bEnsureCorrectPlaybackSpeed, bOpenAVSInThread;
         private ulong audioSamplesPerUpdate;
         private AfterEncoding afterEncoding;
         private decimal forceFilmThreshold, acceptableFPSError;
@@ -188,6 +189,7 @@ namespace MeGUI
             ffmsThreads = 1;
             appendToForcedStreams = "";
             bUseITU = true;
+            bOpenAVSInThread = true;
         }
 
         private string getDownloadPath(string strPath)
@@ -862,6 +864,33 @@ namespace MeGUI
                 return processingPriority; 
             }
             set { processingPriority = value; }
+        }
+        /// <summary>
+        /// open AVS files in a thread
+        /// </summary>
+        public bool OpenAVSInThread
+        {
+            get { return bOpenAVSInThread; }
+            set { bOpenAVSInThread = value; }
+        }
+        private bool bOpenAVSInThreadDuringSession;
+        private bool bOpenAVSInThreadDuringSessionSet;
+        /// <summary>
+        /// default priority for all new processes during this session
+        /// </summary>
+        [XmlIgnore()]
+        public bool OpenAVSInThreadDuringSession
+        {
+            get
+            {
+                if (!bOpenAVSInThreadDuringSessionSet)
+                {
+                    bOpenAVSInThreadDuringSession = bOpenAVSInThread;
+                    bOpenAVSInThreadDuringSessionSet = true;
+                }
+                return bOpenAVSInThreadDuringSession;
+            }
+            set { bOpenAVSInThreadDuringSession = value; }
         }
 		/// <summary>
 		/// enables no spec compliant mp3 in mp4 muxing
