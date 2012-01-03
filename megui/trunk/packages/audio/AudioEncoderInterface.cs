@@ -520,13 +520,13 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
         {
             Util.ensureExists(audioJob.Input);
             _encoderThread = new Thread(new ThreadStart(this.encode));
-            if (MainForm.Instance.Settings.DefaultPriority == ProcessPriority.HIGH)
+            if (MainForm.Instance.Settings.ProcessingPriority == ProcessPriority.HIGH)
                 _encoderThread.Priority = ThreadPriority.Highest;
-            else if (MainForm.Instance.Settings.DefaultPriority == ProcessPriority.ABOVE_NORMAL)
+            else if (MainForm.Instance.Settings.ProcessingPriority == ProcessPriority.ABOVE_NORMAL)
                 _encoderThread.Priority = ThreadPriority.AboveNormal;
-            if (MainForm.Instance.Settings.DefaultPriority == ProcessPriority.NORMAL)
+            else if (MainForm.Instance.Settings.ProcessingPriority == ProcessPriority.NORMAL)
                 _encoderThread.Priority = ThreadPriority.Normal;
-            if (MainForm.Instance.Settings.DefaultPriority == ProcessPriority.BELOW_NORMAL)
+            else if (MainForm.Instance.Settings.ProcessingPriority == ProcessPriority.BELOW_NORMAL)
                 _encoderThread.Priority = ThreadPriority.BelowNormal;
             else
                 _encoderThread.Priority = ThreadPriority.Lowest;
@@ -1489,6 +1489,7 @@ function x_upmixC" + id + @"(clip stereo)
 							break;
 				    }
                     VistaStuff.SetProcessPriority(_encoderProcess.Handle, _encoderProcess.PriorityClass);
+                    MainForm.Instance.Settings.ProcessingPriority = priority;
                     return;
                 }
                 catch (Exception e) // process could not be running anymore

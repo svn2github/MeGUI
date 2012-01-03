@@ -205,7 +205,7 @@ namespace MeGUI
                 readFromStdOutThread.Start();
                 readFromStdErrThread.Start();
                 new System.Windows.Forms.MethodInvoker(this.RunStatusCycle).BeginInvoke(null, null);
-                this.changePriority(MainForm.Instance.Settings.DefaultPriority);
+                this.changePriority(MainForm.Instance.Settings.ProcessingPriority);
             }
             catch (Exception e)
             {
@@ -302,6 +302,7 @@ namespace MeGUI
 								break;
 					}
                     VistaStuff.SetProcessPriority(proc.Handle, proc.PriorityClass);
+                    MainForm.Instance.Settings.ProcessingPriority = priority;
 				    return;
                 }
                 catch (Exception e) // process could not be running anymore

@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2011  Doom9 & al
+// Copyright (C) 2005-2012  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Xml.Serialization;
 
 using MeGUI.core.util;
 using MeGUI.core.gui;
@@ -847,6 +848,21 @@ namespace MeGUI
 			get {return defaultPriority;}
 			set {defaultPriority = value;}
 		}
+        private ProcessPriority processingPriority;
+        /// <summary>
+        /// default priority for all new processes during this session
+        /// </summary>
+        [XmlIgnore()]
+        public ProcessPriority ProcessingPriority
+        {
+            get 
+            {
+                if (processingPriority == null)
+                    processingPriority = defaultPriority;
+                return processingPriority; 
+            }
+            set { processingPriority = value; }
+        }
 		/// <summary>
 		/// enables no spec compliant mp3 in mp4 muxing
 		/// </summary>
