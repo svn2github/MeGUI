@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -209,15 +209,19 @@ namespace MeGUI
             string cropLine = "#crop";
             if (crop)
             {
-                cropLine = string.Format("crop( {0}, {1}, {2}, {3}){4}",cropLeft, cropTop, -cropRight, -cropBottom, Environment.NewLine );
+                cropLine = string.Format("crop( {0}, {1}, {2}, {3}){4}", cropLeft, cropTop, -cropRight, -cropBottom, Environment.NewLine);
             }
             return cropLine;
         }
 
-        public static string GetResizeLine(bool resize, int hres, int vres, ResizeFilterType type)
+        public static string GetResizeLine(bool resize, int hres, int vres, ResizeFilterType type, bool crop, CropValues cropValues, int originalHRes, int originalVRes)
         {
             if (!resize)
                 return "#resize";
+
+            if (((crop && !cropValues.isCropped()) || !crop) && hres == originalHRes && vres == originalVRes)
+                return "#resize";
+
             EnumProxy p = EnumProxy.Create(type);
             if (p.Tag != null)
                 return string.Format(p.Tag + " # {2}", hres, vres, p);

@@ -1,3 +1,5 @@
+2084 [AVS Script Creator] resize value will only be added to the script if necessary
+                          fixed button checked states after loading avisynth profiles
 2083 [OneClick] fixed long delay during processing when adding more than 4 tracks (part II)
 2082 [Audio Encoder] DTS-MA decoding is blocked with NicAudio to avoid problems
 2081 [OneClick] fixed long delay during processing when adding more than 4 tracks

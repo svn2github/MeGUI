@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2011  Doom9 & al
+// Copyright (C) 2005-2012  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -968,6 +968,13 @@ namespace MeGUI
         public CropValues Clone()
         {
             return (CropValues)this.MemberwiseClone();
+        }
+        public bool isCropped()
+        {
+            if (left != 0 || top != 0 || right != 0 || bottom != 0)
+                return true;
+            else
+                return false;
         }
 	}
 
