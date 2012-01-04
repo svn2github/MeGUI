@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2011  Doom9 & al
+// Copyright (C) 2005-2012  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -202,7 +202,7 @@ namespace MeGUI
                 bool bFound = false;
                 foreach (MuxableType oAllType in allTypes)
                 {
-                    if (oType.ToString().Equals(oAllType.ToString()))
+                    if (oType.outputType.ID.Equals(oAllType.outputType.ID))
                     {
                         bFound = true;
                         break;

@@ -136,7 +136,7 @@ namespace MeGUI
                 bool bFound = false;
                 foreach (MuxableType oAllType in allTypes)
                 {
-                    if (oType.ToString().Equals(oAllType.ToString()))
+                    if (oType.outputType.ID.Equals(oAllType.outputType.ID))
                     {
                         bFound = true;
                         break;
