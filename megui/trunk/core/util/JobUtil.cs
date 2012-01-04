@@ -128,9 +128,12 @@ namespace MeGUI
             MuxProvider prov = mainForm.MuxProvider;
             List<MuxableType> allTypes = new List<MuxableType>();
             List<MuxableType> tempTypes = new List<MuxableType>();
+            List<MuxableType> duplicateTypes = new List<MuxableType>();
             tempTypes.AddRange(audioTypes);
             tempTypes.AddRange(subTypes);
             allTypes.Add(video.VideoType);
+
+            // remove duplicate entries to speed up the process
             foreach (MuxableType oType in tempTypes)
             {
                 bool bFound = false;
@@ -144,12 +147,30 @@ namespace MeGUI
                 }
                 if (!bFound)
                     allTypes.Add(oType);
+                else
+                    duplicateTypes.Add(oType);
             }
             if (chapterInputType != null)
                 allTypes.Add(chapterInputType);
             if (deviceOutputType != null)
                 allTypes.Add(deviceOutputType);
+
+            // get mux path
             MuxPath muxPath = prov.GetMuxPath(container, splitSize.HasValue, allTypes.ToArray());
+
+            // add duplicate entries back into the mux path
+            muxPath.InitialInputTypes.AddRange(duplicateTypes);
+            while (duplicateTypes.Count > 0)
+            {
+                int iPath = 0;
+                for (int i = 0; i < muxPath.Length; i++)
+                    foreach (MuxableType oType in muxPath[i].handledInputTypes)
+                        if (oType.outputType.ID.Equals(duplicateTypes[0].outputType.ID))
+                            iPath = i;
+                muxPath[iPath].handledInputTypes.Add(duplicateTypes[0]);
+                duplicateTypes.RemoveAt(0);
+            }
+
             List<MuxJob> jobs = new List<MuxJob>();
             List<MuxStream> subtitleStreams = new List<MuxStream>(subtitleStreamsArray);
             List<MuxStream> audioStreams = new List<MuxStream>(audioStreamsArray);
