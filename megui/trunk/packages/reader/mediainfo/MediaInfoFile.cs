@@ -198,7 +198,6 @@ namespace MeGUI
             }
         }
 
-
         private static readonly CultureInfo culture = new CultureInfo("en-us");
 
         #region variables
@@ -329,6 +328,54 @@ namespace MeGUI
                 }
 
                 MediaInfo info = new MediaInfo(file);
+
+                if (info.AudioCount == 0 && info.VideoCount == 0 && Path.GetExtension(file).ToLower().Equals(".avs"))
+                {
+                    // AVS Input File
+                    using (AvsFile avi = AvsFile.OpenScriptFile(file))
+                    {
+                        MediaInfoWrapper.VideoTrack oVideo = new MediaInfoWrapper.VideoTrack();
+                        MediaInfoWrapper.AudioTrack oAudio = new MediaInfoWrapper.AudioTrack();
+
+                        info.General[0].Format = "AVS";
+                        info.General[0].FormatString = "AviSynth Script";
+                        if (avi.Info.HasVideo || avi.Info.HasAudio)
+                            info.General[0].PlayTimeString3 = (TimeSpan.FromMilliseconds((avi.Info.FrameCount / avi.Info.FPS) * 1000)).ToString();
+
+                        if (avi.Info.HasVideo)
+                        {
+                            oVideo.ID = "0";
+                            oVideo.Width = avi.Info.Width.ToString();
+                            oVideo.Height = avi.Info.Height.ToString();
+                            oVideo.FrameCount = avi.Info.FrameCount.ToString();
+                            oVideo.FrameRate = avi.Info.FPS.ToString();
+                            if (avi.Clip.interlaced_frame > 0)
+                                oVideo.ScanTypeString = "Interlaced";
+                            else
+                                oVideo.ScanTypeString = "Progressive";
+                            oVideo.Codec = "AVS Video";
+                            oVideo.CodecString = "AVS";
+                            oVideo.Format = "AVS";
+                            oVideo.AspectRatio = avi.Info.DAR.ToString();
+                            oVideo.Delay = "0";
+                            info.Video.Add(oVideo);
+                        }
+
+                        if (avi.Info.HasAudio)
+                        {
+                            oAudio.ID = "0";
+                            oAudio.Format = "AVS";
+                            oAudio.SamplingRate = avi.Clip.AudioSampleRate.ToString();
+                            oAudio.SamplingRateString = avi.Clip.AudioSampleRate.ToString();
+                            oAudio.Channels = avi.Clip.ChannelsCount.ToString();
+                            oAudio.ChannelsString = avi.Clip.ChannelsCount.ToString() + " channels";
+                            oAudio.ChannelPositionsString2 = AudioUtil.getChannelPositionsFromAVSFile(file);
+                            oAudio.BitRateMode = "CBR";
+                            oAudio.Delay = "0";
+                            info.Audio.Add(oAudio);
+                        }
+                    }
+                }
 
                 if (oLog != null)
                     WriteSourceInformation(info, file, oLog);

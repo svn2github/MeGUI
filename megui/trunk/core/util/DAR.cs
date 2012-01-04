@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -92,11 +92,10 @@ namespace MeGUI.core.util
             }
         }
 
-
-
         public override string ToString()
         {
-            return ar.ToString("#.###");
+            System.Globalization.CultureInfo culture = new System.Globalization.CultureInfo("en-us");
+            return ar.ToString("#.########", culture);
         }
 
         public override bool Equals(object obj)
