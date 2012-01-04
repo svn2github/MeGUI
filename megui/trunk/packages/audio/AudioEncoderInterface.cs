@@ -593,7 +593,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             return false;
         }
 
-        private bool OpenSourceWithNicAudio(out StringBuilder sbOpen)
+        private bool OpenSourceWithNicAudio(out StringBuilder sbOpen, MediaInfoFile oInfo)
         {
             sbOpen = new StringBuilder();
             switch (Path.GetExtension(audioJob.Input).ToLower())
@@ -700,13 +700,19 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                     break;
             }
 
-            _log.LogEvent("Trying to open the file with NicAudio", ImageType.Information);
             string strErrorText = String.Empty;
-            if (sbOpen.Length > 0 && AudioUtil.AVSScriptHasAudio(sbOpen.ToString(), out strErrorText))
+            if (!oInfo.AudioTracks[0].Type.Equals("DTS-HD Master Audio"))
             {
-                _log.LogEvent("Successfully opened the file with NicAudio", ImageType.Information);
-                return true;
+                _log.LogEvent("Trying to open the file with NicAudio", ImageType.Information);
+                if (sbOpen.Length > 0 && AudioUtil.AVSScriptHasAudio(sbOpen.ToString(), out strErrorText))
+                {
+                    _log.LogEvent("Successfully opened the file with NicAudio", ImageType.Information);
+                    return true;
+                }
             }
+            else
+                _log.LogEvent("DTS-MA is blocked when using NicAudio", ImageType.Information);
+            
             sbOpen = new StringBuilder();
             if (String.IsNullOrEmpty(strErrorText))
                 _log.LogEvent("Failed opening the file with NicAudio()", ImageType.Information);
@@ -738,7 +744,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             bool bFound = false;
             if (audioJob.Settings.PreferredDecoder == AudioDecodingEngine.NicAudio)
             {
-                bFound = OpenSourceWithNicAudio(out script);
+                bFound = OpenSourceWithNicAudio(out script, oInfo);
                 if (!bFound)
                     bFound = OpenSourceWithFFAudioSource(out script);
                 if (!bFound)
@@ -748,7 +754,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             {
                 bFound = OpenSourceWithFFAudioSource(out script);
                 if (!bFound)
-                    bFound = OpenSourceWithNicAudio(out script);
+                    bFound = OpenSourceWithNicAudio(out script, oInfo);
                 if (!bFound)
                     bFound = OpenSourceWithDirectShow(out script, oInfo);
             }
@@ -756,7 +762,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             {
                 bFound = OpenSourceWithDirectShow(out script, oInfo);
                 if (!bFound)
-                    bFound = OpenSourceWithNicAudio(out script);
+                    bFound = OpenSourceWithNicAudio(out script, oInfo);
                 if (!bFound)
                     bFound = OpenSourceWithFFAudioSource(out script);
             }

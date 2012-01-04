@@ -1,3 +1,4 @@
+2082 [Audio Encoder] DTS-MA decoding is blocked with NicAudio to avoid problems
 2081 [OneClick] fixed long delay during processing when adding more than 4 tracks
 2080 [AVS] if an AVS script cannot be opened the old method to open such files is used during the session. 
            the option can be completly disabled in the settings ("Improved AVS opening", enabled by default). Bug #3437874
