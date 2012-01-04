@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -127,9 +127,24 @@ namespace MeGUI
 
             MuxProvider prov = mainForm.MuxProvider;
             List<MuxableType> allTypes = new List<MuxableType>();
+            List<MuxableType> tempTypes = new List<MuxableType>();
+            tempTypes.AddRange(audioTypes);
+            tempTypes.AddRange(subTypes);
             allTypes.Add(video.VideoType);
-            allTypes.AddRange(audioTypes);
-            allTypes.AddRange(subTypes);
+            foreach (MuxableType oType in tempTypes)
+            {
+                bool bFound = false;
+                foreach (MuxableType oAllType in allTypes)
+                {
+                    if (oType.ToString().Equals(oAllType.ToString()))
+                    {
+                        bFound = true;
+                        break;
+                    }
+                }
+                if (!bFound)
+                    allTypes.Add(oType);
+            }
             if (chapterInputType != null)
                 allTypes.Add(chapterInputType);
             if (deviceOutputType != null)

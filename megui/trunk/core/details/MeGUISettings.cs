@@ -851,6 +851,7 @@ namespace MeGUI
 			set {defaultPriority = value;}
 		}
         private ProcessPriority processingPriority;
+        private bool processingPrioritySet;
         /// <summary>
         /// default priority for all new processes during this session
         /// </summary>
@@ -859,8 +860,11 @@ namespace MeGUI
         {
             get 
             {
-                if (processingPriority == null)
+                if (!processingPrioritySet)
+                {
                     processingPriority = defaultPriority;
+                    processingPrioritySet = true;
+                }
                 return processingPriority; 
             }
             set { processingPriority = value; }
