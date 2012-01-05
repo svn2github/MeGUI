@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -84,14 +84,13 @@ namespace MeGUI.packages.audio.naac
             this.encoderGroupBox.Controls.Add(this.vBitrate);
             this.encoderGroupBox.Controls.Add(this.rbtnCBR);
             this.encoderGroupBox.Controls.Add(this.rbtnABR);
-            this.encoderGroupBox.Location = new System.Drawing.Point(5, 158);
-            this.encoderGroupBox.Size = new System.Drawing.Size(366, 225);
+            this.encoderGroupBox.Location = new System.Drawing.Point(0, 183);
+            this.encoderGroupBox.Size = new System.Drawing.Size(394, 209);
             this.encoderGroupBox.TabIndex = 1;
-            this.encoderGroupBox.Text = "NeroDigital AAC Options";
+            this.encoderGroupBox.Text = " NeroDigital AAC Options ";
             // 
             // besweetOptionsGroupbox
             // 
-            this.besweetOptionsGroupbox.Size = new System.Drawing.Size(378, 149);
             this.besweetOptionsGroupbox.TabIndex = 0;
             // 
             // vQuality
@@ -101,7 +100,7 @@ namespace MeGUI.packages.audio.naac
             this.vQuality.Location = new System.Drawing.Point(3, 133);
             this.vQuality.Maximum = 100;
             this.vQuality.Name = "vQuality";
-            this.vQuality.Size = new System.Drawing.Size(360, 45);
+            this.vQuality.Size = new System.Drawing.Size(388, 45);
             this.vQuality.TabIndex = 4;
             this.vQuality.TickFrequency = 5;
             this.vQuality.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
@@ -113,7 +112,7 @@ namespace MeGUI.packages.audio.naac
             | System.Windows.Forms.AnchorStyles.Right)));
             this.rbtnVBR.Location = new System.Drawing.Point(13, 115);
             this.rbtnVBR.Name = "rbtnVBR";
-            this.rbtnVBR.Size = new System.Drawing.Size(239, 24);
+            this.rbtnVBR.Size = new System.Drawing.Size(267, 24);
             this.rbtnVBR.TabIndex = 3;
             this.rbtnVBR.Text = "Variable Bitrate";
             this.rbtnVBR.CheckedChanged += new System.EventHandler(this.rbtnABR_CheckedChanged);
@@ -126,7 +125,7 @@ namespace MeGUI.packages.audio.naac
             this.vBitrate.Maximum = 640;
             this.vBitrate.Minimum = 16;
             this.vBitrate.Name = "vBitrate";
-            this.vBitrate.Size = new System.Drawing.Size(360, 45);
+            this.vBitrate.Size = new System.Drawing.Size(388, 45);
             this.vBitrate.TabIndex = 2;
             this.vBitrate.TickFrequency = 8;
             this.vBitrate.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
@@ -157,23 +156,23 @@ namespace MeGUI.packages.audio.naac
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Location = new System.Drawing.Point(106, 179);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(199, 21);
+            this.comboBox1.Size = new System.Drawing.Size(266, 21);
             this.comboBox1.TabIndex = 6;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(30, 182);
+            this.label1.Location = new System.Drawing.Point(6, 182);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(66, 13);
+            this.label1.Size = new System.Drawing.Size(60, 13);
             this.label1.TabIndex = 5;
-            this.label1.Text = "AAC Profile :";
+            this.label1.Text = "AAC Profile";
             // 
             // neroConfigurationPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.Name = "neroConfigurationPanel";
-            this.Size = new System.Drawing.Size(378, 397);
+            this.Size = new System.Drawing.Size(394, 396);
             this.encoderGroupBox.ResumeLayout(false);
             this.encoderGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.vQuality)).EndInit();

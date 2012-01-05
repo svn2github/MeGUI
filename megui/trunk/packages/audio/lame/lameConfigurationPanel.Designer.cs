@@ -47,9 +47,9 @@ namespace MeGUI.packages.audio.lame
             this.encoderGroupBox.Controls.Add(this.vbrMode);
             this.encoderGroupBox.Controls.Add(this.abrMode);
             this.encoderGroupBox.Controls.Add(this.cbrMode);
-            this.encoderGroupBox.Location = new System.Drawing.Point(5, 158);
-            this.encoderGroupBox.Size = new System.Drawing.Size(382, 104);
-            this.encoderGroupBox.Text = " Lame MP3 Encoding Mode ";
+            this.encoderGroupBox.Location = new System.Drawing.Point(0, 175);
+            this.encoderGroupBox.Size = new System.Drawing.Size(394, 98);
+            this.encoderGroupBox.Text = "  Lame MP3 Encoding Mode  ";
             // 
             // cbrMode
             // 
@@ -98,7 +98,7 @@ namespace MeGUI.packages.audio.lame
             0,
             0});
             this.vbrValue.Name = "vbrValue";
-            this.vbrValue.Size = new System.Drawing.Size(264, 20);
+            this.vbrValue.Size = new System.Drawing.Size(276, 20);
             this.vbrValue.TabIndex = 8;
             this.vbrValue.Value = new decimal(new int[] {
             4,
@@ -127,7 +127,7 @@ namespace MeGUI.packages.audio.lame
             0,
             0});
             this.abrValue.Name = "abrValue";
-            this.abrValue.Size = new System.Drawing.Size(264, 20);
+            this.abrValue.Size = new System.Drawing.Size(276, 20);
             this.abrValue.TabIndex = 9;
             this.abrValue.Value = new decimal(new int[] {
             128,
@@ -142,14 +142,14 @@ namespace MeGUI.packages.audio.lame
             this.cbrBitrate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbrBitrate.Location = new System.Drawing.Point(112, 18);
             this.cbrBitrate.Name = "cbrBitrate";
-            this.cbrBitrate.Size = new System.Drawing.Size(264, 21);
+            this.cbrBitrate.Size = new System.Drawing.Size(276, 21);
             this.cbrBitrate.TabIndex = 10;
             // 
             // lameConfigurationPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.Name = "lameConfigurationPanel";
-            this.Size = new System.Drawing.Size(394, 265);
+            this.Size = new System.Drawing.Size(394, 277);
             this.encoderGroupBox.ResumeLayout(false);
             this.encoderGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.vbrValue)).EndInit();

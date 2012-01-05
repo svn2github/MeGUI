@@ -1,3 +1,4 @@
+2088 [Audio Encoder] cosmetics
 2087 [FFMS] remove AssumeFPS() as it is causing problems with hybrid/telecined input
 2086 [AVS Script Creator] improve input DAR detection when using AVS input files
 2085 [OneClick] fixed long delay during processing when adding more than 4 tracks (part III)
@@ -17,6 +18,90 @@
 2074 [AVS Script Creator] + [OneClick] improve input DAR detection when using index files
 2073 [Settings] added option to select if ITU Aspect Ratio should be used by default (enabled by default). Feature request #3057378
 2072 [Audio Encoder] added handling of channel count mismatch
+2071 [MediaInfo] added default/forced track info to the MediaInfo wrapper (requires mediainfo revision 0.7.51+)
+2070 [MKV Muxer] adjusted muxer to the recent mkvmerge changes (requires mkvmerge revision 5.2.0+)
+2069 [HD Streams Extractor] automatically execute the job a second time if a gaps file is detected
+2068 [x264] fixed "--range pc"
+2067 [x264] fixed (increased) maximum value of --ref and --bframes when using target playback devices
+2066 [x264] replaced --fullrange with --range (requires x264 revision 2119+)
+2065 [Adaptive Muxer] fixed handling of delay value and default/forced track. Bug #3443721
+2064 [MainForm] MeGUI can only be closed if there are no running jobs
+2063 [D2V Indexer] .bad and .fix.txt files will also be deleted in cleanup step
+2062 [VobSubber] cosmetics
+2061 [x264] fixed wrong --sar values when using BluRay Target Device with 720x576
+2060 [AVS Script Creator] enhanced selection box if opening an indexable file directly
+2059 [OneClick] + [Update] log categories will not be created anymore if already available
+2058 [MKV Muxer] improved idx subtitle handling
+2057 [Adaptive Muxer] fixed long delay when adding more than 4 tracks. Bug #3404061
+2056 [VideoPlayer] fixed handling of non default DPI values
+2055 [AVS Script Creator] fixed opening the wrong video preview in some rare circumstances
+2054 [pre-rendering job] fixed file size targeting with AutoEncode and OneClick
+2053 [Settings] added option to append a text to forced track names
+2052 [Lame] fixed applying bitrate in ABR mode
+2051 [progress window] changed number formatting
+
+Changelog 2028 --> 2050
+
+Main changes:
+[x264]     blu-ray device: added 1440x1080 as supported resolution
+[OneClick] added option to mux the audio source file only if the codec is the same as requested
+           
+Other changes:
+[Audio Encoder] added 24 <--> 25 conversions 
+[AviSynth] open script handling improved
+[Chapter Creator] fixed language tag creation
+[FFMSIndexer] added option to select the number of decoding threads. default and recommended value is 1
+              changed LoadCPlugin to LoadPlugin for the x64 plugin (requires ffms r507+)
+[Flac] enhanced output handling if file already exists
+[Lame] fixed always applying bitrate 128 in ABR mode
+[MainForm] fixed spelling. Bug #3390630
+[Mediainfo] mediainfo details are written into the log for most files/jobs
+[OneClick] enhanced error handling
+[OneClick] fixed editing of mkv mux jobs
+[OneClick] preserve audio track order during processing
+[Source Detector] enhanced error handling
+[Update] added check so that files can only be installed using the correct MeGUI build
+[Video Player] fixed video preview window for some avs scripts (e.g. using ImageSource)
+[x264] added --subme 11 (requires x264 revision 2037+)
+[x264] blu-ray device: enhanced --sar detection
+[x264] fixed maximum --rc-lookahead value. a value > 250 was possible in rare situations. Bug #3383262
+[x264] --keyint will not be applied twice if specified in the custom command line
+[x264] cosmetics
+
+
+Changelog 2008 --> 2028
+
+Main changes:
+[x264] added target playback device option
+       this option restricts or enforces x264 parameters if necessary
+       as this option is more powerful as the downloadable x264 profiles they have been removed
+[Lame] changed encoding modes to reflect valid values
+       Warning: review custom lame presets as there is no full preset update path
+
+Other changes:
+[AVS Script Creator] added a selection box if opening an indexable file directly
+[File Indexer] added MKV audio demuxer for FFMS
+[HD Streams Extractor] cosmetic adjustment. Bug #3303116
+[Job Queue] hide the pause button as it has no function. Bug #3296037
+[M2TS Muxer] fixed m2v input handling
+[M2TS Muxer] fixed splitting option. Bug #3294210
+[MediaInfo] adjustment for recent mediainfo builds
+[MediaInfo] introduce "Core" alias for DTSHD/DTSMA
+[MKV Muxer] added TrueHD + DTS-HD/MA as supported audio input formats
+[OggVorbis] removed channel remapping as it is not needed anymore
+[OneClick] changed handling of failed automatic deinterlacing process
+[x264] added --bluray-compat option (requires x264 rev 1935+)
+[x264] changed --open-gop handling (requires x264 rev 1935+)
+[x264] enhanced help
+[x264] several adjustments
+
+
+Known Problems:
+- Unicode is not supported
+- M2TS bitrate calculator does not calculate correct values if audio is not AC3 only
+
+Full changelog: 
+http://megui.svn.sourceforge.net/viewvc/megui/megui/trunk/Changelog_full.txt
 2071 [MediaInfo] added default/forced track info to the MediaInfo wrapper (requires mediainfo revision 0.7.51+)
 2070 [MKV Muxer] adjusted muxer to the recent mkvmerge changes (requires mkvmerge revision 5.2.0+)
 2069 [HD Streams Extractor] automatically execute the job a second time if a gaps file is detected

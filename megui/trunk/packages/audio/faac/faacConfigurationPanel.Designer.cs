@@ -42,9 +42,9 @@ namespace MeGUI.packages.audio.faac
             this.encoderGroupBox.Controls.Add(this.qualityModeRadioButton);
             this.encoderGroupBox.Controls.Add(this.cbrBitrate);
             this.encoderGroupBox.Controls.Add(this.cbrBitrateRadioButton);
-            this.encoderGroupBox.Location = new System.Drawing.Point(5, 158);
-            this.encoderGroupBox.Size = new System.Drawing.Size(380, 85);
-            this.encoderGroupBox.Text = "AAC Options";
+            this.encoderGroupBox.Location = new System.Drawing.Point(0, 172);
+            this.encoderGroupBox.Size = new System.Drawing.Size(394, 81);
+            this.encoderGroupBox.Text = " AAC Options ";
             // 
             // vbrQuality
             // 
@@ -67,7 +67,7 @@ namespace MeGUI.packages.audio.faac
             0,
             0});
             this.vbrQuality.Name = "vbrQuality";
-            this.vbrQuality.Size = new System.Drawing.Size(264, 20);
+            this.vbrQuality.Size = new System.Drawing.Size(278, 20);
             this.vbrQuality.TabIndex = 7;
             this.vbrQuality.Value = new decimal(new int[] {
             100,
@@ -81,7 +81,7 @@ namespace MeGUI.packages.audio.faac
             this.qualityModeRadioButton.Name = "qualityModeRadioButton";
             this.qualityModeRadioButton.Size = new System.Drawing.Size(68, 24);
             this.qualityModeRadioButton.TabIndex = 6;
-            this.qualityModeRadioButton.Text = "VBR :";
+            this.qualityModeRadioButton.Text = "VBR";
             // 
             // cbrBitrate
             // 
@@ -90,7 +90,7 @@ namespace MeGUI.packages.audio.faac
             this.cbrBitrate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbrBitrate.Location = new System.Drawing.Point(107, 19);
             this.cbrBitrate.Name = "cbrBitrate";
-            this.cbrBitrate.Size = new System.Drawing.Size(264, 21);
+            this.cbrBitrate.Size = new System.Drawing.Size(278, 21);
             this.cbrBitrate.TabIndex = 5;
             // 
             // cbrBitrateRadioButton
@@ -101,14 +101,14 @@ namespace MeGUI.packages.audio.faac
             this.cbrBitrateRadioButton.Size = new System.Drawing.Size(56, 24);
             this.cbrBitrateRadioButton.TabIndex = 4;
             this.cbrBitrateRadioButton.TabStop = true;
-            this.cbrBitrateRadioButton.Text = "ABR :";
+            this.cbrBitrateRadioButton.Text = "ABR";
             this.cbrBitrateRadioButton.CheckedChanged += new System.EventHandler(this.bitrateModeChanged);
             // 
             // faacConfigurationPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.Name = "faacConfigurationPanel";
-            this.Size = new System.Drawing.Size(394, 246);
+            this.Size = new System.Drawing.Size(394, 259);
             this.encoderGroupBox.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.vbrQuality)).EndInit();
             this.ResumeLayout(false);
