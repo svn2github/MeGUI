@@ -1,5 +1,6 @@
+2089 [HD Streams Extractor] defaulting to English if the track language can not be indentified (MKV only)
 2088 [Audio Encoder] cosmetics
-2087 [FFMS] remove AssumeFPS() as it is causing problems with hybrid/telecined input
+2087 [FFMS] remove AssumeFPS() as it is causing problems with hybrid/telecined input. Bug #3463347
 2086 [AVS Script Creator] improve input DAR detection when using AVS input files
 2085 [OneClick] fixed long delay during processing when adding more than 4 tracks (part III)
 2084 [AVS Script Creator] resize value will only be added to the script if necessary

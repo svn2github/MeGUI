@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2008  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -1281,10 +1281,28 @@ namespace MeGUI.packages.tools.hdbdextractor
 
                     if (s.Name.Contains("Subtitle"))
                         s.Language = s.Name;
-                    else s.Language = split[1].Substring(1, split[1].Length - 1);
-                }
-                else s.Language = "";
+                    else 
+                        s.Language = split[1].Substring(1, split[1].Length - 1);
 
+                    bool bFound = false;
+                    foreach (KeyValuePair<string, string> strLanguage in LanguageSelectionContainer.Languages)
+                    {
+                        if (s.Language.ToLower().Contains(strLanguage.Key.ToLower()))
+                        {
+                            bFound = true;
+                            break;
+                        }
+                    }
+                    if (!bFound)
+                    {
+                        if (!FolderSelection.Checked && System.IO.Path.GetExtension(FolderInputTextBox.Text).ToLower().Equals(".mkv"))
+                            s.Language = "English";
+                        else
+                            s.Language = "";
+                    }
+                }
+                else 
+                    s.Language = "";
             }
         }
 
