@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2011  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -2091,21 +2091,30 @@ namespace MeGUI
             bool PropExists = false;
             VideoUtil.getAvisynthVersion(out avisynthversion, out avisynthdate, out PropExists);
 
-            if (!PropExists)
+            if (PropExists)
             {
-                i.LogValue("Avisynth Version ", "not installed");
-                if (AskToDownloadAvisynth() == true)
+                i.LogValue("AviSynth Version ", "not installed");
 #if x86
-                    System.Diagnostics.Process.Start("http://www.avisynth.org");
+                if (File.Exists(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "Avisynth_258.exe")))
+                {
+                    if (AskToInstallAvisynth() == true)
+                        System.Diagnostics.Process.Start(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "Avisynth_258.exe"));
+                }
+                else
+                {
+                    if (AskToDownloadAvisynth() == true)
+                        System.Diagnostics.Process.Start("http://www.avisynth.org");
+                }
 #endif
 #if x64
+                if (AskToDownloadAvisynth() == true)
                     System.Diagnostics.Process.Start("http://forum.doom9.org/showthread.php?t=152800");
 #endif
             }
             else if (string.IsNullOrEmpty(avisynthversion))
-                i.LogValue("Avisynth Version ", avisynthdate);
+                i.LogValue("AviSynth Version ", avisynthdate);
             else
-                i.LogValue("Avisynth Version ", avisynthversion.Replace(", ", ".").ToString() + " (" + avisynthdate + ")");
+                i.LogValue("AviSynth Version ", avisynthversion.Replace(", ", ".").ToString() + " (" + avisynthdate + ")");
 
             if (settings.AutoUpdate)
             {
@@ -2149,7 +2158,16 @@ namespace MeGUI
 
         private bool AskToDownloadAvisynth()
         {
-            if (MessageBox.Show("MeGUI cannot find Avisynth on your system. Without this, it won't run properly. May I ask you to install it first ?\n", "Warning",
+            if (MessageBox.Show("MeGUI cannot find AviSynth on your system.\nWithout AviSynth, MeGUI will not run properly.\nDo you want to download and install it now?", "AviSynth missing",
+                                     MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                return true;
+            else
+                return false;
+        }
+
+        private bool AskToInstallAvisynth()
+        {
+            if (MessageBox.Show("MeGUI cannot find AviSynth on your system.\nWithout AviSynth, MeGUI will not run properly.\nDo you want to install it now?", "AviSynth missing",
                                      MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                 return true;
             else
