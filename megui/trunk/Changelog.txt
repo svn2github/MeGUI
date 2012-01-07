@@ -1,3 +1,4 @@
+2091 [Queue] changed default value of "Autostart Queue" to enabled
 2090 [Audio Encoder] do not abort downmix anymore if input avs file has no channel position information
 2089 [HD Streams Extractor] defaulting to English if the track language can not be indentified (MKV only)
 2088 [Audio Encoder] cosmetics

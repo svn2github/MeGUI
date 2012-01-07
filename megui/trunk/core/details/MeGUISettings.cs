@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -116,7 +116,7 @@ namespace MeGUI
             recalculateMainMovieBitrate = false;
 			autoForceFilm = true;
             bAutoLoadDG = true;
-			autoStartQueue = false;
+			autoStartQueue = true;
             bAlwaysMuxMKV = true;
             bAutoStartQueueStartup = false;
 			forceFilmThreshold = new decimal(95);
