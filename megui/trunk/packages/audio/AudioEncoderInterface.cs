@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -817,12 +817,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                         iChannelCount = AudioUtil.getChannelCountFromAVSFile(audioJob.Input);
                         script.Append(@"# detected channels: " + iChannelCount + " channels" + Environment.NewLine);
                         strChannelPositions = AudioUtil.getChannelPositionsFromAVSFile(audioJob.Input);
-                        if (String.IsNullOrEmpty(strChannelPositions))
-                        {
-                            log.LogEvent("no channel information found. aborting downmix", ImageType.Warning);
-                            break;
-                        }
-                        script.Append(@"# detected channel positions: " + strChannelPositions + Environment.NewLine);
                     }
                     else
                     {
@@ -833,9 +827,13 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                         }
                         strChannelPositions = oInfo.AudioTracks[0].ChannelPositions;
                         script.Append(@"# detected channels: " + oInfo.AudioTracks[0].NbChannels + Environment.NewLine);
-                        script.Append(@"# detected channel positions: " + oInfo.AudioTracks[0].ChannelPositions + Environment.NewLine);
                         int.TryParse(oInfo.AudioTracks[0].NbChannels.Split(' ')[0], out iChannelCount);
                     }
+
+                    if (!String.IsNullOrEmpty(strChannelPositions))
+                        script.Append(@"# detected channel positions: " + strChannelPositions + Environment.NewLine);
+                    else
+                        log.LogEvent("no channel positions found. Downmix result may be wrong.", ImageType.Information);
 
                     if (iChannelCount <= 2)
                     {
