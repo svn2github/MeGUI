@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -209,23 +209,6 @@ namespace MeGUI
             }
             catch (Exception e)
             {
-                try
-                {
-                    File.Delete(executable);
-                    log.LogEvent("Because of an error in job processing the file " + executable + " has been deleted.", ImageType.Warning);
-                    if (MainForm.Instance.Settings.AutoUpdate)
-                    {
-                        log.LogEvent("Starting update detection in order to redownload the file.", ImageType.Warning);
-                        // Need a seperate thread to run the updater to stop internet lookups from freezing the app.
-                        Thread updateCheck = new Thread(new ThreadStart(MainForm.Instance.beginUpdateCheck));
-                        updateCheck.IsBackground = true;
-                        updateCheck.Start();
-                    }
-                }
-                catch (IOException)
-                {
-                    log.LogEvent("Could not delete file " + executable, ImageType.Error);
-                }
                 throw new JobRunException(e);
             }
         }

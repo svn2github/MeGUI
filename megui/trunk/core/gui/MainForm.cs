@@ -1474,24 +1474,52 @@ namespace MeGUI
             RegisterForm(this);
         }
 
-        public void beginUpdateCheck()
+        private void beginUpdateCheck()
         {
+#if x86
+            string strLocalUpdateXML = Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), "upgrade.xml");
+#endif
+#if x64
+            string strLocalUpdateXML = Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), "upgrade_x64.xml");
+#endif
+
             UpdateWindow update = new UpdateWindow(this, this.Settings);
             update.GetUpdateData(true);
             if (update.HasUpdatableFiles()) // If there are updated files, display the window
             {
-                if (MessageBox.Show("There are updated files available that may be necessary to MeGUI to work correctly. Some of them are binary files subject to patents, so they could be in violation of your local laws if you live in US, Japan and some countries in Europe. MeGUI will let you choose what files to update but please check your local laws about patents before proceeding. By clicking on the 'Yes' button you declare you have read this warning. Do you wish to proceed reviewing the updates?",
-                        "Updates Available", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                    update.ShowDialog();
+                if (File.Exists(strLocalUpdateXML))
+                {
+                    update.Visible = true;
+                    update.StartAutoUpdate();
+                    while (update.Visible == true)
+                    {
+                        Application.DoEvents();
+                        System.Threading.Thread.Sleep(100);
+                    }
+                }
+                else
+                {
+                    if (MessageBox.Show("There are updated files available that may be necessary to MeGUI to work correctly. Some of them are binary files subject to patents, so they could be in violation of your local laws if you live in US, Japan and some countries in Europe. MeGUI will let you choose what files to update but please check your local laws about patents before proceeding. By clicking on the 'Yes' button you declare you have read this warning. Do you wish to proceed reviewing the updates?",
+                            "Updates Available", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                        update.ShowDialog();
+                }
+                if (update.isComponentMissing())
+                {
+                    if (AskToInstallComponents(filesToReplace.Keys.Count > 0) == true)
+                    {
+                        if (filesToReplace.Keys.Count > 0) // restart required
+                        {
+                            this.Restart = true;
+                            this.Invoke(new MethodInvoker(delegate { this.Close(); }));
+                            return;
+                        }
+                        else
+                            beginUpdateCheck();
+                    }
+                }
             }
             else
             {
-#if x86
-                string strLocalUpdateXML = Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), "upgrade.xml");
-#endif
-#if x64
-                string strLocalUpdateXML = Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), "upgrade_x64.xml");
-#endif
                 if (File.Exists(strLocalUpdateXML))
                     File.Delete(strLocalUpdateXML);
             }
@@ -2091,7 +2119,7 @@ namespace MeGUI
             bool PropExists = false;
             VideoUtil.getAvisynthVersion(out avisynthversion, out avisynthdate, out PropExists);
 
-            if (PropExists)
+            if (!PropExists)
             {
                 i.LogValue("AviSynth Version ", "not installed");
 #if x86
@@ -2174,6 +2202,21 @@ namespace MeGUI
                 return false;
         }
 
+        private bool AskToInstallComponents(bool bRestartRequired)
+        {
+            string strQuestionText;
+
+            if (bRestartRequired)
+                strQuestionText = "MeGUI cannot find at least one required component.\nWithout these components, MeGUI will not run properly.\nDo you want to restart MeGUI now?";
+            else
+                strQuestionText = "MeGUI cannot find at least one required component.\nWithout these components, MeGUI will not run properly.\nDo you want to search now online for updates?";
+
+            if (MessageBox.Show(strQuestionText, "MeGUI components missing", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                return true;
+            else
+                return false;
+        }
+
         private void OneClickEncButton_Click(object sender, EventArgs e)
         {
             RunTool("one_click");
@@ -2209,4 +2252,4 @@ namespace MeGUI
         public string newUploadDate;
     }
 }
-        #endregion
+#endregion

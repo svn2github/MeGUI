@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2011  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -155,10 +155,10 @@ namespace MeGUI
                     case "eac3to": arrPath.Add(MainForm.Instance.Settings.EAC3toPath); break;
                     case "libs":
                         {
-                            string strMeGUIPath = System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath);
-                            arrPath.Add((System.IO.Path.Combine(strMeGUIPath, @"ICSharpCode.SharpZipLib.dll")));
-                            arrPath.Add((System.IO.Path.Combine(strMeGUIPath, @"MessageBoxExLib.dll")));
-                            arrPath.Add((System.IO.Path.Combine(strMeGUIPath, @"LinqBridge.dll")));
+                            strPath = System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath);
+                            arrPath.Add((System.IO.Path.Combine(strPath, @"ICSharpCode.SharpZipLib.dll")));
+                            arrPath.Add((System.IO.Path.Combine(strPath, @"MessageBoxExLib.dll")));
+                            arrPath.Add((System.IO.Path.Combine(strPath, @"LinqBridge.dll")));
                             break;
                         }
                     case "mediainfo": arrPath.Add(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), @"MediaInfo.dll")); break;
@@ -944,6 +944,131 @@ namespace MeGUI
             mainForm.Settings.UpdateFormStatusColumnWidth = colStatus.Width;
         }
 
+        public bool isComponentMissing()
+        {
+            ArrayList arrPath = new ArrayList();
+            string strPath;
+
+            // base 
+            arrPath.Add(System.Windows.Forms.Application.ExecutablePath);
+            // x264
+            arrPath.Add(MainForm.Instance.Settings.X264Path);
+#if x86
+            strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.X264Path);
+            if (OSInfo.isWow64())
+            {
+                arrPath.Add(System.IO.Path.Combine(strPath, "vfw4x264.exe"));
+                arrPath.Add(System.IO.Path.Combine(strPath, "avs4x264.exe"));
+                arrPath.Add(System.IO.Path.Combine(strPath, "x264_64.exe"));
+            }
+#endif
+            // dgindex
+            arrPath.Add(MainForm.Instance.Settings.DgIndexPath);
+            strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.DgIndexPath);
+            arrPath.Add(System.IO.Path.Combine(strPath, "DGDecode.dll"));
+            // dgavcindex
+            arrPath.Add(MainForm.Instance.Settings.DgavcIndexPath);
+            strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.DgavcIndexPath);
+            arrPath.Add(System.IO.Path.Combine(strPath, "DGAVCDecode.dll"));
+            // dgindexnv
+            arrPath.Add(MainForm.Instance.Settings.DgnvIndexPath);
+            strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.DgnvIndexPath);
+            arrPath.Add(System.IO.Path.Combine(strPath, "DGDecodeNV.dll"));
+            //ffms
+            arrPath.Add(MainForm.Instance.Settings.FFMSIndexPath);
+            strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.FFMSIndexPath);
+            arrPath.Add(System.IO.Path.Combine(strPath, "ffms2.dll"));
+            //mp4box
+            arrPath.Add(MainForm.Instance.Settings.Mp4boxPath);
+            //avimux_gui
+            arrPath.Add(MainForm.Instance.Settings.AviMuxGUIPath);
+            //tsmuxer
+            arrPath.Add(MainForm.Instance.Settings.TSMuxerPath);
+            //xvid_encraw
+            arrPath.Add(MainForm.Instance.Settings.XviDEncrawPath);
+            //faac
+            arrPath.Add(MainForm.Instance.Settings.FaacPath);
+            //mkvmerge
+            arrPath.Add(MainForm.Instance.Settings.MkvmergePath);
+            arrPath.Add(MainForm.Instance.Settings.MkvExtractPath);
+            arrPath.Add(MainForm.Instance.Settings.MkvInfoPath);
+            //ffmpeg
+            arrPath.Add(MainForm.Instance.Settings.FFMpegPath);
+            //oggenc2
+            arrPath.Add(MainForm.Instance.Settings.OggEnc2Path);
+            //yadif
+            arrPath.Add(MainForm.Instance.Settings.YadifPath);
+            //lame
+            arrPath.Add(MainForm.Instance.Settings.LamePath);
+            //aften
+            arrPath.Add(MainForm.Instance.Settings.AftenPath);
+            //flac
+            arrPath.Add(MainForm.Instance.Settings.FlacPath);
+            //eac3to
+            arrPath.Add(MainForm.Instance.Settings.EAC3toPath);
+            //libs":
+            strPath = System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath);
+            arrPath.Add((System.IO.Path.Combine(strPath, @"ICSharpCode.SharpZipLib.dll")));
+            arrPath.Add((System.IO.Path.Combine(strPath, @"MessageBoxExLib.dll")));
+            arrPath.Add((System.IO.Path.Combine(strPath, @"LinqBridge.dll")));
+            //mediainfo
+            arrPath.Add(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), @"MediaInfo.dll"));
+            //mediainfowrapper
+            arrPath.Add(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), @"MediaInfoWrapper.dll"));
+            //sevenzip
+            arrPath.Add(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), @"7z.dll"));
+            //sevenzipsharp
+            arrPath.Add(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), @"SevenZipSharp.dll"));
+            //data
+            arrPath.Add(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), @"Data\ContextHelp.xml"));
+            //avswrapper
+            arrPath.Add((System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), @"AvisynthWrapper.dll")));
+            //updatecopier
+            arrPath.Add((System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), @"updatecopier.exe")));
+            //convolution3dyv12
+            arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"Convolution3DYV12.dll"));
+            //undot
+            arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"UnDot.dll"));
+            //fluxsmooth
+            arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"FluxSmooth.dll"));
+            //eedi2
+            arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"EEDI2.dll"));
+            //decomb
+            arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"Decomb.dll"));
+            //leakkerneldeint
+            arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"LeakKernelDeint.dll"));
+            //tomsmocomp
+            arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"TomsMoComp.dll"));
+            //tdeint
+            arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"TDeint.dll"));
+            //tivtc
+            arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"TIVTC.dll"));
+            //colormatrix
+            arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"ColorMatrix.dll"));
+            //vsfilter
+            arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"VSFilter.dll"));
+            //nicaudio
+            arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"NicAudio.dll"));
+            //vobsub
+            arrPath.Add(MainForm.Instance.Settings.VobSubPath);
+            //besplit
+            arrPath.Add(MainForm.Instance.Settings.BeSplitPath);
+            //neroaacenc
+            arrPath.Add(MainForm.Instance.Settings.NeroAacEncPath);
+
+            foreach (string strAppPath in arrPath)
+            {
+                if (String.IsNullOrEmpty(strAppPath))
+                    return true;
+                if (File.Exists(strAppPath) == false)
+                    return true;
+                FileInfo fInfo = new FileInfo(strAppPath);
+                if (fInfo.Length == 0)
+                    return true;
+            }
+            return false;
+        }
+
         private string[] shuffled(string[] serverList)
         {
             Random r = new Random();
@@ -1483,6 +1608,10 @@ namespace MeGUI
                 }
             }
         }
+        public void StartAutoUpdate()
+        {
+            btnUpdate_Click(null, null);
+        }
         private void btnUpdate_Click(object sender, EventArgs e)
         {
             btnUpdate.Enabled = false;
@@ -1533,7 +1662,7 @@ namespace MeGUI
 
                     if (!String.IsNullOrEmpty(file.GetLatestVersion().Web))
                     {
-                        if (MessageBox.Show("MeGUI cannot find " + file.Name + " on your system or it is outdated.\nDo you would like to download it now? Afterwards it is required to unpack the file and set the path to the " + file.Name + ".exe in the settings.\n", "File not found",
+                        if (MessageBox.Show("MeGUI cannot find " + file.Name + " on your system or it is outdated.\nDue to the licensing the component is not included on the MeGUI update server.\n\nTherefore please download the file on your own, extract it and set the path to the " + file.Name + ".exe\nin the MeGUI settings (\"Settings\\External Program Settings\").\n\nDo you would like to download it now?", "Component not found",
                                      MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
                         {
                             System.Diagnostics.Process.Start(file.GetLatestVersion().Web);

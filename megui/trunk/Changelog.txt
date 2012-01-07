@@ -1,3 +1,4 @@
+2093 [Update] if a component is missing a warning message will appear at startup
 2092 [MainForm] offer to install AviSynth if AviSynth is not found but the installer is availabe (x86 only)
 2091 [Settings] changed default value of "Autostart Queue" to enabled
 2090 [Audio Encoder] do not abort downmix anymore if input avs file has no channel position information
