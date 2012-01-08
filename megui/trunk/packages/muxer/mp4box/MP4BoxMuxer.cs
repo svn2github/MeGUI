@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2011  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -315,7 +315,16 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                         }
                     }
                     if (!string.IsNullOrEmpty(stream.language))
-                        sb.Append(":lang=" + stream.language);
+                    {
+                        foreach (KeyValuePair<string, string> strLanguage in LanguageSelectionContainer.Languages)
+                        {
+                            if (stream.language.ToLower().Equals(strLanguage.Key.ToLower()))
+                            {
+                                sb.Append(":lang=" + strLanguage.Value);
+                                break;
+                            }
+                        }
+                    }
                     if (!string.IsNullOrEmpty(stream.name))
                         sb.Append(":name=" + stream.name);
                     if (stream.delay != 0)
@@ -327,7 +336,16 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                     MuxStream stream = (MuxStream)o;
                     sb.Append(" -add \"" + stream.path);
                     if (!string.IsNullOrEmpty(stream.language))
-                        sb.Append(":lang=" + stream.language);
+                    {
+                        foreach (KeyValuePair<string, string> strLanguage in LanguageSelectionContainer.Languages)
+                        {
+                            if (stream.language.ToLower().Equals(strLanguage.Key.ToLower()))
+                            {
+                                sb.Append(":lang=" + strLanguage.Value);
+                                break;
+                            }
+                        }
+                    }
                     if (!string.IsNullOrEmpty(stream.name))
                         sb.Append(":name=" + stream.name);
                     sb.Append("\"");

@@ -1662,7 +1662,7 @@ namespace MeGUI
 
                     if (!String.IsNullOrEmpty(file.GetLatestVersion().Web))
                     {
-                        if (MessageBox.Show("MeGUI cannot find " + file.Name + " on your system or it is outdated.\nDue to the licensing the component is not included on the MeGUI update server.\n\nTherefore please download the file on your own, extract it and set the path to the " + file.Name + ".exe\nin the MeGUI settings (\"Settings\\External Program Settings\").\n\nDo you would like to download it now?", "Component not found",
+                        if (MessageBox.Show("MeGUI cannot find " + file.Name + " on your system or it is outdated.\nDue to the licensing the component is not included on the MeGUI update server.\n\nTherefore please download the file on your own, extract it and set the path to the " + file.Name + ".exe in the MeGUI settings\n(\"Settings\\External Program Settings\").\n\nDo you would like to download it now?", "Component not found",
                                      MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
                         {
                             System.Diagnostics.Process.Start(file.GetLatestVersion().Web);
