@@ -1432,11 +1432,18 @@ namespace MeGUI
                 ProfileImporter importer = new ProfileImporter(this, data, true);
                 if (importer.ErrorDuringInit())
                     return;
-                importer.Show();
-                while (importer.Visible == true)    // wait until the profiles have been imported
+                if (MainForm.Instance.settings.AutoUpdateSession)
                 {
-                    Application.DoEvents();
-                    System.Threading.Thread.Sleep(100);
+                    importer.AutoImport();
+                }
+                else
+                {
+                    importer.Show();
+                    while (importer.Visible == true)    // wait until the profiles have been imported
+                    {
+                        Application.DoEvents();
+                        System.Threading.Thread.Sleep(100);
+                    }
                 }
             });
         }
@@ -1483,12 +1490,14 @@ namespace MeGUI
 #if x64
             string strLocalUpdateXML = Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), "upgrade_x64.xml");
 #endif
+            if (File.Exists(strLocalUpdateXML))
+                MainForm.Instance.Settings.AutoUpdateSession = true;
 
             UpdateWindow update = new UpdateWindow(this, this.Settings);
             update.GetUpdateData(true);
             if (update.HasUpdatableFiles()) // If there are updated files, display the window
             {
-                if (File.Exists(strLocalUpdateXML))
+                if (MainForm.Instance.Settings.AutoUpdateSession)
                 {
                     update.Visible = true;
                     update.StartAutoUpdate();
@@ -1504,7 +1513,7 @@ namespace MeGUI
                             "Updates Available", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                         update.ShowDialog();
                 }
-                if (update.isComponentMissing())
+                if (update.isComponentMissing() && !this.Restart)
                 {
                     if (AskToInstallComponents(filesToReplace.Keys.Count > 0) == true)
                     {

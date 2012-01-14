@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -85,6 +85,12 @@ namespace MeGUI.core.gui
                 return true;
             else
                 return false;
+        }
+
+        public void AutoImport()
+        {
+            checkAllToolStripMenuItem_Click(null, null);
+            import_Click(null, null);
         }
 
         private Dictionary<string, string> createInitSubTable()

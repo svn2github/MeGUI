@@ -1,3 +1,4 @@
+2096 [Update] changed recommended path for neroaacenc to tools\eac3to
 2095 [Log] changed resource lock behavior. Bug #3466426
 2094 [MP4 Muxer] use ISO 639-2/T language codes when muxing. Bug #3201829
 2093 [Update] if a component is missing a warning message will appear at startup

@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2011  Doom9 & al
+// Copyright (C) 2005-2012  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -152,14 +152,19 @@ namespace MeGUI
         {
             if (mainForm.Settings.DialogSettings.AskAboutDuplicates)
             {
-                bool askAgain;
-                bool bResult = askAbout("Problem adding profile '"
-                    + profname + "':\r\none with the same name already exists. \r\nWhat do you want to do?",
-                     "Duplicate profile", "Overwrite profile", "Skip profile", MessageBoxIcon.Exclamation, out askAgain);
+                if (!MainForm.Instance.Settings.AutoUpdateSession)
+                {
+                    bool askAgain;
+                    bool bResult = askAbout("Problem adding profile '"
+                        + profname + "':\r\none with the same name already exists. \r\nWhat do you want to do?",
+                         "Duplicate profile", "Overwrite profile", "Skip profile", MessageBoxIcon.Exclamation, out askAgain);
 
-                mainForm.Settings.DialogSettings.AskAboutDuplicates = askAgain;
-                mainForm.Settings.DialogSettings.DuplicateResponse = bResult;
-                return bResult;
+                    mainForm.Settings.DialogSettings.AskAboutDuplicates = askAgain;
+                    mainForm.Settings.DialogSettings.DuplicateResponse = bResult;
+                    return bResult;
+                }
+                else
+                    return false; 
             }
             return mainForm.Settings.DialogSettings.DuplicateResponse;
         }

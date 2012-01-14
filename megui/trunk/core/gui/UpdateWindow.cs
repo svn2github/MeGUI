@@ -1282,17 +1282,6 @@ namespace MeGUI
                 if (value != ErrorState.Successful)
                     return;
             }
-            else
-            {
-#if x86
-                string strLocalUpdateXML = Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), "upgrade.xml");
-#endif
-#if x64
-                string strLocalUpdateXML = Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), "upgrade_x64.xml");
-#endif
-                if (File.Exists(strLocalUpdateXML))
-                    File.Delete(strLocalUpdateXML);
-            }
 
             // I'd prefer the main thread to parse the upgradeXML as opposed to using this
             // "downloading" thread but i didn't know a better way of doing it other than
@@ -1608,10 +1597,12 @@ namespace MeGUI
                 }
             }
         }
+
         public void StartAutoUpdate()
         {
             btnUpdate_Click(null, null);
         }
+
         private void btnUpdate_Click(object sender, EventArgs e)
         {
             btnUpdate.Enabled = false;
@@ -1662,7 +1653,17 @@ namespace MeGUI
 
                     if (!String.IsNullOrEmpty(file.GetLatestVersion().Web))
                     {
-                        if (MessageBox.Show("MeGUI cannot find " + file.Name + " on your system or it is outdated.\nDue to the licensing the component is not included on the MeGUI update server.\n\nTherefore please download the file on your own, extract it and set the path to the " + file.Name + ".exe in the MeGUI settings\n(\"Settings\\External Program Settings\").\n\nDo you would like to download it now?", "Component not found",
+                        string strText;
+
+                        if (file.Name.ToLower().Equals("neroaacenc"))
+                        {
+                            string strPath = System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath) + @"\tools\eac3to\neroAacEnc.exe";
+                            strText = "MeGUI cannot find " + file.Name + " on your system or it is outdated.\nDue to the licensing the component is not included on the MeGUI update server.\n\nTherefore please download the file on your own and extract neroaacenc.exe to:\n" + strPath + "\n\nIf necessary change the path in the settings:\n\"Settings\\External Program Settings\"\n\nDo you would like to download it now?";
+                        }
+                        else
+                            strText = "MeGUI cannot find " + file.Name + " on your system or it is outdated.\nDue to the licensing the component is not included on the MeGUI update server.\n\nTherefore please download the file on your own, extract it and set the path to the " + file.Name + ".exe in the MeGUI settings\n(\"Settings\\External Program Settings\").\n\nDo you would like to download it now?";
+
+                        if (MessageBox.Show(strText, "Component not found",
                                      MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
                         {
                             System.Diagnostics.Process.Start(file.GetLatestVersion().Web);
@@ -1733,6 +1734,17 @@ namespace MeGUI
                 AddTextToLog("Files which have been sucessfully updated: " + succeededFiles.Count, ImageType.Information);
             if (failedFiles.Count > 0)
                 AddTextToLog("Files which have been not sucessfully updated: " + failedFiles.Count, ImageType.Error);
+            else
+            {
+#if x86
+                string strLocalUpdateXML = Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), "upgrade.xml");
+#endif
+#if x64
+                string strLocalUpdateXML = Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), "upgrade_x64.xml");
+#endif
+                if (File.Exists(strLocalUpdateXML))
+                    File.Delete(strLocalUpdateXML);
+            }
 
             List<string> files = new List<string>();
             foreach (iUpgradeable u in upgradeData)
@@ -1751,6 +1763,11 @@ namespace MeGUI
                     mainForm.Invoke(new MethodInvoker(delegate { mainForm.Close(); }));
                     return/* true*/;
                 }
+            }
+            if (MainForm.Instance.Settings.AutoUpdateSession)
+            {
+                this.Invoke(new MethodInvoker(delegate { this.Close(); }));
+                return;
             }
             listViewDetails.Invoke(new MethodInvoker(delegate { DisplayItems(chkShowAllFiles.Checked); }));
             Invoke(new MethodInvoker(delegate

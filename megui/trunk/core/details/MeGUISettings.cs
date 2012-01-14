@@ -105,7 +105,7 @@ namespace MeGUI
             ffmsIndexPath = getDownloadPath(@"tools\ffms\ffmsindex.exe");
             xvidEncrawPath = getDownloadPath(@"tools\xvid_encraw\xvid_encraw.exe");
             lamePath = getDownloadPath(@"tools\lame\lame.exe");
-            neroAacEncPath = "neroAacEnc.exe";
+            neroAacEncPath = strMeGUIPath + @"\tools\eac3to\neroAacEnc.exe";
             oggEnc2Path = getDownloadPath(@"tools\oggenc2\oggenc2.exe");
             ffmpegPath = getDownloadPath(@"tools\ffmpeg\ffmpeg.exe");
             aftenPath = getDownloadPath(@"tools\aften\aften.exe");
@@ -573,7 +573,13 @@ namespace MeGUI
         public string NeroAacEncPath
         {
             get { return neroAacEncPath; }
-            set { neroAacEncPath = value; }
+            set 
+            { 
+                if (!System.IO.File.Exists(value))
+                    neroAacEncPath = strMeGUIPath + @"\tools\eac3to\neroAacEnc.exe";
+                else
+                    neroAacEncPath = value; 
+            }
         }		
 	    
 	    /// <summary>
@@ -1072,6 +1078,17 @@ namespace MeGUI
         }
 
         #endregion
+
+        private bool bAutoUpdateSession;
+        /// <summary>
+        /// automatic update process
+        /// </summary>
+        [XmlIgnore()]
+        public bool AutoUpdateSession
+        {
+            get { return bAutoUpdateSession; }
+            set { bAutoUpdateSession = value; }
+        }
     }
     public enum AfterEncoding { DoNothing = 0, Shutdown = 1, RunCommand = 2, CloseMeGUI = 3 }
 }
