@@ -237,7 +237,8 @@ namespace MeGUI.core.gui
             }
             catch (Exception e)
             {
-                Console.Write(e.Message);
+                MeGUI.core.util.LogItem _oLog = MainForm.Instance.Log.Info("Error");
+                _oLog.LogValue("playNextFrame", e, MeGUI.core.util.ImageType.Error);
             }
         }
 

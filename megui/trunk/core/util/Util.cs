@@ -111,7 +111,7 @@ namespace MeGUI.core.util
                         File.Delete(path);
                     }
                     catch (IOException) { }
-                    Console.Write(e.Message);
+                    MessageBox.Show(e.Message);
                 }
             }
         }
@@ -128,12 +128,11 @@ namespace MeGUI.core.util
                     {
                         return (T)ser.Deserialize(s);
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
                         s.Close();
                         MessageBox.Show("File '" + path + "' could not be loaded!\n\nIt will be moved to the backup directory.", "Error loading File", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         FileUtil.BackupFile(path, true);
-                        Console.Write(e.Message);
                         return null;
                     }
                 }
@@ -169,7 +168,8 @@ namespace MeGUI.core.util
                             MessageBox.Show("File '" + path + "' could not be loaded!\n\nIt will be moved to the backup directory.", "Error loading File", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             FileUtil.BackupFile(path, true);
                         }
-                        Console.Write(e.Message);
+                        LogItem _oLog = MainForm.Instance.Log.Info("Error");
+                        _oLog.LogValue("XmlDeserialize: " + path, e, ImageType.Error);
                         return null;
                     }
                 }
@@ -502,7 +502,8 @@ namespace MeGUI.core.util
                     }
                     catch (Exception e) // integer parsing error
                     {
-                        Console.Write(e.Message);
+                        LogItem _oLog = MainForm.Instance.Log.Info("Error");
+                        _oLog.LogValue("getTimeCode: " + timecode, e, ImageType.Error);
                         return -1;
                     }
                 }

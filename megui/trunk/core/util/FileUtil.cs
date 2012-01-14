@@ -282,9 +282,7 @@ namespace MeGUI.core.util
                 }
             }
             else
-            {
-                Console.WriteLine("Source path does not exist!");
-            }
+                MessageBox.Show("Source path does not exist!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         /// <summary>

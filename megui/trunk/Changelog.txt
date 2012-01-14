@@ -1,3 +1,4 @@
+2095 [Log] changed resource lock behavior. Bug #3466426
 2094 [MP4 Muxer] use ISO 639-2/T language codes when muxing. Bug #3201829
 2093 [Update] if a component is missing a warning message will appear at startup
 2092 [MainForm] offer to install AviSynth if AviSynth is not found but the installer is availabe (x86 only)

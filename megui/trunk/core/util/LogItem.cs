@@ -191,7 +191,7 @@ namespace MeGUI.core.util
             }
             catch (Exception e)
             {
-                Console.Write(e.Message);
+                MessageBox.Show(e.Message);
             }
 
             return res.ToString();
@@ -203,7 +203,7 @@ namespace MeGUI.core.util
 
             try
             {
-                MainForm.Instance.LogLock.WaitOne();
+                MainForm.Instance.LogLock.WaitOne(10000);
                 res.AppendFormat("{0}[{1}] {2}{3}", dashes(iLevel), Type, Text, Environment.NewLine);
                 System.IO.File.AppendAllText(MainForm.Instance.LogFile, res.ToString());
             }

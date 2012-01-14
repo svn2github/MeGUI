@@ -1773,7 +1773,8 @@ namespace MeGUI
 				}
 				catch (Exception e)
 				{
-					Console.Write(e.Message);
+                    MeGUI.core.util.LogItem _oLog = MainForm.Instance.Log.Info("Error");
+                    _oLog.LogValue("convertStringToMatrix: " + matrix, e, MeGUI.core.util.ImageType.Error);
 					MessageBox.Show("Invalid quantizer detected: " + quantizer + "\nUsing 16 instead", "Invalid quantizer", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 				}
 				retval[line, column] = val;
@@ -1920,7 +1921,8 @@ namespace MeGUI
 				}
 				catch (Exception f)
 				{
-					Console.Write(f.Message);
+                    MeGUI.core.util.LogItem _oLog = MainForm.Instance.Log.Info("Error");
+                    _oLog.LogValue("Error", f, MeGUI.core.util.ImageType.Error);
 				}
 				finally
 				{
@@ -1932,7 +1934,8 @@ namespace MeGUI
 						}
 						catch (Exception f)
 						{
-							Console.Write(f.Message);
+                            MeGUI.core.util.LogItem _oLog = MainForm.Instance.Log.Info("Error");
+                            _oLog.LogValue("Error", f, MeGUI.core.util.ImageType.Error);
 						}
 					}
 				}
@@ -1997,7 +2000,8 @@ namespace MeGUI
 				}
 				catch (Exception f)
 				{
-					Console.Write(f.Message);
+                    MeGUI.core.util.LogItem _oLog = MainForm.Instance.Log.Info("Error");
+                    _oLog.LogValue("Error", f, MeGUI.core.util.ImageType.Error);
 				}
 				finally
 				{
@@ -2009,7 +2013,8 @@ namespace MeGUI
 						}
 						catch (Exception f)
 						{
-							Console.Write(f.Message);
+                            MeGUI.core.util.LogItem _oLog = MainForm.Instance.Log.Info("Error");
+                            _oLog.LogValue("Error", f, MeGUI.core.util.ImageType.Error);
 						}
 					}
 				}

@@ -553,7 +553,8 @@ namespace MeGUI.core.details
                         try { s.Close(); File.Delete(name); }
                         catch (Exception) { }
                     }
-                    Console.Write(e.Message);
+                    LogItem _oLog = MainForm.Instance.Log.Info("Error");
+                    _oLog.LogValue("loadJob: " + name, e, ImageType.Error);
                     return null;
                 }
             }
@@ -610,7 +611,7 @@ namespace MeGUI.core.details
 
         private void addJob(TaggedJob job)
         {
-            mainForm.Jobs.ResourceLock.WaitOne();
+            mainForm.Jobs.ResourceLock.WaitOne(10000);
             job.Name = getFreeJobName();
             allJobs[job.Name] = job;
             jobQueue.queueJob(job);

@@ -683,7 +683,8 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                     }
                     catch (EndOfStreamException e)
                     {
-                        Console.WriteLine("{0}, wavfile can't be read.", e.GetType().Name);
+                        LogItem _oLog = MainForm.Instance.Log.Info("Error");
+                        _oLog.LogValue(e.GetType().Name + ", wavfile can't be read.", e, ImageType.Error);
                     }
                     finally
                     {
@@ -701,7 +702,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             }
 
             string strErrorText = String.Empty;
-            if (!oInfo.AudioTracks[0].Type.Equals("DTS-HD Master Audio"))
+            if (oInfo.AudioTracks.Count == 0 || !oInfo.AudioTracks[0].Type.Equals("DTS-HD Master Audio"))
             {
                 _log.LogEvent("Trying to open the file with NicAudio", ImageType.Information);
                 if (sbOpen.Length > 0 && AudioUtil.AVSScriptHasAudio(sbOpen.ToString(), out strErrorText))

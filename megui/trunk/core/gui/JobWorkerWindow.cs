@@ -675,7 +675,7 @@ namespace MeGUI.core.gui
 
         private JobStartInfo startNextJobInQueue()
         {
-            mainForm.Jobs.ResourceLock.WaitOne();
+            mainForm.Jobs.ResourceLock.WaitOne(10000);
 
             TaggedJob job = getNextJob();
 

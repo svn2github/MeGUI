@@ -833,7 +833,7 @@ namespace MeGUI
             avsLock = 0;
             try
             {
-                logLock.WaitOne();
+                logLock.WaitOne(10000);
                 File.WriteAllText(strLogFile, "Preliminary log file only. During closing of MeGUI the well formed log file will be written.\r\n\r\n");
             }
             catch (Exception ex)
@@ -1037,7 +1037,8 @@ namespace MeGUI
                 }
                 catch (Exception e)
                 {
-                    Console.Write(e.Message);
+                    LogItem _oLog = MainForm.Instance.Log.Info("Error");
+                    _oLog.LogValue("saveSettings", e, ImageType.Error);
                 }
             }
         }
@@ -1059,8 +1060,9 @@ namespace MeGUI
                     }
                     catch (Exception e)
                     {
+                        LogItem _oLog = MainForm.Instance.Log.Info("Error");
+                        _oLog.LogValue("loadSettings", e, ImageType.Error);
                         MessageBox.Show("Settings could not be loaded.", "Error loading profile", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        Console.Write(e.Message);
                     }
                 }
             }
@@ -1150,7 +1152,6 @@ namespace MeGUI
             get { return logTree1.Log; }
         }
 
-
         /// <summary>
         /// saves the whole content of the log into a logfile
         /// </summary>
@@ -1159,12 +1160,12 @@ namespace MeGUI
             string text = Log.ToString();
             try
             {
-                logLock.WaitOne();
+                logLock.WaitOne(10000);
                 File.WriteAllText(strLogFile, text);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                Console.Write(e.Message);
+                MessageBox.Show("Log file cannot be saved", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
