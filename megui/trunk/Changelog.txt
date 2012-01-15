@@ -1,3 +1,4 @@
+2097 [Bitrate Calculator] improved M2TS calculation assumption. Warning: it is better but also not correct
 2096 [Update] changed recommended path for neroaacenc to tools\eac3to
 2095 [Log] changed resource lock behavior. Bug #3466426
 2094 [MP4 Muxer] use ISO 639-2/T language codes when muxing. Bug #3201829

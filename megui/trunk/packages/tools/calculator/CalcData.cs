@@ -1,3 +1,23 @@
+// ****************************************************************************
+// 
+// Copyright (C) 2005-2012 Doom9 & al
+// 
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 2 of the License, or
+// (at your option) any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+// 
+// ****************************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -195,13 +215,13 @@ namespace MeGUI.packages.tools.calculator
         /// <returns>overhead this video track will incurr</returns>
         private long GetM2tsVideoOverhead(int iAudioStreamCount)
         {
-            long videoOverhead = 0;
-            long videoSize = (long)VideoBitrate * (long)TotalSeconds; //videoOverhead+generalOverhead+rawVideo
             if (iAudioStreamCount == 0)
             {
-                videoOverhead = Frames * 263 + 9412;
+                VideoOverheadRatio = 1.06f;
+                return 0;
             }
-            videoSize -= videoOverhead;
+            long videoOverhead = 0;
+            long videoSize = (long)VideoBitrate * (long)TotalSeconds; //videoOverhead+generalOverhead+rawVideo
             int packageSize = 192;
             int packageFill = 184; //of 192
             long packageCount = videoSize / packageSize + 1;
@@ -223,7 +243,7 @@ namespace MeGUI.packages.tools.calculator
                 if (ContainerType == ContainerType.MKV)
                     AudioOverhead += new FileSize(Unit.B, GetMkvAudioOverhead(audio.AType, 48000, (double)TotalSeconds));
                 else if (ContainerType == ContainerType.M2TS)
-                    AudioOverhead += new FileSize(Unit.B, GetM2tsAudioOverhead(audio.AType, Frames, (double)TotalSeconds, audio.Size.Value.Bytes, true));
+                    AudioOverhead += new FileSize(Unit.B, GetM2tsAudioOverhead(audio.AType, Frames, (ulong)TotalSeconds, audio.Size.Value.Bytes, true));
                 else if (ContainerType == ContainerType.AVI)
                     AudioOverhead +=  new FileSize(Unit.B, GetAviAudioOverhead(audio.AType) * Frames);
             }
@@ -281,21 +301,80 @@ namespace MeGUI.packages.tools.calculator
         /// <param name="lFileSize">size of the audio track</param>
         /// <param name="bVideoHandling">true if video will also be muxed</param>
         /// <returns>overhead this audio track will incurr</returns>
-        private static int GetM2tsAudioOverhead(AudioType audioType, long lFrames, double length, ulong lFileSize, bool bVideohandling)
+        private static int GetM2tsAudioOverhead(AudioType audioType, long lFrames, ulong length, ulong lFileSize, bool bVideohandling)
         {
-            int blocksize = 80;
-            if (audioType == AudioType.AC3 || audioType == AudioType.THD || audioType == AudioType.DTS
-             || audioType == AudioType.DTSHD || audioType == AudioType.DTSMA || audioType == AudioType.PCM)
+            if (audioType == AudioType.DTS || audioType == AudioType.DTSHD || audioType == AudioType.DTSMA)
             {
-                blocksize = 907;
+                // formula based on http://forum.doom9.org/showpost.php?p=1484281&postcount=141
+                int packageSize = 192;
+                ulong audioOverhead = 0;
+                double packageFill = 184.0;
+                ulong dtsRawsize = lFileSize;
+                ulong hdRawsize = 0;
+                int averageBitrate = (int)(lFileSize / length) + 1;
+                ulong hdOverhead = 0;
+                if (averageBitrate > 194000)
+                {
+                    dtsRawsize = (ulong)(192000 * length);
+                    hdRawsize = ((ulong)averageBitrate - 192000) * length;
+                    if (hdRawsize > 0)
+                    {
+                        hdOverhead = hdRawsize * (ulong)packageSize / (ulong)packageFill + length * 1024 * 10 - hdRawsize;
+                    }
+                }
+                ulong dtsMult = 1147;
+                audioOverhead = dtsMult * (ulong)packageSize * length - dtsRawsize;
+                audioOverhead += hdOverhead;
+                return (int)audioOverhead;
             }
-            int audioOverhead = (int)((2 * blocksize) / 180.0 * 8.0 + 17.0 + 0.5) * ((int)(lFileSize * 1.0 / (blocksize * 1.0) + 0.5));
-            if (bVideohandling)
+            else
             {
-                double audiobitrate = lFileSize / length;
-                audioOverhead += (int)lFrames * (262 + ((int)audiobitrate / 184 + 1)) + 9412;
+                //// formula based on http://forum.doom9.org/showpost.php?p=1473477&postcount=18
+                //int blocksize = 80;
+                //if (audioType == AudioType.AC3 || audioType == AudioType.THD|| audioType == AudioType.PCM)
+                //{
+                //    blocksize = 907;
+                //}
+                //int audioOverhead = (int)((2 * blocksize) / 180.0 * 8.0 + 17.0 + 0.5) * ((int)(lFileSize * 1.0 / (blocksize * 1.0) + 0.5));
+                //if (bVideohandling)
+                //{
+                //    double audiobitrate = lFileSize / length;
+                //    audioOverhead += (int)lFrames * (262 + ((int)audiobitrate / 184 + 1)) + 9412;
+                //}
+                //return audioOverhead;
+
+                // formula based on http://forum.doom9.org/showpost.php?p=1488863&postcount=162
+                int packageSize = 192;
+                ulong audioOverhead = 0;
+                double packageFill = 184.0;
+                int pesOverhead = 17;
+                ulong ac3RawSize = lFileSize;
+                ulong hdRawSize = 0;
+                int averageBitrate = (int)(lFileSize / length) + 1;
+                if (averageBitrate > 88000)
+                {
+                    ac3RawSize = 80000 * length;
+                    hdRawSize = ((ulong)averageBitrate - 80000) * length;
+                    averageBitrate = 80000;
+                }
+                int audioPackageSizePerSecond = averageBitrate / 250 + 1; // = averageBitrate*8/1000/2
+                int effectiveAudioPackagePerSecond = audioPackageSizePerSecond + pesOverhead;
+                int containerPackagesCountPerAudioPackagePerSecond = (int)(effectiveAudioPackagePerSecond / packageFill) + 1;
+                int containerPackageSizePerAudioPackagePerSecond = packageSize * containerPackagesCountPerAudioPackagePerSecond;
+                audioOverhead = ac3RawSize * (ulong)containerPackageSizePerAudioPackagePerSecond / (ulong)audioPackageSizePerSecond - ac3RawSize;
+                ulong hdOverhead = 0;
+                if (hdRawSize > 0)
+                {
+                    hdOverhead = hdRawSize * (ulong)(packageSize / packageFill) + length * 1024 * 10 - hdRawSize;
+                }
+                audioOverhead += hdOverhead;
+                if (bVideohandling)
+                {
+                    double audiobitrate = lFileSize / length;
+                    audioOverhead += (ulong)lFrames * (262 + ((ulong)(audiobitrate / 184) + 1)) + 9412;
+                }
+                return (int)audioOverhead;
             }
-            return audioOverhead;
         }
 
         /// <summary>

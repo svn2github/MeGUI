@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -303,8 +303,10 @@ namespace MeGUI.core.details
 
         private void reallyDeleteJob(TaggedJob job)
         {
-            if (job.Status == JobStatus.PROCESSING) return;
+            if (job.Status == JobStatus.PROCESSING) 
+                return;
 
+            mainForm.Jobs.ResourceLock.WaitOne(10000);
             if (job.OwningWorker != null && workers.ContainsKey(job.OwningWorker))
                 workers[job.OwningWorker].RemoveJobFromQueue(job);
 
@@ -323,6 +325,7 @@ namespace MeGUI.core.details
                 File.Delete(fileName);
             
             allJobs.Remove(job.Name);
+            mainForm.Jobs.ResourceLock.Release();
         }
 
         private void deleteAllDependantJobs(TaggedJob job)
@@ -360,13 +363,14 @@ namespace MeGUI.core.details
         /// </summary>
         public void saveJobs()
         {
+            mainForm.Jobs.ResourceLock.WaitOne(10000);
             foreach (TaggedJob job in allJobs.Values)
             {
                 job.EnabledJobNames = toStringList(job.EnabledJobs);
                 job.RequiredJobNames = toStringList(job.RequiredJobs);
                 saveJob(job, mainForm.MeGUIPath);
             }
-
+            mainForm.Jobs.ResourceLock.Release();
             saveJobLists();
         }
 
@@ -380,6 +384,7 @@ namespace MeGUI.core.details
         {
             JobListSerializer s = new JobListSerializer();
 
+            mainForm.Jobs.ResourceLock.WaitOne(10000);
             s.mainJobList = toStringList(jobQueue.JobList);
 
             foreach (JobWorker w in workers.Values)
@@ -389,6 +394,7 @@ namespace MeGUI.core.details
             string path = Path.Combine(mainForm.MeGUIPath, "joblists.xml");
 
             Util.XmlSerialize(s, path);
+            mainForm.Jobs.ResourceLock.Release();
         }
 
         private void loadJobLists()
