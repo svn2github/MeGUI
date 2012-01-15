@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ContextHelp version="0.7" Author="Kurtnoise, Zathor et all" LastUpdated="2010-10-20">
+<ContextHelp version="0.x" Author="Kurtnoise, Zathor et all" LastUpdated="20XX-XX-XX">
 	<Codec name="x264">
 		<slicesnb name="Slices">
 			<Advanced>
@@ -25,6 +25,22 @@ Limit the size of each slice in macroblocks</Advanced>
 			<Recommended>0</Recommended>
 			<Default>0</Default>
 		</maxSliceSizeMB>
+    <gopcalculation name="GOP Calculation">
+      <Advanced>
+Determines how minimum and maximum GOP size are calculated.
+
+Fixed: 
+the selected values will be used
+
+FPS based: 
+the values will be used as on a 25 FPS basis
+Maximum/Minimum value is divided by 25 * actual FPS
+e.g. 250 / 25fps * 23.967fps = 240
+      </Advanced>
+      <Basic>GOP Calculation</Basic>
+      <Recommended>FPS based</Recommended>
+      <Default>FPS based</Default>
+    </gopcalculation>
 		<opengop name="Open GOPs">
 			<Advanced>
 Use recovery points to close GOPs. Only available with b-frames.</Advanced>
@@ -113,14 +129,14 @@ Normal = Non-Strict (not Blu-ray compatible)</Advanced>
 		</b-pyramid>
 	<slow-firstpass name="Slow first pass">
 		<Advanced>
-		With the advent of the Preset system in r1177, using --pass 1 applies the following settings at the end of parsing the command line:
-		* ref 1
-		* no-8x8dct
-		* partitions i4x4 (if originally enabled, else none)
-		* me dia
-		* subme MIN( 2, subme )
-		* trellis 0
-		This feature is automatically disabled with preset placebo. To otherwise disable the feature, uncheck this option.
+With the advent of the Preset system in r1177, using --pass 1 applies the following settings at the end of parsing the command line:
+* ref 1
+* no-8x8dct
+* partitions i4x4 (if originally enabled, else none)
+* me dia
+* subme MIN( 2, subme )
+* trellis 0
+This feature is automatically disabled with preset placebo. To otherwise disable the feature, uncheck this option.
 		</Advanced>
 		<Basic>Slow first pass</Basic>
 		<Recommended>disabled</Recommended>
@@ -391,7 +407,7 @@ Enables 'brightness' weighting of B-frames which improves fades and colour gradi
 		</weightb>
 	<weightp name="B-frame Weighted Prediction">
 		<Advanced>
-		Enables use of explicit weighted prediction to improve compression in P-frames. Higher modes are slower.
+Enables use of explicit weighted prediction to improve compression in P-frames. Higher modes are slower.
 		</Advanced>
 		<Basic>Weighted prediction for P-frames</Basic>
 		<Recommended>2</Recommended>
@@ -759,16 +775,16 @@ Applies this constant quantizer to the selected zones
 		<Advanced>
 The H.264 standard includes the following sets of capabilities, which are referred to as profiles,
 targeting specific classes of applications:
-	- Baseline Profile (BP): Primarily for lower-cost applications with limited computing resources,
-		this profile is used widely in videoconferencing and mobile applications.
-	- Main Profile (MP): Originally intended as the mainstream consumer profile for broadcast and
-		storage applications, the importance of this profile faded when the High profile was 
-		developed for those applications.
-	- Extended Profile (XP): Intended as the streaming video profile, this profile has relatively high
-		compression capability and some extra tricks for robustness to data losses and server stream switching.
-	- High Profile (HiP): The primary profile for broadcast and disc storage applications, particularly
-		for high-definition television applications (this is the profile adopted into HD DVD and Blu-ray Disc,
-		for example).
+- Baseline Profile (BP): Primarily for lower-cost applications with limited computing resources,
+	this profile is used widely in videoconferencing and mobile applications.
+- Main Profile (MP): Originally intended as the mainstream consumer profile for broadcast and
+	storage applications, the importance of this profile faded when the High profile was 
+	developed for those applications.
+- Extended Profile (XP): Intended as the streaming video profile, this profile has relatively high
+	compression capability and some extra tricks for robustness to data losses and server stream switching.
+- High Profile (HiP): The primary profile for broadcast and disc storage applications, particularly
+	for high-definition television applications (this is the profile adopted into HD DVD and Blu-ray Disc,
+	for example).
 		</Advanced>
 		<Basic>Choose your AVC Profile.</Basic>
 		<Recommended>High Profile</Recommended>
@@ -788,12 +804,12 @@ a preset but before all other parameters.
 	</tunes>
 	<presets name="x264 Presets">
 		<Advanced>
-		Change options to trade off compression efficiency and quality.
-		If you specify a preset, the changes it makes will be applied
-		before all other parameters are applied.
-		Faster presets will shorten the encoding time while
-		- lowering the quality in bitrate mode or
-		- increasing the file size in Constant Quantizer or Constant Ratefactor mode
+Change options to trade off compression efficiency and quality.
+If you specify a preset, the changes it makes will be applied
+before all other parameters are applied.
+Faster presets will shorten the encoding time while
+- lowering the quality in bitrate mode or
+- increasing the file size in Constant Quantizer or Constant Ratefactor mode
 		</Advanced>
 		<Basic>
 		Specify an internal preset.
@@ -803,8 +819,8 @@ a preset but before all other parameters.
 	</presets>
 	<targetmode name="Target mode">
 		<Advanced>
-		If you need to reach a specific file size select "Targeting file size".
-		If not it is recommended to select "Targeting quality".
+If you need to reach a specific file size select "Targeting file size".
+If not it is recommended to select "Targeting quality".
 		</Advanced>
 		<Basic>
 		Specify an encoding mode.
@@ -847,5 +863,11 @@ Note that a value not equal to 1 may lead to crashes.
 Recommended Value: 1
       </Basic>
     </ffmsthreads>
+    <useituvalues name="Use ITU aspect ratio">
+      <Basic>
+When enabled the aspect ratio of DVD sources (720x480, 720x576) will be shown and calculated as ITU values.
+When disabled clear 4:3 or 16:9 is used.
+      </Basic>
+    </useituvalues>
   </Form>
 </ContextHelp>

@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2011  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -241,6 +241,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             }
 
             // GOP Size
+            int iBackupKeyframeInterval = xs.KeyframeInterval;
+            int iBackupMinGOPSize = xs.MinGOPSize;
+
             xs.KeyframeInterval = oSettingsHandler.getKeyInt(fps_n, fps_d);
             if (xs.KeyframeInterval != 250) // gop size of 250 is default
             {
@@ -250,9 +253,13 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                     sb.Append("--keyint " + xs.KeyframeInterval + " ");
             }
 
-            xs.MinGOPSize = oSettingsHandler.getMinKeyint();
-            if (xs.MinGOPSize != xs.KeyframeInterval / 10)
+            xs.MinGOPSize = oSettingsHandler.getMinKeyint(fps_n, fps_d);
+            double fps = (double)fps_n / fps_d;
+            if (xs.MinGOPSize != fps / 10)
                 sb.Append("--min-keyint " + xs.MinGOPSize + " ");
+
+            xs.KeyframeInterval = iBackupKeyframeInterval;
+            xs.MinGOPSize = iBackupMinGOPSize;
 
             if (!xs.CustomEncoderOptions.Contains("--open-gop") && (xs.OpenGopValue || xs.BlurayCompat))
                 sb.Append("--open-gop ");

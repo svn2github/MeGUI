@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -148,8 +148,8 @@ namespace MeGUI.packages.video.x264
                 slicesnb.Value = 0;
                 if (cbBPyramid.SelectedIndex == 1)
                     cbBPyramid.SelectedIndex = 2;
-                if (x264WeightedPPrediction.SelectedIndex == 1)
-                    x264WeightedPPrediction.SelectedIndex = 2;
+                if (this.x264WeightedPPrediction.SelectedIndex != x264Settings.GetDefaultNumberOfWeightp((x264Settings.x264PresetLevelModes)tbx264Presets.Value, x264Tunes.SelectedIndex, avcProfile.SelectedIndex, chkBlurayCompat.Checked))
+                    this.x264WeightedPPrediction.SelectedIndex = x264Settings.GetDefaultNumberOfWeightp((x264Settings.x264PresetLevelModes)tbx264Presets.Value, x264Tunes.SelectedIndex, avcProfile.SelectedIndex, chkBlurayCompat.Checked);
             }
 
             // BFrames
@@ -1380,6 +1380,7 @@ namespace MeGUI.packages.video.x264
                 xs.MaxSliceSyzeBytes = (int)this.maxSliceSizeBytes.Value;
                 xs.MaxSliceSyzeMBs = (int)this.maxSliceSizeMB.Value;
                 xs.x264BFramePyramid = this.cbBPyramid.SelectedIndex;
+                xs.x264GOPCalculation = this.cbGOPCalculation.SelectedIndex;
                 xs.X264Aud = x264aud.Checked;
                 xs.Nalhrd = (int)x264hrd.SelectedIndex;
                 foreach (x264Device oDevice in x264DeviceList)
@@ -1511,6 +1512,7 @@ namespace MeGUI.packages.video.x264
                 this.maxSliceSizeBytes.Value = xs.MaxSliceSyzeBytes;
                 this.maxSliceSizeMB.Value = xs.MaxSliceSyzeMBs;
                 this.cbBPyramid.SelectedIndex = xs.x264BFramePyramid;
+                this.cbGOPCalculation.SelectedIndex = xs.x264GOPCalculation;
                 x264WeightedBPrediction.Checked = xs.WeightedBPrediction;
                 x264WeightedPPrediction.SelectedIndex = xs.WeightedPPrediction;
                 x264aud.Checked = xs.X264Aud;
@@ -1617,6 +1619,7 @@ namespace MeGUI.packages.video.x264
             tooltipHelp.SetToolTip(x264SCDSensitivity, SelectHelpText("scenecut"));
             tooltipHelp.SetToolTip(x264BframeBias, SelectHelpText("b-bias"));
             tooltipHelp.SetToolTip(x264BframePredictionMode, SelectHelpText("direct"));
+            tooltipHelp.SetToolTip(cbGOPCalculation, SelectHelpText("gopcalculation"));
 
             /*************************/
             /* Rate Control Tooltips */
@@ -1953,6 +1956,7 @@ namespace MeGUI.packages.video.x264
             this.cbInterlaceMode.SelectedIndex = (int)x264Settings.x264InterlacedModes.progressive;
             this.x264PullDown.SelectedIndex = 0;
             this.scenecut.Checked = true;
+            this.cbGOPCalculation.SelectedIndex = 1;
             
             // Rate Control Tab
             this.x264MinimimQuantizer.Value = 0;

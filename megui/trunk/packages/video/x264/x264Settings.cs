@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2011  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -81,7 +81,7 @@ namespace MeGUI
             bframePredictionMode, vbvBufferSize, vbvMaxBitrate, meType, meRange, minGOPSize, macroBlockOptions,
             quantizerMatrixType, x264Trellis, noiseReduction, deadZoneInter, deadZoneIntra, AQMode, profile, level,
             lookahead, slicesnb, maxSliceSyzeBytes, maxSliceSyzeMBs, bFramePyramid, weightedPPrediction, tune, x264Nalhrd,
-            colorMatrix, transfer, colorPrim, x264PullDown, sampleAR;
+            colorMatrix, transfer, colorPrim, x264PullDown, sampleAR, _gopCalculation;
 		decimal ipFactor, pbFactor, chromaQPOffset, vbvInitialBuffer, bitrateVariance, quantCompression, 
 			tempComplexityBlur, tempQuanBlurCC, scdSensitivity, bframeBias, quantizerCrf, AQStrength, psyRDO, psyTrellis;
 		bool deblock, cabac, p4x4mv, p8x8mv, b8x8mv, i4x4mv, i8x8mv, weightedBPrediction, blurayCompat,
@@ -188,6 +188,7 @@ namespace MeGUI
             interlacedMode = x264InterlacedModes.progressive;
             targetDevice = x264DeviceList[0];
             blurayCompat = false;
+            _gopCalculation = 1;
 		}
 		#endregion
 		#region properties
@@ -437,6 +438,11 @@ namespace MeGUI
 			get { return bFramePyramid; }
 			set { bFramePyramid = value; }
 		}
+        public int x264GOPCalculation
+        {
+            get { return _gopCalculation; }
+            set { _gopCalculation = value; }
+        }
         public bool ChromaME
 		{
 			get { return chromaME; }
@@ -711,6 +717,7 @@ namespace MeGUI
                 this.BframeBias != otherSettings.BframeBias ||
                 this.BframePredictionMode != otherSettings.BframePredictionMode ||
                 this.x264BFramePyramid != otherSettings.x264BFramePyramid ||
+                this.x264GOPCalculation != otherSettings.x264GOPCalculation ||
                 this.BitrateVariance != otherSettings.BitrateVariance ||
                 this.PsyRDO != otherSettings.PsyRDO ||
                 this.PsyTrellis != otherSettings.PsyTrellis ||

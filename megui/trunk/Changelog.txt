@@ -1,3 +1,5 @@
+2098 [x264] added option to adjust GOP size based on the FPS of the source (enabled by default)
+            changed --weightp and --min-keyint default value calculation
 2097 [Bitrate Calculator] improved M2TS calculation assumption. Warning: it is better but also not correct
 2096 [Update] changed recommended path for neroaacenc to tools\eac3to
 2095 [Log] changed resource lock behavior. Bug #3466426
