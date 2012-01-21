@@ -1,3 +1,6 @@
+2100 [x264] check if files for --qpfile/--cqmfile are available
+            improved --min-keyint default value calculation
+            removed automatic deactivation of x64 x264 in case of an error
 2099 fixed a crash introduced in 2095 when using .NET 2.0 SP1 or older
 2098 [x264] added option to adjust GOP size based on the FPS of the source (enabled by default)
             changed --weightp and --min-keyint default value calculation

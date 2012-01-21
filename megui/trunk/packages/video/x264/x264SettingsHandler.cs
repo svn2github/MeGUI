@@ -577,7 +577,7 @@ namespace MeGUI.packages.video.x264
             if (_log == null)
                 return _xs.KeyframeInterval;
 
-            if (_xs.x264GOPCalculation == 1)
+            if (_xs.x264GOPCalculation == 1) // calculate min-keyint based on 25fps
                 _xs.KeyframeInterval = (int)Math.Round((double)_xs.KeyframeInterval / 25.0 * ((double)fps_n / fps_d), 0);
 
             int fps = (int)Math.Round((decimal)fps_n / fps_d, 0);
@@ -608,11 +608,16 @@ namespace MeGUI.packages.video.x264
                 return _xs.MinGOPSize;
 
             double fps = (double)fps_n / fps_d;
-            if (_xs.x264GOPCalculation == 1)
+            if (_xs.x264GOPCalculation == 1) // calculate min-keyint based on 25fps
                 _xs.MinGOPSize = (int)((double)_xs.MinGOPSize / 25.0 * fps);
 
-            if (_device.MaxGOP > -1 && fps / 10 != _xs.MinGOPSize)
-                _xs.MinGOPSize = (int)(fps / 10);
+            int iMaxValue = _xs.KeyframeInterval / 2 + 1;
+            if (_device.MaxGOP > -1 && _xs.MinGOPSize > iMaxValue)
+            {
+                int iDefault = _xs.KeyframeInterval / 10;
+                _log.LogEvent(strDevice + "changing --min-keyint to " + iDefault);
+                _xs.MinGOPSize = iDefault;
+            }
 
             return _xs.MinGOPSize;
         }

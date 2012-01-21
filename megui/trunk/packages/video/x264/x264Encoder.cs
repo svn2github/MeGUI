@@ -254,8 +254,16 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             }
 
             xs.MinGOPSize = oSettingsHandler.getMinKeyint(fps_n, fps_d);
-            double fps = (double)fps_n / fps_d;
-            if (xs.MinGOPSize != fps / 10)
+            if (xs.MinGOPSize > (xs.KeyframeInterval / 2 + 1))
+            {
+                xs.MinGOPSize = xs.KeyframeInterval / 2 + 1;
+                if (log != null)
+                    log.LogEvent("--min-keyint bigger as --keyint/2+1. Lowering --min-keyint to max value: " + xs.MinGOPSize, ImageType.Warning); 
+            }
+            int iDefault = xs.KeyframeInterval / 10;
+            if (log != null)
+                iDefault = Math.Min(xs.KeyframeInterval / 10, fps_n / fps_d);
+            if (xs.MinGOPSize != iDefault) // (MIN(--keyint / 10,--fps)) is default
                 sb.Append("--min-keyint " + xs.MinGOPSize + " ");
 
             xs.KeyframeInterval = iBackupKeyframeInterval;
@@ -508,7 +516,13 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                 switch (xs.QuantizerMatrixType)
                 {
                     case 1: if (!xs.CustomEncoderOptions.Contains("--cqm ")) sb.Append("--cqm \"jvt\" "); break;
-                    case 2: if (!xs.CustomEncoderOptions.Contains("--cqmfile")) sb.Append("--cqmfile \"" + xs.QuantizerMatrix + "\" "); break;
+                    case 2: if (!xs.CustomEncoderOptions.Contains("--cqmfile"))
+                            {
+                                if (log != null && !System.IO.File.Exists(xs.QuantizerMatrix))
+                                    log.LogEvent(xs.QuantizerMatrix + " not found. --cqmfile will be skipped.", ImageType.Warning);
+                                else
+                                    sb.Append("--cqmfile \"" + xs.QuantizerMatrix + "\" ");
+                            } break;
                 }
             }
 
@@ -758,14 +772,19 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
             /// </summary>
 
             // QPFile
-            if (!xs.CustomEncoderOptions.Contains("-qpfile "))
+            if (!xs.CustomEncoderOptions.Contains("--qpfile "))
+            {
                 if (xs.UseQPFile)
-                    if (xs.EncodingMode == 0 ||
-                        xs.EncodingMode == 1 ||
-                        xs.EncodingMode == 2 ||
-                        xs.EncodingMode == 5 ||
-                        xs.EncodingMode == 9)
-                        sb.Append("--qpfile " + "\"" + xs.QPFile + "\" ");
+                {
+                    if (xs.EncodingMode == 0 || xs.EncodingMode == 1 || xs.EncodingMode == 2 || xs.EncodingMode == 5 || xs.EncodingMode == 9)
+                    {
+                        if (log != null && !System.IO.File.Exists(xs.QPFile))
+                            log.LogEvent(xs.QPFile + " not found. --qpfile will be skipped.", ImageType.Warning);
+                        else
+                            sb.Append("--qpfile " + "\"" + xs.QPFile + "\" ");
+                    }
+                }
+            }
 
             if (!xs.CustomEncoderOptions.Contains("--psnr"))
                 if (xs.PSNRCalculation)
@@ -945,10 +964,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
         protected override void doExitConfig()
         {
             if (proc.ExitCode != 0 && !su.WasAborted && OSInfo.isWow64() && MainForm.Instance.Settings.Use64bitX264)
-            {
-                MainForm.Instance.Settings.Use64bitX264 = false;
-                log.LogEvent("The 64 bit mode of x264 has been disabled", ImageType.Error);
-            }
+                log.LogEvent("The 64 bit mode of x264 is enabled. Depending on the error it may help to disable it in the MeGUI settings.", ImageType.Warning);
 
             base.doExitConfig();
         }
