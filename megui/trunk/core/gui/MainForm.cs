@@ -833,7 +833,7 @@ namespace MeGUI
             avsLock = 0;
             try
             {
-                logLock.WaitOne(10000);
+                logLock.WaitOne(10000, false);
                 File.WriteAllText(strLogFile, "Preliminary log file only. During closing of MeGUI the well formed log file will be written.\r\n\r\n");
             }
             catch (Exception ex)
@@ -1160,7 +1160,7 @@ namespace MeGUI
             string text = Log.ToString();
             try
             {
-                logLock.WaitOne(10000);
+                logLock.WaitOne(10000, false);
                 File.WriteAllText(strLogFile, text);
             }
             catch (Exception)

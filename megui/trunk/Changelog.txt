@@ -1,3 +1,4 @@
+2099 fixed a crash introduced in 2095 when using .NET 2.0 SP1 or older
 2098 [x264] added option to adjust GOP size based on the FPS of the source (enabled by default)
             changed --weightp and --min-keyint default value calculation
 2097 [Bitrate Calculator] improved M2TS calculation assumption. Warning: it is better but also not correct

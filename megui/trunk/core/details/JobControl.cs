@@ -306,7 +306,7 @@ namespace MeGUI.core.details
             if (job.Status == JobStatus.PROCESSING) 
                 return;
 
-            mainForm.Jobs.ResourceLock.WaitOne(10000);
+            mainForm.Jobs.ResourceLock.WaitOne(10000, false);
             if (job.OwningWorker != null && workers.ContainsKey(job.OwningWorker))
                 workers[job.OwningWorker].RemoveJobFromQueue(job);
 
@@ -363,7 +363,7 @@ namespace MeGUI.core.details
         /// </summary>
         public void saveJobs()
         {
-            mainForm.Jobs.ResourceLock.WaitOne(10000);
+            mainForm.Jobs.ResourceLock.WaitOne(10000, false);
             foreach (TaggedJob job in allJobs.Values)
             {
                 job.EnabledJobNames = toStringList(job.EnabledJobs);
@@ -384,7 +384,7 @@ namespace MeGUI.core.details
         {
             JobListSerializer s = new JobListSerializer();
 
-            mainForm.Jobs.ResourceLock.WaitOne(10000);
+            mainForm.Jobs.ResourceLock.WaitOne(10000, false);
             s.mainJobList = toStringList(jobQueue.JobList);
 
             foreach (JobWorker w in workers.Values)
@@ -617,7 +617,7 @@ namespace MeGUI.core.details
 
         private void addJob(TaggedJob job)
         {
-            mainForm.Jobs.ResourceLock.WaitOne(10000);
+            mainForm.Jobs.ResourceLock.WaitOne(10000, false);
             job.Name = getFreeJobName();
             allJobs[job.Name] = job;
             jobQueue.queueJob(job);

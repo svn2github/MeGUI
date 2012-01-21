@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -675,7 +675,7 @@ namespace MeGUI.core.gui
 
         private JobStartInfo startNextJobInQueue()
         {
-            mainForm.Jobs.ResourceLock.WaitOne(10000);
+            mainForm.Jobs.ResourceLock.WaitOne(10000, false);
 
             TaggedJob job = getNextJob();
 
