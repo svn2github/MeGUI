@@ -1,3 +1,4 @@
+2101 [M2TS muxer] added some missing audio types
 2100 [x264] check if files for --qpfile/--cqmfile are available
             improved --min-keyint default value calculation
             removed automatic deactivation of x64 x264 in case of an error
