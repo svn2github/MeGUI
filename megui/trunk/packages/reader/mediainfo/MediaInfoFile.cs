@@ -300,7 +300,7 @@ namespace MeGUI
                     Path.GetExtension(file).ToLower().Equals(".dga") ||
                     Path.GetExtension(file).ToLower().Equals(".dgi"))
                 {
-                    using (StreamReader sr = new StreamReader(file))
+                    using (StreamReader sr = new StreamReader(file, Encoding.Default))
                     {
                         string line = null;
                         int iLineCount = 0;
@@ -590,6 +590,7 @@ namespace MeGUI
                     LogItem oTrack = new LogItem("Video");
 
                     oTrack.Info("ID: " + t.ID);
+                    oTrack.Info("StreamOrder: " + t.StreamOrder);
                     oTrack.Info("Width: " + t.Width);
                     oTrack.Info("Height: " + t.Height);
                     oTrack.Info("FrameCount: " + t.FrameCount);
@@ -614,6 +615,7 @@ namespace MeGUI
                     LogItem oTrack = new LogItem("Audio");
 
                     oTrack.Info("ID: " + t.ID);
+                    oTrack.Info("StreamOrder: " + t.StreamOrder);
                     oTrack.Info("Format: " + t.Format);
                     oTrack.Info("FormatProfile: " + t.FormatProfile);
                     oTrack.Info("FormatSettingsSBR: " + t.FormatSettingsSBR);
@@ -638,6 +640,7 @@ namespace MeGUI
                     LogItem oTrack = new LogItem("Text");
 
                     oTrack.Info("ID: " + t.ID);
+                    oTrack.Info("StreamOrder: " + t.StreamOrder);
                     oTrack.Info("Codec: " + t.Codec);
                     oTrack.Info("Delay: " + t.Delay);
                     oTrack.Info("Title: " + t.Title);
@@ -653,6 +656,7 @@ namespace MeGUI
                     LogItem oTrack = new LogItem("Chapters");
 
                     oTrack.Info("ID: " + t.ID);
+                    oTrack.Info("StreamOrder: " + t.StreamOrder);
                     oTrack.Info("Codec: " + t.Codec);
                     oTrack.Info("Inform: " + t.Inform);
                     oTrack.Info("Title: " + t.Title);

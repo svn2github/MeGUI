@@ -1,3 +1,5 @@
+2103 [MediaInfo] fixed opening of DG index files if the source file is using not only 7bit ASCII characters
+2102 [MediaInfo] added StreamOrder to the MediaInfo wrapper (requires mediainfo revision 0.7.53+)
 2101 [M2TS muxer] added some missing audio types
 2100 [x264] check if files for --qpfile/--cqmfile are available
             improved --min-keyint default value calculation
