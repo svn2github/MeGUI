@@ -98,8 +98,8 @@ namespace MediaInfoWrapper
         /// <param name="path"></param>
         public MediaInfo(string path)
         {
-            //if (!CheckFileExistence("MediaInfo.dll")) return;
-            if (!CheckFileExistence(path)) return;
+            if (!CheckFileExistence("MediaInfo.dll") || !CheckFileExistence(path)) 
+                return;
             _FileName = path;
             
             this.Handle = MediaInfo.MediaInfo_New();
@@ -177,11 +177,9 @@ namespace MediaInfoWrapper
         protected bool CheckFileExistence(string filepath)
         {
             if (!File.Exists(filepath))
-            {
-                throw new FileNotFoundException("File not found :" + filepath, filepath);
-                
-            }
-            else return true;
+                throw new FileNotFoundException("File not found: " + filepath, filepath);
+            else 
+                return true;
         }
 
         private unsafe string GetSpecificMediaInfo(MediaInfoStreamKind KindOfStream, int trackindex, string NameOfParameter)
@@ -358,6 +356,7 @@ namespace MediaInfoWrapper
                         _tracktemp_.StreamCount= GetSpecificMediaInfo(MediaInfoStreamKind.General,num2,"StreamCount");
                         _tracktemp_.StreamKind= GetSpecificMediaInfo(MediaInfoStreamKind.General,num2,"StreamKind");
                         _tracktemp_.StreamKindID= GetSpecificMediaInfo(MediaInfoStreamKind.General,num2,"StreamKindID");
+                        _tracktemp_.StreamOrder = GetSpecificMediaInfo(MediaInfoStreamKind.General, num2, "StreamOrder");
                         _tracktemp_.Inform= GetSpecificMediaInfo(MediaInfoStreamKind.General,num2,"Inform");
                         _tracktemp_.ID= GetSpecificMediaInfo(MediaInfoStreamKind.General,num2,"ID");
                         _tracktemp_.UniqueID= GetSpecificMediaInfo(MediaInfoStreamKind.General,num2,"UniqueID");
@@ -559,6 +558,7 @@ namespace MediaInfoWrapper
                         _tracktemp_.StreamCount = GetSpecificMediaInfo(MediaInfoStreamKind.Video,num2,"StreamCount");
                         _tracktemp_.StreamKind = GetSpecificMediaInfo(MediaInfoStreamKind.Video,num2,"StreamKind");
                         _tracktemp_.StreamKindID = GetSpecificMediaInfo(MediaInfoStreamKind.Video,num2,"StreamKindID");
+                        _tracktemp_.StreamOrder = GetSpecificMediaInfo(MediaInfoStreamKind.Video, num2, "StreamOrder");
                         _tracktemp_.Inform = GetSpecificMediaInfo(MediaInfoStreamKind.Video,num2,"Inform");
                         _tracktemp_.ID = GetSpecificMediaInfo(MediaInfoStreamKind.Video,num2,"ID");
                         _tracktemp_.UniqueID = GetSpecificMediaInfo(MediaInfoStreamKind.Video,num2,"UniqueID");
@@ -664,6 +664,7 @@ namespace MediaInfoWrapper
                         _tracktemp_.StreamKindString = GetSpecificMediaInfo(MediaInfoStreamKind.Audio, num2, "StreamKind/String");
                         _tracktemp_.StreamKindID= GetSpecificMediaInfo(MediaInfoStreamKind.Audio,num2,"StreamKindID");
                         _tracktemp_.StreamKindPos = GetSpecificMediaInfo(MediaInfoStreamKind.Audio, num2, "StreamKindPos");
+                        _tracktemp_.StreamOrder = GetSpecificMediaInfo(MediaInfoStreamKind.Audio, num2, "StreamOrder");
                         _tracktemp_.Inform= GetSpecificMediaInfo(MediaInfoStreamKind.Audio,num2,"Inform");
                         _tracktemp_.ID= GetSpecificMediaInfo(MediaInfoStreamKind.Audio,num2,"ID");
                         _tracktemp_.IDString = GetSpecificMediaInfo(MediaInfoStreamKind.Audio, num2, "ID/String");
@@ -807,6 +808,7 @@ namespace MediaInfoWrapper
                         _tracktemp_.StreamCount= GetSpecificMediaInfo(MediaInfoStreamKind.Text,num2,"StreamCount");
                         _tracktemp_.StreamKind= GetSpecificMediaInfo(MediaInfoStreamKind.Text,num2,"StreamKind");
                         _tracktemp_.StreamKindID= GetSpecificMediaInfo(MediaInfoStreamKind.Text,num2,"StreamKindID");
+                        _tracktemp_.StreamOrder = GetSpecificMediaInfo(MediaInfoStreamKind.Text, num2, "StreamOrder");
                         _tracktemp_.Inform= GetSpecificMediaInfo(MediaInfoStreamKind.Text,num2,"Inform");
                         _tracktemp_.ID= GetSpecificMediaInfo(MediaInfoStreamKind.Text,num2,"ID");
                         _tracktemp_.UniqueID= GetSpecificMediaInfo(MediaInfoStreamKind.Text,num2,"UniqueID");
@@ -872,6 +874,7 @@ namespace MediaInfoWrapper
                         _tracktemp_.StreamCount= GetSpecificMediaInfo(MediaInfoStreamKind.Chapters,num2,"StreamCount");
                         _tracktemp_.StreamKind= GetSpecificMediaInfo(MediaInfoStreamKind.Chapters,num2,"StreamKind");
                         _tracktemp_.StreamKindID= GetSpecificMediaInfo(MediaInfoStreamKind.Chapters,num2,"StreamKindID");
+                        _tracktemp_.StreamOrder = GetSpecificMediaInfo(MediaInfoStreamKind.Chapters, num2, "StreamOrder");
                         _tracktemp_.Inform= GetSpecificMediaInfo(MediaInfoStreamKind.Chapters,num2,"Inform");
                         _tracktemp_.ID= GetSpecificMediaInfo(MediaInfoStreamKind.Chapters,num2,"ID");
                         _tracktemp_.UniqueID= GetSpecificMediaInfo(MediaInfoStreamKind.Chapters,num2,"UniqueID");

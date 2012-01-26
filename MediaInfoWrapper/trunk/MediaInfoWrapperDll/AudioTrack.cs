@@ -11,6 +11,7 @@ namespace MediaInfoWrapper
         private string _StreamKindString;
         private string _StreamKindID;
         private string _StreamKindPos;
+        private string _StreamOrder;
         private string _Inform;
         private string _ID;
         private string _IDString;
@@ -198,6 +199,21 @@ namespace MediaInfoWrapper
             set
             {
                 this._StreamKindPos = value;
+            }
+        }
+
+        ///<summary>Stream order in the file, whatever is the kind of stream (base=0)</summary>
+        public string StreamOrder
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(this._StreamOrder))
+                    this._StreamOrder = "";
+                return _StreamOrder;
+            }
+            set
+            {
+                this._StreamOrder = value;
             }
         }
 
