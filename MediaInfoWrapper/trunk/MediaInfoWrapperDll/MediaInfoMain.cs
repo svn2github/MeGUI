@@ -98,7 +98,7 @@ namespace MediaInfoWrapper
         /// <param name="path"></param>
         public MediaInfo(string path)
         {
-            if (!CheckFileExistence("MediaInfo.dll") || !CheckFileExistence(path)) 
+            if (!CheckFileExistence(path)) 
                 return;
             _FileName = path;
             

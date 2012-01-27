@@ -1,3 +1,4 @@
+2104 [MediaInfo] fixed "File not found" error in the wrapper. Bug #3480347
 2103 [MediaInfo] fixed opening of DG index files if the source file is using not only 7bit ASCII characters
 2102 [MediaInfo] added StreamOrder to the MediaInfo wrapper (requires mediainfo revision 0.7.53+)
 2101 [M2TS muxer] added some missing audio types
