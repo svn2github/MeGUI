@@ -1,4 +1,5 @@
-2105 [Audio Encoder] moved the opening of files into the job progress window
+2106 [File Indexer] fixed trying to extract audio from MKV files without audio when using the FFMS indexer
+2105 [Audio Encoder] show the opening of files in the job progress window as FFAudioSource may need some time to index files
                      fixed crash when using DTS-ES with NicAudio
 2104 [MediaInfo] fixed "File not found" error in the wrapper. Bug #3480347
 2103 [MediaInfo] fixed opening of DG index files if the source file is using not only 7bit ASCII characters

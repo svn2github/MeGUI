@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2011  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -837,7 +837,7 @@ namespace MeGUI
                             case IndexType.FFMS:
                             {
                                 FFMSIndexJob job = generateFFMSIndexJob();
-                                if (oMkvInfo != null && job.DemuxMode > 0)
+                                if (oMkvInfo != null && job.DemuxMode > 0 && job.AudioTracks.Count > 0)
                                 {
                                     List<MkvInfoTrack> oExtractTrack = new List<MkvInfoTrack>();
                                     foreach (AudioTrackInfo oStream in job.AudioTracks)
@@ -889,9 +889,7 @@ namespace MeGUI
 
             List<AudioTrackInfo> audioTracks = new List<AudioTrackInfo>();
             foreach (AudioTrackInfo ati in AudioTracks.CheckedItems)
-            {
                 audioTracks.Add(ati);
-            }
 
             return new D2VIndexJob(this.input.Filename, this.output.Text, demuxType, audioTracks, loadOnComplete.Checked, demuxVideo.Checked);
 		}
@@ -907,9 +905,7 @@ namespace MeGUI
 
             List<AudioTrackInfo> audioTracks = new List<AudioTrackInfo>();
             foreach (AudioTrackInfo ati in AudioTracks.CheckedItems)
-            {
                 audioTracks.Add(ati);
-            }
 
             return new DGIIndexJob(this.input.Filename, this.output.Text, demuxType, audioTracks, loadOnComplete.Checked, demuxVideo.Checked);
         }
@@ -925,9 +921,7 @@ namespace MeGUI
 
             List<AudioTrackInfo> audioTracks = new List<AudioTrackInfo>();
             foreach (AudioTrackInfo ati in AudioTracks.CheckedItems)
-            {
                 audioTracks.Add(ati);
-            }
 
             return new DGAIndexJob(this.input.Filename, this.output.Text, demuxType, audioTracks, loadOnComplete.Checked, demuxVideo.Checked);
         }
@@ -943,9 +937,7 @@ namespace MeGUI
 
             List<AudioTrackInfo> audioTracks = new List<AudioTrackInfo>();
             foreach (AudioTrackInfo ati in AudioTracks.CheckedItems)
-            {
                 audioTracks.Add(ati);
-            }
 
             return new FFMSIndexJob(this.input.Filename, demuxType, audioTracks, loadOnComplete.Checked);
         }
