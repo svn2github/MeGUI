@@ -1,3 +1,5 @@
+2105 [Audio Encoder] moved the opening of files into the job progress window
+                     fixed crash when using DTS-ES with NicAudio
 2104 [MediaInfo] fixed "File not found" error in the wrapper. Bug #3480347
 2103 [MediaInfo] fixed opening of DG index files if the source file is using not only 7bit ASCII characters
 2102 [MediaInfo] added StreamOrder to the MediaInfo wrapper (requires mediainfo revision 0.7.53+)

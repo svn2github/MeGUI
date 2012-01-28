@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -447,6 +447,8 @@ namespace MeGUI
                             case "MA":
                             case "MA / Core": ati.Type = "DTS-HD Master Audio"; break;
                             case "TrueHD": ati.Type = "TrueHD"; break;
+                            case "ES": ati.Type = "DTS-ES"; break;
+                            default: ati.Type = atrack.Format; break;
                         }
                     }
                     else

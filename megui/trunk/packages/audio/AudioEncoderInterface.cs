@@ -295,7 +295,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             Thread t = null;
             try
             {
-                raiseEvent("Preprocessing...   ***PLEASE WAIT***");
+                raiseEvent("Opening file...   ***PLEASE WAIT***");
                 _start = DateTime.Now;
                 t = new Thread(new ThreadStart(delegate
                 {
@@ -306,6 +306,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                     }
                 }));
                 t.Start();
+                createAviSynthScript();
+                raiseEvent("Preprocessing...   ***PLEASE WAIT***");
+                _start = DateTime.Now;
                 using (AviSynthScriptEnvironment env = new AviSynthScriptEnvironment())
                 {
                     _log.LogEvent("Avisynth script environment opened");
@@ -702,7 +705,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             }
 
             string strErrorText = String.Empty;
-            if (oInfo.AudioTracks.Count == 0 || !oInfo.AudioTracks[0].Type.Equals("DTS-HD Master Audio"))
+            if (oInfo.AudioTracks.Count > 0 && oInfo.AudioTracks[0].Type.Equals("DTS-HD Master Audio"))
+            {
+                _log.LogEvent("DTS-MA is blocked when using NicAudio", ImageType.Information);
+            }
+            else
             {
                 _log.LogEvent("Trying to open the file with NicAudio", ImageType.Information);
                 if (sbOpen.Length > 0 && AudioUtil.AVSScriptHasAudio(sbOpen.ToString(), out strErrorText))
@@ -711,8 +718,6 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                     return true;
                 }
             }
-            else
-                _log.LogEvent("DTS-MA is blocked when using NicAudio", ImageType.Information);
             
             sbOpen = new StringBuilder();
             if (String.IsNullOrEmpty(strErrorText))
@@ -731,16 +736,18 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
         {
             this._log = log;
             this.audioJob = (AudioJob)job;
-
             this.su = su;
+        }
 
+        private void createAviSynthScript()
+        {
             //let's create avisynth script
             StringBuilder script = new StringBuilder();
 
             string id = _uniqueId;
             string tmp = Path.Combine(Path.GetTempPath(), id);
 
-            MediaInfoFile oInfo = new MediaInfoFile(audioJob.Input, ref log);
+            MediaInfoFile oInfo = new MediaInfoFile(audioJob.Input, ref _log);
 
             bool bFound = false;
             if (audioJob.Settings.PreferredDecoder == AudioDecodingEngine.NicAudio)
@@ -812,7 +819,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                     {
                         if (!AudioUtil.AVSFileHasAudio(audioJob.Input))
                         {
-                            log.LogEvent("avs file has no audio: " + audioJob.Input, ImageType.Error);
+                            _log.LogEvent("avs file has no audio: " + audioJob.Input, ImageType.Error);
                             break;
                         }
                         iChannelCount = AudioUtil.getChannelCountFromAVSFile(audioJob.Input);
@@ -823,7 +830,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                     {
                         if (!oInfo.HasAudio)
                         {
-                            log.LogEvent("no audio file detected: " + audioJob.Input, ImageType.Error);
+                            _log.LogEvent("no audio file detected: " + audioJob.Input, ImageType.Error);
                             break;
                         }
                         strChannelPositions = oInfo.AudioTracks[0].ChannelPositions;
@@ -834,11 +841,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                     if (!String.IsNullOrEmpty(strChannelPositions))
                         script.Append(@"# detected channel positions: " + strChannelPositions + Environment.NewLine);
                     else
-                        log.LogEvent("no channel positions found. Downmix result may be wrong.", ImageType.Information);
+                        _log.LogEvent("no channel positions found. Downmix result may be wrong.", ImageType.Information);
 
                     if (iChannelCount <= 2)
                     {
-                        log.LogEvent("ignoring downmix as there are only " + iChannelCount + " channels", ImageType.Information);
+                        _log.LogEvent("ignoring downmix as there are only " + iChannelCount + " channels", ImageType.Information);
                         break;
                     }
 
@@ -848,7 +855,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
 
                     if (iAVSChannelCount != iChannelCount)
                     {
-                        log.LogEvent("channel count mismatch! ignoring downmix as the input file is reporting " + iChannelCount + " channels and the AviSynth script is reporting " + iAVSChannelCount + " channels", ImageType.Warning);
+                        _log.LogEvent("channel count mismatch! ignoring downmix as the input file is reporting " + iChannelCount + " channels and the AviSynth script is reporting " + iAVSChannelCount + " channels", ImageType.Warning);
                         break;
                     }
                     
