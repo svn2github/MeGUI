@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -226,6 +226,8 @@ namespace MeGUI.core.util
             if (string.IsNullOrEmpty(filter))
                 return true;
 
+            bool bIsFolder = Directory.Exists(filename);
+
             filter = filter.ToLower();
             filename = Path.GetFileName(filename).ToLower();
             string[] filters = filter.Split('|');
@@ -241,6 +243,9 @@ namespace MeGUI.core.util
                             throw new Exception("Invalid filter format");
 
                         if (f == "*.*" && filename.IndexOf('.') > -1)
+                            return true;
+
+                        if (f == "*." && bIsFolder)
                             return true;
 
                         string extension = f.Substring(1);
@@ -347,6 +352,62 @@ namespace MeGUI.core.util
             {
                 return false;
             }
+        }
+
+        /// <summary>
+        /// Attempts to delete all files and directories listed 
+        /// in job.FilesToDelete if settings.DeleteIntermediateFiles is checked
+        /// </summary>
+        /// <param name="job">the job which should just have been completed</param>
+        public static LogItem DeleteIntermediateFiles(List<string> files, bool bAlwaysAddLog)
+        {
+            bool bShowLog = false;
+            LogItem i = new LogItem("Deleting intermediate files");
+            
+            // delete all files first
+            foreach (string file in files)
+            {
+                try
+                {
+                    if (Directory.Exists(file))
+                        continue;
+                    else if (!File.Exists(file))
+                        continue;
+                    bShowLog = true;
+                    File.Delete(file);
+                    i.LogEvent("Successfully deleted " + file);
+                }
+                catch (IOException e)
+                {
+                    i.LogValue("Error deleting " + file, e, ImageType.Error);
+                }
+            }
+
+            // delete empty directories
+            foreach (string file in files)
+            {
+                try
+                {
+                    if (Directory.Exists(file))
+                    {
+                        bShowLog = true;
+                        if (Directory.GetFiles(file, "*.*", SearchOption.AllDirectories).Length == 0)
+                        {
+                            Directory.Delete(file, true);
+                            i.LogEvent("Successfully deleted directory " + file);
+                        }
+                        else
+                            i.LogEvent("Did not delete " + file + " as the directory is not empty.");
+                    }  
+                }
+                catch (IOException e)
+                {
+                    i.LogValue("Error deleting directory " + file, e, ImageType.Error);
+                }
+            }
+            if (bAlwaysAddLog || bShowLog)
+                return i;
+            return null;
         }
     }
 }

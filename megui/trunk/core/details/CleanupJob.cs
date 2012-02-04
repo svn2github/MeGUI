@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -73,36 +73,10 @@ namespace MeGUI.core.details
             delegate(MainForm mf, Job j)
             {
                 if (mf.Settings.DeleteIntermediateFiles)
-                    return deleteIntermediateFiles(j.FilesToDelete);
+                    return FileUtil.DeleteIntermediateFiles(j.FilesToDelete, true);
                 return null;
             }
             , "DeleteIntermediateFiles");
-
-
-        
-        /// <summary>
-        /// Attempts to delete all files listed in job.FilesToDelete if settings.DeleteIntermediateFiles is checked
-        /// </summary>
-        /// <param name="job">the job which should just have been completed</param>
-        private static LogItem deleteIntermediateFiles(List<string> files)
-        {
-            LogItem i = new LogItem("Deleting intermediate files");
-            foreach (string file in files)
-            {
-                try
-                {
-                    if (!File.Exists(file))
-                        continue;
-                    File.Delete(file);
-                    i.LogEvent("Successfully deleted " + file);
-                }
-                catch (IOException e)
-                {
-                    i.LogValue("Error deleting " + file, e, ImageType.Error);
-                }
-            }
-            return i;
-        }
 
         #region IJobProcessor Members
 
@@ -130,7 +104,7 @@ namespace MeGUI.core.details
 
             log.LogValue("Delete Intermediate Files option set", mf.Settings.DeleteIntermediateFiles);
             if (mf.Settings.DeleteIntermediateFiles)
-                log.Add(deleteIntermediateFiles(files));
+                log.Add(FileUtil.DeleteIntermediateFiles(files, true));
 
             su.IsComplete = true;
             statusUpdate(su);

@@ -306,6 +306,24 @@ namespace MeGUI.core.details
             if (job.Status == JobStatus.PROCESSING) 
                 return;
 
+            if (job.Status != JobStatus.DONE && MainForm.Instance.Settings.DeleteIntermediateFiles)
+            {
+                List<string> filesToDelete = new List<string>();
+                if (job.Job.FilesToDelete.Count > 0)
+                    filesToDelete.AddRange(job.Job.FilesToDelete);
+                if (job.Job is CleanupJob && ((CleanupJob)job.Job).files.Count > 0)
+                    filesToDelete.AddRange(((CleanupJob)job.Job).files);
+                if (filesToDelete.Count > 0)
+                {
+                    LogItem oLog = FileUtil.DeleteIntermediateFiles(filesToDelete, false);
+                    if (oLog != null)
+                    {
+                        LogItem log = mainForm.Log.Info(string.Format("Log for {0} ({1}, {2} -> {3})", job.Name, job.Job.EncodingMode, job.InputFileName, job.OutputFileName));
+                        log.Add(oLog);
+                    }
+                }
+            }
+
             mainForm.Jobs.ResourceLock.WaitOne(10000, false);
             if (job.OwningWorker != null && workers.ContainsKey(job.OwningWorker))
                 workers[job.OwningWorker].RemoveJobFromQueue(job);

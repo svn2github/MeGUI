@@ -1,3 +1,66 @@
+2106 [File Indexer] fixed trying to extract audio from MKV files without audio when using the FFMS indexer
+2105 [Audio Encoder] show the opening of files in the job progress window as FFAudioSource may need some time to index files
+                     fixed crash when using DTS-ES with NicAudio
+2104 [MediaInfo] fixed "File not found" error in the wrapper. Bug #3480347
+2103 [MediaInfo] fixed opening of DG index files if the source file is using not only 7bit ASCII characters
+2102 [MediaInfo] added StreamOrder to the MediaInfo wrapper (requires mediainfo revision 0.7.53+)
+2101 [M2TS muxer] added some missing audio types
+2100 [x264] check if files for --qpfile/--cqmfile are available
+            improved --min-keyint default value calculation
+            removed automatic deactivation of x64 x264 in case of an error
+2099 fixed a crash introduced in 2095 when using .NET 2.0 SP1 or older
+2098 [x264] added option to adjust GOP size based on the FPS of the source (enabled by default)
+            changed --weightp and --min-keyint default value calculation
+2097 [Bitrate Calculator] improved M2TS calculation assumption. Warning: it is better but also not correct
+2096 [Update] changed recommended path for neroaacenc to tools\eac3to
+2095 [Log] changed resource lock behavior. Bug #3466426
+2094 [MP4 Muxer] use ISO 639-2/T language codes when muxing. Bug #3201829
+2093 [Update] if a component is missing a warning message will appear at startup
+2092 [MainForm] offer to install AviSynth if AviSynth is not found but the installer is availabe (x86 only)
+2091 [Settings] changed default value of "Autostart Queue" to enabled
+2090 [Audio Encoder] do not abort downmix anymore if input avs file has no channel position information
+2089 [HD Streams Extractor] defaulting to English if the track language can not be indentified (MKV only)
+2088 [Audio Encoder] cosmetics
+2087 [FFMS] remove AssumeFPS() as it is causing problems with hybrid/telecined input. Bug #3463347
+2086 [AVS Script Creator] improve input DAR detection when using AVS input files
+2085 [OneClick] fixed long delay during processing when adding more than 4 tracks (part III)
+2084 [AVS Script Creator] resize value will only be added to the script if necessary
+                          fixed button checked states after loading avisynth profiles
+2083 [OneClick] fixed long delay during processing when adding more than 4 tracks (part II)
+2082 [Audio Encoder] DTS-MA decoding is blocked with NicAudio to avoid problems
+2081 [OneClick] fixed long delay during processing when adding more than 4 tracks
+2080 [AVS] if an AVS script cannot be opened the old method to open such files is used during the session. 
+           the option can be completly disabled in the settings ("Improved AVS opening", enabled by default). Bug #3437874
+2079 [MKV Demuxer] adjusted demuxer to the recent mkvextract changes (requires mkvmerge revision 5.2.1+)
+2078 [Progress Window] changed priority will be kept during the whole application session. Feature request #3445179
+2077 [Progress Window] lower also I/O and memory priority when priority below normal (requires Windows Vista or newer). Feature request #3468249
+2076 [Video Player] fixed a crash when using non seekable scripts
+                    in order to display such scripts the default start position is now the beginning 
+2075 [AVS Script Creator] improve input DAR detection when using no index files
+2074 [AVS Script Creator] + [OneClick] improve input DAR detection when using index files
+2073 [Settings] added option to select if ITU Aspect Ratio should be used by default (enabled by default). Feature request #3057378
+2072 [Audio Encoder] added handling of channel count mismatch
+2071 [MediaInfo] added default/forced track info to the MediaInfo wrapper (requires mediainfo revision 0.7.51+)
+2070 [MKV Muxer] adjusted muxer to the recent mkvmerge changes (requires mkvmerge revision 5.2.0+)
+2069 [HD Streams Extractor] automatically execute the job a second time if a gaps file is detected
+2068 [x264] fixed "--range pc"
+2067 [x264] fixed (increased) maximum value of --ref and --bframes when using target playback devices
+2066 [x264] replaced --fullrange with --range (requires x264 revision 2119+)
+2065 [Adaptive Muxer] fixed handling of delay value and default/forced track. Bug #3443721
+2064 [MainForm] MeGUI can only be closed if there are no running jobs
+2063 [D2V Indexer] .bad and .fix.txt files will also be deleted in cleanup step
+2062 [VobSubber] cosmetics
+2061 [x264] fixed wrong --sar values when using BluRay Target Device with 720x576
+2060 [AVS Script Creator] enhanced selection box if opening an indexable file directly
+2059 [OneClick] + [Update] log categories will not be created anymore if already available
+2058 [MKV Muxer] improved idx subtitle handling
+2057 [Adaptive Muxer] fixed long delay when adding more than 4 tracks. Bug #3404061
+2056 [VideoPlayer] fixed handling of non default DPI values
+2055 [AVS Script Creator] fixed opening the wrong video preview in some rare circumstances
+2054 [pre-rendering job] fixed file size targeting with AutoEncode and OneClick
+2053 [Settings] added option to append a text to forced track names
+2052 [Lame] fixed applying bitrate in ABR mode
+2051 [progress window] changed number formatting
 2050 [Update] added check so that files can only be installed using the correct MeGUI build
 2049 open avisynth script handling improved
 2048 fixed spelling. Bug #3390630
