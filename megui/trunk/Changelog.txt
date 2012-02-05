@@ -1,3 +1,4 @@
+2109 [XviD] fixed saving of custom vbv values. Bug #3483985
 2108 [AutoEncode] + [OneClick] fixed saving of custom file size values
      [File Size Selector] removed some default values
                           added a control in the settings to modify custom file size values

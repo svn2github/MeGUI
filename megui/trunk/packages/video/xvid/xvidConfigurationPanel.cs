@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -425,6 +425,9 @@ namespace MeGUI.packages.video.xvid
                 xvidNbBFrames.Value = xs.NbBframes;
                 xvidPackedBitstream.Checked = xs.PackedBitstream;
                 xvidProfile.SelectedIndex = xs.XvidProfile;
+                xvidVbvBuffer.Text = xs.VbvBuffer.ToString();
+                xvidVbvMaxRate.Text = xs.VbvMaxRate.ToString();
+                xvidVbvPeakRate.Text = xs.VbvPeakRate.ToString();
                 xvidMotionSearchPrecision.SelectedIndex = xs.MotionSearchPrecision;
                 xvidVHQ.SelectedIndex = xs.VHQMode;
                 xvidUseVHQForBframes.Checked = xs.VHQForBframes;
