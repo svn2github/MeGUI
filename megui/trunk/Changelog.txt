@@ -1,3 +1,7 @@
+2108 [AutoEncode] + [OneClick] fixed saving of custom file size values
+     [File Size Selector] removed some default values
+                          added a control in the settings to modify custom file size values
+                          all other controls will not save anymore custom values
 2107 [Job] delete intermediate files also during job deletion if specified in the settings
 
 Changelog 2050 --> 2106

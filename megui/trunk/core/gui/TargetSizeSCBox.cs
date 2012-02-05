@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -32,24 +32,15 @@ namespace MeGUI.core.gui
     public class TargetSizeSCBox : StandardAndCustomComboBox
     {
         public static readonly Named<FileSize>[] PredefinedFilesizes = new Named<FileSize>[] {
-            new Named<FileSize>("1/4 CD  (175MB)", new FileSize(Unit.MB, 175)),
-            new Named<FileSize>("1/2 CD  (350MB)", new FileSize(Unit.MB, 350)),
             new Named<FileSize>("CD  (700MB)", new FileSize(Unit.MB, 700)),
-            new Named<FileSize>("2 CDs  (1400MB)", new FileSize(Unit.MB, 1400)),
-            new Named<FileSize>("3 CDs  (2100MB)", new FileSize(Unit.MB, 2100)),
-            new Named<FileSize>("1/5 DVD  (896MB)", new FileSize(Unit.MB, 896)),
-            new Named<FileSize>("1/4 DVD  (1120MB)", new FileSize(Unit.MB, 1120)),
-            new Named<FileSize>("1/3 DVD  (1492MB)", new FileSize(Unit.MB, 1492)),
-            new Named<FileSize>("1/2 DVD  (2240MB)", new FileSize(Unit.MB, 2240)),
             new Named<FileSize>("DVD or BD-5  (4480MB)", new FileSize(Unit.MB, 4480)),
-            new Named<FileSize>("1½ DVD  (6720MB)", new FileSize(Unit.MB, 6720)),
             new Named<FileSize>("DVD-DL or BD-9 (8145MB)", new FileSize(Unit.MB, 8145)),
             new Named<FileSize>("BD  (23450MB)", new FileSize(Unit.MB, 23450)),
             new Named<FileSize>("BD-DL  (46900MB)", new FileSize(Unit.MB, 46900)) };
 
         protected override void Dispose(bool disposing)
         {
-            if (MainForm.Instance != null) // form designer fix
+            if (MainForm.Instance != null && base.bSaveEveryItem) // form designer fix
                 MainForm.Instance.Settings.CustomFileSizes = CustomSizes;
             base.Dispose(disposing);
         }
@@ -83,9 +74,11 @@ namespace MeGUI.core.gui
             set { maxSize = value; }
         }
 
-        public TargetSizeSCBox() : base("Clear user-selected sizes...", "Select size...")
+        public TargetSizeSCBox() : base("Remove custom sizes...", "Select custom size...")
         {
             base.Getter = new Getter<object>(getter);
+            base.bSaveEveryItem = true;
+            SaveCustomValues = false;
             if (MainForm.Instance != null) // form designer fix
                 CustomSizes = MainForm.Instance.Settings.CustomFileSizes;
         }
@@ -97,7 +90,6 @@ namespace MeGUI.core.gui
                 objects.Add(NullString);
             objects.AddRange(TargetSizeSCBox.PredefinedFilesizes);
             base.StandardItems = objects.ToArray();
-
         }
 
         FileSizeDialog ofd = new FileSizeDialog();
@@ -177,5 +169,20 @@ namespace MeGUI.core.gui
             set { Value = value; }
         }
 
+        public bool SaveCustomValues
+        {
+            get { return base.bSaveEveryItem; }
+            set 
+            {
+                if (base.bSaveEveryItem != value)
+                {
+                    base.bSaveEveryItem = value;
+                    base.SetTargetSizeSCBoxType("Remove custom sizes...", "Select custom size...");
+                    fillStandard();
+                    if (MainForm.Instance != null) // form designer fix
+                        CustomSizes = MainForm.Instance.Settings.CustomFileSizes;
+                }
+            }
+        }
     }
 }
