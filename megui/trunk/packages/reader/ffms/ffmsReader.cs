@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 // 
-// Copyright (C) 2005-2012  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -36,12 +36,15 @@ namespace MeGUI
 
         public IMediaFile Open(string file)
         {
-            return new ffmsFile(file, null);
+            if (file.ToLower().EndsWith(".ffindex"))
+                return new ffmsFile(null, file);
+            else
+                return new ffmsFile(file, null);
         }
 
         public int HandleLevel(string file)
         {
-            if (file.ToLower().EndsWith(".ffindex"))
+            if (file.ToLower().EndsWith(".ffindex") || File.Exists(file + ".ffindex"))
                 return 12;
             return -1;
         }
@@ -71,26 +74,23 @@ namespace MeGUI
         /// initializes the ffms reader
         /// </summary>
         /// <param name="fileName">the FFMSIndex source file file that this reader will process</param>
-        /// <param name="fileName">the FFMSIndex index file that this reader will process</param>
+        /// <param name="indexFile">the FFMSIndex index file that this reader will process</param>
         public ffmsFile(string fileName, string indexFile)
         {
             string strScript = "";
 
-            if (!fileName.ToLower().EndsWith(".ffindex") 
-                && !String.IsNullOrEmpty(indexFile) 
-                && !indexFile.ToLower().EndsWith(".ffindex"))
+            if (!String.IsNullOrEmpty(indexFile) && String.IsNullOrEmpty(fileName))
             {
-                MessageBox.Show("No ffindex file: " + fileName, "Error processing file", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                this.fileName = indexFile.Substring(0, indexFile.Length - 8);
+                indexFile = null;
             }
-            
-            if (!String.IsNullOrEmpty(indexFile))
-                this.fileName = fileName;
             else
-                this.fileName = fileName.Substring(0, fileName.Length - 8);
-            string strPath = Path.GetDirectoryName(MainForm.Instance.Settings.FFMSIndexPath);
-            string strDLL = Path.Combine(strPath, "ffms2.dll");
-            strScript = "LoadPlugin(\"" + strDLL + "\")\r\nFFVideoSource(\"" + this.fileName + "\"" + (!string.IsNullOrEmpty(indexFile) ? ", cachefile=\"" + indexFile + "\"" : String.Empty) + (MainForm.Instance.Settings.FFMSThreads > 0 ? ", threads=" + MainForm.Instance.Settings.FFMSThreads : String.Empty) + ")";
+                this.fileName = fileName;
+
+            string strDLL = Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.FFMSIndexPath), "ffms2.dll");
+            strScript = "LoadPlugin(\"" + strDLL + "\")\r\nFFVideoSource(\"" + this.fileName + "\"" 
+                + (!string.IsNullOrEmpty(indexFile) ? ", cachefile=\"" + indexFile + "\"" : String.Empty) 
+                + (MainForm.Instance.Settings.FFMSThreads > 0 ? ", threads=" + MainForm.Instance.Settings.FFMSThreads : String.Empty) + ")";
             reader = AvsFile.ParseScript(strScript);
             info = reader.Info.Clone();
             if (File.Exists(this.fileName))
