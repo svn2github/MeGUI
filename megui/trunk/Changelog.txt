@@ -1,3 +1,6 @@
+2110 [x264] force --keyint-min 1 with Blu-ray (requires x264 revision 2149+)
+            replaced vfw4x264 with avs4x264mod. Details:
+            http://forum.doom9.org/showthread.php?t=162656
 2109 [XviD] fixed saving of custom vbv values. Bug #3483985
 2108 [AutoEncode] + [OneClick] fixed saving of custom file size values
      [File Size Selector] removed some default values

@@ -48,9 +48,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
 #if x86
             if (OSInfo.isWow64() && MainForm.Instance.Settings.Use64bitX264)
             {
-                string vfw4x264Path =  System.IO.Path.Combine(System.IO.Path.GetDirectoryName(encoderPath), "vfw4x264.exe");
-                if (System.IO.File.Exists(vfw4x264Path))
-                    executable = vfw4x264Path;
+                string x264Path = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(encoderPath), "avs4x264mod.exe");
+                if (System.IO.File.Exists(x264Path))
+                    executable = x264Path;
             }
 #endif
         }
@@ -253,18 +253,21 @@ new JobProcessorFactory(new ProcessorFactory(init), "x264Encoder");
                     sb.Append("--keyint " + xs.KeyframeInterval + " ");
             }
 
-            xs.MinGOPSize = oSettingsHandler.getMinKeyint(fps_n, fps_d);
-            if (xs.MinGOPSize > (xs.KeyframeInterval / 2 + 1))
+            if (!xs.BlurayCompat)
             {
-                xs.MinGOPSize = xs.KeyframeInterval / 2 + 1;
+                xs.MinGOPSize = oSettingsHandler.getMinKeyint(fps_n, fps_d);
+                if (xs.MinGOPSize > (xs.KeyframeInterval / 2 + 1))
+                {
+                    xs.MinGOPSize = xs.KeyframeInterval / 2 + 1;
+                    if (log != null)
+                        log.LogEvent("--min-keyint bigger as --keyint/2+1. Lowering --min-keyint to max value: " + xs.MinGOPSize, ImageType.Warning);
+                }
+                int iDefault = xs.KeyframeInterval / 10;
                 if (log != null)
-                    log.LogEvent("--min-keyint bigger as --keyint/2+1. Lowering --min-keyint to max value: " + xs.MinGOPSize, ImageType.Warning); 
+                    iDefault = Math.Min(xs.KeyframeInterval / 10, fps_n / fps_d);
+                if (xs.MinGOPSize != iDefault) // (MIN(--keyint / 10,--fps)) is default
+                    sb.Append("--min-keyint " + xs.MinGOPSize + " ");
             }
-            int iDefault = xs.KeyframeInterval / 10;
-            if (log != null)
-                iDefault = Math.Min(xs.KeyframeInterval / 10, fps_n / fps_d);
-            if (xs.MinGOPSize != iDefault) // (MIN(--keyint / 10,--fps)) is default
-                sb.Append("--min-keyint " + xs.MinGOPSize + " ");
 
             xs.KeyframeInterval = iBackupKeyframeInterval;
             xs.MinGOPSize = iBackupMinGOPSize;

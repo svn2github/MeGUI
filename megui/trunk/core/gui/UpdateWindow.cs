@@ -110,8 +110,7 @@ namespace MeGUI
                             strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.X264Path);
                             if (OSInfo.isWow64())
                             { 
-                                arrPath.Add(System.IO.Path.Combine(strPath, "vfw4x264.exe"));
-                                arrPath.Add(System.IO.Path.Combine(strPath, "avs4x264.exe"));
+                                arrPath.Add(System.IO.Path.Combine(strPath, "avs4x264mod.exe"));
                                 arrPath.Add(System.IO.Path.Combine(strPath, "x264_64.exe"));
                             }
 #endif
@@ -957,8 +956,7 @@ namespace MeGUI
             strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.X264Path);
             if (OSInfo.isWow64())
             {
-                arrPath.Add(System.IO.Path.Combine(strPath, "vfw4x264.exe"));
-                arrPath.Add(System.IO.Path.Combine(strPath, "avs4x264.exe"));
+                arrPath.Add(System.IO.Path.Combine(strPath, "avs4x264mod.exe"));
                 arrPath.Add(System.IO.Path.Combine(strPath, "x264_64.exe"));
             }
 #endif
