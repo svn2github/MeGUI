@@ -1603,6 +1603,10 @@ namespace MeGUI
 				settings.ForceFilmThreshold = forceFilmPercentage.Value;
 				settings.DefaultPriority = (ProcessPriority)priority.SelectedIndex;
                 settings.OpenAVSInThread = cbOpenAVSinThread.Checked;
+                if (cbOpenAVSinThread.CheckState == CheckState.Checked)
+                    settings.OpenAVSInThreadDuringSession = true;
+                else
+                    settings.OpenAVSInThreadDuringSession = false;
 				settings.AutoStartQueue = this.autostartQueue.Checked;
                 settings.AutoStartQueueStartup = this.cbAutoStartQueueStartup.Checked;
                 settings.AlwaysMuxMKV = this.chkAlwaysMuxMKV.Checked;

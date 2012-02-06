@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -294,6 +294,11 @@ namespace MeGUI.core.gui
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message, "Video Player Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    if (MainForm.Instance.Settings.OpenAVSInThreadDuringSession)
+ 	  	            {
+ 	  	                MainForm.Instance.Settings.OpenAVSInThreadDuringSession = false;
+                        MessageBox.Show("As a result during this session the option \"Improved AVS opening\" in the settings is now disabled. Please disable it there completly if necessary.", "Video Player Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+ 	  	            }
                     break;
                 }
                 
