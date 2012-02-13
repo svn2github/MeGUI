@@ -1,3 +1,4 @@
+2113 [Job] translate process exit codes to status messages
 2112 [Video Player] changed default start position to the middle if "Improved AVS opening" is selected 
 2111 [AVS Script Creator] fixed opening of FFMS indexed files
 2110 [x264] force --keyint-min 1 with Blu-ray (requires x264 revision 2149+)
