@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 // 
-// Copyright (C) 2005-2011  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -153,7 +153,7 @@ namespace MeGUI
     public class AudioTrackInfo
     {
         private string nbChannels, type, samplingRate, containerType, description, channelPositions;
-        private int index, trackID, aacFlag;
+        private int index, trackID, aacFlag, mmgTrackID;
         public AudioTrackInfo()
             : this(null, null, null, 0)
         {
@@ -165,6 +165,7 @@ namespace MeGUI
             this.type = type;
             this.trackID = trackID;
             aacFlag = -1;
+            mmgTrackID = 0;
         }
 
         public string Language
@@ -192,6 +193,11 @@ namespace MeGUI
         {
             get { return trackID; }
             set { trackID = value; }
+        }
+        public int MMGTrackID
+        {
+            get { return mmgTrackID; }
+            set { mmgTrackID = value; }
         }
         public string DgIndexID
         {

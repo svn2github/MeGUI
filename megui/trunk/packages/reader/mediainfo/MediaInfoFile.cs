@@ -222,6 +222,7 @@ namespace MeGUI
         private MediaFileInfo _MediaFileInfo;
         private bool bHasVideo;
         private int _trackID;
+        private int _mmgTrackID;
         #endregion
         #region properties
         public MediaFileInfo Info
@@ -423,6 +424,7 @@ namespace MeGUI
                              (atrack.ID.Contains("-") && Int32.TryParse(atrack.ID.Split('-')[1], out iID))))
                         ati.TrackID = iID;
                     else
+                    {
                         // MediaInfo failed to get ID try guessing based on codec
                         switch (atrack.Format.Substring(0, 3))
                         {
@@ -433,6 +435,9 @@ namespace MeGUI
                             case "MPA": ati.TrackID = (0xC0 + counter); break;
                             case "DTS": ati.TrackID = (0x88 + counter); break;
                         }
+                    }
+                    if (Int32.TryParse(atrack.StreamOrder, out iID))
+                        ati.MMGTrackID = iID;
                     if (atrack.FormatProfile != "") // some tunings to have a more useful info instead of a typical audio Format
                     {
                         switch (atrack.FormatProfile)
@@ -496,7 +501,7 @@ namespace MeGUI
                 foreach (TextTrack oTextTrack in info.Text)
                 {
                     int trackID = -1;
-                    Int32.TryParse(oTextTrack.ID, out trackID);
+                    Int32.TryParse(oTextTrack.StreamOrder, out trackID);
                     _arrSubtitleTracks.Add(trackID);
                 }
                     
@@ -509,6 +514,8 @@ namespace MeGUI
                     {
                         _trackID = 0;
                         Int32.TryParse(track.ID, out _trackID);
+                        _mmgTrackID = 0;
+                        Int32.TryParse(track.StreamOrder, out _trackID);
                         ulong width = (ulong)easyParseInt(track.Width).Value;
                         ulong height = (ulong)easyParseInt(track.Height).Value;
                         ulong frameCount = (ulong)(easyParseInt(track.FrameCount) ?? 0);
@@ -680,28 +687,22 @@ namespace MeGUI
         /// <returns>trackID or 0</returns>
         public int GetFirstVideoTrackID()
         {
-            // check if the file is a video file
+            // check if the file contains a video track
             if (!HasVideo)
                 return 0;
 
-            int iCount = 0;
-            if (_trackID > 0)
-                iCount = _trackID - 1;
-            return iCount;
+            return _mmgTrackID;
         }
 
         /// <summary>gets the first audio track ID for muxing with mkvmerge</summary>
         /// <returns>trackID or 0</returns>
         public int GetFirstAudioTrackID()
         {
-            // check if the file is a audio file
+            // check if the file contains a video audio track
             if (!HasAudio)
                 return 0;
 
-            int iCount = 0;
-            if (_arrAudioTracks[0].TrackID > 0)
-                iCount = _arrAudioTracks[0].TrackID - 1;
-            return iCount;
+            return _arrAudioTracks[0].MMGTrackID;
         }
 
         /// <summary>gets the first subtitle track ID for muxing with mkvmerge</summary>
@@ -712,10 +713,7 @@ namespace MeGUI
             if (_arrSubtitleTracks.Count == 0)
                 return 0;
 
-            int iCount = 0;
-            if (_arrSubtitleTracks[0] > 0)
-                iCount = _arrSubtitleTracks[0] - 1;
-            return iCount;
+            return _arrSubtitleTracks[0];
         }
 
         /// <summary>checks if the file is indexable by DGIndexNV</summary>

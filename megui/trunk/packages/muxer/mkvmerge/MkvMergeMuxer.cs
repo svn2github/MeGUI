@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2011  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -208,7 +208,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
 
                     if (stream.MuxOnlyInfo != null)
                     {
-                        trackID = stream.MuxOnlyInfo.TrackID - 1;
+                        trackID = stream.MuxOnlyInfo.TrackID;
                         if (!string.IsNullOrEmpty(stream.MuxOnlyInfo.Language))
                             sb.Append(" --language " + trackID + ":" + stream.MuxOnlyInfo.Language);
                         if (!string.IsNullOrEmpty(stream.MuxOnlyInfo.Name))

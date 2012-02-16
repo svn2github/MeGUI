@@ -43,7 +43,7 @@ namespace MeGUI
                        defaultLanguage1, defaultLanguage2, afterEncodingCommand, videoExtension, audioExtension,
                        strLastDestinationPath, strLastSourcePath, dgnvIndexPath, tempDirMP4, flacPath,
                        httpproxyaddress, httpproxyport, httpproxyuid, httpproxypwd, defaultOutputDir, strMeGUIPath,
-                       mkvInfoPath, mkvExtractPath, appendToForcedStreams;
+                       mkvExtractPath, appendToForcedStreams;
         private bool recalculateMainMovieBitrate, autoForceFilm, autoStartQueue, enableMP3inMP4, autoOpenScript,
                      overwriteStats, keep2of3passOutput, autoUpdate, deleteCompletedJobs, deleteIntermediateFiles,
                      deleteAbortedOutput, openProgressWindow, useadvancedtooltips, autoSelectHDStreams, autoscroll, 
@@ -89,7 +89,6 @@ namespace MeGUI
             faacPath = getDownloadPath(@"tools\faac\faac.exe");
 			mp4boxPath = getDownloadPath(@"tools\mp4box\mp4box.exe");
 			mkvmergePath = getDownloadPath(@"tools\mkvmerge\mkvmerge.exe");
-            mkvInfoPath = getDownloadPath(@"tools\mkvmerge\mkvinfo.exe");
             mkvExtractPath = getDownloadPath(@"tools\mkvmerge\mkvextract.exe");
 #if x64
             x264Path = getDownloadPath(@"tools\x264\x264_64.exe");
@@ -589,14 +588,6 @@ namespace MeGUI
 		{
 			get {return mkvmergePath;}
 		}
-
-        /// <summary>
-        /// filename and full path of the mkvinfo executable
-        /// </summary>
-        public string MkvInfoPath
-        {
-            get { return mkvInfoPath; }
-        }
 
         /// <summary>
         /// filename and full path of the mkvextract executable

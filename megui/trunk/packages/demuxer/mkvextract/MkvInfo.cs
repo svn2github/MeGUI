@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 //
-// Copyright (C) 2005-2011  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -57,8 +57,8 @@ namespace MeGUI
             _strResult = null;
             using (Process mkvinfo = new Process())
             {
-                mkvinfo.StartInfo.FileName = MainForm.Instance.Settings.MkvInfoPath;
-                mkvinfo.StartInfo.Arguments = string.Format("--ui-language en \"{0}\"", _strFile);
+                mkvinfo.StartInfo.FileName = MainForm.Instance.Settings.MkvmergePath;
+                mkvinfo.StartInfo.Arguments = string.Format("--ui-language en --identify-verbose \"{0}\"", _strFile);
                 mkvinfo.StartInfo.CreateNoWindow = true;
                 mkvinfo.StartInfo.UseShellExecute = false;
                 mkvinfo.StartInfo.RedirectStandardOutput = true;
@@ -149,70 +149,46 @@ namespace MeGUI
 
         private void parseResult()
         {
-            MkvInfoTrack oTempTrack = new MkvInfoTrack(_strFile);
+            MkvInfoTrack oTempTrack;
             foreach (String Line in Regex.Split(_strResult, "\r\n"))
             {
-                string strLine = Line.Replace("|", "");
-                if (strLine.StartsWith("+") || strLine.StartsWith(" +"))
+                if (Line.StartsWith("Track ID"))
                 {
-                    // new track start?
+                    oTempTrack = new MkvInfoTrack(_strFile);
+                    int ID = -1;
+                    Int32.TryParse(Line.Substring(9, Line.IndexOf(':') - 9), out ID);
+                    oTempTrack.TrackID = ID;
+
+                    switch (Line.Substring(Line.IndexOf(':') + 2, 5)) 
+                    {
+                        case "video": oTempTrack.Type = MkvInfoTrackType.Video; break;
+                        case "audio": oTempTrack.Type = MkvInfoTrackType.Audio; break;
+                        case "subti": oTempTrack.Type = MkvInfoTrackType.Subtitle; break;
+                    }
+
+                    foreach (string strData in Line.Split(' '))
+                    {
+                        string[] value = strData.Split(':');
+                        if (value.Length < 2)
+                            continue;
+                        value[1] = value[1].Replace("\\s", " ").Replace("\\2", "\"").Replace("\\c", ":").Replace("\\h", "#").Replace("\\\\", "\\");
+                        switch (value[0].ToLower())
+                        {
+                            case "default_track": if (value[1].Equals("0")) oTempTrack.DefaultTrack = false; break;
+                            case "forced_track": if (value[1].Equals("1")) oTempTrack.ForcedTrack = true; break;
+                            case "codec_id": oTempTrack.CodecID = value[1]; break;
+                            case "language": oTempTrack.Language = value[1]; break;
+                            case "track_name": oTempTrack.Name = value[1]; break;
+                            case "audio_channels": oTempTrack.AudioChannels = value[1] + " Channels"; break;
+                        }
+                    }
+
                     if (oTempTrack.TrackID != -1)
                         _oTracks.Add(oTempTrack);
-                    oTempTrack = new MkvInfoTrack(_strFile);
                 }
-                
-                if (strLine.StartsWith("  + Track number: "))
-                {
-                    oTempTrack.TrackID = Int32.Parse(strLine.Substring(18));
-                }
-                else if (strLine.StartsWith("  + Track type: "))
-                {
-                    if (strLine.Equals("  + Track type: audio"))
-                        oTempTrack.Type = MkvInfoTrackType.Audio;
-                    else if (strLine.Equals("  + Track type: subtitles"))
-                        oTempTrack.Type = MkvInfoTrackType.Subtitle;
-                    else if (strLine.Equals("  + Track type: video"))
-                        oTempTrack.Type = MkvInfoTrackType.Video;
-                }
-                else if (strLine.Equals("  + Default flag: 0"))
-                {
-                    oTempTrack.DefaultTrack = false;
-                }
-                else if (strLine.Equals("  + Forced flag: 1"))
-                {
-                    oTempTrack.ForcedTrack = true;
-                }
-                else if (strLine.StartsWith("  + Codec ID: "))
-                {
-                    oTempTrack.CodecID = strLine.Substring(14);
-                }
-                else if (strLine.StartsWith("  + Language: "))
-                {
-                    oTempTrack.Language = strLine.Substring(14);
-                }
-                else if (strLine.StartsWith("  + Name: "))
-                {
-                    oTempTrack.Name = strLine.Substring(10);
-                }
-                else if (strLine.StartsWith("   + Channels: "))
-                {
-                    oTempTrack.AudioChannels = strLine.Substring(15) + " Channels";
-                }
-                else if (strLine.Equals("+ Chapters"))
-                {
+
+                if (Line.StartsWith("Chapters:"))
                     _bHasChapters = true;
-                }
-                else if (strLine.StartsWith("  + Default duration: "))
-                {
-                    if (oTempTrack.Type != MkvInfoTrackType.Video)
-                        continue;
-
-                    String[] fps = strLine.Split(' ');
-                    if (fps.Length < 7)
-                        continue;
-
-                    oTempTrack.FPS = decimal.Parse(fps[6].Substring(1), new System.Globalization.CultureInfo("en-us"));
-                }
             }
         }
 

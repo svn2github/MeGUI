@@ -144,7 +144,7 @@ namespace MeGUI
                     case "mkvmerge":
                         arrPath.Add(MainForm.Instance.Settings.MkvmergePath);
                         arrPath.Add(MainForm.Instance.Settings.MkvExtractPath);
-                        arrPath.Add(MainForm.Instance.Settings.MkvInfoPath); break;
+                        break;
                     case "ffmpeg": arrPath.Add(MainForm.Instance.Settings.FFMpegPath); break;
                     case "oggenc2": arrPath.Add(MainForm.Instance.Settings.OggEnc2Path); break;
                     case "yadif": arrPath.Add(MainForm.Instance.Settings.YadifPath); break;
@@ -989,7 +989,6 @@ namespace MeGUI
             //mkvmerge
             arrPath.Add(MainForm.Instance.Settings.MkvmergePath);
             arrPath.Add(MainForm.Instance.Settings.MkvExtractPath);
-            arrPath.Add(MainForm.Instance.Settings.MkvInfoPath);
             //ffmpeg
             arrPath.Add(MainForm.Instance.Settings.FFMpegPath);
             //oggenc2

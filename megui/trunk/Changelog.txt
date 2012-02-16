@@ -1,15 +1,21 @@
+2114 [MKV Muxer] adjusted (de)muxer to the recent mkvmerge changes (requires mkvmerge revision 5.3.0+)
 2113 [Job] translate process exit codes to status messages
-2112 [Video Player] changed default start position to the middle if "Improved AVS opening" is selected 
-2111 [AVS Script Creator] fixed opening of FFMS indexed files
-2110 [x264] force --keyint-min 1 with Blu-ray (requires x264 revision 2149+)
-            replaced vfw4x264 with avs4x264mod. Details:
-            http://forum.doom9.org/showthread.php?t=162656
-2109 [XviD] fixed saving of custom vbv values. Bug #3483985
-2108 [AutoEncode] + [OneClick] fixed saving of custom file size values
-     [File Size Selector] removed some default values
-                          added a control in the settings to modify custom file size values
-                          all other controls will not save anymore custom values
-2107 [Job] delete intermediate files also during job deletion if specified in the settings
+
+Changelog 2106 --> 2112
+
+Features:
+[File Size Selector] removed some default values and added a control in the settings to add custom file size values
+[File Size Selector] all other controls will not save anymore custom values to avoid problems in AutoEncode + OneClick
+[Job] delete intermediate files also during job deletion if specified in the settings
+[Video Player] changed default start position to the middle if "Improved AVS opening" is selected 
+[x264] force --keyint-min 1 with Blu-ray (requires x264 revision 2149+)
+[x264] replaced vfw4x264 with avs4x264mod. Details:
+[x264] http://forum.doom9.org/showthread.php?t=162656
+
+Enhancements:
+[AVS Script Creator] fixed opening of FFMS indexed files
+[XviD] fixed saving of custom vbv values. Bug #3483985
+
 
 Changelog 2050 --> 2106
 
@@ -70,35 +76,6 @@ Enhancements:
 [x264] changed --weightp and --min-keyint default value calculation
 [x264] fixed (increased) maximum value of --ref and --bframes when using target playback devices
 [x264] fixed wrong --sar values when using BluRay Target Device with 720x576
-
-
-Changelog 2028 --> 2050
-
-Main changes:
-[x264]     blu-ray device: added 1440x1080 as supported resolution
-[OneClick] added option to mux the audio source file only if the codec is the same as requested
-           
-Other changes:
-[Audio Encoder] added 24 <--> 25 conversions 
-[AviSynth] open script handling improved
-[Chapter Creator] fixed language tag creation
-[FFMSIndexer] added option to select the number of decoding threads. default and recommended value is 1
-              changed LoadCPlugin to LoadPlugin for the x64 plugin (requires ffms r507+)
-[Flac] enhanced output handling if file already exists
-[Lame] fixed always applying bitrate 128 in ABR mode
-[MainForm] fixed spelling. Bug #3390630
-[Mediainfo] mediainfo details are written into the log for most files/jobs
-[OneClick] enhanced error handling
-[OneClick] fixed editing of mkv mux jobs
-[OneClick] preserve audio track order during processing
-[Source Detector] enhanced error handling
-[Update] added check so that files can only be installed using the correct MeGUI build
-[Video Player] fixed video preview window for some avs scripts (e.g. using ImageSource)
-[x264] added --subme 11 (requires x264 revision 2037+)
-[x264] blu-ray device: enhanced --sar detection
-[x264] fixed maximum --rc-lookahead value. a value > 250 was possible in rare situations. Bug #3383262
-[x264] --keyint will not be applied twice if specified in the custom command line
-[x264] cosmetics
 
 
 Known Problems:

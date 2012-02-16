@@ -200,10 +200,11 @@ namespace MeGUI
                 }
                 else
                 {
-                    myVideo.Output = job.PostprocessingProperties.VideoTrackToMux.FileName;
-                    myVideo.Framerate = job.PostprocessingProperties.VideoTrackToMux.FPS;
+                    myVideo.Output = job.PostprocessingProperties.VideoTrackToMux.InputFile;
                     videoSettings.VideoName = job.PostprocessingProperties.VideoTrackToMux.Name;
                     myVideo.Settings = videoSettings;
+                    MediaInfoFile oInfo = new MediaInfoFile(myVideo.Output, ref _log);
+                    myVideo.Framerate = (decimal)oInfo.Info.FPS;
                 }
 
                 List<string> intermediateFiles = new List<string>();

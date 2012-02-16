@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 // 
-// Copyright (C) 2005-2011  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -39,7 +39,6 @@ namespace MeGUI
         private int _iTrackID;
         private String _strCodecID, _strLanguage, _strInputFile, _strName, _strAudioChannels;
         private bool _bDefault, _bForced;
-        private decimal _fps;
 
         public MkvInfoTrack() : this(null) { }
 
@@ -54,7 +53,6 @@ namespace MeGUI
             this._bForced = false;
             this._strName = String.Empty;
             this._strAudioChannels = String.Empty;
-            this._fps = -1;
         }
 
         public MkvInfoTrackType Type
@@ -114,12 +112,6 @@ namespace MeGUI
         {
             get { return _bForced; }
             set { _bForced = value; }
-        }
-
-        public decimal FPS
-        {
-            get { return _fps; }
-            set { _fps = value; }
         }
 
         [XmlIgnore()]

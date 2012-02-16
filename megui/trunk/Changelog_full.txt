@@ -1,3 +1,14 @@
+2112 [Video Player] changed default start position to the middle if "Improved AVS opening" is selected 
+2111 [AVS Script Creator] fixed opening of FFMS indexed files
+2110 [x264] force --keyint-min 1 with Blu-ray (requires x264 revision 2149+)
+            replaced vfw4x264 with avs4x264mod. Details:
+            http://forum.doom9.org/showthread.php?t=162656
+2109 [XviD] fixed saving of custom vbv values. Bug #3483985
+2108 [AutoEncode] + [OneClick] fixed saving of custom file size values
+     [File Size Selector] removed some default values
+                          added a control in the settings to modify custom file size values
+                          all other controls will not save anymore custom values
+2107 [Job] delete intermediate files also during job deletion if specified in the settings
 2106 [File Indexer] fixed trying to extract audio from MKV files without audio when using the FFMS indexer
 2105 [Audio Encoder] show the opening of files in the job progress window as FFAudioSource may need some time to index files
                      fixed crash when using DTS-ES with NicAudio

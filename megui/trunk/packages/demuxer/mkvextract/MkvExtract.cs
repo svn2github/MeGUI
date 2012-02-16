@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 //
-// Copyright (C) 2005-2012  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -105,7 +105,7 @@ namespace MeGUI
                     if (oTrack.Type != MkvInfoTrackType.Audio && oTrack.Type != MkvInfoTrackType.Subtitle)
                         continue;
 
-                    sb.Append(" " + (oTrack.TrackID - 1) + ":\"" + job.OutputPath + "\\" + oTrack.FileName + "\"");
+                    sb.Append(" " + oTrack.TrackID + ":\"" + job.OutputPath + "\\" + oTrack.FileName + "\"");
                 }
 
                 return sb.ToString();
