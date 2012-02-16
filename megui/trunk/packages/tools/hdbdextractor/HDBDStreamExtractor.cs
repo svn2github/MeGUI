@@ -1289,6 +1289,7 @@ namespace MeGUI.packages.tools.hdbdextractor
                     {
                         if (s.Language.ToLower().Contains(strLanguage.Key.ToLower()))
                         {
+                            s.Language = strLanguage.Key;
                             bFound = true;
                             break;
                         }
