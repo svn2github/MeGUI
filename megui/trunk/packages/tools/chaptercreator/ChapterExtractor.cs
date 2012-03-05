@@ -14,41 +14,44 @@ using System.Security.Cryptography;
 
 namespace MeGUI
 {
-  public abstract class ChapterExtractor
-  {
-    public abstract string[] Extensions { get; }
-    public virtual bool SupportsMultipleStreams { get { return true; } }
-    public abstract List<ChapterInfo> GetStreams(string location);
-
-    public event EventHandler<ProgramChainArg> StreamDetected;
-    public event EventHandler<ProgramChainArg> ChaptersLoaded;
-    public event EventHandler ExtractionComplete;
-
-    public static string ComputeMD5Sum(string path)
+    public abstract class ChapterExtractor
     {
-      return BitConverter.ToString(new
-          MD5CryptoServiceProvider().ComputeHash(System.IO.File.ReadAllBytes(path)))
-          .Replace("-", "").ToLower();
+        public abstract string[] Extensions { get; }
+        public virtual bool SupportsMultipleStreams { get { return true; } }
+        public abstract List<ChapterInfo> GetStreams(string location);
+
+        public event EventHandler<ProgramChainArg> StreamDetected;
+        public event EventHandler<ProgramChainArg> ChaptersLoaded;
+        public event EventHandler ExtractionComplete;
+
+        public static string ComputeMD5Sum(string path)
+        {
+            return BitConverter.ToString(new
+                MD5CryptoServiceProvider().ComputeHash(System.IO.File.ReadAllBytes(path)))
+                .Replace("-", "").ToLower();
+        }
+
+        protected void OnExtractionComplete()
+        {
+            if (ExtractionComplete != null)
+                ExtractionComplete(this, EventArgs.Empty);
+        }
+
+        protected void OnStreamDetected(ChapterInfo pgc)
+        {
+            if (StreamDetected != null)
+                StreamDetected(this, new ProgramChainArg() { ProgramChain = pgc });
+        }
+
+        protected void OnChaptersLoaded(ChapterInfo pgc)
+        {
+            if (ChaptersLoaded != null)
+                ChaptersLoaded(this, new ProgramChainArg() { ProgramChain = pgc });
+        }
     }
 
-    protected void OnExtractionComplete()
+    public class ProgramChainArg : EventArgs
     {
-      if (ExtractionComplete != null) ExtractionComplete(this, EventArgs.Empty);
+        public ChapterInfo ProgramChain { get; set; }
     }
-
-    protected void OnStreamDetected(ChapterInfo pgc)
-    {
-      if (StreamDetected != null) StreamDetected(this, new ProgramChainArg() { ProgramChain = pgc });
-    }
-    protected void OnChaptersLoaded(ChapterInfo pgc)
-    {
-      if (ChaptersLoaded != null) ChaptersLoaded(this, new ProgramChainArg() { ProgramChain = pgc });
-    }
-  }
-
-  public class ProgramChainArg : EventArgs
-  {
-    public ChapterInfo ProgramChain { get; set; }
-  }
-
 }

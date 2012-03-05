@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -537,8 +537,23 @@ namespace MeGUI
 
                     if (input.Text.ToLower().EndsWith("ifo"))
                     {
-                        ChapterExtractor ex = new IfoExtractor();
-                        pgc = ex.GetStreams(input.Text)[0];
+                        ChapterExtractor ex = new DvdExtractor();
+                        using (frmStreamSelect frm = new frmStreamSelect(ex))
+                        {
+                            if (ex is DvdExtractor)
+                                frm.Text = "Select your PGC";
+                            else
+                                frm.Text = "Select your Playlist";
+                            ex.GetStreams(input.Text);
+                            if (frm.ChapterCount == 1 || frm.ShowDialog(this) == DialogResult.OK)
+                            {
+                                pgc = frm.SelectedSingleChapterInfo;
+                                if (pgc.FramesPerSecond == 0)
+                                    pgc.FramesPerSecond = 25.0;
+                                if (String.IsNullOrEmpty(pgc.LangCode))
+                                    pgc.LangCode = "und";
+                            }
+                        }
                         FreshChapterView();
                         updateTimeLine();
                     }
@@ -572,6 +587,8 @@ namespace MeGUI
                             ChapterExtractor ex =
                               Directory.Exists(Path.Combine(input.Text, "VIDEO_TS")) ?
                               new DvdExtractor() as ChapterExtractor :
+                              File.Exists(Path.Combine(input.Text, "VIDEO_TS.IFO")) ?
+                              new DvdExtractor() as ChapterExtractor :
                               Directory.Exists(Path.Combine(Path.Combine(input.Text, "BDMV"), "PLAYLIST")) ?
                               new BlurayExtractor() as ChapterExtractor :
                               null;
@@ -579,19 +596,20 @@ namespace MeGUI
                             if (ex == null)
                                 throw new Exception("The location was not detected as DVD, or Blu-Ray.");
 
-
                             using (frmStreamSelect frm = new frmStreamSelect(ex))
                             {
                                 if (ex is DvdExtractor)
-                                    frm.Text = "Select your PGC";
+                                    frm.Text = "Select your Title";
                                 else
                                     frm.Text = "Select your Playlist";
                                 ex.GetStreams(input.Text);
-                                if (frm.ShowDialog(this) == DialogResult.OK)
+                                if (frm.ChapterCount == 1 || frm.ShowDialog(this) == DialogResult.OK)
                                 {
-                                    pgc = frm.ProgramChain;
-                                    if (pgc.FramesPerSecond == 0) pgc.FramesPerSecond = 25.0;
-                                    if (String.IsNullOrEmpty(pgc.LangCode)) pgc.LangCode = "und";
+                                    pgc = frm.SelectedSingleChapterInfo;
+                                    if (pgc.FramesPerSecond == 0) 
+                                        pgc.FramesPerSecond = 25.0;
+                                    if (String.IsNullOrEmpty(pgc.LangCode)) 
+                                        pgc.LangCode = "und";
                                 }
                             }
                             FreshChapterView();
@@ -604,7 +622,6 @@ namespace MeGUI
                     }
                 }
             }
-
 
             if (chapterListView.Items.Count != 0)
                 chapterListView.Items[0].Selected = true;

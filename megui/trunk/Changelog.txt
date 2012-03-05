@@ -1,3 +1,4 @@
+2117 [Chapter Creator] improved DVD PGC handling
 2116 [VobSubber] improved detection of subtitle streams
 2115 [HD Streams Extractor] fixed handling of english tracks in a MKV container when the track name contains a language
 2114 [MKV Muxer] adjusted (de)muxer to the recent mkvmerge changes (requires mkvmerge revision 5.3.0+)
