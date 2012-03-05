@@ -159,18 +159,22 @@ namespace MeGUI
                     Int32.TryParse(Line.Substring(9, Line.IndexOf(':') - 9), out ID);
                     oTempTrack.TrackID = ID;
 
-                    switch (Line.Substring(Line.IndexOf(':') + 2, 5)) 
+                    string strLine = Line.Substring(0, Line.Length - 1);
+
+                    switch (strLine.Substring(strLine.IndexOf(':') + 2, 5)) 
                     {
                         case "video": oTempTrack.Type = MkvInfoTrackType.Video; break;
                         case "audio": oTempTrack.Type = MkvInfoTrackType.Audio; break;
                         case "subti": oTempTrack.Type = MkvInfoTrackType.Subtitle; break;
                     }
 
-                    foreach (string strData in Line.Split(' '))
+                    foreach (string strData in strLine.Split(' '))
                     {
                         string[] value = strData.Split(':');
                         if (value.Length < 2)
                             continue;
+                        if (value[0].StartsWith("["))
+                            value[0] = value[0].Substring(1);
                         value[1] = value[1].Replace("\\s", " ").Replace("\\2", "\"").Replace("\\c", ":").Replace("\\h", "#").Replace("\\\\", "\\");
                         switch (value[0].ToLower())
                         {

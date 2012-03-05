@@ -163,9 +163,11 @@ namespace MeGUI
             TrackInfo = new TrackInfo(language, null);
             this.nbChannels = nbChannels;
             this.type = type;
+            if (type != null && type.Length > 2)
+                this.type = type.Split('/')[0].Substring(2);   
             this.trackID = trackID;
             aacFlag = -1;
-            mmgTrackID = 0;
+            mmgTrackID = 0;   
         }
 
         public string Language

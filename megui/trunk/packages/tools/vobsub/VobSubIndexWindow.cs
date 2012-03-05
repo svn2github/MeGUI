@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -85,7 +85,7 @@ namespace MeGUI
             subtitleTracks.Items.Clear();
             uint nbPGC = IFOparser.getPGCnb(fileName);
             pgc.Maximum = nbPGC;
-            subtitleTracks.Items.AddRange(IFOparser.GetSubtitlesStreamsInfos(input.Filename, Convert.ToInt32(pgc.Value),chkShowAllStreams.Checked));
+            subtitleTracks.Items.AddRange(IFOparser.GetSubtitlesStreamsInfos(input.Filename, Convert.ToInt32(pgc.Value), chkShowAllStreams.Checked));
             demuxSelectedTracks.Checked = !keepAllTracks.Checked;
         }
         private void checkIndexIO()

@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 // 
-// Copyright (C) 2009-2011  Kurtnoise (kurtnoise@free.fr)
+// Copyright (C) 2009-2012 Kurtnoise (kurtnoise@free.fr)
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -281,28 +281,30 @@ namespace MeGUI.core.util
 
                     if (buff[0] == 0)
                         continue;
+                    buff[0] -= 128;
 
-                    // match the stream number with the stream ID
-                    if (buff[1] == buff[2])
-                    {
+                    if (buff[0] > 0)
+                        if (String.IsNullOrEmpty(substreams[buff[0]]))
+                            substreams[buff[0]] = "[" + String.Format("{0:00}", buff[0]) + "] - " + subdesc[i];
+                    if (buff[1] > 0)
                         if (String.IsNullOrEmpty(substreams[buff[1]]))
                             substreams[buff[1]] = "[" + String.Format("{0:00}", buff[1]) + "] - " + subdesc[i];
-                    }
-                    else
-                    {
-                        if (String.IsNullOrEmpty(substreams[buff[1]]))
-                            substreams[buff[1]] = "[" + String.Format("{0:00}", buff[1]) + "] - " + subdesc[i] + " wide";
+                    if (buff[2] > 0)
                         if (String.IsNullOrEmpty(substreams[buff[2]]))
-                            substreams[buff[2]] = "[" + String.Format("{0:00}", buff[2]) + "] - " + subdesc[i] + " letterbox";
-                    }
+                            substreams[buff[2]] = "[" + String.Format("{0:00}", buff[2]) + "] - " + subdesc[i];
+                    if (buff[3] > 0)
+                        if (String.IsNullOrEmpty(substreams[buff[3]]))
+                            substreams[buff[3]] = "[" + String.Format("{0:00}", buff[3]) + "] - " + subdesc[i];
+                    if (buff[0] == 0 && buff[1] == 0 && buff[2] == 0 && buff[3] == 0)
+                        if (String.IsNullOrEmpty(substreams[buff[0]]))
+                            substreams[buff[0]] = "[" + String.Format("{0:00}", buff[0]) + "] - " + subdesc[i];
                 }
 
                 if (bGetAllStreams)
                 {
                     for (int i = 0; i < 32; i++)
-                    {
-                        substreams[i] = "[" + String.Format("{0:00}", i) + "] - not detected";
-                    }
+                        if (String.IsNullOrEmpty(substreams[i]))
+                            substreams[i] = "[" + String.Format("{0:00}", i) + "] - not detected";
                 }
                 else
                 {

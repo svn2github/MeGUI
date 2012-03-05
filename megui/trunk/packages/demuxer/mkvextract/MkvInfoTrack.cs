@@ -171,7 +171,7 @@ namespace MeGUI
                 if (_type != MkvInfoTrackType.Audio)
                     return null;
 
-                AudioTrackInfo oAudioTrack = new AudioTrackInfo(LanguageSelectionContainer.lookupISOCode(_strLanguage), _strAudioChannels, _strCodecID.Split('/')[0].Substring(2), _iTrackID);
+                AudioTrackInfo oAudioTrack = new AudioTrackInfo(LanguageSelectionContainer.lookupISOCode(_strLanguage), _strAudioChannels, _strCodecID, _iTrackID);
                 oAudioTrack.ContainerType = "MATROSKA";
                 oAudioTrack.TrackInfo.Name = _strName;
 
