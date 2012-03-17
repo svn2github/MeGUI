@@ -103,7 +103,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                 {
                     MediaInfoFile oVideoInfo = new MediaInfoFile(settings.VideoInput, ref log);
                     if (oVideoInfo.ContainerFileType == ContainerType.MP4 || oVideoInfo.ContainerFileType == ContainerType.MKV)
-                        trackID = oVideoInfo.GetFirstVideoTrackID();
+                        trackID = oVideoInfo.VideoInfo.FirstMMGTrackID;
                     else
                         trackID = 0;
 
@@ -119,7 +119,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                 {
                     MediaInfoFile oVideoInfo = new MediaInfoFile(settings.MuxedInput, ref log);
                     if (oVideoInfo.ContainerFileType == ContainerType.MP4 || oVideoInfo.ContainerFileType == ContainerType.MKV)
-                        trackID = oVideoInfo.GetFirstVideoTrackID();
+                        trackID = oVideoInfo.VideoInfo.FirstMMGTrackID;
                     else
                         trackID = 0;
 
@@ -147,7 +147,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                     }
 
                     if (oAudioInfo.ContainerFileType == ContainerType.MP4 || oAudioInfo.ContainerFileType == ContainerType.MKV)
-                        trackID = oAudioInfo.GetFirstAudioTrackID();
+                        trackID = oAudioInfo.AudioInfo.GetFirstTrackID();
                     else
                         trackID = 0;
 
@@ -155,20 +155,20 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                     if (oAudioInfo.ContainerFileType == ContainerType.MP4)
                     {
                         heaac_flag = -1;
-                        if (oAudioInfo.AudioTracks.Count > 0)
+                        if (oAudioInfo.AudioInfo.Tracks.Count > 0)
                         {
-                            heaac_flag = oAudioInfo.AudioTracks[0].AACFlag;
+                            heaac_flag = oAudioInfo.AudioInfo.Tracks[0].AACFlag;
                         }
                         if (heaac_flag == 1)
                             sb.Append(" --aac-is-sbr "+ trackID + ":1");
                         else if (heaac_flag == 0)
                             sb.Append(" --aac-is-sbr " + trackID + ":0");
                     }
-                    else if (oAudioInfo.ACodecs[0] == AudioCodec.AAC)
+                    else if (oAudioInfo.AudioInfo.Codecs[0] == AudioCodec.AAC)
                     {
                         heaac_flag = -1;
-                        if (oAudioInfo.AudioTracks.Count > 0)
-                            heaac_flag = oAudioInfo.AudioTracks[0].AACFlag;
+                        if (oAudioInfo.AudioInfo.Tracks.Count > 0)
+                            heaac_flag = oAudioInfo.AudioInfo.Tracks[0].AACFlag;
                         if (heaac_flag == 1)
                             sb.Append(" --aac-is-sbr 0:1");
                         else if (heaac_flag == 0)
@@ -203,7 +203,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                     {
                         MediaInfoFile oSubtitleInfo = new MediaInfoFile(stream.path, ref log);
                         if (oSubtitleInfo.ContainerFileType == ContainerType.MP4 || oSubtitleInfo.ContainerFileType == ContainerType.MKV)
-                            trackID = oSubtitleInfo.GetFirstSubtitleTrackID();      
+                            trackID = oSubtitleInfo.SubtitleInfo.GetFirstTrackID();      
                     }
 
                     if (stream.MuxOnlyInfo != null)

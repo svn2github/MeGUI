@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -273,6 +273,7 @@ namespace MeGUI
 				return _vi.width;
 			}
 		}
+
 		public int VideoHeight
 		{
 			get
@@ -280,6 +281,7 @@ namespace MeGUI
 				return _vi.height;
 			}
 		}
+
 		public int raten
 		{
 			get
@@ -287,6 +289,7 @@ namespace MeGUI
 				return _vi.raten;
 			}
 		}
+
 		public int rated
 		{
 			get
@@ -294,6 +297,7 @@ namespace MeGUI
 				return _vi.rated;
 			}
 		}
+
 		public int aspectn
 		{
 			get
@@ -301,6 +305,7 @@ namespace MeGUI
 				return _vi.aspectn;
 			}
 		}
+
 		public int aspectd
 		{
 			get
@@ -308,6 +313,7 @@ namespace MeGUI
 				return _vi.aspectd;
 			}
 		}
+
 		public int interlaced_frame
 		{
 			get
@@ -315,6 +321,7 @@ namespace MeGUI
 				return _vi.interlaced_frame;
 			}
 		}
+
 		public int top_field_first
 		{
 			get
@@ -322,6 +329,7 @@ namespace MeGUI
 				return _vi.top_field_first;
 			}
 		}
+
 		public int num_frames
 		{
 			get
@@ -329,7 +337,16 @@ namespace MeGUI
 				return _vi.num_frames;
 			}
 		}
+
 		// Audio
+        public bool HasAudio
+        {
+            get
+            {
+                return _vi.num_audio_samples != 0;
+            }
+        }
+
 		public int AudioSampleRate
 		{
 			get
@@ -345,6 +362,7 @@ namespace MeGUI
 				return _vi.num_audio_samples;
 			}
 		}
+
 		public AudioSampleType SampleType
 		{
 			get
@@ -352,6 +370,7 @@ namespace MeGUI
 				return _vi.sample_type;
 			}
 		}
+
 		public short ChannelsCount
 		{
 			get
@@ -375,6 +394,7 @@ namespace MeGUI
                 return _colorSpace;
             }
         }
+
         public AudioSampleType OriginalSampleType
         {
             get
@@ -382,7 +402,6 @@ namespace MeGUI
                 return _sampleType;
             }
         }
-
 
 		#endregion
 

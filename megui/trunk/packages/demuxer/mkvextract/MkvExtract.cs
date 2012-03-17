@@ -102,7 +102,7 @@ namespace MeGUI
                 foreach (MkvInfoTrack oTrack in job.MkvTracks)
                 {
                     // Extract only audio/subtitle tracks
-                    if (oTrack.Type != MkvInfoTrackType.Audio && oTrack.Type != MkvInfoTrackType.Subtitle)
+                    if (oTrack.Type != TrackType.Audio && oTrack.Type != TrackType.Subtitle)
                         continue;
 
                     sb.Append(" " + oTrack.TrackID + ":\"" + job.OutputPath + "\\" + oTrack.FileName + "\"");

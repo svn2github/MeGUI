@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 // 
-// Copyright (C) 2005-2011  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -170,16 +170,16 @@ new JobProcessorFactory(new ProcessorFactory(init), "TSMuxer");
                         log.Error("No video track found: " + settings.VideoInput);
                     else
                     {
-                        if (oVideoInfo.VCodec == VideoCodec.AVC)
+                        if (oVideoInfo.VideoInfo.Codec == VideoCodec.AVC)
                         {
                             vcodecID = "V_MPEG4/ISO/AVC";
                             extra = " insertSEI, contSPS";
                             if (oVideoInfo.ContainerFileType == ContainerType.MP4)
                                 extra += " , track=1";
                         }
-                        else if (oVideoInfo.VCodec == VideoCodec.MPEG2)
+                        else if (oVideoInfo.VideoInfo.Codec == VideoCodec.MPEG2)
                             vcodecID = "V_MPEG-2";
-                        else if (oVideoInfo.VCodec == VideoCodec.VC1)
+                        else if (oVideoInfo.VideoInfo.Codec == VideoCodec.VC1)
                             vcodecID = "V_MS/VFW/WVC1";
                     }
                     sw.Write("\n" + vcodecID + ", ");
@@ -193,16 +193,16 @@ new JobProcessorFactory(new ProcessorFactory(init), "TSMuxer");
                         log.Error("No video track found: " + settings.MuxedInput);
                     else
                     {
-                        if (oVideoInfo.VCodec == VideoCodec.AVC)
+                        if (oVideoInfo.VideoInfo.Codec == VideoCodec.AVC)
                         {
                             vcodecID = "V_MPEG4/ISO/AVC";
                             extra = " insertSEI, contSPS";
                             if (oVideoInfo.ContainerFileType == ContainerType.MP4)
                                 extra += " , track=1";
                         }
-                        else if (oVideoInfo.HasVideo && oVideoInfo.VCodec == VideoCodec.MPEG2)
+                        else if (oVideoInfo.HasVideo && oVideoInfo.VideoInfo.Codec == VideoCodec.MPEG2)
                             vcodecID = "V_MPEG-2";
-                        else if (oVideoInfo.HasVideo && oVideoInfo.VCodec == VideoCodec.VC1)
+                        else if (oVideoInfo.HasVideo && oVideoInfo.VideoInfo.Codec == VideoCodec.VC1)
                             vcodecID = "V_MS/VFW/WVC1";
                     }
                     sw.Write(vcodecID + ", ");
@@ -231,11 +231,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "TSMuxer");
                         continue;
                     }
 
-                    if (oInfo.ACodecs[0] == AudioCodec.AC3)
+                    if (oInfo.AudioInfo.Codecs[0] == AudioCodec.AC3)
                         acodecID = "A_AC3";
-                    else if (oInfo.ACodecs[0] == AudioCodec.AAC)
+                    else if (oInfo.AudioInfo.Codecs[0] == AudioCodec.AAC)
                         acodecID = "A_AAC";
-                    else if (oInfo.ACodecs[0] == AudioCodec.DTS || oInfo.ACodecs[0] == AudioCodec.DTSHD || oInfo.ACodecs[0] == AudioCodec.DTSMA)
+                    else if (oInfo.AudioInfo.Codecs[0] == AudioCodec.DTS || oInfo.AudioInfo.Codecs[0] == AudioCodec.DTSHD || oInfo.AudioInfo.Codecs[0] == AudioCodec.DTSMA)
                         acodecID = "A_DTS";
 
                     sw.Write("\n" + acodecID + ", ");
@@ -275,7 +275,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "TSMuxer");
 
                     if (stream.path.ToLower().EndsWith(".srt"))
                     {
-                        sw.Write(", video-width={0}, video-height={1}, fps={2}", oVideoInfo.Info.Width, oVideoInfo.Info.Height, settings.Framerate.Value.ToString(ci));
+                        sw.Write(", video-width={0}, video-height={1}, fps={2}", oVideoInfo.VideoInfo.Width, oVideoInfo.VideoInfo.Height, settings.Framerate.Value.ToString(ci));
                     }
 
                     if (!string.IsNullOrEmpty(stream.language))

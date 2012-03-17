@@ -705,7 +705,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             }
 
             string strErrorText = String.Empty;
-            if (oInfo.AudioTracks.Count > 0 && oInfo.AudioTracks[0].Type.Equals("DTS-HD Master Audio"))
+            if (oInfo.AudioInfo.Tracks.Count > 0 && oInfo.AudioInfo.Tracks[0].Type.Equals("DTS-HD Master Audio"))
             {
                 _log.LogEvent("DTS-MA is blocked when using NicAudio", ImageType.Information);
             }
@@ -833,9 +833,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                             _log.LogEvent("no audio file detected: " + audioJob.Input, ImageType.Error);
                             break;
                         }
-                        strChannelPositions = oInfo.AudioTracks[0].ChannelPositions;
-                        script.Append(@"# detected channels: " + oInfo.AudioTracks[0].NbChannels + Environment.NewLine);
-                        int.TryParse(oInfo.AudioTracks[0].NbChannels.Split(' ')[0], out iChannelCount);
+                        strChannelPositions = oInfo.AudioInfo.Tracks[0].ChannelPositions;
+                        script.Append(@"# detected channels: " + oInfo.AudioInfo.Tracks[0].NbChannels + Environment.NewLine);
+                        int.TryParse(oInfo.AudioInfo.Tracks[0].NbChannels.Split(' ')[0], out iChannelCount);
                     }
 
                     if (!String.IsNullOrEmpty(strChannelPositions))

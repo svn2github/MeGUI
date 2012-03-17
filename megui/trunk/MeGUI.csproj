@@ -718,6 +718,7 @@
     <Compile Include="packages\tools\oneclick\OneClickPostProcessing.cs" />
     <Compile Include="packages\tools\oneclick\OneClickPostProcessingJob.cs" />
     <Compile Include="packages\tools\oneclick\OneClickSettings.cs" />
+    <Compile Include="packages\tools\oneclick\OneClickStream.cs" />
     <Compile Include="packages\tools\oneclick\OneClickWindow.cs">
       <SubType>Form</SubType>
     </Compile>

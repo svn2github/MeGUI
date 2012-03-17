@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2011  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -63,7 +63,7 @@ namespace MeGUI
         private AvsFile reader;
         private string fileName;
         private int fieldOperation;
-        private MediaFileInfo info;
+        private VideoInformation info;
         private double filmPercentage;
 
         private static readonly System.Text.RegularExpressions.Regex r =
@@ -105,7 +105,7 @@ namespace MeGUI
 		/// </summary>
 		private void readFileProperties()
 		{
-            info = reader.Info.Clone();
+            info = reader.VideoInfo.Clone();
             using (StreamReader sr = new StreamReader(fileName))
             {
                 int iLineCount = 0;
@@ -119,7 +119,7 @@ namespace MeGUI
                         if (File.Exists(strSourceFile))
                         {
                             MediaInfoFile oInfo = new MediaInfoFile(strSourceFile);
-                            info.DAR = oInfo.Info.DAR;
+                            info.DAR = oInfo.VideoInfo.DAR;
                         }
                     }
 					if (line.IndexOf("Field_Operation") != -1)
@@ -138,7 +138,7 @@ namespace MeGUI
 		}
 
 		#region properties
-        public MediaFileInfo Info
+        public VideoInformation VideoInfo
         {
             get { return info; }
         }

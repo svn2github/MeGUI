@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2011  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -280,17 +280,17 @@ namespace MeGUI
 
             input.Filename = fileName;
             Dar? ar = null;
-            int maxHorizontalResolution = int.Parse(iFile.Info.Width.ToString());
+            int maxHorizontalResolution = int.Parse(iFile.VideoInfo.Width.ToString());
             
             List<AudioTrackInfo> audioTracks = new List<AudioTrackInfo>();
             if (oMkvInfo != null)
             {
                 foreach (MkvInfoTrack oTrack in oMkvInfo.Track)
-                    if (oTrack.Type == MkvInfoTrackType.Audio)
+                    if (oTrack.Type == TrackType.Audio)
                         audioTracks.Add(oTrack.AudioTrackInfo);
             }
             else
-                audioTracks = iFile.AudioTracks;
+                audioTracks = iFile.AudioInfo.Tracks;
             
             List<object> trackNames = new List<object>();
             trackNames.Add("None");
@@ -522,7 +522,7 @@ namespace MeGUI
                             oAudioTrackInfo = (AudioTrackInfo)audioTrack[i].SelectedObject;
                             audioTracks.Add(oAudioTrackInfo);
                             aInput = "::" + oAudioTrackInfo.TrackID + "::";
-                            info = oAudioTrackInfo.TrackInfo;
+                            info = new TrackInfo(oAudioTrackInfo.Language, oAudioTrackInfo.Name);
                             strLanguage = oAudioTrackInfo.Language;
                             strAudioCodec = oAudioTrackInfo.Type;
                             if (oMkvInfo != null && (oIndexerToUse == FileIndexerWindow.IndexType.FFMS || oIndexerToUse == FileIndexerWindow.IndexType.DGI))
@@ -541,9 +541,9 @@ namespace MeGUI
                         {
                             aInput = audioTrack[i].SelectedText;
                             MediaInfoFile oInfo = new MediaInfoFile(aInput, ref _oLog);
-                            strAudioCodec = oInfo.AudioTracks[0].Type;
-                            info = oInfo.AudioTracks[0].TrackInfo;
-                            strLanguage = oInfo.AudioTracks[0].Language;
+                            strAudioCodec = oInfo.AudioInfo.Tracks[0].Type;
+                            info = new TrackInfo(oInfo.AudioInfo.Tracks[0].Language, oInfo.AudioInfo.Tracks[0].Name);
+                            strLanguage = oInfo.AudioInfo.Tracks[0].Language;
                         }
 
                         if (audioConfigControl[i].AudioEncodingMode == AudioEncodingMode.Never ||
@@ -573,7 +573,7 @@ namespace MeGUI
                             {
                                 foreach (MkvInfoTrack oTrack in oMkvInfo.Track)
                                 {
-                                    if (oTrack.Type == MkvInfoTrackType.Video)
+                                    if (oTrack.Type == TrackType.Video)
                                     {
                                         dpp.VideoTrackToMux = oTrack;
                                         break;
@@ -641,7 +641,7 @@ namespace MeGUI
                     {
                         foreach (MkvInfoTrack oTrack in oMkvInfo.Track)
                         {
-                            if (oTrack.Type == MkvInfoTrackType.Subtitle)
+                            if (oTrack.Type == TrackType.Subtitle)
                                 dpp.SubtitleTracks.Add(oTrack);
                         }
                     }

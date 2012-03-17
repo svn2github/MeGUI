@@ -99,6 +99,22 @@ namespace MeGUI
             }
         }
 
+        public static int AVSFileChannelCount(String strAVSScript)
+        {
+            try
+            {
+                if (!Path.GetExtension(strAVSScript).ToLower().Equals(".avs"))
+                    return 0;
+                using (AviSynthScriptEnvironment env = new AviSynthScriptEnvironment())
+                    using (AviSynthClip a = env.OpenScriptFile(strAVSScript))
+                        return a.ChannelsCount;
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+
         public static string getChannelPositionsFromAVSFile(String strAVSFile)
         {
             string strChannelPositions = String.Empty;
@@ -152,7 +168,7 @@ namespace MeGUI
 
     public class AudioTrackInfo
     {
-        private string nbChannels, type, samplingRate, containerType, description, channelPositions;
+        private string nbChannels, type, samplingRate, containerType, channelPositions, language, name;
         private int index, trackID, aacFlag, mmgTrackID;
         public AudioTrackInfo()
             : this(null, null, null, 0)
@@ -160,11 +176,9 @@ namespace MeGUI
         }
         public AudioTrackInfo(string language, string nbChannels, string type, int trackID)
         {
-            TrackInfo = new TrackInfo(language, null);
-            this.nbChannels = nbChannels;
+            this.language = language;
+            this.nbChannels = nbChannels;     
             this.type = type;
-            if (type != null && type.Length > 2)
-                this.type = type.Split('/')[0].Substring(2);   
             this.trackID = trackID;
             aacFlag = -1;
             mmgTrackID = 0;   
@@ -172,25 +186,22 @@ namespace MeGUI
 
         public string Language
         {
-            get
-            {
-                if (TrackInfo == null) return null;
-                return TrackInfo.Language;
-            }
-            set
-            {
-                if (TrackInfo == null)
-                    TrackInfo = new TrackInfo();
-                TrackInfo.Language = value;
-            }
+            get { return language; } 
+            set { language = value; }
         }
 
-        public TrackInfo TrackInfo;
+        public string Name
+        {
+            get { return name; }
+            set { name = value; }
+        }
+
         public string TrackIDx
         {
             get { return containerType == "MPEG-TS" ? trackID.ToString("x3") : trackID.ToString("x"); }
             set { trackID = Int32.Parse(value, System.Globalization.NumberStyles.HexNumber); }
         }
+
         public int TrackID
         {
             get { return trackID; }
@@ -205,21 +216,19 @@ namespace MeGUI
         {
             get { return containerType == "MPEG-TS" ? index.ToString() : TrackIDx; }
         }
+
         public string ContainerType
         {
             get { return containerType; }
             set { containerType = value; }
         }
+
         public int Index
         {
             get { return index; }
             set { index = value; }
         }
-        public string Description
-        {
-            get { return description; }
-            set { description = value; }
-        }
+
         public string Type
         {
             get { return type; }
@@ -261,9 +270,9 @@ namespace MeGUI
             {
                 fullString += " / " + samplingRate;
             }
-            if (!string.IsNullOrEmpty(TrackInfo.Language))
+            if (!string.IsNullOrEmpty(language))
             {
-                fullString += " / " + TrackInfo.Language;
+                fullString += " / " + language;
             }
             return fullString.Trim();
         }

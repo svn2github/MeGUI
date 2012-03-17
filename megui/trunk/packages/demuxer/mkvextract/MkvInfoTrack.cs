@@ -25,7 +25,7 @@ using System.Xml.Serialization;
 
 namespace MeGUI
 {
-    public enum MkvInfoTrackType
+    public enum TrackType
     {
         Audio,
         Subtitle,
@@ -35,7 +35,7 @@ namespace MeGUI
 
     public class MkvInfoTrack
     {
-        private MkvInfoTrackType _type;
+        private TrackType _type;
         private int _iTrackID;
         private String _strCodecID, _strLanguage, _strInputFile, _strName, _strAudioChannels;
         private bool _bDefault, _bForced;
@@ -45,7 +45,7 @@ namespace MeGUI
         public MkvInfoTrack(String strInputFile)
         {
             this._strInputFile = strInputFile;
-            this._type = MkvInfoTrackType.Unknown;
+            this._type = TrackType.Unknown;
             this._iTrackID = -1;
             this._strCodecID = String.Empty;
             this._strLanguage = String.Empty;
@@ -55,13 +55,13 @@ namespace MeGUI
             this._strAudioChannels = String.Empty;
         }
 
-        public MkvInfoTrackType Type
+        public TrackType Type
         {
             get { return _type; }
             set 
             { 
                 _type = value;
-                if (_type != MkvInfoTrackType.Video && _type != MkvInfoTrackType.Unknown && String.IsNullOrEmpty(_strLanguage))
+                if (_type != TrackType.Video && _type != TrackType.Unknown && String.IsNullOrEmpty(_strLanguage))
                     _strLanguage = "eng";
             }
         }
@@ -119,7 +119,7 @@ namespace MeGUI
         {
             get 
             {
-                if (_type != MkvInfoTrackType.Audio && _type != MkvInfoTrackType.Subtitle)
+                if (_type != TrackType.Audio && _type != TrackType.Subtitle)
                     return null;
 
                 string strExtension = String.Empty;
@@ -168,14 +168,36 @@ namespace MeGUI
         {
             get
             {
-                if (_type != MkvInfoTrackType.Audio)
+                if (_type != TrackType.Audio)
                     return null;
 
-                AudioTrackInfo oAudioTrack = new AudioTrackInfo(LanguageSelectionContainer.lookupISOCode(_strLanguage), _strAudioChannels, _strCodecID, _iTrackID);
+                string strCodecID = _strCodecID.Split('/')[0].Replace("AC3", "AC-3");
+                if (strCodecID.Length > 2 && strCodecID.Substring(1, 1).Equals("_"))
+                    strCodecID = strCodecID.Substring(2);
+
+                AudioTrackInfo oAudioTrack = new AudioTrackInfo(LanguageSelectionContainer.lookupISOCode(_strLanguage), _strAudioChannels, strCodecID, _iTrackID);
                 oAudioTrack.ContainerType = "MATROSKA";
-                oAudioTrack.TrackInfo.Name = _strName;
+                oAudioTrack.Name = _strName;
 
                 return oAudioTrack;
+            }
+        }
+
+        [XmlIgnore()]
+        public OneClickStream SubtitleTrackInfo
+        {
+            get
+            {
+                if (_type != TrackType.Subtitle)
+                    return null;
+
+                string strCodecID = _strCodecID.Split('/')[0].Replace("AC3", "AC-3");
+                if (strCodecID.Length > 2 && strCodecID.Substring(1,1).Equals("_"))
+                    strCodecID = strCodecID.Substring(2);
+
+                OneClickStream oSubtitleTrack = new OneClickStream(_strInputFile, TrackType.Subtitle, strCodecID, "MATROSKA", _iTrackID.ToString(), LanguageSelectionContainer.lookupISOCode(_strLanguage), _strName, 0, _bDefault, _bForced, null, AudioEncodingMode.IfCodecDoesNotMatch, this);
+
+                return oSubtitleTrack;
             }
         }
     }

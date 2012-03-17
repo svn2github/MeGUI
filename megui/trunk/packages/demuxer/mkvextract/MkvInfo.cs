@@ -163,9 +163,9 @@ namespace MeGUI
 
                     switch (strLine.Substring(strLine.IndexOf(':') + 2, 5)) 
                     {
-                        case "video": oTempTrack.Type = MkvInfoTrackType.Video; break;
-                        case "audio": oTempTrack.Type = MkvInfoTrackType.Audio; break;
-                        case "subti": oTempTrack.Type = MkvInfoTrackType.Subtitle; break;
+                        case "video": oTempTrack.Type = TrackType.Video; break;
+                        case "audio": oTempTrack.Type = TrackType.Audio; break;
+                        case "subti": oTempTrack.Type = TrackType.Subtitle; break;
                     }
 
                     foreach (string strData in strLine.Split(' '))

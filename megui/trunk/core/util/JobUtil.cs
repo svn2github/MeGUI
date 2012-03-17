@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -489,13 +489,13 @@ namespace MeGUI
 			{
                 using (AvsFile avi = AvsFile.OpenScriptFile(video))
                 {
-                    checked { nbOfFrames = (ulong)avi.Info.FrameCount; }
-                    framerate = avi.Info.FPS;
-                    framerate_n = avi.Info.FPS_N;
-                    framerate_d = avi.Info.FPS_D;
-                    hRes = (int)avi.Info.Width;
-                    vRes = (int)avi.Info.Height;
-                    dar = avi.Info.DAR;
+                    checked { nbOfFrames = (ulong)avi.VideoInfo.FrameCount; }
+                    framerate = avi.VideoInfo.FPS;
+                    framerate_n = avi.VideoInfo.FPS_N;
+                    framerate_d = avi.VideoInfo.FPS_D;
+                    hRes = (int)avi.VideoInfo.Width;
+                    vRes = (int)avi.VideoInfo.Height;
+                    dar = avi.VideoInfo.DAR;
                 }
                 return true;
 			}

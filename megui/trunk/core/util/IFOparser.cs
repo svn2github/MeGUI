@@ -74,7 +74,7 @@ namespace MeGUI.core.util
             return ifoFile;
         }
 
-        public static byte[] GetFileBlock(string strFile, long pos, int count)
+        internal static byte[] GetFileBlock(string strFile, long pos, int count)
         {
             using (FileStream stream = new FileStream(strFile, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
@@ -86,26 +86,26 @@ namespace MeGUI.core.util
             }
         }
 
-        public static short ToInt16(byte[] bytes) { return (short)((bytes[0] << 8) + bytes[1]); }
-        public static uint ToInt32(byte[] bytes) { return (uint)((bytes[0] << 24) + (bytes[1] << 16) + (bytes[2] << 8) + bytes[3]); }
-        public static short ToShort(byte[] bytes) { return ToInt16(bytes); }
-        public static long ToFilePosition(byte[] bytes) { return ToInt32(bytes) * 0x800L; }
+        internal static short ToInt16(byte[] bytes) { return (short)((bytes[0] << 8) + bytes[1]); }
+        private static uint ToInt32(byte[] bytes) { return (uint)((bytes[0] << 24) + (bytes[1] << 16) + (bytes[2] << 8) + bytes[3]); }
+        private static short ToShort(byte[] bytes) { return ToInt16(bytes); }
+        internal static long ToFilePosition(byte[] bytes) { return ToInt32(bytes) * 0x800L; }
 
-        public static long GetTotalFrames(TimeSpan time, int fps)
+        private static long GetTotalFrames(TimeSpan time, int fps)
         {
             return (long)Math.Round(fps * time.TotalSeconds);
         }
 
-        static string TwoLong(int val) { return string.Format("{0:D2}", val); }
+        private static string TwoLong(int val) { return string.Format("{0:D2}", val); }
 
-        static int AsHex(int val)
+        private static int AsHex(int val)
         {
             int ret;
             int.TryParse(string.Format("{0:X2}", val), out ret);
             return ret;
         }
 
-        internal static short? GetFrames(byte val)
+        private static short? GetFrames(byte val)
         {
             int byte0_high = val >> 4;
             int byte0_low = val & 0x0F;
@@ -116,10 +116,11 @@ namespace MeGUI.core.util
             return (short)(((byte0_high - 4) * 10) + byte0_low);
         }
 
-        internal static int GetFrames(TimeSpan time, int fps)
+        private static int GetFrames(TimeSpan time, int fps)
         {
             return (int)Math.Round(fps * time.Milliseconds / 1000.0);
         }
+
         internal static long GetPCGIP_Position(string ifoFile)
         {
             return ToFilePosition(GetFileBlock(ifoFile, 0xCC, 4));
@@ -355,6 +356,35 @@ namespace MeGUI.core.util
                 ((uint)br.ReadByte()) << 8 |
                 ((uint)br.ReadByte()));
             return val;
+        }
+
+        /// <summary>
+        /// get Aspect Ratio Video Information from the IFO file
+        /// </summary>
+        /// <param name="fileName">name of the IFO file</param>
+        /// <returns>aspect ratio info as String</returns>
+        public static string GetVideoAR(string FileName)
+        {
+            FileStream fs = new FileStream(FileName, FileMode.Open, FileAccess.Read);
+            BinaryReader br = new BinaryReader(fs);
+            Stream sr = br.BaseStream;
+
+            sr.Seek(0x200, SeekOrigin.Begin);
+            byte[] array = new byte[2];
+            fs.Read(array, 0, 2);
+            fs.Close();
+
+            byte b = (byte)((0x0C & array[0]) >> 2);
+            string ar = String.Empty;
+
+            switch (b)
+            {
+                case 0: ar = "4:3"; break;
+                case 1:
+                case 2: ar = String.Empty; break;
+                case 3: ar = "16:9"; break;
+            }
+            return ar;
         }
     }
 }

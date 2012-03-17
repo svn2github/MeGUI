@@ -204,7 +204,7 @@ namespace MeGUI
                     videoSettings.VideoName = job.PostprocessingProperties.VideoTrackToMux.Name;
                     myVideo.Settings = videoSettings;
                     MediaInfoFile oInfo = new MediaInfoFile(myVideo.Output, ref _log);
-                    myVideo.Framerate = (decimal)oInfo.Info.FPS;
+                    myVideo.Framerate = (decimal)oInfo.VideoInfo.FPS;
                 }
 
                 List<string> intermediateFiles = new List<string>();
@@ -413,7 +413,7 @@ namespace MeGUI
             //Check if AR needs to be autodetected now
             if (AR == null) // it does
             {
-                customDAR = d2v.Info.DAR;
+                customDAR = d2v.VideoInfo.DAR;
                 if (customDAR.ar > 0)
                     _log.LogValue("Aspect ratio", customDAR);
                 else
@@ -430,15 +430,15 @@ namespace MeGUI
 
             if (keepInputResolution)
             {
-                horizontalResolution = (int)d2v.Info.Width;
+                horizontalResolution = (int)d2v.VideoInfo.Width;
                 dar = customDAR;
             }
             else
             {
                 // Minimise upsizing
-                int sourceHorizontalResolution = (int)d2v.Info.Width - final.right - final.left;
+                int sourceHorizontalResolution = (int)d2v.VideoInfo.Width - final.right - final.left;
                 if (autoCrop)
-                    sourceHorizontalResolution = (int)d2v.Info.Width;
+                    sourceHorizontalResolution = (int)d2v.VideoInfo.Width;
 
                 if (horizontalResolution > sourceHorizontalResolution)
                 {
@@ -453,9 +453,9 @@ namespace MeGUI
             //Suggest a resolution (taken from AvisynthWindow.suggestResolution_CheckedChanged)
             int scriptVerticalResolution = 0;
             if (keepInputResolution)
-                scriptVerticalResolution = (int)d2v.Info.Height;
+                scriptVerticalResolution = (int)d2v.VideoInfo.Height;
             else
-                scriptVerticalResolution = Resolution.suggestResolution(d2v.Info.Height, d2v.Info.Width, (double)customDAR.ar,
+                scriptVerticalResolution = Resolution.suggestResolution(d2v.VideoInfo.Height, d2v.VideoInfo.Width, (double)customDAR.ar,
                     final, horizontalResolution, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out dar);
             _log.LogValue("Output resolution", horizontalResolution + "x" + scriptVerticalResolution);
 
@@ -465,7 +465,7 @@ namespace MeGUI
                 x264Settings xs = (x264Settings)settings;
                 qpfile = job.PostprocessingProperties.ChapterFile;
                 if ((Path.GetExtension(qpfile).ToLower()) == ".txt")
-                    qpfile = VideoUtil.convertChaptersTextFileTox264QPFile(job.PostprocessingProperties.ChapterFile, d2v.Info.FPS);
+                    qpfile = VideoUtil.convertChaptersTextFileTox264QPFile(job.PostprocessingProperties.ChapterFile, d2v.VideoInfo.FPS);
                 if (File.Exists(qpfile))
                 {
                     xs.UseQPFile = true;
@@ -480,7 +480,7 @@ namespace MeGUI
             string cropLine = "#crop";
             string resizeLine = "#resize";
 
-            inputLine = ScriptServer.GetInputLine(path, false, oPossibleSource,
+            inputLine = ScriptServer.GetInputLine(path, null, false, oPossibleSource,
                 false, false, false, 0, false);
             if (!inputLine.EndsWith(")"))
                 inputLine += ")";
@@ -503,7 +503,7 @@ namespace MeGUI
             }
 
             raiseEvent("Finalizing preprocessing...   ***PLEASE WAIT***");
-            inputLine = ScriptServer.GetInputLine(path, interlaced, oPossibleSource, avsSettings.ColourCorrect, avsSettings.MPEG2Deblock, false, 0, false);
+            inputLine = ScriptServer.GetInputLine(path, null, interlaced, oPossibleSource, avsSettings.ColourCorrect, avsSettings.MPEG2Deblock, false, 0, false);
             if (!inputLine.EndsWith(")"))
                 inputLine += ")";
 
@@ -519,8 +519,8 @@ namespace MeGUI
                 if (horizontalResolution <= 0 || scriptVerticalResolution <= 0)
                     _log.Error("Error in detection of output resolution: " + horizontalResolution + "x" + scriptVerticalResolution);
                 else
-                    resizeLine = ScriptServer.GetResizeLine(!signalAR || avsSettings.Mod16Method == mod16Method.resize, horizontalResolution, scriptVerticalResolution, (ResizeFilterType)avsSettings.ResizeMethod,
-                                                            autoCrop, final, (int)d2v.Info.Width, (int)d2v.Info.Height);
+                    resizeLine = ScriptServer.GetResizeLine(!signalAR || avsSettings.Mod16Method == mod16Method.resize, horizontalResolution, scriptVerticalResolution, 0, 0, (ResizeFilterType)avsSettings.ResizeMethod,
+                                                            autoCrop, final, (int)d2v.VideoInfo.Width, (int)d2v.VideoInfo.Height);
             }
 
             string newScript = ScriptServer.CreateScriptFromTemplate(avsSettings.Template, inputLine, cropLine, resizeLine, denoiseLines, deinterlaceLines);

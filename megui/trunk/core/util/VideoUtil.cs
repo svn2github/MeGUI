@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -706,8 +706,8 @@ namespace MeGUI
             if (useMediaInfo)
             {
                 MediaInfoFile info = new MediaInfoFile(p);
-                if (info.Info.HasVideo)
-                    return new MuxableType(info.VideoType, info.VCodec);
+                if (info.VideoInfo.HasVideo)
+                    return new MuxableType(info.VideoInfo.Type, info.VideoInfo.Codec);
                 // otherwise we may as well try the other route too
             }
             VideoType vType = guessVideoType(p);
@@ -728,8 +728,8 @@ namespace MeGUI
             if (useMediaInfo)
             {
                 MediaInfoFile info = new MediaInfoFile(p);
-                if (info.AudioType != null)
-                    return new MuxableType(info.AudioType, info.ACodecs[0]);
+                if (info.AudioInfo.Type != null)
+                    return new MuxableType(info.AudioInfo.Type, info.AudioInfo.Codecs[0]);
             }
             AudioType aType = guessAudioType(p);
             if (aType != null)
@@ -760,7 +760,7 @@ namespace MeGUI
             {
                 StreamWriter output = new StreamWriter(outputFile);
                 output.WriteLine(
-                    ScriptServer.GetInputLine(filename, false, sourceType, false, false, false, -1, false));
+                    ScriptServer.GetInputLine(filename, null, false, sourceType, false, false, false, -1, false));
                 output.Close();
             }
             catch (IOException)
@@ -912,8 +912,8 @@ namespace MeGUI
                 else
                 {
                     MediaInfoFile oInfo = new MediaInfoFile(strInput);
-                    if (oInfo.Info.HasVideo && oInfo.Info.FPS > 0)
-                        fps = oInfo.Info.FPS;
+                    if (oInfo.VideoInfo.HasVideo && oInfo.VideoInfo.FPS > 0)
+                        fps = oInfo.VideoInfo.FPS;
                     else
                         return String.Empty;
                 }

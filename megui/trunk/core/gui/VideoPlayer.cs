@@ -180,7 +180,7 @@ namespace MeGUI
                 else
                 {
                     file = mainForm.MediaFileFactory.Open(path);
-                    if (file == null && !(file.Info.HasVideo && file.CanReadVideo))
+                    if (file == null && !(file.VideoInfo.HasVideo && file.CanReadVideo))
                         throw new ArgumentException("The video stream cannot be opened");
                     btnReloadVideo.Enabled = true;
                 }
@@ -223,7 +223,7 @@ namespace MeGUI
                     iStart = startFrame;
                 else if (MainForm.Instance.Settings.OpenAVSInThreadDuringSession)
                     iStart = reader.FrameCount / 2;
-                videoPreview.LoadVideo(reader, file.Info.FPS, iStart);
+                videoPreview.LoadVideo(reader, file.VideoInfo.FPS, iStart);
                 setTitleText();
 				return true;
 			}
@@ -254,7 +254,7 @@ namespace MeGUI
                 else
                 {
                     file = mainForm.MediaFileFactory.Open(strFileName);
-                    if (file == null && !(file.Info.HasVideo && file.CanReadVideo))
+                    if (file == null && !(file.VideoInfo.HasVideo && file.CanReadVideo))
                         throw new ArgumentException("The video stream cannot be opened");
                 }
                 reader = file.GetVideoReader();
@@ -293,7 +293,7 @@ namespace MeGUI
                     iStart = positionSlider.Value;
                 else if (MainForm.Instance.Settings.OpenAVSInThreadDuringSession)
                     iStart = reader.FrameCount / 2;
-                videoPreview.LoadVideo(reader, file.Info.FPS, iStart);
+                videoPreview.LoadVideo(reader, file.VideoInfo.FPS, iStart);
                 setTitleText();
                 return true;
             }
@@ -317,7 +317,7 @@ namespace MeGUI
         private void originalSizeButton_Click(object sender, EventArgs e)
         {
             bOriginalSize = true;
-            zoomWidth = (int)file.Info.Width;
+            zoomWidth = (int)file.VideoInfo.Width;
             zoomFactor = (int)((double)zoomWidth / zoomMaxWidth * 100.0);
             setZoomButtons();
             resize(zoomWidth, showPAR.Checked);
@@ -421,14 +421,14 @@ namespace MeGUI
             int iScreenWidth = oSizeScreen.Width - 2 * SystemInformation.FixedFrameBorderSize.Width;
 
             // does the video fit into the screen?
-            if ((int)file.Info.Height + formHeightDelta > iScreenHeight ||
-                (int)file.Info.Width > iScreenWidth)
+            if ((int)file.VideoInfo.Height + formHeightDelta > iScreenHeight ||
+                (int)file.VideoInfo.Width > iScreenWidth)
             {
-                Dar d = new Dar(file.Info.Width, file.Info.Height);
+                Dar d = new Dar(file.VideoInfo.Width, file.VideoInfo.Height);
                 if (showPAR.Checked) d = arChooser.Value ?? d;
 
                 int height = 0;
-                if ((int)file.Info.Width > iScreenWidth)
+                if ((int)file.VideoInfo.Width > iScreenWidth)
                 {
                     zoomMaxWidth = iScreenWidth;
                     height = (int)Math.Round((decimal)zoomMaxWidth / d.ar);
@@ -448,15 +448,15 @@ namespace MeGUI
             }
             else
             {
-                zoomMaxWidth = (int)file.Info.Width;
+                zoomMaxWidth = (int)file.VideoInfo.Width;
                 videoWindowWidth = zoomMaxWidth;
-                videoWindowHeight = (int)file.Info.Height;
+                videoWindowHeight = (int)file.VideoInfo.Height;
             }
 
             if (zoomFactor != 100)
             {
                 zoomWidth = (int)(zoomMaxWidth * zoomFactor / 100);
-                Dar d = new Dar(file.Info.Width, file.Info.Height);
+                Dar d = new Dar(file.VideoInfo.Width, file.VideoInfo.Height);
                 if (showPAR.Checked) d = arChooser.Value ?? d;
                 int height = (int)Math.Round((decimal)zoomWidth / d.ar);
                 videoWindowWidth = zoomWidth;
@@ -984,8 +984,8 @@ namespace MeGUI
 		/// </summary>
 		private void setTitleText()
 		{
-            totalTime = Util.converFrameNumberToTimecode(this.positionSlider.Maximum, file.Info.FPS);
-            currentTime = Util.converFrameNumberToTimecode(this.positionSlider.Value, file.Info.FPS);
+            totalTime = Util.converFrameNumberToTimecode(this.positionSlider.Maximum, file.VideoInfo.FPS);
+            currentTime = Util.converFrameNumberToTimecode(this.positionSlider.Value, file.VideoInfo.FPS);
             if (this.zoneStart > -1 || this.zoneEnd > -1)
             {
                 this.Text = "Pos: " + CurrentFrame + "/" + (FrameCount - 1);
@@ -1282,7 +1282,7 @@ namespace MeGUI
 		/// </summary>
 		public double Framerate
 		{
-            get { return file.Info.FPS; }
+            get { return file.VideoInfo.FPS; }
 		}
 		/// <summary>
 		/// gets / sets the frame currently visible
@@ -1301,7 +1301,7 @@ namespace MeGUI
         private void resize(int targetWidth, bool PAR)
         {
             zoomWidth = targetWidth;
-            Dar d = new Dar(file.Info.Width, file.Info.Height);
+            Dar d = new Dar(file.VideoInfo.Width, file.VideoInfo.Height);
             if (PAR) d = arChooser.Value ?? d;
 
             int height = (int)Math.Round((decimal)targetWidth / d.ar);

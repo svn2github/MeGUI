@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -135,7 +135,7 @@ namespace MeGUI
             return newScript;
         }
 
-        public static string GetInputLine(string input, bool interlaced, PossibleSources sourceType,
+        public static string GetInputLine(string input, string indexFile, bool interlaced, PossibleSources sourceType,
             bool colormatrix, bool mpeg2deblock, bool flipVertical, double fps, bool dss2)
         {
             string inputLine = "#input";
@@ -147,8 +147,10 @@ namespace MeGUI
                     inputLine = "Import(\"" + input + "\")";
                     break;
                 case PossibleSources.d2v:
+                    if (String.IsNullOrEmpty(indexFile))
+                        indexFile = input;
                     strDLLPath = Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.DgIndexPath), "DGDecode.dll");
-                    inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nDGDecode_mpeg2source(\"" + input + "\"";
+                    inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nDGDecode_mpeg2source(\"" + indexFile + "\"";
                     if (mpeg2deblock)
                         inputLine += ", cpu=4";
                     if (colormatrix)
@@ -158,24 +160,30 @@ namespace MeGUI
                         inputLine += string.Format("\r\nLoadPlugin(\"" + Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "ColorMatrix.dll") + "\")\r\nColorMatrix(hints=true{0}, threads=0)", interlaced ? ", interlaced=true" : "");
                     break;
                 case PossibleSources.dga:
+                    if (String.IsNullOrEmpty(indexFile))
+                        indexFile = input;
                     strDLLPath = Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.DgavcIndexPath), "DGAVCDecode.dll");
-                    inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nAVCSource(\"" + input + "\")"; 
-                    break;
-                case PossibleSources.ffindex:
-                    strDLLPath = Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.FFMSIndexPath), "ffms2.dll");
-                    if (input.ToLower().EndsWith(".ffindex"))
-                        inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + input.Substring(0, input.Length - 8) + "\"" + (MainForm.Instance.Settings.FFMSThreads > 0 ? ", threads=" + MainForm.Instance.Settings.FFMSThreads : String.Empty) + ")";
-                    else
-                        inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + input + "\"" + (MainForm.Instance.Settings.FFMSThreads > 0 ? ", threads=" + MainForm.Instance.Settings.FFMSThreads : String.Empty) + ")";
+                    inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nAVCSource(\"" + indexFile + "\")"; 
                     break;
                 case PossibleSources.dgi:
+                    if (String.IsNullOrEmpty(indexFile))
+                        indexFile = input;
                     strDLLPath = Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.DgnvIndexPath), "DGDecodeNV.dll");
-                    inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nDGSource(\"" + input + "\"";
+                    inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nDGSource(\"" + indexFile + "\"";
                     if (MainForm.Instance.Settings.AutoForceFilm &&
                         MainForm.Instance.Settings.ForceFilmThreshold <= (decimal)dgiFile.GetFilmPercent(input))
                         inputLine += ",fieldop=1";
                     else
                         inputLine += ",fieldop=0";
+                    break;
+                case PossibleSources.ffindex:
+                    strDLLPath = Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.FFMSIndexPath), "ffms2.dll");
+                    if (input.ToLower().EndsWith(".ffindex"))
+                        inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + input.Substring(0, input.Length - 8) + "\"" + (MainForm.Instance.Settings.FFMSThreads > 0 ? ", threads=" + MainForm.Instance.Settings.FFMSThreads : String.Empty) + ")";
+                    else if (!String.IsNullOrEmpty(indexFile))
+                        inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + input + "\"" + (!string.IsNullOrEmpty(indexFile) ? ", cachefile=\"" + indexFile + "\"" : String.Empty) + (MainForm.Instance.Settings.FFMSThreads > 0 ? ", threads=" + MainForm.Instance.Settings.FFMSThreads : String.Empty) + ")" + VideoUtil.getAssumeFPS(fps, input);
+                    else
+                        inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + input + "\"" + (MainForm.Instance.Settings.FFMSThreads > 0 ? ", threads=" + MainForm.Instance.Settings.FFMSThreads : String.Empty) + ")";
                     break;
                 case PossibleSources.vdr:
                     inputLine = "AVISource(\"" + input + "\", audio=false)" + VideoUtil.getAssumeFPS(fps, input);
@@ -214,7 +222,7 @@ namespace MeGUI
             return cropLine;
         }
 
-        public static string GetResizeLine(bool resize, int hres, int vres, ResizeFilterType type, bool crop, CropValues cropValues, int originalHRes, int originalVRes)
+        public static string GetResizeLine(bool resize, int hres, int vres, int hresWithBorder, int vresWithBorder, ResizeFilterType type, bool crop, CropValues cropValues, int originalHRes, int originalVRes)
         {
             if (!resize)
                 return "#resize";
@@ -224,7 +232,12 @@ namespace MeGUI
 
             EnumProxy p = EnumProxy.Create(type);
             if (p.Tag != null)
-                return string.Format(p.Tag + " # {2}", hres, vres, p);
+                if (hresWithBorder > hres || vresWithBorder > vres)
+                    return string.Format(p.Tag + ".AddBorders({3},{4},{5},{6}) # {2}", hres, vres, p, 
+                        Math.Floor((hresWithBorder - hres) / 2.0), Math.Floor((vresWithBorder - vres) / 2.0), 
+                        Math.Ceiling((hresWithBorder - hres) / 2.0), Math.Ceiling((vresWithBorder - vres) / 2.0));
+                else
+                    return string.Format(p.Tag + " # {2}", hres, vres, p);
             else
                 return "#resize - " + p;
         }

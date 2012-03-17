@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -140,7 +140,7 @@ namespace MeGUI
             bool videoLoaded = player.loadVideo(mainForm, fileName, PREVIEWTYPE.CREDITS, true);
             if (videoLoaded)
             {
-                info.DAR = info.DAR ?? player.File.Info.DAR;
+                info.DAR = info.DAR ?? player.File.VideoInfo.DAR;
                 player.DAR = info.DAR;
                 player.IntroCreditsFrameSet += new IntroCreditsFrameSetCallback(player_IntroCreditsFrameSet);
                 player.Closed += new EventHandler(player_Closed);
@@ -261,7 +261,7 @@ namespace MeGUI
             {
                 using (AvsFile avi = AvsFile.OpenScriptFile(fileName))
                 {
-                    info.DAR = avi.Info.DAR;
+                    info.DAR = avi.VideoInfo.DAR;
                 }
             }
             string filePath;

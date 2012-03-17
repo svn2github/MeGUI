@@ -30,7 +30,6 @@ using MeGUI.core.util;
 
 namespace MeGUI
 {
-
 	/// <summary>
 	/// Summary description for Vobinput.
 	/// </summary>
@@ -42,7 +41,7 @@ namespace MeGUI
         
         public enum IndexType
         {
-            D2V, DGA, DGI, FFMS
+            D2V, DGA, DGI, FFMS, NONE
         };
         private IndexType IndexerUsed = IndexType.D2V;
 
@@ -662,10 +661,10 @@ namespace MeGUI
 		{
             MediaInfoFile iFile = new MediaInfoFile(fileName, ref _oLog);
 
-            strVideoCodec = iFile.VideoCodecString;
-            strVideoScanType = iFile.VideoScanType;
+            strVideoCodec = iFile.VideoInfo.CodecString;
+            strVideoScanType = iFile.VideoInfo.ScanType;
             strContainerFormat = iFile.ContainerFileTypeString;
-            audioTracks = iFile.AudioTracks;
+            audioTracks = iFile.AudioInfo.Tracks;
 
             if (String.IsNullOrEmpty(strVideoCodec))
                 txtCodecInformation.Text = " unknown";
@@ -716,7 +715,7 @@ namespace MeGUI
             if (oMkvInfo != null && IndexerUsed == IndexType.FFMS)
             {
                 foreach (MkvInfoTrack oTrack in oMkvInfo.Track)
-                    if (oTrack.Type == MkvInfoTrackType.Audio)
+                    if (oTrack.Type == TrackType.Audio)
                         AudioTracks.Items.Add(oTrack.AudioTrackInfo);
             }
             else

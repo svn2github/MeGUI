@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2011  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -899,7 +899,7 @@ namespace MeGUI
         {
             try
             {
-                fps.Value = (decimal)new MediaInfoFile(vInput.Filename).Info.FPS;
+                fps.Value = (decimal)new MediaInfoFile(vInput.Filename).VideoInfo.FPS;
             }
             catch (Exception) { fps.Value = null; }
 

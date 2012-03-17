@@ -68,7 +68,7 @@ namespace MeGUI
     {
         private AvsFile reader;
         private string fileName;
-        private MediaFileInfo info;
+        private VideoInformation info;
 
         /// <summary>
         /// initializes the ffms reader
@@ -92,16 +92,16 @@ namespace MeGUI
                 + (!string.IsNullOrEmpty(indexFile) ? ", cachefile=\"" + indexFile + "\"" : String.Empty) 
                 + (MainForm.Instance.Settings.FFMSThreads > 0 ? ", threads=" + MainForm.Instance.Settings.FFMSThreads : String.Empty) + ")";
             reader = AvsFile.ParseScript(strScript);
-            info = reader.Info.Clone();
+            info = reader.VideoInfo.Clone();
             if (File.Exists(this.fileName))
             {
                 MediaInfoFile oInfo = new MediaInfoFile(this.fileName);
-                info.DAR = oInfo.Info.DAR;
+                info.DAR = oInfo.VideoInfo.DAR;
             }
         }
 
         #region properties
-        public MediaFileInfo Info
+        public VideoInformation VideoInfo
         {
             get { return info; }
         }

@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -1517,6 +1517,7 @@ namespace MeGUI
 
             double fps = (double)fpsBox.Value;
             inputLine = ScriptServer.GetInputLine(this.input.Filename, 
+                                                  null,
                                                   deinterlace.Checked, 
                                                   sourceType, 
                                                   colourCorrect.Checked, 
@@ -1536,7 +1537,7 @@ namespace MeGUI
                 deinterlaceLines = ((DeinterlaceFilter)deinterlaceType.SelectedItem).Script;
             cropLine = ScriptServer.GetCropLine(crop.Checked, Cropping);
             if (!nvResize.Checked)
-                resizeLine = ScriptServer.GetResizeLine(resize.Checked, (int)horizontalResolution.Value, (int)verticalResolution.Value, (ResizeFilterType)(resizeFilterType.SelectedItem as EnumProxy).RealValue,
+                resizeLine = ScriptServer.GetResizeLine(resize.Checked, (int)horizontalResolution.Value, (int)verticalResolution.Value, 0, 0, (ResizeFilterType)(resizeFilterType.SelectedItem as EnumProxy).RealValue,
                                                         crop.Checked, Cropping, (int)horizontalResolution.Maximum, (int)verticalResolution.Maximum);
             denoiseLines = ScriptServer.GetDenoiseLines(noiseFilter.Checked, (DenoiseFilterType)(noiseFilterType.SelectedItem as EnumProxy).RealValue);
 
@@ -1859,8 +1860,8 @@ namespace MeGUI
                     try
                     {
                         MediaInfoFile info = new MediaInfoFile(fileName);
-                        if (info.Info.HasVideo && info.Info.FPS > 0)
-                            frameRateString = info.Info.FPS.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                        if (info.VideoInfo.HasVideo && info.VideoInfo.FPS > 0)
+                            frameRateString = info.VideoInfo.FPS.ToString(System.Globalization.CultureInfo.InvariantCulture);
                     }
                     catch (Exception)
                     { }
@@ -1973,25 +1974,25 @@ namespace MeGUI
                 this.input.Filename = strSourceFileName;
                 file = player.File;
                 reader = player.Reader;
-                this.fpsBox.Value = (decimal)file.Info.FPS;
-                if (file.Info.FPS.Equals(25.0)) // disable ivtc for pal sources
+                this.fpsBox.Value = (decimal)file.VideoInfo.FPS;
+                if (file.VideoInfo.FPS.Equals(25.0)) // disable ivtc for pal sources
 					this.tvTypeLabel.Text = "PAL";
 				else
 					this.tvTypeLabel.Text = "NTSC";
-                horizontalResolution.Maximum = file.Info.Width;
-                verticalResolution.Maximum = file.Info.Height;
-                horizontalResolution.Value = file.Info.Width;
-                verticalResolution.Value = file.Info.Height;
+                horizontalResolution.Maximum = file.VideoInfo.Width;
+                verticalResolution.Maximum = file.VideoInfo.Height;
+                horizontalResolution.Value = file.VideoInfo.Width;
+                verticalResolution.Value = file.VideoInfo.Height;
                 if (File.Exists(strSourceFileName))
                 {
                     MediaInfoFile oInfo = new MediaInfoFile(strSourceFileName);
-                    arChooser.Value = oInfo.Info.DAR;
+                    arChooser.Value = oInfo.VideoInfo.DAR;
                 }
                 else
-                    arChooser.Value = file.Info.DAR;
+                    arChooser.Value = file.VideoInfo.DAR;
 
-                cropLeft.Maximum = cropRight.Maximum = file.Info.Width / 2;
-                cropTop.Maximum = cropBottom.Maximum = file.Info.Height / 2;
+                cropLeft.Maximum = cropRight.Maximum = file.VideoInfo.Width / 2;
+                cropTop.Maximum = cropBottom.Maximum = file.VideoInfo.Height / 2;
                 /// Commented out to ensure to keep the source file resolution when opening it
                 /// if (resize.Enabled && resize.Checked)
                 ///    suggestResolution.Checked = true;
@@ -2174,7 +2175,7 @@ namespace MeGUI
                 Dar? suggestedDar;
 
                 bool signalAR = this.signalAR.Checked;
-                int scriptVerticalResolution = Resolution.suggestResolution((int)file.Info.Height, (int)file.Info.Width, dar,
+                int scriptVerticalResolution = Resolution.suggestResolution((int)file.VideoInfo.Height, (int)file.VideoInfo.Width, dar,
                     Cropping, (int)horizontalResolution.Value, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out suggestedDar);
 
 
@@ -2187,7 +2188,7 @@ namespace MeGUI
                         do
                         {
                             hres -= 16;
-                            scriptVerticalResolution = Resolution.suggestResolution((int)file.Info.Height, (int)file.Info.Width, dar, Cropping, hres, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out suggestedDar);
+                            scriptVerticalResolution = Resolution.suggestResolution((int)file.VideoInfo.Height, (int)file.VideoInfo.Width, dar, Cropping, hres, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out suggestedDar);
                         }
                         while (scriptVerticalResolution > verticalResolution.Maximum && hres > 0);
                         eventsOn = false;
@@ -2282,7 +2283,7 @@ namespace MeGUI
             {
                 if (detector == null) // We want to start the analysis
                 {
-                    string source = ScriptServer.GetInputLine(input.Filename, false, sourceType, false, false, false, 25, false);
+                    string source = ScriptServer.GetInputLine(input.Filename, null, false, sourceType, false, false, false, 25, false);
                     if (nvDeInt.Enabled) source += ")";
                     detector = new SourceDetector(source,
                         input.Filename, deintIsAnime.Checked,

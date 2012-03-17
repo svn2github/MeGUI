@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -146,7 +146,7 @@ namespace MeGUI
                 using (AvsFile af = AvsFile.ParseScript(scriptBlock))
                 {
                     int i = 0;
-                    int frameCount = (int)af.Info.FrameCount;
+                    int frameCount = (int)af.VideoInfo.FrameCount;
                     bool running = true;
                     new Thread(new ThreadStart(delegate
                     {
@@ -185,7 +185,7 @@ namespace MeGUI
             {
                 using (AvsFile af = AvsFile.ParseScript(script))
                 {
-                    numFrames = (int)af.Info.FrameCount;
+                    numFrames = (int)af.VideoInfo.FrameCount;
                 }
             }
             catch (Exception e)

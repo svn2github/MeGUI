@@ -241,7 +241,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                     {
                         int trackID = 0;
                         if (oVideoInfo.HasVideo)
-                            trackID = oVideoInfo.FirstVideoTrackID;
+                            trackID = oVideoInfo.VideoInfo.FirstTrackID;
                         sb.Append("#trackID=" + trackID);
                     }
                     if (settings.Framerate.HasValue)
@@ -261,7 +261,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                     {
                         int trackID = 0;
                         if (oVideoInfo.HasVideo)
-                            trackID = oVideoInfo.FirstVideoTrackID;
+                            trackID = oVideoInfo.VideoInfo.FirstTrackID;
                         sb.Append("#trackID=" + trackID);
                     }
                     if (settings.Framerate.HasValue)
@@ -289,10 +289,10 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                     {
                         int trackID = 0;
                         int heaac_flag = -1;
-                        if (oInfo.AudioTracks.Count > 0)
+                        if (oInfo.AudioInfo.Tracks.Count > 0)
                         {
-                            trackID = oInfo.AudioTracks[0].TrackID;
-                            heaac_flag = oInfo.AudioTracks[0].AACFlag;
+                            trackID = oInfo.AudioInfo.Tracks[0].TrackID;
+                            heaac_flag = oInfo.AudioInfo.Tracks[0].AACFlag;
                         }
                         sb.Append("#trackID=" + trackID);
                         switch (heaac_flag)
@@ -302,11 +302,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                             default: sb.Append(""); break;
                         }
                     }
-                    else if (oInfo.ACodecs[0] == AudioCodec.AAC)
+                    else if (oInfo.AudioInfo.Codecs[0] == AudioCodec.AAC)
                     {
                         int heaac_flag = -1;
-                        if (oInfo.AudioTracks.Count > 0)
-                            heaac_flag = oInfo.AudioTracks[0].AACFlag;
+                        if (oInfo.AudioInfo.Tracks.Count > 0)
+                            heaac_flag = oInfo.AudioInfo.Tracks[0].AACFlag;
                         switch (heaac_flag)
                         {
                             case 1: sb.Append(":sbr"); break;
