@@ -69,6 +69,12 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
         }
         #endregion
 
+        protected override void checkJobIO()
+        {
+            su.Status = "Muxing MKV...";
+            base.checkJobIO();
+        }
+
         protected override bool checkExitCode
         {
             get { return true; }
