@@ -1,3 +1,4 @@
+2120 [MKV Muxer] improved handling of empty IDX subtitle files
 2119 [MKV Muxer] added job status message during muxing
 2118 [MediaInfo] improved information detection for DVD sources
 2117 [Chapter Creator] improved DVD PGC handling

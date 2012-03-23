@@ -63,7 +63,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
             }
             catch (Exception e)
             {
-                log.LogValue("Exception in getPercentage(" + line + ")", e, MeGUI.core.util.ImageType.Warning);
+                log.LogValue("Exception in getPercentage(" + line + ")", e, ImageType.Warning);
                 return null;
             }
         }
@@ -148,7 +148,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
 
                     if (!oAudioInfo.HasAudio)
                     {
-                        log.Error("No audio track found: " + stream.path);
+                        log.LogEvent("No audio track found: " + stream.path, ImageType.Warning);
                         continue;
                     }
 
@@ -235,6 +235,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                     {
                         List<SubtitleInfo> subTracks;
                         idxReader.readFileProperties(stream.path, out subTracks);
+                        if (subTracks.Count == 0)
+                        {
+                            log.LogEvent("No subtitle track found: " + stream.path, ImageType.Warning);
+                            continue;
+                        }
                         foreach (SubtitleInfo strack in subTracks)
                         {
                             foreach (KeyValuePair<string, string> strLanguage in LanguageSelectionContainer.Languages)
