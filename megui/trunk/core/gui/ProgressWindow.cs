@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -65,6 +65,7 @@ namespace MeGUI
         private ToolStripStatusLabel statusLabel;
         private MeGUI.core.gui.HelpButton helpButton1;
         private ITaskbarList3 taskbarProgress;
+        private ToolStripStatusLabel jobNameLabel;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -147,6 +148,7 @@ namespace MeGUI
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.helpButton1 = new MeGUI.core.gui.HelpButton();
+            this.jobNameLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.groupBox1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -162,8 +164,8 @@ namespace MeGUI
             // 
             // currentVideoFrame
             // 
-            this.currentVideoFrame.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.currentVideoFrame.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.currentVideoFrame.Location = new System.Drawing.Point(173, 41);
             this.currentVideoFrame.Name = "currentVideoFrame";
             this.currentVideoFrame.ReadOnly = true;
@@ -173,8 +175,8 @@ namespace MeGUI
             // 
             // groupBox1
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.totalTime);
             this.groupBox1.Controls.Add(this.totalTimeLabel);
             this.groupBox1.Controls.Add(this.timeElapsed);
@@ -195,8 +197,8 @@ namespace MeGUI
             // 
             // totalTime
             // 
-            this.totalTime.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.totalTime.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.totalTime.Location = new System.Drawing.Point(173, 149);
             this.totalTime.Name = "totalTime";
             this.totalTime.ReadOnly = true;
@@ -215,8 +217,8 @@ namespace MeGUI
             // 
             // timeElapsed
             // 
-            this.timeElapsed.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.timeElapsed.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.timeElapsed.Location = new System.Drawing.Point(173, 122);
             this.timeElapsed.Name = "timeElapsed";
             this.timeElapsed.ReadOnly = true;
@@ -235,8 +237,8 @@ namespace MeGUI
             // 
             // fps
             // 
-            this.fps.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.fps.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.fps.Location = new System.Drawing.Point(173, 95);
             this.fps.Name = "fps";
             this.fps.ReadOnly = true;
@@ -255,8 +257,8 @@ namespace MeGUI
             // 
             // videoData
             // 
-            this.videoData.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.videoData.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.videoData.Location = new System.Drawing.Point(173, 68);
             this.videoData.Name = "videoData";
             this.videoData.ReadOnly = true;
@@ -284,8 +286,8 @@ namespace MeGUI
             // 
             // positionInClip
             // 
-            this.positionInClip.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.positionInClip.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.positionInClip.Location = new System.Drawing.Point(173, 14);
             this.positionInClip.Name = "positionInClip";
             this.positionInClip.ReadOnly = true;
@@ -313,8 +315,8 @@ namespace MeGUI
             // 
             // progress
             // 
-            this.progress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.progress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.progress.Location = new System.Drawing.Point(122, 191);
             this.progress.Name = "progress";
             this.progress.Size = new System.Drawing.Size(195, 23);
@@ -330,8 +332,8 @@ namespace MeGUI
             // 
             // priority
             // 
-            this.priority.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.priority.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.priority.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.priority.Items.AddRange(new object[] {
             "LOW",
@@ -348,6 +350,7 @@ namespace MeGUI
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.jobNameLabel,
             this.statusLabel});
             this.statusStrip1.Location = new System.Drawing.Point(0, 284);
             this.statusStrip1.Name = "statusStrip1";
@@ -372,6 +375,12 @@ namespace MeGUI
             this.helpButton1.Name = "helpButton1";
             this.helpButton1.Size = new System.Drawing.Size(38, 23);
             this.helpButton1.TabIndex = 5;
+            // 
+            // jobNameLabel
+            // 
+            this.jobNameLabel.Name = "jobNameLabel";
+            this.jobNameLabel.Size = new System.Drawing.Size(38, 17);
+            this.jobNameLabel.Text = "[job1]";
             // 
             // ProgressWindow
             // 
@@ -440,6 +449,8 @@ namespace MeGUI
 
                 this.Text = "Status: " + (su.PercentageDoneExact ?? 0M).ToString("0.00") + " %";
                 statusLabel.Text = su.Status ?? "";
+
+                jobNameLabel.Text = "[" + su.JobName + "]";
 
                 progress.Value = su.PercentageDone;
 
