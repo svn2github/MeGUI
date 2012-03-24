@@ -596,6 +596,32 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             return false;
         }
 
+        private bool OpenSourceWithImportAVS(out StringBuilder sbOpen, MediaInfoFile oInfo)
+        {
+            sbOpen = new StringBuilder();
+
+            try
+            {
+                if (oInfo.HasAudio)
+                    sbOpen.AppendFormat("Import(\"{0}\"){1}", audioJob.Input, Environment.NewLine);
+            }
+            catch { }
+
+            string strErrorText = String.Empty;
+            _log.LogEvent("Trying to open the file with Import()", ImageType.Information);
+            if (sbOpen.Length > 0 && AudioUtil.AVSScriptHasAudio(sbOpen.ToString(), out strErrorText))
+            {
+                _log.LogEvent("Successfully opened the file with Import()", ImageType.Information);
+                return true;
+            }
+            sbOpen = new StringBuilder();
+            if (String.IsNullOrEmpty(strErrorText))
+                _log.LogEvent("Failed opening the file with Import()", ImageType.Information);
+            else
+                _log.LogEvent("Failed opening the file with Import(). " + strErrorText, ImageType.Information);
+            return false;
+        }
+
         private bool OpenSourceWithNicAudio(out StringBuilder sbOpen, MediaInfoFile oInfo)
         {
             sbOpen = new StringBuilder();
@@ -750,7 +776,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             MediaInfoFile oInfo = new MediaInfoFile(audioJob.Input, ref _log);
 
             bool bFound = false;
-            if (audioJob.Settings.PreferredDecoder == AudioDecodingEngine.NicAudio)
+            if (oInfo.ContainerFileTypeString.Equals("AVS"))
+            {
+                bFound = OpenSourceWithImportAVS(out script, oInfo);
+            }
+            else if (audioJob.Settings.PreferredDecoder == AudioDecodingEngine.NicAudio)
             {
                 bFound = OpenSourceWithNicAudio(out script, oInfo);
                 if (!bFound)
