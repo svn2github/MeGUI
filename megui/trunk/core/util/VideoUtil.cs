@@ -759,8 +759,7 @@ namespace MeGUI
             try
             {
                 StreamWriter output = new StreamWriter(outputFile);
-                output.WriteLine(
-                    ScriptServer.GetInputLine(filename, null, false, sourceType, false, false, false, -1, false));
+                output.WriteLine(ScriptServer.GetInputLine(filename, null, false, sourceType, false, false, false, -1, false));
                 output.Close();
             }
             catch (IOException)

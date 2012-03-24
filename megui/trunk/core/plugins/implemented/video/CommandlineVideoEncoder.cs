@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2011  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -54,14 +54,11 @@ namespace MeGUI
                 string strAVSFile = String.Empty;
                 try
                 {
-                    StreamReader sr = new StreamReader(job.Input);
+                    StreamReader sr = new StreamReader(job.Input, Encoding.Default);
                     strAVSFile = sr.ReadToEnd();
                     sr.Close();
                 }
-                catch (Exception)
-                {
-
-                }
+                catch (Exception) {}
                 log.LogValue("Avisynth input script", strAVSFile);
             }
             su.Status = "Encoding video...";
