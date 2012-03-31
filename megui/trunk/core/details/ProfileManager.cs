@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -212,8 +212,6 @@ namespace MeGUI
             string file = Path.Combine(GetSaveFolder(path), "SelectedProfiles.xml");
             if (!File.Exists(file)) return;
 
-            deleteDeprecatedEntries(file);
-
             using (Stream s = File.OpenRead(file))
             {
                 try
@@ -242,54 +240,6 @@ namespace MeGUI
                     MessageBox.Show("List of selected profiles could not be loaded.", "Error loading profile", MessageBoxButtons.OK);
                 }
             }
-        }
-
-#warning delete block after the next stable (current 1989)
-        private void deleteDeprecatedEntries(String strFile)
-        {
-            String line; 
-            StringBuilder sbNewFile = new StringBuilder();
-            int counter = 0, iBlock = 0;
-            List<int> arrDeprecated = new List<int>();
-
-            StreamReader file = new StreamReader(strFile);
-            while ((line = file.ReadLine()) != null)
-            {
-                if (line.Equals("  <ArrayOfString>"))
-                {
-                    iBlock++;
-                    counter = 0;
-                }
-                counter++;
-
-                if (iBlock == 1 && (line.Equals("    <string>Snow</string>") || line.Equals("    <string>Aud-X MP3</string>") || line.Equals("    <string>Winamp AAC</string>")))
-                    arrDeprecated.Add(counter);
-                else if (iBlock == 4 && (line.Equals("    <string>Snow</string>") || line.Equals("    <string>Aud-X MP3</string>") || line.Equals("    <string>Winamp AAC</string>")))
-                {
-                    if (line.Contains("Snow"))
-                        sbNewFile.AppendLine("    <string>x264</string>");
-                    else
-                        sbNewFile.AppendLine("    <string>Aften AC-3</string>");
-                }
-                else if (iBlock == 2)
-                {
-                    bool bDelete = false;
-                    foreach (int i in arrDeprecated)
-                    {
-                        if (i == counter)
-                            bDelete = true;
-                    }
-                    if (!bDelete)
-                        sbNewFile.AppendLine(line);
-                }
-                else
-                    sbNewFile.AppendLine(line);
-            }
-            file.Close();
-
-            StreamWriter newfile = new StreamWriter(strFile);
-            newfile.Write(sbNewFile);
-            newfile.Close();
         }
 
         public void LoadProfiles()

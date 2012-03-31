@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -123,19 +123,6 @@ namespace MeGUI
             normalize = 100;
             preferredDecoder = AudioDecodingEngine.NicAudio;
 		}
-
-#warning Deprecated since 2004; delete after next stable release
-        public string ForceDecodingViaDirectShow
-        {
-            get { return "migrated"; }
-            set
-            {
-                if (value.Equals("migrated"))
-                    return;
-                if (value.Equals("true"))
-                    preferredDecoder = AudioDecodingEngine.DirectShow;
-            }
-        }
 
         [XmlIgnore()]
         public AudioDecodingEngine PreferredDecoder

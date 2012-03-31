@@ -420,6 +420,8 @@ namespace MeGUI
 		{
             try
             {
+                // possible to abort job
+                abortButton.Enabled = (su.JobStatus == JobStatus.PROCESSING);
 
                 // Current position
                 positionInClip.Text = (Util.ToString(su.ClipPosition) ?? "---") +

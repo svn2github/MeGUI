@@ -387,7 +387,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                                     target.WriteByte(0);
                             }
                             raiseEvent("Finalizing encoder");
-                            _encoderProcess.WaitForExit();
+                            while (!_encoderProcess.HasExited) // wait until the process has terminated without locking the GUI
+                            {
+                                System.Windows.Forms.Application.DoEvents();
+                                System.Threading.Thread.Sleep(100);
+                            }
                             _readFromStdErrThread.Join();
                             _readFromStdOutThread.Join();
                             if (0 != _encoderProcess.ExitCode)
@@ -399,7 +403,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                             if (!_encoderProcess.HasExited)
                             {
                                 _encoderProcess.Kill();
-                                _encoderProcess.WaitForExit();
+                                while (!_encoderProcess.HasExited) // wait until the process has terminated without locking the GUI
+                                {
+                                    System.Windows.Forms.Application.DoEvents();
+                                    System.Threading.Thread.Sleep(100);
+                                }
                                 _readFromStdErrThread.Join();
                                 _readFromStdOutThread.Join();
                             }

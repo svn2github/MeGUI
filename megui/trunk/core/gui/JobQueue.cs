@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -577,7 +577,7 @@ namespace MeGUI.core.gui
             {
                 int position = this.queueListView.SelectedItems[0].Index;
                 TaggedJob job = jobs[this.queueListView.SelectedItems[0].Text];
-                if (job.Status == JobStatus.PROCESSING) // job is being processed -> do nothing
+                if (job.Status == JobStatus.PROCESSING || job.Status == JobStatus.ABORTING) // job is being processed -> do nothing
                     return;
                 if (job.Status == JobStatus.WAITING) // waiting -> postponed
                     job.Status = JobStatus.POSTPONED;
@@ -663,7 +663,7 @@ namespace MeGUI.core.gui
             EditMenuItem.Enabled = isSelectionEditable();
             EditMenuItem.Checked = false;
 
-            bool canModifySelectedJobs = !AnyJobsHaveStatus(JobStatus.PROCESSING) && this.queueListView.SelectedItems.Count > 0;
+            bool canModifySelectedJobs = !AnyJobsHaveStatus(JobStatus.PROCESSING) && !AnyJobsHaveStatus(JobStatus.ABORTING) && this.queueListView.SelectedItems.Count > 0;
             DeleteMenuItem.Enabled = PostponedMenuItem.Enabled = WaitingMenuItem.Enabled = canModifySelectedJobs;
 
             DeleteMenuItem.Checked = false;
@@ -753,7 +753,7 @@ namespace MeGUI.core.gui
                     item.SubItems[8].Text = "";
                     item.SubItems[9].Text = "";
                 }
-                if (job.Status == JobStatus.DONE || job.Status == JobStatus.PROCESSING)
+                if (job.Status == JobStatus.DONE || job.Status == JobStatus.PROCESSING || job.Status == JobStatus.ABORTING)
                     item.SubItems[7].Text = job.Start.ToLongTimeString();
                 else
                     item.SubItems[7].Text = "";

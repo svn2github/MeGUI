@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -83,19 +83,6 @@ namespace MeGUI
         {
             get { return prerenderVideo; }
             set { prerenderVideo = value; }
-        }
-
-#warning Deprecated since 2031; delete after next stable release
-        public string DontEncodeAudio
-        {
-            get { return "migrated"; }
-            set
-            {
-                if (value.Equals("migrated"))
-                    return;
-                if (value.Equals("true"))
-                    audioEncodingMode = AudioEncodingMode.Never;
-            }
         }
 
         private AudioEncodingMode audioEncodingMode;

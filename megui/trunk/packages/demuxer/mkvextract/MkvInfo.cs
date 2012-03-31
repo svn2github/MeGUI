@@ -72,8 +72,12 @@ namespace MeGUI
                     mkvinfo.Start();
                     mkvinfo.BeginErrorReadLine();
                     mkvinfo.BeginOutputReadLine();
-                    mkvinfo.WaitForExit();
-                    
+                    while (!mkvinfo.HasExited) // wait until the process has terminated without locking the GUI
+                    {
+                        System.Windows.Forms.Application.DoEvents();
+                        System.Threading.Thread.Sleep(100);
+                    }
+
                     if (mkvinfo.ExitCode != 0)
                         _oLog.LogValue("MkvInfo", _strResult, ImageType.Error);
                     else
@@ -113,7 +117,11 @@ namespace MeGUI
                     mkvinfo.Start();
                     mkvinfo.BeginErrorReadLine();
                     mkvinfo.BeginOutputReadLine();
-                    mkvinfo.WaitForExit();
+                    while (!mkvinfo.HasExited) // wait until the process has terminated without locking the GUI
+                    {
+                        System.Windows.Forms.Application.DoEvents();
+                        System.Threading.Thread.Sleep(100);
+                    }
 
                     if (mkvinfo.ExitCode != 0)
                         _oLog.LogValue("MkvExtract", _strResult, ImageType.Error);

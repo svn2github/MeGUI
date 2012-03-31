@@ -148,7 +148,7 @@ namespace MeGUI.core.details
             {
                 foreach (TaggedJob j in jobs)
                 {
-                    if (j.Status == JobStatus.PROCESSING)
+                    if (j.Status == JobStatus.PROCESSING || j.Status == JobStatus.ABORTING)
                     {
                         MessageBox.Show("Can't move '" + j.Name + "' because it is currently processing.", "Can't move job", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         continue;
@@ -257,7 +257,7 @@ namespace MeGUI.core.details
         #region deleting jobs
         internal void DeleteJob(TaggedJob job)
         {
-            if (job.Status == JobStatus.PROCESSING)
+            if (job.Status == JobStatus.PROCESSING || job.Status == JobStatus.ABORTING)
             {
                 MessageBox.Show("You cannot delete a job while it is being processed.", "Deleting job failed", MessageBoxButtons.OK);
                 return;
@@ -303,7 +303,7 @@ namespace MeGUI.core.details
 
         private void reallyDeleteJob(TaggedJob job)
         {
-            if (job.Status == JobStatus.PROCESSING) 
+            if (job.Status == JobStatus.PROCESSING || job.Status == JobStatus.ABORTING) 
                 return;
 
             if (job.Status != JobStatus.DONE && MainForm.Instance.Settings.DeleteIntermediateFiles)
@@ -469,7 +469,6 @@ namespace MeGUI.core.details
             foreach (FileInfo fi in files)
             {
                 string fileName = fi.FullName;
-                updateJobFile(fileName);
                 TaggedJob job = loadJob(fileName);
                 if (job != null && job.Name != null)
                 {
@@ -483,44 +482,13 @@ namespace MeGUI.core.details
 
             foreach (TaggedJob job in allJobs.Values)
             {
-                if (job.Status == JobStatus.PROCESSING)
+                if (job.Status == JobStatus.PROCESSING || job.Status == JobStatus.ABORTING)
                     job.Status = JobStatus.ABORTED;
 
                 job.RequiredJobs = toJobList(job.RequiredJobNames);
                 job.EnabledJobs = toJobList(job.EnabledJobNames);
             }
             loadJobLists();
-        }
-
-        /// <summary>
-        /// dirty workaround!
-        /// </summary>
-#warning delete block after 0.3.6
-        private void updateJobFile(string strFileName)
-        {
-            bool bFound = false;
-
-            StreamReader reader = new StreamReader(strFileName);
-            string content = reader.ReadToEnd();
-            reader.Close();
-
-            if (Regex.IsMatch(content, "<Job xsi:type=\"IndexJob\">"))
-            {
-                bFound = true;
-                content = Regex.Replace(content, "<Job xsi:type=\"IndexJob\">", "<Job xsi:type=\"D2VIndexJob\">");
-            }
-            else if (Regex.IsMatch(content, "<Job xsi:type=\"DGNVIndexJob\">"))
-            {
-                bFound = true;
-                content = Regex.Replace(content, "<Job xsi:type=\"DGNVIndexJob\">", "<Job xsi:type=\"DGIIndexJob\">");
-            }
-
-            if (!bFound)
-                return;
-
-            StreamWriter writer = new StreamWriter(strFileName);
-            writer.Write(content);
-            writer.Close();
         }
 
         internal List<TaggedJob> toJobList(IEnumerable<string> list)

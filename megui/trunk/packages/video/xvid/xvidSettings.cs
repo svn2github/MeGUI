@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -304,20 +304,6 @@ namespace MeGUI
             get { return vhqForBframes; }
             set { vhqForBframes = value; }
         }
-#warning deprecated since 1941
-        public string AdaptiveQuant
-        {
-            get { return "migrated"; }
-            set
-            {
-                if (value.Equals("migrated"))
-                    return;
-                if (value.Equals("false"))
-                    hvsMasking = 0;
-                else if (value.Equals("true"))
-                    hvsMasking = 1;
-            }
-        }
         public bool Interlaced
         {
             get { return interlaced; }
@@ -378,7 +364,6 @@ namespace MeGUI
                 return true;
             xvidSettings otherSettings = (xvidSettings)settings;
             if (
-               this.AdaptiveQuant != otherSettings.AdaptiveQuant ||
                this.AveragingPeriod != otherSettings.AveragingPeriod ||
                this.BframeThreshold != otherSettings.BframeThreshold ||
                this.BQuantOffset != otherSettings.BQuantOffset ||

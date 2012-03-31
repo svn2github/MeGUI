@@ -373,9 +373,12 @@ namespace MeGUI.core.gui
         public void Abort()
         {
             Debug.Assert(IsEncoding);
-            if (currentProcessor == null) return;
+            if (currentProcessor == null || currentJob.Status == JobStatus.ABORTING) 
+                return;
             try
             {
+                currentJob.Status = JobStatus.ABORTING;
+                refreshAll();
                 currentProcessor.stop();
             }
             catch (JobRunException er)
@@ -527,6 +530,8 @@ namespace MeGUI.core.gui
                 {
                     if (pw.IsHandleCreated && pw.Visible) // the window is there, send the update to the window
                     {
+                        TaggedJob job = mainForm.Jobs.ByName(su.JobName);
+                        su.JobStatus = job.Status;
                         pw.BeginInvoke(new UpdateStatusCallback(pw.UpdateStatus), su);
                     }
                 }
@@ -715,6 +720,8 @@ namespace MeGUI.core.gui
         /// </summary>
         private void markJobAborted()
         {
+            if (currentJob == null)
+                return;
             TaggedJob job = currentJob;
             job.Status = JobStatus.ABORTED;
             job.End = DateTime.Now;
@@ -801,7 +808,7 @@ namespace MeGUI.core.gui
 
         internal void UserRequestedAbort()
         {
-            if (currentJob.Status == JobStatus.ABORTED)
+            if (currentJob.Status == JobStatus.ABORTED || currentJob.Status == JobStatus.ABORTING)
             {
                 MessageBox.Show("Job already aborting. Please wait.", "Abort in progress", MessageBoxButtons.OK);
                 return;

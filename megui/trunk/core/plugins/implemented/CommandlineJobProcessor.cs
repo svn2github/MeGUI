@@ -223,7 +223,11 @@ namespace MeGUI
                     mre.Set(); // if it's paused, then unpause
                     su.WasAborted = true;
                     proc.Kill();
-                    proc.WaitForExit(10000);
+                    while (!proc.HasExited) // wait until the process has terminated without locking the GUI
+                    {
+                        System.Windows.Forms.Application.DoEvents();
+                        System.Threading.Thread.Sleep(100);
+                    }
                     return;
                 }
                 catch (Exception e)
