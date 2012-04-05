@@ -392,6 +392,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                                 System.Windows.Forms.Application.DoEvents();
                                 System.Threading.Thread.Sleep(100);
                             }
+                            _encoderProcess.WaitForExit();
                             _readFromStdErrThread.Join();
                             _readFromStdOutThread.Join();
                             if (0 != _encoderProcess.ExitCode)
@@ -408,6 +409,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                                     System.Windows.Forms.Application.DoEvents();
                                     System.Threading.Thread.Sleep(100);
                                 }
+                                _encoderProcess.WaitForExit();
                                 _readFromStdErrThread.Join();
                                 _readFromStdOutThread.Join();
                             }

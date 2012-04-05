@@ -1,4 +1,5 @@
-2124 [Job] improved aborting of Jobs
+2125 [Job] improved aborting of jobs part II
+2124 [Job] improved aborting of jobs
 2123 [Log] use system default encoding for AviSynth input script
 2122 [Progress Window] added job name. Feature request #3488205
 2121 [Audio Encoder] Import() will be used for AVS input files. Bug #3506283

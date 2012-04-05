@@ -228,6 +228,7 @@ namespace MeGUI
                         System.Windows.Forms.Application.DoEvents();
                         System.Threading.Thread.Sleep(100);
                     }
+                    proc.WaitForExit();
                     return;
                 }
                 catch (Exception e)

@@ -762,12 +762,12 @@ namespace MeGUI.packages.tools.hdbdextractor
                     while (!compiler.HasExited)
                         if (backgroundWorker.CancellationPending)
                             compiler.Kill();
-
                     while (!compiler.HasExited) // wait until the process has terminated without locking the GUI
                     {
                         System.Windows.Forms.Application.DoEvents();
                         System.Threading.Thread.Sleep(100);
                     }
+                    compiler.WaitForExit();
                 }
                 catch (Exception ex)
                 {

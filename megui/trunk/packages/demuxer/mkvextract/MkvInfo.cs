@@ -77,6 +77,7 @@ namespace MeGUI
                         System.Windows.Forms.Application.DoEvents();
                         System.Threading.Thread.Sleep(100);
                     }
+                    mkvinfo.WaitForExit();
 
                     if (mkvinfo.ExitCode != 0)
                         _oLog.LogValue("MkvInfo", _strResult, ImageType.Error);
@@ -122,6 +123,7 @@ namespace MeGUI
                         System.Windows.Forms.Application.DoEvents();
                         System.Threading.Thread.Sleep(100);
                     }
+                    mkvinfo.WaitForExit();
 
                     if (mkvinfo.ExitCode != 0)
                         _oLog.LogValue("MkvExtract", _strResult, ImageType.Error);
