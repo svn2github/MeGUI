@@ -1,3 +1,4 @@
+2126 [AVS Script Creator] crop values will only be added to the script if necessary
 2125 [Job] improved aborting of jobs part II
 2124 [Job] improved aborting of jobs
 2123 [Log] use system default encoding for AviSynth input script

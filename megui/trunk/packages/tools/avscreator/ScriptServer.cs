@@ -209,27 +209,35 @@ namespace MeGUI
 
         public static string GetCropLine(bool crop, CropValues cropValues)
         {
-            return GetCropLine(crop, cropValues.left, cropValues.top, cropValues.right, cropValues.bottom);
-        }
-
-        public static string GetCropLine(bool crop, int cropLeft, int cropTop, int cropRight, int cropBottom)
-        {
             string cropLine = "#crop";
-            if (crop)
+            if (crop & cropValues.isCropped())
             {
-                cropLine = string.Format("crop( {0}, {1}, {2}, {3}){4}", cropLeft, cropTop, -cropRight, -cropBottom, Environment.NewLine);
+                cropLine = string.Format("crop({0}, {1}, {2}, {3})", cropValues.left, cropValues.top, -cropValues.right, -cropValues.bottom);
             }
             return cropLine;
         }
 
         public static string GetResizeLine(bool resize, int hres, int vres, int hresWithBorder, int vresWithBorder, ResizeFilterType type, bool crop, CropValues cropValues, int originalHRes, int originalVRes)
         {
-            if (!resize)
-                return "#resize";
+            int iInputHresAfterCrop = originalHRes;
+            int iInputVresAfterCrop = originalVRes;
+            if (crop)
+            {
+                iInputHresAfterCrop = iInputHresAfterCrop - cropValues.left - cropValues.right;
+                iInputVresAfterCrop = iInputVresAfterCrop - cropValues.top - cropValues.bottom;
+            }
 
-            if (((crop && !cropValues.isCropped()) || !crop) && hres == originalHRes && vres == originalVRes)
-                return "#resize";
-
+            // only resize if necessary
+            if (!resize || (hres == iInputHresAfterCrop && vres == iInputVresAfterCrop))
+            {
+                if (hresWithBorder > iInputHresAfterCrop || vresWithBorder > iInputVresAfterCrop)
+                    return string.Format("AddBorders({0},{1},{2},{3})",
+                        Math.Floor((hresWithBorder - iInputHresAfterCrop) / 2.0), Math.Floor((vresWithBorder - iInputVresAfterCrop) / 2.0),
+                        Math.Ceiling((hresWithBorder - iInputHresAfterCrop) / 2.0), Math.Ceiling((vresWithBorder - iInputVresAfterCrop) / 2.0));
+                else
+                    return "#resize";
+            }
+                
             EnumProxy p = EnumProxy.Create(type);
             if (p.Tag != null)
                 if (hresWithBorder > hres || vresWithBorder > vres)
