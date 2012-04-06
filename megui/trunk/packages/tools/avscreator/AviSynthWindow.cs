@@ -2127,8 +2127,6 @@ namespace MeGUI
 		#region autocrop
 		/// <summary>
 		/// gets the autocrop values
-		/// we start at 25% of the video, then advance by 5% and analyze 10 frames in total
-		/// (thus at position 25%, 30%, 35%, ... 70%)
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -2140,22 +2138,39 @@ namespace MeGUI
                     "AutoCropping not possible",MessageBoxButtons.OK,MessageBoxIcon.Error);
                 return;
             }
-            CropValues final = Autocrop.autocrop(reader);
-			bool error = (final.left == -1);
-			if (!error)
-			{
-				cropLeft.Value = final.left;
-				cropTop.Value = final.top;
-				cropRight.Value = final.right;
-				cropBottom.Value = final.bottom;
-				if (!crop.Checked)
-					crop.Checked = true;
+
+            // don't lock up the GUI, start a new thread
+            this.Cursor = System.Windows.Forms.Cursors.WaitCursor;
+            System.Threading.Thread t = new System.Threading.Thread(new System.Threading.ThreadStart(delegate
+            {
+                CropValues final = Autocrop.autocrop(reader);
+                Invoke(new MethodInvoker(delegate
+                {
+                    setCropValues(final);
+                }));
+            }));
+            t.IsBackground = true;
+            t.Start();
+		}
+
+        private void setCropValues(CropValues cropValues)
+        {
+            this.Cursor = System.Windows.Forms.Cursors.Default;
+            bool error = (cropValues.left == -1);
+            if (!error)
+            {
+                cropLeft.Value = cropValues.left;
+                cropTop.Value = cropValues.top;
+                cropRight.Value = cropValues.right;
+                cropBottom.Value = cropValues.bottom;
+                if (!crop.Checked)
+                    crop.Checked = true;
                 chAutoPreview_CheckedChanged(null, null);
                 this.showScript();
-			}
-			else
-				MessageBox.Show("I'm afraid I was unable to find 3 frames that have matching crop values");
-		}
+            }
+            else
+                MessageBox.Show("I'm afraid I was unable to find more than 5 frames that have matching crop values");
+        }
 
 		/// <summary>
 		/// if enabled, each change of the horizontal resolution triggers this method
