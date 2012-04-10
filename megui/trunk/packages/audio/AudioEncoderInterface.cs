@@ -632,7 +632,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             return false;
         }
 
-        private bool OpenSourceWithNicAudio(out StringBuilder sbOpen, MediaInfoFile oInfo)
+        private bool OpenSourceWithNicAudio(out StringBuilder sbOpen, MediaInfoFile oInfo, bool bForce)
         {
             sbOpen = new StringBuilder();
             switch (Path.GetExtension(audioJob.Input).ToLower())
@@ -740,19 +740,17 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                     break;
             }
 
+            _log.LogEvent("Trying to open the file with NicAudio", ImageType.Information);
+
             string strErrorText = String.Empty;
-            if (oInfo.AudioInfo.Tracks.Count > 0 && oInfo.AudioInfo.Tracks[0].Type.Equals("DTS-HD Master Audio"))
+            if (oInfo.AudioInfo.Tracks.Count > 0 && oInfo.AudioInfo.Tracks[0].Type.Equals("DTS-HD Master Audio") && !bForce)
             {
-                _log.LogEvent("DTS-MA is blocked when using NicAudio", ImageType.Information);
+                _log.LogEvent("DTS-MA is blocked in the first place when using NicAudio", ImageType.Information);
             }
-            else
+            else if (sbOpen.Length > 0 && AudioUtil.AVSScriptHasAudio(sbOpen.ToString(), out strErrorText))
             {
-                _log.LogEvent("Trying to open the file with NicAudio", ImageType.Information);
-                if (sbOpen.Length > 0 && AudioUtil.AVSScriptHasAudio(sbOpen.ToString(), out strErrorText))
-                {
-                    _log.LogEvent("Successfully opened the file with NicAudio", ImageType.Information);
-                    return true;
-                }
+                _log.LogEvent("Successfully opened the file with NicAudio", ImageType.Information);
+                return true;
             }
             
             sbOpen = new StringBuilder();
@@ -792,7 +790,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             }
             else if (audioJob.Settings.PreferredDecoder == AudioDecodingEngine.NicAudio)
             {
-                bFound = OpenSourceWithNicAudio(out script, oInfo);
+                bFound = OpenSourceWithNicAudio(out script, oInfo, false);
                 if (!bFound)
                     bFound = OpenSourceWithFFAudioSource(out script);
                 if (!bFound)
@@ -802,7 +800,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             {
                 bFound = OpenSourceWithFFAudioSource(out script);
                 if (!bFound)
-                    bFound = OpenSourceWithNicAudio(out script, oInfo);
+                    bFound = OpenSourceWithNicAudio(out script, oInfo, false);
                 if (!bFound)
                     bFound = OpenSourceWithDirectShow(out script, oInfo);
             }
@@ -810,10 +808,13 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             {
                 bFound = OpenSourceWithDirectShow(out script, oInfo);
                 if (!bFound)
-                    bFound = OpenSourceWithNicAudio(out script, oInfo);
+                    bFound = OpenSourceWithNicAudio(out script, oInfo, false);
                 if (!bFound)
                     bFound = OpenSourceWithFFAudioSource(out script);
             }
+
+            if (!bFound && oInfo.AudioInfo.Tracks.Count > 0 && oInfo.AudioInfo.Tracks[0].Type.Equals("DTS-HD Master Audio"))
+                bFound = OpenSourceWithNicAudio(out script, oInfo, true);
 
             if (!bFound)
             {
