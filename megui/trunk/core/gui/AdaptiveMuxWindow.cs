@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -307,11 +307,11 @@ namespace MeGUI
             knownVideoType = videoType;
             knownAudioTypes = audioTypes;
 
-            // disable everything
+            // disable controls where required
             videoGroupbox.Enabled = false;
 
             for (int i = 0; i < audioStreams.Length; ++i)
-                audioTracks[i].Enabled = false;
+                audioTracks[i].SetAutoEncodeMode();
 
             this.output.Filename = output;
             this.splitting.Value = splitSize;

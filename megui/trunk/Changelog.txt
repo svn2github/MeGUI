@@ -1,3 +1,4 @@
+2129 [AutoEncode] enabled option to set the audio language
 2128 [Audio Encoder] NicAudio will be tried for DTS-MA decoding when DirectShow and FFAudioSource fail
 2127 [AVS Script Creator] improved automatic cropping
 2126 [AVS Script Creator] crop values will only be added to the script if necessary
@@ -21,7 +22,7 @@ Features:
 [File Size Selector] removed some default values and added a control in the settings to add custom file size values
 [File Size Selector] all other controls will not save anymore custom values to avoid problems in AutoEncode + OneClick
 [Job] delete intermediate files also during job deletion if specified in the settings
-[Video Player] changed default start position to the middle if "Improved AVS opening" is selected 
+[Video Player] changed default start position to the middle if "Improved AVS opening" is selected
 [x264] force --keyint-min 1 with Blu-ray (requires x264 revision 2149+)
 [x264] replaced vfw4x264 with avs4x264mod. Details:
 [x264] http://forum.doom9.org/showthread.php?t=162656

@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2011  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -136,6 +136,11 @@ namespace MeGUI.core.details.mux
         public void SetLanguage(string lang)
         {
             subtitleLanguage.SelectedItem = lang;
+        }
+
+        public void SetAutoEncodeMode()
+        {
+            audioDelay.Enabled = input.Enabled = subName.Enabled = false;
         }
 
         private void removeSubtitleTrack_Click(object sender, EventArgs e)

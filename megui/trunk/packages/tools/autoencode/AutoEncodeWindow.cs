@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2011  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -694,6 +694,19 @@ namespace MeGUI
                 string muxedOutput = this.muxedOutput.Filename;
                 ContainerType cot = this.container.SelectedItem as ContainerType;
 
+                // determine audio language 
+                foreach (MuxStream stream in audio)
+                {
+                    foreach (KeyValuePair<string, string> strLanguage in LanguageSelectionContainer.Languages)
+                    {
+                        if (Path.GetFileNameWithoutExtension(stream.path).ToLower().Contains(strLanguage.Key.ToLower()))
+                        {
+                            stream.language = strLanguage.Key;
+                            break;
+                        }
+                    }
+                }
+
                 if (addSubsNChapters.Checked)
 				{
                     AdaptiveMuxWindow amw = new AdaptiveMuxWindow(mainForm);
@@ -726,11 +739,12 @@ namespace MeGUI
                 {
                     if (stream.path == a.Output)
                     {
-                        matchFound = true; // In this case we have found a file which needs to be encoded
+                        matchFound = true;              // found a file which needs to be encoded
+                        a.Language = stream.language;   // set language
                         break;
                     }
                 }
-                if (!matchFound) // in this case we have not found any files which will be encoded first to produce this file
+                if (!matchFound) // not found any files which will be encoded first to produce this file
                 {
                     newAudio.Add(stream);
                 }
