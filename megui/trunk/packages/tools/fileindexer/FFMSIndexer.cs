@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -72,6 +72,8 @@ namespace MeGUI
                 if (job.DemuxMode > 0)
                     sb.Append("-t -1 ");
                 sb.Append("-f \"" + job.Input + "\"");
+                if (!String.IsNullOrEmpty(job.Output))
+                    sb.Append(" \"" + job.Output + "\"");
                 return sb.ToString();
             }
         }
@@ -80,8 +82,12 @@ namespace MeGUI
         {
             try
             {
-                if (File.Exists(job.Output))
-                    File.Delete(job.Output);
+                if (!String.IsNullOrEmpty(job.Output))
+                {
+                    FileUtil.ensureDirectoryExists(Path.GetDirectoryName(job.Output));
+                    if (File.Exists(job.Output))
+                        File.Delete(job.Output);
+                }
             }
             finally
             {
@@ -100,7 +106,7 @@ namespace MeGUI
                     StringBuilder strAVSScript = new StringBuilder();
                     String strDLLPath = Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.FFMSIndexPath), "ffms2.dll");
                     strAVSScript.AppendLine("LoadPlugin(\"" + strDLLPath + "\")");
-                    strAVSScript.AppendLine("FFAudioSource(\"" + job.Input + "\", " + iCurrentTrack + ")");
+                    strAVSScript.AppendLine("FFAudioSource(\"" + job.Input + "\", track=" + iCurrentTrack + (!string.IsNullOrEmpty(job.Output) ? ", cachefile=\"" + job.Output + "\"" : String.Empty) + ")");
 
                     // is this an audio track?
                     string strErrorText;
@@ -116,6 +122,8 @@ namespace MeGUI
                         // write avs file
                         string strAudioAVSFile;
                         strAudioAVSFile = job.Input + "_track_" + (oAudioTrack.Index + 1) + "_" + oAudioTrack.Language.ToLower() + ".avs";
+                        if (!String.IsNullOrEmpty(job.Output))
+                            strAudioAVSFile = Path.Combine(Path.GetDirectoryName(job.Output), Path.GetFileName(strAudioAVSFile));
                         try
                         {
                             strAVSScript.AppendLine(@"# detected channels: " + oAudioTrack.NbChannels);

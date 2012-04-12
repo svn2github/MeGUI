@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -57,6 +57,19 @@ public static readonly JobProcessorFactory Factory =
                 base.ProcessLine(line, stream);
 
             lastLine = line;
+        }
+
+        protected override void checkJobIO()
+        {
+            try
+            {
+                if (!String.IsNullOrEmpty(job.Output))
+                    FileUtil.ensureDirectoryExists(Path.GetDirectoryName(job.Output));
+            }
+            finally
+            {
+                base.checkJobIO();
+            }
         }
 
         protected override string Commandline

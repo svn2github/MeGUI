@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -30,11 +30,14 @@ namespace MeGUI
         {
         }
 
-        public FFMSIndexJob(string input, int demuxType, List<AudioTrackInfo> audioTracks, bool loadSources) : base()
+        public FFMSIndexJob(string input, string indexFile, int demuxType, List<AudioTrackInfo> audioTracks, bool loadSources) : base()
         {
             Input = input;
             LoadSources = loadSources;
-            Output = input + ".ffindex";
+            if (String.IsNullOrEmpty(indexFile))
+                Output = input + ".ffindex";
+            else
+                Output = indexFile;
 
             DemuxMode = demuxType;
             if (audioTracks == null)

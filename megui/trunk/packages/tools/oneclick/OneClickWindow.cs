@@ -716,7 +716,7 @@ namespace MeGUI
                         OneClickPostProcessingJob ocJob = new OneClickPostProcessingJob(input.Filename, input.Filename + ".ffindex", dpp, FileIndexerWindow.IndexType.FFMS);
                         if (oMkvInfo != null)
                         {
-                            job = new FFMSIndexJob(input.Filename, 0, null, false);
+                            job = new FFMSIndexJob(input.Filename, null, 0, null, false);
 
                             List<MkvInfoTrack> oExtractTrack = new List<MkvInfoTrack>();
                             foreach (AudioTrackInfo oStream in audioTracks)
@@ -748,7 +748,7 @@ namespace MeGUI
                         }
                         else
                         {
-                            job = new FFMSIndexJob(input.Filename, 2, audioTracks, false);
+                            job = new FFMSIndexJob(input.Filename, null, 2, audioTracks, false);
                             c = new SequentialChain(new SequentialChain(job), new SequentialChain(ocJob));
                         }
                         mainForm.Jobs.addJobsWithDependencies(c);

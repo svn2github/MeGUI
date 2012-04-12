@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -98,6 +98,19 @@ namespace MeGUI
                 else
                     sb.Append(" -OM=0"); // no audio demux
                 return sb.ToString();
+            }
+        }
+
+        protected override void checkJobIO()
+        {
+            try
+            {
+                if (!String.IsNullOrEmpty(job.Output))
+                    FileUtil.ensureDirectoryExists(Path.GetDirectoryName(job.Output));
+            }
+            finally
+            {
+                base.checkJobIO();
             }
         }
         

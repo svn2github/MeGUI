@@ -938,7 +938,7 @@ namespace MeGUI
             foreach (AudioTrackInfo ati in AudioTracks.CheckedItems)
                 audioTracks.Add(ati);
 
-            return new FFMSIndexJob(this.input.Filename, demuxType, audioTracks, loadOnComplete.Checked);
+            return new FFMSIndexJob(this.input.Filename, null, demuxType, audioTracks, loadOnComplete.Checked);
         }
 		#endregion
 		#region properties
