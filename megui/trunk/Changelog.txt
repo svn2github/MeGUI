@@ -1,3 +1,4 @@
+2132 [DGI Indexer] fixed getting the film value
 2131 [FFMS] prepared indexer for handling index files stored in other locations
 2130 [HD Streams Extractor] improved job queuing when no feature is selected
 2129 [AutoEncode] enabled option to set the audio language
