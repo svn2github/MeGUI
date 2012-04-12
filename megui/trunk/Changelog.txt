@@ -1,3 +1,4 @@
+2133 [VobSubber] added job status message during processing
 2132 [DGI Indexer] fixed getting the film value
 2131 [FFMS] prepared indexer for handling index files stored in other locations
 2130 [HD Streams Extractor] improved job queuing when no feature is selected
