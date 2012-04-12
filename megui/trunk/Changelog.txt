@@ -1,5 +1,6 @@
+2130 [HD Streams Extractor] improved job queuing when no feature is selected
 2129 [AutoEncode] enabled option to set the audio language
-2128 [Audio Encoder] NicAudio will be tried for DTS-MA decoding when DirectShow and FFAudioSource fail
+2128 [Audio Encoder] NicAudio will be tried for DTS-MA decoding when DirectShowSource and FFAudioSource fail
 2127 [AVS Script Creator] improved automatic cropping
 2126 [AVS Script Creator] crop values will only be added to the script if necessary
 2125 [Job] improved aborting of jobs part II

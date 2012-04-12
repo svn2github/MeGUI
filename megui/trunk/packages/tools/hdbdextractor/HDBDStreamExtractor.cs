@@ -1139,28 +1139,32 @@ namespace MeGUI.packages.tools.hdbdextractor
                 folderBrowserDialog1.Description = "Choose an input directory";
                 folderBrowserDialog1.ShowNewFolderButton = false;
                 dr = folderBrowserDialog1.ShowDialog();
+                if (dr != DialogResult.OK)
+                    return;
                 if (folderBrowserDialog1.SelectedPath.EndsWith(":\\"))
-                     myinput = folderBrowserDialog1.SelectedPath;
-                else myinput = folderBrowserDialog1.SelectedPath + System.IO.Path.DirectorySeparatorChar;
+                    myinput = folderBrowserDialog1.SelectedPath;
+                else 
+                    myinput = folderBrowserDialog1.SelectedPath + System.IO.Path.DirectorySeparatorChar;
                 if (dr == DialogResult.OK)
                     MainForm.Instance.Settings.LastSourcePath = myinput;
             }
             else
             {
                 dr = openFileDialog1.ShowDialog();
+                if (dr != DialogResult.OK)
+                    return;
                 inputType = 2; 
                 foreach (String file in openFileDialog1.FileNames)
                 {
                     if (idx > 0) // seamless branching
-                         myinput += "+" + file;
-                    else myinput = file;
+                        myinput += "+" + file;
+                    else 
+                        myinput = file;
                     idx++;
                 }
             }
 
-            if (dr == DialogResult.OK)
-                FolderInputTextBox.Text = myinput;
-
+            FolderInputTextBox.Text = myinput;
             if (FolderInputTextBox.Text != "")
             {
                 string projectPath;
@@ -1176,13 +1180,7 @@ namespace MeGUI.packages.tools.hdbdextractor
                             FolderOutputTextBox.Text = FolderInputTextBox.Text.Substring(0, FolderInputTextBox.Text.LastIndexOf("\\") + 1);
                     }
                 }
-                if (!System.IO.File.Exists(settings.EAC3toPath))
-                {
-                    MessageBox.Show("EAC3to not found. Please use the updater.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-                else
-                    FeatureButton_Click(null, null);
+                FeatureButton_Click(null, null);
             }
         }
 
@@ -1205,39 +1203,38 @@ namespace MeGUI.packages.tools.hdbdextractor
             if (string.IsNullOrEmpty(FolderInputTextBox.Text))
             {
                 MessageBox.Show("Configure input source folder prior to retrieving features.", "Feature Retrieval", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
+                return;
+            }
+
+            InitBackgroundWorker();
+            eac3toArgs args = new eac3toArgs();
+
+            args.eac3toPath = eac3toPath;
+            args.inputPath = FolderInputTextBox.Text;
+            args.workingFolder = string.IsNullOrEmpty(FolderOutputTextBox.Text) ? FolderOutputTextBox.Text : System.IO.Path.GetDirectoryName(args.eac3toPath);
+            if (FolderSelection.Checked)
+            {
+                args.resultState = ResultState.FeatureCompleted;
+                args.args = string.Empty;
+
+                features = new List<Feature>();
+                backgroundWorker.ReportProgress(0, "Retrieving features...");
+                WriteToLog("Retrieving features...");
             }
             else
             {
-                InitBackgroundWorker();
-                eac3toArgs args = new eac3toArgs();
+                args.resultState = ResultState.StreamCompleted;
+                args.args = string.Empty;
 
-                args.eac3toPath = eac3toPath;
-                args.inputPath = FolderInputTextBox.Text;
-                args.workingFolder = string.IsNullOrEmpty(FolderOutputTextBox.Text) ? FolderOutputTextBox.Text : System.IO.Path.GetDirectoryName(args.eac3toPath);
-                if (FolderSelection.Checked)
-                {
-                    args.resultState = ResultState.FeatureCompleted;
-                    args.args = string.Empty;
-
-                    features = new List<Feature>();
-                    backgroundWorker.ReportProgress(0, "Retrieving features...");
-                    WriteToLog("Retrieving features...");
-                }
-                else
-                {
-                    args.resultState = ResultState.StreamCompleted;
-                    args.args = string.Empty;
-
-                    streams = new List<Stream>();
-                    backgroundWorker.ReportProgress(0, "Retrieving streams...");
-                    WriteToLog("Retrieving streams...");
+                streams = new List<Stream>();
+                backgroundWorker.ReportProgress(0, "Retrieving streams...");
+                WriteToLog("Retrieving streams...");
  
-                }
-                FeatureButton.Enabled = false;
-                Cursor = Cursors.WaitCursor;
-
-                backgroundWorker.RunWorkerAsync(args);
             }
+            FeatureButton.Enabled = false;
+            Cursor = Cursors.WaitCursor;
+
+            backgroundWorker.RunWorkerAsync(args);
         }
 
         private void StreamDataGridView_DataSourceChanged(object sender, EventArgs e)
@@ -1328,31 +1325,28 @@ namespace MeGUI.packages.tools.hdbdextractor
                 MessageBox.Show("Configure output target folder prior to queueing job.", "Queue Job", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
                 return;
             }
-
             if (StreamDataGridView.Rows.Count == 0)
             {
                 MessageBox.Show("Retrieve streams prior to queueing job.", "Queue Job", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
                 return;
             }
-
             if (!IsStreamCheckedForExtract())
             {
                 MessageBox.Show("Select stream(s) to extract prior to queueing job.", "Queue Job", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
                 return;
             }
-
+            if (FolderSelection.Checked && FeatureDataGridView.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Select feature prior to queueing job.", "Queue Job", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
+                return;
+            }
             if (!Drives.ableToWriteOnThisDrive(System.IO.Path.GetPathRoot(FolderOutputTextBox.Text)))
             {
                 MessageBox.Show("MeGUI cannot write on " + System.IO.Path.GetPathRoot(FolderOutputTextBox.Text) +
-                                "\nPlease, select another Output path.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                "\nPlease, select another Output path.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
                 return;
             }
 
-            if (!System.IO.File.Exists(settings.EAC3toPath))
-            {
-                MessageBox.Show("EAC3to not found. Please use the updater.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
 
             eac3toArgs args = new eac3toArgs();
             HDStreamsExJob job;
@@ -1377,7 +1371,8 @@ namespace MeGUI.packages.tools.hdbdextractor
             // Load to MeGUI job queue
             if (FolderSelection.Checked)
                 job = new HDStreamsExJob(dummyInput, this.FolderOutputTextBox.Text+"xxx", args.featureNumber, args.args, inputType);
-            else job = new HDStreamsExJob(this.FolderInputTextBox.Text, this.FolderOutputTextBox.Text+"xxx", null, args.args, inputType);
+            else 
+                job = new HDStreamsExJob(this.FolderInputTextBox.Text, this.FolderOutputTextBox.Text+"xxx", null, args.args, inputType);
 
             lastJob = job;
             info.Jobs.addJobsToQueue(job);
