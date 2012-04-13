@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -185,7 +185,7 @@ namespace MeGUI.core.gui
                     return null;
 
                 return new AudioJob(this.AudioInput, this.AudioOutput, this.cuts.Filename,
-                    this.AudCodecSettings, (int)delay.Value, null);
+                    this.AudCodecSettings, (int)delay.Value, null, null);
             }
             set
             {

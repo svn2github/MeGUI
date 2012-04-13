@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012  Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@ namespace MeGUI.core.util
 {
     public class PrettyFormatting
     {
-        public static string ExtractWorkingName(string fileName)
+        public static string ExtractWorkingName(string fileName, string strReplace, string strReplaceWith)
         {
             string A = Path.GetFileNameWithoutExtension(fileName); // In case they all fail
 
@@ -55,7 +55,8 @@ namespace MeGUI.core.util
             }
 
             // Format it nicely:
-            A = A.Replace("_", " ");
+            if (!String.IsNullOrEmpty(strReplace))
+                A = A.Replace(strReplace, strReplaceWith);
             return A;
         }
 

@@ -350,7 +350,7 @@ namespace MeGUI
             if (string.IsNullOrEmpty(workingDirectory.Filename = mainForm.Settings.DefaultOutputDir))
                 workingDirectory.Filename = Path.GetDirectoryName(fileName);
 
-            workingName.Text = PrettyFormatting.ExtractWorkingName(fileName);
+            workingName.Text = PrettyFormatting.ExtractWorkingName(fileName, "_", " ");
             this.updateFilename();
             this.ar.Value = ar;            
 
@@ -551,7 +551,7 @@ namespace MeGUI
                             audioConfigControl[i].Settings.EncoderType.ACodec.ID.Equals(strAudioCodec, StringComparison.InvariantCultureIgnoreCase)))
                             ocAudioTracks.Add(new OneClickAudioTrack(null, new MuxStream(aInput, info.Language, info.Name, delay, false, false, null), oAudioTrackInfo, oMkvInfoTrack));
                         else
-                            ocAudioTracks.Add(new OneClickAudioTrack(new AudioJob(aInput, null, null, audioConfigControl[i].Settings, delay, strLanguage), null, oAudioTrackInfo, oMkvInfoTrack));
+                            ocAudioTracks.Add(new OneClickAudioTrack(new AudioJob(aInput, null, null, audioConfigControl[i].Settings, delay, strLanguage, null), null, oAudioTrackInfo, oMkvInfoTrack));
                     }
 
                     OneClickPostprocessingProperties dpp = new OneClickPostprocessingProperties();
@@ -628,7 +628,7 @@ namespace MeGUI
                         }
                         else if (Path.GetExtension(input.Filename).ToLower().Equals(".vob"))
                         {
-                            chapterFile.Filename = VideoUtil.getChaptersFromIFO(input.Filename, false);
+                            chapterFile.Filename = VideoUtil.getChaptersFromIFO(input.Filename, false, null, 1);
                             dpp.FilesToDelete.Add(chapterFile.Filename);
                         }
                     }

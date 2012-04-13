@@ -87,15 +87,17 @@ namespace MeGUI
         /// </summary>
         /// <param name="fileName"></param>
         /// <returns>chapter file name</returns>
-        public static String getChaptersFromIFO(string fileName, bool qpfile)
+        public static String getChaptersFromIFO(string fileName, bool qpfile, string outputDirectory, int iPGCNumber)
         {
             if (Path.GetExtension(fileName.ToLower()) == ".vob")
             {
                 string ifoFile;
                 string fileNameNoPath = Path.GetFileName(fileName);
+                if (String.IsNullOrEmpty(outputDirectory))
+                    outputDirectory = Path.GetDirectoryName(fileName);
 
                 // we check the main IFO
-                if (fileNameNoPath.Substring(0, 4) == "VTS_")
+                if (fileNameNoPath.Substring(0, 4).ToUpper() == "VTS_")
                     ifoFile = fileName.Substring(0, fileName.LastIndexOf("_")) + "_0.IFO";
                 else 
                     ifoFile = Path.ChangeExtension(fileName, ".IFO");
@@ -103,16 +105,16 @@ namespace MeGUI
                 if (File.Exists(ifoFile))
                 {
                     ChapterInfo pgc;
-                    ChapterExtractor ex = new IfoExtractor();
-                    pgc = ex.GetStreams(ifoFile)[0];
-                    if (Drives.ableToWriteOnThisDrive(Path.GetPathRoot(ifoFile)))
+                    IfoExtractor ex = new IfoExtractor();
+                    pgc = ex.GetChapterInfo(ifoFile, iPGCNumber);
+                    if (Drives.ableToWriteOnThisDrive(Path.GetPathRoot(outputDirectory)))
                     {
                         if (qpfile)
-                            pgc.SaveQpfile(Path.GetDirectoryName(ifoFile) + "\\" + fileNameNoPath.Substring(0, 6) + " - Chapter Information.qpf");
+                            pgc.SaveQpfile(outputDirectory + "\\" + fileNameNoPath.Substring(0, 6) + " - Chapter Information.qpf");
 
                         // save always this format - some users want it for the mux
-                        pgc.SaveText(Path.GetDirectoryName(ifoFile) + "\\" + fileNameNoPath.Substring(0, 6) + " - Chapter Information.txt");
-                        return Path.GetDirectoryName(ifoFile) + "\\" + fileNameNoPath.Substring(0, 6) + " - Chapter Information.txt";
+                        pgc.SaveText(outputDirectory + "\\" + fileNameNoPath.Substring(0, 6) + " - Chapter Information.txt");
+                        return outputDirectory + "\\" + fileNameNoPath.Substring(0, 6) + " - Chapter Information.txt";
                     }
                     else
                         MessageBox.Show("MeGUI cannot write on the disc " + Path.GetPathRoot(ifoFile) + " \n" +
@@ -270,28 +272,6 @@ namespace MeGUI
 
             return audioFiles;
 		}
-
-        public Dictionary<int, string> getAllDemuxedSubtitles(List<SubtitleInfo> subTracks, string projectName)
-        {
-            Dictionary<int, string> subFiles = new Dictionary<int, string>();
-            for (int counter = 0; counter < subTracks.Count; counter++)
-            {
-                string[] files = Directory.GetFiles(Path.GetDirectoryName(projectName),
-                        Path.GetFileNameWithoutExtension(projectName));
-                foreach (string file in files)
-                {
-                    if (file.EndsWith(".idx") ||
-                        file.EndsWith(".srt") ||
-                        file.EndsWith(".ssa") ||
-                        file.EndsWith(".ass")) // It is the right track
-                    {
-                        subFiles.Add(subTracks[counter].Index, file);
-                        break;
-                    }
-                }
-            }
-            return subFiles;
-        }
 
 		#endregion
 
@@ -592,10 +572,10 @@ namespace MeGUI
             }
 
             if (videoTrackToMux != null)
-                return new SequentialChain(new ParallelChain((Job[])audioStreams), new SequentialChain(muxJobs));
+                return new SequentialChain(new SequentialChain((Job[])audioStreams), new SequentialChain(muxJobs));
             else
                 return new SequentialChain(
-                    new ParallelChain((Job[])audioStreams),
+                    new SequentialChain((Job[])audioStreams),
                     new SequentialChain(vjobs),
                     new SequentialChain(muxJobs));
         }

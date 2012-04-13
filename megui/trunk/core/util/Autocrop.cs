@@ -28,6 +28,26 @@ namespace MeGUI.core.util
 {
     public class Autocrop
     {
+        public static bool autocrop(out CropValues cropValues, IVideoReader reader, bool signalAR, mod16Method cropMethod)
+        {
+            cropValues = Autocrop.autocrop(reader);
+
+            if (signalAR)
+            {
+                if (cropMethod == mod16Method.overcrop)
+                    ScriptServer.overcrop(ref cropValues);
+                else if (cropMethod == mod16Method.mod4Horizontal)
+                    ScriptServer.cropMod4Horizontal(ref cropValues);
+                else if (cropMethod == mod16Method.undercrop)
+                    ScriptServer.undercrop(ref cropValues);
+            }
+
+            if (cropValues.left < 0)
+                return false;
+            else
+                return true;
+        }
+
         public static CropValues autocrop(IVideoReader reader)
         {
             /// start at 10% of the video, then advance by 6,66% and analyze 11 frames in total
