@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -63,7 +63,7 @@ namespace MeGUI
         public static readonly AudioCodec AAC    = new AudioCodec("AAC");
         public static readonly AudioCodec VORBIS = new AudioCodec("VORBIS");
         public static readonly AudioCodec DTS    = new AudioCodec("DTS");
-        public static readonly AudioCodec AC3    = new AudioCodec("AC3");
+        public static readonly AudioCodec AC3    = new AudioCodec("AC-3");
         public static readonly AudioCodec MP2    = new AudioCodec("MP2");
         public static readonly AudioCodec WAV    = new AudioCodec("WAV");
         public static readonly AudioCodec PCM    = new AudioCodec("PCM");
@@ -272,6 +272,7 @@ namespace MeGUI
         public static readonly AudioType DTSHD  = new AudioType("DTSHD", "DTS-HD High Resolution Files", "dtshd", null, AudioCodec.DTSHD);
         public static readonly AudioType DTSMA  = new AudioType("DTSMA", "DTS Master Audio Files", "dtsma", null, AudioCodec.DTSMA);
         public static readonly AudioType FLAC   = new AudioType("FLAC", "FLAC Audio Lossless Files", "flac", null, AudioCodec.FLAC);
+        public static readonly AudioType AVS    = new AudioType("AVS", "AviSynth Script Files", "avs", null, AudioCodec.PCM);
     }
     public class SubtitleType : OutputType
     {
@@ -356,6 +357,7 @@ namespace MeGUI
                 AudioTypes.Register(AudioType.DTSMA)  &&
                 AudioTypes.Register(AudioType.EAC3)   &&
                 AudioTypes.Register(AudioType.FLAC)   &&
+                AudioTypes.Register(AudioType.AVS)    &&
                 AudioTypes.Register(AudioType.THD)))
                 throw new Exception("Failed to register an audio type");
             if (!(
