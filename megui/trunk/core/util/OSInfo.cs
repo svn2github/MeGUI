@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -268,15 +268,15 @@ namespace MeGUI
                                                     {
                                                         switch (edition)
                                                         {
-                                                            case PRODUCT_ULTIMATE: osName = "Windows Seven Ultimate Edition"; break;
+                                                            case PRODUCT_ULTIMATE: osName = "Windows 7 Ultimate Edition"; break;
                                                             case PRODUCT_HOME_BASIC:
-                                                            case PRODUCT_HOME_BASIC_N: osName = "Windows Seven Home Basic Edition"; break;
-                                                            case PRODUCT_HOME_PREMIUM: osName = "Windows Seven Premium Edition"; break;
-                                                            case PRODUCT_ENTERPRISE: osName = "Windows Seven Enterprise Edition"; break;
+                                                            case PRODUCT_HOME_BASIC_N: osName = "Windows 7 Home Basic Edition"; break;
+                                                            case PRODUCT_HOME_PREMIUM: osName = "Windows 7 Premium Edition"; break;
+                                                            case PRODUCT_ENTERPRISE: osName = "Windows 7 Enterprise Edition"; break;
                                                             case PRODUCT_BUSINESS:
-                                                            case PRODUCT_BUSINESS_N: osName = "Windows Seven Professional Edition"; break;
-                                                            case PRODUCT_STARTER: osName = "Windows Seven Starter Edition"; break;
-                                                            default: osName = "Windows Seven"; break;
+                                                            case PRODUCT_BUSINESS_N: osName = "Windows 7 Professional Edition"; break;
+                                                            case PRODUCT_STARTER: osName = "Windows 7 Starter Edition"; break;
+                                                            default: osName = "Windows 7"; break;
                                                         }
                                                     } break;
                                                 }

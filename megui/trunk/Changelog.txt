@@ -1,3 +1,4 @@
+2138 [Log] added required DLLs to the version information block
 2137 [AutoEncode] enabled option to set the audio track name
 2136 [OneClick] added some minor changes for the upcoming next release of the OneClick tool
 2135 [PGC Demux] added pgcdemux for DVD PGC processing

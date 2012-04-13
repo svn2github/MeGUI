@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
@@ -408,6 +409,33 @@ namespace MeGUI.core.util
             if (bAlwaysAddLog || bShowLog)
                 return i;
             return null;
+        }
+
+        /// <summary>
+        /// Detects the file version/date and writes it into the log
+        /// </summary>
+        /// <param name="strName">the name in the log</param>
+        /// <param name="strFile">the file to check</param>
+        /// <param name="oLog">the LogItem where the information should be added</param>
+        public static void GetFileInformation(string strName, string strFile, ref LogItem oLog)
+        {
+            string fileVersion = string.Empty;
+            string fileDate = string.Empty;
+            if (File.Exists(strFile))
+            {
+                FileVersionInfo FileProperties = FileVersionInfo.GetVersionInfo(strFile);
+                fileVersion = FileProperties.FileVersion;
+                fileDate = File.GetLastWriteTimeUtc(strFile).ToString();
+
+                if (string.IsNullOrEmpty(fileVersion))
+                    oLog.LogValue(strName, fileDate);
+                else
+                    oLog.LogValue(strName, fileVersion.Replace(", ", ".").ToString() + " (" + fileDate + ")");
+            }
+            else
+            {
+                oLog.LogValue(strName, "not installed");
+            }
         }
     }
 }

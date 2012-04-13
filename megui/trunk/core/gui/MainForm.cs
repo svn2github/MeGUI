@@ -1786,6 +1786,7 @@ namespace MeGUI
             PackageSystem.JobProcessors.Register(tsMuxeR.Factory);
 
             PackageSystem.JobProcessors.Register(MkvExtract.Factory);
+            PackageSystem.JobProcessors.Register(PgcDemux.Factory);
             PackageSystem.JobProcessors.Register(OneClickPostProcessing.Factory);
             PackageSystem.JobProcessors.Register(CleanupJobRunner.Factory);
 
@@ -2114,24 +2115,40 @@ namespace MeGUI
         {
             this.ClientSize = settings.MainFormSize;
 
+            getVersionInformation();
+
+            if (settings.AutoUpdate)
+            {
+                // Need a seperate thread to run the updater to stop internet lookups from freezing the app.
+                Thread updateCheck = new Thread(new ThreadStart(beginUpdateCheck));
+                updateCheck.IsBackground = true;
+                updateCheck.Start();
+            }
+
+            if (settings.AutoStartQueueStartup)
+                jobControl1.StartAll(false);
+
+            if ((Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor >= 1)
+                || Environment.OSVersion.Version.Major > 6)
+                taskbarItem = (ITaskbarList3)new ProgressTaskbar();
+        }
+
+        private void getVersionInformation()
+        {
             LogItem i = Log.Info("Versions");
 #if x86
-            i.LogValue("MeGUI Version ", new System.Version(Application.ProductVersion).Build + " (svn)");
+            i.LogValue("MeGUI", new System.Version(Application.ProductVersion).Build + " (svn)");
 #endif
 #if x64
             i.LogValue("MeGUI Version ", new System.Version(Application.ProductVersion).Build + " x64 (svn)");
 #endif
-            i.LogValue("OS ", string.Format("{0}{1} ({2}.{3}.{4}.{5})", OSInfo.GetOSName(), OSInfo.GetOSServicePack(), OSInfo.OSMajorVersion, OSInfo.OSMinorVersion, OSInfo.OSRevisionVersion, OSInfo.OSBuildVersion));
-            i.LogValue("Latest .Net Framework installed ", string.Format("{0}", OSInfo.DotNetVersionFormated(OSInfo.FormatDotNetVersion())));
+            i.LogValue("Operating System", string.Format("{0}{1} ({2}.{3}.{4}.{5})", OSInfo.GetOSName(), OSInfo.GetOSServicePack(), OSInfo.OSMajorVersion, OSInfo.OSMinorVersion, OSInfo.OSRevisionVersion, OSInfo.OSBuildVersion));
+            i.LogValue(".Net Framework", string.Format("{0}", OSInfo.DotNetVersionFormated(OSInfo.FormatDotNetVersion())));
 
-            string avisynthversion = string.Empty;
-            string avisynthdate = string.Empty;
-            bool PropExists = false;
-            VideoUtil.getAvisynthVersion(out avisynthversion, out avisynthdate, out PropExists);
-
-            if (!PropExists)
+            bool bAviSynthExists;
+            VideoUtil.getAvisynthVersion(ref i, out bAviSynthExists);
+            if (!bAviSynthExists)
             {
-                i.LogValue("AviSynth Version ", "not installed");
 #if x86
                 if (File.Exists(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "Avisynth_258.exe")))
                 {
@@ -2149,25 +2166,16 @@ namespace MeGUI
                     System.Diagnostics.Process.Start("http://forum.doom9.org/showthread.php?t=152800");
 #endif
             }
-            else if (string.IsNullOrEmpty(avisynthversion))
-                i.LogValue("AviSynth Version ", avisynthdate);
-            else
-                i.LogValue("AviSynth Version ", avisynthversion.Replace(", ", ".").ToString() + " (" + avisynthdate + ")");
 
-            if (settings.AutoUpdate)
-            {
-                // Need a seperate thread to run the updater to stop internet lookups from freezing the app.
-                Thread updateCheck = new Thread(new ThreadStart(beginUpdateCheck));
-                updateCheck.IsBackground = true;
-                updateCheck.Start();
-            }
+            FileUtil.GetFileInformation("AvisynthWrapper", Path.GetDirectoryName(Application.ExecutablePath) + @"\AvisynthWrapper.dll", ref i);
+            FileUtil.GetFileInformation("ICSharpCode.SharpZipLib", Path.GetDirectoryName(Application.ExecutablePath) + @"\ICSharpCode.SharpZipLib.dll", ref i);
+            FileUtil.GetFileInformation("LinqBridge", Path.GetDirectoryName(Application.ExecutablePath) + @"\LinqBridge.dll", ref i);
+            FileUtil.GetFileInformation("MediaInfo", Path.GetDirectoryName(Application.ExecutablePath) + @"\MediaInfo.dll", ref i);
+            FileUtil.GetFileInformation("MediaInfoWrapper", Path.GetDirectoryName(Application.ExecutablePath) + @"\MediaInfoWrapper.dll", ref i);
+            FileUtil.GetFileInformation("MessageBoxExLib", Path.GetDirectoryName(Application.ExecutablePath) + @"\MessageBoxExLib.dll", ref i);
+            FileUtil.GetFileInformation("SevenZipSharp", Path.GetDirectoryName(Application.ExecutablePath) + @"\SevenZipSharp.dll", ref i);
+            FileUtil.GetFileInformation("7z", Path.GetDirectoryName(Application.ExecutablePath) + @"\7z.dll", ref i);
 
-            if (settings.AutoStartQueueStartup)
-                jobControl1.StartAll(false);
-
-            if ((Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor >= 1)
-                || Environment.OSVersion.Version.Major > 6)
-                taskbarItem = (ITaskbarList3)new ProgressTaskbar();
         }
 
         public void setOverlayIcon(Icon oIcon)

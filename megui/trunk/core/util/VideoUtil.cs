@@ -823,20 +823,20 @@ namespace MeGUI
                 return allSmallFilters.ToString().TrimEnd('|');
         }
 
-        public static void getAvisynthVersion(out string FileVersion, out string FileDate, out bool PropExists)
+        public static void getAvisynthVersion(ref LogItem i, out bool bFound)
         {
-            FileVersion = string.Empty;
-            FileDate = string.Empty;
-            PropExists = false;
+            string fileVersion = string.Empty;
+            string fileDate = string.Empty;
+            bFound = false;
 
             string systempath = Environment.GetFolderPath(Environment.SpecialFolder.System);
 
             if (File.Exists(systempath + "\\avisynth.dll"))
             {
                 FileVersionInfo FileProperties = FileVersionInfo.GetVersionInfo(systempath + "\\avisynth.dll");
-                FileVersion = FileProperties.FileVersion;
-                FileDate = File.GetLastWriteTimeUtc(systempath + "\\avisynth.dll").ToString();
-                PropExists = true;
+                fileVersion = FileProperties.FileVersion;
+                fileDate = File.GetLastWriteTimeUtc(systempath + "\\avisynth.dll").ToString();
+                bFound = true;
             }
 #if x86
             else
@@ -848,13 +848,23 @@ namespace MeGUI
                     if (File.Exists(syswow64path + "\\avisynth.dll"))
                     {
                         FileVersionInfo FileProperties = FileVersionInfo.GetVersionInfo(syswow64path + "\\avisynth.dll");
-                        FileVersion = FileProperties.FileVersion;
-                        FileDate = File.GetLastWriteTimeUtc(syswow64path + "\\avisynth.dll").ToString();
-                        PropExists = true;
+                        fileVersion = FileProperties.FileVersion;
+                        fileDate = File.GetLastWriteTimeUtc(syswow64path + "\\avisynth.dll").ToString();
+                        bFound = true;
                     }
                 }
             }
 #endif
+            if (!bFound)
+            {
+                i.LogValue("AviSynth", "not installed");
+            }
+            else if (string.IsNullOrEmpty(fileVersion))
+                i.LogValue("AviSynth", fileDate);
+            else
+                i.LogValue("AviSynth", fileVersion.Replace(", ", ".").ToString() + " (" + fileDate + ")");
+
+
         }
 
         public static bool isDGIIndexerAvailable()
