@@ -741,6 +741,7 @@ namespace MeGUI
                     {
                         matchFound = true;              // found a file which needs to be encoded
                         a.Language = stream.language;   // set language
+                        a.Name = stream.name;           // set track name
                         break;
                     }
                 }

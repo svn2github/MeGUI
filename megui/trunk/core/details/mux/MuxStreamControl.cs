@@ -140,7 +140,7 @@ namespace MeGUI.core.details.mux
 
         public void SetAutoEncodeMode()
         {
-            audioDelay.Enabled = input.Enabled = subName.Enabled = false;
+            audioDelay.Enabled = input.Enabled = false;
         }
 
         private void removeSubtitleTrack_Click(object sender, EventArgs e)
