@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -47,7 +47,11 @@ namespace MeGUI
         public bool SaveMode
         {
             get { return saveMode; }
-            set { saveMode = value; filename.AllowDrop = !value; }
+            set 
+            { 
+                saveMode = value; 
+                filename.AllowDrop = !value; 
+            }
         }
 
         public bool ReadOnly

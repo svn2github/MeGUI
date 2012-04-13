@@ -114,7 +114,6 @@ namespace MeGUI
             get;
         }
 
-
         /// <summary>
         /// handles the encoder process existing
         /// </summary>
@@ -177,7 +176,6 @@ namespace MeGUI
 
             this.su = su;
             checkJobIO();
-
         }
 
         public void start()

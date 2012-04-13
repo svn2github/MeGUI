@@ -137,6 +137,7 @@ namespace MeGUI
                         arrPath.Add(System.IO.Path.Combine(strPath, "ffms2.dll"));
                         break;
                     case "mp4box": arrPath.Add(MainForm.Instance.Settings.Mp4boxPath); break;
+                    case "pgcdemux": arrPath.Add(MainForm.Instance.Settings.PgcDemuxPath); break;
                     case "avimux_gui": arrPath.Add(MainForm.Instance.Settings.AviMuxGUIPath); break;
                     case "tsmuxer": arrPath.Add(MainForm.Instance.Settings.TSMuxerPath); break;
                     case "xvid_encraw": arrPath.Add(MainForm.Instance.Settings.XviDEncrawPath); break;
@@ -627,6 +628,8 @@ namespace MeGUI
                             return meGUISettings.LamePath;
                         case ("mp4box"):
                             return meGUISettings.Mp4boxPath;
+                        case ("pgcdemux"):
+                            return meGUISettings.PgcDemuxPath;
                         case ("neroaacenc"):
                             return meGUISettings.NeroAacEncPath;
                         case ("avimux_gui"):
@@ -978,6 +981,8 @@ namespace MeGUI
             arrPath.Add(System.IO.Path.Combine(strPath, "ffms2.dll"));
             //mp4box
             arrPath.Add(MainForm.Instance.Settings.Mp4boxPath);
+            //pgcdemux
+            arrPath.Add(MainForm.Instance.Settings.PgcDemuxPath);
             //avimux_gui
             arrPath.Add(MainForm.Instance.Settings.AviMuxGUIPath);
             //tsmuxer

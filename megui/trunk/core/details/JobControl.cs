@@ -71,8 +71,12 @@ namespace MeGUI.core.details
               NewWorker(freeWorkerName(), false);
 
             foreach (JobWorker w in workers.Values)
-                if (!w.IsEncoding) w.StartEncoding(false);
-                else if (restartStopping && w.Status == JobWorkerStatus.Stopping) w.SetRunning();
+            {
+                if (!w.IsEncoding)
+                    w.StartEncoding(false);
+                else if (restartStopping && w.Status == JobWorkerStatus.Stopping)
+                    w.SetRunning();
+            }
             refresh();
         }
 

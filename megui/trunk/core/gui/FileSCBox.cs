@@ -54,7 +54,10 @@ namespace MeGUI.core.gui
         private object getterFolder()
         {
             if (fbd.ShowDialog() == DialogResult.OK)
+            {
+                MainForm.Instance.Settings.LastUsedOneClickFolder = fbd.SelectedPath;
                 return fbd.SelectedPath;
+            }
             return null;
         }
 
@@ -74,7 +77,11 @@ namespace MeGUI.core.gui
                 {
                     base.SetFileSCBoxType("Select file...", "Select folder...", oType);
                     if (oType == FileSCBoxType.OC_FILE_AND_FOLDER)
+                    {
                         base.GetterFolder = new Getter<object>(getterFolder);
+                        if (MainForm.Instance != null && System.IO.Directory.Exists(MainForm.Instance.Settings.LastUsedOneClickFolder))
+                            fbd.SelectedPath = MainForm.Instance.Settings.LastUsedOneClickFolder;
+                    }
                 }
             }
         }

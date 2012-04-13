@@ -35,6 +35,15 @@ namespace MeGUI
     public class MeGUISettings
     {
         #region variables
+        public enum OCGUIMode
+        {
+            [EnumTitle("Show Basic Settings")]
+            Basic,
+            [EnumTitle("Show Default Settings")]
+            Default,
+            [EnumTitle("Show Advanced Settings")]
+            Advanced
+        };
         private string[][] autoUpdateServerLists;
         private string faacPath, lamePath, neroAacEncPath, mp4boxPath, mkvmergePath, strMainAudioFormat,
                        ffmpegPath, besplitPath, yadifPath, aftenPath, x264Path, strMainFileFormat,
@@ -43,7 +52,7 @@ namespace MeGUI
                        defaultLanguage1, defaultLanguage2, afterEncodingCommand, videoExtension, audioExtension,
                        strLastDestinationPath, strLastSourcePath, dgnvIndexPath, tempDirMP4, flacPath,
                        httpproxyaddress, httpproxyport, httpproxyuid, httpproxypwd, defaultOutputDir, strMeGUIPath,
-                       mkvExtractPath, appendToForcedStreams;
+                       mkvExtractPath, appendToForcedStreams, pgcDemuxPath, lastUsedOneClickFolder;
         private bool recalculateMainMovieBitrate, autoForceFilm, autoStartQueue, enableMP3inMP4, autoOpenScript,
                      overwriteStats, keep2of3passOutput, autoUpdate, deleteCompletedJobs, deleteIntermediateFiles,
                      deleteAbortedOutput, openProgressWindow, useadvancedtooltips, autoSelectHDStreams, autoscroll, 
@@ -68,6 +77,7 @@ namespace MeGUI
         private FileSize[] customFileSizes;
         private FPS[] customFPSs;
         private Dar[] customDARs;
+        private OCGUIMode ocGUIMode;
 
         #endregion
         public MeGUISettings()
@@ -90,6 +100,7 @@ namespace MeGUI
 			mp4boxPath = getDownloadPath(@"tools\mp4box\mp4box.exe");
 			mkvmergePath = getDownloadPath(@"tools\mkvmerge\mkvmerge.exe");
             mkvExtractPath = getDownloadPath(@"tools\mkvmerge\mkvextract.exe");
+            pgcDemuxPath = getDownloadPath(@"tools\pgcdemux\pgcdemux.exe");
 #if x64
             x264Path = getDownloadPath(@"tools\x264\x264_64.exe");
             b64bitX264 = true;
@@ -187,8 +198,10 @@ namespace MeGUI
             bEnsureCorrectPlaybackSpeed = false;
             ffmsThreads = 1;
             appendToForcedStreams = "";
+            ocGUIMode = OCGUIMode.Default;
             bUseITU = true;
             bOpenAVSInThread = true;
+            lastUsedOneClickFolder = "";
         }
 
         private string getDownloadPath(string strPath)
@@ -393,6 +406,15 @@ namespace MeGUI
         }
 
         /// <summary>
+        /// Gets / sets whether the one-click advanced settings will be shown
+        /// </summary>
+        public OCGUIMode OneClickGUIMode
+        {
+            get { return ocGUIMode; }
+            set { ocGUIMode = value; }
+        }
+
+        /// <summary>
         /// Gets / sets whether the playback speed in video preview should match the fps
         /// </summary>
         public bool EnsureCorrectPlaybackSpeed
@@ -438,9 +460,14 @@ namespace MeGUI
                 else
                 {
                     autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/stable/", "http://megui.xvidvideo.ru/auto/stable/" },
-                                                             new string[] { "Development", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" }, new string[] { "Custom"}};
+                                                             new string[] { "Development", "http://megui.org/auto/", "http://megui.xvidvideo.ru/auto/" }, new string[] {"Custom"}};
                 }
-                return autoUpdateServerLists; 
+#if DEBUG
+                autoUpdateServerLists = new string[][] { new string[] { "Stable", "http://megui.org/auto/" },
+                                                         new string[] { "Development", "http://megui.org/auto/" },
+                                                         new string[] { "Custom", "http://megui.org/auto/" }};
+#endif
+                return autoUpdateServerLists;
             }
             set { autoUpdateServerLists = value; }
         }
@@ -604,6 +631,15 @@ namespace MeGUI
 		{
 			get {return mp4boxPath;}
 		}
+
+        /// <summary>
+        /// filename and full path of the pgcdemux executable
+        /// </summary>
+        public string PgcDemuxPath
+        {
+            get { return pgcDemuxPath; }
+        }
+
 		/// <summary>
 		/// filename and full path of the x264 executable
 		/// </summary>
@@ -611,6 +647,7 @@ namespace MeGUI
 		{
 			get {return x264Path;}
 		}
+
 		/// <summary>
 		/// filename and full path of the dgindex executable
 		/// </summary>
@@ -1042,6 +1079,12 @@ namespace MeGUI
         {
             get { return strMainFileFormat; }
             set { strMainFileFormat = value; }
+        }
+
+        public string LastUsedOneClickFolder
+        {
+            get { return lastUsedOneClickFolder; }
+            set { lastUsedOneClickFolder = value; }
         }
 
         public int MinComplexity

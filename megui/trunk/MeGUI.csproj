@@ -571,6 +571,8 @@
     <Compile Include="packages\demuxer\mkvextract\MkvExtractJob.cs" />
     <Compile Include="packages\demuxer\mkvextract\MkvInfo.cs" />
     <Compile Include="packages\demuxer\mkvextract\MkvInfoTrack.cs" />
+    <Compile Include="packages\demuxer\pgcdemux\PgcDemux.cs" />
+    <Compile Include="packages\demuxer\pgcdemux\PgcDemuxJob.cs" />
     <Compile Include="packages\muxer\avimuxgui\AMGMuxer.cs" />
     <Compile Include="packages\muxer\mkvmerge\MkvMergeMuxer.cs" />
     <Compile Include="packages\muxer\mp4box\MP4BoxMuxer.cs" />

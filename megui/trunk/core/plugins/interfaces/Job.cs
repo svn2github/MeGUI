@@ -90,7 +90,7 @@ namespace MeGUI
 	XmlInclude (typeof(MuxStream)), XmlInclude(typeof(D2VIndexJob)), XmlInclude(typeof(AviSynthJob)), 
     XmlInclude(typeof(SubtitleIndexJob)), XmlInclude(typeof(AudioSplitJob)), XmlInclude(typeof(AudioJoinJob)),
     XmlInclude(typeof(CleanupJob)), XmlInclude(typeof(DGAIndexJob)), XmlInclude(typeof(FFMSIndexJob)),
-    XmlInclude(typeof(DGIIndexJob)), XmlInclude(typeof(HDStreamsExJob)), 
+    XmlInclude(typeof(DGIIndexJob)), XmlInclude(typeof(HDStreamsExJob)), XmlInclude(typeof(PgcDemuxJob)),
     XmlInclude(typeof(MkvExtractJob)), XmlInclude(typeof(OneClickPostProcessingJob))]
 	public abstract class Job
 	{
