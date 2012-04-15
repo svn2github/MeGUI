@@ -57,10 +57,7 @@ namespace MeGUI
         public override void ProcessLine(string line, StreamType stream)
         {
             if (Regex.IsMatch(line, "^[0-9]{1,3}$", RegexOptions.Compiled))
-            {
                 su.PercentageDoneExact = Int32.Parse(line);
-                su.Status = "Creating DGV...";
-            }
             else
                 base.ProcessLine(line, stream);
 
@@ -112,6 +109,7 @@ namespace MeGUI
             {
                 base.checkJobIO();
             }
+            su.Status = "Creating DGV...";
         }
         
         protected override void doExitConfig()

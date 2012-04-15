@@ -49,10 +49,7 @@ public static readonly JobProcessorFactory Factory =
         public override void ProcessLine(string line, StreamType stream)
         {
             if (Regex.IsMatch(line, "^[0-9]{1,3}$", RegexOptions.Compiled))
-            {
                 su.PercentageDoneExact = Int32.Parse(line);
-                su.Status = "Creating DGA...";
-            }
             else
                 base.ProcessLine(line, stream);
 
@@ -70,6 +67,7 @@ public static readonly JobProcessorFactory Factory =
             {
                 base.checkJobIO();
             }
+            su.Status = "Creating DGA...";
         }
 
         protected override string Commandline

@@ -1,4 +1,4 @@
-// ****************************************************************************
+﻿// ****************************************************************************
 // 
 // Copyright (C) 2005-2012 Doom9 & al
 // 
@@ -20,7 +20,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
@@ -30,15 +29,15 @@ using MeGUI.core.util;
 
 namespace MeGUI
 {
-	/// <summary>
-	/// Summary description for Vobinput.
-	/// </summary>
-	public class FileIndexerWindow : System.Windows.Forms.Form
-	{ 
-		#region variables
+    /// <summary>
+    /// Summary description for File Indexer.
+    /// </summary>
+    public partial class FileIndexerWindow : Form
+    {
+        #region variables
         private D2VIndexJob lastJob = null;
         private LogItem _oLog;
-        
+
         public enum IndexType
         {
             D2V, DGA, DGI, FFMS, NONE
@@ -51,59 +50,25 @@ namespace MeGUI
         private List<AudioTrackInfo> audioTracks = new List<AudioTrackInfo>();
         private MkvInfo oMkvInfo = null;
 
-        private bool dialogMode = false; // $%�%$^>*"%$%%$#{"!!! Affects the public behaviour!
-		private bool configured = false;
-		private MainForm mainForm;
-		private VideoUtil vUtil;
-		private JobUtil jobUtil;
+        private bool dialogMode = false; // $%£%$^>*"%$%%$#{"!!! Affects the public behaviour!
+        private bool configured = false;
+        private MainForm mainForm;
+        private VideoUtil vUtil;
+        private JobUtil jobUtil;
 
-		private System.Windows.Forms.GroupBox gbAudio;
-        private System.Windows.Forms.GroupBox gbOutput;
-		private System.Windows.Forms.Label inputLabel;
-		private System.Windows.Forms.TextBox output;
-		private System.Windows.Forms.Label outputLabel;
-        private System.Windows.Forms.SaveFileDialog saveProjectDialog;
-		private System.Windows.Forms.Button pickOutputButton;
-		private System.Windows.Forms.GroupBox gbInput;
-        private System.Windows.Forms.RadioButton demuxTracks;
-        private System.Windows.Forms.RadioButton demuxNoAudiotracks;
-		private System.Windows.Forms.Button queueButton;
-		private System.Windows.Forms.CheckBox loadOnComplete;
-		private System.Windows.Forms.CheckBox closeOnQueue;
-        private MeGUI.core.gui.HelpButton helpButton1;
-        private CheckedListBox AudioTracks;
-        private RadioButton demuxAll;
-        private FileBar input;
-        private CheckBox demuxVideo;
-        private GroupBox gbIndexer;
-        private RadioButton btnDGI;
-        private RadioButton btnD2V;
-        private RadioButton btnFFMS;
-        private RadioButton btnDGA;
-        private GroupBox gbFileInformation;
-        private Label lblContainer;
-        private Label lblScanType;
-        private Label lblCodec;
-        private TextBox txtCodecInformation;
-        private TextBox txtContainerInformation;
-        private TextBox txtScanTypeInformation;
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.Container components = null;
-		#endregion
-		#region start / stop
-		public void setConfig(string input, string projectName, int demuxType,
+        #endregion
+        #region start / stop
+        public void setConfig(string input, string projectName, int demuxType,
             bool showCloseOnQueue, bool closeOnQueue, bool loadOnComplete, bool updateMode)
-		{
-			openVideo(input);
-			if (!string.IsNullOrEmpty(projectName))
+        {
+            openVideo(input);
+            if (!string.IsNullOrEmpty(projectName))
                 this.output.Text = projectName;
-			if (demuxType == 0)
-				demuxNoAudiotracks.Checked = true;
-			else
-				demuxAll.Checked = true;
-			this.loadOnComplete.Checked = loadOnComplete;
+            if (demuxType == 0)
+                demuxNoAudiotracks.Checked = true;
+            else
+                demuxAll.Checked = true;
+            this.loadOnComplete.Checked = loadOnComplete;
             if (updateMode)
             {
                 this.dialogMode = true;
@@ -111,32 +76,34 @@ namespace MeGUI
             }
             else
                 this.dialogMode = false;
-			checkIndexIO();
+            checkIndexIO();
             if (!showCloseOnQueue)
             {
                 this.closeOnQueue.Hide();
                 this.Controls.Remove(this.closeOnQueue);
             }
             this.closeOnQueue.Checked = closeOnQueue;
-		}
-		
-		public FileIndexerWindow(MainForm mainForm)
-		{
-			InitializeComponent();
-			this.mainForm = mainForm;
-			this.vUtil = new VideoUtil(mainForm);
-			this.jobUtil = new JobUtil(mainForm);
+        }
+
+        public FileIndexerWindow(MainForm mainForm)
+        {
+            InitializeComponent();
+            this.mainForm = mainForm;
+            this.vUtil = new VideoUtil(mainForm);
+            this.jobUtil = new JobUtil(mainForm);
             _oLog = mainForm.Log.Info("FileIndexer");
             CheckDGIIndexer();
-		}
+        }
 
-		public FileIndexerWindow(MainForm mainForm, string fileName): this(mainForm)
-		{
+        public FileIndexerWindow(MainForm mainForm, string fileName)
+            : this(mainForm)
+        {
             CheckDGIIndexer();
-			openVideo(fileName);
-		}
+            openVideo(fileName);
+        }
 
-        public FileIndexerWindow(MainForm mainForm, string fileName, bool autoReturn) : this(mainForm, fileName)
+        public FileIndexerWindow(MainForm mainForm, string fileName, bool autoReturn)
+            : this(mainForm, fileName)
         {
             CheckDGIIndexer();
             openVideo(fileName);
@@ -164,501 +131,92 @@ namespace MeGUI
             switch (dgType)
             {
                 case IndexType.DGI:
-                {
-                    this.saveProjectDialog.Filter = "DGIndexNV project files|*.dgi";
-                    if (this.demuxTracks.Checked)
-                        this.demuxAll.Checked = true;
-                    this.demuxTracks.Enabled = false;
-                    this.gbAudio.Enabled = true;
-                    this.gbAudio.Text = " Audio Demux ";
-                    this.gbOutput.Enabled = true;
-                    this.demuxVideo.Enabled = true;
-                    IndexerUsed = IndexType.DGI;
-                    btnDGI.Checked = true;
-                    if (txtContainerInformation.Text.Trim().ToUpper().Equals("MATROSKA"))
-                        generateAudioList();
-                    break;
-                }
-                case IndexType.DGA:
-                {
-                    this.saveProjectDialog.Filter = "DGAVCIndex project files|*.dga";
-                    this.gbOutput.Enabled = true;
-                    this.gbAudio.Enabled = true;
-                    this.gbAudio.Text = " Audio Demux ";
-                    if (this.demuxTracks.Checked)
-                        this.demuxAll.Checked = true;
-                    this.demuxTracks.Enabled = false;
-                    this.demuxVideo.Enabled = true;
-                    IndexerUsed = IndexType.DGA;
-                    btnDGA.Checked = true;
-                    break;
-                }
-                case IndexType.D2V:
-                {
-                    this.saveProjectDialog.Filter = "DGIndex project files|*.d2v";
-                    this.demuxTracks.Enabled = true;
-                    this.gbOutput.Enabled = true;
-                    this.gbAudio.Text = " Audio Demux ";
-                    this.gbAudio.Enabled = true;
-                    this.demuxVideo.Enabled = true;
-                    IndexerUsed = IndexType.D2V;
-                    btnD2V.Checked = true;
-                    break;
-                }
-                case IndexType.FFMS:
-                {
-                    this.saveProjectDialog.Filter = "FFMSIndex project files|*.ffindex";
-                    this.gbOutput.Enabled = false;
-                    this.gbAudio.Enabled = true;
-                    if (this.demuxTracks.Checked)
-                        this.demuxAll.Checked = true;
-                    this.demuxTracks.Enabled = true;
-                    this.demuxVideo.Checked = false;
-                    this.demuxVideo.Enabled = false;
-                    IndexerUsed = IndexType.FFMS;
-                    btnFFMS.Checked = true;
-                    if (txtContainerInformation.Text.Trim().ToUpper().Equals("MATROSKA"))
                     {
-                        generateAudioList();
+                        this.saveProjectDialog.Filter = "DGIndexNV project files|*.dgi";
+                        if (this.demuxTracks.Checked)
+                            this.demuxAll.Checked = true;
+                        this.demuxTracks.Enabled = false;
+                        this.gbAudio.Enabled = true;
                         this.gbAudio.Text = " Audio Demux ";
+                        this.gbOutput.Enabled = true;
+                        this.demuxVideo.Enabled = true;
+                        IndexerUsed = IndexType.DGI;
+                        btnDGI.Checked = true;
+                        if (txtContainerInformation.Text.Trim().ToUpper().Equals("MATROSKA"))
+                            generateAudioList();
+                        break;
                     }
-                    else
-                        this.gbAudio.Text = " Audio Encoding ";
-                    break;
-                }
+                case IndexType.DGA:
+                    {
+                        this.saveProjectDialog.Filter = "DGAVCIndex project files|*.dga";
+                        this.gbOutput.Enabled = true;
+                        this.gbAudio.Enabled = true;
+                        this.gbAudio.Text = " Audio Demux ";
+                        if (this.demuxTracks.Checked)
+                            this.demuxAll.Checked = true;
+                        this.demuxTracks.Enabled = false;
+                        this.demuxVideo.Enabled = true;
+                        IndexerUsed = IndexType.DGA;
+                        btnDGA.Checked = true;
+                        break;
+                    }
+                case IndexType.D2V:
+                    {
+                        this.saveProjectDialog.Filter = "DGIndex project files|*.d2v";
+                        this.demuxTracks.Enabled = true;
+                        this.gbOutput.Enabled = true;
+                        this.gbAudio.Text = " Audio Demux ";
+                        this.gbAudio.Enabled = true;
+                        this.demuxVideo.Enabled = true;
+                        IndexerUsed = IndexType.D2V;
+                        btnD2V.Checked = true;
+                        break;
+                    }
+                case IndexType.FFMS:
+                    {
+                        this.saveProjectDialog.Filter = "FFMSIndex project files|*.ffindex";
+                        this.gbOutput.Enabled = false;
+                        this.gbAudio.Enabled = true;
+                        if (this.demuxTracks.Checked)
+                            this.demuxAll.Checked = true;
+                        this.demuxTracks.Enabled = true;
+                        this.demuxVideo.Checked = false;
+                        this.demuxVideo.Enabled = false;
+                        IndexerUsed = IndexType.FFMS;
+                        btnFFMS.Checked = true;
+                        if (txtContainerInformation.Text.Trim().ToUpper().Equals("MATROSKA"))
+                        {
+                            generateAudioList();
+                            this.gbAudio.Text = " Audio Demux ";
+                        }
+                        else
+                            this.gbAudio.Text = " Audio Encoding ";
+                        break;
+                    }
             }
             setOutputFileName();
             recommendSettings();
             if (!demuxTracks.Checked)
                 rbtracks_CheckedChanged(null, null);
         }
-
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			if( disposing )
-			{
-				if(components != null)
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose( disposing );
-		}
-		#endregion
-		#region Windows Form Designer generated code
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FileIndexerWindow));
-            this.gbInput = new System.Windows.Forms.GroupBox();
-            this.input = new MeGUI.FileBar();
-            this.inputLabel = new System.Windows.Forms.Label();
-            this.queueButton = new System.Windows.Forms.Button();
-            this.loadOnComplete = new System.Windows.Forms.CheckBox();
-            this.gbAudio = new System.Windows.Forms.GroupBox();
-            this.demuxAll = new System.Windows.Forms.RadioButton();
-            this.AudioTracks = new System.Windows.Forms.CheckedListBox();
-            this.demuxNoAudiotracks = new System.Windows.Forms.RadioButton();
-            this.demuxTracks = new System.Windows.Forms.RadioButton();
-            this.gbOutput = new System.Windows.Forms.GroupBox();
-            this.demuxVideo = new System.Windows.Forms.CheckBox();
-            this.pickOutputButton = new System.Windows.Forms.Button();
-            this.output = new System.Windows.Forms.TextBox();
-            this.outputLabel = new System.Windows.Forms.Label();
-            this.saveProjectDialog = new System.Windows.Forms.SaveFileDialog();
-            this.closeOnQueue = new System.Windows.Forms.CheckBox();
-            this.gbIndexer = new System.Windows.Forms.GroupBox();
-            this.btnDGA = new System.Windows.Forms.RadioButton();
-            this.btnFFMS = new System.Windows.Forms.RadioButton();
-            this.btnD2V = new System.Windows.Forms.RadioButton();
-            this.btnDGI = new System.Windows.Forms.RadioButton();
-            this.gbFileInformation = new System.Windows.Forms.GroupBox();
-            this.txtContainerInformation = new System.Windows.Forms.TextBox();
-            this.txtScanTypeInformation = new System.Windows.Forms.TextBox();
-            this.txtCodecInformation = new System.Windows.Forms.TextBox();
-            this.lblScanType = new System.Windows.Forms.Label();
-            this.lblCodec = new System.Windows.Forms.Label();
-            this.lblContainer = new System.Windows.Forms.Label();
-            this.helpButton1 = new MeGUI.core.gui.HelpButton();
-            this.gbInput.SuspendLayout();
-            this.gbAudio.SuspendLayout();
-            this.gbOutput.SuspendLayout();
-            this.gbIndexer.SuspendLayout();
-            this.gbFileInformation.SuspendLayout();
-            this.SuspendLayout();
-            // 
-            // gbInput
-            // 
-            this.gbInput.Controls.Add(this.input);
-            this.gbInput.Controls.Add(this.inputLabel);
-            this.gbInput.Location = new System.Drawing.Point(12, 6);
-            this.gbInput.Name = "gbInput";
-            this.gbInput.Size = new System.Drawing.Size(424, 50);
-            this.gbInput.TabIndex = 0;
-            this.gbInput.TabStop = false;
-            this.gbInput.Text = " Input ";
-            // 
-            // input
-            // 
-            this.input.AllowDrop = true;
-            this.input.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.input.Filename = "";
-            this.input.Filter = "";
-            this.input.FilterIndex = 0;
-            this.input.FolderMode = false;
-            this.input.Location = new System.Drawing.Point(77, 10);
-            this.input.Name = "input";
-            this.input.ReadOnly = true;
-            this.input.SaveMode = false;
-            this.input.Size = new System.Drawing.Size(329, 34);
-            this.input.TabIndex = 4;
-            this.input.Title = null;
-            this.input.FileSelected += new MeGUI.FileBarEventHandler(this.input_FileSelected);
-            // 
-            // inputLabel
-            // 
-            this.inputLabel.Location = new System.Drawing.Point(9, 22);
-            this.inputLabel.Name = "inputLabel";
-            this.inputLabel.Size = new System.Drawing.Size(100, 13);
-            this.inputLabel.TabIndex = 0;
-            this.inputLabel.Text = "Input File";
-            // 
-            // queueButton
-            // 
-            this.queueButton.Location = new System.Drawing.Point(362, 395);
-            this.queueButton.Name = "queueButton";
-            this.queueButton.Size = new System.Drawing.Size(74, 23);
-            this.queueButton.TabIndex = 10;
-            this.queueButton.Text = "Queue";
-            this.queueButton.Click += new System.EventHandler(this.queueButton_Click);
-            // 
-            // loadOnComplete
-            // 
-            this.loadOnComplete.Checked = true;
-            this.loadOnComplete.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.loadOnComplete.Location = new System.Drawing.Point(91, 395);
-            this.loadOnComplete.Name = "loadOnComplete";
-            this.loadOnComplete.Size = new System.Drawing.Size(144, 24);
-            this.loadOnComplete.TabIndex = 11;
-            this.loadOnComplete.Text = "On completion load files";
-            // 
-            // gbAudio
-            // 
-            this.gbAudio.Controls.Add(this.demuxAll);
-            this.gbAudio.Controls.Add(this.AudioTracks);
-            this.gbAudio.Controls.Add(this.demuxNoAudiotracks);
-            this.gbAudio.Controls.Add(this.demuxTracks);
-            this.gbAudio.Enabled = false;
-            this.gbAudio.Location = new System.Drawing.Point(12, 187);
-            this.gbAudio.Name = "gbAudio";
-            this.gbAudio.Size = new System.Drawing.Size(424, 125);
-            this.gbAudio.TabIndex = 8;
-            this.gbAudio.TabStop = false;
-            this.gbAudio.Text = " Audio Demux ";
-            // 
-            // demuxAll
-            // 
-            this.demuxAll.AutoSize = true;
-            this.demuxAll.Checked = true;
-            this.demuxAll.Location = new System.Drawing.Point(304, 20);
-            this.demuxAll.Name = "demuxAll";
-            this.demuxAll.Size = new System.Drawing.Size(100, 17);
-            this.demuxAll.TabIndex = 15;
-            this.demuxAll.TabStop = true;
-            this.demuxAll.Text = "All Audio Tracks";
-            this.demuxAll.UseVisualStyleBackColor = true;
-            this.demuxAll.CheckedChanged += new System.EventHandler(this.rbtracks_CheckedChanged);
-            // 
-            // AudioTracks
-            // 
-            this.AudioTracks.CheckOnClick = true;
-            this.AudioTracks.Enabled = false;
-            this.AudioTracks.FormattingEnabled = true;
-            this.AudioTracks.Location = new System.Drawing.Point(16, 43);
-            this.AudioTracks.Name = "AudioTracks";
-            this.AudioTracks.Size = new System.Drawing.Size(394, 68);
-            this.AudioTracks.TabIndex = 14;
-            // 
-            // demuxNoAudiotracks
-            // 
-            this.demuxNoAudiotracks.Location = new System.Drawing.Point(19, 16);
-            this.demuxNoAudiotracks.Name = "demuxNoAudiotracks";
-            this.demuxNoAudiotracks.Size = new System.Drawing.Size(120, 24);
-            this.demuxNoAudiotracks.TabIndex = 13;
-            this.demuxNoAudiotracks.Text = "No Audio";
-            this.demuxNoAudiotracks.CheckedChanged += new System.EventHandler(this.rbtracks_CheckedChanged);
-            // 
-            // demuxTracks
-            // 
-            this.demuxTracks.Enabled = false;
-            this.demuxTracks.Location = new System.Drawing.Point(155, 16);
-            this.demuxTracks.Name = "demuxTracks";
-            this.demuxTracks.Size = new System.Drawing.Size(120, 24);
-            this.demuxTracks.TabIndex = 7;
-            this.demuxTracks.Text = "Select Audio Tracks";
-            this.demuxTracks.CheckedChanged += new System.EventHandler(this.rbtracks_CheckedChanged);
-            // 
-            // gbOutput
-            // 
-            this.gbOutput.Controls.Add(this.demuxVideo);
-            this.gbOutput.Controls.Add(this.pickOutputButton);
-            this.gbOutput.Controls.Add(this.output);
-            this.gbOutput.Controls.Add(this.outputLabel);
-            this.gbOutput.Enabled = false;
-            this.gbOutput.Location = new System.Drawing.Point(12, 318);
-            this.gbOutput.Name = "gbOutput";
-            this.gbOutput.Size = new System.Drawing.Size(424, 69);
-            this.gbOutput.TabIndex = 12;
-            this.gbOutput.TabStop = false;
-            this.gbOutput.Text = " Output ";
-            // 
-            // demuxVideo
-            // 
-            this.demuxVideo.AutoSize = true;
-            this.demuxVideo.Location = new System.Drawing.Point(81, 44);
-            this.demuxVideo.Name = "demuxVideo";
-            this.demuxVideo.Size = new System.Drawing.Size(125, 17);
-            this.demuxVideo.TabIndex = 6;
-            this.demuxVideo.Text = "Demux Video Stream";
-            this.demuxVideo.UseVisualStyleBackColor = true;
-            // 
-            // pickOutputButton
-            // 
-            this.pickOutputButton.Location = new System.Drawing.Point(380, 17);
-            this.pickOutputButton.Name = "pickOutputButton";
-            this.pickOutputButton.Size = new System.Drawing.Size(30, 23);
-            this.pickOutputButton.TabIndex = 5;
-            this.pickOutputButton.Text = "...";
-            this.pickOutputButton.Click += new System.EventHandler(this.pickOutputButton_Click);
-            // 
-            // output
-            // 
-            this.output.Location = new System.Drawing.Point(81, 17);
-            this.output.Name = "output";
-            this.output.ReadOnly = true;
-            this.output.Size = new System.Drawing.Size(289, 21);
-            this.output.TabIndex = 4;
-            // 
-            // outputLabel
-            // 
-            this.outputLabel.Location = new System.Drawing.Point(11, 21);
-            this.outputLabel.Name = "outputLabel";
-            this.outputLabel.Size = new System.Drawing.Size(100, 13);
-            this.outputLabel.TabIndex = 3;
-            this.outputLabel.Text = "Output File";
-            // 
-            // saveProjectDialog
-            // 
-            this.saveProjectDialog.Filter = "DGIndex project files|*.d2v";
-            this.saveProjectDialog.Title = "Pick a name for your DGIndex project";
-            // 
-            // closeOnQueue
-            // 
-            this.closeOnQueue.Checked = true;
-            this.closeOnQueue.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.closeOnQueue.Location = new System.Drawing.Point(281, 395);
-            this.closeOnQueue.Name = "closeOnQueue";
-            this.closeOnQueue.Size = new System.Drawing.Size(72, 24);
-            this.closeOnQueue.TabIndex = 13;
-            this.closeOnQueue.Text = "and close";
-            // 
-            // gbIndexer
-            // 
-            this.gbIndexer.Controls.Add(this.btnDGA);
-            this.gbIndexer.Controls.Add(this.btnFFMS);
-            this.gbIndexer.Controls.Add(this.btnD2V);
-            this.gbIndexer.Controls.Add(this.btnDGI);
-            this.gbIndexer.Enabled = false;
-            this.gbIndexer.Location = new System.Drawing.Point(12, 135);
-            this.gbIndexer.Name = "gbIndexer";
-            this.gbIndexer.Size = new System.Drawing.Size(424, 46);
-            this.gbIndexer.TabIndex = 15;
-            this.gbIndexer.TabStop = false;
-            this.gbIndexer.Text = " File Indexer ";
-            // 
-            // btnDGA
-            // 
-            this.btnDGA.AutoSize = true;
-            this.btnDGA.Location = new System.Drawing.Point(115, 19);
-            this.btnDGA.Name = "btnDGA";
-            this.btnDGA.Size = new System.Drawing.Size(87, 17);
-            this.btnDGA.TabIndex = 3;
-            this.btnDGA.TabStop = true;
-            this.btnDGA.Text = "DGAVCIndex";
-            this.btnDGA.UseVisualStyleBackColor = true;
-            this.btnDGA.Click += new System.EventHandler(this.btnDGA_Click);
-            // 
-            // btnFFMS
-            // 
-            this.btnFFMS.AutoSize = true;
-            this.btnFFMS.Location = new System.Drawing.Point(329, 19);
-            this.btnFFMS.Name = "btnFFMS";
-            this.btnFFMS.Size = new System.Drawing.Size(79, 17);
-            this.btnFFMS.TabIndex = 2;
-            this.btnFFMS.TabStop = true;
-            this.btnFFMS.Text = "FFMSIndex";
-            this.btnFFMS.UseVisualStyleBackColor = true;
-            this.btnFFMS.Click += new System.EventHandler(this.btnFFMS_Click);
-            // 
-            // btnD2V
-            // 
-            this.btnD2V.AutoSize = true;
-            this.btnD2V.Location = new System.Drawing.Point(12, 20);
-            this.btnD2V.Name = "btnD2V";
-            this.btnD2V.Size = new System.Drawing.Size(67, 17);
-            this.btnD2V.TabIndex = 1;
-            this.btnD2V.TabStop = true;
-            this.btnD2V.Text = "DGIndex";
-            this.btnD2V.UseVisualStyleBackColor = true;
-            this.btnD2V.Click += new System.EventHandler(this.btnD2V_Click);
-            // 
-            // btnDGI
-            // 
-            this.btnDGI.AutoSize = true;
-            this.btnDGI.Location = new System.Drawing.Point(229, 19);
-            this.btnDGI.Name = "btnDGI";
-            this.btnDGI.Size = new System.Drawing.Size(80, 17);
-            this.btnDGI.TabIndex = 0;
-            this.btnDGI.TabStop = true;
-            this.btnDGI.Text = "DGIndexNV";
-            this.btnDGI.UseVisualStyleBackColor = true;
-            this.btnDGI.Click += new System.EventHandler(this.btnDGI_Click);
-            // 
-            // gbFileInformation
-            // 
-            this.gbFileInformation.Controls.Add(this.txtContainerInformation);
-            this.gbFileInformation.Controls.Add(this.txtScanTypeInformation);
-            this.gbFileInformation.Controls.Add(this.txtCodecInformation);
-            this.gbFileInformation.Controls.Add(this.lblScanType);
-            this.gbFileInformation.Controls.Add(this.lblCodec);
-            this.gbFileInformation.Controls.Add(this.lblContainer);
-            this.gbFileInformation.Location = new System.Drawing.Point(12, 62);
-            this.gbFileInformation.Name = "gbFileInformation";
-            this.gbFileInformation.Size = new System.Drawing.Size(424, 67);
-            this.gbFileInformation.TabIndex = 16;
-            this.gbFileInformation.TabStop = false;
-            this.gbFileInformation.Text = " File Information ";
-            // 
-            // txtContainerInformation
-            // 
-            this.txtContainerInformation.Enabled = false;
-            this.txtContainerInformation.Location = new System.Drawing.Point(300, 34);
-            this.txtContainerInformation.Name = "txtContainerInformation";
-            this.txtContainerInformation.Size = new System.Drawing.Size(108, 21);
-            this.txtContainerInformation.TabIndex = 5;
-            // 
-            // txtScanTypeInformation
-            // 
-            this.txtScanTypeInformation.Enabled = false;
-            this.txtScanTypeInformation.Location = new System.Drawing.Point(153, 34);
-            this.txtScanTypeInformation.Name = "txtScanTypeInformation";
-            this.txtScanTypeInformation.Size = new System.Drawing.Size(108, 21);
-            this.txtScanTypeInformation.TabIndex = 4;
-            // 
-            // txtCodecInformation
-            // 
-            this.txtCodecInformation.Enabled = false;
-            this.txtCodecInformation.Location = new System.Drawing.Point(12, 34);
-            this.txtCodecInformation.Name = "txtCodecInformation";
-            this.txtCodecInformation.Size = new System.Drawing.Size(108, 21);
-            this.txtCodecInformation.TabIndex = 3;
-            // 
-            // lblScanType
-            // 
-            this.lblScanType.AutoSize = true;
-            this.lblScanType.Location = new System.Drawing.Point(152, 18);
-            this.lblScanType.Name = "lblScanType";
-            this.lblScanType.Size = new System.Drawing.Size(57, 13);
-            this.lblScanType.TabIndex = 2;
-            this.lblScanType.Text = "Scan Type";
-            // 
-            // lblCodec
-            // 
-            this.lblCodec.AutoSize = true;
-            this.lblCodec.Location = new System.Drawing.Point(11, 18);
-            this.lblCodec.Margin = new System.Windows.Forms.Padding(0);
-            this.lblCodec.Name = "lblCodec";
-            this.lblCodec.Size = new System.Drawing.Size(37, 13);
-            this.lblCodec.TabIndex = 1;
-            this.lblCodec.Text = "Codec";
-            // 
-            // lblContainer
-            // 
-            this.lblContainer.AutoSize = true;
-            this.lblContainer.Location = new System.Drawing.Point(301, 18);
-            this.lblContainer.Name = "lblContainer";
-            this.lblContainer.Size = new System.Drawing.Size(54, 13);
-            this.lblContainer.TabIndex = 0;
-            this.lblContainer.Text = "Container";
-            // 
-            // helpButton1
-            // 
-            this.helpButton1.ArticleName = "File Indexer window";
-            this.helpButton1.AutoSize = true;
-            this.helpButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.helpButton1.Location = new System.Drawing.Point(13, 394);
-            this.helpButton1.Name = "helpButton1";
-            this.helpButton1.Size = new System.Drawing.Size(38, 23);
-            this.helpButton1.TabIndex = 14;
-            // 
-            // FileIndexerWindow
-            // 
-            this.AutoScaleBaseSize = new System.Drawing.Size(5, 14);
-            this.ClientSize = new System.Drawing.Size(444, 425);
-            this.Controls.Add(this.gbFileInformation);
-            this.Controls.Add(this.gbIndexer);
-            this.Controls.Add(this.helpButton1);
-            this.Controls.Add(this.closeOnQueue);
-            this.Controls.Add(this.gbInput);
-            this.Controls.Add(this.gbOutput);
-            this.Controls.Add(this.loadOnComplete);
-            this.Controls.Add(this.queueButton);
-            this.Controls.Add(this.gbAudio);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.Name = "FileIndexerWindow";
-            this.Text = "MeGUI - File Indexer";
-            this.gbInput.ResumeLayout(false);
-            this.gbAudio.ResumeLayout(false);
-            this.gbAudio.PerformLayout();
-            this.gbOutput.ResumeLayout(false);
-            this.gbOutput.PerformLayout();
-            this.gbIndexer.ResumeLayout(false);
-            this.gbIndexer.PerformLayout();
-            this.gbFileInformation.ResumeLayout(false);
-            this.gbFileInformation.PerformLayout();
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
-		}
-		#endregion
-		#region buttons
-		private void pickOutputButton_Click(object sender, System.EventArgs e)
-		{
-			if (saveProjectDialog.ShowDialog() == DialogResult.OK)
-			{
-				output.Text = saveProjectDialog.FileName;
-				checkIndexIO();
-			}
-		}
+        #endregion
+        #region buttons
+        private void pickOutputButton_Click(object sender, System.EventArgs e)
+        {
+            if (saveProjectDialog.ShowDialog() == DialogResult.OK)
+            {
+                output.Text = saveProjectDialog.FileName;
+                checkIndexIO();
+            }
+        }
 
         private void input_FileSelected(FileBar sender, FileBarEventArgs args)
         {
-			openVideo(input.Filename);
-			checkIndexIO();
-		}
-		private void openVideo(string fileName)
-		{
+            openVideo(input.Filename);
+            checkIndexIO();
+        }
+        private void openVideo(string fileName)
+        {
             MediaInfoFile iFile = new MediaInfoFile(fileName, ref _oLog);
 
             strVideoCodec = iFile.VideoInfo.CodecString;
@@ -679,7 +237,7 @@ namespace MeGUI
             else
                 txtScanTypeInformation.Text = " " + strVideoScanType;
 
-			if (input.Filename != fileName)
+            if (input.Filename != fileName)
                 input.Filename = fileName;
 
             // if the input container is MKV get the MkvInfo
@@ -707,7 +265,7 @@ namespace MeGUI
                 output.Text = "";
                 demuxNoAudiotracks.Checked = true;
             }
-		}
+        }
 
         private void generateAudioList()
         {
@@ -724,8 +282,8 @@ namespace MeGUI
         }
 
         /// <summary>
-		/// recommend input settings based upon the input file
-		/// </summary>
+        /// recommend input settings based upon the input file
+        /// </summary>
         private void recommendSettings()
         {
             if (AudioTracks.Items.Count > 0)
@@ -764,8 +322,8 @@ namespace MeGUI
         }
 
         /// <summary>
-		/// sets the output file name
-		/// </summary>
+        /// sets the output file name
+        /// </summary>
         private void setOutputFileName()
         {
             if (!String.IsNullOrEmpty(this.input.Filename))
@@ -787,16 +345,16 @@ namespace MeGUI
                         case IndexType.DGI: output.Text = Path.Combine(projectPath, Path.ChangeExtension(fileNameNoPath, ".dgi")); ; break;
                     }
                 }
-            }   
+            }
         }
 
-		/// <summary>
-		/// creates a project
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void queueButton_Click(object sender, System.EventArgs e)
-		{
+        /// <summary>
+        /// creates a project
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void queueButton_Click(object sender, System.EventArgs e)
+        {
 
             if (configured)
             {
@@ -807,54 +365,54 @@ namespace MeGUI
                         switch (IndexerUsed)
                         {
                             case IndexType.D2V:
-                            {
-                                D2VIndexJob job = generateD2VIndexJob();
-                                lastJob = job;
-                                mainForm.Jobs.addJobsToQueue(job);
-                                if (this.closeOnQueue.Checked)
-                                    this.Close();
-                                break;
-                            }
-                            case IndexType.DGI:
-                            {
-                                DGIIndexJob job = generateDGNVIndexJob();
-                                //lastJob = job;
-                                mainForm.Jobs.addJobsToQueue(job);
-                                if (this.closeOnQueue.Checked)
-                                    this.Close();
-                                break;
-                            }
-                            case IndexType.DGA:
-                            {
-                                DGAIndexJob job = generateDGAIndexJob();
-                                //lastJob = job;
-                                mainForm.Jobs.addJobsToQueue(job);
-                                if (this.closeOnQueue.Checked)
-                                    this.Close();
-                                break;
-                            }
-                            case IndexType.FFMS:
-                            {
-                                FFMSIndexJob job = generateFFMSIndexJob();
-                                if (oMkvInfo != null && job.DemuxMode > 0 && job.AudioTracks.Count > 0)
                                 {
-                                    List<MkvInfoTrack> oExtractTrack = new List<MkvInfoTrack>();
-                                    foreach (AudioTrackInfo oStream in job.AudioTracks)
-                                        foreach (MkvInfoTrack oTrack in oMkvInfo.Track)
-                                            if (oTrack.TrackID == oStream.TrackID)
-                                                oExtractTrack.Add(oTrack);
-                                    job.AudioTracksDemux = oExtractTrack;
-                                    job.AudioTracks = new List<AudioTrackInfo>();
-                                    MkvExtractJob extractJob = new MkvExtractJob(input.Filename, Path.GetDirectoryName(this.input.Filename), oExtractTrack);
-                                    JobChain c = new SequentialChain(new SequentialChain(extractJob), new SequentialChain(job));
-                                    mainForm.Jobs.addJobsWithDependencies(c);
-                                }
-                                else
+                                    D2VIndexJob job = generateD2VIndexJob();
+                                    lastJob = job;
                                     mainForm.Jobs.addJobsToQueue(job);
-                                if (this.closeOnQueue.Checked)
-                                    this.Close();
-                                break;
-                            }
+                                    if (this.closeOnQueue.Checked)
+                                        this.Close();
+                                    break;
+                                }
+                            case IndexType.DGI:
+                                {
+                                    DGIIndexJob job = generateDGNVIndexJob();
+                                    //lastJob = job;
+                                    mainForm.Jobs.addJobsToQueue(job);
+                                    if (this.closeOnQueue.Checked)
+                                        this.Close();
+                                    break;
+                                }
+                            case IndexType.DGA:
+                                {
+                                    DGAIndexJob job = generateDGAIndexJob();
+                                    //lastJob = job;
+                                    mainForm.Jobs.addJobsToQueue(job);
+                                    if (this.closeOnQueue.Checked)
+                                        this.Close();
+                                    break;
+                                }
+                            case IndexType.FFMS:
+                                {
+                                    FFMSIndexJob job = generateFFMSIndexJob();
+                                    if (oMkvInfo != null && job.DemuxMode > 0 && job.AudioTracks.Count > 0)
+                                    {
+                                        List<MkvInfoTrack> oExtractTrack = new List<MkvInfoTrack>();
+                                        foreach (AudioTrackInfo oStream in job.AudioTracks)
+                                            foreach (MkvInfoTrack oTrack in oMkvInfo.Track)
+                                                if (oTrack.TrackID == oStream.TrackID)
+                                                    oExtractTrack.Add(oTrack);
+                                        job.AudioTracksDemux = oExtractTrack;
+                                        job.AudioTracks = new List<AudioTrackInfo>();
+                                        MkvExtractJob extractJob = new MkvExtractJob(input.Filename, Path.GetDirectoryName(this.input.Filename), oExtractTrack);
+                                        JobChain c = new SequentialChain(new SequentialChain(extractJob), new SequentialChain(job));
+                                        mainForm.Jobs.addJobsWithDependencies(c);
+                                    }
+                                    else
+                                        mainForm.Jobs.addJobsToQueue(job);
+                                    if (this.closeOnQueue.Checked)
+                                        this.Close();
+                                    break;
+                                }
                         }
                     }
                 }
@@ -865,22 +423,22 @@ namespace MeGUI
             else
                 MessageBox.Show("You must select the input and output file to continue",
                        "Configuration incomplete", MessageBoxButtons.OK);
-		}
-		#endregion
-		#region helper methods
-		private void checkIndexIO()
-		{
-			configured = (!input.Filename.Equals("") && !output.Text.Equals(""));
-			if (configured && dialogMode)
-				queueButton.DialogResult = DialogResult.OK;
-			else
+        }
+        #endregion
+        #region helper methods
+        private void checkIndexIO()
+        {
+            configured = (!input.Filename.Equals("") && !output.Text.Equals(""));
+            if (configured && dialogMode)
+                queueButton.DialogResult = DialogResult.OK;
+            else
                 queueButton.DialogResult = DialogResult.None;
-		}
+        }
         private D2VIndexJob generateD2VIndexJob()
-		{
-			int demuxType = 0;
-			if (demuxTracks.Checked)
-				demuxType = 1;
+        {
+            int demuxType = 0;
+            if (demuxTracks.Checked)
+                demuxType = 1;
             else if (demuxNoAudiotracks.Checked)
                 demuxType = 0;
             else
@@ -891,7 +449,7 @@ namespace MeGUI
                 audioTracks.Add(ati);
 
             return new D2VIndexJob(this.input.Filename, this.output.Text, demuxType, audioTracks, loadOnComplete.Checked, demuxVideo.Checked);
-		}
+        }
         private DGIIndexJob generateDGNVIndexJob()
         {
             int demuxType = 0;
@@ -940,16 +498,16 @@ namespace MeGUI
 
             return new FFMSIndexJob(this.input.Filename, null, demuxType, audioTracks, loadOnComplete.Checked);
         }
-		#endregion
-		#region properties
-		/// <summary>
-		/// gets the index job created from the current configuration
-		/// </summary>
-		public D2VIndexJob Job
-		{
+        #endregion
+        #region properties
+        /// <summary>
+        /// gets the index job created from the current configuration
+        /// </summary>
+        public D2VIndexJob Job
+        {
             get { return generateD2VIndexJob(); }
-		}
-        
+        }
+
         public D2VIndexJob LastJob
         {
             get { return lastJob; }

@@ -354,6 +354,9 @@
     <Compile Include="core\gui\LogTree.Designer.cs">
       <DependentUpon>LogTree.cs</DependentUpon>
     </Compile>
+    <Compile Include="core\gui\MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="core\gui\NiceComboBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -667,6 +670,9 @@
     </Compile>
     <Compile Include="packages\tools\cutter\Cutter.Designer.cs">
       <DependentUpon>Cutter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="packages\tools\fileindexer\FileIndexerWindow.Designer.cs">
+      <DependentUpon>FileIndexerWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="packages\tools\fileindexer\IndexJob.cs" />
     <Compile Include="packages\tools\fileindexer\FFMSIndexJob.cs" />

@@ -93,6 +93,7 @@ namespace MeGUI
             {
                 base.checkJobIO();
             }
+            su.Status = "Creating FFMS index...";
         }
 
         protected override void doExitConfig()
