@@ -792,7 +792,8 @@ namespace MeGUI
 
             UpdateWindow update = new UpdateWindow(this, this.Settings);
             update.GetUpdateData(true);
-            if (update.HasUpdatableFiles()) // If there are updated files, display the window
+            bool bIsComponentMissing = UpdateWindow.isComponentMissing(true);
+            if (bIsComponentMissing || update.HasUpdatableFiles()) // If there are updated or missing files, display the window
             {
                 if (MainForm.Instance.Settings.AutoUpdateSession)
                 {
@@ -806,11 +807,25 @@ namespace MeGUI
                 }
                 else
                 {
-                    if (MessageBox.Show("There are updated files available that may be necessary to MeGUI to work correctly. Some of them are binary files subject to patents, so they could be in violation of your local laws if you live in US, Japan and some countries in Europe. MeGUI will let you choose what files to update but please check your local laws about patents before proceeding. By clicking on the 'Yes' button you declare you have read this warning. Do you wish to proceed reviewing the updates?",
+                    if (bIsComponentMissing)
+                    {
+                        if (AskToInstallComponents(filesToReplace.Keys.Count > 0) == true)
+                        {
+                            if (filesToReplace.Keys.Count > 0) // restart required
+                            {
+                                this.Restart = true;
+                                this.Invoke(new MethodInvoker(delegate { this.Close(); }));
+                                return;
+                            }
+                        }
+                        else
+                            return;
+                    }
+                    if (MessageBox.Show("There are updated files available that may be necessary for MeGUI to work correctly. Some of them are binary files subject to patents, so they could be in violation of your local laws if you live e.g. in US, Japan and some countries in Europe. MeGUI will let you choose what files to update but please check your local laws about patents before proceeding. By clicking on the 'Yes' button you declare you have read this warning. Do you wish to proceed reviewing the updates?",
                             "Updates Available", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                         update.ShowDialog();
                 }
-                if (update.isComponentMissing() && !this.Restart)
+                if (UpdateWindow.isComponentMissing(true) && !this.Restart)
                 {
                     if (AskToInstallComponents(filesToReplace.Keys.Count > 0) == true)
                     {
@@ -1415,12 +1430,7 @@ namespace MeGUI
             getVersionInformation();
 
             if (settings.AutoUpdate)
-            {
-                // Need a seperate thread to run the updater to stop internet lookups from freezing the app.
-                Thread updateCheck = new Thread(new ThreadStart(beginUpdateCheck));
-                updateCheck.IsBackground = true;
-                updateCheck.Start();
-            }
+                startUpdateCheck();
 
             if (settings.AutoStartQueueStartup)
                 jobControl1.StartAll(false);
@@ -1428,6 +1438,14 @@ namespace MeGUI
             if ((Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor >= 1)
                 || Environment.OSVersion.Version.Major > 6)
                 taskbarItem = (ITaskbarList3)new ProgressTaskbar();
+        }
+
+        public void startUpdateCheck()
+        {
+            // Need a seperate thread to run the updater to stop internet lookups from freezing the app.
+            Thread updateCheck = new Thread(new ThreadStart(beginUpdateCheck));
+            updateCheck.IsBackground = true;
+            updateCheck.Start();
         }
 
         private void getVersionInformation()
@@ -1525,11 +1543,11 @@ namespace MeGUI
             string strQuestionText;
 
             if (bRestartRequired)
-                strQuestionText = "MeGUI cannot find at least one required component.\nWithout these components, MeGUI will not run properly.\nDo you want to restart MeGUI now?";
+                strQuestionText = "MeGUI cannot find at least one required component. Without these components, MeGUI will not run properly (e.g. no job can be started).\n\nDo you want to restart MeGUI now?";
             else
-                strQuestionText = "MeGUI cannot find at least one required component.\nWithout these components, MeGUI will not run properly.\nDo you want to search now online for updates?";
+                strQuestionText = "MeGUI cannot find at least one required component. Without these components, MeGUI will not run properly (e.g. no job can be started).\n\nDo you want to search now online for updates?";
 
-            if (MessageBox.Show(strQuestionText, "MeGUI components missing", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+            if (MessageBox.Show(strQuestionText, "MeGUI component(s) missing", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                 return true;
             else
                 return false;

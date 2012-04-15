@@ -946,7 +946,7 @@ namespace MeGUI
             mainForm.Settings.UpdateFormStatusColumnWidth = colStatus.Width;
         }
 
-        public bool isComponentMissing()
+        public static bool isComponentMissing(bool bWriteLog)
         {
             ArrayList arrPath = new ArrayList();
             string strPath;
@@ -1061,12 +1061,24 @@ namespace MeGUI
             foreach (string strAppPath in arrPath)
             {
                 if (String.IsNullOrEmpty(strAppPath))
+                {
+                    if (bWriteLog)
+                        MainForm.Instance.UpdateLog.LogEvent("No path to check for missing components!", ImageType.Error);
                     return true;
+                }
                 if (File.Exists(strAppPath) == false)
+                {
+                    if (bWriteLog)
+                        MainForm.Instance.UpdateLog.LogEvent("Component not found: " + strAppPath, ImageType.Error);
                     return true;
+                }
                 FileInfo fInfo = new FileInfo(strAppPath);
                 if (fInfo.Length == 0)
+                {
+                    if (bWriteLog)
+                        MainForm.Instance.UpdateLog.LogEvent("Component has 0 bytes: " + strAppPath, ImageType.Error);
                     return true;
+                }
             }
             return false;
         }

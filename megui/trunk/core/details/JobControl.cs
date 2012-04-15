@@ -67,6 +67,13 @@ namespace MeGUI.core.details
 
         public void StartAll(bool restartStopping)
         {
+            // check for missing components
+            if (UpdateWindow.isComponentMissing(false))
+            {
+                mainForm.startUpdateCheck();
+                return;
+            }
+
             if (workers.Values.Count == 0)
               NewWorker(freeWorkerName(), false);
 
