@@ -190,6 +190,7 @@
     <Content Include="lib_x86\MediaInfo.dll" Condition=" '$(Platform)' == 'x86' ">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Compile Include="core\details\AudioTrackInfo.cs" />
     <Compile Include="core\details\CleanupJob.cs" />
     <Compile Include="core\details\CodecManager.cs" />
     <Compile Include="core\details\CommandlineParser.cs" />
@@ -228,7 +229,10 @@
     <Compile Include="core\details\ProfileManager.cs" />
     <Compile Include="core\details\StatusUpdate.cs" />
     <Compile Include="core\details\Streams.cs" />
+    <Compile Include="core\details\SubtitleTrackInfo.cs" />
     <Compile Include="core\details\TaggedJob.cs" />
+    <Compile Include="core\details\TrackInfo.cs" />
+    <Compile Include="core\details\VideoTrackInfo.cs" />
     <Compile Include="core\details\video\VideoCodecSettings.cs" />
     <Compile Include="core\details\video\VideoConfigurationPanel.cs">
       <SubType>UserControl</SubType>
@@ -573,7 +577,6 @@
     <Compile Include="packages\demuxer\mkvextract\MkvExtract.cs" />
     <Compile Include="packages\demuxer\mkvextract\MkvExtractJob.cs" />
     <Compile Include="packages\demuxer\mkvextract\MkvInfo.cs" />
-    <Compile Include="packages\demuxer\mkvextract\MkvInfoTrack.cs" />
     <Compile Include="packages\demuxer\pgcdemux\PgcDemux.cs" />
     <Compile Include="packages\demuxer\pgcdemux\PgcDemuxJob.cs" />
     <Compile Include="packages\muxer\avimuxgui\AMGMuxer.cs" />

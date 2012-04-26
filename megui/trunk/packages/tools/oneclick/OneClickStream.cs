@@ -29,38 +29,24 @@ namespace MeGUI
 {
     public class OneClickStream
     {
-        private string _language;
-        private string _name;
         private string _path;
-        private string _container;
-        private string _codec;
-        private string _id;
-        private int _delay;
-        private bool _bDefaultTrack;
-        private bool _bForceTrack;
-        private TrackType _trackType;
         private AudioCodecSettings _encoderSettings;
         private AudioEncodingMode _encodingMode;
+        private TrackInfo _trackInfo;
 
-        // audio
-        private AudioTrackInfo _audioInfo;
-
-        // MKV Info
-        private MkvInfoTrack _mkvInfo;
-
-        public OneClickStream(string path, TrackType trackType, string codec, string container, string ID, string language, string name, int delay, bool bDefaultTrack, bool bForceTrack, AudioCodecSettings oSettings, AudioEncodingMode oEncodingMode, MkvInfoTrack trackInfo)
+        public OneClickStream(string path, TrackType trackType, string codec, string container, int ID, string language, string name, int delay, bool bDefaultTrack, bool bForceTrack, AudioCodecSettings oSettings, AudioEncodingMode oEncodingMode)
         {
-            this._language = language;
-            this._name = name;
+            _trackInfo = new TrackInfo(language, name);
+            _trackInfo.TrackType = trackType;
+            _trackInfo.Delay = delay;
+            _trackInfo.DefaultTrack = bDefaultTrack;
+            _trackInfo.ForcedTrack = bForceTrack;
+            _trackInfo.ContainerType = container;
+            _trackInfo.Codec = codec;
+            _trackInfo.TrackID = ID;
+
             this._path = path;
-            this._delay = delay;
-            this._bDefaultTrack = bDefaultTrack;
-            this._bForceTrack = bForceTrack;
-            this._trackType = trackType;
-            this._container = container;
-            this._id = ID;
-            this._codec = codec;
-            this._mkvInfo = trackInfo;
+
             this._encoderSettings = oSettings;
             if ((int)oEncodingMode == -1)
                 this._encodingMode = AudioEncodingMode.IfCodecDoesNotMatch;
@@ -68,55 +54,38 @@ namespace MeGUI
                 this._encodingMode = oEncodingMode;
         }
 
-        public OneClickStream(AudioTrackInfo oInfo) : this(oInfo, null) { }
-
-        public OneClickStream(AudioTrackInfo oInfo, MkvInfoTrack oMkv) 
+        public OneClickStream(AudioTrackInfo oInfo) 
         {
-            this._audioInfo = oInfo;
-            this._trackType = TrackType.Audio;
-            this._id = oInfo.TrackIDx;
-            this._language = oInfo.Language;
-            this._name = oInfo.Name;
-            this._codec = oInfo.Type;
-            this._mkvInfo = oMkv;
+            this._trackInfo = oInfo;
             this._encodingMode = AudioEncodingMode.IfCodecDoesNotMatch;
         }
 
-        public OneClickStream() : this(null, TrackType.Unknown, null, null, null, null, null, 0, false, false, null, AudioEncodingMode.IfCodecDoesNotMatch, null) { }
+        public OneClickStream(SubtitleTrackInfo oInfo)
+        {
+            this._trackInfo = oInfo;
+            this._encodingMode = AudioEncodingMode.IfCodecDoesNotMatch;
+        }
+
+        public OneClickStream() : this(null, TrackType.Unknown, null, null, 0, null, null, 0, false, false, null, AudioEncodingMode.IfCodecDoesNotMatch) { }
 
         // Stream Type
         public TrackType Type
         {
-            get { return _trackType; }
-            set { _trackType = value; }
+            get { return _trackInfo.TrackType; }
         }
 
         // Stream Language
         public string Language
         {
-            get { return _language; }
-            set 
-            { 
-                _language = value;
-                if (_audioInfo != null)
-                    _audioInfo.Language = _language;
-                if (_mkvInfo != null)
-                    _mkvInfo.Language = _language;
-            }
+            get { return _trackInfo.Language; }
+            set { _trackInfo.Language = value; }
         }
 
         // Stream Name
         public string Name
         {
-            get { return _name; }
-            set
-            {
-                _name = value;
-                if (_audioInfo != null)
-                    _audioInfo.Name = _name;
-                if (_mkvInfo != null)
-                    _mkvInfo.Name = _name;
-            }
+            get { return _trackInfo.Name; }
+            set { _trackInfo.Name = value; }
         }
 
         // Stream Name
@@ -124,63 +93,40 @@ namespace MeGUI
         {
             get 
             {
-                if (_mkvInfo != null)
-                    return _mkvInfo.FileName;
+                if (_trackInfo != null)
+                    return _trackInfo.DemuxFileName;
                 else
                     return _path; 
             }
             set { _path = value; }
         }
 
-        // Stream ID
-        public string TrackID
-        {
-            get { return _id; }
-        }
-
         // Stream Delay
         public int Delay
         {
-            get { return _delay; }
-            set { _delay = value; }
+            get { return _trackInfo.Delay; }
+            set { _trackInfo.Delay = value; }
         }
 
         // Stream Delay
         public bool ForcedStream
         {
-            get { return _bForceTrack; }
-            set 
-            { 
-                _bForceTrack = value;
-                if (_mkvInfo != null)
-                    _mkvInfo.ForcedTrack = value;
-            }
+            get { return _trackInfo.ForcedTrack; }
+            set { _trackInfo.ForcedTrack = value; }
         }
 
         // Stream Delay
         public bool DefaultStream
         {
-            get { return _bDefaultTrack; }
-            set
-            {
-                _bDefaultTrack = value;
-                if (_mkvInfo != null)
-                    _mkvInfo.DefaultTrack = value;
-            }
+            get { return _trackInfo.DefaultTrack; }
+            set { _trackInfo.DefaultTrack = value; }
         }
 
-        // Stream Info
-        public MkvInfoTrack MkvInfo
+        // Track Info
+        public TrackInfo TrackInfo
         {
-            get { return _mkvInfo; }
-            set { _mkvInfo = value; }
-        }
-
-        // Audio Track Info
-        public AudioTrackInfo AudioTrackInfo
-        {
-            get { return _audioInfo; }
-            set { _audioInfo = value; }
+            get { return _trackInfo; }
+            set { _trackInfo = value; }
         }
 
         // Audio Track Info
@@ -205,16 +151,20 @@ namespace MeGUI
 
         public override string ToString()
         {
-            string fullString = "[" + _id + "] - " + this._codec;
-            if (_audioInfo != null)
+            string fullString = "[";
+            if (_trackInfo.TrackType == TrackType.Audio)
+                fullString += ((AudioTrackInfo)_trackInfo).TrackIDx + "] - " + _trackInfo.Codec;
+            else
+                fullString += _trackInfo.MMGTrackID + "] - " + _trackInfo.Codec;
+            if (_trackInfo != null)
             {
-                if (!string.IsNullOrEmpty(_audioInfo.NbChannels))
-                    fullString += " - " + _audioInfo.NbChannels;
-                if (!string.IsNullOrEmpty(_audioInfo.SamplingRate))
-                    fullString += " / " + _audioInfo.SamplingRate;
+                if (_trackInfo is AudioTrackInfo && !string.IsNullOrEmpty(((AudioTrackInfo)_trackInfo).NbChannels))
+                    fullString += " - " + ((AudioTrackInfo)_trackInfo).NbChannels;
+                if (_trackInfo is AudioTrackInfo && !string.IsNullOrEmpty(((AudioTrackInfo)_trackInfo).SamplingRate))
+                    fullString += " - " + ((AudioTrackInfo)_trackInfo).SamplingRate;
             }
-            if (!string.IsNullOrEmpty(_language))
-                fullString += " / " + _language;
+            if (!string.IsNullOrEmpty(_trackInfo.Language))
+                fullString += " / " + _trackInfo.Language;
             return fullString.Trim();
         }
     }

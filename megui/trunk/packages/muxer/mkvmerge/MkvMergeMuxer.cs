@@ -109,7 +109,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                 {
                     MediaInfoFile oVideoInfo = new MediaInfoFile(settings.VideoInput, ref log);
                     if (oVideoInfo.ContainerFileType == ContainerType.MP4 || oVideoInfo.ContainerFileType == ContainerType.MKV)
-                        trackID = oVideoInfo.VideoInfo.FirstMMGTrackID;
+                        trackID = oVideoInfo.VideoInfo.Track.MMGTrackID;
                     else
                         trackID = 0;
 
@@ -125,7 +125,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                 {
                     MediaInfoFile oVideoInfo = new MediaInfoFile(settings.MuxedInput, ref log);
                     if (oVideoInfo.ContainerFileType == ContainerType.MP4 || oVideoInfo.ContainerFileType == ContainerType.MKV)
-                        trackID = oVideoInfo.VideoInfo.FirstMMGTrackID;
+                        trackID = oVideoInfo.VideoInfo.Track.MMGTrackID;
                     else
                         trackID = 0;
 
@@ -214,7 +214,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
 
                     if (stream.MuxOnlyInfo != null)
                     {
-                        trackID = stream.MuxOnlyInfo.TrackID;
+                        trackID = stream.MuxOnlyInfo.MMGTrackID;
                         if (!string.IsNullOrEmpty(stream.MuxOnlyInfo.Language))
                             sb.Append(" --language " + trackID + ":" + stream.MuxOnlyInfo.Language);
                         if (!string.IsNullOrEmpty(stream.MuxOnlyInfo.Name))
@@ -229,7 +229,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                             sb.Append(" --forced-track \"" + trackID + ":yes\"");
                         else
                             sb.Append(" --forced-track \"" + trackID + ":no\"");
-                        sb.Append(" -s " + trackID + " -D -A -T --no-global-tags --no-chapters \"" + stream.MuxOnlyInfo.InputFile + "\"");
+                        sb.Append(" -s " + trackID + " -D -A -T --no-global-tags --no-chapters \"" + stream.MuxOnlyInfo.SourceFileName + "\"");
                     }
                     else if (stream.path.ToLower().EndsWith(".idx"))
                     {

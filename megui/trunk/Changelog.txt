@@ -1,3 +1,4 @@
+2141 [OneClick] added some changes for the upcoming next release of the OneClick tool
 2140 [Update] if a component is missing no jobs can be started
 2139 [DGA/DGI Indexer] added job status message during processing
 2138 [Log] added required DLLs to the version information block

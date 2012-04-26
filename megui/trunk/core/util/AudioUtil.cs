@@ -18,23 +18,9 @@
 // 
 // ****************************************************************************
 
-using Utils.MessageBoxExLib;
-
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
-using System.Text;
-using System.Threading;
-using System.Windows.Forms;
-
-using MeGUI.core.details;
-using MeGUI.core.gui;
-using MeGUI.core.util;
-
-using MediaInfoWrapper;
 
 namespace MeGUI
 {
@@ -163,118 +149,6 @@ namespace MeGUI
             {
                 return iChannelCount;
             }
-        }
-    }
-
-    public class AudioTrackInfo
-    {
-        private string nbChannels, type, samplingRate, containerType, channelPositions, language, name;
-        private int index, trackID, aacFlag, mmgTrackID;
-        public AudioTrackInfo()
-            : this(null, null, null, 0)
-        {
-        }
-        public AudioTrackInfo(string language, string nbChannels, string type, int trackID)
-        {
-            this.language = language;
-            this.nbChannels = nbChannels;     
-            this.type = type;
-            this.trackID = trackID;
-            aacFlag = -1;
-            mmgTrackID = 0;   
-        }
-
-        public string Language
-        {
-            get { return language; } 
-            set { language = value; }
-        }
-
-        public string Name
-        {
-            get { return name; }
-            set { name = value; }
-        }
-
-        public string TrackIDx
-        {
-            get { return containerType == "MPEG-TS" ? trackID.ToString("x3") : trackID.ToString("x"); }
-            set { trackID = Int32.Parse(value, System.Globalization.NumberStyles.HexNumber); }
-        }
-
-        public int TrackID
-        {
-            get { return trackID; }
-            set { trackID = value; }
-        }
-        public int MMGTrackID
-        {
-            get { return mmgTrackID; }
-            set { mmgTrackID = value; }
-        }
-        public string DgIndexID
-        {
-            get { return containerType == "MPEG-TS" ? index.ToString() : TrackIDx; }
-        }
-
-        public string ContainerType
-        {
-            get { return containerType; }
-            set { containerType = value; }
-        }
-
-        public int Index
-        {
-            get { return index; }
-            set { index = value; }
-        }
-
-        public string Type
-        {
-            get { return type; }
-            set { type = value; }
-        }
-
-        public string NbChannels
-        {
-            get { return nbChannels; }
-            set { nbChannels = value; }
-        }
-
-        public string ChannelPositions
-        {
-            get { return channelPositions; }
-            set { channelPositions = value; }
-        }
-
-        public string SamplingRate
-        {
-            get { return samplingRate; }
-            set { samplingRate = value; }
-        }
-
-        public int AACFlag
-        {
-            get { return aacFlag; }
-            set { aacFlag = value; }
-        }
-
-        public override string ToString()
-        {
-            string fullString = "[" + TrackIDx + "] - " + this.type;
-            if (!string.IsNullOrEmpty(nbChannels))
-            {
-                fullString += " - " + this.nbChannels;
-            }
-            if (!string.IsNullOrEmpty(samplingRate))
-            {
-                fullString += " / " + samplingRate;
-            }
-            if (!string.IsNullOrEmpty(language))
-            {
-                fullString += " / " + language;
-            }
-            return fullString.Trim();
         }
     }
 }

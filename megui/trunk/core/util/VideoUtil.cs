@@ -174,7 +174,7 @@ namespace MeGUI
         /// <param name="audioTrackIDs">list of audio TrackIDs</param>
 		/// <param name="projectName">the name of the dgindex project</param>
 		/// <returns>an array of string of filenames</returns>
-        public Dictionary<int, string> getAllDemuxedAudio(List<AudioTrackInfo> audioTracks, List<MkvInfoTrack> audioTracksDemux, out List<string> arrDeleteFiles, string projectName, LogItem log)
+        public Dictionary<int, string> getAllDemuxedAudio(List<AudioTrackInfo> audioTracks, List<AudioTrackInfo> audioTracksDemux, out List<string> arrDeleteFiles, string projectName, LogItem log)
         {
 		    Dictionary<int, string> audioFiles = new Dictionary<int, string>();
             arrDeleteFiles = new List<string>();
@@ -200,7 +200,7 @@ namespace MeGUI
                     if (Path.GetExtension(projectName).ToLower().Equals(".dga"))
                         trackFile = Path.GetFileName(projectName) + trackFile;
                     else if (Path.GetExtension(projectName).ToLower().Equals(".ffindex"))
-                        trackFile = Path.GetFileNameWithoutExtension(projectName) + "_track_" + (audioTracks[counter].Index + 1) + "_*.avs";
+                        trackFile = Path.GetFileNameWithoutExtension(projectName) + "_track_" + (audioTracks[counter].TrackIndex + 1) + "_*.avs";
                     else
                         trackFile = Path.GetFileNameWithoutExtension(projectName) + trackFile;
 
@@ -255,10 +255,10 @@ namespace MeGUI
                 }
             }
 
-            foreach (MkvInfoTrack oTrack in audioTracksDemux)
+            foreach (AudioTrackInfo oTrack in audioTracksDemux)
             {
                 bool bFound = false;
-                string trackFile = Path.GetDirectoryName(projectName) + "\\" + oTrack.FileName;
+                string trackFile = Path.GetDirectoryName(projectName) + "\\" + oTrack.DemuxFileName;
                 if (File.Exists(trackFile))
                 {
                     bFound = true;
@@ -454,9 +454,9 @@ namespace MeGUI
         public JobChain GenerateJobSeries(VideoStream video, string muxedOutput, AudioJob[] audioStreams,
             MuxStream[] subtitles, string chapters, FileSize? desiredSize, FileSize? splitSize, 
             ContainerType container, bool prerender, MuxStream[] muxOnlyAudio, LogItem log, string deviceType, 
-            Zone[] zones, MkvInfoTrack videoTrackToMux, OneClickAudioTrack[] audioTracks)
+            Zone[] zones, string videoFileToMux, OneClickAudioTrack[] audioTracks)
         {
-            if (desiredSize.HasValue && videoTrackToMux == null)
+            if (desiredSize.HasValue && String.IsNullOrEmpty(videoFileToMux))
             {
                 if (video.Settings.EncodingMode != 4 && video.Settings.EncodingMode != 8) // no automated 2/3 pass
                 {
@@ -472,8 +472,8 @@ namespace MeGUI
             log.Add(eliminatedDuplicateFilenames(ref videoOutput, ref muxedOutput, audioStreams));
             
             JobChain vjobs = null;
-            if (videoTrackToMux != null)
-                video.Output = videoTrackToMux.InputFile;
+            if (!String.IsNullOrEmpty(videoFileToMux))
+                video.Output = videoFileToMux;
             else
             {
                 video.Output = videoOutput;
@@ -549,14 +549,14 @@ namespace MeGUI
             }
 
             List<string> inputsToDelete = new List<string>();
-            if (videoTrackToMux == null)
+            if (String.IsNullOrEmpty(videoFileToMux))
                 inputsToDelete.Add(video.Output);
             inputsToDelete.AddRange(Array.ConvertAll<AudioJob, string>(audioStreams, delegate(AudioJob a) { return a.Output; }));
 
             JobChain muxJobs = jobUtil.GenerateMuxJobs(video, video.Framerate, allAudioToMux.ToArray(), allInputAudioTypes.ToArray(),
                 subtitles, allInputSubtitleTypes.ToArray(), chapters, chapterInputType, container, muxedOutput, splitSize, inputsToDelete, deviceType, deviceOutputType);
 
-            if (desiredSize.HasValue && videoTrackToMux == null)
+            if (desiredSize.HasValue && String.IsNullOrEmpty(videoFileToMux))
             {
                 BitrateCalculationInfo b = new BitrateCalculationInfo();
                 
@@ -571,7 +571,7 @@ namespace MeGUI
                 ((VideoJob)vjobs.Jobs[0].Job).BitrateCalculationInfo = b;
             }
 
-            if (videoTrackToMux != null)
+            if (!String.IsNullOrEmpty(videoFileToMux))
                 return new SequentialChain(new SequentialChain((Job[])audioStreams), new SequentialChain(muxJobs));
             else
                 return new SequentialChain(

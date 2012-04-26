@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 // 
-// Copyright (C) 2005-2011  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -29,15 +29,26 @@ namespace MeGUI
     /// </summary>
     public class MkvExtractJob : Job
     {
-        private List<MkvInfoTrack> _oTracks;
+        private List<TrackInfo> _oTracks;
         private string _strOutputPath;
 
-        public MkvExtractJob() : this(null, null, null) { }
+        public MkvExtractJob() 
+        {
+        }
 
-        public MkvExtractJob(string strInput, string strOutputPath, List<MkvInfoTrack> oTracks)
+        public MkvExtractJob(string strInput, string strOutputPath, List<TrackInfo> oTracks)
             : base(strInput, null)
         {
             this._oTracks = oTracks;
+            this._strOutputPath = strOutputPath;
+        }
+
+        public MkvExtractJob(string strInput, string strOutputPath, List<AudioTrackInfo> oTracks)
+            : base(strInput, null)
+        {
+            this._oTracks = new List<TrackInfo>();
+            foreach (AudioTrackInfo oInfo in oTracks)
+                this._oTracks.Add((TrackInfo)oInfo);
             this._strOutputPath = strOutputPath;
         }
 
@@ -51,7 +62,7 @@ namespace MeGUI
             get { return "ext"; }
         }
 
-        public List<MkvInfoTrack> MkvTracks
+        public List<TrackInfo> MkvTracks
         {
             get { return _oTracks; }
             set { _oTracks = value; }

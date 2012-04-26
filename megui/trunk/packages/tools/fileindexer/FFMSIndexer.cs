@@ -117,12 +117,12 @@ namespace MeGUI
 
                     foreach (AudioTrackInfo oAudioTrack in job.AudioTracks)
                     {
-                        if (oAudioTrack.Index != iCurrentAudioTrack)
+                        if (oAudioTrack.TrackIndex != iCurrentAudioTrack)
                             continue;
 
                         // write avs file
                         string strAudioAVSFile;
-                        strAudioAVSFile = job.Input + "_track_" + (oAudioTrack.Index + 1) + "_" + oAudioTrack.Language.ToLower() + ".avs";
+                        strAudioAVSFile = job.Input + "_track_" + (oAudioTrack.TrackIndex + 1) + "_" + oAudioTrack.Language.ToLower() + ".avs";
                         if (!String.IsNullOrEmpty(job.Output))
                             strAudioAVSFile = Path.Combine(Path.GetDirectoryName(job.Output), Path.GetFileName(strAudioAVSFile));
                         try

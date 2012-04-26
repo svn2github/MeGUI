@@ -32,12 +32,15 @@ namespace MeGUI
     {
         private bool _bHasChapters;
         private String _strResult, _strFile;
-        private List<MkvInfoTrack> _oTracks = new List<MkvInfoTrack>();
+        private List<TrackInfo> _oTracks = new List<TrackInfo>();
         private LogItem _oLog;
 
         public MkvInfo(String strFile, ref LogItem oLog)
         {
-            this._oLog = oLog;
+            if (oLog == null)
+                this._oLog = MainForm.Instance.Log.Info("MkvInfo");
+            else
+                this._oLog = oLog;
             this._strFile = strFile;
             getInfo();
         }
@@ -45,11 +48,6 @@ namespace MeGUI
         public bool HasChapters
         {
             get { return _bHasChapters; }
-        }
-
-        public List<MkvInfoTrack> Track
-        {
-            get { return _oTracks; }
         }
 
         private void getInfo()
@@ -159,48 +157,8 @@ namespace MeGUI
 
         private void parseResult()
         {
-            MkvInfoTrack oTempTrack;
             foreach (String Line in Regex.Split(_strResult, "\r\n"))
             {
-                if (Line.StartsWith("Track ID"))
-                {
-                    oTempTrack = new MkvInfoTrack(_strFile);
-                    int ID = -1;
-                    Int32.TryParse(Line.Substring(9, Line.IndexOf(':') - 9), out ID);
-                    oTempTrack.TrackID = ID;
-
-                    string strLine = Line.Substring(0, Line.Length - 1);
-
-                    switch (strLine.Substring(strLine.IndexOf(':') + 2, 5)) 
-                    {
-                        case "video": oTempTrack.Type = TrackType.Video; break;
-                        case "audio": oTempTrack.Type = TrackType.Audio; break;
-                        case "subti": oTempTrack.Type = TrackType.Subtitle; break;
-                    }
-
-                    foreach (string strData in strLine.Split(' '))
-                    {
-                        string[] value = strData.Split(':');
-                        if (value.Length < 2)
-                            continue;
-                        if (value[0].StartsWith("["))
-                            value[0] = value[0].Substring(1);
-                        value[1] = value[1].Replace("\\s", " ").Replace("\\2", "\"").Replace("\\c", ":").Replace("\\h", "#").Replace("\\\\", "\\");
-                        switch (value[0].ToLower())
-                        {
-                            case "default_track": if (value[1].Equals("0")) oTempTrack.DefaultTrack = false; break;
-                            case "forced_track": if (value[1].Equals("1")) oTempTrack.ForcedTrack = true; break;
-                            case "codec_id": oTempTrack.CodecID = value[1]; break;
-                            case "language": oTempTrack.Language = value[1]; break;
-                            case "track_name": oTempTrack.Name = value[1]; break;
-                            case "audio_channels": oTempTrack.AudioChannels = value[1] + " Channels"; break;
-                        }
-                    }
-
-                    if (oTempTrack.TrackID != -1)
-                        _oTracks.Add(oTempTrack);
-                }
-
                 if (Line.StartsWith("Chapters:"))
                     _bHasChapters = true;
             }

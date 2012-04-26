@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@ namespace MeGUI
         private bool demuxVideo;
 		private int demuxMode;
         private List<AudioTrackInfo> audioTracks;
-        private List<MkvInfoTrack> audioTracksDemux;
+        private List<AudioTrackInfo> audioTracksDemux;
 		
 		public IndexJob():base()
 		{
@@ -40,7 +40,7 @@ namespace MeGUI
             demuxVideo = false;
 			demuxMode = 0;
             audioTracks = new List<AudioTrackInfo>();
-            audioTracksDemux = new List<MkvInfoTrack>();
+            audioTracksDemux = new List<AudioTrackInfo>();
 		}
 
 		/// <summary>
@@ -77,7 +77,7 @@ namespace MeGUI
             set { audioTracks = value; }
         }
 
-        public List<MkvInfoTrack> AudioTracksDemux
+        public List<AudioTrackInfo> AudioTracksDemux
         {
             get { return audioTracksDemux; }
             set { audioTracksDemux = value; }

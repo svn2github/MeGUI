@@ -146,10 +146,10 @@ namespace MeGUI
  
                 foreach (OneClickAudioTrack oAudioTrack in job.PostprocessingProperties.AudioTracks)
                 {
-                    if (oAudioTrack.MkvAudioTrack != null)
+                    if (oAudioTrack.AudioTrackInfo != null)
                     {
-                        audioFiles.Add(oAudioTrack.MkvAudioTrack.TrackID, Path.GetDirectoryName(job.PostprocessingProperties.FinalOutput) + "\\" + oAudioTrack.MkvAudioTrack.FileName);
-                        arrAudioFilesDelete.Add(Path.GetDirectoryName(job.PostprocessingProperties.FinalOutput) + "\\" + oAudioTrack.MkvAudioTrack.FileName);
+                        audioFiles.Add(oAudioTrack.AudioTrackInfo.TrackID, Path.GetDirectoryName(job.PostprocessingProperties.FinalOutput) + "\\" + oAudioTrack.AudioTrackInfo.DemuxFileName);
+                        arrAudioFilesDelete.Add(Path.GetDirectoryName(job.PostprocessingProperties.FinalOutput) + "\\" + oAudioTrack.AudioTrackInfo.DemuxFileName);
                     }
                     else if (oAudioTrack.AudioTrackInfo != null)
                         arrAudioTracks.Add(oAudioTrack.AudioTrackInfo);
@@ -159,13 +159,13 @@ namespace MeGUI
                         arrMuxStreams.Add(oAudioTrack.DirectMuxAudio);
                 }
                 if (audioFiles.Count == 0)
-                    audioFiles = vUtil.getAllDemuxedAudio(arrAudioTracks, new List<MkvInfoTrack>(), out arrAudioFilesDelete, job.IndexFile, _log);
+                    audioFiles = vUtil.getAllDemuxedAudio(arrAudioTracks, new List<AudioTrackInfo>(), out arrAudioFilesDelete, job.IndexFile, _log);
 
                 fillInAudioInformation(arrAudioJobs, arrMuxStreams);
 
                 //job.PostprocessingProperties.AudioJobs = AudioUtil.getConfiguredAudioJobs(job.PostprocessingProperties.AudioJobs);
 
-                if (job.PostprocessingProperties.VideoTrackToMux != null)
+                if (job.PostprocessingProperties.VideoFileToMux != null)
                     _log.LogEvent("Don't encode video: True");
                 else
                     _log.LogEvent("Desired size: " + job.PostprocessingProperties.OutputSize);
@@ -176,7 +176,7 @@ namespace MeGUI
                 VideoStream myVideo = new VideoStream();
 
                 VideoCodecSettings videoSettings = job.PostprocessingProperties.VideoSettings;
-                if (job.PostprocessingProperties.VideoTrackToMux == null)
+                if (job.PostprocessingProperties.VideoFileToMux == null)
                 {
                     //Open the video
                     Dar? dar;
@@ -200,11 +200,12 @@ namespace MeGUI
                 }
                 else
                 {
-                    myVideo.Output = job.PostprocessingProperties.VideoTrackToMux.InputFile;
-                    videoSettings.VideoName = job.PostprocessingProperties.VideoTrackToMux.Name;
-                    myVideo.Settings = videoSettings;
+                    myVideo.Output = job.PostprocessingProperties.VideoFileToMux;
                     MediaInfoFile oInfo = new MediaInfoFile(myVideo.Output, ref _log);
+                    videoSettings.VideoName = oInfo.VideoInfo.Track.Name;
+                    myVideo.Settings = videoSettings;
                     myVideo.Framerate = (decimal)oInfo.VideoInfo.FPS;
+                    
                 }
 
                 List<string> intermediateFiles = new List<string>();
@@ -220,7 +221,7 @@ namespace MeGUI
                 foreach (string file in job.PostprocessingProperties.FilesToDelete)
                     intermediateFiles.Add(file);
 
-                if (!string.IsNullOrEmpty(videoInput) || job.PostprocessingProperties.VideoTrackToMux != null)
+                if (!string.IsNullOrEmpty(videoInput) || job.PostprocessingProperties.VideoFileToMux != null)
                 {
                     MuxStream[] subtitles;
                     if (job.PostprocessingProperties.SubtitleTracks.Count == 0)
@@ -232,9 +233,9 @@ namespace MeGUI
                     {
                         subtitles = new MuxStream[job.PostprocessingProperties.SubtitleTracks.Count];
                         int i = 0;
-                        foreach (MkvInfoTrack oTrack in job.PostprocessingProperties.SubtitleTracks)
+                        foreach (SubtitleTrackInfo oTrack in job.PostprocessingProperties.SubtitleTracks)
                         {
-                            subtitles[i] = new MuxStream(oTrack.FileName, oTrack.Language, oTrack.Name, 0, oTrack.DefaultTrack, oTrack.ForcedTrack, oTrack);
+                            subtitles[i] = new MuxStream(oTrack.SourceFileName, oTrack.Language, oTrack.Name, 0, oTrack.DefaultTrack, oTrack.ForcedTrack, oTrack);
                             i++;
                         }
                     }
@@ -246,7 +247,7 @@ namespace MeGUI
                         subtitles, job.PostprocessingProperties.ChapterFile, job.PostprocessingProperties.OutputSize,
                         job.PostprocessingProperties.Splitting, job.PostprocessingProperties.Container,
                         job.PostprocessingProperties.PrerenderJob, arrMuxStreams.ToArray(),
-                        _log, job.PostprocessingProperties.DeviceOutputType, null, job.PostprocessingProperties.VideoTrackToMux, job.PostprocessingProperties.AudioTracks.ToArray());
+                        _log, job.PostprocessingProperties.DeviceOutputType, null, job.PostprocessingProperties.VideoFileToMux, job.PostprocessingProperties.AudioTracks.ToArray());
                     if (c == null)
                     {
                         _log.Warn("Job creation aborted");

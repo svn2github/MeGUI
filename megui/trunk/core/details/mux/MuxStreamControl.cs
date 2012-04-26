@@ -38,7 +38,7 @@ namespace MeGUI.core.details.mux
             subtitleLanguage.Items.AddRange(new List<string>(LanguageSelectionContainer.Languages.Keys).ToArray());
         }
 
-        private MkvInfoTrack _mkvInfoTrack;
+        private TrackInfo _trackInfo;
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public MuxStream Stream
         {
@@ -57,7 +57,7 @@ namespace MeGUI.core.details.mux
                 if (showForceSubtitleStream)
                     bForce = chkForceStream.Checked;
 
-                return new MuxStream(input.Filename, subtitleLanguage.Text, subName.Text, iDelay, bDefault, bForce, _mkvInfoTrack);
+                return new MuxStream(input.Filename, subtitleLanguage.Text, subName.Text, iDelay, bDefault, bForce, _trackInfo);
             }
 
             set
@@ -80,7 +80,7 @@ namespace MeGUI.core.details.mux
                 audioDelay.Value = value.delay;
                 chkDefaultStream.Checked = value.bDefaultTrack;
                 chkForceStream.Checked = value.bForceTrack;
-                _mkvInfoTrack = value.MuxOnlyInfo;
+                _trackInfo = value.MuxOnlyInfo;
             }
         }
 

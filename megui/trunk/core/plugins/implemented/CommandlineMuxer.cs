@@ -62,7 +62,7 @@ namespace MeGUI
             foreach (MuxStream s in settings.SubtitleStreams)
             {
                 if (s.MuxOnlyInfo != null)
-                    Util.ensureExistsIfNeeded(s.MuxOnlyInfo.InputFile);
+                    Util.ensureExistsIfNeeded(s.MuxOnlyInfo.SourceFileName);
                 else
                     Util.ensureExistsIfNeeded(s.path);
             }

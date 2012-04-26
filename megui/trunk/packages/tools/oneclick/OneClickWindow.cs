@@ -104,7 +104,6 @@ namespace MeGUI
         private VideoUtil vUtil;
         private MainForm mainForm;
         private MuxProvider muxProvider;
-        private MkvInfo oMkvInfo;
         
         /// <summary>
         /// whether the user has selected an output filename
@@ -272,25 +271,12 @@ namespace MeGUI
                 return;
             }
 
-            // if the input container is MKV get the MkvInfo
-            if (iFile.ContainerFileTypeString.ToUpper().Equals("MATROSKA"))
-                oMkvInfo = new MkvInfo(input.Filename, ref _oLog);
-            else
-                oMkvInfo = null;
-
             input.Filename = fileName;
             Dar? ar = null;
             int maxHorizontalResolution = int.Parse(iFile.VideoInfo.Width.ToString());
             
             List<AudioTrackInfo> audioTracks = new List<AudioTrackInfo>();
-            if (oMkvInfo != null)
-            {
-                foreach (MkvInfoTrack oTrack in oMkvInfo.Track)
-                    if (oTrack.Type == TrackType.Audio)
-                        audioTracks.Add(oTrack.AudioTrackInfo);
-            }
-            else
-                audioTracks = iFile.AudioInfo.Tracks;
+            audioTracks = iFile.AudioInfo.Tracks;
             
             List<object> trackNames = new List<object>();
             trackNames.Add("None");
@@ -336,7 +322,7 @@ namespace MeGUI
             horizontalResolution.Maximum = maxHorizontalResolution;
             
             // Detect Chapters
-            if (oMkvInfo != null && oMkvInfo.HasChapters)
+            if (iFile.hasMKVChapters())
                 this.chapterFile.Filename = "<internal MKV chapters>";
             else if (Path.GetExtension(input.Filename).ToLower().Equals(".vob"))
                 this.chapterFile.Filename = "<internal VOB chapters>";
@@ -383,7 +369,7 @@ namespace MeGUI
                     if (audioTrack[i].SelectedSCItem.IsStandard)
                     {
                         AudioTrackInfo ati = (AudioTrackInfo)audioTrack[i].SelectedObject;
-                        typeString = "file." + ati.Type;
+                        typeString = "file." + ati.Codec;
                     }
                     else
                     {
@@ -514,7 +500,7 @@ namespace MeGUI
                         string strLanguage = null;
                         string strAudioCodec = null;
                         TrackInfo info = null;
-                        MkvInfoTrack oMkvInfoTrack = null;
+                        bool bMuxMKV = false;
                         AudioTrackInfo oAudioTrackInfo = null; 
                         int delay = audioConfigControl[i].Delay;
                         if (audioTrack[i].SelectedSCItem.IsStandard)
@@ -524,24 +510,15 @@ namespace MeGUI
                             aInput = "::" + oAudioTrackInfo.TrackID + "::";
                             info = new TrackInfo(oAudioTrackInfo.Language, oAudioTrackInfo.Name);
                             strLanguage = oAudioTrackInfo.Language;
-                            strAudioCodec = oAudioTrackInfo.Type;
-                            if (oMkvInfo != null && (oIndexerToUse == FileIndexerWindow.IndexType.FFMS || oIndexerToUse == FileIndexerWindow.IndexType.DGI))
-                            {
-                                foreach (MkvInfoTrack oTrack in oMkvInfo.Track)
-                                {
-                                    if (oTrack.TrackID == oAudioTrackInfo.TrackID)
-                                    {
-                                        oMkvInfoTrack = oTrack;
-                                        break;
-                                    }
-                                }
-                            }
+                            strAudioCodec = oAudioTrackInfo.Codec;
+                            if (oAudioTrackInfo.ContainerType.ToUpper().Equals("MATROSKA") && (oIndexerToUse == FileIndexerWindow.IndexType.FFMS || oIndexerToUse == FileIndexerWindow.IndexType.DGI))
+                                bMuxMKV = true;
                         }
                         else
                         {
                             aInput = audioTrack[i].SelectedText;
                             MediaInfoFile oInfo = new MediaInfoFile(aInput, ref _oLog);
-                            strAudioCodec = oInfo.AudioInfo.Tracks[0].Type;
+                            strAudioCodec = oInfo.AudioInfo.Tracks[0].Codec;
                             info = new TrackInfo(oInfo.AudioInfo.Tracks[0].Language, oInfo.AudioInfo.Tracks[0].Name);
                             strLanguage = oInfo.AudioInfo.Tracks[0].Language;
                         }
@@ -549,9 +526,9 @@ namespace MeGUI
                         if (audioConfigControl[i].AudioEncodingMode == AudioEncodingMode.Never ||
                             (audioConfigControl[i].AudioEncodingMode == AudioEncodingMode.IfCodecDoesNotMatch &&
                             audioConfigControl[i].Settings.EncoderType.ACodec.ID.Equals(strAudioCodec, StringComparison.InvariantCultureIgnoreCase)))
-                            ocAudioTracks.Add(new OneClickAudioTrack(null, new MuxStream(aInput, info.Language, info.Name, delay, false, false, null), oAudioTrackInfo, oMkvInfoTrack));
+                            ocAudioTracks.Add(new OneClickAudioTrack(null, new MuxStream(aInput, info.Language, info.Name, delay, false, false, null), oAudioTrackInfo, bMuxMKV));
                         else
-                            ocAudioTracks.Add(new OneClickAudioTrack(new AudioJob(aInput, null, null, audioConfigControl[i].Settings, delay, strLanguage, null), null, oAudioTrackInfo, oMkvInfoTrack));
+                            ocAudioTracks.Add(new OneClickAudioTrack(new AudioJob(aInput, null, null, audioConfigControl[i].Settings, delay, strLanguage, null), null, oAudioTrackInfo, bMuxMKV));
                     }
 
                     OneClickPostprocessingProperties dpp = new OneClickPostprocessingProperties();
@@ -569,25 +546,19 @@ namespace MeGUI
                     {
                         if (dpp.Container == ContainerType.MKV)
                         {
-                            if (oMkvInfo != null)
+                            using (MediaInfoFile oInfo = new MediaInfoFile(input.Filename))
                             {
-                                foreach (MkvInfoTrack oTrack in oMkvInfo.Track)
-                                {
-                                    if (oTrack.Type == TrackType.Video)
-                                    {
-                                        dpp.VideoTrackToMux = oTrack;
-                                        break;
-                                    }
-                                }
+                                if (oInfo.ContainerFileType == ContainerType.MKV)
+                                    dpp.VideoFileToMux = input.Filename;
+                                else
+                                    _oLog.LogEvent("\"Don't encode video\" has been disabled as at the moment only the source container MKV is supported");
                             }
-                            else
-                                _oLog.LogEvent("\"Don't encode video\" has been disabled as at the moment only the source container MKV is supported");
                         }
                         else
                             _oLog.LogEvent("\"Don't encode video\" has been disabled as at the moment only the target container MKV is supported");
                     }
 
-                    if (dpp.VideoTrackToMux == null)
+                    if (String.IsNullOrEmpty(dpp.VideoFileToMux))
                     {
                         dpp.AutoDeinterlace = autoDeint.Checked;
                         dpp.KeepInputResolution = keepInputResolution.Checked;
@@ -602,7 +573,7 @@ namespace MeGUI
                         dpp.OutputSize = null;
                     }
 
-                    if (keepInputResolution.Checked || dpp.VideoTrackToMux != null)
+                    if (keepInputResolution.Checked || !String.IsNullOrEmpty(dpp.VideoFileToMux))
                     {
                         dpp.SignalAR = dpp.AutoCrop = false;
                         dpp.HorizontalOutputResolution = 0;
@@ -613,37 +584,41 @@ namespace MeGUI
                         dpp.AutoCrop = autoCrop.Checked;
                         dpp.HorizontalOutputResolution = (int)horizontalResolution.Value;
                     }
-                    
+
+
+
                     // chapter handling
                     if (!File.Exists(chapterFile.Filename))
                     {
-                        if (oMkvInfo != null && oMkvInfo.HasChapters)
+                        using (MediaInfoFile oInfo = new MediaInfoFile(input.Filename))
                         {
-                            string strChapterFile = Path.GetDirectoryName(output.Filename) + "\\" + Path.GetFileNameWithoutExtension(output.Filename) + " - Chapter Information.txt";
-                            if (oMkvInfo.extractChapters(strChapterFile))
+                            if (oInfo.ContainerFileType == ContainerType.MKV && oInfo.hasMKVChapters())
                             {
-                                chapterFile.Filename = strChapterFile;
-                                dpp.FilesToDelete.Add(strChapterFile);
+                                string strChapterFile = Path.GetDirectoryName(output.Filename) + "\\" + Path.GetFileNameWithoutExtension(output.Filename) + " - Chapter Information.txt";
+                                if (oInfo.extractMKVChapters(strChapterFile))
+                                {
+                                    chapterFile.Filename = strChapterFile;
+                                    dpp.FilesToDelete.Add(strChapterFile);
+                                }
                             }
-                        }
-                        else if (Path.GetExtension(input.Filename).ToLower().Equals(".vob"))
-                        {
-                            chapterFile.Filename = VideoUtil.getChaptersFromIFO(input.Filename, false, null, 1);
-                            dpp.FilesToDelete.Add(chapterFile.Filename);
+                            else if (Path.GetExtension(input.Filename).ToLower().Equals(".vob"))
+                            {
+                                chapterFile.Filename = VideoUtil.getChaptersFromIFO(input.Filename, false, null, 1);
+                                dpp.FilesToDelete.Add(chapterFile.Filename);
+                            }
                         }
                     }
                     if (!File.Exists(chapterFile.Filename))
                         chapterFile.Filename = "";
                     dpp.ChapterFile = chapterFile.Filename;
 
+                    bool bMKVInput = false;
                     // subtitle handling
-                    if (oMkvInfo != null && dpp.Container == ContainerType.MKV)
+                    using (MediaInfoFile oInfo = new MediaInfoFile(input.Filename))
                     {
-                        foreach (MkvInfoTrack oTrack in oMkvInfo.Track)
-                        {
-                            if (oTrack.Type == TrackType.Subtitle)
-                                dpp.SubtitleTracks.Add(oTrack);
-                        }
+                        bMKVInput = oInfo.ContainerFileType == ContainerType.MKV;
+                        if (oInfo.ContainerFileType == ContainerType.MKV && dpp.Container == ContainerType.MKV)
+                            dpp.SubtitleTracks.AddRange(oInfo.SubtitleInfo.Tracks);
                     }
 
                     // create jobs
@@ -670,25 +645,12 @@ namespace MeGUI
 
                         DGIIndexJob job;
                         JobChain c;
-                        if (oMkvInfo != null)
+                        if (bMKVInput)
                         {
                             job = new DGIIndexJob(input.Filename, d2vName, 0, null, false, false);
-
-                            List<MkvInfoTrack> oExtractTrack = new List<MkvInfoTrack>();
-                            foreach (AudioTrackInfo oStream in audioTracks)
+                            if (audioTracks.Count > 0)
                             {
-                                foreach (MkvInfoTrack oTrack in oMkvInfo.Track)
-                                {
-                                    if (oTrack.TrackID == oStream.TrackID)
-                                    {
-                                        oExtractTrack.Add(oTrack);
-                                        break;
-                                    }
-                                }
-                            }
-                            if (oExtractTrack.Count > 0)
-                            {
-                                MkvExtractJob extractJob = new MkvExtractJob(input.Filename, Path.GetDirectoryName(dpp.FinalOutput), oExtractTrack);
+                                MkvExtractJob extractJob = new MkvExtractJob(input.Filename, Path.GetDirectoryName(dpp.FinalOutput), audioTracks);
                                 if (chkDontEncodeVideo.Checked && dpp.Container == ContainerType.MKV)
                                     c = new SequentialChain(new SequentialChain(extractJob), new SequentialChain(ocJob));
                                 else
@@ -714,25 +676,12 @@ namespace MeGUI
                         JobChain c;
                         FFMSIndexJob job;
                         OneClickPostProcessingJob ocJob = new OneClickPostProcessingJob(input.Filename, input.Filename + ".ffindex", dpp, FileIndexerWindow.IndexType.FFMS);
-                        if (oMkvInfo != null)
+                        if (bMKVInput)
                         {
                             job = new FFMSIndexJob(input.Filename, null, 0, null, false);
-
-                            List<MkvInfoTrack> oExtractTrack = new List<MkvInfoTrack>();
-                            foreach (AudioTrackInfo oStream in audioTracks)
-                            {                             
-                                foreach (MkvInfoTrack oTrack in oMkvInfo.Track)
-                                {
-                                    if (oTrack.TrackID == oStream.TrackID)
-                                    {
-                                        oExtractTrack.Add(oTrack);
-                                        break;
-                                    }
-                                }
-                            }
-                            if (oExtractTrack.Count > 0)
+                            if (audioTracks.Count > 0)
                             {
-                                MkvExtractJob extractJob = new MkvExtractJob(input.Filename, Path.GetDirectoryName(dpp.FinalOutput), oExtractTrack);
+                                MkvExtractJob extractJob = new MkvExtractJob(input.Filename, Path.GetDirectoryName(dpp.FinalOutput), audioTracks);
                                 if (chkDontEncodeVideo.Checked && dpp.Container == ContainerType.MKV)
                                     c = new SequentialChain(new SequentialChain(extractJob), new SequentialChain(ocJob));
                                 else
@@ -863,7 +812,7 @@ namespace MeGUI
             if (!track.SelectedSCItem.IsStandard)
                 audioConfigControl[i].openAudioFile((string)track.SelectedObject);
             audioConfigControl[i].DelayEnabled = !track.SelectedSCItem.IsStandard;
-            if (oIndexerToUse == FileIndexerWindow.IndexType.FFMS && track.SelectedSCItem.IsStandard && oMkvInfo == null)
+            if (oIndexerToUse == FileIndexerWindow.IndexType.FFMS && track.SelectedSCItem.IsStandard && track.SelectedIndex > 0 && !((TrackInfo)track.SelectedObject).IsMKVContainer())
                 audioConfigControl[i].DisableDontEncode(true);
             else
                 audioConfigControl[i].DisableDontEncode(false);

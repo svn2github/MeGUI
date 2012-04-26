@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2011  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -44,8 +44,8 @@ namespace MeGUI
 		private string chapterFile, finalOutput, aviSynthScript, deviceType;
         private List<string> filesToDelete;
         private List<OneClickAudioTrack> _audioTracks;
-        private List<MkvInfoTrack> _subtitleTrack;
-        private MkvInfoTrack _videoTrackToMux;
+        private List<SubtitleTrackInfo> _subtitleTrack;
+        private string _videoFileToMux;
 
 		public OneClickPostprocessingProperties()
 		{
@@ -65,8 +65,8 @@ namespace MeGUI
             useChapterMarks = false;
             filesToDelete = new List<string>();
             _audioTracks = new List<OneClickAudioTrack>();
-            _subtitleTrack = new List<MkvInfoTrack>();
-            _videoTrackToMux = null;
+            _subtitleTrack = new List<SubtitleTrackInfo>();
+            _videoFileToMux = null;
 		}
 
         public bool AutoDeinterlace
@@ -243,7 +243,7 @@ namespace MeGUI
             set { _audioTracks = value; }
         }
 
-        public List<MkvInfoTrack> SubtitleTracks
+        public List<SubtitleTrackInfo> SubtitleTracks
         {
             get { return _subtitleTrack; }
             set { _subtitleTrack = value; }
@@ -252,10 +252,10 @@ namespace MeGUI
         /// <summary>
         /// gets / sets the video track for mux only
         /// </summary>
-        public MkvInfoTrack VideoTrackToMux
+        public string VideoFileToMux
         {
-            get { return _videoTrackToMux; }
-            set { _videoTrackToMux = value; }
+            get { return _videoFileToMux; }
+            set { _videoFileToMux = value; }
         }
 	}
 }

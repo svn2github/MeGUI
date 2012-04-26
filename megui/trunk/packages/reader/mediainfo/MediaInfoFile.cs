@@ -84,7 +84,7 @@ namespace MeGUI
                 {
                     VideoTrack v = new VideoTrack();
                     v.Codec = v.VCodec = getVideoCodec(t.Codec);
-                    v.Info = new MeGUI.core.details.TrackInfo(t.Language, t.Title);
+                    v.Info = new TrackInfo(t.Language, t.Title);
 
                     ulong width = ulong.Parse(t.Width);
                     ulong height = ulong.Parse(t.Height);
@@ -103,7 +103,7 @@ namespace MeGUI
                 {
                     AudioTrack a = new AudioTrack();
                     a.Codec = a.ACodec = getAudioCodec(t.Format);
-                    a.Info = new MeGUI.core.details.TrackInfo(t.Language, t.Title);
+                    a.Info = new TrackInfo(t.Language, t.Title);
 
                     a.StreamInfo = new AudioInfo();
 
@@ -116,7 +116,7 @@ namespace MeGUI
                 {
                     SubtitleTrack s = new SubtitleTrack();
                     s.Codec = s.SCodec = getSubtitleCodec(t.Codec);
-                    s.Info = new MeGUI.core.details.TrackInfo(t.Language, t.Title);
+                    s.Info = new TrackInfo(t.Language, t.Title);
                     s.StreamInfo = new SubtitleInfo2();
                     s.TrackNumber = uint.Parse(t.ID);
 
@@ -211,6 +211,8 @@ namespace MeGUI
         private VideoInformation _VideoInfo;
         private AudioInformation _AudioInfo;
         private SubtitleInformation _SubtitleInfo;
+        private MkvInfo _MkvInfo;
+        private LogItem _Log;
         #endregion
         #region properties
         public AudioInformation AudioInfo
@@ -264,6 +266,7 @@ namespace MeGUI
         /// <param name="oLog">the log item</param>
         private void GetSourceInformation(string file, LogItem oLog, int iPGCNumber)
         {
+            _Log = oLog;
             _file = file;
             _indexerToUse = FileIndexerWindow.IndexType.NONE;
             this._AudioInfo = new AudioInformation();
@@ -350,9 +353,12 @@ namespace MeGUI
                         _AudioInfo.BitrateModes[counter] = BitrateManagementMode.CBR;
 
                     AudioTrackInfo ati = new AudioTrackInfo();
+                    ati.SourceFileName = _file;
+                    ati.DefaultTrack = atrack.DefaultString.ToLower().Equals("yes");
+                    ati.ForcedTrack = atrack.ForcedString.ToLower().Equals("yes");
                     // DGIndex expects audio index not ID for TS
                     ati.ContainerType = info.General[0].Format;
-                    ati.Index = counter;
+                    ati.TrackIndex = counter;
                     int iID = 0;
                     if (info.General[0].Format == "CDXA/MPEG-PS")
                         // MediaInfo doesn't give TrackID for VCD, specs indicate only MP1L2 is supported
@@ -380,25 +386,28 @@ namespace MeGUI
                     {
                         switch (atrack.FormatProfile)
                         {
-                            case "Dolby Digital": ati.Type = "AC-3"; break;
+                            case "Dolby Digital": ati.Codec = "AC-3"; break;
                             case "HRA / Core":
-                            case "HRA": ati.Type = "DTS-HD High Resolution"; break;
-                            case "Layer 1": ati.Type = "MPA"; break;
-                            case "Layer 2": ati.Type = "MP2"; break;
-                            case "Layer 3": ati.Type = "MP3"; break;
-                            case "LC": ati.Type = "AAC"; break;
+                            case "HRA": ati.Codec = "DTS-HD High Resolution"; break;
+                            case "Layer 1": ati.Codec = "MPA"; break;
+                            case "Layer 2": ati.Codec = "MP2"; break;
+                            case "Layer 3": ati.Codec = "MP3"; break;
+                            case "LC": ati.Codec = "AAC"; break;
                             case "MA":
-                            case "MA / Core": ati.Type = "DTS-HD Master Audio"; break;
-                            case "TrueHD": ati.Type = "TrueHD"; break;
-                            case "ES": ati.Type = "DTS-ES"; break;
-                            default: ati.Type = atrack.Format; break;
+                            case "MA / Core": ati.Codec = "DTS-HD Master Audio"; break;
+                            case "TrueHD": ati.Codec = "TrueHD"; break;
+                            case "ES": ati.Codec = "DTS-ES"; break;
+                            default: ati.Codec = atrack.Format; break;
                         }
                     }
                     else
-                        ati.Type = atrack.Format;
+                        ati.Codec = atrack.Format;
                     ati.NbChannels = atrack.ChannelsString;
                     ati.ChannelPositions = atrack.ChannelPositionsString2;
                     ati.SamplingRate = atrack.SamplingRateString;
+                    int delay = 0;
+                    Int32.TryParse(atrack.Delay, out delay);
+                    ati.Delay = delay;
                     // gets SBR/PS flag from AAC streams
                     if (atrack.Format == "AAC")
                     {
@@ -423,10 +432,18 @@ namespace MeGUI
                 //subtitle detection
                 foreach (TextTrack oTextTrack in info.Text)
                 {
-                    bool bForceTrack = oTextTrack.ForcedString.ToLower().Equals("yes");
-                    bool bDefaultTrack = oTextTrack.DefaultString.ToLower().Equals("yes");
-                    OneClickStream oStream = new OneClickStream(file, TrackType.Subtitle, oTextTrack.CodecString, _strContainer, oTextTrack.StreamOrder, oTextTrack.LanguageString, oTextTrack.Title, 0, bDefaultTrack, bForceTrack, null, AudioEncodingMode.IfCodecDoesNotMatch, null);
-                    _SubtitleInfo.Tracks.Add(oStream);
+                    int mmgTrackID = 0;
+                    Int32.TryParse(oTextTrack.StreamOrder, out mmgTrackID);
+                    SubtitleTrackInfo oTrack = new SubtitleTrackInfo(mmgTrackID, oTextTrack.LanguageString, oTextTrack.Title);
+                    oTrack.DefaultTrack = oTextTrack.DefaultString.ToLower().Equals("yes");
+                    oTrack.ForcedTrack = oTextTrack.ForcedString.ToLower().Equals("yes");
+                    oTrack.SourceFileName = file;
+                    oTrack.Codec = oTextTrack.CodecString;
+                    oTrack.ContainerType = _strContainer;
+                    int delay = 0;
+                    Int32.TryParse(oTextTrack.Delay, out delay);
+                    oTrack.Delay = delay;
+                    _SubtitleInfo.Tracks.Add(oTrack);
                 }
 
                 // video detection
@@ -438,16 +455,18 @@ namespace MeGUI
                     {
                         int _trackID = 0;
                         Int32.TryParse(track.ID, out _trackID);
-                        _VideoInfo.FirstTrackID = _trackID;
                         int _mmgTrackID = 0;
                         Int32.TryParse(track.StreamOrder, out _mmgTrackID);
-                        _VideoInfo.FirstMMGTrackID = _mmgTrackID;
+
+                        VideoTrackInfo videoInfo = new VideoTrackInfo(_trackID, _mmgTrackID, track.LanguageString, track.Title, track.CodecString);
+                        videoInfo.ContainerType = _strContainer;
+                        _VideoInfo.Track = videoInfo;
+
                         _VideoInfo.Width = (ulong)easyParseInt(track.Width).Value;
                         _VideoInfo.Height = (ulong)easyParseInt(track.Height).Value;
                         _VideoInfo.FrameCount = (ulong)(easyParseInt(track.FrameCount) ?? 0);
                         _VideoInfo.FPS = (easyParseDouble(track.FrameRate) ?? 25.0);
                         _VideoInfo.ScanType = track.ScanTypeString;
-                        _VideoInfo.CodecString = track.CodecString;
                         _VideoInfo.Codec = getVideoCodec(track.Codec);
                         if (_VideoInfo.Codec == null)
                             _VideoInfo.Codec = getVideoCodec(track.Format); // sometimes codec info is not available, check the format then...
@@ -738,6 +757,32 @@ namespace MeGUI
         }
 
         #region methods
+        /// <summary>checks if the file is a MKV file and has chapters</summary>
+        /// <returns>true if MKV has chapters, false if not</returns>
+        public bool hasMKVChapters()
+        {
+            if (cType != ContainerType.MKV)
+                return false;
+
+            if (_MkvInfo == null)
+                _MkvInfo = new MkvInfo(_file, ref _Log);
+
+            return _MkvInfo.HasChapters;
+        }
+
+        /// <summary>extracts the MKV chapters</summary>
+        /// <returns>true if chapters have been extracted, false if not</returns>
+        public bool extractMKVChapters(string strChapterFile)
+        {
+            if (cType != ContainerType.MKV)
+                return false;
+
+            if (_MkvInfo == null)
+                return false;
+
+            return _MkvInfo.extractChapters(strChapterFile);
+        }
+
         /// <summary>checks if the file is indexable by DGIndexNV</summary>
         /// <returns>true if indexable, false if not</returns>
         public bool isDGIIndexable()
@@ -751,9 +796,9 @@ namespace MeGUI
                 return false;
 
             // only AVC, VC1 and MPEG2 are supported
-            if (!_VideoInfo.CodecString.ToUpper().Equals("AVC") &&
-                !_VideoInfo.CodecString.ToUpper().Equals("VC-1") &&
-                !_VideoInfo.CodecString.ToUpper().Equals("MPEG-2 VIDEO"))
+            if (!_VideoInfo.Track.Codec.ToUpper().Equals("AVC") &&
+                !_VideoInfo.Track.Codec.ToUpper().Equals("VC-1") &&
+                !_VideoInfo.Track.Codec.ToUpper().Equals("MPEG-2 VIDEO"))
                 return false;
 
             // only the following container formats are supported
@@ -782,8 +827,8 @@ namespace MeGUI
                 return false;
 
             // only MPEG1 and MPEG2 are supported
-            if (!_VideoInfo.CodecString.ToUpper().Equals("MPEG-1 VIDEO") &&
-                !_VideoInfo.CodecString.ToUpper().Equals("MPEG-2 VIDEO"))
+            if (!_VideoInfo.Track.Codec.ToUpper().Equals("MPEG-1 VIDEO") &&
+                !_VideoInfo.Track.Codec.ToUpper().Equals("MPEG-2 VIDEO"))
                 return false;
 
             // only the following container formats are supported
@@ -809,7 +854,7 @@ namespace MeGUI
                 return false;
 
             // only AVC is supported
-            if (!_VideoInfo.CodecString.ToUpper().Equals("AVC"))
+            if (!_VideoInfo.Track.Codec.ToUpper().Equals("AVC"))
                 return false;
 
             // only the following container formats are supported
@@ -836,7 +881,7 @@ namespace MeGUI
                 return false;
 
             // interlaced VC-1 is not supported
-            if (_VideoInfo.CodecString.ToUpper().Equals("VC-1") &&
+            if (_VideoInfo.Track.Codec.ToUpper().Equals("VC-1") &&
                 !_VideoInfo.ScanType.ToUpper().Equals("PROGRESSIVE"))
                 return false;
 
@@ -1174,11 +1219,9 @@ namespace MeGUI
         public int PGCCount;
 
         private string _strVideoScanType;
-        private string _strVideoCodec;
         private VideoCodec _vCodec;
         private VideoType _vType;
-        private int _trackID;
-        private int _mmgTrackID;
+        private VideoTrackInfo _videoInfo;
 
         public VideoInformation(bool hasVideo,
             ulong width, ulong height,
@@ -1198,15 +1241,16 @@ namespace MeGUI
             PGCNumber = 0;
         }
 
+        public VideoTrackInfo Track
+        {
+            get { return _videoInfo; }
+            set { _videoInfo = value; }
+        }
+
         public string ScanType
         {
             get { return _strVideoScanType; }
             set { _strVideoScanType = value; }
-        }
-        public string CodecString
-        {
-            get { return _strVideoCodec; }
-            set { _strVideoCodec = value; }
         }
 
         public VideoType Type
@@ -1219,27 +1263,6 @@ namespace MeGUI
         {
             get { return _vCodec; }
             set { _vCodec = value; }
-        }
-
-        /// <summary>gets the first video track ID for muxing with mkvmerge</summary>
-        /// <returns>trackID or 0</returns>
-        public int FirstMMGTrackID
-        {
-            get
-            {
-                // check if the file contains a video track
-                if (!HasVideo)
-                    return 0;
-
-                return _mmgTrackID;
-            }
-            set { _mmgTrackID = value; }
-        }
-
-        public int FirstTrackID
-        {
-            get { return _trackID; }
-            set { _trackID = value; }
         }
 
         public VideoInformation Clone()
@@ -1303,14 +1326,14 @@ namespace MeGUI
 
     public class SubtitleInformation
     {
-        private List<OneClickStream> _arrSubtitleTracks = new List<OneClickStream>();
+        private List<SubtitleTrackInfo> _arrSubtitleTracks = new List<SubtitleTrackInfo>();
 
         public SubtitleInformation()
         {
 
         }
 
-        public List<OneClickStream> Tracks
+        public List<SubtitleTrackInfo> Tracks
         {
             get { return _arrSubtitleTracks; }
             set { _arrSubtitleTracks = value; }
@@ -1323,15 +1346,7 @@ namespace MeGUI
             // check if the file is a subtitle file
             if (_arrSubtitleTracks.Count == 0)
                 return 0;
-
-            int iCount = 0;
-
-            int trackID = -1;
-            Int32.TryParse(_arrSubtitleTracks[0].TrackID, out trackID);
-
-            if (trackID > 0)
-                iCount = trackID - 1;
-            return iCount;
+            return _arrSubtitleTracks[0].MMGTrackID;
         }
 
         public VideoInformation Clone()

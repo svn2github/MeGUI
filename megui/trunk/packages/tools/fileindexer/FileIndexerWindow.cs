@@ -34,29 +34,26 @@ namespace MeGUI
     /// </summary>
     public partial class FileIndexerWindow : Form
     {
-        #region variables
-        private D2VIndexJob lastJob = null;
-        private LogItem _oLog;
-
         public enum IndexType
         {
             D2V, DGA, DGI, FFMS, NONE
         };
-        private IndexType IndexerUsed = IndexType.D2V;
 
+        #region variables
+        private D2VIndexJob lastJob = null;
+        private LogItem _oLog;
+        private IndexType IndexerUsed = IndexType.D2V;
         private string strVideoCodec = "";
         private string strVideoScanType = "";
         private string strContainerFormat = "";
         private List<AudioTrackInfo> audioTracks = new List<AudioTrackInfo>();
-        private MkvInfo oMkvInfo = null;
-
         private bool dialogMode = false; // $%£%$^>*"%$%%$#{"!!! Affects the public behaviour!
         private bool configured = false;
         private MainForm mainForm;
         private VideoUtil vUtil;
         private JobUtil jobUtil;
-
         #endregion
+
         #region start / stop
         public void setConfig(string input, string projectName, int demuxType,
             bool showCloseOnQueue, bool closeOnQueue, bool loadOnComplete, bool updateMode)
@@ -219,7 +216,7 @@ namespace MeGUI
         {
             MediaInfoFile iFile = new MediaInfoFile(fileName, ref _oLog);
 
-            strVideoCodec = iFile.VideoInfo.CodecString;
+            strVideoCodec = iFile.VideoInfo.Track.Codec;
             strVideoScanType = iFile.VideoInfo.ScanType;
             strContainerFormat = iFile.ContainerFileTypeString;
             audioTracks = iFile.AudioInfo.Tracks;
@@ -239,11 +236,6 @@ namespace MeGUI
 
             if (input.Filename != fileName)
                 input.Filename = fileName;
-
-            // if the input container is MKV get the MkvInfo
-            oMkvInfo = null;
-            if (txtContainerInformation.Text.Trim().ToUpper().Equals("MATROSKA"))
-                oMkvInfo = new MkvInfo(input.Filename, ref _oLog);
 
             generateAudioList();
 
@@ -270,15 +262,9 @@ namespace MeGUI
         private void generateAudioList()
         {
             AudioTracks.Items.Clear();
-            if (oMkvInfo != null && IndexerUsed == IndexType.FFMS)
-            {
-                foreach (MkvInfoTrack oTrack in oMkvInfo.Track)
-                    if (oTrack.Type == TrackType.Audio)
-                        AudioTracks.Items.Add(oTrack.AudioTrackInfo);
-            }
-            else
-                foreach (AudioTrackInfo atrack in audioTracks)
-                    AudioTracks.Items.Add(atrack);
+
+            foreach (AudioTrackInfo atrack in audioTracks)
+                AudioTracks.Items.Add(atrack);
         }
 
         /// <summary>
@@ -394,16 +380,11 @@ namespace MeGUI
                             case IndexType.FFMS:
                                 {
                                     FFMSIndexJob job = generateFFMSIndexJob();
-                                    if (oMkvInfo != null && job.DemuxMode > 0 && job.AudioTracks.Count > 0)
+                                    if (txtContainerInformation.Text.Trim().ToUpper().Equals("MATROSKA") && job.DemuxMode > 0 && job.AudioTracks.Count > 0)
                                     {
-                                        List<MkvInfoTrack> oExtractTrack = new List<MkvInfoTrack>();
-                                        foreach (AudioTrackInfo oStream in job.AudioTracks)
-                                            foreach (MkvInfoTrack oTrack in oMkvInfo.Track)
-                                                if (oTrack.TrackID == oStream.TrackID)
-                                                    oExtractTrack.Add(oTrack);
-                                        job.AudioTracksDemux = oExtractTrack;
+                                        job.AudioTracksDemux = job.AudioTracks;
                                         job.AudioTracks = new List<AudioTrackInfo>();
-                                        MkvExtractJob extractJob = new MkvExtractJob(input.Filename, Path.GetDirectoryName(this.input.Filename), oExtractTrack);
+                                        MkvExtractJob extractJob = new MkvExtractJob(input.Filename, Path.GetDirectoryName(this.input.Filename), job.AudioTracksDemux);
                                         JobChain c = new SequentialChain(new SequentialChain(extractJob), new SequentialChain(job));
                                         mainForm.Jobs.addJobsWithDependencies(c);
                                     }
@@ -592,7 +573,7 @@ namespace MeGUI
             StringBuilder logBuilder = new StringBuilder();
             VideoUtil vUtil = new VideoUtil(mainForm);
             List<string> arrFilesToDelete = new List<string>();
-            Dictionary<int, string> audioFiles = vUtil.getAllDemuxedAudio(job.AudioTracks, new List<MkvInfoTrack>(), out arrFilesToDelete, job.Output, null);
+            Dictionary<int, string> audioFiles = vUtil.getAllDemuxedAudio(job.AudioTracks, new List<AudioTrackInfo>(), out arrFilesToDelete, job.Output, null);
             if (job.LoadSources)
             {
                 if (job.DemuxMode != 0 && audioFiles.Count > 0)
@@ -631,7 +612,7 @@ namespace MeGUI
             StringBuilder logBuilder = new StringBuilder();
             VideoUtil vUtil = new VideoUtil(mainForm);
             List<string> arrFilesToDelete = new List<string>();
-            Dictionary<int, string> audioFiles = vUtil.getAllDemuxedAudio(job.AudioTracks, new List<MkvInfoTrack>(), out arrFilesToDelete, job.Output, null);
+            Dictionary<int, string> audioFiles = vUtil.getAllDemuxedAudio(job.AudioTracks, new List<AudioTrackInfo>(), out arrFilesToDelete, job.Output, null);
             if (job.LoadSources)
             {
                 if (job.DemuxMode != 0 && audioFiles.Count > 0)
@@ -670,7 +651,7 @@ namespace MeGUI
             StringBuilder logBuilder = new StringBuilder();
             VideoUtil vUtil = new VideoUtil(mainForm);
             List<string> arrFilesToDelete = new List<string>();
-            Dictionary<int, string> audioFiles = vUtil.getAllDemuxedAudio(job.AudioTracks, new List<MkvInfoTrack>(), out arrFilesToDelete, job.Output, null);
+            Dictionary<int, string> audioFiles = vUtil.getAllDemuxedAudio(job.AudioTracks, new List<AudioTrackInfo>(), out arrFilesToDelete, job.Output, null);
             if (job.LoadSources)
             {
                 if (job.DemuxMode != 0 && audioFiles.Count > 0)

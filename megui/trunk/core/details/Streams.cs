@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2011  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -26,20 +26,6 @@ using MeGUI.core.util;
 
 namespace MeGUI.core.details
 {
-    public class TrackInfo
-    {
-        public string Language;
-        public string Name;
-
-        public TrackInfo(string language, string name)
-        {
-            Language = language;
-            Name = name;
-        }
-
-        public TrackInfo() : this("", "") { }
-    }
-
     public class MuxStream
     {
         private string _language;
@@ -48,9 +34,9 @@ namespace MeGUI.core.details
         public int delay;
         public bool bDefaultTrack;
         public bool bForceTrack;
-        public MkvInfoTrack MuxOnlyInfo;
+        public TrackInfo MuxOnlyInfo;
 
-        public MuxStream(string path, string language, string name, int delay, bool bDefaultTrack, bool bForceTrack, MkvInfoTrack MuxOnlyInfo)
+        public MuxStream(string path, string language, string name, int delay, bool bDefaultTrack, bool bForceTrack, TrackInfo MuxOnlyInfo)
         {
             this._language = language;
             this._name = name;

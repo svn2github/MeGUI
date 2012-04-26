@@ -241,7 +241,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                     {
                         int trackID = 0;
                         if (oVideoInfo.HasVideo)
-                            trackID = oVideoInfo.VideoInfo.FirstTrackID;
+                            trackID = oVideoInfo.VideoInfo.Track.TrackID;
                         sb.Append("#trackID=" + trackID);
                     }
                     if (settings.Framerate.HasValue)
@@ -261,7 +261,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                     {
                         int trackID = 0;
                         if (oVideoInfo.HasVideo)
-                            trackID = oVideoInfo.VideoInfo.FirstTrackID;
+                            trackID = oVideoInfo.VideoInfo.Track.TrackID;
                         sb.Append("#trackID=" + trackID);
                     }
                     if (settings.Framerate.HasValue)

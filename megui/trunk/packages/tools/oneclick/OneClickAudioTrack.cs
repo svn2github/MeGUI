@@ -32,16 +32,16 @@ namespace MeGUI
 	/// </summary>
 	public class OneClickAudioTrack
 	{
-        private MkvInfoTrack _mkvAudioTrack;
         private AudioJob _audioJob;
         private MuxStream _directMuxAudio;
         private AudioTrackInfo _audioTrackInfo;
+        private bool _bMKVTrack;
 
-		public OneClickAudioTrack() : this(null, null, null, null) { }
+		public OneClickAudioTrack() : this(null, null, null, false) { }
 
-        public OneClickAudioTrack(AudioJob oAudioJob, MuxStream oMuxStream, AudioTrackInfo oAudioTrackInfo, MkvInfoTrack oMkvInfoTrack)
+        public OneClickAudioTrack(AudioJob oAudioJob, MuxStream oMuxStream, AudioTrackInfo oAudioTrackInfo, bool bMKVTrack)
         {
-            _mkvAudioTrack = oMkvInfoTrack;
+            _bMKVTrack = bMKVTrack;
             _audioJob = oAudioJob;
             _directMuxAudio = oMuxStream;
             _audioTrackInfo = oAudioTrackInfo;
@@ -62,10 +62,10 @@ namespace MeGUI
             set { _directMuxAudio = value; }
         }
 
-        public MkvInfoTrack MkvAudioTrack
+        public bool ExtractMKVTrack
         {
-            get { return _mkvAudioTrack; }
-            set { _mkvAudioTrack = value; }
+            get { return _bMKVTrack; }
+            set { _bMKVTrack = value; }
         }
 
         public AudioTrackInfo AudioTrackInfo

@@ -99,13 +99,13 @@ namespace MeGUI
                 sb.Append("tracks \"" + job.Input + "\" --ui-language en");
 
                 // Tracks to extract
-                foreach (MkvInfoTrack oTrack in job.MkvTracks)
+                foreach (TrackInfo oTrack in job.MkvTracks)
                 {
                     // Extract only audio/subtitle tracks
-                    if (oTrack.Type != TrackType.Audio && oTrack.Type != TrackType.Subtitle)
+                    if (oTrack.TrackType != TrackType.Audio && oTrack.TrackType != TrackType.Subtitle)
                         continue;
 
-                    sb.Append(" " + oTrack.TrackID + ":\"" + job.OutputPath + "\\" + oTrack.FileName + "\"");
+                    sb.Append(" " + oTrack.MMGTrackID + ":\"" + job.OutputPath + "\\" + oTrack.DemuxFileName + "\"");
                 }
 
                 return sb.ToString();
