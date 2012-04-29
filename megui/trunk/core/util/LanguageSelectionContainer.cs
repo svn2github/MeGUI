@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -188,7 +188,7 @@ namespace MeGUI
         public static string Short2FullLanguageName(string LngCode)
         {
             string Language = "";
-            switch (LngCode.ToLower())
+            switch (LngCode.ToLower(System.Globalization.CultureInfo.InvariantCulture))
             {
                 case "aa": Language = "Afar"; break;
                 case "ab": Language = "Abkhazian"; break;

@@ -41,7 +41,7 @@ namespace MeGUI
             string videoIFO;
             string path;
 
-            if (File.Exists(location) && Path.GetExtension(location).ToLower().Equals(".ifo"))
+            if (File.Exists(location) && Path.GetExtension(location).ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(".ifo"))
             {
                 path = Path.GetDirectoryName(location);
                 videoIFO = location;
@@ -65,7 +65,7 @@ namespace MeGUI
             ex.StreamDetected += (sender, args) => OnStreamDetected(args.ProgramChain);
             ex.ChaptersLoaded += (sender, args) => OnChaptersLoaded(args.ProgramChain);
 
-            if (File.Exists(videoIFO) && Path.GetFileName(videoIFO).ToUpper().Equals("VIDEO_TS.IFO"))
+            if (File.Exists(videoIFO) && Path.GetFileName(videoIFO).ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("VIDEO_TS.IFO"))
             {
                 byte[] bytRead = new byte[4];
                 long VMG_PTT_STPT_Position = IFOparser.ToFilePosition(IFOparser.GetFileBlock(videoIFO, 0xC4, 4));

@@ -48,7 +48,7 @@ namespace MeGUI
             if (location.StartsWith("VTS_"))
             {
                 titleSetNum = int.Parse(Path.GetFileNameWithoutExtension(location)
-                .ToUpper()
+                .ToUpper(System.Globalization.CultureInfo.InvariantCulture)
                 .Replace("VTS_", string.Empty)
                 .Replace("_0.IFO", string.Empty));
             }

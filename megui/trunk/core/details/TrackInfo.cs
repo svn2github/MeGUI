@@ -166,26 +166,8 @@ namespace MeGUI
 
         public bool IsMKVContainer()
         {
-            return _containerType.Trim().ToUpper().Equals("MATROSKA");
+            return _containerType.Trim().ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("MATROSKA");
         }
-
-        //public override string ToString()
-        //{
-        //    string fullString = "[" + TrackIDx + "] - " + this.type;
-        //    if (!string.IsNullOrEmpty(nbChannels))
-        //    {
-        //        fullString += " - " + this.nbChannels;
-        //    }
-        //    if (!string.IsNullOrEmpty(samplingRate))
-        //    {
-        //        fullString += " / " + samplingRate;
-        //    }
-        //    if (!string.IsNullOrEmpty(language))
-        //    {
-        //        fullString += " / " + language;
-        //    }
-        //    return fullString.Trim();
-        //}
 
         [XmlIgnore()]
         public String DemuxFileName
@@ -194,14 +176,14 @@ namespace MeGUI
             {
                 string strExtension = String.Empty;
                 string[] arrCodec = new string[]{};
-                string strCodec = _codec.ToUpper();
+                string strCodec = _codec.ToUpper(System.Globalization.CultureInfo.InvariantCulture);
 
-                if (_containerType.ToUpper().Equals("MATROSKA"))
+                if (IsMKVContainer())
                 {
                     arrCodec = _codec.Split('/');
                     if (arrCodec[0].Substring(1, 1).Equals("_"))
                         arrCodec[0] = arrCodec[0].Substring(2);
-                    strCodec = arrCodec[0];
+                    strCodec = arrCodec[0].ToUpper(System.Globalization.CultureInfo.InvariantCulture);
                 }
 
                 switch (strCodec)

@@ -504,7 +504,7 @@ namespace MeGUI
 		{
 			if (this.saveFileDialog.ShowDialog() == DialogResult.OK)
 			{
-                string ext = Path.GetExtension(saveFileDialog.FileName).ToLower();
+                string ext = Path.GetExtension(saveFileDialog.FileName).ToLower(System.Globalization.CultureInfo.InvariantCulture);
                 if (Drives.ableToWriteOnThisDrive(Path.GetPathRoot(saveFileDialog.FileName)))
                 {
                     if (ext == ".qpf")
@@ -535,7 +535,7 @@ namespace MeGUI
                 {
                     input.Text = openFileDialog.FileName;
 
-                    if (input.Text.ToLower().EndsWith("ifo"))
+                    if (input.Text.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith("ifo"))
                     {
                         ChapterExtractor ex = new DvdExtractor();
                         using (frmStreamSelect frm = new frmStreamSelect(ex))
@@ -557,7 +557,7 @@ namespace MeGUI
                         FreshChapterView();
                         updateTimeLine();
                     }
-                    else if (input.Text.ToLower().EndsWith("mpls"))
+                    else if (input.Text.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith("mpls"))
                     {
                         ChapterExtractor ex = new MplsExtractor();
                         pgc = ex.GetStreams(input.Text)[0];

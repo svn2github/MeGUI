@@ -635,7 +635,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
         private bool OpenSourceWithNicAudio(out StringBuilder sbOpen, MediaInfoFile oInfo, bool bForce)
         {
             sbOpen = new StringBuilder();
-            switch (Path.GetExtension(audioJob.Input).ToLower())
+            switch (Path.GetExtension(audioJob.Input).ToLower(System.Globalization.CultureInfo.InvariantCulture))
             {
                 case ".ac3":
                 case ".ddp":
@@ -856,7 +856,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 case ChannelMode.StereoDownmix:
                     string strChannelPositions;
                     int iChannelCount = 0;
-                    if (Path.GetExtension(audioJob.Input).ToLower().Equals(".avs"))
+                    if (Path.GetExtension(audioJob.Input).ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(".avs"))
                     {
                         if (!AudioUtil.AVSFileHasAudio(audioJob.Input))
                         {

@@ -248,7 +248,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "TSMuxer");
                     {
                         foreach (KeyValuePair<string, string> strLanguage in LanguageSelectionContainer.Languages)
                         {
-                            if (stream.language.ToLower().Equals(strLanguage.Key.ToLower()))
+                            if (stream.language.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(strLanguage.Key.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
                             {
                                 sw.Write(", lang=" + strLanguage.Value);
                                 break;
@@ -262,7 +262,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "TSMuxer");
                     MuxStream stream = (MuxStream)o;
                     string scodecID = "";
 
-                    if (stream.path.ToLower().EndsWith(".srt"))
+                    if (stream.path.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".srt"))
                         scodecID = "S_TEXT/UTF8";
                     else 
                         scodecID = "S_HDMV/PGS"; // sup files
@@ -273,7 +273,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "TSMuxer");
                     if (stream.delay != 0)
                         sw.Write(", timeshift={0}ms", stream.delay);
 
-                    if (stream.path.ToLower().EndsWith(".srt"))
+                    if (stream.path.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".srt"))
                     {
                         sw.Write(", video-width={0}, video-height={1}, fps={2}", oVideoInfo.VideoInfo.Width, oVideoInfo.VideoInfo.Height, settings.Framerate.Value.ToString(ci));
                     }
@@ -282,7 +282,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "TSMuxer");
                     {
                         foreach (KeyValuePair<string, string> strLanguage in LanguageSelectionContainer.Languages)
                         {
-                            if (stream.language.ToLower().Equals(strLanguage.Key.ToLower()))
+                            if (stream.language.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(strLanguage.Key.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
                             {
                                 sw.Write(", lang=" + strLanguage.Value);
                                 break;

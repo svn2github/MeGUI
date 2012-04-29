@@ -122,7 +122,7 @@ namespace MeGUI
 
                         // write avs file
                         string strAudioAVSFile;
-                        strAudioAVSFile = job.Input + "_track_" + (oAudioTrack.TrackIndex + 1) + "_" + oAudioTrack.Language.ToLower() + ".avs";
+                        strAudioAVSFile = job.Input + "_track_" + (oAudioTrack.TrackIndex + 1) + "_" + oAudioTrack.Language.ToLower(System.Globalization.CultureInfo.InvariantCulture) + ".avs";
                         if (!String.IsNullOrEmpty(job.Output))
                             strAudioAVSFile = Path.Combine(Path.GetDirectoryName(job.Output), Path.GetFileName(strAudioAVSFile));
                         try

@@ -151,18 +151,25 @@ namespace MeGUI
 
         public override string ToString()
         {
+            string strCodec = _trackInfo.Codec;
+            if (_trackInfo.IsMKVContainer())
+            {
+                string[] arrCodec = new string[] { };
+                arrCodec = _trackInfo.Codec.Split('/');
+                if (arrCodec[0].Substring(1, 1).Equals("_"))
+                    arrCodec[0] = arrCodec[0].Substring(2);
+                strCodec = arrCodec[0];
+            }
+
             string fullString = "[";
             if (_trackInfo.TrackType == TrackType.Audio)
-                fullString += ((AudioTrackInfo)_trackInfo).TrackIDx + "] - " + _trackInfo.Codec;
+                fullString += ((AudioTrackInfo)_trackInfo).TrackIDx + "] - " + strCodec;
             else
-                fullString += _trackInfo.MMGTrackID + "] - " + _trackInfo.Codec;
-            if (_trackInfo != null)
-            {
-                if (_trackInfo is AudioTrackInfo && !string.IsNullOrEmpty(((AudioTrackInfo)_trackInfo).NbChannels))
-                    fullString += " - " + ((AudioTrackInfo)_trackInfo).NbChannels;
-                if (_trackInfo is AudioTrackInfo && !string.IsNullOrEmpty(((AudioTrackInfo)_trackInfo).SamplingRate))
-                    fullString += " - " + ((AudioTrackInfo)_trackInfo).SamplingRate;
-            }
+                fullString += _trackInfo.MMGTrackID + "] - " + strCodec;
+            if (_trackInfo is AudioTrackInfo && !string.IsNullOrEmpty(((AudioTrackInfo)_trackInfo).NbChannels))
+                fullString += " - " + ((AudioTrackInfo)_trackInfo).NbChannels;
+            if (_trackInfo is AudioTrackInfo && !string.IsNullOrEmpty(((AudioTrackInfo)_trackInfo).SamplingRate))
+                fullString += " - " + ((AudioTrackInfo)_trackInfo).SamplingRate;
             if (!string.IsNullOrEmpty(_trackInfo.Language))
                 fullString += " / " + _trackInfo.Language;
             return fullString.Trim();

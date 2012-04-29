@@ -699,7 +699,7 @@ namespace MeGUI
                 {
                     foreach (KeyValuePair<string, string> strLanguage in LanguageSelectionContainer.Languages)
                     {
-                        if (Path.GetFileNameWithoutExtension(stream.path).ToLower().Contains(strLanguage.Key.ToLower()))
+                        if (Path.GetFileNameWithoutExtension(stream.path).ToLower(System.Globalization.CultureInfo.InvariantCulture).Contains(strLanguage.Key.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
                         {
                             stream.language = strLanguage.Key;
                             break;

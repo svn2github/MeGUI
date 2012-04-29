@@ -320,7 +320,7 @@ namespace MeGUI.packages.video.x264
             CustomSarValue = String.Empty;
             if (String.IsNullOrEmpty(CustomSarValueInput) && extractCustomCommand("sar", out strCustomValue))
             {
-                switch (strCustomValue.ToLower())
+                switch (strCustomValue.ToLower(System.Globalization.CultureInfo.InvariantCulture))
                 {
                     case "1:1": _xs.SampleAR = 1; break;
                     case "4:3": _xs.SampleAR = 2; break;
@@ -368,7 +368,7 @@ namespace MeGUI.packages.video.x264
             string strCustomValue;
             if (extractCustomCommand("colorprim", out strCustomValue))
             {
-                switch (strCustomValue.ToLower())
+                switch (strCustomValue.ToLower(System.Globalization.CultureInfo.InvariantCulture))
                 {
                     case "bt709": _xs.ColorPrim = 1; break;
                     case "bt470m": _xs.ColorPrim = 2; break;
@@ -390,7 +390,7 @@ namespace MeGUI.packages.video.x264
             string strCustomValue;
             if (extractCustomCommand("pulldown", out strCustomValue))
             {
-                switch (strCustomValue.ToLower())
+                switch (strCustomValue.ToLower(System.Globalization.CultureInfo.InvariantCulture))
                 {
                     case "none": _xs.X264PullDown = 0; break;
                     case "22": _xs.X264PullDown = 1; break;
@@ -413,7 +413,7 @@ namespace MeGUI.packages.video.x264
             string strCustomValue;
             if (extractCustomCommand("transfer", out strCustomValue))
             {
-                switch (strCustomValue.ToLower())
+                switch (strCustomValue.ToLower(System.Globalization.CultureInfo.InvariantCulture))
                 {
                     case "bt709": _xs.Transfer = 1; break;
                     case "bt470m": _xs.Transfer = 2; break;
@@ -437,7 +437,7 @@ namespace MeGUI.packages.video.x264
             string strCustomValue;
             if (extractCustomCommand("colormatrix", out strCustomValue))
             {
-                switch (strCustomValue.ToLower())
+                switch (strCustomValue.ToLower(System.Globalization.CultureInfo.InvariantCulture))
                 {
                     case "bt709": _xs.ColorMatrix = 1; break;
                     case "fcc": _xs.ColorMatrix = 2; break;
@@ -460,7 +460,7 @@ namespace MeGUI.packages.video.x264
         {
             string strCustomValue;
             extractCustomCommand("profile", out strCustomValue);
-            switch (strCustomValue.ToLower())
+            switch (strCustomValue.ToLower(System.Globalization.CultureInfo.InvariantCulture))
             {
                 case "baseline": _xs.Profile = 0; break;
                 case "main": _xs.Profile = 1; break;
@@ -492,7 +492,7 @@ namespace MeGUI.packages.video.x264
         {
             string strCustomValue;
             extractCustomCommand("nal-hrd", out strCustomValue);
-            switch (strCustomValue.ToLower())
+            switch (strCustomValue.ToLower(System.Globalization.CultureInfo.InvariantCulture))
             {
                 case "none": _xs.Nalhrd = 0; break;
                 case "vbr": _xs.Nalhrd = 1; break;
@@ -519,7 +519,7 @@ namespace MeGUI.packages.video.x264
         {
             string strCustomValue;
             extractCustomCommand("level", out strCustomValue);
-            switch (strCustomValue.ToLower().Replace(".", "").Trim())
+            switch (strCustomValue.ToLower(System.Globalization.CultureInfo.InvariantCulture).Replace(".", "").Trim())
             {
                 case "1": 
                 case "10": _xs.Level = 0; break;
@@ -565,7 +565,7 @@ namespace MeGUI.packages.video.x264
         {
             string strCustomValue;
             extractCustomCommand("keyint", out strCustomValue);
-            if (strCustomValue.ToLower().Equals("infinite"))
+            if (strCustomValue.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals("infinite"))
                 _xs.KeyframeInterval = 0;
             else
             {
@@ -760,7 +760,7 @@ namespace MeGUI.packages.video.x264
         {
             string strCustomValue;
             extractCustomCommand("b-pyramid", out strCustomValue);
-            switch (strCustomValue.ToLower())
+            switch (strCustomValue.ToLower(System.Globalization.CultureInfo.InvariantCulture))
             {
                 case "none": _xs.x264BFramePyramid = 0; break;
                 case "normal": _xs.x264BFramePyramid = 2; break;
@@ -929,7 +929,7 @@ namespace MeGUI.packages.video.x264
 
             foreach (String strCommand in System.Text.RegularExpressions.Regex.Split(_xs.CustomEncoderOptions, "--"))
             {
-                if (strCommand.Trim().ToLower().StartsWith(strCommandToExtract.ToLower()))
+                if (strCommand.Trim().ToLower(System.Globalization.CultureInfo.InvariantCulture).StartsWith(strCommandToExtract.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
                 {
                     strCommandValue = strCommand.Substring(strCommandToExtract.Length).Trim();
                     bFound = true;

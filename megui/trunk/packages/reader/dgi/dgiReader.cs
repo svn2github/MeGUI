@@ -41,7 +41,7 @@ namespace MeGUI
 
         public int HandleLevel(string file)
         {
-            if (file.ToLower().EndsWith(".dgi"))
+            if (file.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".dgi"))
                 return 12;
             return -1;
         }

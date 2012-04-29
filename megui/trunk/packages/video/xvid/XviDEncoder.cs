@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -263,7 +263,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "XviDEncoder");
             }
             if (xs.EncodingMode != 2) // not 2 pass vbr first pass, add output filename and output type
             {
-                string extension = Path.GetExtension(output).ToLower();
+                string extension = Path.GetExtension(output).ToLower(System.Globalization.CultureInfo.InvariantCulture);
                 if (extension.Equals(".mkv"))
                     sb.Append("-mkv \"" + output + "\"");
                 else if (extension.Equals(".avi"))

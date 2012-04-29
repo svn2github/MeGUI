@@ -289,7 +289,7 @@ namespace MeGUI
             // select primary language
             foreach (AudioTrackInfo ati in audioTracks)
             {
-                if (ati.Language.ToLower().Equals(mainForm.Settings.DefaultLanguage1.ToLower()) &&
+                if (ati.Language.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(mainForm.Settings.DefaultLanguage1.ToLower(System.Globalization.CultureInfo.InvariantCulture)) &&
                     audioTrack1.SelectedIndex == 0)
                 {
                     audioTrack1.SelectedObject = ati;
@@ -302,7 +302,7 @@ namespace MeGUI
             {
                 foreach (AudioTrackInfo ati in audioTracks)
                 {
-                    if (ati.Language.ToLower().Equals(mainForm.Settings.DefaultLanguage2.ToLower()))
+                    if (ati.Language.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(mainForm.Settings.DefaultLanguage2.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
                     {
                         if (audioTrack1.SelectedIndex == 0)
                             audioTrack1.SelectedObject = ati;
@@ -324,7 +324,7 @@ namespace MeGUI
             // Detect Chapters
             if (iFile.hasMKVChapters())
                 this.chapterFile.Filename = "<internal MKV chapters>";
-            else if (Path.GetExtension(input.Filename).ToLower().Equals(".vob"))
+            else if (Path.GetExtension(input.Filename).ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(".vob"))
                 this.chapterFile.Filename = "<internal VOB chapters>";
             else
             {
@@ -511,7 +511,7 @@ namespace MeGUI
                             info = new TrackInfo(oAudioTrackInfo.Language, oAudioTrackInfo.Name);
                             strLanguage = oAudioTrackInfo.Language;
                             strAudioCodec = oAudioTrackInfo.Codec;
-                            if (oAudioTrackInfo.ContainerType.ToUpper().Equals("MATROSKA") && (oIndexerToUse == FileIndexerWindow.IndexType.FFMS || oIndexerToUse == FileIndexerWindow.IndexType.DGI))
+                            if (oAudioTrackInfo.ContainerType.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("MATROSKA") && (oIndexerToUse == FileIndexerWindow.IndexType.FFMS || oIndexerToUse == FileIndexerWindow.IndexType.DGI))
                                 bMuxMKV = true;
                         }
                         else
@@ -601,7 +601,7 @@ namespace MeGUI
                                     dpp.FilesToDelete.Add(strChapterFile);
                                 }
                             }
-                            else if (Path.GetExtension(input.Filename).ToLower().Equals(".vob"))
+                            else if (Path.GetExtension(input.Filename).ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(".vob"))
                             {
                                 chapterFile.Filename = VideoUtil.getChaptersFromIFO(input.Filename, false, null, 1);
                                 dpp.FilesToDelete.Add(chapterFile.Filename);

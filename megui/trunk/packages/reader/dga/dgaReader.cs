@@ -40,7 +40,7 @@ namespace MeGUI
 
         public int HandleLevel(string file)
         {
-            if (file.ToLower().EndsWith(".dga"))
+            if (file.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".dga"))
                 return 11;
             return -1;
         }

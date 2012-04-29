@@ -45,7 +45,7 @@ namespace MeGUI
 
         public int HandleLevel(string file)
         {
-            if (file.ToLower().EndsWith(".avs"))
+            if (file.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".avs"))
                 return 10;
             return -1;
         }

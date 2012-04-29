@@ -167,14 +167,14 @@ namespace MeGUI.core.details.mux
             bool bFound = false;
             foreach (KeyValuePair<string,string> strLanguage in LanguageSelectionContainer.Languages)
             {
-                if (input.Filename.ToLower().Contains(strLanguage.Key.ToLower()))
+                if (input.Filename.ToLower(System.Globalization.CultureInfo.InvariantCulture).Contains(strLanguage.Key.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
                 {
                     SetLanguage(strLanguage.Key);
                     bFound = true;
                     break;
                 }
             }
-            if (!bFound && input.Filename.ToLower().EndsWith(".idx"))
+            if (!bFound && input.Filename.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".idx"))
             {
                 List<SubtitleInfo> subTracks;
                 idxReader.readFileProperties(input.Filename, out subTracks);

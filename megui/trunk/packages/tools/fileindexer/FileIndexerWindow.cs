@@ -139,7 +139,7 @@ namespace MeGUI
                         this.demuxVideo.Enabled = true;
                         IndexerUsed = IndexType.DGI;
                         btnDGI.Checked = true;
-                        if (txtContainerInformation.Text.Trim().ToUpper().Equals("MATROSKA"))
+                        if (txtContainerInformation.Text.Trim().ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("MATROSKA"))
                             generateAudioList();
                         break;
                     }
@@ -181,7 +181,7 @@ namespace MeGUI
                         this.demuxVideo.Enabled = false;
                         IndexerUsed = IndexType.FFMS;
                         btnFFMS.Checked = true;
-                        if (txtContainerInformation.Text.Trim().ToUpper().Equals("MATROSKA"))
+                        if (txtContainerInformation.Text.Trim().ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("MATROSKA"))
                         {
                             generateAudioList();
                             this.gbAudio.Text = " Audio Demux ";
@@ -297,10 +297,10 @@ namespace MeGUI
 
             if (IndexerUsed == IndexType.FFMS)
             {
-                if (!strContainerFormat.ToUpper().Equals("MATROSKA") &&
-                    !strContainerFormat.ToUpper().Equals("AVI") &&
-                    !strContainerFormat.ToUpper().Equals("MPEG-4") &&
-                    !strContainerFormat.ToUpper().Equals("FLASH VIDEO"))
+                if (!strContainerFormat.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("MATROSKA") &&
+                    !strContainerFormat.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("AVI") &&
+                    !strContainerFormat.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("MPEG-4") &&
+                    !strContainerFormat.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("FLASH VIDEO"))
                 {
                     MessageBox.Show("It is recommended to use a MKV, AVI, MP4 or FLV container to index files with the FFMS2 indexer", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
@@ -380,7 +380,7 @@ namespace MeGUI
                             case IndexType.FFMS:
                                 {
                                     FFMSIndexJob job = generateFFMSIndexJob();
-                                    if (txtContainerInformation.Text.Trim().ToUpper().Equals("MATROSKA") && job.DemuxMode > 0 && job.AudioTracks.Count > 0)
+                                    if (txtContainerInformation.Text.Trim().ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("MATROSKA") && job.DemuxMode > 0 && job.AudioTracks.Count > 0)
                                     {
                                         job.AudioTracksDemux = job.AudioTracks;
                                         job.AudioTracks = new List<AudioTrackInfo>();

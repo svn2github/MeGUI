@@ -71,7 +71,7 @@ namespace MeGUI
         {
             try
             {
-                if (!Path.GetExtension(strAVSScript).ToLower().Equals(".avs"))
+                if (!Path.GetExtension(strAVSScript).ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(".avs"))
                     return false;
                 using (AviSynthScriptEnvironment env = new AviSynthScriptEnvironment())
                     using (AviSynthClip a = env.OpenScriptFile(strAVSScript))
@@ -89,7 +89,7 @@ namespace MeGUI
         {
             try
             {
-                if (!Path.GetExtension(strAVSScript).ToLower().Equals(".avs"))
+                if (!Path.GetExtension(strAVSScript).ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(".avs"))
                     return 0;
                 using (AviSynthScriptEnvironment env = new AviSynthScriptEnvironment())
                     using (AviSynthClip a = env.OpenScriptFile(strAVSScript))

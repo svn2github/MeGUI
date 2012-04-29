@@ -41,7 +41,17 @@ namespace MeGUI
 
         public override string ToString()
         {
-            string fullString = "[" + MMGTrackID + "] - " + this.Codec;
+            string strCodec = this.Codec.ToUpper(System.Globalization.CultureInfo.InvariantCulture);
+            if (IsMKVContainer())
+            {
+                string[] arrCodec = new string[] { };
+                arrCodec = this.Codec.Split('/');
+                if (arrCodec[0].Substring(1, 1).Equals("_"))
+                    arrCodec[0] = arrCodec[0].Substring(2);
+                strCodec = arrCodec[0].ToUpper(System.Globalization.CultureInfo.InvariantCulture);
+            }
+
+            string fullString = "[" + MMGTrackID + "] - " + strCodec;
             if (!string.IsNullOrEmpty(Language))
                 fullString += " / " + Language;
             return fullString.Trim();

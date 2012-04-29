@@ -76,7 +76,7 @@ namespace MeGUI
             {
                 StringBuilder sb = new StringBuilder();
                 sb.Append("-i \"" + job.Input + "\"");
-                if (MainForm.Instance.Settings.AutoLoadDG && Path.GetExtension(job.Input).ToLower().Equals(".vob"))
+                if (MainForm.Instance.Settings.AutoLoadDG && Path.GetExtension(job.Input).ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(".vob"))
                 {
                     string strFile = Path.GetFileNameWithoutExtension(job.Input);
                     int iNumber = 0;

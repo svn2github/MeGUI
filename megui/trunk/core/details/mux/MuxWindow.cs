@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2011  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -201,7 +201,7 @@ namespace MeGUI
         {
             foreach (ContainerType t in muxer.GetSupportedContainers())
             {
-                if (output.Filename.ToLower().EndsWith(t.Extension.ToLower()))
+                if (output.Filename.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(t.Extension.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
                     return;
             }
             output.Filename = Path.ChangeExtension(output.Filename, muxer.GetSupportedContainers()[0].Extension);
@@ -212,7 +212,7 @@ namespace MeGUI
             Debug.Assert(outputFilename != null);
             foreach (ContainerType t in muxer.GetSupportedContainers())
             {
-                if (outputFilename.ToLower().EndsWith(t.Extension.ToLower()))
+                if (outputFilename.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(t.Extension.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
                     return t;
             }
             Debug.Assert(false);

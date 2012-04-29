@@ -229,8 +229,8 @@ namespace MeGUI.core.util
 
             bool bIsFolder = Directory.Exists(filename);
 
-            filter = filter.ToLower();
-            filename = Path.GetFileName(filename).ToLower();
+            filter = filter.ToLower(System.Globalization.CultureInfo.InvariantCulture);
+            filename = Path.GetFileName(filename).ToLower(System.Globalization.CultureInfo.InvariantCulture);
             string[] filters = filter.Split('|');
             
             for (int i = 1; i < filters.Length; i += 2)

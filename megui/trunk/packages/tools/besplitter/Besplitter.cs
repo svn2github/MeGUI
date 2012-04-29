@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -64,7 +64,7 @@ namespace MeGUI.packages.tools.besplitter
                 return;
             }
 
-            if (!output.Filename.ToLower().EndsWith(Path.GetExtension(input.Filename).ToLower()))
+            if (!output.Filename.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(Path.GetExtension(input.Filename).ToLower(System.Globalization.CultureInfo.InvariantCulture)))
             {
                 MessageBox.Show("Can't create job: input and output have different types.", "Can't create job", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -141,7 +141,7 @@ namespace MeGUI.packages.tools.besplitter
         {
             foreach (OutputFileType type in filters)
             {
-                if (sender.Filename.ToLower().EndsWith(type.Extension))
+                if (sender.Filename.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(type.Extension))
                 {
                     output.Filter = type.OutputFilterString;
                     break;

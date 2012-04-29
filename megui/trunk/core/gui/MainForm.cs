@@ -640,7 +640,7 @@ namespace MeGUI
         }
         private FileType getFileType(string fileName)
         {
-            switch (Path.GetExtension(fileName.ToLower()))
+            switch (Path.GetExtension(fileName.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
             {
                 case ".avs":
                     return FileType.VIDEOINPUT;
@@ -904,7 +904,7 @@ namespace MeGUI
 
         public void OpenVideoFile(string p)
         {
-            if (p.ToLower().EndsWith(".avs"))
+            if (p.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".avs"))
                 Video.openVideoFile(p);
             else
             {

@@ -36,7 +36,7 @@ namespace MeGUI
 
         public IMediaFile Open(string file)
         {
-            if (file.ToLower().EndsWith(".ffindex"))
+            if (file.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".ffindex"))
                 return new ffmsFile(null, file);
             else
                 return new ffmsFile(file, null);
@@ -44,7 +44,7 @@ namespace MeGUI
 
         public int HandleLevel(string file)
         {
-            if (file.ToLower().EndsWith(".ffindex") || File.Exists(file + ".ffindex"))
+            if (file.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".ffindex") || File.Exists(file + ".ffindex"))
                 return 12;
             return -1;
         }

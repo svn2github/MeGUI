@@ -28,7 +28,7 @@ namespace MeGUI
         {
             return BitConverter.ToString(new
                 MD5CryptoServiceProvider().ComputeHash(System.IO.File.ReadAllBytes(path)))
-                .Replace("-", "").ToLower();
+                .Replace("-", "").ToLower(System.Globalization.CultureInfo.InvariantCulture);
         }
 
         protected void OnExtractionComplete()

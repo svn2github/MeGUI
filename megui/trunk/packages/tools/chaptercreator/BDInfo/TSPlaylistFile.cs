@@ -47,7 +47,7 @@ namespace BDInfo
             FileInfo fileInfo)
         {
             FileInfo = fileInfo;
-            Name = fileInfo.Name.ToUpper();
+            Name = fileInfo.Name.ToUpper(System.Globalization.CultureInfo.InvariantCulture);
         }
 
         //public TSPlaylistFile(

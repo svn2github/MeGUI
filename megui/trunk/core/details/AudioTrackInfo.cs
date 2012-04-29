@@ -84,17 +84,11 @@ namespace MeGUI
         {
             string fullString = "[" + TrackIDx + "] - " + this.Codec;
             if (!string.IsNullOrEmpty(nbChannels))
-            {
                 fullString += " - " + this.nbChannels;
-            }
             if (!string.IsNullOrEmpty(samplingRate))
-            {
                 fullString += " / " + samplingRate;
-            }
             if (!string.IsNullOrEmpty(Language))
-            {
                 fullString += " / " + Language;
-            }
             return fullString.Trim();
         }
     }

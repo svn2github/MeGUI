@@ -465,7 +465,7 @@ namespace MeGUI
             {
                 x264Settings xs = (x264Settings)settings;
                 qpfile = job.PostprocessingProperties.ChapterFile;
-                if ((Path.GetExtension(qpfile).ToLower()) == ".txt")
+                if ((Path.GetExtension(qpfile).ToLower(System.Globalization.CultureInfo.InvariantCulture)) == ".txt")
                     qpfile = VideoUtil.convertChaptersTextFileTox264QPFile(job.PostprocessingProperties.ChapterFile, d2v.VideoInfo.FPS);
                 if (File.Exists(qpfile))
                 {

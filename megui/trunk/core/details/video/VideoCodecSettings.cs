@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -169,19 +169,19 @@ namespace MeGUI
 		{
 			get 
             {
-                if (EncoderType.ID.ToLower().Equals("x264"))
+                if (EncoderType.ID.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals("x264"))
                 {
                     // update custom command line if necessary
                     String strNewCommandLine = "", strNewCommand = "";
                     foreach (String strCommand in System.Text.RegularExpressions.Regex.Split(customEncoderOptions, "--"))
                     {
-                        if (strCommand.Trim().ToLower().Equals("nal-hrd"))
+                        if (strCommand.Trim().ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals("nal-hrd"))
                             strNewCommand = "nal-hrd vbr";
-                        else if (strCommand.Trim().ToLower().Equals("open-gop none"))
+                        else if (strCommand.Trim().ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals("open-gop none"))
                             strNewCommand = String.Empty;
-                        else if (strCommand.Trim().ToLower().Equals("open-gop normal"))
+                        else if (strCommand.Trim().ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals("open-gop normal"))
                             strNewCommand = "open-gop";
-                        else if (strCommand.Trim().ToLower().Equals("open-gop bluray"))
+                        else if (strCommand.Trim().ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals("open-gop bluray"))
                             strNewCommand = "open-gop --bluray-compat";
                         else
                             strNewCommand = strCommand.Trim();

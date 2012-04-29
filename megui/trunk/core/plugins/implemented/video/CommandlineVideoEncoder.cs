@@ -49,7 +49,7 @@ namespace MeGUI
         protected override void checkJobIO()
         {
             base.checkJobIO();
-            if (File.Exists(job.Input) && Path.GetExtension(job.Input).ToLower().Equals(".avs"))
+            if (File.Exists(job.Input) && Path.GetExtension(job.Input).ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(".avs"))
             {
                 string strAVSFile = String.Empty;
                 try

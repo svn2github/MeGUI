@@ -1669,7 +1669,7 @@ namespace MeGUI
                     {
                         string strText;
 
-                        if (file.Name.ToLower().Equals("neroaacenc"))
+                        if (file.Name.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals("neroaacenc"))
                         {
                             string strPath = System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath) + @"\tools\eac3to\neroAacEnc.exe";
                             strText = "MeGUI cannot find " + file.Name + " on your system or it is outdated.\nDue to the licensing the component is not included on the MeGUI update server.\n\nTherefore please download the file on your own and extract neroaacenc.exe to:\n" + strPath + "\n\nIf necessary change the path in the settings:\n\"Settings\\External Program Settings\"\n\nDo you would like to download it now?";

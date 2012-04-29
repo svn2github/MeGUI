@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -48,12 +48,12 @@ namespace MeGUI
 
             for (int i = 0; i < urls.Count; ++i)
             {
-                urls[i] = urls[i].ToLower();
+                urls[i] = urls[i].ToLower(System.Globalization.CultureInfo.InvariantCulture);
             }
 
             foreach (FileInfo f in files)
             {
-                if (urls.IndexOf(f.Name.ToLower()) < 0)
+                if (urls.IndexOf(f.Name.ToLower(System.Globalization.CultureInfo.InvariantCulture)) < 0)
                 {
                     if (DateTime.Now - f.LastWriteTime > new TimeSpan(60, 0, 0, 0, 0))
                     {
@@ -88,7 +88,7 @@ namespace MeGUI
                 }
 
                 // check the zip file
-                if (localFilename.ToLower().EndsWith(".zip"))
+                if (localFilename.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".zip"))
                 {
                     try
                     {
@@ -107,7 +107,7 @@ namespace MeGUI
                         UpdateCacher.FlushFile(localFilename, oUpdate);
                     }
                 }
-                else if (localFilename.ToLower().EndsWith(".7z")) // check the 7-zip file
+                else if (localFilename.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".7z")) // check the 7-zip file
                 {
                     try
                     {

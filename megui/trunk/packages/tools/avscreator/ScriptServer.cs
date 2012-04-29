@@ -178,7 +178,7 @@ namespace MeGUI
                     break;
                 case PossibleSources.ffindex:
                     strDLLPath = Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.FFMSIndexPath), "ffms2.dll");
-                    if (input.ToLower().EndsWith(".ffindex"))
+                    if (input.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".ffindex"))
                         inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + input.Substring(0, input.Length - 8) + "\"" + (MainForm.Instance.Settings.FFMSThreads > 0 ? ", threads=" + MainForm.Instance.Settings.FFMSThreads : String.Empty) + ")";
                     else if (!String.IsNullOrEmpty(indexFile))
                         inputLine = "LoadPlugin(\"" + strDLLPath + "\")\r\nFFVideoSource(\"" + input + "\"" + (!string.IsNullOrEmpty(indexFile) ? ", cachefile=\"" + indexFile + "\"" : String.Empty) + (MainForm.Instance.Settings.FFMSThreads > 0 ? ", threads=" + MainForm.Instance.Settings.FFMSThreads : String.Empty) + ")" + VideoUtil.getAssumeFPS(fps, input);
@@ -189,7 +189,7 @@ namespace MeGUI
                     inputLine = "AVISource(\"" + input + "\", audio=false)" + VideoUtil.getAssumeFPS(fps, input);
                     break;
                 case PossibleSources.directShow:
-                    if (input.ToLower().EndsWith(".avi"))
+                    if (input.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".avi"))
                     {
                         inputLine = "AVISource(\"" + input + "\", audio=false)" + VideoUtil.getAssumeFPS(fps, input);
                     }
@@ -259,11 +259,11 @@ namespace MeGUI
                 EnumProxy p = EnumProxy.Create(type);
                 if (p.Tag != null)
                 {
-                    if (p.Tag.ToString().ToLower().Contains("undot"))
+                    if (p.Tag.ToString().ToLower(System.Globalization.CultureInfo.InvariantCulture).Contains("undot"))
                         strPath = "LoadPlugin(\"" + Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "UnDot.dll") + "\")\r\n";
-                    else if (p.Tag.ToString().ToLower().Contains("fluxsmoothst"))
+                    else if (p.Tag.ToString().ToLower(System.Globalization.CultureInfo.InvariantCulture).Contains("fluxsmoothst"))
                         strPath = "LoadPlugin(\"" + Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "FluxSmooth.dll") + "\")\r\n";
-                    else if (p.Tag.ToString().ToLower().Contains("convolution3d"))
+                    else if (p.Tag.ToString().ToLower(System.Globalization.CultureInfo.InvariantCulture).Contains("convolution3d"))
                         strPath = "LoadPlugin(\"" + Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, "Convolution3DYV12.dll") + "\")\r\n";
                     denoiseLines = string.Format(strPath + p.Tag + " # " + p);
                 }

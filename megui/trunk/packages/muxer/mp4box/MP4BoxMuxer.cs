@@ -134,7 +134,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
             {
                 FileSize len = FileSize.Of(job.Output);
                 FileSize Empty = FileSize.Empty;
-                if (!Path.GetExtension(job.Input).ToLower().Equals(".mp4"))
+                if (!Path.GetExtension(job.Input).ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(".mp4"))
                 {
                     FileSize rawSize = FileSize.Of(job.Input);
                     LogItem i = new LogItem("MP4 Muxing statistics");
@@ -318,7 +318,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                     {
                         foreach (KeyValuePair<string, string> strLanguage in LanguageSelectionContainer.Languages)
                         {
-                            if (stream.language.ToLower().Equals(strLanguage.Key.ToLower()))
+                            if (stream.language.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(strLanguage.Key.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
                             {
                                 sb.Append(":lang=" + strLanguage.Value);
                                 break;
@@ -339,7 +339,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                     {
                         foreach (KeyValuePair<string, string> strLanguage in LanguageSelectionContainer.Languages)
                         {
-                            if (stream.language.ToLower().Equals(strLanguage.Key.ToLower()))
+                            if (stream.language.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(strLanguage.Key.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
                             {
                                 sb.Append(":lang=" + strLanguage.Value);
                                 break;

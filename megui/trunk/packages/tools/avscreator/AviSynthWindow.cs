@@ -1585,7 +1585,7 @@ namespace MeGUI
                 projectPath = Path.GetDirectoryName(videoInput);
             videoOutput.Filename = Path.Combine(projectPath, Path.ChangeExtension(fileNameNoPath, ".avs"));
             
-            string ext = Path.GetExtension(videoInput).ToLower();
+            string ext = Path.GetExtension(videoInput).ToLower(System.Globalization.CultureInfo.InvariantCulture);
             switch (ext)
             {
                 case ".avs":
@@ -2491,7 +2491,7 @@ namespace MeGUI
             {
                 if (this.SubtitlesPath.Text != openSubsDialog.FileName)
                 {
-                    string ext = Path.GetExtension(openSubsDialog.FileName).ToString().ToLower();
+                    string ext = Path.GetExtension(openSubsDialog.FileName).ToString().ToLower(System.Globalization.CultureInfo.InvariantCulture);
                     this.SubtitlesPath.Text = openSubsDialog.FileName;
                     if (ext == ".idx")
                         cbCharset.Enabled = false;

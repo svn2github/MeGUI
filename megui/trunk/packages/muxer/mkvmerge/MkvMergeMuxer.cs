@@ -185,7 +185,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                     {
                         foreach (KeyValuePair<string, string> strLanguage in LanguageSelectionContainer.Languages)
                         {
-                            if (stream.language.ToLower().Equals(strLanguage.Key.ToLower()))
+                            if (stream.language.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(strLanguage.Key.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
                             {
                                 sb.Append(" --language " + trackID + ":" + strLanguage.Value);
                                 break;
@@ -231,7 +231,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                             sb.Append(" --forced-track \"" + trackID + ":no\"");
                         sb.Append(" -s " + trackID + " -D -A -T --no-global-tags --no-chapters \"" + stream.MuxOnlyInfo.SourceFileName + "\"");
                     }
-                    else if (stream.path.ToLower().EndsWith(".idx"))
+                    else if (stream.path.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith(".idx"))
                     {
                         List<SubtitleInfo> subTracks;
                         idxReader.readFileProperties(stream.path, out subTracks);
@@ -245,13 +245,13 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                             foreach (KeyValuePair<string, string> strLanguage in LanguageSelectionContainer.Languages)
                             {  
                                 if (trackID == 0 && !string.IsNullOrEmpty(stream.language) 
-                                    && stream.language.ToLower().Equals(strLanguage.Key.ToLower()))
+                                    && stream.language.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(strLanguage.Key.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
                                 {
                                     sb.Append(" --language " + trackID + ":" + strLanguage.Value);
                                     break;
                                 }
                                 else if (((trackID == 0 && string.IsNullOrEmpty(stream.language)) || trackID > 0) 
-                                    && LanguageSelectionContainer.Short2FullLanguageName(strack.Name).ToLower().Equals(strLanguage.Key.ToLower()))
+                                    && LanguageSelectionContainer.Short2FullLanguageName(strack.Name).ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(strLanguage.Key.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
                                 {
                                     sb.Append(" --language " + trackID + ":" + strLanguage.Value);
                                     break;
@@ -289,7 +289,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MkvMergeMuxer");
                         {
                             foreach (KeyValuePair<string, string> strLanguage in LanguageSelectionContainer.Languages)
                             {
-                                if (stream.language.ToLower().Equals(strLanguage.Key.ToLower()))
+                                if (stream.language.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(strLanguage.Key.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
                                 {
                                     sb.Append(" --language " + trackID + ":" + strLanguage.Value);
                                     break;
