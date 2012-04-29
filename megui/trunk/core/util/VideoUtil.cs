@@ -867,23 +867,6 @@ namespace MeGUI
 
         }
 
-        public static bool isDGIIndexerAvailable()
-        {
-            // check if the license file is available
-            if (!File.Exists(Path.Combine(Path.GetDirectoryName(MainForm.Instance.Settings.DgnvIndexPath), "license.txt")))
-                return false;
-
-            // DGI is not available in a RDP connection
-            if (System.Windows.Forms.SystemInformation.TerminalServerSession == true)
-                return false;
-
-            // check if the indexer is available
-            if (!File.Exists(MainForm.Instance.Settings.DgnvIndexPath))
-                return false;
-
-            return true;
-        }
-
         public static string getAssumeFPS(double fps, string strInput)
         {
             if (fps <= 0)

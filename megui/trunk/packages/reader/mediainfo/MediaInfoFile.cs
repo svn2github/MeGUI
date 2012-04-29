@@ -791,8 +791,8 @@ namespace MeGUI
             if (!_VideoInfo.HasVideo)
                 return false;
 
-            // check if the indexer and the license file is available
-            if (!VideoUtil.isDGIIndexerAvailable())
+            // check if the indexer and the license file are available
+            if (!MainForm.Instance.Settings.IsDGIIndexerAvailable())
                 return false;
 
             // only AVC, VC1 and MPEG2 are supported

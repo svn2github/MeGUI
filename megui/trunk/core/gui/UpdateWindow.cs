@@ -127,14 +127,20 @@ namespace MeGUI
                         arrPath.Add(System.IO.Path.Combine(strPath, "DGAVCDecode.dll")); 
                         break;
                     case "dgindexnv":
-                        arrPath.Add(MainForm.Instance.Settings.DgnvIndexPath);
-                        strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.DgnvIndexPath);
-                        arrPath.Add(System.IO.Path.Combine(strPath, "DGDecodeNV.dll"));
+                        if (MainForm.Instance.Settings.UseDGIndexNV)
+                        {
+                            arrPath.Add(MainForm.Instance.Settings.DgnvIndexPath);
+                            strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.DgnvIndexPath);
+                            arrPath.Add(System.IO.Path.Combine(strPath, "DGDecodeNV.dll"));
+                        }
                         break;
                     case "ffms":
                         arrPath.Add(MainForm.Instance.Settings.FFMSIndexPath);
                         strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.FFMSIndexPath);
                         arrPath.Add(System.IO.Path.Combine(strPath, "ffms2.dll"));
+#if x64
+                        arrPath.Add(System.IO.Path.Combine(strPath, "ffms2-x64.dll"));
+#endif
                         break;
                     case "mp4box": arrPath.Add(MainForm.Instance.Settings.Mp4boxPath); break;
                     case "pgcdemux": arrPath.Add(MainForm.Instance.Settings.PgcDemuxPath); break;
@@ -184,13 +190,16 @@ namespace MeGUI
                     case "besplit": arrPath.Add(MainForm.Instance.Settings.BeSplitPath); break;
                     case "neroaacenc":
                         {
-                            arrPath.Add(MainForm.Instance.Settings.NeroAacEncPath);
-                            if (File.Exists(MainForm.Instance.Settings.NeroAacEncPath))
+                            if (MainForm.Instance.Settings.UseNeroAacEnc)
                             {
-                                System.Diagnostics.FileVersionInfo finfo = System.Diagnostics.FileVersionInfo.GetVersionInfo(MainForm.Instance.Settings.NeroAacEncPath);
-                                FileInfo fi = new FileInfo(MainForm.Instance.Settings.NeroAacEncPath);
-                                this.currentVersion.FileVersion = finfo.FileMajorPart + "." + finfo.FileMinorPart + "." + finfo.FileBuildPart + "." + finfo.FilePrivatePart;
-                                this.currentVersion.UploadDate = fi.LastWriteTimeUtc;
+                                arrPath.Add(MainForm.Instance.Settings.NeroAacEncPath);
+                                if (File.Exists(MainForm.Instance.Settings.NeroAacEncPath))
+                                {
+                                    System.Diagnostics.FileVersionInfo finfo = System.Diagnostics.FileVersionInfo.GetVersionInfo(MainForm.Instance.Settings.NeroAacEncPath);
+                                    FileInfo fi = new FileInfo(MainForm.Instance.Settings.NeroAacEncPath);
+                                    this.currentVersion.FileVersion = finfo.FileMajorPart + "." + finfo.FileMinorPart + "." + finfo.FileBuildPart + "." + finfo.FilePrivatePart;
+                                    this.currentVersion.UploadDate = fi.LastWriteTimeUtc;
+                                }
                             }
                             break;
                         }
@@ -971,14 +980,13 @@ namespace MeGUI
             arrPath.Add(MainForm.Instance.Settings.DgavcIndexPath);
             strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.DgavcIndexPath);
             arrPath.Add(System.IO.Path.Combine(strPath, "DGAVCDecode.dll"));
-            // dgindexnv
-            arrPath.Add(MainForm.Instance.Settings.DgnvIndexPath);
-            strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.DgnvIndexPath);
-            arrPath.Add(System.IO.Path.Combine(strPath, "DGDecodeNV.dll"));
             //ffms
             arrPath.Add(MainForm.Instance.Settings.FFMSIndexPath);
             strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.FFMSIndexPath);
             arrPath.Add(System.IO.Path.Combine(strPath, "ffms2.dll"));
+#if x64
+            arrPath.Add(System.IO.Path.Combine(strPath, "ffms2-x64.dll"));
+#endif
             //mp4box
             arrPath.Add(MainForm.Instance.Settings.Mp4boxPath);
             //pgcdemux
@@ -1055,8 +1063,18 @@ namespace MeGUI
             arrPath.Add(MainForm.Instance.Settings.VobSubPath);
             //besplit
             arrPath.Add(MainForm.Instance.Settings.BeSplitPath);
+            
             //neroaacenc
-            arrPath.Add(MainForm.Instance.Settings.NeroAacEncPath);
+            if (MainForm.Instance.Settings.UseNeroAacEnc)
+                arrPath.Add(MainForm.Instance.Settings.NeroAacEncPath);
+
+            // dgindexnv
+            if (MainForm.Instance.Settings.UseDGIndexNV)
+            {
+                arrPath.Add(MainForm.Instance.Settings.DgnvIndexPath);
+                strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.DgnvIndexPath);
+                arrPath.Add(System.IO.Path.Combine(strPath, "DGDecodeNV.dll"));
+            }
 
             foreach (string strAppPath in arrPath)
             {
@@ -1134,8 +1152,17 @@ namespace MeGUI
                 {
                     XmlSerializer serializer = new XmlSerializer(typeof(iUpgradeableCollection), new Type[] { typeof(ProgramFile), typeof(AviSynthFile), typeof(ProfilesFile) , typeof(MeGUIFile)});
                     StreamReader settingsReader = new StreamReader(path);
-                    this.upgradeData = (iUpgradeableCollection)serializer.Deserialize(settingsReader);
+                    iUpgradeableCollection upgradeDataTemp = (iUpgradeableCollection)serializer.Deserialize(settingsReader);
                     settingsReader.Dispose();
+                    
+                    foreach (iUpgradeable file in upgradeDataTemp)
+                    {
+                        if (file.Name.Equals("neroaacenc") && !MainForm.Instance.Settings.UseNeroAacEnc)
+                            continue;
+                        if (file.Name.Equals("dgindexnv") && !MainForm.Instance.Settings.UseDGIndexNV)
+                            continue;
+                        this.upgradeData.Add(file);
+                    }
 
                     foreach (iUpgradeable file in upgradeData)
                     {
@@ -1419,6 +1446,10 @@ namespace MeGUI
 
             try
             {
+                if (node.Name.Equals("neroaacenc") && !MainForm.Instance.Settings.UseNeroAacEnc)
+                    return;
+                if (node.Name.Equals("dgindexnv") && !MainForm.Instance.Settings.UseDGIndexNV)
+                    return;
 #if x86
                 if (node.Attributes["platform"].Value.Equals("x64"))
 #endif
@@ -2071,7 +2102,7 @@ namespace MeGUI
             int numUpdateableFiles = 0;
             foreach (iUpgradeable upgradeable in upgradeData)
             {
-                if (upgradeable.Name == "neroaacenc")
+                if (upgradeable.Name.Equals("neroaacenc"))
                 {
                     if (upgradeable.CurrentVersion.FileVersion != null && upgradeable.CurrentVersion.FileVersion.Equals(upgradeable.GetLatestVersion().FileVersion))
                         upgradeable.GetLatestVersion().UploadDate = upgradeable.CurrentVersion.UploadDate;

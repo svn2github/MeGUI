@@ -58,9 +58,8 @@ namespace MeGUI
                      deleteAbortedOutput, openProgressWindow, useadvancedtooltips, autoSelectHDStreams, autoscroll, 
                      alwaysOnTop, safeProfileAlteration, usehttpproxy, addTimePosition, alwaysbackupfiles, bUseITU,
                      forcerawavcextension, bAutoLoadDG, bAutoStartQueueStartup, bAlwaysMuxMKV, b64bitX264,
-                     bEnsureCorrectPlaybackSpeed, bOpenAVSInThread;
+                     bEnsureCorrectPlaybackSpeed, bOpenAVSInThread, bUseDGIndexNV, bUseNeroAacEnc;
         private ulong audioSamplesPerUpdate;
-        private AfterEncoding afterEncoding;
         private decimal forceFilmThreshold, acceptableFPSError;
         private int nbPasses, acceptableAspectError, autoUpdateServerSubList, minComplexity, updateFormSplitter,
                     maxComplexity, jobColumnWidth, inputColumnWidth, outputColumnWidth, codecColumnWidth,
@@ -78,7 +77,7 @@ namespace MeGUI
         private FPS[] customFPSs;
         private Dar[] customDARs;
         private OCGUIMode ocGUIMode;
-
+        private AfterEncoding afterEncoding;
         #endregion
         public MeGUISettings()
 		{
@@ -195,7 +194,7 @@ namespace MeGUI
             startColumnWidth = 55;
             endColumnWidth = 55;
             fpsColumnWidth = 35;
-            bEnsureCorrectPlaybackSpeed = false;
+            bEnsureCorrectPlaybackSpeed = bUseDGIndexNV = bUseNeroAacEnc = false;
             ffmsThreads = 1;
             appendToForcedStreams = "";
             ocGUIMode = OCGUIMode.Default;
@@ -579,6 +578,7 @@ namespace MeGUI
         {
             get { return oggEnc2Path; }
         }
+
         /// <summary>
         /// filename and full path of the faac executable
         /// </summary>
@@ -586,27 +586,14 @@ namespace MeGUI
         {
             get { return faacPath; }
         }
+
         /// <summary>
         /// filename and full path of the faac executable
         /// </summary>
         public string LamePath
         {
             get { return lamePath; }
-        }
-        /// <summary>
-        /// filename and full path of the faac executable
-        /// </summary>
-        public string NeroAacEncPath
-        {
-            get { return neroAacEncPath; }
-            set 
-            { 
-                if (!System.IO.File.Exists(value))
-                    neroAacEncPath = strMeGUIPath + @"\tools\eac3to\neroAacEnc.exe";
-                else
-                    neroAacEncPath = value; 
-            }
-        }		
+        }	
 	    
 	    /// <summary>
 		/// filename and full path of the mkvmerge executable
@@ -1111,6 +1098,33 @@ namespace MeGUI
             set { bUseITU = value; }
         }
 
+        public bool UseDGIndexNV
+        {
+            get { return bUseDGIndexNV; }
+            set { bUseDGIndexNV = value; }
+        }
+
+        /// <summary>
+        /// filename and full path of the neroaacenc executable
+        /// </summary>
+        public string NeroAacEncPath
+        {
+            get { return neroAacEncPath; }
+            set
+            {
+                if (!System.IO.File.Exists(value))
+                    neroAacEncPath = strMeGUIPath + @"\tools\eac3to\neroAacEnc.exe";
+                else
+                    neroAacEncPath = value;
+            }
+        }	
+
+        public bool UseNeroAacEnc
+        {
+            get { return bUseNeroAacEnc; }
+            set { bUseNeroAacEnc = value; }
+        }
+
         #endregion
 
         private bool bAutoUpdateSession;
@@ -1123,6 +1137,32 @@ namespace MeGUI
             get { return bAutoUpdateSession; }
             set { bAutoUpdateSession = value; }
         }
+
+        #region Methods
+        public bool IsNeroAACEncAvailable()
+        {
+            return bUseNeroAacEnc && System.IO.File.Exists(neroAacEncPath);
+        }
+        public bool IsDGIIndexerAvailable()
+        {
+            if (!bUseDGIndexNV)
+                return false;
+
+            // check if the license file is available
+            if (!System.IO.File.Exists(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.DgnvIndexPath), "license.txt")))
+                return false;
+
+            // DGI is not available in a RDP connection
+            if (System.Windows.Forms.SystemInformation.TerminalServerSession == true)
+                return false;
+
+            // check if the indexer is available
+            if (!System.IO.File.Exists(MainForm.Instance.Settings.DgnvIndexPath))
+                return false;
+
+            return true;
+        }
+        #endregion
     }
     public enum AfterEncoding { DoNothing = 0, Shutdown = 1, RunCommand = 2, CloseMeGUI = 3 }
 }

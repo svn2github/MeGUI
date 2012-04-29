@@ -105,8 +105,6 @@ namespace MeGUI
         private CheckBox backupfiles;
         private CheckBox forcerawavcuse;
         private TabPage tabPage2;
-        private TextBox textBox2;
-        private Button button2;
         private GroupBox vobGroupBox;
         private Label percentLabel;
         private NumericUpDown forceFilmPercentage;
@@ -131,7 +129,6 @@ namespace MeGUI
         private ComboBox defaultLanguage1;
         private CheckBox chkSelectHDTracks;
         private Button btnClearOutputDirecoty;
-        private Button button1;
         private NumericUpDown ffmsThreads;
         private Label lblffmsThreads;
         private Label lblForcedName;
@@ -139,6 +136,10 @@ namespace MeGUI
         private CheckBox cbUseITUValues;
         private CheckBox cbOpenAVSinThread;
         private core.gui.TargetSizeSCBox targetSizeSCBox1;
+        private FileBar neroaacencLocation;
+        private CheckBox useNeroAacEnc;
+        private Label label1;
+        private CheckBox useDGIndexNV;
         private XmlDocument ContextHelp = new XmlDocument();
 		#region start / stop
 		public SettingsForm()
@@ -311,13 +312,14 @@ namespace MeGUI
             this.chkSelectHDTracks = new System.Windows.Forms.CheckBox();
             this.chkEnable64bitX264 = new System.Windows.Forms.CheckBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.button2 = new System.Windows.Forms.Button();
+            this.useNeroAacEnc = new System.Windows.Forms.CheckBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.neroaacencLocation = new MeGUI.FileBar();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.btnClearMP4TempDirectory = new System.Windows.Forms.Button();
             this.tempDirMP4 = new MeGUI.FileBar();
             this.vobGroupBox = new System.Windows.Forms.GroupBox();
+            this.useDGIndexNV = new System.Windows.Forms.CheckBox();
             this.cbAutoLoadDG = new System.Windows.Forms.CheckBox();
             this.percentLabel = new System.Windows.Forms.Label();
             this.forceFilmPercentage = new System.Windows.Forms.NumericUpDown();
@@ -724,7 +726,7 @@ namespace MeGUI
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage1.Size = new System.Drawing.Size(475, 387);
             this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Main";
+            this.tabPage1.Text = "Main Configuration";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // groupBox3
@@ -785,7 +787,7 @@ namespace MeGUI
             this.btnClearOutputDirecoty.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.btnClearOutputDirecoty.Location = new System.Drawing.Point(257, 25);
             this.btnClearOutputDirecoty.Name = "btnClearOutputDirecoty";
-            this.btnClearOutputDirecoty.Size = new System.Drawing.Size(24, 26);
+            this.btnClearOutputDirecoty.Size = new System.Drawing.Size(24, 23);
             this.btnClearOutputDirecoty.TabIndex = 43;
             this.btnClearOutputDirecoty.Text = "x";
             this.btnClearOutputDirecoty.Click += new System.EventHandler(this.btnClearOutputDirecoty_Click);
@@ -827,7 +829,7 @@ namespace MeGUI
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Size = new System.Drawing.Size(475, 387);
             this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "Extra config";
+            this.tabPage3.Text = "Extra Configuration";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
             // groupBox2
@@ -1180,7 +1182,7 @@ namespace MeGUI
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage2.Size = new System.Drawing.Size(475, 387);
             this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "External Program Settings";
+            this.tabPage2.Text = "External Program Configuration";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // groupBox6
@@ -1191,9 +1193,9 @@ namespace MeGUI
             this.groupBox6.Controls.Add(this.ffmsThreads);
             this.groupBox6.Controls.Add(this.chkSelectHDTracks);
             this.groupBox6.Controls.Add(this.chkEnable64bitX264);
-            this.groupBox6.Location = new System.Drawing.Point(4, 230);
+            this.groupBox6.Location = new System.Drawing.Point(4, 265);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(467, 151);
+            this.groupBox6.Size = new System.Drawing.Size(467, 116);
             this.groupBox6.TabIndex = 33;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = " Misc ";
@@ -1271,48 +1273,57 @@ namespace MeGUI
             // 
             // groupBox5
             // 
-            this.groupBox5.Controls.Add(this.button1);
-            this.groupBox5.Controls.Add(this.textBox2);
-            this.groupBox5.Controls.Add(this.button2);
+            this.groupBox5.Controls.Add(this.useNeroAacEnc);
+            this.groupBox5.Controls.Add(this.label1);
+            this.groupBox5.Controls.Add(this.neroaacencLocation);
             this.groupBox5.Location = new System.Drawing.Point(4, 6);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(467, 73);
+            this.groupBox5.Size = new System.Drawing.Size(467, 85);
             this.groupBox5.TabIndex = 32;
             this.groupBox5.TabStop = false;
-            this.groupBox5.Text = " NeroAacEnc Location ";
+            this.groupBox5.Text = " NeroAacEnc ";
             // 
-            // button1
+            // useNeroAacEnc
             // 
-            this.button1.Location = new System.Drawing.Point(437, 28);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(24, 26);
-            this.button1.TabIndex = 43;
-            this.button1.Text = "x";
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.useNeroAacEnc.AutoSize = true;
+            this.useNeroAacEnc.Location = new System.Drawing.Point(12, 21);
+            this.useNeroAacEnc.Name = "useNeroAacEnc";
+            this.useNeroAacEnc.Size = new System.Drawing.Size(119, 17);
+            this.useNeroAacEnc.TabIndex = 46;
+            this.useNeroAacEnc.Text = "Enable NeroAacEnc";
+            this.useNeroAacEnc.UseVisualStyleBackColor = true;
+            this.useNeroAacEnc.CheckedChanged += new System.EventHandler(this.useNeroAacEnc_CheckedChanged);
             // 
-            // textBox2
+            // label1
             // 
-            this.textBox2.Location = new System.Drawing.Point(13, 30);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.ReadOnly = true;
-            this.textBox2.Size = new System.Drawing.Size(386, 21);
-            this.textBox2.TabIndex = 25;
-            this.textBox2.Text = "neroAacEnc.exe";
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(11, 53);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(47, 13);
+            this.label1.TabIndex = 45;
+            this.label1.Text = "Location";
             // 
-            // button2
+            // neroaacencLocation
             // 
-            this.button2.Location = new System.Drawing.Point(405, 28);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(24, 23);
-            this.button2.TabIndex = 26;
-            this.button2.Text = "...";
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.neroaacencLocation.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.neroaacencLocation.Filename = "";
+            this.neroaacencLocation.Filter = "NeroAacEnc|neroaacenc.exe";
+            this.neroaacencLocation.FilterIndex = 0;
+            this.neroaacencLocation.FolderMode = false;
+            this.neroaacencLocation.Location = new System.Drawing.Point(64, 47);
+            this.neroaacencLocation.Name = "neroaacencLocation";
+            this.neroaacencLocation.ReadOnly = true;
+            this.neroaacencLocation.SaveMode = false;
+            this.neroaacencLocation.Size = new System.Drawing.Size(399, 26);
+            this.neroaacencLocation.TabIndex = 44;
+            this.neroaacencLocation.Title = null;
             // 
             // groupBox4
             // 
             this.groupBox4.Controls.Add(this.btnClearMP4TempDirectory);
             this.groupBox4.Controls.Add(this.tempDirMP4);
-            this.groupBox4.Location = new System.Drawing.Point(5, 147);
+            this.groupBox4.Location = new System.Drawing.Point(3, 191);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(467, 77);
             this.groupBox4.TabIndex = 31;
@@ -1321,9 +1332,9 @@ namespace MeGUI
             // 
             // btnClearMP4TempDirectory
             // 
-            this.btnClearMP4TempDirectory.Location = new System.Drawing.Point(437, 33);
+            this.btnClearMP4TempDirectory.Location = new System.Drawing.Point(436, 34);
             this.btnClearMP4TempDirectory.Name = "btnClearMP4TempDirectory";
-            this.btnClearMP4TempDirectory.Size = new System.Drawing.Size(24, 26);
+            this.btnClearMP4TempDirectory.Size = new System.Drawing.Size(24, 23);
             this.btnClearMP4TempDirectory.TabIndex = 42;
             this.btnClearMP4TempDirectory.Text = "x";
             this.btnClearMP4TempDirectory.Click += new System.EventHandler(this.btnClearMP4TempDirectory_Click);
@@ -1347,21 +1358,32 @@ namespace MeGUI
             // 
             // vobGroupBox
             // 
+            this.vobGroupBox.Controls.Add(this.useDGIndexNV);
             this.vobGroupBox.Controls.Add(this.cbAutoLoadDG);
             this.vobGroupBox.Controls.Add(this.percentLabel);
             this.vobGroupBox.Controls.Add(this.forceFilmPercentage);
             this.vobGroupBox.Controls.Add(this.autoForceFilm);
-            this.vobGroupBox.Location = new System.Drawing.Point(4, 85);
+            this.vobGroupBox.Location = new System.Drawing.Point(4, 97);
             this.vobGroupBox.Name = "vobGroupBox";
-            this.vobGroupBox.Size = new System.Drawing.Size(467, 56);
+            this.vobGroupBox.Size = new System.Drawing.Size(467, 76);
             this.vobGroupBox.TabIndex = 29;
             this.vobGroupBox.TabStop = false;
             this.vobGroupBox.Text = " DGIndex Tools";
             // 
+            // useDGIndexNV
+            // 
+            this.useDGIndexNV.AutoSize = true;
+            this.useDGIndexNV.Location = new System.Drawing.Point(12, 24);
+            this.useDGIndexNV.Name = "useDGIndexNV";
+            this.useDGIndexNV.Size = new System.Drawing.Size(116, 17);
+            this.useDGIndexNV.TabIndex = 47;
+            this.useDGIndexNV.Text = "Enable DGIndexNV";
+            this.useDGIndexNV.UseVisualStyleBackColor = true;
+            // 
             // cbAutoLoadDG
             // 
             this.cbAutoLoadDG.AutoSize = true;
-            this.cbAutoLoadDG.Location = new System.Drawing.Point(13, 24);
+            this.cbAutoLoadDG.Location = new System.Drawing.Point(225, 51);
             this.cbAutoLoadDG.Name = "cbAutoLoadDG";
             this.cbAutoLoadDG.Size = new System.Drawing.Size(179, 17);
             this.cbAutoLoadDG.TabIndex = 7;
@@ -1499,27 +1521,12 @@ namespace MeGUI
 		}
         #endregion
         #region button handlers
-        private bool selectExe(string exe)
-        {
-            openExecutableDialog.Filter = exe + " executable|" + exe +"*.exe|Any executable|*.exe";
-            openExecutableDialog.DefaultExt = "exe";
-            openExecutableDialog.FileName = exe + ".exe";
-            openExecutableDialog.Title = "Select " + exe + " executable";
-            return openExecutableDialog.ShowDialog() == DialogResult.OK;
-        }
         private void configSourceDetector_Click(object sender, EventArgs e)
         {
             SourceDetectorConfigWindow sdcWindow = new SourceDetectorConfigWindow();
             sdcWindow.Settings = sdSettings;
             if (sdcWindow.ShowDialog() == DialogResult.OK)
                 sdSettings = sdcWindow.Settings;
-        }
-        private void button2_Click(object sender, EventArgs e)
-        {
-            if (selectExe("neroAacEnc"))
-            {
-                textBox2.Text = openExecutableDialog.FileName;
-            }
         }
   
         private void resetDialogs_Click(object sender, EventArgs e)
@@ -1591,7 +1598,7 @@ namespace MeGUI
                 settings.AutoUpdate = useAutoUpdateCheckbox.Checked;
                 settings.AcceptableAspectErrorPercent = (int)acceptableAspectError.Value;
                 settings.SourceDetectorSettings = sdSettings;
-                settings.NeroAacEncPath = textBox2.Text;
+                settings.NeroAacEncPath = neroaacencLocation.Filename;
                 settings.VideoExtension = videoExtension.Text;
                 settings.AudioExtension = audioExtension.Text;
                 settings.UseAdvancedTooltips = chkboxUseAdvancedTooltips.Checked;
@@ -1647,6 +1654,8 @@ namespace MeGUI
                 settings.FFMSThreads = Decimal.ToInt32(ffmsThreads.Value);
                 settings.AppendToForcedStreams = txtForcedName.Text;
                 settings.UseITUValues = cbUseITUValues.Checked;
+                settings.UseNeroAacEnc = useNeroAacEnc.Checked;
+                settings.UseDGIndexNV = useDGIndexNV.Checked;
 				return settings;
 			}
 			set
@@ -1657,7 +1666,7 @@ namespace MeGUI
                 acceptableFPSError.Value = settings.AcceptableFPSError;
                 useAutoUpdateCheckbox.Checked = settings.AutoUpdate;
                 acceptableAspectError.Value = (decimal)settings.AcceptableAspectErrorPercent;
-                textBox2.Text = settings.NeroAacEncPath;
+                neroaacencLocation.Filename = settings.NeroAacEncPath;
                 sdSettings = settings.SourceDetectorSettings;
                 chkboxUseAdvancedTooltips.Checked = settings.UseAdvancedTooltips;
                 videoExtension.Text = settings.VideoExtension;
@@ -1713,6 +1722,8 @@ namespace MeGUI
                 else
                     ffmsThreads.Value = settings.FFMSThreads;
                 cbUseITUValues.Checked = settings.UseITUValues;
+                useNeroAacEnc.Checked = settings.UseNeroAacEnc;
+                useDGIndexNV.Checked = settings.UseDGIndexNV;
 			}
 		}
 		#endregion
@@ -1760,11 +1771,6 @@ namespace MeGUI
             defaultOutputDir.Filename = "";
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            textBox2.Text = "neroAacEnc.exe";
-        }
-
         private void tempDirMP4_FileSelected(FileBar sender, FileBarEventArgs args)
         {
             if (System.IO.Path.GetPathRoot(tempDirMP4.Filename).Equals(tempDirMP4.Filename, StringComparison.CurrentCultureIgnoreCase))
@@ -1773,6 +1779,12 @@ namespace MeGUI
                 MessageBox.Show("A root folder cannot be selected!", "Wrong path", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 tempDirMP4.Filename = String.Empty;
             }
+        }
+
+        private void useNeroAacEnc_CheckedChanged(object sender, EventArgs e)
+        {
+            if (useNeroAacEnc.Checked && !internalSettings.UseNeroAacEnc)
+                MessageBox.Show("You have to restart MeGUI in order to get access to the NeroAacEnc profiles!", "Restart required", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 	}
 }
