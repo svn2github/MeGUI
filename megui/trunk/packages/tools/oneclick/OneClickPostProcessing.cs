@@ -146,7 +146,7 @@ namespace MeGUI
  
                 foreach (OneClickAudioTrack oAudioTrack in job.PostprocessingProperties.AudioTracks)
                 {
-                    if (oAudioTrack.AudioTrackInfo != null)
+                    if (oAudioTrack.ExtractMKVTrack)
                     {
                         audioFiles.Add(oAudioTrack.AudioTrackInfo.TrackID, Path.GetDirectoryName(job.PostprocessingProperties.FinalOutput) + "\\" + oAudioTrack.AudioTrackInfo.DemuxFileName);
                         arrAudioFilesDelete.Add(Path.GetDirectoryName(job.PostprocessingProperties.FinalOutput) + "\\" + oAudioTrack.AudioTrackInfo.DemuxFileName);
