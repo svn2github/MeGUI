@@ -976,10 +976,12 @@ namespace MeGUI
             arrPath.Add(MainForm.Instance.Settings.DgIndexPath);
             strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.DgIndexPath);
             arrPath.Add(System.IO.Path.Combine(strPath, "DGDecode.dll"));
+#if x86
             // dgavcindex
             arrPath.Add(MainForm.Instance.Settings.DgavcIndexPath);
             strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.DgavcIndexPath);
             arrPath.Add(System.IO.Path.Combine(strPath, "DGAVCDecode.dll"));
+#endif
             //ffms
             arrPath.Add(MainForm.Instance.Settings.FFMSIndexPath);
             strPath = System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.FFMSIndexPath);
@@ -1035,18 +1037,13 @@ namespace MeGUI
             arrPath.Add((System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), @"AvisynthWrapper.dll")));
             //updatecopier
             arrPath.Add((System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), @"updatecopier.exe")));
+#if x86
             //convolution3dyv12
             arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"Convolution3DYV12.dll"));
-            //undot
-            arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"UnDot.dll"));
             //fluxsmooth
             arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"FluxSmooth.dll"));
-            //eedi2
-            arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"EEDI2.dll"));
             //decomb
             arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"Decomb.dll"));
-            //leakkerneldeint
-            arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"LeakKernelDeint.dll"));
             //tomsmocomp
             arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"TomsMoComp.dll"));
             //tdeint
@@ -1059,6 +1056,13 @@ namespace MeGUI
             arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"VSFilter.dll"));
             //nicaudio
             arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"NicAudio.dll"));
+#endif
+            //undot
+            arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"UnDot.dll"));
+            //eedi2
+            arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"EEDI2.dll"));
+            //leakkerneldeint
+            arrPath.Add(System.IO.Path.Combine(MainForm.Instance.Settings.AvisynthPluginsPath, @"LeakKernelDeint.dll"));
             //vobsub
             arrPath.Add(MainForm.Instance.Settings.VobSubPath);
             //besplit
@@ -1076,29 +1080,32 @@ namespace MeGUI
                 arrPath.Add(System.IO.Path.Combine(strPath, "DGDecodeNV.dll"));
             }
 
+            bool bComponentMissing = false;
             foreach (string strAppPath in arrPath)
             {
                 if (String.IsNullOrEmpty(strAppPath))
                 {
                     if (bWriteLog)
                         MainForm.Instance.UpdateLog.LogEvent("No path to check for missing components!", ImageType.Error);
-                    return true;
+                    bComponentMissing = true;
+                    continue;
                 }
-                if (File.Exists(strAppPath) == false)
+                else if (File.Exists(strAppPath) == false)
                 {
                     if (bWriteLog)
                         MainForm.Instance.UpdateLog.LogEvent("Component not found: " + strAppPath, ImageType.Error);
-                    return true;
+                    bComponentMissing = true;
+                    continue;
                 }
                 FileInfo fInfo = new FileInfo(strAppPath);
                 if (fInfo.Length == 0)
                 {
                     if (bWriteLog)
                         MainForm.Instance.UpdateLog.LogEvent("Component has 0 bytes: " + strAppPath, ImageType.Error);
-                    return true;
+                    bComponentMissing = true;
                 }
             }
-            return false;
+            return bComponentMissing;
         }
 
         private string[] shuffled(string[] serverList)

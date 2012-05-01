@@ -1,3 +1,4 @@
+2146 [Update] improved handling of missing files in the MeGUI x64 build
 2145 [Flac] added --ignore-chunk-sizes to the command line
 2144 [Settings] cosmetics
 2143 NeroAacEnc + DGIndexNV are now disabled by default as external dependencies are required.
