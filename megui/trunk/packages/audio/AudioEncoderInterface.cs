@@ -1059,7 +1059,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                 _mustSendWavHeaderToEncoderStdIn = true;
                 FlacSettings n = audioJob.Settings as FlacSettings;
                 _encoderExecutablePath = this._settings.FlacPath;
-                _encoderCommandLine = "-f --channel-map=none -" + n.CompressionLevel + " - -o \"{0}\""; 
+                _encoderCommandLine = "-f --ignore-chunk-sizes --channel-map=none -" + n.CompressionLevel + " - -o \"{0}\""; 
             }
             if (audioJob.Settings is AC3Settings)
             {

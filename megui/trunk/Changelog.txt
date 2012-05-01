@@ -1,3 +1,4 @@
+2145 [Flac] added --ignore-chunk-sizes to the command line
 2144 [Settings] cosmetics
 2143 NeroAacEnc + DGIndexNV are now disabled by default as external dependencies are required.
      In order to use them, they have to be enabled in "Options\Settings\External Program Configuration".
