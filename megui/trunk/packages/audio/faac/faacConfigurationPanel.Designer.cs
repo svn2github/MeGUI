@@ -42,8 +42,8 @@ namespace MeGUI.packages.audio.faac
             this.encoderGroupBox.Controls.Add(this.qualityModeRadioButton);
             this.encoderGroupBox.Controls.Add(this.cbrBitrate);
             this.encoderGroupBox.Controls.Add(this.cbrBitrateRadioButton);
-            this.encoderGroupBox.Location = new System.Drawing.Point(0, 172);
-            this.encoderGroupBox.Size = new System.Drawing.Size(394, 81);
+            this.encoderGroupBox.Location = new System.Drawing.Point(0, 140);
+            this.encoderGroupBox.Size = new System.Drawing.Size(394, 90);
             this.encoderGroupBox.Text = " AAC Options ";
             // 
             // vbrQuality
@@ -55,7 +55,7 @@ namespace MeGUI.packages.audio.faac
             0,
             0,
             0});
-            this.vbrQuality.Location = new System.Drawing.Point(107, 51);
+            this.vbrQuality.Location = new System.Drawing.Point(107, 47);
             this.vbrQuality.Maximum = new decimal(new int[] {
             500,
             0,
@@ -67,7 +67,7 @@ namespace MeGUI.packages.audio.faac
             0,
             0});
             this.vbrQuality.Name = "vbrQuality";
-            this.vbrQuality.Size = new System.Drawing.Size(278, 20);
+            this.vbrQuality.Size = new System.Drawing.Size(278, 22);
             this.vbrQuality.TabIndex = 7;
             this.vbrQuality.Value = new decimal(new int[] {
             100,
@@ -77,9 +77,9 @@ namespace MeGUI.packages.audio.faac
             // 
             // qualityModeRadioButton
             // 
-            this.qualityModeRadioButton.Location = new System.Drawing.Point(16, 51);
+            this.qualityModeRadioButton.Location = new System.Drawing.Point(16, 47);
             this.qualityModeRadioButton.Name = "qualityModeRadioButton";
-            this.qualityModeRadioButton.Size = new System.Drawing.Size(68, 24);
+            this.qualityModeRadioButton.Size = new System.Drawing.Size(68, 22);
             this.qualityModeRadioButton.TabIndex = 6;
             this.qualityModeRadioButton.Text = "VBR";
             // 
@@ -88,17 +88,17 @@ namespace MeGUI.packages.audio.faac
             this.cbrBitrate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cbrBitrate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbrBitrate.Location = new System.Drawing.Point(107, 19);
+            this.cbrBitrate.Location = new System.Drawing.Point(107, 18);
             this.cbrBitrate.Name = "cbrBitrate";
-            this.cbrBitrate.Size = new System.Drawing.Size(278, 21);
+            this.cbrBitrate.Size = new System.Drawing.Size(278, 20);
             this.cbrBitrate.TabIndex = 5;
             // 
             // cbrBitrateRadioButton
             // 
             this.cbrBitrateRadioButton.Checked = true;
-            this.cbrBitrateRadioButton.Location = new System.Drawing.Point(16, 19);
+            this.cbrBitrateRadioButton.Location = new System.Drawing.Point(16, 18);
             this.cbrBitrateRadioButton.Name = "cbrBitrateRadioButton";
-            this.cbrBitrateRadioButton.Size = new System.Drawing.Size(56, 24);
+            this.cbrBitrateRadioButton.Size = new System.Drawing.Size(56, 22);
             this.cbrBitrateRadioButton.TabIndex = 4;
             this.cbrBitrateRadioButton.TabStop = true;
             this.cbrBitrateRadioButton.Text = "ABR";
@@ -106,9 +106,9 @@ namespace MeGUI.packages.audio.faac
             // 
             // faacConfigurationPanel
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.Name = "faacConfigurationPanel";
-            this.Size = new System.Drawing.Size(394, 259);
+            this.Size = new System.Drawing.Size(394, 254);
             this.encoderGroupBox.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.vbrQuality)).EndInit();
             this.ResumeLayout(false);

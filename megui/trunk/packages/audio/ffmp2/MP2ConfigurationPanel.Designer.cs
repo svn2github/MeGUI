@@ -37,16 +37,16 @@ namespace MeGUI.packages.audio.ffmp2
             // 
             this.encoderGroupBox.Controls.Add(this.label2);
             this.encoderGroupBox.Controls.Add(this.comboBox1);
-            this.encoderGroupBox.Location = new System.Drawing.Point(0, 170);
-            this.encoderGroupBox.Size = new System.Drawing.Size(394, 46);
+            this.encoderGroupBox.Location = new System.Drawing.Point(0, 140);
+            this.encoderGroupBox.Size = new System.Drawing.Size(394, 52);
             this.encoderGroupBox.Text = " MP2 Encoder Options ";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 18);
+            this.label2.Location = new System.Drawing.Point(6, 17);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(69, 13);
+            this.label2.Size = new System.Drawing.Size(69, 12);
             this.label2.TabIndex = 5;
             this.label2.Text = "Bitrate (kbps)";
             // 
@@ -56,16 +56,16 @@ namespace MeGUI.packages.audio.ffmp2
             | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(106, 15);
+            this.comboBox1.Location = new System.Drawing.Point(106, 14);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(285, 21);
+            this.comboBox1.Size = new System.Drawing.Size(285, 20);
             this.comboBox1.TabIndex = 3;
             // 
             // MP2ConfigurationPanel
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.Name = "MP2ConfigurationPanel";
-            this.Size = new System.Drawing.Size(394, 219);
+            this.Size = new System.Drawing.Size(394, 212);
             this.encoderGroupBox.ResumeLayout(false);
             this.encoderGroupBox.PerformLayout();
             this.ResumeLayout(false);

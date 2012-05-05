@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2012  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -84,8 +84,8 @@ namespace MeGUI.packages.audio.naac
             this.encoderGroupBox.Controls.Add(this.vBitrate);
             this.encoderGroupBox.Controls.Add(this.rbtnCBR);
             this.encoderGroupBox.Controls.Add(this.rbtnABR);
-            this.encoderGroupBox.Location = new System.Drawing.Point(0, 183);
-            this.encoderGroupBox.Size = new System.Drawing.Size(394, 209);
+            this.encoderGroupBox.Location = new System.Drawing.Point(0, 140);
+            this.encoderGroupBox.Size = new System.Drawing.Size(394, 210);
             this.encoderGroupBox.TabIndex = 1;
             this.encoderGroupBox.Text = " NeroDigital AAC Options ";
             // 
@@ -97,7 +97,7 @@ namespace MeGUI.packages.audio.naac
             // 
             this.vQuality.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.vQuality.Location = new System.Drawing.Point(3, 133);
+            this.vQuality.Location = new System.Drawing.Point(3, 123);
             this.vQuality.Maximum = 100;
             this.vQuality.Name = "vQuality";
             this.vQuality.Size = new System.Drawing.Size(388, 45);
@@ -110,9 +110,9 @@ namespace MeGUI.packages.audio.naac
             // 
             this.rbtnVBR.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.rbtnVBR.Location = new System.Drawing.Point(13, 115);
+            this.rbtnVBR.Location = new System.Drawing.Point(13, 106);
             this.rbtnVBR.Name = "rbtnVBR";
-            this.rbtnVBR.Size = new System.Drawing.Size(267, 24);
+            this.rbtnVBR.Size = new System.Drawing.Size(267, 22);
             this.rbtnVBR.TabIndex = 3;
             this.rbtnVBR.Text = "Variable Bitrate";
             this.rbtnVBR.CheckedChanged += new System.EventHandler(this.rbtnABR_CheckedChanged);
@@ -121,7 +121,7 @@ namespace MeGUI.packages.audio.naac
             // 
             this.vBitrate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.vBitrate.Location = new System.Drawing.Point(3, 64);
+            this.vBitrate.Location = new System.Drawing.Point(3, 59);
             this.vBitrate.Maximum = 640;
             this.vBitrate.Minimum = 16;
             this.vBitrate.Name = "vBitrate";
@@ -134,18 +134,18 @@ namespace MeGUI.packages.audio.naac
             // 
             // rbtnCBR
             // 
-            this.rbtnCBR.Location = new System.Drawing.Point(13, 42);
+            this.rbtnCBR.Location = new System.Drawing.Point(13, 39);
             this.rbtnCBR.Name = "rbtnCBR";
-            this.rbtnCBR.Size = new System.Drawing.Size(320, 24);
+            this.rbtnCBR.Size = new System.Drawing.Size(320, 22);
             this.rbtnCBR.TabIndex = 1;
             this.rbtnCBR.Text = "Constant Bitrate";
             this.rbtnCBR.CheckedChanged += new System.EventHandler(this.rbtnABR_CheckedChanged);
             // 
             // rbtnABR
             // 
-            this.rbtnABR.Location = new System.Drawing.Point(13, 24);
+            this.rbtnABR.Location = new System.Drawing.Point(13, 22);
             this.rbtnABR.Name = "rbtnABR";
-            this.rbtnABR.Size = new System.Drawing.Size(302, 17);
+            this.rbtnABR.Size = new System.Drawing.Size(302, 16);
             this.rbtnABR.TabIndex = 0;
             this.rbtnABR.Text = "Adaptive Bitrate";
             this.rbtnABR.CheckedChanged += new System.EventHandler(this.rbtnABR_CheckedChanged);
@@ -154,25 +154,25 @@ namespace MeGUI.packages.audio.naac
             // 
             this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(106, 179);
+            this.comboBox1.Location = new System.Drawing.Point(106, 165);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(266, 21);
+            this.comboBox1.Size = new System.Drawing.Size(266, 20);
             this.comboBox1.TabIndex = 6;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 182);
+            this.label1.Location = new System.Drawing.Point(6, 168);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(60, 13);
+            this.label1.Size = new System.Drawing.Size(63, 12);
             this.label1.TabIndex = 5;
             this.label1.Text = "AAC Profile";
             // 
             // neroConfigurationPanel
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.Name = "neroConfigurationPanel";
-            this.Size = new System.Drawing.Size(394, 396);
+            this.Size = new System.Drawing.Size(394, 379);
             this.encoderGroupBox.ResumeLayout(false);
             this.encoderGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.vQuality)).EndInit();

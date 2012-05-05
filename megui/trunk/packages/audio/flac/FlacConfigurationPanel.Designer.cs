@@ -40,13 +40,13 @@ namespace MeGUI.packages.audio.flac
             this.encoderGroupBox.Controls.Add(this.label5);
             this.encoderGroupBox.Controls.Add(this.label4);
             this.encoderGroupBox.Controls.Add(this.tbQuality);
-            this.encoderGroupBox.Location = new System.Drawing.Point(0, 171);
-            this.encoderGroupBox.Size = new System.Drawing.Size(393, 72);
+            this.encoderGroupBox.Location = new System.Drawing.Point(0, 140);
+            this.encoderGroupBox.Size = new System.Drawing.Size(393, 78);
             this.encoderGroupBox.Text = " Flac Options ";
             // 
             // tbQuality
             // 
-            this.tbQuality.Location = new System.Drawing.Point(6, 19);
+            this.tbQuality.Location = new System.Drawing.Point(6, 18);
             this.tbQuality.Maximum = 8;
             this.tbQuality.Name = "tbQuality";
             this.tbQuality.Size = new System.Drawing.Size(378, 45);
@@ -57,26 +57,26 @@ namespace MeGUI.packages.audio.flac
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 51);
+            this.label4.Location = new System.Drawing.Point(6, 47);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(120, 13);
+            this.label4.Size = new System.Drawing.Size(116, 12);
             this.label4.TabIndex = 11;
             this.label4.Text = "Biggest file, fast encode";
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(260, 51);
+            this.label5.Location = new System.Drawing.Point(260, 47);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(128, 13);
+            this.label5.Size = new System.Drawing.Size(124, 12);
             this.label5.TabIndex = 12;
             this.label5.Text = "Smallest file, slow encode";
             // 
             // FlacConfigurationPanel
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.Name = "FlacConfigurationPanel";
-            this.Size = new System.Drawing.Size(394, 247);
+            this.Size = new System.Drawing.Size(394, 240);
             this.encoderGroupBox.ResumeLayout(false);
             this.encoderGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tbQuality)).EndInit();
