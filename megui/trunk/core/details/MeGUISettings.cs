@@ -58,7 +58,7 @@ namespace MeGUI
                      deleteAbortedOutput, openProgressWindow, useadvancedtooltips, autoSelectHDStreams, autoscroll, 
                      alwaysOnTop, safeProfileAlteration, usehttpproxy, addTimePosition, alwaysbackupfiles, bUseITU,
                      forcerawavcextension, bAutoLoadDG, bAutoStartQueueStartup, bAlwaysMuxMKV, b64bitX264,
-                     bEnsureCorrectPlaybackSpeed, bOpenAVSInThread, bUseDGIndexNV, bUseNeroAacEnc;
+                     bEnsureCorrectPlaybackSpeed, bOpenAVSInThread, bUseDGIndexNV, bUseNeroAacEnc, bExternalProgramsSet;
         private ulong audioSamplesPerUpdate;
         private decimal forceFilmThreshold, acceptableFPSError;
         private int nbPasses, acceptableAspectError, autoUpdateServerSubList, minComplexity, updateFormSplitter,
@@ -194,7 +194,7 @@ namespace MeGUI
             startColumnWidth = 55;
             endColumnWidth = 55;
             fpsColumnWidth = 35;
-            bEnsureCorrectPlaybackSpeed = bUseDGIndexNV = bUseNeroAacEnc = false;
+            bEnsureCorrectPlaybackSpeed = bUseDGIndexNV = bUseNeroAacEnc = bExternalProgramsSet = false;
             ffmsThreads = 1;
             appendToForcedStreams = "";
             ocGUIMode = OCGUIMode.Default;
@@ -1100,7 +1100,12 @@ namespace MeGUI
 
         public bool UseDGIndexNV
         {
-            get { return bUseDGIndexNV; }
+            get 
+            {
+                if (!bExternalProgramsSet)
+                    SetExternalPrograms();
+                return bUseDGIndexNV; 
+            }
             set { bUseDGIndexNV = value; }
         }
 
@@ -1121,8 +1126,22 @@ namespace MeGUI
 
         public bool UseNeroAacEnc
         {
-            get { return bUseNeroAacEnc; }
+            get 
+            {
+                if (!bExternalProgramsSet)
+                    SetExternalPrograms();
+                return bUseNeroAacEnc; 
+            }
             set { bUseNeroAacEnc = value; }
+        }
+
+        /// <summary>
+        /// if the external programs (nero & dgindexnv) have been already set
+        /// </summary>
+        public bool ExternalProgramsSet
+        {
+            get { return bExternalProgramsSet; }
+            set { bExternalProgramsSet = value; }
         }
 
         #endregion
@@ -1139,10 +1158,29 @@ namespace MeGUI
         }
 
         #region Methods
+#warning Deprecated after next stable release
+        private void SetExternalPrograms()
+        {
+            // check NeroAacEnc
+            bUseNeroAacEnc = System.IO.File.Exists(neroAacEncPath);
+
+            // check if the DGIndexNV license file is available
+            if (System.IO.File.Exists(MainForm.Instance.Settings.DgnvIndexPath) && 
+                System.IO.File.Exists(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(MainForm.Instance.Settings.DgnvIndexPath), "license.txt")))
+                bUseDGIndexNV = true;
+            else
+                bUseDGIndexNV = false;
+
+            bExternalProgramsSet = true;
+        }
+
         public bool IsNeroAACEncAvailable()
         {
+            if (!bExternalProgramsSet)
+                SetExternalPrograms();
             return bUseNeroAacEnc && System.IO.File.Exists(neroAacEncPath);
         }
+
         public bool IsDGIIndexerAvailable()
         {
             if (!bUseDGIndexNV)
