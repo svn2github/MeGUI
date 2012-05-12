@@ -1,3 +1,4 @@
+2150 [Flac] changed input handling (PCM --> RAW) so that 24bit WAV files can be processed as well
 2149 [Audio Encoder] cosmetics. Patch by andrewxeron929623
 2148 Enable NeroAacEnc + DGIndexNV by default when they are already in use
 2147 [OneClick] fixed problem encoding WMA files

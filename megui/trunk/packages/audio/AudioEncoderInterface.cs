@@ -323,6 +323,9 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
                         inputLog.LogValue("Bits per sample", a.BitsPerSample);
                         inputLog.LogValue("Sample rate", a.AudioSampleRate);
 
+                        if (audioJob.Settings is FlacSettings)
+                            _encoderCommandLine += " --channels=" + a.ChannelsCount + " --bps=" + a.BitsPerSample + " --sample-rate=" + a.AudioSampleRate;
+
                         const int MAX_SAMPLES_PER_ONCE = 4096;
                         int frameSample = 0;
                         int lastUpdateSample = 0;
@@ -1055,11 +1058,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "AviSynthAudioEncoder");
             }
             if (audioJob.Settings is FlacSettings)
             {
-                script.Append("AudioBits(last)>24?ConvertAudioTo16bit(last):last " + Environment.NewLine); // flac encoder doesn't support 32bits streams
-                _mustSendWavHeaderToEncoderStdIn = true;
+                script.Append("AudioBits(last)>24?ConvertAudioTo24bit(last):last " + Environment.NewLine); // flac encoder doesn't support 32bits streams
+                _mustSendWavHeaderToEncoderStdIn = false;
                 FlacSettings n = audioJob.Settings as FlacSettings;
                 _encoderExecutablePath = this._settings.FlacPath;
-                _encoderCommandLine = "-f --ignore-chunk-sizes --channel-map=none -" + n.CompressionLevel + " - -o \"{0}\""; 
+                _encoderCommandLine = "--force --force-raw-format --endian=little --sign=signed -" + n.CompressionLevel + " - -o \"{0}\""; 
             }
             if (audioJob.Settings is AC3Settings)
             {
