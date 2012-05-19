@@ -523,9 +523,10 @@ namespace MeGUI
                             strLanguage = oInfo.AudioInfo.Tracks[0].Language;
                         }
 
-                        if (audioConfigControl[i].AudioEncodingMode == AudioEncodingMode.Never ||
+                        if (audioConfigControl[i].IsDontEncodePossible() &&
+                            (audioConfigControl[i].AudioEncodingMode == AudioEncodingMode.Never ||
                             (audioConfigControl[i].AudioEncodingMode == AudioEncodingMode.IfCodecDoesNotMatch &&
-                            audioConfigControl[i].Settings.EncoderType.ACodec.ID.Equals(strAudioCodec, StringComparison.InvariantCultureIgnoreCase)))
+                            audioConfigControl[i].Settings.EncoderType.ACodec.ID.Equals(strAudioCodec, StringComparison.InvariantCultureIgnoreCase))))
                             ocAudioTracks.Add(new OneClickAudioTrack(null, new MuxStream(aInput, info.Language, info.Name, delay, false, false, null), oAudioTrackInfo, bMuxMKV));
                         else
                             ocAudioTracks.Add(new OneClickAudioTrack(new AudioJob(aInput, null, null, audioConfigControl[i].Settings, delay, strLanguage, null), null, oAudioTrackInfo, bMuxMKV));
