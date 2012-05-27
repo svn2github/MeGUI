@@ -1,3 +1,5 @@
+2152 [Chapter Creator] improved DVD PGC handling
+                       added option to sort the title list
 2151 [OneClick] fixed processing of audio files which cannot be demuxed
 2150 [Flac] changed input handling (PCM --> RAW) so that 24bit WAV files can be processed as well
 2149 [Audio Encoder] cosmetics. Patch by andrewxeron929623

@@ -70,36 +70,46 @@ namespace MeGUI
                 byte[] bytRead = new byte[4];
                 long VMG_PTT_STPT_Position = IFOparser.ToFilePosition(IFOparser.GetFileBlock(videoIFO, 0xC4, 4));
                 int titlePlayMaps = IFOparser.ToInt16(IFOparser.GetFileBlock(videoIFO, VMG_PTT_STPT_Position, 2));
-                for (int currentTitle = 1; currentTitle <= titlePlayMaps; ++currentTitle)
+
+                // get PGC count from all ifo files
+                int pgcCount = 0;
+                foreach (string file in Directory.GetFiles(path, "VTS_*_0.IFO"))
+                    pgcCount += (int)IFOparser.getPGCnb(file);
+
+                if (pgcCount > titlePlayMaps)
                 {
-                    long titleInfoStart = 8 + ((currentTitle - 1) * 12);
-                    int titleSetNumber = IFOparser.GetFileBlock(videoIFO, (VMG_PTT_STPT_Position + titleInfoStart) + 6L, 1)[0];
-                    int titleSetTitleNumber = IFOparser.GetFileBlock(videoIFO, (VMG_PTT_STPT_Position + titleInfoStart) + 7L, 1)[0];
-                    string vtsIFO = Path.Combine(path, string.Format("VTS_{0:D2}_0.IFO", titleSetNumber));
-                    if (!File.Exists(vtsIFO))
-                    {
-                        Trace.WriteLine(string.Format("VTS IFO file missing: {0}", Path.GetFileName(vtsIFO)));
-                        continue;
-                    }
-                    streams.Add(ex.GetChapterInfo(vtsIFO, titleSetTitleNumber));
-                }
-            }
-            else
-            {
-                if (File.Exists(videoIFO))
-                {
-                    // read only the selected ifo file
-                    streams.AddRange(ex.GetStreams(videoIFO));
-                }
-                else
-                {
-                    //read all the ifo files
+                    // process all the ifo files as there are more PGCs than in the VIDEO_TS.IFO
                     foreach (string file in Directory.GetFiles(path, "VTS_*_0.IFO"))
                         streams.AddRange(ex.GetStreams(file));
                 }
+                else
+                {
+                    for (int currentTitle = 1; currentTitle <= titlePlayMaps; ++currentTitle)
+                    {
+                        long titleInfoStart = 8 + ((currentTitle - 1) * 12);
+                        int titleSetNumber = IFOparser.GetFileBlock(videoIFO, (VMG_PTT_STPT_Position + titleInfoStart) + 6L, 1)[0];
+                        int titleSetTitleNumber = IFOparser.GetFileBlock(videoIFO, (VMG_PTT_STPT_Position + titleInfoStart) + 7L, 1)[0];
+                        string vtsIFO = Path.Combine(path, string.Format("VTS_{0:D2}_0.IFO", titleSetNumber));
+                        if (!File.Exists(vtsIFO))
+                        {
+                            Trace.WriteLine(string.Format("VTS IFO file missing: {0}", Path.GetFileName(vtsIFO)));
+                            continue;
+                        }
+                        streams.Add(ex.GetChapterInfo(vtsIFO, titleSetTitleNumber));
+                    }
+                }
             }
-
-            streams = streams.OrderByDescending(p => p.Duration).ToList();
+            else if (File.Exists(videoIFO))
+            {
+                // read only the selected ifo file
+                streams.AddRange(ex.GetStreams(videoIFO));
+            }
+            else
+            {
+                // read all the ifo files
+                foreach (string file in Directory.GetFiles(path, "VTS_*_0.IFO"))
+                    streams.AddRange(ex.GetStreams(file));
+            }
 
             OnExtractionComplete();
             return streams;
