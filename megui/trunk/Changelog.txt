@@ -1,3 +1,4 @@
+2153 [MP4 Muxer] fixed muxing files with names containing #
 2152 [Chapter Creator] improved DVD PGC handling
                        added option to sort the title list
 2151 [OneClick] fixed processing of audio files which cannot be demuxed

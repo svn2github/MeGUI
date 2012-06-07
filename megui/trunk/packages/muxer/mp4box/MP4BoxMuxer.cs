@@ -231,39 +231,23 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                 MuxSettings settings = job.Settings;
                 CultureInfo ci = new CultureInfo("en-us");
                 StringBuilder sb = new StringBuilder();
+ 
+                if (!String.IsNullOrEmpty(settings.VideoInput) || !String.IsNullOrEmpty(settings.MuxedInput))
+                {
+                    string strInput;
+                    if (!String.IsNullOrEmpty(settings.VideoInput))
+                        strInput = settings.VideoInput;
+                    else
+                        strInput = settings.MuxedInput;
 
-                MediaInfoFile oVideoInfo = null;
-                if (!string.IsNullOrEmpty(settings.VideoInput))
-                {
-                    oVideoInfo = new MediaInfoFile(settings.VideoInput, ref log);
-                    sb.Append("-add \"" + settings.VideoInput);
-                    if (oVideoInfo.ContainerFileType == ContainerType.MP4)
-                    {
-                        int trackID = 0;
-                        if (oVideoInfo.HasVideo)
-                            trackID = oVideoInfo.VideoInfo.Track.TrackID;
-                        sb.Append("#trackID=" + trackID);
-                    }
-                    if (settings.Framerate.HasValue)
-                    {
-                        string fpsString = settings.Framerate.Value.ToString(ci);
-                        sb.Append(":fps=" + fpsString);
-                    }
-                    if (!string.IsNullOrEmpty(settings.VideoName))
-                        sb.Append(":name=" + settings.VideoName);
-                    sb.Append("\"");
-                }
-                else if (!string.IsNullOrEmpty(settings.MuxedInput))
-                {
-                    oVideoInfo = new MediaInfoFile(settings.VideoInput, ref log);
-                    sb.Append(" -add \"" + settings.MuxedInput);
-                    if (oVideoInfo.ContainerFileType == ContainerType.MP4)
-                    {
-                        int trackID = 0;
-                        if (oVideoInfo.HasVideo)
-                            trackID = oVideoInfo.VideoInfo.Track.TrackID;
-                        sb.Append("#trackID=" + trackID);
-                    }
+                    MediaInfoFile oVideoInfo = new MediaInfoFile(strInput, ref log);
+                    sb.Append("-add \"" + strInput);
+
+                    int trackID = 1;
+                    if (oVideoInfo.HasVideo && oVideoInfo.ContainerFileType == ContainerType.MP4)
+                        trackID = oVideoInfo.VideoInfo.Track.TrackID;
+                    sb.Append("#trackID=" + trackID);
+
                     if (settings.Framerate.HasValue)
                     {
                         string fpsString = settings.Framerate.Value.ToString(ci);
@@ -285,28 +269,19 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                     }
 
                     sb.Append(" -add \"" + stream.path);
-                    if (oInfo.ContainerFileType == ContainerType.MP4)
+
+                    int trackID = 1;
+                    int heaac_flag = -1;
+                    if (oInfo.AudioInfo.Tracks.Count > 0)
                     {
-                        int trackID = 0;
-                        int heaac_flag = -1;
-                        if (oInfo.AudioInfo.Tracks.Count > 0)
-                        {
+                        if (oInfo.ContainerFileType == ContainerType.MP4)
                             trackID = oInfo.AudioInfo.Tracks[0].TrackID;
-                            heaac_flag = oInfo.AudioInfo.Tracks[0].AACFlag;
-                        }
-                        sb.Append("#trackID=" + trackID);
-                        switch (heaac_flag)
-                        {
-                            case 1: sb.Append(":sbr"); break;
-                            case 2: sb.Append(":ps"); break;
-                            default: sb.Append(""); break;
-                        }
+                        heaac_flag = oInfo.AudioInfo.Tracks[0].AACFlag;
                     }
-                    else if (oInfo.AudioInfo.Codecs[0] == AudioCodec.AAC)
+                    sb.Append("#trackID=" + trackID);
+
+                    if (oInfo.ContainerFileType == ContainerType.MP4 || oInfo.AudioInfo.Codecs[0] == AudioCodec.AAC)
                     {
-                        int heaac_flag = -1;
-                        if (oInfo.AudioInfo.Tracks.Count > 0)
-                            heaac_flag = oInfo.AudioInfo.Tracks[0].AACFlag;
                         switch (heaac_flag)
                         {
                             case 1: sb.Append(":sbr"); break;
@@ -334,7 +309,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                 foreach (object o in settings.SubtitleStreams)
                 {
                     MuxStream stream = (MuxStream)o;
-                    sb.Append(" -add \"" + stream.path);
+                    sb.Append(" -add \"" + stream.path + "#trackID=1");
                     if (!string.IsNullOrEmpty(stream.language))
                     {
                         foreach (KeyValuePair<string, string> strLanguage in LanguageSelectionContainer.Languages)
