@@ -1,46 +1,46 @@
-2153 [MP4 Muxer] fixed muxing files with names containing #
-2152 [Chapter Creator] improved DVD PGC handling
-                       added option to sort the title list
-2151 [OneClick] fixed processing of audio files which cannot be demuxed
-2150 [Flac] changed input handling (PCM --> RAW) so that 24bit WAV files can be processed as well
-2149 [Audio Encoder] cosmetics. Patch by andrewxeron929623
-2148 Enable NeroAacEnc + DGIndexNV by default when they are already in use
-2147 [OneClick] fixed problem encoding WMA files
-2146 [Update] improved handling of missing files in the MeGUI x64 build
-2145 [Flac] added --ignore-chunk-sizes to the command line
-2144 [Settings] cosmetics
-2143 NeroAacEnc + DGIndexNV are now disabled by default as external dependencies are required.
-     In order to use them, they have to be enabled in "Options\Settings\External Program Configuration".
-2142 fixed problems with Turkish characters (e.g. in the File Indexer)
-2141 [OneClick] added some changes for the upcoming next release of the OneClick tool
-2140 [Update] if a component is missing no jobs can be started
-2139 [DGA/DGI Indexer] added job status message during processing
-2138 [Log] added required DLLs to the version information block
-2137 [AutoEncode] enabled option to set the audio track name
-2136 [OneClick] added some minor changes for the upcoming next release of the OneClick tool
-2135 [PGC Demux] added pgcdemux for DVD PGC processing
-2134 [OneClick] fixed encoding of AC3 tracks which should be muxed only
-2133 [VobSubber] added job status message during processing
-2132 [DGI Indexer] fixed getting the film value
-2131 [FFMS] prepared indexer for handling index files stored in other locations
-2130 [HD Streams Extractor] improved job queuing when no feature is selected
-2129 [AutoEncode] enabled option to set the audio language
-2128 [Audio Encoder] NicAudio will be tried for DTS-MA decoding when DirectShowSource and FFAudioSource fail
-2127 [AVS Script Creator] improved automatic cropping
-2126 [AVS Script Creator] crop values will only be added to the script if necessary
-2125 [Job] improved aborting of jobs part II
-2124 [Job] improved aborting of jobs
-2123 [Log] use system default encoding for AviSynth input script
-2122 [Progress Window] added job name. Feature request #3488205
-2121 [Audio Encoder] Import() will be used for AVS input files. Bug #3506283
-2120 [MKV Muxer] improved handling of empty IDX subtitle files
-2119 [MKV Muxer] added job status message during muxing
-2118 [MediaInfo] improved information detection for DVD sources
-2117 [Chapter Creator] improved DVD PGC handling
-2116 [VobSubber] improved detection of subtitle streams
-2115 [HD Streams Extractor] fixed handling of english tracks in a MKV container when the track name contains a language
-2114 [MKV Muxer] adjusted (de)muxer to the recent mkvmerge changes (requires mkvmerge revision 5.3.0+)
-2113 [Job] translate process exit codes to status messages
+2154 [MediaInfo] some adjustments for frame rate detection with MediaInfo 0.7.59+
+
+Changelog 2112 --> 2153
+
+Features/Changes:
+NeroAacEnc + DGIndexNV are now disabled by default as external dependencies are required.
+If they are already in use they will be enabled automatically, in all other cases
+they have to be enabled in "Options\Settings\External Program Configuration".
+[AutoEncode] enabled option to set the audio language and the track name
+[MediaInfo] improved information detection for DVD sources
+[Update] if a component is missing no jobs can be started
+
+Enhancements/Fixes:
+[Audio Encoder] cosmetics. Patch by andrewxeron929623
+[Audio Encoder] Import() will be used for AVS input files. Bug #3506283
+[Audio Encoder] NicAudio will be tried for DTS-MA decoding when DirectShowSource and FFAudioSource fail
+[AVS Script Creator] crop values will only be added to the script if necessary
+[AVS Script Creator] improved automatic cropping
+[Chapter Creator] added option to sort the title list
+[Chapter Creator] improved DVD PGC handling
+[DGA/DGI Indexer] + [MKV Muxer] + [VobSubber] added job status message during processing
+[DGI Indexer] fixed getting the film value
+[FFMS] prepared indexer for handling index files stored in other locations
+[Flac] changed input handling (PCM --> RAW) so that 24bit WAV files can be processed as well
+[HD Streams Extractor] fixed handling of English tracks in a MKV container when the track name contains a language
+[HD Streams Extractor] improved job queuing when no feature is selected
+[Job] improved aborting of jobs
+[Job] translate process exit codes to status messages
+[Log] added required DLLs to the version information block
+[Log] use system default encoding for AviSynth input script
+[MKV Muxer] adjusted (de)muxer to the recent mkvmerge changes (requires mkvmerge revision 5.3.0+)
+[MKV Muxer] improved handling of empty IDX subtitle files
+[MP4 Muxer] fixed muxing files with names containing #. Bug #3531735
+[OneClick] added some changes for the upcoming next release of the OneClick tool
+[OneClick] fixed encoding of AC3 tracks which should be muxed only
+[OneClick] fixed problem encoding WMA files
+[OneClick] fixed processing of audio files which cannot be demuxed
+[PGC Demux] added pgcdemux for DVD PGC processing
+[Progress Window] added job name. Feature request #3488205
+[Settings] cosmetics
+[VobSubber] improved detection of subtitle streams
+Fixed problems with Turkish characters in various places (e.g. in the File Indexer)
+
 
 Changelog 2106 --> 2112
 
@@ -56,67 +56,6 @@ Features:
 Enhancements:
 [AVS Script Creator] fixed opening of FFMS indexed files
 [XviD] fixed saving of custom vbv values. Bug #3483985
-
-
-Changelog 2050 --> 2106
-
-Features:
-[Audio Encoder] added handling of channel count mismatch
-[Audio Encoder] cosmetics
-[Audio Encoder] do not abort downmix anymore if input avs file has no channel position information
-[Audio Encoder] DTS-MA decoding is blocked with NicAudio to avoid problems
-[Audio Encoder] show the opening of files in the job progress window as FFAudioSource may need some time to index files
-[AVS Script Creator] + [OneClick] improve input DAR detection
-[AVS Script Creator] enhanced selection box if opening an indexable file directly
-[AVS Script Creator] resize value will only be added to the script if necessary
-[Bitrate Calculator] improved M2TS calculation assumption. Warning: it is better but also not correct
-[D2V Indexer] .bad and .fix.txt files will also be deleted in cleanup step
-[HD Streams Extractor] automatically execute the job a second time if a gaps file is detected
-[HD Streams Extractor] defaulting to English if the track language cannot be indentified (MKV only)
-[M2TS muxer] added some missing audio types
-[MainForm] MeGUI can only be closed if there are no running jobs
-[MainForm] offer to install AviSynth if AviSynth is not found but the installer is available (x86 only)
-[MediaInfo] added default/forced track info to the MediaInfo wrapper (requires mediainfo revision 0.7.51+)
-[MediaInfo] added StreamOrder to the MediaInfo wrapper (requires mediainfo revision 0.7.53+)
-[MKV Demuxer] adjusted demuxer to the recent mkvextract changes (requires mkvmerge revision 5.2.1+)
-[MKV Muxer] adjusted muxer to the recent mkvmerge changes (requires mkvmerge revision 5.2.0+)
-[OneClick] + [Update] log categories will not be created anymore if already available
-[Progress Window] changed number formatting
-[Progress Window] changed priority will be kept during the whole application session. Feature request #3445179
-[Progress Window] lower also I/O and memory priority when priority below normal (requires Windows Vista or newer). Feature request #3468249
-[Settings] added option to append a text to forced track names
-[Settings] added option to select if ITU Aspect Ratios should be used (enabled by default). Feature request #3057378
-[Settings] changed default value of "Autostart Queue" to enabled
-[Update] changed recommended path for neroaacenc to tools\eac3to
-[Update] if a component is missing a warning message will appear at startup
-[VobSubber] cosmetics
-[x264] added option to adjust GOP size based on the FPS of the source (enabled by default)
-[x264] check if files for --qpfile/--cqmfile are available
-[x264] removed automatic deactivation of x64 x264 in case of an error
-[x264] replaced --fullrange with --range (requires x264 revision 2119+)
-
-
-Enhancements:
-[Adaptive Muxer] + [OneClick] fixed long delay when adding more than 4 tracks. Bug #3404061
-[Adaptive Muxer] fixed handling of delay value and default/forced track. Bug #3443721
-[Audio Encoder] fixed crash when using DTS-ES with NicAudio
-[AVS Script Creator] fixed button checked states after loading avisynth profiles
-[AVS Script Creator] fixed opening the wrong video preview in some rare circumstances
-[AVS] if an AVS script cannot be opened the old method to open such files is used during the session
-[AVS] the option can be completely disabled in the settings ("Improved AVS opening", enabled by default). Bug #3437874
-[FFMS] removed AssumeFPS() as it is causing problems with hybrid/telecined input. Bug #3463347
-[File Indexer] fixed trying to extract audio from MKV files without audio when using the FFMS indexer
-[Lame] fixed applying bitrate in ABR mode
-[Log] changed resource lock behavior. Bug #3466426
-[MKV Muxer] improved idx subtitle handling
-[MP4 Muxer] use ISO 639-2/T language codes when muxing. Bug #3201829
-[pre-rendering job] fixed file size targeting with AutoEncode and OneClick
-[Video Player] fixed a crash when using non seekable scripts
-[Video Player] fixed handling of non default DPI values
-[Video Player] in order to display such scripts the default start position is now the beginning 
-[x264] changed --weightp and --min-keyint default value calculation
-[x264] fixed (increased) maximum value of --ref and --bframes when using target playback devices
-[x264] fixed wrong --sar values when using BluRay Target Device with 720x576
 
 
 Known Problems:

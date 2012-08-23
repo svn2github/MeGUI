@@ -89,7 +89,7 @@ namespace MeGUI
                     ulong width = ulong.Parse(t.Width);
                     ulong height = ulong.Parse(t.Height);
                     ulong frameCount = ulong.Parse(t.FrameCount);
-                    double fps = double.Parse(t.FrameRate);
+                    double fps = (easyParseDouble(t.FrameRate) ?? easyParseDouble(t.FrameRateOriginal) ?? 99);
 
                     decimal? ar = easyParse<decimal>(delegate { return decimal.Parse(t.AspectRatio); });
                     Dar dar = new Dar(ar, width, height);
@@ -465,7 +465,7 @@ namespace MeGUI
                         _VideoInfo.Width = (ulong)easyParseInt(track.Width).Value;
                         _VideoInfo.Height = (ulong)easyParseInt(track.Height).Value;
                         _VideoInfo.FrameCount = (ulong)(easyParseInt(track.FrameCount) ?? 0);
-                        _VideoInfo.FPS = (easyParseDouble(track.FrameRate) ?? 25.0);
+                        _VideoInfo.FPS = (easyParseDouble(track.FrameRate) ?? easyParseDouble(track.FrameRateOriginal) ?? 99);
                         _VideoInfo.ScanType = track.ScanTypeString;
                         _VideoInfo.Codec = getVideoCodec(track.Codec);
                         if (_VideoInfo.Codec == null)
@@ -546,6 +546,8 @@ namespace MeGUI
                     oTrack.Info("Height: " + t.Height);
                     oTrack.Info("FrameCount: " + t.FrameCount);
                     oTrack.Info("FrameRate: " + t.FrameRate);
+                    oTrack.Info("FrameRateOriginal: " + t.FrameRateOriginal);
+                    oTrack.Info("FrameRateMode: " + t.FrameRateMode);
                     oTrack.Info("ScanType: " + t.ScanTypeString);
                     oTrack.Info("Codec: " + t.Codec);
                     oTrack.Info("CodecString: " + t.CodecString);

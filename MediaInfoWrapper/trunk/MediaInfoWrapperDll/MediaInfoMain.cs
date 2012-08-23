@@ -520,15 +520,6 @@ namespace MediaInfoWrapper
             }
         }
 
-        ///<summary> Number of General streams in the file</summary>
-        public Int32 GeneralCount
-        {
-            get
-            {
-              return this._GeneralCount;
-            }
-        }
-
         ///<summary> List of all the Video streams available in the file, type VideoTrack[trackindex] to access a specific track</summary>
         public List<VideoTrack> Video
         {
@@ -580,6 +571,10 @@ namespace MediaInfoWrapper
                         _tracktemp_.AspectRatioString = GetSpecificMediaInfo(MediaInfoStreamKind.Video,num2,"AspectRatio/String");
                         _tracktemp_.FrameRate = GetSpecificMediaInfo(MediaInfoStreamKind.Video,num2,"FrameRate");
                         _tracktemp_.FrameRateString = GetSpecificMediaInfo(MediaInfoStreamKind.Video,num2,"FrameRate/String");
+                        _tracktemp_.FrameRateOriginal = GetSpecificMediaInfo(MediaInfoStreamKind.Video, num2, "FrameRate_Original");
+                        _tracktemp_.FrameRateOriginalString = GetSpecificMediaInfo(MediaInfoStreamKind.Video, num2, "FrameRate_Original/String");
+                        _tracktemp_.FrameRateMode = GetSpecificMediaInfo(MediaInfoStreamKind.Video, num2, "FrameRate_Mode");
+                        _tracktemp_.FrameRateModeString = GetSpecificMediaInfo(MediaInfoStreamKind.Video, num2, "FrameRate_Mode/String");
                         _tracktemp_.FrameCount = GetSpecificMediaInfo(MediaInfoStreamKind.Video,num2,"FrameCount");
                         _tracktemp_.BitDepth = GetSpecificMediaInfo(MediaInfoStreamKind.Video,num2,"BitDepth");
                         _tracktemp_.BitsPixelFrame = GetSpecificMediaInfo(MediaInfoStreamKind.Video,num2,"Bits/(Pixel*Frame)");
@@ -621,15 +616,6 @@ namespace MediaInfoWrapper
                          this._Video.Add(_tracktemp_);
                     }
                 }
-            }
-        }
-
-        ///<summary> Number of Video streams in the file</summary>
-        public Int32 VideoCount
-        {
-            get
-            {
-              return this._VideoCount;
             }
         }
 
@@ -770,15 +756,6 @@ namespace MediaInfoWrapper
             }
         }
 
-        ///<summary> Number of Audio streams in the file</summary>
-        public Int32 AudioCount
-        {
-            get
-            {
-              return this._AudioCount;
-            }
-        }
-
         ///<summary> List of all the Text streams available in the file, type TextTrack[trackindex] to access a specific track</summary>
         public List<TextTrack> Text
         {
@@ -836,15 +813,6 @@ namespace MediaInfoWrapper
             }
         }
 
-        ///<summary> Number of Text streams in the file</summary>
-        public Int32 TextCount
-        {
-            get
-            {
-              return this._TextCount;
-            }
-        }
-
         ///<summary> List of all the Chapters streams available in the file, type ChaptersTrack[trackindex] to access a specific track</summary>
         public List<ChaptersTrack> Chapters
         {
@@ -892,15 +860,6 @@ namespace MediaInfoWrapper
                         this._Chapters.Add(_tracktemp_);
                     }
                 }
-            }
-        }
-
-        ///<summary> Number of Chapters streams in the file</summary>
-        public Int32 ChaptersCount
-        {
-            get
-            {
-              return this._ChaptersCount;
             }
         }
     }

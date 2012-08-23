@@ -43,6 +43,8 @@ namespace MediaInfoWrapper
         private string _PlayTimeString3;
         private string _Title;
         private string _TitleMore;
+        private string _PGCNumber;
+        private string _PGCCount;
         private string _Domain;
         private string _Collection;
         private string _CollectionTotalParts;
@@ -195,6 +197,36 @@ namespace MediaInfoWrapper
             set
             {
                 this._StreamCount = value;
+            }
+        }
+
+        ///<summary> DVD PGC Count </summary>
+        public string PGCCount
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(this._PGCCount))
+                    this._PGCCount = "";
+                return _PGCCount;
+            }
+            set
+            {
+                this._PGCCount = value;
+            }
+        }
+
+        ///<summary> DVD PGC Number </summary>
+        public string PGCNumber
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(this._PGCNumber))
+                    this._PGCNumber = "";
+                return _PGCNumber;
+            }
+            set
+            {
+                this._PGCNumber = value;
             }
         }
 

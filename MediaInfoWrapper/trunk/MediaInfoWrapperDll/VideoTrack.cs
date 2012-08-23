@@ -31,6 +31,10 @@ namespace MediaInfoWrapper
         private string _AspectRatioString;
         private string _FrameRate;
         private string _FrameRateString;
+        private string _FrameRateOriginal;
+        private string _FrameRateOriginalString;
+        private string _FrameRateMode;
+        private string _FrameRateModeString;
         private string _FrameCount;
         private string _BitDepth;
         private string _BitsPixelFrame;
@@ -457,6 +461,66 @@ namespace MediaInfoWrapper
             set
             {
                 this._FrameRateString = value;
+            }
+        }
+
+        ///<summary> Frame rate original </summary>
+        public string FrameRateOriginal
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(this._FrameRateOriginal))
+                    this._FrameRateOriginal = "";
+                return _FrameRateOriginal;
+            }
+            set
+            {
+                this._FrameRateOriginal = value;
+            }
+        }
+
+        ///<summary> Frame rate original</summary>
+        public string FrameRateOriginalString
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(this._FrameRateOriginalString))
+                    this._FrameRateOriginalString = "";
+                return _FrameRateOriginalString;
+            }
+            set
+            {
+                this._FrameRateOriginalString = value;
+            }
+        }
+
+        ///<summary> Frame rate mode</summary>
+        public string FrameRateMode
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(this._FrameRateMode))
+                    this._FrameRateMode = "";
+                return _FrameRateMode;
+            }
+            set
+            {
+                this._FrameRateMode = value;
+            }
+        }
+
+        ///<summary> Frame rate mode</summary>
+        public string FrameRateModeString
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(this._FrameRateModeString))
+                    this._FrameRateModeString = "";
+                return _FrameRateModeString;
+            }
+            set
+            {
+                this._FrameRateModeString = value;
             }
         }
 
