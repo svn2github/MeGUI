@@ -22,7 +22,6 @@ using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
-using MeGUI.core.details;
 using MeGUI.core.util;
 
 namespace MeGUI
@@ -32,8 +31,8 @@ namespace MeGUI
 	/// </summary>
 	public class OneClickPostprocessingProperties
 	{
-		private bool autoDeriveAR, signalAR, autoDeint, autoCrop, keepInputResolution, prerenderJob, useChapterMarks;
-		private int horizontalOutputResolution;
+		private bool signalAR, autoDeint, autoCrop, keepInputResolution, prerenderJob, useChapterMarks, chapterExtracted, eac3toDemux;
+        private int horizontalOutputResolution, _titleNumberToProcess;
         private FileSize? splitSize;
         private ContainerType container;
 		private FileSize? outputSize;
@@ -41,15 +40,17 @@ namespace MeGUI
 		private VideoCodecSettings videoSettings;
         private AviSynthSettings avsSettings;
 		private double customAR;
-		private string chapterFile, finalOutput, aviSynthScript, deviceType;
+        private string chapterFile, finalOutput, aviSynthScript, deviceType, inputFile, workingDirectory, _videoFileToMux;
         private List<string> filesToDelete;
         private List<OneClickAudioTrack> _audioTracks;
-        private List<SubtitleTrackInfo> _subtitleTrack;
-        private string _videoFileToMux;
+        private List<OneClickStream> _subtitleTrack;
+        private FileIndexerWindow.IndexType _indexType;
+        private OneClickSettings _oneClickSettings;
+        private List<OneClickFilesToProcess> _filesToProcess;
+        private string ifoFile;
 
 		public OneClickPostprocessingProperties()
 		{
-			autoDeriveAR = false;
 			signalAR = false;
             autoCrop = true;
             keepInputResolution = false;
@@ -65,8 +66,14 @@ namespace MeGUI
             useChapterMarks = false;
             filesToDelete = new List<string>();
             _audioTracks = new List<OneClickAudioTrack>();
-            _subtitleTrack = new List<SubtitleTrackInfo>();
+            _subtitleTrack = new List<OneClickStream>();
             _videoFileToMux = null;
+            _oneClickSettings = null;
+            _filesToProcess = new List<OneClickFilesToProcess>();
+            chapterExtracted = false;
+            _titleNumberToProcess = 1;
+            eac3toDemux = false;
+            ifoFile = string.Empty;
 		}
 
         public bool AutoDeinterlace
@@ -74,14 +81,16 @@ namespace MeGUI
             get { return autoDeint; }
             set { autoDeint = value; }
         }
+
         /// <summary>
-		/// gets / sets whether the aspect ratio should be derived from the dgindex project
-		/// </summary>
-		public bool AutoDeriveAR
-		{
-			get { return autoDeriveAR; }
-			set { autoDeriveAR = value; }
-		}
+        /// gets / sets whether the chapter file has been created automatically
+        /// </summary>
+        public bool ChapterExtracted
+        {
+            get { return chapterExtracted; }
+            set { chapterExtracted = value; }
+        }
+
 		/// <summary>
 		/// gets / sets whether the aspect ratio should be signalled in the output and thus
 		/// resizing should not unstretch anamorphically stretched content
@@ -91,6 +100,7 @@ namespace MeGUI
 			get { return signalAR; }
 			set { signalAR = value; }
 		}
+
         /// <summary>
         /// gets / sets the AutoCrop function
         /// </summary>
@@ -99,6 +109,7 @@ namespace MeGUI
             get { return autoCrop; }
             set { autoCrop = value; }
         }
+
         /// <summary>
         /// gets / sets Keep Input Resolution
         /// </summary>
@@ -107,6 +118,7 @@ namespace MeGUI
             get { return keepInputResolution; }
             set { keepInputResolution = value; }
         }
+
         /// <summary>
         /// gets / sets Prerender Job
         /// </summary>
@@ -115,6 +127,7 @@ namespace MeGUI
             get { return prerenderJob; }
             set { prerenderJob = value; }
         }
+
 		/// <summary>
 		/// gets / sets the horizontal output resolution the output should have
 		/// </summary>
@@ -123,6 +136,7 @@ namespace MeGUI
 			get { return horizontalOutputResolution; }
 			set { horizontalOutputResolution = value; }
 		}
+
 		/// <summary>
 		/// gets / sets the container of the output
 		/// </summary>
@@ -145,6 +159,7 @@ namespace MeGUI
                 Container = null;
             }
         }
+
         /// <summary>
 		/// gets / sets the output size
 		/// </summary>
@@ -153,6 +168,7 @@ namespace MeGUI
 			get { return outputSize; }
 			set { outputSize = value; }
 		}
+
 		/// <summary>
 		/// gets / sets the split size for the output
 		/// </summary>
@@ -161,6 +177,7 @@ namespace MeGUI
 			get { return splitSize; }
 			set { splitSize = value; }
 		}
+
 		/// <summary>
 		/// gets / sets the aspect ratio of the video input (if known)
 		/// </summary>
@@ -169,11 +186,13 @@ namespace MeGUI
 			get { return ar; }
 			set { ar = value; }
 		}
+
         public AviSynthSettings AvsSettings
         {
             get { return avsSettings; }
             set { avsSettings = value; }
         }
+
 		/// <summary>
 		/// gets / sets the video codec settings used for video encoding
 		/// </summary>
@@ -182,6 +201,7 @@ namespace MeGUI
 			get { return videoSettings; }
 			set { videoSettings = value; }
 		}
+
 		/// <summary>
 		/// gets / sets a custom aspect ratio for the input
 		/// (requires AR set to AspectRatio.Custom to be taken into account)
@@ -191,6 +211,7 @@ namespace MeGUI
 			get { return customAR; }
 			set { customAR = value; }
 		}
+
 		/// <summary>
 		/// gets / sets the chapter file for the output
 		/// </summary>
@@ -199,6 +220,7 @@ namespace MeGUI
 			get { return chapterFile; }
 			set { chapterFile = value; }
 		}
+
 		/// <summary>
 		/// gets / sets the path and name of the final output file
 		/// </summary>
@@ -207,6 +229,34 @@ namespace MeGUI
 			get { return finalOutput; }
 			set { finalOutput = value; }
 		}
+
+        /// <summary>
+        /// gets / sets the path and name of the video input file
+        /// </summary>
+        public string VideoInput
+        {
+            get { return inputFile; }
+            set { inputFile = value; }
+        }
+
+        /// <summary>
+        /// gets / sets the path and name of the video input file
+        /// </summary>
+        public string IFOInput
+        {
+            get { return ifoFile; }
+            set { ifoFile = value; }
+        }
+
+        /// <summary>
+        /// gets / sets the working directory
+        /// </summary>
+        public string WorkingDirectory
+        {
+            get { return workingDirectory; }
+            set { workingDirectory = value; }
+        }
+
 		/// <summary>
 		/// gets / sets the path and name of the AviSynth script created from the dgindex project
 		/// this is filled in during postprocessing
@@ -216,6 +266,7 @@ namespace MeGUI
 			get { return aviSynthScript; }
 			set { aviSynthScript = value; }
 		}
+
         /// <summary>
         /// gets / sets the device output type
         /// </summary>
@@ -231,6 +282,15 @@ namespace MeGUI
             set { useChapterMarks = value; }
         }
 
+        /// <summary>
+        /// gets / sets if the input is demuxed with eac3to
+        /// </summary>
+        public bool Eac3toDemux
+        {
+            get { return eac3toDemux; }
+            set { eac3toDemux = value; }
+        }
+
         public List<string> FilesToDelete
         {
             get { return filesToDelete; }
@@ -243,19 +303,55 @@ namespace MeGUI
             set { _audioTracks = value; }
         }
 
-        public List<SubtitleTrackInfo> SubtitleTracks
+        public List<OneClickStream> SubtitleTracks
         {
             get { return _subtitleTrack; }
             set { _subtitleTrack = value; }
         }
 
         /// <summary>
-        /// gets / sets the video track for mux only
+        /// gets / sets the video file for mux only
         /// </summary>
         public string VideoFileToMux
         {
             get { return _videoFileToMux; }
             set { _videoFileToMux = value; }
+        }
+
+        /// <summary>
+        /// gets / sets the file index type
+        /// </summary>
+        public FileIndexerWindow.IndexType IndexType
+        {
+            get { return _indexType; }
+            set { _indexType = value; }
+        }
+
+        /// <summary>
+        /// gets / sets files which need to be processed
+        /// </summary>
+        public List<OneClickFilesToProcess> FilesToProcess
+        {
+            get { return _filesToProcess; }
+            set { _filesToProcess = value; }
+        }
+
+        /// <summary>
+        /// gets / sets settings for the FilesToProcess
+        /// </summary>
+        public OneClickSettings OneClickSetting
+        {
+            get { return _oneClickSettings; }
+            set { _oneClickSettings = value; }
+        }
+
+        /// <summary>
+        /// gets / sets settings for the TitleNumberToProcess
+        /// </summary>
+        public int TitleNumberToProcess
+        {
+            get { return _titleNumberToProcess; }
+            set { _titleNumberToProcess = value; }
         }
 	}
 }

@@ -27,8 +27,9 @@ using System.Text.RegularExpressions;
 
 using MediaInfoWrapper;
 
-using MeGUI.core.util;
 using MeGUI.core.details;
+using MeGUI.core.util;
+using MeGUI.packages.tools.hdbdextractor;
 
 namespace MeGUI
 {
@@ -212,6 +213,7 @@ namespace MeGUI
         private AudioInformation _AudioInfo;
         private SubtitleInformation _SubtitleInfo;
         private MkvInfo _MkvInfo;
+        private Eac3toInfo _Eac3toInfo;
         private LogItem _Log;
         #endregion
         #region properties
@@ -683,7 +685,7 @@ namespace MeGUI
 
                         // subtitle information is wrong in VOB, use IFO instead
                         oInfo.Text.Clear();
-                        string[] arrSubtitle = IFOparser.GetSubtitlesStreamsInfos(ifoFile, iPGCNumber, false);      
+                        string[] arrSubtitle = IFOparser.GetSubtitlesStreamsInfos(ifoFile, _VideoInfo.PGCNumber, false);      
                         foreach (string strSubtitle in arrSubtitle)
                         {
                             TextTrack oTextTrack = new TextTrack();
@@ -696,6 +698,35 @@ namespace MeGUI
                                 oTextTrack.ForcedString = "yes";
                             oTextTrack.CodecString = SubtitleType.VOBSUB.ToString();
                             oInfo.Text.Add(oTextTrack);
+                        }
+                    }
+                }
+                else if (oInfo.General[0].FormatString.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals("blu-ray playlist"))
+                {
+                    // Blu-ray Input File
+                    if (infoLog != null)
+                        infoLog.Info("Blu-ray playlist detected. Getting information from eac3to.");
+
+                    _Eac3toInfo = new Eac3toInfo(strFile, this, infoLog);
+                    _Eac3toInfo.FetchAllInformation();
+
+                    int iAudioCount = 0;
+                    int iTextCount = 0;
+                    bool bVideoFound = false;
+                    int i = oInfo.Video.Count;
+                    foreach (eac3to.Stream oTrack in _Eac3toInfo.Features[0].Streams)
+                    {
+                        if (oTrack.Type == eac3to.StreamType.Subtitle)
+                            oInfo.Text[iTextCount++].StreamOrder = oTrack.Number.ToString();
+                        else if (oTrack.Type == eac3to.StreamType.Audio)
+                        {
+                            oInfo.Audio[iAudioCount].ID = oTrack.Number.ToString();
+                            oInfo.Audio[iAudioCount++].StreamOrder = oTrack.Number.ToString();
+                        }
+                        else if (oTrack.Type == eac3to.StreamType.Video && !bVideoFound && !oTrack.Name.Contains("(right eye)"))
+                        {
+                            oInfo.Video[0].ID = oTrack.Number.ToString();
+                            bVideoFound = true;
                         }
                     }
                 }
@@ -772,6 +803,26 @@ namespace MeGUI
             return _MkvInfo.HasChapters;
         }
 
+        /// <summary>checks if the file is a MKV file and has chapters</summary>
+        /// <returns>track number or -1 if no chapters available</returns>
+        public int getEac3toChaptersTrack()
+        {
+            if (!isEac3toDemuxable())
+                return -1;
+
+            if (_Eac3toInfo == null)
+                _Eac3toInfo = new Eac3toInfo(_file, this, _Log);
+
+            int iTrack = -1;
+            foreach (eac3to.Stream oTrack in _Eac3toInfo.Features[0].Streams)
+            {
+                if (oTrack.Type == eac3to.StreamType.Chapter)
+                    iTrack = oTrack.Number;
+            }
+
+            return iTrack;
+        }
+
         /// <summary>extracts the MKV chapters</summary>
         /// <returns>true if chapters have been extracted, false if not</returns>
         public bool extractMKVChapters(string strChapterFile)
@@ -810,7 +861,8 @@ namespace MeGUI
                 !_strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("MPEG VIDEO") &&
                 !_strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("VC-1") &&
                 !_strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("AVC") &&
-                !_strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("BDAV"))
+                !_strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("BDAV") &&
+                !_strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("BLU-RAY PLAYLIST"))
                 return false;
 
             return true;
@@ -897,7 +949,8 @@ namespace MeGUI
                 _strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("FLASH VIDEO") ||
                 _strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("OGG") ||
                 _strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("WINDOWS MEDIA") ||
-                _strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("BDAV"))
+                _strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("BDAV") ||
+                _strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("BLU-RAY PLAYLIST"))
                 return true;
 
             return false;
@@ -997,21 +1050,12 @@ namespace MeGUI
         /// <returns>true if demuxable, false if not</returns>
         public bool isEac3toDemuxable()
         {
-            // check if the file is a video file
-            if (!_VideoInfo.HasVideo)
-                return false;
-
             // check if the indexer is available
             if (!File.Exists(MainForm.Instance.Settings.EAC3toPath))
                 return false;
 
             // only the following container formats are supported
-            // EVO is missing / not confirmed
-            if (_strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("MATROSKA") ||
-                _strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("MPEG-TS") ||
-                (_strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("MPEG-PS") && Path.GetExtension(_file).ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(".vob")) ||
-                _strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("EVO") ||
-                _strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("BDAV"))
+            if (_strContainer.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("BLU-RAY PLAYLIST"))
                 return true;
 
             return false;

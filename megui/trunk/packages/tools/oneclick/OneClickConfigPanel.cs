@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -20,17 +20,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
-
-
-
-using MeGUI.core.details.video;
-using MeGUI.core.plugins.interfaces;
-using MeGUI.core.util;
 
 namespace MeGUI.packages.tools.oneclick
 {
@@ -95,6 +85,22 @@ namespace MeGUI.packages.tools.oneclick
                 val.KeepInputResolution = keepInputResolution.Checked;
                 val.VideoProfileName = videoProfile.SelectedProfile.FQName;
                 val.UseChaptersMarks = usechaptersmarks.Checked;
+                val.DefaultWorkingDirectory = workingDirectory.Filename;
+
+                List<string> arrDefaultAudio = new List<string>();
+                foreach (string s in lbDefaultAudio.Items)
+                    arrDefaultAudio.Add(s);
+                val.DefaultAudioLanguage = arrDefaultAudio;
+                List<string> arrDefaultSubtitle = new List<string>();
+                foreach (string s in lbDefaultSubtitle.Items)
+                    arrDefaultSubtitle.Add(s);
+                val.DefaultSubtitleLanguage = arrDefaultSubtitle;
+                List<string> arrIndexerPriority = new List<string>();
+                foreach (string s in lbIndexerPriority.Items)
+                    arrIndexerPriority.Add(s);
+                val.IndexerPriority = arrIndexerPriority;
+                val.WorkingNameReplace = txtWorkingNameDelete.Text;
+                val.WorkingNameReplaceWith = txtWorkingNameReplaceWith.Text;
                 return val;
             }
             set
@@ -114,6 +120,33 @@ namespace MeGUI.packages.tools.oneclick
                 keepInputResolution.Checked = value.KeepInputResolution;
                 videoProfile.SetProfileNameOrWarn(value.VideoProfileName);
                 usechaptersmarks.Checked = value.UseChaptersMarks;
+                workingDirectory.Filename = value.DefaultWorkingDirectory;
+                txtWorkingNameDelete.Text = value.WorkingNameReplace;
+                txtWorkingNameReplaceWith.Text = value.WorkingNameReplaceWith;
+                
+                List<string> arrNonDefaultAudio = new List<string>(LanguageSelectionContainer.Languages.Keys);
+                foreach (string strLanguage in value.DefaultAudioLanguage)
+                    arrNonDefaultAudio.Remove(strLanguage);
+                List<string> arrNonDefaultSubtitle = new List<string>(LanguageSelectionContainer.Languages.Keys);
+                foreach (string strLanguage in value.DefaultSubtitleLanguage)
+                    arrNonDefaultSubtitle.Remove(strLanguage);
+
+                lbDefaultAudio.Items.Clear();
+                lbDefaultAudio.Items.AddRange(value.DefaultAudioLanguage.ToArray());
+                lbDefaultAudio_SelectedIndexChanged(null, null);
+                lbNonDefaultAudio.Items.Clear();
+                lbNonDefaultAudio.Items.AddRange(arrNonDefaultAudio.ToArray());
+                lbNonDefaultAudio_SelectedIndexChanged(null, null);
+
+                lbDefaultSubtitle.Items.Clear();
+                lbDefaultSubtitle.Items.AddRange(value.DefaultSubtitleLanguage.ToArray());
+                lbDefaultSubtitle_SelectedIndexChanged(null, null);
+                lbNonDefaultSubtitle.Items.Clear();
+                lbNonDefaultSubtitle.Items.AddRange(arrNonDefaultSubtitle.ToArray());
+                lbNonDefaultSubtitle_SelectedIndexChanged(null, null);
+
+                lbIndexerPriority.Items.Clear();
+                lbIndexerPriority.Items.AddRange(value.IndexerPriority.ToArray());
             }
         }
 
@@ -183,6 +216,182 @@ namespace MeGUI.packages.tools.oneclick
         private void dontEncodeAudio_CheckedChanged(object sender, EventArgs e)
         {
             audioProfile.Enabled = !cbAudioEncoding.SelectedText.Equals("never");
+        }
+
+        private void btnAddAudio_Click(object sender, EventArgs e)
+        {
+            List<string> arrAudio = new List<string>();
+            foreach (string s in lbNonDefaultAudio.SelectedItems)
+            {
+                lbDefaultAudio.Items.Add(s);
+                arrAudio.Add(s);
+            }
+            foreach (string s in arrAudio)
+                lbNonDefaultAudio.Items.Remove(s);
+        }
+
+        private void btnRemoveAudio_Click(object sender, EventArgs e)
+        {
+            List<string> arrAudio = new List<string>();
+            foreach (string s in lbDefaultAudio.SelectedItems)
+            {
+                lbNonDefaultAudio.Items.Add(s);
+                arrAudio.Add(s);
+            }
+            foreach (string s in arrAudio)
+                lbDefaultAudio.Items.Remove(s);
+        }
+
+        private void btnAudioUp_Click(object sender, EventArgs e)
+        {
+            int iPos = lbDefaultAudio.SelectedIndex;
+            if (iPos < 1)
+                return;
+
+            object o = lbDefaultAudio.SelectedItem;
+            lbDefaultAudio.Items.RemoveAt(iPos);
+            lbDefaultAudio.Items.Insert(iPos - 1, o);
+            lbDefaultAudio.SelectedIndex = iPos - 1;
+        }
+
+        private void btnAudioDown_Click(object sender, EventArgs e)
+        {
+            int iPos = lbDefaultAudio.SelectedIndex;
+            if (iPos < 0 || iPos > lbDefaultAudio.Items.Count - 2)
+                return;
+
+            object o = lbDefaultAudio.SelectedItem;
+            lbDefaultAudio.Items.RemoveAt(iPos);
+            lbDefaultAudio.Items.Insert(iPos + 1, o);
+            lbDefaultAudio.SelectedIndex = iPos + 1;
+        }
+
+        private void lbDefaultAudio_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lbDefaultAudio.SelectedIndex < 0)
+            {
+                btnRemoveAudio.Enabled = btnAudioUp.Enabled = btnAudioDown.Enabled = false;
+                return;
+            }
+            btnRemoveAudio.Enabled = true;
+            if (lbDefaultAudio.SelectedIndex == 0)
+                btnAudioUp.Enabled = false;
+            else
+                btnAudioUp.Enabled = true;
+            if (lbDefaultAudio.SelectedIndex == lbDefaultAudio.Items.Count - 1)
+                btnAudioDown.Enabled = false;
+            else
+                btnAudioDown.Enabled = true;
+        }
+
+        private void lbNonDefaultAudio_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lbNonDefaultAudio.SelectedIndex < 0)
+                btnAddAudio.Enabled = false;
+            else
+                btnAddAudio.Enabled = true;
+        }
+
+        private void btnAddSubtitle_Click(object sender, EventArgs e)
+        {
+            List<string> arrSubtitle = new List<string>();
+            foreach (string s in lbNonDefaultSubtitle.SelectedItems)
+            {
+                lbDefaultSubtitle.Items.Add(s);
+                arrSubtitle.Add(s);
+            }
+            foreach (string s in arrSubtitle)
+                lbNonDefaultSubtitle.Items.Remove(s);
+        }
+
+        private void btnRemoveSubtitle_Click(object sender, EventArgs e)
+        {
+            List<string> arrSubtitle = new List<string>();
+            foreach (string s in lbDefaultSubtitle.SelectedItems)
+            {
+                lbNonDefaultSubtitle.Items.Add(s);
+                arrSubtitle.Add(s);
+            }
+            foreach (string s in arrSubtitle)
+                lbDefaultSubtitle.Items.Remove(s);
+        }
+
+        private void btnSubtitleUp_Click(object sender, EventArgs e)
+        {
+            int iPos = lbDefaultSubtitle.SelectedIndex;
+            if (iPos < 1)
+                return;
+
+            object o = lbDefaultSubtitle.SelectedItem;
+            lbDefaultSubtitle.Items.RemoveAt(iPos);
+            lbDefaultSubtitle.Items.Insert(iPos - 1, o);
+            lbDefaultSubtitle.SelectedIndex = iPos - 1;
+        }
+
+        private void btnSubtitleDown_Click(object sender, EventArgs e)
+        {
+            int iPos = lbDefaultSubtitle.SelectedIndex;
+            if (iPos < 0 || iPos > lbDefaultSubtitle.Items.Count - 2)
+                return;
+
+            object o = lbDefaultSubtitle.SelectedItem;
+            lbDefaultSubtitle.Items.RemoveAt(iPos);
+            lbDefaultSubtitle.Items.Insert(iPos + 1, o);
+            lbDefaultSubtitle.SelectedIndex = iPos + 1;
+        }
+
+        private void lbDefaultSubtitle_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lbDefaultSubtitle.SelectedIndex < 0)
+            {
+                btnRemoveSubtitle.Enabled = btnSubtitleUp.Enabled = btnSubtitleDown.Enabled = false;
+                return;
+            }
+            btnRemoveSubtitle.Enabled = true;
+            if (lbDefaultSubtitle.SelectedIndex == 0)
+                btnSubtitleUp.Enabled = false;
+            else
+                btnSubtitleUp.Enabled = true;
+            if (lbDefaultSubtitle.SelectedIndex == lbDefaultSubtitle.Items.Count - 1)
+                btnSubtitleDown.Enabled = false;
+            else
+                btnSubtitleDown.Enabled = true;
+        }
+
+        private void lbNonDefaultSubtitle_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lbNonDefaultSubtitle.SelectedIndex < 0)
+                btnAddSubtitle.Enabled = false;
+            else
+                btnAddSubtitle.Enabled = true;
+        }
+
+        private void lbIndexerPriority_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Up)
+            {
+                int iPos = lbIndexerPriority.SelectedIndex;
+                if (iPos < 1)
+                    return;
+
+                object o = lbIndexerPriority.SelectedItem;
+                lbIndexerPriority.Items.RemoveAt(iPos);
+                lbIndexerPriority.Items.Insert(iPos - 1, o);
+                lbIndexerPriority.SelectedIndex = iPos - 1;
+                e.SuppressKeyPress = true;
+            }
+            else if (e.KeyCode == Keys.Down)
+            {
+                int iPos = lbIndexerPriority.SelectedIndex;
+                if (iPos < 0 || iPos > lbIndexerPriority.Items.Count - 2)
+                    return;
+
+                object o = lbIndexerPriority.SelectedItem;
+                lbIndexerPriority.Items.RemoveAt(iPos);
+                lbIndexerPriority.Items.Insert(iPos + 1, o);
+                lbIndexerPriority.SelectedIndex = iPos + 1;
+                e.SuppressKeyPress = true;
+            }
         }
     }
 }

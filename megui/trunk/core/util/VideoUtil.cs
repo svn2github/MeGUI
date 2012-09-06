@@ -18,23 +18,15 @@
 // 
 // ****************************************************************************
 
-using Utils.MessageBoxExLib;
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Text;
-using System.Threading;
 using System.Windows.Forms;
 
 using MeGUI.core.details;
-using MeGUI.core.gui;
 using MeGUI.core.util;
-
-using MediaInfoWrapper;
 
 namespace MeGUI
 {
@@ -89,7 +81,8 @@ namespace MeGUI
         /// <returns>chapter file name</returns>
         public static String getChaptersFromIFO(string fileName, bool qpfile, string outputDirectory, int iPGCNumber)
         {
-            if (Path.GetExtension(fileName.ToLower(System.Globalization.CultureInfo.InvariantCulture)) == ".vob")
+            if (Path.GetExtension(fileName.ToLower(System.Globalization.CultureInfo.InvariantCulture)) == ".vob"
+                || Path.GetExtension(fileName.ToLower(System.Globalization.CultureInfo.InvariantCulture)) == ".ifo")
             {
                 string ifoFile;
                 string fileNameNoPath = Path.GetFileName(fileName);

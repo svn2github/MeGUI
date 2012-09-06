@@ -30,9 +30,7 @@ namespace MeGUI
 
         public override string ToString()
         {
-            if (Chapters.Count == 0)
-                return string.Empty;
-            else if (Chapters.Count > 1)
+            if (Chapters.Count > 1 || Chapters.Count == 0)
                 return string.Format("{0} - {1}  -  {2}  -  [{3} Chapters]", Title, SourceName, Duration.ToString(), Chapters.Count);
             else
                 return string.Format("{0} - {1}  -  {2}  -  [{3} Chapter]", Title, SourceName, Duration.ToString(), Chapters.Count);

@@ -19,9 +19,7 @@
 // ****************************************************************************
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -33,9 +31,6 @@ using MeGUI.core.details;
 using MeGUI.core.gui;
 using MeGUI.core.plugins.interfaces;
 using MeGUI.core.util;
-using MeGUI.packages.tools.besplitter;
-using MeGUI.packages.tools.cutter;
-using MeGUI.packages.tools.hdbdextractor;
 
 namespace MeGUI
 {
@@ -167,7 +162,6 @@ namespace MeGUI
 #if x64
             this.TitleText += " x64";
 #endif
-            this.TitleText += " (svn)";
             if (MainForm.Instance.Settings.AutoUpdate == true && MainForm.Instance.Settings.AutoUpdateServerSubList == 1)
                 this.TitleText += " DEVELOPMENT UPDATE SERVER";
             setGUIInfo();
@@ -226,7 +220,7 @@ namespace MeGUI
         /// saves all jobs, stops the currently active job and saves all profiles as well
         /// </summary>
         /// <param name="e"></param>
-        protected override void OnClosing(CancelEventArgs e)
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
             if (jobControl1.IsAnyWorkerEncoding)
             {
@@ -629,7 +623,7 @@ namespace MeGUI
         public void openOneClickFile(string fileName)
         {
             OneClickWindow ocmt = new OneClickWindow(this);
-            ocmt.openInput(fileName);
+            ocmt.setInput(fileName);
             ocmt.ShowDialog();
         }
         public void openD2VCreatorFile(string fileName)
@@ -1108,26 +1102,26 @@ namespace MeGUI
             PackageSystem.JobProcessors.Register(DGIIndexer.Factory);
             PackageSystem.JobProcessors.Register(FFMSIndexer.Factory);
             PackageSystem.JobProcessors.Register(VobSubIndexer.Factory);
-            PackageSystem.JobProcessors.Register(Joiner.Factory);
+            PackageSystem.JobProcessors.Register(MeGUI.packages.tools.besplitter.Joiner.Factory);
             PackageSystem.JobProcessors.Register(MeGUI.packages.tools.besplitter.Splitter.Factory);
             PackageSystem.JobProcessors.Register(HDStreamExtractorIndexer.Factory);
             PackageSystem.MuxerProviders.Register(new AVIMuxGUIMuxerProvider());
             PackageSystem.MuxerProviders.Register(new TSMuxerProvider());
             PackageSystem.MuxerProviders.Register(new MKVMergeMuxerProvider());
             PackageSystem.MuxerProviders.Register(new MP4BoxMuxerProvider());
-            PackageSystem.Tools.Register(new CutterTool());
+            PackageSystem.Tools.Register(new MeGUI.packages.tools.cutter.CutterTool());
             PackageSystem.Tools.Register(new AviSynthWindowTool());
             PackageSystem.Tools.Register(new AutoEncodeTool());
             PackageSystem.Tools.Register(new CQMEditorTool());
             PackageSystem.Tools.Register(new CalculatorTool());
             PackageSystem.Tools.Register(new ChapterCreatorTool());
             PackageSystem.Options.Register(new UpdateOptions());
-            PackageSystem.Tools.Register(new BesplitterTool());
+            PackageSystem.Tools.Register(new MeGUI.packages.tools.besplitter.BesplitterTool());
             PackageSystem.Tools.Register(new OneClickTool());
             PackageSystem.Tools.Register(new D2VCreatorTool());
             PackageSystem.Tools.Register(new AVCLevelTool());
             PackageSystem.Tools.Register(new VobSubTool());
-            PackageSystem.Tools.Register(new HdBdExtractorTool());
+            PackageSystem.Tools.Register(new MeGUI.packages.tools.hdbdextractor.HdBdExtractorTool());
             PackageSystem.MediaFileTypes.Register(new AvsFileFactory());
             PackageSystem.MediaFileTypes.Register(new d2vFileFactory());
             PackageSystem.MediaFileTypes.Register(new dgaFileFactory());
@@ -1163,7 +1157,7 @@ namespace MeGUI
             }
 
             // Check if the program can write to the program and avisynth plugin dir
-            if (FileUtil.IsDirWriteable(Path.GetDirectoryName(Application.ExecutablePath)) == false)
+            if (!FileUtil.IsDirWriteable(Path.GetDirectoryName(Application.ExecutablePath)))
                 bForceAdmin = true;
 
             // If needed run as elevated process
@@ -1212,7 +1206,7 @@ namespace MeGUI
             i.LogValue("Exception message", e.Message);
             i.LogValue("Stacktrace", e.StackTrace);
             i.LogValue("Inner exception", e.InnerException);
-            foreach (DictionaryEntry info in e.Data)
+            foreach (System.Collections.DictionaryEntry info in e.Data)
                 i.LogValue(info.Key.ToString(), info.Value);
 
             MessageBox.Show("MeGUI encountered a fatal error and may not be able to proceed. Reason: " + e.Message
@@ -1247,7 +1241,7 @@ namespace MeGUI
                 pstart.Arguments += "--no-restart";
 
             // Check if the program can write to the program dir
-            if (FileUtil.IsDirWriteable(Path.GetDirectoryName(Application.ExecutablePath)) == true)
+            if (FileUtil.IsDirWriteable(Path.GetDirectoryName(Application.ExecutablePath)))
             {
                 pstart.CreateNoWindow = true;
                 pstart.UseShellExecute = false;
@@ -1452,10 +1446,10 @@ namespace MeGUI
         {
             LogItem i = Log.Info("Versions");
 #if x86
-            i.LogValue("MeGUI", new System.Version(Application.ProductVersion).Build + " (svn)");
+            i.LogValue("MeGUI", new System.Version(Application.ProductVersion).Build);
 #endif
 #if x64
-            i.LogValue("MeGUI Version ", new System.Version(Application.ProductVersion).Build + " x64 (svn)");
+            i.LogValue("MeGUI Version ", new System.Version(Application.ProductVersion).Build + " x64");
 #endif
             i.LogValue("Operating System", string.Format("{0}{1} ({2}.{3}.{4}.{5})", OSInfo.GetOSName(), OSInfo.GetOSServicePack(), OSInfo.OSMajorVersion, OSInfo.OSMinorVersion, OSInfo.OSRevisionVersion, OSInfo.OSBuildVersion));
             i.LogValue(".Net Framework", string.Format("{0}", OSInfo.DotNetVersionFormated(OSInfo.FormatDotNetVersion())));

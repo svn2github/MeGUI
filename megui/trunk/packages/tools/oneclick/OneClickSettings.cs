@@ -29,8 +29,11 @@ namespace MeGUI
 {
     public enum AudioEncodingMode
     {
+        [EnumTitle("Always")]
         Always,
+        [EnumTitle("If codec does not match")]
         IfCodecDoesNotMatch,
+        [EnumTitle("Never")]
         Never
     };
 
@@ -178,11 +181,77 @@ namespace MeGUI
             set { deviceType = value; }
         }
 
+        private string workingNameReplace;
+        public string WorkingNameReplace
+        {
+            get { return workingNameReplace; }
+            set { workingNameReplace = value; }
+        }
+
+        private string workingNameReplaceWith;
+        public string WorkingNameReplaceWith
+        {
+            get { return workingNameReplaceWith; }
+            set { workingNameReplaceWith = value; }
+        }
+
         private bool useChaptersMarks;
         public bool UseChaptersMarks
         {
             get { return useChaptersMarks; }
             set { useChaptersMarks = value; }
+        }
+
+        private string defaultWorkingDirectory;
+        public string DefaultWorkingDirectory
+        {
+            get { return defaultWorkingDirectory; }
+            set { defaultWorkingDirectory = value; }
+        }
+
+        private List<string> defaultAudioLanguage;
+        [XmlIgnore()]
+        [PropertyEqualityIgnoreAttribute()]
+        public List<string> DefaultAudioLanguage
+        {
+            get { return defaultAudioLanguage; }
+            set { defaultAudioLanguage = value; }
+        }
+
+        public string[] DefaultAudioLanguageString
+        {
+            get { return defaultAudioLanguage.ToArray(); }
+            set { defaultAudioLanguage = new List<string>(value); }
+        }
+
+        private List<string> defaultSubtitleLanguage;
+        [XmlIgnore()]
+        [PropertyEqualityIgnoreAttribute()]
+        public List<string> DefaultSubtitleLanguage
+        {
+            get { return defaultSubtitleLanguage; }
+            set { defaultSubtitleLanguage = value; }
+        }
+
+        public string[] DefaultSubtitleLanguageString
+        {
+            get { return defaultSubtitleLanguage.ToArray(); }
+            set { defaultSubtitleLanguage = new List<string>(value); }
+        }
+
+        private List<string> indexerPriority;
+        [XmlIgnore()]
+        [PropertyEqualityIgnoreAttribute()]
+        public List<string> IndexerPriority
+        {
+            get { return indexerPriority; }
+            set { indexerPriority = value; }
+        }
+
+        public string[] IndexerPriorityString
+        {
+            get { return indexerPriority.ToArray(); }
+            set { indexerPriority = new List<string>(value); }
         }
 
         object ICloneable.Clone()
@@ -209,12 +278,36 @@ namespace MeGUI
             PrerenderVideo = false;
             AudioEncodingMode = MeGUI.AudioEncodingMode.Always;
             DontEncodeVideo = false;
+            UseChaptersMarks = true;
 			SignalAR = false;
             AutoCrop = true;
             KeepInputResolution = false;
 			OutputResolution = 720;
             SplitSize = null;
             ContainerCandidates = new string[] {"MKV"};
+            DefaultAudioLanguage = new List<string>();
+            DefaultSubtitleLanguage = new List<string>();
+            IndexerPriority = new List<string>();
+            DefaultWorkingDirectory = "";
+            WorkingNameReplace = "";
+            workingNameReplaceWith = "";
+
+            if (MainForm.Instance != null)
+            {
+                if (!String.IsNullOrEmpty(MainForm.Instance.Settings.DefaultLanguage1))
+                {
+                    DefaultAudioLanguage.Add(MainForm.Instance.Settings.DefaultLanguage1);
+                    DefaultSubtitleLanguage.Add(MainForm.Instance.Settings.DefaultLanguage1);
+                }
+                if (!String.IsNullOrEmpty(MainForm.Instance.Settings.DefaultLanguage2) && !DefaultAudioLanguage.Contains(MainForm.Instance.Settings.DefaultLanguage2))
+                    DefaultAudioLanguage.Add(MainForm.Instance.Settings.DefaultLanguage2);
+                if (!String.IsNullOrEmpty(MainForm.Instance.Settings.DefaultLanguage2) && !DefaultSubtitleLanguage.Contains(MainForm.Instance.Settings.DefaultLanguage2))
+                    DefaultSubtitleLanguage.Add(MainForm.Instance.Settings.DefaultLanguage2);
+            }
+            IndexerPriority.Add(FileIndexerWindow.IndexType.DGI.ToString());
+            IndexerPriority.Add(FileIndexerWindow.IndexType.DGA.ToString());
+            IndexerPriority.Add(FileIndexerWindow.IndexType.D2V.ToString());
+            IndexerPriority.Add(FileIndexerWindow.IndexType.FFMS.ToString());
 		}
 
         #region GenericSettings Members

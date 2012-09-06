@@ -1,3 +1,19 @@
+2156 [OneClick] added an improved OneClick encoder with these changes:
+     - added subtitle control (including delay, language, name, forced/default flag). Feature request #2752988
+     - enhanced audio control (added delay, language, name)
+     - AVS files as video input supported. Feature request #3412229
+     - folder as input supported. Feature request #3429875/#2773587
+     - embedded VOB subtitle support (IFO must be available)
+     - every OneClick job will be stored in a unique working directory. Feature request #2798486
+     - added option to select default audio/subtitle languages
+     - added option to select default working directory
+     - added option to specify the indexer priority
+     - added option to define the project name settings
+     - the x264 target playback device settings will be used for resizing
+     - input DAR detection moved from postprocessing to initial opening step
+     - added DVD folder + file processing (including PGC support). Feature request #2817190
+     - convert TrueHD and DTS-HD tracks with eac3to when the track should be encoded
+     - added Blu-ray processing (Folder + Playlist)
 2156 [File Indexer] added warning if the input VOB file has multiple PGCs
 2155 [OneClick] added job status message during cleanup step
 2154 [MediaInfo] some adjustments for frame rate detection with MediaInfo 0.7.59+

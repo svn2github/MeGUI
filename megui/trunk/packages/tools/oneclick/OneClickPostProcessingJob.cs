@@ -1,6 +1,6 @@
 ﻿// ****************************************************************************
 // 
-// Copyright (C) 2005-2011  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -30,15 +30,13 @@ namespace MeGUI
     public class OneClickPostProcessingJob : Job
     {
         private OneClickPostprocessingProperties postprocessingProperties;
-        private FileIndexerWindow.IndexType indexType;
         private string strIndexFile;
 
-        public OneClickPostProcessingJob() : this(null, null, null, FileIndexerWindow.IndexType.D2V) { }
+        public OneClickPostProcessingJob() : this(null, null, null) { }
 
-        public OneClickPostProcessingJob(string input, string strIndexFile, OneClickPostprocessingProperties postprocessingProperties, FileIndexerWindow.IndexType oType) : base(input, null)
+        public OneClickPostProcessingJob(string input, string strIndexFile, OneClickPostprocessingProperties postprocessingProperties) : base(input, null)
         {
             this.postprocessingProperties = postprocessingProperties;
-            this.indexType = oType;
             this.strIndexFile = strIndexFile;
         }
 
@@ -61,12 +59,6 @@ namespace MeGUI
         {
             get { return postprocessingProperties; }
             set { postprocessingProperties = value; }
-        }
-
-        public FileIndexerWindow.IndexType IndexerUsed
-        {
-            get { return indexType; }
-            set { indexType = value; }
         }
 
         public string IndexFile

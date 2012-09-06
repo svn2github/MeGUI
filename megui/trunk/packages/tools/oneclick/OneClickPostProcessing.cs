@@ -98,6 +98,8 @@ namespace MeGUI
 
         private void setProgress(decimal n)
         {
+            if (n * 100M < su.PercentageDoneExact)
+                _start = DateTime.Now;
             su.PercentageDoneExact = n * 100M;
             su.TimeElapsed = DateTime.Now - _start;
             su.FillValues();
@@ -143,44 +145,102 @@ namespace MeGUI
                 List<AudioTrackInfo> arrAudioTracks = new List<AudioTrackInfo>();
                 List<AudioJob> arrAudioJobs = new List<AudioJob>();
                 List<MuxStream> arrMuxStreams = new List<MuxStream>();
- 
+                List<string> intermediateFiles = new List<string>();
+
+                FileUtil.ensureDirectoryExists(job.PostprocessingProperties.WorkingDirectory);
                 foreach (OneClickAudioTrack oAudioTrack in job.PostprocessingProperties.AudioTracks)
                 {
                     if (oAudioTrack.ExtractMKVTrack)
                     {
-                        audioFiles.Add(oAudioTrack.AudioTrackInfo.TrackID, Path.GetDirectoryName(job.PostprocessingProperties.FinalOutput) + "\\" + oAudioTrack.AudioTrackInfo.DemuxFileName);
-                        arrAudioFilesDelete.Add(Path.GetDirectoryName(job.PostprocessingProperties.FinalOutput) + "\\" + oAudioTrack.AudioTrackInfo.DemuxFileName);
+                        audioFiles.Add(oAudioTrack.AudioTrackInfo.TrackID, job.PostprocessingProperties.WorkingDirectory + "\\" + oAudioTrack.AudioTrackInfo.DemuxFileName);
+                        arrAudioFilesDelete.Add(job.PostprocessingProperties.WorkingDirectory + "\\" + oAudioTrack.AudioTrackInfo.DemuxFileName);
                     }
                     else if (oAudioTrack.AudioTrackInfo != null)
                         arrAudioTracks.Add(oAudioTrack.AudioTrackInfo);
                     if (oAudioTrack.AudioJob != null)
+                    {
+                        if (job.PostprocessingProperties.IndexType == FileIndexerWindow.IndexType.NONE
+                            && String.IsNullOrEmpty(oAudioTrack.AudioJob.Input))
+                            oAudioTrack.AudioJob.Input = job.Input;
                         arrAudioJobs.Add(oAudioTrack.AudioJob);
+                    }
                     if (oAudioTrack.DirectMuxAudio != null)
                         arrMuxStreams.Add(oAudioTrack.DirectMuxAudio);
                 }
-                if (audioFiles.Count == 0)
+                if (audioFiles.Count == 0 && job.PostprocessingProperties.IndexType != FileIndexerWindow.IndexType.NONE && !job.PostprocessingProperties.Eac3toDemux)
                     audioFiles = vUtil.getAllDemuxedAudio(arrAudioTracks, new List<AudioTrackInfo>(), out arrAudioFilesDelete, job.IndexFile, _log);
 
                 fillInAudioInformation(arrAudioJobs, arrMuxStreams);
 
-                //job.PostprocessingProperties.AudioJobs = AudioUtil.getConfiguredAudioJobs(job.PostprocessingProperties.AudioJobs);
-
-                if (job.PostprocessingProperties.VideoFileToMux != null)
+                if (!String.IsNullOrEmpty(job.PostprocessingProperties.VideoFileToMux))
                     _log.LogEvent("Don't encode video: True");
                 else
                     _log.LogEvent("Desired size: " + job.PostprocessingProperties.OutputSize);
                 _log.LogEvent("Split size: " + job.PostprocessingProperties.Splitting);
-                
 
-                string videoInput = String.Empty;
+
+                // chapter file handling
+                if (String.IsNullOrEmpty(job.PostprocessingProperties.ChapterFile))
+                {
+                    job.PostprocessingProperties.ChapterFile = null;
+                }
+                else if (job.PostprocessingProperties.Container == ContainerType.AVI)
+                {
+                    _log.LogEvent("Chapter handling disabled because of the AVI target container");
+                    job.PostprocessingProperties.ChapterFile = null;
+                }
+                else if (!File.Exists(job.PostprocessingProperties.ChapterFile))
+                {
+                    if (job.PostprocessingProperties.ChapterFile.StartsWith("<") || job.PostprocessingProperties.ChapterExtracted)
+                    {
+                        // internal chapter file
+                        string strTempFile = job.PostprocessingProperties.ChapterFile;
+                        if (Path.GetExtension(job.PostprocessingProperties.VideoInput).ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(".mkv"))
+                        {
+                            MediaInfoFile oInfo = new MediaInfoFile(job.PostprocessingProperties.VideoInput, ref _log);
+                            if (oInfo.hasMKVChapters())
+                            {
+                                job.PostprocessingProperties.ChapterFile = Path.Combine(job.PostprocessingProperties.WorkingDirectory, Path.GetFileNameWithoutExtension(job.IndexFile) + " - Chapter Information.txt");
+                                if (oInfo.extractMKVChapters(job.PostprocessingProperties.ChapterFile))
+                                {
+                                    intermediateFiles.Add(job.PostprocessingProperties.ChapterFile);
+                                    job.PostprocessingProperties.ChapterExtracted = true;
+                                }
+                                else
+                                    job.PostprocessingProperties.ChapterFile = strTempFile;
+                            }
+                        }
+                        else if (File.Exists(job.PostprocessingProperties.IFOInput))
+                        {
+                            job.PostprocessingProperties.ChapterFile = VideoUtil.getChaptersFromIFO(job.PostprocessingProperties.IFOInput, false, job.PostprocessingProperties.WorkingDirectory, job.PostprocessingProperties.TitleNumberToProcess);
+                            if (!String.IsNullOrEmpty(job.PostprocessingProperties.ChapterFile))
+                            {
+                                intermediateFiles.Add(job.PostprocessingProperties.ChapterFile);
+                                job.PostprocessingProperties.ChapterExtracted = true;
+                            }
+                            else
+                                job.PostprocessingProperties.ChapterFile = strTempFile;
+                        }
+                    }
+                    if (!File.Exists(job.PostprocessingProperties.ChapterFile))
+                    {
+                        _log.LogEvent("File not found: " + job.PostprocessingProperties.ChapterFile, ImageType.Error);
+                        job.PostprocessingProperties.ChapterFile = null;
+                    }
+                }
+                else if (job.PostprocessingProperties.ChapterExtracted)
+                {
+                    intermediateFiles.Add(job.PostprocessingProperties.ChapterFile);
+                }
+
+                string avsFile = String.Empty;
                 VideoStream myVideo = new VideoStream();
-
                 VideoCodecSettings videoSettings = job.PostprocessingProperties.VideoSettings;
-                if (job.PostprocessingProperties.VideoFileToMux == null)
+                if (String.IsNullOrEmpty(job.PostprocessingProperties.VideoFileToMux))
                 {
                     //Open the video
                     Dar? dar;
-                    videoInput = openVideo(job.IndexFile, job.PostprocessingProperties.DAR,
+                    avsFile = createAVSFile(job.IndexFile, job.Input, job.PostprocessingProperties.DAR,
                         job.PostprocessingProperties.HorizontalOutputResolution, job.PostprocessingProperties.SignalAR, _log,
                         job.PostprocessingProperties.AvsSettings, job.PostprocessingProperties.AutoDeinterlace, videoSettings, out dar,
                         job.PostprocessingProperties.AutoCrop, job.PostprocessingProperties.KeepInputResolution,
@@ -188,10 +248,10 @@ namespace MeGUI
 
                     ulong length;
                     double framerate;
-                    JobUtil.getInputProperties(out length, out framerate, videoInput);
-                    myVideo.Input = videoInput;
-                    myVideo.Output = Path.Combine(Path.GetDirectoryName(job.IndexFile),
-                        Path.GetFileNameWithoutExtension(job.IndexFile) + "_Video");
+                    JobUtil.getInputProperties(out length, out framerate, avsFile);
+                    myVideo.Input = avsFile;
+                    myVideo.Output = Path.Combine(job.PostprocessingProperties.WorkingDirectory,
+                        Path.GetFileNameWithoutExtension(job.Input) + "_Video");
                     myVideo.NumberOfFrames = length;
                     myVideo.Framerate = (decimal)framerate;
                     myVideo.DAR = dar;
@@ -201,15 +261,14 @@ namespace MeGUI
                 else
                 {
                     myVideo.Output = job.PostprocessingProperties.VideoFileToMux;
+                    myVideo.Settings = videoSettings;
+
                     MediaInfoFile oInfo = new MediaInfoFile(myVideo.Output, ref _log);
                     videoSettings.VideoName = oInfo.VideoInfo.Track.Name;
-                    myVideo.Settings = videoSettings;
                     myVideo.Framerate = (decimal)oInfo.VideoInfo.FPS;
-                    
                 }
 
-                List<string> intermediateFiles = new List<string>();
-                intermediateFiles.Add(videoInput);
+                intermediateFiles.Add(avsFile);
                 intermediateFiles.Add(job.IndexFile);
                 intermediateFiles.AddRange(audioFiles.Values);
                 if (!string.IsNullOrEmpty(qpfile))
@@ -221,7 +280,7 @@ namespace MeGUI
                 foreach (string file in job.PostprocessingProperties.FilesToDelete)
                     intermediateFiles.Add(file);
 
-                if (!string.IsNullOrEmpty(videoInput) || job.PostprocessingProperties.VideoFileToMux != null)
+                if (!string.IsNullOrEmpty(avsFile) || !String.IsNullOrEmpty(job.PostprocessingProperties.VideoFileToMux))
                 {
                     MuxStream[] subtitles;
                     if (job.PostprocessingProperties.SubtitleTracks.Count == 0)
@@ -233,15 +292,28 @@ namespace MeGUI
                     {
                         subtitles = new MuxStream[job.PostprocessingProperties.SubtitleTracks.Count];
                         int i = 0;
-                        foreach (SubtitleTrackInfo oTrack in job.PostprocessingProperties.SubtitleTracks)
+                        foreach (OneClickStream oTrack in job.PostprocessingProperties.SubtitleTracks)
                         {
-                            subtitles[i] = new MuxStream(oTrack.SourceFileName, oTrack.Language, oTrack.Name, 0, oTrack.DefaultTrack, oTrack.ForcedTrack, oTrack);
+                            if (oTrack.TrackInfo.IsMKVContainer())
+                            {
+                                //demuxed MKV
+                                string trackFile = Path.GetDirectoryName(job.IndexFile) + "\\" + oTrack.TrackInfo.DemuxFileName;
+                                if (File.Exists(trackFile))
+                                {
+                                    intermediateFiles.Add(trackFile);
+                                    if (Path.GetExtension(trackFile).ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(".idx"))
+                                        intermediateFiles.Add(FileUtil.GetPathWithoutExtension(trackFile) + ".sub");
+
+                                    subtitles[i] = new MuxStream(trackFile, oTrack.Language, oTrack.Name, oTrack.Delay, oTrack.DefaultStream, oTrack.ForcedStream, null);
+                                }
+                                else
+                                    _log.LogEvent("File not found: " + trackFile, ImageType.Error);
+                            }
+                            else
+                                subtitles[i] = new MuxStream(oTrack.DemuxFilePath, oTrack.Language, oTrack.Name, oTrack.Delay, oTrack.DefaultStream, oTrack.ForcedStream, null);
                             i++;
                         }
                     }
-
-                    if (job.PostprocessingProperties.Container == ContainerType.AVI)
-                        job.PostprocessingProperties.ChapterFile = null;
 
                     JobChain c = vUtil.GenerateJobSeries(myVideo, job.PostprocessingProperties.FinalOutput, arrAudioJobs.ToArray(), 
                         subtitles, job.PostprocessingProperties.ChapterFile, job.PostprocessingProperties.OutputSize,
@@ -254,8 +326,15 @@ namespace MeGUI
                         return;
                     }
 
-                    c = CleanupJob.AddAfter(c, intermediateFiles);
+                    c = CleanupJob.AddAfter(c, intermediateFiles, job.PostprocessingProperties.FinalOutput);
                     mainForm.Jobs.addJobsWithDependencies(c);
+
+                    // batch processing other input files if necessary
+                    if (job.PostprocessingProperties.FilesToProcess.Count > 0)
+                    {
+                        OneClickWindow ocw = new OneClickWindow(mainForm);
+                        ocw.setBatchProcessing(job.PostprocessingProperties.FilesToProcess, job.PostprocessingProperties.OneClickSetting);
+                    }
                 }
             }
             catch (Exception e)
@@ -311,7 +390,8 @@ namespace MeGUI
                 {
                     int t = int.Parse(sub);
                     string s = audioFiles[t];
-                    delay = PrettyFormatting.getDelay(s) ?? 0;
+                    if (PrettyFormatting.getDelay(s) != null)
+                        delay = PrettyFormatting.getDelay(s) ?? 0;
                     return s;
                 }
                 catch (Exception)
@@ -325,7 +405,7 @@ namespace MeGUI
         }
             
         /// <summary>
-        /// opens a dgindex script
+        /// creates the AVS Script file
         /// if the file can be properly opened, auto-cropping is performed, then depending on the AR settings
         /// the proper resolution for automatic resizing, taking into account the derived cropping values
         /// is calculated, and finally the avisynth script is written and its name returned
@@ -333,7 +413,7 @@ namespace MeGUI
         /// <param name="path">dgindex script</param>
         /// <param name="aspectRatio">aspect ratio selection to be used</param>
         /// <param name="customDAR">custom display aspect ratio for this source</param>
-        /// <param name="horizontalResolution">desired horizontal resolution of the output</param>
+        /// <param name="desiredOutputWidth">desired horizontal resolution of the output</param>
         /// <param name="settings">the codec settings (used only for x264)</param>
         /// <param name="sarX">pixel aspect ratio X</param>
         /// <param name="sarY">pixel aspect ratio Y</param>
@@ -341,137 +421,297 @@ namespace MeGUI
         /// <param name="signalAR">whether or not ar signalling is to be used for the output 
         /// (depending on this parameter, resizing changes to match the source AR)</param>
         /// <param name="autoCrop">whether or not autoCrop is used for the input</param>
-        /// <returns>the name of the AviSynth script created, empty of there was an error</returns>
-        private string openVideo(string path, Dar? AR, int horizontalResolution,
+        /// <returns>the name of the AviSynth script created, empty if there was an error</returns>
+        private string createAVSFile(string indexFile, string inputFile, Dar? AR, int desiredOutputWidth,
             bool signalAR, LogItem _log, AviSynthSettings avsSettings, bool autoDeint,
             VideoCodecSettings settings, out Dar? dar, bool autoCrop, bool keepInputResolution, bool useChaptersMarks)
         {
             dar = null;
-            CropValues final = new CropValues();
             Dar customDAR;
-            IMediaFile d2v = null;
+            IMediaFile iMediaFile = null;
             IVideoReader reader;
             PossibleSources oPossibleSource;
+            x264Device xTargetDevice = null;
 
-            if (job.IndexerUsed == FileIndexerWindow.IndexType.DGI)
+            int outputWidthIncludingPadding = 0;
+            int outputHeightIncludingPadding = 0;
+            int outputWidthCropped = 0;
+            int outputHeightCropped = 0;
+
+            CropValues cropValues = new CropValues();
+            bool bAdjustResolution = false;
+            bool bCropped = false;
+
+            // open index file to retrieve information
+            if (job.PostprocessingProperties.IndexType == FileIndexerWindow.IndexType.DGI)
             {
-                d2v = new dgiFile(path);
+                iMediaFile = new dgiFile(indexFile);
                 oPossibleSource = PossibleSources.dgi;
             }
-            else if (job.IndexerUsed == FileIndexerWindow.IndexType.D2V)
+            else if (job.PostprocessingProperties.IndexType == FileIndexerWindow.IndexType.D2V)
             {
-                d2v = new d2vFile(path);
+                iMediaFile = new d2vFile(indexFile);
                 oPossibleSource = PossibleSources.d2v;
             }
-            else if (job.IndexerUsed == FileIndexerWindow.IndexType.DGA)
+            else if (job.PostprocessingProperties.IndexType == FileIndexerWindow.IndexType.DGA)
             {
-                d2v = new dgaFile(path);
+                iMediaFile = new dgaFile(indexFile);
                 oPossibleSource = PossibleSources.dga;
             }
-            else if (job.IndexerUsed == FileIndexerWindow.IndexType.FFMS)
+            else if (job.PostprocessingProperties.IndexType == FileIndexerWindow.IndexType.FFMS)
             {
-                d2v = new ffmsFile(null, path);
+                iMediaFile = new ffmsFile(inputFile, indexFile);
                 oPossibleSource = PossibleSources.ffindex;
             }
             else
             {
-                _log.Error("This project cannot be opened!");
-                return "";
+                iMediaFile = AvsFile.OpenScriptFile(inputFile);
+                oPossibleSource = PossibleSources.avs;
             }
-            reader = d2v.GetVideoReader();
+            reader = iMediaFile.GetVideoReader();
+            
+            // abort if the index file is invalid
             if (reader.FrameCount < 1)
             {
-                _log.Error("There are 0 frames in this file. This is a fatal error. Please recreate the DGIndex project");
+                _log.Error("There are 0 frames in the index file. Aborting...");
                 return "";
             }
 
-            if (!keepInputResolution && autoCrop)
+            if (AR == null)
             {
-                //Autocrop
-                final = Autocrop.autocrop(reader);
-
-                if (signalAR)
+                // AR needs to be detected automatically now
+                _log.LogValue("Auto-detect aspect ratio", AR == null);
+                customDAR = iMediaFile.VideoInfo.DAR;
+                if (customDAR.ar <= 0)
                 {
-                    if (avsSettings.Mod16Method == mod16Method.overcrop)
-                        ScriptServer.overcrop(ref final);
-                    else if (avsSettings.Mod16Method == mod16Method.mod4Horizontal)
-                        ScriptServer.cropMod4Horizontal(ref final);
-                    else if (avsSettings.Mod16Method == mod16Method.undercrop)
-                        ScriptServer.undercrop(ref final);
-                }
-
-                bool error = (final.left == -1);
-                if (!error)
-                    _log.LogValue("Autocrop values", final);
-                else
-                {
-                    _log.Error("Autocrop failed, aborting now");
-                    return "";
-                }
-            }
-
-            _log.LogValue("Auto-detect aspect ratio now", AR == null);
-            //Check if AR needs to be autodetected now
-            if (AR == null) // it does
-            {
-                customDAR = d2v.VideoInfo.DAR;
-                if (customDAR.ar > 0)
-                    _log.LogValue("Aspect ratio", customDAR);
-                else
-                {
-                    if (MainForm.Instance.Settings.UseITUValues)
-                        customDAR = Dar.ITU16x9PAL;
-                    else
-                        customDAR = Dar.STATIC16x9;
+                    customDAR = Dar.ITU16x9PAL;
                     _log.Warn(string.Format("No aspect ratio found, defaulting to {0}.", customDAR));
                 }
             }
             else
                 customDAR = AR.Value;
+            _log.LogValue("Aspect ratio", customDAR);
 
-            if (keepInputResolution)
-            {
-                horizontalResolution = (int)d2v.VideoInfo.Width;
-                dar = customDAR;
-            }
-            else
-            {
-                // Minimise upsizing
-                int sourceHorizontalResolution = (int)d2v.VideoInfo.Width - final.right - final.left;
-                if (autoCrop)
-                    sourceHorizontalResolution = (int)d2v.VideoInfo.Width;
-
-                if (horizontalResolution > sourceHorizontalResolution)
-                {
-                    if (avsSettings.Mod16Method == mod16Method.resize)
-                        while (horizontalResolution > sourceHorizontalResolution + 16)
-                            horizontalResolution -= 16;
-                    else
-                        horizontalResolution = sourceHorizontalResolution;
-                }
-            }
-
-            //Suggest a resolution (taken from AvisynthWindow.suggestResolution_CheckedChanged)
-            int scriptVerticalResolution = 0;
-            if (keepInputResolution)
-                scriptVerticalResolution = (int)d2v.VideoInfo.Height;
-            else
-                scriptVerticalResolution = Resolution.suggestResolution(d2v.VideoInfo.Height, d2v.VideoInfo.Width, (double)customDAR.ar,
-                    final, horizontalResolution, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out dar);
-            _log.LogValue("Output resolution", horizontalResolution + "x" + scriptVerticalResolution);
-
-            // create qpf file if necessary
-            if (useChaptersMarks && settings != null && settings is x264Settings)
+            // check x264 settings (target device, chapter file)
+            if (settings != null && settings is x264Settings)
             {
                 x264Settings xs = (x264Settings)settings;
-                qpfile = job.PostprocessingProperties.ChapterFile;
-                if ((Path.GetExtension(qpfile).ToLower(System.Globalization.CultureInfo.InvariantCulture)) == ".txt")
-                    qpfile = VideoUtil.convertChaptersTextFileTox264QPFile(job.PostprocessingProperties.ChapterFile, d2v.VideoInfo.FPS);
-                if (File.Exists(qpfile))
+                xTargetDevice = xs.TargetDevice;
+
+                // create qpf file if necessary
+                if (!String.IsNullOrEmpty(job.PostprocessingProperties.ChapterFile) && useChaptersMarks)
                 {
-                    xs.UseQPFile = true;
-                    xs.QPFile = qpfile;
+                    qpfile = job.PostprocessingProperties.ChapterFile;
+                    if ((Path.GetExtension(qpfile).ToLower(System.Globalization.CultureInfo.InvariantCulture)) == ".txt")
+                        qpfile = VideoUtil.convertChaptersTextFileTox264QPFile(job.PostprocessingProperties.ChapterFile, iMediaFile.VideoInfo.FPS);
+                    if (File.Exists(qpfile))
+                    {
+                        xs.UseQPFile = true;
+                        xs.QPFile = qpfile;
+                    }
                 }
+            }
+
+            // if encoding for a specific device select the appropriate resolution setting
+            if (xTargetDevice != null && xTargetDevice.Width > 0 && xTargetDevice.Height > 0)
+            {
+                if (keepInputResolution)
+                {
+                    // resolution should not be changed - use input resolution
+                    outputWidthCropped = (int)iMediaFile.VideoInfo.Width;
+                    outputHeightCropped = (int)iMediaFile.VideoInfo.Height;
+                }
+                else
+                {
+                    // crop input video if selected
+                    if (autoCrop)
+                    {
+                        if (Autocrop.autocrop(out cropValues, reader, signalAR, avsSettings.Mod16Method) == false)
+                        {
+                            _log.Error("Autocrop failed. Aborting...");
+                            return "";
+                        }
+                        bCropped = true;
+                    }
+
+                    outputWidthCropped = desiredOutputWidth;
+                    outputHeightCropped = Resolution.suggestResolution(iMediaFile.VideoInfo.Height, iMediaFile.VideoInfo.Width,
+                        (double)customDAR.ar, cropValues, outputWidthCropped, signalAR,
+                        mainForm.Settings.AcceptableAspectErrorPercent, out dar);
+                    dar = null;
+                }
+
+                if (xTargetDevice.Width < outputWidthCropped)
+                {
+                    // width must be lowered to be target conform
+                    bAdjustResolution = true;
+                    if (keepInputResolution)
+                    {
+                        keepInputResolution = false;
+                        _log.LogEvent("Disabling \"Keep Input Resolution\" as " + xTargetDevice.Name + " does not support a resolution width of "
+                            + outputWidthCropped + ". The maximum value is " + xTargetDevice.Width + ".");
+                    }
+                }
+                else if (xTargetDevice.Height < outputHeightCropped)
+                {
+                    // height must be lowered to be target conform
+                    bAdjustResolution = true;
+                    if (keepInputResolution)
+                    {
+                        keepInputResolution = false;
+                        _log.LogEvent("Disabling \"Keep Input Resolution\" as " + xTargetDevice.Name + " does not support a resolution height of "
+                            + outputHeightCropped + ". The maximum value is " + xTargetDevice.Height + ".");
+                    }
+                }
+                else if (xTargetDevice.BluRay)
+                {
+                    string strResolution = outputWidthCropped + "x" + outputHeightCropped;
+                    if (!strResolution.Equals("1920x1080") &&
+                        !strResolution.Equals("1440x1080") &&
+                        !strResolution.Equals("1280x720") &&
+                        !strResolution.Equals("720x576") &&
+                        !strResolution.Equals("720x480"))
+                    {
+                        bAdjustResolution = true;
+                        if (keepInputResolution)
+                        {
+                            keepInputResolution = false;
+                            _log.LogEvent("Disabling \"Keep Input Resolution\" as " + xTargetDevice.Name + " does not support a resolution of "
+                                + outputWidthCropped + "x" + outputHeightCropped
+                                + ". Supported are 1920x1080, 1440x1080, 1280x720, 720x576 and 720x480.");
+                        }
+                    }
+                    else
+                    {
+                        outputWidthIncludingPadding = outputWidthCropped;
+                        outputHeightIncludingPadding = outputHeightCropped;
+                    }
+                }
+
+                if (bAdjustResolution)
+                {
+                    if (!autoCrop)
+                    {
+                        autoCrop = true;
+                        _log.LogEvent("Enabling \"AutoCrop\"");
+                    }
+                }
+            }
+            else
+                outputWidthCropped = desiredOutputWidth;
+
+            if (!keepInputResolution && autoCrop && !bCropped)
+            {
+                // crop input video if required
+                if (Autocrop.autocrop(out cropValues, reader, signalAR, avsSettings.Mod16Method) == false)
+                {
+                    _log.Error("Autocrop failed. Aborting...");
+                    return "";
+                }
+                bCropped = true;
+            }
+
+            if (bAdjustResolution)
+            {
+                // adjust horizontal resolution as width or height are too large
+                if (xTargetDevice.BluRay)
+                {
+                    if (outputWidthCropped >= 1920)
+                    {
+                        outputWidthCropped = 1920;
+                        outputHeightIncludingPadding = 1080;
+                        _log.LogEvent("Force resolution of 1920x1080 as required for " + xTargetDevice.Name);
+                    }
+                    else if (outputWidthCropped >= 1280)
+                    {
+                        outputWidthCropped = 1280;
+                        outputHeightIncludingPadding = 720;
+                        _log.LogEvent("Force resolution of 1280x720 as required for " + xTargetDevice.Name);
+                    }
+                    else
+                    {
+                        outputWidthCropped = 720;
+                        Double dfps = Convert.ToDouble(iMediaFile.VideoInfo.FPS_N) / iMediaFile.VideoInfo.FPS_D;
+                        if (dfps == 25)
+                        {
+                            outputHeightIncludingPadding = 576;
+                            _log.LogEvent("Force resolution of 720x576 as required for " + xTargetDevice.Name);
+                        }
+                        else
+                        {
+                            outputHeightIncludingPadding = 480;
+                            _log.LogEvent("Force resolution of 720x480 as required for " + xTargetDevice.Name);
+                        }
+                    }
+                    outputWidthIncludingPadding = outputWidthCropped;
+                }
+                else if (outputWidthCropped > xTargetDevice.Width)
+                {
+                    outputWidthCropped = xTargetDevice.Width;
+                    _log.LogEvent("Set resolution width to " + outputWidthCropped + " as required for " + xTargetDevice.Name);
+                }
+                
+                // adjust cropped vertical resolution
+                outputHeightCropped = Resolution.suggestResolution(iMediaFile.VideoInfo.Height, iMediaFile.VideoInfo.Width, (double)customDAR.ar,
+                    cropValues, outputWidthCropped, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out dar);
+                while (outputHeightCropped > xTargetDevice.Height || (xTargetDevice.BluRay && outputHeightCropped > outputHeightIncludingPadding))
+                {
+                    outputWidthCropped -= 16;
+                    outputHeightCropped = Resolution.suggestResolution(iMediaFile.VideoInfo.Height, iMediaFile.VideoInfo.Width, (double)customDAR.ar,
+                        cropValues, outputWidthCropped, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out dar);
+                }
+            }
+
+            if (keepInputResolution)
+            {
+                outputWidthCropped = outputWidthIncludingPadding = (int)iMediaFile.VideoInfo.Width;
+                outputHeightCropped = outputHeightIncludingPadding = (int)iMediaFile.VideoInfo.Height;
+                dar = customDAR;
+            }
+            else if (xTargetDevice == null || (xTargetDevice != null && !xTargetDevice.BluRay))
+            {
+                // Minimise upsizing
+                int sourceHorizontalResolution = (int)iMediaFile.VideoInfo.Width - cropValues.right - cropValues.left;
+                if (autoCrop)
+                    sourceHorizontalResolution = (int)iMediaFile.VideoInfo.Width;
+
+                if (outputWidthCropped > sourceHorizontalResolution)
+                {
+                    if (avsSettings.Mod16Method == mod16Method.resize)
+                        while (outputWidthCropped > sourceHorizontalResolution + 16)
+                            outputWidthCropped -= 16;
+                    else
+                        outputWidthCropped = sourceHorizontalResolution;
+                }
+            }
+
+            // calculate height
+            if (!keepInputResolution)
+                outputHeightCropped = Resolution.suggestResolution(iMediaFile.VideoInfo.Height, iMediaFile.VideoInfo.Width, (double)customDAR.ar,
+                    cropValues, outputWidthCropped, signalAR, mainForm.Settings.AcceptableAspectErrorPercent, out dar);
+            
+            // set complete padding if required
+            if (outputHeightIncludingPadding == 0 && outputWidthIncludingPadding > 0)
+                outputHeightIncludingPadding = outputHeightCropped;
+            if (outputWidthIncludingPadding == 0 && outputHeightIncludingPadding > 0)
+                outputWidthIncludingPadding = outputWidthCropped;
+
+            // write calculated output resolution into the log
+            _log.LogValue("Input resolution", iMediaFile.VideoInfo.Width + "x" + iMediaFile.VideoInfo.Height);
+            if (autoCrop && !keepInputResolution && cropValues.isCropped())
+            {
+                _log.LogValue("Autocrop values", cropValues);
+                _log.LogValue("Cropped output resolution", outputWidthCropped + "x" + outputHeightCropped);
+            }
+            else
+                _log.LogValue("Output resolution", outputWidthCropped + "x" + outputHeightCropped);
+            if (outputWidthIncludingPadding > 0 && (outputWidthIncludingPadding != outputWidthCropped || outputHeightIncludingPadding != outputHeightCropped))
+                _log.LogValue("Padded output resolution", outputWidthIncludingPadding + "x" + outputHeightIncludingPadding);
+            
+            if (outputWidthCropped <= 0 || outputHeightCropped <= 0)
+            {
+                _log.Error("Error in detection of output resolution");
+                return "";
             }
 
             //Generate the avs script based on the template
@@ -481,16 +721,15 @@ namespace MeGUI
             string cropLine = "#crop";
             string resizeLine = "#resize";
 
-            inputLine = ScriptServer.GetInputLine(path, null, false, oPossibleSource,
-                false, false, false, 0, false);
+            inputLine = ScriptServer.GetInputLine(inputFile, indexFile, false, oPossibleSource, false, false, false, 0, avsSettings.DSS2);
             if (!inputLine.EndsWith(")"))
                 inputLine += ")";
 
-            raiseEvent("Automatic deinterlacing...   ***PLEASE WAIT***");
             _log.LogValue("Automatic deinterlacing", autoDeint);
             if (autoDeint)
             {
-                string d2vPath = path;
+                raiseEvent("Automatic deinterlacing...   ***PLEASE WAIT***");
+                string d2vPath = indexFile;
                 SourceDetector sd = new SourceDetector(inputLine, d2vPath, false,
                     mainForm.Settings.SourceDetectorSettings,
                     new UpdateSourceDetectionStatus(analyseUpdate),
@@ -500,39 +739,77 @@ namespace MeGUI
                 waitTillAnalyseFinished();
                 sd.stop();
                 deinterlaceLines = filters[0].Script;
-                _log.LogValue("Deinterlacing used", deinterlaceLines);
+                if (interlaced)
+                    _log.LogValue("Deinterlacing used", deinterlaceLines, ImageType.Warning);
+                else
+                    _log.LogValue("Deinterlacing used", deinterlaceLines);              
             }
 
             raiseEvent("Finalizing preprocessing...   ***PLEASE WAIT***");
-            inputLine = ScriptServer.GetInputLine(path, null, interlaced, oPossibleSource, avsSettings.ColourCorrect, avsSettings.MPEG2Deblock, false, 0, false);
+            inputLine = ScriptServer.GetInputLine(inputFile, indexFile, interlaced, oPossibleSource, avsSettings.ColourCorrect, avsSettings.MPEG2Deblock, false, 0, avsSettings.DSS2);
             if (!inputLine.EndsWith(")"))
                 inputLine += ")";
 
-            if (autoCrop)
-                cropLine = ScriptServer.GetCropLine(true, final);
-            else
-                cropLine = ScriptServer.GetCropLine(false, final);
+            if (!keepInputResolution && autoCrop)
+                cropLine = ScriptServer.GetCropLine(true, cropValues);
 
             denoiseLines = ScriptServer.GetDenoiseLines(avsSettings.Denoise, (DenoiseFilterType)avsSettings.DenoiseMethod);
 
             if (!keepInputResolution)
             {
-                if (horizontalResolution <= 0 || scriptVerticalResolution <= 0)
-                    _log.Error("Error in detection of output resolution: " + horizontalResolution + "x" + scriptVerticalResolution);
-                else
-                    resizeLine = ScriptServer.GetResizeLine(!signalAR || avsSettings.Mod16Method == mod16Method.resize, horizontalResolution, scriptVerticalResolution, 0, 0, (ResizeFilterType)avsSettings.ResizeMethod,
-                                                            autoCrop, final, (int)d2v.VideoInfo.Width, (int)d2v.VideoInfo.Height);
+                resizeLine = ScriptServer.GetResizeLine(!signalAR || avsSettings.Mod16Method == mod16Method.resize || outputWidthIncludingPadding > 0 || (int)iMediaFile.VideoInfo.Width != outputWidthCropped,
+                                                        outputWidthCropped, outputHeightCropped, outputWidthIncludingPadding, outputHeightIncludingPadding, (ResizeFilterType)avsSettings.ResizeMethod,
+                                                        autoCrop, cropValues, (int)iMediaFile.VideoInfo.Width, (int)iMediaFile.VideoInfo.Height);
             }
 
             string newScript = ScriptServer.CreateScriptFromTemplate(avsSettings.Template, inputLine, cropLine, resizeLine, denoiseLines, deinterlaceLines);
 
             if (dar.HasValue)
                 newScript = string.Format("global MeGUI_darx = {0}\r\nglobal MeGUI_dary = {1}\r\n{2}", dar.Value.X, dar.Value.Y, newScript);
+            else
+            {
+                if (xTargetDevice != null && xTargetDevice.BluRay)
+                {
+                    string strResolution = outputWidthIncludingPadding + "x" + outputHeightIncludingPadding;
+                    x264Settings _xs = (x264Settings)settings;
+                    
+                    if (strResolution.Equals("720x480"))
+                    {
+                        _xs.SampleAR = 4;
+                        _log.LogEvent("Set --sar to 10:11 as only 40:33 or 10:11 are supported with a resolution of " +
+                            strResolution + " as required for " + xTargetDevice.Name + ".");
+                    }
+                    else if (strResolution.Equals("720x576"))
+                    {
+                        _xs.SampleAR = 5;
+                        _log.LogEvent("Set --sar to 12:11 as only 16:11 or 12:11 are supported with a resolution of "
+                            + strResolution + " as required for " + xTargetDevice.Name + ".");
+                    }
+                    else if (strResolution.Equals("1280x720") || strResolution.Equals("1920x1080"))
+                    {
+                        _xs.SampleAR = 1;
+                        _log.LogEvent("Set --sar to 1:1 as only 1:1 is supported with a resolution of "
+                            + strResolution + " as required for " + xTargetDevice.Name + ".");
+                    }
+                    else if (strResolution.Equals("1440x1080"))
+                    {
+                        _xs.SampleAR = 2;
+                        _log.LogEvent("Set --sar to 4:3 as only 4:3 is supported with a resolution of "
+                            + strResolution + " as required for " + xTargetDevice.Name + ".");
+                    }
+                }
+            }
 
             _log.LogValue("Generated Avisynth script", newScript);
+            string strOutputAVSFile;
+            if (String.IsNullOrEmpty(indexFile))
+                strOutputAVSFile = Path.Combine(job.PostprocessingProperties.WorkingDirectory, Path.GetFileName(inputFile));
+            else
+                strOutputAVSFile = Path.ChangeExtension(indexFile, ".avs");
+
             try
             {
-                StreamWriter sw = new StreamWriter(Path.ChangeExtension(path, ".avs"), false, System.Text.Encoding.Default);
+                StreamWriter sw = new StreamWriter(strOutputAVSFile, false, System.Text.Encoding.Default);
                 sw.Write(newScript);
                 sw.Close();
             }
@@ -541,7 +818,7 @@ namespace MeGUI
                 _log.LogValue("Error saving AviSynth script", i, ImageType.Error);
                 return "";
             }
-            return Path.ChangeExtension(path, ".avs");
+            return strOutputAVSFile;
         }
 
         public void finishedAnalysis(SourceInfo info, bool error, string errorMessage)

@@ -54,6 +54,7 @@ namespace MeGUI
             this._mmgTrackID = 0;
             this._delay = 0;
             this._trackIndex = 0;
+            this._codec = _containerType = String.Empty;
         }
 
         /// <summary>
@@ -166,7 +167,10 @@ namespace MeGUI
 
         public bool IsMKVContainer()
         {
-            return _containerType.Trim().ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("MATROSKA");
+            if (String.IsNullOrEmpty(_containerType))
+                return false;
+            else
+                return _containerType.Trim().ToUpper(System.Globalization.CultureInfo.InvariantCulture).Equals("MATROSKA");
         }
 
         [XmlIgnore()]
@@ -176,7 +180,9 @@ namespace MeGUI
             {
                 string strExtension = String.Empty;
                 string[] arrCodec = new string[]{};
-                string strCodec = _codec.ToUpper(System.Globalization.CultureInfo.InvariantCulture);
+                string strCodec = String.Empty;
+                if (!String.IsNullOrEmpty(_codec))
+                    strCodec = _codec.ToUpper(System.Globalization.CultureInfo.InvariantCulture);
 
                 if (IsMKVContainer())
                 {
@@ -186,40 +192,34 @@ namespace MeGUI
                     strCodec = arrCodec[0].ToUpper(System.Globalization.CultureInfo.InvariantCulture);
                 }
 
+                if (strCodec.StartsWith("DTS", StringComparison.InvariantCultureIgnoreCase))
+                    strCodec = "DTS";
+
+                if (strCodec.StartsWith("TRUEHD", StringComparison.InvariantCultureIgnoreCase))
+                    strCodec = "TRUEHD";
+
                 switch (strCodec)
                 {
                     case "AC-3": strExtension = "ac3"; break;
                     case "TRUEHD": strExtension = "thd"; break;
-                    case "MPEG":
-                        if (arrCodec.Length > 0 && arrCodec[1].Equals("L3"))
-                            strExtension = "mp3";
-                        else
-                            strExtension = "mp2";
-                        break;
                     case "DTS": strExtension = "dts"; break;
+                    case "MP3": strExtension = "mp3"; break;
+                    case "MP2": strExtension = "mp2"; break;
                     case "PCM": strExtension = "wav"; break;
+                    case "MS/ACM": strExtension = "wav"; break;
                     case "VORBIS": strExtension = "ogg"; break;
                     case "FLAC": strExtension = "flac"; break;
                     case "REAL": strExtension = "ra"; break;
                     case "AAC": strExtension = "aac"; break;
-                    case "MS/ACM": strExtension = "wav"; break;
-                    case "TEXT":
-                        if (arrCodec.Length > 0 && arrCodec[1].Equals("SSA"))
-                            strExtension = "ssa";
-                        else if (arrCodec.Length > 0 && arrCodec[1].Equals("ASS"))
-                            strExtension = "ass";
-                        else if (arrCodec.Length > 0 && arrCodec[1].Equals("USF"))
-                            strExtension = "usf";
-                        else
-                            strExtension = "srt";
-                        break;
                     case "VOBSUB": strExtension = "idx"; break;
+                    case "ASS": strExtension = "ass"; break;
+                    case "UTF-8": strExtension = "srt"; break;
+                    case "SSA": strExtension = "ssa"; break;
+                    case "USF": strExtension = "usf"; break;
                     case "HDMV": strExtension = "sup"; break;
+                    case "PGS": strExtension = "sup"; break;
                     default: strExtension = strCodec + ".unknown"; break;
                 }
-
-                if (String.IsNullOrEmpty(strExtension))
-                    return null;
 
                 string strFileName = System.IO.Path.GetFileNameWithoutExtension(_sourceFileName) + " - [" + _mmgTrackID + "]";
                 if (!String.IsNullOrEmpty(_language))

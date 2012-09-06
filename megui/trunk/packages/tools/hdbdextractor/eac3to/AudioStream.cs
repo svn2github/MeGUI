@@ -139,6 +139,7 @@ namespace eac3to
                     audioStream.AudioType = AudioStreamType.RAW;
                     break;
             }
+            audioStream.Language = (s.IndexOf(',') == s.LastIndexOf(',')) ? s.Substring(s.IndexOf(',') + 1).Trim() : s.Substring(s.IndexOf(',') + 1, s.LastIndexOf(',') - s.IndexOf(',') - 1).Trim();
 
             return audioStream;
         }

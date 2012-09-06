@@ -113,8 +113,10 @@ namespace MeGUI.core.util
 
         public static DirectoryInfo ensureDirectoryExists(string p)
         {
-            if (Directory.Exists(p)) return new DirectoryInfo(p);
-            if (string.IsNullOrEmpty(p)) throw new IOException("Can't create directory");
+            if (Directory.Exists(p)) 
+                return new DirectoryInfo(p);
+            if (string.IsNullOrEmpty(p)) 
+                throw new IOException("Can't create directory");
             ensureDirectoryExists(Path.GetDirectoryName(p));
             System.Threading.Thread.Sleep(100);
             return Directory.CreateDirectory(p);
@@ -323,31 +325,35 @@ namespace MeGUI.core.util
         /// <summary>
         /// Checks if a directory is writable
         /// </summary>
-        /// <param name"strPath">Path of the Source file</param>
+        /// <param name"strPath">path to check</param>
         public static bool IsDirWriteable(string strPath)
         {
             try
             {
-                // Does the root directory exists
+                bool bDirectoryCreated = false;
+
+                // does the root directory exists
                 if (!Directory.Exists(strPath))
-                    return false;
-
-                // Create a new file name
-                string newFileName = System.IO.Path.GetRandomFileName();
-
-                // Combine the new file name with the path
-                string newPath = System.IO.Path.Combine(strPath, newFileName);
-
-                // Create & delete the file
-                if (!System.IO.File.Exists(newPath))
                 {
-                    System.IO.FileStream fs = System.IO.File.Create(newPath);
-                    fs.Close();
-                    System.IO.File.Delete(newPath);
-                    return true; 
+                    Directory.CreateDirectory(strPath);
+                    bDirectoryCreated = true;
                 }
 
-                return false;
+                string newFilePath = string.Empty;
+                // combine the random file name with the path
+                do
+                    newFilePath = Path.Combine(strPath, Path.GetRandomFileName());
+                while (File.Exists(newFilePath));
+
+                // create & delete the file
+                FileStream fs = File.Create(newFilePath);
+                fs.Close();
+                File.Delete(newFilePath);
+
+                if (bDirectoryCreated)
+                    Directory.Delete(strPath);
+
+                return true; 
             }
             catch
             {

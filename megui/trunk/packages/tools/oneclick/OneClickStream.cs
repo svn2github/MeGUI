@@ -29,7 +29,8 @@ namespace MeGUI
 {
     public class OneClickStream
     {
-        private string _path;
+        private string _inputFilePath;
+        private string _demuxFilePath;
         private AudioCodecSettings _encoderSettings;
         private AudioEncodingMode _encodingMode;
         private TrackInfo _trackInfo;
@@ -45,7 +46,7 @@ namespace MeGUI
             _trackInfo.Codec = codec;
             _trackInfo.TrackID = ID;
 
-            this._path = path;
+            this._inputFilePath = path;
 
             this._encoderSettings = oSettings;
             if ((int)oEncodingMode == -1)
@@ -88,17 +89,19 @@ namespace MeGUI
             set { _trackInfo.Name = value; }
         }
 
-        // Stream Name
-        public string Path
+        // Demux File Path
+        public string DemuxFilePath
         {
-            get 
+            get
             {
+                if (!String.IsNullOrEmpty(_demuxFilePath))
+                    return _demuxFilePath;
                 if (_trackInfo != null)
                     return _trackInfo.DemuxFileName;
                 else
-                    return _path; 
+                    return _inputFilePath; 
             }
-            set { _path = value; }
+            set { _inputFilePath = _demuxFilePath = value; }
         }
 
         // Stream Delay

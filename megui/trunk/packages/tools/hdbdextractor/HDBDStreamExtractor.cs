@@ -28,176 +28,56 @@ using System.Windows.Forms;
 
 using MeGUI.core.plugins.interfaces;
 using MeGUI.core.details;
+using MeGUI.core.util;
 using eac3to;
 
 namespace MeGUI.packages.tools.hdbdextractor
 {
     public partial class HdBdStreamExtractor : Form
     {
-        List<Feature> features;
-        List<Stream> streams;
-        MainForm info;
-        BackgroundWorker backgroundWorker;
-        string eac3toPath;
+        MainForm mainForm;
         private MeGUISettings settings;
         private HDStreamsExJob lastJob = null;
         private int inputType = 1;
         string dummyInput = "";
+        Eac3toInfo _oEac3toInfo;
 
         public HdBdStreamExtractor(MainForm info)
         {
-            this.info = info;
+            this.mainForm = info;
             this.settings = info.Settings;
             InitializeComponent();
-
-            eac3toPath = settings.EAC3toPath;
-        }
-
-        struct eac3toArgs
-        {
-            public string eac3toPath { get; set; }
-            public string inputPath { get; set; }
-            public string workingFolder { get; set; }
-            public string featureNumber { get; set; }
-            public string args { get; set; }
-            public ResultState resultState { get; set; }
-
-            public eac3toArgs(string eac3toPath, string inputPath, string args)
-                : this()
-            {
-                this.eac3toPath = eac3toPath;
-                this.inputPath = inputPath;
-                this.args = args;
-            }
-        }
-
-        public enum ResultState
-        {
-            [StringValue("Feature Retrieval Completed")]
-            FeatureCompleted,
-            [StringValue("Stream Retrieval Completed")]
-            StreamCompleted,
-            [StringValue("Stream Extraction Completed")]
-            ExtractCompleted
         }
 
         #region backgroundWorker
-        void backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
-        {
-            eac3toArgs args = (eac3toArgs)e.Argument;
 
-            using (Process compiler = new Process())
-            {
-                compiler.StartInfo.FileName = args.eac3toPath;
-                // use tester to debug posted logs from forums
-                //compiler.StartInfo.FileName = "tester.exe";
-
-                switch (args.resultState)
-                {
-                    case ResultState.FeatureCompleted:
-                        compiler.StartInfo.Arguments = string.Format("\"{0}\"", args.inputPath);
-                        //use commented line below for debuging posted feature logs from forums
-                        //compiler.StartInfo.Arguments = "\"Tests\\featuers\\New Text Document.txt\"";
-                        break;
-                    case ResultState.StreamCompleted:
-                        if (args.args == string.Empty)
-                            compiler.StartInfo.Arguments = string.Format("\"{0}\"", args.inputPath);
-                        else compiler.StartInfo.Arguments = string.Format("\"{0}\" {1}) {2}", args.inputPath, args.args, "-progressnumbers");
-                        //use commented line below for debuging posted stream logs from forums
-                        //compiler.StartInfo.Arguments = "\"Tests\\streams\\New Text Document (4).txt\"";
-                        break;
-                    case ResultState.ExtractCompleted:
-                        if (FileSelection.Checked)
-                            compiler.StartInfo.Arguments = string.Format("\"{0}\" {1}", args.inputPath, args.args + " -progressnumbers");
-                        else compiler.StartInfo.Arguments = string.Format("\"{0}\" {1}) {2}", args.inputPath, args.featureNumber, args.args + "-progressnumbers");
-                        break;
-                }
-
-                WriteToLog(string.Format("Arguments: {0}", compiler.StartInfo.Arguments));
-
-                compiler.StartInfo.WorkingDirectory = args.workingFolder;
-                compiler.StartInfo.CreateNoWindow = true;
-                compiler.StartInfo.UseShellExecute = false;
-                compiler.StartInfo.RedirectStandardOutput = true;
-                compiler.StartInfo.RedirectStandardError = true;
-                compiler.StartInfo.ErrorDialog = false;
-                compiler.EnableRaisingEvents = true;
-
-                compiler.EnableRaisingEvents = true;
-                compiler.Exited += new EventHandler(backgroundWorker_Exited);
-                compiler.ErrorDataReceived += new DataReceivedEventHandler(backgroundWorker_ErrorDataReceived);
-                compiler.OutputDataReceived += new DataReceivedEventHandler(backgroundWorker_OutputDataReceived);
-
-                try
-                {
-                    compiler.Start();
-                    compiler.BeginErrorReadLine();
-                    compiler.BeginOutputReadLine();
-
-                    while (!compiler.HasExited)
-                        if (backgroundWorker.CancellationPending)
-                            compiler.Kill();
-                    while (!compiler.HasExited) // wait until the process has terminated without locking the GUI
-                    {
-                        System.Windows.Forms.Application.DoEvents();
-                        System.Threading.Thread.Sleep(100);
-                    }
-                    compiler.WaitForExit();
-                }
-                catch (Exception ex)
-                {
-                    //e.Cancel = true;
-                    //e.Result = ex.Message;
-                    WriteToLog(ex.Message);
-                }
-                finally
-                {
-                    compiler.ErrorDataReceived -= new DataReceivedEventHandler(backgroundWorker_ErrorDataReceived);
-                    compiler.OutputDataReceived -= new DataReceivedEventHandler(backgroundWorker_OutputDataReceived);
-                }
-            }
-
-            e.Result = args.resultState;
-        }
-
-        void backgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        private void SetProgress(object sender, ProgressChangedEventArgs e)
         {
             SetToolStripProgressBarValue(e.ProgressPercentage);
-
             if (e.UserState != null)
                 SetToolStripLabelText(e.UserState.ToString());
         }
 
-        void backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        public void SetData(object sender, RunWorkerCompletedEventArgs e)
         {
-            if (e.Cancelled)
-                WriteToLog("Work was cancelled");
-
-            if (e.Error != null)
-            {
-                WriteToLog(e.Error.Message);
-                WriteToLog(e.Error.TargetSite.Name);
-                WriteToLog(e.Error.Source);
-                WriteToLog(e.Error.StackTrace);
-            }
-
             SetToolStripProgressBarValue(0);
             SetToolStripLabelText(Extensions.GetStringValue(((ResultState)e.Result)));
+            ResetCursor(Cursors.Default);
 
             if (e.Result != null)
             {
-                WriteToLog(Extensions.GetStringValue(((ResultState)e.Result)));
-
                 switch ((ResultState)e.Result)
                 {
                     case ResultState.FeatureCompleted:
-                        FeatureDataGridView.DataSource = features;
+                        FeatureDataGridView.DataSource = _oEac3toInfo.Features;
                         FeatureButton.Enabled = true;
                         FeatureDataGridView.SelectionChanged += new System.EventHandler(this.FeatureDataGridView_SelectionChanged);
+                        if (_oEac3toInfo.Features.Count == 1)
+                            FeatureDataGridView.Rows[0].Selected = true;
                         break;
                     case ResultState.StreamCompleted:
                         if (FileSelection.Checked)
-                            StreamDataGridView.DataSource = streams;
+                            StreamDataGridView.DataSource = _oEac3toInfo.Features[0].Streams;
                         else
                             StreamDataGridView.DataSource = ((eac3to.Feature)FeatureDataGridView.SelectedRows[0].DataBoundItem).Streams;
                         SelectTracks();
@@ -206,240 +86,6 @@ namespace MeGUI.packages.tools.hdbdextractor
                     case ResultState.ExtractCompleted:
                         QueueButton.Enabled = true;
                         break;
-                }
-            }
-        }
-
-        void backgroundWorker_Exited(object sender, EventArgs e)
-        {
-            ResetCursor(Cursors.Default);
-        }
-
-        void backgroundWorker_ErrorDataReceived(object sender, DataReceivedEventArgs e)
-        {
-            string data;
-
-            if (!String.IsNullOrEmpty(e.Data))
-            {
-                data = e.Data.TrimStart('\b').Trim();
-
-                if (!string.IsNullOrEmpty(data))
-                    WriteToLog("Error: " + e.Data);
-            }
-        }
-
-        void backgroundWorker_OutputDataReceived(object sender, DataReceivedEventArgs e)
-        {
-            string data;
-
-            if (!string.IsNullOrEmpty(e.Data))
-            {
-                data = e.Data.TrimStart('\b').Trim();
-
-                if (!string.IsNullOrEmpty(data))
-                {
-                    // Feature line
-                    // 2) 00216.mpls, 0:50:19
-                    if (Regex.IsMatch(data, @"^[0-99]+\).+$", RegexOptions.Compiled))
-                    {
-                        try
-                        {
-                            features.Add(eac3to.Feature.Parse(data));
-                        }
-                        catch (Exception ex)
-                        {
-                            WriteToLog(ex.Message);
-                            WriteToLog(ex.Source);
-                            WriteToLog(ex.StackTrace);
-                        }
-
-                        return;
-                    }
-
-                    // Feature name
-                    // "Feature Name"
-                    else if (Regex.IsMatch(data, "^\".+\"$", RegexOptions.Compiled))
-                    {
-                        if (FileSelection.Checked)
-                            streams[streams.Count - 1].Name = Extensions.CapitalizeAll(data.Trim("\" .".ToCharArray()));
-                        else features[features.Count - 1].Name = Extensions.CapitalizeAll(data.Trim("\" .".ToCharArray()));
-                        return;
-                    }
-
-                    // Stream line on feature listing
-                    // - h264/AVC, 1080p24 /1.001 (16:9)
-                    else if (Regex.IsMatch(data, "^-.+$", RegexOptions.Compiled))
-                        return;
-
-                    // Playlist file listing
-                    // [99+100+101+102+103+104+105+106+114].m2ts (blueray playlist *.mpls)
-                    else if (Regex.IsMatch(data, @"^\[.+\].m2ts$", RegexOptions.Compiled))
-                    {
-                        foreach (string file in Regex.Match(data, @"\[.+\]").Value.Trim("[]".ToCharArray()).Split("+".ToCharArray()))
-                            features[features.Count - 1].Files.Add(new File(file + ".m2ts", features[features.Count - 1].Files.Count + 1));
-
-                        return;
-                    }
-
-                    // Stream listing feature header
-                    // M2TS, 1 video track, 6 audio tracks, 9 subtitle tracks, 1:53:06
-                    // EVO, 2 video tracks, 4 audio tracks, 8 subtitle tracks, 2:20:02
-                    else if (Regex.IsMatch(data, "^M2TS, .+$", RegexOptions.Compiled) ||
-                             Regex.IsMatch(data, "^EVO, .+$", RegexOptions.Compiled) ||
-                             Regex.IsMatch(data, "^TS, .+$", RegexOptions.Compiled) ||
-                             Regex.IsMatch(data, "^VOB, .+$", RegexOptions.Compiled) ||
-                             Regex.IsMatch(data, "^MKV, .+$", RegexOptions.Compiled) ||
-                             Regex.IsMatch(data, "^MKA, .+$", RegexOptions.Compiled)
-                             )
-                    {
-                        WriteToLog(data);
-                        return;
-                    }
-
-                    // Stream line
-                    // 8: AC3, English, 2.0 channels, 192kbps, 48khz, dialnorm: -27dB
-                    else if (Regex.IsMatch(data, "^[0-99]+:.+$", RegexOptions.Compiled))
-                    {
-                        if (FileSelection.Checked)
-                        {
-                            try
-                            {
-                                streams.Add(eac3to.Stream.Parse(data));
-                            }
-                            catch (Exception ex)
-                            {
-                                WriteToLog(ex.Message);
-                                WriteToLog(ex.Source);
-                                WriteToLog(ex.StackTrace);
-                            }
-                        }
-                        else
-                        {
-                            try
-                            {
-                                if (FeatureDataGridView.SelectedRows.Count == 0)
-                                    FeatureDataGridView.Rows[0].Selected = true;
-                                ((Feature)FeatureDataGridView.SelectedRows[0].DataBoundItem).Streams.Add(Stream.Parse(data));
-                            }
-                            catch (Exception ex)
-                            {
-                                WriteToLog(ex.Message);
-                                WriteToLog(ex.Source);
-                                WriteToLog(ex.StackTrace);
-                            }
-                        }
-                        return;
-                    }
-
-                    // Analyzing
-                    // analyze: 100%
-                    else if (Regex.IsMatch(data, "^analyze: [0-9]{1,3}%$", RegexOptions.Compiled))
-                    {
-                        if (backgroundWorker.IsBusy)
-                            backgroundWorker.ReportProgress(int.Parse(Regex.Match(data, "[0-9]{1,3}").Value),
-                                string.Format("Analyzing ({0}%)", int.Parse(Regex.Match(data, "[0-9]{1,3}").Value)));
-
-                        return;
-                    }
-
-                    // Information line
-                    // [a03] Creating file "audio.ac3"...
-                    else if (Regex.IsMatch(data, @"^\[.+\] .+\.{3}$", RegexOptions.Compiled))
-                    {
-                        WriteToLog(data);
-                        return;
-                    }
-
-                    else if (Regex.IsMatch(data, @"^\v .*...", RegexOptions.Compiled))
-                    {
-                        WriteToLog(data);
-                        return;
-                    }
-
-                    else if (Regex.IsMatch(data, @"(core: .*)", RegexOptions.Compiled))
-                    {
-                        //WriteToLog(data);
-                        return;
-                    }
-
-                    else if (Regex.IsMatch(data, @"(embedded: .*)", RegexOptions.Compiled))
-                    {
-                        //WriteToLog(data);
-                        return;
-                    }
-
-                    // Creating file
-                    // Creating file "C:\1_1_chapter.txt"...
-                    else if (Regex.IsMatch(data, "^Creating file \".+\"\\.{3}$", RegexOptions.Compiled))
-                    {
-                        WriteToLog(data);
-                        return;
-                    }
-
-                    // Processing
-                    // process: 100%
-                    else if (Regex.IsMatch(data, "^process: [0-9]{1,3}%$", RegexOptions.Compiled))
-                    {
-                        if (backgroundWorker.IsBusy)
-                            backgroundWorker.ReportProgress(int.Parse(Regex.Match(data, "[0-9]{1,3}").Value),
-                                string.Format("Processing ({0}%)", int.Parse(Regex.Match(data, "[0-9]{1,3}").Value)));
-
-                        return;
-                    }
-
-                    // Progress
-                    // progress: 100%
-                    else if (Regex.IsMatch(data, "^progress: [0-9]{1,3}%$", RegexOptions.Compiled))
-                    {
-                        if (backgroundWorker.IsBusy)
-                            backgroundWorker.ReportProgress(int.Parse(Regex.Match(data, "[0-9]{1,3}").Value),
-                                string.Format("Progress ({0}%)", int.Parse(Regex.Match(data, "[0-9]{1,3}").Value)));
-
-                        return;
-                    }
-
-                    // Done
-                    // Done.
-                    else if (data.Equals("Done."))
-                    {
-                        WriteToLog(data);
-                        return;
-                    }
-
-                    #region Errors
-                    // Source file not found
-                    // Source file "x:\" not found.
-                    else if (Regex.IsMatch(data, "^Source file \".*\" not found.$", RegexOptions.Compiled))
-                    {
-                        MessageBox.Show(data, "Source", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
-                        WriteToLog(data);
-                        return;
-                    }
-
-                    // Format of Source file not detected
-                    // The format of the source file could not be detected.
-                    else if (data.Equals("The format of the source file could not be detected."))
-                    {
-                        MessageBox.Show(data, "Source File Format", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
-                        WriteToLog(data);
-                        return;
-                    }
-
-                    // Audio conversion not supported
-                    // This audio conversion is not supported.
-                    else if (data.Equals("This audio conversion is not supported."))
-                    {
-                        MessageBox.Show(data, "Audio Conversion", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
-                        WriteToLog(data);
-                        return;
-                    }
-                    #endregion
-
-                    // Unknown line
-                    else
-                    {
-                        WriteToLog(string.Format("Unknown line: \"{0}\"", data));
-                    }
                 }
             }
         }
@@ -479,26 +125,6 @@ namespace MeGUI.packages.tools.hdbdextractor
                     this.BeginInvoke(new ResetCursorCallback(ResetCursor), cursor);
                 else
                     this.Cursor = cursor;
-            }
-        }
-
-        delegate void WriteToLogCallback(string text);
-        private void WriteToLog(string text)
-        {
-            if (LogTextBox.InvokeRequired)
-                LogTextBox.BeginInvoke(new WriteToLogCallback(WriteToLog), text);
-            else
-            {
-                lock (this)
-                {
-                    LogTextBox.AppendText(string.Format("[{0}] {1}{2}", DateTime.Now.ToString("HH:mm:ss"), text, Environment.NewLine));
-
-                    //using (System.IO.StreamWriter SW = new System.IO.StreamWriter(System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), "HdBrStreamExtractor.txt"), true))
-                    //{
-                    //    SW.WriteLine(string.Format("[{0}] {1}{2}", DateTime.Now.ToString("HH:mm:ss"), text, Environment.NewLine));
-                    //    SW.Close();
-                    //}
-                }
             }
         }
 
@@ -581,35 +207,13 @@ namespace MeGUI.packages.tools.hdbdextractor
                 return;
             }
 
-            InitBackgroundWorker();
-            eac3toArgs args = new eac3toArgs();
-
-            args.eac3toPath = eac3toPath;
-            args.inputPath = FolderInputTextBox.Text;
-            args.workingFolder = string.IsNullOrEmpty(FolderOutputTextBox.Text) ? FolderOutputTextBox.Text : System.IO.Path.GetDirectoryName(args.eac3toPath);
-            if (FolderSelection.Checked)
-            {
-                args.resultState = ResultState.FeatureCompleted;
-                args.args = string.Empty;
-
-                features = new List<Feature>();
-                backgroundWorker.ReportProgress(0, "Retrieving features...");
-                WriteToLog("Retrieving features...");
-            }
-            else
-            {
-                args.resultState = ResultState.StreamCompleted;
-                args.args = string.Empty;
-
-                streams = new List<Stream>();
-                backgroundWorker.ReportProgress(0, "Retrieving streams...");
-                WriteToLog("Retrieving streams...");
-
-            }
             FeatureButton.Enabled = false;
             Cursor = Cursors.WaitCursor;
 
-            backgroundWorker.RunWorkerAsync(args);
+            _oEac3toInfo = new Eac3toInfo(FolderInputTextBox.Text, null, null);
+            _oEac3toInfo.FetchInformationCompleted += new OnFetchInformationCompletedHandler(SetData);
+            _oEac3toInfo.ProgressChanged += new OnProgressChangedHandler(SetProgress);
+            _oEac3toInfo.FetchFeatureInformation();
         }
 
         private void StreamDataGridView_DataSourceChanged(object sender, EventArgs e)
@@ -683,16 +287,6 @@ namespace MeGUI.packages.tools.hdbdextractor
             }
         }
 
-        private void InitBackgroundWorker()
-        {
-            backgroundWorker = new BackgroundWorker();
-            backgroundWorker.WorkerSupportsCancellation = true;
-            backgroundWorker.WorkerReportsProgress = true;
-            backgroundWorker.DoWork += new DoWorkEventHandler(backgroundWorker_DoWork);
-            backgroundWorker.ProgressChanged += new ProgressChangedEventHandler(backgroundWorker_ProgressChanged);
-            backgroundWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorker_RunWorkerCompleted);
-        }
-
         private void QueueButton_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(FolderOutputTextBox.Text))
@@ -726,7 +320,7 @@ namespace MeGUI.packages.tools.hdbdextractor
             eac3toArgs args = new eac3toArgs();
             HDStreamsExJob job;
 
-            args.eac3toPath = eac3toPath;
+            args.eac3toPath = settings.EAC3toPath;
             args.inputPath = FolderInputTextBox.Text;
             if (FolderSelection.Checked)
                 args.featureNumber = ((Feature)FeatureDataGridView.SelectedRows[0].DataBoundItem).Number.ToString();
@@ -750,7 +344,7 @@ namespace MeGUI.packages.tools.hdbdextractor
                 job = new HDStreamsExJob(this.FolderInputTextBox.Text, this.FolderOutputTextBox.Text + "xxx", null, args.args, inputType);
 
             lastJob = job;
-            info.Jobs.addJobsToQueue(job);
+            mainForm.Jobs.addJobsToQueue(job);
             if (this.closeOnQueue.Checked)
                 this.Close();
         }
@@ -810,15 +404,15 @@ namespace MeGUI.packages.tools.hdbdextractor
 
         private void HdBrStreamExtractor_FormClosing(object sender, System.Windows.Forms.FormClosingEventArgs e)
         {
-            if (backgroundWorker != null)
-            {
-                if (backgroundWorker.IsBusy)
-                    if (MessageBox.Show("A process is still running. Do you want to cancel it?", "Cancel process?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                        backgroundWorker.CancelAsync();
+            //if (backgroundWorker != null)
+            //{
+            //    if (backgroundWorker.IsBusy)
+            //        if (MessageBox.Show("A process is still running. Do you want to cancel it?", "Cancel process?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            //            backgroundWorker.CancelAsync();
 
-                if (backgroundWorker.CancellationPending)
-                    backgroundWorker.Dispose();
-            }
+            //    if (backgroundWorker.CancellationPending)
+            //        backgroundWorker.Dispose();
+            //}
         }
 
         private bool IsStreamCheckedForExtract()
@@ -840,9 +434,9 @@ namespace MeGUI.packages.tools.hdbdextractor
         private void FeatureDataGridView_SelectionChanged(object sender, EventArgs e)
         {
             // only fire after the Databind has completed on grid and a row is selected
-            if (FeatureDataGridView.Rows.Count == features.Count && FeatureDataGridView.SelectedRows.Count == 1)
+            if (FeatureDataGridView.Rows.Count == _oEac3toInfo.Features.Count && FeatureDataGridView.SelectedRows.Count == 1)
             {
-                if (backgroundWorker.IsBusy) // disallow selection change
+                if (_oEac3toInfo.IsBusy()) // disallow selection change
                 {
                     this.FeatureDataGridView.SelectionChanged -= new System.EventHandler(this.FeatureDataGridView_SelectionChanged);
 
@@ -858,29 +452,24 @@ namespace MeGUI.packages.tools.hdbdextractor
                     // Check for Streams
                     if (feature.Streams == null || feature.Streams.Count == 0)
                     {
-                        InitBackgroundWorker();
-                        eac3toArgs args = new eac3toArgs();
-
-                        args.eac3toPath = eac3toPath;
-                        args.inputPath = FolderInputTextBox.Text;
-                        args.workingFolder = string.IsNullOrEmpty(FolderOutputTextBox.Text) ? FolderOutputTextBox.Text : System.IO.Path.GetDirectoryName(args.eac3toPath);
-                        args.resultState = ResultState.StreamCompleted;
-                        args.args = ((Feature)FeatureDataGridView.SelectedRows[0].DataBoundItem).Number.ToString();
+                        //args.workingFolder = string.IsNullOrEmpty(FolderOutputTextBox.Text) ? FolderOutputTextBox.Text : System.IO.Path.GetDirectoryName(args.eac3toPath);
 
                         // create dummy input string for megui job
                         if (feature.Description.Contains("EVO"))
                         {
-                            if (args.inputPath.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Contains("HVDVD_TS"))
-                                dummyInput = args.inputPath + feature.Description.Substring(0, feature.Description.IndexOf(","));
-                            else dummyInput = args.inputPath + "HVDVD_TS\\" + feature.Description.Substring(0, feature.Description.IndexOf(","));
+                            if (FolderInputTextBox.Text.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Contains("HVDVD_TS"))
+                                dummyInput = FolderInputTextBox.Text + feature.Description.Substring(0, feature.Description.IndexOf(","));
+                            else
+                                dummyInput = FolderInputTextBox.Text + "HVDVD_TS\\" + feature.Description.Substring(0, feature.Description.IndexOf(","));
                         }
                         else if (feature.Description.Contains("(angle"))
                         {
-                            if (args.inputPath.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Contains("BDMV\\PLAYLIST"))
-                                dummyInput = args.inputPath + feature.Description.Substring(0, feature.Description.IndexOf(" ("));
-                            else if (args.inputPath.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Contains("BDMV\\STREAM"))
-                                dummyInput = args.inputPath.Substring(0, args.inputPath.LastIndexOf("BDMV")) + "BDMV\\PLAYLIST\\" + feature.Description.Substring(0, feature.Description.IndexOf(" ("));
-                            else dummyInput = args.inputPath + "BDMV\\PLAYLIST\\" + feature.Description.Substring(0, feature.Description.IndexOf(" ("));
+                            if (FolderInputTextBox.Text.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Contains("BDMV\\PLAYLIST"))
+                                dummyInput = FolderInputTextBox.Text + feature.Description.Substring(0, feature.Description.IndexOf(" ("));
+                            else if (FolderInputTextBox.Text.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Contains("BDMV\\STREAM"))
+                                dummyInput = FolderInputTextBox.Text.Substring(0, FolderInputTextBox.Text.LastIndexOf("BDMV")) + "BDMV\\PLAYLIST\\" + feature.Description.Substring(0, feature.Description.IndexOf(" ("));
+                            else
+                                dummyInput = FolderInputTextBox.Text + "BDMV\\PLAYLIST\\" + feature.Description.Substring(0, feature.Description.IndexOf(" ("));
                         }
                         else if (feature.Description.Substring(feature.Description.LastIndexOf(".") + 1, 4) == "m2ts")
                         {
@@ -888,30 +477,29 @@ namespace MeGUI.packages.tools.hdbdextractor
 
                             if (des.Contains("+")) // seamless branching
                             {
-                                if (args.inputPath.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Contains("BDMV\\STREAM"))
-                                    dummyInput = args.inputPath.Substring(0, args.inputPath.IndexOf("BDMV")) + "BDMV\\PLAYLIST\\" + feature.Description.Substring(0, feature.Description.IndexOf(","));
+                                if (FolderInputTextBox.Text.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Contains("BDMV\\STREAM"))
+                                    dummyInput = FolderInputTextBox.Text.Substring(0, FolderInputTextBox.Text.IndexOf("BDMV")) + "BDMV\\PLAYLIST\\" + feature.Description.Substring(0, feature.Description.IndexOf(","));
                                 else
-                                    dummyInput = args.inputPath + "BDMV\\PLAYLIST\\" + feature.Description.Substring(0, feature.Description.IndexOf(","));
+                                    dummyInput = FolderInputTextBox.Text + "BDMV\\PLAYLIST\\" + feature.Description.Substring(0, feature.Description.IndexOf(","));
                             }
                             else
                             {
-                                if (args.inputPath.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Contains("BDMV\\STREAM"))
-                                    dummyInput = args.inputPath + des;
-                                else dummyInput = args.inputPath + "BDMV\\STREAM\\" + des;
+                                if (FolderInputTextBox.Text.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Contains("BDMV\\STREAM"))
+                                    dummyInput = FolderInputTextBox.Text + des;
+                                else
+                                    dummyInput = FolderInputTextBox.Text + "BDMV\\STREAM\\" + des;
                             }
                         }
                         else
                         {
-                            if (args.inputPath.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Contains("BDMV\\PLAYLIST"))
-                                dummyInput = args.inputPath + feature.Description.Substring(0, feature.Description.IndexOf(","));
-                            else dummyInput = args.inputPath + "BDMV\\PLAYLIST\\" + feature.Description.Substring(0, feature.Description.IndexOf(","));
+                            if (FolderInputTextBox.Text.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Contains("BDMV\\PLAYLIST"))
+                                dummyInput = FolderInputTextBox.Text + feature.Description.Substring(0, feature.Description.IndexOf(","));
+                            else
+                                dummyInput = FolderInputTextBox.Text + "BDMV\\PLAYLIST\\" + feature.Description.Substring(0, feature.Description.IndexOf(","));
                         }
 
-                        backgroundWorker.ReportProgress(0, "Retrieving streams...");
-                        WriteToLog("Retrieving streams...");
                         Cursor = Cursors.WaitCursor;
-
-                        backgroundWorker.RunWorkerAsync(args);
+                        _oEac3toInfo.FetchStreamInformation(((Feature)FeatureDataGridView.SelectedRows[0].DataBoundItem).Number);
                     }
                     else // use already collected streams
                     {
