@@ -257,6 +257,9 @@ namespace MeGUI
                 output.Text = "";
                 demuxNoAudiotracks.Checked = true;
             }
+
+            if (iFile.VideoInfo.PGCCount > 1)
+                MessageBox.Show("Source file has more than one PGC. This may lead to audio/video sync problems.", iFile.VideoInfo.PGCCount + " PGCs found", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         private void generateAudioList()
