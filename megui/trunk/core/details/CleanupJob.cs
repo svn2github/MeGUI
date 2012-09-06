@@ -20,8 +20,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
 using System.Threading;
 
 using MeGUI.core.util;
@@ -34,16 +32,11 @@ namespace MeGUI.core.details
 
         private CleanupJob() { }
 
-        public static JobChain AddAfter(JobChain other, List<string> files)
-        {
-            return AddAfter(other, null, files);
-        }
-
-        public static JobChain AddAfter(JobChain other, string type, List<string> files)
+        public static JobChain AddAfter(JobChain other, List<string> files, string strInput)
         {
             CleanupJob j = new CleanupJob();
             j.files = files;
-            j.type = type;
+            j.Input = strInput;
             return new SequentialChain(other, j);
         }
 
@@ -52,7 +45,6 @@ namespace MeGUI.core.details
             get { return ""; }
         }
 
-        private string type;
         public override string EncodingMode
         {
             get { return "cleanup"; }
@@ -100,6 +92,8 @@ namespace MeGUI.core.details
 
         void run()
         {
+            su.Status = "Cleanup files...";
+
             Thread.Sleep(2000); // just so that the job has properly registered as starting
 
             log.LogValue("Delete Intermediate Files option set", mf.Settings.DeleteIntermediateFiles);
