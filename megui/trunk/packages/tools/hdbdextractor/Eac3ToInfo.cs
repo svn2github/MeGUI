@@ -510,7 +510,8 @@ namespace MeGUI.packages.tools.hdbdextractor
                     // Unknown line
                     else
                     {
-                        _log.Warn(string.Format("Unknown line: \"{0}\"", data));
+                        if (_log != null)
+                            _log.Warn(string.Format("Unknown line: \"{0}\"", data));
                     }
                 }
             }
