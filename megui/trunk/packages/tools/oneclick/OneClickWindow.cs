@@ -695,7 +695,7 @@ namespace MeGUI
                 else if (inputContainer != ContainerType.MKV)
                     _oLog.LogEvent("\"Don't encode video\" has been disabled as at the moment only the source container MKV is supported");
                 else
-                    dpp.VideoFileToMux = _videoInputInfo.FileName;
+                    dpp.VideoFileToMux = dpp.VideoInput;
             }
 
             // set oneclick job settings

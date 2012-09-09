@@ -1,3 +1,4 @@
+2159 [OneClick] use the correct input file if using Blu-ray input with the option "don't encode video"
 2158 [HD Streams Extractor] fixed a crash
 2157 [OneClick] added an improved OneClick encoder with these changes:
      - added subtitle control (including delay, language, name, forced/default flag). Feature request #2752988
