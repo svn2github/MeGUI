@@ -144,10 +144,8 @@ namespace MeGUI
                 su.HasError = true;
                 log.LogValue("An error occurred", errorString, ImageType.Error);
             }
-            if (errorString == null && frameString == null)
-            {
+            if (frameString == null)
                 base.ProcessLine(line, stream);
-            }
         }
 
         public abstract string GetFrameString(string line, StreamType stream);

@@ -98,6 +98,12 @@ namespace MeGUI.packages.tools.oneclick
                 List<string> arrIndexerPriority = new List<string>();
                 foreach (string s in lbIndexerPriority.Items)
                     arrIndexerPriority.Add(s);
+
+                if (cbLanguageSelect.SelectedText.Equals("none"))
+                    val.UseNoLanguagesAsFallback = true;
+                else
+                    val.UseNoLanguagesAsFallback = false;
+
                 val.IndexerPriority = arrIndexerPriority;
                 val.WorkingNameReplace = txtWorkingNameDelete.Text;
                 val.WorkingNameReplaceWith = txtWorkingNameReplaceWith.Text;
@@ -125,9 +131,11 @@ namespace MeGUI.packages.tools.oneclick
                 txtWorkingNameReplaceWith.Text = value.WorkingNameReplaceWith;
                 
                 List<string> arrNonDefaultAudio = new List<string>(LanguageSelectionContainer.Languages.Keys);
+                arrNonDefaultAudio.Add("[none]");
                 foreach (string strLanguage in value.DefaultAudioLanguage)
                     arrNonDefaultAudio.Remove(strLanguage);
                 List<string> arrNonDefaultSubtitle = new List<string>(LanguageSelectionContainer.Languages.Keys);
+                arrNonDefaultSubtitle.Add("[none]");
                 foreach (string strLanguage in value.DefaultSubtitleLanguage)
                     arrNonDefaultSubtitle.Remove(strLanguage);
 
@@ -147,6 +155,11 @@ namespace MeGUI.packages.tools.oneclick
 
                 lbIndexerPriority.Items.Clear();
                 lbIndexerPriority.Items.AddRange(value.IndexerPriority.ToArray());
+
+                if (!value.UseNoLanguagesAsFallback)
+                    cbLanguageSelect.SelectedItem = "all";
+                else
+                    cbLanguageSelect.SelectedItem = "none";
             }
         }
 

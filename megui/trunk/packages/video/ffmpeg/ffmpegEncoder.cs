@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -53,7 +53,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "FFmpegEncoder");
             get
             {
                 StringBuilder sb = new StringBuilder();
-                sb.Append("-y -i \"" + job.Input + "\" -vcodec ffvhuff -context 1 -vstrict -2 -pred 2 -an \"" + job.Output + "\" ");
+                sb.Append("-y -i \"" + job.Input + "\" -c:v ffvhuff -threads 0 -sn -an -context 1 -vstrict -2 -pred 2 \"" + job.Output + "\" ");
                 return sb.ToString();
                 throw new Exception();
             }

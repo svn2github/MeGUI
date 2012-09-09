@@ -202,6 +202,13 @@ namespace MeGUI
             set { useChaptersMarks = value; }
         }
 
+        private bool useNoLanguagesAsFallback;
+        public bool UseNoLanguagesAsFallback
+        {
+            get { return useNoLanguagesAsFallback; }
+            set { useNoLanguagesAsFallback = value; }
+        }
+
         private string defaultWorkingDirectory;
         public string DefaultWorkingDirectory
         {

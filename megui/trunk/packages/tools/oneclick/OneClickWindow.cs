@@ -401,12 +401,12 @@ namespace MeGUI
             List<OneClickStream> arrAudioTrackInfo = new List<OneClickStream>();
             foreach (AudioTrackInfo oInfo in iFile.AudioInfo.Tracks)
                 arrAudioTrackInfo.Add(new OneClickStream(oInfo));
-            AudioResetTrack(arrAudioTrackInfo);
+            AudioResetTrack(arrAudioTrackInfo, _oSettings);
 
             List<OneClickStream> arrSubtitleTrackInfo = new List<OneClickStream>();
             foreach (SubtitleTrackInfo oInfo in iFile.SubtitleInfo.Tracks)
                 arrSubtitleTrackInfo.Add(new OneClickStream(oInfo));
-            SubtitleResetTrack(arrSubtitleTrackInfo);
+            SubtitleResetTrack(arrSubtitleTrackInfo, _oSettings);
 
             horizontalResolution.Maximum = maxHorizontalResolution;
             
@@ -519,6 +519,19 @@ namespace MeGUI
             set
             {
                 OneClickSettings settings = value;
+
+                if (_videoInputInfo != null)
+                {
+                    List<OneClickStream> arrAudioTrackInfo = new List<OneClickStream>();
+                    foreach (AudioTrackInfo oInfo in _videoInputInfo.AudioInfo.Tracks)
+                        arrAudioTrackInfo.Add(new OneClickStream(oInfo));
+                    AudioResetTrack(arrAudioTrackInfo, settings);
+
+                    List<OneClickStream> arrSubtitleTrackInfo = new List<OneClickStream>();
+                    foreach (SubtitleTrackInfo oInfo in _videoInputInfo.SubtitleInfo.Tracks)
+                        arrSubtitleTrackInfo.Add(new OneClickStream(oInfo));
+                    SubtitleResetTrack(arrSubtitleTrackInfo, settings);
+                }
 
                 foreach (OneClickStreamControl a in audioTracks)
                     a.SelectProfileNameOrWarn(settings.AudioProfileName);
@@ -1200,7 +1213,7 @@ namespace MeGUI
             updatePossibleContainers();
         }
 
-        private void SubtitleResetTrack(List<OneClickStream> arrSubtitleTrackInfo)
+        private void SubtitleResetTrack(List<OneClickStream> arrSubtitleTrackInfo, OneClickSettings settings)
         {
             // generate track names
             List<object> trackNames = new List<object>();
@@ -1218,8 +1231,12 @@ namespace MeGUI
                 subtitleTracks.RemoveAt(i - 1);
             }
 
+            foreach (string strLanguage in settings.DefaultSubtitleLanguage)
+                if (strLanguage.Equals("[none]"))
+                    return;
+
             int iCounter = 0;
-            foreach (string strLanguage in _oSettings.DefaultSubtitleLanguage)
+            foreach (string strLanguage in settings.DefaultSubtitleLanguage)
             {
                 for (int i = 0; i < arrSubtitleTrackInfo.Count; i++)
                 {
@@ -1232,7 +1249,7 @@ namespace MeGUI
                 }
             }
 
-            if (iCounter == 0 && arrSubtitleTrackInfo.Count > 0)
+            if (iCounter == 0 && arrSubtitleTrackInfo.Count > 0 && !settings.UseNoLanguagesAsFallback)
             {
                 for (int i = 0; i < arrSubtitleTrackInfo.Count; i++)
                 {
@@ -1369,7 +1386,7 @@ namespace MeGUI
             updatePossibleContainers();
         }
 
-        private void AudioResetTrack(List<OneClickStream> arrAudioTrackInfo)
+        private void AudioResetTrack(List<OneClickStream> arrAudioTrackInfo, OneClickSettings settings)
         {
             // generate track names
             List<object> trackNames = new List<object>();
@@ -1387,8 +1404,12 @@ namespace MeGUI
                 audioTracks.RemoveAt(i - 1);
             }
 
-            int iCounter = 0; 
-            foreach (string strLanguage in _oSettings.DefaultAudioLanguage)
+            foreach (string strLanguage in settings.DefaultAudioLanguage)
+                if (strLanguage.Equals("[none]"))
+                    return;
+
+            int iCounter = 0;
+            foreach (string strLanguage in settings.DefaultAudioLanguage)
             {
                 for (int i = 0; i < arrAudioTrackInfo.Count; i++)
                 {
@@ -1401,7 +1422,7 @@ namespace MeGUI
                 }
             }
 
-            if (iCounter == 0 && arrAudioTrackInfo.Count > 0)
+            if (iCounter == 0 && arrAudioTrackInfo.Count > 0 && !settings.UseNoLanguagesAsFallback)
             {
                 for (int i = 0; i < arrAudioTrackInfo.Count; i++)
                 {
