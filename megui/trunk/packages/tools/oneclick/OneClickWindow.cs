@@ -264,7 +264,12 @@ namespace MeGUI
                 String strVideoInput = input.SelectedText;
                 if (!String.IsNullOrEmpty(strVideoInput) && File.Exists(strVideoInput))
                 {
-                    if (!String.IsNullOrEmpty(MainForm.Instance.Settings.DefaultOutputDir) && Directory.Exists(MainForm.Instance.Settings.DefaultOutputDir))
+                    if (!String.IsNullOrEmpty(_oSettings.DefaultOutputDirectory) && Directory.Exists(_oSettings.DefaultOutputDirectory))
+                    {
+                        output.Filename = Path.Combine(_oSettings.DefaultOutputDirectory, workingName.Text + "." +
+                            ((ContainerType)containerFormat.SelectedItem).Extension);
+                    }
+                    else if (!String.IsNullOrEmpty(MainForm.Instance.Settings.DefaultOutputDir) && Directory.Exists(MainForm.Instance.Settings.DefaultOutputDir))
                     {
                         output.Filename = Path.Combine(MainForm.Instance.Settings.DefaultOutputDir, workingName.Text + "." +
                             ((ContainerType)containerFormat.SelectedItem).Extension);

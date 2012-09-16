@@ -216,6 +216,13 @@ namespace MeGUI
             set { defaultWorkingDirectory = value; }
         }
 
+        private string defaultOutputDirectory;
+        public string DefaultOutputDirectory
+        {
+            get { return defaultOutputDirectory; }
+            set { defaultOutputDirectory = value; }
+        }
+
         private List<string> defaultAudioLanguage;
         [XmlIgnore()]
         [PropertyEqualityIgnoreAttribute()]

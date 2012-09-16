@@ -86,6 +86,7 @@ namespace MeGUI.packages.tools.oneclick
                 val.VideoProfileName = videoProfile.SelectedProfile.FQName;
                 val.UseChaptersMarks = usechaptersmarks.Checked;
                 val.DefaultWorkingDirectory = workingDirectory.Filename;
+                val.DefaultOutputDirectory = outputDirectory.Filename;
 
                 List<string> arrDefaultAudio = new List<string>();
                 foreach (string s in lbDefaultAudio.Items)
@@ -127,6 +128,7 @@ namespace MeGUI.packages.tools.oneclick
                 videoProfile.SetProfileNameOrWarn(value.VideoProfileName);
                 usechaptersmarks.Checked = value.UseChaptersMarks;
                 workingDirectory.Filename = value.DefaultWorkingDirectory;
+                outputDirectory.Filename = value.DefaultOutputDirectory;
                 txtWorkingNameDelete.Text = value.WorkingNameReplace;
                 txtWorkingNameReplaceWith.Text = value.WorkingNameReplaceWith;
                 
