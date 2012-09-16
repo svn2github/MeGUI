@@ -381,32 +381,37 @@ namespace MeGUI.packages.tools.oneclick
                 btnAddSubtitle.Enabled = true;
         }
 
-        private void lbIndexerPriority_KeyDown(object sender, KeyEventArgs e)
+        private void btnIndexerUp_Click(object sender, EventArgs e)
         {
-            if (e.KeyCode == Keys.Up)
-            {
-                int iPos = lbIndexerPriority.SelectedIndex;
-                if (iPos < 1)
-                    return;
+            int iPos = lbIndexerPriority.SelectedIndex;
+            if (iPos < 1)
+                return;
 
-                object o = lbIndexerPriority.SelectedItem;
-                lbIndexerPriority.Items.RemoveAt(iPos);
-                lbIndexerPriority.Items.Insert(iPos - 1, o);
-                lbIndexerPriority.SelectedIndex = iPos - 1;
-                e.SuppressKeyPress = true;
-            }
-            else if (e.KeyCode == Keys.Down)
-            {
-                int iPos = lbIndexerPriority.SelectedIndex;
-                if (iPos < 0 || iPos > lbIndexerPriority.Items.Count - 2)
-                    return;
+            object o = lbIndexerPriority.SelectedItem;
+            lbIndexerPriority.Items.RemoveAt(iPos);
+            lbIndexerPriority.Items.Insert(iPos - 1, o);
+            lbIndexerPriority.SelectedIndex = iPos - 1;
+            lbIndexerPriority_MouseClick(null, null);
+        }
 
-                object o = lbIndexerPriority.SelectedItem;
-                lbIndexerPriority.Items.RemoveAt(iPos);
-                lbIndexerPriority.Items.Insert(iPos + 1, o);
-                lbIndexerPriority.SelectedIndex = iPos + 1;
-                e.SuppressKeyPress = true;
-            }
+        private void btnIndexerDown_Click(object sender, EventArgs e)
+        {
+            int iPos = lbIndexerPriority.SelectedIndex;
+            if (iPos < 0 || iPos > lbIndexerPriority.Items.Count - 2)
+                return;
+
+            object o = lbIndexerPriority.SelectedItem;
+            lbIndexerPriority.Items.RemoveAt(iPos);
+            lbIndexerPriority.Items.Insert(iPos + 1, o);
+            lbIndexerPriority.SelectedIndex = iPos + 1;
+            lbIndexerPriority_MouseClick(null, null);
+        }
+
+        private void lbIndexerPriority_MouseClick(object sender, MouseEventArgs e)
+        {
+            int iPos = lbIndexerPriority.SelectedIndex;
+            btnIndexerUp.Enabled = iPos > 0;
+            btnIndexerDown.Enabled = iPos >= 0 && iPos <= lbIndexerPriority.Items.Count - 2;
         }
     }
 }

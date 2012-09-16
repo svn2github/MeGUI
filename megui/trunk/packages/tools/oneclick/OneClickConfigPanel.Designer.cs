@@ -96,18 +96,20 @@ namespace MeGUI.packages.tools.oneclick
             this.lbDefaultAudio = new System.Windows.Forms.ListBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.outputDirectory = new MeGUI.FileBar();
+            this.label8 = new System.Windows.Forms.Label();
+            this.workingDirectory = new MeGUI.FileBar();
+            this.workingDirectoryLabel = new System.Windows.Forms.Label();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.txtWorkingNameReplaceWith = new System.Windows.Forms.TextBox();
             this.txtWorkingNameDelete = new System.Windows.Forms.TextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.btnIndexerDown = new System.Windows.Forms.Button();
+            this.btnIndexerUp = new System.Windows.Forms.Button();
             this.lbIndexerPriority = new System.Windows.Forms.ListBox();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.workingDirectoryLabel = new System.Windows.Forms.Label();
-            this.workingDirectory = new MeGUI.FileBar();
-            this.outputDirectory = new MeGUI.FileBar();
-            this.label8 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
             this.otherGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.horizontalResolution)).BeginInit();
@@ -120,9 +122,9 @@ namespace MeGUI.packages.tools.oneclick
             this.groupBox1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage5.SuspendLayout();
+            this.groupBox5.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox3.SuspendLayout();
-            this.groupBox5.SuspendLayout();
             this.SuspendLayout();
             // 
             // label3
@@ -664,6 +666,67 @@ namespace MeGUI.packages.tools.oneclick
             this.tabPage5.Text = "Other";
             this.tabPage5.UseVisualStyleBackColor = true;
             // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.outputDirectory);
+            this.groupBox5.Controls.Add(this.label8);
+            this.groupBox5.Controls.Add(this.workingDirectory);
+            this.groupBox5.Controls.Add(this.workingDirectoryLabel);
+            this.groupBox5.Location = new System.Drawing.Point(15, 7);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(393, 92);
+            this.groupBox5.TabIndex = 44;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = " Default Directories ";
+            // 
+            // outputDirectory
+            // 
+            this.outputDirectory.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.outputDirectory.Filename = "";
+            this.outputDirectory.Filter = null;
+            this.outputDirectory.FilterIndex = 0;
+            this.outputDirectory.FolderMode = true;
+            this.outputDirectory.Location = new System.Drawing.Point(107, 19);
+            this.outputDirectory.Name = "outputDirectory";
+            this.outputDirectory.ReadOnly = true;
+            this.outputDirectory.SaveMode = false;
+            this.outputDirectory.Size = new System.Drawing.Size(280, 26);
+            this.outputDirectory.TabIndex = 43;
+            this.outputDirectory.Title = null;
+            // 
+            // label8
+            // 
+            this.label8.Location = new System.Drawing.Point(6, 25);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(108, 13);
+            this.label8.TabIndex = 44;
+            this.label8.Text = "Output Directory";
+            // 
+            // workingDirectory
+            // 
+            this.workingDirectory.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.workingDirectory.Filename = "";
+            this.workingDirectory.Filter = null;
+            this.workingDirectory.FilterIndex = 0;
+            this.workingDirectory.FolderMode = true;
+            this.workingDirectory.Location = new System.Drawing.Point(107, 50);
+            this.workingDirectory.Name = "workingDirectory";
+            this.workingDirectory.ReadOnly = true;
+            this.workingDirectory.SaveMode = false;
+            this.workingDirectory.Size = new System.Drawing.Size(280, 26);
+            this.workingDirectory.TabIndex = 42;
+            this.workingDirectory.Title = null;
+            // 
+            // workingDirectoryLabel
+            // 
+            this.workingDirectoryLabel.Location = new System.Drawing.Point(6, 56);
+            this.workingDirectoryLabel.Name = "workingDirectoryLabel";
+            this.workingDirectoryLabel.Size = new System.Drawing.Size(108, 13);
+            this.workingDirectoryLabel.TabIndex = 41;
+            this.workingDirectoryLabel.Text = "Working Directory";
+            // 
             // groupBox4
             // 
             this.groupBox4.Controls.Add(this.label6);
@@ -711,6 +774,8 @@ namespace MeGUI.packages.tools.oneclick
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.btnIndexerDown);
+            this.groupBox3.Controls.Add(this.btnIndexerUp);
             this.groupBox3.Controls.Add(this.lbIndexerPriority);
             this.groupBox3.Location = new System.Drawing.Point(15, 105);
             this.groupBox3.Name = "groupBox3";
@@ -719,75 +784,36 @@ namespace MeGUI.packages.tools.oneclick
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = " Indexer Priority ";
             // 
+            // btnIndexerDown
+            // 
+            this.btnIndexerDown.Enabled = false;
+            this.btnIndexerDown.Location = new System.Drawing.Point(145, 64);
+            this.btnIndexerDown.Name = "btnIndexerDown";
+            this.btnIndexerDown.Size = new System.Drawing.Size(29, 23);
+            this.btnIndexerDown.TabIndex = 44;
+            this.btnIndexerDown.Text = "-";
+            this.btnIndexerDown.UseVisualStyleBackColor = true;
+            this.btnIndexerDown.Click += new System.EventHandler(this.btnIndexerDown_Click);
+            // 
+            // btnIndexerUp
+            // 
+            this.btnIndexerUp.Enabled = false;
+            this.btnIndexerUp.Location = new System.Drawing.Point(145, 33);
+            this.btnIndexerUp.Name = "btnIndexerUp";
+            this.btnIndexerUp.Size = new System.Drawing.Size(29, 23);
+            this.btnIndexerUp.TabIndex = 43;
+            this.btnIndexerUp.Text = "+";
+            this.btnIndexerUp.UseVisualStyleBackColor = true;
+            this.btnIndexerUp.Click += new System.EventHandler(this.btnIndexerUp_Click);
+            // 
             // lbIndexerPriority
             // 
             this.lbIndexerPriority.FormattingEnabled = true;
-            this.lbIndexerPriority.Location = new System.Drawing.Point(56, 18);
+            this.lbIndexerPriority.Location = new System.Drawing.Point(33, 18);
             this.lbIndexerPriority.Name = "lbIndexerPriority";
             this.lbIndexerPriority.Size = new System.Drawing.Size(106, 82);
             this.lbIndexerPriority.TabIndex = 42;
-            this.lbIndexerPriority.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lbIndexerPriority_KeyDown);
-            // 
-            // groupBox5
-            // 
-            this.groupBox5.Controls.Add(this.outputDirectory);
-            this.groupBox5.Controls.Add(this.label8);
-            this.groupBox5.Controls.Add(this.workingDirectory);
-            this.groupBox5.Controls.Add(this.workingDirectoryLabel);
-            this.groupBox5.Location = new System.Drawing.Point(15, 7);
-            this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(393, 92);
-            this.groupBox5.TabIndex = 44;
-            this.groupBox5.TabStop = false;
-            this.groupBox5.Text = " Default Directories ";
-            // 
-            // workingDirectoryLabel
-            // 
-            this.workingDirectoryLabel.Location = new System.Drawing.Point(6, 56);
-            this.workingDirectoryLabel.Name = "workingDirectoryLabel";
-            this.workingDirectoryLabel.Size = new System.Drawing.Size(108, 13);
-            this.workingDirectoryLabel.TabIndex = 41;
-            this.workingDirectoryLabel.Text = "Working Directory";
-            // 
-            // workingDirectory
-            // 
-            this.workingDirectory.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.workingDirectory.Filename = "";
-            this.workingDirectory.Filter = null;
-            this.workingDirectory.FilterIndex = 0;
-            this.workingDirectory.FolderMode = true;
-            this.workingDirectory.Location = new System.Drawing.Point(107, 50);
-            this.workingDirectory.Name = "workingDirectory";
-            this.workingDirectory.ReadOnly = true;
-            this.workingDirectory.SaveMode = false;
-            this.workingDirectory.Size = new System.Drawing.Size(280, 26);
-            this.workingDirectory.TabIndex = 42;
-            this.workingDirectory.Title = null;
-            // 
-            // outputDirectory
-            // 
-            this.outputDirectory.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.outputDirectory.Filename = "";
-            this.outputDirectory.Filter = null;
-            this.outputDirectory.FilterIndex = 0;
-            this.outputDirectory.FolderMode = true;
-            this.outputDirectory.Location = new System.Drawing.Point(107, 19);
-            this.outputDirectory.Name = "outputDirectory";
-            this.outputDirectory.ReadOnly = true;
-            this.outputDirectory.SaveMode = false;
-            this.outputDirectory.Size = new System.Drawing.Size(280, 26);
-            this.outputDirectory.TabIndex = 43;
-            this.outputDirectory.Title = null;
-            // 
-            // label8
-            // 
-            this.label8.Location = new System.Drawing.Point(6, 25);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(108, 13);
-            this.label8.TabIndex = 44;
-            this.label8.Text = "Output Directory";
+            this.lbIndexerPriority.MouseClick += new System.Windows.Forms.MouseEventHandler(this.lbIndexerPriority_MouseClick);
             // 
             // OneClickConfigPanel
             // 
@@ -810,10 +836,10 @@ namespace MeGUI.packages.tools.oneclick
             this.groupBox1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.tabPage5.ResumeLayout(false);
+            this.groupBox5.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             this.groupBox3.ResumeLayout(false);
-            this.groupBox5.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -879,5 +905,7 @@ namespace MeGUI.packages.tools.oneclick
         private System.Windows.Forms.Label label8;
         private FileBar workingDirectory;
         private System.Windows.Forms.Label workingDirectoryLabel;
+        private System.Windows.Forms.Button btnIndexerDown;
+        private System.Windows.Forms.Button btnIndexerUp;
     }
 }
