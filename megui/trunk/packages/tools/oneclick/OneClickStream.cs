@@ -96,7 +96,7 @@ namespace MeGUI
             {
                 if (!String.IsNullOrEmpty(_demuxFilePath))
                     return _demuxFilePath;
-                if (_trackInfo != null)
+                if (_trackInfo != null && _trackInfo.DemuxFileName != null)
                     return _trackInfo.DemuxFileName;
                 else
                     return _inputFilePath; 

@@ -178,6 +178,9 @@ namespace MeGUI
         {
             get
             {
+                if (String.IsNullOrEmpty(_sourceFileName))
+                    return null;
+
                 string strExtension = String.Empty;
                 string[] arrCodec = new string[]{};
                 string strCodec = String.Empty;
