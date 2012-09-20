@@ -716,6 +716,12 @@
     </Compile>
     <Compile Include="packages\tools\hdbdextractor\HDStreamExtractorIndexer.cs" />
     <Compile Include="packages\tools\hdbdextractor\HDStreamsExJob.cs" />
+    <Compile Include="packages\tools\oneclick\OneClickAudioControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="packages\tools\oneclick\OneClickAudioControl.Designer.cs">
+      <DependentUpon>OneClickAudioControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="packages\tools\oneclick\OneClickProcessing.cs" />
     <Compile Include="packages\tools\oneclick\OneClickStreamControl.cs">
       <SubType>UserControl</SubType>
@@ -1005,6 +1011,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="packages\tools\hdbdextractor\HDBDStreamExtractor.resx">
       <DependentUpon>HDBDStreamExtractor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="packages\tools\oneclick\OneClickAudioControl.resx">
+      <DependentUpon>OneClickAudioControl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="packages\tools\oneclick\OneClickStreamControl.resx">

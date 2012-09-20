@@ -67,13 +67,6 @@ namespace MeGUI
             set { videoProfileName = value; }
         }
 
-        private string audioProfileName;
-        public string AudioProfileName
-        {
-            get { return audioProfileName; }
-            set { audioProfileName = value; }
-        }
-
         private string avsProfileName;
         public string AvsProfileName
         {
@@ -88,27 +81,46 @@ namespace MeGUI
             set { prerenderVideo = value; }
         }
 
-        private AudioEncodingMode audioEncodingMode;
-        [XmlIgnore()]
-        public AudioEncodingMode AudioEncodingMode
+        private string audioProfileName;
+        public string AudioProfileName
         {
-            get { return audioEncodingMode; }
-            set { audioEncodingMode = value; }
+            get { return "migrated"; }
+            set { audioProfileName = value; }
         }
 
         // for profile import/export in case the enum changes
         public string AudioEncodingModeString
         {
-            get { return audioEncodingMode.ToString(); }
+            get { return "migrated"; }
             set
             {
+                if (value.Equals("migrated"))
+                    return;
+
+                AudioEncodingMode audioEncodingMode = AudioEncodingMode.Always;
                 if (value.Equals("Never"))
                     audioEncodingMode = AudioEncodingMode.Never;
                 else if (value.Equals("IfCodecDoesNotMatch"))
                     audioEncodingMode = AudioEncodingMode.IfCodecDoesNotMatch;
-                else
-                    audioEncodingMode = AudioEncodingMode.Always;
+
+                audioSettings = new List<OneClickAudioSettings>();
+                audioSettings.Add(new OneClickAudioSettings("[default]", audioProfileName, audioEncodingMode));
             }
+        }
+
+        private List<OneClickAudioSettings> audioSettings;
+        [XmlIgnore()]
+        [PropertyEqualityIgnoreAttribute()]
+        public List<OneClickAudioSettings> AudioSettings
+        {
+            get { return audioSettings; }
+            set { audioSettings = value; }
+        }
+
+        public OneClickAudioSettings[] AudioSettingsString
+        {
+            get { return audioSettings.ToArray(); }
+            set { audioSettings = new List<OneClickAudioSettings>(value); }
         }
 
         private bool dontEncodeVideo;
@@ -285,26 +297,25 @@ namespace MeGUI
 
 		public OneClickSettings()
 		{
-			VideoProfileName = "";
-			AudioProfileName = "";
-            AvsProfileName = "";
-            AutomaticDeinterlacing = true;
-            PrerenderVideo = false;
-            AudioEncodingMode = MeGUI.AudioEncodingMode.Always;
-            DontEncodeVideo = false;
-            UseChaptersMarks = true;
-			SignalAR = false;
-            AutoCrop = true;
-            KeepInputResolution = false;
-			OutputResolution = 720;
-            SplitSize = null;
-            ContainerCandidates = new string[] {"MKV"};
-            DefaultAudioLanguage = new List<string>();
-            DefaultSubtitleLanguage = new List<string>();
-            IndexerPriority = new List<string>();
-            DefaultWorkingDirectory = "";
-            WorkingNameReplace = "";
+			videoProfileName = "";
+            avsProfileName = "";
+            automaticDeinterlacing = true;
+            prerenderVideo = false;
+            dontEncodeVideo = false;
+            useChaptersMarks = true;
+			signalAR = false;
+            autoCrop = true;
+            keepInputResolution = false;
+			outputResolution = 720;
+            splitSize = null;
+            containerCandidates = new string[] {"MKV"};
+            defaultAudioLanguage = new List<string>();
+            defaultSubtitleLanguage = new List<string>();
+            indexerPriority = new List<string>();
+            defaultWorkingDirectory = "";
+            workingNameReplace = "";
             workingNameReplaceWith = "";
+            audioSettings = new List<OneClickAudioSettings>();
 
             if (MainForm.Instance != null)
             {
@@ -326,7 +337,6 @@ namespace MeGUI
 
         #region GenericSettings Members
 
-
         public string[] RequiredFiles
         {
             get { return new string[0]; }
@@ -334,7 +344,7 @@ namespace MeGUI
 
         public string[] RequiredProfiles
         {
-            get { return new string[]{VideoProfileName, AudioProfileName};}
+            get { return new string[]{VideoProfileName, AudioSettings[0].Profile};}
         }
 
         #endregion

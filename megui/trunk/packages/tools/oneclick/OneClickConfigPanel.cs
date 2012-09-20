@@ -27,6 +27,8 @@ namespace MeGUI.packages.tools.oneclick
     public partial class OneClickConfigPanel : UserControl, Editable<OneClickSettings>
     {
         private MainForm mainForm;
+        List<OneClickAudioControl> audioConfigurations;
+
         #region profiles
         #region AVS profiles
         private void initAvsHandler()
@@ -41,12 +43,6 @@ namespace MeGUI.packages.tools.oneclick
             videoProfile.Manager = mainForm.Profiles;
         }
         #endregion
-        #region Audio profiles
-        private void initAudioHandler()
-        {
-            audioProfile.Manager = mainForm.Profiles;
-        }
-        #endregion
         #endregion
         
         public OneClickConfigPanel() 
@@ -58,9 +54,13 @@ namespace MeGUI.packages.tools.oneclick
 
             foreach (ContainerType t in mainForm.MuxProvider.GetSupportedContainers())
                 containerTypeList.Items.Add(t.ToString());
-            initAudioHandler();
+   
             initAvsHandler();
             initVideoHandler();
+
+            audioConfigurations = new List<OneClickAudioControl>();
+            audioConfigurations.Add(oneClickAudioControl1);
+            oneClickAudioControl1.SetDefault();
         }
 
         #region Gettable<OneClickSettings> Members
@@ -70,11 +70,9 @@ namespace MeGUI.packages.tools.oneclick
             get
             {
                 OneClickSettings val = new OneClickSettings();
-                val.AudioProfileName = audioProfile.SelectedProfile.FQName;
                 val.AutomaticDeinterlacing = autoDeint.Checked;
                 val.AvsProfileName = avsProfile.SelectedProfile.FQName;
                 val.ContainerCandidates = ContainerCandidates;
-                val.AudioEncodingMode = (AudioEncodingMode)cbAudioEncoding.SelectedIndex;
                 val.DontEncodeVideo = chkDontEncodeVideo.Checked;
                 val.Filesize = fileSize.Value;
                 val.OutputResolution = (long)horizontalResolution.Value;
@@ -88,14 +86,34 @@ namespace MeGUI.packages.tools.oneclick
                 val.DefaultWorkingDirectory = workingDirectory.Filename;
                 val.DefaultOutputDirectory = outputDirectory.Filename;
 
+                List<OneClickAudioSettings> arrSettings = new List<OneClickAudioSettings>();
+                for (int i = 0; i < audioConfigurations.Count; i++)
+                {
+                    bool bFound = false;
+                    for (int j = 0; j < i; j++)
+                    {
+                        if (audioConfigurations[i].Language.Equals(audioConfigurations[j].Language))
+                        {
+                            bFound = true;
+                            break;
+                        }
+                    }
+                    if (!bFound)
+                        arrSettings.Add(new OneClickAudioSettings(audioConfigurations[i].Language,
+                            audioConfigurations[i].EncoderProfile.FQName, audioConfigurations[i].EncodingMode));
+                }
+                val.AudioSettings = arrSettings;
+
                 List<string> arrDefaultAudio = new List<string>();
                 foreach (string s in lbDefaultAudio.Items)
                     arrDefaultAudio.Add(s);
                 val.DefaultAudioLanguage = arrDefaultAudio;
+
                 List<string> arrDefaultSubtitle = new List<string>();
                 foreach (string s in lbDefaultSubtitle.Items)
                     arrDefaultSubtitle.Add(s);
                 val.DefaultSubtitleLanguage = arrDefaultSubtitle;
+
                 List<string> arrIndexerPriority = new List<string>();
                 foreach (string s in lbIndexerPriority.Items)
                     arrIndexerPriority.Add(s);
@@ -112,11 +130,9 @@ namespace MeGUI.packages.tools.oneclick
             }
             set
             {
-                audioProfile.SetProfileNameOrWarn(value.AudioProfileName);
                 autoDeint.Checked = value.AutomaticDeinterlacing;
                 avsProfile.SetProfileNameOrWarn(value.AvsProfileName);
                 ContainerCandidates = value.ContainerCandidates;
-                cbAudioEncoding.SelectedIndex = (int)value.AudioEncodingMode;
                 chkDontEncodeVideo.Checked = value.DontEncodeVideo;
                 fileSize.Value = value.Filesize;
                 horizontalResolution.Value = value.OutputResolution;
@@ -131,11 +147,25 @@ namespace MeGUI.packages.tools.oneclick
                 outputDirectory.Filename = value.DefaultOutputDirectory;
                 txtWorkingNameDelete.Text = value.WorkingNameReplace;
                 txtWorkingNameReplaceWith.Text = value.WorkingNameReplaceWith;
-                
+
+                int i = 0;
+                AudioResetTrack();
+                foreach (OneClickAudioSettings o in value.AudioSettings)
+                {
+                    if (i++ == 0)
+                    {
+                        audioConfigurations[0].SetProfileNameOrWarn(o.Profile);
+                        audioConfigurations[0].EncodingMode = o.AudioEncodingMode;
+                    }
+                    else
+                        AudioAddTrack(o);
+                }
+
                 List<string> arrNonDefaultAudio = new List<string>(LanguageSelectionContainer.Languages.Keys);
                 arrNonDefaultAudio.Add("[none]");
                 foreach (string strLanguage in value.DefaultAudioLanguage)
                     arrNonDefaultAudio.Remove(strLanguage);
+                
                 List<string> arrNonDefaultSubtitle = new List<string>(LanguageSelectionContainer.Languages.Keys);
                 arrNonDefaultSubtitle.Add("[none]");
                 foreach (string strLanguage in value.DefaultSubtitleLanguage)
@@ -226,11 +256,6 @@ namespace MeGUI.packages.tools.oneclick
                 else
                     horizontalResolution.Enabled = autoCrop.Enabled = signalAR.Enabled = true;
             }
-        }
-
-        private void dontEncodeAudio_CheckedChanged(object sender, EventArgs e)
-        {
-            audioProfile.Enabled = !cbAudioEncoding.SelectedText.Equals("never");
         }
 
         private void btnAddAudio_Click(object sender, EventArgs e)
@@ -412,6 +437,125 @@ namespace MeGUI.packages.tools.oneclick
             int iPos = lbIndexerPriority.SelectedIndex;
             btnIndexerUp.Enabled = iPos > 0;
             btnIndexerDown.Enabled = iPos >= 0 && iPos <= lbIndexerPriority.Items.Count - 2;
+        }
+
+        private int iSelectedAudioTabPage = -1;
+        private void audioTab_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right)
+                return;
+
+            System.Drawing.Point p = e.Location;
+            for (int i = 0; i < audioTab.TabCount; i++)
+            {
+                System.Drawing.Rectangle rect = audioTab.GetTabRect(i);
+                rect.Offset(2, 2);
+                rect.Width -= 4;
+                rect.Height -= 4;
+                if (rect.Contains(p))
+                {
+                    iSelectedAudioTabPage = i;
+                    audioMenu.Show(audioTab, e.Location);
+                    break;
+                }
+            }
+        }
+
+        private void audioAddTrack_Click(object sender, EventArgs e)
+        {
+            AudioAddTrack(null);
+        }
+
+        private void audioRemoveTrack_Click(object sender, EventArgs e)
+        {
+            AudioRemoveTrack(iSelectedAudioTabPage);
+        }
+
+        private void AudioAddTrack(OneClickAudioSettings oSettings)
+        {
+            if (oSettings == null)
+                oSettings = new OneClickAudioSettings("English", 
+                    audioConfigurations[0].EncoderProfile.FQName, audioConfigurations[0].EncodingMode);
+
+            TabPage p = new TabPage(oSettings.Language);
+            p.UseVisualStyleBackColor = audioTab.TabPages[0].UseVisualStyleBackColor;
+            p.Padding = audioTab.TabPages[0].Padding;
+
+            OneClickAudioControl a = new OneClickAudioControl();
+            a.Dock = audioConfigurations[0].Dock;
+            a.Padding = audioConfigurations[0].Padding;
+            a.Location = audioConfigurations[0].Location;
+            a.EncodingMode = oSettings.AudioEncodingMode;
+            a.SetProfileNameOrWarn(oSettings.Profile);
+            a.Language = oSettings.Language;
+            a.LanguageChanged += new EventHandler(audio1_LanguageChanged);
+            audioConfigurations.Add(a);
+            
+            audioTab.TabPages.Insert(audioTab.TabCount - 1, p);
+            p.Controls.Add(a);
+            audioTab.SelectedTab = p;
+        }
+
+        private void AudioResetTrack()
+        {
+            // delete all tracks beside the first and last one
+            for (int i = audioTab.TabCount - 1; i > 1; i--)
+                audioTab.TabPages.RemoveAt(i - 1);
+            for (int i = audioConfigurations.Count - 1; i > 0; i--)
+                audioConfigurations.RemoveAt(i);
+        }
+
+        private void audio1_LanguageChanged(object sender, EventArgs e)
+        {
+            for (int i = 1; i < audioTab.TabCount - 1; i++)
+                audioTab.TabPages[i].Text = audioConfigurations[i].Language;
+        }
+
+        private void AudioRemoveTrack(int iTabPageIndex)
+        {
+            if (iTabPageIndex == 0 || iTabPageIndex == audioTab.TabCount - 1)
+                return;
+
+            audioTab.TabPages.RemoveAt(iTabPageIndex);
+            audioConfigurations.RemoveAt(iTabPageIndex);
+            if (iTabPageIndex < audioTab.TabCount - 1)
+                audioTab.SelectedIndex = iTabPageIndex;
+            else
+                audioTab.SelectedIndex = iTabPageIndex - 1;
+        }
+
+        private void audioTab_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (audioTab.SelectedIndex == audioTab.TabCount - 1)
+                AudioAddTrack(null);
+        }
+
+        private void audioTab_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete || e.KeyCode == Keys.Back)
+                AudioRemoveTrack(audioTab.SelectedIndex);
+        }
+
+        private void audioTab_VisibleChanged(object sender, EventArgs e)
+        {
+            if (!audioTab.Visible || audioTab.TabCount == audioConfigurations.Count + 1)
+                return;
+
+            List<OneClickAudioSettings> arrSettings = new List<OneClickAudioSettings>();
+            foreach (OneClickAudioControl o in audioConfigurations)
+                arrSettings.Add(new OneClickAudioSettings(o.Language, o.EncoderProfile.FQName, o.EncodingMode));
+            AudioResetTrack();
+            int i = 0;
+            foreach (OneClickAudioSettings o in arrSettings)
+            {
+                if (i++ == 0)
+                {
+                    audioConfigurations[0].SetProfileNameOrWarn(o.Profile);
+                    audioConfigurations[0].EncodingMode = o.AudioEncodingMode;
+                }
+                else
+                    AudioAddTrack(o);
+            }
         }
     }
 }

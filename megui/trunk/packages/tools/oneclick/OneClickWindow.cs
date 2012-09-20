@@ -505,7 +505,8 @@ namespace MeGUI
                     MessageBox.Show(message, "Filetype restrictions too restrictive", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     ignoreRestrictions = true;
                 }
-                if (ignoreRestrictions) supportedOutputTypes = tempSupportedOutputTypes;
+                if (ignoreRestrictions) 
+                    supportedOutputTypes = tempSupportedOutputTypes;
                 if (tempSupportedOutputTypes.Count == 0)
                     MessageBox.Show("No container type could be found for your current settings. Please modify the codecs you use", "No container found", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -537,9 +538,8 @@ namespace MeGUI
                         arrSubtitleTrackInfo.Add(new OneClickStream(oInfo));
                     SubtitleResetTrack(arrSubtitleTrackInfo, settings);
                 }
-
-                foreach (OneClickStreamControl a in audioTracks)
-                    a.SelectProfileNameOrWarn(settings.AudioProfileName);
+                else
+                    ResetAudioSettings(settings);
 
                 videoProfile.SetProfileNameOrWarn(settings.VideoProfileName);
                 avsProfile.SetProfileNameOrWarn(settings.AvsProfileName);
@@ -555,10 +555,6 @@ namespace MeGUI
                 acceptableContainerTypes = temp.ToArray();
 
                 ignoreRestrictions = false;
-
-                foreach (OneClickStreamControl a in audioTracks)
-                    if (a.IsDontEncodePossible() == true)
-                        a.EncodingMode = settings.AudioEncodingMode;
 
                 // bools
                 chkDontEncodeVideo.Checked = settings.DontEncodeVideo;
@@ -1307,7 +1303,7 @@ namespace MeGUI
             a.SomethingChanged += new EventHandler(audio1_SomethingChanged);
             a.EncodingMode = audioTracks[0].EncodingMode;
             a.initProfileHandler();
-            a.SelectProfileNameOrWarn(_oSettings.AudioProfileName);
+            a.SelectProfileNameOrWarn(audioTracks[0].EncoderProfile);
             if (this.Visible)
                 a.enableDragDrop();
 
@@ -1434,6 +1430,33 @@ namespace MeGUI
                     if (iCounter > 0)
                         AudioAddTrack();
                     audioTracks[iCounter++].SelectedStreamIndex = i + 1;
+                }
+            }
+
+            ResetAudioSettings(settings);
+        }
+
+        private void ResetAudioSettings(OneClickSettings settings)
+        {
+            foreach (OneClickStreamControl a in audioTracks)
+            {
+                bool bFound = false;
+                for (int i = 1; i < settings.AudioSettings.Count; i++)
+                {
+                    if (a.SelectedStream.Language.Equals(settings.AudioSettings[i].Language))
+                    {
+                        a.SelectProfileNameOrWarn(settings.AudioSettings[i].Profile);
+                        if (a.IsDontEncodePossible() == true)
+                            a.EncodingMode = settings.AudioSettings[i].AudioEncodingMode;
+                        bFound = true;
+                        break;
+                    }
+                }
+                if (!bFound)
+                {
+                    a.SelectProfileNameOrWarn(settings.AudioSettings[0].Profile);
+                    if (a.IsDontEncodePossible() == true)
+                        a.EncodingMode = settings.AudioSettings[0].AudioEncodingMode;
                 }
             }
         }

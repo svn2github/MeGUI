@@ -75,6 +75,12 @@ namespace MeGUI
             get { return (AudioCodecSettings)encoderProfile.SelectedProfile.BaseSettings; }
         }
 
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public string EncoderProfile
+        {
+            get { return encoderProfile.SelectedProfile.FQName; }
+        }
+
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public void DisableDontEncode(bool bDisable)
