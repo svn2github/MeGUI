@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -64,7 +64,7 @@ namespace MeGUI
             addLanguage("Afro-Asiatic (Other)", "afa");
             addLanguage("Akan", "aka");
             addLanguage("Akkadian", "akk");
-            addLanguage("Albanian", "alb");
+            addLanguage("Albanian", "sqi");
             addLanguage("Aleut", "ale");
             addLanguage("Algonquian languages", "alg");
             addLanguage("Altaic (Other)", "tut");
@@ -75,7 +75,7 @@ namespace MeGUI
             addLanguage("Arapaho", "arp");
             addLanguage("Araucanian", "arn");
             addLanguage("Arawak", "arw");
-            addLanguage("Armenian", "arm");
+            addLanguage("Armenian", "hye");
             addLanguage("Assamese", "ast");
             addLanguage("Athapascan languages", "art");
             addLanguage("Australian languages", "aus");
@@ -87,32 +87,31 @@ namespace MeGUI
             addLanguage("Azerbaijani", "aze");
             addLanguage("Balinese", "ban");
             addLanguage("Bantu", "bnt");
-            addLanguage("Basque", "baq");
+            addLanguage("Basque", "eus");
             addLanguage("Belarusian", "bel");
             addLanguage("Bosnian", "bos");
             addLanguage("Breton", "bre");
             addLanguage("Bulgarian", "bul");
-            addLanguage("Burmese", "bur");
+            addLanguage("Burmese", "mya");
             addLanguage("Catalan", "cat");
             addLanguage("Chinese", "chi");
             addLanguage("Chinese (Alt)", "zho");
             addLanguage("Corsican", "cos");
-            addLanguage("Croatian", "scr");
-            addLanguage("Czech", "cze");
+            addLanguage("Croatian", "hrv");
+            addLanguage("Czech", "ces");
             addLanguage("Danish", "dan");
-            addLanguage("Dutch", "dut");            
+            addLanguage("Dutch", "nld");            
             addLanguage("Estonian", "est");
             addLanguage("Faroese", "fao");
             addLanguage("Finnish", "fin");
-            addLanguage("Français", "fra");
-            addLanguage("French", "fre");
-            addLanguage("Georgian", "geo");
-            addLanguage("German", "ger");
-            addLanguage("Greek", "gre");
+            addLanguage("French", "fra");
+            addLanguage("Georgian", "kat");
+            addLanguage("German", "deu");
+            addLanguage("Greek", "ell");
             addLanguage("Hebrew", "heb");
             addLanguage("Hindi", "hin");
             addLanguage("Hungarian", "hun");
-            addLanguage("Icelandic", "ice");
+            addLanguage("Icelandic", "isl");
             addLanguage("Indonesian", "ind");
             addLanguage("Irish", "gai");
             addLanguage("Italian", "ita");
@@ -122,25 +121,25 @@ namespace MeGUI
             addLanguage("Korean", "kor");
             addLanguage("Latvian", "lav");
             addLanguage("Lithuanian", "lit");
-            addLanguage("Macedonian", "mac");
+            addLanguage("Macedonian", "mkd");
             addLanguage("Maltese", "mlt");
             addLanguage("Moldavian", "mol");
             addLanguage("Mongolian", "mon");
             addLanguage("Norwegian", "nor");
             addLanguage("Punjabi", "pan");
-            addLanguage("Persian", "per");
+            addLanguage("Persian", "fas");
             addLanguage("Polish", "pol");
             addLanguage("Portuguese", "por");
             addLanguage("Romanian", "ron");
             addLanguage("Russian", "rus");
-            addLanguage("Serbian", "scc");
+            addLanguage("Serbian", "srp");
             addLanguage("Slovak", "slk");
             addLanguage("Slovenian", "slv");
             addLanguage("Spanish", "spa");
             addLanguage("Swahili", "swa");
             addLanguage("Swedish", "swe");
             addLanguage("Thai", "tha");
-            addLanguage("Tibetan", "tib");
+            addLanguage("Tibetan", "bod");
             addLanguage("Turkish", "tur");
             addLanguage("Urdu", "urd");
             addLanguage("Ukrainian", "ukr");
@@ -174,7 +173,6 @@ namespace MeGUI
             {
                 if (ci.ThreeLetterISOLanguageName == iso639dot2) // we found our language
                 {
-                    if (ci.TwoLetterISOLanguageName.Length == 2) // sometimes we get 3 letter codes here, divxmux can't handle those
                         return ci.TwoLetterISOLanguageName;
                 }
             }
@@ -188,7 +186,7 @@ namespace MeGUI
         public static string Short2FullLanguageName(string LngCode)
         {
             string Language = "";
-            switch (LngCode.ToLower())
+            switch (LngCode.ToLower(System.Globalization.CultureInfo.InvariantCulture))
             {
                 case "aa": Language = "Afar"; break;
                 case "ab": Language = "Abkhazian"; break;
