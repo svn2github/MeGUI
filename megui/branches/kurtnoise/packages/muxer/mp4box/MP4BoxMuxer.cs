@@ -1,6 +1,6 @@
 // ****************************************************************************
 // 
-// Copyright (C) 2005-2009  Doom9 & al
+// Copyright (C) 2005-2012 Doom9 & al
 // 
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -134,7 +134,7 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
             {
                 FileSize len = FileSize.Of(job.Output);
                 FileSize Empty = FileSize.Empty;
-                if (!Path.GetExtension(job.Input).ToLower().Equals(".mp4"))
+                if (!Path.GetExtension(job.Input).ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(".mp4"))
                 {
                     FileSize rawSize = FileSize.Of(job.Input);
                     LogItem i = new LogItem("MP4 Muxing statistics");
@@ -164,13 +164,37 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                 case LineType.importing:
                     su.PercentageDoneExact = getPercentage(line);
                     if (trackNumber == 1) // video
-                        su.Status = "Importing Video Track...";
+                    {
+                        if (String.IsNullOrEmpty(su.Status) || !su.Status.Equals("Importing Video Track..."))
+                        {
+                            su.Status = "Importing Video Track...";
+                            startTime = DateTime.Now;
+                        }
+                    }
                     else if (trackNumber == 2 && numberOfAudioTracks > 0) // first audio track
-                        su.Status = "Importing Audio Track 1...";
+                    {
+                        if (String.IsNullOrEmpty(su.Status) || !su.Status.Equals("Importing Audio Track 1..."))
+                        {
+                            su.Status = "Importing Audio Track 1...";
+                            startTime = DateTime.Now;
+                        }
+                    }
                     else if (trackNumber == 3 && numberOfAudioTracks > 1) // second audio track
-                        su.Status = "Importing Audio Track 2...";
+                    {
+                        if (String.IsNullOrEmpty(su.Status) || !su.Status.Equals("Importing Audio Track 2..."))
+                        {
+                            su.Status = "Importing Audio Track 2...";
+                            startTime = DateTime.Now;
+                        }
+                    }
                     else
-                        su.Status = "Importing Tracks...";
+                    {
+                        if (String.IsNullOrEmpty(su.Status) || !su.Status.Equals("Importing Tracks..."))
+                        {
+                            su.Status = "Importing Tracks...";
+                            startTime = DateTime.Now;
+                        }
+                    }
                     break;
 
                 case LineType.splitting:
@@ -180,7 +204,11 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
 
                 case LineType.writing:
                     su.PercentageDoneExact = getPercentage(line);
-                    su.Status = "Writing...";
+                    if (String.IsNullOrEmpty(su.Status) || !su.Status.Equals("Writing..."))
+                    {
+                        su.Status = "Writing...";
+                        startTime = DateTime.Now;
+                    }
                     break;
 
                 case LineType.other:
@@ -203,32 +231,34 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                 MuxSettings settings = job.Settings;
                 CultureInfo ci = new CultureInfo("en-us");
                 StringBuilder sb = new StringBuilder();
+ 
+                if (!String.IsNullOrEmpty(settings.VideoInput) || !String.IsNullOrEmpty(settings.MuxedInput))
+                {
+                    string strInput;
+                    if (!String.IsNullOrEmpty(settings.VideoInput))
+                        strInput = settings.VideoInput;
+                    else
+                        strInput = settings.MuxedInput;
 
-                if (!string.IsNullOrEmpty(settings.VideoInput))
-                {
-                    sb.Append("-add \"" + settings.VideoInput);
-                    if (settings.VideoInput.ToLower().EndsWith(".mp4"))
+                    if (settings.DeviceType != "Standard")
                     {
-                        int trackID = VideoUtil.getIDFromFirstVideoStream(settings.VideoInput);
-                        sb.Append("#trackID=" + trackID);
+                        switch (settings.DeviceType)
+                        {
+                            case "iPod": sb.Append("-ipod "); break;
+                            case "iPhone": sb.Append("-ipod -brand M4VP:1 "); break;
+                            case "ISMA": sb.Append("-isma "); break;
+                            case "PSP": sb.Append("-psp -brand MSNV:1 "); break;
+                        }
                     }
-                    if (settings.Framerate.HasValue)
-                    {
-                        string fpsString = settings.Framerate.Value.ToString(ci);
-                        sb.Append(":fps=" + fpsString);
-                    }
-                    if (!string.IsNullOrEmpty(settings.VideoName))
-                        sb.Append(":name=" + settings.VideoName);
-                    sb.Append("\"");
-                }
-                if (!string.IsNullOrEmpty(settings.MuxedInput))
-                {
-                    sb.Append(" -add \"" + settings.MuxedInput);
-                    if (settings.MuxedInput.ToLower().EndsWith(".mp4"))
-                    {
-                        int trackID = VideoUtil.getIDFromFirstVideoStream(settings.MuxedInput);
-                        sb.Append("#trackID=" + trackID);
-                    }
+
+                    MediaInfoFile oVideoInfo = new MediaInfoFile(strInput, ref log);
+                    sb.Append("-add \"" + strInput);
+
+                    int trackID = 1;
+                    if (oVideoInfo.HasVideo && oVideoInfo.ContainerFileType == ContainerType.MP4)
+                        trackID = oVideoInfo.VideoInfo.Track.TrackID;
+                    sb.Append("#trackID=" + trackID);
+
                     if (settings.Framerate.HasValue)
                     {
                         string fpsString = settings.Framerate.Value.ToString(ci);
@@ -241,23 +271,46 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                 foreach (object o in settings.AudioStreams)
                 {
                     MuxStream stream = (MuxStream)o;
-                    sb.Append(" -add \"" + stream.path);
-                    if (stream.path.ToLower().EndsWith(".mp4") || stream.path.ToLower().EndsWith(".m4a"))
+                    MediaInfoFile oInfo = new MediaInfoFile(stream.path, ref log);
+
+                    if (!oInfo.HasAudio)
                     {
-                        int trackID = VideoUtil.getIDFromAudioStream(stream.path);
-                        sb.Append("#trackID=" + trackID);
-                        int heaac_flag = VideoUtil.getSBRFlagFromAACStream(stream.path);
-                        if (heaac_flag > 0)
-                            sb.Append(":sbr");
+                        log.Error("No audio track found: " + stream.path);
+                        continue;
                     }
-                    if (stream.path.ToLower().EndsWith(".aac"))
+
+                    sb.Append(" -add \"" + stream.path);
+
+                    int trackID = 1;
+                    int heaac_flag = -1;
+                    if (oInfo.AudioInfo.Tracks.Count > 0)
                     {
-                        int heaac_flag = VideoUtil.getSBRFlagFromAACStream(stream.path);
-                        if (heaac_flag > 0)
-                            sb.Append(":sbr");
+                        if (oInfo.ContainerFileType == ContainerType.MP4)
+                            trackID = oInfo.AudioInfo.Tracks[0].TrackID;
+                        heaac_flag = oInfo.AudioInfo.Tracks[0].AACFlag;
+                    }
+                    sb.Append("#trackID=" + trackID);
+
+                    if (oInfo.ContainerFileType == ContainerType.MP4 || oInfo.AudioInfo.Codecs[0] == AudioCodec.AAC)
+                    {
+                        switch (heaac_flag)
+                        {
+                            case 1: sb.Append(":sbr"); break;
+                            case 2: sb.Append(":ps"); break;
+                            default: sb.Append(""); break;
+                        }
                     }
                     if (!string.IsNullOrEmpty(stream.language))
-                        sb.Append(":lang=" + stream.language);
+                    {
+                        foreach (KeyValuePair<string, string> strLanguage in LanguageSelectionContainer.Languages)
+                        {
+                            if (stream.language.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(strLanguage.Key.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
+                            {
+                                sb.Append(":lang=" + LanguageSelectionContainer.getISO639dot1(strLanguage.Value));
+                                break;
+                            }
+                        }
+                    }
                     if (!string.IsNullOrEmpty(stream.name))
                         sb.Append(":name=" + stream.name);
                     if (stream.delay != 0)
@@ -267,11 +320,22 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                 foreach (object o in settings.SubtitleStreams)
                 {
                     MuxStream stream = (MuxStream)o;
-                    sb.Append(" -add \"" + stream.path);
+                    sb.Append(" -add \"" + stream.path + "#trackID=1");
                     if (!string.IsNullOrEmpty(stream.language))
-                        sb.Append(":lang=" + stream.language);
+                    {
+                        foreach (KeyValuePair<string, string> strLanguage in LanguageSelectionContainer.Languages)
+                        {
+                            if (stream.language.ToLower(System.Globalization.CultureInfo.InvariantCulture).Equals(strLanguage.Key.ToLower(System.Globalization.CultureInfo.InvariantCulture)))
+                            {
+                                sb.Append(":lang=" + LanguageSelectionContainer.getISO639dot1(strLanguage.Value));
+                                break;
+                            }
+                        }
+                    }
                     if (!string.IsNullOrEmpty(stream.name))
                         sb.Append(":name=" + stream.name);
+                    if (settings.DeviceType == "iPod" || settings.DeviceType == "iPhone")
+                        sb.Append(":hdlr=sbtl:layout=-1:group=2");
                     sb.Append("\"");
                 }
 
@@ -281,26 +345,20 @@ new JobProcessorFactory(new ProcessorFactory(init), "MP4BoxMuxer");
                 if (settings.SplitSize.HasValue)
                     sb.Append(" -splits " + settings.SplitSize.Value.KB);
 
-                if (settings.DeviceType != "Standard")
+                // tmp directory
+                if (!String.IsNullOrEmpty(MainForm.Instance.Settings.TempDirMP4) && Directory.Exists(MainForm.Instance.Settings.TempDirMP4))
+                    sb.AppendFormat(" -tmp \"{0}\"", MainForm.Instance.Settings.TempDirMP4.Replace("\\","\\\\"));
+                else if (!Path.GetPathRoot(settings.MuxedOutput).Equals(settings.MuxedOutput, StringComparison.CurrentCultureIgnoreCase))
+                    sb.AppendFormat(" -tmp \"{0}\"", Path.GetDirectoryName(settings.MuxedOutput).Replace("\\", "\\\\"));
+
+                if (settings.DeviceType == "iPod" || settings.DeviceType == "iPhone")
                 {
-                    switch (settings.DeviceType)
-                    {
-                        case "iPod": sb.Append(" -ipod"); break;
-                        case "iPhone": sb.Append(" -ipod -brand M4VP:1"); break;
-                        case "ISMA": sb.Append(" -isma"); break;
-                        case "PSP": sb.Append(" -psp"); break;
-                    }
+                    if (!string.IsNullOrEmpty(settings.VideoInput))
+                        settings.MuxedOutput = Path.ChangeExtension(settings.MuxedOutput, ".m4v");
+                    if (string.IsNullOrEmpty(settings.VideoInput) && !string.IsNullOrEmpty(settings.AudioStreams.ToString()))
+                        settings.MuxedOutput = Path.ChangeExtension(settings.MuxedOutput, ".m4a");
                 }
 
-                // tmp directory
-                // due to a bug from MP4Box, we need to test the path delimiter number
-                if (Util.CountStrings(settings.MuxedOutput, '\\') > 1) {
-                    sb.AppendFormat(" -tmp \"{0}\"", Path.GetDirectoryName(settings.MuxedOutput));
-                }
-                else { 
-                    sb.AppendFormat(" -tmp {0}", Path.GetDirectoryName(settings.MuxedOutput));
-                } 
-              
                 // force to create a new output file
                 sb.Append(" -new \"" + settings.MuxedOutput + "\"");
                 return sb.ToString();
